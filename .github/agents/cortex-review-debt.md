@@ -1,606 +1,419 @@
-# CORTEX Technical Debt Review Agent# CORTEX Technical Debt Review Agent
+# CORTEX Review Agent: Technical Debt Analysis
+## Code Quality, Patterns & Maintenance Issues
 
-
-
-**Purpose:** Identify accumulated technical debt, deferred decisions, duplicated patterns, and opportunities for simplification.**Purpose:** Identify accumulated technical debt, deferred decisions, duplicated patterns, and opportunities for simplification.
-
-
-
-**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
-
-
-
----## ⚠️ OUTPUT GUIDELINES
-
-
-
-## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)**Copilot Instructions:**
-
-- ✅ Output findings to terminal (human-readable)
-
-**Unified policy enforced across ALL review agents:**- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-DEBT-YYYYMMDD.yaml`
-
-- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
-
-### Forbidden File Patterns (ZERO TOLERANCE)- ❌ DO NOT create markdown (.md) report files
-
-| What | Why | Action |- ❌ DO NOT output to root or `.github/` directories
-
-|------|-----|--------|- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
-
-| `.md` report files outside `docs/` | SSOT conflict | DELETE IMMEDIATELY |
-
-| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
-
-| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
-
-| `.py` scripts in root | Pollution | DELETE at end of session |**Default Behavior:** Terminal output + YAML report (no extra MD files)
-
-| Mixed YAML/MD findings | Authority confusion | Use YAML only for reports |
+**Purpose:** Identify technical debt that increases maintenance burden, reduces quality, or hides real problems.
 
 ---
 
-### ✅ Correct Findings Output Locations
+## CHECKS PERFORMED
 
-- Primary: `_workspaces/roadmap/issues/Findings-DEBT-YYYYMMDD.yaml` (YAML only)## DEBT CATEGORIES
+### 1. Code Duplication
 
-- Documentation: `docs/FILENAME.md` (only if needed for execution)
+**What to look for:**
+- Same logic in 3+ places
+- Copy-paste code patterns
+- Similar class implementations
+- Repeated error handling
 
-- Terminal: Default (human-readable analysis)### Category 1: Code Duplication
-
-
-
----**Detection Commands:**
-
+**Search patterns:**
 ```bash
+# Find similar function signatures
+grep -rn "def " cortex/ --include="*.py" | sort | uniq -c | sort -rn | head -20
 
-## 🎯 VALIDATION CHECKLIST - Before Each Output# Find similar function names (potential duplication)
+# Find repeated patterns
+grep -rn "for.*in\|while.*:\|try:" cortex/ --include="*.py" | sort | uniq -c | sort -rn | head -10
 
-grep -rh "def \w\+" --include="*.py" src/ | sort | uniq -c | sort -rn | head -20
-
+# Find copy-paste comments
+grep -rn "TODO\|FIXME\|NOTE" cortex/ --include="*.py" | cut -d: -f1 | sort | uniq -c | sort -rn
 ```
 
-BEFORE creating debt findings:# Find copy-paste patterns (identical blocks)
-
-[ ] Creating .md report? → STOP - Use YAML + terminal instead# Use a proper tool like jscpd or pylint
-
-[ ] Creating docs_md/? → STOP - FORBIDDENpylint --disable=all --enable=duplicate-code src/ 2>&1 | head -50
-
-[ ] Multiple cortex-*.yaml? → STOP - SSOT violation
-
-[ ] Wrong output locations? → STOP - FIX paths# Find multiple implementations of same interface
-
-[ ] .py scripts in root? → DELETE before commitgrep -rn "class.*IAudit\|class.*Logger\|class.*Handler" --include="*.py" src/
-
-``````
-
-
-
-**Red Flag 🚩 = FIX IMMEDIATELY****What to Flag:**
-
-- `.md` findings outside `docs/`- Same logic in multiple files — HIGH
-
-- `docs_md/` folder created- Copy-paste with minor variations — MEDIUM
-
-- Multiple cortex-*.yaml in use- Multiple implementations without interface — HIGH
-
-- Stray files in root- Redundant utility functions — LOW
-
-
-
----### Category 2: Missing Abstractions
-
-
-
-## ⚠️ OUTPUT GUIDELINES**Detection Commands:**
-
-```bash
-
-**Copilot Instructions:**# Find long functions (>50 lines)
-
-- ✅ Output findings to terminal (human-readable, default)grep -n "def " --include="*.py" src/ | while read line; do
-
-- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-DEBT-YYYYMMDD.yaml`  file=$(echo $line | cut -d: -f1)
-
-- ✅ Create MD documentation to `docs/` (only if absolutely required)  linenum=$(echo $line | cut -d: -f2)
-
-- ❌ DO NOT create markdown (.md) report files  # Complex to detect, use static analysis tools
-
-- ❌ DO NOT output to root or `.github/` directoriesdone
-
-- ❌ DO NOT create `docs_md/` folder
-
-- ❌ NEVER leave `.py` scripts in root# Find repeated parameter patterns
-
-grep -rn "def .*db_path.*config" --include="*.py" src/
-
-**Default Behavior:** Terminal output + optional YAML findings
-
-# Find God classes (too many methods)
-
----grep -c "def " src/**/*.py 2>/dev/null | awk -F: '$2 > 20 {print}'
-
-```
-
-## DEBT CATEGORIES
-
-**What to Flag:**
-
-### Category 1: Code Duplication- Functions over 50 lines — MEDIUM
-
-- Classes with 20+ methods — HIGH
-
-**Detection Commands:**- Repeated parameter groups — MEDIUM
-
-```bash- No clear separation of concerns — HIGH
-
-# Find similar function names (potential duplication)
-
-grep -rh "def \w\+" --include="*.py" src/ | sort | uniq -c | sort -rn | head -20### Category 3: Deprecated Patterns
-
-
-
-# Find copy-paste patterns (identical blocks)**Detection Commands:**
-
-# Use a proper tool like jscpd or pylint```bash
-
-pylint --disable=all --enable=duplicate-code src/ 2>&1 | head -50# Find TODO/FIXME/HACK/XXX comments
-
-grep -rn "TODO\|FIXME\|HACK\|XXX\|DEPRECATED" --include="*.py" src/
-
-# Find multiple implementations of same interface
-
-grep -rn "class.*IAudit\|class.*Logger\|class.*Handler" --include="*.py" src/# Find old-style string formatting
-
-```grep -rn "% s\|%d\|%f\|\.format(" --include="*.py" src/ | grep -v "logging\|f\"" | head -20
-
-
-
-**What to Flag:**# Find deprecated stdlib usage
-
-- Same logic in multiple files — HIGHgrep -rn "optparse\|imp\.\|asyncore\|asynchat" --include="*.py" src/
-
-- Copy-paste with minor variations — MEDIUM```
-
-- Multiple implementations without interface — HIGH
-
-- Redundant utility functions — LOW**What to Flag:**
-
-- TODO comments over 30 days old — MEDIUM
-
-### Category 2: Missing Abstractions- FIXME without issue reference — MEDIUM
-
-- HACK comments (known shortcuts) — HIGH
-
-**Detection Commands:**- Deprecated stdlib modules — HIGH
-
-```bash
-
-# Find long functions (>50 lines)### Category 4: Over-Engineering
-
-grep -n "def " --include="*.py" src/ | while read line; do
-
-  file=$(echo $line | cut -d: -f1)**Detection Commands:**
-
-  linenum=$(echo $line | cut -d: -f2)```bash
-
-  # Complex to detect, use static analysis tools# Find unnecessary abstractions (1 implementation)
-
-done# Interfaces with single implementor
-
-grep -rn "class I[A-Z]\w\+\|Protocol\):" --include="*.py" src/ | while read interface; do
-
-# Find repeated parameter patterns  name=$(echo $interface | grep -o "I[A-Z]\w\+\|class \w\+Protocol" | head -1)
-
-grep -rn "def .*db_path.*config" --include="*.py" src/  # Check for implementations
-
-done
-
-# Find God classes (too many methods)
-
-grep -c "def " src/**/*.py 2>/dev/null | awk -F: '$2 > 20 {print}'# Find deeply nested code
-
-```# Use complexity analysis tools
-
-radon cc src/ -a -nc 2>&1 | head -30
-
-**What to Flag:**
-
-- Functions over 50 lines — MEDIUM# Find unused parameters
-
-- Classes with 20+ methods — HIGHpylint --disable=all --enable=unused-argument src/ 2>&1 | head -30
-
-- Repeated parameter groups — MEDIUM```
-
-- No clear separation of concerns — HIGH
-
-**What to Flag:**
-
-### Category 3: Deprecated Patterns- Abstract classes with single implementation — LOW
-
-- Cyclomatic complexity > 10 — HIGH
-
-**Detection Commands:**- Inheritance depth > 3 — MEDIUM
-
-```bash- Unused parameters — LOW
-
-# Find TODO/FIXME/HACK/XXX comments
-
-grep -rn "TODO\|FIXME\|HACK\|XXX\|DEPRECATED" --include="*.py" src/### Category 5: Under-Engineering
-
-
-
-# Find old-style string formatting**Detection Commands:**
-
-grep -rn "% s\|%d\|%f\|\.format(" --include="*.py" src/ | grep -v "logging\|f\"" | head -20```bash
-
-# Find magic numbers
-
-# Find deprecated stdlib usagegrep -rn "[^a-zA-Z_][0-9]\{3,\}[^a-zA-Z_]" --include="*.py" src/ | grep -v "test\|0x\|port\|version"
-
-grep -rn "optparse\|imp\.\|asyncore\|asynchat" --include="*.py" src/
-
-```# Find hardcoded strings (should be constants)
-
-grep -rn '"\w\{10,\}"' --include="*.py" src/ | grep -v "docstring\|import\|test"
-
-**What to Flag:**
-
-- TODO comments over 30 days old — MEDIUM# Find missing validation
-
-- FIXME without issue reference — MEDIUMgrep -rn "def \w\+(.*:" --include="*.py" src/ | head -50
-
-- HACK comments (known shortcuts) — HIGH# Then check which lack input validation
-
-- Deprecated stdlib modules — HIGH```
-
-
-
-### Category 4: Over-Engineering**What to Flag:**
-
-- Magic numbers without names — MEDIUM
-
-**Detection Commands:**- Hardcoded strings that should be configurable — MEDIUM
-
-```bash- Missing input validation — HIGH
-
-# Find unnecessary abstractions (1 implementation)- No error messages (just raise) — LOW
-
-# Interfaces with single implementor
-
-grep -rn "class I[A-Z]\w\+\|Protocol\):" --include="*.py" src/ | while read interface; do### Category 6: Documentation Drift
-
-  name=$(echo $interface | grep -o "I[A-Z]\w\+\|class \w\+Protocol" | head -1)
-
-  # Check for implementations**Detection Commands:**
-
-done```bash
-
-# Compare docstrings to implementation
-
-# Find unused dependencies# Complex - use tools or manual review
-
-grep -rn "^import\|^from" --include="*.py" src/ > /tmp/imports.txt
-
-grep -o "^[a-z_]*" /tmp/imports.txt | sort -u > /tmp/imported_modules.txt# Find outdated comments
-
-git log --oneline --all --follow src/ | head -20
-
-# Find unused classes/functions# Then compare comment dates to code change dates
-
-grep -rn "^class\|^def" --include="*.py" src/ > /tmp/definitions.txt
-
-```# Find README inconsistencies
-
-diff <(grep "## " README.md) <(ls -1 src/)
-
-**What to Flag:**```
-
-- Interfaces with single implementation — MEDIUM
-
-- Unused imports — LOW**What to Flag:**
-
-- Unused functions/classes — MEDIUM- Docstrings mentioning removed parameters — HIGH
-
-- Excessive inheritance hierarchies — HIGH- README features not implemented — HIGH
-
-- Comments describing old behavior — MEDIUM
-
-### Category 5: Configuration Debt- Missing changelog entries — LOW
-
-
-
-**Detection Commands:**### Category 7: Test Debt
-
-```bash
-
-# Find hardcoded values that should be config**Detection Commands:**
-
-grep -rn "=['\"].*['\"]" --include="*.py" src/ | grep -E "path|url|host|port|key" | head -30```bash
-
-# Find untested code paths
-
-# Find inconsistent config patternspytest --cov=src --cov-report=term-missing 2>&1 | grep "TOTAL\|Missing"
-
-grep -rn "os.getenv\|os.environ\|config\[" --include="*.py" src/ | head -20
-
-# Find tests without assertions
-
-# Find missing config docsgrep -rn "def test_" --include="*.py" tests/ | while read test; do
-
-ls -la *.ini *.yaml *.json *.toml 2>/dev/null  file=$(echo $test | cut -d: -f1)
-
-```  linenum=$(echo $test | cut -d: -f2)
-
-  # Check for assert in next 50 lines
-
-**What to Flag:**done
-
-- Hardcoded paths/URLs — MEDIUM
-
-- Inconsistent config access — MEDIUM# Find skipped tests
-
-- Missing config documentation — LOWgrep -rn "@pytest.mark.skip\|pytest.skip\|@unittest.skip" --include="*.py" tests/
-
-- Config not validated — MEDIUM```
-
-
-
-### Category 6: Documentation Debt**What to Flag:**
-
-- Coverage below 80% — HIGH
-
-**Detection Commands:**- Tests without assertions — CRITICAL
-
-```bash- Permanently skipped tests — MEDIUM
-
-# Find missing docstrings (CORE-012 violation)- Flaky tests — HIGH
-
-grep -rn "^def\|^class" --include="*.py" src/ | wc -l
-
-grep -rn "\"\"\"" --include="*.py" src/ | wc -l---
-
-
-
-# Find outdated documentation## FINDING TEMPLATE
-
-grep -rn "TODO\|FIXME\|XXX" docs/ | head -20
-
-```yaml
-
-# Find missing type hints (CORE-011 violation)finding:
-
-grep -rn "def.*:" --include="*.py" src/ | grep -v " ->" | head -20  id: "DEBT-XXX"
-
-```  agent: "cortex-review-debt"
-
-  severity: "CRITICAL|HIGH|MEDIUM|LOW"
-
-**What to Flag:**  category: "duplication|abstraction|deprecated|over_engineering|under_engineering|documentation|test"
-
-- Missing docstrings — HIGH  
-
-- Outdated docs — MEDIUM  title: "[Specific technical debt description]"
-
-- Missing type hints — HIGH  
-
-- Inconsistent doc format — MEDIUM  location:
-
-    files: 
-
----      - "src/path/to/file1.py"
-
-      - "src/path/to/file2.py"
-
-## Debt Severity Levels    scope: "function|class|module|pattern"
-
-  
-
-| Level | Definition | Impact |  evidence:
-
-|-------|-----------|--------|    detection_method: "static_analysis|code_review|test_coverage|git_history"
-
-| CRITICAL | Blocks future development | Fix immediately |    tool_used: "pylint|radon|pytest-cov|manual"
-
-| HIGH | Increases maintenance cost | Fix in next phase |    output: |
-
-| MEDIUM | Reduces code clarity | Fix when convenient |      [Tool output or code snippets]
-
-| LOW | Minor inconsistency | Monitor and address later |  
-
-  debt_description: |
-    What the debt is.
-    When it was introduced (if known).
-    Why it exists (historical reason).
-  
-  debt_cost:
-    maintenance_overhead: "Hours per month spent working around this"
-    bug_risk: "Likelihood of bugs from this debt"
-    onboarding_impact: "How this affects new developers"
-  
-  interest_accumulation: |
-    How this debt grows worse over time.
-    What becomes harder the longer it exists.
-  
-  refactoring_opportunity: |
-    What clean solution would look like.
-    What patterns should be applied.
-  
-  remediation:
-    effort: "1h|4h|1d|1w|2w"
-    approach: |
-      1. Create abstraction for [pattern]
-      2. Consolidate duplicates into [location]
-      3. Add tests for [coverage gap]
-      4. Update documentation
-    dependencies: "Must complete [other work] first"
-    risk: "Breaking changes to [components]"
-  
-  priority_factors:
-    affects_critical_path: true|false
-    blocks_new_features: true|false
-    causes_recurring_bugs: true|false
-    developer_pain_point: true|false
-```
-
----
-
-## DEBT METRICS DASHBOARD
-
-```yaml
-technical_debt_summary:
-  generated_at: "2026-01-16T10:00:00Z"
-  
-  code_quality_metrics:
-    test_coverage: "XX%"
-    cyclomatic_complexity_avg: X.X
-    maintainability_index: XX
-    duplicate_code_percentage: "X%"
-  
-  debt_by_category:
-    duplication:
-      findings: N
-      estimated_fix_hours: N
-    abstraction:
-      findings: N
-      estimated_fix_hours: N
-    deprecated:
-      findings: N
-      estimated_fix_hours: N
-    test_debt:
-      findings: N
-      estimated_fix_hours: N
-  
-  debt_velocity:
-    new_debt_this_month: N
-    debt_paid_this_month: N
-    net_debt_change: "+N or -N"
-  
-  quick_wins:
-    - description: "Remove 5 TODO comments with fixes"
-      effort: "2h"
-      impact: "Removes 5 MEDIUM findings"
-    - description: "Consolidate 3 duplicate utilities"
-      effort: "4h"
-      impact: "Removes 3 HIGH findings"
-  
-  recommended_focus_areas:
-    - area: "Test coverage for src/orchestrators/"
-      current: "65%"
-      target: "80%"
-      effort: "8h"
-```
-
----
-
-## QUICK DEBT AUDIT SCRIPT
-
+**Examples:**
 ```python
-#!/usr/bin/env python3
-"""Quick technical debt audit for CORTEX."""
+# Pattern 1: Validation code repeated 3x
+if not user_input or len(user_input) > 100:
+    raise ValueError(...)
 
-import subprocess
-import os
-from pathlib import Path
+# Pattern 2: Same validation elsewhere
+if not config or len(config) > 100:
+    raise ValueError(...)
 
-def count_todo_fixme():
-    """Count TODO/FIXME comments."""
-    result = subprocess.run(
-        ["grep", "-rn", "TODO\\|FIXME\\|HACK\\|XXX", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    lines = [l for l in result.stdout.split('\n') if l]
-    
-    by_type = {
-        "TODO": len([l for l in lines if "TODO" in l]),
-        "FIXME": len([l for l in lines if "FIXME" in l]),
-        "HACK": len([l for l in lines if "HACK" in l]),
-        "XXX": len([l for l in lines if "XXX" in l]),
-    }
-    
-    return {
-        "check": "todo_fixme",
-        "total": len(lines),
-        "by_type": by_type,
-        "details": lines[:10]
-    }
+# Pattern 3: Yet again
+if not request or len(request) > 100:
+    raise ValueError(...)
 
-def check_function_length():
-    """Estimate long functions (rough heuristic)."""
-    long_functions = []
-    for pyfile in Path("src").rglob("*.py"):
-        try:
-            content = pyfile.read_text()
-            lines = content.split('\n')
-            current_func = None
-            func_start = 0
-            
-            for i, line in enumerate(lines):
-                if line.strip().startswith("def "):
-                    if current_func and (i - func_start) > 50:
-                        long_functions.append({
-                            "file": str(pyfile),
-                            "function": current_func,
-                            "lines": i - func_start
-                        })
-                    current_func = line.strip().split("(")[0].replace("def ", "")
-                    func_start = i
-        except Exception:
-            pass
-    
-    return {
-        "check": "long_functions",
-        "functions_over_50_lines": len(long_functions),
-        "details": long_functions[:10]
-    }
-
-def check_test_skips():
-    """Find skipped tests."""
-    result = subprocess.run(
-        ["grep", "-rn", "@pytest.mark.skip\\|pytest.skip\\|@skip", "--include=*.py", "tests/"],
-        capture_output=True, text=True
-    )
-    lines = [l for l in result.stdout.split('\n') if l]
-    
-    return {
-        "check": "skipped_tests",
-        "count": len(lines),
-        "details": lines[:10]
-    }
-
-if __name__ == "__main__":
-    import json
-    
-    checks = [
-        count_todo_fixme(),
-        check_function_length(),
-        check_test_skips(),
-    ]
-    
-    print(json.dumps({"debt_audit": checks}, indent=2))
+# ← Should be: def validate_input(data, max_len=100): ...
 ```
 
 ---
 
-## DEBT PRIORITIZATION MATRIX
+### 2. Over-Engineering
 
-| Factor | Weight | Description |
-|--------|--------|-------------|
-| Bug Risk | 3x | Debt that causes/enables bugs |
-| Feature Block | 3x | Debt that blocks new features |
-| Developer Pain | 2x | Debt that slows daily work |
-| Maintenance Cost | 2x | Debt that increases ongoing work |
-| Code Clarity | 1x | Debt that makes code hard to understand |
+**What to look for:**
+- Complex abstraction for simple problem
+- Inheritance hierarchies that don't simplify
+- Design patterns used unnecessarily
+- Over-parameterized functions
 
-**Priority Score = Σ(Factor Weight × Factor Score)**
+**Examples:**
+```python
+# Over-engineered: Factory pattern for single implementation
+class DatabaseFactory:
+    @staticmethod
+    def create_connection():
+        return PostgresConnection()
 
-- Score 15+: CRITICAL — Fix in current sprint
-- Score 10-14: HIGH — Fix within 2 weeks
-- Score 5-9: MEDIUM — Plan for next quarter
-- Score 1-4: LOW — Track, fix opportunistically
+# Over-engineered: Inheritance for slight variation
+class BaseHandler:
+    def process(self): ...
+
+class SpecialHandler(BaseHandler):
+    def process(self):
+        return super().process() + "special"
+
+# Should be: Simple function with parameter
+def handle(data, special=False):
+    result = process(data)
+    if special:
+        result += "special"
+    return result
+```
 
 ---
 
-## COPYRIGHT
+### 3. Under-Engineering
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
+**What to look for:**
+- Shortcuts taken for speed
+- Hardcoded values that should be parameterized
+- Quick fixes that should be proper patterns
+- Band-aid solutions
+
+**Examples:**
+```python
+# Under-engineered: Hardcoded retry count
+for i in range(3):  # ← Magic number, should be configurable
+    try:
+        result = api.call()
+        break
+    except:
+        pass
+
+# Under-engineered: Direct state manipulation
+class Store:
+    def __init__(self):
+        self.state = {}  # ← Public, anyone can modify
+    
+# Better:
+class Store:
+    def __init__(self):
+        self._state = {}  # ← Private, controlled access
+    
+    def set_state(self, key, value):
+        # Can add validation, logging, etc.
+        self._state[key] = value
+```
+
+---
+
+### 4. Deprecated Pattern Usage
+
+**What to look for:**
+- Old async patterns instead of modern ones
+- String formatting instead of f-strings
+- Classes instead of dataclasses
+- Old exception handling patterns
+
+**Search patterns:**
+```bash
+# Old string formatting
+grep -rn "\.format(\|%s\|%d" cortex/ --include="*.py" | grep -v "f\"" | head -10
+
+# Old exception handling
+grep -rn "except.*as e:\s*print" cortex/ --include="*.py"
+
+# Classes that should be dataclasses
+grep -rn "class.*:\s*$" cortex/ --include="*.py" -A 5 | grep "__init__.*self," | head -10
+
+# Collections usage
+grep -rn "from collections import\|import collections" cortex/ --include="*.py"
+```
+
+**Examples:**
+```python
+# Old pattern
+name = "{}".format(user)  # ← Use f-string instead
+message = "User: %s" % user  # ← Use f-string instead
+
+# Modern pattern
+name = f"{user}"
+message = f"User: {user}"
+
+# Old: Manual class for data storage
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+# Modern: Dataclass
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+```
+
+---
+
+### 5. Missing Abstractions
+
+**What to look for:**
+- Same logic in 3+ classes
+- Similar interfaces not unified
+- Code that could be parameterized
+- Repeated conditional branches
+
+**Examples:**
+```python
+# Missing abstraction: Three similar handlers
+class UserHandler:
+    def handle(self, user):
+        validate_user(user)
+        save_user(user)
+        notify_user(user)
+
+class ProductHandler:
+    def handle(self, product):
+        validate_product(product)
+        save_product(product)
+        notify_product(product)
+
+class OrderHandler:
+    def handle(self, order):
+        validate_order(order)
+        save_order(order)
+        notify_order(order)
+
+# Better: Abstract handler
+from abc import ABC, abstractmethod
+
+class BaseHandler(ABC):
+    def handle(self, entity):
+        self.validate(entity)
+        self.save(entity)
+        self.notify(entity)
+    
+    @abstractmethod
+    def validate(self, entity): ...
+    @abstractmethod
+    def save(self, entity): ...
+    @abstractmethod
+    def notify(self, entity): ...
+```
+
+---
+
+### 6. Documentation vs Implementation Gaps
+
+**What to look for:**
+- Docstring doesn't match implementation
+- README outdated vs actual code
+- Configuration docs missing
+- Error messages don't match code
+
+**Verify:**
+```bash
+# Check if README matches actual CLI
+cortex --help > /tmp/help.txt
+grep -E "usage:|command" docs/README.md | diff - /tmp/help.txt
+
+# Find modules without docs
+find cortex -name "*.py" -exec grep -L "\"\"\"" {} \; | head -10
+```
+
+---
+
+### 7. Integration Test Gaps
+
+**What to look for:**
+- Only unit tests, no integration tests
+- Happy-path tests missing edge cases
+- No cross-module testing
+- No test of actual persistence/APIs
+
+**Check:**
+```bash
+# Count integration tests
+find tests -name "test_integration*" | wc -l
+
+# Count unit tests
+find tests -name "test_unit*" | wc -l
+
+# Coverage
+pytest --cov=cortex --cov-report=term-missing | grep "TOTAL"
+```
+
+**Issues:**
+```python
+# Unit test (mock): Happy path only
+def test_save_user():
+    user = User(name="John")
+    repo.save(user)  # ← Mocked
+    assert repo.get(user.id) == user  # ← Mocked, not real
+
+# Missing: Integration test with real DB
+def test_save_user_integration():
+    db = PostgreSQL()
+    user = User(name="John")
+    db.execute("TRUNCATE users")  # ← Real setup
+    repo = UserRepository(db)
+    repo.save(user)
+    
+    # Read from DB without mock
+    result = db.query("SELECT * FROM users WHERE name='John'")
+    assert result[0]['name'] == "John"
+```
+
+---
+
+### 8. Performance Anti-Patterns
+
+**What to look for:**
+- N+1 query problems
+- Inefficient algorithms
+- Polling instead of event-driven
+- Unnecessary data copies
+
+**Search patterns:**
+```bash
+# N+1 patterns
+grep -rn "for.*in.*:" cortex/ --include="*.py" -A 5 | grep "query\|select\|get" | head -10
+
+# Polling patterns
+grep -rn "while.*True\|sleep" cortex/ --include="*.py"
+
+# Inefficient sorts
+grep -rn "sort\|sorted" cortex/ --include="*.py"
+```
+
+**Examples:**
+```python
+# N+1 query problem
+users = db.query("SELECT * FROM users")
+for user in users:
+    orders = db.query("SELECT * FROM orders WHERE user_id=?", user.id)  # ← Repeated query!
+    process(orders)
+
+# Better: JOIN
+users_with_orders = db.query("""
+    SELECT u.*, o.* FROM users u
+    LEFT JOIN orders o ON u.id = o.user_id
+""")
+
+# Polling instead of events
+while True:
+    new_data = api.check_for_updates()
+    if new_data:
+        process(new_data)
+    sleep(5)
+
+# Better: Event-driven
+def on_update(data):
+    process(data)
+api.subscribe(on_update)
+```
+
+---
+
+## OUTPUT FORMAT
+
+Create: `_workspaces/roadmap/issues/findings-debt-YYYYMMDD.yaml`
+
+```yaml
+debt_findings:
+  metadata:
+    review_date: "YYYYMMDD"
+    total_debt_items: X
+    by_category:
+      duplication: Y
+      over_engineering: Z
+      under_engineering: A
+      deprecated: B
+      abstraction_gaps: C
+      documentation_gaps: D
+      integration_gaps: E
+      performance: F
+    
+  high_priority_debt:
+    - debt_id: "DEBT-001"
+      category: "DUPLICATION"
+      severity: "HIGH"
+      description: "Validation logic repeated 7 times"
+      locations:
+        - "cortex/api/endpoints/users.py:45"
+        - "cortex/api/endpoints/products.py:123"
+        - "cortex/api/endpoints/orders.py:89"
+      impact: "Bug in validation requires 7 fixes; 7x maintenance burden"
+      remediation: "Extract to cortex/common/validation.py"
+      effort: "2 hours"
+      
+    - debt_id: "DEBT-002"
+      category: "INTEGRATION_GAPS"
+      severity: "HIGH"
+      description: "No integration tests for database operations"
+      evidence:
+        - "Only 23 unit tests with mocks"
+        - "Zero integration tests"
+        - "Coverage: 45% (real operations untested)"
+      impact: "DB migrations fail in production; undetected in tests"
+      remediation: "Add 15-20 integration tests with real DB"
+      effort: "3 days"
+      
+    - debt_id: "DEBT-003"
+      category: "PERFORMANCE"
+      severity: "MEDIUM"
+      description: "N+1 query in audit log retrieval"
+      location: "cortex/infrastructure/audit_logger.py:150"
+      evidence: "For each AC, queries entries (1 + N queries for N ACs)"
+      impact: "Audit retrieval O(N²) instead of O(N); slow for large audits"
+      remediation: "Use JOIN to fetch all entries in single query"
+      effort: "1 hour"
+      
+  recommendations:
+    - "Extract all validation logic to shared module (reduce duplication by 80%)"
+    - "Add integration test suite (2-3 days effort, 40% coverage improvement)"
+    - "Refactor N+1 queries (5-10 queries identified, quick wins)"
+    - "Replace polling with event-driven architecture (resource intensive operations)"
+    - "Consolidate 3 similar handlers into single abstraction"
+```
+
+---
+
+## DECISION TREE
+
+```
+For each debt item:
+
+Q1: Is code duplicated 3+ times?
+  → YES: HIGH debt (maintenance burden * 3)
+  
+Q2: Does it affect performance?
+  → YES: MEDIUM or HIGH (depends on frequency)
+  
+Q3: Is there no test coverage?
+  → YES: HIGH debt (undetectable bugs)
+  
+Q4: Is it using deprecated patterns?
+  → YES: LOW to MEDIUM (maintenance burden, readability)
+```
+
+---
+
+## VALIDATION
+
+Before finalizing findings:
+- [ ] Duplication pattern is exact (not just similar)
+- [ ] Performance impact is quantifiable (not speculative)
+- [ ] Effort estimate is realistic
+- [ ] Remediation is actionable
+- [ ] Business impact is clear
