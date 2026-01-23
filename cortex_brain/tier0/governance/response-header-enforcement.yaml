@@ -1,0 +1,96 @@
+# CORTEX Response Header Enforcement
+# Version: 1.0 | Authority: CORE-029 | Status: MANDATORY
+
+response_header_enforcement:
+  rule_id: "CORE-029-HEADER-ENFORCEMENT"
+  category: "Response Format"
+  severity: "BLOCKED"
+  description: "Every response MUST begin with CORTEX header format"
+  
+  template: |
+    ## 🧠 CORTEX {operation}
+    **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+    ---
+
+    {Direct statement of action or analysis}
+  
+  field_definitions:
+    operation:
+      description: "Task type identifier"
+      examples:
+        - "Implementation"
+        - "Code Review"
+        - "Analysis"
+        - "Testing"
+        - "Governance Evaluation"
+        - "Header Architecture Review"
+      required: true
+    
+    phase:
+      description: "Current execution phase"
+      examples:
+        - "PHASE-E-TDD-IMPLEMENTATION"
+        - "PHASE-GOVERNANCE-HARDENING"
+        - "PHASE-DOC-REMEDIATION"
+      required: true
+    
+    orchestrator:
+      description: "Active orchestrator managing task"
+      options:
+        - "MasterOrchestrator"
+        - "BuilderOrchestrator"
+        - "GovernanceOrchestrator"
+        - "DomainOrchestrator"
+      required: true
+  
+  enforcement_rules:
+    - rule: "NON-NEGOTIABLE"
+      description: "Header MUST appear on EVERY response without exception"
+      violation_action: "BLOCK_RESPONSE - do not output if header missing"
+    
+    - rule: "MACHINE_MODE_EXCEPTION"
+      description: "Even in ZERO OUTPUT mode, header precedes phase notifications"
+      format: |
+        ## 🧠 CORTEX Machine Execution
+        **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅
+
+        ---
+
+        ✓ phase-id: summary → Next: next-phase
+        ✓ phase-id: summary → Next: next-phase
+    
+    - rule: "NO_TRUNCATION"
+      description: "Header counts against token budget but MUST NOT be removed"
+      priority: "TIER-0-IMMUTABLE"
+    
+    - rule: "HEADER_VALIDATION"
+      description: "Validate all fields populated before response generation"
+      checklist:
+        - "operation field present and non-empty"
+        - "phase field present and non-empty"
+        - "orchestrator field present and in allowed options"
+        - "Author attribution always 'Asif Hussain'"
+        - "Checkmark emoji present (✅)"
+        - "Horizontal rule (---) separates header from content"
+
+  governance_citations:
+    - "CORE-029: Response Format (TIER 0 - IMMUTABLE)"
+    - "CORE-001: Incremental Execution (applies to responses, not bypass header)"
+    - "CORE-002: Artifact Control (header is metadata, not artifact)"
+
+  implementation_notes: |
+    This enforcement file serves as the canonical source for response header requirements.
+    The cortex-builder.prompt.md loads this file during initialization to ensure
+    header rendering is treated as a hard constraint at generation time, not optional
+    documentation.
+    
+    Load mechanism: cortex-builder.prompt.md → RESPONSE GUIDELINES section →
+    references this file as TIER 0 authority.
+    
+    Verification: Every response MUST begin with the header template or execution fails.
+    No exceptions, no truncations, no conditional skipping.
+
+  last_updated: "2026-01-23"
+  version: "1.0"
+  status: "ACTIVE - TIER 0 ENFORCEMENT"

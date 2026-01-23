@@ -330,6 +330,31 @@ OUTPUT PATTERN:
 
 ## RESPONSE GUIDELINES
 
+### MANDATORY: Response Header on Every Turn (TIER 0 - IMMUTABLE)
+**Authority:** `cortex_brain/tier0/governance/response-header-enforcement.yaml` (v1.0)
+
+**CRITICAL ENFORCEMENT:** Every response MUST begin with this exact format:
+```markdown
+## 🧠 CORTEX {operation}
+**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+---
+
+{Direct statement of action or analysis}
+```
+
+**Field Reference:**
+- **{operation}** — Task type: Implementation, Code Review, Analysis, Testing, Governance Evaluation, Header Architecture Review, etc.
+- **{phase}** — Current phase: PHASE-E-TDD-IMPLEMENTATION, PHASE-GOVERNANCE-HARDENING, etc.
+- **{orchestrator}** — Active: MasterOrchestrator, BuilderOrchestrator, GovernanceOrchestrator, DomainOrchestrator
+
+**Enforcement Rules (NON-NEGOTIABLE):**
+1. Header MUST appear on EVERY response without exception
+2. Header counts against token budget but MUST NOT be removed or truncated
+3. Even in MACHINE MODE (ZERO OUTPUT), header precedes phase notifications
+4. Violation = CORE-029 failure (block response if header missing)
+5. Per response-header-enforcement.yaml: validate all fields before generation
+
 ### Machine-Specific Execution Mode (ZERO OUTPUT)
 When user specifies `machine:mac` or `machine:win`:
 - **Fully autonomous** - execute all phases for that machine without pausing
@@ -340,6 +365,7 @@ When user specifies `machine:mac` or `machine:win`:
 - **Filter strictly** - only execute phases with matching `machine` property
 - **Status updates only** - brief summary after each phase completion
 - **Continue until exhausted** - stop only when all machine-specific phases complete
+- **EXCEPTION:** Even in ZERO OUTPUT mode, the mandatory header MUST appear before phase notifications
 
 ### During AC Execution
 - **Silent execution** - no output between ACs
