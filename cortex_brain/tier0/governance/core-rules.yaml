@@ -637,7 +637,6 @@ rules:
       **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
       
       ---
-      **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
       
       [Response content]
       
@@ -697,7 +696,6 @@ rules:
         **Author:** Asif Hussain | **Phase:** PHASE-13 | **Orchestrator:** MasterOrchestrator ✅
         
         ---
-        **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
         
         Analysis results here...
       
@@ -706,7 +704,6 @@ rules:
         **Author:** Asif Hussain | **Phase:** PHASE-DOC-REMEDIATION | **Orchestrator:** PlanningOrchestrator ✅
         
         ---
-        **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
         
         Implementation plan here...
       

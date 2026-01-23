@@ -240,7 +240,6 @@ GitHub Copilot: ## 🧠 CORTEX Analysis
 **Author:** Asif Hussain | **Phase:** PHASE-E-TDD-IMPLEMENTATION | **Orchestrator:** GovernanceOrchestrator ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -381,7 +380,6 @@ GitHub Copilot: ## 🧠 CORTEX Implementation
 **Author:** Asif Hussain | **Phase:** PHASE-E-TDD-IMPLEMENTATION | **Orchestrator:** MasterOrchestrator ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 

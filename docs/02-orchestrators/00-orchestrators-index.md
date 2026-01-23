@@ -581,7 +581,6 @@ master.enable_debug_logging()
 
 ## Copyright & Attribution
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Orchestrators System
 Architecture Documentation v1.0.0

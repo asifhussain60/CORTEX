@@ -961,4 +961,3 @@ def load_tool_with_fallback(tool_id: str) -> Result[MCPTool]:
 **Authority:** Runtime behavior analysis  
 **Next Review:** Upon major changes to concurrency, governance, or auth logic  
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
