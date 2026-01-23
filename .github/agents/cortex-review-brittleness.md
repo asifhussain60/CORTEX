@@ -1,296 +1,589 @@
-# CORTEX Brittleness Review Agent# CORTEX Brittleness Review Agent
+# CORTEX Review Agent: Brittleness Analysis# CORTEX Brittleness Review Agent# CORTEX Brittleness Review Agent
+
+## Structural Weaknesses & Load Handling
 
 
+
+**Purpose:** Identify code that works in happy-path but fails under load, concurrency, resource exhaustion, or edge cases.
 
 **Purpose:** Systematically identify structural weaknesses that break under load, edge cases, or environmental changes.**Purpose:** Systematically identify structural weaknesses that break under load, edge cases, or environmental changes.
 
+---
 
+
+
+## CHECKS PERFORMED
 
 **SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
 
+### 1. Single Points of Failure (SPOFs)
 
 
----## ⚠️ OUTPUT GUIDELINES
 
+**What to look for:**
 
+- No redundancy or failover logic---## ⚠️ OUTPUT GUIDELINES
+
+- All requests routing through single component
+
+- No circuit breaker patterns
+
+- Hardcoded endpoints (no retries)
 
 ## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)**Copilot Instructions:**
 
-- ✅ Output findings to terminal (human-readable)
+**Search commands:**
 
-**Unified policy enforced across ALL agents:**- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml`
+```bash- ✅ Output findings to terminal (human-readable)
 
-- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
+grep -rn "self\._" cortex/ --include="*.py" | grep -v "__" | head -20
 
-### Forbidden File Patterns (NO EXCEPTIONS)- ❌ DO NOT create markdown (.md) report files
+grep -rn "singleton\|Singleton\|INSTANCE" cortex/ --include="*.py"**Unified policy enforced across ALL agents:**- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml`
 
-| What | Why | Action |- ❌ DO NOT output to root or `.github/` directories
+grep -rn "hardcoded\|fixed.*url\|ENDPOINT = " cortex/ --include="*.py"
+
+```- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
+
+
+
+**Evidence locations:**### Forbidden File Patterns (NO EXCEPTIONS)- ❌ DO NOT create markdown (.md) report files
+
+- `cortex/infrastructure/connection_pool.py` - Connection pool exhaustion
+
+- `cortex/infrastructure/circuit_breaker.py` - No state persistence| What | Why | Action |- ❌ DO NOT output to root or `.github/` directories
+
+- `cortex/orchestrators/` - Single coordinator instances
 
 |------|-----|--------|- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
 
+---
+
 | `.md` report files outside `docs/` | SSOT conflict | DELETE IMMEDIATELY |
+
+### 2. Resource Exhaustion Patterns
 
 | `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
 
-| Multiple cortex-*.yaml files | Truth conflict | DELETE extras |
+**What to look for:**
 
-| `.py` scripts in root | Pollution | DELETE at session end |**Default Behavior:** Terminal output + YAML report (no extra MD files)
+- No connection limits| Multiple cortex-*.yaml files | Truth conflict | DELETE extras |
+
+- Memory leaks (unclosed files/connections)
+
+- Growing data structures without cleanup| `.py` scripts in root | Pollution | DELETE at session end |**Default Behavior:** Terminal output + YAML report (no extra MD files)
+
+- No rate limiting
 
 | `.md` files in `_workspaces/roadmap/` | Authority confusion | DELETE IMMEDIATELY |
 
----
+**Search patterns:**
 
-### ✅ Correct Findings Output Locations
+```python---
 
-- Primary: `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml` (YAML only)## BRITTLENESS CATEGORIES
+# Missing finally blocks
 
-- Documentation: `docs/FILENAME.md` (only if needed for execution)
+try:### ✅ Correct Findings Output Locations
 
-- Terminal: Default (human-readable output)### Category 1: Error Handling Brittleness
+    resource = acquire()
+
+    # Use resource- Primary: `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml` (YAML only)## BRITTLENESS CATEGORIES
+
+except:
+
+    pass  # ← Resource never released!- Documentation: `docs/FILENAME.md` (only if needed for execution)
 
 
 
----**Detection Commands:**
+# Growing lists without bounds- Terminal: Default (human-readable output)### Category 1: Error Handling Brittleness
 
-```bash
+self.history.append(data)  # ← Unbounded growth
 
-## 🎯 VALIDATION CHECKLIST - Before Each Output# Find bare except clauses (CORE-013 violation)
 
-grep -rn "except:" --include="*.py" src/ | grep -v "except Exception\|except \w"
+
+# Unclosed connections
+
+conn = db.connect()---**Detection Commands:**
+
+query(conn)  # ← No finally/context manager
+
+``````bash
+
+
+
+**Check files:**## 🎯 VALIDATION CHECKLIST - Before Each Output# Find bare except clauses (CORE-013 violation)
+
+- `cortex/infrastructure/audit_logger.py` - Log rotation?
+
+- `cortex/infrastructure/resource_tracker.py` - Resource cleanup?grep -rn "except:" --include="*.py" src/ | grep -v "except Exception\|except \w"
+
+- `cortex/brain/tier2/resilience/__init__.py` - AlertManager cleanup?
 
 ```
+
+---
 
 BEFORE creating brittleness findings:# Find generic Exception catches
 
+### 3. Error Handling Completeness
+
 [ ] Creating .md report? → STOP - Use YAML + terminal insteadgrep -rn "except Exception:" --include="*.py" src/
 
-[ ] Creating docs_md/? → STOP - FORBIDDEN
+**What to look for:**
 
-[ ] Multiple cortex-*.yaml? → STOP - SSOT violation# Find missing error handling in critical paths
+- Bare `except:` clauses[ ] Creating docs_md/? → STOP - FORBIDDEN
+
+- Unhandled exception types
+
+- Silent failures (no logging)[ ] Multiple cortex-*.yaml? → STOP - SSOT violation# Find missing error handling in critical paths
+
+- No retry logic for transient errors
 
 [ ] Wrong file locations? → STOP - FIX pathsgrep -rn "open(\|sqlite3.connect\|requests\.\|subprocess" --include="*.py" src/ | head -50
 
-[ ] .py files in root? → DELETE before commit```
+**Search patterns:**
 
-```
+```bash[ ] .py files in root? → DELETE before commit```
 
-**What to Flag:**
+# Bare except
+
+grep -rn "except:" cortex/ --include="*.py"```
+
+
+
+# Exception swallowing**What to Flag:**
+
+grep -rn "except.*:\s*pass" cortex/ --include="*.py"
 
 **Red Flag 🚩 = IMMEDIATE ACTION**- `except:` (bare except) — CRITICAL
 
-- `.md` findings outside `docs/`- `except Exception:` without re-raise — HIGH
+# Generic Exception catches
 
-- `docs_md/` folder- `pass` in except blocks — HIGH
+grep -rn "except Exception:" cortex/ --include="*.py"- `.md` findings outside `docs/`- `except Exception:` without re-raise — HIGH
 
-- Multiple cortex-*.yaml- Missing try/except around I/O operations — MEDIUM
 
-- Stray files
 
-### Category 2: State Management Brittleness
+# Missing error context- `docs_md/` folder- `pass` in except blocks — HIGH
+
+grep -rn "except.*:\s*return\|except.*:\s*None" cortex/ --include="*.py"
+
+```- Multiple cortex-*.yaml- Missing try/except around I/O operations — MEDIUM
+
+
+
+**Key files:**- Stray files
+
+- `cortex/infrastructure/graceful_degradation.py:54` - `raise NotImplementedError`
+
+- `cortex/infrastructure/crash_recovery.py` - Recovery logic errors?### Category 2: State Management Brittleness
+
+- `cortex/brain/tier2/resilience/__init__.py` - Error propagation?
+
+---
 
 ---
 
 **Detection Commands:**
 
+### 4. Concurrency Issues
+
 ## ⚠️ OUTPUT GUIDELINES```bash
 
-# Find file writes without atomic patterns
+**What to look for:**
 
-**Copilot Instructions:**grep -rn "\.write(" --include="*.py" src/ | grep -v "tempfile\|atomic"
+- No locks for shared state# Find file writes without atomic patterns
+
+- Race conditions in initialization
+
+- Deadlock potential**Copilot Instructions:**grep -rn "\.write(" --include="*.py" src/ | grep -v "tempfile\|atomic"
+
+- No atomic operations
 
 - ✅ Output findings to terminal (human-readable, default)
 
-- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml`# Find concurrent access without locking
+**Search patterns:**
 
-- ✅ Create MD documentation to `docs/` (only if absolutely required)grep -rn "threading\|multiprocessing" --include="*.py" src/
+```bash- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-BRIT-YYYYMMDD.yaml`# Find concurrent access without locking
 
-- ❌ DO NOT create markdown (.md) report files
+# Shared mutable state
+
+grep -rn "class.*:\s*$" cortex/ -A 5 --include="*.py" | grep "self\._.*= \[\]\|self\._.*= {}"- ✅ Create MD documentation to `docs/` (only if absolutely required)grep -rn "threading\|multiprocessing" --include="*.py" src/
+
+
+
+# Missing locks- ❌ DO NOT create markdown (.md) report files
+
+grep -rn "Lock\|threading\|asyncio.Lock" cortex/ --include="*.py" | grep -v import
 
 - ❌ DO NOT output to root or `.github/` directories# Find state stored in memory-only
 
-- ❌ DO NOT create `docs_md/` foldergrep -rn "self\.\w+ = \[\]\|self\.\w+ = {}" --include="*.py" src/
+# Concurrent dict/list access
+
+grep -rn "\[.*\] =\|\[.*\]\.append\|\[.*\]\.extend" cortex/ --include="*.py" | grep -v test- ❌ DO NOT create `docs_md/` foldergrep -rn "self\.\w+ = \[\]\|self\.\w+ = {}" --include="*.py" src/
+
+```
 
 - ❌ NEVER leave `.py` scripts in root```
 
+**Verify in:**
 
+- `cortex/brain/tier1/orchestrators/` - Orchestrator state management
 
-**Default Behavior:** Terminal output + optional YAML findings**What to Flag:**
+- `cortex/infrastructure/transaction_manager.py` - Transaction atomicity?
 
-- Non-atomic file writes — HIGH
+- `cortex/brain/tier2/resilience/__init__.py` - Alert manager thread safety?**Default Behavior:** Terminal output + optional YAML findings**What to Flag:**
 
----- Missing file locks for shared resources — HIGH
 
-- In-memory state without persistence — MEDIUM
 
-## BRITTLENESS CATEGORIES- No transaction boundaries — CRITICAL
+---- Non-atomic file writes — HIGH
 
 
 
-### Category 1: Error Handling Brittleness### Category 3: Resource Management Brittleness
+### 5. File/Network I/O Error Paths---- Missing file locks for shared resources — HIGH
 
 
 
-**Detection Commands:****Detection Commands:**
+**What to look for:**- In-memory state without persistence — MEDIUM
 
-```bash```bash
+- No timeout handling
 
-# Find bare except clauses (CORE-013 violation)# Find unclosed resources
+- No retry on transient failures## BRITTLENESS CATEGORIES- No transaction boundaries — CRITICAL
 
-grep -rn "except:" --include="*.py" src/ | grep -v "except Exception\|except \w"grep -rn "open(" --include="*.py" src/ | grep -v "with open"
+- Missing partial read handling
 
+- No connection keep-alive
 
 
-# Find generic Exception catches# Find connection leaks
 
-grep -rn "except Exception:" --include="*.py" src/grep -rn "sqlite3.connect\|create_engine" --include="*.py" src/ | grep -v "with\|contextmanager"
-
-
-
-# Find missing error handling in critical paths# Find missing cleanup in __del__
-
-grep -rn "open(\|sqlite3.connect\|requests\.\|subprocess" --include="*.py" src/ | head -50grep -rn "def __del__" --include="*.py" src/
-
-``````
-
-
-
-**What to Flag:****What to Flag:**
-
-- `except:` (bare except) — CRITICAL- File handles without context manager — HIGH
-
-- `except Exception:` without re-raise — HIGH- DB connections without proper close — CRITICAL
-
-- `pass` in except blocks — HIGH- Network connections without timeout — HIGH
-
-- Missing try/except around I/O operations — MEDIUM- Missing `finally` blocks for cleanup — MEDIUM
-
-
-
-### Category 2: State Management Brittleness### Category 4: Concurrency Brittleness
-
-
-
-**Detection Commands:****Detection Commands:**
-
-```bash```bash
-
-# Find file writes without atomic patterns# Find shared mutable state
-
-grep -rn "\.write(" --include="*.py" src/ | grep -v "tempfile\|atomic"grep -rn "global " --include="*.py" src/
-
-
-
-# Find concurrent access without locking# Find potential race conditions
-
-grep -rn "threading\|multiprocessing" --include="*.py" src/grep -rn "if not .* and\|if .* is None" --include="*.py" src/ | head -30
-
-
-
-# Find state stored in memory-only# Find lock patterns
-
-grep -rn "self\.\w+ = \[\]\|self\.\w+ = {}" --include="*.py" src/grep -rn "Lock()\|RLock()\|Semaphore" --include="*.py" src/
-
-``````
-
-
-
-**What to Flag:****What to Flag:**
-
-- Non-atomic file writes — HIGH- Global mutable state — CRITICAL
-
-- Missing file locks for shared resources — HIGH- Check-then-act patterns without locking — HIGH
-
-- In-memory state without persistence — MEDIUM- Shared resources without synchronization — HIGH
-
-- No transaction boundaries — CRITICAL- Deadlock-prone lock ordering — CRITICAL
-
-
-
-### Category 3: Resource Management Brittleness### Category 5: Dependency Brittleness
-
-
-
-**Detection Commands:****Detection Commands:**
-
-```bash```bash
-
-# Find unclosed resources# Find hardcoded dependencies
-
-grep -rn "open(" --include="*.py" src/ | grep -v "with open"grep -rn "import \w\+\s*$" --include="*.py" src/ | grep -v "from\|typing\|__future__"
-
-
-
-# Find connection leaks# Find version-sensitive APIs
-
-grep -rn "sqlite3.connect\|create_engine" --include="*.py" src/ | grep -v "with\|contextmanager"grep -rn "sys.version\|platform\." --include="*.py" src/
-
-
-
-# Find missing cleanup in __del__# Find missing dependency checks
-
-grep -rn "def __del__" --include="*.py" src/grep -rn "try:.*import\|ImportError" --include="*.py" src/
-
-``````
-
-
-
-**What to Flag:****What to Flag:**
-
-- File handles without context manager — HIGH- Missing version guards — MEDIUM
-
-- DB connections without proper close — CRITICAL- Optional dependencies without fallback — HIGH
-
-- Network connections without timeout — HIGH- Circular import patterns — HIGH
-
-- Missing `finally` blocks for cleanup — MEDIUM- Unguarded C extension imports — MEDIUM
-
-
-
-### Category 4: Concurrency Brittleness---
-
-
-
-**Detection Commands:**## AUDIT LOG QUERIES FOR BRITTLENESS
+**Search patterns:**### Category 1: Error Handling Brittleness### Category 3: Resource Management Brittleness
 
 ```bash
 
-# Find shared mutable state```sql
+# File operations without error handling
+
+grep -rn "open(" cortex/ --include="*.py" | grep -v "with\|try"
+
+**Detection Commands:****Detection Commands:**
+
+# Network calls without timeout
+
+grep -rn "requests\.\|httpx\." cortex/ --include="*.py" | grep -v timeout```bash```bash
+
+
+
+# No retry logic# Find bare except clauses (CORE-013 violation)# Find unclosed resources
+
+grep -rn "requests\.\|httpx\." cortex/ --include="*.py" | grep -v retry
+
+```grep -rn "except:" --include="*.py" src/ | grep -v "except Exception\|except \w"grep -rn "open(" --include="*.py" src/ | grep -v "with open"
+
+
+
+**Check files:**
+
+- `cortex/deployment/` - Deployment I/O
+
+- `cortex/mcp/` - Network protocol handling# Find generic Exception catches# Find connection leaks
+
+- `cortex/api/` - HTTP endpoint handling
+
+grep -rn "except Exception:" --include="*.py" src/grep -rn "sqlite3.connect\|create_engine" --include="*.py" src/ | grep -v "with\|contextmanager"
+
+---
+
+
+
+### 6. Database Transaction Consistency
+
+# Find missing error handling in critical paths# Find missing cleanup in __del__
+
+**What to look for:**
+
+- Uncommitted transactionsgrep -rn "open(\|sqlite3.connect\|requests\.\|subprocess" --include="*.py" src/ | head -50grep -rn "def __del__" --include="*.py" src/
+
+- No rollback on error
+
+- Missing transaction boundaries``````
+
+- Dirty reads possible
+
+
+
+**Search patterns:**
+
+```bash**What to Flag:****What to Flag:**
+
+# Missing transaction context
+
+grep -rn "execute\|cursor\|query" cortex/ --include="*.py" | grep -v transaction | grep -v "# transaction"- `except:` (bare except) — CRITICAL- File handles without context manager — HIGH
+
+
+
+# No rollback- `except Exception:` without re-raise — HIGH- DB connections without proper close — CRITICAL
+
+grep -rn "except:" cortex/ --include="*.py" -A 2 | grep -v rollback
+
+```- `pass` in except blocks — HIGH- Network connections without timeout — HIGH
+
+
+
+**Verify in:**- Missing try/except around I/O operations — MEDIUM- Missing `finally` blocks for cleanup — MEDIUM
+
+- `cortex/infrastructure/audit_logger.py` - Audit log transactions
+
+- `cortex/core/` - State management
+
+- `cortex/governance/` - Governance state
+
+### Category 2: State Management Brittleness### Category 4: Concurrency Brittleness
+
+---
+
+
+
+### 7. Timeout Handling
+
+**Detection Commands:****Detection Commands:**
+
+**What to look for:**
+
+- No timeout on blocking operations```bash```bash
+
+- Infinite waits
+
+- Missing deadline enforcement# Find file writes without atomic patterns# Find shared mutable state
+
+
+
+**Search patterns:**grep -rn "\.write(" --include="*.py" src/ | grep -v "tempfile\|atomic"grep -rn "global " --include="*.py" src/
+
+```bash
+
+# Missing timeout
+
+grep -rn "\.wait\(\)\|\.get\(\)\|\.join\(\)" cortex/ --include="*.py" | grep -v timeout
+
+# Find concurrent access without locking# Find potential race conditions
+
+# Infinite loops
+
+grep -rn "while True:" cortex/ --include="*.py" | grep -v "# safe: break on\|# break when"grep -rn "threading\|multiprocessing" --include="*.py" src/grep -rn "if not .* and\|if .* is None" --include="*.py" src/ | head -30
+
+```
+
+
+
+**Critical files:**
+
+- `cortex/infrastructure/graceful_degradation.py` - Fallback execution# Find state stored in memory-only# Find lock patterns
+
+- `cortex/orchestrators/` - Orchestrator execution
+
+- `cortex/brain/tier2/resilience/__init__.py` - Resilience mechanismsgrep -rn "self\.\w+ = \[\]\|self\.\w+ = {}" --include="*.py" src/grep -rn "Lock()\|RLock()\|Semaphore" --include="*.py" src/
+
+
+
+---``````
+
+
+
+### 8. Graceful Degradation Paths
+
+
+
+**What to look for:****What to Flag:****What to Flag:**
+
+- No fallback behaviors
+
+- Hard failures instead of partial service- Non-atomic file writes — HIGH- Global mutable state — CRITICAL
+
+- Missing feature flags
+
+- No adaptive behavior- Missing file locks for shared resources — HIGH- Check-then-act patterns without locking — HIGH
+
+
+
+**Verify:**- In-memory state without persistence — MEDIUM- Shared resources without synchronization — HIGH
+
+- `cortex/infrastructure/graceful_degradation.py` - Implementation complete?
+
+- `cortex/infrastructure/bulkhead_manager.py` - Isolation working?- No transaction boundaries — CRITICAL- Deadlock-prone lock ordering — CRITICAL
+
+- `cortex/infrastructure/circuit_breaker.py` - State transitions correct?
+
+
+
+---
+
+### Category 3: Resource Management Brittleness### Category 5: Dependency Brittleness
+
+## OUTPUT FORMAT
+
+
+
+Create: `_workspaces/roadmap/issues/findings-brittleness-YYYYMMDD.yaml`
+
+**Detection Commands:****Detection Commands:**
+
+```yaml
+
+brittleness_findings:```bash```bash
+
+  metadata:
+
+    review_date: "YYYYMMDD"# Find unclosed resources# Find hardcoded dependencies
+
+    total_issues: X
+
+    by_severity:grep -rn "open(" --include="*.py" src/ | grep -v "with open"grep -rn "import \w\+\s*$" --include="*.py" src/ | grep -v "from\|typing\|__future__"
+
+      critical: Y
+
+      high: Z
+
+      medium: A
+
+    # Find connection leaks# Find version-sensitive APIs
+
+  critical_issues:
+
+    - issue_id: "BRIT-001"grep -rn "sqlite3.connect\|create_engine" --include="*.py" src/ | grep -v "with\|contextmanager"grep -rn "sys.version\|platform\." --include="*.py" src/
+
+      category: "SPOF"
+
+      severity: "CRITICAL"
+
+      location: "cortex/infrastructure/connection_pool.py:63"
+
+      description: "Single connection pool instance with no redundancy"# Find missing cleanup in __del__# Find missing dependency checks
+
+      failure_scenario: "Pool exhaustion causes all requests to queue indefinitely"
+
+      impact: "System unavailable when pool saturated"grep -rn "def __del__" --include="*.py" src/grep -rn "try:.*import\|ImportError" --include="*.py" src/
+
+      evidence:
+
+        - "ConnectionPool._instances uses single dict"``````
+
+        - "No fallback to direct connections"
+
+        - "No timeout on .get() calls"
+
+      remediation: "Implement connection pool with timeout and fallback"
+
+      blocking_phase: "impl-infra-001-resilience"**What to Flag:****What to Flag:**
+
+      
+
+  high_severity_issues:- File handles without context manager — HIGH- Missing version guards — MEDIUM
+
+    - issue_id: "BRIT-002"
+
+      category: "RESOURCE_EXHAUSTION"- DB connections without proper close — CRITICAL- Optional dependencies without fallback — HIGH
+
+      severity: "HIGH"
+
+      location: "cortex/brain/tier2/resilience/__init__.py:824"- Network connections without timeout — HIGH- Circular import patterns — HIGH
+
+      description: "Alert history unbounded growth"
+
+      failure_scenario: "Memory exhaustion after 1M+ alerts"- Missing `finally` blocks for cleanup — MEDIUM- Unguarded C extension imports — MEDIUM
+
+      impact: "Out-of-memory crash on high-alert systems"
+
+      evidence:
+
+        - "AlertManager stores all alerts in history list"
+
+        - "No pruning or rotation"### Category 4: Concurrency Brittleness---
+
+        - "pass statement at line 824 suggests incomplete"
+
+      remediation: "Implement circular buffer or cleanup policy"
+
+      
+
+  recommendations:**Detection Commands:**## AUDIT LOG QUERIES FOR BRITTLENESS
+
+    - "Add circuit breaker timeouts to all I/O operations"
+
+    - "Implement connection pool with backpressure"```bash
+
+    - "Add graceful degradation for non-critical failures"
+
+    - "Implement resource cleanup on exceptions"# Find shared mutable state```sql
+
+```
 
 grep -rn "global " --include="*.py" src/-- Find components with high failure rates
 
+---
+
 SELECT component, 
+
+## DECISION TREE
 
 # Find potential race conditions       COUNT(CASE WHEN operation = 'AC_EXECUTE_FAILED' THEN 1 END) as failures,
 
-grep -rn "if not .* and\|if .* is None" --include="*.py" src/ | head -30       COUNT(CASE WHEN operation = 'AC_COMPLETE' THEN 1 END) as successes,
+```
 
-       ROUND(100.0 * COUNT(CASE WHEN operation = 'AC_EXECUTE_FAILED' THEN 1 END) / 
+For each potential brittleness issue:grep -rn "if not .* and\|if .* is None" --include="*.py" src/ | head -30       COUNT(CASE WHEN operation = 'AC_COMPLETE' THEN 1 END) as successes,
 
-# Find lock patterns             COUNT(*), 2) as failure_rate
 
-grep -rn "Lock()\|RLock()\|Semaphore" --include="*.py" src/FROM audit_log
 
-```WHERE operation IN ('AC_EXECUTE_FAILED', 'AC_COMPLETE')
+Q1: Is there NO error handling?       ROUND(100.0 * COUNT(CASE WHEN operation = 'AC_EXECUTE_FAILED' THEN 1 END) / 
 
-GROUP BY component
+  → YES: CRITICAL brittleness (hard fail)
 
-**What to Flag:**HAVING failure_rate > 5
+  → NO: Next question# Find lock patterns             COUNT(*), 2) as failure_rate
 
-- Global mutable state — CRITICALORDER BY failure_rate DESC;
 
-- Check-then-act patterns without locking — CRITICAL
+
+Q2: Can issue cause cascading failures?grep -rn "Lock()\|RLock()\|Semaphore" --include="*.py" src/FROM audit_log
+
+  → YES: HIGH brittleness (system-wide impact)
+
+  → NO: Next question```WHERE operation IN ('AC_EXECUTE_FAILED', 'AC_COMPLETE')
+
+
+
+Q3: Does code have SPOFs?GROUP BY component
+
+  → YES: HIGH brittleness (no redundancy)
+
+  → NO: Next question**What to Flag:**HAVING failure_rate > 5
+
+
+
+Q4: Can resource exhaustion occur?- Global mutable state — CRITICALORDER BY failure_rate DESC;
+
+  → YES: MEDIUM brittleness (eventual failure)
+
+  → NO: MEDIUM or LOW based on impact- Check-then-act patterns without locking — CRITICAL
+
+```
 
 - Missing locks around shared access — HIGH-- Find repeated failures (same AC failing multiple times)
 
+---
+
 - Deadlock-prone lock ordering — HIGHSELECT ac_id, COUNT(*) as failure_count, 
+
+## VALIDATION
 
        GROUP_CONCAT(timestamp, ', ') as failure_times
 
-### Category 5: Configuration BrittlenessFROM audit_log
+Before finalizing findings:
 
-WHERE operation = 'AC_EXECUTE_FAILED'
+- [ ] Evidence is direct code inspection (not speculation)### Category 5: Configuration BrittlenessFROM audit_log
 
-**Detection Commands:**GROUP BY ac_id
+- [ ] Failure scenario is realistic (not theoretical)
+
+- [ ] Impact is quantifiable (not vague)WHERE operation = 'AC_EXECUTE_FAILED'
+
+- [ ] Each issue has specific file:line reference
+
+- [ ] Remediation is actionable (not "refactor everything")**Detection Commands:**GROUP BY ac_id
+
 
 ```bashHAVING failure_count > 1
 

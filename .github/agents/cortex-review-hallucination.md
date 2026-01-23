@@ -1,228 +1,301 @@
-# CORTEX Hallucination Review Agent
+# CORTEX Review Agent: Hallucination Analysis
+## AI Safety, Injection Vectors & Unvalidated Output
 
-**Purpose:** Identify areas where AI agents could generate incorrect, misleading, or ungrounded output that propagates through the system.
-
-**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)
-
----
-
-## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
-
-**Unified policy enforced across ALL review agents:**
-
-### Forbidden File Patterns (ZERO TOLERANCE)
-| What | Why | Action |
-|------|-----|--------|
-| `.md` report files outside `docs/` | SSOT conflict | DELETE IMMEDIATELY |
-| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |
-| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
-| `.py` scripts in root | Pollution | DELETE at end of session |
-| Hallucination findings as `.md` | Authority confusion | Use YAML only |
-
-### ✅ Correct Findings Output Locations
-- Primary: `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml` (YAML only)
-- Documentation: `docs/FILENAME.md` (only if needed for execution)
-- Terminal: Default (human-readable analysis)
+**Purpose:** Identify AI safety risks: unvalidated LLM output, prompt injection, missing guardrails, unsafe code generation.
 
 ---
 
-## 🎯 VALIDATION CHECKLIST - Before Each Output
+## CHECKS PERFORMED
 
-```
-BEFORE creating hallucination findings:
-[ ] Creating .md report? → STOP - Use YAML + terminal instead
-[ ] Creating docs_md/? → STOP - FORBIDDEN
-[ ] Multiple cortex-*.yaml? → STOP - SSOT violation
-[ ] Wrong output locations? → STOP - FIX paths
-[ ] .py files in root? → DELETE before commit
-[ ] Reading from archived/old YAML? → STOP - Use cortex-impl-map.yaml ONLY
+### 1. Unvalidated LLM Output Execution
+
+**What to look for:**
+- LLM-generated code executed without validation
+- No confidence scoring before action
+- Missing grounding checks
+- Direct eval() of LLM output
+
+**Search patterns:**
+```bash
+# eval() or exec() with LLM input
+grep -rn "eval(\|exec(" cortex/ --include="*.py" | grep -v "# safe:"
+
+# LLM integration without validation
+grep -rn "claude\|gpt\|openai\|anthropic" cortex/ --include="*.py"
+
+# Generated code paths
+grep -rn "generate.*code\|code.*generation" cortex/ --include="*.py" -i
 ```
 
-**Red Flag 🚩 = FIX IMMEDIATELY**
-- `.md` findings outside `docs/`
-- `docs_md/` folder
-- Multiple cortex-*.yaml
-- Stray files in root
-- Old YAML references
+**Key concerns:**
+- `cortex/mcp/` - MCP tool execution (validates LLM tool calls?)
+- `cortex/brain/tier2/` - Code generation features
+- `cortex/execution/` - Execution of generated workflows
 
 ---
 
-## ⚠️ OUTPUT GUIDELINES
+### 2. Prompt Injection Vectors
 
-**Copilot Instructions:**
-- ✅ Output findings to terminal (human-readable, default)
-- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml`
-- ✅ Create MD documentation to `docs/` (only if absolutely required)
-- ❌ DO NOT create markdown (.md) report files
-- ❌ DO NOT output to root or `.github/` directories
-- ❌ DO NOT create `docs_md/` folder
-- ❌ NEVER leave `.py` scripts in root
+**What to look for:**
+- User input directly in prompts
+- Template interpolation without escaping
+- No input sanitization
+- Jailbreak-susceptible prompt structure
 
-**Default Behavior:** Terminal output + optional YAML findings
+**Search patterns:**
+```bash
+# Direct format strings
+grep -rn "f\".*{.*prompt.*}\|f\".*{.*input.*}" cortex/ --include="*.py"
+
+# Template rendering
+grep -rn "\.format(\|\.substitute(\|render(" cortex/ --include="*.py"
+
+# Unsafe string concatenation
+grep -rn "str +\|\" + str(" cortex/ --include="*.py"
+```
+
+**Critical files:**
+- `cortex/templates/` - Template safety?
+- `cortex/tools/template_validator.py` - Validation logic
+- `cortex/mcp/` - Tool parameter injection
 
 ---
 
-## HALLUCINATION RISK CATEGORIES
+### 3. MCP Protocol Compliance
 
-### Category 1: Prompt Injection Vectors
+**What to look for:**
+- Tool definitions missing input schema
+- No type validation on parameters
+- Missing error handling for tool calls
+- Tool exposure without authorization
 
-**Detection Approach:**
+**Verify:**
 ```bash
-# Find templates with user input interpolation
-grep -rn "\.format(\|f\".*{.*}\|%s" --include="*.py" src/ | grep -i "prompt\|template\|instruction"
+# MCP tool definitions
+find cortex/mcp -name "*.py" -exec grep -l "@mcp_tool\|tool_schema" {} \;
 
-# Find unescaped string concatenation in prompts
-grep -rn "prompt.*+\|+ .*prompt" --include="*.py" src/
+# Tool parameter validation
+grep -rn "validate.*parameter\|check.*input\|schema" cortex/mcp/ --include="*.py"
 
-# Find YAML templates with dynamic content
-grep -rn "{{.*}}\|{%.*%}" --include="*.yaml" cortex_brain/tier2/
+# Tool authorization
+grep -rn "permission\|authorize\|role.*check" cortex/mcp/ --include="*.py"
 ```
 
-**What to Flag:**
-- User input directly in LLM prompts — CRITICAL
-- Template interpolation without sanitization — HIGH
-- Dynamic prompt construction from external sources — HIGH
-- Missing input validation before LLM calls — MEDIUM
-
-### Category 2: Ungrounded AI Responses
-
-**Detection Approach:**
-```bash
-# Find LLM calls without source attribution
-grep -rn "openai\|anthropic\|llm\|completion" --include="*.py" src/ | head -30
-
-# Find response handlers without validation
-grep -rn "response\['\|response\.\|result\[" --include="*.py" src/ | grep -i "llm\|ai\|model"
-
-# Find missing confidence thresholds
-grep -rn "confidence\|certainty\|score" --include="*.py" src/
-```
-
-**What to Flag:**
-- LLM output used directly without verification — CRITICAL
-- No source attribution for generated facts — HIGH
-- Missing confidence scores/thresholds — MEDIUM
-- No human approval gate for critical operations — HIGH
-
-### Category 3: Context Window Overflow
-
-**Detection Approach:**
-```bash
-# Find context building without size limits
-grep -rn "context.*append\|\.extend(\|\.join(" --include="*.py" src/ | grep -i "prompt\|context\|message"
-
-# Find missing token counting
-grep -rn "token\|tiktoken\|max_length" --include="*.py" src/
-
-# Find large file reads for context
-grep -rn "read()\|readlines()\|Path.*read_text" --include="*.py" src/
-```
-
-**What to Flag:**
-- Unbounded context accumulation — HIGH
-- Missing token count validation — HIGH
-- Large files read entirely into context — MEDIUM
-- No context truncation strategy — MEDIUM
-
-### Category 4: Template Hallucination
-
-**Detection Approach:**
-```bash
-# Find response templates
-ls -la cortex_brain/tier2/response-templates/
-
-# Find template loading without validation
-grep -rn "yaml.safe_load\|json.load" --include="*.py" src/ | grep -i "template"
-
-# Find templates with AI-generated sections
-grep -rn "{{ai_content}}\|{generated}\|<!-- AI -->" --include="*.yaml" --include="*.md" cortex_brain/
-```
-
-**What to Flag:**
-- Templates with unconstrained AI sections — HIGH
-- Dynamic template generation without limits — HIGH
-- Missing template validation — MEDIUM
-- No fallback for failed generation — MEDIUM
-
-### Category 5: Knowledge Base Staleness
-
-**Detection Approach:**
-```bash
-# Find hardcoded dates/versions
-grep -rn "[0-9]{4}-[0-9]{2}-[0-9]{2}\|version.*=[0-9]\+" --include="*.py" src/ | head -20
-
-# Find cache/memoization without TTL
-grep -rn "@cache\|@lru_cache\|\.cache" --include="*.py" src/ | head -20
-
-# Find knowledge graph inconsistencies
-```
-
-**What to Flag:**
-- Hardcoded dates without update mechanism — MEDIUM
-- Cached knowledge without expiration — HIGH
-- No knowledge versioning — MEDIUM
-- Inconsistent facts across modules — HIGH
-
-### Category 6: Recursive AI Calls (AI-Generated AI Prompts)
-
-**Detection Approach:**
-```bash
-# Find code that generates prompts programmatically
-grep -rn "f\"{.*prompt.*}\"\|build.*prompt\|generate.*instruction" --include="*.py" src/ | head -20
-
-# Find nested AI calls
-grep -rn "llm.*llm\|ai.*ai" --include="*.py" src/
-
-# Find string interpolation in prompt context
-grep -rn "\${.*}\|{.*{.*}.*}" --include="*.py" src/ | grep -i "prompt"
-```
-
-**What to Flag:**
-- AI generating prompts for other AI — CRITICAL
-- Recursive LLM calls without depth limit — CRITICAL
-- String interpolation in nested prompts — HIGH
-- No circuit breaker for cascading failures — HIGH
+**Expected:**
+- All tools have input schemas
+- All parameters have type annotations
+- All tool calls validate inputs
+- Tool exposure controlled by permissions
 
 ---
 
-## Hallucination Mitigation Strategies
+### 4. Missing Input Sanitization
 
-### Strategy 1: Input Validation
-- Sanitize all user inputs before LLM use
-- Validate prompt structure and length
-- Check for injection patterns
+**What to look for:**
+- SQL injection vectors
+- Path traversal vulnerabilities
+- Script injection in shell commands
+- XSS vectors in templates
 
-### Strategy 2: Output Verification
-- Require source attribution for facts
-- Implement confidence thresholds
-- Use human-in-the-loop for critical decisions
-- Cross-reference facts with knowledge base
+**Search patterns:**
+```bash
+# SQL queries with direct string concat
+grep -rn "SELECT.*{.*}\|INSERT.*{.*}\|UPDATE.*{.*}" cortex/ --include="*.py"
 
-### Strategy 3: Context Management
-- Implement token counting
-- Truncate context when needed
-- Version knowledge base entries
-- Track context drift
+# Shell execution
+grep -rn "os.system(\|subprocess.*shell=True" cortex/ --include="*.py"
 
-### Strategy 4: Guardrails
-- Limit template generation flexibility
-- Use constrained templates with validation
-- Disable recursive AI calls
-- Implement circuit breakers
+# Path operations on user input
+grep -rn "open(user_\|open(.*request\|os.path.join(.*user" cortex/ --include="*.py"
 
-### Strategy 5: Audit Trail
-- Log all LLM prompts and responses
-- Track hallucination detection events
-- Record confidence scores
-- Enable hallucination pattern detection
+# Template rendering with user data
+grep -rn "jinja\|render.*user\|template.*request" cortex/ --include="*.py"
+```
+
+**Key files:**
+- `cortex/api/` - HTTP endpoint input handling
+- `cortex/cli/` - CLI argument parsing
+- `cortex/tools/` - Tool input handling
 
 ---
 
-## Hallucination Severity Levels
+### 5. Unsafe Template Interpolation
 
-| Level | Definition | Impact |
-|-------|-----------|--------|
-| CRITICAL | System generates false information | Immediate escalation |
-| HIGH | Hallucination vectors present | Fix before deployment |
-| MEDIUM | Potential for hallucination | Add safeguards |
-| LOW | Theoretical risk | Monitor and address |
+**What to look for:**
+- Autoescape disabled
+- User content in templates
+- Unsafe Jinja2 filters
+- No context isolation
+
+**Verify in:**
+- `cortex/templates/` directory
+- All uses of `jinja2.Template()`
+- Template rendering in `cortex/tools/`
+
+**Checks:**
+```bash
+grep -rn "autoescape=False\|autoescape.*False" cortex/ --include="*.py"
+grep -rn "Template(" cortex/ --include="*.py" | grep -v "autoescape=True"
+```
+
+---
+
+### 6. Code Generation Without Grounding
+
+**What to look for:**
+- Generated code not traced to source requirements
+- No verification against spec
+- Missing test generation alongside code
+- Hallucinated features
+
+**Verify:**
+- Is code generation tied to specific AC requirements?
+- Are generated classes/methods validated against schema?
+- Do tests exist for generated code?
+- Is generation deterministic (repeatable)?
+
+**Check files:**
+- `cortex/scripts/` - Code generation scripts
+- `cortex/mcp/tools/` - Tool generation
+- `cortex/templates/` - Template expansion
+
+---
+
+### 7. Missing Confidence Thresholds
+
+**What to look for:**
+- Actions taken without confidence scoring
+- No uncertainty handling
+- Fallback-on-confidence missing
+- Always-trusting behavior
+
+**Search patterns:**
+```bash
+# Confidence checks
+grep -rn "confidence\|certainty\|score" cortex/ --include="*.py" | grep -v test
+
+# Decisions without confidence
+grep -rn "if.*llm\|if.*gpt\|if.*claude" cortex/ --include="*.py" | grep -v "confidence\|score"
+```
+
+**Expected:**
+- All LLM-based decisions have confidence scoring
+- Low-confidence paths have fallbacks
+- High-risk operations require high confidence
+
+---
+
+### 8. Human-in-the-Loop Gaps
+
+**What to look for:**
+- No approval gates for high-risk operations
+- No logging of autonomous decisions
+- Missing "why" documentation
+- No reversal/rollback capability
+
+**Verify:**
+- Critical operations require review
+- All autonomous actions are logged
+- Decisions are reversible
+- Users can understand why decision was made
+
+---
+
+## OUTPUT FORMAT
+
+Create: `_workspaces/roadmap/issues/findings-hallucination-YYYYMMDD.yaml`
+
+```yaml
+hallucination_findings:
+  metadata:
+    review_date: "YYYYMMDD"
+    total_issues: X
+    by_severity:
+      critical: Y
+      high: Z
+      medium: A
+    
+  critical_issues:
+    - issue_id: "HALL-001"
+      category: "UNVALIDATED_EXECUTION"
+      severity: "CRITICAL"
+      location: "cortex/mcp/tools/code_generator.py:XX"
+      description: "Generated code executed without validation"
+      vulnerability: "LLM-generated code directly executed with eval()"
+      impact: "Arbitrary code execution if LLM compromised or jailbroken"
+      evidence:
+        - "Tool returns code_output without schema validation"
+        - "Executor calls eval(code_output) without checks"
+        - "No confidence scoring on generation"
+      remediation: "Validate generated code structure, type annotations, and dependencies"
+      blocking_phase: "arch-011-hallucination"
+      
+    - issue_id: "HALL-002"
+      category: "PROMPT_INJECTION"
+      severity: "CRITICAL"
+      location: "cortex/templates/template_resolver.py:XX"
+      description: "User input directly in LLM prompts"
+      vulnerability: "Prompt injection via user-controlled parameters"
+      impact: "LLM jailbreak, unauthorized actions, information disclosure"
+      evidence:
+        - "User input interpolated in prompt template"
+        - "No escaping or sanitization"
+        - "No input length limits"
+      remediation: "Sanitize input, use structured prompts, implement input validation"
+      
+  high_severity_issues:
+    - issue_id: "HALL-003"
+      category: "MCP_COMPLIANCE"
+      severity: "HIGH"
+      location: "cortex/mcp/tools/XX"
+      description: "Tool parameters lack input schema"
+      vulnerability: "Type confusion, unexpected input types"
+      impact: "Tool execution errors, potential crashes"
+      evidence:
+        - "Tool definition missing @param_schema"
+        - "No type hints on tool functions"
+        - "No parameter validation"
+      remediation: "Add comprehensive input schemas to all tools"
+      
+  recommendations:
+    - "Implement input validation framework for all user-facing APIs"
+    - "Add prompt injection detection and blocking"
+    - "Require confidence thresholds for all LLM-based decisions"
+    - "Implement code signing for generated code"
+    - "Add human approval gate for high-risk operations"
+```
+
+---
+
+## DECISION TREE
+
+```
+For each potential hallucination issue:
+
+Q1: Is LLM output executed without validation?
+  → YES: CRITICAL hallucination (arbitrary execution)
+  → NO: Next question
+
+Q2: Can user input influence LLM prompts?
+  → YES: CRITICAL hallucination (injection vector)
+  → NO: Next question
+
+Q3: Is generated code safety-checked?
+  → NO: HIGH hallucination (code safety gap)
+  → YES: Next question
+
+Q4: Is there human approval for high-risk actions?
+  → NO: MEDIUM hallucination (autonomous risk)
+  → YES: LOW or no issue
+```
+
+---
+
+## VALIDATION
+
+Before finalizing findings:
+- [ ] Vulnerability is exploitable (not theoretical)
+- [ ] Attack path is realistic and documented
+- [ ] Impact includes user harm scenarios
+- [ ] Evidence includes code locations and patterns
+- [ ] Remediation is specific and implementable

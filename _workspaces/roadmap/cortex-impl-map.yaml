@@ -393,6 +393,140 @@ implementation_philosophy:
       design_document: "_workspaces/roadmap/reports/KNOWLEDGE-GRAPH-ASSESSMENT.md"
       review_authority: "REVIEW-CORTEX-20260122.yaml (cortex-review.prompt.md Phase 2 & 3)"
     
+    remediation:
+      strategy: "review_findings_remediation"
+      focus: "Production readiness - Fix 18 CRITICAL findings from live implementation review"
+      status: "NOT_STARTED"
+      initiation_date: "2026-01-23"
+      total_phases: 10
+      total_estimated_effort: "120-150 hours (3-4 weeks)"
+      production_impact: "BLOCKS - 18 CRITICAL findings must be fixed before production"
+      authority: "CORTEX Live Implementation Review v4.1 (2026-01-23)"
+      review_consolidation_file: "_workspaces/roadmap/reports/review-findings-consolidated-20260123.yaml"
+      phases:
+        - phase_id: "REMEDIATION-REVIEW-PHASE-0-EMERGENCY-FIXES"
+          sequence: 1
+          priority: "P0-IMMEDIATE"
+          required: true
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "8 hours"
+          blocking: true
+          acceptance_criteria: 3
+          finding_ids: ["BRT-003", "BRT-004", "INTEG-003"]
+          description: "Emergency fixes for production blocking issues (no timeouts, bare except, no health checks)"
+          tasks:
+            - "Add timeout to external API calls (2-3 hours) - BRT-003"
+            - "Implement fail-fast on critical component init (3-4 hours) - BRT-002"
+            - "Add bare except remediation script (2 hours) - BRT-004"
+          target_completion: "2026-01-24"
+        
+        - phase_id: "REMEDIATION-REVIEW-PHASE-1-CRITICAL-FINDINGS"
+          sequence: 2
+          priority: "P1-CRITICAL"
+          required: true
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "20-25 hours"
+          blocking: true
+          acceptance_criteria: 6
+          finding_ids: ["BRT-001", "BRT-002", "BRT-005", "HALL-001", "HALL-002", "GOV-002"]
+          description: "Fix 6 CRITICAL findings (resource pool, silent degradation, LLM validation, type hints, audit logging)"
+          tasks:
+            - "Resource pool exhaustion fix (4-6 hours) - BRT-001: Add max_overflow protection"
+            - "Silent component degradation fix (6-8 hours) - BRT-002: Implement fail-fast + health checks"
+            - "LLM output validation (3-4 hours) - HALL-001: Bounds checking + semantic validation"
+            - "Prompt injection prevention (4-6 hours) - HALL-002: Input sanitization + escaping"
+            - "Type hints audit (8-10 hours) - GOV-002: 100% type coverage on public APIs"
+            - "Audit logging implementation (4-6 hours) - CORE-027: AC_START → EXECUTE → COMPLETE"
+          target_completion: "2026-01-26"
+          depends_on: ["REMEDIATION-REVIEW-PHASE-0-EMERGENCY-FIXES"]
+        
+        - phase_id: "REMEDIATION-REVIEW-PHASE-2-HIGH-PRIORITY"
+          sequence: 3
+          priority: "P2-HIGH"
+          required: true
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "40-50 hours"
+          blocking: false
+          acceptance_criteria: 8
+          finding_ids: ["BRT-006", "BRT-007", "STATE-001", "STATE-002", "ARCH-001", "ARCH-002", "INTEG-002"]
+          description: "Fix 7 HIGH-priority findings (race conditions, orchestrator SPOF, circuit breakers, architecture)"
+          tasks:
+            - "Race condition fixes (3-4 hours) - STATE-001: Check-then-act atomicity"
+            - "Deadlock prevention (3-4 hours) - STATE-002: Saga coordinator locks"
+            - "SPOF remediation for MasterOrchestrator (8-10 hours) - BRT-006: Add backup + failover"
+            - "Circuit breaker integration (4-6 hours) - BRT-007: Wrap all external calls"
+            - "MasterOrchestrator refactor (8-10 hours) - ARCH-001: Reduce SRP violation"
+            - "Dependency injection (6-8 hours) - ARCH-002: Remove hard-coded dependencies"
+            - "Silent failure remediation (6-8 hours) - INTEG-002: Add observability"
+          target_completion: "2026-02-07"
+          depends_on: ["REMEDIATION-REVIEW-PHASE-1-CRITICAL-FINDINGS"]
+        
+        - phase_id: "REMEDIATION-REVIEW-PHASE-3-MEDIUM-PRIORITY"
+          sequence: 4
+          priority: "P3-MEDIUM"
+          required: false
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "40-60 hours"
+          blocking: false
+          acceptance_criteria: 4
+          finding_ids: ["BRT-008", "BRT-009", "INTEG-001"]
+          description: "Fix 3 MEDIUM-priority findings (graceful shutdown, rate limiting, structured logging)"
+          tasks:
+            - "Graceful shutdown implementation (2-3 hours) - BRT-008: SIGTERM handler"
+            - "Rate limiting (2-3 hours) - BRT-009: Token bucket algorithm"
+            - "Structured logging (6-8 hours) - INTEG-001: JSON logs + correlation IDs"
+            - "Performance monitoring (6-8 hours): Metrics collection"
+            - "Distributed tracing (6-8 hours): OpenTelemetry integration"
+          target_completion: "2026-02-15"
+          depends_on: ["REMEDIATION-REVIEW-PHASE-2-HIGH-PRIORITY"]
+        
+        - phase_id: "REMEDIATION-REVIEW-VERIFICATION"
+          sequence: 5
+          priority: "P0-GATE"
+          required: true
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "4-6 hours"
+          blocking: true
+          acceptance_criteria: 4
+          description: "Verification that all 18 CRITICAL+HIGH findings are fixed"
+          tasks:
+            - "Re-run all 81 finding checks (2 hours)"
+            - "Verify test pass rate ≥98% (1 hour)"
+            - "Verify governance compliance ≥95% (1 hour)"
+            - "Generate final production readiness report (1 hour)"
+          target_completion: "2026-02-15"
+          depends_on: ["REMEDIATION-REVIEW-PHASE-3-MEDIUM-PRIORITY"]
+          gate_criteria: |
+            ✅ All 18 CRITICAL findings = FIXED
+            ✅ All 24 HIGH findings = FIXED or MITIGATED
+            ✅ Test pass rate ≥98%
+            ✅ Governance compliance ≥95%
+            ✅ Production readiness ≥90%
+        
+        - phase_id: "REMEDIATION-AUDIT-PHASES"
+          sequence: 6
+          priority: "P1-OPTIONAL-AUDIT"
+          required: false
+          track: "remediation"
+          status: "NOT_STARTED"
+          estimated_effort: "8-12 hours (optional)"
+          blocking: false
+          sub_phases:
+            - "PHASE-AUDIT-001-EXPORT-VERIFY (30 min): Verify test collection 0 errors"
+            - "PHASE-AUDIT-002-PHASE-E-VERIFY (2-3 hours): Audit 25% of PHASE-E modules"
+            - "PHASE-AUDIT-003-IMPORT-MIGRATION-AUDIT (2-4 hours): Categorize 105 concerning imports"
+            - "PHASE-AUDIT-004-GOVERNANCE-COMPLIANCE-CHECK (1-2 hours): Verify CORE rules"
+            - "PHASE-AUDIT-005-GIT-CHECKPOINT-VERIFY (1 hour): Verify commit messages"
+            - "PHASE-AUDIT-006-DOCSTRING-COMPLIANCE-CHECK (1-2 hours): Static analysis of compliance"
+            - "PHASE-AUDIT-007-COVERAGE-BASELINE-ESTABLISH (1 hour): Establish metrics"
+          description: "Optional deep-dive audit phases for production confidence"
+          note: "Not blocking production; recommended for first production deployment"
+    
     ah:
       strategy: "deployment_automation + quality_hardening"
       focus: "Deployment infrastructure, multi-repo governance, profiles, code quality"
@@ -4458,6 +4592,106 @@ phase_execution_tracking:
         test_results: "15/15 tests passing (100%)"
         notes: "14 MCP tools (5 governance, 4 orchestration, 3 knowledge, 2 utility) with real implementations, registry integration, metrics tracking. All tools return real data not mocks."
         git_commit: "807e67f66"
+
+remediation_findings_tracker:
+  review_date: "2026-01-23"
+  review_authority: "CORTEX Live Implementation Review System v4.1"
+  review_findings_files:
+    - "issues/Findings-BRIT-20260123.yaml"
+    - "issues/Findings-AGENTS-2-8-20260123.yaml"
+    - "reports/review-findings-consolidated-20260123.yaml"
+    - "reports/requirements-analysis-20260123.yaml"
+  total_findings: 81
+  critical_findings: 18
+  high_findings: 24
+  medium_findings: 39
+  
+  critical_findings_list:
+    - "BRT-001: Resource pool exhaustion (4-6 hrs)"
+    - "BRT-002: Silent degradation (6-8 hrs)"
+    - "BRT-003: No external call timeout (2-3 hrs)"
+    - "BRT-004: Bare except clauses (3-4 hrs)"
+    - "BRT-005: 905 test failures investigation (10-15 hrs)"
+    - "HALL-001: Unvalidated LLM output (3-4 hrs)"
+    - "HALL-002: No prompt injection prevention (4-6 hrs)"
+    - "GOV-001: CORE-013 bare except violations (3-4 hrs)"
+    - "GOV-002: CORE-011 type hints incomplete (8-10 hrs)"
+    - "GOV-003: CORE-027 audit logging gaps (4-6 hrs)"
+    - "STATE-001: Check-then-act race condition (3-4 hrs)"
+    - "STATE-002: Deadlock risk in saga coordinator (3-4 hrs)"
+    - "ARCH-001: SRP violation MasterOrchestrator (8-10 hrs)"
+    - "ARCH-002: Hard-coded dependencies (6-8 hrs)"
+    - "INTEG-001: Structured logging missing (6-8 hrs)"
+    - "INTEG-002: Silent failures at boundaries (6-8 hrs)"
+    - "INTEG-003: No health check endpoints (2-3 hrs)"
+  
+  high_findings_summary:
+    - "BRT-006: MasterOrchestrator SPOF (8-10 hrs)"
+    - "BRT-007: No circuit breaker pattern (4-6 hrs)"
+    - "+ 22 more high-priority findings (see consolidated report)"
+  
+  remediation_roadmap:
+    phase_0_emergency:
+      effort: "8 hours"
+      target_date: "2026-01-24"
+      findings_fixed: 3
+      tasks:
+        - "External call timeouts"
+        - "Component init fail-fast"
+        - "Bare except clause cleanup"
+    
+    phase_1_critical:
+      effort: "20-25 hours"
+      target_date: "2026-01-26"
+      findings_fixed: 6
+      tasks:
+        - "Resource pool exhaustion"
+        - "Silent degradation"
+        - "LLM output validation"
+        - "Type hints compliance"
+        - "Audit logging"
+    
+    phase_2_high_priority:
+      effort: "40-50 hours"
+      target_date: "2026-02-07"
+      findings_fixed: 7
+      tasks:
+        - "Race conditions"
+        - "Deadlock prevention"
+        - "Orchestrator failover"
+        - "Circuit breakers"
+        - "Dependency injection"
+    
+    phase_3_medium:
+      effort: "40-60 hours"
+      target_date: "2026-02-15"
+      findings_fixed: 3
+      tasks:
+        - "Graceful shutdown"
+        - "Rate limiting"
+        - "Structured logging"
+    
+    total_effort: "120-150 hours (3-4 weeks)"
+    estimated_production_ready: "2026-02-07"
+
+  captured_files_to_delete:
+    issues:
+      - "Findings-BRIT-20260123.yaml"
+      - "Findings-AGENTS-2-8-20260123.yaml"
+      - "review-gap-inventory-20260123.yaml"
+      - "review-stubs-20260123.yaml"
+      - "REVIEW-GAPS-EXTRACTED-20260122.yaml"
+    
+    reports:
+      - "review-findings-consolidated-20260123.yaml"
+      - "requirements-analysis-20260123.yaml"
+      - "CORTEX-REVIEW-EXECUTION-SUMMARY.md"
+      - "INDEX-REVIEW-OUTPUT.md"
+  
+  status: "FINDINGS_CAPTURED_IN_CORTEX-IMPL-MAP.YAML"
+  consolidation_date: "2026-01-23T18:00:00Z"
+  consolidation_note: "All review findings converted to remediation phases in machine:remediation track. Original YAML/MD files can now be archived."
+
     
     execution_notes: |
       Ready for implementation when directed. Each phase includes:

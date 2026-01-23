@@ -1,528 +1,371 @@
-# CORTEX Assumptions Review Agent# CORTEX Assumptions Review Agent
+# CORTEX Review Agent: Assumptions Analysis
+## Hidden Environment & Platform Dependencies
 
-
-
-**Purpose:** Identify hidden assumptions in the codebase that could break in different environments, configurations, or usage patterns.**Purpose:** Identify hidden assumptions in the codebase that could break in different environments, configurations, or usage patterns.
-
-
-
-**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
-
-
-
----## ⚠️ OUTPUT GUIDELINES
-
-
-
-## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)**Copilot Instructions:**
-
-- ✅ Output findings to terminal (human-readable)
-
-**Unified policy enforced across ALL agents (no exceptions):**- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-ASM-YYYYMMDD.yaml`
-
-- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
-
-### Forbidden File Patterns (ZERO TOLERANCE)- ❌ DO NOT create markdown (.md) report files
-
-| What | Why | Action |- ❌ DO NOT output to root or `.github/` directories
-
-|------|-----|--------|- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
-
-| `.md` files anywhere except `docs/` | SSOT conflict | FIX IMMEDIATELY |
-
-| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
-
-| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
-
-| `.md` findings outside `docs/` | Authority confusion | DELETE immediately |**Default Behavior:** Terminal output + YAML report (no extra MD files)
-
-| `.py` scripts in root | Cleanup violation | DELETE at end of session |
+**Purpose:** Identify unstated assumptions about environment, platforms, services, and dependencies.
 
 ---
 
-### ✅ Findings Output Locations (YAML ONLY)
+## CHECKS PERFORMED
 
-- Primary: `_workspaces/roadmap/issues/Findings-ASM-YYYYMMDD.yaml`## ASSUMPTION CATEGORIES
+### 1. Platform Dependencies (macOS vs Linux vs Windows)
 
-- If MD needed: `docs/FILENAME.md` (only for complex execution guides)
+**What to look for:**
+- os.name, sys.platform checks
+- Path separators hardcoded
+- Home directory assumptions
+- Shell-specific commands
 
-- Terminal: Default (human-readable analysis)### Category 1: Platform Assumptions
-
-
-
----**Detection Commands:**
-
+**Search patterns:**
 ```bash
+# Platform-specific code
+grep -rn "os.name\|sys.platform\|platform.system" cortex/ --include="*.py"
+grep -rn "\\\\|/\|os.sep" cortex/ --include="*.py" | grep -v "os.path"
+grep -rn "~\|/home/\|/Users/\|C:\\\\" cortex/ --include="*.py"
 
-## 🎯 VALIDATION CHECKLIST - Before Each Output# Find platform-specific code
-
-grep -rn "platform\|sys.platform\|os.name\|darwin\|linux\|win32" --include="*.py" src/
-
+# Shell commands
+grep -rn "os.system\|subprocess.*shell" cortex/ --include="*.py"
+grep -rn "sh\|bash\|cmd.exe" cortex/ --include="*.py"
 ```
 
-BEFORE creating findings:# Find path separator assumptions
-
-[ ] Creating .md report? → STOP - Use YAML + terminal outputgrep -rn "\\\\\\\\\\|/\\|os.sep\|pathlib" --include="*.py" src/ | head -30
-
-[ ] Creating docs_md/? → STOP - FORBIDDEN
-
-[ ] Multiple YAML sources? → STOP - Use cortex-impl-map.yaml ONLY# Find shell assumptions
-
-[ ] Wrong file locations? → STOP - FIX pathsgrep -rn "subprocess\|os.system\|Popen" --include="*.py" src/ | grep -v "shell=False"
-
-[ ] .py scripts in root? → DELETE before commit```
-
-```
-
-**What to Flag:**
-
-**Red Flag 🚩 = STOP & FIX**- Hardcoded `/` for paths (use `pathlib`) — MEDIUM
-
-- `.md` findings files outside `docs/`- Platform-specific executables assumed — HIGH
-
-- `docs_md/` folder created- Shell=True with hardcoded commands — HIGH
-
-- Multiple cortex-*.yaml in use- macOS-specific features used without guards — HIGH
-
-- Stray files in root
-
-### Category 2: Python Version Assumptions
-
----
-
-**Detection Commands:**
-
-## ⚠️ OUTPUT GUIDELINES```bash
-
-# Check minimum Python version
-
-**Copilot Instructions:**grep -rn "python_requires\|sys.version" --include="*.py" --include="setup.py" --include="pyproject.toml" .
-
-- ✅ Output findings to terminal (human-readable, default)
-
-- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-ASM-YYYYMMDD.yaml`# Find f-strings (Python 3.6+)
-
-- ✅ Create MD documentation to `docs/` (only if absolutely required)grep -rn 'f"' --include="*.py" src/ | head -10
-
-- ❌ DO NOT create markdown (.md) report files
-
-- ❌ DO NOT output to root or `.github/` directories# Find walrus operator (Python 3.8+)
-
-- ❌ DO NOT create `docs_md/` foldergrep -rn ":=" --include="*.py" src/
-
-- ❌ NEVER leave `.py` scripts in root after session
-
-# Find match statements (Python 3.10+)
-
-**Default Behavior:** Terminal output + optional YAML findings (minimal file creation)grep -rn "match \w\+:" --include="*.py" src/
-
-```
-
----
-
-**What to Flag:**
-
-## ASSUMPTION CATEGORIES- Python 3.10+ features without guards — MEDIUM
-
-- No `python_requires` in setup — LOW
-
-### Category 1: Platform Assumptions- Deprecated APIs used — HIGH
-
-
-
-**Detection Commands:**### Category 3: Environment Assumptions
-
-```bash
-
-# Find platform-specific code**Detection Commands:**
-
-grep -rn "platform\|sys.platform\|os.name\|darwin\|linux\|win32" --include="*.py" src/```bash
-
-# Find environment variable usage
-
-# Find path separator assumptionsgrep -rn "os.environ\|os.getenv\|environ\[" --include="*.py" src/
-
-grep -rn "\\\\\\\|/\|os.sep\|pathlib" --include="*.py" src/ | head -30
-
-# Find missing default values
-
-# Find shell assumptionsgrep -rn "os.getenv(" --include="*.py" src/ | grep -v ", "
-
-grep -rn "subprocess\|os.system\|Popen" --include="*.py" src/ | grep -v "shell=False"
-
-```# Find file system assumptions
-
-grep -rn "os.path.exists\|Path.*exists" --include="*.py" src/ | head -30
-
-**What to Flag:**```
-
-- Hardcoded `/` for paths (use `pathlib`) — MEDIUM
-
-- Platform-specific executables assumed — HIGH**What to Flag:**
-
-- Shell=True with hardcoded commands — HIGH- Required env vars without defaults — HIGH
-
-- macOS-specific features used without guards — HIGH- File existence assumed without check — HIGH
-
-- Working directory assumptions — MEDIUM
-
-### Category 2: Python Version Assumptions- Home directory assumptions — MEDIUM
-
-
-
-**Detection Commands:**### Category 4: Dependency Assumptions
-
-```bash
-
-# Check minimum Python version**Detection Commands:**
-
-grep -rn "python_requires\|sys.version" --include="*.py" --include="setup.py" --include="pyproject.toml" .```bash
-
-# Find imports without try/except
-
-# Find version-specific importsgrep -rn "^import \|^from " --include="*.py" src/ | grep -v "typing\|__future__" | head -50
-
-grep -rn "from __future__\|typing_extensions\|backports" --include="*.py" src/ | head -20
-
-# Find optional dependencies
-
-# Find f-string usage (Python 3.6+)grep -rn "try:.*import\|except ImportError" --include="*.py" src/
-
-grep -rn 'f".*{.*}"\|f'"'"'.*{.*}'"'"'' --include="*.py" src/ | wc -l
-
-```# Check requirements.txt for loose versions
-
-grep -v "==" requirements.txt | grep -v "^#\|^$"
-
-**What to Flag:**```
-
-- No python_requires in setup.py — MEDIUM
-
-- Type hints with no Python 3.5+ note — MEDIUM**What to Flag:**
-
-- F-strings without Python 3.6+ requirement — LOW- Missing ImportError handling for optional deps — HIGH
-
-- Unpinned dependencies — MEDIUM
-
-### Category 3: Dependency Assumptions- Circular import risks — HIGH
-
-- C extension imports without fallback — HIGH
-
-**Detection Commands:**
-
-```bash### Category 5: Network/Service Assumptions
-
-# Find optional imports without try/except
-
-grep -rn "^import\|^from" --include="*.py" src/ | head -30**Detection Commands:**
-
-```bash
-
-# Find hardcoded versions# Find network operations
-
-grep -rn "== [0-9]\|< [0-9]\|> [0-9]" --include="setup.py" --include="requirements.txt" --include="pyproject.toml"grep -rn "requests\.\|http\|socket\|urllib" --include="*.py" src/
-
-
-
-# Find missing requirements.txt entries# Find timeout settings
-
-```grep -rn "timeout" --include="*.py" src/
-
-
-
-**What to Flag:**# Find hardcoded URLs
-
-- Missing try/except for optional dependencies — MEDIUMgrep -rn "http://\|https://" --include="*.py" src/
-
-- Pinned versions causing compatibility issues — LOW```
-
-- Missing from requirements.txt — CRITICAL
-
-**What to Flag:**
-
-### Category 4: Environment Assumptions- Network calls without timeout — HIGH
-
-- Hardcoded URLs/endpoints — HIGH
-
-**Detection Commands:**- Missing offline fallback — MEDIUM
-
-```bash- SSL verification disabled — CRITICAL
-
-# Find hardcoded environment paths
-
-grep -rn "/home/\|/Users/\|C:\\\\\|/var/\|/opt/" --include="*.py" src/### Category 6: Concurrency Assumptions
-
-
-
-# Find hardcoded server addresses**Detection Commands:**
-
-grep -rn "localhost\|127.0.0.1\|hardcoded.*host\|hardcoded.*port" --include="*.py" src/ | head -20```bash
-
-# Find threading usage
-
-# Find database path assumptionsgrep -rn "threading\|asyncio\|multiprocessing" --include="*.py" src/
-
-grep -rn "\.db\|\.sqlite\|data\.db" --include="*.py" src/ | grep -v "tests/" | head -20
-
-```# Find shared state
-
-grep -rn "global \|cls\.\w\+ =" --include="*.py" src/
-
-**What to Flag:**
-
-- Hardcoded user paths — HIGH# Find async without proper handling
-
-- localhost assumptions for APIs — MEDIUMgrep -rn "async def\|await " --include="*.py" src/
-
-- Hardcoded DB paths — HIGH```
-
-- No environment variable fallbacks — MEDIUM
-
-**What to Flag:**
-
-### Category 5: Permission Assumptions- Thread-safety assumptions — HIGH
-
-- Async operations without proper await — HIGH
-
-**Detection Commands:**- Shared mutable state — CRITICAL
-
-```bash- GIL assumptions for parallelism — MEDIUM
-
-# Find write operations assuming permissions
-
-grep -rn "\.write(\|mkdir\|rmdir" --include="*.py" src/ | head -30### Category 7: Database Assumptions
-
-
-
-# Find directory assumptions**Detection Commands:**
-
-grep -rn "getcwd\|chdir" --include="*.py" src/```bash
-
-# Find SQLite usage
-
-# Find file permission assumptionsgrep -rn "sqlite3\|sqlalchemy" --include="*.py" src/
-
-grep -rn "chmod\|0o[0-7]{3}" --include="*.py" src/
-
-```# Find transaction assumptions
-
-grep -rn "commit\|rollback\|BEGIN\|TRANSACTION" --include="*.py" src/
-
-**What to Flag:**
-
-- Write operations without permission checks — MEDIUM# Find connection management
-
-- Directory assumptions without fallback — MEDIUMgrep -rn "connect(\|create_engine" --include="*.py" src/
-
-- No error handling for permission denied — HIGH```
-
-
-
-### Category 6: Runtime State Assumptions**What to Flag:**
-
-- SQLite assumed (not configurable) — MEDIUM
-
-**Detection Commands:**- Missing transaction boundaries — HIGH
-
-```bash- Connection leaks — CRITICAL
-
-# Find state assumptions (module-level)- Concurrent write assumptions — HIGH
-
-grep -rn "^[A-Z_]* = \[\]\|^[A-Z_]* = {}" --include="*.py" src/
-
----
-
-# Find singleton assumptions
-
-grep -rn "class.*Singleton\|instance = None\|_instance" --include="*.py" src/ | head -20## FINDING TEMPLATE
-
-
-
-# Find cache assumptions```yaml
-
-grep -rn "@cache\|@lru_cache\|cache = {}" --include="*.py" src/finding:
-
-```  id: "ASSUME-XXX"
-
-  agent: "cortex-review-assumptions"
-
-**What to Flag:**  severity: "CRITICAL|HIGH|MEDIUM|LOW"
-
-- Global mutable state — CRITICAL  category: "platform|python_version|environment|dependency|network|concurrency|database"
-
-- Singleton pattern without thread safety — HIGH  
-
-- Unbounded caches — MEDIUM  title: "[Specific assumption description]"
-
-- Module-level initialization side effects — HIGH  
-
-  assumption: |
-
----    What is assumed to be true.
-
-    Why this assumption exists.
-
-## Assumption Severity Levels  
-
-  location:
-
-| Level | Definition | Action |    file: "src/path/to/file.py"
-
-|-------|-----------|--------|    lines: "123-145"
-
-| CRITICAL | Breaks in different environment | Must fix immediately |    code_pattern: "[The specific code making this assumption]"
-
-| HIGH | May break in some scenarios | Fix in next phase |  
-
-| MEDIUM | Potential issue, needs verification | Document assumption |  evidence:
-
-| LOW | Minor inconsistency | Consider for next pass |    detection_method: "code_analysis|grep_search|manual_review"
-
-    command: |
-      [Command used to find this]
-    output: |
-      [Actual output]
-  
-  breaks_when:
-    - scenario: "Running on Windows"
-      failure_mode: "Path separator causes FileNotFoundError"
-    - scenario: "Running on Python 3.9"
-      failure_mode: "match statement causes SyntaxError"
-  
-  environments_affected:
-    - "Windows"
-    - "Linux CI/CD"
-    - "Python 3.9"
-    - "Air-gapped network"
-  
-  current_handling: "None|Partial|Adequate"
-  handling_details: |
-    What guards currently exist (if any).
-  
-  impact:
-    failure_visibility: "Immediate crash|Silent failure|Degraded performance"
-    user_experience: "How users experience this when broken"
-    recovery_path: "How to recover if this breaks"
-  
-  remediation:
-    effort: "1h|4h|1d|1w"
-    approach: |
-      1. Add platform check at [location]
-      2. Provide fallback for [scenario]
-      3. Add test for [environment]
-    test_required: true
-    test_environments: ["Windows", "Linux", "Python 3.9"]
-```
-
----
-
-## ASSUMPTIONS FROM HISTORY
-
-### CORTEX 4.0/5.0/5.5 Historical Assumptions That Broke:
-
-1. **macOS-only Development**
-   - Hardcoded `/Users/asifhussain/` paths
-   - Broke: Any other developer, CI/CD
-   - Fix: CORE-005 (path portability)
-
-2. **Python 3.10+ Assumed**
-   - match/case statements used
-   - Broke: Python 3.9 environments
-   - Fix: Version guards
-
-3. **SQLite Always Available**
-   - No fallback database
-   - Broke: None yet, but risk exists
-   - Fix: Configurable database backend
-
-4. **Network Always Available**
-   - LLM calls without offline handling
-   - Broke: Air-gapped environments
-   - Fix: Graceful degradation
-
-5. **Single User Assumption**
-   - No concurrent access handling
-   - Broke: Shared development environments
-   - Fix: File locking (partially done)
-
----
-
-## QUICK CHECK SCRIPT
-
+**Examples that are problematic:**
 ```python
-#!/usr/bin/env python3
-"""Check for hidden assumptions in CORTEX."""
+# Assumes Unix/Linux path separator
+config_path = f"{user_home}/.cortex/config.yaml"  # ← Fails on Windows
 
-import subprocess
-import re
+# Uses home directory without Path handling
+import os
+cortex_root = os.path.expanduser("~/.cortex")  # ← Better but still assumes ~
 
-def check_platform_assumptions():
-    """Find platform-specific code."""
-    result = subprocess.run(
-        ["grep", "-rn", "darwin\\|win32\\|linux", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    lines = [l for l in result.stdout.split('\n') if l]
-    return {
-        "check": "platform_assumptions",
-        "platform_specific_code": len(lines),
-        "details": lines[:10]
-    }
+# Subprocess with shell-specific syntax
+subprocess.run("grep pattern file.txt", shell=True)  # ← Fails on Windows
+```
 
-def check_env_vars():
-    """Find environment variable usage."""
-    result = subprocess.run(
-        ["grep", "-rn", "os.getenv\\|os.environ", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    
-    # Find those without defaults
-    no_default = [
-        l for l in result.stdout.split('\n')
-        if 'getenv' in l and l.count(',') == 0 and l  # No second arg = no default
-    ]
-    
-    return {
-        "check": "env_vars",
-        "total_env_usage": len([l for l in result.stdout.split('\n') if l]),
-        "without_defaults": len(no_default),
-        "details": no_default[:10]
-    }
+**Files to check:**
+- `cortex/config/` - Configuration paths
+- `cortex/deployment/` - Deployment scripts
+- `cortex/scripts/` - Utility scripts
+- `cortex/cli/` - CLI commands
 
-def check_network_timeouts():
-    """Find network calls without timeouts."""
-    result = subprocess.run(
-        ["grep", "-rn", "requests\\.", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    
-    # Find those without timeout parameter
-    no_timeout = [
-        l for l in result.stdout.split('\n')
-        if l and 'timeout' not in l.lower()
-    ]
-    
-    return {
-        "check": "network_timeouts",
-        "network_calls": len([l for l in result.stdout.split('\n') if l]),
-        "without_timeout": len(no_timeout),
-        "details": no_timeout[:10]
-    }
+---
 
-if __name__ == "__main__":
-    import json
-    
-    checks = [
-        check_platform_assumptions(),
-        check_env_vars(),
-        check_network_timeouts(),
-    ]
-    
-    print(json.dumps({"assumption_checks": checks}, indent=2))
+### 2. Python Version Assumptions
+
+**What to look for:**
+- Features only in Python 3.10+
+- f-strings (OK for 3.6+)
+- Walrus operator (3.8+)
+- match/case (3.10+)
+- Type hints features
+
+**Search patterns:**
+```bash
+# Match/case statements (Python 3.10+)
+grep -rn "match\|case:" cortex/ --include="*.py"
+
+# Walrus operator (Python 3.8+)
+grep -rn ":=" cortex/ --include="*.py"
+
+# Type hints requiring 3.10+
+grep -rn "list\[.*\]\|dict\[.*\]\|tuple\[.*\]" cortex/ --include="*.py" | grep -v "List\|Dict\|Tuple"
+
+# Check requirements.txt
+cat requirements.txt | grep -i python
+```
+
+**Issue:** requirements.txt says Python 3.9+ but code uses 3.10+ features
+
+**Solution:**
+- Use `List[T]` from typing instead of `list[T]`
+- Avoid `match` statements
+- Use `Union[A, B]` instead of `A | B`
+
+---
+
+### 3. External Service Requirements
+
+**What to look for:**
+- API endpoints hardcoded
+- Service availability assumed
+- No fallback when service unavailable
+- Authentication method not documented
+
+**Search patterns:**
+```bash
+# Hardcoded URLs/endpoints
+grep -rn "http\|api\|endpoint\|url" cortex/ --include="*.py" | grep "=" | head -20
+
+# API calls
+grep -rn "requests\.\|httpx\.\|urllib" cortex/ --include="*.py"
+
+# Service assumptions
+grep -rn "db\.\|database\.\|cache\." cortex/ --include="*.py" | grep -v "test\|mock"
+```
+
+**Examples:**
+```python
+# Hardcoded API endpoint
+API_URL = "https://api.openai.com/v1/chat/completions"  # ← What if service down?
+
+# Database required to run
+db = Database.connect()  # ← Fails if no DB running
+```
+
+**Critical services:**
+- OpenAI API (if using)
+- Anthropic API (if using)
+- Database (PostgreSQL/SQLite)
+- Cache (Redis/Memcached)
+- Message queue (if async)
+
+---
+
+### 4. File System Permissions
+
+**What to look for:**
+- Assumes write permissions
+- Assumes specific directory ownership
+- No fallback for read-only FS
+- Temporary file creation assumptions
+
+**Search patterns:**
+```bash
+# File write operations
+grep -rn "open(.*'w'\|open(.*'a'" cortex/ --include="*.py"
+
+# Directory creation
+grep -rn "mkdir\|makedirs" cortex/ --include="*.py"
+
+# Temporary files
+grep -rn "tempfile\|tmp\|/tmp/" cortex/ --include="*.py"
+```
+
+**Issues:**
+```python
+# Assumes write permission to current directory
+log_file = open("cortex.log", "w")  # ← Fails if run from read-only location
+
+# Assumes /tmp exists and is writable
+temp_dir = "/tmp/cortex"  # ← Doesn't exist on Windows
 ```
 
 ---
 
-## COPYRIGHT
+### 5. Network Connectivity
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
+**What to look for:**
+- Assumes internet connection
+- No offline mode
+- No connection retry logic
+- Long timeouts block execution
+
+**Search patterns:**
+```bash
+# Network dependencies
+grep -rn "requests\.\|httpx\.\|socket" cortex/ --include="*.py" | grep -v timeout
+
+# Hard dependency on online resources
+grep -rn "download\|fetch\|pull" cortex/ --include="*.py" | head -20
+
+# Missing retry logic
+grep -rn "requests\.\|httpx\." cortex/ --include="*.py" | grep -v "retry\|Retry"
+```
+
+**Issues:**
+```python
+# Fails if network unavailable
+response = requests.get("https://api.github.com/user")
+
+# No timeout = infinite wait
+response = requests.get(url)  # ← Default 30s timeout is OK but document it
+```
+
+---
+
+### 6. Environment Variables
+
+**What to look for:**
+- Required env vars not documented
+- No defaults
+- Case sensitivity issues
+- Missing validation
+
+**Search patterns:**
+```bash
+# Environment variable usage
+grep -rn "os.environ\|os.getenv\|getenv" cortex/ --include="*.py"
+
+# Missing documentation
+grep -rn "getenv.*)" cortex/ --include="*.py" | grep -v "#"
+```
+
+**Examples:**
+```python
+# Required but not documented
+api_key = os.environ["OPENAI_API_KEY"]  # ← Will crash if not set
+
+# Better with default and documentation
+api_key = os.environ.get("OPENAI_API_KEY")  # ← Returns None, better but still unclear
+
+# Best: explicit requirement
+api_key = os.environ.get("OPENAI_API_KEY") or ""
+if not api_key:
+    raise ValueError("OPENAI_API_KEY environment variable required")
+```
+
+**Document required env vars in:**
+- README.md
+- .env.example
+- config/DEFAULT_CONFIG.yaml
+
+---
+
+### 7. Timezone & Locale Assumptions
+
+**What to look for:**
+- Time operations without timezone
+- String comparisons assuming locale
+- Number formatting assumptions
+- Date parsing without timezone
+
+**Search patterns:**
+```bash
+# Timezone-naive datetime
+grep -rn "datetime.now()\|datetime.utcnow()\|timezone" cortex/ --include="*.py"
+
+# Locale assumptions
+grep -rn "locale\|encoding\|utf" cortex/ --include="*.py"
+
+# Time formatting
+grep -rn "strftime\|strptime" cortex/ --include="*.py"
+```
+
+**Issues:**
+```python
+# Timezone-naive (problematic in distributed systems)
+now = datetime.now()  # ← No timezone info
+
+# Better: explicit UTC
+from datetime import datetime, timezone
+now = datetime.now(timezone.utc)
+```
+
+---
+
+### 8. Development Tools Required
+
+**What to look for:**
+- Tools called by scripts
+- Build tools assumed
+- Database tools required
+- Testing frameworks
+
+**Search patterns:**
+```bash
+# Tools called by scripts
+grep -rn "subprocess\|os.system" cortex/ --include="*.py" | grep -v "pytest\|python"
+
+# Build tool requirements
+cat requirements.txt | grep -E "build|wheel|setuptools"
+
+# Testing requirements
+cat requirements.txt | grep -E "pytest|pytest-"
+```
+
+**Examples of tool dependencies:**
+- pytest (testing)
+- Docker (containerization)
+- PostgreSQL (database)
+- Redis (cache)
+- Git (version control)
+
+---
+
+## OUTPUT FORMAT
+
+Create: `_workspaces/roadmap/issues/findings-assumptions-YYYYMMDD.yaml`
+
+```yaml
+assumptions_findings:
+  metadata:
+    review_date: "YYYYMMDD"
+    total_assumptions: X
+    by_category:
+      platform: Y
+      python_version: Z
+      services: A
+      permissions: B
+      network: C
+      environment: D
+      timezone: E
+      tools: F
+    
+  critical_assumptions:
+    - assumption_id: "ASS-001"
+      category: "PYTHON_VERSION"
+      severity: "CRITICAL"
+      description: "Code uses Python 3.10+ features but requirements.txt says 3.9+"
+      evidence:
+        - "cortex/brain/tier2/resilience/__init__.py uses match/case"
+        - "requirements.txt: Python 3.9+"
+      impact: "Code fails on Python 3.9"
+      remediation: "Either update requirements.txt to 3.10+ or replace match/case with if/elif"
+      
+    - assumption_id: "ASS-002"
+      category: "EXTERNAL_SERVICE"
+      severity: "HIGH"
+      description: "Requires OpenAI API to be available; no offline mode"
+      evidence:
+        - "cortex/execution/llm_engine.py calls OpenAI API directly"
+        - "No fallback if API unavailable"
+      impact: "System non-functional if OpenAI service down"
+      remediation: "Add offline mode or graceful degradation when API unavailable"
+      
+    - assumption_id: "ASS-003"
+      category: "PLATFORM"
+      severity: "HIGH"
+      description: "Assumes Unix/Linux path separators"
+      evidence:
+        - 'cortex/config/loader.py: config_path = f"{home}/.cortex/config.yaml"'
+        - "Fails on Windows (no .cortex folder convention)"
+      impact: "Cannot run on Windows"
+      remediation: "Use pathlib.Path for platform-agnostic paths"
+      
+  recommendations:
+    - "Document all environment variable requirements"
+    - "Add .env.example with all required vars"
+    - "Use pathlib.Path everywhere for cross-platform support"
+    - "Add offline mode or circuit breaker for external APIs"
+    - "Document minimum Python version clearly"
+    - "Add startup checks for all required services"
+```
+
+---
+
+## DECISION TREE
+
+```
+For each assumption:
+
+Q1: Is requirement not documented?
+  → YES: HIGH severity (user won't know)
+  
+Q2: Will failure be silent?
+  → YES: CRITICAL severity (hard to debug)
+  
+Q3: Is there no fallback?
+  → YES: HIGH severity (complete system failure)
+  
+Q4: Are multiple platforms affected?
+  → YES: CRITICAL severity (many users blocked)
+```
+
+---
+
+## VALIDATION
+
+Before finalizing findings:
+- [ ] Assumption is clearly stated (not vague)
+- [ ] Evidence includes code location and pattern
+- [ ] Impact describes failure mode clearly
+- [ ] Remediation is specific (not "make it portable")
+- [ ] Severity matches actual user impact
