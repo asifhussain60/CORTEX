@@ -314,7 +314,10 @@ class HotReloadOrchestrator:
             sandbox_enabled: Whether to enable sandbox mode
         """
         self.orchestrator_path = Path(orchestrator_path)
-        self.state = ReloadState.IDLE
+        self._state = ReloadState.IDLE
+        # REM-HIGH-001: Thread-safe state management with lock and timeout
+        self._state_lock = threading.Lock()
+        self._state_timeout = 5.0  # 5 second timeout for state transitions
         self.sandbox_enabled = sandbox_enabled
         self.config = config
         self.registered_orchestrators: Dict[str, Any] = {}
@@ -326,6 +329,23 @@ class HotReloadOrchestrator:
             "on_error": [],
         }
         self._preserved_state: Dict[str, Any] = {}
+    
+    @property
+    def state(self) -> ReloadState:
+        """Get current reload state (thread-safe)."""
+        with self._state_lock:
+            return self._state
+    
+    @state.setter
+    def state(self, new_state: ReloadState) -> None:
+        """Set reload state (thread-safe, atomic transition)."""
+        acquired = self._state_lock.acquire(timeout=self._state_timeout)
+        if not acquired:
+            raise TimeoutError(f"Failed to acquire state lock within {self._state_timeout}s")
+        try:
+            self._state = new_state
+        finally:
+            self._state_lock.release()
     
     def start(self) -> None:
         """Start hot reload monitoring."""
