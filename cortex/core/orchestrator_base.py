@@ -9,6 +9,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 from enum import Enum
+import threading
 
 
 class OrchestrationState(Enum):
@@ -35,6 +36,8 @@ class OrchestratorBase(ABC):
         self.version = "1.0"
         self.state = OrchestrationState.IDLE
         self.internal_state: Dict[str, Any] = {}
+        # REM-CRIT-001: Thread-safe state management with lock
+        self._state_lock = threading.Lock()
 
     @abstractmethod
     def initialize(self) -> None:
@@ -75,24 +78,27 @@ class OrchestratorBase(ABC):
         return self.version
 
     def get_state(self) -> OrchestrationState:
-        """Get current state.
+        """Get current state (thread-safe).
 
         Returns:
             OrchestrationState.
         """
-        return self.state
+        with self._state_lock:
+            return self.state
 
     def set_state(self, state: OrchestrationState) -> None:
-        """Set orchestration state.
+        """Set orchestration state (thread-safe, atomic transition).
 
         Args:
             state: New state.
         """
-        self.state = state
+        with self._state_lock:
+            self.state = state
 
     def clear_state(self) -> None:
-        """Clear internal state."""
-        self.internal_state = {}
+        """Clear internal state (thread-safe)."""
+        with self._state_lock:
+            self.internal_state = {}
 
 
 class OrchestrationContext:

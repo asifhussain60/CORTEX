@@ -1,7 +1,57 @@
 cortex_implementation_map:
-  version: '2.0'
   created: 2026-01-23_074307
-  status: REVIEW_COMPLETE_REMEDIATION_REQUIRED
+  estimated_completion: '2026-02-22'
+  remediation:
+    completion_checklist:
+    - '[ ] All CRITICAL items in phase_001 completed and tested'
+    - '[ ] All HIGH items in phase_002 completed and tested'
+    - '[ ] All MEDIUM items in phase_003 addressed'
+    - '[ ] Re-run audit trace validation after each CRITICAL fix'
+    - '[ ] Update phase YAML files weekly with progress'
+    - '[ ] Obtain code review approval for each phase'
+    - "[ ] Run full test suite (\u2265 2000 tests) after each phase"
+    created: 2026-01-23_074307
+    execution_roadmap:
+      phase_1_blockers:
+        blocking_deployment: true
+        file: _workspaces/roadmap/phases/phase-001-critical-blockers.yaml
+        name: Fix Critical Blockers (Week 1)
+        start_date: '2026-01-24'
+        target_completion: '2026-01-31'
+        total_effort_hours: 15
+      phase_2_state:
+        blocking_deployment: false
+        file: _workspaces/roadmap/phases/phase-002-state-management.yaml
+        name: State Management Fixes (Week 2)
+        start_date: '2026-02-01'
+        target_completion: '2026-02-07'
+        total_effort_hours: 12
+      phase_3_architecture:
+        blocking_deployment: false
+        file: _workspaces/roadmap/phases/phase-003-architecture-refactoring.yaml
+        name: Architecture Refactoring (Weeks 3-4)
+        start_date: '2026-02-08'
+        target_completion: '2026-02-22'
+        total_effort_hours: 20
+    phase_references:
+    - blocking_deployment: true
+      effort_hours: 15
+      file: _workspaces/roadmap/phases/phase-001-critical-blockers.yaml
+      priority: 1
+      total_items: 4
+    - blocking_deployment: false
+      effort_hours: 12
+      file: _workspaces/roadmap/phases/phase-002-state-management.yaml
+      priority: 2
+      total_items: 2
+    - blocking_deployment: false
+      effort_hours: 20
+      file: _workspaces/roadmap/phases/phase-003-architecture-refactoring.yaml
+      priority: 3
+      total_items: 2
+    phases_directory: _workspaces/roadmap/phases
+    review_artifacts: _workspaces/roadmap/issues/2026-01-23_074307
+    version: '2.0'
   review_artifacts:
     directory: _workspaces/roadmap/issues/2026-01-23_074307
     key_files:
@@ -11,56 +61,25 @@ cortex_implementation_map:
     - Findings-STATE.yaml
     - Findings-ARCH.yaml
     - Findings-INTEG.yaml
-  remediation:
-    version: '2.0'
-    created: 2026-01-23_074307
-    review_artifacts: _workspaces/roadmap/issues/2026-01-23_074307
-    phases_directory: _workspaces/roadmap/phases
-    phase_references:
-    - file: _workspaces/roadmap/phases/phase-001-critical-blockers.yaml
-      priority: 1
-      blocking_deployment: true
-      total_items: 4
-      effort_hours: 15
-    - file: _workspaces/roadmap/phases/phase-002-state-management.yaml
-      priority: 2
-      blocking_deployment: false
-      total_items: 2
-      effort_hours: 12
-    - file: _workspaces/roadmap/phases/phase-003-architecture-refactoring.yaml
-      priority: 3
-      blocking_deployment: false
-      total_items: 2
-      effort_hours: 20
-    execution_roadmap:
-      phase_1_blockers:
-        name: Fix Critical Blockers (Week 1)
-        file: _workspaces/roadmap/phases/phase-001-critical-blockers.yaml
-        total_effort_hours: 15
-        blocking_deployment: true
-        start_date: '2026-01-24'
-        target_completion: '2026-01-31'
-      phase_2_state:
-        name: State Management Fixes (Week 2)
-        file: _workspaces/roadmap/phases/phase-002-state-management.yaml
-        total_effort_hours: 12
-        blocking_deployment: false
-        start_date: '2026-02-01'
-        target_completion: '2026-02-07'
-      phase_3_architecture:
-        name: Architecture Refactoring (Weeks 3-4)
-        file: _workspaces/roadmap/phases/phase-003-architecture-refactoring.yaml
-        total_effort_hours: 20
-        blocking_deployment: false
-        start_date: '2026-02-08'
-        target_completion: '2026-02-22'
-    completion_checklist:
-    - '[ ] All CRITICAL items in phase_001 completed and tested'
-    - '[ ] All HIGH items in phase_002 completed and tested'
-    - '[ ] All MEDIUM items in phase_003 addressed'
-    - '[ ] Re-run audit trace validation after each CRITICAL fix'
-    - '[ ] Update phase YAML files weekly with progress'
-    - '[ ] Obtain code review approval for each phase'
-    - '[ ] Run full test suite (≥ 2000 tests) after each phase'
+  status: REVIEW_COMPLETE_REMEDIATION_REQUIRED
   total_remediation_effort_hours: 47
-  estimated_completion: '2026-02-22'
+  version: '2.0'
+phase_execution_tracking:
+  mac_track_state:
+    current_phase_index: 1
+    phase_states:
+    - items:
+      - id: REM-CRIT-001
+        status: PENDING
+      - id: REM-CRIT-002
+        status: PENDING
+      - id: REM-CRIT-003
+        status: PENDING
+      - id: REM-CRIT-004
+        status: PENDING
+      phase_id: phase-001-critical-blockers
+      start_time: '2026-01-23T07:50:09.510458'
+      status: EXECUTING
+  win_track_state:
+    current_phase_index: 0
+    phase_states: []
