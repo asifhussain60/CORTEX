@@ -3,6 +3,29 @@
 
 ---
 
+## ⚠️ CRITICAL: Response Header Enforcement (TIER 0 - IMMUTABLE)
+
+**Authority:** `cortex_brain/tier0/governance/response-header-enforcement.yaml` (v1.0)  
+**Rule:** CORE-029 (Response Format)
+
+**EVERY response from this prompt MUST begin with:**
+```markdown
+## 🧠 CORTEX {operation}
+**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+---
+
+{Direct statement of action or analysis}
+```
+
+**Non-Negotiable Enforcement:**
+- Header MUST precede ALL output (no exceptions)
+- Header counts against token budget but MUST NOT be removed
+- Agents executing this prompt inherit this requirement
+- Violation = CORE-029 failure (block response if missing)
+
+---
+
 ## Purpose
 
 Wire in ALL verified production-ready functionality from CORTEX 7.0 Master Orchestrator System. This prompt ensures deployment of fully operational integrated components with all orchestrators, protocols, and MCP tools active.
