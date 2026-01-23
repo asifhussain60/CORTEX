@@ -347,11 +347,27 @@ class MasterOrchestrator(IOrchestrator):
                 operation="INITIALIZATION",
                 details={}
             )
+            
+            # AC-AR-006-02: Bootstrap all orchestrators
+            from cortex.orchestrators.bootstrap import ensure_bootstrapped
+            bootstrap_result = ensure_bootstrapped()
+            
+            if bootstrap_result.is_err():
+                error_msg = bootstrap_result.error
+                self.logger.log_operation_complete(
+                    ac_id="AC-AR-006-01",
+                    operation="INITIALIZATION",
+                    success=False,
+                    details={"error": error_msg}
+                )
+                return Err(str(error_msg))
+            
+            bootstrap_data = bootstrap_result.unwrap()
             self.logger.log_operation_complete(
                 ac_id="AC-AR-006-01",
                 operation="INITIALIZATION",
                 success=True,
-                details={"initialized": True}
+                details={"initialized": True, "bootstrap_steps": len(bootstrap_data.get("steps", []))}
             )
             return Ok("MasterOrchestrator initialized successfully")
         except Exception as e:
