@@ -1,0 +1,552 @@
+# QA Coding Standards for C# Test Automation
+# Source: HealthEquity ClassicQA Framework Documentation  
+# Version: 1.0
+# Created: 2026-01-23
+# Schema: QA_Automation_GuidelineSchema
+# Purpose: Coding standards, style guide, and best practices for C# test automation
+
+metadata:
+  title: "QA Coding Standards for C# Test Automation"
+  company: "HealthEquity"
+  framework: "ClassicQA (HEQAutomationCore)"
+  sources:
+    - "ClassicQA/docs/coding-standards.md"
+  version: "1.0"
+  created: "2026-01-23"
+  updated: "2026-01-23"
+  schema: "QA_Automation_GuidelineSchema"
+  tags:
+    - coding-standards
+    - csharp
+    - style-guide
+    - test-automation
+    - healthequity
+  
+  generated_docs:
+    - path: "docs/guidelines/qa-automation/qa-coding-standards.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_guideline"
+
+# NAMING CONVENTIONS
+naming_conventions:
+  general_rules:
+    - rule: "Use PascalCase for classes, methods, properties, constants"
+      examples: ["Auth0NonMemberLoginTests", "LoginAsMember", "LoginButton", "TestUsername"]
+      
+    - rule: "Use camelCase for local variables and parameters"
+      examples: ["memberUsername", "expectedBalance", "transactionCount"]
+      
+    - rule: "Use _camelCase (underscore prefix) for private fields"
+      examples: ["_memberLoginPage", "_dashboardPage", "_testUsername"]
+      
+    - rule: "Use UPPER_CASE only for true constants (rare in tests)"
+      note: "Prefer PascalCase for constants in C#"
+      
+    - rule: "Names should be descriptive and self-documenting"
+      rationale: "Reduces need for comments, improves code readability"
+  
+  test_classes:
+    format: "[FeatureArea][Component]Tests"
+    
+    rules:
+      - "NEVER include ticket IDs or ADO work item IDs in class names"
+      - "Class names should describe functionality, not reference ticket numbers"
+      - "File name MUST exactly match class name"
+    
+    good_examples:
+      - name: "Auth0NonMemberLoginTests"
+        reason: "Describes feature area and component"
+        
+      - name: "MemberDashboardNavigationTests"
+        reason: "Clear, descriptive, follows pattern"
+        
+      - name: "EmployerReportGenerationTests"
+        reason: "Indicates what is being tested"
+    
+    bad_examples:
+      - name: "Test1"
+        problem: "Non-descriptive"
+        
+      - name: "LoginTest"
+        problem: "Too generic"
+        
+      - name: "TC193006Tests"
+        problem: "DO NOT include ticket ID in class name"
+        
+      - name: "ADO12345AuthTests"
+        problem: "DO NOT include work item ID in class name"
+  
+  test_methods:
+    format: "TC[ADO_ID]_[FeatureArea]_[Scenario]_[ExpectedOutcome]"
+    
+    good_examples:
+      - "TC193006_Auth0NonMemberLoginPage_LoginHappyPathAgreeToPrivacy_LoadsUnifiedEmployerDashboard"
+      - "TC195976_Auth0NonMemberLoginPage_PartnerLogin_LoadsPartnerHomePage"
+      - "TC001234_MemberDashboard_ViewTransactions_DisplaysTransactionList"
+    
+    bad_examples:
+      - name: "TC001234_Test"
+        problem: "Not descriptive"
+        
+      - name: "TestLogin"
+        problem: "No TC number, too generic"
+        
+      - name: "TC001234_TestEverything"
+        problem: "Too broad"
+  
+  page_object_classes:
+    format: "[PageName]Page"
+    
+    rules:
+      - "Must inherit from PageBase"
+      - "Must end with 'Page' suffix"
+      - "Must use PascalCase"
+    
+    good_examples:
+      - "MemberHomePage"
+      - "BusinessLoginPage"
+      - "TransactionHistoryPage"
+    
+    bad_examples:
+      - name: "HomePage"
+        problem: "Too generic"
+        
+      - name: "MemberHome"
+        problem: "Missing 'Page' suffix"
+        
+      - name: "PageObject1"
+        problem: "Non-descriptive"
+  
+  page_object_elements:
+    rule: "Include element type in the name"
+    
+    examples:
+      - "UsernameField => FindElement(\"username\", FindTypes.ID);"
+      - "LoginButton => FindElement(\"btn-login\", FindTypes.ID);"
+      - "ErrorMessage => FindElement(\"error-msg\", FindTypes.CLASSNAME);"
+      - "WelcomeText => FindElement(\"welcome\", FindTypes.ID);"
+      - "NavigationMenu => FindElement(\"nav-menu\", FindTypes.ID);"
+      - "AccountDropdown => FindElement(\"account-dd\", FindTypes.ID);"
+    
+    bad_examples:
+      - name: "Input1"
+        problem: "Non-descriptive"
+        
+      - name: "Element"
+        problem: "Too generic"
+        
+      - name: "Username"
+        problem: "Missing type indicator (should be UsernameField)"
+  
+  variables_and_parameters:
+    good_examples:
+      - "var memberUsername = \"testuser@example.com\";"
+      - "var expectedBalance = 1500.00m;"
+      - "var transactionCount = 5;"
+      - "var loginPage = new MemberLoginPage();"
+    
+    bad_examples:
+      - name: "var x = \"testuser@example.com\";"
+        problem: "Single letter variable"
+        
+      - name: "var temp = 1500.00m;"
+        problem: "Too generic"
+        
+      - name: "var data = new MemberLoginPage();"
+        problem: "Vague"
+  
+  private_fields:
+    rule: "Use underscore prefix for private fields"
+    
+    correct:
+      - "private MemberLoginPage _loginPage;"
+      - "private MemberHomePage _dashboardPage;"
+      - "private string _testUsername;"
+    
+    incorrect:
+      - name: "private MemberLoginPage loginPage;"
+        problem: "Missing underscore"
+        
+      - name: "private MemberLoginPage m_loginPage;"
+        problem: "Wrong prefix style"
+        
+      - name: "private MemberLoginPage mLoginPage;"
+        problem: "Hungarian notation (avoid)"
+  
+  constants:
+    rule: "Use PascalCase for constants in C#"
+    
+    correct:
+      - "private const string TestUsername = \"TestUser123\";"
+      - "private const int MaxRetryCount = 3;"
+      - "private const decimal DefaultBalance = 0.00m;"
+    
+    incorrect:
+      - name: "private const string TEST_USERNAME = \"TestUser123\";"
+        problem: "UPPER_CASE not needed in C#"
+        
+      - name: "private const int maxRetryCount = 3;"
+        problem: "Should be PascalCase"
+
+# CODE ORGANIZATION
+code_organization:
+  file_structure:
+    order:
+      - "Copyright header (if applicable)"
+      - "Using statements (grouped and ordered)"
+      - "Namespace declaration"
+      - "XML documentation comments"
+      - "Class attributes ([TestClass])"
+      - "Class declaration"
+      - "Private field declarations"
+      - "Constants"
+      - "TestInitialize methods"
+      - "Test methods"
+      - "TestCleanup methods"
+      - "Private helper methods"
+    
+    example:
+      code: |
+        // Copyright © 2022 HealthEquity, Inc.
+        
+        using System;
+        using System.Collections.Generic;
+        using System.Linq;
+        using HEQAutomationCore;
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+        using PageClassesCore.Auth0;
+        using PageClassesCore.MemberPortal;
+        
+        namespace TestCore.Tests.FeatureArea
+        {
+            /// <summary>
+            /// Test class description
+            /// </summary>
+            [TestClass]
+            public class YourTestClass : TestBase
+            {
+                // ========================================
+                // PRIVATE FIELDS
+                // ========================================
+                private PageObject _pageObject;
+                
+                // ========================================
+                // CONSTANTS
+                // ========================================
+                private const string ConstValue = "value";
+                
+                // ========================================
+                // TEST SETUP
+                // ========================================
+                [TestInitialize]
+                public void TestSetup() { }
+                
+                // ========================================
+                // TEST METHODS
+                // ========================================
+                [TestMethod]
+                public void TestMethod() { }
+                
+                // ========================================
+                // TEST CLEANUP
+                // ========================================
+                [TestCleanup]
+                public void TestCleanup() { }
+                
+                // ========================================
+                // HELPER METHODS
+                // ========================================
+                private void HelperMethod() { }
+            }
+        }
+  
+  using_statements_order:
+    - "System namespaces"
+    - "Third-party namespaces"
+    - "Project namespaces (alphabetically)"
+    
+    example:
+      good:
+        code: |
+          using System;
+          using System.Collections.Generic;
+          using System.Linq;
+          using HEQAutomationCore;
+          using Microsoft.VisualStudio.TestTools.UnitTesting;
+          using PageClassesCore.Auth0;
+          using PageClassesCore.MemberPortal;
+          using TestCore.Tests;
+      
+      bad:
+        code: |
+          using PageClassesCore.Auth0;
+          using System;
+          using Microsoft.VisualStudio.TestTools.UnitTesting;
+          using HEQAutomationCore;
+  
+  method_organization:
+    pattern:
+      code: |
+        [TestMethod]
+        public void TC123456_Feature_Scenario_Outcome()
+        {
+            // ============ ARRANGE PHASE ============
+            SetPhaseArrange();
+            // All setup code here
+            
+            // ============ ACT PHASE ============
+            SetPhaseAct();
+            // All action code here
+            
+            // ============ ASSERT PHASE ============
+            SetPhaseAssert();
+            // All verification code here
+            
+            // Optional: COMPLETE PHASE
+            SetPhaseComplete();
+        }
+  
+  code_grouping:
+    rule: "Use section comments to group related code"
+    
+    example:
+      code: |
+        [TestClass]
+        public class ExampleTests : TestBase
+        {
+            // ========================================
+            // PRIVATE FIELDS
+            // ========================================
+            private LoginPage _loginPage;
+            private DashboardPage _dashboardPage;
+            
+            // ========================================
+            // CONSTANTS
+            // ========================================
+            private const string TestUsername = "user@test.com";
+            
+            // ========================================
+            // TEST METHODS - Happy Path
+            // ========================================
+            [TestMethod]
+            public void TC001_HappyPath_Test() { }
+            
+            // ========================================
+            // TEST METHODS - Error Cases
+            // ========================================
+            [TestMethod]
+            public void TC002_ErrorCase_Test() { }
+        }
+
+# COMMENTS AND DOCUMENTATION
+comments_and_documentation:
+  xml_documentation:
+    rule: "Always add XML comments to test classes and optionally to test methods"
+    
+    required_for:
+      - "Test classes"
+      - "Page object classes"
+      - "Page object methods"
+      - "Complex helper methods"
+    
+    optional_for:
+      - "Test methods (recommended but optional)"
+    
+    example:
+      code: |
+        /// <summary>
+        /// Tests for Auth0 non-member (business) login functionality.
+        /// Validates login flows for Employer, Partner, and Broker user types.
+        /// </summary>
+        [TestClass]
+        public class Auth0NonMemberLoginTests : TestBase
+        {
+            /// <summary>
+            /// TC193006: Validates that an employer can log in via Auth0 business login page
+            /// and successfully land on the Unified Employer Dashboard after agreeing to privacy policy.
+            /// </summary>
+            [TestMethod]
+            public void TC193006_Auth0NonMemberLoginPage_LoginHappyPathAgreeToPrivacy_LoadsUnifiedEmployerDashboard()
+            {
+                // Implementation
+            }
+        }
+  
+  inline_comments:
+    rule: "Use inline comments sparingly - code should be self-documenting"
+    
+    when_to_use:
+      - "Complex logic requiring explanation"
+      - "Non-obvious behavior"
+      - "Workarounds for known issues"
+    
+    explain_why_not_what:
+      good:
+        - "// User is hard coded due to IdentityFactory issues with Auth0 integration"
+        - "// Wait longer here because report generation can take up to 30 seconds"
+      
+      bad:
+        - "// Click the login button"
+        - "// Set username to test value"
+  
+  todo_comments:
+    good:
+      - "// TODO (YourName): Replace hardcoded username once IdentityFactory is fixed - Ticket: ADO-12345"
+    
+    bad:
+      - "// TODO: Fix this later"
+      - "// TODO"
+
+# AUTHENTICATION REQUIREMENTS
+authentication_requirements:
+  critical_rule: "All test methods requiring authenticated access MUST include complete login implementation steps"
+  
+  when_login_required:
+    - "Access member, employer, partner, or broker portals"
+    - "Navigate to pages requiring user context"
+    - "Test features behind authentication walls"
+    - "Interact with user-specific data or functionality"
+  
+  available_login_methods:
+    - method: "LoginUtilities.LoginAsUser()"
+      usage: "Standard user/member login"
+      example: |
+        var member = IdentityAccessManagementFactories.CreateMemberThatCanLogIn();
+        LoginUtilities.LoginAsUser(member.Authentication.Username);
+    
+    - method: "LoginUtilities.LoginAsAdmin()"
+      usage: "Admin/support user"
+      example: "LoginUtilities.LoginAsAdmin();"
+    
+    - method: "LoginPageActions.LoginAsMember()"
+      usage: "Member with password reset"
+      example: |
+        var member = IdentityAccessManagementFactories.CreateMemberThatCanLogIn();
+        LoginPageActions.LoginAsMember(member.MemberId);
+    
+    - method: "Page-based login"
+      usage: "Full control over login process"
+      example: |
+        var loginPage = new MemberLoginPage();
+        loginPage.Login(username, password);
+  
+  anti_patterns:
+    - pattern: "Using TODO for authentication"
+      severity: "CRITICAL"
+      problem: "Test cannot run without authentication"
+      
+      bad_example:
+        code: |
+          [TestMethod]
+          public void TC001_MemberDashboard_ViewBalance()
+          {
+              SetPhaseArrange();
+              // TODO: Add login here  ❌ NOT ALLOWED
+              
+              SetPhaseAct();
+              Browser.Load($"{FW.BaseDomain.Classic}/dashboard");
+          }
+      
+      good_example:
+        code: |
+          [TestMethod]
+          public void TC001_MemberDashboard_ViewBalance()
+          {
+              SetPhaseArrange();
+              var member = IdentityAccessManagementFactories.CreateMemberThatCanLogIn();
+              
+              SetPhaseAct();
+              LoginUtilities.LoginAsUser(member.Authentication.Username);
+              Browser.Load($"{FW.BaseDomain.Classic}/dashboard");
+              
+              SetPhaseAssert();
+              // Assertions
+          }
+
+# BEST PRACTICES
+best_practices:
+  general:
+    - practice: "Keep methods small and focused (< 50 lines)"
+      reason: "Improves readability and maintainability"
+      
+    - practice: "Use meaningful variable names"
+      reason: "Self-documenting code reduces need for comments"
+      
+    - practice: "Follow Single Responsibility Principle"
+      reason: "Each method/class should have one clear purpose"
+      
+    - practice: "Avoid magic numbers - use named constants"
+      reason: "Improves readability and maintenance"
+      
+    - practice: "Remove commented-out code before committing"
+      reason: "Version control maintains history"
+      
+    - practice: "Don't check in TODO comments without context and owner"
+      reason: "Unclear TODOs create technical debt"
+  
+  test_specific:
+    - practice: "Always use test phases (Arrange, Act, Assert)"
+      reason: "Improves debugging and test structure"
+      
+    - practice: "One logical assertion per test when possible"
+      reason: "Makes failures easier to diagnose"
+      
+    - practice: "Initialize page objects in TestInitialize"
+      reason: "Ensures clean state for each test"
+      
+    - practice: "Use data factories instead of hardcoded values"
+      reason: "Tests are portable and environment-independent"
+      
+    - practice: "Always provide descriptive assertion messages"
+      reason: "Speeds up debugging when tests fail"
+
+# ANTI-PATTERNS
+anti_patterns:
+  - pattern: "Including ticket/work item IDs in class names"
+    severity: "HIGH"
+    problem: "Class names should describe functionality, not reference tickets"
+    solution: "Use descriptive functional names; ticket IDs belong in test method names only"
+    
+  - pattern: "File name doesn't match class name"
+    severity: "CRITICAL"
+    problem: "Build errors and confusion"
+    solution: "File name MUST exactly match class name"
+    
+  - pattern: "Missing or incomplete authentication in tests"
+    severity: "CRITICAL"
+    problem: "Tests fail or cannot run"
+    solution: "Always implement complete login for authenticated tests"
+    
+  - pattern: "Using generic or single-letter variable names"
+    severity: "MEDIUM"
+    problem: "Reduces code readability"
+    solution: "Use descriptive, meaningful names"
+    
+  - pattern: "Commented-out code in commits"
+    severity: "LOW"
+    problem: "Creates clutter, version control maintains history"
+    solution: "Delete commented code before committing"
+    
+  - pattern: "TODO comments without context or owner"
+    severity: "MEDIUM"
+    problem: "Creates unclear technical debt"
+    solution: "Include owner name and ticket reference in TODOs"
+
+# RELATED GUIDES
+related_guides:
+  - path: "qa-automation-testing/mstest-framework-patterns.yaml"
+    title: "MSTest Framework Patterns"
+    relevance: "Framework structure and conventions"
+    
+  - path: "qa-automation-testing/test-structure-templates.yaml"
+    title: "Test Structure Templates"
+    relevance: "Complete test examples following these standards"
+    
+  - path: "qa-automation-testing/page-object-patterns.yaml"
+    title: "Page Object Patterns"
+    relevance: "Page object naming and structure standards"
+    
+  - path: "backend-python/clean-code.yaml"
+    title: "Clean Code Principles"
+    relevance: "Universal clean code concepts (language-agnostic)"
