@@ -1,0 +1,114 @@
+# Legal Domain Profile - Legal Tech
+# Profile ID: legal-v1.0
+# Category: Legal, Compliance, Document Management
+# Target: Legal tech applications, contract management, compliance systems
+
+profile:
+  id: legal-v1.0
+  name: Legal Tech
+  version: "1.0"
+  category: legal
+  description: >
+    Governance profile for legal technology applications including
+    contract management, compliance tracking, and legal document processing.
+  tags:
+    - legal
+    - compliance
+    - contracts
+    - documents
+    - e-discovery
+
+compatibility:
+  cortex_min_version: "0.8.0"
+  python_versions: ["3.10", "3.11", "3.12", "3.13"]
+
+rules:
+  # Document Management Rules
+  - id: LEGAL-001
+    name: document-versioning
+    severity: critical
+    description: All legal documents must be versioned with full history
+    pattern: "document_version with changelog"
+    enforcement: mandatory
+    
+  - id: LEGAL-002
+    name: immutable-records
+    severity: critical
+    description: Finalized documents must be immutable
+    pattern: "immutable after finalization"
+    enforcement: mandatory
+    
+  - id: LEGAL-003
+    name: digital-signatures
+    severity: high
+    description: Support digital signatures for document execution
+    pattern: "digital signature integration"
+    enforcement: mandatory
+    
+  # Audit & Chain of Custody
+  - id: LEGAL-004
+    name: chain-of-custody
+    severity: critical
+    description: Maintain chain of custody for all documents
+    pattern: "custody_log for each document"
+    enforcement: mandatory
+    
+  - id: LEGAL-005
+    name: access-audit
+    severity: high
+    description: Log all document access and modifications
+    pattern: "document access audit trail"
+    enforcement: mandatory
+    
+  # Retention & Holds
+  - id: LEGAL-006
+    name: retention-policies
+    severity: high
+    description: Implement configurable retention policies
+    pattern: "retention_policy configuration"
+    enforcement: mandatory
+    
+  - id: LEGAL-007
+    name: litigation-holds
+    severity: critical
+    description: Support litigation holds preventing deletion
+    pattern: "litigation_hold flag"
+    enforcement: mandatory
+    
+  # Confidentiality Rules
+  - id: LEGAL-008
+    name: privilege-marking
+    severity: high
+    description: Support attorney-client privilege marking
+    pattern: "privilege_status field"
+    enforcement: mandatory
+    
+  - id: LEGAL-009
+    name: confidentiality-levels
+    severity: high
+    description: Implement confidentiality classification
+    pattern: "confidentiality_level enum"
+    enforcement: mandatory
+    
+  - id: LEGAL-010
+    name: redaction-support
+    severity: medium
+    description: Support document redaction for disclosure
+    pattern: "redaction capability"
+    enforcement: recommended
+
+templates:
+  - name: contract-service
+    path: templates/legal/contract_service.py.j2
+  - name: document-manager
+    path: templates/legal/document_manager.py.j2
+  - name: compliance-report
+    path: templates/legal/compliance_report.py.j2
+
+hooks:
+  pre_commit:
+    - check_document_versioning
+    - validate_privilege_markings
+  pre_push:
+    - confidentiality_scan
+    - retention_policy_check
