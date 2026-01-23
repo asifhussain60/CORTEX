@@ -1,0 +1,1138 @@
+﻿# Infrastructure as Code (IaC) Best Practices
+# Part of CORTEX Knowledge Library - Phase 10 Week 28
+# Version: 1.0
+# Author: Asif Hussain
+# Created: December 22, 2025
+
+metadata:
+  domain: devops
+  category: infrastructure_as_code
+  version: "1.0"
+  tags:
+    - infrastructure-as-code
+    - iac
+    - terraform
+    - cloudformation
+    - ansible
+    - devops
+    - automation
+  learning_objectives:
+    - Understand IaC principles and benefits
+    - Compare IaC tools (Terraform, CloudFormation, Pulumi, Ansible)
+    - Implement declarative infrastructure definitions
+    - Apply IaC best practices (modularity, state management, security)
+    - Design scalable, maintainable infrastructure code
+
+# ==============================================================================
+# IAC OVERVIEW
+# ==============================================================================
+
+iac_overview:
+  definition: "Managing and provisioning infrastructure through machine-readable definition files rather than manual processes or interactive configuration tools"
+  
+  core_principles:
+    - name: "Declarative"
+      description: "Define desired end state, tool figures out how to achieve it"
+      example: "Describe 3 EC2 instances, tool creates/updates/destroys to match"
+    
+    - name: "Idempotent"
+      description: "Running same code multiple times produces same result"
+      benefit: "Safe to re-run, no unexpected side effects"
+    
+    - name: "Version Controlled"
+      description: "Infrastructure definitions stored in Git"
+      benefits:
+        - "Track history of infrastructure changes"
+        - "Code review for infrastructure"
+        - "Rollback capability"
+    
+    - name: "Reproducible"
+      description: "Same code creates identical infrastructure every time"
+      benefit: "Eliminate environment drift, 'works on my machine' issues"
+  
+  benefits:
+    - name: "Speed & Efficiency"
+      description: "Provision infrastructure in minutes vs hours/days"
+      impact: "10x faster environment creation"
+    
+    - name: "Consistency"
+      description: "Same code produces identical environments"
+      impact: "Zero configuration drift"
+    
+    - name: "Reduced Risk"
+      description: "Changes are code-reviewed, tested, versioned"
+      impact: "60% reduction in infrastructure incidents"
+    
+    - name: "Documentation as Code"
+      description: "Infrastructure code IS the documentation"
+      impact: "Always up-to-date documentation"
+    
+    - name: "Cost Optimization"
+      description: "Easily destroy/recreate environments, auto-scale"
+      impact: "30-50% infrastructure cost savings"
+    
+    - name: "Disaster Recovery"
+      description: "Recreate entire infrastructure from code"
+      impact: "Recovery time reduced from days to hours"
+  
+  use_cases:
+    - "Multi-environment provisioning (dev, staging, production)"
+    - "Disaster recovery (rebuild infrastructure from scratch)"
+    - "Testing infrastructure changes (preview environments)"
+    - "Compliance and auditing (infrastructure as audit trail)"
+    - "Cloud migration (codify existing infrastructure)"
+
+# ==============================================================================
+# IAC TOOLS COMPARISON
+# ==============================================================================
+
+iac_tools:
+  - name: "Terraform"
+    type: "Declarative, cloud-agnostic"
+    vendor: "HashiCorp"
+    language: "HCL (HashiCorp Configuration Language)"
+    best_for: "Multi-cloud, complex infrastructure, large teams"
+    strengths:
+      - "Cloud-agnostic (AWS, Azure, GCP, 3,000+ providers)"
+      - "Strong state management"
+      - "Large community and module registry"
+      - "Plan/preview changes before applying"
+      - "Mature ecosystem"
+    weaknesses:
+      - "State file management complexity"
+      - "Learning curve for HCL"
+      - "Terraform Cloud costs for collaboration features"
+    pricing: "Open-source (free), Terraform Cloud ($20/user/month)"
+    example: |
+      # main.tf
+      provider "aws" {
+        region = "us-east-1"
+      }
+      
+      resource "aws_instance" "web" {
+        ami           = "ami-0c55b159cbfafe1f0"
+        instance_type = "t2.micro"
+        
+        tags = {
+          Name = "HelloWorld"
+        }
+      }
+  
+  - name: "AWS CloudFormation"
+    type: "Declarative, AWS-specific"
+    vendor: "AWS"
+    language: "JSON or YAML"
+    best_for: "AWS-only infrastructure"
+    strengths:
+      - "Native AWS integration"
+      - "Free (no additional cost)"
+      - "Change sets (preview changes)"
+      - "Stack rollback on failure"
+      - "Managed service (no state file management)"
+    weaknesses:
+      - "AWS-only (vendor lock-in)"
+      - "Verbose YAML/JSON"
+      - "Slower to add new AWS features than Terraform"
+    pricing: "Free (pay only for AWS resources)"
+    example: |
+      # template.yaml
+      Resources:
+        WebServer:
+          Type: AWS::EC2::Instance
+          Properties:
+            ImageId: ami-0c55b159cbfafe1f0
+            InstanceType: t2.micro
+            Tags:
+              - Key: Name
+                Value: HelloWorld
+  
+  - name: "Pulumi"
+    type: "Declarative/imperative, cloud-agnostic"
+    vendor: "Pulumi Corporation"
+    language: "Python, TypeScript, Go, C#, Java"
+    best_for: "Developers preferring general-purpose languages"
+    strengths:
+      - "Use familiar programming languages (not DSL)"
+      - "Loops, conditionals, functions (real programming)"
+      - "Strong typing and IDE support"
+      - "Multi-cloud support"
+      - "Share/reuse code as libraries"
+    weaknesses:
+      - "Smaller community than Terraform"
+      - "State management complexity"
+      - "Pulumi Service required for teams (or self-host)"
+    pricing: "Free (individual), $75/user/month (Team)"
+    example: |
+      # __main__.py (Python)
+      import pulumi
+      import pulumi_aws as aws
+      
+      web = aws.ec2.Instance("web",
+          ami="ami-0c55b159cbfafe1f0",
+          instance_type="t2.micro",
+          tags={"Name": "HelloWorld"}
+      )
+      
+      pulumi.export("instance_id", web.id)
+  
+  - name: "Ansible"
+    type: "Imperative, configuration management"
+    vendor: "Red Hat"
+    language: "YAML (playbooks)"
+    best_for: "Configuration management, application deployment, multi-tool orchestration"
+    strengths:
+      - "Agentless (SSH-based)"
+      - "Simple YAML syntax"
+      - "Huge module library (6,000+ modules)"
+      - "Good for configuration management AND provisioning"
+      - "Procedural (step-by-step)"
+    weaknesses:
+      - "Less suited for infrastructure provisioning (better for config management)"
+      - "No dependency graph (runs sequentially)"
+      - "Performance issues at scale"
+    pricing: "Open-source (free), Ansible Tower/AAP ($5,000-$14,000/year)"
+    example: |
+      # playbook.yml
+      - name: Provision EC2 instance
+        hosts: localhost
+        tasks:
+          - name: Create EC2 instance
+            amazon.aws.ec2_instance:
+              name: HelloWorld
+              image_id: ami-0c55b159cbfafe1f0
+              instance_type: t2.micro
+              region: us-east-1
+  
+  - name: "Azure Resource Manager (ARM)"
+    type: "Declarative, Azure-specific"
+    vendor: "Microsoft"
+    language: "JSON"
+    best_for: "Azure-only infrastructure"
+    strengths:
+      - "Native Azure integration"
+      - "Free"
+      - "Parallel resource creation"
+      - "Resource dependencies handled automatically"
+    weaknesses:
+      - "Azure-only"
+      - "Verbose JSON (harder to read/write than HCL)"
+      - "Limited abstraction (no modules like Terraform)"
+    pricing: "Free"
+    bicep_alternative: "Bicep (new DSL, compiles to ARM, much cleaner syntax)"
+  
+  - name: "Kubernetes YAML"
+    type: "Declarative, Kubernetes-specific"
+    language: "YAML"
+    best_for: "Kubernetes resources (deployments, services, ingress)"
+    strengths:
+      - "Standard for Kubernetes"
+      - "Declarative and idempotent"
+      - "GitOps workflows (ArgoCD, Flux)"
+    weaknesses:
+      - "Verbose for complex applications"
+      - "No variable substitution natively"
+      - "Helm or Kustomize needed for templating"
+    alternatives: "Helm (package manager), Kustomize (patching), Crossplane (manage cloud resources via Kubernetes)"
+
+tool_selection_guide:
+  decision_factors:
+    - factor: "Cloud Provider"
+      options:
+        - "AWS only ΓåÆ CloudFormation or Terraform"
+        - "Azure only ΓåÆ ARM/Bicep or Terraform"
+        - "GCP only ΓåÆ Deployment Manager or Terraform"
+        - "Multi-cloud ΓåÆ Terraform or Pulumi"
+    
+    - factor: "Team Skills"
+      options:
+        - "Developers (Python/TypeScript) ΓåÆ Pulumi"
+        - "Operations/DevOps ΓåÆ Terraform or Ansible"
+        - "Prefer general-purpose languages ΓåÆ Pulumi"
+        - "Prefer DSL ΓåÆ Terraform"
+    
+    - factor: "Use Case"
+      options:
+        - "Infrastructure provisioning ΓåÆ Terraform, CloudFormation, Pulumi"
+        - "Configuration management ΓåÆ Ansible, Chef, Puppet"
+        - "Both provisioning + config ΓåÆ Terraform + Ansible"
+    
+    - factor: "Maturity & Community"
+      ranking:
+        - "1. Terraform (largest community, most providers)"
+        - "2. Ansible (huge for config management)"
+        - "3. CloudFormation (AWS native)"
+        - "4. Pulumi (growing, modern)"
+
+# ==============================================================================
+# TERRAFORM DEEP DIVE
+# ==============================================================================
+
+terraform_concepts:
+  providers:
+    description: "Plugins that interact with cloud APIs (AWS, Azure, GCP)"
+    example: |
+      provider "aws" {
+        region = var.aws_region
+      }
+      
+      provider "azurerm" {
+        features {}
+      }
+    best_practices:
+      - "Pin provider versions for reproducibility"
+      - "Use separate provider configurations for multi-region"
+  
+  resources:
+    description: "Infrastructure components (EC2 instances, S3 buckets, databases)"
+    syntax: "resource <type> <name> { config }"
+    example: |
+      resource "aws_s3_bucket" "data" {
+        bucket = "my-app-data-bucket"
+        acl    = "private"
+        
+        versioning {
+          enabled = true
+        }
+        
+        tags = {
+          Environment = "Production"
+        }
+      }
+  
+  data_sources:
+    description: "Read-only queries to fetch information (AMI IDs, availability zones)"
+    example: |
+      data "aws_ami" "ubuntu" {
+        most_recent = true
+        owners      = ["099720109477"]  # Canonical
+        
+        filter {
+          name   = "name"
+          values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+        }
+      }
+      
+      resource "aws_instance" "web" {
+        ami = data.aws_ami.ubuntu.id
+        # ...
+      }
+  
+  variables:
+    description: "Parameterize configurations for reusability"
+    types: ["string", "number", "bool", "list", "map", "object"]
+    example: |
+      variable "instance_type" {
+        description = "EC2 instance type"
+        type        = string
+        default     = "t2.micro"
+      }
+      
+      variable "availability_zones" {
+        type    = list(string)
+        default = ["us-east-1a", "us-east-1b"]
+      }
+      
+      # Usage
+      resource "aws_instance" "web" {
+        instance_type = var.instance_type
+      }
+  
+  outputs:
+    description: "Export values from Terraform (IP addresses, URLs)"
+    example: |
+      output "instance_ip" {
+        description = "Public IP of web server"
+        value       = aws_instance.web.public_ip
+      }
+      
+      # After apply: terraform output instance_ip
+  
+  modules:
+    description: "Reusable infrastructure components"
+    benefits:
+      - "DRY principle (Don't Repeat Yourself)"
+      - "Encapsulation"
+      - "Versioning"
+      - "Sharing across teams"
+    example_usage: |
+      module "vpc" {
+        source  = "terraform-aws-modules/vpc/aws"
+        version = "3.14.0"
+        
+        name = "my-vpc"
+        cidr = "10.0.0.0/16"
+        
+        azs             = ["us-east-1a", "us-east-1b"]
+        private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+        public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+        
+        enable_nat_gateway = true
+      }
+    creating_modules:
+      structure: |
+        modules/
+        ΓööΓöÇΓöÇ web-server/
+            Γö£ΓöÇΓöÇ main.tf       # Resources
+            Γö£ΓöÇΓöÇ variables.tf  # Input variables
+            Γö£ΓöÇΓöÇ outputs.tf    # Output values
+            ΓööΓöÇΓöÇ README.md     # Documentation
+  
+  state_management:
+    description: "Terraform tracks infrastructure state in terraform.tfstate file"
+    local_state:
+      pros: ["Simple", "No extra setup"]
+      cons: ["No collaboration", "No locking", "Loss of state = disaster"]
+    remote_state:
+      description: "Store state in remote backend (S3, Azure Blob, Terraform Cloud)"
+      benefits:
+        - "Team collaboration"
+        - "State locking (prevents concurrent modifications)"
+        - "Encrypted state"
+        - "State versioning"
+      example_s3_backend: |
+        terraform {
+          backend "s3" {
+            bucket         = "my-terraform-state"
+            key            = "prod/terraform.tfstate"
+            region         = "us-east-1"
+            dynamodb_table = "terraform-locks"  # For locking
+            encrypt        = true
+          }
+        }
+    best_practices:
+      - "ALWAYS use remote state for teams"
+      - "Enable state locking"
+      - "Encrypt state (contains sensitive data)"
+      - "Version state buckets"
+      - "Never manually edit state"
+      - "Use terraform state commands for state manipulation"
+  
+  workspaces:
+    description: "Multiple named state instances (dev, staging, prod)"
+    use_case: "Separate environments with same code"
+    commands:
+      - "terraform workspace list"
+      - "terraform workspace new dev"
+      - "terraform workspace select prod"
+    example: |
+      resource "aws_instance" "web" {
+        instance_type = terraform.workspace == "prod" ? "t2.large" : "t2.micro"
+        
+        tags = {
+          Environment = terraform.workspace
+        }
+      }
+    alternative: "Separate directories per environment (more explicit)"
+  
+  lifecycle_meta_arguments:
+    description: "Control resource behavior"
+    options:
+      - name: "create_before_destroy"
+        use_case: "Create new resource before destroying old (zero downtime)"
+        example: |
+          resource "aws_instance" "web" {
+            # ...
+            lifecycle {
+              create_before_destroy = true
+            }
+          }
+      
+      - name: "prevent_destroy"
+        use_case: "Protect critical resources from accidental deletion"
+        example: |
+          resource "aws_s3_bucket" "important" {
+            # ...
+            lifecycle {
+              prevent_destroy = true
+            }
+          }
+      
+      - name: "ignore_changes"
+        use_case: "Ignore specific attribute changes (e.g., tags managed externally)"
+        example: |
+          resource "aws_instance" "web" {
+            # ...
+            lifecycle {
+              ignore_changes = [tags]
+            }
+          }
+  
+  provisioners:
+    description: "Run scripts during resource creation/destruction (LAST RESORT)"
+    types:
+      - "local-exec (run commands on machine running Terraform)"
+      - "remote-exec (run commands on resource via SSH)"
+      - "file (copy files to resource)"
+    best_practices:
+      - "Avoid provisioners when possible (use cloud-init, user_data, config management)"
+      - "Provisioners make Terraform less declarative"
+      - "Use null_resource for decoupled provisioning"
+    example: |
+      resource "aws_instance" "web" {
+        # ...
+        
+        provisioner "remote-exec" {
+          inline = [
+            "sudo apt-get update",
+            "sudo apt-get install -y nginx"
+          ]
+          
+          connection {
+            type = "ssh"
+            user = "ubuntu"
+            private_key = file("~/.ssh/id_rsa")
+            host = self.public_ip
+          }
+        }
+      }
+
+terraform_workflow:
+  commands:
+    - command: "terraform init"
+      description: "Initialize working directory, download providers"
+      when: "First time, or after adding new providers/modules"
+    
+    - command: "terraform plan"
+      description: "Preview changes (dry-run)"
+      output: "Shows resources to create/update/destroy"
+      best_practice: "Always run before apply"
+    
+    - command: "terraform apply"
+      description: "Apply changes to infrastructure"
+      flags:
+        - "-auto-approve (skip confirmation)"
+        - "-var-file=prod.tfvars (use variable file)"
+    
+    - command: "terraform destroy"
+      description: "Destroy all managed infrastructure"
+      warning: "Irreversible, use with caution"
+    
+    - command: "terraform validate"
+      description: "Validate configuration syntax"
+    
+    - command: "terraform fmt"
+      description: "Auto-format code"
+    
+    - command: "terraform state list"
+      description: "List resources in state"
+    
+    - command: "terraform state show aws_instance.web"
+      description: "Show details of specific resource"
+    
+    - command: "terraform import"
+      description: "Import existing infrastructure into Terraform state"
+      example: "terraform import aws_instance.web i-0123456789abcdef"
+    
+    - command: "terraform taint"
+      description: "Mark resource for recreation on next apply"
+  
+  typical_workflow:
+    steps:
+      - "1. Write/modify .tf files"
+      - "2. terraform fmt (auto-format)"
+      - "3. terraform validate (check syntax)"
+      - "4. terraform plan (preview changes)"
+      - "5. Review plan output carefully"
+      - "6. terraform apply (apply changes)"
+      - "7. Verify infrastructure"
+      - "8. Commit .tf files to Git"
+
+# ==============================================================================
+# IAC BEST PRACTICES
+# ==============================================================================
+
+iac_best_practices:
+  code_organization:
+    - principle: "DRY (Don't Repeat Yourself)"
+      implementation: "Use modules for reusable components"
+      example: "VPC module used by multiple environments"
+    
+    - principle: "Separation of Concerns"
+      implementation: "Separate files by resource type"
+      structure: |
+        Γö£ΓöÇΓöÇ main.tf          # Main resources
+        Γö£ΓöÇΓöÇ variables.tf     # Input variables
+        Γö£ΓöÇΓöÇ outputs.tf       # Output values
+        Γö£ΓöÇΓöÇ providers.tf     # Provider configuration
+        Γö£ΓöÇΓöÇ networking.tf    # Network resources
+        Γö£ΓöÇΓöÇ compute.tf       # Compute resources
+        ΓööΓöÇΓöÇ database.tf      # Database resources
+    
+    - principle: "Environment Separation"
+      options:
+        - option_1: "Separate directories"
+          structure: |
+            Γö£ΓöÇΓöÇ environments/
+            Γöé   Γö£ΓöÇΓöÇ dev/
+            Γöé   Γöé   ΓööΓöÇΓöÇ main.tf
+            Γöé   Γö£ΓöÇΓöÇ staging/
+            Γöé   Γöé   ΓööΓöÇΓöÇ main.tf
+            Γöé   ΓööΓöÇΓöÇ prod/
+            Γöé       ΓööΓöÇΓöÇ main.tf
+            ΓööΓöÇΓöÇ modules/
+                ΓööΓöÇΓöÇ web-server/
+          pros: "Clear separation, different backends per env"
+        
+        - option_2: "Terraform workspaces"
+          usage: "terraform workspace select prod"
+          pros: "Same code, different state"
+          cons: "Easier to accidentally affect wrong environment"
+        
+        - option_3: "Variable files"
+          usage: "terraform apply -var-file=prod.tfvars"
+          files: "dev.tfvars, staging.tfvars, prod.tfvars"
+  
+  version_control:
+    - practice: "Commit all .tf files"
+      exclude: |
+        # .gitignore
+        .terraform/
+        terraform.tfstate
+        terraform.tfstate.backup
+        *.tfvars  # If contains secrets
+    
+    - practice: "Use .terraformignore"
+      purpose: "Exclude files from module uploads"
+    
+    - practice: "Semantic versioning for modules"
+      example: "module version = 1.2.3"
+    
+    - practice: "Meaningful commit messages"
+      example: "Add RDS database for production"
+  
+  security:
+    - practice: "Never commit secrets"
+      solutions:
+        - "Use environment variables"
+        - "Use secret management tools (AWS Secrets Manager, HashiCorp Vault)"
+        - "Use Terraform Cloud variables (marked sensitive)"
+        - "Use .tfvars files (gitignored)"
+      example_env_vars: |
+        export TF_VAR_db_password="super_secret"
+        
+        # In variables.tf
+        variable "db_password" {
+          type      = string
+          sensitive = true
+        }
+    
+    - practice: "Encrypt state files"
+      implementation: "Use S3 bucket encryption, Azure Blob encryption"
+    
+    - practice: "Least privilege IAM/service principals"
+      description: "Give Terraform minimum required permissions"
+    
+    - practice: "Scan IaC for security issues"
+      tools: ["Checkov", "tfsec", "Terrascan", "Snyk IaC"]
+      example_checkov: |
+        checkov -d . --framework terraform
+        # Checks for 1,000+ security/compliance policies
+    
+    - practice: "State locking"
+      purpose: "Prevent concurrent modifications"
+      implementation: "DynamoDB for S3 backend, blob lease for Azure"
+  
+  testing:
+    - level: "Syntax Validation"
+      command: "terraform validate"
+      checks: "Syntax errors, invalid references"
+    
+    - level: "Linting"
+      tools: ["tflint", "terraform fmt"]
+      checks: "Code style, deprecated syntax, provider-specific issues"
+    
+    - level: "Static Analysis"
+      tools: ["Checkov", "tfsec", "Terrascan"]
+      checks: "Security misconfigurations, compliance violations"
+      example_tfsec: |
+        tfsec .
+        # Checks for exposed S3 buckets, unencrypted resources, etc.
+    
+    - level: "Plan Testing"
+      tool: "terraform plan"
+      purpose: "Preview changes before applying"
+      best_practice: "Require plan review before approval"
+    
+    - level: "Automated Testing"
+      tools: ["Terratest", "kitchen-terraform", "Terraform test (experimental)"]
+      approach: "Deploy to test environment, validate, destroy"
+      example_terratest: |
+        # Go code
+        func TestTerraformAWSExample(t *testing.T) {
+          terraformOptions := &terraform.Options{
+            TerraformDir: "../examples/aws",
+          }
+          
+          defer terraform.Destroy(t, terraformOptions)
+          terraform.InitAndApply(t, terraformOptions)
+          
+          instanceID := terraform.Output(t, terraformOptions, "instance_id")
+          assert.NotEmpty(t, instanceID)
+        }
+  
+  documentation:
+    - practice: "Document modules with README"
+      sections:
+        - "Purpose and use case"
+        - "Input variables"
+        - "Output values"
+        - "Examples"
+        - "Requirements (provider versions)"
+    
+    - practice: "Use terraform-docs"
+      tool: "Auto-generate documentation from code"
+      command: "terraform-docs markdown table . > README.md"
+    
+    - practice: "Inline comments for complex logic"
+      example: |
+        # Create one NAT gateway per AZ for high availability
+        resource "aws_nat_gateway" "main" {
+          count = length(var.availability_zones)
+          # ...
+        }
+  
+  change_management:
+    - practice: "Always run terraform plan first"
+      rationale: "Understand impact before applying"
+    
+    - practice: "Peer review infrastructure changes"
+      implementation: "Pull requests for .tf file changes"
+    
+    - practice: "Small, incremental changes"
+      rationale: "Easier to troubleshoot, lower risk"
+    
+    - practice: "Use Terraform Cloud or Atlantis"
+      features:
+        - "Automated plan on PR"
+        - "Apply requires approval"
+        - "Audit log of all changes"
+      atlantis_example: |
+        # atlantis.yaml
+        version: 3
+        projects:
+        - name: production
+          dir: environments/prod
+          workflow: prod
+          apply_requirements: [approved]
+  
+  state_management:
+    - practice: "Use remote state with locking"
+      rationale: "Team collaboration, prevent conflicts"
+    
+    - practice: "Never manually edit state"
+      safe_operations:
+        - "terraform state mv (rename resources)"
+        - "terraform state rm (remove from state)"
+        - "terraform import (add existing resources)"
+    
+    - practice: "Regular state backups"
+      implementation: "S3 versioning, Azure Blob snapshots"
+    
+    - practice: "Separate state per environment"
+      example: "dev.tfstate, staging.tfstate, prod.tfstate"
+
+# ==============================================================================
+# ADVANCED PATTERNS
+# ==============================================================================
+
+advanced_patterns:
+  multi_environment:
+    description: "Manage multiple environments (dev/staging/prod) with same code"
+    approach_1_separate_dirs:
+      structure: |
+        Γö£ΓöÇΓöÇ modules/
+        Γöé   ΓööΓöÇΓöÇ app/
+        Γöé       Γö£ΓöÇΓöÇ main.tf
+        Γöé       Γö£ΓöÇΓöÇ variables.tf
+        Γöé       ΓööΓöÇΓöÇ outputs.tf
+        ΓööΓöÇΓöÇ environments/
+            Γö£ΓöÇΓöÇ dev/
+            Γöé   Γö£ΓöÇΓöÇ main.tf
+            Γöé   ΓööΓöÇΓöÇ terraform.tfvars
+            Γö£ΓöÇΓöÇ staging/
+            Γöé   Γö£ΓöÇΓöÇ main.tf
+            Γöé   ΓööΓöÇΓöÇ terraform.tfvars
+            ΓööΓöÇΓöÇ prod/
+                Γö£ΓöÇΓöÇ main.tf
+                ΓööΓöÇΓöÇ terraform.tfvars
+      pros: "Clear separation, different backends, explicit"
+      cons: "More files, potential duplication"
+    
+    approach_2_workspaces:
+      usage: |
+        terraform workspace new dev
+        terraform workspace select dev
+        terraform apply
+      pros: "Single codebase, less duplication"
+      cons: "Same backend, easier to make mistakes"
+  
+  blue_green_infrastructure:
+    description: "Maintain two identical environments, switch traffic between them"
+    use_case: "Zero-downtime infrastructure updates"
+    implementation: |
+      resource "aws_lb_target_group" "blue" {
+        name = "app-blue"
+        # ...
+      }
+      
+      resource "aws_lb_target_group" "green" {
+        name = "app-green"
+        # ...
+      }
+      
+      resource "aws_lb_listener_rule" "main" {
+        listener_arn = aws_lb_listener.main.arn
+        
+        action {
+          type             = "forward"
+          target_group_arn = var.active_group == "blue" ? 
+                             aws_lb_target_group.blue.arn : 
+                             aws_lb_target_group.green.arn
+        }
+      }
+      
+      # Switch by changing var.active_group from "blue" to "green"
+  
+  conditional_resources:
+    description: "Create resources only if condition is true"
+    example: |
+      resource "aws_instance" "bastion" {
+        count = var.enable_bastion ? 1 : 0
+        # ...
+      }
+      
+      # Create only in production
+      resource "aws_cloudwatch_alarm" "cpu" {
+        count = var.environment == "prod" ? 1 : 0
+        # ...
+      }
+  
+  dynamic_blocks:
+    description: "Generate nested blocks based on variables"
+    use_case: "Security group rules, ingress/egress rules"
+    example: |
+      variable "ingress_rules" {
+        type = list(object({
+          from_port   = number
+          to_port     = number
+          protocol    = string
+          cidr_blocks = list(string)
+        }))
+        default = [
+          { from_port = 80, to_port = 80, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"] },
+          { from_port = 443, to_port = 443, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"] }
+        ]
+      }
+      
+      resource "aws_security_group" "web" {
+        name = "web-sg"
+        
+        dynamic "ingress" {
+          for_each = var.ingress_rules
+          content {
+            from_port   = ingress.value.from_port
+            to_port     = ingress.value.to_port
+            protocol    = ingress.value.protocol
+            cidr_blocks = ingress.value.cidr_blocks
+          }
+        }
+      }
+  
+  data_transformation:
+    description: "Use built-in functions to transform data"
+    examples:
+      - function: "for"
+        use_case: "Transform lists"
+        example: |
+          locals {
+            instance_names = [for i in range(3) : "web-${i}"]
+            # Result: ["web-0", "web-1", "web-2"]
+          }
+      
+      - function: "lookup"
+        use_case: "Map lookups with defaults"
+        example: |
+          locals {
+            instance_types = {
+              dev  = "t2.micro"
+              prod = "t2.large"
+            }
+            instance_type = lookup(local.instance_types, var.environment, "t2.micro")
+          }
+      
+      - function: "merge"
+        use_case: "Combine maps"
+        example: |
+          locals {
+            default_tags = { Managed = "Terraform" }
+            combined_tags = merge(local.default_tags, var.custom_tags)
+          }
+  
+  remote_state_data_sources:
+    description: "Reference outputs from other Terraform state files"
+    use_case: "Share data between independent Terraform projects"
+    example: |
+      # Network team manages VPC
+      # App team references VPC outputs
+      
+      data "terraform_remote_state" "network" {
+        backend = "s3"
+        config = {
+          bucket = "my-terraform-state"
+          key    = "network/terraform.tfstate"
+          region = "us-east-1"
+        }
+      }
+      
+      resource "aws_instance" "app" {
+        subnet_id = data.terraform_remote_state.network.outputs.private_subnet_ids[0]
+        # ...
+      }
+
+# ==============================================================================
+# ANTI-PATTERNS
+# ==============================================================================
+
+anti_patterns:
+  - name: "Manual Infrastructure Changes"
+    description: "Making changes via console/CLI instead of IaC"
+    problems:
+      - "Configuration drift"
+      - "Terraform state out of sync"
+      - "Undocumented changes"
+    solution: "Always make changes through Terraform (import existing resources if needed)"
+  
+  - name: "Hardcoded Values"
+    description: "Hardcoding IPs, ARNs, names in .tf files"
+    problems:
+      - "Not reusable across environments"
+      - "Difficult to maintain"
+    solution: "Use variables, data sources, locals"
+    example_bad: |
+      resource "aws_instance" "web" {
+        ami           = "ami-0c55b159cbfafe1f0"  # Hardcoded
+        subnet_id     = "subnet-12345678"        # Hardcoded
+        instance_type = "t2.micro"               # Hardcoded
+      }
+    example_good: |
+      data "aws_ami" "ubuntu" {
+        most_recent = true
+        # ...
+      }
+      
+      resource "aws_instance" "web" {
+        ami           = data.aws_ami.ubuntu.id
+        subnet_id     = var.subnet_id
+        instance_type = var.instance_type
+      }
+  
+  - name: "Monolithic State Files"
+    description: "Managing all infrastructure in single state file"
+    problems:
+      - "Slow terraform plan/apply"
+      - "Higher blast radius (mistakes affect everything)"
+      - "Difficult collaboration (locking conflicts)"
+    solution: "Split infrastructure into logical components (networking, compute, data) with separate state files"
+  
+  - name: "No Remote State"
+    description: "Using local state files for team projects"
+    problems:
+      - "No collaboration"
+      - "State conflicts"
+      - "No backup"
+    solution: "Always use remote state (S3, Azure Blob, Terraform Cloud)"
+  
+  - name: "Secrets in Code"
+    description: "Committing secrets to .tf files or variables"
+    problems:
+      - "Secrets in Git history"
+      - "Security breach"
+    solution:
+      - "Use secret management (AWS Secrets Manager, HashiCorp Vault)"
+      - "Use environment variables"
+      - "Mark variables as sensitive"
+  
+  - name: "No Version Pinning"
+    description: "Not pinning provider versions"
+    problems:
+      - "Breaking changes on provider updates"
+      - "Non-reproducible builds"
+    solution: |
+      terraform {
+        required_providers {
+          aws = {
+            source  = "hashicorp/aws"
+            version = "~> 4.0"  # Pin to 4.x
+          }
+        }
+      }
+  
+  - name: "Overuse of Provisioners"
+    description: "Using remote-exec/local-exec for configuration management"
+    problems:
+      - "Makes Terraform less declarative"
+      - "Not idempotent"
+      - "Difficult to debug"
+    solution: "Use cloud-init, user_data, or dedicated config management tools (Ansible)"
+
+# ==============================================================================
+# GITOPS WORKFLOWS
+# ==============================================================================
+
+gitops:
+  definition: "Git as single source of truth for infrastructure, automated deployments on Git changes"
+  
+  principles:
+    - "Infrastructure defined in Git"
+    - "Desired state declared in Git"
+    - "Changes approved via pull requests"
+    - "Automated synchronization (Git ΓåÆ Infrastructure)"
+  
+  tools:
+    - name: "Atlantis"
+      description: "Terraform pull request automation"
+      features:
+        - "Runs terraform plan on PR automatically"
+        - "Posts plan output as PR comment"
+        - "Requires approval to apply"
+        - "Runs terraform apply on merge"
+      example_workflow:
+        - "1. Developer opens PR with .tf changes"
+        - "2. Atlantis runs terraform plan"
+        - "3. Plan output posted as comment"
+        - "4. Reviewer approves PR"
+        - "5. Developer comments 'atlantis apply'"
+        - "6. Atlantis runs terraform apply"
+      setup: |
+        # atlantis.yaml
+        version: 3
+        projects:
+        - name: production
+          dir: environments/prod
+          workflow: prod
+          apply_requirements: [approved, mergeable]
+          
+        workflows:
+          prod:
+            plan:
+              steps:
+              - init
+              - plan
+            apply:
+              steps:
+              - apply
+    
+    - name: "Terraform Cloud"
+      description: "HashiCorp's managed Terraform service"
+      features:
+        - "Remote execution"
+        - "Remote state management"
+        - "VCS integration (GitHub, GitLab)"
+        - "Policy as code (Sentinel)"
+        - "Cost estimation"
+      workflow:
+        - "Connect workspace to Git repo"
+        - "On commit/PR, Terraform Cloud runs plan"
+        - "Manual approval in UI"
+        - "Apply changes"
+    
+    - name: "Env0"
+      description: "Self-service IaC management"
+      features:
+        - "Multi-IaC support (Terraform, Pulumi, CloudFormation)"
+        - "RBAC and policy enforcement"
+        - "Cost estimation and optimization"
+        - "Drift detection"
+    
+    - name: "Spacelift"
+      description: "Sophisticated IaC management platform"
+      features:
+        - "Policy as code (OPA)"
+        - "Private worker pools"
+        - "Custom workflows"
+        - "Drift detection and remediation"
+
+# ==============================================================================
+# MIGRATION STRATEGIES
+# ==============================================================================
+
+migration_to_iac:
+  - phase: "Phase 1: Inventory"
+    duration: "1-2 weeks"
+    activities:
+      - "Document all existing infrastructure"
+      - "Identify dependencies"
+      - "Prioritize what to migrate first"
+      - "Choose IaC tool"
+  
+  - phase: "Phase 2: Import Existing Resources"
+    duration: "2-4 weeks"
+    activities:
+      - "Use terraform import to bring existing resources into state"
+      - "Write .tf files to match imported resources"
+      - "Validate with terraform plan (should show no changes)"
+    example: |
+      # Import existing EC2 instance
+      terraform import aws_instance.web i-0123456789abcdef
+      
+      # Write matching configuration
+      resource "aws_instance" "web" {
+        ami           = "ami-0c55b159cbfafe1f0"
+        instance_type = "t2.micro"
+        # ... match existing config
+      }
+      
+      # Verify: terraform plan (should show 0 changes)
+  
+  - phase: "Phase 3: Refactor for Best Practices"
+    duration: "2-4 weeks"
+    activities:
+      - "Extract reusable modules"
+      - "Parameterize with variables"
+      - "Organize into logical files"
+      - "Set up remote state"
+  
+  - phase: "Phase 4: New Resources via IaC"
+    ongoing: true
+    policy: "All new infrastructure must be defined in Terraform"
+  
+  - phase: "Phase 5: Prevent Manual Changes"
+    duration: "1 week"
+    activities:
+      - "Remove manual access to production (or audit only)"
+      - "Set up drift detection"
+      - "Enforce IaC-only changes via policy"
+
+# ==============================================================================
+# CORTEX INTEGRATION
+# ==============================================================================
+
+cortex_integration:
+  description: "How CORTEX uses this knowledge"
+  use_cases:
+    - "Generate IaC code from architecture diagrams"
+    - "Recommend IaC tool based on project requirements"
+    - "Detect IaC anti-patterns (hardcoded values, no remote state)"
+    - "Validate IaC security (encrypted state, secret management)"
+    - "Refactor monolithic Terraform to modules"
+  
+  detection_heuristics:
+    - pattern: "No IaC"
+      detection: "Manual infrastructure provisioning"
+      recommendation: "Generate Terraform/CloudFormation starter templates"
+    
+    - pattern: "Hardcoded values"
+      detection: "Literal strings in resource definitions"
+      recommendation: "Extract to variables with validation"
+    
+    - pattern: "No remote state"
+      detection: "terraform.tfstate file in repository"
+      recommendation: "Configure S3/Azure Blob backend with locking"
+    
+    - pattern: "Secrets in code"
+      detection: "Sensitive values in .tf files"
+      recommendation: "Use secret management tools, environment variables"
+    
+    - pattern: "No version pinning"
+      detection: "Provider blocks without version constraints"
+      recommendation: "Pin provider versions for reproducibility"
