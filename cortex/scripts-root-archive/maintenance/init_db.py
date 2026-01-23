@@ -20,7 +20,6 @@ Multi-Machine Strategy:
     - Audit logs are local context (don't need sync)
     
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import argparse

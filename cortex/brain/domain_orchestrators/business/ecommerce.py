@@ -4,7 +4,6 @@ AC-PHX-008-03: E-Commerce Domain Orchestrator
 Domain orchestrator for e-commerce operations including order processing,
 payment handling, inventory management, and shipping.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from datetime import datetime

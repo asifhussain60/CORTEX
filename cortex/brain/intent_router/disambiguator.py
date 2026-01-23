@@ -9,7 +9,6 @@ Resolves ambiguous intents through:
 - User interaction support
 
 CORTEX Governance: CORE-008, 011, 012, 013, 027
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Tuple, Any, Optional

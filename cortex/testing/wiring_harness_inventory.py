@@ -12,7 +12,6 @@ Phase: PRODUCTION-READINESS
 AC-ID: AC-WIRING-HARNESS-001
 Authority: cortex-impl-map.yaml v3.9 + cortex-total-recall.prompt.md
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Any, Optional

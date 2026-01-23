@@ -7,7 +7,6 @@ Constructs call graphs from AST parse results to identify:
 - Complete call dependency chains
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 AC-ID: E3-CALL-GRAPH-BUILDER
 """
 

@@ -10,7 +10,6 @@ Available decorators:
 - @orchestrator: Auto-registers orchestrator in global registry
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from cortex.brain.core.decorators.governance_decorator import (

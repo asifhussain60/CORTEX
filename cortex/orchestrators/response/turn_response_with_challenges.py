@@ -4,7 +4,6 @@ Generates responses that include challenge questions, recommendations, and
 holistic context information, with proper segment ordering.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

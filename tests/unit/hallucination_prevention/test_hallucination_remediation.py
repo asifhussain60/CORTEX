@@ -11,7 +11,6 @@ AC-IDs:
 - AC-FIX-STATUS-001: AC Status Tracking Reconciliation
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import os

@@ -4,7 +4,6 @@ CORTEX Vacuum Tool Registration
 MCP integration and registration for vacuum tools.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Optional, Dict

@@ -4,7 +4,6 @@ AC-TC-001-01: Content Population Strategy
 Provides the strategy and registry for template content population.
 Manages domain-specific templates and their metadata.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

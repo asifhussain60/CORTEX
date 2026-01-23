@@ -5,7 +5,6 @@ and registers all MCP tools in the framework. Scans tool modules and
 populates the registry.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import importlib

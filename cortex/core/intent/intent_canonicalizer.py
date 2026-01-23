@@ -1,7 +1,6 @@
 """Module: Canonicalizes intents to prevent misinterpretation
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import re

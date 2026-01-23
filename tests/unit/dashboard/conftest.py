@@ -9,7 +9,6 @@ This module replaces browser-based testing with static file analysis that
 can validate CSS properties, JavaScript functions, and HTML structure.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import re

@@ -4,7 +4,6 @@ Implements CORE-033: Tool Description Accuracy Validation.
 Validates tool descriptions match actual capabilities and parameters.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

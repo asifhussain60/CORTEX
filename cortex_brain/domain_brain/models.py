@@ -4,7 +4,6 @@ Defines models for domain orchestration, domain-specific operations, and
 domain knowledge representation.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

@@ -7,7 +7,6 @@ Provides comprehensive Abstract Syntax Tree analysis for Python code including:
 - Integration with call graph, pattern detection, and dependency mapping
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 AC-ID: E3-AST-INTELLIGENCE-ENGINE
 """
 

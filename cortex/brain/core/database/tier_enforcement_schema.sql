@@ -5,7 +5,6 @@
 --          through database constraints (triggers + checks)
 --
 -- Author: Asif Hussain
--- Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 -- ============================================================================
 -- Table: governance_rules (if not already exists)

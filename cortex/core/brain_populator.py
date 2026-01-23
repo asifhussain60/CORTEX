@@ -3,7 +3,6 @@
 Populates the knowledge base/brain with structured information.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

@@ -4,7 +4,6 @@ AC-PHX-008-01: Financial Services Orchestrator
 Domain orchestrator for financial services operations including
 transactions, risk assessment, and compliance.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from datetime import datetime

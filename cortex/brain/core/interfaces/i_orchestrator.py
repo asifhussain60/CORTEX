@@ -7,7 +7,6 @@ Defines contract for orchestrators:
 - All operations audit-logged with hash chain (AC-AR-011-03)
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABC, abstractmethod

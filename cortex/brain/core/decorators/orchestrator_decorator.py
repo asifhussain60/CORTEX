@@ -23,7 +23,6 @@ Then orchestrators are auto-discovered:
     orchestrators = registry.get_orchestrators_by_domain("governance")
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import functools

@@ -4,7 +4,6 @@ Orchestrator Registry
 Central registry for orchestrators with dependency injection support.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Type

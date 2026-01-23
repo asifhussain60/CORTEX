@@ -18,7 +18,6 @@ Verification tests for PHASE-05 brittleness fixes:
 - AC-BRITTLE-014: Verification rate brittleness
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

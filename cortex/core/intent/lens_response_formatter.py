@@ -3,7 +3,6 @@
 Formats LENS reflection responses into various output formats (JSON, YAML, Markdown).
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any

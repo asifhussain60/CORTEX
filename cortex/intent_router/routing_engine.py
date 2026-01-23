@@ -4,7 +4,6 @@ Routes classified intents to appropriate handlers using pattern matching
 and fallback strategies.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any, Callable

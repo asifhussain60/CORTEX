@@ -3,7 +3,6 @@
 Provides cleaning orchestrators for different domains.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

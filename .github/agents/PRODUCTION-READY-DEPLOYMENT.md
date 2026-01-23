@@ -480,4 +480,3 @@ tail -f cortex_brain/state/audit.log
 **Authority:** CORTEX Framework v7.0  
 **Support:** See CORTEX.prompt.md for operational procedures
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

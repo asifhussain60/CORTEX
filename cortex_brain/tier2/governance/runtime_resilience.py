@@ -4,7 +4,6 @@ Implements CORE-036: Runtime Resilience Configuration.
 Manages resilience levels and retry policies.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

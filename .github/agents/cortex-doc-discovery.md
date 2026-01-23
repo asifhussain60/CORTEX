@@ -193,7 +193,6 @@ Integrates with:
 
 **Author:** CORTEX Documentation Engine  
 **Last Generated:** {ISO 8601}  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 ### Stage 4: mkdocs Configuration Update
@@ -592,4 +591,3 @@ pytest docs/_tests/ -v --cov=docs --cov-report=html
 
 **Authority:** cortex-doc.prompt.md v1.1  
 **Status:** Ready for autonomous execution with cleanup phase  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

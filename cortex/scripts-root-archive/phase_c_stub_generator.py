@@ -4,7 +4,6 @@ Systematic approach to implementing missing CORTEX modules identified
 through collection error analysis. Prioritized by impact.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import os
@@ -297,7 +296,6 @@ def generate_stub_file(classes: List[str], description: str) -> str:
         f'"""Module: {description}',
         '',
         'Author: CORTEX Framework',
-        'Copyright © 2025-2026 Asif Hussain. All rights reserved.',
         '"""',
         '',
         'from typing import Dict, List, Optional, Any',

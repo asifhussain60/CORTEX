@@ -21,7 +21,6 @@ Usage:
 3. Audit entries automatically generated on test execution
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import hashlib

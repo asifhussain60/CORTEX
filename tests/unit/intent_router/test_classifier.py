@@ -19,7 +19,6 @@ CORTEX Governance Rules Applied:
 Test Coverage Target: ≥98%
 Expected Tests: 45 unit tests
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

@@ -390,7 +390,6 @@ New to CORTEX? Start with the [Quick Start Guide](guides/quick-start.md).
 
 CORTEX is a comprehensive AI-powered development orchestration system designed to streamline software development workflows with intelligent automation, governance, and decision support.
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 """
             
             if not self.dry_run:

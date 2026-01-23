@@ -5,7 +5,6 @@ AC-IDs tested: CORE-002, AC-CORE-002
 Validates that markdown report/status files are suppressed unless explicitly 
 requested by user. Rule applies workspace-wide (root + subdirectories).
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

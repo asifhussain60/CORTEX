@@ -21,7 +21,6 @@ Governance Rules Enforced:
 - AR-001-03: Tier 0 Immutability (enforced per-turn)
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging

@@ -1,7 +1,6 @@
 """Tier2 Governance: Audit Performance SLA
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

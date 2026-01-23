@@ -4,7 +4,6 @@ Implements CORE-034: Reasoning Trace Requirements.
 Tracks step-by-step reasoning with confidence scoring and evidence chains.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

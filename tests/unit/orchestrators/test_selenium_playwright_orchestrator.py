@@ -5,7 +5,6 @@ Tests for SeleniumPlaywrightOrchestrator which converts Selenium test code
 to Playwright test code with pattern matching and AST transformation.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

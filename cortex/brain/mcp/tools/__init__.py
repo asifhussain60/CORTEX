@@ -4,7 +4,6 @@ MCP Tools Package
 MCP-exposed tools for CORTEX operations.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from cortex.brain.mcp.tools.governance_tools import (

@@ -3,7 +3,6 @@
 Central registry for governance rules, policies, and enforcement metadata.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict, List, Optional

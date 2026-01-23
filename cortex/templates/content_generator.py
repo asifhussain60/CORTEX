@@ -3,7 +3,6 @@ CORTEX Templates - Content Generator
 
 Template content generation and transformation utilities.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

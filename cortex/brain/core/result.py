@@ -17,7 +17,6 @@ Usage:
         print(f"Error: {result.error}")
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABCMeta

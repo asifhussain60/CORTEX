@@ -856,4 +856,3 @@ if __name__ == "__main__":
 
 ## COPYRIGHT
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.

@@ -8,7 +8,6 @@ Per CORE-008 (Tests First), these tests define the expected behavior
 before implementation.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

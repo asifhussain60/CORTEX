@@ -3,7 +3,6 @@ PHASE-09: Developer Governance Tooling - 8 ACs
 
 CLI tools and validation for governance enforcement.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Any

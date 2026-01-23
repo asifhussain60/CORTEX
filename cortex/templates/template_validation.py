@@ -3,7 +3,6 @@ CORTEX Templates - Template Validation
 
 Template validation and consistency checking.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

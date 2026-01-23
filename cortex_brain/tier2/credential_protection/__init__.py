@@ -4,7 +4,6 @@ Provides credential encryption, key management, and secure credential
 storage and retrieval mechanisms.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

@@ -3,7 +3,6 @@ CORTEX Templates - Content Population Strategy
 
 Manages domain templates, content sources, and template metadata.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

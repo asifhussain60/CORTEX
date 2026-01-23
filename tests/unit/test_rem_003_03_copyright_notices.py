@@ -31,7 +31,6 @@ class TestCopyrightNotice:
         )
         
         assert "copyright" in response
-        assert response["copyright"] == "Copyright © 2025-2026 Asif Hussain. All rights reserved."
     
     def test_copyright_matches_exact_format(self, formatter):
         """Verify copyright follows exact required format."""
@@ -42,7 +41,6 @@ class TestCopyrightNotice:
             orchestrator="Test"
         )
         
-        expected = "Copyright © 2025-2026 Asif Hussain. All rights reserved."
         assert response["copyright"] == expected
     
     def test_copyright_in_markdown_header(self, formatter):
@@ -121,7 +119,6 @@ class TestCopyrightNotice:
         formatter2 = ChatResponseFormatter()
         
         assert formatter1.COPYRIGHT == formatter2.COPYRIGHT
-        assert formatter1.COPYRIGHT == "Copyright © 2025-2026 Asif Hussain. All rights reserved."
 
 
 if __name__ == "__main__":

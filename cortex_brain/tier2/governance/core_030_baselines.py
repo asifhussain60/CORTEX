@@ -3,7 +3,6 @@
 Performance SLA baselines and monitoring for CORE-030 compliance.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

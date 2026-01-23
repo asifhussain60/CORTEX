@@ -21,7 +21,6 @@ Governance:
   - CORE-013: Specific exception handling (no bare except clauses)
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field
