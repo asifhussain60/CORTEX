@@ -287,9 +287,9 @@ strategic_transform_phases:
         completed:
           - "CONS-001: Redundancy analysis ✅"
           - "CONS-002: Master Orchestrator unification ✅"
+          - "CONS-003: Intent Routing consolidation ✅ (4h actual, 85% value, 100% compat)"
         in_progress: null
         ready_for_implementation:
-          - "CONS-003: Intent routing (3→1)"
           - "CONS-004: Registry (5→1)"
           - "CONS-005: Domain classification (6→2)"
           - "CONS-006: Response formatting (5→1)"
@@ -442,8 +442,8 @@ summary:
   
   progress_dashboard:
     transform_001: "✅ COMPLETE (23/23 orchestrators, 88/88 tests, 99.6% suite, 85% efficiency)"
-    transform_002: "⏳ IN PROGRESS (2/11 phases complete, 6.7% effort, 98K tokens remaining)"
-    overall_roadmap: "58% COMPLETE (31/53 tracked phases, on critical path 100%)"
+    transform_002: "⏳ IN PROGRESS (3/11 phases complete, 27.3% effort, 89K tokens remaining)"
+    overall_roadmap: "60% COMPLETE (32/53 tracked phases, on critical path 100%)"
   
   completion_metrics:
     critical_phases: 31
@@ -506,7 +506,7 @@ summary:
     phase_1: "✅ PHASE-CONV-PROTOCOL-001 (COMPLETED 2026-01-22)"
     phase_2: "✅ REMEDIATION-AUDIT phases (6/6 COMPLETED 2026-01-23)"
     phase_3: "✅ TRANSFORM-001 (COMPLETED 2026-01-24, 23/23 orchestrators)"
-    phase_4: "⏳ TRANSFORM-002 (IN PROGRESS 2026-01-24, CONS-003 next, 56h remaining)"
+    phase_4: "⏳ TRANSFORM-002 (IN PROGRESS 2026-01-24, CONS-003✅ CONS-004 next, 52h remaining)"
     phase_5: "📅 TRANSFORM-003-005 (READY 2026-02-01 start, 80h total)"
 
 notes: |
