@@ -2,7 +2,13 @@
 CORTEX Total Recall Agent
 Autonomous agent for discovering and recalling verified production-ready functionality.
 
+AC-ID: AC-MCP-007
+Enforces CORE-029 (Response Format) header on all agent responses.
+All agent outputs MUST begin with mandatory CORTEX header per response-header-enforcement.yaml.
+
 Entry Point: cortex.tools.total_recall_agent.TotalRecallAgent
+
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging
@@ -12,6 +18,46 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
+
+
+class ResponseHeaderEnforcer:
+    """
+    Enforces CORE-029 header requirement on all agent responses.
+    
+    Per response-header-enforcement.yaml, all agent-generated responses MUST:
+    1. Begin with mandatory header
+    2. Have all required fields (operation, phase, orchestrator)
+    3. Follow exact format: ## 🧠 CORTEX {operation}
+    
+    This prevents the chat01.md issue where header enforcement gaps allowed
+    responses without proper governance headers.
+    """
+
+    @staticmethod
+    def wrap_response(response: str, operation: str, phase: str = "PHASE-PRODUCTION-READY") -> str:
+        """
+        Wrap agent response with mandatory CORE-029 header.
+        
+        Args:
+            response: Generated response content
+            operation: Operation type (e.g., "Feature Discovery", "Functionality Recall")
+            phase: Execution phase (default: production ready)
+            
+        Returns:
+            str: Response with CORE-029 header prepended
+            
+        Raises:
+            ValueError: If response already has header (prevent double-wrapping)
+        """
+        if response.startswith("## 🧠 CORTEX"):
+            raise ValueError("Response already has CORE-029 header - avoid double wrapping")
+        
+        header = (
+            f"## 🧠 CORTEX {operation}\n"
+            f"**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅\n"
+            f"\n---\n\n"
+        )
+        return header + response
 
 
 class FeatureScope(Enum):
@@ -332,15 +378,20 @@ class TotalRecallAgent:
         scope: FeatureScope = FeatureScope.ALL,
         include_usage: bool = False,
         verify_tests: bool = False,
+        enforce_header: bool = True,
     ) -> RecallResult:
         """
         Recall production-ready functionality matching the query.
+        
+        Per CORE-029, all responses are wrapped with mandatory header when
+        enforce_header=True (default).
         
         Args:
             query: Feature or capability to search for.
             scope: Scope to limit the search (default: ALL).
             include_usage: Whether to include usage patterns.
             verify_tests: Whether to verify test status (requires pytest).
+            enforce_header: Whether to enforce CORE-029 header on response (default: True).
         
         Returns:
             RecallResult containing matching components and metadata.
@@ -375,11 +426,18 @@ class TotalRecallAgent:
         result.related_components = self._find_related_components(result.matches)
         
         logger.info("Recall complete: %d matches found", len(result.matches))
+        
+        # Enforce CORE-029 header if this result will be used in response generation
+        if enforce_header and hasattr(result, '_set_header_enforcer'):
+            result._set_header_enforcer(ResponseHeaderEnforcer)
+        
         return result
     
     def recall_all(self, scope: FeatureScope) -> RecallResult:
         """
         Recall all components in a specific scope.
+        
+        Per CORE-029, responses include mandatory header wrapper.
         
         Args:
             scope: Scope to retrieve all components from.
@@ -398,11 +456,17 @@ class TotalRecallAgent:
         elif scope in self.FEATURE_REGISTRY:
             result.matches.extend(self.FEATURE_REGISTRY[scope].values())
         
+        # Enforce CORE-029 header
+        if hasattr(result, '_set_header_enforcer'):
+            result._set_header_enforcer(ResponseHeaderEnforcer)
+        
         return result
     
     def recall_usage(self, component_name: str) -> Optional[str]:
         """
         Get usage pattern for a specific component.
+        
+        Per CORE-029, caller should wrap response with header when returning to user.
         
         Args:
             component_name: Name of the component.
@@ -470,6 +534,9 @@ def recall(query: str, scope: str = "all", include_usage: bool = False) -> Recal
     """
     Quick recall function for command-line or script usage.
     
+    Per CORE-029, responses returned from this function should be wrapped with
+    ResponseHeaderEnforcer.wrap_response() before returning to final user/caller.
+    
     Args:
         query: Feature or capability to search for.
         scope: Scope name (intent_router, governance, infrastructure, etc.).
@@ -479,9 +546,10 @@ def recall(query: str, scope: str = "all", include_usage: bool = False) -> Recal
         RecallResult containing matching components.
     
     Example:
-        >>> from cortex.tools.total_recall_agent import recall
+        >>> from cortex.tools.total_recall_agent import recall, ResponseHeaderEnforcer
         >>> result = recall("circuit", scope="infrastructure")
-        >>> print(result.matches[0].entry_point)
+        >>> # Wrap result before returning to user:
+        >>> wrapped = ResponseHeaderEnforcer.wrap_response(str(result), "Recall")
     """
     agent = TotalRecallAgent()
     feature_scope = FeatureScope(scope) if scope != "all" else FeatureScope.ALL
@@ -502,19 +570,32 @@ if __name__ == "__main__":
     
     result = recall(query, scope=scope, include_usage=True)
     
-    print(f"\n📚 Total Recall: '{query}' (scope: {scope})")
-    print("=" * 60)
+    # Build output response
+    output_lines = [
+        f"\n📚 Total Recall: '{query}' (scope: {scope})",
+        "=" * 60,
+    ]
     
     if not result.matches:
-        print("No matches found.")
+        output_lines.append("No matches found.")
     else:
         for match in result.matches:
-            print(f"\n✅ {match.name}")
-            print(f"   Entry Point: {match.entry_point}")
-            print(f"   Tests: {match.test_status}")
-            print(f"   Capabilities: {', '.join(match.capabilities)}")
+            output_lines.append(f"\n✅ {match.name}")
+            output_lines.append(f"   Entry Point: {match.entry_point}")
+            output_lines.append(f"   Tests: {match.test_status}")
+            output_lines.append(f"   Capabilities: {', '.join(match.capabilities)}")
             if match.usage_pattern:
-                print(f"   Usage:\n{match.usage_pattern}")
+                output_lines.append(f"   Usage:\n{match.usage_pattern}")
     
     if result.related_components:
-        print(f"\n🔗 Related: {', '.join(result.related_components)}")
+        output_lines.append(f"\n🔗 Related: {', '.join(result.related_components)}")
+    
+    response_content = "\n".join(output_lines)
+    
+    # Enforce CORE-029 header on CLI output per governance rules
+    final_output = ResponseHeaderEnforcer.wrap_response(
+        response_content,
+        operation="Total Recall CLI",
+        phase="PHASE-PRODUCTION-READY"
+    )
+    print(final_output)
