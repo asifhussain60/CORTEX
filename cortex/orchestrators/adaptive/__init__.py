@@ -8,9 +8,7 @@ Modules:
     execution_modes: ExecutionMode enums and mode handlers
     caching_layer: CachingLayer for result caching with TTL
     performance_profiler: PerformanceProfiler for execution profiling
-
-Author: Asif Hussain
-Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+    unified_adaptive_layer: UnifiedAdaptiveLayer consolidating all adaptive components
 """
 
 from .execution_context_analyzer import (
@@ -35,6 +33,12 @@ from .performance_profiler import (
     PerformanceProfile,
     PerformanceProfiler,
 )
+from .unified_adaptive_layer import (
+    UnifiedAdaptiveLayer,
+    FailoverContext,
+    ResourceAllocation,
+    StrategyType,
+)
 
 __all__ = [
     "ExecutionContext",
@@ -49,4 +53,8 @@ __all__ = [
     "ExecutionMetrics",
     "PerformanceProfile",
     "PerformanceProfiler",
+    "UnifiedAdaptiveLayer",
+    "FailoverContext",
+    "ResourceAllocation",
+    "StrategyType",
 ]
