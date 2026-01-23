@@ -53,13 +53,32 @@ rules:
   - rule_id: CORE-002
     category: response_formatting
     severity: blocked
-    name: No Summary File Creation
+    name: Markdown Restricted to docs/ Directories
     description: |
-      Do NOT create *-summary.md, *-report.md files. Summaries go in chat.
+      Do NOT create .md files outside approved documentation directories.
+      
+      README.md NOT required for CORTEX functionality (documentation-only).
+      Suppress all markdown file creation outside documentation paths.
+      
+      BLOCKED patterns:
+      - DEPLOYMENT-*.md (root level)
+      - ORCHESTRATOR-*.md (root level)
+      - README.md (root level - non-functional)
+      - *-SUMMARY.md (root level)
+      - *-REPORT.md (root level)
+      - Any .md in root or non-docs/ subdirectories
+      
+      APPROVED locations:
+      - docs/ (primary documentation)
+      - _workspaces/docs/ (workspace-specific documentation)
     validation:
-      - No *-summary.md files
-      - No *-report.md files
-      - No completion-*.md files
+      - No .md files in workspace root
+      - No .md files outside docs/, _workspaces/docs/
+      - Artifact creation pre-validated before execution
+      - README.md explicitly suppressed (non-functional)
+    implementation:
+      method: governance_registry.validate_artifact_creation()
+      enforcement: master_orchestrator pre-execution gate
 
   # --------------------------------------------------------------------------
   # CORE-003: Visual Progress Bars

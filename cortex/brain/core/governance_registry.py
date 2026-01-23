@@ -18,7 +18,6 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import logging
 import threading
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.path_resolver import resolve_path
@@ -371,3 +370,57 @@ class GovernanceRegistry:
             f"on turn {turn_number}"
         )
         return Ok(True)
+    
+    def validate_artifact_creation(self, artifact_path: str, ac_id: Optional[str] = None) -> Result[bool]:
+        """
+        Validate that artifact creation complies with CORE-002 (TIER 0).
+        
+        Implements: CORE-002 (expanded scope)
+        Purpose: Block creation of ALL markdown files outside approved documentation directories
+        
+        Allowed locations for .md files:
+        - docs/ subdirectory
+        - _workspaces/docs/ subdirectory
+        
+        BLOCKED: All .md files in root, including README.md (non-functional, documentation-only)
+        
+        Args:
+            artifact_path: Full path or filename of artifact to validate
+            ac_id: Optional AC-ID for audit trail
+        
+        Returns:
+            Ok(True) if artifact creation is allowed
+            Err(violation_message) if artifact violates CORE-002
+        
+        Raises:
+            N/A - Returns Result type instead of raising exceptions
+        """
+        if not artifact_path.endswith(".md"):
+            # Non-markdown artifacts are allowed
+            return Ok(True)
+        
+        # Approved markdown locations (documentation directories only)
+        approved_prefixes = ["docs/", "_workspaces/docs/"]
+        
+        # Extract path string
+        path_str = str(artifact_path)
+        
+        # Check if in approved documentation directory
+        in_approved_directory = any(
+            path_str.startswith(prefix) for prefix in approved_prefixes
+        )
+        
+        if in_approved_directory:
+            return Ok(True)
+        
+        # Violation detected - all root-level .md files blocked (including README.md)
+        violation_msg = (
+            f"CORE-002 VIOLATION: Markdown file creation blocked outside docs/\n"
+            f"File: {artifact_path}\n"
+            f"Approved locations: docs/, _workspaces/docs/ only\n"
+            f"Reason: README.md not required for CORTEX functionality (documentation-only)\n"
+            f"AC-ID: {ac_id if ac_id else 'unspecified'}"
+        )
+        
+        self._logger.error(violation_msg)
+        return Err(violation_msg)
