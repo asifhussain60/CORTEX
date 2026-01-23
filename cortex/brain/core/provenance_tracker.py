@@ -11,7 +11,6 @@ Requirement traceability with:
 Satisfies: AC-EXPLAIN-001 through AC-EXPLAIN-005
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

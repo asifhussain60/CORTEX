@@ -3,7 +3,6 @@
 Learns from feedback to improve classification accuracy over time.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import List

@@ -8,7 +8,6 @@ Tests for domain-specific orchestrator templates.
 - Each template includes audit logging hooks
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

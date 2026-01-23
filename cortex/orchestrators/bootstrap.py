@@ -11,7 +11,6 @@ AC-AR-006-02: Wire all orchestrators into MasterOrchestrator
 Ensures all orchestrators operational and interconnected.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Any, Optional

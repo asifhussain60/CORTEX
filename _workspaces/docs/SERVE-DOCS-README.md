@@ -215,4 +215,3 @@ For issues with the documentation server:
 **Version:** 1.0  
 **Updated:** 2026-01-22  
 **Status:** Production Ready  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

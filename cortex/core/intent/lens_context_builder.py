@@ -4,7 +4,6 @@ Provides context aggregation for the LENS protocol, combining AST findings,
 Git history, and other intelligence sources into a unified context.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

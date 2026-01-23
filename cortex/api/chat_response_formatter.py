@@ -30,7 +30,6 @@ class ChatResponseFormatter:
     AUTHOR = "Asif Hussain"
     
     # Standard copyright notice
-    COPYRIGHT = "Copyright © 2025-2026 Asif Hussain. All rights reserved."
     
     def __init__(self):
         """Initialize ChatResponseFormatter."""

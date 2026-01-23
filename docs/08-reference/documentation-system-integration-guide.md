@@ -284,7 +284,6 @@ graph TD
 ---
 
 **Author:** Generator  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 ### Adding a New Diagram
@@ -428,4 +427,3 @@ All files validated by test suite before submission.
 **Author:** CORTEX Documentation Engine  
 **Generated:** 2026-01-22  
 **Status:** Ready for production deployment  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

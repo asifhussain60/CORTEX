@@ -428,7 +428,6 @@ result = orchestrator.apply_solid_decomposition(
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Refactoring Orchestrator Module
 Status: Production Ready | Version: 1.0.0

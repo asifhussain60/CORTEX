@@ -7,7 +7,6 @@ Tests for:
 - AC-FR-004-03: Artifact Collection with AC-ID linkage
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

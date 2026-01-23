@@ -4,7 +4,6 @@ Naming Conventions Module - CR-001-01
 Defines orchestrator naming conventions and provides linting functionality.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import re

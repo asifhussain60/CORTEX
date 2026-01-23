@@ -1,7 +1,6 @@
 """Hallucination Prevention REDIRECT to cortex_brain.tier2.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 # All hallucination prevention logic is in cortex_brain/tier2/hallucination_prevention/

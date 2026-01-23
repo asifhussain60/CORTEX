@@ -4,7 +4,6 @@ Provides functions to resolve paths within the CORTEX project structure
 and locate modules, configurations, and resources.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from pathlib import Path

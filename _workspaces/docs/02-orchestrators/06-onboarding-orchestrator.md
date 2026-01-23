@@ -287,7 +287,6 @@ scan = setup_orchestrator.scan_security(
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Onboarding Orchestrator Module
 Status: Production Ready | Version: 1.0.0

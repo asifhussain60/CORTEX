@@ -8,7 +8,6 @@ All agent outputs MUST begin with mandatory CORTEX header per response-header-en
 
 Entry Point: cortex.tools.total_recall_agent.TotalRecallAgent
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging

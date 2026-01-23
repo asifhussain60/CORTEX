@@ -14,7 +14,6 @@ Traits are implemented as typing.Protocol for structural subtyping.
 No circular dependencies - tree structure verified.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Protocol, List, Dict, Any, Optional, Set

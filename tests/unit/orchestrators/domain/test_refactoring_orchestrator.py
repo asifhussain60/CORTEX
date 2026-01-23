@@ -9,7 +9,6 @@ Tests for RefactoringOrchestrator:
 - AC-AR-012-05: Refactoring plan generation
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

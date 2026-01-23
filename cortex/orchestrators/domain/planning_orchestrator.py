@@ -21,7 +21,6 @@ Plan Visualization:
 - This orchestrator provides DATA via MCP tools; Observatory provides UI
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import hashlib

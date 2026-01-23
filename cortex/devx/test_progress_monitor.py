@@ -3,7 +3,6 @@
 Provides continuous progress feedback, hanging test detection, and execution analysis.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import subprocess

@@ -20,7 +20,6 @@ CORTEX Governance Rules Applied:
 - CORE-027: Audit trail logging (AC_START, AC_EXECUTE, AC_COMPLETE)
 - CORE-028: Kebab-case naming, ≤25 character filenames
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Set, Tuple, Optional, Any

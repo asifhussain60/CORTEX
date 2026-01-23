@@ -5,7 +5,6 @@ Single implementation for loading YAML/JSON configuration files.
 All configuration loading should go through this module.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

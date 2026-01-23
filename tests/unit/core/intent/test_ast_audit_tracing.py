@@ -13,7 +13,6 @@ executes comprehension via the LENS protocol, the audit trail contains proof
 that ASTIntelligenceEngine was called.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

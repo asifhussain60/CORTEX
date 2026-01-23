@@ -11,7 +11,6 @@ Hallucination prevention with:
 Satisfies: AC-COHERENCE-001 through AC-COHERENCE-004
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import re

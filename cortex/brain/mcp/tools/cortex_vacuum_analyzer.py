@@ -5,7 +5,6 @@ Phase 1: Non-destructive analysis of repository structure and file organization.
 Generates migration plans without modifying any files.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

@@ -4,7 +4,6 @@ Defines protocols and abstract interfaces for orchestrators, executors,
 and core framework components.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict, Optional, Protocol, runtime_checkable

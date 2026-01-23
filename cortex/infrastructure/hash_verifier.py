@@ -11,7 +11,6 @@ Production-grade hash chain verification with:
 Satisfies: NFR-003-02 - Hash Chain Integrity Verification
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import hashlib

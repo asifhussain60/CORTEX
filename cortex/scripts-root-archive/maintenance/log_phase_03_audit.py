@@ -4,7 +4,6 @@ Log audit trail for PHASE-03 (Safety, Reliability & Observability)
 
 Logs AC_START, AC_EXECUTE, AC_COMPLETE for each acceptance criterion.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sys

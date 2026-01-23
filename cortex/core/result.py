@@ -4,7 +4,6 @@ Provides a Rust-style Result[T] type for explicit error handling without
 exceptions. Supports both Ok(value) and Err(error) cases.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Generic, TypeVar, Union, Callable, Optional, Any, TYPE_CHECKING

@@ -4,7 +4,6 @@ AC-TC-003-02: Quality Assurance Framework
 Provides quality assurance tools for templates including
 completeness checking, consistency validation, and metrics.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

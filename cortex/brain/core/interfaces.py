@@ -5,7 +5,6 @@ Defines interfaces that all implementations must follow.
 Ensures consistency and enables dependency injection.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABC, abstractmethod

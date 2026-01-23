@@ -7,7 +7,6 @@ Tests for orchestrator composition and delegation patterns.
 - Error handling in composed operations
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

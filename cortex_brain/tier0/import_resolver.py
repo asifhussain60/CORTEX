@@ -15,7 +15,6 @@ Type Hints: 100% coverage
 Docstrings: Comprehensive
 
 Author: cortex-builder
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sys

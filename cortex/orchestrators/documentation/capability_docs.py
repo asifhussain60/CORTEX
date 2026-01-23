@@ -5,7 +5,6 @@ Auto-generates capability documentation from orchestrator metadata.
 Provides search and indexing functionality.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

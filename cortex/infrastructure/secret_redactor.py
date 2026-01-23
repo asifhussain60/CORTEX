@@ -11,7 +11,6 @@ Production-grade secret redaction with:
 Satisfies: NFR-003 - Security - Secret Redaction
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

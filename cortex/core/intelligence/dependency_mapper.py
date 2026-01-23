@@ -6,7 +6,6 @@ Maps and classifies module imports into:
 - Local imports (project-specific modules)
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 AC-ID: E3-DEPENDENCY-MAPPER
 """
 

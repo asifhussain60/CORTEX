@@ -126,7 +126,6 @@ variables:
     
     - name: "notice"
       source: "copyright.notice"
-      value: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
     
     - name: "repository"
       source: "author.repository"

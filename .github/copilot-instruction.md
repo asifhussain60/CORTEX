@@ -55,7 +55,6 @@ All three files are **unified and synchronized** for seamless master orchestrato
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Examples:**
@@ -201,7 +200,6 @@ Examples: AC-CORE-001, AC-FR-042, AC-REM-CRIT-003, AC-ENH-002-01
 ```python
 """Tests for {module_name}
 AC-IDs: {AC-ID-1}, {AC-ID-2}
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 import pytest
 from cortex.{module_path} import {ClassName}
@@ -226,7 +224,6 @@ class Test{ClassName}:
 """Module: {name}
 AC-ID: {ac_id}
 Purpose: {description}
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 from typing import Optional
 from cortex.core.result import Result, Ok, Err

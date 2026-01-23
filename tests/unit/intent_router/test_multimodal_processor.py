@@ -9,7 +9,6 @@ Test coverage for multi-modal input handling including:
 - Domain-specific schemas
 - Error handling and metrics
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

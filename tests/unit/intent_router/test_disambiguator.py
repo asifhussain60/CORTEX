@@ -4,7 +4,6 @@ Tests for Intent Disambiguation - AC-PHX-007-03
 Test disambiguation logic including confidence thresholding,
 context-aware disambiguation, and fallback suggestions.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

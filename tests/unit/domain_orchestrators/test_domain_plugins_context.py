@@ -4,7 +4,6 @@ AC-PHX-008-04/05/06: Domain Plugin System and Context Management Tests
 TDD Tests for domain plugin framework and context management.
 Tests MUST exist BEFORE implementation (CORE-008).
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

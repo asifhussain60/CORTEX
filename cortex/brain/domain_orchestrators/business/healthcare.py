@@ -4,7 +4,6 @@ AC-PHX-008-02: Healthcare Domain Orchestrator
 Domain orchestrator for healthcare operations with HIPAA compliance,
 PHI protection, and healthcare system integration.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from datetime import datetime
