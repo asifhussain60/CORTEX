@@ -5,6 +5,29 @@
 # Status: Phase 1 Complete, Phases 2-3 Planned (Security + Governance Hardening)
 
 maintenance_tasks:
+  copyright_prevention:
+    priority: "P0-CRITICAL"
+    description: "Enforce copyright statement policy via pre-commit hooks"
+    status: "ACTIVE"
+    rule: |
+      ✅ ALLOWED: Copyright © in .md files (docs/, _workspaces/roadmap/) and response headers (per CORE-029)
+      ❌ FORBIDDEN: Copyright © in .py source files (cortex/, cortex_brain/, tests/)
+      
+      Prevention: Pre-commit hook (.git/hooks/pre-commit) blocks commits with:
+      - "Copyright ©" in .py files
+      - "Copyright (c)" in .py files
+      - "All rights reserved" in .py files
+      - Bare except: clauses (CORE-013 CRITICAL)
+      
+      Activation: Run: chmod +x .git/hooks/pre-commit
+      Bypass (if needed): git commit --no-verify
+    
+    enforcement_mechanism:
+      - Hook file: .git/hooks/pre-commit
+      - Scans: All staged .py files before commit
+      - Behavior: Exit 1 (block commit) if violations found
+      - Warning mode: ⚠️ for CORE-011 (type hints review)
+  
   cleanup_duplicate_phase_definitions:
     priority: "P0-CRITICAL"
     description: "Remove duplicate phase entries from both cortex-impl-map.yaml and individual phase YAML files"
@@ -396,7 +419,7 @@ implementation_philosophy:
     remediation:
       strategy: "review_findings_remediation"
       focus: "Production readiness - Fix 18 CRITICAL findings from live implementation review"
-      status: "NOT_STARTED"
+      status: "⏳ IN_PROGRESS (Phases 0-3 COMPLETED, Phases 4-7 NOT_STARTED)"
       initiation_date: "2026-01-23"
       total_phases: 10
       total_estimated_effort: "120-150 hours (3-4 weeks)"
@@ -554,9 +577,10 @@ implementation_philosophy:
           priority: "P1-CRITICAL"
           required: true
           track: "all"
-          status: "NOT_STARTED"
+          status: "COMPLETED"
           estimated_effort: "40-50 hours (5-6 days)"
           blocking: false
+          completion_note: "9 orchestrator modules merged from origin/CORTEX (challenge_generator, comprehension_yaml, confidence_router, core/comprehension_session, multi_turn_workflow, response_challenge_injector, turn_validation_gate, verification_compliance_gate, wiring_harness_integration). Code implementations present but NOT YET WIRED into 4-stage pipeline."
           acceptance_criteria: 8
           description: |
             Integrate per-turn intent validation architecture from CORTEX-5.5 archive branch.
