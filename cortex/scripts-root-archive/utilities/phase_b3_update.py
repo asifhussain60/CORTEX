@@ -66,8 +66,10 @@ def find_remaining_test_files():
                             content = f.read()
                             if re.search(r'from src\.|import src', content):
                                 remaining_files.append(filepath)
-                    except:
-                        pass
+                    except (OSError, IOError, UnicodeDecodeError) as e:
+                        # Skip files that cannot be read or decoded
+                        import logging
+                        logging.warning(f"Failed to read file {filepath}: {e}")
     
     return sorted(remaining_files)
 

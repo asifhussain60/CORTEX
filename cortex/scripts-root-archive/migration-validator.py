@@ -141,8 +141,10 @@ class MigrationValidator:
                     duplicates.append((filepath, hashes[file_hash]))
                 else:
                     hashes[file_hash] = filepath
-            except:
-                pass
+            except (OSError, IOError, ValueError) as e:
+                # Skip files that cannot be hashed or read
+                import logging
+                logging.warning(f"Failed to hash file {filepath}: {e}")
         
         if duplicates:
             for dup, original in duplicates:
