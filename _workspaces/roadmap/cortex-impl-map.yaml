@@ -742,20 +742,6 @@ phases_implementation_status:
     note: "Comprehensive design specifications for all 21 architectural stub phases. Phase YAML files created in _workspaces/roadmap/phases/"
     status: "FULLY_DESIGNED"
     phases:
-      - id: "arch-005-hardening"
-        title: "Production Hardening"
-        track: "stubs"
-        status: "DEPRECATED"
-        reason: "Placeholder phase - actual hardening covered in impl-infra-001, impl-state-002, impl-recovery-003"
-        phase_file: "_workspaces/roadmap/phases/arch-005-hardening.yaml"
-      
-      - id: "arch-007-ecosystem"
-        title: "Orchestrator Ecosystem"
-        track: "stubs"
-        status: "CONSOLIDATED"
-        reason: "Broad placeholder - actual implementations in impl-governance-001, impl-intelligence-001/002/003"
-        phase_file: "_workspaces/roadmap/phases/arch-007-ecosystem.yaml"
-      
       - id: "arch-007-intent"
         title: "Intent Router"
         track: "stubs"
@@ -810,14 +796,6 @@ phases_implementation_status:
         estimated_effort: "2-3 weeks"
         reason: "Concept phase - no implementations found"
         phase_file: "_workspaces/roadmap/phases/arch-012-knowledge.yaml"
-      
-      - id: "arch-013-observability"
-        title: "Observability"
-        track: "stubs"
-        status: "DEFERRED"
-        priority: "P2-MEDIUM"
-        reason: "Deferred to impl-ops-004-observability"
-        phase_file: "_workspaces/roadmap/phases/arch-013-observability.yaml"
       
       - id: "arch-015-dashboard"
         title: "Dashboard"
