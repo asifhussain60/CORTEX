@@ -14,7 +14,7 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 29
+  rule_count: 31
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
 
@@ -721,6 +721,231 @@ rules:
         
         (INVALID: Missing checkmark after orchestrator)
 
+  # --------------------------------------------------------------------------
+  # CORE-031: Declarative Autowiring Registry (Wiring Brittleness Fix)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-031
+    category: architecture_integrity
+    severity: blocked
+    name: Declarative Autowiring Registry (Git-Safe Wiring)
+    description: |
+      Orchestrators and modules MUST use declarative YAML-based autowiring,
+      NOT imperative Python code registration. This makes wiring Git-safe,
+      surviving pulls/merges without manual re-registration.
+      
+      Problem solved: Wiring breaks after git operations because registration
+      is embedded in import sequences and initialization order. Solution:
+      Move all wiring to immutable YAML specs that survive git operations.
+    
+    wiring_requirements:
+      - Each orchestrator/module has a {module_name}_wiring.yaml spec
+      - Specs declare: dependencies, entry points, initialization order
+      - AutowiringOrchestrator discovers and validates wiring at startup
+      - YAML specs are Git-safe (merges respect data integrity)
+      - Wiring is idempotent (can run discovery multiple times safely)
+    
+    yaml_spec_structure:
+      location: "cortex/orchestrators/{module_name}_wiring.yaml"
+      
+      required_fields:
+        - module_name: Name of orchestrator/module
+        - version: Semantic version
+        - dependencies: List of required modules with version constraints
+        - provides: List of provided interfaces
+        - entry_points: Initialization hooks (name, function, phase)
+        - conflict_resolution: Rules for handling duplicate registrations
+        - initialization_order: Topological sort key
+      
+      example: |
+        module_name: master_orchestrator
+        version: "2.0.0"
+        
+        dependencies:
+          - name: intent_router
+            version: ">=1.5.0"
+            required: true
+          - name: domain_orchestrator
+            version: ">=2.0.0"
+            required: true
+          - name: governance_registry
+            version: ">=1.0.0"
+            required: true
+        
+        provides:
+          - interface: IMasterOrchestrator
+            version: "2.0.0"
+          - interface: IOrchestrationPipeline
+            version: "1.0.0"
+        
+        entry_points:
+          - name: "initialize"
+            function: "master_orchestrator.initialize()"
+            phase: "startup"
+            order: 100
+          - name: "register_handlers"
+            function: "master_orchestrator.register_handlers()"
+            phase: "startup"
+            order: 200
+        
+        initialization_order: 100
+        
+        conflict_resolution:
+          duplicate_registration: "use_latest"
+          missing_dependency: "fail_fast"
+          circular_dependency: "reject_startup"
+    
+    autowiring_engine:
+      class: "AutowiringOrchestrator"
+      location: "cortex/orchestrators/core/autowiring_orchestrator.py"
+      
+      startup_sequence:
+        1_discover: "Discover all *_wiring.yaml files"
+        2_validate: "Validate dependency graph, detect cycles"
+        3_resolve: "Topological sort, resolve version constraints"
+        4_register: "Register modules into OrchestratorRegistry"
+        5_verify: "Post-registration validation of wiring"
+      
+      methods:
+        discover_wiring_specs: "Find all *_wiring.yaml files"
+        validate_dependency_graph: "Check for cycles and conflicts"
+        resolve_dependencies: "Topological sort of initialization order"
+        register_modules: "Register into OrchestratorRegistry"
+        validate_wiring: "Verify all registrations successful"
+        query_wiring_state: "Expose wiring state for inspection"
+    
+    git_safety_guarantees:
+      - "YAML specs are data, not code - merges respect structure"
+      - "Pulling new modules auto-wires them (no manual registration)"
+      - "Merge conflicts in YAML are explicit and visible"
+      - "Wiring can be diffed and version-controlled"
+      - "Breaking changes detected at startup, not hidden"
+    
+    validation_hooks:
+      pre_execution:
+        - "AutowiringOrchestrator.validate() must pass before any execution"
+        - "Dependency resolution must be deterministic and complete"
+        - "No circular dependencies allowed"
+        - "All declared entry points must be discoverable"
+      
+      pre_commit:
+        - "Check that *_wiring.yaml specs are valid YAML"
+        - "Validate against wiring schema"
+        - "Detect new modules missing wiring specs"
+      
+      post_merge:
+        - "Run post-merge hook: cortex/scripts/validate-wiring-post-merge.sh"
+        - "If wiring is invalid, merge marked with error"
+        - "Report which modules are unwired or have conflicts"
+    
+    post_merge_validation_script: |
+      #!/bin/bash
+      # Post-merge wiring validation (executes after git merge)
+      
+      echo "Validating orchestrator wiring post-merge..."
+      
+      # Discover all orchestrator files
+      ORCHESTRATORS=$(find cortex/orchestrators -name "*.py" -type f)
+      
+      # Check that each orchestrator has a corresponding _wiring.yaml
+      MISSING_SPECS=0
+      for orch in $ORCHESTRATORS; do
+        spec_file="${orch%.*}_wiring.yaml"
+        if [[ ! -f "$spec_file" && "$orch" != *"__pycache__"* ]]; then
+          echo "❌ Missing wiring spec: $spec_file"
+          ((MISSING_SPECS++))
+        fi
+      done
+      
+      if [[ $MISSING_SPECS -gt 0 ]]; then
+        echo "ERROR: $MISSING_SPECS orchestrators are missing wiring specs"
+        exit 1
+      fi
+      
+      # Validate wiring specs can be parsed and dependencies resolved
+      python3 -c "
+        from cortex.orchestrators.core.autowiring_orchestrator import AutowiringOrchestrator
+        engine = AutowiringOrchestrator()
+        
+        try:
+          specs = engine.discover_wiring_specs()
+          engine.validate_dependency_graph(specs)
+          print(f'✅ All {len(specs)} wiring specs valid')
+        except Exception as e:
+          print(f'❌ Wiring validation failed: {e}')
+          exit(1)
+      "
+      
+      echo "✅ Wiring validation passed - merge is safe"
+    
+    success_criteria:
+      - "No manual orchestrator registration code in __init__.py files"
+      - "All wiring happens via AutowiringOrchestrator discovery"
+      - "Post-merge: pull origin → all new modules auto-wire"
+      - "Post-merge: no wiring re-registration needed"
+      - "Merge conflicts in YAML are explicit, not silent"
+      - "All orchestrators queryable: cortex-brain query wiring"
+      - "Wiring state is version-controlled and diff-able"
+    
+    implementation_phases:
+      phase_1_design:
+        effort: "8-12 hours"
+        deliverables:
+          - "AutowiringOrchestrator class design"
+          - "Wiring YAML spec schema definition"
+          - "Post-merge validation script"
+          - "Wiring state persistence design"
+      
+      phase_2_implementation:
+        effort: "16-20 hours"
+        deliverables:
+          - "AutowiringOrchestrator implementation"
+          - "Dependency graph validator"
+          - "OrchestratorRegistry integration"
+          - "Post-merge hook integration"
+      
+      phase_3_migration:
+        effort: "12-16 hours"
+        deliverables:
+          - "Convert 23 existing orchestrators to declarative specs"
+          - "Create *_wiring.yaml for each orchestrator"
+          - "Remove imperative registration code"
+          - "Comprehensive integration tests"
+      
+      phase_4_validation:
+        effort: "4-6 hours"
+        deliverables:
+          - "Pull/merge brittleness tests"
+          - "Multi-branch integration tests"
+          - "Performance validation"
+          - "Documentation"
+    
+    related_ac_ids:
+      - "transform-001-orchestrator-wiring"
+      - "AC-AR-AUTOWIRING-001"
+      - "AC-AR-GIT-SAFETY-001"
+    
+    references:
+      - "discovery-autowiring-system.md (docs/)"
+      - "transform-001-orchestrator-wiring.yaml (roadmap/phases/)"
+      - "orchestrator_registry.py (cortex/orchestrators/registry/)"
+    
+    enforcement:
+      when: "phase-lock"
+      action: "REJECT if non-declarative wiring found"
+      audit_log: "CRITICAL"
+      message: |
+        CORE-031 Violation: Imperative orchestrator registration detected.
+        
+        All wiring MUST be declarative (YAML-based) per CORE-031.
+        
+        Required fixes:
+        1. Create {module_name}_wiring.yaml spec for each orchestrator
+        2. Move wiring logic from __init__.py to AutowiringOrchestrator
+        3. Pass post-merge validation: scripts/validate-wiring-post-merge.sh
+        4. Verify no imperative registration code remains
+        
+        See core-rules.yaml CORE-031 for complete specification.
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
@@ -733,7 +958,7 @@ enforcement:
     pre_push: true
   
   core_rule_precedence:
-    highest: "CORE-030 (Response headers)"
+    highest: "CORE-030 (Response headers), CORE-031 (Declarative autowiring)"
     high: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     medium: "CORE-028 (File naming), CORE-016 (Code formatting)"
     loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
