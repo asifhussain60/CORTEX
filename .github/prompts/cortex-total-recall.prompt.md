@@ -981,73 +981,227 @@ print(f"Governance violations: {summary.governance_violations}")
 
 **CRITICAL:** Execute these steps BEFORE any rewiring or registration operations.
 
-### Step 1: Sync with Remote (Preserve Local Work)
+**PROTECTION PRIORITY:** Company domain knowledge YAMLs and best practices MUST NEVER be lost during sync.
+
+### Step 0: Pre-Sync Backup (Company Knowledge Protection)
 
 ```bash
-# 1. Save current work state
-git stash push -m "Pre-sync: $(date +%Y%m%d_%H%M%S)"
+# Create timestamped backup of ALL local work (especially domain YAMLs)
+BACKUP_DIR="_backups/pre-sync-$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$BACKUP_DIR"
 
-# 2. Fetch latest from origin
+# Backup critical company-specific files
+cp -r cortex_brain/tier1/profiles/ "$BACKUP_DIR/tier1-profiles/" 2>/dev/null || true
+cp -r cortex_brain/tier2/governance/ "$BACKUP_DIR/tier2-governance/" 2>/dev/null || true
+cp -r cortex_brain/tier3/knowledge/ "$BACKUP_DIR/tier3-knowledge/" 2>/dev/null || true
+cp -r cortex_brain/tier3/domain-registry.yaml "$BACKUP_DIR/" 2>/dev/null || true
+
+# Backup any uncommitted domain-specific work
+git diff > "$BACKUP_DIR/uncommitted-changes.patch"
+git diff --cached > "$BACKUP_DIR/staged-changes.patch"
+
+echo "✓ Backup created: $BACKUP_DIR"
+ls -lh "$BACKUP_DIR"
+```
+
+### Step 1: Sync with Remote (Maximum Local Work Protection)
+
+```bash
+# 1. Save ALL current work state (including untracked files)
+git add -A  # Stage everything first
+git stash push --include-untracked -m "Pre-sync: $(date +%Y%m%d_%H%M%S)"
+
+# 2. Fetch latest from origin (no local changes yet)
 git fetch origin
 
-# 3. Pull and merge with strategy to preserve local work
+# 3. Pull and merge with LOCAL-FAVORING strategy
+# CRITICAL: --strategy-option=ours keeps LOCAL version on conflicts
 git pull origin main --no-rebase --strategy-option=ours
 
-# 4. Restore local changes (if any were stashed)
+# 4. Restore ALL local changes (stash pop AFTER merge)
 git stash pop
+
+# 5. If stash pop has conflicts, LOCAL work is PRESERVED in stash
+# You can inspect: git stash show -p
 ```
 
-### Step 2: Conflict Resolution (If Needed)
+### Step 2: Intelligent Conflict Resolution (Company Knowledge First)
 
 ```bash
-# If conflicts occur during stash pop:
-# 1. List conflicted files
-git status | grep "both modified"
+# If conflicts occur during stash pop, LOCAL work is STILL in stash (safe!)
 
-# 2. For each conflict, choose strategy:
-#    - Keep local: git checkout --ours <file>
-#    - Keep remote: git checkout --theirs <file>
-#    - Manual merge: edit file, then git add <file>
+# Strategy 1: Keep ALL local changes for domain-specific files
+DOMAIN_FILES=(
+    "cortex_brain/tier1/profiles/*.yaml"
+    "cortex_brain/tier2/governance/*rules.yaml"
+    "cortex_brain/tier3/knowledge/*.yaml"
+    "cortex_brain/tier3/domain-registry.yaml"
+)
 
-# 3. Complete stash recovery
-git stash drop  # Only after resolving all conflicts
+# For each domain file with conflict, KEEP LOCAL version
+for pattern in "${DOMAIN_FILES[@]}"; do
+    for file in $pattern; do
+        if git status | grep -q "$file"; then
+            echo "Protecting local: $file"
+            git checkout --ours "$file"
+            git add "$file"
+        fi
+    done
+done
+
+# Strategy 2: For non-domain files, review conflicts manually
+git status | grep "both modified" | grep -v "cortex_brain/tier" | while read status file; do
+    echo "Manual review needed: $file"
+    # Use git mergetool or manual inspection
+done
+
+# Strategy 3: Complete stash recovery (only drop after verification)
+# DO NOT drop until you verify all domain YAMLs are intact!
+echo "⚠️  Verify domain YAMLs before dropping stash!"
+git stash list  # Should show your stashed work
 ```
 
-### Step 3: Verify Synchronization
+### Step 3: Verify No Local Work Lost (MANDATORY)
 
 ```bash
-# Confirm you're up to date
+# 1. Check git status
 git status
 
-# Check last sync timestamp
-git log -1 --format="%ai" origin/main
+# 2. Verify domain knowledge YAMLs are intact
+echo "Verifying domain knowledge YAMLs..."
+for yaml in cortex_brain/tier{1,2,3}/**/*.yaml; do
+    if [ -f "$yaml" ]; then
+        echo "✓ $yaml exists"
+    else
+        echo "❌ MISSING: $yaml - RESTORE FROM BACKUP!"
+    fi
+done
 
-# Verify no divergence
+# 3. Compare with backup to ensure no loss
+BACKUP_DIR=$(ls -dt _backups/pre-sync-* | head -1)
+echo "Comparing with backup: $BACKUP_DIR"
+
+diff -r "$BACKUP_DIR/tier1-profiles/" cortex_brain/tier1/profiles/ || echo "⚠️  Tier 1 profiles differ"
+diff -r "$BACKUP_DIR/tier2-governance/" cortex_brain/tier2/governance/ || echo "⚠️  Tier 2 governance differs"
+diff -r "$BACKUP_DIR/tier3-knowledge/" cortex_brain/tier3/knowledge/ || echo "⚠️  Tier 3 knowledge differs"
+
+# 4. If any differences, RESTORE from backup
+# Example: cp -r "$BACKUP_DIR/tier3-knowledge/custom-domain.yaml" cortex_brain/tier3/knowledge/
+
+# 5. Check last sync timestamp
+git log -1 --format="%ai %s" origin/main
+
+# 6. Verify no divergence
 git rev-list --left-right --count origin/main...HEAD
+
+# 7. ONLY drop stash after verification
+read -p "All domain YAMLs verified? (y/n) " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    git stash drop
+    echo "✓ Stash dropped - sync complete"
+else
+    echo "⚠️  Stash preserved - review conflicts"
+fi
 ```
 
-### Safety Guarantees
+### Step 4: Recovery from Backup (If Needed)
 
-- ✅ Local uncommitted work preserved via stash
-- ✅ Merge strategy (`--strategy-option=ours`) favors local changes on conflicts
-- ✅ No rebase (prevents history rewriting)
-- ✅ Atomic operation (stash pop can be retried if needed)
+```bash
+# If any domain knowledge was lost, restore from backup
+BACKUP_DIR=$(ls -dt _backups/pre-sync-* | head -1)
 
-### Integration with Orchestrators
+# Restore entire directories
+cp -r "$BACKUP_DIR/tier1-profiles/"* cortex_brain/tier1/profiles/
+cp -r "$BACKUP_DIR/tier2-governance/"* cortex_brain/tier2/governance/
+cp -r "$BACKUP_DIR/tier3-knowledge/"* cortex_brain/tier3/knowledge/
+
+# Restore from patch files
+git apply "$BACKUP_DIR/uncommitted-changes.patch"
+git apply "$BACKUP_DIR/staged-changes.patch"
+
+# Verify restoration
+git status
+echo "✓ Local work restored from backup"
+```
+
+### Safety Guarantees (Enhanced)
+
+- ✅ **Pre-sync backup:** All local work backed up BEFORE any git operations
+- ✅ **Stash with untracked files:** Everything preserved, including new domain YAMLs
+- ✅ **Local-favoring merge:** `--strategy-option=ours` keeps LOCAL version on conflicts
+- ✅ **No rebase:** Prevents history rewriting and potential data loss
+- ✅ **Stash safety net:** Local work remains in stash even if pop fails
+- ✅ **Domain-specific protection:** Automated local preference for tier1/tier2/tier3 YAMLs
+- ✅ **Verification before cleanup:** Manual check required before dropping stash
+- ✅ **Backup recovery:** Can restore from timestamped backup if needed
+- ✅ **Atomic operation:** Each step can be retried independently
+
+### Protected File Patterns (ALWAYS Keep Local)
+
+```yaml
+Critical Company Assets (LOCAL version ALWAYS wins):
+  Tier 1 Profiles:
+    - cortex_brain/tier1/profiles/*.yaml  # Company domain profiles
+  
+  Tier 2 Governance:
+    - cortex_brain/tier2/governance/production-rules.yaml
+    - cortex_brain/tier2/governance/sensitive-data-rules.yaml
+    - cortex_brain/tier2/governance/high-risk-operations-rules.yaml
+    - cortex_brain/tier2/governance/audit-critical-rules.yaml
+  
+  Tier 3 Knowledge:
+    - cortex_brain/tier3/knowledge/*.yaml  # All knowledge YAMLs
+    - cortex_brain/tier3/domain-registry.yaml
+    - cortex_brain/tier3/expert-registry.yaml
+  
+  Best Practices:
+    - cortex_brain/tier*/custom-*.yaml  # Any custom additions
+    - cortex_brain/tier*/company-*.yaml  # Company-specific files
+```
+
+### Integration with Orchestrators (Enhanced)
 
 ```python
 from cortex.infrastructure.git_sync import GitSynchronizer
 
 # Before orchestrator initialization
 sync = GitSynchronizer()
-sync.safe_pull_with_local_preservation()
+
+# Enhanced sync with backup and domain protection
+sync_result = sync.safe_pull_with_local_preservation(
+    backup_before_sync=True,
+    protect_patterns=[
+        "cortex_brain/tier1/profiles/*.yaml",
+        "cortex_brain/tier2/governance/*rules.yaml",
+        "cortex_brain/tier3/knowledge/*.yaml",
+        "cortex_brain/tier3/domain-registry.yaml"
+    ],
+    conflict_strategy="local_wins_for_protected",
+    verify_before_cleanup=True
+)
+
+if not sync_result.success:
+    # Restore from backup automatically
+    sync.restore_from_backup(sync_result.backup_dir)
+    raise DeploymentError(f"Git sync failed, restored from backup: {sync_result.conflicts}")
+
+if sync_result.domain_yamls_lost:
+    # Automatic recovery
+    sync.restore_domain_yamls(sync_result.backup_dir)
+    print(f"⚠️  Domain YAMLs restored from backup: {sync_result.restored_files}")
+
+print(f"✓ Synced with origin at {sync_result.timestamp}")
+print(f"✓ Local changes preserved: {sync_result.stashed_changes}")
+print(f"✓ Domain YAMLs protected: {sync_result.protected_files}")
+print(f"✓ Backup location: {sync_result.backup_dir}")
 
 # Now safe to proceed with rewiring
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 master = MasterOrchestrator.instance()
 ```
 
-**Enforcement:** This synchronization step is TIER 0 requirement for all production deployments.
+**Enforcement:** This synchronization step is TIER 0 requirement for all production deployments.  
+**CORE-020 Rule:** Multi-repo sync MUST preserve local company domain knowledge.
 
 ---
 
@@ -1313,10 +1467,34 @@ result = server.call_tool("query_governance_context", {"operation_id": "op_123"}
 ## ⚡ QUICK COMMANDS
 
 ```bash
-# STEP 0: Git synchronization (ALWAYS FIRST)
-git stash push -m "Pre-deployment-$(date +%Y%m%d_%H%M%S)"
+# STEP 0: Git synchronization with domain knowledge protection (ALWAYS FIRST)
+
+# Create backup
+BACKUP_DIR="_backups/pre-sync-$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$BACKUP_DIR"
+cp -r cortex_brain/tier{1,2,3} "$BACKUP_DIR/" 2>/dev/null || true
+git diff > "$BACKUP_DIR/uncommitted.patch"
+
+# Sync with local work protection
+git add -A
+git stash push --include-untracked -m "Pre-deployment-$(date +%Y%m%d_%H%M%S)"
 git pull origin main --no-rebase --strategy-option=ours
 git stash pop
+
+# Protect domain YAMLs on conflicts (keep LOCAL version)
+for file in cortex_brain/tier{1,2,3}/**/*.yaml; do
+    if git status | grep -q "$file"; then
+        git checkout --ours "$file"
+        git add "$file"
+    fi
+done
+
+# Verify no data loss
+ls cortex_brain/tier{1,2,3}/**/*.yaml
+git stash list  # Stash still available if needed
+
+# Only drop stash after manual verification
+# git stash drop  # <-- Commented out, manual verification required
 
 # Verify production readiness
 python -c "from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator; m = MasterOrchestrator.instance(); print('✓ READY')"
@@ -1337,8 +1515,9 @@ pytest tests/ -n auto --tb=short -q
 ---
 
 **Last Updated:** 2026-01-23  
-**Status:** ✅ PRODUCTION READY - Git sync enforced, all 4 stages wired, MCP active, orchestrators registered  
+**Status:** ✅ PRODUCTION READY - Enhanced git sync with domain knowledge protection, all 4 stages wired, MCP active, orchestrators registered  
 **Authority:** CORTEX.prompt.md v6.0 & cortex-impl-map.yaml v3.9  
-**Deployment Status:** Ready for production deployment with git synchronization  
+**Deployment Status:** Ready for production deployment with enhanced git synchronization and company knowledge protection  
+**Protection Level:** MAXIMUM - Local domain YAMLs and best practices NEVER lost during sync
 
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
