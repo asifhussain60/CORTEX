@@ -34,6 +34,38 @@ from cortex.orchestrators.onboarding.dependency_resolver import (
     ResolutionStrategy,
 )
 
+# Backward compatibility: Unified Onboarding interface
+import warnings
+from cortex.config.unified_onboarding import (
+    UnifiedOnboarding,
+    OnboardingConfig,
+    Journey,
+    JourneyState,
+    get_unified_onboarding,
+)
+
+
+# OnboardingOrchestrator alias for backward compatibility
+class OnboardingOrchestrator(UnifiedOnboarding):
+    """
+    Legacy OnboardingOrchestrator alias.
+    
+    **DEPRECATED**: Use UnifiedOnboarding from cortex.config instead.
+    
+    This class is maintained for backward compatibility only.
+    All new code should use cortex.config.UnifiedOnboarding.
+    """
+    
+    def __init__(self, config=None):
+        warnings.warn(
+            "OnboardingOrchestrator is deprecated. Use UnifiedOnboarding from "
+            "cortex.config instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(config)
+
+
 __all__ = [
     # setup_orchestrator
     "SetupOrchestrator",
@@ -55,4 +87,11 @@ __all__ = [
     "DependencyResolver",
     "DependencyConflict",
     "ResolutionStrategy",
+    # Unified Onboarding (new)
+    "UnifiedOnboarding",
+    "OnboardingOrchestrator",  # Backward compatibility
+    "OnboardingConfig",
+    "Journey",
+    "JourneyState",
+    "get_unified_onboarding",
 ]
