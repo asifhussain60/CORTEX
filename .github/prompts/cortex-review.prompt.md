@@ -141,12 +141,157 @@ Each agent produces: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/Findings-{AG
 3. Identify missing packages
 4. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/requirements-analysis.yaml`
 
+### Phase 4.5: Instruction Alignment Validation (15 min) ⭐ NEW
+
+**Purpose:** Verify copilot-instruction.md is synchronized with cortex-total-recall.prompt.md and production state.
+
+**Step 4.5.1: Version Alignment Check**
+
+```bash
+# Extract versions from instruction files
+TOTAL_RECALL_VERSION=$(grep "^\\*\\*Version:\\*\\*" .github/prompts/cortex-total-recall.prompt.md | head -1 | sed 's/.*Version:\*\* //' | cut -d' ' -f1)
+COPILOT_INSTR_VERSION=$(grep "^\\*\\*Version:\\*\\*" .github/copilot-instruction.md | head -1 | sed 's/.*Version:\*\* //' | cut -d' ' -f1)
+CORTEX_PROMPT_VERSION=$(grep "^\\*\\*Version:\\*\\*" .github/prompts/CORTEX.prompt.md | head -1 | sed 's/.*Version:\*\* //' | cut -d' ' -f1)
+
+echo "Version Alignment Check:" > ${REVIEW_ARTIFACTS}/instruction-alignment.yaml
+echo "  total_recall_version: $TOTAL_RECALL_VERSION" >> ${REVIEW_ARTIFACTS}/instruction-alignment.yaml
+echo "  copilot_instruction_version: $COPILOT_INSTR_VERSION" >> ${REVIEW_ARTIFACTS}/instruction-alignment.yaml
+echo "  cortex_prompt_version: $CORTEX_PROMPT_VERSION" >> ${REVIEW_ARTIFACTS}/instruction-alignment.yaml
+```
+
+**Step 4.5.2: Component Coverage Check**
+
+Verify copilot-instruction.md includes all production components from cortex-total-recall.prompt.md:
+
+```bash
+# Check for critical component references
+python3 << 'EOF'
+import yaml
+import re
+
+critical_components = [
+    "Brain Tier Architecture",
+    "Intelligence Layer",
+    "Todo Manager",
+    "Knowledge Composer",
+    "Domain Brain",
+    "Multi-Repo Governance",
+    "Conversation Protocol",
+    "Git Sync.*domain knowledge protection"
+]
+
+with open('.github/copilot-instruction.md', 'r') as f:
+    content = f.read()
+
+missing = []
+found = []
+
+for component in critical_components:
+    if re.search(component, content, re.IGNORECASE):
+        found.append(component)
+    else:
+        missing.append(component)
+
+result = {
+    'instruction_alignment_validation': {
+        'total_components_checked': len(critical_components),
+        'found_components': len(found),
+        'missing_components': len(missing),
+        'found': found,
+        'missing': missing,
+        'status': 'PASSED' if len(missing) == 0 else 'FAILED'
+    }
+}
+
+with open('${REVIEW_ARTIFACTS}/instruction-alignment.yaml', 'a') as f:
+    yaml.dump(result, f)
+EOF
+
+cat ${REVIEW_ARTIFACTS}/instruction-alignment.yaml
+```
+
+**Step 4.5.3: Governance Rule Count Verification**
+
+```bash
+# Verify governance rule counts match across documents
+python3 << 'EOF'
+import yaml
+import re
+
+# Extract rule counts from copilot-instruction.md
+with open('.github/copilot-instruction.md', 'r') as f:
+    content = f.read()
+
+# Look for tier rule counts in table
+tier0_match = re.search(r'Tier 0.*?\| (\d+) \|', content)
+tier1_match = re.search(r'Tier 1.*?\| (\d+) \|', content)
+tier2_match = re.search(r'Tier 2.*?\| (\d+) \|', content)
+tier3_match = re.search(r'Tier 3.*?\| (\d+) \|', content)
+
+tier_counts = {
+    'tier0': int(tier0_match.group(1)) if tier0_match else 0,
+    'tier1': int(tier1_match.group(1)) if tier1_match else 0,
+    'tier2': int(tier2_match.group(1)) if tier2_match else 0,
+    'tier3': int(tier3_match.group(1)) if tier3_match else 0
+}
+
+# Expected counts from cortex-total-recall.prompt.md
+expected = {
+    'tier0': 29,
+    'tier1': 47,
+    'tier2': 38,
+    'tier3': 13
+}
+
+mismatches = []
+for tier, count in tier_counts.items():
+    if count != expected[tier]:
+        mismatches.append({
+            'tier': tier,
+            'expected': expected[tier],
+            'actual': count
+        })
+
+result = {
+    'governance_rule_count_verification': {
+        'tier_counts': tier_counts,
+        'expected_counts': expected,
+        'mismatches': mismatches,
+        'status': 'PASSED' if len(mismatches) == 0 else 'FAILED'
+    }
+}
+
+with open('${REVIEW_ARTIFACTS}/instruction-alignment.yaml', 'a') as f:
+    yaml.dump(result, f)
+EOF
+```
+
+**Step 4.5.4: Outdated Instruction Detection**
+
+```bash
+# Check for outdated patterns in copilot-instruction.md
+grep -n "CRITICAL.*Production Hardening" .github/copilot-instruction.md || echo "✓ No outdated production hardening references"
+grep -n "NOT PRODUCTION READY" .github/copilot-instruction.md || echo "✓ No 'NOT PRODUCTION READY' flags"
+grep -n "IN-PROGRESS.*Orchestrators" .github/copilot-instruction.md || echo "✓ No outdated orchestrator status"
+grep -n "14 tools" .github/copilot-instruction.md && echo "⚠️  Outdated MCP tool count (should be 15)" || echo "✓ MCP tool count current"
+```
+
+**Pass Criteria:**
+- ✅ All critical components referenced in copilot-instruction.md
+- ✅ Governance rule counts match (29/47/38/13)
+- ✅ No outdated "NOT PRODUCTION READY" or "IN-PROGRESS" flags
+- ✅ MCP tool count is current (15 tools)
+- ✅ Version alignment documented
+
+**Output:** `${REVIEW_ARTIFACTS}/instruction-alignment.yaml`
+
 ### Phase 5: Consolidated Report (20 min)
 
 1. Merge all 8 agent findings
 2. Classify by severity: CRITICAL / HIGH / MEDIUM / LOW
-3. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/review-findings-consolidated.yaml`
-4. Ready for cortex-builder.prompt.md
+3. Include instruction alignment results
+4. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/review-findings-consolidated.yaml`
+5. Ready for cortex-builder.prompt.md
 
 ### Phase 6: Audit Trace & End-to-End Validation (25 min) ⭐ MANDATORY
 
@@ -645,8 +790,12 @@ wait
 # Phase 4: Requirements Analysis (10 min)
 /review requirements --output ${REVIEW_ARTIFACTS}/
 
+# Phase 4.5: Instruction Alignment Validation (15 min) ⭐ NEW
+/review instruction-alignment --output ${REVIEW_ARTIFACTS}/
+
 # Phase 5: Consolidate all findings (20 min)
 /review consolidate --from ${REVIEW_ARTIFACTS}/Findings-*.yaml \
+                   --include ${REVIEW_ARTIFACTS}/instruction-alignment.yaml \
                    --output ${REVIEW_ARTIFACTS}/review-findings-consolidated.yaml
 
 # Phase 6: Audit Trace & End-to-End Validation (25 min) ⭐ MANDATORY
@@ -907,6 +1056,7 @@ _workspaces/roadmap/
 │  │  ├─ Findings-ARCH.yaml                 ⭐ Agent 7
 │  │  ├─ Findings-INTEG.yaml                ⭐ Agent 8
 │  │  ├─ requirements-analysis.yaml         ⭐ Phase 4
+│  │  ├─ instruction-alignment.yaml         ⭐ Phase 4.5 (NEW)
 │  │  ├─ review-findings-consolidated.yaml  ⭐ Phase 5
 │  │  ├─ audit-trace-validation.yaml        ⭐ Phase 6
 │  │  ├─ mcp-toolkit-audit.yaml             ⭐ Phase 6.5
@@ -1182,6 +1332,12 @@ Phase 3: 8-Agent Analysis (Parallel - 27 min)
     └─ Batch 2: Assumptions, Debt, State, Architecture, Integration (15 min)
     ↓
 Phase 4: Requirements Analysis (10 min)
+    ↓
+Phase 4.5: Instruction Alignment Validation ⭐ NEW (15 min)
+    ├── Version alignment check
+    ├── Component coverage verification
+    ├── Governance rule count validation
+    └── Outdated instruction detection
     ↓
 Phase 5: Consolidated Report (20 min)
     ↓
