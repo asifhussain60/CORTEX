@@ -1,0 +1,793 @@
+# REMEDIATION-INTENT-VALIDATION-INTEGRATION Phase Specification
+# Version: 1.0
+# Date: 2026-01-23
+# Authority: cortex-total-recall.prompt.md + cortex-5.5 archive analysis
+# Status: NOT_STARTED
+
+metadata:
+  phase_id: "REMEDIATION-INTENT-VALIDATION-INTEGRATION"
+  title: "Per-Turn Intent Validation Architecture Integration"
+  description: |
+    Integrate confidence-driven, multi-turn intent validation architecture from CORTEX-5.5
+    archive branch into current CORTEX system. Restore per-turn comprehension workflows,
+    challenge injection, and governance validation. Wire 8 core components via wiring harness.
+  sequence: 7
+  priority: "P1-CRITICAL"
+  required: true
+  track: "all"
+  estimated_effort: "40-50 hours (5-6 days)"
+  blocking: false
+  estimated_start: "2026-02-15"
+  estimated_completion: "2026-02-25"
+
+phase_overview:
+  problem_statement: |
+    Current CORTEX architecture lacks per-turn intent validation. CORTEX-5.5 archive
+    contained comprehensive intent validation system:
+    - ComprehensionSession for tracking multi-turn approvals
+    - ChallengeGenerator for proactive risk identification
+    - Confidence-based routing with caution flags
+    - Turn-by-turn governance validation
+    - Challenge-first response injection
+    
+    This phase restores that capability by integrating 8 key components into the
+    current 4-stage orchestration pipeline, wiring them via the wiring harness inventory,
+    and achieving ≥90% confidence accuracy on multi-turn conversations.
+  
+  success_definition: |
+    1. All 8 components integrated into appropriate pipeline stages
+    2. Confidence-driven routing gates properly functioning
+    3. Challenge injection working end-to-end
+    4. Per-turn governance validation active
+    5. Wiring harness auto-discovery finding all components
+    6. Multi-turn test suite passing (16 integration tests)
+    7. Overall governance compliance ≥95%
+    8. 100% test pass rate (154/154 tests)
+  
+  key_metrics:
+    - Multi-turn intent validation accuracy: ≥90%
+    - Challenge identification precision: ≥95%
+    - Confidence scoring accuracy: ±5% of baseline
+    - Governance compliance: ≥95% (TIER 0-2)
+    - Test pass rate: 100% (154/154)
+    - Component discovery rate: 100% (8/8)
+
+components_to_integrate:
+  - component_id: 1
+    name: "ComprehensionSession"
+    category: "State Machine"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/comprehension_loop.py"
+    current_location: "cortex/orchestrators/core/comprehension_session.py (to create)"
+    integration_point: "Stage 1 - MasterOrchestrationStage1 output"
+    priority: "CRITICAL-0"
+    hours_estimate: 8
+    description: |
+      Multi-turn session tracker with approval workflows. Tracks:
+      - session_id, created_at
+      - knowledge_graph reference
+      - current_comprehension (ComprehensionYAML)
+      - approval_status (PENDING, APPROVED, REJECTED, NEEDS_CLARIFICATION)
+      - revision_count and revision_history
+      - target_tier for knowledge storage
+      - temp_files list for cleanup
+      - approval_timestamp and rejection_reason
+    
+    key_methods:
+      - __init__(): Initialize session with UUID
+      - record_revision(): Add comprehension revision
+      - set_approval_status(): Update status (PENDING→APPROVED/REJECTED)
+      - get_revision_history(): Retrieve iterations
+      - cleanup_temp_files(): Cleanup on completion
+    
+    test_expectations: "24 tests covering state transitions, revisions, approval workflows"
+    dependencies: ["ComprehensionYAML", "EnhancedAuditLogger"]
+  
+  - component_id: 2
+    name: "ChallengeGenerator"
+    category: "Risk Analyzer"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/challenge_generator.py"
+    current_location: "cortex/orchestrators/challenge_generator.py (to create)"
+    integration_point: "Stage 3 - Knowledge Integration (before execution)"
+    priority: "CRITICAL-1"
+    hours_estimate: 6
+    description: |
+      Proactive risk identification system. Detects:
+      - BREAKING_CHANGE: Interface/contract changes
+      - TEST_GAP: Missing test coverage
+      - GOVERNANCE_RISK: Tier 0-2 rule violations
+      - HISTORICAL_ISSUE: Known problematic patterns
+      - PERFORMANCE_RISK: O(n²) algorithms, N+1 queries
+      - SECURITY_RISK: eval(), pickle.load, etc.
+      
+      Outputs Challenge objects sorted by severity (CRITICAL>HIGH>MEDIUM>LOW)
+    
+    key_classes:
+      - Challenge: category, severity, description, affected_scope, evidence, mitigation, line_number, confidence
+      - ChallengeCategory: Enum for 6 categories
+      - Severity: Enum for 4 levels
+    
+    key_methods:
+      - generate_all(): Analyze source and produce challenges (takes source, context, changes, historical_issues)
+      - analyze_governance(): Check dangerous patterns, docstrings
+      - analyze_performance(): Detect anti-patterns
+      - analyze_coverage(): Check test gaps
+      - analyze_changes(): Breaking change detection
+      - check_historical_issues(): Pattern matching against known issues
+    
+    test_expectations: "28 tests covering all challenge categories, severity sorting, evidence quality"
+    dependencies: ["ast module", "re module", "GovernanceRegistry"]
+  
+  - component_id: 3
+    name: "ConfidenceRouter"
+    category: "Routing Enhancement"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/intent_router.py"
+    current_location: "cortex/intent_router/confidence_router.py (to create)"
+    integration_point: "Stage 2 - IntentRouter enhancement"
+    priority: "CRITICAL-2"
+    hours_estimate: 10
+    description: |
+      Confidence-based routing gates. Routes based on thresholds:
+      - ≥0.85: High confidence - auto-route to appropriate handler (no caution)
+      - 0.70-0.84: Medium confidence - route with caution_flag=True
+      - <0.70: Low confidence - reroute to INTERACTION for clarification
+      
+      Special case: QUERY/ANALYZE always route to DIRECT_RESPONSE (safe operations)
+    
+    key_thresholds:
+      - CONFIDENCE_HIGH: 0.85
+      - CONFIDENCE_MEDIUM_LOW: 0.70
+    
+    key_methods:
+      - apply_confidence_rules(): Decision tree for routing based on confidence
+      - get_routing_reason(): Human-readable explanation
+      - validate_routing_decision(): Post-routing validation
+    
+    integration_notes: |
+      Enhances existing IntentRouter class, not replacement.
+      Adds confidence_score parameter to routing decision.
+      Adds caution_flag to RoutingDecision.
+    
+    test_expectations: "35 tests covering all confidence thresholds, caution flag logic, intent types"
+    dependencies: ["IntentRouter", "CanonicalizedIntent", "RoutingDecision"]
+  
+  - component_id: 4
+    name: "TurnValidationGate"
+    category: "Governance Integration"
+    archive_location: "archive/CORTEX-5.5:cortex/orchestrators/core/master_orchestrator.py (_turn_number tracking)"
+    current_location: "cortex/orchestrators/turn_validation_gate.py (to create)"
+    integration_point: "ConversationProtocol.execute_turn() lifecycle"
+    priority: "HIGH-3"
+    hours_estimate: 8
+    description: |
+      Per-turn governance validation middleware. Executes at turn boundaries:
+      - Before comprehension: Validate previous turn context
+      - After routing: Validate routing decision against governance
+      - Before execution: Block on TIER 0 violations, escalate TIER 1-2
+      
+      Extends GovernanceRegistry with turn context awareness.
+    
+    key_features:
+      - turn_number tracking through entire pipeline
+      - TIER 0 rule evaluation per turn
+      - Blocking on violations (blocks execution)
+      - Escalation of warnings (logs but allows execution)
+      - Context pass-through for audit trail
+    
+    key_methods:
+      - validate_turn_pre_comprehension(): Pre-turn checks
+      - validate_turn_post_routing(): Routing decision validation
+      - validate_turn_pre_execution(): Final gate before execution
+      - get_turn_context(): Extract turn-specific context
+    
+    test_expectations: "18 tests covering validation lifecycle, TIER enforcement, escalation logic"
+    dependencies: ["GovernanceRegistry", "ConversationProtocol", "EnhancedAuditLogger"]
+  
+  - component_id: 5
+    name: "ComprehensionYAML"
+    category: "Data Structure"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/comprehension_yaml.py"
+    current_location: "cortex/orchestrators/comprehension_yaml.py (to create)"
+    integration_point: "Stage 1 - Output data structure"
+    priority: "HIGH-4"
+    hours_estimate: 4
+    description: |
+      YAML-serializable representation of comprehension output. Structure:
+      - metadata: version, generated_at, tool, phase, schema
+      - intent: IntentSection (type, scope, confidence, keywords)
+      - challenges: ChallengeSection (list of ChallengeItem)
+      - recommendations: RecommendationSection (list of RecommendationItem)
+    
+    key_classes:
+      - ComprehensionYAML: Main container
+      - IntentSection: intent_type, scope, confidence, keywords
+      - ChallengeSection: challenges[], summary
+      - ChallengeItem: category, severity, description, mitigation
+      - RecommendationSection: recommendations[], confidence
+      - RecommendationItem: title, description, priority, evidence
+    
+    key_methods:
+      - to_dict(): Convert to dictionary for YAML serialization
+      - to_yaml(): Generate YAML string
+      - from_dict(): Deserialize from dictionary
+      - validate(): Validate structure
+    
+    test_expectations: "15 tests covering serialization, deserialization, validation"
+    dependencies: ["yaml module", "dataclasses module"]
+  
+  - component_id: 6
+    name: "CautionFlagMechanism"
+    category: "Routing Enhancement"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/intent_router.py (confidence gates)"
+    current_location: "cortex/intent_router/routing_decision.py (enhancement)"
+    integration_point: "Stage 2 - RoutingDecision object"
+    priority: "MEDIUM-5"
+    hours_estimate: 4
+    description: |
+      Flags medium-confidence (0.70-0.84) routing decisions for elevated scrutiny.
+      Caution flag tells downstream handlers to:
+      - Include reasoning in response
+      - Request confirmation before proceeding
+      - Log for audit trail
+      - Enable operator override
+    
+    key_features:
+      - caution_flag: bool attribute on RoutingDecision
+      - confidence_score: float (0.0-1.0)
+      - routing_reason: Human-readable explanation
+    
+    test_expectations: "10 tests covering caution flag propagation, operator overrides"
+    dependencies: ["RoutingDecision", "ConversationProtocol"]
+  
+  - component_id: 7
+    name: "ResponseChallengeInjector"
+    category: "Response Processing"
+    archive_location: "archive/CORTEX-5.5:cortex/brain/core/intent/ (comprehension loop pattern)"
+    current_location: "cortex/orchestrators/response_challenge_injector.py (to create)"
+    integration_point: "Stage 4 - Response formatting (before user output)"
+    priority: "HIGH-6"
+    hours_estimate: 6
+    description: |
+      Injects challenges and recommendations into final response. Order:
+      1. Header (CORE-029 formatted)
+      2. Operation summary
+      3. Challenges (sorted by severity, CRITICAL first)
+      4. Recommendations (confidence-weighted)
+      5. User approval request (if challenges present)
+      6. Execution output (if approved)
+      7. Copyright footer
+      
+      Challenges presented BEFORE execution, not after.
+    
+    key_features:
+      - challenges_dismissible: User can acknowledge and proceed
+      - challenges_logged: All dismissed challenges logged for governance
+      - approval_workflow: Multi-turn context for challenge approval
+      - conditional_execution: Block on CRITICAL challenges, warn on HIGH
+    
+    key_methods:
+      - inject_challenges(): Add challenges to response
+      - format_challenge_section(): Pretty-print challenges
+      - format_recommendation_section(): Pretty-print recommendations
+      - get_user_approval(): Interactive approval (for CLI) or logged (for API)
+    
+    test_expectations: "15 tests covering injection, formatting, approval workflows"
+    dependencies: ["ResponseHeaderInjector", "ConversationProtocol", "EnhancedAuditLogger"]
+  
+  - component_id: 8
+    name: "WiringHarnessIntegration"
+    category: "Auto-Discovery"
+    archive_location: "cortex/testing/wiring_harness_inventory.py (existing)"
+    current_location: "cortex/testing/wiring_harness_inventory.py (enhancement)"
+    integration_point: "TotalRecallAgent initialization"
+    priority: "MEDIUM-7"
+    hours_estimate: 4
+    description: |
+      Register all 8 components in wiring_harness_inventory.py with:
+      - Entry point paths for auto-import
+      - Initialization code for each component
+      - Wiring priority (CRITICAL-0 through MEDIUM-7)
+      - Dependencies and hook points
+      - Test file references
+      
+      Components auto-wired when TotalRecallAgent initializes.
+    
+    key_registrations:
+      1. ComprehensionSession: CRITICAL-0, Stage 1
+      2. ChallengeGenerator: CRITICAL-1, Stage 3
+      3. ConfidenceRouter: CRITICAL-2, Stage 2
+      4. TurnValidationGate: HIGH-3, ConversationProtocol
+      5. ComprehensionYAML: HIGH-4, Stage 1 output
+      6. CautionFlagMechanism: MEDIUM-5, RoutingDecision
+      7. ResponseChallengeInjector: HIGH-6, Stage 4
+      8. WiringHarnessIntegration: MEDIUM-7, TotalRecallAgent
+    
+    test_expectations: "12 tests covering discovery, initialization, wiring validation"
+    dependencies: ["wiring_harness_inventory", "TotalRecallAgent"]
+
+test_strategy:
+  total_tests_required: 154
+  test_files:
+    - "tests/unit/orchestrators/test_comprehension_session.py (24 tests)"
+    - "tests/unit/orchestrators/test_challenge_generator.py (28 tests)"
+    - "tests/unit/intent_router/test_confidence_routing.py (35 tests)"
+    - "tests/unit/orchestrators/test_turn_governance.py (18 tests)"
+    - "tests/unit/orchestrators/test_comprehension_yaml.py (15 tests)"
+    - "tests/unit/intent_router/test_caution_flags.py (10 tests)"
+    - "tests/unit/orchestrators/test_response_injection.py (15 tests)"
+    - "tests/unit/testing/test_wiring_harness_intent_validation.py (12 tests)"
+    - "tests/integration/test_intent_validation_multiturns.py (16 tests)"
+    - "tests/integration/test_intent_validation_full_pipeline.py (12 tests)"
+  
+  test_framework: "pytest with CORE-008 TDD enforcement"
+  coverage_target: "95% minimum"
+  pass_rate_target: "100%"
+
+subphases:
+  - subphase_1:
+      id: "REMEDIATION-INTENT-001-COMPREHENSION-SESSION"
+      title: "ComprehensionSession State Machine"
+      effort: "8 hours"
+      ac_ids: ["AC-INTENT-001-01", "AC-INTENT-001-02", "AC-INTENT-001-03"]
+      tests: 24
+      sequence: 1
+      depends_on: []
+      
+      tasks:
+        - "Create cortex/orchestrators/core/comprehension_session.py"
+        - "Implement ComprehensionSession dataclass with all fields"
+        - "Implement ApprovalStatus and BrainTier enums"
+        - "Add record_revision(), set_approval_status(), cleanup_temp_files() methods"
+        - "Create cortex/orchestrators/core/comprehension_state_machine.py (state transitions)"
+        - "Write tests/unit/orchestrators/test_comprehension_session.py"
+        - "Run tests and verify 24/24 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_001_01:
+          title: "ComprehensionSession initialized with UUID"
+          criteria:
+            - "session_id generated via uuid.uuid4()"
+            - "created_at captures timestamp"
+            - "approval_status defaults to PENDING"
+            - "revision_count starts at 0"
+        
+        AC_INTENT_001_02:
+          title: "State transitions enforced"
+          criteria:
+            - "PENDING → APPROVED (with timestamp)"
+            - "PENDING → REJECTED (with reason)"
+            - "PENDING → NEEDS_CLARIFICATION (with context)"
+            - "No invalid transitions allowed"
+        
+        AC_INTENT_001_03:
+          title: "Revision history tracking"
+          criteria:
+            - "record_revision() adds timestamped entry"
+            - "revision_count incremented"
+            - "Full comprehension snapshot stored"
+      
+      success_criteria:
+        - "24/24 tests passing"
+        - "State machine diagram documented"
+        - "Integrated with Stage 1 output"
+  
+  - subphase_2:
+      id: "REMEDIATION-INTENT-002-CHALLENGE-GENERATOR"
+      title: "ChallengeGenerator Wiring"
+      effort: "6 hours"
+      ac_ids: ["AC-INTENT-002-01", "AC-INTENT-002-02"]
+      tests: 28
+      sequence: 2
+      depends_on: ["REMEDIATION-INTENT-001-COMPREHENSION-SESSION"]
+      
+      tasks:
+        - "Create cortex/orchestrators/challenge_generator.py (from archive)"
+        - "Create cortex/orchestrators/challenge_category.py (enums + Challenge dataclass)"
+        - "Implement generate_all() with analysis methods"
+        - "Implement danger pattern detection"
+        - "Implement performance anti-pattern detection"
+        - "Write tests/unit/orchestrators/test_challenge_generator.py"
+        - "Write integration test into Stage 3"
+        - "Run tests and verify 28/28 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_002_01:
+          title: "Challenge categories detected"
+          criteria:
+            - "BREAKING_CHANGE: Interface changes detected"
+            - "TEST_GAP: Missing test coverage identified"
+            - "GOVERNANCE_RISK: Tier rule violations caught"
+            - "HISTORICAL_ISSUE: Known patterns detected"
+            - "PERFORMANCE_RISK: Slow algorithms identified"
+            - "SECURITY_RISK: Dangerous functions detected"
+        
+        AC_INTENT_002_02:
+          title: "Challenges sorted and scored"
+          criteria:
+            - "Severity sorting: CRITICAL > HIGH > MEDIUM > LOW"
+            - "Evidence captured for each challenge"
+            - "Mitigation suggested"
+            - "Confidence score (0-1) assigned"
+      
+      success_criteria:
+        - "28/28 tests passing"
+        - "Integrated into Stage 3 workflow"
+        - "Challenges injected before execution"
+  
+  - subphase_3:
+      id: "REMEDIATION-INTENT-003-CONFIDENCE-ROUTING"
+      title: "Confidence-Driven Routing Gates"
+      effort: "10 hours"
+      ac_ids: ["AC-INTENT-003-01", "AC-INTENT-003-02", "AC-INTENT-003-03"]
+      tests: 35
+      sequence: 3
+      depends_on: ["REMEDIATION-INTENT-002-CHALLENGE-GENERATOR"]
+      
+      tasks:
+        - "Create cortex/intent_router/confidence_router.py"
+        - "Enhance cortex/intent_router/routing_engine.py with confidence gates"
+        - "Implement confidence threshold logic (0.85, 0.70)"
+        - "Implement caution flag propagation"
+        - "Implement QUERY/ANALYZE special handling"
+        - "Write tests/unit/intent_router/test_confidence_routing.py"
+        - "Write integration test with routing decision"
+        - "Run tests and verify 35/35 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_003_01:
+          title: "High confidence routing (≥0.85)"
+          criteria:
+            - "Routes to appropriate handler immediately"
+            - "No caution flag"
+            - "Proceeds without additional gates"
+        
+        AC_INTENT_003_02:
+          title: "Medium confidence routing (0.70-0.84)"
+          criteria:
+            - "Routes to appropriate handler"
+            - "Sets caution_flag=True"
+            - "Includes confidence score in response"
+            - "Logs for audit trail"
+        
+        AC_INTENT_003_03:
+          title: "Low confidence routing (<0.70)"
+          criteria:
+            - "Non-query intents: Routes to INTERACTION for clarification"
+            - "Query intents: Still routes to DIRECT_RESPONSE"
+            - "Provides clarification prompts"
+      
+      success_criteria:
+        - "35/35 tests passing"
+        - "All confidence thresholds validated"
+        - "Caution flag mechanism working"
+  
+  - subphase_4:
+      id: "REMEDIATION-INTENT-004-TURN-GOVERNANCE"
+      title: "Per-Turn Governance Validation"
+      effort: "8 hours"
+      ac_ids: ["AC-INTENT-004-01", "AC-INTENT-004-02"]
+      tests: 18
+      sequence: 4
+      depends_on: ["REMEDIATION-INTENT-003-CONFIDENCE-ROUTING"]
+      
+      tasks:
+        - "Create cortex/orchestrators/turn_validation_gate.py"
+        - "Enhance ConversationProtocol.execute_turn() with turn_number parameter"
+        - "Implement pre-comprehension validation"
+        - "Implement post-routing validation"
+        - "Implement pre-execution validation"
+        - "Extend GovernanceRegistry with turn context"
+        - "Write tests/unit/orchestrators/test_turn_governance.py"
+        - "Run tests and verify 18/18 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_004_01:
+          title: "Per-turn governance context"
+          criteria:
+            - "turn_number tracked through pipeline"
+            - "TIER 0 rules evaluated per turn"
+            - "TIER 1-2 rules evaluated per turn with context"
+        
+        AC_INTENT_004_02:
+          title: "Blocking and escalation enforcement"
+          criteria:
+            - "TIER 0 violations block execution"
+            - "TIER 1-2 violations escalated as warnings"
+            - "Governance audit trail populated"
+      
+      success_criteria:
+        - "18/18 tests passing"
+        - "turn_number parameter integrated into ConversationProtocol"
+        - "Governance validation working at turn boundaries"
+  
+  - subphase_5:
+      id: "REMEDIATION-INTENT-005-WIRING-HARNESS"
+      title: "Wiring Harness Integration"
+      effort: "4 hours"
+      ac_ids: ["AC-INTENT-005-01"]
+      tests: 12
+      sequence: 5
+      depends_on: ["REMEDIATION-INTENT-004-TURN-GOVERNANCE"]
+      
+      tasks:
+        - "Enhance cortex/testing/wiring_harness_inventory.py"
+        - "Add 8 UnwiredComponent entries (1 per component)"
+        - "Set priorities: CRITICAL-0 through MEDIUM-7"
+        - "Define entry_points and initialization_code for each"
+        - "Define orchestrator_hook_type for each"
+        - "Write tests/unit/testing/test_wiring_harness_intent_validation.py"
+        - "Test auto-discovery of all 8 components"
+        - "Test auto-wiring capability"
+        - "Run tests and verify 12/12 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_005_01:
+          title: "All components registered with correct priorities"
+          criteria:
+            - "8 UnwiredComponent entries created"
+            - "Priorities: CRITICAL-0 to MEDIUM-7"
+            - "Entry points correct for each component"
+            - "Initialization code present"
+            - "Hook types defined"
+      
+      success_criteria:
+        - "12/12 tests passing"
+        - "All components discoverable via wiring harness"
+        - "Auto-wiring validated"
+  
+  - subphase_6:
+      id: "REMEDIATION-INTENT-006-RESPONSE-INJECTION"
+      title: "Challenge + Recommendation Response Injection"
+      effort: "6 hours"
+      ac_ids: ["AC-INTENT-006-01", "AC-INTENT-006-02"]
+      tests: 15
+      sequence: 6
+      depends_on: ["REMEDIATION-INTENT-005-WIRING-HARNESS"]
+      
+      tasks:
+        - "Create cortex/orchestrators/response_challenge_injector.py"
+        - "Implement challenge section formatting"
+        - "Implement recommendation section formatting"
+        - "Implement user approval workflow"
+        - "Enhance ConversationProtocol with injection"
+        - "Implement dismissible challenges with logging"
+        - "Write tests/unit/orchestrators/test_response_injection.py"
+        - "Run tests and verify 15/15 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_006_01:
+          title: "Challenges presented before execution"
+          criteria:
+            - "CRITICAL challenges block execution"
+            - "HIGH challenges shown with caution"
+            - "MEDIUM/LOW challenges informational"
+            - "Challenges sorted by severity"
+        
+        AC_INTENT_006_02:
+          title: "User approval workflow"
+          criteria:
+            - "Dismissible challenges"
+            - "Dismissed challenges logged"
+            - "Approval status tracked"
+            - "Governance audit maintained"
+      
+      success_criteria:
+        - "15/15 tests passing"
+        - "Response injection working end-to-end"
+        - "Challenges presented before execution"
+  
+  - subphase_7:
+      id: "REMEDIATION-INTENT-007-MULTI-TURN-TESTS"
+      title: "Multi-Turn End-to-End Tests"
+      effort: "5 hours"
+      ac_ids: ["AC-INTENT-007-01", "AC-INTENT-007-02", "AC-INTENT-007-03"]
+      tests: 16
+      sequence: 7
+      depends_on: ["REMEDIATION-INTENT-006-RESPONSE-INJECTION"]
+      
+      tasks:
+        - "Create tests/integration/test_intent_validation_multiturns.py"
+        - "Write test: Low-confidence intent forces interaction loop"
+        - "Write test: Medium-confidence includes caution flag"
+        - "Write test: High-confidence proceeds normally"
+        - "Write test: User rejection preserves context"
+        - "Write test: Challenge approval workflow"
+        - "Write test: TIER 0 block on turn boundary"
+        - "Write test: Full 5-turn conversation flow"
+        - "Run tests and verify 16/16 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_007_01:
+          title: "Low-confidence routing test"
+          criteria:
+            - "Intent <0.70 confidence routes to INTERACTION"
+            - "User provides clarification"
+            - "Second turn re-evaluates with better context"
+        
+        AC_INTENT_007_02:
+          title: "Medium-confidence caution test"
+          criteria:
+            - "Intent 0.70-0.84 includes caution flag"
+            - "Response includes confidence score"
+            - "Audit trail captures caution"
+        
+        AC_INTENT_007_03:
+          title: "Multi-turn context preservation"
+          criteria:
+            - "Context flows through turns 1-5"
+            - "Intent validation consistent across turns"
+            - "Challenge state preserved"
+      
+      success_criteria:
+        - "16/16 tests passing"
+        - "All conversation scenarios covered"
+        - "Multi-turn validation working correctly"
+  
+  - subphase_8:
+      id: "REMEDIATION-INTENT-008-VERIFICATION"
+      title: "Architecture Verification & Compliance"
+      effort: "3 hours"
+      ac_ids: ["AC-INTENT-008-01"]
+      tests: 8
+      sequence: 8
+      depends_on: ["REMEDIATION-INTENT-007-MULTI-TURN-TESTS"]
+      
+      tasks:
+        - "Create scripts/verify_intent_validation_integration.py"
+        - "Verify all 8 components discoverable via wiring harness"
+        - "Verify all integration points connected"
+        - "Run governance compliance check"
+        - "Run test collection and pass rate"
+        - "Generate verification report to _workspaces/roadmap/verification/"
+        - "Create final compliance report"
+        - "Run tests and verify 8/8 passing"
+        - "Git commit with AC-IDs"
+      
+      ac_acceptance_criteria:
+        AC_INTENT_008_01:
+          title: "Verification and compliance confirmed"
+          criteria:
+            - "All 8 components discovered"
+            - "All integration points connected"
+            - "Test pass rate 100% (154/154)"
+            - "Governance compliance ≥95%"
+            - "Confidence accuracy ≥90%"
+      
+      success_criteria:
+        - "8/8 tests passing"
+        - "All components verified"
+        - "Compliance report generated"
+        - "Ready for production deployment"
+
+completion_verification:
+  success_criteria:
+    - "✓ ComprehensionSession state machine fully implemented"
+    - "✓ ChallengeGenerator wired into Stage 3"
+    - "✓ Confidence-based routing integrated into Stage 2"
+    - "✓ Per-turn governance validation in ConversationProtocol"
+    - "✓ All 8 components registered in wiring harness"
+    - "✓ Response injection working end-to-end"
+    - "✓ Multi-turn tests all passing (16/16)"
+    - "✓ Verification script passing (8/8)"
+    - "✓ Overall test pass rate 100% (154/154)"
+    - "✓ Governance compliance ≥95%"
+    - "✓ Intent validation accuracy ≥90%"
+    - "✓ Challenge identification precision ≥95%"
+    - "✓ Git commits with AC-IDs"
+    - "✓ Merged with origin/CORTEX"
+  
+  acceptance_gate: "All success criteria must be met for phase completion"
+  
+  metrics:
+    total_test_pass_rate: "100% (154/154)"
+    governance_compliance: "95%+ (TIER 0-3)"
+    intent_accuracy: "≥90%"
+    challenge_precision: "≥95%"
+    component_discovery: "100% (8/8)"
+    
+  deliverables:
+    code_files:
+      - "cortex/orchestrators/core/comprehension_session.py (226 lines)"
+      - "cortex/orchestrators/core/comprehension_state_machine.py (89 lines)"
+      - "cortex/orchestrators/challenge_generator.py (412 lines)"
+      - "cortex/orchestrators/challenge_category.py (67 lines)"
+      - "cortex/intent_router/confidence_router.py (186 lines)"
+      - "cortex/orchestrators/turn_validation_gate.py (234 lines)"
+      - "cortex/orchestrators/comprehension_yaml.py (178 lines)"
+      - "cortex/orchestrators/response_challenge_injector.py (267 lines)"
+      - "cortex/testing/wiring_harness_inventory.py (enhanced, +200 lines)"
+    
+    test_files:
+      - "tests/unit/orchestrators/test_comprehension_session.py (24 tests)"
+      - "tests/unit/orchestrators/test_challenge_generator.py (28 tests)"
+      - "tests/unit/intent_router/test_confidence_routing.py (35 tests)"
+      - "tests/unit/orchestrators/test_turn_governance.py (18 tests)"
+      - "tests/unit/orchestrators/test_comprehension_yaml.py (15 tests)"
+      - "tests/unit/intent_router/test_caution_flags.py (10 tests)"
+      - "tests/unit/orchestrators/test_response_injection.py (15 tests)"
+      - "tests/unit/testing/test_wiring_harness_intent_validation.py (12 tests)"
+      - "tests/integration/test_intent_validation_multiturns.py (16 tests)"
+      - "tests/integration/test_intent_validation_full_pipeline.py (12 tests)"
+    
+    scripts:
+      - "scripts/verify_intent_validation_integration.py"
+    
+    documentation:
+      - "_workspaces/roadmap/verification/intent_validation_integration.yaml (verification report)"
+      - "Docstrings in all public APIs (Google style, CORE-012)"
+      - "Type hints on all functions (CORE-011)"
+  
+  post_phase_actions:
+    - "Git commit with AC-IDs: 'REMEDIATION-INTENT-VALIDATION-INTEGRATION: Restored per-turn intent validation architecture - 154/154 tests passing'"
+    - "Update cortex-impl-map.yaml: Set phase status to COMPLETED"
+    - "Merge with origin/CORTEX"
+    - "Update machine_track_state for all machines"
+
+notes: |
+  ARCHITECTURE FIT ASSESSMENT (EXCELLENT):
+  
+  This phase restores the intent validation architecture that made CORTEX-5.5 robust.
+  The design maps perfectly to the current 4-stage pipeline:
+  
+  Stage 1 (Comprehension):
+    - ComprehensionSession tracks multi-turn approvals
+    - Integrates with MasterOrchestrationStage1
+  
+  Stage 2 (Routing):
+    - ConfidenceRouter adds gates to IntentRouter
+    - Routes low-confidence back to INTERACTION
+    - Applies caution flags to medium-confidence
+  
+  Stage 3 (Knowledge Integration):
+    - ChallengeGenerator injected for proactive risk identification
+    - Challenges presented BEFORE execution
+  
+  Stage 4 (Execution & Audit):
+    - ResponseChallengeInjector formats challenges in response
+    - TodoManager tracks phase completion
+    - EnhancedAuditLogger maintains audit trail
+  
+  MultiTurn Support:
+    - ConversationProtocol enhanced with turn_number tracking
+    - TurnValidationGate enforces governance per turn
+    - ComprehensionSession preserves context across turns
+  
+  Wiring Integration:
+    - All 8 components registered in wiring_harness_inventory.py
+    - TotalRecallAgent auto-wires on initialization
+    - Auto-discovery tests validate all components
+  
+  CRITICAL SUCCESS FACTORS:
+  1. ComprehensionSession MUST properly track state transitions
+  2. ChallengeGenerator MUST detect all 6 categories with ≥95% precision
+  3. Confidence routing thresholds MUST be validated with 35+ tests
+  4. Turn governance validation MUST enforce TIER 0 blocking
+  5. Response injection MUST present challenges before execution
+  6. Wiring harness MUST discover all 8 components
+  7. Multi-turn tests MUST validate complete end-to-end flows
+  
+  INTEGRATION COMPLEXITY:
+  - Moderate: All 8 components are new, with clear integration points
+  - No refactoring of existing code required
+  - Non-blocking for production (after verification)
+  - Can run in parallel with other remediation phases
+  
+  RISK MITIGATION:
+  - Each subphase has standalone test suite
+  - Components tested in isolation before integration
+  - Integration tests validate end-to-end flows
+  - Governance compliance validated per subphase
+  - Verification script provides final gate
+  
+  ESTIMATED TIMELINE:
+  - 40-50 hours = 5-6 days with single developer
+  - 20-25 hours = 2-3 days with two developers
+  - 15-20 hours = 2 days with three developers (parallel subphases)
+
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
