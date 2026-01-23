@@ -1,0 +1,396 @@
+# CORTEX Best Practices Repository - Master Index
+# Consolidated from CORTEX-4.0, CORTEX-5.0, and CORTEX-5.5
+# Purpose: Unified knowledge base for technical best practices across all domains
+
+metadata:
+  title: "CORTEX Best Practices Repository"
+  version: "2.0"
+  created: "2026-01-23"
+  updated: "2026-01-23"
+  source_commits:
+    - commit: "6ad2094a5"
+      message: "feat: Import 35 best practices knowledge YAMLs from CORTEX-4.0"
+  total_guides: 35
+  tech_stacks:
+    - architecture
+    - backend-python
+    - frontend-js-ts
+    - devops-infrastructure
+    - security
+    - testing-validation
+    - performance-optimization
+    - database-management
+    - ai-ml-domains
+    - ui-ux-design
+
+# ARCHITECTURE & DESIGN PATTERNS (10 guides)
+architecture:
+  description: "System design, microservices, API design, and domain-driven design patterns"
+  count: 10
+  guides:
+    - path: "architecture/ddd-aggregates-entities.yaml"
+      title: "Domain-Driven Design: Aggregates & Entities"
+      keywords: ["DDD", "aggregates", "entities", "bounded-contexts", "modeling"]
+      
+    - path: "architecture/ddd-bounded-contexts.yaml"
+      title: "Domain-Driven Design: Bounded Contexts"
+      keywords: ["DDD", "bounded-contexts", "domain", "integration", "anti-corruption"]
+      
+    - path: "architecture/ddd-domain-events.yaml"
+      title: "Domain-Driven Design: Domain Events"
+      keywords: ["DDD", "domain-events", "event-sourcing", "integration"]
+      
+    - path: "architecture/engineering-anti-patterns.yaml"
+      title: "Engineering Anti-Patterns & Pitfalls"
+      keywords: ["anti-patterns", "code-smell", "refactoring", "design-mistakes"]
+      
+    - path: "architecture/engineering-design-patterns.yaml"
+      title: "Software Design Patterns"
+      keywords: ["design-patterns", "creational", "structural", "behavioral", "GoF"]
+      
+    - path: "architecture/engineering-solid-principles.yaml"
+      title: "SOLID Principles of Object-Oriented Design"
+      keywords: ["SOLID", "single-responsibility", "open-closed", "liskov", "interface-segregation", "dependency-inversion"]
+      
+    - path: "architecture/microservices-resilience-patterns.yaml"
+      title: "Microservices Resilience Patterns"
+      keywords: ["microservices", "resilience", "circuit-breaker", "retry", "bulkhead", "timeout"]
+      
+    - path: "architecture/api-versioning.yaml"
+      title: "API Versioning Strategies"
+      keywords: ["api", "versioning", "backward-compatibility", "deprecation"]
+      
+    - path: "architecture/graphql-best-practices.yaml"
+      title: "GraphQL Best Practices"
+      keywords: ["graphql", "api", "query-language", "schema", "performance"]
+      
+    - path: "architecture/rest-api-design.yaml"
+      title: "RESTful API Design Best Practices"
+      keywords: ["REST", "API", "HTTP", "resources", "stateless"]
+
+# BACKEND & PYTHON (3 guides)
+backend-python:
+  description: "Python-specific best practices, code quality, and development patterns"
+  count: 3
+  guides:
+    - path: "backend-python/clean-code.yaml"
+      title: "Clean Code Principles"
+      keywords: ["clean-code", "readability", "maintainability", "naming", "functions", "comments"]
+      stack: "python"
+      
+    - path: "backend-python/refactoring.yaml"
+      title: "Code Refactoring Techniques"
+      keywords: ["refactoring", "code-improvement", "test-driven", "safe-refactoring", "incremental"]
+      stack: "python"
+      
+    - path: "backend-python/code-review.yaml"
+      title: "Code Review Best Practices"
+      keywords: ["code-review", "peer-review", "feedback", "quality-assurance", "knowledge-sharing"]
+      stack: "python"
+
+# FRONTEND & JAVASCRIPT/TYPESCRIPT (1 guide)
+frontend-js-ts:
+  description: "Frontend framework best practices, particularly React and modern JS/TS"
+  count: 1
+  guides:
+    - path: "frontend-js-ts/react-best-practices.yaml"
+      title: "React Best Practices"
+      keywords: ["react", "javascript", "jsx", "hooks", "component", "performance", "state-management"]
+      frameworks: ["react", "javascript", "typescript"]
+
+# DEVOPS & INFRASTRUCTURE (4 guides)
+devops-infrastructure:
+  description: "Deployment, CI/CD, infrastructure-as-code, and cloud platform practices"
+  count: 4
+  guides:
+    - path: "devops-infrastructure/cicd-pipelines.yaml"
+      title: "CI/CD Pipeline Best Practices"
+      keywords: ["ci-cd", "continuous-integration", "continuous-deployment", "automation", "github-actions"]
+      
+    - path: "devops-infrastructure/infrastructure-as-code.yaml"
+      title: "Infrastructure as Code (IaC) Best Practices"
+      keywords: ["infrastructure-as-code", "terraform", "cloudformation", "docker", "kubernetes"]
+      
+    - path: "devops-infrastructure/monitoring-observability.yaml"
+      title: "Monitoring & Observability Best Practices"
+      keywords: ["monitoring", "observability", "logging", "metrics", "alerting", "tracing"]
+      
+    - path: "devops-infrastructure/aws-best-practices.yaml"
+      title: "AWS Best Practices & Well-Architected Framework"
+      keywords: ["aws", "cloud", "well-architected", "operational-excellence", "security", "reliability"]
+      cloud_provider: "aws"
+
+# SECURITY (3 guides)
+security:
+  description: "Secure coding, API security, and OWASP compliance"
+  count: 3
+  guides:
+    - path: "security/api-security-checklist.yaml"
+      title: "API Security Checklist"
+      keywords: ["api-security", "authentication", "authorization", "encryption", "validation"]
+      
+    - path: "security/owasp-top-10.yaml"
+      title: "OWASP Top 10 & Mitigation Strategies"
+      keywords: ["owasp", "security", "vulnerability", "injection", "xss", "csrf", "authentication"]
+      standards: ["OWASP"]
+      
+    - path: "security/secure-coding-practices.yaml"
+      title: "Secure Coding Practices"
+      keywords: ["secure-coding", "input-validation", "output-encoding", "error-handling", "cryptography"]
+
+# TESTING & VALIDATION (4 guides)
+testing-validation:
+  description: "Test strategies, TDD, testing frameworks, and test automation"
+  count: 4
+  guides:
+    - path: "testing-validation/tdd-best-practices.yaml"
+      title: "Test-Driven Development (TDD) Best Practices"
+      keywords: ["tdd", "test-first", "unit-testing", "test-coverage", "red-green-refactor"]
+      
+    - path: "testing-validation/test-doubles.yaml"
+      title: "Test Doubles: Mocks, Stubs, and Fakes"
+      keywords: ["test-doubles", "mocking", "stubbing", "faking", "test-isolation"]
+      
+    - path: "testing-validation/testing-pyramid.yaml"
+      title: "Testing Pyramid: Unit, Integration, E2E"
+      keywords: ["testing-pyramid", "unit-testing", "integration-testing", "end-to-end", "test-strategy"]
+      
+    - path: "testing-validation/selenium-to-playwright-migration.yaml"
+      title: "Selenium to Playwright Migration Guide"
+      keywords: ["playwright", "selenium", "browser-automation", "e2e-testing", "migration"]
+      tools: ["playwright", "selenium"]
+
+# PERFORMANCE & OPTIMIZATION (3 guides)
+performance-optimization:
+  description: "Performance tuning, caching strategies, and profiling techniques"
+  count: 3
+  guides:
+    - path: "performance-optimization/caching-strategies.yaml"
+      title: "Caching Strategies & Cache Invalidation"
+      keywords: ["caching", "cache-invalidation", "ttl", "distributed-caching", "redis", "memcached"]
+      
+    - path: "performance-optimization/optimization-techniques.yaml"
+      title: "Performance Optimization Techniques"
+      keywords: ["performance", "optimization", "bottlenecks", "profiling", "benchmarking"]
+      
+    - path: "performance-optimization/profiling-analysis.yaml"
+      title: "Profiling & Performance Analysis"
+      keywords: ["profiling", "performance-analysis", "cpu-profiling", "memory-profiling", "flame-graphs"]
+
+# DATABASE MANAGEMENT (1 guide)
+database-management:
+  description: "Database best practices for relational and NoSQL systems"
+  count: 1
+  guides:
+    - path: "database-management/oracle-best-practices.yaml"
+      title: "Oracle Database Best Practices"
+      keywords: ["oracle", "database", "sql", "performance", "optimization", "backup"]
+      database_systems: ["oracle", "sql"]
+
+# AI/ML & DOMAIN KNOWLEDGE (4 guides)
+ai-ml-domains:
+  description: "AI/ML integration, embeddings, RAG patterns, and vector databases"
+  count: 4
+  guides:
+    - path: "ai-ml-domains/domain-rag-integration.yaml"
+      title: "Domain-Specific RAG Integration"
+      keywords: ["rag", "retrieval-augmented-generation", "embeddings", "llm", "ai"]
+      technology: ["rag", "ai", "llm"]
+      
+    - path: "ai-ml-domains/embeddings-strategy.yaml"
+      title: "Embeddings Strategy & Selection"
+      keywords: ["embeddings", "vector-embeddings", "semantic-search", "similarity", "models"]
+      technology: ["embeddings", "nlp", "ml"]
+      
+    - path: "ai-ml-domains/retrieval-pipeline.yaml"
+      title: "Building Effective Retrieval Pipelines"
+      keywords: ["retrieval", "search", "indexing", "ranking", "relevance"]
+      technology: ["rag", "search", "information-retrieval"]
+      
+    - path: "ai-ml-domains/vector-database-guide.yaml"
+      title: "Vector Database Selection & Implementation"
+      keywords: ["vector-database", "pinecone", "weaviate", "milvus", "similarity-search"]
+      technology: ["vector-db", "database", "embeddings"]
+
+# UI/UX DESIGN (2 guides)
+ui-ux-design:
+  description: "User interface design patterns, accessibility, and modern design systems"
+  count: 2
+  guides:
+    - path: "ui-ux-design/glassmorphism-design-standards.yaml"
+      title: "Glassmorphism Design Standards"
+      keywords: ["glassmorphism", "design", "ui", "css", "modern-design", "aesthetics"]
+      design_systems: ["glassmorphism"]
+      
+    - path: "ui-ux-design/ui-ux-best-practices.yaml"
+      title: "UI/UX Best Practices & Design Principles"
+      keywords: ["ui-ux", "user-experience", "design", "accessibility", "usability", "design-systems"]
+      design_systems: ["material-design", "accessibility"]
+
+# DISCOVERY & NAVIGATION
+discovery:
+  by_technology_stack:
+    - stack: "python-backend"
+      guides:
+        - "backend-python/clean-code.yaml"
+        - "backend-python/refactoring.yaml"
+        - "backend-python/code-review.yaml"
+        - "testing-validation/tdd-best-practices.yaml"
+        - "testing-validation/test-doubles.yaml"
+        - "performance-optimization/profiling-analysis.yaml"
+        - "security/secure-coding-practices.yaml"
+        
+    - stack: "javascript-react"
+      guides:
+        - "frontend-js-ts/react-best-practices.yaml"
+        - "performance-optimization/caching-strategies.yaml"
+        - "security/api-security-checklist.yaml"
+        - "testing-validation/testing-pyramid.yaml"
+        
+    - stack: "aws-cloud"
+      guides:
+        - "devops-infrastructure/aws-best-practices.yaml"
+        - "devops-infrastructure/infrastructure-as-code.yaml"
+        - "devops-infrastructure/monitoring-observability.yaml"
+        - "devops-infrastructure/cicd-pipelines.yaml"
+        - "security/secure-coding-practices.yaml"
+        
+    - stack: "data-systems"
+      guides:
+        - "database-management/oracle-best-practices.yaml"
+        - "performance-optimization/caching-strategies.yaml"
+        - "performance-optimization/optimization-techniques.yaml"
+        - "ai-ml-domains/vector-database-guide.yaml"
+        
+    - stack: "ai-ml-systems"
+      guides:
+        - "ai-ml-domains/domain-rag-integration.yaml"
+        - "ai-ml-domains/embeddings-strategy.yaml"
+        - "ai-ml-domains/retrieval-pipeline.yaml"
+        - "ai-ml-domains/vector-database-guide.yaml"
+        - "performance-optimization/caching-strategies.yaml"
+        
+    - stack: "microservices-distributed"
+      guides:
+        - "architecture/microservices-resilience-patterns.yaml"
+        - "architecture/ddd-bounded-contexts.yaml"
+        - "architecture/ddd-domain-events.yaml"
+        - "devops-infrastructure/monitoring-observability.yaml"
+        - "security/api-security-checklist.yaml"
+        - "devops-infrastructure/cicd-pipelines.yaml"
+        
+    - stack: "api-development"
+      guides:
+        - "architecture/rest-api-design.yaml"
+        - "architecture/graphql-best-practices.yaml"
+        - "architecture/api-versioning.yaml"
+        - "security/api-security-checklist.yaml"
+        - "testing-validation/testing-pyramid.yaml"
+        - "performance-optimization/caching-strategies.yaml"
+
+  by_concern:
+    - concern: "quality"
+      guides:
+        - "backend-python/clean-code.yaml"
+        - "backend-python/code-review.yaml"
+        - "testing-validation/tdd-best-practices.yaml"
+        - "architecture/engineering-anti-patterns.yaml"
+        
+    - concern: "security"
+      guides:
+        - "security/secure-coding-practices.yaml"
+        - "security/api-security-checklist.yaml"
+        - "security/owasp-top-10.yaml"
+        - "devops-infrastructure/aws-best-practices.yaml"
+        
+    - concern: "performance"
+      guides:
+        - "performance-optimization/caching-strategies.yaml"
+        - "performance-optimization/optimization-techniques.yaml"
+        - "performance-optimization/profiling-analysis.yaml"
+        - "database-management/oracle-best-practices.yaml"
+        
+    - concern: "scalability"
+      guides:
+        - "architecture/microservices-resilience-patterns.yaml"
+        - "devops-infrastructure/infrastructure-as-code.yaml"
+        - "devops-infrastructure/monitoring-observability.yaml"
+        - "ai-ml-domains/vector-database-guide.yaml"
+
+# GOVERNANCE & METADATA
+governance:
+  schema_version: "1.0"
+  source_authority: "cortex_brain/tier3/knowledge"
+  compliance_frameworks:
+    - name: "OWASP"
+      applicable_guides:
+        - "security/owasp-top-10.yaml"
+        - "security/api-security-checklist.yaml"
+        - "security/secure-coding-practices.yaml"
+    - name: "AWS Well-Architected"
+      applicable_guides:
+        - "devops-infrastructure/aws-best-practices.yaml"
+        - "devops-infrastructure/infrastructure-as-code.yaml"
+  quality_standards:
+    - standard: "Clean Code"
+      applicable_guides:
+        - "backend-python/clean-code.yaml"
+        - "backend-python/code-review.yaml"
+    - standard: "Test-Driven Development"
+      applicable_guides:
+        - "testing-validation/tdd-best-practices.yaml"
+        - "testing-validation/testing-pyramid.yaml"
+
+# USAGE PATTERNS
+usage:
+  onboarding:
+    description: "Guides for new engineers to CORTEX ecosystem"
+    sequence:
+      - "architecture/rest-api-design.yaml"
+      - "backend-python/clean-code.yaml"
+      - "testing-validation/tdd-best-practices.yaml"
+      - "security/secure-coding-practices.yaml"
+      - "devops-infrastructure/cicd-pipelines.yaml"
+      
+  api_development:
+    description: "Complete API design and development workflow"
+    sequence:
+      - "architecture/rest-api-design.yaml"
+      - "architecture/api-versioning.yaml"
+      - "security/api-security-checklist.yaml"
+      - "testing-validation/testing-pyramid.yaml"
+      - "performance-optimization/caching-strategies.yaml"
+      
+  microservices_design:
+    description: "Building resilient microservices"
+    sequence:
+      - "architecture/ddd-bounded-contexts.yaml"
+      - "architecture/microservices-resilience-patterns.yaml"
+      - "devops-infrastructure/monitoring-observability.yaml"
+      - "devops-infrastructure/infrastructure-as-code.yaml"
+      - "security/secure-coding-practices.yaml"
+      
+  quality_improvement:
+    description: "Improving code quality and maintainability"
+    sequence:
+      - "backend-python/clean-code.yaml"
+      - "backend-python/refactoring.yaml"
+      - "testing-validation/tdd-best-practices.yaml"
+      - "backend-python/code-review.yaml"
+
+# VERSIONING & UPDATES
+versioning:
+  current_version: "2.0"
+  previous_versions:
+    - version: "1.0"
+      source: "cortex_brain/tier3/knowledge/ARCHITECTURE (pre-consolidation)"
+  migration_notes:
+    - "Consolidated from distributed tier3 structure"
+    - "35 comprehensive guides organized by technology stack"
+    - "Added cross-reference discovery patterns"
+    - "Aligned with CORTEX-4.0 best practices standards"
+  next_planned_updates:
+    - "Add Rust backend best practices"
+    - "Add Kubernetes-specific patterns"
+    - "Add AsyncIO and async patterns for Python"
+    - "Add TypeScript-specific guides"

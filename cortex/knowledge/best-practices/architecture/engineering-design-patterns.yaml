@@ -1,0 +1,1979 @@
+﻿# Design Patterns Knowledge Base
+# Based on Gang of Four (GoF) Design Patterns + Modern Patterns
+# Source: Design Patterns: Elements of Reusable Object-Oriented Software (1994)
+# Additional Sources: Refactoring.Guru, Martin Fowler, Clean Architecture
+
+metadata:
+  version: "1.0.0"
+  author: "Asif Hussain"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  source: "GoF Design Patterns (1994) + Modern Enterprise Patterns"
+  purpose: "Comprehensive design pattern knowledge for CORTEX AI agents"
+  schema: "DesignPatternsSchema"
+  integration:
+    - "Architecture agents for pattern recommendations"
+    - "Code generation agents for pattern implementation"
+    - "Refactoring agents for pattern detection and transformation"
+    - "Code review agents for pattern compliance validation"
+
+# Pattern selection guide - Problem to Pattern mapping
+pattern_selection_guide:
+  object_creation:
+    - problem: "Need to ensure only one instance of a class exists"
+      pattern: "Singleton"
+      category: "creational"
+    - problem: "Need to create objects without specifying exact class"
+      pattern: "Factory Method"
+      category: "creational"
+    - problem: "Need to create families of related objects"
+      pattern: "Abstract Factory"
+      category: "creational"
+    - problem: "Need to construct complex objects step by step"
+      pattern: "Builder"
+      category: "creational"
+    - problem: "Need to clone existing objects"
+      pattern: "Prototype"
+      category: "creational"
+  
+  object_structure:
+    - problem: "Need to make incompatible interfaces work together"
+      pattern: "Adapter"
+      category: "structural"
+    - problem: "Need to separate abstraction from implementation"
+      pattern: "Bridge"
+      category: "structural"
+    - problem: "Need to compose objects into tree structures"
+      pattern: "Composite"
+      category: "structural"
+    - problem: "Need to add responsibilities dynamically"
+      pattern: "Decorator"
+      category: "structural"
+    - problem: "Need to provide simplified interface to complex system"
+      pattern: "Facade"
+      category: "structural"
+    - problem: "Need to share objects efficiently at fine-grained level"
+      pattern: "Flyweight"
+      category: "structural"
+    - problem: "Need to control access to an object"
+      pattern: "Proxy"
+      category: "structural"
+  
+  object_behavior:
+    - problem: "Need to pass request along chain of handlers"
+      pattern: "Chain of Responsibility"
+      category: "behavioral"
+    - problem: "Need to encapsulate requests as objects"
+      pattern: "Command"
+      category: "behavioral"
+    - problem: "Need to traverse elements of collection without exposing structure"
+      pattern: "Iterator"
+      category: "behavioral"
+    - problem: "Need to define communication between objects"
+      pattern: "Mediator"
+      category: "behavioral"
+    - problem: "Need to notify multiple objects of state changes"
+      pattern: "Observer"
+      category: "behavioral"
+    - problem: "Need to change behavior based on internal state"
+      pattern: "State"
+      category: "behavioral"
+    - problem: "Need to define family of interchangeable algorithms"
+      pattern: "Strategy"
+      category: "behavioral"
+    - problem: "Need to define skeleton of algorithm in base class"
+      pattern: "Template Method"
+      category: "behavioral"
+  
+  modern_enterprise:
+    - problem: "Need to decouple object creation from dependencies"
+      pattern: "Dependency Injection"
+      category: "modern"
+    - problem: "Need to abstract data access layer"
+      pattern: "Repository"
+      category: "modern"
+    - problem: "Need to treat group of operations as single transaction"
+      pattern: "Unit of Work"
+      category: "modern"
+    - problem: "Need to compose business rules and queries"
+      pattern: "Specification"
+      category: "modern"
+
+# ==========================================
+# CREATIONAL PATTERNS (5 patterns)
+# ==========================================
+
+creational_patterns:
+  - name: "Singleton"
+    category: "Creational"
+    intent: "Ensure a class has only one instance and provide global access point"
+    also_known_as: []
+    
+    problem: |
+      Need to restrict class to single instance (e.g., database connection, logger, config)
+      and provide controlled global access without using global variables.
+      Multiple instances could interfere with each other (e.g., logging to same file).
+    
+    solution: |
+      Make constructor private/protected, provide static Instance property that returns same instance.
+      Use Lazy<T> in C# for thread-safe lazy initialization.
+    
+    structure: |
+      Singleton
+      Γö£ΓöÇΓöÇ static _instance: Singleton (private)
+      Γö£ΓöÇΓöÇ private/protected constructor()
+      Γö£ΓöÇΓöÇ static Instance: Singleton (property)
+      ΓööΓöÇΓöÇ SingletonOperation() (instance methods)
+    
+    participants:
+      - name: "Singleton"
+        role: "Defines Instance property for accessing unique instance, may have singleton operations"
+        responsibilities:
+          - "Controls how and when clients access unique instance"
+          - "May be responsible for creating its own unique instance"
+    
+    collaborations:
+      - "Clients access singleton instance only through static Instance property"
+      - "Singleton may lazily create its instance on first access"
+    
+    csharp_specifics:
+      key_features:
+        - "Use Lazy<T> for thread-safe lazy initialization"
+        - "Private constructor prevents external instantiation"
+        - "Protected constructor allows subclassing"
+        - "Static Instance property provides global access"
+        - "sealed keyword recommended to prevent inheritance"
+      
+      naive_implementation: |
+        // Γ¥î Not thread-safe - multiple threads could create multiple instances
+        public class Logger
+        {
+            private static Logger? _instance;
+            
+            protected Logger() { }
+            
+            public static Logger Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                        _instance = new Logger();
+                    return _instance;
+                }
+            }
+            
+            public void Log(string message) 
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+      
+      thread_safe_implementation: |
+        // Γ£à Thread-safe using Lazy<T> - recommended approach
+        public sealed class Logger
+        {
+            private static readonly Lazy<Logger> _lazyLogger = 
+                new Lazy<Logger>(() => new Logger());
+            
+            public static Logger Instance => _lazyLogger.Value;
+            
+            private Logger() { }
+            
+            public void Log(string message)
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+        
+        // Usage
+        Logger.Instance.Log("Application started");
+        var logger1 = Logger.Instance;
+        var logger2 = Logger.Instance;
+        // logger1 == logger2 (same instance, thread-safe)
+      
+      with_subclassing: |
+        // Protected constructor allows subclassing
+        public class Logger
+        {
+            private static Logger? _instance;
+            
+            protected Logger() { }
+            
+            public static Logger Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                        _instance = new Logger();
+                    return _instance;
+                }
+            }
+            
+            public virtual void Log(string message) 
+            {
+                Console.WriteLine($"[{DateTime.Now}] {message}");
+            }
+        }
+        
+        public class FileLogger : Logger
+        {
+            public override void Log(string message)
+            {
+                // Write to file instead
+            }
+        }
+    
+    consequences:
+      pros:
+        - "Controlled access to sole instance"
+        - "Reduced namespace pollution vs global variables"
+        - "Can allow controlled number of instances"
+        - "Can be subclassed (if using protected constructor)"
+        - "Instance creation can be deferred until first use (lazy loading)"
+        - "Lazy<T> provides thread-safe initialization in .NET"
+      cons:
+        - "Violates Single Responsibility Principle (manages lifecycle + business logic)"
+        - "Difficult to unit test (hard to mock, creates hidden dependencies)"
+        - "Can hide dependencies in code"
+        - "Global state can make debugging difficult"
+        - "Not suitable for IoC containers (prefer scoped/singleton lifetimes instead)"
+    
+    use_cases:
+      good:
+        - "Logging service (single log file access)"
+        - "Configuration manager (single source of settings)"
+        - "Database connection pool manager"
+        - "Cache manager"
+        - "Thread pool manager"
+        - "Device driver access (hardware resources)"
+      
+      avoid:
+        - "Modern applications with IoC containers (use DI instead)"
+        - "When you need multiple instances in tests"
+        - "When dependencies should be explicit"
+    
+    implementation_notes:
+      - "In modern C#, prefer using IoC container with singleton lifetime"
+      - "Lazy<T> is the preferred thread-safe approach in .NET"
+      - "sealed keyword prevents subclassing for better control"
+      - "Protected constructor allows subclassing if needed"
+      - "Consider implementing IDisposable if singleton manages resources"
+        
+        typescript:
+          good: |
+            class Singleton {
+                private static instance: Singleton;
+                private constructor() {}
+                
+                public static getInstance(): Singleton {
+                    if (!Singleton.instance) {
+                        Singleton.instance = new Singleton();
+                    }
+                    return Singleton.instance;
+                }
+            }
+            
+            // Usage
+            const s1 = Singleton.getInstance();
+            const s2 = Singleton.getInstance();
+            // s1 === s2 (same instance)
+          
+          bad: |
+            // Γ¥î Constructor is public
+            class Singleton {
+                private static instance: Singleton;
+                
+                public static getInstance(): Singleton {
+                    if (!this.instance) {
+                        this.instance = new Singleton();
+                    }
+                    return this.instance;
+                }
+            }
+    
+    related_patterns:
+      - "Abstract Factory often implemented as Singleton"
+      - "Facade often implemented as Singleton"
+      - "State objects often Singletons"
+    
+    modern_alternative:
+      pattern: "Dependency Injection"
+      reason: "Preferred in modern applications - better testability, clearer dependencies"
+      example: |
+        # Instead of Singleton, use DI container
+        container.register_singleton(DatabaseConnection)
+
+  - name: "Factory Method"
+    category: "Creational"
+    intent: "Define interface for creating object, but let subclasses decide which class to instantiate"
+    also_known_as: ["Virtual Constructor"]
+    
+    problem: |
+      Need to create objects without specifying exact class to instantiate.
+      Want to defer instantiation to subclasses. Client shouldn't know about concrete classes.
+      Tight coupling between client and concrete implementations makes system inflexible.
+    
+    solution: |
+      Define abstract factory method in base class (Creator), override in subclasses (ConcreteCreator) 
+      to create specific types (ConcreteProduct). Work on interfaces/abstractions, not implementations.
+    
+    structure: |
+      Product (abstract/interface)
+      ΓööΓöÇΓöÇ operation()
+      
+      ConcreteProduct1, ConcreteProduct2 : Product
+      
+      Creator (abstract)
+      Γö£ΓöÇΓöÇ factoryMethod(): Product (abstract)
+      ΓööΓöÇΓöÇ someOperation() // may call factoryMethod()
+      
+      ConcreteCreator1, ConcreteCreator2 : Creator
+      ΓööΓöÇΓöÇ factoryMethod(): ConcreteProduct
+    
+    participants:
+      - name: "Product"
+        role: "Abstract base class or interface for objects factory creates"
+        responsibilities:
+          - "Defines interface of objects factory method creates"
+      
+      - name: "ConcreteProduct"
+        role: "Implements the Product interface/abstract class"
+        responsibilities:
+          - "Provides specific implementation of Product"
+      
+      - name: "Creator"
+        role: "Declares the factory method"
+        responsibilities:
+          - "Declares abstract/virtual factory method returning Product"
+          - "May call factory method to create Product objects"
+      
+      - name: "ConcreteCreator"
+        role: "Overrides factory method to return ConcreteProduct"
+        responsibilities:
+          - "Implements factory method to instantiate ConcreteProduct"
+    
+    collaborations:
+      - "Creator relies on subclasses to define factory method"
+      - "Factory method returns appropriate Product instance"
+      - "Client works with Creator and Product abstractions, not concrete types"
+    
+    csharp_specifics:
+      key_features:
+        - "Use abstract class or interface for Product"
+        - "Use abstract class with abstract method for Creator"
+        - "ConcreteCreator returns ConcreteProduct but typed as Product"
+        - "Eliminates 'new' operator coupling in client code"
+      
+      shopping_cart_example: |
+        // Product - can be interface or abstract class
+        public abstract class DiscountService
+        {
+            public abstract int DiscountPercentage { get; }
+            public override string ToString() => GetType().Name;
+        }
+        
+        // ConcreteProduct implementations
+        public class CountryDiscountService : DiscountService
+        {
+            private readonly string _countryId;
+            
+            public CountryDiscountService(string countryId)
+            {
+                _countryId = countryId;
+            }
+            
+            public override int DiscountPercentage => 
+                _countryId == "BE" ? 20 : 10;
+        }
+        
+        public class CodeDiscountService : DiscountService
+        {
+            private readonly Guid _code;
+            
+            public CodeDiscountService(Guid code)
+            {
+                _code = code;
+            }
+            
+            public override int DiscountPercentage => 15;
+        }
+        
+        // Creator (abstract factory)
+        public abstract class DiscountFactory
+        {
+            public abstract DiscountService CreateDiscountService();
+        }
+        
+        // ConcreteCreator implementations
+        public class CountryDiscountFactory : DiscountFactory
+        {
+            private readonly string _countryId;
+            
+            public CountryDiscountFactory(string countryId)
+            {
+                _countryId = countryId;
+            }
+            
+            public override DiscountService CreateDiscountService()
+            {
+                return new CountryDiscountService(_countryId);
+            }
+        }
+        
+        public class CodeDiscountFactory : DiscountFactory
+        {
+            private readonly Guid _code;
+            
+            public CodeDiscountFactory(Guid code)
+            {
+                _code = code;
+            }
+            
+            public override DiscountService CreateDiscountService()
+            {
+                return new CodeDiscountService(_code);
+            }
+        }
+        
+        // Client usage
+        var factories = new List<DiscountFactory>
+        {
+            new CountryDiscountFactory("BE"),
+            new CodeDiscountFactory(Guid.NewGuid())
+        };
+        
+        foreach (var factory in factories)
+        {
+            var service = factory.CreateDiscountService();
+            Console.WriteLine($"{service}: {service.DiscountPercentage}%");
+        }
+      
+      interface_alternative: |
+        // Can also use interface for Product
+        public interface IDiscountService
+        {
+            int DiscountPercentage { get; }
+        }
+        
+        // And interface for Creator
+        public interface IDiscountFactory
+        {
+            IDiscountService CreateDiscountService();
+        }
+        
+        // Implementations remain similar
+        public class CountryDiscountService : IDiscountService
+        {
+            public int DiscountPercentage { get; init; }
+        }
+    
+    consequences:
+      pros:
+        - "Eliminates binding to application-specific classes (loose coupling)"
+        - "Adheres to Open/Closed Principle (extend without modifying client)"
+        - "Adheres to Single Responsibility Principle (creation logic in one place)"
+        - "Provides hooks for subclasses"
+        - "Connects parallel class hierarchies"
+        - "Easy to add new product types without breaking client code"
+      
+      cons:
+        - "Can require creating subclass just to change product type"
+        - "More complex than direct instantiation"
+        - "Code can become more complicated with many small classes"
+    
+    use_cases:
+      good:
+        - "Class can't anticipate class of objects it must create"
+        - "Class wants subclasses to specify objects it creates"
+        - "Classes delegate responsibility to helper subclasses"
+        - "Want to localize knowledge of which helper is the delegate"
+        - "Need to reuse existing objects instead of always creating new"
+      
+      examples:
+        - "Document editor creating different document types (PDF, Word)"
+        - "Shopping cart with different discount calculation strategies"
+        - "Data export services (CSV, JSON, XML)"
+        - "Payment processing with different payment methods"
+        - "Logging frameworks with different logger types"
+    
+    implementation_notes:
+      - "In C#, Product can be interface or abstract class (prefer interface when no base implementation needed)"
+      - "Creator can be abstract class (more common) or interface"
+      - "Factory method is called within Creator's methods, not just standalone"
+      - "Can parameterize factory method to create multiple product types"
+      - "Often used with Template Method pattern"
+    
+    implementation:
+      considerations:
+        - "Can parameterize factory method to create multiple product types"
+        - "Can use templates/generics to avoid subclassing"
+        - "Consider naming convention (e.g., createProduct, makeProduct)"
+      
+      languages:
+        python:
+          good: |
+            from abc import ABC, abstractmethod
+            
+            class Document(ABC):
+                @abstractmethod
+                def open(self): pass
+            
+            class PDFDocument(Document):
+                def open(self): return "Opening PDF"
+            
+            class WordDocument(Document):
+                def open(self): return "Opening Word"
+            
+            class Application(ABC):
+                @abstractmethod
+                def create_document(self) -> Document: pass
+                
+                def open_document(self):
+                    doc = self.create_document()
+                    return doc.open()
+            
+            class PDFApplication(Application):
+                def create_document(self) -> Document:
+                    return PDFDocument()
+            
+            # Usage
+            app = PDFApplication()
+            result = app.open_document()  # "Opening PDF"
+          
+          bad: |
+            # Γ¥î Tight coupling to concrete types
+            class Application:
+                def open_document(self, doc_type: str):
+                    if doc_type == "pdf":
+                        doc = PDFDocument()
+                    elif doc_type == "word":
+                        doc = WordDocument()
+                    return doc.open()
+        
+        csharp:
+          good: |
+            public abstract class Document
+            {
+                public abstract void Open();
+            }
+            
+            public class PDFDocument : Document
+            {
+                public override void Open() => Console.WriteLine("Opening PDF");
+            }
+            
+            public abstract class Application
+            {
+                public abstract Document CreateDocument();
+                
+                public void OpenDocument()
+                {
+                    var doc = CreateDocument();
+                    doc.Open();
+                }
+            }
+            
+            public class PDFApplication : Application
+            {
+                public override Document CreateDocument() => new PDFDocument();
+            }
+            
+            // Usage
+            Application app = new PDFApplication();
+            app.OpenDocument(); // "Opening PDF"
+          
+          bad: |
+            // Γ¥î Switch statement on type
+            public class Application
+            {
+                public void OpenDocument(string docType)
+                {
+                    Document doc = docType switch
+                    {
+                        "pdf" => new PDFDocument(),
+                        "word" => new WordDocument(),
+                        _ => throw new ArgumentException()
+                    };
+                    doc.Open();
+                }
+            }
+        
+        typescript:
+          good: |
+            abstract class Document {
+                abstract open(): string;
+            }
+            
+            class PDFDocument extends Document {
+                open(): string { return "Opening PDF"; }
+            }
+            
+            abstract class Application {
+                abstract createDocument(): Document;
+                
+                openDocument(): string {
+                    const doc = this.createDocument();
+                    return doc.open();
+                }
+            }
+            
+            class PDFApplication extends Application {
+                createDocument(): Document {
+                    return new PDFDocument();
+                }
+            }
+            
+            // Usage
+            const app: Application = new PDFApplication();
+            console.log(app.openDocument()); // "Opening PDF"
+          
+          bad: |
+            // Γ¥î Type checking with instanceof
+            class Application {
+                openDocument(doc: Document): string {
+                    if (doc instanceof PDFDocument) {
+                        return "Opening PDF";
+                    }
+                    return "Unknown document";
+                }
+            }
+    
+    related_patterns:
+      - "Abstract Factory often implemented using Factory Methods"
+      - "Template Method often calls Factory Methods"
+      - "Prototypes don't require subclassing but need initialization"
+
+  - name: "Abstract Factory"
+    intent: "Provide interface for creating families of related objects without specifying concrete classes"
+    problem: |
+      Need to create families of related objects (e.g., UI components for different platforms)
+      without coupling to specific implementation classes.
+    solution: |
+      Define abstract factory interface with methods for creating each product type.
+      Implement concrete factories for each product family.
+    structure: |
+      AbstractFactory (interface)
+      Γö£ΓöÇΓöÇ createProductA(): AbstractProductA
+      ΓööΓöÇΓöÇ createProductB(): AbstractProductB
+      
+      ConcreteFactory1, ConcreteFactory2
+      
+      AbstractProductA, AbstractProductB (interfaces)
+      ProductA1, ProductA2, ProductB1, ProductB2
+    
+    participants:
+      - name: "AbstractFactory"
+        role: "Declares interface for creating abstract products"
+      - name: "ConcreteFactory"
+        role: "Implements operations to create concrete products"
+      - name: "AbstractProduct"
+        role: "Declares interface for product type"
+      - name: "ConcreteProduct"
+        role: "Defines product created by corresponding factory"
+      - name: "Client"
+        role: "Uses only interfaces declared by AbstractFactory and AbstractProduct"
+    
+    consequences:
+      pros:
+        - "Isolates concrete classes"
+        - "Makes exchanging product families easy"
+        - "Promotes consistency among products"
+      cons:
+        - "Difficult to add new products (requires changing factory interface)"
+    
+    implementation:
+      considerations:
+        - "Factories often Singletons"
+        - "Can use Factory Method for each product"
+        - "Can use Prototype to configure factory"
+      
+      languages:
+        python:
+          good: |
+            from abc import ABC, abstractmethod
+            
+            class Button(ABC):
+                @abstractmethod
+                def render(self): pass
+            
+            class Checkbox(ABC):
+                @abstractmethod
+                def render(self): pass
+            
+            class WindowsButton(Button):
+                def render(self): return "Windows Button"
+            
+            class WindowsCheckbox(Checkbox):
+                def render(self): return "Windows Checkbox"
+            
+            class MacButton(Button):
+                def render(self): return "Mac Button"
+            
+            class MacCheckbox(Checkbox):
+                def render(self): return "Mac Checkbox"
+            
+            class GUIFactory(ABC):
+                @abstractmethod
+                def create_button(self) -> Button: pass
+                @abstractmethod
+                def create_checkbox(self) -> Checkbox: pass
+            
+            class WindowsFactory(GUIFactory):
+                def create_button(self) -> Button:
+                    return WindowsButton()
+                def create_checkbox(self) -> Checkbox:
+                    return WindowsCheckbox()
+            
+            # Usage
+            factory: GUIFactory = WindowsFactory()
+            button = factory.create_button()
+            checkbox = factory.create_checkbox()
+        
+        csharp:
+          good: |
+            public interface IButton { string Render(); }
+            public interface ICheckbox { string Render(); }
+            
+            public class WindowsButton : IButton
+            {
+                public string Render() => "Windows Button";
+            }
+            
+            public class MacButton : IButton
+            {
+                public string Render() => "Mac Button";
+            }
+            
+            public interface IGUIFactory
+            {
+                IButton CreateButton();
+                ICheckbox CreateCheckbox();
+            }
+            
+            public class WindowsFactory : IGUIFactory
+            {
+                public IButton CreateButton() => new WindowsButton();
+                public ICheckbox CreateCheckbox() => new WindowsCheckbox();
+            }
+            
+            // Usage
+            IGUIFactory factory = new WindowsFactory();
+            var button = factory.CreateButton();
+            var checkbox = factory.CreateCheckbox();
+        
+        typescript:
+          good: |
+            interface Button { render(): string; }
+            interface Checkbox { render(): string; }
+            
+            class WindowsButton implements Button {
+                render(): string { return "Windows Button"; }
+            }
+            
+            class MacButton implements Button {
+                render(): string { return "Mac Button"; }
+            }
+            
+            interface GUIFactory {
+                createButton(): Button;
+                createCheckbox(): Checkbox;
+            }
+            
+            class WindowsFactory implements GUIFactory {
+                createButton(): Button { return new WindowsButton(); }
+                createCheckbox(): Checkbox { return new WindowsCheckbox(); }
+            }
+            
+            // Usage
+            const factory: GUIFactory = new WindowsFactory();
+            const button = factory.createButton();
+
+  - name: "Builder"
+    intent: "Separate construction of complex object from representation, allowing same construction process to create different representations"
+    problem: |
+      Need to construct complex objects step by step.
+      Same construction process should create different representations.
+    solution: |
+      Separate object construction into Builder class with methods for each construction step.
+      Director class uses Builder to construct object.
+    structure: |
+      Director
+      ΓööΓöÇΓöÇ construct(builder: Builder)
+      
+      Builder (interface)
+      Γö£ΓöÇΓöÇ buildPartA()
+      Γö£ΓöÇΓöÇ buildPartB()
+      ΓööΓöÇΓöÇ getResult(): Product
+      
+      ConcreteBuilder
+      ΓööΓöÇΓöÇ implements all build methods
+    
+    participants:
+      - name: "Builder"
+        role: "Specifies abstract interface for creating Product parts"
+      - name: "ConcreteBuilder"
+        role: "Constructs and assembles Product parts"
+      - name: "Director"
+        role: "Constructs object using Builder interface"
+      - name: "Product"
+        role: "Complex object under construction"
+    
+    consequences:
+      pros:
+        - "Lets you vary product's internal representation"
+        - "Isolates construction code from representation"
+        - "Finer control over construction process"
+      cons:
+        - "More complex than simple constructors"
+        - "Requires creating separate Builder for each product type"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class House:
+                def __init__(self):
+                    self.walls = None
+                    self.roof = None
+                    self.windows = None
+            
+            class HouseBuilder:
+                def __init__(self):
+                    self.house = House()
+                
+                def build_walls(self, material: str):
+                    self.house.walls = material
+                    return self
+                
+                def build_roof(self, material: str):
+                    self.house.roof = material
+                    return self
+                
+                def build_windows(self, count: int):
+                    self.house.windows = count
+                    return self
+                
+                def build(self) -> House:
+                    return self.house
+            
+            # Usage - Method chaining
+            house = (HouseBuilder()
+                     .build_walls("brick")
+                     .build_roof("tiles")
+                     .build_windows(4)
+                     .build())
+        
+        csharp:
+          good: |
+            public class House
+            {
+                public string Walls { get; set; }
+                public string Roof { get; set; }
+                public int Windows { get; set; }
+            }
+            
+            public class HouseBuilder
+            {
+                private House house = new House();
+                
+                public HouseBuilder WithWalls(string material)
+                {
+                    house.Walls = material;
+                    return this;
+                }
+                
+                public HouseBuilder WithRoof(string material)
+                {
+                    house.Roof = material;
+                    return this;
+                }
+                
+                public HouseBuilder WithWindows(int count)
+                {
+                    house.Windows = count;
+                    return this;
+                }
+                
+                public House Build() => house;
+            }
+            
+            // Usage
+            var house = new HouseBuilder()
+                .WithWalls("brick")
+                .WithRoof("tiles")
+                .WithWindows(4)
+                .Build();
+        
+        typescript:
+          good: |
+            class House {
+                walls?: string;
+                roof?: string;
+                windows?: number;
+            }
+            
+            class HouseBuilder {
+                private house = new House();
+                
+                withWalls(material: string): this {
+                    this.house.walls = material;
+                    return this;
+                }
+                
+                withRoof(material: string): this {
+                    this.house.roof = material;
+                    return this;
+                }
+                
+                withWindows(count: number): this {
+                    this.house.windows = count;
+                    return this;
+                }
+                
+                build(): House { return this.house; }
+            }
+            
+            // Usage
+            const house = new HouseBuilder()
+                .withWalls("brick")
+                .withRoof("tiles")
+                .withWindows(4)
+                .build();
+
+  - name: "Prototype"
+    intent: "Specify kinds of objects to create using prototypical instance, create new objects by copying prototype"
+    problem: |
+      Need to create new objects by copying existing objects (prototypes).
+      Want to avoid coupling to specific classes.
+    solution: |
+      Declare cloning interface, implement clone() method in classes.
+    structure: |
+      Prototype (interface)
+      ΓööΓöÇΓöÇ clone(): Prototype
+      
+      ConcretePrototype1, ConcretePrototype2
+      ΓööΓöÇΓöÇ clone(): returns copy of self
+    
+    consequences:
+      pros:
+        - "Can add/remove products at runtime"
+        - "Can create new objects without knowing their classes"
+        - "Reduces subclassing"
+      cons:
+        - "Deep copy can be complex (circular references, etc.)"
+        - "Each class must implement clone()"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            import copy
+            
+            class Prototype:
+                def clone(self):
+                    return copy.deepcopy(self)
+            
+            class ConcretePrototype(Prototype):
+                def __init__(self, field):
+                    self.field = field
+            
+            # Usage
+            p1 = ConcretePrototype("value")
+            p2 = p1.clone()
+            assert p1 is not p2  # Different objects
+            assert p1.field == p2.field  # Same data
+        
+        csharp:
+          good: |
+            public interface IPrototype
+            {
+                IPrototype Clone();
+            }
+            
+            public class ConcretePrototype : IPrototype
+            {
+                public string Field { get; set; }
+                
+                public IPrototype Clone()
+                {
+                    return (IPrototype)this.MemberwiseClone();
+                }
+            }
+            
+            // Usage
+            var p1 = new ConcretePrototype { Field = "value" };
+            var p2 = (ConcretePrototype)p1.Clone();
+        
+        typescript:
+          good: |
+            interface Prototype {
+                clone(): Prototype;
+            }
+            
+            class ConcretePrototype implements Prototype {
+                constructor(public field: string) {}
+                
+                clone(): Prototype {
+                    return new ConcretePrototype(this.field);
+                }
+            }
+            
+            // Usage
+            const p1 = new ConcretePrototype("value");
+            const p2 = p1.clone();
+
+# ==========================================
+# STRUCTURAL PATTERNS (7 patterns)
+# ==========================================
+
+structural_patterns:
+  - name: "Adapter"
+    intent: "Convert interface of class into another interface clients expect"
+    problem: "Need to make incompatible interfaces work together"
+    solution: "Create adapter class that translates one interface to another"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Target:
+                def request(self) -> str:
+                    return "Target: Default behavior"
+            
+            class Adaptee:
+                def specific_request(self) -> str:
+                    return "Adaptee: Specific behavior"
+            
+            class Adapter(Target):
+                def __init__(self, adaptee: Adaptee):
+                    self.adaptee = adaptee
+                
+                def request(self) -> str:
+                    return f"Adapter: {self.adaptee.specific_request()}"
+            
+            # Usage
+            adaptee = Adaptee()
+            adapter = Adapter(adaptee)
+            result = adapter.request()
+
+  - name: "Bridge"
+    intent: "Decouple abstraction from implementation so they can vary independently"
+    problem: "Need to avoid permanent binding between abstraction and implementation"
+    solution: "Separate abstraction and implementation into separate class hierarchies"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Implementation:
+                def operation_impl(self) -> str:
+                    pass
+            
+            class ConcreteImplementationA(Implementation):
+                def operation_impl(self) -> str:
+                    return "ConcreteImplementationA"
+            
+            class Abstraction:
+                def __init__(self, implementation: Implementation):
+                    self.implementation = implementation
+                
+                def operation(self) -> str:
+                    return f"Abstraction: {self.implementation.operation_impl()}"
+            
+            # Usage
+            impl = ConcreteImplementationA()
+            abstraction = Abstraction(impl)
+            result = abstraction.operation()
+
+  - name: "Composite"
+    intent: "Compose objects into tree structures to represent part-whole hierarchies"
+    problem: "Need to treat individual objects and compositions uniformly"
+    solution: "Define common interface for leaf and composite objects"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Component:
+                def operation(self) -> str:
+                    pass
+            
+            class Leaf(Component):
+                def operation(self) -> str:
+                    return "Leaf"
+            
+            class Composite(Component):
+                def __init__(self):
+                    self.children = []
+                
+                def add(self, component: Component):
+                    self.children.append(component)
+                
+                def operation(self) -> str:
+                    results = [child.operation() for child in self.children]
+                    return f"Branch({'+'.join(results)})"
+
+  - name: "Decorator"
+    intent: "Attach additional responsibilities to object dynamically"
+    problem: "Need to add functionality without subclassing"
+    solution: "Wrap object in decorator that adds new behavior"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Component:
+                def operation(self) -> str:
+                    pass
+            
+            class ConcreteComponent(Component):
+                def operation(self) -> str:
+                    return "ConcreteComponent"
+            
+            class Decorator(Component):
+                def __init__(self, component: Component):
+                    self._component = component
+                
+                def operation(self) -> str:
+                    return self._component.operation()
+            
+            class ConcreteDecorator(Decorator):
+                def operation(self) -> str:
+                    return f"ConcreteDecorator({super().operation()})"
+
+  - name: "Facade"
+    intent: "Provide unified interface to set of interfaces in subsystem"
+    problem: "Need to simplify complex subsystem"
+    solution: "Create facade class with simple methods that delegate to subsystem"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class SubsystemA:
+                def operation_a(self): return "SubsystemA"
+            
+            class SubsystemB:
+                def operation_b(self): return "SubsystemB"
+            
+            class Facade:
+                def __init__(self):
+                    self.subsystem_a = SubsystemA()
+                    self.subsystem_b = SubsystemB()
+                
+                def operation(self) -> str:
+                    results = [
+                        self.subsystem_a.operation_a(),
+                        self.subsystem_b.operation_b()
+                    ]
+                    return f"Facade: {', '.join(results)}"
+
+  - name: "Flyweight"
+    intent: "Use sharing to support large numbers of fine-grained objects efficiently"
+    problem: "Need to create many similar objects efficiently"
+    solution: "Share common state (intrinsic) between objects, externalize unique state (extrinsic)"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Flyweight:
+                def __init__(self, shared_state):
+                    self._shared_state = shared_state
+                
+                def operation(self, unique_state):
+                    return f"Flyweight: {self._shared_state} + {unique_state}"
+            
+            class FlyweightFactory:
+                def __init__(self):
+                    self._flyweights = {}
+                
+                def get_flyweight(self, shared_state):
+                    if shared_state not in self._flyweights:
+                        self._flyweights[shared_state] = Flyweight(shared_state)
+                    return self._flyweights[shared_state]
+
+  - name: "Proxy"
+    intent: "Provide surrogate or placeholder for another object to control access"
+    problem: "Need to control access to object (lazy init, access control, logging, etc.)"
+    solution: "Create proxy class with same interface as real subject"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Subject:
+                def request(self) -> str:
+                    pass
+            
+            class RealSubject(Subject):
+                def request(self) -> str:
+                    return "RealSubject: Handling request"
+            
+            class Proxy(Subject):
+                def __init__(self):
+                    self._real_subject = None
+                
+                def request(self) -> str:
+                    if self._real_subject is None:
+                        self._real_subject = RealSubject()
+                    return f"Proxy: {self._real_subject.request()}"
+
+# ==========================================
+# BEHAVIORAL PATTERNS (11 patterns)
+# ==========================================
+
+behavioral_patterns:
+  - name: "Chain of Responsibility"
+    intent: "Pass request along chain of handlers until one handles it"
+    problem: "Need to decouple sender from receiver"
+    solution: "Chain handlers together, each decides to handle or pass request"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Handler:
+                def __init__(self, successor=None):
+                    self._successor = successor
+                
+                def handle(self, request):
+                    if self._successor:
+                        return self._successor.handle(request)
+
+  - name: "Command"
+    intent: "Encapsulate request as object"
+    problem: "Need to parameterize objects with operations, queue requests, log requests, support undo"
+    solution: "Create command objects with execute() method"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Command:
+                def execute(self): pass
+                def undo(self): pass
+            
+            class ConcreteCommand(Command):
+                def __init__(self, receiver):
+                    self._receiver = receiver
+                
+                def execute(self):
+                    self._receiver.action()
+
+  - name: "Iterator"
+    intent: "Provide way to access elements sequentially without exposing underlying representation"
+    problem: "Need to traverse collection without exposing its internals"
+    solution: "Create iterator object with next() and hasNext() methods"
+
+  - name: "Mediator"
+    intent: "Define object that encapsulates how set of objects interact"
+    problem: "Need to reduce chaotic dependencies between objects"
+    solution: "Create mediator that coordinates interactions"
+
+  - name: "Observer"
+    intent: "Define one-to-many dependency so when one object changes state, all dependents are notified"
+    problem: "Need to notify multiple objects of state changes"
+    solution: "Define Subject that maintains list of Observers and notifies them of changes"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Subject:
+                def __init__(self):
+                    self._observers = []
+                
+                def attach(self, observer):
+                    self._observers.append(observer)
+                
+                def notify(self):
+                    for observer in self._observers:
+                        observer.update(self)
+            
+            class Observer:
+                def update(self, subject):
+                    pass
+
+  - name: "State"
+    intent: "Allow object to alter behavior when internal state changes"
+    problem: "Need different behavior based on state"
+    solution: "Encapsulate states as objects, delegate state-specific behavior"
+
+  - name: "Strategy"
+    intent: "Define family of algorithms, encapsulate each one, make them interchangeable"
+    problem: "Need to use different algorithms interchangeably"
+    solution: "Define strategy interface, implement concrete strategies"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class Strategy:
+                def execute(self, data): pass
+            
+            class ConcreteStrategyA(Strategy):
+                def execute(self, data):
+                    return sorted(data)
+            
+            class Context:
+                def __init__(self, strategy: Strategy):
+                    self._strategy = strategy
+                
+                def execute_strategy(self, data):
+                    return self._strategy.execute(data)
+
+  - name: "Template Method"
+    intent: "Define skeleton of algorithm, let subclasses override specific steps"
+    problem: "Need to define algorithm structure while allowing customization of certain steps"
+    solution: "Define template method with primitive operations that subclasses override"
+
+  - name: "Visitor"
+    intent: "Represent operation to be performed on elements of object structure"
+    problem: "Need to add new operations without changing element classes"
+    solution: "Create visitor interface with visit() method for each element type"
+
+  - name: "Memento"
+    intent: "Capture and externalize object's internal state without violating encapsulation"
+    problem: "Need to save and restore object state (undo/redo)"
+    solution: "Create memento object that stores state snapshot"
+
+  - name: "Interpreter"
+    intent: "Define representation for grammar along with interpreter"
+    problem: "Need to interpret sentences in language"
+    solution: "Define abstract syntax tree with interpret() method on each node"
+
+# ==========================================
+# MODERN PATTERNS (4 patterns)
+# ==========================================
+
+modern_patterns:
+  - name: "Dependency Injection"
+    intent: "Decouple object creation from object usage by injecting dependencies"
+    problem: "Objects creating their own dependencies leads to tight coupling and hard-to-test code"
+    solution: "Pass dependencies to objects via constructor, properties, or methods"
+    category: "modern"
+    
+    benefits:
+      - "Loose coupling between components"
+      - "Easier unit testing (can inject mocks)"
+      - "Better separation of concerns"
+      - "Centralized dependency configuration"
+    
+    types:
+      - name: "Constructor Injection"
+        description: "Dependencies passed through constructor (PREFERRED)"
+        example_python: |
+          class Service:
+              def __init__(self, repository: Repository):
+                  self.repository = repository
+      
+      - name: "Property Injection"
+        description: "Dependencies set via properties"
+        example_python: |
+          class Service:
+              def __init__(self):
+                  self.repository = None  # Set later
+      
+      - name: "Method Injection"
+        description: "Dependencies passed to methods"
+        example_python: |
+          class Service:
+              def process(self, repository: Repository):
+                  repository.save()
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            # Interface
+            class Repository:
+                def save(self, data): pass
+            
+            # Implementation
+            class SQLRepository(Repository):
+                def save(self, data):
+                    print(f"Saving to SQL: {data}")
+            
+            # Consumer - dependencies injected
+            class UserService:
+                def __init__(self, repository: Repository):
+                    self.repository = repository
+                
+                def create_user(self, user_data):
+                    self.repository.save(user_data)
+            
+            # DI Container (manual)
+            repository = SQLRepository()
+            service = UserService(repository)
+            service.create_user({"name": "John"})
+          
+          bad: |
+            # Γ¥î Tight coupling - creates its own dependency
+            class UserService:
+                def __init__(self):
+                    self.repository = SQLRepository()  # Hard-coded
+                
+                def create_user(self, user_data):
+                    self.repository.save(user_data)
+        
+        csharp:
+          good: |
+            public interface IRepository
+            {
+                void Save(object data);
+            }
+            
+            public class SQLRepository : IRepository
+            {
+                public void Save(object data) => Console.WriteLine($"Saving: {data}");
+            }
+            
+            public class UserService
+            {
+                private readonly IRepository _repository;
+                
+                // Constructor injection
+                public UserService(IRepository repository)
+                {
+                    _repository = repository;
+                }
+                
+                public void CreateUser(object userData)
+                {
+                    _repository.Save(userData);
+                }
+            }
+            
+            // DI Container (ASP.NET Core)
+            services.AddScoped<IRepository, SQLRepository>();
+            services.AddScoped<UserService>();
+    
+    di_containers:
+      python:
+        - "dependency-injector"
+        - "injector"
+        - "pinject"
+      csharp:
+        - "Built-in (Microsoft.Extensions.DependencyInjection)"
+        - "Autofac"
+        - "Ninject"
+      typescript:
+        - "InversifyJS"
+        - "TSyringe"
+    
+    best_practices:
+      - "Prefer constructor injection for required dependencies"
+      - "Inject interfaces, not concrete classes"
+      - "Register dependencies at application startup (composition root)"
+      - "Use scoped lifetimes appropriately (Singleton, Transient, Scoped)"
+      - "Avoid service locator anti-pattern"
+
+  - name: "Repository"
+    intent: "Encapsulate data access logic and provide collection-like interface"
+    problem: "Business logic shouldn't know about database implementation details"
+    solution: "Create repository interface that abstracts data access operations"
+    category: "modern"
+    
+    benefits:
+      - "Decouples business logic from data access"
+      - "Centralized data access logic"
+      - "Easier to test (can mock repository)"
+      - "Can swap data sources without changing business logic"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            from abc import ABC, abstractmethod
+            from typing import List, Optional
+            
+            class Entity:
+                def __init__(self, id, name):
+                    self.id = id
+                    self.name = name
+            
+            # Repository interface
+            class IRepository(ABC):
+                @abstractmethod
+                def get_by_id(self, id: int) -> Optional[Entity]: pass
+                
+                @abstractmethod
+                def get_all(self) -> List[Entity]: pass
+                
+                @abstractmethod
+                def add(self, entity: Entity): pass
+                
+                @abstractmethod
+                def update(self, entity: Entity): pass
+                
+                @abstractmethod
+                def delete(self, id: int): pass
+            
+            # Concrete implementation
+            class SQLRepository(IRepository):
+                def get_by_id(self, id: int) -> Optional[Entity]:
+                    # SELECT * FROM entities WHERE id = ?
+                    return Entity(id, "Name")
+                
+                def get_all(self) -> List[Entity]:
+                    # SELECT * FROM entities
+                    return []
+                
+                def add(self, entity: Entity):
+                    # INSERT INTO entities...
+                    pass
+                
+                def update(self, entity: Entity):
+                    # UPDATE entities SET...
+                    pass
+                
+                def delete(self, id: int):
+                    # DELETE FROM entities WHERE id = ?
+                    pass
+            
+            # Business logic - doesn't know about database
+            class Service:
+                def __init__(self, repository: IRepository):
+                    self.repository = repository
+                
+                def process_entity(self, id: int):
+                    entity = self.repository.get_by_id(id)
+                    if entity:
+                        # Business logic here
+                        self.repository.update(entity)
+        
+        csharp:
+          good: |
+            public interface IRepository<T> where T : class
+            {
+                T GetById(int id);
+                IEnumerable<T> GetAll();
+                void Add(T entity);
+                void Update(T entity);
+                void Delete(int id);
+            }
+            
+            public class SQLRepository<T> : IRepository<T> where T : class
+            {
+                private readonly DbContext _context;
+                
+                public SQLRepository(DbContext context)
+                {
+                    _context = context;
+                }
+                
+                public T GetById(int id) => _context.Set<T>().Find(id);
+                public IEnumerable<T> GetAll() => _context.Set<T>().ToList();
+                public void Add(T entity) => _context.Set<T>().Add(entity);
+                public void Update(T entity) => _context.Set<T>().Update(entity);
+                public void Delete(int id)
+                {
+                    var entity = GetById(id);
+                    if (entity != null)
+                        _context.Set<T>().Remove(entity);
+                }
+            }
+    
+    common_methods:
+      - "GetById(id)"
+      - "GetAll()"
+      - "Find(predicate)"
+      - "Add(entity)"
+      - "Update(entity)"
+      - "Delete(id)"
+      - "Exists(id)"
+      - "Count()"
+    
+    best_practices:
+      - "One repository per aggregate root (DDD)"
+      - "Repository returns domain entities, not DTOs"
+      - "Keep repository interface simple (CRUD operations)"
+      - "Use Unit of Work pattern for transactions"
+      - "Don't expose IQueryable (leaky abstraction)"
+
+  - name: "Unit of Work"
+    intent: "Maintain list of objects affected by business transaction and coordinates writing changes"
+    problem: "Need to treat multiple repository operations as single atomic transaction"
+    solution: "Create Unit of Work that tracks changes and commits them all at once"
+    category: "modern"
+    
+    benefits:
+      - "Atomic transactions across multiple repositories"
+      - "Reduces database roundtrips"
+      - "Centralized transaction management"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            class UnitOfWork:
+                def __init__(self):
+                    self.user_repository = UserRepository(self)
+                    self.order_repository = OrderRepository(self)
+                    self._changes = []
+                
+                def register_new(self, entity):
+                    self._changes.append(('INSERT', entity))
+                
+                def register_dirty(self, entity):
+                    self._changes.append(('UPDATE', entity))
+                
+                def register_deleted(self, entity):
+                    self._changes.append(('DELETE', entity))
+                
+                def commit(self):
+                    # Start transaction
+                    for operation, entity in self._changes:
+                        if operation == 'INSERT':
+                            # Execute INSERT
+                            pass
+                        elif operation == 'UPDATE':
+                            # Execute UPDATE
+                            pass
+                        elif operation == 'DELETE':
+                            # Execute DELETE
+                            pass
+                    # Commit transaction
+                    self._changes.clear()
+                
+                def rollback(self):
+                    self._changes.clear()
+            
+            # Usage
+            uow = UnitOfWork()
+            user = uow.user_repository.get_by_id(1)
+            user.name = "Updated"
+            uow.user_repository.update(user)
+            
+            order = Order()
+            uow.order_repository.add(order)
+            
+            uow.commit()  # Atomic - both changes or neither
+        
+        csharp:
+          good: |
+            public interface IUnitOfWork : IDisposable
+            {
+                IUserRepository Users { get; }
+                IOrderRepository Orders { get; }
+                int Complete();
+            }
+            
+            public class UnitOfWork : IUnitOfWork
+            {
+                private readonly DbContext _context;
+                
+                public UnitOfWork(DbContext context)
+                {
+                    _context = context;
+                    Users = new UserRepository(_context);
+                    Orders = new OrderRepository(_context);
+                }
+                
+                public IUserRepository Users { get; }
+                public IOrderRepository Orders { get; }
+                
+                public int Complete()
+                {
+                    return _context.SaveChanges();
+                }
+                
+                public void Dispose()
+                {
+                    _context.Dispose();
+                }
+            }
+            
+            // Usage
+            using (var uow = new UnitOfWork(context))
+            {
+                var user = uow.Users.GetById(1);
+                user.Name = "Updated";
+                
+                var order = new Order();
+                uow.Orders.Add(order);
+                
+                uow.Complete(); // Atomic commit
+            }
+    
+    best_practices:
+      - "Use with Repository pattern"
+      - "Commit all changes at end of business transaction"
+      - "Handle exceptions and rollback on failure"
+      - "Dispose of Unit of Work properly (using/with statement)"
+
+  - name: "Specification"
+    intent: "Encapsulate business rules and queries as reusable, combinable objects"
+    problem: "Business rules scattered across codebase, hard to reuse and test"
+    solution: "Create specification objects with IsSatisfiedBy() method, support AND/OR/NOT composition"
+    category: "modern"
+    
+    benefits:
+      - "Reusable business rules"
+      - "Composable (AND, OR, NOT)"
+      - "Testable in isolation"
+      - "Readable business logic"
+    
+    implementation:
+      languages:
+        python:
+          good: |
+            from abc import ABC, abstractmethod
+            
+            class Specification(ABC):
+                @abstractmethod
+                def is_satisfied_by(self, candidate) -> bool:
+                    pass
+                
+                def and_spec(self, other):
+                    return AndSpecification(self, other)
+                
+                def or_spec(self, other):
+                    return OrSpecification(self, other)
+                
+                def not_spec(self):
+                    return NotSpecification(self)
+            
+            class AndSpecification(Specification):
+                def __init__(self, left, right):
+                    self.left = left
+                    self.right = right
+                
+                def is_satisfied_by(self, candidate) -> bool:
+                    return (self.left.is_satisfied_by(candidate) and
+                            self.right.is_satisfied_by(candidate))
+            
+            # Business rule specifications
+            class PremiumCustomerSpec(Specification):
+                def is_satisfied_by(self, customer) -> bool:
+                    return customer.total_purchases > 10000
+            
+            class ActiveCustomerSpec(Specification):
+                def is_satisfied_by(self, customer) -> bool:
+                    return customer.last_purchase_days < 30
+            
+            # Compose specifications
+            premium_and_active = PremiumCustomerSpec().and_spec(ActiveCustomerSpec())
+            
+            # Use in repository
+            class CustomerRepository:
+                def find(self, spec: Specification):
+                    return [c for c in self.customers if spec.is_satisfied_by(c)]
+            
+            # Usage
+            customers = repo.find(premium_and_active)
+        
+        csharp:
+          good: |
+            public interface ISpecification<T>
+            {
+                bool IsSatisfiedBy(T candidate);
+            }
+            
+            public class AndSpecification<T> : ISpecification<T>
+            {
+                private readonly ISpecification<T> _left;
+                private readonly ISpecification<T> _right;
+                
+                public AndSpecification(ISpecification<T> left, ISpecification<T> right)
+                {
+                    _left = left;
+                    _right = right;
+                }
+                
+                public bool IsSatisfiedBy(T candidate)
+                {
+                    return _left.IsSatisfiedBy(candidate) && _right.IsSatisfiedBy(candidate);
+                }
+            }
+            
+            // Business rules
+            public class PremiumCustomerSpec : ISpecification<Customer>
+            {
+                public bool IsSatisfiedBy(Customer candidate)
+                {
+                    return candidate.TotalPurchases > 10000;
+                }
+            }
+            
+            public class ActiveCustomerSpec : ISpecification<Customer>
+            {
+                public bool IsSatisfiedBy(Customer candidate)
+                {
+                    return candidate.LastPurchaseDays < 30;
+                }
+            }
+            
+            // Compose
+            var premiumAndActive = new AndSpecification<Customer>(
+                new PremiumCustomerSpec(),
+                new ActiveCustomerSpec()
+            );
+            
+            // Usage
+            var customers = repository.Find(premiumAndActive);
+    
+    use_cases:
+      - "Complex business rules validation"
+      - "Query object pattern (building dynamic queries)"
+      - "Eligibility checking"
+      - "Filtering collections"
+    
+    best_practices:
+      - "Keep specifications focused (Single Responsibility)"
+      - "Name specifications after business concepts"
+      - "Compose complex rules from simple ones"
+      - "Test specifications independently"
+
+# ==========================================
+# Pattern Relationships & Synergies
+# ==========================================
+
+pattern_relationships:
+  - pattern1: "Abstract Factory"
+    pattern2: "Factory Method"
+    relationship: "Abstract Factory often implemented using Factory Methods"
+  
+  - pattern1: "Abstract Factory"
+    pattern2: "Singleton"
+    relationship: "Factories often implemented as Singletons"
+  
+  - pattern1: "Builder"
+    pattern2: "Composite"
+    relationship: "Builder can construct Composite trees"
+  
+  - pattern1: "Decorator"
+    pattern2: "Composite"
+    relationship: "Decorator can be viewed as degenerate Composite with one component"
+  
+  - pattern1: "Strategy"
+    pattern2: "State"
+    relationship: "Strategy encapsulates algorithms, State encapsulates state-specific behavior"
+  
+  - pattern1: "Command"
+    pattern2: "Memento"
+    relationship: "Command can use Memento to undo operations"
+  
+  - pattern1: "Repository"
+    pattern2: "Unit of Work"
+    relationship: "Repository used within Unit of Work for coordinated persistence"
+  
+  - pattern1: "Dependency Injection"
+    pattern2: "Repository"
+    relationship: "Repositories injected into services via DI"
+  
+  - pattern1: "Specification"
+    pattern2: "Repository"
+    relationship: "Specification pattern used in repository queries"
+
+# ==========================================
+# Anti-Pattern Warnings
+# ==========================================
+
+anti_patterns:
+  - name: "Overuse of Patterns"
+    description: "Using patterns when simpler solution exists"
+    advice: "Don't force patterns - use when complexity justifies it"
+  
+  - name: "God Object"
+    description: "Single class that does everything"
+    solution: "Apply Single Responsibility Principle, consider Facade/Mediator"
+  
+  - name: "Lava Flow"
+    description: "Dead code left in codebase"
+    solution: "Remove unused patterns/classes"
+  
+  - name: "Golden Hammer"
+    description: "Using favorite pattern for every problem"
+    solution: "Understand problem first, then select appropriate pattern"
+
+# ==========================================
+# Integration with CORTEX Agents
+# ==========================================
+
+cortex_integration:
+  architecture_agent:
+    - "Recommend patterns based on problem description"
+    - "Detect anti-patterns in existing code"
+    - "Suggest pattern refactorings"
+  
+  code_generation_agent:
+    - "Generate boilerplate for selected pattern"
+    - "Implement pattern-specific structure"
+    - "Add language-specific idioms"
+  
+  refactoring_agent:
+    - "Transform code to use design patterns"
+    - "Detect pattern violations"
+    - "Suggest pattern-based improvements"
+  
+  code_review_agent:
+    - "Validate pattern implementation"
+    - "Check for anti-patterns"
+    - "Ensure pattern best practices followed"
+
+# ==========================================
+# Quick Reference Matrix
+# ==========================================
+
+quick_reference:
+  by_purpose:
+    object_creation:
+      - "Singleton"
+      - "Factory Method"
+      - "Abstract Factory"
+      - "Builder"
+      - "Prototype"
+    
+    object_structure:
+      - "Adapter"
+      - "Bridge"
+      - "Composite"
+      - "Decorator"
+      - "Facade"
+      - "Flyweight"
+      - "Proxy"
+    
+    object_behavior:
+      - "Chain of Responsibility"
+      - "Command"
+      - "Iterator"
+      - "Mediator"
+      - "Observer"
+      - "State"
+      - "Strategy"
+      - "Template Method"
+      - "Visitor"
+    
+    enterprise:
+      - "Dependency Injection"
+      - "Repository"
+      - "Unit of Work"
+      - "Specification"
+  
+  by_complexity:
+    simple:
+      - "Singleton"
+      - "Factory Method"
+      - "Adapter"
+      - "Decorator"
+      - "Strategy"
+    
+    medium:
+      - "Abstract Factory"
+      - "Builder"
+      - "Bridge"
+      - "Composite"
+      - "Facade"
+      - "Observer"
+      - "State"
+      - "Repository"
+    
+    complex:
+      - "Flyweight"
+      - "Proxy"
+      - "Chain of Responsibility"
+      - "Mediator"
+      - "Visitor"
+      - "Unit of Work"

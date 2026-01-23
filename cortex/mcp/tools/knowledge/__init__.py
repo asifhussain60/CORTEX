@@ -13,6 +13,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 from typing import Dict, List, Any, Optional
 from cortex.mcp.decorators import mcp_tool
+from cortex.mcp.tools.knowledge.guidance_tool import get_tdd_guidance_for_module
 
 
 @mcp_tool(
@@ -91,4 +92,5 @@ __all__ = [
     "search_knowledge_base",
     "analyze_knowledge_gap",
     "generate_knowledge_summary",
+    "get_tdd_guidance_for_module",
 ]
