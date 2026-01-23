@@ -1,0 +1,382 @@
+phase:
+  id: transform-005
+  name: Declarative Autowiring Registry - Permanent Solution to Wiring Brittleness
+  priority: 1
+  blocking_deployment: false
+  critical_for_long_term_stability: true
+  created_at: '2026-01-23T22:00:00Z'
+  start_date: '2026-02-08'
+  target_completion: '2026-02-15'
+  total_effort_hours: 35
+  
+  objective: |
+    Implement a permanent, Git-safe solution to orchestrator/module wiring brittleness.
+    Move wiring from imperative Python code (which breaks after merges) to declarative 
+    YAML specs with runtime idempotent registration. This ensures orchestrators and 
+    modules stay wired across all git operations (pull, merge, rebase, etc.).
+    
+    Problem: Every pull/merge from origin breaks wiring because registration is 
+    code-based and import-order dependent. Solution: Declarative YAML wiring specs 
+    with autowiring engine that discovers and validates wiring at runtime.
+  
+  current_state:
+    wiring_approach: "Imperative Python code (breaks on merge)"
+    wiring_brittleness: "HIGH - requires manual re-registration after git operations"
+    wiring_discovery: "Manual - requires developer knowledge"
+    git_safety: "POOR - merge conflicts and silent breakage"
+    observability: "None - wiring state not queryable"
+    example_issue: |
+      1. Developer pulls 9 new orchestrator modules from origin/CORTEX ✅
+      2. Wiring still registered in old code path ❌
+      3. New modules exist but not accessible 🚫
+      4. Developer manually re-registers (waste of time) 😞
+      5. Process repeats on next merge 🔄
+  
+  target_state:
+    wiring_approach: "Declarative YAML specs + runtime autowiring engine"
+    wiring_brittleness: "NONE - Git operations can't break wiring"
+    wiring_discovery: "Automatic - engine discovers all modules"
+    git_safety: "EXCELLENT - YAML merges are explicit and conflict-clear"
+    observability: "FULL - query wiring state via CLI"
+    example_flow: |
+      1. Developer pulls 9 new orchestrator modules ✅
+      2. Each module has {name}_wiring.yaml declaring dependencies ✅
+      3. AutowiringOrchestrator starts first, discovers all specs ✅
+      4. All modules auto-wire with dependency validation ✅
+      5. Next merge: same automatic process repeats ✅
+      No manual intervention needed ever.
+  
+  solution_architecture: |
+    Layer 1: Declarative Wiring Specs
+    - Each orchestrator/module gets {module_name}_wiring.yaml
+    - Specs declare: required dependencies, provided interfaces, init order, conflicts
+    - Stored alongside module code (git-safe by definition)
+    - Format: Simple YAML, machine-readable, human-maintainable
+    
+    Layer 2: Autowiring Engine (AutowiringOrchestrator)
+    - Single startup service that runs FIRST in pipeline
+    - Discovers all *_wiring.yaml files recursively
+    - Validates dependency graph (circular deps, missing modules)
+    - Performs topological sort for initialization order
+    - Registers modules into OrchestratorRegistry with guarantees
+    - Returns SUCCESS or detailed error report
+    
+    Layer 3: Registry Validation
+    - Pre-execution hook validates registered wiring matches declared specs
+    - Detects breaking changes (removed modules, incompatible interfaces)
+    - Can run as pre-commit hook to catch issues before merge
+    
+    Layer 4: Post-Merge Validation
+    - Post-merge git hook runs AutowiringOrchestrator.validate()
+    - If wiring is invalid, merge is marked with clear error (not silent)
+    - Developers know immediately if wiring broke, can fix before continuing
+  
+  key_benefits: |
+    ✅ Git-Safe: Wiring is data (YAML), not code—merges respect structure
+    ✅ Pull-Proof: Each module declares its own wiring; pulling new modules auto-wires
+    ✅ Merge-Proof: Git merges YAML specs naturally; conflicts are explicit
+    ✅ Observable: Wiring state is queryable, diff-able, version-controlled
+    ✅ Scalable: Adding 20+ more orchestrators doesn't increase complexity
+    ✅ Pattern-Aligned: Extends your TIER 0 governance YAML pattern
+    ✅ Zero Breaking Changes: Additive, doesn't require refactoring existing code
+    ✅ Testable: Wiring validation can be unit tested independently
+  
+  items:
+    - id: AUTOWIRE-001
+      title: "Design Declarative Wiring Specification Format"
+      description: |
+        Create YAML specification format for module/orchestrator wiring declarations.
+        Each module declares its wiring requirements in a consistent, machine-readable format.
+      file: _workspaces/roadmap/docs/AUTOWIRING-SPEC-FORMAT.md
+      implementation:
+        - Design {module_name}_wiring.yaml schema
+        - Define sections: dependencies, provides_interface, initialization_order, conflict_resolution
+        - Create 3-5 example specifications for different orchestrator types
+        - Document all fields with validation rules
+        - Add JSON schema for automated validation
+      acceptance_criteria:
+        - Format supports all current CORTEX orchestrator types
+        - Circular dependency detection possible from spec
+        - Merge-safe (YAML can be automatically merged)
+        - Human-readable without extensive documentation
+        - Can represent complex dependency chains (A→B→C→D)
+      estimated_hours: 4
+      priority: CRITICAL
+      dependencies: []
+    
+    - id: AUTOWIRE-002
+      title: "Implement AutowiringOrchestrator Engine"
+      description: |
+        Create the core autowiring engine that discovers, validates, and registers modules.
+      file: cortex/orchestrators/core/autowiring_orchestrator.py
+      implementation:
+        - AutowiringOrchestrator class (inherits from BaseOrchestrator)
+        - discover_wiring_specs(): Find all *_wiring.yaml files in cortex/ and cortex_brain/
+        - validate_specs(): Check for missing dependencies, circular refs, incompatible versions
+        - build_dependency_graph(): Create DAG from all specs
+        - register_modules(): Topological sort + register in OrchestratorRegistry
+        - generate_wiring_report(): Return SUCCESS + wiring summary OR ERROR + details
+        - query_wiring_state(): Return current wiring state (for CLI commands)
+      acceptance_criteria:
+        - Discovers all wiring specs without manual configuration
+        - Detects circular dependencies before registration
+        - Reports missing modules with clear error messages
+        - Registers modules in correct dependency order
+        - Unit tests cover: happy path, missing module, circular deps, incompatible versions
+        - Performance: discovers + validates 50+ specs in <1 second
+      estimated_hours: 10
+      priority: CRITICAL
+      dependencies: [AUTOWIRE-001]
+    
+    - id: AUTOWIRE-003
+      title: "Create Wiring Specifications for All Current Orchestrators"
+      description: |
+        Generate {name}_wiring.yaml files for all 23 existing orchestrators.
+        Extract dependencies from current code, formalize in specs.
+      files:
+        - cortex/orchestrators/core/master_orchestrator_wiring.yaml
+        - cortex/orchestrators/core/intent_router_wiring.yaml
+        - cortex/orchestrators/core/tdd_orchestrator_wiring.yaml
+        - cortex/orchestrators/domain/ (5 domain orchestrators)
+        - cortex/orchestrators/support/ (6 support orchestrators)
+        - cortex_brain/orchestrators/ (5 brain orchestrators)
+      implementation:
+        - Audit each orchestrator's current imports and dependencies
+        - Create specification documenting: what it depends on, what it provides
+        - Identify initialization order constraints
+        - Add version compatibility rules
+        - Validate specs against actual code
+      acceptance_criteria:
+        - All 23 orchestrators have wiring specs
+        - Specs accurately reflect current dependencies
+        - AutowiringOrchestrator successfully discovers and registers all 23
+        - No circular dependencies detected
+        - Tests verify specs are consistent with code
+      estimated_hours: 8
+      priority: HIGH
+      dependencies: [AUTOWIRE-002]
+    
+    - id: AUTOWIRE-004
+      title: "Integrate AutowiringOrchestrator into Pipeline Stage 1"
+      description: |
+        Wire AutowiringOrchestrator to execute FIRST in 4-stage pipeline,
+        before Intent Router and other components.
+      file: cortex/orchestrators/core/master_orchestrator.py
+      implementation:
+        - Create MasterOrchestrator._initialize_wiring() method
+        - Call AutowiringOrchestrator at Stage 1 start
+        - Capture wiring results and validation status
+        - Add wiring_state to ConversationContext
+        - Add wiring error handling (fail-fast vs continue)
+        - Update logging to track wiring initialization
+      acceptance_criteria:
+        - AutowiringOrchestrator runs on every 4-stage execution
+        - Wiring status available in context throughout pipeline
+        - Wiring errors prevent execution (fail-fast behavior)
+        - Tests verify: successful wiring, failed wiring, partial wiring scenarios
+        - Performance: wiring discovery + validation doesn't block execution (cached after first run)
+      estimated_hours: 5
+      priority: HIGH
+      dependencies: [AUTOWIRE-003]
+    
+    - id: AUTOWIRE-005
+      title: "Add Post-Merge Git Hook for Wiring Validation"
+      description: |
+        Create post-merge hook to validate wiring after git operations.
+        Ensures developers know immediately if wiring broke.
+      file: .git/hooks/post-merge
+      implementation:
+        - Hook executes after git merge/pull completes
+        - Runs AutowiringOrchestrator.validate() in lightweight mode
+        - Checks for breaking changes (removed orchestrators, interface mismatches)
+        - Reports findings to developer (pass/fail + details)
+        - Optional: Auto-fix simple issues (e.g., reorder if only order changed)
+      acceptance_criteria:
+        - Hook runs automatically after merge/pull (no user action)
+        - Catches all breaking wiring changes
+        - Provides clear error messages with fix suggestions
+        - Doesn't significantly slow down merge operations (<100ms)
+        - Can be skipped with --no-verify if needed
+      estimated_hours: 4
+      priority: MEDIUM
+      dependencies: [AUTOWIRE-002, AUTOWIRE-004]
+    
+    - id: AUTOWIRE-006
+      title: "Implement Wiring Query CLI Command"
+      description: |
+        Create cortex-brain commands to query and inspect wiring state.
+      file: cortex/cli/commands/wiring.py
+      implementation:
+        - Command: cortex-brain query wiring [--format json|yaml|table]
+        - Display: All registered modules, dependencies, conflicts
+        - Command: cortex-brain validate wiring
+        - Display: Validation report (success/failures/warnings)
+        - Command: cortex-brain show wiring {module_name}
+        - Display: Specific module wiring details
+      acceptance_criteria:
+        - All 3 commands functional
+        - Output is clear and actionable
+        - JSON output for programmatic use
+        - Tests verify command output accuracy
+      estimated_hours: 3
+      priority: MEDIUM
+      dependencies: [AUTOWIRE-002]
+    
+    - id: AUTOWIRE-007
+      title: "Documentation & Developer Guide"
+      description: |
+        Create comprehensive documentation for declarative autowiring system.
+      files:
+        - docs/AUTOWIRING-SYSTEM-GUIDE.md
+        - _workspaces/roadmap/docs/HOW-TO-ADD-WIRING-SPEC.md
+      implementation:
+        - System overview and architecture
+        - Wiring spec format with examples
+        - How to create new wiring specs for new modules
+        - Troubleshooting guide for wiring failures
+        - Performance characteristics and caching strategy
+        - Migration guide from old imperative approach
+      acceptance_criteria:
+        - Documentation covers all major features
+        - Examples for adding new orchestrator are clear
+        - Troubleshooting section addresses common issues
+        - Performance implications explained
+      estimated_hours: 3
+      priority: MEDIUM
+      dependencies: [AUTOWIRE-001, AUTOWIRE-002]
+    
+    - id: AUTOWIRE-008
+      title: "Testing & Validation"
+      description: |
+        Comprehensive test suite for autowiring system.
+      file: tests/unit/orchestrators/test_autowiring_orchestrator.py
+      implementation:
+        - Test spec discovery (finds all YAML files)
+        - Test spec validation (detects errors correctly)
+        - Test dependency graph building (correct ordering)
+        - Test circular dependency detection (all patterns)
+        - Test module registration (all types)
+        - Test wiring state queries
+        - Test merge scenarios (before/after specs)
+        - Test failure recovery
+      acceptance_criteria:
+        - ≥50 unit tests, all passing
+        - Coverage ≥95% for AutowiringOrchestrator
+        - Integration tests with real orchestrators
+        - Chaos tests (missing specs, incompatible versions, conflicts)
+        - Performance tests (scales to 100+ specs)
+      estimated_hours: 5
+      priority: HIGH
+      dependencies: [AUTOWIRE-001 through AUTOWIRE-007]
+
+  success_criteria: |
+    After this phase:
+    1. ✅ Pull from origin → new orchestrators auto-wire (no manual work)
+    2. ✅ Merge from feature branch → wiring validated (not silent breakage)
+    3. ✅ Rebase → wiring automatically re-resolved (no conflicts)
+    4. ✅ Wiring state → queryable via CLI (full observability)
+    5. ✅ New modules → Just add YAML spec, auto-discovery handles registration
+    6. ✅ No git conflicts → YAML specs merge naturally
+    7. ✅ Zero rework → No manual re-registration ever needed
+    8. ✅ Production stable → Wiring brittleness permanently solved
+  
+  dependencies:
+    requires: 
+      - "REMEDIATION-INTENT-VALIDATION-INTEGRATION (preceding phase)"
+    blocks:
+      - "Long-term stability of orchestrator ecosystem"
+    integrates_with:
+      - "4-stage orchestration pipeline (Stage 1)"
+      - "OrchestratorRegistry"
+      - "Git hook system"
+      - "CLI framework"
+  
+  acceptance_criteria:
+    - ac_id: "AC-AUTOWIRE-001"
+      title: "Pull/Merge Safety Guarantee"
+      description: "After any git operation, AutowiringOrchestrator auto-validates wiring"
+      completion: "NOT_STARTED"
+    
+    - ac_id: "AC-AUTOWIRE-002"
+      title: "Zero Manual Re-Registration"
+      description: "No manual code changes needed when orchestrators are added/removed"
+      completion: "NOT_STARTED"
+    
+    - ac_id: "AC-AUTOWIRE-003"
+      title: "Full Observability"
+      description: "Wiring state queryable via CLI and programmatic APIs"
+      completion: "NOT_STARTED"
+    
+    - ac_id: "AC-AUTOWIRE-004"
+      title: "Breaking Change Detection"
+      description: "System detects incompatible changes before they cause failures"
+      completion: "NOT_STARTED"
+    
+    - ac_id: "AC-AUTOWIRE-005"
+      title: "Comprehensive Documentation"
+      description: "Developers understand system and can add new wiring specs"
+      completion: "NOT_STARTED"
+  
+  risk_mitigation:
+    risks:
+      - risk: "Complex dependency chains could cause DAG cycles"
+        mitigation: "Comprehensive cycle detection in validation layer, unit tests for all patterns"
+      
+      - risk: "YAML specs could get out of sync with code"
+        mitigation: "Validation hook catches mismatches, clear error messages"
+      
+      - risk: "Performance impact from runtime discovery"
+        mitigation: "Cache discovered specs after first run, lazy evaluation"
+      
+      - risk: "Developers forget to update specs when adding dependencies"
+        mitigation: "CI/CD gate: fail if new imports found without corresponding spec updates"
+    
+    testing_strategy: |
+      1. Unit tests: Spec discovery, validation, DAG building (minimal code)
+      2. Integration tests: Full pipeline with real orchestrators
+      3. Merge scenario tests: Simulate git operations
+      4. Chaos tests: Missing specs, incompatible versions, conflicts
+      5. Performance tests: Large spec counts, discovery speed
+  
+  rollout_strategy: |
+    Phase 1 (Days 1-2): Design + Core Engine
+    - Design wiring spec format
+    - Implement AutowiringOrchestrator
+    - Create specs for 5 core orchestrators
+    - Unit tests for discovery and validation
+    
+    Phase 2 (Days 3-4): Full Integration
+    - Create specs for all 23 orchestrators
+    - Integrate into Stage 1 pipeline
+    - Add validation hooks (pre-commit, post-merge)
+    - Integration tests with real components
+    
+    Phase 3 (Days 5-6): Polish + Documentation
+    - CLI commands for wiring inspection
+    - Documentation and developer guide
+    - Final testing and edge case handling
+    - Prepare for production rollout
+    
+    Validation:
+    - ✅ All 23 orchestrators auto-wire
+    - ✅ Unit tests: ≥50, all passing
+    - ✅ Integration tests with real code
+    - ✅ Merge scenario tests successful
+    - ✅ Performance acceptable (<1 sec)
+  
+  long_term_benefits: |
+    Immediate (Post-Implementation):
+    - 💪 Wiring brittleness permanently solved
+    - 🚀 New orchestrators integrate automatically
+    - 🛡️ Breaking changes caught early
+    
+    Medium-term (4-8 weeks):
+    - 📈 Orchestrator ecosystem grows to 40+ (enabled by reliable wiring)
+    - 🔍 Better observability into system architecture
+    - 🎯 Developer onboarding faster (auto-wiring clear)
+    
+    Long-term (3-6 months):
+    - 🏗️ Solid foundation for system evolution
+    - 🔄 Git operations (merge, rebase) become safe
+    - 📊 Production stability significantly improves
+    - 💡 Enables future AI-guided wiring optimization

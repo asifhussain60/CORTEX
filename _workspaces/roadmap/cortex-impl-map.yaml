@@ -3023,6 +3023,102 @@ phases_implementation_status:
             - "Orchestrators: 412/613 (67%)"
             - "Phase E TDD: 1,101/1,462 (75.3%)"
           next_phase: "PHASE-STORYTELLING-002-image-generation"
+      
+      - id: "transform-005"
+        title: "Declarative Autowiring Registry - Permanent Solution to Wiring Brittleness"
+        ac_ids: 8
+        status: "NOT_STARTED"
+        priority: "P0-CRITICAL"
+        estimated_effort: "35 hours (5-6 days)"
+        blocking: false
+        recommended_timing: "Post-REMEDIATION-INTENT-VALIDATION-INTEGRATION (Phase 8)"
+        file: "_workspaces/roadmap/phases/transform-005-declarative-autowiring.yaml"
+        category: "INFRASTRUCTURE"
+        business_value: "Permanent solution to wiring brittleness - Git-safe module registration that survives all git operations"
+        
+        problem_statement: |
+          Every pull/merge from origin breaks orchestrator wiring:
+          1. Developer pulls 9 new orchestrator modules ✅
+          2. Modules exist but registration broken ❌
+          3. Manual re-registration required 😞
+          4. Process repeats on next merge 🔄
+          
+          Root cause: Imperative Python registration breaks when modules added across branches
+        
+        solution_architecture: |
+          Layer 1: Declarative YAML wiring specs ({module}_wiring.yaml)
+          Layer 2: Autowiring engine discovers + validates + registers at runtime
+          Layer 3: Pre-execution validation checks registered wiring matches specs
+          Layer 4: Post-merge git hook validates wiring didn't break
+          
+          Result: Modules auto-wire after pull, no manual intervention needed
+        
+        implementation_items: 8
+        items:
+          - id: AUTOWIRE-001
+            title: "Design Declarative Wiring Specification Format"
+            effort: "4 hours"
+            priority: "CRITICAL"
+          - id: AUTOWIRE-002
+            title: "Implement AutowiringOrchestrator Engine"
+            effort: "10 hours"
+            priority: "CRITICAL"
+          - id: AUTOWIRE-003
+            title: "Create Wiring Specifications for All Orchestrators"
+            effort: "8 hours"
+            priority: "HIGH"
+          - id: AUTOWIRE-004
+            title: "Integrate AutowiringOrchestrator into Pipeline Stage 1"
+            effort: "5 hours"
+            priority: "HIGH"
+          - id: AUTOWIRE-005
+            title: "Add Post-Merge Git Hook for Wiring Validation"
+            effort: "4 hours"
+            priority: "MEDIUM"
+          - id: AUTOWIRE-006
+            title: "Implement Wiring Query CLI Command"
+            effort: "3 hours"
+            priority: "MEDIUM"
+          - id: AUTOWIRE-007
+            title: "Documentation & Developer Guide"
+            effort: "3 hours"
+            priority: "MEDIUM"
+          - id: AUTOWIRE-008
+            title: "Testing & Validation"
+            effort: "5 hours"
+            priority: "HIGH"
+        
+        success_criteria: |
+          ✅ Pull from origin → new orchestrators auto-wire (no manual work)
+          ✅ Merge from feature branch → wiring validated (not silent breakage)
+          ✅ Rebase → wiring automatically re-resolved (no conflicts)
+          ✅ Wiring state → queryable via CLI (full observability)
+          ✅ New modules → auto-discovery handles registration
+          ✅ No git conflicts → YAML specs merge naturally
+          ✅ Zero rework → no manual re-registration ever
+          ✅ Production stable → wiring brittleness solved
+        
+        dependencies:
+          - "Requires: REMEDIATION-INTENT-VALIDATION-INTEGRATION (preceding phase for merged modules)"
+          - "Enhances: 4-stage orchestration pipeline (Stage 1: Comprehension)"
+          - "Integrates: OrchestratorRegistry, Git hook system, CLI framework"
+        
+        post_implementation_impact: |
+          Immediate Benefits:
+          - 💪 Wiring brittleness permanently solved
+          - 🚀 New orchestrators integrate automatically
+          - 🛡️ Breaking changes caught early
+          
+          Medium-term (4-8 weeks):
+          - 📈 Orchestrator ecosystem grows to 40+ (enabled by reliable wiring)
+          - 🔍 Better observability into system architecture
+          - 🎯 Developer onboarding faster
+          
+          Long-term (3-6 months):
+          - 🏗️ Solid foundation for system evolution
+          - 🔄 Git operations become safe (merge, rebase)
+          - 📊 Production stability significantly improves
+          - 💡 Enables AI-guided wiring optimization
 
 phase_tracker:
   authority: "CORTEX_IMPL_MAP_v3.10-STORYTELLING-ADDED"
