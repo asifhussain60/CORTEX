@@ -55,7 +55,6 @@ Every response MUST begin with this exact format:
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Field Reference:**
@@ -391,10 +390,6 @@ tests/
 ```
 ## 🧠 CORTEX {operation}
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
-
----
-
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
