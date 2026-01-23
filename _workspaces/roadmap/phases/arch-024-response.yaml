@@ -1,0 +1,63 @@
+phase_id: "arch-024-response"
+title: "Response Composition - Multi-Source Response Aggregation and Formatting"
+track: "stubs"
+machine: null
+status: "STUB"
+priority: "P2-MEDIUM"
+estimated_effort: "2-3 weeks"
+blocking: false
+dependencies: []
+created_date: "2026-01-23"
+
+description: |
+  Implement comprehensive response composition framework:
+  - ResponseComposer implementations for different strategies
+  - ResponseAggregator to combine multiple responses
+  - ResponseFormatter for different output formats
+  - ResponseValidator to ensure response quality
+  - All with comprehensive error handling and metrics
+
+acceptance_criteria:
+  - "ResponseComposer strategies: sequential, parallel, merge, priority"
+  - "ResponseAggregator combines data from multiple sources"
+  - "ResponseFormatter supports: JSON, XML, HTML, plain text, markdown"
+  - "ResponseValidator checks completeness, consistency, security"
+  - "Integration with orchestration and API frameworks"
+  - "Metrics: composition time, aggregation accuracy, format conversion"
+  - "Support for streaming and chunked responses"
+  - "≥18 tests covering composers, aggregator, formatter, validator, integration"
+  - "100% type hints, Google docstrings, no bare except"
+
+implementation_locations:
+  composer: "cortex/api/response_composer.py"
+  aggregator: "cortex/api/response_aggregator.py"
+  formatter: "cortex/api/response_formatter.py"
+  validator: "cortex/api/response_validator.py"
+  tests: "tests/integration/api/test_response_composition.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥18 tests passing"
+  type_safety: "100% type hints"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "Composers execute strategies correctly"
+    test_file: "tests/integration/api/test_response_composition.py"
+    test_count: "5 tests"
+  - criterion: "Aggregator combines sources accurately"
+    test_file: "tests/integration/api/test_response_composition.py"
+    test_count: "5 tests"
+  - criterion: "Formatter converts to all supported formats"
+    test_file: "tests/integration/api/test_response_composition.py"
+    test_count: "5 tests"
+  - criterion: "Validator ensures response quality"
+    test_file: "tests/integration/api/test_response_composition.py"
+    test_count: "3 tests"
+
+notes: |
+  - Can proceed independently (no blockers)
+  - 2-3 week timeline for 4 components
+  - Builds on existing API framework
+  - Critical for multi-source queries and aggregation

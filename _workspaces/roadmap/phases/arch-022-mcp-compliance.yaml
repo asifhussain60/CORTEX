@@ -1,0 +1,73 @@
+phase_id: "arch-022-mcp-compliance"
+title: "MCP Compliance - Tool Implementation and Registry Integration"
+track: "stubs"
+machine: null
+status: "BLOCKED"
+priority: "P1-HIGH"
+estimated_effort: "3-4 days"
+blocking: false
+dependencies: ["Phase-B: MCP Registry Creation"]
+created_date: "2026-01-23"
+
+description: |
+  Implement real MCP tool logic (currently return mock data):
+  - Governance tools: query_tool, validate_tool, execute_tool, analyze_tool, report_tool
+  - Intelligence tools: route_tool, optimize_tool, analyze_tool, predict_tool
+  - State tools: query_tool, update_tool, lock_tool, unlock_tool
+  - Utility tools: echo_tool, transform_tool, sample_tool
+  - All integrated with MCP registry and governance framework
+
+acceptance_criteria:
+  - "All 14 MCP tools return real data (not mocks)"
+  - "Each tool implements complete business logic"
+  - "Tool governance enforced via policy framework"
+  - "All tools registered in cortex/mcp/registry.py"
+  - "Tool discovery works via MCP server"
+  - "Tool categorization consistent and queryable"
+  - "Metrics: tool invocation, latency, error rates"
+  - "≥14 tests covering each tool's real implementation"
+  - "100% type hints, Google docstrings, no bare except"
+  - "BLOCKED until Phase B (MCP Registry) completes"
+
+blocker_details:
+  phase: "Phase B - MCP Centralization"
+  description: "Create cortex/mcp/registry.py with tool metadata and reorganize tools"
+  duration: "2 days"
+  status: "NOT_STARTED"
+  unblocks_this_phase: true
+
+implementation_locations:
+  governance: "cortex/mcp/tools/governance/"
+  intelligence: "cortex/mcp/tools/intelligence/"
+  state: "cortex/mcp/tools/state/"
+  utility: "cortex/mcp/tools/utility/"
+  registry: "cortex/mcp/registry.py"
+  tests: "tests/integration/mcp/test_mcp_tools.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥14 tests passing (one per tool)"
+  type_safety: "100% type hints"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "All governance tools return real data"
+    test_file: "tests/integration/mcp/test_mcp_tools.py"
+    test_count: "5 tests"
+  - criterion: "All intelligence tools return real data"
+    test_file: "tests/integration/mcp/test_mcp_tools.py"
+    test_count: "4 tests"
+  - criterion: "All state tools return real data"
+    test_file: "tests/integration/mcp/test_mcp_tools.py"
+    test_count: "3 tests"
+  - criterion: "All utility tools work correctly"
+    test_file: "tests/integration/mcp/test_mcp_tools.py"
+    test_count: "2 tests"
+
+notes: |
+  - BLOCKED by Phase B (MCP Registry Creation)
+  - Can proceed immediately after Phase B (2 days) completes
+  - 3-4 day implementation timeline after unblocking
+  - Related to arch-012 (Knowledge Ecosystem)
+  - Completes MCP tool implementation work

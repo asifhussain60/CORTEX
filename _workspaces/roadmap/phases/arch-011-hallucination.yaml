@@ -1,0 +1,70 @@
+phase_id: "arch-011-hallucination"
+title: "Hallucination Prevention - Pre-Implementation Code Consolidation and Completion"
+track: "stubs"
+machine: null
+status: "PARTIAL"
+priority: "P1-HIGH"
+estimated_effort: "2-3 days (after Phase A)"
+blocking: false
+dependencies: ["Phase A: Tier Consolidation"]
+created_date: "2026-01-23"
+
+description: |
+  Complete hallucination prevention implementation:
+  - Pre-implementation code exists in cortex_brain/tier2/hallucination_prevention/
+  - Consolidate code during Phase A (tier consolidation)
+  - Complete missing components
+  - Integrate with governance framework
+  - All with comprehensive test coverage
+
+phase_a_prerequisite: |
+  BLOCKED until Phase A (Tier Consolidation) completes:
+  - Phase A consolidates cortex_brain/ as single source of truth
+  - Phase A deletes cortex/brain/core/governance/ duplicates
+  - Phase A moves hallucination_prevention to single location
+  After Phase A (1 day), this phase can proceed (2-3 days)
+
+acceptance_criteria:
+  - "Pre-implementation code consolidated and cleaned up"
+  - "Missing validation and filtering logic implemented"
+  - "Integration with governance and context-aware dispatch"
+  - "LLM output validation prevents common hallucinations"
+  - "Fact-checking against knowledge graph"
+  - "Confidence scoring for generated responses"
+  - "≥12 tests covering validators, filters, integration"
+  - "100% type hints, Google docstrings, no bare except"
+  - "Fully integrated with evaluation suite"
+
+implementation_locations:
+  validators: "cortex_brain/tier2/hallucination_prevention/validators.py"
+  filters: "cortex_brain/tier2/hallucination_prevention/filters.py"
+  checker: "cortex_brain/tier2/hallucination_prevention/fact_checker.py"
+  integrations: "cortex_brain/tier2/hallucination_prevention/integrations.py"
+  tests: "tests/integration/hallucination_prevention/test_hallucination.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥12 tests passing"
+  type_safety: "100% type hints"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "Validators detect hallucination patterns correctly"
+    test_file: "tests/integration/hallucination_prevention/test_hallucination.py"
+    test_count: "4 tests"
+  - criterion: "Filters remove hallucinated content"
+    test_file: "tests/integration/hallucination_prevention/test_hallucination.py"
+    test_count: "4 tests"
+  - criterion: "Fact-checker validates against knowledge graph"
+    test_file: "tests/integration/hallucination_prevention/test_hallucination.py"
+    test_count: "2 tests"
+  - criterion: "Integration with governance works"
+    test_file: "tests/integration/hallucination_prevention/test_hallucination.py"
+    test_count: "2 tests"
+
+notes: |
+  - BLOCKED until Phase A (Tier Consolidation) completes
+  - Can proceed immediately after Phase A (1 day + 2-3 days)
+  - Pre-implementation code exists; not a from-scratch build
+  - Critical for production LLM safety
