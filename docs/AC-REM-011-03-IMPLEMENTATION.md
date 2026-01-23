@@ -306,4 +306,3 @@ wrapped.event_registry.register_listener(
 
 **Author:** Asif Hussain  
 **Authority:** cortex-impl-map.yaml v2.0  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

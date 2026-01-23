@@ -309,4 +309,3 @@ No more platform-specific setup guides needed!
 **Tested On:** Windows 11, bash 5.0+  
 **Target Platforms:** Windows 10/11, macOS 10.9+, Linux (all major distros), WSL  
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

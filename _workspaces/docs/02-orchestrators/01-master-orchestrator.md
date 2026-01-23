@@ -593,7 +593,6 @@ print(f"Avg routing time: {metrics['avg_routing_ms']}ms")
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Master Orchestrator Module
 Status: Production Ready | Version: 1.0.0

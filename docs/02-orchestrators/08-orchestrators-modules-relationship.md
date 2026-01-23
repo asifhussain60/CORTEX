@@ -536,4 +536,3 @@ A module can be called from any orchestrator. No assumptions about caller.
 
 **Author:** CORTEX Documentation Engine  
 **Generated:** 2026-01-22  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

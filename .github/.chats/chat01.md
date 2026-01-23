@@ -16,7 +16,6 @@ Let me provide the proper format:
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -30,7 +29,6 @@ The mandatory format for every response is:
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 This header is now enforced on all responses to maintain compliance with CORE-029 (Response Format).

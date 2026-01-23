@@ -55,7 +55,6 @@ All three files are **unified and synchronized** for seamless master orchestrato
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Examples:**
