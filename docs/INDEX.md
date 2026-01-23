@@ -221,6 +221,30 @@ python -m cortex.mcp.server
 
 ---
 
+## 🔗 Discovery & Auto-Wiring System (NEW)
+
+The **Discovery & Auto-Wiring System** automatically identifies and integrates production-ready components at runtime.
+
+| Resource | Purpose |
+|----------|---------|
+| [Quick Start Guide](DISCOVERY-QUICKSTART.md) | 5-minute guide to running discovery |
+| [Full System Documentation](DISCOVERY-AUTOWIRING-SYSTEM.md) | Complete discovery system reference |
+| Discovery Scanner | `cortex/testing/discovery_scanner.py` |
+| Integration Tests | `tests/unit/testing/test_discovery_*.py` |
+
+**Key Capabilities:**
+- ✅ Dynamic orchestrator discovery
+- ✅ LENS component identification (Language, Examination, Navigation, Synthesis)
+- ✅ Infrastructure component discovery (CircuitBreaker, RetryStrategy, etc.)
+- ✅ Governance component auto-wiring
+- ✅ MCP toolkit discovery
+- ✅ 90+ comprehensive tests
+- ✅ Auto-wiring of critical components on initialization
+
+**Quick Command:** `python tests/unit/testing/run_discovery_tests.py --verbose`
+
+---
+
 ## 🔗 Deep Dive Links
 
 | Topic | Link |
@@ -230,4 +254,6 @@ python -m cortex.mcp.server
 | API Reference | [API Overview](03-api-reference/0-overview.md) |
 | Development Setup | [Development Setup](07-contributing/2-development-setup.md) |
 | Testing Strategy | [Testing Strategy](07-contributing/3-testing-strategy.md) |
+| Discovery System | [Discovery & Auto-Wiring](DISCOVERY-AUTOWIRING-SYSTEM.md) |
+| Discovery Quick Start | [Quick Start Guide](DISCOVERY-QUICKSTART.md) |
 | Troubleshooting | [Troubleshooting](04-guides/operations/4-troubleshooting.md) |
