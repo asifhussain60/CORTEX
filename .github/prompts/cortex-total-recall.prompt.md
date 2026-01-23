@@ -90,9 +90,40 @@ for component in components:
     # e.g., orchestrator.register_stage_3_component(instance)
 ```
 
-**Test Harness:** `tests/unit/testing/test_wiring_harness.py` (24+ tests)  
-**Coverage:** All unwired components discoverable and importable  
-**Status:** ✅ Ready for auto-integration
+**Test Harness:** `tests/unit/testing/test_wiring_harness.py` (19 tests ✅ PASSING)  
+**Agent Integration:** `cortex.tools.total_recall_agent.TotalRecallAgent` (auto-wires on init)  
+**Coverage:** All 25+ unwired components auto-discovered and wired on agent startup  
+**Status:** ✅ ACTIVELY INTEGRATED - Components auto-wire when TotalRecallAgent initializes
+
+### Active Integration Details
+
+The wiring harness is **actively integrated** into TotalRecallAgent:
+
+```python
+# When any agent creates TotalRecallAgent(), auto-wiring happens automatically:
+agent = TotalRecallAgent()  # auto_wire_critical=True by default
+
+# Behind the scenes:
+# 1. Load wiring_harness_inventory.get_critical_wiring_order()
+# 2. For each component (ordered by priority):
+#    - Import component class from entry point
+#    - Instantiate with default parameters
+#    - Store in agent._wired_components registry
+# 3. Components available for orchestrator integration
+
+# Retrieve wired component:
+component = agent.get_wired_component("UNWIRED-CHALLENGE-001")
+```
+
+**Auto-Wiring Coverage:**
+- ✅ **7 CRITICAL (Priority 0):** Challenge integration, Interaction/LENS protocol
+- ✅ **8 HIGH (Priority 1):** Health tracking, MCP discovery, Governance intelligence
+- ✅ **10+ MEDIUM/LOW:** Advanced routing, knowledge management, planning
+
+**Test Coverage:** 
+- 19 wiring harness tests (inventory, auto-wire capability, integration checklists)
+- 4 agent auto-wiring integration tests
+- **23/23 tests PASSING**
 
 ---
 
