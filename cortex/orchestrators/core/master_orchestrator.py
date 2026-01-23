@@ -35,6 +35,7 @@ from cortex.domain_brain.business_knowledge_repository import (
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
+from cortex.orchestrators.tools.todo_manager import TodoManager
 from cortex.brain.mcp.decorator import mcp_tool
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
@@ -97,6 +98,9 @@ class MasterOrchestrator(IOrchestrator):
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
         db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
+        
+        # AC-FR-TODO-001-004: Initialize TodoManager for multi-phase task tracking
+        self._todo_manager = TodoManager()
         
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
         self._governance_registry: Optional[GovernanceRegistry] = None
@@ -281,6 +285,16 @@ class MasterOrchestrator(IOrchestrator):
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
+    
+    def get_todo_manager(self) -> TodoManager:
+        """Get TodoManager for multi-phase task tracking.
+        
+        AC-FR-TODO-001-004: Get TodoManager instance for task management.
+        
+        Returns:
+            TodoManager: Instance for creating and managing multi-phase tasks.
+        """
+        return self._todo_manager
     
     def get_initialization_status(self) -> Dict[str, Any]:
         """Get initialization status of all components.
