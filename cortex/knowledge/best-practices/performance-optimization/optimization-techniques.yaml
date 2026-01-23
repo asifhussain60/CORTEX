@@ -1,0 +1,1035 @@
+﻿# Performance Optimization Techniques Knowledge Base
+# CORTEX Knowledge Library - Phase 10.2 Week 26
+# Version: 1.0
+# Author: Asif Hussain
+# Created: 2025-12-22
+# Purpose: Comprehensive performance optimization techniques for AI-guided code improvements
+
+metadata:
+  domain: performance
+  category: optimization_techniques
+  version: "1.0"
+  last_updated: "2025-12-22"
+  author: "Asif Hussain"
+  tags:
+    - performance
+    - optimization
+    - algorithms
+    - scalability
+    - efficiency
+  use_cases:
+    - code_generation
+    - code_review
+    - refactoring
+    - architecture_design
+    - performance_troubleshooting
+  related_documents:
+    - profiling-analysis.yaml
+    - caching-strategies.yaml
+    - ../engineering/design-patterns.yaml
+    - ../security/owasp-top-10.yaml
+
+# =============================================================================
+# OPTIMIZATION CATEGORIES
+# =============================================================================
+
+categories:
+  - id: algorithmic
+    name: "Algorithmic Optimization"
+    description: "Improve time and space complexity through better algorithms and data structures"
+    impact: "HIGH"
+    effort: "MEDIUM"
+    risk: "MEDIUM"
+    
+  - id: database
+    name: "Database Optimization"
+    description: "Optimize queries, indexes, and database interactions"
+    impact: "HIGH"
+    effort: "MEDIUM"
+    risk: "LOW"
+    
+  - id: caching
+    name: "Caching & Memoization"
+    description: "Reduce redundant computations and data fetches"
+    impact: "HIGH"
+    effort: "LOW"
+    risk: "MEDIUM"
+    
+  - id: memory
+    name: "Memory Optimization"
+    description: "Reduce memory usage and prevent leaks"
+    impact: "MEDIUM"
+    effort: "MEDIUM"
+    risk: "LOW"
+    
+  - id: network
+    name: "Network & I/O Optimization"
+    description: "Reduce latency and bandwidth usage"
+    impact: "HIGH"
+    effort: "MEDIUM"
+    risk: "LOW"
+    
+  - id: computational
+    name: "Computational Optimization"
+    description: "Parallel processing, vectorization, GPU acceleration"
+    impact: "HIGH"
+    effort: "HIGH"
+    risk: "MEDIUM"
+
+# =============================================================================
+# ALGORITHMIC OPTIMIZATION
+# =============================================================================
+
+algorithmic_optimization:
+  description: "Choose optimal algorithms and data structures for performance"
+  
+  complexity_analysis:
+    time_complexity:
+      description: "Optimize execution time by reducing Big-O complexity"
+      
+      levels:
+        - complexity: "O(1)"
+          name: "Constant Time"
+          description: "Best possible - array access, hash lookup"
+          examples:
+            - "Array index access: arr[5]"
+            - "Hash table lookup: dict.get(key)"
+            - "Stack push/pop operations"
+          
+        - complexity: "O(log n)"
+          name: "Logarithmic Time"
+          description: "Excellent - binary search, balanced trees"
+          examples:
+            - "Binary search in sorted array"
+            - "Operations on balanced BST"
+            - "Heap insert/delete"
+            
+        - complexity: "O(n)"
+          name: "Linear Time"
+          description: "Good - single pass through data"
+          examples:
+            - "Array traversal"
+            - "Linear search"
+            - "Finding min/max in unsorted array"
+            
+        - complexity: "O(n log n)"
+          name: "Linearithmic Time"
+          description: "Acceptable for sorting - merge sort, heap sort"
+          examples:
+            - "Merge sort, quicksort (average)"
+            - "Heap sort"
+            - "Efficient divide-and-conquer algorithms"
+            
+        - complexity: "O(n┬▓)"
+          name: "Quadratic Time"
+          description: "Poor for large n - nested loops"
+          examples:
+            - "Bubble sort, insertion sort"
+            - "Nested iteration over same dataset"
+            - "Naive string matching"
+          warning: "ΓÜá∩╕Å Avoid for n > 1000"
+          
+        - complexity: "O(2Γü┐)"
+          name: "Exponential Time"
+          description: "Terrible - only viable for very small n"
+          examples:
+            - "Recursive Fibonacci without memoization"
+            - "Brute force subset generation"
+            - "Traveling salesman (brute force)"
+          warning: "≡ƒö┤ CRITICAL - Use dynamic programming or approximation"
+    
+    space_complexity:
+      description: "Optimize memory usage through efficient data structures"
+      
+      strategies:
+        - name: "In-place Algorithms"
+          complexity: "O(1) space"
+          description: "Modify input data structure without extra memory"
+          examples:
+            - technique: "In-place quicksort"
+              before: |
+                def quicksort(arr):
+                    if len(arr) <= 1:
+                        return arr
+                    pivot = arr[len(arr) // 2]
+                    left = [x for x in arr if x < pivot]    # O(n) space
+                    middle = [x for x in arr if x == pivot]
+                    right = [x for x in arr if x > pivot]
+                    return quicksort(left) + middle + quicksort(right)
+              after: |
+                def quicksort_inplace(arr, low, high):
+                    if low < high:
+                        pi = partition(arr, low, high)  # O(1) space
+                        quicksort_inplace(arr, low, pi - 1)
+                        quicksort_inplace(arr, pi + 1, high)
+              benefit: "Reduces space from O(n) to O(log n) for recursion stack"
+              
+        - name: "Generators vs Lists"
+          complexity: "O(1) vs O(n) space"
+          description: "Use generators for large sequences to avoid loading all data"
+          examples:
+            - technique: "Python generators"
+              before: |
+                def get_numbers(n):
+                    return [x * x for x in range(n)]  # O(n) space
+                
+                result = sum(get_numbers(1000000))
+              after: |
+                def get_numbers(n):
+                    return (x * x for x in range(n))  # O(1) space
+                
+                result = sum(get_numbers(1000000))
+              benefit: "Memory usage constant regardless of n"
+              
+        - name: "Streaming Data Processing"
+          complexity: "O(1) space"
+          description: "Process large files/datasets chunk by chunk"
+          examples:
+            - technique: "File processing"
+              before: |
+                with open('large_file.txt') as f:
+                    data = f.read()  # Load entire file - O(n) space
+                    process(data)
+              after: |
+                with open('large_file.txt') as f:
+                    for line in f:  # Process line by line - O(1) space
+                        process(line)
+              benefit: "Can process files larger than available RAM"
+  
+  data_structure_selection:
+    description: "Choose optimal data structures for access patterns"
+    
+    guidelines:
+      - scenario: "Frequent lookups by key"
+        optimal: "Hash Table / Dictionary"
+        complexity: "O(1) average"
+        alternatives:
+          - name: "Binary Search Tree"
+            complexity: "O(log n)"
+            use_when: "Need sorted order"
+          - name: "Array with Binary Search"
+            complexity: "O(log n) search, O(n) insert"
+            use_when: "Static data, many searches"
+        examples:
+          python: |
+            # Use dict for O(1) lookup
+            user_cache = {user_id: user_data for user_id, user_data in users}
+            user = user_cache.get(123)  # O(1)
+          csharp: |
+            // Use Dictionary for O(1) lookup
+            var userCache = new Dictionary<int, User>();
+            var user = userCache.TryGetValue(123, out var result) ? result : null;
+            
+      - scenario: "Frequent insertions/deletions at both ends"
+        optimal: "Deque (Double-ended Queue)"
+        complexity: "O(1) for both ends"
+        alternatives:
+          - name: "List"
+            complexity: "O(1) end, O(n) start"
+            use_when: "Only append/pop at end"
+        examples:
+          python: |
+            from collections import deque
+            queue = deque()
+            queue.append(item)      # O(1) - right end
+            queue.appendleft(item)  # O(1) - left end
+            queue.pop()             # O(1) - right end
+            queue.popleft()         # O(1) - left end
+          java: |
+            Deque<String> deque = new ArrayDeque<>();
+            deque.addLast("item");   // O(1)
+            deque.addFirst("item");  // O(1)
+            
+      - scenario: "Priority-based processing"
+        optimal: "Heap / Priority Queue"
+        complexity: "O(log n) insert/extract"
+        alternatives:
+          - name: "Sorted List"
+            complexity: "O(n) insert, O(1) min"
+            use_when: "Very few insertions"
+        examples:
+          python: |
+            import heapq
+            heap = []
+            heapq.heappush(heap, (priority, item))  # O(log n)
+            min_item = heapq.heappop(heap)          # O(log n)
+          csharp: |
+            var pq = new PriorityQueue<string, int>();
+            pq.Enqueue("item", priority);  // O(log n)
+            var minItem = pq.Dequeue();    // O(log n)
+            
+      - scenario: "Range queries on sorted data"
+        optimal: "Binary Search Tree (Self-balancing)"
+        complexity: "O(log n + k) for k results"
+        alternatives:
+          - name: "Sorted Array + Binary Search"
+            complexity: "O(log n) find, O(n) insert"
+            use_when: "Static or rarely modified data"
+        examples:
+          python: |
+            from sortedcontainers import SortedDict
+            tree = SortedDict()
+            tree[key] = value                    # O(log n)
+            range_items = tree.irange(10, 20)    # O(log n + k)
+          java: |
+            TreeMap<Integer, String> tree = new TreeMap<>();
+            tree.put(key, value);                // O(log n)
+            var range = tree.subMap(10, 20);     // O(log n + k)
+            
+      - scenario: "Set operations (union, intersection)"
+        optimal: "Hash Set"
+        complexity: "O(n + m) average"
+        alternatives:
+          - name: "Sorted Set (Tree Set)"
+            complexity: "O(n log m)"
+            use_when: "Need sorted results"
+        examples:
+          python: |
+            set1 = {1, 2, 3, 4}
+            set2 = {3, 4, 5, 6}
+            union = set1 | set2           # O(n + m)
+            intersection = set1 & set2    # O(min(n, m))
+          csharp: |
+            var set1 = new HashSet<int> {1, 2, 3, 4};
+            var set2 = new HashSet<int> {3, 4, 5, 6};
+            set1.UnionWith(set2);         // O(n + m)
+            set1.IntersectWith(set2);     // O(min(n, m))
+  
+  algorithm_optimization_patterns:
+    description: "Common patterns for algorithmic improvements"
+    
+    patterns:
+      - name: "Two Pointers"
+        description: "Use two indices to traverse data in one pass"
+        complexity_improvement: "O(n┬▓) ΓåÆ O(n)"
+        use_cases:
+          - "Finding pairs with target sum in sorted array"
+          - "Removing duplicates from sorted array"
+          - "Palindrome checking"
+        example:
+          problem: "Find two numbers that sum to target"
+          naive: |
+            def two_sum(nums, target):
+                for i in range(len(nums)):           # O(n┬▓)
+                    for j in range(i + 1, len(nums)):
+                        if nums[i] + nums[j] == target:
+                            return [i, j]
+          optimized: |
+            def two_sum_sorted(nums, target):
+                left, right = 0, len(nums) - 1       # O(n)
+                while left < right:
+                    current_sum = nums[left] + nums[right]
+                    if current_sum == target:
+                        return [left, right]
+                    elif current_sum < target:
+                        left += 1
+                    else:
+                        right -= 1
+          improvement: "From O(n┬▓) to O(n)"
+          
+      - name: "Sliding Window"
+        description: "Maintain a window of elements and slide it through data"
+        complexity_improvement: "O(n┬▓) ΓåÆ O(n)"
+        use_cases:
+          - "Maximum sum of k consecutive elements"
+          - "Longest substring without repeating characters"
+          - "Minimum window substring"
+        example:
+          problem: "Find max sum of k consecutive elements"
+          naive: |
+            def max_sum_subarray(arr, k):
+                max_sum = float('-inf')
+                for i in range(len(arr) - k + 1):    # O(n * k)
+                    current_sum = sum(arr[i:i+k])
+                    max_sum = max(max_sum, current_sum)
+                return max_sum
+          optimized: |
+            def max_sum_subarray(arr, k):
+                window_sum = sum(arr[:k])            # O(n)
+                max_sum = window_sum
+                for i in range(k, len(arr)):
+                    window_sum += arr[i] - arr[i - k]  # Slide window
+                    max_sum = max(max_sum, window_sum)
+                return max_sum
+          improvement: "From O(n * k) to O(n)"
+          
+      - name: "Hash Map for O(1) Lookup"
+        description: "Trade space for time using hash tables"
+        complexity_improvement: "O(n┬▓) ΓåÆ O(n)"
+        use_cases:
+          - "Two sum problem"
+          - "Finding duplicates"
+          - "Anagram grouping"
+        example:
+          problem: "Find two numbers that sum to target"
+          naive: |
+            def two_sum(nums, target):
+                for i in range(len(nums)):           # O(n┬▓)
+                    for j in range(i + 1, len(nums)):
+                        if nums[i] + nums[j] == target:
+                            return [i, j]
+          optimized: |
+            def two_sum(nums, target):
+                seen = {}                            # O(n)
+                for i, num in enumerate(nums):
+                    complement = target - num
+                    if complement in seen:
+                        return [seen[complement], i]
+                    seen[num] = i
+          improvement: "From O(n┬▓) to O(n) with O(n) space"
+          
+      - name: "Dynamic Programming (Memoization)"
+        description: "Cache results of expensive recursive calls"
+        complexity_improvement: "O(2Γü┐) ΓåÆ O(n)"
+        use_cases:
+          - "Fibonacci sequence"
+          - "Longest common subsequence"
+          - "Coin change problem"
+        example:
+          problem: "Calculate nth Fibonacci number"
+          naive: |
+            def fib(n):
+                if n <= 1:
+                    return n
+                return fib(n - 1) + fib(n - 2)       # O(2Γü┐)
+          optimized: |
+            from functools import lru_cache
+            
+            @lru_cache(maxsize=None)                 # O(n)
+            def fib(n):
+                if n <= 1:
+                    return n
+                return fib(n - 1) + fib(n - 2)
+          improvement: "From O(2Γü┐) to O(n)"
+          
+      - name: "Prefix Sum / Cumulative Sum"
+        description: "Precompute cumulative values for range queries"
+        complexity_improvement: "O(n) per query ΓåÆ O(1) per query"
+        use_cases:
+          - "Subarray sum queries"
+          - "Range sum queries"
+          - "Equilibrium index"
+        example:
+          problem: "Answer q range sum queries"
+          naive: |
+            def range_sum(arr, queries):
+                results = []
+                for left, right in queries:          # O(q * n)
+                    results.append(sum(arr[left:right+1]))
+                return results
+          optimized: |
+            def range_sum(arr, queries):
+                prefix = [0]                         # O(n + q)
+                for num in arr:
+                    prefix.append(prefix[-1] + num)
+                
+                results = []
+                for left, right in queries:
+                    results.append(prefix[right + 1] - prefix[left])
+                return results
+          improvement: "From O(q * n) to O(n + q)"
+          
+      - name: "Binary Search"
+        description: "Search in sorted data in logarithmic time"
+        complexity_improvement: "O(n) ΓåÆ O(log n)"
+        use_cases:
+          - "Find element in sorted array"
+          - "Find insertion position"
+          - "Search in rotated sorted array"
+        example:
+          problem: "Find target in sorted array"
+          naive: |
+            def search(arr, target):
+                for i, num in enumerate(arr):        # O(n)
+                    if num == target:
+                        return i
+                return -1
+          optimized: |
+            def binary_search(arr, target):
+                left, right = 0, len(arr) - 1        # O(log n)
+                while left <= right:
+                    mid = (left + right) // 2
+                    if arr[mid] == target:
+                        return mid
+                    elif arr[mid] < target:
+                        left = mid + 1
+                    else:
+                        right = mid - 1
+                return -1
+          improvement: "From O(n) to O(log n)"
+
+# =============================================================================
+# DATABASE OPTIMIZATION
+# =============================================================================
+
+database_optimization:
+  description: "Optimize database queries and interactions"
+  
+  query_optimization:
+    - name: "Index Optimization"
+      impact: "HIGH"
+      effort: "LOW"
+      techniques:
+        - technique: "Create indexes on frequently queried columns"
+          example: |
+            -- Before: Full table scan O(n)
+            SELECT * FROM users WHERE email = 'user@example.com';
+            
+            -- Add index: O(log n)
+            CREATE INDEX idx_users_email ON users(email);
+          benefit: "10-1000x faster queries on indexed columns"
+          
+        - technique: "Composite indexes for multi-column queries"
+          example: |
+            -- Query filters by status and created_at
+            SELECT * FROM orders 
+            WHERE status = 'pending' AND created_at > '2025-01-01';
+            
+            -- Composite index
+            CREATE INDEX idx_orders_status_created 
+            ON orders(status, created_at);
+          benefit: "Index covers both conditions, single tree traversal"
+          rules:
+            - "Most selective column first"
+            - "Column order matters: (A, B) Γëá (B, A)"
+            - "Covers queries filtering by A or (A, B), not just B"
+            
+        - technique: "Covering indexes"
+          description: "Index includes all columns needed by query"
+          example: |
+            -- Query needs id, email, name
+            SELECT id, email, name FROM users WHERE email = 'user@example.com';
+            
+            -- Covering index (no table access needed)
+            CREATE INDEX idx_users_email_covering 
+            ON users(email) INCLUDE (id, name);
+          benefit: "Eliminates table lookup - index-only scan"
+          
+    - name: "Query Structure Optimization"
+      impact: "HIGH"
+      effort: "MEDIUM"
+      techniques:
+        - technique: "Avoid SELECT *"
+          reason: "Fetches unnecessary data, prevents covering indexes"
+          before: |
+            SELECT * FROM users WHERE id = 123;  -- Fetches all 50 columns
+          after: |
+            SELECT id, email, name FROM users WHERE id = 123;  -- Only needed columns
+          benefit: "Reduces I/O, network transfer, memory usage"
+          
+        - technique: "Use LIMIT for pagination"
+          reason: "Fetch only needed rows"
+          before: |
+            SELECT * FROM orders ORDER BY created_at DESC;  -- All rows
+          after: |
+            SELECT * FROM orders ORDER BY created_at DESC LIMIT 20 OFFSET 0;
+          benefit: "Reduces data transfer and processing"
+          
+        - technique: "Avoid N+1 queries - use JOINs or eager loading"
+          reason: "Multiple queries much slower than single JOIN"
+          before: |
+            # Python example - N+1 problem
+            users = User.query.all()                    # 1 query
+            for user in users:                          # N queries
+                print(user.profile.bio)                 # SELECT each profile
+          after: |
+            # Eager loading
+            users = User.query.options(
+                joinedload(User.profile)                # Single JOIN query
+            ).all()
+          benefit: "1 query instead of N+1 queries"
+          
+        - technique: "Use EXISTS instead of COUNT for existence checks"
+          reason: "Stops after finding first match"
+          before: |
+            SELECT COUNT(*) FROM orders WHERE user_id = 123;  -- Scans all matching rows
+            # Python: if count > 0
+          after: |
+            SELECT EXISTS(SELECT 1 FROM orders WHERE user_id = 123);  -- Stops at first match
+          benefit: "O(1) vs O(n) for existence check"
+  
+  connection_pooling:
+    - name: "Database Connection Pooling"
+      impact: "HIGH"
+      effort: "LOW"
+      description: "Reuse connections instead of creating new ones"
+      
+      benefits:
+        - "Eliminates connection overhead (50-200ms per connection)"
+        - "Reduces database load from connection setup/teardown"
+        - "Limits max concurrent connections to database"
+        
+      examples:
+        - language: "Python (SQLAlchemy)"
+          code: |
+            from sqlalchemy import create_engine
+            from sqlalchemy.pool import QueuePool
+            
+            engine = create_engine(
+                'postgresql://user:pass@localhost/db',
+                poolclass=QueuePool,
+                pool_size=10,              # Min connections
+                max_overflow=20,           # Max additional connections
+                pool_timeout=30,           # Wait time for connection
+                pool_recycle=3600          # Recycle connections after 1 hour
+            )
+          metrics: "Reduces query time by 30-50% under load"
+          
+        - language: "C# (Entity Framework)"
+          code: |
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    sqlOptions.MaxBatchSize(100);
+                    sqlOptions.CommandTimeout(30);
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(5),
+                        errorNumbersToAdd: null);
+                }));
+          metrics: "Handles 10x more concurrent requests"
+  
+  batch_operations:
+    - name: "Batch Inserts/Updates"
+      impact: "HIGH"
+      effort: "LOW"
+      description: "Group multiple operations into single query"
+      
+      examples:
+        - scenario: "Inserting 1000 records"
+          before: |
+            for record in records:
+                db.execute("INSERT INTO users VALUES (%s, %s)", (record.name, record.email))
+          after: |
+            values = [(r.name, r.email) for r in records]
+            db.executemany("INSERT INTO users VALUES (%s, %s)", values)
+          improvement: "100x faster (1000 queries ΓåÆ 1 query)"
+          
+        - scenario: "Bulk updates"
+          before: |
+            for user_id in user_ids:
+                db.execute("UPDATE users SET status = 'active' WHERE id = %s", (user_id,))
+          after: |
+            db.execute("UPDATE users SET status = 'active' WHERE id = ANY(%s)", (user_ids,))
+          improvement: "50-100x faster"
+
+# =============================================================================
+# NETWORK & I/O OPTIMIZATION
+# =============================================================================
+
+network_io_optimization:
+  description: "Reduce network latency and I/O operations"
+  
+  techniques:
+    - name: "Request Batching"
+      impact: "HIGH"
+      effort: "MEDIUM"
+      description: "Combine multiple API calls into single request"
+      example:
+        before: |
+          # 3 separate HTTP requests
+          user = api.get('/users/123')
+          posts = api.get('/users/123/posts')
+          comments = api.get('/users/123/comments')
+        after: |
+          # Single HTTP request with batch endpoint
+          data = api.post('/batch', {
+              'requests': [
+                  {'method': 'GET', 'url': '/users/123'},
+                  {'method': 'GET', 'url': '/users/123/posts'},
+                  {'method': 'GET', 'url': '/users/123/comments'}
+              ]
+          })
+        benefit: "Reduces latency from 3├ùRTT to 1├ùRTT (66% reduction)"
+        
+    - name: "Parallel Requests"
+      impact: "HIGH"
+      effort: "LOW"
+      description: "Execute independent API calls concurrently"
+      example:
+        before: |
+          user = api.get('/users/123')       # 100ms
+          product = api.get('/products/456')  # 100ms
+          order = api.get('/orders/789')      # 100ms
+          # Total: 300ms
+        after: |
+          import asyncio
+          
+          async def fetch_all():
+              user, product, order = await asyncio.gather(
+                  api.get('/users/123'),
+                  api.get('/products/456'),
+                  api.get('/orders/789')
+              )
+          # Total: 100ms (parallel)
+        benefit: "3x faster (300ms ΓåÆ 100ms)"
+        
+    - name: "Response Compression"
+      impact: "MEDIUM"
+      effort: "LOW"
+      description: "Compress HTTP responses to reduce bandwidth"
+      example:
+        server_config: |
+          # Flask example
+          from flask_compress import Compress
+          
+          app = Flask(__name__)
+          Compress(app)  # Auto-compress responses > 500 bytes
+        client_config: |
+          import requests
+          
+          response = requests.get(url, headers={'Accept-Encoding': 'gzip'})
+        benefit: "70-90% bandwidth reduction for JSON/text responses"
+        
+    - name: "Connection Reuse (HTTP Keep-Alive)"
+      impact: "MEDIUM"
+      effort: "LOW"
+      description: "Reuse TCP connections for multiple requests"
+      example:
+        python: |
+          import requests
+          
+          # Session reuses connection
+          session = requests.Session()
+          for url in urls:
+              response = session.get(url)  # Reuses connection
+        benefit: "Eliminates TCP handshake overhead (50-100ms per request)"
+
+# =============================================================================
+# COMPUTATIONAL OPTIMIZATION
+# =============================================================================
+
+computational_optimization:
+  description: "Leverage parallel processing and hardware acceleration"
+  
+  techniques:
+    - name: "Multi-threading"
+      impact: "HIGH"
+      effort: "MEDIUM"
+      use_cases:
+        - "I/O-bound tasks (network, disk)"
+        - "Tasks with waiting time"
+      example:
+        python: |
+          from concurrent.futures import ThreadPoolExecutor
+          
+          def download_file(url):
+              response = requests.get(url)  # I/O-bound
+              return response.content
+          
+          with ThreadPoolExecutor(max_workers=10) as executor:
+              results = executor.map(download_file, urls)
+        benefit: "10x faster for I/O-bound tasks"
+        warning: "ΓÜá∩╕Å Not effective for CPU-bound tasks in Python (GIL)"
+        
+    - name: "Multi-processing"
+      impact: "HIGH"
+      effort: "MEDIUM"
+      use_cases:
+        - "CPU-bound tasks (computation, data processing)"
+        - "Tasks that can be parallelized"
+      example:
+        python: |
+          from multiprocessing import Pool
+          
+          def process_data(chunk):
+              # CPU-intensive work
+              return expensive_computation(chunk)
+          
+          with Pool(processes=8) as pool:
+              results = pool.map(process_data, data_chunks)
+        benefit: "Near-linear speedup with CPU cores (8x on 8 cores)"
+        
+    - name: "Vectorization"
+      impact: "HIGH"
+      effort: "LOW"
+      description: "Use SIMD operations on arrays"
+      use_cases:
+        - "Numerical computations"
+        - "Matrix operations"
+        - "Array transformations"
+      example:
+        before: |
+          # Python loop - slow
+          result = []
+          for x, y in zip(arr1, arr2):
+              result.append(x * y + z)
+        after: |
+          # NumPy vectorized - 10-100x faster
+          import numpy as np
+          result = arr1 * arr2 + z
+        benefit: "10-100x faster using CPU SIMD instructions"
+        
+    - name: "GPU Acceleration"
+      impact: "EXTREME"
+      effort: "HIGH"
+      use_cases:
+        - "Deep learning"
+        - "Large matrix operations"
+        - "Image/video processing"
+      example:
+        python: |
+          import torch
+          
+          # Move computation to GPU
+          device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+          tensor = torch.tensor(data).to(device)
+          result = model(tensor)  # Runs on GPU
+        benefit: "10-1000x faster for parallel numerical operations"
+        cost: "Requires GPU hardware, higher complexity"
+
+# =============================================================================
+# MEMORY OPTIMIZATION
+# =============================================================================
+
+memory_optimization:
+  description: "Reduce memory usage and prevent leaks"
+  
+  techniques:
+    - name: "Object Pooling"
+      impact: "MEDIUM"
+      effort: "MEDIUM"
+      description: "Reuse expensive objects instead of creating new ones"
+      use_cases:
+        - "Database connections"
+        - "Thread pools"
+        - "Large object creation"
+      example:
+        python: |
+          class ObjectPool:
+              def __init__(self, factory, max_size=10):
+                  self.factory = factory
+                  self.pool = []
+                  self.max_size = max_size
+              
+              def acquire(self):
+                  if self.pool:
+                      return self.pool.pop()
+                  return self.factory()
+              
+              def release(self, obj):
+                  if len(self.pool) < self.max_size:
+                      self.pool.append(obj)
+        benefit: "Reduces GC pressure, faster object allocation"
+        
+    - name: "Lazy Loading"
+      impact: "MEDIUM"
+      effort: "LOW"
+      description: "Load data only when needed"
+      example:
+        before: |
+          class User:
+              def __init__(self, user_id):
+                  self.id = user_id
+                  self.profile = db.query(Profile).filter_by(user_id=user_id).first()
+                  self.orders = db.query(Order).filter_by(user_id=user_id).all()
+        after: |
+          class User:
+              def __init__(self, user_id):
+                  self.id = user_id
+                  self._profile = None
+                  self._orders = None
+              
+              @property
+              def profile(self):
+                  if self._profile is None:
+                      self._profile = db.query(Profile).filter_by(user_id=self.id).first()
+                  return self._profile
+        benefit: "Reduces initial memory footprint by 50-90%"
+        
+    - name: "Weak References"
+      impact: "LOW"
+      effort: "LOW"
+      description: "Allow garbage collection of cached objects"
+      example:
+        python: |
+          import weakref
+          
+          class Cache:
+              def __init__(self):
+                  self._cache = weakref.WeakValueDictionary()
+              
+              def get(self, key):
+                  return self._cache.get(key)
+              
+              def set(self, key, value):
+                  self._cache[key] = value
+        benefit: "Prevents memory leaks from caches"
+
+# =============================================================================
+# OPTIMIZATION DECISION FRAMEWORK
+# =============================================================================
+
+optimization_framework:
+  description: "Systematic approach to performance optimization"
+  
+  process:
+    - step: 1
+      name: "Measure First"
+      description: "Always profile before optimizing"
+      actions:
+        - "Use profiling tools to identify bottlenecks"
+        - "Measure baseline performance metrics"
+        - "Identify top 20% of code causing 80% of issues"
+      tools:
+        python: "cProfile, line_profiler, memory_profiler"
+        csharp: "dotTrace, PerfView, Visual Studio Profiler"
+        java: "JProfiler, VisualVM, YourKit"
+        
+    - step: 2
+      name: "Target High-Impact Areas"
+      description: "Focus on 80/20 rule - optimize hotspots first"
+      prioritization:
+        - "Functions consuming >10% of total time"
+        - "Operations called in loops"
+        - "Database queries in critical path"
+        - "Network calls that block user interactions"
+        
+    - step: 3
+      name: "Choose Optimization Technique"
+      description: "Select technique based on bottleneck type"
+      decision_tree:
+        - condition: "CPU-bound (high CPU, low I/O)"
+          techniques:
+            - "Algorithmic optimization (better Big-O)"
+            - "Vectorization (NumPy, pandas)"
+            - "Multi-processing (CPU parallelism)"
+            - "JIT compilation (Numba, PyPy)"
+            
+        - condition: "I/O-bound (low CPU, waiting on I/O)"
+          techniques:
+            - "Asynchronous I/O (async/await)"
+            - "Multi-threading"
+            - "Connection pooling"
+            - "Batching requests"
+            
+        - condition: "Memory-bound (high memory usage)"
+          techniques:
+            - "Streaming/generators"
+            - "Lazy loading"
+            - "Data structure optimization"
+            - "Object pooling"
+            
+        - condition: "Database bottleneck"
+          techniques:
+            - "Query optimization (indexes, query structure)"
+            - "Caching query results"
+            - "Connection pooling"
+            - "Batch operations"
+            
+    - step: 4
+      name: "Implement & Re-measure"
+      description: "Verify optimization effectiveness"
+      actions:
+        - "Implement optimization"
+        - "Run same profiling/benchmarks"
+        - "Compare metrics with baseline"
+        - "Ensure correctness (tests still pass)"
+        
+    - step: 5
+      name: "Iterate if Needed"
+      description: "Repeat process for remaining bottlenecks"
+      stopping_criteria:
+        - "Performance meets requirements"
+        - "Diminishing returns (<10% improvement)"
+        - "Complexity cost outweighs benefit"
+
+# =============================================================================
+# ANTI-PATTERNS
+# =============================================================================
+
+anti_patterns:
+  - name: "Premature Optimization"
+    description: "Optimizing before profiling or requirements are clear"
+    problem: "Wastes time, increases complexity, may optimize wrong things"
+    solution: "Profile first, optimize proven bottlenecks"
+    quote: "Premature optimization is the root of all evil - Donald Knuth"
+    
+  - name: "Micro-optimizations"
+    description: "Optimizing trivial operations that don't impact performance"
+    example: "Choosing ++i vs i++ in non-critical code"
+    problem: "Reduces readability for negligible gain"
+    solution: "Focus on algorithmic and architectural optimizations"
+    
+  - name: "Over-engineering"
+    description: "Adding complexity for theoretical performance gains"
+    example: "Building custom cache when simple dict would suffice"
+    problem: "Increases maintenance burden, reduces code clarity"
+    solution: "Use simplest solution that meets requirements"
+
+# =============================================================================
+# PERFORMANCE METRICS
+# =============================================================================
+
+performance_metrics:
+  description: "Key metrics to track during optimization"
+  
+  metrics:
+    - name: "Response Time / Latency"
+      description: "Time from request to response"
+      targets:
+        - "API endpoints: < 200ms (p95)"
+        - "Database queries: < 50ms (p95)"
+        - "UI interactions: < 100ms"
+      measurement: "Use percentiles (p50, p95, p99) not averages"
+      
+    - name: "Throughput"
+      description: "Requests processed per second"
+      targets:
+        - "Web servers: > 1000 req/s per instance"
+        - "Batch processing: > 10k records/s"
+      measurement: "Requests per second, transactions per second"
+      
+    - name: "Resource Utilization"
+      description: "CPU, memory, network, disk usage"
+      targets:
+        - "CPU: < 70% average (headroom for spikes)"
+        - "Memory: < 80% to avoid swapping"
+        - "Disk I/O: < 80% to avoid queuing"
+      measurement: "Monitor under realistic load"
+      
+    - name: "Error Rate"
+      description: "Failed requests / total requests"
+      targets:
+        - "< 0.1% error rate"
+        - "Zero errors from timeouts after optimization"
+      measurement: "Track before/after optimization"
+
+# =============================================================================
+# BEST PRACTICES
+# =============================================================================
+
+best_practices:
+  - principle: "Measure, don't guess"
+    description: "Always profile before optimizing"
+    rationale: "Intuition about bottlenecks is often wrong"
+    
+  - principle: "Optimize algorithms before implementations"
+    description: "Better Big-O beats micro-optimizations"
+    example: "O(n log n) sort beats optimized O(n┬▓) sort for large n"
+    
+  - principle: "Cache expensive operations"
+    description: "Don't recompute what you can remember"
+    examples:
+      - "Memoize recursive functions"
+      - "Cache database query results"
+      - "Cache API responses"
+      
+  - principle: "Batch operations when possible"
+    description: "Amortize overhead across multiple operations"
+    examples:
+      - "Batch database inserts"
+      - "Batch API calls"
+      - "Batch file I/O"
+      
+  - principle: "Use appropriate data structures"
+    description: "Right tool for the job"
+    guideline: "Understand access patterns and choose accordingly"
+    
+  - principle: "Parallelize independent work"
+    description: "Leverage multiple cores/threads"
+    caveat: "Ensure thread safety, watch for overhead"
+    
+  - principle: "Keep it simple"
+    description: "Simplicity is the ultimate optimization"
+    rationale: "Simple code is easier to optimize and maintain"

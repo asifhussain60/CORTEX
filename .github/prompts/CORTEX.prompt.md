@@ -17,7 +17,7 @@ You are the **CORTEX Master Orchestrator** — an autonomous, governance-aware d
 | **Infrastructure** | 472/472 | ✅ 100% READY | Connection pooling, circuit breakers, fault tolerance verified |
 | **Orchestrators** | 412/613 | ⏳ 67% IN-PROGRESS | Core logic complete, domain handlers in development |
 | **Domain Brain** | 213/353 | ⏳ 60% IN-PROGRESS | Query engines ready, synthesis module pending |
-| **MCP Tools** | 14/14 | ✅ 100% REGISTERED | Governance, orchestration, knowledge, utility tools active |
+| **MCP Tools** | 15/15 | ✅ 100% REGISTERED | Governance, orchestration, knowledge (TDD guidance), utility tools active |
 
 ### Critical Status: REMEDIATION REQUIRED
 
@@ -420,8 +420,9 @@ tests/
 | Governance Validation | `cortex.brain.core.governance_registry.GovernanceRegistry` | ✅ 95% | `registry.validate(ac_id)` |
 | State Management | `cortex.brain.core.state_manager.StateManager` | ✅ Active | `state_mgr.persist_state(state_id, data)` |
 | Audit Logging | `cortex.infrastructure.enhanced_audit_logger.EnhancedAuditLogger` | ✅ Active | `logger.log_operation(op, context)` |
-| MCP Tool Registry | `cortex.mcp.registry.ToolRegistry` | ✅ 14 tools | `registry.get_tool(tool_id)` |
+| MCP Tool Registry | `cortex.mcp.registry.ToolRegistry` | ✅ 15 tools | `registry.get_tool(tool_id)` |
 | Knowledge Query | `cortex.brain.core.knowledge_repository.KnowledgeRepository` | ✅ Active | `knowledge.query(pattern, domain)` |
+| **TDD Guidance** (NEW) | `cortex.brain.core.knowledge_guidance_engine.KnowledgeGuidanceEngine` | ✅ Active | `engine.get_guidance_for_module(module_path, context)` |
 
 ### Operational Commands
 

@@ -1,0 +1,1004 @@
+﻿# Oracle Database Best Practices (Machine-Readable Guideline)
+# Version: 1.0
+# Created: December 28, 2025
+# Schema: DatabaseBestPracticesSchema
+# Purpose: Authoritative Oracle database guidelines for CORTEX-powered database operations
+
+metadata:
+  title: "Oracle Database Best Practices"
+  category: "Database Management"
+  vendor: "Oracle Corporation"
+  applicable_versions:
+    - "Oracle 23c"
+    - "Oracle 21c"
+    - "Oracle 19c"
+    - "Oracle 18c"
+    - "Oracle 12c"
+  version: "1.0"
+  created: "2025-12-28"
+  updated: "2025-12-28"
+  schema: "DatabaseBestPracticesSchema"
+  tags:
+    - oracle
+    - database
+    - sql
+    - performance
+    - security
+    - optimization
+  
+  generated_docs:
+    - path: "docs/guidelines/database/oracle-best-practices.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_guideline"
+
+# 1. CONNECTION MANAGEMENT
+connection_management:
+  principle: "Efficient connection handling prevents resource exhaustion and improves performance"
+  importance: "Critical - impacts scalability and reliability"
+  
+  rules:
+    - id: "oracle_conn_001"
+      name: "Use Connection Pooling"
+      description: "Always use connection pools to reuse connections efficiently"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import oracledb
+              
+              # Create connection pool (recommended)
+              pool = oracledb.create_pool(
+                  user="app_user",
+                  password="secure_password",
+                  dsn="mydb.example.com:1521/ORCLPDB1",
+                  min=2,
+                  max=10,
+                  increment=1,
+                  threaded=True
+              )
+              
+              # Acquire connection from pool
+              with pool.acquire() as connection:
+                  with connection.cursor() as cursor:
+                      cursor.execute("SELECT * FROM employees WHERE dept_id = :dept", dept=10)
+                      results = cursor.fetchall()
+            explanation: "Connection pool reuses connections, dramatically improving performance"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Creating new connection for each operation (inefficient)
+              connection = oracledb.connect(
+                  user="app_user",
+                  password="secure_password",
+                  dsn="mydb.example.com:1521/ORCLPDB1"
+              )
+              cursor = connection.cursor()
+              cursor.execute("SELECT * FROM employees")
+              connection.close()
+            explanation: "Creating new connections is expensive; reuse via pooling"
+      
+      implementation:
+        - "Configure pool size based on concurrent user load"
+        - "Set appropriate timeout values for idle connections"
+        - "Monitor pool statistics (busy, open, max connections)"
+        - "Use pool.reconfigure() for dynamic sizing"
+    
+    - id: "oracle_conn_002"
+      name: "Close Resources Properly"
+      description: "Always close cursors and connections to prevent resource leaks"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Use context managers (recommended)
+              with oracledb.connect(user=user, password=pwd, dsn=dsn) as connection:
+                  with connection.cursor() as cursor:
+                      cursor.execute("SELECT * FROM departments")
+                      for row in cursor:
+                          process(row)
+              # Automatically closed
+            explanation: "Context managers ensure proper cleanup even on exceptions"
+        
+        bad:
+          - language: "python"
+            code: |
+              connection = oracledb.connect(user=user, password=pwd, dsn=dsn)
+              cursor = connection.cursor()
+              cursor.execute("SELECT * FROM departments")
+              # Forgot to close - resource leak!
+            explanation: "Manual management risks leaving connections open"
+    
+    - id: "oracle_conn_003"
+      name: "Set Appropriate Timeouts"
+      description: "Configure connection and statement timeouts to prevent hanging"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              pool = oracledb.create_pool(
+                  user=user,
+                  password=pwd,
+                  dsn=dsn,
+                  min=2,
+                  max=10,
+                  timeout=30,          # Connection acquisition timeout
+                  wait_timeout=1000,   # Wait for available connection
+                  max_lifetime_session=3600  # Max session lifetime
+              )
+              
+              with pool.acquire() as connection:
+                  connection.call_timeout = 5000  # 5 second query timeout
+                  with connection.cursor() as cursor:
+                      cursor.execute("SELECT * FROM large_table")
+            explanation: "Timeouts prevent indefinite waits and hanging connections"
+
+# 2. SQL QUERY OPTIMIZATION
+query_optimization:
+  principle: "Efficient queries minimize resource consumption and maximize throughput"
+  importance: "Critical - directly impacts performance and scalability"
+  
+  rules:
+    - id: "oracle_query_001"
+      name: "Use Bind Variables"
+      description: "Always use bind variables to prevent SQL injection and enable statement caching"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Named bind variables (recommended)
+              cursor.execute("""
+                  SELECT employee_id, first_name, last_name
+                  FROM employees
+                  WHERE department_id = :dept_id
+                  AND salary > :min_salary
+              """, dept_id=10, min_salary=50000)
+              
+              # Positional bind variables
+              cursor.execute("""
+                  SELECT * FROM employees
+                  WHERE department_id = :1 AND salary > :2
+              """, [10, 50000])
+            explanation: "Bind variables enable SQL caching and prevent SQL injection"
+        
+        bad:
+          - language: "python"
+            code: |
+              # String concatenation (DANGEROUS - SQL injection risk!)
+              dept_id = request.get("dept_id")
+              cursor.execute(f"SELECT * FROM employees WHERE department_id = {dept_id}")
+              
+              # String formatting (also dangerous)
+              cursor.execute("SELECT * FROM employees WHERE dept_id = %s" % dept_id)
+            explanation: "Vulnerable to SQL injection; prevents statement caching"
+      
+      implementation:
+        - "Use :name for named parameters"
+        - "Use :1, :2 for positional parameters"
+        - "Never concatenate user input into SQL strings"
+        - "Bind variables work for values, not table/column names"
+    
+    - id: "oracle_query_002"
+      name: "Fetch Data Efficiently"
+      description: "Use arraysize and appropriate fetch methods for optimal data retrieval"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Set arraysize for bulk fetching (default is 100)
+              cursor.arraysize = 1000
+              cursor.execute("SELECT * FROM large_table WHERE status = :status", status='ACTIVE')
+              
+              # Fetch in batches
+              while True:
+                  rows = cursor.fetchmany()
+                  if not rows:
+                      break
+                  process_batch(rows)
+              
+              # Or use fetchall for smaller result sets
+              cursor.execute("SELECT * FROM departments")
+              all_rows = cursor.fetchall()
+            explanation: "Larger arraysize reduces round trips to database"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Fetching one row at a time (inefficient)
+              cursor.execute("SELECT * FROM large_table")
+              while True:
+                  row = cursor.fetchone()
+                  if not row:
+                      break
+                  process(row)
+            explanation: "Multiple round trips for each row; very slow for large result sets"
+      
+      implementation:
+        - "Set arraysize between 100-1000 based on row size"
+        - "Use fetchmany() for large result sets"
+        - "Use fetchall() only for small result sets"
+        - "Consider server-side pagination for web applications"
+    
+    - id: "oracle_query_003"
+      name: "Select Only Required Columns"
+      description: "Avoid SELECT * - explicitly list needed columns"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Select only required columns
+              SELECT employee_id, first_name, last_name, salary
+              FROM employees
+              WHERE department_id = :dept_id;
+            explanation: "Reduces data transfer and memory usage"
+        
+        bad:
+          - language: "sql"
+            code: |
+              -- Selecting all columns (wasteful)
+              SELECT *
+              FROM employees
+              WHERE department_id = :dept_id;
+            explanation: "Transfers unnecessary data; breaks code when schema changes"
+    
+    - id: "oracle_query_004"
+      name: "Use Appropriate Indexes"
+      description: "Create indexes on frequently queried columns"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Create index on frequently searched columns
+              CREATE INDEX idx_emp_dept ON employees(department_id);
+              
+              -- Composite index for multi-column searches
+              CREATE INDEX idx_emp_dept_sal ON employees(department_id, salary);
+              
+              -- Function-based index for computed searches
+              CREATE INDEX idx_emp_upper_name ON employees(UPPER(last_name));
+            explanation: "Indexes dramatically improve query performance"
+        
+        considerations:
+          - "Don't over-index - each index has insert/update overhead"
+          - "Use composite indexes for multiple search columns"
+          - "Monitor index usage with v$object_usage"
+          - "Rebuild or reorganize fragmented indexes"
+    
+    - id: "oracle_query_005"
+      name: "Use Appropriate JOIN Types"
+      description: "Choose the most efficient JOIN strategy for your data"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- INNER JOIN (most efficient when you need matching rows)
+              SELECT e.employee_id, e.first_name, d.department_name
+              FROM employees e
+              INNER JOIN departments d ON e.department_id = d.department_id
+              WHERE e.salary > :min_salary;
+              
+              -- LEFT JOIN when you need all left-side rows
+              SELECT d.department_name, COUNT(e.employee_id) as emp_count
+              FROM departments d
+              LEFT JOIN employees e ON d.department_id = e.department_id
+              GROUP BY d.department_name;
+            explanation: "Appropriate JOIN types improve query performance"
+        
+        bad:
+          - language: "sql"
+            code: |
+              -- Cartesian product (missing JOIN condition)
+              SELECT e.first_name, d.department_name
+              FROM employees e, departments d
+              WHERE e.salary > 50000;
+              
+              -- Using LEFT JOIN when INNER JOIN would suffice
+              SELECT e.employee_id, d.department_name
+              FROM employees e
+              LEFT JOIN departments d ON e.department_id = d.department_id
+              WHERE d.department_id IS NOT NULL;
+            explanation: "Incorrect JOIN types cause performance issues"
+
+# 3. TRANSACTION MANAGEMENT
+transaction_management:
+  principle: "Proper transaction handling ensures data integrity and consistency"
+  importance: "Critical - affects data correctness and concurrency"
+  
+  rules:
+    - id: "oracle_tx_001"
+      name: "Use Explicit Transactions"
+      description: "Control transactions explicitly with COMMIT and ROLLBACK"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              connection.autocommit = False  # Explicit transaction control
+              
+              try:
+                  cursor.execute("UPDATE accounts SET balance = balance - :amt WHERE id = :id", 
+                                amt=100, id=1)
+                  cursor.execute("UPDATE accounts SET balance = balance + :amt WHERE id = :id", 
+                                amt=100, id=2)
+                  connection.commit()  # Commit both operations
+              except Exception as e:
+                  connection.rollback()  # Rollback on error
+                  raise
+            explanation: "Explicit control ensures atomicity of related operations"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Autocommit mode (default in python-oracledb)
+              cursor.execute("UPDATE accounts SET balance = balance - 100 WHERE id = 1")
+              # Immediately committed - no rollback possible
+              cursor.execute("UPDATE accounts SET balance = balance + 100 WHERE id = 2")
+            explanation: "Each statement commits immediately; can't rollback partial work"
+    
+    - id: "oracle_tx_002"
+      name: "Keep Transactions Short"
+      description: "Minimize transaction duration to reduce lock contention"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Prepare data outside transaction
+              prepared_data = prepare_complex_data()
+              
+              # Short transaction for database update
+              try:
+                  cursor.execute("UPDATE orders SET status = :status WHERE id = :id", 
+                                status=prepared_data['status'], id=order_id)
+                  connection.commit()
+              except Exception as e:
+                  connection.rollback()
+                  raise
+            explanation: "Minimizes lock duration; improves concurrency"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Long transaction holding locks
+              cursor.execute("SELECT * FROM orders WHERE id = :id FOR UPDATE", id=order_id)
+              
+              # Complex processing while holding row lock
+              complex_data = perform_expensive_calculation()
+              call_external_api()
+              
+              cursor.execute("UPDATE orders SET status = :status WHERE id = :id", 
+                            status=new_status, id=order_id)
+              connection.commit()
+            explanation: "Holds locks during expensive operations; blocks other users"
+    
+    - id: "oracle_tx_003"
+      name: "Use Savepoints for Complex Operations"
+      description: "Use savepoints to create checkpoints within transactions"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              connection.autocommit = False
+              
+              try:
+                  cursor.execute("INSERT INTO orders (id, customer_id) VALUES (:1, :2)", 
+                                [101, 5])
+                  
+                  # Create savepoint
+                  cursor.execute("SAVEPOINT order_items")
+                  
+                  # Insert order items
+                  for item in items:
+                      cursor.execute("INSERT INTO order_items VALUES (:1, :2, :3)", 
+                                    [101, item['product_id'], item['qty']])
+                  
+                  connection.commit()
+              except ItemError as e:
+                  # Rollback to savepoint, keep order
+                  cursor.execute("ROLLBACK TO order_items")
+                  log_error(e)
+                  connection.commit()
+              except Exception as e:
+                  # Full rollback
+                  connection.rollback()
+                  raise
+            explanation: "Savepoints allow partial rollback within transactions"
+
+# 4. SECURITY BEST PRACTICES
+security:
+  principle: "Secure database access prevents unauthorized data exposure and modification"
+  importance: "Critical - protects sensitive data and system integrity"
+  
+  rules:
+    - id: "oracle_sec_001"
+      name: "Use Least Privilege Principle"
+      description: "Grant only necessary permissions to application users"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Create dedicated application user
+              CREATE USER app_user IDENTIFIED BY secure_password;
+              
+              -- Grant only necessary privileges
+              GRANT CONNECT TO app_user;
+              GRANT SELECT, INSERT, UPDATE ON employees TO app_user;
+              GRANT SELECT ON departments TO app_user;
+              
+              -- Revoke unnecessary privileges
+              REVOKE DELETE ON employees FROM app_user;
+            explanation: "Limited privileges reduce impact of compromised accounts"
+        
+        bad:
+          - language: "sql"
+            code: |
+              -- Using admin account for application (DANGEROUS!)
+              -- GRANT DBA TO app_user;
+              
+              -- Granting excessive privileges
+              GRANT ALL PRIVILEGES TO app_user;
+            explanation: "Over-privileged accounts are security vulnerabilities"
+    
+    - id: "oracle_sec_002"
+      name: "Secure Connection Strings"
+      description: "Never hardcode credentials; use secure credential storage"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import os
+              from oracledb import connect
+              
+              # Use environment variables or secrets manager
+              connection = connect(
+                  user=os.getenv('ORACLE_USER'),
+                  password=os.getenv('ORACLE_PASSWORD'),
+                  dsn=os.getenv('ORACLE_DSN')
+              )
+              
+              # Or use Oracle Wallet (recommended for production)
+              connection = connect(
+                  user=os.getenv('ORACLE_USER'),
+                  dsn=dsn,
+                  wallet_location="/path/to/wallet",
+                  wallet_password=os.getenv('WALLET_PASSWORD')
+              )
+            explanation: "Credentials stored securely outside source code"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Hardcoded credentials (NEVER DO THIS!)
+              connection = connect(
+                  user="app_user",
+                  password="MyPassword123",
+                  dsn="production.example.com:1521/PROD"
+              )
+            explanation: "Credentials exposed in source code; major security risk"
+    
+    - id: "oracle_sec_003"
+      name: "Use Encrypted Connections"
+      description: "Enable TLS/SSL encryption for network traffic"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Enable network encryption
+              connection = oracledb.connect(
+                  user=user,
+                  password=pwd,
+                  dsn="(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=db.example.com)(PORT=2484))(CONNECT_DATA=(SERVICE_NAME=ORCLPDB1)))"
+              )
+              
+              # Or configure sqlnet.ora
+              # SQLNET.ENCRYPTION_CLIENT = REQUIRED
+              # SQLNET.ENCRYPTION_TYPES_CLIENT = (AES256, AES192, AES128)
+            explanation: "Encrypted connections protect data in transit"
+    
+    - id: "oracle_sec_004"
+      name: "Audit Critical Operations"
+      description: "Enable auditing for sensitive data access and modifications"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Enable unified auditing (Oracle 12c+)
+              AUDIT SELECT, INSERT, UPDATE, DELETE ON employees BY ACCESS;
+              
+              -- Audit specific users
+              AUDIT ALL STATEMENTS BY app_user;
+              
+              -- Query audit trail
+              SELECT event_timestamp, dbusername, action_name, object_name
+              FROM unified_audit_trail
+              WHERE object_name = 'EMPLOYEES'
+              ORDER BY event_timestamp DESC;
+            explanation: "Audit trails track data access and modifications"
+
+# 5. PERFORMANCE TUNING
+performance:
+  principle: "Optimized database operations maximize throughput and minimize resource usage"
+  importance: "High - impacts user experience and infrastructure costs"
+  
+  rules:
+    - id: "oracle_perf_001"
+      name: "Use Explain Plan"
+      description: "Analyze query execution plans before deploying"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Generate execution plan
+              EXPLAIN PLAN FOR
+              SELECT e.employee_id, e.first_name, d.department_name
+              FROM employees e
+              JOIN departments d ON e.department_id = d.department_id
+              WHERE e.salary > :min_salary;
+              
+              -- View execution plan
+              SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+              
+              -- Check for full table scans, missing indexes
+              SELECT operation, object_name, cost, cardinality
+              FROM plan_table
+              WHERE operation LIKE '%TABLE%FULL%';
+            explanation: "Execution plans reveal performance bottlenecks"
+    
+    - id: "oracle_perf_002"
+      name: "Use Bulk Operations"
+      description: "Use executemany() for batch inserts/updates"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Bulk insert (much faster than loops)
+              data = [
+                  (1, 'John', 'Doe', 50000),
+                  (2, 'Jane', 'Smith', 60000),
+                  (3, 'Bob', 'Johnson', 55000)
+              ]
+              
+              cursor.executemany("""
+                  INSERT INTO employees (id, first_name, last_name, salary)
+                  VALUES (:1, :2, :3, :4)
+              """, data)
+              
+              connection.commit()
+            explanation: "Bulk operations reduce network round trips"
+        
+        bad:
+          - language: "python"
+            code: |
+              # Individual inserts (slow)
+              for emp in employees:
+                  cursor.execute("""
+                      INSERT INTO employees (id, first_name, last_name, salary)
+                      VALUES (:1, :2, :3, :4)
+                  """, (emp['id'], emp['first_name'], emp['last_name'], emp['salary']))
+              
+              connection.commit()
+            explanation: "Multiple round trips; very slow for large datasets"
+    
+    - id: "oracle_perf_003"
+      name: "Use Partitioning for Large Tables"
+      description: "Partition large tables to improve query performance"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Range partitioning by date
+              CREATE TABLE sales (
+                  sale_id NUMBER,
+                  sale_date DATE,
+                  amount NUMBER
+              )
+              PARTITION BY RANGE (sale_date) (
+                  PARTITION sales_2023 VALUES LESS THAN (TO_DATE('2024-01-01', 'YYYY-MM-DD')),
+                  PARTITION sales_2024 VALUES LESS THAN (TO_DATE('2025-01-01', 'YYYY-MM-DD')),
+                  PARTITION sales_2025 VALUES LESS THAN (TO_DATE('2026-01-01', 'YYYY-MM-DD'))
+              );
+              
+              -- Query optimizer automatically uses partition pruning
+              SELECT * FROM sales
+              WHERE sale_date BETWEEN DATE '2024-01-01' AND DATE '2024-12-31';
+            explanation: "Partitioning improves query performance on large tables"
+    
+    - id: "oracle_perf_004"
+      name: "Gather Statistics Regularly"
+      description: "Keep table statistics current for optimal query plans"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Gather table statistics
+              EXEC DBMS_STATS.GATHER_TABLE_STATS('SCHEMA_NAME', 'EMPLOYEES');
+              
+              -- Gather schema statistics
+              EXEC DBMS_STATS.GATHER_SCHEMA_STATS('SCHEMA_NAME');
+              
+              -- Enable automatic statistics gathering (recommended)
+              BEGIN
+                DBMS_AUTO_TASK_ADMIN.ENABLE(
+                  client_name => 'auto optimizer stats collection',
+                  operation => NULL,
+                  window_name => NULL
+                );
+              END;
+            explanation: "Current statistics enable optimal query execution plans"
+    
+    - id: "oracle_perf_005"
+      name: "Use Result Set Caching"
+      description: "Enable result caching for frequently accessed data"
+      severity: "LOW"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Enable result cache for query
+              SELECT /*+ RESULT_CACHE */ department_id, department_name
+              FROM departments;
+              
+              -- Create table with result cache
+              CREATE TABLE departments (
+                  department_id NUMBER PRIMARY KEY,
+                  department_name VARCHAR2(100)
+              )
+              RESULT_CACHE (MODE FORCE);
+            explanation: "Result caching reduces repeated query execution"
+
+# 6. ERROR HANDLING
+error_handling:
+  principle: "Robust error handling ensures graceful failure and easy debugging"
+  importance: "High - affects reliability and maintainability"
+  
+  rules:
+    - id: "oracle_err_001"
+      name: "Handle Specific Exceptions"
+      description: "Catch and handle specific Oracle error codes"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import oracledb
+              
+              try:
+                  cursor.execute("INSERT INTO employees VALUES (:1, :2, :3)", 
+                                (101, 'John', 'Doe'))
+                  connection.commit()
+              except oracledb.IntegrityError as e:
+                  # ORA-00001: unique constraint violated
+                  error, = e.args
+                  if error.code == 1:
+                      logger.warning(f"Duplicate employee ID: {101}")
+                      # Handle duplicate gracefully
+                  connection.rollback()
+              except oracledb.DatabaseError as e:
+                  error, = e.args
+                  logger.error(f"Database error {error.code}: {error.message}")
+                  connection.rollback()
+                  raise
+              except Exception as e:
+                  logger.error(f"Unexpected error: {e}")
+                  connection.rollback()
+                  raise
+            explanation: "Specific exception handling enables appropriate responses"
+        
+        bad:
+          - language: "python"
+            code: |
+              try:
+                  cursor.execute("INSERT INTO employees VALUES (:1, :2, :3)", 
+                                (101, 'John', 'Doe'))
+                  connection.commit()
+              except Exception as e:
+                  print("Error occurred")  # Too generic; loses error details
+                  pass  # Silently swallowing errors
+            explanation: "Generic exception handling loses valuable debugging information"
+    
+    - id: "oracle_err_002"
+      name: "Log Detailed Error Information"
+      description: "Log complete error context for troubleshooting"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import logging
+              
+              logger = logging.getLogger(__name__)
+              
+              try:
+                  cursor.execute(sql_query, bind_params)
+              except oracledb.DatabaseError as e:
+                  error, = e.args
+                  logger.error(
+                      f"Oracle error occurred:\n"
+                      f"  Error Code: {error.code}\n"
+                      f"  Message: {error.message}\n"
+                      f"  Offset: {error.offset}\n"
+                      f"  Query: {sql_query}\n"
+                      f"  Params: {bind_params}",
+                      exc_info=True
+                  )
+                  raise
+            explanation: "Detailed logging aids troubleshooting and debugging"
+    
+    - id: "oracle_err_003"
+      name: "Use Retry Logic for Transient Errors"
+      description: "Implement retry logic for temporary failures"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import time
+              from oracledb import DatabaseError
+              
+              def execute_with_retry(cursor, sql, params, max_retries=3):
+                  for attempt in range(max_retries):
+                      try:
+                          cursor.execute(sql, params)
+                          return cursor
+                      except DatabaseError as e:
+                          error, = e.args
+                          # Retry on deadlock or resource busy
+                          if error.code in (60, 54):  # ORA-00060, ORA-00054
+                              if attempt < max_retries - 1:
+                                  wait_time = 2 ** attempt  # Exponential backoff
+                                  logger.warning(f"Retry attempt {attempt + 1} after {wait_time}s")
+                                  time.sleep(wait_time)
+                                  continue
+                          raise
+            explanation: "Retry logic handles transient failures gracefully"
+
+# 7. DATA TYPES AND ENCODING
+data_types:
+  principle: "Use appropriate data types and handle encoding correctly"
+  importance: "Medium - affects data integrity and storage efficiency"
+  
+  rules:
+    - id: "oracle_dt_001"
+      name: "Use Appropriate Data Types"
+      description: "Choose correct Oracle data types for your data"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              CREATE TABLE employees (
+                  employee_id NUMBER(10) PRIMARY KEY,
+                  first_name VARCHAR2(50) NOT NULL,
+                  last_name VARCHAR2(50) NOT NULL,
+                  hire_date DATE NOT NULL,
+                  salary NUMBER(10, 2),
+                  commission_pct NUMBER(3, 2),
+                  is_active CHAR(1) DEFAULT 'Y' CHECK (is_active IN ('Y', 'N')),
+                  notes CLOB,
+                  profile_picture BLOB,
+                  created_timestamp TIMESTAMP DEFAULT SYSTIMESTAMP
+              );
+            explanation: "Appropriate data types ensure data integrity and efficiency"
+        
+        considerations:
+          - "NUMBER: precise numeric values, specify precision"
+          - "VARCHAR2: variable-length strings, up to 4000 bytes"
+          - "DATE: date and time (no fractional seconds)"
+          - "TIMESTAMP: date and time with fractional seconds"
+          - "CLOB: large text data (up to 4GB)"
+          - "BLOB: binary data (up to 4GB)"
+    
+    - id: "oracle_dt_002"
+      name: "Handle Character Encoding"
+      description: "Properly configure encoding for international characters"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Configure encoding explicitly
+              connection = oracledb.connect(
+                  user=user,
+                  password=pwd,
+                  dsn=dsn,
+                  encoding="UTF-8",
+                  nencoding="UTF-8"
+              )
+              
+              # Insert unicode data
+              cursor.execute("""
+                  INSERT INTO employees (id, name, notes)
+                  VALUES (:1, :2, :3)
+              """, (101, 'τö░Σ╕¡σñ¬ΘâÄ', 'πüôπéôπü½πüíπü»Σ╕ûτòî'))
+            explanation: "Explicit encoding ensures correct handling of unicode data"
+    
+    - id: "oracle_dt_003"
+      name: "Use LOBs for Large Data"
+      description: "Use CLOB/BLOB for large text or binary data"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Writing large data to CLOB
+              large_text = "..." * 10000  # Large text content
+              
+              cursor.execute("""
+                  INSERT INTO documents (id, content)
+                  VALUES (:id, :content)
+              """, id=1, content=large_text)
+              
+              # Reading CLOB data
+              cursor.execute("SELECT content FROM documents WHERE id = :id", id=1)
+              clob = cursor.fetchone()[0]
+              content = clob.read()  # Read LOB content
+            explanation: "LOBs efficiently store large data; VARCHAR2 limited to 4000 bytes"
+
+# 8. MONITORING AND MAINTENANCE
+monitoring:
+  principle: "Proactive monitoring prevents issues and ensures optimal performance"
+  importance: "Medium - affects long-term system health"
+  
+  rules:
+    - id: "oracle_mon_001"
+      name: "Monitor Connection Pool Health"
+      description: "Track pool statistics and connection usage"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              # Get pool statistics
+              pool_stats = {
+                  'busy': pool.busy,
+                  'open': pool.open,
+                  'max': pool.max,
+                  'min': pool.min,
+                  'increment': pool.increment,
+                  'timeout': pool.timeout
+              }
+              
+              logger.info(f"Pool stats: {pool_stats}")
+              
+              # Alert if pool exhausted
+              if pool.busy == pool.max:
+                  logger.warning("Connection pool exhausted!")
+            explanation: "Pool monitoring identifies capacity issues"
+    
+    - id: "oracle_mon_002"
+      name: "Monitor Query Performance"
+      description: "Track slow queries and execution times"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Find slow queries
+              SELECT sql_id, sql_text, elapsed_time, executions,
+                     elapsed_time / executions as avg_elapsed
+              FROM v$sql
+              WHERE elapsed_time > 1000000  -- > 1 second
+              ORDER BY elapsed_time DESC;
+              
+              -- Find queries with high buffer gets
+              SELECT sql_id, sql_text, buffer_gets, executions,
+                     buffer_gets / executions as avg_buffer_gets
+              FROM v$sql
+              WHERE buffer_gets / executions > 10000
+              ORDER BY buffer_gets DESC;
+            explanation: "Identifying slow queries enables targeted optimization"
+    
+    - id: "oracle_mon_003"
+      name: "Monitor Database Health"
+      description: "Regularly check database metrics and alerts"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "sql"
+            code: |
+              -- Check tablespace usage
+              SELECT tablespace_name,
+                     ROUND(used_percent, 2) as used_pct,
+                     ROUND(used_space * block_size / 1024 / 1024, 2) as used_mb,
+                     ROUND(tablespace_size * block_size / 1024 / 1024, 2) as total_mb
+              FROM dba_tablespace_usage_metrics;
+              
+              -- Check for invalid objects
+              SELECT owner, object_type, object_name, status
+              FROM dba_objects
+              WHERE status != 'VALID';
+              
+              -- Check for blocking sessions
+              SELECT blocking_session, sid, serial#, wait_class, seconds_in_wait
+              FROM v$session
+              WHERE blocking_session IS NOT NULL;
+            explanation: "Regular health checks prevent issues before they impact users"
+
+# 9. BEST PRACTICES SUMMARY
+summary:
+  critical_practices:
+    - "Always use bind variables (prevents SQL injection, enables caching)"
+    - "Use connection pooling (dramatically improves performance)"
+    - "Close resources properly (prevents resource leaks)"
+    - "Never hardcode credentials (security fundamental)"
+    - "Use explicit transactions (ensures data consistency)"
+    - "Grant least privileges (limits security exposure)"
+  
+  performance_priorities:
+    - "Use appropriate indexes"
+    - "Set optimal arraysize (1000 for large result sets)"
+    - "Use executemany() for bulk operations"
+    - "Select only required columns"
+    - "Keep transactions short"
+    - "Gather statistics regularly"
+  
+  security_priorities:
+    - "Use bind variables (prevent SQL injection)"
+    - "Secure credential storage"
+    - "Enable network encryption"
+    - "Implement least privilege access"
+    - "Enable auditing for sensitive operations"
+    - "Validate and sanitize all user input"
+  
+  common_pitfalls:
+    - "String concatenation in SQL (SQL injection risk)"
+    - "Not closing connections (resource leaks)"
+    - "Fetching rows one at a time (performance issue)"
+    - "Using SELECT * (inefficient data transfer)"
+    - "Long-running transactions (lock contention)"
+    - "Over-privileged database users (security risk)"
+
+# 10. RESOURCES AND REFERENCES
+resources:
+  official_documentation:
+    - title: "Python python-oracledb Documentation"
+      url: "https://python-oracledb.readthedocs.io/"
+    - title: "Oracle Database Documentation"
+      url: "https://docs.oracle.com/en/database/"
+    - title: "Oracle SQL Language Reference"
+      url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/"
+  
+  performance_tuning:
+    - title: "Oracle Database Performance Tuning Guide"
+      url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/tgdba/"
+    - title: "SQL Tuning Guide"
+      url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/tgsql/"
+  
+  security:
+    - title: "Oracle Database Security Guide"
+      url: "https://docs.oracle.com/en/database/oracle/oracle-database/19/dbseg/"
+    - title: "OWASP SQL Injection Prevention Cheat Sheet"
+      url: "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html"
+
+# Metadata for CORTEX integration
+cortex_integration:
+  usage_contexts:
+    - "Database schema design reviews"
+    - "SQL query optimization"
+    - "Security audit of database code"
+    - "Performance troubleshooting"
+    - "Code review for Oracle integration"
+  
+  auto_apply_severity:
+    CRITICAL: "Always enforce; block on violations"
+    HIGH: "Enforce with warnings; require acknowledgment"
+    MEDIUM: "Suggest improvements; track technical debt"
+    LOW: "Optional optimization recommendations"
