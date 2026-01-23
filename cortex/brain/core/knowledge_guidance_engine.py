@@ -256,7 +256,14 @@ class KnowledgeGuidanceEngine:
         """Load TIER 0 (immutable) governance guidance."""
         # CORE-008: TDD discipline
         if self.tier_0_rules:
-            guidance.tier_0_rules = list(self.tier_0_rules.keys())
+            # Handle both dict and list formats for tier_0_rules
+            if isinstance(self.tier_0_rules, dict):
+                guidance.tier_0_rules = list(self.tier_0_rules.keys())
+            elif isinstance(self.tier_0_rules, list):
+                guidance.tier_0_rules = self.tier_0_rules
+            else:
+                guidance.tier_0_rules = []
+            
             guidance.guidance_entries.append(
                 GuidanceEntry(
                     category=GuidanceCategory.TDD_DISCIPLINE,
