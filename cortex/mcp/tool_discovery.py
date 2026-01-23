@@ -35,10 +35,10 @@ class ToolDiscoveryEngine:
     
     # Tool categories and their modules
     TOOL_MODULES = {
-        ToolCategory.GOVERNANCE: "cortex.mcp.tools.governance",
-        ToolCategory.ORCHESTRATION: "cortex.mcp.tools.orchestration",
-        ToolCategory.KNOWLEDGE: "cortex.mcp.tools.knowledge",
-        ToolCategory.UTILITY: "cortex.mcp.tools.utility",
+        ToolCategory.GOVERNANCE: "cortex.brain.mcp.tools.governance_tools",
+        ToolCategory.ORCHESTRATION: "cortex.brain.mcp.tools.orchestrator_tools",
+        ToolCategory.KNOWLEDGE: "cortex.brain.mcp.tools.knowledge_tools",
+        ToolCategory.UTILITY: "cortex.brain.mcp.tools.utility_tools",
     }
     
     # Default authorization levels by category
@@ -143,6 +143,7 @@ class ToolDiscoveryEngine:
             tool_id=tool_id,
             tool_name=tool_info["metadata"].get("description", tool_id),
             description=tool_info["metadata"].get("description", ""),
+            category=category,
             parameters=tool_info["metadata"].get("parameters", {}),
             metadata={
                 "category": category.value,
