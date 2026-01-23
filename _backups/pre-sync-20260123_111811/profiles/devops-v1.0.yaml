@@ -1,0 +1,100 @@
+# DevOps Domain Profile - DevOps & Infrastructure
+# Profile ID: devops-v1.0
+# Category: Infrastructure, CI/CD, Platform Engineering
+# Target: CI/CD pipelines, infrastructure code, deployment automation
+
+profile:
+  id: devops-v1.0
+  name: DevOps & Infrastructure
+  version: "1.0"
+  category: infrastructure
+  description: >
+    Governance profile for DevOps and infrastructure projects including
+    CI/CD pipelines, infrastructure as code, and deployment automation.
+  tags:
+    - devops
+    - infrastructure
+    - ci-cd
+    - automation
+    - platform
+
+compatibility:
+  cortex_min_version: "0.8.0"
+  python_versions: ["3.10", "3.11", "3.12", "3.13"]
+
+rules:
+  # Infrastructure as Code Rules
+  - id: DEVOPS-001
+    name: iac-versioning
+    severity: high
+    description: All infrastructure must be defined as code and versioned
+    pattern: "terraform|pulumi|cloudformation"
+    enforcement: mandatory
+    
+  - id: DEVOPS-002
+    name: no-manual-changes
+    severity: high
+    description: Prevent manual infrastructure changes
+    pattern: "drift detection enabled"
+    enforcement: mandatory
+    
+  # CI/CD Pipeline Rules
+  - id: DEVOPS-003
+    name: pipeline-as-code
+    severity: high
+    description: CI/CD pipelines must be defined as code
+    pattern: ".github/workflows or azure-pipelines.yml"
+    enforcement: mandatory
+    
+  - id: DEVOPS-004
+    name: automated-testing
+    severity: high
+    description: All pipelines must include automated testing
+    pattern: "test stage in pipeline"
+    enforcement: mandatory
+    
+  # Security Rules
+  - id: DEVOPS-005
+    name: secrets-management
+    severity: critical
+    description: Use secrets management, never hardcode secrets
+    pattern: "vault|aws-secrets|azure-keyvault"
+    enforcement: mandatory
+    
+  - id: DEVOPS-006
+    name: least-privilege
+    severity: high
+    description: Apply least privilege principle to service accounts
+    pattern: "minimal IAM permissions"
+    enforcement: mandatory
+    
+  # Deployment Rules
+  - id: DEVOPS-007
+    name: rollback-capability
+    severity: high
+    description: All deployments must support rollback
+    pattern: "rollback mechanism defined"
+    enforcement: mandatory
+    
+  - id: DEVOPS-008
+    name: health-checks
+    severity: high
+    description: Implement health checks for all services
+    pattern: "/health endpoint"
+    enforcement: mandatory
+
+templates:
+  - name: terraform-module
+    path: templates/devops/terraform_module.tf.j2
+  - name: github-workflow
+    path: templates/devops/github_workflow.yml.j2
+  - name: dockerfile
+    path: templates/devops/Dockerfile.j2
+
+hooks:
+  pre_commit:
+    - terraform_fmt
+    - validate_secrets_usage
+  pre_push:
+    - terraform_validate
+    - security_scan

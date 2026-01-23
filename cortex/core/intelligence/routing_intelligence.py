@@ -32,9 +32,8 @@ class RoutingAnalyzer:
             db_path: Path to SQLite database (uses default if None)
         """
         if db_path is None:
-            from cortex.core.path_resolver import PathResolver
-            resolver = PathResolver()
-            db_path = str(resolver.resolve_path("cortex_brain/state/governance.db"))
+            from cortex.core.path_resolver import resolve_path, get_project_root
+            db_path = str(resolve_path("cortex_brain/state/governance.db"))
         
         self.db_path = db_path
         self._init_database()
