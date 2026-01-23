@@ -74,6 +74,47 @@ class ToolRegistry:
         self._tools[metadata.id] = metadata
         logger.info(f"Registered tool: {metadata.id} ({metadata.category.value})")
 
+    def register_tool(
+        self,
+        tool_id: str,
+        tool_name: str,
+        description: str,
+        category: ToolCategory,
+        parameters: Optional[Dict[str, Any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        auth_required: bool = False,
+        version: str = "1.0.0",
+    ) -> None:
+        """Register a tool with detailed parameters (tool discovery interface).
+        
+        Args:
+            tool_id: Unique tool identifier.
+            tool_name: Human-readable tool name.
+            description: Tool description.
+            category: Tool category.
+            parameters: Tool parameters dictionary.
+            metadata: Additional metadata.
+            auth_required: Whether authentication is required.
+            version: Tool version.
+            
+        Raises:
+            ValueError: If tool with same ID already registered.
+        """
+        tool_metadata = ToolMetadata(
+            id=tool_id,
+            name=tool_name,
+            category=category,
+            description=description,
+            parameters=parameters or {},
+            auth_required=auth_required,
+            version=version,
+        )
+        # Merge additional metadata if provided
+        if metadata:
+            tool_metadata.parameters.update(metadata)
+        
+        self.register(tool_metadata)
+
     def get(self, tool_id: str) -> Optional[ToolMetadata]:
         """Get tool metadata by ID.
         
@@ -163,3 +204,42 @@ class ToolRegistry:
         
         logger.debug(f"Registry summary: {summary_dict}")
         return summary_dict
+
+
+# ============================================================================
+# SINGLETON REGISTRY INSTANCE AND FACTORY
+# ============================================================================
+
+_tool_registry_instance: Optional[ToolRegistry] = None
+
+
+def get_mcp_tool_registry() -> ToolRegistry:
+    """Get singleton instance of MCP Tool Registry.
+    
+    Lazily initializes and returns the global tool registry instance.
+    Ensures only one registry exists across the application.
+    
+    Returns:
+        ToolRegistry: Singleton instance of the tool registry
+        
+    Example:
+        registry = get_mcp_tool_registry()
+        tools = registry.list_all()
+    """
+    global _tool_registry_instance
+    if _tool_registry_instance is None:
+        _tool_registry_instance = ToolRegistry()
+        logger.debug("Created singleton ToolRegistry instance")
+    return _tool_registry_instance
+
+
+def reset_mcp_tool_registry() -> None:
+    """Reset the singleton registry instance.
+    
+    WARNING: This should only be used in testing. Clears all registered tools
+    and creates a fresh registry instance.
+    """
+    global _tool_registry_instance
+    _tool_registry_instance = None
+    logger.warning("MCP Tool Registry instance reset")
+

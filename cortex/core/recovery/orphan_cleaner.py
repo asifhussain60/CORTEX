@@ -479,3 +479,20 @@ class OrphanedResourceCleaner:
             
             # Wait for next scan
             self._stop_scan.wait(self.scan_interval_seconds)
+
+
+# ============================================================================
+# BACKWARDS-COMPATIBLE ALIASES FOR PRODUCTION DEPLOYMENT
+# ============================================================================
+
+# Alias for common naming convention used in production documentation
+OrphanCleaner = OrphanedResourceCleaner
+
+__all__ = [
+    "ResourceType",
+    "OrphanedResource",
+    "CleanupStrategy",
+    "OrphanedResourceCleaner",
+    "OrphanCleaner",  # Alias for production compatibility
+]
+

@@ -348,6 +348,7 @@ class TracingCollector:
         Args:
             timeout_seconds: Maximum time to wait for flush.
             
+            
         Returns:
             True if all spans flushed, False if timeout.
         """
@@ -360,3 +361,22 @@ class TracingCollector:
             time.sleep(0.01)
         
         return False
+
+
+# ============================================================================
+# BACKWARDS-COMPATIBLE ALIASES FOR PRODUCTION DEPLOYMENT
+# ============================================================================
+
+# Alias for common naming convention used in production documentation
+DistributedTracing = TracingCollector
+
+__all__ = [
+    "SpanKind",
+    "SpanStatus",
+    "TraceContext",
+    "Span",
+    "TracingConfig",
+    "TracingCollector",
+    "DistributedTracing",  # Alias for production compatibility
+]
+

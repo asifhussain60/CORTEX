@@ -460,3 +460,22 @@ class MetricsCollector:
         """
         metrics_text = self.generate_metrics_text()
         return {"metrics": metrics_text, "timestamp": datetime.utcnow().isoformat()}
+
+
+# ============================================================================
+# BACKWARDS-COMPATIBLE ALIASES FOR PRODUCTION DEPLOYMENT
+# ============================================================================
+
+# Alias for common naming convention used in production documentation
+PrometheusMetrics = MetricsCollector
+
+__all__ = [
+    "MetricsConfig",
+    "RequestMetrics",
+    "DatabaseMetrics",
+    "BusinessMetrics",
+    "CustomMetrics",
+    "MetricsCollector",
+    "PrometheusMetrics",  # Alias for production compatibility
+]
+

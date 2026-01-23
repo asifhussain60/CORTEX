@@ -385,3 +385,21 @@ def add_version_column(db_path: str, table: str) -> None:
         conn.commit()
     
     conn.close()
+
+
+# ============================================================================
+# BACKWARDS-COMPATIBLE ALIASES FOR PRODUCTION DEPLOYMENT
+# ============================================================================
+
+# Alias for common naming convention used in production documentation
+OptimisticLock = OptimisticLockManager
+
+__all__ = [
+    "MergeStrategy",
+    "VersionedRow",
+    "OptimisticLockMetrics",
+    "OptimisticLockManager",
+    "OptimisticLock",  # Alias for production compatibility
+    "enable_versioning",
+]
+
