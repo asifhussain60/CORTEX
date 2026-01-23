@@ -1,6 +1,8 @@
 """
 Template Testing Framework (AC-TT-003-02)
 
+AC-ID: AC-MCP-010 | CORE-029: Response Format (mandatory header enforcement)
+
 Testing framework for orchestrator templates.
 Provides:
 - Test case definition
@@ -9,6 +11,12 @@ Provides:
 - Result reporting
 
 Integrates with pytest and standalone usage.
+
+Per TIER 0 governance (response-header-enforcement.yaml v1.0), all test reports
+should be wrapped with ResponseHeaderEnforcer.wrap_response() before returning
+to final user/orchestrator to ensure consistent header formatting.
+
+Copyright © 2025 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field
@@ -17,6 +25,43 @@ from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, Set, Union
 import traceback
 import time
+
+
+# ================================================================================
+# CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
+# ================================================================================
+# Per governance rules, all test reports must include CORTEX header
+# Reference: cortex_brain/tier0/governance/response-header-enforcement.yaml
+# ================================================================================
+
+class ResponseHeaderEnforcer:
+    """Enforces CORE-029 response header formatting on test reports."""
+    
+    @staticmethod
+    def wrap_response(response: str, operation: str, phase: str = "PHASE-PRODUCTION-READY") -> str:
+        """
+        Wrap test report with mandatory CORTEX header.
+        
+        Args:
+            response: The report content to wrap
+            operation: Name of the operation (e.g., "Test Report")
+            phase: Execution phase (default: PHASE-PRODUCTION-READY)
+        
+        Returns:
+            Report with prepended CORTEX header
+        
+        Raises:
+            ValueError: If response already has header (prevent double-wrapping)
+        """
+        if response.startswith("## 🧠 CORTEX"):
+            raise ValueError("Response already has header - avoid double wrapping")
+        
+        header = (
+            f"## 🧠 CORTEX {operation}\n"
+            f"**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅\n"
+            f"\n---\n\n"
+        )
+        return header + response
 
 
 class TestStatus(Enum):
@@ -592,12 +637,22 @@ class TemplateTestFramework:
         """
         Generate test report.
         
+        Per CORE-029: Callers should wrap this response with ResponseHeaderEnforcer
+        before returning to final user to ensure header compliance.
+        
         Args:
             suite: Test suite results
             verbose: Include detailed output
             
         Returns:
             Report string
+
+        Example:
+            >>> framework = TemplateTestingFramework("MyTests")
+            >>> suite = framework.run()
+            >>> report = framework.report(suite, verbose=True)
+            >>> # Wrap before returning to caller:
+            >>> wrapped = ResponseHeaderEnforcer.wrap_response(report, "Test Report")
         """
         lines = [
             "=" * 60,

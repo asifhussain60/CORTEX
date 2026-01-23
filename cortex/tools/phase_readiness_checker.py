@@ -1,6 +1,8 @@
 """
 Phase Readiness Checker for CORTEX Governance.
 
+AC-ID: AC-MCP-009 | CORE-029: Response Format (mandatory header enforcement)
+
 Validates that a phase is ready for completion/lock by checking:
 1. Governance compliance (no rule violations in phase code)
 2. Audit trail verification (audit log entries for all ACs)
@@ -8,6 +10,12 @@ Validates that a phase is ready for completion/lock by checking:
 4. Documentation completeness (phase docs updated)
 
 Used to determine if phase can proceed to next stage or be locked.
+
+Per TIER 0 governance (response-header-enforcement.yaml v1.0), all phase readiness
+reports should be wrapped with ResponseHeaderEnforcer.wrap_response() before returning
+to final user/orchestrator to ensure consistent header formatting.
+
+Copyright © 2025 Asif Hussain. All rights reserved.
 """
 
 import json
@@ -20,6 +28,43 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import sqlite3
+
+
+# ================================================================================
+# CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
+# ================================================================================
+# Per governance rules, all readiness check reports must include CORTEX header
+# Reference: cortex_brain/tier0/governance/response-header-enforcement.yaml
+# ================================================================================
+
+class ResponseHeaderEnforcer:
+    """Enforces CORE-029 response header formatting on readiness reports."""
+    
+    @staticmethod
+    def wrap_response(response: str, operation: str, phase: str = "PHASE-PRODUCTION-READY") -> str:
+        """
+        Wrap readiness report with mandatory CORTEX header.
+        
+        Args:
+            response: The report content to wrap
+            operation: Name of the operation (e.g., "Phase Readiness Check")
+            phase: Execution phase (default: PHASE-PRODUCTION-READY)
+        
+        Returns:
+            Report with prepended CORTEX header
+        
+        Raises:
+            ValueError: If response already has header (prevent double-wrapping)
+        """
+        if response.startswith("## 🧠 CORTEX"):
+            raise ValueError("Response already has header - avoid double wrapping")
+        
+        header = (
+            f"## 🧠 CORTEX {operation}\n"
+            f"**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅\n"
+            f"\n---\n\n"
+        )
+        return header + response
 
 
 class ReadinessStage(Enum):
@@ -110,12 +155,25 @@ class PhaseReadinessChecker:
     def check_phase_readiness(self, phase_id: str) -> PhaseReadinessReport:
         """
         Check if a phase is ready for lock.
+        
+        Per CORE-029: Callers should convert the returned PhaseReadinessReport to
+        string (via to_yaml() or to_markdown()) and wrap with ResponseHeaderEnforcer
+        before returning to user/orchestrator to ensure header compliance.
 
         Args:
             phase_id: Phase ID (e.g., 'PHASE-09')
 
         Returns:
             Phase readiness report
+
+        Example:
+            >>> checker = PhaseReadinessChecker()
+            >>> report = checker.check_phase_readiness("PHASE-09")
+            >>> # Wrap before returning to caller:
+            >>> wrapped = ResponseHeaderEnforcer.wrap_response(
+            ...     report.to_markdown(),
+            ...     "Phase Readiness Check"
+            ... )
         """
         import datetime
         report = PhaseReadinessReport(
