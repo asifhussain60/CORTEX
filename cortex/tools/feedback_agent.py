@@ -2,7 +2,15 @@
 CORTEX Feedback Agent
 Automated feedback collection and GitHub Issue generation.
 
+AC-ID: AC-MCP-008 | CORE-029: Response Format (mandatory header enforcement)
+
 Entry Point: cortex.tools.feedback_agent.FeedbackAgent
+
+Per TIER 0 governance (response-header-enforcement.yaml v1.0), all agent-generated
+responses include mandatory CORTEX header wrapper via ResponseHeaderEnforcer.wrap_response().
+This prevents response format violations and ensures consistent output formatting.
+
+Copyright © 2025 Asif Hussain. All rights reserved.
 """
 
 import json
@@ -14,6 +22,45 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
+
+
+# ================================================================================
+# CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
+# ================================================================================
+# Per governance rules, all agent responses must include CORTEX header with:
+# - Operation name, Author attribution, Phase, Orchestrator ID
+# - Prevents governance violations and ensures consistent response formatting
+# - Reference: cortex_brain/tier0/governance/response-header-enforcement.yaml
+# ================================================================================
+
+class ResponseHeaderEnforcer:
+    """Enforces CORE-029 response header formatting on all agent outputs."""
+    
+    @staticmethod
+    def wrap_response(response: str, operation: str, phase: str = "PHASE-PRODUCTION-READY") -> str:
+        """
+        Wrap agent response with mandatory CORTEX header.
+        
+        Args:
+            response: The response content to wrap
+            operation: Name of the operation (e.g., "Feedback Report")
+            phase: Execution phase (default: PHASE-PRODUCTION-READY)
+        
+        Returns:
+            Response with prepended CORTEX header
+        
+        Raises:
+            ValueError: If response already has header (prevent double-wrapping)
+        """
+        if response.startswith("## 🧠 CORTEX"):
+            raise ValueError("Response already has header - avoid double wrapping")
+        
+        header = (
+            f"## 🧠 CORTEX {operation}\n"
+            f"**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** MasterOrchestrator ✅\n"
+            f"\n---\n\n"
+        )
+        return header + response
 
 
 class FeedbackType(Enum):
@@ -188,7 +235,12 @@ class Feedback:
         return "\n".join(yaml_lines)
     
     def to_github_issue_markdown(self) -> str:
-        """Generate GitHub Issue markdown."""
+        """
+        Generate GitHub Issue markdown.
+        
+        Per CORE-029: Caller should wrap this response with ResponseHeaderEnforcer
+        before returning to final user/orchestrator to ensure header compliance.
+        """
         return f"""## 🧠 CORTEX Operational Feedback
 
 **Type:** {self.feedback_type.value}
@@ -280,6 +332,10 @@ class FeedbackAgent:
         """
         Collect feedback from CORTEX operations.
         
+        Per CORE-029: Feedback objects returned from this method should be converted
+        to string (via to_yaml() or to_github_issue_markdown()) and wrapped with
+        ResponseHeaderEnforcer.wrap_response() before returning to user/orchestrator.
+        
         Args:
             feedback_type: Type of feedback to collect.
             since: Time range (e.g., "1 hour ago", "2024-01-21T10:00:00").
@@ -291,7 +347,11 @@ class FeedbackAgent:
         
         Example:
             >>> feedback = agent.collect(FeedbackType.PERFORMANCE, since="1 hour ago")
-            >>> print(feedback.to_github_issue_markdown())
+            >>> # Wrap before returning to caller:
+            >>> wrapped = ResponseHeaderEnforcer.wrap_response(
+            ...     feedback.to_github_issue_markdown(),
+            ...     "Feedback Report"
+            ... )
         """
         logger.info(
             "Collecting feedback: type=%s, since=%s, scope=%s",
@@ -596,6 +656,9 @@ def collect_feedback(
     """
     Quick feedback collection function.
     
+    Per CORE-029: Returned output should be wrapped with ResponseHeaderEnforcer
+    before returning to final user to ensure header compliance.
+    
     Args:
         feedback_type: Type of feedback (error, performance, governance, general).
         since: Time range for error collection.
@@ -605,9 +668,10 @@ def collect_feedback(
         Formatted feedback string.
     
     Example:
-        >>> from cortex.tools.feedback_agent import collect_feedback
+        >>> from cortex.tools.feedback_agent import collect_feedback, ResponseHeaderEnforcer
         >>> yaml_output = collect_feedback("error", since="1 hour ago")
-        >>> print(yaml_output)
+        >>> # Wrap before returning to caller:
+        >>> wrapped = ResponseHeaderEnforcer.wrap_response(yaml_output, "Feedback Collection")
     """
     agent = FeedbackAgent()
     fb_type = FeedbackType(feedback_type)
