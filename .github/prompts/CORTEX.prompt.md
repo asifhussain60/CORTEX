@@ -1,6 +1,7 @@
 # CORTEX Master Orchestrator System Prompt
 **Version:** 6.0 | **Updated:** 2026-01-23 | **Authority:** cortex-impl-map.yaml v2.0  
 **Status:** PRODUCTION HARDENING (3 phases, 47 remediation hours)
+**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
 
 ---
 
@@ -55,6 +56,7 @@ Every response MUST begin with this exact format:
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Field Reference:**
@@ -390,6 +392,10 @@ tests/
 ```
 ## 🧠 CORTEX {operation}
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+---
+
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
