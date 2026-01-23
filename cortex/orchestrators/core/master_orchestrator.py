@@ -282,6 +282,53 @@ class MasterOrchestrator(IOrchestrator):
             cls._instance = cls()
         return cls._instance
     
+    def get_initialization_status(self) -> Dict[str, Any]:
+        """Get initialization status of all components.
+        
+        AC-EMERGENCY-002: Provides detailed status of each component.
+        
+        Returns:
+            Dictionary with component status information.
+        """
+        return {
+            "knowledge_repository": {
+                "initialized": self._knowledge_repository is not None,
+                "required": True,
+                "component_name": "KnowledgeRepository",
+                "degraded": self._knowledge_repository is None,
+            },
+            "business_knowledge_repository": {
+                "initialized": self._business_knowledge_repository is not None,
+                "required": True,
+                "component_name": "BusinessKnowledgeRepository",
+                "degraded": self._business_knowledge_repository is None,
+            },
+            "intelligent_knowledge_router": {
+                "initialized": self.router is not None,
+                "required": True,
+                "component_name": "IntelligentKnowledgeRouter",
+                "degraded": self.router is None,
+            },
+            "interaction_orchestrator": {
+                "initialized": self.interaction_orchestrator is not None,
+                "required": False,
+                "component_name": "MasterOrchestrationStage1",
+                "degraded": self.interaction_orchestrator is None,
+            },
+            "intent_router": {
+                "initialized": self.intent_router is not None,
+                "required": False,
+                "component_name": "IntentRouter",
+                "degraded": self.intent_router is None,
+            },
+            "header_injector": {
+                "initialized": self.header_injector is not None,
+                "required": False,
+                "component_name": "ResponseHeaderInjector",
+                "degraded": self.header_injector is None,
+            },
+        }
+    
     # Implementation of abstract methods from IOrchestrator
     
     def get_name(self) -> str:
