@@ -26,6 +26,76 @@
 
 ---
 
+## Wiring Harness Integration (AUTO-WIRE UNWIRED COMPONENTS)
+
+**Authority:** `cortex/testing/wiring_harness_inventory.py` (v1.0)  
+**Scope:** Auto-discover and integrate 28+ production-ready but unwired components
+
+### Components Requiring Integration
+
+When this prompt executes, it MUST auto-wire all components in critical priority order:
+
+**CRITICAL (Priority 0):**
+- ChallengeGenerator (Challenge analysis system)
+- ChallengeIntegrationOrchestrator (Confidence filtering, severity sorting)
+- HolisticContextBuilder (Intent + analysis + challenges + recommendations merge)
+- TurnResponseWithChallenges (Auto-inject challenges in response)
+- InteractionOrchestrator (Stage 1 LENS comprehension)
+- ConversationProtocol (Multi-turn wrapper)
+- ContinuationDecision (Turn continuation logic)
+
+**HIGH (Priority 1):**
+- ComponentHealthTracker (Liveness/readiness health checks)
+- GracefulDegradationFramework (Feature degradation on component failure)
+- MCP ToolDiscoveryEngine (Auto-register all MCP tools)
+- GovernanceIntelligence (Context-aware rule composition)
+- TierComposer (Multi-tier governance rule synthesis)
+- LENS Synthesis (Phase 4 synthesis integration)
+- IntentCanonicalizer (Normalize intents)
+
+**MEDIUM (Priority 2+):**
+- PartialFunctionalityMode (Dynamic feature availability)
+- TerminalEventRegistry (Event listener system)
+- IntentReflectionProtocol (User approval workflow)
+- UnifiedKnowledgeService (Knowledge API)
+- IntelligentKnowledgeRouter (Knowledge-driven routing)
+- PlanningOrchestrator (Multi-step planning)
+
+### Auto-Wiring Instructions
+
+**Load Inventory:**
+```python
+from cortex.testing.wiring_harness_inventory import (
+    get_unwired_inventory,
+    get_critical_wiring_order
+)
+
+components = get_critical_wiring_order()  # Ordered by priority
+```
+
+**Wire Each Component:**
+```python
+import importlib
+
+for component in components:
+    # Import component
+    module_path, class_name = component.entry_point.rsplit('.', 1)
+    module = importlib.import_module(module_path)
+    ComponentClass = getattr(module, class_name)
+    
+    # Initialize per component's initialization_code
+    instance = ComponentClass()  # or with params per spec
+    
+    # Register with MasterOrchestrator at orchestrator_hook_type
+    # e.g., orchestrator.register_stage_3_component(instance)
+```
+
+**Test Harness:** `tests/unit/testing/test_wiring_harness.py` (24+ tests)  
+**Coverage:** All unwired components discoverable and importable  
+**Status:** ✅ Ready for auto-integration
+
+---
+
 ## Purpose
 
 Wire in ALL verified production-ready functionality from CORTEX 7.0 Master Orchestrator System. This prompt ensures deployment of fully operational integrated components with all orchestrators, protocols, and MCP tools active.

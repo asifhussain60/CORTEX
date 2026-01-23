@@ -1,0 +1,720 @@
+"""
+Wiring Harness Inventory - Comprehensive Map of Unwired Modules & Auto-Integration
+
+This module catalogs all production-ready components designed but not wired into
+the active orchestration pipeline, enabling the total-recall agent to automatically
+integrate them when executed.
+
+Phase: PRODUCTION-READINESS
+AC-ID: AC-WIRING-HARNESS-001
+Authority: cortex-impl-map.yaml v3.9 + cortex-total-recall.prompt.md
+
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+from typing import Dict, List, Any, Optional
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+
+
+class ComponentCategory(str, Enum):
+    """Categories of unwired components."""
+    ORCHESTRATOR = "orchestrator"
+    TOOL = "tool"
+    PROTOCOL = "protocol"
+    MODULE = "module"
+    FEATURE = "feature"
+    FRAMEWORK = "framework"
+    INTEGRATION = "integration"
+
+
+class IntegrationStatus(str, Enum):
+    """Status of component wiring."""
+    UNWIRED = "unwired"
+    PARTIAL = "partial"
+    BLOCKED = "blocked"
+    READY = "ready"
+
+
+@dataclass
+class WiredComponentDependency:
+    """Dependency for a component that needs to be wired."""
+    component_name: str
+    import_path: str
+    initialization_required: bool = True
+    init_params: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class UnwiredComponent:
+    """Definition of a component that is designed but not wired."""
+    
+    id: str
+    name: str
+    category: ComponentCategory
+    status: IntegrationStatus
+    
+    # Design & Implementation
+    description: str
+    tests_count: int
+    test_pass_rate: float  # e.g., 1.0 for 100%
+    test_files: List[str]
+    implementation_location: str
+    
+    # Integration Details
+    entry_point: str  # Module path to import from
+    initialization_code: str  # Python code to initialize
+    usage_pattern: str  # Example usage
+    dependencies: List[WiredComponentDependency] = field(default_factory=list)
+    wiring_priority: int = 0  # 0=critical, 10=optional
+    
+    # Master Orchestrator Integration
+    orchestrator_hook_type: Optional[str] = None  # "stage_1", "stage_2", "stage_3", "stage_4", etc.
+    integration_point: Optional[str] = None  # Where in orchestrator lifecycle
+    blocker_phase: Optional[str] = None  # Phase blocking integration
+    estimated_wiring_hours: float = 0.5
+    
+    # Governance
+    governance_rules_required: List[str] = field(default_factory=list)
+    test_coverage_minimum: float = 0.8  # 80% minimum
+    
+    # Notes
+    integration_notes: str = ""
+    version: str = "1.0"
+
+
+class WiringHarnessInventory:
+    """
+    Centralized inventory of all unwired components with automatic discovery
+    and integration support.
+    """
+    
+    # =========================================================================
+    # SECTION 1: CHALLENGE INTEGRATION (Issue #9) - UNWIRED
+    # =========================================================================
+    
+    CHALLENGE_INTEGRATION_CHALLENGE_GENERATOR = UnwiredComponent(
+        id="UNWIRED-CHALLENGE-001",
+        name="ChallengeGenerator",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Generates challenges from code analysis (breaking changes, test gaps, governance risks, performance issues)",
+        tests_count=17,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/intent_router/test_challenge_generator.py"],
+        implementation_location="cortex/core/intent/challenge_generator.py",
+        entry_point="cortex.core.intent.challenge_generator.ChallengeGenerator",
+        initialization_code="generator = ChallengeGenerator()",
+        usage_pattern="challenges = generator.generate_all(code=code_str, context=context)",
+        dependencies=[
+            WiredComponentDependency("Result", "cortex.core.result.Result")
+        ],
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="MasterOrchestrator.execute() → Stage 3",
+        wiring_priority=0,  # CRITICAL
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        integration_notes="Required for INT-RULE-009: Mandatory Intelligent Challenge",
+    )
+    
+    CHALLENGE_INTEGRATION_ORCHESTRATOR = UnwiredComponent(
+        id="UNWIRED-CHALLENGE-002",
+        name="ChallengeIntegrationOrchestrator",
+        category=ComponentCategory.ORCHESTRATOR,
+        status=IntegrationStatus.READY,
+        description="Wraps ChallengeGenerator with confidence filtering (0.30 threshold) and severity sorting",
+        tests_count=15,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_challenge_integration_orchestrator.py"],
+        implementation_location="cortex/core/orchestrator/challenge_integration.py",
+        entry_point="cortex.core.orchestrator.challenge_integration.ChallengeIntegrationOrchestrator",
+        initialization_code="orchestrator = ChallengeIntegrationOrchestrator(generator=challenge_gen, confidence_threshold=0.30)",
+        usage_pattern="challenges = orchestrator.process_challenges(context)",
+        dependencies=[
+            WiredComponentDependency("ChallengeGenerator", "cortex.core.intent.challenge_generator.ChallengeGenerator")
+        ],
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="MasterOrchestrator.stage_3_knowledge_integration()",
+        wiring_priority=0,  # CRITICAL
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        estimated_wiring_hours=1.0,
+        integration_notes="Must initialize after ChallengeGenerator. Routes to stage 3 of MasterOrchestrator.",
+    )
+    
+    HOLISTIC_CONTEXT_BUILDER = UnwiredComponent(
+        id="UNWIRED-CHALLENGE-003",
+        name="HolisticContextBuilder",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Merges all context dimensions: intent, code analysis, challenges, recommendations",
+        tests_count=15,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_holistic_context_builder.py"],
+        implementation_location="cortex/brain/core/orchestrator/holistic_context_builder.py",
+        entry_point="cortex.brain.core.orchestrator.holistic_context_builder.HolisticContextBuilder",
+        initialization_code="builder = HolisticContextBuilder()",
+        usage_pattern="context = builder.build(intent, analysis, challenges, recommendations)",
+        orchestrator_hook_type="stage_3_synthesis",
+        integration_point="MasterOrchestrator.stage_3_knowledge_synthesis()",
+        wiring_priority=0,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        integration_notes="Depends on challenges being generated in earlier stage",
+    )
+    
+    TURN_RESPONSE_WITH_CHALLENGES = UnwiredComponent(
+        id="UNWIRED-CHALLENGE-004",
+        name="TurnResponseWithChallenges",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Automatic challenge injection on every turn with confidence filtering",
+        tests_count=20,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_turn_response_with_challenges.py"],
+        implementation_location="cortex/orchestrators/response/turn_response_with_challenges.py",
+        entry_point="cortex.orchestrators.response.turn_response_with_challenges.TurnResponseWithChallenges",
+        initialization_code="response_gen = TurnResponseWithChallenges(holistic_builder)",
+        usage_pattern="response = response_gen.generate_turn_response(turn_context, challenges)",
+        dependencies=[
+            WiredComponentDependency("HolisticContextBuilder", "cortex.brain.core.orchestrator.holistic_context_builder.HolisticContextBuilder")
+        ],
+        orchestrator_hook_type="stage_4_execution_response",
+        integration_point="MasterOrchestrator.stage_4_execution() → response building",
+        wiring_priority=0,
+        governance_rules_required=["CORE-029"],  # Response headers
+        estimated_wiring_hours=1.5,
+        integration_notes="Must be last stage - generates final response with all integrated dimensions",
+    )
+    
+    # =========================================================================
+    # SECTION 2: INTERACTION ORCHESTRATOR & LENS PROTOCOL - NOT FULLY WIRED
+    # =========================================================================
+    
+    INTERACTION_ORCHESTRATOR = UnwiredComponent(
+        id="UNWIRED-INTERACTION-001",
+        name="InteractionOrchestrator",
+        category=ComponentCategory.ORCHESTRATOR,
+        status=IntegrationStatus.PARTIAL,
+        description="Stage 1 of LENS protocol - wraps ConversationProtocol for communication pattern enforcement",
+        tests_count=20,
+        test_pass_rate=0.95,
+        test_files=["tests/unit/orchestrators/core/test_interaction_orchestrator.py"],
+        implementation_location="cortex/orchestrators/core/interaction_orchestrator.py",
+        entry_point="cortex.orchestrators.core.interaction_orchestrator.InteractionOrchestrator",
+        initialization_code="from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator\norchestrator = InteractionOrchestrator(conversation_protocol)",
+        usage_pattern="result = orchestrator.execute_turn_with_pattern(round_context, pattern_id='request-response')",
+        orchestrator_hook_type="stage_1_comprehension",
+        integration_point="MasterOrchestrator.stage_1_intent_comprehension()",
+        wiring_priority=0,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        estimated_wiring_hours=2.0,
+        integration_notes="Stage 1 of LENS protocol. Partially implemented but not called from MasterOrchestrator",
+    )
+    
+    LENS_SYNTHESIS = UnwiredComponent(
+        id="UNWIRED-LENS-001",
+        name="LENSSynthesis",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="LENS Phase 4 - synthesizes Language/Examination/Navigation phases into recommendations",
+        tests_count=25,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_lens_synthesis.py"],
+        implementation_location="cortex/orchestrators/core/lens_synthesis.py",
+        entry_point="cortex.orchestrators.core.lens_synthesis.LENSSynthesis",
+        initialization_code="synthesis = LENSSynthesis()",
+        usage_pattern="recommendations = synthesis.synthesize(language_phase, examination_phase, navigation_phase)",
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="Knowledge integration phase",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+    )
+    
+    # =========================================================================
+    # SECTION 3: COMPONENT HEALTH & RESILIENCE - NOT WIRED
+    # =========================================================================
+    
+    COMPONENT_HEALTH_TRACKER = UnwiredComponent(
+        id="UNWIRED-HEALTH-001",
+        name="ComponentHealthTracker",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Tracks component initialization status and provides health check API (liveness/readiness)",
+        tests_count=18,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_component_health.py"],
+        implementation_location="cortex/orchestrators/core/component_health.py",
+        entry_point="cortex.orchestrators.core.component_health.ComponentHealthTracker",
+        initialization_code="health = ComponentHealthTracker()\nhealth.register_component('master_orchestrator', ComponentType.CRITICAL)",
+        usage_pattern="health.mark_initialized('governance_engine', success=True)",
+        orchestrator_hook_type="initialization",
+        integration_point="MasterOrchestrator.__init__() and health check endpoints",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011"],
+        estimated_wiring_hours=1.0,
+        integration_notes="Should be initialized first in MasterOrchestrator. Enables readiness probes.",
+    )
+    
+    GRACEFUL_DEGRADATION_FRAMEWORK = UnwiredComponent(
+        id="UNWIRED-RESILIENCE-001",
+        name="GracefulDegradationFramework",
+        category=ComponentCategory.FRAMEWORK,
+        status=IntegrationStatus.READY,
+        description="Framework for handling graceful degradation - continue operating with reduced functionality",
+        tests_count=22,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/brain/test_graceful_degradation.py"],
+        implementation_location="cortex/brain/tier2/resilience/__init__.py",
+        entry_point="cortex.brain.tier2.resilience.GracefulDegradationFramework",
+        initialization_code="degradation = GracefulDegradationFramework('cortex_system')",
+        usage_pattern="degradation.register_fallback('governance', fallback_fn)\ndegradation.activate_degradation_mode(['governance'])",
+        orchestrator_hook_type="error_handling",
+        integration_point="MasterOrchestrator error handling & retry logic",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        estimated_wiring_hours=1.5,
+        integration_notes="Critical for production resilience. Must wire fallback strategies for all critical components.",
+    )
+    
+    PARTIAL_FUNCTIONALITY_MODE = UnwiredComponent(
+        id="UNWIRED-RESILIENCE-002",
+        name="PartialFunctionalityMode",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Manages partial functionality when components degrade - dynamic feature availability",
+        tests_count=16,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/brain/test_partial_functionality.py"],
+        implementation_location="cortex/brain/tier2/resilience/__init__.py",
+        entry_point="cortex.brain.tier2.resilience.PartialFunctionalityMode",
+        initialization_code="partial = PartialFunctionalityMode()\npartial.register_feature_dependency('governance', ['rules_engine', 'audit_logger'])",
+        usage_pattern="if partial.is_feature_available('governance'): ...",
+        orchestrator_hook_type="feature_management",
+        integration_point="MasterOrchestrator feature flags",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011"],
+    )
+    
+    # =========================================================================
+    # SECTION 4: CONVERSATION PROTOCOL & TURN MANAGEMENT - PARTIAL
+    # =========================================================================
+    
+    CONVERSATION_PROTOCOL = UnwiredComponent(
+        id="UNWIRED-PROTOCOL-001",
+        name="ConversationProtocol",
+        category=ComponentCategory.PROTOCOL,
+        status=IntegrationStatus.PARTIAL,
+        description="Multi-turn conversation protocol wrapper with event registry and continuation decision",
+        tests_count=39,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/brain/test_conversation_protocol.py"],
+        implementation_location="cortex/brain/core/orchestrator/conversation_protocol.py",
+        entry_point="cortex.brain.core.orchestrator.conversation_protocol.ConversationProtocol",
+        initialization_code="protocol = ConversationProtocol()",
+        usage_pattern="result = protocol.execute_turn(round_context)",
+        orchestrator_hook_type="stage_1_comprehension",
+        integration_point="MasterOrchestrator.stage_1",
+        wiring_priority=0,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012", "CORE-024"],
+        estimated_wiring_hours=2.0,
+        integration_notes="Implemented but not integrated into MasterOrchestrator execution flow",
+    )
+    
+    CONTINUATION_DECISION = UnwiredComponent(
+        id="UNWIRED-PROTOCOL-002",
+        name="ContinuationDecision",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Frozen dataclass for turn continuation logic with serialization support",
+        tests_count=40,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_continuation_decision.py"],
+        implementation_location="cortex/brain/core/orchestrator/continuation_decision.py",
+        entry_point="cortex.brain.core.orchestrator.continuation_decision.ContinuationDecision",
+        initialization_code="decision = ContinuationDecision(should_continue=True, reason='more_analysis_needed')",
+        usage_pattern="if decision.should_continue: protocol.execute_turn(next_context)",
+        orchestrator_hook_type="stage_4_execution",
+        integration_point="MasterOrchestrator multi-turn loop",
+        wiring_priority=0,
+        governance_rules_required=["CORE-008", "CORE-011"],
+    )
+    
+    TERMINAL_EVENT_REGISTRY = UnwiredComponent(
+        id="UNWIRED-PROTOCOL-003",
+        name="TerminalEventRegistry",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Event listener registry and event firing system for orchestrator events",
+        tests_count=40,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_terminal_event_registry.py"],
+        implementation_location="cortex/brain/core/orchestrator/terminal_event_registry.py",
+        entry_point="cortex.brain.core.orchestrator.terminal_event_registry.TerminalEventRegistry",
+        initialization_code="registry = TerminalEventRegistry()\nregistry.on('operation_complete', handler_fn)",
+        usage_pattern="registry.fire('operation_complete', context)",
+        orchestrator_hook_type="event_system",
+        integration_point="MasterOrchestrator event bus",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011"],
+    )
+    
+    # =========================================================================
+    # SECTION 5: MCP TOOL DISCOVERY & REGISTRY - NOT INTEGRATED
+    # =========================================================================
+    
+    MCP_TOOL_DISCOVERY = UnwiredComponent(
+        id="UNWIRED-MCP-001",
+        name="ToolDiscoveryEngine",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Auto-discovery and registration of MCP tools from modules",
+        tests_count=18,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/mcp/test_tool_discovery.py"],
+        implementation_location="cortex/mcp/tool_discovery.py",
+        entry_point="cortex.mcp.tool_discovery.ToolDiscoveryEngine",
+        initialization_code="engine = ToolDiscoveryEngine()\ncount = engine.discover_tools()\nengine.register_discovered_tools()",
+        usage_pattern="tools = engine.discover_tools()",
+        orchestrator_hook_type="mcp_initialization",
+        integration_point="MasterOrchestrator stage initialization",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011"],
+        estimated_wiring_hours=1.0,
+        integration_notes="Must run before MCP server initialization to auto-register all tools",
+    )
+    
+    MCP_TOOL_GOVERNANCE = UnwiredComponent(
+        id="UNWIRED-MCP-002",
+        name="ToolGovernanceManager",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Governance policy enforcement for MCP tools (auth level, compliance mode)",
+        tests_count=20,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/mcp/test_tool_governance.py"],
+        implementation_location="cortex/mcp/tool_governance.py",
+        entry_point="cortex.mcp.tool_governance.ToolGovernanceManager",
+        initialization_code="governance = ToolGovernanceManager()\ngovernance.set_policy(tool_id, ToolCategory.GOVERNANCE, ComplianceMode.STRICT)",
+        usage_pattern="is_allowed = governance.check_access(tool_id, user_auth_level)",
+        orchestrator_hook_type="security_layer",
+        integration_point="MCP server before tool execution",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-017"],
+    )
+    
+    # =========================================================================
+    # SECTION 6: INTENT ROUTING ADVANCED - PARTIAL
+    # =========================================================================
+    
+    INTENT_CANONICALIZER = UnwiredComponent(
+        id="UNWIRED-INTENT-001",
+        name="IntentCanonicalizer",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Normalizes user intents to canonical forms for consistent processing",
+        tests_count=21,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/intent_router/test_intent_canonicalizer.py"],
+        implementation_location="cortex/core/intent/intent_canonicalizer.py",
+        entry_point="cortex.core.intent.intent_canonicalizer.IntentCanonicalizer",
+        initialization_code="canonicalizer = IntentCanonicalizer()",
+        usage_pattern="canonical = canonicalizer.canonicalize(user_intent)",
+        orchestrator_hook_type="stage_1_comprehension",
+        integration_point="IntentClassifier → canonicalization step",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        estimated_wiring_hours=0.5,
+        integration_notes="Should run after intent classification, before routing",
+    )
+    
+    INTENT_REFLECTION_PROTOCOL = UnwiredComponent(
+        id="UNWIRED-INTENT-002",
+        name="IntentReflectionProtocol",
+        category=ComponentCategory.PROTOCOL,
+        status=IntegrationStatus.READY,
+        description="Master→Interaction delegation with user approval workflow (approve/reject/clarify)",
+        tests_count=41,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/intent_router/test_intent_reflection_protocol.py"],
+        implementation_location="cortex/core/intent/intent_reflection_protocol.py",
+        entry_point="cortex.core.intent.intent_reflection_protocol.IntentReflectionProtocol",
+        initialization_code="protocol = IntentReflectionProtocol()",
+        usage_pattern="approval = protocol.request_user_approval(intent, confidence=0.85)",
+        orchestrator_hook_type="stage_1_comprehension",
+        integration_point="After challenge/recommendation generation, before execution",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012", "CORE-024"],
+        estimated_wiring_hours=1.5,
+        integration_notes="Enables human-in-loop approval for high-risk operations",
+    )
+    
+    COMPREHENSION_YAML_GENERATOR = UnwiredComponent(
+        id="UNWIRED-INTENT-003",
+        name="ComprehensionYAMLGenerator",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Generates YAML output with intent, challenges, recommendations, and metadata sections",
+        tests_count=35,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/orchestrators/test_comprehension_yaml.py"],
+        implementation_location="cortex/core/intent/comprehension_yaml.py",
+        entry_point="cortex.core.intent.comprehension_yaml.ComprehensionYAMLGenerator",
+        initialization_code="gen = ComprehensionYAMLGenerator()",
+        usage_pattern="yaml_output = gen.generate(intent, code_analysis, challenges, recommendations)",
+        orchestrator_hook_type="stage_3_knowledge_synthesis",
+        integration_point="Response generation phase",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        integration_notes="Part of LENS Phase 4 output generation",
+    )
+    
+    # =========================================================================
+    # SECTION 7: KNOWLEDGE MANAGEMENT - PARTIALLY WIRED
+    # =========================================================================
+    
+    UNIFIED_KNOWLEDGE_SERVICE = UnwiredComponent(
+        id="UNWIRED-KNOWLEDGE-001",
+        name="UnifiedKnowledgeService",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Unified API across search, analytics, recommendations, and knowledge graph",
+        tests_count=23,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/knowledge/test_unified_service.py"],
+        implementation_location="cortex/brain/core/knowledge/unified_service.py",
+        entry_point="cortex.brain.core.knowledge.unified_service.UnifiedKnowledgeService",
+        initialization_code="service = UnifiedKnowledgeService()",
+        usage_pattern="insights = service.get_insights_for_context(context)",
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="MasterOrchestrator.stage_3",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011"],
+        integration_notes="Currently exists but not called from orchestrator pipeline",
+    )
+    
+    KNOWLEDGE_GRAPH_INTEGRATION = UnwiredComponent(
+        id="UNWIRED-KNOWLEDGE-002",
+        name="KnowledgeGraphIntegration",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Knowledge graph backend for domain entities, relationships, and pattern discovery",
+        tests_count=32,
+        test_pass_rate=0.95,
+        test_files=["tests/unit/domain_brain/test_knowledge_graph.py"],
+        implementation_location="cortex/domain_brain/knowledge_graph.py",
+        entry_point="cortex.domain_brain.knowledge_graph.KnowledgeGraphBackend",
+        initialization_code="kg = KnowledgeGraphBackend()\nkg.initialize()",
+        usage_pattern="entities = kg.query_entities(entity_type='Domain')",
+        orchestrator_hook_type="optional_backend",
+        integration_point="Optional: KnowledgeRepository backend",
+        wiring_priority=3,
+        governance_rules_required=["CORE-008", "CORE-011"],
+        blocker_phase="PHASE-KG-001-foundation (optional eval track)",
+    )
+    
+    # =========================================================================
+    # SECTION 8: ADVANCED ROUTING & PLANNING - NOT INTEGRATED
+    # =========================================================================
+    
+    INTELLIGENT_KNOWLEDGE_ROUTER = UnwiredComponent(
+        id="UNWIRED-ROUTING-001",
+        name="IntelligentKnowledgeRouter",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.PARTIAL,
+        description="Knowledge-driven routing that leverages domain brain for orchestrator selection",
+        tests_count=14,
+        test_pass_rate=0.9,
+        test_files=["tests/unit/intent_router/test_intelligent_knowledge_router.py"],
+        implementation_location="cortex/brain/core/knowledge/router.py",
+        entry_point="cortex.brain.core.knowledge.router.IntelligentKnowledgeRouter",
+        initialization_code="router = IntelligentKnowledgeRouter(knowledge_repo=knowledge_service)",
+        usage_pattern="orchestrator = router.select_orchestrator(intent, domain_context)",
+        orchestrator_hook_type="stage_2_routing",
+        integration_point="RoutingEngine alternative or enhancement",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011"],
+        estimated_wiring_hours=1.5,
+        integration_notes="Optional enhancement to RoutingEngine. Fallback to YAML rules if unavailable.",
+    )
+    
+    PLANNING_ORCHESTRATOR = UnwiredComponent(
+        id="UNWIRED-ROUTING-002",
+        name="PlanningOrchestrator",
+        category=ComponentCategory.ORCHESTRATOR,
+        status=IntegrationStatus.PARTIAL,
+        description="Orchestrator for multi-step execution planning and resource allocation",
+        tests_count=28,
+        test_pass_rate=0.95,
+        test_files=["tests/unit/orchestrators/test_planning_orchestrator.py"],
+        implementation_location="cortex/orchestrators/domain/planning_orchestrator.py",
+        entry_point="cortex.orchestrators.domain.planning_orchestrator.PlanningOrchestrator",
+        initialization_code="planner = PlanningOrchestrator()\nplan = planner.create_execution_plan(intent)",
+        usage_pattern="result = planner.execute_plan(plan)",
+        orchestrator_hook_type="domain_orchestrator",
+        integration_point="MasterOrchestrator domain routing",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
+        estimated_wiring_hours=2.0,
+        integration_notes="Available but not registered in domain orchestrator registry",
+    )
+    
+    # =========================================================================
+    # SECTION 9: GOVERNANCE INTELLIGENCE - NOT INTEGRATED
+    # =========================================================================
+    
+    GOVERNANCE_INTELLIGENCE = UnwiredComponent(
+        id="UNWIRED-GOVERNANCE-001",
+        name="GovernanceIntelligence",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Analyzes operation context (domain, risk, environment) for intelligent rule composition",
+        tests_count=16,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/governance/test_governance_intelligence.py"],
+        implementation_location="cortex/brain/core/governance_intelligence.py",
+        entry_point="cortex.brain.core.governance_intelligence.GovernanceIntelligence",
+        initialization_code="intelligence = GovernanceIntelligence()",
+        usage_pattern="context = intelligence.analyze_operation(operation_type='IMPLEMENT', domain='healthcare')",
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="GovernanceRegistry evaluation",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-017"],
+        integration_notes="Enables context-aware governance rule selection from all tiers",
+    )
+    
+    TIER_COMPOSER = UnwiredComponent(
+        id="UNWIRED-GOVERNANCE-002",
+        name="TierComposer",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Composes governance rules from multiple tiers (Tier0→Tier3) based on context",
+        tests_count=19,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/governance/test_tier_composer.py"],
+        implementation_location="cortex/brain/core/tier_composer.py",
+        entry_point="cortex.brain.core.tier_composer.TierComposer",
+        initialization_code="composer = TierComposer()",
+        usage_pattern="rules = composer.compose_rules(tier0=True, tier1_domains=['security'], tier2_contexts=['production'])",
+        orchestrator_hook_type="stage_3_knowledge_integration",
+        integration_point="GovernanceRegistry during rule loading",
+        wiring_priority=1,
+        governance_rules_required=["CORE-008", "CORE-011", "CORE-017"],
+        estimated_wiring_hours=1.0,
+        integration_notes="Enables multi-tier governance composition per operation context",
+    )
+    
+    # =========================================================================
+    # SECTION 10: ADDITIONAL MODULES - READY FOR INTEGRATION
+    # =========================================================================
+    
+    CONFLICT_RESOLVER = UnwiredComponent(
+        id="UNWIRED-MISC-001",
+        name="ConflictResolver",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="3-tier conflict resolution (hierarchy, LENS synthesis, manual review with SLA)",
+        tests_count=19,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/core/test_conflict_resolver.py"],
+        implementation_location="cortex/core/conflict_resolver.py",
+        entry_point="cortex.core.conflict_resolver.ConflictResolver",
+        initialization_code="resolver = ConflictResolver()",
+        usage_pattern="resolution = resolver.resolve(conflict_context)",
+        orchestrator_hook_type="error_handling",
+        integration_point="MasterOrchestrator conflict scenarios",
+        wiring_priority=2,
+        governance_rules_required=["CORE-008", "CORE-011"],
+    )
+    
+    ORPHAN_DETECTOR = UnwiredComponent(
+        id="UNWIRED-MISC-002",
+        name="OrphanDetector",
+        category=ComponentCategory.MODULE,
+        status=IntegrationStatus.READY,
+        description="Detects orphaned resources and registers for cleanup",
+        tests_count=12,
+        test_pass_rate=1.0,
+        test_files=["tests/unit/recovery/test_orphan_detector.py"],
+        implementation_location="cortex/core/recovery/orphan_detector.py",
+        entry_point="cortex.core.recovery.orphan_detector.OrphanDetector",
+        initialization_code="detector = OrphanDetector()\ndetector.register_checker('resources', checker_fn)",
+        usage_pattern="orphans = detector.detect_orphans()",
+        orchestrator_hook_type="maintenance",
+        integration_point="Background health check task",
+        wiring_priority=3,
+        governance_rules_required=["CORE-008", "CORE-011"],
+    )
+
+
+def get_unwired_inventory() -> List[UnwiredComponent]:
+    """
+    Get list of all unwired components ordered by integration priority.
+    
+    Returns:
+        Sorted list of UnwiredComponent objects (critical first)
+    """
+    components = [
+        # Challenge integration (CRITICAL)
+        WiringHarnessInventory.CHALLENGE_INTEGRATION_CHALLENGE_GENERATOR,
+        WiringHarnessInventory.CHALLENGE_INTEGRATION_ORCHESTRATOR,
+        WiringHarnessInventory.HOLISTIC_CONTEXT_BUILDER,
+        WiringHarnessInventory.TURN_RESPONSE_WITH_CHALLENGES,
+        
+        # Interaction & LENS protocol (CRITICAL)
+        WiringHarnessInventory.INTERACTION_ORCHESTRATOR,
+        WiringHarnessInventory.CONVERSATION_PROTOCOL,
+        WiringHarnessInventory.CONTINUATION_DECISION,
+        
+        # Health & resilience (HIGH)
+        WiringHarnessInventory.COMPONENT_HEALTH_TRACKER,
+        WiringHarnessInventory.GRACEFUL_DEGRADATION_FRAMEWORK,
+        WiringHarnessInventory.PARTIAL_FUNCTIONALITY_MODE,
+        
+        # LENS & synthesis
+        WiringHarnessInventory.LENS_SYNTHESIS,
+        WiringHarnessInventory.INTENT_CANONICALIZER,
+        WiringHarnessInventory.COMPREHENSION_YAML_GENERATOR,
+        
+        # Intent routing
+        WiringHarnessInventory.INTENT_REFLECTION_PROTOCOL,
+        WiringHarnessInventory.INTELLIGENT_KNOWLEDGE_ROUTER,
+        
+        # MCP tools
+        WiringHarnessInventory.MCP_TOOL_DISCOVERY,
+        WiringHarnessInventory.MCP_TOOL_GOVERNANCE,
+        
+        # Knowledge & governance
+        WiringHarnessInventory.UNIFIED_KNOWLEDGE_SERVICE,
+        WiringHarnessInventory.GOVERNANCE_INTELLIGENCE,
+        WiringHarnessInventory.TIER_COMPOSER,
+        WiringHarnessInventory.KNOWLEDGE_GRAPH_INTEGRATION,
+        
+        # Advanced
+        WiringHarnessInventory.PLANNING_ORCHESTRATOR,
+        WiringHarnessInventory.TERMINAL_EVENT_REGISTRY,
+        WiringHarnessInventory.CONFLICT_RESOLVER,
+        WiringHarnessInventory.ORPHAN_DETECTOR,
+    ]
+    
+    # Sort by wiring_priority (0=critical, higher=less critical)
+    return sorted(components, key=lambda c: c.wiring_priority)
+
+
+def get_critical_wiring_order() -> List[UnwiredComponent]:
+    """
+    Get unwired components in the order they must be integrated.
+    
+    Returns:
+        List of components in dependency/execution order
+    """
+    return [c for c in get_unwired_inventory() if c.wiring_priority <= 1]
+
+
+__all__ = [
+    "WiringHarnessInventory",
+    "UnwiredComponent",
+    "WiredComponentDependency",
+    "ComponentCategory",
+    "IntegrationStatus",
+    "get_unwired_inventory",
+    "get_critical_wiring_order",
+]
