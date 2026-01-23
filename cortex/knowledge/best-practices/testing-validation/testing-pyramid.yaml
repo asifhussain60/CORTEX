@@ -1,0 +1,566 @@
+﻿# Testing Pyramid Strategy (Machine-Readable Guideline)
+# Source: Mike Cohn's Testing Pyramid (2009) + Martin Fowler's TestPyramid (2012)
+# Version: 1.0
+# Created: December 22, 2025
+# Schema: TestingStrategySchema
+# Purpose: Authoritative testing strategy for CORTEX test generation and validation
+
+metadata:
+  title: "Testing Pyramid Strategy"
+  authors:
+    - "Mike Cohn"
+    - "Martin Fowler"
+  sources:
+    - "Succeeding with Agile: Software Development Using Scrum (2009)"
+    - "https://martinfowler.com/articles/practical-test-pyramid.html"
+  version: "1.0"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  schema: "TestingStrategySchema"
+  tags:
+    - testing
+    - test-automation
+    - test-strategy
+    - quality-assurance
+    - testing-pyramid
+  
+  generated_docs:
+    - path: "docs/guidelines/testing/testing-pyramid.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_guideline"
+
+# OVERVIEW
+overview:
+  concept: "Testing Pyramid"
+  description: >
+    The Testing Pyramid is a metaphor for organizing automated tests into layers based on
+    granularity, speed, and cost. The shape (wide base, narrow top) indicates the ideal
+    distribution: many fast unit tests, fewer integration tests, and even fewer UI tests.
+  
+  key_principles:
+    - principle: "Test at the Lowest Level Possible"
+      rationale: "Lower-level tests are faster, cheaper, and more stable"
+    
+    - principle: "Optimize Test Distribution"
+      rationale: "More unit tests (70%), fewer integration tests (20%), minimal UI tests (10%)"
+    
+    - principle: "Fail Fast, Fail Early"
+      rationale: "Unit tests catch bugs in seconds vs minutes/hours for UI tests"
+    
+    - principle: "Test Isolation"
+      rationale: "Each layer tests different concerns independently"
+  
+  benefits:
+    - "Fast feedback cycles (seconds for unit tests)"
+    - "Lower maintenance cost (unit tests are most stable)"
+    - "Better test coverage (unit tests cover edge cases cheaply)"
+    - "Reduced flakiness (fewer external dependencies)"
+    - "Cheaper execution (unit tests run in parallel easily)"
+
+# PYRAMID LAYERS
+layers:
+  # LAYER 1: UNIT TESTS (BASE - 70%)
+  unit_tests:
+    position: "Base (Bottom Layer)"
+    proportion: "70%"
+    quantity: "Majority of tests"
+    execution_time: "Milliseconds to seconds"
+    scope: "Single unit (class, function, method)"
+    dependencies: "None (use test doubles)"
+    
+    description: >
+      Unit tests verify individual units of code in isolation. They are fast, deterministic,
+      and test a single responsibility. Use test doubles (mocks, stubs) for dependencies.
+    
+    characteristics:
+      - "Extremely fast (< 100ms per test)"
+      - "No external dependencies (database, network, filesystem)"
+      - "Deterministic (same input = same output)"
+      - "Easy to write and maintain"
+      - "High code coverage achievable"
+      - "Pinpoint exact failure location"
+    
+    what_to_test:
+      - "Business logic and algorithms"
+      - "Data validation and transformation"
+      - "Edge cases and boundary conditions"
+      - "Error handling and exceptions"
+      - "State management within a class"
+      - "Utility functions and helpers"
+    
+    examples:
+      - language: "python"
+        framework: "pytest"
+        code: |
+          # Unit test for a calculator class
+          def test_add_positive_numbers():
+              calculator = Calculator()
+              result = calculator.add(2, 3)
+              assert result == 5
+          
+          def test_divide_by_zero_raises_exception():
+              calculator = Calculator()
+              with pytest.raises(ZeroDivisionError):
+                  calculator.divide(10, 0)
+        
+        explanation: "Tests single methods in isolation with no external dependencies"
+      
+      - language: "csharp"
+        framework: "xUnit"
+        code: |
+          // Unit test for OrderValidator
+          [Fact]
+          public void Validate_WithNegativeQuantity_ReturnsFalse()
+          {
+              // Arrange
+              var validator = new OrderValidator();
+              var order = new Order { Quantity = -1 };
+              
+              // Act
+              var result = validator.Validate(order);
+              
+              // Assert
+              Assert.False(result);
+          }
+        
+        explanation: "Tests business rule validation without database or external services"
+    
+    tools:
+      - name: "pytest"
+        languages: ["python"]
+        features: ["fixtures", "parametrization", "mocking"]
+      
+      - name: "unittest"
+        languages: ["python"]
+        features: ["built-in", "test discovery", "mocking"]
+      
+      - name: "JUnit"
+        languages: ["java"]
+        features: ["annotations", "assertions", "lifecycle"]
+      
+      - name: "xUnit / NUnit"
+        languages: ["csharp"]
+        features: ["theories", "data-driven tests", "parallel execution"]
+      
+      - name: "Jest"
+        languages: ["javascript", "typescript"]
+        features: ["snapshot testing", "coverage", "watch mode"]
+    
+    best_practices:
+      - practice: "One Assertion Per Test"
+        rationale: "Makes failures easier to diagnose"
+      
+      - practice: "Use AAA Pattern"
+        description: "Arrange (setup), Act (execute), Assert (verify)"
+      
+      - practice: "Test Behavior, Not Implementation"
+        rationale: "Tests should survive refactoring"
+      
+      - practice: "Use Descriptive Test Names"
+        format: "test_methodName_scenario_expectedBehavior()"
+      
+      - practice: "Mock External Dependencies"
+        rationale: "Keeps tests fast and isolated"
+  
+  # LAYER 2: INTEGRATION TESTS (MIDDLE - 20%)
+  integration_tests:
+    position: "Middle Layer"
+    proportion: "20%"
+    quantity: "Moderate number of tests"
+    execution_time: "Seconds to minutes"
+    scope: "Multiple units working together"
+    dependencies: "Real or test doubles of external systems"
+    
+    description: >
+      Integration tests verify that multiple units work correctly together. They test
+      interactions between components, modules, or external systems (databases, APIs).
+    
+    characteristics:
+      - "Slower than unit tests (1-10 seconds per test)"
+      - "May use real external systems or test containers"
+      - "Test data flow between components"
+      - "More complex setup and teardown"
+      - "Can be flaky if external systems are unstable"
+    
+    what_to_test:
+      - "Database queries and transactions"
+      - "API endpoints (request/response)"
+      - "Message queue interactions"
+      - "File system operations"
+      - "Third-party service integrations"
+      - "Component interactions within a module"
+    
+    examples:
+      - language: "python"
+        framework: "pytest + TestContainers"
+        code: |
+          # Integration test with real database
+          def test_user_repository_saves_and_retrieves(db_container):
+              # Arrange
+              repo = UserRepository(db_container.connection_string)
+              user = User(name="Alice", email="alice@example.com")
+              
+              # Act
+              user_id = repo.save(user)
+              retrieved = repo.get_by_id(user_id)
+              
+              # Assert
+              assert retrieved.name == "Alice"
+              assert retrieved.email == "alice@example.com"
+        
+        explanation: "Tests repository with real database using TestContainers"
+      
+      - language: "csharp"
+        framework: "xUnit + WebApplicationFactory"
+        code: |
+          // Integration test for API endpoint
+          [Fact]
+          public async Task GetOrders_ReturnsOkWithOrders()
+          {
+              // Arrange
+              var client = _factory.CreateClient();
+              
+              // Act
+              var response = await client.GetAsync("/api/orders");
+              
+              // Assert
+              response.EnsureSuccessStatusCode();
+              var orders = await response.Content
+                  .ReadFromJsonAsync<List<Order>>();
+              Assert.NotEmpty(orders);
+          }
+        
+        explanation: "Tests full HTTP request/response cycle with in-memory database"
+    
+    subcategories:
+      - type: "Narrow Integration Tests"
+        description: "Test two closely related units (e.g., service + repository)"
+        dependencies: "Minimal external systems"
+      
+      - type: "Broad Integration Tests"
+        description: "Test full vertical slice through multiple layers"
+        dependencies: "Multiple external systems (database, cache, API)"
+      
+      - type: "Contract Tests"
+        description: "Verify API contracts between services"
+        tools: ["Pact", "Spring Cloud Contract"]
+    
+    tools:
+      - name: "TestContainers"
+        languages: ["python", "java", "csharp"]
+        features: ["Docker containers for databases", "isolation", "cleanup"]
+      
+      - name: "WebApplicationFactory"
+        languages: ["csharp"]
+        features: ["In-memory ASP.NET Core testing", "integration tests"]
+      
+      - name: "pytest-docker"
+        languages: ["python"]
+        features: ["Docker fixtures for pytest"]
+      
+      - name: "Supertest"
+        languages: ["javascript", "typescript"]
+        features: ["HTTP API testing", "Express.js integration"]
+    
+    best_practices:
+      - practice: "Use Test Databases"
+        description: "Never run integration tests against production databases"
+      
+      - practice: "Clean State Between Tests"
+        rationale: "Prevents test interdependencies and flakiness"
+      
+      - practice: "Use Transactions for Rollback"
+        description: "Wrap tests in transactions and rollback after test"
+      
+      - practice: "Test Realistic Scenarios"
+        rationale: "Integration tests should reflect real-world usage"
+      
+      - practice: "Keep Tests Independent"
+        rationale: "Each test should setup its own data and not rely on test order"
+  
+  # LAYER 3: UI/E2E TESTS (TOP - 10%)
+  ui_end_to_end_tests:
+    position: "Top (Peak)"
+    proportion: "10%"
+    quantity: "Small number of critical paths"
+    execution_time: "Minutes to hours"
+    scope: "Entire application from user perspective"
+    dependencies: "Full application stack + real browser"
+    
+    description: >
+      End-to-End (E2E) tests verify the entire application flow from the user's perspective.
+      They test through the UI, simulating real user interactions (clicks, form inputs, navigation).
+    
+    characteristics:
+      - "Slowest tests (10-60 seconds per test)"
+      - "Most brittle (UI changes break tests)"
+      - "Highest maintenance cost"
+      - "Test full system integration"
+      - "Catch issues unit/integration tests miss"
+      - "Can be flaky (timing issues, network latency)"
+    
+    what_to_test:
+      - "Critical user journeys (happy paths)"
+      - "Login and authentication flows"
+      - "Checkout and payment processes"
+      - "Key business workflows"
+      - "Cross-browser compatibility (selective)"
+    
+    what_not_to_test:
+      - "Edge cases (test at unit level)"
+      - "Every permutation (combinatorial explosion)"
+      - "Detailed validation logic (test at unit level)"
+      - "Performance (use dedicated performance tests)"
+    
+    examples:
+      - language: "javascript"
+        framework: "Playwright"
+        code: |
+          // E2E test for user login flow
+          test('user can login with valid credentials', async ({ page }) => {
+            // Navigate to login page
+            await page.goto('https://example.com/login');
+            
+            // Fill in credentials
+            await page.fill('input[name="email"]', 'user@example.com');
+            await page.fill('input[name="password"]', 'password123');
+            
+            // Submit form
+            await page.click('button[type="submit"]');
+            
+            // Verify redirect to dashboard
+            await expect(page).toHaveURL(/.*dashboard/);
+            await expect(page.locator('h1')).toContainText('Welcome');
+          });
+        
+        explanation: "Tests complete login flow through real browser"
+      
+      - language: "python"
+        framework: "Selenium"
+        code: |
+          # E2E test for shopping cart checkout
+          def test_user_can_complete_purchase(driver):
+              # Navigate to product page
+              driver.get("https://shop.example.com/products/1")
+              
+              # Add to cart
+              add_to_cart = driver.find_element(By.ID, "add-to-cart")
+              add_to_cart.click()
+              
+              # Go to checkout
+              driver.find_element(By.ID, "checkout").click()
+              
+              # Fill payment form
+              driver.find_element(By.NAME, "card_number").send_keys("4111111111111111")
+              driver.find_element(By.NAME, "submit").click()
+              
+              # Verify success
+              assert "Order confirmed" in driver.page_source
+        
+        explanation: "Tests end-to-end purchase flow from product to confirmation"
+    
+    tools:
+      - name: "Playwright"
+        languages: ["javascript", "typescript", "python", "csharp"]
+        features: ["multi-browser", "auto-wait", "network interception", "fast"]
+      
+      - name: "Cypress"
+        languages: ["javascript", "typescript"]
+        features: ["time-travel debugging", "automatic waiting", "network stubbing"]
+      
+      - name: "Selenium WebDriver"
+        languages: ["python", "java", "csharp", "javascript"]
+        features: ["multi-browser", "mature ecosystem", "grid support"]
+      
+      - name: "Puppeteer"
+        languages: ["javascript", "typescript"]
+        features: ["Chrome DevTools Protocol", "headless Chrome"]
+    
+    best_practices:
+      - practice: "Test Critical Paths Only"
+        rationale: "E2E tests are expensive; focus on high-value scenarios"
+      
+      - practice: "Use Page Object Model"
+        description: "Encapsulate page interactions in reusable objects"
+      
+      - practice: "Implement Retry Logic"
+        rationale: "Handle transient failures (network, timing)"
+      
+      - practice: "Use Explicit Waits"
+        description: "Wait for specific conditions instead of arbitrary sleeps"
+      
+      - practice: "Run in Parallel"
+        rationale: "Reduces total execution time"
+      
+      - practice: "Use Headless Mode for CI"
+        description: "Faster execution in continuous integration pipelines"
+
+# ANTI-PATTERNS (ICE CREAM CONE)
+anti_patterns:
+  ice_cream_cone:
+    name: "Ice Cream Cone Anti-Pattern"
+    description: >
+      Inverted pyramid with many UI tests, few integration tests, and minimal unit tests.
+      This is the opposite of the ideal pyramid and leads to slow, brittle test suites.
+    
+    problems:
+      - "Extremely slow feedback (hours to run full suite)"
+      - "High maintenance cost (UI changes break many tests)"
+      - "Flaky tests (timing issues, environment dependencies)"
+      - "Poor root cause analysis (UI tests don't pinpoint bugs)"
+      - "Expensive to run (requires full environment)"
+    
+    warning_signs:
+      - "Test suite takes > 30 minutes to run"
+      - "Developers skip running tests locally"
+      - "Tests fail randomly without code changes"
+      - "Most tests are Selenium/Cypress tests"
+      - "Low code coverage despite many tests"
+    
+    solution:
+      - "Identify logic tested only at UI level"
+      - "Push tests down the pyramid (unit ΓåÆ integration ΓåÆ UI)"
+      - "Delete redundant UI tests covering unit-level logic"
+      - "Invest in unit test infrastructure"
+  
+  manual_testing_trap:
+    name: "Manual Testing Trap"
+    description: "Over-reliance on manual testing instead of automated tests"
+    
+    problems:
+      - "Regression bugs slip through"
+      - "Inconsistent test execution"
+      - "Cannot scale with team growth"
+      - "Slow release cycles"
+    
+    solution:
+      - "Automate repetitive tests first"
+      - "Start with unit tests for new code"
+      - "Gradually build integration/E2E coverage"
+
+# TEST DISTRIBUTION GUIDELINES
+distribution:
+  ideal_ratios:
+    unit_tests: "70%"
+    integration_tests: "20%"
+    ui_e2e_tests: "10%"
+  
+  flexibility_note: >
+    Ratios are guidelines, not strict rules. Adjust based on:
+    - Application type (API-heavy vs UI-heavy)
+    - Team size and expertise
+    - Risk tolerance
+    - Deployment frequency
+  
+  examples_by_application_type:
+    - type: "Microservice API"
+      unit: "80%"
+      integration: "15%"
+      e2e: "5%"
+      rationale: "Business logic dominates; minimal UI"
+    
+    - type: "SPA Web Application"
+      unit: "60%"
+      integration: "25%"
+      e2e: "15%"
+      rationale: "More integration and UI testing needed"
+    
+    - type: "Data Processing Pipeline"
+      unit: "75%"
+      integration: "20%"
+      e2e: "5%"
+      rationale: "Focus on transformation logic and data flow"
+
+# IMPLEMENTATION STRATEGY
+implementation_strategy:
+  starting_from_zero:
+    - step: "1. Start with Unit Tests"
+      rationale: "Fastest ROI; build foundation"
+      actions:
+        - "Test new code with unit tests first (TDD)"
+        - "Add unit tests for bug fixes"
+        - "Gradually increase coverage for critical paths"
+    
+    - step: "2. Add Integration Tests"
+      rationale: "Verify component interactions"
+      actions:
+        - "Test database repositories"
+        - "Test API endpoints"
+        - "Test message handlers"
+    
+    - step: "3. Add E2E Tests Sparingly"
+      rationale: "Cover critical user journeys only"
+      actions:
+        - "Identify 5-10 most critical flows"
+        - "Automate happy path for each"
+        - "Resist adding more unless high ROI"
+  
+  for_existing_codebase:
+    - step: "1. Measure Current Distribution"
+      actions:
+        - "Count tests by type"
+        - "Calculate actual ratios"
+        - "Identify imbalances"
+    
+    - step: "2. Stop the Bleeding"
+      actions:
+        - "Freeze new UI tests"
+        - "Require unit tests for new features"
+        - "Set coverage targets for new code"
+    
+    - step: "3. Refactor High-Value Areas"
+      actions:
+        - "Push UI test logic down to unit tests"
+        - "Delete redundant tests"
+        - "Focus on critical business logic"
+
+# METRICS AND MONITORING
+metrics:
+  execution_time:
+    target_unit_tests: "< 10 minutes for full suite"
+    target_integration_tests: "< 20 minutes"
+    target_e2e_tests: "< 30 minutes"
+  
+  code_coverage:
+    unit_test_coverage: "> 80% for business logic"
+    overall_coverage: "> 70%"
+    note: "Coverage is necessary but not sufficient; test quality matters"
+  
+  test_health:
+    flakiness: "< 1% tests fail intermittently"
+    build_time: "< 10 minutes for CI pipeline"
+    feedback_time: "< 5 minutes for local development"
+
+# REFERENCES
+references:
+  - title: "The Practical Test Pyramid"
+    author: "Ham Vocke"
+    url: "https://martinfowler.com/articles/practical-test-pyramid.html"
+    year: 2018
+  
+  - title: "Succeeding with Agile: Software Development Using Scrum"
+    author: "Mike Cohn"
+    publisher: "Addison-Wesley Professional"
+    year: 2009
+  
+  - title: "Test Pyramid"
+    author: "Martin Fowler"
+    url: "https://martinfowler.com/bliki/TestPyramid.html"
+    year: 2012
+  
+  - title: "Google Testing Blog - Just Say No to More End-to-End Tests"
+    author: "Mike Wacker"
+    url: "https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html"
+    year: 2015
+
+# RELATED TOPICS
+related_knowledge:
+  - file: "testing/tdd-best-practices.yaml"
+    relevance: "Test-first development methodology driving pyramid strategy"
+  
+  - file: "testing/test-doubles.yaml"
+    relevance: "Mocking strategies for isolated unit tests (pyramid base)"
+  
+  - file: "testing/selenium-to-playwright-migration.yaml"
+    relevance: "E2E testing at pyramid top - migrate to Playwright for faster, more reliable tests"

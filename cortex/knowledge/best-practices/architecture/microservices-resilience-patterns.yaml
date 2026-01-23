@@ -1,0 +1,391 @@
+﻿# Microservices Resilience Patterns (Machine-Readable Guideline)
+# Source: Release It!, Microservices Patterns (Chris Richardson)
+# Version: 1.0
+# Created: December 28, 2025
+# Schema: KnowledgeGuidelineSchema
+# Purpose: Resilience patterns for distributed systems
+
+metadata:
+  title: "Microservices Resilience Patterns"
+  author: "Michael Nygard, Chris Richardson"
+  source: "Release It!, Microservices Patterns"
+  year: 2025
+  version: "1.0"
+  created: "2025-12-28"
+  updated: "2025-12-28"
+  schema: "KnowledgeGuidelineSchema"
+  tags:
+    - microservices
+    - resilience
+    - fault-tolerance
+    - distributed-systems
+  
+  generated_docs:
+    - path: "docs/knowledge/microservices/resilience-patterns.html"
+      format: "html"
+      generator: "DocumentationOrchestrator"
+      template: "knowledge_file_detail"
+
+# 1. CIRCUIT BREAKER PATTERN
+circuit_breaker:
+  principle: "Prevent cascading failures by failing fast"
+  importance: "Critical - protects system from cascade failures"
+  
+  rules:
+    - id: "micro_cb_001"
+      name: "Implement Circuit Breaker"
+      description: "Automatically stop calling failing service"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "csharp"
+            code: |
+              // Using Polly library
+              var circuitBreakerPolicy = Policy
+                  .Handle<HttpRequestException>()
+                  .CircuitBreakerAsync(
+                      exceptionsAllowedBeforeBreaking: 3,
+                      durationOfBreak: TimeSpan.FromSeconds(30),
+                      onBreak: (exception, duration) => {
+                          Log.Warning("Circuit breaker opened");
+                      },
+                      onReset: () => {
+                          Log.Information("Circuit breaker reset");
+                      }
+                  );
+              
+              // Use the policy
+              var result = await circuitBreakerPolicy.ExecuteAsync(async () => {
+                  return await httpClient.GetAsync("https://api.example.com/data");
+              });
+            explanation: "Opens circuit after 3 failures, closes after 30s"
+        
+        good:
+          - language: "java"
+            code: |
+              // Using Resilience4j
+              CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+                  .failureRateThreshold(50)              // Open at 50% failure rate
+                  .waitDurationInOpenState(Duration.ofSeconds(30))
+                  .slidingWindowSize(10)                  // Last 10 calls
+                  .permittedNumberOfCallsInHalfOpenState(3)
+                  .build();
+              
+              CircuitBreakerRegistry registry = CircuitBreakerRegistry.of(config);
+              CircuitBreaker circuitBreaker = registry.circuitBreaker("paymentService");
+              
+              Supplier<String> decoratedSupplier = CircuitBreaker
+                  .decorateSupplier(circuitBreaker, () -> callExternalService());
+              
+              Try<String> result = Try.ofSupplier(decoratedSupplier)
+                  .recover(throwable -> "Fallback response");
+            explanation: "Circuit breaker with configurable thresholds"
+
+  states:
+    - name: "CLOSED"
+      description: "Normal operation, requests pass through"
+    - name: "OPEN"
+      description: "Circuit breaker tripped, requests fail fast"
+    - name: "HALF_OPEN"
+      description: "Testing if service recovered"
+
+# 2. RETRY PATTERN
+retry_patterns:
+  principle: "Handle transient failures automatically"
+  importance: "High - improves reliability"
+  
+  rules:
+    - id: "micro_retry_001"
+      name: "Exponential Backoff"
+      description: "Increase delay between retries exponentially"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "python"
+            code: |
+              import time
+              from functools import wraps
+              
+              def retry_with_backoff(max_retries=3, base_delay=1, max_delay=60):
+                  def decorator(func):
+                      @wraps(func)
+                      def wrapper(*args, **kwargs):
+                          retries = 0
+                          while retries < max_retries:
+                              try:
+                                  return func(*args, **kwargs)
+                              except Exception as e:
+                                  retries += 1
+                                  if retries >= max_retries:
+                                      raise
+                                  
+                                  # Exponential backoff with jitter
+                                  delay = min(base_delay * (2 ** retries), max_delay)
+                                  jitter = random.uniform(0, delay * 0.1)
+                                  time.sleep(delay + jitter)
+                                  
+                                  print(f"Retry {retries}/{max_retries} after {delay}s")
+                      return wrapper
+                  return decorator
+              
+              @retry_with_backoff(max_retries=3)
+              def call_external_api():
+                  response = requests.get("https://api.example.com/data")
+                  response.raise_for_status()
+                  return response.json()
+            explanation: "Retries: 1s, 2s, 4s with jitter"
+
+    - id: "micro_retry_002"
+      name: "Idempotent Operations Only"
+      description: "Only retry operations that can be safely repeated"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "typescript"
+            code: |
+              // Γ£à Idempotent - safe to retry
+              async function getOrder(orderId: string): Promise<Order> {
+                  return await retryableHttpGet(`/api/orders/${orderId}`);
+              }
+              
+              // Γ£à Idempotent with idempotency key
+              async function createOrder(order: Order): Promise<Order> {
+                  const idempotencyKey = generateUUID();
+                  return await retryableHttpPost('/api/orders', order, {
+                      headers: { 'Idempotency-Key': idempotencyKey }
+                  });
+              }
+            explanation: "GET is naturally idempotent, POST uses idempotency key"
+        
+        bad:
+          - language: "typescript"
+            code: |
+              // Γ¥î NOT idempotent - dangerous to retry
+              async function addToBalance(userId: string, amount: number) {
+                  // Retry could add amount multiple times!
+                  return await retryableHttpPost('/api/balance/add', { userId, amount });
+              }
+            explanation: "Retrying could credit account multiple times"
+
+# 3. TIMEOUT PATTERN
+timeout_patterns:
+  principle: "Prevent indefinite waiting"
+  importance: "Critical - prevents resource exhaustion"
+  
+  rules:
+    - id: "micro_timeout_001"
+      name: "Set Aggressive Timeouts"
+      description: "Fail fast rather than waiting indefinitely"
+      severity: "CRITICAL"
+      examples:
+        good:
+          - language: "csharp"
+            code: |
+              var httpClient = new HttpClient
+              {
+                  Timeout = TimeSpan.FromSeconds(5)  // 5s timeout
+              };
+              
+              var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+              
+              try
+              {
+                  var response = await httpClient.GetAsync(
+                      "https://api.example.com/data",
+                      cts.Token
+                  );
+              }
+              catch (TaskCanceledException ex)
+              {
+                  _logger.LogWarning("Request timed out after 3s");
+                  return FallbackResponse();
+              }
+            explanation: "3s timeout with fallback"
+
+    - id: "micro_timeout_002"
+      name: "Chain Timeouts Appropriately"
+      description: "Each layer should have shorter timeout than caller"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "text"
+            code: |
+              API Gateway: 30s timeout
+                Γö£ΓöÇ Service A: 25s timeout
+                Γöé   Γö£ΓöÇ Service B: 20s timeout
+                Γöé   Γöé   ΓööΓöÇ Database: 15s timeout
+                Γöé   ΓööΓöÇ Cache: 2s timeout
+                ΓööΓöÇ Service C: 20s timeout
+                    ΓööΓöÇ External API: 15s timeout
+            explanation: "Nested services have progressively shorter timeouts"
+
+# 4. BULKHEAD PATTERN
+bulkhead_patterns:
+  principle: "Isolate resources to prevent total system failure"
+  importance: "High - prevents cascading resource exhaustion"
+  
+  rules:
+    - id: "micro_bulk_001"
+      name: "Thread Pool Isolation"
+      description: "Separate thread pools for different dependencies"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "java"
+            code: |
+              // Separate thread pools
+              ExecutorService paymentThreadPool = Executors.newFixedThreadPool(10);
+              ExecutorService inventoryThreadPool = Executors.newFixedThreadPool(20);
+              ExecutorService notificationThreadPool = Executors.newFixedThreadPool(5);
+              
+              // Submit tasks to isolated pools
+              Future<PaymentResult> payment = paymentThreadPool.submit(() -> 
+                  processPayment(order));
+              
+              Future<InventoryResult> inventory = inventoryThreadPool.submit(() -> 
+                  reserveInventory(order));
+            explanation: "Slow payment API doesn't block inventory service"
+
+    - id: "micro_bulk_002"
+      name: "Connection Pool Limits"
+      description: "Limit connections per downstream service"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "csharp"
+            code: |
+              // Configure HttpClient with connection limits
+              services.AddHttpClient("PaymentService", client =>
+              {
+                  client.BaseAddress = new Uri("https://payment-api.com");
+                  client.Timeout = TimeSpan.FromSeconds(10);
+              })
+              .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+              {
+                  MaxConnectionsPerServer = 10  // Limit connections
+              });
+            explanation: "Max 10 concurrent connections to payment service"
+
+# 5. FALLBACK PATTERN
+fallback_patterns:
+  principle: "Provide degraded functionality when service fails"
+  importance: "High - improves user experience"
+  
+  rules:
+    - id: "micro_fallback_001"
+      name: "Return Cached Data"
+      description: "Serve stale data when service unavailable"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "typescript"
+            code: |
+              async function getUserProfile(userId: string): Promise<UserProfile> {
+                  try {
+                      // Try primary service
+                      const profile = await userService.getProfile(userId);
+                      await cache.set(`user:${userId}`, profile, 300);  // Cache 5 min
+                      return profile;
+                  } catch (error) {
+                      // Fallback to cache
+                      const cachedProfile = await cache.get(`user:${userId}`);
+                      if (cachedProfile) {
+                          logger.warn('Serving cached profile due to service failure');
+                          return { ...cachedProfile, stale: true };
+                      }
+                      
+                      // Final fallback
+                      return getDefaultProfile();
+                  }
+              }
+            explanation: "Cache ΓåÆ Default, never full failure"
+
+    - id: "micro_fallback_002"
+      name: "Graceful Degradation"
+      description: "Remove non-essential features when dependencies fail"
+      severity: "MEDIUM"
+      examples:
+        good:
+          - language: "javascript"
+            code: |
+              async function renderDashboard(userId) {
+                  const [userProfile, recommendations, notifications] = await Promise.allSettled([
+                      getUserProfile(userId),
+                      getRecommendations(userId),
+                      getNotifications(userId)
+                  ]);
+                  
+                  return {
+                      profile: userProfile.status === 'fulfilled' 
+                          ? userProfile.value 
+                          : getBasicProfile(userId),  // Essential
+                      
+                      recommendations: recommendations.status === 'fulfilled'
+                          ? recommendations.value
+                          : [],  // Optional feature
+                      
+                      notifications: notifications.status === 'fulfilled'
+                          ? notifications.value
+                          : []   // Optional feature
+                  };
+              }
+            explanation: "Core functionality works, optional features may be missing"
+
+# 6. HEALTH CHECK PATTERN
+health_check_patterns:
+  principle: "Monitor service health continuously"
+  importance: "High - enables automated recovery"
+  
+  rules:
+    - id: "micro_health_001"
+      name: "Implement Health Check Endpoint"
+      description: "Expose /health endpoint for monitoring"
+      severity: "HIGH"
+      examples:
+        good:
+          - language: "csharp"
+            code: |
+              // ASP.NET Core health checks
+              public void ConfigureServices(IServiceCollection services)
+              {
+                  services.AddHealthChecks()
+                      .AddCheck("self", () => HealthCheckResult.Healthy())
+                      .AddSqlServer(connectionString, name: "database")
+                      .AddRedis(redisConnection, name: "cache")
+                      .AddUrlGroup(new Uri("https://api.external.com/health"), name: "external-api");
+              }
+              
+              public void Configure(IApplicationBuilder app)
+              {
+                  app.UseHealthChecks("/health", new HealthCheckOptions
+                  {
+                      ResponseWriter = async (context, report) =>
+                      {
+                          context.Response.ContentType = "application/json";
+                          await context.Response.WriteAsync(JsonSerializer.Serialize(new
+                          {
+                              status = report.Status.ToString(),
+                              checks = report.Entries.Select(e => new
+                              {
+                                  name = e.Key,
+                                  status = e.Value.Status.ToString(),
+                                  duration = e.Value.Duration
+                              })
+                          }));
+                      }
+                  });
+              }
+            explanation: "Comprehensive health check with dependencies"
+
+# CROSS-REFERENCES
+related_knowledge:
+  - file: "microservices/service-design.yaml"
+    relationship: "Service design principles"
+  - file: "microservices/api-gateway-patterns.yaml"
+    relationship: "Gateway-level resilience"
+  - file: "devops/monitoring-observability.yaml"
+    relationship: "Monitoring circuit breakers and retries"
+  - file: "performance/caching-strategies.yaml"
+    relationship: "Caching for fallback"
+  - file: "cloud/serverless-patterns.yaml"
+    relationship: "Resilience in serverless"
