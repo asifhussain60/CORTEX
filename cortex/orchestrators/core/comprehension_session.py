@@ -5,7 +5,6 @@ AC-ID: AC-INTENT-001-01, AC-INTENT-001-02, AC-INTENT-001-03
 Phase: REMEDIATION-INTENT-001-COMPREHENSION-SESSION
 Purpose: Track comprehension approvals, revisions, and state across turns
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from __future__ import annotations

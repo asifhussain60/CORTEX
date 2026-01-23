@@ -56,7 +56,6 @@ Every response MUST begin with this exact format:
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Field Reference:**
@@ -153,7 +152,6 @@ Execute with full traceability:
 Tests for {module_name}
 AC-IDs tested: {AC-ID-1}, {AC-ID-2}
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
@@ -185,7 +183,6 @@ Module: {module_name}
 AC-ID: {ac_id}
 Purpose: {description}
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Optional, Dict, Any, List
@@ -395,7 +392,6 @@ tests/
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 

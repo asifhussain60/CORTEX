@@ -43,7 +43,6 @@ GitHub Copilot: ## 🧠 CORTEX Intent Validation Architecture Analysis
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -97,7 +96,6 @@ GitHub Copilot: ## 🧠 CORTEX Git History Analysis & Copyright Prevention
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -161,7 +159,6 @@ GitHub Copilot: ## 🧠 CORTEX Phase Status Analysis
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 

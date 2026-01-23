@@ -893,4 +893,3 @@ This is NOT a rewrite. This is adding a "simple mode" alongside "professional mo
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

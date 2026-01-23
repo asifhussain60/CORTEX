@@ -246,7 +246,6 @@ graph TD
 ---
 
 **Author:** CORTEX Documentation Engine  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 ### Mermaid Diagram Standards
@@ -613,4 +612,3 @@ FOR each file in FILES_TO_RELOCATE:
 
 **Authority:** CORTEX.prompt.md v1.1  
 **Status:** Ready for autonomous execution with cleanup phase  
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
