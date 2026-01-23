@@ -378,7 +378,89 @@ with tracer.start_span("operation") as span:
 
 ---
 
+## 🔄 PRE-DEPLOYMENT: GIT SYNCHRONIZATION (MANDATORY)
+
+**CRITICAL:** Execute these steps BEFORE any rewiring or registration operations.
+
+### Step 1: Sync with Remote (Preserve Local Work)
+
+```bash
+# 1. Save current work state
+git stash push -m "Pre-sync: $(date +%Y%m%d_%H%M%S)"
+
+# 2. Fetch latest from origin
+git fetch origin
+
+# 3. Pull and merge with strategy to preserve local work
+git pull origin main --no-rebase --strategy-option=ours
+
+# 4. Restore local changes (if any were stashed)
+git stash pop
+```
+
+### Step 2: Conflict Resolution (If Needed)
+
+```bash
+# If conflicts occur during stash pop:
+# 1. List conflicted files
+git status | grep "both modified"
+
+# 2. For each conflict, choose strategy:
+#    - Keep local: git checkout --ours <file>
+#    - Keep remote: git checkout --theirs <file>
+#    - Manual merge: edit file, then git add <file>
+
+# 3. Complete stash recovery
+git stash drop  # Only after resolving all conflicts
+```
+
+### Step 3: Verify Synchronization
+
+```bash
+# Confirm you're up to date
+git status
+
+# Check last sync timestamp
+git log -1 --format="%ai" origin/main
+
+# Verify no divergence
+git rev-list --left-right --count origin/main...HEAD
+```
+
+### Safety Guarantees
+
+- ✅ Local uncommitted work preserved via stash
+- ✅ Merge strategy (`--strategy-option=ours`) favors local changes on conflicts
+- ✅ No rebase (prevents history rewriting)
+- ✅ Atomic operation (stash pop can be retried if needed)
+
+### Integration with Orchestrators
+
+```python
+from cortex.infrastructure.git_sync import GitSynchronizer
+
+# Before orchestrator initialization
+sync = GitSynchronizer()
+sync.safe_pull_with_local_preservation()
+
+# Now safe to proceed with rewiring
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+master = MasterOrchestrator.instance()
+```
+
+**Enforcement:** This synchronization step is TIER 0 requirement for all production deployments.
+
+---
+
 ## 🎯 PRODUCTION DEPLOYMENT CHECKLIST (2026-01-23)
+
+### ✅ Git Synchronization Complete
+
+Verify before proceeding:
+- [ ] `git pull` executed successfully
+- [ ] Local changes preserved (check `git status`)
+- [ ] No merge conflicts pending
+- [ ] Timestamp: `git log -1 --format="%ai"`
 
 ### ✅ Dependencies (44/44 Installed)
 
@@ -450,15 +532,27 @@ Features: Single-turn execution, continuation decisions, governance validation, 
 ## 🚀 PRODUCTION DEPLOYMENT PATTERN
 
 ```python
-# 1. Initialize MasterOrchestrator (singleton)
+# STEP 0: GIT SYNCHRONIZATION (MANDATORY)
+from cortex.infrastructure.git_sync import GitSynchronizer
+
+sync = GitSynchronizer()
+sync_result = sync.safe_pull_with_local_preservation()
+
+if not sync_result.success:
+    raise DeploymentError(f"Git sync failed: {sync_result.conflicts}")
+
+print(f"✓ Synced with origin at {sync_result.timestamp}")
+print(f"✓ Local changes preserved: {sync_result.stashed_changes}")
+
+# STEP 1: Initialize MasterOrchestrator (singleton)
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 master = MasterOrchestrator.instance()
 
-# 2. Setup Conversation Protocol for multi-turn
+# STEP 2: Setup Conversation Protocol for multi-turn
 from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 conversation = ConversationProtocol(master, max_turns=10)
 
-# 3. Execute 4-stage pipeline with governance
+# STEP 3: Execute 4-stage pipeline with governance
 from cortex.brain.core.governance_registry import GovernanceRegistry
 governance = GovernanceRegistry()
 
@@ -471,7 +565,7 @@ if not violations:
 else:
     print(f"Blocked by governance: {violations}")
 
-# 4. Multi-turn conversation (if needed)
+# STEP 4: Multi-turn conversation (if needed)
 for turn in range(1, 11):
     turn_result = conversation.execute_turn(
         user_input=f"Turn {turn} action",
@@ -562,6 +656,11 @@ result = server.call_tool("query_governance_context", {"operation_id": "op_123"}
 ## ⚡ QUICK COMMANDS
 
 ```bash
+# STEP 0: Git synchronization (ALWAYS FIRST)
+git stash push -m "Pre-deployment-$(date +%Y%m%d_%H%M%S)"
+git pull origin main --no-rebase --strategy-option=ours
+git stash pop
+
 # Verify production readiness
 python -c "from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator; m = MasterOrchestrator.instance(); print('✓ READY')"
 
@@ -581,8 +680,8 @@ pytest tests/ -n auto --tb=short -q
 ---
 
 **Last Updated:** 2026-01-23  
-**Status:** ✅ PRODUCTION READY - All 4 stages wired, MCP active, orchestrators registered  
+**Status:** ✅ PRODUCTION READY - Git sync enforced, all 4 stages wired, MCP active, orchestrators registered  
 **Authority:** CORTEX.prompt.md v6.0 & cortex-impl-map.yaml v3.9  
-**Deployment Status:** Ready for production deployment  
+**Deployment Status:** Ready for production deployment with git synchronization  
 
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
