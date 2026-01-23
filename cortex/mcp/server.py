@@ -259,8 +259,14 @@ class MCPServer:
         Returns:
             List of tool definitions as dictionaries
         """
-        return [
-            {
+        from cortex.mcp.registry import get_mcp_tool_registry
+        
+        # Get tools from both local registry and global ToolRegistry
+        tools_list = []
+        
+        # Add locally registered tools (like SampleTool)
+        for tool in self._tools.values():
+            tools_list.append({
                 "name": tool.definition.name,
                 "description": tool.definition.description,
                 "parameters": [
@@ -272,9 +278,35 @@ class MCPServer:
                     }
                     for p in tool.definition.parameters
                 ],
-            }
-            for tool in self._tools.values()
-        ]
+            })
+        
+        # Add tools from global ToolRegistry
+        try:
+            registry = get_mcp_tool_registry()
+            for metadata in registry.list_all():
+                # Skip if already in local tools
+                if metadata.id not in [t["name"] for t in tools_list]:
+                    # Handle parameters - they're stored as Dict[str, Dict[str, Any]]
+                    params_list = []
+                    if isinstance(metadata.parameters, dict):
+                        for param_name, param_spec in metadata.parameters.items():
+                            if isinstance(param_spec, dict):
+                                params_list.append({
+                                    "name": param_name,
+                                    "type": param_spec.get("type", "string"),
+                                    "required": param_spec.get("required", False),
+                                    "description": param_spec.get("description", ""),
+                                })
+                    
+                    tools_list.append({
+                        "name": metadata.id,
+                        "description": metadata.description,
+                        "parameters": params_list,
+                    })
+        except Exception as e:
+            self.logger.warning(f"Could not load tools from ToolRegistry: {e}")
+        
+        return tools_list
 
     def get_tools(self) -> List[Dict[str, Any]]:
         """

@@ -55,6 +55,14 @@ def mcp_tool(
         wrapper._mcp_category = category  # type: ignore
         wrapper._mcp_parameters = parameters or {}  # type: ignore
         
+        # Also set _mcp_tool_metadata for tool discovery
+        wrapper._mcp_tool_metadata = {  # type: ignore
+            "name": name,
+            "description": description,
+            "category": category,
+            "parameters": parameters or {}
+        }
+        
         # Register in thread-safe registry
         with _REGISTRY_LOCK:
             _REGISTERED_TOOLS[name] = {
