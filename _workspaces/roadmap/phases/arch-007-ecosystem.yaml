@@ -1,0 +1,38 @@
+phase_id: "arch-007-ecosystem"
+title: "Orchestrator Ecosystem - CONSOLIDATED (Work Distributed)"
+track: "stubs"
+machine: null
+status: "CONSOLIDATED"
+priority: "P3-LOW"
+estimated_effort: "0 days (documentation only)"
+blocking: false
+dependencies: []
+created_date: "2026-01-23"
+
+description: |
+  This phase has been CONSOLIDATED.
+  
+  Orchestrator ecosystem work is already distributed across:
+  - impl-governance-001: Governance orchestrator
+  - impl-intelligence-001: Intelligence coordinator
+  - impl-intelligence-002: Intelligence workflow
+  - impl-intelligence-003: Intelligence reasoning
+  - arch-008: Core Orchestrators (ConversationOrchestrator, DomainOrchestrator, etc.)
+  
+  All ecosystem components are covered by these existing/planned phases.
+
+consolidation_rationale: |
+  Originally planned as broad "Orchestrator Ecosystem" covering all orchestrators,
+  but analysis found the work was better split into specific domain implementations:
+  - Governance orchestrator (governance domain)
+  - Intelligence orchestrators (intelligence domain)
+  - Core orchestrators (arch-008 planned phase)
+  
+  See DESIGN_STUBS_INVENTORY.md for details on the consolidation.
+
+status_action: "Consolidate documentation to point to specific phases"
+
+notes: |
+  - Kept for reference to overall architecture
+  - All actual work delegated to more specific phases
+  - Documentation should cross-reference: impl-governance-001, impl-intelligence-*, arch-008

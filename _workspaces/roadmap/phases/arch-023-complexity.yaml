@@ -1,0 +1,63 @@
+phase_id: "arch-023-complexity"
+title: "Complexity Gate - Business Rules and Complexity Scoring"
+track: "stubs"
+machine: null
+status: "STUB"
+priority: "P2-MEDIUM"
+estimated_effort: "1-2 weeks"
+blocking: false
+dependencies: []
+created_date: "2026-01-23"
+
+description: |
+  Complete complexity gate implementation with business rules:
+  - Define complexity metrics and scoring rules
+  - Implement complexity calculator with scoring engine
+  - Create complexity thresholds and gate logic
+  - Add complexity reporting and analysis tools
+  - All integrated with orchestration framework
+
+acceptance_criteria:
+  - "Complexity metrics: operation type, data size, dependency count, etc."
+  - "Scoring engine calculates 0-100 complexity score"
+  - "Thresholds: <30 simple, 30-70 moderate, >70 complex"
+  - "Gate logic allows/blocks/warns based on complexity and resources"
+  - "Reporting: complexity distribution, high-complexity operations"
+  - "Integration with adaptive execution and orchestration"
+  - "Business rules configurable via YAML"
+  - "≥14 tests covering calculator, gates, reporting, integration"
+  - "100% type hints, Google docstrings, no bare except"
+
+implementation_locations:
+  metrics: "cortex/execution/complexity_metrics.py"
+  calculator: "cortex/execution/complexity_calculator.py"
+  gate: "cortex/execution/complexity_gate.py"
+  rules: "cortex_brain/tier1/complexity_rules.yaml"
+  tests: "tests/integration/execution/test_complexity_gate.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥14 tests passing"
+  type_safety: "100% type hints"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "Complexity calculator scores operations correctly"
+    test_file: "tests/integration/execution/test_complexity_gate.py"
+    test_count: "5 tests"
+  - criterion: "Gate logic enforces thresholds correctly"
+    test_file: "tests/integration/execution/test_complexity_gate.py"
+    test_count: "5 tests"
+  - criterion: "Reporting shows complexity distribution"
+    test_file: "tests/integration/execution/test_complexity_gate.py"
+    test_count: "2 tests"
+  - criterion: "Business rules can be customized"
+    test_file: "tests/integration/execution/test_complexity_gate.py"
+    test_count: "2 tests"
+
+notes: |
+  - Can proceed independently (no blockers)
+  - Quick win: 1-2 weeks for business rules + implementation
+  - Builds on existing ComplexityGate skeleton
+  - Integrates with arch-010 (Adaptive Execution)

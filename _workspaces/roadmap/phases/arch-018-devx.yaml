@@ -1,0 +1,62 @@
+phase_id: "arch-018-devx"
+title: "Developer Experience - Tooling and IDE Integration"
+track: "stubs"
+machine: null
+status: "STUB"
+priority: "P2-MEDIUM"
+estimated_effort: "2-3 weeks"
+blocking: false
+dependencies: []
+created_date: "2026-01-23"
+
+description: |
+  Implement comprehensive developer experience tooling:
+  - DevxFormatter: Code/output formatting utilities
+  - DevxDebugger: Debugging helpers and introspection tools
+  - DevxProfiler: Performance analysis and bottleneck detection
+  - IDEIntegration: VS Code extension improvements
+  - All integrated with existing CLI and development infrastructure
+
+acceptance_criteria:
+  - "DevxFormatter formats code, output, logs consistently"
+  - "DevxDebugger provides breakpoints, variable inspection, stack traces"
+  - "DevxProfiler measures execution time, memory usage, bottlenecks"
+  - "IDEIntegration adds syntax highlighting, go-to-definition, autocomplete"
+  - "Integration with existing CLI framework"
+  - "Documentation: examples and best practices for each tool"
+  - "≥18 tests covering formatter, debugger, profiler, IDE, integration"
+  - "100% type hints, Google docstrings, no bare except"
+
+implementation_locations:
+  formatter: "cortex/devx/devx_formatter.py"
+  debugger: "cortex/devx/devx_debugger.py"
+  profiler: "cortex/devx/devx_profiler.py"
+  ide: "extensions/vscode-cortex/src/extension.ts"
+  tests: "tests/integration/devx/test_devx_tools.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥18 tests passing"
+  type_safety: "100% type hints (Python)"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "Formatter outputs consistent code/output formatting"
+    test_file: "tests/integration/devx/test_devx_tools.py"
+    test_count: "4 tests"
+  - criterion: "Debugger provides useful debugging information"
+    test_file: "tests/integration/devx/test_devx_tools.py"
+    test_count: "5 tests"
+  - criterion: "Profiler identifies performance bottlenecks"
+    test_file: "tests/integration/devx/test_devx_tools.py"
+    test_count: "5 tests"
+  - criterion: "IDE integration improves development experience"
+    test_file: "tests/integration/devx/test_devx_tools.py"
+    test_count: "4 tests"
+
+notes: |
+  - Can proceed independently (no blockers)
+  - Builds on existing CLI framework and VS Code extension
+  - 2-3 week timeline reasonable for 4 tools
+  - IDE integration may require separate TypeScript work

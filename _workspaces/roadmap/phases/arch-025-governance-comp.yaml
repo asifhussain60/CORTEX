@@ -1,0 +1,70 @@
+phase_id: "arch-025-governance-comp"
+title: "Governance Composite - Coordinated Governance Policy Enforcement"
+track: "stubs"
+machine: null
+status: "BLOCKED"
+priority: "P1-HIGH"
+estimated_effort: "3-4 days (after Phase A)"
+blocking: false
+dependencies: ["Phase A: Tier Consolidation"]
+created_date: "2026-01-23"
+
+description: |
+  Implement governance composite framework:
+  - Coordinate governance modules after tier consolidation
+  - GovernanceComposite: Orchestrate all governance enforcement
+  - Policy composition: Combine multiple policies with precedence
+  - Governance chain-of-responsibility: Layer governance rules
+  - Comprehensive validation and audit trail
+
+phase_a_prerequisite: |
+  BLOCKED until Phase A (Tier Consolidation) completes:
+  - Phase A consolidates governance to single source of truth
+  - Phase A deletes cortex/brain/core/governance/ duplicates
+  - Phase A ensures cortex_brain/tier0/governance/ is canonical
+  After Phase A (1 day), this phase can proceed (3-4 days)
+
+acceptance_criteria:
+  - "GovernanceComposite coordinates all governance modules"
+  - "Policy composition supports precedence and override rules"
+  - "Chain-of-responsibility allows layering of governance"
+  - "Real-time policy enforcement with blocking/warnings"
+  - "Policy audit trail with all decisions logged"
+  - "Custom policy injection and hot-reload support"
+  - "Metrics: policies evaluated, violations caught, performance"
+  - "≥16 tests covering composite, policies, chain, audit, integration"
+  - "100% type hints, Google docstrings, no bare except"
+
+implementation_locations:
+  composite: "cortex_brain/tier0/governance/governance_composite.py"
+  policies: "cortex_brain/tier0/governance/policy_composer.py"
+  chain: "cortex_brain/tier0/governance/governance_chain.py"
+  enforcer: "cortex_brain/tier0/governance/composite_enforcer.py"
+  tests: "tests/integration/governance/test_governance_composite.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥16 tests passing"
+  type_safety: "100% type hints"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "Composite coordinates governance modules"
+    test_file: "tests/integration/governance/test_governance_composite.py"
+    test_count: "4 tests"
+  - criterion: "Policy composition respects precedence"
+    test_file: "tests/integration/governance/test_governance_composite.py"
+    test_count: "4 tests"
+  - criterion: "Chain-of-responsibility enforces layered rules"
+    test_file: "tests/integration/governance/test_governance_composite.py"
+    test_count: "4 tests"
+  - criterion: "Audit trail logs all governance decisions"
+    test_file: "tests/integration/governance/test_governance_composite.py"
+    test_count: "4 tests"
+
+notes: |
+  - BLOCKED until Phase A (Tier Consolidation) completes
+  - Can proceed immediately after Phase A (1 day + 3-4 days)
+  - Builds on existing governance infrastructure
+  - Critical for multi-layer policy enforcement

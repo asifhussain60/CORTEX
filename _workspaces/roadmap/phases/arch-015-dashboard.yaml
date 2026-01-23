@@ -1,0 +1,80 @@
+phase_id: "arch-015-dashboard"
+title: "Dashboard - System Observability and Operations UI"
+track: "stubs"
+machine: null
+status: "STUB"
+priority: "P2-MEDIUM"
+estimated_effort: "3-5 days MVP, 2-4 weeks advanced"
+blocking: false
+dependencies: []
+created_date: "2026-01-23"
+
+description: |
+  Implement web-based dashboard for system observability:
+  
+  MVP (3-5 days):
+  - System health overview
+  - Performance metrics display
+  - Recent activity log
+  - Basic charts/graphs
+  
+  Advanced (2-4 weeks):
+  - Real-time metrics streaming
+  - Interactive filtering and drill-down
+  - Custom dashboard creation
+  - Export/reporting capabilities
+  - Multi-tenant support
+
+acceptance_criteria:
+  MVP:
+  - "Dashboard loads in <2s and updates every 5s"
+  - "Health overview shows: system status, error rate, active operations"
+  - "Metrics display: p50/p95/p99 latencies, throughput, error rates"
+  - "Activity log shows last 50 operations with status/duration"
+  - "At least 3 chart types: line, bar, pie"
+  - "Responsive design (mobile/tablet/desktop)"
+  
+  Advanced:
+  - "Real-time metric streaming via WebSocket"
+  - "Interactive filtering by time range, entity type, status"
+  - "Custom dashboard templates (API, Domain, Workflow)"
+  - "PDF/CSV export of metrics and reports"
+  - "Multi-tenant isolation and access control"
+  
+  All:
+  - "≥15 tests (MVP tests + integration tests)"
+  - "100% type hints, Google docstrings, no bare except"
+  - "Production-grade security and performance"
+
+implementation_locations:
+  backend: "cortex/api/dashboard_api.py"
+  frontend: "cortex/dashboard/"
+  models: "cortex/models/dashboard_models.py"
+  tests: "tests/integration/dashboard/test_dashboard.py"
+
+success_criteria:
+  test_coverage: "≥98%"
+  test_count: "≥15 tests passing"
+  type_safety: "100% type hints (backend)"
+  documentation: "Google docstrings on all public APIs"
+  governance: "CORE-008, CORE-011, CORE-012, CORE-013, CORE-017"
+
+completion_verification:
+  - criterion: "MVP dashboard loads and displays system health"
+    test_file: "tests/integration/dashboard/test_dashboard.py"
+    test_count: "5 tests"
+  - criterion: "Metrics display accurately and update in real-time"
+    test_file: "tests/integration/dashboard/test_dashboard.py"
+    test_count: "5 tests"
+  - criterion: "Activity log shows recent operations"
+    test_file: "tests/integration/dashboard/test_dashboard.py"
+    test_count: "3 tests"
+  - criterion: "Advanced features work correctly (if implemented)"
+    test_file: "tests/integration/dashboard/test_dashboard.py"
+    test_count: "2 tests"
+
+notes: |
+  - Can proceed independently (no blockers)
+  - Split into MVP (fast) and advanced (comprehensive)
+  - Recommend doing MVP first, advanced later if time permits
+  - Integrates with existing observability infrastructure
