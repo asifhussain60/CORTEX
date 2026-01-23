@@ -51,75 +51,8 @@ executive_summary: |
 
 active_phases:
   in_progress:
-    count: 1
-    phases:
-      - id: "PHASE-CONV-PROTOCOL-001"
-        title: "Conversation Protocol Production Enhancement"
-        priority: "P0-CRITICAL"
-        estimated_effort: "6-8 hours"
-        status: "NOT_STARTED"
-        blocking: true
-        category: "CORE_ORCHESTRATION"
-        
-        rationale: |
-          ConversationProtocol exists in cortex/brain/core/orchestrator/conversation_protocol.py
-          (1211 lines) but is incomplete and not production-ready:
-          
-          **Current State:**
-          - Basic single-turn execution ✅
-          - ContinuationDecision integration ✅
-          - EventRegistry for terminal events ✅
-          - Governance validation hooks ⚠️
-          
-          **Missing/Incomplete:**
-          - Multi-turn conversation state management ❌
-          - Conversation history persistence ❌
-          - Context aggregation across turns ❌
-          - Turn timeout/cancellation handling ⚠️
-          - Integration with InteractionOrchestrator ❌
-          - Communication protocol pattern enforcement ❌
-          - Production observability (metrics, tracing) ⚠️
-          
-          This phase completes ConversationProtocol to production-ready status,
-          enabling proper multi-turn orchestration with state persistence,
-          history tracking, and full observability.
-        
-        acceptance_criteria: 7
-        acceptance_criteria_list:
-          - "AC-CONV-001-01: Conversation State Persistence (12 tests)"
-          - "AC-CONV-001-02: Context Aggregation and Carryover (10 tests)"
-          - "AC-CONV-001-03: Turn Timeout and Cancellation (8 tests)"
-          - "AC-CONV-001-04: InteractionOrchestrator Integration (15 tests)"
-          - "AC-CONV-001-05: Communication Pattern Enforcement (12 tests)"
-          - "AC-CONV-001-06: Production Observability (10 tests)"
-          - "AC-CONV-001-07: Integration Testing with Real Orchestrators (18 tests)"
-        
-        tests_required: 85
-        
-        implementation_steps:
-          - "Step 1: Conversation State Persistence (2 hours)"
-          - "Step 2: Context Aggregation (1.5 hours)"
-          - "Step 3: Timeout Handling (1 hour)"
-          - "Step 4: InteractionOrchestrator Integration (2 hours)"
-          - "Step 5: Pattern Enforcement (1 hour)"
-          - "Step 6: Observability (0.5 hours)"
-        
-        deliverables:
-          - "cortex/brain/core/orchestrator/conversation_state.py"
-          - "cortex/brain/core/orchestrator/context_aggregator.py"
-          - "cortex/brain/core/orchestrator/turn_timeout.py"
-          - "cortex/brain/core/orchestrator/pattern_enforcer.py"
-          - "cortex/brain/core/orchestrator/conversation_metrics.py"
-          - "tests/integration/test_conversation_protocol_e2e.py"
-        
-        success_criteria:
-          - "All 7 AC criteria fully realized (not stubbed)"
-          - "85/85 tests passing (100% pass rate)"
-          - "Full observability end-to-end"
-          - "Governance compliance ≥95%"
-          - "Production deployment ready"
-        
-        file: "_workspaces/roadmap/phases/PHASE-CONV-PROTOCOL-001.yaml"
+    count: 0
+    note: "No in-progress phases - all critical path phases complete"
   
   not_started:
     count: 6
