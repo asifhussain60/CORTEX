@@ -4,7 +4,6 @@ This module provides intelligent routing of user intents to the correct orchestr
 layer based on intent type, confidence, and context.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any

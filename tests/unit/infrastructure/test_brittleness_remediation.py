@@ -9,7 +9,6 @@ TDD Tests for critical brittleness fixes:
 - AC-PYTEST-CONFIG-GAP-002: Pytest Configuration
 - AC-TEST-NAMING-GAP-003: Test Framework Naming
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

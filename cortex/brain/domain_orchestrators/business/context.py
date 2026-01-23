@@ -4,7 +4,6 @@ AC-PHX-008-05: Domain Context Management
 Context management for domain orchestrators providing isolation,
 scoped data, and session management.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

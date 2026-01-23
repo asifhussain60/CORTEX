@@ -4,7 +4,6 @@ Log audit trail for PHASE-REMEDIATION-07 (AC-MCP-EXPOSURE-001, 002, 003)
 
 Logs AC_START, AC_EXECUTE, AC_COMPLETE for each acceptance criterion.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sys

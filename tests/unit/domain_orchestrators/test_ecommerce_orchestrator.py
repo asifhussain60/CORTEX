@@ -4,7 +4,6 @@ AC-PHX-008-03: E-Commerce Domain Orchestrator Tests
 TDD Tests for E-Commerce Domain Orchestrator.
 Tests MUST exist BEFORE implementation (CORE-008).
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

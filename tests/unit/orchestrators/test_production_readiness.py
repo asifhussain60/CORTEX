@@ -15,7 +15,6 @@ Comprehensive production readiness verification ensuring:
 This test suite is the definitive check for CORTEX production deployment readiness.
 Run this suite with: pytest tests/unit/orchestrators/test_production_readiness.py -v
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

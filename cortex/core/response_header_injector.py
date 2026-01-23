@@ -3,7 +3,6 @@
 Adds metadata headers to responses for tracking, auditing, and control flow.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

@@ -11,7 +11,6 @@ According to CORTEX Review Protocol Phase 0.5:
 - Fix: Create schema + populate with test audit entries
 
 Author: CORTEX Review System
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

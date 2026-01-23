@@ -37,7 +37,6 @@ Architecture:
 4. SeleniumPlaywrightOrchestrator: IOrchestrator implementation with audit trail
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import ast

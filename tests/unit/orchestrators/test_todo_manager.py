@@ -10,7 +10,6 @@ Implements phase-based task decomposition with:
 - Rollback support for failed phases
 - Audit trail for all phase changes
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

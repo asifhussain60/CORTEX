@@ -11,7 +11,6 @@ Comprehensive discovery tests ensuring:
 - Metadata completeness and consistency
 - Governance registry integration active
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

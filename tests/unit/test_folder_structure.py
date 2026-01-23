@@ -7,7 +7,6 @@ Verification tests for PHASE-PARALLEL folder structure migration:
 - AC-AR-010-03: Cross-platform path resolution working
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import os

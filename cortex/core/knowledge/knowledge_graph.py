@@ -4,7 +4,6 @@ Provides graph-based knowledge storage and retrieval with support for
 relationships, inference rules, and semantic queries.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

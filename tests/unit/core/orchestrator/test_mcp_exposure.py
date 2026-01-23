@@ -6,7 +6,6 @@ Tests verify:
 - AC-MCP-EXPOSURE-002: Domain orchestrator operations exposed
 - AC-MCP-EXPOSURE-003: /list-tools endpoint functional
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

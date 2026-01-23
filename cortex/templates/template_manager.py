@@ -3,7 +3,6 @@ CORTEX Templates - Template Manager
 
 Template management, rendering, and content retrieval.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

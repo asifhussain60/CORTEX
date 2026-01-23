@@ -8,7 +8,6 @@ AC-AR-017-01: Registry stores orchestrator metadata
 - Statistics tracking
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any

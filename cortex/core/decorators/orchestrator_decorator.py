@@ -4,7 +4,6 @@ This module provides decorator functionality for marking classes as orchestrator
 and auto-registering them in a global registry with metadata tracking.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar

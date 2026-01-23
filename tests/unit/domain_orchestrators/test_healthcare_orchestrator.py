@@ -4,7 +4,6 @@ AC-PHX-008-02: Healthcare Domain Orchestrator Tests
 TDD Tests for Healthcare Domain Orchestrator.
 Tests MUST exist BEFORE implementation (CORE-008).
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

@@ -3,7 +3,6 @@
 Abstract base class for orchestrator implementations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABC, abstractmethod

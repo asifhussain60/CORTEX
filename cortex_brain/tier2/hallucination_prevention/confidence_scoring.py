@@ -3,7 +3,6 @@
 Provides confidence scoring for operations to detect unreliable outputs.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

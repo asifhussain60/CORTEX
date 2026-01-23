@@ -11,7 +11,6 @@ Scans the CORTEX codebase to identify:
 Authority: cortex-total-recall.prompt.md v2.0 | AC-WIRING-HARNESS-001
 Phase: PRODUCTION-READINESS | Status: ✅ AUTO-DISCOVERY ACTIVE
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import os

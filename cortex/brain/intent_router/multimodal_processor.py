@@ -15,7 +15,6 @@ CORTEX Governance Rules Applied:
 - CORE-013: Specific exception handling
 - CORE-027: Audit trail logging
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Any, Optional, List, Union

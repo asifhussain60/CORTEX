@@ -14,7 +14,6 @@ AC-PHX-007-01 Completion:
 - Performance metrics and caching implemented
 - Signal detection and multi-label classification working
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

@@ -3,7 +3,6 @@
 Defines and enforces behavioral boundaries to prevent hallucinations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

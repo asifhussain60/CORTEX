@@ -4,7 +4,6 @@ Manages conversation state, intent history, and session context for
 multi-turn conversations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

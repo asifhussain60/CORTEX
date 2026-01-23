@@ -3,7 +3,6 @@
 Provides integration layer between intent classification and orchestrators.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Optional, Any

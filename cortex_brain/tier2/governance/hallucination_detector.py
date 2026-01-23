@@ -4,7 +4,6 @@ Implements CORE-031: Hallucination Detection & Confidence Scoring.
 Detects potential hallucinations and scores confidence with minimum 0.75 threshold.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

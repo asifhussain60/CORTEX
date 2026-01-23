@@ -3,7 +3,6 @@ AC-PHX-008-04: Domain Plugin System
 
 Framework for domain-specific plugins that extend orchestrator capabilities.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABC, abstractmethod

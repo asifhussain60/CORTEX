@@ -34,7 +34,6 @@ The mandatory format for every response is:
 This header is now enforced on all responses to maintain compliance with CORE-029 (Response Format).
 
 asifhussain60: Follow instructions in [CORTEX.prompt.md](file:///d%3A/PROJECTS/CORTEX/.github/prompts/CORTEX.prompt.md).
-remove **Copyright © 2025-2026 Asif Hussain. All rights reserved.** from the header
 
 GitHub Copilot: ## 🧠 CORTEX Governance Update
 **Author:** Asif Hussain | **Phase:** PHASE-GOVERNANCE-HARDENING | **Orchestrator:** MasterOrchestrator ✅

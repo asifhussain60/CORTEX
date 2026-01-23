@@ -6,7 +6,6 @@ Supports both absolute and relative imports, handles package detection.
 
 Test-Driven Development (TDD): Tests written first (RED phase)
 Author: cortex-builder
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sys

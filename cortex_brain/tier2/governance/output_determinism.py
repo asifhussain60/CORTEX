@@ -4,7 +4,6 @@ Implements CORE-035: Output Determinism Verification.
 Tracks execution outputs and verifies deterministic behavior.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import hashlib

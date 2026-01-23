@@ -3,7 +3,6 @@ Batch audit logger for AC-PHX-007-02 through AC-PHX-007-14
 
 Creates audit trail entries for all remaining Phase 07 ACs.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

@@ -5,7 +5,6 @@ for all MCP tool invocations. Each tool is categorized and governed by
 specific authorization rules.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Set, Any

@@ -10,7 +10,6 @@ Provides runtime enforcement of:
 This is the core business logic layer. MCP tools wrap these functions.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import re

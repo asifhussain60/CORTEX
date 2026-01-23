@@ -5,7 +5,6 @@ Parses cortex-master.yaml and populates governance.db with AC-IDs.
 Creates the single source of truth for AC tracking.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from pathlib import Path

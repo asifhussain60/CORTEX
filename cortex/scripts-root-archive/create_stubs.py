@@ -7,7 +7,6 @@ Provides isolated execution environment with rollback and dry-run capabilities
 to prevent hallucinations by testing operations before committing.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any, Callable
@@ -110,7 +109,6 @@ Detects hallucinations in agent operations through pattern recognition
 and statistical analysis.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any
@@ -182,7 +180,6 @@ intent_canonicalization_code = '''"""Intent Canonicalization for Hallucination P
 Normalizes intents to prevent interpretation-based hallucinations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Optional, Any
@@ -236,7 +233,6 @@ behavioral_boundaries_code = '''"""Behavioral Boundaries for Hallucination Preve
 Enforces boundaries on agent behavior to prevent hallucinations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any
@@ -294,7 +290,6 @@ vision_mutations_code = '''"""Vision Mutations for Hallucination Prevention.
 Tracks vision changes to detect when hallucinations distort perception.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any

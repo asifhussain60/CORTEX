@@ -3,7 +3,6 @@
 Provides lazy-loaded access to IOrchestrator and OrchestratorBase.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 def __getattr__(name):

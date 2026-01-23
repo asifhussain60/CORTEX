@@ -7,7 +7,6 @@ MCP-exposed tools for knowledge management:
 - generate_knowledge_summary: Generate summaries from knowledge base
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict, List

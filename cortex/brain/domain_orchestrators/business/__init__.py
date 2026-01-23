@@ -3,7 +3,6 @@ PHASE-08: Business Domain Orchestrator Package
 
 Business domain-specific orchestrator implementations.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from cortex.brain.domain_orchestrators.business.base import BusinessDomainOrchestrator

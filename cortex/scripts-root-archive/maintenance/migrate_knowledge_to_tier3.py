@@ -5,7 +5,6 @@ Migrate Knowledge Files from cortex_brain/knowledge/ to cortex_brain/tier3/knowl
 Maps old category structure to new 16-domain taxonomy and updates the knowledge index.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import shutil

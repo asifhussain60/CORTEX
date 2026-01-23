@@ -3,7 +3,6 @@ CORTEX Templates - Knowledge Base Schema
 
 Schema definitions and validation for template structures.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

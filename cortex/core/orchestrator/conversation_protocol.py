@@ -4,7 +4,6 @@ Wraps any IOrchestrator to execute one turn at a time with continuation
 decisions, governance validation, and token tracking.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

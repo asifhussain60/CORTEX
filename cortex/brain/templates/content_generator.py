@@ -4,7 +4,6 @@ AC-TC-003-01: Content Generator
 Utilities for generating template content, skeletons, and bundles.
 Supports batch generation and format transformation.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

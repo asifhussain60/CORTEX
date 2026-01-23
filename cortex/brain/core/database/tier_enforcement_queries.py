@@ -7,7 +7,6 @@ Implements:
 3. TIER-0 immutability constraint enforcement
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

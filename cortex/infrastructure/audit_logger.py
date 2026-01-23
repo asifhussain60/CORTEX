@@ -9,7 +9,6 @@ Production-grade audit logging with:
 - Result[T] pattern for error handling
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import hashlib

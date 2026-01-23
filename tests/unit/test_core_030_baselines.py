@@ -8,7 +8,6 @@ Validates:
 - Convenience functions work as expected
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

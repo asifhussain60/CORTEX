@@ -11,7 +11,6 @@ Production-grade compliance marker system with:
 Satisfies: NFR-003-03 - Compliance Markers in Audit Logs
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

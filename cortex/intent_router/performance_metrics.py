@@ -3,7 +3,6 @@
 Tracks classification latency and throughput metrics.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import time

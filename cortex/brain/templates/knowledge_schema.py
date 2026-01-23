@@ -4,7 +4,6 @@ AC-TC-001-02: Knowledge Base Schema
 Defines the schema for template structure and validation.
 Provides JSON Schema export and compatibility checking.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

@@ -15,7 +15,6 @@ Features:
 - Fallback mechanisms for legacy formats
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

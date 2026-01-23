@@ -4,7 +4,6 @@ Provides confidence scoring based on multiple signals including keyword matches,
 signal strength, and historical data.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Any

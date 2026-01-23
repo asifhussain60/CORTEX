@@ -1,7 +1,6 @@
 """Governance REDIRECT to cortex_brain tiers.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 # All governance logic is in cortex_brain/tier2/governance/

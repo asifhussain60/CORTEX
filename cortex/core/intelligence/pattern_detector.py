@@ -7,7 +7,6 @@ Detects common software design patterns including:
 - Decorator chains (multiple decorators on single function)
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 AC-ID: E3-PATTERN-DETECTOR
 """
 

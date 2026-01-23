@@ -11,7 +11,6 @@ Rationale: Production launch requires compliance framework. 2h of work fits in P
           Eliminates 6-month gap + post-launch rework.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import sqlite3

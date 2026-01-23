@@ -10,7 +10,6 @@ AC-OR-001-04: Analysis handler
 AC-OR-001-05: Optimization handler
 AC-OR-001-06: Integration handler
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Any, Optional, Callable

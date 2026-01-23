@@ -11,7 +11,6 @@ AC-TC-003-02: Quality Assurance
 Target: 72+ tests (12 per AC)
 TDD Phase: RED (tests written, implementation pending)
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
