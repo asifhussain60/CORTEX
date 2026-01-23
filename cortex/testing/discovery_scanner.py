@@ -323,7 +323,8 @@ class DiscoveryScanner:
             relative = file_path.relative_to(self.cortex_root)
             module_path = str(relative).replace("\\", "/").replace("/", ".").replace(".py", "")
             return module_path
-        except:
+        except (ValueError, OSError) as e:
+            logger.debug(f"Failed to convert path to module path: {e}")
             return str(file_path)
     
     def generate_inventory_updates(self) -> str:
