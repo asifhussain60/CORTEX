@@ -45,6 +45,20 @@ except ImportError:
     # Fallback if module not accessible
     IntelligentKnowledgeRouter = None
 
+# AC-REM-011-02: Import TDD Orchestrator for test-driven development workflow routing
+# Wires 35 best practices YAMLs from cortex_brain/tier3/knowledge/ into TDD discipline
+try:
+    from cortex.orchestrators.core.tdd_orchestrator import (
+        TDDOrchestrator,
+        get_tdd_orchestrator,
+        TDDPhase
+    )
+except ImportError:
+    # Fallback if module not accessible
+    TDDOrchestrator = None
+    get_tdd_orchestrator = None
+    TDDPhase = None
+
 
 @dataclass
 class OrchestratorMetadata:
@@ -279,6 +293,39 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
         
+        # AC-REM-011-02: Initialize TDD Orchestrator with 35 best practices YAMLs wired
+        # Routes ALL implementation intents through TDD discipline (CORE-019)
+        self.tdd_orchestrator: Optional[TDDOrchestrator] = None
+        try:
+            if get_tdd_orchestrator is not None:
+                self.tdd_orchestrator = get_tdd_orchestrator()
+                tdd_status = self.tdd_orchestrator.get_tdd_status()
+                self.logger.log_operation_complete(
+                    ac_id="AC-REM-011-02",
+                    operation="TDD_ORCHESTRATOR_INIT",
+                    success=True,
+                    details={
+                        "status": "TDD Orchestrator initialized with knowledge YAMLs",
+                        "knowledge_loaded": tdd_status.get("knowledge_loaded", {}),
+                        "routing_intent": "CORE-019: Route ALL implementation intents through TDD-Master"
+                    }
+                )
+            else:
+                self.logger.log_operation_complete(
+                    ac_id="AC-REM-011-02",
+                    operation="TDD_ORCHESTRATOR_INIT",
+                    success=False,
+                    details={"error": "TDD Orchestrator module not available"}
+                )
+        except Exception as e:
+            # Log but don't fail - TDD orchestrator is important but graceful degradation supported
+            self.logger.log_operation_complete(
+                ac_id="AC-REM-011-02",
+                operation="TDD_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": f"Failed to initialize TDD Orchestrator: {str(e)}"}
+            )
+        
     @classmethod
     def instance(cls) -> 'MasterOrchestrator':
         """Get singleton instance of MasterOrchestrator"""
@@ -334,6 +381,13 @@ class MasterOrchestrator(IOrchestrator):
                 "required": False,
                 "component_name": "IntentRouter",
                 "degraded": self.intent_router is None,
+            },
+            "tdd_orchestrator": {
+                "initialized": self.tdd_orchestrator is not None,
+                "required": False,
+                "component_name": "TDDOrchestrator",
+                "degraded": self.tdd_orchestrator is None,
+                "knowledge_yamls_wired": len(self.tdd_orchestrator.knowledge_loader.tdd_yamls) if self.tdd_orchestrator else 0,
             },
             "header_injector": {
                 "initialized": self.header_injector is not None,

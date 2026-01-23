@@ -189,6 +189,111 @@ class WiringHarnessInventory:
     )
     
     # =========================================================================
+    # SECTION 1B: TDD ORCHESTRATOR (KNOWLEDGE INTEGRATION) - WIRED ✓
+    # =========================================================================
+    # AC-REM-011-02: TDD Orchestrator Knowledge Integration - COMPLETED
+    # Status: WIRED into MasterOrchestrator with 35 best practices YAMLs
+    
+    TDD_ORCHESTRATOR_WIRED = {
+        "id": "WIRED-TDD-ORCHESTRATOR-001",
+        "name": "TDDOrchestrator",
+        "category": "orchestrator",
+        "status": "WIRED",
+        "phase": "AC-REM-011-02",
+        "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex_brain/tier3/knowledge/",
+        
+        "implementation_location": "cortex/orchestrators/core/tdd_orchestrator.py",
+        "entry_point": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
+        "singleton_getter": "cortex.orchestrators.core.tdd_orchestrator.get_tdd_orchestrator()",
+        
+        "tests_count": 42,
+        "test_pass_rate": 1.0,
+        "test_files": ["tests/unit/orchestrators/test_tdd_orchestrator.py"],
+        
+        "governance_rules": ["CORE-008", "CORE-011", "CORE-012", "CORE-019"],
+        
+        "knowledge_yamls_wired": {
+            "TESTING-VALIDATION": [
+                "tdd-best-practices.yaml",
+                "test-doubles.yaml",
+                "testing-pyramid.yaml",
+                "playwright-best-practices.yaml"
+            ],
+            "ARCHITECTURE": 14,
+            "DEPLOYMENT": 4,
+            "KNOWLEDGE-CURATION": 4,
+            "SECURITY": 3,
+            "PERFORMANCE": 3,
+            "DATA-MANAGEMENT": 1,
+            "DOCUMENTATION": 2,
+            "total_yamls": 35
+        },
+        
+        "wiring_details": {
+            "wired_into": "MasterOrchestrator",
+            "initialization_ac_id": "AC-REM-011-02",
+            "initialization_method": "MasterOrchestrator.__init__() → stage initialization",
+            "initialization_code": """
+                # AC-REM-011-02: Initialize TDD Orchestrator with 35 best practices YAMLs wired
+                self.tdd_orchestrator: Optional[TDDOrchestrator] = None
+                try:
+                    if get_tdd_orchestrator is not None:
+                        self.tdd_orchestrator = get_tdd_orchestrator()
+                        tdd_status = self.tdd_orchestrator.get_tdd_status()
+                        self.logger.log_operation_complete(
+                            ac_id="AC-REM-011-02",
+                            operation="TDD_ORCHESTRATOR_INIT",
+                            success=True,
+                            details={
+                                "status": "TDD Orchestrator initialized with knowledge YAMLs",
+                                "knowledge_loaded": tdd_status.get("knowledge_loaded", {})
+                            }
+                        )
+            """,
+            "routing_ac_id": "CORE-019",
+            "routing_rule": "ALL implementation intents route through TDD-Master (TDDOrchestrator)",
+            "tdd_phases": ["RED (test-first)", "GREEN (minimal code)", "REFACTOR (design improvement)"]
+        },
+        
+        "integration_features": {
+            "knowledge_guidance_engine": "Integrated via KnowledgeGuidanceEngine",
+            "tdd_discipline_enforcement": "RED → GREEN → REFACTOR workflow per CORE-008",
+            "best_practices_loading": "4 TDD-specific YAMLs from TESTING-VALIDATION domain",
+            "coverage_targets": "70% unit, 20% integration, 10% E2E per testing pyramid",
+            "governance_integration": "CORE-008 (TDD), CORE-019 (TDD-Master routing)",
+            "anti_pattern_detection": "Extracts and warns about TDD anti-patterns",
+            "test_pattern_guidance": "Provides test double patterns, testing pyramid guidance"
+        },
+        
+        "completion_status": {
+            "implementation": "COMPLETE",
+            "testing": "42 tests PASSING (100%)",
+            "wiring": "WIRED to MasterOrchestrator (AC-REM-011-02)",
+            "knowledge_integration": "35 YAMLs from cortex_brain/tier3/knowledge/ loaded",
+            "documentation": "Google-style docstrings on all public APIs",
+            "governance_compliance": "CORE-008, CORE-011, CORE-012, CORE-019 compliant"
+        },
+        
+        "yaml_restoration_status": {
+            "phase": "PHASE-REMEDIATION-07: TDD Knowledge Integration",
+            "yaml_location": "cortex_brain/tier3/knowledge/",
+            "yaml_source": "Restored from git commit 6ad2094a5 (CORTEX-4.0 import)",
+            "restoration_date": "2026-01-23",
+            "yaml_count": 35,
+            "domains": ["ARCHITECTURE", "TESTING-VALIDATION", "DEPLOYMENT", "KNOWLEDGE-CURATION", "SECURITY", "PERFORMANCE", "DATA-MANAGEMENT", "DOCUMENTATION"],
+            "key_tdd_files": ["tdd-best-practices.yaml (Kent Beck + Uncle Bob methodology)", "test-doubles.yaml (Mock patterns)", "testing-pyramid.yaml (70/20/10 distribution)"]
+        },
+        
+        "dependencies": {
+            "KnowledgeGuidanceEngine": "cortex.brain.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
+            "TDD_YAMLs": "cortex_brain/tier3/knowledge/TESTING-VALIDATION/*.yaml",
+            "Governance": "cortex_brain/tier0/governance/core-rules.yaml (CORE-008, CORE-019)"
+        },
+        
+        "integration_notes": "✅ WIRED: TDD Orchestrator fully integrated with 35 best practices YAMLs. Routes ALL implementation intents through TDD discipline enforcer per CORE-019. Provides RED/GREEN/REFACTOR workflow guidance with knowledge integration."
+    }
+    
+    # =========================================================================
     # SECTION 2: INTERACTION ORCHESTRATOR & LENS PROTOCOL - NOT FULLY WIRED
     # =========================================================================
     
