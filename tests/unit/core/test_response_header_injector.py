@@ -8,7 +8,6 @@ AC-ID: AC-CORE-029-01 (Header Injection)
 AC-ID: AC-CORE-029-02 (Author/Phase/Orchestrator Metadata)
 AC-ID: AC-CORE-029-03 (Governance Compliance Validation)
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

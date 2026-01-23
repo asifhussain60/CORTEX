@@ -517,4 +517,3 @@ The intent validation architecture from CORTEX-5.5 integrates cleanly into the c
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

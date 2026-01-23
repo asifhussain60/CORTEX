@@ -5,7 +5,6 @@ AC-ID: AC-INTENT-005-01
 Phase: REMEDIATION-INTENT-005-COMPREHENSION-YAML
 Purpose: Structured data model for intent comprehension output
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from __future__ import annotations
