@@ -1,0 +1,32 @@
+phase:
+  id: phase-002
+  name: State Management & Concurrency - Deep Fixes
+  priority: 2
+  blocking_deployment: false
+  source_review: 2026-01-23_074307
+  source_artifacts: _workspaces/roadmap/issues/2026-01-23_074307
+  items:
+  - id: REM-HIGH-001
+    source_finding: STATE-RC-002
+    issue: Race condition in hot reload
+    file: cortex/devx/hot_reload.py
+    line: 317
+    description: Reload state can be corrupted under concurrent requests
+    remediation: Add state machine with atomic transitions and timeout
+    priority: 2
+    depends_on:
+    - REM-CRIT-001
+    estimated_effort_hours: 3
+    status: PENDING
+  - id: REM-HIGH-002
+    source_finding: STATE-DEADLOCK-001
+    issue: Potential deadlock in orchestrator coordination
+    file: cortex/orchestrators/coordinator.py
+    description: Nested lock acquisition without timeout
+    remediation: Implement lock timeout + strict lock ordering + deadlock detection
+    priority: 2
+    depends_on:
+    - REM-CRIT-001
+    estimated_effort_hours: 4
+    status: PENDING
+  total_effort_hours: 12

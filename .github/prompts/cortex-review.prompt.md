@@ -35,48 +35,36 @@ Compare LIVE implementation against `cortex-impl-map.yaml` roadmap and identify:
 **MANDATORY FIRST STEP** before any analysis:
 
 ```bash
-# Create timestamped directories for gap reports and remediation phases
+# Create timestamped directory for ALL review outputs
 export REVIEW_TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
 export REVIEW_ARTIFACTS="_workspaces/roadmap/issues/${REVIEW_TIMESTAMP}"
-export PHASE_ARTIFACTS="_workspaces/roadmap/phases"
-
 mkdir -p "${REVIEW_ARTIFACTS}"
-mkdir -p "${PHASE_ARTIFACTS}"
 
-# Gap reports, findings, and diagnostics go to issues/
-# Remediation phases go to phases/
+# All findings, reports, diagnostics, and logs go here
 # NO ephemeral output allowed - all results persisted to disk
 ```
 
 **Directory structure for this execution:**
 ```
-_workspaces/roadmap/
-├─ issues/                                    ← Gap reports & findings (per-review)
-│  ├─ 2026-01-23_143022/                    ← This execution's timestamped folder
-│  │  ├─ review-gap-inventory.yaml
-│  │  ├─ review-stubs.yaml
-│  │  ├─ Findings-BRIT.yaml
-│  │  ├─ Findings-HALL.yaml
-│  │  ├─ Findings-GOV.yaml
-│  │  ├─ Findings-ASM.yaml
-│  │  ├─ Findings-DEBT.yaml
-│  │  ├─ Findings-STATE.yaml
-│  │  ├─ Findings-ARCH.yaml
-│  │  ├─ Findings-INTEG.yaml
-│  │  ├─ audit-trace-validation.yaml
-│  │  ├─ mcp-toolkit-audit.yaml
-│  │  ├─ cortex-lens-ast-validation.yaml
-│  │  ├─ requirements-analysis.yaml
-│  │  └─ review-findings-consolidated.yaml
-│  ├─ 2026-01-22_102015/                    ← Previous execution
-│  │  └─ [all artifacts from that execution]
-│  └─ [archive of all previous executions]
-│
-└─ phases/                                    ← Remediation phases (persistent)
-   ├─ REM-PHASE-CRITICAL-BLOCKERS.yaml      ← Executable remediation roadmap
-   ├─ REM-PHASE-ARCHITECTURE.yaml
-   ├─ REM-PHASE-TECHNICAL-DEBT.yaml
-   └─ REM-PHASE-IMPROVEMENTS.yaml
+_workspaces/roadmap/issues/
+├─ 2026-01-23_143022/                    ← This execution's timestamped folder
+│  ├─ review-gap-inventory.yaml
+│  ├─ review-stubs.yaml
+│  ├─ Findings-BRIT.yaml
+│  ├─ Findings-HALL.yaml
+│  ├─ Findings-GOV.yaml
+│  ├─ Findings-ASM.yaml
+│  ├─ Findings-DEBT.yaml
+│  ├─ Findings-STATE.yaml
+│  ├─ Findings-ARCH.yaml
+│  ├─ Findings-INTEG.yaml
+│  ├─ audit-trace-validation.yaml
+│  ├─ mcp-toolkit-audit.yaml
+│  ├─ cortex-lens-ast-validation.yaml
+│  └─ remediation-plan.yaml
+└─ reports/
+   ├─ requirements-analysis-2026-01-23_143022.yaml
+   └─ review-findings-consolidated-2026-01-23_143022.yaml
 ```
 
 ---
@@ -120,7 +108,7 @@ Classify defect type:
 1. Read `cortex-impl-map.yaml` status distribution
 2. For each COMPLETED phase, verify actual implementation exists
 3. Find FALSE_COMPLETED phases (claimed done, actually partial/missing)
-4. Create: `_workspaces/roadmap/issues/review-gap-inventory-YYYYMMDD.yaml`
+4. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/review-gap-inventory.yaml`
 
 ### Phase 2: Stub Detection (20 min)
 
@@ -128,7 +116,7 @@ Classify defect type:
 2. Find all `pass` statements in function bodies
 3. Find all `# TODO` blocking comments
 4. Find all mock/hardcoded returns
-5. Create: `_workspaces/roadmap/issues/review-stubs-YYYYMMDD.yaml`
+5. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/review-stubs.yaml`
 
 ### Phase 3: 8-Agent Parallel Analysis (27 min)
 
@@ -144,20 +132,20 @@ Classify defect type:
 - Agent 7: Architecture (SOLID violations, design patterns, coupling) ⭐ NEW
 - Agent 8: Integration/Observability (boundaries, monitoring, health checks) ⭐ NEW
 
-Each agent produces: `_workspaces/roadmap/issues/Findings-AGENT-YYYYMMDD.yaml`
+Each agent produces: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/Findings-{AGENT}.yaml`
 
 ### Phase 4: Requirements Validation (10 min)
 
 1. Scan all imports in cortex/
 2. Compare with requirements.txt
 3. Identify missing packages
-4. Create: `_workspaces/roadmap/reports/requirements-analysis-YYYYMMDD.yaml`
+4. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/requirements-analysis.yaml`
 
 ### Phase 5: Consolidated Report (20 min)
 
 1. Merge all 8 agent findings
 2. Classify by severity: CRITICAL / HIGH / MEDIUM / LOW
-3. Create: `${REVIEW_ARTIFACTS}/review-findings-consolidated.yaml`
+3. Create: `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/review-findings-consolidated.yaml`
 4. Ready for cortex-builder.prompt.md
 
 ### Phase 6: Audit Trace & End-to-End Validation (25 min) ⭐ MANDATORY
@@ -360,7 +348,7 @@ EOF
 cat ${REVIEW_ARTIFACTS}/cortex-lens-ast-validation.yaml
 ```
 
-**Output:** `${REVIEW_ARTIFACTS}/cortex-lens-ast-validation.yaml` and `${REVIEW_ARTIFACTS}/mcp-toolkit-audit.yaml`
+**Output:** `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/cortex-lens-ast-validation.yaml` and `_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}/mcp-toolkit-audit.yaml`
 
 **Pass Criteria:**
 - ✅ No MCP exposure violations
@@ -373,7 +361,7 @@ cat ${REVIEW_ARTIFACTS}/cortex-lens-ast-validation.yaml
 
 ### Phase 7: Mandatory Remediation Planning (20 min) ⭐ MANDATORY
 
-**Purpose:** Create executable remediation phases in `_workspaces/roadmap/phases/`
+**Purpose:** Create executable remediation phases in `_workspaces/roadmap/phases/` and update `cortex-impl-map.yaml`
 
 **Step 7.1: Enumerate All Findings**
 
@@ -384,24 +372,27 @@ Aggregate ALL findings from all phases and agents:
 - Phase 6 audit failures: Any trace/database inconsistencies
 - Phase 6.5 MCP violations: Exposure or toolkit issues
 
-**Step 7.2: Create Remediation Phase Files**
+**Step 7.2: Create Remediation Phases**
 
-Generate four executable phase files in `_workspaces/roadmap/phases/`:
+Create separate remediation phase files in `_workspaces/roadmap/phases/`:
 
-**File 1: REM-PHASE-CRITICAL-BLOCKERS.yaml** (Blocking Deployment - Week 1)
 ```yaml
-remediation_phase:
-  phase_id: "REM-PHASE-CRITICAL-BLOCKERS"
-  phase_name: "Fix Critical Blockers"
-  timeline: "Week 1 (7-10 days)"
+# _workspaces/roadmap/phases/phase-001-critical-blockers.yaml
+# Generated from review: {REVIEW_TIMESTAMP}
+
+phase:
+  id: "phase-001"
+  name: "Critical Blockers - Production Readiness"
+  priority: 1
   blocking_deployment: true
-  created: "2026-01-23T14:55:18Z"
-  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
+  source_review: "{REVIEW_TIMESTAMP}"
+  source_artifacts: "_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}"
   
   items:
     - id: "REM-CRIT-001"
       source_finding: "BRIT-SPOF-003"
       issue: "Race condition in AC_START lifecycle"
+      description: "Multiple concurrent AC_START calls can corrupt state"
       remediation: "Add mutex lock around AC state transition"
       responsible_component: "cortex/orchestrators/orchestrator.py"
       priority: 1
@@ -409,14 +400,11 @@ remediation_phase:
       estimated_effort_hours: 4
       completion_criterion: "Unit test + integration test passing"
       status: "PENDING"
-      acceptance_tests:
-        - "Concurrent AC_START calls serialize correctly"
-        - "No race condition under 100+ parallel calls"
-        - "Deadlock detection timeout fires after 5s"
     
     - id: "REM-CRIT-002"
       source_finding: "INTEG-TIMEOUT-001"
       issue: "External API calls missing timeout"
+      description: "No timeout on external API calls can hang indefinitely"
       remediation: "Add 30s timeout + retry logic to all external calls"
       responsible_component: "cortex/api/external_service_client.py"
       priority: 2
@@ -424,40 +412,35 @@ remediation_phase:
       estimated_effort_hours: 3
       completion_criterion: "All calls have timeout, no silent failures"
       status: "PENDING"
-      acceptance_tests:
-        - "All external calls timeout after 30s"
-        - "Retry logic fires on timeout"
-        - "No silent failures logged"
   
   completion_checklist:
-    - [ ] All CRITICAL items completed and tested
-    - [ ] Re-run audit trace validation
-    - [ ] All acceptance tests passing
+    - [ ] All items in this phase completed
+    - [ ] All tests passing (unit + integration)
     - [ ] Code review approved
-    - [ ] Deployed to staging environment
-    - [ ] Production readiness sign-off
+    - [ ] Audit trace validation passed
+    - [ ] Ready for deployment
+  
+  total_effort_hours: 7
+  blocking_deployment: true
 
-  success_criteria:
-    - All CRITICAL findings resolved
-    - Audit trace validation PASSED
-    - Production deployment unblocked
-    - No regressions detected
-```
+# _workspaces/roadmap/phases/phase-002-architecture-refactoring.yaml
+# Generated from review: {REVIEW_TIMESTAMP}
 
-**File 2: REM-PHASE-ARCHITECTURE.yaml** (High Priority - Week 2-3)
-```yaml
-remediation_phase:
-  phase_id: "REM-PHASE-ARCHITECTURE"
-  phase_name: "Refactor Architecture"
-  timeline: "Week 2-3 (14 days)"
+phase:
+  id: "phase-002"
+  name: "Architecture Refactoring - SOLID Principles"
+  priority: 2
   blocking_deployment: false
-  created: "2026-01-23T14:55:18Z"
-  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
+  source_review: "{REVIEW_TIMESTAMP}"
+  source_artifacts: "_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}"
   
   items:
     - id: "REM-HIGH-001"
       source_finding: "ARCH-SRP-002"
       issue: "Orchestrator class violates SRP (850 lines, 4 concerns)"
+      description: |
+        The Orchestrator class handles scheduling, execution, logging, and persistence.
+        This violates Single Responsibility Principle and makes testing difficult.
       remediation: "Split into Orchestrator, Scheduler, Logger, PersistenceManager"
       responsible_component: "cortex/orchestrators/orchestrator.py"
       priority: 3
@@ -465,41 +448,33 @@ remediation_phase:
       estimated_effort_hours: 16
       completion_criterion: "Class max 200 lines, 1 concern each"
       status: "PENDING"
-      acceptance_tests:
-        - "Orchestrator class < 200 lines"
-        - "Each class has single responsibility"
-        - "All original functionality preserved"
-        - "No performance regression"
   
   completion_checklist:
-    - [ ] Architecture refactoring completed
-    - [ ] All tests passing (no regressions)
-    - [ ] Performance benchmarks baseline collected
-    - [ ] Code review with architecture team
-    - [ ] Documentation updated
-    - [ ] Staged deployment prepared
-
-  success_criteria:
-    - All HIGH priority findings resolved
-    - Architecture cleanup improves maintainability
-    - No performance regression
-    - Ready for next sprint delivery
-```
-
-**File 3: REM-PHASE-TECHNICAL-DEBT.yaml** (Medium Priority - Week 4)
-```yaml
-remediation_phase:
-  phase_id: "REM-PHASE-TECHNICAL-DEBT"
-  phase_name: "Address Technical Debt"
-  timeline: "Week 4 (7 days)"
+    - [ ] All items in this phase completed
+    - [ ] All tests passing (unit + integration)
+    - [ ] Code review approved
+    - [ ] Performance metrics unchanged or improved
+    - [ ] Ready for next phase
+  
+  total_effort_hours: 16
   blocking_deployment: false
-  created: "2026-01-23T14:55:18Z"
-  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
+
+# _workspaces/roadmap/phases/phase-003-technical-debt.yaml
+# Generated from review: {REVIEW_TIMESTAMP}
+
+phase:
+  id: "phase-003"
+  name: "Technical Debt Remediation"
+  priority: 3
+  blocking_deployment: false
+  source_review: "{REVIEW_TIMESTAMP}"
+  source_artifacts: "_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}"
   
   items:
     - id: "REM-MED-001"
       source_finding: "DEBT-DUP-015"
       issue: "Error handling duplicated in 8 locations"
+      description: "Error handling logic repeated instead of abstracted"
       remediation: "Extract to ErrorHandler utility class"
       responsible_component: "cortex/common/error_handler.py"
       priority: 5
@@ -507,193 +482,127 @@ remediation_phase:
       estimated_effort_hours: 6
       completion_criterion: "DRY principle applied, tests passing"
       status: "PENDING"
-      acceptance_tests:
-        - "Single error handler used in all 8 locations"
-        - "Error handling behavior identical"
-        - "All tests passing"
   
   completion_checklist:
-    - [ ] Technical debt items completed
-    - [ ] Code duplication eliminated
-    - [ ] All tests green
-    - [ ] Code quality metrics improve
-    - [ ] Ready for production deployment
-
-  success_criteria:
-    - Codebase cleaner and more maintainable
-    - Technical debt reduced
-    - Quality metrics improve
-    - Team velocity increases
-```
-
-**File 4: REM-PHASE-IMPROVEMENTS.yaml** (Non-Blocking - Continuous)
-```yaml
-remediation_phase:
-  phase_id: "REM-PHASE-IMPROVEMENTS"
-  phase_name: "Non-Blocking Improvements"
-  timeline: "Continuous (backlog items)"
+    - [ ] All items in this phase completed
+    - [ ] Code duplication reduced by ≥ 50%
+    - [ ] All tests passing
+    - [ ] Code review approved
+  
+  total_effort_hours: 6
   blocking_deployment: false
-  created: "2026-01-23T14:55:18Z"
-  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
-  
-  items:
-    - id: "REM-LOW-001"
-      source_finding: "DEBT-STYLE-003"
-      issue: "Missing docstrings in 45 functions"
-      remediation: "Add docstrings following Google style guide"
-      responsible_component: "cortex/orchestrators/"
-      priority: 10
-      depends_on: []
-      estimated_effort_hours: 8
-      completion_criterion: "100% docstring coverage in scope"
-      status: "PENDING"
-  
-  completion_checklist:
-    - [ ] Backlog items selected for sprint
-    - [ ] Completed items integrate with main
-    - [ ] No impact on critical path delivery
-
-  success_criteria:
-    - Improvements delivered opportunistically
-    - Backlog managed in kanban style
-    - Quality improvements accumulate over time
 ```
 
-**Step 7.3: Update cortex-impl-map.yaml with Remediation Reference**
-
-Add single remediation reference track to `cortex-impl-map.yaml`:
+Also update `cortex-impl-map.yaml` with reference to phases:
 
 ```yaml
-remediation_reference:
-  version: "1.0"
-  created: "2026-01-23T14:55:18Z"
-  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
-  status: "ACTIVE"
+# Add to cortex-impl-map.yaml
+
+remediation:
+  version: "2.0"
+  created: "{REVIEW_TIMESTAMP}"
+  review_artifacts: "_workspaces/roadmap/issues/{REVIEW_TIMESTAMP}"
+  phases_directory: "_workspaces/roadmap/phases"
   
-  phases:
-    critical_blockers:
-      phase_id: "REM-PHASE-CRITICAL-BLOCKERS"
-      file: "_workspaces/roadmap/phases/REM-PHASE-CRITICAL-BLOCKERS.yaml"
-      timeline: "Week 1"
+  # Reference to individual phase files
+  phase_references:
+    - file: "_workspaces/roadmap/phases/phase-001-critical-blockers.yaml"
+      priority: 1
       blocking_deployment: true
-      items_count: 2
     
-    architecture:
-      phase_id: "REM-PHASE-ARCHITECTURE"
-      file: "_workspaces/roadmap/phases/REM-PHASE-ARCHITECTURE.yaml"
-      timeline: "Week 2-3"
+    - file: "_workspaces/roadmap/phases/phase-002-architecture-refactoring.yaml"
+      priority: 2
       blocking_deployment: false
-      items_count: 1
     
-    technical_debt:
-      phase_id: "REM-PHASE-TECHNICAL-DEBT"
-      file: "_workspaces/roadmap/phases/REM-PHASE-TECHNICAL-DEBT.yaml"
-      timeline: "Week 4"
+    - file: "_workspaces/roadmap/phases/phase-003-technical-debt.yaml"
+      priority: 3
       blocking_deployment: false
-      items_count: 3
-    
-    improvements:
-      phase_id: "REM-PHASE-IMPROVEMENTS"
-      file: "_workspaces/roadmap/phases/REM-PHASE-IMPROVEMENTS.yaml"
-      timeline: "Continuous"
-      blocking_deployment: false
-      items_count: 12
   
   execution_roadmap:
     phase_1_blockers:
       name: "Fix Critical Blockers (Week 1)"
-      file: "_workspaces/roadmap/phases/REM-PHASE-CRITICAL-BLOCKERS.yaml"
+      file: "_workspaces/roadmap/phases/phase-001-critical-blockers.yaml"
       total_effort_hours: 7
       blocking_deployment: true
-      action: "Execute immediately - blocks deployment"
     
     phase_2_architecture:
       name: "Refactor Architecture (Week 2-3)"
-      file: "_workspaces/roadmap/phases/REM-PHASE-ARCHITECTURE.yaml"
+      file: "_workspaces/roadmap/phases/phase-002-architecture-refactoring.yaml"
       total_effort_hours: 28
       blocking_deployment: false
-      action: "Start after Phase 1 complete"
     
     phase_3_technical_debt:
       name: "Address Technical Debt (Week 4)"
-      file: "_workspaces/roadmap/phases/REM-PHASE-TECHNICAL-DEBT.yaml"
+      file: "_workspaces/roadmap/phases/phase-003-technical-debt.yaml"
       total_effort_hours: 18
       blocking_deployment: false
-      action: "Integrate into sprint work"
-    
-    phase_4_improvements:
-      name: "Non-Blocking Improvements (Continuous)"
-      file: "_workspaces/roadmap/phases/REM-PHASE-IMPROVEMENTS.yaml"
-      total_effort_hours: 40
-      blocking_deployment: false
-      action: "Include in backlog as opportunity"
+  
+  completion_checklist:
+    - [ ] All CRITICAL items in phase_001 completed and tested
+    - [ ] All HIGH items in phase_002 completed and tested
+    - [ ] All MEDIUM items in phase_003 addressed
+    - [ ] Re-run audit trace validation after each CRITICAL fix
+    - [ ] Update phase YAML files weekly with progress
+    - [ ] Obtain approval before closing any remediation item
+```
 
-**Step 7.4: Validation Before Completion**
+**Step 7.3: Validation Before Completion**
 
 ```bash
-# Verify all phase files exist and are valid
+# Verify remediation phases exist and are valid
 python3 << 'EOF'
 import yaml
 import os
 from pathlib import Path
 
-phase_artifacts = "_workspaces/roadmap/phases"
-Path(phase_artifacts).mkdir(parents=True, exist_ok=True)
+phases_dir = Path("_workspaces/roadmap/phases")
+impl_map_file = Path("cortex-impl-map.yaml")
 
-required_phases = [
-    "REM-PHASE-CRITICAL-BLOCKERS.yaml",
-    "REM-PHASE-ARCHITECTURE.yaml",
-    "REM-PHASE-TECHNICAL-DEBT.yaml",
-    "REM-PHASE-IMPROVEMENTS.yaml",
-]
-
-all_valid = True
-for phase_file in required_phases:
-    phase_path = Path(phase_artifacts) / phase_file
-    if not phase_path.exists():
-        print(f"❌ FAILURE: {phase_file} not found")
-        all_valid = False
-    else:
-        try:
-            with open(phase_path) as f:
-                phase_data = yaml.safe_load(f)
-            if 'remediation_phase' not in phase_data:
-                print(f"❌ FAILURE: {phase_file} missing 'remediation_phase' key")
-                all_valid = False
-            else:
-                print(f"✅ {phase_file} valid")
-        except Exception as e:
-            print(f"❌ FAILURE: {phase_file} parse error: {e}")
-            all_valid = False
-
-# Verify cortex-impl-map.yaml reference
-if Path('cortex-impl-map.yaml').exists():
-    with open('cortex-impl-map.yaml') as f:
-        impl_map = yaml.safe_load(f)
-    if 'remediation_reference' in impl_map:
-        ref = impl_map['remediation_reference']
-        print(f"\n✅ REMEDIATION REFERENCE VALID:")
-        print(f"   - Phases defined: {len(ref.get('phases', {}))}")
-        print(f"   - Execution roadmap: {len(ref.get('execution_roadmap', {}))}")
-    else:
-        print(f"\n⚠ cortex-impl-map.yaml missing 'remediation_reference' track")
-else:
-    print(f"\n⚠ cortex-impl-map.yaml not found")
-
-if all_valid:
-    print(f"\n✅ REMEDIATION PHASES VALID - Ready for execution")
-else:
-    print(f"\n❌ REMEDIATION PHASES INVALID - Fix errors above")
+# Check 1: phases directory exists
+if not phases_dir.exists():
+    print("❌ FAILURE: phases directory not found")
     exit(1)
+
+# Check 2: phase files exist
+phase_files = list(phases_dir.glob("phase-*.yaml"))
+if len(phase_files) == 0:
+    print("❌ FAILURE: No phase YAML files found")
+    exit(1)
+
+print(f"✅ Found {len(phase_files)} remediation phase files:")
+for phase_file in sorted(phase_files):
+    with open(phase_file) as f:
+        phase = yaml.safe_load(f)
+    if 'phase' in phase:
+        p = phase['phase']
+        print(f"   - {phase_file.name}")
+        print(f"     ID: {p.get('id')}, Priority: {p.get('priority')}")
+        print(f"     Items: {len(p.get('items', []))}")
+        print(f"     Effort: {p.get('total_effort_hours')} hours")
+
+# Check 3: impl-map references phases
+if impl_map_file.exists():
+    with open(impl_map_file) as f:
+        impl_map = yaml.safe_load(f)
+    
+    if 'remediation' in impl_map:
+        remediation = impl_map['remediation']
+        if 'phase_references' in remediation:
+            print(f"\n✅ cortex-impl-map.yaml references {len(remediation['phase_references'])} phases")
+        else:
+            print("\n⚠ cortex-impl-map.yaml remediation section found but no phase_references")
+else:
+    print("\n⚠ cortex-impl-map.yaml not found")
+
+print("\n✅ REMEDIATION PHASES VALID")
 EOF
 ```
 
 **Output:** 
-- `_workspaces/roadmap/phases/REM-PHASE-CRITICAL-BLOCKERS.yaml` (executable)
-- `_workspaces/roadmap/phases/REM-PHASE-ARCHITECTURE.yaml` (executable)
-- `_workspaces/roadmap/phases/REM-PHASE-TECHNICAL-DEBT.yaml` (executable)
-- `_workspaces/roadmap/phases/REM-PHASE-IMPROVEMENTS.yaml` (executable)
-- `cortex-impl-map.yaml` with `remediation_reference:` track (references)
+- Multiple phase files: `_workspaces/roadmap/phases/phase-{number}-{name}.yaml`
+- Updated `cortex-impl-map.yaml` with `remediation.phase_references`
+- Each phase file is independent and can be executed separately
+- Phases reference source findings via review timestamp
 
 ---
 
@@ -982,52 +891,53 @@ LOW (Nice-to-Have)
 
 ## 📁 OUTPUT STRUCTURE - PERSISTENT ARTIFACTS ⭐ MANDATORY
 
-**ALL gap reports persisted to `_workspaces/roadmap/issues/<timestamp>/`**
-**ALL remediation phases persisted to `_workspaces/roadmap/phases/`**
-
+**Gap Reports persisted to timestamped issue directory:**
 ```
 _workspaces/roadmap/
-├─ issues/                                    ← Gap Reports & Findings (timestamped per-review)
-│  ├─ 2026-01-23_143022/                    ← This execution's timestamped folder
-│  │  ├─ review-gap-inventory.yaml          ← Phase 1: Gap analysis
-│  │  ├─ review-stubs.yaml                  ← Phase 2: Stub detection
-│  │  ├─ Findings-BRIT.yaml                 ← Phase 3: Agent findings
-│  │  ├─ Findings-HALL.yaml
-│  │  ├─ Findings-GOV.yaml
-│  │  ├─ Findings-ASM.yaml
-│  │  ├─ Findings-DEBT.yaml
-│  │  ├─ Findings-STATE.yaml
-│  │  ├─ Findings-ARCH.yaml
-│  │  ├─ Findings-INTEG.yaml
-│  │  ├─ audit-trace-validation.yaml        ← Phase 6: Audit validation
-│  │  ├─ mcp-toolkit-audit.yaml             ← Phase 6.5: MCP audit
-│  │  ├─ cortex-lens-ast-validation.yaml    ← Phase 6.5: LENS validation
-│  │  ├─ requirements-analysis.yaml         ← Phase 4: Requirements
-│  │  └─ review-findings-consolidated.yaml  ← Phase 5: Consolidated report
-│  ├─ 2026-01-22_102015/                    ← Previous execution
+├─ issues/
+│  ├─ 2026-01-23_143022/                    ← Review execution #{timestamp}
+│  │  ├─ review-gap-inventory.yaml          ⭐ Phase 1 output
+│  │  ├─ review-stubs.yaml                  ⭐ Phase 2 output
+│  │  ├─ Findings-BRIT.yaml                 ⭐ Agent 1
+│  │  ├─ Findings-HALL.yaml                 ⭐ Agent 2
+│  │  ├─ Findings-GOV.yaml                  ⭐ Agent 3
+│  │  ├─ Findings-ASM.yaml                  ⭐ Agent 4
+│  │  ├─ Findings-DEBT.yaml                 ⭐ Agent 5
+│  │  ├─ Findings-STATE.yaml                ⭐ Agent 6
+│  │  ├─ Findings-ARCH.yaml                 ⭐ Agent 7
+│  │  ├─ Findings-INTEG.yaml                ⭐ Agent 8
+│  │  ├─ requirements-analysis.yaml         ⭐ Phase 4
+│  │  ├─ review-findings-consolidated.yaml  ⭐ Phase 5
+│  │  ├─ audit-trace-validation.yaml        ⭐ Phase 6
+│  │  ├─ mcp-toolkit-audit.yaml             ⭐ Phase 6.5
+│  │  └─ cortex-lens-ast-validation.yaml    ⭐ Phase 6.5
+│  ├─ 2026-01-22_102015/                    ← Previous review
 │  │  └─ [all artifacts from that execution]
 │  └─ [archive of all previous executions]
 │
-└─ phases/                                    ← Remediation Phases (persistent, updates)
-   ├─ REM-PHASE-CRITICAL-BLOCKERS.yaml      ← Phase 7: Executable remediation
-   ├─ REM-PHASE-ARCHITECTURE.yaml           ← Blocking deployment (Week 1)
-   ├─ REM-PHASE-TECHNICAL-DEBT.yaml         ← High priority (Week 2-3)
-   ├─ REM-PHASE-IMPROVEMENTS.yaml           ← Medium priority (Week 4+)
-   └─ phases-manifest.yaml                  ← Index of all phase files
+├─ phases/                                   ← NEW: Remediation phases
+│  ├─ phase-001-critical-blockers.yaml       ⭐ Generated from 2026-01-23_143022 review
+│  ├─ phase-002-architecture-refactoring.yaml ⭐ Generated from 2026-01-23_143022 review
+│  ├─ phase-003-technical-debt.yaml          ⭐ Generated from 2026-01-23_143022 review
+│  └─ [future phases from subsequent reviews]
+│
+└─ reports/                                  ← Summary reports (optional)
+   └─ [summary reports cross-linking issues and phases]
 ```
 
-**Reference in cortex-impl-map.yaml:**
+**Remediation tracking in cortex-impl-map.yaml:**
 ```yaml
 cortex-impl-map.yaml
-└─ remediation_reference:
+└─ remediation:
+   ├─ version: "2.0"
    ├─ created: "2026-01-23T14:55:18Z"
    ├─ review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
-   ├─ phases:
-   │  ├─ critical_blockers → file: _workspaces/roadmap/phases/REM-PHASE-CRITICAL-BLOCKERS.yaml
-   │  ├─ architecture → file: _workspaces/roadmap/phases/REM-PHASE-ARCHITECTURE.yaml
-   │  ├─ technical_debt → file: _workspaces/roadmap/phases/REM-PHASE-TECHNICAL-DEBT.yaml
-   │  └─ improvements → file: _workspaces/roadmap/phases/REM-PHASE-IMPROVEMENTS.yaml
-   └─ execution_roadmap: [execution sequence with phase references]
+   ├─ phases_directory: "_workspaces/roadmap/phases"
+   ├─ phase_references:
+   │  ├─ file: "_workspaces/roadmap/phases/phase-001-critical-blockers.yaml"
+   │  ├─ file: "_workspaces/roadmap/phases/phase-002-architecture-refactoring.yaml"
+   │  └─ file: "_workspaces/roadmap/phases/phase-003-technical-debt.yaml"
+   └─ execution_roadmap: [references to phases]
 ```
 
 ---
@@ -1042,15 +952,15 @@ cortex-impl-map.yaml
 - Stdout-only logging
 - Test artifacts not preserved
 
-✅ **REQUIRED:**
+**✅ REQUIRED:**
 - All gap reports written to `_workspaces/roadmap/issues/<timestamp>/`
 - All remediation phases written to `_workspaces/roadmap/phases/`
-- Reference track written to `cortex-impl-map.yaml::remediation_reference`
+- Each phase file is independent and traceable to source review
+- Remediation plan persisted to `cortex-impl-map.yaml` with phase references
 - All findings correlated back to source files/locations
 - Execution metadata (timestamp, status, duration) in every report
-- Historical archive of all previous gap reports preserved
-- Remediation phases persist across reviews (updated, not replaced)
-- Phase files are executable YAML (ready for remediation execution)
+- Historical archive of all previous executions preserved
+- Phase files reference source review via review timestamp
 
 ---
 
@@ -1127,20 +1037,18 @@ mcp_toolkit_audit:
 ### Gate 4: Mandatory Remediation Planning ⭐ MANDATORY
 ```yaml
 remediation_planning:
-  - [ ] All phase files created in _workspaces/roadmap/phases/
-  - [ ] REM-PHASE-CRITICAL-BLOCKERS.yaml exists and valid
-  - [ ] REM-PHASE-ARCHITECTURE.yaml exists and valid
-  - [ ] REM-PHASE-TECHNICAL-DEBT.yaml exists and valid
-  - [ ] REM-PHASE-IMPROVEMENTS.yaml exists and valid
+  - [ ] Remediation phases directory created: _workspaces/roadmap/phases/
+  - [ ] Phase files created for each priority level
+  - [ ] remediation.phase_references populated in cortex-impl-map.yaml
+  - [ ] Each phase file has execution_roadmap entry
   - [ ] All findings from phases 1-6 mapped to remediation items
   - [ ] Dependency ordering correct (uses depends_on)
   - [ ] Priority levels assigned (1-10)
   - [ ] Effort estimates provided for all items
   - [ ] Responsible components assigned
   - [ ] Completion criteria defined for each item
-  - [ ] Acceptance tests defined for critical items
-  - [ ] remediation_reference track added to cortex-impl-map.yaml
-  - [ ] Phase files reference source findings (_workspaces/roadmap/issues/<timestamp>/)
+  - [ ] Phase files are independent and self-contained
+  - [ ] Source review timestamp included in all phase files
 ```
 
 ### Gate 5: Review Pass/Fail Declaration ⭐ MANDATORY
@@ -1152,12 +1060,12 @@ final_declaration:
   - [ ] Any failed gate → Review FAILS (not warning)
   - [ ] Final report: review-findings-consolidated.yaml includes:
       - [ ] Pass/fail status (explicit)
-      - [ ] Artifacts location (timestamped path: issues/<timestamp>/)
+      - [ ] Artifacts location (timestamped path)
       - [ ] Audit trace status (PASSED or FAILED)
       - [ ] MCP audit status (PASSED or FAILED)
-      - [ ] Remediation phases location (_workspaces/roadmap/phases/)
+      - [ ] Remediation plan location (cortex-impl-map.yaml)
       - [ ] Summary of critical blockers
-      - [ ] Next steps (remediation phase execution link)
+      - [ ] Next steps (remediation phase link)
 ```
 
 ---
@@ -1168,11 +1076,7 @@ final_declaration:
 review_completion:
   status: "PASSED" | "FAILED"
   timestamp: "2026-01-23T14:55:18Z"
-  
-  locations:
-    gap_reports: "_workspaces/roadmap/issues/2026-01-23_143022"
-    remediation_phases: "_workspaces/roadmap/phases"
-    remediation_reference: "cortex-impl-map.yaml::remediation_reference"
+  review_artifacts: "_workspaces/roadmap/issues/2026-01-23_143022"
   
   mandatory_gates:
     persistent_artifacts: "PASSED ✅"
@@ -1188,35 +1092,13 @@ review_completion:
   cortex_production_readiness:
     declaration: "CORTEX PASSES review - ready for deployment"
     or_declaration: "CORTEX FAILS review - critical blockers must be fixed"
-  
+    
   remediation_phases:
-    critical_blockers:
-      file: "_workspaces/roadmap/phases/REM-PHASE-CRITICAL-BLOCKERS.yaml"
-      timeline: "Week 1"
-      blocking_deployment: true
-      items_count: 2
-      status: "PENDING - Execute immediately"
-    
-    architecture:
-      file: "_workspaces/roadmap/phases/REM-PHASE-ARCHITECTURE.yaml"
-      timeline: "Week 2-3"
-      blocking_deployment: false
-      items_count: 1
-      status: "PENDING - After critical blockers"
-    
-    technical_debt:
-      file: "_workspaces/roadmap/phases/REM-PHASE-TECHNICAL-DEBT.yaml"
-      timeline: "Week 4"
-      blocking_deployment: false
-      items_count: 3
-      status: "PENDING - In sprint work"
-    
-    improvements:
-      file: "_workspaces/roadmap/phases/REM-PHASE-IMPROVEMENTS.yaml"
-      timeline: "Continuous"
-      blocking_deployment: false
-      items_count: 12
-      status: "PENDING - Backlog items"
+    location: "_workspaces/roadmap/phases/"
+    phases_created: 3
+    critical_phase: "_workspaces/roadmap/phases/phase-001-critical-blockers.yaml"
+    link: "Execute phases in priority order before next deployment"
+    tracking: "cortex-impl-map.yaml :: remediation.phase_references"
   
   audit_trail_summary:
     runtime_logs_found: 12
@@ -1225,16 +1107,11 @@ review_completion:
     critical_paths_traced: "✅ ALL"
   
   next_steps:
-    - "Review gap reports in _workspaces/roadmap/issues/<timestamp>/"
     - "Review remediation phases in _workspaces/roadmap/phases/"
-    - "Execute REM-PHASE-CRITICAL-BLOCKERS.yaml (blocking)"
-    - "Execute REM-PHASE-ARCHITECTURE.yaml (after critical)"
-    - "Integrate REM-PHASE-TECHNICAL-DEBT.yaml into sprint work"
-    - "Add REM-PHASE-IMPROVEMENTS.yaml to backlog"
-    - "Re-run audit trace validation after each critical fix"
-    - "Prioritize and assign critical blockers"
-    - "Execute Phase 1 remediation items"
-    - "Re-run audit trace validation after fixes"
+    - "Start with phase-001-critical-blockers.yaml"
+    - "Follow dependency ordering in each phase"
+    - "Update phase YAML files as work progresses"
+    - "Re-run audit trace validation after critical blockers fixed"
     - "Schedule next review cycle (weekly recommended)"
 ```
 
@@ -1292,70 +1169,45 @@ gate_checks:
 ## 🔄 COMPLETE WORKFLOW SUMMARY
 
 ```
-PRE-EXECUTION: Create timestamped artifacts directories
-    ├─ mkdir _workspaces/roadmap/issues/${TIMESTAMP}  ← Gap reports
-    └─ mkdir _workspaces/roadmap/phases              ← Remediation phases
+PRE-EXECUTION: Create timestamped artifacts directory
     ↓
 Phase 0: Validation (15 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/phase0-validation.yaml
     ↓ (gates pass)
 Phase 1: Gap Inventory (15 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/review-gap-inventory.yaml
     ↓
 Phase 2: Stub Detection (20 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/review-stubs.yaml
     ↓
 Phase 3: 8-Agent Analysis (Parallel - 27 min)
     ├─ Batch 1: Brittleness, Hallucination, Governance (12 min)
     └─ Batch 2: Assumptions, Debt, State, Architecture, Integration (15 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/Findings-[AGENT].yaml
     ↓
 Phase 4: Requirements Analysis (10 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/requirements-analysis.yaml
     ↓
 Phase 5: Consolidated Report (20 min)
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/review-findings-consolidated.yaml
     ↓
 Phase 6: Audit Trace & E2E Validation ⭐ MANDATORY (25 min)
     ├─ Runtime audit trace inspection
     ├─ Database audit log queries
     ├─ MCP interface audit
     └─ LENS/AST validation
-    → Outputs: _workspaces/roadmap/issues/${TIMESTAMP}/audit-trace-validation.yaml
-              _workspaces/roadmap/issues/${TIMESTAMP}/mcp-toolkit-audit.yaml
-              _workspaces/roadmap/issues/${TIMESTAMP}/cortex-lens-ast-validation.yaml
     ↓
 Phase 7: Mandatory Remediation Planning ⭐ MANDATORY (20 min)
-    ├─ Analyze all gap reports from issues/${TIMESTAMP}/
-    ├─ Create REM-PHASE-CRITICAL-BLOCKERS.yaml
-    ├─ Create REM-PHASE-ARCHITECTURE.yaml
-    ├─ Create REM-PHASE-TECHNICAL-DEBT.yaml
-    ├─ Create REM-PHASE-IMPROVEMENTS.yaml
-    └─ Update cortex-impl-map.yaml::remediation_reference
-    → Outputs: _workspaces/roadmap/phases/REM-PHASE-*.yaml (4 files)
-              cortex-impl-map.yaml::remediation_reference (reference track)
+    ├─ Enumerate all findings
+    ├─ Create remediation track
+    ├─ Define execution roadmap
+    └─ Update cortex-impl-map.yaml
     ↓
 COMPLETION: All 5 mandatory gates passed
-    ├─ Gate 1: Persistent artifacts in issues/${TIMESTAMP}/ ✅
-    ├─ Gate 2: Audit trace validation PASSED ✅
-    ├─ Gate 3: MCP/Toolkit audit PASSED ✅
-    ├─ Gate 4: Remediation phases in phases/ ✅
-    └─ Gate 5: Pass/Fail declared ✅
-    ↓
-    CORTEX REVIEW COMPLETE
-    Gap Reports:        _workspaces/roadmap/issues/${TIMESTAMP}/
-    Remediation Phases: _workspaces/roadmap/phases/
-    Reference:         cortex-impl-map.yaml::remediation_reference
+    ├─ Persistent artifacts persisted ✅
+    ├─ Audit trace validated ✅
+    ├─ MCP/Toolkit audited ✅
+    ├─ Remediation plan created ✅
+    └─ Pass/Fail declared ✅
     ↓
 Handoff to cortex-builder.prompt.md for remediation execution
 ```
 
 **Total Workflow Time: 2.5-3 hours**
-
-**Output Locations:**
-- **Gap Reports & Findings:** `_workspaces/roadmap/issues/<YYYY-MM-DD_HHMMSS>/` (timestamped, archived per-review)
-- **Remediation Phases:** `_workspaces/roadmap/phases/` (persistent, executable YAML)
-- **Remediation Reference:** `cortex-impl-map.yaml::remediation_reference` (lightweight reference track)
 
 ---
 
