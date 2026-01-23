@@ -538,8 +538,38 @@ class MasterOrchestrator(IOrchestrator):
         operation_name: str,
         parameters: Dict[str, Any],
     ) -> Result[Any]:
-        """Execute operation with audit logging."""
+        """Execute operation with audit logging and governance validation."""
         try:
+            # CORE-002: Pre-execution artifact validation gate
+            # Initialize governance registry if needed
+            if not self._governance_registry:
+                self._governance_registry = GovernanceRegistry.instance()
+                init_result = self._governance_registry.initialize()
+                if init_result.is_err():
+                    return Err(f"Failed to initialize governance registry: {init_result.error}")
+            
+            # Validate any artifacts in parameters before execution (CORE-002)
+            artifact_path = parameters.get("artifact_path")
+            ac_id = parameters.get("ac_id")
+            if artifact_path:
+                artifact_validation = self._governance_registry.validate_artifact_creation(
+                    artifact_path=artifact_path,
+                    ac_id=ac_id
+                )
+                if artifact_validation.is_err():
+                    # CORE-002 violation - block execution
+                    self.logger.log_operation_complete(
+                        ac_id="CORE-002",
+                        operation="ARTIFACT_VALIDATION_FAILED",
+                        success=False,
+                        details={
+                            "violation": artifact_validation.error,
+                            "requested_artifact": artifact_path,
+                            "operation": operation_name
+                        }
+                    )
+                    return artifact_validation
+            
             self.logger.log_operation_start(
                 ac_id="AC-AR-006-01",
                 operation=operation_name,
