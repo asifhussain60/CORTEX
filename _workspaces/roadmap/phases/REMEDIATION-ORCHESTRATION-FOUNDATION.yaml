@@ -1,0 +1,398 @@
+# REMEDIATION-ORCHESTRATION-FOUNDATION Phase
+# Part of: REMEDIATION-PRODUCTION-COMPLETENESS
+# Sequence: 1
+# Priority: P0-IMMEDIATE
+# Blocking: true
+# Track: remediation
+
+phase_id: "REMEDIATION-ORCHESTRATION-FOUNDATION"
+parent_phase: "REMEDIATION-PRODUCTION-COMPLETENESS"
+sequence: 1
+priority: "P0-IMMEDIATE"
+effort: "8-10 days"
+blocking: true
+status: "NOT_STARTED"
+track: "remediation"
+
+description: |
+  Fix MasterOrchestrator SPOF (single point of failure) and implement three critical
+  orchestrators: AnalysisOrchestrator, ExecutionOrchestrator, IntentOrchestrator.
+  This foundation phase delivers 201 tests across 3 major components.
+
+current_state:
+  orchestration_tests: "412/613 (67%)"
+  orchestration_gap: "201 tests missing"
+  spof_status: "MasterOrchestrator has no backup/failover"
+  analysis_orchestrator: "STUB - no implementation"
+  execution_orchestrator: "STUB - no implementation"
+  intent_orchestrator: "MISSING - not yet created"
+
+target_state:
+  orchestration_tests: "613/613 (100%)"
+  spof_fixed: "true"
+  backup_orchestrator: "Fully implemented with state sync"
+  failover_manager: "Automatic failover on MasterOrchestrator failure"
+  analysis_orchestrator: "100% implemented with 86 tests"
+  execution_orchestrator: "100% implemented with 89 tests"
+  intent_orchestrator: "Fully implemented with routing"
+
+components:
+  - component_id: "AC-ORCH-001"
+    name: "MasterOrchestrator SPOF Fix"
+    effort: "8-10 hours"
+    tests: 26
+    acceptance_criteria: 3
+    description: "Add backup orchestrator, failover logic, state sync"
+    
+    ac_items:
+      - ac_id: "AC-ORCH-001-01"
+        title: "BackupOrchestrator Implementation"
+        description: |
+          Create backup_orchestrator.py with full MasterOrchestrator interface compliance.
+          Must support:
+          - State sync from master
+          - Ready-to-assume-leadership mode
+          - Passive monitoring of master health
+          - Seamless takeover capability
+        acceptance_criteria:
+          - "BackupOrchestrator fully implements IOrchestrator interface"
+          - "State synchronization works bidirectionally"
+          - "Health monitoring captures master failure within 2 seconds"
+          - "Takeover transitions to active state seamlessly"
+        tests_required: 9
+        test_file: "tests/unit/orchestrators/test_master_orchestrator_spof_fix.py"
+      
+      - ac_id: "AC-ORCH-001-02"
+        title: "FailoverManager Implementation"
+        description: |
+          Create failover_manager.py to coordinate failover decisions.
+          Must handle:
+          - Health checks (periodic, configurable interval)
+          - Quorum-based failover decisions
+          - State consistency verification
+          - Rollback on failed failover
+        acceptance_criteria:
+          - "Failover decision made within 3 seconds of master failure"
+          - "Quorum logic prevents split-brain scenarios"
+          - "State consistency verified before leadership assumption"
+          - "100% failover success rate in test scenarios"
+        tests_required: 10
+        test_file: "tests/unit/orchestrators/test_master_orchestrator_spof_fix.py"
+      
+      - ac_id: "AC-ORCH-001-03"
+        title: "MasterOrchestrator Enhancement"
+        description: |
+          Enhance existing MasterOrchestrator to integrate backup orchestrator.
+          Must add:
+          - Initialization of backup orchestrator
+          - State sync mechanism to backup
+          - Heartbeat to signal liveness
+          - Graceful shutdown with leadership transfer
+        acceptance_criteria:
+          - "Initialization creates and configures backup orchestrator"
+          - "State sync to backup happens after each major operation"
+          - "Heartbeat interval configurable, default 1 second"
+          - "Graceful shutdown transfers leadership within 2 seconds"
+        tests_required: 7
+        test_file: "tests/unit/orchestrators/test_master_orchestrator_spof_fix.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex/orchestrators/core/backup_orchestrator.py"
+        type: "new"
+        lines_of_code: "250-300"
+        description: "Full backup orchestrator with state sync"
+      
+      - path: "cortex/orchestrators/core/failover_manager.py"
+        type: "new"
+        lines_of_code: "180-220"
+        description: "Failover coordination and decision logic"
+      
+      - path: "cortex/orchestrators/core/master_orchestrator.py"
+        type: "enhance"
+        lines_of_code: "50-100 additions"
+        description: "Add backup integration and state sync"
+  
+  - component_id: "AC-ORCH-002"
+    name: "AnalysisOrchestrator Full Implementation"
+    effort: "4-6 days"
+    tests: 86
+    acceptance_criteria: 4
+    description: "Pattern analysis, trend detection, anomaly detection, statistics"
+    
+    ac_items:
+      - ac_id: "AC-ORCH-002-01"
+        title: "PatternAnalyzer Module"
+        description: |
+          Implement pattern_analyzer.py for detecting patterns in operation sequences.
+          Features:
+          - Sequence pattern matching with configurable window size
+          - Frequency analysis and hotspot identification
+          - Pattern scoring and ranking by importance
+          - Caching of pattern analysis results
+        acceptance_criteria:
+          - "Pattern detection accuracy ≥95% on synthetic patterns"
+          - "Performance: analyze 10K operations in <1s"
+          - "Hotspot identification shows top 10 patterns with frequencies"
+          - "Cache hit rate ≥85% on repeated patterns"
+        tests_required: 20
+        test_file: "tests/unit/orchestrators/test_analysis_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-002-02"
+        title: "TrendDetector Module"
+        description: |
+          Implement trend_detector.py for identifying trends in metrics over time.
+          Features:
+          - Time-series trend analysis (uptrend, downtrend, stable)
+          - Moving average calculations
+          - Trend inflection point detection
+          - Prediction confidence scoring
+        acceptance_criteria:
+          - "Trend detection accuracy ≥90% on synthetic trends"
+          - "Inflection points identified within 2 data points"
+          - "Confidence scores calibrated to actual prediction accuracy"
+          - "Performance: process 1K metrics in <500ms"
+        tests_required: 22
+        test_file: "tests/unit/orchestrators/test_analysis_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-002-03"
+        title: "AnomalyDetector Module"
+        description: |
+          Implement anomaly_detector.py for detecting unusual behavior.
+          Features:
+          - Statistical anomaly detection (z-score, IQR methods)
+          - Contextual anomaly detection
+          - Anomaly severity scoring
+          - Baseline learning from historical data
+        acceptance_criteria:
+          - "Anomaly detection F1-score ≥0.85"
+          - "False positive rate <5%"
+          - "Detects injected anomalies within 1 data point"
+          - "Baseline learning converges within 100 samples"
+        tests_required: 22
+        test_file: "tests/unit/orchestrators/test_analysis_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-002-04"
+        title: "AnalysisOrchestrator Integration"
+        description: |
+          Implement analysis_orchestrator.py integrating all analysis modules.
+          Features:
+          - Unified orchestration of pattern, trend, and anomaly analysis
+          - Configurable analysis pipeline
+          - Result caching and invalidation
+          - Integration with MCP tool framework
+        acceptance_criteria:
+          - "All analysis modules invoked in correct sequence"
+          - "Combined analysis results consistent and actionable"
+          - "MCP tool exposure working (list_analyses, get_analysis)"
+          - "Performance: complete analysis cycle <2.0s"
+        tests_required: 22
+        test_file: "tests/unit/orchestrators/test_analysis_orchestrator.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex/orchestrators/analysis/pattern_analyzer.py"
+        type: "new"
+        lines_of_code: "300-350"
+        description: "Pattern detection and analysis"
+      
+      - path: "cortex/orchestrators/analysis/trend_detector.py"
+        type: "new"
+        lines_of_code: "280-320"
+        description: "Time-series trend analysis"
+      
+      - path: "cortex/orchestrators/analysis/anomaly_detector.py"
+        type: "new"
+        lines_of_code: "350-400"
+        description: "Statistical anomaly detection"
+      
+      - path: "cortex/orchestrators/domain/analysis_orchestrator.py"
+        type: "new"
+        lines_of_code: "250-300"
+        description: "Analysis orchestrator orchestrating all analysis modules"
+  
+  - component_id: "AC-ORCH-003"
+    name: "ExecutionOrchestrator Full Implementation"
+    effort: "4-6 days"
+    tests: 89
+    acceptance_criteria: 4
+    description: "Task execution, parallel workflows, saga orchestration, recovery"
+    
+    ac_items:
+      - ac_id: "AC-ORCH-003-01"
+        title: "TaskExecutor Module"
+        description: |
+          Implement task_executor.py for executing individual tasks.
+          Features:
+          - Sequential and parallel task execution modes
+          - Timeout enforcement with configurable limits
+          - Retry logic with exponential backoff
+          - Comprehensive error handling and logging
+        acceptance_criteria:
+          - "Tasks execute in specified mode (sequential/parallel)"
+          - "Timeout enforcement ≤100ms variance from configured timeout"
+          - "Retry success rate ≥95% on transient failures"
+          - "Error logging captures full context (task, error, retry count)"
+        tests_required: 20
+        test_file: "tests/unit/orchestrators/test_execution_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-003-02"
+        title: "WorkflowOrchestrator Module"
+        description: |
+          Implement workflow_orchestrator.py for orchestrating task sequences.
+          Features:
+          - Dependency graph evaluation
+          - Parallel execution of independent tasks
+          - Branch execution based on conditions
+          - Workflow state persistence and recovery
+        acceptance_criteria:
+          - "Dependencies correctly enforced (no out-of-order execution)"
+          - "Independent tasks execute in parallel automatically"
+          - "Conditional branching works with ≥3 condition types"
+          - "State persistence enables recovery from interruption"
+        tests_required: 25
+        test_file: "tests/unit/orchestrators/test_execution_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-003-03"
+        title: "SagaManager Module"
+        description: |
+          Implement saga_manager.py for distributed transaction orchestration.
+          Features:
+          - Saga orchestration with compensating transactions
+          - Rollback coordination across services
+          - Saga status tracking and recovery
+          - Idempotency enforcement
+        acceptance_criteria:
+          - "Saga completion success rate ≥99% (compensating transactions reliable)"
+          - "Rollback completes within 2x forward execution time"
+          - "Idempotency prevents duplicate effects on retries"
+          - "Saga state observable and debuggable"
+        tests_required: 22
+        test_file: "tests/unit/orchestrators/test_execution_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-003-04"
+        title: "ExecutionOrchestrator Integration"
+        description: |
+          Implement execution_orchestrator.py integrating all execution modules.
+          Features:
+          - Unified orchestration of task, workflow, and saga execution
+          - Configurable execution strategies
+          - Performance monitoring and optimization
+          - MCP tool integration
+        acceptance_criteria:
+          - "All execution modules invoked correctly with proper sequencing"
+          - "End-to-end workflow execution <2.0s for typical workflows"
+          - "MCP tools exposed: list_workflows, get_workflow_status, execute_workflow"
+          - "Performance monitoring tracks execution latency, task success rate"
+        tests_required: 22
+        test_file: "tests/unit/orchestrators/test_execution_orchestrator.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex/orchestrators/execution/task_executor.py"
+        type: "new"
+        lines_of_code: "300-350"
+        description: "Individual task execution with retries"
+      
+      - path: "cortex/orchestrators/execution/workflow_orchestrator.py"
+        type: "new"
+        lines_of_code: "350-400"
+        description: "Task sequence orchestration with dependencies"
+      
+      - path: "cortex/orchestrators/execution/saga_manager.py"
+        type: "new"
+        lines_of_code: "320-370"
+        description: "Distributed transaction orchestration"
+      
+      - path: "cortex/orchestrators/domain/execution_orchestrator.py"
+        type: "new"
+        lines_of_code: "280-320"
+        description: "Execution orchestrator orchestrating all execution modules"
+
+depends_on: []
+
+gate_criteria:
+  - criterion: "Test Pass Rate"
+    target: "≥98% (201/201 tests)"
+    verification: "pytest tests/unit/orchestrators/test_master_orchestrator_spof_fix.py tests/unit/orchestrators/test_analysis_orchestrator.py tests/unit/orchestrators/test_execution_orchestrator.py -v"
+  
+  - criterion: "Type Hints Coverage"
+    target: "100%"
+    verification: "pyright cortex/orchestrators/core/master_orchestrator.py cortex/orchestrators/core/backup_orchestrator.py cortex/orchestrators/core/failover_manager.py cortex/orchestrators/analysis/*.py cortex/orchestrators/execution/*.py cortex/orchestrators/domain/{analysis,execution}_orchestrator.py"
+  
+  - criterion: "Docstring Coverage"
+    target: "100% (Google style)"
+    verification: "All public functions have complete Google-style docstrings with Args, Returns, Raises sections"
+  
+  - criterion: "No Bare Except"
+    target: "0 occurrences"
+    verification: "grep -r 'except:' cortex/orchestrators/"
+  
+  - criterion: "MasterOrchestrator Resilience"
+    target: "Automatic failover on master failure"
+    verification: "Test backup orchestrator takeover in <3 seconds"
+  
+  - criterion: "IOrchestrator Interface"
+    target: "All 3 new orchestrators implement interface"
+    verification: "Code review: all required methods implemented with correct signatures"
+
+completion_verification:
+  success_criteria:
+    - "201 tests passing in test_master_orchestrator_spof_fix.py, test_analysis_orchestrator.py, test_execution_orchestrator.py"
+    - "MasterOrchestrator backup operational with automatic failover"
+    - "AnalysisOrchestrator handles patterns, trends, anomalies"
+    - "ExecutionOrchestrator handles tasks, workflows, sagas"
+    - "All type hints present (100% coverage)"
+    - "All docstrings Google style (100% coverage)"
+    - "No bare except clauses anywhere"
+    - "All CORE governance rules (008, 011, 012, 013) satisfied"
+  
+  verification_steps:
+    - "Run: pytest tests/unit/orchestrators/ -v --tb=short → 201/201 tests pass"
+    - "Run: pyright cortex/orchestrators/ → 0 type errors"
+    - "Run: grep -r 'except:' cortex/orchestrators/ → 0 matches"
+    - "Manual review: All public functions have Google-style docstrings"
+    - "Integration test: Backup takes over master within 3 seconds"
+    - "Load test: 100 concurrent workflow executions complete <2.0s each"
+
+deliverables:
+  - "tests/unit/orchestrators/test_master_orchestrator_spof_fix.py (26 tests)"
+  - "cortex/orchestrators/core/backup_orchestrator.py (250-300 LOC)"
+  - "cortex/orchestrators/core/failover_manager.py (180-220 LOC)"
+  - "cortex/orchestrators/core/master_orchestrator.py (enhanced, +50-100 LOC)"
+  - "tests/unit/orchestrators/test_analysis_orchestrator.py (86 tests)"
+  - "cortex/orchestrators/analysis/pattern_analyzer.py (300-350 LOC)"
+  - "cortex/orchestrators/analysis/trend_detector.py (280-320 LOC)"
+  - "cortex/orchestrators/analysis/anomaly_detector.py (350-400 LOC)"
+  - "cortex/orchestrators/domain/analysis_orchestrator.py (250-300 LOC)"
+  - "tests/unit/orchestrators/test_execution_orchestrator.py (89 tests)"
+  - "cortex/orchestrators/execution/task_executor.py (300-350 LOC)"
+  - "cortex/orchestrators/execution/workflow_orchestrator.py (350-400 LOC)"
+  - "cortex/orchestrators/execution/saga_manager.py (320-370 LOC)"
+  - "cortex/orchestrators/domain/execution_orchestrator.py (280-320 LOC)"
+
+git_strategy:
+  commit_message: "remediation: REMEDIATION-ORCHESTRATION-FOUNDATION: MasterOrchestrator SPOF + Analysis/Execution orchestrators (201 tests, 26+86+89)"
+  commit_detail: |
+    - MasterOrchestrator SPOF fix: Add BackupOrchestrator + FailoverManager
+      * backup_orchestrator.py: Full backup implementation with state sync
+      * failover_manager.py: Failover decision logic with quorum support
+      * master_orchestrator.py: Enhanced with backup integration
+    
+    - AnalysisOrchestrator: Pattern, trend, anomaly analysis (86 tests)
+      * pattern_analyzer.py: Sequence pattern matching and hotspot detection
+      * trend_detector.py: Time-series trend analysis
+      * anomaly_detector.py: Statistical anomaly detection
+      * analysis_orchestrator.py: Unified analysis orchestration
+    
+    - ExecutionOrchestrator: Task, workflow, saga execution (89 tests)
+      * task_executor.py: Individual task execution with retries
+      * workflow_orchestrator.py: Workflow orchestration with dependencies
+      * saga_manager.py: Distributed transaction orchestration
+      * execution_orchestrator.py: Unified execution orchestration
+    
+    Total: 201 tests, 3500-4000 LOC, production-ready quality
+
+timeline:
+  estimated_days: "8-10"
+  critical_path: "MasterOrchestrator SPOF fix (8-10h) → AnalysisOrchestrator (4-6d) → ExecutionOrchestrator (4-6d, can run parallel)"
+  optimization: "AnalysisOrchestrator and ExecutionOrchestrator can run in parallel (independent)"
+
+next_phase: "REMEDIATION-ORCHESTRATION-ROUTING"

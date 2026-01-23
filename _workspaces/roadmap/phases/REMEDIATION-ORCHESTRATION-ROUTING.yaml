@@ -1,0 +1,251 @@
+# REMEDIATION-ORCHESTRATION-ROUTING Phase
+# Part of: REMEDIATION-PRODUCTION-COMPLETENESS
+# Sequence: 2
+# Priority: P0-CRITICAL
+# Blocking: true
+# Track: remediation
+
+phase_id: "REMEDIATION-ORCHESTRATION-ROUTING"
+parent_phase: "REMEDIATION-PRODUCTION-COMPLETENESS"
+sequence: 2
+priority: "P0-CRITICAL"
+effort: "2-3 days"
+blocking: true
+status: "NOT_STARTED"
+track: "remediation"
+
+description: |
+  Implement IntentOrchestrator for intelligent intent routing and Continuation/Recovery
+  module for resuming interrupted operations. This phase delivers 136 tests enabling
+  production-grade intent handling and operation recovery.
+
+current_state:
+  intent_routing: "MISSING - intent orchestrator not yet created"
+  continuation_recovery: "MISSING - no recovery mechanism"
+  operation_interruption: "No state persistence or recovery"
+  test_gap: "136 tests missing"
+
+target_state:
+  intent_orchestrator: "100% implemented with routing logic"
+  continuation_handler: "Full operation recovery capability"
+  state_checkpoints: "Persistent operation state snapshots"
+  recovery_tests: "136 tests validating all scenarios"
+
+components:
+  - component_id: "AC-ORCH-004"
+    name: "IntentOrchestrator Creation"
+    effort: "2-3 days"
+    tests: 78
+    acceptance_criteria: 3
+    description: "Route intents to appropriate handlers, context preservation"
+    
+    ac_items:
+      - ac_id: "AC-ORCH-004-01"
+        title: "Intent Routing Logic"
+        description: |
+          Implement intent routing engine that maps intents to appropriate handlers.
+          Features:
+          - Intent type classification and router selection
+          - Context propagation throughout routing
+          - Handler capability matching
+          - Fallback routing for unhandled intents
+        acceptance_criteria:
+          - "95%+ intents correctly routed to appropriate handler"
+          - "Context preserved through complete routing chain"
+          - "Fallback handling for unknown intent types"
+          - "Routing latency <100ms per intent"
+        tests_required: 26
+        test_file: "tests/unit/orchestrators/test_intent_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-004-02"
+        title: "Intent Validation and Normalization"
+        description: |
+          Implement intent validation and normalization pipeline.
+          Features:
+          - Intent schema validation
+          - Parameter normalization (type conversion, cleaning)
+          - Security validation (no injection, sanitization)
+          - Intent enrichment with metadata
+        acceptance_criteria:
+          - "100% invalid intents rejected before routing"
+          - "Normalized parameters consistent across pipeline"
+          - "Security validation prevents injection attacks"
+          - "Intent metadata enrichment complete (source, timestamp, user)"
+        tests_required: 26
+        test_file: "tests/unit/orchestrators/test_intent_orchestrator.py"
+      
+      - ac_id: "AC-ORCH-004-03"
+        title: "IntentOrchestrator Integration"
+        description: |
+          Implement intent_orchestrator.py orchestrating the complete intent pipeline.
+          Features:
+          - Initialization with handler registry
+          - Intent validation and routing pipeline
+          - Response aggregation from handlers
+          - MCP tool exposure for intent testing
+        acceptance_criteria:
+          - "Initialization loads all handlers from registry"
+          - "End-to-end intent processing <500ms"
+          - "Handler responses properly aggregated"
+          - "MCP tools exposed: route_intent, list_handlers, get_intent_status"
+        tests_required: 26
+        test_file: "tests/unit/orchestrators/test_intent_orchestrator.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex/orchestrators/routing/intent_router.py"
+        type: "new"
+        lines_of_code: "280-320"
+        description: "Intent routing logic with handler matching"
+      
+      - path: "cortex/orchestrators/routing/intent_validator.py"
+        type: "new"
+        lines_of_code: "250-300"
+        description: "Intent validation and normalization"
+      
+      - path: "cortex/orchestrators/domain/intent_orchestrator.py"
+        type: "new"
+        lines_of_code: "220-260"
+        description: "Intent orchestrator orchestrating routing pipeline"
+  
+  - component_id: "AC-ORCH-005"
+    name: "Continuation/Recovery Module"
+    effort: "2-3 days"
+    tests: 58
+    acceptance_criteria: 3
+    description: "Resume interrupted operations, state preservation, checkpoints"
+    
+    ac_items:
+      - ac_id: "AC-ORCH-005-01"
+        title: "State Checkpoint System"
+        description: |
+          Implement state_checkpoint.py for persisting operation state.
+          Features:
+          - Checkpoint creation at operation boundaries
+          - Checkpoint serialization (JSON/pickle with compression)
+          - Checkpoint storage (file system with configurable path)
+          - Checkpoint metadata (timestamp, operation_id, version)
+        acceptance_criteria:
+          - "Checkpoint creation <50ms per operation"
+          - "Checkpoint serialization <100ms for typical states"
+          - "Checkpoint retrieval latency <200ms"
+          - "Storage efficiency: 80%+ compression ratio"
+        tests_required: 19
+        test_file: "tests/unit/orchestrators/test_continuation_recovery.py"
+      
+      - ac_id: "AC-ORCH-005-02"
+        title: "Continuation Handler"
+        description: |
+          Implement continuation_handler.py for resuming interrupted operations.
+          Features:
+          - Checkpoint discovery and selection
+          - State restoration with validation
+          - Operation resumption from checkpoint
+          - Progress tracking and logging
+        acceptance_criteria:
+          - "Checkpoint discovery complete within 500ms"
+          - "State restoration maintains consistency"
+          - "Resumption position calculated correctly"
+          - "Progress tracking shows continuation checkpoint"
+        tests_required: 19
+        test_file: "tests/unit/orchestrators/test_continuation_recovery.py"
+      
+      - ac_id: "AC-ORCH-005-03"
+        title: "Recovery Strategy Configuration"
+        description: |
+          Implement configurable recovery strategies for different failure modes.
+          Features:
+          - Configurable checkpoint intervals
+          - Recovery strategy selection (retry, skip, escalate)
+          - Recovery policy enforcement
+          - Audit logging of recovery actions
+        acceptance_criteria:
+          - "All recovery strategies configurable per operation type"
+          - "Checkpoint interval configurable (time/count based)"
+          - "Recovery policy prevents infinite retry loops"
+          - "Audit log captures all recovery decisions"
+        tests_required: 20
+        test_file: "tests/unit/orchestrators/test_continuation_recovery.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex/orchestrators/recovery/state_checkpoint.py"
+        type: "new"
+        lines_of_code: "280-320"
+        description: "State checkpoint creation and retrieval"
+      
+      - path: "cortex/orchestrators/recovery/continuation_handler.py"
+        type: "new"
+        lines_of_code: "300-350"
+        description: "Operation resumption from checkpoints"
+      
+      - path: "cortex/orchestrators/recovery/recovery_strategy.py"
+        type: "new"
+        lines_of_code: "200-250"
+        description: "Recovery strategy configuration and enforcement"
+
+depends_on: ["REMEDIATION-ORCHESTRATION-FOUNDATION"]
+
+gate_criteria:
+  - criterion: "Test Pass Rate"
+    target: "≥98% (136/136 tests)"
+    verification: "pytest tests/unit/orchestrators/test_intent_orchestrator.py tests/unit/orchestrators/test_continuation_recovery.py -v"
+  
+  - criterion: "Intent Routing Accuracy"
+    target: "95%+ intents correctly routed"
+    verification: "Test routing of 100 diverse intent types with correct handler matching"
+  
+  - criterion: "Recovery Success Rate"
+    target: "100% (all checkpoints restorable)"
+    verification: "Create/restore 50 checkpoints, verify state consistency"
+  
+  - criterion: "Type Hints & Docstrings"
+    target: "100% coverage"
+    verification: "pyright + docstring validation on recovery/ and routing/ modules"
+
+completion_verification:
+  success_criteria:
+    - "136 tests passing in test_intent_orchestrator.py and test_continuation_recovery.py"
+    - "Intent routing accuracy ≥95%"
+    - "Recovery success rate 100%"
+    - "All type hints present (100% coverage)"
+    - "All docstrings Google style (100% coverage)"
+    - "Checkpoint latency <50ms per operation"
+    - "Recovery latency <500ms per checkpoint"
+
+  verification_steps:
+    - "Run: pytest tests/unit/orchestrators/test_intent_orchestrator.py -v → 78/78 pass"
+    - "Run: pytest tests/unit/orchestrators/test_continuation_recovery.py -v → 58/58 pass"
+    - "Run: pyright cortex/orchestrators/routing/ cortex/orchestrators/recovery/ → 0 errors"
+    - "Load test: 100 concurrent intent routes complete <500ms each"
+    - "Recovery test: Restore 50 checkpoints with 100% consistency"
+
+deliverables:
+  - "tests/unit/orchestrators/test_intent_orchestrator.py (78 tests)"
+  - "cortex/orchestrators/routing/intent_router.py (280-320 LOC)"
+  - "cortex/orchestrators/routing/intent_validator.py (250-300 LOC)"
+  - "cortex/orchestrators/domain/intent_orchestrator.py (220-260 LOC)"
+  - "tests/unit/orchestrators/test_continuation_recovery.py (58 tests)"
+  - "cortex/orchestrators/recovery/state_checkpoint.py (280-320 LOC)"
+  - "cortex/orchestrators/recovery/continuation_handler.py (300-350 LOC)"
+  - "cortex/orchestrators/recovery/recovery_strategy.py (200-250 LOC)"
+
+git_strategy:
+  commit_message: "remediation: REMEDIATION-ORCHESTRATION-ROUTING: IntentOrchestrator + Continuation/Recovery (136 tests, 78+58)"
+  commit_detail: |
+    - IntentOrchestrator: Intent routing + validation (78 tests)
+      * intent_router.py: Intent type classification and handler matching
+      * intent_validator.py: Intent validation and normalization
+      * intent_orchestrator.py: Unified intent orchestration pipeline
+    
+    - Continuation/Recovery: Operation state persistence + resumption (58 tests)
+      * state_checkpoint.py: Checkpoint creation and storage
+      * continuation_handler.py: Operation resumption from checkpoints
+      * recovery_strategy.py: Recovery strategy configuration and enforcement
+    
+    Total: 136 tests, 1900-2200 LOC, production-ready quality
+
+timeline:
+  estimated_days: "2-3"
+  critical_path: "IntentOrchestrator (2-3d) + Continuation/Recovery (2-3d) in parallel"
+  optimization: "IntentOrchestrator and Continuation/Recovery modules can run in parallel"
+
+next_phase: "REMEDIATION-DOMAIN-BRAIN-SYNTHESIS"

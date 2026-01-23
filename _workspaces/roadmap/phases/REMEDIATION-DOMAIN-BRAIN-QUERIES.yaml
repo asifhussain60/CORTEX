@@ -1,0 +1,255 @@
+# REMEDIATION-DOMAIN-BRAIN-QUERIES Phase
+# Part of: REMEDIATION-PRODUCTION-COMPLETENESS
+# Sequence: 4
+# Priority: P1-HIGH
+# Blocking: false
+# Track: remediation
+
+phase_id: "REMEDIATION-DOMAIN-BRAIN-QUERIES"
+parent_phase: "REMEDIATION-PRODUCTION-COMPLETENESS"
+sequence: 4
+priority: "P1-HIGH"
+effort: "6-8 days"
+blocking: false
+status: "NOT_STARTED"
+track: "remediation"
+
+description: |
+  Complete QueryEngine for multi-domain queries, KnowledgeGraphDB for relationship
+  traversal and inference, and PatternMatcher for advanced pattern detection.
+  This phase delivers 97 tests enabling sophisticated domain brain capabilities.
+
+current_state:
+  query_engine: "PARTIAL - basic queries only"
+  knowledge_graph_db: "PARTIAL - limited inference"
+  pattern_matcher: "STUB - basic matching only"
+  test_gap: "97 tests missing"
+
+target_state:
+  query_engine: "100% with multi-domain aggregation"
+  knowledge_graph_db: "Full inference and optimization"
+  pattern_matcher: "Advanced pattern detection and edge cases"
+  query_tests: "97 tests validating all scenarios"
+
+components:
+  - component_id: "AC-BRAIN-003"
+    name: "QueryEngine Enhancement"
+    effort: "2-3 days"
+    tests: 33
+    acceptance_criteria: 2
+    description: "Multi-domain queries, aggregation, complex lookups"
+    
+    ac_items:
+      - ac_id: "AC-BRAIN-003-01"
+        title: "Multi-Domain Query Support"
+        description: |
+          Enhance query_engine.py for querying across multiple domains simultaneously.
+          Features:
+          - Query translation for each domain
+          - Parallel domain query execution
+          - Result aggregation from multiple domains
+          - Domain-specific result formatting
+        acceptance_criteria:
+          - "Multi-domain queries execute in parallel (4+ domains concurrent)"
+          - "Results from all domains aggregated correctly"
+          - "Query latency scales sub-linearly with domain count"
+          - "Domain failures don't block other domains"
+        tests_required: 17
+        test_file: "tests/unit/domain_brain/test_query_engine_advanced.py"
+      
+      - ac_id: "AC-BRAIN-003-02"
+        title: "Query Optimization and Caching"
+        description: |
+          Implement query_optimizer.py for intelligent query optimization.
+          Features:
+          - Query plan optimization
+          - Result caching with TTL
+          - Cache invalidation on data changes
+          - Query execution monitoring
+        acceptance_criteria:
+          - "Query optimization reduces execution time ≥30%"
+          - "Cache hit rate ≥60% on repeated queries"
+          - "Cache invalidation immediate on relevant updates"
+          - "Monitoring tracks query latency and cache stats"
+        tests_required: 16
+        test_file: "tests/unit/domain_brain/test_query_engine_advanced.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex_brain/query/query_engine.py"
+        type: "enhance"
+        lines_of_code: "150-200 additions"
+        description: "Add multi-domain query support"
+      
+      - path: "cortex_brain/query/query_optimizer.py"
+        type: "new"
+        lines_of_code: "300-350"
+        description: "Query optimization and caching"
+  
+  - component_id: "AC-BRAIN-004"
+    name: "KnowledgeGraphDB Enhancement"
+    effort: "2-3 days"
+    tests: 37
+    acceptance_criteria: 2
+    description: "Relationship traversal, inference, performance optimization"
+    
+    ac_items:
+      - ac_id: "AC-BRAIN-004-01"
+        title: "Graph Traversal and Inference"
+        description: |
+          Enhance knowledge_graph.py for sophisticated graph operations.
+          Features:
+          - Breadth-first and depth-first traversal
+          - Shortest path algorithms
+          - Relationship inference (transitive, symmetric)
+          - Graph metrics (centrality, clustering coefficient)
+        acceptance_criteria:
+          - "Traversal algorithms handle graphs with 100K+ nodes"
+          - "Inference discovers indirect relationships"
+          - "Graph metrics computed efficiently (<1s for 100K nodes)"
+          - "Traversal results cached for repeated queries"
+        tests_required: 19
+        test_file: "tests/unit/domain_brain/test_knowledge_graph_db.py"
+      
+      - ac_id: "AC-BRAIN-004-02"
+        title: "Graph Indexing and Optimization"
+        description: |
+          Implement graph_inference.py for inference engine and indexing.
+          Features:
+          - Semantic indexing for fast lookup
+          - Relationship indexing by type
+          - Query planner for optimal execution
+          - Performance monitoring and tuning
+        acceptance_criteria:
+          - "Lookup latency <10ms for 100K node graphs"
+          - "Index memory overhead <20% of graph size"
+          - "Query planner produces near-optimal plans"
+          - "Monitoring identifies performance bottlenecks"
+        tests_required: 18
+        test_file: "tests/unit/domain_brain/test_knowledge_graph_db.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex_brain/knowledge/knowledge_graph.py"
+        type: "enhance"
+        lines_of_code: "200-250 additions"
+        description: "Add traversal and inference algorithms"
+      
+      - path: "cortex_brain/knowledge/graph_inference.py"
+        type: "new"
+        lines_of_code: "350-400"
+        description: "Inference engine and graph indexing"
+  
+  - component_id: "AC-BRAIN-005"
+    name: "PatternMatcher Enhancement"
+    effort: "2-3 days"
+    tests: 30
+    acceptance_criteria: 2
+    description: "Advanced pattern detection, edge cases, performance"
+    
+    ac_items:
+      - ac_id: "AC-BRAIN-005-01"
+        title: "Advanced Pattern Detection"
+        description: |
+          Enhance pattern_matcher.py for sophisticated pattern matching.
+          Features:
+          - Regular expression patterns
+          - Fuzzy pattern matching (Levenshtein distance)
+          - Wildcard and template patterns
+          - Pattern priority and conflict resolution
+        acceptance_criteria:
+          - "Regex patterns match with ≥95% accuracy"
+          - "Fuzzy matching handles typos and variations"
+          - "Wildcard patterns resolve correctly"
+          - "Pattern priority prevents conflicts"
+        tests_required: 15
+        test_file: "tests/unit/domain_brain/test_pattern_matcher_advanced.py"
+      
+      - ac_id: "AC-BRAIN-005-02"
+        title: "Pattern Performance and Edge Cases"
+        description: |
+          Optimize pattern matching for performance and edge cases.
+          Features:
+          - Pattern compilation and caching
+          - Efficient matching algorithms
+          - Edge case handling (empty patterns, null values)
+          - Memory-efficient pattern storage
+        acceptance_criteria:
+          - "Pattern matching latency <5ms per pattern"
+          - "Pattern cache hit rate ≥80%"
+          - "All edge cases handled without errors"
+          - "Memory usage <1MB for 1000 patterns"
+        tests_required: 15
+        test_file: "tests/unit/domain_brain/test_pattern_matcher_advanced.py"
+    
+    files_to_create_or_enhance:
+      - path: "cortex_brain/patterns/pattern_matcher.py"
+        type: "enhance"
+        lines_of_code: "200-250 additions"
+        description: "Add advanced pattern matching"
+
+depends_on: ["REMEDIATION-DOMAIN-BRAIN-SYNTHESIS"]
+
+gate_criteria:
+  - criterion: "Test Pass Rate"
+    target: "≥98% (97/97 tests)"
+    verification: "pytest tests/unit/domain_brain/test_query_engine_advanced.py tests/unit/domain_brain/test_knowledge_graph_db.py tests/unit/domain_brain/test_pattern_matcher_advanced.py -v"
+  
+  - criterion: "Query Performance"
+    target: "Multi-domain queries <2.0s p95"
+    verification: "Load test: 100 concurrent multi-domain queries"
+  
+  - criterion: "Graph Operations"
+    target: "100K+ node graphs in <1s"
+    verification: "Performance test with large knowledge graphs"
+  
+  - criterion: "Pattern Matching"
+    target: "<5ms per pattern"
+    verification: "Benchmark: 1000 pattern matches"
+
+completion_verification:
+  success_criteria:
+    - "97 tests passing in all three test files"
+    - "Multi-domain queries executing in parallel"
+    - "Knowledge graph traversal handles 100K+ nodes"
+    - "Pattern matching latency <5ms"
+    - "All type hints present (100% coverage)"
+    - "All docstrings Google style (100% coverage)"
+
+  verification_steps:
+    - "Run: pytest tests/unit/domain_brain/test_query_engine_advanced.py -v → 33/33 pass"
+    - "Run: pytest tests/unit/domain_brain/test_knowledge_graph_db.py -v → 37/37 pass"
+    - "Run: pytest tests/unit/domain_brain/test_pattern_matcher_advanced.py -v → 30/30 pass"
+    - "Load test: 100 concurrent multi-domain queries complete <2.0s"
+    - "Benchmark: Knowledge graph with 100K nodes processes in <1s"
+
+deliverables:
+  - "tests/unit/domain_brain/test_query_engine_advanced.py (33 tests)"
+  - "cortex_brain/query/query_engine.py (enhanced, +150-200 LOC)"
+  - "cortex_brain/query/query_optimizer.py (300-350 LOC)"
+  - "tests/unit/domain_brain/test_knowledge_graph_db.py (37 tests)"
+  - "cortex_brain/knowledge/knowledge_graph.py (enhanced, +200-250 LOC)"
+  - "cortex_brain/knowledge/graph_inference.py (350-400 LOC)"
+  - "tests/unit/domain_brain/test_pattern_matcher_advanced.py (30 tests)"
+  - "cortex_brain/patterns/pattern_matcher.py (enhanced, +200-250 LOC)"
+
+git_strategy:
+  commit_message: "remediation: REMEDIATION-DOMAIN-BRAIN-QUERIES: QueryEngine/KnowledgeGraphDB/PatternMatcher (97 tests, 33+37+30)"
+  commit_detail: |
+    - QueryEngine: Multi-domain queries + optimization (33 tests)
+      * query_engine.py: Add multi-domain query support
+      * query_optimizer.py: Query optimization and caching
+    
+    - KnowledgeGraphDB: Graph traversal + inference (37 tests)
+      * knowledge_graph.py: Add traversal algorithms
+      * graph_inference.py: Inference engine and indexing
+    
+    - PatternMatcher: Advanced detection + optimization (30 tests)
+      * pattern_matcher.py: Add advanced pattern matching
+    
+    Total: 97 tests, 1850-2150 LOC, production-ready quality
+
+timeline:
+  estimated_days: "6-8"
+  critical_path: "QueryEngine (2-3d) + KnowledgeGraphDB (2-3d) + PatternMatcher (2-3d) in parallel"
+  optimization: "All three components can run in parallel (independent)"
+
+next_phase: "REMEDIATION-INTEGRATION-VALIDATION"
