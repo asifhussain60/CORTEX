@@ -234,3 +234,11 @@ def get_wiring_registry() -> OrchestratorWiringRegistry:
     if _wiring_registry_instance is None:
         _wiring_registry_instance = OrchestratorWiringRegistry()
     return _wiring_registry_instance
+
+
+def reset_wiring_registry() -> None:
+    """Reset wiring registry singleton (for testing)"""
+    global _wiring_registry_instance
+    if _wiring_registry_instance is not None:
+        _wiring_registry_instance.reset()
+    _wiring_registry_instance = None
