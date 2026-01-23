@@ -12,6 +12,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging
+import importlib
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -361,16 +362,108 @@ class TotalRecallAgent:
         },
     }
     
-    def __init__(self, workspace_root: Optional[Path] = None) -> None:
+    def __init__(self, workspace_root: Optional[Path] = None, auto_wire_critical: bool = True) -> None:
         """
         Initialize the Total Recall Agent.
+        
+        Per cortex-total-recall.prompt.md, auto-wires all critical production-ready
+        but previously unwired components during initialization.
         
         Args:
             workspace_root: Root directory of the CORTEX workspace.
                            Defaults to current working directory.
+            auto_wire_critical: Whether to auto-wire critical components on init.
+                               Default: True (enables full orchestration pipeline).
         """
         self.workspace_root = workspace_root or Path.cwd()
+        self._wired_components: Dict[str, Any] = {}
+        
+        if auto_wire_critical:
+            self._auto_wire_critical_components()
+        
         logger.info("TotalRecallAgent initialized with workspace: %s", self.workspace_root)
+    
+    def _auto_wire_critical_components(self) -> None:
+        """
+        Auto-discover and wire all critical unwired components.
+        
+        Per AC-WIRING-HARNESS-001, loads the wiring harness inventory and wires
+        all components marked as CRITICAL (priority 0) or HIGH (priority 1).
+        
+        Workflow:
+        1. Load wiring harness inventory
+        2. Get critical components in priority order
+        3. Import each component class
+        4. Instantiate with default parameters
+        5. Store in _wired_components registry
+        6. Log wiring results
+        
+        This ensures that when this agent executes, all critical orchestration
+        components are available for use during the recall workflow.
+        """
+        try:
+            from cortex.testing.wiring_harness_inventory import get_critical_wiring_order
+            
+            critical_components = get_critical_wiring_order()
+            logger.info("Auto-wiring %d critical components", len(critical_components))
+            
+            for component in critical_components:
+                try:
+                    # Parse entry point: "module.path.ClassName" -> ("module.path", "ClassName")
+                    module_path, class_name = component.entry_point.rsplit('.', 1)
+                    module = importlib.import_module(module_path)
+                    ComponentClass = getattr(module, class_name)
+                    
+                    # Instantiate component with default parameters
+                    instance = ComponentClass()
+                    self._wired_components[component.id] = instance
+                    
+                    logger.debug(
+                        "Wired component %s (%s) - priority: %d, tests: %d",
+                        component.name,
+                        component.id,
+                        component.wiring_priority,
+                        component.tests_count,
+                    )
+                    
+                except (ImportError, AttributeError) as e:
+                    # Some components may be planned but not yet implemented
+                    logger.debug(
+                        "Skipped component %s (%s) - not yet available: %s",
+                        component.name,
+                        component.id,
+                        str(e),
+                    )
+                except Exception as e:
+                    logger.warning(
+                        "Failed to wire component %s (%s): %s",
+                        component.name,
+                        component.id,
+                        str(e),
+                    )
+            
+            logger.info(
+                "Auto-wiring complete: %d/%d critical components wired successfully",
+                len(self._wired_components),
+                len(critical_components),
+            )
+            
+        except ImportError as e:
+            logger.warning("Wiring harness not available: %s", str(e))
+        except Exception as e:
+            logger.error("Error during auto-wiring: %s", str(e))
+    
+    def get_wired_component(self, component_id: str) -> Optional[Any]:
+        """
+        Retrieve a wired component by its ID.
+        
+        Args:
+            component_id: Component ID (e.g., "UNWIRED-CHALLENGE-001")
+        
+        Returns:
+            Component instance if wired, None otherwise.
+        """
+        return self._wired_components.get(component_id)
     
     def recall(
         self,
