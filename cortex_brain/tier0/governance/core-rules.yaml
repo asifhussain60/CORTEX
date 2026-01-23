@@ -48,37 +48,42 @@ rules:
       - Token usage capped at 80%
 
   # --------------------------------------------------------------------------
-  # CORE-002: No Summary Files
+  # CORE-002: Markdown Report Suppression
   # --------------------------------------------------------------------------
   - rule_id: CORE-002
     category: response_formatting
     severity: blocked
-    name: Markdown Restricted to docs/ Directories
+    name: Markdown Report Suppression (Workspace-Wide)
     description: |
-      Do NOT create .md files outside approved documentation directories.
+      SUPPRESS markdown report/status files UNLESS explicitly requested by user.
       
-      README.md NOT required for CORTEX functionality (documentation-only).
-      Suppress all markdown file creation outside documentation paths.
+      This rule applies workspace-wide (root + all subdirectories).
       
-      BLOCKED patterns:
-      - DEPLOYMENT-*.md (root level)
-      - ORCHESTRATOR-*.md (root level)
-      - README.md (root level - non-functional)
-      - *-SUMMARY.md (root level)
-      - *-REPORT.md (root level)
-      - Any .md in root or non-docs/ subdirectories
+      BLOCKED patterns (unless explicitly requested):
+      - *-summary.md (status summaries)
+      - *-report.md (execution reports)
+      - *-status.md (status documents)
+      - DEPLOYMENT-*.md (deployment docs)
+      - ORCHESTRATOR-*.md (orchestrator docs)
+      - README.md (non-functional documentation)
+      - *-QUICKSTART.md, *-GUIDE.md (unless explicitly requested)
+      - Any markdown report/documentation files
       
-      APPROVED locations:
-      - docs/ (primary documentation)
-      - _workspaces/docs/ (workspace-specific documentation)
+      APPROVED locations (always allowed, no user request needed):
+      - docs/ (primary documentation directory)
+      - _workspaces/docs/ (workspace documentation directory)
+      
+      EXCEPTION: User may explicitly request markdown creation in request text.
+      Example: "Create DEPLOYMENT-STATUS.md with..."
+      Validation: validate_artifact_creation(path, user_explicit_request=True)
     validation:
-      - No .md files in workspace root
-      - No .md files outside docs/, _workspaces/docs/
-      - Artifact creation pre-validated before execution
-      - README.md explicitly suppressed (non-functional)
+      - Block markdown reports unless user explicitly requests in prompt
+      - Allow docs/, _workspaces/docs/ unconditionally (structural)
+      - Check for explicit user approval in request context
+      - Log all suppressed artifacts with reason
     implementation:
-      method: governance_registry.validate_artifact_creation()
-      enforcement: master_orchestrator pre-execution gate
+      method: governance_registry.validate_artifact_creation(artifact_path, user_explicit_request=False)
+      enforcement: master_orchestrator pre-execution gate + intent router
 
   # --------------------------------------------------------------------------
   # CORE-003: Visual Progress Bars
