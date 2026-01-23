@@ -433,4 +433,3 @@ Together, these tiers produce **efficient, governance-compliant composite prompt
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**

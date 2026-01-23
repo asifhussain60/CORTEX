@@ -7,7 +7,6 @@ Tests for:
 - AC-FR-001-03: Audit logs queryable by AC-ID
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from pathlib import Path

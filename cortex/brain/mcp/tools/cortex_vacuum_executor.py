@@ -5,7 +5,6 @@ Phase 2: Controlled execution of repository reorganization with safety guarantee
 Applies changes in dependency order and maintains rollback capability.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

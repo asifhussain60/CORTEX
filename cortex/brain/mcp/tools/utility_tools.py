@@ -6,7 +6,6 @@ MCP-exposed utility tools:
 - transform_tool: Transform data between formats
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict

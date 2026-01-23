@@ -8,7 +8,6 @@ MCP-exposed tools for orchestration monitoring and control:
 - diagnose_orchestrator_issues: Diagnose orchestrator issues
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict

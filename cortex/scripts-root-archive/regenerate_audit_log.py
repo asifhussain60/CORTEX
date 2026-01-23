@@ -10,7 +10,6 @@ According to CORTEX Review Protocol Phase 0:
 - Action: REGENERATE from scratch
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import os

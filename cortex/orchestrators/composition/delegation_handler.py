@@ -4,7 +4,6 @@ Delegation Handler - AR-017-02
 Handles orchestrator delegation with audit trail maintenance.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import time

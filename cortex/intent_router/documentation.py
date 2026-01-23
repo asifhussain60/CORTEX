@@ -1,7 +1,6 @@
 """Documentation Module - Framework documentation integration.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, List, Optional, Any

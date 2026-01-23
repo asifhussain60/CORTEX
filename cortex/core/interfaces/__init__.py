@@ -3,7 +3,6 @@
 Re-exports interfaces from parent module.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import importlib.util

@@ -5,7 +5,6 @@ Base class for all business domain-specific orchestrators.
 Provides common functionality for domain context management,
 compliance checking, and reporting.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from abc import ABC, abstractmethod

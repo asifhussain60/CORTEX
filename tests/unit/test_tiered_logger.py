@@ -7,7 +7,6 @@ Tests for:
 - AC-AR-004-03: Structured JSON format for all logs
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import json

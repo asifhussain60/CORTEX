@@ -4,7 +4,6 @@ Defines structured result types for parsing operations with success/failure
 states and error information.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

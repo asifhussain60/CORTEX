@@ -2,7 +2,6 @@
 AC Index Populator Tests - TDD for populating AC-IDs from master plan
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

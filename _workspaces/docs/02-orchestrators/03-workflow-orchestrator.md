@@ -458,7 +458,6 @@ result = workflow.execute_workflow(context, config)
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Workflow Orchestrator Module
 Status: Production Ready | Version: 1.0.0

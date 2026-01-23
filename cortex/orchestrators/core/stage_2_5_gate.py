@@ -3,7 +3,6 @@
 Gate validator for stage 2.5 of the pipeline.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

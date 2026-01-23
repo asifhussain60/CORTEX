@@ -231,7 +231,6 @@ domain_mappings = {
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Adaptive Router Module
 Status: Production Ready | Version: 1.0.0

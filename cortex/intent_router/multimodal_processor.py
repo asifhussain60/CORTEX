@@ -4,7 +4,6 @@ Processes multi-modal inputs including text, JSON, commands, code,
 and domain-specific schemas. Converts all to text for classification.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Dict, Any, Union

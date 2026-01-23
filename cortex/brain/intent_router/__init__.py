@@ -24,7 +24,6 @@ CORTEX Governance Rules Applied:
 - CORE-013: Specific exception handling (no bare except)
 - CORE-027: Audit trail logging (AC_START → AC_EXECUTE → AC_COMPLETE)
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from cortex.brain.intent_router.classifier import IntentClassifier

@@ -7,7 +7,6 @@ Tests for orchestrator naming conventions and validation linting.
 - CI integration for name validation
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

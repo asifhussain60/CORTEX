@@ -14,7 +14,6 @@ CORE-011: All functions have type hints.
 CORE-012: All methods have Google-style docstrings.
 CORE-013: Specific exceptions only.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from enum import Enum

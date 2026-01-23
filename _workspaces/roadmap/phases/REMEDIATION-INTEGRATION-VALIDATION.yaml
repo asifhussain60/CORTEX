@@ -1,0 +1,235 @@
+# REMEDIATION-INTEGRATION-VALIDATION Phase
+# Part of: REMEDIATION-PRODUCTION-COMPLETENESS
+# Sequence: 5
+# Priority: P1-HIGH
+# Blocking: true
+# Track: remediation
+
+phase_id: "REMEDIATION-INTEGRATION-VALIDATION"
+parent_phase: "REMEDIATION-PRODUCTION-COMPLETENESS"
+sequence: 5
+priority: "P1-HIGH"
+effort: "3-5 days"
+blocking: true
+status: "NOT_STARTED"
+track: "remediation"
+
+description: |
+  Comprehensive integration testing of orchestrators with domain brain,
+  end-to-end workflow validation, and performance benchmarking.
+  This phase delivers 80 tests validating complete production readiness.
+
+current_state:
+  integration_tests: "MISSING - no orchestrator-domain brain integration tests"
+  e2e_workflows: "PARTIAL - only 35/60 workflows tested"
+  performance_benchmarks: "MISSING - no performance baselines"
+  test_gap: "80 tests missing"
+
+target_state:
+  integration_tests: "Full orchestrator-domain brain workflow tests"
+  e2e_workflows: "All 60 workflows validated (100%)"
+  performance_benchmarks: "Baselines established and validated"
+  validation_tests: "80 tests with 100% pass rate"
+
+components:
+  - component_id: "AC-INTEG-001"
+    name: "Orchestrator-DomainBrain Integration Tests"
+    effort: "2-3 days"
+    tests: 45
+    acceptance_criteria: 2
+    description: "Cross-component workflows, end-to-end scenarios"
+    
+    ac_items:
+      - ac_id: "AC-INTEG-001-01"
+        title: "Integration Test Suite"
+        description: |
+          Implement test_orchestrator_domain_brain_integration.py validating
+          orchestrator-domain brain interactions.
+          Features:
+          - Intent routing to analysis orchestrator
+          - Analysis results fed to domain brain synthesis
+          - Synthesized recommendations back to execution orchestrator
+          - Multi-step workflow validation
+        acceptance_criteria:
+          - "Intent routing works end-to-end"
+          - "Analysis results properly consumed by synthesis"
+          - "Recommendations actionable in execution"
+          - "Latency for complete cycle <3.0s"
+        tests_required: 23
+        test_file: "tests/integration/test_orchestrator_domain_brain_integration.py"
+      
+      - ac_id: "AC-INTEG-001-02"
+        title: "Recovery and Continuation Integration"
+        description: |
+          Validate recovery and continuation across orchestrator-domain brain boundary.
+          Features:
+          - Checkpoints capture full workflow state
+          - Continuation from checkpoint works across boundaries
+          - Recovery preserves orchestrator-domain brain consistency
+          - State synchronization after recovery
+        acceptance_criteria:
+          - "Checkpoints capture complete cross-component state"
+          - "Recovery restores all state correctly"
+          - "Consistency maintained after recovery"
+          - "Recovery time <1.0s"
+        tests_required: 22
+        test_file: "tests/integration/test_orchestrator_domain_brain_integration.py"
+    
+    files_to_create_or_enhance:
+      - path: "tests/integration/test_orchestrator_domain_brain_integration.py"
+        type: "new"
+        lines_of_code: "500-600"
+        description: "Orchestrator-domain brain integration tests"
+  
+  - component_id: "AC-INTEG-002"
+    name: "E2E Workflow Tests"
+    effort: "1-2 days"
+    tests: 35
+    acceptance_criteria: 2
+    description: "Full system workflows, state consistency, recovery"
+    
+    ac_items:
+      - ac_id: "AC-INTEG-002-01"
+        title: "End-to-End Workflow Scenarios"
+        description: |
+          Implement test_end_to_end_workflows.py for complete system workflows.
+          Features:
+          - 60 distinct workflow scenarios
+          - State consistency verification throughout workflows
+          - Error handling and recovery in workflows
+          - Performance monitoring for each workflow
+        acceptance_criteria:
+          - "All 60 workflows complete successfully"
+          - "State remains consistent throughout workflows"
+          - "Errors properly caught and handled"
+          - "Average workflow latency <2.0s"
+        tests_required: 18
+        test_file: "tests/integration/test_end_to_end_workflows.py"
+      
+      - ac_id: "AC-INTEG-002-02"
+        title: "Performance Benchmarking"
+        description: |
+          Establish performance baselines and validate against thresholds.
+          Features:
+          - Latency benchmarking for all major operations
+          - Throughput measurement (ops/sec)
+          - Resource utilization monitoring (CPU, memory)
+          - Performance regression detection
+        acceptance_criteria:
+          - "All operations meet <2.0s p95 latency target"
+          - "Throughput ≥100 ops/sec for typical workflows"
+          - "Memory usage stable (no leaks)"
+          - "CPU utilization <50% under normal load"
+        tests_required: 17
+        test_file: "tests/integration/test_end_to_end_workflows.py"
+    
+    files_to_create_or_enhance:
+      - path: "tests/integration/test_end_to_end_workflows.py"
+        type: "new"
+        lines_of_code: "400-500"
+        description: "End-to-end workflow and performance tests"
+
+depends_on: ["REMEDIATION-DOMAIN-BRAIN-QUERIES"]
+
+gate_criteria:
+  - criterion: "Integration Test Pass Rate"
+    target: "100% (45/45 tests)"
+    verification: "pytest tests/integration/test_orchestrator_domain_brain_integration.py -v"
+  
+  - criterion: "E2E Workflow Success"
+    target: "100% (60/60 workflows)"
+    verification: "All 60 workflows complete without errors"
+  
+  - criterion: "Performance Benchmarks"
+    target: "All operations <2.0s p95"
+    verification: "Performance test results show all operations within target"
+  
+  - criterion: "Consistency Validation"
+    target: "State consistent throughout workflows"
+    verification: "State consistency checks pass at all workflow steps"
+
+completion_verification:
+  success_criteria:
+    - "80 tests passing in both integration test files"
+    - "All 60 E2E workflows completing successfully"
+    - "Orchestrator-domain brain integration latency <3.0s"
+    - "Individual operations latency <2.0s p95"
+    - "State consistency maintained throughout workflows"
+    - "Memory stable, no resource leaks"
+
+  verification_steps:
+    - "Run: pytest tests/integration/test_orchestrator_domain_brain_integration.py -v → 45/45 pass"
+    - "Run: pytest tests/integration/test_end_to_end_workflows.py -v → 35/35 pass"
+    - "Load test: 100 concurrent workflows complete successfully"
+    - "Performance test: Verify all operations <2.0s p95"
+    - "Memory profiler: Confirm no leaks over extended run"
+
+deliverables:
+  - "tests/integration/test_orchestrator_domain_brain_integration.py (45 tests)"
+  - "tests/integration/test_end_to_end_workflows.py (35 tests)"
+  - "Performance baseline report (human-readable summary in YAML format)"
+  - "Workflow state consistency validation report"
+
+git_strategy:
+  commit_message: "remediation: REMEDIATION-INTEGRATION-VALIDATION: Integration + E2E tests (80 tests, 45+35)"
+  commit_detail: |
+    - Integration Tests: Orchestrator-domain brain workflows (45 tests)
+      * test_orchestrator_domain_brain_integration.py: Intent→Analysis→Synthesis→Execution
+      * Recovery and continuation validation across boundaries
+    
+    - E2E Workflow Tests: Complete system workflows (35 tests)
+      * test_end_to_end_workflows.py: 60 workflow scenarios
+      * Performance benchmarking and latency validation
+      * State consistency throughout workflows
+    
+    - Deliverables:
+      * Performance baseline data
+      * Consistency validation reports
+    
+    Total: 80 tests, 900-1100 LOC, production validation
+
+timeline:
+  estimated_days: "3-5"
+  critical_path: "Integration tests (2-3d) + E2E tests (1-2d) + benchmarking (1d)"
+  optimization: "Integration and E2E tests can run in parallel after initial setup"
+
+final_phase: true
+next_phase: "null"
+
+gates_to_production:
+  gate_1_orchestration:
+    target: "Orchestration Layer 100% (613/613 tests)"
+    status: "VALIDATED by phases 1-2"
+  
+  gate_2_domain_brain:
+    target: "Domain Brain 100% (353/353 tests)"
+    status: "VALIDATED by phases 3-4"
+  
+  gate_3_integration:
+    target: "Integration tests 100% (45/45 tests)"
+    status: "VALIDATED by phase 5"
+  
+  gate_4_e2e_workflows:
+    target: "E2E workflows 100% (60/60 workflows)"
+    status: "VALIDATED by phase 5"
+  
+  gate_5_performance:
+    target: "All operations <2.0s p95"
+    status: "VALIDATED by phase 5"
+  
+  gate_6_governance:
+    target: "100% CORE rules compliance"
+    status: "ENFORCED by cortex-builder.prompt.md"
+
+production_readiness:
+  pre_phase_5:
+    orchestration: "613/613 (100%)"
+    domain_brain: "353/353 (100%)"
+    integration: "45/45 (100%)"
+    e2e_workflows: "60/60 (100%)"
+    performance: "ALL <2.0s p95"
+    governance: "100% CORE rules"
+    overall_completion: "2,042 tests + integration/E2E validation"
+  
+  decision_point: "READY FOR PRODUCTION DEPLOYMENT"
+  deployment_date: "2026-02-22 (target)"

@@ -10,7 +10,6 @@ Handles resumption of interrupted or paused operations with:
 - Recovery logging and audit trail
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import threading

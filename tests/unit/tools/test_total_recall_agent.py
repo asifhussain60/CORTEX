@@ -2,7 +2,6 @@
 Tests for Total Recall Agent
 AC-IDs tested: AC-AGENT-001
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

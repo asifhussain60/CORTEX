@@ -10,7 +10,6 @@ Provides:
 - Performance-optimized searches
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import List, Optional, Any, Dict

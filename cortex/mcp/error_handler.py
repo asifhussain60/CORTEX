@@ -1,7 +1,6 @@
 """MCP Error Handler - Error handling and recovery for MCP operations.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from typing import Any, Dict, List, Optional, Callable

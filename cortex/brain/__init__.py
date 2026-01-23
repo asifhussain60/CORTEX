@@ -8,7 +8,6 @@ A production-grade AI assistant framework with:
 - Orchestrator pattern for complex workflows
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 __version__ = "7.0.0"

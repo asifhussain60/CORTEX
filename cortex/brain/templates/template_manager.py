@@ -4,7 +4,6 @@ AC-TC-002-01: Template Manager
 Manages template rendering, loading, and caching.
 Provides the main interface for working with templates.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

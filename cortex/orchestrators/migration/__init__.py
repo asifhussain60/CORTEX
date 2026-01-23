@@ -7,7 +7,6 @@ Provides orchestrators for:
 - Code pattern transformations
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from .selenium_playwright_orchestrator import (

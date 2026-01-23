@@ -4,7 +4,6 @@ Classifies user intents from natural language text using keyword matching,
 signal detection, and confidence scoring.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from enum import Enum

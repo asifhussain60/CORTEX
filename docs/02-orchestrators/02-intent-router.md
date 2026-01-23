@@ -566,7 +566,6 @@ decision = router.route(context)
 
 ## Copyright & License
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 CORTEX Framework - Intent Router Module
 Status: Production Ready | Version: 1.0.0

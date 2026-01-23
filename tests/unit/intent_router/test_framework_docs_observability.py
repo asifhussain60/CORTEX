@@ -3,7 +3,6 @@ Tests for AC-PHX-007-11 through AC-PHX-007-14
 
 Testing framework, documentation, observability, and edge cases.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

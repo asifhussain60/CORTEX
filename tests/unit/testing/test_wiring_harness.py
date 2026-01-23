@@ -7,7 +7,6 @@ and that they can be successfully imported and instantiated when needed.
 AC-ID: AC-WIRING-HARNESS-TEST-001
 Authority: cortex-total-recall.prompt.md + cortex-builder.prompt.md
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

@@ -3,7 +3,6 @@ CORTEX Templates - Quality Assurance Framework
 
 Template quality assurance and testing framework.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

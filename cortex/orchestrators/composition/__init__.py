@@ -4,7 +4,6 @@ Orchestrator Composition Package
 Provides composition and delegation patterns for orchestrator workflows.
 
 Author: Asif Hussain
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from .composition_engine import (

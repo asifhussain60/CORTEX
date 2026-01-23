@@ -11,7 +11,6 @@ Modules:
 - content_generator: Content generation utilities
 - quality_assurance: QA framework for templates
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from .content_strategy import ContentPopulationStrategy

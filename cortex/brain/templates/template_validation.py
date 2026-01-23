@@ -4,7 +4,6 @@ AC-TC-002-02: Template Content Validation
 Validates template content, structure, and consistency.
 Provides cross-reference and markdown validation.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

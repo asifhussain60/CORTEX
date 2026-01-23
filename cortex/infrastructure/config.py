@@ -8,7 +8,6 @@ Centralized configuration for infrastructure components including:
 
 AC-FIX-BRITTLENESS-004: Timeout Configuration
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field

@@ -583,5 +583,4 @@ Before deploying template:
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 

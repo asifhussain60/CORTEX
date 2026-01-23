@@ -4,7 +4,6 @@ Provides unified query interface across multiple knowledge backends with
 aggregation, deduplication, and source attribution.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass

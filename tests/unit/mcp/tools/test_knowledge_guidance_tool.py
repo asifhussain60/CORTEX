@@ -17,7 +17,6 @@ AC-IDs tested:
   - AC-MCP-008-11: MCP tool returns correct schema
   - AC-MCP-008-12: Guidance formatting for display
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest

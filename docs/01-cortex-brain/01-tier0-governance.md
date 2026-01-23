@@ -186,7 +186,6 @@ Progress: ###############
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Operation Types:**
@@ -861,5 +860,4 @@ Before any code submission:
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 

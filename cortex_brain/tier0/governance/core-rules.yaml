@@ -48,18 +48,42 @@ rules:
       - Token usage capped at 80%
 
   # --------------------------------------------------------------------------
-  # CORE-002: No Summary Files
+  # CORE-002: Markdown Report Suppression
   # --------------------------------------------------------------------------
   - rule_id: CORE-002
     category: response_formatting
     severity: blocked
-    name: No Summary File Creation
+    name: Markdown Report Suppression (Workspace-Wide)
     description: |
-      Do NOT create *-summary.md, *-report.md files. Summaries go in chat.
+      SUPPRESS markdown report/status files UNLESS explicitly requested by user.
+      
+      This rule applies workspace-wide (root + all subdirectories).
+      
+      BLOCKED patterns (unless explicitly requested):
+      - *-summary.md (status summaries)
+      - *-report.md (execution reports)
+      - *-status.md (status documents)
+      - DEPLOYMENT-*.md (deployment docs)
+      - ORCHESTRATOR-*.md (orchestrator docs)
+      - README.md (non-functional documentation)
+      - *-QUICKSTART.md, *-GUIDE.md (unless explicitly requested)
+      - Any markdown report/documentation files
+      
+      APPROVED locations (always allowed, no user request needed):
+      - docs/ (primary documentation directory)
+      - _workspaces/docs/ (workspace documentation directory)
+      
+      EXCEPTION: User may explicitly request markdown creation in request text.
+      Example: "Create DEPLOYMENT-STATUS.md with..."
+      Validation: validate_artifact_creation(path, user_explicit_request=True)
     validation:
-      - No *-summary.md files
-      - No *-report.md files
-      - No completion-*.md files
+      - Block markdown reports unless user explicitly requests in prompt
+      - Allow docs/, _workspaces/docs/ unconditionally (structural)
+      - Check for explicit user approval in request context
+      - Log all suppressed artifacts with reason
+    implementation:
+      method: governance_registry.validate_artifact_creation(artifact_path, user_explicit_request=False)
+      enforcement: master_orchestrator pre-execution gate + intent router
 
   # --------------------------------------------------------------------------
   # CORE-003: Visual Progress Bars
@@ -613,7 +637,6 @@ rules:
       **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
       
       ---
-      **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
       
       [Response content]
       
@@ -673,7 +696,6 @@ rules:
         **Author:** Asif Hussain | **Phase:** PHASE-13 | **Orchestrator:** MasterOrchestrator ✅
         
         ---
-        **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
         
         Analysis results here...
       
@@ -682,7 +704,6 @@ rules:
         **Author:** Asif Hussain | **Phase:** PHASE-DOC-REMEDIATION | **Orchestrator:** PlanningOrchestrator ✅
         
         ---
-        **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
         
         Implementation plan here...
       

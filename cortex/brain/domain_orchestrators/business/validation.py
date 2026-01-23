@@ -4,7 +4,6 @@ AC-PHX-008-06: Domain Validation Framework
 Validation framework for domain operations, contexts, and cross-domain
 interactions.
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field
