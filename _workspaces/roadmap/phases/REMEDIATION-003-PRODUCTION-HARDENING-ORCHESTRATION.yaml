@@ -1,0 +1,238 @@
+# CORTEX REMEDIATION PHASE 3: Production Hardening Orchestration
+# Orchestrates Phase A-E remediation roadmap from phase-remediation-001-production-readiness.yaml
+# Machine: all (mac, win, ah)
+# Priority: P0-CRITICAL
+# Timeline: 5 weeks (2026-01-24 → 2026-02-24)
+
+phase_id: "REMEDIATION-003-PRODUCTION-HARDENING-ORCHESTRATION"
+title: "Production Hardening Orchestration"
+track: "remediation"
+machine: "all"
+status: "PENDING"
+created_date: "2026-01-23"
+locked: false
+blocking_deployment: true
+
+metadata:
+  phase_sequence: 3
+  total_effort_hours: 47
+  estimated_duration_weeks: 5
+  target_completion_date: "2026-02-24"
+  master_plan: "_workspaces/roadmap/phases/phase-remediation-001-production-readiness.yaml"
+  authority: "cortex-impl-map.yaml v3.9 + phase-remediation-001-production-readiness.yaml v1.0"
+  
+description: |
+  Orchestration phase that coordinates comprehensive production hardening across 5 phases (A-E).
+  Addresses 5 critical blockers preventing production deployment:
+  - CIRCULAR-IMPORTS-001: 21 integration tests blocked
+  - ARCH-TIER-DUPLICATION-001: 3 phases blocked
+  - MCP-TOOLS-NO-REGISTRY-001: 14 scattered tools, no discovery
+  - MISSING-CLASSES-001: 58 classes missing, 50 test modules fail
+  - (TBD): 5th blocker identified in review
+  
+  Current state: 36% production ready
+  Target state: 100% production ready (≥5500 tests passing, 7547 test suite)
+  Timeline: 5-week implementation roadmap (Phase A → Phase E)
+
+sub_phases:
+  phase_a:
+    id: "phase-a-tier-consolidation"
+    title: "Governance Tier Consolidation"
+    description: "Eliminate duplicate tier structures between cortex/brain and cortex_brain"
+    effort_hours: 4
+    priority: "P0-CRITICAL"
+    blocking: true
+    dependencies: []
+    start_date: "2026-01-24"
+    target_date: "2026-01-24"
+    success_criteria:
+      - "Delete cortex/brain/core/governance/ directory (backup first)"
+      - "Move hallucination_prevention to cortex_brain/tier2/"
+      - "Update BrainPopulator to point to new location"
+      - "All 348 governance tests still passing"
+    acceptance_criteria:
+      - id: "PHASE-A-001"
+        description: "Tier deduplication completed with no data loss"
+        verification:
+          - "Old and new paths verified"
+          - "All references updated"
+          - "Governance rules still enforced"
+  
+  phase_b:
+    id: "phase-b-mcp-registry-centralization"
+    title: "MCP Registry Centralization"
+    description: "Create centralized MCP tool registry with auto-discovery"
+    effort_hours: 16
+    priority: "P0-CRITICAL"
+    blocking: true
+    dependencies:
+      - "phase-a-tier-consolidation"
+    start_date: "2026-01-25"
+    target_date: "2026-01-27"
+    success_criteria:
+      - "Create cortex/mcp/registry.py with ToolRegistry class"
+      - "Reorganize 14 tools into cortex/mcp/tools/ with categories"
+      - "Implement auto-discovery via decorators"
+      - "All MCP compliance tests passing"
+    acceptance_criteria:
+      - id: "PHASE-B-001"
+        description: "MCP registry operational with discovery"
+        verification:
+          - "14 tools discoverable via registry"
+          - "server.py uses registry instead of hardcoding"
+          - "Tool metadata standardized"
+  
+  phase_c:
+    id: "phase-c-fix-circular-imports"
+    title: "Fix Circular Import Dependencies"
+    description: "Resolve circular import patterns in cortex.core and cortex.orchestrators"
+    effort_hours: 8
+    priority: "P0-CRITICAL"
+    blocking: true
+    dependencies:
+      - "phase-b-mcp-registry-centralization"
+    start_date: "2026-01-28"
+    target_date: "2026-01-30"
+    success_criteria:
+      - "Identify 3-5 circular import patterns"
+      - "Refactor imports to use late binding or dependency injection"
+      - "21 previously blocked integration tests now pass"
+      - "No ImportError on cortex module load"
+    acceptance_criteria:
+      - id: "PHASE-C-001"
+        description: "All circular imports resolved"
+        verification:
+          - "python -c 'import cortex' succeeds"
+          - "21 integration tests pass"
+          - "No import-time side effects"
+  
+  phase_d:
+    id: "phase-d-create-missing-modules"
+    title: "Create Missing Core Modules & Classes"
+    description: "Implement 58 missing classes and stubs across tier2/tier3"
+    effort_hours: 24
+    priority: "P0-CRITICAL"
+    blocking: true
+    dependencies:
+      - "phase-c-fix-circular-imports"
+    start_date: "2026-01-31"
+    target_date: "2026-02-12"
+    success_criteria:
+      - "All 58 missing classes implemented"
+      - "50 test modules now collect successfully"
+      - "172 test collection errors → 0"
+      - "Governance compliance: 28/29 → 29/29 rules"
+    acceptance_criteria:
+      - id: "PHASE-D-001"
+        description: "All missing classes created with full implementation"
+        verification:
+          - "Class exists in expected module"
+          - "Has __init__, required methods, type hints"
+          - "Docstrings per CORE-012"
+      - id: "PHASE-D-002"
+        description: "Test collection succeeds"
+        verification:
+          - "pytest --collect-only succeeds"
+          - "0 test collection errors"
+  
+  phase_e:
+    id: "phase-e-tdd-synthesis-engine"
+    title: "TDD Implementation: Synthesis Engine & Full Coverage"
+    description: "Implement remaining 125+ modules via TDD, complete Domain Brain synthesis"
+    effort_hours: 40
+    priority: "P0-CRITICAL"
+    blocking: true
+    dependencies:
+      - "phase-d-create-missing-modules"
+    start_date: "2026-02-13"
+    target_date: "2026-02-24"
+    success_criteria:
+      - "125 modules implemented via TDD (tests first)"
+      - "Domain Brain synthesis engine fully operational"
+      - "7547 test suite: ≥5500 passing (≥73%)"
+      - "Coverage ≥85% across all modules"
+      - "All orchestrators functional (412/613 → ≥600/613)"
+    acceptance_criteria:
+      - id: "PHASE-E-001"
+        description: "Synthesis engine operational"
+        verification:
+          - "cortex_brain/tier3/knowledge/synthesis_engine.py complete"
+          - "Pattern recognition working"
+          - "Confidence scoring accurate"
+      - id: "PHASE-E-002"
+        description: "TDD complete with high test coverage"
+        verification:
+          - "Failing tests written first"
+          - "Implementation code follows"
+          - "All 7547 tests collected"
+          - "≥5500 tests passing"
+
+orchestration_plan:
+  approach: "Sequential execution with strict dependency ordering"
+  parallelization: "Phase A (1 day) → Phase B (3 days) → Phase C (3 days) → Phase D (12-13 days) → Phase E (12-15 days)"
+  dependencies:
+    - "Phase A must complete before Phase B starts (tier consistency)"
+    - "Phase B must complete before Phase C starts (registry required for imports)"
+    - "Phase C must complete before Phase D starts (no circular imports allowed)"
+    - "Phase D must complete before Phase E starts (all classes must exist)"
+  
+  machine_assignment:
+    mac: ["phase-a", "phase-b", "phase-c", "phase-d", "phase-e"]
+    win: ["phase-a", "phase-b", "phase-c", "phase-d"]
+    ah: ["phase-a", "phase-b"]
+  
+  execution_sequence:
+    - phase_a_start: "2026-01-24"
+    - phase_a_end: "2026-01-24 (1 day)"
+    - phase_b_start: "2026-01-25"
+    - phase_b_end: "2026-01-27 (3 days)"
+    - phase_c_start: "2026-01-28"
+    - phase_c_end: "2026-01-30 (3 days)"
+    - phase_d_start: "2026-01-31"
+    - phase_d_end: "2026-02-12 (12-13 days)"
+    - phase_e_start: "2026-02-13"
+    - phase_e_end: "2026-02-24 (12-15 days)"
+
+completion_verification:
+  success_criteria:
+    - "All 5 phases COMPLETED status"
+    - "0 test collection errors (was 172)"
+    - "≥5500 tests passing (was 412/613 orchestrators)"
+    - "29/29 governance rules implemented (was 28/29)"
+    - "0 architecture conflicts (was 4)"
+    - "All 14 MCP tools discoverable"
+    - "Domain Brain synthesis engine operational"
+  
+  delivery_checklist:
+    - "[ ] Phase A: Tier consolidation verified"
+    - "[ ] Phase B: MCP registry auto-discovery working"
+    - "[ ] Phase C: Circular imports resolved, 21 tests pass"
+    - "[ ] Phase D: 58 classes implemented, 172 errors → 0"
+    - "[ ] Phase E: 7547 test suite with ≥5500 passing"
+    - "[ ] Full integration test suite green"
+    - "[ ] Load test validation passed"
+    - "[ ] Production readiness: 100% (was 36%)"
+  
+  final_status: "PRODUCTION READY - All blockers resolved"
+
+related_phases:
+  - "phase-001-critical-blockers (MAC TRACK - COMPLETED)"
+  - "phase-002-state-management (MAC TRACK - COMPLETED)"
+  - "phase-003-architecture-refactoring (MAC TRACK - PENDING)"
+  - "PHASE-E-TDD-IMPLEMENTATION (MAC TRACK)"
+  - "phase-remediation-001-production-readiness.yaml (MASTER PLAN)"
+
+notes: |
+  This phase orchestrates the comprehensive production hardening roadmap from
+  phase-remediation-001-production-readiness.yaml, which documented:
+  - Current state: 36% production ready
+  - 5 critical blockers blocking deployment
+  - 172 test collection errors
+  - 4 architecture conflicts
+  
+  Execution per cortex-builder.prompt.md ZERO OUTPUT MODE:
+  - Sequential phase execution with dependency checking
+  - Auto-advance without pausing (no user confirmation)
+  - One-sentence notification per sub-phase completion
+  - Git commit with machine marker (mac:, win:, ah:)
+  - Final status: 100% production ready by 2026-02-24
