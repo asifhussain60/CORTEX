@@ -1,0 +1,449 @@
+# REMEDIATION-GOVERNANCE-ENFORCEMENT Phase Specification
+# ========================================================
+# Authority: Identified 2026-01-24 holistic system review
+# Root Cause: "Implementation Without Enforcement" syndrome
+# Priority: P0-CRITICAL (blocks production confidence)
+
+metadata:
+  phase_id: "REMEDIATION-GOVERNANCE-ENFORCEMENT"
+  title: "Governance Enforcement Architecture"
+  version: "1.0"
+  created: "2026-01-24T18:00:00Z"
+  updated: "2026-01-24T18:00:00Z"
+  status: "NOT_STARTED"
+  priority: "P0-CRITICAL"
+  category: "GOVERNANCE"
+  
+phase_overview:
+  objective: |
+    Remediate "Implementation Without Enforcement" syndrome identified in
+    holistic system review (2026-01-24). Add CORE-032-035 rules and implement
+    factory pattern to enforce mandatory intent classification on every turn.
+  
+  estimated_effort: "11 hours"
+  start_date: "2026-01-25"
+  completion_date: "2026-01-26"
+  dependencies:
+    - "TRANSFORM-002 ✅ (complete)"
+  
+  root_cause_analysis: |
+    CRITICAL FINDING: Intent validation was skipped because NO TIER 0 
+    governance rule mandates it. Architectural disconnect between:
+    
+    - Design Layer: IntentClassifier exists and works (128/128 tests) ✅
+    - Enforcement Layer: Stage 1 optional, no DoR checkpoint ❌
+    
+    PATTERN IDENTIFIED: "Implementation Without Enforcement" syndrome
+    
+    Affected Systems:
+    1. Intent Classification (LENS) - No CORE rule mandates execution
+    2. Response Headers - CORE-030 exists but enforcement unclear
+    3. StateManager Usage - No CORE rule mandates state tracking
+    4. AuditLogger Invocation - Partial enforcement only
+    
+    Root Cause: Governance rules focus on "what not to do" (negative rules)
+    vs "what MUST be done" (positive rules). Examples:
+    - CORE-001: "Don't exceed 500 lines" ❌ (negative)
+    - CORE-008: "Must write tests first" ✅ (positive)
+    - CORE-019: "Must route through TDD-Master" ✅ (positive)
+    - MISSING: "Must classify intent before orchestration" ❌
+
+implementation_phases:
+  - id: "GOVE-REM-001"
+    title: "Create IntentRouterFactory"
+    estimated_effort: "2 hours"
+    description: |
+      Implement factory pattern for orchestrator creation that enforces
+      mandatory intent classification. Zero bypass possibility - orchestrators
+      can ONLY be created through this factory after intent validation.
+    
+    deliverables:
+      - file: "cortex/orchestrators/core/intent_router_factory.py"
+        description: "Factory class with get_orchestrator() method"
+        lines: "~150 lines"
+      
+      - file: "tests/unit/orchestrators/core/test_intent_router_factory.py"
+        description: "Factory behavior validation"
+        tests: "15+ tests"
+    
+    acceptance_criteria:
+      - "IntentRouterFactory class implemented"
+      - "get_orchestrator() enforces intent classification"
+      - "Cannot bypass factory (architectural constraint)"
+      - "All 15 tests passing"
+      - "Type hints 100% (CORE-011)"
+      - "Google docstrings (CORE-012)"
+    
+    implementation_notes: |
+      Factory Pattern Benefits:
+      - Single enforcement chokepoint (vs distributed decorators)
+      - No runtime overhead (architectural, not per-method)
+      - Testable (mock factory to verify all paths)
+      - Aligns with TRANSFORM-005 (declarative autowiring planned)
+      - 11 hours total vs 20 hours for middleware approach
+  
+  - id: "GOVE-REM-002"
+    title: "Refactor MasterOrchestrator to use Factory"
+    estimated_effort: "3 hours"
+    description: |
+      Update MasterOrchestrator and all orchestrator instantiation code to
+      use IntentRouterFactory exclusively. Remove optional Stage 1 intent
+      classification - make it mandatory via factory pattern.
+    
+    deliverables:
+      - file: "cortex/orchestrators/core/master_orchestrator_refactored.py"
+        description: "Use factory for all orchestrator creation"
+        changes: "Remove optional intent classification, enforce via factory"
+      
+      - file: "tests/integration/orchestrators/test_master_orchestrator_factory.py"
+        description: "Integration tests for factory usage"
+        tests: "20+ tests"
+    
+    acceptance_criteria:
+      - "MasterOrchestrator uses factory exclusively"
+      - "No direct orchestrator instantiation (zero bypass)"
+      - "Stage 1 intent classification mandatory (not optional)"
+      - "DoR validation checkpoint enforced"
+      - "All 20 integration tests passing"
+      - "100% backward compatibility maintained"
+      - "Zero breaking changes detected"
+    
+    backward_compatibility_notes: |
+      Maintain 100% backward compatibility:
+      - Factory returns same orchestrator types as before
+      - Public API unchanged (same methods, same signatures)
+      - Only internal implementation path changes
+      - Existing tests should pass without modification
+  
+  - id: "GOVE-REM-003"
+    title: "Add CORE-032-035 Governance Rules"
+    estimated_effort: "2 hours"
+    description: |
+      Add four new positive enforcement rules to cortex_brain/tier0/governance/core-rules.yaml.
+      Implement pytest governance plugin hooks to enforce these rules automatically.
+    
+    deliverables:
+      - file: "cortex_brain/tier0/governance/core-rules.yaml"
+        description: "Add CORE-032, CORE-033, CORE-034, CORE-035"
+        changes: "4 new rule definitions"
+      
+      - file: "cortex/testing/pytest_plugin_governance.py"
+        description: "Pytest hooks for new rules enforcement"
+        changes: "Add validators for CORE-032-035"
+      
+      - file: "tests/unit/governance/test_core_rules_032_035.py"
+        description: "Rule validation tests"
+        tests: "20+ tests"
+    
+    new_rules:
+      - rule_id: "CORE-032"
+        title: "Mandatory Intent Classification (DoR)"
+        category: "orchestration_lifecycle"
+        severity: "blocked"
+        description: |
+          ALL user requests MUST undergo intent classification via LENS protocol
+          BEFORE orchestrator selection. NO direct execution without DoR validation.
+        
+        enforcement_mechanism: "IntentRouterFactory (architectural)"
+        validation: "pytest governance plugin"
+        
+        validation_checks:
+          - "IntentClassifier.classify() invoked on EVERY user turn"
+          - "Confidence score logged in audit trail (0.0-1.0)"
+          - "Orchestrator selection based on classified intent"
+          - "Low confidence (<0.5) triggers disambiguation"
+        
+        audit_trail_requirements:
+          - "log_operation('INTENT_CLASSIFIED', intent_type, confidence)"
+          - "log_operation('ORCHESTRATOR_SELECTED', orchestrator_name, intent_id)"
+          - "trace_id linking request → intent → orchestrator → result"
+      
+      - rule_id: "CORE-033"
+        title: "Mandatory State Persistence"
+        category: "orchestration_lifecycle"
+        severity: "blocked"
+        description: |
+          Multi-turn operations MUST persist state via StateManager.
+          Stateful conversations require state tracking for continuity.
+        
+        enforcement_mechanism: "StateManager invocation required"
+        validation: "pytest governance plugin"
+      
+      - rule_id: "CORE-034"
+        title: "Mandatory Audit Logging"
+        category: "observability"
+        severity: "blocked"
+        description: |
+          ALL orchestrator execution MUST be audited via AuditLogger.
+          No execution without audit trail for debugging and compliance.
+        
+        enforcement_mechanism: "@audit_logged decorator required"
+        validation: "pytest governance plugin"
+      
+      - rule_id: "CORE-035"
+        title: "Mandatory Response Header Injection"
+        category: "response_formatting"
+        severity: "blocked"
+        description: |
+          ALL responses MUST include standard CORTEX header (CORE-030 clarification).
+          Header format is immutable and non-negotiable.
+        
+        enforcement_mechanism: "ResponseHeaderValidator (pre-return check)"
+        validation: "pytest governance plugin"
+    
+    acceptance_criteria:
+      - "All 4 rules added to core-rules.yaml"
+      - "Pytest plugin enforces all 4 rules"
+      - "20+ rule validation tests passing"
+      - "Documentation updated with rule descriptions"
+  
+  - id: "GOVE-REM-004"
+    title: "Migrate 23 Orchestrators to Factory Pattern"
+    estimated_effort: "4 hours"
+    description: |
+      Update all 23 orchestrators from TRANSFORM-001 to use IntentRouterFactory.
+      Update wiring harness to use factory instead of direct instantiation.
+    
+    deliverables:
+      - description: "23 orchestrators updated (incremental migration)"
+        orchestrators: "All orchestrators from TRANSFORM-001"
+      
+      - file: "cortex/orchestrators/core/orchestrator_wiring.py"
+        description: "Update wiring harness to use factory"
+        changes: "Replace direct instantiation with factory calls"
+      
+      - file: "tests/integration/orchestrators/test_orchestrator_migration.py"
+        description: "Migration validation tests"
+        tests: "35+ tests"
+    
+    orchestrators_to_migrate:
+      - "MasterOrchestrator"
+      - "TDDOrchestrator"
+      - "BuilderOrchestrator"
+      - "GovernanceOrchestrator"
+      - "DomainOrchestrator"
+      - "SeleniumPlaywrightOrchestrator"
+      - "DocumentationOrchestrator"
+      - "TestingOrchestrator"
+      - "AnalysisOrchestrator"
+      - "ReviewOrchestrator"
+      - "RefactoringOrchestrator"
+      - "DebuggingOrchestrator"
+      - "OptimizationOrchestrator"
+      - "ValidationOrchestrator"
+      - "PlanningOrchestrator"
+      - "KnowledgeOrchestrator"
+      - "ObservabilityOrchestrator"
+      - "InfrastructureOrchestrator"
+      - "DeploymentOrchestrator"
+      - "SecurityOrchestrator"
+      - "PerformanceOrchestrator"
+      - "ScalabilityOrchestrator"
+      - "ResilienceOrchestrator"
+    
+    migration_strategy:
+      approach: "Incremental (one orchestrator at a time)"
+      validation: "Run tests after each migration"
+      rollback: "Git checkpoint before each migration"
+      
+    acceptance_criteria:
+      - "All 23 orchestrators use factory exclusively"
+      - "Wiring harness updated (no direct instantiation)"
+      - "35+ migration tests passing"
+      - "100% backward compatibility maintained"
+      - "Zero breaking changes detected"
+      - "Performance impact <5% (negligible factory overhead)"
+
+success_criteria:
+  technical:
+    - "IntentRouterFactory implemented and tested"
+    - "All orchestrators use factory (zero direct instantiation)"
+    - "CORE-032-035 rules added to core-rules.yaml"
+    - "Pytest plugin enforces all 4 new rules"
+    - "≥70 tests passing (100% new code coverage)"
+    - "Zero breaking changes (100% backward compatible)"
+  
+  functional:
+    - "Intent classification happens on EVERY user turn"
+    - "Audit trail logs: INTENT_CLASSIFIED → ORCHESTRATOR_SELECTED"
+    - "DoR validation checkpoint enforced before execution"
+    - "Response headers injected on all responses"
+    - "State persistence mandatory for multi-turn operations"
+    - "Audit logging mandatory for all orchestrator execution"
+  
+  architectural:
+    - "Single source of truth for orchestrator creation (factory)"
+    - "Zero bypass possibility (architectural constraint)"
+    - "Permanent fix for 'Implementation Without Enforcement' syndrome"
+    - "Positive enforcement rules established (vs negative only)"
+
+deliverables:
+  code:
+    - "cortex/orchestrators/core/intent_router_factory.py"
+    - "Updated master_orchestrator_refactored.py"
+    - "Updated orchestrator_wiring.py"
+    - "Updated 23 orchestrators (factory usage)"
+  
+  governance:
+    - "CORE-032-035 rules in core-rules.yaml"
+    - "Pytest enforcement hooks in pytest_plugin_governance.py"
+  
+  tests:
+    - "tests/unit/orchestrators/core/test_intent_router_factory.py"
+    - "tests/integration/orchestrators/test_master_orchestrator_factory.py"
+    - "tests/unit/governance/test_core_rules_032_035.py"
+    - "tests/integration/orchestrators/test_orchestrator_migration.py"
+  
+  documentation:
+    - "Migration guide for orchestrator developers"
+    - "Architecture decision record (ADR-004)"
+    - "Governance rule audit report"
+    - "Updated CORTEX.prompt.md (factory pattern section)"
+
+git_commits:
+  - "GOVE-REM-001: IntentRouterFactory implementation (150 LOC, 15 tests)"
+  - "GOVE-REM-002: MasterOrchestrator factory refactor (20 tests, 100% compat)"
+  - "GOVE-REM-003: CORE-032-035 governance rules (4 rules, 20 tests)"
+  - "GOVE-REM-004: 23 orchestrators migrated to factory (35 tests, 0 breaks)"
+
+validation_checklist:
+  before_implementation:
+    - "[ ] Phase dependencies verified (TRANSFORM-002 complete)"
+    - "[ ] Git checkpoint created"
+    - "[ ] TDD approach confirmed (tests first per CORE-008)"
+  
+  during_implementation:
+    - "[ ] GOVE-REM-001: IntentRouterFactory tests passing"
+    - "[ ] GOVE-REM-002: MasterOrchestrator integration tests passing"
+    - "[ ] GOVE-REM-003: Governance rule tests passing"
+    - "[ ] GOVE-REM-004: Migration tests passing"
+  
+  after_implementation:
+    - "[ ] All ≥70 tests passing (100%)"
+    - "[ ] Zero breaking changes detected"
+    - "[ ] Backward compatibility verified"
+    - "[ ] Performance impact <5%"
+    - "[ ] Documentation updated"
+    - "[ ] Git commits created with descriptive messages"
+
+next_actions:
+  immediate:
+    - "Begin GOVE-REM-001: IntentRouterFactory (2h)"
+    - "Execute GOVE-REM-002: MasterOrchestrator refactor (3h)"
+    - "Execute GOVE-REM-003: CORE-032-035 rules (2h)"
+    - "Execute GOVE-REM-004: Migrate orchestrators (4h)"
+  
+  post_completion:
+    - "Validate all success criteria met"
+    - "Deploy to production after validation"
+    - "Monitor for 24 hours (enhanced surveillance)"
+    - "Create governance rule audit report"
+    - "Update roadmap to mark phase COMPLETED"
+
+risk_assessment:
+  refactoring_risk:
+    level: "MEDIUM"
+    description: "23 orchestrators require migration"
+    mitigation:
+      - "Incremental migration (one at a time)"
+      - "TDD approach (tests first)"
+      - "Git checkpoint before each migration"
+      - "Comprehensive integration tests"
+      - "Rollback plan documented"
+  
+  backward_compatibility_risk:
+    level: "LOW"
+    description: "Factory pattern must maintain 100% compatibility"
+    mitigation:
+      - "Factory returns same orchestrator types"
+      - "Public API unchanged"
+      - "Existing tests run without modification"
+      - "Comprehensive compatibility test suite"
+  
+  performance_risk:
+    level: "LOW"
+    description: "Factory overhead could impact latency"
+    mitigation:
+      - "Factory is lightweight (negligible overhead)"
+      - "Performance benchmarks established"
+      - "Target: <5% impact vs baseline"
+      - "Monitoring alerts if >5% regression"
+
+lessons_learned_integration:
+  from_transform_002: |
+    Apply consolidation pattern learnings:
+    - TDD approach (tests first per CORE-008)
+    - Incremental implementation (one phase at a time)
+    - Backward compatibility as first-class requirement
+    - Documentation written during implementation
+    - Comprehensive testing at each step
+    - Git checkpoints for rollback safety
+  
+  from_holistic_review: |
+    Address root cause, not symptoms:
+    - Factory pattern is architectural (not bolted on)
+    - Positive enforcement rules (not just negative)
+    - Single source of truth (factory is chokepoint)
+    - Permanent fix (not temporary workaround)
+    - Applies pattern to all future enforcement gaps
+
+architectural_decision_record:
+  title: "ADR-004: Factory Pattern for Intent Classification Enforcement"
+  decision: "Implement IntentRouterFactory vs Middleware/Decorator"
+  
+  alternatives_considered:
+    - option: "Middleware Pattern"
+      pros: "Easy to retrofit, familiar pattern"
+      cons: "Runtime coupling, can be bypassed, 20h effort"
+    
+    - option: "Decorator Pattern"
+      pros: "Pythonic, minimal refactoring"
+      cons: "Manual application required, can be forgotten, creates overhead"
+    
+    - option: "Factory Pattern (CHOSEN)"
+      pros: "Zero bypass, single chokepoint, aligns with TRANSFORM-005, 11h effort"
+      cons: "Requires refactoring, architectural change"
+  
+  rationale: |
+    Factory pattern chosen because:
+    1. Zero bypass possibility (architectural constraint)
+    2. Single enforcement point (no distributed decorators)
+    3. Aligns with TRANSFORM-005 (declarative autowiring)
+    4. 11 hours vs 20 hours (45% time savings)
+    5. Permanent fix (not temporary workaround)
+    6. Testable (mock factory to verify all paths)
+  
+  consequences:
+    positive:
+      - "Permanent solution to enforcement gaps"
+      - "Single source of truth for orchestrator creation"
+      - "Audit trail completeness (100% coverage)"
+      - "DoR validation before all execution"
+    
+    negative:
+      - "Requires refactoring 23 orchestrators"
+      - "Architectural change (medium risk)"
+      - "Team learning curve (new pattern)"
+    
+    mitigation:
+      - "TDD approach reduces refactoring risk"
+      - "Incremental migration reduces blast radius"
+      - "Comprehensive documentation reduces learning curve"
+
+notes: |
+  This remediation phase addresses the "Implementation Without Enforcement"
+  syndrome identified during holistic system review (2026-01-24).
+  
+  The factory pattern is the permanent architectural fix, not a temporary
+  workaround. It establishes the principle that all orchestration entry
+  points MUST flow through IntentRouter factory, ensuring:
+  
+  1. Intent classification on EVERY user turn
+  2. DoR validation before execution
+  3. Audit trail completeness
+  4. Permanent solution to enforcement gaps
+  
+  This phase is P0-CRITICAL because it blocks production confidence.
+  Without mandatory intent validation, the system cannot guarantee that
+  all user requests are understood before execution, violating the
+  fundamental Definition of Ready (DoR) principle.
