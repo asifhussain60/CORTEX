@@ -447,7 +447,32 @@ class MasterOrchestrator(IOrchestrator):
         return "2.0"
     
     def initialize(self) -> Result[str]:
-        """Initialize orchestrator."""
+        """Initialize MasterOrchestrator and all domain orchestrators.
+        
+        Performs complete system initialization including:
+        - Orchestrator bootstrap and wiring
+        - Governance registry initialization
+        - Knowledge repositories setup
+        - State manager configuration
+        - Response header injection setup
+        
+        Args:
+            None
+            
+        Returns:
+            Result[str]: Ok with success message or Err with error details
+            
+        Raises:
+            No exceptions - all errors wrapped in Result type
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.initialize()
+            >>> if result.is_ok():
+            ...     print("System ready")
+            ... else:
+            ...     print(f"Init failed: {result.error}")
+        """
         try:
             self.logger.log_operation_start(
                 ac_id="AC-AR-006-01",
@@ -577,7 +602,44 @@ class MasterOrchestrator(IOrchestrator):
         operation_name: str,
         parameters: Dict[str, Any],
     ) -> Result[Any]:
-        """Execute operation with audit logging and governance validation."""
+        """Execute an operation through the CORTEX orchestration pipeline.
+        
+        Performs complete operation execution including:
+        - Intent classification via routing factory
+        - Governance and compliance validation
+        - Domain-specific orchestrator delegation
+        - Audit trail logging
+        - Result aggregation and formatting
+        
+        The operation flows through the full 4-stage CORTEX workflow:
+        1. Stage 1: Interaction/Comprehension - understand intent
+        2. Stage 2: Intent Routing - classify and route
+        3. Stage 3: Governance - validate against policies
+        4. Stage 4: Execution - delegate to domain orchestrators
+        
+        Args:
+            operation_name: Name or type of the operation (e.g., "implement", "fix", "refactor")
+            parameters: Operation parameters dictionary containing:
+                - required keys depend on operation_name
+                - typically includes: target, scope, context
+            
+        Returns:
+            Result[Any]: Ok with operation result or Err with error message
+            
+        Raises:
+            No exceptions - all errors wrapped in Result type
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.execute_operation(
+            ...     operation_name="implement",
+            ...     parameters={"target": "feature_x", "scope": "module"}
+            ... )
+            >>> if result.is_ok():
+            ...     print(f"Result: {result.unwrap()}")
+            ... else:
+            ...     print(f"Error: {result.error}")
+        """
         try:
             # AC-GOVE-REM-001: Mandatory intent classification via factory pattern
             # Enforces intent classification as architectural prerequisite (CORE-032)
