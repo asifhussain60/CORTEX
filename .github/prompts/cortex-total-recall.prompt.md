@@ -60,10 +60,50 @@ agent = TotalRecallAgent(auto_wire_production=True)
 
 ---
 
+## ✅ AUTO-ENFORCEMENT: Wiring Validation & Gap Remediation
+
+**CRITICAL:** On EVERY execution, TotalRecallAgent MUST:
+
+1. **Validate All Wiring** (execute `validate_production_wiring()`)
+   - Check all 23 orchestrators are discoverable
+   - Verify 28+ critical components are registered
+   - Confirm 4-stage pipeline integrity
+   - Test MCP registry with 15 tools
+
+2. **Detect Missing Wiring** (execute `detect_wiring_gaps()`)
+   - Scan cortex/ for orchestrators not in registry
+   - Find components without initialization
+   - Identify broken imports or circular dependencies
+   - Check for unregistered MCP tools
+
+3. **Auto-Fix Detected Gaps** (execute `auto_wire_missing_components()`)
+   - Register discovered orchestrators
+   - Initialize orphaned components
+   - Wire missing MCP tools
+   - Fix broken imports
+   - Update orchestrator registry in real-time
+
+4. **Report Enforcement Status** (execute `report_wiring_status()`)
+   - List all wired components with timestamps
+   - Flag any remaining gaps requiring manual intervention
+   - Log AC-IDs for audit trail
+   - Verify CORE-029 header on output
+
+**Implementation Locations:**
+- Validation: `cortex/tools/wiring_validator.py` (NEW)
+- Gap Detection: `cortex/tools/wiring_gap_detector.py` (NEW)
+- Auto-Fixer: `cortex/tools/wiring_auto_fixer.py` (NEW)
+- Enforcement Hook: `cortex/tools/total_recall_agent.py::TotalRecallAgent.enforce_production_wiring()` (ENHANCED)
+
+**Task AC-ID:** `AC-WIRING-ENFORCEMENT-001`
+
+---
+
 ## Wiring Harness Integration (AUTO-WIRE ALL ORCHESTRATORS & COMPONENTS)
 
 **Authority:** `cortex/testing/wiring_harness_inventory.py` + `cortex/orchestrators/core/orchestrator_wiring.py`  
 **Scope:** Auto-discover and integrate ALL 20+ orchestrators and 28+ production-ready components
+**Enforcement:** Executed automatically on agent initialization with `enforce_production_wiring=True` (default)
 
 ### WIRE-001: Core Orchestrators (6 orchestrators - CRITICAL Priority)
 
