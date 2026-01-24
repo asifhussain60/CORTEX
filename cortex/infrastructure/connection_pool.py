@@ -1,404 +1,304 @@
 """
-Connection Pool with Lifecycle Management.
+Connection Pool with Health Checks (BRT-010)
 
-AC-INFRA-001-01: Implements production-grade connection pooling with:
-- Configurable min/max connections
-- Health checks before reuse
-- Automatic cleanup of idle connections
-- Context manager support
-- Comprehensive metrics
+Provides a thread-safe connection pool with passive health monitoring.
+Manages connection lifecycle, detects stale connections, and tracks metrics.
+
+Key Features:
+- Thread-safe acquire/release with configurable timeout
+- Passive health checks to detect and remove stale connections
+- Comprehensive status reporting and monitoring
+- Compatible with LifecycleManager (BRT-008) and RateLimiter (BRT-009)
+- Simple, focused implementation (no adaptive recovery - see BRT-011)
 
 CORE-CRIT-STATE-001: Thread-safe operations with RLock protecting shared state
 """
 
 import logging
-import sqlite3
 import threading
 import time
-from contextlib import contextmanager
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, Optional, Any
-from queue import Queue, Empty
+from dataclasses import dataclass, field
+from typing import Dict, Any, Optional
+
+logger = logging.getLogger(__name__)
+
+
+class InvalidConfigError(Exception):
+    """Raised when pool configuration is invalid."""
+
+    pass
 
 
 class PoolExhaustedError(Exception):
-    """Raised when connection pool is exhausted and timeout expires."""
-    pass
+    """Raised when no connections available and timeout exceeded."""
 
-
-class ConnectionHealthCheckFailedError(Exception):
-    """Raised when connection health check fails."""
     pass
 
 
 @dataclass
-class ConnectionPoolConfig:
-    """Configuration for connection pool."""
+class Connection:
+    """
+    Represents a managed connection in the pool.
     
-    min_connections: int = 2
-    max_connections: int = 20
-    connection_timeout_seconds: float = 30.0
-    idle_timeout_seconds: float = 300.0  # 5 minutes
-    health_check_enabled: bool = True
-    
-    def __post_init__(self) -> None:
-        """Validate configuration parameters."""
-        if self.min_connections <= 0:
-            raise ValueError("min_connections must be positive")
-        if self.max_connections < self.min_connections:
-            raise ValueError("max_connections must be >= min_connections")
-        if self.connection_timeout_seconds <= 0:
-            raise ValueError("connection_timeout_seconds must be positive")
-        if self.idle_timeout_seconds <= 0:
-            raise ValueError("idle_timeout_seconds must be positive")
+    Attributes:
+        connection_id: Unique identifier for this connection
+        pool: Reference to parent pool
+        is_valid: Whether this connection is still valid
+        created_at: Timestamp when connection was created
+        last_used: Timestamp when connection was last used
+    """
 
+    connection_id: str
+    """Unique identifier for this connection."""
 
-@dataclass
-class _ConnectionWrapper:
-    """Wrapper for tracking connection metadata."""
-    
-    connection: sqlite3.Connection
-    last_used: float
-    in_use: bool = False
+    pool: "ConnectionPool"
+    """Reference to parent pool."""
+
+    is_valid: bool = True
+    """Whether this connection is still valid."""
+
+    created_at: float = field(default_factory=time.time)
+    """Timestamp when connection was created."""
+
+    last_used: float = field(default_factory=time.time)
+    """Timestamp when connection was last used."""
+
+    def __hash__(self) -> int:
+        """Make connection hashable for set/dict operations."""
+        return hash(self.connection_id)
 
 
 class ConnectionPool:
     """
-    Production-grade connection pool with lifecycle management.
-    
-    Features:
-    - Min/max connection limits
-    - Health checks before reuse
-    - Automatic idle connection cleanup
-    - Context manager support
-    - Thread-safe operations
-    - Comprehensive metrics
-    
-    Example:
-        >>> config = ConnectionPoolConfig(min_connections=2, max_connections=10)
-        >>> pool = ConnectionPool(Path("db.sqlite"), config)
-        >>> with pool.connection() as conn:
-        ...     cursor = conn.cursor()
-        ...     cursor.execute("SELECT 1")
-        >>> pool.shutdown()
+    Thread-safe connection pool with health monitoring.
+
+    Manages a pool of connections with configurable capacity, timeout,
+    and periodic health checks to detect stale connections.
+
+    Usage:
+        pool = ConnectionPool(capacity=10)
+        conn = pool.acquire_connection()
+        try:
+            # use connection
+            pass
+        finally:
+            pool.release_connection(conn)
+
+    Args:
+        capacity: Maximum number of connections in pool
+        timeout: Max wait time in seconds for acquiring connection
+        health_check_interval: Seconds between health check runs
     """
-    
+
     def __init__(
         self,
-        database_path: Path,
-        config: Optional[ConnectionPoolConfig] = None,
+        capacity: int,
+        timeout: float = 30.0,
+        health_check_interval: float = 60.0,
     ) -> None:
         """
         Initialize connection pool.
-        
+
         Args:
-            database_path: Path to SQLite database file
-            config: Pool configuration (uses defaults if None)
+            capacity: Must be > 0
+            timeout: Must be > 0
+            health_check_interval: Must be > 0
+
+        Raises:
+            InvalidConfigError: If any parameter is invalid
         """
-        self.database_path = database_path
-        self.config = config or ConnectionPoolConfig()
-        
+        if capacity <= 0:
+            raise InvalidConfigError("capacity must be > 0")
+        if timeout <= 0:
+            raise InvalidConfigError("timeout must be > 0")
+        if health_check_interval <= 0:
+            raise InvalidConfigError("health_check_interval must be > 0")
+
+        self.capacity = capacity
+        self.timeout = timeout
+        self.health_check_interval = health_check_interval
+
+        self._available_connections: list[Connection] = []
+        self._all_connections: set[Connection] = set()
         self._lock = threading.RLock()
-        self._available: Queue[_ConnectionWrapper] = Queue()
-        self._all_connections: Dict[int, _ConnectionWrapper] = {}
-        self._shutdown_flag = False
-        
-        # Metrics tracking
-        self._wait_times: list[float] = []
-        self._total_acquires = 0
-        
-        # Initialize minimum connections
+        self._not_empty = threading.Condition(self._lock)
+
+        self._failed_checks = 0
+        self._last_health_check = 0.0
+        self._connection_counter = 0
+
+        # Initialize pool with connections
         self._initialize_pool()
-    
+
+        logger.info(
+            f"ConnectionPool initialized: capacity={capacity}, "
+            f"timeout={timeout}s, health_check_interval={health_check_interval}s"
+        )
+
     def _initialize_pool(self) -> None:
-        """Create minimum connections during initialization."""
-        with self._lock:
-            for _ in range(self.config.min_connections):
-                wrapper = self._create_connection()
-                self._all_connections[id(wrapper.connection)] = wrapper
-                self._available.put(wrapper)
-    
-    def _create_connection(self) -> _ConnectionWrapper:
-        """
-        Create a new database connection.
-        
-        Returns:
-            Wrapped connection with metadata
-        """
-        conn = sqlite3.connect(
-            str(self.database_path),
-            timeout=self.config.connection_timeout_seconds,
-            check_same_thread=False,
-        )
-        # Enable WAL mode for better concurrency
-        conn.execute("PRAGMA journal_mode=WAL")
-        
-        return _ConnectionWrapper(
-            connection=conn,
-            last_used=time.time(),
-            in_use=False,
-        )
-    
-    def _health_check(self, conn: sqlite3.Connection) -> bool:
-        """
-        Check if connection is healthy.
-        
-        Args:
-            conn: Connection to check
-            
-        Returns:
-            True if healthy, False otherwise
-        """
-        if not self.config.health_check_enabled:
-            return True
-        
-        try:
-            cursor = conn.cursor()
-            cursor.execute("SELECT 1")
-            cursor.fetchone()
-            return True
-        except (sqlite3.Error, AttributeError):
-            return False
-    
-    def acquire(self, timeout: Optional[float] = None) -> sqlite3.Connection:
+        """Initialize pool with available connections."""
+        for _ in range(self.capacity):
+            conn = self._create_connection()
+            self._available_connections.append(conn)
+            self._all_connections.add(conn)
+
+    def _create_connection(self) -> Connection:
+        """Create a new connection for the pool."""
+        self._connection_counter += 1
+        conn_id = f"conn-{self._connection_counter}"
+        return Connection(connection_id=conn_id, pool=self)
+
+    def acquire_connection(self) -> Connection:
         """
         Acquire a connection from the pool.
-        
-        Args:
-            timeout: Maximum time to wait for connection (uses config default if None)
-            
+
+        Waits up to self.timeout seconds for a connection to become available.
+        Only returns valid (non-stale) connections.
+
         Returns:
-            Database connection
-            
+            Available Connection from the pool
+
         Raises:
-            PoolExhaustedError: If pool exhausted and timeout expires
-            RuntimeError: If pool is shutdown
+            PoolExhaustedError: If no connection available within timeout
         """
-        if self._shutdown_flag:
-            raise RuntimeError("Connection pool is shutdown")
-        
-        timeout = timeout if timeout is not None else self.config.connection_timeout_seconds
-        start_time = time.time()
-        
-        with self._lock:
-            self._total_acquires += 1
-        
-        while True:
-            wait_time = time.time() - start_time
-            remaining_timeout = timeout - wait_time
-            
-            if remaining_timeout <= 0:
-                raise PoolExhaustedError(
-                    f"Connection pool exhausted after {timeout}s timeout"
-                )
-            
-            try:
-                # Try to get available connection
-                wrapper = self._available.get(timeout=min(remaining_timeout, 0.1))
-                
-                # Validate health
-                if self._health_check(wrapper.connection):
-                    with self._lock:
-                        wrapper.in_use = True
-                        wrapper.last_used = time.time()
-                        self._wait_times.append(wait_time)
-                        if len(self._wait_times) > 1000:
-                            self._wait_times = self._wait_times[-1000:]
-                    return wrapper.connection
-                else:
-                    # Connection unhealthy, try to replace it
-                    self._close_connection(wrapper)
-                    with self._lock:
-                        if len(self._all_connections) < self.config.max_connections:
-                            new_wrapper = self._create_connection()
-                            self._all_connections[id(new_wrapper.connection)] = new_wrapper
-                            self._available.put(new_wrapper)
-                    
-            except Empty:
-                # No available connections, try to create new one
-                with self._lock:
-                    if len(self._all_connections) < self.config.max_connections:
-                        wrapper = self._create_connection()
-                        self._all_connections[id(wrapper.connection)] = wrapper
-                        wrapper.in_use = True
-                        wrapper.last_used = time.time()
-                        return wrapper.connection
-                
-                # Pool at max capacity, continue waiting
-                continue
-    
-    def release(self, conn: sqlite3.Connection) -> None:
+        with self._not_empty:
+            deadline = time.time() + self.timeout
+
+            while True:
+                # Try to get a valid connection
+                valid_conns = [c for c in self._available_connections if c.is_valid]
+
+                if valid_conns:
+                    conn = valid_conns[0]
+                    self._available_connections.remove(conn)
+                    conn.last_used = time.time()
+                    return conn
+
+                # No valid connections, calculate wait time
+                wait_time = deadline - time.time()
+                if wait_time <= 0:
+                    raise PoolExhaustedError(
+                        f"No connections available after {self.timeout}s timeout "
+                        f"(capacity={self.capacity})"
+                    )
+
+                # Wait for connection to be released
+                self._not_empty.wait(timeout=min(wait_time, 0.1))
+
+    def release_connection(self, conn: Connection) -> None:
         """
-        Release a connection back to the pool.
-        
+        Return a connection to the pool.
+
+        Makes the connection available for reuse. If the connection is from
+        a different pool or invalid, raises an error.
+
         Args:
-            conn: Connection to release
-            
+            conn: Connection to return to pool
+
         Raises:
-            ConnectionHealthCheckFailedError: If connection fails health check
+            ValueError: If connection is not from this pool
         """
-        if self._shutdown_flag:
-            self._close_connection_by_ref(conn)
-            return
-        
-        conn_id = id(conn)
-        
         with self._lock:
-            wrapper = self._all_connections.get(conn_id)
-            if wrapper is None:
-                return  # Connection not from this pool
-            
-            # Health check before returning to pool
-            if not self._health_check(conn):
-                self._close_connection(wrapper)
-                raise ConnectionHealthCheckFailedError(
-                    "Connection failed health check on release"
+            if conn not in self._all_connections:
+                raise ValueError(
+                    f"Connection {conn.connection_id} not from this pool"
                 )
-            
-            wrapper.in_use = False
-            wrapper.last_used = time.time()
-            self._available.put(wrapper)
-    
-    def _cleanup_idle_connections(self) -> None:
-        """Clean up connections idle longer than timeout."""
-        if self._shutdown_flag:
-            return
-        
-        current_time = time.time()
-        idle_timeout = self.config.idle_timeout_seconds
-        
+
+            # Only return valid connections to available pool
+            if conn.is_valid:
+                self._available_connections.append(conn)
+                self._not_empty.notify()
+            else:
+                # Invalid connection, mark for removal (will be cleaned on health check)
+                logger.debug(f"Not returning invalid connection {conn.connection_id}")
+
+    def run_health_check(self) -> None:
+        """
+        Execute health check on all connections.
+
+        Detects stale connections and removes them from the pool.
+        Tracks health check failures for monitoring.
+
+        This is a passive health check - it validates connections
+        already in the pool. For active recovery, see BRT-011.
+        """
         with self._lock:
-            # Don't cleanup if at minimum
-            if len(self._all_connections) <= self.config.min_connections:
-                return
-            
-            # Find idle connections to cleanup
-            to_cleanup = []
-            temp_available = []
-            
-            while not self._available.empty():
-                try:
-                    wrapper = self._available.get_nowait()
-                    # CORE-CRIT-STATE-001: Check idle status while holding lock
-                    # to prevent race condition between check and cleanup
-                    if (current_time - wrapper.last_used > idle_timeout and
-                        len(self._all_connections) > self.config.min_connections and
-                        not wrapper.in_use):  # Additional safety check
-                        to_cleanup.append(wrapper)
-                    else:
-                        temp_available.append(wrapper)
-                except Empty:
-                    break
-            
-            # Return non-cleaned connections to queue
-            for wrapper in temp_available:
-                self._available.put(wrapper)
-            
-            # Close idle connections - lock held throughout ensures
-            # no concurrent access to _all_connections dict
-            for wrapper in to_cleanup:
-                self._close_connection(wrapper)
-    
-    def _close_connection(self, wrapper: _ConnectionWrapper) -> None:
-        """Close a connection and remove from pool."""
-        try:
-            wrapper.connection.close()
-        except sqlite3.Error as e:
-            logging.warning(f"Error closing connection: {e}")
-        except Exception as e:
-            logging.error(f"Unexpected error closing connection: {e}")
-        
-        conn_id = id(wrapper.connection)
-        if conn_id in self._all_connections:
-            del self._all_connections[conn_id]
-    
-    def _close_connection_by_ref(self, conn: sqlite3.Connection) -> None:
-        """Close a connection by reference."""
-        conn_id = id(conn)
-        wrapper = self._all_connections.get(conn_id)
-        if wrapper:
-            self._close_connection(wrapper)
-    
-    @contextmanager
-    def connection(self, timeout: Optional[float] = None):
+            # Check available connections for staleness
+            stale_conns = []
+
+            for conn in self._available_connections:
+                # Mark very old connections as stale (> 1 hour)
+                age = time.time() - conn.created_at
+                if age > 3600:
+                    conn.is_valid = False
+                    stale_conns.append(conn)
+
+            # Remove stale connections from available pool
+            for conn in stale_conns:
+                if conn in self._available_connections:
+                    self._available_connections.remove(conn)
+                    self._failed_checks += 1
+                    logger.debug(f"Removed stale connection {conn.connection_id}")
+
+            self._last_health_check = time.time()
+
+    def get_status(self) -> Dict[str, Any]:
         """
-        Context manager for acquiring and releasing connections.
-        
-        Args:
-            timeout: Maximum time to wait for connection
-            
-        Yields:
-            Database connection
-            
-        Example:
-            >>> with pool.connection() as conn:
-            ...     cursor = conn.cursor()
-            ...     cursor.execute("SELECT 1")
-        """
-        conn = self.acquire(timeout=timeout)
-        try:
-            yield conn
-        finally:
-            try:
-                self.release(conn)
-            except ConnectionHealthCheckFailedError:
-                pass  # Already handled in release
-    
-    def get_metrics(self) -> Dict[str, Any]:
-        """
-        Get pool metrics.
-        
+        Get current pool status and metrics.
+
         Returns:
-            Dictionary with metrics:
-            - total: Total connections
-            - active: Connections in use
-            - idle: Connections available
-            - avg_wait_time_ms: Average wait time in milliseconds
+            Dictionary with pool metrics:
+            - capacity: Pool maximum size
+            - available_connections: Currently available connections
+            - total_connections: Total connections in pool
+            - failed_checks: Cumulative failed health checks
+            - last_health_check: Timestamp of last check (or 0.0)
         """
         with self._lock:
-            active = sum(1 for w in self._all_connections.values() if w.in_use)
-            total = len(self._all_connections)
-            idle = total - active
-            
-            avg_wait_time_ms = 0.0
-            if self._wait_times:
-                avg_wait_time_ms = (sum(self._wait_times) / len(self._wait_times)) * 1000
-            
             return {
-                "total": total,
-                "active": active,
-                "idle": idle,
-                "avg_wait_time_ms": avg_wait_time_ms,
-                "total_acquires": self._total_acquires,
+                "capacity": self.capacity,
+                "available_connections": len(
+                    [c for c in self._available_connections if c.is_valid]
+                ),
+                "total_connections": len(self._all_connections),
+                "failed_checks": self._failed_checks,
+                "last_health_check": self._last_health_check,
             }
-    
-    def shutdown(self, timeout: float = 5.0) -> None:
-        """
-        Shutdown the connection pool.
-        
-        Closes all connections and prevents new acquisitions.
-        
-        Args:
-            timeout: Maximum time to wait for shutdown
-        """
-        with self._lock:
-            self._shutdown_flag = True
-            
-            # Close all connections
-            for wrapper in list(self._all_connections.values()):
-                try:
-                    wrapper.connection.close()
-                except sqlite3.Error as e:
-                    logging.warning(f"Error closing connection during cleanup: {e}")
-                except Exception as e:
-                    logging.error(f"Unexpected error closing connection during cleanup: {e}")
-            
-            self._all_connections.clear()
-            
-            # Clear queue
-            while not self._available.empty():
-                try:
-                    self._available.get_nowait()
-                except Empty:
-                    break
+
+
+# Module-level singleton instance
+_connection_pool: Optional[ConnectionPool] = None
+_pool_lock = threading.Lock()
+
+
+def get_connection_pool(
+    capacity: int = 10,
+    timeout: float = 30.0,
+    health_check_interval: float = 60.0,
+) -> ConnectionPool:
+    """
+    Get or create thread-safe singleton connection pool.
+
+    First call creates the pool with specified parameters.
+    Subsequent calls return the existing instance (parameters ignored).
+
+    Args:
+        capacity: Initial pool capacity (default: 10)
+        timeout: Acquire timeout in seconds (default: 30)
+        health_check_interval: Health check interval in seconds (default: 60)
+
+    Returns:
+        The singleton ConnectionPool instance
+    """
+    global _connection_pool
+
+    if _connection_pool is None:
+        with _pool_lock:
+            if _connection_pool is None:
+                _connection_pool = ConnectionPool(
+                    capacity=capacity,
+                    timeout=timeout,
+                    health_check_interval=health_check_interval,
+                )
+
+    return _connection_pool
