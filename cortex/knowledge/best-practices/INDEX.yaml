@@ -419,7 +419,7 @@ usage:
       - "architecture/microservices-resilience-patterns.yaml"
       - "devops-infrastructure/monitoring-observability.yaml"
       - "devops-infrastructure/infrastructure-as-code.yaml"
-      - "security/secure-coding-practices
+      - "security/secure-coding-practices.yaml"
   
   qa_automation_onboarding:
     description: "Setting up QA automation for HealthEquity (or similar enterprise)"
@@ -429,7 +429,7 @@ usage:
       - "qa-automation-testing/qa-coding-standards.yaml"
       - "qa-automation-testing/page-object-patterns.yaml"
       - "testing-validation/tdd-best-practices.yaml"
-      - "qa-automation-testing/ai-assisted-testing.yaml".yaml"
+      - "qa-automation-testing/ai-assisted-testing.yaml"
       
   quality_improvement:
     description: "Improving code quality and maintainability"
