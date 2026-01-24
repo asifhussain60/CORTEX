@@ -184,10 +184,11 @@ class CircuitBreaker:
     
     def _call_new_api(self, func: Callable[[], T]) -> T:
         """New API: Execute function, raise on open circuit."""
+        # Check if we should transition from OPEN to HALF_OPEN
+        should_execute = False
         with self._lock:
             self._request_count += 1
             
-            # Check if we should transition from OPEN to HALF_OPEN
             if self._state == CircuitState.OPEN:
                 # Check if enough time has passed
                 if self._opened_at is not None:
@@ -196,6 +197,7 @@ class CircuitBreaker:
                         self._state = CircuitState.HALF_OPEN
                         self._half_open_attempts = 0
                         self._consecutive_successes = 0
+                        should_execute = True
                     else:
                         self._rejected_count += 1
                         raise CircuitBreakerOpenError(
@@ -206,8 +208,14 @@ class CircuitBreaker:
                     raise CircuitBreakerOpenError(
                         f"Circuit breaker '{self.name}' is OPEN"
                     )
+            else:
+                # CLOSED or HALF_OPEN state, execute normally
+                should_execute = True
         
-        # Execute the call
+        # Execute the call if allowed
+        if not should_execute:
+            raise CircuitBreakerOpenError(f"Circuit breaker '{self.name}' is OPEN")
+        
         try:
             result = func()
             self._on_success_new()
@@ -278,8 +286,8 @@ class CircuitBreaker:
             self._failure_count += 1
             
             if self._state == CircuitState.HALF_OPEN:
-                # Any failure in half-open reopens the circuit
-                self._trip_breaker()
+                # Any failure in half-open reopens the circuit with exponential backoff
+                self._trip_breaker(is_reopen=True)
             elif self._state == CircuitState.CLOSED:
                 # Check if failure threshold exceeded
                 if isinstance(self.config.failure_threshold, float):
@@ -287,17 +295,24 @@ class CircuitBreaker:
                     if self._request_count >= self.config.min_requests:
                         failure_rate = self._failure_count / self._request_count
                         if failure_rate >= self.config.failure_threshold:
-                            self._trip_breaker()
+                            self._trip_breaker(is_reopen=False)
                 else:
                     # Count-based threshold (legacy)
                     if self._failure_count >= self.config.failure_threshold:
-                        self._trip_breaker()
+                        self._trip_breaker(is_reopen=False)
     
-    def _trip_breaker(self) -> None:
-        """Trip the circuit breaker to OPEN state."""
+    def _trip_breaker(self, is_reopen: bool = False) -> None:
+        """
+        Trip the circuit breaker to OPEN state.
+        
+        Args:
+            is_reopen: True if reopening from HALF_OPEN (apply exponential backoff)
+        """
         self._state = CircuitState.OPEN
         self._opened_at = time.time()
-        self._increase_open_duration()
+        if is_reopen:
+            # Apply exponential backoff on reopens
+            self._increase_open_duration()
     
     def _increase_open_duration(self) -> None:
         """Increase open duration with exponential backoff."""
