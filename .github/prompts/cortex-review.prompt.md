@@ -1,5 +1,5 @@
-# CORTEX Review System - 8-Agent Comprehensive Analysis
-**Version:** 5.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY
+# CORTEX Review System - 9-Agent Comprehensive Analysis (ENHANCED)
+**Version:** 5.1 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SSOT VERIFICATION
 
 ---
 
@@ -15,10 +15,13 @@
 
 ---
 
-## 🎯 What This Does
+## 🎯 What This Does (ENHANCED v5.1)
 
-CORTEX Review is your **code quality watchdog**. It performs comprehensive analysis using 8 specialized agents that scan your codebase for problems you might miss:
+CORTEX Review is your **code quality AND specification integrity watchdog**. It performs comprehensive analysis using **9 specialized agents** that scan your codebase and specifications for problems you might miss:
 
+**NEW (v5.1):** Before checking code quality, verification phase validates that specifications match implementation.
+
+- **Specification Verification** → Ensures spec matches implementation (Phase -1, runs FIRST)
 - **Brittleness** → Finds fragile code that could break under stress
 - **Hallucination** → Catches AI safety & output validation issues
 - **Governance** → Ensures compliance with CORTEX rules (CORE-001 through CORE-029)
@@ -26,7 +29,7 @@ CORTEX Review is your **code quality watchdog**. It performs comprehensive analy
 - **Debt** → Identifies duplicated code, TODOs, and technical shortcuts
 - **State/Concurrency** → Detects race conditions, deadlocks, thread safety issues
 - **Architecture** → Spots SOLID violations, tight coupling, design problems
-- **Integration/Observability** → Finds monitoring gaps and missing observability
+- **Integration/Observability** → Finds monitoring gaps, MCP exposure, wiring completeness (ENHANCED)
 
 ---
 
@@ -73,7 +76,7 @@ I'll scan the entire CORTEX codebase using 8 specialized review agents that chec
 ```
 "Run a full review"
 ```
-Scans everything. Takes ~60 minutes. Best for periodic audits.
+Scans everything. Takes ~95 minutes. Best for periodic audits.
 
 ### Targeted Reviews
 ```
@@ -96,7 +99,7 @@ Scans everything. Takes ~60 minutes. Best for periodic audits.
 
 | Command | Agents | Time | Best For |
 |---------|--------|------|----------|
-| `/review` | All 8 | 60 min | Full audit, production readiness |
+| `/review` | All 9 (0-8) | 95 min | Full audit, production readiness |
 | `/review {file}` | All 8 | 20 min | Specific file deep dive |
 | `/review-quick` | BRIT, GOV, DEBT | 15 min | Fast health check |
 | `/review-safety` | HALL, ASM, STATE | 20 min | Security & safety focus |
@@ -213,10 +216,10 @@ Scans everything. Takes ~60 minutes. Best for periodic audits.
 
 ---
 
-### 🖤 Agent 8: Integration/Observability (INTEG)
-**Question:** Can we see what's happening in production?
+### 🖤 Agent 8: Integration/Observability (INTEG) — ENHANCED v5.1
+**Question:** Can we see what's happening in production? Are MCP tools exposed? Is wiring complete?
 
-**Checks for:**
+**Core Observability Checks:**
 - Missing health check endpoints
 - Untraced operations (hard to debug)
 - Insufficient logging (can't diagnose issues)
@@ -224,11 +227,63 @@ Scans everything. Takes ~60 minutes. Best for periodic audits.
 - Undocumented APIs
 - Missing error reporting
 
-**Example Finding:** "Database queries don't appear in logs or metrics—no visibility"
+**ENHANCED (v5.1): MCP Tool Exposure Checks:**
+- Are orchestrators exposing `get_mcp_tools()` method? (18/23 missing)
+- Do MCP tools have proper schemas and descriptions?
+- Are tool implementations wired into MCPServer integration?
+
+**ENHANCED (v5.1): Wiring Integration Checks:**
+- Orchestrator auto-wiring: Do all 23 orchestrators appear in registry?
+- Import statements: Are orchestrators imported in `__init__.py`?
+- Dependency injection: Are dependencies properly resolved?
+
+**ENHANCED (v5.1): CLI Entry Point Checks:**
+- Are orchestrators accessible via CLI commands?
+- Do `/review-*` commands resolve to correct agents?
+- Is help text complete and accurate?
+
+**Finding Categories (ENHANCED):**
+- **MCP-INTEG-001:** Tool exposure incomplete (e.g., "Orchestrator X missing get_mcp_tools()")
+- **MCP-INTEG-002:** MCPServer integration gap (e.g., "Tools defined but not exposed to server")
+- **MCP-INTEG-003:** MCP toolkit violation (e.g., "Tool schema invalid or missing description")
+- **WIRING-INTEG-001:** Orchestrator wiring gap (e.g., "Orchestrator not in registry")
+- **WIRING-INTEG-002:** Import/dependency resolution issue (e.g., "Circular import detected")
+- **CLI-INTEG-001:** CLI command incomplete (e.g., "`/review-agent` not wired to orchestrator")
+- **CLI-INTEG-002:** Help/documentation missing (e.g., "No help text for command")
+- **SPEC-INTEG-001:** Specification/implementation alignment (e.g., "Prompt says wired, code has NotImplementedError")
+
+**Example Findings:** 
+- "Tool exposure: 5/23 orchestrators expose MCP tools (CRITICAL gap)"
+- "Database queries don't appear in logs or metrics—no visibility"
+- "CLI command `/review-ssot` not wired to Agent 0"
 
 ---
 
-## 📊 How Reviews Work (4 Phases)
+## 📊 How Reviews Work (5 Phases: -1 through 3)
+
+### Phase -1: SSOT Verification (10 min) 🆕 CORTEX v5.1
+**NEW in v5.1:** This phase MUST run FIRST before all other analysis.
+
+**Purpose:** Verify that specifications match implementation. Prevents circular issue patterns.
+
+**Agent 0: SSOT-Compliance (S)**
+- Loads source of truth: `cortex-impl-map.yaml` v3.0
+- Compares against: Prompt files, agent specifications, phase definitions
+- Calculates metric divergence: Claimed orchestrator completion % vs actual code
+- Identifies blocking issues: Prerequisites incomplete, phases out of order, dependencies unmet
+- Decision logic:
+  - **Divergence > 10%:** 🔴 **CRITICAL** - BLOCK all other agents, flag as blocking work
+  - **Divergence 5-10%:** 🟠 **HIGH** - Flag but continue with all agents (investigate in Phase 4)
+  - **Divergence < 5%:** ✅ **PASS** - Proceed to Phase 0 with confidence
+- Expected findings categories:
+  - **SSOT-001:** Metric divergence (e.g., "Claims 20/23 orchestrators, found 3/23")
+  - **SSOT-002:** Blocking phase (e.g., "Phase 5 marked complete but Phase 2 incomplete")
+  - **SSOT-003:** Specification mismatch (e.g., "Prompt says agent X wired, code has NotImplementedError")
+  - **SSOT-004:** Implementation gap (e.g., "MCP tools defined but 18/23 orchestrators missing exposure")
+
+Output: `review-ssot-verification.yaml` with divergence report and blocking assessment.
+
+---
 
 ### Phase 0: Pre-Flight Check (5 min)
 Before we start, I verify everything is ready:
@@ -256,21 +311,27 @@ I hunt for incomplete code:
 
 Output: `review-stubs.yaml`
 
-### Phase 3: 8-Agent Deep Dive (30 min)
-All 8 agents run in parallel, each scanning for their specialty:
-- **Batch 1:** Brittleness, Hallucination, Governance (10 min each)
-- **Batch 2:** Assumptions, Debt, State, Architecture, Integration (8-12 min each)
+### Phase 3: 9-Agent Deep Dive (35 min) 🆕 ENHANCED in v5.1
+After SSOT verification, all 9 agents run in parallel (Agent 0 + original 8):
+- **Phase -1 complete:** Confidence that spec matches implementation
+- **Agent 0:** SSOT-Compliance issues (if any divergence found)
+- **Agent 1-8:** Traditional code quality analysis
+  - **Batch 1:** Brittleness, Hallucination, Governance (10 min each)
+  - **Batch 2:** Assumptions, Debt, State, Architecture, Integration (8-12 min each)
 
-Outputs: `Findings-BRIT.yaml`, `Findings-HALL.yaml`, etc.
+Outputs: `review-ssot-verification.yaml`, `Findings-BRIT.yaml`, `Findings-HALL.yaml`, etc.
 
 ### Phase 4: Consolidation & Reporting (10 min)
-I merge all findings and create:
-- Priority-ordered issue list
-- Remediation plan
-- Executive summary
-- Detailed recommendations
+I merge all findings from Phase -1 (SSOT) and Phases 1-3 (Code Quality):
+- **Phase -1 SSOT findings first:** Specification divergence (if blocking)
+- **Phase 1-3 findings:** Consolidated by priority
+- Create:
+  - Priority-ordered issue list (critical/high/medium/low)
+  - Remediation roadmap
+  - Executive summary
+  - Detailed recommendations by agent
 
-Output: `remediation-plan.yaml`, `review-consolidated.yaml`
+Output: `remediation-plan.yaml`, `review-consolidated.yaml` (includes SSOT + code quality findings)
 
 ---
 
@@ -444,7 +505,7 @@ logger.log_operation_start(operation="REVIEW", scope="cortex/")
 
 **Pre-Review Checklist:**
 - ✅ You know what you want to check (full system? specific file? one agent?)
-- ✅ You have ~60 minutes free (or less for targeted reviews)
+- ✅ You have ~95 minutes free (or less for targeted reviews)
 - ✅ You're ready to act on findings (create issues, plan fixes)
 - ✅ The system is in a good state (tests passing, no emergency)
 
@@ -523,7 +584,7 @@ I verify everything is ready:
 - ✅ Tests passing
 - ✅ No blockers
 
-### Step 3: Analysis Runs (4 Phases, ~60 min)
+### Step 3: Analysis Runs (5 Phases, ~95 min)
 - Phase 0: Pre-flight validation
 - Phase 1: Gap inventory
 - Phase 2: Stub detection
