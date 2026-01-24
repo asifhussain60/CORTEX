@@ -419,6 +419,10 @@ def _create_version_manifest(
 def _create_registry_template(registry_path: Path) -> Dict[str, Any]:
     """Create registry template file.
     
+    CRITICAL FIX: Do NOT overwrite existing registry with orchestrators wired.
+    If registry exists with registry_template: false, preserve it.
+    This prevents losing orchestrator wiring on every git pull/setup.
+    
     Args:
         registry_path: Path to registry template
         
@@ -427,6 +431,20 @@ def _create_registry_template(registry_path: Path) -> Dict[str, Any]:
     """
     try:
         registry_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # CRITICAL: Preserve existing wired registry
+        if registry_path.exists():
+            with open(registry_path, 'r') as f:
+                existing = yaml.safe_load(f) or {}
+            
+            # If already wired (registry_template: false), do NOT regenerate
+            if not existing.get("registry_template", True):
+                return {
+                    "success": True,
+                    "status": "preserved",
+                    "path": str(registry_path),
+                    "message": "Existing wired registry preserved (registry_template: false)"
+                }
 
         registry_template = {
             "metadata": {
