@@ -13,19 +13,21 @@ metadata:
   description: "Single source of truth for active (non-completed) phases"
   project: "CORTEX"
   version: "1.0-active-only"
-  updated: "2026-01-24T03:00:00Z"
-  total_active_phases: 14
+  updated: "2026-01-24T18:00:00Z"
+  total_active_phases: 15
   total_completed_phases: 28
+  total_remediation_phases: 1
   total_stubs: 21
   authority: "Holistic phase review with implementation verification"
   
   phase_categories:
     completed_archived: 28
     in_progress: 0
-    not_started: 3
+    not_started: 4
+    remediation: 1
     blocked: 3
     stub_designs: 21
-    total: 55
+    total: 56
 
 executive_summary: |
   CORTEX has achieved significant production readiness with 25 completed phases
@@ -49,14 +51,16 @@ executive_summary: |
      - 82% token efficiency maintained throughout
   
   **Ready for Deployment:**
+  � REMEDIATION-GOVERNANCE-ENFORCEMENT: Intent validation enforcement (11 hours, P0-CRITICAL)
   📋 TRANSFORM-003: Capability Discoverability (20 hours, 2026-02-01)
   📋 TRANSFORM-004: Governance Modes (25 hours, 2026-02-01)
   📋 TRANSFORM-005: Declarative Autowiring (35 hours, 2026-02-01)
   
   **Path Forward:**
   1. ✅ Deploy TRANSFORM-002 consolidations to production
-  2. Execute TRANSFORM-003-005 post-production (80 hours, optional/strategic)
-  3. All critical path work complete - ready for immediate deployment
+  2. 🔴 Execute REMEDIATION-GOVERNANCE-ENFORCEMENT (11h, CRITICAL)
+  3. Execute TRANSFORM-003-005 post-production (80 hours, optional/strategic)
+  4. All critical path work complete - ready for immediate deployment after remediation
 
 active_phases:
   in_progress:
@@ -1253,6 +1257,183 @@ implementation_readiness_by_transform:
     team_allocated: true
     infrastructure_ready: true
     readiness_score: "100% (ready to start 2026-02-24)"
+
+remediation_phases:
+  count: 1
+  note: "Critical governance enforcement remediation - identified 2026-01-24"
+  
+  phases:
+    - id: "REMEDIATION-GOVERNANCE-ENFORCEMENT"
+      title: "Governance Enforcement Architecture"
+      priority: "P0-CRITICAL"
+      status: "NOT_STARTED"
+      category: "GOVERNANCE"
+      estimated_effort: "11 hours"
+      start_date: "2026-01-25"
+      completion_date: "2026-01-26"
+      dependencies: "TRANSFORM-002 ✅"
+      
+      objective: |
+        Remediate "Implementation Without Enforcement" syndrome identified in
+        holistic system review. Add CORE-032-035 rules and implement factory
+        pattern to enforce mandatory intent classification on every turn.
+      
+      root_cause: |
+        CRITICAL FINDING: Intent validation was skipped because NO TIER 0 
+        governance rule mandates it. Architectural disconnect between:
+        - Design Layer: IntentClassifier exists and works (128/128 tests) ✅
+        - Enforcement Layer: Stage 1 optional, no DoR checkpoint ❌
+        
+        PATTERN: "Implementation Without Enforcement" syndrome affects:
+        1. Intent Classification (LENS) - No CORE rule mandates execution
+        2. Response Headers - CORE-030 exists but enforcement unclear
+        3. StateManager Usage - No CORE rule mandates state tracking
+        4. AuditLogger Invocation - Partial enforcement only
+      
+      implementation_phases:
+        - id: "GOVE-REM-001"
+          title: "Create IntentRouterFactory"
+          effort: "2 hours"
+          deliverables:
+            - "cortex/orchestrators/core/intent_router_factory.py"
+            - "Factory pattern enforces intent classification"
+            - "Zero bypass possibility (architectural enforcement)"
+            - "15+ tests validating factory behavior"
+        
+        - id: "GOVE-REM-002"
+          title: "Refactor MasterOrchestrator to use Factory"
+          effort: "3 hours"
+          deliverables:
+            - "Update master_orchestrator_refactored.py"
+            - "All orchestrator instantiation via factory"
+            - "Remove optional Stage 1 intent classification"
+            - "Mandatory DoR validation checkpoint"
+            - "20+ integration tests"
+        
+        - id: "GOVE-REM-003"
+          title: "Add CORE-032-035 Governance Rules"
+          effort: "2 hours"
+          deliverables:
+            - "CORE-032: Mandatory Intent Classification (DoR)"
+            - "CORE-033: Mandatory State Persistence"
+            - "CORE-034: Mandatory Audit Logging"
+            - "CORE-035: Mandatory Response Header Injection"
+            - "Pytest enforcement hooks for all 4 rules"
+        
+        - id: "GOVE-REM-004"
+          title: "Migrate 23 Orchestrators to Factory Pattern"
+          effort: "4 hours"
+          deliverables:
+            - "All 23 orchestrators from TRANSFORM-001"
+            - "Update wiring harness to use factory"
+            - "Backward compatibility maintained (100%)"
+            - "35+ tests validating migration"
+      
+      success_criteria:
+        - "IntentRouterFactory implemented and tested"
+        - "All orchestrators use factory (zero direct instantiation)"
+        - "CORE-032-035 rules added to core-rules.yaml"
+        - "Pytest plugin enforces all 4 new rules"
+        - "≥70 tests passing (100% new code coverage)"
+        - "Zero breaking changes (100% backward compatible)"
+        - "Intent classification happens on EVERY user turn"
+        - "Audit trail logs: INTENT_CLASSIFIED → ORCHESTRATOR_SELECTED"
+      
+      technical_approach:
+        pattern: "Factory Pattern (vs Middleware/Decorator)"
+        rationale: |
+          RECOMMENDED APPROACH (vs decorator pattern):
+          - Zero bypass possibility (single enforcement chokepoint)
+          - No decorator overhead (architectural, not per-method)
+          - Testable (mock factory to verify all paths)
+          - Aligns with TRANSFORM-005 (declarative autowiring)
+          - 11 hours vs 20 hours for middleware approach
+        
+        implementation_path:
+          - "Phase 1: Create IntentRouterFactory (2h)"
+          - "Phase 2: Refactor MasterOrchestrator (3h)"
+          - "Phase 3: Add CORE-032-035 + pytest (2h)"
+          - "Phase 4: Migrate 23 orchestrators (4h)"
+      
+      architectural_impact:
+        positive:
+          - "Permanent fix for enforcement gaps"
+          - "Single source of truth for orchestrator creation"
+          - "Audit trail completeness (100% coverage)"
+          - "DoR validation before all execution"
+        
+        risks:
+          - "Refactoring risk: Medium (23 orchestrators)"
+          - "Test coverage requirement: ≥95%"
+          - "Backward compatibility requirement: 100%"
+        
+        mitigation:
+          - "TDD approach (tests first per CORE-008)"
+          - "Incremental migration (one orchestrator at a time)"
+          - "Comprehensive integration tests"
+          - "Rollback plan documented"
+      
+      governance_rules_to_add:
+        - rule_id: "CORE-032"
+          title: "Mandatory Intent Classification (DoR)"
+          category: "orchestration_lifecycle"
+          severity: "blocked"
+          enforcement: "IntentRouterFactory (architectural)"
+          validation: "pytest governance plugin"
+        
+        - rule_id: "CORE-033"
+          title: "Mandatory State Persistence"
+          category: "orchestration_lifecycle"
+          severity: "blocked"
+          enforcement: "StateManager invocation required"
+          validation: "pytest governance plugin"
+        
+        - rule_id: "CORE-034"
+          title: "Mandatory Audit Logging"
+          category: "observability"
+          severity: "blocked"
+          enforcement: "AuditLogger decorator required"
+          validation: "pytest governance plugin"
+        
+        - rule_id: "CORE-035"
+          title: "Mandatory Response Header Injection"
+          category: "response_formatting"
+          severity: "blocked"
+          enforcement: "CORE-030 clarification (explicit)"
+          validation: "pytest governance plugin"
+      
+      completion_verification:
+        - "IntentRouterFactory class exists and tested"
+        - "MasterOrchestrator uses factory exclusively"
+        - "CORE-032-035 added to core-rules.yaml"
+        - "All 23 orchestrators migrated"
+        - "≥70 tests passing (100%)"
+        - "Zero breaking changes detected"
+        - "Governance rule audit created"
+        - "Documentation updated"
+      
+      deliverables:
+        - "cortex/orchestrators/core/intent_router_factory.py"
+        - "Updated master_orchestrator_refactored.py"
+        - "CORE-032-035 rules in core-rules.yaml"
+        - "Pytest enforcement hooks"
+        - "Migration guide for orchestrator developers"
+        - "Architecture decision record (ADR-004)"
+        - "Governance rule audit report"
+      
+      git_commits:
+        - "GOVE-REM-001: IntentRouterFactory implementation"
+        - "GOVE-REM-002: MasterOrchestrator factory refactor"
+        - "GOVE-REM-003: CORE-032-035 governance rules"
+        - "GOVE-REM-004: 23 orchestrators migrated to factory"
+      
+      next_actions:
+        - "Begin GOVE-REM-001: IntentRouterFactory (2h)"
+        - "Execute GOVE-REM-002-004 sequentially (9h)"
+        - "Validate all success criteria met"
+        - "Deploy to production after validation"
+      
+      file_location: "_workspaces/roadmap/phases/remediation-governance-enforcement.yaml"
 
 blocked_phases:
   count: 3
