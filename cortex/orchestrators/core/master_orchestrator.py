@@ -59,6 +59,16 @@ except ImportError:
     get_tdd_orchestrator = None
     TDDPhase = None
 
+# AC-GOVE-REM-001: Import IntentRouterFactory for mandatory intent classification
+# Enforces intent classification on every operation (architectural enforcement)
+try:
+    from cortex.orchestrators.core.intent_router_factory import (
+        get_intent_router_factory,
+    )
+except ImportError:
+    # Fallback if module not accessible
+    get_intent_router_factory = None
+
 
 @dataclass
 class OrchestratorMetadata:
@@ -540,6 +550,37 @@ class MasterOrchestrator(IOrchestrator):
     ) -> Result[Any]:
         """Execute operation with audit logging and governance validation."""
         try:
+            # AC-GOVE-REM-001: Mandatory intent classification via factory pattern
+            # Enforces intent classification as architectural prerequisite (CORE-032)
+            if get_intent_router_factory is not None:
+                try:
+                    factory = get_intent_router_factory()
+                    router = factory.create_router()
+                    
+                    # Classify intent based on operation_name and context
+                    operation_text = f"{operation_name}: {str(parameters)}"
+                    routing_decision = router.classify_intent(operation_text, {"operation": operation_name})
+                    
+                    if routing_decision:
+                        # Log classified intent for audit trail
+                        self.logger.log_operation_start(
+                            ac_id="AC-GOVE-REM-001",
+                            operation=f"INTENT_CLASSIFIED:{routing_decision.intent_type.value}",
+                            details={
+                                "intent_type": routing_decision.intent_type.value,
+                                "target_handler": routing_decision.target_handler,
+                                "confidence": routing_decision.confidence_score,
+                            }
+                        )
+                except Exception as intent_err:
+                    # Log intent classification failure but don't block execution
+                    self.logger.log_operation_complete(
+                        ac_id="AC-GOVE-REM-001",
+                        operation="INTENT_CLASSIFICATION_FAILED",
+                        success=False,
+                        details={"error": str(intent_err)}
+                    )
+            
             # CORE-002: Pre-execution artifact validation gate
             # Initialize governance registry if needed
             if not self._governance_registry:
