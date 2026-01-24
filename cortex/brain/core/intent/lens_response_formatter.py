@@ -108,7 +108,7 @@ class LENSResponseFormatter:
         Args:
             response: The reflection response to format
             output_format: Desired output format (JSON, YAML, Markdown)
-            section_order: Custom ordering of sections
+            section_order: Custom ordering of sections (used for markdown formatting)
         
         Returns:
             Formatted response as string
@@ -125,7 +125,7 @@ class LENSResponseFormatter:
         elif output_format == ResponseFormat.YAML:
             return self._format_yaml(prepared)
         elif output_format == ResponseFormat.MARKDOWN:
-            return self._format_markdown(prepared)
+            return self._format_markdown(prepared, section_order=section_order)
         else:
             raise ValueError(f"Unsupported format: {output_format}")
     
@@ -176,9 +176,21 @@ class LENSResponseFormatter:
             sort_keys=False
         )
     
-    def _format_markdown(self, response: Dict[str, Any]) -> str:
-        """Format response as Markdown."""
-        lines = []
+    def _format_markdown(
+        self,
+        response: Dict[str, Any],
+        section_order: Optional[List[str]] = None,
+    ) -> str:
+        """Format response as Markdown.
+        
+        Args:
+            response: The response to format
+            section_order: Optional custom section ordering
+        
+        Returns:
+            Formatted markdown string
+        """
+        lines: List[str] = []
         
         # Header
         lines.append("# Intent Comprehension Review")
@@ -251,7 +263,6 @@ class LENSResponseFormatter:
         
         if recommendations:
             for rec in recommendations:
-                priority = rec.get("priority", "MEDIUM")
                 category = rec.get("category", "")
                 
                 lines.append(f"### 💡 {category}")

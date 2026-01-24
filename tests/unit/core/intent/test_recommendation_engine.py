@@ -1,5 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
-# AC-ID: IR-002-03 - Recommendation Engine Tests
 """
 Tests for Recommendation Engine.
 
@@ -133,7 +131,7 @@ class TestBestPracticeMatching:
         self, code_needing_patterns: str
     ) -> None:
         """Test suggestion of singleton pattern."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -149,7 +147,7 @@ class TestBestPracticeMatching:
         self, code_needing_error_handling: str
     ) -> None:
         """Test suggestion of error handling patterns."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -165,7 +163,7 @@ class TestBestPracticeMatching:
         self, code_needing_patterns: str
     ) -> None:
         """Test recommendation of context manager usage."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine
         
         engine = RecommendationEngine()
         
@@ -196,7 +194,7 @@ class TestAlternativeFinding:
 
     def test_suggest_list_comprehension(self) -> None:
         """Test suggestion of list comprehension over loop."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -218,7 +216,7 @@ class TestAlternativeFinding:
 
     def test_suggest_dict_get(self) -> None:
         """Test suggestion of dict.get() over key access."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -250,7 +248,7 @@ class TestTestStrategySuggestion:
         self, code_with_api_endpoint: str
     ) -> None:
         """Test suggestion of API endpoint tests."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -266,7 +264,7 @@ class TestTestStrategySuggestion:
         self, code_needing_error_handling: str
     ) -> None:
         """Test suggestion of edge case testing."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -291,7 +289,7 @@ class TestDocumentationRecommendations:
         self, code_without_docstrings: str
     ) -> None:
         """Test suggestion of class documentation."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -307,7 +305,7 @@ class TestDocumentationRecommendations:
         self, code_with_api_endpoint: str
     ) -> None:
         """Test suggestion of API documentation."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -332,7 +330,7 @@ class TestGovernanceCompliance:
         self, code_without_docstrings: str
     ) -> None:
         """Test suggestion of type hint addition."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationType
         
         engine = RecommendationEngine()
         
@@ -357,7 +355,7 @@ class TestRecommendationPrioritization:
         self, code_needing_patterns: str
     ) -> None:
         """Test that recommendations have priority levels."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, Priority
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, Priority
         
         engine = RecommendationEngine()
         
@@ -370,7 +368,7 @@ class TestRecommendationPrioritization:
         self, code_needing_patterns: str
     ) -> None:
         """Test that recommendations are sorted by priority."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine
         
         engine = RecommendationEngine()
         
@@ -395,7 +393,7 @@ class TestContextAwareRecommendations:
         self, intent_context: Dict[str, Any]
     ) -> None:
         """Test recommendations based on intent context."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine
         
         engine = RecommendationEngine()
         
@@ -420,7 +418,7 @@ class TestRecommendationEngineIntegration:
         self, code_needing_patterns: str
     ) -> None:
         """Test complete recommendation pipeline."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine, RecommendationResult
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine, RecommendationResult
         
         engine = RecommendationEngine()
         
@@ -435,7 +433,7 @@ class TestRecommendationEngineIntegration:
         self, code_needing_patterns: str
     ) -> None:
         """Test serialization of recommendations."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine
         
         engine = RecommendationEngine()
         
@@ -454,7 +452,7 @@ class TestRecommendationEngineIntegration:
         self, code_needing_patterns: str
     ) -> None:
         """Test that recommendations include rationale."""
-        from cortex.core.intent.recommendation_engine import RecommendationEngine
+        from cortex.brain.core.intent.recommendation_engine import RecommendationEngine
         
         engine = RecommendationEngine()
         
