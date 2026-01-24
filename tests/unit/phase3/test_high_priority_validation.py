@@ -93,6 +93,68 @@ class TestGOV002Docstrings:
             assert 'Args:' in doc
             assert 'Returns:' in doc
             assert 'Governance' in doc  # CORE-017, CORE-019 governance
+    
+    def test_master_orchestrator_additional_public_methods_enhanced(self) -> None:
+        """Verify 8 additional public methods have comprehensive docstrings."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        
+        methods_to_check = [
+            'get_name',
+            'get_version', 
+            'get_mode',
+            'get_response_with_headers',
+            'get_audit_trail',
+            'get_registered_domains',
+            'get_orchestrator',
+            'get_coordination_history',
+        ]
+        
+        for method_name in methods_to_check:
+            method = getattr(MasterOrchestrator, method_name)
+            doc = method.__doc__
+            assert doc is not None, f"{method_name} missing docstring"
+            assert len(doc) > 50, f"{method_name} docstring too short"
+            # Enhanced docstrings should have at least Args/Returns or description
+            has_content = any(keyword in doc for keyword in ['Args:', 'Returns:', 'Example:', 'description', 'Returns'])
+            assert has_content, f"{method_name} docstring lacks structure"
+    
+    def test_get_name_docstring(self) -> None:
+        """Verify get_name() has enhanced docstring."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        
+        doc = MasterOrchestrator.get_name.__doc__
+        assert doc is not None
+        assert 'canonical' in doc.lower()
+        assert 'MasterOrchestrator' in doc
+    
+    def test_get_version_docstring(self) -> None:
+        """Verify get_version() has enhanced docstring."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        
+        doc = MasterOrchestrator.get_version.__doc__
+        assert doc is not None
+        assert 'version' in doc.lower()
+        assert '2.0' in doc or 'v2' in doc
+    
+    def test_get_mode_docstring(self) -> None:
+        """Verify get_mode() has enhanced docstring."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        
+        doc = MasterOrchestrator.get_mode.__doc__
+        assert doc is not None
+        assert 'mode' in doc.lower()
+        assert 'PLANNING' in doc
+    
+    def test_get_audit_trail_docstring(self) -> None:
+        """Verify get_audit_trail() has enhanced docstring."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        
+        doc = MasterOrchestrator.get_audit_trail.__doc__
+        assert doc is not None
+        assert 'audit' in doc.lower()
+        assert 'hash' in doc.lower()
+        assert 'Args:' in doc
+        assert 'Returns:' in doc
 
 
 class TestBRIT003CacheCleanup:

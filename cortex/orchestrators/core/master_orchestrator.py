@@ -439,11 +439,42 @@ class MasterOrchestrator(IOrchestrator):
     # Implementation of abstract methods from IOrchestrator
     
     def get_name(self) -> str:
-        """Get orchestrator name."""
+        """Get orchestrator name.
+        
+        Returns the canonical name identifying this orchestrator in the
+        CORTEX system. Used for logging, registration, and identification
+        in orchestrator coordination operations.
+        
+        Returns:
+            str: "MasterOrchestrator" - canonical orchestrator name
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> name = master.get_name()
+            >>> assert name == "MasterOrchestrator"
+        """
         return "MasterOrchestrator"
     
     def get_version(self) -> str:
-        """Get orchestrator version."""
+        """Get orchestrator version.
+        
+        Returns the current version of MasterOrchestrator implementation.
+        Used for compatibility checking and documentation of orchestrator
+        capabilities and behavior.
+        
+        Version History:
+        - v1.0: Initial orchestrator implementation with domain delegation
+        - v2.0: Current - Enhanced with governance validation, atomic
+                transactions, knowledge integration, and per-turn validation
+        
+        Returns:
+            str: "2.0" - current orchestrator version
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> version = master.get_version()
+            >>> assert version == "2.0"
+        """
         return "2.0"
     
     def initialize(self) -> Result[str]:
@@ -506,7 +537,30 @@ class MasterOrchestrator(IOrchestrator):
             return Err(f"Initialization failed: {str(e)}")
     
     def get_mode(self) -> OperationMode:
-        """Get current operation mode."""
+        """Get current operation mode.
+        
+        Returns the operational mode of MasterOrchestrator, indicating how
+        the system is currently operating. This affects delegation strategy,
+        response formatting, and governance enforcement policies.
+        
+        Supported Modes:
+        - PLANNING: Strategic planning mode - analyzes intent, plans operations
+        - EXECUTION: Actual operation execution against real targets
+        - REVIEW: Code review and quality validation mode
+        - DOCUMENTATION: Documentation generation and knowledge creation
+        
+        Current Implementation: MasterOrchestrator operates in PLANNING mode,
+        analyzing and coordinating operations without direct execution (which
+        delegates to domain orchestrators).
+        
+        Returns:
+            OperationMode: PLANNING mode for MasterOrchestrator
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> mode = master.get_mode()
+            >>> assert mode == OperationMode.PLANNING
+        """
         return OperationMode.PLANNING
     
     def get_response_with_headers(self, response: str) -> str:
@@ -742,7 +796,49 @@ class MasterOrchestrator(IOrchestrator):
             return Err(f"Operation execution failed: {str(e)}")
     
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
-        """AC-AR-011-03: Get audit trail with hash chain."""
+        """Get audit trail with hash chain verification.
+        
+        Retrieves the audit trail recording all operations performed by
+        MasterOrchestrator. Each entry includes:
+        - Operation ID and name
+        - Timestamp and duration
+        - Success/failure status
+        - Actor and context information
+        - Hash chain for integrity verification (AC-FIX-001-01)
+        
+        The audit trail provides complete operational transparency and
+        supports compliance auditing, security investigation, and
+        post-incident analysis. Hash chain verification prevents tampering
+        with historical records.
+        
+        Args:
+            limit: Maximum number of entries to retrieve (default: 100)
+                Range: 1-10000 entries
+        
+        Returns:
+            Result[list]: Ok with list of audit entries (most recent first),
+                each entry contains:
+                - operation_id: Unique operation identifier
+                - operation: Operation name/type
+                - timestamp: ISO 8601 timestamp
+                - duration_ms: Execution duration in milliseconds
+                - success: Boolean success indicator
+                - actor: User/system that triggered operation
+                - context: Operation-specific context data
+                - hash: SHA256 hash for integrity verification
+                - hash_chain: Reference to previous entry's hash
+                
+        Raises:
+            None - all errors wrapped in Result type
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.get_audit_trail(limit=50)
+            >>> if result.is_ok():
+            ...     entries = result.unwrap()
+            ...     for entry in entries:
+            ...         print(f"{entry['timestamp']}: {entry['operation']}")
+        """
         try:
             # Query audit trail from database
             trail = self.db.query_audit_trail(limit=limit)
@@ -860,11 +956,31 @@ class MasterOrchestrator(IOrchestrator):
         description="Get list of all registered orchestrator domains"
     )
     def get_registered_domains(self) -> Result[List[str]]:
-        """
-        Get list of registered orchestrator domains.
+        """Get list of registered orchestrator domains.
+        
+        Returns the complete list of domains for which orchestrators have
+        been registered with MasterOrchestrator. Each domain represents a
+        logical area of functionality (e.g., governance, audit, evidence).
+        
+        This list changes dynamically as orchestrators are registered/unregistered
+        during system lifecycle. Used for:
+        - Capability discovery (what domains are available)
+        - Operation routing (which orchestrators can handle request)
+        - System health checking (are all expected domains present)
+        - Orchestrator management (list for admin operations)
         
         Returns:
-            Result with list of domain names
+            Result[List[str]]: Ok with sorted list of registered domain names,
+                or Err with failure message. Empty list if no orchestrators
+                registered yet.
+                
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.get_registered_domains()
+            >>> if result.is_ok():
+            ...     domains = result.unwrap()
+            ...     print(f"Available domains: {', '.join(domains)}")
+            ...     # e.g., ['governance', 'audit', 'evidence']
         """
         try:
             domains = list(self.domain_orchestrators.keys())
@@ -877,14 +993,36 @@ class MasterOrchestrator(IOrchestrator):
         description="Get orchestrator instance for a specific domain"
     )
     def get_orchestrator(self, domain: str) -> Result[IOrchestrator]:
-        """
-        Get orchestrator for a specific domain.
+        """Get orchestrator for a specific domain.
+        
+        Retrieves the orchestrator instance registered for the given domain.
+        Used by coordination logic to delegate domain-specific operations to
+        the appropriate orchestrator implementation.
+        
+        This enables:
+        - Dynamic orchestrator discovery (no hardcoding of orchestrators)
+        - Flexible domain-based routing (route to correct handler)
+        - Orchestrator lifecycle management (attach/detach at runtime)
+        - Capability-driven architecture (route by capability)
         
         Args:
-            domain: Domain name
+            domain: Domain name identifying the orchestrator
+                Examples: "governance", "audit", "evidence", "compliance"
         
         Returns:
-            Result with orchestrator instance
+            Result[IOrchestrator]: Ok with orchestrator instance conforming
+                to IOrchestrator interface, or Err with error message if:
+                - Domain not found (not registered)
+                - Internal lookup failure
+                
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.get_orchestrator("governance")
+            >>> if result.is_ok():
+            ...     orchestrator = result.unwrap()
+            ...     # Can now call orchestrator.execute_operation(), etc.
+            ... else:
+            ...     print(f"Domain not found: {result.error}")
         """
         try:
             if domain not in self.domain_orchestrators:
@@ -1116,14 +1254,42 @@ class MasterOrchestrator(IOrchestrator):
         self,
         limit: int = 10
     ) -> Result[List[Dict[str, Any]]]:
-        """
-        Get recent coordination operation history.
+        """Get recent coordination operation history.
+        
+        Returns the history of coordination operations performed by
+        MasterOrchestrator. Each entry records the details of a coordination
+        including which domains were engaged, what operations were performed,
+        and the aggregated results.
+        
+        The coordination history enables:
+        - Operation tracking (what operations have been coordinated)
+        - Performance analysis (response times, success rates)
+        - Debugging (replay coordination logic)
+        - Compliance auditing (who coordinated what when)
+        - Pattern analysis (identify frequently coordinated operations)
         
         Args:
-            limit: Maximum number of entries to return
+            limit: Maximum number of history entries to return (default: 10)
+                Recent entries returned first (most recent at index 0)
+                Range: 1-1000 entries
         
         Returns:
-            Result with coordination history
+            Result[List[Dict[str, Any]]]: Ok with list of coordination entries,
+                each containing:
+                - operation: Operation name coordinated
+                - target_domains: Domains that participated
+                - results: Dict of domain -> result mappings
+                - timestamp: ISO 8601 when coordination occurred
+                - duration_ms: Total coordination time
+                - success: Boolean success indicator
+                
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.get_coordination_history(limit=5)
+            >>> if result.is_ok():
+            ...     history = result.unwrap()
+            ...     for entry in history:
+            ...         print(f"Op: {entry['operation']} in {entry['duration_ms']}ms")
         """
         try:
             history = self.operation_history[-limit:]
@@ -1136,11 +1302,46 @@ class MasterOrchestrator(IOrchestrator):
         description="Get current registry status and orchestrator information"
     )
     def get_registry_status(self) -> Result[Dict[str, Any]]:
-        """
-        Get current registry status.
+        """Get current registry status and orchestrator information.
+        
+        Returns comprehensive information about the MasterOrchestrator's
+        registry of domain orchestrators. Provides administrative visibility
+        into system structure and capabilities.
+        
+        Registry Status Contains:
+        - Total count of registered orchestrators
+        - Complete metadata for each domain:
+          * Domain name and orchestrator type
+          * Version number and capabilities
+          * Registration timestamp (when orchestrator was added)
+        - Total operations coordinated
+        
+        Use Cases:
+        - System health dashboard (see what's registered)
+        - Administrative operations (inventory of orchestrators)
+        - Debugging (verify orchestrator registration)
+        - Auto-discovery (programmatic capability enumeration)
+        - Monitoring (track changes over time)
         
         Returns:
-            Result with registry metadata
+            Result[Dict[str, Any]]: Ok with registry metadata:
+                - total_orchestrators: Count of registered orchestrators
+                - domains: List of domain information dicts:
+                    * domain: Domain name
+                    * type: Orchestrator class name
+                    * version: Orchestrator version string
+                    * capabilities: List of capability strings
+                    * registered_at: ISO 8601 registration timestamp
+                - total_operations: Total coordination operations performed
+                
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.get_registry_status()
+            >>> if result.is_ok():
+            ...     status = result.unwrap()
+            ...     print(f"Total orchestrators: {status['total_orchestrators']}")
+            ...     for domain in status['domains']:
+            ...         print(f"  - {domain['domain']}: {domain['type']} v{domain['version']}")
         """
         try:
             status = {
