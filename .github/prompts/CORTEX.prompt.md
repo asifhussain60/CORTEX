@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 4.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY
+**Version:** 4.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** 🔄 TRANSFORMATION_IN_PROGRESS (Phase 1: Orchestrator Wiring - Blocking Deployment)
 
 ---
 
@@ -277,49 +277,74 @@ tools = registry.list_tools()  # Returns 15+ tools
 
 ---
 
-## ⚡ Wired Components (Production Ready)
+## ⚡ Currently Wired Orchestrators (3/23 - 13%)
 
-### Challenge System (Stage 3)
-```python
-from cortex.core.intent.challenge_generator import ChallengeGenerator
-from cortex.core.orchestrator.challenge_integration import ChallengeIntegrationOrchestrator
-```
+**Status:** CORE orchestrators only. WIRE-001/002/003 modules written but not yet integrated into MasterOrchestrator.initialize()
 
-### Intelligence Layer
-```python
-from cortex.core.intelligence.routing_intelligence import RoutingAnalyzer
-from cortex.core.intelligence.duration_intelligence import DurationAnalyzer
-from cortex.core.intelligence.error_intelligence import ErrorAnalyzer
-```
+### Currently Active (Wired to MasterOrchestrator)
+1. **MasterOrchestrator** - Coordinator (has get_mcp_tools())
+2. **PlanningOrchestrator** - Planning domain (has get_mcp_tools())
+3. **RefactoringOrchestrator** - Refactoring domain (has get_mcp_tools())
 
-### Conversation Protocol
-```python
-from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
-# Multi-turn state, token tracking (20K limit), governance per turn
-```
+### Ready but Not Yet Wired (20 orchestrators - Modules exist in cortex/orchestrators/core/wire_00X_*_wiring.py)
 
-### Infrastructure
-```python
-from cortex.infrastructure.circuit_breaker import CircuitBreaker
-from cortex.infrastructure.retry_strategy import RetryStrategy
-from cortex.infrastructure.saga_coordinator import SagaCoordinator
-from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-```
+**WIRE-001 (6 orchestrators):**
+- InteractionOrchestrator
+- IntentRouter
+- TDDOrchestrator
+- WorkflowOrchestrator
+- WrappedTDDOrchestrator
+- OrchestratorBootstrap
+
+**WIRE-002 (5-6 orchestrators):**
+- SeleniumPlaywrightOrchestrator
+- DomainOrchestrator
+- ConversationOrchestrator
+- (+ 2-3 others)
+
+**WIRE-003 (6+ orchestrators):**
+- OnboardingOrchestrator
+- ToolDiscoveryOrchestrator
+- UpgradeOrchestrator
+- RollbackOrchestrator
+- SetupOrchestrator
+- ComposedOrchestrator
+
+---
+
+## 📝 Phase 1 Integration Plan (cortex-impl-map.yaml transform-001-orchestrator-wiring.yaml)
+
+**Blocking Deployment:** ✅ Yes  
+**Effort:** 40 hours  
+**Target Completion:** 2026-02-07
+
+**Key Deliverables:**
+- [ ] Wire WIRE-001, WIRE-002, WIRE-003 into MasterOrchestrator.initialize()
+- [ ] Expose all 15 MCP tools via get_mcp_tools() on all orchestrators
+- [ ] Implement orchestrator auto-discovery and registration
+- [ ] Create capability catalog from orchestrator metadata
 
 ---
 
 ## 📊 Production Metrics
 
+**⚠️ REFERENCE ONLY: See `cortex-impl-map.yaml` as single source of truth (v3.0)**
+
 ```yaml
+# ACTUAL STATUS (from cortex-impl-map.yaml)
 production_status:
-  test_suite: 6,847+ tests
-  test_pass_rate: "100%"
-  orchestrators_wired: 20/23 (87%)
-  mcp_tools_active: 15
-  governance_rules: 29/29 implemented
-  knowledge_yamls: 35+ best practices
-  infrastructure_components: 13 resilience patterns
+  status: TRANSFORMATION_IN_PROGRESS
+  phase_1_blocking_deployment: true
+  test_suite: 7,547 tests collected
+  test_pass_rate: 73% (5,500 passing, 2,047 failing - see cortex-impl-map.yaml)
+  orchestrators_wired: 3/23 (13% - core only, WIRE-001/002/003 modules written but not integrated)
+  orchestrators_total: 23 (6 core, 5-6 domain, 6+ support)
+  mcp_tools_discoverable: 14 (from cortex-impl-map.yaml)
+  governance_rules: 29/29 implemented in cortex_brain/tier0/governance/
+  transformation_roadmap: 4 phases planned, Phase 1 (40h) critical path
 ```
+
+**Next Phase:** See `_workspaces/roadmap/phases/transform-001-orchestrator-wiring.yaml`
 
 ---
 
