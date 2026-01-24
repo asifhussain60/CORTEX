@@ -69,6 +69,14 @@ except ImportError:
     # Fallback if module not accessible
     get_intent_router_factory = None
 
+# AC-GOVE-DOR-WIRE-001: Import DoRApprovalGate for user approval before execution
+# Displays intent reflection in markdown, waits for user approval
+try:
+    from cortex.orchestrators.core.dor_approval_gate import DoRApprovalGate
+except ImportError:
+    # Fallback if module not accessible
+    DoRApprovalGate = None
+
 
 @dataclass
 class OrchestratorMetadata:
@@ -118,6 +126,27 @@ class MasterOrchestrator(IOrchestrator):
         self.intent_router: Optional[IOrchestrator] = None
         # Stage 3 Registry: Orchestrator registry for delegation
         self.orchestrator_registry: Dict[str, IOrchestrator] = {}
+        
+        # AC-GOVE-DOR-WIRE-001: Initialize DoRApprovalGate for user approval workflow
+        # Displays intent reflection in markdown, waits for user approval before execution
+        self._dor_gate: Optional[DoRApprovalGate] = None
+        if DoRApprovalGate is not None:
+            try:
+                self._dor_gate = DoRApprovalGate()
+                self.logger.log_operation_complete(
+                    ac_id="AC-GOVE-DOR-WIRE-001",
+                    operation="DOR_APPROVAL_GATE_INIT",
+                    success=True,
+                    details={"gate": "DoRApprovalGate initialized for user approval workflow"}
+                )
+            except Exception as gate_err:
+                # Log but don't fail - DoR gate is enhancement, not blocking
+                self.logger.log_operation_complete(
+                    ac_id="AC-GOVE-DOR-WIRE-001",
+                    operation="DOR_APPROVAL_GATE_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize DoRApprovalGate: {str(gate_err)}"}
+                )
         
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
         db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
