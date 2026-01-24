@@ -762,18 +762,46 @@ class MasterOrchestrator(IOrchestrator):
         orchestrator: IOrchestrator,
         capabilities: Optional[List[str]] = None
     ) -> Result[Dict[str, Any]]:
-        """
-        Register a domain orchestrator.
+        """Register a domain-specific orchestrator with MasterOrchestrator.
         
-        AC-AR-006-01: Register domain orchestrator
+        This is a critical registration point for the orchestrator architecture.
+        Each domain (governance, audit, evidence, etc.) provides a dedicated
+        orchestrator instance that handles domain-specific logic and patterns.
+        
+        The registration process:
+        1. Validates domain name is unique
+        2. Stores orchestrator metadata
+        3. Logs registration in audit trail
+        4. Makes orchestrator available for operation coordination
         
         Args:
-            domain: Domain name (e.g., "governance", "audit", "evidence")
-            orchestrator: IOrchestrator implementation
-            capabilities: List of capabilities (e.g., ["validate", "enforce"])
+            domain: Domain name identifying orchestrator's scope
+                Examples: "governance", "audit", "evidence", "compliance"
+            orchestrator: IOrchestrator implementation for this domain
+            capabilities: List of capabilities provided by orchestrator
+                Examples: ["validate", "enforce", "audit", "remediate"]
         
         Returns:
-            Result with registration details
+            Result[Dict[str, Any]]: Success contains registration metadata:
+                - domain: Registered domain name
+                - registered: Boolean success flag
+                - total_orchestrators: Count after registration
+                - registered_at: ISO timestamp
+                
+        Raises:
+            ValueError: If domain already registered
+            
+        Example:
+            >>> from cortex.orchestrators.governance import GovernanceOrchestrator
+            >>> gov_orch = GovernanceOrchestrator()
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.register_orchestrator(
+            ...     domain="governance",
+            ...     orchestrator=gov_orch,
+            ...     capabilities=["validate", "enforce"]
+            ... )
+            >>> if result.is_ok():
+            ...     print(f"Registered: {result.unwrap()}")
         """
         try:
             # Log operation start
@@ -876,26 +904,63 @@ class MasterOrchestrator(IOrchestrator):
         context: Dict[str, Any],
         target_domains: Optional[List[str]] = None
     ) -> Result[Dict[str, Any]]:
-        """
-        Coordinate operation across domain orchestrators.
+        """Coordinate an operation across multiple domain orchestrators.
         
-        AC-AR-006-01: Coordinate operations across domain orchestrators
-        AC-REM-002-04: Add governance validation before delegation
-        AC-FIX-001-01: Atomic operation + audit logging in single transaction
+        This method implements the critical coordination pattern for distributed
+        orchestration. It validates governance policies, coordinates execution
+        across domain-specific orchestrators, and aggregates results atomically.
         
-        Args:
-            operation: Operation name (e.g., "validate", "enforce")
-            context: Operation context (metadata, parameters, etc.)
-            target_domains: Specific domains to target (None = all)
-        
-        Returns:
-            Result with aggregated results from orchestrators
+        Coordination Process:
+        1. Governance Validation: Validates against CORE-017, CORE-019 policies
+        2. Turn Tracking: Increments turn counter for per-turn validation (CORE-019)
+        3. Knowledge Evaluation: Retrieves technical and business knowledge
+        4. Domain Orchestration: Delegates to applicable domain orchestrators
+        5. Result Aggregation: Collects and combines all results
+        6. Atomic Logging: Records operation in single transaction (AC-FIX-001-01)
         
         Governance Enforcement:
-        - CORE-017: Strict Governance Enforcement
-        - CORE-019: TDD-Master Routing (per-turn validation)
-        - CORE-027: Audit Trail Per Turn
+        - CORE-017: Strict governance enforcement
+        - CORE-019: Per-turn validation via turn counter
+        - CORE-027: Audit trail per turn
         - AC-FIX-001-01: Atomic state + audit logging
+        
+        Args:
+            operation: Operation name to execute (e.g., "validate", "enforce")
+            context: Operation context dictionary containing:
+                - metadata: Operation metadata
+                - parameters: Operation parameters
+                - user_id: Requesting user
+                - request_id: Unique request identifier
+            target_domains: Specific domains to target. If None, targets all
+                registered orchestrators (e.g., ["governance", "audit"])
+        
+        Returns:
+            Result[Dict[str, Any]]: Success contains aggregated results:
+                - operation: Operation name
+                - target_domains: Domains that were targeted
+                - results: Dict of domain -> result mappings
+                - coordination_time_ms: Total coordination time
+                - turn_number: Turn number for this coordination
+                - governance_validated: Boolean confirmation of validation
+                
+        Raises:
+            GovernanceViolationError: If governance validation fails
+            
+        Example:
+            >>> master = MasterOrchestrator.instance()
+            >>> result = master.coordinate_operation(
+            ...     operation="validate",
+            ...     context={
+            ...         "metadata": {"version": "1.0"},
+            ...         "parameters": {"target": "feature_x"}
+            ...     },
+            ...     target_domains=["governance", "audit"]
+            ... )
+            >>> if result.is_ok():
+            ...     aggregated = result.unwrap()
+            ...     print(f"Turn: {aggregated['turn_number']}")
+            ... else:
+            ...     print(f"Coordination failed: {result.error}")
         """
         # AC-FIX-001-01: Wrap entire operation in atomic transaction
         # Both coordination execution and audit logging occur in single transaction
