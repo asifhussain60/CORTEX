@@ -132,13 +132,12 @@ documentation_files:
 # ============================================================================
 
 informational_files:
-  description: "Session notes, project summaries, progress reports"
-  location: "_workspaces/"
+  description: "Session notes, project summaries, progress reports, system validation files"
   retention_policy: "ARCHIVE by default, DELETE after 90 days in archive"
   
   categories:
     
-    session_files:
+    _workspaces_session_files:
       pattern:
         - "_workspaces/SESSION-*.md"
         - "_workspaces/SESSION_*.md"
@@ -148,7 +147,7 @@ informational_files:
       action: "ARCHIVE to _workspaces/_archive/session-logs/"
       retention: "12 months (historical record)"
     
-    project_files:
+    _workspaces_project_files:
       pattern:
         - "_workspaces/PROJECT_COMPLETION_REPORT_*.md"
         - "_workspaces/FINAL-DELIVERY-SUMMARY.md"
@@ -159,7 +158,7 @@ informational_files:
       action: "ARCHIVE to _workspaces/_archive/project-reports/"
       retention: "Until next major phase completion"
     
-    remediation_files:
+    _workspaces_remediation_files:
       pattern:
         - "_workspaces/REMEDIATION-*.md"
         - "_workspaces/CLEANUP-*.md"
@@ -169,53 +168,176 @@ informational_files:
       action: "EVALUATE for docs migration OR ARCHIVE"
       retention: "Until remediation complete (then archive 30 days)"
     
-    analysis_files:
+    _workspaces_analysis_files:
       pattern:
         - "_workspaces/*COMPARISON*.md"
         - "_workspaces/*OBSOLETE*.md"
         - "_workspaces/*INVENTORY*.md"
         - "_workspaces/*INDEX*.md"
+        - "_workspaces/QUICK-REFERENCE-*.md"
+        - "_workspaces/README-*.md"
       examples:
         - "BEFORE-AFTER-COMPARISON.md"
         - "CORTEX-OBSOLETE-FILES-COMPLETION-REPORT.md"
         - "OBSOLETE-FILES-INVENTORY.md"
+        - "QUICK-REFERENCE-GOVERNANCE.md"
       action: "ARCHIVE to _workspaces/_archive/analysis/"
       retention: "6 months (reference value)"
     
-    improvement_files:
+    _workspaces_improvement_files:
       pattern:
         - "_workspaces/*IMPROVEMENT*.md"
         - "_workspaces/*ENHANCEMENT*.md"
         - "_workspaces/UX-*.md"
         - "_workspaces/TEST-FIXES-SUMMARY.md"
+        - "_workspaces/EXECUTIVE_SUMMARY_*.md"
       examples:
         - "UX-IMPROVEMENTS-SUMMARY.md"
         - "TEST-FIXES-SUMMARY.md"
+        - "EXECUTIVE_SUMMARY_DoR_System.md"
       action: "EVALUATE for docs migration OR ARCHIVE"
       retention: "6 months then archive"
 
-  migration_strategy:
-    high_value:
-      - "EXECUTIVE_SUMMARY_*.md with unique architecture insights"
-      - "REMEDIATION-* files with reusable processes"
-      - "UX-IMPROVEMENTS-SUMMARY.md with user impact"
-      destination: "docs/04-guides/ or docs/08-reference/"
-      retention: "Permanent in docs/"
-    
-    medium_value:
-      - "SESSION-SUMMARY-*.md with key decisions"
-      - "PROJECT_COMPLETION_REPORT_*.md with lessons learned"
-      destination: "_workspaces/_archive/session-logs/ or project-reports/"
-      retention: "12 months"
-    
-    low_value:
-      - "Temporary analysis files"
-      - "Duplicate reports"
-      - "Regenerable summaries"
-      action: "DELETE"
-      retention: "0 (delete immediately)"
+    # =========================================================================
+    # NEW: docs/ root non-canonical files (system validation & reference docs)
+    # =========================================================================
+
+    docs_acceptance_criteria_reports:
+      pattern:
+        - "docs/AC-*.md"
+      examples:
+        - "docs/AC-MCP-007-010-HEADER-ENFORCEMENT-SUMMARY.md"
+        - "docs/AC-REM-011-03-IMPLEMENTATION.md"
+        - "docs/AC-WIRING-ENFORCEMENT-SUMMARY.md"
+      action: "ARCHIVE to docs/_archive/validation-reports/"
+      retention: "6 months (reference)"
+      reason: "System validation evidence; can be regenerated from implementation records"
+
+    docs_build_test_reports:
+      pattern:
+        - "docs/BRT-*.md"
+      examples:
+        - "docs/BRT-016-COMPLETION-REPORT.md"
+        - "docs/BRT-017-COMPLETION-REPORT.md"
+        - "docs/BRT-018-COMPLETION-REPORT.md"
+        - "docs/BRT-019-COMPLETION-REPORT.md"
+        - "docs/BRT-020-COMPLETION-REPORT.md"
+        - "docs/BRT-021-COMPLETION-REPORT.md"
+        - "docs/BRT-022-COMPLETION-REPORT.md"
+      action: "ARCHIVE to docs/_archive/build-test-reports/"
+      retention: "6 months (historical records)"
+      reason: "Build/test completion evidence; obsolete after phase complete"
+
+    docs_consolidation_reports:
+      pattern:
+        - "docs/CONS-*.md"
+      examples:
+        - "docs/CONS-009-COMPLETION-CHECKLIST.md"
+        - "docs/CONS-009-COMPLETION-SUMMARY.md"
+        - "docs/CONS-009-DELIVERY-PACKAGE.md"
+        - "docs/CONS-009-QUICK-REFERENCE.md"
+      action: "ARCHIVE to docs/_archive/consolidation-reports/"
+      retention: "6 months (reference)"
+      reason: "Consolidation phase documentation; archive after phase delivery"
+
+    docs_cortex_review_files:
+      pattern:
+        - "docs/CORTEX-REVIEW-*.md"
+      examples:
+        - "docs/CORTEX-REVIEW-ENHANCEMENT-v4.1.md"
+        - "docs/CORTEX-REVIEW-QUICKSTART.md"
+        - "docs/CORTEX-REVIEW-SYSTEM-V4-SUMMARY.md"
+        - "docs/CORTEX-REVIEW-v4.1-FILE-INDEX.md"
+        - "docs/CORTEX-REVIEW-v4.1-QUICK-REFERENCE.md"
+      action: "ARCHIVE to docs/_archive/system-reviews/"
+      retention: "6 months (historical snapshots)"
+      reason: "CORTEX system review documents; superseded by newer versions"
+
+    docs_copilot_tracking_files:
+      pattern:
+        - "docs/COPILOT-*.md"
+      examples:
+        - "docs/COPILOT-REQUEST-TRACK-EVAL-SILENT.md"
+        - "docs/COPILOT-TRACK-EVAL-QUICK-START.md"
+      action: "ARCHIVE to docs/_archive/copilot-tracking/"
+      retention: "3 months (operational records)"
+      reason: "Copilot request tracking; ephemeral operational data"
+
+    docs_session_summary_files:
+      pattern:
+        - "docs/SESSION-SUMMARY-*.md"
+      examples:
+        - "docs/SESSION-SUMMARY-2026-01-24-BRT-017.md"
+      action: "ARCHIVE to docs/_archive/session-logs/"
+      retention: "12 months (historical record)"
+      reason: "Session documentation; move to archive structure"
+
+    docs_architecture_analysis_files:
+      pattern:
+        - "docs/ARCHITECTURE_DoR*.md"
+      examples:
+        - "docs/ARCHITECTURE_DoR_Approval_System.md"
+      action: "ARCHIVE to docs/_archive/architecture-analysis/"
+      retention: "Retain in docs/02-architecture/ or archive if superseded"
+      reason: "Architecture documentation; keep if current, archive if historical"
+
+    docs_governance_compliance_files:
+      pattern:
+        - "docs/GOVERNANCE_COMPLIANCE_REPORT.md"
+        - "docs/USER_GUIDE_DoR_Approval_Workflow.md"
+      action: "MIGRATE to docs/08-reference/governance/ OR ARCHIVE"
+      retention: "Keep in docs if current operational value; archive if historical"
+      reason: "Governance documentation with ongoing reference value"
+
+    docs_best_practices_files:
+      pattern:
+        - "docs/BEST-PRACTICES-CONSOLIDATION.md"
+      action: "MIGRATE to docs/03-api-reference/ OR docs/08-reference/best-practices/"
+      retention: "Permanent if actionable; archive if superseded"
+      reason: "Best practices; high value if current"
 
   archive_structure:
+    docs/_archive/:
+      validation-reports/:
+        description: "Acceptance criteria & validation reports (AC-*)"
+        retention: "6 months"
+        files: "docs/AC-*.md"
+      
+      build-test-reports/:
+        description: "Build & test completion reports (BRT-*)"
+        retention: "6 months"
+        files: "docs/BRT-*.md"
+      
+      consolidation-reports/:
+        description: "Consolidation phase completion reports (CONS-*)"
+        retention: "6 months"
+        files: "docs/CONS-*.md"
+      
+      system-reviews/:
+        description: "CORTEX system review snapshots (CORTEX-REVIEW-*)"
+        retention: "6 months"
+        files: "docs/CORTEX-REVIEW-*.md"
+      
+      copilot-tracking/:
+        description: "Copilot request tracking files (COPILOT-*)"
+        retention: "3 months"
+        files: "docs/COPILOT-*.md"
+      
+      session-logs/:
+        description: "Session summary files (SESSION-SUMMARY-*)"
+        retention: "12 months"
+        files: "docs/SESSION-SUMMARY-*.md"
+      
+      architecture-analysis/:
+        description: "Architecture analysis documents (ARCHITECTURE_DoR-*)"
+        retention: "12 months or until superseded"
+        files: "docs/ARCHITECTURE_DoR*.md"
+      
+      INDEX.md:
+        description: "Archive manifest with dates, categories, reasons, search index"
+        generated: true
+        updated: "On each vacuum operation"
+
     _workspaces/_archive/:
       session-logs/:
         description: "Session summaries and final reports"
@@ -246,6 +368,40 @@ informational_files:
         description: "Archive manifest with dates, reasons, search index"
         generated: true
         updated: "On each vacuum operation"
+
+  migration_strategy:
+    high_value_docs:
+      - "EXECUTIVE_SUMMARY_*.md with unique architecture insights"
+      - "REMEDIATION-*.md files with reusable processes"
+      - "UX-IMPROVEMENTS-SUMMARY.md with user impact documentation"
+      - "GOVERNANCE_COMPLIANCE_REPORT.md with compliance tracking"
+      destination: "docs/04-guides/ or docs/08-reference/"
+      retention: "Permanent in docs/"
+      action: "MIGRATE (move from _workspaces/ or docs/ root)"
+    
+    high_value_docs_root:
+      - "docs/GOVERNANCE_COMPLIANCE_REPORT.md (if current)"
+      - "docs/USER_GUIDE_DoR_Approval_Workflow.md (if current)"
+      - "docs/BEST-PRACTICES-CONSOLIDATION.md (if actionable)"
+      destination: "docs/08-reference/governance/ or docs/03-api-reference/"
+      retention: "Permanent in docs if updated"
+      action: "REVIEW and MIGRATE or ARCHIVE"
+    
+    medium_value:
+      - "SESSION-SUMMARY-*.md with key decisions"
+      - "PROJECT_COMPLETION_REPORT_*.md with lessons learned"
+      - "ARCHITECTURE_DoR*.md with design patterns"
+      destination: "docs/_archive/session-logs/ or project-reports/ or architecture-analysis/"
+      retention: "12 months"
+      action: "ARCHIVE"
+    
+    low_value:
+      - "AC-*.md, BRT-*.md, CONS-*.md completion reports"
+      - "CORTEX-REVIEW-*.md system snapshots"
+      - "COPILOT-*.md tracking files"
+      - "Temporary analysis files"
+      action: "DELETE or ARCHIVE to docs/_archive/"
+      retention: "3-6 months in archive, then DELETE"
 
 ---
 
@@ -325,6 +481,7 @@ cleanup_policies:
       risk: "LOW"
       use_case: "First-time cleanup, paranoid mode"
       coverage: "~30% of unnecessary files"
+
 
   safeguards_by_mode:
     aggressive:
