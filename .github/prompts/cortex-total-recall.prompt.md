@@ -1,14 +1,116 @@
-# CORTEX Total Recall - Complete Production System Discovery# CORTEX Total Recall - 100% Production Ready System
+# CORTEX Total Recall - Production System Discovery & AC-PERMANENT-FIX Enforcement
 
-**Version:** 4.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY**Version:** 3.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ 100% PRODUCTION READY
+**Version:** 5.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + AC-PERMANENT-FIX AWARE
+
+**AC-PERMANENT-FIX Commits Tracked:** 4 permanent fixes implemented  
+- AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
+- AC-PERMANENT-FIX-002: Add verification and documentation for orchestrator wiring fix  
+- AC-PERMANENT-FIX-003: Executive summary of orchestrator unwiring fix  
+- AC-PERMANENT-FIX-004: Complete transformation status - Fix verified and ready
 
 
 
 ------
 
+## 🔧 AC-PERMANENT-FIX ENFORCEMENT (TIER 0 - IMMUTABLE)
 
+**Critical Pattern:** This prompt enforces identification and prevention of recurring issues tracked in AC-PERMANENT-FIX commits.
 
-## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)## ⚠️ CRITICAL: Response Header Enforcement (TIER 0 - IMMUTABLE)
+**Permanent Fixes Registry:**
+```yaml
+AC-PERMANENT-FIX-001: Orchestrator Registry Unwiring
+  Problem: Registry auto-regeneration losing all orchestrator wiring on git pull
+  Root Cause: setup_cortex_hub.py auto-generating empty registry_template: true
+  Solution: 
+    - Set registry_template: false in cortex_brain/tier0/repo-registry.yaml
+    - Populate with all 23 orchestrators (6 core, 5+ domain, 6+ support)
+    - Add preservation logic in setup script
+  Verification: Check registry_template field and wiring_status count
+  File Locations:
+    - cortex_brain/tier0/repo-registry.yaml
+    - cortex/scripts-root-archive/setup_cortex_hub.py
+    - docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
+
+AC-PERMANENT-FIX-002: Verification & Documentation
+  Problem: No verification mechanism to prevent regression
+  Solution:
+    - Created verify_registry.py for registry validation
+    - Created test_fix_verification.py for automated tests
+    - Added ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
+  Verification: All 18/23 orchestrators appear in registry.wiring_status
+  File Locations:
+    - tests/unit/orchestrators/verify_registry.py
+    - tests/unit/orchestrators/test_fix_verification.py
+    - docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
+
+AC-PERMANENT-FIX-003: Executive Summary & Readiness
+  Problem: No clear statement of fix completion
+  Solution: Executive summary document with complete solution details
+  Verification: All 18/23 orchestrators wired, registry locked
+  File Locations:
+    - docs/ORCHESTRATOR-UNWIRING-FIX-PERMANENT-SOLUTION.md
+
+AC-PERMANENT-FIX-004: Complete Transformation Status
+  Problem: Need confirmation for Phase 1 deployment readiness
+  Solution: Status verification complete - registry stable, no auto-regeneration
+  Verification: Registry persists across git operations
+  File Locations:
+    - cortex_brain/tier0/repo-registry.yaml (locked, non-regenerating)
+    - cortex/scripts-root-archive/setup_cortex_hub.py (preservation logic)
+```
+
+**EFFICIENT IDENTIFY-AND-FIX Pattern:**
+
+When agent executes:
+1. **Identify** - Check git log for `AC-PERMANENT-FIX-*` commits
+   ```bash
+   git log --all --oneline --grep="AC-PERMANENT-FIX" | sort
+   ```
+2. **Verify** - For each AC-PERMANENT-FIX, validate fix is active
+   ```bash
+   # AC-PERMANENT-FIX-001: Check registry_template: false
+   grep "registry_template:" cortex_brain/tier0/repo-registry.yaml
+   
+   # AC-PERMANENT-FIX-001: Count wired orchestrators
+   grep -c "wiring_status: \"wired\"" cortex_brain/tier0/repo-registry.yaml
+   ```
+3. **Detect Regression** - If any permanent fix is reverted, block execution
+   ```python
+   if registry_template == true:
+       raise PermanentFixRegressionError("AC-PERMANENT-FIX-001 reverted!")
+   ```
+4. **Report** - Include AC-PERMANENT-FIX status in all discovery operations
+   ```markdown
+   **AC-PERMANENT-FIX Status:** ✅ ALL 4 FIXES ACTIVE
+   - AC-PERMANENT-FIX-001 (Registry Wiring): ✅ LOCKED
+   - AC-PERMANENT-FIX-002 (Verification): ✅ TESTS PASSING
+   - AC-PERMANENT-FIX-003 (Readiness): ✅ DOCUMENTED
+   - AC-PERMANENT-FIX-004 (Complete): ✅ VERIFIED
+   ```
+
+**Agent Implementation:**
+
+```python
+# Method 1: Check all AC-PERMANENT-FIX status (efficient)
+from cortex.tools.total_recall_agent import TotalRecallAgent
+
+agent = TotalRecallAgent()
+ac_status = agent.check_ac_permanent_fixes()
+
+for fix_id, result in ac_status.items():
+    print(f"{fix_id}: {'✅' if result['valid'] else '❌'} {result['message']}")
+
+# Method 2: Verify automatically on recall (default behavior)
+result = agent.recall("orchestrator registry", verify_ac_permanent_fixes=True)
+# Raises RuntimeError if any CRITICAL fix is reverted
+
+# Method 3: Skip verification for offline scenarios (not recommended)
+result = agent.recall("circuit breaker", verify_ac_permanent_fixes=False)
+```
+
+------
+
+## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)
 
 
 
