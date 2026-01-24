@@ -26,6 +26,7 @@ from cortex.brain.core.response_header_config import HeaderConfigurationManager
 from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
+from cortex.core.hallucination_prevention.output_validator import validate_llm_output, OutputValidationError
 from cortex.brain.core.state_manager import StateManager, OperationState, get_state_manager
 from cortex.domain_brain.business_knowledge_repository import (
     BusinessKnowledgeRepository,
