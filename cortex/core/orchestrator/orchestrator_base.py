@@ -93,5 +93,38 @@ class OrchestratorBase(ABC):
         """Clear all state."""
         self._state.clear()
 
+    def get_mcp_tools(self) -> Dict[str, Any]:
+        """Get available MCP tools for this orchestrator.
+        
+        AC-MCP-EXPOSURE-001: Default implementation returns all 15 tools.
+        
+        Subclasses can override to customize tool exposure based on their
+        specific domain and capabilities.
+        
+        Returns:
+            Dict with tool categories and names. Follows format:
+            {
+                "status": "ok",
+                "orchestrator": orchestrator_name,
+                "tools": {
+                    "governance": [tool_names...],
+                    "orchestration": [tool_names...],
+                    "knowledge": [tool_names...],
+                    "utility": [tool_names...]
+                },
+                "total_tools": 15
+            }
+        """
+        from cortex.orchestrators.mcp_tools_registry import MCPToolsRegistry
+        
+        tool_names = MCPToolsRegistry.get_tool_names()
+        
+        return {
+            "status": "ok",
+            "orchestrator": self.get_name(),
+            "tools": tool_names,
+            "total_tools": MCPToolsRegistry.get_tool_count(),
+        }
+
 
 __all__ = ["OrchestratorBase"]
