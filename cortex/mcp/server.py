@@ -254,21 +254,30 @@ class MCPServer:
 
     def list_tools(self) -> List[Dict[str, Any]]:
         """
-        List all available tools.
+        List all available tools from local registry and all orchestrators.
+        
+        AC-MCP-EXPOSURE-001b: Dynamic tool discovery from all 23 orchestrators
+        
+        Tool sources:
+        1. Locally registered tools (self._tools)
+        2. Global ToolRegistry
+        3. All 23 registered orchestrators via MasterOrchestrator
         
         Returns:
-            List of tool definitions as dictionaries
+            List of tool definitions as dictionaries, consolidated from all sources
         """
         from cortex.mcp.registry import get_mcp_tool_registry
         
-        # Get tools from both local registry and global ToolRegistry
+        # Get tools from local registry and global ToolRegistry
         tools_list = []
+        seen_tools = set()
         
-        # Add locally registered tools (like SampleTool)
+        # 1. Add locally registered tools (like SampleTool)
         for tool in self._tools.values():
-            tools_list.append({
+            tool_dict = {
                 "name": tool.definition.name,
                 "description": tool.definition.description,
+                "source": "local",
                 "parameters": [
                     {
                         "name": p.name,
@@ -278,14 +287,16 @@ class MCPServer:
                     }
                     for p in tool.definition.parameters
                 ],
-            })
+            }
+            tools_list.append(tool_dict)
+            seen_tools.add(tool.definition.name)
         
-        # Add tools from global ToolRegistry
+        # 2. Add tools from global ToolRegistry
         try:
             registry = get_mcp_tool_registry()
             for metadata in registry.list_all():
-                # Skip if already in local tools
-                if metadata.id not in [t["name"] for t in tools_list]:
+                # Skip if already added
+                if metadata.id not in seen_tools:
                     # Handle parameters - they're stored as Dict[str, Dict[str, Any]]
                     params_list = []
                     if isinstance(metadata.parameters, dict):
@@ -298,13 +309,65 @@ class MCPServer:
                                     "description": param_spec.get("description", ""),
                                 })
                     
-                    tools_list.append({
+                    tool_dict = {
                         "name": metadata.id,
                         "description": metadata.description,
+                        "source": "registry",
                         "parameters": params_list,
-                    })
+                    }
+                    tools_list.append(tool_dict)
+                    seen_tools.add(metadata.id)
         except Exception as e:
             self.logger.warning(f"Could not load tools from ToolRegistry: {e}")
+        
+        # 3. Add tools from all 23 registered orchestrators
+        try:
+            from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+            from cortex.orchestrators.core.orchestrator_wiring import get_wiring_registry
+            
+            registry = get_wiring_registry()
+            orchestrator_count = 0
+            
+            # Query each registered orchestrator for its tools
+            if hasattr(registry, 'wired_orchestrators'):
+                for domain, metadata in registry.wired_orchestrators.items():
+                    orchestrator = metadata.orchestrator
+                    orchestrator_count += 1
+                    
+                    # Call get_mcp_tools() on each orchestrator
+                    if hasattr(orchestrator, 'get_mcp_tools'):
+                        try:
+                            tools_result = orchestrator.get_mcp_tools()
+                            
+                            if tools_result and isinstance(tools_result, dict):
+                                orchestrator_tools = tools_result.get("tools", {})
+                                
+                                # Extract tool names from result
+                                if isinstance(orchestrator_tools, dict):
+                                    for category, tool_names in orchestrator_tools.items():
+                                        if isinstance(tool_names, list):
+                                            for tool_name in tool_names:
+                                                # Add if not already seen
+                                                if tool_name not in seen_tools:
+                                                    tool_dict = {
+                                                        "name": tool_name,
+                                                        "category": category,
+                                                        "source": f"orchestrator:{domain}",
+                                                    }
+                                                    tools_list.append(tool_dict)
+                                                    seen_tools.add(tool_name)
+                        except Exception as e:
+                            self.logger.warning(
+                                f"Could not get tools from orchestrator '{domain}': {e}"
+                            )
+            
+            self.logger.info(
+                f"Tool discovery: queried {orchestrator_count} orchestrators, "
+                f"found {len(seen_tools)} unique tools"
+            )
+            
+        except Exception as e:
+            self.logger.warning(f"Could not query orchestrators for tools: {e}")
         
         return tools_list
 
