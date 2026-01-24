@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: AC-REM-011-03 - WrappedTDDOrchestrator with ConversationProtocol
 """
 Tests for WrappedTDDOrchestrator - Multi-turn TDD conversation management.
@@ -451,10 +450,13 @@ class TestEventRegistryIntegration:
         # Setup event listener
         event_fired = []
 
-        def on_completion(event: TerminalEvent) -> None:
+        def on_completion(event: Any) -> bool:
             event_fired.append(event)
+            return True
 
-        wrapped_orchestrator.event_registry.subscribe("completion", on_completion)
+        wrapped_orchestrator.event_registry.register_listener(
+            PhaseCompletedEvent, on_completion
+        )
 
         wrapped_orchestrator.execute_with_continuation(
             initial_input="Complete TDD",

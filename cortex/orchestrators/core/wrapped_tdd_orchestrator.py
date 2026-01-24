@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: AC-REM-011-03 - WrappedTDDOrchestrator with ConversationProtocol
 """
 WrappedTDDOrchestrator - Multi-turn TDD conversation management.
@@ -159,8 +158,11 @@ class WrappedTDDOrchestrator:
         AC-REM-011-03: Initialize wrapped orchestrator with required components
         """
         self.tdd_orchestrator = tdd_orchestrator or TDDOrchestrator()
-        self.conversation_protocol = conversation_protocol
         self.event_registry = event_registry or EventRegistry()
+        self.conversation_protocol = conversation_protocol or ConversationProtocol(
+            orchestrator=self.tdd_orchestrator,
+            event_registry=self.event_registry
+        )
 
         self.turn_count: int = 0
         self.total_tokens_used: int = 0
