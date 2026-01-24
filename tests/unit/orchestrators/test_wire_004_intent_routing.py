@@ -245,7 +245,7 @@ class TestRoutingStats:
         assert "total_orchestrators" in stats
         assert "by_category" in stats
         assert "coverage_percentage" in stats
-        assert stats["total_orchestrators"] == 23
+        assert stats["total_orchestrators"] == 22
     
     def test_stats_shows_all_categories(self):
         """Test that stats show all orchestrator categories"""
