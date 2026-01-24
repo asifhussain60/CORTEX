@@ -14,11 +14,11 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 22
+  rule_count: 21
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-24 - Phase 2 Simplification: Deleted 2 redundant rules (CORE-030, CORE-035)"
-  version: "2.1"
+  last_update: "2026-01-24 - Phase 3 Simplification: Deleted CORE-033 (unimplemented)"
+  version: "2.2"
 
 categories:
   - orchestration_lifecycle
@@ -537,38 +537,6 @@ rules:
       severity_on_bypass: "blocked"
 
   # --------------------------------------------------------------------------
-  # CORE-033: Mandatory State Persistence
-  # --------------------------------------------------------------------------
-  - rule_id: CORE-033
-    category: orchestration_lifecycle
-    severity: blocked
-    name: Mandatory State Persistence (Operation Context Tracking)
-    description: |
-      ALL operations MUST persist state to StateManager.
-      Enables resumption after interruption, cross-system consistency.
-      
-      State tracking includes:
-      - Operation ID (unique per execution)
-      - Intent type (IMPLEMENT, FIX, REFACTOR)
-      - Current stage (1-4 in orchestration pipeline)
-      - Context data (domain, priority, dependencies)
-      - Timestamps (start, current, estimated completion)
-      - Status (IN_PROGRESS, COMPLETED, FAILED)
-    
-    state_persistence_requirements:
-      - "StateManager.persist_state() called after each stage"
-      - "Includes: operation_id, stage, status, context, timestamp"
-      - "State retrievable: StateManager.get_state(operation_id)"
-      - "Enables: operation resumption after interruption"
-      - "Audit trail includes: STATE_PERSISTED events"
-    
-    success_criteria:
-      - "All orchestrators call StateManager.persist_state()"
-      - "State persisted after Stage 1, 2, 3, 4"
-      - "Operation resumable from last persisted stage"
-      - "Audit trail includes STATE_PERSISTED events"
-
-  # --------------------------------------------------------------------------
   # CORE-034: Mandatory Audit Logging
   # --------------------------------------------------------------------------
   - rule_id: CORE-034
@@ -613,11 +581,10 @@ enforcement:
   
   core_rule_precedence:
     highest: "CORE-029 (Response headers), CORE-031 (Declarative autowiring), CORE-032 (Intent classification)"
-    high: "CORE-033 (State persistence), CORE-034 (Audit logging)"
+    high: "CORE-034 (Audit logging)"
     medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
   
   remediation_status:
     "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
-    "CORE-033": "IN_PROGRESS - StateManager integration in Stage 2"
     "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
