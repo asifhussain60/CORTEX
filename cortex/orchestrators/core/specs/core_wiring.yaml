@@ -1,0 +1,90 @@
+# Core Orchestrators Wiring Specification
+# AC-ID: AC-WIRING-CORE-001
+# Purpose: Declarative registration of 6 core orchestrators (CORE-031 compliance)
+
+module_name: core_orchestrators
+version: "1.0.0"
+description: "Core orchestrators: Interaction, Intent Router, TDD, Workflow, Master, Autowiring"
+
+dependencies:
+  - name: governance_registry
+    version: ">=1.0.0"
+    required: true
+    internal: false
+    
+  - name: audit_logger
+    version: ">=1.0.0"
+    required: true
+    internal: false
+    
+  - name: state_manager
+    version: ">=1.0.0"
+    required: true
+    internal: false
+
+provides:
+  - name: InteractionOrchestrator
+    category: CORE
+    description: "Manages user/API interaction patterns"
+    entry_point: "cortex.orchestrators.core.interaction_orchestrator:InteractionOrchestrator"
+    features:
+      - conversation_flow
+      - intent_classification
+      - response_formatting
+    
+  - name: IntentRouter
+    category: CORE
+    description: "Routes intents to appropriate orchestrators"
+    entry_point: "cortex.orchestrators.core.intent_router:IntentRouter"
+    features:
+      - intent_detection
+      - routing_logic
+      - fallback_handling
+    
+  - name: TDDOrchestrator
+    category: CORE
+    description: "Test-driven development workflow"
+    entry_point: "cortex.orchestrators.core.tdd_orchestrator:TDDOrchestrator"
+    features:
+      - test_generation
+      - test_execution
+      - coverage_analysis
+    
+  - name: WorkflowOrchestrator
+    category: CORE
+    description: "Coordinates multi-step workflows"
+    entry_point: "cortex.orchestrators.core.workflow_orchestrator:WorkflowOrchestrator"
+    features:
+      - task_sequencing
+      - dependency_resolution
+      - error_recovery
+    
+  - name: MasterOrchestrator
+    category: CORE
+    description: "Coordinator of all orchestrators"
+    entry_point: "cortex.orchestrators.core.master_orchestrator:MasterOrchestrator"
+    features:
+      - orchestrator_wiring
+      - initialization
+      - lifecycle_management
+    
+  - name: AutowiringOrchestrator
+    category: CORE
+    description: "Manages declarative YAML-based wiring"
+    entry_point: "cortex.orchestrators.core.autowiring_orchestrator:AutowiringOrchestrator"
+    features:
+      - spec_discovery
+      - dependency_validation
+      - topological_sorting
+
+initialization_order: 10
+
+conflict_resolution:
+  "DuplicateOrchestrator": "use_latest_version"
+  "MissingDependency": "fail_fast"
+
+metadata:
+  maintained_by: "CORTEX Core Team"
+  last_updated: "2026-01-24"
+  git_commit: "ac-wiring-core-001"
+  status: "active"

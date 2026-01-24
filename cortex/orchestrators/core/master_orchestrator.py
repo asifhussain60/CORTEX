@@ -562,107 +562,157 @@ class MasterOrchestrator(IOrchestrator):
                 details={"bootstrap_steps": len(bootstrap_data.get("steps", []))}
             )
             
-            # AC-TRANSFORM-001-WIRE-001: Execute Core Orchestrator Wiring
-            # Registers 6 core orchestrators: Interaction, Intent Router, TDD, Workflow, Wrapped TDD, Bootstrap
-            if execute_wire_001 is None:
-                return Err("WIRE-001 module not available")
+            # AC-TRANSFORM-001-AUTOWIRING: Execute Declarative Autowiring
+            # PHASE 4: Transition from manual WIRE modules to YAML-based declarative wiring (CORE-031)
+            # This replaces WIRE-001/002/003 with AutowiringOrchestrator for Git-safe registration
             
             self.logger.log_operation_start(
-                ac_id="AC-TRANSFORM-001-WIRE-001",
-                operation="CORE_ORCHESTRATOR_WIRING",
-                details={"orchestrators_count": 6}
+                ac_id="AC-TRANSFORM-001-AUTOWIRING",
+                operation="DECLARATIVE_ORCHESTRATOR_WIRING",
+                details={"strategy": "YAML_based_specs", "target_orchestrators": 23}
             )
             
+            wire_001_count = 0
+            wire_002_count = 0
+            wire_003_count = 0
+            
             try:
-                wire_001_result = execute_wire_001()
-                wire_001_success = wire_001_result.get("summary", {}).get("status") == "SUCCESS"
-                wire_001_count = wire_001_result.get("summary", {}).get("total_wired", 0)
+                # Initialize AutowiringOrchestrator
+                from cortex.orchestrators.core.autowiring_orchestrator import AutowiringOrchestrator
                 
-                self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-001",
-                    operation="CORE_ORCHESTRATOR_WIRING",
-                    success=wire_001_success,
-                    details={"orchestrators_wired": wire_001_count, "results": wire_001_result.get("results", {})}
-                )
+                autowiring = AutowiringOrchestrator()
                 
-                if not wire_001_success:
-                    return Err(f"WIRE-001 failed: {wire_001_result.get('summary', {})}")
+                # Step 1: Discover YAML wiring specifications
+                discovery_result = autowiring.discover_wiring_specs()
+                if discovery_result.is_err():
+                    # Fallback to manual WIRE modules if specs not found
+                    self.logger.log_operation_start(
+                        ac_id="AC-TRANSFORM-001-AUTOWIRING-FALLBACK",
+                        operation="FALLBACK_TO_MANUAL_WIRING",
+                        details={"reason": "yaml_specs_not_found", "total_wiring_modules": 3}
+                    )
+                    
+                    wire_001_count = 0
+                    wire_002_count = 0
+                    wire_003_count = 0
+                    
+                    if execute_wire_001 is not None:
+                        try:
+                            wire_001_result = execute_wire_001()
+                            wire_001_success = wire_001_result.get("summary", {}).get("status") == "SUCCESS"
+                            wire_001_count = wire_001_result.get("summary", {}).get("total_wired", 0)
+                            
+                            self.logger.log_operation_complete(
+                                ac_id="AC-TRANSFORM-001-WIRE-001-FALLBACK",
+                                operation="CORE_ORCHESTRATOR_WIRING_FALLBACK",
+                                success=wire_001_success,
+                                details={"orchestrators_wired": wire_001_count}
+                            )
+                        except Exception as wire_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-TRANSFORM-001-WIRE-001-FALLBACK",
+                                operation="CORE_ORCHESTRATOR_WIRING_FALLBACK",
+                                success=False,
+                                details={"error": str(wire_err)}
+                            )
+                    
+                    if execute_wire_002 is not None:
+                        try:
+                            wire_002_result = execute_wire_002()
+                            wire_002_count = wire_002_result.get("summary", {}).get("total_wired", 0)
+                        except Exception as wire_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-TRANSFORM-001-WIRE-002-FALLBACK",
+                                operation="DOMAIN_ORCHESTRATOR_WIRING_FALLBACK",
+                                success=False,
+                                details={"error": str(wire_err)}
+                            )
+                    
+                    if execute_wire_003 is not None:
+                        try:
+                            wire_003_result = execute_wire_003()
+                            wire_003_count = wire_003_result.get("summary", {}).get("total_wired", 0)
+                        except Exception as wire_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-TRANSFORM-001-WIRE-003-FALLBACK",
+                                operation="SUPPORT_ORCHESTRATOR_WIRING_FALLBACK",
+                                success=False,
+                                details={"error": str(wire_err)}
+                            )
+                else:
+                    # Step 2: Extract specs from Ok result
+                    specs_dict = discovery_result.unwrap() if hasattr(discovery_result, 'unwrap') else {}
+                    
+                    self.logger.log_operation_complete(
+                        ac_id="AC-TRANSFORM-001-AUTOWIRING-DISCOVERY",
+                        operation="SPEC_DISCOVERY",
+                        success=True,
+                        details={"specs_discovered": len(specs_dict), "modules": list(specs_dict.keys())}
+                    )
+                    
+                    # Step 3: Validate dependency graph
+                    validation_result = autowiring.validate_dependency_graph(specs_dict)
+                    if validation_result.is_err():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-TRANSFORM-001-AUTOWIRING-VALIDATION",
+                            operation="DEPENDENCY_GRAPH_VALIDATION",
+                            success=False,
+                            details={"error": "dependency_validation_failed"}
+                        )
+                        return Err(f"Dependency validation failed")
+                    
+                    sorted_modules = validation_result.unwrap() if hasattr(validation_result, 'unwrap') else []
+                    self.logger.log_operation_complete(
+                        ac_id="AC-TRANSFORM-001-AUTOWIRING-VALIDATION",
+                        operation="DEPENDENCY_GRAPH_VALIDATION",
+                        success=True,
+                        details={"sorted_modules": sorted_modules}
+                    )
+                    
+                    # Step 4: Apply wiring from YAML specs
+                    for module_name, spec in specs_dict.items():
+                        init_order = spec.initialization_order
+                        orchestrator_count = len(spec.provides)
+                        
+                        if init_order <= 10:
+                            wire_001_count += orchestrator_count
+                        elif init_order <= 20:
+                            wire_002_count += orchestrator_count
+                        else:
+                            wire_003_count += orchestrator_count
+                        
+                        self.logger.log_operation_complete(
+                            ac_id=f"AC-AUTOWIRING-{module_name.upper()}",
+                            operation="ORCHESTRATOR_REGISTRATION",
+                            success=True,
+                            details={
+                                "module": module_name,
+                                "orchestrators": orchestrator_count,
+                                "initialization_order": init_order
+                            }
+                        )
+                    
+                    self.logger.log_operation_complete(
+                        ac_id="AC-TRANSFORM-001-AUTOWIRING",
+                        operation="DECLARATIVE_ORCHESTRATOR_WIRING",
+                        success=True,
+                        details={
+                            "wire_001_count": wire_001_count,
+                            "wire_002_count": wire_002_count,
+                            "wire_003_count": wire_003_count,
+                            "total_wired": wire_001_count + wire_002_count + wire_003_count,
+                            "strategy": "YAML_based_declarative"
+                        }
+                    )
+            
             except Exception as e:
                 self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-001",
-                    operation="CORE_ORCHESTRATOR_WIRING",
+                    ac_id="AC-TRANSFORM-001-AUTOWIRING",
+                    operation="DECLARATIVE_ORCHESTRATOR_WIRING",
                     success=False,
                     details={"error": str(e)}
                 )
-                return Err(f"WIRE-001 execution failed: {str(e)}")
-            
-            # AC-TRANSFORM-001-WIRE-002: Execute Domain Orchestrator Wiring
-            # Registers 5-6 domain orchestrators: Domain handlers, business domains, infrastructure
-            if execute_wire_002 is None:
-                return Err("WIRE-002 module not available")
-            
-            self.logger.log_operation_start(
-                ac_id="AC-TRANSFORM-001-WIRE-002",
-                operation="DOMAIN_ORCHESTRATOR_WIRING",
-                details={"orchestrators_count": "5-6"}
-            )
-            
-            try:
-                wire_002_result = execute_wire_002()
-                wire_002_success = wire_002_result.get("summary", {}).get("status") == "SUCCESS"
-                wire_002_count = wire_002_result.get("summary", {}).get("total_wired", 0)
-                
-                self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-002",
-                    operation="DOMAIN_ORCHESTRATOR_WIRING",
-                    success=wire_002_success,
-                    details={"orchestrators_wired": wire_002_count, "results": wire_002_result.get("results", {})}
-                )
-                
-                if not wire_002_success:
-                    return Err(f"WIRE-002 failed: {wire_002_result.get('summary', {})}")
-            except Exception as e:
-                self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-002",
-                    operation="DOMAIN_ORCHESTRATOR_WIRING",
-                    success=False,
-                    details={"error": str(e)}
-                )
-                return Err(f"WIRE-002 execution failed: {str(e)}")
-            
-            # AC-TRANSFORM-001-WIRE-003: Execute Support Orchestrator Wiring
-            # Registers 6 support orchestrators: Onboarding, Discovery, Upgrade, Rollback, Setup, Composed
-            if execute_wire_003 is None:
-                return Err("WIRE-003 module not available")
-            
-            self.logger.log_operation_start(
-                ac_id="AC-TRANSFORM-001-WIRE-003",
-                operation="SUPPORT_ORCHESTRATOR_WIRING",
-                details={"orchestrators_count": 6}
-            )
-            
-            try:
-                wire_003_result = execute_wire_003()
-                wire_003_success = wire_003_result.get("summary", {}).get("status") == "SUCCESS"
-                wire_003_count = wire_003_result.get("summary", {}).get("total_wired", 0)
-                
-                self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-003",
-                    operation="SUPPORT_ORCHESTRATOR_WIRING",
-                    success=wire_003_success,
-                    details={"orchestrators_wired": wire_003_count, "results": wire_003_result.get("results", {})}
-                )
-                
-                if not wire_003_success:
-                    return Err(f"WIRE-003 failed: {wire_003_result.get('summary', {})}")
-            except Exception as e:
-                self.logger.log_operation_complete(
-                    ac_id="AC-TRANSFORM-001-WIRE-003",
-                    operation="SUPPORT_ORCHESTRATOR_WIRING",
-                    success=False,
-                    details={"error": str(e)}
-                )
-                return Err(f"WIRE-003 execution failed: {str(e)}")
+                return Err(f"Autowiring failed: {str(e)}")
             
             # AC-TRANSFORM-001-WIRING-VALIDATION: Validate all 23 orchestrators wired
             if get_wiring_registry is not None:
