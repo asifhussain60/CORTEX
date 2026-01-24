@@ -76,22 +76,52 @@ Step 1: Pattern Matching
       Action: PRESERVE
 
     DOCUMENTATION:
-      ✓ docs/**/*.md
-      ✓ docs_archive/**/*.md
+      ✓ docs/**/*.md (EXCEPT non-canonical files listed below)
+      ✓ docs/0-README.md, docs/01-*/*, docs/02-*/*, ..., docs/09-*/*
       ✓ cortex_brain/releases/**
       ✓ README.md (root only)
       Action: VALIDATE & ORGANIZE
 
     INFORMATIONAL:
+      
+      _workspaces/ files:
       ✓ _workspaces/*SUMMARY*.md
       ✓ _workspaces/*REPORT*.md
       ✓ _workspaces/*SESSION*.md
-      Action: ARCHIVE or DELETE
+      ✓ _workspaces/*PROJECT*.md
+      ✓ _workspaces/*REMEDIATION*.md
+      ✓ _workspaces/*CLEANUP*.md
+      ✓ _workspaces/*COMPARISON*.md
+      ✓ _workspaces/*OBSOLETE*.md
+      ✓ _workspaces/*INVENTORY*.md
+      ✓ _workspaces/*INDEX*.md
+      ✓ _workspaces/*ENHANCEMENT*.md
+      ✓ _workspaces/UX-*.md
+      ✓ _workspaces/TEST-FIXES-SUMMARY.md
+      ✓ _workspaces/EXECUTIVE_SUMMARY_*.md
+      ✓ _workspaces/README-*.md
+      ✓ _workspaces/QUICK-REFERENCE-*.md
+      
+      docs/ root non-canonical files (ARCHIVE priority):
+      ✓ docs/AC-*.md (Acceptance criteria reports)
+      ✓ docs/BRT-*.md (Build/test completion reports - 7 files)
+      ✓ docs/CONS-*.md (Consolidation phase reports - 4 files)
+      ✓ docs/CORTEX-REVIEW-*.md (System review snapshots - 5 files)
+      ✓ docs/COPILOT-*.md (Copilot tracking files - 2 files)
+      ✓ docs/SESSION-SUMMARY-*.md (Session documentation)
+      ✓ docs/ARCHITECTURE_DoR*.md (Architecture analysis)
+      ✓ docs/GOVERNANCE_COMPLIANCE_REPORT.md (Governance report)
+      ✓ docs/USER_GUIDE_DoR_Approval_Workflow.md (Workflow guide)
+      ✓ docs/BEST-PRACTICES-CONSOLIDATION.md (Best practices)
+      
+      Action: ARCHIVE or DELETE (per retention policy)
 
     GENERATED:
       ✓ **/*-COMPLETION-REPORT.md
       ✓ docs/08-reference/implementation-status.md
+      ✓ docs/08-reference/remediation-status.md
       ✓ cortex_brain/state/**/*.json
+      ✓ **/__pycache__/**, **.pyc, .coverage
       Action: DELETE (regenerable)
 
     DEPRECATED:

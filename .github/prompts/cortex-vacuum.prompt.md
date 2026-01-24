@@ -107,21 +107,39 @@ Retention: 🟢 KEEP (with organization)
 ### INFORMATIONAL Files (📋 ARCHIVE or DELETE)
 ```yaml
 Patterns:
-  - _workspaces/PROJECT_COMPLETION_REPORT_*.md
-  - _workspaces/SESSION-SUMMARY-*.md
-  - _workspaces/SESSION-FINAL-REPORT-*.md
-  - _workspaces/REMEDIATION-COMPLETION-SUMMARY.md
-  - _workspaces/*CLEANUP*.md
-  - _workspaces/ENHANCEMENT-COMPLETE.md
-  - _workspaces/FINAL-DELIVERY-SUMMARY.md
-  - _workspaces/TEST-FIXES-SUMMARY.md
-  - _workspaces/UX-IMPROVEMENTS-SUMMARY.md
-  - docs/GOVERNANCE_COMPLIANCE_REPORT.md
-  - docs/USER_GUIDE_DoR_Approval_Workflow.md
+  
+  _workspaces/ session & project files:
+    - _workspaces/PROJECT_COMPLETION_REPORT_*.md
+    - _workspaces/SESSION-SUMMARY-*.md
+    - _workspaces/SESSION-FINAL-REPORT-*.md
+    - _workspaces/REMEDIATION-COMPLETION-SUMMARY.md
+    - _workspaces/*CLEANUP*.md
+    - _workspaces/ENHANCEMENT-COMPLETE.md
+    - _workspaces/FINAL-DELIVERY-SUMMARY.md
+    - _workspaces/TEST-FIXES-SUMMARY.md
+    - _workspaces/UX-IMPROVEMENTS-SUMMARY.md
+    - _workspaces/*COMPARISON*.md
+    - _workspaces/*OBSOLETE*.md
+    - _workspaces/*INVENTORY*.md
+    - _workspaces/QUICK-REFERENCE-*.md
+    - _workspaces/EXECUTIVE_SUMMARY_*.md
+    - _workspaces/README-*.md
+  
+  docs/ system validation & reference files (NON-CANONICAL):
+    - docs/AC-*.md                              # Acceptance criteria reports
+    - docs/BRT-*.md                             # Build/test completion reports
+    - docs/CONS-*.md                            # Consolidation completion reports
+    - docs/CORTEX-REVIEW-*.md                   # CORTEX review/system docs
+    - docs/COPILOT-*.md                         # Copilot tracking files
+    - docs/SESSION-SUMMARY-*.md                 # Session documentation files
+    - docs/ARCHITECTURE_DoR*.md                 # Architecture analysis files
+    - docs/GOVERNANCE_COMPLIANCE_REPORT.md      # Governance validation report
+    - docs/USER_GUIDE_DoR_Approval_Workflow.md  # Workflow documentation
+    - docs/BEST-PRACTICES-CONSOLIDATION.md      # Best practices summary
 
-Purpose: Progress tracking, session notes, temporary analysis
+Purpose: Progress tracking, session notes, temporary analysis, system validation
 Lifespan: Session-specific or project-phase-specific
-Action: ARCHIVE to _workspaces/_archive/ or DELETE (per config)
+Action: ARCHIVE to _workspaces/_archive/ or docs/_archive/ (per config)
 
 Retention: 🟡 ARCHIVE (unless flagged for docs migration)
 ```
