@@ -1,0 +1,771 @@
+# CORTEX Vacuum Operations Configuration
+# Version: 1.0 | Updated: 2026-01-24 | Authority: cortex-vacuum.prompt.md
+
+---
+
+vacuum_metadata:
+  version: "1.0"
+  created: "2026-01-24"
+  last_updated: "2026-01-24"
+  authority: "cortex-vacuum.prompt.md"
+  status: "PRODUCTION_READY"
+
+---
+
+# ============================================================================
+# SECTION 1: SYSTEM FILES (🔒 PRESERVE - NEVER DELETE)
+# ============================================================================
+
+system_files:
+  description: "Core system infrastructure - PRESERVE with 100% confidence"
+  patterns:
+    - ".github/prompts/**/*.prompt.md"          # All prompt definitions
+    - ".github/agents/**/*.md"                  # All agent definitions
+    - ".github/copilot-instructions.md"         # System instructions
+    - ".github/workflows/**"                    # CI/CD workflows
+    - ".github/hooks/**"                        # Git hooks
+    - "cortex_brain/tier0/governance/**"        # Governance rules
+    - "cortex_brain/tier1/**"                   # Tier 1 AC specs
+    - "cortex_brain/tier2/**"                   # Tier 2 templates
+    - "cortex_brain/tier3/knowledge/**"         # Tier 3 knowledge
+    - "cortex/**/*.py"                          # Production Python
+    - "cortex_brain/**/*.py"                    # Brain system code
+    - "requirements.txt"                        # Dependencies
+    - "setup.py"                                # Setup configuration
+    - "pyrightconfig.json"                      # Type checker config
+    - "mkdocs.yml"                              # Documentation config
+    - ".gitignore"                              # Git configuration
+    - "cortex-config.yaml"                      # System config
+    - "cortex-impl-map.yaml"                    # Implementation map
+    - "README.md"                               # Root README only
+    - "tests/**"                                # Test code
+
+  safeguards:
+    - name: "No system file deletion"
+      check: "Validate files_to_delete against this pattern list"
+      action: "BLOCK if any match"
+      severity: "CRITICAL"
+    
+    - name: "Verify .prompt.md count"
+      check: "Count preserved *.prompt.md files"
+      expected: ">= 7"  # Current count
+      action: "FAIL if < 7"
+      severity: "CRITICAL"
+    
+    - name: "Verify agents/*.md count"
+      check: "Count preserved agents/*.md files"
+      expected: ">= 7"  # Current count
+      action: "FAIL if < 7"
+      severity: "CRITICAL"
+
+---
+
+# ============================================================================
+# SECTION 2: DOCUMENTATION FILES (✨ VALIDATE & ORGANIZE)
+# ============================================================================
+
+documentation_files:
+  description: "Official documentation - validate links, organize structure"
+  canonical_locations:
+    - "docs/0-README.md"
+    - "docs/01-getting-started/**"
+    - "docs/02-architecture/**"
+    - "docs/03-api-reference/**"
+    - "docs/04-guides/**"
+    - "docs/05-deployment/**"
+    - "docs/06-release-notes/**"
+    - "docs/07-troubleshooting/**"
+    - "docs/08-reference/**"
+    - "docs/09-tutorials/**"
+    - "docs/_archive/**"
+
+  non_canonical_locations:
+    - "docs/*REPORT*.md"                        # Move to reference/
+    - "docs/*SUMMARY*.md"                       # Move to guides/ or archive/
+    - "docs/GOVERNANCE*.md"                     # Move to reference/governance/
+    - "docs/USER_GUIDE*.md"                     # Move to guides/
+    - "docs/AC-*.md"                            # Move to reference/
+    - "docs/*compliance*.md"                    # Move to reference/
+
+  cleanup_rules:
+    - name: "Remove non-canonical docs"
+      pattern: "docs/*REPORT*.md|docs/*SUMMARY*.md"
+      action: "ANALYZE for relocation value"
+    
+    - name: "Consolidate API reference"
+      pattern: "docs/03-api-reference/"
+      rules:
+        - High-value files: KEEP and organize
+        - Duplicate files: CONSOLIDATE to index
+        - Outdated files: ARCHIVE to docs/_archive/
+    
+    - name: "Clean up reference section"
+      pattern: "docs/08-reference/"
+      rules:
+        - Governance docs: KEEP, organize by category
+        - Implementation status: DELETE (regenerated)
+        - Remediation status: DELETE (regenerated)
+        - Compliance reports: ARCHIVE if age > 30 days
+    
+    - name: "Archive outdated guides"
+      pattern: "docs/04-guides/"
+      condition: "File modification date > 90 days old AND no recent references"
+      action: "ARCHIVE to docs/_archive/outdated-guides/"
+
+  validations:
+    - name: "Link integrity"
+      tool: "mkdocs build + link checker"
+      severity: "ERROR"
+    
+    - name: "Markdown syntax"
+      tool: "markdown linter"
+      severity: "WARNING"
+    
+    - name: "Cross-references"
+      tool: "grep for doc internal links"
+      severity: "WARNING"
+
+---
+
+# ============================================================================
+# SECTION 3: INFORMATIONAL FILES (📋 ARCHIVE or DELETE)
+# ============================================================================
+
+informational_files:
+  description: "Session notes, project summaries, progress reports, system validation files"
+  retention_policy: "ARCHIVE by default, DELETE after 90 days in archive"
+  
+  categories:
+    
+    _workspaces_session_files:
+      pattern:
+        - "_workspaces/SESSION-*.md"
+        - "_workspaces/SESSION_*.md"
+      examples:
+        - "SESSION-SUMMARY-2026-01-24-PHASE-2-COMPLETE.md"
+        - "SESSION-FINAL-REPORT-2026-01-24.md"
+      action: "ARCHIVE to _workspaces/_archive/session-logs/"
+      retention: "12 months (historical record)"
+    
+    _workspaces_project_files:
+      pattern:
+        - "_workspaces/PROJECT_COMPLETION_REPORT_*.md"
+        - "_workspaces/FINAL-DELIVERY-SUMMARY.md"
+        - "_workspaces/ENHANCEMENT-COMPLETE.md"
+      examples:
+        - "PROJECT_COMPLETION_REPORT_2026-01-24.md"
+        - "FINAL-DELIVERY-SUMMARY.md"
+      action: "ARCHIVE to _workspaces/_archive/project-reports/"
+      retention: "Until next major phase completion"
+    
+    _workspaces_remediation_files:
+      pattern:
+        - "_workspaces/REMEDIATION-*.md"
+        - "_workspaces/CLEANUP-*.md"
+      examples:
+        - "REMEDIATION-COMPLETION-SUMMARY.md"
+        - "CLEANUP-ACTION-PLAN.md"
+      action: "EVALUATE for docs migration OR ARCHIVE"
+      retention: "Until remediation complete (then archive 30 days)"
+    
+    _workspaces_analysis_files:
+      pattern:
+        - "_workspaces/*COMPARISON*.md"
+        - "_workspaces/*OBSOLETE*.md"
+        - "_workspaces/*INVENTORY*.md"
+        - "_workspaces/*INDEX*.md"
+        - "_workspaces/QUICK-REFERENCE-*.md"
+        - "_workspaces/README-*.md"
+      examples:
+        - "BEFORE-AFTER-COMPARISON.md"
+        - "CORTEX-OBSOLETE-FILES-COMPLETION-REPORT.md"
+        - "OBSOLETE-FILES-INVENTORY.md"
+        - "QUICK-REFERENCE-GOVERNANCE.md"
+      action: "ARCHIVE to _workspaces/_archive/analysis/"
+      retention: "6 months (reference value)"
+    
+    _workspaces_improvement_files:
+      pattern:
+        - "_workspaces/*IMPROVEMENT*.md"
+        - "_workspaces/*ENHANCEMENT*.md"
+        - "_workspaces/UX-*.md"
+        - "_workspaces/TEST-FIXES-SUMMARY.md"
+        - "_workspaces/EXECUTIVE_SUMMARY_*.md"
+      examples:
+        - "UX-IMPROVEMENTS-SUMMARY.md"
+        - "TEST-FIXES-SUMMARY.md"
+        - "EXECUTIVE_SUMMARY_DoR_System.md"
+      action: "EVALUATE for docs migration OR ARCHIVE"
+      retention: "6 months then archive"
+
+    # =========================================================================
+    # NEW: docs/ root non-canonical files (system validation & reference docs)
+    # =========================================================================
+
+    docs_acceptance_criteria_reports:
+      pattern:
+        - "docs/AC-*.md"
+      examples:
+        - "docs/AC-MCP-007-010-HEADER-ENFORCEMENT-SUMMARY.md"
+        - "docs/AC-REM-011-03-IMPLEMENTATION.md"
+        - "docs/AC-WIRING-ENFORCEMENT-SUMMARY.md"
+      action: "ARCHIVE to docs/_archive/validation-reports/"
+      retention: "6 months (reference)"
+      reason: "System validation evidence; can be regenerated from implementation records"
+
+    docs_build_test_reports:
+      pattern:
+        - "docs/BRT-*.md"
+      examples:
+        - "docs/BRT-016-COMPLETION-REPORT.md"
+        - "docs/BRT-017-COMPLETION-REPORT.md"
+        - "docs/BRT-018-COMPLETION-REPORT.md"
+        - "docs/BRT-019-COMPLETION-REPORT.md"
+        - "docs/BRT-020-COMPLETION-REPORT.md"
+        - "docs/BRT-021-COMPLETION-REPORT.md"
+        - "docs/BRT-022-COMPLETION-REPORT.md"
+      action: "ARCHIVE to docs/_archive/build-test-reports/"
+      retention: "6 months (historical records)"
+      reason: "Build/test completion evidence; obsolete after phase complete"
+
+    docs_consolidation_reports:
+      pattern:
+        - "docs/CONS-*.md"
+      examples:
+        - "docs/CONS-009-COMPLETION-CHECKLIST.md"
+        - "docs/CONS-009-COMPLETION-SUMMARY.md"
+        - "docs/CONS-009-DELIVERY-PACKAGE.md"
+        - "docs/CONS-009-QUICK-REFERENCE.md"
+      action: "ARCHIVE to docs/_archive/consolidation-reports/"
+      retention: "6 months (reference)"
+      reason: "Consolidation phase documentation; archive after phase delivery"
+
+    docs_cortex_review_files:
+      pattern:
+        - "docs/CORTEX-REVIEW-*.md"
+      examples:
+        - "docs/CORTEX-REVIEW-ENHANCEMENT-v4.1.md"
+        - "docs/CORTEX-REVIEW-QUICKSTART.md"
+        - "docs/CORTEX-REVIEW-SYSTEM-V4-SUMMARY.md"
+        - "docs/CORTEX-REVIEW-v4.1-FILE-INDEX.md"
+        - "docs/CORTEX-REVIEW-v4.1-QUICK-REFERENCE.md"
+      action: "ARCHIVE to docs/_archive/system-reviews/"
+      retention: "6 months (historical snapshots)"
+      reason: "CORTEX system review documents; superseded by newer versions"
+
+    docs_copilot_tracking_files:
+      pattern:
+        - "docs/COPILOT-*.md"
+      examples:
+        - "docs/COPILOT-REQUEST-TRACK-EVAL-SILENT.md"
+        - "docs/COPILOT-TRACK-EVAL-QUICK-START.md"
+      action: "ARCHIVE to docs/_archive/copilot-tracking/"
+      retention: "3 months (operational records)"
+      reason: "Copilot request tracking; ephemeral operational data"
+
+    docs_session_summary_files:
+      pattern:
+        - "docs/SESSION-SUMMARY-*.md"
+      examples:
+        - "docs/SESSION-SUMMARY-2026-01-24-BRT-017.md"
+      action: "ARCHIVE to docs/_archive/session-logs/"
+      retention: "12 months (historical record)"
+      reason: "Session documentation; move to archive structure"
+
+    docs_architecture_analysis_files:
+      pattern:
+        - "docs/ARCHITECTURE_DoR*.md"
+      examples:
+        - "docs/ARCHITECTURE_DoR_Approval_System.md"
+      action: "ARCHIVE to docs/_archive/architecture-analysis/"
+      retention: "Retain in docs/02-architecture/ or archive if superseded"
+      reason: "Architecture documentation; keep if current, archive if historical"
+
+    docs_governance_compliance_files:
+      pattern:
+        - "docs/GOVERNANCE_COMPLIANCE_REPORT.md"
+        - "docs/USER_GUIDE_DoR_Approval_Workflow.md"
+      action: "MIGRATE to docs/08-reference/governance/ OR ARCHIVE"
+      retention: "Keep in docs if current operational value; archive if historical"
+      reason: "Governance documentation with ongoing reference value"
+
+    docs_best_practices_files:
+      pattern:
+        - "docs/BEST-PRACTICES-CONSOLIDATION.md"
+      action: "MIGRATE to docs/03-api-reference/ OR docs/08-reference/best-practices/"
+      retention: "Permanent if actionable; archive if superseded"
+      reason: "Best practices; high value if current"
+
+  archive_structure:
+    docs/_archive/:
+      validation-reports/:
+        description: "Acceptance criteria & validation reports (AC-*)"
+        retention: "6 months"
+        files: "docs/AC-*.md"
+      
+      build-test-reports/:
+        description: "Build & test completion reports (BRT-*)"
+        retention: "6 months"
+        files: "docs/BRT-*.md"
+      
+      consolidation-reports/:
+        description: "Consolidation phase completion reports (CONS-*)"
+        retention: "6 months"
+        files: "docs/CONS-*.md"
+      
+      system-reviews/:
+        description: "CORTEX system review snapshots (CORTEX-REVIEW-*)"
+        retention: "6 months"
+        files: "docs/CORTEX-REVIEW-*.md"
+      
+      copilot-tracking/:
+        description: "Copilot request tracking files (COPILOT-*)"
+        retention: "3 months"
+        files: "docs/COPILOT-*.md"
+      
+      session-logs/:
+        description: "Session summary files (SESSION-SUMMARY-*)"
+        retention: "12 months"
+        files: "docs/SESSION-SUMMARY-*.md"
+      
+      architecture-analysis/:
+        description: "Architecture analysis documents (ARCHITECTURE_DoR-*)"
+        retention: "12 months or until superseded"
+        files: "docs/ARCHITECTURE_DoR*.md"
+      
+      INDEX.md:
+        description: "Archive manifest with dates, categories, reasons, search index"
+        generated: true
+        updated: "On each vacuum operation"
+
+    _workspaces/_archive/:
+      session-logs/:
+        description: "Session summaries and final reports"
+        retention: "12 months"
+        files: "SESSION-*.md, SESSION_*.md"
+      
+      project-reports/:
+        description: "Project completion and delivery summaries"
+        retention: "Until phase complete + 30 days"
+        files: "PROJECT_COMPLETION_*.md, FINAL-DELIVERY-*.md"
+      
+      remediation/:
+        description: "Remediation and cleanup progress"
+        retention: "Until complete + 30 days"
+        files: "REMEDIATION-*.md, CLEANUP-*.md"
+      
+      analysis/:
+        description: "Analysis, comparisons, inventories"
+        retention: "6 months"
+        files: "*COMPARISON*.md, *OBSOLETE*.md, *INVENTORY*.md"
+      
+      outdated-guides/:
+        description: "Documentation guides replaced by newer versions"
+        retention: "6 months"
+        files: "docs/04-guides/ → archived"
+      
+      INDEX.md:
+        description: "Archive manifest with dates, reasons, search index"
+        generated: true
+        updated: "On each vacuum operation"
+
+  migration_strategy:
+    high_value_docs:
+      - "EXECUTIVE_SUMMARY_*.md with unique architecture insights"
+      - "REMEDIATION-*.md files with reusable processes"
+      - "UX-IMPROVEMENTS-SUMMARY.md with user impact documentation"
+      - "GOVERNANCE_COMPLIANCE_REPORT.md with compliance tracking"
+      destination: "docs/04-guides/ or docs/08-reference/"
+      retention: "Permanent in docs/"
+      action: "MIGRATE (move from _workspaces/ or docs/ root)"
+    
+    high_value_docs_root:
+      - "docs/GOVERNANCE_COMPLIANCE_REPORT.md (if current)"
+      - "docs/USER_GUIDE_DoR_Approval_Workflow.md (if current)"
+      - "docs/BEST-PRACTICES-CONSOLIDATION.md (if actionable)"
+      destination: "docs/08-reference/governance/ or docs/03-api-reference/"
+      retention: "Permanent in docs if updated"
+      action: "REVIEW and MIGRATE or ARCHIVE"
+    
+    medium_value:
+      - "SESSION-SUMMARY-*.md with key decisions"
+      - "PROJECT_COMPLETION_REPORT_*.md with lessons learned"
+      - "ARCHITECTURE_DoR*.md with design patterns"
+      destination: "docs/_archive/session-logs/ or project-reports/ or architecture-analysis/"
+      retention: "12 months"
+      action: "ARCHIVE"
+    
+    low_value:
+      - "AC-*.md, BRT-*.md, CONS-*.md completion reports"
+      - "CORTEX-REVIEW-*.md system snapshots"
+      - "COPILOT-*.md tracking files"
+      - "Temporary analysis files"
+      action: "DELETE or ARCHIVE to docs/_archive/"
+      retention: "3-6 months in archive, then DELETE"
+
+---
+
+# ============================================================================
+# SECTION 4: GENERATED FILES (🔧 REGENERATE as NEEDED)
+# ============================================================================
+
+generated_files:
+  description: "Auto-generated files that can be safely deleted and regenerated"
+  
+  patterns:
+    - "docs/08-reference/implementation-status.md"
+    - "docs/08-reference/remediation-status.md"
+    - "cortex_brain/state/**/*.json"
+    - "**/.pytest_cache/**"
+    - "**/__pycache__/**"
+    - "*.pyc"
+    - ".coverage"
+    - "htmlcov/**"
+    - "build/**"
+    - "dist/**"
+
+  regeneration_trigger:
+    - CI/CD pipeline runs (auto-generate)
+    - Manual: `/doc-discover`, `/doc-generate`
+    - Scheduled: Weekly auto-generation (optional)
+
+  action: "DELETE (will be regenerated)"
+
+---
+
+# ============================================================================
+# SECTION 5: DEPRECATED FILES (⚠️ RELOCATE or DELETE)
+# ============================================================================
+
+deprecated_files:
+  description: "Files in wrong locations or obsolete format"
+  
+  patterns:
+    - "docs_md/**"                              # Forbidden location
+    - "cortex/.github/prompts/**"               # Wrong location
+    - "root/*.md (except README.md)"            # Wrong location
+
+  action: "DELETE or RELOCATE to canonical location"
+  
+  examples:
+    - "docs_md/old-guide.md" → DELETE (merge to docs/04-guides/)
+    - "cortex/.github/prompts/x.md" → RELOCATE to .github/prompts/
+
+---
+
+# ============================================================================
+# SECTION 6: CLEANUP POLICIES
+# ============================================================================
+
+cleanup_policies:
+  default_mode: "BALANCED"
+  
+  modes:
+    aggressive:
+      description: "Delete DEPRECATED + GENERATED files only"
+      preservation: "INFORMATIONAL files preserved for manual review"
+      risk: "LOW"
+      use_case: "Quick cleanup, minimal data loss"
+      coverage: "~60% of unnecessary files"
+    
+    balanced:
+      description: "Delete DEPRECATED + GENERATED; Archive INFORMATIONAL"
+      preservation: "Archives to _workspaces/_archive/ (restorable)"
+      risk: "MEDIUM"
+      use_case: "Recommended for production (DEFAULT)"
+      coverage: "~85% of unnecessary files"
+    
+    conservative:
+      description: "Only delete DEPRECATED; Archive everything else"
+      preservation: "Maximum preservation, minimal deletion"
+      risk: "LOW"
+      use_case: "First-time cleanup, paranoid mode"
+      coverage: "~30% of unnecessary files"
+
+
+  safeguards_by_mode:
+    aggressive:
+      - No user approval needed for generated files
+      - Requires approval for any INFORMATIONAL deletion
+      - Git checkpoint mandatory
+    
+    balanced:
+      - User approval for overall plan (dry-run first)
+      - No approval needed for individual file archival
+      - Git checkpoint mandatory
+      - Backup manifest created
+    
+    conservative:
+      - User approval for each file deletion
+      - Requires file-by-file review
+      - Git checkpoint mandatory
+      - Full backup before any deletion
+
+---
+
+# ============================================================================
+# SECTION 7: VACUUM OPERATION SEQUENCE
+# ============================================================================
+
+operation_sequence:
+  phase_1_analysis:
+    name: "File Classification & Analysis"
+    agent: "FileClassificationAgent"
+    input: "Repository root"
+    output: "VacuumAnalysisReport"
+    duration: "~30 seconds"
+    dry_run_capable: true
+    steps:
+      - "Traverse all directories"
+      - "Classify each file by patterns"
+      - "Analyze file dependencies"
+      - "Calculate preservation scores"
+      - "Generate manifest"
+
+  phase_2_preview:
+    name: "User Review & Approval"
+    agent: "Vacuum Orchestrator (user interaction)"
+    input: "VacuumAnalysisReport"
+    output: "User approval + optional modifications"
+    duration: "~5 minutes (user decision time)"
+    steps:
+      - "Display analysis summary"
+      - "Show deletions preview"
+      - "Show relocations preview"
+      - "Request approval"
+      - "Wait for user response"
+
+  phase_3_migration:
+    name: "Content Migration"
+    agent: "ContentRelocatorAgent"
+    input: "files_to_relocate from analysis"
+    output: "MigrationResult list"
+    duration: "~30 seconds"
+    dry_run_capable: true
+    condition: "Only if files_to_relocate > 0"
+    steps:
+      - "Plan migrations"
+      - "Transform content"
+      - "Update references"
+      - "Update mkdocs.yml"
+      - "Generate migration audit trail"
+
+  phase_4_sanitization:
+    name: "Repository Sanitization"
+    agent: "RepoSanitizerAgent"
+    input: "files_to_delete, files_to_archive"
+    output: "SanitizationResult"
+    duration: "~1-2 minutes"
+    dry_run_capable: true
+    safeguards:
+      - "Validate safeguards (no system files)"
+      - "Create backup manifest"
+      - "Create feature branch"
+      - "Execute deletions (git rm)"
+      - "Scan for broken references"
+      - "Create git checkpoint"
+    steps:
+      - "Log AC_START"
+      - "Archive files (if configured)"
+      - "Delete files (git rm)"
+      - "Update .gitignore"
+      - "Validate integrity"
+      - "Create git checkpoint CORE-026"
+      - "Log AC_COMPLETE"
+
+  phase_5_reporting:
+    name: "Metrics & Reporting"
+    agent: "Vacuum Orchestrator"
+    input: "Analysis, Migration, Sanitization results"
+    output: "VacuumReport + metrics"
+    duration: "~30 seconds"
+    steps:
+      - "Calculate metrics (files deleted, space freed, etc.)"
+      - "Generate PR summary"
+      - "Create before/after comparison"
+      - "List broken references (if any)"
+      - "Generate rollback instructions"
+
+  total_duration: "~2-5 minutes (dry-run 30 sec, execution 2-5 min)"
+
+---
+
+# ============================================================================
+# SECTION 8: EXPECTED RESULTS
+# ============================================================================
+
+expected_results:
+  informational_files_archived: "~19 files"
+  informational_files_deleted: "~0 files (default: archive not delete)"
+  documentation_reorganized: "~5-10 files"
+  generated_files_deleted: "~3-5 files"
+  disk_space_freed: "~5-8 MB"
+  
+  repository_metrics_before:
+    total_md_files: "~150"
+    _workspaces_md_files: "19"
+    docs_md_files: "~80"
+    unnecessary_files_ratio: "15%"
+  
+  repository_metrics_after:
+    total_md_files: "~120"
+    _workspaces_md_files: "5 (+ 14 archived)"
+    docs_md_files: "~85"
+    unnecessary_files_ratio: "3%"
+    cleanliness_improvement: "12%"
+
+  git_metrics:
+    commits_created: "1"
+    files_staged_for_deletion: "~15-20"
+    files_added_to_archive: "~14-19"
+    checkpoints_created: "1 (tag: vacuum-YYYYMMDD-vN)"
+
+---
+
+# ============================================================================
+# SECTION 9: SAFEGUARDS & VALIDATION
+# ============================================================================
+
+safeguards:
+  critical_checks:
+    - name: "No system file deletion"
+      check_list:
+        - "cortex/*.py not in deletion list"
+        - "cortex_brain/tier0/** not in deletion list"
+        - ".github/prompts/*.prompt.md not in deletion list"
+        - ".github/agents/*.md not in deletion list"
+      action_on_violation: "BLOCK - refuse to proceed"
+      severity: "CRITICAL"
+    
+    - name: "Preserved file count"
+      check_list:
+        - "*.prompt.md count >= 7"
+        - "agents/*.md count >= 7"
+        - "tier0/governance/** files preserved"
+      action_on_violation: "BLOCK - refuse to proceed"
+      severity: "CRITICAL"
+    
+    - name: "Git integrity"
+      check_list:
+        - "Working tree clean before start"
+        - "Feature branch created for operation"
+        - "Git checkpoint created after deletion"
+      action_on_violation: "WARN - proceed with caution"
+      severity: "HIGH"
+
+  validation_after_deletion:
+    - name: "Broken reference scan"
+      scan_targets:
+        - "cortex/**/*.py for deleted imports"
+        - "docs/**/*.md for dead links"
+        - ".github/**/*.yml for missing references"
+      action: "Report but don't block (PR review will catch)"
+      severity: "MEDIUM"
+    
+    - name: "Documentation integrity"
+      checks:
+        - "mkdocs build succeeds"
+        - "No dead links in generated HTML"
+        - "All navigation entries resolve"
+      action: "Report - broken links block PR"
+      severity: "HIGH"
+    
+    - name: "Code integrity"
+      checks:
+        - "Python syntax valid (pyright/mypy)"
+        - "No orphaned imports"
+        - "YAML files valid (tier0, tier1, etc.)"
+      action: "Report - syntax errors block PR"
+      severity: "HIGH"
+
+---
+
+# ============================================================================
+# SECTION 10: ROLLBACK PROCEDURE
+# ============================================================================
+
+rollback_procedure:
+  when: "If vacuum operation causes issues or user requests rollback"
+  
+  automatic_backup:
+    location: "_workspaces/_vacuum-backups/backup-TIMESTAMP.manifest"
+    contents:
+      - File paths, sizes, checksums
+      - Original file contents (for important files)
+      - Git information (commit hash, branch)
+    retention: "30 days"
+
+  rollback_script:
+    location: "_workspaces/_vacuum-backups/rollback-TIMESTAMP.sh"
+    capability: "Restore all deleted files from git history"
+    execution: "bash rollback-YYYYMMDD-HHMMSS.sh"
+
+  git_rollback:
+    method: "git reset --hard {checkpoint_hash_before_vacuum}"
+    alternative: "git revert {vacuum_commit_hash}"
+    time: "< 30 seconds"
+
+---
+
+# ============================================================================
+# SECTION 11: POST-VACUUM MAINTENANCE
+# ============================================================================
+
+post_vacuum_maintenance:
+  immediate_actions:
+    - "Review git diff for confirmation"
+    - "Test mkdocs build locally"
+    - "Run Python linter/type checker"
+    - "Create PR for team review"
+    - "Merge after approval"
+
+  ongoing_monitoring:
+    frequency: "Monthly"
+    checklist:
+      - "New informational files accumulated?"
+      - "_workspaces/ directory size growing?"
+      - "Broken documentation links?"
+      - "Outdated guides accumulating?"
+
+  automated_cleanup:
+    scheduled: "Monthly or per-phase"
+    mode: "DRY_RUN first, BALANCED for execution"
+    target: "Archive files > 30 days old from _archive/"
+
+---
+
+# ============================================================================
+# SECTION 12: METRICS & REPORTING
+# ============================================================================
+
+metrics_captured:
+  operation_metrics:
+    - Files classified: N
+    - Files deleted: M
+    - Files archived: K
+    - Files relocated: L
+    - Disk space freed: X.X GB
+    - Operation duration: HH:MM:SS
+    - Broken references found: P
+
+  quality_metrics:
+    - Classification confidence (avg): %
+    - Migration success rate: %
+    - Safeguard violations: 0
+    - Git checkpoint success: Yes/No
+    - Documentation build success: Yes/No
+
+  repository_metrics:
+    - Total files before/after
+    - Total lines of markdown before/after
+    - Documentation coverage score
+    - Repository cleanliness score (0-100)
+    - Unnecessary files ratio before/after
+
+  report_location: "_workspaces/reports/vacuum-report-YYYYMMDD.md"
+
+---
+
+# ============================================================================
+# END OF CONFIGURATION
+# ============================================================================
