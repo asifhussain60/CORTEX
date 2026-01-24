@@ -90,9 +90,32 @@ Reply with:
 - If no response, ask "Would you like me to proceed with this action?"
 - Never auto-execute operations that modify code
 
-### Stage 4: Execute with Governance
+### Stage 4: Rule Enforcement (NEW - Tier 0 Prevention)
 
-After approval:
+**AFTER approval, BEFORE execution:**
+1. Run **EnforcementOrchestrator** with 3 agents:
+   - **GovernanceEnforcementAgent** (CORE-008, CORE-011, CORE-012, CORE-013, CORE-029)
+   - **SecurityCheckpointAgent** (CORE-026, CORE-025, CORE-027)
+   - **ComplianceValidationAgent** (TIER-1 rules, escalations)
+
+2. **If Tier 0 violation detected:**
+   - ❌ BLOCK operation with clear violation message
+   - Report exactly which rule violated and how to fix
+   - Do NOT proceed to execution
+
+3. **If Tier 1 escalation detected:**
+   - ⚠️ LOG warning but continue
+   - Report escalation details for audit trail
+
+4. **If all checks pass:**
+   - ✅ Proceed to Stage 5
+
+**Authority:** `cortex_brain/tier0/governance/` + `cortex_brain/tier1/acceptance/`  
+**Documentation:** `cortex-enforcement.prompt.md`, `cortex-enforcement-agents.md`
+
+### Stage 5: Execute with Governance
+
+After enforcement pass:
 1. Log `AC_START` to audit trail
 2. Apply applicable CORE rules
 3. Execute operation via target orchestrator
@@ -143,14 +166,22 @@ Contents: TDD patterns, refactoring patterns, API design, etc.
 
 ## 🎼 Orchestrator Registry (23+ Orchestrators)
 
-### Core Orchestrators (Stage 2-3)
+### Core Orchestrators (Stage 1-5)
 | Orchestrator | Domain | Capabilities |
 |--------------|--------|--------------|
-| **MasterOrchestrator** | Coordination | 4-stage pipeline, delegation, knowledge synthesis |
+| **MasterOrchestrator** | Coordination | 5-stage pipeline, delegation, knowledge synthesis |
 | **InteractionOrchestrator** | Stage 1 | Comprehension, context preservation |
 | **IntentRouter** | Stage 2 | Intent classification, confidence scoring |
-| **TDDOrchestrator** | Testing | RED→GREEN→REFACTOR, test generation |
+| **EnforcementOrchestrator** | Stage 3 | ⭐ NEW - Rule enforcement (Tier 0 blocking + Tier 1 escalations) |
+| **TDDOrchestrator** | Stage 4+ | RED→GREEN→REFACTOR, test generation |
 | **WorkflowOrchestrator** | Workflows | Multi-step execution, state management |
+
+### Enforcement Agents (Stage 3 - Sub-Orchestrators)
+| Agent | Focus | Rules | Action |
+|-------|-------|-------|--------|
+| **GovernanceEnforcementAgent** | Code Quality | CORE-008, 011, 012, 013, 029 | BLOCK violations |
+| **SecurityCheckpointAgent** | Safety | CORE-026, 025, 027 | BLOCK violations |
+| **ComplianceValidationAgent** | Phase Readiness | TIER-1 rules | ESCALATE violations |
 
 ### Domain Orchestrators
 | Orchestrator | Domain | Capabilities |
@@ -231,6 +262,9 @@ tools = registry.list_tools()  # Returns 15+ tools
 
 | Command | Action | Orchestrator |
 |---------|--------|--------------|
+| `/enforce {operation}` | Check governance rules | EnforcementOrchestrator |
+| `/enforce-tier0` | Check blocking rules only | Tier 0 agents |
+| `/enforce-tier1` | Check escalation rules | ComplianceValidationAgent |
 | `/implement {feature}` | Implement with TDD | TDDOrchestrator |
 | `/fix {issue}` | Fix bug/issue | IntentRouter → Fix handler |
 | `/refactor {target}` | Refactor code | RefactoringOrchestrator |
