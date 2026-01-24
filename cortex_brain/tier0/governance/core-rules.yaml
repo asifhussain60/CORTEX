@@ -14,7 +14,7 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 31
+  rule_count: 35
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
 
@@ -946,6 +946,162 @@ rules:
         
         See core-rules.yaml CORE-031 for complete specification.
 
+  # --------------------------------------------------------------------------
+  # CORE-032: Mandatory Intent Classification (DoR - Definition of Ready)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-032
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Mandatory Intent Classification (DoR Checkpoint)
+    description: |
+      EVERY operation MUST have intent classified BEFORE execution starts.
+      This is enforced architecturally via IntentRouterFactory pattern.
+      
+      Problem: Intent classification was optional (Stage 1 skippable).
+      Solution: Factory pattern makes classification MANDATORY - factory
+      won't create orchestrator until intent is classified.
+      
+      Enforcement: IntentRouterFactory.create_router() → RouterInstance
+      RouterInstance.execute() requires prior RouterInstance.classify_intent()
+      Without classification: RuntimeError("Intent must be classified first")
+    
+    intent_classification_requirements:
+      - "Every user operation must classify intent (IMPLEMENT, FIX, REFACTOR)"
+      - "Classification MUST happen before orchestrator execution"
+      - "Intent classification is DoR checkpoint (Definition of Ready)"
+      - "Audit trail MUST log: INTENT_CLASSIFIED → ORCHESTRATOR_SELECTED"
+      - "Bypass impossible (architectural enforcement via factory)"
+    
+    factory_pattern_enforcement:
+      factory_class: "cortex.orchestrators.core.intent_router_factory.IntentRouterFactory"
+      router_wrapper: "RouterInstance"
+      
+      enforcement_flow: |
+        factory = IntentRouterFactory()
+        router = factory.create_router()      # Returns RouterInstance
+        
+        # MANDATORY BEFORE execute():
+        router.classify_intent(text="...", context={...})
+        
+        # Only NOW is execute allowed:
+        result = router.execute_orchestrated(text="...", context={...})
+        
+        # Without classify_intent(), execute raises:
+        # RuntimeError("Intent must be classified first")
+    
+    success_criteria:
+      - "IntentRouterFactory prevents execution without classification"
+      - "All 23 orchestrators created via factory"
+      - "Intent classification logs to audit trail"
+      - "Zero bypass paths (architectural enforcement)"
+      - "100% of operations have classified intent"
+    
+    implementation:
+      method: "Factory Pattern (IntentRouterFactory)"
+      enforcement_point: "RouterInstance.execute_orchestrated()"
+      audit_event: "INTENT_CLASSIFIED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-033: Mandatory State Persistence
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-033
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Mandatory State Persistence (Operation Context Tracking)
+    description: |
+      ALL operations MUST persist state to StateManager.
+      Enables resumption after interruption, cross-system consistency.
+      
+      State tracking includes:
+      - Operation ID (unique per execution)
+      - Intent type (IMPLEMENT, FIX, REFACTOR)
+      - Current stage (1-4 in orchestration pipeline)
+      - Context data (domain, priority, dependencies)
+      - Timestamps (start, current, estimated completion)
+      - Status (IN_PROGRESS, COMPLETED, FAILED)
+    
+    state_persistence_requirements:
+      - "StateManager.persist_state() called after each stage"
+      - "Includes: operation_id, stage, status, context, timestamp"
+      - "State retrievable: StateManager.get_state(operation_id)"
+      - "Enables: operation resumption after interruption"
+      - "Audit trail includes: STATE_PERSISTED events"
+    
+    success_criteria:
+      - "All orchestrators call StateManager.persist_state()"
+      - "State persisted after Stage 1, 2, 3, 4"
+      - "Operation resumable from last persisted stage"
+      - "Audit trail includes STATE_PERSISTED events"
+
+  # --------------------------------------------------------------------------
+  # CORE-034: Mandatory Audit Logging
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-034
+    category: auditability
+    severity: blocked
+    name: Mandatory Audit Logging (Observability)"
+    description: |
+      ALL operations MUST log to AuditLogger.
+      Provides observability, debugging, compliance tracking.
+      
+      Mandatory log events:
+      - INTENT_CLASSIFIED (Stage 1 complete)
+      - ORCHESTRATOR_SELECTED (Stage 2 complete)
+      - GOVERNANCE_VALIDATED (Stage 3 complete)
+      - EXECUTION_STARTED (Stage 4 start)
+      - EXECUTION_COMPLETED (Stage 4 complete)
+      - ERROR events (any stage failure)
+    
+    audit_logging_requirements:
+      - "EnhancedAuditLogger.instance().log_event()"
+      - "All 5+ events logged per operation"
+      - "Timestamps ISO format (UTC)"
+      - "Audit trail searchable by: operation_id, intent, stage, status"
+      - "Retention: 90+ days"
+    
+    success_criteria:
+      - "All orchestrators call AuditLogger.log_event()"
+      - "No operations missing audit entries"
+      - "Audit trail complete for all 4 stages"
+      - "ERROR events captured with context"
+
+  # --------------------------------------------------------------------------
+  # CORE-035: Mandatory Response Header Injection
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-035
+    category: response_formatting
+    severity: blocked
+    name: Mandatory Response Header Injection (Response Metadata)"
+    description: |
+      ALL responses MUST include CORTEX metadata header.
+      Clarifies CORE-030 enforcement (response header is mandatory).
+      
+      Required header format:
+      ## 🧠 CORTEX {operation}
+      **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orch} ✅
+      
+      Mandatory header fields:
+      - {operation}: Task type (Implementation, Code Review, Testing, etc.)
+      - {author}: Who performed the operation
+      - {phase}: Current phase name
+      - {orch}: Active orchestrator name
+      - Checkmark: Always include ✅ (indicates operational status)
+    
+    response_header_requirements:
+      - "Every response starts with: ## 🧠 CORTEX {operation}"
+      - "Includes all 4 metadata fields (operation, author, phase, orch)"
+      - "Includes checkmark: ✅ (operational status indicator)"
+      - "Separated by markdown horizontal rule: ---"
+      - "Response continues AFTER header and rule"
+    
+    success_criteria:
+      - "All responses include CORTEX header"
+      - "Header includes all 4 metadata fields"
+      - "Checkmark present (✅) on every response"
+      - "Header format consistent across all orchestrators"
+      - "Zero responses missing header"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
@@ -958,7 +1114,13 @@ enforcement:
     pre_push: true
   
   core_rule_precedence:
-    highest: "CORE-030 (Response headers), CORE-031 (Declarative autowiring)"
-    high: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
-    medium: "CORE-028 (File naming), CORE-016 (Code formatting)"
+    highest: "CORE-030 (Response headers), CORE-031 (Declarative autowiring), CORE-032 (Intent classification)"
+    high: "CORE-033 (State persistence), CORE-034 (Audit logging), CORE-035 (Response headers)"
+    medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
+  
+  remediation_status:
+    "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
+    "CORE-033": "IN_PROGRESS - StateManager integration in Stage 2"
+    "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
+    "CORE-035": "IN_PROGRESS - Response header validation in Stage 4"
