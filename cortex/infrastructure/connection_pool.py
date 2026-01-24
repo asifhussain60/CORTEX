@@ -7,8 +7,11 @@ AC-INFRA-001-01: Implements production-grade connection pooling with:
 - Automatic cleanup of idle connections
 - Context manager support
 - Comprehensive metrics
+
+CORE-CRIT-STATE-001: Thread-safe operations with RLock protecting shared state
 """
 
+import logging
 import sqlite3
 import threading
 import time
@@ -277,8 +280,11 @@ class ConnectionPool:
             while not self._available.empty():
                 try:
                     wrapper = self._available.get_nowait()
+                    # CORE-CRIT-STATE-001: Check idle status while holding lock
+                    # to prevent race condition between check and cleanup
                     if (current_time - wrapper.last_used > idle_timeout and
-                        len(self._all_connections) > self.config.min_connections):
+                        len(self._all_connections) > self.config.min_connections and
+                        not wrapper.in_use):  # Additional safety check
                         to_cleanup.append(wrapper)
                     else:
                         temp_available.append(wrapper)
@@ -289,13 +295,13 @@ class ConnectionPool:
             for wrapper in temp_available:
                 self._available.put(wrapper)
             
-            # Close idle connections
+            # Close idle connections - lock held throughout ensures
+            # no concurrent access to _all_connections dict
             for wrapper in to_cleanup:
                 self._close_connection(wrapper)
     
     def _close_connection(self, wrapper: _ConnectionWrapper) -> None:
         """Close a connection and remove from pool."""
-        import logging
         try:
             wrapper.connection.close()
         except sqlite3.Error as e:
