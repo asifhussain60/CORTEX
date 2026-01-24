@@ -4,7 +4,7 @@ from datetime import datetime
 from unittest.mock import Mock, MagicMock
 
 from cortex.mcp.protocol import ToolParameter, ToolDefinition, MCPTool
-from cortex.mcp.registry import ToolRegistry, ToolEntry
+from cortex.mcp.registry import ToolRegistry, ToolMetadata
 
 @pytest.fixture
 def registry():
