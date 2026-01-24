@@ -23,19 +23,10 @@ from .unified_response_composer import (
     ResponseWithChallenges as UnifiedResponseWithChallenges,
 )
 
-# ✅ Legacy imports for backward compatibility
-from .turn_response_generator import (
-    TurnResponseGenerator,
-    ResponseBuilder,
-    ResponseFormatter,
-)
-from .turn_response_with_challenges import (
-    TurnResponseWithChallenges,
-    ChallengeResponseGenerator,
-    ResponseWithChallenges,
-    Challenge,
-    ChallengeType,
-)
+# Note: Legacy imports removed after CONS-008 consolidation
+# - turn_response_generator.py → UnifiedResponseComposer
+# - turn_response_with_challenges.py → UnifiedResponseComposer
+# All functionality available via UnifiedResponseComposer
 
 __all__ = [
     # Unified Response Composer (CONS-008)
@@ -58,13 +49,4 @@ __all__ = [
     "ResponseTemplate",
     "UnifiedChallenge",
     "UnifiedResponseWithChallenges",
-    # Legacy exports (for backward compatibility)
-    "TurnResponseGenerator",
-    "ResponseBuilder",
-    "ResponseFormatter",
-    "TurnResponseWithChallenges",
-    "ChallengeResponseGenerator",
-    "ResponseWithChallenges",
-    "Challenge",
-    "ChallengeType",
 ]
