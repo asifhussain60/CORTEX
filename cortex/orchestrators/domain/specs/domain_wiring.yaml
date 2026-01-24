@@ -1,0 +1,94 @@
+# Domain Orchestrators Wiring Specification
+# AC-ID: AC-WIRING-DOMAIN-001
+# Purpose: Declarative registration of 5-6 domain orchestrators (CORE-031 compliance)
+
+module_name: domain_orchestrators
+version: "1.0.0"
+description: "Domain orchestrators: Refactoring, Planning, Domain, Conversation, SeleniumPlaywright"
+
+dependencies:
+  - name: core_orchestrators
+    version: ">=1.0.0"
+    required: true
+    internal: true
+    
+  - name: governance_registry
+    version: ">=1.0.0"
+    required: true
+    internal: false
+    
+  - name: business_knowledge_repository
+    version: ">=1.0.0"
+    required: true
+    internal: false
+
+provides:
+  - name: RefactoringOrchestrator
+    category: DOMAIN
+    description: "Manages code refactoring workflows"
+    entry_point: "cortex.orchestrators.domain.refactoring_orchestrator:RefactoringOrchestrator"
+    features:
+      - code_analysis
+      - refactoring_patterns
+      - quality_metrics
+    dependencies:
+      - TDDOrchestrator
+      - governance_registry
+    
+  - name: PlanningOrchestrator
+    category: DOMAIN
+    description: "Manages planning and roadmap orchestration"
+    entry_point: "cortex.orchestrators.domain.planning_orchestrator:PlanningOrchestrator"
+    features:
+      - task_planning
+      - resource_allocation
+      - timeline_management
+    dependencies:
+      - WorkflowOrchestrator
+      - state_manager
+    
+  - name: DomainOrchestrator
+    category: DOMAIN
+    description: "Manages domain-specific logic"
+    entry_point: "cortex.orchestrators.domain.domain_orchestrator:DomainOrchestrator"
+    features:
+      - domain_model_management
+      - business_rules_engine
+      - domain_events
+    dependencies:
+      - business_knowledge_repository
+    
+  - name: ConversationOrchestrator
+    category: DOMAIN
+    description: "Manages multi-turn conversations"
+    entry_point: "cortex.orchestrators.domain.conversation_orchestrator:ConversationOrchestrator"
+    features:
+      - context_management
+      - turn_processing
+      - history_tracking
+    dependencies:
+      - InteractionOrchestrator
+      - state_manager
+    
+  - name: SeleniumPlaywrightOrchestrator
+    category: DOMAIN
+    description: "Manages browser automation workflows"
+    entry_point: "cortex.orchestrators.domain.selenium_playwright_orchestrator:SeleniumPlaywrightOrchestrator"
+    features:
+      - selenium_integration
+      - playwright_integration
+      - browser_automation
+    dependencies:
+      - WorkflowOrchestrator
+
+initialization_order: 20
+
+conflict_resolution:
+  "DuplicateOrchestrator": "use_latest_version"
+  "MissingDependency": "fail_fast"
+
+metadata:
+  maintained_by: "CORTEX Domain Team"
+  last_updated: "2026-01-24"
+  git_commit: "ac-wiring-domain-001"
+  status: "active"

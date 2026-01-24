@@ -1,0 +1,102 @@
+# Support Orchestrators Wiring Specification
+# AC-ID: AC-WIRING-SUPPORT-001
+# Purpose: Declarative registration of 6 support orchestrators (CORE-031 compliance)
+
+module_name: support_orchestrators
+version: "1.0.0"
+description: "Support orchestrators: Onboarding, ToolDiscovery, Upgrade, Rollback, Setup, Composed"
+
+dependencies:
+  - name: core_orchestrators
+    version: ">=1.0.0"
+    required: true
+    internal: true
+    
+  - name: governance_registry
+    version: ">=1.0.0"
+    required: true
+    internal: false
+    
+  - name: documentation_system
+    version: ">=1.0.0"
+    required: false
+    internal: false
+
+provides:
+  - name: OnboardingOrchestrator
+    category: SUPPORT
+    description: "Manages onboarding workflows"
+    entry_point: "cortex.orchestrators.support.onboarding_orchestrator:OnboardingOrchestrator"
+    features:
+      - setup_guidance
+      - tutorial_management
+      - configuration_wizards
+    dependencies:
+      - governance_registry
+    
+  - name: ToolDiscoveryOrchestrator
+    category: SUPPORT
+    description: "Discovers and documents available tools"
+    entry_point: "cortex.orchestrators.support.tool_discovery_orchestrator:ToolDiscoveryOrchestrator"
+    features:
+      - mcp_tool_discovery
+      - capability_mapping
+      - tool_documentation
+    dependencies:
+      - MasterOrchestrator
+    
+  - name: UpgradeOrchestrator
+    category: SUPPORT
+    description: "Manages system upgrades"
+    entry_point: "cortex.orchestrators.support.upgrade_orchestrator:UpgradeOrchestrator"
+    features:
+      - version_checking
+      - migration_planning
+      - upgrade_execution
+    dependencies:
+      - governance_registry
+    
+  - name: RollbackOrchestrator
+    category: SUPPORT
+    description: "Manages system rollbacks"
+    entry_point: "cortex.orchestrators.support.rollback_orchestrator:RollbackOrchestrator"
+    features:
+      - snapshot_management
+      - state_recovery
+      - rollback_verification
+    dependencies:
+      - state_manager
+    
+  - name: SetupOrchestrator
+    category: SUPPORT
+    description: "Manages system setup and configuration"
+    entry_point: "cortex.orchestrators.support.setup_orchestrator:SetupOrchestrator"
+    features:
+      - environment_setup
+      - configuration_management
+      - validation_checks
+    dependencies:
+      - governance_registry
+    
+  - name: ComposedOrchestrator
+    category: SUPPORT
+    description: "Combines multiple orchestrators"
+    entry_point: "cortex.orchestrators.support.composed_orchestrator:ComposedOrchestrator"
+    features:
+      - orchestrator_composition
+      - workflow_combination
+      - result_aggregation
+    dependencies:
+      - MasterOrchestrator
+
+initialization_order: 30
+
+conflict_resolution:
+  "DuplicateOrchestrator": "use_latest_version"
+  "MissingDependency": "fail_fast"
+
+metadata:
+  maintained_by: "CORTEX Support Team"
+  last_updated: "2026-01-24"
+  git_commit: "ac-wiring-support-001"
+  status: "active"
