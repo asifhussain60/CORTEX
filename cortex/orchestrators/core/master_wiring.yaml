@@ -1,0 +1,70 @@
+# Master Orchestrator Wiring Specification
+# CORE-031 Compliance: Declarative autowiring for Git-safe registration
+
+module_name: master_orchestrator
+version: "2.0.0"
+description: |
+  Central orchestration hub that coordinates all domain orchestrators.
+  Routes intents to appropriate handlers via semantic capability matching.
+
+dependencies:
+  - name: intent_router
+    version: ">=1.5.0"
+    required: true
+    internal: false  # External until wiring spec created
+  - name: governance_registry
+    version: ">=1.0.0"
+    required: true
+    internal: false
+  - name: state_manager
+    version: ">=1.0.0"
+    required: true
+    internal: false
+  - name: audit_logger
+    version: ">=1.0.0"
+    required: true
+    internal: false
+
+provides:
+  - interface: IMasterOrchestrator
+    version: "2.0.0"
+    description: "Central orchestration coordination"
+  - interface: IOrchestrationPipeline
+    version: "1.0.0"
+    description: "4-stage orchestration pipeline"
+
+entry_points:
+  - name: "initialize"
+    function: "master_orchestrator.MasterOrchestrator.initialize"
+    phase: "startup"
+    order: 100
+  - name: "register_handlers"
+    function: "master_orchestrator.MasterOrchestrator.register_domain_handlers"
+    phase: "startup"
+    order: 200
+  - name: "validate_wiring"
+    function: "master_orchestrator.MasterOrchestrator.validate_orchestrator_wiring"
+    phase: "startup"
+    order: 300
+
+initialization_order: 100
+
+conflict_resolution:
+  duplicate_registration: "use_latest"
+  missing_dependency: "fail_fast"
+  circular_dependency: "reject_startup"
+
+capabilities:
+  - intent_routing
+  - domain_orchestration
+  - governance_enforcement
+  - state_persistence
+  - audit_logging
+
+governance:
+  tier: 0
+  rules_enforced:
+    - CORE-029  # Response headers
+    - CORE-032  # Intent classification
+    - CORE-033  # State persistence
+    - CORE-034  # Audit logging
