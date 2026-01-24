@@ -24,13 +24,13 @@ import json
 import yaml
 
 # Import modules to test
-from cortex.core.intent.lens_response_formatter import (
+from cortex.brain.core.intent.lens_response_formatter import (
     LENSResponseFormatter,
     FormattedResponse,
     ResponseFormat,
     SeverityColor,
 )
-from cortex.core.intent.lens_context_builder import LENSContext
+from cortex.brain.core.intent.lens_context_builder import LENSContext
 
 
 # ============================================================================
