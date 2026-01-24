@@ -104,8 +104,16 @@ class PolicyEnforcer:
         """Add custom enforcement rule.
         
         Args:
-            rule: Rule dictionary
+            rule: Rule dictionary with rule_id, name, conditions, actions
+            
+        Returns:
+            None
+            
+        Raises:
+            ValueError: If rule format is invalid
         """
+        if not rule.get("rule_id"):
+            raise ValueError("Rule must have a rule_id")
         # Store custom rule for future use
         pass
 
@@ -113,6 +121,6 @@ class PolicyEnforcer:
         """Get enforcement metrics.
         
         Returns:
-            Dictionary of metrics
+            Dictionary of metrics including total_decisions, allowed, blocked, warned
         """
         return self.metrics.copy()
