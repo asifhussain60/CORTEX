@@ -7,7 +7,7 @@ The actual implementation has been consolidated into master_orchestrator.py
 AC-ID: AC-PHASE5-BLOCKING-001
 """
 
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List
 from dataclasses import dataclass, field
 
 
@@ -19,6 +19,31 @@ class Stage1Output:
     stage: str = "stage_1"
     context: Dict[str, Any] = field(default_factory=dict)
     errors: List[str] = field(default_factory=list)
+
+
+@dataclass
+class Stage1ComprehensionContext:
+    """Context for Stage 1 Comprehension phase."""
+    
+    intent: str = ""
+    context: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class MasterOrchestrationStage1:
+    """Master Orchestration Stage 1 - Comprehension."""
+    
+    def __init__(self, context: Any = None) -> None:
+        self.context = context or {}
+    
+    def execute(self, **kwargs: Any) -> Stage1Output:
+        """Execute Stage 1 comprehension."""
+        return Stage1Output(
+            status="ok",
+            stage="stage_1",
+            context=self.context,
+            errors=[]
+        )
 
 
 def get_stage_1_output(**kwargs: Any) -> Stage1Output:
