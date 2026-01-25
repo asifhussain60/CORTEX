@@ -18,16 +18,9 @@ from datetime import datetime, timedelta
 from enum import Enum
 import threading
 import json
+from cortex.api.health_endpoints import HealthStatus
 
 logger = logging.getLogger(__name__)
-
-
-class HealthStatus(Enum):
-    """Health status levels."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
-    UNKNOWN = "unknown"
 
 
 @dataclass

@@ -4,10 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class HealthStatus(Enum):
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
+from cortex.api.health_endpoints import HealthStatus
 
 
 @dataclass

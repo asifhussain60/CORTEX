@@ -27,12 +27,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from threading import RLock, Semaphore
 from enum import Enum
-
-
-class HealthStatus(Enum):
-    """Health status enumeration."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
+from cortex.api.health_endpoints import HealthStatus
     UNHEALTHY = "unhealthy"
 
 
