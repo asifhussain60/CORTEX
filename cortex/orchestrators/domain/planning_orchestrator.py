@@ -314,6 +314,8 @@ class PlanningOrchestrator(IOrchestrator):
         The Neural Observatory's Plan Hub component consumes this data
         for dynamic rendering with glassmorphism styling.
         
+        Reads from cortex-registry (SSOT) instead of _workspaces/roadmap.
+        
         Args:
             phase_id: Specific phase to get (None returns all phases)
         
@@ -326,7 +328,8 @@ class PlanningOrchestrator(IOrchestrator):
                 "source": "PlanningOrchestrator",
                 "version": self._version,
                 "generated_at": datetime.now(timezone.utc).isoformat(),
-                "ssot_file": "_workspaces/roadmap/cortex-master.yaml",
+                "ssot_file": "cortex-registry/planning/index.yaml",
+                "ssot_authority": "AC-PERMANENT-FIX: CORTEX-REGISTRY-SSOT-001",
             },
             "visualization_target": "Neural Observatory Plan Hub",
             "deprecated": {
