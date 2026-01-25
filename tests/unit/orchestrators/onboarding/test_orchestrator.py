@@ -4,15 +4,16 @@ Unit tests for Onboarding Orchestrator & Flow Engine.
 Validates the OnboardingOrchestrator implementation with:
 - Async/await pattern support
 - Journey state machine (NEW -> IN_PROGRESS -> COMPLETED)
-- Result[T] error handling
+- Result[T] error handling using Ok/Err pattern
 - Audit logging of all onboarding events
+
+Updated: 2026-01-25 - Use is_ok()/is_err()/unwrap() API
 """
 
 import pytest
 from cortex.orchestrators.onboarding.orchestrator import (
     OnboardingOrchestrator,
     JourneyState,
-    Result,
     JourneyProgress
 )
 
@@ -32,17 +33,18 @@ class TestOnboardingOrchestrator:
             ['activity1', 'activity2', 'activity3']
         )
         
-        assert result.success is True
-        assert result.value.state == JourneyState.NEW
-        assert result.value.activities_completed == 0
-        assert result.value.total_activities == 3
+        assert result.is_ok() is True
+        journey = result.unwrap()
+        assert journey.state == JourneyState.NEW
+        assert journey.activities_completed == 0
+        assert journey.total_activities == 3
     
     def test_create_journey_duplicate(self):
         """Test that duplicate journeys are rejected."""
         self.orchestrator.create_journey('j1', 'user1', ['a1'])
         result = self.orchestrator.create_journey('j1', 'user2', ['a1'])
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'already exists' in result.error
     
     def test_start_journey_success(self):
@@ -50,14 +52,14 @@ class TestOnboardingOrchestrator:
         self.orchestrator.create_journey('j1', 'user1', ['a1', 'a2'])
         result = self.orchestrator.start_journey('j1')
         
-        assert result.success is True
-        assert result.value.state == JourneyState.IN_PROGRESS
+        assert result.is_ok() is True
+        assert result.unwrap().state == JourneyState.IN_PROGRESS
     
     def test_start_journey_not_found(self):
         """Test starting non-existent journey."""
         result = self.orchestrator.start_journey('nonexistent')
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'not found' in result.error
     
     def test_start_journey_already_started(self):
@@ -66,7 +68,7 @@ class TestOnboardingOrchestrator:
         self.orchestrator.start_journey('j1')
         result = self.orchestrator.start_journey('j1')
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'already in state' in result.error
     
     def test_complete_activity_success(self):
@@ -75,15 +77,15 @@ class TestOnboardingOrchestrator:
         self.orchestrator.start_journey('j1')
         result = self.orchestrator.complete_activity('j1', 0)
         
-        assert result.success is True
-        assert result.value.activities_completed == 1
+        assert result.is_ok() is True
+        assert result.unwrap().activities_completed == 1
     
     def test_complete_activity_not_started(self):
         """Test completing activity in non-started journey."""
         self.orchestrator.create_journey('j1', 'user1', ['a1'])
         result = self.orchestrator.complete_activity('j1', 0)
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'not in progress' in result.error
     
     def test_complete_activity_out_of_range(self):
@@ -92,7 +94,7 @@ class TestOnboardingOrchestrator:
         self.orchestrator.start_journey('j1')
         result = self.orchestrator.complete_activity('j1', 5)
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'out of range' in result.error
     
     def test_complete_journey_success(self):
@@ -101,16 +103,17 @@ class TestOnboardingOrchestrator:
         self.orchestrator.start_journey('j1')
         result = self.orchestrator.complete_journey('j1')
         
-        assert result.success is True
-        assert result.value.state == JourneyState.COMPLETED
-        assert result.value.completed_at is not None
+        assert result.is_ok() is True
+        journey = result.unwrap()
+        assert journey.state == JourneyState.COMPLETED
+        assert journey.completed_at is not None
     
     def test_complete_journey_not_started(self):
         """Test completing non-started journey."""
         self.orchestrator.create_journey('j1', 'user1', ['a1'])
         result = self.orchestrator.complete_journey('j1')
         
-        assert result.success is False
+        assert result.is_err() is True
         assert 'not in progress' in result.error
     
     def test_get_journey_progress(self):
@@ -121,9 +124,10 @@ class TestOnboardingOrchestrator:
         
         result = self.orchestrator.get_journey_progress('j1')
         
-        assert result.success is True
-        assert result.value.activities_completed == 1
-        assert result.value.total_activities == 2
+        assert result.is_ok() is True
+        progress = result.unwrap()
+        assert progress.activities_completed == 1
+        assert progress.total_activities == 2
     
     def test_audit_log_journey_created(self):
         """Test that journey creation is logged."""

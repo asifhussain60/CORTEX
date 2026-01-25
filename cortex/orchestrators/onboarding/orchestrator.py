@@ -8,7 +8,7 @@ Version: 1.0.0
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Generic, List, Optional, TypeVar
+from typing import Any, Dict, List, Optional, TypeVar, Union
 
 
 T = TypeVar('T')
@@ -27,7 +27,7 @@ class JourneyState(str, Enum):
     COMPLETED = "completed"
 
 
-from cortex.brain.core.result import Result
+from cortex.brain.core.result import Result, Ok, Err
 
 
 @dataclass
@@ -110,10 +110,7 @@ class OnboardingOrchestrator:
             Result containing the created Journey or error
         """
         if journey_id in self.journeys:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' already exists"
-            )
+            return Err(f"Journey '{journey_id}' already exists")
         
         journey = Journey(
             journey_id=journey_id,
@@ -130,7 +127,7 @@ class OnboardingOrchestrator:
             metadata={'total_activities': len(activities)}
         )
         
-        return Result(success=True, value=journey)
+        return Ok(journey)
     
     def start_journey(self, journey_id: str) -> Result[Journey]:
         """Start an onboarding journey.
@@ -143,16 +140,10 @@ class OnboardingOrchestrator:
         """
         journey = self.journeys.get(journey_id)
         if not journey:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not found"
-            )
+            return Err(f"Journey '{journey_id}' not found")
         
         if journey.state != JourneyState.NEW:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' already in state {journey.state.value}"
-            )
+            return Err(f"Journey '{journey_id}' already in state {journey.state.value}")
         
         journey.state = JourneyState.IN_PROGRESS
         journey.started_at = datetime.now()
@@ -163,7 +154,7 @@ class OnboardingOrchestrator:
             user_id=journey.user_id
         )
         
-        return Result(success=True, value=journey)
+        return Ok(journey)
     
     def complete_activity(
         self,
@@ -181,22 +172,13 @@ class OnboardingOrchestrator:
         """
         journey = self.journeys.get(journey_id)
         if not journey:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not found"
-            )
+            return Err(f"Journey '{journey_id}' not found")
         
         if journey.state != JourneyState.IN_PROGRESS:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not in progress"
-            )
+            return Err(f"Journey '{journey_id}' not in progress")
         
         if activity_index < 0 or activity_index >= len(journey.activities):
-            return Result(
-                success=False,
-                error=f"Activity index {activity_index} out of range"
-            )
+            return Err(f"Activity index {activity_index} out of range")
         
         # Track internally and update count
         if activity_index not in journey._completed_indices:
@@ -210,7 +192,7 @@ class OnboardingOrchestrator:
             metadata={'activity_index': activity_index}
         )
         
-        return Result(success=True, value=journey)
+        return Ok(journey)
     
     def complete_journey(self, journey_id: str) -> Result[Journey]:
         """Complete an onboarding journey.
@@ -223,16 +205,10 @@ class OnboardingOrchestrator:
         """
         journey = self.journeys.get(journey_id)
         if not journey:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not found"
-            )
+            return Err(f"Journey '{journey_id}' not found")
         
         if journey.state != JourneyState.IN_PROGRESS:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not in progress"
-            )
+            return Err(f"Journey '{journey_id}' not in progress")
         
         journey.state = JourneyState.COMPLETED
         journey.completed_at = datetime.now()
@@ -243,7 +219,7 @@ class OnboardingOrchestrator:
             user_id=journey.user_id
         )
         
-        return Result(success=True, value=journey)
+        return Ok(journey)
     
     def get_journey_progress(self, journey_id: str) -> Result[JourneyProgress]:
         """Get progress information for a journey.
@@ -256,10 +232,7 @@ class OnboardingOrchestrator:
         """
         journey = self.journeys.get(journey_id)
         if not journey:
-            return Result(
-                success=False,
-                error=f"Journey '{journey_id}' not found"
-            )
+            return Err(f"Journey '{journey_id}' not found")
         
         progress = JourneyProgress(
             state=journey.state,
@@ -267,7 +240,7 @@ class OnboardingOrchestrator:
             total_activities=len(journey.activities)
         )
         
-        return Result(success=True, value=progress)
+        return Ok(progress)
     
     def get_audit_log(self) -> List[Dict[str, Any]]:
         """Get the audit log entries.
@@ -305,6 +278,8 @@ class OnboardingOrchestrator:
 __all__ = [
     "JourneyState",
     "Result",
+    "Ok",
+    "Err",
     "Journey",
     "JourneyProgress",
     "OnboardingOrchestrator"
