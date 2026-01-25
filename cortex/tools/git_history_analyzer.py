@@ -180,7 +180,21 @@ class GitHistoryAnalyzer:
             return 0
     
     def _get_current_orchestrator_count(self) -> int:
-        """Get current count of wired orchestrators."""
+        """Get current count of wired orchestrators.
+        
+        Updated: 2026-01-25 - AC-PERMANENT-FIX-010: Use DatabaseBackedRegistry as primary
+        """
+        # Primary: Use DatabaseBackedRegistry (SSOT)
+        try:
+            from cortex.orchestrators import get_database_registry
+            
+            registry = get_database_registry()
+            stats = registry.get_wiring_statistics()
+            return stats.get('total_wired', 0)
+        except ImportError:
+            pass
+        
+        # Fallback: Read from YAML (legacy)
         registry_file = self.repo_path / "cortex_brain" / "tier0" / "repo-registry.yaml"
         if not registry_file.exists():
             return 0
@@ -197,21 +211,31 @@ class GitHistoryAnalyzer:
         """
         Validate all AC-PERMANENT-FIX commits are still active.
         
+        Updated: 2026-01-25 - AC-PERMANENT-FIX-010: Check DatabaseBackedRegistry first
+        
         Returns:
             Dict mapping fix_id to validation status
         """
         validations = {}
         
-        # AC-PERMANENT-FIX-001: Registry template locked
-        registry_file = self.repo_path / "cortex_brain" / "tier0" / "repo-registry.yaml"
-        if registry_file.exists():
-            try:
-                data = yaml.safe_load(registry_file.read_text())
-                validations['AC-PERMANENT-FIX-001'] = not data.get('registry_template', True)
-            except Exception:
+        # AC-PERMANENT-FIX-001: Registry is healthy (check DB first)
+        try:
+            from cortex.orchestrators import get_database_registry
+            
+            registry = get_database_registry()
+            stats = registry.get_wiring_statistics()
+            validations['AC-PERMANENT-FIX-001'] = stats.get('total_wired', 0) >= 18
+        except ImportError:
+            # Fallback to YAML check
+            registry_file = self.repo_path / "cortex_brain" / "tier0" / "repo-registry.yaml"
+            if registry_file.exists():
+                try:
+                    data = yaml.safe_load(registry_file.read_text())
+                    validations['AC-PERMANENT-FIX-001'] = not data.get('registry_template', True)
+                except Exception:
+                    validations['AC-PERMANENT-FIX-001'] = False
+            else:
                 validations['AC-PERMANENT-FIX-001'] = False
-        else:
-            validations['AC-PERMANENT-FIX-001'] = False
         
         # AC-PERMANENT-FIX-002: Verification files exist
         verify_files = [
