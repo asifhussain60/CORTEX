@@ -1,8 +1,73 @@
 # Planning Registry
 # Plan-type segregation for orchestrator phases
-# Execution, Planning, Analysis, and other phase types segregated
+# Authority: DatabaseBackedRegistry (SSOT)
+# Created: 2026-01-25
 
-plan_types: {}
 metadata:
-  authority: "cortex-impl-map.yaml phase_execution_tracking"
-  last_updated: null
+  registry_version: "1.0"
+  authority: "cortex-registry-001-migration"
+  last_updated: "2026-01-25"
+  description: "Consolidated Planning Orchestrator phases"
+
+plan_types:
+  "PHASE-PLANNING-001":
+    name: "Planning Orchestrator Consolidation"
+    status: "active"
+    description: "Unified planning orchestrator with registry-based data loading"
+    acs:
+      - "AC-PLANNING-CONSOLIDATED-001: Single orchestrator registration"
+      - "AC-PLANNING-CONSOLIDATED-002: LENS classification"
+      - "AC-PLANNING-CONSOLIDATED-003: Challenge system"
+      - "AC-PLANNING-CONSOLIDATED-004: Execution gates"
+  
+  "PHASE-PLANNING-002":
+    name: "Registry-Based Phase Management"
+    status: "active"
+    description: "Load phase data from cortex-registry/planning/ structure"
+    dependencies:
+      - "PHASE-PLANNING-001"
+  
+  "PHASE-PLANNING-003":
+    name: "Challenge System (4 Types)"
+    status: "active"
+    description: "Governance, Alternative Path, Scope Creep, Risk Mismatch"
+    dependencies:
+      - "PHASE-PLANNING-002"
+  
+  "PHASE-PLANNING-004":
+    name: "Execution Gates (Impact x Confidence)"
+    status: "active"
+    description: "Smart execution gates based on impact and confidence"
+    dependencies:
+      - "PHASE-PLANNING-003"
+  
+  "PHASE-PLANNING-005":
+    name: "Audit Trail (Hash Chain)"
+    status: "active"
+    description: "Cryptographic hash chain for audit integrity"
+    dependencies:
+      - "PHASE-PLANNING-001"
+  
+  "PHASE-PLANNING-006":
+    name: "MCP Tools (5+ Exposed)"
+    status: "active"
+    description: "Model Context Protocol tools for plan management"
+    dependencies:
+      - "PHASE-PLANNING-001"
+
+governance:
+  compliance_rules:
+    - "CORE-008: TDD - Tests before code"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-013: No bare except clauses"
+    - "CORE-026: Git checkpoint"
+    - "CORE-027: Audit trail logging"
+    - "CORE-030: Implementation truth"
+    - "CORE-035: Single canonical implementation"
+
+registry_metadata:
+  source: "cortex-registry/planning/"
+  ssot: true
+  versioning: "semantic"
+  authority: "DatabaseBackedRegistry"
