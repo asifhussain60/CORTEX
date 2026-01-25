@@ -406,11 +406,11 @@ def main() -> int:
         report = generate_completion_report()
         print(report)
         
-        # Save report to file
-        reports_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/reports")
+        # Save report to reports/phase-tracking/ with CORE-028 compliant naming
+        reports_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/reports/phase-tracking")
         reports_dir.mkdir(parents=True, exist_ok=True)
         
-        report_file = reports_dir / "PHASE-14-COMPLETION-REPORT.md"
+        report_file = reports_dir / "phase-14-completion-report.md"
         report_file.write_text(report)
         print(f"\n✅ Report saved to: {report_file}")
         
