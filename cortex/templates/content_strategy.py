@@ -53,14 +53,6 @@ class TemplateMetadata:
         }
 
 
-@dataclass
-class ValidationResult:
-    """Registry validation result."""
-    valid: bool
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
-
-
 class ContentPopulationStrategy:
     """Content population strategy and template registry.
     
