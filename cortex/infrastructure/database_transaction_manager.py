@@ -227,14 +227,17 @@ class DatabaseTransactionManager:
         # Get prior entry to validate linkage
         prior_entry_hash = self._get_prior_entry_hash(conn, ac_id)
         if prior_entry_hash or ac_id:  # Not a GENESIS entry for this AC-ID
-            # Create entry object for validation
-            class AuditEntry:
-                def __init__(self, prev_hash, entry_h):
-                    self.previous_hash = prev_hash
-                    self.entry_hash = entry_h
+            # Create entry objects for validation using canonical AuditEntry
+            from cortex.infrastructure.enhanced_audit_logger import AuditEntry
             
-            current = AuditEntry(previous_hash, entry_hash)
-            prior = AuditEntry("", prior_entry_hash) if prior_entry_hash else None
+            current = AuditEntry(
+                entry_id=0, timestamp="", ac_id="", operation="", status="", 
+                details={}, entry_hash=entry_hash, previous_hash=previous_hash
+            )
+            prior = AuditEntry(
+                entry_id=0, timestamp="", ac_id="", operation="", status="",
+                details={}, entry_hash=prior_entry_hash, previous_hash=""
+            ) if prior_entry_hash else None
             
             # Validate before insert
             self._validate_hash_chain(current, prior)
