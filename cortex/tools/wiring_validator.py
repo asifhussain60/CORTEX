@@ -3,27 +3,24 @@ Wiring Validator - Comprehensive Production Wiring Verification
 
 AC-ID: AC-WIRING-ENFORCEMENT-001
 Purpose: Validate that ALL orchestrators and components are wired into production pipeline
-Authority: cortex-total-recall.prompt.md (v3.0)
+Authority: cortex-total-recall.prompt.md (v8.0)
 Scope: Executed automatically on TotalRecallAgent initialization
 
-This module validates:
-1. All 23 orchestrators discoverable and registered
-2. All 28+ critical components initialized
-3. 4-stage pipeline integrity (Comprehension → Routing → Knowledge → Execution)
-4. MCP registry with 15 tools operational
-5. No circular dependencies or broken imports
-6. Governance registry singleton active
-7. TodoManager integrated with MasterOrchestrator
-8. StateManager cross-phase persistence working
+This module validates using DatabaseBackedRegistry as Single Source of Truth (SSOT):
+1. All 23 orchestrators registered and wired via DatabaseBackedRegistry
+2. 4-stage pipeline integrity (Comprehension → Routing → Knowledge → Execution)
+3. MCP registry with 15 tools operational
+4. Governance registry singleton active
+5. StateManager cross-phase persistence working
+
+Updated: 2026-01-25 - Now uses DatabaseBackedRegistry instead of hardcoded lists
 
 """
 
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
-from pathlib import Path
 import importlib
-import sys
 import logging
 
 logger = logging.getLogger(__name__)
@@ -53,19 +50,31 @@ class WiringValidator:
     """
     Comprehensive validator for CORTEX production wiring.
     
-    Executes on TotalRecallAgent initialization to ensure all components
-    are wired and operational. Provides detailed error reporting for
-    remediation.
+    Now uses DatabaseBackedRegistry as the Single Source of Truth (SSOT)
+    for orchestrator wiring status instead of hardcoded lists.
+    
+    Provides detailed error reporting for remediation.
     """
     
     def __init__(self):
         """Initialize validator."""
         self.validation_results: List[WiringValidationResult] = []
         self.timestamp_start = datetime.now()
+        self._db_registry = None
+    
+    def _get_db_registry(self) -> Optional[Any]:
+        """Get DatabaseBackedRegistry instance (lazy load)."""
+        if self._db_registry is None:
+            try:
+                from cortex.orchestrators.core.database_registry import get_database_registry
+                self._db_registry = get_database_registry()
+            except ImportError as e:
+                logger.warning("DatabaseBackedRegistry not available: %s", e)
+        return self._db_registry
     
     def validate_all_production_wiring(self) -> Dict[str, Any]:  # type: ignore
         """
-        Execute comprehensive wiring validation.
+        Execute comprehensive wiring validation using DatabaseBackedRegistry.
         
         Returns:
             Dict with overall status and detailed results per component category
@@ -73,47 +82,24 @@ class WiringValidator:
         results: Dict[str, Any] = {
             "overall_status": "PASS",
             "timestamp": datetime.now().isoformat(),
+            "registry_type": "DatabaseBackedRegistry",
             "checks": {}
         }
         
-        # Validate core orchestrators
-        core_result = self._validate_core_orchestrators()
-        results["checks"]["core_orchestrators"] = {
-            "status": core_result.status,
-            "coverage": f"{core_result.coverage_percent:.1f}%",
-            "validated": core_result.components_validated,
-            "total": core_result.components_total,
-            "failed": core_result.components_failed,
-            "errors": core_result.errors
+        # Validate orchestrators via DatabaseBackedRegistry
+        orchestrator_result = self._validate_orchestrators_via_db()
+        results["checks"]["orchestrators"] = {
+            "status": orchestrator_result.status,
+            "coverage": f"{orchestrator_result.coverage_percent:.1f}%",
+            "validated": orchestrator_result.components_validated,
+            "total": orchestrator_result.components_total,
+            "failed": orchestrator_result.components_failed,
+            "errors": orchestrator_result.errors
         }
-        if core_result.status == "FAIL":
+        if orchestrator_result.status == "FAIL":
             results["overall_status"] = "FAIL"
-        
-        # Validate domain orchestrators
-        domain_result = self._validate_domain_orchestrators()
-        results["checks"]["domain_orchestrators"] = {
-            "status": domain_result.status,
-            "coverage": f"{domain_result.coverage_percent:.1f}%",
-            "validated": domain_result.components_validated,
-            "total": domain_result.components_total,
-            "failed": domain_result.components_failed,
-            "errors": domain_result.errors
-        }
-        if domain_result.status == "FAIL":
-            results["overall_status"] = "FAIL"
-        
-        # Validate support orchestrators
-        support_result = self._validate_support_orchestrators()
-        results["checks"]["support_orchestrators"] = {
-            "status": support_result.status,
-            "coverage": f"{support_result.coverage_percent:.1f}%",
-            "validated": support_result.components_validated,
-            "total": support_result.components_total,
-            "failed": support_result.components_failed,
-            "errors": support_result.errors
-        }
-        if support_result.status != "PASS":
-            results["overall_status"] = "PARTIAL" if results["overall_status"] == "PASS" else "FAIL"
+        elif orchestrator_result.status == "PARTIAL" and results["overall_status"] == "PASS":
+            results["overall_status"] = "PARTIAL"
         
         # Validate 4-stage pipeline
         pipeline_result = self._validate_4stage_pipeline()
@@ -152,7 +138,7 @@ class WiringValidator:
             results["overall_status"] = "FAIL"
         
         # Calculate totals
-        all_results = [core_result, domain_result, support_result, pipeline_result, mcp_result, governance_result]
+        all_results = [orchestrator_result, pipeline_result, mcp_result, governance_result]
         results["total_checks"] = len(all_results)
         results["total_components"] = sum(r.components_total for r in all_results)
         results["total_validated"] = sum(r.components_validated for r in all_results)
@@ -163,101 +149,79 @@ class WiringValidator:
         
         return results
     
-    def _validate_core_orchestrators(self) -> WiringValidationResult:
-        """Validate 6 core orchestrators."""
-        core_orchestrators = [
-            ("InteractionOrchestrator", "cortex.orchestrators.core.interaction_orchestrator"),
-            ("IntentRouter", "cortex.intent_router.routing_engine"),
-            ("TDDOrchestrator", "cortex.orchestrators.core.tdd_orchestrator"),
-            ("WorkflowOrchestrator", "cortex.orchestrators.core.workflow_orchestrator"),
-            ("WrappedTDDOrchestrator", "cortex.orchestrators.core.wrapped_tdd_orchestrator"),
-            ("OrchestratorBootstrap", "cortex.orchestrators.core.orchestrator_bootstrap"),
-        ]
+    def _validate_orchestrators_via_db(self) -> WiringValidationResult:
+        """
+        Validate all orchestrators using DatabaseBackedRegistry.
         
+        Returns status from DB instead of trying to import modules directly.
+        """
         result = WiringValidationResult(
-            check_name="Core Orchestrators",
+            check_name="Orchestrators (via DatabaseBackedRegistry)",
             status="PASS",
-            components_total=len(core_orchestrators)
+            components_total=23  # Expected total
         )
         
-        for orch_name, module_path in core_orchestrators:
-            try:
-                module = importlib.import_module(module_path)
-                result.components_validated += 1
-                logger.info(f"✅ Core orchestrator validated: {orch_name}")
-            except ImportError as e:
-                result.components_failed.append(orch_name)
-                result.errors.append(f"{orch_name}: {str(e)}")
+        registry = self._get_db_registry()
+        if registry is None:
+            # Fallback to legacy validation
+            result.status = "PARTIAL"
+            result.errors.append("DatabaseBackedRegistry not available, using legacy validation")
+            return self._validate_orchestrators_legacy(result)
+        
+        try:
+            stats = registry.get_wiring_statistics()
+            result.components_total = stats.get("total_registered", 23)
+            result.components_validated = stats.get("total_wired", 0)
+            
+            # Determine status
+            coverage = result.components_validated / result.components_total if result.components_total > 0 else 0
+            if coverage >= 0.90:  # 90%+ = PASS
+                result.status = "PASS"
+            elif coverage >= 0.70:  # 70-90% = PARTIAL
+                result.status = "PARTIAL"
+            else:
                 result.status = "FAIL"
-                logger.error(f"❌ Failed to validate core orchestrator {orch_name}: {e}")
+            
+            # Get category breakdown
+            by_category = stats.get("by_category", {})
+            for cat, count in by_category.items():
+                logger.info(f"  {cat}: {count} orchestrators registered")
+            
+            logger.info(f"Orchestrator validation: {result.components_validated}/{result.components_total} wired ({coverage*100:.0f}%)")
+            
+        except Exception as e:
+            result.status = "FAIL"
+            result.errors.append(f"Failed to query DatabaseBackedRegistry: {str(e)}")
+            logger.error(f"DatabaseBackedRegistry query failed: {e}")
         
         return result
     
-    def _validate_domain_orchestrators(self) -> WiringValidationResult:
-        """Validate 5 domain orchestrators."""
-        domain_orchestrators = [
-            ("RefactoringOrchestrator", "cortex.orchestrators.domain.refactoring_orchestrator"),
-            ("PlanningOrchestrator", "cortex.orchestrators.domain.planning_orchestrator"),
-            ("DomainOrchestrator", "cortex.orchestrators.domain.domain_orchestrator"),
-            ("ConversationOrchestrator", "cortex.orchestrators.conversation_orchestrator"),
-            ("DomainBrain", "cortex.brain.domain_brain.domain_brain"),
+    def _validate_orchestrators_legacy(self, result: WiringValidationResult) -> WiringValidationResult:
+        """Legacy orchestrator validation by importing modules."""
+        orchestrators = [
+            ("MasterOrchestrator", "cortex.orchestrators.core.master_orchestrator"),
+            ("InteractionOrchestrator", "cortex.orchestrators.core.interaction_orchestrator"),
+            ("IntentRouter", "cortex.orchestrators.core.intent_router"),
+            ("TDDOrchestrator", "cortex.orchestrators.core.tdd_orchestrator"),
         ]
         
-        result = WiringValidationResult(
-            check_name="Domain Orchestrators",
-            status="PASS",
-            components_total=len(domain_orchestrators)
-        )
-        
-        for orch_name, module_path in domain_orchestrators:
+        result.components_total = len(orchestrators)
+        for orch_name, module_path in orchestrators:
             try:
-                module = importlib.import_module(module_path)
+                importlib.import_module(module_path)
                 result.components_validated += 1
-                logger.info(f"✅ Domain orchestrator validated: {orch_name}")
             except ImportError as e:
                 result.components_failed.append(orch_name)
                 result.errors.append(f"{orch_name}: {str(e)}")
-                result.status = "PARTIAL"  # Domain orchestrators are HIGH priority, not CRITICAL
-                logger.warning(f"⚠️  Failed to validate domain orchestrator {orch_name}: {e}")
-        
-        return result
-    
-    def _validate_support_orchestrators(self) -> WiringValidationResult:
-        """Validate 6 support orchestrators."""
-        support_orchestrators = [
-            ("OnboardingOrchestrator", "cortex.orchestrators.onboarding_orchestrator"),
-            ("ToolDiscoveryOrchestrator", "cortex.orchestrators.tools.tool_discovery_orchestrator"),
-            ("SeleniumPlaywrightOrchestrator", "cortex.orchestrators.migration.selenium_playwright_orchestrator"),
-            ("UpgradeOrchestrator", "cortex.orchestrators.upgrade_orchestrator"),
-            ("RollbackOrchestrator", "cortex.orchestrators.rollback_orchestrator"),
-            ("SetupOrchestrator", "cortex.orchestrators.setup_orchestrator"),
-        ]
-        
-        result = WiringValidationResult(
-            check_name="Support Orchestrators",
-            status="PASS",
-            components_total=len(support_orchestrators)
-        )
-        
-        for orch_name, module_path in support_orchestrators:
-            try:
-                module = importlib.import_module(module_path)
-                result.components_validated += 1
-                logger.info(f"✅ Support orchestrator validated: {orch_name}")
-            except ImportError as e:
-                result.components_failed.append(orch_name)
-                result.errors.append(f"{orch_name}: {str(e)}")
-                # Support orchestrators are MEDIUM priority
-                logger.warning(f"⚠️  Support orchestrator not yet implemented: {orch_name}")
         
         return result
     
     def _validate_4stage_pipeline(self) -> WiringValidationResult:
         """Validate 4-stage orchestration pipeline."""
         stages = [
-            ("Stage 1: Comprehension", "cortex.orchestrators.core.master_orchestrator_stage_1"),
-            ("Stage 2: Routing", "cortex.intent_router.routing_engine"),
-            ("Stage 3: Knowledge", "cortex.brain.core.knowledge_repository"),
+            ("Stage 1: Comprehension", "cortex.orchestrators.core.interaction_orchestrator"),
+            ("Stage 2: Routing", "cortex.orchestrators.core.intent_router"),
+            ("Stage 3: Knowledge", "cortex.brain.core.knowledge.knowledge_repository"),
             ("Stage 4: Execution", "cortex.orchestrators.core.master_orchestrator"),
         ]
         

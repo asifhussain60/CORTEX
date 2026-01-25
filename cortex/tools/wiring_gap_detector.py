@@ -3,20 +3,20 @@ Wiring Gap Detector - Identify Missing and Unregistered Components
 
 AC-ID: AC-WIRING-ENFORCEMENT-002
 Purpose: Detect gaps in orchestrator and component wiring
-Authority: cortex-total-recall.prompt.md (v3.0)
-Scope: Scans cortex/ for components not in registry, finds broken imports
+Authority: cortex-total-recall.prompt.md (v8.0)
+Scope: Uses DatabaseBackedRegistry as SSOT to detect wiring gaps
 
-This module detects:
-1. Orchestrators present in codebase but not registered
-2. Components without proper initialization
+This module detects using DatabaseBackedRegistry:
+1. Orchestrators registered but not wired
+2. Orchestrators in codebase but not registered
 3. Broken imports or circular dependencies
 4. Unregistered MCP tools
-5. Missing module exports
-6. Components with test failures
+
+Updated: 2026-01-25 - Now uses DatabaseBackedRegistry as SSOT
 
 """
 
-from typing import Dict, List, Set, Optional, Any
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -44,11 +44,12 @@ class WiringGap:
 
 class WiringGapDetector:
     """
-    Detects gaps in production wiring by scanning codebase for:
-    1. Unregistered orchestrators
-    2. Unregistered MCP tools
-    3. Broken imports
-    4. Orphaned components
+    Detects gaps in production wiring using DatabaseBackedRegistry as SSOT.
+    
+    Now queries DatabaseBackedRegistry for:
+    1. Registered but unwired orchestrators
+    2. Wiring validation status
+    3. Failed wiring attempts
     """
     
     def __init__(self, cortex_root: Optional[Path] = None):
@@ -58,27 +59,38 @@ class WiringGapDetector:
         
         self.cortex_root = cortex_root
         self.detected_gaps: List[WiringGap] = []
+        self._db_registry = None
+    
+    def _get_db_registry(self) -> Optional[Any]:
+        """Get DatabaseBackedRegistry instance (lazy load)."""
+        if self._db_registry is None:
+            try:
+                from cortex.orchestrators.core.database_registry import get_database_registry
+                self._db_registry = get_database_registry()
+            except ImportError as e:
+                logger.warning("DatabaseBackedRegistry not available: %s", e)
+        return self._db_registry
     
     def detect_all_gaps(self) -> Dict[str, Any]:
         """
-        Execute comprehensive gap detection.
+        Execute comprehensive gap detection using DatabaseBackedRegistry.
         
         Returns:
             Dict with detected gaps organized by category
         """
-        gaps_result = {
+        gaps_result: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
+            "registry_type": "DatabaseBackedRegistry",
             "total_gaps_detected": 0,
             "critical_gaps": [],
             "orchestrator_gaps": [],
             "mcp_tool_gaps": [],
             "import_gaps": [],
-            "orphaned_components": [],
             "remediation_summary": []
         }
         
-        # Detect unregistered orchestrators
-        orch_gaps = self._detect_unregistered_orchestrators()
+        # Detect orchestrator gaps via DatabaseBackedRegistry
+        orch_gaps = self._detect_orchestrator_gaps_via_db()
         gaps_result["orchestrator_gaps"] = [
             {
                 "name": gap.component_name,
@@ -114,20 +126,8 @@ class WiringGapDetector:
             for gap in import_gaps
         ]
         
-        # Detect orphaned components
-        orphan_gaps = self._detect_orphaned_components()
-        gaps_result["orphaned_components"] = [
-            {
-                "name": gap.component_name,
-                "file": gap.file_path,
-                "module": gap.module_path,
-                "remediation": gap.remediation
-            }
-            for gap in orphan_gaps
-        ]
-        
         # Summarize
-        all_gaps = orch_gaps + mcp_gaps + import_gaps + orphan_gaps
+        all_gaps = orch_gaps + mcp_gaps + import_gaps
         self.detected_gaps = all_gaps
         gaps_result["total_gaps_detected"] = len(all_gaps)
         gaps_result["critical_gaps"] = [
@@ -140,19 +140,80 @@ class WiringGapDetector:
         
         return gaps_result
     
-    def _detect_unregistered_orchestrators(self) -> List[WiringGap]:
-        """Scan for orchestrator classes not registered in MasterOrchestrator."""
+    def _detect_orchestrator_gaps_via_db(self) -> List[WiringGap]:
+        """
+        Detect orchestrator wiring gaps using DatabaseBackedRegistry.
+        
+        Returns gaps for:
+        - Registered but not wired orchestrators
+        - Failed wiring attempts
+        """
         gaps: List[WiringGap] = []
         
-        # Known orchestrator patterns
-        orchestrator_suffixes = ["Orchestrator", "Router", "Manager"]
+        registry = self._get_db_registry()
+        if registry is None:
+            # Fallback to legacy detection
+            logger.warning("DatabaseBackedRegistry not available, using legacy detection")
+            return self._detect_unregistered_orchestrators_legacy()
+        
+        try:
+            stats = registry.get_wiring_statistics()
+            total_registered = stats.get("total_registered", 0)
+            total_wired = stats.get("total_wired", 0)
+            
+            # If there are unwired orchestrators, report them
+            unwired_count = total_registered - total_wired
+            if unwired_count > 0:
+                gap = WiringGap(
+                    component_name=f"{unwired_count} unwired orchestrators",
+                    component_type="orchestrator",
+                    file_path="DatabaseBackedRegistry",
+                    module_path="cortex.orchestrators.core.database_registry",
+                    import_status="N/A",
+                    is_critical=unwired_count > 5,  # Critical if >5 unwired
+                    remediation=f"Run registry.wire_all() to wire {unwired_count} orchestrators"
+                )
+                gaps.append(gap)
+                logger.warning(f"⚠️  {unwired_count} orchestrators registered but not wired")
+            
+            # Check registry state
+            state = stats.get("state", "unknown")
+            if state not in ["wired", "validated"]:
+                gap = WiringGap(
+                    component_name=f"Registry state: {state}",
+                    component_type="orchestrator",
+                    file_path="DatabaseBackedRegistry",
+                    module_path="cortex.orchestrators.core.database_registry",
+                    import_status="N/A",
+                    is_critical=state == "error",
+                    remediation=f"Registry in {state} state - run initialize_registry() + wire_all()"
+                )
+                gaps.append(gap)
+            
+        except Exception as e:
+            logger.error(f"Error querying DatabaseBackedRegistry: {e}")
+            gap = WiringGap(
+                component_name="DatabaseBackedRegistry query failed",
+                component_type="orchestrator",
+                file_path="N/A",
+                module_path="cortex.orchestrators.core.database_registry",
+                import_status="FAILED",
+                error_message=str(e),
+                is_critical=True,
+                remediation="Check DatabaseBackedRegistry initialization"
+            )
+            gaps.append(gap)
+        
+        return gaps
+    
+    def _detect_unregistered_orchestrators_legacy(self) -> List[WiringGap]:
+        """Legacy orchestrator detection by scanning files."""
+        gaps: List[WiringGap] = []
         
         orchestrators_dir = self.cortex_root / "orchestrators"
         if not orchestrators_dir.exists():
-            logger.warning(f"Orchestrators directory not found: {orchestrators_dir}")
             return gaps
         
-        # Scan for .py files
         for py_file in orchestrators_dir.rglob("*.py"):
             if py_file.name.startswith("_"):
                 continue
@@ -161,33 +222,18 @@ class WiringGapDetector:
                 with open(py_file, "r") as f:
                     tree = ast.parse(f.read())
                 
-                # Look for class definitions ending with orchestrator patterns
                 for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        # Check if class name suggests it's an orchestrator
-                        is_orchestrator = any(
-                            node.name.endswith(suffix) for suffix in orchestrator_suffixes
+                    if isinstance(node, ast.ClassDef) and node.name.endswith("Orchestrator"):
+                        module_path = self._file_to_module_path(py_file)
+                        gap = WiringGap(
+                            component_name=node.name,
+                            component_type="orchestrator",
+                            file_path=str(py_file),
+                            module_path=module_path,
+                            import_status="NOT_ATTEMPTED",
+                            remediation=f"Register {node.name} in DatabaseBackedRegistry"
                         )
-                        
-                        if is_orchestrator and not node.name.startswith("_"):
-                            module_path = self._file_to_module_path(py_file)
-                            
-                            # Try to import and verify registration
-                            gap = WiringGap(
-                                component_name=node.name,
-                                component_type="orchestrator",
-                                file_path=str(py_file),
-                                module_path=module_path,
-                                import_status="NOT_ATTEMPTED"
-                            )
-                            
-                            # Check if registered
-                            if not self._is_registered_in_master(node.name):
-                                gap.is_critical = "Core" in node.name or node.name == "MasterOrchestrator"
-                                gap.remediation = f"Register {node.name} in MasterOrchestrator.register_orchestrator()"
-                                gaps.append(gap)
-                                logger.warning(f"⚠️  Unregistered orchestrator: {node.name}")
-            
+                        gaps.append(gap)
             except Exception as e:
                 logger.error(f"Error scanning {py_file}: {e}")
         
