@@ -1,0 +1,13 @@
+{
+  "$schema": "https://github.com/modelcontextprotocol/specification/blob/main/schema/mcp.json",
+  "mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp"],
+      "cwd": "c:/PROJECTS/CORTEX",
+      "env": {
+        "PYTHONPATH": "c:/PROJECTS/CORTEX"
+      }
+    }
+  }
+}

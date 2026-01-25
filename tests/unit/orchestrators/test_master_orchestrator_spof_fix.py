@@ -21,13 +21,7 @@ from enum import Enum
 # AC-ORCH-001: MasterOrchestrator SPOF Fix Tests (26 tests)
 # ============================================================================
 
-
-class HealthStatus(Enum):
-    """Health status enum for orchestrators."""
-
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
+from cortex.api.health_endpoints import HealthStatus
 
 
 @dataclass

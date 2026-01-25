@@ -13,19 +13,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result
-
-
-@dataclass
-class AuditEntry:
-    """Audit log entry structure."""
-    timestamp: datetime
-    operation: str
-    ac_id: Optional[str]
-    correlation_id: str
-    component: str
-    level: str
-    message: str
-    metadata: Optional[Dict[str, Any]] = None
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
 
 class IAuditLogger(ABC):
