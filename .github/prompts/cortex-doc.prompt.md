@@ -47,7 +47,7 @@ This prompt implements a **unified one-shot execution** model:
 | **Impact** | � High (Regenerates entire docs/) |
 | **Target** | `docs/`, `_workspaces/reports/` |
 | **Rules** | CORE-012, CORE-027 |
-| **Workflow** | 7-Phase end-to-end pipeline (no stopping) |
+| **Workflow** | 8-Phase end-to-end pipeline (no stopping) |
 
 ---
 **⏳ Awaiting approval to proceed with complete fresh documentation generation...**
@@ -57,15 +57,16 @@ This prompt implements a **unified one-shot execution** model:
 - Accept: "proceed", "yes", "approve", "go ahead", "do it"
 - Reject: "no", "cancel", "stop", "abort"
 
-**Step 3-9: Automatic End-to-End Execution (NO USER INTERACTION)**
+**Step 3-10: Automatic End-to-End Execution (NO USER INTERACTION)**
 Once approved, execute ALL phases without stopping:
-1. **PRE-CLEANUP** → Delete all docs/ except *.bat/*.sh
-2. **DISCOVERY** → Scan codebase for components
-3. **GENERATION** → Generate all markdown documentation
-4. **DIAGRAMS** → Generate Mermaid + D3.js diagrams (10 total)
-5. **BUILD** → mkdocs build --strict (ZERO warnings/errors)
-6. **VALIDATION** → Validate all links and references
-7. **REPORTING** → Generate completion report + git commit
+1. **DISCOVERY** → Scan codebase for components
+2. **GENERATION** → Generate all markdown documentation
+3. **DIAGRAMS** → Generate Mermaid + D3.js diagrams (10 total)
+4. **BUILD** → mkdocs build --strict (ZERO warnings/errors)
+5. **VALIDATION** → Validate all links and references
+6. **REPORTING** → Generate completion report
+7. **POST-CLEANUP** → Delete legacy markdown files (final cleanup)
+8. **GIT-COMMIT** → Final git commit with all changes
 
 ---
 
@@ -73,7 +74,7 @@ Once approved, execute ALL phases without stopping:
 
 | Command | Action | Execution |
 |---------|--------|-----------|
-| `/doc-fresh-generate` | Fresh generation: PRE-CLEANUP → DISCOVERY → GENERATION → DIAGRAMS → BUILD → VALIDATION → REPORTING | End-to-End (No stops) |
+| `/doc-fresh-generate` | Fresh generation: DISCOVERY → GENERATION → DIAGRAMS → BUILD → VALIDATION → REPORTING → POST-CLEANUP → GIT-COMMIT | End-to-End (No stops) |
 
 ---
 
@@ -81,31 +82,7 @@ Once approved, execute ALL phases without stopping:
 
 Once user approves with "proceed" or "yes", execute ALL phases automatically:
 
-### Phase 1: PRE-CLEANUP (Keep serve scripts only)
-```bash
-#!/bin/bash
-# OBJECTIVE: Delete ALL generated files, preserve infrastructure
-
-cd docs
-
-# Remove all generated markdown files
-find . -maxdepth 1 -type f -name "*.md" -delete
-
-# Remove generated directories  
-rm -rf _diagrams _reports _tests
-
-# VERIFY serve scripts still exist
-[ -f "serve-docs.bat" ] && [ -f "serve-docs.sh" ] && echo "✅ Serve scripts preserved"
-
-# Ensure infrastructure preserved
-for dir in _archive _hooks assets stylesheets theme; do
-    [ ! -d "$dir" ] && mkdir -p "$dir"
-done
-
-echo "✅ PHASE 1: PRE-CLEANUP COMPLETE"
-```
-
-### Phase 2: DISCOVERY (Scan codebase)
+### Phase 1: DISCOVERY (Scan codebase)
 ```python
 class DiscoveryOrchestrator:
     """Scan codebase for undocumented components."""
@@ -133,10 +110,10 @@ class DiscoveryOrchestrator:
             governance_rules=self.scan_governance()
         )
 
-print("✅ PHASE 2: DISCOVERY COMPLETE")
+print("✅ PHASE 1: DISCOVERY COMPLETE")
 ```
 
-### Phase 3: GENERATION (Create markdown docs)
+### Phase 2: GENERATION (Create markdown docs)
 ```python
 class DocumentationGenerationOrchestrator:
     """Generate comprehensive markdown documentation."""
@@ -154,7 +131,7 @@ class DocumentationGenerationOrchestrator:
         }
         return sections
 
-print("✅ PHASE 3: GENERATION COMPLETE")
+print("✅ PHASE 2: GENERATION COMPLETE")
 ```
 
 **Generated files:**
@@ -197,7 +174,7 @@ class DiagramGenerationOrchestrator:
             "d3js": self._generate_d3js_diagrams(d3js)
         }
 
-print("✅ PHASE 4: DIAGRAMS COMPLETE")
+print("✅ PHASE 3: DIAGRAMS COMPLETE")
 ```
 
 **Generated diagrams:**
@@ -212,11 +189,11 @@ print("✅ PHASE 4: DIAGRAMS COMPLETE")
 - `docs/_diagrams/d3/tdd-knowledge-cycle.html`
 - `docs/_diagrams/d3/domain-brain-architecture.html`
 
-### Phase 5: BUILD (mkdocs --strict)
+### Phase 4: BUILD (mkdocs --strict)
 ```bash
 #!/bin/bash
 
-echo "🏗️  PHASE 5: Building mkdocs (--strict: ZERO warnings/errors)..."
+echo "🏗️  PHASE 4: Building mkdocs (--strict: ZERO warnings/errors)..."
 
 # Validate configuration
 mkdocs validate || { echo "❌ Config invalid"; exit 1; }
@@ -230,15 +207,15 @@ if mkdocs build 2>&1 | grep -iE "warning|error"; then
     exit 1
 fi
 
-echo "✅ PHASE 5: BUILD COMPLETE - ZERO WARNINGS, ZERO ERRORS!"
+echo "✅ PHASE 4: BUILD COMPLETE - ZERO WARNINGS, ZERO ERRORS!"
 echo "📍 Site ready at: _build/site/"
 ```
 
-### Phase 6: VALIDATION (Check links and references)
+### Phase 5: VALIDATION (Check links and references)
 ```bash
 #!/bin/bash
 
-echo "🔗 PHASE 6: Validating all internal links..."
+echo "🔗 PHASE 5: Validating all internal links..."
 
 broken_count=0
 find _build/site -name "*.html" -print0 | while IFS= read -r -d '' file; do
@@ -253,14 +230,14 @@ find _build/site -name "*.html" -print0 | while IFS= read -r -d '' file; do
     done
 done
 
-[ $broken_count -eq 0 ] && echo "✅ PHASE 6: VALIDATION COMPLETE - All links valid"
+[ $broken_count -eq 0 ] && echo "✅ PHASE 5: VALIDATION COMPLETE - All links valid"
 ```
 
-### Phase 7: REPORTING (Commit and report)
+### Phase 6: REPORTING (Generate completion report)
 ```bash
 #!/bin/bash
 
-echo "📊 PHASE 7: Final Report & Git Commit"
+echo "📊 PHASE 6: Final Report"
 
 # Generate report
 report="FRESH-DOCUMENTATION-GENERATION-$(date +%Y-%m-%d).md"
@@ -309,13 +286,14 @@ cat > "_workspaces/reports/$report" << 'EOF'
 ✅ Serve scripts: serve-docs.bat, serve-docs.sh
 
 ## Execution Timeline
-- Pre-cleanup: [timestamp]
 - Discovery: [timestamp]
 - Generation: [timestamp]
 - Diagrams: [timestamp]
 - Build: [timestamp]
 - Validation: [timestamp]
 - Reporting: [timestamp]
+- Post-cleanup: [timestamp]
+- Git commit: [timestamp]
 
 ## Next Steps
 1. Run: `mkdocs serve` to preview
@@ -329,24 +307,68 @@ cat > "_workspaces/reports/$report" << 'EOF'
 ✅ Git checkpoint: Commit created
 EOF
 
-# Git commit
+# Git add (but don't commit - Phase 7 will commit everything)
 git add docs/
 git add _workspaces/reports/$report
+
+echo "✅ PHASE 6: REPORTING COMPLETE"
+echo "📊 Report: _workspaces/reports/$report"
+```
+
+### Phase 7: POST-CLEANUP (Remove legacy files)
+```bash
+#!/bin/bash
+
+echo "🧹 PHASE 7: POST-CLEANUP - Removing legacy files"
+
+cd docs
+
+# Remove all legacy markdown files (everything except serve scripts)
+find . -maxdepth 1 -type f -name "*.md" -delete
+
+# Remove old generated directories that may have been recreated
+rm -rf _diagrams _reports _tests
+
+# VERIFY serve scripts still exist
+[ -f "serve-docs.bat" ] && [ -f "serve-docs.sh" ] && echo "✅ Serve scripts preserved"
+
+# VERIFY new generated content exists
+if [ -d "01-getting-started" ] || [ -f "00-README.md" ]; then
+    echo "✅ Fresh documentation preserved"
+else
+    echo "❌ ERROR: Fresh documentation missing!"
+    exit 1
+fi
+
+echo "✅ PHASE 7: POST-CLEANUP COMPLETE"
+```
+
+### Phase 8: GIT-COMMIT (Final commit with all changes)
+```bash
+#!/bin/bash
+
+echo "📦 PHASE 8: Final Git Commit"
+
+# Commit all changes (fresh docs, diagrams, cleanup, and report)
 git commit -m "docs: fresh generation - $(date +%Y-%m-%d)
 
-- Phase 1: Pre-cleanup (preserve serve scripts)
-- Phase 2: Discovery (scan components)
-- Phase 3: Generation (create markdown)
-- Phase 4: Diagrams (6 Mermaid + 4 D3.js)
-- Phase 5: Build (--strict, zero warnings/errors)
-- Phase 6: Validation (link verification)
-- Phase 7: Reporting (completion summary)
+Fresh documentation generation pipeline complete:
+- Phase 1: Discovery (scan codebase)
+- Phase 2: Generation (create markdown)
+- Phase 3: Diagrams (6 Mermaid + 4 D3.js)
+- Phase 4: Build (--strict, zero warnings/errors)
+- Phase 5: Validation (all links verified)
+- Phase 6: Reporting (completion summary)
+- Phase 7: Post-cleanup (remove legacy files)
+- Phase 8: Git commit (all changes committed)
 
-Site ready: docs/_build/site/"
+Site ready: docs/_build/site/
+Serve with: mkdocs serve"
 
-echo "✅ PHASE 7: REPORTING COMPLETE"
-echo "📊 Report: _workspaces/reports/$report"
-echo "✅ Git commit: Created"
+git push origin $(git rev-parse --abbrev-ref HEAD)
+
+echo "✅ PHASE 8: GIT-COMMIT COMPLETE"
+echo "✅ All changes committed and pushed"
 ```
 
 ---
@@ -355,15 +377,16 @@ echo "✅ Git commit: Created"
 
 When user types "proceed":
 1. ✅ AC_START logged with operation ID
-2. ✅ Phase 1: PRE-CLEANUP executes (delete all except *.bat/*.sh)
-3. ✅ Phase 2: DISCOVERY executes (scan codebase)
-4. ✅ Phase 3: GENERATION executes (create all markdown)
-5. ✅ Phase 4: DIAGRAMS executes (10 diagrams total)
-6. ✅ Phase 5: BUILD executes (mkdocs --strict)
-7. ✅ Phase 6: VALIDATION executes (link checks)
-8. ✅ Phase 7: REPORTING executes (summary + commit)
-9. ✅ AC_COMPLETE logged with result
-10. ✅ Final summary displayed to user
+2. ✅ Phase 1: DISCOVERY executes (scan codebase)
+3. ✅ Phase 2: GENERATION executes (create all markdown)
+4. ✅ Phase 3: DIAGRAMS executes (10 diagrams total)
+5. ✅ Phase 4: BUILD executes (mkdocs --strict)
+6. ✅ Phase 5: VALIDATION executes (link checks)
+7. ✅ Phase 6: REPORTING executes (completion summary)
+8. ✅ Phase 7: POST-CLEANUP executes (remove legacy files)
+9. ✅ Phase 8: GIT-COMMIT executes (final commit + push)
+10. ✅ AC_COMPLETE logged with result
+11. ✅ Final summary displayed to user
 
 **NO STOPPING, NO CHOICES, NO PAUSES** — Fully automated end-to-end pipeline
 
