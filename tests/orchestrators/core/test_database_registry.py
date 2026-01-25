@@ -642,9 +642,23 @@ class TestErrorHandling:
         # Should have failure for invalid module
         assert not validation.passed or validation.passed_count < validation.checked_count
 
-    def test_missing_dependency_detection(self, registry):
+    def test_missing_dependency_detection(self, temp_db_dir):
         """Should detect and report missing dependencies."""
-        config = OrchestratorConfig(
+        # Use completely isolated registry for this test
+        from cortex.orchestrators.core.database_registry import DatabaseBackedRegistry
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+        
+        # Create isolated database for this test only
+        db_path = Path(temp_db_dir) / "isolated_test.db"
+        config = DatabaseConfig(db_path=db_path)
+        db_manager = DatabaseManager(config)
+        
+        # Create isolated registry instance (not using singleton)
+        test_registry = DatabaseBackedRegistry(db_manager)
+        test_registry.initialize_schema()
+        
+        # Create orphan config for testing
+        orphan_config = OrchestratorConfig(
             name="orphan",
             module_path="test.orphan",
             class_name="Orphan",
@@ -652,11 +666,14 @@ class TestErrorHandling:
             dependencies=["nonexistent_parent"],
         )
         
-        registry.register(config)
-        result = registry.compute_wiring_order()
+        # Register and test in isolated registry
+        test_registry.register(orphan_config)
+        result = test_registry.compute_wiring_order()
         
         # Should fail due to missing dependency
         assert result.is_err()
+        assert "nonexistent_parent" in result.error
+        assert "orphan" in result.error
 
 
 if __name__ == "__main__":

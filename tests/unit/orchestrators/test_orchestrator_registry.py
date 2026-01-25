@@ -30,15 +30,10 @@ class TestOrchestratorRegistryBridge:
     def test_registry_singleton(self):
         """Test that registry bridge works"""
         # AC-PERMANENT-FIX-012: Bridge to DatabaseBackedRegistry
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry1 = OrchestratorRegistry()
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry2 = OrchestratorRegistry()
-        
-        assert registry1 is registry2
-    
-    def test_register_orchestrator(self):
-        """Test registering an orchestrator (bridge compatibility)"""
-        # AC-PERMANENT-FIX-012: Bridge to DatabaseBackedRegistry 
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry = OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        registry = get_database_registry()
+from cortex.orchestrators import get_database_registry
+        registry = get_database_registry()
         registry.clear()  # Clear for clean test (no-op in bridge)
         
         metadata = OrchestratorMetadata(
@@ -60,7 +55,8 @@ class TestOrchestratorRegistryBridge:
     def test_register_validates_required_fields(self):
         """Test that registration validates required fields (bridge compatibility)"""
         # AC-PERMANENT-FIX-012: Use bridge to DatabaseBackedRegistry
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry = OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        registry = get_database_registry()
         registry.clear()
         
         # Missing domain field - should raise error
