@@ -1,12 +1,16 @@
 # CORTEX Total Recall - Production System Discovery & AC-PERMANENT-FIX Enforcement
 
-**Version:** 6.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SELF-VALIDATING
+**Version:** 7.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SELF-VALIDATING
 
-**AC-PERMANENT-FIX Commits Tracked:** 4 permanent fixes implemented  
+**AC-PERMANENT-FIX Commits Tracked:** 8 permanent fixes implemented  
 - AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
 - AC-PERMANENT-FIX-002: Add verification and documentation for orchestrator wiring fix  
 - AC-PERMANENT-FIX-003: Executive summary of orchestrator unwiring fix  
 - AC-PERMANENT-FIX-004: Complete transformation status - Fix verified and ready
+- AC-PERMANENT-FIX-005: CORE-030 Implementation Truth Enforcement ⭐ NEW
+- AC-PERMANENT-FIX-006: ChallengeEngine wiring into InteractionOrchestrator ⭐ NEW
+- AC-PERMANENT-FIX-007: CORE-035 Single Canonical Implementation detection ⭐ NEW
+- AC-PERMANENT-FIX-008: Duplicate implementation consolidation (~3,200 lines removed) ⭐ NEW
 
 ---
 

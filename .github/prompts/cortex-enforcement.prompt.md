@@ -1,5 +1,7 @@
 # CORTEX Enforcement - Governance Rule Enforcement System
-**Version:** 1.0 | **Updated:** 2026-01-24 | **Authority:** cortex_brain/tier0/governance/ | **Status:** ✅ PRODUCTION READY
+**Version:** 2.0 | **Updated:** 2026-01-25 | **Authority:** cortex_brain/tier0/governance/ | **Status:** ✅ PRODUCTION READY
+
+**CORE Rules Enforced:** 31 (CORE-001 through CORE-035)
 
 ---
 
@@ -65,6 +67,8 @@ Stage 4: Route to Domain Orchestrator (if no violations)
 | **CORE-012** | Docstrings | BLOCK code with missing docstrings |
 | **CORE-013** | Exception handling | BLOCK bare `except:` clauses |
 | **CORE-029** | Response headers | BLOCK responses without headers |
+| **CORE-030** | Implementation Truth | BLOCK answers based on docs without code verification ⭐ NEW |
+| **CORE-035** | Single Canonical | BLOCK creation of duplicate implementations ⭐ NEW |
 
 **Violation Response:**
 ```
