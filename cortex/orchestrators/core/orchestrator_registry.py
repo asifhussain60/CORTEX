@@ -3,11 +3,20 @@ Orchestrator Registry - Domain-based Query Interface
 
 AC-AR-006-03: Orchestrator registry queryable by domain
 
-Provides OrchestratorRegistry singleton for querying orchestrators:
-- Query by domain (e.g., "governance", "audit", "evidence")
-- Pattern matching and wildcards
-- Metadata retrieval
-- Registry statistics
+DEPRECATION NOTICE (AC-PERMANENT-FIX: AC-009):
+----------------------------------------------
+This registry provides legacy domain query support.
+For orchestrator wiring and SSOT operations, use DatabaseBackedRegistry:
+
+    from cortex.orchestrators.core.database_registry import (
+        DatabaseBackedRegistry,
+        get_database_registry,
+    )
+
+This module is maintained for backward compatibility with:
+- Domain-based queries (get_by_domain)
+- Pattern matching (query with wildcards)
+- Statistics retrieval
 
 Usage:
     registry = OrchestratorRegistry.instance()
@@ -24,9 +33,9 @@ Usage:
 Author: Asif Hussain
 """
 
-from typing import Dict, List, Optional, Any, Pattern
+from typing import Dict, List, Optional, Any, Pattern, Set
 import re
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from datetime import datetime
 
 from cortex.brain.core.decorators.orchestrator_decorator import (
@@ -41,17 +50,14 @@ class RegistryQuery:
     """Query result for registry lookups"""
     domain: Optional[str] = None
     pattern: Optional[str] = None
-    results: List[Dict[str, Any]] = None
+    results: List[Dict[str, Any]] = field(default_factory=lambda: [])
     total_count: int = 0
     matched_count: int = 0
-    query_time: str = None
-    
-    def __post_init__(self):
-        if self.results is None:
-            self.results = []
+    query_time: Optional[str] = None
 
 
 class OrchestratorRegistry:
+
     """
     Singleton registry for querying orchestrators by domain.
     
@@ -190,7 +196,7 @@ class OrchestratorRegistry:
     
     def get_domains(self) -> List[str]:
         """Get list of all registered domains."""
-        domains = set()
+        domains: Set[str] = set()
         for orch in self.get_all():
             domains.add(orch.get("domain", "unknown"))
         return sorted(list(domains))
@@ -202,7 +208,7 @@ class OrchestratorRegistry:
         Returns:
             Dict mapping domain -> list of capabilities
         """
-        capabilities = {}
+        capabilities: Dict[str, List[str]] = {}
         for orch in self.get_all():
             domain = orch.get("domain", "unknown")
             if domain not in capabilities:
@@ -227,11 +233,12 @@ class OrchestratorRegistry:
         capabilities = self.get_capabilities()
         
         # Flatten capabilities
-        all_capabilities = set()
+        all_capabilities: Set[str] = set()
         for caps in capabilities.values():
             all_capabilities.update(caps)
         
-        versions = set(orch.get("version") for orch in orchestrators)
+        versions: Set[Optional[str]] = set(orch.get("version") for orch in orchestrators)
+        versions_list = [v for v in versions if v is not None]
         
         return {
             "total_orchestrators": len(orchestrators),
@@ -240,7 +247,7 @@ class OrchestratorRegistry:
             "total_capabilities": len(all_capabilities),
             "capabilities": sorted(list(all_capabilities)),
             "capabilities_by_domain": capabilities,
-            "versions": sorted(list(versions)),
+            "versions": sorted(versions_list),
             "created_at": self.created_at,
             "last_query_time": datetime.now().isoformat()
         }
@@ -263,7 +270,7 @@ class OrchestratorRegistry:
     # Pattern Matching
     
     @staticmethod
-    def _pattern_to_regex(pattern: str) -> Pattern:
+    def _pattern_to_regex(pattern: str) -> Pattern[str]:
         """
         Convert wildcard pattern to regex.
         
@@ -276,6 +283,7 @@ class OrchestratorRegistry:
         # Escape special regex chars except *
         escaped = re.escape(pattern)
         # Replace escaped * with .*
+
         regex_pattern = escaped.replace(r"\*", ".*")
         # Match entire string
         regex_pattern = f"^{regex_pattern}$"
