@@ -537,7 +537,39 @@ rules:
       severity_on_bypass: "blocked"
 
   # --------------------------------------------------------------------------
-  # AC-PERMANENT-FIX-006: Challenge System Permanent Wiring
+  # AC-PERMANENT-FIX-007: Holistic Duplicate Detection Prevention
+  - rule_id: AC-PERMANENT-FIX-007
+    title: "Holistic Duplicate Detection Prevention" 
+    severity: BLOCKED
+    category: "governance"
+    description: |
+      Prevents duplicate implementations from causing system conflicts.
+      Triggered by discovery of ConversationProtocol duplicates causing import conflicts.
+      
+      MANDATORY ACTIONS:
+      1. Before any major operation, scan for duplicate class names
+      2. Check for conflicting import paths (same class from different modules)
+      3. Verify single canonical implementation for all interfaces
+      4. Block operations if duplicates detected until resolved
+      
+      DETECTION SCOPE:
+      - Class name conflicts across modules
+      - Interface implementations with different behaviors
+      - MCP tool name collisions
+      - Orchestrator registry conflicts
+      
+    enforcement:
+      pre_commit: true
+      pre_push: true
+      scope: "system_wide"
+      action: "BLOCK execution with AC-PERMANENT-FIX-007 violation"
+      validation_commands:
+        - "grep -r 'class ConversationProtocol' cortex/ | wc -l == 1"
+        - "python -c 'from cortex.tools.duplicate_detector import detect_class_conflicts; assert len(detect_class_conflicts()) == 0'"
+      remediation:
+        immediate: "Resolve duplicate implementations before proceeding"
+        long_term: "Implement continuous duplicate detection in CI/CD"
+      audit_event: "AC-PERMANENT-FIX-007"
   # --------------------------------------------------------------------------
   - rule_id: AC-PERMANENT-FIX-006
     category: architectural_enforcement
@@ -759,4 +791,4 @@ enforcement:
     "CORE-030": "✅ COMPLETE - Implementation-first validation protocol enforced"
     "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
     "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
-    "CORE-035": "✅ COMPLETE - Single canonical implementation enforced, 11 duplicate files deleted"
+    "CORE-035": "� IN_PROGRESS - ConversationProtocol RESOLVED! 323 violations remaining (down from 326). ValidationResult (17), AuditEntry (13) next priority."
