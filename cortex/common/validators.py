@@ -42,13 +42,14 @@ class ValidationError(Exception):
 
 
 @dataclass
+@dataclass
 class ValidationResult:
     """Result of a validation operation.
     
     Contains validation status and any errors encountered.
     """
-    is_valid: bool
     errors: Dict[str, str] = field(default_factory=dict)
+    is_valid: bool = True
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert result to dictionary.

@@ -144,7 +144,7 @@ class TemplateContentValidator:
             Validation result.
         """
         # Basic validation - always passes for now
-        return ValidationResult(valid=True)
+        return ValidationResult(valid=True, errors=[], warnings=[])
     
     def validate_inheritance(self, template_id: str) -> ValidationResult:
         """Validate template inheritance chain.
@@ -156,7 +156,7 @@ class TemplateContentValidator:
             Validation result.
         """
         # Basic validation - always passes for now
-        return ValidationResult(valid=True)
+        return ValidationResult(valid=True, errors=[], warnings=[])
     
     def validate_all(self) -> ValidationReport:
         """Validate all templates in registry.

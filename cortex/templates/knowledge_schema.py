@@ -6,8 +6,15 @@ Schema definitions and validation for template structures.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, NamedTuple
 from enum import Enum
+
+
+class ValidationResult(NamedTuple):
+    """Result of validation operation."""
+    valid: bool
+    errors: List[str]
+    warnings: List[str]
 
 
 class VariableType(Enum):
@@ -213,6 +220,7 @@ class KnowledgeBaseSchema:
         return ValidationResult(
             valid=len(errors) == 0,
             errors=errors,
+            warnings=[],
         )
     
     def to_json_schema(self) -> Dict[str, Any]:

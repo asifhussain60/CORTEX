@@ -46,7 +46,18 @@ class GovernanceRule:
     created_at: datetime
     created_by: str
 
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
+@dataclass
+class AuditEntry:
+    """Audit trail entry for governance decisions."""
+    
+    event_id: str
+    event_type: AuditEventType
+    conversation_id: str
+    actor_id: str
+    action: str
+    affected_rules: List[str]
+    metadata: Dict
     timestamp: datetime = None
     
     def to_dict(self) -> Dict:

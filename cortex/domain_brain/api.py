@@ -6,7 +6,20 @@ from enum import Enum
 from datetime import datetime
 from cortex.domain_brain.models import EntityType
 from cortex_brain.domain_brain.models import Conflict
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
+
+@dataclass
+class AuditEntry:
+    """Audit entry for tracking operations."""
+    
+    entry_id: str
+    operation: str
+    timestamp: datetime = field(default_factory=datetime.now)
+    details: Dict[str, Any] = field(default_factory=dict)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
             "entry_id": self.entry_id,
             "operation": self.operation,
             "timestamp": self.timestamp.isoformat() if self.timestamp else None,

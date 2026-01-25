@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 """Intent Reflection Protocol.
 
 Orchestrates the Master → Interaction delegation pattern for LENS protocol.
@@ -49,7 +48,15 @@ class ReflectionRequest:
     timestamp: str = ""
 
 
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+@dataclass
+class AuditEntry:
+    """Audit log entry for tracking intent reflection operations."""
+    
+    operation: str
+    timestamp: str
+    details: Dict[str, Any] = field(default_factory=dict)
+    
+    def get(self, key: str, default: Any = None) -> Any:
         """Get attribute with dict-like access."""
         if key == "operation":
             return self.operation
