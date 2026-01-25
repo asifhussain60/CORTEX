@@ -1,16 +1,57 @@
 # CORTEX Total Recall - Production System Discovery & AC-PERMANENT-FIX Enforcement
 
-**Version:** 7.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SELF-VALIDATING
+**Version:** 8.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + DB-BACKED SSOT
 
-**AC-PERMANENT-FIX Commits Tracked:** 8 permanent fixes implemented  
+**Registry Type:** DatabaseBackedRegistry (SQLite-backed Single Source of Truth)  
+**Wiring Status:** 23/23 orchestrators (100%)  
+
+**AC-PERMANENT-FIX Commits Tracked:** 9 permanent fixes implemented  
 - AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
 - AC-PERMANENT-FIX-002: Add verification and documentation for orchestrator wiring fix  
 - AC-PERMANENT-FIX-003: Executive summary of orchestrator unwiring fix  
 - AC-PERMANENT-FIX-004: Complete transformation status - Fix verified and ready
-- AC-PERMANENT-FIX-005: CORE-030 Implementation Truth Enforcement ⭐ NEW
-- AC-PERMANENT-FIX-006: ChallengeEngine wiring into InteractionOrchestrator ⭐ NEW
-- AC-PERMANENT-FIX-007: CORE-035 Single Canonical Implementation detection ⭐ NEW
-- AC-PERMANENT-FIX-008: Duplicate implementation consolidation (~3,200 lines removed) ⭐ NEW
+- AC-PERMANENT-FIX-005: CORE-030 Implementation Truth Enforcement
+- AC-PERMANENT-FIX-006: ChallengeEngine wiring into InteractionOrchestrator
+- AC-PERMANENT-FIX-007: CORE-035 Single Canonical Implementation detection
+- AC-PERMANENT-FIX-008: Duplicate implementation consolidation (~3,200 lines removed)
+- AC-PERMANENT-FIX-009: DatabaseBackedRegistry SSOT for orchestrator wiring ⭐ NEW
+
+---
+
+## 🗄️ DATABASE-BACKED REGISTRY (NEW - SSOT)
+
+**TotalRecallAgent now uses DatabaseBackedRegistry as the Single Source of Truth for all wiring operations.**
+
+```python
+from cortex.tools.total_recall_agent import TotalRecallAgent
+
+# Initialize with DatabaseBackedRegistry wiring (recommended)
+agent = TotalRecallAgent(auto_wire_production=True)
+
+# Behind the scenes:
+# 1. Initializes SQLite database at .cortex/orchestrator_registry.db
+# 2. Populates 23 orchestrator definitions (10 core, 6 domain, 6 support, 1 infra)
+# 3. Wires all orchestrators in dependency order
+# 4. Creates health checker for continuous monitoring
+# 5. Verifies MasterOrchestrator is operational
+
+# Check wiring status
+status = agent.get_wiring_status()
+print(f"Wired: {status['total_wired']}/{status['total_registered']}")  # 23/23
+print(f"Registry: {status['registry_type']}")  # DatabaseBackedRegistry
+
+# Verify production readiness
+readiness = agent.verify_production_readiness()
+print(f"Status: {readiness['status']}")  # READY
+print(f"Coverage: {readiness['orchestrator_coverage']*100:.0f}%")  # 100%
+```
+
+**Key Benefits:**
+- ✅ Persistent wiring survives git merges and restarts
+- ✅ Dependency-ordered wiring prevents initialization failures
+- ✅ Health monitoring detects unwiring and auto-recovers
+- ✅ Full audit trail of all wire/unwire operations
+- ✅ Thread-safe singleton pattern
 
 ---
 

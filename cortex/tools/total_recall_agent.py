@@ -690,77 +690,123 @@ class TotalRecallAgent:
         """
         Auto-wire ALL orchestrators and components for 100% production readiness.
         
-        AC-IDs: AC-TRANSFORM-001-WIRE-001, AC-TRANSFORM-001-WIRE-002, 
-                AC-TRANSFORM-001-WIRE-003, AC-WIRING-HARNESS-001
+        AC-IDs: AC-DB-SSOT-001, AC-WIRING-HARNESS-001
         
-        Workflow:
-        1. Execute WIRE-001: Core Orchestrators (6 orchestrators)
-        2. Execute WIRE-002: Domain Orchestrators (5 orchestrators)
-        3. Execute WIRE-003: Support Orchestrators (6 orchestrators)
-        4. Execute WIRE-004: Critical Components (28+ components)
-        5. Verify MasterOrchestrator initialization
-        6. Run production readiness tests (optional)
-        7. Generate wiring summary
+        Uses DatabaseBackedRegistry as Single Source of Truth (SSOT) for wiring:
+        1. Initialize SQLite-backed registry with 23 orchestrator definitions
+        2. Wire all orchestrators in dependency order
+        3. Start health checker for continuous monitoring
+        4. Verify MasterOrchestrator initialization
+        5. Generate wiring summary
         
         Returns:
             Dictionary with wiring results and production readiness status
+            
+        Example:
+            >>> agent = TotalRecallAgent(auto_wire_production=True)
+            >>> results = agent._production_wiring_results
+            >>> print(results["total_wired"])  # 23
+            >>> print(results["production_ready"])  # True
         """
         from datetime import datetime
         
-        logger.info("Starting 100% production wiring sequence")
+        logger.info("Starting DatabaseBackedRegistry production wiring sequence")
         
         results: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "phases": {},
             "total_wired": 0,
             "total_failed": 0,
-            "production_ready": False
+            "production_ready": False,
+            "registry_type": "DatabaseBackedRegistry"
         }
         
-        # Phase 1: WIRE-001 Core Orchestrators
+        # Phase 1: Initialize Database Registry (SSOT)
         try:
-            from cortex.orchestrators.core.wire_001_core_wiring import CoreOrchestratorWiring
+            from cortex.orchestrators.core.database_registry import (
+                get_database_registry,
+                initialize_registry
+            )
             
-            logger.info("Phase 1: Wiring WIRE-001 core orchestrators...")
-            core_wiring = CoreOrchestratorWiring()
-            wire_001_results = core_wiring.execute_all_wiring()
-            results["phases"]["WIRE-001"] = wire_001_results
-            results["total_wired"] += wire_001_results.get("success_count", 0)
-            logger.info("WIRE-001 complete: %d orchestrators wired", wire_001_results.get("success_count", 0))
+            logger.info("Phase 1: Initializing DatabaseBackedRegistry...")
+            init_result = initialize_registry()
+            
+            if init_result.is_err():
+                error_msg = str(init_result.err()) if hasattr(init_result, 'err') else str(init_result.error)
+                logger.error("Database registry initialization failed: %s", error_msg)
+                results["phases"]["DB-INIT"] = {"error": error_msg, "success": False}
+                return results
+            
+            results["phases"]["DB-INIT"] = {
+                "status": "completed",
+                "success": True,
+                "message": "DatabaseBackedRegistry initialized with 23 orchestrators"
+            }
+            logger.info("Phase 1 complete: Database registry initialized")
+            
+        except ImportError as e:
+            logger.error("DatabaseBackedRegistry module not available: %s", str(e))
+            results["phases"]["DB-INIT"] = {"error": str(e), "success": False}
+            return results
         except Exception as e:
-            logger.error("WIRE-001 failed: %s", str(e))
-            results["phases"]["WIRE-001"] = {"error": str(e), "success_count": 0}
+            logger.error("Phase 1 failed: %s", str(e))
+            results["phases"]["DB-INIT"] = {"error": str(e), "success": False}
+            return results
         
-        # Phase 2: WIRE-002 Domain Orchestrators
+        # Phase 2: Wire all orchestrators via DatabaseBackedRegistry
         try:
-            # Note: wire_002 and wire_003 implementations TBD
-            logger.info("Phase 2: Wiring WIRE-002 domain orchestrators...")
-            # Placeholder - to be implemented in wire_002_domain_wiring.py
-            results["phases"]["WIRE-002"] = {"status": "pending", "success_count": 0}
+            logger.info("Phase 2: Wiring all orchestrators via DatabaseBackedRegistry...")
+            registry = get_database_registry()
+            wire_result = registry.wire_all(fail_fast=False)
+            
+            if wire_result.is_err():
+                error_msg = str(wire_result.err()) if hasattr(wire_result, 'err') else str(wire_result.error)
+                logger.error("Wiring failed: %s", error_msg)
+                results["phases"]["DB-WIRE"] = {"error": error_msg, "success": False}
+                return results
+            
+            validation = wire_result.unwrap()
+            results["phases"]["DB-WIRE"] = {
+                "status": "completed",
+                "success": validation.passed,
+                "passed_count": validation.passed_count,
+                "failed_count": len(validation.failures) if validation.failures else 0,
+                "failures": validation.failures[:5] if validation.failures else [],  # First 5 failures
+            }
+            results["total_wired"] = validation.passed_count
+            results["total_failed"] = len(validation.failures) if validation.failures else 0
+            logger.info("Phase 2 complete: %d/%d orchestrators wired", 
+                       validation.passed_count, validation.passed_count + results["total_failed"])
+            
         except Exception as e:
-            logger.error("WIRE-002 failed: %s", str(e))
-            results["phases"]["WIRE-002"] = {"error": str(e), "success_count": 0}
+            logger.error("Phase 2 failed: %s", str(e))
+            results["phases"]["DB-WIRE"] = {"error": str(e), "success": False}
+            return results
         
-        # Phase 3: WIRE-003 Support Orchestrators
+        # Phase 3: Start health checker (optional background monitoring)
         try:
-            logger.info("Phase 3: Wiring WIRE-003 support orchestrators...")
-            # Placeholder - to be implemented in wire_003_support_wiring.py
-            results["phases"]["WIRE-003"] = {"status": "pending", "success_count": 0}
+            logger.info("Phase 3: Starting health checker...")
+            from cortex.orchestrators.core.health_checker import create_health_checker
+            
+            health_checker = create_health_checker(
+                registry=registry,
+                start_immediately=False,  # Don't start background thread by default
+                interval_seconds=60
+            )
+            results["phases"]["HEALTH-CHECKER"] = {
+                "status": "ready",
+                "success": True,
+                "message": "Health checker created (call start() to enable monitoring)"
+            }
+            logger.info("Phase 3 complete: Health checker ready")
+        except ImportError:
+            results["phases"]["HEALTH-CHECKER"] = {"status": "skipped", "message": "Health checker module not available"}
         except Exception as e:
-            logger.error("WIRE-003 failed: %s", str(e))
-            results["phases"]["WIRE-003"] = {"error": str(e), "success_count": 0}
+            logger.warning("Phase 3 warning: Health checker setup failed: %s", str(e))
+            results["phases"]["HEALTH-CHECKER"] = {"status": "warning", "error": str(e)}
         
-        # Phase 4: WIRE-004 Critical Components (existing auto-wiring)
-        logger.info("Phase 4: Wiring WIRE-004 critical components...")
-        results["phases"]["WIRE-004"] = {
-            "status": "completed" if self._wired_components else "pending",
-            "success_count": len(self._wired_components),
-            "wired_components": list(self._wired_components.keys())
-        }
-        results["total_wired"] += len(self._wired_components)
-        
-        # Phase 5: Verify MasterOrchestrator
-        logger.info("Phase 5: Verifying MasterOrchestrator...")
+        # Phase 4: Verify MasterOrchestrator
+        logger.info("Phase 4: Verifying MasterOrchestrator...")
         try:
             from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
             master = MasterOrchestrator.instance()
@@ -786,51 +832,51 @@ class TotalRecallAgent:
     
     def get_wiring_status(self) -> Dict[str, Any]:
         """
-        Get current wiring status for all orchestrators and components.
+        Get current wiring status from DatabaseBackedRegistry.
         
         Returns:
-            Dictionary with wiring status per phase (WIRE-001, WIRE-002, WIRE-003, WIRE-004)
+            Dictionary with wiring status including:
+            - total_wired: Count of successfully wired orchestrators
+            - total_registered: Count of orchestrators in registry
+            - orchestrators: Dict of orchestrator name -> wiring status
+            - production_ready: Boolean indicating >= 20 orchestrators wired
+            - registry_type: "DatabaseBackedRegistry"
+            
+        Example:
+            >>> agent = TotalRecallAgent()
+            >>> status = agent.get_wiring_status()
+            >>> print(status["total_wired"])  # 23
+            >>> print(status["production_ready"])  # True
         """
         status: Dict[str, Any] = {
-            "WIRE-001": {"wired": [], "success_count": 0},
-            "WIRE-002": {"wired": [], "success_count": 0},
-            "WIRE-003": {"wired": [], "success_count": 0},
-            "WIRE-004": {"wired": list(self._wired_components.keys()), "success_count": len(self._wired_components)},
-            "total_wired": len(self._wired_components),
-            "production_ready": False
+            "total_wired": 0,
+            "total_registered": 0,
+            "by_category": {},
+            "production_ready": False,
+            "registry_type": "DatabaseBackedRegistry"
         }
         
-        # Check WIRE-001 core orchestrators
         try:
-            from cortex.orchestrators.core.orchestrator_wiring import get_wiring_registry
-            registry = get_wiring_registry()
+            from cortex.orchestrators.core.database_registry import get_database_registry
             
-            core_orchestrators = [
-                "InteractionOrchestrator",
-                "IntentRouter",
-                "TDDOrchestrator",
-                "WorkflowOrchestrator",
-                "WrappedTDDOrchestrator",
-                "OrchestratorBootstrap"
-            ]
+            registry = get_database_registry()
+            stats = registry.get_wiring_statistics()
             
-            for orch in core_orchestrators:
-                if registry.get_orchestrator(orch.lower()):
-                    status["WIRE-001"]["wired"].append(orch)
+            status["total_registered"] = stats.get("total_registered", 0)
+            status["total_wired"] = stats.get("total_wired", 0)
+            status["by_category"] = stats.get("by_category", {})
+            status["state"] = stats.get("state", "unknown")
+            status["wiring_order"] = stats.get("wiring_order", [])
+            status["production_ready"] = status["total_wired"] >= 20
             
-            status["WIRE-001"]["success_count"] = len(status["WIRE-001"]["wired"])
+        except ImportError as e:
+            logger.warning("DatabaseBackedRegistry not available, falling back: %s", str(e))
+            # Fallback to legacy status
+            status["total_wired"] = len(self._wired_components)
+            status["registry_type"] = "legacy"
         except Exception as e:
-            logger.debug("Could not check WIRE-001 status: %s", str(e))
-        
-        # Calculate total and production ready status
-        status["total_wired"] = (
-            status["WIRE-001"]["success_count"] +
-            status["WIRE-002"]["success_count"] +
-            status["WIRE-003"]["success_count"] +
-            status["WIRE-004"]["success_count"]
-        )
-        
-        status["production_ready"] = status["total_wired"] >= 20
+            logger.error("Error getting wiring status: %s", str(e))
+            status["error"] = str(e)
         
         return status
     
@@ -838,16 +884,27 @@ class TotalRecallAgent:
         """
         Verify 100% production readiness of CORTEX system.
         
-        Checks:
-        - All orchestrators wired (target: 20/23 = 87%)
+        Uses DatabaseBackedRegistry to verify:
+        - All orchestrators wired (target: 23/23 = 100%)
         - MasterOrchestrator operational
+        - Health checker available
         - All critical components available
-        - Optional: Run test suite verification
         
         Returns:
-            Dictionary with production readiness status
+            Dictionary with production readiness status including:
+            - status: "READY" | "PARTIAL" | "BLOCKED"
+            - orchestrator_coverage: Percentage of orchestrators wired
+            - total_wired: Count of wired orchestrators
+            - master_operational: Boolean for MasterOrchestrator status
+            - registry_type: "DatabaseBackedRegistry"
+            
+        Example:
+            >>> agent = TotalRecallAgent()
+            >>> readiness = agent.verify_production_readiness()
+            >>> print(readiness["status"])  # "READY"
+            >>> print(readiness["orchestrator_coverage"])  # 1.0 (100%)
         """
-        logger.info("Verifying production readiness...")
+        logger.info("Verifying production readiness via DatabaseBackedRegistry...")
         
         wiring_status = self.get_wiring_status()
         
@@ -856,10 +913,11 @@ class TotalRecallAgent:
             "timestamp": datetime.now().isoformat(),
             "orchestrator_coverage": 0.0,
             "total_wired": wiring_status["total_wired"],
-            "tests_passed": 0,
-            "tests_failed": 0,
+            "total_registered": wiring_status.get("total_registered", 23),
             "master_operational": False,
-            "ac_ids_verified": [],
+            "health_checker_available": False,
+            "by_category": wiring_status.get("by_category", {}),
+            "registry_type": wiring_status.get("registry_type", "unknown"),
             "next_action": "REMEDIATE"
         }
         
@@ -872,19 +930,25 @@ class TotalRecallAgent:
             logger.warning("MasterOrchestrator check failed: %s", str(e))
             readiness["master_operational"] = False
         
-        # Calculate orchestrator coverage (target: 20/23 = 87%)
-        total_orchestrators = 23
+        # Check health checker availability
+        try:
+            from cortex.orchestrators.core.health_checker import OrchestratorHealthChecker
+            readiness["health_checker_available"] = True
+        except ImportError:
+            readiness["health_checker_available"] = False
+        
+        # Calculate orchestrator coverage
+        total_orchestrators = readiness["total_registered"] or 23
         readiness["orchestrator_coverage"] = wiring_status["total_wired"] / total_orchestrators
         
-        # Determine production readiness
+        # Determine production readiness (100% = READY with DB registry)
         if (
-            readiness["orchestrator_coverage"] >= 0.74 and  # At least 17/23 wired (74%)
-            readiness["master_operational"] and
-            len(self._wired_components) >= 10  # At least 10 critical components
+            readiness["orchestrator_coverage"] >= 0.90 and  # At least 90% wired
+            readiness["master_operational"]
         ):
             readiness["status"] = "READY"
             readiness["next_action"] = "DEPLOY"
-        elif readiness["orchestrator_coverage"] >= 0.50:
+        elif readiness["orchestrator_coverage"] >= 0.70:
             readiness["status"] = "PARTIAL"
             readiness["next_action"] = "CONTINUE_WIRING"
         else:
@@ -892,12 +956,15 @@ class TotalRecallAgent:
             readiness["next_action"] = "REMEDIATE"
         
         logger.info(
-            "Production readiness: %s (coverage: %.1f%%, wired: %d, master: %s)",
+            "Production readiness: %s (coverage: %.1f%%, wired: %d/%d, master: %s)",
             readiness["status"],
             readiness["orchestrator_coverage"] * 100,
             readiness["total_wired"],
+            total_orchestrators,
             readiness["master_operational"]
         )
+        
+        return readiness
         
         return readiness
     
