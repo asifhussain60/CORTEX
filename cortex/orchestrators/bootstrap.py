@@ -2,11 +2,14 @@
 Orchestrator Bootstrap & Initialization Module
 
 AC-AR-006-02: Wire all orchestrators into MasterOrchestrator
+AC-DB-SSOT-001: Database-backed Single Source of Truth for wiring
+
 - Register domain orchestrators (Planning, Refactoring)
 - Initialize conversation orchestrator (ConversationOrchestrator)
 - Wire intent router integration
 - Initialize registry and discovery
 - Activate all MCP tools
+- Initialize Database-Backed SSOT Registry (NEW)
 
 Ensures all orchestrators operational and interconnected.
 
@@ -17,10 +20,13 @@ from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 import threading
+import logging
 
 from cortex.core.result import Ok, Err
 from cortex.core.interfaces import IOrchestrator
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -32,6 +38,10 @@ class OrchestratorBootstrapConfig:
     initialize_discovery: bool = True
     enable_mcp_tools: bool = True
     timeout_seconds: float = 30.0
+    # NEW: Database-backed SSOT options
+    use_database_registry: bool = True  # Use DB-backed SSOT
+    enable_health_checks: bool = True   # Background health monitoring
+    health_check_interval: int = 60     # Seconds between health checks
 
 
 class OrchestratorBootstrap:
@@ -71,6 +81,8 @@ class OrchestratorBootstrap:
         self.conversation_orchestrator: Optional[Any] = None
         self.registry_initialized: bool = False
         self.discovery_initialized: bool = False
+        self._health_checker: Optional[Any] = None  # OrchestratorHealthChecker
+        self._database_registry: Optional[Any] = None  # DatabaseBackedRegistry
         self._initialized = True
     
     @classmethod
@@ -136,13 +148,21 @@ class OrchestratorBootstrap:
             if not step5["success"]:
                 bootstrap_result["errors"].append(step5["error"])
             
-            # Step 6: Enable MCP tools
-            step6 = self._enable_mcp_tools()
+            # Step 6: Initialize Database-Backed SSOT Registry (NEW)
+            step6 = self._initialize_database_registry()
             bootstrap_result["steps"].append(step6)
             if not step6["success"]:
-                bootstrap_result["errors"].append(step6["error"])
+                bootstrap_result["errors"].append(step6.get("error", "Database registry initialization failed"))
             else:
-                bootstrap_result["orchestrators"]["mcp_tools"] = step6["count"]
+                bootstrap_result["orchestrators"]["database_registry"] = "READY"
+            
+            # Step 7: Enable MCP tools
+            step7 = self._enable_mcp_tools()
+            bootstrap_result["steps"].append(step7)
+            if not step7["success"]:
+                bootstrap_result["errors"].append(step7["error"])
+            else:
+                bootstrap_result["orchestrators"]["mcp_tools"] = step7["count"]
             
             bootstrap_result["completed_at"] = datetime.now().isoformat()
             bootstrap_result["success"] = len(bootstrap_result["errors"]) == 0
@@ -373,9 +393,96 @@ class OrchestratorBootstrap:
                 "count": 0
             }
     
+    def _initialize_database_registry(self) -> Dict[str, Any]:
+        """
+        Initialize Database-Backed SSOT Registry - AC-DB-SSOT-001
+        
+        This is the key step that ensures persistent wiring survives:
+        - Git merges
+        - Application restarts
+        - Multi-machine deployments
+        """
+        try:
+            if not self.config.use_database_registry:
+                return {
+                    "step": "Initialize Database Registry",
+                    "success": True,
+                    "message": "Database registry disabled in config"
+                }
+            
+            from cortex.orchestrators.core.database_registry import (
+                get_database_registry,
+                initialize_registry
+            )
+            
+            # Initialize the database registry
+            registry_result = initialize_registry()
+            
+            if registry_result.is_err():
+                return {
+                    "step": "Initialize Database Registry",
+                    "success": False,
+                    "error": f"Failed to initialize database registry: {registry_result.err()}"
+                }
+            
+            registry = get_database_registry()
+            
+            # Wire all orchestrators
+            wire_result = registry.wire_all(fail_fast=False)
+            
+            if wire_result.is_err():
+                return {
+                    "step": "Initialize Database Registry",
+                    "success": False,
+                    "error": f"Failed to wire orchestrators: {wire_result.err()}"
+                }
+            
+            validation = wire_result.unwrap()
+            
+            # Optionally start health checks
+            if self.config.enable_health_checks:
+                try:
+                    from cortex.orchestrators.core.health_checker import create_health_checker
+                    
+                    self._health_checker = create_health_checker(
+                        registry=registry,
+                        start_immediately=True,
+                        interval_seconds=self.config.health_check_interval
+                    )
+                    health_status = "ACTIVE"
+                except Exception as e:
+                    logger.warning(f"Health checker initialization failed: {e}")
+                    health_status = "DISABLED"
+            else:
+                health_status = "DISABLED"
+            
+            return {
+                "step": "Initialize Database Registry",
+                "success": validation.passed,
+                "message": f"Database registry wired {validation.passed_count} orchestrators",
+                "wired_count": validation.passed_count,
+                "failures": validation.failures,
+                "health_checker": health_status
+            }
+            
+        except ImportError as e:
+            # Graceful fallback if database registry module not available yet
+            logger.warning(f"Database registry module not available: {e}")
+            return {
+                "step": "Initialize Database Registry",
+                "success": True,
+                "message": "Database registry module not available (fallback to in-memory)"
+            }
+        except Exception as e:
+            return {
+                "step": "Initialize Database Registry",
+                "success": False,
+                "error": f"Failed to initialize database registry: {str(e)}"
+            }
+    
     def get_status(self) -> Dict[str, Any]:
         """Get current bootstrap status"""
-        return {
+        status = {
             "master_orchestrator_ready": self.master_orchestrator is not None,
             "domain_orchestrators": list(self.domain_orchestrators.keys()),
             "conversation_orchestrator_ready": self.conversation_orchestrator is not None,
@@ -383,6 +490,26 @@ class OrchestratorBootstrap:
             "discovery_initialized": self.discovery_initialized,
             "timestamp": datetime.now().isoformat()
         }
+        
+        # Add database registry status
+        if self._database_registry is not None:
+            try:
+                status["database_registry"] = self._database_registry.get_status()
+            except Exception:
+                status["database_registry"] = "ERROR"
+        else:
+            status["database_registry"] = "NOT_INITIALIZED"
+        
+        # Add health checker status
+        if self._health_checker is not None:
+            try:
+                status["health_checker"] = self._health_checker.get_status()
+            except Exception:
+                status["health_checker"] = "ERROR"
+        else:
+            status["health_checker"] = "NOT_INITIALIZED"
+        
+        return status
 
 
 def bootstrap_orchestrators(config: Optional[OrchestratorBootstrapConfig] = None):
