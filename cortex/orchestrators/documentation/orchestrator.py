@@ -198,6 +198,63 @@ class DiagramGenerationOrchestrator(IOrchestrator):
         self._d3js_visualizations: List[DiagramSpec] = []
         self._initialize_diagram_specs()
     
+    # ========================================================================
+    # IOrchestrator Implementation
+    # ========================================================================
+    
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        return "DiagramGenerationOrchestrator"
+    
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        return "1.0.0"
+    
+    def initialize(self) -> Any:
+        """Initialize orchestrator."""
+        try:
+            self.logger.log_operation("initialize", {"status": "started"})
+            self._initialize_diagram_specs()
+            return Ok("DiagramGenerationOrchestrator initialized")
+        except Exception as e:
+            return Err(f"Initialization failed: {str(e)}")
+    
+    def get_mode(self) -> str:
+        """Get current operation mode."""
+        return "sync"
+    
+    def get_mcp_tools(self) -> Dict[str, Any]:
+        """Get available MCP tools."""
+        return {
+            "generate_mermaid": {
+                "description": "Generate Mermaid diagrams",
+                "parameters": {}
+            },
+            "generate_d3js": {
+                "description": "Generate D3.js visualizations",
+                "parameters": {}
+            },
+            "generate_all": {
+                "description": "Generate all diagrams",
+                "parameters": {}
+            }
+        }
+    
+    def get_audit_trail(self, limit: int = 100) -> Any:
+        """Get audit trail for orchestrator."""
+        return Ok([])  # Minimal implementation
+    
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
+        """Execute an operation."""
+        if operation_name == "generate_mermaid":
+            return self._generate_mermaid_diagrams()
+        elif operation_name == "generate_d3js":
+            return self._generate_d3js_diagrams()
+        elif operation_name == "generate_all":
+            return self._generate_all_diagrams()
+        else:
+            return Err(f"Unknown operation: {operation_name}")
+    
     def _initialize_diagram_specs(self) -> None:
         """Initialize diagram specifications."""
         # Mermaid diagrams
@@ -393,6 +450,56 @@ class DocumentationCleanupOrchestrator(IOrchestrator):
         self.state_manager = StateManager()
         self.docs_root = Path(docs_root)
         self._archive_root = self.docs_root / "_archive"
+    
+    # ========================================================================
+    # IOrchestrator Implementation
+    # ========================================================================
+    
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        return "DocumentationCleanupOrchestrator"
+    
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        return "1.0.0"
+    
+    def initialize(self) -> Any:
+        """Initialize orchestrator."""
+        try:
+            self.logger.log_operation("initialize", {"status": "started"})
+            return Ok("DocumentationCleanupOrchestrator initialized")
+        except Exception as e:
+            return Err(f"Initialization failed: {str(e)}")
+    
+    def get_mode(self) -> str:
+        """Get current operation mode."""
+        return "sync"
+    
+    def get_mcp_tools(self) -> Dict[str, Any]:
+        """Get available MCP tools."""
+        return {
+            "analyze": {
+                "description": "Analyze for redundancies",
+                "parameters": {}
+            },
+            "cleanup": {
+                "description": "Execute cleanup",
+                "parameters": {"dry_run": bool}
+            }
+        }
+    
+    def get_audit_trail(self, limit: int = 100) -> Any:
+        """Get audit trail for orchestrator."""
+        return Ok([])  # Minimal implementation
+    
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
+        """Execute an operation."""
+        if operation_name == "analyze":
+            return self._analyze_redundancies()
+        elif operation_name == "cleanup":
+            return self._execute_cleanup(dry_run=parameters.get("dry_run", True))
+        else:
+            return Err(f"Unknown operation: {operation_name}")
     
     def execute(self, operation: str, **kwargs) -> Result[Dict[str, Any], str]:
         """Execute cleanup operation."""
@@ -593,6 +700,79 @@ class DocumentationOrchestrator(IOrchestrator):
         self.state_manager = StateManager()
         self.diagram_generator = DiagramGenerationOrchestrator()
         self.cleanup_orchestrator = DocumentationCleanupOrchestrator()
+    
+    # ========================================================================
+    # IOrchestrator Implementation
+    # ========================================================================
+    
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        return "DocumentationOrchestrator"
+    
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        return "1.0.0"
+    
+    def initialize(self) -> Any:
+        """Initialize orchestrator."""
+        try:
+            self.logger.log_operation("initialize", {"status": "started"})
+            self.state_manager.set_state(
+                OperationState(
+                    operation="documentation",
+                    status="initialized",
+                    timestamp=datetime.now()
+                )
+            )
+            self.logger.log_operation("initialize", {"status": "complete"})
+            return Ok("DocumentationOrchestrator initialized")
+        except Exception as e:
+            return Err(f"Initialization failed: {str(e)}")
+    
+    def get_mode(self) -> str:
+        """Get current operation mode."""
+        return "sync"
+    
+    def get_mcp_tools(self) -> Dict[str, Any]:
+        """Get available MCP tools."""
+        return {
+            "discover_components": {
+                "description": "Discover components in codebase",
+                "parameters": {"include_orphaned": bool}
+            },
+            "generate_docs": {
+                "description": "Generate documentation",
+                "parameters": {"component": str}
+            },
+            "validate_docs": {
+                "description": "Validate documentation",
+                "parameters": {}
+            },
+            "cleanup": {
+                "description": "Execute cleanup operation",
+                "parameters": {"action": str}
+            }
+        }
+    
+    def get_audit_trail(self, limit: int = 100) -> Any:
+        """Get audit trail for orchestrator."""
+        return Ok([])  # Minimal implementation
+    
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
+        """Execute an operation."""
+        try:
+            if operation_name == "discover":
+                return self._discover_components()
+            elif operation_name == "generate":
+                return self._generate_documentation(parameters.get("component"))
+            elif operation_name == "validate":
+                return self._validate_documentation()
+            elif operation_name == "cleanup":
+                return self.cleanup_orchestrator.execute("analyze")
+            else:
+                return Err(f"Unknown operation: {operation_name}")
+        except Exception as e:
+            return Err(f"Operation error: {str(e)}")
     
     def execute(self, operation: str, **kwargs) -> Result[Dict[str, Any], str]:
         """Execute documentation operation."""
