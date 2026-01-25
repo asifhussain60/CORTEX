@@ -1,7 +1,7 @@
 # CORTEX Copilot Instructions
-**Version:** 5.0 | **Updated:** 2026-01-25 | **Authority:** CORTEX Master Orchestrator
+**Version:** 5.1 | **Updated:** 2026-01-25 | **Authority:** CORTEX Master Orchestrator
 
-**AC-PERMANENT-FIX:** 8 permanent fixes active (001-008)
+**AC-PERMANENT-FIX:** 9 permanent fixes active (001-009)
 
 ---
 
@@ -183,13 +183,18 @@ from cortex.brain.core.state_manager import StateManager, get_state_manager
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.circuit_breaker import CircuitBreaker
 
-# Database-Backed Registry (SSOT for orchestrator wiring)
-from cortex.orchestrators.core.database_registry import (
+# CANONICAL: Database-Backed Registry (SSOT for orchestrator wiring)
+# AC-PERMANENT-FIX-009: Use this for all registry imports
+from cortex.orchestrators import (
     DatabaseBackedRegistry,
     get_database_registry,
-    initialize_registry
+    initialize_registry,
+    OrchestratorConfig,
+    OrchestratorCategory,
+    WiringState,
+    OrchestratorHealthChecker,
+    create_health_checker,
 )
-from cortex.orchestrators.core.health_checker import OrchestratorHealthChecker
 ```
 
 ### Entry Points:
