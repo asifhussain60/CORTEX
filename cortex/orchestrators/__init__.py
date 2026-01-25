@@ -54,7 +54,7 @@ from cortex.orchestrators.core.db_wiring_init import (
 )
 
 # Legacy metadata registry (backward compatibility)
-from cortex.orchestrators.registry.orchestrator_registry import (
+from cortex.orchestrators.registry import (
     OrchestratorMetadata,
 )
 

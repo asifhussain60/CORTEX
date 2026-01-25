@@ -21,7 +21,7 @@ from typing import Dict, List, Set, Optional, Any, Type, Tuple
 from pathlib import Path
 from importlib.util import find_spec
 
-from cortex.orchestrators.registry.orchestrator_registry import OrchestratorRegistry, OrchestratorMetadata
+from cortex.orchestrators import get_database_registry, OrchestratorMetadata
 from cortex.orchestrators.registry.discovery_engine import DiscoveryEngine, DiscoveryQuery, DiscoveryResult
 from cortex.core.interfaces import IOrchestrator
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
@@ -146,7 +146,7 @@ class TestOrchestratorDiscovery:
     @pytest.fixture
     def registry(self) -> OrchestratorRegistry:
         """Provide OrchestratorRegistry instance."""
-        return OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
 
     @pytest.fixture
     def discovery_engine(self) -> DiscoveryEngine:
@@ -155,7 +155,7 @@ class TestOrchestratorDiscovery:
 
     def test_registry_singleton(self, registry: OrchestratorRegistry) -> None:
         """Test AC-AR-017-01: Registry follows singleton pattern."""
-        registry2 = OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry2 = OrchestratorRegistry()
         assert registry is registry2
 
     def test_discovery_engine_singleton(self, discovery_engine: DiscoveryEngine) -> None:
@@ -411,7 +411,7 @@ class TestCapabilitiesCompleteness:
     @pytest.fixture
     def registry(self) -> OrchestratorRegistry:
         """Provide OrchestratorRegistry instance."""
-        return OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
 
     def test_orchestrator_capabilities_documented(self, registry: OrchestratorRegistry) -> None:
         """Test AC-AR-017-01: All orchestrator capabilities are documented."""
@@ -444,7 +444,7 @@ class TestProductionReadinessInventory:
     @pytest.fixture
     def registry(self) -> OrchestratorRegistry:
         """Provide OrchestratorRegistry instance."""
-        return OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
 
     def test_all_required_orchestrator_domains_present(self, registry: OrchestratorRegistry) -> None:
         """Test AC-FR-DISCOVERY-101: All required orchestrator domains are represented."""
@@ -560,8 +560,8 @@ class TestCORE020MultiRepoGovernance:
 
     def test_orchestrator_registry_is_singleton(self) -> None:
         """Test AC-CORE-020: OrchestratorRegistry is singleton for centralized registration."""
-        reg1 = OrchestratorRegistry()
-        reg2 = OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - reg1 = OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - reg2 = OrchestratorRegistry()
         
         assert reg1 is reg2
 

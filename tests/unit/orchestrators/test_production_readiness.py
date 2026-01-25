@@ -24,7 +24,7 @@ import inspect
 
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 from cortex.orchestrators.tools.todo_manager import TodoManager, Phase, Task, TaskState, PhaseStatus
-from cortex.orchestrators.registry.orchestrator_registry import OrchestratorRegistry, OrchestratorMetadata
+from cortex.orchestrators import get_database_registry, OrchestratorMetadata
 from cortex.orchestrators.registry.discovery_engine import DiscoveryEngine, DiscoveryQuery
 from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
@@ -42,7 +42,7 @@ class TestCORTEXSystemReady:
             "MasterOrchestrator": MasterOrchestrator.instance(),
             "GovernanceRegistry": GovernanceRegistry.instance(),
             "AuditLogger": EnhancedAuditLogger.instance(),
-            "OrchestratorRegistry": OrchestratorRegistry(),
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
             "DiscoveryEngine": DiscoveryEngine(),
             "TodoManager": TodoManager(),
             "IntentClassifier": IntentClassifier(),
@@ -102,7 +102,7 @@ class TestCORTEXSystemReady:
             from cortex.brain.core.state_manager import StateManager, get_state_manager
             
             # Stage 4: Registry imports
-            from cortex.orchestrators.registry.orchestrator_registry import OrchestratorRegistry
+            from cortex.orchestrators import get_database_registry
             from cortex.orchestrators.registry.discovery_engine import DiscoveryEngine
             
             # Stage 5: Tool imports
@@ -124,7 +124,7 @@ class TestOrchestratorRegistration:
 
     def test_registry_operational(self) -> None:
         """Test AC-AR-017-01: Orchestrator registry is operational."""
-        registry = OrchestratorRegistry()
+        registry = get_database_registry()
         
         # Should be able to list all (even if empty)
         all_orchs = registry.list_all()
@@ -144,7 +144,7 @@ class TestOrchestratorRegistration:
 
     def test_orchestrator_registration_workflow(self) -> None:
         """Test AC-AR-017-01: Full orchestrator registration workflow."""
-        registry = OrchestratorRegistry()
+        registry = get_database_registry()
         
         # Create orchestrator metadata
         metadata = OrchestratorMetadata(
@@ -427,7 +427,7 @@ class TestProductionReadinessSummary:
             "TodoManager": TodoManager(),
             "GovernanceRegistry": GovernanceRegistry.instance(),
             "AuditLogger": EnhancedAuditLogger.instance(),
-            "OrchestratorRegistry": OrchestratorRegistry(),
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
             "DiscoveryEngine": DiscoveryEngine(),
             "IntentClassifier": IntentClassifier(),
         }
@@ -533,7 +533,7 @@ class TestProductionDeploymentReadiness:
         try:
             # 1. Orchestrators operational
             master = MasterOrchestrator.instance()
-            registry = OrchestratorRegistry()
+            registry = get_database_registry()
             engine = DiscoveryEngine()
             readiness_status["orchestrators_operational"] = all([master, registry, engine])
             

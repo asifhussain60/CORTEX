@@ -12,6 +12,7 @@ Respects and verifies AC-PERMANENT-FIX commits from git history:
 - AC-PERMANENT-FIX-002: Verification and documentation
 - AC-PERMANENT-FIX-003: Executive summary and readiness
 - AC-PERMANENT-FIX-004: Complete transformation status verification
+- AC-PERMANENT-FIX-012: Manual registry elimination (NEW)
 
 Entry Point: cortex.tools.total_recall_agent.TotalRecallAgent
 
@@ -25,6 +26,17 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+# AC-PERMANENT-FIX-012: Import manual registry elimination
+try:
+    from cortex.tools.manual_registry_eliminator import (
+        ManualRegistryEliminator,
+        eliminate_manual_registries,
+        enforce_database_registry_only
+    )
+    MANUAL_REGISTRY_ELIMINATOR_AVAILABLE = True
+except ImportError:
+    MANUAL_REGISTRY_ELIMINATOR_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -111,6 +123,13 @@ class ACPermanentFixEnforcer:
             "problem": "Need confirmation for Phase 1 deployment readiness",
             "solution": "Status verification complete - registry stable",
             "verification_fn": "verify_registry_persistence",
+            "critical": True,
+        },
+        "AC-PERMANENT-FIX-012": {
+            "title": "Manual Registry Elimination",
+            "problem": "Manual orchestrator registries still exist with fallback logic",
+            "solution": "Automatic detection and elimination of all manual registry patterns",
+            "verification_fn": "verify_manual_registries_eliminated",
             "critical": True,
         },
     }
@@ -226,6 +245,30 @@ class ACPermanentFixEnforcer:
             return False, "Neither DatabaseBackedRegistry nor YAML registry found"
         except Exception as e:
             return False, f"Registry persistence verification failed: {str(e)}"
+    
+    @staticmethod
+    def verify_manual_registries_eliminated() -> Tuple[bool, str]:
+        """
+        Verify AC-PERMANENT-FIX-012: Manual registries eliminated.
+        
+        Returns:
+            Tuple[bool, str]: (is_valid, message)
+        """
+        if not MANUAL_REGISTRY_ELIMINATOR_AVAILABLE:
+            return False, "ManualRegistryEliminator not available"
+        
+        try:
+            # Use enforce_database_registry_only to check for manual registries
+            enforce_result = enforce_database_registry_only()
+            if enforce_result:
+                return True, "✅ No manual registries detected - DatabaseBackedRegistry only"
+            else:
+                return False, "Manual registries still detected in codebase"
+        except RuntimeError as e:
+            # RuntimeError indicates manual registries were found
+            return False, f"Manual registries found: {str(e)}"
+        except Exception as e:
+            return False, f"Manual registry verification failed: {str(e)}"
     
     @classmethod
     def verify_all_fixes(cls) -> Dict[str, Dict[str, Any]]:
@@ -1037,6 +1080,66 @@ class TotalRecallAgent:
         logger.info(ACPermanentFixEnforcer.get_ac_permanent_fix_report())
         
         return ac_fixes
+    
+    def eliminate_manual_registries(self) -> Dict[str, Any]:
+        """
+        Eliminate all manual orchestrator registries (AC-PERMANENT-FIX-012).
+        
+        Uses ManualRegistryEliminator to automatically detect and remove:
+        - Legacy OrchestratorRegistry usage
+        - Manual wire_001/002/003 imports and calls
+        - Fallback logic in MasterOrchestrator
+        - Any remaining manual registry patterns
+        
+        Returns:
+            Dictionary with elimination results and statistics
+        
+        Example:
+            >>> agent = TotalRecallAgent()
+            >>> report = agent.eliminate_manual_registries()
+            >>> print(f"Eliminated {report['manual_registries_found']} manual registries")
+        """
+        if not MANUAL_REGISTRY_ELIMINATOR_AVAILABLE:
+            return {
+                "manual_registries_found": 0,
+                "files_modified": 0,
+                "fallbacks_removed": 0,
+                "single_path_active": False,
+                "error": "ManualRegistryEliminator not available"
+            }
+        
+        logger.info("AC-PERMANENT-FIX-012: Eliminating manual orchestrator registries")
+        
+        try:
+            # Run full elimination
+            eliminator = ManualRegistryEliminator()
+            report = eliminator.eliminate_all_manual_registries()
+            
+            logger.info(
+                "Manual registry elimination complete: %d patterns eliminated across %d files",
+                report.manual_registries_found,
+                report.files_modified
+            )
+            
+            return {
+                "manual_registries_found": report.manual_registries_found,
+                "files_scanned": report.files_scanned,
+                "files_modified": report.files_modified,
+                "fallbacks_removed": report.fallbacks_removed,
+                "single_path_active": report.single_path_active,
+                "patterns_eliminated": len(report.patterns_eliminated),
+                "errors": report.errors
+            }
+            
+        except Exception as e:
+            logger.error("Manual registry elimination failed: %s", str(e))
+            return {
+                "manual_registries_found": 0,
+                "files_modified": 0,
+                "fallbacks_removed": 0,
+                "single_path_active": False,
+                "error": str(e)
+            }
     
     def recall(
         self,

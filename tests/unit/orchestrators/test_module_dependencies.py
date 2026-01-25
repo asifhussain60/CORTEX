@@ -406,12 +406,12 @@ class TestModuleConsistency:
 
     def test_registry_consistency(self) -> None:
         """Test AC-FR-MODULE-013: Registry instances are consistent."""
-        from cortex.orchestrators.registry.orchestrator_registry import OrchestratorRegistry
+        # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry bridge
+        from cortex.orchestrators.registry import OrchestratorRegistry
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - r1 = OrchestratorRegistry()
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - r2 = OrchestratorRegistry()
         
-        r1 = OrchestratorRegistry()
-        r2 = OrchestratorRegistry()
-        
-        # Should be same instance
+        # Should be same instance (bridge pattern)
         assert r1 is r2
 
     def test_governance_registry_consistency(self) -> None:

@@ -90,32 +90,19 @@ except ImportError:
     ConversationProtocol = None
     RoundContext = None
 
-# AC-TRANSFORM-001-WIRE-001: Import Core Orchestrator Wiring
-# Registers 6 core orchestrators: Interaction, Intent Router, TDD, Workflow, Wrapped TDD, Bootstrap
+# AC-PERMANENT-FIX-012: DatabaseBackedRegistry-Only Wiring (Single Source of Truth)
+# REMOVED: Manual registry pattern - # ALL 23 orchestrators wired via DatabaseBackedRegistry - NO manual wiring or fallbacks
 try:
-    from cortex.orchestrators.core.wire_001_core_wiring import execute_wire_001
+    from cortex.orchestrators import (
+        get_database_registry,
+        initialize_database_wiring,
+        register_all_orchestrators
+    )
 except ImportError:
-    execute_wire_001 = None
-
-# AC-TRANSFORM-001-WIRE-002: Import Domain Orchestrator Wiring
-# Registers 5-6 domain orchestrators: Domain handlers, business domains, infrastructure
-try:
-    from cortex.orchestrators.core.wire_002_domain_wiring import execute_wire_002
-except ImportError:
-    execute_wire_002 = None
-
-# AC-TRANSFORM-001-WIRE-003: Import Support Orchestrator Wiring
-# Registers 6 support orchestrators: Onboarding, Discovery, Upgrade, Rollback, Setup, Composed
-try:
-    from cortex.orchestrators.core.wire_003_support_wiring import execute_wire_003
-except ImportError:
-    execute_wire_003 = None
-
-# AC-TRANSFORM-001-WIRING-REGISTRY: Import wiring registry for orchestrator discovery
-try:
-    from cortex.orchestrators.core.orchestrator_wiring import get_wiring_registry
-except ImportError:
-    get_wiring_registry = None
+    # If DatabaseBackedRegistry not available, system cannot function
+    get_database_registry = None
+    initialize_database_wiring = None
+    register_all_orchestrators = None
 
 
 @dataclass
@@ -613,19 +600,27 @@ class MasterOrchestrator(IOrchestrator):
                 details={"bootstrap_steps": len(bootstrap_data.get("steps", []))}
             )
             
-            # AC-TRANSFORM-001-AUTOWIRING: Execute Declarative Autowiring
-            # PHASE 4: Transition from manual WIRE modules to YAML-based declarative wiring (CORE-031)
-            # This replaces WIRE-001/002/003 with AutowiringOrchestrator for Git-safe registration
+            # AC-PERMANENT-FIX-012: DatabaseBackedRegistry ONLY (No Fallbacks)
+            # Single execution path - ALL orchestrators wired via DatabaseBackedRegistry
             
             self.logger.log_operation_start(
-                ac_id="AC-TRANSFORM-001-AUTOWIRING",
-                operation="DECLARATIVE_ORCHESTRATOR_WIRING",
-                details={"strategy": "YAML_based_specs", "target_orchestrators": 23}
+                ac_id="AC-PERMANENT-FIX-012",
+                operation="DATABASE_BACKED_ORCHESTRATOR_WIRING",
+                details={"strategy": "SQLite_SSOT", "target_orchestrators": 23}
             )
             
-            wire_001_count = 0
-            wire_002_count = 0
-            wire_003_count = 0
+            total_wired = 0
+            
+            # ENFORCE: Only DatabaseBackedRegistry path allowed
+            if initialize_database_wiring is None:
+                error_msg = "CRITICAL: DatabaseBackedRegistry not available - system cannot function without SSOT"
+                self.logger.log_operation_complete(
+                    ac_id="AC-PERMANENT-FIX-012",
+                    operation="DATABASE_BACKED_ORCHESTRATOR_WIRING",
+                    success=False,
+                    details={"error": error_msg}
+                )
+                return Err(error_msg)
             
             try:
                 # Initialize AutowiringOrchestrator
@@ -633,128 +628,60 @@ class MasterOrchestrator(IOrchestrator):
                 
                 autowiring = AutowiringOrchestrator()
                 
-                # Step 1: Discover YAML wiring specifications
-                discovery_result = autowiring.discover_wiring_specs()
-                if discovery_result.is_err():
-                    # Fallback to manual WIRE modules if specs not found
-                    self.logger.log_operation_start(
-                        ac_id="AC-TRANSFORM-001-AUTOWIRING-FALLBACK",
-                        operation="FALLBACK_TO_MANUAL_WIRING",
-                        details={"reason": "yaml_specs_not_found", "total_wiring_modules": 3}
+                # AC-PERMANENT-FIX-012: Single-path DatabaseBackedRegistry initialization
+                # No fallbacks, no manual wiring - DatabaseBackedRegistry is the SSOT
+                self.logger.log_operation_start(
+                    ac_id="AC-PERMANENT-FIX-012-DATABASE-REGISTRY",
+                    operation="DATABASE_REGISTRY_INITIALIZATION",
+                    details={"strategy": "single_path_enforcement"}
+                )
+                
+                try:
+                    from cortex.orchestrators import get_database_registry, initialize_registry
+                    
+                    # Initialize the registry
+                    init_result = initialize_registry()
+                    if init_result.is_err():
+                        error_msg = f"DatabaseBackedRegistry initialization failed: {init_result.error}"
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PERMANENT-FIX-012-DATABASE-REGISTRY",
+                            operation="DATABASE_REGISTRY_INITIALIZATION",
+                            success=False,
+                            details={"error": error_msg}
+                        )
+                        return Err(error_msg)
+                    
+                    # Get registry and stats
+                    registry = get_database_registry()
+                    stats = registry.get_wiring_statistics()
+                    total_wired = stats.get('total_wired', 0)
+                    total_registered = stats.get('total_registered', 0)
+                    
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PERMANENT-FIX-012-DATABASE-REGISTRY", 
+                        operation="DATABASE_REGISTRY_INITIALIZATION",
+                        success=True,
+                        details={
+                            "total_wired": total_wired,
+                            "total_registered": total_registered,
+                            "strategy": "database_backed_registry_only",
+                            "manual_fallbacks_eliminated": True
+                        }
                     )
                     
-                    wire_001_count = 0
+                    wire_001_count = total_wired  # Report all wiring as core for compatibility
                     wire_002_count = 0
                     wire_003_count = 0
                     
-                    if execute_wire_001 is not None:
-                        try:
-                            wire_001_result = execute_wire_001()
-                            wire_001_success = wire_001_result.get("summary", {}).get("status") == "SUCCESS"
-                            wire_001_count = wire_001_result.get("summary", {}).get("total_wired", 0)
-                            
-                            self.logger.log_operation_complete(
-                                ac_id="AC-TRANSFORM-001-WIRE-001-FALLBACK",
-                                operation="CORE_ORCHESTRATOR_WIRING_FALLBACK",
-                                success=wire_001_success,
-                                details={"orchestrators_wired": wire_001_count}
-                            )
-                        except Exception as wire_err:
-                            self.logger.log_operation_complete(
-                                ac_id="AC-TRANSFORM-001-WIRE-001-FALLBACK",
-                                operation="CORE_ORCHESTRATOR_WIRING_FALLBACK",
-                                success=False,
-                                details={"error": str(wire_err)}
-                            )
-                    
-                    if execute_wire_002 is not None:
-                        try:
-                            wire_002_result = execute_wire_002()
-                            wire_002_count = wire_002_result.get("summary", {}).get("total_wired", 0)
-                        except Exception as wire_err:
-                            self.logger.log_operation_complete(
-                                ac_id="AC-TRANSFORM-001-WIRE-002-FALLBACK",
-                                operation="DOMAIN_ORCHESTRATOR_WIRING_FALLBACK",
-                                success=False,
-                                details={"error": str(wire_err)}
-                            )
-                    
-                    if execute_wire_003 is not None:
-                        try:
-                            wire_003_result = execute_wire_003()
-                            wire_003_count = wire_003_result.get("summary", {}).get("total_wired", 0)
-                        except Exception as wire_err:
-                            self.logger.log_operation_complete(
-                                ac_id="AC-TRANSFORM-001-WIRE-003-FALLBACK",
-                                operation="SUPPORT_ORCHESTRATOR_WIRING_FALLBACK",
-                                success=False,
-                                details={"error": str(wire_err)}
-                            )
-                else:
-                    # Step 2: Extract specs from Ok result
-                    specs_dict = discovery_result.unwrap() if hasattr(discovery_result, 'unwrap') else {}
-                    
+                except Exception as e:
+                    error_msg = f"DatabaseBackedRegistry failed: {str(e)}"
                     self.logger.log_operation_complete(
-                        ac_id="AC-TRANSFORM-001-AUTOWIRING-DISCOVERY",
-                        operation="SPEC_DISCOVERY",
-                        success=True,
-                        details={"specs_discovered": len(specs_dict), "modules": list(specs_dict.keys())}
+                        ac_id="AC-PERMANENT-FIX-012-DATABASE-REGISTRY",
+                        operation="DATABASE_REGISTRY_INITIALIZATION", 
+                        success=False,
+                        details={"error": error_msg}
                     )
-                    
-                    # Step 3: Validate dependency graph
-                    validation_result = autowiring.validate_dependency_graph(specs_dict)
-                    if validation_result.is_err():
-                        self.logger.log_operation_complete(
-                            ac_id="AC-TRANSFORM-001-AUTOWIRING-VALIDATION",
-                            operation="DEPENDENCY_GRAPH_VALIDATION",
-                            success=False,
-                            details={"error": "dependency_validation_failed"}
-                        )
-                        return Err(f"Dependency validation failed")
-                    
-                    sorted_modules = validation_result.unwrap() if hasattr(validation_result, 'unwrap') else []
-                    self.logger.log_operation_complete(
-                        ac_id="AC-TRANSFORM-001-AUTOWIRING-VALIDATION",
-                        operation="DEPENDENCY_GRAPH_VALIDATION",
-                        success=True,
-                        details={"sorted_modules": sorted_modules}
-                    )
-                    
-                    # Step 4: Apply wiring from YAML specs
-                    for module_name, spec in specs_dict.items():
-                        init_order = spec.initialization_order
-                        orchestrator_count = len(spec.provides)
-                        
-                        if init_order <= 10:
-                            wire_001_count += orchestrator_count
-                        elif init_order <= 20:
-                            wire_002_count += orchestrator_count
-                        else:
-                            wire_003_count += orchestrator_count
-                        
-                        self.logger.log_operation_complete(
-                            ac_id=f"AC-AUTOWIRING-{module_name.upper()}",
-                            operation="ORCHESTRATOR_REGISTRATION",
-                            success=True,
-                            details={
-                                "module": module_name,
-                                "orchestrators": orchestrator_count,
-                                "initialization_order": init_order
-                            }
-                        )
-                    
-                    self.logger.log_operation_complete(
-                        ac_id="AC-TRANSFORM-001-AUTOWIRING",
-                        operation="DECLARATIVE_ORCHESTRATOR_WIRING",
-                        success=True,
-                        details={
-                            "wire_001_count": wire_001_count,
-                            "wire_002_count": wire_002_count,
-                            "wire_003_count": wire_003_count,
-                            "total_wired": wire_001_count + wire_002_count + wire_003_count,
-                            "strategy": "YAML_based_declarative"
-                        }
-                    )
+                    return Err(error_msg)
             
             except Exception as e:
                 self.logger.log_operation_complete(

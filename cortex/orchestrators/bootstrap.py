@@ -302,28 +302,34 @@ class OrchestratorBootstrap:
     def _initialize_registry(self) -> Dict[str, Any]:
         """Initialize orchestrator registry - AC-AR-017-01"""
         try:
+            # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry only
             if not self.config.initialize_registry:
                 return {
-                    "step": "Initialize OrchestratorRegistry",
+                    "step": "Initialize DatabaseBackedRegistry",
                     "success": True,
                     "message": "Registry initialization disabled"
                 }
             
-            from cortex.orchestrators.registry.orchestrator_registry import OrchestratorRegistry
+            # ENFORCE: Only DatabaseBackedRegistry allowed (no legacy registries)
+            from cortex.orchestrators import get_database_registry, initialize_database_wiring
             
-            registry = OrchestratorRegistry.instance()
+            # Initialize DatabaseBackedRegistry as SSOT
+            registry = get_database_registry()
+            
+            # Ensure all orchestrators are registered and wired
+            wiring_result = initialize_database_wiring()
             
             self.registry_initialized = True
             return {
-                "step": "Initialize OrchestratorRegistry",
+                "step": "Initialize DatabaseBackedRegistry",
                 "success": True,
-                "message": "OrchestratorRegistry initialized as singleton"
+                "message": f"DatabaseBackedRegistry initialized with {len(registry.get_all_orchestrators())} orchestrators"
             }
         except Exception as e:
             return {
-                "step": "Initialize OrchestratorRegistry",
+                "step": "Initialize DatabaseBackedRegistry",
                 "success": False,
-                "error": f"Failed to initialize registry: {str(e)}"
+                "error": f"Failed to initialize DatabaseBackedRegistry: {str(e)}"
             }
     
     def _initialize_discovery(self) -> Dict[str, Any]:

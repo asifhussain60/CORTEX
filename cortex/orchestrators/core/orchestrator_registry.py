@@ -19,7 +19,7 @@ This module is maintained for backward compatibility with:
 - Statistics retrieval
 
 Usage:
-    registry = OrchestratorRegistry.instance()
+registry = get_database_registry()
     
     # Query by exact domain
     orchestrators = registry.get_by_domain("governance")

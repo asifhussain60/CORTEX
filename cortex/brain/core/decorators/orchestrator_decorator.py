@@ -19,7 +19,7 @@ Usage:
         ...
 
 Then orchestrators are auto-discovered:
-    registry = OrchestratorRegistry.instance()
+registry = get_database_registry()
     orchestrators = registry.get_orchestrators_by_domain("governance")
 
 Author: Asif Hussain

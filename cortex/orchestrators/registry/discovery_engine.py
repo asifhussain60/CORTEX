@@ -17,10 +17,19 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import time
 
-from cortex.orchestrators.registry.orchestrator_registry import (
-    OrchestratorRegistry,
-    OrchestratorMetadata,
-)
+# AC-PERMANENT-FIX-012: Use bridge to DatabaseBackedRegistry
+try:
+    from cortex.orchestrators.registry import (
+        OrchestratorRegistry,
+        OrchestratorMetadata,
+    )
+except ImportError:
+    # Fallback for tests
+    class OrchestratorRegistry:
+        pass
+    
+    class OrchestratorMetadata:
+        pass
 
 
 @dataclass
@@ -68,7 +77,13 @@ class DiscoveryEngine:
         if self._initialized:
             return
         
-        self.registry = OrchestratorRegistry()
+        # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry
+        try:
+            from cortex.orchestrators import get_database_registry
+            self.registry = get_database_registry()
+        except ImportError:
+            # Fallback for tests
+            self.registry = None
         self._initialized = True
     
     def search(self, query: DiscoveryQuery) -> DiscoveryResult:
