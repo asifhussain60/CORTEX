@@ -179,7 +179,160 @@ Recommendations:
 
 ------
 
-## 🔧 AC-PERMANENT-FIX ENFORCEMENT (TIER 0 - IMMUTABLE)
+## � CORE-035 DEDUPLICATION ENFORCEMENT (TIER 0 - IMMUTABLE)
+
+**Critical Pattern:** This prompt enforces CORE-035 "Single Canonical Implementation" detection and consolidation on EVERY discovery operation.
+
+**What is CORE-035?**
+- ONE implementation of each orchestrator, component, interface
+- NO duplicate classes/functions across cortex/ and cortex_brain/
+- ALL imports use canonical location only
+- ALL tests verify non-duplicate imports
+
+**Mandatory Enforcement on EVERY Total Recall Operation:**
+
+### Step 1: Scan for Duplicates (AUTOMATIC)
+```python
+from cortex.tools.duplicate_detector import DuplicateDetector
+
+detector = DuplicateDetector()
+duplicates = detector.find_all_duplicates()
+
+print("🔍 CORE-035 Duplicate Scan Results:")
+print(f"   Total duplicates found: {len(duplicates)}")
+
+for item in duplicates:
+    print(f"\n   ⚠️  DUPLICATE FOUND: {item['name']}")
+    print(f"       Version 1: {item['path1']} (Last modified: {item['date1']})")
+    print(f"       Version 2: {item['path2']} (Last modified: {item['date2']})")
+    print(f"       Canonical: {item['canonical_path']} (most recent, most compliant)")
+    print(f"       Status: {item['status']} (CRITICAL if not consolidated)")
+```
+
+**Expected Output (Healthy System):**
+```
+🔍 CORE-035 Duplicate Scan Results:
+   Total duplicates found: 0
+   ✅ ZERO duplicates detected - System is CORE-035 compliant
+```
+
+### Step 2: Verify Master Orchestrator Wiring (AUTOMATIC)
+```python
+from cortex.tools.wiring_validator import WiringValidator
+
+validator = WiringValidator()
+wiring_status = validator.verify_all_orchestrators()
+
+print("✅ Master Orchestrator Wiring Status:")
+print(f"   Orchestrators wired: {wiring_status['wired_count']}/23")
+print(f"   Orchestrators missing: {wiring_status['missing_count']}")
+
+if wiring_status['missing_count'] > 0:
+    print(f"\n   ⚠️  MISSING WIRING (CORTEX-035 violation):")
+    for orch in wiring_status['unwired_orchestrators']:
+        print(f"       - {orch['name']} (location: {orch['path']})")
+else:
+    print(f"   ✅ All 23 orchestrators wired to MasterOrchestrator")
+```
+
+**Expected Output (Healthy System):**
+```
+✅ Master Orchestrator Wiring Status:
+   Orchestrators wired: 23/23
+   Orchestrators missing: 0
+   ✅ All 23 orchestrators wired to MasterOrchestrator
+```
+
+### Step 3: Verify Canonical Implementations (AUTOMATIC)
+```python
+from cortex.tools.canonical_verifier import CanonicalVerifier
+
+verifier = CanonicalVerifier()
+canonical_status = verifier.verify_canonical_implementations()
+
+print("📍 Canonical Implementation Verification:")
+for component_name, status in canonical_status.items():
+    symbol = "✅" if status['is_canonical'] else "⚠️"
+    print(f"   {symbol} {component_name}: {status['canonical_location']}")
+    
+    if status['duplicates_found']:
+        print(f"       Duplicates: {len(status['duplicates_found'])} found")
+        for dup in status['duplicates_found']:
+            print(f"         - {dup['path']} (should be deleted)")
+```
+
+**Expected Output (Healthy System):**
+```
+📍 Canonical Implementation Verification:
+   ✅ ConversationProtocol: cortex/brain/core/orchestrator/conversation_protocol.py
+   ✅ MasterOrchestrator: cortex/orchestrators/core/master_orchestrator.py
+   ✅ IntentRouter: cortex/orchestrators/core/intent_router.py
+   ... (20+ more)
+   
+   ✅ ALL core components have single canonical implementation
+```
+
+### Step 4: Report CORE-035 Compliance (AUTOMATIC)
+**Prepend to EVERY discovery result:**
+
+```markdown
+## 🔍 CORE-035 Compliance Status
+
+| Check | Status | Details |
+|-------|--------|---------|
+| Duplicate Scans | ✅ PASS | 0 duplicates found |
+| Master Wiring | ✅ PASS | 23/23 orchestrators wired |
+| Canonical Verify | ✅ PASS | All 23+ components canonical |
+| Import Validation | ✅ PASS | No split imports detected |
+
+**Result:** ✅ SYSTEM IS CORE-035 COMPLIANT
+
+**Action Required:** None - System meets all CORE-035 requirements
+
+---
+```
+
+**If duplicates found (CRITICAL):**
+
+```markdown
+## 🔍 CORE-035 VIOLATION DETECTED
+
+| Check | Status | Details |
+|-------|--------|---------|
+| Duplicate Scans | ❌ FAIL | 3 duplicates found |
+| Master Wiring | ⚠️  WARNING | 18/23 orchestrators wired |
+| Canonical Verify | ❌ FAIL | 2 components not canonical |
+| Import Validation | ❌ FAIL | 5 split imports detected |
+
+**Result:** ❌ SYSTEM VIOLATES CORE-035
+
+**Duplicates Found:**
+1. ConversationProtocol (2 locations)
+   - Version 1: cortex/brain/core/orchestrator/conversation_protocol.py (CANONICAL)
+   - Version 2: cortex_brain/legacy/conversation_protocol.py (DELETE)
+   
+2. MasterOrchestrator (2 locations)
+   - Version 1: cortex/orchestrators/core/master_orchestrator.py (CANONICAL)
+   - Version 2: cortex/orchestrators/archive/master_orchestrator.py (DELETE)
+
+**Action Required (CRITICAL):**
+1. Delete non-canonical versions
+2. Update 12 imports to use canonical paths
+3. Run full test suite to verify no breakage
+4. Create commit: `feat(CORE-035): Consolidate {Component} to canonical location`
+5. Re-run Total Recall to verify compliance
+
+**Estimated Effort:** 30 minutes consolidation + 10 minutes testing
+```
+
+**Reporting Rule:**
+- If ZERO duplicates AND all 23 orchestrators wired → ✅ PASS section only
+- If ANY duplicates or missing wiring → ⚠️  Print both sections + detailed action plan
+- If critical violations → 🔴 BLOCK operation, require consolidation before proceeding
+
+------
+
+## �🔧 AC-PERMANENT-FIX ENFORCEMENT (TIER 0 - IMMUTABLE)
 
 **Critical Pattern:** This prompt enforces identification and prevention of recurring issues tracked in AC-PERMANENT-FIX commits.
 
