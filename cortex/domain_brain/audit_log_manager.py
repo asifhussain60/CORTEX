@@ -8,7 +8,12 @@ import time as time_module
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
+
+@dataclass
+class AuditEntry:
+    """Audit entry for tracking operations."""
+    
     entry_id: str
     operation_type: str
     domain: str

@@ -27,11 +27,13 @@ class HealthStatus(Enum):
         HEALTHY: System is operating normally.
         DEGRADED: System is partially operational but functional.
         UNHEALTHY: System cannot serve requests.
+        UNKNOWN: Health status not yet determined.
     """
 
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
+    UNKNOWN = "unknown"
 
 
 @dataclass

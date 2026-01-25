@@ -13,7 +13,16 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
+
+@dataclass
+class AuditEntry:
+    """Audit entry for tracking sanitization state.
+    
+    Attributes:
+        id: Entry unique identifier.
+        ac_id: Acceptance criteria ID.
+        timestamp: When entry was created.
         operation: Operation type.
         source: Entry source (dev/production).
         is_production: Whether this is a production entry.

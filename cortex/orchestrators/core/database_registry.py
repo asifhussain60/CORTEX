@@ -82,6 +82,7 @@ class OrchestratorConfig:
     init_args: Dict[str, Any] = field(default_factory=dict)  # Constructor arguments
     is_utility: bool = False  # True if not a full IOrchestrator (no execute())
     factory_function: Optional[str] = None  # Optional factory function name
+    state: WiringState = WiringState.UNINITIALIZED  # Current wiring state
     
 
 @dataclass
@@ -409,6 +410,106 @@ class DatabaseBackedRegistry:
         except Exception as e:
             logger.error(f"Failed to register {config.name}: {e}")
             return Err(f"Registration failed: {str(e)}")
+    
+    def get(self, name: str) -> Optional[OrchestratorConfig]:
+        """
+        Get orchestrator configuration by name.
+        
+        Args:
+            name: Name of the orchestrator
+            
+        Returns:
+            OrchestratorConfig if found, None otherwise
+        """
+        # Try in-memory first
+        if name in self._orchestrators:
+            entry = self._orchestrators[name]
+            if 'config' in entry:
+                return entry['config']
+        
+        # Fall back to database
+        try:
+            with self._db.get_connection() as conn:
+                cursor = conn.execute("""
+                    SELECT orchestrator_name, module_path, class_name, category,
+                           priority, dependencies, capabilities, routing_keywords,
+                           is_optional, version, status
+                    FROM orchestrator_registry
+                    WHERE orchestrator_name = ?
+                """, (name,))
+                
+                row = cursor.fetchone()
+                if row:
+                    config = OrchestratorConfig(
+                        name=row[0],
+                        module_path=row[1],
+                        class_name=row[2],
+                        category=OrchestratorCategory(row[3]),
+                        priority=row[4],
+                        dependencies=json.loads(row[5] or '[]'),
+                        capabilities=json.loads(row[6] or '[]'),
+                        routing_keywords=json.loads(row[7] or '[]'),
+                        is_optional=bool(row[8]),
+                        version=row[9] or '1.0.0'
+                    )
+                    # Also update state from DB
+                    config.state = WiringState(row[10].lower()) if row[10] else WiringState.UNINITIALIZED
+                    return config
+                    
+        except Exception as e:
+            logger.error(f"Failed to get config for {name}: {e}")
+        
+        return None
+    
+    def create_snapshot(self) -> Result[WiringSnapshot]:
+        """
+        Create a snapshot of the current wiring state.
+        
+        Returns:
+            Result containing WiringSnapshot or error
+        """
+        try:
+            wired_names = [
+                name for name, entry in self._orchestrators.items()
+                if entry.get('wired', False)
+            ]
+            
+            snapshot = WiringSnapshot(
+                snapshot_id=f"snap_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}",
+                total_orchestrators=len(self._orchestrators),
+                wired_count=len(wired_names),
+                failed_count=len(self._orchestrators) - len(wired_names),
+                snapshot_time=datetime.now(timezone.utc),
+                wiring_duration_ms=0.0,  # Not tracked in manual snapshot
+                validation_hash=self._compute_wiring_hash(),
+                orchestrator_names=wired_names
+            )
+            
+            # Persist to database
+            with self._db.get_connection() as conn:
+                conn.execute("""
+                    INSERT INTO wiring_state_snapshot (
+                        snapshot_id, total_orchestrators, wired_count, failed_count,
+                        snapshot_time, wiring_duration_ms, validation_hash, orchestrator_names
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    snapshot.snapshot_id,
+                    snapshot.total_orchestrators,
+                    snapshot.wired_count,
+                    snapshot.failed_count,
+                    snapshot.snapshot_time.isoformat(),
+                    snapshot.wiring_duration_ms,
+                    snapshot.validation_hash,
+                    json.dumps(snapshot.orchestrator_names)
+                ))
+                conn.commit()
+            
+            logger.info(f"Created snapshot: {snapshot.snapshot_id}")
+            return Ok(snapshot)
+            
+        except Exception as e:
+            logger.error(f"Failed to create snapshot: {e}")
+            return Err(f"Snapshot creation failed: {str(e)}")
     
     def load_from_database(self) -> Result[int]:
         """

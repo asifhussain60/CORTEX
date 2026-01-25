@@ -24,7 +24,7 @@ from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
 from cortex.core.orchestrator.terminal_events import EventRegistry, TerminalEvent
 from cortex.core.result import Ok, Err, Result
 

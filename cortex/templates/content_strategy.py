@@ -6,10 +6,17 @@ Manages domain templates, content sources, and template metadata.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional, Set, NamedTuple
 from enum import Enum
 from pathlib import Path
 import yaml
+
+
+class ValidationResult(NamedTuple):
+    """Result of validation operation."""
+    valid: bool
+    errors: List[str]
+    warnings: List[str]
 
 
 class ContentSource(Enum):

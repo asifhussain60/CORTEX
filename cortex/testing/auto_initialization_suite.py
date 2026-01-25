@@ -18,7 +18,7 @@ from cortex.brain.core.governance_intelligence import GovernanceIntelligence
 from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.knowledge_composer import KnowledgeComposer
 from cortex.brain.core.tier_composer import TierComposer
-from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.structured_logger import StructuredLogger
 from cortex.mcp.server import MCPServer

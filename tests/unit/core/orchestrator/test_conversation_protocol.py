@@ -17,7 +17,7 @@ from unittest.mock import Mock, MagicMock, patch
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from cortex.core.orchestrator.conversation_protocol import (
+from cortex.brain.core.orchestrator.conversation_protocol import (
     ConversationProtocol,
     RoundContext,
 )
@@ -25,7 +25,7 @@ from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from cortex.core.result import Result, Ok, Err
+from cortex.brain.core.result import Result, Ok, Err
 
 
 @dataclass
