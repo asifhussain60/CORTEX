@@ -54,20 +54,7 @@ class PhaseState:
     COMPLETE = "COMPLETE"
 
 
-class Result:
-    """Result type for operations."""
-    def __init__(self, value=None, error=None):
-        self.value = value
-        self.error = error
-    
-    def is_ok(self) -> bool:
-        return self.error is None
-    
-    def is_err(self) -> bool:
-        return self.error is not None
-    
-    def unwrap(self):
-        if self.is_ok():
+from cortex.brain.core.result import Result
             return self.value
         raise Exception(self.error)
 
