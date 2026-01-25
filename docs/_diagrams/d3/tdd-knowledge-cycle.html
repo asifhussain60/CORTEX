@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDD Knowledge Cycle</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 30px 0;
+        }
+        
+        #cycle {
+            width: 100%;
+            height: 700px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 25px;
+            font-size: 13px;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        
+        text {
+            font-size: 13px;
+        }
+        
+        .phase-label {
+            font-weight: 600;
+            fill: white;
+            text-anchor: middle;
+        }
+        
+        .arrow-label {
+            font-size: 11px;
+            fill: #333;
+            text-anchor: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 TDD Knowledge Cycle</h1>
+        <p class="subtitle">Continuous learning and improvement through Test-Driven Development</p>
+        <div id="cycle"></div>
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color" style="background: #1976D2;"></span>
+                Learn Phase
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #D32F2F;"></span>
+                Red Phase (Failing Tests)
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #4CAF50;"></span>
+                Green Phase (Passing Tests)
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #FFC107;"></span>
+                Refactor Phase
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const width = 800;
+        const height = 700;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = 200;
+
+        const svg = d3.select("#cycle")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Define the TDD cycle phases
+        const phases = [
+            {
+                angle: 0,
+                name: "📚 Learn",
+                color: "#1976D2",
+                description: "Understand requirements and design",
+                details: [
+                    "Read specifications",
+                    "Understand use cases",
+                    "Design architecture",
+                    "Plan test cases"
+                ]
+            },
+            {
+                angle: Math.PI / 2,
+                name: "❌ Red",
+                color: "#D32F2F",
+                description: "Write failing tests first",
+                details: [
+                    "Create test skeleton",
+                    "Define assertions",
+                    "Run tests (fail)",
+                    "Understand failure"
+                ]
+            },
+            {
+                angle: Math.PI,
+                name: "✅ Green",
+                color: "#4CAF50",
+                description: "Implement to pass tests",
+                details: [
+                    "Write minimal code",
+                    "Run tests (pass)",
+                    "Verify all tests pass",
+                    "Check coverage"
+                ]
+            },
+            {
+                angle: 3 * Math.PI / 2,
+                name: "🔧 Refactor",
+                color: "#FFC107",
+                description: "Improve and optimize code",
+                details: [
+                    "Remove duplication",
+                    "Improve clarity",
+                    "Optimize performance",
+                    "Update documentation"
+                ]
+            }
+        ];
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+        // Draw outer circle
+        svg.append("circle")
+            .attr("cx", centerX)
+            .attr("cy", centerY)
+            .attr("r", radius + 40)
+            .attr("fill", "none")
+            .attr("stroke", "#ddd")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "5,5");
+
+        // Draw phases
+        phases.forEach((phase, i) => {
+            const x = centerX + radius * Math.cos(phase.angle - Math.PI / 2);
+            const y = centerY + radius * Math.sin(phase.angle - Math.PI / 2);
+
+            // Phase circle
+            svg.append("circle")
+                .attr("cx", x)
+                .attr("cy", y)
+                .attr("r", 50)
+                .attr("fill", phase.color)
+                .attr("stroke", "white")
+                .attr("stroke-width", 3)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event) {
+                    d3.select(this)
+                        .attr("r", 60)
+                        .attr("stroke-width", 4);
+                    
+                    const details = phase.details.map(d => `• ${d}`).join("<br/>");
+                    tooltip.style("display", "block")
+                        .html(`
+                            <strong style="font-size: 14px;">${phase.name}</strong><br/>
+                            <em>${phase.description}</em><br/><br/>
+                            ${details}
+                        `)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mousemove", function(event) {
+                    tooltip
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .attr("r", 50)
+                        .attr("stroke-width", 3);
+                    tooltip.style("display", "none");
+                });
+
+            // Phase label
+            svg.append("text")
+                .attr("class", "phase-label")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("dy", ".35em")
+                .text(phase.name);
+        });
+
+        // Draw arrows between phases
+        for (let i = 0; i < phases.length; i++) {
+            const current = phases[i];
+            const next = phases[(i + 1) % phases.length];
+
+            const x1 = centerX + (radius - 50) * Math.cos(current.angle - Math.PI / 2);
+            const y1 = centerY + (radius - 50) * Math.sin(current.angle - Math.PI / 2);
+
+            const x2 = centerX + (radius - 50) * Math.cos(next.angle - Math.PI / 2);
+            const y2 = centerY + (radius - 50) * Math.sin(next.angle - Math.PI / 2);
+
+            // Arrow line
+            svg.append("line")
+                .attr("x1", x1)
+                .attr("y1", y1)
+                .attr("x2", x2)
+                .attr("y2", y2)
+                .attr("stroke", "#999")
+                .attr("stroke-width", 2)
+                .attr("marker-end", "url(#arrowhead)");
+
+            // Arrow label
+            const midX = (x1 + x2) / 2;
+            const midY = (y1 + y2) / 2;
+            
+            const labels = [
+                "Tests created",
+                "Code written",
+                "Code improved",
+                "Knowledge gained"
+            ];
+
+            svg.append("text")
+                .attr("class", "arrow-label")
+                .attr("x", midX + 30 * Math.cos(current.angle - Math.PI / 2))
+                .attr("y", midY + 30 * Math.sin(current.angle - Math.PI / 2))
+                .text(labels[i]);
+        }
+
+        // Define arrow marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
+            .attr("refX", 9)
+            .attr("refY", 3)
+            .attr("orient", "auto")
+            .append("polygon")
+            .attr("points", "0 0, 10 3, 0 6")
+            .attr("fill", "#999");
+
+        // Center circle with cycle name
+        svg.append("circle")
+            .attr("cx", centerX)
+            .attr("cy", centerY)
+            .attr("r", 40)
+            .attr("fill", "#f5f5f5")
+            .attr("stroke", "#999")
+            .attr("stroke-width", 2);
+
+        svg.append("text")
+            .attr("class", "phase-label")
+            .attr("x", centerX)
+            .attr("y", centerY - 5)
+            .attr("dy", ".35em")
+            .attr("fill", "#333")
+            .attr("font-size", "12px")
+            .text("🔄 TDD");
+
+        svg.append("text")
+            .attr("x", centerX)
+            .attr("y", centerY + 15)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle")
+            .attr("fill", "#666")
+            .attr("font-size", "10px")
+            .text("Cycle");
+
+        // Add continuous improvement note
+        svg.append("text")
+            .attr("x", centerX)
+            .attr("y", height - 20)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#999")
+            .attr("font-size", "11px")
+            .text("Continuous loop drives quality and knowledge growth");
+    </script>
+</body>
+</html>

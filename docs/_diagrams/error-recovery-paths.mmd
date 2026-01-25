@@ -1,0 +1,74 @@
+---
+title: Error Recovery Paths
+---
+flowchart TD
+    A["⚠️ Error Detected"] --> B{"Error<br/>Type?"}
+    
+    B -->|Validation Error| C["📋 Validation Failed"]
+    C --> D["🔍 Analyze<br/>- Invalid input<br/>- Missing required fields<br/>- Type mismatch"]
+    D --> E{"Recoverable?"}
+    E -->|Yes| F["💡 Apply<br/>Default Values"]
+    F --> G["✅ Continue with<br/>Defaults"]
+    E -->|No| H["❌ Reject Input"]
+    H --> I["📧 Report Error<br/>to Requestor"]
+    I --> J["User Corrects<br/>& Resubmits"]
+    J --> K["Retry Processing"]
+    
+    B -->|Timeout Error| L["⏱️ Operation<br/>Timeout"]
+    L --> M["🔄 Retry Logic<br/>- Attempt 1<br/>- Wait 1s"]
+    M --> N{"Success?"}
+    N -->|Yes| O["✅ Operation<br/>Completed"]
+    N -->|No| P["🔄 Retry<br/>- Attempt 2<br/>- Wait 2s"]
+    P --> Q{"Success?"}
+    Q -->|Yes| O
+    Q -->|No| R["🔄 Retry<br/>- Attempt 3<br/>- Wait 4s"]
+    R --> S{"Success?"}
+    S -->|Yes| O
+    S -->|No| T["❌ Max Retries<br/>Exceeded"]
+    T --> U["📊 Log Timeout<br/>- Attempts made<br/>- Last error<br/>- Resource state"]
+    U --> V["Escalate to<br/>Operations"]
+    
+    B -->|Circuit Breaker| W["🔌 Circuit<br/>Open/Tripped"]
+    W --> X["📈 Check Resource<br/>Health"]
+    X --> Y{"Resource<br/>Healthy?"}
+    Y -->|Yes| Z["🔄 Half-Open<br/>State"]
+    Z --> AA{"Test<br/>Request OK?"}
+    AA -->|Yes| AB["✅ Circuit<br/>Closed"]
+    AB --> AC["Resume Normal<br/>Operations"]
+    AA -->|No| AD["🔌 Circuit<br/>Reopens"]
+    AD --> AE["Wait Before<br/>Retry"]
+    AE --> AX["Monitor"]
+    Y -->|No| AF["⏳ Wait &<br/>Monitor"]
+    AF --> AX
+    
+    B -->|State Error| AG["❌ Invalid<br/>State Transition"]
+    AG --> AH["🔍 Analyze State<br/>- Current state<br/>- Requested transition<br/>- Valid transitions"]
+    AH --> AI{"Can<br/>Recover?"}
+    AI -->|Yes| AJ["🔄 Roll Back to<br/>Last Valid State"]
+    AJ --> AK["✅ Safe State<br/>Restored"]
+    AI -->|No| AL["❌ Fatal Error"]
+    AL --> AM["📊 Emergency Log<br/>- Full state dump<br/>- Operation history<br/>- Error context"]
+    AM --> AN["Alert<br/>Administrators"]
+    
+    B -->|Data Integrity| AO["🔐 Integrity<br/>Check Failed"]
+    AO --> AP["🔍 Verify Data<br/>- Checksum<br/>- References<br/>- Constraints"]
+    AP --> AQ{"Corruption<br/>Detected?"}
+    AQ -->|Yes| AR["🗂️ Attempt<br/>Recovery"]
+    AR --> AS{"Recovery<br/>Possible?"}
+    AS -->|Yes| AT["✅ Data<br/>Restored"]
+    AT --> AU["Continue Processing"]
+    AS -->|No| AV["❌ Data Loss"]
+    AV --> AW["🚨 Critical Alert<br/>to Admins"]
+    AW --> AX
+    AQ -->|No| AX
+    
+    AX --> AY["🔚 Recovery<br/>Complete"]
+
+    style A fill:#ffccbc
+    style O fill:#c8e6c9
+    style AC fill:#c8e6c9
+    style AK fill:#c8e6c9
+    style AT fill:#c8e6c9
+    style T fill:#ffccbc
+    style AL fill:#ffccbc
+    style AV fill:#ffccbc

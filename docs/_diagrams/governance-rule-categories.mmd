@@ -1,0 +1,62 @@
+---
+title: Governance Rule Categories
+---
+flowchart TD
+    A["🏛️ GOVERNANCE SYSTEM"] --> B["29 CORE Rules"]
+    
+    B --> C["Tier 0: Immutable<br/>Governance"]
+    B --> D["Tier 1: Acceptance<br/>Criteria"]
+    B --> E["Tier 2: Response<br/>Templates"]
+    B --> F["Tier 3: Knowledge<br/>& Practices"]
+    
+    C --> C1["CORE-001:<br/>Intent Classification"]
+    C --> C2["CORE-008:<br/>TDD First"]
+    C --> C3["CORE-011:<br/>Type Hints"]
+    C --> C4["CORE-026:<br/>Git Checkpoints"]
+    C --> C5["+ 25 More Rules"]
+    
+    D --> D1["DoR Validation<br/>- Completeness<br/>- Clarity<br/>- Feasibility"]
+    D --> D2["AC-ID Mapping<br/>- Test coverage<br/>- Verification<br/>- Success metrics"]
+    
+    E --> E1["Response Headers<br/>- CORTEX branding<br/>- Phase tracking<br/>- Status display"]
+    E --> E2["Hallucination<br/>Prevention<br/>- Boundary checks<br/>- Scope limits"]
+    E --> E3["Response Quality<br/>- Format standards<br/>- Documentation<br/>- Examples"]
+    
+    F --> F1["35+ Best<br/>Practices YAML"]
+    F --> F2["TDD Patterns<br/>- Test strategies<br/>- Coverage targets<br/>- Mock patterns"]
+    F --> F3["Refactoring<br/>Patterns<br/>- Code smells<br/>- Improvement steps<br/>- Safety checks"]
+    F --> F4["API Design<br/>- Interface patterns<br/>- Error handling<br/>- Versioning"]
+    F --> F5["Architecture<br/>- CORTEX patterns<br/>- Orchestrators<br/>- Integration points"]
+    
+    C1 --> G["✅ Classified Intent"]
+    C2 --> H["✅ TDD Compliance"]
+    C3 --> I["✅ Type Safety"]
+    C4 --> J["✅ Git History"]
+    
+    D1 --> K["✅ Ready Gate Passed"]
+    D2 --> L["✅ Success Verified"]
+    
+    E1 --> M["✅ Formatted Output"]
+    E2 --> N["✅ Accurate Response"]
+    E3 --> O["✅ Quality Assured"]
+    
+    F1 --> P["✅ Best Practice<br/>Applied"]
+    
+    G --> Q["🎯 Governance<br/>Enforced"]
+    H --> Q
+    I --> Q
+    J --> Q
+    K --> Q
+    L --> Q
+    M --> Q
+    N --> Q
+    O --> Q
+    P --> Q
+    
+    style A fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    style B fill:#f3e5f5
+    style C fill:#e1f5fe
+    style D fill:#e0f2f1
+    style E fill:#f1f8e9
+    style F fill:#ffe0b2
+    style Q fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
