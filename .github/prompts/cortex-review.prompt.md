@@ -1,5 +1,5 @@
-# CORTEX Review System - 9-Agent Comprehensive Analysis (ENHANCED)
-**Version:** 5.1 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SSOT VERIFICATION
+# CORTEX Review System - 10-Agent Comprehensive Analysis (ENHANCED)
+**Version:** 5.2 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + IMPLEMENTATION TRUTH
 
 ---
 
@@ -17,19 +17,19 @@
 
 ## 🎯 What This Does (ENHANCED v5.1)
 
-CORTEX Review is your **code quality AND specification integrity watchdog**. It performs comprehensive analysis using **9 specialized agents** that scan your codebase and specifications for problems you might miss:
+CORTEX Review is your **code quality AND implementation truth watchdog**. It performs comprehensive analysis using **10 specialized agents** that scan your codebase and specifications for problems you might miss:
 
-**NEW (v5.1):** Before checking code quality, verification phase validates that specifications match implementation.
+**NEW (v5.2):** Agent 0 verifies implementation truth (CORE-030) and detects duplicate implementations (CORE-035) BEFORE code quality analysis.
 
-- **Specification Verification** → Ensures spec matches implementation (Phase -1, runs FIRST)
+- **Implementation Truth** → Verifies claims match actual code (Phase 0, runs FIRST)
 - **Brittleness** → Finds fragile code that could break under stress
 - **Hallucination** → Catches AI safety & output validation issues
-- **Governance** → Ensures compliance with CORTEX rules (CORE-001 through CORE-029)
+- **Governance** → Ensures compliance with CORTEX rules (CORE-001 through CORE-035)
 - **Assumptions** → Uncovers hidden dependencies & platform assumptions
 - **Debt** → Identifies duplicated code, TODOs, and technical shortcuts
 - **State/Concurrency** → Detects race conditions, deadlocks, thread safety issues
 - **Architecture** → Spots SOLID violations, tight coupling, design problems
-- **Integration/Observability** → Finds monitoring gaps, MCP exposure, wiring completeness (ENHANCED)
+- **Integration/Observability** → Finds monitoring gaps, MCP exposure, wiring completeness
 
 ---
 
@@ -99,11 +99,12 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 
 | Command | Agents | Time | Best For |
 |---------|--------|------|----------|
-| `/review` | All 9 (0-8) | 95 min | Full audit, production readiness |
-| `/review {file}` | All 8 | 20 min | Specific file deep dive |
+| `/review` | All 10 (0-9) | 105 min | Full audit, production readiness |
+| `/review {file}` | All 9 (1-9) | 20 min | Specific file deep dive |
 | `/review-quick` | BRIT, GOV, DEBT | 15 min | Fast health check |
 | `/review-safety` | HALL, ASM, STATE | 20 min | Security & safety focus |
 | `/review-quality` | DEBT, ARCH, INTEG | 25 min | Code quality & design |
+| `/review-truth` | TRUTH only | 12 min | Implementation verification |
 | `/review-brittleness` | BRIT only | 10 min | Fault tolerance check |
 | `/review-hallucination` | HALL only | 10 min | AI safety check |
 | `/review-governance` | GOV only | 10 min | Rule compliance |
@@ -115,7 +116,40 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 
 ---
 
-## 🤖 What Each Agent Looks For
+## 🤖 What Each Agent Looks For (ENHANCED v5.2)
+
+### 🔍 Agent 0: Implementation Truth Verification (TRUTH) — NEW v5.2
+**Question:** Do documentation claims match actual implementation?
+
+**Critical Checks (CORE-030 Enforcement):**
+- **Governance Claims vs Reality:** Verify CORE-035 "Single canonical" against duplicate files
+- **AC-PERMANENT-FIX Verification:** Check git commits for claimed permanent fixes
+- **Configuration Claims:** Verify .vscode/mcp.json, auto_wire_production defaults, etc.
+- **Orchestrator Wiring Claims:** Check actual registry vs claimed percentages
+- **Implementation Status Claims:** Verify "COMPLETE" status against code stubs
+
+**Duplicate Implementation Detection (CORE-035):**
+- ConversationProtocol: Search for multiple implementations in different paths
+- Orchestrator classes: Detect conflicting class definitions
+- Interface implementations: Find multiple versions of same interface
+- MCP tool definitions: Check for duplicate tool names or conflicting schemas
+
+**Evidence Sources:**
+- Git log for AC-PERMANENT-FIX commits
+- File system scans for duplicate class names
+- Import analysis for conflicting paths
+- Governance rule files vs actual compliance
+
+**Finding Categories:**
+- **TRUTH-001:** Documentation-implementation mismatch (e.g., "Claims auto_wire_production=True default but code shows False")
+- **TRUTH-002:** Duplicate implementation violation (e.g., "ConversationProtocol exists in 2 paths")
+- **TRUTH-003:** Missing implementation for claimed feature (e.g., "Claims .vscode/mcp.json exists but file missing")
+- **TRUTH-004:** False AC-PERMANENT-FIX claim (e.g., "AC-PERMANENT-FIX-005 claimed but no git commit found")
+- **TRUTH-005:** Governance rule violation (e.g., "CORE-035 marked COMPLETE but duplicates exist")
+
+**Example Finding:** "TRUTH-002: ConversationProtocol duplicate violation - found in cortex/core/orchestrator/ AND cortex/brain/core/orchestrator/ with different implementations. Tests import from both paths causing conflicts."
+
+---
 
 ### 🔴 Agent 1: Brittleness (BRIT)
 **Question:** Will this code survive real-world stress?
@@ -145,7 +179,7 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 
 ---
 
-### 🟡 Agent 3: Governance (GOV)
+### 🟡 Agent 3: Governance (GOV) — ENHANCED v5.2
 **Question:** Does this follow CORTEX rules?
 
 **Checks for:**
@@ -154,8 +188,22 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 - Bare `except:` clauses (CORE-013)
 - No audit logging (CORE-027)
 - Tests written after code (CORE-008)
+- **NEW:** Implementation truth violations (CORE-030)
+- **NEW:** Duplicate implementations (CORE-035)
+- **NEW:** AC-PERMANENT-FIX regression checks
 
-**Example Finding:** "Function `process_data()` missing type hints and docstring"
+**CORE-030 Implementation Truth Checks:**
+- Functions answering questions without checking actual code first
+- Documentation claims not backed by grep_search or read_file evidence
+- Default parameter assumptions without verification
+
+**CORE-035 Single Canonical Checks:**
+- Multiple class definitions with same name in different modules
+- Conflicting interface implementations
+- Import path ambiguity causing module confusion
+
+**Example Finding:** "Function `process_data()` missing type hints and docstring"  
+**NEW Example:** "CORE-035 violation: ConversationProtocol implemented in 2 locations with conflicting behavior"
 
 ---
 
