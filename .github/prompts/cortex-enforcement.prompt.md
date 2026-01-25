@@ -5,7 +5,7 @@
 
 ---
 
-## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)
+## ⚠️ CRITICAL: Response Header + Implementation Truth (TIER 0)
 
 **EVERY response MUST begin with:**
 ```markdown
@@ -14,6 +14,12 @@
 
 ---
 ```
+
+**ENFORCEMENT WITH IMPLEMENTATION TRUTH (CORE-030):**
+1. **VERIFY BEFORE ENFORCE:** Check actual code implementation first
+2. **NO DOCUMENTATION ASSUMPTIONS:** Use grep_search/read_file evidence only
+3. **TEST ISOLATION CHECKS:** Prevent test data from affecting production rules
+4. **API ACCURACY:** Enforce against actual method signatures, not documented ones
 
 ---
 

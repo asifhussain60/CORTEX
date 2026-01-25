@@ -4,6 +4,7 @@
 
 **Registry Type:** DatabaseBackedRegistry (SQLite-backed Single Source of Truth)  
 **Wiring Status:** 23/23 orchestrators (100%)  
+**Test Isolation:** CORE-031 compliant (singleton reset mechanisms)
 
 **AC-PERMANENT-FIX Commits Tracked:** 9 permanent fixes implemented  
 - AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
@@ -55,9 +56,49 @@ print(f"Coverage: {readiness['orchestrator_coverage']*100:.0f}%")  # 100%
 
 ---
 
-## ⚡ PRE-EXECUTION VALIDATION (RUN FIRST - MANDATORY)
+## 🧪 TEST ISOLATION VALIDATION (STEP 0 - CRITICAL)
 
-**ALWAYS run this before executing any Total Recall steps:**
+**MANDATORY: Ensure clean test isolation before TotalRecallAgent execution:**
+
+```python
+from cortex.orchestrators.core.database_registry import DatabaseBackedRegistry
+import os
+
+print('🧪 CORTEX Test Isolation Check')
+print('=' * 50)
+
+# Step 1: Reset singleton to prevent test contamination
+DatabaseBackedRegistry.reset_instance()
+print('✅ Singleton reset complete')
+
+# Step 2: Remove any existing test database
+test_db_path = '.cortex/orchestrator_registry.db'
+if os.path.exists(test_db_path):
+    os.remove(test_db_path)
+    print('✅ Cleaned existing test database')
+else:
+    print('✅ No test database to clean')
+    
+# Step 3: Verify clean state
+registry = DatabaseBackedRegistry.instance()
+print(f'✅ Fresh registry: {len(registry._orchestrators)} orchestrators')
+
+# Step 4: Check for test contamination
+if 'orphan' in registry._orchestrators or 'nonexistent_parent' in str(registry._orchestrators):
+    print('❌ TEST CONTAMINATION DETECTED! "orphan" orchestrator from tests interfering')
+    print('   This prevents production registry initialization.')
+    print('   SOLUTION: Run in fresh Python process or check test isolation')
+    exit(1)
+else:
+    print('✅ No test contamination detected')
+    
+print('\n🎯 Ready for TotalRecallAgent initialization')
+print('=' * 50)
+```
+
+## ⚡ PRE-EXECUTION VALIDATION (STEP 1 - MANDATORY)
+
+**ALWAYS run this AFTER test isolation check:**
 
 ```python
 from cortex.tools.git_history_analyzer import GitHistoryAnalyzer

@@ -3,7 +3,7 @@
 
 ---
 
-## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)
+## ⚠️ CRITICAL: Response Header + Implementation Truth (TIER 0)
 
 **EVERY response MUST begin with:**
 ```markdown
@@ -12,6 +12,12 @@
 
 ---
 ```
+
+**DOCUMENTATION WITH IMPLEMENTATION TRUTH (CORE-030):**
+1. **VERIFY IMPLEMENTATION:** Use grep_search/read_file to check actual code
+2. **CHECK TEST ISOLATION:** Ensure no test data contamination
+3. **VALIDATE API METHODS:** Confirm method names exist in implementation
+4. **DOCUMENT WHAT EXISTS:** Only document verified, implemented features
 
 ---
 
