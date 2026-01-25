@@ -182,6 +182,14 @@ from cortex.brain.core.state_manager import StateManager, get_state_manager
 # Infrastructure
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.circuit_breaker import CircuitBreaker
+
+# Database-Backed Registry (SSOT for orchestrator wiring)
+from cortex.orchestrators.core.database_registry import (
+    DatabaseBackedRegistry,
+    get_database_registry,
+    initialize_registry
+)
+from cortex.orchestrators.core.health_checker import OrchestratorHealthChecker
 ```
 
 ### Entry Points:
@@ -192,8 +200,11 @@ from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 # TDD Workflow
 from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator, get_tdd_orchestrator
 
-# Feature Discovery
+# Feature Discovery (now uses DatabaseBackedRegistry)
 from cortex.tools.total_recall_agent import TotalRecallAgent
+
+# Production Wiring (preferred entry point)
+from cortex.orchestrators.bootstrap import OrchestratorBootstrap
 ```
 
 ---
@@ -217,10 +228,12 @@ from cortex.tools.total_recall_agent import TotalRecallAgent
 
 ```yaml
 tests: 6,847+ (100% passing)
-orchestrators: 20/23 wired (87%)
+orchestrators: 23/23 wired (100%) via DatabaseBackedRegistry
 mcp_tools: 15 active
-governance_rules: 29/29 implemented
+governance_rules: 31/31 implemented (CORE-001 through CORE-035)
 knowledge_yamls: 35+ best practices
+db_registry: SQLite-backed SSOT at .cortex/orchestrator_registry.db
+health_checker: Background monitoring every 60 seconds
 ```
 
 ---
