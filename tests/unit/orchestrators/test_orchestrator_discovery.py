@@ -144,18 +144,20 @@ class TestOrchestratorDiscovery:
     """AC-FR-DISCOVERY-009: Test orchestrator discovery and registration."""
 
     @pytest.fixture
-    def registry(self) -> OrchestratorRegistry:
+    def registry(self):
         """Provide OrchestratorRegistry instance."""
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        return get_database_registry()
 
     @pytest.fixture
     def discovery_engine(self) -> DiscoveryEngine:
         """Provide DiscoveryEngine instance."""
         return DiscoveryEngine()
 
-    def test_registry_singleton(self, registry: OrchestratorRegistry) -> None:
-        """Test AC-AR-017-01: Registry follows singleton pattern."""
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - registry2 = OrchestratorRegistry()
+    def test_registry_singleton(self, registry) -> None:
+        """Test AC-AR-017-01: DatabaseBackedRegistry follows singleton pattern."""
+        from cortex.orchestrators import get_database_registry
+        registry2 = get_database_registry()
         assert registry is registry2
 
     def test_discovery_engine_singleton(self, discovery_engine: DiscoveryEngine) -> None:
@@ -163,7 +165,7 @@ class TestOrchestratorDiscovery:
         engine2 = DiscoveryEngine()
         assert discovery_engine is engine2
 
-    def test_can_register_orchestrator(self, registry: OrchestratorRegistry) -> None:
+    def test_can_register_orchestrator(self, registry) -> None:
         """Test AC-FR-DISCOVERY-009: Can register an orchestrator."""
         metadata = OrchestratorMetadata(
             id="test-orchestrator",
@@ -181,7 +183,7 @@ class TestOrchestratorDiscovery:
         assert retrieved.id == "test-orchestrator"
         assert retrieved.name == "Test Orchestrator"
 
-    def test_cannot_register_duplicate(self, registry: OrchestratorRegistry) -> None:
+    def test_cannot_register_duplicate(self, registry) -> None:
         """Test AC-FR-DISCOVERY-010: Cannot register duplicate orchestrator."""
         metadata = OrchestratorMetadata(
             id="test-dup",
@@ -263,7 +265,7 @@ class TestOrchestratorDiscovery:
                 description=""
             )
 
-    def test_discovery_query_filters(self, registry: OrchestratorRegistry, discovery_engine: DiscoveryEngine) -> None:
+    def test_discovery_query_filters(self, registry, discovery_engine: DiscoveryEngine) -> None:
         """Test AC-AR-017-01: Discovery queries filter correctly."""
         # Register test orchestrators in different domains
         planning_orch = OrchestratorMetadata(
@@ -294,7 +296,7 @@ class TestOrchestratorDiscovery:
         planning_results = [o.domain for o in result.orchestrators]
         assert all(d == "planning" for d in planning_results)
 
-    def test_discovery_list_by_capability(self, registry: OrchestratorRegistry) -> None:
+    def test_discovery_list_by_capability(self, registry) -> None:
         """Test AC-AR-017-01: Can list orchestrators by capability."""
         error_handler_orch = OrchestratorMetadata(
             id="error-handler",
@@ -409,11 +411,12 @@ class TestCapabilitiesCompleteness:
     """AC-AR-017-01+: Test that registered orchestrators have complete capabilities."""
     
     @pytest.fixture
-    def registry(self) -> OrchestratorRegistry:
+    def registry(self):
         """Provide OrchestratorRegistry instance."""
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        return get_database_registry()
 
-    def test_orchestrator_capabilities_documented(self, registry: OrchestratorRegistry) -> None:
+    def test_orchestrator_capabilities_documented(self, registry) -> None:
         """Test AC-AR-017-01: All orchestrator capabilities are documented."""
         orchestrators = registry.list_all()
         
@@ -422,7 +425,7 @@ class TestCapabilitiesCompleteness:
             assert len(orch.capabilities) > 0, f"Orchestrator {orch.id} has no capabilities"
             assert all(isinstance(cap, str) for cap in orch.capabilities)
 
-    def test_core_capabilities_coverage(self, registry: OrchestratorRegistry) -> None:
+    def test_core_capabilities_coverage(self, registry) -> None:
         """Test AC-AR-017-01+: Core capabilities covered across orchestrators."""
         orchestrators = registry.list_all()
         all_capabilities = set()
@@ -442,11 +445,12 @@ class TestProductionReadinessInventory:
     """AC-FR-DISCOVERY-100: Comprehensive production readiness verification."""
     
     @pytest.fixture
-    def registry(self) -> OrchestratorRegistry:
+    def registry(self):
         """Provide OrchestratorRegistry instance."""
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - return OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        return get_database_registry()
 
-    def test_all_required_orchestrator_domains_present(self, registry: OrchestratorRegistry) -> None:
+    def test_all_required_orchestrator_domains_present(self, registry) -> None:
         """Test AC-FR-DISCOVERY-101: All required orchestrator domains are represented."""
         orchestrators = registry.list_all()
         domains_found = {orch.domain for orch in orchestrators}
@@ -560,8 +564,9 @@ class TestCORE020MultiRepoGovernance:
 
     def test_orchestrator_registry_is_singleton(self) -> None:
         """Test AC-CORE-020: OrchestratorRegistry is singleton for centralized registration."""
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - reg1 = OrchestratorRegistry()
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - reg2 = OrchestratorRegistry()
+from cortex.orchestrators import get_database_registry
+        reg1 = get_database_registry()
+reg2 = get_database_registry()
         
         assert reg1 is reg2
 

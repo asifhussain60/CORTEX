@@ -42,7 +42,7 @@ class TestCORTEXSystemReady:
             "MasterOrchestrator": MasterOrchestrator.instance(),
             "GovernanceRegistry": GovernanceRegistry.instance(),
             "AuditLogger": EnhancedAuditLogger.instance(),
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
             "DiscoveryEngine": DiscoveryEngine(),
             "TodoManager": TodoManager(),
             "IntentClassifier": IntentClassifier(),
@@ -427,7 +427,7 @@ class TestProductionReadinessSummary:
             "TodoManager": TodoManager(),
             "GovernanceRegistry": GovernanceRegistry.instance(),
             "AuditLogger": EnhancedAuditLogger.instance(),
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
+# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - "OrchestratorRegistry": OrchestratorRegistry(),
             "DiscoveryEngine": DiscoveryEngine(),
             "IntentClassifier": IntentClassifier(),
         }
