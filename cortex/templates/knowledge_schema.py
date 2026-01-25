@@ -20,14 +20,6 @@ class VariableType(Enum):
     OPTIONAL = "optional"
 
 
-@dataclass
-class ValidationResult:
-    """Schema validation result."""
-    valid: bool
-    errors: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
-
-
 class KnowledgeBaseSchema:
     """Knowledge base schema for template validation.
     

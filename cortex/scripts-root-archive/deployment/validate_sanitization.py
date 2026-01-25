@@ -12,19 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
 
-
-@dataclass
-class ValidationResult:
-    """Result of validation check.
-    
-    Attributes:
-        is_valid: Whether the check passed.
-        reason: Human-readable reason if validation failed.
-        details: Additional details about the validation.
-    """
-    is_valid: bool = True
-    reason: str = ""
-    details: str = ""
+from cortex.common.validators import ValidationResult
 
 
 @dataclass
