@@ -3,24 +3,28 @@ WiringValidationAgent - Tool 2 of 3-Tool Safety System.
 
 Validates component wiring correctness by checking:
 1. Class exists (Python file with class definition)
-2. Registered (in repo-registry.yaml)
+2. Registered (in DatabaseBackedRegistry - SQLite SSOT)
 3. Initialized (in MasterOrchestrator.__init__)
 4. Called (in MasterOrchestrator.execute_operation)
 5. Tested (test file exists)
 
 AC-UNWIRED-VALIDATE-001: WiringValidationAgent implementation
+AC-PERMANENT-FIX-009: DatabaseBackedRegistry integration (23/23 wired)
 
 Author: Asif Hussain
 Date: 2026-01-25
+Updated: 2026-01-XX - Migrated from repo-registry.yaml to DatabaseBackedRegistry
 """
 
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set
 import re
-import yaml
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ComponentStatus(Enum):
@@ -107,12 +111,11 @@ class WiringValidationAgent:
             self.cortex_root = Path(cortex_root)
         
         self.orchestrators_dir = self.cortex_root / 'cortex' / 'orchestrators'
-        self.registry_file = self.cortex_root / 'cortex_brain' / 'tier0' / 'repo-registry.yaml'
         self.master_orchestrator_file = self.cortex_root / 'cortex' / 'orchestrators' / 'core' / 'master_orchestrator.py'
         self.tests_dir = self.cortex_root / 'tests'
         
         # Cache for performance
-        self._registry_cache: Optional[Dict] = None
+        self._db_registry_cache: Optional[Set[str]] = None
         self._master_init_cache: Optional[str] = None
         self._master_execute_cache: Optional[str] = None
     
@@ -155,20 +158,18 @@ class WiringValidationAgent:
         )
     
     def validate_all(self) -> Dict[str, ValidationResult]:
-        """Validate all registered components.
+        """Validate all registered components from DatabaseBackedRegistry.
         
         Returns:
             Dictionary mapping component names to ValidationResults
         """
         results = {}
         
-        # Get all registered components from repo-registry.yaml
-        registry = self._read_registry()
-        if 'registered_orchestrators' in registry:
-            for entry in registry['registered_orchestrators']:
-                component_name = entry.get('name', '')
-                if component_name:
-                    results[component_name] = self.validate_component(component_name)
+        # Get all registered components from DatabaseBackedRegistry
+        registered_names = self._get_registered_from_db()
+        for component_name in registered_names:
+            if component_name:
+                results[component_name] = self.validate_component(component_name)
         
         # Also check mentioned-but-not-implemented components
         mentioned_missing = [
@@ -274,7 +275,7 @@ class WiringValidationAgent:
         return False
     
     def _check_registered(self, component_name: str) -> bool:
-        """Check if component is registered in repo-registry.yaml.
+        """Check if component is registered in DatabaseBackedRegistry.
         
         Args:
             component_name: Name of component
@@ -282,16 +283,8 @@ class WiringValidationAgent:
         Returns:
             True if registered, False otherwise
         """
-        registry = self._read_registry()
-        
-        if 'registered_orchestrators' not in registry:
-            return False
-        
-        for entry in registry['registered_orchestrators']:
-            if entry.get('name') == component_name:
-                return True
-        
-        return False
+        registered_names = self._get_registered_from_db()
+        return component_name in registered_names
     
     def _check_initialized(self, component_name: str) -> bool:
         """Check if component is initialized in MasterOrchestrator.__init__.
@@ -456,7 +449,7 @@ class WiringValidationAgent:
             issues.append(f"{component_name} class does not exist (mentioned but not implemented)")
         
         if not checks['registered'] and checks['class_exists']:
-            issues.append(f"{component_name} not registered in repo-registry.yaml")
+            issues.append(f"{component_name} not registered in DatabaseBackedRegistry")
         
         if not checks['initialized'] and checks['registered']:
             issues.append(f"{component_name} registered but not initialized in MasterOrchestrator.__init__")
@@ -498,11 +491,11 @@ class WiringValidationAgent:
                 recommendations.append(f"Initialize {component_name} in MasterOrchestrator.__init__()")
                 recommendations.append(f"Wire into execute_operation()")
             else:
-                recommendations.append(f"Register {component_name} in repo-registry.yaml")
+                recommendations.append(f"Register {component_name} in DatabaseBackedRegistry")
                 recommendations.append(f"Initialize in MasterOrchestrator.__init__()")
         
         if status == ComponentStatus.ORPHANED:
-            recommendations.append(f"Register {component_name} in repo-registry.yaml")
+            recommendations.append(f"Register {component_name} in DatabaseBackedRegistry")
         
         if not checks['tested'] and checks['class_exists']:
             recommendations.append(f"Create test file for {component_name}")
@@ -567,7 +560,7 @@ class WiringValidationAgent:
         if orphaned_components:
             recommendations.append({
                 'priority': 'LOW',
-                'action': 'Register orphaned components in repo-registry.yaml',
+                'action': 'Register orphaned components in DatabaseBackedRegistry',
                 'components': orphaned_components,
                 'count': len(orphaned_components),
             })
@@ -605,25 +598,46 @@ class WiringValidationAgent:
         
         return None
     
-    def _read_registry(self) -> Dict:
-        """Read and cache repo-registry.yaml.
+    def _get_registered_from_db(self) -> Set[str]:
+        """Get registered component names from DatabaseBackedRegistry.
         
         Returns:
-            Dictionary from YAML file
+            Set of component names registered in the database
         """
-        if self._registry_cache is not None:
-            return self._registry_cache
-        
-        if not self.registry_file.exists():
-            return {}
+        if self._db_registry_cache is not None:
+            return self._db_registry_cache
         
         try:
-            with open(self.registry_file, 'r', encoding='utf-8') as f:
-                self._registry_cache = yaml.safe_load(f) or {}
-                return self._registry_cache
+            from cortex.orchestrators.core.database_registry import (
+                get_database_registry,
+                initialize_registry
+            )
+            
+            # Initialize registry if needed
+            init_result = initialize_registry()
+            if init_result.is_err():
+                logger.warning(f"Failed to initialize registry: {init_result.error}")
+                return set()
+            
+            # Get wiring statistics from DB
+            registry = get_database_registry()
+            stats = registry.get_wiring_statistics()
+            
+            # Extract orchestrator names from categories
+            registered_names: Set[str] = set()
+            for category, orchestrators in stats.get('by_category', {}).items():
+                for name in orchestrators:
+                    registered_names.add(name)
+            
+            self._db_registry_cache = registered_names
+            return registered_names
+            
+        except ImportError as e:
+            logger.warning(f"DatabaseBackedRegistry not available: {e}")
+            return set()
         except Exception as e:
-            print(f"Error reading registry: {e}")
-            return {}
+            logger.error(f"Error reading database registry: {e}")
+            return set()
     
     def _read_master_init(self) -> str:
         """Read MasterOrchestrator.__init__ method.
