@@ -408,14 +408,17 @@ CORTEX is a comprehensive AI-powered development orchestration system designed t
             return False
     
     def save_audit_log(self, output_path: str = None) -> str:
-        """Save audit log to JSON file."""
+        """Save audit log to YAML file (CORE-028/CORE-038 compliant)."""
         if output_path is None:
-            output_path = f"_workspaces/roadmap/reports/doc-migration-{self.timestamp}.json"
+            # Save to reports/analysis/ with CORE-028 compliant naming (YYYY-MM-DD)
+            output_path = f"reports/analysis/doc-migration-{datetime.now().strftime('%Y-%m-%d')}.yaml"
         
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         
+        # Convert JSON to YAML format for better readability and compliance
+        import yaml
         with open(output_path, 'w') as f:
-            json.dump(self.audit_log, f, indent=2)
+            yaml.dump(self.audit_log, f, default_flow_style=False)
         
         return output_path
     
