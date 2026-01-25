@@ -551,7 +551,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="domain",
-                module_path="cortex.orchestrators.domain.domain_orchestrator",
+                module_path="cortex.orchestrators.domain_orchestrator",
                 class_name="DomainOrchestrator",
                 category=OrchestratorCategory.DOMAIN,
                 priority=120,
@@ -569,7 +569,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="selenium_playwright",
-                module_path="cortex.orchestrators.domain.selenium_playwright_orchestrator",
+                module_path="cortex.orchestrators.migration.selenium_playwright_orchestrator",
                 class_name="SeleniumPlaywrightOrchestrator",
                 category=OrchestratorCategory.DOMAIN,
                 priority=140,
@@ -583,7 +583,7 @@ class DatabaseBackedRegistry:
         support_orchestrators = [
             OrchestratorConfig(
                 name="onboarding",
-                module_path="cortex.orchestrators.support.onboarding_orchestrator",
+                module_path="cortex.orchestrators.onboarding.orchestrator",
                 class_name="OnboardingOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=200,
@@ -592,7 +592,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="tool_discovery",
-                module_path="cortex.orchestrators.support.tool_discovery_orchestrator",
+                module_path="cortex.orchestrators.onboarding.tool_discovery",
                 class_name="ToolDiscoveryOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=210,
@@ -601,7 +601,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="upgrade",
-                module_path="cortex.orchestrators.support.upgrade_orchestrator",
+                module_path="cortex.orchestrators.upgrade_orchestrator",
                 class_name="UpgradeOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=220,
@@ -610,7 +610,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="rollback",
-                module_path="cortex.orchestrators.support.rollback_orchestrator",
+                module_path="cortex.orchestrators.rollback_orchestrator",
                 class_name="RollbackOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=230,
@@ -619,7 +619,7 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="setup",
-                module_path="cortex.orchestrators.support.setup_orchestrator",
+                module_path="cortex.orchestrators.onboarding.setup_orchestrator",
                 class_name="SetupOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=240,
@@ -628,10 +628,11 @@ class DatabaseBackedRegistry:
             ),
             OrchestratorConfig(
                 name="composed",
-                module_path="cortex.orchestrators.support.composed_orchestrator",
+                module_path="cortex.orchestrators.composition.composition_engine",
                 class_name="ComposedOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=250,
+                is_optional=True,
                 capabilities=["orchestrator_composition", "chaining"],
                 routing_keywords=["compose", "chain", "combine"]
             ),
@@ -657,6 +658,43 @@ class DatabaseBackedRegistry:
                 capabilities=["approval_gate", "user_confirmation"],
                 routing_keywords=["approve", "confirm", "dor"]
             ),
+            OrchestratorConfig(
+                name="lens_synthesis",
+                module_path="cortex.orchestrators.core.lens_synthesis",
+                class_name="LENSSynthesis",
+                category=OrchestratorCategory.CORE,
+                priority=12,
+                capabilities=["lens_protocol", "synthesis", "comprehension"],
+                routing_keywords=["lens", "synthesize", "comprehend"]
+            ),
+            OrchestratorConfig(
+                name="documentation",
+                module_path="cortex.orchestrators.documentation.orchestrator",
+                class_name="DocumentationOrchestrator",
+                category=OrchestratorCategory.DOMAIN,
+                priority=150,
+                is_optional=True,
+                capabilities=["documentation_generation", "doc_updates"],
+                routing_keywords=["document", "docs", "readme"]
+            ),
+            OrchestratorConfig(
+                name="stage_25_gate",
+                module_path="cortex.orchestrators.core.stage_2_5_gate",
+                class_name="Stage25Gate",
+                category=OrchestratorCategory.CORE,
+                priority=25,
+                capabilities=["stage_validation", "gate_checking"],
+                routing_keywords=["gate", "validate", "stage"]
+            ),
+            OrchestratorConfig(
+                name="autowiring",
+                module_path="cortex.orchestrators.core.autowiring_orchestrator",
+                class_name="AutowiringOrchestrator",
+                category=OrchestratorCategory.INFRASTRUCTURE,
+                priority=2,
+                capabilities=["autowiring", "dependency_injection"],
+                routing_keywords=["wire", "autowire", "inject"]
+            ),
         ]
         
         # Register all orchestrators
@@ -672,7 +710,7 @@ class DatabaseBackedRegistry:
             if result.is_ok():
                 registered += 1
             else:
-                logger.warning(f"Failed to register {config.name}: {result.err()}")
+                logger.warning(f"Failed to register {config.name}: {result.error}")
         
         logger.info(f"Populated {registered} orchestrators from code")
         return Ok(registered)
@@ -847,7 +885,7 @@ class DatabaseBackedRegistry:
         if not self._wiring_order:
             order_result = self.compute_wiring_order()
             if order_result.is_err():
-                return Err(order_result.err())
+                return Err(order_result.error)
         
         self._state = WiringState.WIRING
         logger.info(f"Wiring {len(self._wiring_order)} orchestrators")
@@ -1148,7 +1186,7 @@ def initialize_registry() -> Result[RegistryValidation]:
     # Initialize schema
     schema_result = registry.initialize_schema()
     if schema_result.is_err():
-        return Err(f"Schema initialization failed: {schema_result.err()}")
+        return Err(f"Schema initialization failed: {schema_result.error}")
     
     # Load from database or populate from code
     load_result = registry.load_from_database()
@@ -1156,7 +1194,7 @@ def initialize_registry() -> Result[RegistryValidation]:
         # Database empty, populate from code
         populate_result = registry.populate_from_code()
         if populate_result.is_err():
-            return Err(f"Population failed: {populate_result.err()}")
+            return Err(f"Population failed: {populate_result.error}")
     
     # Wire all orchestrators
     return registry.wire_all()
