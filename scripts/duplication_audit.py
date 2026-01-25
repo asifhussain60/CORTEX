@@ -254,9 +254,9 @@ def main():
     report = audit.run()
     print(report)
     
-    # Save report
-    report_path = Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/reports") / \
-                  f"DUPLICATION-AUDIT-{datetime.now().strftime('%Y-%m-%d-%H%M%S')}.md"
+    # Save report to reports/analysis/ with CORE-028 compliant naming
+    report_path = Path("/Users/asifhussain/PROJECTS/CORTEX/reports/analysis") / \
+                  f"duplication-audit-{datetime.now().strftime('%Y-%m-%d')}.md"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(report)
     
