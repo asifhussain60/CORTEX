@@ -15,19 +15,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
-
-
-class HealthStatus(Enum):
-    """Health status of graph adapter.
-
-    HEALTHY: Adapter operational and responding normally
-    DEGRADED: Adapter operational but experiencing elevated latency
-    UNHEALTHY: Adapter non-responsive or in error state
-    """
-
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
+from cortex.api.health_endpoints import HealthStatus
 
 
 class GraphQueryError(Exception):
