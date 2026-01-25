@@ -32,6 +32,51 @@ Old agent definitions kept for reference only:
 | Planner | cortex-planner.md | Planning & roadmap |
 | Master | CORTEX.md | Master orchestrator (23 orchestrators) |
 
+---
+
+## 🎯 Orchestrator Registry (DatabaseBackedRegistry - SSOT)
+
+**All 23 orchestrators wired via SQLite-backed registry (`.cortex/orchestrator_registry.db`)**
+
+### Core Orchestrators (6/6 Wired)
+| Orchestrator | Status | Authority |
+|--------------|--------|-----------|
+| **MasterOrchestrator** | ✅ WIRED | core |
+| **InteractionOrchestrator** | ✅ WIRED | core |
+| **IntentRouter** | ✅ WIRED | core |
+| **TDDOrchestrator** | ✅ WIRED | core |
+| **WorkflowOrchestrator** | ✅ WIRED | core |
+| **WrappedTDDOrchestrator** | ✅ WIRED | core |
+
+### Domain Orchestrators (6/6 Wired)
+| Orchestrator | Status | Authority |
+|--------------|--------|-----------|
+| **PlanningOrchestrator** | ✅ WIRED (v2.0 consolidated) | domain |
+| **RefactoringOrchestrator** | ✅ WIRED | domain |
+| **DomainOrchestrator** | ✅ WIRED | domain |
+| **ConversationOrchestrator** | ✅ WIRED | domain |
+| **SeleniumPlaywrightOrchestrator** | ✅ WIRED | domain |
+| **DocumentationOrchestrator** | ✅ WIRED | domain |
+
+### Support Orchestrators (11/11 Wired)
+| Orchestrator | Status | Authority |
+|--------------|--------|-----------|
+| **OnboardingOrchestrator** | ✅ WIRED | support |
+| **ToolDiscoveryOrchestrator** | ✅ WIRED | support |
+| **UpgradeOrchestrator** | ✅ WIRED | support |
+| **RollbackOrchestrator** | ✅ WIRED | support |
+| **SetupOrchestrator** | ✅ WIRED | support |
+| **ComposedOrchestrator** | ✅ WIRED | support |
+| **OrchestratorBootstrap** | ✅ WIRED | support |
+| **DoRApprovalGate** | ✅ WIRED | support |
+| **LENSSynthesis** | ✅ WIRED | support |
+| **GovernanceRegistry** | ✅ WIRED | support |
+| **KnowledgeRepository** | ✅ WIRED | support |
+
+**Registry Authority:** AC-PERMANENT-FIX-009 (DatabaseBackedRegistry)  
+**Wiring Entry Point:** `cortex.orchestrators.bootstrap.OrchestratorBootstrap.bootstrap()`  
+**Verification:** `cortex/orchestrators/core/database_registry.py:DatabaseBackedRegistry.get_wiring_statistics()`
+
 ## 📋 Status
 
 ✅ **Deduplication Complete**:
