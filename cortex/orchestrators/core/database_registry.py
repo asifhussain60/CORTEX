@@ -562,300 +562,50 @@ class DatabaseBackedRegistry:
     
     def populate_from_code(self) -> Result[int]:
         """
-        Populate database from wire_*.py modules.
+        Populate database from canonical orchestrator definitions.
         
-        Scans wire_001_core_wiring.py, wire_002_domain_wiring.py, 
-        wire_003_support_wiring.py and registers all orchestrators.
+        Delegates to db_wiring_init.py which is the SSOT for all 23
+        orchestrator configurations. This ensures:
+        - Single canonical source (CORE-035 compliance)
+        - Cross-machine compatibility
+        - Deterministic wiring order
         
         Returns:
             Result containing count of registered orchestrators or error
         """
         self._state = WiringState.REGISTERING
         
-        registered = 0
+        try:
+            # Import from canonical SSOT (db_wiring_init.py)
+            # This is the ONLY place orchestrator definitions should live
+            from cortex.orchestrators.core.db_wiring_init import ALL_ORCHESTRATORS
+            
+            registered = 0
+            for config in ALL_ORCHESTRATORS:
+                result = self.register(config, registered_by="populate_from_code")
+                if result.is_ok():
+                    registered += 1
+                else:
+                    logger.warning(f"Failed to register {config.name}: {result.error}")
+            
+            logger.info(f"Populated {registered} orchestrators from canonical definitions (db_wiring_init.py)")
+            return Ok(registered)
+        except Exception as e:
+            logger.error(f"Failed to populate from code: {str(e)}")
+            return Err(f"Population failed: {str(e)}")
+    
+    def _legacy_populate_from_code(self) -> Result[int]:
+        """
+        DEPRECATED: Legacy inline definitions - kept for reference only.
         
-        # Default init args for common orchestrators
-        # These come from the current working directory at runtime
-        import os
-        default_workspace = os.getcwd()
+        All orchestrator definitions have been moved to db_wiring_init.py
+        as the single source of truth (CORE-035).
         
-        # WIRE-001: Core Orchestrators (6)
-        core_orchestrators = [
-            OrchestratorConfig(
-                name="interaction",
-                module_path="cortex.orchestrators.core.interaction_orchestrator",
-                class_name="InteractionOrchestrator",
-                category=OrchestratorCategory.CORE,
-                priority=10,
-                capabilities=["stage_1_comprehension", "lens_protocol", "challenge_generation"],
-                routing_keywords=["understand", "analyze", "comprehend"],
-                init_args={"conversation_protocol": None},  # Optional protocol
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="intent_router",
-                module_path="cortex.orchestrators.core.intent_router",
-                class_name="IntentRouter",
-                category=OrchestratorCategory.CORE,
-                priority=20,
-                dependencies=["interaction"],
-                capabilities=["intent_classification", "routing", "confidence_scoring"],
-                routing_keywords=["route", "classify", "dispatch"]
-            ),
-            OrchestratorConfig(
-                name="tdd",
-                module_path="cortex.orchestrators.core.tdd_orchestrator",
-                class_name="TDDOrchestrator",
-                category=OrchestratorCategory.CORE,
-                priority=30,
-                capabilities=["test_driven_development", "red_green_refactor"],
-                routing_keywords=["test", "tdd", "implement"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="workflow",
-                module_path="cortex.orchestrators.core.workflow_orchestrator",
-                class_name="WorkflowOrchestrator",
-                category=OrchestratorCategory.CORE,
-                priority=40,
-                capabilities=["multi_step_workflows", "pipeline_execution"],
-                routing_keywords=["workflow", "pipeline", "sequence"],
-                init_args={"workspace_root": default_workspace},
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="wrapped_tdd",
-                module_path="cortex.orchestrators.core.wrapped_tdd_orchestrator",
-                class_name="WrappedTDDOrchestrator",
-                category=OrchestratorCategory.CORE,
-                priority=35,
-                dependencies=["tdd"],
-                capabilities=["tdd_with_governance", "rule_enforcement"],
-                routing_keywords=["governed_tdd", "safe_implement"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="bootstrap",
-                module_path="cortex.orchestrators.bootstrap",
-                class_name="OrchestratorBootstrap",
-                category=OrchestratorCategory.CORE,
-                priority=5,
-                capabilities=["system_initialization", "startup"],
-                routing_keywords=["bootstrap", "initialize", "startup"],
-                is_utility=True  # No execute() method
-            ),
-        ]
-        
-        # WIRE-002: Domain Orchestrators (5)
-        domain_orchestrators = [
-            OrchestratorConfig(
-                name="refactoring",
-                module_path="cortex.orchestrators.domain.refactoring_orchestrator",
-                class_name="RefactoringOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=100,
-                capabilities=["code_refactoring", "pattern_application"],
-                routing_keywords=["refactor", "improve", "clean"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="planning",
-                module_path="cortex.orchestrators.domain.planning_orchestrator",
-                class_name="PlanningOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=110,
-                capabilities=["planning", "roadmap", "phase_management"],
-                routing_keywords=["plan", "roadmap", "phase"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="domain",
-                module_path="cortex.orchestrators.domain_orchestrator",
-                class_name="DomainOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=120,
-                capabilities=["domain_operations", "business_logic"],
-                routing_keywords=["domain", "business"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="conversation",
-                module_path="cortex.orchestrators.conversation_orchestrator",
-                class_name="ConversationOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=130,
-                capabilities=["stateful_conversations", "multi_turn"],
-                routing_keywords=["conversation", "chat", "dialogue"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="selenium_playwright",
-                module_path="cortex.orchestrators.migration.selenium_playwright_orchestrator",
-                class_name="SeleniumPlaywrightOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=140,
-                is_optional=True,
-                capabilities=["test_migration", "browser_automation"],
-                routing_keywords=["selenium", "playwright", "browser"],
-                is_utility=True  # No execute() method
-            ),
-        ]
-        
-        # WIRE-003: Support Orchestrators (6)
-        support_orchestrators = [
-            OrchestratorConfig(
-                name="onboarding",
-                module_path="cortex.orchestrators.onboarding.orchestrator",
-                class_name="OnboardingOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=200,
-                capabilities=["user_onboarding", "guided_setup"],
-                routing_keywords=["onboard", "setup", "welcome"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="tool_discovery",
-                module_path="cortex.orchestrators.onboarding.tool_discovery",
-                class_name="ToolDiscoveryOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=210,
-                capabilities=["capability_discovery", "tool_catalog"],
-                routing_keywords=["discover", "tools", "capabilities"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="upgrade",
-                module_path="cortex.orchestrators.upgrade_orchestrator",
-                class_name="UpgradeOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=220,
-                capabilities=["version_upgrade", "migration"],
-                routing_keywords=["upgrade", "migrate", "version"],
-                init_args={"repo_path": default_workspace},
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="rollback",
-                module_path="cortex.orchestrators.rollback_orchestrator",
-                class_name="RollbackOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=230,
-                capabilities=["failure_recovery", "rollback"],
-                routing_keywords=["rollback", "revert", "undo"],
-                init_args={"repo_path": default_workspace},
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="setup",
-                module_path="cortex.orchestrators.onboarding.setup_orchestrator",
-                class_name="SetupOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=240,
-                capabilities=["environment_setup", "configuration"],
-                routing_keywords=["setup", "configure", "environment"],
-                init_args={"workspace": default_workspace},
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="composed",
-                module_path="cortex.orchestrators.composition.composition_engine",
-                class_name="ComposedOrchestrator",
-                category=OrchestratorCategory.SUPPORT,
-                priority=250,
-                is_optional=True,
-                capabilities=["orchestrator_composition", "chaining"],
-                routing_keywords=["compose", "chain", "combine"],
-                # ComposedOrchestrator is a dataclass - provide required args
-                init_args={
-                    "name": "default_composed",
-                    "pattern": "sequential"  # Will need import fix
-                },
-                is_utility=True
-            ),
-        ]
-        
-        # Additional orchestrators from MasterOrchestrator
-        additional_orchestrators = [
-            OrchestratorConfig(
-                name="master",
-                module_path="cortex.orchestrators.core.master_orchestrator",
-                class_name="MasterOrchestrator",
-                category=OrchestratorCategory.CORE,
-                priority=1,
-                capabilities=["coordination", "delegation", "aggregation"],
-                routing_keywords=["master", "main", "coordinate"]
-                # Has execute() - true orchestrator
-            ),
-            OrchestratorConfig(
-                name="dor_approval",
-                module_path="cortex.orchestrators.core.dor_approval_gate",
-                class_name="DoRApprovalGate",
-                category=OrchestratorCategory.CORE,
-                priority=15,
-                capabilities=["approval_gate", "user_confirmation"],
-                routing_keywords=["approve", "confirm", "dor"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="lens_synthesis",
-                module_path="cortex.orchestrators.core.lens_synthesis",
-                class_name="LENSSynthesis",
-                category=OrchestratorCategory.CORE,
-                priority=12,
-                capabilities=["lens_protocol", "synthesis", "comprehension"],
-                routing_keywords=["lens", "synthesize", "comprehend"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="documentation",
-                module_path="cortex.orchestrators.documentation.orchestrator",
-                class_name="DocumentationOrchestrator",
-                category=OrchestratorCategory.DOMAIN,
-                priority=150,
-                is_optional=True,
-                capabilities=["documentation_generation", "doc_updates"],
-                routing_keywords=["document", "docs", "readme"]
-                # Has execute() - true orchestrator
-            ),
-            OrchestratorConfig(
-                name="stage_25_gate",
-                module_path="cortex.orchestrators.core.stage_2_5_gate",
-                class_name="Stage25Gate",
-                category=OrchestratorCategory.CORE,
-                priority=25,
-                capabilities=["stage_validation", "gate_checking"],
-                routing_keywords=["gate", "validate", "stage"],
-                is_utility=True  # No execute() method
-            ),
-            OrchestratorConfig(
-                name="autowiring",
-                module_path="cortex.orchestrators.core.autowiring_orchestrator",
-                class_name="AutowiringOrchestrator",
-                category=OrchestratorCategory.INFRASTRUCTURE,
-                priority=2,
-                capabilities=["autowiring", "dependency_injection"],
-                routing_keywords=["wire", "autowire", "inject"],
-                is_utility=True  # No execute() method
-            ),
-        ]
-        
-        # Register all orchestrators
-        all_configs = (
-            core_orchestrators + 
-            domain_orchestrators + 
-            support_orchestrators + 
-            additional_orchestrators
-        )
-        
-        for config in all_configs:
-            result = self.register(config, registered_by="populate_from_code")
-            if result.is_ok():
-                registered += 1
-            else:
-                logger.warning(f"Failed to register {config.name}: {result.error}")
-        
-        logger.info(f"Populated {registered} orchestrators from code")
-        return Ok(registered)
+        This method is no longer called but preserved for audit trail.
+        """
+        # Legacy code removed - see git history for original implementation
+        # All 23 orchestrators are now defined in db_wiring_init.py
+        return Err("Legacy method - use populate_from_code() instead")
     
     # =========================================================================
     # Wiring Logic
