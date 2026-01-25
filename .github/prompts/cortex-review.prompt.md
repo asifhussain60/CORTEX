@@ -202,8 +202,52 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 - Conflicting interface implementations
 - Import path ambiguity causing module confusion
 
-**Example Finding:** "Function `process_data()` missing type hints and docstring"  
-**NEW Example:** "CORE-035 violation: ConversationProtocol implemented in 2 locations with conflicting behavior"
+**CORE-035 Deduplication Algorithm (NEW - Comprehensive):**
+
+**Step 1: Identify Potential Duplicates**
+```bash
+# Search for duplicate class/function names
+find cortex/ -name "*.py" -exec grep -l "^class \|^def " {} \; | sort | uniq -d
+
+# Example output indicates potential duplicates to investigate
+for file in cortex/orchestrators/core/*.py cortex_brain/core/orchestrator/*.py; do
+  grep "^class ConversationProtocol\|^def execute_operation" "$file"
+done
+```
+
+**Step 2: Determine Canonical Version**
+For each duplicate found:
+- Check `git log --follow` to see which was created first (original is canonical)
+- Count usage: Which version is imported in tests/main? (used = canonical)
+- Check recent commits: Which has newer fixes? (maintained = canonical)
+- Verify governance: Does it have CORE-011/012/013 compliance? (compliant = canonical)
+
+**Step 3: Create Consolidation Plan**
+For each duplicate:
+1. Delete non-canonical versions
+2. Update ALL imports to use canonical location
+3. Update test fixtures to import canonical only
+4. Run full test suite to verify no breakage
+5. Create commit: `feat(CORE-035): Consolidate {name} to canonical location`
+
+**Step 4: Verify No Import Conflicts**
+```python
+# After consolidation, verify:
+import sys
+duplicates = {}
+for name, mod in sys.modules.items():
+    if mod and hasattr(mod, '__file__') and mod.__file__:
+        key = mod.__file__.split('/')[-1]
+        if key not in duplicates:
+            duplicates[key] = []
+        duplicates[key].append(name)
+
+for key, mods in duplicates.items():
+    if len(mods) > 1:
+        print(f"CONFLICT: {key} imported as {mods}")  # Should be empty
+```
+
+**Example Finding:** "CORE-035 violation: ConversationProtocol implemented in 2 locations with conflicting behavior. Canonical: cortex/brain/core/orchestrator/conversation_protocol.py (maintained, CORE-011 compliant). Duplicate: cortex_brain/legacy/conversation_protocol.py (outdated, 2 CORE violations). Action: Delete duplicate, update 12 imports to canonical."
 
 ---
 
@@ -300,10 +344,159 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 - **CLI-INTEG-002:** Help/documentation missing (e.g., "No help text for command")
 - **SPEC-INTEG-001:** Specification/implementation alignment (e.g., "Prompt says wired, code has NotImplementedError")
 
+**NEW (v5.2): Deduplication & Consolidation Checks:**
+- **DEDUP-001:** Duplicate class definitions (e.g., "ConversationProtocol in 2 modules")
+- **DEDUP-002:** Conflicting implementations (e.g., "IntentRouter with different behavior")
+- **DEDUP-003:** Import path ambiguity (e.g., "Tests import from 2 different locations")
+- **CONSOLIDATION-001:** Missing consolidation (e.g., "Duplicate exists but not consolidated per CORE-035")
+- **CONSOLIDATION-002:** Incomplete consolidation (e.g., "Duplicate deleted but imports not updated")
+
 **Example Findings:** 
 - "Tool exposure: 5/23 orchestrators expose MCP tools (CRITICAL gap)"
 - "Database queries don't appear in logs or metrics—no visibility"
 - "CLI command `/review-ssot` not wired to Agent 0"
+- "DEDUP-001: ConversationProtocol duplicated in cortex/core AND cortex_brain/core with 14 imports split between them"
+- "CONSOLIDATION-001: MasterOrchestrator appears in 3 locations - no single canonical version"
+
+---
+
+## 🔍 NEW: CORE-035 Deduplication Review Checklist
+
+**MANDATORY FOR EVERY CODE REVIEW** - Run before approving merge:
+
+### Pre-Review: Scan for Duplicates
+```bash
+# Find potential duplicates (same name, different files)
+echo "🔍 Scanning for duplicate class/function definitions..."
+
+for pattern in "ConversationProtocol" "MasterOrchestrator" "IntentRouter" "orchestrator_registry"; do
+  echo ""
+  echo "Pattern: $pattern"
+  find cortex/ -name "*.py" -exec grep -l "^class $pattern\|^def $pattern" {} \;
+done
+
+# Find imports from multiple locations
+echo ""
+echo "🔍 Checking for split imports..."
+grep -r "from cortex\|from cortex_brain" cortex/ tests/ | awk -F: '{print $NF}' | sort | uniq -d
+```
+
+### During Review: Deduplication Checklist
+
+**For EVERY pull request, verify:**
+
+- [ ] **No new duplicate classes** 
+  - Grep for class name across entire cortex/ folder
+  - If found elsewhere, is it truly different or a duplicate?
+  
+- [ ] **No new duplicate functions**
+  - Check for function name duplicates
+  - If found elsewhere, should they be one shared function?
+
+- [ ] **Imports use CANONICAL location only**
+  - All tests import from canonical path
+  - Main code imports from canonical path
+  - No imports from 2 different locations for same class
+
+- [ ] **No competing implementations**
+  - Example: ConversationProtocol should exist in ONE place only
+  - All usages point to same location
+  - No conflicting behavior between versions
+
+- [ ] **Master orchestrator wiring complete**
+  - All 23 orchestrators imported in `__init__.py`
+  - All orchestrators registered with @orchestrator decorator
+  - All orchestrators appear in orchestrator_registry.yaml
+  - No import errors or circular dependencies
+
+- [ ] **CORE-035 compliance verified**
+  - Zero duplicate implementations of core classes
+  - Single canonical version of each component
+  - All imports use canonical location
+  - Tests confirm no import conflicts
+
+### Post-Merge: Verify Consolidation
+
+If deduplication was performed:
+
+- [ ] **Verify deleted files**
+  - Non-canonical version deleted
+  - No orphaned references to deleted file
+
+- [ ] **Verify all imports updated**
+  - Search for old import paths
+  - Update ALL usages to canonical location
+  - Verify test suite runs without import errors
+
+- [ ] **Run full test suite**
+  - All tests pass with canonical imports only
+  - No import-related failures
+  - Verify no circular dependency issues
+
+- [ ] **Create consolidation commit**
+  - Commit message: `feat(CORE-035): Consolidate {ComponentName} to canonical location`
+  - Include details of what was consolidated
+  - Link to old duplicate location if deleted
+
+- [ ] **Update roadmap**
+  - Add `AC-CONSOLIDATION-##` entry if consolidation is significant
+  - Document which duplicates were consolidated
+  - Note any issues encountered
+
+---
+
+## 📋 Master Orchestrator Wiring Verification
+
+**NEW (v5.2): Mandatory Verification for Production Readiness**
+
+On EVERY code review, verify:
+
+```markdown
+## ✅ Master Orchestrator Wiring Checklist
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| All 23 orchestrators imported | ⏳ | Check `cortex/orchestrators/core/__init__.py` |
+| All registered with @decorator | ⏳ | Check `cortex/orchestrators/core/orchestrator_registry.py` |
+| Registry YAML complete | ⏳ | Check `cortex_brain/tier0/repo-registry.yaml` (23 entries) |
+| 4-stage pipeline intact | ⏳ | Check `MasterOrchestrator.execute_operation()` |
+| No import errors | ⏳ | `python -c "from cortex.orchestrators import *"` |
+| No circular imports | ⏳ | Run pytest with import validation |
+| Test coverage adequate | ⏳ | Check test_master_orchestrator.py coverage |
+
+**Target Status:** All ✅ (23/23 orchestrators wired, 0 errors)
+
+**Current Status (from git history):** 18/23 wired (78% - per chat01.md and AC-PERMANENT-FIX commits)
+
+**Action Items:**
+- [ ] Verify all 23 orchestrators actually wired (not just registry claim)
+- [ ] Identify and wire remaining 5 orchestrators
+- [ ] Update AC-PERMANENT-FIX tracking with new wiring entries
+- [ ] Verify test suite passes with all orchestrators active
+```
+
+**Example Finding:**
+```markdown
+### WIRING-INTEG-003: Incomplete Master Orchestrator Wiring
+
+- **Current:** 18/23 orchestrators wired (78%)
+- **Missing:** PlanningOrchestrator, RefactoringOrchestrator, 3 others
+- **Impact:** Those orchestrators not available via MasterOrchestrator.execute()
+- **Evidence:** 
+  - Missing from cortex/orchestrators/core/__init__.py imports
+  - Not in orchestrator_registry.yaml
+  - Tests show NotImplementedError when routed
+
+**Fix:** Wire missing 5 orchestrators:
+1. Import orchestrators in __init__.py
+2. Add @orchestrator decorator if missing
+3. Register in orchestrator_registry.yaml
+4. Add routing logic in MasterOrchestrator.execute_operation()
+5. Test each orchestrator's routing path
+6. Update AC-PERMANENT-FIX-001 status if this completes wiring
+
+**Commit:** `feat(CORE-035): Complete master orchestrator wiring (18→23 orchestrators)`
+```
 
 ---
 
