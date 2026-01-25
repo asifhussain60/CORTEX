@@ -304,6 +304,96 @@ class InteractionOrchestrator:
         
         return Ok(None)
     
+    def evaluate_solution_options(
+        self,
+        solution_options: List[Dict[str, Any]],
+        round_context: Optional[RoundContext] = None
+    ) -> Optional[Dict[str, Any]]:
+        """
+        AC-RECOMMENDATION-001: Evaluate solution options and mark best one.
+        
+        Integrates recommendation engine with challenge system to mark
+        the best solution option with ⭐ for user presentation.
+        
+        Workflow:
+        1. Convert solution option dicts to SolutionOption objects
+        2. Score each option using weighted criteria
+        3. Determine best option and confidence level
+        4. Mark best with ⭐ RECOMMENDED BY CORTEX
+        5. Return with alternatives and reasoning
+        
+        Args:
+            solution_options: List of solution option dicts with:
+                - option_id: Unique identifier
+                - name: Solution name
+                - description: Detailed description
+                - implementation_effort: "low", "medium", "high"
+                - risk_level: "low", "medium", "high"
+                - maintenance_cost: "low", "medium", "high"
+                - cortex_alignment: 0.0-1.0
+                - governance_compliance: 0.0-1.0
+                - performance_impact: 0.0-1.0
+                - scalability_score: 0.0-1.0
+                - team_familiarity: 0.0-1.0
+                - technical_debt: 0.0-1.0
+                - pros: List[str]
+                - cons: List[str]
+                - timeline_estimate: str (optional)
+            round_context: Optional context for audit logging
+        
+        Returns:
+            Dict with recommendation (best marked with ⭐) or None on error
+        """
+        try:
+            from cortex.orchestrators.core.solution_recommendation_engine import (
+                SolutionOption,
+                get_recommendation_engine,
+            )
+            
+            if not solution_options:
+                return None
+            
+            # Convert dicts to SolutionOption objects
+            options = []
+            for opt_dict in solution_options:
+                option = SolutionOption(
+                    option_id=opt_dict.get("option_id", f"option_{len(options)}"),
+                    name=opt_dict.get("name", "Unnamed Option"),
+                    description=opt_dict.get("description", ""),
+                    implementation_effort=opt_dict.get("implementation_effort", "medium"),
+                    risk_level=opt_dict.get("risk_level", "medium"),
+                    maintenance_cost=opt_dict.get("maintenance_cost", "medium"),
+                    cortex_alignment=float(opt_dict.get("cortex_alignment", 0.5)),
+                    governance_compliance=float(opt_dict.get("governance_compliance", 0.5)),
+                    performance_impact=float(opt_dict.get("performance_impact", 0.5)),
+                    scalability_score=float(opt_dict.get("scalability_score", 0.5)),
+                    team_familiarity=float(opt_dict.get("team_familiarity", 0.5)),
+                    technical_debt=float(opt_dict.get("technical_debt", 0.5)),
+                    pros=opt_dict.get("pros", []),
+                    cons=opt_dict.get("cons", []),
+                    dependencies=opt_dict.get("dependencies", []),
+                    timeline_estimate=opt_dict.get("timeline_estimate"),
+                )
+                options.append(option)
+            
+            # Get recommendation using singleton engine
+            engine = get_recommendation_engine()
+            context = {"round_context": round_context} if round_context else {}
+            recommendation = engine.recommend_best_option(options, context=context)
+            
+            logger.info(
+                "Evaluated %d options, best: %s (confidence: %s)",
+                len(options),
+                recommendation.best_option.name,
+                recommendation.confidence.value
+            )
+            
+            return recommendation.to_dict()
+        
+        except Exception as e:
+            logger.error("Error evaluating solution options: %s", str(e))
+            return None
+    
     def list_available_patterns(self) -> List[str]:
         """
         List all available pattern IDs.

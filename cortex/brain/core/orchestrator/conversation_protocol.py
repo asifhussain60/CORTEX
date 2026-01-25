@@ -1211,3 +1211,98 @@ class ConversationProtocol:
                 )
             return ""
 
+    def get_recommended_option(
+        self,
+        solution_options: List[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
+        """
+        AC-RECOMMENDATION-001: Evaluate solution options and mark best one.
+        
+        Converts solution options dict format to SolutionOption objects,
+        scores them using the recommendation engine, and marks the best option
+        with ⭐ RECOMMENDED BY CORTEX for presentation to user.
+        
+        Args:
+            solution_options: List of solution option dictionaries with keys:
+                - option_id: Unique identifier
+                - name: Solution name
+                - description: Detailed description
+                - implementation_effort: "low", "medium", "high"
+                - risk_level: "low", "medium", "high"
+                - maintenance_cost: "low", "medium", "high"
+                - cortex_alignment: 0.0-1.0
+                - governance_compliance: 0.0-1.0
+                - performance_impact: 0.0-1.0
+                - scalability_score: 0.0-1.0
+                - team_familiarity: 0.0-1.0
+                - technical_debt: 0.0-1.0
+                - pros: List[str]
+                - cons: List[str]
+                - timeline_estimate: str (optional)
+        
+        Returns:
+            Dict with recommendation details including marked best option
+        """
+        try:
+            # Import recommendation engine
+            from cortex.orchestrators.core.solution_recommendation_engine import (
+                SolutionOption,
+                get_recommendation_engine,
+            )
+            
+            # Convert dicts to SolutionOption objects
+            options = []
+            for opt_dict in solution_options:
+                option = SolutionOption(
+                    option_id=opt_dict.get("option_id", "unknown"),
+                    name=opt_dict.get("name", "Unnamed Option"),
+                    description=opt_dict.get("description", ""),
+                    implementation_effort=opt_dict.get("implementation_effort", "medium"),
+                    risk_level=opt_dict.get("risk_level", "medium"),
+                    maintenance_cost=opt_dict.get("maintenance_cost", "medium"),
+                    cortex_alignment=float(opt_dict.get("cortex_alignment", 0.5)),
+                    governance_compliance=float(opt_dict.get("governance_compliance", 0.5)),
+                    performance_impact=float(opt_dict.get("performance_impact", 0.5)),
+                    scalability_score=float(opt_dict.get("scalability_score", 0.5)),
+                    team_familiarity=float(opt_dict.get("team_familiarity", 0.5)),
+                    technical_debt=float(opt_dict.get("technical_debt", 0.5)),
+                    pros=opt_dict.get("pros", []),
+                    cons=opt_dict.get("cons", []),
+                    dependencies=opt_dict.get("dependencies", []),
+                    timeline_estimate=opt_dict.get("timeline_estimate"),
+                )
+                options.append(option)
+            
+            # Get recommendation (using singleton pattern)
+            engine = get_recommendation_engine()
+            recommendation = engine.recommend_best_option(
+                options,
+                context={"turn_number": self.turn_number}
+            )
+            
+            # Audit the recommendation
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-RECOMMENDATION-001",
+                    operation="OPTION_EVALUATION",
+                    success=True,
+                    details={
+                        "best_option": recommendation.best_option.name,
+                        "confidence": recommendation.confidence.value,
+                        "score": engine.score_option(recommendation.best_option),
+                    },
+                )
+            
+            return recommendation.to_dict()
+        
+        except Exception as e:
+            logger.error(f"Error in recommendation engine: {str(e)}")
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-RECOMMENDATION-001",
+                    operation="OPTION_EVALUATION",
+                    success=False,
+                    details={"error": str(e)},
+                )
+            return None
+
