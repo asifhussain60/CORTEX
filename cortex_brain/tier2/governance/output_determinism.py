@@ -44,12 +44,7 @@ class DeterminismAnalysis:
     variance_percentage: float = 0.0
 
 
-@dataclass
-class Result:
-    """Generic result wrapper."""
-    success: bool
-    value: Any = None
-    error: Optional[str] = None
+from cortex.brain.core.result import Result
 
 
 class OutputDeterminismVerifier:

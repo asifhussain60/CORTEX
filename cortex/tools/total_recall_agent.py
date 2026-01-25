@@ -187,18 +187,19 @@ class ACPermanentFixEnforcer:
         Returns:
             Tuple[bool, str]: (is_valid, message)
         """
-        # This verifies setup script doesn't auto-regenerate empty registry
+        # This verifies the registry file exists and has production status
         try:
-            setup_file = Path("cortex/scripts-root-archive/setup_cortex_hub.py")
-            if not setup_file.exists():
-                return False, "setup_cortex_hub.py not found"
+            registry_file = Path("cortex_brain/tier0/repo-registry.yaml")
+            if not registry_file.exists():
+                return False, "repo-registry.yaml not found"
             
-            content = setup_file.read_text()
-            # Check for preservation logic
-            if "preserve" not in content.lower() and "registry" in content.lower():
-                return True, "✅ Setup script preserves registry state"
+            content = registry_file.read_text(encoding="utf-8")
             
-            return True, "✅ Registry persistence verified"
+            # Check for production status indicators
+            if "PRODUCTION" in content or "wired" in content:
+                return True, "✅ Registry persistence verified"
+            
+            return False, "Registry missing production status"
         except Exception as e:
             return False, f"Registry persistence verification failed: {str(e)}"
     

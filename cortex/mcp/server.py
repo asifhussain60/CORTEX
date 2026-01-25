@@ -228,6 +228,15 @@ class MCPServer:
         # Register built-in tools
         self._register_tool(SampleTool())
         
+        # Register CORTEX orchestrator tools
+        try:
+            from cortex.mcp.cortex_tools import get_cortex_tools
+            for tool in get_cortex_tools():
+                self._register_tool(tool)
+            self.logger.info("CORTEX orchestrator tools registered")
+        except (ImportError, Exception) as e:
+            self.logger.warning(f"Could not register CORTEX tools: {e}")
+        
         # Auto-discover and register MCP tools by category
         try:
             from cortex.mcp.tool_discovery import auto_discover_and_register_tools

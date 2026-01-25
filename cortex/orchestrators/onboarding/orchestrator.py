@@ -27,17 +27,7 @@ class JourneyState(str, Enum):
     COMPLETED = "completed"
 
 
-@dataclass
-class Result(Generic[T]):
-    """Generic result wrapper for operations.
-    
-    Attributes:
-        success: Whether the operation succeeded
-        value: The result value if successful
-        error: Error message if unsuccessful
-    """
-    success: bool
-    value: Optional[T] = None
+from cortex.brain.core.result import Result
     error: Optional[str] = None
 
 

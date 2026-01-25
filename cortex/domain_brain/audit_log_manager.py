@@ -8,21 +8,7 @@ import time as time_module
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
-
-
-@dataclass
-class AuditEntry:
-    """Audit log entry.
-    
-    Attributes:
-        entry_id: Unique entry identifier.
-        operation_type: Type of audit operation.
-        domain: Domain name.
-        user: User identifier.
-        message: Entry message.
-        timestamp: When entry was created.
-        metadata: Additional metadata.
-    """
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
     entry_id: str
     operation_type: str
     domain: str

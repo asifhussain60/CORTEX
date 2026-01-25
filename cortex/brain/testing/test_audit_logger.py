@@ -33,16 +33,7 @@ from pathlib import Path
 import pytest
 
 from cortex.infrastructure.database import DatabaseManager
-
-
-@dataclass
-class AuditEntry:
-    """Represents a single audit log entry to be written."""
-    timestamp: str
-    operation: str  # AC_START, AC_EXECUTE, AC_COMPLETE
-    component: str  # Test module/function
-    level: str = "INFO"
-    message: str = ""
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
     ac_id: Optional[str] = None
     correlation_id: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None

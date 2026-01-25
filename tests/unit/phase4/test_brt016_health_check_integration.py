@@ -27,12 +27,7 @@ import pytest
 # HEALTH CHECK INTEGRATION IMPLEMENTATION FOR TESTING
 # ============================================================================
 
-class HealthStatus(str, Enum):
-    """Health status levels."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
-    UNKNOWN = "unknown"
+from cortex.api.health_endpoints import HealthStatus
 
 
 @dataclass

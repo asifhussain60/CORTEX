@@ -322,7 +322,7 @@ class MasterOrchestrator(IOrchestrator):
             protocol = ConvProtocol(orchestrator=self)
             self.interaction_orchestrator_with_challenges = InteractionOrch(
                 conversation_protocol=protocol,
-                enable_challenges=True  # AC-PERMANENT-FIX-006: Always enabled
+                enable_challenges=True  # AC-PERMANENT-FIX-006: MUST be True (permanent)
             )
             self.logger.log_operation_complete(
                 ac_id="AC-PERMANENT-FIX-006",

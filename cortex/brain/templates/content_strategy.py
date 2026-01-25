@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Set
 import yaml
 
+from cortex.common.validators import ValidationResult
+
 
 @dataclass
 class ValidationResult:
