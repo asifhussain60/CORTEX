@@ -537,6 +537,46 @@ rules:
       severity_on_bypass: "blocked"
 
   # --------------------------------------------------------------------------
+  # AC-PERMANENT-FIX-006: Challenge System Permanent Wiring
+  # --------------------------------------------------------------------------
+  - rule_id: AC-PERMANENT-FIX-006
+    category: architectural_enforcement
+    severity: blocked
+    name: Challenge System Permanent Wiring
+    description: |
+      Challenge-driven interaction system MUST remain permanently wired.
+      InteractionOrchestrator with ChallengeEngine MUST be active in all
+      MasterOrchestrator instances.
+      
+      This prevents regression of challenge-driven interaction capability
+      that enables CORTEX to disagree with user requests when better
+      solutions exist.
+    
+    verification_points:
+      - "MasterOrchestrator.__init__ MUST initialize InteractionOrchestrator"
+      - "enable_challenges=True MUST be hardcoded (not configurable)"
+      - "ChallengeEngine MUST be accessible via get_challenge_engine()"
+      - "MCP server MUST expose cortex_challenge tool"
+      - "Challenge system MUST be invoked on every user request"
+    
+    protected_files:
+      - "cortex/orchestrators/core/master_orchestrator.py:313-340"
+      - "cortex/orchestrators/core/interaction_orchestrator.py:100-103"
+      - "cortex/orchestrators/core/challenge_engine.py"
+      - "cortex/mcp/cortex_tools.py:CORTEXChallengeTool"
+    
+    regression_detection:
+      condition: "enable_challenges=False OR ChallengeEngine not imported"
+      action: "BLOCK execution with AC-PERMANENT-FIX-006 violation"
+      message: "Challenge system regression detected! CORTEX challenge-driven interaction disabled."
+    
+    implementation:
+      method: "Hardcoded initialization in MasterOrchestrator.__init__"
+      enforcement_point: "InteractionOrchestrator creation"
+      audit_event: "AC-PERMANENT-FIX-006"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
   # CORE-030: Implementation Truth Enforcement (AC-PERMANENT-FIX-005)
   # --------------------------------------------------------------------------
   - rule_id: CORE-030

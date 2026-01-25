@@ -29,18 +29,17 @@ def main() -> int:
     """
     Main entry point for MCP server.
     
-    Initializes and demonstrates MCP server functionality by:
-    1. Creating an MCP server instance
-    2. Listing available tools
-    3. Executing a sample tool invocation
+    Runs CORTEX MCP server with stdio transport for Copilot integration.
+    Handles JSON-RPC 2.0 requests via stdin/stdout.
     
     Returns:
         int: Exit code (0 for success, non-zero for failure)
     """
     try:
-        from cortex.mcp.server import MCPServer, MCPResponse
+        from cortex.mcp.server import MCPServer
+        from cortex.mcp.stdio_transport import run_stdio_server
         
-        logger.info("Initializing CORTEX MCP Server...")
+        logger.info("Initializing CORTEX MCP Server with stdio transport...")
         server: MCPServer = MCPServer()
         
         # List available tools
@@ -49,25 +48,11 @@ def main() -> int:
         for tool in tools:
             logger.info(f"  - {tool['name']}: {tool['description']}")
         
-        # Demonstrate tool invocation
-        logger.info("\nExecuting sample tool demonstration...")
-        response: MCPResponse = server.call_tool(
-            "sample_tool",
-            {"input": "CORTEX MCP Server v7.0", "mode": "demo"},
-            request_id="startup-demo"
-        )
+        logger.info("Starting stdio JSON-RPC transport...")
+        logger.info("CORTEX MCP Server ready for Copilot integration")
         
-        logger.info("Sample tool execution result:")
-        logger.info(json.dumps(json.loads(response.to_json()), indent=2))
-        
-        logger.info("\nMCP Server is ready for JSON-RPC requests via stdio")
-        logger.info("Server statistics:")
-        stats = server.execution_statistics
-        logger.info(f"  Total executions: {stats['total_executions']}")
-        logger.info(f"  Tools registered: {stats['tools_registered']}")
-        logger.info(f"  Cache size: {stats['cache_size']}")
-        
-        return 0
+        # Run stdio server (blocks until terminated)
+        return run_stdio_server(server)
         
     except ImportError as e:
         logger.error(f"Failed to import MCP server components: {e}")
