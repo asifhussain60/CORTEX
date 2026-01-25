@@ -259,6 +259,22 @@ class GitHistoryAnalyzer:
         else:
             validations['AC-PERMANENT-FIX-006'] = False
         
+        # AC-PERMANENT-FIX-007: Single Canonical Implementation (CORE-035)
+        # Ensures no duplicate/competing implementations exist
+        forbidden_patterns = [
+            '*_unified.py', '*_refactored.py', '*_v2.py', '*_v3.py',
+            '*_alternative.py', '*_new.py', '*_old.py', '*_legacy.py', '*_backup.py'
+        ]
+        cortex_dir = self.repo_path / "cortex"
+        duplicate_files = []
+        if cortex_dir.exists():
+            for pattern in forbidden_patterns:
+                # Use glob to find matching files
+                matches = list(cortex_dir.rglob(pattern))
+                duplicate_files.extend(matches)
+        
+        validations['AC-PERMANENT-FIX-007'] = len(duplicate_files) == 0
+        
         return validations
 
 

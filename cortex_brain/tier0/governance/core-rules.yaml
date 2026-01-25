@@ -641,6 +641,63 @@ rules:
       - "Audit trail complete for all 4 stages"
       - "ERROR events captured with context"
 
+  # --------------------------------------------------------------------------
+  # CORE-035: Single Canonical Implementation (AC-PERMANENT-FIX-007)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-035
+    category: architecture
+    severity: blocked
+    name: Single Canonical Implementation
+    description: |
+      Each concept, pattern, or component MUST have exactly ONE canonical implementation.
+      No *_unified, *_refactored, *_v2, *_alternative, *_new, *_old variants allowed.
+      
+      This rule prevents:
+      - Competing implementations causing confusion
+      - Orphaned code consuming maintenance budget
+      - Import uncertainty (which version to use?)
+      - Dead code accumulating in the codebase
+      
+      AC-PERMANENT-FIX-007: Permanent enforcement of single implementation pattern
+    
+    enforcement_protocol:
+      pre_creation_check:
+        - "Before creating new file, check if concept already exists"
+        - "Search for existing implementations: semantic_search, file_search, grep_search"
+        - "If exists: UPDATE existing, do NOT create parallel version"
+      
+      forbidden_patterns:
+        - "*_unified.py - consolidation experiments"
+        - "*_refactored.py - refactoring experiments"
+        - "*_v2.py, *_v3.py - version experiments"
+        - "*_alternative.py - alternative implementations"
+        - "*_new.py, *_old.py - temporal variants"
+        - "*_legacy.py - deprecated but kept"
+        - "*_backup.py - backup copies in production"
+      
+      allowed_pattern:
+        - "One canonical file per concept"
+        - "Update in place, use git for history"
+        - "If major refactor needed: create branch, not parallel file"
+      
+      git_validation:
+        check: "No files matching forbidden patterns in cortex/"
+        command: "git ls-files 'cortex/**/*_unified.py' 'cortex/**/*_refactored.py' 'cortex/**/*_v2.py'"
+        expected_count: 0
+    
+    success_criteria:
+      - "Zero competing implementations per concept"
+      - "No *_unified, *_refactored, *_v2 files in cortex/"
+      - "Single import path for each component"
+      - "Clear canonical file for each orchestrator"
+      - "git_history_analyzer validates this rule"
+    
+    implementation:
+      method: "Git pre-commit hook + AC-PERMANENT-FIX tracking"
+      enforcement_point: "File creation, git commit"
+      audit_event: "DUPLICATE_IMPLEMENTATION_BLOCKED"
+      severity_on_bypass: "blocked"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
@@ -653,7 +710,7 @@ enforcement:
     pre_push: true
   
   core_rule_precedence:
-    highest: "CORE-029 (Response headers), CORE-030 (Implementation truth), CORE-031 (Declarative autowiring), CORE-032 (Intent classification)"
+    highest: "CORE-029 (Response headers), CORE-030 (Implementation truth), CORE-031 (Declarative autowiring), CORE-032 (Intent classification), CORE-035 (Single canonical)"
     high: "CORE-034 (Audit logging)"
     medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
@@ -662,3 +719,4 @@ enforcement:
     "CORE-030": "✅ COMPLETE - Implementation-first validation protocol enforced"
     "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
     "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
+    "CORE-035": "✅ COMPLETE - Single canonical implementation enforced, 11 duplicate files deleted"

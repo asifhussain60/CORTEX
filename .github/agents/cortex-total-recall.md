@@ -19,7 +19,13 @@ SCAN → IDENTIFY → PRIORITIZE → FIX → VERIFY → REPORT
 
 ### Phase 1: Rapid Scan (30 sec)
 ```bash
-# Scan for common issues
+# Git History & Remote Tracking
+git fetch origin                        # Fetch remote updates
+git log CORTEX..origin/CORTEX --oneline # New commits on remote
+git diff --stat CORTEX origin/CORTEX   # Change summary
+python -m cortex.mcp.tools.git_history_analyzer # Comprehensive divergence analysis
+
+# Local Repository Scan
 git status                              # Uncommitted changes
 grep -r "TODO\|FIXME\|XXX" cortex/     # Code markers
 find . -name "*.pyc" -o "*.pyo"         # Stale bytecode
@@ -30,12 +36,14 @@ grep "except:" cortex/**/*.py           # Bare except clauses
 ### Phase 2: Intelligent Diagnosis (Parallel)
 ```python
 # Check in parallel:
-1. Test failures (pytest results)
-2. Import errors (missing dependencies)
-3. Governance violations (CORE rules)
-4. Orphaned files (unreferenced modules)
-5. Registry mismatches (wiring inconsistencies)
-6. Type hints missing (CORE-011 violations)
+1. Remote work analysis (commits, AC-IDs, authors, file impact)
+2. Branch divergence (merge conflicts, ahead/behind status)
+3. Test failures (pytest results)
+4. Import errors (missing dependencies)
+5. Governance violations (CORE rules)
+6. Orphaned files (unreferenced modules)
+7. Registry mismatches (wiring inconsistencies)
+8. Type hints missing (CORE-011 violations)
 ```
 
 ### Phase 3: Automated Fix (With Approval Gate)
@@ -125,6 +133,8 @@ Report ONLY:
 /fix-tests {module}      → Fix failing tests in module
 /fix-verify {component}  → Fix then verify component
 /fix-report              → Show only fixes applied (no issues)
+/sync-remote             → Analyze & sync with origin/CORTEX (NEW)
+/work-summary            → Generate work summary from git history (NEW)
 ```
 
 ---
@@ -230,7 +240,15 @@ mypy {file} --fast                    # Quick type check
 ```python
 # Orchestrator Discovery
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.core.intent_router import IntentRouter
+frGit History Analysis (NEW - MCP Tool)
+from cortex.mcp.tools.git_history_analyzer import (
+    GitHistoryAnalyzer,
+    get_git_history_analyzer,
+    BranchDivergence,
+    WorkSummary
+)
+
+# om cortex.orchestrators.core.intent_router import IntentRouter
 
 # Issue Detection
 from cortex.brain.core.governance_registry import GovernanceRegistry
