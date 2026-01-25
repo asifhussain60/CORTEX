@@ -42,12 +42,13 @@ grep "except:" cortex/**/*.py           # Bare except clauses
 2. Branch divergence (merge conflicts, ahead/behind status)
 3. Test failures (pytest results)
 4. Import errors (missing dependencies)
-5. Governance violations (CORE rules including CORE-030, CORE-035)
-6. Orphaned files (unreferenced modules)
-7. Registry mismatches (wiring inconsistencies)
-8. Type hints missing (CORE-011 violations)
-9. Duplicate implementations (CORE-035 violations) ⭐ NEW
-10. Documentation-code mismatches (CORE-030 violations) ⭐ NEW
+5. Governance violations (CORE rules including CORE-030, CORE-035, CORE-038)
+6. File placement violations (CORE-038: kebab-case, subfolders, whitelist) ⭐ NEW
+7. Orphaned files (unreferenced modules)
+8. Registry mismatches (wiring inconsistencies)
+9. Type hints missing (CORE-011 violations)
+10. Duplicate implementations (CORE-035 violations) ⭐ NEW
+11. Documentation-code mismatches (CORE-030 violations) ⭐ NEW
 ```
 
 ### Phase 3: Automated Fix (With Approval Gate)
@@ -75,6 +76,12 @@ Report ONLY:
 
 ### 🔴 CRITICAL (Block Deployment)
 ```yaml
+- File placement violations (CORE-038) ⭐ NEW
+  Pattern: Files in forbidden roots (reports/, docs/, cortex/, cortex_brain/)
+  Naming: Files not in kebab-case format
+  Fix: Move file to correct subfolder with proper naming
+  Reference: cortex_brain/tier0/governance/core-038-file-placement-policy.yaml
+  
 - Unwired orchestrators (registry_template: true)
   Fix: Set registry_template: false, add to repo-registry.yaml
   
@@ -137,6 +144,7 @@ Report ONLY:
 /fix-tests {module}      → Fix failing tests in module
 /fix-verify {component}  → Fix then verify component
 /fix-report              → Show only fixes applied (no issues)
+/fix-files               → Fix file placement violations (CORE-038) ⭐ NEW
 /sync-remote             → Analyze & sync with origin/CORTEX (NEW)
 /work-summary            → Generate work summary from git history (NEW)
 ```
@@ -277,9 +285,17 @@ from cortex.mcp.tools.git_history_analyzer import (
     WorkSummary
 )
 
-# Issue Detection
+# Governance & Enforcement (Including File Placement)
 from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+# CORE-038: File Placement Policy Discovery (NEW)
+from cortex_brain.tier0.governance.core_038_file_placement_policy import (
+    FilePlacementPolicy,
+    FileOrganizationValidator,
+    KEBAB_CASE_PATTERN,
+    FORBIDDEN_ROOTS,
+    ALLOWED_ROOT_FILES,
+)
 
 # Auto-Fix Tools
 from cortex.mcp.tools.code_formatter import CodeFormatter
@@ -326,7 +342,8 @@ tests:
   planning_specific: 39/39 (100% - newly consolidated)
 
 governance:
-  CORE_rules: 31/31 active ✅ (CORE-001 through CORE-035)
+  CORE_rules: 32/32 active ✅ (CORE-001 through CORE-038)
+  CORE_038_file_placement: enabled (kebab-case, subfolders required, 12-item whitelist) ⭐ NEW
   violations: auto-detectable
   compliance: enforced
   ac_permanent_fixes: 9 active (AC-PERMANENT-FIX-001 through 009)
