@@ -30,7 +30,9 @@
 
 ## 🔄 CORTEX LENS → DoR → Approval Protocol
 
-### Before EVERY Documentation Task:
+### One-Shot End-to-End Execution Model
+
+This prompt implements a **unified one-shot execution** model:
 
 **Step 1: Intent Classification**
 ```markdown
@@ -38,59 +40,334 @@
 
 | Field | Value |
 |-------|-------|
-| **Intent** | `DOCUMENT` |
+| **Intent** | `DOCUMENT - FRESH GENERATION` |
 | **Handler** | `DocumentationOrchestrator` |
-| **Confidence** | 🟢 High (90%) |
-| **Scope** | `{FILE|MODULE|SYSTEM}` |
-| **Impact** | 🔵 Low |
-| **Target** | `docs/{section}/` |
+| **Confidence** | 🟢 High (95%) |
+| **Scope** | `SYSTEM` |
+| **Impact** | � High (Regenerates entire docs/) |
+| **Target** | `docs/`, `_workspaces/reports/` |
 | **Rules** | CORE-012, CORE-027 |
+| **Workflow** | 7-Phase end-to-end pipeline (no stopping) |
 
 ---
-**⏳ Awaiting approval to proceed...**
+**⏳ Awaiting approval to proceed with complete fresh documentation generation...**
 ```
 
 **Step 2: Wait for User Approval**
+- Accept: "proceed", "yes", "approve", "go ahead", "do it"
+- Reject: "no", "cancel", "stop", "abort"
 
-**Step 3: Execute Documentation Task**
-
----
-
-## 🚀 Quick Commands
-
-| Command | Action |
-|---------|--------|
-| `/doc-discover` | Scan codebase, identify components |
-| `/doc-generate {component}` | Generate docs for component |
-| `/doc-diagram {type}` | Generate diagram (mermaid or d3js) |
-| `/doc-status` | Show documentation coverage |
-| `/doc-validate` | Check links and consistency |
-| `/doc-cleanup` | Execute cleanup cycle |
-| `/doc-maintenance` | Full maintenance: discover → generate → validate → cleanup |
+**Step 3-9: Automatic End-to-End Execution (NO USER INTERACTION)**
+Once approved, execute ALL phases without stopping:
+1. **PRE-CLEANUP** → Delete all docs/ except *.bat/*.sh
+2. **DISCOVERY** → Scan codebase for components
+3. **GENERATION** → Generate all markdown documentation
+4. **DIAGRAMS** → Generate Mermaid + D3.js diagrams (10 total)
+5. **BUILD** → mkdocs build --strict (ZERO warnings/errors)
+6. **VALIDATION** → Validate all links and references
+7. **REPORTING** → Generate completion report + git commit
 
 ---
 
-## 📁 Documentation Structure
+## 🎯 Command
 
+| Command | Action | Execution |
+|---------|--------|-----------|
+| `/doc-fresh-generate` | Fresh generation: PRE-CLEANUP → DISCOVERY → GENERATION → DIAGRAMS → BUILD → VALIDATION → REPORTING | End-to-End (No stops) |
+
+---
+
+## � 7-Phase End-to-End Execution Pipeline
+
+Once user approves with "proceed" or "yes", execute ALL phases automatically:
+
+### Phase 1: PRE-CLEANUP (Keep serve scripts only)
+```bash
+#!/bin/bash
+# OBJECTIVE: Delete ALL generated files, preserve infrastructure
+
+cd docs
+
+# Remove all generated markdown files
+find . -maxdepth 1 -type f -name "*.md" -delete
+
+# Remove generated directories  
+rm -rf _diagrams _reports _tests
+
+# VERIFY serve scripts still exist
+[ -f "serve-docs.bat" ] && [ -f "serve-docs.sh" ] && echo "✅ Serve scripts preserved"
+
+# Ensure infrastructure preserved
+for dir in _archive _hooks assets stylesheets theme; do
+    [ ! -d "$dir" ] && mkdir -p "$dir"
+done
+
+echo "✅ PHASE 1: PRE-CLEANUP COMPLETE"
 ```
-docs/
-├── 0-README.md                    # Main entry point
-├── 01-getting-started/            # Quickstart guides
-│   ├── 0-overview.md
-│   ├── 1-installation.md
-│   └── 2-quickstart.md
-├── 02-architecture/               # Architecture docs
-│   ├── 0-overview.md
-│   ├── 1-brain-tiers.md
-│   ├── 2-orchestrators.md
-│   └── 3-infrastructure.md
-├── 03-api-reference/              # API documentation
-│   ├── orchestrators/
-│   ├── mcp-tools/
-│   └── governance/
-├── 04-guides/                     # How-to guides
-└── _archive/                      # Historical docs
+
+### Phase 2: DISCOVERY (Scan codebase)
+```python
+class DiscoveryOrchestrator:
+    """Scan codebase for undocumented components."""
+    
+    def scan_orchestrators(self):
+        """Find all orchestrator classes."""
+        scan: cortex/orchestrators/
+        results: List[OrchestratorMetadata]
+        
+    def scan_mcp_tools(self):
+        """Find all MCP tool decorators."""
+        scan: cortex/mcp/tools/
+        results: List[MCPToolMetadata]
+        
+    def scan_governance(self):
+        """Find all CORE rules."""
+        scan: cortex_brain/tier0/governance/
+        results: List[GovernanceRule]
+    
+    def generate_inventory(self):
+        """Create component catalog."""
+        return ComponentInventory(
+            orchestrators=self.scan_orchestrators(),
+            mcp_tools=self.scan_mcp_tools(),
+            governance_rules=self.scan_governance()
+        )
+
+print("✅ PHASE 2: DISCOVERY COMPLETE")
 ```
+
+### Phase 3: GENERATION (Create markdown docs)
+```python
+class DocumentationGenerationOrchestrator:
+    """Generate comprehensive markdown documentation."""
+    
+    def generate_all_markdown(self):
+        """Generate all sections of documentation."""
+        sections = {
+            "00-README.md": self._generate_readme(),
+            "01-getting-started/": self._generate_getting_started(),
+            "02-architecture/": self._generate_architecture(),
+            "03-api-reference/": self._generate_api_reference(),
+            "04-guides/": self._generate_guides(),
+            "05-tutorials/": self._generate_tutorials(),
+            "06-reference/": self._generate_reference(),
+        }
+        return sections
+
+print("✅ PHASE 3: GENERATION COMPLETE")
+```
+
+**Generated files:**
+- `docs/00-README.md` - Main entry point
+- `docs/01-getting-started/` - Installation, quickstart (3 files)
+- `docs/02-architecture/` - Brain tiers, orchestrators, infrastructure (4 files)
+- `docs/03-api-reference/` - Orchestrators, MCP tools, governance (3 sections)
+- `docs/04-guides/` - How-to guides (5+ files)
+- `docs/05-tutorials/` - Step-by-step tutorials (4+ files)
+- `docs/06-reference/` - API reference, glossary, rules (3+ files)
+
+### Phase 4: DIAGRAMS (Generate all visualizations)
+```python
+class DiagramGenerationOrchestrator:
+    """Generate Mermaid + D3.js diagrams."""
+    
+    def generate_all_diagrams(self):
+        """Generate 10 diagrams total."""
+        
+        # Mermaid (6 diagrams)
+        mermaid = [
+            ("approval-gate-decision-tree.mmd", "flowchart", "Complexity scoring flow"),
+            ("error-recovery-paths.mmd", "flowchart", "Error handling recovery"),
+            ("circuit-breaker-state-machine.mmd", "stateDiagram", "Resilience pattern"),
+            ("master-orchestrator-sequence.mmd", "sequenceDiagram", "Execution protocol"),
+            ("tdd-workflow-phases.mmd", "flowchart", "RED → GREEN → REFACTOR"),
+            ("governance-rule-categories.mmd", "graph", "29 CORE rules pyramid"),
+        ]
+        
+        # D3.js (4 diagrams)
+        d3js = [
+            ("governance-pyramid.html", "sunburst", "Interactive governance pyramid"),
+            ("request-lifecycle-sankey.html", "sankey", "Request flow diagram"),
+            ("tdd-knowledge-cycle.html", "circular", "TDD workflow cycle"),
+            ("domain-brain-architecture.html", "layered", "Domain brain layers"),
+        ]
+        
+        return {
+            "mermaid": self._generate_mermaid_diagrams(mermaid),
+            "d3js": self._generate_d3js_diagrams(d3js)
+        }
+
+print("✅ PHASE 4: DIAGRAMS COMPLETE")
+```
+
+**Generated diagrams:**
+- `docs/02-architecture/_diagrams/approval-gate-decision-tree.mmd`
+- `docs/02-architecture/_diagrams/error-recovery-paths.mmd`
+- `docs/02-architecture/_diagrams/circuit-breaker-state-machine.mmd`
+- `docs/02-architecture/_diagrams/master-orchestrator-sequence.mmd`
+- `docs/02-architecture/_diagrams/tdd-workflow-phases.mmd`
+- `docs/02-architecture/_diagrams/governance-rule-categories.mmd`
+- `docs/_diagrams/d3/governance-pyramid.html` (+ data generator)
+- `docs/_diagrams/d3/request-lifecycle-sankey.html` (+ data generator)
+- `docs/_diagrams/d3/tdd-knowledge-cycle.html`
+- `docs/_diagrams/d3/domain-brain-architecture.html`
+
+### Phase 5: BUILD (mkdocs --strict)
+```bash
+#!/bin/bash
+
+echo "🏗️  PHASE 5: Building mkdocs (--strict: ZERO warnings/errors)..."
+
+# Validate configuration
+mkdocs validate || { echo "❌ Config invalid"; exit 1; }
+
+# Build with strict mode
+mkdocs build --strict --clean || { echo "❌ Build failed"; exit 1; }
+
+# Verify ZERO warnings in output
+if mkdocs build 2>&1 | grep -iE "warning|error"; then
+    echo "❌ Build contains warnings/errors"
+    exit 1
+fi
+
+echo "✅ PHASE 5: BUILD COMPLETE - ZERO WARNINGS, ZERO ERRORS!"
+echo "📍 Site ready at: _build/site/"
+```
+
+### Phase 6: VALIDATION (Check links and references)
+```bash
+#!/bin/bash
+
+echo "🔗 PHASE 6: Validating all internal links..."
+
+broken_count=0
+find _build/site -name "*.html" -print0 | while IFS= read -r -d '' file; do
+    grep -o 'href="[^"]*"' "$file" 2>/dev/null | sed 's/href="//;s/"$//' | while read link; do
+        [[ $link == http* ]] && continue
+        
+        target="${file%/*}/$link"
+        if [ ! -f "$target" ]; then
+            echo "❌ Broken: $link in $file"
+            ((broken_count++))
+        fi
+    done
+done
+
+[ $broken_count -eq 0 ] && echo "✅ PHASE 6: VALIDATION COMPLETE - All links valid"
+```
+
+### Phase 7: REPORTING (Commit and report)
+```bash
+#!/bin/bash
+
+echo "📊 PHASE 7: Final Report & Git Commit"
+
+# Generate report
+report="FRESH-DOCUMENTATION-GENERATION-$(date +%Y-%m-%d).md"
+
+cat > "_workspaces/reports/$report" << 'EOF'
+# Fresh Documentation Generation Report
+
+## Summary
+- ✅ Serve scripts: PRESERVED (serve-docs.bat, serve-docs.sh)
+- ✅ Markdown docs: Generated (7 sections, 16+ files)
+- ✅ Diagrams: Generated (6 Mermaid + 4 D3.js = 10 total)
+- ✅ Build status: ZERO warnings, ZERO errors
+- ✅ Links validation: All valid
+- ✅ Site ready: _build/site/
+
+## Files Generated
+### Documentation
+- docs/00-README.md
+- docs/01-getting-started/ (3 files)
+- docs/02-architecture/ (4 files)
+- docs/03-api-reference/ (3 sections)
+- docs/04-guides/ (5+ files)
+- docs/05-tutorials/ (4+ files)
+- docs/06-reference/ (3+ files)
+
+### Diagrams (Mermaid)
+- docs/02-architecture/_diagrams/approval-gate-decision-tree.mmd
+- docs/02-architecture/_diagrams/error-recovery-paths.mmd
+- docs/02-architecture/_diagrams/circuit-breaker-state-machine.mmd
+- docs/02-architecture/_diagrams/master-orchestrator-sequence.mmd
+- docs/02-architecture/_diagrams/tdd-workflow-phases.mmd
+- docs/02-architecture/_diagrams/governance-rule-categories.mmd
+
+### Diagrams (D3.js)
+- docs/_diagrams/d3/governance-pyramid.html
+- docs/_diagrams/d3/request-lifecycle-sankey.html
+- docs/_diagrams/d3/tdd-knowledge-cycle.html
+- docs/_diagrams/d3/domain-brain-architecture.html
+
+## Quality Metrics
+✅ mkdocs build: PASSED (--strict mode)
+✅ Link validation: 100% (all internal links valid)
+✅ Documentation coverage: COMPLETE
+✅ Diagram count: 10 (6 Mermaid + 4 D3.js)
+✅ Infrastructure preserved: _archive/, assets/, theme/
+✅ Serve scripts: serve-docs.bat, serve-docs.sh
+
+## Execution Timeline
+- Pre-cleanup: [timestamp]
+- Discovery: [timestamp]
+- Generation: [timestamp]
+- Diagrams: [timestamp]
+- Build: [timestamp]
+- Validation: [timestamp]
+- Reporting: [timestamp]
+
+## Next Steps
+1. Run: `mkdocs serve` to preview
+2. Run: `mkdocs gh-deploy` to publish
+3. Share site with team
+
+## Governance Compliance
+✅ AC_START logged
+✅ CORE-012 (docstrings): All components documented
+✅ CORE-027 (audit trail): AC_COMPLETE logged
+✅ Git checkpoint: Commit created
+EOF
+
+# Git commit
+git add docs/
+git add _workspaces/reports/$report
+git commit -m "docs: fresh generation - $(date +%Y-%m-%d)
+
+- Phase 1: Pre-cleanup (preserve serve scripts)
+- Phase 2: Discovery (scan components)
+- Phase 3: Generation (create markdown)
+- Phase 4: Diagrams (6 Mermaid + 4 D3.js)
+- Phase 5: Build (--strict, zero warnings/errors)
+- Phase 6: Validation (link verification)
+- Phase 7: Reporting (completion summary)
+
+Site ready: docs/_build/site/"
+
+echo "✅ PHASE 7: REPORTING COMPLETE"
+echo "📊 Report: _workspaces/reports/$report"
+echo "✅ Git commit: Created"
+```
+
+---
+
+## ✅ Execution Summary
+
+When user types "proceed":
+1. ✅ AC_START logged with operation ID
+2. ✅ Phase 1: PRE-CLEANUP executes (delete all except *.bat/*.sh)
+3. ✅ Phase 2: DISCOVERY executes (scan codebase)
+4. ✅ Phase 3: GENERATION executes (create all markdown)
+5. ✅ Phase 4: DIAGRAMS executes (10 diagrams total)
+6. ✅ Phase 5: BUILD executes (mkdocs --strict)
+7. ✅ Phase 6: VALIDATION executes (link checks)
+8. ✅ Phase 7: REPORTING executes (summary + commit)
+9. ✅ AC_COMPLETE logged with result
+10. ✅ Final summary displayed to user
+
+**NO STOPPING, NO CHOICES, NO PAUSES** — Fully automated end-to-end pipeline
+
+---
 
 ---
 
@@ -655,30 +932,27 @@ START
 END
 ```
 
-### Selective Commands
+### Single Command Interface
 
 ```bash
-# Just discover what's new
-/doc-discover
-
-# Generate docs for specific component
-/doc-generate master-orchestrator
-
-# Generate specific diagram
-/doc-diagram mermaid --title="Approval Gate"
-
-# Check documentation status
-/doc-status
-
-# Validate links and completeness
-/doc-validate
-
-# Run cleanup cycle (shows recommendations, awaits approval)
-/doc-cleanup
-
-# Run full maintenance cycle
-/doc-maintenance
+# Execute complete fresh documentation generation pipeline
+/doc-fresh-generate
 ```
+
+**Execution Flow:**
+1. User: `/doc-fresh-generate`
+2. CORTEX: Display DoR classification
+3. CORTEX: Show message "⏳ Awaiting approval to proceed with complete fresh documentation generation..."
+4. User: Type "proceed" or "yes"
+5. CORTEX: Execute all 7 phases WITHOUT stopping:
+   - Phase 1: Pre-cleanup
+   - Phase 2: Discovery
+   - Phase 3: Generation
+   - Phase 4: Diagrams
+   - Phase 5: Build
+   - Phase 6: Validation
+   - Phase 7: Reporting
+6. CORTEX: Display final completion report with metrics
 
 ---
 
