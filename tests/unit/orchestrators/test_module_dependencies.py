@@ -408,8 +408,10 @@ class TestModuleConsistency:
         """Test AC-FR-MODULE-013: Registry instances are consistent."""
         # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry bridge
         from cortex.orchestrators.registry import OrchestratorRegistry
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - r1 = OrchestratorRegistry()
-# REMOVED: Manual registry pattern - # REMOVED: Manual registry pattern - r2 = OrchestratorRegistry()
+        
+        # Test DatabaseBackedRegistry bridge consistency
+        r1 = OrchestratorRegistry()
+        r2 = OrchestratorRegistry()
         
         # Should be same instance (bridge pattern)
         assert r1 is r2
