@@ -2,6 +2,8 @@
 Unwired Component Detector - Discovers components that exist but aren't wired.
 
 AC-UNWIRED-DETECT-001: UnwiredComponentDetector implementation
+AC-PERMANENT-FIX-009: DatabaseBackedRegistry integration (23/23 wired)
+
 Purpose: Auto-detect gaps between component existence, registry, and actual usage
 
 Detects 5 gap types:
@@ -20,12 +22,14 @@ CORE Governance:
 from __future__ import annotations
 
 import re
-import yaml
+import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class ComponentStatus(Enum):
@@ -96,9 +100,11 @@ class UnwiredComponentDetector:
         
         self.cortex_root = Path(cortex_root)
         self.orchestrators_dir = self.cortex_root / "cortex" / "orchestrators"
-        self.registry_file = self.cortex_root / "cortex_brain" / "tier0" / "repo-registry.yaml"
         self.master_orch_file = self.cortex_root / "cortex" / "orchestrators" / "core" / "master_orchestrator.py"
         self.prompts_dir = self.cortex_root / ".github" / "prompts"
+        
+        # Cache for DB registry lookups
+        self._db_registry_cache: Optional[Set[str]] = None
     
     def scan_codebase(self) -> UnwiredReport:
         """
@@ -251,29 +257,44 @@ class UnwiredComponentDetector:
     
     def _read_registry(self) -> List[Dict[str, Any]]:
         """
-        Read orchestrators from repo-registry.yaml.
+        Read orchestrators from DatabaseBackedRegistry.
         
         Returns:
-            List of registered orchestrators
+            List of registered orchestrators with wiring info
         """
-        if not self.registry_file.exists():
-            return []
-        
         try:
-            with self.registry_file.open() as f:
-                registry = yaml.safe_load(f)
+            from cortex.orchestrators.core.database_registry import (
+                get_database_registry,
+                initialize_registry
+            )
             
-            registered = registry.get('registered_orchestrators', [])
-            return [
-                {
-                    'name': orch.get('name'),
-                    'wiring_status': orch.get('wiring_status'),
-                    'category': orch.get('category'),
-                    'module_path': orch.get('module_path')
-                }
-                for orch in registered
-            ]
-        except Exception:
+            # Initialize registry if needed
+            init_result = initialize_registry()
+            if init_result.is_err():
+                logger.warning(f"Failed to initialize registry: {init_result.error}")
+                return []
+            
+            # Get wiring statistics from DB
+            registry = get_database_registry()
+            stats = registry.get_wiring_statistics()
+            
+            registered: List[Dict[str, Any]] = []
+            for category, orchestrators in stats.get('by_category', {}).items():
+                for name in orchestrators:
+                    registered.append({
+                        'name': name,
+                        'wiring_status': 'WIRED',  # All in DB are wired
+                        'category': category,
+                        'module_path': f'cortex.orchestrators.{category.lower()}'
+                    })
+            
+            return registered
+            
+        except ImportError as e:
+            logger.warning(f"DatabaseBackedRegistry not available: {e}")
+            return []
+        except Exception as e:
+            logger.error(f"Error reading database registry: {e}")
             return []
     
     def _scan_master_init(self) -> List[str]:

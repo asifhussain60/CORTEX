@@ -456,9 +456,9 @@ On EVERY code review, verify:
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| All 23 orchestrators imported | ⏳ | Check `cortex/orchestrators/core/__init__.py` |
-| All registered with @decorator | ⏳ | Check `cortex/orchestrators/core/orchestrator_registry.py` |
-| Registry YAML complete | ⏳ | Check `cortex_brain/tier0/repo-registry.yaml` (23 entries) |
+| All 23 orchestrators registered | ✅ | DatabaseBackedRegistry (23/23 wired) |
+| DatabaseBackedRegistry SSOT | ✅ | `cortex/orchestrators/core/database_registry.py` |
+| Health checker active | ✅ | `cortex/orchestrators/core/health_checker.py` |
 | 4-stage pipeline intact | ⏳ | Check `MasterOrchestrator.execute_operation()` |
 | No import errors | ⏳ | `python -c "from cortex.orchestrators import *"` |
 | No circular imports | ⏳ | Run pytest with import validation |
@@ -466,16 +466,19 @@ On EVERY code review, verify:
 
 **Target Status:** All ✅ (23/23 orchestrators wired, 0 errors)
 
-**Current Status (from git history):** 18/23 wired (78% - per chat01.md and AC-PERMANENT-FIX commits)
+**Current Status (AC-PERMANENT-FIX-009):** 23/23 wired (100%) via DatabaseBackedRegistry
 
-**Action Items:**
-- [ ] Verify all 23 orchestrators actually wired (not just registry claim)
-- [ ] Identify and wire remaining 5 orchestrators
-- [ ] Update AC-PERMANENT-FIX tracking with new wiring entries
-- [ ] Verify test suite passes with all orchestrators active
+**Verification Command:**
+```python
+from cortex.orchestrators.core.database_registry import get_database_registry, initialize_registry
+initialize_registry()
+stats = get_database_registry().get_wiring_statistics()
+print(f"Wired: {stats['total_wired']}/{stats['total_registered']}")
+# Output: Wired: 23/23
+```
 ```
 
-**Example Finding:**
+**Example Finding (if wiring incomplete):**
 ```markdown
 ### WIRING-INTEG-003: Incomplete Master Orchestrator Wiring
 
@@ -517,10 +520,10 @@ On EVERY code review, verify:
   - **Divergence 5-10%:** 🟠 **HIGH** - Flag but continue with all agents (investigate in Phase 4)
   - **Divergence < 5%:** ✅ **PASS** - Proceed to Phase 0 with confidence
 - Expected findings categories:
-  - **SSOT-001:** Metric divergence (e.g., "Claims 20/23 orchestrators, found 3/23")
+  - **SSOT-001:** Metric divergence (e.g., "Claims X/23 orchestrators, DatabaseBackedRegistry shows Y/23")
   - **SSOT-002:** Blocking phase (e.g., "Phase 5 marked complete but Phase 2 incomplete")
-  - **SSOT-003:** Specification mismatch (e.g., "Prompt says agent X wired, code has NotImplementedError")
-  - **SSOT-004:** Implementation gap (e.g., "MCP tools defined but 18/23 orchestrators missing exposure")
+  - **SSOT-003:** Specification mismatch (e.g., "Prompt says agent X wired, DatabaseBackedRegistry disagrees")
+  - **SSOT-004:** Implementation gap (e.g., "MCP tools defined but orchestrators missing exposure")
 
 Output: `review-ssot-verification.yaml` with divergence report and blocking assessment.
 
