@@ -1,0 +1,60 @@
+---
+title: Approval Gate Decision Tree
+---
+flowchart TD
+    A["🎯 Request Submitted"] --> B{"Has Required<br/>Information?"}
+    B -->|No| C["❌ Return to Sender"]
+    C --> D["📝 Request Details<br/>- Missing fields<br/>- Required data"]
+    D --> E["Resubmit Request"]
+    E --> A
+    
+    B -->|Yes| F{"Meets CORE<br/>Rules?"}
+    F -->|No| G["❌ Compliance Check<br/>Failed"]
+    G --> H["📋 Issues Found<br/>- Rule violations<br/>- Standards breach"]
+    H --> I["Address Issues"]
+    I --> A
+    
+    F -->|Yes| J{"Does it Require<br/>Domain Review?"}
+    J -->|Yes| K["👥 Domain Specialists<br/>Review"]
+    K --> L{"Domain<br/>Approved?"}
+    L -->|No| M["❌ Domain<br/>Rejection"]
+    M --> N["📝 Feedback<br/>- Domain concerns<br/>- Required changes"]
+    N --> O["Revise & Resubmit"]
+    O --> A
+    
+    L -->|Yes| P["✅ Domain<br/>Approved"]
+    J -->|No| P
+    
+    P --> Q{"Impact<br/>Level?"}
+    Q -->|Low| R["✅ Auto-Approve"]
+    Q -->|Medium| S["👤 Lead Review"]
+    S --> T{"Lead<br/>Approval?"}
+    T -->|No| U["❌ Lead<br/>Rejection"]
+    U --> V["📝 Lead Feedback"]
+    V --> W["Address Concerns"]
+    W --> A
+    T -->|Yes| X["✅ Lead<br/>Approved"]
+    
+    Q -->|High| Y["🏛️ Governance<br/>Council"]
+    Y --> Z{"Council<br/>Approval?"}
+    Z -->|No| AA["❌ Council<br/>Rejection"]
+    AA --> AB["📝 Strategic<br/>Feedback"]
+    AB --> AC["Address Strategic<br/>Concerns"]
+    AC --> A
+    Z -->|Yes| AD["✅ Council<br/>Approved"]
+    
+    X --> AE["✅ APPROVED"]
+    AD --> AE
+    R --> AE
+    
+    AE --> AF["🚀 Implementation<br/>Authorized"]
+    AF --> AG["📊 Log Approval<br/>- Timestamp<br/>- Approvers<br/>- Decision rationale"]
+
+    style A fill:#e1f5ff
+    style AE fill:#c8e6c9
+    style AF fill:#fff9c4
+    style C fill:#ffccbc
+    style G fill:#ffccbc
+    style M fill:#ffccbc
+    style U fill:#ffccbc
+    style AA fill:#ffccbc
