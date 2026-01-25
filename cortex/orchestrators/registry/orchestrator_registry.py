@@ -7,10 +7,22 @@ AC-AR-017-01: Registry stores orchestrator metadata
 - Lookup and listing
 - Statistics tracking
 
+DEPRECATION NOTICE (AC-PERMANENT-FIX: AC-009):
+----------------------------------------------
+This registry is maintained for backward compatibility only.
+For orchestrator wiring, use DatabaseBackedRegistry:
+
+    from cortex.orchestrators.core.database_registry import (
+        DatabaseBackedRegistry,
+        get_database_registry,
+    )
+
+OrchestratorMetadata is still valid for metadata storage.
+
 Author: Asif Hussain
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Set
 from dataclasses import dataclass, field
 from datetime import datetime
 import re
@@ -26,7 +38,8 @@ class OrchestratorMetadata:
     capabilities: List[str]
     description: str
     registered_at: str = field(default_factory=lambda: datetime.now().isoformat())
-    tags: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=lambda: [])
+
     
     def __post_init__(self) -> None:
         """Validate metadata after initialization"""
@@ -186,10 +199,10 @@ class OrchestratorRegistry:
         all_orchs = self._orchestrators.values()
         
         # Collect unique domains
-        domains = set(orch.domain for orch in all_orchs)
+        domains: Set[str] = set(orch.domain for orch in all_orchs)
         
         # Collect unique capabilities
-        capabilities = set()
+        capabilities: Set[str] = set()
         for orch in all_orchs:
             capabilities.update(orch.capabilities)
         
