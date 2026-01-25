@@ -41,18 +41,7 @@ class AuditValidationResult(Enum):
     NOT_FOUND = "ac_id_not_found"
 
 
-@dataclass
-class AuditEntry:
-    """Single audit log entry."""
-    id: int
-    timestamp: str
-    ac_id: str
-    operation: str
-    actor: str
-    details: Dict[str, Any]
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
         return {
             "id": self.id,
             "timestamp": self.timestamp,

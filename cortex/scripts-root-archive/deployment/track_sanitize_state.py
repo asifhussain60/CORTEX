@@ -13,16 +13,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
-
-
-@dataclass
-class AuditEntry:
-    """Represents an audit log entry.
-    
-    Attributes:
-        id: Database row ID.
-        ac_id: Acceptance Criteria ID.
-        timestamp: Entry timestamp.
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
         operation: Operation type.
         source: Entry source (dev/production).
         is_production: Whether this is a production entry.

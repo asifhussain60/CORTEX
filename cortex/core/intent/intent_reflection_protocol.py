@@ -49,20 +49,7 @@ class ReflectionRequest:
     timestamp: str = ""
 
 
-@dataclass
-class AuditEntry:
-    """Single entry in the audit trail.
-    
-    Attributes:
-        operation: Operation type (REFLECTION_START, REFLECTION_COMPLETE, USER_APPROVAL, etc)
-        timestamp: ISO timestamp of the operation
-        details: Additional details about the operation
-    """
-    operation: str
-    timestamp: str
-    details: Dict[str, Any] = field(default_factory=dict)
-    
-    def get(self, key: str, default=None):
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
         """Get attribute with dict-like access."""
         if key == "operation":
             return self.operation
