@@ -321,7 +321,7 @@ class TestCapabilogCatalog:
         assert "total_orchestrators" in catalog
         assert "orchestrators" in catalog
         assert "coverage_percentage" in catalog
-        assert catalog["total_orchestrators"] == 22
+        assert catalog["total_orchestrators"] == 23  # Updated: 23 orchestrators wired
     
     def test_catalog_has_orchestrator_details(self):
         """Test catalog contains orchestrator details"""
@@ -386,7 +386,7 @@ class TestFullWorkflow:
         
         catalog = result.get("capability_catalog", {})
         assert "total_orchestrators" in catalog
-        assert catalog["total_orchestrators"] == 22
+        assert catalog["total_orchestrators"] == 23  # Updated: 23 orchestrators wired
 
 
 if __name__ == "__main__":
