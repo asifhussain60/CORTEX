@@ -55,7 +55,8 @@ class FolderMigrator:
         self.repo_root = Path(repo_root)
         self.src_dir = self.repo_root / "src"
         self.backup_dir = self.repo_root / ".migration-backup"
-        self.migration_log = self.repo_root / "MIGRATION-REPORT.md"
+        # CORE-038: File placement - migration report goes to reports/analysis/, not root
+        self.migration_log = self.repo_root / "reports" / "analysis" / "migration-report.md"
         
         self.files_to_migrate: List[MigrationFile] = []
         self.migration_stats = {
@@ -344,6 +345,9 @@ python scripts/migrate-folder-structure.py --rollback
 ---
 Generated: {datetime.now().isoformat()}
 """
+        
+        # CORE-038: Ensure reports directory exists
+        self.migration_log.parent.mkdir(parents=True, exist_ok=True)
         
         with open(self.migration_log, 'w') as f:
             f.write(report)
