@@ -185,7 +185,7 @@ class OrchestratorHealthChecker:
             drift_detected = comparison.get('drift_detected', False)
         else:
             drift_detected = False
-            details['snapshot_comparison'] = {'error': snapshot_result.err()}
+            details['snapshot_comparison'] = {'error': snapshot_result.error}
         
         # Determine if unwiring occurred
         unwiring_detected = orchestrators_failed > 0 or drift_detected
@@ -292,7 +292,7 @@ class OrchestratorHealthChecker:
                 details['recovery'] = {
                     'strategy': 'rewire',
                     'success': False,
-                    'error': wire_result.err()
+                    'error': wire_result.error
                 }
             
             return False
