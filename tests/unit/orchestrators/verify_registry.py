@@ -10,14 +10,16 @@ remains active and has not regressed.
 Entry Point: tests.unit.orchestrators.verify_registry
 """
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Any, Optional
 
 import yaml
 
 
-def verify_registry_template_locked(registry_path: Path | None = None) -> Tuple[bool, str]:
+def verify_registry_template_locked(registry_path: Optional[Path] = None) -> Tuple[bool, str]:
     """
     Verify that registry_template is set to false (locked).
     
