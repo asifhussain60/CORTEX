@@ -495,7 +495,7 @@ class WiringHarnessInventory:
         wiring_priority=1,
         governance_rules_required=["CORE-008", "CORE-011", "CORE-012"],
         estimated_wiring_hours=1.5,
-        integration_notes="Critical for production resilience. Must wire fallback strategies for all critical components.",
+# REMOVED: Manual registry pattern - integration_notes="Critical for production resilience. Must wire fallback strategies for all critical components.",
     )
     
     PARTIAL_FUNCTIONALITY_MODE = UnwiredComponent(

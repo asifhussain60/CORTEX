@@ -108,7 +108,7 @@ class MCPServer:
         self.logger = EnhancedAuditLogger.instance() if enable_audit else None
         self.db = DatabaseManager()
         self.master_orchestrator = MasterOrchestrator.instance()
-        self.registry = OrchestratorRegistry.instance()
+self.registry = get_database_registry()
         self.governance_registry = GovernanceRegistry.instance()
         
         self.is_running = False
