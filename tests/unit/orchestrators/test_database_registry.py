@@ -405,5 +405,71 @@ class TestOrchestratorCategoryEnum:
         assert OrchestratorCategory.DOMAIN.value == "domain"
 
 
+class TestPopulateFromCode:
+    """Tests for populate_from_code() using canonical db_wiring_init.py definitions."""
+    
+    def setup_method(self):
+        """Set up test fixtures."""
+        self.tmpdir = tempfile.mkdtemp()
+        self.db_path = Path(self.tmpdir) / "test_registry.db"
+        config = DatabaseConfig(db_path=self.db_path)
+        self.db = DatabaseManager(config)
+        self.registry = DatabaseBackedRegistry(self.db)
+        self.registry.initialize_schema()
+        DatabaseBackedRegistry.reset_instance()
+    
+    def teardown_method(self):
+        """Clean up test fixtures."""
+        shutil.rmtree(self.tmpdir, ignore_errors=True)
+        DatabaseBackedRegistry.reset_instance()
+    
+    def test_populate_from_code_uses_db_wiring_init(self):
+        """populate_from_code() should use db_wiring_init.py definitions."""
+        result = self.registry.populate_from_code()
+        
+        assert result.is_ok(), f"populate_from_code failed: {result}"
+        count = result.unwrap()
+        
+        # Should register all 23 orchestrators from db_wiring_init.py
+        assert count == 23, f"Expected 23 orchestrators, got {count}"
+    
+    def test_populate_from_code_registers_master_orchestrator(self):
+        """MasterOrchestrator should be registered with priority 1."""
+        self.registry.populate_from_code()
+        
+        master = self.registry.get("MasterOrchestrator")
+        assert master is not None
+        assert master.name == "MasterOrchestrator"
+        assert master.priority == 1
+        assert master.category == OrchestratorCategory.CORE
+    
+    def test_populate_from_code_statistics(self):
+        """Statistics should reflect all 23 orchestrators after populate."""
+        self.registry.populate_from_code()
+        
+        stats = self.registry.get_wiring_statistics()
+        assert stats["total_registered"] == 23
+        # Core: MasterOrchestrator, InteractionOrchestrator, IntentRouter, 
+        #       TDDOrchestrator, WorkflowOrchestrator, WrappedTDDOrchestrator
+        assert stats["by_category"]["core"] == 6
+        # Domain: RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
+        #         ConversationOrchestrator, SeleniumPlaywrightOrchestrator, DocumentationOrchestrator
+        assert stats["by_category"]["domain"] == 6
+        # Support: 11 orchestrators
+        assert stats["by_category"]["support"] == 11
+    
+    def test_populate_from_code_idempotent(self):
+        """Multiple populate_from_code calls should be idempotent."""
+        result1 = self.registry.populate_from_code()
+        result2 = self.registry.populate_from_code()
+        
+        assert result1.is_ok()
+        assert result2.is_ok()
+        
+        # Count should remain 23 (no duplicates)
+        stats = self.registry.get_wiring_statistics()
+        assert stats["total_registered"] == 23
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
