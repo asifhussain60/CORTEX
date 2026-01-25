@@ -608,10 +608,9 @@ class DatabaseBackedRegistry:
                 class_name="OnboardingOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=200,
-                is_optional=True,  # Has syntax error in source
                 capabilities=["user_onboarding", "guided_setup"],
                 routing_keywords=["onboard", "setup", "welcome"],
-                is_utility=True
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="tool_discovery",
@@ -665,6 +664,11 @@ class DatabaseBackedRegistry:
                 is_optional=True,
                 capabilities=["orchestrator_composition", "chaining"],
                 routing_keywords=["compose", "chain", "combine"],
+                # ComposedOrchestrator is a dataclass - provide required args
+                init_args={
+                    "name": "default_composed",
+                    "pattern": "sequential"  # Will need import fix
+                },
                 is_utility=True
             ),
         ]

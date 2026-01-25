@@ -28,7 +28,6 @@ class JourneyState(str, Enum):
 
 
 from cortex.brain.core.result import Result
-    error: Optional[str] = None
 
 
 @dataclass
