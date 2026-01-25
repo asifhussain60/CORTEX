@@ -291,7 +291,7 @@ tools = registry.list_tools()  # Returns 15+ tools
 | Python Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` | Human-readable |
-| Reports | `_workspaces/roadmap/reports/` | YAML tracking |
+| Reports | `reports/` | YAML tracking |
 
 ### Forbidden Patterns
 - ❌ `.md` files outside `docs/`
@@ -468,8 +468,7 @@ CORTEX Response:
 
 | Prompt | Purpose | Agent |
 |--------|---------|-------|
-| `cortex-total-recall.prompt.md` | Feature discovery | TotalRecallAgent |
-| `cortex-builder.prompt.md` | AC-ID implementation | BuilderOrchestrator |
+| `cortex-total-recall.prompt.md` | Feature discovery & Implementation | TotalRecallAgent |
 | `cortex-review.prompt.md` | Code quality review | 8 review agents |
 | `cortex-doc.prompt.md` | Documentation | DocumentationOrchestrator |
 | `cortex-deploy.prompt.md` | Deployment | DeploymentOrchestrator |

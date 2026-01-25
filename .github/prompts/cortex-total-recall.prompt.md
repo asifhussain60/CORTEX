@@ -1,6 +1,6 @@
-# CORTEX Total Recall - Production System Discovery & AC-PERMANENT-FIX Enforcement
+# CORTEX Total Recall - Production System Discovery & Comprehensive Code Review
 
-**Version:** 8.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + DB-BACKED SSOT
+**Version:** 9.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + DB-BACKED SSOT + INTEGRATED REVIEW
 
 **Registry Type:** DatabaseBackedRegistry (SQLite-backed Single Source of Truth)  
 **Wiring Status:** 23/23 orchestrators (100%)  
@@ -3710,7 +3710,435 @@ pytest tests/ -n auto --tb=short -q
 
 ---
 
-**Last Updated:** 2026-01-23  
+## 🔍 INTEGRATED REVIEW & ANALYSIS SYSTEM
+
+**NEW (v8.1):** Comprehensive code quality and implementation truth analysis integrated directly into TotalRecallAgent.
+
+This system provides **10 specialized agents** that scan your codebase for problems and verify implementation truth (CORE-030) before code quality analysis.
+
+### Quick Review Commands
+
+| Command | Agents | Time | Purpose |
+|---------|--------|------|---------|
+| `/review` | All 10 (0-9) | 105 min | Full audit, production readiness |
+| `/review {file}` | All 10 | 20 min | Specific file deep dive |
+| `/review-quick` | BRIT, GOV, DEBT | 15 min | Fast health check |
+| `/review-safety` | HALL, ASM, STATE | 20 min | Security & safety focus |
+| `/review-quality` | DEBT, ARCH, INTEG | 25 min | Code quality & design |
+| `/review-truth` | TRUTH only | 12 min | Implementation verification |
+| `/review-brittleness` | BRIT only | 10 min | Fault tolerance check |
+| `/review-hallucination` | HALL only | 10 min | AI safety check |
+| `/review-governance` | GOV only | 10 min | Rule compliance |
+| `/review-assumptions` | ASM only | 8 min | Dependency check |
+| `/review-debt` | DEBT only | 12 min | Code duplication |
+| `/review-state` | STATE only | 10 min | Thread safety |
+| `/review-arch` | ARCH only | 12 min | Design patterns |
+| `/review-integration` | INTEG only | 10 min | Observability |
+
+### 🤖 10 Specialized Review Agents
+
+#### 🔍 Agent 0: Implementation Truth Verification (TRUTH)
+**Question:** Do documentation claims match actual implementation?
+
+**MANDATORY PRE-CHECK (CORE-030 Enforcement):**
+- Verify implementation claims with grep_search or read_file evidence
+- Check test isolation (no test data contaminating production registries)
+- Validate Singleton state (clean DatabaseBackedRegistry instance)
+- Verify API accuracy against actual method signatures
+
+**Duplicate Implementation Detection (CORE-035):**
+- Search for multiple implementations in different paths
+- Detect conflicting class definitions
+- Find interface implementation variations
+- Check for duplicate MCP tool definitions
+
+**Finding Categories:**
+- **TRUTH-001:** Documentation-implementation mismatch
+- **TRUTH-002:** Duplicate implementation violation
+- **TRUTH-003:** Missing implementation for claimed feature
+- **TRUTH-004:** False AC-PERMANENT-FIX claim
+- **TRUTH-005:** Governance rule violation
+- **TRUTH-006:** Test isolation contamination
+- **TRUTH-007:** API documentation mismatch
+
+---
+
+#### 🔴 Agent 1: Brittleness (BRIT)
+**Question:** Will this code survive real-world stress?
+
+**Checks for:**
+- Single points of failure that could bring down the system
+- Error handling that might silently fail
+- Resource exhaustion (unbounded loops, uncapped collections)
+- Missing timeouts on external calls
+- Bottlenecks that could cause slowdowns under load
+
+**Example Finding:** "External API call at line 45 has no timeout—could hang forever"
+
+---
+
+#### 🟠 Agent 2: Hallucination (HALL)
+**Question:** Is AI output safely validated before use?
+
+**Checks for:**
+- LLM output used directly without validation
+- Prompt injection vulnerabilities
+- Missing confidence thresholds
+- Unvalidated trust boundaries
+- AI safety guardrails
+
+**Example Finding:** "LLM response at line 89 isn't validated before executing—injection risk"
+
+---
+
+#### 🟡 Agent 3: Governance (GOV)
+**Question:** Does this follow CORTEX rules?
+
+**Checks for:**
+- Missing type hints (CORE-011)
+- Missing docstrings (CORE-012)
+- Bare `except:` clauses (CORE-013)
+- No audit logging (CORE-027)
+- Tests written after code (CORE-008)
+- Implementation truth violations (CORE-030)
+- Duplicate implementations (CORE-035)
+- AC-PERMANENT-FIX regression checks
+
+**CORE-035 Deduplication Algorithm:**
+1. Identify potential duplicates (same name, different files)
+2. Determine canonical version (created first, most used, most maintained, most compliant)
+3. Create consolidation plan (delete non-canonical, update imports)
+4. Verify no import conflicts
+5. Create consolidation commit
+
+**Example Finding:** "CORE-035 violation: ConversationProtocol implemented in 2 locations with conflicting behavior. Canonical: cortex/brain/core/orchestrator/conversation_protocol.py (maintained, CORE-011 compliant). Duplicate: cortex_brain/legacy/conversation_protocol.py (outdated, 2 CORE violations). Action: Delete duplicate, update 12 imports to canonical."
+
+---
+
+#### 🟢 Agent 4: Assumptions (ASM)
+**Question:** What could go wrong if the environment changes?
+
+**Checks for:**
+- Hardcoded paths that won't work on other systems
+- Platform-specific code without fallbacks
+- Undeclared version dependencies
+- Implicit ordering assumptions
+- Missing configuration flexibility
+
+**Example Finding:** "Hardcoded `/usr/local/bin` path won't work on Windows"
+
+---
+
+#### 🔵 Agent 5: Debt (DEBT)
+**Question:** Where's the code smell and shortcut debt?
+
+**Checks for:**
+- Copy-paste duplication
+- Long functions (>50 lines) that do too much
+- Deprecated API usage
+- TODO/FIXME comments that pile up
+- Untested code paths
+- Missing abstractions
+
+**Example Finding:** "Lines 120-145 duplicated from lines 200-225—extract to method"
+
+---
+
+#### 💜 Agent 6: State/Concurrency (STATE)
+**Question:** Could threads step on each other?
+
+**Checks for:**
+- Race conditions on shared state
+- Deadlock patterns (lock ordering issues)
+- Non-atomic operations
+- Global mutable state without protection
+- Missing synchronization
+
+**Example Finding:** "Shared list `cache` at line 50 accessed without lock—race condition"
+
+---
+
+#### 🟤 Agent 7: Architecture (ARCH)
+**Question:** Does this follow good design principles?
+
+**Checks for:**
+- Single Responsibility violations (classes doing too much)
+- God classes (oversized, everything depends on it)
+- Circular dependencies between modules
+- Tight coupling (hard to test, modify, or replace)
+- Feature envy (methods that know too much about other objects)
+
+**Example Finding:** "Controller imports 12 different services—violates Single Responsibility"
+
+---
+
+#### 🖤 Agent 8: Integration/Observability (INTEG)
+**Question:** Can we see what's happening in production? Are MCP tools exposed? Is wiring complete?
+
+**Core Observability Checks:**
+- Missing health check endpoints
+- Untraced operations (hard to debug)
+- Insufficient logging (can't diagnose issues)
+- Missing metrics (can't see performance)
+- Undocumented APIs
+- Missing error reporting
+
+**MCP Tool Exposure Checks:**
+- Are orchestrators exposing `get_mcp_tools()` method?
+- Do MCP tools have proper schemas and descriptions?
+- Are tool implementations wired into MCPServer integration?
+
+**Wiring Integration Checks:**
+- Orchestrator auto-wiring: Do all 23 orchestrators appear in registry?
+- Import statements: Are orchestrators imported in `__init__.py`?
+- Dependency injection: Are dependencies properly resolved?
+
+**CLI Entry Point Checks:**
+- Are orchestrators accessible via CLI commands?
+- Do `/review-*` commands resolve to correct agents?
+- Is help text complete and accurate?
+
+**Finding Categories:**
+- **MCP-INTEG-001:** Tool exposure incomplete
+- **MCP-INTEG-002:** MCPServer integration gap
+- **MCP-INTEG-003:** MCP toolkit violation
+- **WIRING-INTEG-001:** Orchestrator wiring gap
+- **WIRING-INTEG-002:** Import/dependency resolution issue
+- **CLI-INTEG-001:** CLI command incomplete
+- **CLI-INTEG-002:** Help/documentation missing
+- **SPEC-INTEG-001:** Specification/implementation alignment
+- **DEDUP-001:** Duplicate class definitions
+- **DEDUP-002:** Conflicting implementations
+- **DEDUP-003:** Import path ambiguity
+- **CONSOLIDATION-001:** Missing consolidation
+- **CONSOLIDATION-002:** Incomplete consolidation
+
+**Example Findings:** 
+- "Tool exposure: 5/23 orchestrators expose MCP tools (CRITICAL gap)"
+- "Database queries don't appear in logs or metrics—no visibility"
+- "CLI command `/review-ssot` not wired to Agent 0"
+
+---
+
+### 📊 Review Analysis Phases
+
+#### Phase -1: SSOT Verification (10 min)
+**Purpose:** Verify specifications match implementation. Prevents circular issue patterns.
+
+**Agent 0: SSOT-Compliance**
+- Loads source of truth: `cortex-impl-map.yaml` v3.0
+- Compares against: Prompt files, agent specifications, phase definitions
+- Calculates metric divergence: Claimed vs actual code
+- Identifies blocking issues: Prerequisites incomplete, phases out of order
+
+**Finding Categories:**
+- **SSOT-001:** Metric divergence
+- **SSOT-002:** Blocking phase
+- **SSOT-003:** Specification mismatch
+- **SSOT-004:** Implementation gap
+
+---
+
+#### Phase 0: Pre-Flight Check (5 min)
+Before analysis starts, verify:
+- ✅ Test suite healthy (6,847+ tests)
+- ✅ Audit trail complete
+- ✅ Code is current
+- ✅ No blockers
+
+---
+
+#### Phase 1: Gap Inventory (10 min)
+Check the master plan and verify:
+- Are COMPLETED features actually implemented?
+- Any FALSE_COMPLETED phases?
+- Missing critical code?
+
+**Output:** `review-gap-inventory.yaml`
+
+---
+
+#### Phase 2: Stub Detection (10 min)
+Hunt for incomplete code:
+- `NotImplementedError` placeholders
+- Empty `pass` statements
+- Blocking TODOs
+- Mock/hardcoded returns
+
+**Output:** `review-stubs.yaml`
+
+---
+
+#### Phase 3: 10-Agent Deep Dive (35 min)
+All 10 agents run in parallel:
+- **Batch 1:** TRUTH, Brittleness, Hallucination, Governance (10 min each)
+- **Batch 2:** Assumptions, Debt, State, Architecture, Integration (8-12 min each)
+
+**Output:** `review-ssot-verification.yaml`, `Findings-BRIT.yaml`, `Findings-HALL.yaml`, etc.
+
+---
+
+#### Phase 4: Consolidation & Reporting (10 min)
+Merge all findings:
+- Phase -1 SSOT findings first (if blocking)
+- Phase 1-3 findings consolidated by priority
+- Create priority-ordered issue list
+- Remediation roadmap
+- Executive summary
+- Detailed recommendations by agent
+
+**Output:** `remediation-plan.yaml`, `review-consolidated.yaml`
+
+---
+
+### 📋 CORE-035 Deduplication Review Checklist
+
+**MANDATORY FOR EVERY CODE REVIEW:**
+
+#### Pre-Review: Scan for Duplicates
+```bash
+# Find potential duplicates (same name, different files)
+for pattern in "ConversationProtocol" "MasterOrchestrator" "IntentRouter"; do
+  find cortex/ -name "*.py" -exec grep -l "^class $pattern\|^def $pattern" {} \;
+done
+
+# Find imports from multiple locations
+grep -r "from cortex\|from cortex_brain" cortex/ tests/ | awk -F: '{print $NF}' | sort | uniq -d
+```
+
+#### During Review: Verification Checklist
+- [ ] No new duplicate classes
+- [ ] No new duplicate functions
+- [ ] Imports use CANONICAL location only
+- [ ] No competing implementations
+- [ ] Master orchestrator wiring complete (23/23)
+- [ ] CORE-035 compliance verified
+
+#### Post-Merge: Consolidation Verification
+- [ ] Verify deleted files
+- [ ] Verify all imports updated
+- [ ] Run full test suite
+- [ ] Create consolidation commit
+- [ ] Update roadmap with AC-CONSOLIDATION entry
+
+---
+
+### 📁 Review Results Output
+
+**For Full Reviews:**
+```
+reports/
+└── review-consolidated-{DATE}-{TIME}.yaml
+    ├── Gap inventory (what's incomplete)
+    ├── Stubs found (placeholder code)
+    ├── All 10 agent findings (prioritized)
+    └── Remediation roadmap
+```
+
+**For Targeted Reviews:**
+```
+reports/analysis/{DATE}/
+├── review-gap-inventory.yaml          (Phase 1)
+├── review-stubs.yaml                  (Phase 2)
+├── Findings-TRUTH.yaml                (Agent 0)
+├── Findings-BRIT.yaml                 (Agent 1)
+├── Findings-HALL.yaml                 (Agent 2)
+├── Findings-GOV.yaml                  (Agent 3)
+├── Findings-ASM.yaml                  (Agent 4)
+├── Findings-DEBT.yaml                 (Agent 5)
+├── Findings-STATE.yaml                (Agent 6)
+├── Findings-ARCH.yaml                 (Agent 7)
+├── Findings-INTEG.yaml                (Agent 8)
+└── remediation-plan.yaml              (Phase 4)
+```
+
+---
+
+### 🎯 Issue Severity Levels
+
+| Level | Badge | When to Fix | Examples |
+|-------|-------|------------|----------|
+| **CRITICAL** 🔴 | Stop the line | Right now | Security breach, data loss risk, unhandled crash paths |
+| **HIGH** 🟠 | Before next release | This sprint | Missing validation, race condition, CORE violation |
+| **MEDIUM** 🟡 | This quarter | Next few weeks | Code duplication, missing docstring, design issue |
+| **LOW** 🔵 | When you can | Next month | Style issue, minor refactoring, edge case handling |
+| **INFO** ⚪ | FYI only | No deadline | Observation, pattern note, future consideration |
+
+---
+
+### 🎯 CORTEX LENS → DoR → Approval Protocol (Review)
+
+**Before EVERY Review:**
+
+**Step 1: Review Plan**
+```markdown
+## Review Plan
+
+Here's what I'm about to do:
+
+**The Analysis:**
+I'll scan the CORTEX codebase using 10 specialized review agents:
+- Implementation truth verification (CORE-030, CORE-035)
+- Code brittleness & fault tolerance
+- AI safety & hallucination risks
+- Governance rule compliance
+- Hidden assumptions & dependencies
+- Technical debt & code quality
+- Thread safety & concurrency issues
+- Architecture & design patterns
+- Integration & monitoring gaps
+
+**Where:** {SCOPE} (e.g., cortex/ and cortex_brain/)  
+**Output:** A detailed findings report with recommendations  
+**Time:** ~95 minutes for full review, ~15 minutes for quick checks
+
+**Say yes to start, or specify modifications.**
+```
+
+**Step 2: Wait for User Approval**
+- ✅ Accept: "yes", "proceed", "go ahead", "approve"
+- ❌ Decline: "no", "cancel", "stop"
+- 🔧 Modify: "modify: {request}"
+
+**Step 3: Execute Review via TotalRecallAgent**
+
+---
+
+### 📋 Example Review Results
+
+```markdown
+## 🧠 CORTEX Review Results
+**Date:** 2026-01-25 | **Scope:** cortex/ + cortex_brain/ | **Time:** 65 minutes
+
+---
+
+### Executive Summary
+- **Total Issues:** 28 findings
+- **Critical:** 1 (fix today)
+- **High:** 10 (fix this sprint)
+- **Medium:** 14 (fix soon)
+- **Low:** 3 (backlog)
+
+---
+
+### By Agent
+
+| Agent | Issues | Critical | High | Medium | Low |
+|-------|--------|----------|------|--------|-----|
+| Implementation Truth | 1 | 0 | 1 | 0 | 0 |
+| Brittleness | 3 | 0 | 1 | 2 | 0 |
+| Hallucination | 2 | 1 | 1 | 0 | 0 |
+| Governance | 5 | 0 | 2 | 3 | 0 |
+| Assumptions | 4 | 0 | 0 | 3 | 1 |
+| Debt | 8 | 0 | 3 | 5 | 0 |
+| State | 1 | 0 | 1 | 0 | 0 |
+| Architecture | 2 | 0 | 1 | 1 | 0 |
+| Integration | 2 | 0 | 1 | 0 | 1 |
+```
+
+---
+
+**Last Updated:** 2026-01-25  
 **Status:** ✅ PRODUCTION READY - Enhanced git sync with domain knowledge protection, all 4 stages wired, MCP active, orchestrators registered  
 **Authority:** CORTEX.prompt.md v6.0 & cortex-impl-map.yaml v3.9  
 **Deployment Status:** Ready for production deployment with enhanced git synchronization and company knowledge protection  

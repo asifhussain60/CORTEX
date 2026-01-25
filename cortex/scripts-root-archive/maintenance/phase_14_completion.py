@@ -281,10 +281,10 @@ File Artifacts Created:
 ✅ tests/unit/production/test_phase_14_all_acs.py (test suite)
 
 Documentation Artifacts:
-✅ _workspaces/roadmap/reports/PHASE-14-COMPLETION-REPORT.md (this report)
-✅ _workspaces/roadmap/reports/PHASE-14-PROMPT-MAINTENANCE.md (prompt updates)
-✅ _workspaces/roadmap/reports/PHASE-14-PRODUCTION-READINESS-SUMMARY.md (exec summary)
-✅ _workspaces/roadmap/reports/PHASE-14-TRAINING-STRATEGY.md (training plan)
+✅ reports/phase-tracking/PHASE-14-COMPLETION-REPORT.md (this report)
+✅ reports/phase-tracking/PHASE-14-PROMPT-MAINTENANCE.md (prompt updates)
+✅ reports/phase-tracking/PHASE-14-PRODUCTION-READINESS-SUMMARY.md (exec summary)
+✅ reports/phase-tracking/PHASE-14-TRAINING-STRATEGY.md (training plan)
 
 ───────────────────────────────────────────────────────────────────────────────
 GOVERNANCE COMPLIANCE VERIFICATION

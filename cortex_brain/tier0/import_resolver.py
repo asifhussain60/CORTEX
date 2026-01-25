@@ -14,7 +14,7 @@ This module provides:
 Type Hints: 100% coverage
 Docstrings: Comprehensive
 
-Author: cortex-builder
+Author: CORTEX Core Team
 """
 
 import sys
