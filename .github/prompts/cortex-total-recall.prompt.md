@@ -76,6 +76,103 @@ print("=" * 60)
 ============================================================
 ```
 
+---
+
+## 🔍 UNWIRED COMPONENT DETECTION (STEP 0.5 - NEW)
+
+**AC-TOTAL-RECALL-UNWIRED-001:** Auto-detect components that exist but aren't wired
+
+**ALWAYS run this after pre-execution validation:**
+
+```python
+from cortex.tools.unwired_component_detector import UnwiredComponentDetector
+
+# Detect unwired components
+detector = UnwiredComponentDetector()
+report = detector.generate_report()
+
+print("=" * 60)
+print("🔍 Unwired Component Detection")
+print("=" * 60)
+print(f"Total components found: {report['summary']['total_components_found']}")
+print(f"Total wired: {report['summary']['total_wired']}")
+print(f"Total unwired: {report['summary']['total_unwired']}")
+print(f"Registry lies: {report['summary']['total_lies']}")
+print()
+
+# Report critical gaps
+if report['initialized_but_not_called']:
+    print(f"[!] Initialized but not called ({len(report['initialized_but_not_called'])}):")
+    for comp in report['initialized_but_not_called']:
+        print(f"  - {comp['name']}")
+    print()
+
+if report['registry_lies']:
+    print(f"[CRITICAL] Registry lies detected ({len(report['registry_lies'])}):")
+    for lie in report['registry_lies']:
+        print(f"  - {lie['name']} (says 'wired' but not called)")
+    print()
+
+if report['mentioned_but_not_implemented']:
+    print(f"[CRITICAL] Mentioned but not implemented ({len(report['mentioned_but_not_implemented'])}):")
+    for comp in report['mentioned_but_not_implemented']:
+        print(f"  - {comp['name']}")
+    print()
+
+# Display recommendations
+if report['recommendations']:
+    print("Recommendations:")
+    for rec in report['recommendations']:
+        print(f"  [{rec['priority']}] {rec['action']}")
+        print(f"      {rec['details']}")
+    print()
+
+print("=" * 60)
+```
+
+**Expected Output (With Unwired Components):**
+```
+============================================================
+🔍 Unwired Component Detection
+============================================================
+Total components found: 33
+Total wired: 0
+Total unwired: 33
+Registry lies: 18
+
+[!] Initialized but not called (5):
+  - interaction_orchestrator
+  - tdd_orchestrator
+  - dor_gate
+  - domain_orchestrators
+  - orchestrator_registry
+
+[CRITICAL] Registry lies detected (18):
+  - InteractionOrchestrator (says 'wired' but not called)
+  - IntentRouter (says 'wired' but not called)
+  ... (16 more)
+
+[CRITICAL] Mentioned but not implemented (4):
+  - EnforcementOrchestrator
+  - GovernanceEnforcementAgent
+  - SecurityCheckpointAgent
+  - ComplianceValidationAgent
+
+Recommendations:
+  [HIGH] Wire 5 initialized components
+      Components initialized in __init__ but never called in execute_operation
+  [CRITICAL] Fix 18 registry lies
+      Registry says 'wired' but components not actually called
+  [MEDIUM] Implement 4 missing components
+      Components mentioned in prompts but not implemented
+============================================================
+```
+
+**Action Items from Detection:**
+1. **Initialized but not called:** Wire InteractionOrchestrator, IntentRouter, DoRGate into MasterOrchestrator.execute_operation()
+2. **Registry lies:** Update repo-registry.yaml to reflect actual wiring status (not "wired" if not called)
+3. **Missing components:** Implement EnforcementOrchestrator + 3 enforcement agents (Stage 3 of 5-stage pipeline)
+
 ------
 
 ## 🔧 AC-PERMANENT-FIX ENFORCEMENT (TIER 0 - IMMUTABLE)
