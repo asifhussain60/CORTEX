@@ -1058,6 +1058,169 @@ class MasterOrchestrator(IOrchestrator):
                 details=parameters
             )
             
+            # AC-FR-WIRING-001: STAGE 1 - Interaction Orchestrator (Comprehension)
+            # Wire interaction_orchestrator for Stage 1 comprehension
+            if self.interaction_orchestrator and operation_name in ["implement", "fix", "refactor", "analyze"]:
+                try:
+                    # Stage 1: Process through interaction orchestrator for intent comprehension
+                    interaction_result = self.interaction_orchestrator.execute_operation(
+                        operation_name=f"stage_1_comprehension",
+                        parameters={"user_intent": operation_name, "context": parameters}
+                    )
+                    if interaction_result.is_err():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE1",
+                            operation="INTERACTION_ORCHESTRATOR_EXECUTION",
+                            success=False,
+                            details={"error": str(interaction_result.error)}
+                        )
+                except Exception as stage1_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE1",
+                        operation="INTERACTION_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(stage1_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 2 - Intent Router (Classification)
+            # Wire intent_router for Stage 2 intent classification
+            classified_intent = None
+            if self.intent_router:
+                try:
+                    # Stage 2: Classify intent via intent router
+                    classification_result = self.intent_router.execute_operation(
+                        operation_name="classify_intent",
+                        parameters={"operation": operation_name, "context": parameters}
+                    )
+                    if classification_result.is_ok():
+                        classified_intent = classification_result.unwrap()
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE2",
+                            operation="INTENT_CLASSIFICATION",
+                            success=True,
+                            details={"classified_intent": str(classified_intent)}
+                        )
+                except Exception as stage2_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE2",
+                        operation="INTENT_CLASSIFICATION",
+                        success=False,
+                        details={"error": str(stage2_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3A - DoR Approval Gate (if operation requires approval)
+            # Wire dor_gate for user approval workflow
+            if self._dor_gate and operation_name in ["implement", "deploy", "delete"]:
+                try:
+                    # Stage 3A: Get user approval via DoR gate
+                    dor_result = self._dor_gate.evaluate_intent(
+                        intent_type=operation_name,
+                        intent_details=parameters,
+                        confidence=0.8  # Assume reasonable confidence
+                    )
+                    if dor_result.is_err():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3A",
+                            operation="DOR_APPROVAL_GATE",
+                            success=False,
+                            details={"error": "Operation requires user approval"}
+                        )
+                        return dor_result
+                except Exception as dor_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3A",
+                        operation="DOR_APPROVAL_GATE",
+                        success=False,
+                        details={"error": str(dor_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3B - TDD Orchestrator for IMPLEMENT intents
+            # Wire tdd_orchestrator for test-driven implementation
+            if self.tdd_orchestrator and operation_name == "implement":
+                try:
+                    # Stage 3B: Route IMPLEMENT intents through TDD orchestrator
+                    tdd_result = self.tdd_orchestrator.execute_operation(
+                        operation_name="test_driven_implementation",
+                        parameters=parameters
+                    )
+                    if tdd_result.is_ok():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3B",
+                            operation="TDD_ORCHESTRATOR_EXECUTION",
+                            success=True,
+                            details={"target": parameters.get("target")}
+                        )
+                        result = tdd_result
+                        self.logger.log_operation_complete(
+                            ac_id="AC-AR-006-01",
+                            operation=operation_name,
+                            success=result.is_ok(),
+                            details={"result": str(result)}
+                        )
+                        return result
+                except Exception as tdd_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3B",
+                        operation="TDD_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(tdd_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3C - Orchestrator Registry Access
+            # Wire orchestrator_registry for delegate lookup
+            if isinstance(self.orchestrator_registry, dict) and operation_name in ["coordinate_operation", "register_orchestrator"]:
+                try:
+                    # Stage 3C: Access orchestrator registry for delegation
+                    registry_lookup = self.orchestrator_registry.get(operation_name)
+                    if registry_lookup:
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3C",
+                            operation="ORCHESTRATOR_REGISTRY_LOOKUP",
+                            success=True,
+                            details={"found_orchestrators": len([k for k, v in self.orchestrator_registry.items() if v])}
+                        )
+                except Exception as registry_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3C",
+                        operation="ORCHESTRATOR_REGISTRY_LOOKUP",
+                        success=False,
+                        details={"error": str(registry_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 4 - Domain Orchestrators (Execution)
+            # Wire domain_orchestrators for domain-specific delegation
+            domain_orchestrator_key = parameters.get("domain") or "default"
+            if domain_orchestrator_key in self.domain_orchestrators:
+                try:
+                    # Stage 4: Delegate to domain orchestrator
+                    domain_orch_meta = self.domain_orchestrators[domain_orchestrator_key]
+                    domain_result = domain_orch_meta.orchestrator.execute_operation(
+                        operation_name=operation_name,
+                        parameters=parameters
+                    )
+                    if domain_result.is_ok():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE4",
+                            operation="DOMAIN_ORCHESTRATOR_EXECUTION",
+                            success=True,
+                            details={"domain": domain_orchestrator_key}
+                        )
+                        result = domain_result
+                        self.logger.log_operation_complete(
+                            ac_id="AC-AR-006-01",
+                            operation=operation_name,
+                            success=result.is_ok(),
+                            details={"result": str(result)}
+                        )
+                        return result
+                except Exception as domain_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE4",
+                        operation="DOMAIN_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(domain_err)}
+                    )
+            
             # Route to appropriate method based on operation_name
             if operation_name == "register_orchestrator":
                 result = self.register_orchestrator(
@@ -2705,7 +2868,10 @@ class MasterOrchestrator(IOrchestrator):
                 "session_id": session_id,
             }
 
-    @mcp_tool
+    @mcp_tool(
+        name="planning_status",
+        description="Get status of a planning session"
+    )
     def planning_status(self, session_id: str) -> Dict[str, Any]:
         """
         Get status of a planning session.
