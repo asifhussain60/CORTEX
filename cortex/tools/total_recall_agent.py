@@ -1320,6 +1320,210 @@ instance = {class_name}()
         matched_names = {m.name for m in matches}
         return list(set(related) - matched_names)
 
+    def intelligent_git_merge(self, strategy: str = "auto", preserve_cortex_brain: bool = True) -> Dict[str, Any]:
+        """
+        Perform intelligent git merge with cortex_brain preservation.
+        
+        This method integrates the IntelligentGitMergeTool to safely pull updates
+        from origin while preserving ALL user work in cortex_brain directories.
+        
+        Args:
+            strategy: Merge strategy ("auto", "local-favoring", "backup-restore")
+            preserve_cortex_brain: Whether to prioritize cortex_brain preservation
+            
+        Returns:
+            Dict containing merge results and preservation status
+            
+        Example:
+            >>> agent = TotalRecallAgent()
+            >>> result = agent.intelligent_git_merge()
+            >>> print(f"Merge successful: {result['success']}")
+            >>> print(f"cortex_brain preserved: {result['cortex_brain_preserved']}")
+        """
+        try:
+            from cortex.mcp.tools.intelligent_git_merge import IntelligentGitMergeTool
+            
+            # Initialize the intelligent merge tool
+            merge_tool = IntelligentGitMergeTool()
+            
+            # Analyze merge requirements
+            analysis_result = merge_tool.analyze_merge_requirements()
+            if analysis_result.is_err():
+                return {
+                    "success": False,
+                    "error": f"Merge analysis failed: {analysis_result.error}",
+                    "cortex_brain_preserved": True,  # No changes made
+                    "strategy_used": "none",
+                    "files_merged": 0,
+                    "new_features": []
+                }
+            
+            analysis = analysis_result.value
+            
+            # If no updates needed, return early
+            if not analysis.origin_has_updates:
+                return {
+                    "success": True,
+                    "message": "Repository already up to date",
+                    "cortex_brain_preserved": True,
+                    "strategy_used": "none-needed",
+                    "files_merged": 0,
+                    "commits_behind": 0,
+                    "new_features": []
+                }
+            
+            # Perform intelligent merge
+            merge_result = merge_tool.perform_intelligent_merge(strategy)
+            if merge_result.is_err():
+                return {
+                    "success": False,
+                    "error": f"Merge failed: {merge_result.error}",
+                    "cortex_brain_preserved": True,  # Assume backup restored
+                    "strategy_used": strategy,
+                    "files_merged": 0,
+                    "new_features": []
+                }
+            
+            result = merge_result.value
+            
+            # Format response for TotalRecall integration
+            response = {
+                "success": result.success,
+                "cortex_brain_preserved": result.cortex_brain_preserved,
+                "strategy_used": result.strategy_used,
+                "files_merged": result.files_merged,
+                "conflicts_resolved": result.conflicts_resolved,
+                "new_features": result.new_features_integrated,
+                "merge_summary": result.merge_summary,
+                "backup_location": result.backup_location,
+                "warnings": result.warnings,
+                "commits_behind": analysis.behind_commits,
+                "protected_files": len([f for f in analysis.cortex_brain_files if f.startswith("cortex_brain/")])
+            }
+            
+            # Log merge operation for audit trail
+            logger.info(f"Intelligent merge completed: {result.strategy_used} - {result.files_merged} files")
+            
+            return response
+            
+        except ImportError:
+            return {
+                "success": False,
+                "error": "IntelligentGitMergeTool not available - MCP tool not properly wired",
+                "cortex_brain_preserved": True,
+                "strategy_used": "none",
+                "files_merged": 0,
+                "new_features": []
+            }
+        except Exception as e:
+            logger.error(f"Intelligent merge failed: {e}")
+            return {
+                "success": False,
+                "error": f"Unexpected error during merge: {e}",
+                "cortex_brain_preserved": True,
+                "strategy_used": strategy,
+                "files_merged": 0,
+                "new_features": []
+            }
+
+    def sync_with_origin_safely(self, auto_merge: bool = True) -> Dict[str, Any]:
+        """
+        Safely sync with origin while preserving cortex_brain user work.
+        
+        This is the main entry point for the cortex-total-recall.prompt.md
+        intelligent merging functionality. It ensures user work is never lost
+        while integrating new features and intelligence from origin.
+        
+        Args:
+            auto_merge: Whether to automatically merge if safe (default: True)
+            
+        Returns:
+            Dict containing sync results and recommendations
+            
+        Example:
+            >>> agent = TotalRecallAgent()
+            >>> result = agent.sync_with_origin_safely()
+            >>> if result['sync_needed']:
+            ...     print(f"New features available: {result['new_features']}")
+            ...     if result['safe_to_auto_merge']:
+            ...         merge_result = agent.intelligent_git_merge()
+        """
+        try:
+            from cortex.mcp.tools.intelligent_git_merge import IntelligentGitMergeTool
+            
+            merge_tool = IntelligentGitMergeTool()
+            
+            # Analyze what needs to be synced
+            analysis_result = merge_tool.analyze_merge_requirements()
+            if analysis_result.is_err():
+                return {
+                    "success": False,
+                    "error": f"Sync analysis failed: {analysis_result.error}",
+                    "sync_needed": False,
+                    "safe_to_auto_merge": False
+                }
+            
+            analysis = analysis_result.value
+            
+            response = {
+                "success": True,
+                "sync_needed": analysis.origin_has_updates,
+                "commits_behind": analysis.behind_commits,
+                "commits_ahead": analysis.ahead_commits,
+                "cortex_brain_files": len(analysis.cortex_brain_files),
+                "user_modifications": len(analysis.user_modifications),
+                "safe_to_auto_merge": analysis.safe_to_proceed,
+                "recommended_strategy": analysis.recommended_strategy,
+                "working_tree_clean": analysis.is_clean,
+                "requires_backup": analysis.requires_backup
+            }
+            
+            if not analysis.origin_has_updates:
+                response["message"] = "Repository is up to date - no sync needed"
+                response["new_features"] = []
+                return response
+            
+            # If auto_merge is enabled and it's safe, perform the merge
+            if auto_merge and analysis.safe_to_proceed:
+                merge_result = self.intelligent_git_merge(analysis.recommended_strategy)
+                response.update({
+                    "auto_merge_performed": True,
+                    "merge_result": merge_result,
+                    "new_features": merge_result.get("new_features", [])
+                })
+            else:
+                response.update({
+                    "auto_merge_performed": False,
+                    "merge_recommendations": [
+                        f"Run agent.intelligent_git_merge('{analysis.recommended_strategy}')",
+                        "Backup will be created automatically",
+                        "cortex_brain user work will be preserved"
+                    ],
+                    "new_features": ["Unknown - merge required to determine"]
+                })
+                
+                if not analysis.safe_to_proceed:
+                    response["blocking_issues"] = analysis.uncommitted_files
+                    response["message"] = "Uncommitted changes detected - commit or stash before sync"
+            
+            return response
+            
+        except ImportError:
+            return {
+                "success": False,
+                "error": "IntelligentGitMergeTool not available",
+                "sync_needed": False,
+                "safe_to_auto_merge": False
+            }
+        except Exception as e:
+            logger.error(f"Sync analysis failed: {e}")
+            return {
+                "success": False,
+                "error": f"Sync analysis error: {e}",
+                "sync_needed": False,
+                "safe_to_auto_merge": False
+            }
+
 
 # Convenience function for quick recall
 def recall(query: str, scope: str = "all", include_usage: bool = False) -> RecallResult:

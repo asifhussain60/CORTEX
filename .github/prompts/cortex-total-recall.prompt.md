@@ -96,7 +96,183 @@ registry = get_database_registry()  # Only DatabaseBackedRegistry
 - ✅ **Auto-Elimination**: Removes manual registries on detection
 - ✅ **Enforcement Mode**: Blocks system startup if manual registries found
 
-## 🔧 SYSTEM INTEGRITY ENFORCEMENT (AC-PERMANENT-FIX-012)
+## � INTELLIGENT GIT MERGE (AC-INTELLIGENT-MERGE-001 - NEW)
+
+**CRITICAL:** TotalRecallAgent now includes INTELLIGENT git merge capabilities that preserve ALL user work in cortex_brain while integrating new features from origin.
+
+**MCP Tool Integration:** `cortex.mcp.tools.intelligent_git_merge.IntelligentGitMergeTool`
+
+### Cortex Brain Preservation Strategy
+
+```python
+from cortex.tools.total_recall_agent import TotalRecallAgent
+
+# Initialize TotalRecall with intelligent merge capabilities
+agent = TotalRecallAgent()
+
+# Method 1: Automatic sync with cortex_brain preservation
+sync_result = agent.sync_with_origin_safely()
+print(f"Sync needed: {sync_result['sync_needed']}")
+print(f"Safe to auto-merge: {sync_result['safe_to_auto_merge']}")
+print(f"cortex_brain files: {sync_result['cortex_brain_files']}")
+print(f"User modifications: {sync_result['user_modifications']}")
+
+if sync_result['safe_to_auto_merge']:
+    # Automatically perform safe merge
+    merge_result = agent.intelligent_git_merge()
+    print(f"Merge successful: {merge_result['success']}")
+    print(f"cortex_brain preserved: {merge_result['cortex_brain_preserved']}")
+    print(f"New features: {merge_result['new_features']}")
+```
+
+### Local-Favoring Merge Strategy
+
+**Core Principle:** User work in cortex_brain ALWAYS takes priority over origin changes.
+
+```python
+# Method 2: Manual merge control
+merge_result = agent.intelligent_git_merge(strategy="local-favoring")
+
+# Expected output:
+{
+    "success": True,
+    "cortex_brain_preserved": True,  # GUARANTEED
+    "strategy_used": "local-favoring",
+    "files_merged": 15,
+    "conflicts_resolved": 3,
+    "new_features": [
+        "AC-PERMANENT-FIX system updates",
+        "TotalRecall agent capabilities", 
+        "DatabaseBackedRegistry enhancements"
+    ],
+    "backup_location": "_backups/cortex_brain_backup_20260125_141758",
+    "warnings": [],  # Empty if all preserved
+    "commits_behind": 5,
+    "protected_files": 47  # All cortex_brain files protected
+}
+```
+
+### Protected Paths (NEVER OVERWRITTEN)
+
+The intelligent merge ALWAYS preserves these user work areas:
+
+```yaml
+protected_paths:
+  - "cortex_brain/tier0/governance/"     # Core rules & guidelines
+  - "cortex_brain/tier1/governance/"     # Compliance & development rules  
+  - "cortex_brain/tier1/profiles/"       # Auth, DevOps, FinOps, Healthcare, Legal, ML profiles
+  - "cortex_brain/tier2/governance/"     # Security & operational rules
+  - "cortex_brain/tier3/knowledge/"      # Domain knowledge & best practices
+  - "cortex_brain/domain/"               # Business domain implementations
+  - "cortex_brain/domain_brain/"         # Domain-specific intelligence
+```
+
+### Merge Analysis & Safety Checks
+
+```python
+# Before any merge, intelligent analysis is performed:
+analysis = {
+    "current_branch": "CORTEX",
+    "is_clean": True,                    # Working tree status
+    "uncommitted_files": [],            # Files needing commit
+    "ahead_commits": 0,                 # Local commits ahead
+    "behind_commits": 5,                # Origin commits behind  
+    "cortex_brain_files": 47,           # User files to protect
+    "user_modifications": [             # User-modified files
+        "cortex_brain/tier1/profiles/healthcare-v1.0.yaml",
+        "cortex_brain/tier2/governance/security-rules.yaml",
+        "cortex_brain/domain/implementations/hr_domain.py"
+    ],
+    "potential_conflicts": [],          # Files that might conflict
+    "recommended_strategy": "local-favoring",
+    "requires_backup": True,            # Backup needed before merge
+    "safe_to_proceed": True            # All safety checks pass
+}
+```
+
+### Integration with cortex-total-recall.prompt.md
+
+**Enhanced Command Set:**
+
+| Command | Action | cortex_brain Protection |
+|---------|--------|-------------------------|
+| `/sync-origin` | Check for origin updates | Analysis only - no changes |
+| `/merge-safe` | Intelligent merge with preservation | FULL protection + backup |
+| `/sync-auto` | Auto-sync if safe | USER_WORK_FIRST strategy |
+| `/backup-cortex-brain` | Create cortex_brain backup | Timestamp-based backup |
+| `/verify-preservation` | Check cortex_brain integrity | Post-merge validation |
+
+**Usage in Prompt:**
+
+```markdown
+# Enhanced Total Recall with Intelligent Merge
+
+## Step 1: Pre-Sync Analysis (MANDATORY)
+```python
+agent = TotalRecallAgent()
+sync_analysis = agent.sync_with_origin_safely(auto_merge=False)
+
+if sync_analysis['sync_needed']:
+    print(f"🔄 {sync_analysis['commits_behind']} new commits available")
+    print(f"📁 {sync_analysis['cortex_brain_files']} cortex_brain files to protect") 
+    print(f"✏️  {sync_analysis['user_modifications']} user modifications detected")
+```
+
+## Step 2: Safe Merge Execution
+```python
+if sync_analysis['safe_to_auto_merge']:
+    merge_result = agent.intelligent_git_merge()
+    
+    if merge_result['success']:
+        print("✅ Merge completed successfully")
+        print(f"✅ cortex_brain preserved: {merge_result['cortex_brain_preserved']}")
+        print(f"🆕 New features: {', '.join(merge_result['new_features'])}")
+    else:
+        print(f"❌ Merge failed: {merge_result['error']}")
+```
+
+## Step 3: Post-Merge Validation
+```python
+# Verify cortex_brain user work is intact
+verification = agent.verify_cortex_brain_preservation()
+if verification['all_preserved']:
+    print("✅ All user work in cortex_brain preserved")
+else:
+    print(f"⚠️  Issues detected: {verification['issues']}")
+    print(f"📦 Restore from backup: {merge_result['backup_location']}")
+```
+```
+
+### Fallback & Recovery
+
+**If merge fails or cortex_brain is compromised:**
+
+```python
+# Automatic restoration from backup
+if not merge_result['cortex_brain_preserved']:
+    restore_result = agent.restore_cortex_brain_from_backup(
+        backup_path=merge_result['backup_location']
+    )
+    
+    if restore_result['success']:
+        print("✅ cortex_brain restored from backup")
+        print("🔄 Ready for manual merge with conflict resolution")
+    else:
+        print("🚨 CRITICAL: Manual intervention required")
+```
+
+**Benefits of Intelligent Merge:**
+
+1. **User Work Protection**: cortex_brain files NEVER lost
+2. **Feature Integration**: New origin features automatically integrated  
+3. **Conflict Resolution**: LOCAL content takes priority on conflicts
+4. **Backup Safety**: Automatic backup before any risky operations
+5. **Audit Trail**: Complete logging of all merge operations
+6. **Recovery Path**: Easy restoration if anything goes wrong
+
+This ensures users can safely pull the latest cortex-total-recall.prompt.md updates and new TotalRecall features without losing any of their custom governance rules, domain knowledge, or business logic stored in cortex_brain.
+
+## �🔧 SYSTEM INTEGRITY ENFORCEMENT (AC-PERMANENT-FIX-012)
 
 **TotalRecallAgent Enhanced with Comprehensive System Integrity Verification:**
 
