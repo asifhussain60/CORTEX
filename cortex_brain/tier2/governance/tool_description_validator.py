@@ -75,12 +75,7 @@ class ToolDescription:
     error_handling: List[str] = field(default_factory=list)
 
 
-@dataclass
-class Result:
-    """Generic result wrapper."""
-    success: bool
-    value: Any = None
-    error: Optional[str] = None
+from cortex.brain.core.result import Result
 
 
 class ToolDescriptionValidator:

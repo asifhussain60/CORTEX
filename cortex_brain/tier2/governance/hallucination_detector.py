@@ -66,12 +66,7 @@ class HallucinationDetectionResult:
     reasoning_steps: List[str] = field(default_factory=list)
 
 
-@dataclass
-class Result:
-    """Generic result wrapper."""
-    success: bool
-    value: Any = None
-    error: Optional[str] = None
+from cortex.brain.core.result import Result
 
 
 class HallucinationDetector:
