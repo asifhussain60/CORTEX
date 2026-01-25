@@ -56,7 +56,7 @@ class TestPlannerOrchestratorIntegration:
         # PlannerOrchestrator should be registered in database
         from cortex.orchestrators import get_database_registry
         registry = get_database_registry()
-        config = registry.get_orchestrator_config("PlannerOrchestrator")
+        config = registry.get("PlannerOrchestrator")
         
         # Config might be None if not registered, but orchestrator should still exist
         assert planner.get_status() is not None
