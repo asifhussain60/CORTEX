@@ -1,0 +1,22 @@
+graph TD
+    A[Request Received] --> B{Complexity Level}
+    B -->|Low < 5| C[Auto Approval]
+    B -->|Medium 5-8| D[User Review Required]
+    B -->|High > 8| E[Expert Review Required]
+    C --> F[Execute Operation]
+    D --> G{User Approves?}
+    E --> H{Expert Approves?}
+    G -->|Yes| F
+    G -->|No| I[Request Denied]
+    H -->|Yes| F
+    H -->|No| I
+    F --> J[Log AC_START]
+    J --> K[Execute with CORE Rules]
+    K --> L[Log AC_COMPLETE]
+    L --> M[Return Result]
+    I --> N[Return Error]
+    style A fill:#e1f5ff
+    style F fill:#c8e6c9
+    style I fill:#ffcdd2
+    style M fill:#c8e6c9
+    style N fill:#ffcdd2

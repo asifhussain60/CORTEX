@@ -1,0 +1,12 @@
+graph LR
+    A["🔴 RED<br/>Write Failing Test"] --> B["🟢 GREEN<br/>Write Minimal Code"]
+    B --> C["🔄 REFACTOR<br/>Improve Quality"]
+    C --> D["📚 KNOWLEDGE<br/>Update Patterns"]
+    D --> E{More Features?}
+    E -->|Yes| A
+    E -->|No| F["✅ COMPLETE"]
+    style A fill:#ffcdd2
+    style B fill:#c8e6c9
+    style C fill:#fff9c4
+    style D fill:#e1bee7
+    style F fill:#c8e6c9

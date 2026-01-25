@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chart { text-align: center; }
+        .node { stroke: #333; }
+        .link { stroke: #999; stroke-opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <h1>Request Lifecycle Flow</h1>
+    <p>Shows how requests flow through CORTEX system components</p>
+    <div id="chart"></div>
+    <script>
+        const width = 800, height = 400;
+        
+        const svg = d3.select("#chart").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        // Simplified flow visualization
+        const stages = [
+            { name: "Request", x: 50, y: 200, color: "#E3F2FD" },
+            { name: "Intent Router", x: 200, y: 200, color: "#FFF3E0" },
+            { name: "Approval Gate", x: 350, y: 200, color: "#F3E5F5" },
+            { name: "Orchestrator", x: 500, y: 200, color: "#E8F5E9" },
+            { name: "Execute", x: 650, y: 200, color: "#FCE4EC" },
+            { name: "Response", x: 800, y: 200, color: "#C8E6C9" }
+        ];
+        
+        stages.forEach(stage => {
+            svg.append("circle")
+                .attr("cx", stage.x)
+                .attr("cy", stage.y)
+                .attr("r", 40)
+                .attr("fill", stage.color)
+                .attr("stroke", "#333")
+                .attr("stroke-width", 2);
+            
+            svg.append("text")
+                .attr("x", stage.x)
+                .attr("y", stage.y + 5)
+                .attr("text-anchor", "middle")
+                .style("font-size", "12px")
+                .style("font-weight", "bold")
+                .text(stage.name);
+        });
+        
+        // Draw arrows
+        for (let i = 0; i < stages.length - 1; i++) {
+            svg.append("line")
+                .attr("x1", stages[i].x + 40)
+                .attr("y1", stages[i].y)
+                .attr("x2", stages[i+1].x - 40)
+                .attr("y2", stages[i+1].y)
+                .attr("stroke", "#666")
+                .attr("stroke-width", 2)
+                .attr("marker-end", "url(#arrowhead)");
+        }
+        
+        // Arrow marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
+            .attr("refX", 9)
+            .attr("refY", 3)
+            .attr("orient", "auto")
+            .append("polygon")
+            .attr("points", "0 0, 10 3, 0 6")
+            .attr("fill", "#666");
+    </script>
+</body>
+</html>

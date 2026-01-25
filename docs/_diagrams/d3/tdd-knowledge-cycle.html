@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chart { text-align: center; }
+        .phase-text { font-weight: bold; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <h1>TDD Knowledge Cycle</h1>
+    <p>Continuous improvement cycle: RED → GREEN → REFACTOR → KNOWLEDGE</p>
+    <div id="chart"></div>
+    <script>
+        const width = 500, height = 500;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = 150;
+        
+        const svg = d3.select("#chart").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        const phases = [
+            { angle: 0, label: "🔴 RED", color: "#FFCDD2" },
+            { angle: Math.PI / 2, label: "🟢 GREEN", color: "#C8E6C9" },
+            { angle: Math.PI, label: "🔄 REFACTOR", color: "#FFF9C4" },
+            { angle: 3 * Math.PI / 2, label: "📚 KNOWLEDGE", color: "#E1BEE7" }
+        ];
+        
+        // Draw cycle
+        phases.forEach((phase, i) => {
+            const x = centerX + radius * Math.cos(phase.angle);
+            const y = centerY + radius * Math.sin(phase.angle);
+            
+            svg.append("circle")
+                .attr("cx", x)
+                .attr("cy", y)
+                .attr("r", 50)
+                .attr("fill", phase.color)
+                .attr("stroke", "#333")
+                .attr("stroke-width", 2);
+            
+            svg.append("text")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("text-anchor", "middle")
+                .attr("dy", "0.3em")
+                .attr("class", "phase-text")
+                .text(phase.label);
+            
+            // Draw arrow to next phase
+            const nextPhase = phases[(i + 1) % phases.length];
+            const x2 = centerX + radius * Math.cos(nextPhase.angle);
+            const y2 = centerY + radius * Math.sin(nextPhase.angle);
+            
+            const angle = Math.atan2(y2 - y, x2 - x);
+            const startX = x + 50 * Math.cos(angle);
+            const startY = y + 50 * Math.sin(angle);
+            const endX = x2 - 50 * Math.cos(angle);
+            const endY = y2 - 50 * Math.sin(angle);
+            
+            svg.append("line")
+                .attr("x1", startX)
+                .attr("y1", startY)
+                .attr("x2", endX)
+                .attr("y2", endY)
+                .attr("stroke", "#999")
+                .attr("stroke-width", 2)
+                .attr("marker-end", "url(#arrowhead)");
+        });
+        
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
+            .attr("refX", 9)
+            .attr("refY", 3)
+            .attr("orient", "auto")
+            .append("polygon")
+            .attr("points", "0 0, 10 3, 0 6")
+            .attr("fill", "#999");
+        
+        svg.append("text")
+            .attr("x", centerX)
+            .attr("y", centerY)
+            .attr("text-anchor", "middle")
+            .attr("dy", "0.3em")
+            .style("font-size", "14px")
+            .style("font-weight", "bold")
+            .text("Continuous
+Improvement");
+    </script>
+</body>
+</html>

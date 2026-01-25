@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chart { text-align: center; }
+        .layer-label { font-weight: bold; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <h1>Domain Brain Architecture</h1>
+    <p>Layered architecture showing brain tiers and data flow</p>
+    <div id="chart"></div>
+    <script>
+        const width = 700, height = 400;
+        const svg = d3.select("#chart").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        const layers = [
+            { name: "Tier 0: Governance", y: 50, color: "#FFEBEE", rules: "29 CORE Rules" },
+            { name: "Tier 1: Acceptance Criteria", y: 130, color: "#FFF3E0", rules: "AC-ID Specs" },
+            { name: "Tier 2: Templates", y: 210, color: "#F3E5F5", rules: "Response Boundaries" },
+            { name: "Tier 3: Knowledge", y: 290, color: "#E8F5E9", rules: "35+ Best Practices" }
+        ];
+        
+        layers.forEach(layer => {
+            svg.append("rect")
+                .attr("x", 50)
+                .attr("y", layer.y)
+                .attr("width", 600)
+                .attr("height", 60)
+                .attr("fill", layer.color)
+                .attr("stroke", "#333")
+                .attr("stroke-width", 1);
+            
+            svg.append("text")
+                .attr("x", 60)
+                .attr("y", layer.y + 20)
+                .attr("class", "layer-label")
+                .text(layer.name);
+            
+            svg.append("text")
+                .attr("x", 60)
+                .attr("y", layer.y + 40)
+                .attr("class", "layer-label")
+                .style("font-size", "10px")
+                .text(layer.rules);
+        });
+        
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", 30)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text("CORTEX Brain: 4-Tier Architecture");
+    </script>
+</body>
+</html>

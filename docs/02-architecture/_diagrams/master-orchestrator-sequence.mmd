@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant User
+    participant MasterOrchestrator
+    participant IntentRouter
+    participant ApprovalGate
+    participant SpecificOrchestrator
+    participant AuditLogger
+    
+    User->>MasterOrchestrator: Request
+    MasterOrchestrator->>IntentRouter: Classify Intent (LENS)
+    IntentRouter-->>MasterOrchestrator: Intent Type + Confidence
+    MasterOrchestrator->>ApprovalGate: Check Complexity
+    ApprovalGate-->>MasterOrchestrator: Approval (Yes/No/Conditional)
+    MasterOrchestrator->>AuditLogger: AC_START
+    MasterOrchestrator->>SpecificOrchestrator: Execute
+    SpecificOrchestrator-->>MasterOrchestrator: Result
+    MasterOrchestrator->>AuditLogger: AC_COMPLETE
+    MasterOrchestrator-->>User: Response

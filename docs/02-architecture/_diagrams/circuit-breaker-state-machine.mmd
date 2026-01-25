@@ -1,0 +1,21 @@
+stateDiagram-v2
+    [*] --> Closed
+    Closed --> Open: Failure threshold exceeded
+    Open --> HalfOpen: Timeout elapsed
+    HalfOpen --> Closed: Test successful
+    HalfOpen --> Open: Test failed
+    Closed --> Closed: Request succeeds
+    Open --> Open: Reject requests
+    HalfOpen --> HalfOpen: Allow limited test
+    note right of Closed
+        Normal operation
+        Requests pass through
+    end note
+    note right of Open
+        Circuit is open
+        Fast-fail requests
+    end note
+    note right of HalfOpen
+        Testing recovery
+        Controlled requests
+    end note
