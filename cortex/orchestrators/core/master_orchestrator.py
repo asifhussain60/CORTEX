@@ -2497,3 +2497,251 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
             return {"phase": 4, "error": str(e)}
+
+    # ========== PLANNING REFINEMENT INTEGRATION ==========
+
+    def conduct_planning_session(
+        self,
+        session_id: str,
+        user_request: str
+    ) -> Dict[str, Any]:
+        """
+        Conduct interactive planning refinement session.
+
+        Multi-turn refinement loop where CORTEX and user collaborate
+        to achieve 100% clarity (DoR >= 0.95) on a feature request.
+
+        Args:
+            session_id: Unique session identifier
+            user_request: User's feature request
+
+        Returns:
+            Dict with session results and audit trail
+        """
+        self.logger.log_operation_start(
+            ac_id="AC-PLANNING-REFINE-CONDUCT",
+            operation="conduct_planning_session",
+            details={
+                "session_id": session_id,
+                "user_request": user_request[:100],  # First 100 chars
+            }
+        )
+
+        try:
+            # Import PlanningRefinementOrchestrator (lazy import)
+            from cortex.orchestrators.core.planning_refinement_orchestrator import (
+                get_planning_refinement_orchestrator,
+            )
+            from cortex.orchestrators.core.planning_audit_trail import (
+                create_audit_trail_from_session,
+            )
+
+            # Get orchestrator instance
+            refinement_orchestrator = get_planning_refinement_orchestrator()
+
+            # Conduct refinement session (turns 1-6)
+            success, result = refinement_orchestrator.conduct_refinement_session(
+                session_id=session_id,
+                user_request=user_request,
+            )
+
+            if not success:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PLANNING-REFINE-CONDUCT",
+                    operation="conduct_planning_session",
+                    success=False,
+                    details={"error": result}
+                )
+                return {
+                    "success": False,
+                    "error": result,
+                    "session_id": session_id,
+                }
+
+            # Refinement completed
+            session = result
+            dor_achieved = session.dor_achieved
+            final_clarity = session.final_clarity
+
+            # Create audit trail from session
+            audit_trail = create_audit_trail_from_session(session)
+
+            # Verify audit trail integrity
+            from cortex.orchestrators.core.audit_trail_verifier import (
+                get_audit_trail_verifier,
+            )
+
+            verifier = get_audit_trail_verifier()
+            verification = verifier.verify_audit_trail(audit_trail)
+
+            # Log completion
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-CONDUCT",
+                operation="conduct_planning_session",
+                success=True,
+                details={
+                    "session_id": session_id,
+                    "dor_achieved": dor_achieved,
+                    "final_clarity": final_clarity,
+                    "total_turns": session.total_turns_completed,
+                    "audit_chain_intact": verification.is_valid,
+                }
+            )
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "dor_achieved": dor_achieved,
+                "final_clarity": final_clarity,
+                "total_turns": session.total_turns_completed,
+                "clarity_progression": session.clarity_history,
+                "audit_trail_valid": verification.is_valid,
+                "audit_summary": verification.details.get("session_summary", {}),
+                "approved_plan": session.final_approved_plan,
+            }
+
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-CONDUCT",
+                operation="conduct_planning_session",
+                success=False,
+                details={"error": str(e), "exception_type": type(e).__name__}
+            )
+            return {
+                "success": False,
+                "error": f"Planning session failed: {str(e)}",
+                "session_id": session_id,
+            }
+
+    def execute_plan_via_tdd(
+        self,
+        session_id: str,
+        approved_plan: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Execute an approved plan via TDD orchestrator.
+
+        Called after planning refinement session achieves DoR.
+        Routes plan to TDDOrchestrator for implementation.
+
+        Args:
+            session_id: Planning session identifier
+            approved_plan: Plan dict approved during refinement
+
+        Returns:
+            Dict with execution results
+        """
+        self.logger.log_operation_start(
+            ac_id="AC-PLANNING-REFINE-EXECUTE",
+            operation="execute_plan_via_tdd",
+            details={
+                "session_id": session_id,
+            }
+        )
+
+        try:
+            # Check if TDDOrchestrator is available
+            if not TDDOrchestrator or not get_tdd_orchestrator:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PLANNING-REFINE-EXECUTE",
+                    operation="execute_plan_via_tdd",
+                    success=False,
+                    details={"error": "TDDOrchestrator not available"}
+                )
+                return {
+                    "success": False,
+                    "error": "TDDOrchestrator not available",
+                    "session_id": session_id,
+                }
+
+            # Get TDD orchestrator
+            tdd_orchestrator = get_tdd_orchestrator()
+
+            # Prepare context for TDD execution
+            context = {
+                "planning_session_id": session_id,
+                "feature_request": approved_plan.get("user_request", ""),
+                "acceptance_criteria": approved_plan.get("acceptance_criteria", []),
+                "implementation_steps": approved_plan.get("steps", []),
+                "constraints": approved_plan.get("constraints", []),
+                "risks": approved_plan.get("risks", []),
+            }
+
+            # Execute via TDD (write tests first)
+            # This calls tdd_orchestrator.execute(context)
+            execution_result = tdd_orchestrator.execute(
+                operation_mode=OperationMode.AUTO,
+                context=context,
+            )
+
+            # Log successful execution
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-EXECUTE",
+                operation="execute_plan_via_tdd",
+                success=True,
+                details={
+                    "session_id": session_id,
+                    "execution_status": "initiated",
+                }
+            )
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "execution_status": "initiated",
+                "tdd_result": execution_result,
+            }
+
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-EXECUTE",
+                operation="execute_plan_via_tdd",
+                success=False,
+                details={"error": str(e), "exception_type": type(e).__name__}
+            )
+            return {
+                "success": False,
+                "error": f"Plan execution failed: {str(e)}",
+                "session_id": session_id,
+            }
+
+    @mcp_tool
+    def planning_status(self, session_id: str) -> Dict[str, Any]:
+        """
+        Get status of a planning session.
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            Dict with current session status
+        """
+        try:
+            from cortex.orchestrators.core.planning_refinement_orchestrator import (
+                get_planning_refinement_orchestrator,
+            )
+
+            orchestrator = get_planning_refinement_orchestrator()
+            session = orchestrator.get_session(session_id)
+
+            if not session:
+                return {
+                    "success": False,
+                    "error": f"Session {session_id} not found",
+                }
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "dor_achieved": session.dor_achieved,
+                "final_clarity": session.final_clarity,
+                "total_turns": session.total_turns_completed,
+                "clarity_progression": session.clarity_history,
+                "is_complete": session.is_complete(),
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+            }
