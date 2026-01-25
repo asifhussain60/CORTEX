@@ -434,8 +434,8 @@ Quality: Production-ready with 85%+ test coverage
         report = self.generate_completion_report()
         print(report)
         
-        # Save report
-        report_path = self.project_root / '.github' / 'roadmap' / 'reports' / 'PHASE-15-COMPLETION-REPORT.md'
+        # Save report to reports/phase-tracking/ with CORE-028 compliant naming
+        report_path = self.project_root / 'reports' / 'phase-tracking' / 'phase-15-completion-report.md'
         report_path.parent.mkdir(parents=True, exist_ok=True)
         with open(report_path, 'w') as f:
             f.write(report)
