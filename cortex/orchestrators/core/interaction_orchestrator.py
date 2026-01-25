@@ -1,14 +1,21 @@
 """
-InteractionOrchestrator - Communication pattern enforcement wrapper.
+InteractionOrchestrator - Communication pattern enforcement wrapper with challenge system.
 
+AC-CHALLENGE-SYSTEM-002: Integration point for challenge-driven interaction
 Wraps ConversationProtocol to enforce communication patterns from
 cortex-registry/interaction/ definitions.
+
+NEW: Challenge system integration (AC-PERMANENT-FIX-006)
+- Uses LENS synthesis to build context on every turn
+- Generates intelligent challenges when CORTEX disagrees
+- Presents alternatives before proceeding to DoR gate
 """
 
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from pathlib import Path
 import yaml
+import logging
 
 from cortex.brain.core.orchestrator.conversation_protocol import (
     ConversationProtocol,
@@ -16,6 +23,14 @@ from cortex.brain.core.orchestrator.conversation_protocol import (
 )
 from cortex.brain.core.orchestrator.continuation_decision import ContinuationDecision
 from cortex.brain.core.result import Result, Ok, Err
+from cortex.orchestrators.core.challenge_engine import (
+    ChallengeEngine,
+    get_challenge_engine,
+    LENSContext,
+    ChallengeResponse
+)
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -56,16 +71,19 @@ class InteractionOrchestrator:
     def __init__(
         self,
         conversation_protocol: ConversationProtocol,
-        pattern_registry_path: Optional[Path] = None
+        pattern_registry_path: Optional[Path] = None,
+        enable_challenges: bool = True
     ):
         """
-        Initialize InteractionOrchestrator.
+        Initialize InteractionOrchestrator with challenge system.
         
         Args:
             conversation_protocol: ConversationProtocol instance to wrap
             pattern_registry_path: Path to pattern registry (defaults to cortex-registry/interaction/)
+            enable_challenges: Whether to enable challenge system (default: True)
         """
         self.conversation_protocol = conversation_protocol
+        self.enable_challenges = enable_challenges
         
         if pattern_registry_path is None:
             pattern_registry_path = (
@@ -77,6 +95,14 @@ class InteractionOrchestrator:
         self.pattern_registry_path = Path(pattern_registry_path)
         self.patterns: Dict[str, CommunicationPattern] = {}
         self._load_patterns()
+        
+        # Initialize challenge engine (AC-PERMANENT-FIX-006)
+        self.challenge_engine: Optional[ChallengeEngine] = None
+        if self.enable_challenges:
+            self.challenge_engine = get_challenge_engine()
+            logger.info("Challenge system ACTIVE (AC-PERMANENT-FIX-006)")
+        else:
+            logger.warning("Challenge system DISABLED - not recommended")
     
     def _load_patterns(self) -> None:
         """Load communication patterns from registry."""
@@ -102,6 +128,73 @@ class InteractionOrchestrator:
             except Exception as e:
                 print(f"[WARNING] Failed to load pattern from {pattern_file}: {e}")
     
+    def execute_turn_with_challenge(
+        self,
+        user_request: str,
+        round_context: RoundContext,
+        pattern_id: Optional[str] = None
+    ) -> Result[Dict[str, Any]]:
+        """
+        Execute a turn with challenge system (NEW - AC-CHALLENGE-SYSTEM-002).
+        
+        Workflow:
+        1. Build LENS context from user request
+        2. Generate challenge if CORTEX disagrees
+        3. If challenge: present to user and wait for choice
+        4. If no challenge: proceed to pattern validation
+        5. Execute via ConversationProtocol
+        
+        Args:
+            user_request: User's natural language request
+            round_context: Context for this turn
+            pattern_id: Optional pattern to enforce
+            
+        Returns:
+            Result with orchestrator output or challenge for user
+        """
+        logger.info("Executing turn with challenge system for: %s", user_request[:50])
+        
+        # Step 1: Build LENS context
+        if self.enable_challenges and self.challenge_engine:
+            lens_context = self.challenge_engine.build_lens_context(
+                user_request,
+                search_tools={}  # TODO: Pass actual search tools
+            )
+            
+            # Step 2: Generate challenge
+            challenge = self.challenge_engine.generate_challenge(
+                user_request,
+                lens_context
+            )
+            
+            # Step 3: If challenge exists, return it to user for decision
+            if challenge.has_disagreement:
+                logger.info(
+                    "Challenge generated: %s",
+                    challenge.disagreement_type.value
+                )
+                formatted_challenge = self.challenge_engine.format_challenge_response(
+                    challenge
+                )
+                return Ok({
+                    "type": "challenge",
+                    "challenge": challenge,
+                    "formatted_message": formatted_challenge,
+                    "requires_user_choice": True
+                })
+        
+        # Step 4: No challenge, proceed with pattern validation
+        if pattern_id:
+            return self.execute_turn_with_pattern(
+                round_context,
+                pattern_id,
+                validate_strict=True
+            )
+        
+        # Step 5: Execute directly via ConversationProtocol
+        result = self.conversation_protocol.execute_turn(round_context)
+        return result
+    
     def execute_turn_with_pattern(
         self,
         round_context: RoundContext,
@@ -109,7 +202,7 @@ class InteractionOrchestrator:
         validate_strict: bool = True
     ) -> Result[Dict[str, Any]]:
         """
-        Execute a turn with pattern enforcement.
+        Execute a turn with pattern enforcement (original method).
         
         Args:
             round_context: Context for this turn

@@ -11,8 +11,8 @@ Author: Asif Hussain
 
 import pytest
 
-from cortex.core.governance_registry import GovernanceRegistry, GovernanceRule
-from cortex.core.tier_resolver import TierResolver
+from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.brain.core.tier_resolver import TierResolver
 
 
 @pytest.mark.ac("AR-001-01")

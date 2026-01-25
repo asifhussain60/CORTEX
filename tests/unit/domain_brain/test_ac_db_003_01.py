@@ -13,7 +13,7 @@ from cortex.domain_brain.bkio_orchestrator import (
     BusinessKnowledgeIngestionOrchestrator,
     DocumentFormat,
 )
-from cortex.core.orchestrator_base import OrchestrationContext
+from cortex.brain.core.orchestrator_base import OrchestrationContext
 from cortex.domain_brain.api import DomainBrainAPI
 from cortex.domain_brain.models import Domain, Entity, EntityType
 

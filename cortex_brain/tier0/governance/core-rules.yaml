@@ -14,11 +14,11 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 21
+  rule_count: 22
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-24 - Phase 3 Simplification: Deleted CORE-033 (unimplemented)"
-  version: "2.2"
+  last_update: "2026-01-25 - AC-PERMANENT-FIX-005: Added CORE-030 Implementation Truth Enforcement"
+  version: "2.3"
 
 categories:
   - orchestration_lifecycle
@@ -537,6 +537,79 @@ rules:
       severity_on_bypass: "blocked"
 
   # --------------------------------------------------------------------------
+  # CORE-030: Implementation Truth Enforcement (AC-PERMANENT-FIX-005)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-030
+    category: quality_gates
+    severity: blocked
+    name: Implementation Truth Enforcement
+    description: |
+      CORTEX MUST validate claims against actual code BEFORE answering.
+      Documentation is guidance only - implementation is the single source of truth.
+      
+      This rule prevents documentation-driven hallucination where prompts
+      contain aspirational/false claims that diverge from actual implementation.
+    
+    enforcement_protocol:
+      1_check_implementation_first:
+        - "grep_search for actual class/function existence"
+        - "read_file to verify implementation details"
+        - "semantic_search for related production code"
+      
+      2_validate_documentation_claims:
+        - "Compare prompt claims against code reality"
+        - "Flag mismatches as CORE-030 violations"
+        - "Block response if documentation contradicts code"
+      
+      3_documentation_allowed_uses:
+        - "High-level architecture guidance"
+        - "Workflow descriptions (not implementation details)"
+        - "User-facing command reference"
+        - "Historical context and rationale"
+      
+      4_documentation_forbidden_uses:
+        - "Default parameter values (check code)"
+        - "Feature implementation status (check tests)"
+        - "API behavior (check actual functions)"
+        - "Production readiness claims (check wiring)"
+    
+    validation_checklist:
+      before_answering:
+        - "[ ] Searched actual code for referenced components"
+        - "[ ] Verified default values in __init__ signatures"
+        - "[ ] Checked test coverage for claimed features"
+        - "[ ] Validated wiring status in registry"
+      
+      if_documentation_referenced:
+        - "[ ] Cross-referenced docs against code"
+        - "[ ] Flagged any mismatches in response"
+        - "[ ] Cited code location as primary source"
+        - "[ ] Marked documentation claims as 'unverified' if no code check"
+    
+    examples:
+      correct_workflow: |
+        User: "What's the default for auto_wire_production?"
+        
+        CORTEX:
+        1. grep_search for "auto_wire_production" in *.py
+        2. read_file total_recall_agent.py __init__ signature
+        3. Find: auto_wire_production: bool = False
+        4. Answer: "Default is False (verified in total_recall_agent.py:572)"
+      
+      incorrect_workflow: |
+        User: "What's the default for auto_wire_production?"
+        
+        CORTEX:
+        1. Read cortex-total-recall.prompt.md
+        2. Find claim: "auto_wire_production=True (default)"
+        3. Answer: "Default is True" ← VIOLATION (didn't check code)
+    
+    remediation:
+      violation_detected: "Flag as AC-PERMANENT-FIX-005 regression"
+      permanent_fix: "Update interaction protocol to check code first"
+      documentation_update: "Add ⚠️ UNVERIFIED markers to aspirational claims"
+
+  # --------------------------------------------------------------------------
   # CORE-034: Mandatory Audit Logging
   # --------------------------------------------------------------------------
   - rule_id: CORE-034
@@ -568,6 +641,63 @@ rules:
       - "Audit trail complete for all 4 stages"
       - "ERROR events captured with context"
 
+  # --------------------------------------------------------------------------
+  # CORE-035: Single Canonical Implementation (AC-PERMANENT-FIX-007)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-035
+    category: architecture
+    severity: blocked
+    name: Single Canonical Implementation
+    description: |
+      Each concept, pattern, or component MUST have exactly ONE canonical implementation.
+      No *_unified, *_refactored, *_v2, *_alternative, *_new, *_old variants allowed.
+      
+      This rule prevents:
+      - Competing implementations causing confusion
+      - Orphaned code consuming maintenance budget
+      - Import uncertainty (which version to use?)
+      - Dead code accumulating in the codebase
+      
+      AC-PERMANENT-FIX-007: Permanent enforcement of single implementation pattern
+    
+    enforcement_protocol:
+      pre_creation_check:
+        - "Before creating new file, check if concept already exists"
+        - "Search for existing implementations: semantic_search, file_search, grep_search"
+        - "If exists: UPDATE existing, do NOT create parallel version"
+      
+      forbidden_patterns:
+        - "*_unified.py - consolidation experiments"
+        - "*_refactored.py - refactoring experiments"
+        - "*_v2.py, *_v3.py - version experiments"
+        - "*_alternative.py - alternative implementations"
+        - "*_new.py, *_old.py - temporal variants"
+        - "*_legacy.py - deprecated but kept"
+        - "*_backup.py - backup copies in production"
+      
+      allowed_pattern:
+        - "One canonical file per concept"
+        - "Update in place, use git for history"
+        - "If major refactor needed: create branch, not parallel file"
+      
+      git_validation:
+        check: "No files matching forbidden patterns in cortex/"
+        command: "git ls-files 'cortex/**/*_unified.py' 'cortex/**/*_refactored.py' 'cortex/**/*_v2.py'"
+        expected_count: 0
+    
+    success_criteria:
+      - "Zero competing implementations per concept"
+      - "No *_unified, *_refactored, *_v2 files in cortex/"
+      - "Single import path for each component"
+      - "Clear canonical file for each orchestrator"
+      - "git_history_analyzer validates this rule"
+    
+    implementation:
+      method: "Git pre-commit hook + AC-PERMANENT-FIX tracking"
+      enforcement_point: "File creation, git commit"
+      audit_event: "DUPLICATE_IMPLEMENTATION_BLOCKED"
+      severity_on_bypass: "blocked"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
@@ -580,11 +710,13 @@ enforcement:
     pre_push: true
   
   core_rule_precedence:
-    highest: "CORE-029 (Response headers), CORE-031 (Declarative autowiring), CORE-032 (Intent classification)"
+    highest: "CORE-029 (Response headers), CORE-030 (Implementation truth), CORE-031 (Declarative autowiring), CORE-032 (Intent classification), CORE-035 (Single canonical)"
     high: "CORE-034 (Audit logging)"
     medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"
   
   remediation_status:
+    "CORE-030": "✅ COMPLETE - Implementation-first validation protocol enforced"
     "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
     "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
+    "CORE-035": "✅ COMPLETE - Single canonical implementation enforced, 11 duplicate files deleted"

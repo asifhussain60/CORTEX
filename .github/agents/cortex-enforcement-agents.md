@@ -1,5 +1,7 @@
 # CORTEX Enforcement Agents
-**Version:** 1.0 | **Updated:** 2026-01-24 | **Role:** 3 Specialized Governance Enforcement Agents
+**Version:** 2.0 | **Updated:** 2026-01-25 | **Role:** 3 Specialized Governance Enforcement Agents
+
+**CORE Rules:** 31 rules (including CORE-030 Implementation Truth, CORE-035 Single Canonical)
 
 ---
 
