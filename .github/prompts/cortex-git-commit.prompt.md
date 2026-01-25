@@ -3,7 +3,7 @@
 
 ---
 
-## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)
+## ⚠️ CRITICAL: Response Header + Implementation Truth (TIER 0)
 
 **EVERY response MUST begin with:**
 ```markdown
@@ -12,6 +12,12 @@
 
 ---
 ```
+
+**GIT OPERATIONS WITH IMPLEMENTATION TRUTH (CORE-030):**
+1. **VERIFY CHANGES:** Use get_changed_files to check actual modifications
+2. **NO DOCUMENTATION-BASED COMMITS:** Only commit based on actual code changes
+3. **TEST ISOLATION SAFETY:** Don't commit test artifacts or contamination
+4. **ACCURATE MESSAGES:** Commit messages must reflect actual implementation changes
 
 ---
 

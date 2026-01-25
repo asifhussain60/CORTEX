@@ -116,10 +116,17 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 
 ---
 
-## 🤖 What Each Agent Looks For (ENHANCED v5.2)
+### 🤖 What Each Agent Looks For (ENHANCED v5.3)
 
-### 🔍 Agent 0: Implementation Truth Verification (TRUTH) — NEW v5.2
+### 🔍 Agent 0: Implementation Truth Verification (TRUTH) — ENHANCED v5.3
 **Question:** Do documentation claims match actual implementation?
+
+**MANDATORY PRE-CHECK (CORE-030 Enforcement):**
+Before ANY agent execution, Agent 0 MUST verify:
+1. **grep_search** or **read_file** evidence for all implementation claims
+2. **Test isolation** - no test data contaminating production registries
+3. **Singleton state** - clean DatabaseBackedRegistry instance
+4. **API accuracy** - actual method signatures vs documentation
 
 **Critical Checks (CORE-030 Enforcement):**
 - **Governance Claims vs Reality:** Verify CORE-035 "Single canonical" against duplicate files
@@ -139,6 +146,8 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 - File system scans for duplicate class names
 - Import analysis for conflicting paths
 - Governance rule files vs actual compliance
+- **Test isolation validation:** Check for test data contamination in production registries
+- **Singleton state verification:** Ensure clean instance states for DatabaseBackedRegistry
 
 **Finding Categories:**
 - **TRUTH-001:** Documentation-implementation mismatch (e.g., "Claims auto_wire_production=True default but code shows False")
@@ -146,6 +155,8 @@ Scans everything. Takes ~95 minutes. Best for periodic audits.
 - **TRUTH-003:** Missing implementation for claimed feature (e.g., "Claims .vscode/mcp.json exists but file missing")
 - **TRUTH-004:** False AC-PERMANENT-FIX claim (e.g., "AC-PERMANENT-FIX-005 claimed but no git commit found")
 - **TRUTH-005:** Governance rule violation (e.g., "CORE-035 marked COMPLETE but duplicates exist")
+- **TRUTH-006:** Test isolation contamination (e.g., "Test orchestrator 'orphan' contaminating production registry")
+- **TRUTH-007:** API documentation mismatch (e.g., "Prompt claims discover_features() but actual API uses recall()")
 
 **Example Finding:** "TRUTH-002: ConversationProtocol duplicate violation - found in cortex/core/orchestrator/ AND cortex/brain/core/orchestrator/ with different implementations. Tests import from both paths causing conflicts."
 

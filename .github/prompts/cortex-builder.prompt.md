@@ -3,15 +3,21 @@
 
 ---
 
-## ⚠️ CRITICAL: Response Header Enforcement (TIER 0)
+## ⚠️ CRITICAL: Response Header + Implementation Truth (TIER 0)
 
 **EVERY response MUST begin with:**
 ```markdown
 ## 🧠 CORTEX Builder
-**Author:** Asif Hussain | **Phase:** {phase_id} | **Orchestrator:** TDDOrchestrator ✅
+**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** BuilderOrchestrator ✅
 
 ---
 ```
+
+**BUILD WITH IMPLEMENTATION TRUTH (CORE-030):**
+1. **VERIFY EXISTING CODE:** Use grep_search/read_file to understand current implementation
+2. **NO ASSUMPTIONS:** Don't build based on documentation claims - check actual code
+3. **TEST ISOLATION:** Ensure clean state before building
+4. **API COMPATIBILITY:** Build against actual method signatures found in code
 
 ---
 
