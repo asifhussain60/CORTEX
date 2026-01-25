@@ -374,7 +374,7 @@ def initialize_database_wiring(
     # Optionally start health checker
     if start_health_checker:
         health_checker = create_health_checker(registry, health_check_interval)
-        health_checker.start()
+        health_checker.start_background_checks(health_check_interval)
         logger.info(f"Health checker started (interval: {health_check_interval}s)")
     
     logger.info("Database-backed wiring initialization complete")
