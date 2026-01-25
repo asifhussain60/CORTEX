@@ -42,6 +42,17 @@ from cortex.orchestrators.core.health_checker import (
     create_health_checker,
 )
 
+# Wiring initialization (23 orchestrators)
+from cortex.orchestrators.core.db_wiring_init import (
+    initialize_database_wiring,
+    register_all_orchestrators,
+    get_orchestrator_count_by_category,
+    ALL_ORCHESTRATORS,
+    CORE_ORCHESTRATORS,
+    DOMAIN_ORCHESTRATORS,
+    SUPPORT_ORCHESTRATORS,
+)
+
 # Legacy metadata registry (backward compatibility)
 from cortex.orchestrators.registry.orchestrator_registry import (
     OrchestratorMetadata,
@@ -66,6 +77,14 @@ __all__ = [
     # Health monitoring
     "OrchestratorHealthChecker",
     "create_health_checker",
+    # Wiring initialization
+    "initialize_database_wiring",
+    "register_all_orchestrators",
+    "get_orchestrator_count_by_category",
+    "ALL_ORCHESTRATORS",
+    "CORE_ORCHESTRATORS",
+    "DOMAIN_ORCHESTRATORS",
+    "SUPPORT_ORCHESTRATORS",
     # Legacy (backward compatibility)
     "OrchestratorMetadata",
     "DiscoveryEngine",
