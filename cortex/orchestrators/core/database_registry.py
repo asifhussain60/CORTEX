@@ -78,6 +78,10 @@ class OrchestratorConfig:
     routing_keywords: List[str] = field(default_factory=list)
     is_optional: bool = False
     version: str = "1.0.0"
+    # New fields for flexible wiring
+    init_args: Dict[str, Any] = field(default_factory=dict)  # Constructor arguments
+    is_utility: bool = False  # True if not a full IOrchestrator (no execute())
+    factory_function: Optional[str] = None  # Optional factory function name
     
 
 @dataclass
@@ -469,6 +473,11 @@ class DatabaseBackedRegistry:
         
         registered = 0
         
+        # Default init args for common orchestrators
+        # These come from the current working directory at runtime
+        import os
+        default_workspace = os.getcwd()
+        
         # WIRE-001: Core Orchestrators (6)
         core_orchestrators = [
             OrchestratorConfig(
@@ -478,7 +487,9 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=10,
                 capabilities=["stage_1_comprehension", "lens_protocol", "challenge_generation"],
-                routing_keywords=["understand", "analyze", "comprehend"]
+                routing_keywords=["understand", "analyze", "comprehend"],
+                init_args={"conversation_protocol": None},  # Optional protocol
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="intent_router",
@@ -497,7 +508,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=30,
                 capabilities=["test_driven_development", "red_green_refactor"],
-                routing_keywords=["test", "tdd", "implement"]
+                routing_keywords=["test", "tdd", "implement"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="workflow",
@@ -506,7 +518,9 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=40,
                 capabilities=["multi_step_workflows", "pipeline_execution"],
-                routing_keywords=["workflow", "pipeline", "sequence"]
+                routing_keywords=["workflow", "pipeline", "sequence"],
+                init_args={"workspace_root": default_workspace},
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="wrapped_tdd",
@@ -516,7 +530,8 @@ class DatabaseBackedRegistry:
                 priority=35,
                 dependencies=["tdd"],
                 capabilities=["tdd_with_governance", "rule_enforcement"],
-                routing_keywords=["governed_tdd", "safe_implement"]
+                routing_keywords=["governed_tdd", "safe_implement"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="bootstrap",
@@ -525,7 +540,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=5,
                 capabilities=["system_initialization", "startup"],
-                routing_keywords=["bootstrap", "initialize", "startup"]
+                routing_keywords=["bootstrap", "initialize", "startup"],
+                is_utility=True  # No execute() method
             ),
         ]
         
@@ -538,7 +554,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.DOMAIN,
                 priority=100,
                 capabilities=["code_refactoring", "pattern_application"],
-                routing_keywords=["refactor", "improve", "clean"]
+                routing_keywords=["refactor", "improve", "clean"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="planning",
@@ -547,7 +564,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.DOMAIN,
                 priority=110,
                 capabilities=["planning", "roadmap", "phase_management"],
-                routing_keywords=["plan", "roadmap", "phase"]
+                routing_keywords=["plan", "roadmap", "phase"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="domain",
@@ -556,7 +574,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.DOMAIN,
                 priority=120,
                 capabilities=["domain_operations", "business_logic"],
-                routing_keywords=["domain", "business"]
+                routing_keywords=["domain", "business"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="conversation",
@@ -565,7 +584,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.DOMAIN,
                 priority=130,
                 capabilities=["stateful_conversations", "multi_turn"],
-                routing_keywords=["conversation", "chat", "dialogue"]
+                routing_keywords=["conversation", "chat", "dialogue"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="selenium_playwright",
@@ -575,7 +595,8 @@ class DatabaseBackedRegistry:
                 priority=140,
                 is_optional=True,
                 capabilities=["test_migration", "browser_automation"],
-                routing_keywords=["selenium", "playwright", "browser"]
+                routing_keywords=["selenium", "playwright", "browser"],
+                is_utility=True  # No execute() method
             ),
         ]
         
@@ -587,8 +608,10 @@ class DatabaseBackedRegistry:
                 class_name="OnboardingOrchestrator",
                 category=OrchestratorCategory.SUPPORT,
                 priority=200,
+                is_optional=True,  # Has syntax error in source
                 capabilities=["user_onboarding", "guided_setup"],
-                routing_keywords=["onboard", "setup", "welcome"]
+                routing_keywords=["onboard", "setup", "welcome"],
+                is_utility=True
             ),
             OrchestratorConfig(
                 name="tool_discovery",
@@ -597,7 +620,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.SUPPORT,
                 priority=210,
                 capabilities=["capability_discovery", "tool_catalog"],
-                routing_keywords=["discover", "tools", "capabilities"]
+                routing_keywords=["discover", "tools", "capabilities"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="upgrade",
@@ -606,7 +630,9 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.SUPPORT,
                 priority=220,
                 capabilities=["version_upgrade", "migration"],
-                routing_keywords=["upgrade", "migrate", "version"]
+                routing_keywords=["upgrade", "migrate", "version"],
+                init_args={"repo_path": default_workspace},
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="rollback",
@@ -615,7 +641,9 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.SUPPORT,
                 priority=230,
                 capabilities=["failure_recovery", "rollback"],
-                routing_keywords=["rollback", "revert", "undo"]
+                routing_keywords=["rollback", "revert", "undo"],
+                init_args={"repo_path": default_workspace},
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="setup",
@@ -624,7 +652,9 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.SUPPORT,
                 priority=240,
                 capabilities=["environment_setup", "configuration"],
-                routing_keywords=["setup", "configure", "environment"]
+                routing_keywords=["setup", "configure", "environment"],
+                init_args={"workspace": default_workspace},
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="composed",
@@ -634,7 +664,8 @@ class DatabaseBackedRegistry:
                 priority=250,
                 is_optional=True,
                 capabilities=["orchestrator_composition", "chaining"],
-                routing_keywords=["compose", "chain", "combine"]
+                routing_keywords=["compose", "chain", "combine"],
+                is_utility=True
             ),
         ]
         
@@ -648,6 +679,7 @@ class DatabaseBackedRegistry:
                 priority=1,
                 capabilities=["coordination", "delegation", "aggregation"],
                 routing_keywords=["master", "main", "coordinate"]
+                # Has execute() - true orchestrator
             ),
             OrchestratorConfig(
                 name="dor_approval",
@@ -656,7 +688,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=15,
                 capabilities=["approval_gate", "user_confirmation"],
-                routing_keywords=["approve", "confirm", "dor"]
+                routing_keywords=["approve", "confirm", "dor"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="lens_synthesis",
@@ -665,7 +698,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=12,
                 capabilities=["lens_protocol", "synthesis", "comprehension"],
-                routing_keywords=["lens", "synthesize", "comprehend"]
+                routing_keywords=["lens", "synthesize", "comprehend"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="documentation",
@@ -676,6 +710,7 @@ class DatabaseBackedRegistry:
                 is_optional=True,
                 capabilities=["documentation_generation", "doc_updates"],
                 routing_keywords=["document", "docs", "readme"]
+                # Has execute() - true orchestrator
             ),
             OrchestratorConfig(
                 name="stage_25_gate",
@@ -684,7 +719,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.CORE,
                 priority=25,
                 capabilities=["stage_validation", "gate_checking"],
-                routing_keywords=["gate", "validate", "stage"]
+                routing_keywords=["gate", "validate", "stage"],
+                is_utility=True  # No execute() method
             ),
             OrchestratorConfig(
                 name="autowiring",
@@ -693,7 +729,8 @@ class DatabaseBackedRegistry:
                 category=OrchestratorCategory.INFRASTRUCTURE,
                 priority=2,
                 capabilities=["autowiring", "dependency_injection"],
-                routing_keywords=["wire", "autowire", "inject"]
+                routing_keywords=["wire", "autowire", "inject"],
+                is_utility=True  # No execute() method
             ),
         ]
         
@@ -815,12 +852,17 @@ class DatabaseBackedRegistry:
             module = importlib.import_module(config.module_path)
             orchestrator_class = getattr(module, config.class_name)
             
-            # Create instance
-            instance = orchestrator_class()
+            # Create instance with init_args if provided
+            if config.init_args:
+                instance = orchestrator_class(**config.init_args)
+            else:
+                instance = orchestrator_class()
             
-            # Validate interface
-            if not hasattr(instance, 'execute'):
-                raise TypeError(f"{name}: orchestrator must have execute() method")
+            # Validate interface (skip for utilities)
+            if not config.is_utility and not hasattr(instance, 'execute'):
+                # Mark as utility automatically if no execute method
+                logger.debug(f"{name}: No execute() method, treating as utility")
+                config.is_utility = True
             
             # Store instance
             self._instances[name] = instance
@@ -833,17 +875,19 @@ class DatabaseBackedRegistry:
             self._log_wiring_attempt(name, True, duration_ms, None, session_id)
             
             # Update status in registry
-            self._update_orchestrator_status(name, "WIRED")
+            status = "WIRED" if not config.is_utility else "WIRED_UTILITY"
+            self._update_orchestrator_status(name, status)
             
             result = WiringResult(
                 success=True,
                 orchestrator_name=name,
                 timestamp=datetime.now(timezone.utc),
-                duration_ms=duration_ms
+                duration_ms=duration_ms,
+                details={"is_utility": config.is_utility}
             )
             self._wiring_results.append(result)
             
-            logger.debug(f"Wired {name} ({duration_ms:.1f}ms)")
+            logger.debug(f"Wired {name} ({duration_ms:.1f}ms){' [utility]' if config.is_utility else ''}")
             return result
             
         except Exception as e:
