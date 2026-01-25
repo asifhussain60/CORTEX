@@ -78,6 +78,18 @@ except ImportError:
     # Fallback if module not accessible
     DoRApprovalGate = None
 
+# AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
+# Stage 1 comprehension with LENS-powered challenge generation
+try:
+    from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+    from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
+    from cortex.brain.core.orchestrator.round_context import RoundContext
+except ImportError:
+    # Fallback if module not accessible
+    InteractionOrchestrator = None
+    ConversationProtocol = None
+    RoundContext = None
+
 # AC-TRANSFORM-001-WIRE-001: Import Core Orchestrator Wiring
 # Registers 6 core orchestrators: Interaction, Intent Router, TDD, Workflow, Wrapped TDD, Bootstrap
 try:
@@ -298,6 +310,34 @@ class MasterOrchestrator(IOrchestrator):
         self.current_operation: Optional[str] = None
         self.current_phase: Optional[str] = None
         
+        # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Initialize InteractionOrchestrator
+        # Stage 1 comprehension with challenge-driven interaction
+        # Import here to avoid circular import issues
+        self.interaction_orchestrator_with_challenges: Optional[Any] = None
+        try:
+            from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator as InteractionOrch
+            from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol as ConvProtocol
+            
+            # Create ConversationProtocol with self as orchestrator
+            protocol = ConvProtocol(orchestrator=self)
+            self.interaction_orchestrator_with_challenges = InteractionOrch(
+                conversation_protocol=protocol,
+                enable_challenges=True  # AC-PERMANENT-FIX-006: Always enabled
+            )
+            self.logger.log_operation_complete(
+                ac_id="AC-PERMANENT-FIX-006",
+                operation="INTERACTION_ORCHESTRATOR_INIT",
+                success=True,
+                details={"enable_challenges": True, "stage": "Stage_1_comprehension"}
+            )
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PERMANENT-FIX-006",
+                operation="INTERACTION_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": str(e)}
+            )
+        
         # AC-ENH-002-01: Initialize ResponseHeaderInjector for header wrapping
         try:
             config_manager = HeaderConfigurationManager.get_instance()
@@ -321,25 +361,36 @@ class MasterOrchestrator(IOrchestrator):
             # Graceful degradation: continue without header injection
             self.header_injector = None
         
-        # AC-REM-011-01: Initialize stage orchestrators for E2E workflow
-        # Try to initialize Interaction Orchestrator for Stage 1
-        try:
-            from cortex.orchestrators.core.master_orchestrator_stage_1 import MasterOrchestrationStage1
-            self.interaction_orchestrator = MasterOrchestrationStage1()
+        # AC-REM-011-01 + AC-PERMANENT-FIX-006: Initialize stage orchestrators for E2E workflow
+        # Prefer challenge-enabled InteractionOrchestrator if successfully initialized
+        if self.interaction_orchestrator_with_challenges:
+            # Use challenge-enabled version as primary Stage 1 orchestrator
+            self.interaction_orchestrator = self.interaction_orchestrator_with_challenges
             self.logger.log_operation_complete(
-                ac_id="AC-REM-011-01",
-                operation="STAGE_1_INIT",
+                ac_id="AC-PERMANENT-FIX-006",
+                operation="STAGE_1_CHALLENGE_SYSTEM_ACTIVE",
                 success=True,
-                details={"stage": "Interaction Orchestrator initialized"}
+                details={"stage": "InteractionOrchestrator with challenge system"}
             )
-        except Exception as e:
-            # Log but don't fail - graceful degradation
-            self.logger.log_operation_complete(
-                ac_id="AC-REM-011-01",
-                operation="STAGE_1_INIT",
-                success=False,
-                details={"error": str(e)}
-            )
+        elif not self.interaction_orchestrator:
+            # Fallback to MasterOrchestrationStage1 if challenge system not available
+            try:
+                from cortex.orchestrators.core.master_orchestrator_stage_1 import MasterOrchestrationStage1
+                self.interaction_orchestrator = MasterOrchestrationStage1()
+                self.logger.log_operation_complete(
+                    ac_id="AC-REM-011-01",
+                    operation="STAGE_1_FALLBACK_INIT",
+                    success=True,
+                    details={"stage": "MasterOrchestrationStage1 (fallback, no challenge system)"}
+                )
+            except Exception as e:
+                # Log but don't fail - graceful degradation
+                self.logger.log_operation_complete(
+                    ac_id="AC-REM-011-01",
+                    operation="STAGE_1_INIT",
+                    success=False,
+                    details={"error": str(e)}
+                )
         
         # Try to initialize Intent Router for Stage 2
         try:
@@ -882,6 +933,92 @@ class MasterOrchestrator(IOrchestrator):
             return Ok(tools)
         except Exception as e:
             return Err(f"Failed to get MCP tools: {str(e)}")
+    
+    def process_user_request(
+        self,
+        user_request: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Result[Dict[str, Any]]:
+        """
+        Process user request through challenge-driven interaction (Stage 1).
+        
+        AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Challenge-driven workflow
+        
+        Stages:
+        1. Stage 1 (InteractionOrchestrator): LENS → Challenge → User Choice
+        2. Stage 2 (IntentRouter): Intent classification
+        3. Stage 3 (GovernanceRegistry): Compliance validation
+        4. Stage 4 (Domain orchestrators): Execution
+        
+        Args:
+            user_request: Natural language user request
+            context: Optional context dictionary
+            
+        Returns:
+            Result with challenge (if disagreement) or execution result
+        """
+        try:
+            # AC-PERMANENT-FIX-006: Stage 1 - Challenge-driven comprehension
+            if not self.interaction_orchestrator:
+                # Fallback: skip challenge system if not initialized
+                self.logger.log_operation_start(
+                    ac_id="AC-PERMANENT-FIX-006-FALLBACK",
+                    operation="SKIP_CHALLENGE_SYSTEM",
+                    details={"reason": "interaction_orchestrator_not_initialized"}
+                )
+                # Process directly via execute_operation
+                return self.execute_operation(
+                    operation_name="process_request",
+                    parameters={"request": user_request, "context": context or {}}
+                )
+            
+            # Build RoundContext for InteractionOrchestrator
+            if RoundContext:
+                round_context = RoundContext(
+                    user_message=user_request,
+                    conversation_history=[],
+                    metadata=context or {}
+                )
+                
+                # Execute with challenge system
+                result = self.interaction_orchestrator.execute_turn_with_challenge(
+                    user_request=user_request,
+                    round_context=round_context,
+                    pattern_id=None  # Let challenge engine decide
+                )
+                
+                if result.is_ok():
+                    output = result.unwrap()
+                    
+                    # If challenge returned, pass back to user
+                    if output.get("type") == "challenge":
+                        self.logger.log_operation_complete(
+                            ac_id="AC-CHALLENGE-SYSTEM-002",
+                            operation="CHALLENGE_GENERATED",
+                            success=True,
+                            details={
+                                "disagreement_type": output.get("challenge", {}).disagreement_type.value if output.get("challenge") else "unknown",
+                                "requires_user_choice": True
+                            }
+                        )
+                        return Ok(output)
+                    
+                    # No challenge, proceed to Stage 2+ execution
+                    return self.execute_operation(
+                        operation_name="process_request",
+                        parameters={"request": user_request, "context": context or {}}
+                    )
+                else:
+                    return result
+            else:
+                # Fallback if RoundContext not available
+                return self.execute_operation(
+                    operation_name="process_request",
+                    parameters={"request": user_request, "context": context or {}}
+                )
+                
+        except Exception as e:
+            return Err(f"Failed to process user request: {str(e)}")
     
     def execute_operation(
         self,
@@ -1933,6 +2070,34 @@ class MasterOrchestrator(IOrchestrator):
             return Ok(entries)
         except Exception as e:
             return Err(f"Failed to query business knowledge: {str(e)}")
+    
+    @mcp_tool(
+        name="cortex_process_request",
+        description="Process user request through CORTEX challenge-driven workflow (Stage 1: LENS → Challenge, Stage 2-4: Execution)"
+    )
+    def mcp_process_user_request(
+        self,
+        user_request: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        MCP tool wrapper for process_user_request.
+        
+        AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Challenge-driven interaction
+        
+        Args:
+            user_request: Natural language user request
+            context: Optional context dictionary
+            
+        Returns:
+            Dictionary with challenge (if disagreement) or execution result
+        """
+        result = self.process_user_request(user_request, context or {})
+        
+        if result.is_ok():
+            return {"status": "success", "data": result.unwrap()}
+        else:
+            return {"status": "error", "error": result.error}
     
     @mcp_tool(
         name="get_relevant_business_knowledge",
