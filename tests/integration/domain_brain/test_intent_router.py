@@ -1,10 +1,10 @@
-"""Tests for Intent Router semantic intent recognition and routing."""
+"""Tests for NLP Handler Router semantic intent recognition and routing."""
 
 import pytest
 from typing import List, Dict, Any
 from cortex.brain.domain_brain.intent_parser import NLPIntentParser, IntentEntity
 from cortex.brain.domain_brain.intent_classifier import IntentClassifier, IntentCategory
-from cortex.brain.domain_brain.intent_router import IntentRouter, IntentResult
+from cortex.brain.domain_brain.nlp_handler_router import IntentRouter, IntentResult
 from cortex.brain.domain_brain.intent_router_interface import IIntentRouter
 
 

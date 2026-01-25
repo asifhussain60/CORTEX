@@ -6,7 +6,7 @@ Author: CORTEX Framework
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, Any, Optional, List
-from cortex.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
 from cortex.domain_brain.api import DomainBrainAPI, Domain, Entity
 from cortex.domain_brain.models import EntityType
 
