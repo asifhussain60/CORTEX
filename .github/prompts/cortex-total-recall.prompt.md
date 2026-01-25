@@ -1,6 +1,6 @@
 # CORTEX Total Recall - Production System Discovery & AC-PERMANENT-FIX Enforcement
 
-**Version:** 5.0 | **Updated:** 2026-01-24 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + AC-PERMANENT-FIX AWARE
+**Version:** 6.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + SELF-VALIDATING
 
 **AC-PERMANENT-FIX Commits Tracked:** 4 permanent fixes implemented  
 - AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
@@ -8,7 +8,73 @@
 - AC-PERMANENT-FIX-003: Executive summary of orchestrator unwiring fix  
 - AC-PERMANENT-FIX-004: Complete transformation status - Fix verified and ready
 
+---
 
+## ⚡ PRE-EXECUTION VALIDATION (RUN FIRST - MANDATORY)
+
+**ALWAYS run this before executing any Total Recall steps:**
+
+```python
+from cortex.tools.git_history_analyzer import GitHistoryAnalyzer
+
+# 1. Check for recent governance/wiring changes
+analyzer = GitHistoryAnalyzer('.')
+analysis = analyzer.analyze_since_last_pull(hours_back=24)
+
+print("=" * 60)
+print("🧠 CORTEX Pre-Execution Validation")
+print("=" * 60)
+
+# 2. Report governance state
+if analysis.governance_changes:
+    print(f"⚠️  GOVERNANCE CHANGED: {analysis.rules_before} → {analysis.rules_after} rules")
+    print(f"   Deleted: {analysis.deleted_rules}")
+else:
+    print(f"✅ Governance stable: {analysis.rules_after} rules active")
+
+# 3. Report orchestrator state
+if analysis.orchestrator_changes:
+    print(f"⚠️  ORCHESTRATOR CHANGES: {analysis.wired_before} → {analysis.wired_after} wired")
+else:
+    print(f"✅ Orchestrators stable: {analysis.wired_after}/23 wired")
+
+# 4. Validate AC-PERMANENT-FIX integrity
+fixes = analyzer.validate_ac_permanent_fixes()
+all_active = all(fixes.values())
+print(f"\n🔧 AC-PERMANENT-FIX Status:")
+for fix_id, status in fixes.items():
+    symbol = '✅' if status else '❌'
+    print(f"  {symbol} {fix_id}: {'ACTIVE' if status else 'REGRESSED'}")
+
+# 5. Determine if revalidation needed
+if analysis.requires_revalidation:
+    print("\n🚨 REVALIDATION REQUIRED - Proceed with full Total Recall validation")
+elif not all_active:
+    print("\n🚨 AC-PERMANENT-FIX REGRESSION DETECTED - ABORT!")
+    exit(1)
+else:
+    print("\n✅ System state verified - Safe to proceed")
+
+print("=" * 60)
+```
+
+**Expected Output (Healthy System):**
+```
+============================================================
+🧠 CORTEX Pre-Execution Validation
+============================================================
+✅ Governance stable: 21 rules active
+✅ Orchestrators stable: 18/23 wired
+
+🔧 AC-PERMANENT-FIX Status:
+  ✅ AC-PERMANENT-FIX-001: ACTIVE
+  ✅ AC-PERMANENT-FIX-002: ACTIVE
+  ✅ AC-PERMANENT-FIX-003: ACTIVE
+  ✅ AC-PERMANENT-FIX-004: ACTIVE
+
+✅ System state verified - Safe to proceed
+============================================================
+```
 
 ------
 
@@ -1265,7 +1331,20 @@ if result.confidence >= 0.7:
 | **RuleEvaluator** | `cortex.brain.core.rule_evaluator.RuleEvaluator` | Integrated rule evaluation pipeline |
 | **BehavioralBoundaryRules** | `cortex_brain.tier2.hallucination_prevention.BehavioralBoundaryRules` | Hallucination prevention boundaries |
 
-**29 TIER 0 Rules Active:**
+**TIER 0 Rules Active (Dynamic Count):**
+```python
+# ALWAYS run this Python snippet to get current rule count:
+import re
+content = open('cortex_brain/tier0/governance/core-rules.yaml').read()
+rules = sorted(set(re.findall(r'rule_id: (CORE-\d+)', content)))
+print(f"✅ {len(rules)} TIER 0 Rules Active")
+print("Critical Rules:")
+for rule in rules[:10]:  # Show first 10
+    print(f"  - {rule}")
+if len(rules) > 10:
+    print(f"  ... and {len(rules)-10} more (see core-rules.yaml)")
+```
+
 ```yaml
 Location: cortex_brain/tier0/governance/core-rules.yaml
 Critical Rules:
@@ -1296,7 +1375,7 @@ if violations:
 
 | Tier | Location | Purpose | Rule Count | Override |
 |------|----------|---------|------------|----------|
-| **Tier 0 (SKULL)** | `cortex_brain/tier0/governance/core-rules.yaml` | Immutable core rules (CORTEX operational boundaries) | 29 | NEVER |
+| **Tier 0 (SKULL)** | `cortex_brain/tier0/governance/core-rules.yaml` | Immutable core rules (CORTEX operational boundaries) | **DYNAMIC** (run Python above) | NEVER |
 | **Tier 1 (SPINE)** | `cortex_brain/tier1/governance/*.yaml` | Domain-specific rules (security, operations, development, data, compliance) | 47 | By Tier 0 only |
 | **Tier 2 (ORGANS)** | `cortex_brain/tier2/governance/*.yaml` | Context-aware rules (production, sensitive-data, high-risk-ops, audit-critical) | 38 | By Tier 0-1 |
 | **Tier 3 (FUNCTIONS)** | `cortex_brain/tier3/knowledge/*.yaml` | Knowledge governance, domain registry, business profiles | 13 | By Tier 0-2 |
@@ -2413,7 +2492,31 @@ git stash list  # Should show your stashed work
 # 1. Check git status
 git status
 
-# 2. Verify domain knowledge YAMLs are intact
+# 2. Run git history analysis (NEW - CRITICAL POST-SYNC STEP)
+echo "🔍 Analyzing git changes since last pull..."
+python -c "
+from cortex.tools.git_history_analyzer import GitHistoryAnalyzer
+
+analyzer = GitHistoryAnalyzer('.')
+analysis = analyzer.analyze_since_last_pull(hours_back=24)
+
+if analysis.governance_changes:
+    print(f'⚠️  GOVERNANCE CHANGED: {analysis.rules_before} → {analysis.rules_after} rules')
+    print(f'   Deleted rules: {analysis.deleted_rules}')
+
+if analysis.orchestrator_changes:
+    print(f'⚠️  ORCHESTRATOR CHANGES: {analysis.wired_before} → {analysis.wired_after} wired')
+
+if analysis.ac_permanent_fix_commits:
+    print(f'✅ AC-PERMANENT-FIX commits: {len(analysis.ac_permanent_fix_commits)}')
+
+if analysis.requires_revalidation:
+    print('🚨 REVALIDATION REQUIRED - Run full Total Recall validation')
+else:
+    print('✅ No critical changes detected')
+"
+
+# 3. Verify domain knowledge YAMLs are intact
 echo "Verifying domain knowledge YAMLs..."
 for yaml in cortex_brain/tier{1,2,3}/**/*.yaml; do
     if [ -f "$yaml" ]; then
@@ -2423,7 +2526,23 @@ for yaml in cortex_brain/tier{1,2,3}/**/*.yaml; do
     fi
 done
 
-# 3. Compare with backup to ensure no loss
+# 4. Validate AC-PERMANENT-FIX integrity (NEW - CRITICAL)
+python -c "
+from cortex.tools.git_history_analyzer import GitHistoryAnalyzer
+
+analyzer = GitHistoryAnalyzer('.')
+fixes = analyzer.validate_ac_permanent_fixes()
+
+for fix_id, status in fixes.items():
+    symbol = '✅' if status else '❌'
+    print(f'{symbol} {fix_id}: {"ACTIVE" if status else "REGRESSED"}')
+
+if not all(fixes.values()):
+    print('🚨 AC-PERMANENT-FIX REGRESSION DETECTED - ABORT!')
+    exit(1)
+"
+
+# 5. Compare with backup to ensure no loss
 BACKUP_DIR=$(ls -dt _backups/pre-sync-* | head -1)
 echo "Comparing with backup: $BACKUP_DIR"
 
