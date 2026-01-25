@@ -1,5 +1,7 @@
 # CORTEX Total Recall - Issue Identification & Auto-Fix Agent
-**Version:** 5.0 | **Updated:** 2026-01-24 | **Role:** Detect → Diagnose → Fix (Fast)
+**Version:** 6.0 | **Updated:** 2026-01-25 | **Role:** Detect → Diagnose → Fix (Fast)
+
+**AC-PERMANENT-FIX Status:** 8 fixes active (validates on every scan)
 
 ---
 
@@ -40,10 +42,12 @@ grep "except:" cortex/**/*.py           # Bare except clauses
 2. Branch divergence (merge conflicts, ahead/behind status)
 3. Test failures (pytest results)
 4. Import errors (missing dependencies)
-5. Governance violations (CORE rules)
+5. Governance violations (CORE rules including CORE-030, CORE-035)
 6. Orphaned files (unreferenced modules)
 7. Registry mismatches (wiring inconsistencies)
 8. Type hints missing (CORE-011 violations)
+9. Duplicate implementations (CORE-035 violations) ⭐ NEW
+10. Documentation-code mismatches (CORE-030 violations) ⭐ NEW
 ```
 
 ### Phase 3: Automated Fix (With Approval Gate)
