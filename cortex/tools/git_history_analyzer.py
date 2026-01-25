@@ -227,6 +227,38 @@ class GitHistoryAnalyzer:
         # AC-PERMANENT-FIX-004: Transformation complete
         validations['AC-PERMANENT-FIX-004'] = all(validations.values())
         
+        # AC-PERMANENT-FIX-005: CORE-030 rule active (implementation truth enforcement)
+        core_rules = self.repo_path / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
+        if core_rules.exists():
+            try:
+                content = core_rules.read_text()
+                validations['AC-PERMANENT-FIX-005'] = 'CORE-030' in content and 'Implementation Truth Enforcement' in content
+            except Exception:
+                validations['AC-PERMANENT-FIX-005'] = False
+        else:
+            validations['AC-PERMANENT-FIX-005'] = False
+        
+        # AC-PERMANENT-FIX-006: Challenge system active in InteractionOrchestrator
+        interaction_orch = self.repo_path / "cortex" / "orchestrators" / "core" / "interaction_orchestrator.py"
+        challenge_engine = self.repo_path / "cortex" / "orchestrators" / "core" / "challenge_engine.py"
+        if interaction_orch.exists() and challenge_engine.exists():
+            try:
+                orch_content = interaction_orch.read_text()
+                # Check for challenge system integration
+                has_challenge_import = 'from cortex.orchestrators.core.challenge_engine import' in orch_content
+                has_challenge_method = 'execute_turn_with_challenge' in orch_content
+                has_enable_flag = 'enable_challenges' in orch_content
+                validations['AC-PERMANENT-FIX-006'] = all([
+                    has_challenge_import,
+                    has_challenge_method,
+                    has_enable_flag,
+                    challenge_engine.exists()
+                ])
+            except Exception:
+                validations['AC-PERMANENT-FIX-006'] = False
+        else:
+            validations['AC-PERMANENT-FIX-006'] = False
+        
         return validations
 
 
