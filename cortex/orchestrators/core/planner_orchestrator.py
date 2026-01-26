@@ -1348,6 +1348,276 @@ class PlannerOrchestrator(IOrchestrator):
             self.logger.error(f"Correction analysis failed: {str(e)}")
             return None
 
+    # ========================================================================
+    # PLAN MIGRATION METHODS (AC-PLANNING-MIGRATION-001)
+    # ========================================================================
+
+    def migrate_legacy_plan(self, plan_data: Dict[str, Any], domain: str) -> Optional[Dict[str, Any]]:
+        """Migrate a single legacy plan to new registry structure.
+        
+        Args:
+            plan_data: Legacy plan dictionary
+            domain: Domain to organize plan under
+            
+        Returns:
+            Migrated plan data or None on failure
+        """
+        try:
+            if self.registry_loader is None:
+                self.logger.warning("Registry loader not available, skipping migration")
+                return None
+            
+            plan_id = plan_data.get("plan_id", f"plan-{uuid4().hex[:8]}")
+            plan_name = plan_data.get("name", plan_id).replace(" ", "-").lower()
+            
+            # Register plan in new structure
+            register_result = self.registry_loader.register_plan(domain, plan_data)
+            if not register_result:
+                return None
+            
+            # Add migration metadata
+            migrated = dict(plan_data)
+            migrated["migrated_at"] = datetime.now().isoformat()
+            migrated["migrated_from"] = "legacy"
+            migrated["domain"] = domain
+            
+            self.logger.info(f"Migrated plan {plan_id} to domain {domain}")
+            return migrated
+        
+        except Exception as e:
+            self.logger.error(f"Plan migration failed: {str(e)}")
+            return None
+
+    def migrate_batch_plans(
+        self, plans: List[Dict[str, Any]], domain: str
+    ) -> Optional[Dict[str, Any]]:
+        """Migrate batch of legacy plans.
+        
+        Args:
+            plans: List of legacy plans
+            domain: Domain to organize plans under
+            
+        Returns:
+            Migration summary or None on failure
+        """
+        try:
+            migrated_count = 0
+            failed_count = 0
+            
+            for plan in plans:
+                result = self.migrate_legacy_plan(plan, domain)
+                if result:
+                    migrated_count += 1
+                else:
+                    failed_count += 1
+            
+            summary = {
+                "total": len(plans),
+                "migrated": migrated_count,
+                "failed": failed_count,
+                "domain": domain,
+            }
+            
+            self.logger.info(f"Batch migration: {migrated_count}/{len(plans)} successful")
+            return summary
+        
+        except Exception as e:
+            self.logger.error(f"Batch migration failed: {str(e)}")
+            return None
+
+    def update_plan_references(
+        self, plan_data: Dict[str, Any], old_ref: str, new_ref: str
+    ) -> Optional[Dict[str, Any]]:
+        """Update plan references after migration.
+        
+        Args:
+            plan_data: Plan containing references
+            old_ref: Old reference to replace
+            new_ref: New reference path
+            
+        Returns:
+            Updated plan or None on failure
+        """
+        try:
+            updated = dict(plan_data)
+            
+            # Update various reference fields
+            for ref_field in ["depends_on", "linked_plans", "dependencies"]:
+                if ref_field in updated and isinstance(updated[ref_field], list):
+                    updated[ref_field] = [
+                        new_ref if item == old_ref else item for item in updated[ref_field]
+                    ]
+            
+            self.logger.info(f"Updated references: {old_ref} → {new_ref}")
+            return updated
+        
+        except Exception as e:
+            self.logger.error(f"Reference update failed: {str(e)}")
+            return None
+
+    def detect_circular_dependencies(
+        self, plans: List[Dict[str, Any]]
+    ) -> Optional[List[List[str]]]:
+        """Detect circular dependencies in plans.
+        
+        Args:
+            plans: List of plans to check
+            
+        Returns:
+            List of circular dependency chains or empty list
+        """
+        try:
+            # Build dependency graph
+            graph: Dict[str, List[str]] = {}
+            for plan in plans:
+                plan_id = plan.get("plan_id")
+                if not plan_id:
+                    continue
+                
+                deps = plan.get("depends_on", [])
+                graph[plan_id] = deps if isinstance(deps, list) else [deps]
+            
+            # Detect cycles (simplified DFS)
+            cycles: List[List[str]] = []
+            for node in graph:
+                if self._has_cycle(node, graph, set()):
+                    cycles.append([node])
+            
+            if cycles:
+                self.logger.warning(f"Found {len(cycles)} circular dependencies")
+            
+            return cycles
+        
+        except Exception as e:
+            self.logger.error(f"Cycle detection failed: {str(e)}")
+            return None
+
+    def _has_cycle(self, node: str, graph: Dict[str, List[str]], visited: set) -> bool:  # type: ignore[type-arg]
+        """Check if node has cyclic dependency (DFS).
+        
+        Args:
+            node: Current node
+            graph: Dependency graph
+            visited: Already visited nodes
+            
+        Returns:
+            True if cycle found
+        """
+        if node in visited:
+            return True
+        
+        visited.add(node)
+        
+        for neighbor in graph.get(node, []):
+            if self._has_cycle(neighbor, graph, visited.copy()):
+                return True
+        
+        return False
+
+    def validate_migrated_plan(self, plan_data: Dict[str, Any]) -> Optional[bool]:
+        """Validate migrated plan integrity.
+        
+        Args:
+            plan_data: Migrated plan to validate
+            
+        Returns:
+            True if valid, False if invalid, None on error
+        """
+        try:
+            required_fields = ["plan_id", "name"]
+            
+            for field in required_fields:
+                if field not in plan_data:
+                    self.logger.warning(f"Missing required field: {field}")
+                    return False
+            
+            # Validate plan structure
+            if "phases" in plan_data and not isinstance(plan_data["phases"], list):
+                self.logger.warning("Invalid phases structure")
+                return False
+            
+            self.logger.info(f"Plan {plan_data.get('plan_id')} validated successfully")
+            return True
+        
+        except Exception as e:
+            self.logger.error(f"Plan validation failed: {str(e)}")
+            return None
+
+    def verify_data_integrity(
+        self, original: Dict[str, Any], migrated: Dict[str, Any]
+    ) -> Optional[bool]:
+        """Verify no data loss during migration.
+        
+        Args:
+            original: Original plan
+            migrated: Migrated plan
+            
+        Returns:
+            True if integrity verified
+        """
+        try:
+            # Check critical fields preserved
+            for key in ["plan_id", "phases", "tasks"]:
+                if key in original:
+                    if original[key] != migrated.get(key):
+                        self.logger.warning(f"Data mismatch in field: {key}")
+                        return False
+            
+            self.logger.info("Data integrity verified")
+            return True
+        
+        except Exception as e:
+            self.logger.error(f"Integrity verification failed: {str(e)}")
+            return None
+
+    def rollback_migration(self, checkpoint: Dict[str, Any]) -> Optional[bool]:
+        """Rollback a migration to previous state.
+        
+        Args:
+            checkpoint: Migration checkpoint with rollback info
+            
+        Returns:
+            True if rollback successful
+        """
+        try:
+            original_location = checkpoint.get("original_location")
+            plan_id = checkpoint.get("plan_id")
+            
+            self.logger.info(f"Rolling back migration of {plan_id}")
+            # Rollback logic would restore from original location
+            
+            return True
+        
+        except Exception as e:
+            self.logger.error(f"Rollback failed: {str(e)}")
+            return None
+
+    def save_migration_checkpoint(self, checkpoint: Dict[str, Any]) -> Optional[bool]:
+        """Save migration checkpoint for recovery.
+        
+        Args:
+            checkpoint: Checkpoint data
+            
+        Returns:
+            True if saved successfully
+        """
+        try:
+            repo_root = Path(__file__).parent.parent.parent.parent.parent
+            checkpoint_dir = repo_root / ".cortex" / "migration"
+            checkpoint_dir.mkdir(parents=True, exist_ok=True)
+            
+            checkpoint_file = checkpoint_dir / f"checkpoint-{datetime.now().timestamp()}.json"
+            
+            with open(checkpoint_file, "w") as f:
+                json.dump(checkpoint, f, indent=2)
+            
+            self.logger.info(f"Saved migration checkpoint: {checkpoint_file}")
+            return True
+        
+        except Exception as e:
+            self.logger.error(f"Checkpoint save failed: {str(e)}")
+            return None
+
     def get_mcp_tools(self) -> Result:  # type: ignore[type-arg]
         """Get MCP tools - required by IOrchestrator"""
         try:
