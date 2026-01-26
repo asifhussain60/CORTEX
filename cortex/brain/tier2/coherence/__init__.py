@@ -19,14 +19,9 @@ import sys
 from typing import Dict, List, Set, Tuple, Optional, Any
 from pathlib import Path
 from enum import Enum
+from cortex.models.canonical_enums import CoherenceType
 
 
-class CoherenceType(Enum):
-    """Types of coherence."""
-    IMPORT = "import"
-    TYPE = "type"
-    STATE = "state"
-    CONFIGURATION = "configuration"
 
 
 class CoherenceIssue:

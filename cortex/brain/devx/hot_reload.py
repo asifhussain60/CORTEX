@@ -62,11 +62,6 @@ class ReloadState(Enum):
     PAUSED = "PAUSED"
 
 
-class ChangeType(Enum):
-    """Type of file change detected."""
-    CREATED = "CREATED"
-    MODIFIED = "MODIFIED"
-    DELETED = "DELETED"
 
 
 @dataclass
@@ -478,6 +473,7 @@ class HotReloadOrchestrator:
                         try:
                             # Test if serializable
                             import json
+from cortex.models.canonical_enums import ChangeType
                             json.dumps(value, default=str)
                             state[key] = value
                         except (TypeError, ValueError):

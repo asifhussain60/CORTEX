@@ -226,16 +226,16 @@ def main():
     root_dir = "/Users/asifhussain/PROJECTS/CORTEX"
     
     print("=" * 80)
-    print("PHASE 2.2: ENUM IMPORT REPLACEMENT (DRY RUN MODE)")
+    print("PHASE 2.2: ENUM IMPORT REPLACEMENT (EXECUTION MODE)")
     print("=" * 80)
     print()
     
-    # Run in dry-run mode first
-    results = process_codebase(root_dir, dry_run=True)
+    # Execute enum replacement
+    results = process_codebase(root_dir, dry_run=False)
     
     print()
     print("=" * 80)
-    print("DRY RUN RESULTS:")
+    print("EXECUTION RESULTS:")
     print("=" * 80)
     print()
     print(f"Files processed:        {results['total_files_processed']}")
@@ -264,14 +264,12 @@ def main():
     print()
     print("=" * 80)
     print()
-    print("✅ DRY RUN COMPLETE")
+    print("✅ EXECUTION COMPLETE")
     print()
-    print("This would modify:")
+    print("Successfully modified:")
     print(f"  - {results['files_modified']} Python files")
-    print(f"  - Replace {results['total_enums_replaced']} enum definitions")
-    print(f"  - Add canonical imports to {results['files_modified']} files")
-    print()
-    print("To apply changes, set dry_run=False and re-run")
+    print(f"  - Replaced {results['total_enums_replaced']} enum definitions")
+    print(f"  - Added canonical imports to {results['files_modified']} files")
     print()
 
 

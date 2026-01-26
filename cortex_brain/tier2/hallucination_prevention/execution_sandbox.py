@@ -250,15 +250,6 @@ class SandboxExecution:
 
 from enum import Enum
 
-class ExecutionMode(Enum):
-    """Execution modes for sandbox."""
-    SANDBOX = "sandbox"
-    SAFE = "safe"
-    ISOLATED = "isolated"
-    RESTRICTED = "restricted"
-    UNRESTRICTED = "unrestricted"
-    DRY_RUN = "dry_run"
-    ROLLBACK = "rollback"
 
 
 class ExecutionState(Enum):
@@ -271,6 +262,7 @@ class ExecutionState(Enum):
 
 
 from dataclasses import dataclass, field
+from cortex.models.canonical_enums import ExecutionMode
 
 @dataclass
 class SandboxSnapshot:

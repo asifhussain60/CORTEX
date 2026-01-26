@@ -7,18 +7,9 @@ import re
 from enum import Enum
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
+from cortex.models.canonical_enums import IntentType
 
 
-class IntentType(str, Enum):
-    """Standard intent types."""
-    IMPLEMENT = "IMPLEMENT"
-    FIX = "FIX"
-    REFACTOR = "REFACTOR"
-    QUERY = "QUERY"
-    ANALYZE = "ANALYZE"
-    VALIDATE = "VALIDATE"
-    MIGRATE = "MIGRATE"
-    UNKNOWN = "UNKNOWN"
 
 
 @dataclass

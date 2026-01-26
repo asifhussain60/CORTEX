@@ -32,16 +32,6 @@ from enum import Enum
 import re
 
 
-class ExecutionStrategy(Enum):
-    """Test execution strategies."""
-    SMOKE = ("smoke", "Tests baseline health only (<30s)")
-    FAST = ("fast", "Unit + essential tests (~2-3min on 4 cores)")
-    STANDARD = ("standard", "Default comprehensive (~5-8min on 4 cores)")
-    COMPREHENSIVE = ("comprehensive", "All tests including e2e (~10-15min on 4 cores)")
-    SERIAL = ("serial", "Debug mode - serial execution")
-    AC_ONLY = ("ac", "Audit trail & compliance verification")
-    MCP_ONLY = ("mcp", "Protocol compliance tests")
-    GOVERNANCE = ("governance", "Governance & compliance checks")
 
 
 @dataclass
@@ -263,6 +253,7 @@ class TestOptimizer:
 def main():
     """Main entry point."""
     import argparse
+from cortex.models.canonical_enums import ExecutionStrategy
 
     parser = argparse.ArgumentParser(
         description="CORTEX Test Optimization Suite",

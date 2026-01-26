@@ -7,13 +7,9 @@ CLI tools and validation for governance enforcement.
 
 from typing import Dict, List, Any
 from enum import Enum
+from cortex.models.canonical_enums import ValidationLevel
 
 
-class ValidationLevel(Enum):
-    """Validation severity levels."""
-    ERROR = "error"
-    WARNING = "warning"
-    INFO = "info"
 
 
 class GovernanceValidator:

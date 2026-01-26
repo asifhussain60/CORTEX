@@ -19,17 +19,9 @@ import json
 import csv
 import io
 import gzip
+from cortex.models.canonical_enums import AuditAction
 
 
-class AuditAction(str, Enum):
-    """Audit action types."""
-
-    START = "START"
-    EXECUTE = "EXECUTE"
-    COMPLETE = "COMPLETE"
-    ERROR = "ERROR"
-    TRIGGER = "TRIGGER"
-    RECORD = "RECORD"
 
 
 class EnforcementMode(str, Enum):

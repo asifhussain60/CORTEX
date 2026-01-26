@@ -17,6 +17,7 @@ from enum import Enum
 import hashlib
 from datetime import datetime
 import json
+from cortex.models.canonical_enums import ChallengeType, ResponseType
 
 
 # ================================================================================
@@ -51,12 +52,6 @@ class FormattingProfile(str, Enum):
     RICH = "rich"
 
 
-class ResponseType(str, Enum):
-    """Response template type (from response_templates)."""
-    SUCCESS = "success"
-    ERROR = "error"
-    INFORMATIONAL = "informational"
-    WARNING = "warning"
 
 
 class VariableType(str, Enum):
@@ -68,12 +63,6 @@ class VariableType(str, Enum):
     OPTIONAL = "optional"
 
 
-class ChallengeType(str, Enum):
-    """Challenge type (from turn_response_with_challenges)."""
-    QUESTION = "question"
-    EXERCISE = "exercise"
-    SCENARIO = "scenario"
-    INTERACTIVE = "interactive"
 
 
 class QualityMetricType(str, Enum):

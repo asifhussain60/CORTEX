@@ -42,19 +42,9 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 import hashlib
 from enum import Enum
+from cortex.models.canonical_enums import AuditEventType
 
 
-class AuditEventType(Enum):
-    """Types of audit events."""
-
-    SESSION_STARTED = "session_started"
-    TURN_COMPLETED = "turn_completed"
-    CLARITY_MEASURED = "clarity_measured"
-    DOR_ACHIEVED = "dor_achieved"
-    GIT_ANALYSIS_RECORDED = "git_analysis_recorded"
-    USER_RESPONSE_RECORDED = "user_response_recorded"
-    APPROVAL_UNLOCKED = "approval_unlocked"
-    SESSION_COMPLETED = "session_completed"
 
 
 @dataclass

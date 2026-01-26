@@ -11,16 +11,9 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from enum import Enum
 from datetime import datetime
 import ast
+from cortex.models.canonical_enums import CoherenceType
 
 
-class CoherenceType(Enum):
-    """Types of coherence checks."""
-
-    SEMANTIC = "semantic"
-    SYNTACTIC = "syntactic"
-    PRAGMATIC = "pragmatic"
-    NARRATIVE = "narrative"
-    LOGICAL = "logical"
 
 
 class CoherenceIssue(Enum):

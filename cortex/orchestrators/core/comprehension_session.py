@@ -16,22 +16,11 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from cortex.models.canonical_enums import ApprovalStatus, BrainTier
 
 
-class ApprovalStatus(Enum):
-    """Status of comprehension in approval process."""
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    NEEDS_CLARIFICATION = "needs_clarification"
 
 
-class BrainTier(Enum):
-    """Target brain tier for comprehension storage."""
-    TIER0 = "tier0"
-    TIER1 = "tier1"
-    TIER2 = "tier2"
-    TIER3 = "tier3"
 
 
 @dataclass

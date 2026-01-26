@@ -25,13 +25,9 @@ from enum import Enum
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from cortex.models.canonical_enums import CircuitBreakerState
 
 
-class CircuitBreakerState(Enum):
-    """States for circuit breaker pattern."""
-    CLOSED = "closed"  # Normal operation
-    OPEN = "open"  # Failures detected, block requests
-    HALF_OPEN = "half_open"  # Testing if service recovered
 
 
 @dataclass

@@ -14,13 +14,9 @@ import hashlib
 import threading
 import time
 import fnmatch
+from cortex.models.canonical_enums import ChangeType
 
 
-class ChangeType(Enum):
-    """File change types."""
-    CREATED = "created"
-    MODIFIED = "modified"
-    DELETED = "deleted"
 
 
 @dataclass

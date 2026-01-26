@@ -22,15 +22,9 @@ from cortex.orchestrators.core.intent_router_factory import (
     get_intent_router_factory,
 )
 from cortex.core.result import Ok
+from cortex.models.canonical_enums import ApprovalStatus
 
 
-class ApprovalStatus(Enum):
-    """Status of user approval for intent execution."""
-    
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    MODIFIED = "modified"
 
 
 @dataclass

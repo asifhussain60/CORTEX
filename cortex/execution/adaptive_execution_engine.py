@@ -10,13 +10,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Dict, Any
 import statistics
+from cortex.models.canonical_enums import ExecutionStrategy
 
 
-class ExecutionStrategy(Enum):
-    """Execution strategy options."""
-    SEQUENTIAL = "sequential"
-    PARALLEL = "parallel"
-    ASYNC = "async"
 
 
 @dataclass

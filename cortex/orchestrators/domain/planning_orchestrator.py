@@ -41,6 +41,7 @@ from cortex.orchestrators.core.database_registry import (
     OrchestratorCategory,
 )
 from cortex.orchestrators.domain.planning_registry_loader import (
+from cortex.models.canonical_enums import ChallengeType
     PlanningRegistryLoader,
 )
 
@@ -52,13 +53,6 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 
-class ChallengeType(Enum):
-    """Types of strategic challenges."""
-    
-    GOVERNANCE = "governance"  # Violates CORE rules
-    ALTERNATIVE_PATH = "alternative_path"  # Better solution exists
-    SCOPE_CREEP = "scope_creep"  # Scope expanded unexpectedly
-    RISK_MISMATCH = "risk_mismatch"  # High impact + low confidence
 
 
 class ExecutionGateType(Enum):

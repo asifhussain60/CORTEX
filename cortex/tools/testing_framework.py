@@ -16,7 +16,6 @@ Per TIER 0 governance (response-header-enforcement.yaml v1.0), all test reports
 should be wrapped with ResponseHeaderEnforcer.wrap_response() before returning
 to final user/orchestrator to ensure consistent header formatting.
 
-Copyright © 2025 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field
@@ -64,12 +63,6 @@ class ResponseHeaderEnforcer:
         return header + response
 
 
-class TestStatus(Enum):
-    """Status of a test."""
-    PASSED = auto()
-    FAILED = auto()
-    SKIPPED = auto()
-    ERROR = auto()
 
 
 @dataclass
@@ -798,6 +791,7 @@ def create_validation_test(
     """
     def setup():
         from cortex.tools.template_validator import TemplateValidator
+from cortex.models.canonical_enums import TestStatus
         v = validator or TemplateValidator()
         return v.validate(template)
     

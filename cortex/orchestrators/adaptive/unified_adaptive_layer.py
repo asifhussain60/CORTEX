@@ -28,17 +28,13 @@ from datetime import datetime
 import logging
 import threading
 from statistics import mean, stdev
+from cortex.models.canonical_enums import ExecutionMode
 
 
 # ============================================================================
 # Enums and Data Models
 # ============================================================================
 
-class ExecutionMode(Enum):
-    """Execution mode enum for adaptive performance tuning."""
-    FAST = "fast"
-    BALANCED = "balanced"
-    THOROUGH = "thorough"
 
 
 class StrategyType(Enum):

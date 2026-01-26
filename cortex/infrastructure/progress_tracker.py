@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.database import DatabaseManager
+from cortex.models.canonical_enums import AlertPriority
 
 
 class BlockerSeverity(Enum):
@@ -45,12 +46,6 @@ class BlockerCategory(Enum):
     OTHER = auto()
 
 
-class AlertPriority(Enum):
-    """Alert priority levels."""
-    URGENT = auto()
-    HIGH = auto()
-    MEDIUM = auto()
-    LOW = auto()
 
 
 @dataclass

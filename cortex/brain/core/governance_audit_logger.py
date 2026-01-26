@@ -27,21 +27,12 @@ from enum import Enum
 from dataclasses import dataclass, asdict
 
 from cortex.brain.core.governance_database import GovernanceDatabaseManager, AuditAction
+from cortex.models.canonical_enums import AuditEventType
 
 
 logger = logging.getLogger(__name__)
 
 
-class AuditEventType(Enum):
-    """Types of events that can be audited."""
-    RULE_CREATED = "RULE_CREATED"
-    RULE_UPDATED = "RULE_UPDATED"
-    RULE_DELETED = "RULE_DELETED"
-    RULE_ACTIVATED = "RULE_ACTIVATED"
-    RULE_DEACTIVATED = "RULE_DEACTIVATED"
-    RULE_OVERRIDDEN = "RULE_OVERRIDDEN"
-    RULE_RESTORED = "RULE_RESTORED"
-    AUDIT_LOG_QUERIED = "AUDIT_LOG_QUERIED"
 
 
 @dataclass

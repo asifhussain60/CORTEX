@@ -11,55 +11,9 @@ from dataclasses import dataclass, field, asdict
 from enum import Enum
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from cortex.models.canonical_enums import ContinuationReason
 
 
-class ContinuationReason(Enum):
-    """
-    Enumeration of reasons why an orchestrator turn ended and whether to continue.
-    
-    Attributes:
-        IMPLICIT_NEXT_OPERATION: Orchestrator knows what to do next without user input
-        USER_PROVIDED_FOLLOWUP: User provided follow-up input; continue processing
-        AUTO_REFINEMENT_LOOP: Auto-refinement loop (e.g., fixing hallucinations)
-        COMPLETION: Goal achieved; user satisfied; stop processing
-        USER_REJECTION: User explicitly rejected result; stop and show message
-        TOKEN_LIMIT: Approaching token budget; stop to preserve tokens
-        GOVERNANCE_HALT: Governance rule violation detected; stop immediately
-        MAX_ROUNDS_REACHED: Safety limit on iterations reached; stop
-        ERROR_UNRECOVERABLE: Unrecoverable error occurred; stop processing
-        INTERACTION_REQUIRED: Waiting for user approval or input; can resume later
-    """
-
-    IMPLICIT_NEXT_OPERATION = "IMPLICIT_NEXT_OPERATION"
-    USER_PROVIDED_FOLLOWUP = "USER_PROVIDED_FOLLOWUP"
-    AUTO_REFINEMENT_LOOP = "AUTO_REFINEMENT_LOOP"
-    COMPLETION = "COMPLETION"
-    USER_REJECTION = "USER_REJECTION"
-    TOKEN_LIMIT = "TOKEN_LIMIT"
-    GOVERNANCE_HALT = "GOVERNANCE_HALT"
-    MAX_ROUNDS_REACHED = "MAX_ROUNDS_REACHED"
-    ERROR_UNRECOVERABLE = "ERROR_UNRECOVERABLE"
-    INTERACTION_REQUIRED = "INTERACTION_REQUIRED"
-
-    @classmethod
-    def from_string(cls, value: str) -> "ContinuationReason":
-        """
-        Create ContinuationReason from string (case-insensitive).
-        
-        Args:
-            value: String representation (e.g., "COMPLETION", "completion")
-        
-        Returns:
-            ContinuationReason enum value
-        
-        Raises:
-            ValueError: If string doesn't match any reason
-        """
-        value_upper = value.upper()
-        for reason in cls:
-            if reason.value == value_upper:
-                return reason
-        raise ValueError(f"Unknown continuation reason: {value}")
 
 
 @dataclass(frozen=True)

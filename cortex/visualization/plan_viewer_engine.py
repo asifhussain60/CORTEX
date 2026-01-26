@@ -21,20 +21,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from dataclasses import dataclass, asdict
 from enum import Enum
+from cortex.models.canonical_enums import PhaseStatus
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Type Definitions
 # ═══════════════════════════════════════════════════════════════════════════
 
-class PhaseStatus(str, Enum):
-    """Phase execution status states."""
-    QUEUED = "queued"
-    EXECUTING = "executing"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    ROLLED_BACK = "rolled_back"
 
 
 class PlanStatus(str, Enum):

@@ -42,6 +42,7 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 from functools import lru_cache
 import logging
+from cortex.models.canonical_enums import AuditAction
 
 logger = logging.getLogger(__name__)
 
@@ -53,13 +54,6 @@ class RuleTier(Enum):
     TIER_2 = 2  # Team-level, multi-tenant
 
 
-class AuditAction(Enum):
-    """Audit log action types."""
-    CREATE = "CREATE"
-    UPDATE = "UPDATE"
-    DELETE = "DELETE"
-    OVERRIDE = "OVERRIDE"
-    RESTORE = "RESTORE"
 
 
 @dataclass

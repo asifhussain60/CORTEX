@@ -27,14 +27,9 @@ from enum import Enum, auto
 from typing import Any, Dict, Optional, List, Callable
 
 from cortex.brain.core.result import Result, Ok, Err
+from cortex.models.canonical_enums import CheckpointStatus
 
 
-class CheckpointStatus(Enum):
-    """Checkpoint lifecycle status."""
-    ACTIVE = auto()      # Available for resumption
-    COMMITTED = auto()   # Operation completed, can be cleaned
-    EXPIRED = auto()     # Exceeded retention time
-    ROLLED_BACK = auto() # Failed, needs cleanup
 
 
 class OperationState(Enum):

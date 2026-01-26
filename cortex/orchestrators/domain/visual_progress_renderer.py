@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, AsyncIterator, Callable, Dict, List, Optional
+from cortex.models.canonical_enums import MessageLevel
 
 logger = logging.getLogger(__name__)
 
@@ -37,13 +38,6 @@ class ProgressBarStyle(Enum):
     FANCY = "fancy"  # ▓▓▓▓░░░░░░
 
 
-class MessageLevel(Enum):
-    """Message severity levels"""
-
-    INFO = "info"
-    SUCCESS = "success"
-    WARNING = "warning"
-    ERROR = "error"
 
 
 @dataclass
