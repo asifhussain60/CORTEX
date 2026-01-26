@@ -1106,6 +1106,248 @@ class PlannerOrchestrator(IOrchestrator):
         except Exception:
             return []
 
+    # ========================================================================
+    # BOOTSTRAP INTEGRATION METHODS (AC-PLANNING-BOOTSTRAP-001)
+    # ========================================================================
+
+    def bootstrap_initialize(self) -> Result:  # type: ignore[type-arg]
+        """Initialize autonomous execution subsystem on startup.
+        
+        Initializes:
+        - Autonomous execution engine
+        - Pause/resume manager  
+        - Registry discovery
+        - Checkpoint restoration
+        
+        Returns:
+            Result: Ok(None) if successful, Err(message) otherwise
+        """
+        try:
+            # Import autonomous execution components (lazy import for efficiency)
+            from cortex.orchestrators.domain.autonomous_execution_engine import (
+                AutonomousExecutionEngine,
+            )
+            from cortex.orchestrators.domain.plan_pause_manager import PlanPauseManager
+
+            # Initialize components (idempotent)
+            if not hasattr(self, 'execution_engine'):
+                self.execution_engine = AutonomousExecutionEngine()
+                self.logger.info("Autonomous execution engine initialized")
+
+            if not hasattr(self, 'pause_manager'):
+                self.pause_manager = PlanPauseManager()
+                self.logger.info("Pause/resume manager initialized")
+
+            # Initialize execution state tracking
+            if not hasattr(self, 'execution_state'):
+                self.execution_state = {
+                    "plan_id": None,
+                    "current_phase": 0,
+                    "phases_completed": [],
+                    "timestamp": datetime.now().isoformat(),
+                }
+                self.logger.info("Execution state initialized")
+
+            # Initialize plans cache
+            if not hasattr(self, '_plans_by_status'):
+                self._plans_by_status = {
+                    status: [] for status in [
+                        "temp", "active", "executing", "paused", "completed", "failed"
+                    ]
+                }
+
+            # Discover plans and restore checkpoint
+            self._discover_plans_from_registry()
+            self.bootstrap_restore_checkpoint()
+
+            self.logger.info("Bootstrap initialization complete")
+            return Ok(None)
+
+        except Exception as e:
+            msg = f"Bootstrap initialization failed: {str(e)}"
+            self.logger.error(msg)
+            return Err(msg)
+
+    def bootstrap_restore_checkpoint(self) -> Result:  # type: ignore[type-arg]
+        """Restore execution checkpoint state from persistence store.
+        
+        Loads checkpoint from `.cortex/execution_state.json` if available.
+        
+        Returns:
+            Result: Ok(checkpoint_data) if loaded, Ok(None) if none exists
+        """
+        try:
+            # Define checkpoint file location
+            repo_root = Path(__file__).parent.parent.parent.parent.parent
+            checkpoint_file = repo_root / ".cortex" / "execution_state.json"
+
+            if checkpoint_file.exists():
+                with open(checkpoint_file, "r") as f:
+                    checkpoint_data = json.load(f)
+
+                # Restore checkpoint state
+                self.execution_state = checkpoint_data
+                self.logger.info(f"Restored checkpoint for plan {checkpoint_data.get('plan_id')}")
+                return Ok(checkpoint_data)
+            else:
+                self.logger.debug("No checkpoint file found for restoration")
+                return Ok(None)
+
+        except Exception as e:
+            msg = f"Checkpoint restoration failed: {str(e)}"
+            self.logger.warning(msg)
+            return Ok(None)  # Non-fatal, continue initialization
+
+    def _discover_plans_from_registry(self) -> None:
+        """Discover plans from registry during bootstrap.
+        
+        Scans registry and categorizes plans by status for quick access.
+        Optimized for large registries with early returns and caching.
+        """
+        try:
+            if self.registry_loader is None:
+                self.logger.warning("Registry loader not initialized, skipping discovery")
+                return
+
+            # Skip if already initialized
+            if hasattr(self, '_discovery_complete') and self._discovery_complete:
+                return
+
+            planning_path = self.registry_loader.planning_path / "planning"
+            if not planning_path.exists():
+                self.logger.debug("Planning path not found, skipping discovery")
+                self._discovery_complete = True
+                return
+
+            # Scan registry for plans (optimized with early initialization)
+            for plan_file in planning_path.glob("*.yaml"):
+                try:
+                    with open(plan_file, "r") as f:
+                        plan_data = yaml.safe_load(f)
+
+                    if not plan_data:
+                        continue
+
+                    status = plan_data.get("status", "unknown")
+                    if status in self._plans_by_status:
+                        self._plans_by_status[status].append({
+                            "plan_id": plan_data.get("plan_id"),
+                            "file": str(plan_file),
+                        })
+
+                except Exception as e:
+                    self.logger.warning(f"Failed to read plan {plan_file}: {str(e)}")
+
+            self._discovery_complete = True
+            self.logger.info(f"Plan discovery complete: discovered plans in all status categories")
+
+        except Exception as e:
+            self.logger.warning(f"Plan discovery failed: {str(e)}")
+            self._discovery_complete = True  # Mark as complete even on error to avoid retry loops
+
+    def get_incomplete_plans(self) -> List[Dict[str, Any]]:
+        """Get list of incomplete plans (executing or paused).
+        
+        Returns:
+            List[Dict]: List of incomplete plan records
+        """
+        if not hasattr(self, '_plans_by_status'):
+            return []
+
+        incomplete = []
+        for status in ["executing", "paused"]:
+            incomplete.extend(self._plans_by_status.get(status, []))
+
+        return incomplete
+
+    def get_paused_plans(self) -> List[Dict[str, Any]]:
+        """Get list of paused plans.
+        
+        Returns:
+            List[Dict]: List of paused plan records
+        """
+        if not hasattr(self, '_plans_by_status'):
+            return []
+
+        return self._plans_by_status.get("paused", [])
+
+    def get_plans_by_status(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all plans organized by status.
+        
+        Returns:
+            Dict: Plans grouped by status
+        """
+        if not hasattr(self, '_plans_by_status'):
+            return {}
+
+        return self._plans_by_status
+
+    def resume_paused_plan(self, plan_id: str) -> Optional[Result]:  # type: ignore[type-arg]
+        """Resume a paused plan.
+        
+        Args:
+            plan_id: ID of plan to resume
+            
+        Returns:
+            Result: Ok if resumed, Err if failed, None if plan not found
+        """
+        try:
+            # Find paused plan in registry
+            if not hasattr(self, '_plans_by_status'):
+                return None
+
+            paused_plans = self._plans_by_status.get("paused", [])
+            matching_plan = next((p for p in paused_plans if p["plan_id"] == plan_id), None)
+
+            if not matching_plan:
+                return None
+
+            # Load plan from file
+            plan_file = Path(matching_plan["file"])
+            with open(plan_file, "r") as f:
+                plan_data = yaml.safe_load(f)
+
+            # Resume execution
+            if self.execution_engine:
+                checkpoint = plan_data.get("pause_checkpoint", {})
+                result = self.execution_engine.resume_execution(
+                    plan_data.get("plan_id"),
+                    checkpoint.get("phase_num", 0),
+                )
+                return result
+
+            return Ok(None)
+
+        except Exception as e:
+            return Err(f"Resume failed: {str(e)}")
+
+    def bootstrap_analyze_corrections(
+        self, paused_plan_data: Dict[str, Any]
+    ) -> Optional[Dict[str, Any]]:
+        """Analyze user corrections using LENS protocol.
+        
+        Args:
+            paused_plan_data: Plan data with user correction
+            
+        Returns:
+            Dict: LENS analysis result or None
+        """
+        try:
+            if not self.pause_manager:
+                return None
+
+            user_correction = paused_plan_data.get("user_correction")
+            if not user_correction:
+                return None
+
+            # Analyze correction with LENS
+            analysis = self.pause_manager.analyze_user_corrections(user_correction)
+            return analysis
+
+        except Exception as e:
+            self.logger.error(f"Correction analysis failed: {str(e)}")
+            return None
+
     def get_mcp_tools(self) -> Result:  # type: ignore[type-arg]
         """Get MCP tools - required by IOrchestrator"""
         try:
