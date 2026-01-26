@@ -570,6 +570,120 @@ rules:
         immediate: "Resolve duplicate implementations before proceeding"
         long_term: "Implement continuous duplicate detection in CI/CD"
       audit_event: "AC-PERMANENT-FIX-007"
+  
+  # --------------------------------------------------------------------------
+  # CORE-038: File Placement Policy (TIER 0 - IMMUTABLE)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-038
+    category: architecture_integrity
+    severity: blocked
+    name: File Placement Policy
+    description: |
+      All files in CORTEX repository MUST be stored in appropriate subfolders.
+      NO files are permitted in root directories of major folders.
+      Uses intelligent kebab-case naming convention.
+    
+    forbidden_patterns:
+      - "Root-level files (reports/my-file.md)"
+      - "Root-level docs (docs/file.md)"
+      - "Root-level cortex modules (cortex/module.py)"
+      - "Root-level brain files (cortex_brain/file.py)"
+    
+    required_patterns:
+      - "Subfolders mandatory: docs/{subfolder}/file.md"
+      - "Reports organized: reports/{subfolder}/file.md"
+      - "Code organized: cortex/{module}/file.py"
+      - "Brain organized: cortex_brain/{tier}/{domain}/file.py"
+    
+    allowed_root_files:
+      - "README.md, .gitignore, .gitattributes"
+      - "requirements.txt, pytest.ini, pyproject.toml"
+      - "cortex-config.yaml, cortex-impl-map.yaml"
+      - "mkdocs.yml, pyrightconfig.json, setup.py"
+    
+    naming_convention: "kebab-case (lowercase, hyphens, max 25 chars total)"
+    
+    examples:
+      valid:
+        - "cortex-vacuum-exec.py (20 chars)"
+        - "phase-15-deliverables.yaml"
+        - "governance-cache-mgr.py"
+      
+      invalid:
+        - "Planning Orchestrator.md (spaces)"
+        - "Planning_Orchestrator.md (underscores)"
+        - "PlanningOrchestrator.md (camelCase)"
+    
+    implementation:
+      validation_script: "scripts/validate-file-placement.py"
+      enforcement_point: "Pre-commit hook"
+      audit_event: "FILE_PLACEMENT_VALIDATED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-039: MD File Generation Prohibition (TIER 0 - IMMUTABLE)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-039
+    category: response_formatting
+    severity: blocked
+    name: MD File Generation Prohibition
+    description: |
+      Eliminate automatic MD file generation at phase end.
+      Only MD files explicitly requested by user are permitted.
+    
+    scope:
+      applies_to:
+        - "All orchestrators"
+        - "Phase completion flows"
+        - "Autonomous executors"
+        - "Analysis tools"
+      
+      exception:
+        - "MD files explicitly created by user request"
+        - "User command: /doc {component}"
+        - "Explicit prompt text: 'Generate documentation for X'"
+    
+    allowed_patterns:
+      - "User-explicit documentation (user_requested=True)"
+      - "MD files in docs/ folder (pre-existing, user-requested)"
+      - "YAML data files (always allowed)"
+    
+    forbidden_patterns:
+      - "Phase-end MD generation (auto-blocked)"
+      - "Autonomous executor MD reports (auto-blocked)"
+      - "Tool-driven report generation (auto-blocked)"
+      - "End-of-session MD output (auto-blocked)"
+      - "*.md files written without user request"
+    
+    blocked_files:
+      - "reports/phase-tracking/phase-*-completion.md"
+      - "reports/session-summary-*.md"
+      - "reports/analysis/*.md (auto-generated)"
+      - "reports/*-report.md (unless user-requested)"
+    
+    allowed_files:
+      - "docs/*/filename.md (user-requested)"
+      - "reports/*.yaml (data files always OK)"
+      - "Any .md in docs/ folder"
+    
+    enforcement:
+      runtime_mechanism: "Monkey-patch Path.write_text() for .md files"
+      test_suite: "cortex/tests/test_md_generation_blocker.py (16 tests)"
+      test_status: "✅ 16/16 PASSING"
+      detection_scope:
+        - "Phase completion handlers"
+        - "Autonomous execution engines"
+        - "Documentation pipelines"
+        - "Tool report generators"
+        - "Session completion handlers"
+    
+    implementation:
+      blocking_class: "CORE039Violation (detailed error messages)"
+      context_manager: "UserRequestContext (for user-requested docs)"
+      test_coverage: "Phase completion, autonomous execution, tools, pipelines, orchestration, mechanisms, static-detection, integration"
+      audit_event: "MD_FILE_GENERATION_BLOCKED"
+      severity_on_bypass: "blocked"
+
   # --------------------------------------------------------------------------
   - rule_id: AC-PERMANENT-FIX-006
     category: architectural_enforcement
