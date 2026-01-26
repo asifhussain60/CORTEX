@@ -1745,6 +1745,126 @@ class MasterOrchestrator(IOrchestrator):
                     }
                 )
                 
+                # ════════════════════════════════════════════════════════════════════════
+                # AC-FR-WIRING-001: STAGE 1 - Interaction Orchestrator (Comprehension)
+                # ════════════════════════════════════════════════════════════════════════
+                # Wire interaction_orchestrator for Stage 1 comprehension with challenges
+                stage1_comprehension_result = None
+                stage1_challenges = None
+                stage1_user_choice = None
+                
+                try:
+                    if self.interaction_orchestrator_with_challenges:
+                        self.logger.log_operation_start(
+                            ac_id="AC-FR-WIRING-001-STAGE-1",
+                            operation="INTERACTION_COMPREHENSION",
+                            details={
+                                "turn_number": self._turn_number,
+                                "operation": operation,
+                                "context_type": type(context).__name__
+                            }
+                        )
+                        
+                        # Stage 1: Call interaction orchestrator with challenges enabled
+                        stage1_result = self.interaction_orchestrator_with_challenges.execute_turn_with_challenge(
+                            user_input=operation,
+                            context=context,
+                            turn_number=self._turn_number
+                        )
+                        
+                        # Extract comprehension result and any challenges
+                        if hasattr(stage1_result, 'is_ok') and stage1_result.is_ok():
+                            stage1_comprehension_result = stage1_result.unwrap()
+                            stage1_challenges = stage1_comprehension_result.get("challenges", [])
+                            stage1_user_choice = stage1_comprehension_result.get("user_choice", None)
+                        else:
+                            stage1_comprehension_result = stage1_result
+                        
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE-1",
+                            operation="INTERACTION_COMPREHENSION",
+                            success=True,
+                            details={
+                                "turn_number": self._turn_number,
+                                "challenges_generated": len(stage1_challenges) if stage1_challenges else 0,
+                                "user_choice": stage1_user_choice
+                            }
+                        )
+                except Exception as e:
+                    # Log but don't fail - Stage 1 is enhancement, not blocking
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE-1",
+                        operation="INTERACTION_COMPREHENSION",
+                        success=False,
+                        details={"error": f"Stage 1 interaction failed: {str(e)}"}
+                    )
+                
+                # ════════════════════════════════════════════════════════════════════════
+                # AC-FR-WIRING-002: STAGE 2 - Intent Router (Intent Verification)
+                # ════════════════════════════════════════════════════════════════════════
+                # Wire intent_router for Stage 2 intent verification and classification
+                classified_intent = operation
+                intent_confidence = 1.0
+                intent_metadata = {}
+                
+                try:
+                    if self.intent_router or get_intent_router_factory:
+                        # Get or create intent router
+                        if not self.intent_router and get_intent_router_factory:
+                            intent_router_factory = get_intent_router_factory()
+                            self.intent_router = intent_router_factory.create_intent_router()
+                        
+                        if self.intent_router:
+                            self.logger.log_operation_start(
+                                ac_id="AC-FR-WIRING-002-STAGE-2",
+                                operation="INTENT_VERIFICATION",
+                                details={
+                                    "turn_number": self._turn_number,
+                                    "operation": operation
+                                }
+                            )
+                            
+                            # Stage 2: Call intent router for verification and classification
+                            intent_verification_result = self.intent_router.verify_intent(
+                                operation=operation,
+                                context=context,
+                                stage1_result=stage1_comprehension_result
+                            )
+                            
+                            # Extract classified intent, confidence, and metadata
+                            if hasattr(intent_verification_result, 'is_ok') and intent_verification_result.is_ok():
+                                intent_data = intent_verification_result.unwrap()
+                                classified_intent = intent_data.get("intent_type", operation)
+                                intent_confidence = intent_data.get("confidence", 1.0)
+                                intent_metadata = intent_data.get("metadata", {})
+                            else:
+                                classified_intent = operation
+                                intent_confidence = 1.0
+                            
+                            self.logger.log_operation_complete(
+                                ac_id="AC-FR-WIRING-002-STAGE-2",
+                                operation="INTENT_VERIFICATION",
+                                success=True,
+                                details={
+                                    "turn_number": self._turn_number,
+                                    "classified_intent": classified_intent,
+                                    "confidence": intent_confidence,
+                                    "matched": classified_intent == operation
+                                }
+                            )
+                except Exception as e:
+                    # Log but don't fail - Stage 2 is enhancement, not blocking
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-002-STAGE-2",
+                        operation="INTENT_VERIFICATION",
+                        success=False,
+                        details={"error": f"Stage 2 intent verification failed: {str(e)}"}
+                    )
+                
+                # ════════════════════════════════════════════════════════════════════════
+                # Stage 3: Knowledge Synthesis (existing, now with Stage 1+2 context)
+                # ════════════════════════════════════════════════════════════════════════
+                
                 # AC-KN-002-01: Evaluate technical knowledge for request composition
                 knowledge_context = self._evaluate_knowledge_for_request(
                     operation=operation,
@@ -1832,12 +1952,25 @@ class MasterOrchestrator(IOrchestrator):
                 # Aggregate results with knowledge context (AC-KN-002-01, AC-KN-003-01)
                 aggregated = {
                     "operation": operation,
+                    "classified_intent": classified_intent,  # AC-FR-WIRING-002: Stage 2 result
                     "timestamp": datetime.now().isoformat(),
                     "turn_number": self._turn_number,
                     "orchestrators_involved": len(domains_to_use),
                     "results": results,
                     "errors": errors if errors else None,
                     "transaction_id": txn.transaction_id,
+                    # AC-FR-WIRING-001: Include Stage 1 interaction/comprehension results
+                    "stage1_comprehension": {
+                        "challenges": stage1_challenges if stage1_challenges else [],
+                        "user_choice": stage1_user_choice,
+                        "raw_result": stage1_comprehension_result
+                    },
+                    # AC-FR-WIRING-002: Include Stage 2 intent verification results
+                    "stage2_intent": {
+                        "classified_intent": classified_intent,
+                        "confidence": intent_confidence,
+                        "metadata": intent_metadata
+                    },
                     # AC-KN-002-01: Include technical knowledge context in composite request
                     "knowledge_context": knowledge_context,
                     # AC-KN-003-01: Include business knowledge context in composite request
@@ -1862,6 +1995,16 @@ class MasterOrchestrator(IOrchestrator):
                         "turn_number": self._turn_number,
                         "governance_enforced": True,
                         "transaction_id": txn.transaction_id,
+                        # AC-FR-WIRING-001: Stage 1 comprehension metrics
+                        "stage1_enabled": self.interaction_orchestrator_with_challenges is not None,
+                        "stage1_challenges_generated": len(stage1_challenges) if stage1_challenges else 0,
+                        "stage1_user_choice": stage1_user_choice,
+                        # AC-FR-WIRING-002: Stage 2 intent verification metrics
+                        "stage2_enabled": self.intent_router is not None,
+                        "stage2_classified_intent": classified_intent,
+                        "stage2_intent_confidence": intent_confidence,
+                        "stage2_intent_matched": classified_intent == operation,
+                        # Knowledge synthesis metrics
                         "knowledge_evaluated": knowledge_context.get("knowledge_evaluated", False),
                         "knowledge_entries_used": knowledge_context.get("entries_count", 0),
                         "business_knowledge_evaluated": business_knowledge_context.get("business_knowledge_evaluated", False),
