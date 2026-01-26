@@ -762,6 +762,13 @@ class DatabaseBackedRegistry:
         """
         Wire all registered orchestrators in deterministic order.
         
+        ✅ PERMANENT WIRING: Updates database immediately after each success
+        
+        This ensures:
+        - Wiring state persists across process restarts
+        - Pre-commit validator sees correct state
+        - No "constant unwiring" issue
+        
         Args:
             fail_fast: If True, stop on first failure. If False, continue.
             
@@ -794,7 +801,10 @@ class DatabaseBackedRegistry:
             
             result = self.wire_single(name, session_id)
             
-            if not result.success:
+            if result.success:
+                # ✅ PERMANENT WIRING: Update database immediately after success
+                self._persist_wiring_to_database(name, session_id)
+            else:
                 failures.append(f"{name}: {result.error}")
                 
                 if fail_fast and not config.is_optional:
@@ -818,7 +828,7 @@ class DatabaseBackedRegistry:
             # Create snapshot
             self._create_snapshot(wiring_duration, session_id)
             
-            logger.info(f"✅ All orchestrators wired successfully ({wiring_duration:.0f}ms)")
+            logger.info(f"✅ All orchestrators wired successfully and persisted to database ({wiring_duration:.0f}ms)")
         else:
             self._state = WiringState.VALIDATION_FAILED
             logger.error(f"Wiring completed with {len(failures)} failures")
@@ -829,6 +839,42 @@ class DatabaseBackedRegistry:
     # =========================================================================
     # Validation & Health Checks
     # =========================================================================
+    
+    def _persist_wiring_to_database(self, orchestrator_name: str, session_id: str) -> bool:
+        """
+        ✅ PERMANENT WIRING: Persist successful wiring to database.
+        
+        Called immediately after wire_single() succeeds to ensure:
+        - Wiring state survives process restart
+        - Pre-commit validator sees correct state
+        - No "constant unwiring" issue
+        
+        Args:
+            orchestrator_name: Name of orchestrator that was wired
+            session_id: Session ID for audit trail
+            
+        Returns:
+            True if persisted successfully, False otherwise
+        """
+        try:
+            with self._db.get_connection() as conn:
+                cursor = conn.cursor()
+                
+                # Update orchestrators table: set wired=1 and wired_at timestamp
+                cursor.execute("""
+                    UPDATE orchestrators
+                    SET wired=1, wired_at=?
+                    WHERE name=?
+                """, (datetime.now(timezone.utc).isoformat(), orchestrator_name))
+                
+                conn.commit()
+                
+                logger.info(f"✅ Persisted wiring state for {orchestrator_name} to database")
+                return True
+                
+        except Exception as e:
+            logger.error(f"Failed to persist wiring for {orchestrator_name}: {e}")
+            return False
     
     def validate_wiring(self) -> RegistryValidation:
         """
