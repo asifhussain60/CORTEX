@@ -445,7 +445,7 @@ rules:
     affected_prompts:
       - ".github/prompts/CORTEX.prompt.md"
       - ".github/prompts/copilot-instruction.md"
-      - ".github/prompts/cortex-builder.prompt.md"
+      - ".github/prompts/cortex-total-recall.prompt.md"
     
     validation:
       - New features have prompt documentation section

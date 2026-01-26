@@ -1058,6 +1058,169 @@ class MasterOrchestrator(IOrchestrator):
                 details=parameters
             )
             
+            # AC-FR-WIRING-001: STAGE 1 - Interaction Orchestrator (Comprehension)
+            # Wire interaction_orchestrator for Stage 1 comprehension
+            if self.interaction_orchestrator and operation_name in ["implement", "fix", "refactor", "analyze"]:
+                try:
+                    # Stage 1: Process through interaction orchestrator for intent comprehension
+                    interaction_result = self.interaction_orchestrator.execute_operation(
+                        operation_name=f"stage_1_comprehension",
+                        parameters={"user_intent": operation_name, "context": parameters}
+                    )
+                    if interaction_result.is_err():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE1",
+                            operation="INTERACTION_ORCHESTRATOR_EXECUTION",
+                            success=False,
+                            details={"error": str(interaction_result.error)}
+                        )
+                except Exception as stage1_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE1",
+                        operation="INTERACTION_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(stage1_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 2 - Intent Router (Classification)
+            # Wire intent_router for Stage 2 intent classification
+            classified_intent = None
+            if self.intent_router:
+                try:
+                    # Stage 2: Classify intent via intent router
+                    classification_result = self.intent_router.execute_operation(
+                        operation_name="classify_intent",
+                        parameters={"operation": operation_name, "context": parameters}
+                    )
+                    if classification_result.is_ok():
+                        classified_intent = classification_result.unwrap()
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE2",
+                            operation="INTENT_CLASSIFICATION",
+                            success=True,
+                            details={"classified_intent": str(classified_intent)}
+                        )
+                except Exception as stage2_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE2",
+                        operation="INTENT_CLASSIFICATION",
+                        success=False,
+                        details={"error": str(stage2_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3A - DoR Approval Gate (if operation requires approval)
+            # Wire dor_gate for user approval workflow
+            if self._dor_gate and operation_name in ["implement", "deploy", "delete"]:
+                try:
+                    # Stage 3A: Get user approval via DoR gate
+                    dor_result = self._dor_gate.evaluate_intent(
+                        intent_type=operation_name,
+                        intent_details=parameters,
+                        confidence=0.8  # Assume reasonable confidence
+                    )
+                    if dor_result.is_err():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3A",
+                            operation="DOR_APPROVAL_GATE",
+                            success=False,
+                            details={"error": "Operation requires user approval"}
+                        )
+                        return dor_result
+                except Exception as dor_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3A",
+                        operation="DOR_APPROVAL_GATE",
+                        success=False,
+                        details={"error": str(dor_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3B - TDD Orchestrator for IMPLEMENT intents
+            # Wire tdd_orchestrator for test-driven implementation
+            if self.tdd_orchestrator and operation_name == "implement":
+                try:
+                    # Stage 3B: Route IMPLEMENT intents through TDD orchestrator
+                    tdd_result = self.tdd_orchestrator.execute_operation(
+                        operation_name="test_driven_implementation",
+                        parameters=parameters
+                    )
+                    if tdd_result.is_ok():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3B",
+                            operation="TDD_ORCHESTRATOR_EXECUTION",
+                            success=True,
+                            details={"target": parameters.get("target")}
+                        )
+                        result = tdd_result
+                        self.logger.log_operation_complete(
+                            ac_id="AC-AR-006-01",
+                            operation=operation_name,
+                            success=result.is_ok(),
+                            details={"result": str(result)}
+                        )
+                        return result
+                except Exception as tdd_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3B",
+                        operation="TDD_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(tdd_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 3C - Orchestrator Registry Access
+            # Wire orchestrator_registry for delegate lookup
+            if isinstance(self.orchestrator_registry, dict) and operation_name in ["coordinate_operation", "register_orchestrator"]:
+                try:
+                    # Stage 3C: Access orchestrator registry for delegation
+                    registry_lookup = self.orchestrator_registry.get(operation_name)
+                    if registry_lookup:
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE3C",
+                            operation="ORCHESTRATOR_REGISTRY_LOOKUP",
+                            success=True,
+                            details={"found_orchestrators": len([k for k, v in self.orchestrator_registry.items() if v])}
+                        )
+                except Exception as registry_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE3C",
+                        operation="ORCHESTRATOR_REGISTRY_LOOKUP",
+                        success=False,
+                        details={"error": str(registry_err)}
+                    )
+            
+            # AC-FR-WIRING-001: STAGE 4 - Domain Orchestrators (Execution)
+            # Wire domain_orchestrators for domain-specific delegation
+            domain_orchestrator_key = parameters.get("domain") or "default"
+            if domain_orchestrator_key in self.domain_orchestrators:
+                try:
+                    # Stage 4: Delegate to domain orchestrator
+                    domain_orch_meta = self.domain_orchestrators[domain_orchestrator_key]
+                    domain_result = domain_orch_meta.orchestrator.execute_operation(
+                        operation_name=operation_name,
+                        parameters=parameters
+                    )
+                    if domain_result.is_ok():
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-001-STAGE4",
+                            operation="DOMAIN_ORCHESTRATOR_EXECUTION",
+                            success=True,
+                            details={"domain": domain_orchestrator_key}
+                        )
+                        result = domain_result
+                        self.logger.log_operation_complete(
+                            ac_id="AC-AR-006-01",
+                            operation=operation_name,
+                            success=result.is_ok(),
+                            details={"result": str(result)}
+                        )
+                        return result
+                except Exception as domain_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-FR-WIRING-001-STAGE4",
+                        operation="DOMAIN_ORCHESTRATOR_EXECUTION",
+                        success=False,
+                        details={"error": str(domain_err)}
+                    )
+            
             # Route to appropriate method based on operation_name
             if operation_name == "register_orchestrator":
                 result = self.register_orchestrator(
@@ -2497,3 +2660,254 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
             return {"phase": 4, "error": str(e)}
+
+    # ========== PLANNING REFINEMENT INTEGRATION ==========
+
+    def conduct_planning_session(
+        self,
+        session_id: str,
+        user_request: str
+    ) -> Dict[str, Any]:
+        """
+        Conduct interactive planning refinement session.
+
+        Multi-turn refinement loop where CORTEX and user collaborate
+        to achieve 100% clarity (DoR >= 0.95) on a feature request.
+
+        Args:
+            session_id: Unique session identifier
+            user_request: User's feature request
+
+        Returns:
+            Dict with session results and audit trail
+        """
+        self.logger.log_operation_start(
+            ac_id="AC-PLANNING-REFINE-CONDUCT",
+            operation="conduct_planning_session",
+            details={
+                "session_id": session_id,
+                "user_request": user_request[:100],  # First 100 chars
+            }
+        )
+
+        try:
+            # Import PlanningRefinementOrchestrator (lazy import)
+            from cortex.orchestrators.core.planning_refinement_orchestrator import (
+                get_planning_refinement_orchestrator,
+            )
+            from cortex.orchestrators.core.planning_audit_trail import (
+                create_audit_trail_from_session,
+            )
+
+            # Get orchestrator instance
+            refinement_orchestrator = get_planning_refinement_orchestrator()
+
+            # Conduct refinement session (turns 1-6)
+            success, result = refinement_orchestrator.conduct_refinement_session(
+                session_id=session_id,
+                user_request=user_request,
+            )
+
+            if not success:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PLANNING-REFINE-CONDUCT",
+                    operation="conduct_planning_session",
+                    success=False,
+                    details={"error": result}
+                )
+                return {
+                    "success": False,
+                    "error": result,
+                    "session_id": session_id,
+                }
+
+            # Refinement completed
+            session = result
+            dor_achieved = session.dor_achieved
+            final_clarity = session.final_clarity
+
+            # Create audit trail from session
+            audit_trail = create_audit_trail_from_session(session)
+
+            # Verify audit trail integrity
+            from cortex.orchestrators.core.audit_trail_verifier import (
+                get_audit_trail_verifier,
+            )
+
+            verifier = get_audit_trail_verifier()
+            verification = verifier.verify_audit_trail(audit_trail)
+
+            # Log completion
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-CONDUCT",
+                operation="conduct_planning_session",
+                success=True,
+                details={
+                    "session_id": session_id,
+                    "dor_achieved": dor_achieved,
+                    "final_clarity": final_clarity,
+                    "total_turns": session.total_turns_completed,
+                    "audit_chain_intact": verification.is_valid,
+                }
+            )
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "dor_achieved": dor_achieved,
+                "final_clarity": final_clarity,
+                "total_turns": session.total_turns_completed,
+                "clarity_progression": session.clarity_history,
+                "audit_trail_valid": verification.is_valid,
+                "audit_summary": verification.details.get("session_summary", {}),
+                "approved_plan": session.final_approved_plan,
+            }
+
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-CONDUCT",
+                operation="conduct_planning_session",
+                success=False,
+                details={"error": str(e), "exception_type": type(e).__name__}
+            )
+            return {
+                "success": False,
+                "error": f"Planning session failed: {str(e)}",
+                "session_id": session_id,
+            }
+
+    def execute_plan_via_tdd(
+        self,
+        session_id: str,
+        approved_plan: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Execute an approved plan via TDD orchestrator.
+
+        Called after planning refinement session achieves DoR.
+        Routes plan to TDDOrchestrator for implementation.
+
+        Args:
+            session_id: Planning session identifier
+            approved_plan: Plan dict approved during refinement
+
+        Returns:
+            Dict with execution results
+        """
+        self.logger.log_operation_start(
+            ac_id="AC-PLANNING-REFINE-EXECUTE",
+            operation="execute_plan_via_tdd",
+            details={
+                "session_id": session_id,
+            }
+        )
+
+        try:
+            # Check if TDDOrchestrator is available
+            if not TDDOrchestrator or not get_tdd_orchestrator:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PLANNING-REFINE-EXECUTE",
+                    operation="execute_plan_via_tdd",
+                    success=False,
+                    details={"error": "TDDOrchestrator not available"}
+                )
+                return {
+                    "success": False,
+                    "error": "TDDOrchestrator not available",
+                    "session_id": session_id,
+                }
+
+            # Get TDD orchestrator
+            tdd_orchestrator = get_tdd_orchestrator()
+
+            # Prepare context for TDD execution
+            context = {
+                "planning_session_id": session_id,
+                "feature_request": approved_plan.get("user_request", ""),
+                "acceptance_criteria": approved_plan.get("acceptance_criteria", []),
+                "implementation_steps": approved_plan.get("steps", []),
+                "constraints": approved_plan.get("constraints", []),
+                "risks": approved_plan.get("risks", []),
+            }
+
+            # Execute via TDD (write tests first)
+            # This calls tdd_orchestrator.execute(context)
+            execution_result = tdd_orchestrator.execute(
+                operation_mode=OperationMode.AUTO,
+                context=context,
+            )
+
+            # Log successful execution
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-EXECUTE",
+                operation="execute_plan_via_tdd",
+                success=True,
+                details={
+                    "session_id": session_id,
+                    "execution_status": "initiated",
+                }
+            )
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "execution_status": "initiated",
+                "tdd_result": execution_result,
+            }
+
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-EXECUTE",
+                operation="execute_plan_via_tdd",
+                success=False,
+                details={"error": str(e), "exception_type": type(e).__name__}
+            )
+            return {
+                "success": False,
+                "error": f"Plan execution failed: {str(e)}",
+                "session_id": session_id,
+            }
+
+    @mcp_tool(
+        name="planning_status",
+        description="Get status of a planning session"
+    )
+    def planning_status(self, session_id: str) -> Dict[str, Any]:
+        """
+        Get status of a planning session.
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            Dict with current session status
+        """
+        try:
+            from cortex.orchestrators.core.planning_refinement_orchestrator import (
+                get_planning_refinement_orchestrator,
+            )
+
+            orchestrator = get_planning_refinement_orchestrator()
+            session = orchestrator.get_session(session_id)
+
+            if not session:
+                return {
+                    "success": False,
+                    "error": f"Session {session_id} not found",
+                }
+
+            return {
+                "success": True,
+                "session_id": session_id,
+                "dor_achieved": session.dor_achieved,
+                "final_clarity": session.final_clarity,
+                "total_turns": session.total_turns_completed,
+                "clarity_progression": session.clarity_history,
+                "is_complete": session.is_complete(),
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+            }

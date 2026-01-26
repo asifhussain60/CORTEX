@@ -171,7 +171,7 @@ After enforcement pass:
 ### Tier 0: Immutable Governance (CANNOT be overridden)
 ```yaml
 Location: cortex_brain/tier0/governance/
-Rules: 31 CORE rules (CORE-001 through CORE-035)
+Rules: 32 CORE rules (CORE-001 through CORE-038)
 Enforcement: STRICT - violations block execution
 Examples:
   - CORE-008: Tests MUST exist before code (TDD)
@@ -181,6 +181,7 @@ Examples:
   - CORE-027: Audit trail (AC_START → AC_EXECUTE → AC_COMPLETE)
   - CORE-030: Implementation Truth (verify code before trusting docs) ⭐ NEW
   - CORE-035: Single Canonical Implementation (no duplicates) ⭐ NEW
+  - CORE-038: File Placement Policy (all files in subfolders, kebab-case) ⭐ NEW
 ```
 
 ### Tier 1: Acceptance Criteria
@@ -290,7 +291,7 @@ tools = registry.list_tools()  # Returns 15+ tools
 | Python Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` | Human-readable |
-| Reports | `_workspaces/roadmap/reports/` | YAML tracking |
+| Reports | `reports/` | YAML tracking |
 
 ### Forbidden Patterns
 - ❌ `.md` files outside `docs/`
@@ -467,8 +468,7 @@ CORTEX Response:
 
 | Prompt | Purpose | Agent |
 |--------|---------|-------|
-| `cortex-total-recall.prompt.md` | Feature discovery | TotalRecallAgent |
-| `cortex-builder.prompt.md` | AC-ID implementation | BuilderOrchestrator |
+| `cortex-total-recall.prompt.md` | Feature discovery & Implementation | TotalRecallAgent |
 | `cortex-review.prompt.md` | Code quality review | 8 review agents |
 | `cortex-doc.prompt.md` | Documentation | DocumentationOrchestrator |
 | `cortex-deploy.prompt.md` | Deployment | DeploymentOrchestrator |

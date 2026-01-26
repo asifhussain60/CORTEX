@@ -42,12 +42,13 @@ grep "except:" cortex/**/*.py           # Bare except clauses
 2. Branch divergence (merge conflicts, ahead/behind status)
 3. Test failures (pytest results)
 4. Import errors (missing dependencies)
-5. Governance violations (CORE rules including CORE-030, CORE-035)
-6. Orphaned files (unreferenced modules)
-7. Registry mismatches (wiring inconsistencies)
-8. Type hints missing (CORE-011 violations)
-9. Duplicate implementations (CORE-035 violations) ⭐ NEW
-10. Documentation-code mismatches (CORE-030 violations) ⭐ NEW
+5. Governance violations (CORE rules including CORE-030, CORE-035, CORE-038)
+6. File placement violations (CORE-038: kebab-case, subfolders, whitelist) ⭐ NEW
+7. Orphaned files (unreferenced modules)
+8. Registry mismatches (wiring inconsistencies)
+9. Type hints missing (CORE-011 violations)
+10. Duplicate implementations (CORE-035 violations) ⭐ NEW
+11. Documentation-code mismatches (CORE-030 violations) ⭐ NEW
 ```
 
 ### Phase 3: Automated Fix (With Approval Gate)
@@ -75,6 +76,12 @@ Report ONLY:
 
 ### 🔴 CRITICAL (Block Deployment)
 ```yaml
+- File placement violations (CORE-038) ⭐ NEW
+  Pattern: Files in forbidden roots (reports/, docs/, cortex/, cortex_brain/)
+  Naming: Files not in kebab-case format
+  Fix: Move file to correct subfolder with proper naming
+  Reference: cortex_brain/tier0/governance/core-038-file-placement-policy.yaml
+  
 - Unwired orchestrators (registry_template: true)
   Fix: Set registry_template: false, add to repo-registry.yaml
   
@@ -137,6 +144,7 @@ Report ONLY:
 /fix-tests {module}      → Fix failing tests in module
 /fix-verify {component}  → Fix then verify component
 /fix-report              → Show only fixes applied (no issues)
+/fix-files               → Fix file placement violations (CORE-038) ⭐ NEW
 /sync-remote             → Analyze & sync with origin/CORTEX (NEW)
 /work-summary            → Generate work summary from git history (NEW)
 ```
@@ -242,9 +250,34 @@ mypy {file} --fast                    # Quick type check
 ## Key Entry Points (For Recall)
 
 ```python
-# Orchestrator Discovery
+# Orchestrator Discovery & Registry (SSOT)
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-frGit History Analysis (NEW - MCP Tool)
+from cortex.orchestrators.core.database_registry import (
+    get_database_registry,
+    initialize_database_wiring,
+    OrchestratorConfig,
+    OrchestratorCategory,
+)
+
+# Planning Orchestrator (CONSOLIDATED - Registry-Based)
+from cortex.orchestrators.domain.planning_orchestrator import (
+    PlanningOrchestrator,
+    ORCHESTRATOR_CONFIG as PLANNING_CONFIG,
+)
+
+# Planning Registry Loader (Data Source)
+from cortex.orchestrators.domain.planning_registry_loader import (
+    PlanningRegistryLoader,
+    load_phases_from_registry,
+)
+
+# TDD Orchestrator Integration
+from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator
+
+# Intent Router (Orchestrator Dispatcher)
+from cortex.orchestrators.core.intent_router import IntentRouter
+
+# Git History Analysis (NEW - MCP Tool)
 from cortex.mcp.tools.git_history_analyzer import (
     GitHistoryAnalyzer,
     get_git_history_analyzer,
@@ -252,11 +285,17 @@ from cortex.mcp.tools.git_history_analyzer import (
     WorkSummary
 )
 
-# om cortex.orchestrators.core.intent_router import IntentRouter
-
-# Issue Detection
+# Governance & Enforcement (Including File Placement)
 from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+# CORE-038: File Placement Policy Discovery (NEW)
+from cortex_brain.tier0.governance.core_038_file_placement_policy import (
+    FilePlacementPolicy,
+    FileOrganizationValidator,
+    KEBAB_CASE_PATTERN,
+    FORBIDDEN_ROOTS,
+    ALLOWED_ROOT_FILES,
+)
 
 # Auto-Fix Tools
 from cortex.mcp.tools.code_formatter import CodeFormatter
@@ -273,23 +312,45 @@ from cortex.infrastructure.circuit_breaker import CircuitBreaker
 
 ```yaml
 wiring:
-  orchestrators: 23/23 wired ✅
+  orchestrators: 23/23 wired via DatabaseBackedRegistry ✅
+  registry_type: SQLite-backed SSOT (.cortex/orchestrator_registry.db)
   registry: locked (registry_template: false) ✅
   persistence: permanent ✅
+  
+  # VERIFIED WIRING (AC-PLANNING-CONSOLIDATED-001):
+  core_orchestrators: 6/6 wired (Master, Interaction, IntentRouter, TDD, Workflow, WrappedTDD)
+  domain_orchestrators: 6/6 wired (Planning ✅, Refactoring, Domain, Conversation, SeleniumPlaywright, Documentation)
+  support_orchestrators: 11/11 wired (OnboardingOrchestrator, ToolDiscovery, Upgrade, Rollback, Setup, Composed, Bootstrap, DoRApprovalGate, LENSSynthesis, GovernanceRegistry, KnowledgeRepository)
+
+planning_orchestrator_status:
+  version: v2.0 (consolidated)
+  location: cortex/orchestrators/domain/planning_orchestrator.py
+  registry_location: cortex-registry/planning/index.yaml
+  test_coverage: 39/39 tests passing (100%)
+  mcp_tools: 5+ exposed (@mcp_tool decorated)
+  data_source: registry-based (NOT roadmap-based)
+  wiring_method: DatabaseBackedRegistry
+  bootstrap_integration: ✅ (bootstrap.py _register_domain_orchestrators)
+  tdd_integration: ✅ (callable via MasterOrchestrator routing)
+  governance_compliance: 100% (CORE-008-035)
 
 tests:
-  total: 7,547
+  total: 7,547+
   passing: 5,500+ (73%)
   failing: 2,047 (27%)
   blocking: 0 (critical fixed)
+  planning_specific: 39/39 (100% - newly consolidated)
 
 governance:
-  CORE_rules: 29/29 active ✅
+  CORE_rules: 32/32 active ✅ (CORE-001 through CORE-038)
+  CORE_038_file_placement: enabled (kebab-case, subfolders required, 12-item whitelist) ⭐ NEW
   violations: auto-detectable
   compliance: enforced
+  ac_permanent_fixes: 9 active (AC-PERMANENT-FIX-001 through 009)
 
 infrastructure:
-  MCP_tools: 15 active
+  MCP_tools: 15+ active
   circuit_breakers: operational
-  audit_logging: enabled
+  audit_logging: enabled (enhanced audit trail with SHA256 hash chain)
+  health_checker: background monitoring (60-second intervals)
 ```

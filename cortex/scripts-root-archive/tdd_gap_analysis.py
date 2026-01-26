@@ -91,9 +91,9 @@ def main():
     
     # Generate YAML report
     yaml_report = generate_yaml_report(missing, existing)
-    with open('_workspaces/roadmap/reports/tdd-gap-analysis.yaml', 'w') as f:
+    with open('reports/analysis/tdd-gap-analysis.yaml', 'w') as f:
         f.write(yaml_report)
-    print("\nReport saved to: _workspaces/roadmap/reports/tdd-gap-analysis.yaml")
+    print("\nReport saved to: reports/analysis/tdd-gap-analysis.yaml")
 
 def generate_yaml_report(missing, existing):
     """Generate YAML report of findings"""

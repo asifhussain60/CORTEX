@@ -39,10 +39,12 @@ class IntentType(Enum):
         IMPLEMENT: New feature development or creation
         FIX: Bug fixes and issue resolution
         REFACTOR: Code improvement and restructuring
+        FILE_CREATION: File creation operations requiring validation (CORE-028/CORE-038)
     """
     IMPLEMENT = "implement"
     FIX = "fix"
     REFACTOR = "refactor"
+    FILE_CREATION = "file_creation"
 
 
 @dataclass
@@ -137,6 +139,11 @@ class IntentRouter(IOrchestrator):
         "clean", "modernize", "reorganize", "rewrite", "redesign", "performance"
     ]
     
+    FILE_CREATION_KEYWORDS: List[str] = [
+        "file", "write", "output", "report", "generate", "save", "persist",
+        "export", "create file", "write file", "output file", "report file"
+    ]
+    
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -157,6 +164,7 @@ class IntentRouter(IOrchestrator):
             IntentType.IMPLEMENT: self.IMPLEMENT_KEYWORDS,
             IntentType.FIX: self.FIX_KEYWORDS,
             IntentType.REFACTOR: self.REFACTOR_KEYWORDS,
+            IntentType.FILE_CREATION: self.FILE_CREATION_KEYWORDS,
         }
         
         # Routing rules: (intent_type, domain) -> target_handler
@@ -178,6 +186,12 @@ class IntentRouter(IOrchestrator):
             (IntentType.REFACTOR, "core"): "CoreRefactoringHandler",
             (IntentType.REFACTOR, "infrastructure"): "InfrastructureRefactoringHandler",
             (IntentType.REFACTOR, None): "GeneralRefactoringHandler",
+            
+            # FILE_CREATION routing (CORE-028/CORE-038 validation)
+            (IntentType.FILE_CREATION, "documentation"): "DocumentationOrchestrator",
+            (IntentType.FILE_CREATION, "governance"): "DocumentationOrchestrator",
+            (IntentType.FILE_CREATION, "reports"): "DocumentationOrchestrator",
+            (IntentType.FILE_CREATION, None): "DocumentationOrchestrator",
         }
         
         # Decision cache (populated by _route_internal, accessed via route)
