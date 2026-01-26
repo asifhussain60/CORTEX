@@ -277,7 +277,6 @@ class WiringValidator:
         components = [
             ("GovernanceRegistry", "cortex.brain.core.governance_registry"),
             ("StateManager", "cortex.brain.core.state_manager"),
-            ("TodoManager", "cortex.orchestrators.tools.todo_manager"),
             ("EnhancedAuditLogger", "cortex.infrastructure.enhanced_audit_logger"),
             ("BehavioralBoundaryRules", "cortex_brain.tier2.hallucination_prevention"),
             ("KnowledgeRepository", "cortex.brain.core.knowledge_repository"),

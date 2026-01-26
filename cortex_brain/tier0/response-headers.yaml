@@ -1,0 +1,97 @@
+# ==============================================================================
+# CORTEX RESPONSE HEADERS - TIER 0
+# ==============================================================================
+# Purpose: Standard response headers for all CORTEX operations
+# Authority: CORE-029 (Response Header Enforcement)
+# Status: ACTIVE
+#
+# ==============================================================================
+
+schema_version: '1.0'
+governance_tier: 0
+category: CORTEX_RESPONSE
+
+metadata:
+  purpose: "Standard response headers for all CORTEX orchestrator responses"
+  author: "Asif Hussain"
+  created: "2026-01-26"
+  version: "1.0"
+
+# ==============================================================================
+# HEADER TEMPLATES
+# ==============================================================================
+
+headers:
+  # Master orchestrator execution
+  master_operation:
+    format: |
+      ## 🧠 CORTEX {operation}
+      **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+      
+      ---
+    variables:
+      - operation: "Name of operation (Implementation, HealthCheck, etc.)"
+      - author: "Default: Asif Hussain"
+      - phase: "Current phase (Validation, Execution, etc.)"
+      - orchestrator: "Name of orchestrator handling the operation"
+    required: true
+    severity: blocked
+
+  # Implementation operation
+  implementation:
+    format: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain | **Phase:** TDD | **Orchestrator:** TDDOrchestrator ✅
+      
+      ---
+    required: true
+    severity: blocked
+
+  # Fix operation
+  fix_operation:
+    format: |
+      ## 🧠 CORTEX Fix
+      **Author:** Asif Hussain | **Phase:** Execution | **Orchestrator:** IntentRouter ✅
+      
+      ---
+    required: true
+    severity: blocked
+
+  # Analysis operation
+  analysis:
+    format: |
+      ## 🧠 CORTEX Analysis
+      **Author:** Asif Hussain | **Phase:** Analysis | **Orchestrator:** MasterOrchestrator ✅
+      
+      ---
+    required: true
+    severity: blocked
+
+  # Testing operation
+  testing:
+    format: |
+      ## 🧠 CORTEX Testing
+      **Author:** Asif Hussain | **Phase:** Validation | **Orchestrator:** TDDOrchestrator ✅
+      
+      ---
+    required: true
+    severity: blocked
+
+# ==============================================================================
+# ENFORCEMENT RULES
+# ==============================================================================
+
+enforcement:
+  - rule_id: CORE-029
+    name: "Response Header Enforcement"
+    description: "Every response MUST begin with a standard header"
+    applies_to:
+      - all_responses
+    violation_action: "BLOCK - Response rejected if header missing"
+    
+  - rule_id: TIER-2-005
+    name: "Header Format Validation"
+    description: "Headers MUST match template format exactly"
+    applies_to:
+      - markdown_responses
+    violation_action: "WARN - Log format inconsistency"
