@@ -29,6 +29,7 @@ import json
 from cortex.core.interfaces import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.execution.specs import SpecRegistry
 
 
 class IntentType(Enum):
