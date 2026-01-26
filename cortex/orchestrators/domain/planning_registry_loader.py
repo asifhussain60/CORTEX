@@ -385,6 +385,301 @@ class PlanningRegistryLoader:
             True if valid, False otherwise
         """
         return self.naming_factory.validate_folder_name(name)
+
+    # ========================================================================
+    # REGISTRY BUILDER METHODS (AC-PLANNING-BUILDER-001)
+    # ========================================================================
+
+    def initialize_planning_registry(self) -> Result[None]:
+        """
+        Initialize planning registry structure.
+
+        Creates:
+        - cortex-registry/planning/ folder
+        - cortex-registry/planning/index.yaml
+        - cortex-registry/domains/ folder
+
+        Returns:
+            Result indicating success or error
+        """
+        try:
+            # Create planning folder
+            self.planning_path.mkdir(parents=True, exist_ok=True)
+
+            # Create domains folder
+            domains_path = self.registry_path / "domains"
+            domains_path.mkdir(parents=True, exist_ok=True)
+
+            # Create index.yaml if not exists
+            index_file = self.planning_path / "index.yaml"
+            if not index_file.exists():
+                index_data = {
+                    "version": "1.0",
+                    "description": "Planning Registry Index",
+                    "plans": [],
+                }
+                with open(index_file, "w", encoding="utf-8") as f:
+                    yaml.dump(index_data, f, default_flow_style=False)
+                logger.info(f"Created index.yaml at {index_file}")
+
+            logger.info("Planning registry initialized")
+            return Ok(None)
+
+        except Exception as e:
+            error_msg = f"Failed to initialize planning registry: {str(e)}"
+            logger.error(error_msg)
+            return Err(error_msg)
+
+    def create_plan_folder(
+        self,
+        domain: str,
+        plan_name: str,
+    ) -> Result[Path]:
+        """
+        Create plan folder structure.
+
+        Creates:
+        - cortex-registry/planning/{domain}/{plan-name}/
+        - cortex-registry/planning/{domain}/{plan-name}/temp/
+        - cortex-registry/planning/{domain}/{plan-name}/artifacts/
+
+        Args:
+            domain: Domain name (e.g., 'planning', 'docs', 'api')
+            plan_name: Plan name (converted to kebab-case)
+
+        Returns:
+            Result containing folder path, or error if name invalid
+        """
+        try:
+            # Validate folder name
+            if not self.validate_folder_name(plan_name):
+                error_msg = f"Invalid plan name: {plan_name}"
+                logger.error(error_msg)
+                return Err(error_msg)
+
+            # Create folder structure
+            plan_folder = self.planning_path / domain / plan_name
+            plan_folder.mkdir(parents=True, exist_ok=True)
+
+            # Create subdirectories
+            (plan_folder / "temp").mkdir(exist_ok=True)
+            (plan_folder / "artifacts").mkdir(exist_ok=True)
+
+            logger.info(f"Created plan folder: {plan_folder}")
+            return Ok(plan_folder)
+
+        except Exception as e:
+            error_msg = f"Failed to create plan folder: {str(e)}"
+            logger.error(error_msg)
+            return Err(error_msg)
+
+    def register_plan(
+        self,
+        domain: str,
+        plan_data: Dict[str, Any],
+    ) -> Result[str]:
+        """
+        Register plan in registry.
+
+        Writes:
+        - plan.yaml (plan specification)
+        - metadata.yaml (plan metadata)
+
+        Updates:
+        - index.yaml (domain index)
+
+        Args:
+            domain: Domain name
+            plan_data: Plan specification (must have 'name')
+
+        Returns:
+            Result containing plan ID (folder name), or error
+        """
+        try:
+            # Extract plan name and convert to kebab-case
+            plan_name = plan_data.get("name", "unnamed-plan")
+            plan_id = self.to_kebab_case(plan_name)
+
+            # Create plan folder
+            folder_result = self.create_plan_folder(domain, plan_id)
+            if folder_result.is_err():
+                return Err(folder_result.unwrap_err())
+
+            plan_folder = folder_result.unwrap()
+
+            # Write plan.yaml
+            plan_file = plan_folder / "plan.yaml"
+            with open(plan_file, "w", encoding="utf-8") as f:
+                yaml.dump(plan_data, f, default_flow_style=False)
+            logger.info(f"Wrote plan.yaml: {plan_file}")
+
+            # Create and write metadata.yaml
+            metadata = {
+                "plan_id": plan_id,
+                "domain": domain,
+                "created_at": "2026-01-26T00:00:00Z",
+                "epics": [],
+                "features": [],
+                "linked_phases": [],
+            }
+            metadata_file = plan_folder / "metadata.yaml"
+            with open(metadata_file, "w", encoding="utf-8") as f:
+                yaml.dump(metadata, f, default_flow_style=False)
+            logger.info(f"Wrote metadata.yaml: {metadata_file}")
+
+            # Update domain index
+            domain_index_file = self.planning_path / domain / "index.yaml"
+            domain_index_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # Load or create domain index
+            if domain_index_file.exists():
+                with open(domain_index_file, "r", encoding="utf-8") as f:
+                    domain_index = yaml.safe_load(f) or {}
+            else:
+                domain_index = {"plans": []}
+
+            # Add plan to index
+            if "plans" not in domain_index:
+                domain_index["plans"] = []
+
+            plan_entry = {
+                "id": plan_id,
+                "name": plan_name,
+                "folder": str(plan_folder.relative_to(self.registry_path)),
+            }
+
+            if plan_entry not in domain_index["plans"]:
+                domain_index["plans"].append(plan_entry)
+
+            # Write domain index
+            with open(domain_index_file, "w", encoding="utf-8") as f:
+                yaml.dump(domain_index, f, default_flow_style=False)
+            logger.info(f"Updated domain index: {domain_index_file}")
+
+            return Ok(plan_id)
+
+        except Exception as e:
+            error_msg = f"Failed to register plan: {str(e)}"
+            logger.error(error_msg)
+            return Err(error_msg)
+
+    def validate_metadata_schema(
+        self,
+        metadata: Dict[str, Any],
+    ) -> Result[None]:
+        """
+        Validate plan metadata against schema.
+
+        Required fields:
+        - plan_id (str)
+        - created_at (str, ISO format)
+
+        Optional fields:
+        - epics (list of strings)
+        - features (list of strings)
+        - linked_phases (list of integers)
+
+        Args:
+            metadata: Metadata dictionary to validate
+
+        Returns:
+            Result indicating valid or error message
+        """
+        try:
+            # Check required fields
+            required_fields = ["plan_id", "created_at"]
+            for field in required_fields:
+                if field not in metadata:
+                    error_msg = f"Missing required field: {field}"
+                    logger.error(error_msg)
+                    return Err(error_msg)
+
+            # Validate types
+            if not isinstance(metadata["plan_id"], str):
+                error_msg = "plan_id must be string"
+                return Err(error_msg)
+
+            if not isinstance(metadata["created_at"], str):
+                error_msg = "created_at must be string (ISO format)"
+                return Err(error_msg)
+
+            # Validate optional list fields
+            optional_lists = ["epics", "features", "linked_phases"]
+            for field in optional_lists:
+                if field in metadata and not isinstance(metadata[field], list):
+                    error_msg = f"{field} must be list or absent"
+                    return Err(error_msg)
+
+            logger.info("Metadata schema validation passed")
+            return Ok(None)
+
+        except Exception as e:
+            error_msg = f"Metadata validation failed: {str(e)}"
+            logger.error(error_msg)
+            return Err(error_msg)
+
+    def regenerate_index_from_filesystem(self) -> Result[None]:
+        """
+        Regenerate registry index from filesystem scan.
+
+        Scans cortex-registry/planning/{domain}/ folders and updates index.yaml files.
+
+        Returns:
+            Result indicating success or error
+        """
+        try:
+            if not self.planning_path.exists():
+                logger.warning(f"Planning path not found: {self.planning_path}")
+                return Ok(None)
+
+            # Scan each domain folder
+            for domain_folder in self.planning_path.iterdir():
+                if not domain_folder.is_dir() or domain_folder.name == "temp":
+                    continue
+
+                domain_name = domain_folder.name
+                domain_index = {"plans": []}
+
+                # Scan plan folders
+                for plan_folder in domain_folder.iterdir():
+                    if not plan_folder.is_dir():
+                        continue
+
+                    plan_id = plan_folder.name
+
+                    # Read metadata if exists
+                    metadata_file = plan_folder / "metadata.yaml"
+                    plan_name = plan_id  # Default to folder name
+
+                    if metadata_file.exists():
+                        try:
+                            with open(metadata_file, "r", encoding="utf-8") as f:
+                                metadata = yaml.safe_load(f) or {}
+                            plan_name = metadata.get("name", plan_id)
+                        except Exception as e:
+                            logger.warning(f"Failed to read metadata: {e}")
+
+                    # Add to index
+                    plan_entry = {
+                        "id": plan_id,
+                        "name": plan_name,
+                        "folder": str(plan_folder.relative_to(self.registry_path)),
+                    }
+                    domain_index["plans"].append(plan_entry)
+
+                # Write domain index.yaml
+                domain_index_file = domain_folder / "index.yaml"
+                with open(domain_index_file, "w", encoding="utf-8") as f:
+                    yaml.dump(domain_index, f, default_flow_style=False)
+                logger.info(f"Regenerated index: {domain_index_file}")
+
+            logger.info("Index regeneration complete")
+            return Ok(None)
+
+        except Exception as e:
+            error_msg = f"Failed to regenerate index: {str(e)}"
+            logger.error(error_msg)
+            return Err(error_msg)
     
     # ========================================================================
     # PRIVATE METHODS
