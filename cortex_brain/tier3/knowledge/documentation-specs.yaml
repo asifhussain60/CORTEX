@@ -1,0 +1,141 @@
+---
+# Documentation Generation Specification Framework
+# Purpose: Runtime configuration for auto-documentation generation
+# Compliance: CORE-038 (proper file placement), CORE-030 (implementation truth)
+
+documentation_templates:
+  - name: API_DOCUMENTATION
+    description: "Auto-generate API documentation from code"
+    output_format: markdown
+    includes:
+      - function_signatures
+      - parameter_descriptions
+      - return_types
+      - exception_types
+      - usage_examples
+    quality_level: comprehensive
+    effort_estimate: "2-4 hours"
+
+  - name: ARCHITECTURE_DOCUMENTATION
+    description: "Generate system architecture diagrams and explanations"
+    output_format: markdown
+    includes:
+      - component_overview
+      - data_flow_diagrams
+      - interaction_patterns
+      - dependency_graphs
+      - design_rationales
+    quality_level: comprehensive
+    effort_estimate: "4-6 hours"
+
+  - name: USER_GUIDE_DOCUMENTATION
+    description: "Generate user-facing guides and tutorials"
+    output_format: markdown
+    includes:
+      - quick_start_guide
+      - feature_walkthroughs
+      - best_practices
+      - troubleshooting_guide
+      - faq_section
+    quality_level: beginner_friendly
+    effort_estimate: "3-5 hours"
+
+  - name: DEPLOYMENT_DOCUMENTATION
+    description: "Generate deployment and operations guides"
+    output_format: markdown
+    includes:
+      - installation_steps
+      - configuration_options
+      - monitoring_setup
+      - scaling_guidelines
+      - backup_recovery_procedures
+    quality_level: technical
+    effort_estimate: "3-4 hours"
+
+  - name: CHANGELOG_DOCUMENTATION
+    description: "Auto-generate changelog from git history"
+    output_format: markdown
+    includes:
+      - version_history
+      - feature_additions
+      - bug_fixes
+      - breaking_changes
+      - migration_guides
+    quality_level: structured
+    effort_estimate: "1-2 hours"
+
+documentation_analysis_rules:
+  - rule: "code_comment_extraction"
+    priority: high
+    description: "Extract docstrings and inline comments"
+    applies_to: ["python", "typescript", "java"]
+
+  - rule: "type_hint_analysis"
+    priority: high
+    description: "Analyze type hints for comprehensive API docs"
+    applies_to: ["python"]
+
+  - rule: "test_coverage_documentation"
+    priority: medium
+    description: "Document testing approach and coverage"
+    applies_to: ["all"]
+
+  - rule: "example_generation"
+    priority: high
+    description: "Extract and compile working examples"
+    applies_to: ["all"]
+
+  - rule: "dead_code_detection"
+    priority: medium
+    description: "Identify and report unused APIs"
+    applies_to: ["all"]
+
+documentation_quality_targets:
+  - metric: "documentation_completeness"
+    target: "95%"
+    definition: "All public APIs documented"
+
+  - metric: "example_coverage"
+    target: "80%"
+    definition: "Working examples for 80%+ of features"
+
+  - metric: "update_recency"
+    target: "current"
+    definition: "Generated from latest code commit"
+
+  - metric: "readability_score"
+    target: "90%"
+    definition: "Flesch-Kincaid grade level <= 10"
+
+documentation_output_formats:
+  - format: markdown
+    extensions: [".md"]
+    mkdocs_compatible: true
+    github_compatible: true
+
+  - format: html
+    extensions: [".html"]
+    sphinx_compatible: true
+    static_hosting_ready: true
+
+  - format: pdf
+    extensions: [".pdf"]
+    print_friendly: true
+    version_archiving: true
+
+documentation_governance_rules:
+  - rule: "no_manual_edits_to_autogen"
+    enforcement: strict
+    violation_action: "regenerate_from_source"
+
+  - rule: "documentation_parity"
+    enforcement: strict
+    definition: "Generated docs must match code within 1 commit"
+
+  - rule: "no_sensitive_data_in_docs"
+    enforcement: critical
+    scan_patterns: ["password", "api_key", "secret"]
+
+  - rule: "changelog_accuracy"
+    enforcement: strict
+    definition: "Changelog must accurately reflect git history"
