@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Plan Viewer - Real-Time Progress Monitor</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════════════════════
+           CORTEX 4.0 Glassmorphism Design System
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        /* CSS Variables - Design Tokens */
+        :root {
+            /* Dark Mode Palette */
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --glass-bg: rgba(26, 31, 58, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Accent Colors */
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7b61ff;
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #a0a6c0;
+            --text-muted: #6b7280;
+            
+            /* Status Colors */
+            --success: #00ff88;
+            --warning: #ffa500;
+            --error: #ff5555;
+            --queued: #888aff;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Base Styles & Reset
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                         sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Reduced Motion Support (Accessibility)
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Main Container & Layout
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .plan-viewer {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0f1438 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated gradient background */
+        .plan-viewer::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(123, 97, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .plan-viewer-content {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Header Section
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .plan-header {
+            padding: var(--spacing-2xl);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .plan-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .plan-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .plan-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            transition: all var(--transition-base);
+        }
+
+        .plan-status-badge::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .plan-status-badge.completed::before {
+            background: var(--success);
+            animation: none;
+        }
+
+        .plan-status-badge.failed::before {
+            background: var(--error);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Overall Progress Section
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .overall-progress-section {
+            padding: 0 var(--spacing-2xl) var(--spacing-xl) var(--spacing-2xl);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .progress-label-text {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-percentage {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Progress Bar Container */
+        .progress-bar-container {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00d4ff, #7b61ff);
+            border-radius: 999px;
+            width: 0%;
+            transition: width var(--transition-base);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Phases Container & Scrolling
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .phases-container {
+            padding: 0 var(--spacing-2xl) var(--spacing-2xl) var(--spacing-2xl);
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        .phases-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .phases-container::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 999px;
+        }
+
+        .phases-container::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 999px;
+            opacity: 0.6;
+        }
+
+        .phases-container::-webkit-scrollbar-thumb:hover {
+            opacity: 1;
+        }
+
+        .phases-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            grid-template-columns: 1fr;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Phase Card - Glassmorphism Design
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .phase-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .phase-card:hover {
+            background: rgba(26, 31, 58, 0.9);
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .phase-card:hover::before {
+            opacity: 1;
+        }
+
+        .phase-card.completed {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .phase-card.failed {
+            border-color: rgba(255, 85, 85, 0.3);
+        }
+
+        /* Phase Header */
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .phase-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .phase-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+            word-break: break-word;
+        }
+
+        .phase-number {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-controls {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+        }
+
+        .phase-toggle-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            font-size: 1.125rem;
+        }
+
+        .phase-toggle-btn:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .phase-status-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--bg-primary);
+            background: var(--accent-primary);
+        }
+
+        .phase-status-icon.completed {
+            background: var(--success);
+        }
+
+        .phase-status-icon.executing {
+            background: var(--accent-primary);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .phase-status-icon.failed {
+            background: var(--error);
+        }
+
+        .phase-status-icon.queued {
+            background: var(--queued);
+        }
+
+        /* Phase Details */
+        .phase-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-base);
+            border-top: 1px solid var(--glass-border);
+            margin-top: var(--spacing-md);
+        }
+
+        .phase-details.expanded {
+            max-height: 1000px;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+        }
+
+        .phase-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.5;
+        }
+
+        /* Phase Progress Bar */
+        .phase-progress-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .phase-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .phase-progress-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .phase-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transition: width var(--transition-base);
+            border-radius: 999px;
+        }
+
+        /* Task List */
+        .phase-tasks {
+            margin-top: var(--spacing-md);
+        }
+
+        .tasks-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-sm);
+            display: block;
+        }
+
+        .task-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            padding: var(--spacing-sm);
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: var(--radius-md);
+            border-left: 2px solid var(--accent-primary);
+        }
+
+        .task-item::before {
+            content: '✓';
+            color: var(--accent-primary);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Phase Metadata */
+        .phase-metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .metadata-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .metadata-value {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Status States
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .phase-card.completed .phase-status-icon::after {
+            content: '✓';
+        }
+
+        .phase-card.executing .phase-status-icon::after {
+            content: '⟳';
+        }
+
+        .phase-card.failed .phase-status-icon::after {
+            content: '✕';
+        }
+
+        .phase-card.paused .phase-status-icon::after {
+            content: '⏸';
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Footer / Last Updated
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .plan-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            position: sticky;
+            bottom: 0;
+            z-index: 9;
+        }
+
+        .refresh-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .refresh-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .refresh-dot.loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Responsive Design
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        @media (max-width: 768px) {
+            :root {
+                --spacing-2xl: 1.5rem;
+                --spacing-xl: 1rem;
+            }
+
+            .plan-header {
+                padding: var(--spacing-xl);
+            }
+
+            .plan-title {
+                font-size: 1.5rem;
+            }
+
+            .plan-title-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .phase-card {
+                padding: var(--spacing-md);
+            }
+
+            .phase-metadata {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-footer {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --spacing-2xl: 1rem;
+                --spacing-lg: 0.75rem;
+                --spacing-md: 0.5rem;
+            }
+
+            .plan-title {
+                font-size: 1.25rem;
+            }
+
+            .plan-header {
+                padding: var(--spacing-lg);
+            }
+
+            .phase-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .phase-controls {
+                align-self: flex-end;
+                margin-top: calc(-1.125rem - var(--spacing-xs));
+            }
+
+            .phases-container {
+                padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+            }
+
+            .progress-percentage {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Empty State
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: var(--spacing-lg);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        .empty-state-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           Loading State
+           ═══════════════════════════════════════════════════════════════════════════ */
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: var(--spacing-md);
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="plan-viewer">
+        <div class="plan-viewer-content">
+            <!-- Header -->
+            <div class="plan-header">
+                <div class="plan-title-section">
+                    <h1 class="plan-title">CORTEX Plan Viewer</h1>
+                    <span class="plan-status-badge" id="planStatusBadge" role="status" aria-label="Plan status">
+                        Loading...
+                    </span>
+                </div>
+
+                <!-- Overall Progress -->
+                <div class="overall-progress-section">
+                    <div class="progress-label">
+                        <span class="progress-label-text">Overall Progress</span>
+                        <span class="progress-percentage" id="overallPercentage" aria-label="Overall progress percentage">0%</span>
+                    </div>
+                    <div class="progress-bar-container" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phases Container -->
+            <div class="phases-container" id="phasesContainer">
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Loading plan data...</div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="plan-footer">
+                <div class="refresh-indicator">
+                    <span class="refresh-dot" id="refreshIndicator"></span>
+                    <span>Auto-refresh every <span id="refreshInterval">1</span>s</span>
+                </div>
+                <div id="lastUpdated">Last updated: —</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         JavaScript: Real-Time Viewer Logic
+         ═══════════════════════════════════════════════════════════════════════════ -->
+
+    <script>
+        /**
+         * CORTEX Plan Viewer - Autonomous Execution Progress Monitor
+         * 
+         * Features:
+         * - Real-time progress tracking
+         * - Phase details with collapsible expansion
+         * - Glassmorphism design with smooth animations
+         * - Responsive mobile-first layout
+         * - Auto-refresh with configurable interval
+         * - WebSocket/Polling fallback support
+         * 
+         * @author Asif Hussain
+         * @version 1.0
+         */
+
+        class PlanViewer {
+            constructor(config = {}) {
+                this.config = {
+                    refreshInterval: config.refreshInterval || 1000, // 1 second
+                    dataSource: config.dataSource || null,
+                    useSampleData: config.useSampleData !== false,
+                    ...config
+                };
+
+                this.currentPlan = null;
+                this.expandedPhases = new Set();
+                this.refreshTimer = null;
+                this.lastUpdateTime = null;
+
+                this.initializeElements();
+                this.attachEventListeners();
+                this.loadPlanData();
+            }
+
+            /**
+             * Initialize DOM element references
+             */
+            initializeElements() {
+                this.elements = {
+                    phasesContainer: document.getElementById('phasesContainer'),
+                    planStatusBadge: document.getElementById('planStatusBadge'),
+                    overallPercentage: document.getElementById('overallPercentage'),
+                    progressBarFill: document.getElementById('progressBarFill'),
+                    lastUpdated: document.getElementById('lastUpdated'),
+                    refreshIndicator: document.getElementById('refreshIndicator'),
+                    refreshInterval: document.getElementById('refreshInterval')
+                };
+            }
+
+            /**
+             * Attach event listeners
+             */
+            attachEventListeners() {
+                // Phase toggle buttons will be added dynamically
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('phase-toggle-btn')) {
+                        this.togglePhaseDetails(e.target);
+                    }
+                });
+            }
+
+            /**
+             * Load plan data from source or sample
+             */
+            async loadPlanData() {
+                try {
+                    if (this.config.dataSource) {
+                        this.currentPlan = await this.fetchPlanData();
+                    } else if (this.config.useSampleData) {
+                        this.currentPlan = this.getSamplePlanData();
+                    }
+
+                    if (this.currentPlan) {
+                        this.renderPlanViewer();
+                        this.startAutoRefresh();
+                    } else {
+                        this.renderEmptyState();
+                    }
+                } catch (error) {
+                    console.error('Error loading plan data:', error);
+                    this.renderErrorState(error.message);
+                }
+            }
+
+            /**
+             * Fetch plan data from API/WebSocket
+             */
+            async fetchPlanData() {
+                if (!this.config.dataSource) return null;
+
+                try {
+                    const response = await fetch(this.config.dataSource);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.warn('Fetch failed, using sample data:', error);
+                    return this.getSamplePlanData();
+                }
+            }
+
+            /**
+             * Get sample plan data for demonstration
+             */
+            getSamplePlanData() {
+                return {
+                    plan_id: "cortex-autonomous-planning-001",
+                    plan_name: "CORTEX Autonomous Planning Orchestrator",
+                    overall_progress: 87,
+                    status: "executing",
+                    created_at: new Date(Date.now() - 3600000).toISOString(),
+                    last_updated: new Date().toISOString(),
+                    phases: [
+                        {
+                            phase_id: 1,
+                            phase_name: "Infrastructure Setup",
+                            progress: 100,
+                            status: "completed",
+                            description: "Initialize async execution engine with pause/resume checkpoint system",
+                            tasks: [
+                                "Create AutonomousExecutionEngine with state machine",
+                                "Implement pause/resume mechanisms",
+                                "Add checkpoint persistence with JSON",
+                                "Integrate LENS protocol for corrections"
+                            ],
+                            started_at: new Date(Date.now() - 3600000).toISOString(),
+                            completed_at: new Date(Date.now() - 2700000).toISOString(),
+                            duration_seconds: 2700
+                        },
+                        {
+                            phase_id: 2,
+                            phase_name: "Naming & Domain Utilities",
+                            progress: 100,
+                            status: "completed",
+                            description: "Implement kebab-case conversion and intelligent domain inference",
+                            tasks: [
+                                "Create NamingFactory with to_kebab_case()",
+                                "Add domain inference with keyword matching",
+                                "Implement validation rules",
+                                "Add 31 comprehensive unit tests"
+                            ],
+                            started_at: new Date(Date.now() - 2700000).toISOString(),
+                            completed_at: new Date(Date.now() - 1800000).toISOString(),
+                            duration_seconds: 1800
+                        },
+                        {
+                            phase_id: 3,
+                            phase_name: "Registry Builder",
+                            progress: 100,
+                            status: "completed",
+                            description: "Build plan registry with folder structure and metadata validation",
+                            tasks: [
+                                "Create initialize_planning_registry()",
+                                "Implement create_plan_folder() with domain structure",
+                                "Add register_plan() with metadata validation",
+                                "Build regenerate_index_from_filesystem()",
+                                "Write 21 integration tests"
+                            ],
+                            started_at: new Date(Date.now() - 1800000).toISOString(),
+                            completed_at: new Date(Date.now() - 900000).toISOString(),
+                            duration_seconds: 2700
+                        },
+                        {
+                            phase_id: 4,
+                            phase_name: "Bootstrap Integration",
+                            progress: 75,
+                            status: "executing",
+                            description: "Initialize autonomous subsystem on startup with checkpoint restoration",
+                            tasks: [
+                                "✓ Create bootstrap_initialize()",
+                                "✓ Implement checkpoint restoration",
+                                "⟳ Add plan discovery from registry",
+                                "Plan resumption from paused state"
+                            ],
+                            started_at: new Date(Date.now() - 900000).toISOString(),
+                            completed_at: null,
+                            duration_seconds: null
+                        },
+                        {
+                            phase_id: 5,
+                            phase_name: "Plan Migration & Consolidation",
+                            progress: 50,
+                            status: "executing",
+                            description: "Migrate legacy plans and detect circular dependencies",
+                            tasks: [
+                                "✓ Implement discover_legacy_plans()",
+                                "⟳ Add duplicate detection with MD5 hashing",
+                                "Plan circular dependency detection (DFS)",
+                                "Validation and data integrity checks"
+                            ],
+                            started_at: new Date(Date.now() - 600000).toISOString(),
+                            completed_at: null,
+                            duration_seconds: null
+                        },
+                        {
+                            phase_id: 6,
+                            phase_name: "End-to-End Testing",
+                            progress: 25,
+                            status: "executing",
+                            description: "Comprehensive system integration and validation testing",
+                            tasks: [
+                                "✓ Write integration test suite",
+                                "Run E2E workflow tests",
+                                "Validate performance baselines",
+                                "Governance compliance verification"
+                            ],
+                            started_at: new Date(Date.now() - 300000).toISOString(),
+                            completed_at: null,
+                            duration_seconds: null
+                        },
+                        {
+                            phase_id: 7,
+                            phase_name: "Plan Viewer Implementation",
+                            progress: 10,
+                            status: "executing",
+                            description: "Create beautiful real-time plan visualization SPA",
+                            tasks: [
+                                "✓ Design glassmorphism UI",
+                                "Implement real-time updates",
+                                "Add phase details display",
+                                "Mobile responsive design"
+                            ],
+                            started_at: new Date(Date.now() - 60000).toISOString(),
+                            completed_at: null,
+                            duration_seconds: null
+                        }
+                    ]
+                };
+            }
+
+            /**
+             * Render the complete plan viewer
+             */
+            renderPlanViewer() {
+                // Update header
+                this.updateHeader();
+
+                // Render phases grid
+                this.renderPhases();
+
+                // Update footer
+                this.updateFooter();
+            }
+
+            /**
+             * Update header with plan info and overall progress
+             */
+            updateHeader() {
+                const plan = this.currentPlan;
+
+                // Update title and status
+                this.elements.planStatusBadge.textContent = plan.status;
+                this.elements.planStatusBadge.className = `plan-status-badge ${plan.status}`;
+                this.elements.planStatusBadge.setAttribute('aria-label', `Plan status: ${plan.status}`);
+
+                // Update overall progress
+                this.updateProgressBar(
+                    this.elements.overallPercentage,
+                    this.elements.progressBarFill,
+                    plan.overall_progress
+                );
+            }
+
+            /**
+             * Render all phase cards
+             */
+            renderPhases() {
+                const phases = this.currentPlan.phases;
+
+                if (!phases || phases.length === 0) {
+                    this.renderEmptyState();
+                    return;
+                }
+
+                const phasesHTML = phases.map(phase => this.createPhaseCard(phase)).join('');
+                this.elements.phasesContainer.innerHTML = `<div class="phases-grid">${phasesHTML}</div>`;
+            }
+
+            /**
+             * Create a single phase card
+             */
+            createPhaseCard(phase) {
+                const isExpanded = this.expandedPhases.has(phase.phase_id);
+                const statusClass = phase.status;
+                const expanded = isExpanded ? 'expanded' : '';
+
+                const detailsHTML = isExpanded ? this.createPhaseDetails(phase) : '';
+
+                return `
+                    <div class="phase-card ${statusClass}" data-phase-id="${phase.phase_id}">
+                        <div class="phase-header">
+                            <div class="phase-info">
+                                <div class="phase-number">Phase ${phase.phase_id}</div>
+                                <div class="phase-name">${phase.phase_name}</div>
+                            </div>
+                            <div class="phase-controls">
+                                <span class="phase-status-icon ${statusClass}" aria-label="Status: ${phase.status}"></span>
+                                <button class="phase-toggle-btn" aria-expanded="${isExpanded}" aria-label="Toggle details">
+                                    ${isExpanded ? '−' : '+'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="phase-progress-section">
+                            <div class="phase-progress-label">
+                                <span>Progress</span>
+                                <span>${phase.progress}%</span>
+                            </div>
+                            <div class="phase-progress-bar">
+                                <div class="phase-progress-fill" style="width: ${phase.progress}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="phase-details ${expanded}">
+                            ${detailsHTML}
+                        </div>
+                    </div>
+                `;
+            }
+
+            /**
+             * Create phase details section (collapsible)
+             */
+            createPhaseDetails(phase) {
+                const tasksHTML = phase.tasks
+                    .map(task => `<li class="task-item">${task}</li>`)
+                    .join('');
+
+                let durationText = '—';
+                if (phase.duration_seconds) {
+                    const minutes = Math.floor(phase.duration_seconds / 60);
+                    const seconds = phase.duration_seconds % 60;
+                    durationText = `${minutes}m ${seconds}s`;
+                }
+
+                const completedAt = phase.completed_at ? new Date(phase.completed_at).toLocaleTimeString() : '—';
+                const startedAt = phase.started_at ? new Date(phase.started_at).toLocaleTimeString() : '—';
+
+                return `
+                    <div class="phase-description">${phase.description}</div>
+
+                    <div class="phase-tasks">
+                        <span class="tasks-label">Tasks & Checklist</span>
+                        <ul class="task-list">
+                            ${tasksHTML}
+                        </ul>
+                    </div>
+
+                    <div class="phase-metadata">
+                        <div class="metadata-item">
+                            <span class="metadata-label">Status</span>
+                            <span class="metadata-value">${phase.status}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Progress</span>
+                            <span class="metadata-value">${phase.progress}%</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Started</span>
+                            <span class="metadata-value">${startedAt}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Completed</span>
+                            <span class="metadata-value">${completedAt}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Duration</span>
+                            <span class="metadata-value">${durationText}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            /**
+             * Toggle phase details expansion
+             */
+            togglePhaseDetails(button) {
+                const card = button.closest('.phase-card');
+                const phaseId = parseInt(card.dataset.phaseId);
+                const details = card.querySelector('.phase-details');
+
+                if (this.expandedPhases.has(phaseId)) {
+                    this.expandedPhases.delete(phaseId);
+                    details.classList.remove('expanded');
+                    button.textContent = '+';
+                    button.setAttribute('aria-expanded', 'false');
+                } else {
+                    this.expandedPhases.add(phaseId);
+                    const phase = this.currentPlan.phases.find(p => p.phase_id === phaseId);
+                    details.innerHTML = this.createPhaseDetails(phase);
+                    details.classList.add('expanded');
+                    button.textContent = '−';
+                    button.setAttribute('aria-expanded', 'true');
+                }
+            }
+
+            /**
+             * Update progress bar with animation
+             */
+            updateProgressBar(percentageElement, fillElement, progress) {
+                percentageElement.textContent = `${progress}%`;
+                fillElement.style.width = `${progress}%`;
+                fillElement.parentElement.setAttribute('aria-valuenow', progress);
+            }
+
+            /**
+             * Update footer with timestamp
+             */
+            updateFooter() {
+                const now = new Date();
+                this.elements.lastUpdated.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+                this.elements.refreshInterval.textContent = Math.floor(this.config.refreshInterval / 1000);
+            }
+
+            /**
+             * Start auto-refresh timer
+             */
+            startAutoRefresh() {
+                this.refreshTimer = setInterval(() => {
+                    // Simulate progress updates for demo
+                    this.simulateProgressUpdate();
+                    this.updateFooter();
+                }, this.config.refreshInterval);
+            }
+
+            /**
+             * Simulate progress updates (for demo)
+             */
+            simulateProgressUpdate() {
+                if (!this.currentPlan) return;
+
+                // Update overall progress
+                if (this.currentPlan.overall_progress < 100) {
+                    this.currentPlan.overall_progress = Math.min(
+                        this.currentPlan.overall_progress + Math.random() * 2,
+                        100
+                    );
+                }
+
+                // Update phase progress
+                this.currentPlan.phases.forEach(phase => {
+                    if (phase.status === 'executing' && phase.progress < 100) {
+                        phase.progress = Math.min(
+                            phase.progress + Math.random() * 5,
+                            100
+                        );
+
+                        // Mark complete if progress reaches 100
+                        if (phase.progress >= 100) {
+                            phase.progress = 100;
+                            phase.status = 'completed';
+                            phase.completed_at = new Date().toISOString();
+                        }
+                    }
+                });
+
+                // Re-render with animation
+                requestAnimationFrame(() => {
+                    this.updateHeader();
+                    this.renderPhases();
+                });
+            }
+
+            /**
+             * Render empty state
+             */
+            renderEmptyState() {
+                this.elements.phasesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-text">No plan data available</div>
+                        <div class="empty-state-hint">Load a plan to view progress and details</div>
+                    </div>
+                `;
+            }
+
+            /**
+             * Render error state
+             */
+            renderErrorState(errorMessage) {
+                this.elements.phasesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <div class="empty-state-text">Error loading plan</div>
+                        <div class="empty-state-hint">${errorMessage}</div>
+                    </div>
+                `;
+            }
+
+            /**
+             * Cleanup resources
+             */
+            destroy() {
+                if (this.refreshTimer) {
+                    clearInterval(this.refreshTimer);
+                }
+            }
+        }
+
+        // Initialize viewer on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            window.planViewer = new PlanViewer({
+                refreshInterval: 1000,
+                useSampleData: true
+            });
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (window.planViewer) {
+                window.planViewer.destroy();
+            }
+        });
+    </script>
+<script>const EMBEDDED_PLAN_DATA = {"plan_id": "version-test-001-v1", "plan_name": "Version Test", "phases": [], "overall_progress": 0};</script>
+</body>
+</html>
