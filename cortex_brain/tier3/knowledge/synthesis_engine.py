@@ -362,8 +362,8 @@ class SynthesisEngine:
         synthesis += f"Identified patterns: {', '.join(patterns[:5])}. "
         
         if relationships:
-            synthesis += f"Found {len(relationships)} cross-domain relationships with average strength {
-                sum(r.get('strength', 0) for r in relationships) / len(relationships):.2f}."
+            avg_strength = sum(r.get('strength', 0) for r in relationships) / len(relationships)
+            synthesis += f"Found {len(relationships)} cross-domain relationships with average strength {avg_strength:.2f}."
         
         return synthesis
     
