@@ -24,6 +24,13 @@ def bootstrap_cortex() -> bool:
         True if bootstrap successful, False if critical issues detected.
     """
     try:
+        # AC-HYBRID-KNOWLEDGE-003: Rebuild knowledge cache from YAML on startup
+        try:
+            from cortex.brain.knowledge.cache_builder import rebuild_knowledge_cache
+            rebuild_knowledge_cache()
+        except Exception as e:
+            logger.warning(f"Knowledge cache rebuild skipped during bootstrap: {e}")
+        
         # Import validator (this also triggers auto-validation)
         from cortex.infrastructure.startup_validator import (
             run_startup_validation,

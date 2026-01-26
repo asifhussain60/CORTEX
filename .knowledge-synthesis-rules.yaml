@@ -1,0 +1,72 @@
+# Knowledge Synthesis Composition Rules
+# Authority: AC-HYBRID-KNOWLEDGE-002
+# Version: 1.0
+# Updated: 2026-01-26
+#
+# Defines how CORTEX best practices combine with Company knowledge domains
+# to produce final instruction sets for Master Orchestrator.
+#
+# Composition Strategies:
+#   - overlay: Company knowledge adds to/overrides CORTEX guidance
+#   - merge: Company knowledge merged with CORTEX guidance
+#   - substitute: Company knowledge replaces CORTEX guidance for specific rules
+
+metadata:
+  version: "1.0"
+  created_at: "2026-01-26T00:00:00Z"
+  authority: "AC-HYBRID-KNOWLEDGE-002"
+
+synthesis_rules:
+  # TDD + Company Context (Default for all IMPLEMENT/FIX/REFACTOR intents)
+  - id: tdd-with-company-context
+    name: "TDD Discipline with Company Engineering Standards"
+    description: "Combines CORTEX TDD best practices with company engineering standards"
+    cortex_domain: TESTING-VALIDATION
+    company_domains: []  # Will auto-expand when company domains added
+    composition: overlay
+    priority: HIGH
+    applicable_intents: [IMPLEMENT, FIX, REFACTOR, TEST]
+    output_layer: "Synthesized TDD guidance with company context"
+
+  # Architecture + Compliance (Active when company has compliance domain)
+  - id: architecture-with-compliance
+    name: "Architecture Design with Compliance Rules"
+    description: "CORTEX architecture patterns filtered through compliance constraints"
+    cortex_domain: ARCHITECTURE
+    company_domains: []  # Will include compliance domain when available
+    composition: merge
+    priority: MEDIUM
+    applicable_intents: [IMPLEMENT, REFACTOR]
+    output_layer: "Compliance-aware architecture guidance"
+
+  # Deployment + Infrastructure (Active when company has infrastructure domain)
+  - id: deployment-with-infrastructure
+    name: "Deployment Automation with Infrastructure Rules"
+    description: "CORTEX CI/CD patterns adapted to company infrastructure"
+    cortex_domain: DEPLOYMENT
+    company_domains: []  # Will include infrastructure domain when available
+    composition: overlay
+    priority: MEDIUM
+    applicable_intents: [DEPLOY, IMPLEMENT]
+    output_layer: "Infrastructure-aware deployment guidance"
+
+  # Security + Data Protection (Active when company has security domain)
+  - id: security-with-data-protection
+    name: "Security Hardening with Data Protection Standards"
+    description: "CORTEX security patterns with company data protection requirements"
+    cortex_domain: SECURITY
+    company_domains: []  # Will include security domain when available
+    composition: merge
+    priority: HIGH
+    applicable_intents: [IMPLEMENT, FIX, REFACTOR]
+    output_layer: "Data-protection-compliant security guidance"
+
+performance_settings:
+  cache_ttl_seconds: 3600
+  cache_strategy: "memory_with_sqlite_backup"
+  rebuild_conditions:
+    - "on_git_pull"
+    - "on_first_import"
+    - "on_config_file_change"
+  parallel_synthesis_enabled: true
+  max_composition_depth: 3
