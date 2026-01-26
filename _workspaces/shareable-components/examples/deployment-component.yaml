@@ -1,0 +1,188 @@
+# Deployment Automation Component Example
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-01-26
+# Purpose: Reference implementation for deployment automation component
+
+metadata:
+  component_name: cortex-deployment
+  version: 1.0.0
+  description: CORTEX-powered deployment automation and canary management
+  author: CORTEX Team
+  domain: deployment
+
+# =============================================================================
+# COMPONENT REGISTRATION
+# =============================================================================
+
+registration:
+  decorator: |
+    @register_component(
+        name="deployment",
+        version="1.0.0",
+        description="Automated deployment with canary releases and health checks",
+        author="cortex-team",
+        domain="deployment",
+        dependencies=["cortex-components", "mcp", "kubernetes-client"],
+        governance_rules=["CORE-026", "CORE-027"]
+    )
+    class DeploymentComponent(CORTEXComponent):
+        pass
+
+# =============================================================================
+# MCP TOOLS
+# =============================================================================
+
+mcp_tools:
+  - name: deploy_canary
+    description: Deploy a canary release with specified traffic percentage
+    input_schema:
+      type: object
+      properties:
+        service_name:
+          type: string
+          description: Name of service to deploy
+        version:
+          type: string
+          description: Version tag to deploy
+        percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+          default: 5
+          description: Percentage of traffic to route to canary
+        namespace:
+          type: string
+          default: default
+          description: Kubernetes namespace
+      required: [service_name, version]
+    output:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+        status:
+          type: string
+        canary_pods:
+          type: array
+          
+  - name: promote_canary
+    description: Promote canary to full production
+    input_schema:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+          description: Deployment ID from deploy_canary
+        confirm:
+          type: boolean
+          default: false
+          description: Confirm promotion
+      required: [deployment_id, confirm]
+      
+  - name: rollback
+    description: Rollback deployment to previous version
+    input_schema:
+      type: object
+      properties:
+        service_name:
+          type: string
+        target_version:
+          type: string
+          description: Version to rollback to (default: previous)
+      required: [service_name]
+      
+  - name: health_check
+    description: Check deployment health status
+    input_schema:
+      type: object
+      properties:
+        service_name:
+          type: string
+        include_metrics:
+          type: boolean
+          default: true
+      required: [service_name]
+    output:
+      type: object
+      properties:
+        healthy:
+          type: boolean
+        pods:
+          type: object
+        metrics:
+          type: object
+
+# =============================================================================
+# INTERNAL TOOLS
+# =============================================================================
+
+internal_tools:
+  kubernetes_client:
+    description: Kubernetes API wrapper
+    methods:
+      - get_deployment(name, namespace) -> Deployment
+      - create_canary_deployment(config) -> Deployment
+      - update_traffic_split(service, percentages) -> Result
+      - rollback_deployment(name, namespace, revision) -> Result
+      
+  health_monitor:
+    description: Health and metrics monitoring
+    methods:
+      - check_pod_health(deployment) -> HealthStatus
+      - get_error_rate(service, window) -> float
+      - get_latency_metrics(service, window) -> LatencyMetrics
+      
+  deployment_manager:
+    description: Deployment orchestration
+    methods:
+      - plan_deployment(config) -> DeploymentPlan
+      - execute_plan(plan) -> DeploymentResult
+      - generate_rollback_plan(deployment) -> RollbackPlan
+
+# =============================================================================
+# GOVERNANCE RULES
+# =============================================================================
+
+governance:
+  applied_rules:
+    CORE-026:
+      description: Git Checkpoint
+      application: Create checkpoint before any deployment changes
+      
+    CORE-027:
+      description: Audit Trail
+      application: All deployment operations logged with full context
+
+# =============================================================================
+# USAGE EXAMPLES
+# =============================================================================
+
+usage_examples:
+  canary_deployment:
+    description: Deploy canary and monitor
+    code: |
+      from cortex_deployment import DeploymentComponent
+      
+      component = DeploymentComponent()
+      
+      # Deploy canary with 5% traffic
+      result = await component.execute("deploy_canary", {
+          "service_name": "my-service",
+          "version": "v2.0.0",
+          "percentage": 5
+      })
+      
+      deployment_id = result.value["deployment_id"]
+      
+      # Check health
+      health = await component.execute("health_check", {
+          "service_name": "my-service"
+      })
+      
+      # If healthy, promote
+      if health.value["healthy"]:
+          await component.execute("promote_canary", {
+              "deployment_id": deployment_id,
+              "confirm": True
+          })

@@ -1,0 +1,358 @@
+# CORTEX Lightweight Audit Specification
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-01-26
+# Purpose: Audit system for standalone CORTEX components
+
+metadata:
+  spec_id: COMP-AUDIT-001
+  status: READY_FOR_IMPLEMENTATION
+  authority: MasterOrchestrator
+  
+# =============================================================================
+# 1. OVERVIEW
+# =============================================================================
+
+overview:
+  description: |
+    LightweightAudit provides essential audit trail capabilities for
+    standalone CORTEX components. It captures operation lifecycle events
+    without requiring CORTEX's full EnhancedAuditLogger infrastructure.
+    
+  design_principles:
+    - Minimal dependencies (no CORTEX core required)
+    - JSON-based logging (portable, parseable)
+    - Operation lifecycle tracking (start/complete)
+    - Self-contained (no external services)
+    
+  comparison_to_full:
+    full_audit:
+      features: [hash_chains, tamper_detection, multi_file, rotation]
+      storage: Multiple log files with SHA256 chains
+      dependency: CORTEX infrastructure
+    lightweight_audit:
+      features: [json_logs, operation_tracking, basic_search]
+      storage: Single JSON log file
+      dependency: None
+
+# =============================================================================
+# 2. CLASS SPECIFICATION
+# =============================================================================
+
+class_specification:
+  name: LightweightAudit
+  module: cortex.components.audit
+  
+  attributes:
+    - name: component_name
+      type: str
+      description: Name of component being audited
+    - name: log_file
+      type: Path
+      description: Path to JSON log file
+    - name: _operation_counter
+      type: int
+      description: Counter for generating operation IDs
+      
+  constructor:
+    signature: "def __init__(self, component_name: str, log_dir: Path = None)"
+    parameters:
+      - name: component_name
+        type: str
+        required: true
+        description: Component name for log context
+      - name: log_dir
+        type: Path
+        required: false
+        default: ".cortex/components/logs"
+        description: Directory for log files
+    behavior:
+      - Sets component name
+      - Creates log directory if not exists
+      - Opens/creates log file for appending
+      - Initializes operation counter
+
+# =============================================================================
+# 3. LOG ENTRY SCHEMA
+# =============================================================================
+
+log_entry_schema:
+  type: object
+  required: [operation_id, component, event_type, timestamp]
+  properties:
+    operation_id:
+      type: string
+      description: Unique operation identifier
+      format: "{component}-{counter}-{timestamp}"
+      example: "test-automation-0001-20260126T120000"
+      
+    component:
+      type: string
+      description: Component name
+      
+    event_type:
+      type: string
+      enum: [OPERATION_START, OPERATION_COMPLETE, OPERATION_ERROR]
+      
+    timestamp:
+      type: string
+      format: ISO-8601
+      
+    operation:
+      type: string
+      description: Operation name
+      
+    params:
+      type: object
+      description: Operation parameters (sanitized)
+      
+    success:
+      type: boolean
+      description: Operation success (for COMPLETE events)
+      
+    result:
+      type: object
+      description: Operation result (for COMPLETE events)
+      
+    error:
+      type: string
+      description: Error message (for ERROR events)
+      
+    duration_ms:
+      type: number
+      description: Operation duration in milliseconds
+
+# =============================================================================
+# 4. METHODS
+# =============================================================================
+
+methods:
+  log_operation_start:
+    signature: "def log_operation_start(self, component: str, operation: str, params: Dict[str, Any]) -> str"
+    description: Log operation start event
+    parameters:
+      - name: component
+        type: str
+      - name: operation
+        type: str
+      - name: params
+        type: Dict[str, Any]
+    returns:
+      type: str
+      description: Operation ID for tracking
+    behavior:
+      - Generates unique operation ID
+      - Records start timestamp
+      - Sanitizes params (removes sensitive data)
+      - Writes OPERATION_START entry
+      - Returns operation ID
+      
+  log_operation_complete:
+    signature: "def log_operation_complete(self, operation_id: str, success: bool, result: Any = None, error: str = None) -> None"
+    description: Log operation completion event
+    parameters:
+      - name: operation_id
+        type: str
+      - name: success
+        type: bool
+      - name: result
+        type: Any
+        required: false
+      - name: error
+        type: str
+        required: false
+    behavior:
+      - Looks up start timestamp
+      - Calculates duration
+      - Writes OPERATION_COMPLETE or OPERATION_ERROR entry
+      
+  search_operations:
+    signature: "def search_operations(self, filters: Dict[str, Any], limit: int = 100) -> List[Dict]"
+    description: Search audit log entries
+    parameters:
+      - name: filters
+        type: Dict[str, Any]
+        description: Filter criteria (component, operation, success, date_range)
+      - name: limit
+        type: int
+        default: 100
+    returns:
+      type: List[Dict]
+      description: Matching log entries
+      
+  get_operation_history:
+    signature: "def get_operation_history(self, operation_id: str) -> List[Dict]"
+    description: Get all entries for an operation
+    returns:
+      type: List[Dict]
+      description: All log entries for operation (start, complete/error)
+
+# =============================================================================
+# 5. SENSITIVE DATA HANDLING
+# =============================================================================
+
+sensitive_data:
+  description: |
+    LightweightAudit sanitizes sensitive data before logging.
+    Sensitive fields are replaced with "[REDACTED]".
+    
+  sensitive_patterns:
+    - "*password*"
+    - "*secret*"
+    - "*token*"
+    - "*api_key*"
+    - "*auth*"
+    - "*credential*"
+    
+  sanitization_config:
+    redaction_value: "[REDACTED]"
+    log_redaction: true  # Log that redaction occurred
+
+# =============================================================================
+# 6. LOG FILE MANAGEMENT
+# =============================================================================
+
+log_file_management:
+  naming:
+    pattern: "{component_name}-audit.jsonl"
+    example: "test-automation-audit.jsonl"
+    
+  format: JSON Lines (one JSON object per line)
+  
+  rotation:
+    enabled: false  # Not in lightweight version
+    note: Full CORTEX provides log rotation
+    
+  location:
+    default: ".cortex/components/logs/"
+    configurable: true
+    
+  retention:
+    default: No automatic cleanup
+    note: Consumer responsibility in standalone mode
+
+# =============================================================================
+# 7. INTEGRATION WITH COMPONENTS
+# =============================================================================
+
+integration:
+  initialization:
+    standalone_mode: |
+      # In CORTEXComponent._init_standalone_mode()
+      self.audit = LightweightAudit(
+          component_name=self.metadata.name
+      )
+      
+    integrated_mode: |
+      # In CORTEXComponent._init_integrated_mode()
+      from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+      self.audit = EnhancedAuditLogger.instance()
+      
+  usage_pattern: |
+    # In execute_with_governance()
+    
+    # Start
+    operation_id = self.audit.log_operation_start(
+        component=self.metadata.name,
+        operation=operation,
+        params=params
+    )
+    
+    try:
+        result = await self.execute(operation, params)
+        
+        # Complete success
+        self.audit.log_operation_complete(
+            operation_id=operation_id,
+            success=result.is_ok,
+            result=result.value if result.is_ok else None,
+            error=result.error if not result.is_ok else None
+        )
+        return result
+        
+    except Exception as e:
+        # Complete error
+        self.audit.log_operation_complete(
+            operation_id=operation_id,
+            success=False,
+            error=str(e)
+        )
+        return Err(str(e))
+
+# =============================================================================
+# 8. EXAMPLE LOG OUTPUT
+# =============================================================================
+
+example_output:
+  operation_start: |
+    {
+      "operation_id": "test-automation-0001-20260126T120000",
+      "component": "test-automation",
+      "event_type": "OPERATION_START",
+      "timestamp": "2026-01-26T12:00:00.000Z",
+      "operation": "generate_test",
+      "params": {
+        "ticket_id": "ADO-12345",
+        "auth_token": "[REDACTED]"
+      }
+    }
+    
+  operation_complete_success: |
+    {
+      "operation_id": "test-automation-0001-20260126T120000",
+      "component": "test-automation",
+      "event_type": "OPERATION_COMPLETE",
+      "timestamp": "2026-01-26T12:00:05.000Z",
+      "operation": "generate_test",
+      "success": true,
+      "duration_ms": 5000,
+      "result": {
+        "test_file": "test_ado_12345.py",
+        "test_count": 3
+      }
+    }
+    
+  operation_complete_error: |
+    {
+      "operation_id": "test-automation-0002-20260126T120100",
+      "component": "test-automation",
+      "event_type": "OPERATION_COMPLETE",
+      "timestamp": "2026-01-26T12:01:02.000Z",
+      "operation": "generate_test",
+      "success": false,
+      "duration_ms": 2000,
+      "error": "ADO ticket not found: ADO-99999"
+    }
+
+# =============================================================================
+# 9. ACCEPTANCE CRITERIA
+# =============================================================================
+
+acceptance_criteria:
+  - id: AC-AUDIT-001
+    description: LightweightAudit creates log file on initialization
+    verification: Log file exists after constructor
+    
+  - id: AC-AUDIT-002
+    description: log_operation_start returns unique operation ID
+    verification: Multiple calls return different IDs
+    
+  - id: AC-AUDIT-003
+    description: log_operation_complete records duration
+    verification: Duration calculated from start timestamp
+    
+  - id: AC-AUDIT-004
+    description: Sensitive data is redacted in logs
+    verification: password/token fields show [REDACTED]
+    
+  - id: AC-AUDIT-005
+    description: Log format is valid JSON Lines
+    verification: Each line parseable as JSON
+    
+  - id: AC-AUDIT-006
+    description: search_operations returns matching entries
+    verification: Filter by component/operation works
+    
+  - id: AC-AUDIT-007
+    description: Works without CORTEX core dependency
+    verification: Imports succeed with only cortex-components installed

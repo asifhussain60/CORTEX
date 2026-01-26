@@ -1,0 +1,338 @@
+# CORTEX Component Modes Comparison
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-01-26
+# Purpose: Detailed comparison of standalone vs integrated modes
+
+metadata:
+  spec_id: COMP-MODES-001
+  status: REFERENCE_DOCUMENT
+  authority: MasterOrchestrator
+  
+# =============================================================================
+# 1. MODE OVERVIEW
+# =============================================================================
+
+modes:
+  standalone:
+    name: Standalone Mode
+    description: Component operates independently as MCP server
+    cortex_required: false
+    installation: "pip install cortex-{component}"
+    target_audience: Teams new to CORTEX
+    
+  integrated:
+    name: Integrated Mode
+    description: Component operates within full CORTEX infrastructure
+    cortex_required: true
+    installation: "Full CORTEX + pip install cortex-{component}"
+    target_audience: CORTEX-adopting teams
+
+# =============================================================================
+# 2. CAPABILITY MATRIX
+# =============================================================================
+
+capability_matrix:
+  mcp_tools:
+    standalone: FULL
+    integrated: FULL
+    notes: "Both modes expose identical MCP tool interfaces"
+    
+  governance:
+    standalone: LIGHTWEIGHT
+    integrated: FULL
+    standalone_details:
+      rule_count: 5-10 essential rules
+      storage: In-memory/bundled YAML
+      enforcement: Basic validation
+    integrated_details:
+      rule_count: 35+ CORE rules
+      storage: SQLite/YAML with audit
+      enforcement: Full tier system with hash verification
+      
+  audit_logging:
+    standalone: LIGHTWEIGHT
+    integrated: FULL
+    standalone_details:
+      format: JSON Lines file
+      features: [operation_tracking, basic_search]
+      hash_chains: false
+      tamper_detection: false
+    integrated_details:
+      format: Multiple log files with rotation
+      features: [operation_tracking, search, hash_chains, tamper_detection]
+      hash_chains: true
+      tamper_detection: SHA256 verification
+      
+  knowledge:
+    standalone: COMPONENT_ONLY
+    integrated: FULL_REPOSITORY
+    standalone_details:
+      scope: Domain-specific knowledge bundled with component
+      sources: Component package YAML files
+    integrated_details:
+      scope: Full CORTEX knowledge repository
+      sources: 35+ YAML files, business knowledge, domain brain
+      
+  state_management:
+    standalone: NONE
+    integrated: FULL
+    standalone_details:
+      persistence: None (stateless operations)
+      cross_operation: Not available
+    integrated_details:
+      persistence: StateManager with SQLite
+      cross_operation: Full state sharing between orchestrators
+      
+  orchestrator_coordination:
+    standalone: NONE
+    integrated: FULL
+    standalone_details:
+      routing: Direct component execution only
+      cross_component: Not available
+    integrated_details:
+      routing: MasterOrchestrator routing
+      cross_component: Full cross-orchestrator workflows
+      
+  registry:
+    standalone: NONE
+    integrated: DATABASE_BACKED
+    standalone_details:
+      discovery: Manual package import
+      wiring: Not applicable
+    integrated_details:
+      discovery: DatabaseBackedRegistry auto-discovery
+      wiring: Full orchestrator wiring and health checks
+
+# =============================================================================
+# 3. INFRASTRUCTURE COMPARISON
+# =============================================================================
+
+infrastructure:
+  dependencies:
+    standalone:
+      required:
+        - cortex-components  # Base framework
+        - mcp               # MCP protocol
+      optional: []
+    integrated:
+      required:
+        - cortex            # Full CORTEX
+        - cortex-components # Base framework  
+        - mcp               # MCP protocol
+      optional:
+        - database drivers
+        - external integrations
+        
+  storage:
+    standalone:
+      audit_logs: ".cortex/components/logs/{component}.jsonl"
+      config: Component package defaults
+      state: None (stateless)
+    integrated:
+      audit_logs: ".cortex/logs/" (multiple files, rotation)
+      config: ".cortex/config.yaml"
+      state: ".cortex/state.db"
+      registry: ".cortex/orchestrator_registry.db"
+      
+  runtime_requirements:
+    standalone:
+      python_version: ">=3.10"
+      memory: "~100MB"
+      disk: "~10MB"
+    integrated:
+      python_version: ">=3.10"
+      memory: "~500MB"
+      disk: "~100MB"
+
+# =============================================================================
+# 4. USE CASE MAPPING
+# =============================================================================
+
+use_cases:
+  standalone_recommended:
+    - name: Quick team adoption
+      reason: Zero CORTEX learning curve
+      
+    - name: Single-purpose automation
+      reason: Linear workflow, bounded context
+      
+    - name: Prototyping
+      reason: Fast iteration without infrastructure
+      
+    - name: CI/CD integration
+      reason: Lightweight, container-friendly
+      
+    - name: Cross-team sharing
+      reason: No CORTEX dependency for consumers
+      
+  integrated_recommended:
+    - name: Enterprise workflows
+      reason: Full governance, audit, compliance
+      
+    - name: Multi-component coordination
+      reason: MasterOrchestrator routing
+      
+    - name: Stateful operations
+      reason: StateManager persistence
+      
+    - name: Knowledge-intensive tasks
+      reason: Full knowledge repository access
+      
+    - name: Cross-cutting concerns
+      reason: Consistent patterns across domains
+
+# =============================================================================
+# 5. PROGRESSIVE ENHANCEMENT
+# =============================================================================
+
+progressive_enhancement:
+  description: |
+    Components support progressive enhancement from standalone to integrated
+    mode without code changes. The mode is determined at initialization.
+    
+  auto_detection:
+    enabled: true
+    logic: |
+      def __init__(self, integrated_mode: bool = None):
+          if integrated_mode is None:
+              # Auto-detect CORTEX availability
+              try:
+                  import cortex
+                  integrated_mode = True
+              except ImportError:
+                  integrated_mode = False
+          self._integrated_mode = integrated_mode
+          
+  upgrade_path:
+    step_1:
+      action: "pip install cortex-{component}"
+      mode: standalone
+      features: [mcp_tools, lightweight_governance, lightweight_audit]
+      
+    step_2:
+      action: "pip install cortex"
+      mode: integrated (auto-detected)
+      features: [mcp_tools, full_governance, full_audit, state, knowledge]
+      
+    step_3:
+      action: "Initialize via MasterOrchestrator"
+      mode: integrated (routed)
+      features: [all_features, cross_component_routing, full_orchestration]
+
+# =============================================================================
+# 6. FEATURE AVAILABILITY TABLE
+# =============================================================================
+
+feature_table:
+  - feature: "MCP Tool Exposure"
+    standalone: "✅ Full"
+    integrated: "✅ Full"
+    
+  - feature: "CORE-011 (Type Hints)"
+    standalone: "✅ Enforced"
+    integrated: "✅ Enforced"
+    
+  - feature: "CORE-012 (Docstrings)"
+    standalone: "✅ Enforced"
+    integrated: "✅ Enforced"
+    
+  - feature: "CORE-013 (No Bare Except)"
+    standalone: "✅ Enforced"
+    integrated: "✅ Enforced"
+    
+  - feature: "CORE-027 (Audit Trail)"
+    standalone: "✅ Lightweight"
+    integrated: "✅ Full"
+    
+  - feature: "CORE-008 (TDD)"
+    standalone: "⚠️ Optional"
+    integrated: "✅ Enforced"
+    
+  - feature: "CORE-026 (Git Checkpoint)"
+    standalone: "⚠️ Optional"
+    integrated: "✅ Enforced"
+    
+  - feature: "Hash Chain Audit"
+    standalone: "❌ No"
+    integrated: "✅ Yes"
+    
+  - feature: "StateManager"
+    standalone: "❌ No"
+    integrated: "✅ Yes"
+    
+  - feature: "Knowledge Repository"
+    standalone: "⚠️ Component only"
+    integrated: "✅ Full (35+ YAMLs)"
+    
+  - feature: "DatabaseBackedRegistry"
+    standalone: "❌ No"
+    integrated: "✅ Yes"
+    
+  - feature: "MasterOrchestrator Routing"
+    standalone: "❌ No"
+    integrated: "✅ Yes"
+    
+  - feature: "Cross-component Workflows"
+    standalone: "❌ No"
+    integrated: "✅ Yes"
+
+# =============================================================================
+# 7. CONFIGURATION DIFFERENCES
+# =============================================================================
+
+configuration:
+  standalone:
+    minimal: true
+    sources:
+      - Component package defaults
+      - Environment variables
+    example: |
+      # Environment variables only
+      CORTEX_COMPONENT_LOG_DIR=/var/log/cortex
+      CORTEX_COMPONENT_LOG_LEVEL=INFO
+      
+  integrated:
+    minimal: false
+    sources:
+      - .cortex/config.yaml
+      - Environment variables
+      - DatabaseBackedRegistry
+      - MasterOrchestrator settings
+    example: |
+      # .cortex/config.yaml
+      governance:
+        enabled: true
+        rules_path: cortex_brain/tier0/governance/
+      
+      audit:
+        enabled: true
+        hash_chains: true
+        rotation_days: 7
+      
+      components:
+        auto_discover: true
+        registry_db: .cortex/orchestrator_registry.db
+
+# =============================================================================
+# 8. TESTING IMPLICATIONS
+# =============================================================================
+
+testing:
+  standalone:
+    approach: "Component-level unit/integration tests"
+    fixtures: "Minimal, component-scoped"
+    mocking: "Mock external dependencies only"
+    ci_requirements: "Python, pip install component"
+    
+  integrated:
+    approach: "Full CORTEX integration tests"
+    fixtures: "Full CORTEX infrastructure fixtures"
+    mocking: "Mock CORTEX subsystems as needed"
+    ci_requirements: "Python, full CORTEX, databases"
+    
+  both_modes:
+    recommendation: |
+      Test components in both modes:
+      1. Standalone tests: Verify component works without CORTEX
+      2. Integrated tests: Verify component works within CORTEX

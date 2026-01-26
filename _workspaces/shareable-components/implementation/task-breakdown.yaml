@@ -1,0 +1,434 @@
+# CORTEX Component Task Breakdown
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-01-26
+# Purpose: Detailed task breakdown for implementation
+
+metadata:
+  document_id: COMP-TASKS-001
+  status: READY_FOR_IMPLEMENTATION
+  authority: MasterOrchestrator
+  total_tasks: 25
+  total_effort_hours: 120
+  
+# =============================================================================
+# TASK BREAKDOWN BY PHASE
+# =============================================================================
+
+phase_0_tasks:
+  phase: Foundation
+  total_effort: 13h
+  
+  tasks:
+    - id: T0.1
+      title: Create component package structure
+      effort: 2h
+      priority: P0
+      dependencies: []
+      owner: TBD
+      status: NOT_STARTED
+      
+      subtasks:
+        - Create cortex/components/__init__.py
+        - Create cortex/components/base.py (empty)
+        - Create cortex/components/registry.py (empty)
+        - Create cortex/components/exceptions.py
+        - Add to pyproject.toml if needed
+        
+      acceptance:
+        - Package structure exists
+        - Imports work
+        
+    - id: T0.2
+      title: Implement ComponentMetadata dataclass
+      effort: 1h
+      priority: P0
+      dependencies: [T0.1]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/base.py
+        code_pattern: |
+          @dataclass
+          class ComponentMetadata:
+              name: str
+              version: str
+              description: str
+              author: str
+              domain: str
+              dependencies: List[str] = field(default_factory=list)
+              mcp_tools: List[str] = field(default_factory=list)
+              governance_rules: List[str] = field(default_factory=list)
+              created_at: str = field(default_factory=lambda: datetime.now().isoformat())
+              
+      acceptance:
+        - Dataclass created with all fields
+        - Default values work correctly
+        
+    - id: T0.3
+      title: Implement CORTEXComponent base class
+      effort: 4h
+      priority: P0
+      dependencies: [T0.2]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/base.py
+        methods_to_implement:
+          - __init__(self, integrated_mode: bool = False)
+          - _init_standalone_mode(self)
+          - _init_integrated_mode(self)
+          - execute(self, operation: str, params: Dict) -> Result  # abstract
+          - get_mcp_tools(self) -> List[Dict]  # abstract
+          - execute_with_governance(self, operation: str, params: Dict) -> Result
+          - as_mcp_server(self) -> ComponentMCPServer
+          - is_integrated property
+          
+      acceptance:
+        - All methods implemented
+        - Abstract methods properly defined
+        - Mode detection works
+        
+    - id: T0.4
+      title: Implement @register_component decorator
+      effort: 2h
+      priority: P0
+      dependencies: [T0.3]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/registry.py
+        functions:
+          - register_component(name, version, description, author, domain, ...)
+          - get_component(name: str) -> Optional[Type[CORTEXComponent]]
+          - list_components() -> List[str]
+          
+      acceptance:
+        - Decorator adds metadata to class
+        - Global registry populated
+        - Lookup functions work
+        
+    - id: T0.5
+      title: Write unit tests for foundation
+      effort: 4h
+      priority: P0
+      dependencies: [T0.1, T0.2, T0.3, T0.4]
+      owner: TBD
+      status: NOT_STARTED
+      
+      test_files:
+        - tests/unit/components/test_base.py
+        - tests/unit/components/test_registry.py
+        
+      test_cases:
+        - test_component_metadata_creation
+        - test_component_abstract_methods_defined
+        - test_component_standalone_mode_init
+        - test_component_integrated_mode_init
+        - test_register_component_decorator
+        - test_list_components
+        - test_get_component
+        
+      acceptance:
+        - All tests pass
+        - 100% coverage on new code
+
+phase_1_tasks:
+  phase: Lightweight Subsystems
+  total_effort: 17h
+  
+  tasks:
+    - id: T1.1
+      title: Implement LightweightGovernance
+      effort: 4h
+      priority: P0
+      dependencies: [T0.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/governance.py
+        rule_file: cortex/components/rules/lightweight_rules.yaml
+        class_methods:
+          - __init__(self, rules: List[str] = None)
+          - validate_operation(self, operation: str, context: Dict) -> Result
+          - check_rule(self, rule_id: str, context: Dict) -> Result
+          - is_rule_enabled(self, rule_id: str) -> bool
+          - get_enabled_rules(self) -> List[RuleDefinition]
+          
+      acceptance:
+        - Rules loaded from YAML
+        - Validation works
+        - No CORTEX core dependency
+        
+    - id: T1.2
+      title: Implement LightweightAudit
+      effort: 4h
+      priority: P0
+      dependencies: [T0.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/audit.py
+        class_methods:
+          - __init__(self, component_name: str, log_dir: Path = None)
+          - log_operation_start(self, component, operation, params) -> str
+          - log_operation_complete(self, operation_id, success, result, error)
+          - search_operations(self, filters: Dict, limit: int = 100) -> List[Dict]
+          - get_operation_history(self, operation_id: str) -> List[Dict]
+          - _sanitize_params(self, params: Dict) -> Dict  # redaction
+          
+      acceptance:
+        - JSON Lines logging works
+        - Operation tracking works
+        - Sensitive data redacted
+        
+    - id: T1.3
+      title: Implement ComponentKnowledge
+      effort: 3h
+      priority: P1
+      dependencies: [T0.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/knowledge.py
+        class_methods:
+          - __init__(self, domain: str)
+          - get_knowledge(self, topic: str) -> Optional[Dict]
+          - list_topics(self) -> List[str]
+          - load_domain_knowledge(self, yaml_path: Path)
+          
+      acceptance:
+        - Domain-focused knowledge loading
+        - Topic lookup works
+        
+    - id: T1.4
+      title: Implement execute_with_governance wrapper
+      effort: 2h
+      priority: P0
+      dependencies: [T1.1, T1.2]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/base.py
+        method: execute_with_governance
+        flow:
+          - Validate with governance
+          - Log operation start
+          - Call abstract execute()
+          - Log operation complete
+          - Handle exceptions
+          
+      acceptance:
+        - Governance validation applied
+        - Audit logging complete
+        - Errors handled properly
+        
+    - id: T1.5
+      title: Write unit tests for subsystems
+      effort: 4h
+      priority: P0
+      dependencies: [T1.1, T1.2, T1.3, T1.4]
+      owner: TBD
+      status: NOT_STARTED
+      
+      test_files:
+        - tests/unit/components/test_governance.py
+        - tests/unit/components/test_audit.py
+        - tests/unit/components/test_knowledge.py
+        
+      test_cases:
+        - test_lightweight_governance_init
+        - test_rule_validation
+        - test_violation_detection
+        - test_audit_log_creation
+        - test_operation_tracking
+        - test_sensitive_data_redaction
+        - test_json_lines_format
+        - test_knowledge_loading
+
+phase_2_tasks:
+  phase: MCP Integration
+  total_effort: 18h
+  
+  tasks:
+    - id: T2.1
+      title: Implement ComponentMCPServer
+      effort: 6h
+      priority: P0
+      dependencies: [T1.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/mcp_server.py
+        class_methods:
+          - __init__(self, component: CORTEXComponent)
+          - _register_tools(self)
+          - run(self, transport: str = 'stdio')
+          - run_async(self, transport: str = 'stdio')
+          - stop(self)
+          
+    - id: T2.2
+      title: Implement as_mcp_server method
+      effort: 1h
+      priority: P1
+      dependencies: [T2.1]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T2.3
+      title: Implement component CLI
+      effort: 3h
+      priority: P1
+      dependencies: [T2.2]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/cli.py
+        commands:
+          - serve: Run component as MCP server
+          - list: List registered components
+          - info: Show component details
+          
+    - id: T2.4
+      title: Implement transport handlers
+      effort: 4h
+      priority: P1
+      dependencies: [T2.1]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/components/transports.py
+        transports:
+          - StdioTransportHandler
+          - HTTPTransportHandler
+          
+    - id: T2.5
+      title: Write integration tests for MCP
+      effort: 4h
+      priority: P0
+      dependencies: [T2.1, T2.2, T2.3, T2.4]
+      owner: TBD
+      status: NOT_STARTED
+
+phase_3_tasks:
+  phase: CORTEX Integration
+  total_effort: 16h
+  
+  tasks:
+    - id: T3.1
+      title: Implement _init_integrated_mode
+      effort: 3h
+      priority: P1
+      dependencies: [T2.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T3.2
+      title: Implement ComponentIntegration
+      effort: 4h
+      priority: P1
+      dependencies: [T3.1]
+      owner: TBD
+      status: NOT_STARTED
+      
+      implementation:
+        file: cortex/orchestrators/core/component_integration.py
+        class_methods:
+          - __init__(self, master_orchestrator: MasterOrchestrator)
+          - discover_components(self)
+          - route_to_component(self, component_name, operation, params)
+          
+    - id: T3.3
+      title: Update MasterOrchestrator
+      effort: 3h
+      priority: P1
+      dependencies: [T3.2]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T3.4
+      title: Implement auto-detection
+      effort: 2h
+      priority: P2
+      dependencies: [T3.1]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T3.5
+      title: Write integration tests
+      effort: 4h
+      priority: P1
+      dependencies: [T3.1, T3.2, T3.3, T3.4]
+      owner: TBD
+      status: NOT_STARTED
+
+phase_4_tasks:
+  phase: Example Components
+  total_effort: 56h
+  
+  tasks:
+    - id: T4.1
+      title: Create test-automation component
+      effort: 16h
+      priority: P2
+      dependencies: [T3.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T4.2
+      title: Create deployment component
+      effort: 16h
+      priority: P2
+      dependencies: [T3.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T4.3
+      title: Create code-analysis component
+      effort: 16h
+      priority: P2
+      dependencies: [T3.5]
+      owner: TBD
+      status: NOT_STARTED
+      
+    - id: T4.4
+      title: Write component tests
+      effort: 8h
+      priority: P2
+      dependencies: [T4.1, T4.2, T4.3]
+      owner: TBD
+      status: NOT_STARTED
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  by_phase:
+    phase_0: 13h
+    phase_1: 17h
+    phase_2: 18h
+    phase_3: 16h
+    phase_4: 56h
+    
+  by_priority:
+    P0: 52h
+    P1: 28h
+    P2: 40h
+    
+  critical_path:
+    - T0.1 → T0.2 → T0.3 → T0.4 → T0.5
+    - T0.5 → T1.1 + T1.2 → T1.4 → T1.5
+    - T1.5 → T2.1 → T2.2 → T2.5
+    - T2.5 → T3.1 → T3.2 → T3.3 → T3.5
+    - T3.5 → T4.1/T4.2/T4.3 (parallel)
