@@ -1,0 +1,280 @@
+---
+# orchestrator: Orchestrator Dispatch Table & Metadata
+# Authority: CORTEX Architecture (AC-PERMANENT-FIX-010 Phase 2)
+# Version: 1.0
+# Purpose: Central registry of all 23 CORTEX orchestrators with metadata
+
+orchestrator_dispatch:
+  version: "1.0"
+  created: "2026-01-26"
+  authority: "CORTEX Architecture"
+  description: |
+    Registry of all 23 CORTEX orchestrators with metadata.
+    Replaces hardcoded orchestrator references with declarative specs.
+    Enables orchestrator discovery and capability checking.
+
+  # CORE ORCHESTRATORS (6)
+  orchestrators:
+    - id: "master"
+      name: "MasterOrchestrator"
+      type: "COORDINATOR"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.master_orchestrator.MasterOrchestrator"
+      capabilities:
+        - "routing"
+        - "delegation"
+        - "aggregation"
+        - "execution_coordination"
+      dependencies: []
+      status: "production"
+      version: "1.0"
+      description: "Main coordinator orchestrator routing all operations"
+
+    - id: "intent_router"
+      name: "IntentRouter"
+      type: "ROUTER"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.intent_router.IntentRouter"
+      capabilities:
+        - "intent_classification"
+        - "handler_selection"
+      dependencies:
+        - "routing-rules-intent.yaml"
+      status: "production"
+      version: "2.0"
+      description: "Routes operations to appropriate orchestrators based on intent"
+
+    - id: "tdd"
+      name: "TDDOrchestrator"
+      type: "EXECUTOR"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator"
+      capabilities:
+        - "test_generation"
+        - "implementation"
+        - "refactoring"
+        - "test_execution"
+      dependencies: []
+      status: "production"
+      version: "3.0"
+      description: "Test-driven development orchestrator"
+
+    - id: "dor_gate"
+      name: "DoRApprovalGate"
+      type: "VALIDATOR"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.dor_approval_gate.DoRApprovalGate"
+      capabilities:
+        - "intent_reflection"
+        - "requirement_validation"
+        - "user_approval"
+      dependencies: []
+      status: "production"
+      version: "2.0"
+      description: "Definition of Ready approval gate"
+
+    - id: "workflow"
+      name: "WorkflowOrchestrator"
+      type: "EXECUTOR"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.workflow_orchestrator.WorkflowOrchestrator"
+      capabilities:
+        - "workflow_execution"
+        - "step_sequencing"
+        - "error_handling"
+      dependencies: []
+      status: "production"
+      version: "1.0"
+      description: "Manages multi-step workflows"
+
+    - id: "interaction"
+      name: "InteractionOrchestrator"
+      type: "SUPPORT"
+      category: "core"
+      entry_point: "cortex.orchestrators.core.interaction_orchestrator.InteractionOrchestrator"
+      capabilities:
+        - "user_interaction"
+        - "clarification"
+        - "feedback"
+      dependencies: []
+      status: "production"
+      version: "1.0"
+      description: "Handles user interaction and clarification"
+
+  # DOMAIN ORCHESTRATORS (6)
+  domain_orchestrators:
+    - id: "refactor"
+      name: "RefactoringOrchestrator"
+      type: "DOMAIN"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.refactoring_orchestrator.RefactoringOrchestrator"
+      capabilities:
+        - "code_refactoring"
+        - "equivalence_testing"
+        - "performance_optimization"
+      domain: "refactoring"
+      status: "production"
+      version: "2.0"
+
+    - id: "planning"
+      name: "PlanningOrchestrator"
+      type: "DOMAIN"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.planning_orchestrator.PlanningOrchestrator"
+      capabilities:
+        - "planning"
+        - "roadmap_generation"
+        - "phase_definition"
+      domain: "planning"
+      status: "production"
+      version: "1.5"
+
+    - id: "documentation"
+      name: "DocumentationOrchestrator"
+      type: "DOMAIN"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.documentation_orchestrator.DocumentationOrchestrator"
+      capabilities:
+        - "documentation_generation"
+        - "doc_validation"
+      domain: "documentation"
+      status: "production"
+      version: "1.0"
+
+    - id: "conversation"
+      name: "ConversationOrchestrator"
+      type: "SUPPORT"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.conversation_orchestrator.ConversationOrchestrator"
+      capabilities:
+        - "conversation_management"
+        - "context_tracking"
+      status: "production"
+      version: "1.0"
+
+    - id: "domain"
+      name: "DomainOrchestrator"
+      type: "DOMAIN"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.domain_orchestrator.DomainOrchestrator"
+      capabilities:
+        - "domain_routing"
+        - "domain_expertise"
+      status: "production"
+      version: "1.0"
+
+    - id: "selenium"
+      name: "SeleniumPlaywrightOrchestrator"
+      type: "SUPPORT"
+      category: "domain"
+      entry_point: "cortex.orchestrators.domain_orchestrators.selenium_playwright_orchestrator.SeleniumPlaywrightOrchestrator"
+      capabilities:
+        - "browser_automation"
+        - "web_testing"
+      status: "production"
+      version: "1.0"
+
+  # SUPPORT ORCHESTRATORS (11)
+  support_orchestrators:
+    - id: "onboarding"
+      name: "OnboardingOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "tool_discovery"
+      name: "ToolDiscoveryOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "upgrade"
+      name: "UpgradeOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "rollback"
+      name: "RollbackOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "setup"
+      name: "SetupOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "composed"
+      name: "ComposedOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "wrapped_tdd"
+      name: "WrappedTDDOrchestrator"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "bootstrap"
+      name: "OrchestratorBootstrap"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "registry"
+      name: "DatabaseBackedRegistry"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "2.0"
+
+    - id: "health_checker"
+      name: "OrchestratorHealthChecker"
+      type: "SUPPORT"
+      category: "support"
+      status: "production"
+      version: "1.0"
+
+    - id: "gateway"
+      name: "MasterGateway"
+      type: "SUPPORT"
+      category: "support"
+      entry_point: "cortex.execution.exec_gateway_impl.MasterGateway"
+      capabilities:
+        - "single_entry_point"
+        - "spec_validation"
+        - "governance_checking"
+      status: "production"
+      version: "1.0"
+
+  # Orchestrator availability check
+  availability_check:
+    method: "registry_lookup"
+    timeout_seconds: 5
+    retry_count: 3
+
+  # Cross-references
+  related_specs:
+    - "routing-rules-intent.yaml"
+    - "execution-flow-definitions.yaml"
+    - "governance-gates-validation.yaml"
+
+  # Orchestrator wiring summary
+  wiring_summary:
+    total_orchestrators: 23
+    core_orchestrators: 6
+    domain_orchestrators: 6
+    support_orchestrators: 11
+    production_ready: 23
+    deprecated: 0
