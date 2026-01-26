@@ -36,8 +36,9 @@ from cortex.domain_brain.business_knowledge_repository import (
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
-from cortex.orchestrators.tools.todo_manager import TodoManager
 from cortex.brain.mcp.decorator import mcp_tool
+from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge
+from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
 try:
@@ -179,15 +180,18 @@ class MasterOrchestrator(IOrchestrator):
         db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
         
-        # AC-FR-TODO-001-004: Initialize TodoManager for multi-phase task tracking
-        self._todo_manager = TodoManager()
-        
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
         self._governance_registry: Optional[GovernanceRegistry] = None
         self._turn_number: int = 0  # Track turn count for governance validation
         
         # AC-FIX-HALLUCINATION-001: Initialize boundary enforcement
         self._boundary_rules = BehavioralBoundaryRules()
+        
+        # AC-PHASE-2-WIRE-001: Initialize ChallengeGenerator for Stage 1 challenge detection
+        self._challenge_generator = ChallengeGenerator()
+        
+        # AC-PHASE-2-WIRE-002: Initialize HolisticContextBuilder for Stage 4 context synthesis
+        self._holistic_context_builder = HolisticContextBuilder()
         
         # AC-KN-002-01: Initialize Knowledge Repository for best practices access
         self._knowledge_repository: Optional[KnowledgeRepository] = None
@@ -438,15 +442,25 @@ class MasterOrchestrator(IOrchestrator):
             cls._instance = cls()
         return cls._instance
     
-    def get_todo_manager(self) -> TodoManager:
-        """Get TodoManager for multi-phase task tracking.
+    def get_challenge_generator(self) -> ChallengeGenerator:
+        """Get ChallengeGenerator for Stage 1 challenge detection.
         
-        AC-FR-TODO-001-004: Get TodoManager instance for task management.
+        AC-PHASE-2-WIRE-001: Provides challenge generation for code analysis.
         
         Returns:
-            TodoManager: Instance for creating and managing multi-phase tasks.
+            ChallengeGenerator: Instance for detecting breaking changes, test gaps, governance risks.
         """
-        return self._todo_manager
+        return self._challenge_generator
+    
+    def get_holistic_context_builder(self) -> HolisticContextBuilder:
+        """Get HolisticContextBuilder for Stage 4 context synthesis.
+        
+        AC-PHASE-2-WIRE-002: Provides context merging of all dimensions.
+        
+        Returns:
+            HolisticContextBuilder: Instance for synthesizing holistic context.
+        """
+        return self._holistic_context_builder
     
     def get_initialization_status(self) -> Dict[str, Any]:
         """Get initialization status of all components.
