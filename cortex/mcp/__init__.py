@@ -57,6 +57,7 @@ from cortex.mcp.orchestrator_mcp_server import (
 )
 
 __all__ = [
+    # Core MCP server and tools
     "MCPServer",
     "Tool",
     "SampleTool",
@@ -65,8 +66,10 @@ __all__ = [
     "MCPRequest",
     "MCPResponse",
     "MCPError",
+    # MCP decorators and registry
     "mcp_tool",
     "MCP_TOOLS_REGISTRY",
+    # MCP endpoints
     "list_tools_endpoint",
     "get_tool_metadata",
     "filter_tools_by_domain",
@@ -88,15 +91,4 @@ __all__ = [
     "CapabilityRequest",
     "CapabilityResponse",
     "ContextType",
-]
-    "MCPResponse",
-    "MCPError",
-    "mcp_tool",
-    "MCP_TOOLS_REGISTRY",
-    "list_tools_endpoint",
-    "get_tool_metadata",
-    "filter_tools_by_domain",
-    "get_tool_count",
-    "is_tool_registered",
-    "call_tool",
 ]
