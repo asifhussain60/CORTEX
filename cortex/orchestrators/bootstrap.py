@@ -148,15 +148,23 @@ class OrchestratorBootstrap:
             if not step5["success"]:
                 bootstrap_result["errors"].append(step5["error"])
             
-            # Step 6: Initialize Database-Backed SSOT Registry (NEW)
-            step6 = self._initialize_database_registry()
+            # Step 6: Apply database migrations
+            step6 = self._apply_database_migrations()
             bootstrap_result["steps"].append(step6)
             if not step6["success"]:
-                bootstrap_result["errors"].append(step6.get("error", "Database registry initialization failed"))
+                bootstrap_result["errors"].append(step6.get("error", "Migration initialization failed"))
+            else:
+                bootstrap_result["orchestrators"]["migrations"] = "READY"
+            
+            # Step 7: Initialize Database-Backed SSOT Registry (NEW)
+            step7 = self._initialize_database_registry()
+            bootstrap_result["steps"].append(step7)
+            if not step7["success"]:
+                bootstrap_result["errors"].append(step7.get("error", "Database registry initialization failed"))
             else:
                 bootstrap_result["orchestrators"]["database_registry"] = "READY"
             
-            # Step 7: Enable MCP tools
+            # Step 8: Enable MCP tools
             step7 = self._enable_mcp_tools()
             bootstrap_result["steps"].append(step7)
             if not step7["success"]:
@@ -357,6 +365,70 @@ class OrchestratorBootstrap:
                 "step": "Initialize DiscoveryEngine",
                 "success": False,
                 "error": f"Failed to initialize discovery: {str(e)}"
+            }
+    
+    def _apply_database_migrations(self) -> Dict[str, Any]:
+        """
+        Apply all database migrations - AC-PERMANENT-FIX-011
+        
+        Ensures schema is up-to-date before initializing registry.
+        Migrations are idempotent and tracked in database.
+        """
+        try:
+            from cortex.orchestrators.core.migration_manager import create_migration_manager
+            from cortex.core.result import Err as ResultErr
+            
+            # Create migration manager
+            manager = create_migration_manager()
+            
+            # Initialize migration tracking tables
+            init_result = manager.initialize()
+            if isinstance(init_result, ResultErr):
+                error_msg = str(init_result)
+                return {
+                    "step": "Apply Database Migrations",
+                    "success": False,
+                    "error": f"Failed to initialize migration system: {error_msg}"
+                }
+            
+            # Apply all pending migrations
+            migrate_result = manager.apply_all_pending()
+            if isinstance(migrate_result, ResultErr):
+                error_msg = str(migrate_result)
+                return {
+                    "step": "Apply Database Migrations",
+                    "success": False,
+                    "error": f"Failed to apply migrations: {error_msg}"
+                }
+            
+            # Handle Ok result
+            migration_count = 0
+            try:
+                # Try to extract list of migrations
+                applied_list = list(migrate_result) if hasattr(migrate_result, '__iter__') else []
+                migration_count = len(applied_list)
+            except Exception:
+                migration_count = 0
+            
+            return {
+                "step": "Apply Database Migrations",
+                "success": True,
+                "message": f"Applied {migration_count} migrations successfully",
+                "migrations_applied": migration_count
+            }
+        except ImportError:
+            # Migration manager not available yet (okay for early bootstrap stages)
+            logger.warning("Migration manager not available in this bootstrap stage")
+            return {
+                "step": "Apply Database Migrations",
+                "success": True,
+                "message": "Migration manager not available (optional)"
+            }
+        except Exception as e:
+            return {
+                "step": "Apply Database Migrations",
+                "success": False,
+                "error": f"Failed to apply migrations: {str(e)}"
             }
     
     def _enable_mcp_tools(self) -> Dict[str, Any]:
