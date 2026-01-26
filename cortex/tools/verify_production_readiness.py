@@ -24,7 +24,6 @@ def main():
     print("   - MasterOrchestrator: ✓ INITIALIZED")
     print("   - InteractionOrchestrator: ✓ WIRED")
     print("   - IntentRouter: ✓ WIRED")
-    print("   - TodoManager: ✓ INTEGRATED")
     print("   - GovernanceRegistry: ✓ OPERATIONAL")
 
     # Test suites
