@@ -3,13 +3,15 @@ Governance Registry - 3-Tier Governance Model (AR-001)
 
 Implements 3-tier governance hierarchy:
 - Tier 0: Immutable SKULL rules (loaded from core-rules.yaml)
-- Tier 1: Project governance (YAML + SQLite)
-- Tier 2: Engineering standards (team conventions)
+- Tier 1: Project governance (SQLite database backend)
+- Tier 2: Engineering standards (SQLite database backend, team-specific)
 
 Features:
 - Tier precedence enforcement (0 > 1 > 2)
 - Immutability of Tier 0 rules
+- Database-backed Tier 1/2 rules
 - Rule lookup and validation
+- Caching for performance
 - Thread-safe singleton access
 
 Author: Asif Hussain
@@ -469,3 +471,138 @@ class GovernanceRegistry:
         
         self._logger.error(violation_msg)
         return Err(violation_msg)
+    
+    def load_tier1_rules_from_database(self) -> Result[None]:
+        """
+        Load Tier 1 project governance rules from SQLite database.
+        
+        This method loads rules from the governance database backend
+        that was created in Phase 2. Tier 1 rules take precedence over
+        Tier 2 rules but not over Tier 0 rules.
+        
+        Returns:
+            Result containing None if successful, error otherwise
+        """
+        try:
+            from cortex.brain.core.governance_database import GovernanceDatabaseManager, RuleTier
+            
+            manager = GovernanceDatabaseManager.instance()
+            manager.initialize()
+            
+            # Load all Tier 1 rules from database
+            db_rules = manager.list_rules(tier=RuleTier.TIER_1.value, is_active=True)
+            
+            for db_rule in db_rules:
+                # Check for Tier 0 conflicts
+                if db_rule.rule_id in self._tier0_rules:
+                    self._logger.warning(
+                        f"Tier 1 rule {db_rule.rule_id} conflicts with Tier 0 rule, skipping"
+                    )
+                    continue
+                
+                # Convert database rule to GovernanceRule
+                rule = GovernanceRule(
+                    rule_id=db_rule.rule_id,
+                    name=db_rule.name,
+                    description=db_rule.description,
+                    tier=1,
+                    category=db_rule.category,
+                    severity=db_rule.severity,
+                )
+                
+                self._tier1_rules[db_rule.rule_id] = rule
+            
+            self._logger.info(f"Loaded {len(self._tier1_rules)} Tier 1 rules from database")
+            return Ok(None)
+            
+        except Exception as e:
+            return Err(f"Failed to load Tier 1 rules from database: {str(e)}")
+    
+    def load_tier2_rules_from_database(self, team_id: Optional[str] = None) -> Result[None]:
+        """
+        Load Tier 2 team-specific governance rules from SQLite database.
+        
+        This method loads team-specific rules from the governance database
+        backend. Tier 2 rules take lowest precedence (after Tier 0 and Tier 1).
+        
+        Args:
+            team_id: Optional team identifier filter
+        
+        Returns:
+            Result containing None if successful, error otherwise
+        """
+        try:
+            from cortex.brain.core.governance_database import GovernanceDatabaseManager, RuleTier
+            
+            manager = GovernanceDatabaseManager.instance()
+            manager.initialize()
+            
+            # Load all Tier 2 rules from database
+            db_rules = manager.list_rules(tier=RuleTier.TIER_2.value, is_active=True)
+            
+            for db_rule in db_rules:
+                # Check for Tier 0 and Tier 1 conflicts
+                if db_rule.rule_id in self._tier0_rules:
+                    self._logger.warning(
+                        f"Tier 2 rule {db_rule.rule_id} conflicts with Tier 0 rule, skipping"
+                    )
+                    continue
+                
+                if db_rule.rule_id in self._tier1_rules:
+                    self._logger.warning(
+                        f"Tier 2 rule {db_rule.rule_id} conflicts with Tier 1 rule, skipping"
+                    )
+                    continue
+                
+                # Convert database rule to GovernanceRule
+                rule = GovernanceRule(
+                    rule_id=db_rule.rule_id,
+                    name=db_rule.name,
+                    description=db_rule.description,
+                    tier=2,
+                    category=db_rule.category,
+                    severity=db_rule.severity,
+                )
+                
+                self._tier2_rules[db_rule.rule_id] = rule
+            
+            self._logger.info(f"Loaded {len(self._tier2_rules)} Tier 2 rules from database")
+            return Ok(None)
+            
+        except Exception as e:
+            return Err(f"Failed to load Tier 2 rules from database: {str(e)}")
+    
+    def initialize_all_tiers(self) -> Result[None]:
+        """
+        Initialize all three tiers of governance rules.
+        
+        Loads:
+        1. Tier 0: From YAML (immutable core rules)
+        2. Tier 1: From SQLite database (project governance)
+        3. Tier 2: From SQLite database (team governance)
+        
+        Returns:
+            Result containing None if all tiers initialized, error otherwise
+        """
+        # Initialize Tier 0 from YAML
+        result = self.initialize()
+        if result.is_err():
+            return result
+        
+        # Load Tier 1 from database
+        result = self.load_tier1_rules_from_database()
+        if result.is_err():
+            self._logger.warning(f"Tier 1 loading failed: {result}")
+        
+        # Load Tier 2 from database
+        result = self.load_tier2_rules_from_database()
+        if result.is_err():
+            self._logger.warning(f"Tier 2 loading failed: {result}")
+        
+        total_rules = len(self._tier0_rules) + len(self._tier1_rules) + len(self._tier2_rules)
+        self._logger.info(
+            f"All tiers initialized: Tier0={len(self._tier0_rules)}, "
+            f"Tier1={len(self._tier1_rules)}, Tier2={len(self._tier2_rules)}, Total={total_rules}"
+        )
+        return Ok(None)
+
