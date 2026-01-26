@@ -57,17 +57,17 @@ INTENT_PATTERNS = {
     IntentType.IMPLEMENT: [
         r"\b(implement|create|build|develop|code|write|add)\b",
     ],
-    IntentType.REVIEW: [
-        r"\b(review|check|verify|validate|audit|inspect)\b",
+    IntentType.ANALYZE: [
+        r"\b(review|check|verify|validate|audit|inspect|analyze|examine)\b",
     ],
-    IntentType.QUERY: [
-        r"\b(status|show|get|what|list|display)\b",
+    IntentType.ANALYZE: [
+        r"\b(status|show|get|what|list|display|query)\b",
     ],
-    IntentType.MODIFY: [
-        r"\b(modify|change|update|edit|alter)\b",
+    IntentType.REFACTOR: [
+        r"\b(modify|change|update|edit|alter|refactor)\b",
     ],
-    IntentType.LOCK: [
-        r"\b(lock|complete|finish|close)\b",
+    IntentType.DOCUMENT: [
+        r"\b(document|lock|complete|finish|close|finalize)\b",
     ],
 }
 
