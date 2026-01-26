@@ -1,7 +1,9 @@
 # CORTEX Total Recall - Issue Identification & Auto-Fix Agent
-**Version:** 6.0 | **Updated:** 2026-01-25 | **Role:** Detect → Diagnose → Fix (Fast)
+**Version:** 6.1 | **Updated:** 2026-01-26 | **Role:** Detect → Diagnose → Fix (Fast)
 
-**AC-PERMANENT-FIX Status:** 8 fixes active (validates on every scan)
+**AC-PERMANENT-FIX Status:** 10 fixes active (validates on every scan)
+- ✅ AC-PERMANENT-FIX-001 through 009: All verified active
+- ✅ AC-PERMANENT-FIX-010: PlanningOrchestrator registry alignment (NEW)
 
 ---
 
