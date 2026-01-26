@@ -69,6 +69,7 @@ class SystemChecker:
             self._check_pre_op_enforcer()
             self._check_backward_compatibility()
             self._check_audit_trail()
+            self._check_core035_compliance()  # NEW: CORE-035 compliance check
             self._check_performance()
 
         except Exception as e:
@@ -336,6 +337,53 @@ class SystemChecker:
                 message=f"Performance check failed: {e}",
                 details={"error": str(e)},
             ))
+
+    def _check_core035_compliance(self) -> None:
+        """Check CORE-035 (Single Canonical Implementation) compliance.
+        
+        This is a detection-only check that tracks duplication violations
+        for audit trail purposes. Non-blocking for deployments.
+        """
+        try:
+            from cortex.infrastructure.core035_compliance_check import get_core035_checker
+            
+            checker = get_core035_checker()
+            status = checker.check()
+            
+            # Always passes (detection-only, non-blocking)
+            # But logs violations for audit trail
+            self.checks.append(CheckResult(
+                name="CORE-035 Compliance",
+                passed=status.healthy,  # Always True for health check
+                message=status.message,
+                details={
+                    "violations_count": status.violations_count,
+                    "duplicate_classes": status.duplicate_classes,
+                    "duplicate_functions": status.duplicate_functions,
+                    "multi_path_orchestrators": status.multi_path_orchestrators,
+                    "baseline_comparison": status.baseline_comparison,
+                    "latency_ms": status.latency_ms,
+                },
+            ))
+            
+            # Log violations if found
+            if status.violations_count > 0:
+                logger.warning(
+                    f"AC-CORE035-HEALTH: {status.violations_count} violations detected "
+                    f"(classes: {status.duplicate_classes}, functions: {status.duplicate_functions}, "
+                    f"orchestrators: {status.multi_path_orchestrators}). "
+                    f"Trend: {status.baseline_comparison.upper()}"
+                )
+        
+        except Exception as e:
+            # If check fails, still passes but logs warning
+            self.checks.append(CheckResult(
+                name="CORE-035 Compliance",
+                passed=True,  # Non-blocking
+                message=f"CORE-035 check unavailable (will retry on next cycle): {e}",
+                details={"error": str(e)},
+            ))
+            logger.warning(f"CORE-035 compliance check failed: {e}")
 
     def _generate_report(self) -> SystemCheckReport:
         """Generate final report."""
