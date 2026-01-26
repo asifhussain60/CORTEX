@@ -461,8 +461,13 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
     """
     
     def __init__(self, orchestrator: Optional[InteractionOrchestrator] = None):
-        """Initialize adapter"""
-        self.orchestrator = orchestrator or InteractionOrchestrator()
+        """
+        Initialize adapter.
+        
+        Note: InteractionOrchestrator requires ConversationProtocol parameter.
+        If not provided, adapter will be partially functional for discovery.
+        """
+        self.orchestrator = orchestrator  # Don't try to instantiate
         self.name = "InteractionOrchestratorAdapter"
     
     def get_capabilities(self) -> List[CapabilityMetadata]:
@@ -511,6 +516,18 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
     ) -> CapabilityResponse:
         """Execute a capability"""
         start = time.time()
+        
+        # Handle None orchestrator (not instantiated due to dependencies)
+        if self.orchestrator is None:
+            return CapabilityResponse(
+                request_id=context.session_id,
+                success=False,
+                error="Orchestrator not available (requires ConversationProtocol)",
+                error_code="NOT_AVAILABLE",
+                orchestrator="interaction",
+                duration_ms=(time.time() - start) * 1000,
+            )
+        
         try:
             if capability_name == "initiate_comprehension":
                 result = self.orchestrator.initiate_comprehension(
@@ -567,6 +584,8 @@ class InteractionOrchestratorAdapter(IOrchestratorAdapter):
     
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
+        if self.orchestrator is None:
+            return False
         try:
             return self.orchestrator.is_healthy()
         except Exception:
@@ -596,8 +615,13 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
     """
     
     def __init__(self, orchestrator: Optional[WorkflowOrchestrator] = None):
-        """Initialize adapter"""
-        self.orchestrator = orchestrator or WorkflowOrchestrator()
+        """
+        Initialize adapter.
+        
+        Note: WorkflowOrchestrator requires workspace_root parameter.
+        If not provided, adapter will be partially functional for discovery.
+        """
+        self.orchestrator = orchestrator  # Don't try to instantiate
         self.name = "WorkflowOrchestratorAdapter"
     
     def get_capabilities(self) -> List[CapabilityMetadata]:
@@ -646,6 +670,18 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
     ) -> CapabilityResponse:
         """Execute a capability"""
         start = time.time()
+        
+        # Handle None orchestrator (not instantiated due to dependencies)
+        if self.orchestrator is None:
+            return CapabilityResponse(
+                request_id=context.session_id,
+                success=False,
+                error="Orchestrator not available (requires workspace_root)",
+                error_code="NOT_AVAILABLE",
+                orchestrator="workflow",
+                duration_ms=(time.time() - start) * 1000,
+            )
+        
         try:
             if capability_name == "create_workflow":
                 result = self.orchestrator.create_workflow(
@@ -704,6 +740,8 @@ class WorkflowOrchestratorAdapter(IOrchestratorAdapter):
     
     def is_healthy(self) -> bool:
         """Check if orchestrator is healthy"""
+        if self.orchestrator is None:
+            return False
         try:
             return self.orchestrator.is_healthy()
         except Exception:
