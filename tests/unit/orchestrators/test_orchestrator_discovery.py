@@ -343,9 +343,9 @@ class TestMasterOrchestratorIntegration:
         master = MasterOrchestrator.instance()
         
         # Verify accessor methods exist
-        assert callable(getattr(master, "get_todo_manager", None))
+        assert callable(getattr(master, "execute_operation", None))
         assert hasattr(master, "logger")
-        assert hasattr(master, "db")
+        assert hasattr(master, "interaction_orchestrator")
 
     def test_governance_registry_integration(self) -> None:
         """Test AC-CORE-020: Governance registry is integrated and operational."""
