@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: AC-CHALLENGE-SYSTEM-002 - ChallengeEngine Tests
 """
 Tests for ChallengeEngine - LENS-powered challenge generation
@@ -464,6 +463,68 @@ class TestChallengeFormatting:
         
         # Should return empty string or None for no disagreement
         assert formatted == "" or formatted is None or "no challenge" in formatted.lower()
+
+    def test_formatted_challenge_includes_numbered_options(
+        self,
+        challenge_engine: ChallengeEngine
+    ) -> None:
+        """
+        Test that formatted challenge includes emoji-numbered options.
+        
+        CORE-029: Response format enhancement - numbered options with emojis
+        """
+        challenge_response = ChallengeResponse(
+            has_disagreement=True,
+            disagreement_type=DisagreementType.BETTER_SOLUTION,
+            user_request_interpretation="User wants to implement without tests",
+            cortex_analysis="Tests should come first",
+            recommended_alternative="Use TDD approach",
+            reasoning="TDD ensures quality",
+            options=[
+                "Implement the better alternative (TDD approach)",
+                "Keep current plan (skip tests initially)",
+                "Modify your idea (mix testing and implementation)"
+            ]
+        )
+        
+        formatted = challenge_engine.format_challenge_response(challenge_response)
+        
+        # Check for emoji-numbered options
+        assert "1️⃣" in formatted
+        assert "2️⃣" in formatted
+        assert "3️⃣" in formatted
+        assert "What would you like to do?" in formatted
+        assert "Reply with: `1` / `2` / `3`" in formatted
+
+    def test_formatted_challenge_option_descriptions_readable(
+        self,
+        challenge_engine: ChallengeEngine
+    ) -> None:
+        """
+        Test that numbered options are clearly readable.
+        
+        CORE-029: UX improvement - clear option descriptions
+        """
+        challenge_response = ChallengeResponse(
+            has_disagreement=True,
+            disagreement_type=DisagreementType.MISSING_CONTEXT,
+            user_request_interpretation="Fix the issue",
+            cortex_analysis="Need more details",
+            recommended_alternative="Provide bug details",
+            reasoning="Insufficient context",
+            options=[
+                "Provide specific error message and stack trace",
+                "Provide steps to reproduce",
+                "Ask CORTEX for help analyzing the problem"
+            ]
+        )
+        
+        formatted = challenge_engine.format_challenge_response(challenge_response)
+        
+        # Check that descriptions are preserved
+        assert "Provide specific error message" in formatted
+        assert "steps to reproduce" in formatted
+        assert "Ask CORTEX for help" in formatted
 
 
 # =============================================================================

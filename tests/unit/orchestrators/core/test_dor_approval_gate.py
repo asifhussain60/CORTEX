@@ -1,4 +1,3 @@
-"""
 Tests for DoR Approval Gate.
 
 AC-ID: AC-GOVE-DOR-001
@@ -41,7 +40,8 @@ class TestIntentReflection:
         assert "🟢 High" in md
         assert "90%" in md
         assert "`MODULE`" in md
-        assert "⏳ Awaiting approval" in md
+        assert "**⏳ Awaiting Your Decision:**" in md
+        assert "1️⃣ **proceed**" in md
 
     def test_to_markdown_medium_confidence(self) -> None:
         """Test markdown generation with medium confidence."""
@@ -100,6 +100,50 @@ class TestIntentReflection:
         md = reflection.to_markdown()
         
         assert "Entities" not in md
+
+    def test_to_markdown_includes_numbered_options(self) -> None:
+        """
+        Test that markdown includes numbered options for user decisions.
+        
+        CORE-029: Response format enhancement - numbered options for UX
+        """
+        reflection = IntentReflection(
+            intent_type="implement",
+            target_handler="BuilderOrchestrator",
+            confidence=0.9,
+            scope="MODULE",
+        )
+        
+        md = reflection.to_markdown()
+        
+        # Check for numbered options
+        assert "1️⃣ **proceed**" in md
+        assert "2️⃣ **modify:" in md
+        assert "3️⃣ **cancel**" in md
+        
+        # Check for decision instructions
+        assert "**⏳ Awaiting Your Decision:**" in md
+        assert "Reply with:" in md
+
+    def test_to_markdown_includes_option_descriptions(self) -> None:
+        """
+        Test that numbered options include clear descriptions.
+        
+        CORE-029: UX improvement - descriptive options
+        """
+        reflection = IntentReflection(
+            intent_type="fix",
+            target_handler="FixOrchestrator",
+            confidence=0.75,
+            scope="FILE",
+        )
+        
+        md = reflection.to_markdown()
+        
+        # Check descriptions
+        assert "Execute with this intent classification" in md
+        assert "Adjust the classification and try again" in md
+        assert "Abort this operation" in md
 
 
 class TestApprovalDecision:
