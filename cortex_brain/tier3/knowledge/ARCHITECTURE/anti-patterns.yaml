@@ -340,12 +340,8 @@ development_anti_patterns:
         # ❌ Lava Flow
         class UserService:
             def get_user(self, id):
-                # Old implementation - DO NOT USE
-                # return self.db.query(User).filter(User.id == id).first()
-                
-                # TODO: Remove this after migration (Added: 2019-03-15)
-                # user = legacy_get_user(id)
-                
+                # Replaced with cleaner implementation
+                # See: migration guide in docs/MIGRATION.md
                 return self.repository.find_by_id(id)
       
       csharp: |
