@@ -3,6 +3,11 @@
 cortex_brain/state/*.db-shm
 cortex_brain/state/*.db-wal
 
+# Knowledge cache (AC-HYBRID-KNOWLEDGE-001)
+# This is rebuilt automatically on git pull via post-merge hook
+.cortex/knowledge.db
+.cortex/knowledge-cache/
+
 # macOS lock files (Finder temporary files)
 # These are OS-generated and should never be committed
 .!*

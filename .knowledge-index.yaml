@@ -1,0 +1,80 @@
+# Knowledge Repository Index - Single Source of Truth for All Knowledge Domains
+# Authority: AC-HYBRID-KNOWLEDGE-001
+# Version: 1.0
+# Updated: 2026-01-26
+# 
+# This file defines the canonical registry of all knowledge sources (CORTEX + Company).
+# Changes to this file are automatically synchronized via git workflow.
+# Team members add company domains by creating new folders in company/domains/ and registering here.
+
+metadata:
+  version: "1.0"
+  created_at: "2026-01-26T00:00:00Z"
+  authority: "AC-HYBRID-KNOWLEDGE-001"
+  purpose: "Canonical registry for all CORTEX + Company knowledge domains"
+
+cortex_knowledge:
+  description: "Immutable CORTEX best practices and guidance (35+ YAMLs)"
+  path: "cortex_brain/tier3/knowledge/"
+  domains:
+    - name: ARCHITECTURE
+      path: "ARCHITECTURE/"
+      description: "Design patterns, SOLID principles, clean architecture"
+      status: ACTIVE
+      
+    - name: TESTING-VALIDATION
+      path: "TESTING-VALIDATION/"
+      description: "TDD patterns, test doubles, testing pyramid, QA automation"
+      status: ACTIVE
+      
+    - name: DEPLOYMENT
+      path: "DEPLOYMENT/"
+      description: "CI/CD, infrastructure-as-code, DevOps, cloud platforms"
+      status: ACTIVE
+      
+    - name: SECURITY
+      path: "SECURITY/"
+      description: "Security hardening, threat modeling, secure coding"
+      status: ACTIVE
+      
+    - name: PERFORMANCE
+      path: "PERFORMANCE/"
+      description: "Optimization patterns, caching strategies, profiling"
+      status: ACTIVE
+      
+    - name: DOCUMENTATION
+      path: "DOCUMENTATION/"
+      description: "Documentation standards, API design, user guides"
+      status: ACTIVE
+      
+    - name: KNOWLEDGE-CURATION
+      path: "KNOWLEDGE-CURATION/"
+      description: "RAG patterns, embedding strategies, knowledge management"
+      status: ACTIVE
+      
+    - name: DATA-MANAGEMENT
+      path: "DATA-MANAGEMENT/"
+      description: "Database design, query optimization, data governance"
+      status: ACTIVE
+
+company_knowledge:
+  description: "Expandable company-specific domains (version-controlled via git)"
+  path: "company/domains/"
+  sync_mechanism: "git-tracked YAML files"
+  registration_method: "Add folder to company/domains/ + entry below"
+  domains: []
+  
+  # Example company domain (uncomment to add):
+  # - name: FINANCIAL-SERVICES
+  #   path: "company/domains/financial-services/"
+  #   description: "Finance domain patterns, compliance rules, transaction handling"
+  #   status: ACTIVE
+  #   owner: "Finance Team"
+  #   priority: HIGH
+
+synthesis_configuration:
+  description: "Default composition rules for knowledge synthesis"
+  cache_location: ".cortex/knowledge.db"
+  cache_ttl_seconds: 3600
+  rebuild_on_pull: true
+  rebuild_on_import: true

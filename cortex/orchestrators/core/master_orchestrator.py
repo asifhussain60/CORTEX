@@ -26,6 +26,8 @@ from cortex.brain.core.response_header_config import HeaderConfigurationManager
 from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
+from cortex.brain.knowledge.hybrid_loader import HybridKnowledgeLoader, get_hybrid_loader
+from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
 from cortex.core.hallucination_prevention.output_validator import validate_llm_output, OutputValidationError
 from cortex.brain.core.state_manager import StateManager, OperationState, get_state_manager
 from cortex.domain_brain.business_knowledge_repository import (
@@ -345,6 +347,28 @@ class MasterOrchestrator(IOrchestrator):
                 operation="ROUTER_INIT",
                 success=False,
                 details={"error": f"Router initialization failed: {str(e)}"}
+            )
+        
+        # AC-HYBRID-KNOWLEDGE-005: Initialize KnowledgeSynthesisEngine for instruction synthesis
+        # Synthesizes CORTEX + Company knowledge into final instructions with source attribution
+        self._synthesis_engine: Optional[KnowledgeSynthesisEngine] = None
+        try:
+            self._synthesis_engine = KnowledgeSynthesisEngine()
+            self.logger.log_operation_complete(
+                ac_id="AC-HYBRID-KNOWLEDGE-005",
+                operation="SYNTHESIS_ENGINE_INIT",
+                success=True,
+                details={
+                    "message": "Knowledge synthesis engine initialized for instruction generation with source attribution"
+                }
+            )
+        except Exception as e:
+            # Log but don't fail - synthesis is enhancement, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-HYBRID-KNOWLEDGE-005",
+                operation="SYNTHESIS_ENGINE_INIT",
+                success=False,
+                details={"error": f"Knowledge synthesis engine initialization failed: {str(e)}"}
             )
         
         # Track current operation context for header variables
@@ -1735,6 +1759,46 @@ class MasterOrchestrator(IOrchestrator):
                     target_domains=target_domains
                 )
                 
+                # AC-HYBRID-KNOWLEDGE-005: Synthesize CORTEX + Company knowledge into final instructions
+                synthesized_instructions = None
+                synthesized_sources = None
+                try:
+                    if self._synthesis_engine is not None:
+                        synthesis_result = self._synthesis_engine.synthesize_for_intent(
+                            intent_type=operation,
+                            company_context=context
+                        )
+                        synthesized_instructions = synthesis_result.instruction
+                        synthesized_sources = [
+                            {
+                                "layer": src.layer,
+                                "domain": src.domain,
+                                "yaml_files": src.yaml_files,
+                                "priority": src.priority
+                            }
+                            for src in synthesis_result.sources
+                        ]
+                        self.logger.log_operation_complete(
+                            ac_id="AC-HYBRID-KNOWLEDGE-005",
+                            operation="KNOWLEDGE_SYNTHESIS",
+                            success=True,
+                            details={
+                                "intent": operation,
+                                "sources_count": len(synthesis_result.sources),
+                                "cortex_sources": len([s for s in synthesis_result.sources if s.layer == "CORTEX"]),
+                                "company_sources": len([s for s in synthesis_result.sources if s.layer == "COMPANY"]),
+                                "synthesis_confidence": synthesis_result.synthesis_confidence
+                            }
+                        )
+                except Exception as e:
+                    # Log but don't fail - synthesis is enhancement, not blocking
+                    self.logger.log_operation_complete(
+                        ac_id="AC-HYBRID-KNOWLEDGE-005",
+                        operation="KNOWLEDGE_SYNTHESIS",
+                        success=False,
+                        details={"error": f"Knowledge synthesis failed: {str(e)}"}
+                    )
+                
                 # Determine target orchestrators
                 domains_to_use = target_domains if target_domains else list(self.domain_orchestrators.keys())
                 
@@ -1777,7 +1841,10 @@ class MasterOrchestrator(IOrchestrator):
                     # AC-KN-002-01: Include technical knowledge context in composite request
                     "knowledge_context": knowledge_context,
                     # AC-KN-003-01: Include business knowledge context in composite request
-                    "business_knowledge_context": business_knowledge_context
+                    "business_knowledge_context": business_knowledge_context,
+                    # AC-HYBRID-KNOWLEDGE-005: Include synthesized instructions with source attribution
+                    "synthesized_instructions": synthesized_instructions,
+                    "instruction_sources": synthesized_sources if synthesized_sources else []
                 }
                 
                 # Store in history
@@ -1798,7 +1865,10 @@ class MasterOrchestrator(IOrchestrator):
                         "knowledge_evaluated": knowledge_context.get("knowledge_evaluated", False),
                         "knowledge_entries_used": knowledge_context.get("entries_count", 0),
                         "business_knowledge_evaluated": business_knowledge_context.get("business_knowledge_evaluated", False),
-                        "business_knowledge_entries_used": business_knowledge_context.get("entries_count", 0)
+                        "business_knowledge_entries_used": business_knowledge_context.get("entries_count", 0),
+                        # AC-HYBRID-KNOWLEDGE-005: Include synthesis metrics in completion log
+                        "instructions_synthesized": synthesized_instructions is not None,
+                        "instruction_sources_count": len(synthesized_sources) if synthesized_sources else 0
                     }
                 )
                 
