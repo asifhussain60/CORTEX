@@ -1,0 +1,246 @@
+"""
+AC-DOMAIN-REF-001: YAML-Driven Refactoring Strategies
+
+Enables runtime configuration of refactoring strategies without code restart.
+Strategies loaded from cortex_brain/tier3/knowledge/refactoring-strategies.yaml
+
+Author: CORTEX Enhancement Framework
+Date: 2026-01-26
+"""
+
+refactoring_strategies:
+  # Strategy 1: Extract Interfaces
+  extract_interfaces:
+    name: "Extract Interfaces"
+    description: "Break god class into smaller, interface-based components"
+    target_metrics:
+      max_methods_per_class: 15
+      min_cohesion: 0.85
+      target_srp_score: 0.9
+    effort_hours: 4
+    complexity: "medium"
+    safety_level: "high"
+    applicable_patterns:
+      - "god_class"
+      - "feature_envy"
+      - "divergent_change"
+    dependencies: []
+    steps:
+      - "Identify interface contracts"
+      - "Extract implementation"
+      - "Create proxy/adapter if needed"
+      - "Verify backward compatibility"
+    validation_rules:
+      - "All public methods assigned"
+      - "No dangling dependencies"
+      - "Test coverage maintained"
+    rollback_strategy: "git_revert"
+
+  # Strategy 2: Decompose Responsibilities
+  decompose_responsibilities:
+    name: "Decompose Responsibilities"
+    description: "Split single class into multiple single-responsibility classes"
+    target_metrics:
+      max_methods_per_class: 10
+      max_properties_per_class: 8
+      min_cohesion: 0.9
+    effort_hours: 8
+    complexity: "high"
+    safety_level: "medium"
+    applicable_patterns:
+      - "god_class"
+      - "large_class"
+      - "data_clump"
+    dependencies:
+      - "extract_interfaces"
+    steps:
+      - "Identify responsibility groups"
+      - "Create new classes"
+      - "Migrate related methods"
+      - "Update dependencies"
+      - "Run full test suite"
+    validation_rules:
+      - "No circular dependencies"
+      - "Each class has single reason to change"
+      - "100% test passing"
+    rollback_strategy: "git_revert"
+
+  # Strategy 3: Refactor Dependencies
+  refactor_dependencies:
+    name: "Refactor Dependencies"
+    description: "Resolve dependency issues and circular references"
+    target_metrics:
+      max_dependency_depth: 3
+      circular_refs: 0
+      coupling_score: 0.3
+    effort_hours: 6
+    complexity: "medium"
+    safety_level: "high"
+    applicable_patterns:
+      - "cyclic_dependency"
+      - "feature_envy"
+      - "inappropriate_intimacy"
+    dependencies: []
+    steps:
+      - "Build dependency graph"
+      - "Detect cycles"
+      - "Introduce intermediary classes"
+      - "Apply dependency injection"
+      - "Verify acyclic"
+    validation_rules:
+      - "No circular dependencies"
+      - "Dependency depth <= 3"
+      - "Tests green"
+    rollback_strategy: "git_revert"
+
+  # Strategy 4: Consolidate Similar Methods
+  consolidate_methods:
+    name: "Consolidate Similar Methods"
+    description: "Merge duplicate or near-duplicate methods using templates"
+    target_metrics:
+      duplicate_methods: 0
+      code_duplication: "< 5%"
+    effort_hours: 3
+    complexity: "low"
+    safety_level: "high"
+    applicable_patterns:
+      - "duplicate_code"
+      - "similar_methods"
+    dependencies: []
+    steps:
+      - "Detect similar methods"
+      - "Extract template method"
+      - "Parameterize differences"
+      - "Replace implementations"
+    validation_rules:
+      - "All tests pass"
+      - "No behavior changes"
+    rollback_strategy: "git_revert"
+
+  # Strategy 5: Extract Module
+  extract_module:
+    name: "Extract Module"
+    description: "Move related classes to new module for better organization"
+    target_metrics:
+      classes_per_module: 3
+      module_cohesion: 0.9
+    effort_hours: 5
+    complexity: "medium"
+    safety_level: "high"
+    applicable_patterns:
+      - "large_module"
+      - "mixed_concerns"
+    dependencies: []
+    steps:
+      - "Identify related classes"
+      - "Create new module"
+      - "Move classes and adjust imports"
+      - "Update documentation"
+    validation_rules:
+      - "All imports valid"
+      - "No circular module deps"
+      - "Tests pass"
+    rollback_strategy: "git_revert"
+
+# Refactoring profiles - pre-configured combinations
+profiles:
+  aggressive:
+    name: "Aggressive"
+    description: "Maximum SOLID compliance, highest effort"
+    strategies:
+      - "extract_interfaces"
+      - "decompose_responsibilities"
+      - "refactor_dependencies"
+      - "consolidate_methods"
+      - "extract_module"
+    total_effort_hours: 26
+    risk_level: "high"
+    recommended_for: "Legacy code, critical paths"
+
+  moderate:
+    name: "Moderate"
+    description: "Balance between effort and improvement"
+    strategies:
+      - "extract_interfaces"
+      - "decompose_responsibilities"
+      - "consolidate_methods"
+    total_effort_hours: 15
+    risk_level: "medium"
+    recommended_for: "Regular maintenance, feature refactoring"
+
+  conservative:
+    name: "Conservative"
+    description: "Minimal changes, lowest risk"
+    strategies:
+      - "consolidate_methods"
+      - "extract_module"
+    total_effort_hours: 8
+    risk_level: "low"
+    recommended_for: "Production systems, stable code"
+
+  minimal:
+    name: "Minimal"
+    description: "Single targeted strategy"
+    strategies:
+      - "consolidate_methods"
+    total_effort_hours: 3
+    risk_level: "low"
+    recommended_for: "Quick wins, CI/CD improvements"
+
+# Violation-to-strategy mapping
+violation_mappings:
+  god_class:
+    severity: "high"
+    primary_strategies:
+      - "extract_interfaces"
+      - "decompose_responsibilities"
+    recommended_profile: "aggressive"
+    indicators:
+      - "methods > 40"
+      - "properties > 15"
+      - "cohesion < 0.7"
+
+  duplicate_code:
+    severity: "medium"
+    primary_strategies:
+      - "consolidate_methods"
+    recommended_profile: "conservative"
+    indicators:
+      - "% duplication > 10%"
+      - "similar method bodies"
+
+  circular_dependency:
+    severity: "high"
+    primary_strategies:
+      - "refactor_dependencies"
+    recommended_profile: "aggressive"
+    indicators:
+      - "cyclic_ref_count > 0"
+      - "dependency_depth > 5"
+
+  feature_envy:
+    severity: "medium"
+    primary_strategies:
+      - "extract_interfaces"
+      - "decompose_responsibilities"
+    recommended_profile: "moderate"
+    indicators:
+      - "excessive external method calls"
+      - "low internal cohesion"
+
+# Quality targets
+quality_targets:
+  srp_score: 0.85  # Single Responsibility Principle
+  cohesion: 0.85   # Internal cohesion
+  coupling: 0.25   # External coupling (lower is better)
+  complexity: 10   # Cyclomatic complexity per method
+  duplication: 0.05  # % code duplication (5%)
+  test_coverage: 0.95  # Code coverage %
+  dependency_depth: 3  # Max module dependency depth
+
+# Performance thresholds
+performance_thresholds:
+  analysis_timeout_seconds: 30
+  max_class_size_lines: 1000
+  max_method_size_lines: 100
+  max_parameters_per_method: 5
