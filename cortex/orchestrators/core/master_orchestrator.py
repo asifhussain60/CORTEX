@@ -40,6 +40,14 @@ from cortex.brain.mcp.decorator import mcp_tool
 from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 
+# AC-PHASE-2-5-WIRE-001: Import ComponentHealthTracker for health monitoring
+from cortex.orchestrators.core.component_health import ComponentHealthTracker, ComponentType
+
+# AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
+from cortex.orchestrators.adaptive.router import AdaptiveRouter
+
+# Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
+
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
 try:
     from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
@@ -192,6 +200,48 @@ class MasterOrchestrator(IOrchestrator):
         
         # AC-PHASE-2-WIRE-002: Initialize HolisticContextBuilder for Stage 4 context synthesis
         self._holistic_context_builder = HolisticContextBuilder()
+        
+        # AC-PHASE-2-5-WIRE-001: Initialize ComponentHealthTracker for system health monitoring
+        self._component_health_tracker = ComponentHealthTracker()
+        # Register all critical components for health tracking
+        self._component_health_tracker.register_component(
+            "MasterOrchestrator", ComponentType.CRITICAL
+        )
+        self._component_health_tracker.register_component(
+            "ChallengeGenerator", ComponentType.CRITICAL
+        )
+        self._component_health_tracker.register_component(
+            "HolisticContextBuilder", ComponentType.CRITICAL
+        )
+        self._component_health_tracker.register_component(
+            "KnowledgeRepository", ComponentType.OPTIONAL
+        )
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE-2-5-WIRE-001",
+            operation="COMPONENT_HEALTH_TRACKER_INIT",
+            success=True,
+            details={"message": "Component health tracking initialized"}
+        )
+        
+        # AC-PHASE-2-5-WIRE-002: Initialize GracefulDegradationFramework for resilience
+        # Import from cortex_brain to avoid circular imports in cortex.brain.tier2
+        from cortex_brain.tier2.resilience import GracefulDegradationFramework
+        self._graceful_degradation = GracefulDegradationFramework()
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE-2-5-WIRE-002",
+            operation="GRACEFUL_DEGRADATION_INIT",
+            success=True,
+            details={"message": "Graceful degradation framework initialized"}
+        )
+        
+        # AC-PHASE-2-5-WIRE-003: Initialize AdaptiveRouter for intelligent task routing
+        self._adaptive_router = AdaptiveRouter()
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE-2-5-WIRE-003",
+            operation="ADAPTIVE_ROUTER_INIT",
+            success=True,
+            details={"message": "Adaptive router initialized"}
+        )
         
         # AC-KN-002-01: Initialize Knowledge Repository for best practices access
         self._knowledge_repository: Optional[KnowledgeRepository] = None
@@ -462,6 +512,36 @@ class MasterOrchestrator(IOrchestrator):
         """
         return self._holistic_context_builder
     
+    def get_component_health_tracker(self) -> ComponentHealthTracker:
+        """Get ComponentHealthTracker for system health monitoring.
+        
+        AC-PHASE-2-5-WIRE-001: Provides health status of all components.
+        
+        Returns:
+            ComponentHealthTracker: Instance for monitoring component health.
+        """
+        return self._component_health_tracker
+    
+    def get_graceful_degradation_framework(self) -> Any:
+        """Get GracefulDegradationFramework for resilience and fallback handling.
+        
+        AC-PHASE-2-5-WIRE-002: Provides graceful degradation capabilities.
+        
+        Returns:
+            GracefulDegradationFramework: Instance for managing resilience.
+        """
+        return self._graceful_degradation
+    
+    def get_adaptive_router(self) -> AdaptiveRouter:
+        """Get AdaptiveRouter for intelligent task routing.
+        
+        AC-PHASE-2-5-WIRE-003: Provides intelligent routing based on context.
+        
+        Returns:
+            AdaptiveRouter: Instance for adaptive task routing.
+        """
+        return self._adaptive_router
+    
     def get_initialization_status(self) -> Dict[str, Any]:
         """Get initialization status of all components.
         
@@ -513,6 +593,24 @@ class MasterOrchestrator(IOrchestrator):
                 "required": False,
                 "component_name": "ResponseHeaderInjector",
                 "degraded": self.header_injector is None,
+            },
+            "component_health_tracker": {
+                "initialized": self._component_health_tracker is not None,
+                "required": False,
+                "component_name": "ComponentHealthTracker",
+                "degraded": False,
+            },
+            "graceful_degradation_framework": {
+                "initialized": self._graceful_degradation is not None,
+                "required": False,
+                "component_name": "GracefulDegradationFramework",
+                "degraded": False,
+            },
+            "adaptive_router": {
+                "initialized": self._adaptive_router is not None,
+                "required": False,
+                "component_name": "AdaptiveRouter",
+                "degraded": False,
             },
         }
     
