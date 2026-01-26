@@ -3,6 +3,11 @@
 cortex_brain/state/*.db-shm
 cortex_brain/state/*.db-wal
 
+# macOS lock files (Finder temporary files)
+# These are OS-generated and should never be committed
+.!*
+.DS_Store
+
 # Python
 __pycache__/
 *.py[cod]

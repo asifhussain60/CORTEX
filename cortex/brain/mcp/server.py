@@ -41,7 +41,7 @@ from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.database import DatabaseManager
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.core.orchestrator_registry import OrchestratorRegistry
+from cortex.orchestrators.core.database_registry import get_database_registry
 from cortex.brain.core.governance_registry import GovernanceRegistry
 
 
@@ -354,25 +354,28 @@ self.registry = get_database_registry()
         AC-AR-007-02: Orchestrators exposed as MCP tools
         """
         try:
+            registry = get_database_registry()
+            all_orchestrators = registry.get_all_orchestrators()
+            
             if self.logger:
                 self.logger.log_operation_start(
                     ac_id="AC-AR-007-02",
                     operation="LOAD_ORCHESTRATOR_TOOLS",
-                    details={"domains": self.registry.get_domains()}
+                    details={"orchestrator_count": len(all_orchestrators)}
                 )
             
-            for orchestrator_meta in self.registry.get_all():
-                domain = orchestrator_meta.get("domain")
-                capabilities = orchestrator_meta.get("capabilities", [])
-                version = orchestrator_meta.get("version", "1.0")
+            for orchestrator_name, orchestrator_instance in all_orchestrators.items():
+                # Get capabilities from orchestrator if available
+                capabilities = getattr(orchestrator_instance, 'capabilities', [])
+                version = getattr(orchestrator_instance, 'version', '1.0.0')
                 
                 # Create tool info for each capability
                 for capability in capabilities:
-                    tool_name = f"{domain}_{capability}"
+                    tool_name = f"{orchestrator_name}_{capability}"
                     tool_info = MCPToolInfo(
                         name=tool_name,
-                        description=f"{capability} in {domain} domain (v{version})",
-                        orchestrator_domain=domain,
+                        description=f"{capability} in {orchestrator_name} (v{version})",
+                        orchestrator_domain=orchestrator_name,
                         parameters={"operation": capability},
                         capabilities=[capability]
                     )
