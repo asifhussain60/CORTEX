@@ -473,7 +473,7 @@ class GovernanceDatabaseManager:
         new_state: Optional[str] = None,
         reason: Optional[str] = None,
     ) -> None:
-        """Log an audit event."""
+        """Log an audit event (internal use)."""
         audit_id = str(uuid.uuid4())
         now = datetime.now(timezone.utc).isoformat()
 
@@ -492,6 +492,35 @@ class GovernanceDatabaseManager:
             ))
 
             conn.commit()
+
+    def log_audit_event(
+        self,
+        rule_id: str,
+        action: str,
+        actor: str,
+        previous_state: Optional[str] = None,
+        new_state: Optional[str] = None,
+        reason: Optional[str] = None,
+    ) -> None:
+        """
+        Log an audit event (public method).
+        
+        Args:
+            rule_id: Rule identifier
+            action: Action type (CREATE, UPDATE, DELETE, etc.)
+            actor: User/system performing action
+            previous_state: Previous state JSON
+            new_state: New state JSON
+            reason: Reason for change
+        """
+        self._log_audit(
+            rule_id=rule_id,
+            action=action,
+            actor=actor,
+            previous_state=previous_state,
+            new_state=new_state,
+            reason=reason,
+        )
 
     def get_audit_log(
         self,
