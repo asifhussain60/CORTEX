@@ -12,6 +12,8 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 from pathlib import Path
 import yaml
+import json
+import hashlib
 
 from cortex.brain.core.orchestrator.continuation_decision import (
     ContinuationDecision,
@@ -164,6 +166,7 @@ class ConversationProtocol:
         event_registry: EventRegistry = None,
         db_path: Optional[str] = None,  # AC-FIX-008-01: Allow test database injection
         adaptive_turn_limit: bool = True,  # AC-FUTURE-004: Enable adaptive limits
+        memoization_enabled: bool = True,  # AC-FUTURE-006: Enable turn result caching
     ):
         """
         Initialize ConversationProtocol wrapper.
@@ -175,6 +178,7 @@ class ConversationProtocol:
             event_registry: Optional EventRegistry for event handling
             db_path: Optional database path (for testing, defaults to production path)
             adaptive_turn_limit: AC-FUTURE-004 - Adapt max_turns based on request complexity (default: True)
+            memoization_enabled: AC-FUTURE-006 - Enable turn result caching (default: True)
         """
         self.orchestrator = orchestrator
         self.max_turns = max_turns
@@ -189,6 +193,12 @@ class ConversationProtocol:
         self.total_tokens_used: int = 0
         self.decisions_history: List[ContinuationDecision] = []
         self.conversation_session: Optional[Any] = None
+        
+        # AC-FUTURE-006: Turn result memoization cache
+        self.turn_result_cache: Dict[str, Any] = {}  # Maps turn_key → result
+        self.turn_cache_hits: int = 0
+        self.turn_cache_misses: int = 0
+        self.memoization_enabled: bool = memoization_enabled
         
         # Governance and audit
         self._governance_registry = None  # Will be injected if available
@@ -251,6 +261,97 @@ class ConversationProtocol:
             )
         
         return recommended_turns
+
+    def _compute_turn_hash(self, round_context: RoundContext) -> str:
+        """
+        Compute hash of turn context for memoization.
+        
+        AC-FUTURE-006: Turn result memoization
+        
+        Creates deterministic hash of turn input to enable result caching.
+        
+        Args:
+            round_context: Turn context with user input and settings
+            
+        Returns:
+            Hex hash string of turn context
+        """
+        # Create deterministic key from context
+        key_data = {
+            "user_input": round_context.user_input,
+            "orchestrator": round_context.orchestrator_name,
+            "round": round_context.round_number,
+            "turn": self.turn_number
+        }
+        
+        # Hash to string
+        key_json = json.dumps(key_data, sort_keys=True, default=str)
+        return hashlib.md5(key_json.encode()).hexdigest()
+    
+    def _get_cached_result(self, turn_hash: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve cached result for identical turn.
+        
+        AC-FUTURE-006: Memoization retrieval
+        
+        Args:
+            turn_hash: Hash of turn context
+            
+        Returns:
+            Cached result if available, None otherwise
+        """
+        if not self.memoization_enabled:
+            return None
+        
+        if turn_hash in self.turn_result_cache:
+            self.turn_cache_hits += 1
+            return self.turn_result_cache[turn_hash]
+        
+        self.turn_cache_misses += 1
+        return None
+    
+    def _cache_result(self, turn_hash: str, result: Dict[str, Any]) -> None:
+        """
+        Cache result for this turn.
+        
+        AC-FUTURE-006: Memoization storage
+        
+        Args:
+            turn_hash: Hash of turn context
+            result: Result to cache
+        """
+        if not self.memoization_enabled or not result:
+            return
+        
+        # Limit cache size to 1000 entries (prevent memory bloat)
+        if len(self.turn_result_cache) >= 1000:
+            # Remove oldest entries (simple FIFO)
+            keys_to_remove = list(self.turn_result_cache.keys())[:100]
+            for key in keys_to_remove:
+                del self.turn_result_cache[key]
+        
+        self.turn_result_cache[turn_hash] = result
+    
+    def get_memoization_stats(self) -> Dict[str, Any]:
+        """
+        Get memoization cache statistics.
+        
+        AC-FUTURE-006: Cache performance metrics
+        
+        Returns:
+            Dict with cache hits, misses, hit rate
+        """
+        total = self.turn_cache_hits + self.turn_cache_misses
+        hit_rate = (self.turn_cache_hits / total * 100) if total > 0 else 0.0
+        
+        return {
+            "cache_enabled": self.memoization_enabled,
+            "cache_size": len(self.turn_result_cache),
+            "hits": self.turn_cache_hits,
+            "misses": self.turn_cache_misses,
+            "hit_rate": f"{hit_rate:.1f}%",
+            "total_turns": total
+        }
 
     def execute_turn(
         self, round_context: RoundContext
