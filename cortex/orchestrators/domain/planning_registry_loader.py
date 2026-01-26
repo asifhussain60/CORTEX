@@ -17,6 +17,7 @@ Date: 2026-01-25
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -38,6 +39,150 @@ class RegistryYAMLParseError(Exception):
     pass
 
 
+# ============================================================================
+# NAMING FACTORY (AC-PLANNING-NAMING-001)
+# ============================================================================
+
+
+class NamingFactory:
+    """
+    Naming utilities for plan folder names.
+
+    Features:
+    - Kebab-case conversion
+    - Domain inference from descriptions
+    - Folder name generation
+    - Folder name validation
+
+    AC-PLANNING-NAMING-001: Naming Factory Utilities
+    """
+
+    # Domain keywords for inference
+    DOMAIN_KEYWORDS = {
+        "docs": ["documentation", "guide", "readme", "tutorial", "manual", "reference", "architectural", "diagram"],
+        "planning": ["plan", "roadmap", "schedule", "timeline", "phase"],
+        "core": ["database", "queue", "storage", "infrastructure", "layer", "persistence", "service bus"],
+        "api": ["api", "endpoint", "graphql", "rest"],
+    }
+
+    def to_kebab_case(self, text: str) -> str:
+        """
+        Convert text to kebab-case.
+
+        Args:
+            text: Input text
+
+        Returns:
+            Kebab-case string
+        """
+        # Replace underscores and spaces with hyphens
+        text = re.sub(r"[_\s]+", "-", text)
+
+        # Handle camelCase: insert hyphen before capitals
+        text = re.sub(r"([a-z])([A-Z])", r"\1-\2", text)
+
+        # Remove special characters except hyphens and numbers
+        text = re.sub(r"[^a-z0-9\-\.]", "-", text.lower())
+
+        # Remove consecutive hyphens
+        text = re.sub(r"-+", "-", text)
+
+        # Remove leading/trailing hyphens
+        text = text.strip("-")
+
+        return text
+
+    def infer_domain(self, description: str) -> str:
+        """
+        Infer domain from description.
+
+        Args:
+            description: Plan description
+
+        Returns:
+            Domain name (docs, planning, api, core, or general)
+        """
+        if not description:
+            return "general"
+
+        description_lower = description.lower()
+
+        # Check each domain's keywords
+        for domain, keywords in self.DOMAIN_KEYWORDS.items():
+            for keyword in keywords:
+                if keyword in description_lower:
+                    return domain
+
+        return "general"
+
+    def generate_folder_name(self, request: Dict[str, Any]) -> str:
+        """
+        Generate folder name from request.
+
+        Args:
+            request: Dictionary with 'name', 'description', optional 'domain'
+
+        Returns:
+            Kebab-case folder name
+        """
+        name = request.get("name", "")
+        description = request.get("description", "")
+        domain = request.get("domain")
+
+        if not name:
+            name = description or "unnamed"
+
+        # Convert to kebab-case
+        folder_name = self.to_kebab_case(name)
+
+        # Infer domain if not provided
+        if not domain:
+            domain = self.infer_domain(description)
+
+        # Append domain if not "general"
+        if domain and domain != "general":
+            # Domain is typically used for folder structure, not name
+            pass
+
+        return folder_name
+
+    def validate_folder_name(self, name: str) -> bool:
+        """
+        Validate folder name.
+
+        Rules:
+        - Not empty
+        - Only alphanumeric, hyphens, dots
+        - No leading/trailing hyphens
+        - No consecutive hyphens
+        - Max 255 characters
+
+        Args:
+            name: Folder name to validate
+
+        Returns:
+            True if valid, False otherwise
+        """
+        if not name or len(name.strip()) == 0:
+            return False
+
+        if len(name) > 255:
+            return False
+
+        # Must match pattern: alphanumeric, hyphens, dots
+        # No leading/trailing hyphens
+        # No consecutive hyphens
+        pattern = r"^[a-z0-9][a-z0-9\.\-]*[a-z0-9]$|^[a-z0-9]$"
+        if not re.match(pattern, name):
+            return False
+
+        # Check for consecutive hyphens
+        if "--" in name or ".." in name:
+            return False
+
+        return True
+
+
 class PlanningRegistryLoader:
     """
     Loads phase data from cortex-registry/planning/ structure.
@@ -46,6 +191,12 @@ class PlanningRegistryLoader:
     - cortex-registry/planning/index.yaml (main registry)
     - cortex-registry/planning/*.yaml (individual phase files)
     - cortex-registry/domains/{domain}/planning/*.yaml (domain-specific phases)
+
+    Features:
+    - YAML-based phase registration
+    - Hierarchical domain support
+    - In-memory caching
+    - Naming factory for kebab-case folder generation
     """
     
     def __init__(self, registry_path: Optional[Path] = None):
@@ -66,6 +217,7 @@ class PlanningRegistryLoader:
         self.planning_path = self.registry_path / "planning"
         self._phase_cache: Dict[str, Any] = {}
         self._initialized = False
+        self.naming_factory = NamingFactory()  # Add naming factory
         
         # Validate paths exist
         if not self.registry_path.exists():
@@ -181,6 +333,58 @@ class PlanningRegistryLoader:
         """Clear phase cache."""
         self._phase_cache = {}
         self._initialized = False
+
+    # ========================================================================
+    # NAMING FACTORY DELEGATES (AC-PLANNING-NAMING-001)
+    # ========================================================================
+
+    def to_kebab_case(self, text: str) -> str:
+        """
+        Delegate to naming factory: Convert text to kebab-case.
+
+        Args:
+            text: Input text
+
+        Returns:
+            Kebab-case string
+        """
+        return self.naming_factory.to_kebab_case(text)
+
+    def infer_domain(self, description: str) -> str:
+        """
+        Delegate to naming factory: Infer domain from description.
+
+        Args:
+            description: Plan description
+
+        Returns:
+            Domain name
+        """
+        return self.naming_factory.infer_domain(description)
+
+    def generate_folder_name(self, request: Dict[str, Any]) -> str:
+        """
+        Delegate to naming factory: Generate folder name from request.
+
+        Args:
+            request: Dictionary with 'name', 'description', optional 'domain'
+
+        Returns:
+            Kebab-case folder name
+        """
+        return self.naming_factory.generate_folder_name(request)
+
+    def validate_folder_name(self, name: str) -> bool:
+        """
+        Delegate to naming factory: Validate folder name.
+
+        Args:
+            name: Folder name to validate
+
+        Returns:
+            True if valid, False otherwise
+        """
+        return self.naming_factory.validate_folder_name(name)
     
     # ========================================================================
     # PRIVATE METHODS
