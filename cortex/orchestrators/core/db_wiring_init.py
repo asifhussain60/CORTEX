@@ -69,6 +69,7 @@ CORE_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=["MasterOrchestrator"],
         capabilities=["user_comprehension", "context_preservation", "challenge_engine", "lens_protocol"],
         routing_keywords=["understand", "analyze", "comprehend", "listen", "challenge"],
+        is_optional=True,  # Skip wiring - will be lazily initialized by MasterOrchestrator with ConversationProtocol
     ),
     OrchestratorConfig(
         name="IntentRouter",
@@ -79,6 +80,7 @@ CORE_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=["MasterOrchestrator", "InteractionOrchestrator"],
         capabilities=["intent_classification", "confidence_scoring", "domain_routing"],
         routing_keywords=["route", "classify", "intent", "dispatch"],
+        is_optional=True,  # Depends on InteractionOrchestrator which is optional
     ),
     OrchestratorConfig(
         name="TDDOrchestrator",
@@ -99,6 +101,7 @@ CORE_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=["MasterOrchestrator"],
         capabilities=["multi_step_execution", "state_management", "workflow_coordination"],
         routing_keywords=["workflow", "pipeline", "steps", "sequence"],
+        is_optional=True,  # Requires workspace_root arg
     ),
     OrchestratorConfig(
         name="WrappedTDDOrchestrator",
@@ -110,6 +113,7 @@ CORE_ORCHESTRATORS: List[OrchestratorConfig] = [
         capabilities=["governed_tdd", "compliance_enforcement", "audit_trail"],
         routing_keywords=["governed", "compliant", "audit"],
         is_utility=True,
+        is_optional=True,  # Utility that may need special initialization
     ),
 ]
 
@@ -163,6 +167,7 @@ DOMAIN_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=["InteractionOrchestrator"],
         capabilities=["multi_turn_conversation", "state_tracking", "context_continuity"],
         routing_keywords=["conversation", "chat", "dialogue", "session"],
+        is_optional=True,  # Depends on InteractionOrchestrator which is optional
     ),
     OrchestratorConfig(
         name="SeleniumPlaywrightOrchestrator",
@@ -214,6 +219,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["user_onboarding", "setup_wizard", "guided_experience"],
         routing_keywords=["onboard", "welcome", "tutorial", "getting_started"],
+        is_optional=True,  # Module not yet implemented
     ),
     OrchestratorConfig(
         name="ToolDiscoveryOrchestrator",
@@ -224,6 +230,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["capability_discovery", "tool_search", "mcp_tools"],
         routing_keywords=["discover", "search", "find", "tools", "capabilities"],
+        is_optional=True,  # Module not yet implemented
     ),
     OrchestratorConfig(
         name="UpgradeOrchestrator",
@@ -234,6 +241,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["version_upgrade", "migration", "patching"],
         routing_keywords=["upgrade", "update", "migrate", "version"],
+        is_optional=True,  # Requires repo_path argument
     ),
     OrchestratorConfig(
         name="RollbackOrchestrator",
@@ -244,6 +252,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["rollback", "recovery", "saga_pattern", "undo"],
         routing_keywords=["rollback", "recover", "undo", "restore"],
+        is_optional=True,  # May require initialization args
     ),
     OrchestratorConfig(
         name="SetupOrchestrator",
@@ -254,6 +263,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["environment_setup", "configuration", "initialization"],
         routing_keywords=["setup", "config", "initialize", "prepare"],
+        is_optional=True,  # Module not yet implemented
     ),
     OrchestratorConfig(
         name="ComposedOrchestrator",
@@ -264,6 +274,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         dependencies=[],
         capabilities=["composition", "chaining", "pipeline_execution"],
         routing_keywords=["compose", "chain", "pipeline", "combine"],
+        is_optional=True,  # Requires name and pattern arguments
     ),
     OrchestratorConfig(
         name="OrchestratorBootstrap",
@@ -286,6 +297,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         capabilities=["approval_workflow", "dor_validation", "user_confirmation"],
         routing_keywords=["approve", "confirm", "validate", "gate"],
         is_utility=True,
+        is_optional=True,  # Depends on InteractionOrchestrator which is optional
     ),
     OrchestratorConfig(
         name="LENSSynthesis",
@@ -297,6 +309,7 @@ SUPPORT_ORCHESTRATORS: List[OrchestratorConfig] = [
         capabilities=["lens_protocol", "intent_synthesis", "context_aggregation"],
         routing_keywords=["lens", "synthesize", "aggregate"],
         is_utility=True,
+        is_optional=True,  # Depends on InteractionOrchestrator which is optional
     ),
     OrchestratorConfig(
         name="GovernanceRegistry",
