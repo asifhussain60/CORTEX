@@ -40,6 +40,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
 from enum import Enum
+from functools import lru_cache
 import logging
 
 logger = logging.getLogger(__name__)
@@ -102,6 +103,55 @@ class AuditLogEntry:
         return asdict(self)
 
 
+class QueryCache:
+    """
+    LRU cache for governance rule queries.
+    
+    Purpose: Improve performance for frequently accessed queries
+    Max size: 128 entries (rules and query results)
+    """
+    
+    def __init__(self, maxsize: int = 128):
+        """Initialize query cache."""
+        self.maxsize = maxsize
+        self.cache: Dict[str, Any] = {}
+        self._lock = threading.Lock()
+    
+    def get(self, key: str) -> Optional[Any]:
+        """Get value from cache."""
+        with self._lock:
+            return self.cache.get(key)
+    
+    def set(self, key: str, value: Any) -> None:
+        """Set value in cache."""
+        with self._lock:
+            if len(self.cache) >= self.maxsize:
+                # Remove oldest entry (simple FIFO for simplicity)
+                oldest_key = next(iter(self.cache))
+                del self.cache[oldest_key]
+            self.cache[key] = value
+    
+    def clear(self) -> None:
+        """Clear entire cache."""
+        with self._lock:
+            self.cache.clear()
+    
+    def invalidate(self, pattern: Optional[str] = None) -> None:
+        """Invalidate cache entries matching pattern."""
+        with self._lock:
+            if pattern is None:
+                self.cache.clear()
+            else:
+                keys_to_delete = [k for k in self.cache.keys() if pattern in k]
+                for key in keys_to_delete:
+                    del self.cache[key]
+    
+    def size(self) -> int:
+        """Get current cache size."""
+        with self._lock:
+            return len(self.cache)
+
+
 class GovernanceDatabaseManager:
     """
     SQLite database manager for governance rules.
@@ -129,6 +179,7 @@ class GovernanceDatabaseManager:
         
         self._connection = None
         self._initialized = False
+        self._query_cache = QueryCache(maxsize=128)
 
     @classmethod
     def instance(cls) -> "GovernanceDatabaseManager":
@@ -308,8 +359,11 @@ class GovernanceDatabaseManager:
 
                 conn.commit()
 
-                # Log to audit trail
-                self._log_audit(
+                # Clear query cache (invalidate all category/active queries)
+                self.clear_query_cache()
+
+                # Log to audit trail (no lock needed, _log_audit_unlocked doesn't acquire lock)
+                self._log_audit_unlocked(
                     rule_id=rule_id,
                     action=AuditAction.CREATE.value,
                     actor=created_by,
@@ -340,6 +394,32 @@ class GovernanceDatabaseManager:
                 logger.error(f"❌ Rule {rule_id} already exists: {e}")
                 raise
 
+    def _get_rule_unlocked(self, rule_id: str, tier: int = RuleTier.TIER_1.value) -> Optional[GovernanceRule]:
+        """
+        Retrieve a rule by ID (unlocked - assumes caller holds lock).
+
+        Args:
+            rule_id: Rule identifier
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            GovernanceRule or None if not found
+        """
+        conn = self._get_connection()
+        cursor = conn.cursor()
+
+        if tier == RuleTier.TIER_1.value:
+            cursor.execute("SELECT * FROM project_rules WHERE rule_id = ?", (rule_id,))
+        elif tier == RuleTier.TIER_2.value:
+            cursor.execute("SELECT * FROM team_rules WHERE rule_id = ?", (rule_id,))
+        else:
+            return None
+
+        row = cursor.fetchone()
+        if row:
+            return GovernanceRule(**dict(row))
+        return None
+
     def get_rule(self, rule_id: str, tier: int = RuleTier.TIER_1.value) -> Optional[GovernanceRule]:
         """
         Retrieve a rule by ID (O(1) performance).
@@ -352,20 +432,7 @@ class GovernanceDatabaseManager:
             GovernanceRule or None if not found
         """
         with self._db_lock:
-            conn = self._get_connection()
-            cursor = conn.cursor()
-
-            if tier == RuleTier.TIER_1.value:
-                cursor.execute("SELECT * FROM project_rules WHERE rule_id = ?", (rule_id,))
-            elif tier == RuleTier.TIER_2.value:
-                cursor.execute("SELECT * FROM team_rules WHERE rule_id = ?", (rule_id,))
-            else:
-                return None
-
-            row = cursor.fetchone()
-            if row:
-                return GovernanceRule(**dict(row))
-            return None
+            return self._get_rule_unlocked(rule_id, tier)
 
     def list_rules(
         self,
@@ -427,7 +494,7 @@ class GovernanceDatabaseManager:
         Raises:
             ValueError: If rule not found
         """
-        # Get previous state for audit
+        # Get previous state for audit (outside lock)
         prev_rule = self.get_rule(rule_id)
         if not prev_rule:
             raise ValueError(f"Rule {rule_id} not found")
@@ -448,9 +515,12 @@ class GovernanceDatabaseManager:
             cursor.execute(query, values)
             conn.commit()
 
-            # Log to audit trail
-            new_rule = self.get_rule(rule_id)
-            self._log_audit(
+            # Clear ALL query cache (any update could affect multiple queries)
+            self.clear_query_cache()
+
+            # Log to audit trail (using unlocked version since we hold the lock)
+            new_rule = self._get_rule_unlocked(rule_id)
+            self._log_audit_unlocked(
                 rule_id=rule_id,
                 action=AuditAction.UPDATE.value,
                 actor=updated_by,
@@ -464,6 +534,38 @@ class GovernanceDatabaseManager:
                 raise ValueError(f"Failed to retrieve updated rule: {rule_id}")
             return new_rule
 
+    def _log_audit_unlocked(
+        self,
+        rule_id: str,
+        action: str,
+        actor: str,
+        previous_state: Optional[str] = None,
+        new_state: Optional[str] = None,
+        reason: Optional[str] = None,
+    ) -> None:
+        """
+        Log an audit event (internal use - assumes lock already held).
+        
+        Note: Caller must hold _db_lock before calling this.
+        """
+        audit_id = str(uuid.uuid4())
+        now = datetime.now(timezone.utc).isoformat()
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO governance_audit_log (
+                audit_id, rule_id, action, actor, timestamp,
+                previous_state, new_state, reason, is_compliant
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            audit_id, rule_id, action, actor, now,
+            previous_state, new_state, reason, True
+        ))
+
+        conn.commit()
+
     def _log_audit(
         self,
         rule_id: str,
@@ -473,25 +575,16 @@ class GovernanceDatabaseManager:
         new_state: Optional[str] = None,
         reason: Optional[str] = None,
     ) -> None:
-        """Log an audit event (internal use)."""
-        audit_id = str(uuid.uuid4())
-        now = datetime.now(timezone.utc).isoformat()
-
+        """Log an audit event (internal use - acquires lock)."""
         with self._db_lock:
-            conn = self._get_connection()
-            cursor = conn.cursor()
-
-            cursor.execute("""
-                INSERT INTO governance_audit_log (
-                    audit_id, rule_id, action, actor, timestamp,
-                    previous_state, new_state, reason, is_compliant
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                audit_id, rule_id, action, actor, now,
-                previous_state, new_state, reason, True
-            ))
-
-            conn.commit()
+            self._log_audit_unlocked(
+                rule_id=rule_id,
+                action=action,
+                actor=actor,
+                previous_state=previous_state,
+                new_state=new_state,
+                reason=reason,
+            )
 
     def log_audit_event(
         self,
@@ -554,6 +647,198 @@ class GovernanceDatabaseManager:
 
             rows = cursor.fetchall()
             return [AuditLogEntry(**dict(row)) for row in rows]
+
+    def get_rules_by_category(self, category: str, tier: int = RuleTier.TIER_1.value) -> List[GovernanceRule]:
+        """
+        Get all rules in a specific category (O(1) via index).
+
+        Args:
+            category: Rule category to filter by
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            List of GovernanceRule objects matching category
+        """
+        cache_key = f"category:{category}:tier:{tier}"
+        cached = self._query_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            
+            cursor.execute(
+                f"SELECT * FROM {table_name} WHERE category = ? ORDER BY name",
+                (category,)
+            )
+            
+            rows = cursor.fetchall()
+            results = [GovernanceRule(**dict(row)) for row in rows]
+            
+            self._query_cache.set(cache_key, results)
+            logger.info(f"✅ Retrieved {len(results)} rules from category: {category}")
+            return results
+
+    def get_rules_by_severity(self, severity: str, tier: int = RuleTier.TIER_1.value) -> List[GovernanceRule]:
+        """
+        Get all rules with a specific severity level.
+
+        Args:
+            severity: Severity level (blocked, warning, info)
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            List of GovernanceRule objects matching severity
+        """
+        cache_key = f"severity:{severity}:tier:{tier}"
+        cached = self._query_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            
+            cursor.execute(
+                f"SELECT * FROM {table_name} WHERE severity = ? ORDER BY name",
+                (severity,)
+            )
+            
+            rows = cursor.fetchall()
+            results = [GovernanceRule(**dict(row)) for row in rows]
+            
+            self._query_cache.set(cache_key, results)
+            logger.info(f"✅ Retrieved {len(results)} rules with severity: {severity}")
+            return results
+
+    def get_rules_by_enforcement_point(self, enforcement_point: str, tier: int = RuleTier.TIER_1.value) -> List[GovernanceRule]:
+        """
+        Get all rules enforced at a specific enforcement point (O(1) via index).
+
+        Args:
+            enforcement_point: Enforcement point name
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            List of GovernanceRule objects for enforcement point
+        """
+        cache_key = f"enforcement:{enforcement_point}:tier:{tier}"
+        cached = self._query_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            
+            cursor.execute(
+                f"SELECT * FROM {table_name} WHERE enforcement_point = ? AND is_active = 1 ORDER BY severity DESC",
+                (enforcement_point,)
+            )
+            
+            rows = cursor.fetchall()
+            results = [GovernanceRule(**dict(row)) for row in rows]
+            
+            self._query_cache.set(cache_key, results)
+            logger.info(f"✅ Retrieved {len(results)} rules for enforcement point: {enforcement_point}")
+            return results
+
+    def search_rules(self, query_term: str, tier: int = RuleTier.TIER_1.value) -> List[GovernanceRule]:
+        """
+        Search rules by name or description (full-text search simulation).
+
+        Args:
+            query_term: Search term (case-insensitive)
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            List of GovernanceRule objects matching search term
+        """
+        cache_key = f"search:{query_term}:tier:{tier}"
+        cached = self._query_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            search_pattern = f"%{query_term}%"
+            
+            cursor.execute(
+                f"""
+                SELECT * FROM {table_name} 
+                WHERE name LIKE ? OR description LIKE ? OR category LIKE ?
+                ORDER BY name
+                """,
+                (search_pattern, search_pattern, search_pattern)
+            )
+            
+            rows = cursor.fetchall()
+            results = [GovernanceRule(**dict(row)) for row in rows]
+            
+            self._query_cache.set(cache_key, results)
+            logger.info(f"✅ Found {len(results)} rules matching: {query_term}")
+            return results
+
+    def get_active_rules(self, tier: int = RuleTier.TIER_1.value) -> List[GovernanceRule]:
+        """
+        Get all active rules (O(1) via index).
+
+        Args:
+            tier: Rule tier (1 for project, 2 for team)
+
+        Returns:
+            List of active GovernanceRule objects
+        """
+        cache_key = f"active:tier:{tier}"
+        cached = self._query_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            
+            cursor.execute(
+                f"SELECT * FROM {table_name} WHERE is_active = 1 ORDER BY category, name"
+            )
+            
+            rows = cursor.fetchall()
+            results = [GovernanceRule(**dict(row)) for row in rows]
+            
+            self._query_cache.set(cache_key, results)
+            logger.info(f"✅ Retrieved {len(results)} active rules from tier {tier}")
+            return results
+
+    def clear_query_cache(self, pattern: Optional[str] = None) -> None:
+        """
+        Clear query cache (called on write operations).
+
+        Args:
+            pattern: Optional pattern to match cache keys
+        """
+        self._query_cache.invalidate(pattern)
+        logger.debug(f"✅ Query cache cleared (pattern: {pattern})")
+
+    def get_cache_size(self) -> int:
+        """
+        Get current query cache size.
+
+        Returns:
+            Number of cached entries
+        """
+        return self._query_cache.size()
 
     def verify_schema(self) -> bool:
         """
