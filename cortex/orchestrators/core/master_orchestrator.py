@@ -1457,6 +1457,71 @@ class MasterOrchestrator(IOrchestrator):
             )
             return Err(f"Operation execution failed: {str(e)}")
     
+    def execute_approved_operation(
+        self,
+        text: str,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Result[Any]:
+        """Execute an operation that has already passed DoR approval.
+        
+        This is the post-approval execution entry point called after:
+        1. User has classified their intent via DoRApprovalGate
+        2. User has approved the intent classification
+        3. MasterOrchestrator will now execute with full supervision
+        
+        This ensures ALL orchestrator execution flows through MasterOrchestrator's
+        4-stage pipeline, not bypassing it via direct router calls.
+        
+        Args:
+            text: The approved operation request text
+            context: Optional context from approval gate
+        
+        Returns:
+            Result[Any]: Ok with execution result or Err with error message
+            
+        Raises:
+            None - all errors wrapped in Result type
+        
+        AC-GOVE-DOR-WIRE-001: Approved operations flow through MasterOrchestrator
+        """
+        try:
+            self.logger.log_operation_start(
+                ac_id="AC-GOVE-DOR-WIRE-001",
+                operation="APPROVED_OPERATION_EXECUTION",
+                details={
+                    "text": text,
+                    "context_keys": list(context.keys()) if context else []
+                }
+            )
+            
+            # Parse operation from text if not already classified
+            operation_name = "execute"
+            parameters = context or {"request_text": text}
+            
+            # Delegate to execute_operation for full 4-stage pipeline execution
+            result = self.execute_operation(
+                operation_name=operation_name,
+                parameters=parameters
+            )
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-GOVE-DOR-WIRE-001",
+                operation="APPROVED_OPERATION_EXECUTION",
+                success=result.is_ok(),
+                details={"result": str(result)[:200]}  # Truncate for log
+            )
+            
+            return result
+        except Exception as e:
+            error_msg = f"Approved operation execution failed: {str(e)}"
+            self.logger.log_operation_complete(
+                ac_id="AC-GOVE-DOR-WIRE-001",
+                operation="APPROVED_OPERATION_EXECUTION",
+                success=False,
+                details={"error": error_msg}
+            )
+            return Err(error_msg)
+    
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """Get audit trail with hash chain verification.
         

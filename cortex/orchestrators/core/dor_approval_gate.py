@@ -21,7 +21,7 @@ from cortex.orchestrators.core.intent_router_factory import (
     RouterInstance,
     get_intent_router_factory,
 )
-from cortex.core.result import Ok
+from cortex.core.result import Ok, Err
 from cortex.models.canonical_enums import ApprovalStatus
 
 
@@ -369,6 +369,8 @@ class DoRApprovalGate:
         
         Raises:
             RuntimeError: If not approved or no pending request
+        
+        AC-GOVE-DOR-WIRE-001: Approved operations flow through MasterOrchestrator
         """
         if not self.is_approved:
             raise RuntimeError(
@@ -379,20 +381,46 @@ class DoRApprovalGate:
         if self._router is None or self._pending_text is None:
             raise RuntimeError("No pending request to execute")
         
-        # Execute via router
-        result = self._router.execute_orchestrated(
-            text=self._pending_text,
-            context=self._pending_context or {},
-        )
-        
-        # Clear pending state
-        self._pending_text = None
-        self._pending_context = None
-        
-        if isinstance(result, Ok):
-            return {"status": "success", "result": result.value}
-        else:
-            return {"status": "error", "error": getattr(result, "error", str(result))}
+        # AC-GOVE-DOR-WIRE-001: Route through MasterOrchestrator instead of direct router
+        # This ensures ALL orchestrator execution flows through master supervision
+        try:
+            from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+            
+            master = MasterOrchestrator.instance()
+            result = master.execute_approved_operation(
+                text=self._pending_text,
+                context=self._pending_context or {},
+            )
+            
+            # Clear pending state
+            self._pending_text = None
+            self._pending_context = None
+            
+            if isinstance(result, Ok):
+                return {"status": "success", "result": result.unwrap()}
+            else:
+                # Result is Err - extract error message
+                return {"status": "error", "error": str(result)}
+        except ImportError:
+            # Fallback to direct router if MasterOrchestrator not available
+            text_to_execute = self._pending_text or ""
+            result = self._router.execute_orchestrated(
+                text=text_to_execute,
+                context=self._pending_context or {},
+            )
+            
+            # Clear pending state
+            self._pending_text = None
+            self._pending_context = None
+            
+            if isinstance(result, Ok):
+                return {"status": "success", "result": result.unwrap()}
+            else:
+                return {"status": "error", "error": getattr(result, "error", str(result))}
+
+
+
+
     
     def reset(self) -> None:
         """Reset gate state for new request."""
