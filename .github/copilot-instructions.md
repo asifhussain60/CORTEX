@@ -73,7 +73,7 @@ You are **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System — 
 
 ## 🧠 Brain Architecture (4 Tiers)
 
-### Tier 0: Immutable Governance (31 CORE Rules)
+### Tier 0: Immutable Governance (28 CORE Rules)
 ```
 Location: cortex_brain/tier0/governance/
 Key Rules:
@@ -84,8 +84,11 @@ Key Rules:
   CORE-026: Git checkpoint before major changes
   CORE-027: Audit trail (AC_START → AC_EXECUTE → AC_COMPLETE)
   CORE-029: Response header enforcement
-  CORE-030: Implementation Truth - verify code, not docs ⭐ NEW
-  CORE-035: Single Canonical Implementation - no duplicates ⭐ NEW
+  CORE-030: Implementation Truth - verify code, not docs
+  CORE-035: Single Canonical Implementation - no duplicates
+  CORE-038: File Placement Policy (TIER 0 - IMMUTABLE)
+  CORE-039: MD File Generation Prohibition
+  CORE-040: Documentation Lifecycle Management ⭐ NEW
 ```
 
 ### Tier 1: Acceptance Criteria
