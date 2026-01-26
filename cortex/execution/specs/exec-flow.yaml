@@ -1,0 +1,240 @@
+---
+# exec-flow: Execution Flow Definitions & Stage Transitions
+# Authority: CORTEX Architecture (AC-PERMANENT-FIX-010 Phase 2)
+# Version: 1.0
+# Purpose: Define execution flow stages and valid transitions
+
+execution_flow_definitions:
+  version: "1.0"
+  created: "2026-01-26"
+  authority: "CORTEX Architecture"
+  description: |
+    Execution flow stages and state transitions.
+    Defines valid paths through operation execution lifecycle.
+
+  # Execution flow stages
+  stages:
+    - id: "stage_0"
+      name: "Intent Reception"
+      description: "Receive and parse user intent"
+      entry_point: "MasterGateway.execute()"
+      activities:
+        - "parse_operation_spec"
+        - "validate_spec_format"
+      outputs:
+        - "normalized_operation_spec"
+      next_stages:
+          - "stage_1"
+      timeout_seconds: 30
+
+    - id: "stage_1"
+      name: "Intent Classification"
+      description: "Classify intent and select handler"
+      orchestrator: "IntentRouter"
+      activities:
+        - "extract_keywords"
+        - "calculate_confidence"
+        - "select_handler"
+      outputs:
+        - "intent_type"
+        - "handler_name"
+        - "confidence_score"
+      next_stages:
+        - "stage_2"
+      timeout_seconds: 60
+
+    - id: "stage_2"
+      name: "Definition of Ready"
+      description: "Validate DoR and get user approval"
+      orchestrator: "DoRApprovalGate"
+      activities:
+        - "generate_intent_reflection"
+        - "display_approval_dialog"
+        - "get_user_approval"
+      outputs:
+        - "approval_status"
+        - "modifications"
+      next_stages:
+        - "stage_3a"  # Approved
+        - "stage_reject"  # Rejected
+      timeout_seconds: 300  # User may need time
+
+    - id: "stage_3a"
+      name: "Governance Validation"
+      description: "Check all governance rules"
+      orchestrator: "GovernanceRegistry"
+      activities:
+        - "check_governance_gates"
+        - "validate_core_rules"
+      outputs:
+        - "governance_violations"
+        - "validation_status"
+      next_stages:
+        - "stage_4"  # Passed
+        - "stage_reject"  # Failed
+      timeout_seconds: 120
+
+    - id: "stage_4"
+      name: "Delegation"
+      description: "Delegate to appropriate orchestrator"
+      orchestrator: "MasterOrchestrator"
+      activities:
+        - "select_orchestrator"
+        - "prepare_context"
+        - "invoke_handler"
+      outputs:
+        - "handler_output"
+        - "execution_metrics"
+      next_stages:
+        - "stage_5"
+      timeout_seconds: 3600  # Handler may take time
+
+    - id: "stage_5"
+      name: "Result Formatting"
+      description: "Format result as JSON (never markdown)"
+      orchestrator: "StructuredDecisionFormatter"
+      activities:
+        - "extract_output"
+        - "format_as_json"
+        - "validate_serializable"
+      outputs:
+        - "json_result"
+      next_stages:
+        - "stage_6"
+      timeout_seconds: 60
+
+    - id: "stage_6"
+      name: "Audit Logging"
+      description: "Log decision and result to audit trail"
+      orchestrator: "EnhancedAuditLogger"
+      activities:
+        - "create_audit_entry"
+        - "log_decision"
+        - "persist_to_database"
+      outputs:
+        - "audit_entry_id"
+      next_stages:
+        - "stage_complete"
+      timeout_seconds: 30
+
+    - id: "stage_complete"
+      name: "Success Complete"
+      description: "Operation completed successfully"
+      activities:
+        - "return_result"
+      final_stage: true
+
+    - id: "stage_reject"
+      name: "Execution Rejected"
+      description: "Operation was rejected"
+      activities:
+        - "format_rejection_response"
+        - "log_rejection"
+      final_stage: true
+
+  # Valid state transitions
+  transitions:
+    stage_0:
+      success: "stage_1"
+      error: "stage_reject"
+      timeout: "stage_reject"
+
+    stage_1:
+      success: "stage_2"
+      error: "stage_reject"
+      no_handler: "stage_2"  # Ask user
+
+    stage_2:
+      approved: "stage_3a"
+      rejected: "stage_reject"
+      modified: "stage_2"  # Re-display for approval
+
+    stage_3a:
+      passed: "stage_4"
+      failed: "stage_reject"
+      blocked: "stage_reject"
+
+    stage_4:
+      success: "stage_5"
+      error: "stage_reject"
+      timeout: "stage_reject"
+
+    stage_5:
+      success: "stage_6"
+      error: "stage_reject"
+
+    stage_6:
+      logged: "stage_complete"
+      error: "stage_complete"  # Even if logging fails, return result
+
+  # Domain-specific flow overrides
+  domain_flows:
+    planning:
+      stages:
+        - "stage_0"
+        - "stage_1"
+        - "stage_2"
+        - "stage_3a"
+        - "stage_4"
+        - "stage_5"
+        - "stage_6"
+        - "stage_complete"
+      description: "Standard flow for planning operations"
+
+    implementation:
+      stages:
+        - "stage_0"
+        - "stage_1"
+        - "stage_2"
+        - "stage_3a"
+        - "stage_4"
+        - "stage_5"
+        - "stage_6"
+        - "stage_complete"
+      description: "Standard flow for implementation (TDD)"
+
+    deployment:
+      stages:
+        - "stage_0"
+        - "stage_1"
+        - "stage_2"
+        - "stage_3a"
+        - "stage_4"
+        - "stage_5"
+        - "stage_6"
+        - "stage_complete"
+      governance_strict: true
+      requires_approval: true
+      description: "Strict flow for deployment operations"
+
+  # Rollback handling
+  error_handling:
+    stage_timeout:
+      action: "ABORT_AND_LOG"
+      rollback: true
+      notify: true
+
+    governance_violation:
+      action: "BLOCK_EXECUTION"
+      remediation_suggestion: true
+      
+    orchestrator_error:
+      action: "LOG_AND_RETRY"
+      max_retries: 3
+
+  # Performance SLAs
+  slas:
+    stage_0: "< 100ms"
+    stage_1: "< 500ms"
+    stage_2: "< 5 minutes (user-dependent)"
+    stage_3a: "< 1 second"
+    stage_4: "< 1 hour"
+    stage_5: "< 500ms"
+    stage_6: "< 1 second"
+    total: "< 1 hour typical"
+
+  # Cross-references
+  related_specs:
+    - "routing-rules-intent.yaml"
+    - "orchestrator-dispatch-table.yaml"
+    - "governance-gates-validation.yaml"
