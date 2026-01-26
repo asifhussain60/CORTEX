@@ -38,6 +38,7 @@ from cortex.brain.core.path_resolver import resolve_path
 from cortex.brain.core.result import Err, Ok, Result
 from cortex.core.interfaces import IOrchestrator
 from cortex.infrastructure.database import DatabaseManager
+from cortex.models.canonical_enums import WiringState
 
 logger = logging.getLogger(__name__)
 
@@ -693,7 +694,7 @@ class DatabaseBackedRegistry:
             
             # Dynamic import
             import importlib
-from cortex.models.canonical_enums import WiringState
+            from cortex.models.canonical_enums import WiringState
             module = importlib.import_module(config.module_path)
             orchestrator_class = getattr(module, config.class_name)
             
