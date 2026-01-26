@@ -38,7 +38,89 @@ from cortex.brain.core.intelligence.pattern_detector import PatternDetector
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 
 
+class RequestComplexityClassifier:
+    """
+    Classifies request complexity to determine adaptive turn limits.
+    
+    AC-FUTURE-004: Adaptive turn limit based on task complexity
+    
+    Complexity levels:
+    - SIMPLE (2-3 turns): Single file edit, quick fix
+    - MEDIUM (5-8 turns): Multi-file changes, some refactoring
+    - COMPLEX (10-15 turns): Major feature, heavy architecture changes
+    - CRITICAL (20-25 turns): System-wide changes, multiple components
+    
+    Analysis factors:
+    - Request length (word count, character count)
+    - Keyword analysis (multi-step, refactor, architecture)
+    - File count mentioned
+    - Component count
+    - Dependencies implied
+    """
+    
+    # Keyword maps for complexity detection
+    SIMPLE_KEYWORDS = ["fix", "typo", "bug", "edit", "single file", "one file"]
+    MEDIUM_KEYWORDS = ["refactor", "improve", "implement feature", "modify", "update"]
+    COMPLEX_KEYWORDS = ["architecture", "redesign", "rebuild", "multiple", "system", "orchestrator"]
+    CRITICAL_KEYWORDS = ["rewrite", "migration", "consolidation", "governance", "complete system"]
+    
+    # Complexity thresholds based on word count
+    SIMPLE_MAX_WORDS = 20
+    MEDIUM_MAX_WORDS = 50
+    COMPLEX_MAX_WORDS = 100
+    
+    @staticmethod
+    def classify(request: str) -> tuple[str, int]:
+        """
+        Classify request complexity and return level + recommended turn count.
+        
+        AC-FUTURE-004: Adaptive turn limits
+        
+        Args:
+            request: User's natural language request
+            
+        Returns:
+            Tuple of (complexity_level, recommended_max_turns)
+        """
+        request_lower = request.lower().strip()
+        word_count = len(request.split())
+        keyword_count = {
+            "simple": 0,
+            "medium": 0,
+            "complex": 0,
+            "critical": 0
+        }
+        
+        # Count matching keywords
+        for keyword in RequestComplexityClassifier.SIMPLE_KEYWORDS:
+            if keyword in request_lower:
+                keyword_count["simple"] += 1
+        
+        for keyword in RequestComplexityClassifier.MEDIUM_KEYWORDS:
+            if keyword in request_lower:
+                keyword_count["medium"] += 1
+        
+        for keyword in RequestComplexityClassifier.COMPLEX_KEYWORDS:
+            if keyword in request_lower:
+                keyword_count["complex"] += 1
+        
+        for keyword in RequestComplexityClassifier.CRITICAL_KEYWORDS:
+            if keyword in request_lower:
+                keyword_count["critical"] += 1
+        
+        # Determine complexity level
+        if keyword_count["critical"] > 0 or word_count > RequestComplexityClassifier.COMPLEX_MAX_WORDS:
+            return "CRITICAL", 25
+        elif keyword_count["complex"] > 0 or word_count > RequestComplexityClassifier.MEDIUM_MAX_WORDS:
+            return "COMPLEX", 15
+        elif keyword_count["medium"] > 0 or word_count > RequestComplexityClassifier.SIMPLE_MAX_WORDS:
+            return "MEDIUM", 8
+        else:
+            return "SIMPLE", 3
+
+
 @dataclass
+
 class RoundContext:
     """Context for a single round of execution."""
     
@@ -81,6 +163,7 @@ class ConversationProtocol:
         token_limit: int = 20000,
         event_registry: EventRegistry = None,
         db_path: Optional[str] = None,  # AC-FIX-008-01: Allow test database injection
+        adaptive_turn_limit: bool = True,  # AC-FUTURE-004: Enable adaptive limits
     ):
         """
         Initialize ConversationProtocol wrapper.
@@ -91,10 +174,12 @@ class ConversationProtocol:
             token_limit: Token budget before halt (default: 20000)
             event_registry: Optional EventRegistry for event handling
             db_path: Optional database path (for testing, defaults to production path)
+            adaptive_turn_limit: AC-FUTURE-004 - Adapt max_turns based on request complexity (default: True)
         """
         self.orchestrator = orchestrator
         self.max_turns = max_turns
         self.token_limit = token_limit
+        self.adaptive_turn_limit = adaptive_turn_limit  # AC-FUTURE-004
         
         # Event handling
         self.event_registry = event_registry or EventRegistry()
@@ -127,6 +212,45 @@ class ConversationProtocol:
         
         # AC-REM-001-04: Initialize PatternDetector for architectural patterns
         self.pattern_detector = PatternDetector()
+
+    def calculate_adaptive_turn_limit(self, user_request: str) -> int:
+        """
+        Calculate adaptive turn limit based on request complexity.
+        
+        AC-FUTURE-004: Adaptive turn limit determination
+        
+        Uses RequestComplexityClassifier to analyze request and return
+        appropriate max_turns for this conversation:
+        - SIMPLE: 2-3 turns
+        - MEDIUM: 5-8 turns
+        - COMPLEX: 10-15 turns
+        - CRITICAL: 20-25 turns
+        
+        Args:
+            user_request: User's natural language request
+            
+        Returns:
+            Recommended max_turns for this request (or original self.max_turns if adaptive disabled)
+        """
+        if not self.adaptive_turn_limit:
+            return self.max_turns
+        
+        complexity_level, recommended_turns = RequestComplexityClassifier.classify(user_request)
+        
+        # Log the classification
+        if self._audit_logger:
+            self._audit_logger.log_operation_complete(
+                ac_id="AC-FUTURE-004",
+                operation="ADAPTIVE_TURN_LIMIT_CALCULATED",
+                success=True,
+                details={
+                    "complexity_level": complexity_level,
+                    "recommended_turns": recommended_turns,
+                    "user_request": user_request[:100]
+                }
+            )
+        
+        return recommended_turns
 
     def execute_turn(
         self, round_context: RoundContext
