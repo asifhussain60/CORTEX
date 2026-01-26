@@ -1,0 +1,246 @@
+# Code Analysis Component Example
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-01-26
+# Purpose: Reference implementation for code analysis component
+
+metadata:
+  component_name: cortex-code-analysis
+  version: 1.0.0
+  description: CORTEX-powered code quality analysis and refactoring suggestions
+  author: CORTEX Team
+  domain: analysis
+
+# =============================================================================
+# COMPONENT REGISTRATION
+# =============================================================================
+
+registration:
+  decorator: |
+    @register_component(
+        name="code-analysis",
+        version="1.0.0",
+        description="Analyze code quality and suggest improvements using CORTEX patterns",
+        author="cortex-team",
+        domain="analysis",
+        dependencies=["cortex-components", "mcp", "tree-sitter"],
+        governance_rules=["CORE-011", "CORE-012", "CORE-013", "CORE-027"]
+    )
+    class CodeAnalysisComponent(CORTEXComponent):
+        pass
+
+# =============================================================================
+# MCP TOOLS
+# =============================================================================
+
+mcp_tools:
+  - name: analyze_file
+    description: Analyze a single file for code quality issues
+    input_schema:
+      type: object
+      properties:
+        file_path:
+          type: string
+          description: Path to file to analyze
+        checks:
+          type: array
+          items:
+            type: string
+            enum: [complexity, duplication, typing, docstrings, security, patterns]
+          default: [complexity, typing, docstrings]
+          description: Types of analysis to perform
+      required: [file_path]
+    output:
+      type: object
+      properties:
+        issues:
+          type: array
+        metrics:
+          type: object
+        suggestions:
+          type: array
+          
+  - name: analyze_module
+    description: Analyze entire module/package
+    input_schema:
+      type: object
+      properties:
+        module_path:
+          type: string
+          description: Path to module directory
+        recursive:
+          type: boolean
+          default: true
+        exclude_patterns:
+          type: array
+          items:
+            type: string
+          default: ["**/test_*", "**/__pycache__/**"]
+      required: [module_path]
+      
+  - name: suggest_refactoring
+    description: Suggest refactoring opportunities
+    input_schema:
+      type: object
+      properties:
+        file_path:
+          type: string
+        focus_area:
+          type: string
+          enum: [extract_method, reduce_complexity, improve_naming, remove_duplication]
+      required: [file_path]
+    output:
+      type: object
+      properties:
+        opportunities:
+          type: array
+        estimated_impact:
+          type: object
+        code_changes:
+          type: array
+          
+  - name: check_cortex_compliance
+    description: Check code for CORTEX CORE rule compliance
+    input_schema:
+      type: object
+      properties:
+        file_path:
+          type: string
+        rules:
+          type: array
+          items:
+            type: string
+          default: ["CORE-011", "CORE-012", "CORE-013"]
+      required: [file_path]
+    output:
+      type: object
+      properties:
+        compliant:
+          type: boolean
+        violations:
+          type: array
+        fixes:
+          type: array
+
+# =============================================================================
+# INTERNAL TOOLS
+# =============================================================================
+
+internal_tools:
+  ast_analyzer:
+    description: Abstract Syntax Tree analysis
+    methods:
+      - parse_file(path: str) -> AST
+      - find_functions(ast: AST) -> List[Function]
+      - calculate_complexity(function: Function) -> int
+      - find_patterns(ast: AST, pattern: Pattern) -> List[Match]
+      
+  metrics_calculator:
+    description: Code metrics calculation
+    methods:
+      - cyclomatic_complexity(function: Function) -> int
+      - cognitive_complexity(function: Function) -> int
+      - lines_of_code(file_path: str) -> LOCMetrics
+      - maintainability_index(module_path: str) -> float
+      
+  suggestion_engine:
+    description: Refactoring suggestion generation
+    methods:
+      - analyze_function(function: Function) -> List[Suggestion]
+      - detect_duplication(files: List[str]) -> List[Duplication]
+      - generate_fix(violation: Violation) -> CodeChange
+
+# =============================================================================
+# GOVERNANCE RULES
+# =============================================================================
+
+governance:
+  applied_rules:
+    CORE-011:
+      description: Type Hints Required
+      application: Check for type hint presence and completeness
+      
+    CORE-012:
+      description: Docstrings Required
+      application: Verify docstring coverage
+      
+    CORE-013:
+      description: No Bare Except
+      application: Detect bare except clauses
+      
+    CORE-027:
+      description: Audit Trail
+      application: Log all analysis operations
+
+# =============================================================================
+# COMPONENT KNOWLEDGE
+# =============================================================================
+
+knowledge:
+  domain_file: analysis.yaml
+  topics:
+    - complexity_thresholds
+    - code_smells
+    - refactoring_patterns
+    - cortex_compliance
+    
+  sample_content: |
+    complexity_thresholds:
+      cyclomatic:
+        low: 5
+        medium: 10
+        high: 20
+        critical: 50
+        
+      cognitive:
+        low: 8
+        medium: 15
+        high: 25
+        critical: 40
+        
+    code_smells:
+      - name: long_method
+        threshold: 50_lines
+        suggestion: Extract methods to reduce complexity
+        
+      - name: large_class
+        threshold: 500_lines
+        suggestion: Consider splitting into multiple classes
+        
+      - name: long_parameter_list
+        threshold: 5_params
+        suggestion: Use parameter object or builder pattern
+
+# =============================================================================
+# USAGE EXAMPLES
+# =============================================================================
+
+usage_examples:
+  file_analysis:
+    description: Analyze a single file
+    code: |
+      from cortex_code_analysis import CodeAnalysisComponent
+      
+      component = CodeAnalysisComponent()
+      
+      result = await component.execute("analyze_file", {
+          "file_path": "src/my_module/service.py",
+          "checks": ["complexity", "typing", "docstrings"]
+      })
+      
+      print(f"Issues found: {len(result.value['issues'])}")
+      for issue in result.value["issues"]:
+          print(f"  {issue['severity']}: {issue['message']}")
+          
+  cortex_compliance:
+    description: Check CORTEX CORE rule compliance
+    code: |
+      result = await component.execute("check_cortex_compliance", {
+          "file_path": "cortex/orchestrators/core/master_orchestrator.py",
+          "rules": ["CORE-011", "CORE-012", "CORE-013"]
+      })
+      
+      if not result.value["compliant"]:
+          print("Violations found:")
+          for v in result.value["violations"]:
+              print(f"  {v['rule']}: {v['location']} - {v['message']}")
