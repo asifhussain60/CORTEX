@@ -1,0 +1,385 @@
+---
+# domain-transitions: Domain Orchestrator Routing Specification
+# Authority: CORTEX Architecture (AC-PERMANENT-FIX-010 Phase 4)
+# Version: 1.0
+# Purpose: Spec-driven domain routing (replaces hardcoded if/elif chains)
+# CORE-040 Compliance: All domain transitions declaratively defined
+
+domain_transitions:
+  version: "1.0"
+  created: "2026-01-26"
+  authority: "CORTEX Architecture"
+  description: |
+    Domain transition and routing specifications for domain-specific orchestrators.
+    Replaces hardcoded domain routing logic in DomainOrchestrator and
+    domain-specific orchestrators with declarative YAML specifications.
+    
+    Enables unified domain selection and execution without hardcoded if/elif chains.
+
+  domains:
+    # PLANNING Domain - Strategic planning and architecture
+    - id: "domain_planning"
+      name: "Planning"
+      description: "Strategic planning, architecture design, roadmap creation"
+      orchestrator: "PlanningOrchestrator"
+      entry_point: "cortex.orchestrators.domain_brain.planning_orchestrator"
+      keywords:
+        - "plan"
+        - "design"
+        - "architecture"
+        - "roadmap"
+        - "strategy"
+        - "blueprint"
+        - "outline"
+        - "specification"
+      capabilities:
+        - "create_implementation_plan"
+        - "design_architecture"
+        - "estimate_effort"
+        - "identify_risks"
+        - "create_roadmap"
+      preconditions:
+        - "operation_context_valid"
+        - "scope_defined"
+      postconditions:
+        - "plan_generated"
+        - "architecture_specified"
+      governance_rules:
+        - "CORE-008"   # TDD
+        - "CORE-011"   # Type hints
+        - "CORE-012"   # Docstrings
+        - "CORE-026"   # Git checkpoints
+        - "CORE-040"   # Execution specs
+      error_codes:
+        - "GOVE_PLANNING_INVALID_SCOPE"
+        - "GOVE_PLANNING_ARCH_FAILED"
+      metadata:
+        priority: "high"
+        frequency: "planning_phase_start"
+        estimated_duration_minutes: 120
+
+    # IMPLEMENTATION Domain - Code development and feature creation
+    - id: "domain_implementation"
+      name: "Implementation"
+      description: "Code development, feature creation, refactoring"
+      orchestrator: "TDDOrchestrator"
+      entry_point: "cortex.orchestrators.core.tdd_orchestrator"
+      keywords:
+        - "implement"
+        - "develop"
+        - "code"
+        - "create"
+        - "build"
+        - "feature"
+        - "develop_code"
+        - "write"
+      capabilities:
+        - "write_tests"
+        - "implement_code"
+        - "run_tests"
+        - "refactor_code"
+        - "validate_syntax"
+      preconditions:
+        - "plan_exists"
+        - "environment_ready"
+        - "dependencies_available"
+      postconditions:
+        - "code_implemented"
+        - "tests_passing"
+        - "type_hints_complete"
+      governance_rules:
+        - "CORE-008"   # TDD
+        - "CORE-011"   # Type hints
+        - "CORE-012"   # Docstrings
+        - "CORE-013"   # No bare except
+        - "CORE-026"   # Git checkpoints
+        - "CORE-040"   # Execution specs
+      error_codes:
+        - "GOVE_IMPL_TESTS_FAIL"
+        - "GOVE_IMPL_SYNTAX_ERROR"
+        - "GOVE_IMPL_TYPE_HINT_MISSING"
+      metadata:
+        priority: "high"
+        frequency: "implementation_phase"
+        estimated_duration_minutes: 480
+
+    # REFACTORING Domain - Code improvement and optimization
+    - id: "domain_refactoring"
+      name: "Refactoring"
+      description: "Code improvement, cleanup, optimization, restructuring"
+      orchestrator: "RefactoringOrchestrator"
+      entry_point: "cortex.orchestrators.domain_orchestrators.refactoring_orchestrator"
+      keywords:
+        - "refactor"
+        - "improve"
+        - "cleanup"
+        - "optimize"
+        - "restructure"
+        - "performance"
+        - "clean_code"
+        - "technical_debt"
+      capabilities:
+        - "analyze_code"
+        - "identify_improvements"
+        - "apply_refactorings"
+        - "measure_impact"
+        - "verify_correctness"
+      preconditions:
+        - "code_exists"
+        - "tests_passing"
+        - "baseline_metrics_collected"
+      postconditions:
+        - "code_improved"
+        - "tests_still_passing"
+        - "metrics_improved"
+      governance_rules:
+        - "CORE-008"   # TDD
+        - "CORE-011"   # Type hints
+        - "CORE-012"   # Docstrings
+      error_codes:
+        - "GOVE_REFACTOR_TESTS_BROKEN"
+        - "GOVE_REFACTOR_NO_IMPROVEMENT"
+      metadata:
+        priority: "medium"
+        frequency: "ongoing"
+        estimated_duration_minutes: 240
+
+    # DEPLOYMENT Domain - Production release and rollout
+    - id: "domain_deployment"
+      name: "Deployment"
+      description: "Production release, rollout, monitoring setup"
+      orchestrator: "DeploymentOrchestrator"
+      entry_point: "cortex.orchestrators.domain_orchestrators.deployment_orchestrator"
+      keywords:
+        - "deploy"
+        - "release"
+        - "production"
+        - "rollout"
+        - "launch"
+        - "go_live"
+        - "publish"
+      capabilities:
+        - "build_artifacts"
+        - "run_integration_tests"
+        - "deploy_staging"
+        - "deploy_production"
+        - "setup_monitoring"
+      preconditions:
+        - "all_tests_passing"
+        - "release_notes_prepared"
+        - "approval_obtained"
+      postconditions:
+        - "deployed_to_production"
+        - "monitoring_active"
+        - "health_checks_passing"
+      governance_rules:
+        - "CORE-026"   # Git checkpoints
+        - "CORE-027"   # Audit trail
+        - "CORE-040"   # Execution specs
+      error_codes:
+        - "GOVE_DEPLOY_TESTS_FAIL"
+        - "GOVE_DEPLOY_ROLLOUT_FAILED"
+        - "GOVE_DEPLOY_HEALTH_CHECK_FAIL"
+      metadata:
+        priority: "critical"
+        frequency: "release_cadence"
+        estimated_duration_minutes: 120
+        requires_approval: true
+
+    # ANALYSIS Domain - Code analysis and pattern detection
+    - id: "domain_analysis"
+      name: "Analysis"
+      description: "Code analysis, pattern detection, complexity assessment"
+      orchestrator: "AnalysisOrchestrator"
+      entry_point: "cortex.orchestrators.domain_orchestrators.analysis_orchestrator"
+      keywords:
+        - "analyze"
+        - "review"
+        - "assess"
+        - "examine"
+        - "inspect"
+        - "audit"
+        - "metric"
+      capabilities:
+        - "analyze_code_structure"
+        - "detect_patterns"
+        - "calculate_metrics"
+        - "identify_issues"
+        - "generate_report"
+      preconditions:
+        - "code_available"
+      postconditions:
+        - "analysis_complete"
+        - "report_generated"
+      governance_rules:
+        - "CORE-011"   # Type hints
+        - "CORE-030"   # Implementation truth
+      error_codes:
+        - "GOVE_ANALYSIS_FAILED"
+        - "GOVE_ANALYSIS_NO_CODE"
+      metadata:
+        priority: "medium"
+        frequency: "on_demand"
+        estimated_duration_minutes: 60
+
+    # DOCUMENTATION Domain - Code and architecture documentation
+    - id: "domain_documentation"
+      name: "Documentation"
+      description: "Code documentation, API reference, architecture docs"
+      orchestrator: "DocumentationOrchestrator"
+      entry_point: "cortex.orchestrators.domain_orchestrators.documentation_orchestrator"
+      keywords:
+        - "document"
+        - "doc"
+        - "docstring"
+        - "guide"
+        - "readme"
+        - "api"
+        - "reference"
+      capabilities:
+        - "generate_docstrings"
+        - "create_api_reference"
+        - "generate_architecture_docs"
+        - "update_readme"
+        - "create_guides"
+      preconditions:
+        - "code_exists"
+        - "docstrings_needed"
+      postconditions:
+        - "documentation_generated"
+        - "docs_formatted"
+      governance_rules:
+        - "CORE-012"   # Docstrings
+      error_codes:
+        - "GOVE_DOC_GENERATION_FAILED"
+      metadata:
+        priority: "low"
+        frequency: "post_implementation"
+        estimated_duration_minutes: 90
+
+    # TESTING Domain - Test creation and verification
+    - id: "domain_testing"
+      name: "Testing"
+      description: "Test creation, execution, coverage analysis"
+      orchestrator: "TestingOrchestrator"
+      entry_point: "cortex.orchestrators.domain_orchestrators.testing_orchestrator"
+      keywords:
+        - "test"
+        - "verify"
+        - "validate"
+        - "coverage"
+        - "pytest"
+        - "unit"
+        - "integration"
+      capabilities:
+        - "create_tests"
+        - "run_tests"
+        - "measure_coverage"
+        - "generate_test_report"
+        - "validate_coverage"
+      preconditions:
+        - "code_exists"
+        - "test_framework_available"
+      postconditions:
+        - "tests_created"
+        - "coverage_measured"
+      governance_rules:
+        - "CORE-008"   # TDD
+      error_codes:
+        - "GOVE_TEST_CREATION_FAILED"
+        - "GOVE_TEST_EXECUTION_FAILED"
+      metadata:
+        priority: "high"
+        frequency: "per_feature"
+        estimated_duration_minutes: 120
+
+  # Domain transitions (flow between domains)
+  domain_transitions:
+    # Planning → Implementation
+    - from: "domain_planning"
+      to: "domain_implementation"
+      condition: "plan_approved"
+      description: "Transition from planning to implementation after approval"
+      validator: "phase_transition_validator"
+
+    # Implementation → Testing
+    - from: "domain_implementation"
+      to: "domain_testing"
+      condition: "code_written"
+      description: "Test code after implementation"
+      validator: "code_completeness_validator"
+
+    # Testing → Refactoring (optional)
+    - from: "domain_testing"
+      to: "domain_refactoring"
+      condition: "improvement_identified"
+      description: "Refactor if improvements identified"
+      validator: "improvement_validator"
+
+    # Testing → Deployment
+    - from: "domain_testing"
+      to: "domain_deployment"
+      condition: "all_tests_passing"
+      description: "Deploy after all tests pass"
+      validator: "test_status_validator"
+
+    # Implementation → Analysis (optional)
+    - from: "domain_implementation"
+      to: "domain_analysis"
+      condition: "on_demand"
+      description: "Analyze code anytime during implementation"
+      validator: "code_validator"
+
+    # Any Domain → Documentation
+    - from: "*"
+      to: "domain_documentation"
+      condition: "on_demand"
+      description: "Documentation can be created from any domain"
+      validator: "doc_scope_validator"
+
+  # Domain error recovery
+  domain_error_recovery:
+    "domain_implementation":
+      on_test_fail:
+        action: "stay_in_domain"
+        remediation: "fix_failing_tests"
+        max_retries: 3
+      on_type_hint_fail:
+        action: "stay_in_domain"
+        remediation: "add_type_hints"
+        max_retries: 2
+
+    "domain_testing":
+      on_coverage_low:
+        action: "return_to"
+        target: "domain_implementation"
+        remediation: "write_more_tests"
+
+    "domain_deployment":
+      on_health_check_fail:
+        action: "rollback"
+        remediation: "fix_and_redeploy"
+        max_retries: 1
+
+  # Governance gates per domain
+  domain_governance:
+    "domain_implementation":
+      required_gates:
+        - "gate_tdd"
+        - "gate_type_hints"
+        - "gate_docstrings"
+        - "gate_no_bare_except"
+        - "gate_filename_convention"
+
+    "domain_testing":
+      required_gates:
+        - "gate_test_structure"
+        - "gate_coverage_minimum"
+
+    "domain_deployment":
+      required_gates:
+        - "gate_approval"
+        - "gate_health_check"
+        - "gate_monitoring"
+
+---
