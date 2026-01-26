@@ -10,10 +10,10 @@ Git analysis integrates four scopes:
 3. Dependencies (what imports will be affected?)
 4. Risk assessment (how risky is this?)
 
-Tests: test_planning_refinement_orchestrator.py
-- test_refinement_git_analysis_scope_d_integrated
-- test_planning_audit_trail_e2e.py
-- test_git_analysis_engine.py (pending)
+Tests: test_git_analysis_engine.py
+- test_git_analysis_scope_d_integrated
+- test_git_analysis_dependencies
+- test_git_analysis_risk_assessment
 """
 
 from __future__ import annotations

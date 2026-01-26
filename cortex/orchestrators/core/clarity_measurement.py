@@ -9,10 +9,10 @@ Measures DoR clarity through:
 2. User confirmation ("yes, plan is clear")
 3. Combined score: (heuristic_score * 0.6) + (user_confidence * 0.4)
 
-Tests: test_planning_refinement_orchestrator.py
-- test_refinement_clarity_measurement_logged
-- test_refinement_cortex_suggests_plan_ready_at_clarity_threshold
-- test_clarity_measurement.py (pending)
+Tests: test_clarity_measurement.py
+- test_heuristic_clarity_measurement
+- test_combined_clarity_score
+- test_dor_threshold_detection
 """
 
 from __future__ import annotations
