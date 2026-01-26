@@ -1,0 +1,99 @@
+# Intent Routing Rules - TIER 3 Knowledge Base
+# AC-FUTURE-001: Configurable routing rules loaded at runtime
+# Replaces hardcoded routing_rules dict in IntentRouter
+# Authority: CORE-031 declarative autowiring
+
+routing_rules:
+  # IMPLEMENT intent routing
+  implement:
+    orchestrators:
+      handler: ImplementationOrchestrator
+      confidence_multiplier: 1.0
+      keywords: ["create", "add", "new", "implement", "develop"]
+    core:
+      handler: CoreImplementationHandler
+      confidence_multiplier: 0.95
+    infrastructure:
+      handler: InfrastructureImplementationHandler
+      confidence_multiplier: 0.90
+    default:
+      handler: GeneralImplementationHandler
+      confidence_multiplier: 0.75
+
+  # FIX intent routing
+  fix:
+    orchestrators:
+      handler: OrchestratorFixOrchestrator
+      confidence_multiplier: 1.0
+      keywords: ["fix", "bug", "issue", "error", "race condition"]
+    core:
+      handler: CoreFixOrchestrator
+      confidence_multiplier: 0.95
+    infrastructure:
+      handler: InfrastructureFixOrchestrator
+      confidence_multiplier: 0.90
+    default:
+      handler: GeneralFixOrchestrator
+      confidence_multiplier: 0.75
+
+  # REFACTOR intent routing
+  refactor:
+    orchestrators:
+      handler: RefactoringOrchestrator
+      confidence_multiplier: 1.0
+      keywords: ["refactor", "improve", "cleanup", "optimize", "performance"]
+    core:
+      handler: CoreRefactoringHandler
+      confidence_multiplier: 0.90
+    infrastructure:
+      handler: InfrastructureRefactoringHandler
+      confidence_multiplier: 0.85
+    default:
+      handler: GeneralRefactoringHandler
+      confidence_multiplier: 0.70
+
+  # FILE_CREATION intent routing (CORE-038/CORE-039 compliance)
+  file_creation:
+    documentation:
+      handler: DocumentationOrchestrator
+      confidence_multiplier: 1.0
+    governance:
+      handler: DocumentationOrchestrator
+      confidence_multiplier: 0.95
+    reports:
+      handler: DocumentationOrchestrator
+      confidence_multiplier: 0.95
+    default:
+      handler: DocumentationOrchestrator
+      confidence_multiplier: 0.80
+
+# Composite intent detection rules - AC-FUTURE-005
+# Detect when request contains multiple intents
+composite_patterns:
+  - pattern: "implement.*bug|implement.*fix"
+    intents: ["implement", "fix"]
+    priority: "fix_first"  # Fix the bug, then enhance
+    
+  - pattern: "refactor.*feature|improve.*new"
+    intents: ["refactor", "implement"]
+    priority: "refactor_first"  # Clean up, then add
+
+# Fuzzy matching configuration - AC-FUTURE-009
+fuzzy_matching:
+  enabled: true
+  algorithm: "levenshtein"  # Or "jaro-winkler"
+  threshold: 0.75  # Match similarity >= 75%
+  synonym_expansion: true
+
+# Request complexity classifier - AC-FUTURE-008
+complexity_thresholds:
+  low: 0  # Typos, simple fixes
+  medium: 2  # Basic feature requests
+  high: 5  # Complex refactoring
+  critical: 8  # System-wide changes
+
+# Confidence scoring adjustments
+confidence_adjustments:
+  high_complexity_skip_challenge: true  # Always challenge complex requests
+  low_complexity_skip_challenge: false  # Never skip challenge (always on)
+  composite_intent_boost: 0.15  # +15% confidence for composite intents
