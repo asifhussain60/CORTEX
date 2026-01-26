@@ -783,3 +783,156 @@ class PlanningRegistryLoader:
             error_msg = f"Error loading {file_path}: {str(e)}"
             logger.error(error_msg)
             raise RegistryYAMLParseError(error_msg)
+
+    # ========================================================================
+    # PLAN MIGRATION METHODS (AC-PLANNING-MIGRATION-001)
+    # ========================================================================
+
+    def discover_legacy_plans(self, legacy_path: Path) -> List[Dict[str, Any]]:
+        """Discover plans in legacy location.
+        
+        Args:
+            legacy_path: Path to legacy plans folder
+            
+        Returns:
+            List of discovered plan dictionaries
+        """
+        try:
+            plans = []
+            
+            if not legacy_path.exists():
+                logger.warning(f"Legacy path not found: {legacy_path}")
+                return plans
+            
+            # Scan for YAML and JSON files
+            for ext in ["*.yaml", "*.yml", "*.json"]:
+                for plan_file in legacy_path.glob(ext):
+                    try:
+                        with open(plan_file, "r") as f:
+                            if plan_file.suffix in [".yaml", ".yml"]:
+                                plan_data = yaml.safe_load(f)
+                            else:
+                                import json
+                                plan_data = json.load(f)
+                            
+                            if plan_data and isinstance(plan_data, dict):
+                                plans.append(plan_data)
+                    except Exception as e:
+                        logger.warning(f"Failed to read {plan_file}: {str(e)}")
+            
+            logger.info(f"Discovered {len(plans)} legacy plans")
+            return plans
+        
+        except Exception as e:
+            logger.error(f"Legacy plan discovery failed: {str(e)}")
+            return []
+
+    def infer_domain_from_plan(self, plan_data: Dict[str, Any]) -> str:
+        """Infer domain from plan data.
+        
+        Args:
+            plan_data: Plan dictionary
+            
+        Returns:
+            Inferred domain or 'general' as fallback
+        """
+        try:
+            # Check for explicit domain
+            if "domain" in plan_data:
+                return plan_data["domain"]
+            
+            # Infer from description
+            description = plan_data.get("description", "").lower()
+            name = plan_data.get("name", "").lower()
+            combined = f"{description} {name}"
+            
+            # Domain keywords (same as NamingFactory)
+            domain_keywords = {
+                "docs": ["documentation", "doc", "guide", "tutorial", "reference"],
+                "planning": ["plan", "planning", "orchestrat"],
+                "api": ["api", "rest", "endpoint", "request", "response"],
+                "core": ["core", "central", "main", "infrastructure"],
+            }
+            
+            for domain, keywords in domain_keywords.items():
+                for keyword in keywords:
+                    if keyword in combined:
+                        return domain
+            
+            return "general"
+        
+        except Exception as e:
+            logger.warning(f"Domain inference failed: {str(e)}")
+            return "general"
+
+    def detect_duplicate_plans(self, legacy_path: Path) -> List[Dict[str, Any]]:
+        """Detect duplicate plans in legacy location.
+        
+        Args:
+            legacy_path: Path to legacy plans
+            
+        Returns:
+            List of duplicate plan groups
+        """
+        try:
+            import hashlib
+            
+            plan_checksums: Dict[str, List[Path]] = {}
+            duplicates = []
+            
+            for plan_file in legacy_path.glob("*.yaml"):
+                try:
+                    with open(plan_file, "rb") as f:
+                        content_hash = hashlib.md5(f.read()).hexdigest()
+                    
+                    if content_hash not in plan_checksums:
+                        plan_checksums[content_hash] = []
+                    
+                    plan_checksums[content_hash].append(plan_file)
+                except Exception as e:
+                    logger.warning(f"Failed to hash {plan_file}: {str(e)}")
+            
+            # Collect duplicates
+            for file_list in plan_checksums.values():
+                if len(file_list) > 1:
+                    duplicates.append({"files": [str(f) for f in file_list]})
+            
+            logger.info(f"Found {len(duplicates)} duplicate plan groups")
+            return duplicates
+        
+        except Exception as e:
+            logger.error(f"Duplicate detection failed: {str(e)}")
+            return []
+
+    def resolve_duplicate_plan_ids(self, plans: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Resolve plans with duplicate IDs.
+        
+        Args:
+            plans: List of plans that may have duplicate IDs
+            
+        Returns:
+            List of plans with resolved IDs
+        """
+        try:
+            seen_ids: Dict[str, int] = {}
+            resolved = []
+            
+            for plan in plans:
+                plan_id = plan.get("plan_id", "unknown")
+                
+                if plan_id in seen_ids:
+                    # Add suffix to make unique
+                    seen_ids[plan_id] += 1
+                    plan["plan_id"] = f"{plan_id}_v{seen_ids[plan_id]}"
+                    plan["original_id"] = plan_id
+                else:
+                    seen_ids[plan_id] = 1
+                
+                resolved.append(plan)
+            
+            logger.info(f"Resolved {len(plans)} plans with duplicate IDs")
+            return resolved
+        
+        except Exception as e:
+            logger.error(f"Duplicate ID resolution failed: {str(e)}")
+            return plans
