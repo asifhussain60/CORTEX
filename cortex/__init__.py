@@ -13,6 +13,14 @@ __email__ = 'asif@cortex.dev'
 __license__ = 'Proprietary'
 __description__ = 'AI-Powered Development Orchestration System'
 
+# AC-PERMANENT-FIX-015: Run mandatory startup validation on import
+# This ensures all critical issues are detected and auto-remediated
+# before any orchestrator code executes
+try:
+    from cortex.bootstrap import _bootstrap_success
+except ImportError:
+    pass
+
 # Package metadata
 __all__ = [
     '__version__',
