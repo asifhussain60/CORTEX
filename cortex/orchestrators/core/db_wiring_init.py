@@ -131,7 +131,17 @@ DOMAIN_ORCHESTRATORS: List[OrchestratorConfig] = [
         category=OrchestratorCategory.DOMAIN,
         priority=11,
         dependencies=["MasterOrchestrator"],
-        capabilities=["phase_planning", "dependency_analysis", "roadmap_generation", "milestone_tracking"],
+        capabilities=[
+            "phase_planning",
+            "ac_tracking",
+            "challenge_generation",
+            "intent_classification",
+            "execution_gating",
+            "audit_trail_management",
+            "dependency_analysis",
+            "roadmap_generation",
+            "milestone_tracking",
+        ],
         routing_keywords=["plan", "roadmap", "milestone", "schedule", "phase"],
     ),
     OrchestratorConfig(

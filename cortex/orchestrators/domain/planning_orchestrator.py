@@ -131,7 +131,7 @@ ORCHESTRATOR_CONFIG = OrchestratorConfig(
     module_path="cortex.orchestrators.domain.planning_orchestrator",
     class_name="PlanningOrchestrator",
     category=OrchestratorCategory.DOMAIN,
-    priority=200,
+    priority=11,
     dependencies=["MasterOrchestrator"],
     capabilities=[
         "phase_planning",
