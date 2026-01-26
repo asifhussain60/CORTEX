@@ -1194,55 +1194,122 @@ class MasterOrchestrator(IOrchestrator):
                 details=parameters
             )
             
+            # ════════════════════════════════════════════════════════════════════════
             # AC-FR-WIRING-001: STAGE 1 - Interaction Orchestrator (Comprehension)
-            # Wire interaction_orchestrator for Stage 1 comprehension
-            if self.interaction_orchestrator and operation_name in ["implement", "fix", "refactor", "analyze"]:
-                try:
-                    # Stage 1: Process through interaction orchestrator for intent comprehension
-                    interaction_result = self.interaction_orchestrator.execute_operation(
-                        operation_name=f"stage_1_comprehension",
-                        parameters={"user_intent": operation_name, "context": parameters}
-                    )
-                    if interaction_result.is_err():
-                        self.logger.log_operation_complete(
-                            ac_id="AC-FR-WIRING-001-STAGE1",
-                            operation="INTERACTION_ORCHESTRATOR_EXECUTION",
-                            success=False,
-                            details={"error": str(interaction_result.error)}
-                        )
-                except Exception as stage1_err:
-                    self.logger.log_operation_complete(
-                        ac_id="AC-FR-WIRING-001-STAGE1",
-                        operation="INTERACTION_ORCHESTRATOR_EXECUTION",
-                        success=False,
-                        details={"error": str(stage1_err)}
-                    )
+            # ════════════════════════════════════════════════════════════════════════
+            # CRITICAL FIX: Wire Stage 1 for ALL operations (not just specific ones)
+            # This is the ACTUAL execution path - NOT coordinate_operation()
+            stage1_comprehension_result = None
+            stage1_challenges = None
+            stage1_user_choice = None
             
-            # AC-FR-WIRING-001: STAGE 2 - Intent Router (Classification)
-            # Wire intent_router for Stage 2 intent classification
-            classified_intent = None
-            if self.intent_router:
-                try:
-                    # Stage 2: Classify intent via intent router
-                    classification_result = self.intent_router.execute_operation(
-                        operation_name="classify_intent",
-                        parameters={"operation": operation_name, "context": parameters}
+            try:
+                if self.interaction_orchestrator_with_challenges:
+                    self.logger.log_operation_start(
+                        ac_id="AC-FR-WIRING-001-STAGE-1",
+                        operation="STAGE_1_COMPREHENSION",
+                        details={
+                            "operation_name": operation_name,
+                            "has_parameters": bool(parameters)
+                        }
                     )
-                    if classification_result.is_ok():
-                        classified_intent = classification_result.unwrap()
-                        self.logger.log_operation_complete(
-                            ac_id="AC-FR-WIRING-001-STAGE2",
-                            operation="INTENT_CLASSIFICATION",
-                            success=True,
-                            details={"classified_intent": str(classified_intent)}
-                        )
-                except Exception as stage2_err:
+                    
+                    # Stage 1: Call interaction orchestrator with challenges enabled
+                    # This creates explicit comprehension loop with potential disagreement challenges
+                    stage1_result = self.interaction_orchestrator_with_challenges.execute_turn_with_challenge(
+                        user_input=operation_name,
+                        context=parameters,
+                        turn_number=self._turn_number
+                    )
+                    
+                    # Extract comprehension result and any challenges
+                    if hasattr(stage1_result, 'is_ok') and stage1_result.is_ok():
+                        stage1_comprehension_result = stage1_result.unwrap()
+                        stage1_challenges = stage1_comprehension_result.get("challenges", [])
+                        stage1_user_choice = stage1_comprehension_result.get("user_choice", None)
+                    else:
+                        stage1_comprehension_result = stage1_result
+                    
                     self.logger.log_operation_complete(
-                        ac_id="AC-FR-WIRING-001-STAGE2",
-                        operation="INTENT_CLASSIFICATION",
-                        success=False,
-                        details={"error": str(stage2_err)}
+                        ac_id="AC-FR-WIRING-001-STAGE-1",
+                        operation="STAGE_1_COMPREHENSION",
+                        success=True,
+                        details={
+                            "challenges_generated": len(stage1_challenges) if stage1_challenges else 0,
+                            "user_choice_made": stage1_user_choice is not None
+                        }
                     )
+            except Exception as e:
+                # Log but don't fail - Stage 1 is comprehension enhancement
+                self.logger.log_operation_complete(
+                    ac_id="AC-FR-WIRING-001-STAGE-1",
+                    operation="STAGE_1_COMPREHENSION",
+                    success=False,
+                    details={"error": f"Stage 1 failed: {str(e)}"}
+                )
+            
+            # ════════════════════════════════════════════════════════════════════════
+            # AC-FR-WIRING-002: STAGE 2 - Intent Router (Intent Verification)
+            # ════════════════════════════════════════════════════════════════════════
+            # CRITICAL FIX: Wire Stage 2 for ALL operations (not just specific ones)
+            # This is the ACTUAL execution path - NOT coordinate_operation()
+            classified_intent = operation_name  # Default to operation_name
+            intent_confidence = 1.0
+            intent_metadata = {}
+            
+            try:
+                if self.intent_router or get_intent_router_factory:
+                    # Get or create intent router
+                    if not self.intent_router and get_intent_router_factory:
+                        intent_router_factory = get_intent_router_factory()
+                        self.intent_router = intent_router_factory.create_intent_router()
+                    
+                    if self.intent_router:
+                        self.logger.log_operation_start(
+                            ac_id="AC-FR-WIRING-002-STAGE-2",
+                            operation="STAGE_2_INTENT_VERIFICATION",
+                            details={
+                                "operation_name": operation_name,
+                                "stage1_executed": stage1_comprehension_result is not None
+                            }
+                        )
+                        
+                        # Stage 2: Call intent router for verification and classification
+                        # Pass Stage 1 result to inform intent verification
+                        intent_verification_result = self.intent_router.verify_intent(
+                            operation=operation_name,
+                            context=parameters,
+                            stage1_result=stage1_comprehension_result
+                        )
+                        
+                        # Extract classified intent, confidence, and metadata
+                        if hasattr(intent_verification_result, 'is_ok') and intent_verification_result.is_ok():
+                            intent_data = intent_verification_result.unwrap()
+                            classified_intent = intent_data.get("intent_type", operation_name)
+                            intent_confidence = intent_data.get("confidence", 1.0)
+                            intent_metadata = intent_data.get("metadata", {})
+                        else:
+                            classified_intent = operation_name
+                            intent_confidence = 1.0
+                        
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FR-WIRING-002-STAGE-2",
+                            operation="STAGE_2_INTENT_VERIFICATION",
+                            success=True,
+                            details={
+                                "classified_intent": classified_intent,
+                                "confidence": intent_confidence,
+                                "intent_verified": classified_intent == operation_name
+                            }
+                        )
+            except Exception as e:
+                # Log but don't fail - Stage 2 is intent verification enhancement
+                self.logger.log_operation_complete(
+                    ac_id="AC-FR-WIRING-002-STAGE-2",
+                    operation="STAGE_2_INTENT_VERIFICATION",
+                    success=False,
+                    details={"error": f"Stage 2 failed: {str(e)}"}
+                )
             
             # AC-FR-WIRING-001: STAGE 3A - DoR Approval Gate (if operation requires approval)
             # Wire dor_gate for user approval workflow
@@ -1746,120 +1813,10 @@ class MasterOrchestrator(IOrchestrator):
                 )
                 
                 # ════════════════════════════════════════════════════════════════════════
-                # AC-FR-WIRING-001: STAGE 1 - Interaction Orchestrator (Comprehension)
+                # Stage 1-4: Delegation to execute_operation for actual orchestration
                 # ════════════════════════════════════════════════════════════════════════
-                # Wire interaction_orchestrator for Stage 1 comprehension with challenges
-                stage1_comprehension_result = None
-                stage1_challenges = None
-                stage1_user_choice = None
-                
-                try:
-                    if self.interaction_orchestrator_with_challenges:
-                        self.logger.log_operation_start(
-                            ac_id="AC-FR-WIRING-001-STAGE-1",
-                            operation="INTERACTION_COMPREHENSION",
-                            details={
-                                "turn_number": self._turn_number,
-                                "operation": operation,
-                                "context_type": type(context).__name__
-                            }
-                        )
-                        
-                        # Stage 1: Call interaction orchestrator with challenges enabled
-                        stage1_result = self.interaction_orchestrator_with_challenges.execute_turn_with_challenge(
-                            user_input=operation,
-                            context=context,
-                            turn_number=self._turn_number
-                        )
-                        
-                        # Extract comprehension result and any challenges
-                        if hasattr(stage1_result, 'is_ok') and stage1_result.is_ok():
-                            stage1_comprehension_result = stage1_result.unwrap()
-                            stage1_challenges = stage1_comprehension_result.get("challenges", [])
-                            stage1_user_choice = stage1_comprehension_result.get("user_choice", None)
-                        else:
-                            stage1_comprehension_result = stage1_result
-                        
-                        self.logger.log_operation_complete(
-                            ac_id="AC-FR-WIRING-001-STAGE-1",
-                            operation="INTERACTION_COMPREHENSION",
-                            success=True,
-                            details={
-                                "turn_number": self._turn_number,
-                                "challenges_generated": len(stage1_challenges) if stage1_challenges else 0,
-                                "user_choice": stage1_user_choice
-                            }
-                        )
-                except Exception as e:
-                    # Log but don't fail - Stage 1 is enhancement, not blocking
-                    self.logger.log_operation_complete(
-                        ac_id="AC-FR-WIRING-001-STAGE-1",
-                        operation="INTERACTION_COMPREHENSION",
-                        success=False,
-                        details={"error": f"Stage 1 interaction failed: {str(e)}"}
-                    )
-                
-                # ════════════════════════════════════════════════════════════════════════
-                # AC-FR-WIRING-002: STAGE 2 - Intent Router (Intent Verification)
-                # ════════════════════════════════════════════════════════════════════════
-                # Wire intent_router for Stage 2 intent verification and classification
-                classified_intent = operation
-                intent_confidence = 1.0
-                intent_metadata = {}
-                
-                try:
-                    if self.intent_router or get_intent_router_factory:
-                        # Get or create intent router
-                        if not self.intent_router and get_intent_router_factory:
-                            intent_router_factory = get_intent_router_factory()
-                            self.intent_router = intent_router_factory.create_intent_router()
-                        
-                        if self.intent_router:
-                            self.logger.log_operation_start(
-                                ac_id="AC-FR-WIRING-002-STAGE-2",
-                                operation="INTENT_VERIFICATION",
-                                details={
-                                    "turn_number": self._turn_number,
-                                    "operation": operation
-                                }
-                            )
-                            
-                            # Stage 2: Call intent router for verification and classification
-                            intent_verification_result = self.intent_router.verify_intent(
-                                operation=operation,
-                                context=context,
-                                stage1_result=stage1_comprehension_result
-                            )
-                            
-                            # Extract classified intent, confidence, and metadata
-                            if hasattr(intent_verification_result, 'is_ok') and intent_verification_result.is_ok():
-                                intent_data = intent_verification_result.unwrap()
-                                classified_intent = intent_data.get("intent_type", operation)
-                                intent_confidence = intent_data.get("confidence", 1.0)
-                                intent_metadata = intent_data.get("metadata", {})
-                            else:
-                                classified_intent = operation
-                                intent_confidence = 1.0
-                            
-                            self.logger.log_operation_complete(
-                                ac_id="AC-FR-WIRING-002-STAGE-2",
-                                operation="INTENT_VERIFICATION",
-                                success=True,
-                                details={
-                                    "turn_number": self._turn_number,
-                                    "classified_intent": classified_intent,
-                                    "confidence": intent_confidence,
-                                    "matched": classified_intent == operation
-                                }
-                            )
-                except Exception as e:
-                    # Log but don't fail - Stage 2 is enhancement, not blocking
-                    self.logger.log_operation_complete(
-                        ac_id="AC-FR-WIRING-002-STAGE-2",
-                        operation="INTENT_VERIFICATION",
-                        success=False,
-                        details={"error": f"Stage 2 intent verification failed: {str(e)}"}
-                    )
+                # NOTE: Real Stage 1 & 2 wiring happens in execute_operation() method
+                # coordinate_operation() is used for EXPLICIT cross-domain coordination
                 
                 # ════════════════════════════════════════════════════════════════════════
                 # Stage 3: Knowledge Synthesis (existing, now with Stage 1+2 context)
@@ -1952,25 +1909,13 @@ class MasterOrchestrator(IOrchestrator):
                 # Aggregate results with knowledge context (AC-KN-002-01, AC-KN-003-01)
                 aggregated = {
                     "operation": operation,
-                    "classified_intent": classified_intent,  # AC-FR-WIRING-002: Stage 2 result
                     "timestamp": datetime.now().isoformat(),
                     "turn_number": self._turn_number,
                     "orchestrators_involved": len(domains_to_use),
                     "results": results,
                     "errors": errors if errors else None,
                     "transaction_id": txn.transaction_id,
-                    # AC-FR-WIRING-001: Include Stage 1 interaction/comprehension results
-                    "stage1_comprehension": {
-                        "challenges": stage1_challenges if stage1_challenges else [],
-                        "user_choice": stage1_user_choice,
-                        "raw_result": stage1_comprehension_result
-                    },
-                    # AC-FR-WIRING-002: Include Stage 2 intent verification results
-                    "stage2_intent": {
-                        "classified_intent": classified_intent,
-                        "confidence": intent_confidence,
-                        "metadata": intent_metadata
-                    },
+                    # NOTE: Stage 1 & 2 wiring is in execute_operation(), not coordinate_operation()
                     # AC-KN-002-01: Include technical knowledge context in composite request
                     "knowledge_context": knowledge_context,
                     # AC-KN-003-01: Include business knowledge context in composite request
@@ -1995,15 +1940,7 @@ class MasterOrchestrator(IOrchestrator):
                         "turn_number": self._turn_number,
                         "governance_enforced": True,
                         "transaction_id": txn.transaction_id,
-                        # AC-FR-WIRING-001: Stage 1 comprehension metrics
-                        "stage1_enabled": self.interaction_orchestrator_with_challenges is not None,
-                        "stage1_challenges_generated": len(stage1_challenges) if stage1_challenges else 0,
-                        "stage1_user_choice": stage1_user_choice,
-                        # AC-FR-WIRING-002: Stage 2 intent verification metrics
-                        "stage2_enabled": self.intent_router is not None,
-                        "stage2_classified_intent": classified_intent,
-                        "stage2_intent_confidence": intent_confidence,
-                        "stage2_intent_matched": classified_intent == operation,
+                        # NOTE: Stage 1 & 2 wiring is in execute_operation(), not coordinate_operation()
                         # Knowledge synthesis metrics
                         "knowledge_evaluated": knowledge_context.get("knowledge_evaluated", False),
                         "knowledge_entries_used": knowledge_context.get("entries_count", 0),
