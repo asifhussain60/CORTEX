@@ -25,6 +25,8 @@ from datetime import datetime
 from functools import lru_cache
 import hashlib
 import json
+from pathlib import Path
+import yaml
 
 from cortex.core.interfaces import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
@@ -148,11 +150,14 @@ class IntentRouter(IOrchestrator):
         """
         Initialize IntentRouter orchestrator.
         
+        AC-FUTURE-001: Load routing rules from YAML (CONFIG-DRIVEN)
+        
         Sets up:
         - Operation type keyword mappings
-        - Routing rules
+        - Routing rules (loaded from YAML or fallback to hardcoded)
         - Audit logger
         - Decision cache (LRU with 128 entries)
+        - Complexity classifier for request analysis
         
         Raises:
             Exception: If audit logger cannot be initialized
@@ -167,8 +172,123 @@ class IntentRouter(IOrchestrator):
             IntentType.FILE_CREATION: self.FILE_CREATION_KEYWORDS,
         }
         
-        # Routing rules: (intent_type, domain) -> target_handler
-        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = {
+        # AC-FUTURE-001: Try loading routing rules from YAML
+        self.routing_rules_config: Dict[str, Any] = self._load_routing_config()
+        
+        # Build routing rules dict from config (fallback if YAML loading fails)
+        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = self._build_routing_rules()
+        
+        # Decision cache (populated by _route_internal, accessed via route)
+        self.cached_decisions: Dict[str, RoutingDecision] = {}
+        
+        # AC-FUTURE-008: Complexity classifier configuration
+        self.complexity_thresholds = self.routing_rules_config.get("complexity_thresholds", {
+            "low": 0,
+            "medium": 2,
+            "high": 5,
+            "critical": 8
+        })
+        
+        # AC-FUTURE-009: Fuzzy matching configuration
+        self.fuzzy_config = self.routing_rules_config.get("fuzzy_matching", {
+            "enabled": False,
+            "algorithm": "levenshtein",
+            "threshold": 0.75
+        })
+        
+        # Cache for fuzzy matching results
+        self.fuzzy_cache: Dict[str, List[str]] = {}
+        
+        # Log initialization
+        self.logger.log_operation_complete(
+            ac_id="AC-PROD-001-02",
+            operation="INTENT_ROUTER_INIT",
+            success=True,
+            details={
+                "operation_types": len(self.operation_type_mappings),
+                "routing_rules": len(self.routing_rules),
+                "cache_enabled": True,
+                "fuzzy_matching_enabled": self.fuzzy_config.get("enabled", False),
+                "yaml_config_loaded": "routing_rules" in self.routing_rules_config
+            }
+        )
+    
+    def _load_routing_config(self) -> Dict[str, Any]:
+        """
+        Load routing configuration from YAML file.
+        
+        AC-FUTURE-001: YAML-based rule loading
+        
+        Returns:
+            Dict[str, Any]: Configuration dict, or empty if YAML not found
+        """
+        config_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier3" / "knowledge" / "intent-routing.yaml"
+        
+        try:
+            if config_path.exists():
+                with open(config_path) as f:
+                    raw_config = yaml.safe_load(f)
+                    config: Dict[str, Any] = raw_config if isinstance(raw_config, dict) else {}
+                self.logger.log_operation_complete(
+                    ac_id="AC-FUTURE-001",
+                    operation="YAML_ROUTING_CONFIG_LOADED",
+                    success=True,
+                    details={"path": str(config_path)}
+                )
+                return config
+        except (FileNotFoundError, yaml.YAMLError) as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-FUTURE-001",
+                operation="YAML_ROUTING_CONFIG_LOAD_FAILED",
+                success=False,
+                details={"error": str(e), "using_fallback": True}
+            )
+        
+        return {}
+    
+    def _build_routing_rules(self) -> Dict[Tuple[Optional[IntentType], Optional[str]], str]:
+        """
+        Build routing rules from config or fallback to hardcoded.
+        
+        AC-FUTURE-001: Support both YAML-driven and fallback routing
+        
+        Returns:
+            Dict[Tuple[Optional[IntentType], Optional[str]], str]: Routing rules
+        """
+        rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = {}
+        
+        # Try YAML config first
+        if "routing_rules" in self.routing_rules_config:
+            yaml_rules = self.routing_rules_config.get("routing_rules", {})
+            if isinstance(yaml_rules, dict):
+                for intent_str, domain_rules in yaml_rules.items():
+                    try:
+                        intent = IntentType(intent_str)
+                        if isinstance(domain_rules, dict):
+                            for domain, rule_config in domain_rules.items():
+                                handler_str: str = ""
+                                if isinstance(rule_config, dict):
+                                    handler_str = str(rule_config.get("handler", ""))
+                                else:
+                                    handler_str = str(rule_config)
+                                
+                                if handler_str:
+                                    domain_key = None if domain == "default" else domain
+                                    rules[(intent, domain_key)] = handler_str
+                    except (ValueError, KeyError) as e:
+                        self.logger.log_operation_complete(
+                            ac_id="AC-FUTURE-001",
+                            operation="YAML_RULE_PARSE_ERROR",
+                            success=False,
+                            details={"error": str(e), "intent": intent_str}
+                        )
+            
+            # If YAML rules loaded, return them
+            if rules:
+                return rules
+        
+        # Fallback to hardcoded rules (backward compatibility)
+        return {
             # IMPLEMENT routing
             (IntentType.IMPLEMENT, "orchestrators"): "ImplementationOrchestrator",
             (IntentType.IMPLEMENT, "core"): "CoreImplementationHandler",
@@ -193,21 +313,6 @@ class IntentRouter(IOrchestrator):
             (IntentType.FILE_CREATION, "reports"): "DocumentationOrchestrator",
             (IntentType.FILE_CREATION, None): "DocumentationOrchestrator",
         }
-        
-        # Decision cache (populated by _route_internal, accessed via route)
-        self.cached_decisions: Dict[str, RoutingDecision] = {}
-        
-        # Log initialization
-        self.logger.log_operation_complete(
-            ac_id="AC-PROD-001-02",
-            operation="INTENT_ROUTER_INIT",
-            success=True,
-            details={
-                "operation_types": len(self.operation_type_mappings),
-                "routing_rules": len(self.routing_rules),
-                "cache_enabled": True
-            }
-        )
     
     def get_version(self) -> str:
         """
