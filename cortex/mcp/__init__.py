@@ -55,6 +55,12 @@ from cortex.mcp.orchestrator_mcp_server import (
     CapabilityResponse,
     ContextType,
 )
+from cortex.mcp.unified_tool_discovery import (
+    UnifiedMCPToolDiscovery,
+    get_unified_discovery,
+    MCPTool,
+    ToolCategory,
+)
 
 __all__ = [
     # Core MCP server and tools
@@ -91,4 +97,9 @@ __all__ = [
     "CapabilityRequest",
     "CapabilityResponse",
     "ContextType",
+    # Unified tool discovery (AC-MCP-CENTRALIZED-DISCOVERY - CORE-035)
+    "UnifiedMCPToolDiscovery",
+    "get_unified_discovery",
+    "MCPTool",
+    "ToolCategory",
 ]
