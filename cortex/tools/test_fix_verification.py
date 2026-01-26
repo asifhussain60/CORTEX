@@ -49,20 +49,17 @@ else:
     yaml_available = False
 print()
 
-# Test 3: Verify setup script has preservation logic
-print("TEST 3: Verify setup script has preservation logic")
+# Test 3: Verify DatabaseBackedRegistry initialization
+print("TEST 3: Verify DatabaseBackedRegistry initialization")
 print("=" * 60)
-setup_script_path = Path('cortex/scripts-root-archive/setup_cortex_hub.py')
-
-if setup_script_path.exists():
-    with open(setup_script_path, 'r') as f:
-        script_content = f.read()
-    
-    has_check = 'registry_template' in script_content and 'preserved' in script_content
-    print(f"Setup script exists: ✅ YES")
-    print(f"Has preservation logic: {'✅ YES' if has_check else '❌ NO'}")
-else:
-    print(f"Setup script exists: ❌ NO (archived)")
+try:
+    from cortex.orchestrators.core.database_registry import get_database_registry
+    registry = get_database_registry()
+    stats = registry.get_wiring_statistics()
+    print(f"DatabaseBackedRegistry initialized: ✅ YES")
+    print(f"Orchestrators wired: {stats.get('wired_orchestrators', 0)}")
+except Exception as e:
+    print(f"DatabaseBackedRegistry initialized: ❌ NO ({e})")
 print()
 
 # Summary

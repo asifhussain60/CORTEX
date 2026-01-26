@@ -12,6 +12,9 @@ Exports:
     MCPRequest: JSON-RPC request model
     MCPResponse: JSON-RPC response model
     MCPError: JSON-RPC error model
+    MCPToolsCatalog: Unified MCP tools registry (CORE-035 SSOT)
+    get_mcp_tools_catalog: Get catalog singleton
+    sync_mcp_tools: Sync tools from orchestrators
 """
 
 from cortex.mcp.server import (
@@ -33,11 +36,38 @@ from cortex.mcp.endpoints import (
     is_tool_registered,
     call_tool,
 )
+from cortex.mcp.mcp_tools_catalog import (
+    MCPToolsCatalog,
+    get_mcp_tools_catalog,
+    sync_mcp_tools,
+    MCPToolMetadata,
+    ToolStatus,
+)
 
 __all__ = [
     "MCPServer",
     "Tool",
     "SampleTool",
+    "ToolDefinition",
+    "ToolParameter",
+    "MCPRequest",
+    "MCPResponse",
+    "MCPError",
+    "mcp_tool",
+    "MCP_TOOLS_REGISTRY",
+    "list_tools_endpoint",
+    "get_tool_metadata",
+    "filter_tools_by_domain",
+    "get_tool_count",
+    "is_tool_registered",
+    "call_tool",
+    # Unified MCP catalog (CORE-035 SSOT)
+    "MCPToolsCatalog",
+    "get_mcp_tools_catalog",
+    "sync_mcp_tools",
+    "MCPToolMetadata",
+    "ToolStatus",
+]
     "ToolDefinition",
     "ToolParameter",
     "MCPRequest",

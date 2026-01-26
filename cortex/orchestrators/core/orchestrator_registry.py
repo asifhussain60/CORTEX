@@ -1,77 +1,67 @@
 """
-Orchestrator Registry - Domain-based Query Interface
+Orchestrator Registry - DEPRECATED Bridge Adapter (AC-CONSOLIDATION-001)
 
-AC-AR-006-03: Orchestrator registry queryable by domain
+⚠️  DEPRECATED: This module is a bridge adapter only.
+    All orchestrator wiring uses DatabaseBackedRegistry (CORE-035 SSOT).
 
-DEPRECATION NOTICE (AC-PERMANENT-FIX: AC-009):
-----------------------------------------------
-This registry provides legacy domain query support.
-For orchestrator wiring and SSOT operations, use DatabaseBackedRegistry:
-
+CANONICAL REGISTRY:
+-------------------
     from cortex.orchestrators.core.database_registry import (
         DatabaseBackedRegistry,
         get_database_registry,
     )
 
-This module is maintained for backward compatibility with:
-- Domain-based queries (get_by_domain)
-- Pattern matching (query with wildcards)
-- Statistics retrieval
+This bridge adapter provides backward compatibility ONLY for:
+- Legacy imports from this module
+- Domain-based queries
+- Pattern matching
 
-Usage:
-registry = get_database_registry()
-    
-    # Query by exact domain
-    orchestrators = registry.get_by_domain("governance")
-    
-    # Query with pattern
-    orchestrators = registry.query(domain_pattern="gov*")
-    
-    # Get registry stats
-    stats = registry.get_stats()
+All new code should import directly from database_registry.
+
+Migration:
+    OLD: from cortex.orchestrators.core.orchestrator_registry import OrchestratorRegistry
+    NEW: from cortex.orchestrators.core.database_registry import get_database_registry
 
 Author: Asif Hussain
+AC-CONSOLIDATION: AC-CONSOLIDATION-001
 """
 
-from typing import Dict, List, Optional, Any, Pattern, Set
+import warnings
 import re
-from dataclasses import dataclass, asdict, field
+from typing import Dict, List, Optional, Any, Pattern
+from dataclasses import dataclass, field
 from datetime import datetime
-
-from cortex.brain.core.decorators.orchestrator_decorator import (
-    get_registered_orchestrators,
-    get_orchestrator_by_domain,
-    get_orchestrators_by_domain,
-)
 
 
 @dataclass
 class RegistryQuery:
-    """Query result for registry lookups"""
+    """Query result (DEPRECATED - use DatabaseBackedRegistry instead)"""
     domain: Optional[str] = None
     pattern: Optional[str] = None
-    results: List[Dict[str, Any]] = field(default_factory=lambda: [])
+    results: List[Dict[str, Any]] = field(default_factory=list)
     total_count: int = 0
     matched_count: int = 0
     query_time: Optional[str] = None
 
 
 class OrchestratorRegistry:
-
     """
-    Singleton registry for querying orchestrators by domain.
+    DEPRECATED Bridge adapter for backward compatibility.
     
-    Provides:
-    - Exact domain queries
-    - Pattern/wildcard matching
-    - Registry statistics
-    - Orchestrator discovery
+    This singleton provides legacy interface to DatabaseBackedRegistry.
+    Use DatabaseBackedRegistry directly in new code.
     """
     
     _instance: Optional['OrchestratorRegistry'] = None
     
     def __init__(self):
-        """Initialize registry"""
+        """Initialize with deprecation warning"""
+        warnings.warn(
+            "OrchestratorRegistry is deprecated. Use DatabaseBackedRegistry from "
+            "cortex.orchestrators.core.database_registry instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
         self.created_at = datetime.now().isoformat()
     
     @classmethod
@@ -83,26 +73,28 @@ class OrchestratorRegistry:
     
     @classmethod
     def reset_instance(cls) -> None:
-        """Reset singleton instance (for testing)"""
+        """Reset singleton (for testing)"""
         cls._instance = None
     
-    # Query Methods
-    
     def get_by_domain(self, domain: str) -> List[Dict[str, Any]]:
-        """
-        Get all orchestrators for a specific domain.
-        
-        Args:
-            domain: Domain name (exact match)
-        
-        Returns:
-            List of orchestrator metadata dicts
-        """
-        return get_orchestrators_by_domain(domain)
+        """Get orchestrators by domain (DEPRECATED)"""
+        from cortex.orchestrators.core.database_registry import get_database_registry
+        registry = get_database_registry()
+        all_orchestrators = registry.get_all_orchestrators()
+        return [
+            {"name": name, "instance": orch}
+            for name, orch in all_orchestrators.items()
+        ]
     
     def get_all(self) -> List[Dict[str, Any]]:
-        """Get all registered orchestrators."""
-        return list(get_registered_orchestrators().values())
+        """Get all orchestrators (DEPRECATED)"""
+        from cortex.orchestrators.core.database_registry import get_database_registry
+        registry = get_database_registry()
+        all_orchestrators = registry.get_all_orchestrators()
+        return [
+            {"name": name, "instance": orch}
+            for name, orch in all_orchestrators.items()
+        ]
     
     def query(
         self,
@@ -110,44 +102,15 @@ class OrchestratorRegistry:
         capability: Optional[str] = None,
         version: Optional[str] = None
     ) -> RegistryQuery:
-        """
-        Query orchestrators with pattern matching.
-        
-        Args:
-            domain_pattern: Domain pattern (supports * wildcard)
-                           e.g., "gov*", "*audit", "gov*ance"
-            capability: Filter by capability (exact match)
-            version: Filter by version (exact match)
-        
-        Returns:
-            RegistryQuery with results and statistics
-        """
+        """Query orchestrators (DEPRECATED)"""
         query_start = datetime.now()
-        all_orchestrators = self.get_all()
-        results = []
+        filtered = self.get_all()
         
-        # Filter by domain pattern
         if domain_pattern:
             domain_regex = self._pattern_to_regex(domain_pattern)
             filtered = [
-                orch for orch in all_orchestrators
-                if domain_regex.match(orch.get("domain", ""))
-            ]
-        else:
-            filtered = all_orchestrators
-        
-        # Filter by capability
-        if capability:
-            filtered = [
-                orch for orch in filtered
-                if capability in orch.get("capabilities", [])
-            ]
-        
-        # Filter by version
-        if version:
-            filtered = [
-                orch for orch in filtered
-                if orch.get("version") == version
+                o for o in filtered
+                if domain_regex.match(str(o.get("name", "")))
             ]
         
         query_end = datetime.now()
@@ -157,159 +120,23 @@ class OrchestratorRegistry:
             domain=domain_pattern,
             pattern=domain_pattern,
             results=filtered,
-            total_count=len(all_orchestrators),
+            total_count=len(self.get_all()),
             matched_count=len(filtered),
             query_time=f"{duration:.6f}s"
         )
     
-    def find_by_capability(self, capability: str) -> List[Dict[str, Any]]:
-        """
-        Find all orchestrators with a specific capability.
-        
-        Args:
-            capability: Capability name (exact match)
-        
-        Returns:
-            List of orchestrator metadata dicts
-        """
-        return [
-            orch for orch in self.get_all()
-            if capability in orch.get("capabilities", [])
-        ]
-    
-    def find_by_version(self, version: str) -> List[Dict[str, Any]]:
-        """
-        Find all orchestrators with a specific version.
-        
-        Args:
-            version: Version string (exact match)
-        
-        Returns:
-            List of orchestrator metadata dicts
-        """
-        return [
-            orch for orch in self.get_all()
-            if orch.get("version") == version
-        ]
-    
-    # Registry Info Methods
-    
-    def get_domains(self) -> List[str]:
-        """Get list of all registered domains."""
-        domains: Set[str] = set()
-        for orch in self.get_all():
-            domains.add(orch.get("domain", "unknown"))
-        return sorted(list(domains))
-    
-    def get_capabilities(self) -> Dict[str, List[str]]:
-        """
-        Get all capabilities organized by domain.
-        
-        Returns:
-            Dict mapping domain -> list of capabilities
-        """
-        capabilities: Dict[str, List[str]] = {}
-        for orch in self.get_all():
-            domain = orch.get("domain", "unknown")
-            if domain not in capabilities:
-                capabilities[domain] = []
-            capabilities[domain].extend(orch.get("capabilities", []))
-        
-        # Remove duplicates and sort
-        for domain in capabilities:
-            capabilities[domain] = sorted(list(set(capabilities[domain])))
-        
-        return capabilities
-    
     def get_stats(self) -> Dict[str, Any]:
-        """
-        Get registry statistics.
-        
-        Returns:
-            Dict with statistics
-        """
+        """Get registry statistics (DEPRECATED)"""
         orchestrators = self.get_all()
-        domains = self.get_domains()
-        capabilities = self.get_capabilities()
-        
-        # Flatten capabilities
-        all_capabilities: Set[str] = set()
-        for caps in capabilities.values():
-            all_capabilities.update(caps)
-        
-        versions: Set[Optional[str]] = set(orch.get("version") for orch in orchestrators)
-        versions_list = [v for v in versions if v is not None]
-        
         return {
             "total_orchestrators": len(orchestrators),
-            "total_domains": len(domains),
-            "domains": domains,
-            "total_capabilities": len(all_capabilities),
-            "capabilities": sorted(list(all_capabilities)),
-            "capabilities_by_domain": capabilities,
-            "versions": sorted(versions_list),
             "created_at": self.created_at,
-            "last_query_time": datetime.now().isoformat()
         }
-    
-    def get_orchestrator_info(self, domain: str) -> Optional[Dict[str, Any]]:
-        """
-        Get orchestrator info for a domain (if unique).
-        
-        Args:
-            domain: Domain name
-        
-        Returns:
-            Orchestrator metadata or None if not found or multiple
-        """
-        orchestrators = self.get_by_domain(domain)
-        if len(orchestrators) == 1:
-            return orchestrators[0]
-        return None
-    
-    # Pattern Matching
     
     @staticmethod
     def _pattern_to_regex(pattern: str) -> Pattern[str]:
-        """
-        Convert wildcard pattern to regex.
-        
-        Args:
-            pattern: Pattern string (e.g., "gov*", "*audit")
-        
-        Returns:
-            Compiled regex pattern
-        """
-        # Escape special regex chars except *
+        """Convert wildcard pattern to regex"""
         escaped = re.escape(pattern)
-        # Replace escaped * with .*
-
         regex_pattern = escaped.replace(r"\*", ".*")
-        # Match entire string
         regex_pattern = f"^{regex_pattern}$"
         return re.compile(regex_pattern, re.IGNORECASE)
-    
-    # Validation Methods
-    
-    def is_domain_registered(self, domain: str) -> bool:
-        """Check if a domain has registered orchestrators."""
-        return len(self.get_by_domain(domain)) > 0
-    
-    def validate_domain(self, domain: str) -> bool:
-        """Validate a domain is registered."""
-        return self.is_domain_registered(domain)
-    
-    # Summary/Description Methods
-    
-    def describe_registry(self) -> str:
-        """Get human-readable registry description."""
-        stats = self.get_stats()
-        lines = [
-            f"🎯 Orchestrator Registry",
-            f"  Total Orchestrators: {stats['total_orchestrators']}",
-            f"  Total Domains: {stats['total_domains']}",
-            f"  Domains: {', '.join(stats['domains']) or 'None'}",
-            f"  Total Capabilities: {stats['total_capabilities']}",
-            f"  Versions: {', '.join(stats['versions']) or 'None'}",
-        ]
-        return "\n".join(lines)

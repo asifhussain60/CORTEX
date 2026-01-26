@@ -2768,4 +2768,4 @@ The entire 3-phase legacy cleanup campaign is now complete with:
 
 What's your preference?
 
-Made changes.
+Made changes
