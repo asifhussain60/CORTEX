@@ -15,6 +15,8 @@ Exports:
     MCPToolsCatalog: Unified MCP tools registry (CORE-035 SSOT)
     get_mcp_tools_catalog: Get catalog singleton
     sync_mcp_tools: Sync tools from orchestrators
+    OrchestratorMCPServer: Unified MCP facade for orchestrators (AC-MCP-ORCHESTRATOR-001)
+    get_orchestrator_mcp_server: Get orchestrator server singleton
 """
 
 from cortex.mcp.server import (
@@ -43,6 +45,16 @@ from cortex.mcp.mcp_tools_catalog import (
     MCPToolMetadata,
     ToolStatus,
 )
+from cortex.mcp.orchestrator_mcp_server import (
+    OrchestratorMCPServer,
+    get_orchestrator_mcp_server,
+    IOrchestratorAdapter,
+    ExecutionContext,
+    CapabilityMetadata,
+    CapabilityRequest,
+    CapabilityResponse,
+    ContextType,
+)
 
 __all__ = [
     "MCPServer",
@@ -67,10 +79,16 @@ __all__ = [
     "sync_mcp_tools",
     "MCPToolMetadata",
     "ToolStatus",
+    # Unified orchestrator MCP server (AC-MCP-ORCHESTRATOR-001)
+    "OrchestratorMCPServer",
+    "get_orchestrator_mcp_server",
+    "IOrchestratorAdapter",
+    "ExecutionContext",
+    "CapabilityMetadata",
+    "CapabilityRequest",
+    "CapabilityResponse",
+    "ContextType",
 ]
-    "ToolDefinition",
-    "ToolParameter",
-    "MCPRequest",
     "MCPResponse",
     "MCPError",
     "mcp_tool",
