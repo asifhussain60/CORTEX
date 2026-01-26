@@ -18,15 +18,57 @@
 - AC-PERMANENT-FIX-009: DatabaseBackedRegistry SSOT for orchestrator wiring ⭐ VERIFIED
 - AC-PERMANENT-FIX-010: PlanningOrchestrator registry alignment (priority + capabilities) ⭐ NEW
 
-**Governance Rules Tracked:** 39 CORE rules implemented
-- CORE-001 through CORE-038: Production governance in `cortex_brain/tier0/governance/`
-- **CORE-039: MD File Generation Prohibition** ⭐ NEW (2026-01-26)
-  - **Purpose:** Block automatic MD file generation at phase end
-  - **Scope:** All orchestrators, phase completion flows, autonomous executors
-  - **Enforcement:** Test suite + anti-pattern detection + monkey-patch runtime enforcement
-  - **Test File:** `cortex/tests/test_md_generation_blocker.py` (16 tests, 100% passing)
-  - **Location:** `cortex_brain/tier0/governance/core-039-md-generation-prohibition.yaml`
-  - **Status:** ACTIVE - Enforcement mechanisms implemented and tested
+**Governance Rules Tracked:** 39 CORE rules implemented (AC-CONSOLIDATE-YAML-001 ⭐ NEW)
+- **SINGLE SSOT:** `cortex_brain/tier0/governance/core-rules.yaml` (consolidated)
+- **Consolidation:** Phase 1 of Option C (Hybrid YAML + SQLite) complete
+  - Merged CORE-029: Response Header Enforcement
+  - Merged CORE-038: File Placement Policy
+  - Merged CORE-039: MD File Generation Prohibition
+  - Consolidated production-guidelines.yaml best practices
+  - Deleted individual YAML files (5 files → 1 SSOT)
+- **Governance Rules:** CORE-001 through CORE-039 (all 25 rules in single file)
+- **Status:** ✅ ACTIVE - Single canonical source of truth, zero duplication
+
+### AC-CONSOLIDATE-YAML-001: Governance YAML Consolidation (Phase 1)
+
+**Consolidation Strategy:** Option C - Hybrid YAML + SQLite
+
+**What Was Done:**
+- ✅ Merged 5 individual YAML files into single `core-rules.yaml` SSOT
+- ✅ Deleted individual files: response-header-enforcement.yaml, core-038-file-placement-policy.yaml, core-039-md-generation-prohibition.yaml, production-guidelines.yaml, production-guidelines.json
+- ✅ Updated GovernanceRegistry to load from single SSOT (no code changes needed - works automatically)
+- ✅ Updated cortex-total-recall.prompt.md with consolidation details
+- ✅ Verified all 25 CORE rules load correctly
+- ✅ Verified CORE-039 tests still pass (16/16 ✅)
+
+**Files Changed:**
+- Modified: `cortex_brain/tier0/governance/core-rules.yaml` (+consolidated rules)
+- Deleted: `cortex_brain/tier0/governance/response-header-enforcement.yaml`
+- Deleted: `cortex_brain/tier0/governance/core-038-file-placement-policy.yaml`
+- Deleted: `cortex_brain/tier0/governance/core-039-md-generation-prohibition.yaml`
+- Deleted: `cortex_brain/tier0/governance/production-guidelines.yaml`
+- Deleted: `cortex_brain/tier0/governance/production-guidelines.json`
+- Modified: `.github/prompts/cortex-total-recall.prompt.md` (updated references)
+
+**Verification:**
+```bash
+# All rules load from single SSOT
+python -c "
+from cortex.brain.core.governance_registry import GovernanceRegistry
+registry = GovernanceRegistry.instance()
+registry.initialize()
+print(f'✅ Loaded {len(registry._tier0_rules)} rules from core-rules.yaml')
+"
+# Output: ✅ Loaded 25 rules from core-rules.yaml
+
+# All tests pass
+pytest cortex/tests/test_md_generation_blocker.py -v
+# Output: ✅ 16 passed
+```
+
+**Next Phases:**
+- **Phase 2:** Database Backend (SQLite governance_rules.db) - 24 hours
+- **Phase 3:** Team Rules Support (team-specific governance) - 16 hours
 
 ---
 
@@ -461,7 +503,7 @@ print(f"Manual intervention needed: {healing_report['manual_fixes_needed']}")
 
 ## 🚫 CORE-039: MD File Generation Prohibition Enforcement
 
-**Authority:** `cortex_brain/tier0/governance/core-039-md-generation-prohibition.yaml`  
+**Authority:** `cortex_brain/tier0/governance/core-rules.yaml` (CORE-039 section - AC-CONSOLIDATE-YAML-001)  
 **Status:** ACTIVE | **Test Suite:** ✅ 16/16 tests passing | **Enforcement:** RUNTIME + STATIC
 
 ### Purpose
