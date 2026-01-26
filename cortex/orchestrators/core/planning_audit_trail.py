@@ -43,11 +43,6 @@ from datetime import datetime
 import hashlib
 from enum import Enum
 
-from cortex.orchestrators.core.planning_refinement_orchestrator import (
-    RefinementSession,
-    TurnResult,
-)
-
 
 class AuditEventType(Enum):
     """Types of audit events."""
@@ -298,103 +293,40 @@ class PlanningAuditTrail:
 def create_audit_entry_from_turn(
     session_id: str,
     entry_id: str,
-    turn_result: TurnResult,
+    turn_result: Dict[str, Any],
 ) -> AuditLogEntry:
     """
     Create audit log entry from a turn result.
 
+    DEPRECATED: PlanningRefinementOrchestrator has been consolidated into PlanningOrchestrator.
+    This function is maintained for backward compatibility but should not be used.
+
     Args:
         session_id: Session identifier
         entry_id: Unique entry identifier
-        turn_result: TurnResult from refinement
+        turn_result: Turn result data (legacy format)
 
     Returns:
         AuditLogEntry with turn data
     """
-    return AuditLogEntry(
-        entry_id=entry_id,
-        session_id=session_id,
-        event_type=AuditEventType.TURN_COMPLETED,
-        timestamp=turn_result.timestamp,
-        turn_number=turn_result.turn.value,
-        clarity_before=turn_result.clarity_before,
-        clarity_after=turn_result.clarity_after,
-        dor_achieved=turn_result.dor_achieved,
-        user_response=turn_result.user_response,
-        plan_version=turn_result.plan_version,
-        git_analysis_summary=(
-            f"RiskLevel: {turn_result.git_analysis.risk_assessment.risk_level.value}"
-            if turn_result.git_analysis
-            else None
-        ),
-        challenges_count=len(turn_result.challenges_issued),
-        questions_count=len(turn_result.questions_asked),
-        additional_data={
-            "challenges": turn_result.challenges_issued,
-            "questions": turn_result.questions_asked,
-            "cortex_feedback": turn_result.cortex_feedback,
-        },
-    )
+    # Legacy function - no longer in active use
+    raise NotImplementedError("Planning refinement orchestrator has been consolidated. Use PlanningOrchestrator instead.")
 
 
 def create_audit_trail_from_session(
-    session: RefinementSession,
+    session: Dict[str, Any],
 ) -> PlanningAuditTrail:
     """
     Create complete audit trail from refinement session.
 
-    Reconstructs audit trail from session's turn results.
-    Preserves hash chain linkage.
+    DEPRECATED: PlanningRefinementOrchestrator has been consolidated into PlanningOrchestrator.
+    This function is maintained for backward compatibility but should not be used.
 
     Args:
-        session: RefinementSession
+        session: Legacy session data (unused)
 
     Returns:
-        PlanningAuditTrail with all turns logged
+        PlanningAuditTrail (empty)
     """
-    trail = PlanningAuditTrail(session_id=session.session_id)
-
-    # Add session start entry
-    start_entry = AuditLogEntry(
-        entry_id=f"{session.session_id}-START",
-        session_id=session.session_id,
-        event_type=AuditEventType.SESSION_STARTED,
-        timestamp=session.started_at,
-    )
-    trail.add_entry(start_entry)
-
-    # Add turn entries
-    for turn in session.turns:
-        turn_entry = create_audit_entry_from_turn(
-            session_id=session.session_id,
-            entry_id=f"{session.session_id}-TURN-{turn.turn.value}",
-            turn_result=turn,
-        )
-        trail.add_entry(turn_entry)
-
-    # Add DoR achievement entry if achieved
-    if session.dor_achieved:
-        dor_entry = AuditLogEntry(
-            entry_id=f"{session.session_id}-DOR",
-            session_id=session.session_id,
-            event_type=AuditEventType.DOR_ACHIEVED,
-            timestamp=session.completed_at or datetime.now(),
-            clarity_before=session.clarity_history[-2] if len(session.clarity_history) > 1 else 0.0,
-            clarity_after=session.final_clarity,
-            dor_achieved=True,
-        )
-        trail.add_entry(dor_entry)
-
-    # Add session completion entry
-    if session.completed_at:
-        complete_entry = AuditLogEntry(
-            entry_id=f"{session.session_id}-COMPLETE",
-            session_id=session.session_id,
-            event_type=AuditEventType.SESSION_COMPLETED,
-            timestamp=session.completed_at,
-            clarity_after=session.final_clarity,
-            dor_achieved=session.dor_achieved,
-        )
-        trail.add_entry(complete_entry)
-
-    return trail
+    # Legacy function - no longer in active use
+    raise NotImplementedError("Planning refinement orchestrator has been consolidated. Use PlanningOrchestrator instead.")

@@ -2691,43 +2691,19 @@ class MasterOrchestrator(IOrchestrator):
         )
 
         try:
-            # Import PlanningRefinementOrchestrator (lazy import)
-            from cortex.orchestrators.core.planning_refinement_orchestrator import (
-                get_planning_refinement_orchestrator,
+            # Planning refinement moved to PlanningOrchestrator
+            # This method is deprecated and will be removed in v7.0
+            self.logger.log_operation_complete(
+                ac_id="AC-PLANNING-REFINE-CONDUCT",
+                operation="conduct_planning_session",
+                success=False,
+                details={"error": "Planning refinement orchestrator deprecated - use PlanningOrchestrator instead"}
             )
-            from cortex.orchestrators.core.planning_audit_trail import (
-                create_audit_trail_from_session,
-            )
-
-            # Get orchestrator instance
-            refinement_orchestrator = get_planning_refinement_orchestrator()
-
-            # Conduct refinement session (turns 1-6)
-            success, result = refinement_orchestrator.conduct_refinement_session(
-                session_id=session_id,
-                user_request=user_request,
-            )
-
-            if not success:
-                self.logger.log_operation_complete(
-                    ac_id="AC-PLANNING-REFINE-CONDUCT",
-                    operation="conduct_planning_session",
-                    success=False,
-                    details={"error": result}
-                )
-                return {
-                    "success": False,
-                    "error": result,
-                    "session_id": session_id,
-                }
-
-            # Refinement completed
-            session = result
-            dor_achieved = session.dor_achieved
-            final_clarity = session.final_clarity
-
-            # Create audit trail from session
-            audit_trail = create_audit_trail_from_session(session)
+            return {
+                "success": False,
+                "error": "Planning refinement orchestrator has been consolidated into PlanningOrchestrator. Use planning_orchestrator.execute_operation() instead.",
+                "session_id": session_id,
+            }
 
             # Verify audit trail integrity
             from cortex.orchestrators.core.audit_trail_verifier import (
@@ -2882,32 +2858,10 @@ class MasterOrchestrator(IOrchestrator):
         Returns:
             Dict with current session status
         """
-        try:
-            from cortex.orchestrators.core.planning_refinement_orchestrator import (
-                get_planning_refinement_orchestrator,
-            )
-
-            orchestrator = get_planning_refinement_orchestrator()
-            session = orchestrator.get_session(session_id)
-
-            if not session:
-                return {
-                    "success": False,
-                    "error": f"Session {session_id} not found",
-                }
-
-            return {
-                "success": True,
-                "session_id": session_id,
-                "dor_achieved": session.dor_achieved,
-                "final_clarity": session.final_clarity,
-                "total_turns": session.total_turns_completed,
-                "clarity_progression": session.clarity_history,
-                "is_complete": session.is_complete(),
-            }
-
-        except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-            }
+        # Planning refinement moved to PlanningOrchestrator
+        # This method is deprecated and will be removed in v7.0
+        return {
+            "success": False,
+            "error": "Planning refinement orchestrator has been consolidated into PlanningOrchestrator. Use planning_orchestrator.execute_operation() instead.",
+            "session_id": session_id,
+        }

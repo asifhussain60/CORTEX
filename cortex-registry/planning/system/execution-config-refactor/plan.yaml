@@ -1,0 +1,906 @@
+# ==============================================================================
+# COMPREHENSIVE AUTONOMOUS PLAN: Option A - YAML Intent Certification
+# Generated: 2026-01-26T14:45:00Z
+# PlanningOrchestrator Configuration (ACTIVE State)
+# ==============================================================================
+#
+# MISSION: Replace DoRApprovalGate markdown with UnifiedExecutionConfig YAML
+# OUTCOME: Eliminate markdown from execution flow, achieve machine-readable purity
+# TIMELINE: 8-12 implementation hours + 2-4 hours validation = 10-16 hours total
+# RISK LEVEL: Low (feature-flagged, staged rollout)
+#
+# ==============================================================================
+
+---
+plan:
+  
+  # ---------------------------------------------------------------------------
+  # SECTION 1: METADATA & CONTEXT
+  # ---------------------------------------------------------------------------
+  
+  metadata:
+    plan_id: "plan_exec_config_refactor_001"
+    created_at: "2026-01-26T14:45:00Z"
+    created_by: "github-copilot"
+    version: "1.0"
+    schema_version: "1.0"
+    status: "ACTIVE"
+    
+  request:
+    description: "Eliminate markdown approval layer in MasterOrchestrator execution flow"
+    scope: "system"
+    impact: "high"
+    confidence: 0.95
+    intent_override: "REFACTOR"
+    context: "Current architecture has 3-stage decision (Intent → Markdown → Approval) creating misinterpretation risk. Option A consolidates to 1-stage YAML-based certification. Once approved, all operations become machine-readable."
+
+  # ---------------------------------------------------------------------------
+  # SECTION 2: CLASSIFICATION
+  # ---------------------------------------------------------------------------
+  
+  classification:
+    intent: "REFACTOR"
+    confidence: 0.95
+    scope: "system"
+    impact: "high"
+    handler: "RefactoringOrchestrator"
+    rationale: "Architectural consolidation with backward compatibility. Feature flag enables staged rollout. Zero breaking changes to public API."
+
+  # ---------------------------------------------------------------------------
+  # SECTION 3: GIT CONTEXT (Pre-execution validation)
+  # ---------------------------------------------------------------------------
+  
+  git_context:
+    branch: "CORTEX"
+    status: "clean"
+    uncommitted_changes: []
+    checkpoint_before_phase_1: true
+    checkpoint_message: "AC-EXEC-CONFIG-001: Checkpoint before UnifiedExecutionConfig implementation"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 4: STRATEGIC CHALLENGES (Addressed by plan)
+  # ---------------------------------------------------------------------------
+  
+  challenges:
+    - type: "governance"
+      title: "CORE-030 Implementation Truth Validation"
+      description: "Must verify DoRApprovalGate actually generates markdown before implementation"
+      severity: "high"
+      recommendation: "Phase 0 task: grep_search for '.md', 'markdown' in DoRApprovalGate code"
+      can_proceed_without_addressing: false
+      owner: "MasterOrchestrator"
+      
+    - type: "alternative_path"
+      title: "Should we also fix cross_repo_router markdown reads?"
+      description: "cross_repo_router.py reads CORTEX.prompt.md and copilot-instructions.md at runtime. Parallel effort?"
+      severity: "medium"
+      recommendation: "Defer to Phase 5 (backlog item). Focus on DoRApprovalGate first (critical path)."
+      can_proceed_without_addressing: true
+      owner: "PlanningOrchestrator"
+      
+    - type: "risk_mismatch"
+      title: "DatabaseBackedRegistry stability under load"
+      description: "Plan adds YAML persistence to registry. Need to verify performance (<100ms)"
+      severity: "medium"
+      recommendation: "Phase 4 includes performance benchmarks. Revert to in-memory if needed."
+      can_proceed_without_addressing: true
+      owner: "IntentRouter"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 5: EXECUTION GATES
+  # ---------------------------------------------------------------------------
+  
+  execution_gates:
+    gate_type: "notify_and_execute"
+    requires_confirmation: true
+    requires_design_review: false
+    impact_level: "high"
+    confidence_level: "high"
+    reason: "High confidence in approach (Option A analysis complete). Staged rollout mitigates risk."
+
+  # ---------------------------------------------------------------------------
+  # SECTION 6: WORK BREAKDOWN STRUCTURE (WBS)
+  # ---------------------------------------------------------------------------
+  
+  phases:
+    
+    # ========================================================================
+    # PHASE 0: VALIDATION & SETUP (1-2 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_0_validation"
+      phase_name: "Validation & Setup"
+      phase_type: "FOUNDATION"
+      estimated_hours: 1.5
+      status: "PENDING_APPROVAL"
+      description: "Verify assumptions, set up feature flag infrastructure, establish baseline"
+      
+      tasks:
+        
+        - task_id: "task_0_1"
+          task_name: "Verify DoRApprovalGate generates markdown"
+          estimated_minutes: 15
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Grep search confirms .md or markdown generation in DoRApprovalGate"
+            - "Find line numbers where intent reflection markdown is created"
+            - "Verify markdown is displayed to user (not just internal)"
+          inputs:
+            - "cortex/orchestrators/core/dor_approval_gate.py"
+          outputs:
+            - "markdown_generation_evidence.yaml"
+            - "affected_code_locations.json"
+          implementation_notes: |
+            Use grep_search tool with patterns: "\.md", "markdown", "print", "display"
+            Document exact line numbers and code snippets.
+          
+        - task_id: "task_0_2"
+          task_name: "Create feature flag infrastructure"
+          estimated_minutes: 20
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "FeatureFlag class created with TEST coverage"
+            - "Flag supports: enabled/disabled/shadow_mode (parallel execution)"
+            - "Can be toggled without code deploy (config-based)"
+          inputs:
+            - "cortex/brain/core/feature_flags.py (new)"
+          outputs:
+            - "test_feature_flags.py (20+ unit tests)"
+            - "feature_flags.yaml (config template)"
+          implementation_notes: |
+            TDD approach: Write failing tests first
+            Tests should cover: flag toggle, shadow mode, performance impact
+        
+        - task_id: "task_0_3"
+          task_name: "Establish performance baseline"
+          estimated_minutes: 15
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Measure current DoRApprovalGate latency (p50, p95, p99)"
+            - "Record current MasterOrchestrator.execute_operation() time"
+            - "Create baseline benchmark report"
+          inputs: []
+          outputs:
+            - "baseline_performance_metrics.yaml"
+          implementation_notes: |
+            Run 100 operations through current flow
+            Document: markdown generation time, user approval wait time, total flow time
+        
+        - task_id: "task_0_4"
+          task_name: "Git checkpoint: Phase 0 setup"
+          estimated_minutes: 5
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Git commit with message: AC-EXEC-CONFIG-001: Phase 0 validation setup"
+            - "All Phase 0 artifacts staged and committed"
+          inputs: []
+          outputs:
+            - "git_commit: AC-EXEC-CONFIG-001"
+    
+    # ========================================================================
+    # PHASE 1: YAML SCHEMA & VALIDATOR (2-3 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_1_yaml_foundation"
+      phase_name: "YAML Schema & Validator Foundation"
+      phase_type: "FOUNDATION"
+      estimated_hours: 2.5
+      status: "PENDING_IMPLEMENTATION"
+      description: "Create machine-readable intent certification schema with comprehensive validation"
+      
+      tasks:
+        
+        - task_id: "task_1_1"
+          task_name: "Design UnifiedExecutionConfig YAML schema"
+          estimated_minutes: 30
+          handler: "PlanningOrchestrator"
+          acceptance_criteria:
+            - "Schema includes: metadata, intent classification, governance, execution gates, audit trail"
+            - "Schema is versioned (v1.0) for future evolution"
+            - "All fields have clear types and validation rules"
+            - "Schema file created at: cortex_brain/tier0/schemas/execution-config-v1.0.yaml"
+          inputs: []
+          outputs:
+            - "execution-config-schema-v1.0.yaml (150-200 lines)"
+          implementation_notes: |
+            Schema should include:
+            - metadata: plan_id, created_at, created_by, version, schema_version
+            - classification: intent, confidence, scope, impact, handler, rationale
+            - intent_certification: { certified: bool, certified_by, certified_at, signature }
+            - governance: { tier0_valid, rules_checked, violations: [] }
+            - execution_gates: { gate_type, requires_confirmation, impact_level, confidence_level }
+            - audit_trail: [ {timestamp, action, actor, details} ]
+        
+        - task_id: "task_1_2"
+          task_name: "Implement UnifiedExecutionConfig dataclass"
+          estimated_minutes: 45
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "Dataclass file: cortex/orchestrators/core/unified_execution_config.py"
+            - "35+ unit tests covering all fields and edge cases"
+            - "Type hints complete (CORE-011 compliant)"
+            - "Google-style docstrings (CORE-012 compliant)"
+            - "Custom validators for: confidence scores, gate types, timestamp format"
+            - "Serialization methods: to_dict(), to_yaml(), to_json()"
+            - "Deserialization methods: from_dict(), from_yaml(), from_json()"
+          inputs:
+            - "execution-config-schema-v1.0.yaml"
+          outputs:
+            - "unified_execution_config.py (200-250 lines)"
+            - "test_unified_execution_config.py (35+ tests, all passing)"
+          implementation_notes: |
+            TDD workflow:
+            1. Write failing tests for each field
+            2. Implement dataclass with validators
+            3. Refactor for clarity
+            Each test should verify: type, validation, serialization, deserialization
+        
+        - task_id: "task_1_3"
+          task_name: "Create ExecutionConfigValidator class"
+          estimated_minutes: 45
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "Validator file: cortex/orchestrators/core/execution_config_validator.py"
+            - "Validates against tier0 governance rules (CORE-001 through CORE-035)"
+            - "Returns Result[ValidationReport] with detailed violations"
+            - "30+ unit tests (all passing)"
+            - "Supports async validation for multi-rule checking"
+          inputs:
+            - "cortex_brain/tier0/governance/core-rules.yaml"
+            - "unified_execution_config.py"
+          outputs:
+            - "execution_config_validator.py (180-220 lines)"
+            - "test_execution_config_validator.py (30+ tests)"
+          implementation_notes: |
+            Validator should check:
+            - Intent classification matches handler capability
+            - Confidence score is numeric 0.0-1.0
+            - Governance rules list exists in CORE registry
+            - Execution gate type is valid enum
+            - Audit trail has correct format
+            - Timestamp is ISO8601
+            - All required fields present
+        
+        - task_id: "task_1_4"
+          task_name: "Integrate with DatabaseBackedRegistry"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "UnifiedExecutionConfig can be persisted to database"
+            - "Retrieval by plan_id returns identical config"
+            - "Schema migration script created"
+            - "Backward compatibility maintained (existing configs still load)"
+            - "15+ integration tests (all passing)"
+          inputs:
+            - "cortex/orchestrators/core/database_registry.py"
+            - "unified_execution_config.py"
+          outputs:
+            - "execution_config_storage.py (integration methods)"
+            - "test_execution_config_storage.py (15+ tests)"
+            - "db_migration_001_execution_configs.sql (schema)"
+          implementation_notes: |
+            Add to DatabaseBackedRegistry:
+            - store_execution_config(config) -> Result[str]  # Returns config_id
+            - retrieve_execution_config(config_id) -> Result[UnifiedExecutionConfig]
+            - list_execution_configs(filters) -> Result[List[UnifiedExecutionConfig]]
+            - query_execution_configs(sql) -> Result[List[UnifiedExecutionConfig]]
+
+    # ========================================================================
+    # PHASE 2: MASTER ORCHESTRATOR INTEGRATION (2-3 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_2_master_integration"
+      phase_name: "MasterOrchestrator Integration & Wiring"
+      phase_type: "IMPLEMENTATION"
+      estimated_hours: 2.5
+      status: "PENDING_IMPLEMENTATION"
+      description: "Wire UnifiedExecutionConfig into MasterOrchestrator execute_operation() flow"
+      
+      tasks:
+        
+        - task_id: "task_2_1"
+          task_name: "Create ExecutionConfigGenerator class"
+          estimated_minutes: 45
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "Generator file: cortex/orchestrators/core/execution_config_generator.py"
+            - "Takes: operation_name, parameters, context -> Generates UnifiedExecutionConfig"
+            - "Uses IntentRouter for classification"
+            - "Uses GovernanceRegistry for rule validation"
+            - "Uses BehavioralBoundaryRules for boundary checks"
+            - "Produces audit trail entries"
+            - "30+ unit tests (all passing)"
+          inputs:
+            - "master_orchestrator.py (execute_operation signature)"
+            - "intent_router.py (classification logic)"
+            - "governance_registry.py (rule checking)"
+          outputs:
+            - "execution_config_generator.py (250-300 lines)"
+            - "test_execution_config_generator.py (30+ tests)"
+          implementation_notes: |
+            Generator pipeline:
+            1. Parse operation_name and parameters
+            2. Call IntentRouter.classify_intent() -> IntentType
+            3. Call GovernanceRegistry.validate_governance() -> ViolationList
+            4. Call BehavioralBoundaryRules.check() -> BoundaryReport
+            5. Generate UnifiedExecutionConfig with all results
+            6. Create audit trail entry
+            7. Return Result[UnifiedExecutionConfig]
+        
+        - task_id: "task_2_2"
+          task_name: "Replace DoRApprovalGate markdown with config generation"
+          estimated_minutes: 45
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "Modify execute_operation() to use ExecutionConfigGenerator"
+            - "Feature flag controls: old_flow (markdown) vs new_flow (YAML config)"
+            - "Shadow mode: run both flows in parallel, compare results"
+            - "Remove all markdown generation from approval stage"
+            - "All existing tests still pass"
+            - "25+ new tests for config-based flow"
+          inputs:
+            - "master_orchestrator.py"
+            - "execution_config_generator.py"
+            - "feature_flags.py"
+          outputs:
+            - "master_orchestrator.py (modified execute_operation method)"
+            - "test_master_orchestrator_config_flow.py (25+ tests)"
+          implementation_notes: |
+            Implementation pattern:
+            ```
+            def execute_operation(self, operation_name, parameters):
+              if feature_flag.is_enabled('execution_config_v1'):
+                config = generate_execution_config(operation_name, parameters)
+                if feature_flag.is_shadow_mode('execution_config_v1'):
+                  old_result = old_flow(operation_name, parameters)
+                  compare_results(config, old_result)  # Log divergences
+                return execute_from_config(config)
+              else:
+                return old_flow(operation_name, parameters)
+            ```
+        
+        - task_id: "task_2_3"
+          task_name: "Implement CertificationGate (replaces approval markdown)"
+          estimated_minutes: 30
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "New class: ExecutionConfigCertificationGate"
+            - "Takes UnifiedExecutionConfig -> Returns CertificationResult"
+            - "No markdown output (only structured result)"
+            - "User approval workflow is: human_review(config) -> return bool"
+            - "All approved configs persist to database"
+            - "20+ unit tests"
+          inputs:
+            - "unified_execution_config.py"
+          outputs:
+            - "execution_config_certification_gate.py (150-180 lines)"
+            - "test_execution_config_certification_gate.py (20+ tests)"
+          implementation_notes: |
+            Gate should provide:
+            - summarize_config() -> CertificationSummary (no markdown, structured)
+            - request_user_approval(config) -> Result[bool]
+            - record_approval(config, decision) -> Result[AuditEntry]
+            - All interactions are structured (JSON/YAML), not markdown
+        
+        - task_id: "task_2_4"
+          task_name: "Wire ExecutionConfigGenerator and CertificationGate into MasterOrchestrator"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "execute_operation() calls ExecutionConfigGenerator"
+            - "execute_operation() calls CertificationGate.request_user_approval()"
+            - "User approval saves config to database"
+            - "Config persisted before actual operation execution"
+            - "Rollback preserves approval state"
+            - "20+ integration tests"
+          inputs:
+            - "master_orchestrator.py"
+            - "execution_config_generator.py"
+            - "execution_config_certification_gate.py"
+          outputs:
+            - "test_master_orchestrator_end_to_end.py (20+ tests)"
+            - "master_orchestrator.py (wiring complete)"
+
+    # ========================================================================
+    # PHASE 3: INTERACTION ORCHESTRATOR ADAPTATION (1-2 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_3_interaction_adaptation"
+      phase_name: "InteractionOrchestrator Adaptation"
+      phase_type: "INTEGRATION"
+      estimated_hours: 1.5
+      status: "PENDING_IMPLEMENTATION"
+      description: "Adapt InteractionOrchestrator to work with YAML configs instead of markdown intent reflection"
+      
+      tasks:
+        
+        - task_id: "task_3_1"
+          task_name: "Create ConfigInteractionProtocol"
+          estimated_minutes: 40
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "Protocol file: cortex/orchestrators/core/config_interaction_protocol.py"
+            - "Takes UnifiedExecutionConfig -> Structures for InteractionOrchestrator"
+            - "Generates ChallengeSet (governance, alternative, scope, risk challenges)"
+            - "Handles user responses -> Updates config or rejects"
+            - "No markdown output (structured only)"
+            - "25+ unit tests"
+          inputs:
+            - "unified_execution_config.py"
+            - "interaction_orchestrator.py (challenge system)"
+          outputs:
+            - "config_interaction_protocol.py (200-250 lines)"
+            - "test_config_interaction_protocol.py (25+ tests)"
+          implementation_notes: |
+            Protocol should:
+            1. Extract challenges from config
+            2. Present to user as structured data (JSON/YAML)
+            3. Accept user response
+            4. Update config based on response
+            5. Return updated config or rejection
+            No markdown anywhere in process
+        
+        - task_id: "task_3_2"
+          task_name: "Update InteractionOrchestrator to support config challenges"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "InteractionOrchestrator recognizes UnifiedExecutionConfig input"
+            - "Converts config challenges to ConversationProtocol exchanges"
+            - "Preserves challenge context through conversation"
+            - "Merges user responses back into config"
+            - "10+ integration tests"
+          inputs:
+            - "interaction_orchestrator.py"
+            - "config_interaction_protocol.py"
+          outputs:
+            - "test_interaction_orchestrator_config.py (10+ tests)"
+
+    # ========================================================================
+    # PHASE 4: VALIDATION & BENCHMARKING (1-2 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_4_validation"
+      phase_name: "Validation & Performance Benchmarking"
+      phase_type: "VALIDATION"
+      estimated_hours: 1.5
+      status: "PENDING_IMPLEMENTATION"
+      description: "Comprehensive testing, performance validation, rollback procedure verification"
+      
+      tasks:
+        
+        - task_id: "task_4_1"
+          task_name: "Run comprehensive test suite"
+          estimated_minutes: 30
+          handler: "TDDOrchestrator"
+          acceptance_criteria:
+            - "All Phase 1-3 unit tests passing (100+ tests)"
+            - "All Phase 1-3 integration tests passing (50+ tests)"
+            - "Code coverage >= 85% for new code"
+            - "No new linting violations (pylint, mypy)"
+            - "Type hints complete (CORE-011)"
+            - "Docstrings complete (CORE-012)"
+          inputs: []
+          outputs:
+            - "test_report_comprehensive.yaml"
+            - "coverage_report.html"
+        
+        - task_id: "task_4_2"
+          task_name: "Performance benchmark: Config vs Markdown flow"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Measure latency: config generation (<50ms)"
+            - "Measure latency: validator check (<30ms)"
+            - "Measure latency: database persistence (<100ms)"
+            - "Measure latency: total flow (p50, p95, p99)"
+            - "Compare vs baseline from Phase 0"
+            - "Goal: <= 20% overhead vs current markdown flow"
+            - "Run on 1000+ operations"
+          inputs:
+            - "baseline_performance_metrics.yaml (from Phase 0)"
+          outputs:
+            - "performance_benchmark_report.yaml"
+            - "performance_comparison.json"
+        
+        - task_id: "task_4_3"
+          task_name: "No-markdown verification audit"
+          estimated_minutes: 20
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Grep search confirms NO .md or 'markdown' strings in execute_operation() flow"
+            - "Grep search confirms NO print statements with intent reflection"
+            - "Grep search confirms NO file I/O for markdown files"
+            - "All I/O is YAML/JSON (structured)"
+            - "Audit report: 'Zero markdown detected in execution path'"
+          inputs: []
+          outputs:
+            - "no_markdown_verification_audit.yaml"
+        
+        - task_id: "task_4_4"
+          task_name: "Backward compatibility verification"
+          estimated_minutes: 15
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "All existing orchestrators still work via feature flag old_flow"
+            - "No breaking changes to public API"
+            - "Migration path documented (feature flag -> permanent)"
+            - "Rollback procedure tested and verified"
+          inputs: []
+          outputs:
+            - "backward_compatibility_report.yaml"
+            - "rollback_procedure.md"
+
+    # ========================================================================
+    # PHASE 5: STAGED ROLLOUT (2-4 hours)
+    # ========================================================================
+    
+    - phase_id: "phase_5_staged_rollout"
+      phase_name: "Staged Rollout & Monitoring"
+      phase_type: "DEPLOYMENT"
+      estimated_hours: 3
+      status: "PENDING_IMPLEMENTATION"
+      description: "Feature-flagged rollout with monitoring, metrics, and quick rollback capability"
+      
+      tasks:
+        
+        - task_id: "task_5_1"
+          task_name: "Setup monitoring & alerting for config flow"
+          estimated_minutes: 45
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Metrics collected: config generation time, validation time, DB latency"
+            - "Alerts: generation time > 100ms, validation errors > 5%, DB failures > 1%"
+            - "Dashboard shows: config success rate, latency p50/p95/p99"
+            - "Can toggle feature flag without restart"
+          inputs: []
+          outputs:
+            - "monitoring_config.yaml"
+            - "dashboard_queries.sql"
+        
+        - task_id: "task_5_2"
+          task_name: "Day 1 rollout: shadow mode (5% traffic, config generated but not used)"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Feature flag: execution_config_v1 = SHADOW_MODE"
+            - "5% of operations generate config in parallel with markdown flow"
+            - "Compare config vs markdown results every 10 operations"
+            - "Log divergences (if any) with full context"
+            - "Monitor for 2-4 hours, collect baseline metrics"
+          inputs:
+            - "feature_flags.yaml"
+          outputs:
+            - "day1_shadow_mode_report.yaml"
+        
+        - task_id: "task_5_3"
+          task_name: "Day 2 rollout: 25% traffic on config flow (dual-write)"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Feature flag: execution_config_v1 = ENABLED (canary)"
+            - "25% of operations execute via config flow (rest via markdown)"
+            - "Metrics: latency, errors, approvals, execution success"
+            - "Alert threshold: if error rate > 2% or latency p95 > 200ms, auto-rollback"
+            - "Monitor for 4-6 hours"
+          inputs:
+            - "feature_flags.yaml"
+          outputs:
+            - "day2_canary_report.yaml"
+        
+        - task_id: "task_5_4"
+          task_name: "Day 3 rollout: 50% traffic (A/B test)"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Feature flag: execution_config_v1 = ENABLED (50% users)"
+            - "50% of users on config flow, 50% on markdown"
+            - "Compare: approval time, user satisfaction, feature completeness"
+            - "Metrics dashboard updated with success metrics"
+            - "Monitor for 6-8 hours, collect user feedback"
+          inputs:
+            - "feature_flags.yaml"
+          outputs:
+            - "day3_ab_test_report.yaml"
+        
+        - task_id: "task_5_5"
+          task_name: "Day 4 rollout: 100% traffic on config flow (full rollout)"
+          estimated_minutes: 30
+          handler: "MasterOrchestrator"
+          acceptance_criteria:
+            - "Feature flag: execution_config_v1 = ENABLED (100%)"
+            - "All operations use UnifiedExecutionConfig"
+            - "Markdown flow in fallback only"
+            - "Maintain monitoring for 24-48 hours"
+            - "Zero markdown in primary execution path"
+          inputs:
+            - "feature_flags.yaml"
+          outputs:
+            - "day4_full_rollout_report.yaml"
+        
+        - task_id: "task_5_6"
+          task_name: "Post-rollout: Retire markdown flow and DoRApprovalGate"
+          estimated_minutes: 30
+          handler: "RefactoringOrchestrator"
+          acceptance_criteria:
+            - "Remove DoRApprovalGate class (deprecated)"
+            - "Remove old markdown-based approval flow"
+            - "Remove feature flag (always-on)"
+            - "Remove fallback code"
+            - "Git commit: AC-EXEC-CONFIG-002: Retire markdown approval, consolidate to UnifiedExecutionConfig"
+            - "Update documentation"
+          inputs: []
+          outputs:
+            - "git_commit: AC-EXEC-CONFIG-002"
+            - "DEPRECATION_NOTICE.md"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 7: RISKS & MITIGATION
+  # ---------------------------------------------------------------------------
+  
+  risks:
+    
+    - risk_id: "risk_1"
+      title: "Performance regression"
+      probability: "medium"
+      impact: "high"
+      mitigation: "Phase 0 baseline + Phase 4 benchmarks. If p95 latency > 200ms, auto-rollback."
+      owner: "MasterOrchestrator"
+      
+    - risk_id: "risk_2"
+      title: "Database persistence failure"
+      probability: "low"
+      impact: "high"
+      mitigation: "Fall back to in-memory cache if DB unavailable. Retry mechanism with exponential backoff."
+      owner: "DatabaseBackedRegistry"
+      
+    - risk_id: "risk_3"
+      title: "Approval workflow breaks for users"
+      probability: "medium"
+      impact: "high"
+      mitigation: "Shadow mode on Day 1 (catches issues early). ConfigInteractionProtocol tested with 25+ tests."
+      owner: "InteractionOrchestrator"
+      
+    - risk_id: "risk_4"
+      title: "Incompatibility with existing orchestrators"
+      probability: "low"
+      impact: "medium"
+      mitigation: "Feature flag for staged rollout. Backward compatibility verified. No public API changes."
+      owner: "MasterOrchestrator"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 8: SUCCESS METRICS
+  # ---------------------------------------------------------------------------
+  
+  success_criteria:
+    
+    - metric: "Zero markdown in execute_operation() flow"
+      target: "100%"
+      measurement: "Grep search audit (Phase 4, task_4_3)"
+      
+    - metric: "All operations use UnifiedExecutionConfig"
+      target: "100%"
+      measurement: "Feature flag enabled, no fallback usage"
+      
+    - metric: "Performance: config generation latency"
+      target: "<50ms (p95)"
+      measurement: "Benchmark from Phase 4"
+      
+    - metric: "Test coverage for new code"
+      target: ">=85%"
+      measurement: "Coverage report from Phase 4"
+      
+    - metric: "User approval experience"
+      target: "No regression vs current"
+      measurement: "A/B test feedback (Day 3)"
+      
+    - metric: "Extensibility: schema evolution"
+      target: "Can add new intent types without code changes"
+      measurement: "Verification in Phase 1 (schema versioning)"
+      
+    - metric: "Scalability: distributed execution ready"
+      target: "Config serializable to multiple formats (YAML/JSON/Binary)"
+      measurement: "Serialization tests from Phase 1"
+      
+    - metric: "Accuracy: audit trail completeness"
+      target: "100% of decisions captured"
+      measurement: "Audit trail verification (Phase 4)"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 9: DELIVERABLES CHECKLIST
+  # ---------------------------------------------------------------------------
+  
+  deliverables:
+    phase_0:
+      - "markdown_generation_evidence.yaml"
+      - "feature_flags.yaml"
+      - "baseline_performance_metrics.yaml"
+      - "git_commit: AC-EXEC-CONFIG-001"
+    
+    phase_1:
+      - "execution-config-schema-v1.0.yaml"
+      - "unified_execution_config.py (200-250 lines)"
+      - "test_unified_execution_config.py (35+ tests)"
+      - "execution_config_validator.py (180-220 lines)"
+      - "test_execution_config_validator.py (30+ tests)"
+      - "execution_config_storage.py"
+      - "test_execution_config_storage.py (15+ tests)"
+      - "db_migration_001_execution_configs.sql"
+    
+    phase_2:
+      - "execution_config_generator.py (250-300 lines)"
+      - "test_execution_config_generator.py (30+ tests)"
+      - "master_orchestrator.py (modified)"
+      - "test_master_orchestrator_config_flow.py (25+ tests)"
+      - "execution_config_certification_gate.py (150-180 lines)"
+      - "test_execution_config_certification_gate.py (20+ tests)"
+      - "test_master_orchestrator_end_to_end.py (20+ tests)"
+    
+    phase_3:
+      - "config_interaction_protocol.py (200-250 lines)"
+      - "test_config_interaction_protocol.py (25+ tests)"
+      - "test_interaction_orchestrator_config.py (10+ tests)"
+    
+    phase_4:
+      - "test_report_comprehensive.yaml"
+      - "coverage_report.html (>=85%)"
+      - "performance_benchmark_report.yaml"
+      - "performance_comparison.json"
+      - "no_markdown_verification_audit.yaml"
+      - "backward_compatibility_report.yaml"
+      - "rollback_procedure.md"
+    
+    phase_5:
+      - "monitoring_config.yaml"
+      - "dashboard_queries.sql"
+      - "day1_shadow_mode_report.yaml"
+      - "day2_canary_report.yaml"
+      - "day3_ab_test_report.yaml"
+      - "day4_full_rollout_report.yaml"
+      - "git_commit: AC-EXEC-CONFIG-002"
+      - "DEPRECATION_NOTICE.md"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 10: GOVERNANCE & AUDIT
+  # ---------------------------------------------------------------------------
+  
+  governance:
+    tier_0_rules_validated:
+      - "CORE-001: Incremental execution (<500 lines per phase)"
+      - "CORE-008: TDD enforcement (tests before implementation)"
+      - "CORE-011: Type hints required"
+      - "CORE-012: Docstrings required"
+      - "CORE-013: Explicit error handling (no bare except)"
+      - "CORE-020: No markdown in cortex_brain"
+      - "CORE-026: Git checkpoint before major changes"
+      - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+      - "CORE-030: Implementation truth (verify code, not docs)"
+      - "CORE-035: Single canonical implementation"
+    
+    audit_trail:
+      ac_id_prefix: "AC-EXEC-CONFIG"
+      total_acs: 100  # Will be refined during execution
+      checkpoint_per_phase: true
+      start_event: "AC-EXEC-CONFIG-001"
+      completion_event: "AC-EXEC-CONFIG-100"
+    
+    code_quality_gates:
+      - "Type hints: 100% coverage (CORE-011)"
+      - "Docstrings: Google style (CORE-012)"
+      - "Test coverage: >=85%"
+      - "Linting: zero violations (pylint, mypy)"
+      - "No hardcoded paths (CORE-005)"
+      - "Error handling: specific exceptions only (CORE-013)"
+      - "Zero markdown in execution code"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 11: APPENDIX - IMPLEMENTATION DETAILS
+  # ---------------------------------------------------------------------------
+  
+  appendix:
+    
+    database_schema: |
+      -- Execution Configs Table
+      CREATE TABLE execution_configs (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        plan_id VARCHAR(255) NOT NULL UNIQUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_by VARCHAR(255),
+        status VARCHAR(50),
+        operation_name VARCHAR(255),
+        intent_type VARCHAR(50),
+        confidence_score DECIMAL(3,2),
+        handler_orchestrator VARCHAR(255),
+        governance_validated BOOLEAN,
+        violations JSONB,
+        config_json JSONB NOT NULL,
+        config_yaml TEXT,
+        execution_result JSONB,
+        audit_trail JSONB,
+        INDEX idx_plan_id (plan_id),
+        INDEX idx_status (status),
+        INDEX idx_created_at (created_at)
+      );
+    
+    yaml_example: |
+      # Example UnifiedExecutionConfig
+      metadata:
+        plan_id: "plan_exec_001"
+        created_at: "2026-01-26T14:45:00Z"
+        created_by: "github-copilot"
+        version: "1.0"
+      
+      classification:
+        intent: "IMPLEMENT"
+        confidence: 0.95
+        scope: "module"
+        impact: "medium"
+        handler: "TDDOrchestrator"
+        rationale: "Feature implementation with test-first discipline"
+      
+      governance:
+        tier0_validated: true
+        rules_checked: ["CORE-001", "CORE-008", "CORE-011", "CORE-012", "CORE-013"]
+        violations: []
+      
+      execution_gates:
+        gate_type: "notify_and_execute"
+        requires_confirmation: true
+        impact_level: "medium"
+        confidence_level: "high"
+        reason: "High confidence, routine operation"
+      
+      audit_trail:
+        - timestamp: "2026-01-26T14:45:00Z"
+          action: "CREATED"
+          actor: "github-copilot"
+        - timestamp: "2026-01-26T14:46:00Z"
+          action: "VALIDATED"
+          actor: "ExecutionConfigValidator"
+        - timestamp: "2026-01-26T14:47:00Z"
+          action: "APPROVED"
+          actor: "user:asif"
+
+---
+
+# ==============================================================================
+# APPROVAL GATE & EXECUTION STATE
+# ==============================================================================
+
+approval_status:
+  status: "PENDING_APPROVAL"
+  requested_at: "2026-01-26T14:45:00Z"
+  requested_by: "github-copilot"
+  approval_decision: "pending"  # pending | approved | rejected | modified
+  approval_timestamp: null
+  approval_notes: |
+    Plan ready for execution. All phases defined with clear acceptance criteria.
+    Risk level: LOW (feature-flagged, staged rollout with auto-rollback).
+    Estimated total effort: 10-16 hours.
+    
+    Awaiting user approval to proceed with Phase 0 (Validation & Setup).
+
+# ==============================================================================
+# EXECUTION STATE MACHINE
+# ==============================================================================
+
+status: "ACTIVE"
+status_transitions:
+  - from: "TEMP"
+    to: "PENDING_APPROVAL"
+    trigger: "plan_ready"
+    timestamp: "2026-01-26T14:45:00Z"
+  - from: "PENDING_APPROVAL"
+    to: "ACTIVE"
+    trigger: "user_approval"
+    timestamp: "pending"
+
+next_action: |
+  Upon user approval:
+  1. Create git branch: feat/execution-config-refactor-001
+  2. Begin Phase 0 (Validation & Setup)
+  3. Execute task_0_1: Verify DoRApprovalGate markdown generation
+  4. Create checkpoint: AC-EXEC-CONFIG-001
+  5. Continue through phases in order
+
+rollback_checkpoint: "pre-refactor"
