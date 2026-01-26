@@ -55,8 +55,6 @@ class PhaseState:
 
 
 from cortex.brain.core.result import Result
-            return self.value
-        raise Exception(self.error)
 
 
 class StateMachine:

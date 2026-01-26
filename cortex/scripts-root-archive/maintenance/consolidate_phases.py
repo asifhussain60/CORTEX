@@ -99,7 +99,8 @@ def generate_yaml_snippet(phases_data: Dict[str, Any]) -> str:
             if isinstance(ac_spec, dict):
                 for key, value in ac_spec.items():
                     if key != 'description' and key != 'testing':
-                        yaml_lines.append(f"          {key}: {value if not isinstance(value, str) or ':' not in value else f'\"{value}\"'}")
+                        formatted_value = f'"{value}"' if isinstance(value, str) and ':' in value else value
+                        yaml_lines.append(f"          {key}: {formatted_value}")
             else:
                 yaml_lines.append(f"          title: \"{ac_spec}\"")
         
