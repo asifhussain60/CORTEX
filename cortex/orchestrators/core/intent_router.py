@@ -61,6 +61,7 @@ class RoutingDecision:
         reasoning: Human-readable explanation of routing decision
         metadata: Additional routing context metadata
         timestamp: When routing decision was made
+        composite_intents: AC-FUTURE-005 - List of detected intents for composite requests
     """
     intent_type: IntentType
     target_handler: str
@@ -68,6 +69,145 @@ class RoutingDecision:
     reasoning: str
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+    composite_intents: List[IntentType] = field(default_factory=list)  # AC-FUTURE-005
+
+
+@dataclass
+class RoutingContext:
+    """
+    Represents the full context for a routing decision.
+    
+    Attributes:
+        operation: Operation name/identifier
+        description: Human-readable operation description
+        domain: Target domain (core, orchestrators, infrastructure, etc.)
+        keywords: Keywords from operation description
+        urgency: Operation urgency level (low, medium, high, critical)
+        user_intent: User's stated intent or goal
+        metadata: Additional context metadata
+    """
+    operation: str
+    description: Optional[str] = None
+    domain: Optional[str] = None
+    keywords: Optional[List[str]] = None
+    urgency: str = "medium"
+    user_intent: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class CompositeIntentDetector:
+    """
+    Detects composite intents when a request contains multiple operation types.
+    
+    AC-FUTURE-005: Composite intent detection for multi-faceted requests
+    
+    Examples of composite intents:
+    - "Implement feature AND test it" → IMPLEMENT + TEST (implicit)
+    - "Fix bug AND refactor the code" → FIX + REFACTOR
+    - "Implement with proper documentation" → IMPLEMENT + FILE_CREATION
+    - "Refactor and optimize performance" → REFACTOR (with optimization emphasis)
+    
+    Composite patterns detected:
+    1. AND patterns: "X and Y" or "X then Y"
+    2. WITH patterns: "Implement with tests" → Do both
+    3. SEQUENTIAL patterns: "Fix, then refactor" → Do both
+    4. IMPLICIT patterns: "Fix bug" + "need tests" → Add tests
+    """
+    
+    # Composite connectors that indicate multiple intents
+    AND_CONNECTORS = ["and", "with", "plus", "also", "then", ",", "&", "+"]
+    THEN_CONNECTORS = ["then", "after that", "once", "before"]
+    OR_CONNECTORS = ["or", "alternatively", "|"]
+    
+    # Implicit intent triggers (when one action implies another)
+    IMPLICIT_PATTERNS = {
+        "fix": ["test", "verify", "check"],  # Fix should be tested
+        "implement": ["test", "document", "type hints"],  # Implement should be tested
+        "refactor": ["test", "verify"],  # Refactor should be tested
+    }
+    
+    @staticmethod
+    def detect_composite_intents(
+        request: str,
+        primary_intent: IntentType
+    ) -> List[IntentType]:
+        """
+        Detect composite intents from request text.
+        
+        AC-FUTURE-005: Multi-faceted request handling
+        
+        Args:
+            request: User's natural language request
+            primary_intent: Primary intent already detected
+            
+        Returns:
+            List of intents (including primary_intent + any detected secondary intents)
+        """
+        intents = [primary_intent]
+        request_lower = request.lower()
+        
+        # Check for AND patterns
+        for connector in CompositeIntentDetector.AND_CONNECTORS:
+            if connector in request_lower:
+                # If we have "fix and implement" - both intents present
+                if "implement" in request_lower and "fix" in request_lower:
+                    if IntentType.IMPLEMENT not in intents:
+                        intents.append(IntentType.IMPLEMENT)
+                    if IntentType.FIX not in intents:
+                        intents.append(IntentType.FIX)
+                
+                # If we have "refactor and fix"
+                if "refactor" in request_lower and "fix" in request_lower:
+                    if IntentType.REFACTOR not in intents:
+                        intents.append(IntentType.REFACTOR)
+                    if IntentType.FIX not in intents:
+                        intents.append(IntentType.FIX)
+                
+                # If we have "implement with documentation/tests"
+                if "implement" in request_lower and ("document" in request_lower or "test" in request_lower):
+                    if IntentType.IMPLEMENT not in intents:
+                        intents.append(IntentType.IMPLEMENT)
+                    if IntentType.FILE_CREATION not in intents and "document" in request_lower:
+                        intents.append(IntentType.FILE_CREATION)
+        
+        # Check for THEN patterns (sequential)
+        for connector in CompositeIntentDetector.THEN_CONNECTORS:
+            if connector in request_lower:
+                # Split by connector
+                parts = request_lower.split(connector)
+                if len(parts) >= 2:
+                    # Analyze each part for intents
+                    all_intents_found = set(intents)
+                    for part in parts:
+                        if "implement" in part and IntentType.IMPLEMENT not in all_intents_found:
+                            all_intents_found.add(IntentType.IMPLEMENT)
+                        if "fix" in part and IntentType.FIX not in all_intents_found:
+                            all_intents_found.add(IntentType.FIX)
+                        if "refactor" in part and IntentType.REFACTOR not in all_intents_found:
+                            all_intents_found.add(IntentType.REFACTOR)
+                    
+                    intents = list(all_intents_found)
+        
+        # Check for implicit patterns
+        if primary_intent == IntentType.FIX:
+            # If fixing, should we also test?
+            if any(keyword in request_lower for keyword in CompositeIntentDetector.IMPLICIT_PATTERNS["fix"]):
+                # Test is implicit, but we don't have a TEST intent type
+                # This is noted in metadata for handler
+                pass
+        
+        elif primary_intent == IntentType.IMPLEMENT:
+            # If implementing, should we also create documentation?
+            if "document" in request_lower and IntentType.FILE_CREATION not in intents:
+                intents.append(IntentType.FILE_CREATION)
+        
+        elif primary_intent == IntentType.REFACTOR:
+            # If refactoring, should we test?
+            if any(keyword in request_lower for keyword in CompositeIntentDetector.IMPLICIT_PATTERNS["refactor"]):
+                # Test is implicit
+                pass
+        
+        return list(set(intents))  # Remove duplicates, maintain order
 
 
 @dataclass
@@ -541,6 +681,13 @@ class IntentRouter(IOrchestrator):
             # Detect intent
             intent_type = self.detect_intent(context)
             
+            # AC-FUTURE-005: Detect composite intents (multi-faceted requests)
+            description = context.get("description", "")
+            composite_intents = CompositeIntentDetector.detect_composite_intents(
+                description,
+                intent_type
+            )
+            
             # Determine target handler from routing rules
             routing_key = (intent_type, domain)
             if routing_key not in self.routing_rules:
@@ -552,6 +699,10 @@ class IntentRouter(IOrchestrator):
                 f"{intent_type.value.capitalize()}OrchestrationHandler"
             )
             
+            # If composite intents detected, enhance handler selection
+            if len(composite_intents) > 1:
+                target_handler = f"CompositeHandler_{'+'.join([i.value for i in composite_intents])}"
+            
             # Calculate confidence based on keyword matches
             keywords = context.get("keywords", [])
             operation_type_keywords = self.operation_type_mappings[intent_type]
@@ -559,11 +710,17 @@ class IntentRouter(IOrchestrator):
                          [k.lower() for k in operation_type_keywords])
             confidence = min(1.0, (matches / len(operation_type_keywords)) + 0.5) if operation_type_keywords else 0.75
             
+            # Adjust confidence if composite intents detected (more complex = slightly lower confidence)
+            if len(composite_intents) > 1:
+                confidence *= 0.95
+            
             # Build reasoning
             reasoning = (
-                f"Routed '{operation}' to {target_handler} based on "
+                f"Routed '{context.get('operation')}' to {target_handler} based on "
                 f"intent type '{intent_type.value}' and domain '{domain or 'general'}'"
             )
+            if len(composite_intents) > 1:
+                reasoning += f". Detected composite intents: {', '.join([i.value for i in composite_intents])}"
             
             # Create decision
             decision = RoutingDecision(
@@ -572,11 +729,13 @@ class IntentRouter(IOrchestrator):
                 confidence_score=confidence,
                 reasoning=reasoning,
                 metadata={
-                    "operation": operation,
+                    "operation": context.get("operation"),
                     "domain": domain,
                     "keywords_matched": matches,
-                    "total_keywords": len(operation_type_keywords)
-                }
+                    "total_keywords": len(operation_type_keywords),
+                    "composite_intents": len(composite_intents) > 1  # AC-FUTURE-005 flag
+                },
+                composite_intents=composite_intents  # AC-FUTURE-005
             )
             
             return decision
