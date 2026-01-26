@@ -116,8 +116,8 @@ class HybridKnowledgeLoader:
             repo_root = Path(__file__).parent.parent.parent.parent
 
         self.repo_root = Path(repo_root)
-        self.knowledge_index_path = self.repo_root / ".knowledge-index.yaml"
-        self.synthesis_rules_path = self.repo_root / ".knowledge-synthesis-rules.yaml"
+        self.knowledge_index_path = self.repo_root / "cortex_brain" / "tier3" / "knowledge" / ".knowledge-index.yaml"
+        self.synthesis_rules_path = self.repo_root / "cortex_brain" / "tier3" / "knowledge" / ".knowledge-synthesis-rules.yaml"
         self.cache_db_path = self.repo_root / ".cortex" / "knowledge.db"
         self.cache_db_path.parent.mkdir(parents=True, exist_ok=True)
 
