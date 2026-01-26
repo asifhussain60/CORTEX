@@ -148,6 +148,10 @@ class MasterOrchestrator(IOrchestrator):
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
         
+        # AC-GOVE-RENDER-002: Rendering control flag (disable markdown during execution)
+        # Rendering is deferred to presentation layer (e.g., GitHub Copilot Chat)
+        self.render_markdown = False  # Set to True only if explicitly requested by caller
+        
         # AC-REM-011-05: Initialize StateManager for cross-phase state consistency
         self._state_manager: StateManager = get_state_manager()
         self.logger.log_operation_complete(

@@ -171,13 +171,11 @@ class InteractionOrchestrator:
         
         if challenge.has_disagreement:
             logger.info("Challenge detected: %s", challenge.disagreement_type.value)
-            formatted_challenge = self.challenge_engine.format_challenge_response(
-                challenge
-            )
+            # AC-GOVE-RENDER-002: Return machine-readable challenge only (no markdown rendering)
+            # Rendering deferred to presentation layer if user requests
             return Ok({
                 "type": "challenge",
-                "challenge": challenge,
-                "formatted_message": formatted_challenge,
+                "challenge": challenge.to_dict() if hasattr(challenge, 'to_dict') else challenge,
                 "requires_user_choice": True,
                 "cortex_protocol": "LENS+Challenge (CORE-029)"
             })
@@ -247,13 +245,11 @@ class InteractionOrchestrator:
                     "Challenge generated: %s",
                     challenge.disagreement_type.value
                 )
-                formatted_challenge = self.challenge_engine.format_challenge_response(
-                    challenge
-                )
+                # AC-GOVE-RENDER-002: Return machine-readable challenge only (no markdown rendering)
+                # Rendering deferred to presentation layer if user requests
                 return Ok({
                     "type": "challenge",
                     "challenge": challenge,
-                    "formatted_message": formatted_challenge,
                     "requires_user_choice": True
                 })
         
