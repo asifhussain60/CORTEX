@@ -696,7 +696,7 @@ commenting:
         
         - type: "TODO"
           example: |
-            # TODO(asif): Implement caching layer (Issue #1234)
+            # Use clear issue references instead of vague TODOs
             def fetch_user_data(user_id: str):
                 pass
     
