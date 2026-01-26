@@ -1,0 +1,206 @@
+version: "1.0.0"
+cortex_version: "1.0.0"
+computed_at: "2026-01-25T00:00:00Z"
+checksum: "abc123def456ghi789"
+total_orchestrators: 23
+
+orchestrators:
+  - name: "MasterOrchestrator"
+    module: "cortex.orchestrators.core.master_orchestrator"
+    class_name: "MasterOrchestrator"
+    category: "core"
+    priority: 10
+    capabilities: ["orchestration", "routing", "delegation"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "IntentRouter"
+    module: "cortex.orchestrators.core.intent_router"
+    class_name: "IntentRouter"
+    category: "core"
+    priority: 20
+    capabilities: ["intent_classification", "routing"]
+    dependencies: ["MasterOrchestrator"]
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "TDDOrchestrator"
+    module: "cortex.orchestrators.core.tdd_orchestrator"
+    class_name: "TDDOrchestrator"
+    category: "core"
+    priority: 30
+    capabilities: ["tdd", "testing", "implementation"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "WorkflowOrchestrator"
+    module: "cortex.orchestrators.core.workflow_orchestrator"
+    class_name: "WorkflowOrchestrator"
+    category: "core"
+    priority: 40
+    capabilities: ["workflow", "execution"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "InteractionOrchestrator"
+    module: "cortex.orchestrators.core.interaction_orchestrator"
+    class_name: "InteractionOrchestrator"
+    category: "core"
+    priority: 50
+    capabilities: ["interaction", "conversation"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "RefactoringOrchestrator"
+    module: "cortex.orchestrators.domain.refactoring_orchestrator"
+    class_name: "RefactoringOrchestrator"
+    category: "domain"
+    priority: 60
+    capabilities: ["refactoring", "code_improvement"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "PlanningOrchestrator"
+    module: "cortex.orchestrators.domain.planning_orchestrator"
+    class_name: "PlanningOrchestrator"
+    category: "domain"
+    priority: 70
+    capabilities: ["planning", "task_generation"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "DomainOrchestrator"
+    module: "cortex.orchestrators.domain.domain_orchestrator"
+    class_name: "DomainOrchestrator"
+    category: "domain"
+    priority: 80
+    capabilities: ["domain_expertise", "business_logic"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "ConversationOrchestrator"
+    module: "cortex.orchestrators.domain.conversation_orchestrator"
+    class_name: "ConversationOrchestrator"
+    category: "domain"
+    priority: 90
+    capabilities: ["conversation", "dialogue"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "SeleniumPlaywrightOrchestrator"
+    module: "cortex.orchestrators.domain.selenium_playwright_orchestrator"
+    class_name: "SeleniumPlaywrightOrchestrator"
+    category: "domain"
+    priority: 100
+    capabilities: ["browser_automation", "selenium", "playwright"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "OnboardingOrchestrator"
+    module: "cortex.orchestrators.support.onboarding_orchestrator"
+    class_name: "OnboardingOrchestrator"
+    category: "support"
+    priority: 110
+    capabilities: ["onboarding", "setup"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "ToolDiscoveryOrchestrator"
+    module: "cortex.orchestrators.support.tool_discovery_orchestrator"
+    class_name: "ToolDiscoveryOrchestrator"
+    category: "support"
+    priority: 120
+    capabilities: ["tool_discovery", "feature_discovery"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "UpgradeOrchestrator"
+    module: "cortex.orchestrators.support.upgrade_orchestrator"
+    class_name: "UpgradeOrchestrator"
+    category: "support"
+    priority: 130
+    capabilities: ["upgrade", "migration"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "RollbackOrchestrator"
+    module: "cortex.orchestrators.support.rollback_orchestrator"
+    class_name: "RollbackOrchestrator"
+    category: "support"
+    priority: 140
+    capabilities: ["rollback", "recovery"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "SetupOrchestrator"
+    module: "cortex.orchestrators.support.setup_orchestrator"
+    class_name: "SetupOrchestrator"
+    category: "support"
+    priority: 150
+    capabilities: ["setup", "initialization"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "ComposedOrchestrator"
+    module: "cortex.orchestrators.support.composed_orchestrator"
+    class_name: "ComposedOrchestrator"
+    category: "support"
+    priority: 160
+    capabilities: ["composition", "orchestration"]
+    dependencies: []
+    is_optional: true
+    version: "1.0.0"
+
+  - name: "WrappedTDDOrchestrator"
+    module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
+    class_name: "WrappedTDDOrchestrator"
+    category: "core"
+    priority: 170
+    capabilities: ["tdd", "execution"]
+    dependencies: ["TDDOrchestrator"]
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "DatabaseBackedRegistry"
+    module: "cortex.orchestrators.core.database_registry"
+    class_name: "DatabaseBackedRegistry"
+    category: "infrastructure"
+    priority: 5
+    capabilities: ["registry", "wiring"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "OrchestratorBootstrap"
+    module: "cortex.orchestrators.bootstrap"
+    class_name: "OrchestratorBootstrap"
+    category: "infrastructure"
+    priority: 1
+    capabilities: ["bootstrap", "initialization"]
+    dependencies: []
+    is_optional: false
+    version: "1.0.0"
+
+  - name: "HealthChecker"
+    module: "cortex.orchestrators.core.orchestrator_health_checker"
+    class_name: "OrchestratorHealthChecker"
+    category: "infrastructure"
+    priority: 2
+    capabilities: ["health_check", "validation"]
+    dependencies: ["DatabaseBackedRegistry"]
+    is_optional: false
+    version: "1.0.0"
