@@ -1,0 +1,45 @@
+# Pre-commit validator configuration for CORTEX
+# CORE-026: Git checkpoint validation
+# Extensible via YAML for future orchestrators without code changes
+
+# Expected number of orchestrators to validate
+expected_orchestrator_count: 23
+
+# Stage 1: Quick health check timeout (milliseconds)
+# Should complete in <200ms to not impact developer experience
+stage_1_timeout_ms: 200
+
+# Stage 2: Full validation timeout (milliseconds)
+# Triggered only if Stage 1 fails
+stage_2_timeout_ms: 3000
+
+# Health check cache TTL (seconds)
+# Caches result to avoid repeated checks in quick succession
+health_check_cache_ttl_seconds: 5
+
+# Validators to run during full validation
+# Each validator can be made optional if needed
+validators:
+  - type: wiring
+    required: true
+    description: "Verify all orchestrators are wired in DatabaseBackedRegistry"
+  
+  - type: mcp_adapter
+    required: true
+    description: "Verify MCP adapters are exposed for all wired orchestrators"
+  
+  - type: schema
+    required: true
+    description: "Verify database schema matches expected structure"
+
+# Future orchestrators can be added here without changing hook code
+# Just increment expected_orchestrator_count
+# Example for future expansion:
+#
+# Phase 4+ orchestrators (26-30):
+#   - PhaseOrchestrator
+#   - MonitoringOrchestrator
+#   - etc.
+#
+# Update:
+# expected_orchestrator_count: 30
