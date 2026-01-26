@@ -11,22 +11,13 @@ from typing import Dict, List, Optional, Callable, Any
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from cortex.models.canonical_enums import AlertSeverity, AlertState
 
 logger = logging.getLogger(__name__)
 
 
-class AlertSeverity(Enum):
-    """Alert severity levels."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
 
 
-class AlertState(Enum):
-    """Alert state."""
-    ACTIVE = "active"
-    RESOLVED = "resolved"
 
 
 @dataclass

@@ -42,17 +42,6 @@ from cortex.infrastructure.database import DatabaseManager
 logger = logging.getLogger(__name__)
 
 
-class WiringState(Enum):
-    """Orchestrator registry state machine."""
-    
-    UNINITIALIZED = "uninitialized"
-    LOADING = "loading"
-    REGISTERING = "registering"
-    COMPUTING_ORDER = "computing_order"
-    WIRING = "wiring"
-    WIRED = "wired"
-    VALIDATION_FAILED = "validation_failed"
-    UNWIRED = "unwired"
 
 
 class OrchestratorCategory(Enum):
@@ -704,6 +693,7 @@ class DatabaseBackedRegistry:
             
             # Dynamic import
             import importlib
+from cortex.models.canonical_enums import WiringState
             module = importlib.import_module(config.module_path)
             orchestrator_class = getattr(module, config.class_name)
             

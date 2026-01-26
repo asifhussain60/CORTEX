@@ -24,17 +24,6 @@ import threading
 logger = logging.getLogger(__name__)
 
 
-class AuditEventType(Enum):
-    """Types of audit events."""
-    CREATE = "create"
-    UPDATE = "update"
-    DELETE = "delete"
-    READ = "read"
-    EXECUTE = "execute"
-    ACCESS = "access"
-    MODIFY = "modify"
-    ERROR = "error"
-    ALERT = "alert"
 
 
 class AuditSeverity(Enum):
@@ -177,6 +166,7 @@ class AuditTrail:
     ) -> AuditEvent:
         """Record an audit event."""
         import uuid
+from cortex.models.canonical_enums import AuditEventType
         
         event_id = event_id or str(uuid.uuid4())
         event = AuditEvent(

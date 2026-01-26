@@ -13,11 +13,6 @@ from typing import Any, Dict, List, Optional
 from enum import Enum
 
 
-class ValidationLevel(Enum):
-    """Output validation severity levels."""
-    STRICT = "strict"  # Block dangerous patterns
-    MODERATE = "moderate"  # Warn on dangerous patterns
-    PERMISSIVE = "permissive"  # Log only
 
 
 class OutputValidationError(Exception):
@@ -105,6 +100,7 @@ class LLMOutputValidator:
                 raise OutputValidationError(message)
             elif self.level == ValidationLevel.MODERATE:
                 import logging
+from cortex.models.canonical_enums import ValidationLevel
                 logging.warning(f"CORE-CRIT-HALL-001: {message}")
 
         # Validate JSON if output is JSON string

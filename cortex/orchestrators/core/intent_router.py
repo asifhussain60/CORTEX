@@ -31,22 +31,9 @@ import yaml
 from cortex.core.interfaces import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.models.canonical_enums import IntentType
 
 
-class IntentType(Enum):
-    """
-    Enumeration of recognized operation intent types.
-    
-    Attributes:
-        IMPLEMENT: New feature development or creation
-        FIX: Bug fixes and issue resolution
-        REFACTOR: Code improvement and restructuring
-        FILE_CREATION: File creation operations requiring validation (CORE-028/CORE-038)
-    """
-    IMPLEMENT = "implement"
-    FIX = "fix"
-    REFACTOR = "refactor"
-    FILE_CREATION = "file_creation"
 
 
 @dataclass

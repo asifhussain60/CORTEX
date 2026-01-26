@@ -2,6 +2,7 @@
 
 from enum import Enum
 from typing import Dict, Any, List, Callable, Optional
+from cortex.models.canonical_enums import AuditEventType
 
 
 class GovernanceRuleType(Enum):
@@ -12,12 +13,6 @@ class GovernanceRuleType(Enum):
     SECURITY = "security"
 
 
-class AuditEventType(Enum):
-    """Types of audit events."""
-    RULE_APPLIED = "rule_applied"
-    RULE_VIOLATED = "rule_violated"
-    EXCEPTION_RAISED = "exception_raised"
-    COMPLIANCE_CHECK = "compliance_check"
 
 
 class GovernanceRule:

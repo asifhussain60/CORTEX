@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Dict, Optional, Any
 
 from cortex.infrastructure.connection_pool import (
+from cortex.models.canonical_enums import ComponentHealth
     ConnectionPool,
     ConnectionPoolConfig,
     PoolExhaustedError,
@@ -27,11 +28,6 @@ class ComponentType(str, Enum):
     KNOWLEDGE = "knowledge"
 
 
-class ComponentHealth(str, Enum):
-    """Health status of a component."""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    FAILED = "failed"
 
 
 class BulkheadException(Exception):

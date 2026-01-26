@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-002-01 - Intent Canonicalizer
 """
 Intent Understanding & Canonicalization.
@@ -13,6 +12,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
+from cortex.models.canonical_enums import IntentType
 
 
 # =============================================================================
@@ -20,16 +20,6 @@ from typing import Any, Dict, List, Optional, Set
 # =============================================================================
 
 
-class IntentType(Enum):
-    """Standard intent types."""
-    IMPLEMENT = "IMPLEMENT"  # Create new functionality
-    FIX = "FIX"              # Resolve defect or error
-    REFACTOR = "REFACTOR"    # Improve without changing behavior
-    QUERY = "QUERY"          # Information retrieval
-    ANALYZE = "ANALYZE"      # Deep investigation
-    VALIDATE = "VALIDATE"    # Verify correctness
-    MIGRATE = "MIGRATE"      # Move/transform existing
-    UNKNOWN = "UNKNOWN"      # Unable to determine
 
 
 # =============================================================================

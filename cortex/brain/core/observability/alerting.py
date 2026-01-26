@@ -14,19 +14,9 @@ from typing import Optional, Dict, Any, List, Callable, Set
 from datetime import datetime, timedelta
 from enum import Enum
 import logging
+from cortex.models.canonical_enums import AlertSeverity
 
 
-class AlertSeverity(Enum):
-    """Alert severity levels.
-    
-    Attributes:
-        INFO: Informational - no action needed
-        WARNING: Warning - investigation recommended
-        CRITICAL: Critical - immediate action required
-    """
-    INFO = 0
-    WARNING = 1
-    CRITICAL = 2
 
 
 @dataclass

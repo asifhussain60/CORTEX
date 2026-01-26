@@ -9,16 +9,9 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, List
 from datetime import datetime
 from enum import Enum
+from cortex.models.canonical_enums import CheckpointStatus
 
 
-class CheckpointStatus(Enum):
-    """Checkpoint status."""
-
-    CREATED = "created"
-    ACTIVE = "active"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    RECOVERED = "recovered"
 
 
 @dataclass

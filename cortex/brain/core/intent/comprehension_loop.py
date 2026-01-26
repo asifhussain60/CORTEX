@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-004-02 - Comprehension Loop with YAML Condensation
 """
 Comprehension Loop with YAML Condensation Module (IR-004-02).
@@ -44,6 +43,7 @@ import yaml
 
 from cortex.brain.core.knowledge.knowledge_graph import KnowledgeGraph, NodeType, EdgeType
 from cortex.brain.core.intent.comprehension_yaml import (
+from cortex.models.canonical_enums import ApprovalStatus, BrainTier
     ComprehensionYAML,
     IntentSection,
     ChallengeSection,
@@ -57,20 +57,8 @@ from cortex.brain.core.intent.comprehension_yaml import (
 # ENUMS
 # =============================================================================
 
-class ApprovalStatus(Enum):
-    """Status of comprehension in approval process."""
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-    NEEDS_CLARIFICATION = "needs_clarification"
 
 
-class BrainTier(Enum):
-    """Target brain tier for comprehension."""
-    TIER0 = "tier0"  # Governance rules
-    TIER1 = "tier1"  # AC mappings
-    TIER2 = "tier2"  # Standards/patterns
-    TIER3 = "tier3"  # Knowledge
 
 
 # =============================================================================

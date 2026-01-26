@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 from enum import Enum
+from cortex.models.canonical_enums import AuditOperationType
 
 
 class EntityType(Enum):
@@ -25,19 +26,6 @@ class EntityType(Enum):
     DATABASE = "database"
 
 
-class AuditOperationType(Enum):
-    """Types of audit operations."""
-
-    CREATE = "create"
-    READ = "read"
-    UPDATE = "update"
-    DELETE = "delete"
-    APPROVE = "approve"
-    REJECT = "reject"
-    ESCALATE = "escalate"
-    AC_START = "ac_start"
-    AC_EXECUTE = "ac_execute"
-    AC_COMPLETE = "ac_complete"
 
 
 @dataclass

@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 """Challenge Generation System for Intent Router.
 
 This module provides automated challenge generation to identify potential
@@ -15,16 +14,9 @@ from dataclasses import dataclass, field
 from enum import Enum
 from functools import total_ordering
 from typing import Any, Dict, List, Optional, Set
+from cortex.models.canonical_enums import ChallengeCategory
 
 
-class ChallengeCategory(str, Enum):
-    """Categories of challenges that can be detected."""
-    
-    BREAKING_CHANGE = "BREAKING_CHANGE"
-    TEST_GAP = "TEST_GAP"
-    GOVERNANCE_RISK = "GOVERNANCE_RISK"
-    HISTORICAL_ISSUE = "HISTORICAL_ISSUE"
-    PERFORMANCE_RISK = "PERFORMANCE_RISK"
 
 
 @total_ordering

@@ -15,39 +15,9 @@ Author: Asif Hussain
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+from cortex.models.canonical_enums import ContinuationReason
 
 
-class ContinuationReason(Enum):
-    """Turn continuation decision types."""
-    COMPLETION = "completion"
-    CONTINUE = "continue"
-    IMPLICIT_NEXT_OPERATION = "implicit_next_operation"
-    USER_PROVIDED_FOLLOWUP = "user_provided_followup"
-    AUTO_REFINEMENT_LOOP = "auto_refinement_loop"
-    ERROR_UNRECOVERABLE = "error_unrecoverable"
-    ERROR_RECOVERABLE = "error_recoverable"
-    GOVERNANCE_HALT = "governance_halt"
-    MAX_ROUNDS_REACHED = "max_rounds_reached"
-    TOKEN_LIMIT = "token_limit"
-    USER_CANCELLED = "user_cancelled"
-    USER_REJECTION = "user_rejection"
-    INTERACTION_REQUIRED = "interaction_required"
-    
-    @classmethod
-    def from_string(cls, value: str) -> "ContinuationReason":
-        """Convert string to ContinuationReason enum.
-        
-        Args:
-            value: String value (case-insensitive)
-        
-        Returns:
-            ContinuationReason enum member
-        """
-        value_upper = value.upper().replace("CONTINUATION_", "")
-        for member in cls:
-            if member.name == value_upper:
-                return member
-        raise ValueError(f"Unknown ContinuationReason: {value}")
 
 
 @dataclass(frozen=True)

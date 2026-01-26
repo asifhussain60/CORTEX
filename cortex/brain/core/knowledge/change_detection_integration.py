@@ -26,6 +26,7 @@ import logging
 from enum import Enum
 
 from cortex.brain.core.knowledge.change_detection import (
+from cortex.models.canonical_enums import ActionType
     ChangeDetectionService,
     AnomalyDetection,
     AnomalyType,
@@ -36,23 +37,6 @@ from cortex.brain.core.knowledge.change_detection import (
 logger = logging.getLogger(__name__)
 
 
-class ActionType(Enum):
-    """Types of actions that can be taken for detected anomalies."""
-
-    NOTIFY = "notify"
-    """Send notification to governance."""
-
-    LOG = "log"
-    """Log to audit trail."""
-
-    PAUSE = "pause"
-    """Pause operations until review."""
-
-    AUTO_REMEDIATE = "auto_remediate"
-    """Automatically attempt remediation."""
-
-    ESCALATE = "escalate"
-    """Escalate to human review."""
 
 
 @dataclass

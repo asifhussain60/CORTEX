@@ -129,15 +129,8 @@ class ExtendedIntentCanonicalizer(CanonicalizeEngine):
 
 
 from enum import Enum
+from cortex.models.canonical_enums import ActionType
 
-class ActionType(Enum):
-    """Types of actions."""
-    CREATE = "create"
-    MODIFY = "modify"
-    DELETE = "delete"
-    QUERY = "query"
-    EXECUTE = "execute"
-    ROLLBACK = "rollback"
 
 
 @dataclass

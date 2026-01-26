@@ -26,15 +26,6 @@ from abc import ABC, abstractmethod
 logger = logging.getLogger(__name__)
 
 
-class ChangeType(Enum):
-    """Types of changes detected in knowledge backends."""
-    
-    SCHEMA_DRIFT = "schema_drift"
-    SEMANTIC_SHIFT = "semantic_shift"
-    COVERAGE_GAP = "coverage_gap"
-    STALENESS = "staleness"
-    VOLUME_ANOMALY = "volume_anomaly"
-    DATA_CORRUPTION = "data_corruption"
 
 
 class Severity(Enum):
@@ -322,6 +313,7 @@ class VolumeAnomalyDetector(ChangeDetector):
         
         if variance > self.variance_threshold:
             import uuid
+from cortex.models.canonical_enums import ChangeType
             alert = ChangeAlert(
                 alert_id=str(uuid.uuid4()),
                 change_type=ChangeType.VOLUME_ANOMALY,

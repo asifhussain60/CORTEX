@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-002-02 - Challenge Generator
 """
 Challenge Generation System.
@@ -22,14 +21,6 @@ from typing import Any, Dict, List, Optional, Set
 # =============================================================================
 
 
-class ChallengeCategory(Enum):
-    """Challenge categories."""
-    BREAKING_CHANGE = "BREAKING_CHANGE"
-    TEST_GAP = "TEST_GAP"
-    GOVERNANCE_RISK = "GOVERNANCE_RISK"
-    HISTORICAL_ISSUE = "HISTORICAL_ISSUE"
-    PERFORMANCE_RISK = "PERFORMANCE_RISK"
-    SECURITY_RISK = "SECURITY_RISK"
 
 
 class Severity(Enum):
@@ -519,6 +510,7 @@ class ChallengeGenerator:
         
         # Same directory
         import os
+from cortex.models.canonical_enums import ChallengeCategory
         dir1 = os.path.dirname(file1)
         dir2 = os.path.dirname(file2)
         

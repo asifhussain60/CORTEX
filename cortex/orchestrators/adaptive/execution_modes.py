@@ -7,26 +7,14 @@ AC-EX-002-01: FAST mode minimizes overhead, BALANCED mode optimizes for common
 cases, THOROUGH mode maximizes validation.
 
 Author: Asif Hussain
-Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Optional
+from cortex.models.canonical_enums import ExecutionMode
 
 
-class ExecutionMode(Enum):
-    """Execution mode enum for adaptive performance tuning.
-    
-    Modes:
-        FAST: Minimize overhead, skip non-critical validation
-        BALANCED: Optimize for common cases, standard validation
-        THOROUGH: Maximize validation, additional safety checks
-    """
-    
-    FAST = "fast"
-    BALANCED = "balanced"
-    THOROUGH = "thorough"
 
 
 @dataclass

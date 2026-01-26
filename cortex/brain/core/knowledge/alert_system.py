@@ -54,20 +54,6 @@ class NotificationChannel(Enum):
     """Record in governance registry."""
 
 
-class AlertPriority(Enum):
-    """Alert priority levels."""
-
-    LOW = 1
-    """Low priority alert."""
-
-    MEDIUM = 2
-    """Medium priority alert."""
-
-    HIGH = 3
-    """High priority alert."""
-
-    CRITICAL = 4
-    """Critical priority alert."""
 
 
 @dataclass
@@ -479,6 +465,7 @@ class AlertSystem:
             Number of alerts cleared.
         """
         from datetime import timedelta
+from cortex.models.canonical_enums import AlertPriority
 
         cutoff = datetime.utcnow() - timedelta(hours=older_than_hours)
         initial_count = len(self.alerts)

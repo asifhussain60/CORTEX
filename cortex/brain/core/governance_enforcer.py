@@ -18,16 +18,9 @@ from enum import Enum, auto
 from typing import Any, Dict, Optional
 
 from cortex.infrastructure.database import DatabaseManager
+from cortex.models.canonical_enums import IntentType
 
 
-class IntentType(Enum):
-    """Canonicalized intent types."""
-    IMPLEMENT = auto()
-    REVIEW = auto()
-    QUERY = auto()
-    MODIFY = auto()
-    LOCK = auto()
-    UNKNOWN = auto()
 
 
 @dataclass

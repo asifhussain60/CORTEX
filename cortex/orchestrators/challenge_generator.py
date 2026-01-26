@@ -10,17 +10,9 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+from cortex.models.canonical_enums import ChallengeCategory
 
 
-class ChallengeCategory(Enum):
-    """Challenge categories."""
-
-    BREAKING_CHANGE = "BREAKING_CHANGE"
-    TEST_GAP = "TEST_GAP"
-    GOVERNANCE_RISK = "GOVERNANCE_RISK"
-    HISTORICAL_ISSUE = "HISTORICAL_ISSUE"
-    PERFORMANCE_RISK = "PERFORMANCE_RISK"
-    SECURITY_RISK = "SECURITY_RISK"
 
 
 class Severity(Enum):

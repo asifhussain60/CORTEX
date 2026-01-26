@@ -21,16 +21,12 @@ from enum import Enum
 import time
 from functools import wraps
 import logging
+from cortex.models.canonical_enums import ExecutionMode
 
 
 logger = logging.getLogger(__name__)
 
 
-class ExecutionMode(Enum):
-    """Turn execution modes"""
-    SEQUENTIAL = "sequential"      # Execute turns one by one
-    PARALLEL = "parallel"          # Execute independent turns concurrently
-    HYBRID = "hybrid"              # Use graph analysis to find parallelizable sections
 
 
 @dataclass

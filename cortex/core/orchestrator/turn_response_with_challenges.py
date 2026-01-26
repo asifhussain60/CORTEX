@@ -8,16 +8,9 @@ Author: CORTEX Framework
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, List
 from enum import Enum
+from cortex.models.canonical_enums import ChallengeType
 
 
-class ChallengeType(Enum):
-    """Types of challenges."""
-
-    CLARIFICATION = "clarification"
-    VALIDATION = "validation"
-    EXTENSION = "extension"
-    CONTRADICTION = "contradiction"
-    EXPLORATION = "exploration"
 
 
 @dataclass

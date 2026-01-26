@@ -35,15 +35,6 @@ from enum import Enum
 # AUDIT INFRASTRUCTURE
 # ============================================================================
 
-class TestStatus(Enum):
-    """Test execution status codes."""
-    PENDING = "PENDING"
-    RUNNING = "RUNNING"
-    PASSED = "PASSED"
-    FAILED = "FAILED"
-    ERROR = "ERROR"
-    TIMEOUT = "TIMEOUT"
-    SKIPPED = "SKIPPED"
 
 
 @dataclass
@@ -438,6 +429,7 @@ def run_audited_tests(test_args: List[str], audit_db: Optional[TestAuditDB] = No
 def main():
     """Main CLI entry point."""
     import argparse
+from cortex.models.canonical_enums import TestStatus
     
     parser = argparse.ArgumentParser(
         description="Enterprise Test Performance Auditor"

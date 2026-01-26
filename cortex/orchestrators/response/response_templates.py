@@ -11,6 +11,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
+from cortex.models.canonical_enums import ResponseType
 
 
 class VariableType(str, Enum):
@@ -83,19 +84,6 @@ class VariableSpec:
         return False
 
 
-class ResponseType(str, Enum):
-    """Response template types.
-    
-    Attributes:
-        SUCCESS: Success response
-        ERROR: Error response
-        INFORMATIONAL: Informational response
-        WARNING: Warning response
-    """
-    SUCCESS = "success"
-    ERROR = "error"
-    INFORMATIONAL = "informational"
-    WARNING = "warning"
 
 
 @dataclass

@@ -892,13 +892,9 @@ class ExponentialBackoffRetry:
 # ===== AC-NFR-002-03: Circuit Breaker Pattern =====
 
 from enum import Enum
+from cortex.models.canonical_enums import AlertSeverity, CircuitBreakerState
 
 
-class CircuitBreakerState(Enum):
-    """Circuit breaker state enumeration."""
-    CLOSED = "closed"
-    OPEN = "open"
-    HALF_OPEN = "half_open"
 
 
 class CircuitBreakerOpen(Exception):
@@ -1620,12 +1616,6 @@ class RealTimeProgressDashboard:
 
 # ===== AC-NFR-004-03: Alert Management System =====
 
-class AlertSeverity(Enum):
-    """Alert severity levels."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
 
 
 class ThresholdOperator(Enum):
