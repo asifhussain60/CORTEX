@@ -2,15 +2,15 @@
 🧠 CORTEX COMPREHENSIVE DUPLICATION AUDIT REPORT
 ================================================================================
 
-📅 Generated: 2026-01-26T15:45:52.705784
+📅 Generated: 2026-01-26T16:51:49.439901
 📍 Repository: /Users/asifhussain/PROJECTS/CORTEX
 
 ================================================================================
 📊 DUPLICATION SUMMARY
 ================================================================================
 
-✅ Total Unique Classes: 495
-✅ Total Unique Functions: 384
+✅ Total Unique Classes: 518
+✅ Total Unique Functions: 386
 ⚠️  CORE-035 Violations Found: 285
 📈 Duplicate Items: 154
 
@@ -135,12 +135,12 @@
 ❌ CLASS: ComplexityLevel
    Locations: 8 implementations found
    [1] cortex/core/orchestrator/complexity_assessment.py:14
-   [2] cortex/orchestrators/core/tool_discovery_orchestrator_enhanced.py:50
-   [3] cortex/orchestrators/core/orchestrator_bootstrap_enhanced.py:8
-   [4] cortex/orchestrators/support/setup_orchestrator_enhanced.py:30
-   [5] cortex/orchestrators/support/rollback_orchestrator_enhanced.py:65
-   [6] cortex/orchestrators/support/upgrade_orchestrator_enhanced.py:66
-   [7] cortex/orchestrators/support/composed_orchestrator_enhanced.py:9
+   [2] cortex/orchestrators/core/tool_discovery_orchestrator.py:50
+   [3] cortex/orchestrators/core/orchestrator_bootstrap.py:8
+   [4] cortex/orchestrators/support/composed_orchestrator.py:9
+   [5] cortex/orchestrators/support/setup_orchestrator.py:30
+   [6] cortex/orchestrators/support/rollback_orchestrator.py:65
+   [7] cortex/orchestrators/support/upgrade_orchestrator.py:66
    [8] cortex/brain/core/observability/performance_profiler.py:37
 
 ❌ CLASS: ComplianceFramework
@@ -561,7 +561,7 @@
    [2] cortex/mcp/registry.py:21
    [3] cortex/mcp/tool_governance.py:16
    [4] cortex/orchestrators/mcp_tools_registry.py:21
-   [5] cortex/orchestrators/core/tool_discovery_orchestrator_enhanced.py:58
+   [5] cortex/orchestrators/core/tool_discovery_orchestrator.py:58
 
 ❌ CLASS: TransitionType
    Locations: 2 implementations found
