@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 27
+  rule_count: 28
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-26 - AC-CONSOLIDATE-YAML-001: SSOT consolidation complete (5 files → 1, 27 rules)"
-  version: "3.0"
+  last_update: "2026-01-26 - AC-CLEANUP-PREVENTION: Add CORE-040 Documentation Lifecycle Management rule"
+  version: "3.1"
   consolidation_date: "2026-01-26"
-  consolidation_status: "Phase 1 Complete - YAML SSOT established"
+  consolidation_status: "Phase 1 Complete - YAML SSOT established + CORE-040 added"
 
 categories:
   - orchestration_lifecycle
@@ -685,6 +685,103 @@ rules:
       test_coverage: "Phase completion, autonomous execution, tools, pipelines, orchestration, mechanisms, static-detection, integration"
       audit_event: "MD_FILE_GENERATION_BLOCKED"
       severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-040: Documentation Lifecycle Management (AC-CLEANUP-PREVENTION)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-040
+    category: architecture_integrity
+    severity: blocked
+    name: Documentation Lifecycle Management
+    description: |
+      Prevent documentation bloat at source through lifecycle management.
+      All generated documentation files MUST include expiration timestamps.
+      No cleanup processes—prevention is the enforcement mechanism.
+      
+      This rule addresses the root cause of documentation accumulation by
+      enforcing expiration dates at creation time, not cleanup time.
+      Eliminates need for periodic cleanup by making old docs self-removing.
+    
+    scope:
+      applies_to:
+        - "*.md files generated in reports/ folder"
+        - "*.txt files (analysis outputs, temporary reports)"
+        - "*.bak files (backup/archive files)"
+        - "Session artifacts, analysis reports, phase documentation"
+      
+      exception:
+        - "docs/ folder (permanent user documentation)"
+        - "reports/*.yaml files (data storage, not reports)"
+        - "reports/*/README.md (structural documentation)"
+        - "User-explicitly-archived files"
+    
+    prevention_mechanism:
+      lifecycle_metadata:
+        - "expires_at: ISO8601 timestamp"
+        - "created_at: ISO8601 timestamp"
+        - "lifetime_days: integer (default 30 days)"
+        - "category: session|analysis|phase|tool-output"
+        - "auto_delete_on_expiry: boolean (default true)"
+      
+      metadata_storage:
+        - "Embedded in YAML front-matter: ---\nexpires_at: 2026-02-25\n---"
+        - "Or stored in .metadata.yaml sidecar file"
+        - "Or in central reports/lifecycle-registry.yaml"
+      
+      enforcement_points:
+        - "Creation time: Inject lifecycle metadata when file written"
+        - "Access time: Check expiry before serving/opening"
+        - "Background: Optional cleanup daemon (but NOT part of checks process)"
+    
+    file_naming_convention:
+      - "reports/{category}/{phase|session}-{name}-{timestamp}.md"
+      - "Example: reports/session/2026-01-26-analysis-xyz.md"
+      - "Timestamp in filename enables easy sorting/filtering"
+      - "Naming by date allows natural expiration via age checks"
+    
+    lifetime_defaults:
+      session_artifacts: 7  # Session work files
+      analysis_reports: 30  # Analysis outputs, temp reports
+      phase_documentation: 90  # Phase completion docs
+      test_outputs: 14  # Test run artifacts
+      tool_outputs: 30  # Generic tool outputs
+    
+    creator_checklist:
+      - "Set expires_at = now + lifetime_days"
+      - "Add category tag (session|analysis|phase|tool)"
+      - "Use kebab-case naming per CORE-028"
+      - "Store in reports/{category}/ per CORE-038"
+      - "Include creation_at and lifecycle metadata"
+      - "Do NOT run cleanup on checks process"
+    
+    validation:
+      - "File has expires_at metadata"
+      - "Metadata format is valid ISO8601"
+      - "lifetime_days matches category default (or documented exception)"
+      - "File stored in correct reports/{category}/ folder"
+      - "Sidecar .metadata.yaml exists (if using sidecar pattern)"
+    
+    enforcement:
+      pre_creation: true
+      validation_script: "cortex/governance/validators/lifecycle-validator.py"
+      git_hook: "pre-commit (warn only, don't block)"
+      audit_logging: true
+      audit_event: "LIFECYCLE_METADATA_VALIDATED"
+      severity_on_bypass: "warning"
+    
+    implementation:
+      method: "Lifecycle metadata validator + optional background cleanup daemon"
+      enforcement_point: "File creation (inject metadata), optional background sync"
+      decoupling: "Cleanup is NOT part of core checks process"
+      audit_event: "LIFECYCLE_METADATA_INJECTED"
+    
+    benefits:
+      - "Documents expire naturally—no cleanup process needed"
+      - "Extensible: new file types get lifecycle rules easily"
+      - "Prevents bloat: old artifacts self-remove after expiry"
+      - "Scalable: metadata-driven, no pattern matching needed"
+      - "Accurate: creator decides lifetime, not heuristics"
+      - "Governance-aligned: fits CORTEX 4-tier architecture"
 
   # --------------------------------------------------------------------------
   - rule_id: AC-PERMANENT-FIX-006
