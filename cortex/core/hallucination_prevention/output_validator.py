@@ -12,6 +12,8 @@ import json
 from typing import Any, Dict, List, Optional
 from enum import Enum
 
+from cortex.models.canonical_enums import ValidationLevel
+
 
 
 
@@ -98,9 +100,8 @@ class LLMOutputValidator:
             message = f"Dangerous pattern detected in LLM output: {dangerous_found}"
             if self.level == ValidationLevel.STRICT and not allow_dangerous:
                 raise OutputValidationError(message)
-            elif self.level == ValidationLevel.MODERATE:
+            elif self.level == ValidationLevel.NORMAL:
                 import logging
-from cortex.models.canonical_enums import ValidationLevel
                 logging.warning(f"CORE-CRIT-HALL-001: {message}")
 
         # Validate JSON if output is JSON string
