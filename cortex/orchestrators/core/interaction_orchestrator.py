@@ -75,15 +75,22 @@ class InteractionOrchestrator:
         enable_challenges: bool = True
     ):
         """
-        Initialize InteractionOrchestrator with challenge system.
+        Initialize InteractionOrchestrator with AUTOMATIC challenge system.
+        
+        CORTEX PROTOCOL (AUTOMATIC ON EVERY TURN):
+        1. Build LENS context from user request
+        2. Generate challenge if CORTEX disagrees (intelligent)
+        3. Validate conversation protocol
+        4. Execute and return response with potential challenge
         
         Args:
             conversation_protocol: ConversationProtocol instance to wrap
             pattern_registry_path: Path to pattern registry (defaults to cortex-registry/interaction/)
-            enable_challenges: Whether to enable challenge system (default: True)
+            enable_challenges: ALWAYS TRUE - LENS + challenge automatic (CORE-029 compliance)
         """
         self.conversation_protocol = conversation_protocol
-        self.enable_challenges = enable_challenges
+        # CORE-029: Challenge system ALWAYS enabled
+        self.enable_challenges = True  # Override any False passed in
         
         if pattern_registry_path is None:
             pattern_registry_path = (
@@ -96,13 +103,9 @@ class InteractionOrchestrator:
         self.patterns: Dict[str, CommunicationPattern] = {}
         self._load_patterns()
         
-        # Initialize challenge engine (AC-PERMANENT-FIX-006)
-        self.challenge_engine: Optional[ChallengeEngine] = None
-        if self.enable_challenges:
-            self.challenge_engine = get_challenge_engine()
-            logger.info("Challenge system ACTIVE (AC-PERMANENT-FIX-006)")
-        else:
-            logger.warning("Challenge system DISABLED - not recommended")
+        # Initialize challenge engine (AC-PERMANENT-FIX-006) - MANDATORY
+        self.challenge_engine = get_challenge_engine()
+        logger.info("CORTEX Protocol ACTIVE: LENS + Challenge + Protocol on every turn (CORE-029, AC-PERMANENT-FIX-006)")
     
     def _load_patterns(self) -> None:
         """Load communication patterns from registry."""
@@ -127,6 +130,77 @@ class InteractionOrchestrator:
                 self.patterns[pattern.pattern_id] = pattern
             except Exception as e:
                 print(f"[WARNING] Failed to load pattern from {pattern_file}: {e}")
+    
+    def execute_turn(
+        self,
+        user_request: str,
+        round_context: RoundContext,
+        pattern_id: Optional[str] = None
+    ):
+        """
+        Execute a turn with AUTOMATIC CORTEX PROTOCOL (CORE-029).
+        
+        AUTOMATIC ON EVERY TURN:
+        1. Build LENS context from user request
+        2. Generate challenge if CORTEX disagrees (intelligent)
+        3. Validate conversation protocol  
+        4. Execute and return response
+        
+        Args:
+            user_request: User's natural language request
+            round_context: Context for this turn
+            pattern_id: Optional pattern to enforce
+            
+        Returns:
+            Result with orchestrator output (may include challenge)
+        """
+        logger.info("CORTEX turn starting: LENS synthesis + challenge check + protocol (CORE-029)")
+        
+        # STEP 1: Build LENS context (ALWAYS)
+        lens_context = self.challenge_engine.build_lens_context(
+            user_request,
+            search_tools={}
+        )
+        logger.debug("LENS context built for request: %s", user_request[:50])
+        
+        # STEP 2: Generate challenge if disagreement (ALWAYS)
+        challenge = self.challenge_engine.generate_challenge(
+            user_request,
+            lens_context
+        )
+        
+        if challenge.has_disagreement:
+            logger.info("Challenge detected: %s", challenge.disagreement_type.value)
+            formatted_challenge = self.challenge_engine.format_challenge_response(
+                challenge
+            )
+            return Ok({
+                "type": "challenge",
+                "challenge": challenge,
+                "formatted_message": formatted_challenge,
+                "requires_user_choice": True,
+                "cortex_protocol": "LENS+Challenge (CORE-029)"
+            })
+        
+        # STEP 3: Validate conversation protocol
+        if pattern_id and pattern_id in self.patterns:
+            pattern = self.patterns[pattern_id]
+            input_validation = self._validate_input(round_context, pattern)
+            if not input_validation.is_ok():
+                logger.warning("Pattern validation failed: %s", input_validation.unwrap_err())
+                return input_validation
+        
+        # STEP 4: Execute via ConversationProtocol
+        logger.debug("Executing conversation protocol turn")
+        result = self.conversation_protocol.execute_turn(round_context)
+        
+        if result.is_ok():
+            output = result.unwrap()
+            # Add CORTEX protocol metadata
+            if isinstance(output, dict):
+                output["cortex_protocol"] = "Full (LENS+Challenge+Protocol, CORE-029)"
+        
+        return result
     
     def execute_turn_with_challenge(
         self,

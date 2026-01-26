@@ -1,12 +1,30 @@
 """
-Master Orchestrator Stage 1 - Stub Module
+Master Orchestrator Stage 1 - DEPRECATED Bridge Adapter (AC-CONSOLIDATION-003)
 
-This is a compatibility stub for legacy test files that import from this module.
-The actual implementation has been consolidated into master_orchestrator.py
+⚠️  DEPRECATED: This module is for backward compatibility only.
+    All stage implementations consolidated into master_orchestrator.py
 
-AC-ID: AC-PHASE5-BLOCKING-001
+CANONICAL IMPLEMENTATION:
+    from cortex.orchestrators.core.master_orchestrator import (
+        MasterOrchestrator,
+        Stage1ComprehensionContext,
+        Stage1Output,
+    )
+
+This bridge adapter maintains backward compatibility for:
+- Legacy imports from this module
+- Test files importing Stage1Output
+- Existing code using MasterOrchestrationStage1
+
+Migration path:
+    OLD: from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+    NEW: from cortex.orchestrators.core.master_orchestrator import Stage1Output
+
+Author: Asif Hussain
+AC-CONSOLIDATION: AC-CONSOLIDATION-003-Stage-Files-Consolidation
 """
 
+import warnings
 from typing import Any, Dict, List
 from dataclasses import dataclass, field
 
