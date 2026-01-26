@@ -1,0 +1,282 @@
+---
+# CORE-039: MD File Generation Prohibition
+# **Version:** 1.0 | **Authority:** EnforcementOrchestrator | **Effective:** 2026-01-26
+# **Category:** Tier 0 (IMMUTABLE) | **Violation Level:** BLOCKING
+
+rule_id: CORE-039
+rule_name: "MD File Generation Prohibition"
+rule_version: "1.0"
+implemented_date: "2026-01-26"
+status: "ACTIVE"
+severity: "BLOCKING"
+tier: "TIER-0-IMMUTABLE"
+
+---
+
+## 📋 Rule Definition
+
+### Purpose
+Eliminate automatic MD file generation at phase end and enforce user-driven documentation workflow.
+Only MD files explicitly requested by user are permitted.
+
+### Scope
+- ✅ APPLIES TO: All orchestrators, phase completion flows, autonomous executors, tools
+- ✅ APPLIES TO: Phase end events, completion handlers, report generators
+- ✅ APPLIES TO: Documentation pipelines, analysis tools
+- ❌ EXCEPTION: MD files explicitly created by user request (via `/doc` command or similar)
+
+---
+
+## ✅ ALLOWED Patterns
+
+### 1. User-Explicit Documentation
+```python
+# ALLOWED: User explicitly requests documentation
+# Command: /doc {component}
+# or: "Generate documentation for X"
+
+# Handler checks user_requested=True before creating MD
+if user_requested_documentation:
+    doc_path = Path("docs/...md")
+    doc_path.write_text(content)  # ✅ ALLOWED
+```
+
+### 2. MD Files in `docs/` folder (for user-requested content)
+```python
+# ALLOWED: Pre-existing or user-requested MD files in docs/ folder
+docs_path = Path("docs/01-getting-started/README.md")
+docs_path.write_text(content)  # ✅ ALLOWED (user-requested)
+```
+
+---
+
+## ❌ FORBIDDEN Patterns
+
+### 1. Phase-End MD Generation (AUTO-BLOCKED)
+```python
+# FORBIDDEN: Phase completion triggers MD file creation
+def on_phase_complete(phase_num: int):
+    # ❌ VIOLATION: Writing MD at phase end without user request
+    report_path = Path("reports/phase-tracking/phase-{phase_num}-completion.md")
+    report_path.write_text(f"Phase {phase_num} complete")  # BLOCKED
+```
+
+### 2. Autonomous Executor MD Reports (AUTO-BLOCKED)
+```python
+# FORBIDDEN: Execution engine generates MD reports
+async def execute_phase(phase: Phase):
+    # ... phase execution ...
+    
+    # ❌ VIOLATION: Writing MD at execution completion
+    report = Path("reports/phase-tracking/phase-report.md")
+    report.write_text(completion_report)  # BLOCKED
+```
+
+### 3. Tool-Driven Report Generation (AUTO-BLOCKED)
+```python
+# FORBIDDEN: Analysis tools auto-generating MD reports
+class AnalysisTool:
+    def generate_report(self):
+        # ❌ VIOLATION: Automatic report generation
+        report_path = Path("reports/analysis/analysis.md")
+        report_path.write_text(self.analysis)  # BLOCKED
+```
+
+### 4. End-of-Session MD Output (AUTO-BLOCKED)
+```python
+# FORBIDDEN: Session completion generates MD summary
+def on_session_complete():
+    # ❌ VIOLATION: Auto-generating session summary MD
+    summary = Path("reports/session-summary-{date}.md")
+    summary.write_text(session_report)  # BLOCKED
+```
+
+---
+
+## 🧪 Enforcement Mechanisms
+
+### 1. Anti-Pattern Detection
+**Location:** `cortex/tests/test_md_generation_blocker.py`
+
+```python
+# Test Pattern 1: Phase Event Listeners
+def test_phase_complete_event_no_md_generation():
+    """Verify phase completion events NEVER generate MD files."""
+    assert not phase_executor.generates_md_files
+    assert not autonomous_engine.writes_reports_as_md
+```
+
+### 2. Monkey-Patch Enforcement (Runtime)
+```python
+# Block any orchestrator attempt to write MD
+original_write_text = Path.write_text
+def blocked_write_text(self, data, *args, **kwargs):
+    if str(self).endswith('.md'):
+        # Check if MD write is user-requested
+        if not is_user_requested_documentation():
+            raise GovernanceViolation(
+                f"CORE-039 VIOLATION: Attempted MD file write at {self}. "
+                f"MD generation only allowed if explicitly user-requested."
+            )
+    return original_write_text(self, data, *args, **kwargs)
+
+Path.write_text = blocked_write_text
+```
+
+### 3. Static Analysis Detection
+**Grep Pattern:**
+```bash
+# Find phase-end MD generation patterns
+grep -r "phase.*complete" cortex/orchestrators/ | grep "\.md"
+grep -r "generate.*report" cortex/orchestrators/ | grep "write_text"
+grep -r "reports/.*\.md" cortex/orchestrators/ | grep -v "docs/"
+```
+
+---
+
+## 🚫 Violation Examples & How They're Blocked
+
+### Violation 1: Phase 14 Completion Report
+**File:** `phase_14_completion.py`
+```python
+# BEFORE (VIOLATES CORE-039):
+report_file = reports_dir / "phase-14-completion-report.md"
+report_file.write_text(report)  # ❌ BLOCKED
+
+# AFTER (COMPLIANT):
+# Remove MD generation entirely
+# If user requests: doc_path = docs/phase-14-completion.md
+# If analysis needed: data_path = reports/phase-tracking/phase-14-metrics.yaml
+```
+
+### Violation 2: Autonomous Execution Report
+**File:** `autonomous_execution_engine.py`
+```python
+# BEFORE (VIOLATES CORE-039):
+def on_execution_complete(self):
+    report_path = Path("reports/execution-report.md")
+    report_path.write_text(self.generate_report())  # ❌ BLOCKED
+
+# AFTER (COMPLIANT):
+# Return data to caller, let user decide if documentation needed
+# Store metrics in YAML if analysis needed
+execution_metrics = {
+    'total_phases': total_phases,
+    'passed': passed_count,
+    'failed': failed_count
+}
+metrics_path = Path("reports/metrics.yaml")
+metrics_path.write_text(yaml.dump(execution_metrics))  # ✅ ALLOWED
+```
+
+### Violation 3: Documentation Tool Report
+**File:** `cortex-doc.prompt.md` (Phase 6-7)
+```python
+# BEFORE (VIOLATES CORE-039):
+def generate_fresh_documentation():
+    # Phase 6: REPORTING
+    report = "fresh-documentation-generation-{date}.md"
+    report_path.write_text(report)  # ❌ BLOCKED
+
+# AFTER (COMPLIANT):
+# If user explicitly requested: /doc fresh-documentation
+#   Then: create docs/fresh-documentation-guide.md
+# Otherwise: Store results in YAML, return to user via UI
+results = {
+    'sections_generated': count,
+    'diagrams_generated': count,
+    'build_status': 'success'
+}
+results_path = Path("reports/documentation-results.yaml")
+results_path.write_text(yaml.dump(results))  # ✅ ALLOWED
+```
+
+---
+
+## 🎯 Remediation Checklist
+
+### For Orchestrators
+- [ ] Audit phase-complete event handlers
+- [ ] Remove any `Path(...).write_text(...)`  calls with `.md` extension
+- [ ] Replace with: YAML data files or return dict to caller
+- [ ] Add test verifying no MD generation
+
+### For Phase Completion Scripts
+- [ ] Remove MD report generation
+- [ ] Return completion metrics via YAML or console
+- [ ] If summary needed: provide via CLI tool, not auto-file
+
+### For Tools & Utilities
+- [ ] Audit `generate_report()` methods
+- [ ] Block MD file writes unless `user_requested=True`
+- [ ] Add enforcement test before merge
+
+### For Documentation Pipeline
+- [ ] Separate "user-requested docs" from "phase reports"
+- [ ] Only create MD in `docs/` if user explicitly requests
+- [ ] Store phase metrics in `reports/{category}/{name}.yaml`
+
+---
+
+## 📊 Compliance Matrix
+
+| Component | Pattern | Status | Remediation |
+|-----------|---------|--------|-------------|
+| `phase_14_completion.py` | Phase-end MD | ❌ VIOLATES | Remove MD, keep metrics |
+| `phase_15_completion.py` | Phase-end MD | ❌ VIOLATES | Remove MD, keep metrics |
+| `autonomous_execution_engine.py` | Exec-end MD | ❌ VIOLATES | Return data, no MD write |
+| `cortex-doc.prompt.md` | Auto doc report | ❌ VIOLATES | User-requested only |
+| `duplication_audit.py` | Tool report MD | ❌ VIOLATES | YAML output only |
+| `visual_progress_renderer.py` | Progress MD | ✅ OK (no write) | Keep as-is |
+
+---
+
+## 🔧 Testing (Test-First - CORE-008)
+
+### Test File Location
+`cortex/tests/test_md_generation_blocker.py` (150+ lines)
+
+### Test Coverage
+```python
+test_phase_complete_no_md_generation()
+test_autonomous_engine_no_md_reports()
+test_orchestrator_event_handlers_blocked()
+test_tool_report_generation_blocked()
+test_user_requested_doc_allowed()
+test_monkey_patch_enforcement_works()
+test_cortex_doc_prompt_compliance()
+test_analysis_tools_yaml_only()
+```
+
+---
+
+## 📍 Authority & References
+
+| Reference | Purpose |
+|-----------|---------|
+| **CORE-008** | Tests must exist before implementation |
+| **CORE-027** | Audit trail logging required |
+| **CORE-029** | Response header enforcement |
+| **CORE-035** | No duplicate implementations |
+| **CORE-038** | File placement policy |
+| **CORE-039** | MD generation prohibition (THIS RULE) |
+
+---
+
+## ✅ Implementation Checklist
+
+- [ ] Test suite created: `cortex/tests/test_md_generation_blocker.py`
+- [ ] All tests passing (100% coverage of violation patterns)
+- [ ] Enforcement agent activated (EnforcementOrchestrator)
+- [ ] Monkey-patch installed in test fixtures
+- [ ] Static analysis grep patterns documented
+- [ ] Violation examples documented
+- [ ] Remediation guide published
+- [ ] Total Recall prompt updated
+- [ ] AC_COMPLETE logged
+
+---
+
+**Status:** READY FOR ENFORCEMENT  
+**Last Updated:** 2026-01-26  
+**Next Review:** When phase completion tools audit complete

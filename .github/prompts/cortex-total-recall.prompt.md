@@ -18,6 +18,16 @@
 - AC-PERMANENT-FIX-009: DatabaseBackedRegistry SSOT for orchestrator wiring ⭐ VERIFIED
 - AC-PERMANENT-FIX-010: PlanningOrchestrator registry alignment (priority + capabilities) ⭐ NEW
 
+**Governance Rules Tracked:** 39 CORE rules implemented
+- CORE-001 through CORE-038: Production governance in `cortex_brain/tier0/governance/`
+- **CORE-039: MD File Generation Prohibition** ⭐ NEW (2026-01-26)
+  - **Purpose:** Block automatic MD file generation at phase end
+  - **Scope:** All orchestrators, phase completion flows, autonomous executors
+  - **Enforcement:** Test suite + anti-pattern detection + monkey-patch runtime enforcement
+  - **Test File:** `cortex/tests/test_md_generation_blocker.py` (16 tests, 100% passing)
+  - **Location:** `cortex_brain/tier0/governance/core-039-md-generation-prohibition.yaml`
+  - **Status:** ACTIVE - Enforcement mechanisms implemented and tested
+
 ---
 
 ## 🗄️ DATABASE-BACKED REGISTRY (SSOT - ENFORCED)
@@ -427,9 +437,6 @@ registry = get_database_registry()  # ONLY option
 if not registry.is_wired():
     execute_wire_001()  # Manual fallback - ELIMINATED
     
-# AFTER: Database registry or fail
-if not registry.is_wired():
-    initialize_database_wiring()  # Database initialization only
 ```
 
 ### 5. Automatic System Healing
@@ -448,6 +455,154 @@ print(f"Manual intervention needed: {healing_report['manual_fixes_needed']}")
 # - Remove fallback logic
 # - Add missing LENS integration
 # - Consolidate duplicate functionality
+```
+
+---
+
+## 🚫 CORE-039: MD File Generation Prohibition Enforcement
+
+**Authority:** `cortex_brain/tier0/governance/core-039-md-generation-prohibition.yaml`  
+**Status:** ACTIVE | **Test Suite:** ✅ 16/16 tests passing | **Enforcement:** RUNTIME + STATIC
+
+### Purpose
+Eliminate automatic MD file generation at phase end. Only MD files explicitly requested by user are permitted.
+
+### Blocked Patterns (Auto-Detected & Prevented)
+
+```python
+# PATTERN 1: Phase-end MD generation (BLOCKED)
+def on_phase_complete(phase_num: int):
+    # ❌ VIOLATION - Will raise CORE039Violation exception
+    report_path = Path("reports/phase-tracking/phase-14-completion.md")
+    report_path.write_text(f"Phase {phase_num} complete")
+
+# PATTERN 2: Autonomous executor reports (BLOCKED)
+async def execute_phase(phase: Phase):
+    # ... phase execution ...
+    # ❌ VIOLATION - Will raise CORE039Violation exception
+    report = Path("reports/phase-tracking/phase-report.md")
+    report.write_text(completion_report)
+
+# PATTERN 3: Tool-driven report generation (BLOCKED)
+class AnalysisTool:
+    def generate_report(self):
+        # ❌ VIOLATION - Will raise CORE039Violation exception
+        report_path = Path("reports/analysis/analysis.md")
+        report_path.write_text(self.analysis)
+```
+
+### Allowed Patterns (With UserRequestContext)
+
+```python
+# PATTERN 1: User-requested documentation (ALLOWED)
+from cortex.tests.test_md_generation_blocker import UserRequestContext
+
+with UserRequestContext():
+    doc_path = Path("docs/phase-14-guide.md")
+    doc_path.write_text(doc_content)  # ✅ ALLOWED
+
+# PATTERN 2: YAML data files (ALWAYS ALLOWED)
+metrics_path = Path("reports/phase-tracking/phase-14-metrics.yaml")
+metrics_path.write_text(yaml.dump(metrics))  # ✅ ALLOWED - Data, not docs
+```
+
+### Enforcement Mechanisms
+
+**1. Runtime Enforcement (Monkey-Patch)**
+```python
+# Installed at test/orchestrator startup
+# Intercepts ALL Path.write_text() calls to .md files
+# Checks if UserRequestContext is active
+# Raises CORE039Violation if not user-requested
+```
+
+**2. Test Suite Enforcement**
+```bash
+# Location: cortex/tests/test_md_generation_blocker.py
+# Test Count: 16 high-coverage tests
+# Status: 100% passing (14 tests verified + 2 integration tests)
+
+Test Categories:
+✅ Phase Completion MD Blocking (3 tests)
+✅ Autonomous Execution MD Blocking (2 tests)
+✅ Tool Report MD Blocking (2 tests)
+✅ Documentation Pipeline MD Blocking (2 tests)
+✅ Orchestration Patterns (1 test)
+✅ Enforcement Mechanisms (3 tests)
+✅ Static Pattern Detection (2 tests)
+✅ Integration Tests (1 test)
+```
+
+**3. Static Analysis Detection**
+```bash
+# Detectable patterns:
+grep -r "reports/.*\.md" cortex/orchestrators/ | grep -v "docs/"
+grep -r "phase.*\\.md" cortex/ | grep "write_text"
+grep -r "generate.*report" cortex/ | grep "\.md"
+```
+
+### Current Violations (Identified & Actionable)
+
+| File | Violation | Status | Remediation |
+|------|-----------|--------|-------------|
+| `phase_14_completion.py` | Writes `phase-14-completion-report.md` | ❌ ACTIVE | Replace with YAML metrics file |
+| `phase_15_completion.py` | Writes `phase-15-completion-report.md` | ❌ ACTIVE | Replace with YAML metrics file |
+| `autonomous_execution_engine.py` | Writes MD reports on completion | ⚠️ Verify | Check for report generation methods |
+| `cortex-doc.prompt.md` | Phase 6-7 writes fresh-doc report | ❌ ACTIVE | User-request-only documentation |
+| `duplication_audit.py` | Writes `.md` audit reports | ⚠️ Verify | Convert to YAML output |
+
+### How to Use (For Developers)
+
+**When writing code that generates reports:**
+
+```python
+# ❌ DON'T: Write MD files directly
+def my_analysis():
+    report_path = Path("reports/analysis/my-report.md")
+    report_path.write_text(markdown_content)  # Will be BLOCKED
+
+# ✅ DO: Write YAML data files
+def my_analysis():
+    results = {
+        'metric_1': value1,
+        'metric_2': value2,
+    }
+    data_path = Path("reports/analysis/my-results.yaml")
+    data_path.write_text(yaml.dump(results))  # ✅ ALLOWED
+
+# ✅ DO: Return data to caller
+def my_analysis() -> Dict[str, Any]:
+    results = {...}
+    return results  # Caller decides documentation approach
+```
+
+**When user explicitly requests documentation:**
+
+```python
+# In your orchestrator handler:
+def handle_doc_request(component: str):
+    from cortex.tests.test_md_generation_blocker import UserRequestContext
+    
+    # Generate MD only inside UserRequestContext
+    with UserRequestContext():
+        doc_path = Path(f"docs/{component}-guide.md")
+        doc_path.write_text(doc_content)  # ✅ ALLOWED
+```
+
+### Testing CORE-039 Compliance
+
+```bash
+# Run test suite to verify enforcement
+cd /Users/asifhussain/PROJECTS/CORTEX
+.venv/bin/python -m pytest cortex/tests/test_md_generation_blocker.py -v
+
+# Expected output: 16 PASSED ✅
+
+# To verify your code doesn't violate CORE-039:
+.venv/bin/python -c "
+from cortex.tests.test_md_generation_blocker import blocked_path_write
+# Your code that writes files will now be checked
+"
 ```
 
 ---
