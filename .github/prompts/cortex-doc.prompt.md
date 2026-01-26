@@ -245,10 +245,12 @@ done
 
 echo "📊 PHASE 6: Final Report"
 
-# Generate report
-report="FRESH-DOCUMENTATION-GENERATION-$(date +%Y-%m-%d).md"
+# Generate report with CORE-028 compliant filename
+report="fresh-documentation-generation-$(date +%Y-%m-%d).md"
+report_dir="reports/analysis"
+mkdir -p "$report_dir"
 
-cat > "_workspaces/reports/$report" << 'EOF'
+cat > "$report_dir/$report" << 'EOF'
 # Fresh Documentation Generation Report
 
 ## Summary
@@ -315,10 +317,10 @@ EOF
 
 # Git add (but don't commit - Phase 7 will commit everything)
 git add docs/
-git add _workspaces/reports/$report
+git add $report_dir/$report
 
 echo "✅ PHASE 6: REPORTING COMPLETE"
-echo "📊 Report: _workspaces/reports/$report"
+echo "📊 Report: $report_dir/$report"
 ```
 
 ### Phase 7: POST-CLEANUP (Remove legacy files)

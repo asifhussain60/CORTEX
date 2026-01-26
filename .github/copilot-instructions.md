@@ -146,7 +146,7 @@ Support: OnboardingOrchestrator, ToolDiscoveryOrchestrator, UpgradeOrchestrator,
 | Python Code | `cortex/`, `cortex_brain/` |
 | Tests | `tests/` |
 | Documentation | `docs/` |
-| Reports | `_workspaces/roadmap/reports/` |
+| Reports | `reports/` |
 
 ### FORBIDDEN:
 - ❌ `.md` files outside `docs/`

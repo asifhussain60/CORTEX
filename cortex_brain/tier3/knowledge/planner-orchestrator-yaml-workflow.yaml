@@ -1,0 +1,844 @@
+# ============================================================================
+# PlannerOrchestrator YAML Workflow Configuration
+# AC-PLANNER-YAML-001: Holistic Planning with LENS, Git Analysis, Challenges
+# ============================================================================
+# 
+# WORKFLOW STATES:
+#   1. TEMP (Draft with context) - Pending user approval
+#   2. PENDING_APPROVAL - Awaiting explicit approval with DoR review
+#   3. ACTIVE - Approved, ready for autonomous execution
+#   4. EXECUTING - Currently running with progress tracking
+#   5. EXECUTED - Completed successfully
+#
+# BUILT-IN ORCHESTRATORS:
+#   - LENS Classification (Language→Examination→Navigation→Synthesis)
+#   - Git Analysis (branch, status, recent commits)
+#   - Challenge System (4 types: governance, alternative, scope, risk)
+#   - InteractionOrchestrator (integrated for user challenges)
+#   - Execution Gates (impact/confidence matrix)
+#   - Autonomous Execution (with ASCII progress bars)
+# ============================================================================
+
+---
+##############################################################################
+# SECTION 1: YAML PLAN TEMPLATE (TEMP STATE - Pending Approval)
+##############################################################################
+
+plan_template:
+  
+  # Basic Metadata
+  metadata:
+    plan_id: "string (UUID12)"  # Generated automatically
+    created_at: "ISO8601 timestamp"
+    created_by: "user | system"
+    version: "1.0"
+    schema_version: "1.0"
+    
+  # Request Details (Context for Approval)
+  request:
+    description: "User's original request (REQUIRED)"
+    scope: "line|function|file|module|system"  # Default: file
+    impact: "low|medium|high"  # Default: medium
+    confidence: 0.0-1.0 or "low|medium|high"  # Default: inferred from impact
+    intent_override: "IMPLEMENT|FIX|REFACTOR|DOCUMENT|TEST|ANALYZE"  # Optional
+    context: "Additional context for human reviewers"
+    
+  # LENS Classification Output
+  classification:
+    intent: "IMPLEMENT|FIX|REFACTOR|DOCUMENT|TEST|ANALYZE"
+    confidence: 0.0-1.0  # Classifier confidence
+    scope: "line|function|file|module|system"
+    impact: "low|medium|high"
+    handler: "TDDOrchestrator|IntentRouter|RefactoringOrchestrator|..."
+    rationale: "Why this intent was chosen"
+    
+  # Git Context (Lightweight Analysis)
+  git_context:
+    branch: "current branch name"
+    status: "clean|dirty|error"  # clean = no uncommitted changes
+    uncommitted_changes:
+      - "file path 1"
+      - "file path 2"
+    recent_commits:
+      - hash: "abc123def456"
+        message: "feat: added feature X"
+      - hash: "def456ghi789"
+        message: "fix: resolved issue Y"
+    
+  # Strategic Challenges (Context for Discussion)
+  challenges:
+    - type: "governance|alternative_path|scope_creep|risk_mismatch"
+      title: "Challenge title"
+      description: "Why this is a challenge"
+      severity: "low|medium|high"
+      recommendation: "How to address it"
+      can_proceed_without_addressing: true|false  # Blocking vs advisory
+      
+  # Approval Status (Tracked Through Lifecycle)
+  approval_status:
+    status: "pending_approval|approved|rejected|modified"
+    requested_at: "ISO8601 timestamp"
+    approved_at: "ISO8601 timestamp or null"
+    approved_by: "user or system"
+    rejection_reason: "Why it was rejected (if rejected)"
+    modification_history:
+      - modified_at: "ISO8601 timestamp"
+        modified_by: "user"
+        changes: "What was changed"
+        reason: "Why it was changed"
+        
+  # Execution Gates (Autonomous Decision Matrix)
+  execution_gates:
+    gate_type: "auto_execute|notify_and_execute|confirm_before_execute|notify_user|blocked"
+    requires_confirmation: true|false
+    requires_design_review: true|false  # Only if gate_type = blocked
+    impact_level: "low|medium|high"
+    confidence_level: "low|medium|high"
+    reason: "Why this gate was selected"
+    
+  # Status State Machine
+  status: "temp|pending_approval|active|executing|executed|rejected|failed|archived"
+  
+  # Execution History (Filled During/After Execution)
+  execution_history:
+    - executed_at: "ISO8601 timestamp"
+      executed_by: "system|user"
+      confirmed: true|false
+      gate_applied: "gate_type that was applied"
+      result: "success|failure|blocked"
+      execution_log: "Output from orchestrator"
+      duration_ms: 1234
+
+---
+##############################################################################
+# SECTION 2: CONTEXT-BASED APPROVAL GATES
+##############################################################################
+
+approval_gates:
+  
+  # Gate 1: Definition of Ready (DoR)
+  dor_gate:
+    name: "Definition of Ready"
+    checkpoint: "BEFORE moving TEMP → ACTIVE"
+    required_fields:
+      - request.description  # Must be non-empty
+      - request.scope       # Must be specified
+      - request.impact      # Must be specified
+      - classification.intent  # LENS must have classified
+      - execution_gates.gate_type  # Must have computed gate
+    checklist:
+      - "✓ Request description clear and specific"
+      - "✓ Scope appropriately sized"
+      - "✓ Impact level realistic"
+      - "✓ Challenges reviewed (if any)"
+      - "✓ Execution gate accepted"
+    
+    approval_flow:
+      step_1: "Display TEMP YAML to user with context"
+      step_2: "Show DoR checklist"
+      step_3: "Highlight any CHALLENGES that are BLOCKING"
+      step_4: "User reviews and approves/rejects/modifies"
+      step_5: "If approved: move to ACTIVE, lock YAML"
+      
+  # Gate 2: Challenge Review Gate
+  challenge_gate:
+    name: "Strategic Challenge Review"
+    checkpoint: "BEFORE DoR gate, if challenges exist"
+    rules:
+      - severity_high_and_blocking: "MUST address before approval"
+      - severity_high_non_blocking: "Recommend addressing but not required"
+      - severity_medium: "Can be addressed later"
+      - severity_low: "Informational only"
+      
+    blocking_rules:
+      - governance_violations: "Always blocking (CORE rules)"
+      - risk_mismatch: "Blocking if high impact + low confidence"
+      - scope_creep_severe: "Blocking if >2x expected word count"
+      
+    user_actions:
+      - "address_challenge": "Modify request to address challenge"
+      - "acknowledge_and_proceed": "Accept challenge, proceed anyway"
+      - "reject_plan": "Reject plan entirely"
+      
+  # Gate 3: Execution Gate Enforcement
+  execution_gate:
+    name: "Autonomous Execution Gate"
+    checkpoint: "AT execution time (ACTIVE → EXECUTING)"
+    gate_matrix:
+      low_impact:
+        high_confidence: "AUTO_EXECUTE - proceed immediately"
+        medium_confidence: "NOTIFY_AND_EXECUTE - notify, then proceed"
+        low_confidence: "CONFIRM_BEFORE_EXECUTE - wait for user confirmation"
+      medium_impact:
+        very_high_confidence: "AUTO_EXECUTE - proceed immediately"
+        high_confidence: "CONFIRM_BEFORE_EXECUTE - wait for user confirmation"
+        medium_confidence: "BLOCKED - requires design review"
+        low_confidence: "BLOCKED - requires design review"
+      high_impact:
+        very_high_confidence: "NOTIFY_USER - notify, wait for permission"
+        high_confidence: "CONFIRM_BEFORE_EXECUTE - wait for explicit confirmation"
+        medium_confidence: "BLOCKED - requires design review"
+        low_confidence: "BLOCKED - requires design review"
+
+---
+##############################################################################
+# SECTION 3: WORKFLOW STATE TRANSITIONS
+##############################################################################
+
+state_machine:
+  
+  initial_state: "temp"
+  
+  transitions:
+    
+    # Creation: User Request → TEMP YAML
+    creation:
+      from: "[new request]"
+      to: "temp"
+      actions:
+        - "Generate plan_id (UUID12)"
+        - "Run LENS classification"
+        - "Perform git_context analysis"
+        - "Generate challenges"
+        - "Compute execution gates"
+        - "Write TEMP YAML to disk"
+      side_effects:
+        - "Cache in memory"
+        - "Log AC_START in audit trail"
+        
+    # Modification: User modifies TEMP before approval
+    modify_temp:
+      from: "temp"
+      to: "temp"  # Stays in temp, but status becomes "modified"
+      actions:
+        - "Validate modifications against request schema"
+        - "Re-run LENS classification with new request"
+        - "Regenerate challenges"
+        - "Recompute execution gates"
+        - "Update YAML on disk"
+      preconditions:
+        - "Plan must be in TEMP state"
+        - "Plan must not be locked (approval_status != approved)"
+        
+    # Approval: TEMP → ACTIVE (locks the plan)
+    approve_plan:
+      from: "temp"
+      to: "pending_approval"
+      then_to: "active"
+      actions:
+        - "Validate DoR checklist"
+        - "Display final context to user"
+        - "Wait for explicit approval confirmation"
+        - "Lock YAML (no further modifications allowed)"
+        - "Move from temp_plans/ to active_plans/"
+        - "Set approval_status.status = approved"
+        - "Record approval_status.approved_at timestamp"
+      preconditions:
+        - "DoR gate must pass (all required fields)"
+        - "Challenge gate must be resolved (if blocking challenges)"
+        - "User must explicitly confirm"
+      side_effects:
+        - "Trigger ac_approval_gate if configured"
+        
+    # Rejection: TEMP → REJECTED
+    reject_plan:
+      from: "temp"
+      to: "rejected"
+      actions:
+        - "Record rejection reason"
+        - "Update status in YAML"
+        - "Keep in temp_plans/ for reference"
+      side_effects:
+        - "Log rejection reason in audit trail"
+        
+    # Execution: ACTIVE → EXECUTING → EXECUTED
+    execute_plan:
+      from: "active"
+      to: "executing"
+      then_to: "executed"
+      actions:
+        - "Check execution gate"
+        - "If gate requires confirmation:"
+        - "  - Ask user for explicit confirmation"
+        - "  - Wait for response"
+        - "If gate is AUTO_EXECUTE or confirmed:"
+        - "  - Update status to EXECUTING"
+        - "  - Display ASCII progress bar (live)"
+        - "  - Execute via appropriate orchestrator"
+        - "  - Capture execution output and timing"
+        - "  - Move to executed_plans/"
+        - "  - Update status to EXECUTED"
+      execution_flow:
+        - "Pass plan details to routing orchestrator"
+        - "Orchestrator handles actual implementation"
+        - "Stream progress with ASCII bars"
+        - "Collect results and side effects"
+        - "Return to PlannerOrchestrator for recording"
+
+---
+##############################################################################
+# SECTION 4: ASCII PROGRESS TRACKING (EXECUTING STATE)
+##############################################################################
+
+progress_tracking:
+  
+  template: |
+    ┌────────────────────────────────────────────────────────────┐
+    │ 🚀 PLAN EXECUTION: {plan_id}                              │
+    ├────────────────────────────────────────────────────────────┤
+    │                                                             │
+    │ PHASE: {current_phase}                                     │
+    │ Progress: [{progress_bar}] {percentage}%                  │
+    │                                                             │
+    │ Status: {status_emoji} {status_text}                       │
+    │ Duration: {elapsed}s / {estimated}s                        │
+    │ ETA: {eta_seconds}s remaining                              │
+    │                                                             │
+    │ Last Action: {last_action}                                 │
+    │ Current Step: {current_step}                               │
+    │                                                             │
+    └────────────────────────────────────────────────────────────┘
+  
+  phases:
+    - phase: "INITIALIZE"
+      weight: 5  # 5% of total time
+      description: "Setting up execution environment"
+      ascii_char: "⚙️"
+      
+    - phase: "VALIDATE"
+      weight: 10  # 10% of total time
+      description: "Validating inputs and preconditions"
+      ascii_char: "✓"
+      
+    - phase: "PREPARE"
+      weight: 15  # 15% of total time
+      description: "Preparing work area and dependencies"
+      ascii_char: "📦"
+      
+    - phase: "EXECUTE"
+      weight: 50  # 50% of total time
+      description: "Executing main operations"
+      ascii_char: "▶️"
+      
+    - phase: "VERIFY"
+      weight: 15  # 15% of total time
+      description: "Verifying results and outputs"
+      ascii_char: "🔍"
+      
+    - phase: "FINALIZE"
+      weight: 5  # 5% of total time
+      description: "Finalizing and recording results"
+      ascii_char: "✨"
+  
+  progress_bar_styles:
+    compact:    "⠀⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏"
+    blocks:     "░░░░░░░░░░░░░░░░░░░░"
+    arrows:     "←←←←←←←←←←→→→→→→→→→→"
+    equals:     "═══════════════════════"
+    
+  status_emoji_mapping:
+    queued: "⏳"
+    executing: "🔄"
+    success: "✅"
+    failure: "❌"
+    blocked: "🚫"
+    warning: "⚠️"
+
+---
+##############################################################################
+# SECTION 5: SAMPLE EXECUTION SCENARIO
+##############################################################################
+
+example_scenario_1:
+  
+  title: "Low Impact, High Confidence - AUTO_EXECUTE"
+  description: "Simple documentation update"
+  
+  user_request:
+    description: "Add type hints to util.py module"
+    scope: "file"
+    impact: "low"
+    confidence: 0.95
+    
+  temp_plan_output:
+    plan_id: "abc123def456"
+    status: "temp"
+    classification:
+      intent: "REFACTOR"
+      confidence: 0.90
+      handler: "RefactoringOrchestrator"
+    challenges: []  # No challenges
+    execution_gates:
+      gate_type: "auto_execute"
+      requires_confirmation: false
+      reason: "Low impact + very high confidence"
+      
+  approval_flow:
+    step_1: "Display TEMP YAML to user"
+    step_2: "✓ DoR checklist passes (all fields valid)"
+    step_3: "✓ No challenges to review"
+    step_4: "✓ Execution gate allows auto_execute"
+    step_5: "User approves → moves to ACTIVE"
+    
+  execution_flow:
+    step_1: "Move from active_plans/ to execution"
+    step_2: "Gate check: AUTO_EXECUTE (no confirmation needed)"
+    step_3: "Display progress bars:"
+    
+    progress_display: |
+      ┌────────────────────────────────────────────────────────────┐
+      │ 🚀 PLAN EXECUTION: abc123def456                            │
+      ├────────────────────────────────────────────────────────────┤
+      │                                                             │
+      │ PHASE: PREPARE                                             │
+      │ Progress: [════════════░░░░░░░░░░░░░░░░░░░░░░] 45%        │
+      │                                                             │
+      │ Status: 🔄 Executing                                       │
+      │ Duration: 2.3s / 5.0s estimated                            │
+      │ ETA: 2.7s remaining                                        │
+      │                                                             │
+      │ Last Action: Loaded RefactoringOrchestrator                │
+      │ Current Step: Analyzing type hints in util.py              │
+      │                                                             │
+      └────────────────────────────────────────────────────────────┘
+      
+    step_4: "RefactoringOrchestrator adds type hints"
+    step_5: "Tests pass: 100% (all 42 tests)"
+    step_6: "Final display:"
+    
+    final_display: |
+      ┌────────────────────────────────────────────────────────────┐
+      │ 🚀 PLAN EXECUTION: abc123def456                            │
+      ├────────────────────────────────────────────────────────────┤
+      │                                                             │
+      │ PHASE: FINALIZE                                            │
+      │ Progress: [════════════════════════════════════════] 100%  │
+      │                                                             │
+      │ Status: ✅ SUCCESS                                         │
+      │ Duration: 4.7s / 5.0s estimated                            │
+      │ ETA: Complete                                              │
+      │                                                             │
+      │ Last Action: Recorded execution in EXECUTED state          │
+      │ Result: Added type hints to 156 locations in util.py       │
+      │                                                             │
+      └────────────────────────────────────────────────────────────┘
+      
+    step_7: "Plan moved to executed_plans/"
+    step_8: "User sees final summary with metrics"
+
+---
+
+example_scenario_2:
+  
+  title: "High Impact, Medium Confidence - CONFIRM_BEFORE_EXECUTE"
+  description: "Refactor core orchestrator interface"
+  
+  user_request:
+    description: "Refactor IOrchestrator interface to add new method"
+    scope: "module"
+    impact: "high"
+    confidence: 0.80
+    
+  temp_plan_output:
+    plan_id: "xyz789abc123"
+    status: "temp"
+    classification:
+      intent: "REFACTOR"
+      confidence: 0.85
+      handler: "RefactoringOrchestrator"
+    challenges:
+      - type: "risk_mismatch"
+        title: "High impact with medium confidence"
+        severity: "high"
+        recommendation: "Review design with team before executing"
+        can_proceed_without_addressing: false  # BLOCKING
+    execution_gates:
+      gate_type: "confirm_before_execute"
+      requires_confirmation: true
+      reason: "High impact + medium confidence requires confirmation"
+      
+  approval_flow:
+    step_1: "Display TEMP YAML to user"
+    step_2: "🚨 BLOCKING CHALLENGE detected: Risk mismatch"
+    step_3: "User options:"
+    options: |
+      [1] Address challenge (modify confidence or reduce scope)
+      [2] Acknowledge challenge and proceed anyway
+      [3] Reject plan entirely
+    step_4: "User chooses [2] - acknowledge and proceed"
+    step_5: "User approves → moves to ACTIVE"
+    
+  execution_flow:
+    step_1: "Plan in ACTIVE state, ready for execution"
+    step_2: "Execution initiated"
+    step_3: "Gate check: CONFIRM_BEFORE_EXECUTE"
+    step_4: "Display context and ask for confirmation:"
+    
+    confirmation_display: |
+      ┌────────────────────────────────────────────────────────────┐
+      │ ⚠️  EXECUTION CONFIRMATION REQUIRED                        │
+      ├────────────────────────────────────────────────────────────┤
+      │                                                             │
+      │ Plan: xyz789abc123                                         │
+      │ Intent: REFACTOR (IOrchestrator interface)                 │
+      │                                                             │
+      │ IMPACT: 🔴 HIGH                                            │
+      │ CONFIDENCE: 🟡 MEDIUM (80%)                               │
+      │                                                             │
+      │ This operation will affect 23 orchestrators across         │
+      │ the entire system. Proceed with caution.                   │
+      │                                                             │
+      │ Estimated Duration: 30-45 seconds                          │
+      │                                                             │
+      │ Do you want to proceed? [Y/N]:                             │
+      │                                                             │
+      └────────────────────────────────────────────────────────────┘
+      
+    step_5: "User confirms: Y"
+    step_6: "Progress bars display during execution"
+    step_7: "On success: move to executed_plans/, display summary"
+
+---
+
+example_scenario_3:
+  
+  title: "Medium Impact, Low Confidence - BLOCKED (Design Review)"
+  description: "Overhaul database schema"
+  
+  user_request:
+    description: "Redesign orchestrator_registry table structure"
+    scope: "system"
+    impact: "high"
+    confidence: 0.60
+    
+  temp_plan_output:
+    plan_id: "ghi012jkl345"
+    status: "temp"
+    classification:
+      intent: "REFACTOR"
+      confidence: 0.70
+      handler: "RefactoringOrchestrator"
+    challenges:
+      - type: "risk_mismatch"
+        title: "High impact with low confidence"
+        severity: "high"
+        recommendation: "Increase confidence through design review or reduce scope"
+        can_proceed_without_addressing: false  # BLOCKING
+    execution_gates:
+      gate_type: "blocked"
+      requires_confirmation: true
+      requires_design_review: true
+      reason: "High impact + low confidence requires design review"
+      
+  approval_flow:
+    step_1: "Display TEMP YAML to user"
+    step_2: "🚫 EXECUTION BLOCKED - Design review required"
+    step_3: "User sees:"
+    
+    blocked_message: |
+      This plan cannot proceed to ACTIVE state because it violates
+      the execution gate policy:
+      
+      - Impact Level: HIGH (affects entire system)
+      - Confidence: LOW (60% - not sufficient)
+      - Required Gate: Design Review + Confidence increase to 75%+
+      
+      Options:
+      [1] Modify plan to reduce scope/impact
+      [2] Gather more information to increase confidence
+      [3] Request formal design review (escalate to team)
+      [4] Reject plan entirely
+      
+    step_4: "User chooses [3] - request design review"
+    step_5: "Plan marked for escalation, awaiting design review approval"
+
+---
+
+##############################################################################
+# SECTION 6: CONFIGURATION SECTION - RUNTIME PARAMETERS
+##############################################################################
+
+runtime_config:
+  
+  # Default thresholds
+  thresholds:
+    high_confidence: 0.85
+    medium_confidence: 0.70
+    low_confidence: 0.50
+    
+    high_impact: 3  # Affects 3+ modules
+    medium_impact: 1  # Affects 1-2 modules
+    low_impact: 0   # Single file or less
+    
+  # Approval gates configuration
+  approval:
+    require_dor_validation: true
+    require_challenge_resolution: true  # If any challenges exist
+    blocking_challenge_types:
+      - "governance"           # Always blocking
+      - "risk_mismatch"        # If high impact + low confidence
+      
+    non_blocking_challenge_types:
+      - "alternative_path"     # Informational
+      - "scope_creep"          # Informational (unless word count > 2x)
+      
+  # Execution configuration
+  execution:
+    enable_auto_execute: true   # Allow AUTO_EXECUTE gates
+    enable_progress_bars: true  # Display ASCII progress
+    progress_bar_refresh_ms: 500  # Update frequency
+    
+    # Gate policy
+    gate_policy:
+      low_impact_high_confidence: "auto_execute"
+      low_impact_medium_confidence: "notify_and_execute"
+      low_impact_low_confidence: "confirm_before_execute"
+      
+      medium_impact_very_high_confidence: "auto_execute"
+      medium_impact_high_confidence: "confirm_before_execute"
+      medium_impact_medium_confidence: "blocked"
+      medium_impact_low_confidence: "blocked"
+      
+      high_impact_very_high_confidence: "notify_user"
+      high_impact_high_confidence: "confirm_before_execute"
+      high_impact_medium_confidence: "blocked"
+      high_impact_low_confidence: "blocked"
+  
+  # Storage configuration
+  storage:
+    temp_plans_path: "cortex-registry/planning/temp/"
+    active_plans_path: "cortex-registry/planning/active/"
+    executed_plans_path: "cortex-registry/planning/executed/"
+    cache_in_memory: true
+    yaml_format:
+      default_flow_style: false
+      sort_keys: false
+      
+  # Audit & Logging
+  audit:
+    enable_audit_trail: true
+    log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+    record_execution_output: true
+    record_duration: true
+    record_side_effects: true
+
+---
+##############################################################################
+# SECTION 7: INTEGRATION POINTS - BUILT-IN ORCHESTRATORS
+##############################################################################
+
+integrations:
+  
+  lens_synthesis:
+    module: "cortex.orchestrators.core.lens_synthesis"
+    class: "LENSSynthesis"
+    method: "synthesize"
+    phase: "TEMP plan creation"
+    input: "user_request"
+    output: "classification (intent, confidence, handler)"
+    
+  git_analysis:
+    module: "cortex.orchestrators.core.planner_orchestrator"
+    method: "_initialize_git_context"
+    phase: "TEMP plan creation"
+    input: "local git state"
+    output: "git_context (branch, status, commits)"
+    
+  challenge_engine:
+    module: "cortex.orchestrators.core.planner_orchestrator"
+    method: "_generate_challenges"
+    phase: "TEMP plan creation"
+    input: "user_request, classification"
+    output: "challenges[] (4 types)"
+    
+  interaction_orchestrator:
+    module: "cortex.orchestrators.core.interaction_orchestrator"
+    class: "InteractionOrchestrator"
+    phase: "Challenge resolution (optional)"
+    input: "challenges[]"
+    output: "user responses, modifications"
+    
+  execution_gates:
+    module: "cortex.orchestrators.core.planner_orchestrator"
+    method: "_compute_execution_gates"
+    phase: "TEMP plan creation"
+    input: "impact, confidence"
+    output: "ExecutionGate (type, requires_confirmation)"
+    
+  routing_orchestrators:
+    # Based on classification.handler, route to appropriate orchestrator
+    routing_map:
+      "IMPLEMENT": "TDDOrchestrator"
+      "FIX": "IntentRouter"
+      "REFACTOR": "RefactoringOrchestrator"
+      "DOCUMENT": "DocumentationOrchestrator"
+      "TEST": "TDDOrchestrator"
+      "ANALYZE": "MasterOrchestrator"
+    phase: "EXECUTE phase"
+    input: "active_plan (full context)"
+    output: "execution_result (success/failure)"
+    
+  database_registry:
+    module: "cortex.orchestrators.core.database_registry"
+    class: "DatabaseBackedRegistry"
+    phase: "Orchestrator initialization"
+    operation: "Register PlannerOrchestrator"
+    status: "✅ Registered as CORE orchestrator"
+
+---
+##############################################################################
+# SECTION 8: TRANSITION DIAGRAM (ASCII)
+##############################################################################
+
+ascii_state_diagram: |
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │         PLANNERORCHESTRATOR LIFECYCLE STATE MACHINE              │
+  └──────────────────────────────────────────────────────────────────┘
+  
+  User Request
+      │
+      ▼
+  ┌─────────────┐
+  │   CREATE    │  [Generate plan_id, run LENS, git analysis]
+  └────┬────────┘
+       │
+       ▼
+  ┌──────────────────────────────────────────────────────────┐
+  │              TEMP (Draft with Context)                   │
+  │  - YAML structure fully built                            │
+  │  - Challenges identified (if any)                        │
+  │  - Execution gate computed                               │
+  │  - Awaiting user review & approval                       │
+  └──────┬─────────────────────────────────────────────────┬─┘
+         │                                                 │
+    [User reviews]                                [Can modify]
+         │                                                 │
+    ┌────┴───────────────────────────────────────────┐     │
+    │                                                 │     │
+    ▼                                                 ▼     │
+┌────────────────┐                              ┌─────────┴──┐
+│   CHALLENGES   │                              │  MODIFY    │
+│   TO REVIEW?   │◄─────────────────────────────┤  REQUEST   │
+└───┬────┬───┬───┘                              └────────────┘
+    │    │   │
+ Yes│ No │   │ (If changes needed, re-run LENS)
+    ▼    ▼   └────────────────┐
+   [A] [B]                     │
+    │   │                      │
+    │   │  ┌────────────────┐  │
+    │   └─►│ PENDING        │  │
+    │      │ APPROVAL       │  │
+    │      │ (DoR Checklist)│  │
+    │      └────┬───────────┘  │
+    │           │              │
+    │  ┌────────┼──────────┐   │
+    │  │        │          │   │
+    │  ▼        ▼          ▼   │
+   [Acknowledge] [Reject] [Approve]
+    │             │          │
+    │             ▼          ▼
+    │         ┌────────┐  ┌────────────────┐
+    │         │REJECTED│  │     ACTIVE     │
+    │         └────────┘  │  (Locked YAML) │
+    │                     │ Ready for exec  │
+    │                     └────────┬────────┘
+    │                              │
+    │                   [Execution triggered]
+    │                              │
+    └──────────────────┐           ▼
+                       │      ┌──────────────┐
+                       │      │   EXECUTING  │
+                       │      │  [ASCII bars]│
+                       │      └────────┬─────┘
+                       │              │
+                       │    ┌─────────┴──────────┐
+                       │    │                    │
+                       │    ▼                    ▼
+                       │ ┌────────┐         ┌────────┐
+                       │ │EXECUTED│         │ FAILED │
+                       │ └────────┘         └────────┘
+                       │    │                    │
+                       │    └────────┬───────────┘
+                       │             │
+                       ▼             ▼
+                  ┌──────────────────────┐
+                  │    ARCHIVED          │
+                  │ (Historical record)  │
+                  └──────────────────────┘
+
+---
+##############################################################################
+# SECTION 9: AUDIT TRAIL & GOVERNANCE
+##############################################################################
+
+audit_trail_template:
+  
+  # Each state transition logged
+  entries:
+    - timestamp: "ISO8601"
+      plan_id: "UUID12"
+      event: "PLAN_CREATED|PLAN_MODIFIED|CHALLENGE_RESOLVED|PLAN_APPROVED|EXECUTION_STARTED|EXECUTION_COMPLETED|PLAN_REJECTED"
+      actor: "user|system"
+      details: "Event-specific details"
+      
+      # Governance checks
+      governance:
+        core_rules_checked:
+          - "CORE-030: Implementation Truth"
+          - "CORE-008: TDD (if applicable)"
+          - "CORE-011: Type Hints"
+          - "CORE-012: Docstrings"
+        violations: []  # If any CORE rules violated, list here
+      
+  # Example audit entry
+  example_entry:
+    timestamp: "2026-01-25T14:32:15.823Z"
+    plan_id: "abc123def456"
+    event: "PLAN_APPROVED"
+    actor: "asif.hussain"
+    details:
+      approval_time_minutes: 2.5
+      challenges_addressed: 0
+      modifications_count: 0
+      dor_validation_passed: true
+      
+    governance:
+      core_rules_checked: ["CORE-030", "CORE-008"]
+      violations: []
+
+---
+##############################################################################
+# SUMMARY: YAML WORKFLOW BENEFITS
+##############################################################################
+
+benefits: |
+  ✅ CONTEXT DRIVEN
+     - Full decision context in YAML before execution
+     - Challenges explicitly documented
+     - Git state captured for reproducibility
+     
+  ✅ APPROVAL GATES
+     - Multi-stage validation (DoR, Challenges, Execution)
+     - Blocking vs advisory challenge types
+     - Confirmation gates for high-impact operations
+     
+  ✅ AUTONOMOUS EXECUTION
+     - LENS-powered intelligent routing
+     - Impact/confidence matrix determines auto vs manual
+     - Built-in git analysis provides context
+     - ASCII progress bars for user feedback
+     
+  ✅ AUDIT & GOVERNANCE
+     - Every transition logged with AC-ID
+     - CORE rules checked at approval gates
+     - Full execution history preserved
+     - Reversible (archived state for reference)
+     
+  ✅ INTEGRATION
+     - InteractionOrchestrator for challenge discussion
+     - Router orchestrators for execution (TDD, Refactor, etc.)
+     - DatabaseBackedRegistry for discovery
+     - MCP tools for external integration
+
+# END OF FILE

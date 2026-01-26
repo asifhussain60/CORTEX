@@ -64,7 +64,7 @@ PHASE-XX: [TITLE]
 
 | Type | Location |
 |------|----------|
-| Status (YAML) | `_workspaces/roadmap/reports/` |
+| Status (YAML) | `reports/` |
 | Terminal | Console output |
 | Documentation | `docs/` (only if needed) |
 

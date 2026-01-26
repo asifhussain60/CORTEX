@@ -208,8 +208,9 @@ def main():
     print("\n[3/4] GENERATING YAML snippet...")
     yaml_snippet = generate_yaml_snippet(phases_data)
     
-    # Save snippet for review
-    snippet_file = Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/phases-consolidated-snippet.yaml")
+    # Save snippet for review to reports/analysis/ with CORE-028 compliant naming
+    snippet_file = Path("/Users/asifhussain/PROJECTS/CORTEX/reports/analysis/phases-consolidated-snippet.yaml")
+    snippet_file.parent.mkdir(parents=True, exist_ok=True)
     with open(snippet_file, 'w') as f:
         f.write(yaml_snippet)
     

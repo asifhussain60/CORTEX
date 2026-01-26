@@ -81,11 +81,11 @@ response_header_enforcement:
 
   implementation_notes: |
     This enforcement file serves as the canonical source for response header requirements.
-    The cortex-builder.prompt.md loads this file during initialization to ensure
+    The cortex-total-recall.prompt.md loads this file during initialization to ensure
     header rendering is treated as a hard constraint at generation time, not optional
     documentation.
     
-    Load mechanism: cortex-builder.prompt.md → RESPONSE GUIDELINES section →
+    Load mechanism: cortex-total-recall.prompt.md → RESPONSE GUIDELINES section →
     references this file as TIER 0 authority.
     
     Verification: Every response MUST begin with the header template or execution fails.

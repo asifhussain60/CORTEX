@@ -363,7 +363,7 @@ AC_START (log intent) -> EXECUTE -> AC_COMPLETE (log result) -> Verify hash chai
 - NEVER: `docs_md/`, root, `.github/`
 
 **YAML Reports:**
-- `_workspaces/roadmap/reports/` - Phase reports
+- `reports/` - Phase reports
 - `cortex_brain/tier0/governance/` - Governance specs
 
 ---

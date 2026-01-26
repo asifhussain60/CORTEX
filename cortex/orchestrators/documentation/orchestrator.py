@@ -25,6 +25,7 @@ from cortex.core.interfaces import IOrchestrator
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.brain.core.state_manager import StateManager, OperationState
+from cortex.governance.filename_factory import FilenameFactory, FilePathEnforcer
 
 
 # ============================================================================
@@ -700,6 +701,45 @@ class DocumentationOrchestrator(IOrchestrator):
         self.state_manager = StateManager()
         self.diagram_generator = DiagramGenerationOrchestrator()
         self.cleanup_orchestrator = DocumentationCleanupOrchestrator()
+        # Initialize FilenameFactory for CORE-028/CORE-038 compliance (CORE-030: Implementation Truth)
+        self.filename_factory = FilenameFactory()
+        self.path_enforcer = FilePathEnforcer()
+    
+    def _get_compliant_filename(self, purpose: str, file_type: str = "md") -> str:
+        """Get CORE-028 compliant filename using FilenameFactory.
+        
+        Args:
+            purpose: Human-readable description of file purpose
+            file_type: File extension (md, yaml, json) - defaults to md
+            
+        Returns:
+            CORE-028 compliant filename
+            
+        Implementation Truth (CORE-030): Uses FilenameFactory validation
+        """
+        result = self.filename_factory.generate(purpose, file_type)
+        if result.is_valid:
+            return result.filename
+        else:
+            # Fallback to sanitized purpose-based naming
+            import re
+            safe_name = re.sub(r'[^a-z0-9-]', '', purpose.lower().replace(' ', '-'))[:25]
+            return f"{safe_name}.{file_type}"
+    
+    def _validate_output_path(self, path: str, file_type: str = "md") -> bool:
+        """Validate that output path complies with CORE-038 placement policy.
+        
+        Args:
+            path: Output path to validate
+            file_type: Type of file (md, yaml, json)
+            
+        Returns:
+            True if path is valid, False otherwise
+            
+        Implementation Truth (CORE-030): Uses FilePathEnforcer validation
+        """
+        result = self.path_enforcer.validate_path(path, file_type)
+        return result.is_valid
     
     # ========================================================================
     # IOrchestrator Implementation

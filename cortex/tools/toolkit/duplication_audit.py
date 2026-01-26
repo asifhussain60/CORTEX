@@ -255,7 +255,7 @@ def main():
     print(report)
     
     # Save report
-    report_path = Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/reports") / \
+    report_path = Path("reports/analysis") / \
                   f"DUPLICATION-AUDIT-{datetime.now().strftime('%Y-%m-%d-%H%M%S')}.md"
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(report)
