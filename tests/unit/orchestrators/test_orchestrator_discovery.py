@@ -25,7 +25,6 @@ from cortex.orchestrators import get_database_registry, OrchestratorMetadata
 from cortex.orchestrators.registry.discovery_engine import DiscoveryEngine, DiscoveryQuery, DiscoveryResult
 from cortex.core.interfaces import IOrchestrator
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.tools.todo_manager import TodoManager
 from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
@@ -37,7 +36,7 @@ CORTEX_BRAIN_PACKAGE = "cortex_brain"
 # Expected core modules that must be discoverable
 EXPECTED_CORE_MODULES = [
     "cortex.orchestrators.core.master_orchestrator",
-    "cortex.orchestrators.tools.todo_manager",
+    "cortex.orchestrators.core.database_registry",
     "cortex.intent_router.classifier",
     "cortex.intent_router.routing_engine",
     "cortex.brain.core.governance_registry",
@@ -127,11 +126,11 @@ class TestModuleDiscovery:
         assert master is not None
         assert isinstance(master, MasterOrchestrator)
 
-    def test_todo_manager_available(self) -> None:
-        """Test AC-FR-DISCOVERY-007: TodoManager is available and instantiable."""
-        todo_mgr = TodoManager()
-        assert todo_mgr is not None
-        assert isinstance(todo_mgr, TodoManager)
+    def test_discovery_engine_available(self) -> None:
+        """Test AC-FR-DISCOVERY-007: DiscoveryEngine is available and instantiable."""
+        engine = DiscoveryEngine()
+        assert engine is not None
+        assert isinstance(engine, DiscoveryEngine)
 
     def test_governance_registry_available(self) -> None:
         """Test AC-FR-DISCOVERY-008: GovernanceRegistry is available and operational."""
@@ -142,11 +141,10 @@ class TestModuleDiscovery:
 
 class TestOrchestratorDiscovery:
     """AC-FR-DISCOVERY-009: Test orchestrator discovery and registration."""
-
     @pytest.fixture
     def registry(self):
         """Provide OrchestratorRegistry instance."""
-from cortex.orchestrators import get_database_registry
+        from cortex.orchestrators import get_database_registry
         return get_database_registry()
 
     @pytest.fixture
@@ -333,15 +331,12 @@ class TestMasterOrchestratorIntegration:
         
         assert master1 is master2
 
-    def test_master_orchestrator_todo_manager_wired(self) -> None:
-        """Test AC-FR-TODO-001: TodoManager is wired into MasterOrchestrator."""
+    def test_master_orchestrator_interaction_protocol_wired(self) -> None:
+        """Test AC-FR-INTERACTION-001: InteractionOrchestrator is wired into MasterOrchestrator."""
         master = MasterOrchestrator.instance()
         
-        assert hasattr(master, "get_todo_manager"), "MasterOrchestrator missing get_todo_manager() method"
-        
-        todo_mgr = master.get_todo_manager()
-        assert todo_mgr is not None
-        assert isinstance(todo_mgr, TodoManager)
+        assert hasattr(master, "interaction_orchestrator"), "MasterOrchestrator missing interaction_orchestrator"
+        assert master.interaction_orchestrator is not None
 
     def test_master_orchestrator_accessibility(self) -> None:
         """Test AC-AR-006-01: MasterOrchestrator provides required accessors."""
@@ -413,7 +408,7 @@ class TestCapabilitiesCompleteness:
     @pytest.fixture
     def registry(self):
         """Provide OrchestratorRegistry instance."""
-from cortex.orchestrators import get_database_registry
+        from cortex.orchestrators import get_database_registry
         return get_database_registry()
 
     def test_orchestrator_capabilities_documented(self, registry) -> None:
@@ -447,7 +442,7 @@ class TestProductionReadinessInventory:
     @pytest.fixture
     def registry(self):
         """Provide OrchestratorRegistry instance."""
-from cortex.orchestrators import get_database_registry
+        from cortex.orchestrators import get_database_registry
         return get_database_registry()
 
     def test_all_required_orchestrator_domains_present(self, registry) -> None:
@@ -564,9 +559,9 @@ class TestCORE020MultiRepoGovernance:
 
     def test_orchestrator_registry_is_singleton(self) -> None:
         """Test AC-CORE-020: OrchestratorRegistry is singleton for centralized registration."""
-from cortex.orchestrators import get_database_registry
+        from cortex.orchestrators import get_database_registry
         reg1 = get_database_registry()
-reg2 = get_database_registry()
+        reg2 = get_database_registry()
         
         assert reg1 is reg2
 
