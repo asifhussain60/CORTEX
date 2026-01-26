@@ -199,6 +199,7 @@ class PlannerOrchestrator(IOrchestrator):
         self.interaction_orchestrator: Optional[Any] = None
         self.git_context: Optional[GitContext] = None
         self._plan_cache: Dict[str, Dict[str, Any]] = {}
+        self.registry_loader: Optional[Any] = None  # AC-PLANNING-PLANNER-001
 
     @classmethod
     def instance(cls) -> PlannerOrchestrator:
@@ -234,6 +235,16 @@ class PlannerOrchestrator(IOrchestrator):
 
             # Initialize git context
             self._initialize_git_context()
+
+            # Initialize registry loader (AC-PLANNING-PLANNER-001)
+            try:
+                from cortex.orchestrators.domain.planning_registry_loader import PlanningRegistryLoader
+                
+                self.registry_loader = PlanningRegistryLoader(repo_root.parent / "cortex-registry")
+                self.logger.info("PlanningRegistryLoader initialized for registry refactoring")
+            except Exception as e:
+                self.logger.warning(f"Failed to initialize PlanningRegistryLoader: {str(e)}")
+                self.registry_loader = None
 
             # Register with DatabaseBackedRegistry
             try:
@@ -667,6 +678,117 @@ class PlannerOrchestrator(IOrchestrator):
         except Exception as e:
             self.logger.warning(f"Execution gate computation failed: {str(e)}")
             return None
+
+    # ========================================================================
+    # REGISTRY REFACTORING METHODS (AC-PLANNING-PLANNER-001)
+    # ========================================================================
+
+    def _get_plan_folder_name(self, plan_name: str) -> str:
+        """
+        Get kebab-case folder name for plan.
+
+        Converts plan name to kebab-case using naming factory.
+
+        Args:
+            plan_name: Original plan name
+
+        Returns:
+            Kebab-case folder name
+        """
+        if self.registry_loader:
+            return self.registry_loader.to_kebab_case(plan_name)
+        
+        # Fallback if registry loader not available
+        import re
+        text = re.sub(r"[_\s]+", "-", plan_name)
+        text = re.sub(r"([a-z])([A-Z])", r"\1-\2", text)
+        text = re.sub(r"[^a-z0-9\-\.]", "-", text.lower())
+        text = re.sub(r"-+", "-", text)
+        return text.strip("-")
+
+    def _get_plan_folder_name_from_request(self, user_request: Dict[str, Any]) -> str:
+        """
+        Get plan folder name from user request.
+
+        Extracts name from request, falls back to description.
+
+        Args:
+            user_request: User request dictionary
+
+        Returns:
+            Kebab-case folder name
+        """
+        name = user_request.get("name", "")
+        description = user_request.get("description", "")
+        
+        plan_name = name or description or "unnamed-plan"
+        return self._get_plan_folder_name(plan_name)
+
+    def _infer_domain_from_request(self, user_request: Dict[str, Any]) -> str:
+        """
+        Infer domain from user request.
+
+        Uses registry loader to infer domain (api, docs, planning, core).
+
+        Args:
+            user_request: User request dictionary
+
+        Returns:
+            Domain name (api, docs, planning, core, or general)
+        """
+        if self.registry_loader:
+            description = user_request.get("description", "")
+            return self.registry_loader.infer_domain(description)
+        
+        return "general"  # Fallback
+
+    def _write_plan_to_registry(
+        self,
+        domain: str,
+        plan_name: str,
+        plan_data: Dict[str, Any],
+    ) -> Result:  # type: ignore[type-arg]
+        """
+        Write plan to registry structure.
+
+        Creates plan folder, writes plan.yaml + metadata.yaml, updates index.
+
+        Args:
+            domain: Domain name (api, docs, planning, core)
+            plan_name: Plan name (will be converted to kebab-case)
+            plan_data: Plan data to write
+
+        Returns:
+            Result with plan ID, or error
+        """
+        try:
+            if not self.registry_loader:
+                return Err("Registry loader not initialized")
+
+            # Validate plan name
+            kebab_name = self._get_plan_folder_name(plan_name)
+            if not self.registry_loader.validate_folder_name(kebab_name):
+                return Err(f"Invalid plan name: {plan_name}")
+
+            # Register plan via registry loader
+            register_result = self.registry_loader.register_plan(
+                domain=domain,
+                plan_data=plan_data,
+            )
+
+            if register_result.is_err():
+                error_msg = register_result.unwrap_err()
+                self.logger.error(f"Failed to register plan: {error_msg}")
+                return Err(error_msg)
+
+            plan_id = register_result.unwrap()
+            self.logger.info(f"Plan registered: {plan_id} in domain {domain}")
+            return Ok(plan_id)
+
+        except Exception as e:
+            error_msg = f"Failed to write plan to registry: {str(e)}"
+            self.logger.error(error_msg)
+            return Err(error_msg)
 
     def approve_plan(self, plan_id: str) -> Result:  # type: ignore[type-arg]
         """Move TEMP plan to ACTIVE state after user approval"""
