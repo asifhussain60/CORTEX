@@ -1,12 +1,12 @@
 # CORTEX Total Recall - Production System Discovery & Comprehensive Code Review
 
-**Version:** 9.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + DB-BACKED SSOT + INTEGRATED REVIEW
+**Version:** 9.1 | **Updated:** 2026-01-26 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY + DB-BACKED SSOT + INTEGRATED REVIEW + PLANNING ORCH RECONCILED
 
 **Registry Type:** DatabaseBackedRegistry (SQLite-backed Single Source of Truth)  
 **Wiring Status:** 23/23 orchestrators (100%)  
 **Test Isolation:** CORE-031 compliant (singleton reset mechanisms)
 
-**AC-PERMANENT-FIX Commits Tracked:** 9 permanent fixes implemented  
+**AC-PERMANENT-FIX Commits Tracked:** 10 permanent fixes implemented  
 - AC-PERMANENT-FIX-001: Fix recurring orchestrator unwiring issue  
 - AC-PERMANENT-FIX-002: Add verification and documentation for orchestrator wiring fix  
 - AC-PERMANENT-FIX-003: Executive summary of orchestrator unwiring fix  
@@ -15,7 +15,8 @@
 - AC-PERMANENT-FIX-006: ChallengeEngine wiring into InteractionOrchestrator
 - AC-PERMANENT-FIX-007: CORE-035 Single Canonical Implementation detection
 - AC-PERMANENT-FIX-008: Duplicate implementation consolidation (~3,200 lines removed)
-- AC-PERMANENT-FIX-009: DatabaseBackedRegistry SSOT for orchestrator wiring ⭐ NEW
+- AC-PERMANENT-FIX-009: DatabaseBackedRegistry SSOT for orchestrator wiring ⭐ VERIFIED
+- AC-PERMANENT-FIX-010: PlanningOrchestrator registry alignment (priority + capabilities) ⭐ NEW
 
 ---
 
@@ -854,6 +855,24 @@ AC-PERMANENT-FIX-004: Complete Transformation Status
   File Locations:
     - cortex_brain/tier0/repo-registry.yaml (locked, non-regenerating)
     - cortex/scripts-root-archive/setup_cortex_hub.py (preservation logic)
+
+AC-PERMANENT-FIX-010: PlanningOrchestrator Registry Alignment (2026-01-26)
+  Problem: Priority mismatch (200 vs 11) and capabilities gap in PlanningOrchestrator config
+  Root Cause: Class-level ORCHESTRATOR_CONFIG defined independently before full DB registry integration
+  Solution:
+    - Fixed priority: 200 → 11 (matches canonical db_wiring_init.py source)
+    - Merged capabilities: 4 → 9 (comprehensive set from class-level config)
+    - Both sources now define identical configuration (SSOT enforced)
+  Verification: 
+    - 9/9 planning registry wiring tests passing
+    - 23/23 orchestrator registration tests passing
+    - Priority=11 in both planning_orchestrator.py AND db_wiring_init.py
+    - All 9 capabilities in canonical source
+  File Locations:
+    - cortex/orchestrators/domain/planning_orchestrator.py:129 (priority: 200 → 11)
+    - cortex/orchestrators/core/db_wiring_init.py:127-136 (capabilities: 4 → 9)
+    - reports/WIRING-HOLISTIC-REVIEW-PLANNING-ORCHESTRATOR.md (comprehensive review)
+    - reports/HOLISTIC-REVIEW-SUMMARY.md (executive summary)
 ```
 
 **EFFICIENT IDENTIFY-AND-FIX Pattern:**
@@ -865,24 +884,29 @@ When agent executes:
    ```
 2. **Verify** - For each AC-PERMANENT-FIX, validate fix is active
    ```bash
-   # AC-PERMANENT-FIX-001: Check registry_template: false
-   grep "registry_template:" cortex_brain/tier0/repo-registry.yaml
+   # AC-PERMANENT-FIX-010: Check PlanningOrchestrator priority alignment
+   grep "priority=11" cortex/orchestrators/domain/planning_orchestrator.py
+   grep "priority=11" cortex/orchestrators/core/db_wiring_init.py
    
-   # AC-PERMANENT-FIX-001: Count wired orchestrators
-   grep -c "wiring_status: \"wired\"" cortex_brain/tier0/repo-registry.yaml
+   # AC-PERMANENT-FIX-010: Verify capabilities merged (9 total)
+   grep -c "ac_tracking\|challenge_generation\|intent_classification" cortex/orchestrators/core/db_wiring_init.py
    ```
-3. **Detect Regression** - If any permanent fix is reverted, block execution
+3. **Detect Regression** - If priority or capabilities diverge, block execution
    ```python
-   if registry_template == true:
-       raise PermanentFixRegressionError("AC-PERMANENT-FIX-001 reverted!")
+   if planning_priority != 11:
+       raise PermanentFixRegressionError("AC-PERMANENT-FIX-010 regressed: Priority mismatch")
+   if capabilities_count != 9:
+       raise PermanentFixRegressionError("AC-PERMANENT-FIX-010 regressed: Capabilities incomplete")
    ```
 4. **Report** - Include AC-PERMANENT-FIX status in all discovery operations
    ```markdown
-   **AC-PERMANENT-FIX Status:** ✅ ALL 4 FIXES ACTIVE
+   **AC-PERMANENT-FIX Status:** ✅ ALL 10 FIXES ACTIVE
    - AC-PERMANENT-FIX-001 (Registry Wiring): ✅ LOCKED
    - AC-PERMANENT-FIX-002 (Verification): ✅ TESTS PASSING
    - AC-PERMANENT-FIX-003 (Readiness): ✅ DOCUMENTED
    - AC-PERMANENT-FIX-004 (Complete): ✅ VERIFIED
+   - AC-PERMANENT-FIX-005 through 009: ✅ ALL ACTIVE
+   - AC-PERMANENT-FIX-010 (Planning Orch Alignment): ✅ RECONCILED
    ```
 
 **Agent Implementation:**
