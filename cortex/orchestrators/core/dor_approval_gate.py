@@ -116,7 +116,13 @@ class IntentReflection:
             "",
             "---",
             "",
-            "**⏳ Awaiting approval to proceed...**",
+            "**⏳ Awaiting Your Decision:**",
+            "",
+            "1️⃣ **proceed** — Execute with this intent classification",
+            "2️⃣ **modify: {changes}** — Adjust the classification and try again",
+            "3️⃣ **cancel** — Abort this operation",
+            "",
+            "Reply with: `proceed` / `modify: {your changes}` / `cancel`",
         ])
         
         return "\n".join(lines)

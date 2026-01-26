@@ -311,8 +311,16 @@ class ChallengeEngine:
         
         if challenge.options:
             lines.append("**What would you like to do?**")
+            lines.append("")
+            
+            # Emoji indicators for quick visual scanning
+            emoji_indicators = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
             for i, option in enumerate(challenge.options, 1):
-                lines.append(f"{i}. {option}")
+                emoji = emoji_indicators[i - 1] if i <= len(emoji_indicators) else f"{i}."
+                lines.append(f"{emoji} {option}")
+            
+            lines.append("")
+            lines.append("Reply with: `1` / `2` / `3` (or your choice)")
             lines.append("")
         
         return "\n".join(lines)
