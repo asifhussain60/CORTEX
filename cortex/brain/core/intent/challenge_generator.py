@@ -510,7 +510,6 @@ class ChallengeGenerator:
         
         # Same directory
         import os
-from cortex.models.canonical_enums import ChallengeCategory
         dir1 = os.path.dirname(file1)
         dir2 = os.path.dirname(file2)
         
