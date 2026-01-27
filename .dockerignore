@@ -20,3 +20,4 @@ _backups/
 _archive/
 .DS_Store
 Thumbs.db
+.cortex/knowledge.db
