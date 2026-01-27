@@ -30,17 +30,23 @@
 metadata:
   plan_name: "CORTEX Docker-First Migration"
   date: "2026-01-27"
-  phase: "Phase 0 Complete"
-  status: "APPROVED"
+  phase: "Phase 5 In Progress (Task 1 Complete)"
+  status: "EXECUTING"
   author: "Asif Hussain"
-  git_checkpoint: "phase0-docker-plan-validation-20260127"
+  git_checkpoint: "phase5-task1-health-endpoints-20260127"
+  last_updated: "2026-01-27T18:30:00Z"
   
   # Phase 0 (Pre-Flight): Validation complete ✅
-  # Phase 1: Component Analysis & Inventory Discovery (Queued)
-  # Phase 2: Dependency Graph Analysis (Queued)
-  # Phase 3: Subtraction Batches (Queued)
-  # Phase 4: Docker Configuration & Tests (Queued)
-  # Phase 5: Final Validation & Wiring Setup (Queued)
+  # Phase 1: Component Analysis & Inventory Discovery ✅ COMPLETE
+  # Phase 2: Legacy Removal (69 files deleted) ✅ COMPLETE
+  # Phase 3: Dependency Resolution ✅ COMPLETE
+  # Phase 4: Docker Infrastructure ✅ COMPLETE
+  # Phase 5: MCP Server Enhancement 🟡 IN PROGRESS (Task 1/5 Complete)
+  #   - Task 1 (MCP-001): Health Endpoints ✅ COMPLETE (15/15 tests passing)
+  #   - Task 2 (MCP-002): Metrics Endpoint ⏳ NEXT
+  #   - Task 3 (MCP-003): Tool Discovery ⏳ PENDING
+  #   - Task 4 (MCP-004): Startup Banner ⏳ PENDING
+  #   - Task 5 (MCP-005): Hot-Reload ⏳ PENDING
   # Phase 6: Branch Creation & Git Operations (Queued)
 
 # ============================================================================
@@ -215,6 +221,138 @@ phase_1:
     name: "Branch Creation Gate"
     condition: "On CORTEX-docker branch with backup"
     on_failure: "Restore from tag"
+
+# ============================================================================
+# REGRESSION PREVENTION (CORE-030)
+# ============================================================================
+regression_prevention:
+  date_added: "2026-01-27"
+  authority: "CORE-030 (Implementation Truth)"
+  
+  critical_rules:
+    - rule: "DO_NOT_REFERENCE_DELETED_INFRASTRUCTURE"
+      description: |
+        Never reference or recreate infrastructure deleted in Phase 2.
+        All code, documentation, and prompts must align with current state.
+      
+      deleted_in_phase_2_batch_001:
+        - "cortex/orchestrators/core/database_registry.py"
+        - "cortex/orchestrators/core/orchestrator_registry.py"
+        - "cortex/orchestrators/bootstrap.py"
+        - "cortex/orchestrators/core/db_wiring_init.py"
+        - "cortex/orchestrators/core/permanent_wiring_state.py"
+        - "cortex/orchestrators/core/autowiring_orchestrator.py"
+        - "cortex/orchestrators/core/intent_router_factory.py"
+        - "cortex/infrastructure/wiring_contract_manager.py"
+        - "cortex/infrastructure/wiring_drift_detector.py"
+      
+      forbidden_imports:
+        - "from cortex.orchestrators.core.database_registry import *"
+        - "from cortex.orchestrators.core.orchestrator_registry import *"
+        - "from cortex.orchestrators.bootstrap import *"
+        - "DatabaseBackedRegistry"
+        - "get_database_registry"
+        - "initialize_registry"
+      
+      correct_approach:
+        - "Use Git-backed YAML wiring (cortex/wiring/specifications/wiring.yaml)"
+        - "Read orchestrator config from YAML files"
+        - "No SQLite databases for wiring state"
+        - "Ephemeral container state only"
+    
+    - rule: "ALWAYS_VERIFY_FILE_EXISTS"
+      description: |
+        Before importing or referencing any file, verify it exists in the current codebase.
+        Never trust documentation without verification (CORE-030).
+      
+      verification_command: |
+        ls -la cortex/orchestrators/core/database_registry.py 2>/dev/null
+        # Expected: "No such file or directory" (deleted in Phase 2)
+    
+    - rule: "UPDATE_DOCUMENTATION_WITH_CODE"
+      description: |
+        Documentation must reflect actual code state, not historical state.
+        All prompts, READMEs, and specs must be updated after deletions.
+      
+      files_requiring_updates:
+        - ".github/prompts/CORTEX.prompt.md"  # ❌ Still references database_registry
+        - "_workspaces/docker-plan/wiring-schema-specification.md"
+        - "_workspaces/docker-plan/wiring-integration-tests.md"
+      
+      stale_imports_found:
+        count: 19
+        files:
+          - "cortex/tools/wiring_validator.py"
+          - "cortex/tools/unwired_component_detector.py"
+          - "cortex/tools/git_history_analyzer.py"
+          - "cortex/tools/test_fix_verification.py"
+          - "cortex/tools/wiring_gap_detector.py"
+          - "cortex/tools/verify_registry.py"
+          - "cortex/tools/total_recall_agent.py"
+          - "cortex/tools/wiring_validation_agent.py"
+          - "cortex/tools/manual_registry_eliminator.py"
+          - "cortex/mcp/unified_tool_discovery.py"
+          - "cortex/mcp/mcp_tools_catalog.py"
+          - "cortex/orchestrators/core/master_orchestrator.py"
+          - "cortex/orchestrators/core/unified_orchestrator_init.py"
+          - "cortex/orchestrators/__init__.py"
+          - "cortex/orchestrators/registry/discovery_engine.py"
+          - "cortex/orchestrators/domain/viewer_artifact_orchestrator.py"
+          - "cortex/orchestrators/domain/planning_orchestrator_bootstrap.py"
+          - "cortex/brain/core/decorators/orchestrator_decorator.py"
+          - "cortex/brain/core/decorators/orchestrator.py"
+  
+  phase_5_guidance:
+    description: |
+      Phase 5 implementations must use Docker-first architecture.
+      No database_registry, no SQLite wiring, only YAML-based configuration.
+    
+    correct_patterns:
+      health_endpoints:
+        - "Read wiring.yaml for orchestrator counts"
+        - "Compute hash from YAML file content"
+        - "Fall back to hardcoded values if YAML missing (transitional)"
+        - "Never import database_registry"
+      
+      example_correct: |
+        # cortex/mcp/health_checker.py
+        def get_wiring_hash(self) -> str:
+            try:
+                wiring_path = Path("cortex/wiring/specifications/wiring.yaml")
+                if wiring_path.exists():
+                    with open(wiring_path, 'rb') as f:
+                        content = f.read()
+                        return hashlib.sha256(content).hexdigest()[:16]
+            except Exception:
+                pass
+            
+            # Temporary fallback during migration
+            system_state = f"cortex-mcp-{time.time():.0f}"
+            return hashlib.sha256(system_state.encode()).hexdigest()[:16]
+      
+      example_wrong: |
+        # ❌ WRONG: This will fail (database_registry deleted)
+        from cortex.orchestrators.core.database_registry import get_database_registry
+        registry = get_database_registry()  # ModuleNotFoundError
+  
+  validation_checklist:
+    before_implementation:
+      - "Verify target files exist in codebase"
+      - "Check phase 2 deletion list"
+      - "Review migration-phases-plan.yaml for current architecture"
+      - "Consult PHASE-5-IMPLEMENTATION-TRUTH-ANALYSIS.md"
+    
+    during_implementation:
+      - "No imports of deleted modules"
+      - "Use YAML-based config (not database)"
+      - "Write tests that pass without database_registry"
+      - "Document assumptions about future wiring.yaml"
+    
+    after_implementation:
+      - "All tests pass"
+      - "No stale import errors"
+      - "Code review against deleted infrastructure list"
+      - "Update documentation to match implementation"
 
 # ============================================================================
 # PHASE 2: LEGACY REMOVAL (SUBTRACTION)
@@ -1230,42 +1368,159 @@ phase_4_5:
 phase_5:
   name: "MCP Server Enhancement"
   duration: "Days 7-8"
+  status: "IN_PROGRESS"
+  tasks_complete: "1/5"
+  last_updated: "2026-01-27T18:30:00Z"
   
   description: |
     Enhance the MCP server with health endpoints, metrics, and tool discovery.
+    
+    ⚠️ IMPORTANT: All implementations must use Docker-first architecture.
+    DO NOT reference database_registry.py (deleted in Phase 2).
+    Use Git-backed YAML wiring (cortex/wiring/specifications/wiring.yaml).
 
-  enhancements:
+  tasks:
+    # =========================================================================
+    # TASK 1: Health Endpoints ✅ COMPLETE
+    # =========================================================================
     - id: "MCP-001"
       name: "Health Endpoints"
+      status: "COMPLETE"
+      completion_date: "2026-01-27"
+      tests_passing: "15/15"
+      
       endpoints:
-        - "/health"
-        - "/health/wiring"
-        - "/health/orchestrators"
-      response_format:
-        status: "healthy|degraded|unhealthy"
-        wiring_hash: "string"
-        orchestrator_count: "number"
-        uptime_seconds: "number"
+        - path: "/health"
+          purpose: "Basic service health"
+          response_fields:
+            - "status: healthy|degraded|unhealthy"
+            - "timestamp: ISO 8601"
+            - "uptime_seconds: float"
+            - "checks: Dict[str, Any]"
+          
+        - path: "/health/wiring"
+          purpose: "Wiring system status"
+          response_fields:
+            - "wiring_file: present|missing"
+            - "wiring_hash: 16-char SHA256"
+            - "orchestrators_wired: int"
+            - "wiring_status: valid|degraded|unhealthy"
+            - "wiring_source: file|none"
+          
+        - path: "/health/orchestrators"
+          purpose: "Orchestrator availability"
+          response_fields:
+            - "core_orchestrators: 6"
+            - "domain_orchestrators: 6"
+            - "support_orchestrators: 11"
+            - "total_orchestrators: 23"
+            - "all_available: bool"
+      
+      files_modified:
+        - path: "cortex/mcp/health_checker.py"
+          changes:
+            - "Enhanced get_wiring_hash() to use YAML (future) or computed hash"
+            - "Updated check_wiring_health() to avoid database_registry"
+            - "Updated check_orchestrator_health() to use hardcoded counts (transitional)"
+            - "Added comprehensive docstrings for Phase 5 context"
+          
+        - path: "tests/mcp/test_health_recovery.py"
+          status: "CREATED"
+          tests: 15
+          coverage:
+            - "AC-WIRE-HEALTH-001: Wired status reporting"
+            - "AC-WIRE-HEALTH-002: Orchestrator count reporting"
+            - "AC-WIRE-HEALTH-003: Wiring hash reporting (16-char SHA256)"
+            - "AC-WIRE-HEALTH-004: Import error recovery"
+            - "AC-WIRE-HEALTH-005: Timeout handling"
+            - "AC-WIRE-HEALTH-006: Concurrent health checks"
+            - "Response format validation (3 tests)"
+            - "Uptime tracking (2 tests)"
+            - "Metrics tracking (5 tests)"
+      
+      validation:
+        - command: "python3 -m pytest tests/mcp/test_health_recovery.py -v"
+          expected: "15 passed"
+          actual: "✅ 15 passed in 0.19s"
         
+        - command: "curl http://localhost:8443/health"
+          expected: '{"status": "healthy", "uptime_seconds": 123.45, ...}'
+          status: "PENDING (server not yet running)"
+      
+      git_commit: "PENDING (awaiting user approval)"
+      
+      lessons_learned:
+        - "Initial implementation attempted to import database_registry.py (DELETED)"
+        - "CORE-030 violation detected: prompt documentation referenced deleted code"
+        - "Fixed by using YAML-based approach (future) with computed hash fallback"
+        - "All tests pass without database dependencies"
+        - "Demonstrates correct Docker-first architecture pattern"
+    
+    # =========================================================================
+    # TASK 2: Metrics Endpoint ⏳ NEXT
+    # =========================================================================
     - id: "MCP-002"
       name: "Metrics Endpoint"
+      status: "PENDING"
+      priority: "HIGH"
+      
       endpoint: "/metrics"
       format: "prometheus"
       metrics:
-        - "cortex_requests_total"
-        - "cortex_request_duration_seconds"
-        - "cortex_orchestrator_invocations"
-        - "cortex_wiring_health"
-        
+        - name: "cortex_requests_total"
+          type: "counter"
+          labels: ["method", "endpoint", "status"]
+          
+        - name: "cortex_request_duration_seconds"
+          type: "histogram"
+          labels: ["method", "endpoint"]
+          buckets: [0.1, 0.5, 1.0, 5.0, 10.0]
+          
+        - name: "cortex_orchestrator_invocations"
+          type: "counter"
+          labels: ["orchestrator", "operation", "status"]
+          
+        - name: "cortex_wiring_health"
+          type: "gauge"
+          values: "0 (unhealthy), 1 (degraded), 2 (healthy)"
+      
+      integration:
+        - "Integrate with docker-compose.yml Prometheus service (port 9090)"
+        - "Scrape interval: 30s (dev), 15s (prod)"
+        - "Retention: 30 days (production)"
+      
+      implementation_guidance:
+        - "Use prometheus_client library"
+        - "NO database_registry imports"
+        - "Read orchestrator counts from wiring.yaml (when available)"
+        - "Expose metrics at /metrics endpoint"
+    
+    # =========================================================================
+    # TASK 3: Tool Discovery ⏳ PENDING
+    # =========================================================================
     - id: "MCP-003"
       name: "Tool Discovery Endpoint"
+      status: "PENDING"
+      
       endpoint: "/mcp/tools"
       response_format:
         tools: "array"
         schema: "jsonschema"
-        
+        count: "number"
+      
+      implementation:
+        - "Query all 23 orchestrators for available tools"
+        - "Aggregate tool metadata (name, description, parameters)"
+        - "Return JSON schema for each tool"
+        - "Cache results for 60 seconds"
+    
+    # =========================================================================
+    # TASK 4: Startup Banner ⏳ PENDING
+    # =========================================================================
     - id: "MCP-004"
       name: "Startup Banner"
+      status: "PENDING"
+      
       content: |
         ╔══════════════════════════════════════════════════════════╗
         ║                    CORTEX MCP Server                     ║
@@ -1276,16 +1531,48 @@ phase_5:
         ║  Port:         {port}                                    ║
         ║  Environment:  {env}                                     ║
         ╚══════════════════════════════════════════════════════════╝
-        
+      
+      display_when:
+        - "Container startup"
+        - "docker-compose up"
+        - "Manual server start (dev mode)"
+    
+    # =========================================================================
+    # TASK 5: Hot-Reload ⏳ PENDING
+    # =========================================================================
     - id: "MCP-005"
       name: "Hot-Reload for Development"
+      status: "PENDING"
+      
       description: "File watcher to reload wiring.yaml without restart"
       enabled_in: "development"
+      disabled_in: "production"
       watch_path: "cortex/wiring/specifications/wiring.yaml"
+      
+      features:
+        - "Detect wiring.yaml changes (watchdog library)"
+        - "Reload orchestrator configuration"
+        - "Preserve active connections"
+        - "Log reload events"
+        - "Max 1 reload per 5 seconds (debounce)"
 
   validation:
     - "curl http://localhost:8443/health"
+    - "curl http://localhost:8443/metrics | grep cortex_"
     - "curl http://localhost:8443/mcp/tools | jq '.tools | length'"
+    
+  gate:
+    name: "Phase 5 Completion Gate"
+    conditions:
+      - "All 5 tasks complete (MCP-001 through MCP-005)"
+      - "15+ tests passing for health endpoints"
+      - "Prometheus metrics exposed"
+      - "Tool discovery functional"
+      - "Startup banner displays correctly"
+      - "Hot-reload tested in dev environment"
+      - "NO database_registry references in any Phase 5 code"
+    on_pass: "Proceed to Phase 5.5 (Team Collaboration)"
+    on_fail: "Fix issues and re-validate"
 
 # ============================================================================
 # PHASE 5.5: TEAM COLLABORATION LAYER (v2.1 ADDITION)
