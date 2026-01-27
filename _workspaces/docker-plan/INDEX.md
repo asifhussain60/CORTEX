@@ -31,6 +31,7 @@ This folder contains the complete migration plan for CORTEX Docker-First Archite
 | `06-MIGRATION-SCRIPT.md` | Script documentation (reference) | Legacy v1.0 |
 | `07-VALIDATION-CHECKLIST.md` | Validation steps | Current |
 | `08-HEALTH-RECOVERY-TESTS.md` | Health test specs | Current |
+| `09-DEPLOYMENT-GUIDE.md` | **User deployment instructions** | **NEW v2.2** |
 
 ---
 
