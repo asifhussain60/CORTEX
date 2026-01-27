@@ -13,7 +13,7 @@ from cortex.intent_router.context_manager import ContextManager, ConversationCon
 from cortex.orchestrators.adaptive.routing_engine import RoutingEngine
 from cortex.intent_router.fallback_strategy import FallbackStrategy
 from cortex.intent_router.intent_learner import IntentLearner
-from cortex.intent_router.performance_metrics import PerformanceMetrics
+from cortex.execution.performance_metrics import PerformanceMetrics
 from cortex.intent_router.orchestration_integrator import OrchestrationIntegrator
 from cortex.intent_router.classifier import IntentCategory
 

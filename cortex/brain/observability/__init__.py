@@ -20,7 +20,7 @@ from cortex.brain.observability.health_monitor import (
     get_health_monitor,
 )
 
-from cortex.brain.observability.performance_profiler import (
+from cortex.brain.core.observability.performance_profiler import (
     PerformanceProfiler,
     PerformanceMetric,
     PerformanceStats,
