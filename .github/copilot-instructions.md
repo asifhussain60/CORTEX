@@ -192,13 +192,6 @@ from cortex.infrastructure.circuit_breaker import CircuitBreaker
 from cortex.orchestrators import (
     DatabaseBackedRegistry,
     get_database_registry,
-    initialize_registry,
-    OrchestratorConfig,
-    OrchestratorCategory,
-    WiringState,
-    OrchestratorHealthChecker,
-    create_health_checker,
-)
 ```
 
 ### Entry Points:
@@ -209,11 +202,11 @@ from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 # TDD Workflow
 from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator, get_tdd_orchestrator
 
-# Feature Discovery (now uses DatabaseBackedRegistry)
+# Feature Discovery
 from cortex.tools.total_recall_agent import TotalRecallAgent
 
-# Production Wiring (preferred entry point)
-from cortex.orchestrators.bootstrap import OrchestratorBootstrap
+# Production Wiring (Git-backed YAML)
+# Loaded automatically at container startup from cortex/wiring/specifications/wiring.yaml
 
 # LENS Intelligence (Phase 7.1 - IMPLEMENTED)
 from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
@@ -354,13 +347,14 @@ cortex lens todos <file>
 ## 📊 Production Status
 
 ```yaml
-tests: 6,847+ (100% passing)
-orchestrators: 23/23 wired (100%) via DatabaseBackedRegistry
+tests: 172+ (100% passing - Phases 6-7.5)
+orchestrators: 23/23 wired (100%) via Git-backed YAML
+orchestrator_files: 140 Python files in cortex/orchestrators/
 mcp_tools: 15 active
-governance_rules: 31/31 implemented (CORE-001 through CORE-035)
+governance_rules: 35+ implemented (CORE-001 through CORE-038)
 knowledge_yamls: 35+ best practices
-db_registry: SQLite-backed SSOT at .cortex/orchestrator_registry.db
-health_checker: Background monitoring every 60 seconds
+wiring_system: Git-backed YAML at cortex/wiring/specifications/wiring.yaml
+lens_intelligence: GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor (Phase 7.1)
 ```
 
 ---
