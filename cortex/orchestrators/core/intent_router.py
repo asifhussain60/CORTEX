@@ -88,13 +88,11 @@ class CompositeIntentDetector:
     
     AC-FUTURE-005: Composite intent detection for multi-faceted requests
     
-    Examples of composite intents:
-    - "Implement feature AND test it" → IMPLEMENT + TEST (implicit)
-    - "Fix bug AND refactor the code" → FIX + REFACTOR
-    - "Implement with proper documentation" → IMPLEMENT + FILE_CREATION
-    - "Refactor and optimize performance" → REFACTOR (with optimization emphasis)
-    
-    Composite patterns detected:
+        Examples of composite intents:
+        - "Implement feature AND test it" → IMPLEMENT + TEST (implicit)
+        - "Fix bug AND refactor the code" → FIX + REFACTOR
+        - "Implement with proper documentation" → IMPLEMENT + DOCUMENT
+        - "Refactor and optimize performance" → REFACTOR (with optimization emphasis)    Composite patterns detected:
     1. AND patterns: "X and Y" or "X then Y"
     2. WITH patterns: "Implement with tests" → Do both
     3. SEQUENTIAL patterns: "Fix, then refactor" → Do both
@@ -154,8 +152,8 @@ class CompositeIntentDetector:
                 if "implement" in request_lower and ("document" in request_lower or "test" in request_lower):
                     if IntentType.IMPLEMENT not in intents:
                         intents.append(IntentType.IMPLEMENT)
-                    if IntentType.FILE_CREATION not in intents and "document" in request_lower:
-                        intents.append(IntentType.FILE_CREATION)
+                    if IntentType.DOCUMENT not in intents and "document" in request_lower:
+                        intents.append(IntentType.DOCUMENT)
         
         # Check for THEN patterns (sequential)
         for connector in CompositeIntentDetector.THEN_CONNECTORS:
@@ -185,8 +183,8 @@ class CompositeIntentDetector:
         
         elif primary_intent == IntentType.IMPLEMENT:
             # If implementing, should we also create documentation?
-            if "document" in request_lower and IntentType.FILE_CREATION not in intents:
-                intents.append(IntentType.FILE_CREATION)
+            if "document" in request_lower and IntentType.DOCUMENT not in intents:
+                intents.append(IntentType.DOCUMENT)
         
         elif primary_intent == IntentType.REFACTOR:
             # If refactoring, should we test?
@@ -268,7 +266,7 @@ class IntentRouter(IOrchestrator):
         "clean", "modernize", "reorganize", "rewrite", "redesign", "performance"
     ]
     
-    FILE_CREATION_KEYWORDS: List[str] = [
+    DOCUMENT_KEYWORDS: List[str] = [
         "file", "write", "output", "report", "generate", "save", "persist",
         "export", "create file", "write file", "output file", "report file"
     ]
@@ -296,7 +294,7 @@ class IntentRouter(IOrchestrator):
             IntentType.IMPLEMENT: self.IMPLEMENT_KEYWORDS,
             IntentType.FIX: self.FIX_KEYWORDS,
             IntentType.REFACTOR: self.REFACTOR_KEYWORDS,
-            IntentType.FILE_CREATION: self.FILE_CREATION_KEYWORDS,
+            IntentType.DOCUMENT: self.DOCUMENT_KEYWORDS,
         }
         
         # AC-FUTURE-001: Try loading routing rules from YAML
@@ -434,11 +432,11 @@ class IntentRouter(IOrchestrator):
             (IntentType.REFACTOR, "infrastructure"): "InfrastructureRefactoringHandler",
             (IntentType.REFACTOR, None): "GeneralRefactoringHandler",
             
-            # FILE_CREATION routing (CORE-028/CORE-038 validation)
-            (IntentType.FILE_CREATION, "documentation"): "DocumentationOrchestrator",
-            (IntentType.FILE_CREATION, "governance"): "DocumentationOrchestrator",
-            (IntentType.FILE_CREATION, "reports"): "DocumentationOrchestrator",
-            (IntentType.FILE_CREATION, None): "DocumentationOrchestrator",
+            # DOCUMENT routing (CORE-028/CORE-038 validation)
+            (IntentType.DOCUMENT, "documentation"): "DocumentationOrchestrator",
+            (IntentType.DOCUMENT, "governance"): "DocumentationOrchestrator",
+            (IntentType.DOCUMENT, "reports"): "DocumentationOrchestrator",
+            (IntentType.DOCUMENT, None): "DocumentationOrchestrator",
         }
     
     def get_version(self) -> str:
