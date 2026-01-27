@@ -1,0 +1,382 @@
+# =========================================================================
+# CORTEX UNIFIED WIRING SPECIFICATION
+# =========================================================================
+# Authority: CORE-035 (Single Canonical Implementation)
+# 
+# This is the SINGLE SOURCE OF TRUTH for ALL orchestrator wiring.
+# Changes require review. This file is Git-tracked and diff-able.
+#
+# Structure:
+#   orchestrators:
+#     core: [...]      # 6 core orchestrators
+#     domain: [...]    # 6 domain orchestrators
+#     support: [...]   # 11 support orchestrators
+# =========================================================================
+
+version: "2.0"
+specification_date: "2026-01-27"
+git_safe: true
+
+# -------------------------------------------------------------------------
+# GLOBAL CONFIGURATION
+# -------------------------------------------------------------------------
+config:
+  lazy_initialization: true
+  max_dependency_depth: 5
+  allow_circular_dependencies: false
+  health_check_timeout_seconds: 5
+  health_check_retry_count: 3
+  fail_fast_on_wiring_error: true
+
+# -------------------------------------------------------------------------
+# CORE ORCHESTRATORS (6)
+# -------------------------------------------------------------------------
+orchestrators:
+  core:
+    # STAGE 1: Comprehension (LENS Protocol)
+    - name: "InteractionOrchestrator"
+      module: "cortex.orchestrators.core.interaction_orchestrator"
+      class: "InteractionOrchestrator"
+      tier: 1
+      priority: 10
+      dependencies: []
+      capabilities:
+        - comprehension
+        - lens_protocol
+        - challenge_generation
+        - pattern_enforcement
+      health_check: "execute_turn"
+      mcp_adapter: "cortex.mcp.adapters.interaction_adapter"
+      requires_params:
+        conversation_protocol:
+          type: "ConversationProtocol"
+          source: "cortex.brain.core.conversation_protocol"
+          lazy_create: true
+
+    # STAGE 2: Intent Classification
+    - name: "IntentRouter"
+      module: "cortex.orchestrators.core.intent_router"
+      class: "IntentRouter"
+      tier: 1
+      priority: 20
+      dependencies:
+        - "InteractionOrchestrator"
+      capabilities:
+        - intent_classification
+        - confidence_scoring
+        - domain_routing
+        - fuzzy_matching
+      health_check: "classify_intent"
+      mcp_adapter: "cortex.mcp.adapters.intent_router_adapter"
+
+    # STAGE 2.5: LENS Synthesis & DoR Gate
+    - name: "LENSSynthesis"
+      module: "cortex.orchestrators.core.lens_synthesis"
+      class: "LENSSynthesis"
+      tier: 1
+      priority: 25
+      dependencies:
+        - "IntentRouter"
+      capabilities:
+        - dor_generation
+        - approval_gate
+        - synthesis
+      health_check: "synthesize"
+      mcp_adapter: "cortex.mcp.adapters.lens_adapter"
+
+    # STAGE 3: TDD Execution
+    - name: "TDDOrchestrator"
+      module: "cortex.orchestrators.core.tdd_orchestrator"
+      class: "TDDOrchestrator"
+      tier: 1
+      priority: 30
+      dependencies:
+        - "InteractionOrchestrator"
+        - "IntentRouter"
+      capabilities:
+        - test_generation
+        - tdd_workflow
+        - test_execution
+      health_check: "generate_tests"
+      mcp_adapter: "cortex.mcp.adapters.tdd_adapter"
+
+    # Workflow Management
+    - name: "WorkflowOrchestrator"
+      module: "cortex.orchestrators.core.workflow_orchestrator"
+      class: "WorkflowOrchestrator"
+      tier: 1
+      priority: 35
+      dependencies:
+        - "TDDOrchestrator"
+      capabilities:
+        - workflow_management
+        - step_orchestration
+      health_check: "execute_workflow"
+      mcp_adapter: "cortex.mcp.adapters.workflow_adapter"
+
+    # STAGE 4: Master Coordination
+    - name: "MasterOrchestrator"
+      module: "cortex.orchestrators.core.master_orchestrator"
+      class: "MasterOrchestrator"
+      tier: 1
+      priority: 100
+      dependencies:
+        - "InteractionOrchestrator"
+        - "IntentRouter"
+        - "LENSSynthesis"
+        - "TDDOrchestrator"
+      capabilities:
+        - coordination
+        - stage_management
+        - orchestrator_routing
+      health_check: "coordinate_operation"
+      mcp_adapter: "cortex.mcp.adapters.master_adapter"
+
+  # -----------------------------------------------------------------------
+  # DOMAIN ORCHESTRATORS (6)
+  # -----------------------------------------------------------------------
+  domain:
+    - name: "RefactoringOrchestrator"
+      module: "cortex.orchestrators.domain.refactoring_orchestrator"
+      class: "RefactoringOrchestrator"
+      tier: 2
+      priority: 50
+      dependencies:
+        - "MasterOrchestrator"
+      capabilities:
+        - code_refactoring
+        - pattern_application
+        - smell_detection
+      health_check: "analyze_refactoring"
+      mcp_adapter: "cortex.mcp.adapters.refactoring_adapter"
+
+    - name: "PlanningOrchestrator"
+      module: "cortex.orchestrators.domain.planning_orchestrator"
+      class: "PlanningOrchestrator"
+      tier: 2
+      priority: 51
+      dependencies:
+        - "MasterOrchestrator"
+      capabilities:
+        - plan_generation
+        - phase_management
+        - milestone_tracking
+      health_check: "generate_plan"
+      mcp_adapter: "cortex.mcp.adapters.planning_adapter"
+
+    - name: "DocumentationOrchestrator"
+      module: "cortex.orchestrators.domain.documentation_orchestrator"
+      class: "DocumentationOrchestrator"
+      tier: 2
+      priority: 52
+      dependencies:
+        - "MasterOrchestrator"
+      capabilities:
+        - doc_generation
+        - api_documentation
+        - changelog_management
+      health_check: "generate_documentation"
+      mcp_adapter: "cortex.mcp.adapters.documentation_adapter"
+
+    - name: "PhaseExecutor"
+      module: "cortex.orchestrators.domain.phase_executor"
+      class: "PhaseExecutor"
+      tier: 2
+      priority: 53
+      dependencies:
+        - "PlanningOrchestrator"
+      capabilities:
+        - phase_execution
+        - checkpoint_management
+      health_check: "execute_phase"
+
+    - name: "AutonomousExecutionEngine"
+      module: "cortex.orchestrators.domain.autonomous_execution_engine"
+      class: "AutonomousExecutionEngine"
+      tier: 2
+      priority: 54
+      dependencies:
+        - "MasterOrchestrator"
+        - "TDDOrchestrator"
+      capabilities:
+        - autonomous_execution
+        - multi_step_operations
+      health_check: "execute_autonomous"
+
+    - name: "ConversationOrchestrator"
+      module: "cortex.orchestrators.domain.conversation_orchestrator"
+      class: "ConversationOrchestrator"
+      tier: 2
+      priority: 55
+      dependencies:
+        - "InteractionOrchestrator"
+      capabilities:
+        - conversation_management
+        - context_tracking
+      health_check: "manage_conversation"
+
+  # -----------------------------------------------------------------------
+  # SUPPORT ORCHESTRATORS (11)
+  # -----------------------------------------------------------------------
+  support:
+    - name: "OnboardingOrchestrator"
+      module: "cortex.orchestrators.core.onboarding_orchestrator"
+      class: "OnboardingOrchestrator"
+      tier: 3
+      priority: 60
+      dependencies: []
+      capabilities:
+        - user_onboarding
+        - tutorial_guidance
+      health_check: "start_onboarding"
+
+    - name: "ToolDiscoveryOrchestrator"
+      module: "cortex.orchestrators.core.tool_discovery_orchestrator"
+      class: "ToolDiscoveryOrchestrator"
+      tier: 3
+      priority: 61
+      dependencies: []
+      capabilities:
+        - tool_discovery
+        - capability_enumeration
+      health_check: "discover_tools"
+
+    - name: "UpgradeOrchestrator"
+      module: "cortex.orchestrators.support.upgrade_orchestrator"
+      class: "UpgradeOrchestrator"
+      tier: 3
+      priority: 62
+      dependencies: []
+      capabilities:
+        - version_upgrade
+        - migration_assistance
+      health_check: "check_upgrade"
+
+    - name: "RollbackOrchestrator"
+      module: "cortex.orchestrators.support.rollback_orchestrator"
+      class: "RollbackOrchestrator"
+      tier: 3
+      priority: 63
+      dependencies: []
+      capabilities:
+        - rollback_execution
+        - checkpoint_restore
+      health_check: "check_rollback"
+
+    - name: "SetupOrchestrator"
+      module: "cortex.orchestrators.support.setup_orchestrator"
+      class: "SetupOrchestrator"
+      tier: 3
+      priority: 64
+      dependencies: []
+      capabilities:
+        - environment_setup
+        - dependency_installation
+      health_check: "check_setup"
+
+    - name: "GovernanceRegistry"
+      module: "cortex.brain.core.governance_registry"
+      class: "GovernanceRegistry"
+      tier: 3
+      priority: 66
+      dependencies: []
+      capabilities:
+        - governance_enforcement
+        - rule_management
+      health_check: "get_rules"
+
+    - name: "KnowledgeRepository"
+      module: "cortex.brain.core.knowledge.knowledge_repository"
+      class: "KnowledgeRepository"
+      tier: 3
+      priority: 67
+      dependencies: []
+      capabilities:
+        - knowledge_retrieval
+        - relationship_mapping
+      health_check: "query_knowledge"
+
+    - name: "WrappedTDDOrchestrator"
+      module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
+      class: "WrappedTDDOrchestrator"
+      tier: 3
+      priority: 68
+      dependencies:
+        - "TDDOrchestrator"
+      capabilities:
+        - wrapped_tdd
+        - enhanced_testing
+      health_check: "generate_wrapped_tests"
+
+    - name: "FuzzyIntentMatcher"
+      module: "cortex.orchestrators.core.fuzzy_intent_matcher"
+      class: "FuzzyIntentMatcher"
+      tier: 3
+      priority: 69
+      dependencies:
+        - "IntentRouter"
+      capabilities:
+        - fuzzy_matching
+        - intent_disambiguation
+      health_check: "match_intent"
+
+    - name: "ComprehensionSession"
+      module: "cortex.orchestrators.core.comprehension_session"
+      class: "ComprehensionSession"
+      tier: 3
+      priority: 70
+      dependencies:
+        - "InteractionOrchestrator"
+      capabilities:
+        - session_management
+        - comprehension_tracking
+      health_check: "get_session"
+
+    - name: "DoRApprovalGate"
+      module: "cortex.orchestrators.core.dor_approval_gate"
+      class: "DoRApprovalGate"
+      tier: 3
+      priority: 71
+      dependencies:
+        - "LENSSynthesis"
+      capabilities:
+        - approval_gating
+        - dor_validation
+      health_check: "validate_dor"
+
+# -------------------------------------------------------------------------
+# DEPENDENCY VALIDATION RULES
+# -------------------------------------------------------------------------
+validation:
+  rules:
+    - name: "no_circular_dependencies"
+      check: "dependency_graph_is_dag"
+      severity: "ERROR"
+      
+    - name: "all_dependencies_exist"
+      check: "all_dependency_names_in_orchestrator_list"
+      severity: "ERROR"
+      
+    - name: "tier_ordering"
+      check: "lower_tier_cannot_depend_on_higher_tier"
+      severity: "WARNING"
+      
+    - name: "health_check_defined"
+      check: "all_orchestrators_have_health_check"
+      severity: "WARNING"
+
+# -------------------------------------------------------------------------
+# FALLBACK / DEGRADATION ROUTES
+# -------------------------------------------------------------------------
+fallback_routes:
+  - orchestrator: "RefactoringOrchestrator"
+    fallback_to: "TDDOrchestrator"
+    condition: "health_check_fails"
+    
+  - orchestrator: "PlanningOrchestrator"
+    fallback_to: "MasterOrchestrator"
+    condition: "health_check_fails"
+    
+  - orchestrator: "DocumentationOrchestrator"
+    fallback_to: "MasterOrchestrator"
+    condition: "health_check_fails"
