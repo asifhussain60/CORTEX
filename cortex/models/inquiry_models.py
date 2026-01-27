@@ -147,3 +147,74 @@ class AssembledContext:
             True if CORTEX repo detected
         """
         return self.repo_context.is_cortex_repo()
+    
+    def to_cacheable(self) -> Dict[str, Any]:
+        """Serialize to cacheable dictionary.
+        
+        Converts AssembledContext to dictionary for cache storage.
+        Excludes repo_context (provided at deserialization) and cache_hit flag.
+        
+        Returns:
+            Dictionary suitable for JSON serialization
+        """
+        return {
+            "question": self.question,
+            "category": self.category.value,
+            "confidence": self.confidence,
+            "evidence_sources": [
+                {
+                    "file_path": ev.file_path,
+                    "line_number": ev.line_number,
+                    "content": ev.content,
+                    "source_type": ev.source_type,
+                }
+                for ev in self.evidence_sources
+            ],
+            "tier3_knowledge": self.tier3_knowledge,
+            "core_rules": self.core_rules,
+            "metadata": self.metadata,
+        }
+    
+    @classmethod
+    def from_cache(
+        cls,
+        cached_data: Dict[str, Any],
+        repo_context: RepoContext,
+    ) -> "AssembledContext":
+        """Deserialize from cached dictionary.
+        
+        Reconstructs AssembledContext from cached data. Sets cache_hit=True
+        to indicate this context came from cache.
+        
+        Args:
+            cached_data: Cached dictionary from to_cacheable()
+            repo_context: Repository context (not cached)
+            
+        Returns:
+            Reconstructed AssembledContext with cache_hit=True
+        """
+        # Reconstruct evidence sources
+        evidence_sources = [
+            EvidenceSource(
+                file_path=ev["file_path"],
+                line_number=ev["line_number"],
+                content=ev["content"],
+                source_type=ev["source_type"],
+            )
+            for ev in cached_data.get("evidence_sources", [])
+        ]
+        
+        # Reconstruct category enum
+        category = InquiryCategory(cached_data["category"])
+        
+        return cls(
+            question=cached_data["question"],
+            repo_context=repo_context,
+            category=category,
+            evidence_sources=evidence_sources,
+            confidence=cached_data["confidence"],
+            tier3_knowledge=cached_data.get("tier3_knowledge"),
+            core_rules=cached_data.get("core_rules"),
+            cache_hit=True,  # Mark as from cache
+            metadata=cached_data.get("metadata", {}),
+        )
