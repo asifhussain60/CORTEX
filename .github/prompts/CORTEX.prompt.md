@@ -326,21 +326,21 @@ tools = registry.list_tools()  # Returns 15+ tools
 ### Canonical Locations
 | Content | Location | Authority |
 |---------|----------|-----------|
-| Master Plan | `_workspaces/docker-plan/migration-phases-plan.yaml` | **CANONICAL** |
+| Master Plan | `_workspaces/docker-plan/migration-phases-plan.yaml` | **CANONICAL SSOT** |
 | Phase Specs | `_workspaces/docker-plan/PHASE-*.yaml` | Authoritative |
 | Phase Reports | `_workspaces/docker-plan/PHASE-*-REPORT.md` | Completion tracking |
 | Python Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` | Human-readable |
-| Reports (legacy) | `reports/` | YAML tracking (deprecated) |
-| Roadmap (legacy) | `_workspaces/roadmap/` | **DEPRECATED - See DEPRECATED.md** |
+| Archived Roadmap | `_workspaces/roadmap.archive-20260127/` | **ARCHIVED - DO NOT USE** |
 
 ### Forbidden Patterns
 - ❌ `.md` files outside `docs/` or `_workspaces/docker-plan/`
 - ❌ `docs_md/` folder (DELETE IMMEDIATELY)
 - ❌ `.py` files in root
-- ❌ Updates to `cortex-impl-map.yaml` (DEPRECATED)
-- ❌ New files in `_workspaces/roadmap/` (use docker-plan instead)
+- ❌ References to `cortex-impl-map.yaml` (ARCHIVED)
+- ❌ References to `_workspaces/roadmap/` (ARCHIVED 2026-01-27)
+- ❌ New files in archived folders
 
 ---
 
