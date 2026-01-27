@@ -213,11 +213,128 @@ from cortex.tools.total_recall_agent import TotalRecallAgent
 
 # Production Wiring (preferred entry point)
 from cortex.orchestrators.bootstrap import OrchestratorBootstrap
+
+# LENS Intelligence (Phase 7.1 - IMPLEMENTED)
+from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
+from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
+from cortex.brain.analysis.comment_extractor import CommentExtractor
 ```
 
 ---
 
-## 🔧 Commands
+## � LENS Intelligence System (Phase 7.1 ✅)
+
+**LENS** = **L**anguage → **E**xamination → **N**avigation → **S**ynthesis
+
+The LENS system provides code intelligence through three production-ready analyzers:
+
+### Core Analyzers:
+1. **GitHistoryAnalyzer** (`cortex/brain/analysis/git_history_analyzer.py`)
+   - 555 lines, 15 tests ✅
+   - Commit history analysis
+   - Blame attribution
+   - Author contribution patterns
+   - Intent pattern detection from commit messages
+
+2. **ASTAnalyzer** (`cortex/brain/analysis/ast_analyzer.py`)
+   - 338 lines, 19 tests ✅
+   - Function and class extraction
+   - Code complexity metrics
+   - Import analysis
+   - Refactor intent detection
+
+3. **CommentExtractor** (`cortex/brain/analysis/comment_extractor.py`)
+   - 254 lines, 19 tests ✅
+   - TODO/FIXME extraction
+   - Docstring analysis
+   - Intent hints from comments
+   - Multiple docstring styles (Google, NumPy, Sphinx)
+
+### LENS Integration:
+
+**LENSOrchestrator** (Phase 7.1, Task LENS-003 ✅):
+```python
+from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+
+# Unified analysis API
+orchestrator = LENSOrchestrator(repo_path=Path("/path/to/repo"))
+lens_context = orchestrator.analyze_file(Path("module.py"))
+
+# Direct IntentRouter integration
+router = IntentRouter()
+decision = router.route({
+    "operation": "refactor_code",
+    "keywords": ["refactor"],
+    "lens_context": lens_context  # Confidence boost from LENS evidence
+})
+
+# Batch analysis
+results = orchestrator.analyze_batch([
+    Path("file1.py"),
+    Path("file2.py"),
+])
+```
+
+**IntentRouter Enhancement** (Phase 7.1, Task LENS-002 ✅):
+- Accepts optional `lens_context` parameter
+- Boosts confidence (0.0-0.4) based on LENS evidence:
+  * Git pattern matching: +0.15 (exact), +0.05 (partial)
+  * AST complexity: +0.20 (very high), +0.15 (high), +0.10 (medium)
+  * Comment hints: +0.05
+- Enriches metadata with LENS insights
+- Logs LENS usage to audit trail (AC-ID: LENS-002)
+
+**LENS Output Format** (IntentRouter-compatible):
+```python
+{
+  "git_analysis": {
+    "commits": [...],           # Commit history
+    "recent_commits": [...],    # Alias for compatibility
+  },
+  "ast_analysis": {
+    "functions": [...],         # Function definitions
+    "function_count": int,
+    "classes": [...],           # Class definitions
+    "class_count": int,
+  },
+  "comment_analysis": {
+    "todos": [...],             # TODO comments
+    "fixmes": [...],            # FIXME comments
+    "total_comments": int,
+  },
+  "_metadata": {
+    "analysis_time_ms": int,
+    "file_path": str,
+    "analyzers_run": ["git", "ast", "comment"],
+  }
+}
+```
+
+**LENS as Implementation Truth Foundation** (CORE-030):
+- Validates code against documentation claims
+- Detects implementation vs. spec mismatches
+- Provides evidence for refactoring decisions
+- Supports accurate intent classification
+
+### LENS Commands:
+```bash
+# Analyze file with LENS
+cortex lens analyze <file>
+
+# Show git history patterns
+cortex lens history <file>
+
+# Extract AST complexity
+cortex lens complexity <file>
+
+# Find TODOs and FIXMEs
+cortex lens todos <file>
+```
+
+---
+
+## �🔧 Commands
 
 | Command | Description |
 |---------|-------------|
@@ -228,6 +345,7 @@ from cortex.orchestrators.bootstrap import OrchestratorBootstrap
 | `/review` | Run review agents |
 | `/status` | Phase/project status |
 | `/recall {feature}` | Find feature entry point |
+| `/lens analyze {file}` | Run LENS analysis on file ⭐ NEW |
 | `/governance` | Show governance status |
 
 ---
