@@ -195,12 +195,18 @@ class PreCommitConfig:
             if data is None:
                 return cls()
             
+            default_validators = [
+                {'type': 'wiring', 'required': True},
+                {'type': 'mcp_adapter', 'required': True},
+                {'type': 'schema', 'required': True},
+            ]
+            
             return cls(
                 expected_orchestrator_count=data.get('expected_orchestrator_count', 23),
                 stage_1_timeout_ms=data.get('stage_1_timeout_ms', 200),
                 stage_2_timeout_ms=data.get('stage_2_timeout_ms', 3000),
                 health_check_cache_ttl_seconds=data.get('health_check_cache_ttl_seconds', 5),
-                validators=data.get('validators', cls.validators),
+                validators=data.get('validators', default_validators),
             )
         except (yaml.YAMLError, KeyError) as e:
             raise ValueError(f"Invalid pre-commit config YAML: {e}")
