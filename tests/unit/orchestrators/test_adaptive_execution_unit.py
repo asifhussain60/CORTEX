@@ -10,7 +10,6 @@ AC-PHX-010-04: Performance feedback loop
 AC-PHX-010-05: Testing framework
 
 Author: Asif Hussain
-Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import unittest
@@ -239,7 +238,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_adaptive_router_initialization(self) -> None:
         """Test AdaptiveRouter initialization."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         self.assertIsNotNone(router)
@@ -247,7 +246,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_route_task_to_appropriate_orchestrator(self) -> None:
         """Test routing task to appropriate orchestrator."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "planning", "type": "strategy"}
@@ -260,7 +259,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_considers_execution_context(self) -> None:
         """Test router considers execution context in routing."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "analysis"}
@@ -272,7 +271,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_provides_fallback_routes(self) -> None:
         """Test router provides fallback routes."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "validation"}
@@ -285,7 +284,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_balances_load(self) -> None:
         """Test router implements load balancing."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         
@@ -300,7 +299,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_respects_qos_requirements(self) -> None:
         """Test router respects QoS requirements."""
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {
@@ -549,7 +548,7 @@ class TestAdaptiveExecutionIntegration(unittest.TestCase):
         from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
-        from cortex.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.brain.core.knowledge.router import AdaptiveRouter
         
         # Create components
         selector = StrategySelector()

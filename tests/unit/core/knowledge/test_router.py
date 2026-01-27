@@ -21,12 +21,12 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_class_exists(self):
         """Test that IntelligentKnowledgeRouter class is defined."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         assert IntelligentKnowledgeRouter is not None
 
     def test_router_initialization(self):
         """Test router initialization with backends."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -40,7 +40,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_analyze_query_intent(self):
         """Test query intent analysis."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -52,7 +52,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_detect_domain_keywords(self):
         """Test domain keyword detection."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -64,7 +64,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_score_backend_confidence(self):
         """Test backend confidence scoring."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -81,7 +81,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_select_best_backend(self):
         """Test selection of best backend based on confidence."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -97,7 +97,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_route_query_returns_tuple(self):
         """Test that route_query returns (backend, confidence, audit_entry)."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -110,7 +110,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_confidence_score_range(self):
         """Test that confidence scores are between 0 and 1."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -126,7 +126,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_handles_multiple_backends(self):
         """Test router handles multiple backend candidates."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backends = {
             'technical': Mock(),
@@ -144,7 +144,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_audit_entry_contains_metadata(self):
         """Test audit entry contains routing decision metadata."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -158,7 +158,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_fallback_to_parallel_query(self):
         """Test fallback mechanism when confidence is low."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -177,7 +177,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_handles_empty_query(self):
         """Test router handles empty queries gracefully."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -187,7 +187,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_returns_same_backend_for_similar_queries(self):
         """Test consistency: similar queries route to same backend."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -203,7 +203,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_explicit_domain_override(self):
         """Test explicit domain specification in query."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         tech_backend = Mock()
         biz_backend = Mock()
@@ -221,7 +221,7 @@ class TestIntelligentKnowledgeRouter:
 
     def test_router_confidence_factors(self):
         """Test that confidence scoring considers multiple factors."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -238,7 +238,7 @@ class TestRouterIntegration:
 
     def test_router_with_mock_backends(self):
         """Test router with mock backend implementations."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         # Create mock backends with KnowledgeProvider interface
         backend1 = Mock()
@@ -262,7 +262,7 @@ class TestRouterIntegration:
 
     def test_router_preserves_query_history(self):
         """Test that router maintains query routing history."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -283,7 +283,7 @@ class TestRouterIntegration:
 
     def test_router_performance_metadata(self):
         """Test that router collects performance metrics."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend = Mock()
         router = IntelligentKnowledgeRouter(backends={'default': backend})
@@ -300,7 +300,7 @@ class TestRouterIntegration:
 
     def test_router_fallback_mode_multi_backend(self):
         """Test fallback to parallel queries with multiple backends."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend1.query = Mock(return_value=[{'result': 'from backend1'}])
@@ -323,7 +323,7 @@ class TestRouterIntegration:
 
     def test_router_error_handling_invalid_backend(self):
         """Test error handling for invalid backend configuration."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         invalid_backend = "not_a_backend_object"
         
@@ -334,7 +334,7 @@ class TestRouterIntegration:
 
     def test_router_concurrent_queries(self):
         """Test router can handle multiple queries in sequence."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend2 = Mock()
@@ -366,7 +366,7 @@ class TestRouterIntegration:
 
     def test_router_aggregates_results_fallback(self):
         """Test result aggregation when using fallback."""
-        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
         
         backend1 = Mock()
         backend1.query = Mock(return_value=[{'data': 'from_tech'}])
