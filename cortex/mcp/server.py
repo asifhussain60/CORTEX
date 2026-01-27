@@ -275,7 +275,7 @@ class MCPServer:
         Returns:
             List of tool definitions as dictionaries, consolidated from all sources
         """
-        from cortex.mcp.registry import get_mcp_tool_registry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import get_mcp_tool_registry
         
         # Get tools from local registry and global ToolRegistry
         tools_list = []

@@ -140,7 +140,7 @@ def report_governance_status(scope: str = "system", time_range: str = "24h") -> 
 
 
 # Import new governance tools
-from cortex.mcp.tools.governance.tier_resolver import TierResolver
+from cortex.brain.core.tier_resolver import TierResolver
 from cortex.mcp.tools.governance.rule_evaluator import RuleEvaluator
 from cortex.mcp.tools.governance.audit_query import AuditQuery
 from cortex.mcp.tools.governance.policy_enforcer import PolicyEnforcer

@@ -288,7 +288,7 @@ class TestToolRegistry:
     
     def test_register_multiple_tools(self):
         """Test registering multiple tools."""
-        from cortex.mcp.registry import ToolRegistry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
         
         registry = ToolRegistry()
         
@@ -309,7 +309,7 @@ class TestToolRegistry:
     
     def test_retrieve_tool_definition(self):
         """Test retrieving tool definitions from registry."""
-        from cortex.mcp.registry import ToolRegistry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
         
         registry = ToolRegistry()
         
@@ -338,7 +338,7 @@ class TestToolDiscovery:
     def test_discover_tools_by_tag(self):
         """Test discovering tools by tag."""
         from cortex.mcp.discovery import ToolDiscovery
-        from cortex.mcp.registry import ToolRegistry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
         
         registry = ToolRegistry()
         discovery = ToolDiscovery(registry)
@@ -362,7 +362,7 @@ class TestToolDiscovery:
     def test_search_tools_by_name(self):
         """Test searching tools by name."""
         from cortex.mcp.discovery import ToolDiscovery
-        from cortex.mcp.registry import ToolRegistry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
         
         registry = ToolRegistry()
         discovery = ToolDiscovery(registry)
@@ -438,7 +438,7 @@ class TestIntegrationWorkflows:
     
     def test_end_to_end_tool_workflow(self):
         """Test complete end-to-end tool workflow."""
-        from cortex.mcp.registry import ToolRegistry
+        from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
         from cortex.mcp.discovery import ToolDiscovery
         
         # 1. Create registry and discovery

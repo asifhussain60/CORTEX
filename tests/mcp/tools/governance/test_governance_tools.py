@@ -14,7 +14,7 @@ class TestTierResolverPrecedence:
 
     def test_tier0_overrides_tier1(self):
         """Tier0 rules should override tier1 rules."""
-        from cortex.mcp.tools.governance.tier_resolver import TierResolver
+        from cortex.brain.core.tier_resolver import TierResolver
         
         resolver = TierResolver()
         
@@ -29,7 +29,7 @@ class TestTierResolverPrecedence:
 
     def test_tier1_overrides_tier2(self):
         """Tier1 rules should override tier2 rules."""
-        from cortex.mcp.tools.governance.tier_resolver import TierResolver
+        from cortex.brain.core.tier_resolver import TierResolver
         
         resolver = TierResolver()
         
@@ -43,7 +43,7 @@ class TestTierResolverPrecedence:
 
     def test_tier2_default_when_no_override(self):
         """Tier2 should be used when no higher tier rules exist."""
-        from cortex.mcp.tools.governance.tier_resolver import TierResolver
+        from cortex.brain.core.tier_resolver import TierResolver
         
         resolver = TierResolver()
         
