@@ -1,0 +1,247 @@
+# CORTEX File Naming Configuration (SSOT - Single Source of Truth)
+# Location: .cortex/standards/file-naming-config.yaml
+# Authority: cortex_brain/tier0/governance/file-naming-standards.md
+# Last Updated: 2026-01-27
+
+---
+
+FILE_NAMING_STANDARDS:
+  version: "1.0"
+  effective_date: "2026-01-27"
+  status: "ACTIVE"
+  canonical_reference: "cortex_brain/tier0/governance/file-naming-standards.md"
+
+CASE_STYLES:
+  primary: "kebab-case"
+  description: "lowercase letters, numbers, hyphens only"
+  allowed_separators:
+    - "-" # primary separator
+  forbidden_separators:
+    - "_" # snake_case (except Python files)
+    - "." # multiple dots
+    - " " # spaces
+    - ":" # colons
+    - "/" # forward slashes
+  python_exception: "snake_case (PEP 8 standard)"
+
+LENGTH_CONSTRAINTS:
+  minimum: 8 # chars (too short = ambiguous)
+  optimal_min: 16 # chars (recommended minimum)
+  optimal_max: 32 # chars (recommended maximum)
+  maximum: 55 # chars (hard filesystem limit)
+  rationale: "Readable, discovernable, portable"
+
+NAMING_PATTERNS:
+  documentation:
+    pattern: "{purpose}-{context}.md"
+    examples:
+      - "deployment-guide.md"
+      - "api-reference.md"
+      - "component-inventory-reference.md"
+      - "wiring-schema-specification.md"
+
+  configuration:
+    pattern: "{service}-config.yaml"
+    examples:
+      - "docker-config.yaml"
+      - "prometheus-config.yml"
+      - "database-config.yaml"
+      - "kubernetes-production-config.yaml"
+
+  scripts:
+    pattern: "{verb}-{noun}.sh"
+    examples:
+      - "migrate-to-docker.sh"
+      - "deploy-kubernetes.sh"
+      - "validate-syntax.sh"
+      - "initialize-database.sh"
+
+  python_modules:
+    pattern: "{noun}_{verb}.py"
+    note: "Uses snake_case per PEP 8"
+    examples:
+      - "migration_orchestrator.py"
+      - "wiring_validator.py"
+      - "health_checker.py"
+
+  tests:
+    pattern: "test_{noun}.py"
+    note: "pytest convention, underscore after test_"
+    examples:
+      - "test_wiring_integration.py"
+      - "test_orchestrator_startup.py"
+      - "test_validation_rules.py"
+
+  plans_architecture:
+    pattern: "{purpose}-{topic}-plan.yaml"
+    examples:
+      - "migration-phases-plan.yaml"
+      - "project-roadmap.yaml"
+      - "architecture-deployment-plan.yaml"
+
+SCOPE_PREFIXES:
+  docker: "docker-* (Docker/container-related)"
+  wiring: "wiring-* (Orchestration/wiring-related)"
+  migration: "migration-* (Migration-related)"
+  health: "health-* (Health checks/monitoring)"
+  validate: "validate-* (Validation/testing)"
+  deploy: "deploy-* (Deployment-related)"
+  config: "config-* (Configuration-related)"
+  api: "api-* (API-related)"
+  mcp: "mcp-* (Model Context Protocol)"
+
+PROHIBITED_PATTERNS:
+  adjectives:
+    - "new"
+    - "enhanced"
+    - "improved"
+    - "better"
+    - "advanced"
+    - "executive"
+    - "final"
+    - "draft"
+    - "complete"
+    rationale: "Adjectives are weak, dated immediately"
+
+  version_numbers:
+    - "v1.0"
+    - "v2.1"
+    - "2.0"
+    - "-version2"
+    rationale: "Git provides version control, use git history"
+
+  date_stamps:
+    - "2026-01-27"
+    - "20260127"
+    - "jan-27"
+    rationale: "Use git commit dates instead"
+
+  author_names:
+    - "asif-migration"
+    - "hussain-config"
+    rationale: "Use git blame for authorship"
+
+  status_descriptors:
+    - "-draft"
+    - "-final"
+    - "-complete"
+    - "-wip"
+    rationale: "Use git tags for project status"
+
+FILE_TYPE_SPECIFICS:
+  markdown:
+    extension: ".md"
+    case_style: "kebab-case"
+    version_control: "git (no version in filename)"
+    example: "deployment-guide.md"
+
+  yaml:
+    extension: ".yaml or .yml"
+    case_style: "kebab-case"
+    version_control: "git (no version in filename)"
+    example: "docker-config.yaml"
+    docker_exception: "docker-compose.yml (standard naming)"
+
+  shell_script:
+    extension: ".sh"
+    case_style: "kebab-case"
+    version_control: "git (no version in filename)"
+    example: "migrate-to-docker.sh"
+
+  python:
+    extension: ".py"
+    case_style: "snake_case (PEP 8)"
+    version_control: "git (no version in filename)"
+    example: "migration_orchestrator.py"
+    note: "Exception to kebab-case rule - follows Python convention"
+
+  configuration:
+    extension: ".yaml, .yml, .conf, .cfg"
+    case_style: "kebab-case"
+    pattern: "{purpose}-config.{ext}"
+    example: "docker-config.yaml"
+
+  docker:
+    special_files:
+      - dockerfile: "Dockerfile (no extension, capital D)"
+      - compose: "docker-compose.yml (standard)"
+      - compose_prod: "docker-compose.prod.yml (variant)"
+      - ignore: ".dockerignore (standard)"
+
+GENERATION_RULES:
+  rule_001: "Always check for adjectives - remove them"
+  rule_002: "Purpose/verb comes first, then noun/context"
+  rule_003: "Length must be 8-55 characters"
+  rule_004: "Use kebab-case except Python (snake_case)"
+  rule_005: "Include scope prefix when context matters (docker-, wiring-, etc.)"
+  rule_006: "No version numbers, dates, authors, or status in filename"
+  rule_007: "Be specific - one-word names are ambiguous"
+  rule_008: "Test files start with 'test_'"
+  rule_009: "Configuration files include '-config' suffix"
+  rule_010: "Scripts use {verb}-{noun} pattern"
+
+ENFORCEMENT:
+  pre_commit_hook: true
+  ci_cd_validation: true
+  linter_tool: "cortex/tools/file-naming-validator.py"
+  validation_workflow: ".github/workflows/validate-file-naming.yml"
+  auto_fix_mode: "--fix flag available"
+  documentation_generator: "Uses FileNameFactory class"
+
+EXCEPTIONS:
+  - file: "Dockerfile"
+    reason: "Docker standard naming (no extension)"
+
+  - file: "docker-compose.yml"
+    reason: "Docker standard naming (.yml not .yaml)"
+
+  - file: ".dockerignore"
+    reason: "Docker standard naming (hidden file)"
+
+  - file: "python_files.py"
+    reason: "PEP 8 standard requires snake_case for Python"
+
+  - files: ".gitlab-ci.yml, .github/workflows/*.yml"
+    reason: "CI/CD platform standards supersede naming standard"
+
+MIGRATION_PRIORITY:
+  priority_1: "Critical files (used by scripts, core logic)"
+  priority_2: "Documentation (high visibility, external reference)"
+  priority_3: "Legacy files (low impact, gradual migration)"
+  strategy: "Rename on next edit - no forced bulk changes"
+
+CHANGE_PROCESS:
+  when_updating_standards:
+    - "Update this YAML file"
+    - "Update canonical reference MD file"
+    - "Update FileNameFactory class"
+    - "Update validation tools"
+    - "Create PR for review"
+    - "Merge + tag: naming-standards-update-{date}"
+    - "Communicate to team"
+    - "Gradually apply to legacy files"
+
+REVIEW_CYCLE:
+  frequency: "Annual (1st quarter)"
+  next_review: "2027-01-27"
+  process:
+    - "Validate standards still serve purpose"
+    - "Identify new patterns needed"
+    - "Get developer feedback"
+    - "Document clarifications"
+    - "Update this SSOT"
+
+TEAMS_RESPONSIBLE:
+  - "Governance Team (cortex_brain/tier0)"
+  - "DevX Team (Developer Experience)"
+  - "CI/CD Team (enforcement automation)"
+  - "Documentation Team (guides + standards)"
+
+CONTACT:
+  governance_team: "Asif Hussain (@asifhussain60)"
+  questions: "Refer to cortex_brain/tier0/governance/file-naming-standards.md"
+  issues: "Create issue in CORTEX repository"
+
+SSOT_LOCATION: ".cortex/standards/file-naming-config.yaml"
+GOVERNANCE_LOCATION: "cortex_brain/tier0/governance/file-naming-standards.md"
+IMPLEMENTATION_LOCATION: "cortex/tools/file-naming-validator.py"
