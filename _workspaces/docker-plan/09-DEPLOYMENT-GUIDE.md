@@ -12,15 +12,16 @@
 ## 📋 Table of Contents
 
 1. [Prerequisites](#1-prerequisites)
-2. [Quick Start (5 Minutes)](#2-quick-start-5-minutes)
-3. [Development Deployment](#3-development-deployment)
-4. [Production Deployment](#4-production-deployment)
-5. [Docker MCP Gateway Integration](#5-docker-mcp-gateway-integration)
-6. [Client Integrations](#6-client-integrations)
-7. [Configuration Reference](#7-configuration-reference)
-8. [Health Monitoring](#8-health-monitoring)
-9. [Troubleshooting](#9-troubleshooting)
-10. [Upgrade & Rollback](#10-upgrade--rollback)
+2. [Python Tooling Architecture](#2-python-tooling-architecture)
+3. [Quick Start (5 Minutes)](#3-quick-start-5-minutes)
+4. [Development Deployment](#4-development-deployment)
+5. [Production Deployment](#5-production-deployment)
+6. [Docker MCP Gateway Integration](#6-docker-mcp-gateway-integration)
+7. [Client Integrations](#7-client-integrations)
+8. [Configuration Reference](#8-configuration-reference)
+9. [Health Monitoring](#9-health-monitoring)
+10. [Troubleshooting](#10-troubleshooting)
+11. [Upgrade & Rollback](#11-upgrade--rollback)
 
 ---
 
@@ -88,7 +89,291 @@ git checkout CORTEX-docker
 
 ---
 
-## 2. Quick Start (5 Minutes)
+## 2. Python Tooling Architecture
+
+### 2.1 Installation Model: Centralized (ONE-TIME)
+
+**Key Concept:** Python is NOT installed per-user. Instead, it's installed ONCE during Docker image build and reused by ALL users.
+
+```
+Docker Image Build (ONCE by CI/CD)
+    ├─ Python 3.11 installed (143 MB)
+    ├─ All 142 dependencies installed (350 MB)
+    ├─ CORTEX source code packaged (15 MB)
+    └─ Result: cortex/mcp-server:latest (600-800 MB)
+    
+                      ↓ SHARED BY ALL USERS
+    
+User Environment (NO Python install needed!)
+    ├─ docker pull cortex/mcp-server:latest (~3-5 min, first time)
+    ├─ docker run -d -p 8443:8443 cortex/mcp-server:latest
+    ├─ MCP server starts (Python already in image!)
+    └─ IDE connects to localhost:8443
+```
+
+### 2.2 How It Works
+
+#### When Happens: Image Build Time (ONCE)
+
+```dockerfile
+# Dockerfile (executed ONCE in CI/CD pipeline)
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y git curl
+
+# Install Python dependencies (HAPPENS HERE - ONE TIME)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir fastapi uvicorn[standard]
+
+# Copy source code
+COPY cortex/ ./cortex/
+COPY cortex_brain/ ./cortex_brain/
+
+# Result: Docker image with EVERYTHING pre-installed
+```
+
+**What This Means:**
+- Python 3.11 is installed INSIDE the image, not on user's machine
+- All 142 dependencies are installed INSIDE the image
+- This happens ONCE when image is built
+- User's machine doesn't need Python installed ✅
+
+#### When Happens: User Runtime (Per Session)
+
+```bash
+# User just needs to run (NO Python setup needed!):
+$ docker pull cortex/mcp-server:latest    # First time: ~3-5 min (downloads image)
+$ docker run -d -p 8443:8443 cortex/mcp-server:latest
+
+# Result: MCP server starts instantly
+# Python is already in the image!
+# No pip install needed on user's machine!
+```
+
+### 2.3 Installation Models by Deployment Type
+
+#### Model 1: Solo Developer (Local Docker Desktop)
+
+```bash
+# Developer's machine
+$ git clone https://github.com/asifhussain60/CORTEX.git
+$ cd CORTEX/_workspaces/docker-plan
+$ docker compose up -d
+
+# Result:
+# - Docker builds image locally (first time: ~10 min, includes Python)
+# - Starts container
+# - Python already in container! ✅
+# - MCP server ready at localhost:8443
+
+# Subsequent runs (Day 2, 3, ...):
+$ docker compose up -d    # Instant! (cached layers)
+
+# Per-developer cost: 10 min (one-time), then instant
+```
+
+#### Model 2: Team Collaboration (Shared Central Server)
+
+```yaml
+# Architecture:
+# Central CI/CD Pipeline (GitHub Actions)
+#   └─ Builds cortex/mcp-server:latest image
+#   └─ Pushes to Docker Hub
+#
+# Team Members:
+#   ├─ docker pull cortex/mcp-server:latest (first time: ~3-5 min)
+#   ├─ All get IDENTICAL Python version
+#   ├─ All get IDENTICAL dependencies
+#   ├─ No conflicts between team members
+#   └─ No "works on my machine" problems ✅
+
+# Each team member:
+$ docker run -d -p 8443:8443 cortex/mcp-server:latest
+$ # Configure IDE → Done! ✅
+```
+
+#### Model 3: Enterprise (100-500+ Users)
+
+```
+Architecture:
+    Central Docker Registry (Docker Hub / ECR / Artifactory)
+        └─ cortex/mcp-server:latest (pre-built, all deps)
+    
+    Kubernetes Cluster
+        ├─ 3-10 pod replicas (auto-scaling)
+        ├─ Load balancer (routes requests)
+        ├─ Persistent storage (Docker volumes)
+        └─ All pods run IDENTICAL image
+    
+    Users (100-500+)
+        ├─ Point IDE to: enterprise.cortex.example.com:8443
+        ├─ Load balancer routes to replica containers
+        ├─ All users get consistent environment
+        └─ All using IDENTICAL Python + dependencies ✅
+
+Per-User Cost: ~2 min (first IDE config), then instant
+Central Cost: One image build + deployment
+Scaling: Horizontal (add more pod replicas as needed)
+```
+
+### 2.4 Installation Location Breakdown
+
+```
+Docker Image Contents:
+
+Base Layer (FROM python:3.11-slim):
+  ├─ Python 3.11: 143 MB (included in slim image)
+  ├─ System libs: ~50 MB
+  └─ Total: ~200 MB
+
+Dependencies Layer (pip install):
+  ├─ Core: pyyaml, pydantic (parsing, validation)
+  ├─ MCP: websockets, aiofiles, httptools (communication)
+  ├─ Web: fastapi, uvicorn (API server)
+  ├─ Optional: pandas, numpy, scikit-learn (analytics)
+  └─ Total: 350 MB (pre-compiled, cached)
+
+Application Layer:
+  ├─ cortex/ directory (1,592 Python files)
+  ├─ cortex_brain/ directory (brain files)
+  ├─ Test suite (500+ test files)
+  └─ Total: ~15 MB
+
+─────────────────────────────────
+TOTAL IMAGE SIZE: ~600-800 MB
+SHARED ACROSS: ALL users (storage efficient!)
+```
+
+**Key Point:** The entire image is built ONCE and reused by everyone. No per-user duplication of Python or dependencies!
+
+### 2.5 Comparison: Local Python vs. Docker
+
+```
+LOCAL PYTHON INSTALLATION (❌ NOT RECOMMENDED):
+├─ User must install Python 3.11
+├─ User must run: pip install -r requirements.txt
+├─ Time per user: 30-60 minutes
+├─ Disk space per user: 500+ MB (separate environment)
+├─ Version conflicts: Common (different Python versions per user)
+├─ Dependency conflicts: Common (pip conflicts)
+├─ Maintenance: Per-user (each user manages their own setup)
+└─ Scaling issue: N users × 30-60 min = massive overhead
+
+DOCKER CONTAINER (✅ RECOMMENDED):
+├─ Python pre-installed in image
+├─ All dependencies pre-installed in image
+├─ Time per user (first run): <5 minutes
+├─ Disk space per user: 0 MB (shared image!)
+├─ Version consistency: 100% (all users identical)
+├─ Dependency conflicts: Impossible (all in image)
+├─ Maintenance: Central (one image build, all users get it)
+└─ Scaling solution: 1 image → any number of users ✅
+```
+
+### 2.6 Python Tooling FAQ
+
+**Q: I don't have Python installed on my machine. Is that a problem?**
+```
+A: No problem! ✅
+
+Python is inside the Docker container, not on your machine.
+Docker handles everything. Just install Docker (not Python).
+```
+
+**Q: Do I need to run pip install?**
+```
+A: No! ✅
+
+All dependencies are pre-installed in the Docker image.
+When you run the container, Python and all packages are ready.
+No pip commands needed on your machine.
+```
+
+**Q: What if I have Python 3.9 but CORTEX needs 3.11?**
+```
+A: Doesn't matter! ✅
+
+Your Python version is irrelevant. Container has Python 3.11.
+Your local Python is never used by CORTEX.
+Container is completely isolated from your machine.
+```
+
+**Q: How do I update Python or dependencies?**
+```
+A: Central team rebuilds image:
+
+1. Update requirements.txt in repo
+2. CI/CD pipeline rebuilds image (Python 3.11 + new deps)
+3. Image pushed to registry (Docker Hub, ECR, etc.)
+4. All users: docker pull cortex/mcp-server:latest
+5. Everyone gets updated Python + deps ✅
+
+No per-user setup needed!
+```
+
+**Q: What if I want to run development version (with editable install)?**
+```
+A: Use docker-compose with volume mount:
+
+# docker-compose.yml
+services:
+  cortex-mcp:
+    build: .
+    volumes:
+      - ./cortex:/app/cortex    # Mount source code
+      - ./cortex_brain:/app/cortex_brain
+    # Changes to source are reflected instantly!
+```
+
+**Q: Does this work with my IDE (VS Code, Cursor, Claude)?**
+```
+A: Yes! ✅
+
+1. Start CORTEX in Docker: docker run -d -p 8443:8443 ...
+2. Configure IDE: Point MCP endpoint to localhost:8443
+3. IDE connects to MCP server in container
+4. Use /CORTEX commands normally
+5. Python in container handles everything ✅
+```
+
+### 2.7 Troubleshooting Python Tooling Issues
+
+**Issue: "docker: command not found"**
+```
+Solution: Install Docker
+  - macOS: brew install --cask docker
+  - Windows: Download Docker Desktop
+  - Linux: curl -fsSL https://get.docker.com | sh
+```
+
+**Issue: "Container exits immediately after starting"**
+```
+Solution: Check logs
+  $ docker logs <container-id>
+  Look for Python import errors or missing dependencies.
+  If you see Python errors, report with logs attached.
+```
+
+**Issue: "Python version mismatch error"**
+```
+Solution: You're probably using local Python (wrong!)
+  
+  Don't run Python directly:
+    ❌ python -c "import cortex"
+  
+  Use container instead:
+    ✅ docker run cortex/mcp-server:latest
+    OR
+    ✅ Configure IDE to connect to container
+```
+
+---
+
+## 3. Quick Start (5 Minutes)
 
 For users who want to get CORTEX running immediately:
 
@@ -120,11 +405,11 @@ curl http://localhost:8443/mcp/tools
 }
 ```
 
-**🎉 CORTEX is now running!** Skip to [Section 6](#6-client-integrations) to connect your IDE.
+**🎉 CORTEX is now running!** Skip to [Section 7](#7-client-integrations) to connect your IDE.
 
 ---
 
-## 3. Development Deployment
+## 4. Development Deployment
 
 ### 3.1 Directory Structure
 
@@ -224,7 +509,7 @@ docker compose exec cortex-mcp pytest tests/ -v
 
 ---
 
-## 4. Production Deployment
+## 5. Production Deployment
 
 ### 4.1 Production docker-compose.prod.yml
 
@@ -412,7 +697,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 ---
 
-## 5. Docker MCP Gateway Integration
+## 6. Docker MCP Gateway Integration
 
 ### 5.1 Why Use MCP Gateway?
 
@@ -514,7 +799,7 @@ curl http://localhost:6600/v1/servers
 
 ---
 
-## 6. Client Integrations
+## 7. Client Integrations
 
 ### 6.1 VS Code Integration
 
@@ -609,7 +894,7 @@ Test CORTEX is accessible from your IDE:
 
 ---
 
-## 7. Configuration Reference
+## 8. Configuration Reference
 
 ### 7.1 Environment Variables
 
@@ -644,7 +929,7 @@ Test CORTEX is accessible from your IDE:
 
 ---
 
-## 8. Health Monitoring
+## 9. Health Monitoring
 
 ### 8.1 Health Check Endpoints
 
@@ -725,7 +1010,7 @@ docker compose exec cortex-mcp curl -f http://localhost:8443/health
 
 ---
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 ### 9.1 Common Issues
 
@@ -830,7 +1115,7 @@ docker compose up -d --build
 
 ---
 
-## 10. Upgrade & Rollback
+## 11. Upgrade ## 10. Upgrade & Rollback Rollback
 
 ### 10.1 Upgrade Process
 
