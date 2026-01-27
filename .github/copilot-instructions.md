@@ -83,6 +83,7 @@ Key Rules:
   CORE-013: No bare except clauses
   CORE-026: Git checkpoint before major changes
   CORE-027: Audit trail (AC_START → AC_EXECUTE → AC_COMPLETE)
+  CORE-028: File Naming - Python modules MUST use snake_case (hyphens = SyntaxError)
   CORE-029: Response header enforcement
   CORE-030: Implementation Truth - verify code, not docs
   CORE-035: Single Canonical Implementation - no duplicates
