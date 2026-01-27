@@ -242,3 +242,117 @@ class TestAssembledContext:
         
         assert high_conf_ctx.has_high_confidence() is True
         assert low_conf_ctx.has_high_confidence() is False
+    
+    def test_assembled_context_to_cacheable(self):
+        """Test serialization to cacheable dictionary."""
+        repo_ctx = RepoContext(
+            repo_type=RepoType.CORTEX,
+            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_name="CORTEX",
+        )
+        
+        evidence = [
+            EvidenceSource(
+                file_path="cortex/orchestrators/core/tdd_orchestrator.py",
+                line_number=42,
+                content="class TDDOrchestrator:",
+                source_type="code",
+            )
+        ]
+        
+        ctx = AssembledContext(
+            question="How does TDDOrchestrator work?",
+            repo_context=repo_ctx,
+            category=InquiryCategory.ARCHITECTURE,
+            evidence_sources=evidence,
+            confidence=0.92,
+            tier3_knowledge=["tdd-patterns.yaml"],
+            core_rules=["CORE-008"],
+        )
+        
+        cacheable = ctx.to_cacheable()
+        
+        assert isinstance(cacheable, dict)
+        assert cacheable["question"] == "How does TDDOrchestrator work?"
+        assert cacheable["category"] == "architecture"  # Enum value is lowercase
+        assert cacheable["confidence"] == 0.92
+        assert len(cacheable["evidence_sources"]) == 1
+        assert cacheable["tier3_knowledge"] == ["tdd-patterns.yaml"]
+        assert cacheable["core_rules"] == ["CORE-008"]
+    
+    def test_assembled_context_from_cache(self):
+        """Test deserialization from cached dictionary."""
+        cached_data = {
+            "question": "How does TDDOrchestrator work?",
+            "category": "architecture",  # Enum value is lowercase
+            "confidence": 0.92,
+            "evidence_sources": [
+                {
+                    "file_path": "cortex/orchestrators/core/tdd_orchestrator.py",
+                    "line_number": 42,
+                    "content": "class TDDOrchestrator:",
+                    "source_type": "code",
+                }
+            ],
+            "tier3_knowledge": ["tdd-patterns.yaml"],
+            "core_rules": ["CORE-008"],
+            "metadata": {"cached_at": "2026-01-27"},
+        }
+        
+        repo_ctx = RepoContext(
+            repo_type=RepoType.CORTEX,
+            repo_path=Path("/Users/asifhussain/PROJECTS/CORTEX"),
+            repo_name="CORTEX",
+        )
+        
+        ctx = AssembledContext.from_cache(cached_data, repo_ctx)
+        
+        assert ctx.question == "How does TDDOrchestrator work?"
+        assert ctx.category == InquiryCategory.ARCHITECTURE
+        assert ctx.confidence == 0.92
+        assert len(ctx.evidence_sources) == 1
+        assert ctx.evidence_sources[0].file_path == "cortex/orchestrators/core/tdd_orchestrator.py"
+        assert ctx.tier3_knowledge == ["tdd-patterns.yaml"]
+        assert ctx.core_rules == ["CORE-008"]
+        assert ctx.cache_hit is True
+        assert ctx.metadata["cached_at"] == "2026-01-27"
+    
+    def test_assembled_context_round_trip_serialization(self):
+        """Test complete round-trip: object → cache → object."""
+        repo_ctx = RepoContext(
+            repo_type=RepoType.USER_REPO,
+            repo_path=Path("/Users/john/my-app"),
+            repo_name="my-app",
+        )
+        
+        original = AssembledContext(
+            question="How to add new feature?",
+            repo_context=repo_ctx,
+            category=InquiryCategory.FEATURE,
+            evidence_sources=[
+                EvidenceSource(
+                    file_path="src/main.py",
+                    line_number=10,
+                    content="def main():",
+                    source_type="code",
+                )
+            ],
+            confidence=0.85,
+            tier3_knowledge=None,
+            core_rules=None,
+            metadata={"source": "test"},
+        )
+        
+        # Serialize
+        cached = original.to_cacheable()
+        
+        # Deserialize
+        restored = AssembledContext.from_cache(cached, repo_ctx)
+        
+        assert restored.question == original.question
+        assert restored.category == original.category
+        assert restored.confidence == original.confidence
+        assert len(restored.evidence_sources) == len(original.evidence_sources)
+        assert restored.evidence_sources[0].file_path == original.evidence_sources[0].file_path
+        assert restored.cache_hit is True  # Should be True after from_cache()
+        assert restored.metadata["source"] == "test"
