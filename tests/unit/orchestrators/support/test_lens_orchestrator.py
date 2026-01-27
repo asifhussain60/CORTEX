@@ -506,3 +506,169 @@ def test_tracks_analysis_time(
     # Should have metadata with timing
     metadata = result.get("_metadata", {})
     assert "analysis_time_ms" in metadata or "duration_ms" in metadata
+
+
+# ============================================================================
+# TEST: Remote Analysis (Phase 10 - LENS-014)
+# ============================================================================
+
+def test_analyze_remote_file(test_repo_path: Path) -> None:
+    """
+    Test remote file analysis.
+    
+    Should fetch remote file and analyze with LENS.
+    """
+    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter, RemoteFile
+    from datetime import datetime
+    
+    orchestrator = LENSOrchestrator(repo_path=test_repo_path)
+    
+    # Mock remote adapter
+    mock_adapter = Mock(spec=RemoteGitAdapter)
+    mock_adapter.fetch_file.return_value = RemoteFile(
+        path="test.py",
+        content="def hello():\n    '''Say hello'''\n    # TODO: improve\n    pass",
+        size=100,
+        sha="abc123",
+    )
+    mock_adapter.fetch_commits.return_value = [
+        Mock(
+            sha="abc123",
+            message="feat: add hello",
+            author="John",
+            author_email="john@example.com",
+            date=datetime(2026, 1, 27),
+            files_changed=["test.py"],
+        ),
+    ]
+    
+    result = orchestrator.analyze_remote(
+        remote_adapter=mock_adapter,
+        repo="owner/repo",
+        file_path="test.py",
+        ref="main",
+    )
+    
+    assert result is not None
+    assert "git_analysis" in result
+    assert "ast_analysis" in result
+    assert "comment_analysis" in result
+    assert result["_metadata"]["mode"] == "remote"
+    
+    mock_adapter.fetch_file.assert_called_once_with("owner/repo", "test.py", "main")
+
+
+def test_analyze_remote_error_handling(test_repo_path: Path) -> None:
+    """
+    Test remote analysis error handling.
+    
+    Should handle API errors gracefully.
+    """
+    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
+    
+    orchestrator = LENSOrchestrator(repo_path=test_repo_path)
+    
+    mock_adapter = Mock(spec=RemoteGitAdapter)
+    mock_adapter.fetch_file.side_effect = Exception("API error")
+    
+    result = orchestrator.analyze_remote(
+        remote_adapter=mock_adapter,
+        repo="owner/repo",
+        file_path="test.py",
+        ref="main",
+    )
+    
+    assert result is not None
+    assert "error" in result["_metadata"]
+
+
+def test_compare_branches_local(test_repo_path: Path) -> None:
+    """
+    Test local branch comparison.
+    
+    Should compare branches in local repository.
+    """
+    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.brain.analysis.branch_comparator import BranchComparison, FileDiff
+    from cortex.brain.analysis.git_history_analyzer import GitCommit
+    from datetime import datetime
+    
+    orchestrator = LENSOrchestrator(repo_path=test_repo_path)
+    
+    # Mock BranchComparator
+    with patch("cortex.orchestrators.support.lens_orchestrator.BranchComparator") as mock_comparator_class:
+        mock_comparator = Mock()
+        mock_comparator.compare_branches.return_value = BranchComparison(
+            base_branch="main",
+            head_branch="feature",
+            commits_ahead=3,
+            commits_behind=1,
+            commits=[
+                GitCommit(
+                    hash="abc123",
+                    author="John",
+                    date=datetime(2026, 1, 27),
+                    message="feat: add feature",
+                    files_changed=["test.py"],
+                ),
+            ],
+            file_diffs=[
+                FileDiff(file_path="test.py", status="modified", additions=10, deletions=5),
+            ],
+            total_additions=10,
+            total_deletions=5,
+            is_mergeable=True,
+        )
+        mock_comparator_class.return_value = mock_comparator
+        
+        result = orchestrator.compare_branches("main", "feature")
+        
+        assert result is not None
+        assert result["base_branch"] == "main"
+        assert result["head_branch"] == "feature"
+        assert result["commits_ahead"] == 3
+        assert len(result["commits"]) == 1
+        assert len(result["file_diffs"]) == 1
+
+
+def test_compare_branches_remote(test_repo_path: Path) -> None:
+    """
+    Test remote branch comparison.
+    
+    Should compare branches in remote repository.
+    """
+    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
+    from cortex.brain.analysis.branch_comparator import BranchComparison
+    
+    orchestrator = LENSOrchestrator(repo_path=test_repo_path)
+    
+    mock_adapter = Mock(spec=RemoteGitAdapter)
+    
+    # Mock BranchComparator
+    with patch("cortex.orchestrators.support.lens_orchestrator.BranchComparator") as mock_comparator_class:
+        mock_comparator = Mock()
+        mock_comparator.compare_branches.return_value = BranchComparison(
+            base_branch="main",
+            head_branch="feature",
+            commits_ahead=2,
+            commits_behind=0,
+            total_additions=15,
+            total_deletions=5,
+            is_mergeable=True,
+        )
+        mock_comparator_class.return_value = mock_comparator
+        
+        result = orchestrator.compare_branches(
+            "main",
+            "feature",
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        
+        assert result is not None
+        assert result["base_branch"] == "main"
+        assert result["commits_ahead"] == 2
+        assert result["is_mergeable"] is True
