@@ -3,6 +3,8 @@ Discovery Engine - Orchestrator Discovery and Query System
 
 AC-AR-017-01: Discovery API for finding orchestrators
 
+Docker-first architecture: Uses YAML-backed wiring configuration.
+
 Provides:
 - Query by domain, capability, version
 - Combined queries with multiple filters
@@ -17,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import time
 
-# AC-PERMANENT-FIX-012: Use bridge to DatabaseBackedRegistry
+# Docker-first: Import from YAML-backed registry
 try:
     from cortex.orchestrators.registry import (
         OrchestratorRegistry,
@@ -77,13 +79,8 @@ class DiscoveryEngine:
         if self._initialized:
             return
         
-        # AC-PERMANENT-FIX-012: Use DatabaseBackedRegistry
-        try:
-            from cortex.orchestrators import get_database_registry
-            self.registry = get_database_registry()
-        except ImportError:
-            # Fallback for tests
-            self.registry = None
+        # Docker-first: YAML-backed wiring (no database registry)
+        self.registry = None  # Discovery via YAML config
         self._initialized = True
     
     def search(self, query: DiscoveryQuery) -> DiscoveryResult:

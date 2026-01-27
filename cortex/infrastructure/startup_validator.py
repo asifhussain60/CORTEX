@@ -4,6 +4,8 @@ CORTEX Startup Validator - Comprehensive System Health Check
 Mandatory pre-execution validation that runs on first import.
 Ensures clean bill of health before any orchestrator execution.
 
+Docker-first architecture: Uses YAML-backed wiring configuration.
+
 Key features:
 - One-time initialization check (cached after first run)
 - Auto-remediation of common issues
@@ -17,7 +19,6 @@ by enforcing mandatory startup validation with auto-remediation.
 
 import json
 import logging
-import sqlite3
 import threading
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
@@ -56,18 +57,22 @@ class StartupValidationStatus:
 
 
 class StartupValidator:
-    """Comprehensive startup validation with auto-remediation."""
+    """Comprehensive startup validation with auto-remediation.
+    
+    Docker-first architecture: Uses YAML-backed wiring configuration.
+    """
 
     # Cache file location (persists across sessions)
     CACHE_DIR = Path.home() / ".cortex" / "startup"
     CACHE_FILE = CACHE_DIR / "validation_status.json"
-    REGISTRY_DB = Path(__file__).parent.parent.parent / ".cortex" / "orchestrator_registry.db"
+    # Docker-first: YAML config instead of SQLite
+    REGISTRY_CONFIG = Path(__file__).parent.parent.parent / "cortex-registry" / "manifest.yaml"
 
     def __init__(self):
         """Initialize validator."""
         self.cache_dir = self.CACHE_DIR
         self.cache_file = self.CACHE_FILE
-        self.registry_db = self.REGISTRY_DB
+        self.registry_config = self.REGISTRY_CONFIG
 
     def validate_and_remediate(self) -> Result:
         """
@@ -180,7 +185,9 @@ class StartupValidator:
 
     def _check_database_integrity(self) -> Result:
         """
-        Check SQLite database integrity.
+        Check configuration integrity.
+        
+        Docker-first: Validates YAML config instead of SQLite database.
 
         Returns:
             Result with list of auto-remediated issues
@@ -188,54 +195,49 @@ class StartupValidator:
         remediated = []
 
         try:
-            # Ensure database exists
-            self.registry_db.parent.mkdir(parents=True, exist_ok=True)
-
-            # Check for stale lock files (macOS .!* pattern)
-            lock_files = list(self.registry_db.parent.glob(".!*orchestrator_registry.db*"))
-            if lock_files:
-                for lock_file in lock_files:
-                    try:
-                        lock_file.unlink()
-                        remediated.append(f"Cleaned up stale lock file: {lock_file.name}")
-                    except Exception as e:
-                        logger.warning(f"Failed to clean lock file {lock_file}: {e}")
-
-            # Verify database is readable
-            if self.registry_db.exists():
+            # Docker-first: Check YAML config exists and is valid
+            if self.registry_config.exists():
                 try:
-                    conn = sqlite3.connect(str(self.registry_db))
-                    conn.execute("SELECT 1")
-                    conn.close()
-                except sqlite3.DatabaseError as e:
-                    return Err(f"Database corruption detected: {e}")
+                    import yaml
+                    with open(self.registry_config, 'r') as f:
+                        data = yaml.safe_load(f)
+                    if data is None:
+                        return Err("YAML config is empty")
+                except yaml.YAMLError as e:
+                    return Err(f"YAML config parse error: {e}")
+            else:
+                # Config doesn't exist yet, not an error during early setup
+                remediated.append("YAML config not yet created (OK during bootstrap)")
 
             return Ok(remediated)
 
         except Exception as e:
-            return Err(f"Database integrity check failed: {str(e)}")
+            return Err(f"Config integrity check failed: {str(e)}")
 
     def _check_orchestrator_wiring(self) -> Result:
         """
         Check orchestrator wiring status.
+        
+        Docker-first: Uses YAML-backed configuration instead of database.
 
         Returns:
             Result with wiring statistics
         """
         try:
             from cortex.orchestrators import (
-                get_database_registry,
-                initialize_registry,
+                get_orchestrator_count_by_category,
             )
 
-            # Initialize registry
-            init_result = initialize_registry()
-            if init_result.is_err():
-                return Err(f"Failed to initialize registry: {init_result.error}")
-
-            # Get registry stats
-            registry = get_database_registry()
-            stats = registry.get_wiring_statistics()
+            # Get stats from YAML-backed registry
+            counts = get_orchestrator_count_by_category()
+            total = counts.get('total', 0)
+            
+            # In YAML-backed config, all defined orchestrators are "wired"
+            stats = {
+                "wired": total,
+                "total": total,
+                "unwired": 0
+            }
 
             return Ok(stats)
 

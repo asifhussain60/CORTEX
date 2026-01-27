@@ -3,7 +3,7 @@ Orchestrator Decorator - Auto-registration Pattern
 
 AC-AR-006-02: Orchestrators auto-registered via @orchestrator decorator
 
-Provides @orchestrator decorator for automatic registration in OrchestratorRegistry:
+Provides @orchestrator decorator for automatic registration:
 - Marks a class as an orchestrator
 - Auto-registers with central registry
 - Tracks domain, version, and capabilities
@@ -18,9 +18,7 @@ Usage:
     class GovernanceOrchestrator(IOrchestrator):
         ...
 
-Then orchestrators are auto-discovered:
-registry = get_database_registry()
-    orchestrators = registry.get_orchestrators_by_domain("governance")
+Docker-first architecture: Orchestrators are configured via YAML wiring.
 
 Author: Asif Hussain
 """

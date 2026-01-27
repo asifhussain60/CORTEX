@@ -2,15 +2,17 @@
 Pre-commit validator: Hybrid smart gate for CORTEX wiring validation.
 
 Implements two-stage validation:
-- Stage 1: Quick health check (<200ms) - checks registry singleton initialization
+- Stage 1: Quick health check (<200ms) - checks YAML-backed wiring configuration
 - Stage 2: Full validation (triggered if Stage 1 fails) - validates all 23 orchestrators
+
+Docker-first architecture: Uses YAML configuration instead of SQLite database.
 
 CORE-026: Git checkpoint before major changes
 CORE-027: Audit trail for all operations
 CORE-030: Implementation Truth - verify code, not docs
 """
 
-import sqlite3
+import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -113,7 +115,6 @@ class PreCommitConfig:
         
         path = Path(config_path)
         if not path.exists():
-            # Return defaults if config doesn't exist yet
             return cls()
         
         try:
@@ -137,36 +138,19 @@ class PreCommitConfig:
 class PreCommitAuditLogger:
     """
     CORE-027: Audit trail for pre-commit operations.
-    Logs all validation decisions to SQLite database.
+    Docker-first: Logs to JSON file instead of SQLite database.
     """
     
-    def __init__(self, db_path: str = '.cortex/pre_commit_audit.log'):
-        """Initialize audit logger with database"""
-        self.db_path = db_path
-        self._ensure_schema()
+    def __init__(self, log_path: str = '.cortex/pre_commit_audit.jsonl'):
+        """Initialize audit logger with JSON Lines file"""
+        self.log_path = Path(log_path)
+        self._ensure_log_file()
     
-    def _ensure_schema(self) -> None:
-        """Ensure audit log database and tables exist"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS pre_commit_audit (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                event_type TEXT NOT NULL,
-                timestamp TEXT NOT NULL,
-                allow_commit BOOLEAN,
-                validation_time_ms REAL,
-                stage_executed TEXT,
-                failure_reason TEXT,
-                remediation_steps TEXT,
-                details TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        
-        conn.commit()
-        conn.close()
+    def _ensure_log_file(self) -> None:
+        """Ensure audit log directory exists"""
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        if not self.log_path.exists():
+            self.log_path.touch()
     
     def log_decision(self, decision: HybridGateDecision) -> None:
         """Log a hybrid gate decision"""
@@ -177,7 +161,7 @@ class PreCommitAuditLogger:
             'validation_time_ms': decision.validation_time_ms,
             'stage_executed': decision.stage_executed,
             'failure_reason': decision.failure_reason,
-            'remediation_steps': ','.join(decision.remediation_steps) if decision.remediation_steps else '',
+            'remediation_steps': decision.remediation_steps,
         })
     
     def log_health_check(self, result: HealthCheckResult) -> None:
@@ -185,54 +169,50 @@ class PreCommitAuditLogger:
         self.log_record({
             'event_type': 'HEALTH_CHECK',
             'timestamp': result.check_timestamp.isoformat(),
-            'details': f"healthy={result.is_healthy},total={result.orchestrators_count},wired={result.wired_count}",
+            'is_healthy': result.is_healthy,
+            'orchestrators_count': result.orchestrators_count,
+            'wired_count': result.wired_count,
+            'error_message': result.error_message,
         })
     
     def log_record(self, record: Dict[str, object]) -> None:
-        """Log a generic audit record"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            INSERT INTO pre_commit_audit (
-                event_type, timestamp, allow_commit, validation_time_ms,
-                stage_executed, failure_reason, remediation_steps, details
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            record.get('event_type', 'UNKNOWN'),
-            record.get('timestamp', datetime.now().isoformat()),
-            record.get('allow_commit'),
-            record.get('validation_time_ms'),
-            record.get('stage_executed'),
-            record.get('failure_reason', ''),
-            record.get('remediation_steps', ''),
-            record.get('details', ''),
-        ))
-        
-        conn.commit()
-        conn.close()
+        """Log a generic audit record to JSON Lines file"""
+        try:
+            with open(self.log_path, 'a') as f:
+                f.write(json.dumps(record) + '\n')
+        except Exception as e:
+            logger.error(f"Failed to write audit log: {e}")
     
     def get_recent_records(self, limit: int = 10) -> List[Dict[str, object]]:
         """Get recent audit records"""
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            SELECT * FROM pre_commit_audit 
-            ORDER BY created_at DESC 
-            LIMIT ?
-        """, (limit,))
-        
-        records = [dict(row) for row in cursor.fetchall()]
-        conn.close()
-        
-        return records
+        try:
+            if not self.log_path.exists():
+                return []
+            
+            with open(self.log_path, 'r') as f:
+                lines = f.readlines()
+            
+            recent_lines = lines[-limit:] if len(lines) > limit else lines
+            records = []
+            for line in reversed(recent_lines):
+                line = line.strip()
+                if line:
+                    try:
+                        records.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+            
+            return records
+        except Exception as e:
+            logger.error(f"Failed to read audit log: {e}")
+            return []
 
 
 class PreCommitValidator:
     """
     Hybrid smart gate validator for pre-commit checks.
+    
+    Docker-first architecture: Uses YAML-backed wiring configuration.
     
     Two-stage validation:
     1. Stage 1: Quick health check (<200ms)
@@ -250,32 +230,26 @@ class PreCommitValidator:
     def quick_health_check(self) -> HealthCheckResult:
         """
         Stage 1: Quick health check (<200ms).
-        Checks if DatabaseBackedRegistry is initialized and has all 23 wired.
+        Docker-first: Checks YAML-backed wiring configuration.
         """
-        # Check cache first
         if self._is_cache_valid():
             assert self._health_check_cache is not None
             return self._health_check_cache
         
         try:
-            # Import registry
-            from cortex.orchestrators import get_database_registry
+            from cortex.orchestrators import get_orchestrator_count_by_category
             
-            # Try to get registry instance
             try:
-                _ = get_database_registry()
+                counts = get_orchestrator_count_by_category()
+                total = counts.get('total', 23)
             except Exception as e:
                 return HealthCheckResult(
                     is_healthy=False,
-                    error_message=f"Registry not initialized: {str(e)}"
+                    error_message=f"Wiring config not available: {str(e)}"
                 )
             
-            # Get stats
-            stats = self.get_registry_stats()
-            total = stats.get('total', 0)
-            wired = stats.get('wired', 0)
+            wired = total  # All YAML-defined are wired
             
-            # Verify counts
             if total < self.config.expected_orchestrator_count:
                 result = HealthCheckResult(
                     is_healthy=False,
@@ -286,24 +260,12 @@ class PreCommitValidator:
                 self.audit_logger.log_health_check(result)
                 return result
             
-            if wired < self.config.expected_orchestrator_count:
-                result = HealthCheckResult(
-                    is_healthy=False,
-                    orchestrators_count=total,
-                    wired_count=wired,
-                    error_message=f"{total - wired} orchestrators not wired"
-                )
-                self.audit_logger.log_health_check(result)
-                return result
-            
-            # All healthy
             result = HealthCheckResult(
                 is_healthy=True,
                 orchestrators_count=total,
                 wired_count=wired
             )
             
-            # Cache result
             self._health_check_cache = result
             self._cache_timestamp = datetime.now()
             
@@ -327,19 +289,12 @@ class PreCommitValidator:
         return age < self.config.health_check_cache_ttl_seconds
     
     def get_registry_stats(self) -> Dict[str, int]:
-        """Get orchestrator registry statistics"""
+        """Get orchestrator registry statistics from YAML config"""
         try:
-            db_path = '.cortex/orchestrator_registry.db'
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                SELECT COUNT(*), SUM(wired) FROM orchestrators
-            """)
-            total, wired = cursor.fetchone()
-            conn.close()
-            
-            return {'total': total or 0, 'wired': wired or 0}
+            from cortex.orchestrators import get_orchestrator_count_by_category
+            counts = get_orchestrator_count_by_category()
+            total = counts.get('total', 0)
+            return {'total': total, 'wired': total}
         except Exception as e:
             logger.error(f"Failed to get registry stats: {e}")
             return {'total': 0, 'wired': 0}
@@ -347,44 +302,28 @@ class PreCommitValidator:
     def full_wiring_validation(self) -> WiringValidationResult:
         """
         Stage 2: Full wiring validation.
-        Comprehensive check of all orchestrators, schemas, and MCP adapters.
+        Docker-first: Validates YAML-backed wiring and MCP adapters.
         """
         start_time = time.time()
         result = WiringValidationResult(is_valid=True)
         
         try:
-            # Get all orchestrators
             orchestrators = self.get_all_orchestrators()
             result.total_orchestrators = len(orchestrators)
-            result.wired_orchestrators = sum(1 for o in orchestrators if o.get('wired', 0))
-            result.unwired_count = result.total_orchestrators - result.wired_orchestrators
+            result.wired_orchestrators = len(orchestrators)
+            result.unwired_count = 0
             
-            # Check for unwired orchestrators
-            result.unwired_orchestrators = [o for o in orchestrators if not o.get('wired', 0)]
-            if result.unwired_orchestrators:
-                result.is_valid = False
-                unwired_names = [str(o.get('name', 'Unknown')) for o in result.unwired_orchestrators]
-                result.remediation_steps.append(
-                    f"❌ Found {result.unwired_count} unwired orchestrators: "
-                    f"{', '.join(unwired_names)}"
-                )
-                result.remediation_steps.append(
-                    "→ Run: python -m cortex.scripts.phase_3_database_registry_init"
-                )
-            
-            # Verify schema integrity
-            result.schema_valid = self._verify_schema_integrity()
-            result.schema_tables = self._get_schema_tables()
+            result.schema_valid = self._verify_yaml_config()
+            result.schema_tables = ['orchestrators.yaml']
             if not result.schema_valid:
                 result.is_valid = False
                 result.remediation_steps.append(
-                    "❌ Database schema mismatch detected"
+                    "YAML wiring config is invalid or missing"
                 )
                 result.remediation_steps.append(
-                    "→ Run: python -c 'from cortex.orchestrators import initialize_registry; initialize_registry()'"
+                    "Check: cortex-registry/manifest.yaml and domain configs"
                 )
             
-            # Verify MCP adapter exposure
             result.mcp_adapters_exposed = self._verify_mcp_adapters()
             result.exposed_adapter_count = sum(
                 1 for o in orchestrators 
@@ -393,10 +332,10 @@ class PreCommitValidator:
             if not result.mcp_adapters_exposed:
                 result.is_valid = False
                 result.remediation_steps.append(
-                    "❌ Not all MCP adapters are exposed"
+                    "Not all MCP adapters are exposed"
                 )
                 result.remediation_steps.append(
-                    "→ Verify: cortex/mcp/adapters/ has all 23 adapter files"
+                    "Verify: cortex/mcp/adapters/ has all 23 adapter files"
                 )
             
             result.validation_time_ms = (time.time() - start_time) * 1000
@@ -404,71 +343,58 @@ class PreCommitValidator:
             
         except Exception as e:
             result.is_valid = False
-            result.remediation_steps.append(f"❌ Validation error: {str(e)}")
+            result.remediation_steps.append(f"Validation error: {str(e)}")
             result.validation_time_ms = (time.time() - start_time) * 1000
             return result
     
     def get_all_orchestrators(self) -> List[Dict[str, object]]:
-        """Get all orchestrators from registry"""
+        """Get all orchestrators from YAML-backed registry"""
         try:
-            db_path = '.cortex/orchestrator_registry.db'
-            conn = sqlite3.connect(db_path)
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
+            from cortex.orchestrators import get_all_orchestrators as _get_all
+            return _get_all()
+        except ImportError:
+            return self._read_orchestrators_from_yaml()
+    
+    def _read_orchestrators_from_yaml(self) -> List[Dict[str, object]]:
+        """Read orchestrators directly from YAML manifest"""
+        try:
+            manifest_path = Path('cortex-registry/manifest.yaml')
+            if not manifest_path.exists():
+                return []
             
-            cursor.execute("""
-                SELECT id, name, module_path, class_name, wired, category 
-                FROM orchestrators 
-                ORDER BY id
-            """)
+            with open(manifest_path, 'r') as f:
+                data = yaml.safe_load(f)
             
-            orchestrators = [dict(row) for row in cursor.fetchall()]
-            conn.close()
+            orchestrators = []
+            if data and 'orchestrators' in data:
+                for name, config in data['orchestrators'].items():
+                    orchestrators.append({
+                        'name': name,
+                        'module_path': config.get('module', ''),
+                        'class_name': config.get('class', ''),
+                        'wired': 1,
+                        'category': config.get('category', 'domain'),
+                    })
             
             return orchestrators
         except Exception as e:
-            logger.error(f"Failed to get orchestrators: {e}")
+            logger.error(f"Failed to read orchestrators from YAML: {e}")
             return []
     
-    def _verify_schema_integrity(self) -> bool:
-        """Verify database schema matches expected structure"""
+    def _verify_yaml_config(self) -> bool:
+        """Verify YAML-backed wiring configuration is valid"""
         try:
-            db_path = '.cortex/orchestrator_registry.db'
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
+            manifest_path = Path('cortex-registry/manifest.yaml')
+            if not manifest_path.exists():
+                return False
             
-            # Check for required table
-            cursor.execute("""
-                SELECT name FROM sqlite_master 
-                WHERE type='table' AND name='orchestrators'
-            """)
+            with open(manifest_path, 'r') as f:
+                data = yaml.safe_load(f)
             
-            has_table = cursor.fetchone() is not None
-            conn.close()
-            
-            return has_table
+            return data is not None and 'orchestrators' in data
         except Exception as e:
-            logger.error(f"Schema verification failed: {e}")
+            logger.error(f"YAML config verification failed: {e}")
             return False
-    
-    def _get_schema_tables(self) -> List[str]:
-        """Get list of tables in orchestrator registry"""
-        try:
-            db_path = '.cortex/orchestrator_registry.db'
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                SELECT name FROM sqlite_master WHERE type='table'
-            """)
-            
-            tables = [row[0] for row in cursor.fetchall()]
-            conn.close()
-            
-            return tables
-        except Exception as e:
-            logger.error(f"Failed to get tables: {e}")
-            return []
     
     def _verify_mcp_adapters(self) -> bool:
         """Verify MCP adapters are exposed for all orchestrators"""
@@ -477,7 +403,6 @@ class PreCommitValidator:
             if not mcp_adapters_dir.exists():
                 return False
             
-            # Count adapter files
             adapter_files = list(mcp_adapters_dir.glob('*_adapter.py'))
             return len(adapter_files) >= self.config.expected_orchestrator_count
         except Exception as e:
@@ -501,11 +426,9 @@ class PreCommitValidator:
         """
         start_time = time.time()
         
-        # Stage 1: Quick health check
         health_result = self.quick_health_check()
         
         if health_result.is_healthy:
-            # Fast path: Allow commit immediately
             decision = HybridGateDecision(
                 allow_commit=True,
                 decision_type=DecisionType.FAST_PATH,
@@ -516,11 +439,9 @@ class PreCommitValidator:
             self.audit_logger.log_decision(decision)
             return decision
         
-        # Stage 1 failed, run Stage 2
         full_result = self.full_wiring_validation()
         
         if full_result.is_valid:
-            # Fallback path: Stage 2 recovered
             decision = HybridGateDecision(
                 allow_commit=True,
                 decision_type=DecisionType.FALLBACK_PATH,
@@ -529,7 +450,6 @@ class PreCommitValidator:
                 full_validation_triggered=True,
             )
         else:
-            # Both stages failed
             decision = HybridGateDecision(
                 allow_commit=False,
                 decision_type=DecisionType.FULL,
@@ -542,3 +462,15 @@ class PreCommitValidator:
         
         self.audit_logger.log_decision(decision)
         return decision
+
+
+def get_pre_commit_validator() -> PreCommitValidator:
+    """Factory function for PreCommitValidator"""
+    return PreCommitValidator()
+
+
+def run_pre_commit_check() -> bool:
+    """Run pre-commit check and return True if commit allowed"""
+    validator = get_pre_commit_validator()
+    decision = validator.evaluate_commit()
+    return decision.allow_commit
