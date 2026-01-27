@@ -71,15 +71,14 @@ except ImportError:
     get_tdd_orchestrator = None
     TDDPhase = None
 
-# AC-GOVE-REM-001: Import IntentRouterFactory for mandatory intent classification
+# AC-GOVE-REM-001: Import IntentRouter for mandatory intent classification
 # Enforces intent classification on every operation (architectural enforcement)
 try:
-    from cortex.orchestrators.core.intent_router_factory import (
-        get_intent_router_factory,
-    )
+    from cortex.orchestrators.core.intent_router import IntentRouter
+    get_intent_router = lambda: IntentRouter()
 except ImportError:
     # Fallback if module not accessible
-    get_intent_router_factory = None
+    get_intent_router = None
 
 # AC-GOVE-DOR-WIRE-001: Import DoRApprovalGate for user approval before execution
 # Displays intent reflection in markdown, waits for user approval
@@ -714,21 +713,23 @@ class MasterOrchestrator(IOrchestrator):
                 details={"phase": "orchestrator_wiring_integration"}
             )
             
-            # AC-AR-006-02: Bootstrap all orchestrators (foundational setup)
-            from cortex.orchestrators.bootstrap import ensure_bootstrapped
-            bootstrap_result = ensure_bootstrapped()
-            
-            if bootstrap_result.is_err():
-                error_msg = bootstrap_result.error
+            # AC-AR-006-02: Bootstrap all orchestrators (Phase 3 Git-backed wiring)
+            try:
+                from cortex.wiring import bootstrap_cortex, is_wired
+                if not is_wired():
+                    registry = bootstrap_cortex()
+                    self.logger.info(f"✅ Bootstrapped {len(registry.list_orchestrators())} orchestrators")
+            except Exception as e:
+                error_msg = f"Bootstrap failed: {str(e)}"
                 self.logger.log_operation_complete(
                     ac_id="AC-TRANSFORM-001-PHASE2-INTEGRATION",
                     operation="MASTER_ORCHESTRATOR_INITIALIZATION",
                     success=False,
                     details={"phase": "bootstrap_failed", "error": error_msg}
                 )
-                return Err(str(error_msg))
+                return Err(error_msg)
             
-            bootstrap_data = bootstrap_result.unwrap()
+            bootstrap_data = {"steps": ["yaml_load", "wiring_validate"]}
             self.logger.log_operation_complete(
                 ac_id="AC-AR-006-01",
                 operation="BOOTSTRAP_COMPLETE",
@@ -747,16 +748,14 @@ class MasterOrchestrator(IOrchestrator):
             
             total_wired = 0
             
-            # Docker-first architecture: YAML-backed wiring (no database)
-            # Orchestrators are configured via cortex/wiring/specifications/wiring.yaml
+            # Phase 3: Git-backed YAML wiring (no database, no autowiring stub)
+            # Orchestrators configured via cortex/wiring/specifications/wiring.yaml
             try:
-                # Initialize AutowiringOrchestrator (stub for backward compat)
-                from cortex.orchestrators.core.autowiring_orchestrator import AutowiringOrchestrator
+                from cortex.wiring import get_cortex
                 
-                autowiring = AutowiringOrchestrator()
-                
-                # Get wired orchestrators from stub
-                wired_orchestrators = autowiring.get_wired_orchestrators()
+                # Get wired orchestrators from Phase 3 registry
+                registry = get_cortex()
+                wired_orchestrators = registry.list_orchestrators() if registry else []
                 total_wired = len(wired_orchestrators)
                 
                 self.logger.log_operation_complete(
@@ -1063,12 +1062,11 @@ class MasterOrchestrator(IOrchestrator):
             ...     print(f"Error: {result.error}")
         """
         try:
-            # AC-GOVE-REM-001: Mandatory intent classification via factory pattern
+            # AC-GOVE-REM-001: Mandatory intent classification via direct import
             # Enforces intent classification as architectural prerequisite (CORE-032)
-            if get_intent_router_factory is not None:
+            if get_intent_router is not None:
                 try:
-                    factory = get_intent_router_factory()
-                    router = factory.create_router()
+                    router = get_intent_router()
                     
                     # Classify intent based on operation_name and context
                     operation_text = f"{operation_name}: {str(parameters)}"
@@ -1194,11 +1192,10 @@ class MasterOrchestrator(IOrchestrator):
             intent_metadata = {}
             
             try:
-                if self.intent_router or get_intent_router_factory:
+                if self.intent_router or get_intent_router:
                     # Get or create intent router
-                    if not self.intent_router and get_intent_router_factory:
-                        intent_router_factory = get_intent_router_factory()
-                        self.intent_router = intent_router_factory.create_intent_router()
+                    if not self.intent_router and get_intent_router:
+                        self.intent_router = get_intent_router()
                     
                     if self.intent_router:
                         self.logger.log_operation_start(

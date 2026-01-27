@@ -8,7 +8,7 @@ This module provides:
 1. Concise intent reflection in markdown format
 2. Definition of Ready (DoR) checkpoint before execution
 3. User approval gate for each turn
-4. Integration with IntentRouterFactory
+4. Direct integration with IntentRouter
 """
 
 from dataclasses import dataclass, field
@@ -16,11 +16,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.core.intent_router import RoutingDecision, IntentType
-from cortex.orchestrators.core.intent_router_factory import (
-    RouterInstance,
-    get_intent_router_factory,
-)
+from cortex.orchestrators.core.intent_router import RoutingDecision, IntentType, IntentRouter
 from cortex.core.result import Ok, Err
 from cortex.models.canonical_enums import ApprovalStatus
 
@@ -179,8 +175,7 @@ class DoRApprovalGate:
     
     def __init__(self) -> None:
         """Initialize DoR Approval Gate."""
-        self._factory = get_intent_router_factory()
-        self._router: Optional[RouterInstance] = None
+        self._router: Optional[IntentRouter] = None
         self._current_reflection: Optional[IntentReflection] = None
         self._approval_decision: Optional[ApprovalDecision] = None
         self._pending_text: Optional[str] = None
@@ -213,7 +208,8 @@ class DoRApprovalGate:
         self._pending_context = context
         
         # Get router and classify
-        self._router = self._factory.create_router()
+        if self._router is None:
+            self._router = IntentRouter()
         routing_decision = self._router.classify_intent(text, context)
         
         if routing_decision is None:
