@@ -1,7 +1,7 @@
 # CORTEX Component Inventory
 ## Complete List of Components to Cherry-Pick
 
-**Document:** 01-COMPONENT-INVENTORY.md  
+**Document:** component-inventory-reference.md  
 **Date:** 2026-01-27  
 **Status:** KEEP = Cherry-pick | REMOVE = Do not include
 

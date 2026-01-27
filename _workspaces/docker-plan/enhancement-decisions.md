@@ -21,11 +21,11 @@
 
 **Example Issues:**
 ```
-00-EXECUTIVE-SUMMARY.md           ← "Executive" is adjective (weak)
-04-DOCKER-SETUP.md                ← "Setup" is vague action
-08-HEALTH-RECOVERY-TESTS.md       ← "Health", "Recovery" unclear
-CORTEX-MIGRATION-MASTER-PLAN.yaml ← Too many modifiers
-OPTION-A-COMPLETION-REPORT.md     ← "Completion" weak adjective
+migration-summary.md           ← "Executive" is adjective (weak)
+docker-configuration-guide.md                ← "Setup" is vague action
+health-verification-tests.md       ← "Health", "Recovery" unclear
+migration-phases-plan.yaml ← Too many modifiers
+versioning-cleanup-report.md     ← "Completion" weak adjective
 ```
 
 ### Proposed Solution: Production-Ready Kebab-Case
@@ -39,17 +39,17 @@ OPTION-A-COMPLETION-REPORT.md     ← "Completion" weak adjective
 
 **Rename Map (14 files):**
 ```
-00-EXECUTIVE-SUMMARY.md                   → migration-summary.md
-01-COMPONENT-INVENTORY.md                 → component-inventory-reference.md
-02-DIRECTORY-STRUCTURE.md                 → docker-structure-reference.md
-03-WIRING-SYSTEM.md                       → wiring-schema-specification.md
-04-DOCKER-SETUP.md                        → docker-configuration-guide.md
-05-WIRING-TESTS.md                        → wiring-integration-tests.md
-06-MIGRATION-SCRIPT.md                    → migrate-to-docker-procedure.md
-08-HEALTH-RECOVERY-TESTS.md               → health-verification-tests.md
-CORTEX-MIGRATION-MASTER-PLAN.yaml         → migration-phases-plan.yaml
-OPTION-A-COMPLETION-REPORT.md             → versioning-cleanup-report.md
-INDEX.md                                  → docker-plan-index.md
+migration-summary.md                   → migration-summary.md
+component-inventory-reference.md                 → component-inventory-reference.md
+docker-structure-reference.md                 → docker-structure-reference.md
+wiring-schema-specification.md                       → wiring-schema-specification.md
+docker-configuration-guide.md                        → docker-configuration-guide.md
+wiring-integration-tests.md                        → wiring-integration-tests.md
+migrate-to-docker-procedure.md                    → migrate-to-docker-procedure.md
+health-verification-tests.md               → health-verification-tests.md
+migration-phases-plan.yaml         → migration-phases-plan.yaml
+versioning-cleanup-report.md             → versioning-cleanup-report.md
+docker-plan-index.md                                  → docker-plan-index.md
 wiring.yaml                               → wiring-schema.yaml
 migrate-to-docker-clean.sh                → migrate-to-docker.sh
 ```

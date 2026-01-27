@@ -21,7 +21,7 @@ Remove all version fields from docker-plan documents and standardize to unified 
 
 ### Files Modified: 6/6 ✅
 
-#### 1. CORTEX-MIGRATION-MASTER-PLAN.yaml
+#### 1. migration-phases-plan.yaml
 - **Before:** Version: 2.2, Created/Updated dates, v2.1/v2.2 review comments
 - **After:** Date: 2026-01-27, Phase: 0 Complete, Status: APPROVED, Git Checkpoint
 - **Changes:**
@@ -54,7 +54,7 @@ Remove all version fields from docker-plan documents and standardize to unified 
   - Updated: Header format to match standard
 - **Status:** ✅ Successfully modified
 
-#### 4. 00-EXECUTIVE-SUMMARY.md
+#### 4. migration-summary.md
 - **Before:** "**Version:** 2.0"
 - **After:** "**Date:** 2026-01-27, **Phase:** 0 Complete (Phases 1-6 Queued), **Status:** APPROVED"
 - **Changes:**
@@ -73,7 +73,7 @@ Remove all version fields from docker-plan documents and standardize to unified 
   - Updated: Status + Phase tracking
 - **Status:** ✅ Successfully modified
 
-#### 6. INDEX.md
+#### 6. docker-plan-index.md
 - **Before:** "**Version:** 2.2"
 - **After:** "**Date:** 2026-01-27, **Phase:** 0 Complete, **Status:** APPROVED & READY (All Phases Queued)"
 - **Changes:**
@@ -195,7 +195,7 @@ Ready for Phases 1-6 execution.
 
 ### Pattern Source
 The new format was validated through **Phase 0 Documentation:**
-- DOCKER-PLAN-INDEX.md (9.2 KB)
+- DOCKER-PLAN-docker-plan-index.md (9.2 KB)
 - DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md (8.3 KB)
 - PHASE-0-COMPLETION-DOCKER-PLAN.md (7.5 KB)
 - PHASE-1-READINESS-DOCKER-PLAN.md (8.6 KB)
@@ -247,7 +247,7 @@ For each phase completion:
   - Verification: All 6 files reviewed and confirmed
 
 - **CORE-035:** Single Canonical Implementation ✅
-  - SSOT: CORTEX-MIGRATION-MASTER-PLAN.yaml
+  - SSOT: migration-phases-plan.yaml
   - No duplicates or version conflicts
 
 ---
@@ -296,7 +296,7 @@ For Phase 1-6 execution, follow the simplified pattern:
 - Create git tag for checkpoint
 - No additional versioning needed
 
-**Reference:** See CORTEX-MIGRATION-MASTER-PLAN.yaml for complete Phase 1-6 specifications.
+**Reference:** See migration-phases-plan.yaml for complete Phase 1-6 specifications.
 
 ---
 

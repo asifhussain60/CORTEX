@@ -1,7 +1,7 @@
 # CORTEX Health & Recovery Tests
 ## Test Suite for Health Checks and Recovery Scenarios
 
-**Document:** 08-HEALTH-RECOVERY-TESTS.md  
+**Document:** health-verification-tests.md  
 **Date:** 2026-01-27  
 
 ---

@@ -6,7 +6,7 @@
 **Status:** APPROVED  
 **Authority:** CORTEX Master Orchestrator  
 
-> **📋 MASTER PLAN:** See `CORTEX-MIGRATION-MASTER-PLAN.yaml` for complete execution details.
+> **📋 MASTER PLAN:** See `migration-phases-plan.yaml` for complete execution details.
 
 ---
 
@@ -141,10 +141,10 @@ Create a clean, Docker-first CORTEX deployment that:
 
 ## 🔗 Plan Documents
 
-1. `01-COMPONENT-INVENTORY.md` - Complete list of components to cherry-pick
-2. `02-DIRECTORY-STRUCTURE.md` - New clean directory layout
-3. `03-WIRING-SYSTEM.md` - Git-backed wiring specification
-4. `04-DOCKER-SETUP.md` - Container configuration
-5. `05-WIRING-TESTS.md` - Comprehensive wiring test plan
-6. `06-MIGRATION-SCRIPT.md` - Automated migration commands
+1. `component-inventory-reference.md` - Complete list of components to cherry-pick
+2. `docker-structure-reference.md` - New clean directory layout
+3. `wiring-schema-specification.md` - Git-backed wiring specification
+4. `docker-configuration-guide.md` - Container configuration
+5. `wiring-integration-tests.md` - Comprehensive wiring test plan
+6. `migrate-to-docker-procedure.md` - Automated migration commands
 7. `07-VALIDATION-CHECKLIST.md` - Final verification steps

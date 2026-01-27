@@ -1,7 +1,7 @@
 # CORTEX Clean Directory Structure
 ## New Branch Layout
 
-**Document:** 02-DIRECTORY-STRUCTURE.md  
+**Document:** docker-structure-reference.md  
 **Date:** 2026-01-27  
 
 ---
