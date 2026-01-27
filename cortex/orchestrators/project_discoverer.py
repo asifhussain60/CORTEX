@@ -145,12 +145,13 @@ class ProjectDiscoverer:
             project_path: Path to project.
             
         Returns:
-            True if .cortex-config.yaml exists.
+            True if .cortex-config.yaml or cortex/config/cortex-config.yaml exists.
         """
         config_paths = [
+            Path(project_path) / "cortex" / "config" / "cortex-config.yaml",
             Path(project_path) / ".cortex-config.yaml",
             Path(project_path) / ".cortex-version",
-            Path(project_path) / "cortex-config.yaml",
+            Path(project_path) / "cortex-config.yaml",  # Legacy location
         ]
         
         return any(p.exists() for p in config_paths)
