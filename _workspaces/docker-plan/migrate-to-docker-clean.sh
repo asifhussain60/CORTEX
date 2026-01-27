@@ -26,7 +26,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 LOG_DIR="$PROJECT_ROOT/logs"
 LOG_FILE="$LOG_DIR/migration-$(date +%Y%m%d_%H%M%S).log"
-BRANCH_NAME="docker-clean-v2"
+BRANCH_NAME="CORTEX-docker"
 TAG_NAME="pre-docker-migration-$(date +%Y%m%d)"
 
 # Colors for output
@@ -197,7 +197,7 @@ phase_1_branch_creation() {
     run_cmd "git checkout -b $BRANCH_NAME" "Create new branch"
     
     # Initial commit
-    run_cmd "git add -A && git commit --allow-empty -m 'chore: start docker-clean-v2 migration' || true" "Initial commit"
+    run_cmd "git add -A && git commit --allow-empty -m 'chore: start CORTEX-docker migration' || true" "Initial commit"
     
     log_success "Branch creation complete"
 }
