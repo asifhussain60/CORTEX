@@ -99,12 +99,45 @@ phase_7_1:
     - id: "LENS-002"
       name: "Wire LENS to IntentRouter Stage 2"
       description: "Connect LENS analyzers to intent classification pipeline"
+      status: "✅ COMPLETE"
+      completed_date: "2026-01-27"
+      actual_time: "2 hours"
       implementation:
         file: "cortex/orchestrators/core/intent_router.py"
         changes:
-          - "Add LENS context injection"
-          - "Enable code analysis before intent classification"
-          - "Provide AST/Git/Comment data to confidence scoring"
+          - "✅ Add LENS context injection for code analysis"
+          - "✅ Provide AST/Git/Comment data to confidence scoring"
+          - "✅ Enable Git pattern analysis (commit history intent detection)"
+          - "✅ Enable AST complexity detection (refactor intent boosting)"
+          - "✅ Enable TODO/FIXME comment analysis (intent hints)"
+          - "✅ Calculate LENS confidence boost (0.0-0.4 scale)"
+          - "✅ Enhance routing metadata with LENS insights"
+          - "✅ Log LENS usage to audit trail (AC LENS-002)"
+          - "✅ Include LENS context in cache key (prevent contamination)"
+        methods_added:
+          - "_extract_git_pattern()"
+          - "_calculate_ast_complexity()"
+          - "_analyze_comment_hints()"
+          - "_calculate_lens_boost()"
+          - "_enhance_with_lens()"
+          - "route() enhancement with lens_context"
+          - "_get_cache_key() enhancement"
+        tests_created: 15  # 14 passing, 1 skipped (audit API out of scope)
+        lines_added: 329
+        backward_compatible: true
+        error_resilient: true
+      deliverables:
+        - "tests/unit/orchestrators/intent/test_lens_router_integration.py (406 lines, 15 tests)"
+        - "IntentRouter now accepts optional lens_context dict"
+        - "Confidence boost applied when LENS evidence supports intent"
+        - "Git pattern matching validates intent from commit history"
+        - "AST complexity boosts refactor confidence (20-40% for high complexity)"
+        - "Comment hints add 5% boost when TODOs align with intent"
+        - "All LENS usage logged with AC-ID LENS-002"
+        - "Format-flexible: supports multiple LENS analyzer output formats"
+      git_commits:
+        - "5d8815ef4: test(phase7.1): Add LENS-002 integration tests (RED phase)"
+        - "597e912d6: feat(phase7.1): LENS-002 IntentRouter integration complete (GREEN phase)"
       estimated_time: "2 hours"
       
     - id: "LENS-003"
