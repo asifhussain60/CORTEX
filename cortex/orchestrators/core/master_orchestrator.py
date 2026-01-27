@@ -3014,3 +3014,100 @@ class MasterOrchestrator(IOrchestrator):
                 "error": f"Plan execution failed: {str(e)}",
                 "session_id": session_id,
             }
+    
+    @mcp_tool(
+        name="ask_codebase_question",
+        description="Ask questions about codebase using CORTEX Inquiry System"
+    )
+    def ask_codebase_question(
+        self,
+        question: str,
+        category: Optional[str] = None,
+        file_paths: Optional[List[str]] = None,
+        repo_path: Optional[str] = None,
+    ) -> Result[Dict[str, Any]]:
+        """
+        Ask questions about codebase using intelligent inquiry system.
+        
+        AC-ID: INQUIRY-015
+        Phase: 7.5 (Inquiry System)
+        
+        Supports both CORTEX and user repository questions:
+        - CORTEX: Architecture, features, best practices, troubleshooting, evolution
+        - User repos: General code explanation and analysis
+        
+        Args:
+            question: The question to ask
+            category: Optional category hint (architecture, feature, best_practice, 
+                     troubleshooting, evolution, code_explanation)
+            file_paths: Optional list of file paths to focus on
+            repo_path: Optional path to repository (defaults to current directory)
+            
+        Returns:
+            Result with answer, evidence, confidence, and metadata
+            
+        Examples:
+            ask_codebase_question("How does authentication work?")
+            ask_codebase_question("What design patterns are used?", category="architecture")
+            ask_codebase_question("What does main.py do?", file_paths=["src/main.py"])
+        """
+        try:
+            from cortex.orchestrators.domain.inquiry_orchestrator import InquiryOrchestrator
+            from cortex.models.inquiry_models import InquiryCategory
+            
+            self.logger.log_operation_start(
+                ac_id="INQUIRY-015",
+                operation="ASK_CODEBASE_QUESTION",
+                details={
+                    "question": question[:100],  # Truncate for logging
+                    "category": category,
+                    "has_file_hints": bool(file_paths),
+                }
+            )
+            
+            # Initialize orchestrator
+            path = Path(repo_path) if repo_path else Path.cwd()
+            inquiry_orchestrator = InquiryOrchestrator(repo_path=path)
+            
+            # Convert category string to enum if provided
+            category_hint = None
+            if category:
+                try:
+                    category_hint = InquiryCategory[category.upper()]
+                except KeyError:
+                    valid_categories = ", ".join(c.value for c in InquiryCategory)
+                    return Err(
+                        f"Invalid category: {category}. "
+                        f"Valid categories: {valid_categories}"
+                    )
+            
+            # Execute inquiry
+            response = inquiry_orchestrator.ask(
+                question=question,
+                category_hint=category_hint,
+                file_paths=file_paths,
+            )
+            
+            self.logger.log_operation_complete(
+                ac_id="INQUIRY-015",
+                operation="ASK_CODEBASE_QUESTION",
+                success=True,
+                details={
+                    "confidence": response.get("confidence", 0.0),
+                    "repo_type": response.get("repo_type"),
+                    "category": response.get("category"),
+                    "cache_hit": response.get("cache_hit", False),
+                }
+            )
+            
+            return Ok(response)
+            
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="INQUIRY-015",
+                operation="ASK_CODEBASE_QUESTION",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Err(f"Inquiry failed: {str(e)}")
+
