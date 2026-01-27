@@ -50,8 +50,14 @@ orchestrators:
       requires_params:
         conversation_protocol:
           type: "ConversationProtocol"
-          source: "cortex.brain.core.conversation_protocol"
+          source: "cortex.brain.core.orchestrator.conversation_protocol"
           lazy_create: true
+          init_params:
+            orchestrator: null  # Will be set by wiring system
+            max_turns: 10
+            token_limit: 20000
+            adaptive_turn_limit: true
+            memoization_enabled: true
 
     # STAGE 2: Intent Classification
     - name: "IntentRouter"
