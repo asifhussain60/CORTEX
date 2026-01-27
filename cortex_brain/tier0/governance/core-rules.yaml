@@ -320,24 +320,40 @@ rules:
         - AC_COMPLETE
 
   # --------------------------------------------------------------------------
-  # CORE-028: Intelligent Kebab-Case File Naming (25-Char Limit)
+  # CORE-028: Intelligent File Naming Convention (REVISED 2026-01-27)
   # --------------------------------------------------------------------------
   - rule_id: CORE-028
     category: architecture_integrity
     severity: blocked
-    name: Intelligent Kebab-Case Naming with 25-Char Limit
+    name: Intelligent File Naming with Python Module Compliance
     description: |
-      ALL file names MUST follow intelligent kebab-case naming with strategic
-      acronyms to keep names meaningful yet concise. Total length including
-      extension MUST NOT exceed 25 characters. Names must be self-documenting
-      without sacrificing clarity.
+      File naming convention varies by file type due to Python import syntax
+      requirements. Python modules MUST use snake_case (hyphens cause SyntaxError).
+      Non-Python files SHOULD use kebab-case for consistency with modern standards.
+      Total length including extension SHOULD NOT exceed 30 characters.
     
     naming_principles:
-      - Use kebab-case (lowercase with hyphens, no underscores)
-      - Employ semantic acronyms for common terms (e.g., cfg=config, mgr=manager)
-      - "Order: [domain]-[component]-[purpose].[ext]"
-      - "Max 25 chars total (e.g., cortex-vacuum-exec.py = 20 chars)"
-      - "Avoid articles (a, the), conjunctions (and), prepositions (in, on, of)"
+      python_modules:  # Files imported with 'from X import Y'
+        - "Use snake_case (lowercase with underscores, NO hyphens)"
+        - "Reason: Python imports treat hyphens as minus operators (SyntaxError)"
+        - "Examples: git_history_analyzer.py, intent_router.py"
+        - "Follows PEP 8 and 99.9% of Python ecosystem"
+      
+      cli_scripts:  # Standalone scripts (not imported)
+        - "Use kebab-case or snake_case (both acceptable)"
+        - "Examples: governance-cli.py, cortex-vacuum.py"
+        - "Executed directly, not imported"
+      
+      non_python_files:  # YAML, Markdown, Shell, Config
+        - "Use kebab-case (lowercase with hyphens)"
+        - "Examples: phase-8-consolidation.yaml, docker-compose.yml"
+        - "Modern standard for non-code files"
+      
+      general:
+        - "Employ semantic acronyms for common terms (cfg=config, mgr=manager)"
+        - "Order: [domain]-[component]-[purpose].[ext]"
+        - "Max 30 chars (revised from 25 for clarity)"
+        - "Avoid articles (a, the), conjunctions (and)"
     
     acronym_dictionary:
       # Infrastructure

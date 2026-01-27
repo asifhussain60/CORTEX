@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # PHASE-21: Intelligent Knowledge Router (AC-IKP-002-01)
 """
 Intelligent routing of knowledge queries to appropriate repositories.
@@ -36,7 +35,7 @@ Performance Impact:
   - Cumulative savings: 8ms overhead vs 50ms+ saved per operation
 
 Example Usage:
-    from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+    from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
     
     router = IntelligentKnowledgeRouter(
         tech_provider=knowledge_repo,

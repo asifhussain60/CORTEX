@@ -1,5 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
-# CORTEX Intelligence Module - Context gathering and analysis
 """
 CORTEX Intelligence Module.
 
@@ -34,7 +32,7 @@ from cortex.brain.core.intelligence.dependency_mapper import (
     DependencyMap,
     ImportInfo,
 )
-from cortex.brain.core.intelligence.git_history_analyzer import (
+from cortex.brain.analysis.git_history_analyzer import (
     GitHistoryAnalyzer,
     CommitInfo,
     RenameInfo,

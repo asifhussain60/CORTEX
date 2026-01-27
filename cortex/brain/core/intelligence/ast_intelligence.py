@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-001-01 - AST-Based Code Intelligence
 """
 AST Intelligence Engine for CORTEX LENS.

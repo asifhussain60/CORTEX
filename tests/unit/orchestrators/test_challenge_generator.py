@@ -5,7 +5,7 @@ Tests challenge generation for proactive risk identification.
 """
 
 import pytest
-from cortex.orchestrators.challenge_generator import (
+from cortex.core.intent.challenge_generator import (
     ChallengeGenerator,
     Challenge,
     ChallengeCategory,
