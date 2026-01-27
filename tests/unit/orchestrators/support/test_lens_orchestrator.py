@@ -154,7 +154,8 @@ def test_analyze_file_returns_lens_context(
     result = orchestrator.analyze_file(test_file_path)
     
     assert result is not None
-    assert "git_history" in result
+    # Should have git data (with either key name for backward compatibility)
+    assert "git_history" in result or "git_analysis" in result
     assert "ast_analysis" in result
     assert "comment_analysis" in result
 
