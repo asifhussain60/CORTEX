@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # PHASE-21: Intelligent Knowledge Protocol
 """
 Core knowledge abstraction for unified knowledge provider interface.

@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-001-02 - Git History Intelligence - Change Frequency
 """
 Change Frequency Mapper for CORTEX LENS.
@@ -20,7 +19,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from cortex.brain.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+    from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
 
 
 # =============================================================================

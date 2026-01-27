@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-004-01 - CORTEX LENS Knowledge Graph Builder
 """
 CORTEX LENS Knowledge Graph Module (IR-004-01).

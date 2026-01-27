@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-001-04 - Relationship Traversal Engine
 """
 Relationship Traversal Engine for code relationships.

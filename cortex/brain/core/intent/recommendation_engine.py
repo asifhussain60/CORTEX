@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-002-03 - Recommendation Engine
 """
 Recommendation Engine for CORTEX Intent Router.
