@@ -1,7 +1,7 @@
 """Tests for Input Validation, Error Handling, and Compliance."""
 import pytest
 from cortex.mcp.protocol import ToolDefinition, ToolParameter, ErrorCode, MCPError, MCPResponse
-from cortex.mcp.input_validator import ToolInputValidator, ValidationError
+from cortex.brain.core.input_validator import ToolInputValidator, ValidationError
 from cortex.mcp.error_handler import MCPErrorHandler, ErrorThrottler, ErrorRecoveryStrategy
 from cortex.mcp.compliance import MCPComplianceTester, ComplianceLevel
 
