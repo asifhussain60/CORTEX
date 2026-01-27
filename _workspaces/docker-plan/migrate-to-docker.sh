@@ -11,8 +11,8 @@
 # Uses SUBTRACTION approach: start with full state, remove unwanted files.
 #
 # Usage:
-#   chmod +x migrate-to-docker-clean.sh
-#   ./migrate-to-docker-clean.sh [--dry-run] [--phase N]
+#   chmod +x migrate-to-docker.sh
+#   ./migrate-to-docker.sh [--dry-run] [--phase N]
 #
 # Options:
 #   --dry-run    Show what would be done without making changes

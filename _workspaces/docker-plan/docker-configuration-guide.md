@@ -1,7 +1,7 @@
 # CORTEX Docker Setup
 ## Container Configuration for Enterprise Deployment
 
-**Document:** 04-DOCKER-SETUP.md  
+**Document:** docker-configuration-guide.md  
 **Date:** 2026-01-27  
 
 ---

@@ -1,7 +1,7 @@
 # CORTEX Git-Backed Wiring System
 ## Single Path, Zero Drift Architecture
 
-**Document:** 03-WIRING-SYSTEM.md  
+**Document:** wiring-schema-specification.md  
 **Date:** 2026-01-27  
 
 ---

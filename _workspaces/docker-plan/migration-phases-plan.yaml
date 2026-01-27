@@ -1794,7 +1794,7 @@ workspaces_migration:
         - ".pre-commit-config.yaml"
         - ".pre-commit-hooks.yaml"
       migration:
-        - "CORTEX-MIGRATION-MASTER-PLAN.yaml"
+        - "migration-phases-plan.yaml"
         - "*.md"
       archives:
         awakening-of-cortex:
@@ -1874,13 +1874,13 @@ migration_script:
     Automated script to execute the migration.
     Run from project root.
     
-  file: "scripts/migrate-to-docker-clean.sh"
+  file: "scripts/migrate-to-docker.sh"
   
   content: |
     #!/bin/bash
     # CORTEX Docker-Clean Migration Script
     # Version: 2.0
-    # Run: ./scripts/migrate-to-docker-clean.sh
+    # Run: ./scripts/migrate-to-docker.sh
     
     set -e
     

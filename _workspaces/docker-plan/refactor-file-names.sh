@@ -72,11 +72,11 @@ rename_file "06-MIGRATION-SCRIPT.md" "migrate-to-docker-procedure.md"
 rename_file "08-HEALTH-RECOVERY-TESTS.md" "health-verification-tests.md"
 # 09-DEPLOYMENT-GUIDE.md → keep (already good)
 
-rename_file "CORTEX-MIGRATION-MASTER-PLAN.yaml" "migration-phases-plan.yaml"
+rename_file "migration-phases-plan.yaml" "migration-phases-plan.yaml"
 rename_file "OPTION-A-COMPLETION-REPORT.md" "versioning-cleanup-report.md"
 rename_file "INDEX.md" "docker-plan-index.md"
 rename_file "wiring.yaml" "wiring-schema.yaml"
-rename_file "migrate-to-docker-clean.sh" "migrate-to-docker.sh"
+rename_file "migrate-to-docker.sh" "migrate-to-docker.sh"
 
 echo ""
 echo -e "${GREEN}Files renamed: $RENAMED${NC}"
@@ -138,11 +138,11 @@ update_refs "05-WIRING-TESTS" "wiring-integration-tests"
 update_refs "06-MIGRATION-SCRIPT" "migrate-to-docker-procedure"
 update_refs "08-HEALTH-RECOVERY-TESTS" "health-verification-tests"
 
-update_refs "CORTEX-MIGRATION-MASTER-PLAN" "migration-phases-plan"
+update_refs "migration-phases-plan" "migration-phases-plan"
 update_refs "OPTION-A-COMPLETION-REPORT" "versioning-cleanup-report"
 update_refs "INDEX\.md" "docker-plan-index.md"
 update_refs "wiring\.yaml" "wiring-schema.yaml"
-update_refs "migrate-to-docker-clean" "migrate-to-docker"
+update_refs "migrate-to-docker" "migrate-to-docker"
 
 echo ""
 echo -e "${GREEN}Reference updates completed${NC}"
@@ -311,11 +311,11 @@ File Renames (14 files):
   05-WIRING-TESTS.md → wiring-integration-tests.md
   06-MIGRATION-SCRIPT.md → migrate-to-docker-procedure.md
   08-HEALTH-RECOVERY-TESTS.md → health-verification-tests.md
-  CORTEX-MIGRATION-MASTER-PLAN.yaml → migration-phases-plan.yaml
+  migration-phases-plan.yaml → migration-phases-plan.yaml
   OPTION-A-COMPLETION-REPORT.md → versioning-cleanup-report.md
   INDEX.md → docker-plan-index.md
   wiring.yaml → wiring-schema.yaml
-  migrate-to-docker-clean.sh → migrate-to-docker.sh
+  migrate-to-docker.sh → migrate-to-docker.sh
   (Files 07, 09 already compliant)
 
 Cross-Reference Updates:

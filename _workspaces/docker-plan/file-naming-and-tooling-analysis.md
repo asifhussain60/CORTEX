@@ -14,20 +14,20 @@
 
 **Problematic Files:**
 ```
-00-EXECUTIVE-SUMMARY.md              ← adjective: "Executive"
-01-COMPONENT-INVENTORY.md            ← noun collection (acceptable)
-02-DIRECTORY-STRUCTURE.md            ← noun (acceptable)
-03-WIRING-SYSTEM.md                  ← noun (acceptable)
-04-DOCKER-SETUP.md                   ← adjective: "Setup" (vague action)
-05-WIRING-TESTS.md                   ← noun collection (acceptable)
-06-MIGRATION-SCRIPT.md               ← noun (acceptable, but generic)
+migration-summary.md              ← adjective: "Executive"
+component-inventory-reference.md            ← noun collection (acceptable)
+docker-structure-reference.md            ← noun (acceptable)
+wiring-schema-specification.md                  ← noun (acceptable)
+docker-configuration-guide.md                   ← adjective: "Setup" (vague action)
+wiring-integration-tests.md                   ← noun collection (acceptable)
+migrate-to-docker-procedure.md               ← noun (acceptable, but generic)
 07-VALIDATION-CHECKLIST.md           ← noun collection (acceptable)
-08-HEALTH-RECOVERY-TESTS.md          ← adjective: "Health", "Recovery" (unclear)
+health-verification-tests.md          ← adjective: "Health", "Recovery" (unclear)
 09-DEPLOYMENT-GUIDE.md               ← noun collection (acceptable)
 
-OPTION-A-COMPLETION-REPORT.md        ← adjective: "Completion", "Option A"
-INDEX.md                             ← generic name (needs context)
-CORTEX-MIGRATION-MASTER-PLAN.yaml    ← adjective: "Master", "Migration"
+versioning-cleanup-report.md        ← adjective: "Completion", "Option A"
+docker-plan-index.md                             ← generic name (needs context)
+migration-phases-plan.yaml    ← adjective: "Master", "Migration"
 ```
 
 ### Industry Standards for File Naming
@@ -48,7 +48,7 @@ CORTEX-MIGRATION-MASTER-PLAN.yaml    ← adjective: "Master", "Migration"
 {purpose}-{target-scope}.{ext}
 
 Good:       migration-phases-specification.yaml
-Bad:        CORTEX-MIGRATION-MASTER-PLAN.yaml (too many adjectives)
+Bad:        migration-phases-plan.yaml (too many adjectives)
 
 Good:       wiring-schema.yaml
 Bad:        CORTEX-UNIFIED-WIRING-SPECIFICATION.yaml
@@ -102,31 +102,31 @@ class FileNameFactory:
 CURRENT_NAME → PRODUCTION_NAME | Length | Reason
 
 # Sequential Documentation (01-09 ONLY where true sequence needed)
-00-EXECUTIVE-SUMMARY.md 
+migration-summary.md 
   → migration-summary.md (18) ✅
   Reason: "Executive" is adjective; "Summary" is clearer
 
-01-COMPONENT-INVENTORY.md 
+component-inventory-reference.md 
   → component-inventory-reference.md (29) ✅
   Reason: Add "reference" for clarity (reference material, not actionable)
 
-02-DIRECTORY-STRUCTURE.md 
+docker-structure-reference.md 
   → docker-structure-reference.md (26) ✅
   Reason: Be specific (Docker context), add "reference"
 
-03-WIRING-SYSTEM.md 
+wiring-schema-specification.md 
   → wiring-schema-specification.md (27) ✅
   Reason: "Schema" + "Specification" more precise than "System"
 
-04-DOCKER-SETUP.md 
+docker-configuration-guide.md 
   → docker-configuration-guide.md (26) ✅
   Reason: "Setup" is vague; "Configuration" + "Guide" is actionable
 
-05-WIRING-TESTS.md 
+wiring-integration-tests.md 
   → wiring-integration-tests.md (25) ✅
   Reason: Add "Integration" for clarity (type of testing)
 
-06-MIGRATION-SCRIPT.md 
+migrate-to-docker-procedure.md 
   → migrate-to-docker-procedure.md (28) ✅
   Reason: Change from noun to verb (what it does)
 
@@ -134,7 +134,7 @@ CURRENT_NAME → PRODUCTION_NAME | Length | Reason
   → validation-checklist.md (20) ✅
   Reason: Keep as-is (clear and specific)
 
-08-HEALTH-RECOVERY-TESTS.md 
+health-verification-tests.md 
   → health-verification-tests.md (25) ✅
   Reason: "Recovery" implies adjective; "Verification" is noun (what tests do)
 
@@ -143,16 +143,16 @@ CURRENT_NAME → PRODUCTION_NAME | Length | Reason
   Reason: Keep as-is (clear and concise)
 
 # Primary Files (not sequential)
-CORTEX-MIGRATION-MASTER-PLAN.yaml 
+migration-phases-plan.yaml 
   → migration-phases-plan.yaml (22) ✅
   Reason: Remove "CORTEX" (implied), "Master" (adjective), "Plan" (purpose)
 
-OPTION-A-COMPLETION-REPORT.md 
+versioning-cleanup-report.md 
   → versioning-cleanup-report.md (27) ✅
   Reason: Remove "Option-A" (implementation detail), "Completion" (weak)
          Specify "versioning-cleanup" (what was done)
 
-INDEX.md 
+docker-plan-index.md 
   → docker-plan-index.md (16) ✅
   Reason: Add context scope (docker-plan), clarify purpose (index)
 
@@ -180,27 +180,27 @@ Execute these renames in order (to avoid link breakdowns):
 cd _workspaces/docker-plan
 
 # Rename files
-mv 00-EXECUTIVE-SUMMARY.md migration-summary.md
-mv 01-COMPONENT-INVENTORY.md component-inventory-reference.md
-mv 02-DIRECTORY-STRUCTURE.md docker-structure-reference.md
-mv 03-WIRING-SYSTEM.md wiring-schema-specification.md
-mv 04-DOCKER-SETUP.md docker-configuration-guide.md
-mv 05-WIRING-TESTS.md wiring-integration-tests.md
-mv 06-MIGRATION-SCRIPT.md migrate-to-docker-procedure.md
+mv migration-summary.md migration-summary.md
+mv component-inventory-reference.md component-inventory-reference.md
+mv docker-structure-reference.md docker-structure-reference.md
+mv wiring-schema-specification.md wiring-schema-specification.md
+mv docker-configuration-guide.md docker-configuration-guide.md
+mv wiring-integration-tests.md wiring-integration-tests.md
+mv migrate-to-docker-procedure.md migrate-to-docker-procedure.md
 # 07-VALIDATION-CHECKLIST.md → validation-checklist.md (keep)
-# 08-HEALTH-RECOVERY-TESTS.md needs rename
-mv 08-HEALTH-RECOVERY-TESTS.md health-verification-tests.md
+# health-verification-tests.md needs rename
+mv health-verification-tests.md health-verification-tests.md
 # 09-DEPLOYMENT-GUIDE.md → deployment-guide.md (keep)
 
-mv CORTEX-MIGRATION-MASTER-PLAN.yaml migration-phases-plan.yaml
-mv OPTION-A-COMPLETION-REPORT.md versioning-cleanup-report.md
-mv INDEX.md docker-plan-index.md
+mv migration-phases-plan.yaml migration-phases-plan.yaml
+mv versioning-cleanup-report.md versioning-cleanup-report.md
+mv docker-plan-index.md docker-plan-index.md
 mv wiring.yaml wiring-schema.yaml
 mv migrate-to-docker-clean.sh migrate-to-docker.sh
 
 # Update all internal references
-sed -i '' 's|00-EXECUTIVE-SUMMARY|migration-summary|g' *.md
-sed -i '' 's|01-COMPONENT-INVENTORY|component-inventory-reference|g' *.md
+sed -i '' 's|migration-summary|migration-summary|g' *.md
+sed -i '' 's|component-inventory-reference|component-inventory-reference|g' *.md
 # ... (continue for all files)
 
 # Git operations
@@ -222,8 +222,8 @@ Benefits:
 - Reduced cognitive load
 
 File mappings:
-  00-EXECUTIVE-SUMMARY.md → migration-summary.md
-  CORTEX-MIGRATION-MASTER-PLAN.yaml → migration-phases-plan.yaml
+  migration-summary.md → migration-summary.md
+  migration-phases-plan.yaml → migration-phases-plan.yaml
   ... (complete mapping)
 
 Governance: CORE-035 (Single Canonical Implementation) ✅"
@@ -235,7 +235,7 @@ git tag -a "naming-standards-refactor-20260127" \
 ### Phase 2: Documentation Updates
 
 Update all internal cross-references:
-1. **INDEX.md** (now docker-plan-index.md) → Update all file references
+1. **docker-plan-index.md** (now docker-plan-index.md) → Update all file references
 2. **migration-phases-plan.yaml** → Update all file path references
 3. **All .md files** → Update cross-links
 

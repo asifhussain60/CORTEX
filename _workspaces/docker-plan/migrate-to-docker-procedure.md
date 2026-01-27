@@ -1,7 +1,7 @@
 # CORTEX Migration Script
 ## Automated Cherry-Pick Migration to Clean Branch
 
-**Document:** 06-MIGRATION-SCRIPT.md  
+**Document:** migrate-to-docker-procedure.md  
 **Date:** 2026-01-27  
 
 ---

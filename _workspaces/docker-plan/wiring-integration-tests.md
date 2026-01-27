@@ -1,7 +1,7 @@
 # CORTEX Wiring Tests
 ## Comprehensive Test Suite for Zero-Drift Wiring
 
-**Document:** 05-WIRING-TESTS.md  
+**Document:** wiring-integration-tests.md  
 **Date:** 2026-01-27  
 
 ---

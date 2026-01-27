@@ -15,7 +15,7 @@ This folder contains the complete migration plan for CORTEX Docker-First Archite
 
 | File | Purpose | Priority |
 |------|---------|----------|
-| **`CORTEX-MIGRATION-MASTER-PLAN.yaml`** | **SSOT** - Complete migration specification | 🔴 CRITICAL |
+| **`migration-phases-plan.yaml`** | **SSOT** - Complete migration specification | 🔴 CRITICAL |
 | **`wiring.yaml`** | Unified orchestrator wiring specification | 🔴 CRITICAL |
 | **`migrate-to-docker-clean.sh`** | Automated migration script | 🟠 HIGH |
 
@@ -23,15 +23,15 @@ This folder contains the complete migration plan for CORTEX Docker-First Archite
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `00-EXECUTIVE-SUMMARY.md` | High-level overview | Phase 0 Complete |
-| `01-COMPONENT-INVENTORY.md` | Component list (reference) | Phase 0 Complete |
-| `02-DIRECTORY-STRUCTURE.md` | Directory layout (reference) | Phase 0 Complete |
-| `03-WIRING-SYSTEM.md` | Wiring design (reference) | Phase 0 Complete |
-| `04-DOCKER-SETUP.md` | Docker config (reference) | Phase 0 Complete |
-| `05-WIRING-TESTS.md` | Test specifications | Phase 0 Complete |
-| `06-MIGRATION-SCRIPT.md` | Script documentation (reference) | Legacy v1.0 |
+| `migration-summary.md` | High-level overview | Phase 0 Complete |
+| `component-inventory-reference.md` | Component list (reference) | Phase 0 Complete |
+| `docker-structure-reference.md` | Directory layout (reference) | Phase 0 Complete |
+| `wiring-schema-specification.md` | Wiring design (reference) | Phase 0 Complete |
+| `docker-configuration-guide.md` | Docker config (reference) | Phase 0 Complete |
+| `wiring-integration-tests.md` | Test specifications | Phase 0 Complete |
+| `migrate-to-docker-procedure.md` | Script documentation (reference) | Legacy v1.0 |
 | `07-VALIDATION-CHECKLIST.md` | Validation steps | Current |
-| `08-HEALTH-RECOVERY-TESTS.md` | Health test specs | Current |
+| `health-verification-tests.md` | Health test specs | Current |
 | `09-DEPLOYMENT-GUIDE.md` | **User deployment instructions** | **NEW v2.2** |
 
 ---
@@ -190,5 +190,5 @@ chmod +x _workspaces/docker-plan/migrate-to-docker-clean.sh
 
 For issues with migration, check:
 1. Log files in `logs/migration-*.log`
-2. Master plan: `CORTEX-MIGRATION-MASTER-PLAN.yaml`
+2. Master plan: `migration-phases-plan.yaml`
 3. Rollback: `git checkout CORTEX` (original branch)
