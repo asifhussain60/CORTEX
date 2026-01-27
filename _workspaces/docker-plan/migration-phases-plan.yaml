@@ -25,19 +25,20 @@
 #   ✅ Production readiness tiers defined (Tier 1-3)
 #   ✅ Docker MCP Gateway integration for centralized routing
 #   ✅ One-click client integrations (VS Code, Claude, Cursor)
+#   ✅ Phase 7+ future enhancements planned (LENS, Observability, Naming)
 # ============================================================================
 
 metadata:
   plan_name: "CORTEX Docker-First Migration"
   date: "2026-01-28"
-  phase: "Phase 6 Complete - Test Suite Delivered with Findings"
-  status: "COMPLETE_WITH_FINDINGS"
+  phase: "Phase 6 Complete - Phase 7+ Enhancement Phases Planned"
+  status: "CORE_COMPLETE_ENHANCEMENTS_PLANNED"
   author: "Asif Hussain"
   git_checkpoint: "phase6-test-suite-20260128"
-  last_updated: "2026-01-28T00:30:00Z"
+  last_updated: "2026-01-27T23:00:00Z"
   
   # SEQUENTIAL EXECUTION - NO SKIPPING
-  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6"
+  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6 → 7.1 → 7.2 → 7.3 → 7.4"
   
   # Phase 0 (Pre-Flight): Validation complete ✅
   # Phase 1: Component Analysis & Inventory Discovery ✅ COMPLETE
@@ -64,6 +65,28 @@ metadata:
   #   - TEST-002: No Database Files Tests ✅ CREATED (5 tests, 2 findings)
   #   - TEST-003: Wiring Determinism Tests ✅ CREATED (4 tests, all passing)
   #   - Test suite successfully identifies legacy violations for cleanup
+  #
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 7+ FUTURE ENHANCEMENTS (Identified via git history gap analysis)
+  # See: PHASE-7-FUTURE-ENHANCEMENTS.yaml for detailed specifications
+  # ═══════════════════════════════════════════════════════════════════════════
+  # Phase 7.1: LENS Protocol Formalization 📋 PLANNED (P0 - 4-6 hours)
+  #   - Formalize GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor wiring
+  #   - Create LENSOrchestrator for unified code intelligence
+  #   - Wire LENS to Stage 2 (IntentRouter) for CORE-030 enforcement
+  #   - Create PHASE-7.1-LENS-COMPLETION-REPORT.md documenting implementation
+  # Phase 7.2: Observability Documentation 📋 PLANNED (P1 - 2-3 hours)
+  #   - Document PHASE-5-MCP-ENHANCEMENT completion status
+  #   - Create observability runbook for production monitoring
+  #   - Add Prometheus docker-compose overlay
+  # Phase 7.3: Consolidation Tracking Sync 📋 PLANNED (P2 - 1-2 hours)
+  #   - Audit TRANSFORM-002 progress (54.5% → ~80%)
+  #   - Verify CONS-002 through CONS-008 completion status
+  #   - Create PHASE-7.3-CONSOLIDATION-AUDIT-REPORT.md
+  # Phase 7.4: File Naming Enforcement 📋 PLANNED (P2 - 3-4 hours)
+  #   - Create naming violation detector (CORE-028 compliance)
+  #   - Enhance pre-commit hook with naming checks
+  #   - Create migration inventory for legacy underscore files
 
 # ============================================================================
 # EXECUTIVE SUMMARY
@@ -2017,10 +2040,14 @@ workspaces_migration:
   target_branch: "CORTEX-docker"
   
   folders:
-    # CRITICAL: Keep all
+    # DEPRECATED: Historical reference only
     - source: "_workspaces/roadmap/"
-      action: "KEEP_ALL"
-      reason: "Contains SSOT: cortex-impl-map.yaml, phase specs"
+      action: "DEPRECATED"
+      status: "ARCHIVED"
+      reason: "Superseded by docker-plan tracking system (see DEPRECATED.md)"
+      note: "Historical reference only - do not update. Use docker-plan for tracking."
+      migration_date: "2026-01-27"
+      replaced_by: "_workspaces/docker-plan/migration-phases-plan.yaml"
       target: "_workspaces/roadmap/"
       
     # KEEP: Strategic vision
@@ -2093,10 +2120,21 @@ workspaces_migration:
   final_structure:
     _workspaces:
       roadmap:
-        - "cortex-impl-map.yaml"
-        - "cortex-roadmap.yaml"
-        - "phases/"
-        - "specs/"
+        status: "DEPRECATED - See DEPRECATED.md"
+        note: "Historical reference only"
+        files:
+          - "DEPRECATED.md"
+          - "cortex-impl-map.yaml (archived)"
+          - "cortex-roadmap.yaml (archived)"
+          - "phases/ (archived)"
+          - "specs/ (archived)"
+      docker-plan:
+        status: "ACTIVE - CANONICAL TRACKING"
+        files:
+          - "migration-phases-plan.yaml (SSOT)"
+          - "PHASE-7-FUTURE-ENHANCEMENTS.yaml"
+          - "PHASE-*-COMPLETION-REPORT.md"
+          - "docker-plan-index.md"
       vision:
         - "cortex-vision.yaml"
         - "orchestrators.yaml"
@@ -2108,9 +2146,6 @@ workspaces_migration:
       config:
         - ".pre-commit-config.yaml"
         - ".pre-commit-hooks.yaml"
-      migration:
-        - "migration-phases-plan.yaml"
-        - "*.md"
       archives:
         awakening-of-cortex:
           - "prompts/"
