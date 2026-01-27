@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 
-from cortex.core.intent.comprehension_yaml import (
+from cortex.brain.core.intent.comprehension_yaml import (
     CanonicalIntentComposer,
     ComprehensionYAML,
 )

@@ -20,7 +20,7 @@ from datetime import datetime
 from enum import Enum
 from dataclasses import dataclass
 
-from cortex.core.intent.comprehension_yaml import (
+from cortex.brain.core.intent.comprehension_yaml import (
     CanonicalIntentComposer,
     ComprehensionYAML,
     IntentSection,
