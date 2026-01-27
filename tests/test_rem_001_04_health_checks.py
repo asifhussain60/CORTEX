@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 import logging
 
-from cortex.infrastructure.health_check import (
+from cortex.common.health_check import (
     DatabaseHealthCheck,
     AuditLoggerHealthCheck,
     ConnectionPoolHealthCheck,
