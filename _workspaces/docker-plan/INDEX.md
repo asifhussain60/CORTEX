@@ -1,6 +1,6 @@
 # CORTEX Docker-First Migration - Document Index
 
-**Version:** 2.1  
+**Version:** 2.2  
 **Date:** 2026-01-27  
 **Status:** APPROVED & REVIEWED
 
@@ -14,7 +14,7 @@ This folder contains the complete migration plan for CORTEX Docker-First Archite
 
 | File | Purpose | Priority |
 |------|---------|----------|
-| **`CORTEX-MIGRATION-MASTER-PLAN.yaml`** | **SSOT** - Complete migration specification (v2.1) | 🔴 CRITICAL |
+| **`CORTEX-MIGRATION-MASTER-PLAN.yaml`** | **SSOT** - Complete migration specification (v2.2) | 🔴 CRITICAL |
 | **`wiring.yaml`** | Unified orchestrator wiring specification (v2.1) | 🔴 CRITICAL |
 | **`migrate-to-docker-clean.sh`** | Automated migration script | 🟠 HIGH |
 
@@ -31,6 +31,34 @@ This folder contains the complete migration plan for CORTEX Docker-First Archite
 | `06-MIGRATION-SCRIPT.md` | Script documentation (reference) | Legacy v1.0 |
 | `07-VALIDATION-CHECKLIST.md` | Validation steps | Current |
 | `08-HEALTH-RECOVERY-TESTS.md` | Health test specs | Current |
+
+---
+
+## 🆕 What Changed in v2.2 (Docker MCP Gateway Integration)
+
+### NEW Phase 4.5: Docker MCP Gateway Integration
+- **Docker MCP Gateway** - Centralized routing and authentication proxy
+- **One-click client integrations** - VS Code, Claude Desktop, Cursor, Windsurf
+- **Docker MCP Catalog** - CORTEX becomes discoverable (220+ users)
+- **cagent compatibility** - Multi-agent YAML workflows supported
+- **Secrets management** - Centralized via Docker MCP Toolkit
+
+### Architecture Enhancement
+```
+BEFORE: Client → Manual Config → CORTEX MCP Server
+AFTER:  Client → Docker MCP Toolkit → MCP Gateway → CORTEX MCP Server
+```
+
+### Compatibility Verified
+| Component | Status | Notes |
+|-----------|--------|-------|
+| `cortex/mcp/server.py` | ✅ No changes | Gateway proxies to existing endpoints |
+| `cortex/mcp/protocol.py` | ✅ No changes | JSON-RPC 2.0 compliant |
+| `cortex/mcp/adapters/*` | ✅ No changes | Internal to CORTEX |
+| `cortex/wiring/**` | ✅ No changes | Orthogonal system |
+
+### New Files Added
+- `deployment/mcp-gateway-config.yaml` - Gateway configuration
 
 ---
 

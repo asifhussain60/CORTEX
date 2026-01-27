@@ -1,7 +1,7 @@
 # ============================================================================
 # CORTEX DOCKER-FIRST MIGRATION MASTER PLAN
 # ============================================================================
-# Version: 2.1
+# Version: 2.2
 # Created: 2026-01-27
 # Updated: 2026-01-27
 # Author: Asif Hussain
@@ -17,13 +17,14 @@
 #   ✅ Subtraction Strategy: 10/10
 #   ✅ Test Coverage: 9/10
 #   ✅ Docker Setup: 9/10
-#   🟡 Team Collaboration: Addressed in v2.1
-#   🟡 MCP Adapter Paths: Fixed in v2.1
+#   ✅ Team Collaboration: Addressed in v2.1
+#   ✅ MCP Adapter Paths: Fixed in v2.1
+#   ✅ Docker MCP Gateway: Added in v2.2 (NEW)
 # ============================================================================
 
 metadata:
   plan_name: "CORTEX Docker-First Migration"
-  version: "2.1"
+  version: "2.2"
   created: "2026-01-27"
   updated: "2026-01-27"
   author: "Asif Hussain"
@@ -43,6 +44,13 @@ metadata:
   # 8. Persistent volume configuration for audit/logs
   # 9. TLS/Security strategy documented
   # 10. Production readiness tiers defined
+  
+  # Key improvements in v2.2 (Docker MCP Gateway):
+  # 11. Docker MCP Gateway integration for centralized routing
+  # 12. One-click client integrations (VS Code, Claude, Cursor)
+  # 13. Docker MCP Catalog discoverability
+  # 14. cagent multi-agent compatibility
+  # 15. Centralized secrets management via Docker
 
 # ============================================================================
 # EXECUTIVE SUMMARY
@@ -924,6 +932,306 @@ phase_4:
   gate:
     name: "Docker Build Gate"
     condition: "Container builds and imports cortex successfully"
+
+# ============================================================================
+# PHASE 4.5: DOCKER MCP GATEWAY INTEGRATION (NEW - v2.2)
+# ============================================================================
+# Added: 2026-01-27
+# Rationale: Leverage Docker's open-source MCP ecosystem for:
+#   - Centralized routing and authentication
+#   - One-click client integrations (VS Code, Claude, Cursor)
+#   - Standard MCP protocol compliance
+#   - Ecosystem discoverability (Docker MCP Catalog)
+# Reference: https://www.docker.com/products/mcp-catalog-and-toolkit/
+# ============================================================================
+phase_4_5:
+  name: "Docker MCP Gateway Integration"
+  duration: "Day 6 (4 hours)"
+  added_in_version: "2.2"
+  
+  description: |
+    Integrate Docker's open-source MCP Gateway to enhance CORTEX deployment.
+    This provides centralized routing, authentication, and client integrations
+    without modifying CORTEX's core MCP implementation.
+    
+    KEY INSIGHT: Docker MCP Gateway sits IN FRONT of CORTEX, not inside it.
+    Our cortex/mcp/server.py remains unchanged - Gateway proxies to it.
+
+  benefits:
+    - "No custom MCP routing code needed"
+    - "Standard protocol compliance verified by Docker"
+    - "Built-in authentication and secrets management"
+    - "One-click integrations with VS Code, Claude Desktop, Cursor, Windsurf"
+    - "CORTEX becomes discoverable in Docker MCP Catalog (220+ servers)"
+    - "Multi-client support without custom wiring"
+
+  compatibility_analysis:
+    cortex_mcp_server:
+      file: "cortex/mcp/server.py"
+      status: "COMPATIBLE - No changes needed"
+      reason: |
+        Our FastAPI MCP server exposes standard endpoints:
+        - GET /health (health check)
+        - GET /mcp/tools (tool discovery)
+        - POST /mcp/execute (tool execution)
+        - GET /metrics (Prometheus metrics)
+        Gateway proxies to these endpoints unchanged.
+        
+    cortex_mcp_adapters:
+      files:
+        - "cortex/mcp/adapters/core_adapters.py"
+        - "cortex/mcp/adapters/domain_adapters.py"
+        - "cortex/mcp/adapters/support_adapters.py"
+      status: "COMPATIBLE - No changes needed"
+      reason: |
+        Adapters expose orchestrator capabilities via IOrchestratorAdapter.
+        Gateway doesn't touch adapter layer - it's a network proxy.
+        
+    cortex_mcp_protocol:
+      file: "cortex/mcp/protocol.py"
+      status: "COMPATIBLE - JSON-RPC 2.0 compliant"
+      reason: |
+        Our MCPRequest/MCPResponse follow JSON-RPC 2.0 spec.
+        Docker MCP Gateway speaks same protocol.
+        
+    wiring_system:
+      file: "cortex/wiring/specifications/wiring.yaml"
+      status: "COMPATIBLE - Orthogonal systems"
+      reason: |
+        Git-backed wiring is internal to CORTEX container.
+        Gateway operates at network layer, not wiring layer.
+
+  architecture:
+    before_gateway: |
+      ┌─────────────────────────────────────────────────────┐
+      │  Client (VS Code/Claude/Cursor)                     │
+      │         │                                           │
+      │         ▼                                           │
+      │  Manual MCP Config (per-client JSON)                │
+      │         │                                           │
+      │         ▼                                           │
+      │  CORTEX MCP Server (port 8443)                      │
+      │         │                                           │
+      │         ▼                                           │
+      │  23 Orchestrators via Adapters                      │
+      └─────────────────────────────────────────────────────┘
+      
+    after_gateway: |
+      ┌─────────────────────────────────────────────────────┐
+      │  Clients (VS Code/Claude/Cursor/Windsurf/...)       │
+      │         │                                           │
+      │         ▼ (one-click integration)                   │
+      │  Docker MCP Toolkit (UI in Docker Desktop)          │
+      │         │                                           │
+      │         ▼                                           │
+      │  Docker MCP Gateway (port 6600)                     │
+      │    - Centralized authentication                     │
+      │    - Secrets management                             │
+      │    - Multi-server routing                           │
+      │         │                                           │
+      │         ▼                                           │
+      │  CORTEX MCP Server (port 8443, unchanged)           │
+      │         │                                           │
+      │         ▼                                           │
+      │  23 Orchestrators via Adapters                      │
+      └─────────────────────────────────────────────────────┘
+
+  tasks:
+    - id: "MCPGW-001"
+      name: "Add MCP Gateway to docker-compose"
+      description: "Add Docker's open-source MCP Gateway as a service"
+      file: "docker-compose.yml"
+      changes: |
+        services:
+          mcp-gateway:
+            image: docker/mcp-gateway:latest
+            container_name: cortex-mcp-gateway
+            ports:
+              - "6600:6600"  # Gateway endpoint
+            environment:
+              - MCP_GATEWAY_LOG_LEVEL=info
+              - MCP_GATEWAY_AUTH_ENABLED=true
+            volumes:
+              - ./deployment/mcp-gateway-config.yaml:/etc/mcp-gateway/config.yaml:ro
+            depends_on:
+              cortex-mcp:
+                condition: service_healthy
+            networks:
+              - cortex-network
+            healthcheck:
+              test: ["CMD", "curl", "-f", "http://localhost:6600/health"]
+              interval: 30s
+              timeout: 10s
+              retries: 3
+
+          cortex-mcp:
+            # ... existing config unchanged ...
+            # Gateway proxies to this service
+      validation: "docker-compose config"
+      
+    - id: "MCPGW-002"
+      name: "Create Gateway Configuration"
+      description: "Configure Gateway to route to CORTEX MCP server"
+      file: "deployment/mcp-gateway-config.yaml"
+      content: |
+        # Docker MCP Gateway Configuration for CORTEX
+        version: "1.0"
+        
+        servers:
+          cortex:
+            name: "CORTEX Orchestrator"
+            description: "AI-powered development orchestrator with 23 specialized orchestrators"
+            url: "http://cortex-mcp:8443"
+            health_endpoint: "/health"
+            tools_endpoint: "/mcp/tools"
+            execute_endpoint: "/mcp/execute"
+            
+            # Capabilities exposed to clients
+            capabilities:
+              - intent_classification
+              - tdd_workflow
+              - code_refactoring
+              - documentation_generation
+              - governance_enforcement
+              - planning
+              - deployment
+            
+            # Authentication (optional - handled by Gateway)
+            auth:
+              type: "api_key"
+              header: "X-CORTEX-API-KEY"
+            
+            # Rate limiting
+            rate_limit:
+              requests_per_minute: 60
+              burst: 10
+        
+        # Client integrations (auto-configured by Docker MCP Toolkit)
+        clients:
+          - name: "vscode"
+            enabled: true
+          - name: "claude-desktop"
+            enabled: true
+          - name: "cursor"
+            enabled: true
+          - name: "windsurf"
+            enabled: true
+      validation: "yamllint deployment/mcp-gateway-config.yaml"
+      
+    - id: "MCPGW-003"
+      name: "Update docker-compose.prod.yml"
+      description: "Add Gateway to production configuration"
+      file: "docker-compose.prod.yml"
+      changes: |
+        services:
+          mcp-gateway:
+            image: docker/mcp-gateway:latest
+            deploy:
+              replicas: 2  # HA for gateway
+              resources:
+                limits:
+                  cpus: '0.5'
+                  memory: 512M
+            # ... same config as dev, different scaling
+      validation: "docker-compose -f docker-compose.prod.yml config"
+      
+    - id: "MCPGW-004"
+      name: "Test Client Integrations"
+      description: "Verify one-click integrations work"
+      tests:
+        - name: "VS Code integration"
+          steps:
+            - "Open Docker Desktop MCP Toolkit"
+            - "Select 'CORTEX' from My Servers"
+            - "Click 'Connect to VS Code'"
+            - "Verify CORTEX tools appear in VS Code"
+          validation: "CORTEX tools accessible in VS Code chat"
+          
+        - name: "Claude Desktop integration"
+          steps:
+            - "Open Docker Desktop MCP Toolkit"
+            - "Select 'CORTEX' from My Servers"
+            - "Click 'Connect to Claude Desktop'"
+            - "Test: 'Use CORTEX to analyze this code'"
+          validation: "Claude can invoke CORTEX orchestrators"
+          
+        - name: "Multi-client concurrent"
+          steps:
+            - "Connect VS Code, Claude, and Cursor simultaneously"
+            - "Send requests from all three"
+            - "Verify no conflicts or race conditions"
+          validation: "All clients receive correct responses"
+
+    - id: "MCPGW-005"
+      name: "Secrets Migration"
+      description: "Move API keys to Docker MCP secrets management"
+      current_state: |
+        API keys stored in:
+        - Environment variables
+        - .env files
+        - cortex/config/credentials.yaml
+      target_state: |
+        API keys managed by Docker MCP Gateway:
+        - Centralized secret store
+        - Injected at runtime
+        - Rotatable without container restart
+      migration_steps:
+        - "Identify all secrets in CORTEX config"
+        - "Register secrets with Docker MCP Toolkit"
+        - "Update CORTEX to read from environment (already does)"
+        - "Remove hardcoded secrets from config files"
+      validation: "CORTEX functions without local secret files"
+
+  no_changes_required:
+    - file: "cortex/mcp/server.py"
+      reason: "Gateway proxies to existing endpoints"
+    - file: "cortex/mcp/protocol.py"
+      reason: "JSON-RPC 2.0 already compliant"
+    - file: "cortex/mcp/adapters/*.py"
+      reason: "Adapters unchanged - internal to CORTEX"
+    - file: "cortex/wiring/**"
+      reason: "Wiring is internal, Gateway is external"
+    - file: "cortex/orchestrators/**"
+      reason: "Orchestrators unchanged"
+
+  optional_enhancements:
+    - id: "MCPGW-OPT-001"
+      name: "Publish to Docker MCP Catalog"
+      description: "Make CORTEX discoverable in Docker's MCP Catalog"
+      benefit: "220+ users can discover and use CORTEX"
+      effort: "Low (2 hours)"
+      steps:
+        - "Create Dockerfile with MCP metadata labels"
+        - "Push to Docker Hub with mcp/ prefix"
+        - "Submit to Docker MCP Catalog verification"
+      
+    - id: "MCPGW-OPT-002"
+      name: "cagent Compatibility"
+      description: "Ensure CORTEX works with Docker's cagent multi-agent framework"
+      benefit: "CORTEX usable in YAML-defined multi-agent workflows"
+      effort: "Low (1 hour)"
+      example: |
+        # cagent agents.yaml
+        agents:
+          code_reviewer:
+            description: "Code review agent"
+            tools:
+              - cortex/refactoring
+              - cortex/governance
+            model: gpt-4
+
+  validation:
+    - "docker-compose up -d"
+    - "curl http://localhost:6600/health"
+    - "curl http://localhost:6600/v1/servers"
+    - "# Gateway should list CORTEX as available server"
+
+  gate:
+    name: "MCP Gateway Integration Gate"
+    condition: |
+      - Gateway starts and proxies to CORTEX
+      - At least 2 client integrations verified
+      - Health check passes through Gateway
 
 # ============================================================================
 # PHASE 5: MCP SERVER ENHANCEMENT
