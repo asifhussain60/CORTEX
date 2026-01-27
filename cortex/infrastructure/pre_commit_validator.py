@@ -7,6 +7,7 @@ Implements two-stage validation:
 
 Docker-first architecture: Uses YAML configuration instead of SQLite database.
 
+CORE-002: No markdown report/summary file generation (NEW - v6.2)
 CORE-026: Git checkpoint before major changes
 CORE-027: Audit trail for all operations
 CORE-030: Implementation Truth - verify code, not docs
@@ -14,6 +15,8 @@ CORE-030: Implementation Truth - verify code, not docs
 
 import json
 import logging
+import re
+import subprocess
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +26,74 @@ import yaml
 import time
 
 logger = logging.getLogger(__name__)
+
+
+# ============================================================================
+# CORE-002: Markdown Suppression Patterns (v6.2)
+# ============================================================================
+
+BLOCKED_MD_PATTERNS = [
+    r".*-REPORT\.md$",
+    r".*-COMPLETION.*\.md$",
+    r".*-STATUS\.md$",
+    r".*-SUMMARY\.md$",
+    r"PHASE-.*-REPORT\.md$",
+    r"DEPLOYMENT-.*\.md$",
+    r"ORCHESTRATOR-.*\.md$",
+    r"SESSION-.*\.md$",
+]
+
+ALLOWED_MD_LOCATIONS = [
+    "docs/",
+    "_workspaces/docs/",
+]
+
+
+def is_blocked_markdown_file(file_path: str) -> bool:
+    """
+    Check if file matches CORE-002 blocked markdown patterns.
+    
+    Args:
+        file_path: Relative path to file from repo root
+        
+    Returns:
+        True if file is blocked by CORE-002
+    """
+    # Check if in allowed location
+    for allowed in ALLOWED_MD_LOCATIONS:
+        if file_path.startswith(allowed):
+            return False
+    
+    # Check if matches blocked patterns
+    filename = Path(file_path).name
+    for pattern in BLOCKED_MD_PATTERNS:
+        if re.match(pattern, filename, re.IGNORECASE):
+            return True
+    
+    return False
+
+
+def get_staged_markdown_files() -> List[str]:
+    """
+    Get list of staged markdown files from git.
+    
+    Returns:
+        List of file paths relative to repo root
+    """
+    try:
+        result = subprocess.run(
+            ['git', 'diff', '--cached', '--name-only', '--diff-filter=ACM'],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        files = result.stdout.strip().split('\n')
+        return [f for f in files if f.endswith('.md') and f]
+    except subprocess.CalledProcessError:
+        return []
+    except Exception as e:
+        logger.error(f"Failed to get staged files: {e}")
+        return []
 
 
 class DecisionType(Enum):
@@ -422,10 +493,40 @@ class PreCommitValidator:
         """
         Hybrid gate evaluation: Try Stage 1, fallback to Stage 2 if needed.
         
+        Also validates CORE-002 markdown suppression rules.
+        
         Returns: HybridGateDecision with allow_commit flag and reasoning
         """
         start_time = time.time()
         
+        # CORE-002: Check for blocked markdown files
+        staged_md = get_staged_markdown_files()
+        blocked_files = [f for f in staged_md if is_blocked_markdown_file(f)]
+        
+        if blocked_files:
+            decision = HybridGateDecision(
+                allow_commit=False,
+                decision_type=DecisionType.FAST_PATH,
+                validation_time_ms=(time.time() - start_time) * 1000,
+                stage_executed="STAGE_0_CORE_002",
+                full_validation_triggered=False,
+                failure_reason=(
+                    f"CORE-002 VIOLATION: Blocked markdown report files detected\n"
+                    f"Files: {', '.join(blocked_files)}\n\n"
+                    f"Reports must be inline in chat, not as files.\n"
+                    f"Allowed locations: {', '.join(ALLOWED_MD_LOCATIONS)}"
+                ),
+                remediation_steps=[
+                    "Remove blocked markdown files from commit",
+                    "Use inline chat responses instead of file generation",
+                    f"Move documentation to allowed folders: {', '.join(ALLOWED_MD_LOCATIONS)}",
+                    "Run: git reset HEAD <file> to unstage",
+                ]
+            )
+            self.audit_logger.log_decision(decision)
+            return decision
+        
+        # Proceed with wiring validation
         health_result = self.quick_health_check()
         
         if health_result.is_healthy:

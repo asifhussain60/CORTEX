@@ -1,7 +1,47 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 6.1 | **Updated:** 2026-01-27 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via DatabaseBackedRegistry)
+**Version:** 6.2 | **Updated:** 2026-01-27 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via DatabaseBackedRegistry)
 
 **AC-PERMANENT-FIX Status:** 9 permanent fixes active (AC-PERMANENT-FIX-001 through 009)
+
+---
+
+## ⛔ ABSOLUTE PROHIBITION: Zero Markdown File Generation (TIER 0 - IMMUTABLE)
+
+**Authority:** `cortex_brain/tier0/governance/CORE-002-md-suppression.yaml`  
+**Rule:** CORE-002 (No Markdown Report Generation)
+
+**NEVER create markdown files during execution unless explicitly requested:**
+
+### 🚫 BLOCKED FILE PATTERNS:
+```
+❌ *-REPORT.md
+❌ *-COMPLETION*.md
+❌ *-STATUS*.md
+❌ *-SUMMARY*.md
+❌ PHASE-*-REPORT.md
+❌ DEPLOYMENT-*.md
+❌ ORCHESTRATOR-*.md
+❌ SESSION-*.md
+```
+
+### ✅ ALLOWED ONLY:
+- Files in `docs/` folder (documentation)
+- Files in `_workspaces/docs/` (approved workspace docs)
+- When user explicitly says: **"create file X.md"**
+
+### 📊 MANDATORY: Inline Chat Responses
+**ALL reports, summaries, and status updates MUST be rendered inline in GitHub Copilot Chat:**
+- Use rich markdown tables, badges, emojis
+- Use code blocks for structured data
+- Use collapsible sections for long output
+- NEVER write to filesystem for reports
+
+### ⚙️ ENFORCEMENT:
+- Pre-commit hooks block report patterns
+- Post-session audits detect violations
+- Violations trigger immediate rollback warnings
+
+**VIOLATION CONSEQUENCE:** Session flagged for manual review, files deleted on detection
 
 ---
 
