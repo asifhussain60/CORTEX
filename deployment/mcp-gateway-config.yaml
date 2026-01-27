@@ -1,0 +1,30 @@
+version: "1.0"
+servers:
+  cortex:
+    name: "CORTEX Orchestrator"
+    description: "AI-powered development orchestrator with 23 specialized orchestrators"
+    url: "http://cortex-mcp:8443"
+    health_endpoint: "/health"
+    tools_endpoint: "/mcp/tools"
+    execute_endpoint: "/mcp/execute"
+    capabilities:
+      - intent_classification
+      - tdd_workflow
+      - code_refactoring
+      - documentation_generation
+      - governance_enforcement
+      - planning
+      - deployment
+    auth:
+      type: "api_key"
+      header: "X-CORTEX-API-KEY"
+    rate_limit:
+      requests_per_minute: 60
+      burst: 10
+clients:
+  - name: "vscode"
+    enabled: true
+  - name: "claude-desktop"
+    enabled: true
+  - name: "cursor"
+    enabled: true
