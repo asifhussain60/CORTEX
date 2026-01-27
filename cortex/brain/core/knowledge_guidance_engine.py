@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: KN-003-01 - Knowledge Guidance Engine
 """
 Knowledge Guidance Engine for TDD-Aware Module Implementation.

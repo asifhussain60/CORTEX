@@ -185,7 +185,7 @@ class TestArchitectureDocumentation:
         from cortex.domain_brain.models import Domain
         from cortex.domain_brain.api import DomainBrainAPI
         from cortex.domain_brain.validator import ConsistencyValidator
-        from cortex.domain_brain.audit_logger import AuditLogger
+        from cortex.infrastructure.audit_logger import AuditLogger
 
         # All components should be independent modules
         assert Domain is not None

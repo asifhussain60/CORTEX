@@ -16,7 +16,7 @@ Priority: P0 (Production Critical)
 """
 
 from cortex.infrastructure.security.secrets_filter import SecretsFilter
-from cortex.infrastructure.security.input_validator import InputValidator
+from cortex.brain.core.input_validator import InputValidator
 from cortex.infrastructure.security.rate_limiter import TokenBucketRateLimiter
 from cortex.infrastructure.security.crypto_provider import CryptoProvider
 from cortex.infrastructure.security.cors_handler import CORSHandler

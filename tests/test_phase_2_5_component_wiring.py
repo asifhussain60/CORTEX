@@ -14,7 +14,7 @@ from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 from cortex.core.intent.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 from cortex.orchestrators.core.component_health import ComponentHealthTracker, ComponentType
-from cortex.orchestrators.adaptive.router import AdaptiveRouter
+from cortex.brain.core.knowledge.router import AdaptiveRouter
 
 
 class TestComponentWiring:

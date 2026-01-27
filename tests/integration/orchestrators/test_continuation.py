@@ -11,7 +11,7 @@ from datetime import datetime
 
 from cortex.orchestrators.conversation_continuer import ConversationContinuer
 from cortex.orchestrators.state_recovery import StateRecovery
-from cortex.orchestrators.checkpoint_manager import CheckpointManager
+from cortex.brain.core.checkpoint_manager import CheckpointManager
 from cortex.orchestrators.continuation_chain import ContinuationChain
 
 

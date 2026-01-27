@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: KN-002-01 - Knowledge Repository Integration
 """
 Knowledge Repository for Best Practices YAML Access (KN-002-01).
