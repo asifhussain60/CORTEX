@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # PHASE-21: Intelligent Knowledge Router Integration
 """
 Integration of IntelligentKnowledgeRouter with MasterOrchestrator.

@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # PHASE-21: Intelligent Knowledge Protocol (AC-IKP-001-01)
 """
 Core knowledge provider protocol definition (Tier0 abstraction).

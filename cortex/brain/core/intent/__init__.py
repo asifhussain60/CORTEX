@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 """Intent module for CORTEX."""
 
 from .intent_canonicalizer import IntentCanonicalizer, CanonicalizedIntent, IntentScope, IntentType

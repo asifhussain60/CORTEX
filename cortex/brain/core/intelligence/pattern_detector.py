@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-001-01 - AST-Based Code Intelligence - Pattern Detector
 """
 Pattern Detector for CORTEX LENS.

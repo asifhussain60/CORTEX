@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 """Comprehension YAML Generation for Intent Router.
 
 This module transforms canonicalized intents, challenges, and recommendations

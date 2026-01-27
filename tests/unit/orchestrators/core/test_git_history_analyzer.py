@@ -16,7 +16,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime, timezone, timedelta
 
-from cortex.orchestrators.core.git_history_analyzer import (
+from cortex.brain.analysis.git_history_analyzer import (
     GitHistoryAnalyzer,
     CommitPattern,
     CommitType,

@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: AC-REM-011-02 - TDD Orchestrator Integration
 """
 TDD Orchestrator - Routes test-driven development workflows with knowledge guidance.

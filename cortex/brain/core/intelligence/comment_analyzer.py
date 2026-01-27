@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: IR-001-03 - Comment Analyzer
 """
 Code Comment Intelligence - Comment Analyzer.

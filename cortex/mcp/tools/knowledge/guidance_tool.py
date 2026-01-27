@@ -1,4 +1,3 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
 # AC-ID: AC-MCP-008 - TDD Guidance Tool
 """
 MCP Tool: Get TDD Guidance for Module Implementation
