@@ -1,72 +1,61 @@
 """
-Master Orchestrator Stage 1 - DEPRECATED Bridge Adapter (AC-CONSOLIDATION-003)
+Master Orchestrator Stage 1 Stub (Docker-First Architecture)
 
-⚠️  DEPRECATED: This module is for backward compatibility only.
-    All stage implementations consolidated into master_orchestrator.py
-
-CANONICAL IMPLEMENTATION:
-    from cortex.orchestrators.core.master_orchestrator import (
-        MasterOrchestrator,
-        Stage1ComprehensionContext,
-        Stage1Output,
-    )
-
-This bridge adapter maintains backward compatibility for:
-- Legacy imports from this module
-- Test files importing Stage1Output
-- Existing code using MasterOrchestrationStage1
-
-Migration path:
-    OLD: from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
-    NEW: from cortex.orchestrators.core.master_orchestrator import Stage1Output
-
-Author: Asif Hussain
-AC-CONSOLIDATION: AC-CONSOLIDATION-003-Stage-Files-Consolidation
+Stage 1 (Comprehension) is now handled by InteractionOrchestrator.
+This stub provides backward compatibility.
 """
 
-import warnings
-from typing import Any, Dict, List
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
+from datetime import datetime
+import logging
 
+from cortex.core.result import Result, Ok, Err
 
-@dataclass
-class Stage1Output:
-    """Output from Stage 1 (Comprehension) of the LENS framework."""
-    
-    status: str = "ok"
-    stage: str = "stage_1"
-    context: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
 class Stage1ComprehensionContext:
-    """Context for Stage 1 Comprehension phase."""
-    
-    intent: str = ""
-    context: Dict[str, Any] = field(default_factory=dict)
+    """Context for Stage 1 comprehension."""
+    user_input: str
+    session_id: str = ""
+    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+@dataclass
+class Stage1Output:
+    """Output from Stage 1 comprehension."""
+    understood_intent: str
+    confidence: float = 0.85
+    entities: List[str] = field(default_factory=list)
+    context: Dict[str, Any] = field(default_factory=dict)
+
+
 class MasterOrchestrationStage1:
-    """Master Orchestration Stage 1 - Comprehension."""
+    """
+    Stub for Stage 1 comprehension.
     
-    def __init__(self, context: Any = None) -> None:
-        self.context = context or {}
+    In production, use InteractionOrchestrator instead.
+    """
     
-    def execute(self, **kwargs: Any) -> Stage1Output:
-        """Execute Stage 1 comprehension."""
-        return Stage1Output(
-            status="ok",
-            stage="stage_1",
-            context=self.context,
-            errors=[]
-        )
-
-
-def get_stage_1_output(**kwargs: Any) -> Stage1Output:
-    """Factory function for Stage1Output."""
-    return Stage1Output(**kwargs)
-
-
-__all__ = ['Stage1Output', 'get_stage_1_output']
+    def __init__(self):
+        """Initialize stage 1."""
+        logger.debug("MasterOrchestrationStage1 stub initialized")
+    
+    def execute(self, context: Stage1ComprehensionContext) -> Result[Stage1Output, str]:
+        """Execute stage 1 comprehension (stub)."""
+        logger.info(f"Stage 1 stub processing: {context.user_input[:50]}...")
+        
+        return Ok(Stage1Output(
+            understood_intent=context.user_input,
+            confidence=0.85,
+            entities=[],
+            context={"source": "stage1_stub"}
+        ))
+    
+    def comprehend(self, user_input: str) -> Result[Stage1Output, str]:
+        """Comprehend user input."""
+        context = Stage1ComprehensionContext(user_input=user_input)
+        return self.execute(context)

@@ -1,49 +1,46 @@
 """
-Master Orchestrator Stage 2 - Stub Module
+Master Orchestrator Stage 2 Stub (Docker-First Architecture)
 
-This is a compatibility stub for legacy test files that import from this module.
-The actual implementation has been consolidated into master_orchestrator.py
-
-AC-ID: AC-PHASE5-BLOCKING-004
+Stage 2 (Routing) is now handled by IntentRouter.
+This stub provides backward compatibility.
 """
 
-from typing import Any, Dict, List
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
+from datetime import datetime
+import logging
+
+from cortex.core.result import Result, Ok, Err
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Stage2Output:
-    """Output from Stage 2 (Examination) of the LENS framework."""
-    
-    status: str = "ok"
-    stage: str = "stage_2"
-    context: Dict[str, Any] = field(default_factory=dict)
-    errors: List[str] = field(default_factory=list)
-
-
-@dataclass
-class Stage2ExaminationContext:
-    """Context for Stage 2 Examination phase."""
-    
-    findings: List[str] = field(default_factory=list)
-    analysis: Dict[str, Any] = field(default_factory=dict)
+class Stage2RoutingContext:
+    """Context for Stage 2 routing."""
+    intent: str
+    entities: List[str] = field(default_factory=list)
+    confidence: float = 0.85
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class MasterOrchestrationStage2:
-    """Master Orchestration Stage 2 - Examination."""
+    """
+    Stub for Stage 2 routing.
     
-    def __init__(self, context: Any = None) -> None:
-        self.context = context or {}
+    In production, use IntentRouter instead.
+    """
     
-    def execute(self, **kwargs: Any) -> Stage2Output:
-        """Execute Stage 2 examination."""
-        return Stage2Output(
-            status="ok",
-            stage="stage_2",
-            context=self.context,
-            errors=[]
-        )
-
-
-__all__ = ['Stage2Output', 'Stage2ExaminationContext', 'MasterOrchestrationStage2']
+    def __init__(self):
+        """Initialize stage 2."""
+        logger.debug("MasterOrchestrationStage2 stub initialized")
+    
+    def route(self, context: Stage2RoutingContext) -> Result[Dict[str, Any], str]:
+        """Route to appropriate orchestrator (stub)."""
+        logger.info(f"Stage 2 stub routing intent: {context.intent}")
+        
+        return Ok({
+            "target_orchestrator": "MasterOrchestrator",
+            "confidence": context.confidence,
+            "routing_reason": "stub_default"
+        })

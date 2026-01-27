@@ -4,18 +4,12 @@ Orchestrator Registry - MCP Runtime Interface
 Central registry for orchestrators with dependency injection support.
 This registry is used by MCP tools for runtime orchestrator lookup.
 
-RELATIONSHIP TO DatabaseBackedRegistry (AC-PERMANENT-FIX: AC-009):
-------------------------------------------------------------------
-This is a runtime instance registry for MCP tool integration.
-For orchestrator WIRING and CONFIGURATION, use DatabaseBackedRegistry:
+Docker-First Architecture (Phase 2+):
+-------------------------------------
+Orchestrator wiring is now YAML-backed (cortex/wiring/specifications/wiring.yaml).
+No database registries - ephemeral container state only.
 
-    from cortex.orchestrators.core.database_registry import (
-        DatabaseBackedRegistry,
-        get_database_registry,
-    )
-
-This registry stores instantiated orchestrator objects at runtime,
-while DatabaseBackedRegistry stores orchestrator metadata and wiring order.
+This registry stores instantiated orchestrator objects at runtime.
 
 Author: Asif Hussain
 """
