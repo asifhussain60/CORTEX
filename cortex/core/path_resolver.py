@@ -16,11 +16,13 @@ def get_project_root() -> Path:
     Returns:
         Path to project root.
     """
-    # Look for cortex-config.yaml or setup.py to identify root
+    # Look for cortex/config/cortex-config.yaml or cortex-config.yaml or setup.py to identify root
     current = Path(__file__).parent
     
     while current != current.parent:
-        if (current / "cortex-config.yaml").exists() or (current / "setup.py").exists():
+        if (current / "cortex" / "config" / "cortex-config.yaml").exists() or \
+           (current / "cortex-config.yaml").exists() or \
+           (current / "setup.py").exists():
             return current
         current = current.parent
     

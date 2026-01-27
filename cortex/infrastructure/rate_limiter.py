@@ -11,7 +11,7 @@ AC-BRT-009: Rate Limiting with Token Bucket Algorithm
 - Per-endpoint rate limiting (different limits for different endpoints)
 - Support for adaptive backoff (wait for token refill)
 - Thread-safe concurrent access
-- Configuration via cortex-config.yaml (default: 100 req/sec)
+- Configuration via cortex/config/cortex-config.yaml (default: 100 req/sec)
 
 This module provides flexible rate limiting that can be applied at
 different levels: global, per-user, or per-endpoint.

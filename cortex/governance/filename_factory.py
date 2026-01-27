@@ -499,16 +499,23 @@ class FilePathEnforcer:
     - Whitelisted files (README.md, requirements.txt) allowed at root
     """
     
-    # Whitelisted files allowed at repository root
+    # Whitelisted files allowed at repository root (Git/Docker infrastructure only)
     WHITELIST: set[str] = {
+        ".gitignore",
+        ".dockerignore",
+        ".pre-commit-config.yaml",
+        ".cortex-version",
+        "Dockerfile",
+        "docker-compose.yaml",
+        "docker-compose.dev.yaml",
+        "docker-compose.test.yaml",
+        # Legacy locations (for backward compatibility)
         "README.md",
         "requirements.txt",
         "pyrightconfig.json",
         "cortex-config.yaml",
         "cortex-impl-map.yaml",
         "mkdocs.yml",
-        ".gitignore",
-        ".github",
         ".env",
     }
     
