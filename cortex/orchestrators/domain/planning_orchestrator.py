@@ -40,8 +40,8 @@ from cortex.orchestrators.core.database_registry import (
     OrchestratorConfig,
     OrchestratorCategory,
 )
-from cortex.orchestrators.domain.planning_registry_loader import (
 from cortex.models.canonical_enums import ChallengeType
+from cortex.orchestrators.domain.planning_registry_loader import (
     PlanningRegistryLoader,
 )
 
