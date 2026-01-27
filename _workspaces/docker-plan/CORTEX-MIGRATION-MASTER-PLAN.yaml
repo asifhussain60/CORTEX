@@ -202,8 +202,8 @@ phase_1:
     - id: "BC-002"
       name: "Create Migration Branch"
       commands:
-        - "git checkout -b docker-clean-v2"
-      validation: "On docker-clean-v2 branch"
+        - "git checkout -b CORTEX-docker"
+      validation: "On CORTEX-docker branch"
       
     - id: "BC-003"
       name: "Create Backup Archive"
@@ -217,12 +217,12 @@ phase_1:
       name: "Initial Commit"
       commands:
         - "git add -A"
-        - "git commit -m 'chore: start docker-clean-v2 migration from full state'"
+        - "git commit -m 'chore: start CORTEX-docker migration from full state'"
       validation: "Commit created"
 
   gate:
     name: "Branch Creation Gate"
-    condition: "On docker-clean-v2 branch with backup"
+    condition: "On CORTEX-docker branch with backup"
     on_failure: "Restore from tag"
 
 # ============================================================================
@@ -1708,7 +1708,7 @@ workspaces_migration:
     Strategy for migrating _workspaces folders to the new branch.
     
   source_branch: "CORTEX"
-  target_branch: "docker-clean-v2"
+  target_branch: "CORTEX-docker"
   
   folders:
     # CRITICAL: Keep all
@@ -1937,8 +1937,8 @@ migration_script:
     log "Created tag: $TAG_NAME"
     
     # Create migration branch
-    git checkout -b docker-clean-v2 2>/dev/null || git checkout docker-clean-v2
-    log "On branch: docker-clean-v2"
+    git checkout -b CORTEX-docker 2>/dev/null || git checkout CORTEX-docker
+    log "On branch: CORTEX-docker"
     
     # -------------------------------------------------------------------------
     # PHASE 2: LEGACY REMOVAL
@@ -2219,7 +2219,7 @@ rollback:
   commands:
     immediate:
       - "git checkout CORTEX"
-      - "git branch -D docker-clean-v2"
+      - "git branch -D CORTEX-docker"
       
     if_tag_exists:
       - "git checkout pre-docker-migration-YYYYMMDD"

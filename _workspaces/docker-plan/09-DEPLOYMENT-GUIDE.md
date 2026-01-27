@@ -83,7 +83,7 @@ git clone https://github.com/asifhussain60/CORTEX.git
 cd CORTEX
 
 # Checkout the docker-clean branch (after migration)
-git checkout docker-clean-v2
+git checkout CORTEX-docker
 ```
 
 ---
