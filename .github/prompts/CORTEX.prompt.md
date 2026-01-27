@@ -332,7 +332,6 @@ tools = registry.list_tools()  # Returns 15+ tools
 | Python Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` | Human-readable |
-| Archived Roadmap | `_workspaces/roadmap.archive-20260127/` | **ARCHIVED - DO NOT USE** |
 
 ### Forbidden Patterns
 - ❌ `.md` files outside `docs/` or `_workspaces/docker-plan/`
@@ -365,22 +364,22 @@ tools = registry.list_tools()  # Returns 15+ tools
 
 ## ⚡ Orchestrator Wiring Status (23/23 - 100%)
 
-**Status:** ✅ ALL orchestrators wired via **DatabaseBackedRegistry** (SQLite-backed SSOT)
+**Status:** ✅ ALL orchestrators wired via **Git-backed YAML** (Deterministic, Ephemeral)
 
-### Database-Backed Registry (SSOT)
+### Git-Backed YAML Wiring (SSOT)
 ```python
-# Access wiring status programmatically
-from cortex.orchestrators.core.database_registry import (
-    DatabaseBackedRegistry,
-    get_database_registry,
-    initialize_registry
+# Access orchestrator registry programmatically
+from cortex.orchestrators import (
+    OrchestratorCategory,
+    OrchestratorConfig,
+    CORE_ORCHESTRATORS,
+    DOMAIN_ORCHESTRATORS,
+    SUPPORT_ORCHESTRATORS
 )
 
-# Initialize and wire all orchestrators
-result = initialize_registry()
-registry = get_database_registry()
-stats = registry.get_wiring_statistics()
-# Returns: {'total_registered': 23, 'total_wired': 23, 'state': 'HEALTHY'}
+# Wiring loaded from YAML at container startup
+# Location: cortex/wiring/specifications/wiring.yaml
+# Total: 23 orchestrators (6 core + 6 domain + 11 support)
 ```
 
 ### Core Orchestrators (6)
@@ -420,17 +419,18 @@ stats = registry.get_wiring_statistics()
 
 ---
 
-## 📝 AC-PERMANENT-FIX-009: DatabaseBackedRegistry
+## 📝 AC-PERMANENT-FIX-009: Git-Backed YAML Wiring
 
 **Purpose:** Single Source of Truth for orchestrator wiring
-**Location:** `cortex/orchestrators/core/database_registry.py`
-**Database:** `.cortex/orchestrator_registry.db` (SQLite)
+**Location:** `cortex/wiring/specifications/wiring.yaml`
+**Runtime:** Ephemeral (loaded at container startup)
 
 **Key Features:**
-- Auto-creates database on first use
-- Background health checking (60-second intervals)
-- Circuit breaker pattern for resilience
-- Full audit trail of wiring operations
+- Deterministic wiring order (Git-tracked)
+- No database drift across machines
+- Version-controlled wiring specification
+- Zero unwiring risk (immutable after load)
+- Docker-first architecture (stateless containers)
 
 ---
 
@@ -439,29 +439,33 @@ stats = registry.get_wiring_statistics()
 **⚠️ REFERENCE ONLY: See `migration-phases-plan.yaml` as single source of truth (v1.0)**
 
 ```yaml
-# ACTUAL STATUS (from DatabaseBackedRegistry + docker-plan tracking)
+# ACTUAL STATUS (from Git-backed YAML + docker-plan tracking)
 production_status:
   status: PRODUCTION_READY
-  db_registry_ssot: true  # AC-PERMANENT-FIX-009
+  wiring_ssot: "Git-backed YAML"  # AC-PERMANENT-FIX-009
   docker_migration: "Phase 6 COMPLETE (100%)"
-  test_suite: 6,847+ tests passing
-  orchestrators_wired: 23/23 (100% - via DatabaseBackedRegistry)
+  test_suite: 172+ tests passing (Phase 6-7.5)
+  orchestrators_wired: 23/23 (100% - via YAML specifications)
   orchestrators_total: 23 (6 core, 6 domain, 11 support)
+  orchestrator_files: 140 Python files in cortex/orchestrators/
   mcp_tools_discoverable: 15 active
-  governance_rules: 31/31 implemented in cortex_brain/tier0/governance/
+  governance_rules: 35+ implemented in cortex_brain/tier0/governance/
   tracking_system: "_workspaces/docker-plan/ (CANONICAL)"
   legacy_tracking: "_workspaces/roadmap/ (DEPRECATED - See DEPRECATED.md)"
   ac_permanent_fixes: 9 active (AC-PERMANENT-FIX-001 through 009)
   challenge_system: ✅ WIRED (ChallengeEngine + InteractionOrchestrator)
-  health_checker: ✅ ACTIVE (60-second monitoring intervals)
+  lens_intelligence: ✅ COMPLETE (Phase 7.1 - GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor)
 ```
 
-**Registry Access:**
+**Wiring Access:**
 ```python
-from cortex.orchestrators.core.database_registry import get_database_registry
-registry = get_database_registry()
-stats = registry.get_wiring_statistics()
-# {'total_registered': 23, 'total_wired': 23, 'state': 'HEALTHY'}
+from cortex.orchestrators import (
+    OrchestratorCategory,
+    CORE_ORCHESTRATORS,  # 6
+    DOMAIN_ORCHESTRATORS,  # 6
+    SUPPORT_ORCHESTRATORS  # 11
+)
+# Total: 23 orchestrators loaded from YAML at startup
 ```
 
 ---
