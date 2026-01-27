@@ -18,6 +18,12 @@ from cortex.brain.analysis.git_history_analyzer import (
     GitBlame,
     GitHistoryResult,
 )
+from cortex.brain.analysis.remote_git_adapter import (
+    RemoteGitAdapter,
+    RemoteCommit as RemoteCommitModel,
+    RemoteBlame as RemoteBlameModel,
+    RemoteFile,
+)
 
 
 class TestGitCommit:
@@ -276,3 +282,258 @@ class TestGitHistoryIntegration:
         if result.commits:
             assert result.commits[0].hash
             assert result.commits[0].author
+
+
+class TestGitHistoryAnalyzerRemote:
+    """Test GitHistoryAnalyzer with remote repositories."""
+    
+    @pytest.fixture
+    def mock_adapter(self):
+        """Create mock RemoteGitAdapter."""
+        adapter = Mock(spec=RemoteGitAdapter)
+        return adapter
+    
+    def test_remote_analyzer_initialization(self, mock_adapter):
+        """Test remote analyzer initialization."""
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+            remote_ref="main",
+        )
+        assert analyzer.is_remote is True
+        assert analyzer.remote_adapter == mock_adapter
+        assert analyzer.remote_repo == "owner/repo"
+        assert analyzer.remote_ref == "main"
+    
+    def test_remote_analyzer_requires_adapter_or_path(self):
+        """Test that analyzer requires either adapter or path."""
+        with pytest.raises(ValueError, match="Either repo_path or remote_adapter"):
+            GitHistoryAnalyzer(repo_path=None, remote_adapter=None)
+    
+    def test_remote_get_file_history(self, mock_adapter):
+        """Test getting file history from remote."""
+        # Mock remote commits
+        mock_adapter.fetch_commits.return_value = [
+            RemoteCommitModel(
+                sha="abc123",
+                message="feat: Add feature",
+                author="John Doe",
+                author_email="john@example.com",
+                date=datetime(2026, 1, 27, 10, 0, 0),
+                files_changed=["test.py"],
+            ),
+            RemoteCommitModel(
+                sha="def456",
+                message="fix: Fix bug",
+                author="Jane Smith",
+                author_email="jane@example.com",
+                date=datetime(2026, 1, 26, 15, 30, 0),
+                files_changed=["test.py"],
+            ),
+        ]
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+            remote_ref="main",
+        )
+        
+        result = analyzer.get_file_history("test.py", max_commits=10)
+        
+        assert result.success is True
+        assert len(result.commits) == 2
+        assert result.commits[0].hash == "abc123"
+        assert result.commits[0].author == "John Doe"
+        assert result.commits[1].hash == "def456"
+        assert result.metadata["mode"] == "remote"
+        
+        mock_adapter.fetch_commits.assert_called_once_with(
+            repo="owner/repo",
+            file_path="test.py",
+            ref="main",
+            max_count=10,
+        )
+    
+    def test_remote_get_recent_commits(self, mock_adapter):
+        """Test getting recent commits from remote."""
+        mock_adapter.fetch_commits.return_value = [
+            RemoteCommitModel(
+                sha="abc123",
+                message="feat: Add feature",
+                author="John Doe",
+                author_email="john@example.com",
+                date=datetime(2026, 1, 27, 10, 0, 0),
+                files_changed=["file1.py", "file2.py"],
+            ),
+        ]
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        
+        result = analyzer.get_recent_commits(max_commits=5)
+        
+        assert result.success is True
+        assert len(result.commits) == 1
+        assert result.commits[0].hash == "abc123"
+        assert len(result.commits[0].files_changed) == 2
+        assert result.metadata["mode"] == "remote"
+        
+        mock_adapter.fetch_commits.assert_called_once_with(
+            repo="owner/repo",
+            file_path=None,
+            ref="main",
+            max_count=5,
+        )
+    
+    def test_remote_get_blame(self, mock_adapter):
+        """Test getting blame from remote."""
+        # Mock remote blame
+        mock_adapter.fetch_blame.return_value = RemoteBlameModel(
+            file_path="test.py",
+            lines=[
+                (1, "abc123", "John Doe", datetime(2026, 1, 27, 10, 0, 0)),
+                (2, "def456", "Jane Smith", datetime(2026, 1, 26, 15, 30, 0)),
+            ],
+        )
+        
+        # Mock remote file
+        mock_adapter.fetch_file.return_value = RemoteFile(
+            path="test.py",
+            content="line 1\nline 2",
+            sha="file123",
+            size=14,
+            encoding="utf-8",
+        )
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        
+        result = analyzer.get_blame("test.py")
+        
+        assert result.success is True
+        assert len(result.blame_info) == 2
+        assert result.blame_info[0].line_number == 1
+        assert result.blame_info[0].commit_hash == "abc123"
+        assert result.blame_info[0].author == "John Doe"
+        assert result.blame_info[0].line_content == "line 1"
+        assert result.metadata["mode"] == "remote"
+        
+        mock_adapter.fetch_blame.assert_called_once_with(
+            repo="owner/repo",
+            file_path="test.py",
+            ref="main",
+        )
+    
+    def test_remote_get_blame_without_file_content(self, mock_adapter):
+        """Test getting blame when file content fetch fails."""
+        # Mock remote blame
+        mock_adapter.fetch_blame.return_value = RemoteBlameModel(
+            file_path="test.py",
+            lines=[
+                (1, "abc123", "John Doe", datetime(2026, 1, 27, 10, 0, 0)),
+            ],
+        )
+        
+        # Mock file fetch failure
+        mock_adapter.fetch_file.side_effect = Exception("File not found")
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        
+        result = analyzer.get_blame("test.py")
+        
+        # Should still succeed, just without line content
+        assert result.success is True
+        assert len(result.blame_info) == 1
+        assert result.blame_info[0].line_content == ""
+    
+    def test_remote_get_file_history_error(self, mock_adapter):
+        """Test error handling for remote file history."""
+        mock_adapter.fetch_commits.side_effect = Exception("API error")
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        
+        result = analyzer.get_file_history("test.py")
+        
+        assert result.success is False
+        assert "Remote fetch failed" in result.error
+    
+    def test_remote_without_adapter_configured(self):
+        """Test remote operations without adapter configured."""
+        analyzer = GitHistoryAnalyzer(
+            repo_path=Path("/tmp"),  # Local path provided
+        )
+        
+        # Force remote mode by setting adapter to None after init
+        analyzer._is_remote = True
+        analyzer.remote_adapter = None
+        
+        result = analyzer._get_file_history_remote("test.py", 10)
+        assert result.success is False
+        assert "not configured" in result.error
+
+
+class TestGitHistoryAnalyzerHybrid:
+    """Test GitHistoryAnalyzer hybrid local/remote scenarios."""
+    
+    def test_local_mode_detection(self, tmp_path: Path):
+        """Test that local path creates local mode analyzer."""
+        analyzer = GitHistoryAnalyzer(repo_path=tmp_path)
+        assert analyzer.is_remote is False
+    
+    def test_remote_mode_detection(self):
+        """Test that remote adapter creates remote mode analyzer."""
+        mock_adapter = Mock(spec=RemoteGitAdapter)
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        assert analyzer.is_remote is True
+    
+    @patch('subprocess.run')
+    def test_local_file_history_called_when_local(self, mock_run, tmp_path: Path):
+        """Test that local mode uses subprocess."""
+        mock_run.return_value = Mock(
+            returncode=0,
+            stdout="abc123|Author|2026-01-27 10:00:00|Message\n",
+        )
+        
+        analyzer = GitHistoryAnalyzer(repo_path=tmp_path)
+        result = analyzer.get_file_history("test.py")
+        
+        # Should call subprocess for local
+        mock_run.assert_called_once()
+        assert result.metadata.get("mode") == "local"
+    
+    def test_remote_file_history_called_when_remote(self):
+        """Test that remote mode uses adapter."""
+        mock_adapter = Mock(spec=RemoteGitAdapter)
+        mock_adapter.fetch_commits.return_value = []
+        
+        analyzer = GitHistoryAnalyzer(
+            repo_path=None,
+            remote_adapter=mock_adapter,
+            remote_repo="owner/repo",
+        )
+        result = analyzer.get_file_history("test.py")
+        
+        # Should call adapter for remote
+        mock_adapter.fetch_commits.assert_called_once()
+        assert result.metadata.get("mode") == "remote"
+
