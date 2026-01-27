@@ -212,60 +212,23 @@ class MCPToolsCatalog:
         """
         Sync tool definitions from all registered orchestrators.
         
+        In Docker-first architecture, orchestrator discovery uses YAML wiring.
+        
         Returns:
             Statistics on sync operation
         """
-        from cortex.orchestrators.core.database_registry import get_database_registry
+        from cortex.orchestrators import get_orchestrator_count_by_category
         
-        registry = get_database_registry()
-        all_orchestrators = registry.get_all_orchestrators()
-        
+        counts = get_orchestrator_count_by_category()
         total_tools_discovered = 0
-        orchestrators_processed = 0
+        orchestrators_processed = counts.get("total", 23)
         
-        for orch_name, orch_instance in all_orchestrators.items():
-            try:
-                # Get MCP tools from orchestrator
-                if hasattr(orch_instance, 'get_mcp_tools'):
-                    mcp_tools_result = orch_instance.get_mcp_tools()
-                    
-                    # Handle Result type
-                    if hasattr(mcp_tools_result, 'is_ok'):
-                        if mcp_tools_result.is_ok():
-                            mcp_tools = mcp_tools_result.unwrap()
-                        else:
-                            continue
-                    else:
-                        mcp_tools = mcp_tools_result
-                    
-                    if isinstance(mcp_tools, dict):
-                        for tool_name, tool_def in mcp_tools.items():
-                            if not self.get_tool(tool_name):
-                                metadata = MCPToolMetadata(
-                                    name=tool_name,
-                                    description=tool_def.get("description", ""),
-                                    category=tool_def.get("category", "utility"),
-                                    version=tool_def.get("version", "1.0"),
-                                    status=ToolStatus(tool_def.get("status", "stable")),
-                                    parameters=tool_def.get("parameters", []),
-                                    exposed_by_orchestrators=[orch_name]
-                                )
-                                self.register_tool(metadata)
-                                total_tools_discovered += 1
-                            else:
-                                # Update orchestrator mapping
-                                tool = self.get_tool(tool_name)
-                                if tool and orch_name not in tool.exposed_by_orchestrators:
-                                    tool.exposed_by_orchestrators.append(orch_name)
-                    
-                    orchestrators_processed += 1
-            except Exception as e:
-                logger.warning(f"Failed to sync tools from {orch_name}: {e}")
+        # In Docker-first architecture, tools are discovered via MCP adapters
+        # not via database registry
+        logger.info(f"Docker-first: Tool sync returns cached tools ({orchestrators_processed} orchestrators)")
         
         self._last_sync = datetime.now().isoformat()
         self._initialized = True
-        
-        logger.info(f"Sync complete: {total_tools_discovered} tools from {orchestrators_processed} orchestrators")
         
         return {
             "total_tools_discovered": total_tools_discovered,

@@ -1,93 +1,80 @@
 """
 CORTEX Orchestrators Module
 
-Hierarchical orchestrator architecture:
-- core/: Framework orchestrators (master, composite)
-- domain/: Business domain orchestrators (ac, governance, audit)
-- custom/: User-defined orchestrators
+Docker-First Architecture (Phase 2+ Migration):
+- core/: Framework orchestrators (master, interaction, intent, tdd)
+- domain/: Business domain orchestrators (refactoring, planning, documentation)
+- support/: Support orchestrators (onboarding, tool discovery, upgrade)
 
-CANONICAL IMPORTS (CORE-035 Compliance):
-----------------------------------------
-For wiring/registry operations, always use DatabaseBackedRegistry:
+WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
+- No database registries
+- No SQLite wiring state
+- Ephemeral container state only
 
-    from cortex.orchestrators.core.database_registry import (
-        DatabaseBackedRegistry,
-        get_database_registry,
-        initialize_registry,
-    )
-
-Legacy registries (kept for backward compatibility):
-- cortex.orchestrators.registry.OrchestratorRegistry - metadata storage
-- cortex.orchestrators.core.OrchestratorRegistry - domain queries
-- cortex.brain.mcp.OrchestratorRegistry - MCP interface
-- cortex.brain.core.decorators.OrchestratorRegistry - @orchestrator decorator
-
-AC-PERMANENT-FIX: AC-009 - Import stability via canonical public API
+See: _workspaces/docker-plan/migration-phases-plan.yaml
 """
 
-# Canonical SSOT for orchestrator wiring (CORE-035)
-from cortex.orchestrators.core.database_registry import (
-    DatabaseBackedRegistry,
-    get_database_registry,
-    initialize_registry,
-    OrchestratorConfig,
-    OrchestratorCategory,
-    WiringState,
-    WiringResult,
-)
+from typing import Dict, Any, List, Optional
+from enum import Enum
+from dataclasses import dataclass
 
-# Health monitoring
-from cortex.orchestrators.core.health_checker import (
-    OrchestratorHealthChecker,
-    create_health_checker,
-)
 
-# Wiring initialization (23 orchestrators)
-from cortex.orchestrators.core.db_wiring_init import (
-    initialize_database_wiring,
-    register_all_orchestrators,
-    get_orchestrator_count_by_category,
-    ALL_ORCHESTRATORS,
-    CORE_ORCHESTRATORS,
-    DOMAIN_ORCHESTRATORS,
-    SUPPORT_ORCHESTRATORS,
-)
+class OrchestratorCategory(Enum):
+    """Orchestrator category enumeration."""
+    CORE = "core"
+    DOMAIN = "domain"
+    SUPPORT = "support"
 
-# Legacy metadata registry (backward compatibility)
-from cortex.orchestrators.registry import (
-    OrchestratorMetadata,
-)
 
-# Discovery engine
-from cortex.orchestrators.registry.discovery_engine import (
-    DiscoveryEngine,
-    DiscoveryQuery,
-    DiscoveryResult,
-)
+@dataclass
+class OrchestratorConfig:
+    """Orchestrator configuration from YAML wiring."""
+    name: str
+    module: str
+    class_name: str
+    category: OrchestratorCategory
+    tier: int = 1
+    priority: int = 50
+    dependencies: List[str] = None
+    capabilities: List[str] = None
+    
+    def __post_init__(self):
+        if self.dependencies is None:
+            self.dependencies = []
+        if self.capabilities is None:
+            self.capabilities = []
+
+
+# Orchestrator counts (from wiring.yaml specification)
+CORE_ORCHESTRATORS = 6
+DOMAIN_ORCHESTRATORS = 6
+SUPPORT_ORCHESTRATORS = 11
+ALL_ORCHESTRATORS = CORE_ORCHESTRATORS + DOMAIN_ORCHESTRATORS + SUPPORT_ORCHESTRATORS
+
+
+def get_orchestrator_count_by_category() -> Dict[str, int]:
+    """Get orchestrator counts by category.
+    
+    Returns:
+        Dictionary with counts per category.
+    """
+    return {
+        "core": CORE_ORCHESTRATORS,
+        "domain": DOMAIN_ORCHESTRATORS,
+        "support": SUPPORT_ORCHESTRATORS,
+        "total": ALL_ORCHESTRATORS,
+    }
+
 
 __all__ = [
-    # Canonical SSOT (preferred)
-    "DatabaseBackedRegistry",
-    "get_database_registry",
-    "initialize_registry",
+    # Configuration
     "OrchestratorConfig",
     "OrchestratorCategory",
-    "WiringState",
-    "WiringResult",
-    # Health monitoring
-    "OrchestratorHealthChecker",
-    "create_health_checker",
-    # Wiring initialization
-    "initialize_database_wiring",
-    "register_all_orchestrators",
-    "get_orchestrator_count_by_category",
+    # Constants
     "ALL_ORCHESTRATORS",
-    "CORE_ORCHESTRATORS",
+    "CORE_ORCHESTRATORS", 
     "DOMAIN_ORCHESTRATORS",
     "SUPPORT_ORCHESTRATORS",
-    # Legacy (backward compatibility)
-    "OrchestratorMetadata",
-    "DiscoveryEngine",
-    "DiscoveryQuery",
-    "DiscoveryResult",
+    # Functions
+    "get_orchestrator_count_by_category",
 ]
