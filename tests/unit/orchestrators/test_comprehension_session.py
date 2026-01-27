@@ -14,7 +14,7 @@ from cortex.orchestrators.core.comprehension_session import (
     ApprovalStatus,
     BrainTier,
 )
-from cortex.orchestrators.comprehension_yaml import (
+from cortex.brain.core.intent.comprehension_yaml import (
     ComprehensionYAML,
     IntentSection,
 )
