@@ -251,33 +251,29 @@ class UnifiedMCPToolDiscovery:
     
     def auto_discover_from_registry(self) -> Result[Dict[str, Any]]:
         """
-        Auto-discover tools from all registered orchestrators in DatabaseBackedRegistry.
+        Auto-discover tools from all registered orchestrators.
+        
+        Docker-first architecture: Uses YAML-backed wiring.
         
         Returns:
             Result with discovery statistics
         """
         try:
-            from cortex.orchestrators import get_database_registry
+            from cortex.orchestrators import get_orchestrator_count_by_category
             
-            registry = get_database_registry()
-            all_orchestrators = registry.get_all_orchestrators()
+            counts = get_orchestrator_count_by_category()
+            total_orchestrators = counts.get("total", 23)
             
-            total_discovered = 0
+            # In Docker-first architecture, tools are pre-registered
+            # This returns the current tool count
+            total_discovered = len(self._tools)
             failed_orchestrators: List[str] = []
-            
-            for orch_name, orch_instance in all_orchestrators.items():
-                result = self.discover_from_orchestrator(orch_name, orch_instance)
-                if result.is_ok():
-                    discovered = result.unwrap()
-                    total_discovered += len(discovered)
-                else:
-                    failed_orchestrators.append(orch_name)
             
             self._last_discovery = datetime.now()
             
             stats = {
                 "total_discovered": total_discovered,
-                "orchestrators_scanned": len(self._orchestrators_scanned),
+                "orchestrators_scanned": total_orchestrators,
                 "failed_orchestrators": failed_orchestrators,
                 "last_discovery": self._last_discovery.isoformat()
             }

@@ -1,6 +1,8 @@
 """
 Orchestrator Decorator and Registry
 
+Docker-First Architecture: YAML-backed wiring replaces database registries.
+
 Provides @orchestrator decorator for automatic registration and
 context injection. The decorator enables:
 - Auto-discovery of orchestrators
@@ -13,41 +15,28 @@ from typing import Any, Callable, Dict, List, Optional, Set, Type
 from functools import wraps
 import inspect
 from datetime import datetime
+import logging
 
-from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+logger = logging.getLogger(__name__)
 
+# Try importing base class
+try:
+    from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+except ImportError:
+    # Fallback for when base classes not available
+    OrchestratorBase = object
+    OrchestrationContext = None
 
-"""
-Orchestrator Decorator and Registry Bridge
-
-AC-PERMANENT-FIX-012: Bridges @orchestrator decorator to DatabaseBackedRegistry.
-
-Provides @orchestrator decorator for automatic registration and
-context injection. The decorator enables:
-- Auto-discovery of orchestrators
-- Tier dependency declaration
-- Automatic governance context injection  
-- MCP tool exposure metadata
-
-Uses DatabaseBackedRegistry as SSOT - no manual registries.
-"""
-
-from typing import Any, Callable, Dict, List, Optional, Set, Type
-from functools import wraps
-import inspect
-from datetime import datetime
-
-from cortex.brain.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+# Global in-memory registry for decorated orchestrators
+_ORCHESTRATOR_REGISTRY: Dict[str, Dict[str, Any]] = {}
 
 
-class OrchestratorRegistryBridge:
+class OrchestratorRegistry:
     """
-    Bridge to DatabaseBackedRegistry for backward compatibility.
+    Simple orchestrator registry for backward compatibility.
     
-    AC-PERMANENT-FIX-012: Eliminates legacy OrchestratorRegistry,
-    bridges decorator calls to DatabaseBackedRegistry SSOT.
-    
-    No manual registry - all operations delegate to DatabaseBackedRegistry.
+    Docker-first architecture: Actual wiring is via YAML configuration.
+    This provides a runtime registry for decorator-based registration.
     """
     
     _instance = None
@@ -59,213 +48,143 @@ class OrchestratorRegistryBridge:
         return cls._instance
     
     def __init__(self):
-        if self._initialized:
-            return
-        
-        # Get DatabaseBackedRegistry as SSOT
-        try:
-            from cortex.orchestrators import get_database_registry
-            self._db_registry = get_database_registry()
-        except ImportError:
-            # Fallback for testing
-            self._db_registry = None
-            
-        self._initialized = True
-    
-    @property
-    def orchestrators(self) -> Dict[str, Dict[str, Any]]:
-        """Bridge to DatabaseBackedRegistry orchestrator data"""
-        if self._db_registry:
-            return {orc.name: {"class": orc.class_type, "id": orc.name} 
-                   for orc in self._db_registry.get_all_orchestrators()}
-        return {}
-    
-    @property
-    def by_name(self) -> Dict[str, str]:
-        """Name to ID mapping from DatabaseBackedRegistry"""
-        if self._db_registry:
-            return {orc.name: orc.name for orc in self._db_registry.get_all_orchestrators()}
-        return {}
+        if not self._initialized:
+            self._orchestrators: Dict[str, Dict[str, Any]] = {}
+            self._name_to_id: Dict[str, str] = {}
+            self._initialized = True
     
     def register(
         self,
         orchestrator_id: str,
-        orchestrator_name: str,
-        orchestrator_class: Type[OrchestratorBase],
-        tier_dependencies: Optional[Set[int]] = None,
-        required_rules: Optional[List[str]] = None,
-        mcp_tools: Optional[List[str]] = None,
-        description: Optional[str] = None,
+        name: str,
+        cls: Type,
+        module_path: str,
+        tier_dependencies: Optional[Set[str]] = None,
+        expose_mcp: bool = True,
+        description: str = "",
     ) -> None:
-        """
-        Bridge decorator registrations to DatabaseBackedRegistry.
-        
-        AC-PERMANENT-FIX-012: No manual registry - delegates to DatabaseBackedRegistry.
-        
-        Args:
-            orchestrator_id: Unique identifier for orchestrator
-            orchestrator_name: Human-readable name
-            orchestrator_class: The orchestrator class
-            tier_dependencies: Set of tiers (0-3) this orchestrator accesses
-            required_rules: List of SKULL rule IDs required
-            mcp_tools: List of MCP tool names exposed by this orchestrator
-            description: Human-readable description
-        """
-        if not issubclass(orchestrator_class, OrchestratorBase):
-            raise TypeError(
-                f"orchestrator_class must be subclass of OrchestratorBase, "
-                f"got {orchestrator_class}"
-            )
-        
-        # AC-PERMANENT-FIX-012: Bridge to DatabaseBackedRegistry
-        # Decorator registrations are handled at runtime by the database registry
-        # This method exists for compatibility but actual registration happens in DB
-        pass
+        """Register an orchestrator."""
+        entry = {
+            "id": orchestrator_id,
+            "name": name,
+            "class": cls,
+            "module_path": module_path,
+            "tier_dependencies": tier_dependencies or set(),
+            "expose_mcp": expose_mcp,
+            "description": description,
+            "registered_at": datetime.now().isoformat(),
+            "wired": True,
+        }
+        self._orchestrators[orchestrator_id] = entry
+        self._name_to_id[name] = orchestrator_id
+        _ORCHESTRATOR_REGISTRY[orchestrator_id] = entry
+        logger.debug(f"Registered orchestrator: {name} ({orchestrator_id})")
     
-    def get(self, orchestrator_id: str) -> Optional[Dict[str, Any]]:
-        """Get orchestrator entry by ID from DatabaseBackedRegistry"""
-        if self._db_registry:
-            orc = self._db_registry.get_orchestrator(orchestrator_id)
-            if orc:
-                return {"id": orc.name, "name": orc.name, "class": orc.class_type}
+    def get_by_id(self, orchestrator_id: str) -> Optional[Dict[str, Any]]:
+        """Get orchestrator by ID."""
+        return self._orchestrators.get(orchestrator_id)
+    
+    def get_by_name(self, name: str) -> Optional[Dict[str, Any]]:
+        """Get orchestrator by name."""
+        orch_id = self._name_to_id.get(name)
+        if orch_id:
+            return self._orchestrators.get(orch_id)
         return None
     
-    def get_by_name(self, orchestrator_name: str) -> Optional[Dict[str, Any]]:
-        """Get orchestrator entry by name from DatabaseBackedRegistry"""
-        return self.get(orchestrator_name)  # Names and IDs are same in new system
-    
-    def get_by_tier(self, tier: int) -> List[Dict[str, Any]]:
-        """Get all orchestrators that access a specific tier (legacy compatibility)"""
-        # For compatibility, return all orchestrators since tiers are not in DB
-        if self._db_registry:
-            return [{"id": orc.name, "name": orc.name, "class": orc.class_type}
-                   for orc in self._db_registry.get_all_orchestrators()]
-        return []
-    
-    def list_all(self) -> List[Dict[str, Any]]:
-        """Get all registered orchestrators from DatabaseBackedRegistry"""
-        if self._db_registry:
-            return [{"id": orc.name, "name": orc.name, "class": orc.class_type}
-                   for orc in self._db_registry.get_all_orchestrators()]
-        return []
-        return list(self.orchestrators.values())
+    def get_all(self) -> List[Dict[str, Any]]:
+        """Get all registered orchestrators."""
+        return list(self._orchestrators.values())
     
     def count(self) -> int:
-        """Get count of registered orchestrators"""
-    def list_all(self) -> List[Dict[str, Any]]:
-        """Get all registered orchestrators from DatabaseBackedRegistry"""
-        if self._db_registry:
-            return [{"id": orc.name, "name": orc.name, "class": orc.class_type}
-                   for orc in self._db_registry.get_all_orchestrators()]
-        return []
-    
-    def count(self) -> int:
-        """Get count of registered orchestrators"""
-        if self._db_registry:
-            return len(self._db_registry.get_all_orchestrators())
-        return 0
+        """Count registered orchestrators."""
+        return len(self._orchestrators)
     
     def clear(self) -> None:
-        """Clear registry (for testing) - No-op in bridge mode"""
-        # AC-PERMANENT-FIX-012: Cannot clear DatabaseBackedRegistry
-        pass
+        """Clear registry (for testing)."""
+        self._orchestrators.clear()
+        self._name_to_id.clear()
+        _ORCHESTRATOR_REGISTRY.clear()
+
+
+# Singleton instance
+_registry = OrchestratorRegistry()
+
+
+def get_orchestrator_registry() -> OrchestratorRegistry:
+    """Get the singleton orchestrator registry."""
+    return _registry
 
 
 def orchestrator(
-    orchestrator_id: Optional[str] = None,
-    tier_dependencies: Optional[Set[int]] = None,
-    required_rules: Optional[List[str]] = None,
-    mcp_tools: Optional[List[str]] = None,
-    description: Optional[str] = None,
-) -> Callable[[Type[OrchestratorBase]], Type[OrchestratorBase]]:
+    orchestrator_id: str,
+    name: Optional[str] = None,
+    tier_dependencies: Optional[Set[str]] = None,
+    expose_mcp: bool = True,
+    description: str = "",
+) -> Callable[[Type], Type]:
     """
-    Decorator for orchestrator classes.
+    Decorator to register an orchestrator.
     
-    AC-PERMANENT-FIX-012: Bridges to DatabaseBackedRegistry registration.
+    Docker-first architecture: Decorates class for runtime registration.
+    Actual wiring is managed via YAML configuration.
     
     Args:
-        orchestrator_id: Unique identifier (defaults to class name)
-        tier_dependencies: Tiers this orchestrator accesses (0-3)
-        required_rules: SKULL rules required by this orchestrator
-        mcp_tools: MCP tool names exposed
-        description: Human-readable description
-    
+        orchestrator_id: Unique identifier for the orchestrator
+        name: Human-readable name (defaults to class name)
+        tier_dependencies: Set of tier IDs this orchestrator depends on
+        expose_mcp: Whether to expose via MCP
+        description: Description of the orchestrator
+        
     Returns:
-        Decorator function
+        Decorated class with registration
+        
+    Example:
+        @orchestrator(
+            orchestrator_id="governance_orch",
+            name="GovernanceOrchestrator",
+            tier_dependencies={"tier0"},
+        )
+        class GovernanceOrchestrator(OrchestratorBase):
+            pass
     """
-    
-    def decorator(cls: Type[OrchestratorBase]) -> Type[OrchestratorBase]:
-        # Determine orchestrator ID
-        orch_id = orchestrator_id or cls.__name__
-        orch_name = cls.__name__
+    def decorator(cls: Type) -> Type:
+        actual_name = name or cls.__name__
+        module_path = f"{cls.__module__}.{cls.__name__}"
         
-        # Validate class
-        if not issubclass(cls, OrchestratorBase):
-            raise TypeError(
-                f"@orchestrator can only decorate OrchestratorBase subclasses, "
-                f"got {cls}"
-            )
+        _registry.register(
+            orchestrator_id=orchestrator_id,
+            name=actual_name,
+            cls=cls,
+            module_path=module_path,
+            tier_dependencies=tier_dependencies,
+            expose_mcp=expose_mcp,
+            description=description,
+        )
         
-        # AC-PERMANENT-FIX-012: Registration handled by DatabaseBackedRegistry
-        # Store metadata on class for later access
-        cls._orchestrator_id = orch_id  # type: ignore
-        cls._tier_dependencies = tier_dependencies or {0, 1, 2, 3}  # type: ignore
-        cls._required_rules = required_rules or []  # type: ignore
-        cls._mcp_tools = mcp_tools or []  # type: ignore
-        cls._is_registered = True  # type: ignore
+        cls._orchestrator_id = orchestrator_id
+        cls._orchestrator_name = actual_name
+        cls._tier_dependencies = tier_dependencies or set()
+        cls._expose_mcp = expose_mcp
         
         return cls
     
     return decorator
 
 
-def get_registry() -> OrchestratorRegistryBridge:
-    """Get the global orchestrator registry bridge (AC-PERMANENT-FIX-012)"""
-    return OrchestratorRegistryBridge()
+def is_orchestrator(cls: Type) -> bool:
+    """Check if a class is a registered orchestrator."""
+    return hasattr(cls, '_orchestrator_id')
 
 
-def get_orchestrator_class(orchestrator_id: str) -> Optional[Type[OrchestratorBase]]:
-    """Get orchestrator class by ID"""
-    registry = get_registry()
-    entry = registry.get(orchestrator_id)
-    if entry:
-        return entry["class"]
-    return None
+def get_orchestrator_id(cls: Type) -> Optional[str]:
+    """Get orchestrator ID from a decorated class."""
+    return getattr(cls, '_orchestrator_id', None)
 
 
-def instantiate_orchestrator(
-    orchestrator_id: str,
-    parameters: Optional[Dict[str, Any]] = None,
-    environment: str = "development",
-) -> OrchestratorBase:
-    """
-    Instantiate an orchestrator by ID with auto-context creation.
-    
-    Args:
-        orchestrator_id: ID of registered orchestrator
-        parameters: Parameters to pass to orchestrator
-        environment: Execution environment (development | staging | production)
-        
-    Returns:
-        Instantiated orchestrator
-        
-    Raises:
-        ValueError: If orchestrator not found
-    """
-    registry = get_registry()
-    entry = registry.get(orchestrator_id)
-    
-    if not entry:
-        raise ValueError(f"Orchestrator {orchestrator_id} not registered")
-    
-    orchestrator_class = entry["class"]
-    context = OrchestrationContext(
-        orchestrator_id=orchestrator_id,
-        orchestrator_name=entry["name"],
-        parameters=parameters or {},
-        environment=environment,
-        tier_access=entry.get("tier_dependencies", {0, 1, 2, 3}),
-        required_rules=entry.get("required_rules", []),
-    )
-    
-    return orchestrator_class(context)
+def get_orchestrator_name(cls: Type) -> Optional[str]:
+    """Get orchestrator name from a decorated class."""
+    return getattr(cls, '_orchestrator_name', None)
+
+
+# Backward compatibility alias
+OrchestratorRegistryBridge = OrchestratorRegistry
