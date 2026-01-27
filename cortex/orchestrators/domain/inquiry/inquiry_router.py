@@ -20,6 +20,21 @@ from cortex.orchestrators.domain.inquiry.base_inquiry_handler import (
 from cortex.orchestrators.domain.inquiry.generic_code_inquiry_handler import (
     GenericCodeInquiryHandler,
 )
+from cortex.orchestrators.domain.inquiry.architecture_inquiry_handler import (
+    ArchitectureInquiryHandler,
+)
+from cortex.orchestrators.domain.inquiry.feature_inquiry_handler import (
+    FeatureInquiryHandler,
+)
+from cortex.orchestrators.domain.inquiry.best_practice_inquiry_handler import (
+    BestPracticeInquiryHandler,
+)
+from cortex.orchestrators.domain.inquiry.troubleshooting_inquiry_handler import (
+    TroubleshootingInquiryHandler,
+)
+from cortex.orchestrators.domain.inquiry.evolution_inquiry_handler import (
+    EvolutionInquiryHandler,
+)
 
 
 class InquiryRouter:
@@ -33,13 +48,13 @@ class InquiryRouter:
         """Initialize router with handler registry."""
         self.generic_handler = GenericCodeInquiryHandler()
         
-        # Specialized handlers (will be implemented in subsequent tasks)
+        # Specialized handlers (implemented)
         self.specialized_handlers: dict[InquiryCategory, Optional[BaseInquiryHandler]] = {
-            InquiryCategory.ARCHITECTURE: None,  # INQUIRY-009
-            InquiryCategory.FEATURE: None,  # INQUIRY-010
-            InquiryCategory.BEST_PRACTICE: None,  # INQUIRY-011
-            InquiryCategory.TROUBLESHOOTING: None,  # INQUIRY-012
-            InquiryCategory.EVOLUTION: None,  # INQUIRY-013
+            InquiryCategory.ARCHITECTURE: ArchitectureInquiryHandler(),
+            InquiryCategory.FEATURE: FeatureInquiryHandler(),
+            InquiryCategory.BEST_PRACTICE: BestPracticeInquiryHandler(),
+            InquiryCategory.TROUBLESHOOTING: TroubleshootingInquiryHandler(),
+            InquiryCategory.EVOLUTION: EvolutionInquiryHandler(),
         }
     
     def route(self, context: AssembledContext) -> BaseInquiryHandler:
