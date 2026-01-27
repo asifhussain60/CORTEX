@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import Mock
 
 from cortex.mcp.protocol import ToolDefinition, MCPTool
-from cortex.mcp.registry import ToolRegistry
+from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
 from cortex.mcp.discovery import ToolDiscovery, DiscoveryFilter, DiscoveryPattern
 
 @pytest.fixture

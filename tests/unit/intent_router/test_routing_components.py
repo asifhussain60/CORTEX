@@ -10,7 +10,7 @@ metrics, and orchestration integration.
 import pytest
 from cortex.intent_router.confidence_scorer import ConfidenceScorer
 from cortex.intent_router.context_manager import ContextManager, ConversationContext
-from cortex.intent_router.routing_engine import RoutingEngine
+from cortex.orchestrators.adaptive.routing_engine import RoutingEngine
 from cortex.intent_router.fallback_strategy import FallbackStrategy
 from cortex.intent_router.intent_learner import IntentLearner
 from cortex.intent_router.performance_metrics import PerformanceMetrics

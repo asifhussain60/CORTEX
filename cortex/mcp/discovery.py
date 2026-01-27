@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Any, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from cortex.mcp.registry import ToolRegistry
+    from cortex.brain.tier1.orchestrators.cleaners.registry import ToolRegistry
 
 
 @dataclass
