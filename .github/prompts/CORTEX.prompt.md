@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 6.0 | **Updated:** 2026-01-25 | **Authority:** cortex-impl-map.yaml v3.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via DatabaseBackedRegistry)
+**Version:** 6.1 | **Updated:** 2026-01-27 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via DatabaseBackedRegistry)
 
 **AC-PERMANENT-FIX Status:** 9 permanent fixes active (AC-PERMANENT-FIX-001 through 009)
 
@@ -286,18 +286,21 @@ tools = registry.list_tools()  # Returns 15+ tools
 ### Canonical Locations
 | Content | Location | Authority |
 |---------|----------|-----------|
-| Master Plan | `_workspaces/roadmap/cortex-impl-map.yaml` | **CANONICAL** |
-| Phase Specs | `_workspaces/roadmap/phases/*.yaml` | Authoritative |
+| Master Plan | `_workspaces/docker-plan/migration-phases-plan.yaml` | **CANONICAL** |
+| Phase Specs | `_workspaces/docker-plan/PHASE-*.yaml` | Authoritative |
+| Phase Reports | `_workspaces/docker-plan/PHASE-*-REPORT.md` | Completion tracking |
 | Python Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` | Human-readable |
-| Reports | `reports/` | YAML tracking |
+| Reports (legacy) | `reports/` | YAML tracking (deprecated) |
+| Roadmap (legacy) | `_workspaces/roadmap/` | **DEPRECATED - See DEPRECATED.md** |
 
 ### Forbidden Patterns
-- ❌ `.md` files outside `docs/`
+- ❌ `.md` files outside `docs/` or `_workspaces/docker-plan/`
 - ❌ `docs_md/` folder (DELETE IMMEDIATELY)
 - ❌ `.py` files in root
-- ❌ Multiple `cortex-*.yaml` files
+- ❌ Updates to `cortex-impl-map.yaml` (DEPRECATED)
+- ❌ New files in `_workspaces/roadmap/` (use docker-plan instead)
 
 ---
 
@@ -393,18 +396,21 @@ stats = registry.get_wiring_statistics()
 
 ## 📊 Production Metrics
 
-**⚠️ REFERENCE ONLY: See `cortex-impl-map.yaml` as single source of truth (v3.0)**
+**⚠️ REFERENCE ONLY: See `migration-phases-plan.yaml` as single source of truth (v1.0)**
 
 ```yaml
-# ACTUAL STATUS (from DatabaseBackedRegistry + cortex-impl-map.yaml)
+# ACTUAL STATUS (from DatabaseBackedRegistry + docker-plan tracking)
 production_status:
   status: PRODUCTION_READY
   db_registry_ssot: true  # AC-PERMANENT-FIX-009
+  docker_migration: "Phase 6 COMPLETE (100%)"
   test_suite: 6,847+ tests passing
   orchestrators_wired: 23/23 (100% - via DatabaseBackedRegistry)
   orchestrators_total: 23 (6 core, 6 domain, 11 support)
   mcp_tools_discoverable: 15 active
   governance_rules: 31/31 implemented in cortex_brain/tier0/governance/
+  tracking_system: "_workspaces/docker-plan/ (CANONICAL)"
+  legacy_tracking: "_workspaces/roadmap/ (DEPRECATED - See DEPRECATED.md)"
   ac_permanent_fixes: 9 active (AC-PERMANENT-FIX-001 through 009)
   challenge_system: ✅ WIRED (ChallengeEngine + InteractionOrchestrator)
   health_checker: ✅ ACTIVE (60-second monitoring intervals)
