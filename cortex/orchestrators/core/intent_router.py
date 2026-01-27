@@ -617,6 +617,9 @@ class IntentRouter(IOrchestrator):
         Creates a hash of the relevant context fields to enable
         caching of identical routing decisions.
         
+        LENS-002: Includes lens_context in cache key to ensure
+        LENS-enhanced and non-LENS decisions are cached separately.
+        
         Args:
             context: Context dictionary
         
@@ -630,6 +633,7 @@ class IntentRouter(IOrchestrator):
                 "description": context.get("description"),
                 "domain": context.get("domain"),
                 "keywords": sorted(context.get("keywords", [])) if context.get("keywords") else None,
+                "has_lens": bool(context.get("lens_context"))  # LENS-002: Include LENS presence
             }
             
             # Serialize to JSON for hashing
@@ -729,12 +733,296 @@ class IntentRouter(IOrchestrator):
             # Specific exception handling per CORE-013
             raise ValueError(f"Routing failed: {str(e)}")
     
+    # ===== LENS-002: LENS Intelligence Enhancement Methods =====
+    
+    def _extract_git_pattern(self, lens_context: Dict[str, Any]) -> Optional[IntentType]:
+        """
+        Extract predominant intent type from Git commit history.
+        
+        LENS-002: Analyze Git commit messages to identify patterns
+        that validate or contradict the detected intent.
+        
+        Args:
+            lens_context: LENS analyzer data (flexible format):
+                - git_history.commits OR git_analysis.recent_commits
+        
+        Returns:
+            IntentType: Predominant intent from Git history, or None
+        """
+        try:
+            # Support both formats: git_history and git_analysis
+            git_data = lens_context.get("git_history") or lens_context.get("git_analysis", {})
+            
+            # Support both formats: commits and recent_commits
+            commits = git_data.get("commits") or git_data.get("recent_commits", [])
+            
+            if not commits:
+                return None
+            
+            # Count intent types from commit messages
+            intent_counts: Dict[IntentType, int] = {
+                IntentType.FIX: 0,
+                IntentType.IMPLEMENT: 0,
+                IntentType.REFACTOR: 0,
+                IntentType.DOCUMENT: 0
+            }
+            
+            fix_keywords = {"fix", "bug", "issue", "resolve", "patch"}
+            implement_keywords = {"add", "implement", "feature", "create", "new"}
+            refactor_keywords = {"refactor", "cleanup", "improve", "optimize", "restructure"}
+            doc_keywords = {"doc", "documentation", "comment", "readme"}
+            
+            for commit in commits:
+                # Support both dict format and string format
+                if isinstance(commit, dict):
+                    message = commit.get("message", "").lower()
+                else:
+                    message = str(commit).lower()
+                
+                if any(kw in message for kw in fix_keywords):
+                    intent_counts[IntentType.FIX] += 1
+                if any(kw in message for kw in implement_keywords):
+                    intent_counts[IntentType.IMPLEMENT] += 1
+                if any(kw in message for kw in refactor_keywords):
+                    intent_counts[IntentType.REFACTOR] += 1
+                if any(kw in message for kw in doc_keywords):
+                    intent_counts[IntentType.DOCUMENT] += 1
+            
+            # Return most frequent intent
+            if max(intent_counts.values()) > 0:
+                return max(intent_counts.items(), key=lambda x: x[1])[0]
+            
+            return None
+        
+        except (KeyError, TypeError, AttributeError):
+            return None
+    
+    def _calculate_ast_complexity(self, lens_context: Dict[str, Any]) -> int:
+        """
+        Calculate code complexity from AST analysis.
+        
+        LENS-002: Extract complexity metrics from AST data
+        to validate refactor intent or identify technical debt.
+        
+        Args:
+            lens_context: LENS analyzer data (flexible format):
+                - ast_analysis.function_count OR ast_analysis.functions (list)
+                - ast_analysis.class_count OR ast_analysis.classes (list)
+        
+        Returns:
+            int: Complexity score (0-100 scale)
+        """
+        try:
+            ast_analysis = lens_context.get("ast_analysis", {})
+            
+            # Support both formats: count fields and list fields
+            function_count = ast_analysis.get("function_count", 0)
+            if not function_count:
+                # Count from functions list
+                functions = ast_analysis.get("functions", [])
+                function_count = len(functions) if isinstance(functions, list) else 0
+            
+            class_count = ast_analysis.get("class_count", 0)
+            if not class_count:
+                # Count from classes list
+                classes = ast_analysis.get("classes", [])
+                class_count = len(classes) if isinstance(classes, list) else 0
+            
+            # Simple complexity heuristic:
+            # Classes contribute more weight than functions
+            complexity = (class_count * 10) + (function_count * 2)
+            
+            return min(100, complexity)
+        
+        except (KeyError, TypeError, AttributeError):
+            return 0
+    
+    def _analyze_comment_hints(self, lens_context: Dict[str, Any]) -> Dict[str, List[str]]:
+        """
+        Analyze TODO/FIXME comments for intent hints.
+        
+        LENS-002: Extract comment-based hints that suggest
+        specific types of work needed (fix, refactor, implement).
+        
+        Args:
+            lens_context: LENS analyzer data
+        
+        Returns:
+            Dict with categorized hints:
+                - refactor_hints: Comments suggesting refactoring
+                - fix_hints: Comments suggesting bug fixes
+                - implement_hints: Comments suggesting new features
+        """
+        try:
+            comment_analysis = lens_context.get("comment_analysis", {})
+            todos = comment_analysis.get("todos", [])
+            fixmes = comment_analysis.get("fixmes", [])
+            
+            hints: Dict[str, List[str]] = {
+                "refactor_hints": [],
+                "fix_hints": [],
+                "implement_hints": []
+            }
+            
+            refactor_keywords = {"refactor", "cleanup", "improve", "optimize", "technical debt"}
+            fix_keywords = {"fix", "bug", "issue", "broken", "error"}
+            implement_keywords = {"add", "implement", "feature", "create", "support"}
+            
+            all_comments = todos + fixmes
+            for comment in all_comments:
+                # Support multiple format variations: text, content, or string
+                if isinstance(comment, dict):
+                    comment_text = (
+                        comment.get("text") or 
+                        comment.get("content") or 
+                        comment.get("message") or 
+                        ""
+                    ).lower()
+                else:
+                    comment_text = str(comment).lower()
+                
+                if any(kw in comment_text for kw in refactor_keywords):
+                    hints["refactor_hints"].append(comment_text)
+                elif any(kw in comment_text for kw in fix_keywords):
+                    hints["fix_hints"].append(comment_text)
+                elif any(kw in comment_text for kw in implement_keywords):
+                    hints["implement_hints"].append(comment_text)
+            
+            return hints
+        
+        except (KeyError, TypeError, AttributeError):
+            return {"refactor_hints": [], "fix_hints": [], "implement_hints": []}
+    
+    def _calculate_lens_boost(
+        self,
+        intent_type: IntentType,
+        lens_context: Dict[str, Any]
+    ) -> float:
+        """
+        Calculate confidence boost from LENS evidence.
+        
+        LENS-002: Compute confidence score enhancement (0.0 to 0.4)
+        based on how well LENS intelligence supports the detected intent.
+        
+        Args:
+            intent_type: Detected intent type
+            lens_context: LENS analyzer data
+        
+        Returns:
+            float: Confidence boost (0.0-0.4)
+        """
+        boost = 0.0
+        
+        # Git pattern matching (up to +0.15)
+        git_pattern = self._extract_git_pattern(lens_context)
+        if git_pattern == intent_type:
+            boost += 0.15
+        elif git_pattern is not None:
+            boost += 0.05  # Partial credit for any git intelligence
+        
+        # AST complexity for refactor intent (up to +0.20)
+        if intent_type == IntentType.REFACTOR:
+            complexity = self._calculate_ast_complexity(lens_context)
+            if complexity >= 80:
+                boost += 0.20  # Very high complexity
+            elif complexity > 40:
+                boost += 0.15  # High complexity
+            elif complexity > 20:
+                boost += 0.10  # Medium complexity
+            elif complexity > 10:
+                boost += 0.05  # Low complexity
+        
+        # Comment hints (up to +0.05)
+        hints = self._analyze_comment_hints(lens_context)
+        hint_key = f"{intent_type.value}_hints"
+        if hint_key in hints and len(hints[hint_key]) > 0:
+            boost += 0.05
+        
+        return min(0.4, boost)  # Cap at 0.4
+    
+    def _enhance_with_lens(
+        self,
+        decision: RoutingDecision,
+        lens_context: Dict[str, Any]
+    ) -> RoutingDecision:
+        """
+        Enhance routing decision with LENS intelligence.
+        
+        LENS-002: Apply LENS-based confidence boost and enrich metadata.
+        
+        Args:
+            decision: Original routing decision
+            lens_context: LENS analyzer data
+        
+        Returns:
+            RoutingDecision: Enhanced decision with LENS boost
+        """
+        try:
+            # Calculate LENS confidence boost
+            lens_boost = self._calculate_lens_boost(decision.intent_type, lens_context)
+            
+            # Apply boost (capped at 1.0 confidence)
+            new_confidence = min(1.0, decision.confidence_score + lens_boost)
+            
+            # Enrich metadata
+            enhanced_metadata = {
+                **decision.metadata,
+                "lens_enhanced": True,
+                "lens_confidence_boost": lens_boost,
+                "original_confidence": decision.confidence_score
+            }
+            
+            # Extract LENS insights for metadata
+            git_pattern = self._extract_git_pattern(lens_context)
+            if git_pattern:
+                enhanced_metadata["lens_git_pattern"] = git_pattern.value
+            
+            complexity = self._calculate_ast_complexity(lens_context)
+            if complexity > 0:
+                enhanced_metadata["lens_ast_complexity"] = complexity
+                # Flag for tests expecting boolean
+                enhanced_metadata["ast_complexity_detected"] = True
+            
+            hints = self._analyze_comment_hints(lens_context)
+            if any(hints.values()):
+                total_hints = sum(len(v) for v in hints.values())
+                enhanced_metadata["lens_comment_hints"] = total_hints
+                
+                # Add specific hint categories for test expectations
+                if hints.get("refactor_hints"):
+                    enhanced_metadata["todo_refactor_hints"] = len(hints["refactor_hints"])
+                if hints.get("fix_hints"):
+                    enhanced_metadata["todo_fix_hints"] = len(hints["fix_hints"])
+                if hints.get("implement_hints"):
+                    enhanced_metadata["todo_implement_hints"] = len(hints["implement_hints"])
+            
+            # Create enhanced decision
+            return RoutingDecision(
+                intent_type=decision.intent_type,
+                target_handler=decision.target_handler,
+                confidence_score=new_confidence,
+                reasoning=decision.reasoning + f" (LENS boost: +{lens_boost:.2f})",
+                metadata=enhanced_metadata,
+                composite_intents=decision.composite_intents
+            )
+        
+        except Exception:
+            # On any error, return original decision unchanged
+            return decision
+    
+    # ===== End LENS-002 Methods =====
+    
     def route(self, context: Dict[str, Any]) -> RoutingDecision:
         """
         Route an operation based on context (with caching).
         
         Analyzes operation context and determines appropriate handler.
         Uses caching to avoid redundant decisions for identical contexts.
+        
+        LENS Integration (LENS-002):
+        - Accepts optional lens_context with Git/AST/Comment intelligence
+        - Enhances confidence scoring based on LENS evidence
+        - Logs LENS usage for audit trail
         
         Args:
             context: Context dictionary with operation details:
@@ -744,6 +1032,10 @@ class IntentRouter(IOrchestrator):
                 - keywords: List of keywords (optional)
                 - urgency: Urgency level (optional)
                 - user_intent: User's stated intent (optional)
+                - lens_context: LENS analyzer data (optional):
+                    * git_history: Git commit analysis
+                    * ast_analysis: AST complexity data
+                    * comment_analysis: TODO/FIXME extraction
         
         Returns:
             RoutingDecision: Routing decision with target handler and metadata
@@ -756,10 +1048,15 @@ class IntentRouter(IOrchestrator):
                 "operation": "fix_race_condition",
                 "description": "Fix race condition in Master Orchestrator",
                 "domain": "core",
-                "keywords": ["bug", "fix", "race condition"]
+                "keywords": ["bug", "fix", "race condition"],
+                "lens_context": {
+                    "git_history": {...},
+                    "ast_analysis": {...},
+                    "comment_analysis": {...}
+                }
             }
             decision = router.route(context)
-            print(f"Route to: {decision.target_handler}")
+            print(f"Route to: {decision.target_handler} (confidence: {decision.confidence_score})")
         """
         try:
             # Get cache key
@@ -771,6 +1068,27 @@ class IntentRouter(IOrchestrator):
             
             # Compute routing decision
             decision = self._route_internal(context)
+            
+            # LENS-002: Enhance decision with LENS intelligence if available
+            lens_context = context.get("lens_context")
+            if lens_context:
+                decision = self._enhance_with_lens(decision, lens_context)
+                
+                # Log LENS usage for audit trail
+                self.logger.log_operation_complete(
+                    ac_id="LENS-002",
+                    operation="LENS_ENHANCED_ROUTING",
+                    success=True,
+                    details={
+                        "intent_type": decision.intent_type.value,
+                        "confidence_boost_applied": decision.metadata.get("lens_confidence_boost", 0.0),
+                        "lens_evidence": {
+                            "git_pattern": "git_history" in lens_context,
+                            "ast_complexity": "ast_analysis" in lens_context,
+                            "comment_hints": "comment_analysis" in lens_context
+                        }
+                    }
+                )
             
             # Store in cache
             self.cached_decisions[cache_key] = decision
