@@ -8,6 +8,16 @@ cortex_brain/state/*.db-wal
 .cortex/knowledge.db
 .cortex/knowledge-cache/
 
+# Docker-first: Ephemeral runtime databases (Phase 2)
+# All database state should be ephemeral in containers
+.cortex/orchestrator_registry.db
+.cortex/*.db
+cortex_brain/state/*.db
+cortex/core/state/*.db
+**/governance.db
+**/governance.db-shm
+**/governance.db-wal
+
 # macOS lock files (Finder temporary files)
 # These are OS-generated and should never be committed
 .!*
