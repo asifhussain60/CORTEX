@@ -1,18 +1,19 @@
 """Onboarding orchestrators package for CORTEX.
 
 This package provides automated setup and configuration orchestrators:
-- SetupOrchestrator: Requirements validation and auto-installation
+- SetupOrchestrator: Requirements validation and auto-installation (from support)
 - VSCodeConfigurator: VSCode workspace configuration
 - ToolchainValidator: Toolchain health checks
 - MCPBootstrapper: MCP server bootstrap
 - DependencyResolver: Multi-repo dependency resolution
 """
 
-from cortex.orchestrators.onboarding.setup_orchestrator import (
+# SetupOrchestrator lives in support package (CORE-035 canonical location)
+from cortex.orchestrators.support.setup_orchestrator import (
     SetupOrchestrator,
-    Requirement,
-    InstallResult,
-    SecurityScanResult,
+    SetupResult,
+    SetupContext,
+    SetupPhase,
 )
 from cortex.orchestrators.onboarding.vscode_configurator import (
     VSCodeConfigurator,
@@ -67,11 +68,11 @@ class OnboardingOrchestrator(UnifiedOnboarding):
 
 
 __all__ = [
-    # setup_orchestrator
+    # setup_orchestrator (from support package)
     "SetupOrchestrator",
-    "Requirement",
-    "InstallResult",
-    "SecurityScanResult",
+    "SetupResult",
+    "SetupContext",
+    "SetupPhase",
     # vscode_configurator
     "VSCodeConfigurator",
     # toolchain_validator

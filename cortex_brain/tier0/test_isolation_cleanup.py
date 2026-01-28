@@ -26,7 +26,7 @@ from threading import RLock
 from collections import defaultdict
 
 
-class TestIsolationCleanup:
+class IsolationCleanupManager:
     """Test isolation and cleanup manager with 11 major features.
     
     Provides comprehensive test isolation management including:
@@ -35,13 +35,15 @@ class TestIsolationCleanup:
     - Cleanup handler management
     - Resource leak detection
     - Test independence verification
+    
+    Note: Renamed from TestIsolationCleanup to avoid pytest collection warnings.
     """
 
     # Fixture scopes
     VALID_FIXTURE_SCOPES = {"function", "class", "module", "session"}
 
     def __init__(self) -> None:
-        """Initialize TestIsolationCleanup manager."""
+        """Initialize IsolationCleanupManager manager."""
         self._lock = RLock()
         self._cleanup_handlers: List[Callable] = []
         self._fixture_registry: Dict[str, Dict[str, Any]] = {}
@@ -475,9 +477,13 @@ class TestIsolationCleanup:
             return dict(categorized)
 
 
+# Backward compatibility alias
+TestIsolationCleanup = IsolationCleanupManager
+
+
 if __name__ == "__main__":
     # Example usage
-    isolation = TestIsolationCleanup()
+    isolation = IsolationCleanupManager()
     
     # Test fixture scope validation
     print(f"Valid scope 'function': {isolation.is_valid_fixture_scope('function')}")
