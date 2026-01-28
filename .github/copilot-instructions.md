@@ -7,7 +7,109 @@
 
 ## 🎯 System Identity
 
-You are **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System — an AI-powered development orchestrator for the CORTEX codebase.
+You are **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System — an AI-powered development orchestrator for t# Find TODOs and FIXMEs
+cortex lens todos <file>
+```
+
+---
+
+## 📊 MCP Observability & Monitoring (Phase 5 ✅, Documented in Phase 7.2 ✅)
+
+CORTEX implements cloud-native observability for production monitoring through health endpoints, Prometheus metrics, and tool discovery.
+
+### Health Endpoints (Phase 5):
+```bash
+# Overall system health
+curl http://localhost:8000/health
+
+# Wiring configuration health
+curl http://localhost:8000/health/wiring
+
+# Individual orchestrator status
+curl http://localhost:8000/health/orchestrators
+```
+
+**Implementation:** `cortex/mcp/health_checker.py`
+
+**Response Format:**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2026-01-27T10:30:00Z",
+  "components": {
+    "wiring": "healthy",
+    "orchestrators": 23,
+    "database": "connected"
+  }
+}
+```
+
+### Prometheus Metrics (Phase 5):
+```yaml
+# Prometheus scrape configuration
+scrape_configs:
+  - job_name: 'cortex-mcp'
+    static_configs:
+      - targets: ['cortex-mcp:8000']
+    metrics_path: '/metrics'
+```
+
+**Implementation:** `cortex/mcp/metrics_collector.py`
+
+**Available Metrics:**
+- `cortex_orchestrator_count` - Total orchestrators registered
+- `cortex_tool_invocations_total` - Tool invocation counter
+- `cortex_wiring_reload_total` - Hot-reload event counter
+- `cortex_request_duration_seconds` - Request latency histogram
+- `cortex_errors_total` - Error counter by type
+
+### Tool Discovery (Phase 5):
+**Implementation:** `cortex/mcp/tool_discovery.py`
+
+**Capabilities:**
+- Dynamic MCP tool registration
+- Auto-discovery from orchestrator registry
+- Version tracking and capability metadata
+
+### Startup Banner (Phase 5):
+**Implementation:** `cortex/mcp/startup_banner.py`
+
+**Displays:**
+- CORTEX ASCII art
+- Python version, orchestrators loaded count
+- MCP server port, health endpoint URL
+
+### Hot-Reload Watcher (Phase 5):
+**Implementation:** `cortex/mcp/wiring_watcher.py`
+
+**Capabilities:**
+- File system monitoring of `wiring.yaml`
+- Auto-reload on changes without restart
+- Event logging to audit trail
+
+### Monitoring Stack (Phase 7.2):
+```bash
+# Start CORTEX with monitoring
+docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+
+# Access Grafana (visualization)
+open http://localhost:3000  # admin/changeme
+
+# Access Prometheus (metrics)
+open http://localhost:9090
+
+# Access AlertManager (alerting)
+open http://localhost:9093
+```
+
+**Documentation:**
+- [Observability Runbook](_workspaces/docker-plan/observability-runbook.md)
+- [Phase 7.2 Completion Report](docs/phases/phase-7.2-observability-completion-report.md)
+- [Docker-Compose Monitoring Stack](docker-compose.monitoring.yml)
+
+---
+
+## 🔧 CommandsEX codebase.
 
 **Core Principle:** Always validate intent through CORTEX LENS, display DoR (Definition of Ready), and await user approval before executing operations.
 
