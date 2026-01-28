@@ -57,7 +57,7 @@ class MDFileNamingIssue(Enum):
     """Enumeration of naming issues found in MD files."""
 
     EXCEEDS_LENGTH = "exceeds_25_chars"  # CORE-028: ≤25 chars
-    CAMELCASE = "uses_camelcase"  # Should be kebab-case
+    CAMELCASE = "uses_camelcase"  # Should be kebab-case (MD files use hyphens)
     SPACES = "contains_spaces"  # Should use hyphens
     NO_HYPHEN = "missing_hyphens"  # Should use hyphens
     INCONSISTENT = "inconsistent_format"  # Mixed naming patterns

@@ -167,7 +167,7 @@ class CortexVacuumAnalyzer:
                     break
 
     def _check_filename_compliance(self, file_path: str, filename: str) -> None:
-        """Check if filename follows kebab-case convention and length limits."""
+        """Check if filename follows CORE-028 naming standards (snake_case for Python, kebab-case for docs)."""
         # Skip certain files
         if filename in {'pytest.ini', 'requirements.txt', 'README.md', '.gitignore'}:
             return
@@ -426,7 +426,10 @@ class CortexVacuumAnalyzer:
 
     def _suggest_filename(self, name_stem: str, ext: str) -> str:
         """
-        Suggest an intelligently abbreviated kebab-case filename (max 25 chars).
+        Suggest an intelligently abbreviated kebab-case filename for docs/configs (max 25 chars).
+        
+        Note: Python files (.py) should use snake_case per CORE-028 and PEP 8.
+        This method suggests kebab-case for markdown and configuration files.
         
         Strategy:
         1. Remove nonsemantic words (old, new, fixed, etc.)
