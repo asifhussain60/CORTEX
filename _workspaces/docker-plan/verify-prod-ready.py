@@ -99,26 +99,26 @@ class CORTEXVerification:
         return self.all_passed()
     
     def check_01_orchestrators_wired(self):
-        """CHECK 1: All 23 orchestrators wired in."""
+        """CHECK 1: All 24 orchestrators wired in (Phase 8.1: Added EnforcementOrchestrator)."""
         try:
             from cortex.wiring import bootstrap_cortex
             
             registry = bootstrap_cortex()
             orchestrators = registry.list_orchestrators()
             
-            if len(orchestrators) != 23:
+            if len(orchestrators) != 24:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 23 Orchestrators Wired",
+                    check_name="All 24 Orchestrators Wired",
                     status=CheckStatus.FAILED,
-                    details=f"Expected 23, found {len(orchestrators)}",
-                    evidence=[f"Count: {len(orchestrators)}/23"],
-                    remediation="Verify cortex/wiring/specifications/wiring.yaml contains all 23 entries"
+                    details=f"Expected 24, found {len(orchestrators)}",
+                    evidence=[f"Count: {len(orchestrators)}/24"],
+                    remediation="Verify cortex/wiring/specifications/wiring.yaml contains all 24 entries"
                 ))
                 return
             
-            # Verify categories
-            core_count = 6
+            # Verify categories (Phase 8.1: 7 core, 6 domain, 11 support)
+            core_count = 7  # Added EnforcementOrchestrator
             domain_count = 6
             support_count = 11
             
@@ -126,6 +126,7 @@ class CORTEXVerification:
             required_orchestrators = [
                 "MasterOrchestrator", "InteractionOrchestrator", "IntentRouter",
                 "TDDOrchestrator", "LENSSynthesis", "WorkflowOrchestrator",
+                "EnforcementOrchestrator",  # Phase 8.1
                 "RefactoringOrchestrator", "PlanningOrchestrator", 
                 "DocumentationOrchestrator", "ToolDiscoveryOrchestrator"
             ]
@@ -135,7 +136,7 @@ class CORTEXVerification:
             if missing:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 23 Orchestrators Wired",
+                    check_name="All 24 Orchestrators Wired",
                     status=CheckStatus.FAILED,
                     details=f"Missing orchestrators: {', '.join(missing)}",
                     evidence=missing,
@@ -144,11 +145,11 @@ class CORTEXVerification:
             else:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 23 Orchestrators Wired",
+                    check_name="All 24 Orchestrators Wired",
                     status=CheckStatus.PASSED,
-                    details=f"All 23 orchestrators wired and accessible",
+                    details=f"All 24 orchestrators wired and accessible (Phase 8.1: Added EnforcementOrchestrator)",
                     evidence=[
-                        f"Total: {len(orchestrators)}/23",
+                        f"Total: {len(orchestrators)}/24",
                         f"Core: {core_count}",
                         f"Domain: {domain_count}",
                         f"Support: {support_count}",
@@ -157,7 +158,7 @@ class CORTEXVerification:
         except Exception as e:
             self.results.append(CheckResult(
                 check_number=1,
-                check_name="All 23 Orchestrators Wired",
+                check_name="All 24 Orchestrators Wired",
                 status=CheckStatus.FAILED,
                 details=f"Exception: {str(e)}",
                 evidence=[str(e)],
