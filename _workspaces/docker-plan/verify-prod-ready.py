@@ -330,58 +330,200 @@ class CORTEXVerification:
             ))
     
     def check_05_no_duplicates(self):
-        """CHECK 5: No duplicate implementations (CORE-035)."""
+        """CHECK 5: AGGRESSIVE duplicate detection for single execution path (CORE-035)."""
         try:
-            # Check for duplicate orchestrator class definitions
-            orchestrators_dir = self.cortex_root / "cortex/orchestrators"
+            issues = []
+            critical_issues = []
             
-            class_names = {}
-            duplicates = {}
+            # Files/patterns that are known backward-compatibility stubs (not real conflicts)
+            KNOWN_STUBS = [
+                "cortex/orchestrators/registry/__init__.py",  # Stub registry
+                "cortex/orchestrators/registry/discovery_engine.py",  # Fallback stub
+            ]
+            
+            DEPRECATED_MARKERS = ["DEPRECATED", "deprecated", "TODO (Phase 8)", "backward compatibility"]
+            
+            def is_stub_or_deprecated(filepath: str, content: str) -> bool:
+                """Check if file is a known stub or marked as deprecated."""
+                if any(stub in filepath for stub in KNOWN_STUBS):
+                    return True
+                return any(marker in content[:500] for marker in DEPRECATED_MARKERS)
+            
+            # === CHECK 5A: Duplicate Orchestrator Classes ===
+            orchestrators_dir = self.cortex_root / "cortex/orchestrators"
+            class_locations = {}
             
             for py_file in orchestrators_dir.rglob("*.py"):
                 if py_file.name.startswith("test_"):
                     continue
+                try:
+                    content = py_file.read_text()
+                    filepath = str(py_file.relative_to(self.cortex_root))
                     
-                with open(py_file) as f:
-                    for line in f:
+                    # Skip deprecated/stub files
+                    if is_stub_or_deprecated(filepath, content):
+                        continue
+                    
+                    for line in content.split('\n'):
                         if line.strip().startswith("class ") and "Orchestrator" in line:
-                            class_name = line.split("class ")[1].split("(")[0].strip()
-                            if class_name not in class_names:
-                                class_names[class_name] = []
-                            class_names[class_name].append(str(py_file))
+                            class_name = line.split("class ")[1].split("(")[0].strip().rstrip(":")
+                            if class_name not in class_locations:
+                                class_locations[class_name] = []
+                            class_locations[class_name].append(filepath)
+                except Exception:
+                    pass
             
-            # Find duplicates
-            for class_name, files in class_names.items():
-                if len(files) > 1:
-                    duplicates[class_name] = files
+            duplicates = {k: v for k, v in class_locations.items() if len(v) > 1}
+            
+            # Critical classes that MUST be unique (not in wiring.yaml with multiple locations)
+            critical_classes = [
+                "MasterOrchestrator", "TDDOrchestrator", "IntentRouter",
+                "InteractionOrchestrator", "LENSSynthesis"
+            ]
+            
+            for cls in critical_classes:
+                if cls in duplicates:
+                    critical_issues.append(f"CRITICAL: {cls} defined in {len(duplicates[cls])} locations!")
             
             if duplicates:
+                issues.append(f"5A: {len(duplicates)} duplicate orchestrator classes (excluding stubs)")
+            
+            # === CHECK 5B: Multiple Registry Implementations ===
+            registry_patterns = ["OrchestratorRegistry", "GitBackedRegistry"]
+            registry_locations = {p: [] for p in registry_patterns}
+            
+            for py_file in self.cortex_root.glob("cortex/**/*.py"):
+                if "test" in py_file.name.lower():
+                    continue
+                try:
+                    content = py_file.read_text()
+                    filepath = str(py_file.relative_to(self.cortex_root))
+                    
+                    # Skip deprecated/stub files
+                    if is_stub_or_deprecated(filepath, content):
+                        continue
+                    
+                    for pattern_name in registry_patterns:
+                        if f"class {pattern_name}" in content:
+                            registry_locations[pattern_name].append(filepath)
+                except Exception:
+                    pass
+            
+            for reg_name, locations in registry_locations.items():
+                if len(locations) > 1:
+                    critical_issues.append(f"CRITICAL: {reg_name} has {len(locations)} active implementations!")
+                    issues.append(f"5B: {reg_name} in {len(locations)} files (excluding stubs)")
+            
+            # === CHECK 5C: Multiple Bootstrap Entry Points ===
+            bootstrap_files = []
+            for py_file in self.cortex_root.glob("cortex/**/*.py"):
+                if "test" in py_file.name.lower():
+                    continue
+                try:
+                    content = py_file.read_text()
+                    filepath = str(py_file.relative_to(self.cortex_root))
+                    
+                    # Only look for the wiring bootstrap function (returns GitBackedRegistry)
+                    if "def bootstrap_cortex" in content and "GitBackedRegistry" in content:
+                        bootstrap_files.append(filepath)
+                except Exception:
+                    pass
+            
+            if len(bootstrap_files) > 1:
+                critical_issues.append(f"CRITICAL: Multiple wiring bootstrap entry points: {len(bootstrap_files)}")
+                issues.append(f"5C: bootstrap_cortex (wiring) in {len(bootstrap_files)} files")
+            
+            # === CHECK 5D: Conflicting get_orchestrator implementations ===
+            get_orch_files = []
+            for py_file in self.cortex_root.glob("cortex/**/*.py"):
+                if "test" in py_file.name.lower():
+                    continue
+                try:
+                    content = py_file.read_text()
+                    if "def get_orchestrator(" in content and "registry" not in py_file.name.lower():
+                        get_orch_files.append(str(py_file.relative_to(self.cortex_root)))
+                except Exception:
+                    pass
+            
+            if len(get_orch_files) > 3:  # Allow wiring, master, coordinator
+                issues.append(f"5D: get_orchestrator() in {len(get_orch_files)} files (expected ≤3)")
+            
+            # === CHECK 5E: Parallel Import Paths for MasterOrchestrator ===
+            master_imports = set()
+            for py_file in self.cortex_root.glob("cortex/**/*.py"):
+                if "test" in py_file.name.lower():
+                    continue
+                try:
+                    content = py_file.read_text()
+                    import_patterns = [
+                        "from cortex.orchestrators.core.master_orchestrator import",
+                        "from cortex.orchestrators import MasterOrchestrator",
+                        "import cortex.orchestrators.core.master_orchestrator",
+                    ]
+                    for pattern in import_patterns:
+                        if pattern in content:
+                            master_imports.add(pattern)
+                except Exception:
+                    pass
+            
+            if len(master_imports) > 2:
+                issues.append(f"5E: {len(master_imports)} different import paths for MasterOrchestrator")
+            
+            # === CHECK 5F: Direct MasterOrchestrator() instantiation outside wiring ===
+            direct_instantiation = []
+            for py_file in self.cortex_root.glob("cortex/**/*.py"):
+                if "test" in py_file.name.lower() or "wiring" in str(py_file):
+                    continue
+                try:
+                    content = py_file.read_text()
+                    if "MasterOrchestrator()" in content:
+                        direct_instantiation.append(str(py_file.relative_to(self.cortex_root)))
+                except Exception:
+                    pass
+            
+            if direct_instantiation:
+                critical_issues.append(f"CRITICAL: Direct MasterOrchestrator() in {len(direct_instantiation)} files!")
+                issues.append(f"5F: Direct instantiation bypasses wiring: {direct_instantiation}")
+            
+            # === DETERMINE STATUS ===
+            if critical_issues:
                 self.results.append(CheckResult(
                     check_number=5,
-                    check_name="No Duplicate Implementations (CORE-035)",
+                    check_name="Single Execution Path (CORE-035)",
+                    status=CheckStatus.FAILED,
+                    details=f"CRITICAL: {len(critical_issues)} execution path conflicts detected!",
+                    evidence=critical_issues[:5] + issues[:5],  # Top 10 issues
+                    remediation="IMMEDIATE: Consolidate to single canonical path. See CORE-035."
+                ))
+            elif issues:
+                self.results.append(CheckResult(
+                    check_number=5,
+                    check_name="Single Execution Path (CORE-035)",
                     status=CheckStatus.WARNING,
-                    details=f"Found {len(duplicates)} duplicate orchestrator classes",
-                    evidence=[f"{k}: {len(v)} files" for k, v in duplicates.items()],
+                    details=f"Found {len(issues)} potential execution path issues (Phase 8 work)",
+                    evidence=issues[:10],
                     remediation="Consolidate duplicate implementations to single canonical location (Phase 8)"
                 ))
             else:
                 self.results.append(CheckResult(
                     check_number=5,
-                    check_name="No Duplicate Implementations (CORE-035)",
+                    check_name="Single Execution Path (CORE-035)",
                     status=CheckStatus.PASSED,
-                    details="All orchestrator implementations are canonical (no duplicates)",
+                    details="Single canonical execution path verified",
                     evidence=[
-                        f"✅ Checked {len(class_names)} orchestrator classes",
-                        "✅ No duplicates found",
+                        f"✅ Checked {len(class_locations)} orchestrator classes",
+                        "✅ Single bootstrap entry point",
+                        "✅ Single registry implementation",
+                        "✅ No conflicting imports",
                         "✅ Ready for Phase 8 utility consolidation",
                     ]
                 ))
         except Exception as e:
             self.results.append(CheckResult(
                 check_number=5,
-                check_name="No Duplicate Implementations (CORE-035)",
+                check_name="Single Execution Path (CORE-035)",
                 status=CheckStatus.WARNING,
-                details=f"Duplicate check failed: {str(e)}",
+                details=f"Execution path check failed: {str(e)}",
                 evidence=[str(e)],
                 remediation="Manual review of orchestrators/ directory recommended"
             ))
