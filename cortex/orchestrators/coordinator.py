@@ -180,7 +180,12 @@ class OrchestrationCoordinator:
             self.release_lock('orchestrator_registry')
     
     def get_orchestrator(self, name: str) -> Optional[Any]:
-        """Get registered orchestrator by name.
+        """Get registered orchestrator by name (delegating accessor).
+        
+        CORE-035: Single Canonical Implementation
+        This method delegates to GitBackedRegistry.get_orchestrator() which is
+        the canonical accessor. This wrapper exists for backward compatibility
+        with code that expects Coordinator to provide orchestrator access.
         
         Args:
             name: Orchestrator name
@@ -188,14 +193,16 @@ class OrchestrationCoordinator:
         Returns:
             Orchestrator instance or None if not found
         """
-        if not self.acquire_lock('orchestrator_registry', timeout=5.0):
-            logger.error("Failed to acquire registry lock for orchestrator lookup")
-            return None
-        
         try:
-            return self._orchestrators.get(name)
-        finally:
-            self.release_lock('orchestrator_registry')
+            # AC-CORE-035: Delegate to canonical GitBackedRegistry accessor
+            from cortex.wiring import get_cortex
+            registry = get_cortex()
+            if registry:
+                return registry.get_orchestrator(name)
+            return None
+        except Exception as e:
+            logger.error(f"Failed to get orchestrator '{name}': {str(e)}")
+            return None
     
     def detect_deadlock(self) -> List[Dict[str, Any]]:
         """Detect potential deadlocks in lock acquisitions.
