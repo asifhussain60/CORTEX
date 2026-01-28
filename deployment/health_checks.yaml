@@ -5,3 +5,39 @@ endpoints:
   - cache_accessible
   - all_dependencies_healthy
   path: /health
+
+# Phase 11: Event-Driven Knowledge Ingestion
+- checks:
+  - git_webhook_listener_active
+  - event_queue_size_healthy
+  - dependency_graph_connected
+  - last_event_processed_recently
+  path: /health/event-ingestion
+
+- checks:
+  - compliance_graph_connected
+  - company_domains_loaded
+  - last_compliance_validation_recent
+  - drift_detection_active
+  path: /health/compliance-graph
+
+- checks:
+  - service_graph_connected
+  - api_gateway_hooks_active
+  - last_topology_update_recent
+  - services_discovered
+  path: /health/service-graph
+
+- checks:
+  - all_subgraphs_reachable
+  - query_cache_hit_rate_acceptable
+  - average_query_latency_acceptable
+  - federation_layer_healthy
+  path: /health/graph-federation
+
+- checks:
+  - last_reconciliation_recent
+  - drift_rate_acceptable
+  - auto_healer_success_rate_acceptable
+  - manual_review_queue_manageable
+  path: /health/reconciliation

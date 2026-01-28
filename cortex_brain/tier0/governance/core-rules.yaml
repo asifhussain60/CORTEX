@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 28
+  rule_count: 29
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-26 - AC-CLEANUP-PREVENTION: Add CORE-040 Documentation Lifecycle Management rule"
-  version: "3.1"
-  consolidation_date: "2026-01-26"
-  consolidation_status: "Phase 1 Complete - YAML SSOT established + CORE-040 added"
+  last_update: "2026-01-28 - PHASE-11: Add CORE-041 Event Idempotency rule"
+  version: "3.2"
+  consolidation_date: "2026-01-28"
+  consolidation_status: "Phase 11 Prep Complete - CORE-041 added for Event-Driven Architecture"
 
 categories:
   - orchestration_lifecycle
@@ -998,6 +998,92 @@ rules:
       enforcement_point: "File creation, git commit"
       audit_event: "DUPLICATE_IMPLEMENTATION_BLOCKED"
       severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-041: Event Idempotency (Phase 11)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-041
+    category: architecture_integrity
+    severity: blocked
+    name: Event Idempotency Required
+    description: |
+      ALL event handlers MUST be idempotent. Replaying the same event twice
+      produces identical graph state. This prevents reconciliation crawlers
+      from creating duplicates and enables safe event replay for disaster recovery.
+      
+      Phase 11 (Event-Driven Knowledge Ingestion) introduces real-time event
+      processing (Git webhooks, API gateway hooks, database CDC). Events can
+      be replayed due to network failures, crashes, or manual reconciliation.
+      Without idempotency, replays corrupt the knowledge graph.
+      
+      This rule ensures:
+      - Event handlers check for existing state before mutation
+      - Duplicate events detected via event_id + timestamp
+      - Reconciliation produces deterministic results
+      - Replay operations logged to audit trail
+    
+    requirements:
+      event_deduplication:
+        - "Every event MUST have unique event_id"
+        - "Event handlers MUST check if event_id already processed"
+        - "Duplicate events logged but not reprocessed"
+        - "Event store maintains processed event_id index"
+      
+      state_mutation:
+        - "Handlers MUST be pure functions of (event + current_state) → new_state"
+        - "Same event + same state = same result (deterministic)"
+        - "No side effects beyond state mutation"
+        - "Timestamps from event payload, not system clock"
+      
+      graph_operations:
+        - "Graph upserts: CREATE if not exists, UPDATE if exists with newer timestamp"
+        - "Graph deletes: Idempotent (deleting non-existent = success)"
+        - "Graph queries: Read-only, no mutations"
+        - "Atomic transactions: All-or-nothing per event"
+    
+    validation:
+      unit_tests:
+        - "Process event twice → assert same graph state"
+        - "Process events out of order → assert deterministic result"
+        - "Replay event after crash → assert no duplicates"
+      
+      integration_tests:
+        - "Webhook replay → assert no duplicate nodes"
+        - "CDC stream replay → assert no duplicate edges"
+        - "Reconciliation full scan → assert no new duplicates"
+      
+      audit_trail:
+        - "Log: EVENT_RECEIVED → EVENT_DEDUPLICATED → EVENT_PROCESSED"
+        - "Log: REPLAY_ATTEMPTED → REPLAY_SKIPPED (duplicate)"
+        - "Log: RECONCILIATION_START → RECONCILIATION_NO_CHANGES"
+    
+    implementation:
+      event_store: "cortex/infrastructure/event_store.py"
+      deduplication: "cortex/event_listeners/deduplicator.py"
+      idempotent_handler: "@idempotent_event_handler decorator"
+      audit_logging: "AC_EVENT_PROCESSED"
+    
+    examples:
+      good:
+        - "def handle_git_push(event): if not event_processed(event.id): apply_changes(event)"
+        - "def upsert_dependency(pkg, ver): graph.merge((pkg, ver), on_exists='update_if_newer')"
+        - "def delete_service(svc_id): graph.delete(svc_id) if graph.exists(svc_id) else pass"
+      
+      bad:
+        - "def handle_event(event): graph.create(node)  # Always creates, causes duplicates"
+        - "def process_event(event): node.timestamp = datetime.now()  # Non-deterministic"
+        - "def handle_event(event): send_email(...)  # Side effect, not idempotent"
+    
+    enforcement:
+      pre_commit: "Unit tests for @idempotent_event_handler decorated functions"
+      ci_cd: "Integration tests replay events 3x, assert identical results"
+      runtime: "Event store rejects duplicate event_id processing"
+    
+    success_criteria:
+      - "100% of event handlers decorated with @idempotent_event_handler"
+      - "Unit tests replay events 2x minimum"
+      - "Reconciliation runs produce zero false-positive duplicates"
+      - "Graph state hash identical after replay"
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION

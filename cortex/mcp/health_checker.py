@@ -185,6 +185,183 @@ class HealthChecker:
                 "all_available": all_available
             }
         )
+    
+    def check_event_ingestion_health(self) -> HealthStatus:
+        """
+        Check event ingestion pipeline health (Phase 11.1).
+        
+        Returns:
+            HealthStatus with event ingestion metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 11.1: Will read from actual event ingestion system
+        # For now, return planned health checks structure
+        git_webhook_active = False  # Not yet implemented
+        event_queue_size = 0
+        dependency_graph_connected = False
+        last_event_timestamp = None
+        
+        checks = {
+            "git_webhook_listener_active": git_webhook_active,
+            "event_queue_size": event_queue_size,
+            "event_queue_healthy": event_queue_size < 1000,
+            "dependency_graph_connected": dependency_graph_connected,
+            "last_event_processed": last_event_timestamp or "never",
+            "phase": "11.1 - PLANNED"
+        }
+        
+        status = "healthy" if git_webhook_active and dependency_graph_connected else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
+    
+    def check_compliance_graph_health(self) -> HealthStatus:
+        """
+        Check compliance graph health (Phase 11.2).
+        
+        Returns:
+            HealthStatus with compliance graph metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 11.2: Will read from actual compliance graph
+        compliance_graph_connected = False
+        company_domains_loaded = 0
+        expected_domains = 12  # From company/domains/compliance-standards/
+        last_validation_timestamp = None
+        drift_detection_active = False
+        
+        checks = {
+            "compliance_graph_connected": compliance_graph_connected,
+            "company_domains_loaded": company_domains_loaded,
+            "expected_domains": expected_domains,
+            "domains_coverage_percent": (company_domains_loaded / expected_domains * 100) if expected_domains > 0 else 0,
+            "last_compliance_validation": last_validation_timestamp or "never",
+            "drift_detection_active": drift_detection_active,
+            "phase": "11.2 - PLANNED"
+        }
+        
+        status = "healthy" if compliance_graph_connected and company_domains_loaded == expected_domains else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
+    
+    def check_service_graph_health(self) -> HealthStatus:
+        """
+        Check service graph health (Phase 11.3).
+        
+        Returns:
+            HealthStatus with service topology metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 11.3: Will read from actual service graph
+        service_graph_connected = False
+        api_gateway_hooks_active = False
+        services_discovered = 0
+        last_topology_update = None
+        
+        checks = {
+            "service_graph_connected": service_graph_connected,
+            "api_gateway_hooks_active": api_gateway_hooks_active,
+            "services_discovered": services_discovered,
+            "last_topology_update": last_topology_update or "never",
+            "topology_up_to_date": False,
+            "phase": "11.3 - PLANNED"
+        }
+        
+        status = "healthy" if service_graph_connected and services_discovered > 0 else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
+    
+    def check_graph_federation_health(self) -> HealthStatus:
+        """
+        Check graph federation layer health (Phase 11.4).
+        
+        Returns:
+            HealthStatus with federation metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 11.4: Will read from actual federation layer
+        subgraphs_reachable = {
+            "dependency": False,
+            "compliance": False,
+            "service": False
+        }
+        query_cache_hit_rate = 0.0
+        avg_query_latency_ms = 0
+        federation_healthy = False
+        
+        checks = {
+            "subgraphs_reachable": subgraphs_reachable,
+            "all_subgraphs_healthy": all(subgraphs_reachable.values()),
+            "query_cache_hit_rate_percent": query_cache_hit_rate * 100,
+            "cache_hit_rate_acceptable": query_cache_hit_rate > 0.30,
+            "average_query_latency_ms": avg_query_latency_ms,
+            "latency_acceptable": avg_query_latency_ms < 200,
+            "federation_layer_healthy": federation_healthy,
+            "phase": "11.4 - PLANNED"
+        }
+        
+        status = "healthy" if federation_healthy and all(subgraphs_reachable.values()) else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
+    
+    def check_reconciliation_health(self) -> HealthStatus:
+        """
+        Check reconciliation system health (Phase 11.5).
+        
+        Returns:
+            HealthStatus with reconciliation metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 11.5: Will read from actual reconciliation orchestrator
+        last_reconciliation = None
+        drift_rate = 0.0
+        auto_healer_success_rate = 0.0
+        manual_review_queue_size = 0
+        
+        checks = {
+            "last_reconciliation": last_reconciliation or "never",
+            "last_reconciliation_recent": False,  # < 24h
+            "drift_rate_percent": drift_rate * 100,
+            "drift_rate_acceptable": drift_rate < 0.01,  # < 1%
+            "auto_healer_success_rate_percent": auto_healer_success_rate * 100,
+            "auto_healer_performing": auto_healer_success_rate > 0.80,  # > 80%
+            "manual_review_queue_size": manual_review_queue_size,
+            "queue_manageable": manual_review_queue_size < 50,
+            "phase": "11.5 - PLANNED"
+        }
+        
+        status = "healthy" if drift_rate < 0.01 and auto_healer_success_rate > 0.80 else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
 
 
 # Global health checker instance
