@@ -12,7 +12,7 @@
 # This hook BLOCKS push if production readiness verification fails.
 # Ensures machines pulling from remote receive 100% production-ready code.
 #
-# Checks performed (11 total):
+# Checks performed (12 total):
 #   1. All 23 orchestrators wired
 #   2. LENS Intelligence operational
 #   3. MasterOrchestrator full control
@@ -24,6 +24,7 @@
 #   9. MCP exposure (9+ tools)
 #  10. Docker configuration valid
 #  11. Database cleanliness
+#  12. Prompt-Code Synchronization (CORE-030) ⭐ TEAM COLLABORATION
 # =============================================================================
 
 set -e

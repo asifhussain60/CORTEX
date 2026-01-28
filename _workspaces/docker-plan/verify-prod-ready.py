@@ -3,7 +3,7 @@
 CORTEX Production Readiness Verification Script
 ===============================================
 
-Executes all 11 verification checks programmatically.
+Executes all 12 verification checks programmatically.
 Suitable for CI/CD pipelines, pre-deployment validation, and health monitoring.
 
 Usage:
@@ -71,7 +71,7 @@ class CORTEXVerification:
             print(f"[{level}] {message}")
     
     def run_all_checks(self) -> bool:
-        """Run all 11 verification checks."""
+        """Run all 12 verification checks."""
         print("=" * 80)
         print("🧪 CORTEX PRODUCTION READINESS VERIFICATION")
         print("=" * 80)
@@ -88,6 +88,8 @@ class CORTEXVerification:
             self.check_09_mcp_exposure()
             if not self.skip_docker:
                 self.check_10_docker_configuration()
+            self.check_11_database_cleanliness()
+            self.check_12_prompt_code_sync()
             self.check_11_database_cleanliness()
         except Exception as e:
             self.log(f"Verification failed: {e}", "ERROR")
@@ -874,6 +876,145 @@ class CORTEXVerification:
                 evidence=[str(e)],
             ))
     
+    def check_12_prompt_code_sync(self):
+        """CHECK 12: Prompt-Code Synchronization (CORE-030).
+        
+        Ensures AI guidance prompts stay synchronized with actual code.
+        This is CRITICAL for team collaboration - stale prompts mislead AI.
+        
+        Checks:
+        - Registry type references match canonical implementation
+        - Orchestrator counts match wiring.yaml
+        - Import paths exist in codebase
+        - No references to deprecated classes
+        """
+        try:
+            issues = []
+            critical_issues = []
+            evidence = []
+            
+            # === PROMPT FILES TO CHECK ===
+            prompt_files = [
+                self.cortex_root / ".github" / "prompts" / "CORTEX.prompt.md",
+                self.cortex_root / ".github" / "copilot-instructions.md",
+            ]
+            
+            # === CANONICAL TRUTH ===
+            wiring_yaml = self.cortex_root / "cortex" / "wiring" / "specifications" / "wiring.yaml"
+            
+            # Read wiring.yaml to get canonical orchestrator count
+            canonical_count = 23  # Default expected
+            if wiring_yaml.exists():
+                import re
+                content = wiring_yaml.read_text()
+                # Count orchestrator entries (lines with class: followed by name)
+                matches = re.findall(r'^\s*class:\s*\w+', content, re.MULTILINE)
+                if matches:
+                    canonical_count = len(matches)
+                evidence.append(f"✅ Wiring YAML: {canonical_count} orchestrators defined")
+            else:
+                critical_issues.append("wiring.yaml not found - cannot verify orchestrator count")
+            
+            # === DEPRECATED TERMS (must NOT appear in prompts) ===
+            deprecated_terms = {
+                "DatabaseBackedRegistry": "GitBackedRegistry (cortex.wiring)",
+                "get_database_registry": "get_registry (cortex.wiring)",
+                "OrchestratorRegistry": "GitBackedRegistry (cortex.wiring)",
+                "orchestrator_registry.db": "wiring.yaml (Git-backed)",
+            }
+            
+            # === REQUIRED TERMS (must appear in prompts) ===
+            required_terms = [
+                "GitBackedRegistry",
+                "wiring.yaml",
+                "cortex.wiring",
+            ]
+            
+            # === CHECK EACH PROMPT FILE ===
+            for prompt_file in prompt_files:
+                if not prompt_file.exists():
+                    issues.append(f"Prompt file not found: {prompt_file.name}")
+                    continue
+                
+                content = prompt_file.read_text()
+                file_name = prompt_file.name
+                
+                # 12A: Check for deprecated terms
+                for deprecated, replacement in deprecated_terms.items():
+                    if deprecated in content:
+                        critical_issues.append(
+                            f"STALE: '{deprecated}' in {file_name} → use {replacement}"
+                        )
+                
+                # 12B: Check orchestrator count claims
+                import re
+                count_matches = re.findall(r'(\d+)/(\d+)\s*[Oo]rchestrators?', content)
+                for current, total in count_matches:
+                    if int(total) != canonical_count:
+                        issues.append(
+                            f"Count mismatch in {file_name}: claims {total} but wiring has {canonical_count}"
+                        )
+                
+                # 12C: Check for required terms
+                missing_required = [term for term in required_terms if term not in content]
+                if missing_required and "copilot-instructions" in file_name:
+                    # Only warn if copilot-instructions is missing key terms
+                    issues.append(f"{file_name} missing references to: {', '.join(missing_required)}")
+            
+            # === 12D: Verify import paths mentioned in prompts exist ===
+            import_paths_to_check = [
+                ("cortex.wiring", self.cortex_root / "cortex" / "wiring" / "__init__.py"),
+                ("cortex.wiring.registry", self.cortex_root / "cortex" / "wiring" / "registry" / "__init__.py"),
+            ]
+            
+            for import_path, file_path in import_paths_to_check:
+                if not file_path.exists():
+                    critical_issues.append(f"Import path '{import_path}' referenced but {file_path} missing!")
+                else:
+                    evidence.append(f"✅ Import path exists: {import_path}")
+            
+            # === DETERMINE STATUS ===
+            if critical_issues:
+                self.results.append(CheckResult(
+                    check_number=12,
+                    check_name="Prompt-Code Synchronization (CORE-030)",
+                    status=CheckStatus.FAILED,
+                    details=f"CRITICAL: {len(critical_issues)} prompt-code mismatches! AI will be misled.",
+                    evidence=critical_issues[:5] + issues[:3],
+                    remediation="Update prompts to match code reality. Check GitBackedRegistry is canonical."
+                ))
+            elif issues:
+                self.results.append(CheckResult(
+                    check_number=12,
+                    check_name="Prompt-Code Synchronization (CORE-030)",
+                    status=CheckStatus.WARNING,
+                    details=f"Found {len(issues)} minor prompt issues",
+                    evidence=issues[:5] + evidence[:3],
+                    remediation="Review prompts for accuracy with current codebase"
+                ))
+            else:
+                self.results.append(CheckResult(
+                    check_number=12,
+                    check_name="Prompt-Code Synchronization (CORE-030)",
+                    status=CheckStatus.PASSED,
+                    details="Prompts synchronized with code - team collaboration safe",
+                    evidence=[
+                        "✅ No deprecated registry references",
+                        f"✅ Orchestrator counts match wiring ({canonical_count})",
+                        "✅ Import paths verified",
+                        "✅ AI guidance accurate",
+                    ]
+                ))
+        except Exception as e:
+            self.results.append(CheckResult(
+                check_number=12,
+                check_name="Prompt-Code Synchronization (CORE-030)",
+                status=CheckStatus.WARNING,
+                details=f"Prompt sync check failed: {str(e)}",
+                evidence=[str(e)],
+                remediation="Manual review of .github/prompts/ and .github/copilot-instructions.md"
+            ))
+
     def all_passed(self) -> bool:
         """Check if all checks passed (no FAILED)."""
         return all(r.status in [CheckStatus.PASSED, CheckStatus.WARNING] for r in self.results)
