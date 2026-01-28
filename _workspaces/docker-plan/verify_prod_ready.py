@@ -71,7 +71,7 @@ class CORTEXVerification:
             print(f"[{level}] {message}")
     
     def run_all_checks(self) -> bool:
-        """Run all 12 verification checks."""
+        """Run all 14 verification checks."""
         print("=" * 80)
         print("🧪 CORTEX PRODUCTION READINESS VERIFICATION")
         print("=" * 80)
@@ -91,6 +91,7 @@ class CORTEXVerification:
             self.check_11_database_cleanliness()
             self.check_12_prompt_code_sync()
             self.check_13_cortical_memory_system_readiness()  # Cortical Memory System
+            self.check_14_capacity_estimation_readiness()  # Capacity Planning System
         except Exception as e:
             self.log(f"Verification failed: {e}", "ERROR")
             return False
@@ -1150,6 +1151,103 @@ class CORTEXVerification:
                 details=f"Readiness check failed: {str(e)}",
                 evidence=[str(e)],
                 remediation="Review Cortical Memory System specification and infrastructure requirements"
+            ))
+    
+    def check_14_capacity_estimation_readiness(self):
+        """CHECK 14: Capacity Planning & Estimation System Infrastructure Readiness.
+        
+        Verifies readiness for Capacity Planning implementation:
+        - Health endpoint infrastructure
+        - LENS integration prerequisites
+        - Evidence collection capability
+        - Estimation model framework
+        
+        Note: Phase 12 is PLANNED, so this checks READINESS, not deployment.
+        """
+        try:
+            issues = []
+            evidence = []
+            readiness_score = 0
+            total_checks = 4
+            
+            # Check 1: Health endpoint infrastructure exists
+            health_checker_path = self.cortex_root / "cortex" / "mcp" / "health_checker.py"
+            if health_checker_path.exists():
+                with open(health_checker_path, 'r') as f:
+                    content = f.read()
+                    if "check_capacity_estimation_health" in content:
+                        readiness_score += 1
+                        evidence.append("✅ Capacity estimation health check method present")
+                    else:
+                        issues.append("Missing check_capacity_estimation_health method")
+            else:
+                issues.append("Health checker infrastructure missing")
+            
+            # Check 2: LENS integration available (prerequisite)
+            lens_orchestrator = self.cortex_root / "cortex" / "orchestrators" / "support" / "lens_orchestrator.py"
+            if lens_orchestrator.exists():
+                readiness_score += 1
+                evidence.append("✅ LENS integration available (Phase 7.1)")
+            else:
+                issues.append("LENS orchestrator missing (prerequisite)")
+            
+            # Check 3: Capacity Planning specification exists
+            capacity_spec = self.cortex_root / "_workspaces" / "docker-plan" / "CAPACITY-PLANNING-SYSTEM.yaml"
+            if capacity_spec.exists():
+                readiness_score += 1
+                evidence.append("✅ Capacity Planning System specification exists")
+            else:
+                issues.append("Capacity Planning System specification missing")
+            
+            # Check 4: health_checks.yaml updated
+            health_checks_yaml = self.cortex_root / "deployment" / "health_checks.yaml"
+            if health_checks_yaml.exists():
+                with open(health_checks_yaml, 'r') as f:
+                    content = f.read()
+                    if "/health/capacity-estimation" in content:
+                        readiness_score += 1
+                        evidence.append("✅ Capacity estimation health endpoint configured")
+                    else:
+                        issues.append("Missing /health/capacity-estimation endpoint")
+            else:
+                issues.append("health_checks.yaml missing")
+            
+            # Determine status
+            readiness_percent = (readiness_score / total_checks) * 100
+            
+            if readiness_percent == 100:
+                status = CheckStatus.PASSED
+                details = "Infrastructure ready for Capacity Planning System implementation"
+            elif readiness_percent >= 75:
+                status = CheckStatus.PASSED
+                details = f"Infrastructure {readiness_percent:.0f}% ready for Capacity Planning"
+            elif readiness_percent >= 50:
+                status = CheckStatus.WARNING
+                details = f"Infrastructure {readiness_percent:.0f}% ready - minor gaps"
+            else:
+                status = CheckStatus.FAILED
+                details = f"Infrastructure only {readiness_percent:.0f}% ready - major gaps"
+            
+            self.results.append(CheckResult(
+                check_number=14,
+                check_name="Capacity Planning & Estimation System Readiness",
+                status=status,
+                details=details,
+                evidence=evidence + [f"Readiness: {readiness_score}/{total_checks} checks passed"],
+                remediation="Complete Capacity Planning infrastructure preparation" if issues else None
+            ))
+            
+            if issues:
+                self.log(f"Capacity Planning readiness issues: {issues}", "WARNING")
+                
+        except Exception as e:
+            self.results.append(CheckResult(
+                check_number=14,
+                check_name="Capacity Planning & Estimation System Readiness",
+                status=CheckStatus.WARNING,
+                details=f"Readiness check failed: {str(e)}",
+                evidence=[str(e)],
+                remediation="Review Capacity Planning specification and infrastructure requirements"
             ))
 
     def all_passed(self) -> bool:

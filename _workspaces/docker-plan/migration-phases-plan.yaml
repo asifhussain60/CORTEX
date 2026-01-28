@@ -115,6 +115,18 @@ metadata:
   #   - LENS-powered config verification (CORE-030 compliance)
   #   - Integration with 6 orchestrators (Onboarding, Setup, Doc, Refactor, TDD, LENS)
   #   - See: PHASE-9-DISCOVERY-ORCHESTRATOR.yaml for complete specification
+  # Phase 12: Capacity Planning & Estimation System 📋 PLANNED (P1-HIGH - 44-60 hours)
+  #   - CAP-1: Evidence Collection Layer (LENS + Git + Domain) - 8-12h
+  #   - CAP-2: Multi-Model Estimation Engine (PERT + Story Points + CPM) - 12-16h
+  #   - CAP-3: Skill Stratification & Allocation (Senior/Mid/Junior) - 8-10h
+  #   - CAP-4: Output Formatter & Visualizer (Sprint breakdown, Gantt) - 6-8h
+  #   - CAP-5: Historical Learning & Accuracy Tracking - 10-14h
+  #   - Multi-model consensus estimation (80% confidence intervals)
+  #   - Realistic parallelization analysis (Brooks' Law enforcement)
+  #   - CORTEX self-estimate comparison (AI velocity vs human)
+  #   - Self-improving accuracy (MAPE target <20%)
+  #   - Inline chat output (no markdown generation)
+  #   - See: CAPACITY-PLANNING-SYSTEM.yaml for complete specification
 
 # ============================================================================
 # EXECUTIVE SUMMARY

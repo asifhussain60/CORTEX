@@ -362,6 +362,51 @@ class HealthChecker:
             uptime_seconds=uptime,
             checks=checks
         )
+    
+    def check_capacity_estimation_health(self) -> HealthStatus:
+        """
+        Check capacity estimation system health (Phase 12).
+        
+        Returns:
+            HealthStatus with capacity estimation metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 12: Will read from actual CapacityOrchestrator
+        evidence_collector_status = "not_deployed"
+        estimation_engine_status = "not_deployed"
+        historical_cache_size = 0
+        lens_integration_status = "not_deployed"
+        model_weights_loaded = False
+        
+        checks = {
+            "evidence_collector_responsive": evidence_collector_status == "healthy",
+            "evidence_collector_status": evidence_collector_status,
+            "estimation_engine_available": estimation_engine_status == "healthy",
+            "estimation_engine_status": estimation_engine_status,
+            "historical_data_cache_accessible": historical_cache_size >= 0,
+            "historical_cache_size_mb": historical_cache_size,
+            "lens_integration_healthy": lens_integration_status == "healthy",
+            "lens_integration_status": lens_integration_status,
+            "model_weights_loaded": model_weights_loaded,
+            "phase": "12 - PLANNED"
+        }
+        
+        all_healthy = (
+            evidence_collector_status == "healthy" and
+            estimation_engine_status == "healthy" and
+            lens_integration_status == "healthy" and
+            model_weights_loaded
+        )
+        
+        status = "healthy" if all_healthy else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
 
 
 # Global health checker instance
