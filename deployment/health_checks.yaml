@@ -41,3 +41,13 @@ endpoints:
   - auto_healer_success_rate_acceptable
   - manual_review_queue_manageable
   path: /health/reconciliation
+
+# Phase 12: Capacity Planning & Estimation System
+- checks:
+  - evidence_collector_responsive
+  - estimation_engine_available
+  - historical_data_cache_accessible
+  - lens_integration_healthy
+  - model_weights_loaded
+  path: /health/capacity-estimation
+
