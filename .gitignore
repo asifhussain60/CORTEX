@@ -91,3 +91,4 @@ _build/
 *.db.backup*
 tests/test_ac_nfr_003_02_secrets.py
 
+tests/_archive/
