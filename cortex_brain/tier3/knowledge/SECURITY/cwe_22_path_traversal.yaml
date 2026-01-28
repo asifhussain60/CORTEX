@@ -1,0 +1,75 @@
+# Tier3 Security Pattern: CWE-22 Path Traversal
+# Authority: Phase 8.2-8.4 Security Framework
+
+pattern_id: "pattern_security_cwe_22"
+cwe_ids:
+  - "CWE-22"
+title: "Remediate Path Traversal Vulnerabilities"
+description: >
+  Path traversal allows attackers to access files outside intended directory.
+  Validate and sanitize file paths, use Path.resolve() to prevent ../ attacks.
+
+severity: "HIGH"
+reference: "https://cwe.mitre.org/data/definitions/22.html"
+
+violations:
+  - "Opening files with user-provided paths"
+  - "Concatenating paths with user input"
+  - "Not validating path canonicalization"
+  - "Allowing ../ in file paths"
+
+recommendation: >
+  For file operations with user input:
+  - Resolve the path to its canonical form
+  - Ensure resolved path is within expected base directory
+  - Use pathlib.Path for path operations (NOT string manipulation)
+  - Whitelist allowed directories and files
+  - Never concatenate paths as strings
+  - Use os.path.abspath() or Path.resolve() to get canonical path
+
+code_example: |
+  # VULNERABLE
+  filename = request.args.get('file')
+  with open(f"/files/{filename}") as f:
+      return f.read()  # CWE-22! User can request: ../../../etc/passwd
+
+  # SECURE ALTERNATIVE 1: Path Validation
+  from pathlib import Path
+  
+  base_dir = Path("/files")
+  requested_file = base_dir / request.args.get('file')
+  
+  # Resolve to canonical path and verify it's within base_dir
+  resolved_path = requested_file.resolve()
+  if not str(resolved_path).startswith(str(base_dir.resolve())):
+      return error("Invalid path")
+  
+  with open(resolved_path) as f:
+      return f.read()
+
+  # SECURE ALTERNATIVE 2: Whitelist
+  ALLOWED_FILES = {"readme.txt", "guide.pdf"}
+  filename = request.args.get('file')
+  if filename not in ALLOWED_FILES:
+      return error("File not allowed")
+  with open(f"/files/{filename}") as f:
+      return f.read()
+
+rationale: >
+  Path traversal exploits assume normalized paths. By using ../, attackers
+  bypass simple prefix checks. pathlib.Path.resolve() returns the canonical
+  path after resolving ../ and symlinks, making traversal detection reliable.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/22.html"
+owasp_category: "A01:2021 - Broken Access Control"
+cvss_score: 7.5  # High
+remediation_effort: "LOW"
+
+patterns:
+  - "open(.*f[\"'].*{.*}.*)"
+  - "open(.*[\"'].*\\.\\./.*)"
+  - "Path(.*f[\"'].*{.*})"
+
+related_cwe:
+  - "CWE-434"  # Unrestricted Upload
+  - "CWE-548"  # Exposure Through Debug Info

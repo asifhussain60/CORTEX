@@ -1,0 +1,60 @@
+# Tier3 Security Pattern: CWE-95 Deserialization of Untrusted Data
+# Authority: Phase 8.2-8.4 Security Framework
+
+pattern_id: "pattern_security_cwe_95"
+cwe_ids:
+  - "CWE-95"
+title: "Remediate Unsafe Deserialization (pickle, marshal)"
+description: >
+  Unsafe deserialization can execute arbitrary code during unpickling.
+  Replace pickle/marshal with safer alternatives (json, msgpack).
+
+severity: "CRITICAL"
+reference: "https://cwe.mitre.org/data/definitions/95.html"
+
+violations:
+  - "Using pickle.loads() on untrusted data"
+  - "Using pickle.load() from untrusted sources"
+  - "Using marshal.loads() on untrusted data"
+  - "Using dill.loads() on untrusted data"
+
+recommendation: >
+  For untrusted data:
+  - Use json for most data (strings, numbers, dicts, lists)
+  - Use msgpack for binary data
+  - Use pickle ONLY for trusted internal data with restricted unpickler
+  - If serializing Python objects: use restricted picklers or alternative formats
+
+code_example: |
+  # VULNERABLE
+  data = request.get_bytes()
+  obj = pickle.loads(data)  # CWE-95!
+
+  # SECURE ALTERNATIVE 1: JSON
+  import json
+  obj = json.loads(data.decode('utf-8'))
+
+  # SECURE ALTERNATIVE 2: Restricted Pickle
+  import pickle
+  import io
+  obj = pickle.Unpickler(io.BytesIO(data), find_class=restricted_find_class).load()
+
+rationale: >
+  pickle.loads() can execute arbitrary code during deserialization. Attackers
+  can craft malicious pickle payloads that execute system commands. JSON and
+  msgpack are designed as safe data formats without code execution.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/95.html"
+owasp_category: "A08:2021 - Software and Data Integrity Failures"
+cvss_score: 9.8  # Critical
+remediation_effort: "MEDIUM"
+
+patterns:
+  - "pickle.loads("
+  - "pickle.load("
+  - "marshal.loads("
+  - "dill.loads("
+
+related_cwe:
+  - "CWE-94"   # Code Injection
+  - "CWE-502"  # Deserialization of Untrusted Data

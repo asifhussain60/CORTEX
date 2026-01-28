@@ -1,0 +1,62 @@
+# Tier3 Security Pattern: CWE-94 Code Injection
+# Authority: Phase 8.2-8.4 Security Framework
+# Phase: 8.4 RecommendationEngine
+
+pattern_id: "pattern_security_cwe_94"
+cwe_ids:
+  - "CWE-94"
+title: "Remediate Code Injection (eval, exec, compile)"
+description: >
+  Code injection vulnerabilities allow attackers to execute arbitrary code.
+  Replace dangerous functions (eval, exec, compile, __import__) with safe alternatives.
+
+severity: "CRITICAL"
+reference: "https://cwe.mitre.org/data/definitions/94.html"
+
+violations:
+  - "Using eval() on user input"
+  - "Using exec() on user input"
+  - "Using compile() on user input"
+  - "Using __import__() on user input"
+
+recommendation: >
+  For safe parsing of user input:
+  - Use ast.literal_eval() for Python literals (strings, numbers, dicts)
+  - Use json.loads() for JSON data
+  - Use yaml.safe_load() for YAML data (not yaml.load())
+  - Avoid eval/exec/compile/compile on user input entirely
+  - If dynamic code execution is needed, use restricted execution environments (RestrictedPython)
+
+code_example: |
+  # VULNERABLE
+  user_expression = request.args.get('expr')
+  result = eval(user_expression)  # CWE-94!
+
+  # SECURE ALTERNATIVE 1: Literals
+  import ast
+  result = ast.literal_eval(user_expression)
+
+  # SECURE ALTERNATIVE 2: JSON
+  import json
+  data = json.loads(user_expression)
+
+rationale: >
+  eval() and exec() can execute arbitrary Python code, giving attackers
+  complete system access. Even with sandboxing, the attack surface is massive.
+  ast.literal_eval() safely evaluates Python literals without executing code.
+  Use domain-specific parsers (json, yaml.safe_load) for structured data.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/94.html"
+owasp_category: "A03:2021 - Injection"
+cvss_score: 9.8  # Critical
+remediation_effort: "LOW"  # Usually straightforward replacement
+
+patterns:
+  - "eval("
+  - "exec("
+  - "compile("
+  - "__import__("
+
+related_cwe:
+  - "CWE-95"   # Deserialization
+  - "CWE-78"   # Command Injection
