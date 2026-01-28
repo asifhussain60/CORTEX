@@ -28,6 +28,11 @@ import logging
 
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.brain.analysis.security_threat_analyzer import (
+    SecurityThreatAnalyzer,
+    ThreatFinding,
+    ThreatSeverity,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +134,30 @@ class ChallengeResponse:
     auto_proceed_ms: int = 0
 
 
+@dataclass
+class SecurityThreatAssessment:
+    """
+    Security threat assessment for a request context.
+    
+    Phase 8.3: Integrates SecurityThreatAnalyzer findings into ChallengeEngine
+    for security-first hard gates before DoR approval.
+    
+    Attributes:
+        has_threats: Whether threats were detected
+        threats: List of ThreatFinding objects
+        highest_severity: Highest severity level found
+        block_execution: Whether execution should be blocked (CRITICAL/HIGH threats)
+        threat_summary: Human-readable summary of threats
+        threat_context: Additional context (files affected, authors, etc.)
+    """
+    has_threats: bool
+    threats: List[ThreatFinding] = field(default_factory=list)
+    highest_severity: Optional[ThreatSeverity] = None
+    block_execution: bool = False
+    threat_summary: str = ""
+    threat_context: Dict[str, Any] = field(default_factory=dict)
+
+
 class ChallengeEngine:
     """
     Generates intelligent challenges when CORTEX disagrees with user requests.
@@ -152,7 +181,11 @@ class ChallengeEngine:
     def __init__(self) -> None:
         """Initialize Challenge Engine with audit logging and Tier-3 rules."""
         self.logger = EnhancedAuditLogger.instance()
-        logger.info("ChallengeEngine initialized")
+        
+        # Phase 8.2: Initialize SecurityThreatAnalyzer for hard security gates
+        self.security_analyzer = SecurityThreatAnalyzer()
+        
+        logger.info("ChallengeEngine initialized with SecurityThreatAnalyzer (Phase 8.2)")
         
         # Phase 8.1: Tier-3 Gate Logic - Define rules for each challenge type
         self.challenge_rules: Dict[ChallengeType, ChallengeRule] = {
@@ -925,6 +958,105 @@ class ChallengeEngine:
             "Modify approach (tell me how)",
             "Explain your reasoning (I'll reconsider)"
         ]
+    
+    def assess_security_threats(
+        self,
+        code_context: str,
+        file_path: str = "user_request.py",
+    ) -> SecurityThreatAssessment:
+        """
+        Assess security threats in code context (Phase 8.3).
+        
+        Phase 8.3: Integrates SecurityThreatAnalyzer findings into challenge
+        engine for hard security gates. Called automatically before DoR gate
+        if code analysis is available.
+        
+        Returns:
+            SecurityThreatAssessment with threats, severity, and block flag
+            
+        Example:
+            >>> assessment = engine.assess_security_threats("eval(user_input)")
+            >>> if assessment.block_execution:
+            >>>     print("⛔ BLOCKED: CWE-94 detected")
+            >>>     for threat in assessment.threats:
+            >>>         print(f"  - {threat.cwe_id}: {threat.description}")
+        """
+        logger.info("Assessing security threats in code context (Phase 8.3)")
+        
+        # Run security analysis
+        result = self.security_analyzer.analyze_code(code_context, file_path)
+        
+        if not result.success:
+            logger.warning("Security analysis failed: %s", result.error)
+            return SecurityThreatAssessment(
+                has_threats=False,
+                threats=[],
+                highest_severity=None,
+                block_execution=False,
+                threat_summary="Security analysis could not be completed",
+                threat_context={"error": result.error}
+            )
+        
+        # Determine highest severity
+        if not result.threat_findings:
+            return SecurityThreatAssessment(
+                has_threats=False,
+                threats=[],
+                highest_severity=None,
+                block_execution=False,
+                threat_summary="No security threats detected",
+                threat_context={
+                    "patterns_checked": result.patterns_checked,
+                    "analysis_time_ms": result.analysis_time_ms
+                }
+            )
+        
+        # Find highest severity
+        highest_severity = max(
+            (t.severity for t in result.threat_findings),
+            default=ThreatSeverity.INFO
+        )
+        
+        # Determine if execution should be blocked (CRITICAL or HIGH with CWE-94, CWE-95, CWE-78)
+        block_execution = (
+            highest_severity == ThreatSeverity.CRITICAL or
+            any(t.cwe_id in ["CWE-94", "CWE-95", "CWE-78"] for t in result.threat_findings)
+        )
+        
+        # Build threat summary
+        threat_counts = {}
+        for threat in result.threat_findings:
+            key = f"{threat.cwe_id} ({threat.severity.name})"
+            threat_counts[key] = threat_counts.get(key, 0) + 1
+        
+        summary_items = [f"{key}: {count}" for key, count in threat_counts.items()]
+        threat_summary = f"Found {len(result.threat_findings)} threat(s): {', '.join(summary_items)}"
+        
+        # Log to audit trail
+        self.logger.log_operation_complete(
+            ac_id="AC-SECURITY-FRAMEWORK-001",
+            operation="SECURITY_THREAT_ASSESSMENT",
+            success=True,
+            details={
+                "threat_count": len(result.threat_findings),
+                "highest_severity": highest_severity.name,
+                "block_execution": block_execution,
+                "analysis_time_ms": result.analysis_time_ms,
+            }
+        )
+        
+        return SecurityThreatAssessment(
+            has_threats=True,
+            threats=result.threat_findings,
+            highest_severity=highest_severity,
+            block_execution=block_execution,
+            threat_summary=threat_summary,
+            threat_context={
+                "patterns_checked": result.patterns_checked,
+                "analysis_time_ms": result.analysis_time_ms,
+                "file_path": file_path,
+            }
+        )
 
 
 # Singleton accessor for global use
