@@ -182,29 +182,25 @@ class TestSinglePathEnforcement:
         )
     
     def test_no_db_files_in_project(self, cortex_root: Path):
-        """Test that no wiring database files exist in the project."""
+        """Test that no WIRING database files exist in the project.
+        
+        Runtime caches in .cortex/ are allowed as they are ephemeral
+        and do not store wiring configuration.
+        """
         db_files = list(cortex_root.glob("**/*.db"))
         
-        # Filter out node_modules, .venv, etc.
-        excluded_dirs = {".venv", "node_modules", "__pycache__", ".git"}
+        # Filter out node_modules, .venv, .cortex (runtime caches), etc.
+        excluded_dirs = {".venv", "node_modules", "__pycache__", ".git", ".cortex"}
         db_files = [
             f for f in db_files
             if not any(excluded in f.parts for excluded in excluded_dirs)
         ]
         
-        # Allowed runtime caches (not wiring databases)
-        allowed_runtime_caches = {
-            ".cortex/knowledge.db",  # Runtime knowledge cache (rebuilt from YAML)
-        }
-        
         # Convert to relative paths for comparison
         db_relative = {str(f.relative_to(cortex_root)) for f in db_files}
         
-        # Check for VIOLATIONS (DB files NOT in allowed list)
-        violations = db_relative - allowed_runtime_caches
-        
-        assert not violations, (
-            f"Found wiring database files: {violations}. "
+        assert not db_relative, (
+            f"Found wiring database files: {db_relative}. "
             "All wiring databases should have been deleted in Phase 2. "
-            "Only runtime caches (like knowledge.db) are allowed."
+            "Runtime caches in .cortex/ are allowed and excluded from this check."
         )

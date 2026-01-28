@@ -264,9 +264,12 @@ class TestErrorHandling:
 class TestParallelExecution:
     """Test parallel plugin execution."""
     
-    @pytest.mark.asyncio
-    async def test_parallel_discovery_executes_concurrently(self):
-        """Test that plugins execute in parallel when enabled."""
+    def test_parallel_discovery_executes_concurrently(self):
+        """Test that plugins execute in parallel when enabled.
+        
+        Note: The orchestrator uses ThreadPoolExecutor for parallelism,
+        not asyncio, so this test is synchronous.
+        """
         orchestrator = DiscoveryOrchestrator(
             repo_path=Path("/fake"),
             parallel_execution=True

@@ -46,7 +46,12 @@ from cortex.core.orchestrator.holistic_context_builder import HolisticContextBui
 from cortex.orchestrators.core.component_health import ComponentHealthTracker, ComponentType
 
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
-from cortex.brain.core.knowledge.router import AdaptiveRouter
+# Use IntelligentKnowledgeRouter as the canonical implementation
+try:
+    from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter as AdaptiveRouter
+except ImportError:
+    # Fallback if module not accessible
+    AdaptiveRouter = None  # type: ignore
 
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 

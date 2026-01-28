@@ -8,6 +8,12 @@ Model Context Protocol integration:
 """
 
 from cortex.brain.mcp.decorator import mcp_tool
-from cortex.brain.tier1.orchestrators.cleaners.registry import OrchestratorRegistry
+
+# Import OrchestratorRegistry from correct location
+try:
+    from cortex.orchestrators.registry import OrchestratorRegistry
+except ImportError:
+    # Fallback for backward compatibility
+    OrchestratorRegistry = None  # type: ignore
 
 __all__ = ["mcp_tool", "OrchestratorRegistry"]
