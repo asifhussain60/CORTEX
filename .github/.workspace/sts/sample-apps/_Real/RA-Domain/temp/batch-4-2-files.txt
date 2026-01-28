@@ -1,9 +1,0 @@
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\EmployerPortalReimbursementPlanDetailsDto.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\EmployerPortalReimbursementPlanTypesDto.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\FlexMemberDto.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\FlexSpanJobResponse.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\FlexSpanResponse.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\FlexStageChangeReasonCodeDTO.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\HsaMemberSummaryDto.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberDocumentationRequiredDto.cs
-C:\PROJECTS\Product.PaymentAccounts\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberDto.cs
