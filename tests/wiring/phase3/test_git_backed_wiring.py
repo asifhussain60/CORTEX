@@ -56,9 +56,10 @@ def test_all_23_orchestrators_defined() -> None:
     total = core_count + domain_count + support_count
     
     # Phase 8.1: Added EnforcementOrchestrator to core (7 total)
+    # Phase 8.3-8.4: Added ChallengeEngine + RecommendationEngine to support (13 total)
     assert core_count == 7, f"Expected 7 core orchestrators, got {core_count}"
     assert domain_count == 6, f"Expected 6 domain orchestrators, got {domain_count}"
-    assert support_count == 11, f"Expected 11 support orchestrators, got {support_count}"
+    assert support_count == 13, f"Expected 13 support orchestrators, got {support_count}"
     assert total == 26, f"Expected 26 total orchestrators, got {total}"
 
 
