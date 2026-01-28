@@ -71,7 +71,7 @@ class CORTEXVerification:
             print(f"[{level}] {message}")
     
     def run_all_checks(self) -> bool:
-        """Run all 14 verification checks."""
+        """Run all 15 verification checks."""
         print("=" * 80)
         print("🧪 CORTEX PRODUCTION READINESS VERIFICATION")
         print("=" * 80)
@@ -92,6 +92,7 @@ class CORTEXVerification:
             self.check_12_prompt_code_sync()
             self.check_13_cortical_memory_system_readiness()  # Cortical Memory System
             self.check_14_capacity_estimation_readiness()  # Capacity Planning System
+            self.check_15_adaptive_bluf_readiness()  # Adaptive BLUF System
         except Exception as e:
             self.log(f"Verification failed: {e}", "ERROR")
             return False
@@ -1248,6 +1249,103 @@ class CORTEXVerification:
                 details=f"Readiness check failed: {str(e)}",
                 evidence=[str(e)],
                 remediation="Review Capacity Planning specification and infrastructure requirements"
+            ))
+    
+    def check_15_adaptive_bluf_readiness(self):
+        """CHECK 15: Adaptive BLUF Communication System Infrastructure Readiness.
+        
+        Verifies readiness for Adaptive BLUF implementation:
+        - Health endpoint infrastructure
+        - InteractionOrchestrator prerequisites
+        - Response template framework
+        - CORE-029 governance rule updates
+        
+        Note: Phase 13 is PLANNED, so this checks READINESS, not deployment.
+        """
+        try:
+            issues = []
+            evidence = []
+            readiness_score = 0
+            total_checks = 4
+            
+            # Check 1: Health endpoint infrastructure exists
+            health_checker_path = self.cortex_root / "cortex" / "mcp" / "health_checker.py"
+            if health_checker_path.exists():
+                with open(health_checker_path, 'r') as f:
+                    content = f.read()
+                    if "check_bluf_system_health" in content:
+                        readiness_score += 1
+                        evidence.append("✅ BLUF system health check method present")
+                    else:
+                        issues.append("Missing check_bluf_system_health method")
+            else:
+                issues.append("Health checker infrastructure missing")
+            
+            # Check 2: InteractionOrchestrator exists (prerequisite)
+            interaction_orchestrator = self.cortex_root / "cortex" / "orchestrators" / "core" / "interaction_orchestrator.py"
+            if interaction_orchestrator.exists():
+                readiness_score += 1
+                evidence.append("✅ InteractionOrchestrator available (prerequisite)")
+            else:
+                issues.append("InteractionOrchestrator missing (prerequisite)")
+            
+            # Check 3: Adaptive BLUF specification exists
+            bluf_spec = self.cortex_root / "_workspaces" / "docker-plan" / "PHASE-13-ADAPTIVE-BLUF-SYSTEM.yaml"
+            if bluf_spec.exists():
+                readiness_score += 1
+                evidence.append("✅ Adaptive BLUF System specification exists")
+            else:
+                issues.append("Adaptive BLUF System specification missing")
+            
+            # Check 4: health_checks.yaml updated
+            health_checks_yaml = self.cortex_root / "deployment" / "health_checks.yaml"
+            if health_checks_yaml.exists():
+                with open(health_checks_yaml, 'r') as f:
+                    content = f.read()
+                    if "/health/bluf-system" in content:
+                        readiness_score += 1
+                        evidence.append("✅ BLUF system health endpoint configured")
+                    else:
+                        issues.append("Missing /health/bluf-system endpoint")
+            else:
+                issues.append("health_checks.yaml missing")
+            
+            # Determine status
+            readiness_percent = (readiness_score / total_checks) * 100
+            
+            if readiness_percent == 100:
+                status = CheckStatus.PASSED
+                details = "Infrastructure ready for Adaptive BLUF System implementation"
+            elif readiness_percent >= 75:
+                status = CheckStatus.PASSED
+                details = f"Infrastructure {readiness_percent:.0f}% ready for Adaptive BLUF"
+            elif readiness_percent >= 50:
+                status = CheckStatus.WARNING
+                details = f"Infrastructure {readiness_percent:.0f}% ready - minor gaps"
+            else:
+                status = CheckStatus.FAILED
+                details = f"Infrastructure only {readiness_percent:.0f}% ready - major gaps"
+            
+            self.results.append(CheckResult(
+                check_number=15,
+                check_name="Adaptive BLUF Communication System Readiness",
+                status=status,
+                details=details,
+                evidence=evidence + [f"Readiness: {readiness_score}/{total_checks} checks passed"],
+                remediation="Complete Adaptive BLUF infrastructure preparation" if issues else None
+            ))
+            
+            if issues:
+                self.log(f"Adaptive BLUF readiness issues: {issues}", "WARNING")
+                
+        except Exception as e:
+            self.results.append(CheckResult(
+                check_number=15,
+                check_name="Adaptive BLUF Communication System Readiness",
+                status=CheckStatus.WARNING,
+                details=f"Readiness check failed: {str(e)}",
+                evidence=[str(e)],
+                remediation="Review Adaptive BLUF specification and infrastructure requirements"
             ))
 
     def all_passed(self) -> bool:

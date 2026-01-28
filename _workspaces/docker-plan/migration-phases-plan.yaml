@@ -127,6 +127,23 @@ metadata:
   #   - Self-improving accuracy (MAPE target <20%)
   #   - Inline chat output (no markdown generation)
   #   - See: CAPACITY-PLANNING-SYSTEM.yaml for complete specification
+  # Phase 13: Adaptive BLUF Communication System 📋 PLANNED (P1-HIGH - 28-38 hours)
+  #   - BLUF-1: Response Format Analyzer + Risk Classifier - 6-8h
+  #   - BLUF-2: BLUF Template Engine + Progressive Disclosure - 8-10h
+  #   - BLUF-3: Adaptive Router + User Preferences - 6-8h
+  #   - BLUF-4: Response Formatter Integration - 4-6h
+  #   - BLUF-5: Analytics & Continuous Improvement - 4-6h
+  #   - Context-aware response formatting (LOW/MEDIUM/HIGH risk)
+  #   - Three response templates (BLUF_ONLY, BLUF_HYBRID, FULL_DETAIL)
+  #   - User preference modes (AUTO, BLUF, FULL, BLUF_ONLY)
+  #   - Progressive disclosure (collapsible sections for details)
+  #   - Format effectiveness analytics (approval rates, time to decision)
+  #   - CLI commands (/bluf-mode, /bluf-status)
+  #   - Updated CORE-029 governance rule (BLUF header requirement)
+  #   - CORTEX self-estimate comparison (AI velocity vs human)
+  #   - Self-improving accuracy (MAPE target <20%)
+  #   - Inline chat output (no markdown generation)
+  #   - See: CAPACITY-PLANNING-SYSTEM.yaml for complete specification
 
 # ============================================================================
 # EXECUTIVE SUMMARY
