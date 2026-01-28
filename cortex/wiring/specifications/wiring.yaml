@@ -14,7 +14,7 @@
 # =========================================================================
 
 version: "2.0"
-specification_date: "2026-01-27"
+specification_date: "2026-01-28"
 git_safe: true
 
 # -------------------------------------------------------------------------
@@ -27,6 +27,45 @@ config:
   health_check_timeout_seconds: 5
   health_check_retry_count: 3
   fail_fast_on_wiring_error: true
+
+# -------------------------------------------------------------------------
+# LENS ANALYZERS (Phase 7.1 + 8.2)
+# -------------------------------------------------------------------------
+analyzers:
+  - name: "GitHistoryAnalyzer"
+    module: "cortex.brain.analysis.git_history_analyzer"
+    class: "GitHistoryAnalyzer"
+    purpose: "Extract commit history, blame, author patterns"
+    phase: "7.1"
+    priority: 1
+
+  - name: "ASTAnalyzer"
+    module: "cortex.brain.analysis.ast_analyzer"
+    class: "ASTAnalyzer"
+    purpose: "Extract code structure, functions, classes, imports"
+    phase: "7.1"
+    priority: 2
+
+  - name: "CommentExtractor"
+    module: "cortex.brain.analysis.comment_extractor"
+    class: "CommentExtractor"
+    purpose: "Extract TODOs, FIXMEs, intent hints from comments"
+    phase: "7.1"
+    priority: 3
+
+  - name: "SecurityThreatAnalyzer"
+    module: "cortex.brain.analysis.security_threat_analyzer"
+    class: "SecurityThreatAnalyzer"
+    purpose: "Detect CWE vulnerabilities (Code Injection, Deserialization, Command Injection, SQL Injection, Weak Crypto, Path Traversal)"
+    phase: "8.2"
+    priority: 4
+    cwe_coverage:
+      - "CWE-94"   # Code Injection
+      - "CWE-95"   # Deserialization
+      - "CWE-78"   # Command Injection
+      - "CWE-89"   # SQL Injection
+      - "CWE-327"  # Weak Cryptography
+      - "CWE-22"   # Path Traversal
 
 # -------------------------------------------------------------------------
 # CORE ORCHESTRATORS (7 - Phase 8.1: Added EnforcementOrchestrator)
@@ -374,6 +413,23 @@ orchestrators:
         - approval_gating
         - dor_validation
       health_check: "validate_dor"
+
+    - name: "RecommendationEngine"
+      module: "cortex.orchestrators.support.recommendation_engine"
+      class: "RecommendationEngine"
+      tier: 3
+      priority: 72
+      dependencies:
+        - "ChallengeEngine"
+      capabilities:
+        - security_recommendations
+        - solid_recommendations
+        - performance_recommendations
+        - compliance_recommendations
+        - best_practice_advisory
+      health_check: "recommend_for_security"
+      mcp_adapter: "cortex.mcp.adapters.recommendation_adapter"
+      description: "Advisory layer providing contextualized best practice recommendations (Phase 8.4)"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
