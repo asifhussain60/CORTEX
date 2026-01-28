@@ -5,32 +5,27 @@ CORTEX Knowledge System
 Unified knowledge repository for best practices, patterns, and domain expertise.
 
 Components:
-- best_practices: 35+ guides organized by technology stack and concern
-- knowledge_repository_integration: Repository integration and cross-referencing
-- best_practices_discovery: Discovery and search functionality
+- best-practices/: 35+ YAML guides organized by technology stack and concern
+- protocol/: Knowledge protocol definitions
+
+Note: best-practices uses hyphen (kebab-case) per file naming policy.
+Access YAML files directly via pathlib, not Python imports.
 
 Examples::
     
-    from cortex.knowledge import best_practices
+    from pathlib import Path
+    import yaml
     
-    # Discover guides
-    python_guides = best_practices.discover_python_backend()
-    security_guides = best_practices.discover_security()
-    
-    # Get learning paths
-    onboarding = best_practices.learning_path("onboarding")
-    
-    # Repository operations
-    repo = best_practices.get_repository()
-    guides = repo.list_guides_by_stack("python-backend")
+    # Load guides directly
+    guides_dir = Path(__file__).parent / "best-practices"
+    with open(guides_dir / "python-backend.yaml") as f:
+        guide = yaml.safe_load(f)
 
 Authority: cortex_brain/tier3/knowledge/
-Version: 2.0
-Updated: 2026-01-23
+Version: 2.1
+Updated: 2026-01-28
 """
 
-from cortex.knowledge import best_practices
+# No imports from best-practices (YAML files, not Python modules)
 
-__all__ = [
-    "best_practices",
-]
+__all__: list[str] = []

@@ -7,11 +7,24 @@ The actual database management has been replaced with YAML-backed configuration.
 See: _workspaces/docker-plan/migration-phases-plan.yaml
 """
 
+from dataclasses import dataclass
 from typing import Optional, Any, Dict
 from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class DatabaseConfig:
+    """Database configuration settings (stub for backward compatibility)."""
+    host: str = "localhost"
+    port: int = 5432
+    database: str = "cortex"
+    user: str = "cortex"
+    password: str = ""
+    pool_size: int = 5
+    max_overflow: int = 10
 
 
 class DatabaseManager:

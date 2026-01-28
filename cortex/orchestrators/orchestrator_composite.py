@@ -8,8 +8,8 @@ from typing import Dict, List, Any
 from datetime import datetime
 
 from cortex.orchestrators.conversation_orchestrator import ConversationOrchestrator
-from cortex.orchestrators.domain_orchestrator import DomainOrchestrator
-from cortex.orchestrators.workflow_orchestrator import WorkflowOrchestrator
+from cortex.domain_orchestrators.domain_orchestrator import DomainOrchestrator
+from cortex.orchestrators.core.workflow_orchestrator import WorkflowOrchestrator
 
 
 class OrchestratorComposite:
