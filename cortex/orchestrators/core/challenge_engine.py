@@ -61,6 +61,45 @@ class LENSContext:
     confidence: float = 0.0
 
 
+class GateType(Enum):
+    """Types of challenge gates (Phase 8.1 - Tier-3 Logic)."""
+    
+    HARD = "hard"  # Blocks execution, requires explicit user response
+    SOFT = "soft"  # Suggests challenge, auto-proceeds after timeout
+    CONTEXT = "context"  # Asks clarifying questions
+
+
+class ChallengeType(Enum):
+    """Challenge types with specific gate behavior (Phase 8.1 - Tier-3 Logic)."""
+    
+    SECURITY = "security"  # Hard gate - security vulnerabilities
+    HARMFUL = "harmful"  # Hard gate - harmful actions
+    SRP_VIOLATION = "srp_violation"  # Soft gate - Single Responsibility Principle
+    ARCHITECTURE_VIOLATION = "architecture_violation"  # Soft gate - architectural violations
+    MISSING_CONTEXT = "missing_context"  # Context gate - missing information
+    AMBIGUITY = "ambiguity"  # Context gate - ambiguous requests
+    REDUNDANT_WORK = "redundant_work"  # Soft gate - work already exists
+
+
+@dataclass
+class ChallengeRule:
+    """
+    Rule for handling specific challenge type (Phase 8.1 - Tier-3 Logic).
+    
+    Attributes:
+        challenge_type: Type of challenge
+        gate_type: Hard/Soft/Context
+        threshold: Confidence threshold to trigger (0.0-1.0)
+        auto_proceed_ms: For soft gates, milliseconds before auto-proceeding (0 for hard gates)
+        description: Human-readable description
+    """
+    challenge_type: ChallengeType
+    gate_type: GateType
+    threshold: float
+    auto_proceed_ms: int
+    description: str
+
+
 @dataclass
 class ChallengeResponse:
     """
@@ -75,6 +114,8 @@ class ChallengeResponse:
         reasoning: Explanation of why alternative is better
         evidence: Supporting evidence (code locations, test results, etc.)
         options: Numbered options for user to choose from
+        gate_type: Gate type for this challenge (Phase 8.1)
+        auto_proceed_ms: Auto-proceed timeout in milliseconds (Phase 8.1)
     """
     has_disagreement: bool
     disagreement_type: Optional[DisagreementType] = None
@@ -84,6 +125,8 @@ class ChallengeResponse:
     reasoning: str = ""
     evidence: Dict[str, Any] = field(default_factory=dict)
     options: List[str] = field(default_factory=list)
+    gate_type: Optional[GateType] = None
+    auto_proceed_ms: int = 0
 
 
 class ChallengeEngine:
@@ -107,9 +150,62 @@ class ChallengeEngine:
     """
     
     def __init__(self) -> None:
-        """Initialize Challenge Engine with audit logging."""
+        """Initialize Challenge Engine with audit logging and Tier-3 rules."""
         self.logger = EnhancedAuditLogger.instance()
         logger.info("ChallengeEngine initialized")
+        
+        # Phase 8.1: Tier-3 Gate Logic - Define rules for each challenge type
+        self.challenge_rules: Dict[ChallengeType, ChallengeRule] = {
+            ChallengeType.SECURITY: ChallengeRule(
+                challenge_type=ChallengeType.SECURITY,
+                gate_type=GateType.HARD,
+                threshold=0.4,  # Low threshold, high priority
+                auto_proceed_ms=0,  # No auto-proceed for hard gates
+                description="Security vulnerability detected"
+            ),
+            ChallengeType.HARMFUL: ChallengeRule(
+                challenge_type=ChallengeType.HARMFUL,
+                gate_type=GateType.HARD,
+                threshold=0.5,
+                auto_proceed_ms=0,
+                description="Harmful action detected"
+            ),
+            ChallengeType.SRP_VIOLATION: ChallengeRule(
+                challenge_type=ChallengeType.SRP_VIOLATION,
+                gate_type=GateType.SOFT,
+                threshold=0.6,
+                auto_proceed_ms=10000,  # 10 second timeout
+                description="Single Responsibility Principle violation"
+            ),
+            ChallengeType.ARCHITECTURE_VIOLATION: ChallengeRule(
+                challenge_type=ChallengeType.ARCHITECTURE_VIOLATION,
+                gate_type=GateType.SOFT,
+                threshold=0.65,
+                auto_proceed_ms=10000,
+                description="Architectural constraint violation"
+            ),
+            ChallengeType.MISSING_CONTEXT: ChallengeRule(
+                challenge_type=ChallengeType.MISSING_CONTEXT,
+                gate_type=GateType.CONTEXT,
+                threshold=0.5,
+                auto_proceed_ms=0,
+                description="Request missing critical context"
+            ),
+            ChallengeType.AMBIGUITY: ChallengeRule(
+                challenge_type=ChallengeType.AMBIGUITY,
+                gate_type=GateType.CONTEXT,
+                threshold=0.7,
+                auto_proceed_ms=0,
+                description="Request contains ambiguity"
+            ),
+            ChallengeType.REDUNDANT_WORK: ChallengeRule(
+                challenge_type=ChallengeType.REDUNDANT_WORK,
+                gate_type=GateType.SOFT,
+                threshold=0.75,
+                auto_proceed_ms=10000,
+                description="Work already exists"
+            ),
+        }
     
     def build_lens_context(
         self,
@@ -175,27 +271,36 @@ class ChallengeEngine:
         self,
         user_request: str,
         lens_context: LENSContext,
-        threshold: float = 0.7
+        threshold: float = 0.7,
+        challenge_type: Optional[ChallengeType] = None
     ) -> ChallengeResponse:
         """
         Generate challenge if CORTEX disagrees with user's request.
         
+        Phase 8.1: Supports Tier-3 gate logic with challenge_type parameter.
+        
         Args:
             user_request: User's original request
             lens_context: LENS context from build_lens_context()
-            threshold: Confidence threshold to trigger challenge (default: 0.7)
+            threshold: Legacy confidence threshold (default: 0.7) - used if challenge_type is None
+            challenge_type: Specific challenge type for Tier-3 gate logic (Phase 8.1)
             
         Returns:
             ChallengeResponse with disagreement details or no challenge
             
         Example:
-            >>> challenge = engine.generate_challenge(request, context)
+            >>> challenge = engine.generate_challenge(request, context, challenge_type=ChallengeType.SRP_VIOLATION)
             >>> if challenge.has_disagreement:
-            >>>     print(f"Type: {challenge.disagreement_type}")
-            >>>     print(f"Alternative: {challenge.recommended_alternative}")
+            >>>     print(f"Gate: {challenge.gate_type}")
+            >>>     print(f"Auto-proceed: {challenge.auto_proceed_ms}ms")
         """
         logger.info("Analyzing request for potential disagreement")
         
+        # Phase 8.1: Apply Tier-3 gate logic if challenge_type specified
+        if challenge_type is not None:
+            return self._apply_tier3_gates(user_request, lens_context, challenge_type)
+        
+        # Legacy behavior: use threshold parameter
         # If confidence too low, don't challenge (need more info)
         if lens_context.confidence < threshold:
             logger.info("Confidence %.2f below threshold %.2f - no challenge", 
@@ -261,6 +366,154 @@ class ChallengeEngine:
         )
         
         return challenge
+    
+    def _apply_tier3_gates(
+        self,
+        user_request: str,
+        lens_context: LENSContext,
+        challenge_type: ChallengeType
+    ) -> ChallengeResponse:
+        """
+        Apply Tier-3 gate logic for specific challenge type.
+        
+        Phase 8.1: Routes challenges through hard/soft/context gates based on
+        violation type and confidence score.
+        
+        Args:
+            user_request: User's original request
+            lens_context: LENS context
+            challenge_type: Type of challenge to apply gate logic for
+            
+        Returns:
+            ChallengeResponse with gate_type and auto_proceed_ms populated
+        """
+        logger.info("Applying Tier-3 gate logic for challenge type: %s", challenge_type.value)
+        
+        # Look up rule for this challenge type
+        if challenge_type not in self.challenge_rules:
+            logger.warning("No rule found for challenge type: %s", challenge_type.value)
+            return ChallengeResponse(has_disagreement=False)
+        
+        rule = self.challenge_rules[challenge_type]
+        
+        # Check if confidence meets threshold
+        if lens_context.confidence < rule.threshold:
+            logger.info(
+                "Confidence %.2f below threshold %.2f for %s - no challenge",
+                lens_context.confidence,
+                rule.threshold,
+                challenge_type.value
+            )
+            return ChallengeResponse(has_disagreement=False)
+        
+        logger.info("Confidence %.2f meets threshold %.2f", lens_context.confidence, rule.threshold)
+        
+        # Map ChallengeType to DisagreementType for backward compatibility
+        disagreement_type_map = {
+            ChallengeType.SECURITY: DisagreementType.HARMFUL_ACTION,
+            ChallengeType.HARMFUL: DisagreementType.HARMFUL_ACTION,
+            ChallengeType.SRP_VIOLATION: DisagreementType.BETTER_SOLUTION,
+            ChallengeType.ARCHITECTURE_VIOLATION: DisagreementType.ARCHITECTURAL_VIOLATION,
+            ChallengeType.MISSING_CONTEXT: DisagreementType.MISSING_CONTEXT,
+            ChallengeType.AMBIGUITY: DisagreementType.MISSING_CONTEXT,
+            ChallengeType.REDUNDANT_WORK: DisagreementType.REDUNDANT_WORK,
+        }
+        
+        disagreement_type = disagreement_type_map.get(
+            challenge_type,
+            DisagreementType.BETTER_SOLUTION
+        )
+        
+        # Generate alternative
+        alternative = self._generate_alternative(
+            user_request,
+            lens_context,
+            disagreement_type
+        )
+        
+        # Build reasoning
+        reasoning = self._build_reasoning(
+            lens_context,
+            disagreement_type,
+            alternative
+        )
+        
+        # Extract evidence
+        evidence = self._extract_evidence(lens_context)
+        
+        # Generate options based on gate type
+        options = self._generate_tier3_options(challenge_type, rule.gate_type)
+        
+        # Create response with gate information
+        challenge = ChallengeResponse(
+            has_disagreement=True,
+            disagreement_type=disagreement_type,
+            user_request_interpretation=lens_context.language,
+            cortex_analysis=lens_context.synthesis,
+            recommended_alternative=alternative,
+            reasoning=reasoning,
+            evidence=evidence,
+            options=options,
+            gate_type=rule.gate_type,
+            auto_proceed_ms=rule.auto_proceed_ms
+        )
+        
+        logger.info(
+            "Challenge generated: type=%s, gate=%s, auto_proceed=%dms",
+            challenge_type.value,
+            rule.gate_type.value,
+            rule.auto_proceed_ms
+        )
+        
+        self.logger.log_operation_complete(
+            ac_id="AC-CHALLENGE-SYSTEM-001",
+            operation="TIER3_GATE_APPLIED",
+            success=True,
+            details={
+                "challenge_type": challenge_type.value,
+                "gate_type": rule.gate_type.value,
+                "confidence": lens_context.confidence,
+                "threshold": rule.threshold,
+                "auto_proceed_ms": rule.auto_proceed_ms
+            }
+        )
+        
+        return challenge
+    
+    def _generate_tier3_options(
+        self,
+        challenge_type: ChallengeType,
+        gate_type: GateType
+    ) -> List[str]:
+        """
+        Generate options for user based on gate type.
+        
+        Hard gates: Accept / Reject / Cancel
+        Soft gates: Accept / Reject / Proceed anyway / Cancel
+        Context gates: Provide context / Clarify / Proceed / Cancel
+        """
+        if gate_type == GateType.HARD:
+            return [
+                "1. Accept CORTEX recommendation and proceed",
+                "2. Reject and try alternative approach",
+                "3. Cancel and review manually"
+            ]
+        elif gate_type == GateType.SOFT:
+            return [
+                "1. Accept CORTEX recommendation",
+                "2. Modify request and retry",
+                "3. Acknowledge risk and proceed anyway",
+                "4. Cancel and review"
+            ]
+        elif gate_type == GateType.CONTEXT:
+            return [
+                "1. Provide additional context",
+                "2. Clarify ambiguous parts",
+                "3. Accept CORTEX interpretation and proceed",
+                "4. Cancel"
+            ]
+        
+        return ["1. Accept", "2. Reject", "3. Cancel"]
     
     def format_challenge_response(
         self,
