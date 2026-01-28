@@ -1,49 +1,65 @@
 # ============================================================================
-# CORTEX DOCKER-PLAN: PHASE 11 - EVENT-DRIVEN KNOWLEDGE INGESTION ARCHITECTURE
+# CORTEX CORTICAL MEMORY SYSTEM - ORGANIZATIONAL INTELLIGENCE ARCHITECTURE
 # ============================================================================
-# Date: 2026-01-28
-# Authority: CORTEX Master Orchestrator + ChallengeEngine
+# Date: 2026-01-28 (Enhanced with brain nomenclature + LENSSmartFacade)
+# Authority: CORTEX Master Orchestrator + ChallengeEngine + LENSOrchestrator
 # Status: APPROVED FOR IMPLEMENTATION
 # Priority: P0-CRITICAL (Foundational architecture for organizational intelligence)
+#
+# Architecture Metaphor: Human Brain Cognitive System
+#   - Sensory Input Layer: Event-driven ingestion (like sensory neurons)
+#   - Synaptic Networks: Knowledge graphs (like neural connections)
+#   - Cortical Integration: LENS + Graph federation (like cortical processing)
+#   - Memory Consolidation: Reconciliation (like sleep memory consolidation)
 #
 # Strategic Context:
 #   User Vision: Crawler-based knowledge ingestion (code, API, DB, compliance)
 #   Challenge Response: Event-driven > Crawlers (real-time, efficient, accurate)
-#   Architecture: Federated domain graphs + schema-aware extractors + reconciliation
+#   Architecture: Synaptic networks + sensory extractors + memory consolidation
 #   Impact: Sub-5s freshness, 90% compute reduction, audit-ready compliance
 #
 # Key Principles:
-#   - Extensibility: Plugin extractors, federated subgraphs, schema evolution
+#   - Extensibility: Plugin extractors, federated synaptic networks, schema evolution
 #   - Scalability: Event-driven ingestion, parallel processing, O(change) not O(repo)
-#   - Accuracy: Real-time CDC, drift detection, reconciliation safety net
-#   - Efficiency: Delta processing, query federation, 3-tier caching
+#   - Accuracy: Real-time CDC, drift detection, memory consolidation safety net
+#   - Efficiency: Delta processing, cortical integration, 3-tier caching
 #   - Team Collaboration: Subgraph ownership, cross-team visibility, shared knowledge
 # ============================================================================
 
 metadata:
-  phase_name: "Event-Driven Knowledge Ingestion - Organizational Nervous System"
+  system_name: "Cortical Memory System"
+  subsystem: "Organizational Intelligence Infrastructure"
   date_created: "2026-01-28"
-  phase_id: "11"
+  date_enhanced: "2026-01-28"
+  architecture_version: "2.0"  # v1.0 = Pure event-driven, v2.0 = LENS + Graph hybrid
   status: "APPROVED"
   priority: "P0-CRITICAL"
   blocking: false  # Enhances existing, doesn't block
   foundational: true  # Enables all future governance intelligence
   
+  # Brain-inspired architecture layers
+  cognitive_layers:
+    sensory_input: "Sensory Input Layer (Git, API, DB events)"
+    synaptic_networks: "Synaptic Networks (Dependency, Compliance, Service graphs)"
+    cortical_integration: "Cortical Integration Layer (LENS + Graph federation)"
+    memory_consolidation: "Memory Consolidation Process (Reconciliation)"
+    working_memory: "Working Memory (LENS local analysis)"
+  
   # Delivery strategy
   delivery_strategy: "TDD_INCREMENTAL"
-  stage_1: "Git Event Ingestion + Dependency Graph (Phase 11.1)"
-  stage_2: "Compliance Extractor + Compliance Graph (Phase 11.2)"
-  stage_3: "API/Service Extractors + Service Graph (Phase 11.3)"
-  stage_4: "Federation Layer + DoR Integration (Phase 11.4)"
-  stage_5: "Reconciliation Crawlers + Drift Detection (Phase 11.5)"
+  stage_1: "Sensory Input Layer + Dependency Synapses (CMS-1)"
+  stage_2: "Compliance Extractor + Compliance Synapses (CMS-2)"
+  stage_3: "API/Service Extractors + Service Synapses (CMS-3)"
+  stage_4: "Cortical Integration Layer + LENSSmartFacade (CMS-4)"
+  stage_5: "Memory Consolidation Process + Drift Detection (CMS-5)"
   
   # Estimated effort
-  total_hours: "60-80 hours"
-  phase_11_1_hours: "12-16 hours"
-  phase_11_2_hours: "14-18 hours"
-  phase_11_3_hours: "12-16 hours"
-  phase_11_4_hours: "10-14 hours"
-  phase_11_5_hours: "12-16 hours"
+  total_hours: "68-88 hours"  # +8-10h for LENSSmartFacade
+  cms_1_hours: "12-16 hours"
+  cms_2_hours: "14-18 hours"
+  cms_3_hours: "12-16 hours"
+  cms_4_hours: "18-22 hours"  # +8h for LENSSmartFacade integration
+  cms_5_hours: "12-16 hours"
   
   # Strategic alignment (Challenge-validated)
   strategic_goals:
@@ -99,79 +115,87 @@ metadata:
       - Replay operations logged to audit trail
 
 # ============================================================================
-# PHASE 11.1: GIT EVENT INGESTION + DEPENDENCY GRAPH
+# CMS-1: SENSORY INPUT LAYER + DEPENDENCY SYNAPSES
 # ============================================================================
-phase_11_1:
-  name: "Git Event Ingestion + Dependency Graph"
+# Brain Metaphor: Sensory neurons receiving external stimuli (Git events)
+# Function: Real-time event ingestion and dependency relationship mapping
+# ============================================================================
+cms_1:
+  layer_name: "Sensory Input Layer + Dependency Synapses"
+  brain_analogy: "Sensory neurons → Thalamus → Synaptic formation"
   duration: "12-16 hours"
   priority: "P0-CRITICAL"
   status: "PLANNED"
   
   description: |
-    Build event ingestion pipeline for Git webhooks (push, PR, merge) and
-    create Dependency Graph for real-time CVE awareness. This replaces
-    periodic scanning with continuous monitoring.
+    Build sensory input layer for Git webhooks (push, PR, merge) and
+    create Dependency Synapses for real-time CVE awareness. This replaces
+    periodic scanning with continuous sensory monitoring.
+    
+    Like the human sensory system, this layer continuously monitors external
+    stimuli (code changes, dependency updates) and forms synaptic connections
+    (package → version → CVE relationships) for rapid recall.
     
   objectives:
-    - Create EventIngestionOrchestrator base class
-    - Implement GitEventListener (GitHub/GitLab/Bitbucket webhooks)
-    - Implement DependencyExtractor (requirements.txt, package.json, go.mod)
-    - Create DependencyGraph (package → version → CVE mappings)
+    - Create SensoryInputOrchestrator base class
+    - Implement GitSensoryReceptor (GitHub/GitLab/Bitbucket webhooks)
+    - Implement DependencySynapticExtractor (requirements.txt, package.json, go.mod)
+    - Create DependencySynapticNetwork (package → version → CVE synapses)
     - Integrate with existing CVE databases (NVD, OSV, GitHub Advisory)
-    - Add event buffering and batch processing
-    - Wire to MCP as knowledge_base_git_events tool
+    - Add event buffering and batch processing (sensory gating)
+    - Wire to MCP as cortical_memory_git_events tool
     
   success_criteria:
-    - Git push events processed < 5 seconds
-    - Dependency changes update graph automatically
+    - Git push events processed < 5 seconds (sensory latency)
+    - Dependency changes update synaptic network automatically
     - CVE alerts fire on vulnerable package detection
-    - 100% test coverage on event handlers
-    - Audit trail logs all event ingestion
+    - 100% test coverage on sensory receptors
+    - Audit trail logs all sensory input
     
   file_structure:
     orchestrators:
-      - "cortex/orchestrators/infrastructure/event_ingestion_orchestrator.py"
-      - "cortex/orchestrators/infrastructure/__init__.py"
+      - "cortex/orchestrators/cortical/sensory_input_orchestrator.py"
+      - "cortex/orchestrators/cortical/__init__.py"
     
-    event_listeners:
-      - "cortex/event_listeners/git_event_listener.py"
-      - "cortex/event_listeners/base_event_listener.py"
-      - "cortex/event_listeners/__init__.py"
+    sensory_receptors:
+      - "cortex/sensory/git_sensory_receptor.py"
+      - "cortex/sensory/base_sensory_receptor.py"
+      - "cortex/sensory/__init__.py"
     
-    extractors:
-      - "cortex/extractors/dependency_extractor.py"
-      - "cortex/extractors/base_extractor.py"
-      - "cortex/extractors/__init__.py"
+    synaptic_extractors:
+      - "cortex/synaptic/dependency_synaptic_extractor.py"
+      - "cortex/synaptic/base_synaptic_extractor.py"
+      - "cortex/synaptic/__init__.py"
     
-    graphs:
-      - "cortex/knowledge_graphs/dependency_graph.py"
-      - "cortex/knowledge_graphs/base_graph.py"
-      - "cortex/knowledge_graphs/__init__.py"
+    synaptic_networks:
+      - "cortex/synaptic/networks/dependency_synaptic_network.py"
+      - "cortex/synaptic/networks/base_synaptic_network.py"
+      - "cortex/synaptic/networks/__init__.py"
     
     tests:
-      - "tests/orchestrators/infrastructure/test_event_ingestion_orchestrator.py"
-      - "tests/event_listeners/test_git_event_listener.py"
-      - "tests/extractors/test_dependency_extractor.py"
-      - "tests/knowledge_graphs/test_dependency_graph.py"
+      - "tests/orchestrators/cortical/test_sensory_input_orchestrator.py"
+      - "tests/sensory/test_git_sensory_receptor.py"
+      - "tests/synaptic/test_dependency_synaptic_extractor.py"
+      - "tests/synaptic/networks/test_dependency_synaptic_network.py"
   
   acceptance_criteria:
-    - ac_id: "AC-EKI-001-01"
-      description: "EventIngestionOrchestrator processes Git webhook events"
+    - ac_id: "AC-CMS-001-01"
+      description: "SensoryInputOrchestrator processes Git webhook events"
       validation: "Unit tests + integration test with mock webhook"
     
-    - ac_id: "AC-EKI-001-02"
-      description: "DependencyExtractor parses Python, Node.js, Go dependencies"
+    - ac_id: "AC-CMS-001-02"
+      description: "DependencySynapticExtractor parses Python, Node.js, Go dependencies"
       validation: "80+ tests covering all package managers"
     
-    - ac_id: "AC-EKI-001-03"
+    - ac_id: "AC-CMS-001-03"
       description: "DependencyGraph stores package → version → CVE mappings"
       validation: "Graph queries return accurate vulnerability data"
     
-    - ac_id: "AC-EKI-001-04"
+    - ac_id: "AC-CMS-001-04"
       description: "Event ingestion logs to audit trail"
       validation: "AC_START → AC_EXECUTE → AC_COMPLETE for every event"
     
-    - ac_id: "AC-EKI-001-05"
+    - ac_id: "AC-CMS-001-05"
       description: "Event handlers are idempotent (CORE-041)"
       validation: "Replaying events produces identical graph state"
   
@@ -207,9 +231,9 @@ phase_11_1:
       - "cortex_cve_alerts_fired_total"
 
 # ============================================================================
-# PHASE 11.2: COMPLIANCE EXTRACTOR + COMPLIANCE GRAPH
+# CORTICAL MEMORY SYSTEM.2: COMPLIANCE EXTRACTOR + COMPLIANCE GRAPH
 # ============================================================================
-phase_11_2:
+cms_2:
   name: "Compliance Extractor + Compliance Graph"
   duration: "14-18 hours"
   priority: "P0-CRITICAL"
@@ -254,23 +278,23 @@ phase_11_2:
       - "tests/compliance/test_drift_detector.py"
   
   acceptance_criteria:
-    - ac_id: "AC-EKI-002-01"
+    - ac_id: "AC-CMS-002-01"
       description: "ComplianceExtractor parses company/domains/*.yaml standards"
       validation: "All 12 compliance YAML files loaded into graph"
     
-    - ac_id: "AC-EKI-002-02"
+    - ac_id: "AC-CMS-002-02"
       description: "Code changes mapped to affected compliance controls"
       validation: "Modify payment endpoint → graph shows PCI-DSS controls"
     
-    - ac_id: "AC-EKI-002-03"
+    - ac_id: "AC-CMS-002-03"
       description: "DoR enriched with compliance context"
       validation: "IntentRouter queries ComplianceGraph before approval"
     
-    - ac_id: "AC-EKI-002-04"
+    - ac_id: "AC-CMS-002-04"
       description: "Drift detection finds undocumented compliance violations"
       validation: "Reconciliation crawler flags PII handling without GDPR docs"
     
-    - ac_id: "AC-EKI-002-05"
+    - ac_id: "AC-CMS-002-05"
       description: "Compliance validation logs to audit trail"
       validation: "Every compliance check has AC_START/COMPLETE entry"
   
@@ -306,9 +330,9 @@ phase_11_2:
       - "cortex_compliance_drift_alerts_total"
 
 # ============================================================================
-# PHASE 11.3: API/SERVICE EXTRACTORS + SERVICE GRAPH
+# CORTICAL MEMORY SYSTEM.3: API/SERVICE EXTRACTORS + SERVICE GRAPH
 # ============================================================================
-phase_11_3:
+cms_3:
   name: "API/Service Extractors + Service Graph"
   duration: "12-16 hours"
   priority: "P1-HIGH"
@@ -354,23 +378,23 @@ phase_11_3:
       - "tests/analyzers/test_blast_radius_calculator.py"
   
   acceptance_criteria:
-    - ac_id: "AC-EKI-003-01"
+    - ac_id: "AC-CMS-003-01"
       description: "APIContractExtractor parses OpenAPI, gRPC, GraphQL specs"
       validation: "All three spec formats loaded into ServiceGraph"
     
-    - ac_id: "AC-EKI-003-02"
+    - ac_id: "AC-CMS-003-02"
       description: "ServiceTopologyExtractor traces service dependencies"
       validation: "Service A calls Service B → graph shows edge"
     
-    - ac_id: "AC-EKI-003-03"
+    - ac_id: "AC-CMS-003-03"
       description: "ServiceGraph tracks team ownership metadata"
       validation: "Each service node has owning_team attribute"
     
-    - ac_id: "AC-EKI-003-04"
+    - ac_id: "AC-CMS-003-04"
       description: "Blast radius calculator shows impact of changes"
       validation: "Modify UserAPI → shows 5 downstream services affected"
     
-    - ac_id: "AC-EKI-003-05"
+    - ac_id: "AC-CMS-003-05"
       description: "LENS integration for code + topology unified view"
       validation: "LENSOrchestrator queries ServiceGraph for context"
   
@@ -405,118 +429,210 @@ phase_11_3:
       - "cortex_service_topology_updates_total"
 
 # ============================================================================
-# PHASE 11.4: FEDERATION LAYER + DOR INTEGRATION
+# CMS-4: CORTICAL INTEGRATION LAYER + LENS SMART FACADE
 # ============================================================================
-phase_11_4:
-  name: "Query Federation Layer + DoR Integration"
-  duration: "10-14 hours"
+# Brain Metaphor: Cortical integration (prefrontal cortex) synthesizing
+#                 working memory (LENS) + long-term memory (synaptic networks)
+# Function: Intelligent routing between fast local analysis and persistent graphs
+# ============================================================================
+cms_4:
+  layer_name: "Cortical Integration Layer + LENSSmartFacade"
+  brain_analogy: "Prefrontal cortex integrating working memory + long-term memory"
+  duration: "18-22 hours"  # +8h for LENSSmartFacade
   priority: "P0-CRITICAL"
   status: "PLANNED"
   
   description: |
-    Create query federation layer that stitches federated subgraphs
-    (Dependency, Compliance, Service) at read-time. Integrate with
-    IntentRouter and DoR approval gate for governance-aware decisions.
+    Create cortical integration layer that intelligently coordinates LENS
+    (working memory - fast, local, ephemeral) with Synaptic Networks
+    (long-term memory - persistent, distributed, comprehensive).
+    
+    Like the human prefrontal cortex, this layer decides which memory system
+    to query based on operation type:
+    - Intent classification → Working memory (LENS) only - fast
+    - Compliance validation → Long-term memory (Graphs) only - accurate
+    - Refactoring analysis → Both systems integrated - comprehensive
+    
+    Key Innovation: LENSSmartFacade automatically routes to appropriate
+    analyzer(s) without user needing to understand dual-memory architecture.
     
   objectives:
-    - Create GraphFederationOrchestrator
-    - Implement cross-graph query language
+    - Create CorticalIntegrationOrchestrator (federation layer)
+    - Implement LENSSmartFacade (intelligent routing)
+    - Implement LENSQueryOptimizer (decision logic)
     - Integrate with IntentRouter for enriched intent classification
-    - Enhance DoR with graph-backed confidence scoring
-    - Add query optimization and caching
-    - Create unified query API for all graphs
+    - Enhance DoR with synaptic network-backed confidence scoring
+    - Add query optimization and caching (both memory systems)
+    - Create unified query API for all intelligence sources
+    - Extend LENSContext with graph_context field
     
   success_criteria:
-    - Single query spans multiple graphs seamlessly
-    - DoR confidence boosted by graph evidence
-    - IntentRouter makes smarter routing decisions
+    - Single query spans multiple synaptic networks seamlessly
+    - DoR confidence boosted by synaptic evidence
+    - IntentRouter makes smarter routing decisions with cortical data
     - Query latency < 200ms for federated queries
+    - LENS-only queries remain < 200ms (no performance regression)
     - 100% integration with existing orchestrators
+    - Automatic analyzer selection (no manual routing needed)
     
   file_structure:
     orchestrators:
-      - "cortex/orchestrators/infrastructure/graph_federation_orchestrator.py"
+      - "cortex/orchestrators/cortical/cortical_integration_orchestrator.py"
+      - "cortex/orchestrators/cortical/__init__.py"
     
-    query_engine:
-      - "cortex/knowledge_graphs/query_engine.py"
-      - "cortex/knowledge_graphs/query_optimizer.py"
-      - "cortex/knowledge_graphs/query_cache.py"
+    smart_facade:
+      - "cortex/orchestrators/support/lens_smart_facade.py"  # NEW - Main facade
+      - "cortex/orchestrators/support/lens_query_optimizer.py"  # NEW - Decision logic
+    
+    synaptic_query:
+      - "cortex/synaptic/networks/query_engine.py"
+      - "cortex/synaptic/networks/query_optimizer.py"
+      - "cortex/synaptic/networks/query_cache.py"
     
     integration:
-      - "cortex/orchestrators/core/intent_router_graph_integration.py"
-      - "cortex/orchestrators/core/dor_graph_integration.py"
+      - "cortex/orchestrators/core/intent_router_cortical_integration.py"
+      - "cortex/orchestrators/core/dor_cortical_integration.py"
+      - "cortex/orchestrators/support/lens_orchestrator.py"  # MODIFIED - Add analyze_file_with_graph()
     
     tests:
-      - "tests/orchestrators/infrastructure/test_graph_federation_orchestrator.py"
-      - "tests/knowledge_graphs/test_query_engine.py"
-      - "tests/integration/test_intent_router_graph_integration.py"
+      - "tests/orchestrators/cortical/test_cortical_integration_orchestrator.py"
+      - "tests/orchestrators/support/test_lens_smart_facade.py"  # NEW
+      - "tests/orchestrators/support/test_lens_query_optimizer.py"  # NEW
+      - "tests/synaptic/networks/test_query_engine.py"
+      - "tests/integration/test_intent_router_cortical_integration.py"
   
   acceptance_criteria:
-    - ac_id: "AC-EKI-004-01"
-      description: "GraphFederationOrchestrator queries multiple graphs in one request"
+    - ac_id: "AC-CMS-004-01"
+      description: "CorticalIntegrationOrchestrator queries multiple synaptic networks in one request"
       validation: "Query 'PCI-DSS violations in payment services with CVEs' works"
     
-    - ac_id: "AC-EKI-004-02"
-      description: "IntentRouter uses graph context for classification"
-      validation: "Graph evidence boosts DoR confidence by 0.0-0.4"
+    - ac_id: "AC-CMS-004-02"
+      description: "IntentRouter uses synaptic context for classification"
+      validation: "Synaptic evidence boosts DoR confidence by 0.0-0.4"
     
-    - ac_id: "AC-EKI-004-03"
-      description: "DoR approval gate enriched with graph insights"
+    - ac_id: "AC-CMS-004-03"
+      description: "DoR approval gate enriched with cortical insights"
       validation: "DoR displays 'Affects 3 services, 2 HIPAA controls, 1 CVE'"
     
-    - ac_id: "AC-EKI-004-04"
-      description: "Query caching reduces redundant graph lookups"
+    - ac_id: "AC-CMS-004-04"
+      description: "Query caching reduces redundant lookups across both memory systems"
       validation: "Second identical query returns from cache in < 10ms"
     
-    - ac_id: "AC-EKI-004-05"
-      description: "All 23 orchestrators can query federated graphs"
+    - ac_id: "AC-CMS-004-05"
+      description: "All 23 orchestrators can query cortical integration layer"
       validation: "Integration tests for TDD, Refactoring, Documentation orchestrators"
+    
+    - ac_id: "AC-CMS-004-06"
+      description: "LENSSmartFacade automatically selects analyzers based on operation"
+      validation: "classify_intent → LENS only, compliance_check → Graph only, refactor → Both"
+    
+    - ac_id: "AC-CMS-004-07"
+      description: "LENSContext extended with graph_context field"
+      validation: "lens_context.graph_context contains compliance, dependencies, services"
+    
+    - ac_id: "AC-CMS-004-08"
+      description: "No performance regression for LENS-only operations"
+      validation: "Intent classification remains < 200ms (no graph overhead)"
+  
+  lens_smart_facade_design:
+    decision_matrix: |
+      | User Operation          | LENS Git | LENS AST | LENS Comment | Synaptic Query | Crawler | Latency |
+      |-------------------------|----------|----------|--------------|----------------|---------|---------|
+      | Intent Classification   | ✅       | ✅       | ✅           | ❌             | ❌      | ~200ms  |
+      | Compliance Check        | ❌       | ❌       | ❌           | ✅             | ❌      | ~50ms   |
+      | Refactor Request        | ✅       | ✅       | ❌           | ✅             | ❌      | ~250ms  |
+      | Impact Analysis         | ❌       | ❌       | ❌           | ✅             | ❌      | ~100ms  |
+      | CVE Scan                | ❌       | ❌       | ❌           | ✅             | ❌      | ~80ms   |
+      | Full Onboarding         | ✅       | ✅       | ✅           | ✅             | ✅      | ~30s    |
+      | Drift Detection         | ❌       | ❌       | ❌           | ✅             | ✅      | ~5-10m  |
+    
+    example_usage: |
+      ```python
+      # Single entry point for all intelligence
+      from cortex.orchestrators.support.lens_smart_facade import LENSSmartFacade
+      
+      facade = LENSSmartFacade(
+          lens_orchestrator=LENSOrchestrator(repo_path=Path("/repo")),
+          cortical_integration=CorticalIntegrationOrchestrator()
+      )
+      
+      # Intent classification → LENS only (fast)
+      result = facade.analyze("classify_intent", file_path=Path("module.py"))
+      # Uses: GitHistoryAnalyzer + ASTAnalyzer + CommentExtractor
+      
+      # Compliance check → Synaptic networks only (accurate)
+      result = facade.analyze("compliance_check", file_path=Path("payment.py"))
+      # Uses: ComplianceSynapticNetwork only
+      
+      # Refactoring → Both systems (comprehensive)
+      result = facade.analyze("refactor", file_path=Path("service.py"))
+      # Uses: LENS + DependencySynapticNetwork + ServiceSynapticNetwork
+      ```
   
   mcp_integration:
     tools:
-      - name: "knowledge_query"
-        description: "Unified query API for all graphs"
+      - name: "cortical_query"
+        description: "Unified query API for all intelligence (LENS + synaptic networks)"
         parameters:
           - "query: str"  # Natural language or structured
-          - "graphs: Optional[List[str]]"  # dependency, compliance, service
-        returns: "Federated query result with metadata"
+          - "operation_type: str"  # classify_intent, compliance_check, refactor, etc.
+          - "file_path: Optional[str]"
+          - "networks: Optional[List[str]]"  # dependency, compliance, service
+        returns: "Unified intelligence result with metadata"
+      
+      - name: "cortical_status"
+        description: "Show cortical integration health (both memory systems)"
+        returns: "LENS status + synaptic network status + cache metrics"
   
   health_checks:
     endpoints:
-      - path: "/health/graph-federation"
+      - path: "/health/cortical-integration"
         checks:
-          - "All subgraphs reachable"
+          - "All synaptic networks reachable"
+          - "LENS orchestrator healthy"
           - "Query cache hit rate > 30%"
           - "Average query latency < 200ms"
-          - "Federation layer healthy"
+          - "Cortical integration layer healthy"
+          - "LENSSmartFacade routing functional"
     
     metrics:
-      - "cortex_graph_queries_total"
-      - "cortex_graph_query_duration_seconds"
-      - "cortex_graph_cache_hit_rate"
-      - "cortex_graph_federation_errors_total"
+      - "cortex_cortical_queries_total"
+      - "cortex_cortical_query_duration_seconds"
+      - "cortex_cortical_cache_hit_rate"
+      - "cortex_cortical_integration_errors_total"
+      - "cortex_lens_only_queries_total"  # Fast path
+      - "cortex_synaptic_only_queries_total"  # Graph path
+      - "cortex_hybrid_queries_total"  # Both systems
 
 # ============================================================================
-# PHASE 11.5: RECONCILIATION CRAWLERS + DRIFT DETECTION
+# CMS-5: MEMORY CONSOLIDATION PROCESS + DRIFT DETECTION
 # ============================================================================
-phase_11_5:
-  name: "Reconciliation Crawlers + Drift Detection"
+# Brain Metaphor: Sleep memory consolidation (hippocampus → cortex transfer)
+# Function: Periodic full-scan reconciliation ensuring long-term accuracy
+# ============================================================================
+cms_5:
+  layer_name: "Memory Consolidation Process + Drift Detection"
+  brain_analogy: "Sleep-based memory consolidation (hippocampus → neocortex)"
   duration: "12-16 hours"
   priority: "P1-HIGH"
   status: "PLANNED"
   
   description: |
-    Build safety net reconciliation system that periodically validates
-    graph state against full repository scan. Detects missed events,
-    graph corruption, and compliance drift.
+    Build memory consolidation system that periodically validates synaptic
+    network state against full repository scan. Like human sleep, this process
+    detects missed sensory input, corrects network corruption, and strengthens
+    accurate synaptic connections while weakening incorrect ones.
+    
+    Runs during "low-activity windows" (analogous to sleep cycles) to avoid
+    interfering with real-time sensory processing.
     
   objectives:
-    - Create ReconciliationOrchestrator
-    - Implement scheduled full-repository crawlers
-    - Add graph state validation and integrity checks
-    - Create drift detection alerts
-    - Build self-healing for minor inconsistencies
-    - Add reconciliation dashboard
+    - Create MemoryConsolidationOrchestrator
+    - Implement scheduled full-repository scanners (sleep cycles)
+    - Add synaptic network validation and integrity checks
+    - Create drift detection alerts (memory corruption detection)
+    - Build self-healing for minor inconsistencies (synaptic pruning)
+    - Add consolidation dashboard (sleep metrics)
     
   success_criteria:
     - Scheduled reconciliation runs during low-activity windows
@@ -551,23 +667,23 @@ phase_11_5:
       - "tests/healing/test_auto_healer.py"
   
   acceptance_criteria:
-    - ac_id: "AC-EKI-005-01"
+    - ac_id: "AC-CMS-005-01"
       description: "ReconciliationOrchestrator runs on schedule (e.g., 3am daily)"
       validation: "Cron job triggers full reconciliation"
     
-    - ac_id: "AC-EKI-005-02"
+    - ac_id: "AC-CMS-005-02"
       description: "Repository crawlers detect missed events"
       validation: "Missed Git push from webhook failure detected"
     
-    - ac_id: "AC-EKI-005-03"
+    - ac_id: "AC-CMS-005-03"
       description: "Drift detection alerts on graph vs reality mismatch"
       validation: "Code declares HIPAA but graph missing → alert fired"
     
-    - ac_id: "AC-EKI-005-04"
+    - ac_id: "AC-CMS-005-04"
       description: "Auto-healer corrects minor inconsistencies"
       validation: "Missing dependency in graph → auto-added from lockfile"
     
-    - ac_id: "AC-EKI-005-05"
+    - ac_id: "AC-CMS-005-05"
       description: "Reconciliation dashboard shows drift metrics"
       validation: "Grafana dashboard displays drift rate, healing stats"
   
@@ -777,12 +893,12 @@ documentation:
     - "docs/11-knowledge-ingestion/mcp-tools.md"
   
   files_to_update:
-    - ".github/copilot-instructions.md"  # Add Phase 11 + 6 new MCP tools
+    - ".github/copilot-instructions.md"  # Add Cortical Memory System + 6 new MCP tools
     - "docs/11-mcp-tools/README.md"  # Document new MCP tools
     - "docs/12-infrastructure/README.md"  # Neo4j, event ingestion
     - "docs/15-observability/dashboards.md"  # New Grafana dashboards
     - "deployment/health_checks.yaml"  # 5 new health endpoints
-    - "_workspaces/docker-plan/verify_prod_ready.py"  # Add Phase 11 checks
+    - "_workspaces/docker-plan/verify_prod_ready.py"  # Add Cortical Memory System checks
 
 # ============================================================================
 # AUDIT TRAIL
@@ -802,7 +918,7 @@ audit:
   
   ac_ids:
     prefix: "AC-EKI"
-    range: "AC-EKI-001-01 through AC-EKI-005-05"
+    range: "AC-CMS-001-01 through AC-CMS-005-05"
     total: 25
   
   estimated_completion:
