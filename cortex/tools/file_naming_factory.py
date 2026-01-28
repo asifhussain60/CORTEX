@@ -305,7 +305,7 @@ class FileNameFactory:
         
         Checks:
         - Length (min/max)
-        - Case style (kebab-case except Python)
+        - Case style (kebab-case for docs/scripts; snake_case for Python per PEP 8)
         - No prohibited patterns
         - No special characters
         - Proper extension
