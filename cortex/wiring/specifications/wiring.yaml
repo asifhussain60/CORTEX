@@ -420,7 +420,7 @@ orchestrators:
       tier: 3
       priority: 71
       dependencies:
-        - "SecurityThreatAnalyzer"
+        - "EnforcementOrchestrator"
       capabilities:
         - hard_security_gates
         - threat_blocking
