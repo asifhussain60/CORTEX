@@ -1,7 +1,7 @@
 """Intent module for CORTEX."""
 
 from .intent_canonicalizer import IntentCanonicalizer, CanonicalizedIntent, IntentScope, IntentType
-from .challenge_generator import ChallengeGenerator, Challenge, ChallengeCategory, Severity
+from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge, ChallengeCategory, Severity
 from .comprehension_yaml import (
     CanonicalIntentComposer,
     ComprehensionYAML,

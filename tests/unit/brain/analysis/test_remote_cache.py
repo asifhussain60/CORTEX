@@ -12,6 +12,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+# Skip all tests if diskcache is not installed
+pytest.importorskip("diskcache", reason="diskcache not installed")
+
 from cortex.brain.analysis.remote_cache import (
     RemoteCache,
     CacheEntry,

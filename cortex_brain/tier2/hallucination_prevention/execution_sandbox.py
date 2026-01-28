@@ -53,6 +53,7 @@ class ExecutionSandbox:
         mode: "ExecutionMode" = None,
         description: str = None,
         snapshot: "SandboxSnapshot" = None,
+        timeout_ms: int = None,
         *args: Any,
         **kwargs: Any,
     ) -> "SandboxExecution":
@@ -64,11 +65,15 @@ class ExecutionSandbox:
             func: Function to execute.
             mode: Execution mode.
             description: Operation description.
+            timeout_ms: Timeout in milliseconds.
             *args: Positional arguments.
             **kwargs: Keyword arguments.
 
         Returns:
             SandboxExecution with execution details.
+            
+        Raises:
+            TypeError: If operation is None and func is None.
         """
         import time
         import traceback
@@ -76,6 +81,14 @@ class ExecutionSandbox:
 
         # Use operation if provided, otherwise func
         executable = operation or func
+        
+        # Validate that we have something to execute
+        if executable is None:
+            raise TypeError("operation or func must be provided and callable")
+        
+        if not callable(executable):
+            raise ValueError("operation must be callable")
+        
         op_id = operation_id or str(uuid_module.uuid4())
         mode = mode or ExecutionMode.SAFE
 
@@ -85,6 +98,7 @@ class ExecutionSandbox:
         execution = SandboxExecution(
             execution_id=op_id,
             status="running",
+            mode=mode,
         )
 
         try:
@@ -96,21 +110,32 @@ class ExecutionSandbox:
 
             execution.status = "completed"
             execution.result = result
+            execution.captured_output = result
             
             # Add mode-specific side effect tracking
             if mode == ExecutionMode.SANDBOX:
                 execution.side_effects.append({"SANDBOX_MODE": "ISOLATED"})
+                execution.committed = False
             elif mode == ExecutionMode.DRY_RUN:
                 execution.side_effects.append({"DRY_RUN_MODE": "NO_SIDE_EFFECTS"})
+                execution.committed = False
+            elif mode == ExecutionMode.COMMITTED:
+                execution.committed = True
+            else:
+                execution.committed = False
             
             # Record execution
+            duration = (time.time() - start_time) * 1000
+            execution.duration_ms = duration
+            execution.context = {"description": description, "mode": mode.value if hasattr(mode, 'value') else str(mode)}
+            
             self.executed_operations.append({
                 "operation_id": op_id,
                 "timestamp": datetime.now(),
                 "success": True,
                 "mode": mode.value if hasattr(mode, 'value') else str(mode),
                 "description": description,
-                "duration_ms": (time.time() - start_time) * 1000,
+                "duration_ms": duration,
             })
             
             # Add state attribute for test compatibility
@@ -122,6 +147,8 @@ class ExecutionSandbox:
             execution.error = str(e)
             execution.state = ExecutionState.FAILED
             execution.exit_code = 1
+            execution.duration_ms = (time.time() - start_time) * 1000
+            execution.context = {"description": description, "mode": mode.value if hasattr(mode, 'value') else str(mode), "error": str(e)}
 
             self.executed_operations.append({
                 "operation_id": op_id,
@@ -146,14 +173,21 @@ class ExecutionSandbox:
         import uuid as uuid_module
         import copy
         
+        snapshot_id = str(uuid_module.uuid4())
+        state_copy = copy.deepcopy(state)
+        
         snapshot = SandboxSnapshot(
             timestamp=datetime.now().isoformat(),
             state=ExecutionState.PENDING,
-            state_data=copy.deepcopy(state),
-            snapshot_id=str(uuid_module.uuid4()),
+            state_data=state_copy,
+            snapshot_id=snapshot_id,
         )
         
-        self.snapshots.append(snapshot)
+        # Store a separate copy for integrity checking
+        self.snapshots.append({
+            "snapshot_id": snapshot_id,
+            "state_data": copy.deepcopy(state_copy),
+        })
         return snapshot
 
     def rollback(self, snapshot: "SandboxSnapshot") -> Dict[str, Any]:
@@ -164,25 +198,29 @@ class ExecutionSandbox:
             
         Returns:
             Restored state.
-        """
-        if snapshot and hasattr(snapshot, 'state_data'):
-            import copy
-            return copy.deepcopy(snapshot.state_data)
-        return {}
-
-    def validate_snapshot_integrity(self, snapshot: "SandboxSnapshot", state: Dict[str, Any]) -> bool:
-        """Validate snapshot integrity against current state.
-        
-        Args:
-            snapshot: Snapshot to validate.
-            state: Current state.
             
-        Returns:
-            Whether snapshot is valid.
+        Raises:
+            ValueError: If snapshot integrity check fails.
         """
         if not snapshot or not hasattr(snapshot, 'state_data'):
-            return False
-        return snapshot.state_data == state
+            raise ValueError("Invalid snapshot")
+        
+        # Validate that the snapshot wasn't tampered with
+        # Check if it's in our tracked snapshots
+        original = None
+        for s in self.snapshots:
+            if s["snapshot_id"] == snapshot.snapshot_id:
+                original = s
+                break
+        
+        if original and original["state_data"] != snapshot.state_data:
+            raise ValueError("Snapshot integrity check failed: data was modified")
+        
+        import copy
+        return copy.deepcopy(snapshot.state_data)
+        
+        import copy
+        return copy.deepcopy(snapshot.state_data)
 
     def detect_side_effects(self, before_state: Dict[str, Any], after_state: Dict[str, Any]) -> Dict[str, Any]:
         """Detect side effects by comparing states.
@@ -221,6 +259,56 @@ class ExecutionSandbox:
         """
         return self.executed_operations.copy()
 
+    def get_execution_history(self, limit: int = None, filter_by: Dict[str, Any] = None) -> list:
+        """Get execution history with optional filtering.
+
+        Args:
+            limit: Maximum number of entries to return.
+            filter_by: Dict of field-value pairs to filter by.
+
+        Returns:
+            List of executed operations.
+        """
+        result = self.executed_operations.copy()
+        
+        # Apply filter
+        if filter_by:
+            filtered = []
+            for entry in result:
+                match = True
+                for key, value in filter_by.items():
+                    if entry.get(key) != value:
+                        match = False
+                        break
+                if match:
+                    filtered.append(entry)
+            result = filtered
+        
+        # Apply limit
+        if limit is not None and limit > 0:
+            result = result[:limit]
+        
+        return result
+
+    def validate_snapshot_integrity(self, snapshot: "SandboxSnapshot", state: Dict[str, Any] = None) -> bool:
+        """Validate snapshot integrity against current state.
+        
+        Args:
+            snapshot: Snapshot to validate.
+            state: Current state (optional).
+            
+        Returns:
+            Whether snapshot is valid.
+            
+        Raises:
+            ValueError: If snapshot integrity check fails.
+        """
+        if not snapshot or not hasattr(snapshot, 'state_data'):
+            raise ValueError("Invalid snapshot: missing state_data")
+        if state is not None and snapshot.state_data != state:
+            raise ValueError("Snapshot integrity check failed: state mismatch")
+        return True
+
     def clear_log(self) -> None:
         """Clear execution log."""
         self.executed_operations.clear()
@@ -239,6 +327,13 @@ class SandboxExecution:
     state: "ExecutionState" = None
     exit_code: int = -1
     side_effects: list = None
+    mode: "ExecutionMode" = None
+    planned_changes: list = None
+    committed: bool = False
+    captured_output: Any = None
+    timestamp: datetime = None
+    duration_ms: float = 0.0
+    context: Dict[str, Any] = None
     
     def __post_init__(self):
         """Initialize defaults."""
@@ -246,6 +341,12 @@ class SandboxExecution:
             self.side_effects = []
         if self.state is None:
             self.state = ExecutionState.PENDING
+        if self.planned_changes is None:
+            self.planned_changes = []
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+        if self.context is None:
+            self.context = {}
 
 
 from enum import Enum
@@ -273,6 +374,11 @@ class SandboxSnapshot:
     results: Dict[str, Any] = field(default_factory=dict)
     snapshot_id: str = field(default_factory=lambda: str(__import__('uuid').uuid4()))
     state_data: Dict[str, Any] = field(default_factory=dict)
+    
+    @property
+    def data(self) -> Dict[str, Any]:
+        """Alias for state_data for backwards compatibility."""
+        return self.state_data
 
 
 __all__ = ["ExecutionSandbox", "SandboxResult", "SandboxExecution", "ExecutionMode", "ExecutionState", "SandboxSnapshot"]
