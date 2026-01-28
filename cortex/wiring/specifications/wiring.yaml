@@ -8,7 +8,7 @@
 #
 # Structure:
 #   orchestrators:
-#     core: [...]      # 6 core orchestrators
+#     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
 #     domain: [...]    # 6 domain orchestrators
 #     support: [...]   # 11 support orchestrators
 # =========================================================================
@@ -29,7 +29,7 @@ config:
   fail_fast_on_wiring_error: true
 
 # -------------------------------------------------------------------------
-# CORE ORCHESTRATORS (6)
+# CORE ORCHESTRATORS (7 - Phase 8.1: Added EnforcementOrchestrator)
 # -------------------------------------------------------------------------
 orchestrators:
   core:
@@ -89,6 +89,31 @@ orchestrators:
         - synthesis
       health_check: "synthesize"
       mcp_adapter: "cortex.mcp.adapters.lens_adapter"
+
+    # STAGE 2.7: Governance Enforcement (Phase 8.1)
+    - name: "EnforcementOrchestrator"
+      module: "cortex.orchestrators.core.enforcement_orchestrator"
+      class: "EnforcementOrchestrator"
+      tier: 1
+      priority: 27
+      dependencies:
+        - "LENSSynthesis"
+      capabilities:
+        - governance_enforcement
+        - tier0_blocking
+        - tier1_escalation
+        - parallel_validation
+      health_check: "validate_operation"
+      mcp_adapter: "cortex.mcp.adapters.enforcement_adapter"
+      requires_params:
+        governance_registry:
+          type: "GovernanceRegistry"
+          source: "cortex.brain.core.governance_registry"
+          lazy_create: true
+        audit_logger:
+          type: "EnhancedAuditLogger"
+          source: "cortex.infrastructure.enhanced_audit_logger"
+          lazy_create: true
 
     # STAGE 3: TDD Execution
     - name: "TDDOrchestrator"
