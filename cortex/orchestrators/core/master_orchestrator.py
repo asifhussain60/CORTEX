@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
-from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
 from cortex.brain.core.response_header_injector import ResponseHeaderInjector
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
