@@ -15,6 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
+class Stage4ApprovalContext:
+    """Context for Stage 4 approval/execution."""
+    operation: Dict[str, Any] = field(default_factory=dict)
+    approved: bool = True
+    executor: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class Stage4Output:
     """Output from Stage 4 execution."""
     result: Any = None

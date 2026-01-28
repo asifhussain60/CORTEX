@@ -14,6 +14,15 @@ from cortex.core.result import Result, Ok, Err
 logger = logging.getLogger(__name__)
 
 
+@dataclass
+class Stage3KnowledgeContext:
+    """Context for Stage 3 knowledge retrieval."""
+    query: str = ""
+    domain: str = ""
+    context: Dict[str, Any] = field(default_factory=dict)
+    keywords: List[str] = field(default_factory=list)
+
+
 @dataclass 
 class Stage3Output:
     """Output from Stage 3 knowledge retrieval."""

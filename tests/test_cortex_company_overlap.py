@@ -718,18 +718,18 @@ def process_transaction(amount, user_id):
         pass
     try:
         record_transaction(amount)
-    except Exception:
+    except:
         pass
 """
         
         result = enforcer.validate_code_for_domain("financial", non_compliant_code, "impl")
         
         # Should have violations for:
-        # - CORE-008 (no TDD/tests)
-        # - CORE-013 (bare except)
+        # - CORE-013 (bare except - now properly a bare except clause)
         # - FIN-001 (no audit trail)
         assert result["is_compliant"] is False
         assert len(result["violations"]) > 0
+        # Verify CORE-013 detected (bare except clause)
         assert any(v["rule"] == "CORE-013" for v in result["violations"])
     
     def test_compliant_code_generation_security(self, enforcer):
@@ -873,7 +873,7 @@ def process_transaction(amount: float, user_id: str) -> None:
         code_with_bare_except = """
 try:
     do_something()
-except Exception:
+except:
     pass
 """
         
@@ -931,8 +931,8 @@ def process_transaction(amount: float, user_id: str) -> bool:
         Success flag.
     \"\"\"
     try:
-        audit = {"amount": amount, "user": user_id}
-        return save_audit(audit)
+        audit_trail = {"amount": amount, "user": user_id}
+        return save_audit_trail(audit_trail)
     except IOError as e:
         log_error(e)
         raise

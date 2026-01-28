@@ -26,6 +26,14 @@ import traceback
 import time
 
 
+class TestStatus(Enum):
+    """Test execution status for template tests."""
+    PASSED = "passed"
+    FAILED = "failed"
+    SKIPPED = "skipped"
+    ERROR = "error"
+
+
 # ================================================================================
 # CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
 # ================================================================================
@@ -791,7 +799,7 @@ def create_validation_test(
     """
     def setup():
         from cortex.tools.template_validator import TemplateValidator
-from cortex.models.canonical_enums import TestStatus
+        from cortex.models.canonical_enums import TestStatus
         v = validator or TemplateValidator()
         return v.validate(template)
     

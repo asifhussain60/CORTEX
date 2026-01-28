@@ -25,7 +25,10 @@ class TestHotReloadThreadSafety:
         orchestrator = HotReloadOrchestrator("/tmp/test")
         
         assert hasattr(orchestrator, '_state_lock'), "State lock not found"
-        assert isinstance(orchestrator._state_lock, threading.Lock)
+        # threading.Lock is a factory function, not a type
+        # Check that the lock has the expected acquire/release methods
+        assert hasattr(orchestrator._state_lock, 'acquire'), "State lock missing acquire method"
+        assert hasattr(orchestrator._state_lock, 'release'), "State lock missing release method"
 
     def test_state_property_get(self) -> None:
         """Verify state getter is thread-safe."""

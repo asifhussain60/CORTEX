@@ -27,9 +27,9 @@ class TestPrecommitHookBasics:
     """Test basic pre-commit hook initialization and configuration."""
 
     def test_precommit_config_file_exists(self) -> None:
-        """Verify .pre-commit-hooks.yaml exists."""
-        hook_file = Path("/Users/asifhussain/PROJECTS/CORTEX/.pre-commit-hooks.yaml")
-        assert hook_file.exists(), ".pre-commit-hooks.yaml not found"
+        """Verify .pre-commit-config.yaml exists."""
+        hook_file = Path("/Users/asifhussain/PROJECTS/CORTEX/.pre-commit-config.yaml")
+        assert hook_file.exists(), ".pre-commit-config.yaml not found"
 
     def test_precommit_handler_initialization(self) -> None:
         """Test PrecommitHookHandler can be instantiated."""

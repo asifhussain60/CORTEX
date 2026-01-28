@@ -19,6 +19,11 @@ import re
 from datetime import datetime
 
 
+class ValidationLevel(Enum):
+    """Validation severity level for template validation."""
+    ERROR = "error"
+    WARNING = "warning"
+    INFO = "info"
 
 
 @dataclass
@@ -527,7 +532,6 @@ class TemplateValidator:
             ValidationResult
         """
         import yaml
-from cortex.models.canonical_enums import ValidationLevel
         
         path = Path(path)
         result = ValidationResult()
