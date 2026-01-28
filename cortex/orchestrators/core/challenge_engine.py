@@ -16,6 +16,7 @@ CORE Governance Rules Applied:
 - CORE-013: Specific exception handling
 - CORE-027: Audit trail logging
 - CORE-030: Implementation truth enforcement
+- CORE-035: Uses canonical enums from cortex.models.canonical_enums
 
 Author: Asif Hussain
 Date: 2026-01-25
@@ -34,11 +35,19 @@ from cortex.brain.analysis.security_threat_analyzer import (
     ThreatSeverity,
 )
 
+# CORE-035: Import DisagreementType from canonical location
+# Note: Local DisagreementType kept for backward compatibility but should migrate
+from cortex.models.canonical_enums import DisagreementType as CanonicalDisagreementType
+
 logger = logging.getLogger(__name__)
 
 
 class DisagreementType(Enum):
-    """Types of disagreements CORTEX can have with user requests."""
+    """Types of disagreements CORTEX can have with user requests.
+    
+    DEPRECATED: Use cortex.models.canonical_enums.DisagreementType instead.
+    Kept for backward compatibility during migration.
+    """
     
     BETTER_SOLUTION = "better_solution"  # CORTEX has a superior approach
     MISSING_CONTEXT = "missing_context"  # User missing critical information

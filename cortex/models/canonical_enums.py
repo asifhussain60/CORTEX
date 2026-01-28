@@ -491,6 +491,110 @@ class WorkflowStage(Enum):
     CLEANUP = "cleanup"
 
 
+# ============================================================================
+# RISK & COMPLEXITY ENUMS (CORE-035 Consolidated)
+# ============================================================================
+
+class RiskLevel(Enum):
+    """Operation risk classification.
+    
+    CORE-035: Canonical definition - import from here, not redefine.
+    Used by: BLUF orchestrators, challenge engine, DoR approval gate
+    """
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+
+class ComplexityLevel(Enum):
+    """Operation complexity classification.
+    
+    CORE-035: Canonical definition - import from here, not redefine.
+    Used by: BLUF orchestrators, capacity planning, LENS analysis
+    """
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    VERY_HIGH = "VERY_HIGH"
+
+
+class DisagreementType(Enum):
+    """Types of challenge/disagreement.
+    
+    CORE-035: Canonical definition.
+    Used by: ChallengeEngine, challenge_engine_plugins
+    """
+    BETTER_APPROACH = "better_approach"
+    MISSING_CONTEXT = "missing_context"
+    SCOPE_CONCERN = "scope_concern"
+    RISK_WARNING = "risk_warning"
+    EFFICIENCY_SUGGESTION = "efficiency_suggestion"
+
+
+class EntityType(Enum):
+    """Types of entities in codebase.
+    
+    CORE-035: Canonical definition.
+    Used by: relationship_analyzer, repository_scanner
+    """
+    FILE = "file"
+    CLASS = "class"
+    FUNCTION = "function"
+    METHOD = "method"
+    MODULE = "module"
+    PACKAGE = "package"
+    VARIABLE = "variable"
+    CONSTANT = "constant"
+
+
+class HealthStatus(Enum):
+    """Health check status.
+    
+    CORE-035: Canonical definition.
+    Used by: health_monitor, production_readiness_manager
+    """
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    UNHEALTHY = "unhealthy"
+    UNKNOWN = "unknown"
+
+
+class LENSPhase(Enum):
+    """LENS analysis phases.
+    
+    CORE-035: Canonical definition.
+    Used by: LENS orchestrators, rollback/setup/upgrade orchestrators
+    """
+    LANGUAGE = "language"
+    EXAMINATION = "examination"
+    NAVIGATION = "navigation"
+    SYNTHESIS = "synthesis"
+
+
+class ResponseFormat(Enum):
+    """Response format options.
+    
+    CORE-035: Canonical definition.
+    Used by: BLUF orchestrators, response composers
+    """
+    BLUF_ONLY = "BLUF_ONLY"
+    BLUF_HYBRID = "BLUF_HYBRID"
+    FULL_DETAIL = "FULL_DETAIL"
+
+
+class UserPreferenceMode(Enum):
+    """User response format preference mode.
+    
+    CORE-035: Canonical definition.
+    Used by: BLUF orchestrators, adaptive router
+    """
+    AUTO = "AUTO"
+    BLUF = "BLUF"
+    FULL = "FULL"
+    BLUF_ONLY = "BLUF_ONLY"
+
+
 
 
 
@@ -684,4 +788,13 @@ __all__ = [
     # Workflow & Execution
     "WorkflowStage",
     "ExecutionStrategy",
+    # Risk & Complexity (CORE-035 Consolidated)
+    "RiskLevel",
+    "ComplexityLevel",
+    "DisagreementType",
+    "EntityType",
+    "HealthStatus",
+    "LENSPhase",
+    "ResponseFormat",
+    "UserPreferenceMode",
 ]
