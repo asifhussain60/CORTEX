@@ -357,7 +357,7 @@ class OrchestratorWiringImplementation:
         
         # UpgradeOrchestrator
         try:
-            from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+            from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
             orchestrator = UpgradeOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="upgrade",
@@ -379,7 +379,7 @@ class OrchestratorWiringImplementation:
         
         # RollbackOrchestrator
         try:
-            from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+            from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
             orchestrator = RollbackOrchestrator()
             result = self.registry.register_orchestrator(
                 domain="rollback",

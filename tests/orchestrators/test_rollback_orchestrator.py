@@ -14,7 +14,7 @@ class TestRollbackOrchestratorDetection:
 
     def test_detect_upgrade_failure(self, tmp_path):
         """Should detect when upgrade has failed."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator(tmp_path)
         
@@ -31,7 +31,7 @@ class TestRollbackOrchestratorDetection:
 
     def test_no_rollback_on_success(self, tmp_path):
         """Should not trigger rollback on successful upgrade."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator(tmp_path)
         
@@ -50,7 +50,7 @@ class TestRollbackOrchestratorExecution:
 
     def test_rollback_on_failure(self, tmp_path):
         """Should rollback to previous version on failure."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         # Create snapshot
         snapshot_dir = tmp_path / ".cortex-snapshots" / "v7.2.0"
@@ -65,7 +65,7 @@ class TestRollbackOrchestratorExecution:
 
     def test_rollback_restores_all_components(self, tmp_path):
         """Should restore all components during rollback."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         # Create comprehensive snapshot
         snapshot_dir = tmp_path / ".cortex-snapshots" / "v7.2.0"
@@ -90,7 +90,7 @@ class TestRollbackOrchestratorSafety:
 
     def test_create_rollback_checkpoint(self, tmp_path):
         """Should create checkpoint before rollback."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator(tmp_path)
         
@@ -101,7 +101,7 @@ class TestRollbackOrchestratorSafety:
 
     def test_verify_rollback_integrity(self, tmp_path):
         """Should verify integrity after rollback."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         # Create mock restored files
         state_dir = tmp_path / "cortex_brain" / "state"
@@ -115,7 +115,7 @@ class TestRollbackOrchestratorSafety:
 
     def test_generate_rollback_report(self, tmp_path):
         """Should generate rollback report."""
-        from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+        from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator(tmp_path)
         

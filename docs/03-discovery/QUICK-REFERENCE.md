@@ -169,7 +169,7 @@ from cortex.orchestrators.onboarding import OnboardingOrchestrator
 onboard = OnboardingOrchestrator()
 
 # Deployment
-from cortex.orchestrators.rollback_orchestrator import RollbackOrchestrator
+from cortex.orchestrators.support.rollback_orchestrator import RollbackOrchestrator
 rollback = RollbackOrchestrator()
 ```
 
