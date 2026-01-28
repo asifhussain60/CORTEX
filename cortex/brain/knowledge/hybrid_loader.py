@@ -48,17 +48,26 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class KnowledgeDomain:
-    """Single knowledge domain (CORTEX or Company)."""
+    """Single knowledge domain (CORTEX or Company).
+    
+    Supports both CORTEX core domains and Company-specific domains with
+    extended metadata fields for compliance standards and domain overrides.
+    """
     name: str
     path: str
     description: str
     status: str = "ACTIVE"
     owner: Optional[str] = None
     priority: Optional[str] = None
+    # Extended fields for company domains (AC-HYBRID-KNOWLEDGE-001)
+    note: Optional[str] = None
+    standards_count: Optional[int] = None
+    categories: Optional[List[str]] = None
+    overrides: Optional[List[str]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
-        return {
+        result = {
             "name": self.name,
             "path": self.path,
             "description": self.description,
@@ -66,6 +75,16 @@ class KnowledgeDomain:
             "owner": self.owner,
             "priority": self.priority,
         }
+        # Include extended fields if set
+        if self.note:
+            result["note"] = self.note
+        if self.standards_count is not None:
+            result["standards_count"] = self.standards_count
+        if self.categories:
+            result["categories"] = self.categories
+        if self.overrides:
+            result["overrides"] = self.overrides
+        return result
 
 
 @dataclass
