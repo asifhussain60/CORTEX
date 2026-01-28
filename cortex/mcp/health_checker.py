@@ -407,6 +407,51 @@ class HealthChecker:
             uptime_seconds=uptime,
             checks=checks
         )
+    
+    def check_bluf_system_health(self) -> HealthStatus:
+        """
+        Check Adaptive BLUF Communication System health (Phase 13).
+        
+        Returns:
+            HealthStatus with BLUF system metrics.
+        """
+        uptime = self.get_uptime_seconds()
+        
+        # Phase 13: Will read from actual AdaptiveBLUFRouter
+        adaptive_router_status = "not_deployed"
+        template_engine_status = "not_deployed"
+        user_preferences_accessible = False
+        format_logger_status = "not_deployed"
+        analytics_collector_active = False
+        
+        checks = {
+            "adaptive_bluf_router_responsive": adaptive_router_status == "healthy",
+            "adaptive_router_status": adaptive_router_status,
+            "bluf_template_engine_available": template_engine_status == "healthy",
+            "template_engine_status": template_engine_status,
+            "user_preferences_accessible": user_preferences_accessible,
+            "format_decision_logger_healthy": format_logger_status == "healthy",
+            "format_logger_status": format_logger_status,
+            "analytics_collector_active": analytics_collector_active,
+            "phase": "13 - PLANNED"
+        }
+        
+        all_healthy = (
+            adaptive_router_status == "healthy" and
+            template_engine_status == "healthy" and
+            user_preferences_accessible and
+            format_logger_status == "healthy" and
+            analytics_collector_active
+        )
+        
+        status = "healthy" if all_healthy else "not_deployed"
+        
+        return HealthStatus(
+            status=status,
+            timestamp=datetime.utcnow().isoformat(),
+            uptime_seconds=uptime,
+            checks=checks
+        )
 
 
 # Global health checker instance
@@ -437,3 +482,4 @@ def format_health_response(health_status: HealthStatus) -> Dict[str, Any]:
         Dictionary ready for JSON serialization.
     """
     return asdict(health_status)
+

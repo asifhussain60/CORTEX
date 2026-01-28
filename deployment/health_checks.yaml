@@ -51,3 +51,12 @@ endpoints:
   - model_weights_loaded
   path: /health/capacity-estimation
 
+# Phase 13: Adaptive BLUF Communication System
+- checks:
+  - adaptive_bluf_router_responsive
+  - bluf_template_engine_available
+  - user_preferences_accessible
+  - format_decision_logger_healthy
+  - analytics_collector_active
+  path: /health/bluf-system
+
