@@ -84,24 +84,8 @@ class ExecutionResult:
     errors: Optional[List[str]] = None
 
 
-class IOrchestrator(ABC):
-    """Interface for orchestrators."""
-    
-    @property
-    @abstractmethod
-    def id(self) -> str:
-        """Orchestrator identifier."""
-        pass
-    
-    @abstractmethod
-    def can_handle(self, request: str) -> bool:
-        """Check if orchestrator can handle request."""
-        pass
-    
-    @abstractmethod
-    def execute(self, request: str, context: Dict[str, Any]) -> Result[ExecutionResult]:
-        """Execute the orchestration."""
-        pass
+# Re-export canonical IOrchestrator from interfaces/i_orchestrator.py (CORE-035)
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode  # noqa: F401
 
 
 class ITool(ABC):

@@ -3,6 +3,8 @@
 Defines protocols and abstract interfaces for orchestrators, executors,
 and core framework components.
 
+CORE-035: Re-exports canonical IOrchestrator from cortex.brain.core.interfaces.i_orchestrator
+
 Author: CORTEX Framework
 """
 
@@ -65,114 +67,14 @@ class ExecutionContext:
         }
 
 
-class IOrchestrator(ABC):
-    """Abstract base class for orchestrator implementations.
+# ============================================================================
+# CORE-035: Single Canonical Implementation
+# Re-export IOrchestrator from canonical location
+# ============================================================================
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode as OrchestratorOperationMode  # noqa: F401, E501
 
-    All orchestrators must implement these methods.
-    """
-
-    @abstractmethod
-    def get_name(self) -> str:
-        """Get orchestrator name.
-
-        Returns:
-            String name of the orchestrator.
-        """
-        pass
-
-    @abstractmethod
-    def get_version(self) -> str:
-        """Get orchestrator version.
-
-        Returns:
-            Version string (e.g., "1.0").
-        """
-        pass
-
-    @abstractmethod
-    def initialize(self) -> Any:
-        """Initialize orchestrator.
-
-        Returns:
-            Result[str] with initialization status.
-        """
-        pass
-
-    @abstractmethod
-    def get_mode(self) -> OperationMode:
-        """Get current operation mode.
-
-        Returns:
-            Current OperationMode.
-        """
-        pass
-
-    @abstractmethod
-    def get_mcp_tools(self) -> Any:
-        """Get available MCP tools.
-
-        Returns:
-            Result[Dict[str, Any]] with tool definitions.
-        """
-        pass
-
-    @abstractmethod
-    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
-        """Execute an operation.
-
-        Args:
-            operation_name: Name of operation to execute.
-            parameters: Operation parameters.
-
-        Returns:
-            Result[Any] with operation results.
-        """
-        pass
-
-    @abstractmethod
-    def get_audit_trail(self, limit: int = 100) -> Any:
-        """Get audit trail for orchestrator.
-
-        Args:
-            limit: Maximum number of entries (default: 100).
-
-        Returns:
-            Result[list] with audit entries.
-        """
-        pass
-
-    def execute(
-        self, user_input: str, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Execute orchestrator operation (optional override).
-
-        Args:
-            user_input: User input string.
-            context: Execution context dictionary.
-
-        Returns:
-            Dictionary with orchestrator results.
-        """
-        return {}
-
-    def validate_input(self, user_input: str) -> bool:
-        """Validate user input (optional override).
-
-        Args:
-            user_input: Input to validate.
-
-        Returns:
-            True if input is valid, False otherwise.
-        """
-        return bool(user_input)
-
-    def get_capabilities(self) -> list[str]:
-        """Get orchestrator capabilities (optional override).
-
-        Returns:
-            List of capability strings.
-        """
-        return []
+# Keep local OperationMode for backward compatibility
+# (Different from IOrchestrator's OperationMode)
 
 
 class IExecutor(ABC):

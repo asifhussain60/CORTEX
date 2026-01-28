@@ -30,7 +30,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from cortex.core.interfaces import IOrchestrator
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.brain.core.state_manager import StateManager, OperationState

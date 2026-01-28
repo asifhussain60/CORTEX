@@ -15,7 +15,7 @@ Date: 2026-01-24
 from __future__ import annotations
 
 from typing import Optional
-from cortex.core.interfaces import IOrchestrator
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.result import Ok, Err
 from cortex.orchestrators.core.orchestrator_wiring import (
     OrchestratorWiringRegistry,

@@ -28,7 +28,7 @@ import json
 from pathlib import Path
 import yaml
 
-from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
