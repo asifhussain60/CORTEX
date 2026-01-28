@@ -150,14 +150,16 @@ open http://localhost:9093
 |-------|-------|
 | **Intent** | `{type}` |
 | **Handler** | `{orchestrator}` |
-| **Confidence** | {🟢 High / 🟡 Medium / 🔴 Low} ({%}) |
+| **DoR Confidence** | {🟢 High / 🟡 Medium / 🔴 Low BLOCKED} ({%}) |
 | **Scope** | `{FILE|MODULE|SYSTEM}` |
 | **Impact** | {🔵 Low / 🟡 Medium / 🔴 High} |
 | **Entities** | `{targets}` |
 | **Rules** | {applicable CORE rules} |
 
 ---
-**⏳ Awaiting approval to proceed...**
+**⏳ Awaiting approval to proceed...** (if DoR ≥ 60%)
+
+**⛔ DoR NOT MET — Execution Blocked** (if DoR < 60%)
 ```
 
 **Step 3: Wait for Approval**
