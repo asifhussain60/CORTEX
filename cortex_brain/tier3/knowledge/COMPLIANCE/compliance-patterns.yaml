@@ -1,0 +1,278 @@
+# Compliance Code Patterns - Generic Implementation Guidance
+# Authority: AC-COMPLIANCE-002
+# Version: 1.0
+# Created: 2026-01-28
+# Purpose: Reusable code patterns applicable across multiple compliance standards
+
+metadata:
+  version: "1.0"
+  created_at: "2026-01-28T00:00:00Z"
+  authority: "AC-COMPLIANCE-002"
+  purpose: "Generic compliance code patterns for any standard"
+
+# =============================================================================
+# DATA PROTECTION PATTERNS
+# =============================================================================
+
+data_protection:
+  encryption_at_rest:
+    id: "DP-001"
+    name: "Encryption at Rest"
+    applies_to: ["PCI-DSS", "HIPAA", "GDPR", "SOC2", "ISO27001"]
+    description: "Encrypt sensitive data when stored"
+    implementation:
+      required_algorithms:
+        - "AES-256-GCM"
+        - "AES-256-CBC"
+      key_management:
+        - "Use dedicated KMS (AWS KMS, Azure Key Vault, HashiCorp Vault)"
+        - "Rotate keys minimum annually"
+        - "Never store keys with encrypted data"
+      patterns:
+        database: "Use transparent data encryption (TDE) or field-level encryption"
+        files: "Encrypt before write, decrypt after read"
+        backups: "Encrypt all backups with separate keys"
+
+  encryption_in_transit:
+    id: "DP-002"
+    name: "Encryption in Transit"
+    applies_to: ["PCI-DSS", "HIPAA", "GDPR", "SOC2", "ISO27001", "GLBA"]
+    description: "Encrypt all data during transmission"
+    implementation:
+      minimum_tls: "TLS 1.2"
+      recommended_tls: "TLS 1.3"
+      certificate_requirements:
+        - "Use certificates from trusted CA"
+        - "Implement certificate pinning for mobile apps"
+        - "Monitor certificate expiration"
+      forbidden:
+        - "SSL 2.0/3.0"
+        - "TLS 1.0/1.1"
+        - "Self-signed certificates in production"
+
+  data_masking:
+    id: "DP-003"
+    name: "Data Masking and Tokenization"
+    applies_to: ["PCI-DSS", "PII", "HIPAA", "GDPR"]
+    description: "Mask or tokenize sensitive data for display and logs"
+    implementation:
+      patterns:
+        credit_card: "Show only last 4 digits: ****-****-****-1234"
+        ssn: "Show only last 4 digits: ***-**-1234"
+        email: "Partial mask: j***@example.com"
+        phone: "Mask middle digits: (555) ***-1234"
+      logging_rules:
+        - "NEVER log full sensitive values"
+        - "Use tokenization for audit trails"
+        - "Implement automatic PII detection in logs"
+
+  data_retention:
+    id: "DP-004"
+    name: "Data Retention and Deletion"
+    applies_to: ["GDPR", "CCPA", "HIPAA", "SOX", "PCI-DSS"]
+    description: "Implement proper data lifecycle management"
+    implementation:
+      requirements:
+        - "Define retention periods per data type"
+        - "Implement automated deletion jobs"
+        - "Support right-to-deletion requests"
+        - "Maintain deletion audit logs"
+      patterns:
+        soft_delete: "Mark as deleted, purge after retention period"
+        hard_delete: "Cryptographic erasure or physical deletion"
+        anonymization: "Remove identifying fields, keep analytics"
+
+# =============================================================================
+# ACCESS CONTROL PATTERNS
+# =============================================================================
+
+access_control:
+  authentication:
+    id: "AC-001"
+    name: "Strong Authentication"
+    applies_to: ["PCI-DSS", "HIPAA", "SOC2", "ISO27001", "NIST-800-53"]
+    description: "Implement robust authentication mechanisms"
+    implementation:
+      password_requirements:
+        minimum_length: 12
+        complexity: "Upper, lower, number, special character"
+        history: "Prevent reuse of last 12 passwords"
+        expiration: "90 days maximum (or use MFA)"
+      mfa_requirements:
+        - "Required for all administrative access"
+        - "Required for access to sensitive data"
+        - "Support TOTP, hardware tokens, or push notifications"
+      session_management:
+        - "Implement absolute timeout (8-12 hours)"
+        - "Implement idle timeout (15-30 minutes)"
+        - "Invalidate sessions on logout"
+
+  authorization:
+    id: "AC-002"
+    name: "Role-Based Access Control (RBAC)"
+    applies_to: ["PCI-DSS", "HIPAA", "SOX", "SOC2", "ISO27001"]
+    description: "Implement least-privilege access control"
+    implementation:
+      principles:
+        - "Least privilege: Grant minimum necessary permissions"
+        - "Separation of duties: Split critical functions"
+        - "Need-to-know: Limit data access by role"
+      patterns:
+        role_hierarchy: "Define clear role inheritance"
+        permission_matrix: "Document role-to-permission mapping"
+        access_reviews: "Quarterly access certification"
+
+  audit_logging:
+    id: "AC-003"
+    name: "Comprehensive Audit Logging"
+    applies_to: ["PCI-DSS", "HIPAA", "SOX", "GDPR", "SOC2", "ISO27001"]
+    description: "Log all security-relevant events"
+    implementation:
+      required_events:
+        - "Authentication attempts (success/failure)"
+        - "Authorization failures"
+        - "Data access (read/write/delete)"
+        - "Administrative actions"
+        - "Configuration changes"
+      log_content:
+        required: ["timestamp", "user_id", "action", "resource", "result", "source_ip"]
+        forbidden: ["passwords", "full credit cards", "SSNs", "PHI"]
+      retention:
+        minimum: "1 year online, 7 years archived"
+        integrity: "Use write-once storage or blockchain anchoring"
+
+# =============================================================================
+# INPUT VALIDATION PATTERNS
+# =============================================================================
+
+input_validation:
+  injection_prevention:
+    id: "IV-001"
+    name: "Injection Attack Prevention"
+    applies_to: ["PCI-DSS", "SOC2", "ISO27001", "OWASP"]
+    description: "Prevent SQL, command, and other injection attacks"
+    implementation:
+      sql_injection:
+        - "Use parameterized queries/prepared statements"
+        - "Use ORM with proper escaping"
+        - "Never concatenate user input into queries"
+      command_injection:
+        - "Avoid system calls with user input"
+        - "Use allowlists for permitted commands"
+        - "Escape shell metacharacters"
+      xss_prevention:
+        - "Encode output based on context (HTML, JS, URL)"
+        - "Use Content-Security-Policy headers"
+        - "Sanitize HTML input with allowlist"
+
+  data_validation:
+    id: "IV-002"
+    name: "Input Data Validation"
+    applies_to: ["PCI-DSS", "HIPAA", "SOC2"]
+    description: "Validate all input data"
+    implementation:
+      principles:
+        - "Validate on server side (never trust client)"
+        - "Use allowlists over denylists"
+        - "Validate data type, length, format, range"
+      patterns:
+        schema_validation: "Use JSON Schema or similar for API inputs"
+        type_coercion: "Explicitly cast to expected types"
+        boundary_checks: "Validate min/max for numeric inputs"
+
+# =============================================================================
+# ERROR HANDLING PATTERNS
+# =============================================================================
+
+error_handling:
+  secure_errors:
+    id: "EH-001"
+    name: "Secure Error Handling"
+    applies_to: ["PCI-DSS", "SOC2", "ISO27001", "OWASP"]
+    description: "Handle errors without exposing sensitive information"
+    implementation:
+      principles:
+        - "Never expose stack traces to users"
+        - "Never expose database errors to users"
+        - "Use generic error messages externally"
+        - "Log detailed errors internally"
+      patterns:
+        error_codes: "Return error codes, not descriptions"
+        error_logging: "Log full details server-side only"
+        user_messages: "Provide helpful but non-revealing messages"
+
+  failure_handling:
+    id: "EH-002"
+    name: "Fail Secure"
+    applies_to: ["PCI-DSS", "SOC2", "ISO27001"]
+    description: "Default to secure state on failure"
+    implementation:
+      principles:
+        - "Deny access on authentication failure"
+        - "Deny access on authorization errors"
+        - "Close connections on crypto failures"
+      patterns:
+        circuit_breaker: "Fail closed after threshold"
+        default_deny: "Explicit allow required"
+
+# =============================================================================
+# API SECURITY PATTERNS
+# =============================================================================
+
+api_security:
+  rate_limiting:
+    id: "API-001"
+    name: "API Rate Limiting"
+    applies_to: ["PCI-DSS", "SOC2", "PSD2"]
+    description: "Protect APIs from abuse"
+    implementation:
+      strategies:
+        - "Per-user rate limits"
+        - "Per-IP rate limits"
+        - "Per-endpoint rate limits"
+      response:
+        - "Return 429 Too Many Requests"
+        - "Include Retry-After header"
+        - "Log rate limit violations"
+
+  api_authentication:
+    id: "API-002"
+    name: "API Authentication"
+    applies_to: ["PCI-DSS", "SOC2", "ISO27001", "PSD2"]
+    description: "Secure API authentication mechanisms"
+    implementation:
+      recommended:
+        - "OAuth 2.0 with PKCE for user-facing APIs"
+        - "API keys with HMAC for service-to-service"
+        - "mTLS for high-security service communication"
+      forbidden:
+        - "API keys in URLs"
+        - "Basic auth without TLS"
+        - "Long-lived tokens without rotation"
+
+# =============================================================================
+# COMPLIANCE VERIFICATION HOOKS
+# =============================================================================
+
+verification:
+  automated_checks:
+    description: "Patterns that can be verified automatically"
+    checkable:
+      - "encryption_at_rest"
+      - "encryption_in_transit"
+      - "injection_prevention"
+      - "audit_logging"
+      - "rate_limiting"
+    tools:
+      - "Static analysis (SAST)"
+      - "Dynamic analysis (DAST)"
+      - "Infrastructure scanning"
+      - "Dependency scanning"
+
+  manual_reviews:
+    description: "Patterns requiring human review"
+    reviewable:
+      - "access_reviews"
+      - "data_retention"
+      - "separation_of_duties"
+    frequency: "Quarterly minimum"
