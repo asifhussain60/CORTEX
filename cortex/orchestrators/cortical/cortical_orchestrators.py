@@ -1,5 +1,13 @@
 """Cortical Memory System - Phase 11 Orchestrators.
 
+DEPRECATED: This module is a consolidated convenience module.
+Use the individual canonical implementations instead:
+- SensoryInputOrchestrator: cortex.orchestrators.cortical.sensory_input_orchestrator
+- CorticalIntegrationOrchestrator: cortex.orchestrators.cortical.cortical_integration_orchestrator
+- MemoryConsolidationOrchestrator: cortex.orchestrators.cortical.memory_consolidation_orchestrator
+
+This file will be removed in Phase 9 (CORE-035 consolidation).
+
 Phase 11 (Cortical Memory System) - Organizational Intelligence Architecture
 
 This module provides the orchestrators for the Cortical Memory System,

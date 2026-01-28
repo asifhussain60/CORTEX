@@ -1,6 +1,9 @@
 """
 Orchestrators Registry - Registration and Discovery System
 
+DEPRECATED: This module provides stub implementations for backward compatibility.
+The canonical wiring system is cortex.wiring.GitBackedRegistry.
+
 Docker-First Architecture: YAML-backed wiring replaces database registries.
 
 Exports:

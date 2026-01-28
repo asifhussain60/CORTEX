@@ -1,5 +1,9 @@
 """Onboarding Orchestrator.
 
+DEPRECATED: Use cortex.config.UnifiedOnboarding instead.
+This module is maintained for backward compatibility only.
+See cortex/orchestrators/onboarding/__init__.py for the canonical import.
+
 Author: CORTEX Framework
 Date: 2025
 Version: 1.0.0

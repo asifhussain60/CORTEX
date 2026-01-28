@@ -1,6 +1,10 @@
 """
 Orchestrator Composition Engine - AR-017-02
 
+DEPRECATED: Use cortex.orchestrators.support.composed_orchestrator instead.
+This module contains composition patterns that have been superseded by the 
+canonical ComposedOrchestrator in support/composed_orchestrator.py.
+
 Composition patterns for orchestrator workflows:
 - Sequential: Steps executed in order
 - Parallel: Steps executed concurrently
