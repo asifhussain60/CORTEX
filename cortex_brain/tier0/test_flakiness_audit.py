@@ -26,7 +26,7 @@ from collections import defaultdict
 from datetime import datetime
 
 
-class TestFlakinessAudit:
+class FlakinessAuditor:
     """Test flakiness audit analyzer with 10 major features.
     
     Provides comprehensive detection and analysis of flaky tests including:
@@ -35,6 +35,8 @@ class TestFlakinessAudit:
     - Metrics calculation
     - Report generation
     - Remediation recommendations
+    
+    Note: Renamed from TestFlakinessAudit to avoid pytest collection warnings.
     """
 
     # Flakiness thresholds
@@ -46,7 +48,7 @@ class TestFlakinessAudit:
     TIMING_VARIANCE_MULTIPLIER = 2.0
 
     def __init__(self) -> None:
-        """Initialize TestFlakinessAudit analyzer."""
+        """Initialize FlakinessAuditor analyzer."""
         self._lock = RLock()
         self._flakiness_cache: Dict[str, Dict[str, Any]] = {}
 
@@ -497,9 +499,13 @@ class TestFlakinessAudit:
             return analysis
 
 
+# Backward compatibility alias
+TestFlakinessAudit = FlakinessAuditor
+
+
 if __name__ == "__main__":
     # Example usage
-    audit = TestFlakinessAudit()
+    audit = FlakinessAuditor()
     
     # Test flakiness detection
     history = [
