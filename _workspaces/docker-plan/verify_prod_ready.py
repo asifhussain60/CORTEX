@@ -90,7 +90,7 @@ class CORTEXVerification:
                 self.check_10_docker_configuration()
             self.check_11_database_cleanliness()
             self.check_12_prompt_code_sync()
-            self.check_13_knowledge_ingestion_readiness()  # Phase 11
+            self.check_13_cortical_memory_system_readiness()  # Cortical Memory System
         except Exception as e:
             self.log(f"Verification failed: {e}", "ERROR")
             return False
