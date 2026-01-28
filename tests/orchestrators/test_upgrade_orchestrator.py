@@ -14,7 +14,7 @@ class TestUpgradeOrchestratorDownload:
 
     def test_download_new_version(self, tmp_path):
         """Should download new version from GitHub/PyPI."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -27,7 +27,7 @@ class TestUpgradeOrchestratorDownload:
 
     def test_extract_release_notes(self, tmp_path):
         """Should extract release notes from CHANGELOG."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         # Create mock changelog
         changelog = tmp_path / "CHANGELOG.md"
@@ -53,7 +53,7 @@ class TestUpgradeOrchestratorDiff:
 
     def test_compute_upgrade_diff(self, tmp_path):
         """Should compute diff between versions."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -68,7 +68,7 @@ class TestUpgradeOrchestratorDiff:
 
     def test_apply_delta_not_replace(self, tmp_path):
         """Should apply delta without replacing existing content."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         # Create existing tier0 rules
         tier0_dir = tmp_path / "cortex" / "core" / "governance"
@@ -90,7 +90,7 @@ rules:
 
     def test_run_validation_tests(self, tmp_path):
         """Should run validation tests after upgrade."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -107,7 +107,7 @@ class TestUpgradeOrchestratorAugmentation:
 
     def test_new_tier0_rules_append(self, tmp_path):
         """Should append new tier0 rules to existing."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -122,7 +122,7 @@ class TestUpgradeOrchestratorAugmentation:
 
     def test_tier1_rules_preserved(self, tmp_path):
         """Should preserve tier1 rules during upgrade."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         # Create tier1 rules
         tier1_dir = tmp_path / "cortex_brain" / "tier1"
@@ -137,7 +137,7 @@ class TestUpgradeOrchestratorAugmentation:
 
     def test_learned_patterns_merged(self, tmp_path):
         """Should merge learned patterns with new baselines."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -153,7 +153,7 @@ class TestUpgradeOrchestratorAugmentation:
 
     def test_deprecated_rules_marked(self, tmp_path):
         """Should mark deprecated rules without deleting."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -171,7 +171,7 @@ class TestUpgradeOrchestratorZeroDowntime:
 
     def test_blue_green_parallel_run(self, tmp_path):
         """Should run old and new versions in parallel."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -182,7 +182,7 @@ class TestUpgradeOrchestratorZeroDowntime:
 
     def test_validation_against_production(self, tmp_path):
         """Should validate new version against production workload."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -195,7 +195,7 @@ class TestUpgradeOrchestratorZeroDowntime:
 
     def test_cutover_to_new_version(self, tmp_path):
         """Should switch traffic to new version."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
@@ -209,7 +209,7 @@ class TestUpgradeOrchestratorZeroDowntime:
 
     def test_generate_upgrade_report(self, tmp_path):
         """Should generate post-upgrade report."""
-        from cortex.orchestrators.upgrade_orchestrator import UpgradeOrchestrator
+        from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator
         
         orchestrator = UpgradeOrchestrator(tmp_path)
         
