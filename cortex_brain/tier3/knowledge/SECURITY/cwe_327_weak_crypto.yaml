@@ -1,0 +1,79 @@
+# Tier3 Security Pattern: CWE-327 Weak Cryptography
+# Authority: Phase 8.2-8.4 Security Framework
+
+pattern_id: "pattern_security_cwe_327"
+cwe_ids:
+  - "CWE-327"
+title: "Remediate Weak Cryptographic Algorithms"
+description: >
+  Weak or broken cryptographic algorithms are vulnerable to attack.
+  Use modern, well-vetted algorithms (SHA-256, SHA-3, bcrypt, AES-256).
+
+severity: "MEDIUM"
+reference: "https://cwe.mitre.org/data/definitions/327.html"
+
+violations:
+  - "Using MD5 for any security purpose"
+  - "Using SHA-1 for any security purpose"
+  - "Using DES for encryption"
+  - "Using Blowfish for new code"
+  - "Using RC4 cipher"
+  - "Using weak random number generators"
+
+recommendation: >
+  For password hashing:
+  - Use bcrypt, scrypt, or argon2 (NOT sha256)
+  - Use hashlib.pbkdf2_hmac() if bcrypt unavailable
+
+  For general hashing (non-security):
+  - Use SHA-256 or SHA-3
+
+  For encryption:
+  - Use AES-256 in GCM mode
+  - Use Fernet (from cryptography library) for symmetric encryption
+
+  For random numbers:
+  - Use secrets module for security (NOT random)
+  - Use os.urandom() for random bytes
+
+code_example: |
+  # VULNERABLE - Weak Hash
+  import hashlib
+  password_hash = hashlib.md5(password.encode()).hexdigest()
+
+  # SECURE ALTERNATIVE 1: bcrypt
+  import bcrypt
+  password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+
+  # SECURE ALTERNATIVE 2: SHA-256 (for non-security)
+  password_hash = hashlib.sha256(password.encode()).hexdigest()
+
+  # VULNERABLE - Weak Encryption
+  from Crypto.Cipher import DES
+  cipher = DES.new(key)  # CWE-327!
+
+  # SECURE ALTERNATIVE: AES-256
+  from cryptography.fernet import Fernet
+  cipher = Fernet(key)
+  ciphertext = cipher.encrypt(plaintext)
+
+rationale: >
+  MD5, SHA-1, DES, and Blowfish are cryptographically broken or have known
+  weaknesses. SHA-256, bcrypt, and AES-256 have no known practical attacks
+  and are recommended by NIST and security experts.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/327.html"
+owasp_category: "A02:2021 - Cryptographic Failures"
+cvss_score: 7.5  # High
+remediation_effort: "MEDIUM"
+
+patterns:
+  - "hashlib.md5("
+  - "hashlib.sha1("
+  - "DES.new("
+  - "Blowfish("
+  - "RC4("
+
+related_cwe:
+  - "CWE-326"  # Inadequate Encryption Strength
+  - "CWE-325"  # Missing Cryptographic Step

@@ -1,0 +1,59 @@
+# Tier3 Security Pattern: CWE-89 SQL Injection
+# Authority: Phase 8.2-8.4 Security Framework
+
+pattern_id: "pattern_security_cwe_89"
+cwe_ids:
+  - "CWE-89"
+title: "Remediate SQL Injection Vulnerabilities"
+description: >
+  SQL injection allows attackers to execute arbitrary SQL commands.
+  Use parameterized queries instead of string concatenation.
+
+severity: "HIGH"
+reference: "https://cwe.mitre.org/data/definitions/89.html"
+
+violations:
+  - "String concatenation in SQL queries"
+  - "Using f-strings in SQL queries"
+  - "Using % formatting in SQL queries"
+  - "Using .format() in SQL queries"
+
+recommendation: >
+  For all SQL queries with user input:
+  - Use parameterized queries with ? or %s placeholders
+  - Pass parameters separately from the SQL query
+  - Use ORM libraries (SQLAlchemy, Django ORM) that handle escaping
+  - Use prepared statements in database libraries
+
+code_example: |
+  # VULNERABLE
+  user_id = request.args.get('id')
+  query = f"SELECT * FROM users WHERE id = {user_id}"
+  db.execute(query)  # CWE-89!
+
+  # SECURE ALTERNATIVE 1: Parameterized Query
+  query = "SELECT * FROM users WHERE id = ?"
+  db.execute(query, (user_id,))
+
+  # SECURE ALTERNATIVE 2: ORM (SQLAlchemy)
+  user = db.query(User).filter(User.id == user_id).first()
+
+rationale: >
+  String concatenation allows attackers to inject SQL metacharacters.
+  Parameterized queries separate SQL syntax from data, making injection
+  impossible. The database driver handles escaping internally.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/89.html"
+owasp_category: "A03:2021 - Injection"
+cvss_score: 9.9  # Critical
+remediation_effort: "LOW"
+
+patterns:
+  - "SELECT.*[f\"].*{.*}"
+  - "INSERT.*[f\"].*{.*}"
+  - "UPDATE.*[f\"].*{.*}"
+  - "DELETE.*[f\"].*{.*}"
+
+related_cwe:
+  - "CWE-78"   # Command Injection
+  - "CWE-94"   # Code Injection

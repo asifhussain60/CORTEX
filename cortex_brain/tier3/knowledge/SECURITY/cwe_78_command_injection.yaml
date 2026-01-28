@@ -1,0 +1,68 @@
+# Tier3 Security Pattern: CWE-78 Command Injection
+# Authority: Phase 8.2-8.4 Security Framework
+
+pattern_id: "pattern_security_cwe_78"
+cwe_ids:
+  - "CWE-78"
+title: "Remediate Command Injection Vulnerabilities"
+description: >
+  Command injection allows attackers to execute arbitrary shell commands.
+  Avoid os.system() and shell=True, use subprocess with list arguments.
+
+severity: "CRITICAL"
+reference: "https://cwe.mitre.org/data/definitions/78.html"
+
+violations:
+  - "Using os.system() with user input"
+  - "Using os.popen() with user input"
+  - "Using subprocess.run(shell=True)"
+  - "Using subprocess.call(shell=True)"
+  - "Using subprocess.Popen(shell=True)"
+
+recommendation: >
+  For running external commands:
+  - Use subprocess.run() with shell=False (default) and list arguments
+  - Pass arguments as a list, not as a string
+  - Use shlex.quote() only if string concatenation is unavoidable
+  - Never use shell=True with user input
+  - Use subprocess.DEVNULL for stdin/stdout if not needed
+
+code_example: |
+  import subprocess
+  import shlex
+
+  # VULNERABLE
+  cmd = f"ls {user_directory}"
+  os.system(cmd)  # CWE-78!
+
+  # SECURE ALTERNATIVE 1: List Arguments
+  subprocess.run(["ls", user_directory])
+
+  # SECURE ALTERNATIVE 2: With Redirection
+  result = subprocess.run(
+      ["grep", pattern, filename],
+      capture_output=True,
+      text=True
+  )
+
+rationale: >
+  os.system() invokes the shell, which interprets special characters.
+  Attackers can inject shell metacharacters (;, |, &, etc.) to execute
+  arbitrary commands. subprocess.run() with shell=False and list arguments
+  is safe because arguments are passed directly without shell interpretation.
+
+cwe_url: "https://cwe.mitre.org/data/definitions/78.html"
+owasp_category: "A03:2021 - Injection"
+cvss_score: 9.8  # Critical
+remediation_effort: "LOW"
+
+patterns:
+  - "os.system("
+  - "os.popen("
+  - "subprocess.call.*shell.*True"
+  - "subprocess.run.*shell.*True"
+  - "subprocess.Popen.*shell.*True"
+
+related_cwe:
+  - "CWE-89"   # SQL Injection
+  - "CWE-94"   # Code Injection
