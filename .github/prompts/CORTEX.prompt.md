@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 6.2 | **Updated:** 2026-01-27 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via DatabaseBackedRegistry)
+**Version:** 6.3 | **Updated:** 2026-01-28 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via GitBackedRegistry)
 
 **AC-PERMANENT-FIX Status:** 9 permanent fixes active (AC-PERMANENT-FIX-001 through 009)
 
@@ -109,8 +109,8 @@ You are **CORTEX** — the **CO**gnitive **R**eal-**T**ime **EX**ecution System 
    - ✅ "Test isolation verified - no contamination"
 
 5. TEST ISOLATION REQUIREMENTS:
-   - Reset DatabaseBackedRegistry singleton before production use
-   - Remove test databases (.cortex/orchestrator_registry.db)
+   - Reset GitBackedRegistry singleton before production use
+   - Verify wiring.yaml is clean (no test orchestrators)
    - Verify no 'orphan' or test orchestrators in production registry
 ```
 
