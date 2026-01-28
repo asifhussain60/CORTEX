@@ -284,6 +284,13 @@ from cortex.brain.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository
 from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
 
+# Company Knowledge Override (KN-005-01) - NEW
+from cortex.brain.core.knowledge.company_knowledge_loader import (
+    CompanyKnowledgeLoader,
+    get_company_knowledge_loader,
+    COMPLIANCE_PATTERNS,
+)
+
 # State Management
 from cortex.brain.core.state_manager import StateManager, get_state_manager
 

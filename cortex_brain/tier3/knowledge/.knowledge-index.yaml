@@ -1,20 +1,21 @@
 # Knowledge Repository Index - Single Source of Truth for All Knowledge Domains
 # Authority: AC-HYBRID-KNOWLEDGE-001
-# Version: 1.0
-# Updated: 2026-01-26
+# Version: 1.1
+# Updated: 2026-01-28
 # 
 # This file defines the canonical registry of all knowledge sources (CORTEX + Company).
 # Changes to this file are automatically synchronized via git workflow.
 # Team members add company domains by creating new folders in company/domains/ and registering here.
 
 metadata:
-  version: "1.0"
+  version: "1.1"
   created_at: "2026-01-26T00:00:00Z"
+  updated_at: "2026-01-28T00:00:00Z"
   authority: "AC-HYBRID-KNOWLEDGE-001"
   purpose: "Canonical registry for all CORTEX + Company knowledge domains"
 
 cortex_knowledge:
-  description: "Immutable CORTEX best practices and guidance (35+ YAMLs)"
+  description: "Immutable CORTEX best practices and guidance (45+ YAMLs)"
   path: "cortex_brain/tier3/knowledge/"
   domains:
     - name: ARCHITECTURE
@@ -56,21 +57,43 @@ cortex_knowledge:
       path: "DATA-MANAGEMENT/"
       description: "Database design, query optimization, data governance"
       status: ACTIVE
+    
+    - name: COMPLIANCE
+      path: "COMPLIANCE/"
+      description: "Compliance routing index and generic implementation patterns"
+      status: ACTIVE
+      note: "Lightweight index only - full standards in company/domains/compliance-standards/"
 
 company_knowledge:
   description: "Expandable company-specific domains (version-controlled via git)"
   path: "company/domains/"
   sync_mechanism: "git-tracked YAML files"
   registration_method: "Add folder to company/domains/ + entry below"
-  domains: []
+  domains:
+    - name: COMPLIANCE-STANDARDS
+      path: "company/domains/compliance-standards/"
+      description: "Industry compliance standards (PCI-DSS, HIPAA, GDPR, SOX, etc.)"
+      status: ACTIVE
+      owner: "Security/Compliance Team"
+      priority: HIGH
+      standards_count: 12
+      categories:
+        - "Payment Security (PCI-DSS)"
+        - "Privacy (PII, GDPR, CCPA)"
+        - "Healthcare (HIPAA, HSA/FSA)"
+        - "Financial (SOX, GLBA, PSD2)"
+        - "Security Frameworks (SOC2, ISO27001, NIST)"
+        - "Government (FedRAMP)"
+        - "Accessibility (WCAG)"
   
-  # Example company domain (uncomment to add):
-  # - name: FINANCIAL-SERVICES
-  #   path: "company/domains/financial-services/"
-  #   description: "Finance domain patterns, compliance rules, transaction handling"
+  # Example company-specific override domain:
+  # - name: ACME-CORP-COMPLIANCE
+  #   path: "company/domains/acme-corp/"
+  #   description: "ACME Corp specific compliance interpretations and policies"
   #   status: ACTIVE
-  #   owner: "Finance Team"
-  #   priority: HIGH
+  #   owner: "ACME Compliance Team"
+  #   priority: OVERRIDE
+  #   overrides: ["COMPLIANCE-STANDARDS"]
 
 synthesis_configuration:
   description: "Default composition rules for knowledge synthesis"
@@ -78,3 +101,66 @@ synthesis_configuration:
   cache_ttl_seconds: 3600
   rebuild_on_pull: true
   rebuild_on_import: true
+
+# =============================================================================
+# COMPLIANCE KNOWLEDGE SYNTHESIS RULES
+# =============================================================================
+
+compliance_synthesis:
+  description: "Rules for overlaying compliance knowledge with company domains"
+  
+  precedence_order:
+    - layer: 1
+      source: "company/domains/{company-name}/compliance/"
+      description: "Company-specific compliance overrides (highest priority)"
+      
+    - layer: 2
+      source: "company/domains/compliance-standards/"
+      description: "Generic industry compliance standards"
+      
+    - layer: 3
+      source: "cortex_brain/tier3/knowledge/COMPLIANCE/"
+      description: "CORTEX compliance patterns and routing (fallback)"
+  
+  merge_strategy: "deep_merge_with_override"
+  conflict_resolution: "higher_layer_wins"
+  
+  auto_detection:
+    enabled: true
+    triggers:
+      - pattern: "payment|credit.?card|PAN|CVV|cardholder"
+        standards: ["pci-dss"]
+      - pattern: "personal.?data|PII|privacy|consent|GDPR|CCPA"
+        standards: ["pii-protection", "gdpr", "ccpa"]
+      - pattern: "health|medical|PHI|HIPAA|patient"
+        standards: ["hipaa"]
+      - pattern: "HSA|FSA|health.?savings|flexible.?spending"
+        standards: ["hsa-fsa", "hipaa"]
+      - pattern: "SOX|financial.?report|internal.?control|audit.?trail"
+        standards: ["financial-services"]
+      - pattern: "SOC.?2|trust.?service|security.?control"
+        standards: ["soc2"]
+      - pattern: "ISO.?27001|ISMS|information.?security"
+        standards: ["iso27001"]
+      - pattern: "NIST|800-53|federal.?security"
+        standards: ["nist-800-53"]
+      - pattern: "FedRAMP|federal.?cloud|government"
+        standards: ["fedramp"]
+      - pattern: "accessibility|WCAG|a11y|screen.?reader"
+        standards: ["wcag"]
+
+  integration_hooks:
+    intent_router:
+      description: "IntentRouter queries compliance standards during classification"
+      trigger: "pre_execution"
+      method: "enrich_context_with_applicable_standards"
+      
+    governance_registry:
+      description: "Register compliance rules as Tier 1 governance"
+      rule_prefix: "COMPLIANCE"
+      escalation_policy: "warn_and_log"
+      
+    knowledge_repository:
+      description: "Synthesize compliance knowledge on query"
+      method: "get_applicable_compliance_standards"
+

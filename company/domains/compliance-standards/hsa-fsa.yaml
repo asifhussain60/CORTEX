@@ -1,0 +1,354 @@
+# HSA/FSA Compliance Rules
+# Health Savings Account and Flexible Spending Account Regulations
+# Authority: U.S. Internal Revenue Service (IRS) / Treasury Department
+# Source: IRC Section 223 (HSA), IRC Section 125 (FSA)
+# Version: 2026
+# Last Updated: 2026-01-28
+
+metadata:
+  standard_id: "HSA-FSA"
+  version: "2026"
+  governing_body: "U.S. Internal Revenue Service / Treasury Department"
+  applies_to:
+    - "HSA trustees and custodians"
+    - "Employers offering FSA benefits"
+    - "Third-party administrators (TPAs)"
+    - "Benefits administration platforms"
+  public_reference: "https://www.irs.gov/publications/p969"
+
+# =============================================================================
+# HEALTH SAVINGS ACCOUNT (HSA) RULES
+# =============================================================================
+
+hsa:
+  description: "Tax-advantaged medical savings account for individuals with HDHP"
+  
+  eligibility:
+    requirements:
+      - "Covered under High Deductible Health Plan (HDHP)"
+      - "No other health coverage (exceptions apply)"
+      - "Not enrolled in Medicare"
+      - "Cannot be claimed as dependent"
+    
+    hdhp_requirements_2026:
+      individual:
+        minimum_deductible: 1650
+        maximum_out_of_pocket: 8300
+      family:
+        minimum_deductible: 3300
+        maximum_out_of_pocket: 16600
+  
+  contribution_limits_2026:
+    individual: 4300
+    family: 8550
+    catch_up_55_plus: 1000
+    
+  contribution_rules:
+    - "Contributions can come from individual or employer"
+    - "Contributions must not exceed annual limit"
+    - "Excess contributions subject to 6% excise tax"
+    - "Pro-rated for partial year eligibility"
+    
+  eligible_expenses:
+    description: "Qualified medical expenses under IRC Section 213(d)"
+    categories:
+      - "Doctor visits and copays"
+      - "Prescription medications"
+      - "Dental care"
+      - "Vision care"
+      - "Mental health services"
+      - "Medical equipment and supplies"
+    ineligible:
+      - "Cosmetic procedures"
+      - "General health items"
+      - "Insurance premiums (with exceptions)"
+      - "Over-the-counter items not prescribed"
+  
+  distribution_rules:
+    qualified:
+      description: "Tax-free distributions for qualified medical expenses"
+      requirements:
+        - "Expense incurred after HSA established"
+        - "Expense is qualified medical expense"
+        - "Maintain documentation"
+    non_qualified:
+      description: "Distributions not for qualified expenses"
+      tax_treatment:
+        under_65: "Income tax + 20% penalty"
+        over_65: "Income tax only (no penalty)"
+  
+  code_patterns:
+    eligibility_check: |
+      def check_hsa_eligibility(employee: Employee, plan_year: int) -> HSAEligibility:
+          """Verify HSA eligibility per IRC Section 223."""
+          limits = get_hdhp_limits(plan_year)
+          
+          # Check HDHP enrollment
+          if not employee.has_hdhp:
+              return HSAEligibility(eligible=False, reason="No HDHP coverage")
+          
+          # Verify HDHP meets requirements
+          hdhp = employee.health_plan
+          coverage_type = "family" if hdhp.covers_family else "individual"
+          
+          if hdhp.deductible < limits[coverage_type]["minimum_deductible"]:
+              return HSAEligibility(eligible=False, reason="Deductible below minimum")
+          
+          if hdhp.out_of_pocket_max > limits[coverage_type]["maximum_out_of_pocket"]:
+              return HSAEligibility(eligible=False, reason="OOP max exceeds limit")
+          
+          # Check other coverage
+          if employee.has_other_health_coverage and not is_permitted_coverage(employee):
+              return HSAEligibility(eligible=False, reason="Disqualifying coverage")
+          
+          # Check Medicare
+          if employee.enrolled_in_medicare:
+              return HSAEligibility(eligible=False, reason="Medicare enrollment")
+          
+          return HSAEligibility(eligible=True, contribution_limit=get_limit(coverage_type, plan_year))
+    
+    contribution_validation: |
+      def validate_hsa_contribution(
+          employee: Employee,
+          amount: Decimal,
+          plan_year: int
+      ) -> ContributionResult:
+          """Validate HSA contribution against annual limits."""
+          limits = get_contribution_limits(plan_year)
+          coverage_type = "family" if employee.health_plan.covers_family else "individual"
+          
+          base_limit = limits[coverage_type]
+          catch_up = limits["catch_up"] if employee.age >= 55 else 0
+          total_limit = base_limit + catch_up
+          
+          ytd_contributions = get_ytd_contributions(employee.hsa_id, plan_year)
+          
+          if ytd_contributions + amount > total_limit:
+              excess = (ytd_contributions + amount) - total_limit
+              return ContributionResult(
+                  valid=False,
+                  reason="Exceeds annual limit",
+                  excess_amount=excess,
+                  max_allowed=total_limit - ytd_contributions
+              )
+          
+          return ContributionResult(valid=True, new_balance=ytd_contributions + amount)
+
+# =============================================================================
+# FLEXIBLE SPENDING ACCOUNT (FSA) RULES
+# =============================================================================
+
+fsa:
+  description: "Employer-sponsored benefit allowing pre-tax contributions for eligible expenses"
+  
+  types:
+    health_fsa:
+      description: "For medical, dental, and vision expenses"
+      contribution_limit_2026: 3300
+      employer_contribution: "Employer may contribute additionally"
+    
+    dependent_care_fsa:
+      description: "For dependent care expenses"
+      contribution_limit_2026:
+        married_filing_jointly: 5000
+        married_filing_separately: 2500
+    
+    limited_purpose_fsa:
+      description: "Dental and vision only (compatible with HSA)"
+      contribution_limit_2026: 3300
+  
+  use_it_or_lose_it:
+    description: "Funds generally must be used by end of plan year"
+    exceptions:
+      grace_period:
+        description: "2.5 month grace period after plan year end"
+        max_period: "March 15 for calendar year plans"
+      carryover:
+        description: "Carry over unused funds to next year"
+        max_amount_2026: 660
+    rule: "Employer may offer grace period OR carryover, not both"
+  
+  eligible_expenses:
+    health_fsa:
+      - "Medical expenses under IRC 213(d)"
+      - "Dental care"
+      - "Vision care"
+      - "Over-the-counter items (post-CARES Act)"
+    dependent_care_fsa:
+      - "Daycare for children under 13"
+      - "Before/after school care"
+      - "Day camp"
+      - "Elder care (if dependent)"
+    ineligible:
+      - "Health insurance premiums"
+      - "Long-term care"
+      - "Overnight camps"
+  
+  substantiation:
+    description: "Claims must be substantiated before reimbursement"
+    requirements:
+      - "Date of service"
+      - "Amount of expense"
+      - "Nature of expense"
+      - "Provider or merchant information"
+    methods:
+      - "Receipts"
+      - "Explanation of Benefits (EOB)"
+      - "Provider statements"
+    auto_substantiation:
+      description: "Automatic verification for certain transactions"
+      eligible:
+        - "Recurring expenses with same provider/amount"
+        - "Copay matching"
+        - "IIAS merchants"
+  
+  code_patterns:
+    claim_validation: |
+      def validate_fsa_claim(
+          claim: FSAClaim,
+          fsa_type: str,
+          plan_year: int
+      ) -> ClaimResult:
+          """Validate FSA claim per IRC Section 125."""
+          # Verify expense date within plan year or grace period
+          plan_dates = get_plan_dates(plan_year)
+          
+          if claim.service_date < plan_dates.start:
+              return ClaimResult(valid=False, reason="Service before plan year start")
+          
+          if claim.service_date > plan_dates.end_with_grace:
+              return ClaimResult(valid=False, reason="Service after plan year/grace period")
+          
+          # Verify eligible expense
+          if not is_eligible_expense(claim.expense_type, fsa_type):
+              return ClaimResult(valid=False, reason="Ineligible expense type")
+          
+          # Check available balance
+          available = get_available_balance(claim.participant_id, fsa_type, plan_year)
+          
+          if claim.amount > available:
+              return ClaimResult(
+                  valid=False,
+                  reason="Insufficient balance",
+                  available=available
+              )
+          
+          # Verify substantiation
+          if not claim.substantiated and not qualifies_for_auto_substantiation(claim):
+              return ClaimResult(
+                  valid=False,
+                  reason="Requires substantiation",
+                  substantiation_required=True
+              )
+          
+          return ClaimResult(valid=True)
+    
+    rollover_calculation: |
+      def calculate_fsa_rollover(
+          participant_id: str,
+          plan_year: int,
+          rollover_limit: Decimal
+      ) -> RolloverResult:
+          """Calculate FSA rollover amount per IRS rules."""
+          remaining_balance = get_remaining_balance(participant_id, plan_year)
+          
+          # Check if plan allows rollover
+          plan_config = get_plan_config(participant_id)
+          if not plan_config.allows_rollover:
+              return RolloverResult(amount=Decimal(0), forfeited=remaining_balance)
+          
+          # Calculate rollover (capped at limit)
+          rollover_amount = min(remaining_balance, rollover_limit)
+          forfeited = remaining_balance - rollover_amount
+          
+          return RolloverResult(
+              amount=rollover_amount,
+              forfeited=forfeited,
+              next_plan_year=plan_year + 1
+          )
+
+# =============================================================================
+# COMPLIANCE REQUIREMENTS
+# =============================================================================
+
+compliance:
+  reporting:
+    hsa:
+      form_5498_sa:
+        description: "HSA contributions report"
+        due_date: "May 31"
+        filed_by: "Trustee/Custodian"
+      form_1099_sa:
+        description: "HSA distributions report"
+        due_date: "January 31"
+        filed_by: "Trustee/Custodian"
+      form_8889:
+        description: "Individual HSA tax form"
+        filed_by: "Account holder with tax return"
+    
+    fsa:
+      form_w2:
+        description: "Report Dependent Care FSA in Box 10"
+        filed_by: "Employer"
+      discrimination_testing:
+        description: "Annual testing for highly compensated employees"
+        tests:
+          - "Eligibility test"
+          - "Benefits test"
+          - "Key employee concentration test"
+  
+  record_keeping:
+    hsa:
+      participant_records:
+        - "Contribution amounts and dates"
+        - "Distribution amounts and dates"
+        - "Expense substantiation (by participant)"
+      retention: "7 years"
+    
+    fsa:
+      employer_records:
+        - "Plan documents"
+        - "Election forms"
+        - "Claims and substantiation"
+        - "Discrimination testing results"
+      retention: "7 years"
+  
+  hipaa_intersection:
+    description: "HSA/FSA systems often handle PHI"
+    requirements:
+      - "Claims data contains PHI - apply HIPAA safeguards"
+      - "Diagnosis codes are PHI"
+      - "Provider information may be PHI in context"
+      - "Financial data alone (balance, contributions) is not PHI"
+
+# =============================================================================
+# COMMON COMPLIANCE ISSUES
+# =============================================================================
+
+common_issues:
+  hsa:
+    - "Contributions exceeding annual limits"
+    - "Distributions for non-qualified expenses"
+    - "Coverage under non-HDHP plan"
+    - "Failure to report employer contributions"
+    - "Missing substantiation for distributions"
+  
+  fsa:
+    - "Claims for ineligible expenses"
+    - "Claims outside plan year/grace period"
+    - "Insufficient substantiation"
+    - "Failure of discrimination testing"
+    - "Improper handling of forfeited funds"
+
+# =============================================================================
+# INTEGRATION
+# =============================================================================
+
+integration:
+  cortex_patterns:
+    - "cortex_brain/tier3/knowledge/COMPLIANCE/compliance-patterns.yaml#data_validation"
+    - "cortex_brain/tier3/knowledge/COMPLIANCE/compliance-patterns.yaml#audit_logging"
+  
+  related_standards:
+    - "hipaa"
+    - "pii-protection"
