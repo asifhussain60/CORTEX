@@ -1,0 +1,72 @@
+# Tier3 SOLID Pattern: Single Responsibility Principle
+# Authority: Phase 8.4 RecommendationEngine
+
+pattern_id: "pattern_solid_srp"
+violations:
+  - "SRP"  # Single Responsibility Principle
+title: "Enforce Single Responsibility Principle"
+description: >
+  A class should have only one reason to change. Classes with multiple
+  responsibilities are harder to maintain, test, and reuse.
+
+severity: "MEDIUM"
+reference: "https://en.wikipedia.org/wiki/Single-responsibility_principle"
+
+recommendation: >
+  Identify multiple responsibilities and extract into separate classes.
+  Each class should have a single, well-defined purpose.
+
+code_example: |
+  # VIOLATES SRP - Too many responsibilities
+  class User:
+      def __init__(self, name, email):
+          self.name = name
+          self.email = email
+      
+      def save_to_database(self):
+          # Database responsibility
+          pass
+      
+      def send_email(self):
+          # Email responsibility
+          pass
+      
+      def generate_report(self):
+          # Reporting responsibility
+          pass
+
+  # RESPECTS SRP - Separated responsibilities
+  class User:
+      def __init__(self, name, email):
+          self.name = name
+          self.email = email
+
+  class UserRepository:
+      def save(self, user):
+          # Only database responsibility
+          pass
+
+  class EmailService:
+      def send(self, to, subject, body):
+          # Only email responsibility
+          pass
+
+  class ReportGenerator:
+      def generate_user_report(self, user):
+          # Only reporting responsibility
+          pass
+
+rationale: >
+  Classes with single responsibilities are easier to test (mock dependencies),
+  maintain (changes to one responsibility don't affect others), and reuse.
+  Each class can be tested independently.
+
+keywords:
+  - "UserManager"  # Usually has too many responsibilities
+  - "Handler"      # Often mixed concerns
+  - "Utility"      # Anti-pattern
+  - "Helper"       # Anti-pattern
+
+related_solid:
+  - "OCP"   # Open/Closed Principle
+  - "ISP"   # Interface Segregation

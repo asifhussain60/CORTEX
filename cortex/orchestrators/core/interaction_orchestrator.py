@@ -27,7 +27,8 @@ from cortex.orchestrators.core.challenge_engine import (
     ChallengeEngine,
     get_challenge_engine,
     LENSContext,
-    ChallengeResponse
+    ChallengeResponse,
+    SecurityThreatAssessment,
 )
 
 logger = logging.getLogger(__name__)
@@ -179,6 +180,43 @@ class InteractionOrchestrator:
                 "requires_user_choice": True,
                 "cortex_protocol": "LENS+Challenge (CORE-029)"
             })
+        
+        # STEP 2.5: Security Threat Assessment (Phase 8.3 - AC-SECURITY-FRAMEWORK-001)
+        # If user request contains code context, run security analysis
+        security_assessment = None
+        if "code" in round_context.data or "file_path" in round_context.data:
+            code_context = round_context.data.get("code", "")
+            file_path = round_context.data.get("file_path", "user_code.py")
+            
+            if code_context:
+                security_assessment = self.challenge_engine.assess_security_threats(
+                    code_context,
+                    file_path
+                )
+                
+                logger.info("Security assessment complete: threats=%d, block=%s",
+                           len(security_assessment.threats),
+                           security_assessment.block_execution)
+                
+                # HARD GATE: Block execution if critical threats
+                if security_assessment.block_execution:
+                    logger.warning("Security threats detected - execution blocked (Phase 8.3)")
+                    return Ok({
+                        "type": "security_gate",
+                        "blocked": True,
+                        "threat_summary": security_assessment.threat_summary,
+                        "threats": [
+                            {
+                                "cwe_id": t.cwe_id,
+                                "severity": t.severity.name,
+                                "line_number": t.line_number,
+                                "description": t.description,
+                                "recommendation": t.recommendation,
+                            }
+                            for t in security_assessment.threats
+                        ],
+                        "cortex_protocol": "Security+Challenge (CORE-029, Phase 8.3)"
+                    })
         
         # STEP 3: Validate conversation protocol
         if pattern_id and pattern_id in self.patterns:

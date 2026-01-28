@@ -38,6 +38,8 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: "cortex.brain.mcp.tools.orchestrator_tools",
         ToolCategory.KNOWLEDGE: "cortex.brain.mcp.tools.knowledge_tools",
         ToolCategory.UTILITY: "cortex.brain.mcp.tools.utility_tools",
+        # Phase 8.2-8.4: Security analysis tools
+        "security": "cortex.mcp.tools.security",  # New security tools category
     }
     
     # Default authorization levels by category
@@ -46,6 +48,7 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: AuthLevel.AUTHENTICATED,
         ToolCategory.KNOWLEDGE: AuthLevel.AUTHENTICATED,
         ToolCategory.UTILITY: AuthLevel.PUBLIC,
+        "security": AuthLevel.AUTHENTICATED,  # Security tools require authentication
     }
     
     # Default compliance modes by category
@@ -54,6 +57,7 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: ComplianceMode.NORMAL,
         ToolCategory.KNOWLEDGE: ComplianceMode.NORMAL,
         ToolCategory.UTILITY: ComplianceMode.LIGHTWEIGHT,
+        "security": ComplianceMode.STRICT,  # Security tools require strict compliance
     }
     
     def __init__(self):
