@@ -15,14 +15,22 @@ Lock files are stored in /app/.cortex/locks/ (Docker) or .cortex/locks/ (local).
 
 from __future__ import annotations
 
-import fcntl
 import os
+import sys
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Generator, Optional
+
+# fcntl is Unix-only, provide Windows fallback
+if sys.platform != "win32":
+    import fcntl
+    HAS_FCNTL = True
+else:
+    fcntl = None  # type: ignore
+    HAS_FCNTL = False
 
 from cortex.collaboration.user_context import get_current_user
 
@@ -168,7 +176,9 @@ def operation_lock(
         while True:
             try:
                 # Try non-blocking lock acquisition
-                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                if HAS_FCNTL and fcntl is not None:
+                    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                # Windows fallback: no-op (file existence is the lock)
                 
                 # Lock acquired - write holder info
                 os.ftruncate(fd, 0)
@@ -212,7 +222,8 @@ def operation_lock(
     finally:
         # Always release lock and close file descriptor
         try:
-            fcntl.flock(fd, fcntl.LOCK_UN)
+            if HAS_FCNTL and fcntl is not None:
+                fcntl.flock(fd, fcntl.LOCK_UN)
         except Exception:
             pass  # Best effort release
         
@@ -246,9 +257,10 @@ def check_lock_status(resource_id: str) -> Optional[LockInfo]:
         fd = os.open(str(lock_file), os.O_RDONLY)
         try:
             # Try non-blocking lock
-            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            # If we got the lock, it wasn't locked
-            fcntl.flock(fd, fcntl.LOCK_UN)
+            if HAS_FCNTL and fcntl is not None:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                # If we got the lock, it wasn't locked
+                fcntl.flock(fd, fcntl.LOCK_UN)
             return None
         except BlockingIOError:
             # Lock is held - read info

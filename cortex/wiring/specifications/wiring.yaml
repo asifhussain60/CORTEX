@@ -143,8 +143,8 @@ orchestrators:
   # -----------------------------------------------------------------------
   domain:
     - name: "RefactoringOrchestrator"
-      module: "cortex.orchestrators.domain.refactoring_orchestrator"
-      class: "RefactoringOrchestrator"
+      module: "cortex.orchestrators.domain.enhanced_refactoring_orchestrator"
+      class: "EnhancedRefactoringOrchestrator"
       tier: 2
       priority: 50
       dependencies:
@@ -157,8 +157,8 @@ orchestrators:
       mcp_adapter: "cortex.mcp.adapters.refactoring_adapter"
 
     - name: "PlanningOrchestrator"
-      module: "cortex.orchestrators.domain.planning_orchestrator"
-      class: "PlanningOrchestrator"
+      module: "cortex.orchestrators.domain.enhanced_planning_orchestrator"
+      class: "EnhancedPlanningOrchestrator"
       tier: 2
       priority: 51
       dependencies:
@@ -171,8 +171,8 @@ orchestrators:
       mcp_adapter: "cortex.mcp.adapters.planning_adapter"
 
     - name: "DocumentationOrchestrator"
-      module: "cortex.orchestrators.domain.documentation_orchestrator"
-      class: "DocumentationOrchestrator"
+      module: "cortex.orchestrators.domain.enhanced_documentation_orchestrator"
+      class: "EnhancedDocumentationOrchestrator"
       tier: 2
       priority: 52
       dependencies:
@@ -210,7 +210,7 @@ orchestrators:
       health_check: "execute_autonomous"
 
     - name: "ConversationOrchestrator"
-      module: "cortex.orchestrators.domain.conversation_orchestrator"
+      module: "cortex.orchestrators.conversation_orchestrator"
       class: "ConversationOrchestrator"
       tier: 2
       priority: 55

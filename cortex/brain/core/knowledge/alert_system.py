@@ -28,6 +28,7 @@ from cortex.brain.core.knowledge.change_detection import (
     AnomalyType,
     SeverityLevel,
 )
+from cortex.models.canonical_enums import AlertPriority
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +466,6 @@ class AlertSystem:
             Number of alerts cleared.
         """
         from datetime import timedelta
-from cortex.models.canonical_enums import AlertPriority
 
         cutoff = datetime.utcnow() - timedelta(hours=older_than_hours)
         initial_count = len(self.alerts)
