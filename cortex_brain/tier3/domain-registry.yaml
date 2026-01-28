@@ -198,7 +198,7 @@ cortex_domains:
       - database-management
       - ai-ml-domains
       - ui-ux-design
-      - qa-automation-testing  # COMPANY QA framework patterns
+      - qa-automation-testing  # QA framework patterns
 
   observability:
     domain_name: "Observability & Telemetry"

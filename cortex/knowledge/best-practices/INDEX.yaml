@@ -228,12 +228,11 @@ ui-ux-design:
       keywords: ["ui-ux", "user-experience", "design", "accessibility", "usability", "design-systems"]
       design_systems: ["material-design", "accessibility"]
 
-# QA AUTOMATION & TESTING (5 guides)
+# QA AUTOMATION & TESTING (4 guides)
 qa-automation-testing:
-  description: "Test automation frameworks, patterns, and practices for enterprise QA (COMPANY ClassicQA)"
-  count: 5
-  company: "COMPANY"
-  framework: "MSTest + HEQAutomationCore + Selenium"
+  description: "Test automation frameworks, patterns, and practices for enterprise QA"
+  count: 4
+  framework: "MSTest + Selenium"
   guides:
     - path: "qa-automation-testing/mstest-framework-patterns.yaml"
       title: "MSTest Framework Patterns"
@@ -254,11 +253,6 @@ qa-automation-testing:
       title: "AI-Assisted Test Automation"
       keywords: ["ai-assistance", "github-copilot", "playwright", "test-generation", "azure-devops"]
       stack: "ai-tools"
-      
-    - path: "qa-automation-testing/company-domain-knowledge.yaml"
-      title: "COMPANY Domain Knowledge"
-      keywords: ["company", "hsa", "fsa", "domain-knowledge", "healthcare", "benefits-administration"]
-      domain: "company-business"
 
 # DISCOVERY & NAVIGATION
 discovery:
@@ -327,7 +321,6 @@ discovery:
         - "qa-automation-testing/qa-coding-standards.yaml"
         - "qa-automation-testing/page-object-patterns.yaml"
         - "qa-automation-testing/ai-assisted-testing.yaml"
-        - "qa-automation-testing/company-domain-knowledge.yaml"
         - "testing-validation/tdd-best-practices.yaml"
         - "testing-validation/testing-pyramid.yaml"
 
@@ -422,9 +415,8 @@ usage:
       - "security/secure-coding-practices.yaml"
   
   qa_automation_onboarding:
-    description: "Setting up QA automation for COMPANY (or similar enterprise)"
+    description: "Setting up QA automation for enterprise projects"
     sequence:
-      - "qa-automation-testing/company-domain-knowledge.yaml"
       - "qa-automation-testing/mstest-framework-patterns.yaml"
       - "qa-automation-testing/qa-coding-standards.yaml"
       - "qa-automation-testing/page-object-patterns.yaml"
