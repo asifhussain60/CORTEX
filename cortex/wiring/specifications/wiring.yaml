@@ -406,13 +406,27 @@ orchestrators:
       module: "cortex.orchestrators.core.dor_approval_gate"
       class: "DoRApprovalGate"
       tier: 3
-      priority: 71
+      priority: 73
       dependencies:
         - "LENSSynthesis"
       capabilities:
         - approval_gating
         - dor_validation
       health_check: "validate_dor"
+
+    - name: "ChallengeEngine"
+      module: "cortex.orchestrators.core.challenge_engine"
+      class: "ChallengeEngine"
+      tier: 3
+      priority: 71
+      dependencies:
+        - "SecurityThreatAnalyzer"
+      capabilities:
+        - hard_security_gates
+        - threat_blocking
+        - challenge_enforcement
+      health_check: "evaluate_threat"
+      description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
 
     - name: "RecommendationEngine"
       module: "cortex.orchestrators.support.recommendation_engine"
