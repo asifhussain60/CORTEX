@@ -1,0 +1,205 @@
+# Docker-Compose Monitoring Stack for CORTEX
+# Phase 7.2 - Task OBS-004
+# Production-ready monitoring with Prometheus, Grafana, and AlertManager
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # PROMETHEUS - Metrics Collection
+  # ============================================================================
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: cortex-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deployment/prometheus.prod.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deployment/prometheus-rules.yml:/etc/prometheus/rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # GRAFANA - Visualization & Dashboards
+  # ============================================================================
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: cortex-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      # Security
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme}
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      
+      # Server settings
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_SERVER_SERVE_FROM_SUB_PATH=false
+      
+      # Analytics
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+      
+      # Plugins
+      - GF_INSTALL_PLUGINS=redis-datasource,grafana-piechart-panel
+      
+      # Datasources
+      - GF_DATASOURCES_DEFAULT_NAME=Prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deployment/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./deployment/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ============================================================================
+  # ALERTMANAGER - Alert Routing & Notifications
+  # ============================================================================
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: cortex-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./deployment/alertmanager.yml:/etc/alertmanager/config.yml:ro
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ============================================================================
+  # NODE EXPORTER (Optional) - Host Metrics
+  # ============================================================================
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: cortex-node-exporter
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/host'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host:ro
+    networks:
+      - cortex-network
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+
+# ============================================================================
+# VOLUMES - Persistent Storage
+# ============================================================================
+volumes:
+  prometheus_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/prometheus
+  
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/grafana
+  
+  alertmanager_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/alertmanager
+
+# ============================================================================
+# NETWORKS - External Network Integration
+# ============================================================================
+networks:
+  cortex-network:
+    external: true
+    name: cortex-network
+
+# ============================================================================
+# USAGE INSTRUCTIONS
+# ============================================================================
+#
+# 1. Start CORTEX with monitoring:
+#    docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+#
+# 2. Access services:
+#    - Grafana:      http://localhost:3000 (admin/changeme)
+#    - Prometheus:   http://localhost:9090
+#    - AlertManager: http://localhost:9093
+#    - Node Exporter: http://localhost:9100/metrics
+#
+# 3. Environment variables (.env file):
+#    GRAFANA_ADMIN_USER=admin
+#    GRAFANA_ADMIN_PASSWORD=changeme
+#
+# 4. First-time setup:
+#    - Create data directories:
+#      mkdir -p data/prometheus data/grafana data/alertmanager
+#      chmod 777 data/grafana  # Grafana runs as user 472
+#    
+#    - Create CORTEX network (if not exists):
+#      docker network create cortex-network
+#
+# 5. Stop monitoring stack:
+#    docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml down
+#
+# 6. Backup data:
+#    tar czf monitoring-backup-$(date +%Y%m%d).tar.gz data/
+#
+# 7. View logs:
+#    docker logs -f cortex-prometheus
+#    docker logs -f cortex-grafana
+#    docker logs -f cortex-alertmanager
+#
+# ============================================================================
+# REQUIRED CONFIGURATION FILES
+# ============================================================================
+#
+# deployment/prometheus.prod.yml         - Prometheus scrape config
+# deployment/prometheus-rules.yml        - Alert rules
+# deployment/alertmanager.yml            - AlertManager routing
+# deployment/grafana/datasources/*.yml   - Grafana datasource config
+# deployment/grafana/dashboards/*.json   - Grafana dashboard templates
+#
+# ============================================================================
