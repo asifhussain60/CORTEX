@@ -55,10 +55,11 @@ def test_all_23_orchestrators_defined() -> None:
     
     total = core_count + domain_count + support_count
     
-    assert core_count == 6, f"Expected 6 core orchestrators, got {core_count}"
+    # Phase 8.1: Added EnforcementOrchestrator to core (7 total)
+    assert core_count == 7, f"Expected 7 core orchestrators, got {core_count}"
     assert domain_count == 6, f"Expected 6 domain orchestrators, got {domain_count}"
     assert support_count == 11, f"Expected 11 support orchestrators, got {support_count}"
-    assert total == 23, f"Expected 23 total orchestrators, got {total}"
+    assert total == 24, f"Expected 24 total orchestrators, got {total}"
 
 
 def test_orchestrators_have_required_fields() -> None:
@@ -186,13 +187,14 @@ def test_bootstrap_cortex_returns_registry() -> None:
 
 
 def test_registry_can_list_orchestrators() -> None:
-    """Test that registry can list all 23 orchestrators."""
+    """Test that registry can list all 24 orchestrators (Phase 8.1: +EnforcementOrchestrator)."""
     from cortex.wiring import bootstrap_cortex
     
     registry = bootstrap_cortex()
     orchestrators = registry.list_orchestrators()
     
-    assert len(orchestrators) == 23, f"Expected 23 orchestrators, got {len(orchestrators)}"
+    # Phase 8.1: Added EnforcementOrchestrator (24 total)
+    assert len(orchestrators) == 24, f"Expected 24 orchestrators, got {len(orchestrators)}"
 
 
 def test_lazy_initialization_works() -> None:
