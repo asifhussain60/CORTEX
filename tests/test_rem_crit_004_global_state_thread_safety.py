@@ -43,7 +43,10 @@ class TestMCPDecoratorThreadSafety:
         
         assert hasattr(decorator, '_REGISTRY_LOCK'), "Registry lock not found"
         import threading
-        assert isinstance(decorator._REGISTRY_LOCK, threading.Lock), "Lock is not a threading.Lock"
+        # threading.Lock is a factory function, not a type
+        # Check that the lock has the expected acquire/release methods
+        assert hasattr(decorator._REGISTRY_LOCK, 'acquire'), "Lock missing acquire method"
+        assert hasattr(decorator._REGISTRY_LOCK, 'release'), "Lock missing release method"
 
     def test_tool_registration(self) -> None:
         """Verify tool registration works."""
@@ -132,8 +135,10 @@ class TestToolkitRegistryThreadSafety:
     def test_toolkit_lock_exists(self) -> None:
         """Verify toolkit registry has thread-safe lock."""
         assert _TOOLS_LOCK is not None
-        import threading
-        assert isinstance(_TOOLS_LOCK, threading.Lock), "Toolkit lock is not a threading.Lock"
+        # threading.Lock is a factory function, not a type
+        # Check that the lock has the expected acquire/release methods
+        assert hasattr(_TOOLS_LOCK, 'acquire'), "Toolkit lock missing acquire method"
+        assert hasattr(_TOOLS_LOCK, 'release'), "Toolkit lock missing release method"
 
     def test_toolkit_command_structure(self) -> None:
         """Verify toolkit has basic commands."""

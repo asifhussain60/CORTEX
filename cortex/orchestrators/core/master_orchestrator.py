@@ -241,12 +241,14 @@ class MasterOrchestrator(IOrchestrator):
         )
         
         # AC-PHASE-2-5-WIRE-003: Initialize AdaptiveRouter for intelligent task routing
-        self._adaptive_router = AdaptiveRouter()
+        # Note: AdaptiveRouter is IntelligentKnowledgeRouter which needs providers
+        # Will be initialized later after knowledge repositories are set up
+        self._adaptive_router = None  # Placeholder, set after knowledge repos init
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-2-5-WIRE-003",
-            operation="ADAPTIVE_ROUTER_INIT",
+            operation="ADAPTIVE_ROUTER_PLACEHOLDER",
             success=True,
-            details={"message": "Adaptive router initialized"}
+            details={"message": "Adaptive router will be initialized after knowledge repos"}
         )
         
         # AC-KN-002-01: Initialize Knowledge Repository for best practices access
@@ -313,6 +315,14 @@ class MasterOrchestrator(IOrchestrator):
                         tech_confidence_threshold=70.0,
                         business_confidence_threshold=70.0,
                         fallback_threshold=50.0
+                    )
+                    # AC-PHASE-2-5-WIRE-003: Set adaptive router now that providers are ready
+                    self._adaptive_router = self.router
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-2-5-WIRE-003",
+                        operation="ADAPTIVE_ROUTER_INIT",
+                        success=True,
+                        details={"message": "Adaptive router initialized with knowledge providers"}
                     )
                     self.logger.log_operation_complete(
                         ac_id="AC-IKP-002-02",
