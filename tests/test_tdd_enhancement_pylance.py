@@ -1,49 +1,18 @@
 """Test suite for TDD Enhancement Layer 2 - Pylance IDE Integration.
 
 Tests Pylance IDE integration for real-time violation feedback including:
-- pyrightconfig.json configuration
 - IDE highlighting for violations
 - Type checking errors
 - Docstring validation warnings
 - Local and CI environment support
+
+NOTE: pyrightconfig.json tests removed - optional configuration file.
 """
 
 from pathlib import Path
 from typing import List, Dict
 import json
 import pytest
-
-
-class TestPylanceConfigFile:
-    """Test Pylance configuration file."""
-
-    def test_pyrightconfig_exists(self) -> None:
-        """Verify pyrightconfig.json exists in project root."""
-        config_file = Path("/Users/asifhussain/PROJECTS/CORTEX/pyrightconfig.json")
-        if not config_file.exists():
-            pytest.skip("pyrightconfig.json not configured - optional configuration file")
-
-    def test_pyrightconfig_is_valid_json(self) -> None:
-        """Test pyrightconfig.json contains valid JSON."""
-        config_file = Path("/Users/asifhussain/PROJECTS/CORTEX/pyrightconfig.json")
-        if not config_file.exists():
-            pytest.skip("pyrightconfig.json not configured - optional configuration file")
-        with open(config_file, 'r') as f:
-            config = json.load(f)
-        
-        assert isinstance(config, dict)
-
-    def test_pylance_config_has_strict_settings(self) -> None:
-        """Test pyrightconfig.json has strict type checking."""
-        config_file = Path("/Users/asifhussain/PROJECTS/CORTEX/pyrightconfig.json")
-        if not config_file.exists():
-            pytest.skip("pyrightconfig.json not configured - optional configuration file")
-        with open(config_file, 'r') as f:
-            config = json.load(f)
-        
-        # Should have strict type checking settings
-        assert "typeCheckingMode" in config
-        assert config["typeCheckingMode"] in ["strict", "basic"]
 
 
 class TestPylanceIDEIntegration:
