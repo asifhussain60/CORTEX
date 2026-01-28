@@ -38,7 +38,7 @@ NC='\033[0m'
 
 # Get script directory
 CORTEX_ROOT="$(git rev-parse --show-toplevel)"
-VERIFY_SCRIPT="$CORTEX_ROOT/_workspaces/docker-plan/verify-prod-ready.py"
+VERIFY_SCRIPT="$CORTEX_ROOT/_workspaces/docker-plan/verify_prod_ready.py"
 PYTHON="$CORTEX_ROOT/.venv/bin/python"
 
 echo ""
@@ -85,7 +85,7 @@ else
     echo ""
     echo -e "${YELLOW}To fix:${NC}"
     echo -e "  1. Review failed checks above"
-    echo -e "  2. Run: PYTHONPATH=. python _workspaces/docker-plan/verify-prod-ready.py --verbose"
+    echo -e "  2. Run: PYTHONPATH=. python _workspaces/docker-plan/verify_prod_ready.py --verbose"
     echo -e "  3. Address each FAILED check"
     echo -e "  4. Re-attempt push"
     echo ""

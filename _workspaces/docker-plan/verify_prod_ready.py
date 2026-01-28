@@ -99,28 +99,28 @@ class CORTEXVerification:
         return self.all_passed()
     
     def check_01_orchestrators_wired(self):
-        """CHECK 1: All 24 orchestrators wired in (Phase 8.1: Added EnforcementOrchestrator)."""
+        """CHECK 1: All 26 orchestrators wired in (Phase 8.3: Added ChallengeEngine, RecommendationEngine)."""
         try:
             from cortex.wiring import bootstrap_cortex
             
             registry = bootstrap_cortex()
             orchestrators = registry.list_orchestrators()
             
-            if len(orchestrators) != 24:
+            if len(orchestrators) != 26:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 24 Orchestrators Wired",
+                    check_name="All 26 Orchestrators Wired",
                     status=CheckStatus.FAILED,
-                    details=f"Expected 24, found {len(orchestrators)}",
-                    evidence=[f"Count: {len(orchestrators)}/24"],
-                    remediation="Verify cortex/wiring/specifications/wiring.yaml contains all 24 entries"
+                    details=f"Expected 26, found {len(orchestrators)}",
+                    evidence=[f"Count: {len(orchestrators)}/26"],
+                    remediation="Verify cortex/wiring/specifications/wiring.yaml contains all 26 entries"
                 ))
                 return
             
-            # Verify categories (Phase 8.1: 7 core, 6 domain, 11 support)
-            core_count = 7  # Added EnforcementOrchestrator
-            domain_count = 6
-            support_count = 11
+            # Verify categories (Phase 8.3: 7 core, 6 domain, 13 support)
+            core_count = 7  # InteractionOrchestrator, IntentRouter, LENSSynthesis, EnforcementOrchestrator, TDDOrchestrator, WorkflowOrchestrator, MasterOrchestrator
+            domain_count = 6  # RefactoringOrchestrator, PlanningOrchestrator, DocumentationOrchestrator, PhaseExecutor, AutonomousExecutionEngine, ConversationOrchestrator
+            support_count = 13  # OnboardingOrchestrator, ToolDiscoveryOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, GovernanceRegistry, KnowledgeRepository, WrappedTDDOrchestrator, FuzzyIntentMatcher, ComprehensionSession, DoRApprovalGate, ChallengeEngine, RecommendationEngine
             
             # Check for specific orchestrators
             required_orchestrators = [
@@ -128,7 +128,8 @@ class CORTEXVerification:
                 "TDDOrchestrator", "LENSSynthesis", "WorkflowOrchestrator",
                 "EnforcementOrchestrator",  # Phase 8.1
                 "RefactoringOrchestrator", "PlanningOrchestrator", 
-                "DocumentationOrchestrator", "ToolDiscoveryOrchestrator"
+                "DocumentationOrchestrator", "ToolDiscoveryOrchestrator",
+                "ChallengeEngine", "RecommendationEngine"  # Phase 8.3
             ]
             
             missing = [o for o in required_orchestrators if o not in orchestrators]
@@ -136,7 +137,7 @@ class CORTEXVerification:
             if missing:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 24 Orchestrators Wired",
+                    check_name="All 26 Orchestrators Wired",
                     status=CheckStatus.FAILED,
                     details=f"Missing orchestrators: {', '.join(missing)}",
                     evidence=missing,
@@ -145,11 +146,11 @@ class CORTEXVerification:
             else:
                 self.results.append(CheckResult(
                     check_number=1,
-                    check_name="All 24 Orchestrators Wired",
+                    check_name="All 26 Orchestrators Wired",
                     status=CheckStatus.PASSED,
-                    details=f"All 24 orchestrators wired and accessible (Phase 8.1: Added EnforcementOrchestrator)",
+                    details=f"All 26 orchestrators wired and accessible (Phase 8.3: Added ChallengeEngine, RecommendationEngine)",
                     evidence=[
-                        f"Total: {len(orchestrators)}/24",
+                        f"Total: {len(orchestrators)}/26",
                         f"Core: {core_count}",
                         f"Domain: {domain_count}",
                         f"Support: {support_count}",

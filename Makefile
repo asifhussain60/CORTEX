@@ -24,7 +24,7 @@ setup-hooks:
 
 # Run production readiness verification
 verify:
-	@PYTHONPATH=. .venv/bin/python _workspaces/docker-plan/verify-prod-ready.py --skip-docker
+	@PYTHONPATH=. .venv/bin/python _workspaces/docker-plan/verify_prod_ready.py --skip-docker
 
 # Run wiring tests
 test:
