@@ -23,12 +23,20 @@ from cortex.models.canonical_enums import ApprovalStatus
 
 
 
+# DoR Confidence threshold - blocks execution if below this value
+DOR_CONFIDENCE_THRESHOLD = 0.6
+
+
 @dataclass
 class IntentReflection:
     """
     Structured reflection of classified intent.
     
     Designed for concise markdown display without overwhelming the user.
+    
+    DoR Confidence represents CORTEX's ability to complete the request
+    with full confidence. If DoR Confidence is below threshold (60%),
+    execution is blocked until clarification is provided.
     """
     
     intent_type: str
@@ -37,8 +45,8 @@ class IntentReflection:
     target_handler: str
     """Orchestrator that will handle this request"""
     
-    confidence: float
-    """Confidence score (0.0 to 1.0)"""
+    dor_confidence: float
+    """DoR Confidence (0.0 to 1.0) - CORTEX's ability to complete request successfully"""
     
     scope: str
     """Scope of operation (FILE, MODULE, SYSTEM, DOMAIN)"""
@@ -63,17 +71,21 @@ class IntentReflection:
         Generate concise markdown representation.
         
         Designed to be scannable in <10 seconds.
+        Includes DoR blocking indicator if confidence is below threshold.
         
         Returns:
             Markdown string for user display
         """
-        # Confidence indicator
-        if self.confidence >= 0.8:
+        # DoR Confidence indicator with blocking status
+        if self.dor_confidence >= 0.8:
             confidence_badge = "🟢 High"
-        elif self.confidence >= 0.6:
+        elif self.dor_confidence >= DOR_CONFIDENCE_THRESHOLD:
             confidence_badge = "🟡 Medium"
         else:
-            confidence_badge = "🔴 Low"
+            confidence_badge = "🔴 Low (BLOCKED)"
+        
+        # Check if DoR is met (execution allowed)
+        dor_met = self.dor_confidence >= DOR_CONFIDENCE_THRESHOLD
         
         # Impact indicator
         impact_badges = {
@@ -91,7 +103,7 @@ class IntentReflection:
             f"|-------|-------|",
             f"| **Intent** | `{self.intent_type}` |",
             f"| **Handler** | `{self.target_handler}` |",
-            f"| **Confidence** | {confidence_badge} ({self.confidence:.0%}) |",
+            f"| **DoR Confidence** | {confidence_badge} ({self.dor_confidence:.0%}) |",
             f"| **Scope** | `{self.scope}` |",
             f"| **Impact** | {impact_badge} {self.estimated_impact.title()} |",
         ]
@@ -108,18 +120,36 @@ class IntentReflection:
             rules_str = ", ".join(self.governance_rules[:3])
             lines.append(f"| **Rules** | {rules_str} |")
         
-        lines.extend([
-            "",
-            "---",
-            "",
-            "**⏳ Awaiting Your Decision:**",
-            "",
-            "1️⃣ **proceed** — Execute with this intent classification",
-            "2️⃣ **modify: {changes}** — Adjust the classification and try again",
-            "3️⃣ **cancel** — Abort this operation",
-            "",
-            "Reply with: `proceed` / `modify: {your changes}` / `cancel`",
-        ])
+        # Add DoR status indicator
+        if dor_met:
+            lines.extend([
+                "",
+                "---",
+                "",
+                "**⏳ Awaiting Your Decision:**",
+                "",
+                "1️⃣ **proceed** — Execute with this intent classification",
+                "2️⃣ **modify: {changes}** — Adjust the classification and try again",
+                "3️⃣ **cancel** — Abort this operation",
+                "",
+                "Reply with: `proceed` / `modify: {your changes}` / `cancel`",
+            ])
+        else:
+            lines.extend([
+                "",
+                "---",
+                "",
+                "**⛔ DoR NOT MET — Execution Blocked**",
+                "",
+                f"DoR Confidence ({self.dor_confidence:.0%}) is below threshold ({DOR_CONFIDENCE_THRESHOLD:.0%}).",
+                "",
+                "Please provide clarification:",
+                "- More specific details about the request",
+                "- Target files, modules, or components",
+                "- Expected behavior or acceptance criteria",
+                "",
+                "Reply with additional context to increase DoR Confidence.",
+            ])
         
         return "\n".join(lines)
 
@@ -272,7 +302,7 @@ class DoRApprovalGate:
         return IntentReflection(
             intent_type=decision.intent_type.value,
             target_handler=decision.target_handler,
-            confidence=decision.confidence_score,
+            dor_confidence=decision.confidence_score,
             scope=scope,
             key_entities=entities,
             estimated_impact=impact,
@@ -286,9 +316,21 @@ class DoRApprovalGate:
         
         Args:
             feedback: Optional approval feedback
+        
+        Raises:
+            RuntimeError: If no pending classification or DoR not met
         """
         if self._current_reflection is None:
             raise RuntimeError("No pending classification to approve")
+        
+        # Block execution if DoR confidence is below threshold
+        if self._current_reflection.dor_confidence < DOR_CONFIDENCE_THRESHOLD:
+            raise RuntimeError(
+                f"DoR NOT MET: Cannot approve execution. "
+                f"DoR Confidence ({self._current_reflection.dor_confidence:.0%}) "
+                f"is below threshold ({DOR_CONFIDENCE_THRESHOLD:.0%}). "
+                f"Please provide additional clarification."
+            )
         
         self._approval_decision = ApprovalDecision(
             status=ApprovalStatus.APPROVED,
@@ -336,6 +378,13 @@ class DoRApprovalGate:
             ApprovalStatus.APPROVED,
             ApprovalStatus.MODIFIED,
         ]
+    
+    @property
+    def is_dor_met(self) -> bool:
+        """Check if Definition of Ready (DoR) is met for execution."""
+        if self._current_reflection is None:
+            return False
+        return self._current_reflection.dor_confidence >= DOR_CONFIDENCE_THRESHOLD
     
     @property
     def is_pending(self) -> bool:

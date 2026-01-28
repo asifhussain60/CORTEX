@@ -147,7 +147,7 @@ On receiving ANY user request:
 |-------|-------|
 | **Intent** | `{IMPLEMENT|FIX|REFACTOR|ANALYZE|...}` |
 | **Handler** | `{TDDOrchestrator|RefactoringOrchestrator|...}` |
-| **Confidence** | 🟢 High (85%) / 🟡 Medium (65%) / 🔴 Low (45%) |
+| **DoR Confidence** | 🟢 High (85%) / 🟡 Medium (65%) / 🔴 Low (45%) BLOCKED |
 | **Scope** | `{FILE|MODULE|SYSTEM|DOMAIN}` |
 | **Impact** | 🔵 Low / 🟡 Medium / 🔴 High |
 | **Entities** | `file.py`, `ClassName`, `function_name` |
@@ -155,10 +155,12 @@ On receiving ANY user request:
 
 ---
 
-**⏳ Awaiting approval to proceed...**
+**⏳ Awaiting approval to proceed...** (if DoR ≥ 60%)
+
+**⛔ DoR NOT MET — Execution Blocked** (if DoR < 60%)
 
 Reply with:
-- ✅ "proceed" / "yes" / "approve" → Execute
+- ✅ "proceed" / "yes" / "approve" → Execute (only if DoR met)
 - ❌ "no" / "cancel" / "stop" → Abort
 - 🔄 "modify: {changes}" → Adjust and re-classify
 ```
@@ -487,7 +489,7 @@ CORTEX Response:
 |-------|-------|
 | **Intent** | `IMPLEMENT` |
 | **Handler** | `TDDOrchestrator` |
-| **Confidence** | 🟢 High (92%) |
+| **DoR Confidence** | 🟢 High (92%) |
 | **Scope** | `MODULE` |
 | **Impact** | 🟡 Medium |
 | **Entities** | `knowledge_repository.py`, `cache` |
@@ -507,7 +509,7 @@ CORTEX Response:
 |-------|-------|
 | **Intent** | `FIX` |
 | **Handler** | `IntentRouter → FixHandler` |
-| **Confidence** | 🟢 High (88%) |
+| **DoR Confidence** | 🟢 High (88%) |
 | **Scope** | `FILE` |
 | **Impact** | 🔴 High |
 | **Entities** | `state_manager.py`, `race condition` |
