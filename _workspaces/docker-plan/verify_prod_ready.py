@@ -1029,16 +1029,16 @@ class CORTEXVerification:
                 remediation="Manual review of .github/prompts/ and .github/copilot-instructions.md"
             ))
     
-    def check_13_knowledge_ingestion_readiness(self):
-        """CHECK 13: Event-Driven Knowledge Ingestion Infrastructure (Phase 11).
+    def check_13_cortical_memory_system_readiness(self):
+        """CHECK 13: Cortical Memory System Infrastructure Readiness.
         
-        Verifies readiness for Phase 11 implementation:
+        Verifies readiness for Cortical Memory System implementation:
         - Health endpoint infrastructure
         - company/domains/ compliance standards present
-        - Graph storage location prepared
+        - Synaptic network storage location prepared
         - MCP tool registration system ready
         
-        Note: Phase 11 is PLANNED, so this checks READINESS, not deployment.
+        Note: CMS is PLANNED, so this checks READINESS, not deployment.
         """
         try:
             issues = []
@@ -1052,23 +1052,23 @@ class CORTEXVerification:
                 readiness_score += 1
                 evidence.append("✅ Health endpoint infrastructure exists")
                 
-                # Verify Phase 11 health methods added
+                # Verify CMS health methods added
                 with open(health_checker_path, 'r') as f:
                     content = f.read()
-                    phase_11_methods = [
+                    cms_methods = [
                         "check_event_ingestion_health",
                         "check_compliance_graph_health",
                         "check_service_graph_health",
                         "check_graph_federation_health",
                         "check_reconciliation_health"
                     ]
-                    found_methods = [m for m in phase_11_methods if m in content]
+                    found_methods = [m for m in cms_methods if m in content]
                     
-                    if len(found_methods) == len(phase_11_methods):
+                    if len(found_methods) == len(cms_methods):
                         readiness_score += 1
-                        evidence.append(f"✅ All 5 Phase 11 health check methods present")
+                        evidence.append(f"✅ All 5 CMS health check methods present")
                     else:
-                        issues.append(f"Missing health check methods: {set(phase_11_methods) - set(found_methods)}")
+                        issues.append(f"Missing health check methods: {set(cms_methods) - set(found_methods)}")
             else:
                 issues.append("Health checker infrastructure missing")
             
@@ -1084,33 +1084,33 @@ class CORTEXVerification:
             else:
                 issues.append("company/domains/compliance-standards/ directory missing")
             
-            # Check 3: Phase 11 specification exists
-            phase_11_spec = self.cortex_root / "_workspaces" / "docker-plan" / "PHASE-11-EVENT-DRIVEN-KNOWLEDGE-INGESTION.yaml"
-            if phase_11_spec.exists():
+            # Check 3: Cortical Memory System specification exists
+            cms_spec = self.cortex_root / "_workspaces" / "docker-plan" / "CORTICAL-MEMORY-SYSTEM.yaml"
+            if cms_spec.exists():
                 readiness_score += 1
-                evidence.append("✅ Phase 11 specification exists")
+                evidence.append("✅ Cortical Memory System specification exists")
             else:
-                issues.append("Phase 11 specification missing")
+                issues.append("Cortical Memory System specification missing")
             
             # Check 4: health_checks.yaml updated
             health_checks_yaml = self.cortex_root / "deployment" / "health_checks.yaml"
             if health_checks_yaml.exists():
                 with open(health_checks_yaml, 'r') as f:
                     content = f.read()
-                    phase_11_endpoints = [
+                    cms_endpoints = [
                         "/health/event-ingestion",
                         "/health/compliance-graph",
                         "/health/service-graph",
                         "/health/graph-federation",
                         "/health/reconciliation"
                     ]
-                    found_endpoints = [e for e in phase_11_endpoints if e in content]
+                    found_endpoints = [e for e in cms_endpoints if e in content]
                     
-                    if len(found_endpoints) == len(phase_11_endpoints):
+                    if len(found_endpoints) == len(cms_endpoints):
                         readiness_score += 1
-                        evidence.append(f"✅ All 5 Phase 11 health endpoints configured")
+                        evidence.append(f"✅ All 5 CMS health endpoints configured")
                     else:
-                        issues.append(f"Missing health endpoints: {set(phase_11_endpoints) - set(found_endpoints)}")
+                        issues.append(f"Missing health endpoints: {set(cms_endpoints) - set(found_endpoints)}")
             else:
                 issues.append("health_checks.yaml missing")
             
@@ -1119,10 +1119,10 @@ class CORTEXVerification:
             
             if readiness_percent == 100:
                 status = CheckStatus.PASSED
-                details = "Infrastructure ready for Phase 11 implementation"
+                details = "Infrastructure ready for Cortical Memory System implementation"
             elif readiness_percent >= 80:
                 status = CheckStatus.PASSED
-                details = f"Infrastructure {readiness_percent:.0f}% ready for Phase 11"
+                details = f"Infrastructure {readiness_percent:.0f}% ready for Cortical Memory System"
             elif readiness_percent >= 60:
                 status = CheckStatus.WARNING
                 details = f"Infrastructure {readiness_percent:.0f}% ready - minor gaps"
@@ -1132,24 +1132,24 @@ class CORTEXVerification:
             
             self.results.append(CheckResult(
                 check_number=13,
-                check_name="Event-Driven Knowledge Ingestion Readiness (Phase 11)",
+                check_name="Cortical Memory System Readiness (Sensory+Synaptic+Cortical)",
                 status=status,
                 details=details,
                 evidence=evidence + [f"Readiness: {readiness_score}/{total_checks} checks passed"],
-                remediation="Complete Phase 11 infrastructure preparation" if issues else None
+                remediation="Complete Cortical Memory System infrastructure preparation" if issues else None
             ))
             
             if issues:
-                self.log(f"Phase 11 readiness issues: {issues}", "WARNING")
+                self.log(f"CMS readiness issues: {issues}", "WARNING")
                 
         except Exception as e:
             self.results.append(CheckResult(
                 check_number=13,
-                check_name="Event-Driven Knowledge Ingestion Readiness (Phase 11)",
+                check_name="Cortical Memory System Readiness (Sensory+Synaptic+Cortical)",
                 status=CheckStatus.WARNING,
                 details=f"Readiness check failed: {str(e)}",
                 evidence=[str(e)],
-                remediation="Review Phase 11 specification and infrastructure requirements"
+                remediation="Review Cortical Memory System specification and infrastructure requirements"
             ))
 
     def all_passed(self) -> bool:
