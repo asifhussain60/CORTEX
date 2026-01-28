@@ -24,7 +24,7 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 
 # Configure Python path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 
 class CheckStatus(Enum):
