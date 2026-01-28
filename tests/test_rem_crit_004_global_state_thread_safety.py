@@ -148,11 +148,6 @@ class TestToolkitRegistryThreadSafety:
         # Toolkit may have 0 or more commands depending on initialization
         assert isinstance(_TOOLS, dict), "TOOLS should be a dict"
 
-    @pytest.mark.skip(reason="Toolkit commands changed - cmd_help/cmd_version/cmd_root no longer exist")
-    def test_concurrent_toolkit_operations(self) -> None:
-        """Verify concurrent toolkit operations don't cause issues."""
-        pass  # Skipped - old API
-
 
 class TestGlobalStateElimination:
     """Verify global mutable state has been properly eliminated."""
