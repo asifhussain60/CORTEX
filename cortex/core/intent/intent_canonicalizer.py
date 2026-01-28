@@ -168,7 +168,7 @@ class IntentCanonicalizer:
             )
         
         return CanonicalIntent(
-            intent_type=intent_type.value if isinstance(intent_type, IntentType) else intent_type,
+            intent_type=intent_type.name if isinstance(intent_type, IntentType) else intent_type,
             scope=scope,
             confidence=confidence,
             keywords=keywords,
@@ -400,7 +400,7 @@ class IntentCanonicalizer:
             CanonicalIntent: Intent marked as unknown
         """
         return CanonicalIntent(
-            intent_type=IntentType.UNKNOWN.value,
+            intent_type=IntentType.UNKNOWN.name,
             scope=Scope(),
             confidence=0.0,
             keywords=[],

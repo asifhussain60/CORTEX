@@ -101,6 +101,10 @@ class TestCompareBranchesCommand:
         assert "API token required" in result.output
 
 
+# Skip cache tests if diskcache is not installed
+_diskcache_available = pytest.importorskip("diskcache", reason="diskcache not installed")
+
+
 class TestCacheCommands:
     """Test cache management commands."""
     

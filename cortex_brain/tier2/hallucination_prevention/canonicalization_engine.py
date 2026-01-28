@@ -126,6 +126,51 @@ class ExtendedIntentCanonicalizer(CanonicalizeEngine):
     def canonicalize_with_context(self, data: Any, context: Dict[str, Any]) -> CanonicalData:
         """Canonicalize with context."""
         return self.canonicalize(data)
+    
+    def canonicalize_extended(self, intent_text: str) -> "ExtendedCanonicalIntent":
+        """Canonicalize an intent string to ExtendedCanonicalIntent.
+        
+        Args:
+            intent_text: Intent text to canonicalize.
+            
+        Returns:
+            ExtendedCanonicalIntent with parsed fields.
+        """
+        import re
+        
+        # Parse AC-ID (e.g., AC-HP-002-01)
+        ac_match = re.search(r'AC-([A-Z]+)-(\d+)-(\d+)', intent_text)
+        ac_id = ac_match.group(0) if ac_match else None
+        
+        # Parse Phase (e.g., PHASE-11)
+        phase_match = re.search(r'PHASE-(\d+)', intent_text)
+        phase = phase_match.group(0) if phase_match else None
+        
+        # Determine action type
+        action_type = ActionType.EXECUTE
+        if 'implement' in intent_text.lower():
+            action_type = ActionType.CREATE
+        elif 'modify' in intent_text.lower():
+            action_type = ActionType.MODIFY
+        elif 'delete' in intent_text.lower():
+            action_type = ActionType.DELETE
+        
+        return ExtendedCanonicalIntent(
+            intent=intent_text,
+            action_type=action_type,
+            confidence=0.9,
+            context={"ac_id": ac_id, "phase": phase},
+        )
+    
+    @property
+    def ac_id(self) -> Optional[str]:
+        """Get last canonicalized AC-ID."""
+        return getattr(self, '_last_ac_id', None)
+    
+    @property  
+    def phase(self) -> Optional[str]:
+        """Get last canonicalized phase."""
+        return getattr(self, '_last_phase', None)
 
 
 from enum import Enum
@@ -140,6 +185,16 @@ class ExtendedCanonicalIntent:
     action_type: ActionType
     confidence: float = 1.0
     context: Dict[str, Any] = field(default_factory=dict)
+    
+    @property
+    def ac_id(self) -> Optional[str]:
+        """Get AC-ID from context."""
+        return self.context.get("ac_id")
+    
+    @property
+    def phase(self) -> Optional[str]:
+        """Get phase from context."""
+        return self.context.get("phase")
 
 
 __all__ = [

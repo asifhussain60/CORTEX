@@ -166,7 +166,7 @@ class ChallengeGenerator:
             if "add_parameter" in change_details or "modify_return" in change_details:
                 affected = self._find_callers(target, call_graph)
                 challenges.append(Challenge(
-                    category=ChallengeCategory.BREAKING_CHANGE.value,
+                    category=ChallengeCategory.BREAKING_CHANGE.name,
                     severity=ChallengeSeverity.HIGH,
                     description=f"Function '{target}' signature change may break {len(affected)} caller(s)",
                     mitigation=f"Review and update all callers: {', '.join(affected[:3])}",
@@ -178,7 +178,7 @@ class ChallengeGenerator:
                 is_public = not target.startswith("_")
                 if is_public:
                     challenges.append(Challenge(
-                        category=ChallengeCategory.BREAKING_CHANGE.value,
+                        category=ChallengeCategory.BREAKING_CHANGE.name,
                         severity=ChallengeSeverity.CRITICAL,
                         description=f"Public API function '{target}' rename is a breaking change",
                         mitigation="Consider deprecation period or version bump (major)",
@@ -226,7 +226,7 @@ class ChallengeGenerator:
                     else ChallengeSeverity.HIGH
                 )
                 challenges.append(Challenge(
-                    category=ChallengeCategory.TEST_GAP.value,
+                    category=ChallengeCategory.TEST_GAP.name,
                     severity=severity,
                     description=(
                         f"Function '{func_name}' ({'private' if is_private else 'public'}) "
@@ -264,7 +264,7 @@ class ChallengeGenerator:
                     is_public = not node.name.startswith("_")
                     if is_public:
                         challenges.append(Challenge(
-                            category=ChallengeCategory.GOVERNANCE_RISK.value,
+                            category=ChallengeCategory.GOVERNANCE_RISK.name,
                             severity=ChallengeSeverity.MEDIUM,
                             description=f"Public function '{node.name}' missing docstring",
                             mitigation="Add Google-style docstring with Args, Returns, Raises",
@@ -277,7 +277,7 @@ class ChallengeGenerator:
             # Detect eval() usage
             if "eval(" in line and not line.strip().startswith("#"):
                 challenges.append(Challenge(
-                    category=ChallengeCategory.GOVERNANCE_RISK.value,
+                    category=ChallengeCategory.GOVERNANCE_RISK.name,
                     severity=ChallengeSeverity.CRITICAL,
                     description=f"Dangerous eval() usage on line {i}",
                     mitigation="Replace eval() with ast.literal_eval() or safer alternative",
@@ -287,7 +287,7 @@ class ChallengeGenerator:
             # Detect exec() usage
             if "exec(" in line and not line.strip().startswith("#"):
                 challenges.append(Challenge(
-                    category=ChallengeCategory.GOVERNANCE_RISK.value,
+                    category=ChallengeCategory.GOVERNANCE_RISK.name,
                     severity=ChallengeSeverity.CRITICAL,
                     description=f"Unsafe exec() on line {i}",
                     mitigation="Refactor to avoid dynamic code execution",
@@ -297,7 +297,7 @@ class ChallengeGenerator:
             # Detect bare except clauses
             if re.search(r"except\s*:", line):
                 challenges.append(Challenge(
-                    category=ChallengeCategory.GOVERNANCE_RISK.value,
+                    category=ChallengeCategory.GOVERNANCE_RISK.name,
                     severity=ChallengeSeverity.HIGH,
                     description=f"Bare except clause on line {i} (CORE-013 violation)",
                     mitigation="Specify exception types explicitly",
@@ -333,7 +333,7 @@ class ChallengeGenerator:
                 )
                 
                 challenges.append(Challenge(
-                    category=ChallengeCategory.HISTORICAL_ISSUE.value,
+                    category=ChallengeCategory.HISTORICAL_ISSUE.name,
                     severity=severity,
                     description=issue.get("description", "Historical pattern detected"),
                     mitigation=issue.get("resolution", "Review historical fixes"),
@@ -374,7 +374,7 @@ class ChallengeGenerator:
                     )
                     
                     challenges.append(Challenge(
-                        category=ChallengeCategory.HISTORICAL_ISSUE.value,
+                        category=ChallengeCategory.HISTORICAL_ISSUE.name,
                         severity=severity,
                         description=issue.get("description", "Historical issue in this file"),
                         mitigation=f"Review commit {issue.get('commit', 'N/A')} from {issue.get('date', 'N/A')}",
@@ -416,7 +416,7 @@ class ChallengeGenerator:
                 ]
                 if nested_loops:
                     challenges.append(Challenge(
-                        category=ChallengeCategory.PERFORMANCE_RISK.value,
+                        category=ChallengeCategory.PERFORMANCE_RISK.name,
                         severity=ChallengeSeverity.MEDIUM,
                         description="Nested loop detected - potential O(n²) complexity",
                         mitigation="Consider using set lookups or dict-based optimization",
@@ -437,7 +437,7 @@ class ChallengeGenerator:
                 for pattern in ["get_connection", "execute", "query", "fetch"]
             ):
                 challenges.append(Challenge(
-                    category=ChallengeCategory.PERFORMANCE_RISK.value,
+                    category=ChallengeCategory.PERFORMANCE_RISK.name,
                     severity=ChallengeSeverity.HIGH,
                     description=f"Potential N+1 query pattern near line {i + 1}",
                     mitigation="Use batch queries or prefetch data before loop",

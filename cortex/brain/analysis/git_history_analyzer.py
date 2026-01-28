@@ -26,6 +26,25 @@ from cortex.brain.analysis.remote_git_adapter import (
 
 
 @dataclass
+class CommitInfo:
+    """Information about a commit (alias for backward compatibility)."""
+    hash: str
+    author: str
+    date: datetime
+    message: str
+    files_changed: List[str] = field(default_factory=list)
+
+
+@dataclass
+class RenameInfo:
+    """Information about a file rename."""
+    old_path: str
+    new_path: str
+    commit_hash: str
+    commit_date: datetime
+
+
+@dataclass
 class GitCommit:
     """
     Represents a single git commit.

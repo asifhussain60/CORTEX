@@ -43,12 +43,17 @@ class ExecutionMode(Enum):
     BATCH = "batch"
     STREAMING = "streaming"
     PARALLEL = "parallel"
+    SANDBOX = "sandbox"
+    DRY_RUN = "dry_run"
+    SAFE = "safe"
+    COMMITTED = "committed"
 
 
 class ExecutionStrategy(Enum):
     """Strategy for executing operations."""
     SEQUENTIAL = "sequential"
     PARALLEL = "parallel"
+    ASYNC = "async"
     DISTRIBUTED = "distributed"
     ADAPTIVE = "adaptive"
     FALLBACK = "fallback"
@@ -159,6 +164,11 @@ class ChallengeCategory(Enum):
     PROCESS = "process"
     ARCHITECTURE = "architecture"
     PERFORMANCE = "performance"
+    BREAKING_CHANGE = "breaking_change"
+    TEST_GAP = "test_gap"
+    GOVERNANCE_RISK = "governance_risk"
+    HISTORICAL_ISSUE = "historical_issue"
+    PERFORMANCE_RISK = "performance_risk"
 
 
 class IntentType(Enum):
@@ -171,6 +181,10 @@ class IntentType(Enum):
     TEST = "test"
     DEPLOY = "deploy"
     GOVERNANCE = "governance"
+    QUERY = "query"
+    VALIDATE = "validate"
+    MIGRATE = "migrate"
+    UNKNOWN = "unknown"
 
 
 class RoutingType(Enum):
@@ -195,6 +209,11 @@ class ChangeType(Enum):
     PERFORMANCE = "performance"
     SECURITY = "security"
     BREAKING = "breaking"
+    SCHEMA_DRIFT = "schema_drift"
+    COVERAGE_GAP = "coverage_gap"
+    STALENESS = "staleness"
+    VOLUME_ANOMALY = "volume_anomaly"
+    SEMANTIC_SHIFT = "semantic_shift"
 
 
 class BrainTier(Enum):
@@ -241,6 +260,7 @@ class ValidationLevel(Enum):
     """Levels of validation."""
     STRICT = "strict"
     NORMAL = "normal"
+    MODERATE = "moderate"
     LENIENT = "lenient"
     NONE = "none"
 
@@ -256,7 +276,25 @@ class ContinuationReason(Enum):
     REFINEMENT_NEEDED = "refinement_needed"
     FOLLOW_UP = "follow_up"
     VALIDATION = "validation"
+    COMPLETION = "completion"
+    IMPLICIT_NEXT_OPERATION = "implicit_next_operation"
+    USER_PROVIDED_FOLLOWUP = "user_provided_followup"
+    GOVERNANCE_HALT = "governance_halt"
+    INTERACTION_REQUIRED = "interaction_required"
+    TOKEN_LIMIT = "token_limit"
+    ERROR_UNRECOVERABLE = "error_unrecoverable"
+    AUTO_REFINEMENT_LOOP = "auto_refinement_loop"
+    USER_REJECTION = "user_rejection"
+    MAX_ROUNDS_REACHED = "max_rounds_reached"
 
+    @classmethod
+    def from_string(cls, value: str) -> "ContinuationReason":
+        """Create enum from string value (case-insensitive)."""
+        value_lower = value.lower().replace("-", "_").replace(" ", "_")
+        for member in cls:
+            if member.value == value_lower or member.name.lower() == value_lower:
+                return member
+        raise ValueError(f"No ContinuationReason matches '{value}'")
 
 class DecisionStatus(Enum):
     """Status of a decision."""

@@ -22,6 +22,8 @@ import json
 import logging
 from abc import ABC, abstractmethod
 
+from cortex.models.canonical_enums import ChangeType
+
 
 logger = logging.getLogger(__name__)
 
@@ -313,7 +315,7 @@ class VolumeAnomalyDetector(ChangeDetector):
         
         if variance > self.variance_threshold:
             import uuid
-from cortex.models.canonical_enums import ChangeType
+            from cortex.models.canonical_enums import ChangeType
             alert = ChangeAlert(
                 alert_id=str(uuid.uuid4()),
                 change_type=ChangeType.VOLUME_ANOMALY,
