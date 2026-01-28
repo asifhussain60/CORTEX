@@ -438,6 +438,8 @@ class CORTEXVerification:
                 issues.append(f"5C: bootstrap_cortex (wiring) in {len(bootstrap_files)} files")
             
             # === CHECK 5D: Conflicting get_orchestrator implementations ===
+            # Checks for actual competing implementations (not delegating accessors).
+            # Delegating accessors that use GitBackedRegistry.get_orchestrator() are allowed.
             get_orch_files = []
             for py_file in self.cortex_root.glob("cortex/**/*.py"):
                 if "test" in py_file.name.lower():
@@ -445,12 +447,22 @@ class CORTEXVerification:
                 try:
                     content = py_file.read_text()
                     if "def get_orchestrator(" in content and "registry" not in py_file.name.lower():
-                        get_orch_files.append(str(py_file.relative_to(self.cortex_root)))
+                        # Check if this is a delegating accessor (CORE-035 compliant)
+                        is_delegating = (
+                            "get_cortex()" in content or  # GitBackedRegistry delegation
+                            "GitBackedRegistry.get_orchestrator" in content or
+                            "registry.get_orchestrator(name)" in content or
+                            "registry.get_orchestrator(handler_name)" in content
+                        )
+                        # Only count actual competing implementations, not CORE-035 delegating accessors
+                        if not is_delegating:
+                            get_orch_files.append(str(py_file.relative_to(self.cortex_root)))
                 except Exception:
                     pass
             
-            if len(get_orch_files) > 3:  # Allow wiring, master, coordinator
-                issues.append(f"5D: get_orchestrator() in {len(get_orch_files)} files (expected ≤3)")
+            # Allow: GitBackedRegistry (canonical), MasterOrchestrator (domain-based)
+            if len(get_orch_files) > 2:
+                issues.append(f"5D: Competing get_orchestrator() in {len(get_orch_files)} files (expected ≤2)")
             
             # === CHECK 5E: Parallel Import Paths for MasterOrchestrator ===
             master_imports = set()

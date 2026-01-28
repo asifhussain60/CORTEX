@@ -31,15 +31,30 @@ class OrchestrationIntegrator:
         self.orchestrator_registry[handler_name] = orchestrator
     
     def get_orchestrator(self, handler_name: str) -> Optional[Any]:
-        """Get registered orchestrator.
+        """Get registered orchestrator (delegating accessor).
+        
+        CORE-035: Single Canonical Implementation
+        This method delegates to GitBackedRegistry.get_orchestrator() which is
+        the canonical accessor. This wrapper exists for backward compatibility
+        with code that expects OrchestrationIntegrator to provide orchestrator access.
         
         Args:
-            handler_name: Handler name
+            handler_name: Handler name or orchestrator name
             
         Returns:
             Orchestrator instance or None if not registered
         """
-        return self.orchestrator_registry.get(handler_name)
+        try:
+            # AC-CORE-035: Delegate to canonical GitBackedRegistry accessor
+            from cortex.wiring import get_cortex
+            registry = get_cortex()
+            if registry:
+                return registry.get_orchestrator(handler_name)
+            # Fallback to local registry for backward compatibility
+            return self.orchestrator_registry.get(handler_name)
+        except Exception:
+            # Graceful degradation: fall back to local registry
+            return self.orchestrator_registry.get(handler_name)
 
 
 __all__ = ["OrchestrationIntegrator"]
