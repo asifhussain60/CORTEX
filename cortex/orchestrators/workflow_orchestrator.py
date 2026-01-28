@@ -1,8 +1,24 @@
 """
-Workflow Orchestrator - Workflow execution with state management and compensation.
+Workflow Orchestrator - DEPRECATED LOCATION
 
-Manages workflow execution, state transitions, and failure compensation.
+CORE-035 WARNING: This file is a LEGACY duplicate.
+The CANONICAL WorkflowOrchestrator is at:
+    cortex/orchestrators/core/workflow_orchestrator.py
+
+This file provides basic workflow state management.
+For the full 5-stage Master Orchestrator workflow, use the canonical location.
+
+TODO (Phase 8): Remove this file and consolidate to single canonical location.
 """
+
+import warnings
+
+warnings.warn(
+    "cortex.orchestrators.workflow_orchestrator is deprecated. "
+    "Use cortex.orchestrators.core.workflow_orchestrator for the canonical 5-stage workflow.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 from enum import Enum
 from dataclasses import dataclass

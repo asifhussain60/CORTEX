@@ -10,6 +10,9 @@ Adapters for 6 core orchestrators:
 6. WrappedTDDOrchestratorAdapter
 
 AC-ID: AC-MCP-ADAPTER-001 through AC-MCP-ADAPTER-006
+
+IMPORTANT: All orchestrators MUST be obtained via wiring system (bootstrap_cortex),
+NOT via direct instantiation. This ensures single execution path per CORE-035.
 """
 
 from typing import Any, Dict, List, Optional
@@ -19,6 +22,7 @@ from cortex.mcp.orchestrator_mcp_server import (
     CapabilityResponse,
     ExecutionContext,
 )
+# CORE-035: Import types only, get instances via wiring
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator, get_tdd_orchestrator
 from cortex.orchestrators.core.intent_router import IntentRouter
@@ -28,6 +32,17 @@ import logging
 import time
 
 logger = logging.getLogger(__name__)
+
+
+def _get_orchestrator_from_wiring(name: str) -> Optional[Any]:
+    """Get orchestrator from wiring system (CORE-035: Single execution path)."""
+    try:
+        from cortex.wiring import bootstrap_cortex
+        registry = bootstrap_cortex()
+        return registry.get_orchestrator(name)
+    except Exception as e:
+        logger.warning(f"Failed to get {name} from wiring: {e}")
+        return None
 
 
 # ============================================================================
@@ -43,11 +58,17 @@ class MasterOrchestratorAdapter(IOrchestratorAdapter):
     - route_to_domain: Route to specific domain orchestrator
     - get_system_status: Get complete system health status
     - execute_workflow: Execute multi-stage workflow
+    
+    CORE-035: Uses wiring system for orchestrator access (single execution path).
     """
     
     def __init__(self, orchestrator: Optional[MasterOrchestrator] = None):
-        """Initialize adapter"""
-        self.orchestrator = orchestrator or MasterOrchestrator()
+        """Initialize adapter with orchestrator from wiring system."""
+        # CORE-035: Get from wiring, never instantiate directly
+        if orchestrator is not None:
+            self.orchestrator = orchestrator
+        else:
+            self.orchestrator = _get_orchestrator_from_wiring("MasterOrchestrator")
         self.name = "MasterOrchestratorAdapter"
     
     def get_capabilities(self) -> List[CapabilityMetadata]:

@@ -6,6 +6,10 @@ validations run before any orchestrator code is executed.
 
 AC-PERMANENT-FIX-015: Prevent repeated discovery of same critical issues
 by running mandatory startup validation on first import.
+
+IMPORTANT (CORE-035): This module handles STARTUP VALIDATION only.
+For ORCHESTRATOR WIRING, use cortex.wiring.bootstrap_cortex() which
+returns the GitBackedRegistry with all 23 orchestrators.
 """
 
 import logging
@@ -14,14 +18,16 @@ import sys
 logger = logging.getLogger(__name__)
 
 
-def bootstrap_cortex() -> bool:
+def run_startup_validation_hook() -> bool:
     """
-    Bootstrap CORTEX with mandatory startup validation.
+    Run CORTEX startup validation hook.
 
     Called automatically on first import of cortex module.
-
+    This is NOT the orchestrator wiring bootstrap - for that use:
+        from cortex.wiring import bootstrap_cortex
+    
     Returns:
-        True if bootstrap successful, False if critical issues detected.
+        True if validation successful, False if critical issues detected.
     """
     try:
         # AC-HYBRID-KNOWLEDGE-003: Rebuild knowledge cache from YAML on startup
@@ -64,11 +70,11 @@ def bootstrap_cortex() -> bool:
                 return False
 
     except Exception as e:
-        logger.exception("CORTEX bootstrap failed with exception")
+        logger.exception("CORTEX startup validation failed with exception")
         return False
 
     return True
 
 
-# Run bootstrap on import
-_bootstrap_success = bootstrap_cortex()
+# Run startup validation on import
+_bootstrap_success = run_startup_validation_hook()
