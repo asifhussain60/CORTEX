@@ -228,76 +228,73 @@ mv cortex/brain/core/distributed_lock.py \
 
 ---
 
-### Phase 2: Refactor Production Code (3-4 hours)
+### Phase 2: Deprecation Notice & Planning (COMPLETED ✅)
 
-**MasterOrchestrator:**
+**Status:** ✅ COMPLETE - database.py now includes comprehensive deprecation warning
+
+**What was done:**
+1. Added 40+ line deprecation notice to database.py module docstring
+2. Listed all 43 dependent files organized by category
+3. Provided migration path from old patterns to EnhancedAuditLogger
+4. Scheduled for Phase 8 deletion (after comprehensive refactoring)
+
+**Deprecation notice includes:**
 ```python
-# ❌ OLD
-from cortex.infrastructure.database import DatabaseManager
-def __init__(self):
-    self.db = DatabaseManager()
-    
-def get_audit_trail(self, limit=100):
-    trail = self.db.query_audit_trail(limit=limit)
-    return Ok(trail)
+"""
+⚠️ DEPRECATION WARNING:
+This module is scheduled for deletion in Phase 8 (CORE-035 consolidation).
 
-# ✅ NEW
-from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-def __init__(self):
-    self._audit_logger = EnhancedAuditLogger.instance()
-    
-def get_audit_trail(self, limit=100):
-    # Query from EnhancedAuditLogger instead of stub DB
-    trail = self._audit_logger.get_audit_entries(limit=limit)
-    return Ok(trail)
-```
+AFFECTED FILES (43 total):
+  - 2 core orchestrators (master_orchestrator, intent_router)
+  - 3 governance infrastructure files
+  - 3 observability/audit files
+  - 35 other infrastructure files
 
-**MCP Server:**
-```python
-# ❌ OLD
-self.db = DatabaseManager()
+MIGRATION PATH:
+  Old: from cortex.infrastructure.database import DatabaseManager; 
+       db = DatabaseManager(); db.insert_audit(...)
+  New: from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger; 
+       logger = EnhancedAuditLogger.instance(); logger.log_operation_start(...)
 
-# ✅ NEW
-self._audit_logger = EnhancedAuditLogger.instance()
-self._audit_logger.initialize(db=None)  # Use no-op mode
-```
-
-**Governance Enforcer:**
-```python
-# ❌ OLD
-self._db.is_phase_locked(phase_id)
-self._db.get_phase_lock_info(phase_id)
-
-# ✅ NEW - Option A: File-based locks
-from cortex.collaboration.operation_lock import operation_lock
-with operation_lock(f"phase:{phase_id}"):
-    # Safe execution
-
-# ✅ NEW - Option B: Memory-based state
-from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-registry = GovernanceRegistry.instance()
-# Use registry's phase state instead
+TIMELINE: Phase 8 (2-4 weeks out) - comprehensive 8-12 hour refactor
+REFERENCE: See docs/phases/PHASE-8-EPIC.md for detailed refactoring plan
+"""
 ```
 
 ---
 
-### Phase 3: Minimal Stub Replacement (1 hour)
+### Phase 8: Comprehensive Refactoring (PLANNED ✅)
 
-**Simplify database.py to:**
+**Status:** 📋 PLANNED - Scheduled after Phase 2 completion
+
+**Scope:** 43 files organized in 4 phases:
+- **Phase 8-A:** Core Orchestrators (2 files, 1-2 hours)
+- **Phase 8-B:** Governance Infrastructure (3 files, 2-3 hours) - requires compliance review
+- **Phase 8-C:** Observability/Audit (3 files, 2-3 hours)
+- **Phase 8-D:** Other Infrastructure (35 files, 2-4 hours)
+
+**Total Effort:** 8-12 hours comprehensive refactoring
+
+**Completion Criteria:**
+- ✅ All 43 files refactored
+- ✅ database.py deleted
+- ✅ All 535+ tests passing
+- ✅ Audit trail integrity verified
+- ✅ CORE-035 compliance (single canonical implementation)
+
+**Documentation:** See [docs/phases/PHASE-8-EPIC.md](../../docs/phases/PHASE-8-EPIC.md)
+
+---
+
+### Current Stub Status
+
+**database.py current implementation (~120 lines):**
 
 ```python
 """
-Database Manager Stub - Backward Compatibility Bridge
-
-This stub provides graceful fallbacks for legacy code that still imports
-from cortex.infrastructure.database.
-
-Modern code should use:
-- EnhancedAuditLogger for audit trails
-- operation_lock for distributed locks
-- Governance registry for phase state
-
-See: _workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md
+⚠️ DEPRECATION WARNING:
+This module is scheduled for deletion in Phase 8...
+[40+ line deprecation notice with migration examples]
 """
 
 from dataclasses import dataclass
@@ -316,7 +313,12 @@ class DatabaseConfig:
 
 
 class DatabaseManager:
-    """Stub that logs warnings and no-ops gracefully."""
+    """
+    ⚠️ DEPRECATED - Stub DatabaseManager for backward compatibility.
+    
+    SCHEDULED FOR DELETION: Phase 8 (CORE-035 consolidation)
+    MIGRATION: See module docstring for migration examples.
+    """
     
     _instance: Optional['DatabaseManager'] = None
     

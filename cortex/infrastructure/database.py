@@ -1,10 +1,39 @@
 """
-Database Manager Stub (Docker-First Architecture)
+Database Manager Stub - DEPRECATED (Scheduled for Phase 8 Deletion)
 
-This is a minimal stub for backward compatibility during docker-first migration.
-The actual database management has been replaced with YAML-backed configuration.
+⚠️ DEPRECATION WARNING:
 
-See: _workspaces/docker-plan/migration-phases-plan.yaml
+This module is scheduled for complete deletion in Phase 8 (CORE-035 consolidation).
+It serves as a backward-compatibility bridge for legacy code while the system
+migrates to EnhancedAuditLogger for audit trails and file-based locking.
+
+MIGRATION PATH:
+  Old Code:                          New Code:
+  ───────────────────────────────────────────────────────────────
+  from cortex.infrastructure.database import DatabaseManager
+  db = DatabaseManager()             from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+  db.insert_audit(...)               logger = EnhancedAuditLogger.instance()
+                                     logger.log_operation_start(...)
+
+  db.query_audit_trail()             logger.query_by_ac_id(ac_id)
+  db.execute(query)                  logger.log_operation_complete(...)
+
+AFFECTED FILES (43 total - Phase 8 epic):
+  • Core orchestrators (2): master_orchestrator.py, intent_router.py
+  • Governance infrastructure (3): governance_enforcer.py, governance_database.py, state_machine.py
+  • Observability/audit (3): enhanced_audit_logger.py, audit_logger.py, audit_trail.py
+  • Infrastructure & tools (35): CI/CD gates, MCP tools, cache, logging, etc.
+
+CURRENT STATUS:
+  ✅ Phase 1 COMPLETE: 856 lines of dead code removed (3 files)
+  ✅ Phase 2 COMPLETE: Deprecation marked, Phase 8 epic documented
+  📋 Phase 8 PLANNED: Full refactoring (8-12 hours of focused work)
+
+REFERENCE:
+  See: _workspaces/docker-plan/migration-phases-plan.yaml
+  See: _workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md
+  See: _workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md
+  See: _workspaces/docker-plan/PHASE-2-DEPRECATION-NOTICE.md (this file)
 """
 
 from dataclasses import dataclass
@@ -29,12 +58,21 @@ class DatabaseConfig:
 
 class DatabaseManager:
     """
-    Stub DatabaseManager for backward compatibility.
+    ⚠️ DEPRECATED - Stub DatabaseManager for backward compatibility.
     
-    In the Docker-first architecture, persistent state is managed via:
+    SCHEDULED FOR DELETION: Phase 8 (CORE-035 consolidation)
+    
+    This class is a no-op bridge that allows legacy code to continue working
+    without modification. New code should use EnhancedAuditLogger directly.
+    
+    Architecture:
     - YAML configuration files (cortex/wiring/specifications/wiring.yaml)
     - Ephemeral container state
     - Persistent volumes for logs/metrics only
+    - EnhancedAuditLogger for all audit operations
+    
+    Migration: See module docstring for migration examples.
+    Timeline: Phase 8 (2-4 weeks out) - comprehensive 8-12 hour refactor
     """
     
     _instance: Optional['DatabaseManager'] = None
