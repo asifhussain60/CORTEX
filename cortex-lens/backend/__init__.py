@@ -13,9 +13,10 @@ Integration:
     and integrate with the existing CORTEX orchestrator infrastructure.
 """
 
-from cortex_lens.backend.routes import router, DashboardRequest, DashboardResponse
-from cortex_lens.backend.orchestrator import DashboardOrchestrator
-from cortex_lens.backend.cache_manager import CacheManager
+# Use relative imports since cortex-lens has a hyphen (not valid Python module name)
+from .routes import router, DashboardRequest, DashboardResponse
+from .orchestrator import DashboardOrchestrator
+from .cache_manager import CacheManager
 
 __all__ = [
     "router",

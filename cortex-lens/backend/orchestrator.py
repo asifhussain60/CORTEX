@@ -41,7 +41,8 @@ from cortex.visualization.renderers.d3_git_timeline_renderer import D3GitTimelin
 from cortex.visualization.renderers.d3_call_graph_renderer import render_call_graph
 from cortex.visualization.renderers.d3_import_graph_renderer import render_import_graph
 
-from cortex_lens.backend.cache_manager import CacheManager, get_cache_manager
+# Use relative import since cortex-lens has a hyphen
+from .cache_manager import CacheManager, get_cache_manager
 
 
 logger = logging.getLogger(__name__)

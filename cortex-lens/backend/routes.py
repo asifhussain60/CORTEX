@@ -18,12 +18,13 @@ from dataclasses import dataclass
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from cortex_lens.backend.orchestrator import (
+# Use relative imports since cortex-lens has a hyphen
+from .orchestrator import (
     DashboardOrchestrator,
     DashboardData,
     get_dashboard_orchestrator,
 )
-from cortex_lens.backend.cache_manager import CacheManager, get_cache_manager
+from .cache_manager import CacheManager, get_cache_manager
 
 
 # Create router with prefix
