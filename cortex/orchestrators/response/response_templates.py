@@ -141,7 +141,7 @@ class ResponseTemplate:
         return (len(errors) == 0, errors)
 
 
-class TemplateRegistry:
+class ResponseTemplateRegistry:
     """Registry for response templates.
     
     Manages template storage, versioning, and retrieval.
@@ -333,7 +333,7 @@ class TemplateEngine:
     
     def __init__(self) -> None:
         """Initialize the template engine."""
-        self.registry = TemplateRegistry()
+        self.registry = ResponseTemplateRegistry()
         self.cache = TemplateCache()
         self.substitutor = SimpleTemplateSubstitutor()
         self._load_default_templates()

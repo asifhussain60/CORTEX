@@ -27,14 +27,14 @@ class TemplateInfo:
     content: str = ""
 
 
-class TemplateRegistry:
+class TemplateEngineRegistry:
     """
     Registry for response templates.
     
     Singleton pattern for template management across the application.
     """
     
-    _instance: Optional['TemplateRegistry'] = None
+    _instance: Optional['TemplateEngineRegistry'] = None
     _templates: Dict[str, TemplateInfo] = {}
     _template_contents: Dict[str, str] = {}
     
@@ -44,7 +44,7 @@ class TemplateRegistry:
         return cls._instance
     
     @classmethod
-    def instance(cls) -> 'TemplateRegistry':
+    def instance(cls) -> 'TemplateEngineRegistry':
         """Get singleton instance"""
         if cls._instance is None:
             cls._instance = cls()
@@ -128,7 +128,7 @@ class TemplateEngine:
             template_dir: Path to templates directory (default: cortex_brain/tier2/response-templates)
         """
         self.logger = EnhancedAuditLogger.instance()
-        self.registry = TemplateRegistry.instance()
+        self.registry = TemplateEngineRegistry.instance()
         
         # Default to cortex_brain/tier2/response-templates
         if template_dir is None:
