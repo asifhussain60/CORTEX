@@ -32,6 +32,7 @@ from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, Operation
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
+from cortex.execution.specs import SpecRegistry
 
 
 

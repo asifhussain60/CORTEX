@@ -1,0 +1,149 @@
+"""
+CORE-040: Execution Specification Mandate
+
+Authority: CORTEX Architecture
+Version: 1.0
+Effective Date: 2026-01-26
+Tier: TIER-0-IMMUTABLE
+
+Purpose:
+  Enforce machine-readable, specification-driven execution model
+  across all CORTEX operations, eliminating hardcoded logic and
+  markdown-based decision making.
+
+Rule Set:
+"""
+
+CORE-040: Execution Specification Mandate
+  name: "Execution Specification Mandate"
+  version: "1.0"
+  effective_date: "2026-01-26"
+  authority: "CORTEX Architecture"
+  tier: "TIER-0-IMMUTABLE"
+  
+  # Core Rules
+  rules:
+    - id: "CORE-040-001"
+      name: "All routing decisions must be YAML-defined"
+      description: |
+        No hardcoded orchestrator routing logic in Python code.
+        All routing rules must be defined in cortex/execution/specs/routing-rules.yaml
+      enforcement: "AUTOMATIC_CI_CD_CHECK"
+      blocked_patterns:
+        - "if operation_name == "
+        - "elif operation =="
+        - "hardcoded_routing"
+      violation_code: "GOVE_001"
+      
+    - id: "CORE-040-002"
+      name: "DoRApprovalGate must return structured JSON"
+      description: |
+        Never return markdown for approval decisions in execution paths.
+        Markdown is for UI layer only. Execution layer uses JSON.
+      enforcement: "AUTOMATIC_TEST_VALIDATION"
+      blocked_patterns:
+        - ".to_markdown() in execute"
+        - "markdown approval"
+      violation_code: "GOVE_002"
+      
+    - id: "CORE-040-003"
+      name: "Governance violations must use structured codes"
+      description: |
+        All violations must map to violation-codes.yaml with structured
+        codes (GOVE_NNN), never English-language error messages.
+      enforcement: "AUTOMATIC_VALIDATION"
+      blocked_patterns:
+        - 'return f".*violation.*"'
+        - "English language in governance output"
+      violation_code: "GOVE_003"
+      
+    - id: "CORE-040-004"
+      name: "All operations must route through MasterGateway"
+      description: |
+        No direct orchestrator instantiation in caller code.
+        All operations must go: Caller → MasterGateway → MasterOrchestrator
+      enforcement: "RUNTIME_GATEWAY_ENFORCER"
+      blocked_patterns:
+        - "SomeOrchestrator().execute()"
+        - "direct orchestrator call"
+      violation_code: "GOVE_004"
+      
+    - id: "CORE-040-005"
+      name: "Domain transitions must use spec-driven routing"
+      description: |
+        No string parsing for domain detection (e.g., "planning" in operation).
+        Use domain-transitions.yaml for explicit routing.
+      enforcement: "AUTOMATIC_CI_CD_CHECK"
+      blocked_patterns:
+        - 'if "planning" in'
+        - 'string parsing.*domain'
+      violation_code: "GOVE_005"
+
+  # Violation Consequences
+  violation_consequences:
+    severity: "CRITICAL"
+    action: "BLOCK_CI_DEPLOYMENT"
+    review_required: true
+    escalation_path: "Architecture Review Board"
+
+  # Migration Strategy
+  migration_path:
+    phase_1_duration_days: 14
+    phase_1_config: "ENFORCE_GATEWAY_MODE = False"
+    phase_1_description: "Optional gateway (code can use old or new path)"
+    
+    phase_2_duration_days: 14
+    phase_2_config: "ENFORCE_GATEWAY_MODE = True"
+    phase_2_description: "Mandatory gateway (all operations must route through)"
+    
+    phase_3_duration_days: "ongoing"
+    phase_3_config: "ENFORCE_GATEWAY_MODE = True + Runtime enforcement"
+    phase_3_description: "Runtime enforcement (GatewayEnforcer active)"
+
+  # CI/CD Integration
+  ci_cd_integration:
+    pre_commit_hook: "cortex/ci_cd/pre-commit-spec-chk.py"
+    github_action: ".github/workflows/core-040-enf.yaml"
+    enforcement_level: "MERGE_BLOCKING"
+    
+  # Governance Validation Tests
+  validation_tests:
+    - "tests/unit/cortex-brain/tier0/test-core-040.py"
+    - "tests/integration/test-exec-specs.py"
+    - "tests/integration/test-gw-enf.py"
+
+  # Related Rules
+  related_rules:
+    - "CORE-008: TDD (Tests before implementation)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-026: Git checkpoints"
+    - "CORE-027: Audit trail"
+    - "CORE-028: Kebab-case filenames"
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: No Duplicate Implementations"
+    - "CORE-038: File placement policy"
+
+  # Success Criteria
+  success_criteria:
+    - "100% of operations routable through MasterGateway"
+    - "All routing rules defined in YAML (zero hardcoded if/elif)"
+    - "All governance violations use structured codes"
+    - "DoRApprovalGate returns JSON (never markdown in execution)"
+    - "Domain transitions defined in specs (no string parsing)"
+    - "6,900+ tests passing (all existing tests still work)"
+    - "Zero breaking changes until phase 3"
+    - "Spec lookup latency < 10% overhead"
+
+  # Enforcement Permanent Status
+  permanence:
+    permanent_fix_id: "AC-PERMANENT-FIX-010"
+    registry_location: ".cortex/orchestrator_registry.db"
+    enforcement_methods:
+      - "CI/CD pre-commit hooks"
+      - "GitHub Actions workflow"
+      - "Runtime GatewayEnforcer"
+      - "Governance registry validation"
+      - "Architectural documentation"
+    rollback_plan: "Feature flag: ENFORCE_GATEWAY_MODE (can disable enforcement)"
+    permanence_guarantees: "GUARANTEED via TIER-0 governance + AC-PERMANENT-FIX-010"

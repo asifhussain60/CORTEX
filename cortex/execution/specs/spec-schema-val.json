@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CORTEX Execution Specification Schema",
+  "description": "JSON Schema for all CORTEX execution specifications (CORE-040)",
+  "version": "1.0",
+  "definitions": {
+    "routing_rule": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z_]+$",
+          "description": "Unique identifier for routing rule"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for intent type"
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Keywords that trigger this intent"
+        },
+        "handler": {
+          "type": "string",
+          "pattern": "^[A-Za-z]+Orchestrator$",
+          "description": "Target orchestrator class name"
+        },
+        "confidence_threshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Minimum confidence score (0.0-1.0)"
+        },
+        "fallback_handler": {
+          "type": "string",
+          "description": "Handler to use if primary fails"
+        },
+        "governance_rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CORE-[0-9]{3}$"
+          },
+          "description": "Governance rules this intent must follow"
+        }
+      },
+      "required": ["id", "name", "keywords", "handler", "confidence_threshold"]
+    },
+    "orchestrator_dispatch": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (e.g., 'master', 'tdd')"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full class name"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["COORDINATOR", "DOMAIN", "SUPPORT"],
+          "description": "Orchestrator type/category"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["core", "domain", "support"],
+          "description": "Implementation category"
+        },
+        "entry_point": {
+          "type": "string",
+          "pattern": "^cortex\\.",
+          "description": "Python import path"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of capabilities this orchestrator provides"
+        }
+      },
+      "required": ["id", "name", "type", "category", "entry_point"]
+    },
+    "operation_routing": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "Operation name or identifier"
+        },
+        "primary_orchestrator": {
+          "type": "string",
+          "description": "Primary handler orchestrator"
+        },
+        "fallback_orchestrator": {
+          "type": "string",
+          "description": "Fallback if primary unavailable"
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Operation timeout in seconds"
+        },
+        "required_governance": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CORE-[0-9]{3}$"
+          },
+          "description": "Governance rules required for this operation"
+        }
+      },
+      "required": ["operation", "primary_orchestrator"]
+    },
+    "violation_code": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^GOVE_[0-9]{3}$",
+          "description": "Violation code identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Violation name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Structured violation description"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["INFO", "WARNING", "ERROR", "CRITICAL"],
+          "description": "Violation severity level"
+        },
+        "remediation": {
+          "type": "string",
+          "description": "How to fix this violation"
+        }
+      },
+      "required": ["code", "name", "description", "severity"]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Specification version (e.g., 1.0)"
+    },
+    "routing_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/routing_rule"
+      },
+      "description": "Intent classification and routing rules"
+    },
+    "orchestrator_dispatch": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/orchestrator_dispatch"
+      },
+      "description": "Orchestrator registry and metadata"
+    },
+    "operation_routing": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/operation_routing"
+      },
+      "description": "Operation to orchestrator mappings"
+    },
+    "violation_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/violation_code"
+      },
+      "description": "Structured governance violation codes"
+    }
+  }
+}
