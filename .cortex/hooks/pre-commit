@@ -95,16 +95,15 @@ if [ ${#VIOLATIONS[@]} -gt 0 ]; then
     echo -e "${YELLOW}SOLUTION: Move to appropriate subfolders${NC}"
     echo "  • .md files → docs/{subfolder}/kebab-case-name.md"
     echo "  • Reports → reports/{subfolder}/kebab-case-name.md"
-    echo "  • .py files → cortex/{module}/kebab-case-name.py"
+    echo "  • .py files → cortex/{module}/snake_case_name.py (per PEP 8)"
     echo ""
     exit 1
 fi
 
 # ========================================
 # FILE NAMING ENFORCEMENT (CORE-028)
-# Authority: AC-NAMING-002 (Updated 2026-01-28)
-# CORE-028: Python modules MUST use snake_case (underscores, not hyphens)
-# Hyphens in .py filenames cause SyntaxError on import
+# Authority: CORE-028 Spec
+# Rule: Python modules MUST use snake_case (hyphens = SyntaxError)
 # ========================================
 
 echo -e "\n${GREEN}Checking CORE-028 file naming compliance...${NC}"
@@ -116,40 +115,61 @@ for FILE in $(git diff --cached --name-only --diff-filter=ACM | grep '\.py$'); d
     FILENAME=$(basename "$FILE")
     FILENAME_NO_EXT="${FILENAME%.py}"
     
-    # For Python files: check for hyphens (FORBIDDEN - must use underscores)
+    # Check for hyphens (kebab-case) - NOT ALLOWED in Python modules
     if [[ "$FILENAME_NO_EXT" =~ - ]]; then
         SUGGESTED=$(echo "$FILENAME_NO_EXT" | tr '-' '_')
-        NAMING_VIOLATIONS+=("$FILE|HYPHEN|$SUGGESTED.py|Python modules must use snake_case (underscores) - hyphens cause SyntaxError")
+        NAMING_VIOLATIONS+=("$FILE|HYPHEN|$SUGGESTED.py")
     fi
     
-    # Check for length (advisory warning, not hard error)
-    if [ ${#FILENAME_NO_EXT} -gt 40 ]; then
-        echo -e "  ${YELLOW}⚠️  $FILE${NC}"
-        echo -e "    ${YELLOW}Advisory:${NC} Filename exceeds 40 characters (consider shortening for readability)"
+    # Check for length (max 50 chars without .py)
+    if [ ${#FILENAME_NO_EXT} -gt 50 ]; then
+        SUGGESTED="${FILENAME_NO_EXT:0:50}"
+        NAMING_VIOLATIONS+=("$FILE|LENGTH|$SUGGESTED.py")
     fi
 done
 
 if [ ${#NAMING_VIOLATIONS[@]} -gt 0 ]; then
-    echo -e "\n${RED}❌ CORE-028 FILE NAMING VIOLATION${NC}"
+    echo -e "\n${RED}❌ CORE-028 FILE NAMING VIOLATIONS${NC}"
     echo -e "${RED}Python modules MUST use snake_case (underscores). Hyphens cause SyntaxError.${NC}"
     echo ""
     
     for VIOLATION in "${NAMING_VIOLATIONS[@]}"; do
-        IFS='|' read -r FILEPATH TYPE SUGGESTED REASON <<< "$VIOLATION"
+        IFS='|' read -r FILEPATH TYPE SUGGESTED <<< "$VIOLATION"
         echo -e "  ${RED}✗${NC} $FILEPATH"
-        echo -e "    ${YELLOW}Issue:${NC} $REASON"
+        if [[ "$TYPE" == "HYPHEN" ]]; then
+            echo -e "    ${YELLOW}Issue:${NC} Uses hyphens (kebab-case) - causes SyntaxError in Python"
+            echo -e "    ${YELLOW}Fix:${NC} Use underscores (snake_case) instead"
+        elif [[ "$TYPE" == "LENGTH" ]]; then
+            echo -e "    ${YELLOW}Issue:${NC} Exceeds 50-character limit"
+        fi
         echo -e "    ${GREEN}Suggested:${NC} $SUGGESTED"
         echo ""
     done
     
     echo -e "${YELLOW}To fix naming violations:${NC}"
-    echo "  1. Rename files to use snake_case (underscores instead of hyphens)"
-    echo "  2. Update imports across the codebase"
-    echo "  Authority: CORE-028 (Python modules MUST use snake_case)"
+    echo "  1. Rename files to snake_case (underscores instead of hyphens)"
+    echo "  2. Ensure file names are ≤50 characters (excluding .py)"
+    echo "  3. Update imports across the codebase"
     echo ""
     exit 1
 fi
 
-echo -e "${GREEN}✓ All files comply with CORE-028 naming policy (snake_case for Python)${NC}"
+echo -e "${GREEN}✓ All files comply with CORE-028 naming policy (snake_case)${NC}"
+
+# ========================================
+# CORE-035 ENFORCEMENT (Single Canonical Implementation)
+# Authority: AC-CORE-035-ENFORCEMENT-001
+# ========================================
+
+echo -e "\n${GREEN}Checking CORE-035 single implementation compliance...${NC}"
+
+# Run CORE-035 enforcer
+if python3 cortex/ci_cd/enforce_core_035.py 2>&1 | grep -q "PASSED"; then
+    echo -e "${GREEN}✓ CORE-035 passed: No duplicate implementations detected${NC}"
+else
+    echo -e "\n${RED}❌ CORE-035 VIOLATIONS DETECTED${NC}"
+    echo -e "${RED}Run for details: python3 cortex/ci_cd/enforce_core_035.py --verbose${NC}"
+    exit 1
+fi
 
 exit 0

@@ -351,6 +351,35 @@ class CORTEXVerification:
             issues = []
             critical_issues = []
             
+            # === STAGE 1: Use CORE-035 Enforcer (Primary Check) ===
+            try:
+                from cortex.ci_cd.enforce_core_035 import Core035Enforcer
+                
+                enforcer = Core035Enforcer(self.cortex_root, verbose=self.verbose)
+                passed = enforcer.run_all_checks()
+                
+                if not passed:
+                    blocked = [v for v in enforcer.violations if v.severity == "blocked"]
+                    warnings = [v for v in enforcer.violations if v.severity == "warning"]
+                    
+                    for v in blocked:
+                        critical_issues.append(
+                            f"CORE-035 BLOCKED: {v.description}"
+                        )
+                    
+                    for v in warnings:
+                        issues.append(
+                            f"CORE-035 WARNING: {v.description}"
+                        )
+                
+                self.log(f"CORE-035 Enforcer: {len(critical_issues)} blocked, {len(issues)} warnings")
+            except ImportError as e:
+                self.log(f"CORE-035 enforcer not available: {e}", "WARNING")
+            except Exception as e:
+                self.log(f"CORE-035 enforcer failed: {e}", "ERROR")
+            
+            # === STAGE 2: Fallback Basic Checks ===
+            
             # Files/patterns that are known backward-compatibility stubs (not real conflicts)
             KNOWN_STUBS = [
                 "cortex/orchestrators/registry/__init__.py",  # Stub registry
