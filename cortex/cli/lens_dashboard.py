@@ -234,3 +234,92 @@ def list_cmd() -> None:
 
     click.echo(f"\n🚀 To serve dashboards, run:")
     click.echo(f"   cortex lens dashboard serve\n")
+
+
+@dashboard.command()
+@click.option(
+    "--port",
+    "-p",
+    type=int,
+    default=8080,
+    help="Port to serve dashboard on (default: 8080)",
+)
+@click.option(
+    "--no-cors",
+    is_flag=True,
+    help="Disable CORS headers (not recommended for development)",
+)
+@click.option(
+    "--path",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, path_type=Path),
+    help="Custom dashboard directory to serve (default: latest in .cortex/lens-dashboard)",
+    default=None,
+)
+def serve(port: int, no_cors: bool, path: Optional[Path]) -> None:
+    """
+    Serve LENS Dashboard locally.
+
+    Starts a lightweight HTTP server to serve the dashboard SPA with proper
+    MIME types, CORS headers, and SPA routing support.
+
+    Args:
+        port: Port to listen on (default: 8080)
+        no_cors: Disable CORS headers (default: False)
+        path: Custom dashboard path (default: latest dashboard)
+
+    Example:
+        cortex lens dashboard serve
+        cortex lens dashboard serve --port 3000
+        cortex lens dashboard serve --path /path/to/dashboard
+    """
+    from cortex.visualization.spa.static_server import serve
+
+    # Determine dashboard path
+    if path:
+        dashboard_dir = path
+    else:
+        # Find latest dashboard
+        if not DASHBOARD_ROOT.exists():
+            click.echo("❌ No dashboards found. Generate one first:")
+            click.echo("   cortex lens dashboard generate")
+            return
+
+        dashboards = sorted(
+            [d for d in DASHBOARD_ROOT.iterdir() if d.is_dir()],
+            key=lambda d: d.stat().st_mtime,
+            reverse=True,
+        )
+
+        if not dashboards:
+            click.echo("❌ No dashboards found. Generate one first:")
+            click.echo("   cortex lens dashboard generate")
+            return
+
+        dashboard_dir = dashboards[0]
+
+    # Verify index.html exists
+    index_file = dashboard_dir / "index.html"
+    if not index_file.exists():
+        click.echo(f"❌ Invalid dashboard directory: {dashboard_dir}")
+        click.echo("   Missing index.html file")
+        return
+
+    click.echo(f"🧠 CORTEX LENS Dashboard Server")
+    click.echo(f"Dashboard: {dashboard_dir.name}")
+    click.echo(f"Port: {port}")
+    click.echo(f"CORS: {'Disabled' if no_cors else 'Enabled'}\n")
+
+    enable_cors = not no_cors
+
+    try:
+        serve(dashboard_dir, port, enable_cors)
+    except KeyboardInterrupt:
+        click.echo("\n✅ Dashboard server stopped")
+    except OSError as e:
+        if "Address already in use" in str(e):
+            click.echo(f"\n❌ Port {port} is already in use")
+            click.echo(f"   Try a different port: cortex lens dashboard serve --port {port + 1}")
+        else:
+            click.echo(f"\n❌ Server error: {e}")
+
+
