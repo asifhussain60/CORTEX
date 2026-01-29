@@ -19,7 +19,7 @@ from cortex.brain.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from cortex.brain.core.orchestrator.terminal_events import (
+from cortex.core.orchestrator.terminal_events import (
     EventRegistry,
     PhaseCompletedEvent,
     UserCancelledEvent,
