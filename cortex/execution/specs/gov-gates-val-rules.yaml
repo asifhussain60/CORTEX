@@ -1,0 +1,215 @@
+---
+# gov-gates-val-rules: Governance Gates Validation Rules
+# Authority: CORTEX Architecture (AC-PERMANENT-FIX-010 Phase 2)
+# Version: 1.0
+# Purpose: Governance validation rules for execution gates
+
+governance_gates:
+  version: "1.0"
+  created: "2026-01-26"
+  authority: "CORTEX Architecture"
+  description: |
+    Pre-execution governance validation rules.
+    Ensures CORE rules are satisfied before operation execution.
+
+  gates:
+    # CORE-008: TDD Gate (Tests before implementation)
+    - id: "gate_tdd"
+      rule: "CORE-008"
+      name: "TDD Test Gate"
+      description: "Verify tests exist before implementation"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "FIX"
+        - "REFACTOR"
+      validation_logic:
+        - check: "test_file_exists"
+          path: "tests/unit/**/*{operation}.py"
+          required: true
+        - check: "test_count_minimum"
+          minimum: 3
+          required: true
+        - check: "docstring_present"
+          on_tests: true
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_008"
+      remediation: "Write tests before implementing"
+
+    # CORE-011: Type Hints Gate
+    - id: "gate_type_hints"
+      rule: "CORE-011"
+      name: "Type Hints Gate"
+      description: "Verify all functions have type hints"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "REFACTOR"
+      validation_logic:
+        - check: "all_functions_typed"
+          required: true
+        - check: "return_type_present"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_011"
+      remediation: "Add type hints to all function signatures"
+
+    # CORE-012: Docstring Gate
+    - id: "gate_docstrings"
+      rule: "CORE-012"
+      name: "Google-Style Docstring Gate"
+      description: "Verify docstrings follow Google style"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "DOCUMENT"
+      validation_logic:
+        - check: "docstring_present"
+          on: "all_functions"
+          required: true
+        - check: "docstring_style"
+          style: "google"
+          required: true
+        - check: "includes_examples"
+          on: "public_functions"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_012"
+      remediation: "Add Google-style docstrings"
+
+    # CORE-013: No Bare Except Gate
+    - id: "gate_no_bare_except"
+      rule: "CORE-013"
+      name: "Exception Handling Gate"
+      description: "Verify no bare except clauses"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "FIX"
+      validation_logic:
+        - check: "no_bare_except_clauses"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_013"
+      remediation: "Replace bare except with specific exception types"
+
+    # CORE-026: Git Checkpoints Gate
+    - id: "gate_git_checkpoints"
+      rule: "CORE-026"
+      name: "Git Checkpoint Gate"
+      description: "Verify git checkpoints at phase boundaries"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "DEPLOY"
+      validation_logic:
+        - check: "branch_exists"
+          required: true
+        - check: "commits_present"
+          minimum: 1
+          required: true
+      severity: "WARNING"
+      error_code: "GOVE_026"
+      remediation: "Create git branch and commit changes"
+
+    # CORE-027: Audit Trail Gate
+    - id: "gate_audit_trail"
+      rule: "CORE-027"
+      name: "Audit Trail Gate"
+      description: "Verify all decisions are logged"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "GOVERNANCE"
+      validation_logic:
+        - check: "audit_logging_present"
+          required: true
+      severity: "WARNING"
+      error_code: "GOVE_027"
+      remediation: "Add audit logging to decision points"
+
+    # CORE-028: Kebab-Case Filenames Gate
+    - id: "gate_filename_convention"
+      rule: "CORE-028"
+      name: "Kebab-Case Filename Gate"
+      description: "Verify all filenames follow kebab-case convention"
+      applies_to_intents:
+        - "IMPLEMENT"
+      validation_logic:
+        - check: "filename_kebab_case"
+          required: true
+        - check: "filename_length"
+          maximum: 25
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_028"
+      remediation: "Use kebab-case filenames (max 25 chars)"
+
+    # CORE-030: Implementation Truth Gate
+    - id: "gate_implementation_truth"
+      rule: "CORE-030"
+      name: "Implementation Truth Gate"
+      description: "Verify code matches documentation claims"
+      applies_to_intents:
+        - "IMPLEMENT"
+        - "ANALYZE"
+      validation_logic:
+        - check: "code_matches_docs"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_030"
+      remediation: "Update code or documentation to match"
+
+    # CORE-035: No Duplicate Implementations Gate
+    - id: "gate_no_duplicates"
+      rule: "CORE-035"
+      name: "No Duplicates Gate"
+      description: "Verify no duplicate implementations exist"
+      applies_to_intents:
+        - "IMPLEMENT"
+      validation_logic:
+        - check: "no_duplicate_functionality"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_035"
+      remediation: "Consolidate duplicate implementations"
+
+    # CORE-040: Execution Specification Mandate Gate
+    - id: "gate_execution_specs"
+      rule: "CORE-040"
+      name: "Execution Specification Gate"
+      description: "Verify execution uses specs (not hardcoded logic)"
+      applies_to_intents:
+        - "IMPLEMENT"
+      validation_logic:
+        - check: "no_hardcoded_routing"
+          required: true
+        - check: "specs_used"
+          required: true
+      severity: "BLOCKING"
+      error_code: "GOVE_040"
+      remediation: "Use YAML specifications instead of hardcoded logic"
+
+  # Gate execution order
+  gate_execution_order:
+    - "gate_implementation_truth"   # Check docs match code first
+    - "gate_tdd"                     # TDD is foundational
+    - "gate_type_hints"              # Type safety
+    - "gate_docstrings"              # Documentation
+    - "gate_no_bare_except"          # Exception handling
+    - "gate_execution_specs"         # Spec-driven architecture
+    - "gate_filename_convention"     # File naming
+    - "gate_no_duplicates"           # Code quality
+    - "gate_git_checkpoints"         # VCS hygiene
+    - "gate_audit_trail"             # Traceability
+
+  # Gate failure handling
+  failure_handling:
+    blocking_violations:
+      action: "FAIL_EXECUTION"
+      allow_override: false
+      require_review: true
+    warning_violations:
+      action: "LOG_WARNING"
+      allow_override: true
+      require_review: false
+
+  # Cross-references
+  related_specs:
+    - "routing-rules-intent.yaml"
+    - "execution-flow-definitions.yaml"

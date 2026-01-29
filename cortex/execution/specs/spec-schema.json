@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CORTEX Execution Specification Schema",
+  "description": "JSON Schema for validating execution specifications (CORE-040)",
+  "version": "1.0.0",
+  "type": "object",
+  "definitions": {
+    "routing_rule": {
+      "type": "object",
+      "required": ["id", "name", "keywords", "handler"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for routing rule"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of intent type"
+        },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Keywords that trigger this rule"
+        },
+        "handler": {
+          "type": "string",
+          "description": "Target orchestrator handler"
+        },
+        "confidence_threshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Minimum confidence score (0.0-1.0)"
+        },
+        "fallback_handler": {
+          "type": "string",
+          "description": "Fallback orchestrator if primary fails"
+        },
+        "governance_rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Applicable CORE rules (CORE-008, CORE-011, etc.)"
+        }
+      }
+    },
+    "orchestrator_entry": {
+      "type": "object",
+      "required": ["id", "name", "entry_point"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Orchestrator ID (short name)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full orchestrator name"
+        },
+        "entry_point": {
+          "type": "string",
+          "description": "Python import path (module.ClassName)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["COORDINATOR", "DOMAIN", "SUPPORT"],
+          "description": "Orchestrator type/category"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category (core, domain, support)"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of capabilities this orchestrator provides"
+        }
+      }
+    },
+    "operation_route": {
+      "type": "object",
+      "required": ["operation", "primary_orchestrator"],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "description": "Operation name"
+        },
+        "primary_orchestrator": {
+          "type": "string",
+          "description": "Primary handler orchestrator ID"
+        },
+        "fallback_orchestrator": {
+          "type": "string",
+          "description": "Fallback orchestrator ID"
+        },
+        "required_governance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required governance rules"
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Execution timeout"
+        }
+      }
+    },
+    "governance_gate": {
+      "type": "object",
+      "required": ["id", "name", "condition"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Gate ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Gate name"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition to check (e.g., 'tests_exist', 'type_hints_present')"
+        },
+        "rule_id": {
+          "type": "string",
+          "description": "Associated CORE rule"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"],
+          "description": "Violation severity if gate fails"
+        }
+      }
+    },
+    "violation_code": {
+      "type": "object",
+      "required": ["code", "name", "description"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Violation code (e.g., GOVE_001)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Violation name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+        },
+        "core_rule": {
+          "type": "string",
+          "description": "Associated CORE rule (e.g., CORE-008)"
+        },
+        "remediation": {
+          "type": "string",
+          "description": "How to fix this violation"
+        }
+      }
+    }
+  },
+  "properties": {
+    "routing_rules": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/routing_rule" },
+      "description": "Intent-to-handler routing specifications"
+    },
+    "orchestrators": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/orchestrator_entry" },
+      "description": "Orchestrator registry entries"
+    },
+    "operation_routing": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/operation_route" },
+      "description": "Operation-to-orchestrator mappings"
+    },
+    "governance_gates": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/governance_gate" },
+      "description": "Pre-execution validation gates"
+    },
+    "violation_codes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/violation_code" },
+      "description": "Structured violation codes (not English text)"
+    }
+  }
+}
