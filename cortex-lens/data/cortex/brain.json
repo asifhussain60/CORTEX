@@ -1,0 +1,147 @@
+{
+  "tiers": [
+    {
+      "id": 0,
+      "name": "Tier 0 - Immutable Governance",
+      "description": "CORE rules that CANNOT be overridden - violations block execution",
+      "rules_count": 38,
+      "key_rules": [
+        {
+          "id": "CORE-008",
+          "name": "TDD Required",
+          "description": "Tests MUST exist before code"
+        },
+        {
+          "id": "CORE-011",
+          "name": "Type Hints",
+          "description": "All functions MUST have type hints"
+        },
+        {
+          "id": "CORE-012",
+          "name": "Docstrings",
+          "description": "Google-style docstrings mandatory"
+        },
+        {
+          "id": "CORE-026",
+          "name": "Git Checkpoint",
+          "description": "Checkpoint before major changes"
+        },
+        {
+          "id": "CORE-027",
+          "name": "Audit Trail",
+          "description": "AC_START \u2192 AC_EXECUTE \u2192 AC_COMPLETE"
+        },
+        {
+          "id": "CORE-030",
+          "name": "Implementation Truth",
+          "description": "Verify code, not docs"
+        },
+        {
+          "id": "CORE-035",
+          "name": "Single Canonical",
+          "description": "No duplicate implementations"
+        },
+        {
+          "id": "CORE-038",
+          "name": "File Placement",
+          "description": "All files in subfolders"
+        }
+      ],
+      "color": "#ff4444"
+    },
+    {
+      "id": 1,
+      "name": "Tier 1 - Acceptance Criteria",
+      "description": "Phase validation and AC-ID specifications",
+      "rules_count": 15,
+      "key_rules": [
+        {
+          "id": "AC-001",
+          "name": "Phase Validation",
+          "description": "All phases must pass gates"
+        },
+        {
+          "id": "AC-002",
+          "name": "DoR Threshold",
+          "description": "60% confidence required"
+        }
+      ],
+      "color": "#ff8844"
+    },
+    {
+      "id": 2,
+      "name": "Tier 2 - Response Templates",
+      "description": "Response formatting and hallucination prevention",
+      "rules_count": 10,
+      "key_rules": [
+        {
+          "id": "RT-001",
+          "name": "Response Header",
+          "description": "Every response starts with CORTEX header"
+        },
+        {
+          "id": "RT-002",
+          "name": "DoR Display",
+          "description": "Show intent classification table"
+        }
+      ],
+      "color": "#44aa44"
+    },
+    {
+      "id": 3,
+      "name": "Tier 3 - Knowledge",
+      "description": "35+ best practices YAMLs for domain guidance",
+      "rules_count": 35,
+      "key_rules": [
+        {
+          "id": "KN-001",
+          "name": "TDD Patterns",
+          "description": "Red-Green-Refactor best practices"
+        },
+        {
+          "id": "KN-002",
+          "name": "API Design",
+          "description": "RESTful API guidelines"
+        },
+        {
+          "id": "KN-003",
+          "name": "Refactoring",
+          "description": "SOLID principles application"
+        }
+      ],
+      "color": "#4488ff"
+    }
+  ],
+  "total_rules": 98,
+  "knowledge_yamls": 35,
+  "architecture_diagram": {
+    "type": "hierarchy",
+    "nodes": [
+      {
+        "id": "tier0",
+        "label": "Tier 0",
+        "level": 0,
+        "color": "#ff4444"
+      },
+      {
+        "id": "tier1",
+        "label": "Tier 1",
+        "level": 1,
+        "color": "#ff8844"
+      },
+      {
+        "id": "tier2",
+        "label": "Tier 2",
+        "level": 2,
+        "color": "#44aa44"
+      },
+      {
+        "id": "tier3",
+        "label": "Tier 3",
+        "level": 3,
+        "color": "#4488ff"
+      }
+    ]
+  },
+  "generated": "2026-01-29T19:13:10.267213Z"
+}

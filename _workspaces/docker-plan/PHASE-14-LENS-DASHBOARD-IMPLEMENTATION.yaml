@@ -3,11 +3,15 @@
 # Created: 2026-01-29
 # Authority: CORE-030 (Implementation Truth), CORE-038 (File Placement)
 # Dependencies: Phase 7.1 (LENS Intelligence Complete)
+#
+# ⚠️ SUPERSEDED BY PHASE-14-LENS-DASHBOARD-V2.yaml (2026-01-29)
+# This file is kept for reference only. Do NOT implement from this file.
+# See PHASE-14-LENS-DASHBOARD-V2.yaml for the revised static HTML + JSON approach.
 
 metadata:
   phase_id: "PHASE-14"
   name: "LENS Dashboard Visualization System (Self-Contained SPA)"
-  status: "IN_PROGRESS"  # Tasks 001-006 completed (7/20 tasks)
+  status: "SUPERSEDED"  # SUPERSEDED by PHASE-14-V2 - See PHASE-14-LENS-DASHBOARD-V2.yaml
   priority: "P1"
   estimated_effort: "15.5-19.5 days"  # Updated: +1.5 days for self-contained SPA
   ac_ids:
@@ -92,6 +96,40 @@ executive_summary: |
 # ==============================================================================
 
 architecture:
+  folder_structure:
+    description: |
+      CORTEX system spans three root-level folders with clear separation:
+      - cortex/ - Orchestration core, analysis engines, visualization renderers
+      - cortex_brain/ - Governance rules, knowledge tiers, compliance
+      - cortex-lens/ - ⭐ Dashboard UI, user-facing entry points, frontend
+      
+      This isolation prevents accidental deletion of critical systems.
+      Dashboard operates as cohesive unit: repo-dashboards.html and 
+      cortex-dashboard.html at root, shared components in subfolders.
+  
+  cortex_lens_structure:
+    entry_points:
+      - "repo-dashboards.html"       # Main entry: repository browser with tiles
+      - "cortex-dashboard.html"      # Direct access: CORTEX 8-tab analysis
+      - "app.py"                     # FastAPI server (serves HTML + API routes)
+    
+    backend_organization:
+      - "backend/orchestrator.py"    # Routes to cortex/visualization/*
+      - "backend/routes.py"          # FastAPI endpoints
+      - "backend/cache_manager.py"   # Manages .cortex/, ~/.cortex/, reports/
+      - "backend/repository_loader.py" # Analyzes and caches repositories
+    
+    frontend_components:
+      - "frontend/css/"              # Shared styling for all dashboards
+      - "frontend/js/"               # Shared Alpine.js logic and utilities
+      - "frontend/views/"            # Tab fragments (8 total)
+      - "static/"                    # Symlink to cortex/visualization/static/vendor/
+    
+    testing_and_deployment:
+      - "tests/"                     # Dashboard-specific tests
+      - "docker/Dockerfile.dashboard"
+      - "docs/dashboard-guide.md"
+  
   spa_framework:
     choice: "Alpine.js 3.13.3"
     rationale: |
@@ -151,21 +189,44 @@ architecture:
         - "diagram_formatter.py"     # Mermaid syntax
         - "response_formatter.py"    # Multi-mode output
     
+    entry_points:
+      path: "cortex-lens/"
+      primary_files:
+        - "repo-dashboards.html"     # ⭐ MAIN ENTRY - Repository browser with tiles
+        - "cortex-dashboard.html"    # ⭐ CORTEX-ONLY - Direct 8-tab view
+      rationale: |
+        Root-level entry points provide:
+        - Clear intent: each file's purpose is explicit
+        - Better UX: users see options immediately
+        - Simpler routing: cortex lens dashboard serve cortex → cortex-dashboard.html
+        - No confusion: no generic index.html hiding purpose
+        - Easy CLI: natural command line shortcuts
+    
     templates:
       path: "cortex/visualization/templates/"
+      description: "Tab fragments loaded by entry points (not standalone)"
       files:
-        # Universal templates (all repos)
-        - "dashboard_base.html"      # Jinja2 base template with conditional rendering
-        - "repository_overview.html" # Tab 1 - UNIVERSAL
-        - "dependency_graph.html"    # Tab 2 - UNIVERSAL
-        - "class_diagram.html"       # Tab 3 - UNIVERSAL
-        - "temporal_analysis.html"   # Tab 4 - UNIVERSAL
-        - "impact_analysis.html"     # Tab 5 - UNIVERSAL
+        # Universal tabs (all repos)
+        - "tab-1-repository_overview.html" # Tab 1 - UNIVERSAL
+        - "tab-2-dependency_graph.html"    # Tab 2 - UNIVERSAL
+        - "tab-3-class_diagram.html"       # Tab 3 - UNIVERSAL
+        - "tab-4-temporal_analysis.html"   # Tab 4 - UNIVERSAL
+        - "tab-5-impact_analysis.html"     # Tab 5 - UNIVERSAL
         
-        # CORTEX-specific templates (only if is_cortex_repository)
-        - "brain_architecture.html"      # Tab 6 - CORTEX ONLY
-        - "governance_heatmap.html"      # Tab 7 - CORTEX ONLY
-        - "orchestrator_constellation.html" # Tab 8 - CORTEX ONLY
+        # CORTEX-specific tabs (only if is_cortex_repository)
+        - "tab-6-brain_architecture.html"      # Tab 6 - CORTEX ONLY
+        - "tab-7-governance_heatmap.html"      # Tab 7 - CORTEX ONLY
+        - "tab-8-orchestrator_constellation.html" # Tab 8 - CORTEX ONLY
+    
+    frontend_components:
+      path: "cortex-lens/frontend/"
+      structure:
+        - "css/dashboard-ui.css"      # Shared styles for both entry points
+        - "js/dashboard-app.js"       # Shared Alpine.js application logic
+        - "js/tab-controller.js"      # Shared tab management
+        - "js/repo-tiles.js"          # Repository grid for repo-dashboards.html
+        - "js/overlay-ui.js"          # Shared overlay system
+        - "js/navigation.js"          # Top-level navigation (back buttons, etc)
     
     static_assets:
       path: "cortex/visualization/static/"
@@ -769,6 +830,109 @@ tasks:
       - "Generates index.html with correct tabs (5 or 8)"
       - "100% test coverage"
   
+  task_002d_cortex_lens_entry_points:
+    ac_id: "LENS-DASH-007"
+    priority: "P0"
+    effort: "1 day"
+    description: "Create cortex-lens/ root-level entry points (repo-dashboards.html, cortex-dashboard.html)"
+    
+    rationale: |
+      Root-level entry points provide:
+      - Clear intent: each file's purpose is explicit in name
+      - Better UX: users see navigation options immediately
+      - Simpler routing: cortex lens dashboard serve cortex → cortex-dashboard.html
+      - No confusion: no generic index.html hiding purpose
+      - Discoverable: developers know what each file does immediately
+    
+    deliverables:
+      - "cortex-lens/repo-dashboards.html"
+        purpose: "Main entry point - repository browser with tiles"
+        loads:
+          - "Alpine.js from /static/vendor/alpine-3.13.3.min.js"
+          - "frontend/css/dashboard-ui.css (shared styles)"
+          - "frontend/js/repo-tiles.js (grid display)"
+          - "frontend/js/dashboard-app.js (shared logic)"
+        features:
+          - "Grid of repository tiles from recent analyses"
+          - "Search and filter by name, type, tags"
+          - "[+ Add Repository] button for new analysis"
+          - "Click tile to open that repository's dashboard"
+          - "[Recent] and [Bookmarks] tabs"
+      
+      - "cortex-lens/cortex-dashboard.html"
+        purpose: "Direct access to CORTEX 8-tab analysis"
+        loads:
+          - "Alpine.js from /static/vendor/alpine-3.13.3.min.js"
+          - "D3.js from /static/vendor/d3-7.8.5.min.js"
+          - "frontend/css/dashboard-ui.css (shared styles)"
+          - "frontend/js/dashboard-app.js (shared logic)"
+        features:
+          - "Skips repository selection"
+          - "Loads all 8 tabs immediately (5 universal + 3 CORTEX-specific)"
+          - "[← Back to Repositories] button at top"
+          - "Tab navigation for all 8 tabs"
+          - "Overlay system (security, performance, compliance)"
+    
+    cortex_lens_folder_structure:
+      - "cortex-lens/repo-dashboards.html"          # Main entry
+      - "cortex-lens/cortex-dashboard.html"         # CORTEX shortcut
+      - "cortex-lens/app.py"                        # FastAPI server (serves both + API routes)
+      - "cortex-lens/backend/orchestrator.py"       # Routes to cortex/visualization/*
+      - "cortex-lens/backend/routes.py"             # API endpoints
+      - "cortex-lens/frontend/css/dashboard-ui.css" # Shared styles
+      - "cortex-lens/frontend/js/dashboard-app.js"  # Shared Alpine.js logic
+      - "cortex-lens/frontend/js/repo-tiles.js"     # Repository grid
+      - "cortex-lens/frontend/js/tab-controller.js" # Tab management
+      - "cortex-lens/frontend/js/overlay-ui.js"     # Overlay toggles
+      - "cortex-lens/static/"                       # Symlink to cortex/visualization/static/vendor/
+    
+    app_py_routing:
+      "GET /":
+        description: "Serve repo-dashboards.html"
+        behavior: "Repository browser with tiles"
+      
+      "GET /cortex":
+        description: "Serve cortex-dashboard.html"
+        behavior: "Direct to 8-tab CORTEX analysis"
+      
+      "GET /api/dashboard/analyze":
+        description: "Analyze repository and return data"
+        parameters:
+          - "repo: Path to repository"
+          - "format: json (default), json-full, csv"
+      
+      "GET /api/dashboard/tab/<tab-id>":
+        description: "Get data for specific tab"
+        parameters:
+          - "repo: Repository path"
+          - "overlay: security|performance|compliance (optional)"
+      
+      "GET /api/dashboard/overlay/<overlay-type>":
+        description: "Get overlay data (security, performance, compliance)"
+        parameters:
+          - "repo: Repository path"
+    
+    test_file: "tests/cortex_lens/test_entry_points.py"
+    
+    test_cases:
+      - "GET / returns repo-dashboards.html"
+      - "GET /cortex returns cortex-dashboard.html"
+      - "Both entry points load Alpine.js correctly"
+      - "repo-dashboards.html shows repository tiles"
+      - "cortex-dashboard.html shows 8 tabs"
+      - "Shared JavaScript works from both entry points"
+      - "Tab fragments load correctly"
+      - "API routes serve JSON data"
+    
+    acceptance_criteria:
+      - "Both HTML files at cortex-lens/ root (not in frontend/)"
+      - "Clear, descriptive filenames (repo-dashboards.html, cortex-dashboard.html)"
+      - "app.py routes correctly to both entry points"
+      - "Shared components (CSS, JS) loaded from frontend/"
+      - "Tab fragments loaded from cortex/visualization/templates/"
+      - "100% test coverage"
+      - "Both entry points work offline (no external CDN)"
+  
   task_003_business_language_generator:
     ac_id: "LENS-DASH-002"
     priority: "P0"
@@ -1115,42 +1279,105 @@ tasks:
   task_015_cli_commands:
     ac_id: "LENS-DASH-006"
     priority: "P1"
-    effort: "0.5 days"
-    description: "Add CLI commands for dashboard generation with auto-detection"
+    effort: "1 day"
+    description: "Add CLI commands for dashboard serving and entry point routing"
+    
+    implementation_approach: |
+      cortex lens dashboard serve routes to cortex-lens/app.py which handles:
+      1. Route / → repo-dashboards.html (repository browser)
+      2. Route /cortex → cortex-dashboard.html (8-tab CORTEX view)
+      3. Route /api/* → FastAPI backend routes (data endpoints)
+      
+      Root entry points (repo-dashboards.html, cortex-dashboard.html) load:
+      - Shared Alpine.js app (cortex-lens/frontend/js/dashboard-app.js)
+      - Tab fragments from cortex/visualization/templates/
+      - Data from cortex-lens/backend/routes.py
     
     commands:
-      - "cortex lens dashboard generate"
-      - "cortex lens dashboard generate --repo=/path/to/repo"
-      - "cortex lens dashboard generate --remote=owner/repo"
-      - "cortex lens dashboard generate --tabs=overview,dependency,temporal"  # Manual tab selection
+      # Start dashboard server
+      - "cortex lens dashboard serve"
       - "cortex lens dashboard serve --port=8080"
+      - "cortex lens dashboard serve --host=0.0.0.0"
+      
+      # Start with specific repository pre-loaded
+      - "cortex lens dashboard serve cortex"              # Opens cortex-dashboard.html directly
+      - "cortex lens dashboard serve /path/to/repo"       # Opens repo-dashboards.html with preselection
+      - "cortex lens dashboard serve owner/repo"          # Analyzes remote repo
+      
+      # Generate standalone dashboards
+      - "cortex lens dashboard generate"                  # Generates in reports/lens-dashboard/
+      - "cortex lens dashboard generate --repo=/path"     # Generates in .cortex/lens-dashboard/
+      - "cortex lens dashboard generate --remote=owner/repo"  # Generates in ~/.cortex/cache/
+      
+      # Cache management
       - "cortex lens dashboard clean --older-than=30d"
+      - "cortex lens dashboard list"                      # Show cached dashboards
+    
+    routing_behavior:
+      repository_browser:
+        trigger: "cortex lens dashboard serve"
+        loads: "cortex-lens/repo-dashboards.html"
+        shows: "Repository tiles with recent analyses"
+        components:
+          - "Alpine.js repo-tiles.js (grid display)"
+          - "Search and filter functionality"
+          - "[+ Add Repository] to analyze new repos"
+          - "Click tile to view dashboard"
+      
+      cortex_direct_access:
+        trigger: "cortex lens dashboard serve cortex"
+        loads: "cortex-lens/cortex-dashboard.html"
+        shows: "Full 8-tab CORTEX analysis immediately"
+        components:
+          - "Alpine.js dashboard-app.js (tab navigation)"
+          - "All 8 tabs enabled (5 universal + 3 CORTEX-specific)"
+          - "[← Back to Repositories] button for navigation"
+          - "No repo selection screen"
+      
+      repository_selection:
+        trigger: "Click on repository tile from repo-dashboards.html"
+        loads: "Depends on repo type (detected by detector.py)"
+        shows: "5-tab dashboard for external, 8-tab for CORTEX"
+        components:
+          - "Tab router (shows appropriate tabs)"
+          - "Overlay system (security, performance, compliance)"
+          - "[← Back] navigation"
     
     auto_detection_behavior:
-      - "Auto-detect repository type (CORTEX vs external)"
-      - "Generate 5 tabs for external repos"
-      - "Generate 8 tabs for CORTEX repo"
-      - "Allow manual tab selection via --tabs flag"
-      - "Show tab count in progress messages"
+      - "Auto-detect repository type (CORTEX vs external) at serve time"
+      - "Show 5 tabs for external repositories"
+      - "Show 8 tabs for CORTEX repository"
+      - "Cache detection result in manifest.json"
+      - "Allow manual override via --tabs flag"
     
     example_output: |
-      $ cortex lens dashboard generate --repo=/path/to/flask-app
-      🔍 Analyzing repository...
-      📊 Repository type: External (5 tabs)
-      ✅ Generated dashboard: /path/to/flask-app/.cortex/lens-dashboard/index.html
+      $ cortex lens dashboard serve
+      🚀 CORTEX LENS Dashboard Server
+      � Listening on http://localhost:8888
+      🏠 Repository browser: http://localhost:8888/
+      🧠 CORTEX direct: http://localhost:8888/cortex
       
-      $ cortex lens dashboard generate
-      🔍 Analyzing repository...
-      📊 Repository type: CORTEX (8 tabs: 5 universal + 3 CORTEX-specific)
-      ✅ Generated dashboard: reports/lens-dashboard/index.html
+      Browser opens at http://localhost:8888/
+      → repo-dashboards.html (with tiles for recent repos)
+      
+      $ cortex lens dashboard serve cortex
+      🚀 CORTEX LENS Dashboard Server
+      📍 Listening on http://localhost:8888
+      🧠 CORTEX analysis: http://localhost:8888/cortex
+      
+      Browser opens at http://localhost:8888/cortex
+      → cortex-dashboard.html (all 8 tabs immediately loaded)
     
     acceptance_criteria:
-      - "CLI commands work with auto-detection"
-      - "Manual tab selection supported"
-      - "Help text explains auto-detection"
-      - "Progress messages show tab count"
-      - "Error handling for invalid repos"
-      - "Tests for CLI with both repo types"
+      - "cortex lens dashboard serve opens repo-dashboards.html"
+      - "cortex lens dashboard serve cortex opens cortex-dashboard.html"
+      - "Root entry points (*.html) load without frontend/ prefix"
+      - "Shared Alpine.js components work from both entry points"
+      - "Tab fragments load correctly from cortex/visualization/templates/"
+      - "API routes serve JSON from cortex-lens/backend/routes.py"
+      - "Help text explains all routing options"
+      - "Tests verify both entry points work correctly"
+      - "Tests verify repository detection works"
   
   # ============================================================================
   # PHASE 5: Testing & Documentation (Days 15-16)

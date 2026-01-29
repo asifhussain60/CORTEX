@@ -236,7 +236,7 @@ class DashboardOutputManager:
 """
         
         index_path = output_path / "index.html"
-        index_path.write_text(html_content)
+        index_path.write_text(html_content, encoding="utf-8")
     
     def _get_repo_hash(self, repo_path: Path) -> str:
         """

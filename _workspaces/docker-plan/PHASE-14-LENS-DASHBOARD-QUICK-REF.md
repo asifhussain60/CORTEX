@@ -1,9 +1,25 @@
 # PHASE 14: LENS Dashboard - Quick Reference
-**Status:** PLANNED | **Priority:** P1 | **Effort:** 14-18 days
+**Status:** ⚠️ SUPERSEDED | **See:** [PHASE-14-V2-QUICK-REFERENCE.md](PHASE-14-V2-QUICK-REFERENCE.md)
 
 ---
 
-## 🎯 What We're Building
+> **⚠️ THIS DOCUMENT IS SUPERSEDED**
+> 
+> Phase 14 has been revised to address implementation issues.
+> Please use the new plan documents:
+> - **Plan:** `PHASE-14-LENS-DASHBOARD-V2.yaml`
+> - **Quick Ref:** `PHASE-14-V2-QUICK-REFERENCE.md`
+>
+> Key changes in v2.0:
+> - Static HTML + JSON instead of FastAPI API
+> - Dark glassmorphism theme from `_workspaces/dashboard`
+> - CORTEX logo hero section (300x300)
+> - All 8 tabs properly configured
+> - Simplified architecture
+
+---
+
+## ~~🎯 What We're Building~~ (SUPERSEDED)
 
 A **comprehensive visual intelligence dashboard** for code repositories with:
 

@@ -333,9 +333,24 @@ class LENSVisualizationOrchestrator:
     
     def _run_analysis(self) -> None:
         """Run LENS analyzers and cache results."""
-        # Git analysis
-        git_result = self.git_analyzer.analyze()
-        self._analysis_cache["git"] = git_result if git_result else {}
+        # Git analysis - use get_recent_commits() to get all repository commits
+        git_result = self.git_analyzer.get_recent_commits(max_commits=100)
+        if git_result.success:
+            self._analysis_cache["git"] = {
+                "commits": [
+                    {
+                        "hash": commit.hash,
+                        "author": commit.author,
+                        "date": commit.date.isoformat() if hasattr(commit.date, 'isoformat') else str(commit.date),
+                        "message": commit.message,
+                        "files_changed": commit.files_changed,
+                    }
+                    for commit in git_result.commits
+                ],
+                "recent_commits": git_result.commits,  # Alias for compatibility
+            }
+        else:
+            self._analysis_cache["git"] = {"commits": [], "recent_commits": []}
         
         # AST analysis (mock for now - would analyze Python files)
         # Full implementation would iterate over Python files
@@ -346,9 +361,12 @@ class LENSVisualizationOrchestrator:
             "modules": [],
         }
         
-        # Comment analysis
-        comment_result = self.comment_extractor.extract_comments(self.repo_path)
-        self._analysis_cache["comments"] = comment_result if comment_result else {}
+        # Comment analysis - analyze repository root
+        try:
+            comment_result = self.comment_extractor.extract_comments(self.repo_path)
+            self._analysis_cache["comments"] = comment_result if comment_result else {}
+        except Exception as e:
+            self._analysis_cache["comments"] = {"todos": [], "fixmes": [], "error": str(e)}
     
     def _get_file_list(self) -> List[str]:
         """Get list of Python files in repository."""

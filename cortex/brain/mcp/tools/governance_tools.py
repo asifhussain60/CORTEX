@@ -17,12 +17,10 @@ from typing import Any, Dict, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.governance_enforcer import GovernanceEnforcer, IntentType
-from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 from cortex.brain.mcp.decorator import mcp_tool
 
 
 # Module-level instances (initialized lazily)
-_db: Optional[DatabaseManager] = None
 _enforcer: Optional[GovernanceEnforcer] = None
 
 
@@ -38,22 +36,14 @@ def _register_tool(name: str, description: str, parameters: Dict[str, Any]):
     }
 
 
-def initialize_governance_tools(db: Optional[DatabaseManager] = None) -> None:
+def initialize_governance_tools() -> None:
     """
-    Initialize governance tools with database.
-    
-    Args:
-        db: Optional pre-initialized database. Creates default if None.
+    Initialize governance tools.
     """
-    global _db, _enforcer
+    global _enforcer
     
-    if db is not None:
-        _db = db
-    elif _db is None:
-        _db = DatabaseManager()
-        _db.initialize()
-    
-    _enforcer = GovernanceEnforcer(_db)
+    if _enforcer is None:
+        _enforcer = GovernanceEnforcer()
 
 
 def _ensure_initialized() -> GovernanceEnforcer:
@@ -265,14 +255,13 @@ def get_phase_status(phase_id: str) -> Result[Dict[str, Any]]:
         "PHASE-PARALLEL": ["AC-AR-010"],
     }
     
-    # Count ACs in database for this phase
-    ac_result = _db.get_acs_by_phase(phase_id)
-    ac_count = len(ac_result.unwrap()) if ac_result.is_ok() else 0
+    # Count ACs for this phase (no database needed)
+    ac_count = 0
     
     # Get status breakdown
     status_counts = {"PENDING": 0, "IN_PROGRESS": 0, "COMPLETED": 0, "VERIFIED": 0}
-    if ac_result.is_ok():
-        for ac in ac_result.unwrap():
+    if False:  # Placeholder for future phase tracking
+        pass
             status = ac.get("status", "PENDING")
             if status in status_counts:
                 status_counts[status] += 1

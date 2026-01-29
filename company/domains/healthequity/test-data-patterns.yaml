@@ -1,0 +1,462 @@
+# HealthEquity Test Data Patterns and Constants
+# Extracted from: Platform.Classic.Tests ClassicQA documentation
+# Version: 1.0
+# Date: 2026-01-28
+
+domain: "HealthEquity Test Data and Constants"
+purpose: "Common test data patterns, constants, and compliance patterns"
+
+# Test Environment Credentials
+test_credentials:
+  pattern: "TestEnvironmentSecurables class"
+  values:
+    password_reset_value: "TestEnvironmentSecurables.PasswordResetValue"
+    plum_service_password: "TestEnvironmentSecurables.PlumServicePassword"
+  
+  usage: "Never hardcode credentials - always use securables"
+  
+  hard_coded_test_users:
+    note: "Some UAT2 users are hard-coded due to IdentityFactory issues"
+    examples:
+      employer: "Izntbkuaem1x5km"
+      partner: "G4jruykcjblaeqw"
+      broker: "Mcrxrgv7fnmwgqv"
+    environment: "UAT2 only"
+
+# Agreement Test Data
+agreement_test_data:
+  entity_types:
+    - "Member"
+    - "Employer"
+  
+  agreement_types:
+    member_agreement:
+      name: "MemberAgreement"
+      default_version: "1.0"
+      states: ["Accepted", "Declined", "Expired", null]
+    
+    investment_agreements:
+      - "FundInvestmentAgreement"
+      - "Nationwide_Investment_Agreement"
+      - "HealthEquity_Investment_Agreement"
+      - "Anheuser_Busch_Investment_Agreement"
+      - "Dimensional_Advisors_Investment_Supplement"
+      - "TIAA_Employee_Investment_Agreement"
+      - "TIAA_Investment_Agreement"
+      - "HSAdministratorsStandard_Investments_Agreement"
+    
+    phi_agreement:
+      type: "PhiAgreementType"
+      title: "PhiAgreementTitle"
+      summary: "PhiAgreementSummary"
+  
+  agreement_states:
+    accepted: "Accepted"
+    declined: "Declined"
+    expired: "Expired"
+    unsigned: null
+  
+  test_agreement_template:
+    naming_pattern: "TestAgreement + DateTime.Now.Ticks"
+    body: "AgreementConstants.TestAgreementBody"
+    title: "AgreementConstants.TestAgreementTitle"
+    summary: "AgreementConstants.TestAgreementSummary"
+    text: "AgreementConstants.TestAgreementText"
+    version: "AgreementConstants.TestAgreementVersion"
+  
+  date_terminated:
+    no_expiration: "DateTime.MaxValue"
+    custom_date: "DateTime.Today.AddYears(1)"
+    already_expired: "DateTime.Now.AddMonths(-1)"
+
+# Investment Test Data
+investment_test_data:
+  service_levels:
+    autopilot:
+      level: 10
+      default_allow_net_sells: 1
+      default_keep_in_cash: 0
+      default_investment_threshold: 1000
+    
+    gps:
+      level: 5
+      default_allow_net_sells: 1
+      cash_replenish_enabled: true
+  
+  thresholds:
+    investment_threshold_default: 1000
+    minimum_cash_replenish: 0
+  
+  cash_replenish:
+    threshold_options:
+      - "Custom"
+      - "Default"
+      - "Product_Based"
+    
+    is_sell_to_replenish:
+      autopilot: 0
+      gps: 1
+  
+  test_keep_in_cash_values:
+    minimum: 0
+    default_threshold: 1000
+    test_values: [0, 400, 1000, 5000]
+
+# Financial Test Data
+financial_test_data:
+  contribution_amounts:
+    scheduled_deduction: 50.25
+    carryover_transfer: 40
+  
+  balance_amounts:
+    default_balance: 0.00
+    expected_balance: 1500.00
+  
+  rollover_settings:
+    percentage_to_rollover: 100
+    min_self: 0
+    max_self: 500
+    min_family: 0
+    max_family: 1000
+  
+  coverage_types:
+    - "Self"
+    - "Couple"
+    - "Family"
+    - "Self_Plus_One"
+    - "Employee_Plus_Children"
+
+# Product Configuration Test Data
+product_configuration_test_data:
+  features:
+    feature_allow_advisor: [0, 1]
+    allow_cash_replenish: [true, false]
+  
+  investment_settings:
+    investment_threshold: 1000
+    minimum_cash_replenish: 0
+    enable_cash_replenish_not_allowed_flow: true
+  
+  fee_schedule:
+    generic_product: "FeeScheduleBuilder.GenericProductXmlAttachment"
+  
+  purse_types:
+    - "HS"  # Health Savings
+    - "HC"  # Health Care
+    - "DC"  # Dependent Care
+
+# Entity Creation Patterns
+entity_creation_patterns:
+  unique_identifiers:
+    pattern: "DateTime.Now.Ticks"
+    usage: "Generate unique test data identifiers"
+    examples:
+      - "var agreementType = \"TestAgreement\" + DateTime.Now.Ticks;"
+      - "var testMember = \"Member_\" + DateTime.Now.Ticks;"
+  
+  member_creation:
+    identity_factory:
+      - "IdentityFactory.CreateMember()"
+      - "IdentityFactory.CreateMemberWithHsa(employer)"
+      - "IdentityFactories.CreateMemberWithMfaOptOutThatCanLogIn()"
+    
+    builder:
+      example: |
+        var member = new SelfDrivenMemberInvestmentScenarioBuilder()
+            .WithAutoRebalance(false)
+            .Build();
+  
+  employer_creation:
+    identity_factory:
+      - "IdentityFactory.CreateEmployerWithMajorMedicalPlan()"
+      - "IdentityAccessManagementFactories.CreateEmployerThatCanLogIn()"
+  
+  scenario_creation:
+    card_scenario:
+      example: |
+        var entity = new CardScenario(FW)
+            .WithPartner("HealthEquity")
+            .WithProduct(FeeScheduleBuilder.GenericProductXmlAttachment)
+            .WithTpa()
+            .WithPurseType("HS")
+            .WithEmployer()
+            .WithMember();
+
+# Database Test Data
+database_test_data:
+  login_fields:
+    - "LoginId"
+    - "Authentication_Username"
+    - "Active"
+  
+  member_fields:
+    - "MemberId"
+    - "Name_FirstName"
+    - "Name_LastName"
+  
+  audit_fields:
+    - "AuditInfo_CreatedBy_ObjectId"
+    - "AuditInfo_CreatedAt"
+    - "AuditInfo_ModifiedBy_ObjectId"
+    - "AuditInfo_ModifiedAt"
+  
+  expected_audit_values:
+    created_by: "l_TAdmin"
+    modified_by_empty: ""
+    modified_at_empty: ""
+
+# Lookup Table Test Data
+lookup_table_test_data:
+  lookup_types:
+    - "RuntimeOptions"
+  
+  lookup_fields:
+    - "LookupId"
+    - "Code"
+    - "Description"
+    - "LookupType"
+  
+  test_lookup_pattern:
+    lookup_id: "TC112399Lookup + timestamp"
+    code: "TC112399Code"
+    description: "TC112399Description + timestamp"
+    lookup_type: "RuntimeOptions"
+  
+  cache_behavior:
+    cache_duration_seconds: 6
+    validation: "Description should remain cached after database update"
+
+# Deduction and Transaction Test Data
+deduction_test_data:
+  deduction_types:
+    employer: "ER"
+    employee: "EE"
+  
+  tax_types:
+    - "PreTax"
+    - "PostTax"
+    - "Roth"
+  
+  scheduled_deduction:
+    amount: 50.25
+    parameters_xml: "<DeductionParameters DeductionType=\"ER\" TaxType=\"PreTax\" Authorized=\"true\" />"
+  
+  scheduled_item:
+    fields:
+      - "ScheduledItemId (Guid)"
+      - "Entity (MemberId)"
+      - "Amount"
+      - "Parameters (XML)"
+
+# Coverage and Dependent Test Data
+coverage_test_data:
+  coverage_types:
+    self: "Self"
+    couple: "Couple"
+    family: "Family"
+    self_plus_one: "Self_Plus_One"
+  
+  medical_coverage_types:
+    - "Self"
+    - "Couple"
+    - "Family"
+  
+  dependent_coverage_types:
+    couple: "CustomRADataWithTiersConsts.DEPENDENT_COVERAGE_TYPE_COUPLE"
+  
+  dependent_relationship_types:
+    - "Spouse"
+    - "Child"
+    - "Dependent"
+  
+  dependent_list_example: |
+    Dependents = new List<DependentRelationshipTypeEnum> { 
+        DependentRelationshipTypeEnum.Spouse 
+    }
+
+# Date and Time Test Data
+date_time_test_data:
+  plan_year:
+    start_date: "new DateTime(DateTimeUtils.Today.AddYears(-1).Year, 1, 1)"
+    end_date: "DateTime.Today.AddDays(-5)"
+  
+  rollover_dates:
+    future_rollover: "DateTime.Today.AddDays(10)"
+  
+  termination_dates:
+    future: "DateTime.Today.AddYears(1)"
+    past: "DateTime.Now.AddYears(-1)"
+    no_expiration: "DateTime.MaxValue"
+  
+  agreement_dates:
+    date_agreed: "DateTime.Now"
+    date_terminated_future: "DateTime.Now.AddYears(2)"
+  
+  time_deltas:
+    delta_type: "DateTimeDeltaType.Days"
+    tolerance: 1
+
+# Reimbursement Account Test Data
+reimbursement_account_test_data:
+  account_types:
+    hcra: "ReimbursementAccountTypeEnum.HCRA"
+    dcra: "ReimbursementAccountTypeEnum.DCRA"
+  
+  data_creator_templates:
+    - "StandardRAData"
+    - "StandardRADataWithTypeHCRA"
+    - "RADataIsInSpendDown"
+    - "RADataWithCarryoverSettings"
+    - "CustomRADataWithTiers"
+  
+  settings_params:
+    start_date: "new DateTime(DateTimeUtils.Today.AddYears(-1).Year, 1, 1)"
+    end_date: "DateTime.Today.AddDays(-5)"
+    ra_coverage_type: "CoverageType.Couple"
+    ra_medical_coverage_type: "\"Self\""
+    feature_ra_coverage_tier_based_on_file: false
+  
+  rollover_settings:
+    do_manual_rollover: false
+    rollover_date: "DateTime.Today.AddDays(10)"
+    percentage_to_rollover: 100
+    min_self: 0
+    max_self: 500
+    min_family: 0
+    max_family: 1000
+
+# Compliance and Security Test Data
+compliance_test_data:
+  acme_resources:
+    card_management: "/Member/CardManagement/RemoveCardSecurityFraud"
+    vpay_fraud: "/Member/VPaySuspectedFraud/VPayFraudAuditor/Edit"
+  
+  http_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+  
+  expected_status_codes:
+    ok: "HttpStatusCode.OK"
+    unauthorized: "HttpStatusCode.Unauthorized"
+  
+  audit_trail:
+    created_by_admin: "l_TAdmin"
+    created_at_now: "DateTime.Now"
+    modified_by_empty: "string.Empty"
+    modified_at_empty: "string.Empty"
+
+# URL Patterns
+url_patterns:
+  base_domains:
+    classic: "FW.BaseDomain.Classic"
+    client: "FW.BaseDomain.Client"
+    domain: "FW.Domain"
+  
+  portal_paths:
+    investments: "/investments"
+    member: "/member"
+    employer: "/employer"
+    partner: "/partner"
+    broker: "/broker"
+  
+  uat2_domain: "https://uat2.healthequity.com"
+
+# Wait Timeout Test Data
+timeout_test_data:
+  short_wait: "TimeSpan.FromSeconds(5)"
+  medium_wait: "TimeSpan.FromSeconds(20)"
+  long_wait: "TimeSpan.FromSeconds(30)"
+  
+  store_procedure_timeout: "9000 milliseconds"
+  cache_wait: "6000 milliseconds (6 seconds)"
+  
+  retry_policy:
+    max_retries: 2
+    base_delay: "TimeSpan.FromSeconds(1)"
+    exponential: "Math.Pow(5, retryAttempt)"
+
+# Partner and Integration Test Data
+partner_test_data:
+  partners:
+    - "HealthEquity"
+    - "Nationwide"
+    - "Anheuser_Busch"
+    - "Dimensional_Advisors"
+    - "TIAA"
+    - "HSAdministrators"
+  
+  integration_types:
+    - "health_plan_partner"
+    - "payroll_partner"
+    - "benefits_platform"
+    - "financial_institution"
+
+# Test Constants Classes
+test_constants:
+  agreement_constants:
+    - "MemberEntityType"
+    - "MemberAgreement"
+    - "FundInvestmentAgreement"
+    - "PhiAgreementType"
+    - "DefaultAgreementVersion"
+    - "AcceptedState"
+    - "DeclinedState"
+    - "TestAgreementBody"
+    - "TestAgreementTitle"
+    - "TestAgreementSummary"
+    - "TestAgreementText"
+    - "TestAgreementVersion"
+  
+  custom_ra_data_consts:
+    - "DEPENDENT_COVERAGE_TYPE_COUPLE"
+
+# Best Practices
+best_practices:
+  unique_identifiers:
+    - "Use DateTime.Now.Ticks for unique test data"
+    - "Prefix test entities with TC or test description"
+    - "Avoid collisions with existing data"
+  
+  credentials:
+    - "Never hardcode passwords in test code"
+    - "Use TestEnvironmentSecurables class"
+    - "Use FW.ConfigureWCFDefaultAdminCredentials() for services"
+  
+  dates:
+    - "Use DateTimeUtils.Today for consistency"
+    - "Use relative dates (AddYears, AddDays) not fixed dates"
+    - "Consider time zones in date comparisons"
+  
+  cleanup:
+    - "Always clean up created test data"
+    - "Use unique identifiers to find test data"
+    - "Handle cleanup errors gracefully"
+  
+  constants:
+    - "Extract magic numbers to named constants"
+    - "Use existing constants classes (AgreementConstants, etc.)"
+    - "Document business meaning of constant values"
+
+# CORTEX Integration
+cortex_usage:
+  when_generating_test_data:
+    - "Use existing data creation patterns (DataCreator, Builder, Factory)"
+    - "Generate unique identifiers with DateTime.Now.Ticks"
+    - "Reference test environment securables for credentials"
+    - "Use relative dates, not hardcoded dates"
+    - "Follow naming patterns from existing test constants"
+  
+  when_validating_data:
+    - "Check for unique identifier collisions"
+    - "Verify credential securables are used"
+    - "Validate date handling uses relative dates"
+    - "Ensure proper cleanup implemented"
+  
+  common_patterns_to_recognize:
+    - "Test agreement types with DateTime.Now.Ticks suffix"
+    - "Service level constants (10 = AutoPilot, 5 = GPS)"
+    - "Coverage type enums (Self, Couple, Family)"
+    - "Agreement state strings (Accepted, Declined, Expired)"
+    - "Audit field patterns (CreatedBy, ModifiedBy)"

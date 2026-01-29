@@ -103,7 +103,7 @@ def generate(
             click.echo(f"Generating dashboard at {output_path}...")
 
         # Generate dashboard
-        dashboard_path = orchestrator.generate_dashboard(output_dir=output_path)
+        dashboard_path = orchestrator.generate_dashboard(output_path=output_path)
 
         click.echo(
             click.style(

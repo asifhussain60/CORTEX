@@ -202,7 +202,7 @@ class DiagramGenerationOrchestrator(IOrchestrator):
     
     def __init__(self):
         """Initialize the diagram generation orchestrator."""
-        self.logger = EnhancedAuditLogger("DiagramGenerationOrchestrator")
+        self.logger = EnhancedAuditLogger.instance()
         self.state_manager = StateManager()
         self._mermaid_diagrams: List[DiagramSpec] = []
         self._d3js_visualizations: List[DiagramSpec] = []
@@ -456,7 +456,7 @@ class DocumentationCleanupOrchestrator(IOrchestrator):
     
     def __init__(self, docs_root: str = "docs"):
         """Initialize the cleanup orchestrator."""
-        self.logger = EnhancedAuditLogger("DocumentationCleanupOrchestrator")
+        self.logger = EnhancedAuditLogger.instance()
         self.state_manager = StateManager()
         self.docs_root = Path(docs_root)
         self._archive_root = self.docs_root / "_archive"
@@ -706,7 +706,7 @@ class DocumentationOrchestrator(IOrchestrator):
     
     def __init__(self):
         """Initialize the main documentation orchestrator."""
-        self.logger = EnhancedAuditLogger("DocumentationOrchestrator")
+        self.logger = EnhancedAuditLogger.instance()
         self.state_manager = StateManager()
         self.diagram_generator = DiagramGenerationOrchestrator()
         self.cleanup_orchestrator = DocumentationCleanupOrchestrator()

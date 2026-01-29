@@ -22,7 +22,6 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.infrastructure.database import DatabaseManager
 
 
 @dataclass
@@ -52,24 +51,20 @@ class EnhancedAuditLogger:
     _instance: Optional['EnhancedAuditLogger'] = None
     _lock = threading.Lock()
     
-    def __init__(self, db: Optional[DatabaseManager] = None):
+    def __init__(self):
         """
         Initialize enhanced audit logger.
-        
-        Args:
-            db: DatabaseManager instance
         """
-        self._db = db
         self._current_hash: Optional[str] = None
         self._initialized = False
     
     @classmethod
-    def instance(cls, db: Optional[DatabaseManager] = None) -> 'EnhancedAuditLogger':
+    def instance(cls) -> 'EnhancedAuditLogger':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    cls._instance = cls(db)
+                    cls._instance = cls()
         return cls._instance
     
     @classmethod
@@ -78,17 +73,13 @@ class EnhancedAuditLogger:
         with cls._lock:
             cls._instance = None
     
-    def initialize(self, db: DatabaseManager) -> Result[None]:
+    def initialize(self) -> Result[None]:
         """
-        Initialize logger with database.
-        
-        Args:
-            db: DatabaseManager instance
+        Initialize logger.
         
         Returns:
             Result containing None if successful, error otherwise
         """
-        self._db = db
         self._initialized = True
         
         # Get the last entry hash for chain continuity

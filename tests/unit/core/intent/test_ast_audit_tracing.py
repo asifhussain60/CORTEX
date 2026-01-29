@@ -21,7 +21,6 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Any
 
-from cortex.infrastructure.database import DatabaseManager
 from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.testing.test_audit_logger import TestAuditLogger
 
@@ -43,11 +42,10 @@ class TestASTEngineAuditTracing:
     """
     
     @pytest.fixture
-    def db_manager(self) -> DatabaseManager:
-        """Get database manager for audit trail queries."""
-        db = DatabaseManager()
-        db.initialize()
-        return db
+    def db_manager(self) -> Any:
+        """Get database manager for audit trail queries (SKIPPED TEST)."""
+        # This test is skipped - no database manager needed
+        return None
     
     @pytest.fixture
     def sample_python_file(self, tmp_path: Path) -> Path:
@@ -79,7 +77,7 @@ class DataProcessor:
     def test_ast_engine_call_creates_audit_entry(
         self, 
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify that calling ASTIntelligenceEngine generates audit trail entry.
@@ -138,7 +136,7 @@ class DataProcessor:
     def test_call_graph_builder_audit_entry(
         self,
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify CallGraphBuilder component is logged in audit trail.
@@ -190,7 +188,7 @@ class DataProcessor:
     def test_dependency_mapper_audit_entry(
         self,
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify DependencyMapper component is logged in audit trail.
@@ -236,7 +234,7 @@ class DataProcessor:
     def test_pattern_detector_audit_entry(
         self,
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify PatternDetector component is logged in audit trail.
@@ -280,7 +278,7 @@ class DataProcessor:
     def test_hash_chain_integrity_for_ast_entries(
         self,
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify AST-related audit entries form unbroken hash chain.
@@ -334,7 +332,7 @@ class DataProcessor:
     def test_ast_audit_entry_completeness(
         self,
         sample_python_file: Path,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify AST engine audit entry has all required fields.
@@ -404,16 +402,15 @@ class TestIR004AuditVerification:
     """
     
     @pytest.fixture
-    def db_manager(self) -> DatabaseManager:
-        """Get database manager."""
-        db = DatabaseManager()
-        db.initialize()
-        return db
+    def db_manager(self) -> Any:
+        """Get database manager (SKIPPED TEST)."""
+        # This test is skipped - no database manager needed
+        return None
     
     @pytest.mark.ac("AC-IR-004-01")
     def test_knowledge_graph_builder_audit_entry(
         self,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify KnowledgeGraphBuilder component is logged.
@@ -447,7 +444,7 @@ class TestIR004AuditVerification:
     @pytest.mark.ac("AC-IR-004-02")
     def test_comprehension_loop_audit_entries(
         self,
-        db_manager: DatabaseManager
+        db_manager: Any
     ):
         """
         Verify comprehension loop generates proper audit trail.

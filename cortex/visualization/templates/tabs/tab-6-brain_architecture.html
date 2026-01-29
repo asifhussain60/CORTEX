@@ -1,0 +1,313 @@
+<!-- Tab 6: CORTEX Brain Architecture (CORTEX-Specific) -->
+<div class="tab-panel cortex-specific" x-show="activeTab === 'brain'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">🧠 CORTEX Brain Architecture</h2>
+    <p class="tab-subtitle">4-Tier intelligence system visualization</p>
+  </div>
+
+  <!-- Brain Overview -->
+  <div class="brain-overview glass-panel">
+    <div class="brain-stats">
+      <div class="stat-card tier0">
+        <div class="tier-label">Tier 0: Governance</div>
+        <div class="tier-count" x-text="data.brain?.tiers?.tier0?.rule_count || 0"></div>
+        <div class="tier-sublabel">CORE Rules</div>
+      </div>
+      <div class="stat-card tier1">
+        <div class="tier-label">Tier 1: Acceptance Criteria</div>
+        <div class="tier-count" x-text="data.brain?.tiers?.tier1?.ac_count || 0"></div>
+        <div class="tier-sublabel">AC Specifications</div>
+      </div>
+      <div class="stat-card tier2">
+        <div class="tier-label">Tier 2: Response Templates</div>
+        <div class="tier-count" x-text="data.brain?.tiers?.tier2?.template_count || 0"></div>
+        <div class="tier-sublabel">Templates</div>
+      </div>
+      <div class="stat-card tier3">
+        <div class="tier-label">Tier 3: Knowledge</div>
+        <div class="tier-count" x-text="data.brain?.tiers?.tier3?.knowledge_count || 0"></div>
+        <div class="tier-sublabel">YAML Knowledge Files</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 0: Governance Rules -->
+  <div class="content-section glass-panel tier0-section">
+    <h3 class="section-title">⚖️ Tier 0: Immutable Governance</h3>
+    <div class="governance-grid">
+      <template x-for="rule in data.brain?.tiers?.tier0?.rules || []" :key="rule.id">
+        <div class="governance-card">
+          <div class="rule-header">
+            <span class="rule-id" x-text="rule.id"></span>
+            <span class="rule-status" :class="rule.compliance_status">
+              <span x-text="rule.compliance_percentage"></span>%
+            </span>
+          </div>
+          <div class="rule-name" x-text="rule.name"></div>
+          <div class="rule-description" x-text="rule.description"></div>
+          <div class="rule-violations" x-show="rule.violations > 0">
+            <span class="violation-count" x-text="rule.violations"></span> violations found
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Tier 1: Acceptance Criteria -->
+  <div class="content-section glass-panel tier1-section">
+    <h3 class="section-title">✅ Tier 1: Acceptance Criteria</h3>
+    <div class="ac-phases">
+      <template x-for="phase in data.brain?.tiers?.tier1?.phases || []" :key="phase.id">
+        <div class="phase-card">
+          <div class="phase-header">
+            <span class="phase-name" x-text="phase.name"></span>
+            <span class="phase-status" :class="phase.status"></span>
+          </div>
+          <div class="phase-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="`width: ${phase.completion}%`"></div>
+            </div>
+            <span class="progress-label" x-text="`${phase.completion}%`"></span>
+          </div>
+          <div class="phase-ac-count">
+            <span x-text="phase.completed_ac"></span> / <span x-text="phase.total_ac"></span> AC Complete
+          </div>
+          <template x-if="phase.active_tasks?.length > 0">
+            <details class="phase-tasks">
+              <summary>Active Tasks (<span x-text="phase.active_tasks.length"></span>)</summary>
+              <ul>
+                <template x-for="task in phase.active_tasks" :key="task.id">
+                  <li>
+                    <span class="task-id" x-text="task.id"></span>
+                    <span class="task-name" x-text="task.name"></span>
+                  </li>
+                </template>
+              </ul>
+            </details>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Tier 2: Response Templates -->
+  <div class="content-section glass-panel tier2-section">
+    <h3 class="section-title">📝 Tier 2: Response Templates & Boundaries</h3>
+    <div class="template-grid">
+      <template x-for="template in data.brain?.tiers?.tier2?.templates || []" :key="template.id">
+        <div class="template-card">
+          <div class="template-name" x-text="template.name"></div>
+          <div class="template-purpose" x-text="template.purpose"></div>
+          <div class="template-usage">
+            <span class="usage-count" x-text="template.usage_count"></span> uses
+          </div>
+          <template x-if="template.preview">
+            <details class="template-preview">
+              <summary>Preview</summary>
+              <pre x-text="template.preview"></pre>
+            </details>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Tier 3: Knowledge Repository -->
+  <div class="content-section glass-panel tier3-section">
+    <h3 class="section-title">📚 Tier 3: Knowledge Repository</h3>
+    <div class="knowledge-categories">
+      <template x-for="category in data.brain?.tiers?.tier3?.categories || []" :key="category.name">
+        <div class="category-card">
+          <div class="category-header">
+            <span class="category-icon" x-text="category.icon"></span>
+            <span class="category-name" x-text="category.name"></span>
+          </div>
+          <div class="category-count" x-text="`${category.file_count} YAML files`"></div>
+          <template x-if="category.files?.length > 0">
+            <details class="category-files">
+              <summary>Files</summary>
+              <ul>
+                <template x-for="file in category.files" :key="file.name">
+                  <li>
+                    <span class="file-name" x-text="file.name"></span>
+                    <span class="file-size" x-text="`${file.size} KB`"></span>
+                  </li>
+                </template>
+              </ul>
+            </details>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Brain Connectivity Map -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🕸️ Brain Connectivity Map</h3>
+    <div id="brain-connectivity-graph" class="brain-graph-canvas"></div>
+    <div class="connectivity-legend">
+      <div class="legend-item">
+        <span class="legend-color tier0"></span>
+        <span class="legend-label">Tier 0 (Governance)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color tier1"></span>
+        <span class="legend-label">Tier 1 (Acceptance Criteria)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color tier2"></span>
+        <span class="legend-label">Tier 2 (Templates)</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color tier3"></span>
+        <span class="legend-label">Tier 3 (Knowledge)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brain Health Metrics -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">💚 Brain Health Metrics</h3>
+    <div class="health-metrics">
+      <div class="health-metric">
+        <div class="metric-name">Governance Compliance</div>
+        <div class="metric-bar">
+          <div class="metric-fill" 
+               :style="`width: ${data.brain?.health?.governance_compliance || 0}%`"
+               :class="getHealthColor(data.brain?.health?.governance_compliance)"></div>
+        </div>
+        <div class="metric-value" x-text="`${data.brain?.health?.governance_compliance || 0}%`"></div>
+      </div>
+      
+      <div class="health-metric">
+        <div class="metric-name">AC Completion Rate</div>
+        <div class="metric-bar">
+          <div class="metric-fill" 
+               :style="`width: ${data.brain?.health?.ac_completion || 0}%`"
+               :class="getHealthColor(data.brain?.health?.ac_completion)"></div>
+        </div>
+        <div class="metric-value" x-text="`${data.brain?.health?.ac_completion || 0}%`"></div>
+      </div>
+      
+      <div class="health-metric">
+        <div class="metric-name">Template Coverage</div>
+        <div class="metric-bar">
+          <div class="metric-fill" 
+               :style="`width: ${data.brain?.health?.template_coverage || 0}%`"
+               :class="getHealthColor(data.brain?.health?.template_coverage)"></div>
+        </div>
+        <div class="metric-value" x-text="`${data.brain?.health?.template_coverage || 0}%`"></div>
+      </div>
+      
+      <div class="health-metric">
+        <div class="metric-name">Knowledge Freshness</div>
+        <div class="metric-bar">
+          <div class="metric-fill" 
+               :style="`width: ${data.brain?.health?.knowledge_freshness || 0}%`"
+               :class="getHealthColor(data.brain?.health?.knowledge_freshness)"></div>
+        </div>
+        <div class="metric-value" x-text="`${data.brain?.health?.knowledge_freshness || 0}%`"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Brain Activity -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📊 Recent Brain Activity</h3>
+    <div class="activity-timeline">
+      <template x-for="activity in data.brain?.recent_activity || []" :key="activity.id">
+        <div class="activity-item">
+          <div class="activity-timestamp" x-text="formatDate(activity.timestamp)"></div>
+          <div class="activity-tier" :class="`tier${activity.tier}`" x-text="`Tier ${activity.tier}`"></div>
+          <div class="activity-type" x-text="activity.type"></div>
+          <div class="activity-description" x-text="activity.description"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+// Brain connectivity visualization
+function initBrainConnectivityGraph(data) {
+  const width = document.getElementById('brain-connectivity-graph').clientWidth;
+  const height = 500;
+
+  d3.select('#brain-connectivity-graph').html('');
+
+  const svg = d3.select('#brain-connectivity-graph')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+  // Tier colors
+  const tierColors = {
+    0: '#c53030',  // Red (governance)
+    1: '#d69e2e',  // Yellow (AC)
+    2: '#4299e1',  // Blue (templates)
+    3: '#48bb78'   // Green (knowledge)
+  };
+
+  // Force simulation with hierarchical layout
+  const simulation = d3.forceSimulation(data.nodes)
+    .force('link', d3.forceLink(data.links).id(d => d.id).distance(100))
+    .force('charge', d3.forceManyBody().strength(-400))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('y', d3.forceY().y(d => (d.tier * height / 4) + 50).strength(0.5));
+
+  // Links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(data.links)
+    .enter()
+    .append('line')
+    .attr('stroke', '#4a5568')
+    .attr('stroke-width', 1.5)
+    .attr('opacity', 0.6);
+
+  // Nodes
+  const node = svg.append('g')
+    .selectAll('circle')
+    .data(data.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', d => d.importance * 10 + 5)
+    .attr('fill', d => tierColors[d.tier])
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+
+  // Labels
+  const labels = svg.append('g')
+    .selectAll('text')
+    .data(data.nodes)
+    .enter()
+    .append('text')
+    .text(d => d.name)
+    .attr('font-size', 10)
+    .attr('dx', 12)
+    .attr('dy', 4);
+
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y);
+
+    labels
+      .attr('x', d => d.x)
+      .attr('y', d => d.y);
+  });
+}
+
+function getHealthColor(value) {
+  if (value >= 80) return 'excellent';
+  if (value >= 60) return 'good';
+  if (value >= 40) return 'fair';
+  return 'poor';
+}
+</script>

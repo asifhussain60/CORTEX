@@ -37,7 +37,6 @@ from cortex.domain_brain.business_knowledge_repository import (
     get_business_knowledge_repository
 )
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 from cortex.brain.mcp.decorator import mcp_tool
 from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge
@@ -145,7 +144,6 @@ class MasterOrchestrator(IOrchestrator):
     def __init__(self):
         """Initialize MasterOrchestrator"""
         self.logger = EnhancedAuditLogger.instance()
-        self.db = DatabaseManager()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
         

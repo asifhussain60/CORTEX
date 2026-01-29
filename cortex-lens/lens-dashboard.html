@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX LENS | Repository Dashboards</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="static/assets/cortex-logo-200.png">
+    
+    <!-- Custom Styles (Dark Glassmorphism) -->
+    <link rel="stylesheet" href="static/css/cortex-lens.css">
+    
+    <!-- Alpine.js (SPA Framework) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <style>
+        /* Hero-specific styles */
+        .hero-glow {
+            position: relative;
+        }
+        
+        .hero-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(123, 44, 191, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 3rem 0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Alpine.js App -->
+    <div x-data="repoDashboards()" x-init="initialize()">
+        
+        <!-- Hero Section with Logo -->
+        <section class="hero-section">
+            <div class="hero-glow">
+                <img 
+                    src="static/assets/cortex-logo-200.png" 
+                    alt="CORTEX Logo" 
+                    class="hero-logo"
+                    onerror="this.style.display='none'"
+                >
+            </div>
+            <h1 class="hero-title">CORTEX LENS</h1>
+            <p class="hero-subtitle">
+                Intelligent Code Analysis Dashboards<br>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">
+                    Static HTML + JSON • No API Required • Works Offline
+                </span>
+            </p>
+        </section>
+        
+        <!-- Main Content -->
+        <main class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
+            
+            <!-- CORTEX Repository Section -->
+            <section>
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🧠</span>
+                    <span>CORTEX Repository</span>
+                    <span class="badge badge-cortex" style="margin-left: 0.5rem;">Primary</span>
+                </h2>
+                
+                <div class="repo-grid">
+                    <!-- CORTEX Tile (Always Present) -->
+                    <a href="cortex-dashboard.html" class="repo-tile cortex">
+                        <div class="repo-icon">🧠</div>
+                        <div class="repo-name">CORTEX</div>
+                        <div class="repo-description">
+                            COgnitive Real-Time EXecution System — AI-powered development orchestrator with 23 orchestrators and 4-tier brain architecture.
+                        </div>
+                        <div class="repo-stats">
+                            <span class="repo-stat">📁 140+ files</span>
+                            <span class="repo-stat">🎼 23 orchestrators</span>
+                            <span class="repo-stat">✅ 172+ tests</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <div class="section-divider"></div>
+            
+            <!-- User Repositories Section -->
+            <section>
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📂</span>
+                    <span>Onboarded Repositories</span>
+                    <span 
+                        class="badge badge-primary" 
+                        style="margin-left: 0.5rem;"
+                        x-text="repos.length + ' repos'"
+                    ></span>
+                </h2>
+                
+                <!-- Repository Grid -->
+                <div class="repo-grid" x-show="repos.length > 0">
+                    <template x-for="repo in repos" :key="repo.name">
+                        <a :href="'data/repos/' + repo.slug + '/index.html'" class="repo-tile">
+                            <div class="repo-icon" x-text="repo.icon || '📦'"></div>
+                            <div class="repo-name" x-text="repo.name"></div>
+                            <div class="repo-description" x-text="repo.description || 'Repository analysis dashboard'"></div>
+                            <div class="repo-stats">
+                                <span class="repo-stat" x-text="'📁 ' + (repo.files || '?') + ' files'"></span>
+                                <span class="repo-stat" x-text="'📏 ' + (repo.lines || '?') + ' lines'"></span>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="empty-state" x-show="repos.length === 0">
+                    <div class="empty-state-icon">📭</div>
+                    <h3 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No repositories onboarded yet</h3>
+                    <p>Run <code>cortex lens onboard /path/to/repo</code> to analyze a repository</p>
+                </div>
+            </section>
+            
+            <div class="section-divider"></div>
+            
+            <!-- How to Use Section -->
+            <section>
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📖</span>
+                    <span>Quick Start</span>
+                </h2>
+                
+                <div class="glass-card">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h3 style="color: var(--accent-primary); margin-bottom: 0.75rem;">1. Serve Locally</h3>
+                            <code style="display: block; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.9rem;">
+                                cd cortex-lens && python -m http.server 8080
+                            </code>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                                Open <a href="http://localhost:8080" target="_blank">localhost:8080</a>
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 style="color: var(--accent-success); margin-bottom: 0.75rem;">2. Onboard a Repo</h3>
+                            <code style="display: block; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.9rem;">
+                                cortex lens onboard /path/to/repo
+                            </code>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                                Generates JSON data in data/repos/
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 style="color: var(--accent-warning); margin-bottom: 0.75rem;">3. View Dashboard</h3>
+                            <code style="display: block; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.9rem;">
+                                Click the repository tile above
+                            </code>
+                            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                                5 tabs: Overview, Deps, Classes, Timeline, Impact
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+        
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--glass-border);">
+            <p>
+                🧠 CORTEX LENS Dashboard • Phase 14 • 
+                <span style="color: var(--accent-primary);">Static HTML + JSON Architecture</span>
+            </p>
+            <p style="margin-top: 0.5rem;">
+                Author: Asif Hussain • Built with Alpine.js, D3.js, Mermaid
+            </p>
+        </footer>
+        
+    </div>
+    
+    <!-- Alpine.js Component -->
+    <script>
+        function repoDashboards() {
+            return {
+                repos: [],
+                loading: false,
+                
+                async initialize() {
+                    console.log('🧠 CORTEX LENS Dashboard initialized');
+                    await this.loadRepos();
+                },
+                
+                async loadRepos() {
+                    try {
+                        const response = await fetch('data/repos/repos.json');
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.repos = data.repos || [];
+                            console.log(`✅ Loaded ${this.repos.length} repositories`);
+                        } else {
+                            console.log('ℹ️ No repos.json found, showing empty state');
+                            this.repos = [];
+                        }
+                    } catch (error) {
+                        console.log('ℹ️ Could not load repos.json:', error.message);
+                        this.repos = [];
+                    }
+                },
+            };
+        }
+    </script>
+</body>
+</html>

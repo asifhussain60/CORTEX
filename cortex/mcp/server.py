@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 
 try:
-    from cortex.infrastructure.audit_logger import EnhancedAuditLogger
+    from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 except (ImportError, ModuleNotFoundError):
     EnhancedAuditLogger = None
 

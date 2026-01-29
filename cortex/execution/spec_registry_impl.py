@@ -58,7 +58,7 @@ class SpecRegistry:
     """
     
     # Default spec directory
-    DEFAULT_SPEC_DIR = Path(__file__).parent
+    DEFAULT_SPEC_DIR = Path(__file__).parent / "specs"
     
     # Maximum cache size (LRU)
     MAX_CACHE_SIZE = 128

@@ -1,0 +1,8 @@
+
+metadata:
+  standard: HIPAA
+  version: "2024"
+requirements:
+  - id: 164.312
+    title: Technical Safeguards
+    description: Access controls, audit controls, integrity controls
