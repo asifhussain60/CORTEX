@@ -123,6 +123,5 @@ pytest tests/visualization/ -v --cov=cortex.visualization
 
 ## Documentation
 
-- [Full Implementation Plan](../../_workspaces/docker-plan/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml)
-- [Quick Reference](../../_workspaces/docker-plan/PHASE-14-LENS-DASHBOARD-QUICK-REF.md)
-- [Adaptive Dashboard Comparison](../../_workspaces/docker-plan/PHASE-14-ADAPTIVE-DASHBOARD-COMPARISON.md)
+Phase 14 (LENS Dashboard) has been superseded by Phase 10 (LENS Remote Intelligence).
+For visualization documentation, see `docs/` folder.
