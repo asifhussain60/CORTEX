@@ -449,7 +449,13 @@ class CORTEXVerification:
                         continue
                     
                     for pattern_name in registry_patterns:
-                        if f"class {pattern_name}" in content:
+                        # Look for actual class definitions, not strings/mermaid diagrams
+                        # Real class: "class GitBackedRegistry:" or "class GitBackedRegistry("
+                        # Exclude: strings, mermaid diagrams, docstrings
+                        import re
+                        # Match actual class definition at start of line (with optional whitespace)
+                        class_pattern = rf'^\s*class\s+{pattern_name}\s*[\(:]'
+                        if re.search(class_pattern, content, re.MULTILINE):
                             registry_locations[pattern_name].append(filepath)
                 except Exception:
                     pass
