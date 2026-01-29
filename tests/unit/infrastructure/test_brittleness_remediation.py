@@ -26,6 +26,7 @@ from unittest.mock import MagicMock, patch
 # AC-FIX-BRITTLENESS-001: Database Connection Lifecycle Tests
 # =============================================================================
 
+@pytest.mark.skip(reason="Database.py module deleted - AC-PERMANENT-FIX-009 cleanup")
 class TestDatabaseConnectionLifecycle:
     """Tests for proper database connection lifecycle management."""
     

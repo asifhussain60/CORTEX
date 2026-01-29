@@ -26,7 +26,6 @@ from enum import Enum
 from typing import Any, Dict, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.infrastructure.database import DatabaseManager
 
 
 class LogLevel(Enum):
@@ -75,14 +74,10 @@ class TieredLogger:
     _instance: Optional['TieredLogger'] = None
     _lock = threading.Lock()
     
-    def __init__(self, db: Optional[DatabaseManager] = None):
+    def __init__(self):
         """
         Initialize tiered logger.
-        
-        Args:
-            db: DatabaseManager instance (uses global if None)
         """
-        self._db = db
         self._logger = logging.getLogger(__name__)
         self._log_levels: Dict[int, LogLevel] = {
             0: LogLevel.AUDIT,      # Tier 0: always audit everything
@@ -92,12 +87,12 @@ class TieredLogger:
         self._initialized = False
     
     @classmethod
-    def instance(cls, db: Optional[DatabaseManager] = None) -> 'TieredLogger':
+    def instance(cls) -> 'TieredLogger':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    cls._instance = cls(db)
+                    cls._instance = cls()
         return cls._instance
     
     @classmethod
@@ -106,17 +101,13 @@ class TieredLogger:
         with cls._lock:
             cls._instance = None
     
-    def initialize(self, db: DatabaseManager) -> Result[None]:
+    def initialize(self) -> Result[None]:
         """
-        Initialize logger with database manager.
-        
-        Args:
-            db: DatabaseManager instance
+        Initialize logger.
         
         Returns:
             Result containing None if successful, error otherwise
         """
-        self._db = db
         self._initialized = True
         self._logger.info("Tiered logger initialized")
         return Ok(None)

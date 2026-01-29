@@ -204,7 +204,7 @@ class ComplexityClassifier:
     
     def __init__(self) -> None:
         """Initialize classifier."""
-        self.logger = EnhancedAuditLogger("ComplexityClassifier")
+        self.logger = EnhancedAuditLogger.instance()
     
     def classify(self, code: str, file_path: str) -> Dict[str, Any]:
         """
@@ -328,7 +328,7 @@ class SOLIDAnalyzer:
     
     def __init__(self) -> None:
         """Initialize analyzer."""
-        self.logger = EnhancedAuditLogger("SOLIDAnalyzer")
+        self.logger = EnhancedAuditLogger.instance()
     
     def analyze(self, code: str, file_path: str) -> SOLIDMetrics:
         """
@@ -476,7 +476,7 @@ class ParallelStrategyEvaluator:
     def __init__(self, max_workers: int = 4) -> None:
         """Initialize evaluator."""
         self.max_workers = max_workers
-        self.logger = EnhancedAuditLogger("ParallelStrategyEvaluator")
+        self.logger = EnhancedAuditLogger.instance()
     
     def evaluate_all(
         self,
@@ -662,7 +662,7 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
         self._mode = OperationMode.EXECUTION
         self._initialized = False
         
-        self.logger = EnhancedAuditLogger("EnhancedRefactoringOrchestrator")
+        self.logger = EnhancedAuditLogger.instance()
         self._audit_trail: List[AuditEntry] = []
         self._audit_lock = threading.Lock()
         

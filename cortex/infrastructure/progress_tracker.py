@@ -24,7 +24,6 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.infrastructure.database import DatabaseManager
 from cortex.models.canonical_enums import AlertPriority
 
 
@@ -131,26 +130,22 @@ class ProgressTrackerManager:
     _instance: Optional['ProgressTrackerManager'] = None
     _lock = threading.Lock()
     
-    def __init__(self, db: Optional[DatabaseManager] = None):
+    def __init__(self):
         """
         Initialize progress tracker.
-        
-        Args:
-            db: DatabaseManager for persistence
         """
-        self._db = db
         self._phase_progress: Dict[str, PhaseProgress] = {}
         self._blockers: Dict[str, Blocker] = {}
         self._alerts: Dict[str, Alert] = {}
         self._progress_lock = threading.Lock()
     
     @classmethod
-    def instance(cls, db: Optional[DatabaseManager] = None) -> 'ProgressTrackerManager':
+    def instance(cls) -> 'ProgressTrackerManager':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    cls._instance = cls(db)
+                    cls._instance = cls()
         return cls._instance
     
     @classmethod

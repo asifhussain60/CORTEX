@@ -23,10 +23,9 @@ from typing import Any, Callable, Optional
 from cortex.brain.core.governance_enforcer import GovernanceEnforcer
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.infrastructure.database import DatabaseManager
 
 
-def governance_enforced(ac_id: str, phase: Optional[str] = None, db: Optional[DatabaseManager] = None):
+def governance_enforced(ac_id: str, phase: Optional[str] = None):
     """
     Decorator: @governance_enforced
     
@@ -51,11 +50,8 @@ def governance_enforced(ac_id: str, phase: Optional[str] = None, db: Optional[Da
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
-            # Get database instance
-            database = db or DatabaseManager()
-            
             # Initialize enforcer
-            enforcer = GovernanceEnforcer(database)
+            enforcer = GovernanceEnforcer()
             
             # Enforce governance
             enforcement = enforcer.enforce_operation(
@@ -82,7 +78,6 @@ def governance_enforced(ac_id: str, phase: Optional[str] = None, db: Optional[Da
 def audit_logged(
     ac_id: str,
     operation: str = "EXECUTE",
-    db: Optional[DatabaseManager] = None,
 ):
     """
     Decorator: @audit_logged
@@ -108,39 +103,12 @@ def audit_logged(
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
-            # Get database (use provided or get from first arg if it's db)
-            database = db
-            if not database and args:
-                # Try to get db from self if this is a method
-                if hasattr(args[0], '_db'):
-                    database = args[0]._db
-            
-            if not database:
-                # If no database, still execute function but don't log
-                try:
-                    result = func(*args, **kwargs)
-                    return Ok(result)
-                except Exception as e:
-                    return Err(f"Execution failed: {str(e)}")
-            
-            # Initialize logger
-            logger = EnhancedAuditLogger(database)
-            logger.initialize(database)
-            
-            # Log operation START
-            start_result = logger.log_operation_start(
-                ac_id=ac_id,
-                operation=operation,
-                details={
-                    "function": func.__name__,
-                    "module": func.__module__,
-                },
-            )
-            
-            if start_result.is_err():
-                return start_result
-            
             # Execute function
+            try:
+                result = func(*args, **kwargs)
+                return Ok(result)
+            except Exception as e:
+                return Err(f"Execution failed: {str(e)}")
             try:
                 result = func(*args, **kwargs)
                 
@@ -176,7 +144,6 @@ def governance_with_audit(
     ac_id: str,
     operation: str = "EXECUTE",
     phase: Optional[str] = None,
-    db: Optional[DatabaseManager] = None,
 ):
     """
     Composite decorator: @governance_with_audit
@@ -203,11 +170,8 @@ def governance_with_audit(
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
-            # Get database instance
-            database = db or DatabaseManager()
-            
             # Initialize enforcer for governance check
-            enforcer = GovernanceEnforcer(database)
+            enforcer = GovernanceEnforcer()
             
             # Enforce governance first
             enforcement = enforcer.enforce_operation(
@@ -220,11 +184,7 @@ def governance_with_audit(
                 return Err(f"Governance violation: {enforcement.reason}")
             
             # Now perform audit logging
-            logger = EnhancedAuditLogger(database)
-            # Initialize the logger with the database
-            init_result = logger.initialize(database)
-            if init_result.is_err():
-                return init_result
+            logger = EnhancedAuditLogger.instance()
             
             # Log operation start
             start_result = logger.log_operation_start(

@@ -28,7 +28,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.infrastructure.database import DatabaseManager
 
 
 class ArtifactType(Enum):
@@ -134,14 +133,10 @@ class EvidenceBundleGenerator:
     Captures evidence artifacts in <500ms and maintains integrity.
     """
     
-    def __init__(self, db: Optional[DatabaseManager] = None):
+    def __init__(self):
         """
         Initialize evidence bundle generator.
-        
-        Args:
-            db: DatabaseManager for persistence
         """
-        self._db = db
         self._bundles: Dict[str, EvidenceBundle] = {}
     
     def create_bundle(

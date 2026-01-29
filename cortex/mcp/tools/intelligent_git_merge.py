@@ -87,7 +87,7 @@ class IntelligentGitMergeTool:
         """
         self.repo_path = Path(repo_path).resolve()
         self.cortex_brain_path = self.repo_path / "cortex_brain"
-        self.logger = EnhancedAuditLogger("IntelligentGitMergeTool")
+        self.logger = EnhancedAuditLogger.instance()
         
         # Critical paths to protect
         self.protected_paths = [
