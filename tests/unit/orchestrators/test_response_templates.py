@@ -24,7 +24,7 @@ from cortex.orchestrators.response.response_templates import (
     VariableSpec,
     ResponseType,
     ResponseTemplate,
-    TemplateRegistry,
+    ResponseTemplateRegistry,
     SimpleTemplateSubstitutor,
     TemplateCache,
     TemplateEngine,
@@ -246,7 +246,7 @@ class TestTemplateRegistry:
 
     def test_register_template(self):
         """Test registering a template."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         template = ResponseTemplate(
             template_id="test",
             version="1.0.0",
@@ -260,7 +260,7 @@ class TestTemplateRegistry:
 
     def test_get_template_by_id(self):
         """Test retrieving a template by ID."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         template = ResponseTemplate(
             template_id="test",
             version="1.0.0",
@@ -276,7 +276,7 @@ class TestTemplateRegistry:
 
     def test_get_latest_template_version(self):
         """Test retrieving latest template version."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         t1 = ResponseTemplate(
             template_id="test",
             version="1.0.0",
@@ -300,7 +300,7 @@ class TestTemplateRegistry:
 
     def test_list_templates(self):
         """Test listing all templates."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         for i in range(3):
             template = ResponseTemplate(
                 template_id=f"test_{i}",
@@ -316,7 +316,7 @@ class TestTemplateRegistry:
 
     def test_list_templates_by_type(self):
         """Test listing templates filtered by response type."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         error_template = ResponseTemplate(
             template_id="error",
             version="1.0.0",
@@ -341,7 +341,7 @@ class TestTemplateRegistry:
 
     def test_unregister_template(self):
         """Test unregistering a template."""
-        registry = TemplateRegistry()
+        registry = ResponseTemplateRegistry()
         template = ResponseTemplate(
             template_id="test",
             version="1.0.0",
