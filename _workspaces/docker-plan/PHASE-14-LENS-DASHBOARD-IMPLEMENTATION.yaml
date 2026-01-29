@@ -6,17 +6,18 @@
 
 metadata:
   phase_id: "PHASE-14"
-  name: "LENS Dashboard Visualization System"
-  status: "PLANNED"
+  name: "LENS Dashboard Visualization System (Self-Contained SPA)"
+  status: "IN_PROGRESS"  # Tasks 001-006 completed (7/20 tasks)
   priority: "P1"
-  estimated_effort: "14-18 days"
+  estimated_effort: "15.5-19.5 days"  # Updated: +1.5 days for self-contained SPA
   ac_ids:
     - "LENS-DASH-001"  # LENSVisualizationOrchestrator
     - "LENS-DASH-002"  # Business Language Content Generator
     - "LENS-DASH-003"  # D3.js Visualization Extractors
     - "LENS-DASH-004"  # Dashboard API Routes
-    - "LENS-DASH-005"  # Frontend Integration
+    - "LENS-DASH-005"  # Frontend Integration (Self-Contained SPA)
     - "LENS-DASH-006"  # Output Management System
+    - "LENS-DASH-007"  # Self-Contained SPA Architecture (NEW)
 
 # ==============================================================================
 # EXECUTIVE SUMMARY
@@ -24,6 +25,13 @@ metadata:
 
 executive_summary: |
   The CORTEX LENS Dashboard provides visual intelligence for code repositories through:
+  
+  **ARCHITECTURE: Self-Contained SPA (Offline-First)**
+  - NO external CDN dependencies (all assets bundled locally)
+  - Lazy-loaded modular architecture (initial load <200KB, full bundle 1.5MB)
+  - Alpine.js framework (15KB reactive SPA vs React 130KB)
+  - HTTP static server built-in (cortex lens dashboard serve)
+  - Fully functional offline (air-gapped environments supported)
   
   1. **Reverse-Engineered Repository Overview** (NEW TAB 1)
      - Business-language description of what the codebase does
@@ -46,7 +54,14 @@ executive_summary: |
      - Tab 7: Governance Compliance (CORTEX-specific - heatmap visualization)
      - Tab 8: Orchestrator Constellation (CORTEX-specific - relationship map)
   
-  3. **New D3.js Visualizations**
+  3. **Multi-Dimensional Overlay System** (Phase 14.1 - APPROVED)
+     - Security Overlay: Highlights P0/P1/P2 vulnerabilities, insecure patterns, dependency risks
+     - Performance Overlay: Shows bottlenecks, complexity hotspots, optimization opportunities
+     - Compliance Overlay: Displays CORE rule violations, standards compliance, audit status
+     - Overlays toggle on/off independently across all tabs (no tab proliferation)
+     - Visual markers: Icons, color coding, sidebar annotations
+  
+  4. **New D3.js Visualizations**
      - Call graph visualization (function relationships)
      - Import dependency graph (module dependencies)
      - Change frequency heatmap (hot spots)
@@ -63,12 +78,38 @@ executive_summary: |
      - Stored in .cortex/lens-dashboard/ (user repos)
      - Stored in reports/lens-dashboard/ (CORTEX self-analysis)
      - Cached in ~/.cortex/cache/<owner>/<repo>/ (remote repos)
+  
+  6. **Bundle Strategy** (Self-Contained SPA)
+     - Core bundle: Alpine.js (15KB) + app code (160KB) = 175KB initial load
+     - D3.js modules: 250KB (lazy-loaded per tab)
+     - Mermaid module: 850KB (lazy-loaded per tab)
+     - Total full bundle: 1.5MB (vs 3MB monolithic)
+     - All assets served from cortex/visualization/static/vendor/
+     - Python http.server for instant serving (no npm/node required)
 
 # ==============================================================================
 # ARCHITECTURE OVERVIEW
 # ==============================================================================
 
 architecture:
+  spa_framework:
+    choice: "Alpine.js 3.13.3"
+    rationale: |
+      - 15KB vs React 130KB (8.6x smaller)
+      - Perfect for dashboards (reactive data binding, no build step)
+      - No JSX/Virtual DOM overhead
+      - Direct DOM manipulation (like Vue.js)
+      - Lazy-loadable per tab
+    bundle_strategy:
+      - Core: Alpine.js + app logic (175KB initial)
+      - Modules: D3.js (250KB), Mermaid (850KB), loaded on tab activation
+      - Total: 1.5MB full bundle vs 3MB monolithic
+    dependencies_local:
+      - "cortex/visualization/static/vendor/alpine-3.13.3.min.js"
+      - "cortex/visualization/static/vendor/d3-7.8.5.min.js"
+      - "cortex/visualization/static/vendor/mermaid-10.6.1.min.js"
+      - "cortex/visualization/static/vendor/tailwind-3.4.0.min.css"
+    
   new_components:
     orchestrator:
       path: "cortex/orchestrators/support/lens_visualization_orchestrator.py"
@@ -1296,6 +1337,80 @@ rollout:
   
   phase_3_public_release:
     duration: "Ongoing"
+    activities:
+      - "Announce LENS Dashboard in README"
+      - "Monitor GitHub issues"
+      - "Community contributions"
+
+# ==============================================================================
+# NEW TASKS FOR SELF-CONTAINED SPA (Tasks 018-020)
+# ==============================================================================
+
+tasks:
+  # ... (Tasks 001-017 above)
+  
+  - id: "018"
+    name: "Dependency Bundling Script"
+    estimated_effort: "0.5 days"
+    dependencies: []
+    description: |
+      Create script to bundle all external dependencies locally for offline operation.
+    
+    acceptance_criteria:
+      - script: "cortex/visualization/scripts/bundle_dependencies.py"
+      - downloads: "Alpine.js 3.13.3, D3.js 7.8.5, Mermaid 10.6.1, Tailwind CSS 3.4.0"
+      - output_dir: "cortex/visualization/static/vendor/"
+      - checksum_validation: "SHA-256 checksums verified"
+      - tests: "Test bundle integrity and completeness"
+    
+    deliverables:
+      - file: "cortex/visualization/scripts/bundle_dependencies.py"
+        lines: 200
+        tests: 8
+      - file: "cortex/visualization/static/vendor/.checksums"
+        purpose: "SHA-256 checksums for all bundled assets"
+  
+  - id: "019"
+    name: "Lazy Module Loader"
+    estimated_effort: "0.5 days"
+    dependencies: ["018"]
+    description: |
+      Implement lazy-loading JavaScript module loader for progressive enhancement.
+    
+    acceptance_criteria:
+      - loader: "cortex/visualization/static/js/module_loader.js"
+      - strategy: "Load core (175KB) initially, modules (50-900KB) on tab activation"
+      - caching: "Browser cache with version fingerprints"
+      - fallback: "Graceful degradation if module fails to load"
+      - tests: "Test module loading, caching, and error handling"
+    
+    deliverables:
+      - file: "cortex/visualization/static/js/module_loader.js"
+        lines: 150
+        tests: 10
+      - file: "cortex/visualization/templates/dashboard_base.html"
+        purpose: "Update template with lazy loading logic"
+  
+  - id: "020"
+    name: "HTTP Static Server"
+    estimated_effort: "0.5 days"
+    dependencies: ["019"]
+    description: |
+      Implement HTTP static server using Python stdlib for instant dashboard serving.
+    
+    acceptance_criteria:
+      - command: "cortex lens dashboard serve [--port 8080]"
+      - server: "Python http.server.ThreadingHTTPServer"
+      - mimetype_mapping: "Correct Content-Type headers for .js, .css, .html"
+      - cors: "CORS headers for local development"
+      - tests: "Test server startup, file serving, and graceful shutdown"
+    
+    deliverables:
+      - file: "cortex/visualization/dashboard_server.py"
+        lines: 180
+        tests: 12
+      - cli_command: "cortex lens dashboard serve"
+        handler: "cortex/cli/lens.py (update)"
     activities:
       - "Announce in docs"
       - "Create tutorial videos"
