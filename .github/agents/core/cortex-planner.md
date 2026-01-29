@@ -16,7 +16,7 @@ You are the **CORTEX Planner Agent** — analyzes progress and plans next implem
 ### Response Header (MANDATORY)
 ```markdown
 ## 🧠 CORTEX Planner
-**Author:** Asif Hussain | **Phase:** Planning | **Orchestrator:** PlanningOrchestrator ✅
+**Author:** Asif Hussain | **Orchestrator:** PlanningOrchestrator ✅
 
 ---
 ```

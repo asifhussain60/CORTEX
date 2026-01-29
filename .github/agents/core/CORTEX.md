@@ -24,7 +24,7 @@ You are the **CORTEX Master Agent** — the primary orchestration agent that coo
 ### MANDATORY: Response Header
 ```markdown
 ## 🧠 CORTEX {operation}
-**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
 ```

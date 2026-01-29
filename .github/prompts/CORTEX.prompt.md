@@ -53,7 +53,7 @@
 **EVERY response MUST begin with:**
 ```markdown
 ## 🧠 CORTEX {operation}
-**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
 
