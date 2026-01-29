@@ -1,0 +1,1323 @@
+# PHASE 14: CORTEX LENS Dashboard - Comprehensive Implementation Plan
+# Version: 1.0
+# Created: 2026-01-29
+# Authority: CORE-030 (Implementation Truth), CORE-038 (File Placement)
+# Dependencies: Phase 7.1 (LENS Intelligence Complete)
+
+metadata:
+  phase_id: "PHASE-14"
+  name: "LENS Dashboard Visualization System"
+  status: "PLANNED"
+  priority: "P1"
+  estimated_effort: "14-18 days"
+  ac_ids:
+    - "LENS-DASH-001"  # LENSVisualizationOrchestrator
+    - "LENS-DASH-002"  # Business Language Content Generator
+    - "LENS-DASH-003"  # D3.js Visualization Extractors
+    - "LENS-DASH-004"  # Dashboard API Routes
+    - "LENS-DASH-005"  # Frontend Integration
+    - "LENS-DASH-006"  # Output Management System
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary: |
+  The CORTEX LENS Dashboard provides visual intelligence for code repositories through:
+  
+  1. **Reverse-Engineered Repository Overview** (NEW TAB 1)
+     - Business-language description of what the codebase does
+     - Key features extracted from AST + Git + Comments
+     - Architecture patterns detected automatically
+     - Technology stack identification
+  
+  2. **Adaptive Multi-Tab Interface** (Context-Aware)
+     
+     **UNIVERSAL Dashboard (5 tabs - ANY repository):**
+     - Tab 1: Repository Overview (NEW - business language)
+     - Tab 2: Dependency Graph (D3.js force-directed network)
+     - Tab 3: Class Diagrams (Mermaid UML generation)
+     - Tab 4: Temporal Analysis (Git commit timeline)
+     - Tab 5: Impact Analysis (change propagation)
+     
+     **CORTEX Extended Dashboard (8 tabs - CORTEX repository only):**
+     - Universal tabs 1-5 PLUS:
+     - Tab 6: Brain Architecture (CORTEX-specific - 4-tier brain map)
+     - Tab 7: Governance Compliance (CORTEX-specific - heatmap visualization)
+     - Tab 8: Orchestrator Constellation (CORTEX-specific - relationship map)
+  
+  3. **New D3.js Visualizations**
+     - Call graph visualization (function relationships)
+     - Import dependency graph (module dependencies)
+     - Change frequency heatmap (hot spots)
+     - Author contribution network (expertise map)
+     - Complexity scatter plot (cyclomatic vs LOC)
+  
+  4. **New Mermaid Diagrams**
+     - Entity-relationship diagrams (database models)
+     - State machine diagrams (workflow states)
+     - Sequence diagrams (interaction flows)
+     - Architecture diagrams (system components)
+  
+  5. **Per-Repository Dashboard Generation**
+     - Stored in .cortex/lens-dashboard/ (user repos)
+     - Stored in reports/lens-dashboard/ (CORTEX self-analysis)
+     - Cached in ~/.cortex/cache/<owner>/<repo>/ (remote repos)
+
+# ==============================================================================
+# ARCHITECTURE OVERVIEW
+# ==============================================================================
+
+architecture:
+  new_components:
+    orchestrator:
+      path: "cortex/orchestrators/support/lens_visualization_orchestrator.py"
+      purpose: "Coordinate visualization generation, extend LENSOrchestrator"
+      dependencies:
+        - "cortex.orchestrators.support.lens_orchestrator:LENSOrchestrator"
+        - "cortex.visualization.*"
+      
+    visualization_package:
+      path: "cortex/visualization/"
+      structure:
+        - "__init__.py"
+        - "lens_visualization_orchestrator.py"
+        - "output_manager.py"
+        - "business_language_generator.py"  # NEW - AST to business language
+        - "repository_detector.py"          # NEW - Detect CORTEX vs external repos
+        - "dashboard_configuration.py"      # NEW - Context-aware tab selection
+        - "renderers/"
+        - "formatters/"
+        - "templates/"
+        - "static/"
+    
+    renderers:
+      path: "cortex/visualization/renderers/"
+      modules:
+        - "d3_renderer.py"           # D3.js config generation
+        - "mermaid_renderer.py"      # Mermaid syntax generation
+        - "governance_heatmap.py"    # Compliance visualization
+        - "dependency_graph.py"      # Call graph + import graph
+        - "timeline_renderer.py"     # Temporal visualization
+        - "complexity_renderer.py"   # Complexity metrics
+        - "author_network.py"        # Contribution analysis
+    
+    formatters:
+      path: "cortex/visualization/formatters/"
+      modules:
+        - "__init__.py"
+        - "graph_formatter.py"       # D3 data format (nodes/edges)
+        - "diagram_formatter.py"     # Mermaid syntax
+        - "response_formatter.py"    # Multi-mode output
+    
+    templates:
+      path: "cortex/visualization/templates/"
+      files:
+        # Universal templates (all repos)
+        - "dashboard_base.html"      # Jinja2 base template with conditional rendering
+        - "repository_overview.html" # Tab 1 - UNIVERSAL
+        - "dependency_graph.html"    # Tab 2 - UNIVERSAL
+        - "class_diagram.html"       # Tab 3 - UNIVERSAL
+        - "temporal_analysis.html"   # Tab 4 - UNIVERSAL
+        - "impact_analysis.html"     # Tab 5 - UNIVERSAL
+        
+        # CORTEX-specific templates (only if is_cortex_repository)
+        - "brain_architecture.html"      # Tab 6 - CORTEX ONLY
+        - "governance_heatmap.html"      # Tab 7 - CORTEX ONLY
+        - "orchestrator_constellation.html" # Tab 8 - CORTEX ONLY
+    
+    static_assets:
+      path: "cortex/visualization/static/"
+      structure:
+        - "css/"
+        - "js/"
+        - "assets/"
+    
+    api_routes:
+      path: "cortex/api/dashboard_routes.py"
+      purpose: "FastAPI endpoints for dashboard data"
+
+  output_locations:
+    per_repo_analysis:
+      pattern: "<repo-root>/.cortex/lens-dashboard/"
+      gitignore: true
+      description: "Generated dashboard for analyzed repository"
+    
+    cortex_self_analysis:
+      pattern: "reports/lens-dashboard/"
+      gitignore: false
+      description: "CORTEX repository self-analysis dashboard"
+    
+    remote_repo_cache:
+      pattern: "~/.cortex/cache/<owner>/<repo>/lens-dashboard/"
+      gitignore: true
+      description: "Cached dashboards for remote repository analysis"
+    
+    ci_artifacts:
+      pattern: "$CI_ARTIFACTS_DIR/lens-dashboard/"
+      gitignore: true
+      description: "Build artifacts in CI/CD pipelines"
+
+# ==============================================================================
+# TAB 1: REPOSITORY OVERVIEW (NEW - Business Language Content)
+# ==============================================================================
+
+tab_1_repository_overview:
+  name: "Repository Overview"
+  purpose: "Generate human-readable, business-language description of repository"
+  
+  algorithm:
+    name: "Business Language Content Generator"
+    implementation: "cortex/visualization/business_language_generator.py"
+    
+    steps:
+      1_ast_extraction:
+        inputs:
+          - "AST analysis (functions, classes, modules)"
+          - "Docstrings and comments"
+          - "Function signatures and parameters"
+        outputs:
+          - "Core capabilities list"
+          - "API endpoints discovered"
+          - "Database models identified"
+      
+      2_git_analysis:
+        inputs:
+          - "Commit messages (last 100 commits)"
+          - "Change frequency patterns"
+          - "Author contributions"
+        outputs:
+          - "Project maturity assessment"
+          - "Active development areas"
+          - "Key contributors"
+      
+      3_technology_detection:
+        inputs:
+          - "Import statements (AST)"
+          - "requirements.txt / package.json / pom.xml"
+          - "Configuration files"
+        outputs:
+          - "Technology stack"
+          - "Framework identification"
+          - "Database technologies"
+      
+      4_pattern_recognition:
+        inputs:
+          - "Directory structure"
+          - "Class inheritance patterns"
+          - "Design patterns in code"
+        outputs:
+          - "Architecture style (MVC, Microservices, Monolith)"
+          - "Design patterns used"
+          - "Code organization strategy"
+      
+      5_business_language_mapping:
+        rules:
+          - "class User → 'User Management System'"
+          - "class Order → 'Order Processing'"
+          - "def authenticate → 'User Authentication'"
+          - "def send_email → 'Email Notification System'"
+          - "API routes → 'RESTful API with X endpoints'"
+          - "Database models → 'Persistent data storage for X entities'"
+        
+        templates:
+          what_it_does: |
+            This is a {architecture_style} {project_type} that provides {core_capabilities}.
+            It uses {technology_stack} and follows {design_patterns} patterns.
+          
+          key_features: |
+            - {feature_1} via {implementation_1}
+            - {feature_2} via {implementation_2}
+            - {feature_3} via {implementation_3}
+          
+          architecture: |
+            The system is organized as a {architecture_style} with {layer_count} layers:
+            {layer_descriptions}
+          
+          technology_stack: |
+            **Backend:** {backend_frameworks}
+            **Frontend:** {frontend_frameworks}
+            **Database:** {database_systems}
+            **Infrastructure:** {deployment_tools}
+      
+      6_confidence_scoring:
+        metrics:
+          - "Docstring coverage (higher = more confident descriptions)"
+          - "Commit message quality (detailed messages = better intent)"
+          - "Pattern detection confidence (explicit patterns = high confidence)"
+        
+        output_format:
+          - "High confidence: Direct statements"
+          - "Medium confidence: 'Appears to provide...'"
+          - "Low confidence: 'Contains components suggesting...'"
+  
+  output_sections:
+    - section: "What This Repository Does"
+      content_type: "prose"
+      sources: ["AST", "Git", "Docstrings"]
+    
+    - section: "Key Features"
+      content_type: "bulleted_list"
+      sources: ["AST functions", "API routes", "Classes"]
+    
+    - section: "Technology Stack"
+      content_type: "badge_grid"
+      sources: ["Imports", "Config files"]
+    
+    - section: "Architecture Overview"
+      content_type: "prose + diagram"
+      sources: ["Directory structure", "Pattern detection"]
+    
+    - section: "Development Activity"
+      content_type: "metrics + timeline"
+      sources: ["Git commits", "Author contributions"]
+    
+    - section: "Code Health Metrics"
+      content_type: "metrics_grid"
+      sources: ["AST complexity", "Test coverage", "Docstring ratio"]
+
+  example_output: |
+    # 📦 Repository Overview: CORTEX
+    
+    ## What This Repository Does
+    CORTEX is a microservices-based orchestration system that provides 
+    AI-powered development workflow automation. It uses Python FastAPI 
+    for backend services, React for frontend dashboards, and PostgreSQL 
+    for persistent storage. The system follows Domain-Driven Design (DDD) 
+    patterns with 23 orchestrators coordinating development tasks.
+    
+    ## Key Features
+    - **Intent Classification** via NLP-powered IntentRouter analyzing user requests
+    - **Test-Driven Development** via TDDOrchestrator enforcing RED-GREEN-REFACTOR cycles
+    - **Code Intelligence** via LENS analyzers (AST, Git, Comments)
+    - **Governance Enforcement** via 38 immutable CORE rules with real-time validation
+    - **Visual Dashboards** via D3.js and Mermaid diagram generation
+    
+    ## Technology Stack
+    **Backend:** Python 3.11, FastAPI, Pydantic
+    **Frontend:** React, D3.js, Tailwind CSS
+    **Database:** PostgreSQL, SQLite (dev)
+    **Infrastructure:** Docker, Kubernetes, Nginx
+    **Testing:** pytest, coverage.py
+    
+    ## Architecture Overview
+    The system follows a 4-tier brain architecture:
+    - **Tier 0:** Immutable governance rules (28 CORE rules)
+    - **Tier 1:** Acceptance criteria and phase validation
+    - **Tier 2:** Response templates and behavioral boundaries
+    - **Tier 3:** Best practices knowledge repository (35+ YAMLs)
+    
+    Orchestrators are wired via Git-backed YAML specifications with 
+    hot-reload support for zero-downtime updates.
+    
+    ## Development Activity
+    - **Total Commits:** 1,247 (last 90 days: 342)
+    - **Active Contributors:** 3 (primary: Asif Hussain)
+    - **Recent Focus Areas:** LENS Intelligence (Phase 7.1), Challenge System (Phase 8)
+    - **Code Churn:** High activity in cortex/orchestrators/ and cortex/brain/analysis/
+
+# ==============================================================================
+# ADAPTIVE TAB STRUCTURE (Context-Aware: 5 Universal + 3 CORTEX-Specific)
+# ==============================================================================
+
+adaptive_tab_structure:
+  description: |
+    Dashboard tabs are context-aware:
+    - Universal tabs (1-5): Shown for ALL repositories
+    - CORTEX-specific tabs (6-8): Only shown when analyzing CORTEX repository
+    
+    Detection logic: Check for cortex_brain/, cortex/orchestrators/, 
+    or .github/prompts/CORTEX.prompt.md
+
+# ------------------------------------------------------------------------------
+# UNIVERSAL TABS (ALL REPOSITORIES)
+# ------------------------------------------------------------------------------
+
+universal_tabs:
+  tab_1_repository_overview:
+    name: "Repository Overview"
+    status: "NEW"
+    applicable_to: "ALL repositories"
+    components:
+      - "Business-language description (generated)"
+      - "Technology stack badges"
+      - "Architecture diagram (auto-generated)"
+      - "Development activity timeline"
+      - "Code health metrics"
+    
+  tab_2_dependency_graph:
+    name: "Dependency Graph"
+    status: "NEW (D3.js force-directed)"
+    applicable_to: "ALL repositories"
+    visualizations:
+      - "Call graph (function calls)"
+      - "Import graph (module dependencies)"
+      - "Cross-module relationships"
+    interactions:
+      - "Click node: Show details panel"
+      - "Hover: Highlight connected nodes"
+      - "Drag: Rearrange layout"
+      - "Zoom/pan: Navigate large graphs"
+    
+  tab_3_class_diagrams:
+    name: "Class Diagrams"
+    status: "ENHANCED (Mermaid + new diagram types)"
+    applicable_to: "ALL repositories"
+    diagram_types:
+      - "UML class diagrams"
+      - "Entity-relationship diagrams (NEW)"
+      - "Interface hierarchy (NEW)"
+    
+  tab_4_temporal_analysis:
+    name: "Temporal Analysis"
+    status: "EXISTING (enhanced)"
+    applicable_to: "ALL repositories"
+    components:
+      - "Commit timeline (D3.js)"
+      - "Change frequency heatmap (NEW)"
+      - "Author contribution over time (NEW)"
+      - "File evolution tracking"
+    
+  tab_5_impact_analysis:
+    name: "Impact Analysis"
+    status: "NEW"
+    applicable_to: "ALL repositories"
+    components:
+      - "Change propagation visualization (NEW)"
+      - "Blast radius calculator (NEW)"
+      - "Dependency impact heatmap (NEW)"
+    purpose: "Show impact of changing a file/function/class"
+
+# ------------------------------------------------------------------------------
+# CORTEX-SPECIFIC TABS (ONLY FOR CORTEX REPOSITORY)
+# ------------------------------------------------------------------------------
+
+cortex_specific_tabs:
+  tab_6_brain_architecture:
+    name: "Brain Architecture"
+    status: "EXISTING (from legacy dashboard)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex_brain/ directory exists"
+      - "cortex/orchestrators/ directory exists"
+    components:
+      - "4-tier brain visualization"
+      - "Governance rule status"
+      - "Orchestrator registry"
+      - "Phase progress tracker"
+    
+  tab_7_governance_compliance:
+    name: "Governance Compliance"
+    status: "EXISTING (from legacy)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex_brain/tier0/governance/ exists"
+      - "CORE rules detected"
+    components:
+      - "CORE rule compliance heatmap"
+      - "Violation detection timeline"
+      - "Phase approval status"
+    
+  tab_8_orchestrator_constellation:
+    name: "Orchestrator Constellation"
+    status: "EXISTING (from legacy)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex/wiring/specifications/wiring.yaml exists"
+      - "Orchestrator registry detected"
+    components:
+      - "Orchestrator relationship map"
+      - "Wiring status visualization"
+      - "Request flow animation"
+
+# ==============================================================================
+# NEW D3.JS VISUALIZATIONS
+# ==============================================================================
+
+new_d3_visualizations:
+  call_graph_visualization:
+    name: "Function Call Graph"
+    description: "Interactive network showing function call relationships"
+    data_structure:
+      nodes:
+        - "id: function_name"
+        - "label: function_signature"
+        - "module: module_path"
+        - "complexity: cyclomatic_complexity"
+        - "size: lines_of_code"
+      edges:
+        - "source: caller_function"
+        - "target: callee_function"
+        - "weight: call_frequency"
+    
+    interactions:
+      - "Click: Show function source code"
+      - "Hover: Show call chain"
+      - "Right-click: Show callers/callees"
+    
+    layout: "force-directed with clustering by module"
+  
+  import_dependency_graph:
+    name: "Module Import Graph"
+    description: "Visualize import dependencies between modules"
+    data_structure:
+      nodes:
+        - "id: module_path"
+        - "label: module_name"
+        - "type: internal|external"
+        - "size: module_complexity"
+      edges:
+        - "source: importer_module"
+        - "target: imported_module"
+        - "type: direct|indirect"
+    
+    layout: "hierarchical tree with external dependencies at top"
+  
+  change_frequency_heatmap:
+    name: "Code Change Heatmap"
+    description: "Show which files/functions change most frequently"
+    data_structure:
+      - "file_path: string"
+      - "function_name: string"
+      - "commit_count: integer"
+      - "unique_authors: integer"
+      - "last_modified: datetime"
+    
+    visualization: "treemap with color intensity = change frequency"
+  
+  author_contribution_network:
+    name: "Developer Collaboration Network"
+    description: "Show which developers work on which parts of codebase"
+    data_structure:
+      nodes:
+        - "id: author_name"
+        - "commits: integer"
+        - "expertise_areas: list[string]"
+      edges:
+        - "source: author_1"
+        - "target: author_2"
+        - "shared_files: integer"
+    
+    layout: "force-directed with node size = commit count"
+  
+  complexity_scatter_plot:
+    name: "Complexity vs Size Analysis"
+    description: "Identify complex functions that may need refactoring"
+    axes:
+      x: "Lines of Code"
+      y: "Cyclomatic Complexity"
+    
+    data_points:
+      - "function_name"
+      - "loc: integer"
+      - "complexity: integer"
+      - "module: string"
+    
+    thresholds:
+      - "High complexity, high LOC → Red (refactor candidate)"
+      - "High complexity, low LOC → Yellow (review logic)"
+      - "Low complexity → Green (healthy)"
+
+# ==============================================================================
+# NEW MERMAID DIAGRAMS
+# ==============================================================================
+
+new_mermaid_diagrams:
+  entity_relationship_diagram:
+    name: "Database ERD"
+    description: "Auto-generate ERD from SQLAlchemy/Django models"
+    detection:
+      - "SQLAlchemy: classes inheriting Base with __tablename__"
+      - "Django: classes inheriting models.Model"
+      - "Relationships: ForeignKey, ManyToMany"
+    
+    mermaid_syntax: |
+      erDiagram
+          USER ||--o{ ORDER : places
+          USER {
+              int id PK
+              string name
+              string email
+          }
+          ORDER {
+              int id PK
+              int user_id FK
+              datetime created_at
+          }
+  
+  state_machine_diagram:
+    name: "Workflow State Machines"
+    description: "Detect state transitions in workflow code"
+    detection:
+      - "Enum classes with state values"
+      - "State transition functions (state_machine pattern)"
+      - "Status field updates in code"
+    
+    mermaid_syntax: |
+      stateDiagram-v2
+          [*] --> Draft
+          Draft --> Review: submit()
+          Review --> Approved: approve()
+          Review --> Rejected: reject()
+          Approved --> [*]
+  
+  sequence_diagram:
+    name: "API Interaction Sequences"
+    description: "Generate sequence diagrams from API routes"
+    detection:
+      - "FastAPI routes (@app.get, @app.post)"
+      - "Function calls within route handlers"
+      - "Database queries and external API calls"
+    
+    mermaid_syntax: |
+      sequenceDiagram
+          Client->>+API: POST /users
+          API->>+Database: INSERT user
+          Database-->>-API: user_id
+          API->>+EmailService: send_welcome_email()
+          EmailService-->>-API: success
+          API-->>-Client: 201 Created
+  
+  architecture_diagram:
+    name: "System Architecture"
+    description: "High-level component architecture"
+    detection:
+      - "Top-level packages/directories"
+      - "Inter-package dependencies"
+      - "External service integrations"
+    
+    mermaid_syntax: |
+      graph TB
+          A[Frontend React] -->|REST API| B[FastAPI Backend]
+          B -->|SQLAlchemy| C[(PostgreSQL)]
+          B -->|Redis| D[Cache Layer]
+          B -->|gRPC| E[Orchestrator Service]
+
+# ==============================================================================
+# IMPLEMENTATION TASKS
+# ==============================================================================
+
+tasks:
+  # ============================================================================
+  # PHASE 1: Core Infrastructure (Days 1-4)
+  # ============================================================================
+  
+  task_001_visualization_package_structure:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Create cortex/visualization/ package structure"
+    
+    deliverables:
+      - "cortex/visualization/__init__.py"
+      - "cortex/visualization/renderers/__init__.py"
+      - "cortex/visualization/formatters/__init__.py"
+      - "cortex/visualization/templates/"
+      - "cortex/visualization/static/css/"
+      - "cortex/visualization/static/js/"
+    
+    acceptance_criteria:
+      - "Package structure follows CORE-038 (all files in subfolders)"
+      - "Empty __init__.py files with docstrings"
+      - "README.md in visualization/ explaining purpose"
+  
+  task_002a_repository_detector:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Implement repository type detection (CORTEX vs external)"
+    
+    implementation:
+      file: "cortex/visualization/repository_detector.py"
+      class: "RepositoryDetector"
+      methods:
+        - "is_cortex_repository(repo_path: Path) -> bool"
+        - "detect_cortex_features(repo_path: Path) -> CortexFeatures"
+        - "get_cortex_markers() -> List[Path]"
+    
+    detection_logic:
+      markers:
+        - "cortex_brain/ directory exists"
+        - "cortex/orchestrators/ directory exists"
+        - ".github/prompts/CORTEX.prompt.md exists"
+        - "cortex/wiring/specifications/wiring.yaml exists"
+      
+      result:
+        - "Return True if ANY marker exists"
+        - "Return CortexFeatures dataclass with feature flags"
+    
+    test_file: "tests/visualization/test_repository_detector.py"
+    
+    test_cases:
+      - "Detect CORTEX repository (all markers present)"
+      - "Detect CORTEX repository (partial markers)"
+      - "Detect external repository (no markers)"
+      - "Detect Flask project (external)"
+      - "Detect Django project (external)"
+    
+    acceptance_criteria:
+      - "Accurately detects CORTEX repository"
+      - "Returns False for external repositories"
+      - "100% test coverage"
+      - "CORE-011 (type hints), CORE-012 (docstrings)"
+  
+  task_002b_dashboard_configuration:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Implement context-aware dashboard configuration"
+    
+    implementation:
+      file: "cortex/visualization/dashboard_configuration.py"
+      class: "DashboardConfiguration"
+      methods:
+        - "get_tabs_for_repo(repo_path: Path) -> List[DashboardTab]"
+        - "get_universal_tabs() -> List[DashboardTab]"
+        - "get_cortex_tabs() -> List[DashboardTab]"
+        - "is_tab_applicable(tab_name: str, repo_path: Path) -> bool"
+    
+    dataclass:
+      name: "DashboardTab"
+      fields:
+        - "id: str"
+        - "name: str"
+        - "template: str"
+        - "is_universal: bool"
+        - "requires_cortex: bool"
+    
+    test_file: "tests/visualization/test_dashboard_configuration.py"
+    
+    test_cases:
+      - "Get 5 tabs for external repository"
+      - "Get 8 tabs for CORTEX repository"
+      - "Verify tab ordering (universal first, then CORTEX-specific)"
+      - "Tab applicability check"
+    
+    acceptance_criteria:
+      - "Returns 5 tabs for external repos"
+      - "Returns 8 tabs for CORTEX repo"
+      - "Tab order consistent"
+      - "100% test coverage"
+  
+  task_002c_output_manager:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "1 day"
+    description: "Implement DashboardOutputManager for location routing"
+    
+    implementation:
+      file: "cortex/visualization/output_manager.py"
+      class: "DashboardOutputManager"
+      methods:
+        - "get_output_path(repo_path, is_cortex_repo, is_remote)"
+        - "ensure_output_directory(output_path)"
+        - "generate_index_file(output_path, tabs)"
+        - "clean_old_dashboards(max_age_days)"
+      
+      dependencies:
+        - "Uses RepositoryDetector to determine if CORTEX repo"
+        - "Uses DashboardConfiguration to get applicable tabs"
+    
+    test_file: "tests/visualization/test_output_manager.py"
+    
+    acceptance_criteria:
+      - "Routes to .cortex/lens-dashboard/ for user repos"
+      - "Routes to reports/lens-dashboard/ for CORTEX repo"
+      - "Routes to ~/.cortex/cache/ for remote repos"
+      - "Creates .gitignore in output directories"
+      - "Generates index.html with correct tabs (5 or 8)"
+      - "100% test coverage"
+  
+  task_003_business_language_generator:
+    ac_id: "LENS-DASH-002"
+    priority: "P0"
+    effort: "2 days"
+    description: "Implement BusinessLanguageGenerator (AST → Business Language)"
+    
+    implementation:
+      file: "cortex/visualization/business_language_generator.py"
+      class: "BusinessLanguageGenerator"
+      methods:
+        - "generate_overview(lens_context) -> RepositoryOverview"
+        - "_extract_core_capabilities(ast_analysis)"
+        - "_detect_technology_stack(ast_analysis)"
+        - "_identify_architecture_style(directory_structure)"
+        - "_map_functions_to_features(functions)"
+        - "_assess_confidence(evidence)"
+    
+    data_classes:
+      - "RepositoryOverview"
+      - "Feature"
+      - "TechnologyStack"
+      - "ArchitectureStyle"
+    
+    test_file: "tests/visualization/test_business_language_generator.py"
+    
+    test_cases:
+      - "Generate overview for Flask API project"
+      - "Generate overview for Django web app"
+      - "Generate overview for CLI tool"
+      - "Handle project with no docstrings (low confidence)"
+      - "Detect microservices architecture"
+      - "Detect monolithic architecture"
+    
+    acceptance_criteria:
+      - "Generates human-readable prose from AST data"
+      - "Confidence scores for each statement"
+      - "Templates for different project types"
+      - "100% test coverage"
+      - "CORE-011 (type hints), CORE-012 (docstrings)"
+  
+  task_004_lens_visualization_orchestrator:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Create LENSVisualizationOrchestrator extending LENSOrchestrator"
+    
+    implementation:
+      file: "cortex/orchestrators/support/lens_visualization_orchestrator.py"
+      class: "LENSVisualizationOrchestrator"
+      inheritance: "Extends LENSOrchestrator"
+      
+      methods:
+        - "generate_dashboard(repo_path, output_path=None)"
+        - "generate_repository_overview()"
+        - "generate_dependency_graph(visualization_type)"
+        - "generate_class_diagram(modules)"
+        - "generate_temporal_analysis(date_range)"
+        - "generate_governance_heatmap()"
+        - "generate_impact_analysis(target_file)"
+    
+    test_file: "tests/orchestrators/support/test_lens_visualization_orchestrator.py"
+    
+    acceptance_criteria:
+      - "Inherits all LENSOrchestrator capabilities"
+      - "Generates complete multi-tab dashboard"
+      - "Each tab generation has dedicated method"
+      - "Caching for repeated dashboard generation"
+      - "100% test coverage"
+  
+  # ============================================================================
+  # PHASE 2: D3.js Visualization Extractors (Days 5-8)
+  # ============================================================================
+  
+  task_005_dependency_graph_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Extract and enhance D3.js dependency graph from legacy"
+    
+    source: "_workspaces/dashboard/d3-force-graph.js"
+    target: "cortex/visualization/static/js/dependency-graph.js"
+    
+    enhancements:
+      - "Add call graph visualization (function calls)"
+      - "Add import graph visualization (module imports)"
+      - "Add clustering by module/package"
+      - "Add zoom/pan controls"
+      - "Add search/filter functionality"
+    
+    backend_renderer:
+      file: "cortex/visualization/renderers/dependency_graph.py"
+      class: "DependencyGraphRenderer"
+      methods:
+        - "render_call_graph(ast_analysis)"
+        - "render_import_graph(ast_analysis)"
+        - "format_d3_data(nodes, edges)"
+    
+    acceptance_criteria:
+      - "D3.js component works standalone"
+      - "Backend generates correct data format"
+      - "Handles large graphs (1000+ nodes)"
+      - "Tests for Python renderer"
+  
+  task_006_temporal_timeline_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "Extract and enhance temporal timeline from legacy"
+    
+    source: "_workspaces/dashboard/frontend/js/components/temporal/audit-timeline.js"
+    target: "cortex/visualization/static/js/temporal-timeline.js"
+    
+    enhancements:
+      - "Add change frequency heatmap"
+      - "Add author contribution timeline"
+      - "Add file evolution tracking"
+    
+    backend_renderer:
+      file: "cortex/visualization/renderers/timeline_renderer.py"
+      class: "TimelineRenderer"
+      methods:
+        - "render_commit_timeline(git_analysis)"
+        - "render_change_heatmap(git_analysis)"
+        - "render_author_timeline(git_analysis)"
+    
+    acceptance_criteria:
+      - "Timeline shows commit history"
+      - "Heatmap highlights hot files"
+      - "Author contributions tracked"
+      - "100% test coverage for renderer"
+  
+  task_007_complexity_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "NEW - Complexity scatter plot and visualizations"
+    
+    implementation:
+      file: "cortex/visualization/renderers/complexity_renderer.py"
+      class: "ComplexityRenderer"
+      methods:
+        - "render_complexity_scatter(ast_analysis)"
+        - "identify_refactor_candidates(threshold)"
+        - "generate_complexity_heatmap()"
+    
+    frontend:
+      file: "cortex/visualization/static/js/complexity-scatter.js"
+      technology: "D3.js scatter plot"
+    
+    acceptance_criteria:
+      - "Scatter plot: X=LOC, Y=Complexity"
+      - "Color-coded by threshold (red/yellow/green)"
+      - "Click to show function details"
+      - "Tests for backend renderer"
+  
+  task_008_author_network_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P2"
+    effort: "1 day"
+    description: "NEW - Developer collaboration network"
+    
+    implementation:
+      file: "cortex/visualization/renderers/author_network.py"
+      class: "AuthorNetworkRenderer"
+      methods:
+        - "render_author_network(git_analysis)"
+        - "calculate_collaboration_strength(author1, author2)"
+        - "identify_expertise_areas(author)"
+    
+    frontend:
+      file: "cortex/visualization/static/js/author-network.js"
+      technology: "D3.js force-directed graph"
+    
+    acceptance_criteria:
+      - "Nodes = authors, edges = shared files"
+      - "Node size = commit count"
+      - "Expertise areas labeled"
+      - "Tests for backend renderer"
+  
+  # ============================================================================
+  # PHASE 3: Mermaid Diagram Generators (Days 9-11)
+  # ============================================================================
+  
+  task_009_enhanced_mermaid_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P0"
+    effort: "1 day"
+    description: "Extract and enhance Mermaid generator from legacy"
+    
+    source: "_workspaces/dashboard/mermaid_diagram_generator.py"
+    target: "cortex/visualization/renderers/mermaid_renderer.py"
+    
+    enhancements:
+      - "Remove graphviz dependency (Mermaid only)"
+      - "Add entity-relationship diagrams (NEW)"
+      - "Add state machine diagrams (NEW)"
+      - "Add sequence diagrams (NEW)"
+    
+    class: "MermaidRenderer"
+    methods:
+      - "generate_class_diagram(ast_analysis)"
+      - "generate_erd(database_models)"  # NEW
+      - "generate_state_diagram(state_enum)"  # NEW
+      - "generate_sequence_diagram(api_routes)"  # NEW
+      - "generate_architecture_diagram(packages)"  # NEW
+    
+    acceptance_criteria:
+      - "All 5 diagram types functional"
+      - "Valid Mermaid syntax"
+      - "Integration with existing LENSOrchestrator"
+      - "100% test coverage"
+  
+  task_010_erd_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "NEW - Entity-Relationship Diagram generator"
+    
+    implementation:
+      file: "cortex/visualization/renderers/mermaid_renderer.py"
+      method: "generate_erd()"
+      
+      detection_logic:
+        - "Detect SQLAlchemy models (Base, __tablename__)"
+        - "Detect Django models (models.Model)"
+        - "Detect relationships (ForeignKey, ManyToMany)"
+        - "Extract field types and constraints"
+    
+    test_cases:
+      - "SQLAlchemy models with one-to-many"
+      - "Django models with many-to-many"
+      - "Mixed inheritance hierarchies"
+    
+    acceptance_criteria:
+      - "Valid Mermaid ERD syntax"
+      - "Relationships correctly identified"
+      - "Field types included"
+      - "100% test coverage"
+  
+  task_011_state_machine_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P2"
+    effort: "1 day"
+    description: "NEW - State machine diagram generator"
+    
+    implementation:
+      file: "cortex/visualization/renderers/mermaid_renderer.py"
+      method: "generate_state_diagram()"
+      
+      detection_logic:
+        - "Find Enum classes with state values"
+        - "Find state transition functions"
+        - "Analyze status field updates"
+    
+    acceptance_criteria:
+      - "Valid Mermaid state diagram syntax"
+      - "Transitions detected from code"
+      - "Initial and final states identified"
+      - "100% test coverage"
+  
+  # ============================================================================
+  # PHASE 4: Frontend Integration & Templates (Days 12-14)
+  # ============================================================================
+  
+  task_012_glassmorphism_extraction:
+    ac_id: "LENS-DASH-005"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Extract glassmorphism CSS as CORTEX design system"
+    
+    source: "_workspaces/dashboard/frontend/css/glassmorphism.css"
+    target: "cortex/visualization/static/css/cortex-design-system.css"
+    
+    changes:
+      - "Namespace all classes with .cortex- prefix"
+      - "Document CSS variables"
+      - "Create design system guide"
+    
+    acceptance_criteria:
+      - "All classes namespaced"
+      - "No conflicts with user stylesheets"
+      - "Design system documentation"
+  
+  task_013_dashboard_templates:
+    ac_id: "LENS-DASH-005"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Create Jinja2 templates with conditional rendering"
+    
+    templates:
+      universal:
+        - "dashboard_base.html (base template with conditional nav)"
+        - "repository_overview.html (Tab 1 - UNIVERSAL)"
+        - "dependency_graph.html (Tab 2 - UNIVERSAL)"
+        - "class_diagrams.html (Tab 3 - UNIVERSAL)"
+        - "temporal_analysis.html (Tab 4 - UNIVERSAL)"
+        - "impact_analysis.html (Tab 5 - UNIVERSAL)"
+      
+      cortex_specific:
+        - "brain_architecture.html (Tab 6 - CORTEX ONLY)"
+        - "governance_heatmap.html (Tab 7 - CORTEX ONLY)"
+        - "orchestrator_constellation.html (Tab 8 - CORTEX ONLY)"
+    
+    conditional_rendering:
+      logic: |
+        {% if is_cortex_repository %}
+          <!-- Show tabs 1-8 -->
+        {% else %}
+          <!-- Show tabs 1-5 only -->
+        {% endif %}
+    
+    acceptance_criteria:
+      - "All templates extend dashboard_base.html"
+      - "Base template conditionally renders CORTEX tabs"
+      - "Jinja2 variables for dynamic content"
+      - "Mobile-responsive design"
+      - "Tab switching via JavaScript"
+      - "Tab numbering adjusts based on repository type"
+  
+  task_014_api_routes:
+    ac_id: "LENS-DASH-004"
+    priority: "P0"
+    effort: "1 day"
+    description: "Create FastAPI routes for dashboard data"
+    
+    implementation:
+      file: "cortex/api/dashboard_routes.py"
+      routes:
+        - "GET /api/lens/dashboard/overview"
+        - "GET /api/lens/dashboard/dependency-graph"
+        - "GET /api/lens/dashboard/class-diagram/{module}"
+        - "GET /api/lens/dashboard/temporal-analysis"
+        - "GET /api/lens/dashboard/governance-heatmap"
+        - "GET /api/lens/dashboard/impact-analysis/{file_path}"
+        - "POST /api/lens/dashboard/generate"  # Generate full dashboard
+        - "GET /api/lens/dashboard/status/{job_id}"  # Generation status
+    
+    acceptance_criteria:
+      - "All routes tested"
+      - "Async support for long operations"
+      - "WebSocket for real-time updates"
+      - "100% test coverage"
+  
+  task_015_cli_commands:
+    ac_id: "LENS-DASH-006"
+    priority: "P1"
+    effort: "0.5 days"
+    description: "Add CLI commands for dashboard generation with auto-detection"
+    
+    commands:
+      - "cortex lens dashboard generate"
+      - "cortex lens dashboard generate --repo=/path/to/repo"
+      - "cortex lens dashboard generate --remote=owner/repo"
+      - "cortex lens dashboard generate --tabs=overview,dependency,temporal"  # Manual tab selection
+      - "cortex lens dashboard serve --port=8080"
+      - "cortex lens dashboard clean --older-than=30d"
+    
+    auto_detection_behavior:
+      - "Auto-detect repository type (CORTEX vs external)"
+      - "Generate 5 tabs for external repos"
+      - "Generate 8 tabs for CORTEX repo"
+      - "Allow manual tab selection via --tabs flag"
+      - "Show tab count in progress messages"
+    
+    example_output: |
+      $ cortex lens dashboard generate --repo=/path/to/flask-app
+      🔍 Analyzing repository...
+      📊 Repository type: External (5 tabs)
+      ✅ Generated dashboard: /path/to/flask-app/.cortex/lens-dashboard/index.html
+      
+      $ cortex lens dashboard generate
+      🔍 Analyzing repository...
+      📊 Repository type: CORTEX (8 tabs: 5 universal + 3 CORTEX-specific)
+      ✅ Generated dashboard: reports/lens-dashboard/index.html
+    
+    acceptance_criteria:
+      - "CLI commands work with auto-detection"
+      - "Manual tab selection supported"
+      - "Help text explains auto-detection"
+      - "Progress messages show tab count"
+      - "Error handling for invalid repos"
+      - "Tests for CLI with both repo types"
+  
+  # ============================================================================
+  # PHASE 5: Testing & Documentation (Days 15-16)
+  # ============================================================================
+  
+  task_016_integration_tests:
+    ac_id: "LENS-DASH-006"
+    priority: "P0"
+    effort: "1 day"
+    description: "End-to-end integration tests for dashboard generation"
+    
+    test_scenarios:
+      - "Generate dashboard for CORTEX repository"
+      - "Generate dashboard for external repository"
+      - "Generate dashboard for remote GitHub repository"
+      - "All 8 tabs render correctly"
+      - "D3.js visualizations load"
+      - "Mermaid diagrams render"
+    
+    test_file: "tests/integration/test_lens_dashboard_generation.py"
+    
+    acceptance_criteria:
+      - "100% scenario coverage"
+      - "Tests run in CI/CD"
+      - "Performance benchmarks (dashboard generation < 30s)"
+  
+  task_017_documentation:
+    ac_id: "LENS-DASH-006"
+    priority: "P1"
+    effort: "1 day"
+    description: "Create comprehensive documentation"
+    
+    documents:
+      - "docs/guides/lens-dashboard-user-guide.md"
+      - "docs/api-reference/lens-visualization-api.md"
+      - "cortex/visualization/README.md"
+      - "reports/lens-dashboard/README.md"
+    
+    content:
+      - "User guide: How to generate dashboards"
+      - "API reference: All public methods"
+      - "Architecture overview: System design"
+      - "Customization guide: Extending visualizations"
+    
+    acceptance_criteria:
+      - "All documents follow CORE-040 (Documentation Lifecycle)"
+      - "Code examples tested"
+      - "Screenshots included"
+      - "Troubleshooting section"
+
+# ==============================================================================
+# TESTING STRATEGY
+# ==============================================================================
+
+testing:
+  unit_tests:
+    coverage_target: "100%"
+    frameworks: ["pytest", "pytest-cov"]
+    
+    test_files:
+      - "tests/visualization/test_output_manager.py"
+      - "tests/visualization/test_business_language_generator.py"
+      - "tests/visualization/renderers/test_dependency_graph.py"
+      - "tests/visualization/renderers/test_timeline_renderer.py"
+      - "tests/visualization/renderers/test_complexity_renderer.py"
+      - "tests/visualization/renderers/test_mermaid_renderer.py"
+      - "tests/orchestrators/support/test_lens_visualization_orchestrator.py"
+  
+  integration_tests:
+    test_file: "tests/integration/test_lens_dashboard_generation.py"
+    scenarios:
+      - "Full dashboard generation (CORTEX repo)"
+      - "External repository analysis"
+      - "Remote GitHub repository analysis"
+      - "Multi-tab rendering validation"
+      - "Performance benchmarks"
+  
+  frontend_tests:
+    framework: "Jest + Puppeteer"
+    tests:
+      - "Tab switching functionality"
+      - "D3.js graph rendering"
+      - "Mermaid diagram display"
+      - "Mobile responsiveness"
+
+# ==============================================================================
+# ACCEPTANCE CRITERIA
+# ==============================================================================
+
+acceptance_criteria:
+  functional:
+    - "All 8 tabs render correctly"
+    - "Tab 1 generates business-language descriptions"
+    - "D3.js visualizations interactive"
+    - "Mermaid diagrams valid syntax"
+    - "Dashboard generation < 30 seconds"
+    - "Output locations follow specification"
+  
+  quality:
+    - "100% test coverage for Python code"
+    - "CORE-008: Tests exist for all modules"
+    - "CORE-011: All functions have type hints"
+    - "CORE-012: All functions have docstrings"
+    - "CORE-038: All files in subfolders"
+    - "CORE-040: Documentation lifecycle followed"
+  
+  performance:
+    - "Dashboard generation < 30 seconds for 500-file repo"
+    - "D3.js graphs handle 1000+ nodes"
+    - "Memory usage < 500MB during generation"
+  
+  user_experience:
+    - "CLI commands intuitive"
+    - "Error messages helpful"
+    - "Documentation comprehensive"
+    - "Dashboard mobile-responsive"
+
+# ==============================================================================
+# DEPENDENCIES
+# ==============================================================================
+
+dependencies:
+  internal:
+    - "Phase 7.1: LENS Intelligence (GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor)"
+    - "cortex.orchestrators.support.lens_orchestrator:LENSOrchestrator"
+    - "cortex.brain.analysis.*"
+  
+  external:
+    - "D3.js: v7.8.5+ (visualization)"
+    - "Mermaid: v10.0+ (diagrams)"
+    - "FastAPI: Backend API"
+    - "Jinja2: Template rendering"
+    - "Tailwind CSS: Styling"
+
+# ==============================================================================
+# RISKS & MITIGATIONS
+# ==============================================================================
+
+risks:
+  risk_1_large_repositories:
+    description: "Dashboard generation may be slow for very large repositories"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation:
+      - "Implement caching for LENS analysis results"
+      - "Add progress indicators for long operations"
+      - "Support incremental updates (only changed files)"
+  
+  risk_2_legacy_code_extraction:
+    description: "Legacy dashboard code may have undocumented dependencies"
+    probability: "Low"
+    impact: "Medium"
+    mitigation:
+      - "Thorough testing of extracted components"
+      - "Rewrite if extraction proves difficult"
+  
+  risk_3_browser_compatibility:
+    description: "D3.js/Mermaid may not work in older browsers"
+    probability: "Low"
+    impact: "Low"
+    mitigation:
+      - "Test in Chrome, Firefox, Safari"
+      - "Provide fallback static images"
+
+# ==============================================================================
+# ROLLOUT PLAN
+# ==============================================================================
+
+rollout:
+  phase_1_internal_testing:
+    duration: "3 days"
+    activities:
+      - "Generate dashboards for CORTEX repository"
+      - "Test all 8 tabs thoroughly"
+      - "Performance profiling"
+      - "Bug fixing"
+  
+  phase_2_limited_release:
+    duration: "5 days"
+    activities:
+      - "Release to internal team (3 developers)"
+      - "Collect feedback on UX"
+      - "Iterate on business language generation"
+  
+  phase_3_public_release:
+    duration: "Ongoing"
+    activities:
+      - "Announce in docs"
+      - "Create tutorial videos"
+      - "Monitor usage metrics"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  adoption:
+    - "50+ dashboards generated within first month"
+    - "Average 3 tabs viewed per dashboard session"
+  
+  quality:
+    - "< 5 bugs reported per 100 dashboards generated"
+    - "95%+ user satisfaction (survey)"
+  
+  performance:
+    - "Dashboard generation time < 30s (95th percentile)"
+    - "Zero crashes during generation"
+  
+  engagement:
+    - "Users spend 5+ minutes per dashboard (indicates value)"
+    - "Repeat usage (same user generates multiple dashboards)"
