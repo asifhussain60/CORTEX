@@ -1,0 +1,609 @@
+/**
+ * DO-001-04: Responsive Design System
+ * 
+ * Comprehensive responsive styles for CORTEX Dashboard across all devices.
+ * 
+ * Breakpoints:
+ * - Mobile: 320px - 767px (compact layout, hamburger menu)
+ * - Tablet: 768px - 1023px (2-column grid, sidebar transitions)
+ * - Desktop: 1024px - 1919px (3-column grid, full navigation)
+ * - Large Desktop: 1920px+ (4-column grid, maximum content)
+ * 
+ * AC-ID: DO-001-04
+ * Phase: PHASE-15-DASHBOARD-ENHANCEMENT
+ */
+
+/* =========================================================================
+   ROOT RESPONSIVE VARIABLES
+   ========================================================================= */
+
+:root {
+  /* Breakpoint values */
+  --breakpoint-mobile: 320px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-large: 1920px;
+  
+  /* Container widths */
+  --container-mobile: 100%;
+  --container-tablet: 720px;
+  --container-desktop: 960px;
+  --container-large: 1200px;
+  
+  /* Touch targets (WCAG minimum 44px) */
+  --touch-target-min: 44px;
+  
+  /* Responsive spacing */
+  --spacing-mobile: 12px;
+  --spacing-tablet: 16px;
+  --spacing-desktop: 24px;
+  
+  /* Font scaling */
+  --font-size-base-mobile: 14px;
+  --font-size-base-tablet: 15px;
+  --font-size-base-desktop: 16px;
+}
+
+/* =========================================================================
+   HEADER & LOGO RESPONSIVE BEHAVIOR
+   ========================================================================= */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-desktop);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cortex-logo {
+  width: 200px;
+  height: auto;
+  max-width: 100%;
+  transition: transform 250ms ease-in-out, opacity 200ms ease;
+}
+
+.cortex-logo:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+/* Tablet: Logo scales to 128px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header {
+    padding: var(--spacing-tablet);
+  }
+  
+  .cortex-logo {
+    width: 128px;
+  }
+}
+
+/* Mobile: Logo scales to 96px */
+@media (max-width: 767px) {
+  .header {
+    padding: var(--spacing-mobile);
+  }
+  
+  .cortex-logo {
+    width: 96px;
+  }
+  
+  .header-logo {
+    gap: 8px;
+  }
+}
+
+/* Dark mode variant */
+@media (prefers-color-scheme: dark) {
+  .cortex-logo-light {
+    display: none;
+  }
+  
+  .cortex-logo-dark {
+    display: block;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .cortex-logo-light {
+    display: block;
+  }
+  
+  .cortex-logo-dark {
+    display: none;
+  }
+}
+
+/* =========================================================================
+   CONTAINER RESPONSIVE BEHAVIOR
+   ========================================================================= */
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-mobile);
+  padding-right: var(--spacing-mobile);
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-tablet);
+    padding-left: var(--spacing-tablet);
+    padding-right: var(--spacing-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-desktop);
+    padding-left: var(--spacing-desktop);
+    padding-right: var(--spacing-desktop);
+  }
+}
+
+@media (min-width: 1920px) {
+  .container {
+    max-width: var(--container-large);
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE GRID SYSTEM
+   ========================================================================= */
+
+.grid-responsive {
+  display: grid;
+  gap: var(--spacing-mobile);
+  grid-template-columns: 1fr; /* Mobile: 1 column */
+}
+
+@media (min-width: 768px) {
+  .grid-responsive {
+    gap: var(--spacing-tablet);
+    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 columns */
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    gap: var(--spacing-desktop);
+    grid-template-columns: repeat(3, 1fr); /* Desktop: 3 columns */
+  }
+}
+
+@media (min-width: 1920px) {
+  .grid-responsive {
+    grid-template-columns: repeat(4, 1fr); /* Large: 4 columns */
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE NAVIGATION (Hamburger Menu)
+   ========================================================================= */
+
+/* Hide hamburger by default (desktop) */
+.hamburger-menu {
+  display: none;
+}
+
+/* Show hamburger on tablet and below */
+@media (max-width: 1023px) {
+  .hamburger-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+  }
+  
+  .hamburger-menu:hover {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .hamburger-icon {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .hamburger-icon span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #e2e8f0;
+    border-radius: 2px;
+    transition: all 250ms ease-in-out;
+  }
+  
+  /* Animated hamburger to X */
+  .hamburger-menu.active .hamburger-icon span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  
+  .hamburger-menu.active .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger-menu.active .hamburger-icon span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+  
+  /* Hide desktop navigation on tablet/mobile */
+  .nav-desktop {
+    display: none;
+  }
+  
+  /* Mobile navigation panel */
+  .nav-mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 80px 24px 24px;
+    transition: right 300ms ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  
+  .nav-mobile.active {
+    right: 0;
+  }
+  
+  .nav-mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 300ms ease-in-out;
+    z-index: 999;
+  }
+  
+  .nav-mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Desktop navigation (full menu visible) */
+@media (min-width: 1024px) {
+  .nav-desktop {
+    display: flex;
+  }
+  
+  .nav-mobile,
+  .nav-mobile-overlay {
+    display: none;
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE CHARTS (Maintain Aspect Ratio)
+   ========================================================================= */
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+}
+
+/* Mobile: Smaller chart height */
+@media (max-width: 767px) {
+  .chart-container {
+    min-height: 180px;
+    max-height: 250px;
+  }
+}
+
+/* Tablet: Medium chart height */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .chart-container {
+    min-height: 220px;
+    max-height: 300px;
+  }
+}
+
+/* Desktop: Full chart height */
+@media (min-width: 1024px) {
+  .chart-container {
+    min-height: 280px;
+    max-height: 400px;
+  }
+}
+
+/* Responsive canvas (Chart.js, D3.js) */
+.chart-canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+}
+
+/* =========================================================================
+   RESPONSIVE TABLES (Horizontal Scroll on Mobile)
+   ========================================================================= */
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Mobile: Enable horizontal scroll */
+@media (max-width: 767px) {
+  .table-responsive {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+  }
+  
+  .table-responsive table {
+    min-width: 600px; /* Force table to be wider than viewport */
+  }
+  
+  /* Scrollbar styling for mobile */
+  .table-responsive::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .table-responsive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: rgba(14, 165, 233, 0.5);
+    border-radius: 3px;
+  }
+}
+
+/* =========================================================================
+   TOUCH TARGETS (WCAG 44px minimum on mobile)
+   ========================================================================= */
+
+@media (max-width: 767px) {
+  button,
+  a.btn,
+  .touch-target {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    padding: 12px 16px;
+  }
+  
+  /* Increase tap area for icons */
+  .icon-button {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE TYPOGRAPHY (Readable at 320px)
+   ========================================================================= */
+
+/* Mobile: Base font size 14px */
+@media (max-width: 767px) {
+  html {
+    font-size: var(--font-size-base-mobile);
+  }
+  
+  h1 { font-size: 1.75rem; } /* 24.5px */
+  h2 { font-size: 1.5rem; }  /* 21px */
+  h3 { font-size: 1.25rem; } /* 17.5px */
+  h4 { font-size: 1.125rem; } /* 15.75px */
+  p  { font-size: 1rem; }    /* 14px */
+  small { font-size: 0.875rem; } /* 12.25px */
+}
+
+/* Tablet: Base font size 15px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  html {
+    font-size: var(--font-size-base-tablet);
+  }
+}
+
+/* Desktop: Base font size 16px */
+@media (min-width: 1024px) {
+  html {
+    font-size: var(--font-size-base-desktop);
+  }
+}
+
+/* Prevent text overflow on small screens */
+@media (max-width: 767px) {
+  * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  code, pre {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE SPACING
+   ========================================================================= */
+
+/* Mobile: Compact spacing */
+@media (max-width: 767px) {
+  .section {
+    padding: var(--spacing-mobile) 0;
+  }
+  
+  .card {
+    padding: var(--spacing-mobile);
+  }
+  
+  .mb-responsive { margin-bottom: var(--spacing-mobile); }
+  .mt-responsive { margin-top: var(--spacing-mobile); }
+  .gap-responsive { gap: var(--spacing-mobile); }
+}
+
+/* Tablet: Medium spacing */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .section {
+    padding: var(--spacing-tablet) 0;
+  }
+  
+  .card {
+    padding: var(--spacing-tablet);
+  }
+  
+  .mb-responsive { margin-bottom: var(--spacing-tablet); }
+  .mt-responsive { margin-top: var(--spacing-tablet); }
+  .gap-responsive { gap: var(--spacing-tablet); }
+}
+
+/* Desktop: Full spacing */
+@media (min-width: 1024px) {
+  .section {
+    padding: var(--spacing-desktop) 0;
+  }
+  
+  .card {
+    padding: var(--spacing-desktop);
+  }
+  
+  .mb-responsive { margin-bottom: var(--spacing-desktop); }
+  .mt-responsive { margin-top: var(--spacing-desktop); }
+  .gap-responsive { gap: var(--spacing-desktop); }
+}
+
+/* =========================================================================
+   RESPONSIVE VISIBILITY UTILITIES
+   ========================================================================= */
+
+/* Show/hide based on breakpoint */
+.hidden-mobile { display: none; }
+.visible-mobile { display: block; }
+
+@media (min-width: 768px) {
+  .hidden-mobile { display: block; }
+  .visible-mobile { display: none; }
+  .hidden-tablet { display: none; }
+  .visible-tablet { display: block; }
+}
+
+@media (min-width: 1024px) {
+  .hidden-tablet { display: block; }
+  .visible-tablet { display: none; }
+  .hidden-desktop { display: none; }
+  .visible-desktop { display: block; }
+}
+
+/* =========================================================================
+   RESPONSIVE GLASS PANELS
+   ========================================================================= */
+
+@media (max-width: 767px) {
+  .glass-panel,
+  .glass-card {
+    border-radius: 8px; /* Smaller radius on mobile */
+    padding: var(--spacing-mobile);
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE SIDEBAR/DRAWER
+   ========================================================================= */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 80px 20px 20px;
+  transition: left 300ms ease-in-out;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    position: static;
+    left: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* =========================================================================
+   PRINT STYLES (Responsive for printing)
+   ========================================================================= */
+
+@media print {
+  .hamburger-menu,
+  .nav-mobile,
+  .sidebar {
+    display: none;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+  
+  .glass-panel,
+  .glass-card {
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+}
+
+/* =========================================================================
+   ACCESSIBILITY (Prefers Reduced Motion)
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-mobile,
+  .sidebar,
+  .hamburger-menu,
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
