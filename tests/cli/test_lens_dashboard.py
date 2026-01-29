@@ -91,33 +91,85 @@ class TestDashboardServeCommand:
         self, runner: CliRunner, tmp_path: Path
     ) -> None:
         """Test serving dashboard on default port."""
-        with patch("cortex.cli.lens_dashboard.uvicorn") as mock_uvicorn:
-            result = runner.invoke(serve)
-            
-            # Command should attempt to start server
-            # May exit immediately in test environment
-            assert result.exit_code in [0, 1]
-
-    def test_serve_custom_port(
-        self, runner: CliRunner
-    ) -> None:
-        """Test serving dashboard on custom port."""
-        with patch("cortex.cli.lens_dashboard.uvicorn") as mock_uvicorn:
-            result = runner.invoke(serve, ["--port", "9000"])
-            
-            assert result.exit_code in [0, 1]
-
-    def test_serve_custom_host(
-        self, runner: CliRunner
-    ) -> None:
-        """Test serving dashboard on custom host."""
-        with patch("cortex.cli.lens_dashboard.uvicorn") as mock_uvicorn:
+        # Create a fake dashboard directory
+        dashboard_dir = tmp_path / "test-dashboard"
+        dashboard_dir.mkdir()
+        (dashboard_dir / "index.html").write_text("<html></html>")
+        
+        with patch("cortex.visualization.spa.static_server.serve") as mock_serve:
             result = runner.invoke(
                 serve,
-                ["--host", "0.0.0.0", "--port", "8080"],
+                ["--path", str(dashboard_dir)],
             )
             
-            assert result.exit_code in [0, 1]
+            # Should start server
+            mock_serve.assert_called_once()
+            call_args = mock_serve.call_args
+            assert call_args[0][0] == dashboard_dir  # Dashboard path
+            assert call_args[0][1] == 8080  # Default port
+            assert call_args[0][2] is True  # CORS enabled
+
+    def test_serve_custom_port(
+        self, runner: CliRunner, tmp_path: Path
+    ) -> None:
+        """Test serving dashboard on custom port."""
+        dashboard_dir = tmp_path / "test-dashboard"
+        dashboard_dir.mkdir()
+        (dashboard_dir / "index.html").write_text("<html></html>")
+        
+        with patch("cortex.visualization.spa.static_server.serve") as mock_serve:
+            result = runner.invoke(
+                serve,
+                ["--port", "9000", "--path", str(dashboard_dir)],
+            )
+            
+            mock_serve.assert_called_once()
+            call_args = mock_serve.call_args
+            assert call_args[0][1] == 9000  # Custom port
+
+    def test_serve_no_cors(
+        self, runner: CliRunner, tmp_path: Path
+    ) -> None:
+        """Test serving dashboard with CORS disabled."""
+        dashboard_dir = tmp_path / "test-dashboard"
+        dashboard_dir.mkdir()
+        (dashboard_dir / "index.html").write_text("<html></html>")
+        
+        with patch("cortex.visualization.spa.static_server.serve") as mock_serve:
+            result = runner.invoke(
+                serve,
+                ["--no-cors", "--path", str(dashboard_dir)],
+            )
+            
+            mock_serve.assert_called_once()
+            call_args = mock_serve.call_args
+            assert call_args[0][2] is False  # CORS disabled
+
+    def test_serve_no_dashboards(
+        self, runner: CliRunner, tmp_path: Path
+    ) -> None:
+        """Test serve command with no dashboards."""
+        with patch("cortex.cli.lens_dashboard.DASHBOARD_ROOT", tmp_path):
+            result = runner.invoke(serve)
+            
+            assert result.exit_code == 0
+            assert "No dashboards found" in result.output
+
+    def test_serve_invalid_dashboard_no_index(
+        self, runner: CliRunner, tmp_path: Path
+    ) -> None:
+        """Test serve command with invalid dashboard (no index.html)."""
+        dashboard_dir = tmp_path / "invalid-dashboard"
+        dashboard_dir.mkdir()
+        
+        result = runner.invoke(
+            serve,
+            ["--path", str(dashboard_dir)],
+        )
+        
+        assert result.exit_code == 0
+        assert "Invalid dashboard directory" in result.output
+        assert "Missing index.html" in result.output
 
 
 class TestDashboardListCommand:
