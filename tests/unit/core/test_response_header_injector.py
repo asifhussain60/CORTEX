@@ -23,7 +23,7 @@ from cortex.brain.core.response_header_injector import (
     sanitize_context_value,
 )
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
-from cortex.brain.core.response_template_engine import ResponseTemplateEngine
+from cortex.core.response_template_engine import ResponseTemplateEngine
 
 
 class TestYAMLEscapeFunctions:

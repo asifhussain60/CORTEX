@@ -14,7 +14,7 @@ Classes:
 from typing import Dict, Any, Optional
 from datetime import datetime
 from .response_header_config import HeaderConfigurationManager
-from .response_template_engine import ResponseTemplateEngine
+from cortex.core.response_template_engine import ResponseTemplateEngine
 import re
 import yaml
 
