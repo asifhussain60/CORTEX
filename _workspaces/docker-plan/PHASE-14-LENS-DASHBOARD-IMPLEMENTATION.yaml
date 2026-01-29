@@ -3,11 +3,15 @@
 # Created: 2026-01-29
 # Authority: CORE-030 (Implementation Truth), CORE-038 (File Placement)
 # Dependencies: Phase 7.1 (LENS Intelligence Complete)
+#
+# ⚠️ SUPERSEDED BY PHASE-14-LENS-DASHBOARD-V2.yaml (2026-01-29)
+# This file is kept for reference only. Do NOT implement from this file.
+# See PHASE-14-LENS-DASHBOARD-V2.yaml for the revised static HTML + JSON approach.
 
 metadata:
   phase_id: "PHASE-14"
   name: "LENS Dashboard Visualization System (Self-Contained SPA)"
-  status: "IN_PROGRESS"  # Tasks 001-006 completed (7/20 tasks)
+  status: "SUPERSEDED"  # SUPERSEDED by PHASE-14-V2 - See PHASE-14-LENS-DASHBOARD-V2.yaml
   priority: "P1"
   estimated_effort: "15.5-19.5 days"  # Updated: +1.5 days for self-contained SPA
   ac_ids:

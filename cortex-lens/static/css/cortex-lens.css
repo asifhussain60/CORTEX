@@ -1,0 +1,535 @@
+/**
+ * CORTEX LENS Dashboard Styles
+ * 
+ * Dark glassmorphism theme adapted from cortex-unified.css
+ * 
+ * Author: Asif Hussain
+ * Version: 1.0.0
+ * Date: January 2026
+ */
+
+/* ========== CSS Variables ========== */
+:root {
+    /* Background */
+    --bg-primary: #0a0e27;
+    --bg-secondary: #131829;
+    --bg-tertiary: #1a1f3a;
+    
+    /* Glass effect */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    
+    /* Text */
+    --text-primary: #ffffff;
+    --text-secondary: #b8c5d6;
+    --text-muted: #6b7a90;
+    
+    /* Accent colors */
+    --accent-primary: #00d4ff;
+    --accent-secondary: #7b2cbf;
+    --accent-success: #06ffa5;
+    --accent-warning: #ffb627;
+    --accent-danger: #ff6b9d;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #00d4ff 100%);
+    
+    /* Chart colors */
+    --chart-1: #00d4ff;
+    --chart-2: #7b2cbf;
+    --chart-3: #06ffa5;
+    --chart-4: #ffb627;
+    --chart-5: #ff6b9d;
+}
+
+/* ========== Reset & Base Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-secondary);
+}
+
+code {
+    font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
+    background: var(--glass-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* ========== Layout ========== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* ========== Header ========== */
+.cortex-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+}
+
+.header-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+}
+
+.header-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+/* ========== Hero Section ========== */
+.hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.hero-logo {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(123, 44, 191, 0.4);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ========== Navigation Tabs ========== */
+.tab-nav {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+}
+
+.tab-button.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* ========== Tab Content ========== */
+.tab-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    min-height: 500px;
+    backdrop-filter: blur(10px);
+}
+
+.tab-pane {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.tab-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* ========== Glass Cards ========== */
+.glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 48px rgba(0, 212, 255, 0.15);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+/* ========== KPI Cards ========== */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-primary);
+}
+
+.kpi-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+}
+
+.kpi-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ========== Repository Tiles ========== */
+.repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.repo-tile {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+
+.repo-tile:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px rgba(0, 212, 255, 0.2);
+}
+
+.repo-tile.cortex {
+    border-color: var(--accent-secondary);
+    background: linear-gradient(135deg, rgba(123, 44, 191, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+}
+
+.repo-tile.cortex:hover {
+    border-color: var(--accent-secondary);
+    box-shadow: 0 12px 48px rgba(123, 44, 191, 0.3);
+}
+
+.repo-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.repo-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.repo-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.repo-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.repo-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* ========== Badges ========== */
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-primary);
+}
+
+.badge-cortex {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.badge-success {
+    background: rgba(6, 255, 165, 0.2);
+    color: var(--accent-success);
+}
+
+/* ========== Tier Cards ========== */
+.tier-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .tier-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.tier-card {
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.tier-card.tier-0 {
+    background: linear-gradient(135deg, rgba(123, 44, 191, 0.3) 0%, rgba(123, 44, 191, 0.1) 100%);
+    border: 1px solid rgba(123, 44, 191, 0.5);
+}
+
+.tier-card.tier-1 {
+    background: linear-gradient(135deg, rgba(0, 119, 255, 0.3) 0%, rgba(0, 119, 255, 0.1) 100%);
+    border: 1px solid rgba(0, 119, 255, 0.5);
+}
+
+.tier-card.tier-2 {
+    background: linear-gradient(135deg, rgba(6, 255, 165, 0.3) 0%, rgba(6, 255, 165, 0.1) 100%);
+    border: 1px solid rgba(6, 255, 165, 0.5);
+}
+
+.tier-card.tier-3 {
+    background: linear-gradient(135deg, rgba(255, 182, 39, 0.3) 0%, rgba(255, 182, 39, 0.1) 100%);
+    border: 1px solid rgba(255, 182, 39, 0.5);
+}
+
+.tier-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.tier-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ========== Visualization Containers ========== */
+.viz-container {
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.viz-placeholder {
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.viz-placeholder-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* ========== Utilities ========== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+
+/* ========== Loading States ========== */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 14, 39, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    background: var(--bg-secondary);
+    padding: 2rem 3rem;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--glass-border);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-logo {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .header-title {
+        font-size: 1.4rem;
+    }
+    
+    .tab-nav {
+        padding: 0.25rem;
+    }
+    
+    .tab-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+}

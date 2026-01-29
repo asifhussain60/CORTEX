@@ -1,23 +1,23 @@
-# CORTEX LENS Dashboard - Self-Contained SPA
+# CORTEX LENS Dashboard
 
-**Version:** 1.0.0  
+**Version:** 2.0.0  
 **Phase:** 14 - LENS Dashboard Implementation  
 **AC-ID:** LENS-DASH-007  
-**Authority:** CORE-038 (File Placement), CORE-040 (Documentation Lifecycle)
+**Architecture:** Static HTML + JSON (No FastAPI Required)
 
 ---
 
 ## 📦 Overview
 
-The CORTEX LENS Dashboard is a **self-contained Single Page Application (SPA)** that provides AI-powered code intelligence visualization for any repository. It operates **fully offline** with all dependencies bundled locally.
+The CORTEX LENS Dashboard provides AI-powered code intelligence visualization for any repository. It uses a **Static HTML + JSON architecture** - no backend server required for viewing dashboards.
 
 ### Key Features
 
-✅ **Offline-First Architecture** - No external CDN dependencies  
-✅ **Lazy-Loaded Modules** - Initial load <200KB, full bundle 1.5MB  
-✅ **Context-Aware Tabs** - 5 universal + 3 CORTEX-specific tabs  
-✅ **Alpine.js Framework** - 15KB reactive SPA (vs React 130KB)  
-✅ **Built-in HTTP Server** - No npm/node required  
+✅ **Static Architecture** - Pure HTML + JSON, no FastAPI dependency for viewing  
+✅ **Dark Glassmorphism Theme** - Elegant dark mode with CSS variables  
+✅ **8-Tab CORTEX Analysis** - Full analysis for CORTEX repositories  
+✅ **5-Tab External Repos** - Standard analysis for any Python project  
+✅ **CLI Generation** - `cortex lens generate` creates JSON data  
 
 ---
 
@@ -25,56 +25,78 @@ The CORTEX LENS Dashboard is a **self-contained Single Page Application (SPA)** 
 
 ```
 cortex-lens/
-├── app.py                      # FastAPI server (main entry point)
-├── repo-dashboards.html        # Main: Repository browser with tiles
-├── cortex-dashboard.html       # Direct: CORTEX 8-tab analysis
+├── lens-dashboard.html         # Main entry: Repository browser with logo
+├── cortex-dashboard.html       # CORTEX 8-tab analysis dashboard
+├── cli.py                      # CLI commands for generation
 ├── README.md                   # This file
-├── frontend/
+├── static/
 │   ├── css/
-│   │   └── dashboard-ui.css    # Shared styles
-│   └── js/
-│       ├── dashboard-app.js    # Shared Alpine.js logic
-│       ├── tab-controller.js   # Tab management
-│       ├── repo-tiles.js       # Repository grid
-│       └── overlay-ui.js       # Overlay system
-├── backend/
-│   ├── orchestrator.py         # Routes to cortex/visualization/*
-│   ├── routes.py               # FastAPI endpoints
-│   ├── cache_manager.py        # Manages .cortex/, ~/.cortex/, reports/
-│   └── repository_loader.py    # Analyzes and caches repositories
-└── tests/
-    └── test_*.py               # Dashboard-specific tests
+│   │   └── cortex-lens.css     # Dark glassmorphism theme
+│   ├── js/
+│   │   └── dashboard-app.js    # D3.js visualizations
+│   └── assets/
+│       └── cortex-logo-200.png # CORTEX logo
+├── data/
+│   ├── cortex/                 # CORTEX JSON data (8 files)
+│   │   ├── overview.json
+│   │   ├── dependencies.json
+│   │   ├── classes.json
+│   │   ├── timeline.json
+│   │   ├── impact.json
+│   │   ├── brain.json
+│   │   ├── governance.json
+│   │   └── orchestrators.json
+│   └── repos/                  # External repo data
+│       └── repos.json          # Registry of analyzed repos
+└── backend/                    # Legacy (not used for viewing)
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Bundle Dependencies (One-Time Setup)
+### 1. View Dashboard (No Setup Required)
 
 ```bash
-# Download all dependencies locally (Alpine.js, D3.js, Mermaid, Tailwind)
-python3 cortex/visualization/scripts/bundle_dependencies.py
+# Start simple HTTP server
+cd cortex-lens
+python3 -m http.server 8080
 
-# Verify bundle integrity
-python3 cortex/visualization/scripts/bundle_dependencies.py verify
+# Open in browser
+open http://localhost:8080/lens-dashboard.html
 ```
 
-### 2. Start Dashboard Server
+### 2. Generate Dashboard Data
 
 ```bash
-# Start server on http://localhost:8888
-python3 cortex-lens/app.py
+# Generate for CORTEX (8 tabs)
+python3 cortex-lens/cli.py generate . --cortex
 
-# Custom port
-uvicorn cortex-lens.app:app --host 0.0.0.0 --port 8080
+# Generate for external repo (5 tabs)
+python3 cortex-lens/cli.py generate /path/to/repo
 ```
 
-### 3. Access Dashboards
+### 3. CLI Commands
 
-- **Repository Browser:** http://localhost:8888/
-- **CORTEX Direct:** http://localhost:8888/cortex
-- **Health Check:** http://localhost:8888/health
+```bash
+# All commands
+python3 cortex-lens/cli.py --help
+
+# Generate dashboard data
+python3 cortex-lens/cli.py generate <repo> [--cortex] [--open]
+
+# Serve dashboard
+python3 cortex-lens/cli.py serve [--port 8080] [--open]
+
+# Open in browser (auto-starts server)
+python3 cortex-lens/cli.py open
+
+# List generated data
+python3 cortex-lens/cli.py cache list
+
+# Clear cache
+python3 cortex-lens/cli.py cache clear --all
+```
 
 ---
 
@@ -84,121 +106,100 @@ uvicorn cortex-lens.app:app --host 0.0.0.0 --port 8080
 
 | URL | File | Purpose |
 |-----|------|---------|
-| `/` | `repo-dashboards.html` | Repository browser with tiles |
-| `/cortex` | `cortex-dashboard.html` | CORTEX 8-tab analysis |
-| `/api/*` | `app.py` | Data endpoints |
-| `/static/*` | `cortex/visualization/static/` | Assets |
+| `/lens-dashboard.html` | Main entry | Logo hero + repository tiles |
+| `/cortex-dashboard.html?repo=cortex` | 8-tab | CORTEX analysis |
+| `/cortex-dashboard.html?repo=<slug>` | 5-tab | External repo analysis |
 
-### Bundle Strategy
+### Tabs
 
-| Bundle | Size | Load Strategy |
-|--------|------|---------------|
-| Core (Alpine.js + app) | 175KB | Initial load |
-| D3.js modules | 250KB | Lazy (Tabs 2, 4, 5, 7, 8) |
-| Mermaid module | 850KB | Lazy (Tabs 3, 6) |
-| Tailwind CSS | 80KB | Initial load |
-| **Total** | **1.5MB** | **Initial: 255KB** |
+| # | Tab | CORTEX | External | Data Source |
+|---|-----|--------|----------|-------------|
+| 1 | Overview | ✅ | ✅ | overview.json |
+| 2 | Dependencies | ✅ | ✅ | dependencies.json |
+| 3 | Classes | ✅ | ✅ | classes.json |
+| 4 | Timeline | ✅ | ✅ | timeline.json |
+| 5 | Impact | ✅ | ✅ | impact.json |
+| 6 | Brain | ✅ | ❌ | brain.json |
+| 7 | Governance | ✅ | ❌ | governance.json |
+| 8 | Orchestrators | ✅ | ❌ | orchestrators.json |
 
-### Tab Configuration
+### Tech Stack
 
-**Universal Tabs (ALL repositories):**
-1. 📦 Repository Overview (business language)
-2. 🕸️ Dependency Graph (D3.js call graph)
-3. 📊 Class Diagrams (Mermaid UML)
-4. 📈 Temporal Analysis (Git timeline)
-5. 👥 Author Network (collaboration graph)
-
-**CORTEX-Specific Tabs (CORTEX repository only):**
-6. 🧠 Brain Architecture (4-tier structure)
-7. ✅ Governance Compliance (CORE rules)
-8. 🎼 Orchestrator Constellation (wiring map)
+| Component | Library | Purpose |
+|-----------|---------|---------|
+| SPA Framework | Alpine.js 3.13.3 | Reactive UI, tabs |
+| Visualizations | D3.js 7.8.5 | Force graph, timeline |
+| Diagrams | Mermaid 10.6.1 | Class diagrams |
+| Styling | Custom CSS | Dark glassmorphism |
 
 ---
 
-## 🔧 API Endpoints
+## 🔧 Integration
 
-### Repository Management
+### LENSDashboardOrchestrator
 
-```bash
-# List repositories
-GET /api/repositories
+The orchestrator generates all JSON files from LENS analyzers:
 
-# Get dashboard tabs for repository
-GET /api/dashboard/tabs/{repo_id}
+```python
+from cortex.orchestrators.support.lens_dashboard_orchestrator import (
+    get_lens_dashboard_orchestrator
+)
+
+orchestrator = get_lens_dashboard_orchestrator()
+result = orchestrator.generate_for_repo(
+    repo_path=Path("/path/to/repo"),
+    repo_name="my-project",
+    is_cortex=False
+)
+
+print(result["files_generated"])
+# ['overview.json', 'dependencies.json', 'classes.json', ...]
 ```
 
-### Module Loading
+### LENS Analyzers Used
 
-```bash
-# Get lazy loader manifest
-GET /api/loader/manifest
+- **ASTAnalyzer** - Classes, functions, complexity
+- **GitHistoryAnalyzer** - Commits, timeline, authors
+- **CommentExtractor** - TODOs, FIXMEs, docstrings
 
-# Get lazy loader JavaScript
-GET /api/loader/javascript
-```
+---
 
-### Health
+## 🎨 Theme Customization
 
-```bash
-# Health check
-GET /health
+Edit `static/css/cortex-lens.css` to customize:
+
+```css
+:root {
+    --bg-primary: #0a0e27;        /* Main background */
+    --accent-primary: #00d4ff;    /* Cyan accent */
+    --accent-secondary: #7b2cbf;  /* Purple accent */
+    --glass-bg: rgba(26, 31, 60, 0.8);
+}
 ```
 
 ---
 
-## 🧪 Testing
+## 📝 Phase 14 Status
 
-```bash
-# Run all dashboard tests
-python3 -m pytest tests/visualization/scripts/ -v
+| Task | Status |
+|------|--------|
+| Dark CSS Theme | ✅ Complete |
+| 8-Tab HTML Dashboard | ✅ Complete |
+| JSON Data Files | ✅ Complete |
+| D3.js Visualizations | ✅ Complete |
+| CLI Commands | ✅ Complete |
+| LENSDashboardOrchestrator | ✅ Complete |
+| Documentation | ✅ Complete |
 
-# Test specific component
-python3 -m pytest tests/visualization/scripts/test_bundle_dependencies.py -v
-python3 -m pytest tests/visualization/scripts/test_lazy_module_loader.py -v
-```
-
----
-
-## 📁 Output Locations
-
-| Repository Type | Output Path | Gitignored |
-|----------------|-------------|------------|
-| External repos | `<repo>/.cortex/lens-dashboard/` | Yes |
-| CORTEX self-analysis | `reports/lens-dashboard/` | No |
-| Remote repos | `~/.cortex/cache/<owner>/<repo>/` | Yes |
-| CI artifacts | `$CI_ARTIFACTS_DIR/lens-dashboard/` | Yes |
+**Phase 14 Progress:** 100% ✅
 
 ---
 
-## 🔗 Related Documentation
+##  Related Documentation
 
 - [Phase 14 Implementation Plan](_workspaces/docker-plan/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml)
 - [LENS Intelligence System](docs/05-lens-protocol/)
-- [Visualization API Reference](docs/06-api-reference/)
-
----
-
-## 🛠️ Development
-
-### Adding New Tabs
-
-1. Create renderer: `cortex/visualization/renderers/your_renderer.py`
-2. Create template: `cortex/visualization/templates/tabs/your_tab.html`
-3. Update `TAB_MODULE_REQUIREMENTS` in `lazy_module_loader.py`
-4. Add tests: `tests/visualization/renderers/test_your_renderer.py`
-
-### Adding New Dependencies
-
-1. Add to `DEPENDENCIES` in `bundle_dependencies.py`
-2. Run bundling script: `python3 cortex/visualization/scripts/bundle_dependencies.py --force`
-3. Update `MODULES` in `lazy_module_loader.py`
-4. Test bundle: `python3 cortex/visualization/scripts/bundle_dependencies.py verify`
-
----
-
-## 📝 License
-
-Part of CORTEX project. See root LICENSE for details.
+- [LENS Analyzers](cortex/brain/analysis/)
 
 ---
 

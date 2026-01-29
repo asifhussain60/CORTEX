@@ -3,15 +3,19 @@
 Provides command-line interface for dashboard generation and management.
 
 Commands:
-    cortex lens dashboard generate <repo> - Generate dashboard
-    cortex lens dashboard serve [port] - Start dashboard server
-    cortex lens dashboard cache list - List cached dashboards
-    cortex lens dashboard cache clear - Clear dashboard cache
-    cortex lens vendor bundle - Download vendor assets
+    cortex lens generate <repo> [--cortex] - Generate dashboard JSON files
+    cortex lens serve [--port] - Start dashboard server
+    cortex lens open - Open dashboard in browser
 
 Integration:
     These commands integrate with the CORTEX CLI infrastructure and
     can be invoked via the main `cortex` command.
+
+Architecture:
+    Static HTML + JSON (no FastAPI required for viewing)
+    - lens-dashboard.html: Main entry point with repository tiles
+    - cortex-dashboard.html: 8-tab analysis dashboard
+    - data/*.json: Pre-generated dashboard data
 """
 
 import argparse
@@ -28,8 +32,15 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 
+# ============================================================================
+# GENERATE COMMAND - Uses LENSDashboardOrchestrator
+# ============================================================================
+
 def cmd_generate(args: argparse.Namespace) -> int:
-    """Generate dashboard for a repository.
+    """Generate dashboard JSON files for a repository.
+    
+    Uses LENSDashboardOrchestrator to analyze the repository and generate
+    JSON data files for all dashboard tabs.
     
     Args:
         args: Parsed command line arguments
@@ -37,46 +48,128 @@ def cmd_generate(args: argparse.Namespace) -> int:
     Returns:
         Exit code (0 for success)
     """
-    from cortex_lens.backend.orchestrator import DashboardOrchestrator
-    from cortex_lens.backend.cache_manager import CacheManager
+    # Add project root to path for imports
+    project_root = Path(__file__).parent.parent
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+    
+    from cortex.orchestrators.support.lens_dashboard_orchestrator import (
+        get_lens_dashboard_orchestrator
+    )
     
     repo_path = Path(args.repo).resolve()
     
     if not repo_path.exists():
-        logger.error(f"Repository not found: {repo_path}")
+        logger.error(f"❌ Repository not found: {repo_path}")
         return 1
     
-    logger.info(f"🔍 Analyzing repository: {repo_path.name}")
+    is_cortex = getattr(args, 'cortex', False) or _detect_cortex(repo_path)
+    
+    logger.info(f"")
+    logger.info(f"🔍 LENS Dashboard Generator")
+    logger.info(f"   Repository: {repo_path.name}")
+    logger.info(f"   Type: {'CORTEX (8 tabs)' if is_cortex else 'External (5 tabs)'}")
+    logger.info(f"")
     
     try:
-        orchestrator = DashboardOrchestrator()
-        dashboard = orchestrator.generate_dashboard(
-            repo_path,
-            force_refresh=args.force,
+        orchestrator = get_lens_dashboard_orchestrator()
+        result = orchestrator.generate_for_repo(
+            repo_path=repo_path,
+            repo_name=repo_path.name,
+            is_cortex=is_cortex
         )
         
-        output_path = orchestrator.save_dashboard(dashboard)
-        
-        logger.info(f"✅ Dashboard generated successfully!")
-        logger.info(f"   Repository: {dashboard.repo_name}")
-        logger.info(f"   Type: {'CORTEX' if dashboard.is_cortex else 'External'}")
-        logger.info(f"   Tabs: {len(dashboard.tabs)}")
-        logger.info(f"   Output: {output_path}")
-        
-        if args.open:
-            index_path = output_path / "index.html"
-            if index_path.exists():
-                webbrowser.open(f"file://{index_path}")
-                logger.info(f"   Opened in browser")
-        
-        return 0
+        if result.get("success"):
+            logger.info(f"✅ Dashboard data generated successfully!")
+            logger.info(f"   Files: {', '.join(result['files_generated'])}")
+            logger.info(f"   Output: {result['data_dir']}")
+            logger.info(f"")
+            logger.info(f"📊 View your dashboard:")
+            logger.info(f"   Run: cortex lens serve")
+            
+            if args.open:
+                serve_and_open()
+            
+            return 0
+        else:
+            logger.error(f"❌ Generation failed: {result.get('error', 'Unknown error')}")
+            return 1
         
     except Exception as e:
         logger.error(f"❌ Dashboard generation failed: {e}")
-        if args.verbose:
+        if getattr(args, 'verbose', False):
             import traceback
             traceback.print_exc()
         return 1
+
+
+def _detect_cortex(repo_path: Path) -> bool:
+    """Detect if repository is CORTEX based on markers."""
+    markers = [
+        repo_path / "cortex",
+        repo_path / "cortex_brain",
+        repo_path / ".github" / "copilot-instructions.md"
+    ]
+    return any(m.exists() for m in markers)
+
+
+def serve_and_open() -> None:
+    """Start server and open browser."""
+    import subprocess
+    import time
+    
+    lens_dir = Path(__file__).parent
+    subprocess.Popen(
+        ["python", "-m", "http.server", "8080"],
+        cwd=lens_dir,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    time.sleep(1)
+    webbrowser.open("http://localhost:8080/lens-dashboard.html")
+
+
+def cmd_open(args: argparse.Namespace) -> int:
+    """Open dashboard in browser (starts server in background).
+    
+    Args:
+        args: Parsed command line arguments
+        
+    Returns:
+        Exit code (0 for success)
+    """
+    import subprocess
+    import time
+    
+    port = getattr(args, 'port', 8080)
+    lens_dir = Path(__file__).parent
+    
+    logger.info(f"")
+    logger.info(f"🚀 Starting LENS Dashboard...")
+    
+    # Start server in background
+    subprocess.Popen(
+        ["python", "-m", "http.server", str(port)],
+        cwd=lens_dir,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    
+    time.sleep(1)
+    
+    url = f"http://localhost:{port}/lens-dashboard.html"
+    webbrowser.open(url)
+    
+    logger.info(f"   Opened: {url}")
+    logger.info(f"   Server running on port {port}")
+    logger.info(f"")
+    
+    return 0
+
+
+# ============================================================================
+# SERVE COMMAND - Static file server
+# ============================================================================
 
 
 def cmd_serve(args: argparse.Namespace) -> int:
@@ -89,16 +182,9 @@ def cmd_serve(args: argparse.Namespace) -> int:
         Exit code (0 for success)
     """
     port = args.port
-    directory = args.directory
     
-    if directory:
-        directory = Path(directory).resolve()
-        if not directory.exists():
-            logger.error(f"Directory not found: {directory}")
-            return 1
-    else:
-        # Default to cortex-lens folder
-        directory = Path(__file__).parent.parent
+    # Always serve from cortex-lens folder
+    directory = Path(__file__).parent
     
     # Change to serve directory
     import os
@@ -118,14 +204,18 @@ def cmd_serve(args: argparse.Namespace) -> int:
     
     try:
         with socketserver.TCPServer(("", port), CORSHandler) as httpd:
+            logger.info(f"")
             logger.info(f"🚀 LENS Dashboard Server")
-            logger.info(f"   Serving: {directory}")
-            logger.info(f"   URL: http://localhost:{port}")
+            logger.info(f"   Directory: {directory}")
+            logger.info(f"")
+            logger.info(f"   📊 Dashboard: http://localhost:{port}/lens-dashboard.html")
+            logger.info(f"   🔬 CORTEX:    http://localhost:{port}/cortex-dashboard.html?repo=cortex")
+            logger.info(f"")
             logger.info(f"   Press Ctrl+C to stop")
             logger.info("")
             
             if args.open:
-                webbrowser.open(f"http://localhost:{port}")
+                webbrowser.open(f"http://localhost:{port}/lens-dashboard.html")
             
             httpd.serve_forever()
             
@@ -141,7 +231,7 @@ def cmd_serve(args: argparse.Namespace) -> int:
 
 
 def cmd_cache_list(args: argparse.Namespace) -> int:
-    """List cached dashboards.
+    """List generated dashboard data.
     
     Args:
         args: Parsed command line arguments
@@ -149,32 +239,37 @@ def cmd_cache_list(args: argparse.Namespace) -> int:
     Returns:
         Exit code (0 for success)
     """
-    from cortex_lens.backend.cache_manager import get_cache_manager
+    data_dir = Path(__file__).parent / "data"
     
-    cache_manager = get_cache_manager()
-    entries = cache_manager.list_cached()
-    
-    if not entries:
-        logger.info("No cached dashboards found")
+    if not data_dir.exists():
+        logger.info("No dashboard data found")
         return 0
     
-    logger.info(f"📦 Cached Dashboards ({len(entries)}):")
+    logger.info(f"📦 Generated Dashboard Data:")
     logger.info("")
     
-    for entry in entries:
-        status = "⚠️  expired" if entry.is_expired() else "✓"
-        repo_type = "CORTEX" if entry.is_cortex else "external"
-        logger.info(f"  {status} {Path(entry.repo_path).name} ({repo_type})")
-        logger.info(f"      Path: {entry.repo_path}")
-        logger.info(f"      Output: {entry.output_path}")
-        logger.info(f"      Created: {entry.created_at.strftime('%Y-%m-%d %H:%M')}")
+    # CORTEX data
+    cortex_dir = data_dir / "cortex"
+    if cortex_dir.exists():
+        files = list(cortex_dir.glob("*.json"))
+        logger.info(f"  ✓ CORTEX ({len(files)} files)")
+        for f in files:
+            logger.info(f"      - {f.name}")
         logger.info("")
+    
+    # External repos
+    repos_dir = data_dir / "repos"
+    if repos_dir.exists():
+        for repo_dir in repos_dir.iterdir():
+            if repo_dir.is_dir():
+                files = list(repo_dir.glob("*.json"))
+                logger.info(f"  ✓ {repo_dir.name} ({len(files)} files)")
     
     return 0
 
 
 def cmd_cache_clear(args: argparse.Namespace) -> int:
-    """Clear dashboard cache.
+    """Clear dashboard data cache.
     
     Args:
         args: Parsed command line arguments
@@ -182,27 +277,29 @@ def cmd_cache_clear(args: argparse.Namespace) -> int:
     Returns:
         Exit code (0 for success)
     """
-    from cortex_lens.backend.cache_manager import get_cache_manager
+    import shutil
     
-    cache_manager = get_cache_manager()
+    data_dir = Path(__file__).parent / "data"
     
     if args.all:
-        # Clear all cache
-        removed = cache_manager.cleanup_old_dashboards(max_age_days=0)
-        logger.info(f"🗑️  Cleared {removed} cached dashboards")
-    elif args.expired:
-        # Clear only expired
-        removed = cache_manager.cleanup_expired()
-        logger.info(f"🗑️  Cleared {removed} expired cache entries")
+        # Clear all external repo data (keep cortex)
+        repos_dir = data_dir / "repos"
+        if repos_dir.exists():
+            for repo_dir in repos_dir.iterdir():
+                if repo_dir.is_dir() and repo_dir.name != "repos.json":
+                    shutil.rmtree(repo_dir)
+                    logger.info(f"🗑️  Cleared {repo_dir.name}")
+        logger.info("✅ Cache cleared")
     elif args.repo:
         # Clear specific repo
-        success = cache_manager.invalidate(Path(args.repo))
-        if success:
+        repo_dir = data_dir / "repos" / args.repo.lower().replace(" ", "-")
+        if repo_dir.exists():
+            shutil.rmtree(repo_dir)
             logger.info(f"🗑️  Cleared cache for {args.repo}")
         else:
             logger.info(f"No cache entry found for {args.repo}")
     else:
-        logger.error("Specify --all, --expired, or --repo")
+        logger.error("Specify --all or --repo")
         return 1
     
     return 0
@@ -261,7 +358,7 @@ def create_parser() -> argparse.ArgumentParser:
     # Generate command
     gen_parser = subparsers.add_parser(
         "generate",
-        help="Generate dashboard for a repository",
+        help="Generate dashboard JSON data for a repository",
     )
     gen_parser.add_argument(
         "repo",
@@ -269,9 +366,9 @@ def create_parser() -> argparse.ArgumentParser:
         help="Path to the repository to analyze",
     )
     gen_parser.add_argument(
-        "--force", "-f",
+        "--cortex", "-c",
         action="store_true",
-        help="Force regeneration (ignore cache)",
+        help="Generate full 8-tab CORTEX dashboard (auto-detected)",
     )
     gen_parser.add_argument(
         "--open", "-o",
@@ -297,16 +394,24 @@ def create_parser() -> argparse.ArgumentParser:
         help="Port to serve on (default: 8080)",
     )
     serve_parser.add_argument(
-        "--directory", "-d",
-        type=str,
-        help="Directory to serve (default: cortex-lens/)",
-    )
-    serve_parser.add_argument(
         "--open", "-o",
         action="store_true",
         help="Open in browser",
     )
     serve_parser.set_defaults(func=cmd_serve)
+    
+    # Open command (shortcut)
+    open_parser = subparsers.add_parser(
+        "open",
+        help="Open dashboard in browser (starts server if needed)",
+    )
+    open_parser.add_argument(
+        "--port", "-p",
+        type=int,
+        default=8080,
+        help="Port to serve on (default: 8080)",
+    )
+    open_parser.set_defaults(func=cmd_open)
     
     # Cache commands
     cache_parser = subparsers.add_parser(
@@ -331,11 +436,6 @@ def create_parser() -> argparse.ArgumentParser:
         "--all", "-a",
         action="store_true",
         help="Clear all cached dashboards",
-    )
-    cache_clear.add_argument(
-        "--expired", "-e",
-        action="store_true",
-        help="Clear only expired entries",
     )
     cache_clear.add_argument(
         "--repo", "-r",

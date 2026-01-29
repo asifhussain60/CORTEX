@@ -1,0 +1,35 @@
+{
+  "diagrams": [
+    {
+      "id": "orchestrator-pipeline",
+      "title": "Core Orchestrator Pipeline",
+      "type": "classDiagram",
+      "mermaid": "classDiagram\n    class MasterOrchestrator {\n        +coordinate_operation()\n        +route_to_orchestrator()\n        +manage_stages()\n    }\n    class InteractionOrchestrator {\n        +execute_turn()\n        +comprehend_request()\n        +apply_lens_protocol()\n    }\n    class IntentRouter {\n        +classify_intent()\n        +score_confidence()\n        +route_domain()\n    }\n    class LENSSynthesis {\n        +synthesize()\n        +generate_dor()\n        +approval_gate()\n    }\n    class EnforcementOrchestrator {\n        +validate_operation()\n        +tier0_blocking()\n        +tier1_escalation()\n    }\n    class TDDOrchestrator {\n        +generate_tests()\n        +red_green_refactor()\n        +execute_tdd()\n    }\n    \n    MasterOrchestrator --> InteractionOrchestrator : Stage 1\n    MasterOrchestrator --> IntentRouter : Stage 2\n    MasterOrchestrator --> LENSSynthesis : Stage 2.5\n    MasterOrchestrator --> TDDOrchestrator : Stage 3\n    IntentRouter --> InteractionOrchestrator\n    LENSSynthesis --> IntentRouter\n    EnforcementOrchestrator --> LENSSynthesis"
+    },
+    {
+      "id": "brain-architecture",
+      "title": "CORTEX Brain 4-Tier Architecture",
+      "type": "classDiagram",
+      "mermaid": "classDiagram\n    class Tier0_Governance {\n        +35 CORE Rules\n        +IMMUTABLE\n        +blocks_violations()\n    }\n    class Tier1_Acceptance {\n        +15 AC Rules\n        +phase_validation()\n        +dor_threshold()\n    }\n    class Tier2_Templates {\n        +10 Response Rules\n        +format_response()\n        +prevent_hallucination()\n    }\n    class Tier3_Knowledge {\n        +35 Best Practices\n        +tdd_patterns()\n        +api_design()\n    }\n    class GovernanceRegistry {\n        +get_rules()\n        +validate()\n        +enforce()\n    }\n    class KnowledgeRepository {\n        +query()\n        +get_best_practices()\n    }\n    \n    Tier0_Governance <|-- GovernanceRegistry\n    Tier1_Acceptance <|-- GovernanceRegistry\n    Tier3_Knowledge <|-- KnowledgeRepository\n    GovernanceRegistry --> Tier2_Templates : enforces"
+    },
+    {
+      "id": "lens-analyzers",
+      "title": "LENS Intelligence Analyzers",
+      "type": "classDiagram",
+      "mermaid": "classDiagram\n    class LENSOrchestrator {\n        +analyze_file()\n        +analyze_batch()\n        +get_lens_context()\n    }\n    class ASTAnalyzer {\n        +extract_functions()\n        +extract_classes()\n        +analyze_complexity()\n    }\n    class GitHistoryAnalyzer {\n        +get_recent_commits()\n        +get_blame()\n        +analyze_patterns()\n    }\n    class CommentExtractor {\n        +extract_todos()\n        +extract_fixmes()\n        +extract_docstrings()\n    }\n    class SecurityThreatAnalyzer {\n        +detect_cwe94()\n        +detect_cwe78()\n        +detect_cwe89()\n    }\n    \n    LENSOrchestrator --> ASTAnalyzer\n    LENSOrchestrator --> GitHistoryAnalyzer\n    LENSOrchestrator --> CommentExtractor\n    LENSOrchestrator --> SecurityThreatAnalyzer"
+    },
+    {
+      "id": "wiring-system",
+      "title": "Git-Backed YAML Wiring System",
+      "type": "classDiagram",
+      "mermaid": "classDiagram\n    class GitBackedRegistry {\n        +load_wiring()\n        +get_orchestrator()\n        +list_all()\n    }\n    class WiringYAML {\n        +orchestrators: core[]\n        +orchestrators: domain[]\n        +orchestrators: support[]\n        +analyzers[]\n    }\n    class MCPServer {\n        +start()\n        +handle_request()\n        +route_to_orchestrator()\n    }\n    class HealthChecker {\n        +check_health()\n        +check_wiring()\n        +prometheus_metrics()\n    }\n    \n    GitBackedRegistry --> WiringYAML : reads\n    MCPServer --> GitBackedRegistry : uses\n    HealthChecker --> GitBackedRegistry : monitors"
+    }
+  ],
+  "entity_relationships": {
+    "orchestrators": 24,
+    "analyzers": 4,
+    "governance_components": 5,
+    "wiring_components": 4
+  },
+  "generated": "2026-01-29T19:13:10.266867Z"
+}

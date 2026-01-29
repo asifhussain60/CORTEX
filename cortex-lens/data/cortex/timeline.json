@@ -1,0 +1,138 @@
+{
+  "timeline": {
+    "start_date": "2026-01-01",
+    "end_date": "2026-01-29",
+    "total_commits": 383,
+    "total_authors": 1,
+    "primary_author": "Asif Hussain"
+  },
+  "commit_frequency": [
+    {
+      "week": "2026-W01",
+      "commits": 45,
+      "label": "Jan 1-7"
+    },
+    {
+      "week": "2026-W02",
+      "commits": 62,
+      "label": "Jan 8-14"
+    },
+    {
+      "week": "2026-W03",
+      "commits": 78,
+      "label": "Jan 15-21"
+    },
+    {
+      "week": "2026-W04",
+      "commits": 156,
+      "label": "Jan 22-28"
+    },
+    {
+      "week": "2026-W05",
+      "commits": 42,
+      "label": "Jan 29+"
+    }
+  ],
+  "hot_files": [
+    {
+      "file": "cortex/orchestrators/core/master_orchestrator.py",
+      "changes": 45,
+      "authors": 1
+    },
+    {
+      "file": "cortex/wiring/specifications/wiring.yaml",
+      "changes": 38,
+      "authors": 1
+    },
+    {
+      "file": "cortex/orchestrators/core/intent_router.py",
+      "changes": 32,
+      "authors": 1
+    },
+    {
+      "file": "cortex/brain/core/governance_registry.py",
+      "changes": 28,
+      "authors": 1
+    },
+    {
+      "file": "cortex/orchestrators/core/tdd_orchestrator.py",
+      "changes": 25,
+      "authors": 1
+    },
+    {
+      "file": "cortex/mcp/server.py",
+      "changes": 22,
+      "authors": 1
+    },
+    {
+      "file": "cortex/orchestrators/support/lens_dashboard_orchestrator.py",
+      "changes": 18,
+      "authors": 1
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase-0",
+      "name": "Phase 0: Pre-Flight",
+      "start": "2026-01-20",
+      "end": "2026-01-20",
+      "status": "complete",
+      "color": "#4ecdc4"
+    },
+    {
+      "id": "phase-1-6",
+      "name": "Phases 1-6: Core Migration",
+      "start": "2026-01-21",
+      "end": "2026-01-27",
+      "status": "complete",
+      "color": "#7b2cbf"
+    },
+    {
+      "id": "phase-7",
+      "name": "Phase 7: LENS Intelligence",
+      "start": "2026-01-27",
+      "end": "2026-01-28",
+      "status": "complete",
+      "color": "#00d4ff"
+    },
+    {
+      "id": "phase-8",
+      "name": "Phase 8: Enforcement",
+      "start": "2026-01-28",
+      "end": "2026-01-28",
+      "status": "complete",
+      "color": "#ff6b6b"
+    },
+    {
+      "id": "phase-14",
+      "name": "Phase 14: LENS Dashboard",
+      "start": "2026-01-29",
+      "end": "2026-01-29",
+      "status": "in_progress",
+      "color": "#ffe66d"
+    }
+  ],
+  "milestones": [
+    {
+      "date": "2026-01-27",
+      "event": "Docker Migration Complete",
+      "icon": "\ud83d\udc33"
+    },
+    {
+      "date": "2026-01-28",
+      "event": "23 Orchestrators Wired",
+      "icon": "\ud83c\udfbc"
+    },
+    {
+      "date": "2026-01-28",
+      "event": "LENS Intelligence Live",
+      "icon": "\ud83d\udd0d"
+    },
+    {
+      "date": "2026-01-29",
+      "event": "Dashboard Generation",
+      "icon": "\ud83d\udcca"
+    }
+  ],
+  "generated": "2026-01-29T19:13:10.267007Z"
+}
