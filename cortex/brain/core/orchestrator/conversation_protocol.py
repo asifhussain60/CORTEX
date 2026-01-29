@@ -30,7 +30,7 @@ from cortex.brain.core.orchestrator.terminal_events import (
     UserApprovalRejectedEvent,
 )
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from cortex.brain.core.governance_pregate import get_governance_pregate, PreGateDecision
 from cortex.brain.core.tier_validator import TierAccessValidator
 from cortex.brain.core.intelligence.ast_intelligence import ASTIntelligenceEngine

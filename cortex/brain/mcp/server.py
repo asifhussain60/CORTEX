@@ -42,7 +42,7 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.database import DatabaseManager
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 from cortex.orchestrators import get_orchestrator_count_by_category
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 @dataclass

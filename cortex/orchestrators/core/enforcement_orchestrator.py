@@ -26,7 +26,7 @@ from typing import Dict, Any, List, Optional
 import logging
 
 from cortex.core.result import Result, Ok, Err
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 logger = logging.getLogger(__name__)
 

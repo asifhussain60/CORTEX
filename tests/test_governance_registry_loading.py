@@ -15,7 +15,7 @@ Version: 1.0
 """
 
 import pytest
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 class TestRegistryBasics:

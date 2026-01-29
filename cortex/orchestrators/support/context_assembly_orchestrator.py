@@ -198,7 +198,7 @@ class ContextAssemblyOrchestrator:
         try:
             # Placeholder for GovernanceRegistry integration
             # In real implementation:
-            # from cortex.brain.core.governance_registry import GovernanceRegistry
+            # from cortex.orchestrators.core.governance_registry import GovernanceRegistry
             # registry = GovernanceRegistry()
             # return registry.get_applicable_rules(question, category)
             

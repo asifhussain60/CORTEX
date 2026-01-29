@@ -28,7 +28,7 @@ import logging
 
 if TYPE_CHECKING:
     from cortex.execution.spec_registry_impl import SpecRegistry
-    from cortex.brain.core.governance_registry import GovernanceRegistry
+    from cortex.orchestrators.core.governance_registry import GovernanceRegistry
     from cortex.execution.structured_decision import StructuredDecisionFormatter
 
 
@@ -161,7 +161,7 @@ class MasterGatewayExecutor:
         """
         # Import at runtime to avoid circular dependencies
         from cortex.execution.spec_registry_impl import SpecRegistry as _SpecRegistry  # type: ignore
-        from cortex.brain.core.governance_registry import GovernanceRegistry as _GovRegistry  # type: ignore
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry as _GovRegistry  # type: ignore
         from cortex.execution.structured_decision import StructuredDecisionFormatter as _SDF  # type: ignore
         
         self.spec_registry = spec_registry or _SpecRegistry.get_registry()

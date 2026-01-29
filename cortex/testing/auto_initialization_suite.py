@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Tuple
 
 import pytest
 from cortex.brain.core.governance_intelligence import GovernanceIntelligence
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.knowledge_composer import KnowledgeComposer
 from cortex.brain.core.tier_composer import TierComposer
 from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
