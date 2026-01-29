@@ -1232,6 +1232,7 @@ class CORTEXVerification:
         - LENS integration prerequisites
         - Evidence collection capability
         - Estimation model framework
+        - Team assumptions config (Legend Enhancement - 2026-01-29)
         
         Note: Phase 12 is PLANNED, so this checks READINESS, not deployment.
         """
@@ -1239,7 +1240,7 @@ class CORTEXVerification:
             issues = []
             evidence = []
             readiness_score = 0
-            total_checks = 4
+            total_checks = 6  # Updated from 4 to 6
             
             # Check 1: Health endpoint infrastructure exists
             health_checker_path = self.cortex_root / "cortex" / "mcp" / "health_checker.py"
@@ -1282,6 +1283,27 @@ class CORTEXVerification:
                         issues.append("Missing /health/capacity-estimation endpoint")
             else:
                 issues.append("health_checks.yaml missing")
+            
+            # Check 5: Team Assumptions Config (Legend Enhancement - 2026-01-29)
+            team_assumptions_yaml = self.cortex_root / "cortex" / "capacity" / "config" / "team_assumptions.yaml"
+            if team_assumptions_yaml.exists():
+                readiness_score += 1
+                evidence.append("✅ Team assumptions config exists (Legend Enhancement)")
+            else:
+                issues.append("Team assumptions YAML config missing")
+            
+            # Check 6: Team Assumptions Loader (Legend Enhancement - 2026-01-29)
+            team_assumptions_py = self.cortex_root / "cortex" / "capacity" / "team_assumptions.py"
+            if team_assumptions_py.exists():
+                with open(team_assumptions_py, 'r') as f:
+                    content = f.read()
+                    if "generate_legend" in content and "TeamAssumptions" in content:
+                        readiness_score += 1
+                        evidence.append("✅ Team assumptions loader with legend generator present")
+                    else:
+                        issues.append("Team assumptions loader missing legend generator")
+            else:
+                issues.append("Team assumptions loader (team_assumptions.py) missing")
             
             # Determine status
             readiness_percent = (readiness_score / total_checks) * 100

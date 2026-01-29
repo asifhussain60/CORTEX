@@ -142,7 +142,7 @@ open http://localhost:9093
 - **Challenge user if better solution exists** (5 disagreement types)
 - Determine target orchestrator, confidence, scope, and impact
 
-**Step 2: Display DoR (Definition of Ready)**
+**Step 2: Display DoR (Definition of Ready) + Action Plan + DoD**
 ```markdown
 ### 📋 Intent Classification
 
@@ -157,9 +157,44 @@ open http://localhost:9093
 | **Rules** | {applicable CORE rules} |
 
 ---
+
+### 🎯 Action Plan
+{Tiered by Impact Level}
+
+🔵 **Low:** > I will {action} in `{file}` to {outcome}.
+
+🟡 **Medium:**
+1. **{Verb}** `{target}` — {purpose}
+2. **{Verb}** `{target}` — {purpose}
+3. **Create** tests in `tests/{module}/`
+
+🔴 **High:**
+1. **{Verb}** `{target}` — {purpose}
+2. **Modify** `{file}` — {changes}
+3. **Create** tests — {coverage target}
+4. **Rollback:** `git stash` before execution
+
+---
+
+### ✅ Definition of Done (DoD)
+- [ ] {Primary deliverable}
+- [ ] {Secondary criteria}
+- [ ] All tests pass
+- [ ] No lint/type errors
+
+---
+
 **⏳ Awaiting approval to proceed...** (if DoR ≥ 60%)
 
 **⛔ DoR NOT MET — Execution Blocked** (if DoR < 60%)
+```
+
+**ANALYZE Intent (read-only) - Lighter Format:**
+```markdown
+### 🔍 Analysis Plan
+I will examine: `{files}` for {purpose}
+Output: Inline summary (no file changes)
+⏳ Awaiting approval...
 ```
 
 **Step 3: Wait for Approval**

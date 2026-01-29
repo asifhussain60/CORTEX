@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 6.3 | **Updated:** 2026-01-28 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via GitBackedRegistry)
+**Version:** 6.4 | **Updated:** 2026-01-29 | **Authority:** Docker-Plan Migration v1.0 | **Status:** ✅ PRODUCTION READY (23/23 Orchestrators Wired via GitBackedRegistry)
 
 **AC-PERMANENT-FIX Status:** 9 permanent fixes active (AC-PERMANENT-FIX-001 through 009)
 
@@ -138,7 +138,7 @@ On receiving ANY user request:
 
 ### Stage 2: DoR (Definition of Ready) Display
 
-**MANDATORY:** Before ANY execution, display intent reflection:
+**MANDATORY:** Before ANY execution, display intent reflection with action plan:
 
 ```markdown
 ### 📋 Intent Classification
@@ -155,6 +155,36 @@ On receiving ANY user request:
 
 ---
 
+### 🎯 Action Plan
+{Tiered by Impact - see below}
+
+**🔵 Low Impact** (1-liner):
+> I will {action} in `{file}` to {outcome}.
+
+**🟡 Medium Impact** (bulleted):
+1. **{Verb}** `{target}` — {purpose}
+2. **{Verb}** `{target}` — {purpose}
+3. **Create** tests in `tests/{module}/`
+
+**🔴 High Impact** (full detail):
+1. **{Verb}** `{target}` — {purpose}
+2. **{Verb}** `{target}` — {purpose}
+3. **Modify** `{file}` — {what changes}
+4. **Create** tests — {test coverage target}
+5. **Rollback point:** `git stash` before execution
+
+---
+
+### ✅ Definition of Done (DoD)
+
+- [ ] {Primary deliverable exists and works}
+- [ ] {Secondary criteria met}
+- [ ] All tests pass ({count}+ expected)
+- [ ] No lint/type errors
+- [ ] {Any governance-specific criteria}
+
+---
+
 **⏳ Awaiting approval to proceed...** (if DoR ≥ 60%)
 
 **⛔ DoR NOT MET — Execution Blocked** (if DoR < 60%)
@@ -163,6 +193,15 @@ Reply with:
 - ✅ "proceed" / "yes" / "approve" → Execute (only if DoR met)
 - ❌ "no" / "cancel" / "stop" → Abort
 - 🔄 "modify: {changes}" → Adjust and re-classify
+```
+
+**ANALYZE Intent (Read-Only) - Lighter Format:**
+```markdown
+### 🔍 Analysis Plan
+I will examine: `{files}` for {purpose}
+Output: Inline summary (no file changes)
+
+**⏳ Awaiting approval...**
 ```
 
 ### Stage 3: Await User Approval

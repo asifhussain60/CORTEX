@@ -1,0 +1,63 @@
+# Team Capacity Estimation Assumptions
+# Version-controlled configuration for transparent cost/effort calculations
+# Edit this file to update team rates - changes tracked in git history
+
+version: "1.0"
+updated: "2026-01-29"
+author: "Asif Hussain"
+
+# Skill level definitions with rates and productivity
+skill_levels:
+  junior:
+    title: "Junior Engineer"
+    hours_per_story_point: 7
+    hourly_rate: 75
+    annual_salary: 120000
+    description: "0-2 years experience"
+    
+  mid_level:
+    title: "Mid-Level Engineer"
+    hours_per_story_point: 4.5
+    hourly_rate: 100
+    annual_salary: 160000
+    description: "2-5 years experience"
+    
+  senior:
+    title: "Senior Engineer"
+    hours_per_story_point: 2.5
+    hourly_rate: 150
+    annual_salary: 240000
+    description: "5-10 years experience"
+    
+  architect:
+    title: "Staff/Architect"
+    hours_per_story_point: 1.5
+    hourly_rate: 200
+    annual_salary: 320000
+    description: "10+ years experience"
+
+# Work schedule defaults
+schedule:
+  work_hours_per_day: 8
+  work_days_per_week: 5
+  sprint_days: 10
+  productive_hours_ratio: 0.75  # Account for meetings, admin, etc.
+
+# Cost calculation defaults
+costs:
+  currency: "USD"
+  overhead_multiplier: 1.3  # Benefits, equipment, office space
+  contingency_percent: 15   # Risk buffer
+
+# PERT model weights
+pert:
+  optimistic_weight: 1
+  likely_weight: 4
+  pessimistic_weight: 1
+
+# Legend display format
+legend:
+  show_hourly_rates: true
+  show_annual_salaries: false
+  show_productivity: true
+  show_overhead: true

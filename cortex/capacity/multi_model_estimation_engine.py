@@ -4,6 +4,8 @@ Implements three estimation models for consensus:
 1. PERT (Program Evaluation and Review Technique)
 2. Story Points with skill-level conversion
 3. Critical Path Method (CPM)
+
+Enhanced with transparent estimation basis (legend) from team_assumptions.yaml.
 """
 
 import logging
@@ -11,6 +13,8 @@ import math
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+
+from cortex.capacity.team_assumptions import get_team_assumptions, TeamAssumptions
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +41,9 @@ class EstimationResult:
         confidence_interval_high: 80% CI high bound
         recommended_hours: Consensus recommendation
         risk_factors: Identified risk factors
+        skill_level_used: Skill level used for estimation
+        estimated_cost: Total estimated cost (with overhead)
+        legend: Estimation basis explanation
     """
     task_id: str
     pert_hours: float = 0.0
@@ -47,6 +54,9 @@ class EstimationResult:
     recommended_hours: float = 0.0
     risk_factors: List[str] = field(default_factory=list)
     model_agreement: float = 0.0  # % of models in agreement
+    skill_level_used: str = "mid_level"
+    estimated_cost: float = 0.0
+    legend: str = ""
 
 
 class PERTEstimator:
@@ -232,11 +242,13 @@ class MultiModelEstimationEngine:
     - 80% confidence intervals
     - Risk factor identification
     - Model agreement metrics
+    - Transparent estimation basis (legend)
     
     AC-CAP-2-01: PERT estimator produces expected value + std dev
     AC-CAP-2-02: Story point converter handles 4 skill levels
     AC-CAP-2-03: CPM calculates parallel path optimization
     AC-CAP-2-04: Consensus produce 80% CI recommendations
+    AC-CAP-2-05: Include estimation basis legend for transparency
     """
     
     def __init__(self):
@@ -244,6 +256,24 @@ class MultiModelEstimationEngine:
         self.pert = PERTEstimator()
         self.story_points = StoryPointEstimator()
         self.cpm = CriticalPathEstimator()
+        self.assumptions = get_team_assumptions()
+    
+    def _skill_level_to_key(self, skill_level: SkillLevel) -> str:
+        """Convert SkillLevel enum to config key.
+        
+        Args:
+            skill_level: SkillLevel enum
+            
+        Returns:
+            Config key string
+        """
+        mapping = {
+            SkillLevel.JUNIOR: "junior",
+            SkillLevel.MIDLEVEL: "mid_level",
+            SkillLevel.SENIOR: "senior",
+            SkillLevel.ARCHITECT: "architect",
+        }
+        return mapping.get(skill_level, "mid_level")
     
     def estimate_task(
         self,
@@ -253,11 +283,13 @@ class MultiModelEstimationEngine:
         pessimistic: float,
         story_points: int,
         skill_level: SkillLevel = SkillLevel.MIDLEVEL,
-        dependencies: Optional[Dict[str, float]] = None
+        dependencies: Optional[Dict[str, float]] = None,
+        include_legend: bool = True
     ) -> EstimationResult:
         """Estimate task using all three models.
         
         Phase 12 AC-CAP-2-04: Produce consensus estimate
+        Phase 12 AC-CAP-2-05: Include estimation basis legend
         
         Args:
             task_id: Task identifier
@@ -267,16 +299,23 @@ class MultiModelEstimationEngine:
             story_points: Story point estimate
             skill_level: Team skill level
             dependencies: Dict of {dep_task_id: duration}
+            include_legend: Whether to include full legend in result
             
         Returns:
-            EstimationResult with all models
+            EstimationResult with all models and transparent legend
         """
+        skill_key = self._skill_level_to_key(skill_level)
+        
         # PERT estimation
         pert_hours, pert_std = self.pert.estimate(optimistic, likely, pessimistic)
         pert_low, pert_high = self.pert.get_confidence_interval(pert_hours, pert_std)
         
-        # Story points estimation
-        sp_hours = self.story_points.estimate_hours(story_points, skill_level)
+        # Story points estimation (use config-driven rates)
+        config_hours_per_pt = self.assumptions.get_hours_per_point(skill_key)
+        if config_hours_per_pt > 0:
+            sp_hours = story_points * config_hours_per_pt
+        else:
+            sp_hours = self.story_points.estimate_hours(story_points, skill_level)
         sp_low, sp_high = self.story_points.estimate_range(story_points, skill_level)
         
         # CPM estimation
@@ -311,6 +350,15 @@ class MultiModelEstimationEngine:
         ci_low = min(all_estimates)
         ci_high = max(all_estimates)
         
+        # Calculate cost using config
+        estimated_cost = self.assumptions.calculate_cost(recommended, skill_key)
+        
+        # Generate legend
+        if include_legend:
+            legend = self.assumptions.generate_legend(skill_levels_used=[skill_key])
+        else:
+            legend = self.assumptions.generate_compact_legend(skill_key)
+        
         return EstimationResult(
             task_id=task_id,
             pert_hours=pert_hours,
@@ -320,17 +368,22 @@ class MultiModelEstimationEngine:
             confidence_interval_high=ci_high,
             recommended_hours=recommended,
             model_agreement=agreement,
+            skill_level_used=skill_key,
+            estimated_cost=estimated_cost,
+            legend=legend,
         )
     
     def get_estimation_summary(self, result: EstimationResult) -> Dict[str, Any]:
-        """Get summary of estimation.
+        """Get summary of estimation with cost and legend.
         
         Args:
             result: Estimation result
             
         Returns:
-            Summary dictionary
+            Summary dictionary with transparent basis
         """
+        currency = self.assumptions.costs.get("currency", "USD")
+        
         return {
             "task_id": result.task_id,
             "recommended_hours": f"{result.recommended_hours:.1f}",
@@ -339,7 +392,18 @@ class MultiModelEstimationEngine:
             "story_points": result.story_points,
             "cpm_hours": f"{result.cpm_hours:.1f}",
             "model_agreement": f"{result.model_agreement:.1f}%",
+            "skill_level": result.skill_level_used,
+            "estimated_cost": f"{currency} {result.estimated_cost:,.2f}",
+            "estimation_basis": result.legend,
         }
+    
+    def get_assumptions_legend(self) -> str:
+        """Get full assumptions legend.
+        
+        Returns:
+            Complete legend showing all estimation basis
+        """
+        return self.assumptions.generate_legend()
 
 
 if __name__ == "__main__":
