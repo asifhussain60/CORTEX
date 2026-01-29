@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Set, Any
 import json
 import logging
 
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 class SeverityLevel(Enum):

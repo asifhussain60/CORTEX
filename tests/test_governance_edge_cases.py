@@ -19,7 +19,7 @@ Version: 1.0
 import pytest
 import tempfile
 from pathlib import Path
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.governance_database import GovernanceDatabaseManager
 
 

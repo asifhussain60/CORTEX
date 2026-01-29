@@ -11,7 +11,7 @@ Author: Asif Hussain
 
 import pytest
 
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.tier_resolver import TierResolver
 
 

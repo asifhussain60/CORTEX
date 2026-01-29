@@ -29,7 +29,7 @@ import threading
 from typing import Dict, List, Optional, Any, Tuple, Union
 from datetime import datetime, timezone
 
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.governance_database import (
     GovernanceDatabaseManager,
     GovernanceRule as DBGovernanceRule,

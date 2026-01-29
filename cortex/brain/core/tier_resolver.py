@@ -13,7 +13,7 @@ Author: Asif Hussain
 import logging
 from typing import Optional, Tuple
 
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.result import Result, Ok, Err
 
 

@@ -20,7 +20,7 @@ import tempfile
 from pathlib import Path
 from typing import Generator
 
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.governance_database import GovernanceDatabaseManager
 
 

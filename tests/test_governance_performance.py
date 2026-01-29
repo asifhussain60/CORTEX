@@ -19,7 +19,7 @@ import pytest
 import tempfile
 import time
 from pathlib import Path
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.brain.core.governance_database import GovernanceDatabaseManager
 
 
