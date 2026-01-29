@@ -10,7 +10,7 @@
 **EVERY response MUST begin with:**
 ```markdown
 ## 🧠 CORTEX Enforcement
-**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** EnforcementOrchestrator ✅
+**Author:** Asif Hussain | **Orchestrator:** EnforcementOrchestrator ✅
 
 ---
 ```
