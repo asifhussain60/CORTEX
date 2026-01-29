@@ -23,7 +23,8 @@ from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, Operation
 from cortex.core.result import Result, Ok, Err
 from cortex.brain.core.response_header_injector import ResponseHeaderInjector
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
-from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+from cortex.execution.exec_gateway_impl import GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
 from cortex.brain.knowledge.hybrid_loader import HybridKnowledgeLoader, get_hybrid_loader
