@@ -1,0 +1,1415 @@
+# PHASE 15: Static Repository Visualization & Domain Knowledge System
+# Version: 1.0
+# Created: 2026-01-29
+# Authority: CORE-030 (Implementation Truth), CORE-038 (File Placement), CORE-040 (Doc Lifecycle)
+# Dependencies: Phase 14 (LENS Dashboard), Phase 7.1 (LENS Intelligence)
+# Status: APPROVED - Ready for Implementation
+#
+# ⭐ CRITICAL: This phase creates GENERIC, repo-agnostic visualization system
+# NO proprietary data in this specification - reference architecture only
+
+metadata:
+  phase_id: "PHASE-15"
+  name: "Static Repository Visualization & Domain Knowledge System"
+  status: "APPROVED"
+  priority: "P1"
+  estimated_effort: "18-24 days"
+  dependencies:
+    - "Phase 14 (LENS Dashboard baseline)"
+    - "Phase 7.1 (LENS Intelligence - AST, Git, Comment analyzers)"
+    - "BusinessLanguageGenerator (cortex/visualization/business_language_generator.py)"
+    - "D3.js renderers (4 existing: call graph, import graph, timeline, author network)"
+  
+  ac_ids:
+    - "STATIC-VIZ-001"  # StaticVisualizationOrchestrator
+    - "STATIC-VIZ-002"  # Multi-Persona HTML Generator
+    - "STATIC-VIZ-003"  # Domain Knowledge Accumulator
+    - "STATIC-VIZ-004"  # 3-Tier Dashboard Hierarchy
+    - "STATIC-VIZ-005"  # D3.js Visualization System (no Mermaid)
+    - "STATIC-VIZ-006"  # Domain Auto-Detection
+    - "STATIC-VIZ-007"  # Incremental Knowledge Updates
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary: |
+  Phase 15 transforms CORTEX from a single-repo analysis tool to a comprehensive
+  portfolio intelligence system with three-tier visualization hierarchy and
+  cumulative domain knowledge.
+  
+  **PROBLEM SOLVED:**
+  - Phase 14 created dashboards but lacked multi-persona views
+  - No way to aggregate knowledge across multiple repos in a domain
+  - Dashboard UX was too technical (Alpine.js, Mermaid failures)
+  - No cross-repository intelligence or compliance tracking
+  
+  **SOLUTION: 3-TIER STATIC VISUALIZATION SYSTEM**
+  
+  Tier 1: Repository Dashboards (6 tabs)
+    - Individual repo analysis with domain context
+    - Static HTML + JSON (file:/// compatible, offline-first)
+    - Multi-persona views (developers/, managers/, executives/, regulatory/, product/)
+    - D3.js visualizations ONLY (Mermaid removed due to Phase 14 failures)
+  
+  Tier 2: Domain Dashboards (6 tabs)
+    - Aggregated knowledge across all repos in a domain
+    - Cross-repo entity catalog, workflow patterns, compliance matrix
+    - Technology prevalence heatmaps
+    - Incremental knowledge accumulation in company/domains/{domain}/
+  
+  Tier 3: CORTEX Self-Analysis (9 tabs)
+    - Special-case dashboard for CORTEX analyzing itself
+    - Standard 5 tabs + Brain + Governance + Orchestrators + CORTEX Domain
+  
+  **ARCHITECTURE PATTERN (Success Model):**
+  Phase 15 follows the proven architecture from RA-Domain-Analysis:
+    ✅ Static HTML pages (no build step, no CDN dependencies)
+    ✅ Glassmorphism CSS (onedrive-glass.css style)
+    ✅ Pure JavaScript (no Alpine.js complexity)
+    ✅ D3.js bundled locally (force-directed graphs, heatmaps, timelines)
+    ✅ Multi-persona navigation (developers/, managers/, etc.)
+    ✅ JSON data files (separation of data from presentation)
+    ✅ Offline-first (works at file:/// without server)
+    ❌ NO Mermaid (failed in Phase 14 - diagrams didn't render)
+    ❌ NO Alpine.js (over-engineered for static content)
+    ❌ NO CDN dependencies (must work offline/air-gapped)
+  
+  **DOMAIN KNOWLEDGE ACCUMULATION:**
+  - Onboarding populates company/domains/{domain}/*.yaml
+  - Entities aggregated across repos (find shared data models)
+  - Workflows detected and cataloged (common patterns emerge)
+  - Compliance tracking (HIPAA/PCI-DSS/SOX across portfolio)
+  - Tech stack analysis (which repos use what technologies)
+  - Glossary building (business terms from AST + comments)
+
+# ==============================================================================
+# ARCHITECTURE: 3-TIER DASHBOARD HIERARCHY
+# ==============================================================================
+
+architecture:
+  overview: |
+    Phase 15 introduces a three-tier hierarchy for code intelligence:
+    
+    1. LENS Dashboard (lens-dashboard.html) - Entry Point
+       ├─ CORTEX tile → cortex-dashboard.html (9 tabs)
+       └─ Domain tiles → domain-dashboard.html?domain=X (6 tabs)
+           └─ Repo tiles → data/repos/{slug}/index.html (6 tabs)
+    
+    2. File Structure (cortex-lens/)
+       cortex-lens/
+         ├─ lens-dashboard.html           # Main entry (repo/domain browser)
+         ├─ cortex-dashboard.html         # CORTEX self-analysis (9 tabs)
+         ├─ domain-dashboard.html         # Domain aggregation (6 tabs)
+         ├─ static/                       # Bundled assets (D3.js, CSS, JS)
+         │   ├─ css/
+         │   │   ├─ cortex-lens.css       # Base styles
+         │   │   └─ glassmorphism.css     # RA-Domain-Analysis inspired
+         │   ├─ js/
+         │   │   ├─ dashboard-core.js     # Shared utilities
+         │   │   ├─ d3-visualizations.js  # D3.js wrappers
+         │   │   └─ persona-nav.js        # Multi-persona navigation
+         │   ├─ vendor/
+         │   │   └─ d3-7.8.5.min.js       # Bundled locally (250KB)
+         │   └─ assets/
+         │       └─ cortex-logo-200.png
+         └─ data/
+             ├─ repos/
+             │   ├─ repos.json            # Repository registry
+             │   └─ {repo-slug}/
+             │       ├─ index.html        # Main repo dashboard (6 tabs)
+             │       ├─ data.json         # Aggregated analysis data
+             │       ├─ developers/       # Developer-focused pages
+             │       │   ├─ index.html
+             │       │   ├─ domain-model.html
+             │       │   ├─ complexity-heatmap.html
+             │       │   └─ integration-architecture.html
+             │       ├─ managers/         # Manager-focused pages
+             │       │   ├─ index.html
+             │       │   ├─ team-metrics.html
+             │       │   ├─ technical-debt-register.html
+             │       │   └─ performance-metrics.html
+             │       ├─ executives/       # Executive-focused pages
+             │       │   ├─ index.html
+             │       │   └─ executive-summary.html
+             │       ├─ regulatory/       # Compliance-focused pages
+             │       │   ├─ index.html
+             │       │   └─ compliance-gaps.html
+             │       └─ product/          # Product manager pages
+             │           ├─ index.html
+             │           └─ use-cases.html
+             └─ domains/
+                 ├─ domains.json          # Domain registry
+                 └─ {domain-slug}/
+                     ├─ index.html        # Domain dashboard (6 tabs)
+                     └─ data.json         # Aggregated domain data
+    
+    3. Knowledge Storage (company/)
+       company/
+         └─ domains/
+             └─ {domain}/
+                 ├─ README.md             # Domain documentation
+                 ├─ entities.yaml         # Aggregated entities across repos
+                 ├─ workflows.yaml        # Common workflow patterns
+                 ├─ compliance.yaml       # Compliance tracking
+                 ├─ tech-stack.yaml       # Technology prevalence
+                 ├─ glossary.yaml         # Business terminology
+                 └─ architecture-patterns.yaml  # Recurring patterns
+
+  tier_1_repository_dashboards:
+    name: "Repository Dashboards (6 tabs + multi-persona)"
+    location: "cortex-lens/data/repos/{repo-slug}/"
+    tabs:
+      tab_1:
+        id: "overview"
+        name: "📦 Repository Overview"
+        purpose: "Business-language summary of what the code does"
+        content:
+          - "What is this application? (BusinessLanguageGenerator output)"
+          - "Who uses it? (Stakeholder identification)"
+          - "Key capabilities (AST-derived features)"
+          - "Technology stack (detected from imports)"
+          - "Architecture patterns (MVC, microservices, monolith)"
+          - "Compliance tags (HIPAA, PCI-DSS, SOX if detected)"
+        data_sources:
+          - "AST analysis (functions, classes, modules)"
+          - "Git commit messages (intent detection)"
+          - "Comments and docstrings"
+          - "BusinessLanguageGenerator"
+      
+      tab_2:
+        id: "dependencies"
+        name: "🕸️ Dependency Graph"
+        purpose: "Visualize module dependencies and function calls"
+        content:
+          - "D3.js force-directed import graph"
+          - "Call graph visualization"
+          - "Dependency metrics (coupling, cohesion)"
+          - "Circular dependency detection"
+        visualizations:
+          - "D3 force-directed graph (nodes = modules, edges = imports)"
+          - "Interactive filtering by module type"
+          - "Color coding by module category"
+        implementation_reference:
+          - "cortex/visualization/renderers/d3_import_graph_renderer.py"
+          - "cortex/visualization/renderers/d3_call_graph_renderer.py"
+          - "See archive/CORTEX-5.0 for original working implementation"
+      
+      tab_3:
+        id: "classes"
+        name: "📊 Class & Entity Model"
+        purpose: "Domain model visualization"
+        content:
+          - "Entity boxes with properties"
+          - "Compliance highlighting (HIPAA entities in blue, PCI in red)"
+          - "Relationship arrows (foreign keys, inheritance)"
+          - "Entity statistics (property count, method count)"
+        visualizations:
+          - "D3.js entity-relationship graph"
+          - "Custom entity box rendering (like RA-Domain-Analysis)"
+          - "Color-coded by compliance requirements"
+        note: "NO Mermaid class diagrams (failed in Phase 14)"
+      
+      tab_4:
+        id: "timeline"
+        name: "📈 Temporal Analysis"
+        purpose: "Git history and change patterns"
+        content:
+          - "Commit timeline visualization"
+          - "Change frequency heatmap (hot files)"
+          - "Author contribution network"
+          - "Development phases detection"
+        visualizations:
+          - "D3.js timeline with commit markers"
+          - "Heatmap of file changes over time"
+          - "Author network (force-directed graph)"
+        implementation_reference:
+          - "cortex/visualization/renderers/d3_git_timeline_renderer.py"
+          - "cortex/visualization/renderers/d3_author_network_renderer.py"
+      
+      tab_5:
+        id: "impact"
+        name: "💥 Impact Analysis"
+        purpose: "Change ripple effects and risk assessment"
+        content:
+          - "High-impact modules (many dependents)"
+          - "Critical paths (change propagation)"
+          - "Dependency matrix"
+          - "Risk assessment (test coverage, rollback strategy)"
+        visualizations:
+          - "D3.js dependency matrix heatmap"
+          - "Impact radius visualization"
+      
+      tab_6:
+        id: "domain-context"
+        name: "🏢 Domain Context"
+        purpose: "How this repo fits into broader company domain"
+        content:
+          - "Domain membership (which domain this repo belongs to)"
+          - "Shared entities with other repos (cross-repo data models)"
+          - "Compliance alignment (domain standards vs this repo)"
+          - "Technology stack comparison (this repo vs domain average)"
+          - "Glossary terms used (business vocabulary)"
+        data_sources:
+          - "company/domains/{domain}/entities.yaml"
+          - "company/domains/{domain}/compliance.yaml"
+          - "company/domains/{domain}/tech-stack.yaml"
+          - "company/domains/{domain}/glossary.yaml"
+        visualizations:
+          - "Venn diagram of shared entities"
+          - "Compliance checklist (green/red indicators)"
+          - "Tech stack radar chart"
+    
+    multi_persona_views:
+      developers:
+        location: "developers/"
+        pages:
+          - "index.html - Developer dashboard with quick links"
+          - "domain-model.html - Entity model with properties/methods"
+          - "complexity-heatmap.html - Cyclomatic complexity visualization"
+          - "integration-architecture.html - API endpoints, message queues"
+          - "knowledge-ownership.html - Which devs know which modules"
+          - "developer-insights.html - Technical debt, refactoring opportunities"
+      
+      managers:
+        location: "managers/"
+        pages:
+          - "index.html - Manager dashboard with KPIs"
+          - "team-metrics.html - Velocity, commit frequency, PR stats"
+          - "technical-debt-register.html - Debt items with ROI estimates"
+          - "technical-debt-roi.html - Payoff matrix for debt reduction"
+          - "test-coverage-gaps.html - Coverage by module"
+          - "test-coverage-roadmap.html - Testing improvement plan"
+          - "performance-metrics.html - Performance benchmarks"
+          - "weekly-scorecard.html - Weekly progress tracking"
+      
+      executives:
+        location: "executives/"
+        pages:
+          - "index.html - Executive summary (1-page overview)"
+          - "executive-narrative.html - Business language description"
+          - "risk-assessment.html - Compliance risks, security gaps"
+          - "portfolio-health.html - Overall system health metrics"
+      
+      regulatory:
+        location: "regulatory/"
+        pages:
+          - "index.html - Compliance dashboard"
+          - "compliance-gaps.html - P0/P1/P2 gap analysis"
+          - "audit-trail.html - Audit log coverage"
+          - "security-controls.html - Security pattern detection"
+      
+      product:
+        location: "product/"
+        pages:
+          - "index.html - Product manager view"
+          - "use-cases.html - Detected business use cases"
+          - "feature-catalog.html - Capabilities extracted from code"
+          - "workflow-diagrams.html - Business process flows"
+
+  tier_2_domain_dashboards:
+    name: "Domain Dashboards (6 tabs, aggregated)"
+    location: "cortex-lens/data/domains/{domain-slug}/"
+    purpose: "Cross-repository intelligence for a business domain"
+    
+    tabs:
+      tab_1:
+        id: "domain-overview"
+        name: "🏢 Domain Overview"
+        content:
+          - "Domain summary (aggregated across all repos)"
+          - "Repository count and health"
+          - "Technology stack prevalence (% repos using each tech)"
+          - "Compliance posture (which repos meet standards)"
+          - "Key metrics (total LOC, files, authors)"
+      
+      tab_2:
+        id: "entity-catalog"
+        name: "📦 Entity Catalog"
+        content:
+          - "All entities discovered across repos"
+          - "Entity prevalence (how many repos use each entity)"
+          - "Property intersection (common properties across repos)"
+          - "Compliance tags aggregated"
+        data_source: "company/domains/{domain}/entities.yaml"
+        visualization:
+          - "D3.js entity network (nodes = entities, edges = relationships)"
+          - "Color by prevalence (red = 1 repo, green = all repos)"
+      
+      tab_3:
+        id: "workflow-patterns"
+        name: "🔄 Workflow Patterns"
+        content:
+          - "Common workflows detected across repos"
+          - "Workflow complexity metrics"
+          - "Compliance-critical workflows flagged"
+        data_source: "company/domains/{domain}/workflows.yaml"
+      
+      tab_4:
+        id: "compliance-matrix"
+        name: "✅ Compliance Matrix"
+        content:
+          - "Compliance standards by repo (HIPAA, PCI-DSS, SOX, GDPR)"
+          - "Gap analysis (which repos missing which controls)"
+          - "Risk exposure by repo"
+        data_source: "company/domains/{domain}/compliance.yaml"
+        visualization:
+          - "Heatmap: repos (rows) vs standards (columns)"
+          - "Color: green (compliant), yellow (partial), red (missing)"
+      
+      tab_5:
+        id: "tech-stack"
+        name: "🛠️ Tech Stack Heatmap"
+        content:
+          - "Technology prevalence across repos"
+          - "Version consistency tracking"
+          - "Deprecated technology detection"
+        data_source: "company/domains/{domain}/tech-stack.yaml"
+        visualization:
+          - "D3.js heatmap: repos (rows) vs technologies (columns)"
+          - "Bubble chart: size = usage prevalence"
+      
+      tab_6:
+        id: "glossary"
+        name: "📖 Business Glossary"
+        content:
+          - "Business terms extracted from code"
+          - "Term definitions (from docstrings/comments)"
+          - "Term usage by repo"
+        data_source: "company/domains/{domain}/glossary.yaml"
+
+  tier_3_cortex_self_analysis:
+    name: "CORTEX Self-Analysis (9 tabs)"
+    location: "cortex-lens/cortex-dashboard.html"
+    purpose: "Special-case dashboard when CORTEX analyzes itself"
+    
+    tabs:
+      - "Tabs 1-5: Standard tabs (Overview, Dependencies, Classes, Timeline, Impact)"
+      - "Tab 6: 🧠 Brain Architecture (4-tier brain visualization)"
+      - "Tab 7: ✅ Governance Compliance (CORE rules heatmap)"
+      - "Tab 8: 🎼 Orchestrator Constellation (23 orchestrators map)"
+      - "Tab 9: 🏢 CORTEX Domain (CORTEX-specific domain knowledge)"
+
+# ==============================================================================
+# DOMAIN KNOWLEDGE ACCUMULATION (Incremental Updates)
+# ==============================================================================
+
+domain_knowledge_system:
+  overview: |
+    Every time a repository is onboarded, CORTEX extracts domain knowledge
+    and incrementally updates company/domains/{domain}/*.yaml files.
+    
+    Knowledge compounds over time as more repos are analyzed, creating a
+    comprehensive understanding of the business domain.
+  
+  knowledge_files:
+    entities_yaml:
+      location: "company/domains/{domain}/entities.yaml"
+      purpose: "Aggregate all entities discovered across repos in domain"
+      schema: |
+        domain: acme-corp-sales
+        updated: 2026-01-29T10:30:00Z
+        repos_analyzed: 5
+        
+        entities:
+          - name: Order
+            sources:
+              - repo: OrderManagement.git
+                file: Models/Order.cs
+                line: 45
+              - repo: Billing.git
+                file: Entities/OrderEntity.cs
+                line: 23
+            properties:
+              - OrderId (string) - found in 2/5 repos
+              - TotalAmount (decimal) - found in 2/5 repos
+              - Status (enum) - found in 2/5 repos
+            compliance_tags:
+              - PCI-DSS (payment data)
+              - SOX (financial records)
+            prevalence: 2/5 repos (40%)
+            confidence: 0.95
+          
+          - name: Customer
+            sources:
+              - repo: OrderManagement.git
+                file: Models/Customer.cs
+              - repo: CRM.git
+                file: Domain/Customer.cs
+              - repo: Portal.git
+                file: Models/User.cs
+            properties:
+              - CustomerId (string) - found in 3/5 repos
+              - TaxId (string) - found in 2/5 repos
+              - Email (string) - found in 3/5 repos
+            compliance_tags:
+              - GDPR (personal data)
+              - PII (customer information)
+            prevalence: 3/5 repos (60%)
+            confidence: 0.92
+      
+      update_strategy: "Incremental merge with conflict detection"
+      conflict_resolution:
+        - "If entity exists, merge properties (union)"
+        - "If property types conflict, flag for manual review"
+        - "Update prevalence counters"
+        - "Update confidence scores based on evidence"
+    
+    workflows_yaml:
+      location: "company/domains/{domain}/workflows.yaml"
+      purpose: "Catalog common business workflows across repos"
+      schema: |
+        domain: acme-corp-sales
+        
+        workflows:
+          - id: WF-001
+            name: Month-End Order Reconciliation
+            detected_in:
+              - repo: OrderManagement.git
+                service: OrderReconciliationService
+                methods: 8
+                complexity: high
+            steps:
+              - Query orders with pending status
+              - Apply business rules validation
+              - Calculate discrepancies
+              - Update order statuses
+              - Generate audit trail
+              - Publish reconciliation events
+            compliance_critical: true
+            regulations:
+              - SOX Section 404 (Internal Controls)
+              - PCI-DSS Requirement 10 (Audit Logging)
+            risk_level: P0 (critical)
+            performance_metrics:
+              - 50000 orders processed in 15-20 minutes
+      
+      detection_algorithm: |
+        1. Scan for service classes with >5 methods
+        2. Detect workflow keywords (process, execute, run, handle)
+        3. Extract step sequence from method calls
+        4. Identify regulatory keywords in comments/docs
+        5. Assign risk level based on compliance tags
+    
+    compliance_yaml:
+      location: "company/domains/{domain}/compliance.yaml"
+      purpose: "Track compliance standards across repo portfolio"
+      schema: |
+        domain: acme-corp-sales
+        
+        standards:
+          GDPR:
+            applicable: true
+            repos_compliant:
+              - OrderManagement.git: 95% (1 gap)
+              - CRM.git: 100%
+              - Portal.git: 90% (2 gaps)
+            gaps:
+              - repo: OrderManagement.git
+                gap_id: P0-001
+                description: Missing consent tracking for data processing
+                severity: P0
+                estimated_exposure: $500k-$2M
+                remediation: Implement ConsentAudit entity
+            controls_detected:
+              - PII encryption at rest (AES-256)
+              - Audit trail (7-year retention)
+              - Access control (role-based)
+          
+          PCI-DSS:
+            applicable: true
+            repos_compliant:
+              - OrderManagement.git: 80% (card storage issues)
+            gaps:
+              - repo: OrderManagement.git
+                gap_id: P0-005
+                description: CVV stored in database (prohibited)
+                severity: P0
+                estimated_exposure: $100k-$500k
+    
+    tech_stack_yaml:
+      location: "company/domains/{domain}/tech-stack.yaml"
+      purpose: "Track technology prevalence and versions"
+      schema: |
+        domain: acme-corp-sales
+        
+        technologies:
+          dotnet:
+            framework: .NET Framework
+            versions:
+              - version: 4.8
+                repos: [OrderManagement.git, Billing.git]
+                prevalence: 2/5 (40%)
+              - version: 6.0
+                repos: [Portal.git]
+                prevalence: 1/5 (20%)
+          
+          databases:
+            - name: SQL Server
+              versions:
+                - "2019"
+              repos: [OrderManagement.git, Billing.git]
+              prevalence: 2/5 (40%)
+          
+          messaging:
+            - name: RabbitMQ
+              versions:
+                - "3.12"
+              repos: [OrderManagement.git]
+              prevalence: 1/5 (20%)
+    
+    glossary_yaml:
+      location: "company/domains/{domain}/glossary.yaml"
+      purpose: "Business terminology extracted from code"
+      schema: |
+        domain: acme-corp-sales
+        
+        terms:
+          - term: SKU
+            full_name: Stock Keeping Unit
+            definition: Unique identifier for each distinct product or service
+            sources:
+              - repo: OrderManagement.git
+                occurrences: 142
+                context: "Product identification, inventory tracking"
+            related_terms: [UPC, GTIN, Product Code]
+            regulatory_references: [GS1 Standards]
+          
+          - term: Backorder
+            definition: Order for product not currently in stock, to be fulfilled when available
+            sources:
+              - repo: OrderManagement.git
+                occurrences: 87
+            business_constraints:
+              - Max 30 days backorder window
+              - Customer notification required within 24 hours
+    
+    architecture_patterns_yaml:
+      location: "company/domains/{domain}/architecture-patterns.yaml"
+      purpose: "Recurring architectural patterns across repos"
+      schema: |
+        domain: acme-corp-sales
+        
+        patterns:
+          - pattern: Domain-Driven Design (DDD)
+            detected_in:
+              - OrderManagement.git
+              - Billing.git
+            indicators:
+              - DomainService suffix (11 services)
+              - Entity/ValueObject separation
+              - Aggregate roots (Order, Customer)
+          
+          - pattern: Event-Driven Architecture
+            detected_in:
+              - OrderManagement.git
+            indicators:
+              - Message queue publishing
+              - Event naming (*Event suffix)
+              - Publish/subscribe pattern
+
+  auto_detection:
+    domain_from_git_remote:
+      enabled: true
+      patterns:
+        - "github.com/mycompany/* → mycompany"
+        - "github.com/acme-corp/* → acme-corp"
+        - "gitlab.com/contoso/* → contoso"
+      fallback: "unknown"
+    
+    domain_from_override:
+      enabled: true
+      cli_flag: "--domain"
+      example: "cortex lens onboard /path/to/repo --domain mycompany"
+    
+    precedence: "CLI override > Git remote detection > 'unknown'"
+
+  incremental_update_algorithm:
+    steps:
+      1_load_existing:
+        description: "Load existing domain YAML files"
+        error_handling: "If file missing, create new empty structure"
+      
+      2_extract_knowledge:
+        description: "Extract knowledge from newly onboarded repo"
+        extractors:
+          - "EntityExtractor (AST analysis)"
+          - "WorkflowDetector (service method analysis)"
+          - "ComplianceScanner (keyword detection)"
+          - "TechStackAnalyzer (import/config analysis)"
+          - "GlossaryBuilder (comment/docstring mining)"
+      
+      3_merge_knowledge:
+        description: "Merge new knowledge with existing"
+        strategies:
+          entities: "Union properties, update prevalence"
+          workflows: "Append if new, update if exists"
+          compliance: "Merge gaps, update compliance scores"
+          tech_stack: "Add versions, update prevalence"
+          glossary: "Add terms, merge definitions"
+      
+      4_conflict_detection:
+        description: "Detect conflicts requiring manual review"
+        conflicts:
+          - "Entity property type mismatch (e.g., string vs int)"
+          - "Workflow step order discrepancy"
+          - "Compliance gap severity disagreement"
+        resolution: "Flag in YAML with CONFLICT marker"
+      
+      5_persist:
+        description: "Write updated YAML files"
+        validation: "YAML syntax check, schema validation"
+      
+      6_regenerate_dashboards:
+        description: "Update domain dashboard with new data"
+        scope: "Regenerate cortex-lens/data/domains/{domain}/index.html"
+
+# ==============================================================================
+# D3.JS VISUALIZATION SYSTEM (No Mermaid)
+# ==============================================================================
+
+d3_visualization_system:
+  rationale: |
+    Phase 14 Mermaid diagrams failed to render properly. Phase 15 uses ONLY
+    D3.js for all visualizations, following the proven pattern from
+    RA-Domain-Analysis static pages.
+  
+  bundled_locally:
+    library: "D3.js v7.8.5"
+    size: "250KB minified"
+    location: "cortex-lens/static/vendor/d3-7.8.5.min.js"
+    cdn_fallback: false  # Must work offline
+  
+  existing_renderers:
+    d3_call_graph:
+      file: "cortex/visualization/renderers/d3_call_graph_renderer.py"
+      output: "Force-directed graph (nodes=functions, edges=calls)"
+      used_in: "Tab 2 (Dependencies)"
+      reference: "See archive/CORTEX-5.0 commit b6a425a2 for original implementation"
+    
+    d3_import_graph:
+      file: "cortex/visualization/renderers/d3_import_graph_renderer.py"
+      output: "Module dependency graph (nodes=modules, edges=imports)"
+      used_in: "Tab 2 (Dependencies)"
+    
+    d3_git_timeline:
+      file: "cortex/visualization/renderers/d3_git_timeline_renderer.py"
+      output: "Commit timeline with markers"
+      used_in: "Tab 4 (Timeline)"
+    
+    d3_author_network:
+      file: "cortex/visualization/renderers/d3_author_network_renderer.py"
+      output: "Author collaboration network (force-directed)"
+      used_in: "Tab 4 (Timeline)"
+  
+  new_renderers_phase_15:
+    d3_entity_relationship:
+      file: "cortex/visualization/renderers/d3_entity_relationship_renderer.py (NEW)"
+      purpose: "Entity boxes with compliance color-coding"
+      output: |
+        <div class="entity-box entity-pci">
+          <h3>Order</h3>
+          <ul>
+            <li>OrderId: string</li>
+            <li>TotalAmount: decimal</li>
+            <li>Status: enum</li>
+          </ul>
+          <div class="compliance-tags">
+            <span class="tag-pci">PCI-DSS</span>
+            <span class="tag-sox">SOX</span>
+          </div>
+        </div>
+      used_in: "Tab 3 (Classes)"
+      reference: "RA-Domain-Analysis developers/domain-model.html pattern"
+    
+    d3_compliance_heatmap:
+      file: "cortex/visualization/renderers/d3_compliance_heatmap_renderer.py (NEW)"
+      purpose: "Compliance matrix (repos vs standards)"
+      output: "Heatmap with color gradient (green=compliant, red=missing)"
+      used_in: "Domain Dashboard Tab 4 (Compliance Matrix)"
+      d3_technique: "d3.scaleSequential() with color interpolation"
+    
+    d3_tech_stack_heatmap:
+      file: "cortex/visualization/renderers/d3_tech_stack_heatmap_renderer.py (NEW)"
+      purpose: "Technology prevalence across repos"
+      output: "Bubble chart (size=usage, color=category)"
+      used_in: "Domain Dashboard Tab 5 (Tech Stack)"
+    
+    d3_workflow_diagram:
+      file: "cortex/visualization/renderers/d3_workflow_diagram_renderer.py (NEW)"
+      purpose: "Business workflow visualization (step sequence)"
+      output: |
+        Horizontal flow diagram with:
+        - Step boxes (rounded rectangles)
+        - Arrows with labels
+        - Compliance markers (⚠️ icons)
+      used_in: "Tab 1 (Overview), product/workflow-diagrams.html"
+      reference: "RA-Domain-Analysis workflow.html ASCII-art pattern"
+
+  visualization_examples:
+    entity_relationship_graph: |
+      // D3.js force-directed graph for entities
+      const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("charge", d3.forceManyBody().strength(-300))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+      
+      const node = svg.selectAll(".entity")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", d => `entity entity-${d.compliance_tag}`);
+      
+      node.append("rect")
+        .attr("width", 150)
+        .attr("height", 100)
+        .attr("fill", d => complianceColor(d.compliance_tag));
+    
+    compliance_heatmap: |
+      // D3.js heatmap for compliance matrix
+      const colorScale = d3.scaleSequential()
+        .domain([0, 100])
+        .interpolator(d3.interpolateRdYlGn);
+      
+      svg.selectAll("rect")
+        .data(matrixData)
+        .enter().append("rect")
+        .attr("x", d => xScale(d.repo))
+        .attr("y", d => yScale(d.standard))
+        .attr("width", cellWidth)
+        .attr("height", cellHeight)
+        .attr("fill", d => colorScale(d.compliance_score));
+
+# ==============================================================================
+# ONBOARDING WORKFLOW (Enhanced with Domain Knowledge)
+# ==============================================================================
+
+onboarding_workflow:
+  command_signature: |
+    cortex lens onboard <repo-path> [--domain <domain-name>] [--generate-personas]
+  
+  options:
+    repo_path:
+      required: true
+      description: "Path to repository to analyze"
+      example: "/path/to/OrderManagement"
+    
+    domain:
+      required: false
+      description: "Domain name (overrides auto-detection)"
+      example: "--domain mycompany"
+      auto_detect: "From git remote URL if not provided"
+    
+    generate_personas:
+      required: false
+      description: "Generate multi-persona HTML pages"
+      default: true
+      flag: "--generate-personas / --no-personas"
+  
+  execution_steps:
+    step_1_domain_detection:
+      description: "Detect or validate domain"
+      algorithm: |
+        if --domain provided:
+          domain = user_provided_domain
+        else:
+          git_remote = get_git_remote_url(repo_path)
+          domain = extract_domain_from_url(git_remote)
+          if domain is None:
+            domain = "unknown"
+        
+        log(f"Domain detected: {domain}")
+    
+    step_2_ast_analysis:
+      description: "Run LENS analyzers (existing Phase 7.1)"
+      analyzers:
+        - "ASTAnalyzer (functions, classes, imports)"
+        - "GitHistoryAnalyzer (commits, authors)"
+        - "CommentExtractor (TODOs, docstrings)"
+      outputs:
+        - "ast_data.json"
+        - "git_data.json"
+        - "comment_data.json"
+    
+    step_3_business_language:
+      description: "Generate business description (existing Phase 14)"
+      orchestrator: "BusinessLanguageGenerator"
+      file: "cortex/visualization/business_language_generator.py"
+      outputs:
+        - "business_description.json"
+        - "capabilities.json"
+        - "tech_stack.json"
+    
+    step_4_domain_knowledge_extraction:
+      description: "Extract domain knowledge for company/domains/"
+      extractors:
+        entity_extractor:
+          input: "ast_data.json (classes)"
+          output: "entities_extracted.json"
+          algorithm: |
+            for each class in AST:
+              if is_entity(class):  # Has ID property, persistence markers
+                extract:
+                  - name
+                  - properties (name, type)
+                  - compliance_tags (from comments, attributes)
+                  - source (repo, file, line)
+        
+        workflow_detector:
+          input: "ast_data.json (services)"
+          output: "workflows_detected.json"
+          algorithm: |
+            for each service class:
+              if method_count > 5:
+                extract workflow:
+                  - name (from class name)
+                  - steps (from method sequence)
+                  - compliance_keywords (HIPAA, PCI, IRS in comments)
+                  - complexity (cyclomatic complexity sum)
+        
+        compliance_scanner:
+          input: "ast_data.json + comment_data.json"
+          output: "compliance_patterns.json"
+          algorithm: |
+            for each file:
+              scan for keywords:
+                - HIPAA, PHI, encryption, audit
+                - PCI-DSS, CVV, card number, payment
+                - SOX, financial, control, segregation
+                - GDPR, personal data, consent
+              
+              detect patterns:
+                - Audit trail classes (BalanceChangeAudit)
+                - Encryption methods (AES, RSA)
+                - Access control attributes ([Authorize])
+        
+        tech_stack_analyzer:
+          input: "ast_data.json (imports)"
+          output: "tech_stack.json"
+          algorithm: |
+            for each import statement:
+              map to technology:
+                - "using System.Data.SqlClient" → SQL Server
+                - "using NServiceBus" → NServiceBus
+                - "using FluentValidation" → FluentValidation
+              
+              extract versions from config files:
+                - packages.config
+                - *.csproj
+        
+        glossary_builder:
+          input: "comment_data.json + ast_data.json"
+          output: "glossary_terms.json"
+          algorithm: |
+            for each docstring:
+              extract business terms (capitalized phrases)
+              extract definitions (first sentence)
+              extract regulatory references (IRS Pub, IRC Sec)
+    
+    step_5_domain_knowledge_merge:
+      description: "Merge extracted knowledge with company/domains/{domain}/"
+      orchestrator: "DomainKnowledgeMerger (NEW)"
+      file: "cortex/orchestrators/domain/domain_knowledge_merger.py (NEW)"
+      algorithm: |
+        for each knowledge file (entities, workflows, etc):
+          existing = load_yaml(f"company/domains/{domain}/{file}.yaml")
+          new_data = extracted_data[file]
+          
+          merged = incremental_merge(existing, new_data)
+          conflicts = detect_conflicts(existing, new_data)
+          
+          if conflicts:
+            log_conflicts(conflicts)
+            add_conflict_markers(merged, conflicts)
+          
+          save_yaml(f"company/domains/{domain}/{file}.yaml", merged)
+    
+    step_6_generate_repo_dashboard:
+      description: "Generate static HTML dashboard for repo"
+      orchestrator: "StaticVisualizationOrchestrator (NEW)"
+      file: "cortex/orchestrators/support/static_visualization_orchestrator.py (NEW)"
+      outputs:
+        location: "cortex-lens/data/repos/{repo-slug}/"
+        files:
+          - "index.html (6-tab main dashboard)"
+          - "data.json (aggregated analysis data)"
+          - "developers/ (developer-focused pages)"
+          - "managers/ (manager-focused pages)"
+          - "executives/ (executive summary)"
+          - "regulatory/ (compliance pages)"
+          - "product/ (product manager pages)"
+      
+      generation_algorithm: |
+        # Load templates
+        templates = load_templates("cortex/visualization/templates/static/")
+        
+        # Render main dashboard (6 tabs)
+        index_html = render_template(
+          "repo-dashboard-6-tab.html",
+          data={
+            "repo_name": repo_name,
+            "domain": domain,
+            "tabs": [overview, dependencies, classes, timeline, impact, domain_context],
+            "data_file": "data.json"
+          }
+        )
+        
+        # Render multi-persona pages
+        if generate_personas:
+          for persona in [developers, managers, executives, regulatory, product]:
+            persona_dir = f"{output_dir}/{persona}/"
+            os.makedirs(persona_dir, exist_ok=True)
+            
+            for page in persona_pages[persona]:
+              html = render_template(f"{persona}/{page}.html", data=analysis_data)
+              save_file(f"{persona_dir}/{page}", html)
+    
+    step_7_update_domain_dashboard:
+      description: "Regenerate domain dashboard with updated knowledge"
+      location: "cortex-lens/data/domains/{domain-slug}/"
+      trigger: "After domain knowledge merge"
+      orchestrator: "DomainDashboardGenerator (NEW)"
+      file: "cortex/orchestrators/support/domain_dashboard_generator.py (NEW)"
+      algorithm: |
+        # Load all domain knowledge
+        entities = load_yaml(f"company/domains/{domain}/entities.yaml")
+        workflows = load_yaml(f"company/domains/{domain}/workflows.yaml")
+        compliance = load_yaml(f"company/domains/{domain}/compliance.yaml")
+        tech_stack = load_yaml(f"company/domains/{domain}/tech-stack.yaml")
+        glossary = load_yaml(f"company/domains/{domain}/glossary.yaml")
+        
+        # Render 6-tab domain dashboard
+        index_html = render_template(
+          "domain-dashboard-6-tab.html",
+          data={
+            "domain": domain,
+            "repos_analyzed": len(entities.get("repos_analyzed", [])),
+            "tabs": [overview, entities, workflows, compliance, tech_stack, glossary]
+          }
+        )
+        
+        save_file(f"cortex-lens/data/domains/{domain-slug}/index.html", index_html)
+    
+    step_8_update_registries:
+      description: "Update repos.json and domains.json"
+      files:
+        repos_json:
+          location: "cortex-lens/data/repos/repos.json"
+          schema: |
+            {
+              "repos": [
+                {
+                  "name": "OrderManagement",
+                  "slug": "ordermanagement",
+                  "domain": "acme-corp-sales",
+                  "path": "/path/to/repo",
+                  "analyzed": "2026-01-29T10:30:00Z",
+                  "files": 256,
+                  "lines": 45000,
+                  "icon": "📦",
+                  "description": "E-commerce order processing and fulfillment system"
+                }
+              ]
+            }
+        
+        domains_json:
+          location: "cortex-lens/data/domains/domains.json"
+          schema: |
+            {
+              "domains": [
+                {
+                  "name": "acme-corp-sales",
+                  "slug": "acme-corp-sales",
+                  "repos_count": 5,
+                  "last_updated": "2026-01-29T10:30:00Z",
+                  "icon": "📊",
+                  "description": "E-commerce sales and order management domain"
+                }
+              ]
+            }
+
+# ==============================================================================
+# REGENERATION INSTRUCTIONS (For New Machines)
+# ==============================================================================
+
+regeneration_guide:
+  purpose: |
+    Since _workspaces/RA-Domain-Analysis contains proprietary data and cannot
+    be pushed to remote, these instructions allow recreation of the Phase 15
+    architecture on a new machine by referencing archive branches.
+  
+  prerequisites:
+    - "CORTEX repository cloned"
+    - "Archive branches available (archive/CORTEX-5.0, archive/CORTEX-5.5)"
+    - "Python 3.9+"
+    - "D3.js bundled in cortex-lens/static/vendor/"
+  
+  steps:
+    step_1_checkout_archives:
+      commands: |
+        # View archive branch history
+        git log remotes/origin/archive/CORTEX-5.0 --oneline --max-count=20
+        
+        # Find commits related to AST and Business Language
+        git log --all --grep="BusinessLanguage\|AST\|Domain-Analysis" --oneline
+        
+        # Key commits to reference:
+        # - b6a425a2: Business language generator implementation
+        # - bf847027: Business language generator (TDD)
+        # - 2a9afdb6: LENS Visualization Orchestrator
+    
+    step_2_extract_d3_patterns:
+      description: "Extract working D3.js visualization code from archive"
+      files_to_reference:
+        - "cortex/visualization/renderers/d3_call_graph_renderer.py"
+        - "cortex/visualization/renderers/d3_import_graph_renderer.py"
+        - "cortex/visualization/renderers/d3_git_timeline_renderer.py"
+        - "cortex/visualization/renderers/d3_author_network_renderer.py"
+      
+      commands: |
+        # View D3 renderer implementation from archive
+        git show archive/CORTEX-5.0:cortex/visualization/renderers/d3_call_graph_renderer.py
+        
+        # Extract D3.js usage patterns
+        git show archive/CORTEX-5.0:cortex/visualization/renderers/ | grep -A 20 "d3.forceSimulation"
+    
+    step_3_extract_business_language_logic:
+      description: "Extract BusinessLanguageGenerator algorithm"
+      files_to_reference:
+        - "cortex/visualization/business_language_generator.py (current main branch)"
+      
+      commands: |
+        # View current implementation
+        cat cortex/visualization/business_language_generator.py
+        
+        # This file is already in main branch (419 lines)
+        # Key methods:
+        # - detect_capabilities() - extracts features from AST
+        # - detect_tech_stack() - identifies technologies
+        # - detect_architecture_pattern() - finds MVC/microservices/etc
+        # - generate_description() - creates business summary
+    
+    step_4_review_ra_domain_analysis_pattern:
+      description: "Reference architecture from RA-Domain-Analysis"
+      reference_structure: |
+        _workspaces/RA-Domain-Analysis (AST reversed)/
+          ├─ index.html                  # Executive summary (main entry)
+          ├─ use-cases.html              # Business use cases
+          ├─ workflow.html               # Workflow diagrams
+          ├─ technical.html              # Technical details
+          ├─ p0-compliance.html          # Compliance gaps
+          ├─ css/
+          │   └─ onedrive-glass.css      # Glassmorphism styling
+          ├─ js/
+          │   └─ main.js                 # Minimal JavaScript
+          ├─ assets/
+          │   ├─ images/
+          │   └─ data/ (JSON files)
+          └─ {persona}/
+              ├─ developers/
+              │   ├─ domain-model.html
+              │   ├─ complexity-heatmap.html
+              │   └─ integration-architecture.html
+              └─ managers/
+                  ├─ team-metrics.html
+                  └─ technical-debt-register.html
+      
+      key_patterns:
+        css_glassmorphism: |
+          /* From onedrive-glass.css */
+          .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          }
+        
+        entity_box_rendering: |
+          <!-- From developers/domain-model.html -->
+          <div class="entity-box entity-pci">
+            <h3>Order</h3>
+            <ul>
+              <li>OrderId: string</li>
+              <li>TotalAmount: decimal</li>
+            </ul>
+            <div class="compliance-tags">
+              <span class="tag-pci">PCI-DSS</span>
+            </div>
+          </div>
+        
+        workflow_diagram: |
+          <!-- From workflow.html -->
+          <div class="workflow-diagram">
+            <pre>
+            ┌─────────────────────────────────────────┐
+            │ Step 1: Query Orders                    │
+            └─────────────────┬───────────────────────┘
+                              │
+                              ▼
+            ┌─────────────────────────────────────────┐
+            │ Step 2: Apply Business Rules            │
+            │ ⚠️  COMPLIANCE: SOX Section 404         │
+            └─────────────────┬───────────────────────┘
+            </pre>
+          </div>
+    
+    step_5_implement_phase_15:
+      description: "Follow Phase 15 implementation tasks"
+      tasks:
+        - "STATIC-VIZ-001: StaticVisualizationOrchestrator"
+        - "STATIC-VIZ-002: Multi-Persona HTML Generator"
+        - "STATIC-VIZ-003: Domain Knowledge Accumulator"
+        - "STATIC-VIZ-004: 3-Tier Dashboard Hierarchy"
+        - "STATIC-VIZ-005: D3.js Visualization System"
+        - "STATIC-VIZ-006: Domain Auto-Detection"
+        - "STATIC-VIZ-007: Incremental Knowledge Updates"
+
+# ==============================================================================
+# IMPLEMENTATION TASKS (Acceptance Criteria)
+# ==============================================================================
+
+acceptance_criteria:
+  STATIC_VIZ_001:
+    id: "STATIC-VIZ-001"
+    name: "StaticVisualizationOrchestrator Implementation"
+    description: "Create orchestrator for static HTML generation"
+    file: "cortex/orchestrators/support/static_visualization_orchestrator.py"
+    tests: "tests/test_static_visualization_orchestrator.py (10 tests)"
+    responsibilities:
+      - "Coordinate AST → Business Language → HTML pipeline"
+      - "Manage multi-persona page generation"
+      - "Handle D3.js data formatting"
+      - "Output to cortex-lens/data/repos/{slug}/"
+    dependencies:
+      - "BusinessLanguageGenerator"
+      - "LENSOrchestrator (AST, Git, Comment analyzers)"
+      - "D3 renderers (4 existing + 4 new)"
+    estimated_effort: "3 days"
+  
+  STATIC_VIZ_002:
+    id: "STATIC-VIZ-002"
+    name: "Multi-Persona HTML Generator"
+    description: "Generate role-specific HTML pages"
+    file: "cortex/visualization/persona_generator.py (NEW)"
+    tests: "tests/test_persona_generator.py (15 tests)"
+    personas:
+      - "developers/ (6 pages)"
+      - "managers/ (8 pages)"
+      - "executives/ (3 pages)"
+      - "regulatory/ (4 pages)"
+      - "product/ (4 pages)"
+    templates: "cortex/visualization/templates/static/{persona}/*.html"
+    estimated_effort: "4 days"
+  
+  STATIC_VIZ_003:
+    id: "STATIC-VIZ-003"
+    name: "Domain Knowledge Accumulator"
+    description: "Extract and merge domain knowledge"
+    files:
+      - "cortex/orchestrators/domain/domain_knowledge_merger.py (NEW)"
+      - "cortex/extractors/entity_extractor.py (NEW)"
+      - "cortex/extractors/workflow_detector.py (NEW)"
+      - "cortex/extractors/compliance_scanner.py (NEW)"
+      - "cortex/extractors/tech_stack_analyzer.py (NEW)"
+      - "cortex/extractors/glossary_builder.py (NEW)"
+    tests: "tests/test_domain_knowledge_accumulator.py (20 tests)"
+    outputs:
+      - "company/domains/{domain}/entities.yaml"
+      - "company/domains/{domain}/workflows.yaml"
+      - "company/domains/{domain}/compliance.yaml"
+      - "company/domains/{domain}/tech-stack.yaml"
+      - "company/domains/{domain}/glossary.yaml"
+    estimated_effort: "5 days"
+  
+  STATIC_VIZ_004:
+    id: "STATIC-VIZ-004"
+    name: "3-Tier Dashboard Hierarchy"
+    description: "Implement lens → domain → repo navigation"
+    files:
+      - "cortex-lens/lens-dashboard.html (entry point)"
+      - "cortex-lens/domain-dashboard.html (domain aggregation)"
+      - "cortex-lens/cortex-dashboard.html (CORTEX self-analysis)"
+      - "cortex-lens/data/repos/{slug}/index.html (repo dashboard)"
+    estimated_effort: "3 days"
+  
+  STATIC_VIZ_005:
+    id: "STATIC-VIZ-005"
+    name: "D3.js Visualization System"
+    description: "Implement 4 new D3 renderers (no Mermaid)"
+    files:
+      - "cortex/visualization/renderers/d3_entity_relationship_renderer.py (NEW)"
+      - "cortex/visualization/renderers/d3_compliance_heatmap_renderer.py (NEW)"
+      - "cortex/visualization/renderers/d3_tech_stack_heatmap_renderer.py (NEW)"
+      - "cortex/visualization/renderers/d3_workflow_diagram_renderer.py (NEW)"
+    tests: "tests/test_d3_renderers.py (16 tests, 4 per renderer)"
+    estimated_effort: "4 days"
+  
+  STATIC_VIZ_006:
+    id: "STATIC-VIZ-006"
+    name: "Domain Auto-Detection"
+    description: "Detect domain from git remote or CLI flag"
+    file: "cortex/utils/domain_detector.py (NEW)"
+    tests: "tests/test_domain_detector.py (8 tests)"
+    algorithm: "CLI override > Git remote > 'unknown'"
+    estimated_effort: "1 day"
+  
+  STATIC_VIZ_007:
+    id: "STATIC-VIZ-007"
+    name: "Incremental Knowledge Updates"
+    description: "Merge new knowledge without overwriting"
+    file: "cortex/utils/incremental_yaml_merger.py (NEW)"
+    tests: "tests/test_incremental_yaml_merger.py (12 tests)"
+    conflict_handling: "Flag conflicts with CONFLICT markers in YAML"
+    estimated_effort: "2 days"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  technical:
+    - "3-tier dashboard hierarchy navigable (lens → domain → repo)"
+    - "6-tab repo dashboards generated (Overview, Deps, Classes, Timeline, Impact, Domain)"
+    - "6-tab domain dashboards generated (Overview, Entities, Workflows, Compliance, Tech, Glossary)"
+    - "9-tab CORTEX self-dashboard functional"
+    - "Multi-persona pages generated (5 personas, 25+ pages total)"
+    - "D3.js visualizations render (4 existing + 4 new = 8 total)"
+    - "Domain knowledge accumulates in company/domains/{domain}/*.yaml"
+    - "Incremental updates work (no data loss on re-onboard)"
+    - "Offline functionality (file:/// URLs work)"
+    - "Zero Mermaid usage (Phase 14 anti-pattern avoided)"
+  
+  user_experience:
+    - "Developers find domain model visualization useful"
+    - "Managers use technical debt registers for prioritization"
+    - "Executives read executive narrative summaries"
+    - "Compliance officers use gap analysis reports"
+    - "Product managers extract use cases from code"
+  
+  business_value:
+    - "Cross-repo intelligence emerges (shared entities discovered)"
+    - "Compliance gaps identified across portfolio"
+    - "Technology standardization opportunities surfaced"
+    - "Workflow patterns cataloged for reuse"
+    - "Business glossary builds organizational knowledge"
+
+# ==============================================================================
+# ANTI-PATTERNS (Lessons from Phase 14)
+# ==============================================================================
+
+anti_patterns:
+  no_mermaid:
+    reason: "Phase 14 Mermaid diagrams failed to render"
+    alternative: "Use D3.js for ALL visualizations"
+    evidence: "cortex-dashboard.html Mermaid blocks show 'Loading...' indefinitely"
+  
+  no_alpine_js:
+    reason: "Over-engineered for static content"
+    alternative: "Pure JavaScript or vanilla HTML"
+    rationale: "Static pages don't need reactive frameworks"
+  
+  no_cdn_dependencies:
+    reason: "Must work offline and in air-gapped environments"
+    alternative: "Bundle all assets in cortex-lens/static/vendor/"
+    enforcement: "Test file:/// URLs before deployment"
+  
+  no_api_routes:
+    reason: "Static pages should not require backend server"
+    alternative: "Pre-generate all data as JSON files"
+    exception: "CORTEX MCP server is optional, not required for dashboards"
+
+# ==============================================================================
+# DEPLOYMENT & TESTING
+# ==============================================================================
+
+deployment:
+  testing_strategy:
+    unit_tests: "72+ tests across 7 acceptance criteria"
+    integration_tests: "End-to-end onboarding → dashboard generation"
+    visual_regression: "Screenshot comparison (before/after)"
+    offline_tests: "Verify file:/// URLs work without server"
+  
+  rollout_phases:
+    phase_1: "CORTEX self-analysis (validate on known codebase)"
+    phase_2: "Single external repo (test domain detection)"
+    phase_3: "Multi-repo domain (test knowledge accumulation)"
+    phase_4: "Full portfolio (scale testing)"
+  
+  documentation:
+    user_guide: "docs/phase-15-user-guide.md"
+    developer_guide: "docs/phase-15-developer-guide.md"
+    architecture_doc: "docs/phase-15-architecture.md"
+
+# ==============================================================================
+# APPENDIX: FILE PLACEMENT REFERENCE
+# ==============================================================================
+
+file_placement:
+  cortex_lens:
+    entry_points:
+      - "cortex-lens/lens-dashboard.html"
+      - "cortex-lens/domain-dashboard.html"
+      - "cortex-lens/cortex-dashboard.html"
+    
+    static_assets:
+      - "cortex-lens/static/css/"
+      - "cortex-lens/static/js/"
+      - "cortex-lens/static/vendor/d3-7.8.5.min.js"
+      - "cortex-lens/static/assets/"
+    
+    generated_data:
+      - "cortex-lens/data/repos/repos.json"
+      - "cortex-lens/data/repos/{slug}/index.html"
+      - "cortex-lens/data/repos/{slug}/data.json"
+      - "cortex-lens/data/repos/{slug}/{persona}/*.html"
+      - "cortex-lens/data/domains/domains.json"
+      - "cortex-lens/data/domains/{slug}/index.html"
+      - "cortex-lens/data/domains/{slug}/data.json"
+  
+  company_domains:
+    knowledge_files:
+      - "company/domains/{domain}/README.md"
+      - "company/domains/{domain}/entities.yaml"
+      - "company/domains/{domain}/workflows.yaml"
+      - "company/domains/{domain}/compliance.yaml"
+      - "company/domains/{domain}/tech-stack.yaml"
+      - "company/domains/{domain}/glossary.yaml"
+      - "company/domains/{domain}/architecture-patterns.yaml"
+  
+  cortex_orchestrators:
+    new_files:
+      - "cortex/orchestrators/support/static_visualization_orchestrator.py"
+      - "cortex/orchestrators/domain/domain_knowledge_merger.py"
+      - "cortex/orchestrators/support/domain_dashboard_generator.py"
+  
+  cortex_visualization:
+    new_renderers:
+      - "cortex/visualization/renderers/d3_entity_relationship_renderer.py"
+      - "cortex/visualization/renderers/d3_compliance_heatmap_renderer.py"
+      - "cortex/visualization/renderers/d3_tech_stack_heatmap_renderer.py"
+      - "cortex/visualization/renderers/d3_workflow_diagram_renderer.py"
+    
+    new_generators:
+      - "cortex/visualization/persona_generator.py"
+    
+    templates:
+      - "cortex/visualization/templates/static/repo-dashboard-6-tab.html"
+      - "cortex/visualization/templates/static/domain-dashboard-6-tab.html"
+      - "cortex/visualization/templates/static/{persona}/*.html"
+  
+  cortex_extractors:
+    new_files:
+      - "cortex/extractors/entity_extractor.py"
+      - "cortex/extractors/workflow_detector.py"
+      - "cortex/extractors/compliance_scanner.py"
+      - "cortex/extractors/tech_stack_analyzer.py"
+      - "cortex/extractors/glossary_builder.py"
+  
+  cortex_utils:
+    new_files:
+      - "cortex/utils/domain_detector.py"
+      - "cortex/utils/incremental_yaml_merger.py"
+
+# ==============================================================================
+# END OF PHASE 15 SPECIFICATION
+# ==============================================================================
