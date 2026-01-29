@@ -1,0 +1,134 @@
+<div x-show="activeTab === 'timeline'" class="space-y-6">
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">📅 Git Commit Timeline</h2>
+        <p class="text-sm text-gray-500 mb-4">
+            Temporal analysis of commit history with categorization and impact assessment.
+        </p>
+        
+        <!-- Timeline Statistics -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                <div class="text-2xl font-bold text-blue-600">{{ timeline_data.stats.total_commits }}</div>
+                <div class="text-sm text-gray-600">Total Commits</div>
+            </div>
+            <div class="text-center p-3 bg-green-50 rounded-lg">
+                <div class="text-2xl font-bold text-green-600">{{ timeline_data.stats.total_authors }}</div>
+                <div class="text-sm text-gray-600">Contributors</div>
+            </div>
+            <div class="text-center p-3 bg-purple-50 rounded-lg">
+                <div class="text-2xl font-bold text-purple-600">{{ timeline_data.stats.total_files_changed }}</div>
+                <div class="text-sm text-gray-600">Files Changed</div>
+            </div>
+            <div class="text-center p-3 bg-orange-50 rounded-lg">
+                <div class="text-2xl font-bold text-orange-600">
+                    {{ timeline_data.stats.total_insertions + timeline_data.stats.total_deletions }}
+                </div>
+                <div class="text-sm text-gray-600">Lines Changed</div>
+            </div>
+        </div>
+        
+        <!-- D3.js Timeline Visualization -->
+        <div id="git-timeline" class="w-full h-96 border border-gray-200 rounded-lg"></div>
+        
+        <!-- Category Legend -->
+        <div class="mt-4 flex flex-wrap gap-2">
+            {% for category, data in timeline_data.categories.items() %}
+            <div class="flex items-center space-x-2">
+                <span class="w-4 h-4 rounded" style="background-color: {{ data.color }}"></span>
+                <span class="text-sm text-gray-700">{{ category|title }} ({{ data.count }})</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <!-- Commit Details -->
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Recent Commits</h3>
+        <div class="space-y-2 max-h-96 overflow-y-auto">
+            {% for day in timeline_data.days[:10] %}
+                {% for commit in day.commits %}
+                <div class="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded">
+                    <span class="w-2 h-2 mt-2 rounded-full" 
+                          style="background-color: {{ timeline_data.categories[commit.category].color }}">
+                    </span>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900">{{ commit.message }}</div>
+                        <div class="text-xs text-gray-500">
+                            {{ commit.author }} • {{ commit.date }} • 
+                            <span class="text-green-600">+{{ commit.insertions }}</span>
+                            <span class="text-red-600">-{{ commit.deletions }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<!-- D3.js Script -->
+<script src="/static/vendor/d3-7.8.5.min.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.watch('activeTab', (value) => {
+            if (value === 'timeline') {
+                renderGitTimeline();
+            }
+        });
+    });
+    
+    function renderGitTimeline() {
+        const timelineData = {{ timeline_data|tojson }};
+        
+        const container = d3.select('#git-timeline');
+        container.selectAll('*').remove();
+        
+        const width = container.node().getBoundingClientRect().width;
+        const height = 400;
+        const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+        
+        const svg = container.append('svg')
+            .attr('width', width)
+            .attr('height', height);
+        
+        // Parse dates
+        const days = timelineData.days.map(d => ({
+            ...d,
+            date: new Date(d.date)
+        }));
+        
+        // Create scales
+        const x = d3.scaleTime()
+            .domain(d3.extent(days, d => d.date))
+            .range([margin.left, width - margin.right]);
+        
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(days, d => d.total_commits)])
+            .range([height - margin.bottom, margin.top]);
+        
+        // Add axes
+        svg.append('g')
+            .attr('transform', `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(x).ticks(10));
+        
+        svg.append('g')
+            .attr('transform', `translate(${margin.left},0)`)
+            .call(d3.axisLeft(y));
+        
+        // Add bars
+        svg.selectAll('rect')
+            .data(days)
+            .join('rect')
+            .attr('x', d => x(d.date))
+            .attr('y', d => y(d.total_commits))
+            .attr('width', 5)
+            .attr('height', d => height - margin.bottom - y(d.total_commits))
+            .attr('fill', '#4CAF50')
+            .on('mouseover', function(event, d) {
+                d3.select(this).attr('fill', '#2E7D32');
+            })
+            .on('mouseout', function(event, d) {
+                d3.select(this).attr('fill', '#4CAF50');
+            });
+    }
+</script>
