@@ -1,0 +1,732 @@
+/**
+ * CORTEX Dashboard Header Styles
+ * Glassmorphism-compliant header with CORTEX branding
+ * 
+ * @author Asif Hussain
+ * @copyright ┬⌐ 2025-2026 Asif Hussain. All rights reserved.
+ */
+
+/* =========================================================================
+   HEADER LAYOUT & STRUCTURE
+   ========================================================================= */
+
+.cortex-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  gap: 2rem;
+}
+
+/* =========================================================================
+   BRAND SECTION (LOGO + TITLE)
+   ========================================================================= */
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 0 0 auto;
+  min-width: 300px;
+}
+
+.logo-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+}
+
+.logo-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+}
+
+.logo-button:active {
+  transform: scale(0.98);
+}
+
+.cortex-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(14, 165, 233, 0.1));
+  transition: filter 0.3s ease;
+}
+
+.logo-button:hover .cortex-logo {
+  filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.3));
+}
+
+/* Logo variants for dark mode */
+:root.dark-mode .cortex-logo {
+  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1));
+}
+
+:root.dark-mode .logo-button:hover .cortex-logo {
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #0ea5e9, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+/* =========================================================================
+   NAVIGATION MENU (DESKTOP)
+   ========================================================================= */
+
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-link {
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #0ea5e9, #10b981);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.nav-link:hover::before {
+  transform: scaleX(1);
+}
+
+.nav-link.active {
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.15);
+}
+
+.nav-link.active::before {
+  transform: scaleX(1);
+}
+
+/* =========================================================================
+   HEADER CONTROLS
+   ========================================================================= */
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 0 auto;
+}
+
+/* Search Box */
+.search-box {
+  position: relative;
+  width: 280px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.search-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #0ea5e9;
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+/* Header Buttons */
+.header-button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.625rem;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.header-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #0ea5e9;
+  border-color: rgba(14, 165, 233, 0.3);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+}
+
+.header-button:active {
+  transform: scale(0.95);
+}
+
+.header-button svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: #ffffff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================================================
+   MOBILE NAVIGATION
+   ========================================================================= */
+
+.header-nav-mobile {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 200px;
+  padding: 1rem 0;
+  box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.nav-link-mobile {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-link-mobile:hover {
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
+  border-left-color: #0ea5e9;
+}
+
+.nav-link-mobile.active {
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.15);
+  border-left-color: #0ea5e9;
+}
+
+/* =========================================================================
+   NOTIFICATION DROPDOWN
+   ========================================================================= */
+
+.notification-dropdown {
+  position: fixed;
+  top: 70px;
+  right: 1rem;
+  width: 350px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.notification-close:hover {
+  color: #ffffff;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+}
+
+.notification-item {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.notification-item.notification-info {
+  border-left: 3px solid #0ea5e9;
+}
+
+.notification-item.notification-success {
+  border-left: 3px solid #10b981;
+}
+
+.notification-item.notification-warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.notification-item.notification-error {
+  border-left: 3px solid #ef4444;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.notification-message {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.notification-dismiss {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.notification-dismiss:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* =========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================= */
+
+/* Tablet (768px and down) */
+@media (max-width: 768px) {
+  .cortex-header {
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+  
+  .header-brand {
+    min-width: auto;
+    flex: 0 1 auto;
+  }
+  
+  .cortex-logo {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .title-section {
+    gap: 0;
+  }
+  
+  .header-title {
+    font-size: 1.25rem;
+  }
+  
+  .header-subtitle {
+    display: none;
+  }
+  
+  .header-nav {
+    display: none;
+  }
+  
+  .search-box {
+    width: 200px;
+  }
+  
+  .search-input {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-only {
+    display: flex !important;
+  }
+}
+
+/* Mobile (480px and down) */
+@media (max-width: 480px) {
+  .cortex-header {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .header-brand {
+    gap: 0.75rem;
+  }
+  
+  .cortex-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header-title {
+    font-size: 1rem;
+  }
+  
+  .header-controls {
+    gap: 0.5rem;
+  }
+  
+  .search-box {
+    display: none;
+  }
+  
+  .header-button {
+    width: 36px;
+    height: 36px;
+    padding: 0.5rem;
+  }
+  
+  .header-button svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .notification-dropdown {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    left: 1rem;
+  }
+}
+
+/* =========================================================================
+   DARK MODE ADJUSTMENTS
+   ========================================================================= */
+
+:root.dark-mode .cortex-header {
+  background: rgba(5, 8, 20, 0.8);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+:root.dark-mode .search-input {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+:root.dark-mode .search-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+}
+
+:root.dark-mode .header-nav-mobile {
+  background: rgba(5, 8, 20, 0.95);
+  border-left-color: rgba(255, 255, 255, 0.05);
+}
+
+:root.dark-mode .notification-dropdown {
+  background: rgba(5, 8, 20, 0.95);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================================================
+   ANIMATIONS & TRANSITIONS
+   ========================================================================= */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
+  }
+}
+
+.header-button.active {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles */
+@media print {
+  .cortex-header {
+    position: fixed;
+    background: #ffffff;
+    border: none;
+  }
+  
+  .header-controls {
+    display: none;
+  }
+  
+  .header-nav {
+    display: none;
+  }
+}
+
+/* =========================================================================
+   DO-001-01: CORTEX LOGO COMPONENT STYLES
+   Responsive logo with dark mode, hover effects, and accessibility
+   ========================================================================= */
+
+/* Logo link wrapper */
+.cortex-logo-link {
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  transition: all 200ms ease-in-out;
+}
+
+/* Logo image base styles */
+.cortex-logo {
+  display: block;
+  object-fit: contain;
+  transition: transform 200ms ease-in-out, filter 200ms ease-in-out;
+}
+
+/* Responsive sizing - Mobile (320-767px): 96px */
+@media (max-width: 767px) {
+  .cortex-logo {
+    width: 96px !important;
+    height: 96px !important;
+  }
+}
+
+/* Responsive sizing - Tablet (768-1023px): 128px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cortex-logo {
+    width: 128px !important;
+    height: 128px !important;
+  }
+}
+
+/* Responsive sizing - Desktop (ΓëÑ1024px): 200px */
+@media (min-width: 1024px) {
+  .cortex-logo {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+/* Hover effects */
+.cortex-logo-link:hover .cortex-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.6));
+}
+
+/* Focus effects for keyboard navigation */
+.cortex-logo-link:focus {
+  outline: 2px solid #0ea5e9; /* Cyan */
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.cortex-logo-link:focus .cortex-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.6));
+}
+
+/* Active/pressed state */
+.cortex-logo-link:active .cortex-logo {
+  transform: scale(0.98);
+}
+
+/* Touch target enhancement for mobile */
+@media (max-width: 767px) {
+  .cortex-logo-link {
+    min-width: 44px; /* WCAG minimum touch target */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Dark mode specific adjustments */
+.dark .cortex-logo {
+  filter: brightness(1.1);
+}
+
+.dark .cortex-logo-link:hover .cortex-logo,
+.dark .cortex-logo-link:focus .cortex-logo {
+  filter: brightness(1.2) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+}
+
+/* Prefers reduced motion - disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .cortex-logo,
+  .cortex-logo-link {
+    transition: none;
+  }
+  
+  .cortex-logo-link:hover .cortex-logo,
+  .cortex-logo-link:focus .cortex-logo {
+    transform: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .cortex-logo-link:focus {
+    outline-width: 3px;
+    outline-color: currentColor;
+  }
+}
+

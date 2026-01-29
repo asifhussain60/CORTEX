@@ -1,0 +1,215 @@
+/**
+ * DO-001-02: Tailwind CSS Custom Theme Configuration
+ * 
+ * Extends Tailwind with CORTEX brand colors for use with utility classes.
+ * This allows using: text-cortex-primary, bg-cortex-secondary, etc.
+ * 
+ * Usage via CDN with inline config:
+ * <script>
+ *   tailwind.config = { theme: { extend: { colors: {...} } } }
+ * </script>
+ * 
+ * AC-ID: DO-001-02
+ * Phase: PHASE-15-DASHBOARD-ENHANCEMENT
+ */
+
+/* =========================================================================
+   TAILWIND CDN CONFIGURATION (Inline Script)
+   Copy this configuration into index.html <script> tag
+   ========================================================================= */
+
+/*
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        // CORTEX Brand Colors
+        cortex: {
+          primary: {
+            DEFAULT: '#0ea5e9',    // Cyan
+            hover: '#0284c7',
+            light: '#38bdf8',
+            dark: '#0369a1',
+          },
+          secondary: {
+            DEFAULT: '#10b981',    // Emerald
+            hover: '#059669',
+            light: '#34d399',
+            dark: '#047857',
+          },
+          accent: {
+            DEFAULT: '#a78bfa',    // Violet
+            hover: '#8b5cf6',
+            light: '#c4b5fd',
+            dark: '#7c3aed',
+          },
+        },
+      },
+    },
+  },
+}
+*/
+
+/* =========================================================================
+   CSS CUSTOM PROPERTIES MAPPING
+   Maps CSS variables to Tailwind-compatible class names
+   ========================================================================= */
+
+@layer utilities {
+  /* Primary Color Utilities */
+  .text-cortex-primary {
+    color: var(--color-primary);
+  }
+  
+  .bg-cortex-primary {
+    background-color: var(--color-primary);
+  }
+  
+  .border-cortex-primary {
+    border-color: var(--color-primary);
+  }
+  
+  /* Secondary Color Utilities */
+  .text-cortex-secondary {
+    color: var(--color-secondary);
+  }
+  
+  .bg-cortex-secondary {
+    background-color: var(--color-secondary);
+  }
+  
+  .border-cortex-secondary {
+    border-color: var(--color-secondary);
+  }
+  
+  /* Accent Color Utilities */
+  .text-cortex-accent {
+    color: var(--color-accent);
+  }
+  
+  .bg-cortex-accent {
+    background-color: var(--color-accent);
+  }
+  
+  .border-cortex-accent {
+    border-color: var(--color-accent);
+  }
+  
+  /* Hover State Utilities */
+  .hover\:text-cortex-primary-hover:hover {
+    color: var(--color-primary-hover);
+  }
+  
+  .hover\:bg-cortex-primary-hover:hover {
+    background-color: var(--color-primary-hover);
+  }
+  
+  /* Gradient Utilities */
+  .bg-gradient-cortex {
+    background: linear-gradient(135deg, 
+      var(--color-primary) 0%, 
+      var(--color-secondary) 50%, 
+      var(--color-accent) 100%
+    );
+  }
+  
+  .text-gradient-cortex {
+    background: linear-gradient(135deg, 
+      var(--color-primary) 0%, 
+      var(--color-secondary) 50%, 
+      var(--color-accent) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* =========================================================================
+   COMPONENT-SPECIFIC COLOR OVERRIDES
+   Applies CORTEX brand colors to standard HTML elements and Tailwind classes
+   ========================================================================= */
+
+/* Links - Primary Color */
+a:not([class]) {
+  color: var(--color-primary);
+  transition: color 200ms ease-in-out;
+}
+
+a:not([class]):hover {
+  color: var(--color-primary-hover);
+}
+
+/* Buttons - Primary by Default */
+button:not([class]) {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+button:not([class]):hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Form Inputs - Primary Focus Ring */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Code Blocks - Accent Color */
+code {
+  color: var(--color-accent);
+  background-color: rgba(167, 139, 250, 0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+/* Selection - Primary Color */
+::selection {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Scrollbar - Primary Color (Webkit browsers) */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* =========================================================================
+   USAGE GUIDE
+   
+   In HTML with Tailwind CDN:
+   
+   1. Add configuration script BEFORE Tailwind CDN:
+      <script>
+        tailwind.config = { theme: { extend: { colors: {...} } } }
+      </script>
+      <script src="https://cdn.tailwindcss.com"></script>
+   
+   2. Use brand colors with Tailwind utilities:
+      <button class="bg-cortex-primary text-white px-4 py-2 rounded-lg hover:bg-cortex-primary-hover">
+        Submit
+      </button>
+   
+   3. Or use custom CSS classes:
+      <button class="btn-primary">Submit</button>
+   
+   4. Gradient text:
+      <h1 class="text-gradient-cortex text-4xl font-bold">CORTEX</h1>
+   
+   5. Status indicators:
+      <span class="text-cortex-secondary">Γ£ô Success</span>
+      <span class="text-cortex-accent">≡ƒñû AI Active</span>
+   ========================================================================= */

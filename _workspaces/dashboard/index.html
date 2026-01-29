@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Neural Observatory - Real-time brain visualization dashboard">
+    <title>CORTEX Neural Observatory</title>
+    
+    <!-- Tailwind CSS Configuration (DO-001-02) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cortex: {
+                            primary: {
+                                DEFAULT: '#0ea5e9',
+                                hover: '#0284c7',
+                                light: '#38bdf8',
+                                dark: '#0369a1',
+                            },
+                            secondary: {
+                                DEFAULT: '#10b981',
+                                hover: '#059669',
+                                light: '#34d399',
+                                dark: '#047857',
+                            },
+                            accent: {
+                                DEFAULT: '#a78bfa',
+                                hover: '#8b5cf6',
+                                light: '#c4b5fd',
+                                dark: '#7c3aed',
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js from unpkg (tracking-friendly CDN) -->
+    <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.js" onerror="console.warn('Γ£ù Chart.js unavailable - static charts only')"></script>
+    
+    <!-- D3.js for graphs -->
+    <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js" onerror="console.warn('Γ£ù D3.js unavailable - basic visualization')"></script>
+    
+    <!-- Custom CSS (DO-001-02: Brand Colors, DO-001-04: Responsive, DO-002-01: Sidebar, DO-002-02: Tabs) -->
+    <link rel="stylesheet" href="/css/colors.css">
+    <link rel="stylesheet" href="/css/tailwind-custom.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/glassmorphism.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/tabs.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-white">
+    
+    <!-- Sidebar Navigation (DO-002-01) -->
+    <aside id="sidebar" class="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <img src="/assets/cortex-logo.svg" alt="CORTEX" class="sidebar-logo-image">
+                <span class="sidebar-logo-text">CORTEX</span>
+            </div>
+        </div>
+        
+        <!-- Collapse/Expand Toggle -->
+        <button id="sidebar-toggle" 
+                class="sidebar-toggle" 
+                aria-label="Toggle sidebar"
+                title="Collapse/Expand sidebar">
+            <div class="sidebar-toggle-icon"></div>
+        </button>
+        
+        <!-- Main Navigation -->
+        <nav class="sidebar-nav">
+            <!-- Section 1: Brain Observatory -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">Core Systems</h3>
+                <a href="#section-brain-observatory" 
+                   class="sidebar-nav-item active" 
+                   data-section="Brain Observatory"
+                   aria-current="page">
+                    <svg class="sidebar-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <span class="sidebar-nav-text">Brain Observatory</span>
+                </a>
+                
+                <a href="#section-temporal-cortex" 
+                   class="sidebar-nav-item" 
+                   data-section="Temporal Cortex">
+                    <svg class="sidebar-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="sidebar-nav-text">Temporal Cortex</span>
+                </a>
+            </div>
+            
+            <!-- Section 2: Execution & Planning -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">Execution</h3>
+                <a href="#section-orchestrators" 
+                   class="sidebar-nav-item" 
+                   data-section="Orchestrators">
+                    <svg class="sidebar-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span class="sidebar-nav-text">Orchestrators</span>
+                </a>
+                
+                <a href="#section-plan-hub" 
+                   class="sidebar-nav-item" 
+                   data-section="Plan Hub">
+                    <svg class="sidebar-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    <span class="sidebar-nav-text">Plan Hub</span>
+                </a>
+            </div>
+            
+            <!-- Section 3: Administration -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-section-title">Management</h3>
+                <a href="#section-admin" 
+                   class="sidebar-nav-item" 
+                   data-section="Admin">
+                    <svg class="sidebar-nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="sidebar-nav-text">Admin</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-text">CORTEX v2.0</p>
+        </div>
+    </aside>
+    
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="glass-panel border-b bg-slate-900/50 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- CORTEX Logo (DO-001-01) -->
+            <a href="/" 
+               id="cortex-logo" 
+               class="cortex-logo-link flex items-center gap-3 group"
+               title="CORTEX v2.0"
+               aria-label="CORTEX Dashboard - Return to Home">
+                <img src="/assets/cortex-logo.svg" 
+                     alt="CORTEX Neural Observatory Logo" 
+                     class="cortex-logo transition-all duration-200 ease-in-out
+                            w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:w-20
+                            group-hover:scale-105 group-focus:scale-105
+                            group-hover:drop-shadow-[0_0_12px_rgba(14,165,233,0.6)]
+                            group-focus:outline group-focus:outline-2 group-focus:outline-cyan-500 group-focus:outline-offset-2"
+                     id="logo-image">
+                <div class="flex flex-col">
+                    <div class="text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-500 to-sky-500 bg-clip-text text-transparent">
+                        CORTEX
+                    </div>
+                    <span class="text-xs md:text-sm opacity-75 hidden sm:block">Neural Observatory</span>
+                </div>
+            </a>
+            
+            <!-- Desktop Navigation Links (DO-001-04) -->
+            <div class="nav-desktop flex items-center gap-4 md:gap-6">
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Observatory</button>
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Audit</button>
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Orchestrators</button>
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Plans</button>
+            </div>
+            
+            <!-- Hamburger Menu (DO-001-04: Mobile/Tablet) -->
+            <button id="hamburger-menu" class="hamburger-menu" aria-label="Toggle navigation menu">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation Overlay (DO-001-04) -->
+    <div id="nav-mobile-overlay" class="nav-mobile-overlay"></div>
+    
+    <!-- Mobile Navigation Panel (DO-001-04) -->
+    <nav id="nav-mobile" class="nav-mobile">
+        <div class="flex flex-col gap-4">
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Observatory</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Audit</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Orchestrators</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Plans</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Governance</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Reports</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area (DO-002-01: Sidebar offset) -->
+    <div class="main-content">
+        <!-- Main Container -->
+        <div class="container mx-auto px-6 py-8">
+            <!-- Welcome Section -->
+            <section class="mb-8">
+                <h1 class="text-4xl font-bold mb-2">CORTEX Brain Observatory</h1>
+                <p class="text-slate-400">Real-time visualization of system architecture, audit intelligence, and orchestration status</p>
+            </section>
+
+        <!-- Tab Navigation Example (DO-002-02) -->
+        <div id="main-tabs" class="tab-container">
+            <div class="tab-list" role="tablist">
+                <button class="tab-item active" 
+                        data-tab="overview" 
+                        role="tab" 
+                        aria-selected="true" 
+                        aria-controls="overview">
+                    <svg class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                    </svg>
+                    Overview
+                </button>
+                <button class="tab-item" 
+                        data-tab="audit-log" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="audit-log">
+                    <svg class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Audit Log
+                </button>
+                <button class="tab-item" 
+                        data-tab="metrics" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="metrics">
+                    <svg class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Metrics
+                </button>
+                <button class="tab-item" 
+                        data-tab="settings" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="settings">
+                    <svg class="tab-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Settings
+                </button>
+            </div>
+            
+            <div class="tab-content-container">
+                <!-- Overview Tab Panel -->
+                <div id="overview" class="tab-panel active" role="tabpanel" aria-hidden="false">
+                    
+        <!-- Brain Observatory - Tier Visualization (NO-001-01) -->
+        <section id="brain-observatory" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Brain Architecture</h2>
+            <div id="tier-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Tiers will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Neural Pulse Status (NO-001-02) -->
+        <section id="neural-pulse" class="mb-8">
+            <div class="glass-panel">
+                <div class="flex items-center gap-4 mb-4">
+                    <h3 class="text-xl font-bold">System Health</h3>
+                    <div id="pulse-indicator" class="pulse-indicator healthy"></div>
+                    <span id="status-badge" class="badge badge-success">OPTIMAL</span>
+                </div>
+                <p id="status-message" class="text-slate-400">All systems operational. Hash chain verified.</p>
+            </div>
+        </section>
+
+        <!-- SSOT Metrics (NO-001-03) -->
+        <section id="ssot-metrics" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">SSOT Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Phases</h4>
+                    <div class="text-3xl font-bold">8/15</div>
+                    <p class="text-sm opacity-50 mt-2">Completed / Total</p>
+                </div>
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Acceptance Criteria</h4>
+                    <div class="text-3xl font-bold">135/206</div>
+                    <p class="text-sm opacity-50 mt-2">Completed / Total (65.5%)</p>
+                </div>
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Audit Entries</h4>
+                    <div class="text-3xl font-bold">3,447</div>
+                    <p class="text-sm opacity-50 mt-2">Hash chain valid</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audit Timeline (NO-002-01) -->
+        <section id="audit-timeline" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Audit Timeline</h2>
+            <div class="glass-panel">
+                <div id="audit-list" class="space-y-3">
+                    <!-- Audit entries will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Orchestrator Grid (NO-003-01) -->
+        <section id="orchestrator-constellation" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Orchestrator Constellation</h2>
+            <div id="orchestrator-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Orchestrator cards will be loaded here -->
+            </div>
+        </section>
+        
+                </div> <!-- end overview tab-panel -->
+                
+                <!-- Audit Log Tab Panel -->
+                <div id="audit-log" class="tab-panel" role="tabpanel" aria-hidden="true">
+                    <p class="tab-panel-empty">Audit log view coming soon...</p>
+                </div>
+                
+                <!-- Metrics Tab Panel -->
+                <div id="metrics" class="tab-panel" role="tabpanel" aria-hidden="true">
+                    <p class="tab-panel-empty">Metrics view coming soon...</p>
+                </div>
+                
+                <!-- Settings Tab Panel -->
+                <div id="settings" class="tab-panel" role="tabpanel" aria-hidden="true">
+                    <p class="tab-panel-empty">Settings view coming soon...</p>
+                </div>
+            </div> <!-- end tab-content-container -->
+        </div> <!-- end tab-container -->
+        
+        </div> <!-- end container -->
+    </div> <!-- end main-content -->
+
+    <!-- JavaScript -->
+    <script src="/js/components/common/header-logo.js"></script>
+    <script src="/js/components/common/hamburger-menu.js"></script>
+    <script src="/js/components/common/sidebar.js"></script>
+    <script src="/js/components/common/tab-switcher.js"></script>
+    <script src="/js/utils/api-client.js"></script>
+    <script src="/js/components/brain/brain-map.js"></script>
+    <script src="/js/components/neural/neural-pulse.js"></script>
+    <script src="/js/components/temporal/audit-timeline.js"></script>
+    <script src="/js/components/orchestrator/orchestrator-grid.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
