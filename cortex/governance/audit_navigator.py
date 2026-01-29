@@ -3,7 +3,16 @@
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
+
+@dataclass
+class AuditEntry:
+    """Audit entry for the navigator (distinct from EnhancedAuditLogger's AuditEntry)."""
+    timestamp: str
+    entity_type: str
+    entity_id: str
+    action: str
+    actor: str
 
 
 class AuditNavigator:
