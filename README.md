@@ -46,9 +46,40 @@ make test-all      # Run all tests
 
 ## Documentation
 
-- [Getting Started](docs/01-getting-started/)
-- [Architecture](docs/02-architecture/)
-- [API Reference](docs/06-api-reference/)
+- **[START HERE](docs/START-HERE.md)** - New to CORTEX? Begin here
+- **[Getting Started](docs/03-getting-started/)** - Installation & setup
+- **[CORTEX Brain](docs/01-cortex-brain/)** - Governance & knowledge system
+- **[Orchestrators](docs/02-orchestrators/)** - 23 specialized coordinators
+- **[LENS Protocol](docs/05-lens-protocol/)** - Code intelligence system
+- **[LENS Dashboard](docs/11-lens-dashboard/)** - Visual intelligence (NEW ✨)
+- **[Architecture](docs/04-architecture/)** - System design
+- **[API Reference](docs/06-api-reference/)** - Complete API docs
+- **[MCP Tools](docs/11-mcp-tools/)** - Model Context Protocol integration
+
+### LENS Dashboard (Phase 14 - NEW ✨)
+
+Generate interactive dashboards for any repository:
+
+```bash
+# Generate dashboard for current repository
+cortex dashboard generate .
+
+# Serve dashboard locally
+cortex dashboard serve . --port 8080
+
+# List generated dashboards
+cortex dashboard list
+```
+
+**Features:**
+- 🎨 5 universal tabs (Overview, Dependencies, Classes, Timeline, Authors)
+- 🧠 3 CORTEX-specific tabs (Brain, Governance, Orchestrators)
+- 📊 D3.js & Mermaid.js visualizations
+- 🔐 Multi-dimensional overlays (Security, Performance, Compliance)
+- 🚀 Self-contained SPA (no external CDN)
+- ⚡ Alpine.js reactive UI
+
+See **[LENS Dashboard Documentation](docs/11-lens-dashboard/)** for details.
 
 ## License
 
