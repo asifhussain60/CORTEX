@@ -275,11 +275,17 @@ class TestVendorAssets:
             content = template_file.read_text()
             
             # Should not reference external CDNs
-            assert "cdn.jsdelivr.net" not in content
-            assert "unpkg.com" not in content
-            assert "cdnjs.cloudflare.com" not in content
+            assert "cdn.jsdelivr.net" not in content, f"External CDN found in {template_file}"
+            assert "unpkg.com" not in content, f"External CDN found in {template_file}"
+            assert "cdnjs.cloudflare.com" not in content, f"External CDN found in {template_file}"
             
-            # Should reference local vendor directory
-            if any(lib in content.lower() for lib in ["alpine", "d3", "mermaid", "tailwind"]):
-                # If libraries are referenced, they should be from vendor/
-                assert "vendor/" in content or "static/vendor/" in content
+            # Tab fragments (in tabs/ folder) inherit vendor loading from parent template
+            # Only check entry-point templates for vendor references
+            is_tab_fragment = "/tabs/" in str(template_file) or "\\tabs\\" in str(template_file)
+            
+            # Should reference local vendor directory (only for entry-point templates)
+            if not is_tab_fragment:
+                if any(lib in content.lower() for lib in ["alpine", "d3", "mermaid", "tailwind"]):
+                    # If libraries are referenced, they should be from vendor/
+                    assert "vendor/" in content or "static/vendor/" in content, \
+                        f"Entry-point template {template_file.name} references libraries but no vendor/ path"
