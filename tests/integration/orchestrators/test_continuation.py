@@ -137,17 +137,24 @@ class TestCheckpointManager:
         assert manager is not None
 
     def test_checkpoint_manager_creates_checkpoint(self) -> None:
-        """Test creating checkpoints."""
+        """Test creating checkpoints with full API."""
         manager = CheckpointManager()
         
         data = {"turn": 1, "context": {}}
-        cp_id = manager.create_checkpoint(data)
+        result = manager.create_checkpoint(
+            operation_id="test-op-1",
+            operation_type="TEST",
+            state_snapshot=data,
+            recovery_instructions="Resume from turn 1",
+        )
         
-        assert cp_id is not None
-        assert manager.get_checkpoint(cp_id) is not None
+        assert result.is_ok()
+        checkpoint = result.unwrap()
+        assert checkpoint is not None
+        assert checkpoint.metadata.operation_id == "test-op-1"
 
     def test_checkpoint_compression(self) -> None:
-        """Test checkpoint compression."""
+        """Test checkpoint compression with large data."""
         manager = CheckpointManager()
         
         # Large state
@@ -156,9 +163,15 @@ class TestCheckpointManager:
             "context": {"data": list(range(100))},
         }
         
-        cp_id = manager.create_checkpoint(large_data)
-        checkpoint = manager.get_checkpoint(cp_id)
+        result = manager.create_checkpoint(
+            operation_id="test-compression",
+            operation_type="LARGE_OP",
+            state_snapshot=large_data,
+            recovery_instructions="Handle large data",
+        )
         
+        assert result.is_ok()
+        checkpoint = result.unwrap()
         assert checkpoint is not None
 
     def test_checkpoint_durability(self) -> None:
@@ -166,21 +179,41 @@ class TestCheckpointManager:
         manager = CheckpointManager()
         
         data = {"turn": 1, "data": "important"}
-        cp_id = manager.create_checkpoint(data)
+        result = manager.create_checkpoint(
+            operation_id="test-durable",
+            operation_type="DURABLE",
+            state_snapshot=data,
+            recovery_instructions="Resume important data",
+        )
         
-        # Simulate retrieval after process restart
-        restored = manager.get_checkpoint(cp_id)
-        assert restored == data
+        assert result.is_ok()
+        checkpoint = result.unwrap()
+        
+        # Retrieve by ID (returns Result, needs unwrap)
+        restore_result = manager.get_checkpoint(checkpoint.metadata.checkpoint_id)
+        assert restore_result.is_ok()
+        restored = restore_result.unwrap()
+        assert restored.state_snapshot == data
 
     def test_checkpoint_validation(self) -> None:
         """Test checkpoint validation."""
         manager = CheckpointManager()
         
         data = {"turn": 1, "context": {}}
-        cp_id = manager.create_checkpoint(data)
+        result = manager.create_checkpoint(
+            operation_id="test-validate",
+            operation_type="VALIDATE",
+            state_snapshot=data,
+            recovery_instructions="Validate checkpoint",
+        )
         
-        is_valid = manager.validate_checkpoint(cp_id)
-        assert is_valid is True
+        assert result.is_ok()
+        checkpoint = result.unwrap()
+        
+        # validate_checkpoint returns Result[bool]
+        is_valid_result = manager.validate_checkpoint(checkpoint.metadata.checkpoint_id)
+        assert is_valid_result.is_ok()
+        assert is_valid_result.unwrap() is True
 
 
 class TestContinuationChain:
@@ -267,8 +300,15 @@ class TestContinuationIntegration:
         chain = ContinuationChain()
         
         for i in range(1, 4):
-            cp_id = manager.create_checkpoint({"turn": i})
-            chain.add_checkpoint(cp_id)
+            result = manager.create_checkpoint(
+                operation_id=f"chain-op-{i}",
+                operation_type="CHAIN",
+                state_snapshot={"turn": i},
+                recovery_instructions=f"Resume from turn {i}",
+            )
+            assert result.is_ok()
+            checkpoint = result.unwrap()
+            chain.add_checkpoint(checkpoint.metadata.checkpoint_id)
         
         assert chain.get_chain_length() == 3
 
@@ -282,14 +322,26 @@ class TestContinuationIntegration:
         # Turn 1
         state1 = {"turn": 1, "user": "Alice", "messages": ["hello"]}
         cp1 = continuer.create_checkpoint(state1)
-        cp1_mgr = manager.create_checkpoint(state1)
-        chain.add_checkpoint(cp1_mgr)
+        result1 = manager.create_checkpoint(
+            operation_id="e2e-turn-1",
+            operation_type="CONVERSATION",
+            state_snapshot=state1,
+            recovery_instructions="Resume from turn 1",
+        )
+        assert result1.is_ok()
+        chain.add_checkpoint(result1.unwrap().metadata.checkpoint_id)
         
         # Turn 2
         state2 = {"turn": 2, "user": "Alice", "messages": ["hello", "response"]}
         cp2 = continuer.create_checkpoint(state2)
-        cp2_mgr = manager.create_checkpoint(state2)
-        chain.add_checkpoint(cp2_mgr)
+        result2 = manager.create_checkpoint(
+            operation_id="e2e-turn-2",
+            operation_type="CONVERSATION",
+            state_snapshot=state2,
+            recovery_instructions="Resume from turn 2",
+        )
+        assert result2.is_ok()
+        chain.add_checkpoint(result2.unwrap().metadata.checkpoint_id)
         
         # Simulate resuming from turn 1
         resumed = continuer.resume_from_checkpoint(cp1)

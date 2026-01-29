@@ -206,7 +206,10 @@ class TestCacheManager:
         cache_manager.register_cache(repo_path, output_path2)
         
         assert len(cache_manager._entries) == 1
-        assert cache_manager._entries[0].output_path == str(output_path2)
+        # Get the entry via get_cached since _entries is a dict
+        entry = cache_manager.get_cached(repo_path)
+        assert entry is not None
+        assert entry.output_path == str(output_path2)
     
     def test_get_cached_returns_valid_entry(
         self,
@@ -270,7 +273,7 @@ class TestCacheManager:
         cache_manager: CacheManager,
     ) -> None:
         """Test cleaning up expired entries."""
-        # Manually add an expired entry
+        # Manually add an expired entry to the dict
         past = datetime.now() - timedelta(hours=48)
         entry = CacheEntry(
             repo_path="/old/repo",
@@ -279,7 +282,8 @@ class TestCacheManager:
             expires_at=past + timedelta(hours=24),
             is_cortex=False,
         )
-        cache_manager._entries.append(entry)
+        # Use a fake cache key since _entries is a dict
+        cache_manager._entries["expired_key"] = entry
         
         removed = cache_manager.cleanup_expired()
         

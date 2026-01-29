@@ -333,6 +333,31 @@ class CheckpointManager:
             ]
             return Ok(active)
     
+    def validate_checkpoint(self, checkpoint_id: str) -> Result[bool]:
+        """
+        Validate checkpoint integrity by checking data digest.
+        
+        Args:
+            checkpoint_id: Checkpoint to validate
+        
+        Returns:
+            Result[bool] - True if valid, False if corrupted
+        """
+        with self._checkpoint_lock:
+            if checkpoint_id not in self._checkpoints:
+                return Err(f"Checkpoint {checkpoint_id} not found")
+            
+            checkpoint = self._checkpoints[checkpoint_id]
+            
+            # Recompute digest and compare
+            state_bytes = json.dumps(
+                checkpoint.state_snapshot, sort_keys=True
+            ).encode()
+            computed_digest = hashlib.sha256(state_bytes).hexdigest()
+            
+            is_valid = computed_digest == checkpoint.data_digest
+            return Ok(is_valid)
+
     def rollback_checkpoint(
         self,
         checkpoint_id: str,
