@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX LENS Dashboard - CORTEX Analysis</title>
+    
+    <!-- Tailwind CSS (self-hosted) -->
+    <link rel="stylesheet" href="/static/vendor/tailwind-3.4.0.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/frontend/css/dashboard-ui.css">
+    
+    <!-- Alpine.js (self-hosted) - Core SPA framework -->
+    <script defer src="/static/vendor/alpine-3.13.3.min.js"></script>
+    
+    <!-- Lazy Module Loader -->
+    <script defer src="/api/loader/javascript"></script>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+        
+        .tab-nav {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: transparent;
+            color: #a0aec0;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .tab-button:hover {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 600px;
+        }
+        
+        .cortex-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Alpine.js App -->
+    <div x-data="cortexDashboard()" x-init="initialize()" class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold text-white mb-2">
+                        🧠 CORTEX Repository Analysis
+                    </h1>
+                    <p class="text-lg text-gray-400">
+                        Comprehensive intelligence dashboard with 8 specialized tabs
+                    </p>
+                </div>
+                <div>
+                    <span class="cortex-badge">
+                        🧠 CORTEX Repository
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Back Button -->
+            <a href="/" class="inline-block mt-4 text-purple-400 hover:text-purple-300 transition-colors">
+                ← Back to Repositories
+            </a>
+        </header>
+        
+        <!-- Tab Navigation -->
+        <nav class="tab-nav mb-6">
+            <template x-for="tab in tabs" :key="tab.id">
+                <button 
+                    class="tab-button"
+                    :class="{ 'active': activeTab === tab.id }"
+                    @click="switchTab(tab.id)"
+                    x-text="tab.icon + ' ' + tab.name"
+                ></button>
+            </template>
+        </nav>
+        
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Tab 1: Repository Overview -->
+            <div x-show="activeTab === 'repository_overview'">
+                <h2 class="text-3xl font-bold mb-4">📦 Repository Overview</h2>
+                <p class="text-gray-400 mb-4">Business-language description of the CORTEX codebase.</p>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <p class="text-lg leading-relaxed">
+                        CORTEX is a microservices-based AI orchestration system that provides 
+                        intelligent development workflow automation. It uses Python FastAPI for 
+                        backend services, integrates with multiple LENS analyzers for code 
+                        intelligence, and follows Domain-Driven Design (DDD) patterns with 23 
+                        orchestrators coordinating development tasks.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Dependency Graph -->
+            <div x-show="activeTab === 'dependency_graph'">
+                <h2 class="text-3xl font-bold mb-4">🕸️ Dependency Graph</h2>
+                <p class="text-gray-400 mb-4">Interactive call graph and import dependency visualization.</p>
+                <div id="dependency-graph-container" class="bg-gray-700 p-6 rounded-lg min-h-[500px]">
+                    <p class="text-center text-gray-400">Loading D3.js visualization...</p>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Class Diagrams -->
+            <div x-show="activeTab === 'class_diagram'">
+                <h2 class="text-3xl font-bold mb-4">📊 Class Diagrams</h2>
+                <p class="text-gray-400 mb-4">UML class diagrams and entity-relationship diagrams.</p>
+                <div id="class-diagram-container" class="bg-gray-700 p-6 rounded-lg min-h-[500px]">
+                    <p class="text-center text-gray-400">Loading Mermaid diagrams...</p>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Temporal Analysis -->
+            <div x-show="activeTab === 'git_timeline'">
+                <h2 class="text-3xl font-bold mb-4">📈 Temporal Analysis</h2>
+                <p class="text-gray-400 mb-4">Git commit timeline and change frequency analysis.</p>
+                <div id="timeline-container" class="bg-gray-700 p-6 rounded-lg min-h-[500px]">
+                    <p class="text-center text-gray-400">Loading timeline visualization...</p>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Author Network -->
+            <div x-show="activeTab === 'author_network'">
+                <h2 class="text-3xl font-bold mb-4">👥 Author Network</h2>
+                <p class="text-gray-400 mb-4">Developer collaboration network and expertise mapping.</p>
+                <div id="author-network-container" class="bg-gray-700 p-6 rounded-lg min-h-[500px]">
+                    <p class="text-center text-gray-400">Loading author network...</p>
+                </div>
+            </div>
+            
+            <!-- Tab 6: Brain Architecture (CORTEX ONLY) -->
+            <div x-show="activeTab === 'brain_architecture'">
+                <h2 class="text-3xl font-bold mb-4">🧠 Brain Architecture</h2>
+                <p class="text-gray-400 mb-4">4-tier brain structure and orchestrator registry.</p>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="bg-purple-900 p-4 rounded">
+                            <h3 class="font-bold mb-2">Tier 0</h3>
+                            <p class="text-sm">Governance</p>
+                        </div>
+                        <div class="bg-blue-900 p-4 rounded">
+                            <h3 class="font-bold mb-2">Tier 1</h3>
+                            <p class="text-sm">Acceptance Criteria</p>
+                        </div>
+                        <div class="bg-green-900 p-4 rounded">
+                            <h3 class="font-bold mb-2">Tier 2</h3>
+                            <p class="text-sm">Response Templates</p>
+                        </div>
+                        <div class="bg-yellow-900 p-4 rounded">
+                            <h3 class="font-bold mb-2">Tier 3</h3>
+                            <p class="text-sm">Knowledge</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 7: Governance Compliance (CORTEX ONLY) -->
+            <div x-show="activeTab === 'governance_heatmap'">
+                <h2 class="text-3xl font-bold mb-4">✅ Governance Compliance</h2>
+                <p class="text-gray-400 mb-4">CORE rule compliance heatmap and violation tracking.</p>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <p class="text-center text-gray-400">Governance heatmap coming soon...</p>
+                </div>
+            </div>
+            
+            <!-- Tab 8: Orchestrator Constellation (CORTEX ONLY) -->
+            <div x-show="activeTab === 'orchestrator_constellation'">
+                <h2 class="text-3xl font-bold mb-4">🎼 Orchestrator Constellation</h2>
+                <p class="text-gray-400 mb-4">Orchestrator relationship map and wiring visualization.</p>
+                <div class="bg-gray-700 p-6 rounded-lg">
+                    <p class="text-center text-gray-400">Orchestrator map coming soon...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading Indicator -->
+        <div x-show="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-gray-800 p-8 rounded-lg text-center">
+                <p class="text-xl mb-2">🔄 Loading modules...</p>
+                <p class="text-gray-400" x-text="loadingMessage"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alpine.js Component Script -->
+    <script>
+        function cortexDashboard() {
+            return {
+                activeTab: 'repository_overview',
+                loading: false,
+                loadingMessage: '',
+                tabs: [
+                    { id: 'repository_overview', name: 'Overview', icon: '📦' },
+                    { id: 'dependency_graph', name: 'Dependencies', icon: '🕸️' },
+                    { id: 'class_diagram', name: 'Classes', icon: '📊' },
+                    { id: 'git_timeline', name: 'Timeline', icon: '📈' },
+                    { id: 'author_network', name: 'Authors', icon: '👥' },
+                    { id: 'brain_architecture', name: 'Brain', icon: '🧠' },
+                    { id: 'governance_heatmap', name: 'Governance', icon: '✅' },
+                    { id: 'orchestrator_constellation', name: 'Orchestrators', icon: '🎼' },
+                ],
+                
+                async initialize() {
+                    console.log('🧠 CORTEX Dashboard initialized');
+                    // Load initial tab data
+                    await this.loadTabData('repository_overview');
+                },
+                
+                async switchTab(tabId) {
+                    if (this.activeTab === tabId) return;
+                    
+                    this.activeTab = tabId;
+                    await this.loadTabData(tabId);
+                },
+                
+                async loadTabData(tabId) {
+                    // Lazy-load required modules for this tab
+                    if (window.CortexModuleLoader) {
+                        this.loading = true;
+                        this.loadingMessage = `Loading modules for ${tabId}...`;
+                        
+                        try {
+                            await window.CortexModuleLoader.loadModulesForTab(tabId);
+                            console.log(`✅ Loaded modules for ${tabId}`);
+                        } catch (error) {
+                            console.error(`❌ Failed to load modules for ${tabId}:`, error);
+                        } finally {
+                            this.loading = false;
+                        }
+                    }
+                    
+                    // Load tab content via API
+                    // TODO: Implement API calls for actual data
+                },
+            };
+        }
+    </script>
+</body>
+</html>

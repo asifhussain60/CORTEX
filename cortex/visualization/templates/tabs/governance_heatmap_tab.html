@@ -1,0 +1,289 @@
+<!-- Tab 7: Governance Heatmap (CORTEX-Specific) -->
+<div class="tab-panel" x-show="activeTab === 'governance_heatmap'" x-transition>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    🛡️ Governance Heatmap
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">
+                    CORE rule compliance tracking and violation detection across the codebase
+                </p>
+            </div>
+            
+            <!-- Overall Compliance Badge -->
+            <div>
+                <span class="px-6 py-3 rounded-full text-2xl font-bold bg-green-100 text-green-800">
+                    92% Compliant
+                </span>
+            </div>
+        </div>
+        
+        <!-- Compliance Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-green-600">35+</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">CORE Rules</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-blue-600">1,247</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Files Checked</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-orange-600">52</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Violations</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-purple-600">+7%</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">This Month</div>
+            </div>
+        </div>
+        
+        <!-- Compliance Heatmap -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Compliance Heatmap (Files × Rules)
+            </h3>
+            <div id="governance-heatmap-container" class="w-full h-96 bg-gray-50 dark:bg-gray-900 rounded-lg overflow-auto">
+                <!-- D3.js heatmap will be rendered here -->
+                <div class="flex items-center justify-center h-full text-gray-400">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                        </svg>
+                        <p>Heatmap loading...</p>
+                        <p class="text-xs mt-2">Analyzing 1,247 files against 35+ CORE rules</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="mt-4 flex items-center justify-center space-x-6 text-sm">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-green-500 mr-2"></div>
+                    <span>Compliant</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-yellow-500 mr-2"></div>
+                    <span>Warning</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-red-500 mr-2"></div>
+                    <span>Violation</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 bg-gray-400 mr-2"></div>
+                    <span>Unknown</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Violations by Rule -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Violations by Rule
+                </h3>
+                <div class="space-y-3">
+                    <!-- CORE-008: TDD -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">CORE-008: TDD</span>
+                            <span class="text-red-600 font-bold">15 violations</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-red-600 h-2 rounded-full" style="width: 29%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- CORE-011: Type Hints -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">CORE-011: Type Hints</span>
+                            <span class="text-orange-600 font-bold">12 violations</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-600 h-2 rounded-full" style="width: 23%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- CORE-012: Docstrings -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">CORE-012: Docstrings</span>
+                            <span class="text-yellow-600 font-bold">8 violations</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-yellow-600 h-2 rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- CORE-013: Exception Handling -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">CORE-013: Exceptions</span>
+                            <span class="text-yellow-600 font-bold">5 violations</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-yellow-600 h-2 rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- CORE-028: File Naming -->
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">CORE-028: File Naming</span>
+                            <span class="text-green-600 font-bold">0 violations</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Violations by Category -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Violations by Category
+                </h3>
+                <div id="violations-category-chart" class="w-full h-64">
+                    <!-- D3.js bar chart will be rendered here -->
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium">🧪 Testing</span>
+                                <span class="font-bold">15</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-red-500 h-3 rounded-full" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium">📝 Code Quality</span>
+                                <span class="font-bold">17</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-orange-500 h-3 rounded-full" style="width: 34%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium">📚 Documentation</span>
+                                <span class="font-bold">8</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-yellow-500 h-3 rounded-full" style="width: 16%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="font-medium">🔒 Governance</span>
+                                <span class="font-bold">12</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-purple-500 h-3 rounded-full" style="width: 24%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Compliance Timeline -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Compliance Drift Timeline
+            </h3>
+            <div id="compliance-timeline-container" class="w-full h-64">
+                <!-- D3.js line chart will be rendered here -->
+                <div class="flex items-center justify-center h-full text-gray-400">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                        <p>Compliance trend over time</p>
+                        <p class="text-xs mt-2 text-green-500">↗ +7% improvement this month</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Critical Violations List -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                🚨 Critical Violations (Priority Fixes)
+            </h3>
+            <div class="space-y-3">
+                <div class="flex items-start p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <span class="text-red-600 mr-3 text-xl">❌</span>
+                    <div class="flex-1">
+                        <div class="font-medium text-red-900 dark:text-red-200">CORE-008: Missing tests</div>
+                        <div class="text-sm text-red-700 dark:text-red-300 mt-1">
+                            cortex/orchestrators/domain/selenium_playwright_orchestrator.py
+                        </div>
+                        <div class="text-xs text-red-600 dark:text-red-400 mt-1">
+                            No test file found for implementation
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-start p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                    <span class="text-orange-600 mr-3 text-xl">⚠️</span>
+                    <div class="flex-1">
+                        <div class="font-medium text-orange-900 dark:text-orange-200">CORE-011: Missing type hints</div>
+                        <div class="text-sm text-orange-700 dark:text-orange-300 mt-1">
+                            cortex/tools/feature_discovery.py:45
+                        </div>
+                        <div class="text-xs text-orange-600 dark:text-orange-400 mt-1">
+                            Function `discover_features` missing return type annotation
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-start p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                    <span class="text-yellow-600 mr-3 text-xl">⚡</span>
+                    <div class="flex-1">
+                        <div class="font-medium text-yellow-900 dark:text-yellow-200">CORE-012: Missing docstrings</div>
+                        <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                            cortex/brain/analysis/comment_extractor.py:127
+                        </div>
+                        <div class="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                            Method `_extract_inline_comments` missing docstring
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase Approval Status -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                📋 Phase Approval Status
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div class="text-2xl font-bold text-green-600">Phase 1-7</div>
+                    <div class="text-sm text-green-700 dark:text-green-300 mt-1">✅ Approved</div>
+                </div>
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-600">Phase 8-13</div>
+                    <div class="text-sm text-blue-700 dark:text-blue-300 mt-1">✅ Approved</div>
+                </div>
+                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                    <div class="text-2xl font-bold text-yellow-600">Phase 14</div>
+                    <div class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">🔄 In Progress</div>
+                </div>
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="text-2xl font-bold text-gray-600 dark:text-gray-300">Phase 15+</div>
+                    <div class="text-sm text-gray-700 dark:text-gray-400 mt-1">⏳ Pending</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX LENS Dashboard - Repository Browser</title>
+    
+    <!-- Tailwind CSS (self-hosted) -->
+    <link rel="stylesheet" href="/static/vendor/tailwind-3.4.0.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/frontend/css/dashboard-ui.css">
+    
+    <!-- Alpine.js (self-hosted) - Core SPA framework -->
+    <script defer src="/static/vendor/alpine-3.13.3.min.js"></script>
+    
+    <!-- Lazy Module Loader -->
+    <script defer src="/api/loader/javascript"></script>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .repo-tile {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .repo-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cortex-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .external-badge {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Alpine.js App -->
+    <div x-data="repositoryBrowser()" x-init="loadRepositories()" class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">
+                🧠 CORTEX LENS Dashboard
+            </h1>
+            <p class="text-xl text-white opacity-90">
+                AI-Powered Code Intelligence for Your Repositories
+            </p>
+        </header>
+        
+        <!-- Search & Filter -->
+        <div class="max-w-2xl mx-auto mb-8">
+            <input 
+                type="text" 
+                x-model="searchQuery"
+                placeholder="Search repositories..."
+                class="w-full px-6 py-4 rounded-full text-lg shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-300"
+            >
+        </div>
+        
+        <!-- Repository Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <template x-for="repo in filteredRepositories" :key="repo.id">
+                <div 
+                    class="repo-tile"
+                    @click="openDashboard(repo)"
+                >
+                    <!-- Badge -->
+                    <div class="flex items-center justify-between mb-3">
+                        <span 
+                            :class="repo.is_cortex ? 'cortex-badge' : 'external-badge'"
+                            x-text="repo.is_cortex ? '🧠 CORTEX' : '📦 External'"
+                        ></span>
+                        <span class="text-sm text-gray-500" x-text="repo.tabs + ' tabs'"></span>
+                    </div>
+                    
+                    <!-- Repository Name -->
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2" x-text="repo.name"></h3>
+                    
+                    <!-- Path -->
+                    <p class="text-sm text-gray-600 mb-4 truncate" x-text="repo.path"></p>
+                    
+                    <!-- Last Analyzed -->
+                    <div class="flex items-center text-xs text-gray-500">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span x-text="formatDate(repo.last_analyzed)"></span>
+                    </div>
+                </div>
+            </template>
+        </div>
+        
+        <!-- Add Repository Button -->
+        <div class="text-center">
+            <button 
+                @click="addRepository()"
+                class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+                ➕ Add Repository
+            </button>
+        </div>
+        
+        <!-- Loading State -->
+        <div x-show="loading" class="text-center text-white text-xl mt-8">
+            <p>🔄 Loading repositories...</p>
+        </div>
+        
+        <!-- Empty State -->
+        <div x-show="!loading && repositories.length === 0" class="text-center text-white mt-8">
+            <p class="text-xl mb-4">No repositories analyzed yet.</p>
+            <p>Click "Add Repository" to get started!</p>
+        </div>
+    </div>
+    
+    <!-- Alpine.js Component Script -->
+    <script>
+        function repositoryBrowser() {
+            return {
+                repositories: [],
+                searchQuery: '',
+                loading: true,
+                
+                async loadRepositories() {
+                    try {
+                        const response = await fetch('/api/repositories');
+                        this.repositories = await response.json();
+                    } catch (error) {
+                        console.error('Failed to load repositories:', error);
+                        this.repositories = [];
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                get filteredRepositories() {
+                    if (!this.searchQuery) {
+                        return this.repositories;
+                    }
+                    
+                    const query = this.searchQuery.toLowerCase();
+                    return this.repositories.filter(repo => 
+                        repo.name.toLowerCase().includes(query) ||
+                        repo.path.toLowerCase().includes(query)
+                    );
+                },
+                
+                openDashboard(repo) {
+                    if (repo.is_cortex) {
+                        window.location.href = '/cortex';
+                    } else {
+                        window.location.href = `/dashboard/${repo.id}`;
+                    }
+                },
+                
+                addRepository() {
+                    // TODO: Implement repository addition flow
+                    alert('Repository addition coming soon!');
+                },
+                
+                formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+                    
+                    if (diffMins < 60) {
+                        return `${diffMins} minutes ago`;
+                    } else if (diffHours < 24) {
+                        return `${diffHours} hours ago`;
+                    } else if (diffDays < 7) {
+                        return `${diffDays} days ago`;
+                    } else {
+                        return date.toLocaleDateString();
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>

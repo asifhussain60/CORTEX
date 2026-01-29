@@ -1,0 +1,301 @@
+<!-- Tab 2: Dependency Graph (D3.js Force-Directed Graph) -->
+<div class="tab-panel" x-show="activeTab === 'dependencies'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">🕸️ Dependency Graph</h2>
+    <p class="tab-subtitle">Module relationships and import patterns</p>
+  </div>
+
+  <!-- Graph Controls -->
+  <div class="graph-controls glass-panel">
+    <div class="control-group">
+      <label class="control-label">Layout</label>
+      <select x-model="graphSettings.layout" @change="updateDependencyGraph()">
+        <option value="force">Force-Directed</option>
+        <option value="hierarchical">Hierarchical</option>
+        <option value="circular">Circular</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Node Size</label>
+      <select x-model="graphSettings.nodeSize" @change="updateDependencyGraph()">
+        <option value="files">File Count</option>
+        <option value="loc">Lines of Code</option>
+        <option value="complexity">Complexity</option>
+        <option value="connections">Connections</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Color By</label>
+      <select x-model="graphSettings.colorBy" @change="updateDependencyGraph()">
+        <option value="package">Package</option>
+        <option value="type">Type (Internal/External)</option>
+        <option value="complexity">Complexity</option>
+        <option value="cohesion">Cohesion</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Filter</label>
+      <input type="text" 
+             x-model="graphSettings.filter" 
+             @input="filterDependencyGraph()"
+             placeholder="Filter modules...">
+    </div>
+
+    <div class="control-group">
+      <button class="btn-reset" @click="resetDependencyGraph()">🔄 Reset View</button>
+    </div>
+  </div>
+
+  <!-- Graph Container -->
+  <div class="graph-container glass-panel">
+    <div id="dependency-graph" class="d3-graph-canvas"></div>
+    
+    <!-- Graph Legend -->
+    <div class="graph-legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-items">
+        <div class="legend-item">
+          <span class="legend-node internal"></span>
+          <span class="legend-label">Internal Module</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-node external"></span>
+          <span class="legend-label">External Dependency</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-edge normal"></span>
+          <span class="legend-label">Import</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-edge circular"></span>
+          <span class="legend-label">Circular Dependency</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graph Statistics -->
+  <div class="graph-stats glass-panel">
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="stat-label">Total Modules</div>
+        <div class="stat-value" x-text="data.dependencies?.stats?.total_modules || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Internal Modules</div>
+        <div class="stat-value" x-text="data.dependencies?.stats?.internal_modules || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">External Dependencies</div>
+        <div class="stat-value" x-text="data.dependencies?.stats?.external_dependencies || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Import Connections</div>
+        <div class="stat-value" x-text="data.dependencies?.stats?.total_imports || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Circular Dependencies</div>
+        <div class="stat-value warning" x-text="data.dependencies?.stats?.circular_dependencies || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Average Connections</div>
+        <div class="stat-value" x-text="(data.dependencies?.stats?.avg_connections || 0).toFixed(1)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hotspots & Issues -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">⚠️ Dependency Issues</h3>
+    
+    <template x-if="data.dependencies?.issues?.circular_dependencies?.length > 0">
+      <div class="issue-group">
+        <h4 class="issue-title">🔄 Circular Dependencies</h4>
+        <template x-for="cycle in data.dependencies?.issues?.circular_dependencies || []" :key="cycle.id">
+          <div class="issue-card warning">
+            <div class="issue-path">
+              <template x-for="(module, index) in cycle.path" :key="index">
+                <span>
+                  <span class="module-name" x-text="module"></span>
+                  <span x-show="index < cycle.path.length - 1" class="path-arrow">→</span>
+                </span>
+              </template>
+            </div>
+            <div class="issue-severity" x-text="cycle.severity"></div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="data.dependencies?.issues?.high_coupling?.length > 0">
+      <div class="issue-group">
+        <h4 class="issue-title">🔗 High Coupling</h4>
+        <template x-for="module in data.dependencies?.issues?.high_coupling || []" :key="module.name">
+          <div class="issue-card info">
+            <div class="module-name" x-text="module.name"></div>
+            <div class="coupling-stats">
+              <span>Imports: <strong x-text="module.imports"></strong></span>
+              <span>Used by: <strong x-text="module.used_by"></strong></span>
+            </div>
+            <div class="coupling-suggestion" x-text="module.suggestion"></div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="data.dependencies?.issues?.orphaned_modules?.length > 0">
+      <div class="issue-group">
+        <h4 class="issue-title">🏝️ Orphaned Modules</h4>
+        <template x-for="module in data.dependencies?.issues?.orphaned_modules || []" :key="module.name">
+          <div class="issue-card neutral">
+            <div class="module-name" x-text="module.name"></div>
+            <div class="module-path" x-text="module.path"></div>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <!-- Module Details (Selected Node) -->
+  <div class="content-section glass-panel" x-show="selectedNode" x-transition>
+    <h3 class="section-title">🔍 Module Details</h3>
+    <div class="module-details">
+      <div class="module-detail-header">
+        <span class="module-name" x-text="selectedNode?.name"></span>
+        <span class="module-type" x-text="selectedNode?.type"></span>
+      </div>
+      <div class="module-detail-body">
+        <div class="detail-row">
+          <span class="detail-label">Path:</span>
+          <span class="detail-value" x-text="selectedNode?.path"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">LOC:</span>
+          <span class="detail-value" x-text="selectedNode?.loc"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Imports:</span>
+          <span class="detail-value" x-text="selectedNode?.imports?.length || 0"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Used By:</span>
+          <span class="detail-value" x-text="selectedNode?.used_by?.length || 0"></span>
+        </div>
+      </div>
+      <div class="module-detail-lists">
+        <div class="detail-list">
+          <h5>Imports</h5>
+          <template x-for="imp in selectedNode?.imports || []" :key="imp">
+            <div class="list-item" x-text="imp"></div>
+          </template>
+        </div>
+        <div class="detail-list">
+          <h5>Used By</h5>
+          <template x-for="user in selectedNode?.used_by || []" :key="user">
+            <div class="list-item" x-text="user"></div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// D3.js Dependency Graph Initialization (called on tab activation)
+function initDependencyGraph(data) {
+  const width = document.getElementById('dependency-graph').clientWidth;
+  const height = 600;
+
+  // Create SVG
+  const svg = d3.select('#dependency-graph')
+    .html('') // Clear existing
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+  // Create force simulation
+  const simulation = d3.forceSimulation(data.nodes)
+    .force('link', d3.forceLink(data.links).id(d => d.id).distance(100))
+    .force('charge', d3.forceManyBody().strength(-300))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(30));
+
+  // Create links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(data.links)
+    .enter()
+    .append('line')
+    .attr('class', d => d.circular ? 'circular' : 'normal')
+    .attr('stroke', d => d.circular ? '#ff6b6b' : '#4a5568')
+    .attr('stroke-width', 2);
+
+  // Create nodes
+  const node = svg.append('g')
+    .selectAll('circle')
+    .data(data.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', d => Math.sqrt(d.size) * 2 + 5)
+    .attr('fill', d => d.type === 'internal' ? '#4299e1' : '#48bb78')
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2)
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended))
+    .on('click', (event, d) => {
+      // Update Alpine.js selected node
+      window.dashboardApp.selectedNode = d;
+    });
+
+  // Add labels
+  const labels = svg.append('g')
+    .selectAll('text')
+    .data(data.nodes)
+    .enter()
+    .append('text')
+    .text(d => d.name)
+    .attr('font-size', 10)
+    .attr('dx', 12)
+    .attr('dy', 4);
+
+  // Simulation tick
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y);
+
+    labels
+      .attr('x', d => d.x)
+      .attr('y', d => d.y);
+  });
+
+  // Drag functions
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+}
+</script>

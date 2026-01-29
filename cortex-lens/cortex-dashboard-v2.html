@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" x-data="dashboardApp()" x-init="init()">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX LENS Dashboard</title>
+    
+    <!-- CORTEX Design System -->
+    <link rel="stylesheet" href="/static/css/cortex-design-system.css">
+    
+    <!-- Alpine.js (Self-contained - no CDN) -->
+    <script defer src="/static/vendor/alpine-3.13.3.min.js"></script>
+    
+    <!-- Dashboard App Logic -->
+    <script defer src="/frontend/js/dashboard-app.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 200ms ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .tab-button:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .tab-button.active {
+            color: #06b6d4;
+            border-bottom-color: #06b6d4;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 300ms ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #06b6d4;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 200ms ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <a href="/" class="back-button">
+                <span>←</span>
+                <span>Back to Repositories</span>
+            </a>
+            
+            <h1 style="margin-top: 1rem; font-size: 2rem; font-weight: 700;">
+                🧠 CORTEX Repository Analysis
+            </h1>
+            <p style="opacity: 0.7; margin-top: 0.5rem;">
+                Comprehensive 8-tab intelligence dashboard for the CORTEX orchestration system
+            </p>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <template x-for="tab in tabs" :key="tab.id">
+                <button 
+                    class="tab-button"
+                    :class="{ 'active': activeTab === tab.id }"
+                    @click="switchTab(tab.id)"
+                    x-text="tab.label"
+                ></button>
+            </template>
+        </nav>
+        
+        <!-- Tab Contents -->
+        <div class="tab-panels">
+            <!-- Tab 1: Repository Overview -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'repository-overview' }"
+                x-show="activeTab === 'repository-overview'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">📦 Repository Overview</h2>
+                    <p style="opacity: 0.8; line-height: 1.6;">
+                        Business-language description of what this repository does, 
+                        generated from AST analysis, docstrings, and commit history.
+                    </p>
+                    <div style="margin-top: 2rem;">
+                        <div x-html="tabContent.repositoryOverview"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Dependency Graph -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'dependency-graph' }"
+                x-show="activeTab === 'dependency-graph'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">🔗 Dependency Graph</h2>
+                    <div id="dependency-graph-container" style="height: 600px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <!-- D3.js force-directed graph will render here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Class Diagrams -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'class-diagrams' }"
+                x-show="activeTab === 'class-diagrams'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">📐 Class Diagrams</h2>
+                    <div class="mermaid" x-html="tabContent.classDiagrams"></div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Temporal Analysis -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'temporal-analysis' }"
+                x-show="activeTab === 'temporal-analysis'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">📈 Temporal Analysis</h2>
+                    <div id="temporal-timeline-container" style="height: 400px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <!-- Git timeline visualization -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Impact Analysis -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'impact-analysis' }"
+                x-show="activeTab === 'impact-analysis'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">💥 Impact Analysis</h2>
+                    <p style="opacity: 0.8;">Change propagation and risk assessment</p>
+                </div>
+            </div>
+            
+            <!-- Tab 6: Brain Architecture (CORTEX-ONLY) -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'brain-architecture' }"
+                x-show="activeTab === 'brain-architecture'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">🧠 Brain Architecture</h2>
+                    <p style="opacity: 0.8;">4-tier CORTEX brain hierarchy visualization</p>
+                </div>
+            </div>
+            
+            <!-- Tab 7: Governance Compliance (CORTEX-ONLY) -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'governance-heatmap' }"
+                x-show="activeTab === 'governance-heatmap'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">✅ Governance Compliance</h2>
+                    <p style="opacity: 0.8;">CORE rule compliance heatmap</p>
+                </div>
+            </div>
+            
+            <!-- Tab 8: Orchestrator Constellation (CORTEX-ONLY) -->
+            <div 
+                class="tab-content" 
+                :class="{ 'active': activeTab === 'orchestrator-constellation' }"
+                x-show="activeTab === 'orchestrator-constellation'"
+                x-transition
+            >
+                <div class="glass" style="padding: 2rem; border-radius: 12px;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">🌟 Orchestrator Constellation</h2>
+                    <p style="opacity: 0.8;">23 orchestrators relationship map</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function dashboardApp() {
+            return {
+                activeTab: 'repository-overview',
+                tabs: [
+                    { id: 'repository-overview', label: 'Overview' },
+                    { id: 'dependency-graph', label: 'Dependencies' },
+                    { id: 'class-diagrams', label: 'Classes' },
+                    { id: 'temporal-analysis', label: 'Timeline' },
+                    { id: 'impact-analysis', label: 'Impact' },
+                    { id: 'brain-architecture', label: 'Brain' },
+                    { id: 'governance-heatmap', label: 'Governance' },
+                    { id: 'orchestrator-constellation', label: 'Orchestrators' }
+                ],
+                tabContent: {
+                    repositoryOverview: '<p>Loading...</p>',
+                    classDiagrams: ''
+                },
+                
+                init() {
+                    console.log('CORTEX Dashboard initialized');
+                    this.loadDashboardData();
+                },
+                
+                switchTab(tabId) {
+                    this.activeTab = tabId;
+                    console.log('Switched to tab:', tabId);
+                },
+                
+                async loadDashboardData() {
+                    try {
+                        // Fetch repository overview
+                        const response = await fetch('/api/dashboard/analyze?repo=cortex');
+                        const data = await response.json();
+                        
+                        if (data.repository_overview) {
+                            this.tabContent.repositoryOverview = this.formatOverview(data.repository_overview);
+                        }
+                    } catch (error) {
+                        console.error('Failed to load dashboard data:', error);
+                    }
+                },
+                
+                formatOverview(overview) {
+                    return `
+                        <div style="margin-top: 1rem;">
+                            <h3 style="color: #06b6d4; margin-bottom: 1rem;">What This Repository Does</h3>
+                            <p style="line-height: 1.8; opacity: 0.9;">${overview.description || 'Analysis in progress...'}</p>
+                            
+                            <h3 style="color: #06b6d4; margin: 2rem 0 1rem;">Key Features</h3>
+                            <ul style="line-height: 2; opacity: 0.9;">
+                                ${(overview.features || []).map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                            
+                            <h3 style="color: #06b6d4; margin: 2rem 0 1rem;">Technology Stack</h3>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                ${(overview.technologies || []).map(tech => `
+                                    <span style="
+                                        padding: 0.25rem 0.75rem;
+                                        background: rgba(6, 182, 212, 0.2);
+                                        border: 1px solid rgba(6, 182, 212, 0.3);
+                                        border-radius: 4px;
+                                        font-size: 0.85rem;
+                                    ">${tech}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

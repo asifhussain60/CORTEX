@@ -1,0 +1,342 @@
+<!-- Tab 5: Impact Analysis (Change Propagation) -->
+<div class="tab-panel" x-show="activeTab === 'impact'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">💥 Impact Analysis</h2>
+    <p class="tab-subtitle">Change propagation and blast radius</p>
+  </div>
+
+  <!-- Impact Calculator -->
+  <div class="impact-calculator glass-panel">
+    <h3 class="section-title">🎯 Calculate Change Impact</h3>
+    <div class="calculator-form">
+      <div class="form-group">
+        <label>Target File/Function</label>
+        <input type="text" 
+               x-model="impactSettings.target"
+               @input="searchTargets()"
+               placeholder="Enter file or function name..."
+               list="target-suggestions">
+        <datalist id="target-suggestions">
+          <template x-for="suggestion in targetSuggestions" :key="suggestion">
+            <option :value="suggestion"></option>
+          </template>
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label>Change Type</label>
+        <select x-model="impactSettings.changeType">
+          <option value="modify">Modify</option>
+          <option value="delete">Delete</option>
+          <option value="rename">Rename</option>
+          <option value="refactor">Refactor</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Scope</label>
+        <select x-model="impactSettings.scope">
+          <option value="function">Function Only</option>
+          <option value="class">Entire Class</option>
+          <option value="file">Entire File</option>
+          <option value="module">Module</option>
+        </select>
+      </div>
+
+      <button class="btn-calculate" @click="calculateImpact()">⚡ Calculate Impact</button>
+    </div>
+  </div>
+
+  <!-- Impact Results -->
+  <template x-if="impactResults">
+    <div class="impact-results glass-panel">
+      <div class="impact-summary">
+        <div class="risk-level" :class="impactResults.risk_level">
+          <span class="risk-icon" x-text="getRiskIcon(impactResults.risk_level)"></span>
+          <span class="risk-label" x-text="impactResults.risk_level.toUpperCase()"></span>
+        </div>
+        <div class="blast-radius">
+          <span class="radius-value" x-text="impactResults.blast_radius"></span>
+          <span class="radius-label">Files Affected</span>
+        </div>
+      </div>
+
+      <div class="impact-metrics">
+        <div class="metric-item">
+          <span class="metric-label">Direct Dependencies</span>
+          <span class="metric-value" x-text="impactResults.direct_dependencies"></span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Indirect Dependencies</span>
+          <span class="metric-value" x-text="impactResults.indirect_dependencies"></span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Test Coverage</span>
+          <span class="metric-value" x-text="`${impactResults.test_coverage}%`"></span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Estimated Effort</span>
+          <span class="metric-value" x-text="impactResults.effort_estimate"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Impact Visualization -->
+  <div class="impact-graph glass-panel">
+    <h3 class="section-title">🕸️ Dependency Graph</h3>
+    <div id="impact-graph-canvas" class="d3-graph-canvas"></div>
+  </div>
+
+  <!-- Affected Components -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📦 Affected Components</h3>
+    <template x-if="impactResults?.affected_components?.length > 0">
+      <div class="component-list">
+        <template x-for="component in impactResults.affected_components" :key="component.path">
+          <div class="component-card" :class="component.impact_level">
+            <div class="component-header">
+              <span class="impact-badge" x-text="component.impact_level"></span>
+              <span class="component-path" x-text="component.path"></span>
+            </div>
+            <div class="component-details">
+              <div class="detail-row">
+                <span class="detail-label">Type:</span>
+                <span class="detail-value" x-text="component.type"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Usage Count:</span>
+                <span class="detail-value" x-text="component.usage_count"></span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Relationship:</span>
+                <span class="detail-value" x-text="component.relationship"></span>
+              </div>
+            </div>
+            <template x-if="component.required_changes?.length > 0">
+              <div class="required-changes">
+                <span class="changes-label">Required Changes:</span>
+                <ul>
+                  <template x-for="change in component.required_changes" :key="change">
+                    <li x-text="change"></li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <!-- Test Requirements -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🧪 Test Requirements</h3>
+    <template x-if="impactResults?.test_requirements">
+      <div class="test-requirements">
+        <div class="test-category">
+          <h4>Unit Tests</h4>
+          <div class="test-count" x-text="`${impactResults.test_requirements.unit_tests} tests required`"></div>
+          <template x-if="impactResults.test_requirements.unit_test_files?.length > 0">
+            <ul class="test-file-list">
+              <template x-for="file in impactResults.test_requirements.unit_test_files" :key="file">
+                <li x-text="file"></li>
+              </template>
+            </ul>
+          </template>
+        </div>
+
+        <div class="test-category">
+          <h4>Integration Tests</h4>
+          <div class="test-count" x-text="`${impactResults.test_requirements.integration_tests} tests required`"></div>
+          <template x-if="impactResults.test_requirements.integration_test_files?.length > 0">
+            <ul class="test-file-list">
+              <template x-for="file in impactResults.test_requirements.integration_test_files" :key="file">
+                <li x-text="file"></li>
+              </template>
+            </ul>
+          </template>
+        </div>
+
+        <div class="test-category">
+          <h4>End-to-End Tests</h4>
+          <div class="test-count" x-text="`${impactResults.test_requirements.e2e_tests} tests required`"></div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- Change Checklist -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">✅ Change Checklist</h3>
+    <template x-if="impactResults?.checklist">
+      <div class="checklist">
+        <template x-for="item in impactResults.checklist" :key="item.id">
+          <div class="checklist-item">
+            <input type="checkbox" :id="`check-${item.id}`" x-model="item.completed">
+            <label :for="`check-${item.id}`">
+              <span class="checklist-text" x-text="item.text"></span>
+              <template x-if="item.priority === 'high'">
+                <span class="priority-badge high">High Priority</span>
+              </template>
+            </label>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <!-- Historical Impact Data -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📊 Historical Impact Patterns</h3>
+    <div class="historical-data">
+      <div class="history-stat">
+        <div class="stat-label">Average Changes per Commit</div>
+        <div class="stat-value" x-text="data.impact?.history?.avg_changes || 0"></div>
+      </div>
+      <div class="history-stat">
+        <div class="stat-label">Most Changed Files</div>
+        <template x-if="data.impact?.history?.hotspots?.length > 0">
+          <ul>
+            <template x-for="hotspot in data.impact?.history?.hotspots || []" :key="hotspot.file">
+              <li>
+                <span class="hotspot-file" x-text="hotspot.file"></span>
+                <span class="hotspot-count" x-text="`(${hotspot.changes} changes)`"></span>
+              </li>
+            </template>
+          </ul>
+        </template>
+      </div>
+      <div class="history-stat">
+        <div class="stat-label">Refactoring Success Rate</div>
+        <div class="stat-value" x-text="`${data.impact?.history?.refactor_success_rate || 0}%`"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">💡 Recommendations</h3>
+    <template x-if="impactResults?.recommendations?.length > 0">
+      <div class="recommendations">
+        <template x-for="rec in impactResults.recommendations" :key="rec.id">
+          <div class="recommendation-card" :class="rec.type">
+            <div class="rec-icon" x-text="rec.icon"></div>
+            <div class="rec-content">
+              <div class="rec-title" x-text="rec.title"></div>
+              <div class="rec-description" x-text="rec.description"></div>
+              <template x-if="rec.action">
+                <button class="rec-action" @click="executeRecommendation(rec)" x-text="rec.action"></button>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
+
+<script>
+// Impact graph visualization
+function initImpactGraph(data) {
+  const width = document.getElementById('impact-graph-canvas').clientWidth;
+  const height = 400;
+
+  d3.select('#impact-graph-canvas').html('');
+
+  const svg = d3.select('#impact-graph-canvas')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+  // Color scale for impact levels
+  const colorScale = d3.scaleOrdinal()
+    .domain(['low', 'medium', 'high', 'critical'])
+    .range(['#48bb78', '#ed8936', '#f56565', '#c53030']);
+
+  // Create force simulation
+  const simulation = d3.forceSimulation(data.nodes)
+    .force('link', d3.forceLink(data.links).id(d => d.id).distance(80))
+    .force('charge', d3.forceManyBody().strength(-200))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(25));
+
+  // Links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(data.links)
+    .enter()
+    .append('line')
+    .attr('stroke', '#718096')
+    .attr('stroke-width', d => d.strength * 2);
+
+  // Nodes
+  const node = svg.append('g')
+    .selectAll('circle')
+    .data(data.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', d => d.id === data.target ? 15 : 10)
+    .attr('fill', d => d.id === data.target ? '#4299e1' : colorScale(d.impact_level))
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2)
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended));
+
+  // Labels
+  const labels = svg.append('g')
+    .selectAll('text')
+    .data(data.nodes)
+    .enter()
+    .append('text')
+    .text(d => d.name)
+    .attr('font-size', 9)
+    .attr('dx', 12)
+    .attr('dy', 4);
+
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y);
+
+    labels
+      .attr('x', d => d.x)
+      .attr('y', d => d.y);
+  });
+
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+}
+
+function getRiskIcon(level) {
+  const icons = {
+    low: '✅',
+    medium: '⚠️',
+    high: '🔴',
+    critical: '💀'
+  };
+  return icons[level] || '❓';
+}
+</script>

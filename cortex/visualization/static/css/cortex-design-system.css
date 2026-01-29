@@ -1,0 +1,534 @@
+/**
+ * CORTEX Design System - Glassmorphism Styles
+ * 
+ * Centralized CSS design system for CORTEX LENS Dashboard featuring:
+ * - Glassmorphism effects with backdrop blur
+ * - Dark mode support
+ * - Tailwind CSS compatible variables
+ * - Reusable component classes
+ * - Responsive design utilities
+ * 
+ * Author: Asif Hussain
+ * Orchestrator: LENSVisualizationOrchestrator
+ * AC-ID: LENS-012
+ * Phase: 14 - LENS Dashboard Implementation
+ */
+
+/* ============================================
+   CSS Variables (Light & Dark Mode)
+   ============================================ */
+
+:root {
+  /* Primary Colors */
+  --cortex-primary: #7c3aed;        /* Purple 600 */
+  --cortex-primary-light: #a78bfa;  /* Purple 400 */
+  --cortex-primary-dark: #5b21b6;   /* Purple 800 */
+  
+  /* Semantic Colors */
+  --cortex-success: #10b981;        /* Green 500 */
+  --cortex-warning: #f59e0b;        /* Amber 500 */
+  --cortex-danger: #ef4444;         /* Red 500 */
+  --cortex-info: #3b82f6;           /* Blue 500 */
+  
+  /* Neutral Colors (Light Mode) */
+  --cortex-bg-primary: #ffffff;
+  --cortex-bg-secondary: #f9fafb;   /* Gray 50 */
+  --cortex-bg-tertiary: #f3f4f6;    /* Gray 100 */
+  --cortex-text-primary: #111827;   /* Gray 900 */
+  --cortex-text-secondary: #6b7280; /* Gray 500 */
+  --cortex-border: #e5e7eb;         /* Gray 200 */
+  
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-hover: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+  --glass-blur: 12px;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;   /* 6px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-2xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"],
+.dark {
+  --cortex-bg-primary: #111827;     /* Gray 900 */
+  --cortex-bg-secondary: #1f2937;   /* Gray 800 */
+  --cortex-bg-tertiary: #374151;    /* Gray 700 */
+  --cortex-text-primary: #f9fafb;   /* Gray 50 */
+  --cortex-text-secondary: #9ca3af; /* Gray 400 */
+  --cortex-border: #374151;         /* Gray 700 */
+  
+  /* Dark Mode Glassmorphism */
+  --glass-bg: rgba(31, 41, 55, 0.7);
+  --glass-bg-hover: rgba(31, 41, 55, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   Glassmorphism Base Classes
+   ============================================ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
+}
+
+.glass-hover {
+  transition: all var(--transition-base);
+}
+
+.glass-hover:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 var(--glass-shadow);
+}
+
+.glass-card {
+  @apply glass rounded-xl p-6;
+}
+
+.glass-card-sm {
+  @apply glass rounded-lg p-4;
+}
+
+.glass-card-lg {
+  @apply glass rounded-2xl p-8;
+}
+
+/* Frosted Glass Variants */
+.glass-frosted {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .glass-frosted {
+  background: rgba(31, 41, 55, 0.5);
+}
+
+.glass-ultra-blur {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ============================================
+   Component Classes
+   ============================================ */
+
+/* Dashboard Container */
+.dashboard-container {
+  @apply min-h-screen bg-gradient-to-br from-gray-50 to-gray-100;
+  @apply dark:from-gray-900 dark:to-gray-800;
+}
+
+/* Tab Navigation */
+.tab-nav {
+  @apply glass rounded-xl mb-6;
+  @apply flex overflow-x-auto;
+}
+
+.tab-button {
+  @apply px-6 py-3 text-sm font-medium;
+  @apply text-gray-700 dark:text-gray-300;
+  @apply hover:text-purple-600 dark:hover:text-purple-400;
+  @apply transition-colors duration-200;
+  @apply border-b-2 border-transparent;
+  @apply whitespace-nowrap;
+}
+
+.tab-button.active {
+  @apply text-purple-600 dark:text-purple-400;
+  @apply border-purple-600 dark:border-purple-400;
+  @apply bg-purple-50 dark:bg-purple-900/20;
+}
+
+/* Cards */
+.cortex-card {
+  @apply glass-card;
+  @apply hover:shadow-xl transition-shadow duration-300;
+}
+
+.cortex-card-header {
+  @apply flex items-center justify-between mb-4;
+  @apply pb-4 border-b border-gray-200 dark:border-gray-700;
+}
+
+.cortex-card-title {
+  @apply text-xl font-bold text-gray-900 dark:text-white;
+}
+
+.cortex-card-subtitle {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-1;
+}
+
+/* Metrics/Stats Cards */
+.metric-card {
+  @apply glass-card-sm;
+  @apply text-center transition-transform duration-200;
+  @apply hover:scale-105;
+}
+
+.metric-value {
+  @apply text-3xl font-bold;
+  @apply bg-gradient-to-r from-purple-600 to-blue-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.metric-label {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-1;
+}
+
+/* Badges */
+.badge {
+  @apply inline-flex items-center px-3 py-1;
+  @apply rounded-full text-xs font-semibold;
+  @apply transition-all duration-200;
+}
+
+.badge-primary {
+  @apply bg-purple-100 text-purple-800;
+  @apply dark:bg-purple-900/30 dark:text-purple-300;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800;
+  @apply dark:bg-green-900/30 dark:text-green-300;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+  @apply dark:bg-yellow-900/30 dark:text-yellow-300;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-800;
+  @apply dark:bg-red-900/30 dark:text-red-300;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-800;
+  @apply dark:bg-blue-900/30 dark:text-blue-300;
+}
+
+/* Buttons */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-purple-600 text-white;
+  @apply hover:bg-purple-700;
+  @apply focus:ring-purple-500;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 text-white;
+  @apply hover:bg-gray-700;
+  @apply focus:ring-gray-500;
+}
+
+.btn-glass {
+  @apply glass text-gray-900 dark:text-white;
+  @apply hover:bg-white/90 dark:hover:bg-gray-800/90;
+}
+
+/* ============================================
+   Visualization Containers
+   ============================================ */
+
+.viz-container {
+  @apply glass-card;
+  @apply relative overflow-hidden;
+}
+
+.viz-header {
+  @apply cortex-card-header;
+}
+
+.viz-title {
+  @apply cortex-card-title;
+}
+
+.viz-canvas {
+  @apply w-full bg-gray-50 dark:bg-gray-900 rounded-lg;
+  @apply transition-all duration-300;
+}
+
+.viz-loading {
+  @apply flex items-center justify-center;
+  @apply text-gray-400 dark:text-gray-600;
+}
+
+.viz-legend {
+  @apply flex items-center justify-center space-x-6 mt-4;
+  @apply text-sm;
+}
+
+.viz-legend-item {
+  @apply flex items-center space-x-2;
+}
+
+/* ============================================
+   Progress Bars
+   ============================================ */
+
+.progress-bar {
+  @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2;
+  @apply overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full rounded-full transition-all duration-500;
+}
+
+.progress-fill-primary {
+  @apply bg-gradient-to-r from-purple-600 to-blue-600;
+}
+
+.progress-fill-success {
+  @apply bg-gradient-to-r from-green-600 to-emerald-600;
+}
+
+.progress-fill-warning {
+  @apply bg-gradient-to-r from-yellow-600 to-orange-600;
+}
+
+.progress-fill-danger {
+  @apply bg-gradient-to-r from-red-600 to-pink-600;
+}
+
+/* ============================================
+   Grid Layouts
+   ============================================ */
+
+.grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.grid-3 {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+.grid-4 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.grid-auto {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.text-gradient {
+  @apply bg-gradient-to-r from-purple-600 to-blue-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.text-gradient-success {
+  @apply bg-gradient-to-r from-green-600 to-emerald-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.text-gradient-warning {
+  @apply bg-gradient-to-r from-yellow-600 to-orange-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.text-gradient-danger {
+  @apply bg-gradient-to-r from-red-600 to-pink-600;
+  @apply bg-clip-text text-transparent;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.backdrop-blur-lg {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  @apply hover:bg-gray-400 dark:hover:bg-gray-500;
+}
+
+/* ============================================
+   Responsive Utilities
+   ============================================ */
+
+@media (max-width: 640px) {
+  .glass-card {
+    @apply p-4;
+  }
+  
+  .tab-button {
+    @apply px-4 py-2 text-xs;
+  }
+  
+  .metric-value {
+    @apply text-2xl;
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+@media print {
+  .glass,
+  .glass-card,
+  .cortex-card {
+    background: white !important;
+    backdrop-filter: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+  
+  .dark .glass,
+  .dark .glass-card,
+  .dark .cortex-card {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+.focus-visible {
+  @apply outline-none ring-2 ring-purple-500 ring-offset-2;
+}
+
+.reduced-motion {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   High Contrast Mode
+   ============================================ */
+
+@media (prefers-contrast: high) {
+  .glass,
+  .glass-card {
+    border-width: 2px;
+    border-color: currentColor;
+  }
+  
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
