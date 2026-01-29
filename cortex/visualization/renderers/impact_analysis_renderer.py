@@ -50,19 +50,15 @@ class ChangeImpact:
     Represents the impact of a proposed change.
     
     Attributes:
-        target: Target node being modified
-        affected_files: List of file nodes that depend on target
-        affected_functions: List of function nodes that depend on target
+        target_file: Path to target file being modified
+        target_function: Optional function name within target file
         blast_radius: Number of entities affected
-        risk_level: LOW, MEDIUM, HIGH, CRITICAL
+        affected_files: List of file paths that depend on target
+        affected_functions: List of function names that depend on target
+        risk_level: Risk level (LOW, MEDIUM, HIGH, CRITICAL)
         recommendations: List of recommended actions
     """
-    target: ImpactNode
-    affected_files: List[ImpactNode]
-    affected_functions: List[ImpactNode]
-    blast_radius: int
-    risk_level: RiskLevel
-    recommendations: List[str]
+    target_file: str
     target_function: Optional[str] = None
     blast_radius: int = 0
     affected_files: List[str] = field(default_factory=list)
