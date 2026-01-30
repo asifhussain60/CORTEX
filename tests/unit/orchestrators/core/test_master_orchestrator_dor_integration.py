@@ -396,5 +396,272 @@ class TestDoRApprovalGateErrorHandling:
                 gate.classify_and_reflect("test text", {})
 
 
+class TestExecutionPlanAndDoD:
+    """Tests for Execution Plan and Definition of Done sections."""
+    
+    @pytest.fixture
+    def dor_gate(self):
+        """Create DoRApprovalGate instance."""
+        return DoRApprovalGate()
+    
+    def test_execution_plan_for_implement_intent(self, dor_gate):
+        """Test execution plan for IMPLEMENT intent."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            key_entities=["authentication.py"],
+            estimated_impact="medium",
+            governance_rules=["CORE-008", "CORE-011", "CORE-012"]
+        )
+        
+        plan = reflection._get_execution_plan()
+        
+        assert len(plan) == 4
+        assert any("Create implementation" in p for p in plan)
+        assert any("Write unit tests" in p for p in plan)
+        assert any("RED phase" in p for p in plan)
+        assert any("Refactor" in p for p in plan)
+    
+    def test_execution_plan_for_fix_intent(self, dor_gate):
+        """Test execution plan for FIX intent."""
+        reflection = IntentReflection(
+            intent_type="FIX",
+            target_handler="IntentRouter",
+            dor_confidence=0.8,
+            scope="FILE",
+            key_entities=["bug_issue.md"],
+            governance_rules=["CORE-008"]
+        )
+        
+        plan = reflection._get_execution_plan()
+        
+        assert len(plan) == 4
+        assert any("root cause" in p.lower() for p in plan)
+        assert any("failing test" in p.lower() for p in plan)
+        assert any("no regressions" in p.lower() for p in plan)
+    
+    def test_execution_plan_for_refactor_intent(self, dor_gate):
+        """Test execution plan for REFACTOR intent."""
+        reflection = IntentReflection(
+            intent_type="REFACTOR",
+            target_handler="RefactoringOrchestrator",
+            dor_confidence=0.75,
+            scope="MODULE",
+            governance_rules=["CORE-008", "CORE-012"]
+        )
+        
+        plan = reflection._get_execution_plan()
+        
+        assert len(plan) == 4
+        assert any("SOLID" in p.upper() for p in plan)
+        assert any("metrics" in p.lower() for p in plan)
+    
+    def test_execution_plan_for_analyze_intent(self, dor_gate):
+        """Test execution plan for ANALYZE intent."""
+        reflection = IntentReflection(
+            intent_type="ANALYZE",
+            target_handler="MasterOrchestrator",
+            dor_confidence=0.9,
+            scope="SYSTEM"
+        )
+        
+        plan = reflection._get_execution_plan()
+        
+        assert len(plan) == 4
+        assert any("codebase" in p.lower() or "architecture" in p.lower() for p in plan)
+        assert any("findings" in p.lower() for p in plan)
+        assert any("recommendations" in p.lower() for p in plan)
+    
+    def test_execution_plan_for_test_intent(self, dor_gate):
+        """Test execution plan for TEST intent."""
+        reflection = IntentReflection(
+            intent_type="TEST",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.88,
+            scope="MODULE"
+        )
+        
+        plan = reflection._get_execution_plan()
+        
+        assert len(plan) == 4
+        assert any("test suite" in p.lower() for p in plan)
+        assert any(">80%" in p or "80%" in p for p in plan)
+        assert any("edge cases" in p.lower() for p in plan)
+    
+    def test_dod_universal_criteria_always_present(self, dor_gate):
+        """Test that universal DoD criteria are always present."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE"
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        # Universal criteria should always be present
+        assert any("Operation completed" in c for c in dod)
+        assert any("Audit trail" in c for c in dod)
+    
+    def test_dod_includes_tests_for_implement(self, dor_gate):
+        """Test that DoD includes test criteria for IMPLEMENT intent."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            requires_tests=True,
+            governance_rules=["CORE-008"]
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        assert any("All tests passing" in c for c in dod)
+        assert any("Feature works" in c for c in dod)
+        assert any("no regressions" in c.lower() for c in dod)
+    
+    def test_dod_includes_type_hints_when_core_011_present(self, dor_gate):
+        """Test that DoD includes type hint criteria when CORE-011 present."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            governance_rules=["CORE-008", "CORE-011"]
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        assert any("Type hints" in c for c in dod)
+    
+    def test_dod_includes_docstrings_when_core_012_present(self, dor_gate):
+        """Test that DoD includes docstring criteria when CORE-012 present."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            governance_rules=["CORE-008", "CORE-012"]
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        assert any("docstrings" in c.lower() for c in dod)
+    
+    def test_dod_for_fix_intent(self, dor_gate):
+        """Test that DoD includes fix-specific criteria."""
+        reflection = IntentReflection(
+            intent_type="FIX",
+            target_handler="IntentRouter",
+            dor_confidence=0.8,
+            scope="FILE",
+            governance_rules=["CORE-008"]
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        assert any("Bug is fixed" in c for c in dod)
+        assert any("Test added to prevent regression" in c for c in dod)
+        assert any("no new bugs" in c.lower() for c in dod)
+    
+    def test_dod_for_refactor_intent(self, dor_gate):
+        """Test that DoD includes refactor-specific criteria."""
+        reflection = IntentReflection(
+            intent_type="REFACTOR",
+            target_handler="RefactoringOrchestrator",
+            dor_confidence=0.75,
+            scope="MODULE"
+        )
+        
+        dod = reflection._get_dod_criteria()
+        
+        assert any("Code quality improved" in c for c in dod)
+        assert any("tests still passing" in c.lower() for c in dod)
+        assert any("Performance" in c for c in dod)
+    
+    def test_markdown_includes_execution_plan_section(self, dor_gate):
+        """Test that markdown output includes Execution Plan section."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            key_entities=["feature.py"],
+            governance_rules=["CORE-008"]
+        )
+        
+        markdown = reflection.to_markdown()
+        
+        assert "📝 Execution Plan" in markdown
+        assert "What CORTEX will do:" in markdown
+        assert "Create implementation" in markdown
+        assert "RED phase" in markdown
+    
+    def test_markdown_includes_dod_section(self, dor_gate):
+        """Test that markdown output includes Definition of Done section."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            requires_tests=True,
+            governance_rules=["CORE-008", "CORE-011", "CORE-012"]
+        )
+        
+        markdown = reflection.to_markdown()
+        
+        assert "✅ Definition of Done" in markdown
+        assert "Success looks like:" in markdown
+        assert "All tests passing" in markdown
+        assert "Operation completed" in markdown
+        assert "Type hints" in markdown
+        assert "docstrings" in markdown.lower()
+    
+    def test_markdown_sections_order(self, dor_gate):
+        """Test that markdown sections appear in correct order."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            requires_tests=True,
+            governance_rules=["CORE-008"]
+        )
+        
+        markdown = reflection.to_markdown()
+        
+        # Extract positions
+        intent_pos = markdown.find("Intent Classification")
+        plan_pos = markdown.find("Execution Plan")
+        dod_pos = markdown.find("Definition of Done")
+        approval_pos = markdown.find("Awaiting Your Decision")
+        
+        # Verify order
+        assert 0 <= intent_pos < plan_pos < dod_pos < approval_pos, \
+            "Sections should appear in order: Intent → Plan → DoD → Approval"
+    
+    def test_markdown_under_15_seconds_scan(self, dor_gate):
+        """Test that markdown output is concise enough to scan in <15 seconds."""
+        reflection = IntentReflection(
+            intent_type="IMPLEMENT",
+            target_handler="TDDOrchestrator",
+            dor_confidence=0.85,
+            scope="MODULE",
+            key_entities=["feature.py", "tests.py"],
+            requires_tests=True,
+            governance_rules=["CORE-008", "CORE-011", "CORE-012"]
+        )
+        
+        markdown = reflection.to_markdown()
+        lines = markdown.split('\n')
+        
+        # Should be scannable: between 30-60 lines total
+        # (header + table + execution plan + DoD + approval sections)
+        assert 25 < len(lines) < 65, \
+            f"Markdown should be concise ({len(lines)} lines, target 30-60)"
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

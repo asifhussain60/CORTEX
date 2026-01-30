@@ -66,12 +66,130 @@ class IntentReflection:
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     """When reflection was generated"""
 
+    def _get_execution_plan(self) -> List[str]:
+        """
+        Generate execution plan bullets based on intent type.
+        
+        Returns:
+            List of action bullets describing what CORTEX will do
+        """
+        plan: List[str] = []
+        
+        if self.intent_type == "IMPLEMENT":
+            plan = [
+                f"Create implementation in {self.key_entities[0] if self.key_entities else 'target module'}",
+                "Write unit tests first (RED phase)",
+                "Implement functionality to pass tests (GREEN phase)",
+                "Refactor for code quality and maintainability (REFACTOR phase)"
+            ]
+        elif self.intent_type == "FIX":
+            plan = [
+                "Identify root cause of the issue",
+                "Write failing test that reproduces the bug",
+                "Implement fix to resolve the issue",
+                "Verify all tests pass and no regressions introduced"
+            ]
+        elif self.intent_type == "REFACTOR":
+            plan = [
+                "Analyze code structure and identify improvement opportunities",
+                "Apply SOLID principles and design patterns",
+                "Preserve existing functionality with comprehensive tests",
+                "Validate metrics and performance improvements"
+            ]
+        elif self.intent_type == "ANALYZE":
+            plan = [
+                "Examine codebase, architecture, or design",
+                "Identify patterns, issues, or opportunities",
+                "Provide findings and recommendations",
+                "Suggest next steps for implementation or improvement"
+            ]
+        elif self.intent_type == "TEST":
+            plan = [
+                "Generate comprehensive test suite covering critical paths",
+                "Ensure >80% code coverage where applicable",
+                "Validate edge cases and error scenarios",
+                "Integrate tests into CI/CD pipeline"
+            ]
+        elif self.intent_type == "DOCUMENT":
+            plan = [
+                "Generate clear, concise documentation",
+                "Include code examples and usage patterns",
+                "Add diagrams or visual explanations where helpful",
+                "Ensure documentation stays synchronized with code"
+            ]
+        else:
+            plan = [
+                f"Execute {self.intent_type.lower()} operation",
+                "Validate against acceptance criteria",
+                "Track progress and report results",
+                "Log completion in audit trail"
+            ]
+        
+        return plan
+    
+    def _get_dod_criteria(self) -> List[str]:
+        """
+        Generate Definition of Done criteria based on intent type and rules.
+        
+        Returns:
+            List of success criteria that must be met
+        """
+        dod: List[str] = []
+        
+        # Universal DoD criteria (always apply)
+        dod.append("✅ Operation completed without errors")
+        dod.append("✅ Audit trail logged (AC_START → AC_COMPLETE)")
+        
+        # CORE-008: TDD requirement
+        if self.requires_tests or self.intent_type in ["IMPLEMENT", "FIX", "TEST"]:
+            dod.append("✅ All tests passing (100% of new/modified code)")
+        
+        # CORE-011: Type hints
+        if "CORE-011" in self.governance_rules:
+            dod.append("✅ Type hints present on all functions")
+        
+        # CORE-012: Docstrings
+        if "CORE-012" in self.governance_rules:
+            dod.append("✅ Google-style docstrings on all public functions")
+        
+        # Intent-specific criteria
+        if self.intent_type == "IMPLEMENT":
+            dod.extend([
+                "✅ Feature works as specified",
+                "✅ Code review approved",
+                "✅ No regressions in existing tests"
+            ])
+        elif self.intent_type == "FIX":
+            dod.extend([
+                "✅ Bug is fixed and verified",
+                "✅ Test added to prevent regression",
+                "✅ No new bugs introduced"
+            ])
+        elif self.intent_type == "REFACTOR":
+            dod.extend([
+                "✅ Code quality improved (metrics verified)",
+                "✅ All existing tests still passing",
+                "✅ Performance meets or exceeds baseline"
+            ])
+        elif self.intent_type == "ANALYZE":
+            dod.extend([
+                "✅ Analysis complete with findings documented",
+                "✅ Recommendations provided and validated",
+                "✅ Report ready for review"
+            ])
+        
+        return dod
+
     def to_markdown(self) -> str:
         """
-        Generate concise markdown representation.
+        Generate concise markdown representation with execution plan and DoD.
         
-        Designed to be scannable in <10 seconds.
-        Includes DoR blocking indicator if confidence is below threshold.
+        Designed to be scannable in <15 seconds.
+        Includes:
+        1. Intent classification table
+        2. Execution plan (what CORTEX will do)
+        3. Definition of Done (success criteria)
+        4. Approval/blocking decision
         
         Returns:
             Markdown string for user display
@@ -95,7 +213,7 @@ class IntentReflection:
         }
         impact_badge = impact_badges.get(self.estimated_impact, "⚪")
         
-        # Build concise markdown
+        # Build markdown with three sections
         lines = [
             "### 📋 Intent Classification",
             "",
@@ -120,7 +238,29 @@ class IntentReflection:
             rules_str = ", ".join(self.governance_rules[:3])
             lines.append(f"| **Rules** | {rules_str} |")
         
-        # Add DoR status indicator
+        # Add execution plan section
+        lines.extend([
+            "",
+            "### 📝 Execution Plan",
+            "",
+            "What CORTEX will do:",
+            ""
+        ])
+        for bullet in self._get_execution_plan():
+            lines.append(f"- {bullet}")
+        
+        # Add Definition of Done section
+        lines.extend([
+            "",
+            "### ✅ Definition of Done",
+            "",
+            "Success looks like:",
+            ""
+        ])
+        for criterion in self._get_dod_criteria():
+            lines.append(f"- {criterion}")
+        
+        # Add DoR status indicator and approval section
         if dor_met:
             lines.extend([
                 "",
