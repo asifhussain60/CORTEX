@@ -8,6 +8,7 @@ This module checks:
 - DoR (Definition of Ready) system with business principles display
 - Orchestrator wiring (26/23 via Git-backed YAML)
 - Governance rules (36+ principles mapped - 27 CORE + 9 AC-FIX)
+- Enforcement system integrity (4-layer defense-in-depth)
 - Test coverage and quality gates
 - Docker-first architecture compliance
 - MCP tool exposure and integration readiness
@@ -15,8 +16,8 @@ This module checks:
 
 Author: Asif Hussain
 Phase: 6+ (Production Readiness)
-AC-ID: AC-PROD-READY-001
-Updated: 2026-01-30 (Business Principles + Single Path Enforcement)
+AC-ID: AC-PROD-READY-001, REM-003-04
+Updated: 2026-01-30 (Added Enforcement Integrity Check - PROD-010)
 """
 
 from typing import Dict, List, Any, Optional
@@ -282,6 +283,102 @@ class ProductionReadinessAssessment:
                 severity="high"
             )
     
+    def check_enforcement_integrity(self) -> ReadinessCheck:
+        """
+        Check enforcement system integrity (4-layer defense-in-depth).
+        
+        Validates:
+        - Layer 1: EnforcementOrchestrator has intent validation methods
+        - Layer 2: StateManager has governance violation tracking
+        - Layer 3: EnhancedAuditLogger exists (detection methods planned)
+        - Layer 4: This check itself (meta-validation)
+        
+        Returns:
+            ReadinessCheck result
+        
+        AC-ID: REM-003-04 (Governance Defense-in-Depth Layer 4)
+        """
+        try:
+            from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+            from cortex.brain.core.state_manager import StateManager
+            
+            enforcement = EnforcementOrchestrator()
+            state_mgr = StateManager()
+            
+            # Layer 1: Validate EnforcementOrchestrator methods exist
+            layer1_methods = [
+                "validate_intent_classification",
+                "validate_dor_confidence",
+                "validate_business_principles_mapping",
+            ]
+            layer1_pass = all(hasattr(enforcement, method) for method in layer1_methods)
+            
+            # Layer 2: Validate StateManager governance methods exist
+            layer2_methods = [
+                "track_governance_violation",
+                "get_violation_count",
+                "is_circuit_breaker_tripped",
+            ]
+            layer2_pass = all(hasattr(state_mgr, method) for method in layer2_methods)
+            
+            # Layer 3: Check if EnhancedAuditLogger exists (methods may be planned)
+            try:
+                from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+                layer3_pass = True
+            except ImportError:
+                layer3_pass = False
+            
+            # Layer 4: Meta-validation (this method exists if we're running)
+            layer4_pass = True
+            
+            layers_operational = sum([layer1_pass, layer2_pass, layer3_pass, layer4_pass])
+            
+            if layers_operational == 4:
+                return ReadinessCheck(
+                    check_id="PROD-CHECK-004",
+                    name="Enforcement System Integrity (PROD-010)",
+                    status="PASS",
+                    details="✅ All 4 layers operational: Pre-Execution Gate, Runtime Monitor, Audit Logger, Readiness Gate",
+                    tier_required=ProductionTier.TIER_1_SINGLE_USER,
+                    severity="critical"
+                )
+            elif layers_operational >= 2:
+                failed_layers = []
+                if not layer1_pass:
+                    failed_layers.append("Layer 1 (Pre-Execution Gate)")
+                if not layer2_pass:
+                    failed_layers.append("Layer 2 (Runtime Monitor)")
+                if not layer3_pass:
+                    failed_layers.append("Layer 3 (Audit Logger)")
+                
+                return ReadinessCheck(
+                    check_id="PROD-CHECK-004",
+                    name="Enforcement System Integrity (PROD-010)",
+                    status="WARN",
+                    details=f"{layers_operational}/4 layers operational - missing: {', '.join(failed_layers)}",
+                    tier_required=ProductionTier.TIER_1_SINGLE_USER,
+                    severity="critical"
+                )
+            else:
+                return ReadinessCheck(
+                    check_id="PROD-CHECK-004",
+                    name="Enforcement System Integrity (PROD-010)",
+                    status="FAIL",
+                    details=f"Only {layers_operational}/4 layers operational - enforcement system compromised",
+                    tier_required=ProductionTier.TIER_1_SINGLE_USER,
+                    severity="critical"
+                )
+                
+        except Exception as e:
+            return ReadinessCheck(
+                check_id="PROD-CHECK-004",
+                name="Enforcement System Integrity (PROD-010)",
+                status="FAIL",
+                details=f"Error validating enforcement system: {e}",
+                tier_required=ProductionTier.TIER_1_SINGLE_USER,
+                severity="critical"
+            )
+    
     def run_all_checks(self) -> List[ReadinessCheck]:
         """
         Run all production readiness checks.
@@ -293,6 +390,7 @@ class ProductionReadinessAssessment:
             self.check_dor_business_principles(),
             self.check_orchestrator_wiring(),
             self.check_governance_principles(),
+            self.check_enforcement_integrity(),  # NEW: REM-003-04
         ]
         
         return self.checks

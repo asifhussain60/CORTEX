@@ -325,15 +325,124 @@ class StateManager:
 
             self.logger.info(f"Completed operation: {operation_id}")
             return True
-
+    
+    def track_governance_violation(
+        self,
+        operation_id: str,
+        rule_id: str,
+        severity: str,
+        description: str
+    ) -> bool:
+        """
+        Track governance rule violation (Layer 2: Runtime Monitoring).
+        
+        Records CORE rule violations in real-time during operation execution.
+        Enables circuit breaker pattern (trip after 3+ violations).
+        
+        Args:
+            operation_id: Operation ID
+            rule_id: Governance rule ID (e.g., CORE-008)
+            severity: Violation severity (CRITICAL, HIGH, MEDIUM, LOW)
+            description: Human-readable violation description
+            
+        Returns:
+            True if tracked successfully, False if operation not found
+        
+        AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
+        """
+        with self._operation_lock:
+            state: Optional[OperationState] = self._operations.get(operation_id)
+            if state is None:
+                return False
+            
+            # Initialize violations list if not exists
+            if "governance_violations" not in state.metadata:
+                state.metadata["governance_violations"] = []
+            
+            violation_entry = {
+                "rule_id": rule_id,
+                "severity": severity,
+                "description": description,
+                "timestamp": datetime.now().timestamp(),
+            }
+            
+            state.metadata["governance_violations"].append(violation_entry)
+            
+            self.logger.warning(
+                f"Governance violation tracked for {operation_id}: "
+                f"{rule_id} ({severity}) - {description}"
+            )
+            
+            # Check circuit breaker threshold
+            violation_count = len(state.metadata["governance_violations"])
+            if violation_count >= 3:
+                self.logger.error(
+                    f"Circuit breaker threshold reached for {operation_id}: "
+                    f"{violation_count} violations detected"
+                )
+                state.metadata["circuit_breaker_tripped"] = True
+            
+            return True
+    
+    def get_violation_count(self, operation_id: str) -> int:
+        """
+        Get governance violation count for operation (Layer 2).
+        
+        Args:
+            operation_id: Operation ID
+            
+        Returns:
+            Number of governance violations, or 0 if operation not found
+        
+        AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
+        """
+        with self._operation_lock:
+            state: Optional[OperationState] = self._operations.get(operation_id)
+            if state is None:
+                return 0
+            
+            violations = state.metadata.get("governance_violations", [])
+            return len(violations)
+    
+    def is_circuit_breaker_tripped(self, operation_id: str) -> bool:
+        """
+        Check if circuit breaker tripped for operation (Layer 2).
+        
+        Circuit breaker trips after 3+ governance violations to prevent
+        cascade failures.
+        
+        Args:
+            operation_id: Operation ID
+            
+        Returns:
+            True if circuit breaker tripped, False otherwise
+        
+        AC-ID: REM-003-02 (Governance Defense-in-Depth Layer 2)
+        """
+        with self._operation_lock:
+            state: Optional[OperationState] = self._operations.get(operation_id)
+            if state is None:
+                return False
+            
+            return state.metadata.get("circuit_breaker_tripped", False)
+    
     def get_statistics(self) -> Dict[str, Any]:
         """
         Get state manager statistics.
         
         Returns:
-            Dict with active operations, rollbacks, etc.
+            Dict with active operations, rollbacks, governance violations, etc.
         """
         with self._operation_lock:
+            total_violations = 0
+            circuit_breaker_tripped_count = 0
+            
+            for state in self._operations.values():
+                violations = state.metadata.get("governance_violations", [])
+                total_violations += len(violations)
+                if state.metadata.get("circuit_breaker_tripped", False):
+                    circuit_breaker_tripped_count += 1
+            
             return {
                 "active_operations": len(self._operations),
                 "total_snapshots": sum(
@@ -344,6 +453,8 @@ class StateManager:
                     op_id: len(snaps)
                     for op_id, snaps in self._phase_snapshots.items()
                 },
+                "governance_violations_total": total_violations,  # NEW: REM-003-02
+                "circuit_breakers_tripped": circuit_breaker_tripped_count,  # NEW: REM-003-02
             }
 
 

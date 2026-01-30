@@ -61,8 +61,21 @@ rules:
       - "cortex/orchestrators/intent_router_refac.py (DOCUMENTATION - 344 lines)"
       - "_workspaces/dashboard/intent_router.py (WORKSPACE - 224 lines)"
     enforcement: "Only CANONICAL files imported by production code"
+  
+  - id: "PROD-010"
+    name: "Enforcement System Integrity"
+    description: "4-layer governance enforcement architecture operational"
+    severity: "critical"
+    implementation: "cortex/orchestrators/core/enforcement_orchestrator.py"
+    validation: |
+      Layer 1: EnforcementOrchestrator validates intent classification
+      Layer 2: StateManager tracks governance violations with circuit breaker
+      Layer 3: EnhancedAuditLogger detects DoR bypass attempts (planned)
+      Layer 4: Production readiness validates enforcement wiring
+    enforcement: "All 4 layers must be operational for production deployment"
+    ac_id: "REM-003 (Governance Defense-in-Depth)"
 
 status: "IMPLEMENTED"
 last_updated: "2026-01-30"
 updated_by: "Asif Hussain"
-changes: "Added PROD-009 for single canonical execution path enforcement (CORE-035)"
+changes: "Added PROD-010 for enforcement system integrity (AC-PERMANENT-FIX-012)"
