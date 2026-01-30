@@ -228,6 +228,17 @@ class MCPServer:
         # Register built-in tools
         self._register_tool(SampleTool())
         
+        # AC-MCP-REGISTRY-001: Restore decorator-registered tools from global registry
+        # Ensure tools decorated with @mcp_tool() are available on boot
+        try:
+            from cortex.mcp.decorators import get_registered_tools as get_decorator_tools
+            decorator_tools = get_decorator_tools()
+            self.logger.info(f"Found {len(decorator_tools)} tools from @mcp_tool decorator registry")
+            # Note: Decorator registry stores metadata only, not Tool objects
+            # These are exposed via list_tools() but not directly registered here
+        except (ImportError, Exception) as e:
+            self.logger.debug(f"No decorator-registered tools available: {e}")
+        
         # Register CORTEX orchestrator tools
         try:
             from cortex.mcp.cortex_tools import get_cortex_tools

@@ -88,13 +88,25 @@ class TestSingleTurnExecution:
         
         assert protocol.turn_number == 0
         
-        # Execute first turn
-        result = protocol.execute_turn("user input 1", {})
+        # Execute first turn with RoundContext
+        round_context_1 = RoundContext(
+            round_number=1,
+            user_input="user input 1",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        result = protocol.execute_turn(round_context_1)
         assert result.is_ok()
         assert protocol.turn_number == 1
         
-        # Execute second turn
-        result = protocol.execute_turn("user input 2", {})
+        # Execute second turn with RoundContext
+        round_context_2 = RoundContext(
+            round_number=2,
+            user_input="user input 2",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        result = protocol.execute_turn(round_context_2)
         assert result.is_ok()
         assert protocol.turn_number == 2
 
@@ -103,7 +115,14 @@ class TestSingleTurnExecution:
         orchestrator = MockIOrchestrator()
         protocol = ConversationProtocol(orchestrator)
         
-        result = protocol.execute_turn("test input", {})
+        # Create RoundContext with proper signature
+        round_context = RoundContext(
+            round_number=1,
+            user_input="test input",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        result = protocol.execute_turn(round_context)
         
         assert result.is_ok()
         decision = result.unwrap()
@@ -116,10 +135,24 @@ class TestSingleTurnExecution:
         
         assert len(protocol.decisions_history) == 0
         
-        protocol.execute_turn("input 1", {})
+        # Create RoundContext for first turn
+        round_context_1 = RoundContext(
+            round_number=1,
+            user_input="input 1",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        protocol.execute_turn(round_context_1)
         assert len(protocol.decisions_history) == 1
         
-        protocol.execute_turn("input 2", {})
+        # Create RoundContext for second turn
+        round_context_2 = RoundContext(
+            round_number=2,
+            user_input="input 2",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        protocol.execute_turn(round_context_2)
         assert len(protocol.decisions_history) == 2
 
     def test_execute_turn_with_empty_context(self):
@@ -127,7 +160,14 @@ class TestSingleTurnExecution:
         orchestrator = MockIOrchestrator()
         protocol = ConversationProtocol(orchestrator)
         
-        result = protocol.execute_turn("test", {})
+        # Create RoundContext with empty previous context
+        round_context = RoundContext(
+            round_number=1,
+            user_input="test",
+            previous_context={},
+            orchestrator_name="MockOrchestrator"
+        )
+        result = protocol.execute_turn(round_context)
         assert result.is_ok()
 
     def test_execute_turn_with_previous_context(self):
@@ -136,7 +176,14 @@ class TestSingleTurnExecution:
         protocol = ConversationProtocol(orchestrator)
         
         context = {"turn_number": 1, "previous_result": "some_data"}
-        result = protocol.execute_turn("input", context)
+        # Create RoundContext with previous context data
+        round_context = RoundContext(
+            round_number=1,
+            user_input="input",
+            previous_context=context,
+            orchestrator_name="MockOrchestrator"
+        )
+        result = protocol.execute_turn(round_context)
         
         assert result.is_ok()
         # Verify turn context includes previous data
