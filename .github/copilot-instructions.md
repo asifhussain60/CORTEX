@@ -175,6 +175,102 @@ open http://localhost:9093
 
 ---
 
+## 🛡️ Governance Enforcement (4-Layer Defense-in-Depth)
+
+**AC-PERMANENT-FIX-012:** Multi-layer enforcement ensures CORE rules cannot be bypassed.
+
+### Architecture Overview:
+```
+Prompt Layer (Guidance)
+    ↓
+Layer 1: Pre-Execution Gate ✓ BLOCKS violations before execution
+    ↓
+Layer 2: Runtime Monitor ✓ STOPS operations at 3+ violations
+    ↓
+Layer 3: Post-Execution Audit ✓ DETECTS bypass attempts
+    ↓
+Layer 4: Production Gate ✓ PREVENTS broken deployment
+```
+
+### Layer 1: Pre-Execution Gate (EnforcementOrchestrator)
+**Location:** `cortex/orchestrators/core/enforcement_orchestrator.py`
+
+**Validates BEFORE execution:**
+- Intent classification integrity (all DoR fields present)
+- DoR confidence justification (not artificially inflated)
+- Business principles mapping (CORE rules explained)
+
+**Methods:**
+```python
+validate_intent_classification(intent_reflection) → Result
+validate_dor_confidence(confidence, intent, context) → Result
+validate_business_principles_mapping(rules, principles) → Result
+```
+
+**Action:** BLOCKS execution if violations detected
+
+### Layer 2: Runtime Monitoring (StateManager)
+**Location:** `cortex/brain/core/state_manager.py`
+
+**Tracks DURING execution:**
+- Governance violations in real-time
+- Violation count per operation
+- Circuit breaker threshold (3+ violations)
+
+**Methods:**
+```python
+track_governance_violation(op_id, rule_id, severity, desc) → bool
+get_violation_count(op_id) → int
+is_circuit_breaker_tripped(op_id) → bool
+```
+
+**Action:** STOPS operation if circuit breaker trips
+
+### Layer 3: Post-Execution Audit (EnhancedAuditLogger)
+**Location:** `cortex/infrastructure/enhanced_audit_logger.py`
+
+**Detects AFTER execution:**
+- DoR bypass attempts (promised vs actual)
+- Confidence manipulation
+- Deviation from approved plan
+
+**Methods:** (Planned enhancement)
+```python
+detect_dor_bypass(promised_fields, actual_output) → List[str]
+detect_confidence_manipulation(dor, execution_result) → List[str]
+```
+
+**Action:** REPORTS violations to audit trail
+
+### Layer 4: Production Readiness Gate
+**Location:** `cortex/brain/production/readiness_assessment.py`
+
+**Validates BEFORE deployment:**
+- All 4 layers operational
+- Enforcement methods exist and callable
+- PROD-010 check passes
+
+**Method:**
+```python
+check_enforcement_integrity() → ReadinessCheck
+```
+
+**Action:** PREVENTS deployment if enforcement compromised
+
+### Enforcement Checklist:
+- [ ] Layer 1: Intent validated before execution
+- [ ] Layer 2: Violations tracked during runtime
+- [ ] Layer 3: Audit detects post-execution issues
+- [ ] Layer 4: Production readiness confirms integrity
+
+**Benefits:**
+- **Extensibility:** New rules plug into existing layers
+- **Scalability:** Runtime monitoring handles edge cases
+- **Accuracy:** Code enforcement > prompt enforcement
+- **Efficiency:** Enforcement runs only when needed
+
+---
+
 ## 🧠 Brain Architecture (4 Tiers)
 
 ### Tier 0: Immutable Governance (28 CORE Rules)

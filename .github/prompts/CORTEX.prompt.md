@@ -172,28 +172,119 @@ Reply with:
 - If no response, ask "Would you like me to proceed with this action?"
 - Never auto-execute operations that modify code
 
-### Stage 4: Rule Enforcement (NEW - Tier 0 Prevention)
+### Stage 4: Governance Enforcement (4-Layer Defense-in-Depth)
 
-**AFTER approval, BEFORE execution:**
-1. Run **EnforcementOrchestrator** with 3 agents:
-   - **GovernanceEnforcementAgent** (CORE-008, CORE-011, CORE-012, CORE-013, CORE-029)
-   - **SecurityCheckpointAgent** (CORE-026, CORE-025, CORE-027)
-   - **ComplianceValidationAgent** (TIER-1 rules, escalations)
+**AC-PERMANENT-FIX-012:** Multi-layer enforcement prevents CORE rule violations at every stage.
 
-2. **If Tier 0 violation detected:**
-   - ❌ BLOCK operation with clear violation message
-   - Report exactly which rule violated and how to fix
-   - Do NOT proceed to execution
+**ARCHITECTURE:**
+```
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 1: Pre-Execution Gate (BEFORE execution)             │
+│  ✓ Validate intent classification integrity                 │
+│  ✓ Validate DoR confidence (prevent manipulation)           │
+│  ✓ Validate business principles mapping                     │
+│  → BLOCKS execution if violations detected                  │
+└──────────────────────────────────────────────────────────────┘
+                              ↓
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 2: Runtime Monitoring (DURING execution)             │
+│  ✓ Track governance violations in real-time                 │
+│  ✓ Circuit breaker trips after 3+ violations                │
+│  ✓ Prevents cascade failures                                │
+│  → STOPS operation if threshold exceeded                    │
+└──────────────────────────────────────────────────────────────┘
+                              ↓
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 3: Post-Execution Audit (AFTER execution)            │
+│  ✓ Detect DoR bypass attempts                               │
+│  ✓ Compare promised vs actual behavior                      │
+│  ✓ Flag deviations for review                               │
+│  → REPORTS violations to audit trail                        │
+└──────────────────────────────────────────────────────────────┘
+                              ↓
+┌──────────────────────────────────────────────────────────────┐
+│  Layer 4: Production Readiness Gate (BEFORE deployment)     │
+│  ✓ Validates all 3 layers operational                       │
+│  ✓ Tests enforcement system integrity                       │
+│  ✓ PROD-010 check blocks if compromised                     │
+│  → PREVENTS deployment with broken enforcement              │
+└──────────────────────────────────────────────────────────────┘
+```
 
-3. **If Tier 1 escalation detected:**
-   - ⚠️ LOG warning but continue
-   - Report escalation details for audit trail
+**EXECUTION FLOW:**
 
-4. **If all checks pass:**
-   - ✅ Proceed to Stage 5
+1. **Layer 1: Pre-Execution Validation** (EnforcementOrchestrator)
+   ```python
+   # Validate intent classification
+   result = enforcement.validate_intent_classification(intent_reflection)
+   if result.is_err():
+       # ❌ BLOCK: Intent classification incomplete or corrupted
+       return Err(result.error)
+   
+   # Validate DoR confidence
+   result = enforcement.validate_dor_confidence(
+       promised_confidence=0.85,
+       intent_type="IMPLEMENT",
+       available_context={"target_file_exists": True, ...}
+   )
+   if result.is_err():
+       # ❌ BLOCK: Confidence suspiciously high or too low
+       return Err(result.error)
+   
+   # Validate business principles mapping
+   result = enforcement.validate_business_principles_mapping(
+       governance_rules=["CORE-008", "CORE-011"],
+       business_principles={"Quality First": "TDD (CORE-008)"}
+   )
+   if result.is_err():
+       # ❌ BLOCK: Rules not properly mapped
+       return Err(result.error)
+   ```
 
-**Authority:** `cortex_brain/tier0/governance/` + `cortex_brain/tier1/acceptance/`  
-**Documentation:** `cortex-enforcement.prompt.md`, `cortex-enforcement-agents.md`
+2. **Layer 2: Runtime Monitoring** (StateManager)
+   ```python
+   # Track violations during execution
+   state_mgr.track_governance_violation(
+       operation_id="op_123",
+       rule_id="CORE-008",
+       severity="CRITICAL",
+       description="Test file missing before implementation"
+   )
+   
+   # Check circuit breaker
+   if state_mgr.is_circuit_breaker_tripped("op_123"):
+       # ⚠️ STOP: 3+ violations detected, abort operation
+       return Err("Circuit breaker tripped")
+   ```
+
+3. **Layer 3: Post-Execution Audit** (EnhancedAuditLogger)
+   ```python
+   # Detect bypass attempts (planned enhancement)
+   audit_logger.detect_dor_bypass(
+       promised_fields=["business_principles", "governance_rules"],
+       actual_output=markdown_output
+   )
+   ```
+
+4. **Layer 4: Production Readiness** (readiness_assessment.py)
+   ```python
+   # Validate enforcement system operational
+   check = assessment.check_enforcement_integrity()
+   if check.status == "FAIL":
+       # ⚠️ BLOCK DEPLOYMENT: Enforcement system compromised
+       return Err("PROD-010 violation: Enforcement not operational")
+   ```
+
+**ENFORCEMENT GUARANTEES:**
+- ❌ Cannot bypass governance through prompt manipulation
+- ❌ Cannot bypass governance through direct API calls
+- ❌ Cannot bypass governance through LLM jailbreaking
+- ✅ Violations caught at minimum 2 checkpoints
+- ✅ Circuit breaker prevents cascade failures
+- ✅ Audit trail provides evidence for all operations
+
+**Authority:** `cortex_brain/tier0/governance/` + `cortex/orchestrators/core/enforcement_orchestrator.py`  
+**AC-ID:** REM-003 (Governance Defense-in-Depth)
 
 ### Stage 5: Execute with Governance
 
