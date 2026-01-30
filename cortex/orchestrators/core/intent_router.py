@@ -34,7 +34,12 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 
-
+# Phase 8.2: Import orchestrator lookup and enforcement
+from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+from cortex.orchestrators.core.routing_enforcement import (
+    RoutingEnforcementEngine,
+    RoutingViolation,
+)
 
 
 @dataclass
@@ -50,6 +55,10 @@ class RoutingDecision:
         metadata: Additional routing context metadata
         timestamp: When routing decision was made
         composite_intents: AC-FUTURE-005 - List of detected intents for composite requests
+        target_orchestrator: AC-PHASE-8.2-01 - Actual orchestrator instance (NEW)
+        fallback_orchestrators: AC-PHASE-8.2-01 - Ranked alternative orchestrators (NEW)
+        keyword_matches: AC-PHASE-8.2-01 - Keywords that matched routing config (NEW)
+        confidence_breakdown: AC-PHASE-8.2-01 - Detailed confidence scoring (NEW)
     """
     intent_type: IntentType
     target_handler: str
@@ -58,6 +67,11 @@ class RoutingDecision:
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     composite_intents: List[IntentType] = field(default_factory=list)  # AC-FUTURE-005
+    # Phase 8.2 additions:
+    target_orchestrator: Optional[IOrchestrator] = None  # AC-PHASE-8.2-01
+    fallback_orchestrators: List[IOrchestrator] = field(default_factory=list)  # AC-PHASE-8.2-01
+    keyword_matches: List[str] = field(default_factory=list)  # AC-PHASE-8.2-01
+    confidence_breakdown: Dict[str, float] = field(default_factory=dict)  # AC-PHASE-8.2-01
 
 
 @dataclass
@@ -277,6 +291,7 @@ class IntentRouter(IOrchestrator):
         Initialize IntentRouter orchestrator.
         
         AC-FUTURE-001: Load routing rules from YAML (CONFIG-DRIVEN)
+        AC-PHASE-8.2-01: Initialize orchestrator lookup and enforcement
         
         Sets up:
         - Operation type keyword mappings
@@ -284,6 +299,8 @@ class IntentRouter(IOrchestrator):
         - Audit logger
         - Decision cache (LRU with 128 entries)
         - Complexity classifier for request analysis
+        - Orchestrator lookup (Phase 8.2)
+        - Routing enforcement engine (Phase 8.2)
         
         Raises:
             Exception: If audit logger cannot be initialized
@@ -325,6 +342,17 @@ class IntentRouter(IOrchestrator):
         # Cache for fuzzy matching results
         self.fuzzy_cache: Dict[str, List[str]] = {}
         
+        # AC-PHASE-8.2-01: Initialize orchestrator lookup (singleton)
+        self.orchestrator_lookup: OrchestratorLookup = OrchestratorLookup()
+        
+        # AC-PHASE-8.2-01: Initialize routing enforcement engine
+        enforcement_config = self.routing_rules_config.get("enforcement", {})
+        self.enforcement_engine: RoutingEnforcementEngine = RoutingEnforcementEngine(
+            confidence_threshold=enforcement_config.get("confidence_threshold", 0.6),
+            disambiguation_threshold=enforcement_config.get("disambiguation_threshold", 0.7),
+            blocking_enabled=enforcement_config.get("blocking_enabled", True)
+        )
+        
         # Log initialization
         self.logger.log_operation_complete(
             ac_id="AC-PROD-001-02",
@@ -335,7 +363,9 @@ class IntentRouter(IOrchestrator):
                 "routing_rules": len(self.routing_rules),
                 "cache_enabled": True,
                 "fuzzy_matching_enabled": self.fuzzy_config.get("enabled", False),
-                "yaml_config_loaded": "routing_rules" in self.routing_rules_config
+                "yaml_config_loaded": "routing_rules" in self.routing_rules_config,
+                "orchestrator_lookup_enabled": True,  # AC-PHASE-8.2-01
+                "enforcement_enabled": enforcement_config.get("blocking_enabled", True)  # AC-PHASE-8.2-01
             }
         )
     
@@ -439,6 +469,178 @@ class IntentRouter(IOrchestrator):
             (IntentType.DOCUMENT, "reports"): "DocumentationOrchestrator",
             (IntentType.DOCUMENT, None): "DocumentationOrchestrator",
         }
+    
+    # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====
+    
+    def _extract_keywords(self, context: Dict[str, Any]) -> List[str]:
+        """
+        Extract routing keywords from user request context.
+        
+        AC-PHASE-8.2-01: Parse description and operation fields to identify
+        trigger keywords that map to orchestrators in routing config.
+        
+        Args:
+            context: User request context with operation/description
+        
+        Returns:
+            List[str]: Extracted keywords (lowercase, unique)
+        
+        Example:
+            >>> context = {"description": "Use CORTEX LENS to onboard repo XYZ"}
+            >>> keywords = self._extract_keywords(context)
+            >>> print(keywords)
+            ['lens', 'onboard', 'repo']
+        """
+        keywords: List[str] = []
+        
+        try:
+            # Extract from description
+            description = context.get("description", "")
+            if description:
+                # Tokenize (split by whitespace and common delimiters)
+                tokens = description.lower().replace(":", " ").replace(",", " ").split()
+                keywords.extend(tokens)
+            
+            # Extract from operation field
+            operation = context.get("operation", "")
+            if operation:
+                tokens = operation.lower().replace("_", " ").split()
+                keywords.extend(tokens)
+            
+            # Extract from user_intent field
+            user_intent = context.get("user_intent", "")
+            if user_intent:
+                tokens = user_intent.lower().split()
+                keywords.extend(tokens)
+            
+            # Remove duplicates and filter out common stop words
+            stop_words = {"the", "a", "an", "is", "are", "to", "of", "for", "with", "in", "on"}
+            unique_keywords = list(set(kw for kw in keywords if kw not in stop_words and len(kw) > 2))
+            
+            return unique_keywords
+        
+        except (TypeError, AttributeError) as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-8.2-01",
+                operation="KEYWORD_EXTRACTION_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            return []
+    
+    def _lookup_orchestrators(
+        self,
+        keywords: List[str],
+        intent: IntentType
+    ) -> List[Tuple[str, IOrchestrator, float]]:
+        """
+        Lookup orchestrators matching extracted keywords.
+        
+        AC-PHASE-8.2-01: Query OrchestratorLookup registry to find
+        orchestrators with matching keywords, then resolve instances.
+        
+        Args:
+            keywords: Extracted keywords from user request
+            intent: Detected intent type for filtering
+        
+        Returns:
+            List[Tuple[str, IOrchestrator, float]]: (name, instance, confidence) tuples
+        
+        Example:
+            >>> keywords = ['lens', 'onboard']
+            >>> candidates = self._lookup_orchestrators(keywords, IntentType.IMPLEMENT)
+            >>> # Returns: [('OnboardingOrchestrator', <instance>, 0.85), ...]
+        """
+        candidates: List[Tuple[str, IOrchestrator, float]] = []
+        
+        try:
+            # Initialize orchestrator lookup (singleton)
+            lookup = OrchestratorLookup()
+            
+            # Query by keywords from routing config
+            matches = lookup.find_by_keywords(keywords, self.routing_rules_config)
+            
+            # Resolve orchestrator instances
+            for orchestrator_name, confidence in matches:
+                result = lookup.resolve_instance(orchestrator_name)
+                
+                if result.is_ok():
+                    instance = result.value
+                    candidates.append((orchestrator_name, instance, confidence))
+                else:
+                    # Log failure but continue
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-8.2-01",
+                        operation="ORCHESTRATOR_RESOLVE_FAILED",
+                        success=False,
+                        details={
+                            "orchestrator": orchestrator_name,
+                            "error": result.error
+                        }
+                    )
+            
+            return candidates
+        
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-8.2-01",
+                operation="ORCHESTRATOR_LOOKUP_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            return []
+    
+    def _rank_orchestrators(
+        self,
+        candidates: List[Tuple[str, IOrchestrator, float]]
+    ) -> List[Tuple[str, IOrchestrator, float]]:
+        """
+        Rank orchestrator candidates by confidence score.
+        
+        AC-PHASE-8.2-01: Sort candidates descending by confidence,
+        applying tie-breaking rules if needed.
+        
+        Args:
+            candidates: List of (name, instance, confidence) tuples
+        
+        Returns:
+            List[Tuple[str, IOrchestrator, float]]: Ranked candidates
+        
+        Example:
+            >>> candidates = [
+            ...     ('LENSOrchestrator', <instance>, 0.75),
+            ...     ('OnboardingOrchestrator', <instance>, 0.85),
+            ... ]
+            >>> ranked = self._rank_orchestrators(candidates)
+            >>> # Returns: [('OnboardingOrchestrator', ..., 0.85), ('LENSOrchestrator', ..., 0.75)]
+        """
+        try:
+            # Sort by confidence descending
+            ranked = sorted(candidates, key=lambda x: x[2], reverse=True)
+            
+            # Log ranking results
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-8.2-01",
+                operation="ORCHESTRATOR_RANKING",
+                success=True,
+                details={
+                    "candidate_count": len(ranked),
+                    "top_candidate": ranked[0][0] if ranked else None,
+                    "top_confidence": ranked[0][2] if ranked else 0.0
+                }
+            )
+            
+            return ranked
+        
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-8.2-01",
+                operation="ORCHESTRATOR_RANKING_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            # Return unsorted on error
+            return candidates
     
     def get_version(self) -> str:
         """
@@ -651,17 +853,25 @@ class IntentRouter(IOrchestrator):
         """
         Internal routing implementation (logic only, no caching).
         
-        Analyzes context and determines target handler.
+        AC-PHASE-8.2-01: Enhanced with keyword-based orchestrator lookup.
+        
+        Flow:
+        1. Extract keywords from user request
+        2. Detect intent type
+        3. Lookup matching orchestrators by keywords
+        4. Rank candidates by confidence
+        5. Enforce routing rules (ROUTING-001 through ROUTING-004)
+        6. Return decision with orchestrator instance
         
         Args:
             context: Context dictionary with operation details
         
         Returns:
-            RoutingDecision: Routing decision with target handler
+            RoutingDecision: Routing decision with target orchestrator instance
         
         Raises:
             KeyError: If required context fields missing
-            ValueError: If routing cannot be determined
+            ValueError: If routing cannot be determined or enforcement blocks
         """
         try:
             # Extract relevant fields
@@ -678,37 +888,93 @@ class IntentRouter(IOrchestrator):
                 intent_type
             )
             
-            # Determine target handler from routing rules
-            routing_key = (intent_type, domain)
-            if routing_key not in self.routing_rules:
-                # Fallback: try with None domain
-                routing_key = (intent_type, None)
+            # AC-PHASE-8.2-01: Extract keywords from request
+            keywords = self._extract_keywords(context)
             
-            target_handler = self.routing_rules.get(
-                routing_key,
-                f"{intent_type.value.capitalize()}OrchestrationHandler"
-            )
+            # AC-PHASE-8.2-01: Lookup orchestrators by keywords
+            candidates = self._lookup_orchestrators(keywords, intent_type)
+            
+            # AC-PHASE-8.2-01: Rank candidates by confidence
+            ranked_candidates = self._rank_orchestrators(candidates)
+            
+            # Determine target handler and orchestrator
+            if ranked_candidates:
+                # Phase 8.2: Use top-ranked orchestrator
+                target_name, target_orch, base_confidence = ranked_candidates[0]
+                target_handler = target_name
+                target_orchestrator = target_orch
+                
+                # Extract fallback orchestrators (top 3 alternatives)
+                fallback_orchestrators = [orch for _, orch, _ in ranked_candidates[1:4]]
+                
+                # Build confidence breakdown
+                confidence_breakdown = {
+                    "keyword_match": base_confidence,
+                    "intent_detection": 0.2,  # Base intent detection confidence
+                }
+                
+                # Apply LENS boost if available (LENS-002 integration)
+                lens_context = context.get("lens_context")
+                if lens_context:
+                    git_pattern = self._extract_git_pattern(lens_context)
+                    ast_complexity = self._calculate_ast_complexity(lens_context)
+                    
+                    if git_pattern == intent_type:
+                        confidence_breakdown["lens_git_exact"] = 0.15
+                    elif git_pattern:
+                        confidence_breakdown["lens_git_partial"] = 0.05
+                    
+                    if ast_complexity > 75:
+                        confidence_breakdown["lens_ast_very_high"] = 0.20
+                    elif ast_complexity > 50:
+                        confidence_breakdown["lens_ast_high"] = 0.15
+                    elif ast_complexity > 25:
+                        confidence_breakdown["lens_ast_medium"] = 0.10
+                
+                # Calculate final confidence
+                confidence = sum(confidence_breakdown.values())
+                
+            else:
+                # Fallback: Use old routing rules (backward compatibility)
+                routing_key = (intent_type, domain)
+                if routing_key not in self.routing_rules:
+                    routing_key = (intent_type, None)
+                
+                target_handler = self.routing_rules.get(
+                    routing_key,
+                    f"{intent_type.value.capitalize()}OrchestrationHandler"
+                )
+                
+                # Try resolving orchestrator instance from handler name
+                result = self.orchestrator_lookup.resolve_instance(target_handler)
+                target_orchestrator = result.value if result.is_ok() else None
+                fallback_orchestrators = []
+                
+                # Fallback confidence calculation
+                context_keywords = context.get("keywords", [])
+                operation_type_keywords = self.operation_type_mappings[intent_type]
+                matches = sum(1 for kw in context_keywords if kw.lower() in 
+                             [k.lower() for k in operation_type_keywords])
+                confidence = min(1.0, (matches / len(operation_type_keywords)) + 0.5) if operation_type_keywords else 0.75
+                
+                confidence_breakdown = {
+                    "legacy_routing": confidence,
+                }
             
             # If composite intents detected, enhance handler selection
             if len(composite_intents) > 1:
                 target_handler = f"CompositeHandler_{'+'.join([i.value for i in composite_intents])}"
-            
-            # Calculate confidence based on keyword matches
-            keywords = context.get("keywords", [])
-            operation_type_keywords = self.operation_type_mappings[intent_type]
-            matches = sum(1 for kw in keywords if kw.lower() in 
-                         [k.lower() for k in operation_type_keywords])
-            confidence = min(1.0, (matches / len(operation_type_keywords)) + 0.5) if operation_type_keywords else 0.75
-            
-            # Adjust confidence if composite intents detected (more complex = slightly lower confidence)
-            if len(composite_intents) > 1:
                 confidence *= 0.95
+                confidence_breakdown["composite_penalty"] = -0.05
             
             # Build reasoning
             reasoning = (
-                f"Routed '{context.get('operation')}' to {target_handler} based on "
-                f"intent type '{intent_type.value}' and domain '{domain or 'general'}'"
+                f"Routed '{context.get('operation')}' to {target_handler} "
+                f"(confidence: {confidence:.2f}) based on "
+                f"intent type '{intent_type.value}'"
             )
+            if keywords:
+                reasoning += f", keywords: {', '.join(keywords[:3])}"
             if len(composite_intents) > 1:
                 reasoning += f". Detected composite intents: {', '.join([i.value for i in composite_intents])}"
             
@@ -716,17 +982,53 @@ class IntentRouter(IOrchestrator):
             decision = RoutingDecision(
                 intent_type=intent_type,
                 target_handler=target_handler,
-                confidence_score=confidence,
+                confidence_score=min(1.0, confidence),  # Clamp to [0, 1]
                 reasoning=reasoning,
                 metadata={
                     "operation": context.get("operation"),
                     "domain": domain,
-                    "keywords_matched": matches,
-                    "total_keywords": len(operation_type_keywords),
-                    "composite_intents": len(composite_intents) > 1  # AC-FUTURE-005 flag
+                    "keywords_matched": len(keywords),
+                    "total_keywords": len(keywords),
+                    "composite_intents": len(composite_intents) > 1,
+                    "candidates_found": len(ranked_candidates) if ranked_candidates else 0,
                 },
-                composite_intents=composite_intents  # AC-FUTURE-005
+                composite_intents=composite_intents,
+                # AC-PHASE-8.2-01: New fields
+                target_orchestrator=target_orchestrator,
+                fallback_orchestrators=fallback_orchestrators,
+                keyword_matches=keywords,
+                confidence_breakdown=confidence_breakdown,
             )
+            
+            # AC-PHASE-8.2-01: Enforce routing rules
+            enforcement_result = self.enforcement_engine.validate_routing_decision(decision)
+            
+            if not enforcement_result.passed:
+                # Log violations
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-8.2-01",
+                    operation="ROUTING_ENFORCEMENT_VIOLATION",
+                    success=False,
+                    details={
+                        "violations": [v.value for v in enforcement_result.violations],
+                        "target_handler": target_handler,
+                        "confidence": confidence,
+                    }
+                )
+                
+                # Check if blocking is enabled
+                blocking_violations = [
+                    v for v in enforcement_result.violations
+                    if v in [
+                        RoutingViolation.ORCHESTRATOR_NOT_FOUND,
+                        RoutingViolation.CONFIDENCE_TOO_LOW,
+                        RoutingViolation.NOT_AUDITABLE,
+                    ]
+                ]
+                if self.enforcement_engine.blocking_enabled and blocking_violations:
+                    raise ValueError(
+                        f"Routing blocked by enforcement: {', '.join([v.value for v in blocking_violations])}"
+                    )
             
             return decision
         

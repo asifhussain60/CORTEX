@@ -351,16 +351,17 @@ class DiscoveryEngine:
         }
 
 
-from cortex.orchestrators.registry.discovery_engine import (
-    DiscoveryEngine,
-    DiscoveryQuery,
-    DiscoveryResult,
-)
+# AC-PHASE-8.2-01: DiscoveryEngine replaced by OrchestratorLookup
+# from cortex.orchestrators.registry.discovery_engine import (
+#     DiscoveryEngine,
+#     DiscoveryQuery,
+#     DiscoveryResult,
+# )
 
 __all__ = [
     "OrchestratorRegistry",
     "OrchestratorMetadata",
-    "DiscoveryEngine",
-    "DiscoveryQuery",
-    "DiscoveryResult",
+    # "DiscoveryEngine",  # AC-PHASE-8.2-01: Deprecated
+    # "DiscoveryQuery",   # AC-PHASE-8.2-01: Deprecated
+    # "DiscoveryResult",  # AC-PHASE-8.2-01: Deprecated
 ]
