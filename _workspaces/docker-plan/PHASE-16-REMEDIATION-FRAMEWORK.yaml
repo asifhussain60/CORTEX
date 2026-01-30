@@ -27,8 +27,8 @@ metadata:
   
   # Source session
   source_session: "chat01.md (2026-01-30)"
-  permanent_fixes_captured: 1
-  total_permanent_fixes: 10  # AC-PERMANENT-FIX-001 through 010
+  permanent_fixes_captured: 2
+  total_permanent_fixes: 11  # AC-PERMANENT-FIX-001 through 011
   
   # Strategic alignment
   strategic_goals:
@@ -178,6 +178,65 @@ lessons_learned:
         status: "PLANNED"
         implementation: "scripts/verify_mock_targets.py"
 
+  # -------------------------------------------------------------------------
+  # AC-PERMANENT-FIX-011: DoR Approval Prompt Simplification
+  # -------------------------------------------------------------------------
+  AC-PERMANENT-FIX-011:
+    title: "Emoji Icons in Approval Prompts Reduce Accessibility"
+    date: "2026-01-30"
+    severity: "LOW"
+    category: "USER_EXPERIENCE"
+    
+    symptoms:
+      - "Emoji icons (✅ ❌ 🔄) may not render consistently across terminals"
+      - "Visual clutter in approval prompts"
+      - "Accessibility concerns for screen readers"
+      - "Inconsistent rendering in different chat interfaces"
+    
+    root_cause: |
+      DoR approval prompts used emoji icons to visually distinguish options:
+      - ✅ "proceed" → Execute
+      - ❌ "cancel" → Abort
+      - 🔄 "modify: {changes}" → Adjust scope
+      
+      While visually appealing, this pattern has compatibility issues:
+      - Some terminal emulators don't render emojis correctly
+      - Screen readers may not announce emojis meaningfully
+      - Adds visual noise in text-heavy chat sessions
+    
+    files_affected:
+      - path: ".github/prompts/CORTEX.prompt.md"
+        changes:
+          - "Simplified DoR approval prompt format"
+          - "Removed emoji icons from approval options"
+          - "Use plain text: 'Shall I proceed? Or would you like to adjust the scope?'"
+      - path: "cortex/orchestrators/core/dor_approval_gate.py"
+        changes:
+          - "Update DoRApprovalGate response templates"
+          - "Simplified approval prompt rendering"
+    
+    fix_summary: |
+      Replace emoji-based approval prompts with simple text:
+      
+      OLD FORMAT:
+      Reply with:
+      ✅ "proceed" → Execute
+      ❌ "cancel" → Abort  
+      🔄 "modify: {changes}" → Adjust scope
+      
+      NEW FORMAT:
+      Shall I proceed? Or would you like to adjust the scope?
+    
+    prevention_measures:
+      - measure: "Approval Prompt Standards"
+        description: "Guidelines for accessibility-friendly approval prompts"
+        status: "DOCUMENTED"
+        implementation: "Phase 16 remediation patterns"
+    
+    verification:
+      approach: "Manual review of DoR approval prompt outputs"
+      verified_date: "2026-01-30"
+
 # ============================================================================
 # REMEDIATION PATTERNS
 # ============================================================================
@@ -217,6 +276,32 @@ remediation_patterns:
     rationale: |
       HTML tags may not render correctly in all markdown contexts.
       Pipe separators (|) are universally supported and visually clear.
+  
+  approval_prompt_simplification:
+    name: "DoR Approval Prompt Simplification"
+    description: |
+      Simplify approval prompts by removing emoji icons that may not render
+      consistently across all terminal environments and chat interfaces.
+    
+    patterns:
+      incorrect: |
+        Reply with:
+        ✅ "proceed" → Execute
+        ❌ "cancel" → Abort
+        🔄 "modify: {changes}" → Adjust
+      
+      correct: |
+        Shall I proceed? Or would you like to adjust the scope?
+    
+    rationale: |
+      - Emoji icons may not render consistently across terminals
+      - Simple text is more accessible and universally readable
+      - Reduces visual clutter in chat responses
+      - Maintains clarity while improving compatibility
+    
+    applicable_rules:
+      - "CORE-029: Response Format"
+      - "AC-PERMANENT-FIX-010: User Experience Improvements"
 
 # ============================================================================
 # PREVENTION FRAMEWORK
@@ -246,6 +331,7 @@ prevention_framework:
   review_checklist:
     - "All prompt-specified fields are implemented in code"
     - "Markdown output uses | separator, not HTML tags"
+    - "Approval prompts use simple text, not emoji icons"
     - "Test mocks target existing functions/classes"
     - "Dataclass changes include corresponding test updates"
 
@@ -254,9 +340,10 @@ prevention_framework:
 # ============================================================================
 metrics:
   permanent_fixes:
-    total: 10
+    total: 11
     by_category:
       DOCUMENTATION_CODE_SYNC: 1
+      USER_EXPERIENCE: 1
       TEST_INFRASTRUCTURE: 1
       # Historical fixes (001-009) from previous sessions
       GOVERNANCE: 3
@@ -360,3 +447,9 @@ permanent_fix_registry:
     date: "2026-01-30"
     status: "ACTIVE"
     details: "See lessons_learned.AC-PERMANENT-FIX-010 above"
+  
+  AC-PERMANENT-FIX-011:
+    summary: "DoR approval prompt simplification (emoji removal)"
+    date: "2026-01-30"
+    status: "ACTIVE"
+    details: "See lessons_learned.AC-PERMANENT-FIX-011 above"
