@@ -28,3 +28,19 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+      - id: verify-prompt-fields
+        name: REM-001 - Verify DoR Fields in Prompts
+        entry: python3 scripts/verify_prompt_fields.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^(\.github/prompts/|cortex/orchestrators/core/dor_approval_gate\.py)
+
+      - id: verify-mock-targets
+        name: REM-002 - Verify Mock Targets Exist
+        entry: python3 scripts/verify_mock_targets.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^tests/.*test_.*\.py$

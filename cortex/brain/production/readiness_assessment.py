@@ -99,6 +99,7 @@ class ProductionReadinessAssessment:
                 dor_confidence=0.85,
                 scope="MODULE",
                 governance_rules=["CORE-008", "CORE-011", "CORE-012"],
+                business_principles={"Quality First": "TDD (CORE-008)", "Maintainability": "Type Safety (CORE-011)"},
                 requires_tests=True
             )
             
@@ -107,9 +108,8 @@ class ProductionReadinessAssessment:
             # Validate business principles display
             checks = [
                 ("Business Principles row", "**Business Principles**" in markdown),
-                ("Comma separation", ", " in markdown),
                 ("Arrow notation", "→" in markdown),
-                ("Bold principles", "**" in markdown),
+                ("Bold principles", "**Quality First**" in markdown),
                 ("CORE-IDs present", "CORE-008" in markdown)
             ]
             
@@ -120,7 +120,7 @@ class ProductionReadinessAssessment:
                     check_id="PROD-CHECK-001",
                     name="DoR Business Principles Display",
                     status="PASS",
-                    details="Business principles display correctly in DoR markdown with arrow notation and comma separation",
+                    details="Business principles display correctly in DoR markdown with arrow notation and principle-technical mapping",
                     tier_required=ProductionTier.TIER_1_SINGLE_USER,
                     severity="high"
                 )
