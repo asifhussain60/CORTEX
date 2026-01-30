@@ -234,12 +234,44 @@ class IntentReflection:
                 entities_str += f" +{len(self.key_entities) - 3} more"
             lines.append(f"| **Entities** | {entities_str} |")
         
-        # Governance (only if applicable rules)
+        # Business Principles (only if applicable rules) - separate lines per rule
         if self.governance_rules:
-            # Convert CORE-* IDs to human-readable principles
-            rules_display = [get_display_name(rule) for rule in self.governance_rules[:3]]
-            rules_str = ", ".join(rules_display)
-            lines.append(f"| **Rules** | {rules_str} |")
+            # Convert CORE-* IDs to business principles with technical details
+            # Format: "🎯 Principle Name → Technical (CORE-ID)"
+            # Example: "🎯 Red-Green-Refactor Discipline → TDD (CORE-008)"
+            from cortex.orchestrators.core.governance_principles import PRINCIPLE_NAMES
+            
+            principles_lines = []
+            for rule_id in self.governance_rules[:5]:  # Show up to 5 rules
+                principle = PRINCIPLE_NAMES.get(rule_id)
+                if principle:
+                    # Extract technical term from principle if present
+                    # E.g., "Red-Green-Refactor Discipline" → "TDD"
+                    technical_map = {
+                        "CORE-008": "TDD",
+                        "CORE-011": "Type Safety",
+                        "CORE-012": "Documentation",
+                        "CORE-013": "Error Handling",
+                        "CORE-026": "Git Safety",
+                        "CORE-027": "Audit Trail",
+                        "CORE-029": "Response Format",
+                        "CORE-030": "Implementation Truth",
+                        "CORE-035": "No Duplicates",
+                        "CORE-038": "File Placement",
+                        "CORE-040": "Doc Lifecycle",
+                    }
+                    technical = technical_map.get(rule_id, "")
+                    if technical:
+                        principles_lines.append(f"**{principle}** → {technical} ({rule_id})")
+                    else:
+                        principles_lines.append(f"**{principle}** ({rule_id})")
+                else:
+                    # Fallback if no principle mapping
+                    principles_lines.append(rule_id)
+            
+            # Join with <br/> for separate lines in same table cell
+            principles_str = "<br/>".join(principles_lines)
+            lines.append(f"| **Business Principles** | {principles_str} |")
         
         # Add execution plan section
         lines.extend([
