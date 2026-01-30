@@ -17,10 +17,11 @@ metadata:
   rule_count: 29
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-28 - PHASE-11: Add CORE-041 Event Idempotency rule"
-  version: "3.2"
+  last_update: "2026-01-30 - Add Jim Collins 'Good to Great' principle aliases"
+  version: "3.3"
   consolidation_date: "2026-01-28"
   consolidation_status: "Phase 11 Prep Complete - CORE-041 added for Event-Driven Architecture"
+  naming_philosophy: "Dual naming system - CORE-* IDs (canonical) + Jim Collins aliases (human-readable)"
 
 categories:
   - orchestration_lifecycle
@@ -40,12 +41,17 @@ rules:
   # CORE-001: Incremental Execution
   # --------------------------------------------------------------------------
   - rule_id: CORE-001
+    alias: "Flywheel Effect"
+    jim_collins_principle: "Good to Great - Chapter 8"
     category: orchestration_lifecycle
     severity: blocked
     name: Incremental Autonomous Execution
     description: |
       ALL orchestrators MUST work in small increments (<500 lines per turn)
       to prevent token limit errors. State MUST persist between increments.
+      
+      Like the flywheel, progress comes from consistent small pushes in the same direction,
+      building momentum over time rather than one dramatic transformation.
     validation:
       - Operations split into <500 line increments
       - State persisted between turns
@@ -55,11 +61,16 @@ rules:
   # CORE-002: Markdown Report Suppression
   # --------------------------------------------------------------------------
   - rule_id: CORE-002
+    alias: "Stop Doing List"
+    jim_collins_principle: "Good to Great - Chapter 6"
     category: response_formatting
     severity: blocked
     name: Markdown Report Suppression (Workspace-Wide)
     description: |
       SUPPRESS markdown report/status files UNLESS explicitly requested by user.
+      
+      Great organizations don't just decide what TO do - they decide what NOT to do.
+      Stop generating unnecessary documentation that creates busywork.
       
       This rule applies workspace-wide (root + all subdirectories).
       
@@ -139,11 +150,16 @@ rules:
   # CORE-008: TDD Enforcement
   # --------------------------------------------------------------------------
   - rule_id: CORE-008
+    alias: "Culture of Discipline"
+    jim_collins_principle: "Good to Great - Chapter 6"
     category: development_workflow
     severity: blocked
     name: Test-First Development
     description: |
       Tests MUST exist BEFORE implementation (RED → GREEN → REFACTOR).
+      
+      A culture of discipline means doing what needs to be done, not what's easy.
+      Writing tests first requires discipline but creates sustainable excellence.
     validation:
       - Test file exists first
       - Test fails initially (RED)
@@ -153,11 +169,16 @@ rules:
   # CORE-011: Type Hints
   # --------------------------------------------------------------------------
   - rule_id: CORE-011
+    alias: "Rigorous Discipline"
+    jim_collins_principle: "Good to Great - Chapter 6"
     category: quality_gates
     severity: blocked
     name: Python Type Hints Required
     description: |
       ALL Python functions MUST have complete type hints.
+      
+      Discipline without rigor is chaos. Type hints provide the rigor that makes
+      code maintainable at scale.
     validation:
       - Parameters have type hints
       - Return types specified
@@ -167,11 +188,16 @@ rules:
   # CORE-012: Docstrings
   # --------------------------------------------------------------------------
   - rule_id: CORE-012
+    alias: "Clear Communication"
+    jim_collins_principle: "Good to Great - Chapter 6"
     category: quality_gates
     severity: blocked
     name: Docstrings Required
     description: |
       ALL public functions/classes MUST have Google-style docstrings.
+      
+      Disciplined people engage in dialogue and debate, but documentation ensures
+      everyone has the context needed for effective communication.
     validation:
       - Public APIs documented
       - Args/Returns/Raises sections
@@ -195,11 +221,16 @@ rules:
   # CORE-017: Governance Enforcement
   # --------------------------------------------------------------------------
   - rule_id: CORE-017
+    alias: "First Who, Then What"
+    jim_collins_principle: "Good to Great - Chapter 3"
     category: security_privacy
     severity: blocked
     name: Strict Governance
     description: |
       ALL rules enforced strictly. No overrides. All violations logged.
+      
+      Get the right rules (who) in place first, then decide what to build.
+      Governance establishes the foundation before execution.
     validation:
       - Enforcement = strict
       - Override = false
@@ -251,11 +282,16 @@ rules:
   # CORE-024: MCP Tool Decorator
   # --------------------------------------------------------------------------
   - rule_id: CORE-024
+    alias: "Technology Accelerators"
+    jim_collins_principle: "Good to Great - Chapter 7"
     category: architecture_integrity
     severity: blocked
     name: "@mcp_tool Required"
     description: |
       ALL MCP tools MUST use @mcp_tool decorator for registration.
+      
+      Technology is an accelerator of momentum, not a creator of it. The decorator
+      pattern accelerates tool discovery but doesn't replace good architecture.
     validation:
       - Decorator on all tools
       - Registered in manifest
@@ -302,12 +338,17 @@ rules:
   # CORE-027: Audit Trail for Phase Completion
   # --------------------------------------------------------------------------
   - rule_id: CORE-027
+    alias: "Level 5 Leadership"
+    jim_collins_principle: "Good to Great - Chapter 2"
     category: auditability
     severity: blocked
     name: Audit Verification Required
     description: |
       Phase completion MUST be validated by audit trail verification.
       No phase lock without queryable audit entries.
+      
+      Level 5 leaders display humility and professional will. The audit trail
+      provides transparency and accountability - humble admission of all actions.
     validation:
       - Each AC-ID has AC_START, AC_EXECUTE, AC_COMPLETE entries
       - Hash chain integrity verified
@@ -502,6 +543,8 @@ rules:
   # CORE-032: Mandatory Intent Classification (DoR - Definition of Ready)
   # --------------------------------------------------------------------------
   - rule_id: CORE-032
+    alias: "Hedgehog Concept"
+    jim_collins_principle: "Good to Great - Chapter 5"
     category: orchestration_lifecycle
     severity: blocked
     name: Mandatory Intent Classification (DoR Checkpoint)
@@ -509,9 +552,9 @@ rules:
       EVERY operation MUST have intent classified BEFORE execution starts.
       This is enforced architecturally via IntentRouterFactory pattern.
       
-      Problem: Intent classification was optional (Stage 1 skippable).
-      Solution: Factory pattern makes classification MANDATORY - factory
-      won't create orchestrator until intent is classified.
+      The Hedgehog Concept: Know what you can be best at. Intent classification
+      ensures we understand the operation deeply before executing - finding our
+      unique intersection of passion, capability, and value.
       
       Enforcement: IntentRouterFactory.create_router() → RouterInstance
       RouterInstance.execute() requires prior RouterInstance.classify_intent()
@@ -841,6 +884,8 @@ rules:
   # CORE-030: Implementation Truth Enforcement (AC-PERMANENT-FIX-005)
   # --------------------------------------------------------------------------
   - rule_id: CORE-030
+    alias: "Confront the Brutal Facts"
+    jim_collins_principle: "Good to Great - Chapter 4"
     category: quality_gates
     severity: blocked
     name: Implementation Truth Enforcement
@@ -848,8 +893,9 @@ rules:
       CORTEX MUST validate claims against actual code BEFORE answering.
       Documentation is guidance only - implementation is the single source of truth.
       
-      This rule prevents documentation-driven hallucination where prompts
-      contain aspirational/false claims that diverge from actual implementation.
+      "You must never confuse faith that you will prevail in the end—which you can
+      never afford to lose—with the discipline to confront the most brutal facts
+      of your current reality." The code is the brutal fact. Face it first.
     
     enforcement_protocol:
       1_check_implementation_first:
@@ -946,12 +992,17 @@ rules:
   # CORE-035: Single Canonical Implementation (AC-PERMANENT-FIX-007)
   # --------------------------------------------------------------------------
   - rule_id: CORE-035
+    alias: "One Thing Done Best"
+    jim_collins_principle: "Good to Great - Chapter 5 (Hedgehog Simplicity)"
     category: architecture
     severity: blocked
     name: Single Canonical Implementation
     description: |
       Each concept, pattern, or component MUST have exactly ONE canonical implementation.
       No *_unified, *_refactored, *_v2, *_alternative, *_new, *_old variants allowed.
+      
+      Like the hedgehog that knows "one big thing," each concept should have one
+      implementation. Foxes know many things but hedgehogs know one thing deeply.
       
       This rule prevents:
       - Competing implementations causing confusion
