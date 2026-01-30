@@ -269,8 +269,8 @@ class IntentReflection:
                     # Fallback if no principle mapping
                     principles_lines.append(rule_id)
             
-            # Join with <br/> for separate lines in same table cell
-            principles_str = "<br/>".join(principles_lines)
+            # Join with commas for better rendering in GitHub Copilot Chat
+            principles_str = ", ".join(principles_lines)
             lines.append(f"| **Business Principles** | {principles_str} |")
         
         # Add execution plan section

@@ -82,7 +82,7 @@ class ProductionReadinessAssessment:
         Validates:
         - IntentReflection.to_markdown() includes Business Principles row
         - Principles show with arrow notation: **Principle** → Technical (CORE-ID)
-        - Line breaks between principles using <br/> tags
+        - Comma-separated format for better rendering in GitHub Copilot Chat
         - Up to 5 principles displayed per DoR
         
         Returns:
@@ -106,7 +106,7 @@ class ProductionReadinessAssessment:
             # Validate business principles display
             checks = [
                 ("Business Principles row", "**Business Principles**" in markdown),
-                ("Line breaks present", "<br/>" in markdown),
+                ("Comma separation", ", " in markdown),
                 ("Arrow notation", "→" in markdown),
                 ("Bold principles", "**" in markdown),
                 ("CORE-IDs present", "CORE-008" in markdown)
@@ -119,7 +119,7 @@ class ProductionReadinessAssessment:
                     check_id="PROD-CHECK-001",
                     name="DoR Business Principles Display",
                     status="PASS",
-                    details="Business principles display correctly in DoR markdown with arrow notation and line breaks",
+                    details="Business principles display correctly in DoR markdown with arrow notation and comma separation",
                     tier_required=ProductionTier.TIER_1_SINGLE_USER,
                     severity="high"
                 )

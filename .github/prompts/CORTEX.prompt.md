@@ -151,7 +151,7 @@ On receiving ANY user request:
 | **Scope** | `{FILE|MODULE|SYSTEM|DOMAIN}` |
 | **Impact** | 🔵 Low / 🟡 Medium / 🔴 High |
 | **Entities** | `file.py`, `ClassName`, `function_name` |
-| **Business Principles** | **Quality First** → TDD (CORE-008)<br/>**Maintainability** → Type Safety (CORE-011)<br/>**Documentation** → Docstrings (CORE-012) |
+| **Business Principles** | **Quality First** → TDD (CORE-008), **Maintainability** → Type Safety (CORE-011), **Documentation** → Docstrings (CORE-012) |
 
 ---
 
