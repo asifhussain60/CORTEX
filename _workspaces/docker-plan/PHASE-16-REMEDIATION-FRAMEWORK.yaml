@@ -21,19 +21,14 @@ metadata:
   plan_name: "CORTEX Remediation & Lessons Learned Framework"
   date: "2026-01-30"
   phase: "16"
-  status: "ACTIVE"
+  status: "IN_PROGRESS"
   author: "CORTEX Team"
   authority: "Session-based lessons learned capture"
   
   # Source session
-  source_session: "chat01.md + chat02.md (2026-01-30)"
+  source_session: "chat01.md (2026-01-30)"
   permanent_fixes_captured: 3
   total_permanent_fixes: 12  # AC-PERMANENT-FIX-001 through 012
-  tasks_completed: 1  # REM-003 (Governance Defense-in-Depth)
-  autonomous_phase_status:
-    phase_1_integration_tests: "✅ COMPLETE (19 tests, 0.14s)"
-    phase_2_prevention_scripts: "✅ COMPLETE (REM-001, REM-002)"
-    phase_3_prevention_integration: "✅ COMPLETE (pre-commit hooks)"
   
   # Strategic alignment
   strategic_goals:
@@ -127,15 +122,13 @@ lessons_learned:
          - REFACTOR: Maintainability → Clean Code, Efficiency → Performance
     
     prevention_measures:
-      - measure: "Documentation-Code Sync Check (REM-001)"
+      - measure: "Documentation-Code Sync Check"
         description: "Pre-commit hook to verify prompt fields exist in code"
-        status: "✅ IMPLEMENTED"
+        status: "PLANNED"
         implementation: "scripts/verify_prompt_fields.py"
-        integration: ".pre-commit-config.yaml (verify-prompt-fields hook)"
-        validation: "8/8 DoR fields passing"
       - measure: "DoR Field Verification Test"
         description: "Unit test that validates all prompt fields are rendered"
-        status: "✅ IMPLEMENTED"
+        status: "IMPLEMENTED"
         implementation: "tests/unit/orchestrators/core/test_master_orchestrator_dor_integration.py"
     
     verification:
@@ -180,17 +173,10 @@ lessons_learned:
       ```
     
     prevention_measures:
-      - measure: "Mock Target Verification (REM-002)"
+      - measure: "Mock Target Verification"
         description: "CI check that mock targets exist in codebase"
-        status: "✅ IMPLEMENTED"
+        status: "PLANNED"
         implementation: "scripts/verify_mock_targets.py"
-        integration: ".pre-commit-config.yaml (verify-mock-targets hook)"
-        validation: "18 valid, 30 obsolete mocks detected"
-        findings: |
-          - Detects outdated @patch decorators after refactoring
-          - Filters stdlib/external packages (subprocess, requests, etc.)
-          - Reports obsolete mocks with file/line number
-          - Helps maintain test suite accuracy
 
   # -------------------------------------------------------------------------
   # AC-PERMANENT-FIX-011: DoR Approval Prompt Simplification
@@ -516,10 +502,9 @@ tasks:
   
   REM-003:
     title: "Governance Defense-in-Depth (4-Layer Enforcement)"
-    status: "COMPLETE"
+    status: "IN_PROGRESS"
     priority: "P0-CRITICAL"
     duration: "4.5-6.5 hours"
-    completed_date: "2026-01-30"
     description: |
       Implement multi-layered governance enforcement to prevent CORE rule
       violations and ensure intent classification integrity.
@@ -546,49 +531,38 @@ tasks:
     subtasks:
       - id: "REM-003-01"
         title: "Enhance EnforcementOrchestrator with intent validation"
-        status: "COMPLETE"
         files:
           - "cortex/orchestrators/core/enforcement_orchestrator.py"
         tests:
-          - "tests/unit/orchestrators/core/test_enforcement_intent_validation.py (planned)"
+          - "tests/unit/orchestrators/core/test_enforcement_intent_validation.py"
       
       - id: "REM-003-02"
         title: "Add runtime governance monitoring to StateManager"
-        status: "COMPLETE"
         files:
           - "cortex/brain/core/state_manager.py"
         tests:
-          - "tests/unit/brain/core/test_state_manager_governance.py (planned)"
+          - "tests/unit/brain/core/test_state_manager_governance.py"
       
       - id: "REM-003-03"
         title: "Enhance audit detection in EnhancedAuditLogger"
-        status: "COMPLETE"
         files:
           - "cortex/infrastructure/enhanced_audit_logger.py"
         tests:
-          - "tests/unit/infrastructure/test_audit_logger_detection.py (planned)"
+          - "tests/unit/infrastructure/test_audit_logger_detection.py"
       
       - id: "REM-003-04"
         title: "Add enforcement integrity check to production readiness"
-        status: "COMPLETE"
         files:
           - "cortex/brain/production/readiness_assessment.py"
           - "cortex_brain/tier2/governance/production-rules.yaml"
         tests:
-          - "tests/unit/brain/production/test_readiness_enforcement.py (planned)"
+          - "tests/unit/brain/production/test_readiness_enforcement.py"
       
       - id: "REM-003-05"
         title: "Document enforcement architecture in prompts"
-        status: "COMPLETE"
         files:
           - ".github/prompts/CORTEX.prompt.md"
           - ".github/copilot-instructions.md"
-    
-    verification:
-      production_readiness: "100% (4/4 checks passing)"
-      pre_push_verification: "96.4% (14 passed, 1 warning)"
-      commit_hash: "1d6c3e7f7"
-      documentation: "Both prompt files updated with 4-layer architecture"
   
   REM-004:
     title: "Create Lessons Learned template"
