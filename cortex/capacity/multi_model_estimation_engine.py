@@ -188,9 +188,19 @@ class CriticalPathEstimator:
             
         Returns:
             Total project duration in hours
+            
+        Raises:
+            ValueError: If circular dependencies detected or invalid dependencies
         """
         if not tasks:
             return 0.0
+        
+        # Validate dependencies exist
+        for task_id, task_data in tasks.items():
+            deps = task_data.get("dependencies", [])
+            for dep in deps:
+                if dep not in tasks:
+                    raise ValueError(f"Task '{task_id}' depends on non-existent task '{dep}'")
         
         # Initialize
         task_objects = {}
@@ -201,9 +211,21 @@ class CriticalPathEstimator:
                 dependencies=task_data.get("dependencies", [])
             )
         
-        # Forward pass - calculate earliest start/finish
+        # Forward pass - calculate earliest start/finish with cycle detection
+        visited = set()
+        recursion_stack = set()
+        
         def calculate_earliest(task_id: str) -> float:
-            """Calculate earliest finish time for task."""
+            """Calculate earliest finish time for task with cycle detection."""
+            # Detect circular dependencies
+            if task_id in recursion_stack:
+                raise ValueError(f"Circular dependency detected involving task '{task_id}'")
+            
+            # Already calculated
+            if task_id in visited:
+                return task_objects[task_id].earliest_finish
+            
+            recursion_stack.add(task_id)
             task = task_objects[task_id]
             
             if not task.dependencies:
@@ -215,6 +237,10 @@ class CriticalPathEstimator:
                 )
             
             task.earliest_finish = task.earliest_start + task.duration_hours
+            
+            recursion_stack.remove(task_id)
+            visited.add(task_id)
+            
             return task.earliest_finish
         
         # Calculate for all tasks
