@@ -17,6 +17,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.core.intent_router import RoutingDecision, IntentType, IntentRouter
+from cortex.orchestrators.core.governance_principles import get_display_name
 from cortex.core.result import Ok, Err
 from cortex.models.canonical_enums import ApprovalStatus
 
@@ -235,7 +236,9 @@ class IntentReflection:
         
         # Governance (only if applicable rules)
         if self.governance_rules:
-            rules_str = ", ".join(self.governance_rules[:3])
+            # Convert CORE-* IDs to human-readable principles
+            rules_display = [get_display_name(rule) for rule in self.governance_rules[:3]]
+            rules_str = ", ".join(rules_display)
             lines.append(f"| **Rules** | {rules_str} |")
         
         # Add execution plan section

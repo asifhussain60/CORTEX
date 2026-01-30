@@ -63,6 +63,7 @@ class GovernanceRule:
         tier: int,
         category: str = "general",
         severity: str = "warning",
+        principle: str = "",
     ):
         """
         Initialize a governance rule.
@@ -74,6 +75,7 @@ class GovernanceRule:
             tier: Governance tier (0, 1, or 2)
             category: Rule category
             severity: Severity level (blocked, warning, info)
+            principle: Business principle alias (e.g., "Confront Brutal Facts")
         """
         self.rule_id = rule_id
         self.name = name
@@ -81,11 +83,19 @@ class GovernanceRule:
         self.tier = tier
         self.category = category
         self.severity = severity
+        self.principle = principle
     
     @property
     def is_immutable(self) -> bool:
         """Check if rule is immutable (Tier 0)."""
         return self.tier == 0
+    
+    @property
+    def display_name(self) -> str:
+        """Get display name with principle if available."""
+        if self.principle:
+            return f"{self.principle} ({self.rule_id})"
+        return f"{self.name} ({self.rule_id})"
     
     def __repr__(self) -> str:
         """String representation."""
@@ -184,6 +194,7 @@ class GovernanceRegistry:
             description = rule_data.get("description", "")
             category = rule_data.get("category", "general")
             severity = rule_data.get("severity", "warning")
+            principle = rule_data.get("principle", "")
             
             if not rule_id:
                 self._logger.warning("Rule missing rule_id, skipping")
@@ -196,6 +207,7 @@ class GovernanceRegistry:
                 tier=0,
                 category=category,
                 severity=severity,
+                principle=principle,
             )
             
             self._tier0_rules[rule_id] = rule
