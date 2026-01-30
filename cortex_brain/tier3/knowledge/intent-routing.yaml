@@ -1,71 +1,269 @@
 # Intent Routing Rules - TIER 3 Knowledge Base
 # AC-FUTURE-001: Configurable routing rules loaded at runtime
+# AC-PHASE-8.2-01: Extended with orchestrator references and keyword mapping
 # Replaces hardcoded routing_rules dict in IntentRouter
-# Authority: CORE-031 declarative autowiring
+# Authority: CORE-031 declarative autowiring, CORE-035 (Single Canonical Implementation)
+
+# =============================================================================
+# PHASE 8.2: UNIFIED USER-REQUEST-TO-ORCHESTRATOR MAPPING
+# =============================================================================
+# Date Extended: 2026-01-30
+# New Fields:
+#   - orchestrator: Actual orchestrator class name (for instance resolution)
+#   - keywords: Trigger words for keyword-based routing
+#   - fallback_orchestrators: Ranked alternatives for ambiguous requests
+#   - confidence_boost: Additional confidence from keyword matches
+#   - blocking: Whether routing rule is enforced (Tier 0)
+# =============================================================================
 
 routing_rules:
   # IMPLEMENT intent routing
   implement:
+    # Onboarding-specific requests
+    onboarding:
+      handler: OnboardingOrchestrator
+      orchestrator: "OnboardingOrchestrator"  # NEW: Phase 8.2
+      keywords:  # NEW: Phase 8.2
+        - "onboard"
+        - "setup"
+        - "initialize"
+        - "bootstrap"
+        - "welcome"
+        - "getting started"
+        - "first time"
+      fallback_orchestrators:  # NEW: Phase 8.2
+        - "SetupOrchestrator"
+        - "LENSOrchestrator"
+      confidence_multiplier: 1.0
+      confidence_boost: 0.25  # NEW: Phase 8.2
+      blocking: true  # NEW: Phase 8.2
+    
+    # LENS intelligence requests
+    lens_analysis:
+      handler: LENSOrchestrator
+      orchestrator: "LENSOrchestrator"  # NEW: Phase 8.2
+      keywords:  # NEW: Phase 8.2
+        - "lens"
+        - "analyze"
+        - "inspect"
+        - "examine"
+        - "code intelligence"
+        - "git history"
+        - "ast"
+        - "complexity"
+      fallback_orchestrators:  # NEW: Phase 8.2
+        - "OnboardingOrchestrator"
+      confidence_multiplier: 1.0
+      confidence_boost: 0.20  # NEW: Phase 8.2
+      blocking: true  # NEW: Phase 8.2
+    
     orchestrators:
       handler: ImplementationOrchestrator
-      confidence_multiplier: 1.0
+      orchestrator: "TDDOrchestrator"  # NEW: Phase 8.2
       keywords: ["create", "add", "new", "implement", "develop"]
+      fallback_orchestrators: ["PlanningOrchestrator"]  # NEW: Phase 8.2
+      confidence_multiplier: 1.0
+      confidence_boost: 0.10  # NEW: Phase 8.2
+      blocking: false  # NEW: Phase 8.2
+    
     core:
       handler: CoreImplementationHandler
+      orchestrator: "TDDOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.95
+      blocking: false  # NEW: Phase 8.2
+    
     infrastructure:
       handler: InfrastructureImplementationHandler
+      orchestrator: "TDDOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.90
+      blocking: false  # NEW: Phase 8.2
+    
     default:
       handler: GeneralImplementationHandler
+      orchestrator: "TDDOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.75
+      blocking: false  # NEW: Phase 8.2
 
   # FIX intent routing
   fix:
     orchestrators:
       handler: OrchestratorFixOrchestrator
+      orchestrator: "IntentRouter"  # NEW: Phase 8.2 - Routes to specialized fix handlers
+      keywords: ["fix", "bug", "issue", "error", "race condition", "resolve", "repair"]
+      fallback_orchestrators: ["TDDOrchestrator"]  # NEW: Phase 8.2
       confidence_multiplier: 1.0
-      keywords: ["fix", "bug", "issue", "error", "race condition"]
+      confidence_boost: 0.15  # NEW: Phase 8.2
+      blocking: false  # NEW: Phase 8.2
+    
     core:
       handler: CoreFixOrchestrator
+      orchestrator: "IntentRouter"  # NEW: Phase 8.2
       confidence_multiplier: 0.95
+      blocking: false  # NEW: Phase 8.2
+    
     infrastructure:
       handler: InfrastructureFixOrchestrator
+      orchestrator: "IntentRouter"  # NEW: Phase 8.2
       confidence_multiplier: 0.90
+      blocking: false  # NEW: Phase 8.2
+    
     default:
       handler: GeneralFixOrchestrator
+      orchestrator: "IntentRouter"  # NEW: Phase 8.2
       confidence_multiplier: 0.75
+      blocking: false  # NEW: Phase 8.2
 
   # REFACTOR intent routing
   refactor:
     orchestrators:
       handler: RefactoringOrchestrator
+      orchestrator: "RefactoringOrchestrator"  # NEW: Phase 8.2
+      keywords: ["refactor", "improve", "cleanup", "optimize", "performance", "restructure", "modernize"]
+      fallback_orchestrators: ["TDDOrchestrator"]  # NEW: Phase 8.2
       confidence_multiplier: 1.0
-      keywords: ["refactor", "improve", "cleanup", "optimize", "performance"]
+      confidence_boost: 0.20  # NEW: Phase 8.2
+      blocking: false  # NEW: Phase 8.2
+    
     core:
       handler: CoreRefactoringHandler
+      orchestrator: "RefactoringOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.90
+      blocking: false  # NEW: Phase 8.2
+    
     infrastructure:
       handler: InfrastructureRefactoringHandler
+      orchestrator: "RefactoringOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.85
+      blocking: false  # NEW: Phase 8.2
+    
     default:
       handler: GeneralRefactoringHandler
+      orchestrator: "RefactoringOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.70
+      blocking: false  # NEW: Phase 8.2
 
   # FILE_CREATION intent routing (CORE-038/CORE-039 compliance)
   file_creation:
     documentation:
       handler: DocumentationOrchestrator
+      orchestrator: "DocumentationOrchestrator"  # NEW: Phase 8.2
+      keywords: ["document", "write", "generate docs", "readme"]  # NEW: Phase 8.2
       confidence_multiplier: 1.0
+      confidence_boost: 0.15  # NEW: Phase 8.2
+      blocking: false  # NEW: Phase 8.2
+    
     governance:
       handler: DocumentationOrchestrator
+      orchestrator: "DocumentationOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.95
+      blocking: false  # NEW: Phase 8.2
+    
     reports:
       handler: DocumentationOrchestrator
+      orchestrator: "DocumentationOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.95
+      blocking: false  # NEW: Phase 8.2
+    
     default:
       handler: DocumentationOrchestrator
+      orchestrator: "DocumentationOrchestrator"  # NEW: Phase 8.2
       confidence_multiplier: 0.80
+      blocking: false  # NEW: Phase 8.2
+
+# =============================================================================
+# PHASE 8.2: ORCHESTRATOR-SPECIFIC ROUTING (Direct keyword-to-orchestrator)
+# =============================================================================
+# These rules allow bypassing intent detection when specific orchestrator
+# keywords are detected with high confidence.
+
+orchestrator_direct_routing:  # NEW: Phase 8.2
+  # Setup and configuration
+  setup:
+    orchestrator: "SetupOrchestrator"
+    keywords:
+      - "setup"
+      - "configure"
+      - "config"
+      - "settings"
+      - "preferences"
+    confidence_threshold: 0.85
+    fallback_orchestrators:
+      - "OnboardingOrchestrator"
+    blocking: true
+  
+  # Planning and roadmap
+  planning:
+    orchestrator: "PlanningOrchestrator"
+    keywords:
+      - "plan"
+      - "roadmap"
+      - "milestone"
+      - "phase"
+      - "timeline"
+      - "schedule"
+    confidence_threshold: 0.80
+    fallback_orchestrators:
+      - "MasterOrchestrator"
+    blocking: false
+  
+  # Documentation
+  documentation:
+    orchestrator: "DocumentationOrchestrator"
+    keywords:
+      - "document"
+      - "docs"
+      - "readme"
+      - "guide"
+      - "manual"
+      - "tutorial"
+    confidence_threshold: 0.75
+    fallback_orchestrators:
+      - "PlanningOrchestrator"
+    blocking: false
+  
+  # Conversation and interaction
+  conversation:
+    orchestrator: "ConversationOrchestrator"
+    keywords:
+      - "chat"
+      - "conversation"
+      - "multi-turn"
+      - "dialogue"
+      - "ask"
+    confidence_threshold: 0.70
+    fallback_orchestrators:
+      - "InteractionOrchestrator"
+    blocking: false
+  
+  # Testing
+  testing:
+    orchestrator: "TDDOrchestrator"
+    keywords:
+      - "test"
+      - "tdd"
+      - "unit test"
+      - "integration test"
+      - "coverage"
+      - "pytest"
+    confidence_threshold: 0.85
+    fallback_orchestrators:
+      - "MasterOrchestrator"
+    blocking: false
+  
+  # Deployment
+  deployment:
+    orchestrator: "DeploymentOrchestrator"
+    keywords:
+      - "deploy"
+      - "release"
+      - "production"
+      - "docker"
+      - "container"
+      - "kubernetes"
+    confidence_threshold: 0.80
+    fallback_orchestrators:
+      - "PlanningOrchestrator"
+    blocking: false
 
 # Composite intent detection rules - AC-FUTURE-005
 # Detect when request contains multiple intents

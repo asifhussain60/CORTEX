@@ -98,6 +98,19 @@ metadata:
   # Phase 8: CORE-035 Duplicate Consolidation 📋 PLANNED (P1-HIGH - 12-16 hours)
   #   - P0 Critical: 20 duplicates (git_history_analyzer, ast_analyzer, etc.)
   #   - P1 High: 45 duplicates (common utilities, infrastructure)
+  # Phase 8.2: Unified User-Request-to-Orchestrator Mapping 🚧 ACTIVE (P0-CRITICAL)
+  #   - Task ROUTE-001: Extend intent-routing.yaml schema 📋 PLANNED
+  #   - Task ROUTE-002: Create OrchestratorLookup adapter 📋 PLANNED
+  #   - Task ROUTE-003: Enhance IntentRouter with keyword extraction 📋 PLANNED
+  #   - Task ROUTE-004: Update RoutingDecision dataclass 📋 PLANNED
+  #   - Task ROUTE-005: Add RoutingEnforcementEngine (Tier 0 blocking) 📋 PLANNED
+  #   - Task ROUTE-006: Integration tests (15 end-to-end scenarios) 📋 PLANNED
+  #   - Phase 8.3: Semantic ranking + disambiguation 📋 PLANNED
+  #   - Phase 8.4: Optional NLP enhancement 📋 PLANNED
+  #   - Phase 8.5: LENS Microsoft stack expertise (C#, SQL, Oracle, Angular) 📋 PLANNED
+  #   - Phase 8.6: Production readiness verification (6 new checks) 📋 PLANNED
+  #   - Timeline: 4 weeks (6 sub-phases), ~1200 LOC, 60+ tests
+  #   - See: PHASE-8.2-UNIFIED-ROUTING.yaml for complete specification
   #   - P2 Medium: 48 duplicates (domain-specific implementations)
   #   - 113 total violations → 113 canonical implementations
   #   - 9% codebase reduction (237 → 113 files)
