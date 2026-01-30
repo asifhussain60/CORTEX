@@ -1,0 +1,362 @@
+# ============================================================================
+# CORTEX DOCKER-PLAN: PHASE 16 - REMEDIATION & LESSONS LEARNED FRAMEWORK
+# ============================================================================
+# Date: 2026-01-30
+# Authority: CORTEX Master Orchestrator
+# Status: ESTABLISHED
+# Source: Session lessons from AC-PERMANENT-FIX-010 implementation
+#
+# Strategic Context:
+#   This phase captures lessons learned from debugging sessions and establishes
+#   a systematic remediation framework to prevent recurring issues.
+#
+# Key Principles:
+#   - Root Cause Analysis: Identify WHY issues occur, not just symptoms
+#   - Permanent Fixes: AC-PERMANENT-FIX pattern for tracking
+#   - Prevention: Pre-commit hooks and CI gates to catch regressions
+#   - Documentation-Code Sync: Ensure prompts match implementations
+# ============================================================================
+
+metadata:
+  plan_name: "CORTEX Remediation & Lessons Learned Framework"
+  date: "2026-01-30"
+  phase: "16"
+  status: "ESTABLISHED"
+  author: "CORTEX Team"
+  authority: "Session-based lessons learned capture"
+  
+  # Source session
+  source_session: "chat01.md (2026-01-30)"
+  permanent_fixes_captured: 1
+  total_permanent_fixes: 10  # AC-PERMANENT-FIX-001 through 010
+  
+  # Strategic alignment
+  strategic_goals:
+    continuous_improvement:
+      rating: "★★★★★"
+      rationale: "Systematic capture and prevention of recurring issues"
+    quality_first:
+      rating: "★★★★★"
+      rationale: "Root cause analysis drives permanent solutions"
+    documentation_accuracy:
+      rating: "★★★★★"
+      rationale: "Ensures prompt specifications match code implementations"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+executive_summary:
+  problem_statement: |
+    During development sessions, issues are identified and fixed, but:
+    - Lessons learned are not systematically captured
+    - Similar issues recur in different contexts
+    - Root causes are fixed but prevention measures are not implemented
+    - Documentation and code drift apart over time
+    
+    Example (AC-PERMANENT-FIX-010):
+    - DoR Intent Classification promised "Business Principles" in prompt
+    - Actual code in dor_approval_gate.py never implemented this field
+    - Issue persisted across multiple sessions until root cause analysis
+
+  solution_overview: |
+    Establish a Remediation Framework that:
+    1. Captures lessons learned in structured YAML format
+    2. Tracks permanent fixes with AC-PERMANENT-FIX-XXX identifiers
+    3. Implements prevention measures (pre-commit, CI gates)
+    4. Verifies documentation-code sync as part of review process
+
+# ============================================================================
+# LESSONS LEARNED REGISTRY
+# ============================================================================
+lessons_learned:
+  
+  # -------------------------------------------------------------------------
+  # AC-PERMANENT-FIX-010: Business Principles in DoR Display
+  # -------------------------------------------------------------------------
+  AC-PERMANENT-FIX-010:
+    title: "Business Principles Missing from DoR Intent Classification"
+    date: "2026-01-30"
+    severity: "MEDIUM"
+    category: "DOCUMENTATION_CODE_SYNC"
+    
+    symptoms:
+      - "DoR Intent Classification displayed in chat lacked Business Principles row"
+      - "Prompt specified Business Principles mapping but output didn't show it"
+      - "Users couldn't see how intent mapped to CORTEX governance rules"
+    
+    root_cause: |
+      The IntentReflection dataclass in dor_approval_gate.py was missing:
+      1. The `business_principles: Dict[str, str]` field definition
+      2. Rendering logic in `to_markdown()` method
+      3. Population logic in `_build_reflection()` method
+      
+      Additionally, the code used HTML `<br/>` tags instead of markdown-friendly
+      ` | ` separators for multi-value fields.
+    
+    files_affected:
+      - path: "cortex/orchestrators/core/dor_approval_gate.py"
+        changes:
+          - "Added business_principles field to IntentReflection dataclass"
+          - "Updated to_markdown() to render Business Principles row"
+          - "Updated _build_reflection() to populate principles by intent type"
+          - "Changed separator from <br/> to | for markdown compatibility"
+      - path: "tests/unit/orchestrators/core/test_master_orchestrator_dor_integration.py"
+        changes:
+          - "Updated test assertions for Business Principles verification"
+          - "Fixed obsolete mock patterns (get_intent_router_factory → IntentRouter)"
+    
+    fix_summary: |
+      1. Added `business_principles: Dict[str, str] = field(default_factory=dict)` 
+         to IntentReflection dataclass
+      2. Added rendering in to_markdown():
+         ```python
+         if self.business_principles:
+             principles_str = " | ".join(
+                 f"{k} → {v}" for k, v in self.business_principles.items()
+             )
+             lines.append(f"| **Business Principles** | {principles_str} |")
+         ```
+      3. Updated _build_reflection() with intent-specific mappings:
+         - IMPLEMENT: Quality First → TDD, Maintainability → Type Safety
+         - FIX: Stability → Root Cause Analysis, Quality First → Test Coverage
+         - REFACTOR: Maintainability → Clean Code, Efficiency → Performance
+    
+    prevention_measures:
+      - measure: "Documentation-Code Sync Check"
+        description: "Pre-commit hook to verify prompt fields exist in code"
+        status: "PLANNED"
+        implementation: "scripts/verify_prompt_fields.py"
+      - measure: "DoR Field Verification Test"
+        description: "Unit test that validates all prompt fields are rendered"
+        status: "IMPLEMENTED"
+        implementation: "tests/unit/orchestrators/core/test_master_orchestrator_dor_integration.py"
+    
+    verification:
+      script: "demo_business_principles.py"
+      expected_output: "Business Principles | Quality First → TDD (CORE-008)"
+      verified_date: "2026-01-30"
+
+  # -------------------------------------------------------------------------
+  # PATTERN: Test Mock Modernization
+  # -------------------------------------------------------------------------
+  TEST-MOCK-PATTERN-001:
+    title: "Obsolete Mock Patterns in Test Suite"
+    date: "2026-01-30"
+    severity: "LOW"
+    category: "TEST_INFRASTRUCTURE"
+    
+    symptoms:
+      - "Tests using get_intent_router_factory pattern failed after refactoring"
+      - "Mock patches targeted non-existent factory functions"
+      - "Test isolation issues due to incorrect mock targets"
+    
+    root_cause: |
+      Historical refactoring removed factory functions but test mocks still
+      referenced them. The pattern evolved:
+      - OLD: get_intent_router_factory() → returns IntentRouter
+      - NEW: Direct IntentRouter instantiation
+    
+    fix_summary: |
+      Updated mock patterns from:
+      ```python
+      @patch("cortex.orchestrators.core.intent_router.get_intent_router_factory")
+      def test_example(self, mock_factory):
+          mock_router = MagicMock()
+          mock_factory.return_value = mock_router
+      ```
+      To:
+      ```python
+      @patch("cortex.orchestrators.core.intent_router.IntentRouter")
+      def test_example(self, mock_router_class):
+          mock_router = MagicMock()
+          mock_router_class.return_value = mock_router
+      ```
+    
+    prevention_measures:
+      - measure: "Mock Target Verification"
+        description: "CI check that mock targets exist in codebase"
+        status: "PLANNED"
+        implementation: "scripts/verify_mock_targets.py"
+
+# ============================================================================
+# REMEDIATION PATTERNS
+# ============================================================================
+remediation_patterns:
+  
+  documentation_code_sync:
+    name: "Documentation-Code Sync Pattern"
+    description: |
+      Ensures that features described in documentation (prompts, README, etc.)
+      are actually implemented in code.
+    
+    detection:
+      - "Grep for field names in prompts/copilot-instructions.md"
+      - "Verify corresponding fields exist in relevant dataclasses"
+      - "Check rendering methods include all fields"
+    
+    resolution:
+      - "Identify missing fields in dataclass definitions"
+      - "Add field with appropriate type and default"
+      - "Update rendering/serialization methods"
+      - "Add population logic in factory/builder methods"
+      - "Create verification test"
+    
+    applicable_rules:
+      - "CORE-030: Implementation Truth"
+      - "CORE-029: Response Header Enforcement"
+
+  separator_standardization:
+    name: "Markdown Separator Standardization"
+    description: |
+      Use markdown-friendly separators instead of HTML in text output.
+    
+    patterns:
+      incorrect: "<br/>, <br>, \\n (in table cells)"
+      correct: " | "
+    
+    rationale: |
+      HTML tags may not render correctly in all markdown contexts.
+      Pipe separators (|) are universally supported and visually clear.
+
+# ============================================================================
+# PREVENTION FRAMEWORK
+# ============================================================================
+prevention_framework:
+  
+  pre_commit_hooks:
+    - name: "verify-prompt-fields"
+      description: "Ensures prompt-documented fields are implemented in code"
+      script: "scripts/verify_prompt_fields.py"
+      status: "PLANNED"
+      priority: "P1-HIGH"
+    
+    - name: "verify-mock-targets"
+      description: "Ensures test mock targets exist in codebase"
+      script: "scripts/verify_mock_targets.py"
+      status: "PLANNED"
+      priority: "P2-MEDIUM"
+  
+  ci_gates:
+    - name: "documentation-code-sync"
+      description: "CI gate that fails if prompt fields are missing from code"
+      implementation: "azure-pipelines.yml"
+      status: "PLANNED"
+      priority: "P1-HIGH"
+  
+  review_checklist:
+    - "All prompt-specified fields are implemented in code"
+    - "Markdown output uses | separator, not HTML tags"
+    - "Test mocks target existing functions/classes"
+    - "Dataclass changes include corresponding test updates"
+
+# ============================================================================
+# TRACKING METRICS
+# ============================================================================
+metrics:
+  permanent_fixes:
+    total: 10
+    by_category:
+      DOCUMENTATION_CODE_SYNC: 1
+      TEST_INFRASTRUCTURE: 1
+      # Historical fixes (001-009) from previous sessions
+      GOVERNANCE: 3
+      WIRING: 2
+      ROUTING: 2
+      AUDIT: 1
+  
+  prevention_effectiveness:
+    target: "90% of issues caught before merge"
+    current: "Manual review only"
+    improvement_plan: "Implement pre-commit hooks and CI gates"
+
+# ============================================================================
+# FUTURE TASKS
+# ============================================================================
+tasks:
+  REM-001:
+    title: "Implement verify-prompt-fields pre-commit hook"
+    status: "PLANNED"
+    priority: "P1-HIGH"
+    duration: "2-3 hours"
+    description: |
+      Create script that:
+      1. Parses copilot-instructions.md for DoR field specifications
+      2. Verifies each field exists in IntentReflection dataclass
+      3. Verifies each field is rendered in to_markdown()
+      4. Fails pre-commit if any field is missing
+  
+  REM-002:
+    title: "Implement verify-mock-targets CI check"
+    status: "PLANNED"
+    priority: "P2-MEDIUM"
+    duration: "1-2 hours"
+    description: |
+      Create script that:
+      1. Finds all @patch decorators in test files
+      2. Extracts target paths
+      3. Verifies each target exists in codebase
+      4. Reports obsolete mocks
+  
+  REM-003:
+    title: "Create Lessons Learned template"
+    status: "COMPLETE"
+    priority: "P0-CRITICAL"
+    duration: "1 hour"
+    description: |
+      This file serves as the template for future lessons learned.
+      Structure established with AC-PERMANENT-FIX-010 as exemplar.
+
+# ============================================================================
+# APPENDIX: AC-PERMANENT-FIX REGISTRY
+# ============================================================================
+permanent_fix_registry:
+  AC-PERMANENT-FIX-001:
+    summary: "Initial governance rule enforcement"
+    date: "2026-01-15"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-002:
+    summary: "Wiring YAML single source of truth"
+    date: "2026-01-18"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-003:
+    summary: "Audit trail enforcement"
+    date: "2026-01-19"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-004:
+    summary: "Intent router factory removal"
+    date: "2026-01-20"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-005:
+    summary: "Git-backed registry canonical import"
+    date: "2026-01-22"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-006:
+    summary: "Response header enforcement"
+    date: "2026-01-23"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-007:
+    summary: "File placement policy"
+    date: "2026-01-24"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-008:
+    summary: "MD file generation prohibition"
+    date: "2026-01-25"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-009:
+    summary: "Canonical registry import path"
+    date: "2026-01-27"
+    status: "ACTIVE"
+  
+  AC-PERMANENT-FIX-010:
+    summary: "Business Principles in DoR display"
+    date: "2026-01-30"
+    status: "ACTIVE"
+    details: "See lessons_learned.AC-PERMANENT-FIX-010 above"

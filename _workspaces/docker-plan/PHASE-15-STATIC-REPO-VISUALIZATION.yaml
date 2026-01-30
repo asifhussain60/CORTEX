@@ -77,7 +77,7 @@ executive_summary: |
     - Incremental knowledge accumulation in company/domains/{domain}/
   
   **ARCHITECTURE PATTERN (Success Model):**
-  Phase 15 follows the proven architecture from RA-Domain-Analysis:
+  Phase 15 follows the proven architecture from reference-architecture:
     ✅ Static HTML pages (no build step, no CDN dependencies)
     ✅ Glassmorphism CSS (onedrive-glass.css style)
     ✅ Alpine.js for tab state management (lightweight)
@@ -124,7 +124,7 @@ architecture:
          ├─ static/                       # Bundled assets (D3.js, CSS, JS)
          │   ├─ css/
          │   │   ├─ cortex-lens.css       # Base styles
-         │   │   └─ glassmorphism.css     # RA-Domain-Analysis inspired
+         │   │   └─ glassmorphism.css     # reference-architecture inspired
          │   ├─ js/
          │   │   ├─ dashboard-core.js     # Shared utilities
          │   │   ├─ d3-visualizations.js  # D3.js wrappers
@@ -292,7 +292,7 @@ architecture:
           - "Entity statistics (property count, method count)"
         visualizations:
           - "D3.js entity-relationship graph"
-          - "Custom entity box rendering (like RA-Domain-Analysis)"
+          - "Custom entity box rendering (like reference-architecture)"
           - "Color-coded by compliance requirements"
         note: "NO Mermaid class diagrams (failed in Phase 14)"
       
@@ -763,7 +763,7 @@ d3_visualization_system:
   rationale: |
     Phase 14 Mermaid diagrams failed to render properly. Phase 15 uses ONLY
     D3.js for all visualizations, following the proven pattern from
-    RA-Domain-Analysis static pages.
+    reference-architecture static pages.
   
   bundled_locally:
     library: "D3.js v7.8.5"
@@ -811,7 +811,7 @@ d3_visualization_system:
           </div>
         </div>
       used_in: "Tab 3 (Classes)"
-      reference: "RA-Domain-Analysis developers/domain-model.html pattern"
+      reference: "reference-architecture developers/domain-model.html pattern"
     
     d3_compliance_heatmap:
       file: "cortex/visualization/renderers/d3_compliance_heatmap_renderer.py (NEW)"
@@ -835,7 +835,7 @@ d3_visualization_system:
         - Arrows with labels
         - Compliance markers (⚠️ icons)
       used_in: "Tab 1 (Overview), product/workflow-diagrams.html"
-      reference: "RA-Domain-Analysis workflow.html ASCII-art pattern"
+      reference: "reference-architecture workflow.html ASCII-art pattern"
 
   visualization_examples:
     entity_relationship_graph: |
@@ -1124,7 +1124,7 @@ onboarding_workflow:
 
 regeneration_guide:
   purpose: |
-    Since _workspaces/RA-Domain-Analysis contains proprietary data and cannot
+    Since _workspaces/domain-analysis contains domain-specific data and may not
     be pushed to remote, these instructions allow recreation of the Phase 15
     architecture on a new machine by referencing archive branches.
   
@@ -1180,9 +1180,9 @@ regeneration_guide:
         # - generate_description() - creates business summary
     
     step_4_review_ra_domain_analysis_pattern:
-      description: "Reference architecture from RA-Domain-Analysis"
+      description: "Reference architecture from reference-architecture"
       reference_structure: |
-        _workspaces/RA-Domain-Analysis (AST reversed)/
+        _workspaces/reference-architecture (AST reversed)/
           ├─ index.html                  # Executive summary (main entry)
           ├─ use-cases.html              # Business use cases
           ├─ workflow.html               # Workflow diagrams

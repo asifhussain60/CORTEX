@@ -256,7 +256,7 @@ phases:
       template_structures:
         bluf_only: |
           ## 🧠 CORTEX {operation}
-          **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
           
           ---
           
@@ -273,7 +273,7 @@ phases:
         
         bluf_hybrid: |
           ## 🧠 CORTEX {operation}
-          **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
           
           ---
           
@@ -305,7 +305,7 @@ phases:
         
         full_detail: |
           ## 🧠 CORTEX {operation}
-          **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          **Author:** CORTEX Team | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
           
           ---
           
@@ -538,7 +538,7 @@ phases:
       core_029_update:
         old_format: |
           ## 🧠 CORTEX {operation}
-          **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
           
           ---
           
@@ -546,7 +546,7 @@ phases:
         
         new_format: |
           ## 🧠 CORTEX {operation}
-          **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
           
           ---
           

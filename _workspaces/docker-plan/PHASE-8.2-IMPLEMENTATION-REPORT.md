@@ -1,5 +1,5 @@
 ## 🧠 CORTEX Phase 8.2 Implementation - Session Complete
-**Author:** Asif Hussain | **Orchestrator:** IntentRouter + OrchestratorLookup + RoutingEnforcementEngine ✅
+**Author:** CORTEX Team | **Orchestrator:** IntentRouter + OrchestratorLookup + RoutingEnforcementEngine ✅
 
 ---
 
@@ -506,4 +506,4 @@ The IntentRouter now correctly routes requests like "Use CORTEX LENS to onboard 
 
 **AC-ID:** AC-PHASE-8.2-01 ✅  
 **Timestamp:** 2026-01-28T18:45:00Z  
-**Signature:** Asif Hussain | CORTEX Autonomous Implementation
+**Signature:** CORTEX Team | CORTEX Autonomous Implementation

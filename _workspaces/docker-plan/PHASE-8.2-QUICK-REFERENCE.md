@@ -255,6 +255,6 @@ curl http://localhost:8000/health/routing
 
 ---
 
-**Owner:** Asif Hussain  
+**Owner:** CORTEX Team  
 **Start Date:** 2026-01-30  
 **Target Completion:** 2026-02-27 (4 weeks)

@@ -370,7 +370,7 @@ Returns: RoutingDecision(
 
 **Priority:** P0-CRITICAL (unblocks orchestrator ecosystem)
 
-**Owner:** Asif Hussain
+**Owner:** CORTEX Team
 
 **Start Date:** 2026-01-30
 

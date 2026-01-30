@@ -8209,22 +8209,22 @@ priorities:
     current_name: copy_assets.py
     suggested_name: copy-assets.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): copy_assets.py'
-  - file: _workspaces/sts/sample-apps/_Real/RA-Domain/scripts/analyze_batch_entities.py
+  - file: _workspaces/sts/sample-apps/examples/sample-domain/scripts/analyze_batch_entities.py
     type: underscore
     current_name: analyze_batch_entities.py
     suggested_name: analyze-batch-entities.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): analyze_batch_entities.py'
-  - file: _workspaces/sts/sample-apps/_Real/RA-Domain/scripts/analyze_ra_domain.py
+  - file: _workspaces/sts/sample-apps/examples/sample-domain/scripts/analyze_ra_domain.py
     type: underscore
     current_name: analyze_ra_domain.py
-    suggested_name: analyze-ra-domain.py
+    suggested_name: analyze-sample-domain.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): analyze_ra_domain.py'
-  - file: _workspaces/sts/sample-apps/_Real/RA-Domain/toolkit/scripts/business_value_scanner.py
+  - file: _workspaces/sts/sample-apps/examples/sample-domain/toolkit/scripts/business_value_scanner.py
     type: underscore
     current_name: business_value_scanner.py
     suggested_name: business-value-scanner.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): business_value_scanner.py'
-  - file: _workspaces/sts/sample-apps/_Real/RA-Domain/toolkit/scripts/06_master_orchestrator.py
+  - file: _workspaces/sts/sample-apps/examples/sample-domain/toolkit/scripts/06_master_orchestrator.py
     type: underscore
     current_name: 06_master_orchestrator.py
     suggested_name: 06-master-orchestrator.py
@@ -9559,11 +9559,11 @@ priorities:
     current_name: test_array_from_pyobj.py
     suggested_name: test-array-from-pyobj.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): test_array_from_pyobj.py'
-  - file: .venv/lib/python3.9/site-packages/numpy/f2py/tests/test_return_real.py
+  - file: .venv/lib/python3.9/site-packages/numpy/f2py/tests/test_returnexamples.py
     type: underscore
-    current_name: test_return_real.py
+    current_name: test_returnexamples.py
     suggested_name: test-return-real.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): test_return_real.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): test_returnexamples.py'
   - file: .venv/lib/python3.9/site-packages/numpy/f2py/tests/test_symbolic.py
     type: underscore
     current_name: test_symbolic.py
@@ -15879,11 +15879,11 @@ priorities:
     current_name: pseudo_diffs.py
     suggested_name: pseudo-diffs.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): pseudo_diffs.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fftpack/_realtransforms.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fftpack/examplestransforms.py
     type: underscore
-    current_name: _realtransforms.py
+    current_name: examplestransforms.py
     suggested_name: -realtransforms.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): _realtransforms.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): examplestransforms.py'
   - file: .venv/lib/python3.9/site-packages/scipy/fftpack/_pseudo_diffs.py
     type: underscore
     current_name: _pseudo_diffs.py
@@ -15904,11 +15904,11 @@ priorities:
     current_name: test_helper.py
     suggested_name: test-helper.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): test_helper.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fftpack/tests/test_real_transforms.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fftpack/tests/testexamples_transforms.py
     type: underscore
-    current_name: test_real_transforms.py
+    current_name: testexamples_transforms.py
     suggested_name: test-real-transforms.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): test_real_transforms.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): testexamples_transforms.py'
   - file: .venv/lib/python3.9/site-packages/scipy/fftpack/tests/test_import.py
     type: underscore
     current_name: test_import.py
@@ -16044,11 +16044,11 @@ priorities:
     current_name: test_interpolate.py
     suggested_name: test-interpolate.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): test_interpolate.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fft/_realtransforms_backend.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fft/examplestransforms_backend.py
     type: underscore
-    current_name: _realtransforms_backend.py
+    current_name: examplestransforms_backend.py
     suggested_name: -realtransforms-backend.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): _realtransforms_backend.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): examplestransforms_backend.py'
   - file: .venv/lib/python3.9/site-packages/scipy/fft/_backend.py
     type: underscore
     current_name: _backend.py
@@ -16069,11 +16069,11 @@ priorities:
     current_name: _debug_backends.py
     suggested_name: -debug-backends.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): _debug_backends.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fft/_realtransforms.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fft/examplestransforms.py
     type: underscore
-    current_name: _realtransforms.py
+    current_name: examplestransforms.py
     suggested_name: -realtransforms.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): _realtransforms.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): examplestransforms.py'
   - file: .venv/lib/python3.9/site-packages/scipy/fft/_basic_backend.py
     type: underscore
     current_name: _basic_backend.py
@@ -16114,11 +16114,11 @@ priorities:
     current_name: mock_backend.py
     suggested_name: mock-backend.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): mock_backend.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fft/tests/test_real_transforms.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fft/tests/testexamples_transforms.py
     type: underscore
-    current_name: test_real_transforms.py
+    current_name: testexamples_transforms.py
     suggested_name: test-real-transforms.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): test_real_transforms.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): testexamples_transforms.py'
   - file: .venv/lib/python3.9/site-packages/scipy/fft/tests/test_fftlog.py
     type: underscore
     current_name: test_fftlog.py
@@ -16129,11 +16129,11 @@ priorities:
     current_name: test_basic.py
     suggested_name: test-basic.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): test_basic.py'
-  - file: .venv/lib/python3.9/site-packages/scipy/fft/_pocketfft/tests/test_real_transforms.py
+  - file: .venv/lib/python3.9/site-packages/scipy/fft/_pocketfft/tests/testexamples_transforms.py
     type: underscore
-    current_name: test_real_transforms.py
+    current_name: testexamples_transforms.py
     suggested_name: test-real-transforms.py
-    reason: 'File uses underscores (CORE-028 requires kebab-case): test_real_transforms.py'
+    reason: 'File uses underscores (CORE-028 requires kebab-case): testexamples_transforms.py'
   - file: .venv/lib/python3.9/site-packages/scipy/sparse/_base.py
     type: underscore
     current_name: _base.py
@@ -22424,22 +22424,22 @@ priorities:
     current_name: consolidate-governance-yaml.py
     suggested_name: consolidate-governance.py
     reason: 'File name exceeds 25 characters (CORE-028): 27 chars'
-  - file: .github/.workspace/sts/sample-apps/_Real/RA-Domain/scripts/analyze_batch_entities.py
+  - file: .github/.workspace/sts/sample-apps/examples/sample-domain/scripts/analyze_batch_entities.py
     type: underscore
     current_name: analyze_batch_entities.py
     suggested_name: analyze-batch-entities.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): analyze_batch_entities.py'
-  - file: .github/.workspace/sts/sample-apps/_Real/RA-Domain/scripts/analyze_ra_domain.py
+  - file: .github/.workspace/sts/sample-apps/examples/sample-domain/scripts/analyze_ra_domain.py
     type: underscore
     current_name: analyze_ra_domain.py
-    suggested_name: analyze-ra-domain.py
+    suggested_name: analyze-sample-domain.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): analyze_ra_domain.py'
-  - file: .github/.workspace/sts/sample-apps/_Real/RA-Domain/toolkit/scripts/business_value_scanner.py
+  - file: .github/.workspace/sts/sample-apps/examples/sample-domain/toolkit/scripts/business_value_scanner.py
     type: underscore
     current_name: business_value_scanner.py
     suggested_name: business-value-scanner.py
     reason: 'File uses underscores (CORE-028 requires kebab-case): business_value_scanner.py'
-  - file: .github/.workspace/sts/sample-apps/_Real/RA-Domain/toolkit/scripts/06_master_orchestrator.py
+  - file: .github/.workspace/sts/sample-apps/examples/sample-domain/toolkit/scripts/06_master_orchestrator.py
     type: underscore
     current_name: 06_master_orchestrator.py
     suggested_name: 06-master-orchestrator.py

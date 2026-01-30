@@ -905,7 +905,7 @@ documentation:
 # ============================================================================
 audit:
   phase_approval:
-    approver: "Asif Hussain"
+    approver: "CORTEX Team"
     date: "2026-01-28"
     rationale: |
       Event-driven architecture validated by ChallengeEngine as superior to

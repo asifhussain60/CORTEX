@@ -123,7 +123,7 @@ These supporting files support the essential .md files:
 
 ```bash
 #!/bin/bash
-cd /Users/asifhussain/PROJECTS/CORTEX/_workspaces/docker-plan
+cd /path/to/CORTEX/_workspaces/docker-plan
 
 # Category 1: Execution Completion Reports
 rm -f DOCKER-PLAN-PHASE-2-3-EXECUTION-COMPLETE.md

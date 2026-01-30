@@ -231,7 +231,7 @@ _workspaces/docker-plan/
 
 ## 📞 Support
 
-**Documentation:** `/Users/asifhussain/PROJECTS/CORTEX/docs/`  
+**Documentation:** `/path/to/CORTEX/docs/`  
 **Issues:** Report in CORTEX repository  
 **Questions:** Review [PHASE-8-QUICK-REFERENCE.md](./PHASE-8-QUICK-REFERENCE.md)
 

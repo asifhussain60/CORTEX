@@ -312,7 +312,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 
 ### Option 1: Dry-Run (Recommended First Step)
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --dry-run --phase 1
 ```
 - **Time:** 10-15 minutes
@@ -321,7 +321,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 
 ### Option 2: Full Phase 1 Execution
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --phase 1
 ```
 - **Time:** 4 hours
@@ -330,7 +330,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 
 ### Option 3: Full Execution with Test Skip
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --phase 1 --skip-tests
 ```
 - **Time:** 2-3 hours

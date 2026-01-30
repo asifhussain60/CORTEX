@@ -64,6 +64,8 @@ class IntentReflection:
     governance_rules: List[str] = field(default_factory=lambda: [])
     """Applicable governance rules"""
     
+    business_principles: Dict[str, str] = field(default_factory=dict)
+    """Business principles mapped to CORE rules (e.g., {'Quality First': 'CORE-008'})"""    
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     """When reflection was generated"""
 
@@ -234,44 +236,18 @@ class IntentReflection:
                 entities_str += f" +{len(self.key_entities) - 3} more"
             lines.append(f"| **Entities** | {entities_str} |")
         
-        # Business Principles (only if applicable rules) - separate lines per rule
-        if self.governance_rules:
-            # Convert CORE-* IDs to business principles with technical details
-            # Format: "🎯 Principle Name → Technical (CORE-ID)"
-            # Example: "🎯 Red-Green-Refactor Discipline → TDD (CORE-008)"
-            from cortex.orchestrators.core.governance_principles import PRINCIPLE_NAMES
-            
-            principles_lines = []
-            for rule_id in self.governance_rules[:5]:  # Show up to 5 rules
-                principle = PRINCIPLE_NAMES.get(rule_id)
-                if principle:
-                    # Extract technical term from principle if present
-                    # E.g., "Red-Green-Refactor Discipline" → "TDD"
-                    technical_map = {
-                        "CORE-008": "TDD",
-                        "CORE-011": "Type Safety",
-                        "CORE-012": "Documentation",
-                        "CORE-013": "Error Handling",
-                        "CORE-026": "Git Safety",
-                        "CORE-027": "Audit Trail",
-                        "CORE-029": "Response Format",
-                        "CORE-030": "Implementation Truth",
-                        "CORE-035": "No Duplicates",
-                        "CORE-038": "File Placement",
-                        "CORE-040": "Doc Lifecycle",
-                    }
-                    technical = technical_map.get(rule_id, "")
-                    if technical:
-                        principles_lines.append(f"**{principle}** → {technical} ({rule_id})")
-                    else:
-                        principles_lines.append(f"**{principle}** ({rule_id})")
-                else:
-                    # Fallback if no principle mapping
-                    principles_lines.append(rule_id)
-            
-            # Join with <br/> for separate lines in same table cell
-            principles_str = "<br/>".join(principles_lines)
+        # Business Principles (mapped to CORE rules)
+        if self.business_principles:
+            # Format: **Quality First** → TDD (CORE-008) | **Maintainability** → Type Safety (CORE-011)
+            principles_parts = []
+            for principle, rule in self.business_principles.items():
+                principles_parts.append(f"**{principle}** → {rule}")
+            principles_str = " | ".join(principles_parts)
             lines.append(f"| **Business Principles** | {principles_str} |")
+        # Governance rules fallback (if no business principles mapped)
+        elif self.governance_rules:
+            rules_str = ", ".join(self.governance_rules[:3])
+            lines.append(f"| **Rules** | {rules_str} |")
         
         # Add execution plan section
         lines.extend([
@@ -468,6 +444,30 @@ class DoRApprovalGate:
         if "test" in text.lower():
             rules.append("CORE-008")
         
+        # Map business principles to CORE rules based on intent type
+        business_principles: Dict[str, str] = {}
+        
+        # Universal principles
+        business_principles["Quality First"] = "TDD (CORE-008)"
+        
+        if decision.intent_type == IntentType.IMPLEMENT:
+            business_principles["Maintainability"] = "Type Safety (CORE-011)"
+            business_principles["Documentation"] = "Docstrings (CORE-012)"
+        elif decision.intent_type == IntentType.FIX:
+            business_principles["Reliability"] = "Test Coverage (CORE-008)"
+            business_principles["Root Cause Analysis"] = "Implementation Truth (CORE-030)"
+        elif decision.intent_type == IntentType.REFACTOR:
+            business_principles["Code Quality"] = "SOLID Principles"
+            business_principles["Maintainability"] = "Type Safety (CORE-011)"
+        elif decision.intent_type == IntentType.ANALYZE:
+            business_principles["Evidence-Based"] = "Implementation Truth (CORE-030)"
+        elif decision.intent_type == IntentType.TEST:
+            business_principles["Quality First"] = "TDD (CORE-008)"
+            business_principles["Coverage"] = "Comprehensive Testing"
+        elif decision.intent_type == IntentType.DOCUMENT:
+            business_principles["Clarity"] = "Docstrings (CORE-012)"
+            business_principles["Accuracy"] = "Implementation Truth (CORE-030)"
+        
         # Extract key entities (simple heuristic)
         entities: List[str] = []
         for word in text.split():
@@ -483,6 +483,7 @@ class DoRApprovalGate:
             estimated_impact=impact,
             requires_tests=True,
             governance_rules=list(set(rules)),
+            business_principles=business_principles,
         )
     
     def approve(self, feedback: Optional[str] = None) -> None:

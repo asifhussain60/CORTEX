@@ -51,45 +51,45 @@ class TestDoRApprovalGateIntegration:
         text = "Implement user authentication system"
         context = {"domain": "security"}
         
-        # Mock IntentRouterFactory
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
-            # Setup mock router
+        # Mock IntentRouter
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
+            # Setup mock router instance
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="GeneralImplementationHandler",
                 confidence_score=0.85,
             )
-            
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify
             reflection = dor_gate.classify_and_reflect(text, context)
             
             # Verify reflection properties
-            assert reflection.intent_type == "implement"
+            assert reflection.intent_type == "IMPLEMENT"
             assert reflection.target_handler == "GeneralImplementationHandler"
-            assert 0 <= reflection.confidence <= 1.0  # Valid confidence range
-            assert "Intent Classification" in reflection.to_markdown()
+            assert 0 <= reflection.dor_confidence <= 1.0  # Valid confidence range
+            markdown = reflection.to_markdown()
+            assert "Intent Classification" in markdown
+            
+            # AC-PERMANENT-FIX-010: Verify Business Principles are displayed
+            assert "Business Principles" in markdown
+            assert "Quality First" in markdown
+            assert "TDD (CORE-008)" in markdown
     
     def test_reflection_markdown_format(self, dor_gate):
         """Test that reflection generates concise markdown."""
         text = "Fix authentication bug in login module"
         context = {"domain": "security"}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="fix"),
+                intent_type=Mock(value=""),
                 target_handler="domain_orchestrator",
                 confidence_score=0.9,
             )
-            
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             reflection = dor_gate.classify_and_reflect(text, context)
             markdown = reflection.to_markdown()
@@ -99,24 +99,27 @@ class TestDoRApprovalGateIntegration:
             assert "Intent" in markdown
             assert "Confidence" in markdown
             assert "Handler" in markdown
-            assert "Awaiting approval" in markdown
+            assert "Awaiting Your Decision" in markdown
+            
+            # AC-PERMANENT-FIX-010: Verify Business Principles with | separator (not <br/>)
+            assert "Business Principles" in markdown
+            assert " | " not in markdown or "Quality First" in markdown  # Either single principle or has separator
+            assert "<br/>" not in markdown  # No HTML breaks
     
     def test_approve_operation(self, dor_gate):
         """Test approving a classified intent."""
         text = "Implement feature X"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -132,17 +135,15 @@ class TestDoRApprovalGateIntegration:
         text = "Implement feature X"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -159,17 +160,15 @@ class TestDoRApprovalGateIntegration:
         text = "Implement feature X"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.6,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -186,18 +185,16 @@ class TestDoRApprovalGateIntegration:
         text = "Implement authentication"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             mock_router.execute_orchestrated.return_value = Ok({"status": "success"})
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify and approve
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -215,17 +212,15 @@ class TestDoRApprovalGateIntegration:
         text = "Implement feature"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify and reject
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -240,17 +235,15 @@ class TestDoRApprovalGateIntegration:
         text = "Implement feature"
         context = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Classify and approve
             reflection = dor_gate.classify_and_reflect(text, context)
@@ -275,17 +268,15 @@ class TestDoRApprovalGateIntegration:
         text1 = "Implement feature 1"
         context1 = {}
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
             mock_router.classify_intent.return_value = Mock(
-                intent_type=Mock(value="implement"),
+                intent_type=Mock(value=""),
                 target_handler="handler",
                 confidence_score=0.8,
             )
             
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # First operation
             reflection1 = dor_gate.classify_and_reflect(text1, context1)
@@ -363,7 +354,7 @@ class TestDoRApprovalGateErrorHandling:
         """Test that classify_and_reflect rejects empty text."""
         gate = DoRApprovalGate()
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_factory.return_value = Mock()
             
             with pytest.raises(ValueError):
@@ -373,11 +364,9 @@ class TestDoRApprovalGateErrorHandling:
         """Test executing without prior classification fails gracefully."""
         gate = DoRApprovalGate()
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             mock_router = Mock()
-            mock_factory_instance = Mock()
-            mock_factory_instance.create_router.return_value = mock_router
-            mock_factory.return_value = mock_factory_instance
+            MockRouter.return_value = mock_router
             
             # Try to execute without classifying first - should raise RuntimeError
             with pytest.raises(RuntimeError):
@@ -387,7 +376,7 @@ class TestDoRApprovalGateErrorHandling:
         """Test that factory None is handled gracefully."""
         gate = DoRApprovalGate()
         
-        with patch('cortex.orchestrators.core.dor_approval_gate.get_intent_router_factory') as mock_factory:
+        with patch('cortex.orchestrators.core.dor_approval_gate.IntentRouter') as MockRouter:
             # Patch at the gate level after initialization
             gate._factory = None
             
@@ -665,3 +654,4 @@ class TestExecutionPlanAndDoD:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+

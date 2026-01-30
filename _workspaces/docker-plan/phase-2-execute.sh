@@ -10,7 +10,7 @@
 
 set -e  # Exit on error
 
-CORTEX_ROOT="/Users/asifhussain/PROJECTS/CORTEX"
+CORTEX_ROOT="/path/to/CORTEX"
 PHASE_NAME="Phase 2: Legacy Removal"
 LOG_FILE="phase2-execution.log"
 

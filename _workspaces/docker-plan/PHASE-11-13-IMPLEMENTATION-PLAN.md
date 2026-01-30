@@ -2,7 +2,7 @@
 ## Comprehensive TDD Specification
 
 **Date:** 2026-01-28  
-**Author:** Asif Hussain  
+**Author:** CORTEX Team  
 **Authority:** CORTEX Master Orchestrator  
 **Status:** ✅ APPROVED FOR IMPLEMENTATION  
 **Phase:** 11-13 (Cortical Memory System, Capacity Planning, Adaptive BLUF)
@@ -467,4 +467,4 @@ validation:
 
 **Estimated Completion:** 2026-02-24 (5 weeks)
 
-**Authorization:** Asif Hussain, CORTEX Master Orchestrator
+**Authorization:** CORTEX Team, CORTEX Master Orchestrator
