@@ -69,7 +69,13 @@ class PERTEstimator:
             
         Returns:
             (expected_hours, standard_deviation)
+            
+        Raises:
+            ValueError: If inputs are invalid (negative, out of order)
         """
+        if optimistic < 0 or likely < 0 or pessimistic < 0:
+            raise ValueError("Hours must be non-negative")
+        
         if optimistic > likely or likely > pessimistic:
             raise ValueError("Must have: optimistic <= likely <= pessimistic")
         
