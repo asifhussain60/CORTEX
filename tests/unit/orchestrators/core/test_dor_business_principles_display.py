@@ -2,10 +2,11 @@
 Test DoR Business Principles Display
 
 Verifies that business principles are displayed correctly in DoR markdown
-with separate rows for each principle within the table cell.
+with comma-separated format for better rendering in GitHub Copilot Chat.
 
 Author: Asif Hussain
 AC-ID: AC-GOVE-BIZ-PRIN-001
+Updated: 2026-01-30 (Changed from <br/> to comma-separated format)
 """
 
 import pytest
@@ -16,7 +17,7 @@ class TestBusinessPrinciplesDisplay:
     """Test business principles display in DoR markdown."""
     
     def test_business_principles_display_format(self):
-        """Test that business principles show with technical terms in separate rows."""
+        """Test that business principles show with technical terms in comma-separated format."""
         reflection = IntentReflection(
             intent_type="IMPLEMENT",
             target_handler="TDDOrchestrator",
@@ -32,8 +33,8 @@ class TestBusinessPrinciplesDisplay:
         # Verify business principles row exists
         assert "**Business Principles**" in markdown, "Business Principles row should exist"
         
-        # Verify line breaks between principles
-        assert "<br/>" in markdown, "Should have line breaks between principles"
+        # Verify comma separation between principles
+        assert ", " in markdown, "Should have commas between principles"
         
         # Verify business principle for CORE-008 (TDD)
         assert "Red-Green-Refactor Discipline" in markdown or "TDD" in markdown, \
@@ -51,8 +52,8 @@ class TestBusinessPrinciplesDisplay:
         assert "CORE-011" in markdown, "Should show CORE-011 ID"
         assert "CORE-012" in markdown, "Should show CORE-012 ID"
     
-    def test_multiple_principles_separate_rows(self):
-        """Test that multiple principles appear on separate rows."""
+    def test_multiple_principles_comma_separated(self):
+        """Test that multiple principles appear comma-separated."""
         reflection = IntentReflection(
             intent_type="IMPLEMENT",
             target_handler="TDDOrchestrator",
@@ -64,9 +65,9 @@ class TestBusinessPrinciplesDisplay:
         
         markdown = reflection.to_markdown()
         
-        # Count <br/> tags (should be N-1 for N principles)
-        br_count = markdown.count("<br/>")
-        assert br_count >= 2, f"Should have at least 2 line breaks for 3 principles, got {br_count}"
+        # Count commas (should be N-1 for N principles)
+        comma_count = markdown.count(", **")  # Count commas before bold principles
+        assert comma_count >= 2, f"Should have at least 2 commas for 3 principles, got {comma_count}"
         
         # Verify each principle is present
         assert "TDD" in markdown, "Should show TDD"
@@ -140,9 +141,9 @@ class TestBusinessPrinciplesDisplay:
         assert "CORE-030" in markdown
         
         # 6th rule might not appear (limit is 5)
-        # Just verify we have at least 4 line breaks (for 5 principles)
-        br_count = markdown.count("<br/>")
-        assert br_count >= 4, f"Should have at least 4 line breaks for 5+ principles"
+        # Just verify we have at least 4 commas (for 5 principles)
+        comma_count = markdown.count(", **")  # Count commas before bold principles
+        assert comma_count >= 4, f"Should have at least 4 commas for 5+ principles"
 
 
 if __name__ == "__main__":
