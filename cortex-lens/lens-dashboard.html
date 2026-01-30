@@ -84,42 +84,7 @@
         <!-- Main Content -->
         <main class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
             
-            <!-- Domain Intelligence Section (Top Priority) -->
-            <section>
-                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <span>🏢</span>
-                    <span>Domain Portfolios</span>
-                    <span 
-                        class="badge badge-success" 
-                        style="margin-left: 0.5rem;"
-                        x-text="domains.length + ' domains'"
-                    ></span>
-                </h2>
-                
-                <!-- Domain Tiles Grid -->
-                <div class="repo-grid" x-show="domains.length > 0">
-                    <template x-for="domain in domains" :key="domain.name">
-                        <a :href="'data/domains/' + domain.slug + '/index.html'" class="repo-tile" style="border-left: 4px solid var(--accent-success);">
-                            <div class="repo-icon" x-text="domain.icon || '🏢'"></div>
-                            <div class="repo-name" x-text="domain.name"></div>
-                            <div class="repo-description" x-text="domain.description || 'Domain analysis dashboard'"></div>
-                            <div class="repo-stats">
-                                <span class="repo-stat" x-text="'📦 ' + (domain.repo_count || '?') + ' repos'"></span>
-                                <span class="repo-stat" x-text="'🏛️ ' + (domain.entity_count || '?') + ' entities'"></span>
-                            </div>
-                        </a>
-                    </template>
-                </div>
-                
-                <!-- Empty State -->
-                <div class="empty-state" x-show="domains.length === 0">
-                    <div class="empty-state-icon">🏢</div>
-                    <h3 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No domains detected yet</h3>
-                    <p>Domains will appear here as repositories are onboarded with --domain flag</p>
-                </div>
-            </section>
-            
-            <div class="section-divider"></div>
+
             
             <!-- User Repositories Section -->
             <section>
@@ -222,15 +187,11 @@
         function repoDashboards() {
             return {
                 repos: [],
-                domains: [],
                 loading: false,
                 
                 async initialize() {
                     console.log('🧠 CORTEX LENS Dashboard initialized');
-                    await Promise.all([
-                        this.loadRepos(),
-                        this.loadDomains(),
-                    ]);
+                    await this.loadRepos();
                 },
                 
                 async loadRepos() {
@@ -247,23 +208,6 @@
                     } catch (error) {
                         console.log('ℹ️ Could not load repos.json:', error.message);
                         this.repos = [];
-                    }
-                },
-                
-                async loadDomains() {
-                    try {
-                        const response = await fetch('data/domains/domains.json');
-                        if (response.ok) {
-                            const data = await response.json();
-                            this.domains = data.domains || [];
-                            console.log(`✅ Loaded ${this.domains.length} domains`);
-                        } else {
-                            console.log('ℹ️ No domains.json found, showing empty state');
-                            this.domains = [];
-                        }
-                    } catch (error) {
-                        console.log('ℹ️ Could not load domains.json:', error.message);
-                        this.domains = [];
                     }
                 },
             };
