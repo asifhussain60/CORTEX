@@ -35,44 +35,59 @@ metadata:
 
 executive_summary: |
   Phase 15 transforms CORTEX from a single-repo analysis tool to a comprehensive
-  portfolio intelligence system with three-tier visualization hierarchy and
-  cumulative domain knowledge.
+  portfolio intelligence system with tabbed entry dashboard and domain-first discovery.
   
   **PROBLEM SOLVED:**
-  - Phase 14 created dashboards but lacked multi-persona views
+  - Phase 14 created dashboards but lacked scalable navigation
   - No way to aggregate knowledge across multiple repos in a domain
-  - Dashboard UX was too technical (Alpine.js, Mermaid failures)
+  - CORTEX self-analysis dashboard was redundant (not user-facing need)
   - No cross-repository intelligence or compliance tracking
   
-  **SOLUTION: 3-TIER STATIC VISUALIZATION SYSTEM**
+  **SOLUTION: TABBED ENTRY DASHBOARD + 3-TIER VISUALIZATION SYSTEM**
   
-  Tier 1: Repository Dashboards (6 tabs)
+  Entry Point: LENS Dashboard (lens-dashboard.html) - TABBED
+    Tab 1: 📂 Repositories
+      - Repo tiles grid (click → 6-tab repo dashboard)
+      - Supports infinite scroll/pagination at scale
+      - Shows file count, lines of code, domain membership
+    
+    Tab 2: 🏢 Domains (DOMAIN-FIRST DISCOVERY)
+      - Domain tiles aggregated from onboarded repos
+      - Auto-detect domain from git remote or CLI flag
+      - Shows repo count, entity count, tech stack per domain
+      - Click → domain-dashboard.html?domain=X (6 tabs)
+      - SCALES to enterprise (30+ domains manageable)
+    
+    Tab 3: ⭐ Quick Links (FUTURE-READY)
+      - Recently viewed repos/domains
+      - Favorite repos/domains
+      - Search & filter across portfolio
+      - Analytics hooks for future UI improvements
+  
+  Repository Dashboards (6 tabs each)
     - Individual repo analysis with domain context
     - Static HTML + JSON (file:/// compatible, offline-first)
     - Multi-persona views (developers/, managers/, executives/, regulatory/, product/)
     - D3.js visualizations ONLY (Mermaid removed due to Phase 14 failures)
   
-  Tier 2: Domain Dashboards (6 tabs)
+  Domain Dashboards (6 tabs)
     - Aggregated knowledge across all repos in a domain
     - Cross-repo entity catalog, workflow patterns, compliance matrix
     - Technology prevalence heatmaps
     - Incremental knowledge accumulation in company/domains/{domain}/
   
-  Tier 3: CORTEX Self-Analysis (9 tabs)
-    - Special-case dashboard for CORTEX analyzing itself
-    - Standard 5 tabs + Brain + Governance + Orchestrators + CORTEX Domain
-  
   **ARCHITECTURE PATTERN (Success Model):**
   Phase 15 follows the proven architecture from RA-Domain-Analysis:
     ✅ Static HTML pages (no build step, no CDN dependencies)
     ✅ Glassmorphism CSS (onedrive-glass.css style)
-    ✅ Pure JavaScript (no Alpine.js complexity)
+    ✅ Alpine.js for tab state management (lightweight)
     ✅ D3.js bundled locally (force-directed graphs, heatmaps, timelines)
     ✅ Multi-persona navigation (developers/, managers/, etc.)
     ✅ JSON data files (separation of data from presentation)
     ✅ Offline-first (works at file:/// without server)
+    ✅ Tabbed navigation (scales from 1 to 100+ repos/domains)
     ❌ NO Mermaid (failed in Phase 14 - diagrams didn't render)
-    ❌ NO Alpine.js (over-engineered for static content)
+    ❌ NO CORTEX self-analysis dashboard (removed - not user-facing need)
     ❌ NO CDN dependencies (must work offline/air-gapped)
   
   **DOMAIN KNOWLEDGE ACCUMULATION:**
@@ -89,17 +104,22 @@ executive_summary: |
 
 architecture:
   overview: |
-    Phase 15 introduces a three-tier hierarchy for code intelligence:
+    Phase 15 introduces a three-tier hierarchy for code intelligence with tabbed
+    entry point for scalable domain-first navigation.
     
-    1. LENS Dashboard (lens-dashboard.html) - Entry Point
-       ├─ CORTEX tile → cortex-dashboard.html (9 tabs)
-       └─ Domain tiles → domain-dashboard.html?domain=X (6 tabs)
-           └─ Repo tiles → data/repos/{slug}/index.html (6 tabs)
+    1. LENS Dashboard (lens-dashboard.html) - Entry Point (TABBED)
+       ├─ Tab 1: 📂 Repositories
+       │   └─ Repo tiles → data/repos/{slug}/index.html (6 tabs)
+       ├─ Tab 2: 🏢 Domains
+       │   └─ Domain tiles → domain-dashboard.html?domain=X (6 tabs)
+       └─ Tab 3: ⭐ Quick Links
+           ├─ Recently viewed
+           ├─ Favorites
+           └─ Search/filter
     
     2. File Structure (cortex-lens/)
        cortex-lens/
-         ├─ lens-dashboard.html           # Main entry (repo/domain browser)
-         ├─ cortex-dashboard.html         # CORTEX self-analysis (9 tabs)
+         ├─ lens-dashboard.html           # Main entry (3 tabs: repos, domains, quick links)
          ├─ domain-dashboard.html         # Domain aggregation (6 tabs)
          ├─ static/                       # Bundled assets (D3.js, CSS, JS)
          │   ├─ css/
@@ -108,7 +128,8 @@ architecture:
          │   ├─ js/
          │   │   ├─ dashboard-core.js     # Shared utilities
          │   │   ├─ d3-visualizations.js  # D3.js wrappers
-         │   │   └─ persona-nav.js        # Multi-persona navigation
+         │   │   ├─ persona-nav.js        # Multi-persona navigation
+         │   │   └─ tab-manager.js        # Tab state management (Alpine.js)
          │   ├─ vendor/
          │   │   └─ d3-7.8.5.min.js       # Bundled locally (250KB)
          │   └─ assets/
@@ -155,6 +176,71 @@ architecture:
                  ├─ tech-stack.yaml       # Technology prevalence
                  ├─ glossary.yaml         # Business terminology
                  └─ architecture-patterns.yaml  # Recurring patterns
+
+  entry_point_tabbed_dashboard:
+    name: "LENS Dashboard Entry Point (Tabbed for Scale)"
+    location: "cortex-lens/lens-dashboard.html"
+    purpose: "Single entry point with domain-first navigation, scales from 1 to 100+ repos"
+    architecture: "Tabbed interface (Alpine.js state management)"
+    
+    tabs:
+      tab_1_repositories:
+        id: "repositories"
+        name: "📂 Repositories"
+        icon: "📂"
+        purpose: "Browse onboarded repositories"
+        content:
+          - "Repository tiles grid (click → 6-tab repo dashboard)"
+          - "Tile shows: repo name, icon, description, file count, lines of code"
+          - "Links to: data/repos/{repo-slug}/index.html"
+          - "Supports: pagination/infinite scroll for scale"
+        data_source: "cortex-lens/data/repos/repos.json"
+        ui_components:
+          - "Repo grid with cards"
+          - "Empty state when no repos (with onboarding instructions)"
+          - "Stats badges (file count, lines of code)"
+      
+      tab_2_domains:
+        id: "domains"
+        name: "🏢 Domains"
+        icon: "🏢"
+        purpose: "Domain-first portfolio exploration (PHASE 15 GOAL)"
+        content:
+          - "Domain tiles aggregated from onboarded repos"
+          - "Tile shows: domain name, repo count, entity count, tech stack"
+          - "Links to: domain-dashboard.html?domain={domain-slug} (6 tabs)"
+          - "Auto-detects domain from git remote or CLI flag"
+          - "Scales to enterprise (30+ domains manageable via pagination)"
+        data_source: "cortex-lens/data/domains/domains.json (generated from repos)"
+        auto_detection:
+          - "CLI flag: --domain {name} (highest priority)"
+          - "Git remote: github.com/mycompany/* → mycompany"
+          - "Fallback: 'unknown' domain"
+        ui_components:
+          - "Domain tiles with entity/repo aggregation"
+          - "Tech stack prevalence icons"
+          - "Empty state (no domains yet)"
+      
+      tab_3_quick_links:
+        id: "quick-links"
+        name: "⭐ Quick Links"
+        icon: "⭐"
+        purpose: "Bookmarks, history, search (future-ready)"
+        content:
+          - "Recently viewed repos/domains (localStorage tracking)"
+          - "Favorite repos/domains (pin/unpin UI)"
+          - "Search & filter across all repos and domains"
+          - "Filter by: technology, compliance tags, domain, risk level"
+        data_source: "localStorage (browser) + cortex-lens/data/"
+        ui_components:
+          - "Recently viewed list"
+          - "Favorites grid"
+          - "Search box with instant filtering"
+          - "Filter chips (Python, Node, HIPAA, High Risk, etc.)"
+        future_enhancements:
+          - "Analytics tracking (which repos most viewed)"
+          - "Personalization (save filter preferences)"
+          - "Recommendations (repos related to your edits)"
 
   tier_1_repository_dashboards:
     name: "Repository Dashboards (6 tabs + multi-persona)"
@@ -378,17 +464,22 @@ architecture:
           - "Term usage by repo"
         data_source: "company/domains/{domain}/glossary.yaml"
 
-  tier_3_cortex_self_analysis:
-    name: "CORTEX Self-Analysis (9 tabs)"
-    location: "cortex-lens/cortex-dashboard.html"
-    purpose: "Special-case dashboard when CORTEX analyzes itself"
-    
-    tabs:
-      - "Tabs 1-5: Standard tabs (Overview, Dependencies, Classes, Timeline, Impact)"
-      - "Tab 6: 🧠 Brain Architecture (4-tier brain visualization)"
-      - "Tab 7: ✅ Governance Compliance (CORE rules heatmap)"
-      - "Tab 8: 🎼 Orchestrator Constellation (23 orchestrators map)"
-      - "Tab 9: 🏢 CORTEX Domain (CORTEX-specific domain knowledge)"
+  tier_3_note:
+    deprecated: "CORTEX Self-Analysis Dashboard"
+    reason: |
+      CORTEX self-analysis dashboard (cortex-dashboard.html) was removed in Phase 15.
+      
+      Rationale:
+      - Not a user-facing need (developers don't browse CORTEX's own architecture)
+      - CORTEX can be onboarded as a regular repo via "cortex lens onboard /path/to/cortex"
+      - Users can view CORTEX dashboard same as any other repo (Tab 1: Repositories)
+      - Simplifies implementation (no special-case 9-tab logic)
+      - Reduces file count and maintenance burden
+      
+      If internal CORTEX analysis is needed:
+      1. Run: cortex lens onboard /path/to/CORTEX/cortex --domain cortex-internal
+      2. View: lens-dashboard.html → Tab 1 Repositories → click CORTEX tile
+      3. Result: Standard 6-tab repository dashboard for CORTEX itself
 
 # ==============================================================================
 # DOMAIN KNOWLEDGE ACCUMULATION (Incremental Updates)

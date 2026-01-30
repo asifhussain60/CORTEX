@@ -74,9 +74,9 @@
             </div>
             <h1 class="hero-title">CORTEX LENS</h1>
             <p class="hero-subtitle">
-                Intelligent Code Analysis Dashboards<br>
+                Repository Dashboards & Domain Intelligence<br>
                 <span style="font-size: 0.9rem; color: var(--text-muted);">
-                    Static HTML + JSON • No API Required • Works Offline
+                    Onboard repos • View 6-tab domain analysis • Offline-first
                 </span>
             </p>
         </section>
@@ -84,28 +84,38 @@
         <!-- Main Content -->
         <main class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
             
-            <!-- CORTEX Repository Section -->
+            <!-- Domain Intelligence Section (Top Priority) -->
             <section>
                 <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <span>🧠</span>
-                    <span>CORTEX Repository</span>
-                    <span class="badge badge-cortex" style="margin-left: 0.5rem;">Primary</span>
+                    <span>🏢</span>
+                    <span>Domain Portfolios</span>
+                    <span 
+                        class="badge badge-success" 
+                        style="margin-left: 0.5rem;"
+                        x-text="domains.length + ' domains'"
+                    ></span>
                 </h2>
                 
-                <div class="repo-grid">
-                    <!-- CORTEX Tile (Always Present) -->
-                    <a href="cortex-dashboard.html" class="repo-tile cortex">
-                        <div class="repo-icon">🧠</div>
-                        <div class="repo-name">CORTEX</div>
-                        <div class="repo-description">
-                            COgnitive Real-Time EXecution System — AI-powered development orchestrator with 23 orchestrators and 4-tier brain architecture.
-                        </div>
-                        <div class="repo-stats">
-                            <span class="repo-stat">📁 140+ files</span>
-                            <span class="repo-stat">🎼 23 orchestrators</span>
-                            <span class="repo-stat">✅ 172+ tests</span>
-                        </div>
-                    </a>
+                <!-- Domain Tiles Grid -->
+                <div class="repo-grid" x-show="domains.length > 0">
+                    <template x-for="domain in domains" :key="domain.name">
+                        <a :href="'data/domains/' + domain.slug + '/index.html'" class="repo-tile" style="border-left: 4px solid var(--accent-success);">
+                            <div class="repo-icon" x-text="domain.icon || '🏢'"></div>
+                            <div class="repo-name" x-text="domain.name"></div>
+                            <div class="repo-description" x-text="domain.description || 'Domain analysis dashboard'"></div>
+                            <div class="repo-stats">
+                                <span class="repo-stat" x-text="'📦 ' + (domain.repo_count || '?') + ' repos'"></span>
+                                <span class="repo-stat" x-text="'🏛️ ' + (domain.entity_count || '?') + ' entities'"></span>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="empty-state" x-show="domains.length === 0">
+                    <div class="empty-state-icon">🏢</div>
+                    <h3 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No domains detected yet</h3>
+                    <p>Domains will appear here as repositories are onboarded with --domain flag</p>
                 </div>
             </section>
             
@@ -173,17 +183,19 @@
                                 cortex lens onboard /path/to/repo
                             </code>
                             <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
-                                Generates JSON data in data/repos/
+                                Generates JSON data + dashboard HTML
                             </p>
                         </div>
                         
                         <div>
-                            <h3 style="color: var(--accent-warning); margin-bottom: 0.75rem;">3. View Dashboard</h3>
+                            <h3 style="color: var(--accent-warning); margin-bottom: 0.75rem;">3. View Dashboards</h3>
                             <code style="display: block; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.9rem;">
-                                Click the repository tile above
+                                Click repo tile → View 6 tabs<br>
+                                Link to domain-dashboard.html
                             </code>
                             <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
-                                5 tabs: Overview, Deps, Classes, Timeline, Impact
+                                Repo: Overview, Deps, Classes, Timeline, Impact, Domain<br>
+                                Domain: Overview, Entities, Workflows, Compliance, Tech, Glossary
                             </p>
                         </div>
                     </div>
@@ -195,11 +207,11 @@
         <!-- Footer -->
         <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--glass-border);">
             <p>
-                🧠 CORTEX LENS Dashboard • Phase 14 • 
-                <span style="color: var(--accent-primary);">Static HTML + JSON Architecture</span>
+                📊 CORTEX LENS Dashboard • Phase 15 • 
+                <span style="color: var(--accent-primary);">Repository + Domain Intelligence</span>
             </p>
             <p style="margin-top: 0.5rem;">
-                Author: Asif Hussain • Built with Alpine.js, D3.js, Mermaid
+                Author: Asif Hussain • Built with Alpine.js, D3.js
             </p>
         </footer>
         
@@ -210,11 +222,15 @@
         function repoDashboards() {
             return {
                 repos: [],
+                domains: [],
                 loading: false,
                 
                 async initialize() {
                     console.log('🧠 CORTEX LENS Dashboard initialized');
-                    await this.loadRepos();
+                    await Promise.all([
+                        this.loadRepos(),
+                        this.loadDomains(),
+                    ]);
                 },
                 
                 async loadRepos() {
@@ -231,6 +247,23 @@
                     } catch (error) {
                         console.log('ℹ️ Could not load repos.json:', error.message);
                         this.repos = [];
+                    }
+                },
+                
+                async loadDomains() {
+                    try {
+                        const response = await fetch('data/domains/domains.json');
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.domains = data.domains || [];
+                            console.log(`✅ Loaded ${this.domains.length} domains`);
+                        } else {
+                            console.log('ℹ️ No domains.json found, showing empty state');
+                            this.domains = [];
+                        }
+                    } catch (error) {
+                        console.log('ℹ️ Could not load domains.json:', error.message);
+                        this.domains = [];
                     }
                 },
             };
