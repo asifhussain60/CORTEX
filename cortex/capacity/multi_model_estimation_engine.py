@@ -354,6 +354,84 @@ class MultiModelEstimationEngine:
             model_agreement=agreement,
         )
     
+    def build_consensus(
+        self,
+        pert_hours: float,
+        story_point_hours: float,
+        cpm_hours: float,
+        task_id: str = "consensus"
+    ) -> EstimationResult:
+        """Build weighted consensus from three model estimates.
+        
+        Phase 12 AC-CAP-005-AC01: Three models aggregated with weights
+        Weights: 40% PERT, 40% Story Points, 20% CPM
+        
+        Args:
+            pert_hours: PERT estimate in hours
+            story_point_hours: Story points converted to hours
+            cpm_hours: Critical path estimate in hours
+            task_id: Optional task identifier
+            
+        Returns:
+            EstimationResult with consensus and risk factors
+        """
+        # AC-CAP-005-AC01: Weighted consensus (40-40-20)
+        weights = {"pert": 0.4, "story_points": 0.4, "cpm": 0.2}
+        consensus = (
+            weights["pert"] * pert_hours +
+            weights["story_points"] * story_point_hours +
+            weights["cpm"] * cpm_hours
+        )
+        
+        # AC-CAP-005-AC04: Calculate model agreement
+        estimates = [pert_hours, story_point_hours, cpm_hours]
+        avg = sum(estimates) / len(estimates)
+        
+        # Calculate variance
+        variance = sum((x - avg) ** 2 for x in estimates) / len(estimates)
+        std_dev = math.sqrt(variance)
+        
+        # Agreement: 100% if identical, decreases with variance
+        # Coefficient of variation: (std_dev / mean) * 100
+        cv = (std_dev / avg * 100) if avg > 0 else 0
+        agreement = max(0, 100 - cv)
+        
+        # AC-CAP-005-AC02: Calculate 80% confidence interval
+        # CI based on standard deviation of model estimates
+        z_score = 1.28  # 80% confidence
+        margin = z_score * std_dev
+        ci_low = max(0, consensus - margin)
+        ci_high = consensus + margin
+        
+        # AC-CAP-005-AC03 & AC-CAP-005-AC05: Detect high variance and risks
+        risk_factors = []
+        
+        # High variance detection (>30% spread)
+        spread_percent = (max(estimates) - min(estimates)) / avg * 100 if avg > 0 else 0
+        if spread_percent > 30:
+            risk_factors.append(f"High variance detected: {spread_percent:.1f}% spread between models")
+        
+        # Low agreement warning
+        if agreement < 50:
+            risk_factors.append(f"Low model agreement: {agreement:.1f}%")
+        
+        # Extreme outlier detection
+        for i, (name, est) in enumerate([("PERT", pert_hours), ("Story Points", story_point_hours), ("CPM", cpm_hours)]):
+            if abs(est - avg) > 2 * std_dev and std_dev > 0:
+                risk_factors.append(f"{name} estimate ({est:.1f}h) is outlier")
+        
+        return EstimationResult(
+            task_id=task_id,
+            pert_hours=pert_hours,
+            story_points=0,  # Already converted to hours
+            cpm_hours=cpm_hours,
+            confidence_interval_low=ci_low,
+            confidence_interval_high=ci_high,
+            recommended_hours=consensus,
+            risk_factors=risk_factors,
+            model_agreement=agreement,
+        )
+    
     def get_estimation_summary(self, result: EstimationResult) -> Dict[str, Any]:
         """Get summary of estimation.
         
