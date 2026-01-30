@@ -93,6 +93,66 @@ class OutputFormatter:
         
         return breakdown
     
+    def generate_gantt_chart(self, breakdown: SprintBreakdown) -> str:
+        """
+        Generate ASCII Gantt chart visualization.
+        
+        Args:
+            breakdown: SprintBreakdown with task allocation
+        
+        Returns:
+            ASCII art string showing task timelines
+        
+        Example:
+            Day:   1  2  3  4  5  6  7  8  9 10
+            T1   [====]
+            T2            [=======]
+            T3                        [======]
+        """
+        if not breakdown.days:
+            return "No tasks to visualize"
+        
+        # Build task timeline mapping: task_id -> list of day numbers where task runs
+        task_timelines: Dict[str, List[int]] = {}
+        for day in breakdown.days:
+            for task_id in day.tasks:
+                if task_id not in task_timelines:
+                    task_timelines[task_id] = []
+                task_timelines[task_id].append(day.day_number)
+        
+        # Build chart
+        lines = []
+        
+        # Header: Day markers
+        header = "Day:  " + "  ".join(f"{i:2d}" for i in range(1, self.SPRINT_DAYS + 1))
+        lines.append(header)
+        lines.append("")  # Blank line
+        
+        # Task rows
+        for task_id in sorted(task_timelines.keys()):
+            task_days = task_timelines[task_id]
+            min_day = min(task_days)
+            max_day = max(task_days)
+            
+            # Build task bar
+            bar_parts = []
+            for day in range(1, self.SPRINT_DAYS + 1):
+                if day < min_day:
+                    bar_parts.append("   ")  # Before task starts
+                elif day == min_day:
+                    bar_parts.append("[==")  # Task start
+                elif day > min_day and day < max_day:
+                    bar_parts.append("===")  # Task continuation
+                elif day == max_day:
+                    bar_parts.append("==]")  # Task end
+                else:
+                    bar_parts.append("   ")  # After task ends
+            
+            task_line = f"{task_id:5s} " + "".join(bar_parts)
+            lines.append(task_line)
+        
+        return "\n".join(lines)
+    
     def _distribute_tasks(self, breakdown: SprintBreakdown, tasks: List[Dict[str, Any]]) -> None:
         """
         Distribute tasks across sprint days respecting dependencies.
