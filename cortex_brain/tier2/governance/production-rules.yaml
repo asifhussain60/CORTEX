@@ -48,9 +48,21 @@ rules:
     description: "All orchestrators wired via YAML (no database dependencies)"
     severity: "critical"
     implementation: "cortex/wiring/specifications/wiring.yaml"
-    validation: "23+ orchestrators defined across core/domain/support categories"
+    validation: "26/23 orchestrators defined across core/domain/support categories"
+    
+  - id: "PROD-009"
+    name: "Single Canonical Execution Path"
+    description: "One canonical implementation per orchestrator (CORE-035)"
+    severity: "critical"
+    implementation: "cortex/orchestrators/core/"
+    validation: "No duplicate intent routers or master orchestrators"
+    duplicate_detection:
+      - "cortex/orchestrators/core/intent_router.py (CANONICAL - 1575 lines)"
+      - "cortex/orchestrators/intent_router_refac.py (DOCUMENTATION - 344 lines)"
+      - "_workspaces/dashboard/intent_router.py (WORKSPACE - 224 lines)"
+    enforcement: "Only CANONICAL files imported by production code"
 
 status: "IMPLEMENTED"
 last_updated: "2026-01-30"
 updated_by: "Asif Hussain"
-changes: "Added PROD-006 through PROD-008 for business principles and wiring validation"
+changes: "Added PROD-009 for single canonical execution path enforcement (CORE-035)"

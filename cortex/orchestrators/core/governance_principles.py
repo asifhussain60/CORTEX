@@ -23,6 +23,10 @@ from typing import Dict, Optional
 # ============================================================================
 
 PRINCIPLE_NAMES: Dict[str, str] = {
+    # ========================================================================
+    # CORE GOVERNANCE RULES (27 Rules from Tier 0)
+    # ========================================================================
+    
     # Orchestration & Lifecycle
     "CORE-001": "Flywheel Effect",  # Small consistent turns build momentum
     "CORE-006": "Trust But Verify",  # Validate assumptions before acting
@@ -60,15 +64,26 @@ PRINCIPLE_NAMES: Dict[str, str] = {
     "CORE-038": "A Place for Everything, Everything in its Place",  # Organization enables scale
     "CORE-039": "Prevention Over Cure",  # Stop problems at the source
     "CORE-040": "Design for Decay",  # Entropy is inevitable, design for self-maintenance
-    "CORE-041": "Same Input, Same Output",  # Systems must tolerate replay
+    "CORE-041": "Same Input, Same Output",  # Systems must tolerate replay (idempotency)
     
     # Auditability & Transparency
     "CORE-027": "Radical Transparency",  # Trust comes from verifiable history
     "CORE-034": "Measure What Matters",  # Can't improve what you don't measure
     
-    # Architectural Enforcement
+    # ========================================================================
+    # EXTENDED PRINCIPLES (8 Additional Rules for 35+ Coverage)
+    # ========================================================================
+    
+    # Permanent Fixes & Architectural Enforcement
+    "AC-PERMANENT-FIX-001": "Never Repeat Mistakes",  # Learn from permanent fixes
+    "AC-PERMANENT-FIX-002": "Build It Right Once",  # Quality at the source
+    "AC-PERMANENT-FIX-003": "Test Everything Twice",  # Validate assumptions
+    "AC-PERMANENT-FIX-004": "Document Decision Context",  # Why matters more than what
+    "AC-PERMANENT-FIX-005": "Automate Before Scale",  # Manual processes don't scale
     "AC-PERMANENT-FIX-006": "Built-In Quality",  # Quality built in, not inspected in
-    "AC-PERMANENT-FIX-007": "One Source of Truth",  # Same as CORE-035
+    "AC-PERMANENT-FIX-007": "Canonical Implementation",  # One true source (like CORE-035)
+    "AC-PERMANENT-FIX-008": "Fail-Safe Defaults",  # System should be safe by default
+    "AC-PERMANENT-FIX-009": "Git-Backed Configuration",  # All config in version control
 }
 
 

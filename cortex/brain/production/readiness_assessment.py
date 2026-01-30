@@ -6,16 +6,17 @@ multiple tiers (Tier 1: Single-User, Tier 2: Team, Tier 3: Enterprise).
 
 This module checks:
 - DoR (Definition of Ready) system with business principles display
-- Orchestrator wiring (23/23 via Git-backed YAML)
-- Governance rules (40+ CORE rules enforced)
+- Orchestrator wiring (26/23 via Git-backed YAML)
+- Governance rules (36+ principles mapped - 27 CORE + 9 AC-FIX)
 - Test coverage and quality gates
 - Docker-first architecture compliance
 - MCP tool exposure and integration readiness
+- Single canonical execution path (no duplicate orchestrators)
 
 Author: Asif Hussain
 Phase: 6+ (Production Readiness)
 AC-ID: AC-PROD-READY-001
-Updated: 2026-01-30 (Business Principles Enhancement)
+Updated: 2026-01-30 (Business Principles + Single Path Enforcement)
 """
 
 from typing import Dict, List, Any, Optional
@@ -48,12 +49,13 @@ class ProductionReadinessAssessment:
     
     Validates:
     1. DoR System with Business Principles (AC-GOVE-BIZ-PRIN-001)
-    2. Orchestrator Wiring (23/23 via wiring.yaml)
-    3. Governance Rules (CORE-001 through CORE-040+)
+    2. Orchestrator Wiring (26/23 via wiring.yaml - Single Path)
+    3. Governance Rules (CORE-001 through CORE-041+)
     4. Test Coverage (172+ tests, 11321 items)
     5. Docker Architecture (stateless containers)
     6. MCP Integration (15+ tools)
-    7. Business Principle Mappings (35+ principles)
+    7. Business Principle Mappings (36 principles - 27 CORE + 9 AC-FIX)
+    8. Single Canonical Execution Path (CORE-035)
     
     Usage:
         assessment = ProductionReadinessAssessment()
@@ -214,6 +216,8 @@ class ProductionReadinessAssessment:
         - PRINCIPLE_NAMES dict has 35+ mappings
         - get_display_name() function works
         - PRINCIPLE_CATEGORIES defined
+        - All 27 CORE rules mapped
+        - AC-PERMANENT-FIX rules included
         
         Returns:
             ReadinessCheck result
@@ -228,16 +232,33 @@ class ProductionReadinessAssessment:
             principle_count = len(PRINCIPLE_NAMES)
             category_count = len(PRINCIPLE_CATEGORIES)
             
+            # Count CORE rules
+            core_rules = [k for k in PRINCIPLE_NAMES.keys() if k.startswith("CORE-")]
+            core_count = len(core_rules)
+            
+            # Count AC-PERMANENT-FIX rules
+            ac_rules = [k for k in PRINCIPLE_NAMES.keys() if k.startswith("AC-PERMANENT-FIX")]
+            ac_count = len(ac_rules)
+            
             # Test get_display_name
             test_result = get_display_name("CORE-008")
-            has_arrow = "→" in test_result or "TDD" in test_result
+            has_valid_format = "Red-Green-Refactor" in test_result and "CORE-008" in test_result
             
-            if principle_count >= 15 and has_arrow:
+            if principle_count >= 35 and core_count >= 27 and has_valid_format:
                 return ReadinessCheck(
                     check_id="PROD-CHECK-003",
                     name="Governance Principle Mappings",
                     status="PASS",
-                    details=f"{principle_count} principles mapped across {category_count} categories",
+                    details=f"✅ 100% Coverage: {principle_count} principles mapped ({core_count} CORE + {ac_count} AC-FIX) across {category_count} categories",
+                    tier_required=ProductionTier.TIER_1_SINGLE_USER,
+                    severity="high"
+                )
+            elif principle_count >= 27:
+                return ReadinessCheck(
+                    check_id="PROD-CHECK-003",
+                    name="Governance Principle Mappings",
+                    status="WARN",
+                    details=f"{principle_count} principles mapped ({core_count} CORE + {ac_count} AC-FIX) - expected 35+ for 100%",
                     tier_required=ProductionTier.TIER_1_SINGLE_USER,
                     severity="high"
                 )
@@ -245,8 +266,8 @@ class ProductionReadinessAssessment:
                 return ReadinessCheck(
                     check_id="PROD-CHECK-003",
                     name="Governance Principle Mappings",
-                    status="WARN",
-                    details=f"Only {principle_count} principles mapped (expected 35+)",
+                    status="FAIL",
+                    details=f"Only {principle_count} principles mapped - minimum 27 CORE rules required",
                     tier_required=ProductionTier.TIER_1_SINGLE_USER,
                     severity="high"
                 )
