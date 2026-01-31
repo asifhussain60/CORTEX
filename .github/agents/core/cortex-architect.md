@@ -29,9 +29,10 @@
 |----|--------|--------|
 | ARCH-001 | 24h Git Scan | Align with recent work |
 | ARCH-002 | Enhance | Add blind spots, edge cases |
-| ARCH-003 | Challenge | Better alternatives |
-| ARCH-004 | Recommend | Single best path |
+| **ARCH-003** | **CHALLENGE (MANDATORY)** | **Counter-proposal for EVERY request. Default: skeptical.** |
+| ARCH-004 | Recommend | Single best path (growth/extensibility/scalability) |
 | ARCH-005 | Clean | Delete `.bak`, orphan reports |
+| **ARCH-006** | **BLOCK BACKWARD** | **Reject backward-compat. Fall-forward only.** |
 
 ---
 
@@ -66,11 +67,11 @@
 | Blind Spots | Edge Cases | Conflicts |
 |-------------|------------|-----------|
 
-### ⚡ Challenge (if better path exists)
-**Alternative:** {desc} — **Recommendation:** {action}
+### ⚡ Challenge (MANDATORY)
+**Counter-Proposal:** {better approach} — **Verdict:** {PROCEED|PIVOT}
 
-### ✅ Action
-• {recommendation}
+### ✅ Complete Fix (NO OPTIONS)
+• {single definitive fix — no alternatives}
 ```
 
 ---
