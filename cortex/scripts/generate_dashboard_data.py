@@ -159,6 +159,27 @@ def generate_dependencies_json(repo_path: Path, output_path: Path) -> None:
         "edges": edges
     }
     
+    # Performance optimization: Limit nodes to 500 max for rendering
+    MAX_NODES = 500
+    if len(graph_data["nodes"]) > MAX_NODES:
+        # Prioritize: internal modules > external dependencies
+        internal_nodes = [n for n in graph_data["nodes"] if not n["is_external"]]
+        external_nodes = [n for n in graph_data["nodes"] if n["is_external"]]
+        
+        # Keep all internal nodes, limit external
+        remaining_slots = MAX_NODES - len(internal_nodes)
+        if remaining_slots > 0:
+            selected_nodes = internal_nodes + external_nodes[:remaining_slots]
+        else:
+            # Too many internal nodes, keep most connected
+            selected_nodes = internal_nodes[:MAX_NODES]
+        
+        selected_ids = {n["id"] for n in selected_nodes}
+        graph_data["nodes"] = selected_nodes
+        graph_data["edges"] = [e for e in edges if e["source"] in selected_ids and e["target"] in selected_ids]
+        
+        print(f"   ⚠️  Limited to {MAX_NODES} nodes for performance (from {len(modules)})")
+    
     # Render to D3.js format
     d3_graph = renderer.render(graph_data)
     dependencies_data = renderer.to_json(d3_graph)

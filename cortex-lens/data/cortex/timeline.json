@@ -1,6 +1,13 @@
 {
   "commits": [
     {
+      "date": "2026-01-31T09:32:06",
+      "author": "Asif Hussain",
+      "message": "feat(phase-14): Sprint 5 Day 1 - Fix git history + bundle D3.js",
+      "hash": "6ef7890b",
+      "files_changed": 7
+    },
+    {
       "date": "2026-01-31T09:23:06",
       "author": "Asif Hussain",
       "message": "feat(phase-14): Complete Sprint 4 - All 6 visualizations functional",
@@ -1392,19 +1399,12 @@
       "message": "Merge origin/CORTEX: Remove proprietary HQY data",
       "hash": "d41f9269",
       "files_changed": 0
-    },
-    {
-      "date": "2026-01-29T03:42:14",
-      "author": "Asif Hussain",
-      "message": "Merge origin/CORTEX: Remove proprietary HQY data",
-      "hash": "fed525b9",
-      "files_changed": 0
     }
   ],
   "total_commits": 200,
   "date_range": {
     "start": "2026-01-29T03:42:14",
-    "end": "2026-01-31T09:23:06"
+    "end": "2026-01-31T09:32:06"
   },
   "authors": [
     "Asif Hussain"

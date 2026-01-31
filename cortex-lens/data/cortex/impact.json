@@ -3,11 +3,13 @@
   "affected_files": [
     "cortex-lens/data/cortex/dependencies.json",
     "cortex-lens/data/cortex/impact.json",
-    "cortex-lens/data/cortex/orchestrators.json",
     "cortex-lens/data/cortex/timeline.json",
-    "cortex-lens/static/js/d3-viz.js",
-    "cortex/scripts/generate_dashboard_data.py",
     "cortex-lens/index.html",
+    "cortex-lens/static/vendor/d3.v7.min.js",
+    "cortex/brain/analysis/git_history_analyzer.py",
+    "cortex/scripts/generate_dashboard_data.py",
+    "cortex-lens/data/cortex/orchestrators.json",
+    "cortex-lens/static/js/d3-viz.js",
     "cortex-lens/static/css/dashboard.css",
     "cortex-lens/static/css/glassmorphism.css",
     "cortex-lens/data/cortex/brain.json",
@@ -48,12 +50,14 @@
     "cortex/orchestrators/adaptive/strategy_selector.py",
     "cortex/orchestrators/mcp_tools_registry.py",
     "_workspaces/docker-plan/PHASE-14-PROMPT-CONSOLIDATION.yaml",
-    "cortex/brain/core/production_readiness_manager.py",
-    "cortex/core/registry/base_registry.py",
-    "_workspaces/dashboard/enhancements_lens_response_formatter.py"
+    "cortex/brain/core/production_readiness_manager.py"
   ],
   "impact_score": 4.15,
   "hotspots": [
+    {
+      "file": "cortex-lens/data/cortex/dependencies.json",
+      "changes": 6
+    },
     {
       "file": "cortex/orchestrators/core/dor_approval_gate.py",
       "changes": 6

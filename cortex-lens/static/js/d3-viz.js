@@ -7,9 +7,36 @@
     'use strict';
 
     /**
+     * Show loading spinner in container
+     */
+    function showLoading(container, message = 'Loading visualization...') {
+        container.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: #b8c5d6;">
+                <div style="width: 50px; height: 50px; border: 4px solid rgba(0, 212, 255, 0.2); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">${message}</p>
+            </div>
+            <style>
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            </style>
+        `;
+    }
+
+    /**
      * Render import dependency graph (Tab 2)
      */
     window.renderImportGraph = function(data, container) {
+        // Show loading
+        showLoading(container, 'Building import graph...');
+        
+        // Use setTimeout to allow loading spinner to render
+        setTimeout(() => {
+            _renderImportGraphInternal(data, container);
+        }, 10);
+    };
+    
+    function _renderImportGraphInternal(data, container) {
         // Clear container
         container.innerHTML = '';
 
@@ -154,6 +181,13 @@
      * Render orchestrator constellation (Tab 3)
      */
     window.renderOrchestratorGraph = function(data, container) {
+        showLoading(container, 'Building orchestrator network...');
+        setTimeout(() => {
+            _renderOrchestratorGraphInternal(data, container);
+        }, 10);
+    };
+    
+    function _renderOrchestratorGraphInternal(data, container) {
         // Clear container
         container.innerHTML = '';
 
@@ -303,6 +337,13 @@
      * Render git timeline (Tab 4)
      */
     window.renderTimeline = function(data, container) {
+        showLoading(container, 'Analyzing git timeline...');
+        setTimeout(() => {
+            _renderTimelineInternal(data, container);
+        }, 10);
+    };
+    
+    function _renderTimelineInternal(data, container) {
         // Clear container
         container.innerHTML = '';
 
@@ -376,6 +417,13 @@
      * Render impact heatmap (Tab 5)
      */
     window.renderHeatmap = function(data, container) {
+        showLoading(container, 'Calculating impact analysis...');
+        setTimeout(() => {
+            _renderHeatmapInternal(data, container);
+        }, 10);
+    };
+    
+    function _renderHeatmapInternal(data, container) {
         // Clear container
         container.innerHTML = '';
 
@@ -450,6 +498,13 @@
      * Render brain architecture (Tab 6)
      */
     window.renderBrainArchitecture = function(data, container) {
+        showLoading(container, 'Rendering brain architecture...');
+        setTimeout(() => {
+            _renderBrainArchitectureInternal(data, container);
+        }, 10);
+    };
+    
+    function _renderBrainArchitectureInternal(data, container) {
         // Clear container
         container.innerHTML = '';
 
