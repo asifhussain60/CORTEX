@@ -2,7 +2,7 @@
 """
 Tests for TDD Orchestrator V2 - Refactored with Base Protocol.
 
-PROOF OF CONCEPT: Verifies TDDOrchestratorV2 correctly inherits and uses
+PROOF OF CONCEPT: Verifies TDDOrchestrator correctly inherits and uses
 OrchestratorBaseProtocol for LENS, Security, Challenge, DoR phases.
 
 Test Coverage:
@@ -30,11 +30,11 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.orchestrators.core.tdd_orchestrator_v2 import (
-    TDDOrchestratorV2,
+from cortex.orchestrators.core.tdd_orchestrator import (
+    TDDOrchestrator,
     TDDPhase,
     TDDKnowledgeLoader,
-    get_tdd_orchestrator_v2,
+    get_tdd_orchestrator,
 )
 from cortex.core.result import Ok, Err
 
@@ -72,21 +72,21 @@ best_practices:
 
 
 @pytest.fixture
-def orchestrator_v2(knowledge_root: Path) -> TDDOrchestratorV2:
+def orchestrator_v2(knowledge_root: Path) -> TDDOrchestrator:
     """Create TDD Orchestrator V2 instance."""
-    return TDDOrchestratorV2(knowledge_root=knowledge_root)
+    return TDDOrchestrator(knowledge_root=knowledge_root)
 
 
 # =============================================================================
 # ARCH-012-REFACTOR-01: Initialization Tests
 # =============================================================================
 
-class TestTDDOrchestratorV2Initialization:
+class TestTDDOrchestratorInitialization:
     """Tests for TDD Orchestrator V2 initialization."""
 
     def test_orchestrator_v2_initializes(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         TDD Orchestrator V2 initializes with base protocol.
@@ -105,7 +105,7 @@ class TestTDDOrchestratorV2Initialization:
 
     def test_orchestrator_v2_loads_knowledge_yamls(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         TDD Orchestrator V2 loads knowledge YAMLs.
@@ -113,7 +113,7 @@ class TestTDDOrchestratorV2Initialization:
         ARCH-012-REFACTOR-01: Verify YAML loading
         """
         status = orchestrator_v2.get_tdd_status()
-        assert status["orchestrator"] == "TDDOrchestratorV2"
+        assert status["orchestrator"] == "TDDOrchestrator"
         assert status["version"] == "2.0"
         assert status["base_protocol"] == "OrchestratorBaseProtocol"
         assert "knowledge_loaded" in status
@@ -127,12 +127,12 @@ class TestTDDOrchestratorV2Initialization:
         knowledge_root: Path
     ) -> None:
         """
-        get_tdd_orchestrator_v2() returns singleton.
+        get_tdd_orchestrator() returns singleton.
         
         ARCH-012-REFACTOR-01: Verify singleton pattern
         """
-        instance1 = get_tdd_orchestrator_v2(knowledge_root)
-        instance2 = get_tdd_orchestrator_v2(knowledge_root)
+        instance1 = get_tdd_orchestrator(knowledge_root)
+        instance2 = get_tdd_orchestrator(knowledge_root)
         
         assert instance1 is instance2
 
@@ -144,11 +144,11 @@ class TestTDDOrchestratorV2Initialization:
 class TestLENSContextIntegration:
     """Tests for LENS context integration (inherited from base protocol)."""
 
-    @patch('cortex.orchestrators.core.tdd_orchestrator_v2.LENSOrchestrator')
+    @patch('cortex.orchestrators.core.tdd_orchestrator.LENSOrchestrator')
     def test_lens_context_built_automatically(
         self,
         mock_lens_class: Mock,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         LENS context is built automatically before TDD execution.
@@ -176,7 +176,7 @@ class TestLENSContextIntegration:
 
     def test_tdd_execution_with_lens_context(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         TDD domain logic receives LENS context.
@@ -209,7 +209,7 @@ class TestSecurityAssessmentIntegration:
 
     def test_security_assessment_for_code_context(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Security assessment runs when code context present.
@@ -238,7 +238,7 @@ class TestSecurityAssessmentIntegration:
 
     def test_security_hard_gate_blocks_vulnerable_code(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Security hard gate blocks CRITICAL threats.
@@ -277,7 +277,7 @@ class TestChallengeGenerationIntegration:
 
     def test_challenge_generated_for_suboptimal_approach(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Challenge generated when CORTEX has better solution.
@@ -305,7 +305,7 @@ class TestChallengeGenerationIntegration:
 
     def test_hard_gate_challenge_blocks_harmful_action(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Hard gate challenge blocks harmful actions.
@@ -345,7 +345,7 @@ class TestDoRConfidenceGateIntegration:
 
     def test_dor_gate_blocks_low_confidence_request(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         DoR gate blocks requests with <60% confidence.
@@ -373,7 +373,7 @@ class TestDoRConfidenceGateIntegration:
 
     def test_dor_gate_allows_high_confidence_request(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         DoR gate allows requests with ≥60% confidence.
@@ -410,7 +410,7 @@ class TestTDDDomainLogic:
 
     def test_red_phase_determination(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         RED phase determined from test-related requests.
@@ -422,7 +422,7 @@ class TestTDDDomainLogic:
 
     def test_green_phase_determination(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         GREEN phase determined from implementation requests.
@@ -434,7 +434,7 @@ class TestTDDDomainLogic:
 
     def test_refactor_phase_determination(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         REFACTOR phase determined from improvement requests.
@@ -446,7 +446,7 @@ class TestTDDDomainLogic:
 
     def test_red_phase_execution(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         RED phase executes with test patterns.
@@ -470,7 +470,7 @@ class TestTDDDomainLogic:
 
     def test_green_phase_execution(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         GREEN phase executes with implementation patterns.
@@ -493,7 +493,7 @@ class TestTDDDomainLogic:
 
     def test_refactor_phase_execution(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         REFACTOR phase executes with refactoring patterns.
@@ -524,7 +524,7 @@ class TestEndToEndProtocol:
 
     def test_full_protocol_execution_success(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Full protocol executes successfully for valid request.
@@ -546,14 +546,14 @@ class TestEndToEndProtocol:
         
         assert result.is_ok()
         output = result.unwrap()
-        assert output["orchestrator"] == "TDDOrchestratorV2"
+        assert output["orchestrator"] == "TDDOrchestrator"
         assert "tdd_phase" in output
         assert "guidance" in output
         assert "protocol_phases_completed" in output
 
     def test_protocol_phases_recorded(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         Protocol phases are recorded in result.
@@ -583,11 +583,11 @@ class TestEndToEndProtocol:
 # =============================================================================
 
 class TestV1vsV2Comparison:
-    """Tests comparing TDDOrchestrator (V1) with TDDOrchestratorV2."""
+    """Tests comparing TDDOrchestrator (V1) with TDDOrchestrator."""
 
     def test_v2_has_base_protocol_components(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         V2 has base protocol components that V1 lacks.
@@ -604,7 +604,7 @@ class TestV1vsV2Comparison:
 
     def test_v2_status_shows_base_protocol(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         V2 status shows base protocol integration.
@@ -623,7 +623,7 @@ class TestV1vsV2Comparison:
 
     def test_v2_simplifies_tdd_logic(
         self,
-        orchestrator_v2: TDDOrchestratorV2
+        orchestrator_v2: TDDOrchestrator
     ) -> None:
         """
         V2 focuses on TDD logic, protocol handled by base.
@@ -641,5 +641,5 @@ class TestV1vsV2Comparison:
 
 
 # =============================================================================
-# Run tests with: pytest tests/unit/orchestrators/test_tdd_orchestrator_v2.py -v
+# Run tests with: pytest tests/unit/orchestrators/test_tdd_orchestrator.py -v
 # =============================================================================
