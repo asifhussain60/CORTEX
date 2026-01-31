@@ -433,10 +433,7 @@ orchestrators:
       class: "DuplicationDetector"
       tier: 3
       priority: 74
-      dependencies:
-        - "GitHistoryAnalyzer"
-        - "ASTAnalyzer"
-        - "CommentExtractor"
+      dependencies: []
       capabilities:
         - exact_duplication_detection
         - semantic_duplication_detection
@@ -446,6 +443,10 @@ orchestrators:
         - duplication_reporting
       health_check: "generate_duplication_report"
       description: "Detects code duplications using LENS analyzers (Phase 8.3A)"
+      lens_analyzers:
+        - "GitHistoryAnalyzer"
+        - "ASTAnalyzer"
+        - "CommentExtractor"
 
     - name: "RecommendationEngine"
       module: "cortex.orchestrators.support.recommendation_engine"
