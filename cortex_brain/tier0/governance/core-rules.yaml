@@ -17,10 +17,11 @@ metadata:
   rule_count: 29
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-28 - PHASE-11: Add CORE-041 Event Idempotency rule"
-  version: "3.2"
+  last_update: "2026-01-30 - Add business principle aliases (dual naming system)"
+  version: "3.3"
   consolidation_date: "2026-01-28"
   consolidation_status: "Phase 11 Prep Complete - CORE-041 added for Event-Driven Architecture"
+  naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
 
 categories:
   - orchestration_lifecycle
@@ -40,12 +41,15 @@ rules:
   # CORE-001: Incremental Execution
   # --------------------------------------------------------------------------
   - rule_id: CORE-001
+    principle: "Flywheel Effect"
     category: orchestration_lifecycle
     severity: blocked
     name: Incremental Autonomous Execution
     description: |
       ALL orchestrators MUST work in small increments (<500 lines per turn)
       to prevent token limit errors. State MUST persist between increments.
+      
+      Business Principle: Small consistent turns build momentum over time.
     validation:
       - Operations split into <500 line increments
       - State persisted between turns
@@ -55,11 +59,14 @@ rules:
   # CORE-002: Markdown Report Suppression
   # --------------------------------------------------------------------------
   - rule_id: CORE-002
+    principle: "Signal vs Noise"
     category: response_formatting
     severity: blocked
     name: Markdown Report Suppression (Workspace-Wide)
     description: |
       SUPPRESS markdown report/status files UNLESS explicitly requested by user.
+      
+      Business Principle: Eliminate noise, amplify signal. Only create artifacts with explicit value.
       
       This rule applies workspace-wide (root + all subdirectories).
       
@@ -93,11 +100,14 @@ rules:
   # CORE-004: Minimal Continuation
   # --------------------------------------------------------------------------
   - rule_id: CORE-004
+    principle: "Clarity Through Brevity"
     category: response_formatting
     severity: blocked
     name: Minimal Continuation Prompts
     description: |
       CONTINUATION-PROMPT.md MUST be <500 tokens. Use pointer pattern.
+      
+      Business Principle: Say more with less. Precision beats verbosity.
     validation:
       - Line count ≤12
       - Token count <500
@@ -107,11 +117,15 @@ rules:
   # CORE-005: Path Portability (CRITICAL)
   # --------------------------------------------------------------------------
   - rule_id: CORE-005
+    principle: "Write Once, Run Anywhere"
     category: portability
     severity: blocked
     name: No Hardcoded Paths
     description: |
       NEVER use hardcoded absolute paths. Use src.core.path_resolver.
+      
+      Business Principle: Build for portability from day one.
+      
       WRONG: /Users/asifhussain/PROJECTS/CORTEX
       RIGHT: get_project_root() / "cortex_brain"
     validation:
@@ -125,11 +139,14 @@ rules:
   # CORE-006: Setup Verification
   # --------------------------------------------------------------------------
   - rule_id: CORE-006
+    principle: "Trust But Verify"
     category: orchestration_lifecycle
     severity: blocked
     name: Phase -2 Setup Verification
     description: |
       ALL orchestrators MUST verify dependencies before execution.
+      
+      Business Principle: Validate assumptions before acting on them.
     validation:
       - Dependencies pass tests (not just file exists)
       - VSCode cache checked
@@ -139,11 +156,14 @@ rules:
   # CORE-008: TDD Enforcement
   # --------------------------------------------------------------------------
   - rule_id: CORE-008
+    principle: "Red-Green-Refactor Discipline"
     category: development_workflow
     severity: blocked
     name: Test-First Development
     description: |
       Tests MUST exist BEFORE implementation (RED → GREEN → REFACTOR).
+      
+      Business Principle: Define success criteria before building the solution.
     validation:
       - Test file exists first
       - Test fails initially (RED)
@@ -153,11 +173,14 @@ rules:
   # CORE-011: Type Hints
   # --------------------------------------------------------------------------
   - rule_id: CORE-011
+    principle: "Make Invalid States Unrepresentable"
     category: quality_gates
     severity: blocked
     name: Python Type Hints Required
     description: |
       ALL Python functions MUST have complete type hints.
+      
+      Business Principle: Catch errors at design time, not runtime.
     validation:
       - Parameters have type hints
       - Return types specified
@@ -167,11 +190,14 @@ rules:
   # CORE-012: Docstrings
   # --------------------------------------------------------------------------
   - rule_id: CORE-012
+    principle: "Code Tells How, Docs Tell Why"
     category: quality_gates
     severity: blocked
     name: Docstrings Required
     description: |
       ALL public functions/classes MUST have Google-style docstrings.
+      
+      Business Principle: Future you shouldn't have to reverse-engineer present you.
     validation:
       - Public APIs documented
       - Args/Returns/Raises sections
@@ -181,11 +207,14 @@ rules:
   # CORE-013: Error Handling
   # --------------------------------------------------------------------------
   - rule_id: CORE-013
+    principle: "Fail Fast, Fail Explicitly"
     category: quality_gates
     severity: blocked
     name: Explicit Error Handling
     description: |
       NO bare except. NO catching generic Exception.
+      
+      Business Principle: Silent failures are time bombs. Make errors visible and actionable.
     validation:
       - Specific exception types
       - Custom exceptions for domain
@@ -195,11 +224,14 @@ rules:
   # CORE-017: Governance Enforcement
   # --------------------------------------------------------------------------
   - rule_id: CORE-017
+    principle: "Culture of Discipline"
     category: security_privacy
     severity: blocked
     name: Strict Governance
     description: |
       ALL rules enforced strictly. No overrides. All violations logged.
+      
+      Business Principle: Consistency at scale requires non-negotiable standards.
     validation:
       - Enforcement = strict
       - Override = false
@@ -209,11 +241,14 @@ rules:
   # CORE-018: YAML-First
   # --------------------------------------------------------------------------
   - rule_id: CORE-018
+    principle: "Machine-Readable First, Human-Readable Second"
     category: architecture_integrity
     severity: blocked
     name: YAML-First Design
     description: |
       Plans and configs MUST use YAML, not markdown. Machine-readable.
+      
+      Business Principle: Build for automation. Humans adapt, machines don't.
     validation:
       - No *-PLAN.md files
       - Use YAML for tracking
@@ -223,11 +258,14 @@ rules:
   # CORE-019: TDD-Master Required
   # --------------------------------------------------------------------------
   - rule_id: CORE-019
+    principle: "Right Tool for the Job"
     category: development_workflow
     severity: blocked
     name: Route Through TDD-Master
     description: |
       ALL implementation requests route to TDD-Master orchestrator.
+      
+      Business Principle: Specialization beats generalization for quality.
     validation:
       - '"implement X" routes to TDD-Master'
       - '"build X" routes to TDD-Master'
@@ -237,11 +275,14 @@ rules:
   # CORE-020: No Markdown in cortex_brain
   # --------------------------------------------------------------------------
   - rule_id: CORE-020
+    principle: "Separation of Concerns"
     category: response_formatting
     severity: blocked
     name: No Markdown in Brain
     description: |
       cortex_brain/ MUST be YAML/JSON only. No .md files.
+      
+      Business Principle: Data structures separate from documentation.
     validation:
       - cortex_brain/**/*.md blocked
       - Use YAML for all configs
@@ -251,11 +292,14 @@ rules:
   # CORE-024: MCP Tool Decorator
   # --------------------------------------------------------------------------
   - rule_id: CORE-024
+    principle: "Convention Over Configuration"
     category: architecture_integrity
     severity: blocked
     name: "@mcp_tool Required"
     description: |
       ALL MCP tools MUST use @mcp_tool decorator for registration.
+      
+      Business Principle: Standard patterns reduce cognitive load.
     validation:
       - Decorator on all tools
       - Registered in manifest
@@ -265,12 +309,15 @@ rules:
   # CORE-025: Result Pattern
   # --------------------------------------------------------------------------
   - rule_id: CORE-025
+    principle: "Make Errors First-Class Citizens"
     category: quality_gates
     severity: blocked
     name: Result[T] Pattern Required
     description: |
       Functions MUST return Result[T] for explicit error handling.
       Use Ok(value) for success, Err(message) for failure.
+      
+      Business Principle: Errors are expected outcomes, not exceptional cases.
     validation:
       - Return Result, not exceptions
       - Check is_ok() before unwrap()
@@ -282,12 +329,15 @@ rules:
   # CORE-026: Git Checkpoint Before Modify
   # --------------------------------------------------------------------------
   - rule_id: CORE-026
+    principle: "Always Have an Escape Route"
     category: development_workflow
     severity: blocked
     name: Git Checkpoint Required
     description: |
       Git checkpoint MUST be created before every major action.
       Enables efficient rollback on failures.
+      
+      Business Principle: Make reversibility a design constraint.
     validation:
       - Checkpoint before AC-ID start
       - Checkpoint before file modification
@@ -302,12 +352,15 @@ rules:
   # CORE-027: Audit Trail for Phase Completion
   # --------------------------------------------------------------------------
   - rule_id: CORE-027
+    principle: "Radical Transparency"
     category: auditability
     severity: blocked
     name: Audit Verification Required
     description: |
       Phase completion MUST be validated by audit trail verification.
       No phase lock without queryable audit entries.
+      
+      Business Principle: Trust comes from verifiable history, not assertions.
     validation:
       - Each AC-ID has AC_START, AC_EXECUTE, AC_COMPLETE entries
       - Hash chain integrity verified
@@ -323,6 +376,7 @@ rules:
   # CORE-028: Intelligent File Naming Convention (REVISED 2026-01-27)
   # --------------------------------------------------------------------------
   - rule_id: CORE-028
+    principle: "Self-Documenting Systems"
     category: architecture_integrity
     severity: blocked
     name: Intelligent File Naming with Python Module Compliance
@@ -331,6 +385,8 @@ rules:
       requirements. Python modules MUST use snake_case (hyphens cause SyntaxError).
       Non-Python files SHOULD use kebab-case for consistency with modern standards.
       Total length including extension SHOULD NOT exceed 30 characters.
+      
+      Business Principle: Names should tell a story without needing comments.
     
     naming_principles:
       python_modules:  # Files imported with 'from X import Y'
@@ -450,12 +506,15 @@ rules:
   # CORE-029: Documentation Drift Prevention
   # --------------------------------------------------------------------------
   - rule_id: CORE-029
+    principle: "Documentation as Code"
     category: quality_gates
     severity: blocked
     name: Documentation Drift Prevention
     description: |
       User-facing features MUST be documented in prompts BEFORE phase lock.
       Implementation code alone is insufficient - prompts must teach usage.
+      
+      Business Principle: If it's not documented, it doesn't exist for users.
       
       This rule addresses the systematic gap where features are built but
       never documented, rendering them invisible to users.
@@ -502,12 +561,16 @@ rules:
   # CORE-032: Mandatory Intent Classification (DoR - Definition of Ready)
   # --------------------------------------------------------------------------
   - rule_id: CORE-032
+    principle: "Hedgehog Concept"
     category: orchestration_lifecycle
     severity: blocked
     name: Mandatory Intent Classification (DoR Checkpoint)
     description: |
       EVERY operation MUST have intent classified BEFORE execution starts.
       This is enforced architecturally via IntentRouterFactory pattern.
+      
+      Business Principle: Know what you're best at. Know what the user actually needs.
+      Understand deeply before acting.
       
       Problem: Intent classification was optional (Stage 1 skippable).
       Solution: Factory pattern makes classification MANDATORY - factory
@@ -593,6 +656,7 @@ rules:
   # CORE-038: File Placement Policy (TIER 0 - IMMUTABLE)
   # --------------------------------------------------------------------------
   - rule_id: CORE-038
+    principle: "A Place for Everything, Everything in its Place"
     category: architecture_integrity
     severity: blocked
     name: File Placement Policy
@@ -600,6 +664,8 @@ rules:
       All files in CORTEX repository MUST be stored in appropriate subfolders.
       NO files are permitted in root directories of major folders.
       Uses intelligent kebab-case naming convention.
+      
+      Business Principle: Organization is not optional. Structure enables scale.
     
     forbidden_patterns:
       - "Root-level files (reports/my-file.md)"
@@ -642,12 +708,15 @@ rules:
   # CORE-039: MD File Generation Prohibition (TIER 0 - IMMUTABLE)
   # --------------------------------------------------------------------------
   - rule_id: CORE-039
+    principle: "Prevention Over Cure"
     category: response_formatting
     severity: blocked
     name: MD File Generation Prohibition
     description: |
       Eliminate automatic MD file generation at phase end.
       Only MD files explicitly requested by user are permitted.
+      
+      Business Principle: Stop problems at the source. Don't create messes to clean up.
     
     scope:
       applies_to:
@@ -706,6 +775,7 @@ rules:
   # CORE-040: Documentation Lifecycle Management (AC-CLEANUP-PREVENTION)
   # --------------------------------------------------------------------------
   - rule_id: CORE-040
+    principle: "Design for Decay"
     category: architecture_integrity
     severity: blocked
     name: Documentation Lifecycle Management
@@ -713,6 +783,8 @@ rules:
       Prevent documentation bloat at source through lifecycle management.
       All generated documentation files MUST include expiration timestamps.
       No cleanup processes—prevention is the enforcement mechanism.
+      
+      Business Principle: Entropy is inevitable. Design systems that self-maintain.
       
       This rule addresses the root cause of documentation accumulation by
       enforcing expiration dates at creation time, not cleanup time.
@@ -801,6 +873,7 @@ rules:
 
   # --------------------------------------------------------------------------
   - rule_id: AC-PERMANENT-FIX-006
+    principle: "Built-In Quality"
     category: architectural_enforcement
     severity: blocked
     name: Challenge System Permanent Wiring
@@ -808,6 +881,8 @@ rules:
       Challenge-driven interaction system MUST remain permanently wired.
       InteractionOrchestrator with ChallengeEngine MUST be active in all
       MasterOrchestrator instances.
+      
+      Business Principle: Quality cannot be inspected in; it must be built in.
       
       This prevents regression of challenge-driven interaction capability
       that enables CORTEX to disagree with user requests when better
@@ -841,12 +916,16 @@ rules:
   # CORE-030: Implementation Truth Enforcement (AC-PERMANENT-FIX-005)
   # --------------------------------------------------------------------------
   - rule_id: CORE-030
+    principle: "Confront Brutal Facts"
     category: quality_gates
     severity: blocked
     name: Implementation Truth Enforcement
     description: |
       CORTEX MUST validate claims against actual code BEFORE answering.
       Documentation is guidance only - implementation is the single source of truth.
+      
+      Business Principle: Face reality, even when uncomfortable. Never lie to yourself.
+      The code doesn't lie - documentation might.
       
       This rule prevents documentation-driven hallucination where prompts
       contain aspirational/false claims that diverge from actual implementation.
@@ -914,12 +993,15 @@ rules:
   # CORE-034: Mandatory Audit Logging
   # --------------------------------------------------------------------------
   - rule_id: CORE-034
+    principle: "Measure What Matters"
     category: auditability
     severity: blocked
     name: Mandatory Audit Logging (Observability)"
     description: |
       ALL operations MUST log to AuditLogger.
       Provides observability, debugging, compliance tracking.
+      
+      Business Principle: You can't improve what you don't measure. Make everything observable.
       
       Mandatory log events:
       - INTENT_CLASSIFIED (Stage 1 complete)
@@ -946,12 +1028,15 @@ rules:
   # CORE-035: Single Canonical Implementation (AC-PERMANENT-FIX-007)
   # --------------------------------------------------------------------------
   - rule_id: CORE-035
+    principle: "One Source of Truth"
     category: architecture
     severity: blocked
     name: Single Canonical Implementation
     description: |
       Each concept, pattern, or component MUST have exactly ONE canonical implementation.
       No *_unified, *_refactored, *_v2, *_alternative, *_new, *_old variants allowed.
+      
+      Business Principle: Duplication is waste. Maintain one authoritative version.
       
       This rule prevents:
       - Competing implementations causing confusion
@@ -1003,6 +1088,7 @@ rules:
   # CORE-041: Event Idempotency (Phase 11)
   # --------------------------------------------------------------------------
   - rule_id: CORE-041
+    principle: "Same Input, Same Output"
     category: architecture_integrity
     severity: blocked
     name: Event Idempotency Required
@@ -1010,6 +1096,8 @@ rules:
       ALL event handlers MUST be idempotent. Replaying the same event twice
       produces identical graph state. This prevents reconciliation crawlers
       from creating duplicates and enables safe event replay for disaster recovery.
+      
+      Business Principle: Systems must tolerate replay. Duplicate processing should be harmless.
       
       Phase 11 (Event-Driven Knowledge Ingestion) introduces real-time event
       processing (Git webhooks, API gateway hooks, database CDC). Events can

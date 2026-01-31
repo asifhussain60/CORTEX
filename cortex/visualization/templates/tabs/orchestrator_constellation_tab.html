@@ -1,0 +1,300 @@
+<!-- Tab 8: Orchestrator Constellation (CORTEX-Specific) -->
+<div class="tab-panel" x-show="activeTab === 'orchestrator_constellation'" x-transition>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    🌌 Orchestrator Constellation
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">
+                    Visualize orchestrator relationships, wiring status, and request flow patterns
+                </p>
+            </div>
+            
+            <!-- Wiring Status Badge -->
+            <div>
+                <span class="px-6 py-3 rounded-full text-2xl font-bold bg-green-100 text-green-800">
+                    100% Wired
+                </span>
+            </div>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-purple-600">23</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Orchestrators</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-blue-600">6</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Core</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-green-600">5</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Domain</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-orange-600">12</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Support</div>
+            </div>
+        </div>
+        
+        <!-- Interactive Constellation Graph -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                    Force-Directed Orchestrator Graph
+                </h3>
+                
+                <!-- Animation Controls -->
+                <div class="flex space-x-2">
+                    <button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
+                        ▶ Simulate Request Flow
+                    </button>
+                    <button class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        ⏸ Pause
+                    </button>
+                    <button class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div id="orchestrator-constellation-graph" class="w-full h-96 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                <!-- D3.js force-directed graph with request flow animation -->
+                <div class="flex items-center justify-center h-full text-gray-400">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <p>Loading orchestrator constellation...</p>
+                        <p class="text-xs mt-2">23 nodes, 47 connections</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="mt-4 flex items-center justify-center space-x-6 text-sm">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                    <span>Core (6)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-purple-500 mr-2"></div>
+                    <span>Domain (5)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+                    <span>Support (12)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-0.5 bg-gray-400 mr-2"></div>
+                    <span>Dependency</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-0.5 bg-yellow-400 mr-2 animate-pulse"></div>
+                    <span>Active Request</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Request Flow Patterns -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                Common Request Flow Patterns
+            </h3>
+            <div class="space-y-4">
+                <!-- Pattern 1: IMPLEMENT Intent -->
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div class="font-medium text-blue-900 dark:text-blue-200 mb-2">
+                        🔧 IMPLEMENT Intent Flow
+                    </div>
+                    <div class="flex items-center text-sm space-x-2">
+                        <span class="px-3 py-1 bg-blue-200 dark:bg-blue-800 rounded-full">IntentRouter</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-purple-200 dark:bg-purple-800 rounded-full">TDDOrchestrator</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">TestRunner</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">CodeGenerator</span>
+                    </div>
+                </div>
+                
+                <!-- Pattern 2: REFACTOR Intent -->
+                <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                    <div class="font-medium text-purple-900 dark:text-purple-200 mb-2">
+                        ♻️ REFACTOR Intent Flow
+                    </div>
+                    <div class="flex items-center text-sm space-x-2">
+                        <span class="px-3 py-1 bg-blue-200 dark:bg-blue-800 rounded-full">IntentRouter</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-purple-200 dark:bg-purple-800 rounded-full">RefactoringOrch.</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">LENSOrchestrator</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">ImpactAnalysis</span>
+                    </div>
+                </div>
+                
+                <!-- Pattern 3: ANALYZE Intent -->
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div class="font-medium text-green-900 dark:text-green-200 mb-2">
+                        🔍 ANALYZE Intent Flow
+                    </div>
+                    <div class="flex items-center text-sm space-x-2">
+                        <span class="px-3 py-1 bg-blue-200 dark:bg-blue-800 rounded-full">IntentRouter</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-purple-200 dark:bg-purple-800 rounded-full">MasterOrch.</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">LENSOrchestrator</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-green-200 dark:bg-green-800 rounded-full">Visualization</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wiring Configuration -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Wiring Source -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    📄 Wiring Configuration
+                </h3>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Source:</span>
+                        <span class="font-mono text-xs">cortex/wiring/specifications/wiring.yaml</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Type:</span>
+                        <span class="font-bold">Git-Backed Registry</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Hot-Reload:</span>
+                        <span class="text-green-600 font-bold">✓ Enabled</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Last Updated:</span>
+                        <span>2026-01-28</span>
+                    </div>
+                </div>
+                
+                <button class="mt-4 w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
+                    View wiring.yaml
+                </button>
+            </div>
+            
+            <!-- Orchestrator Dependencies -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    🔗 Dependency Summary
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">MasterOrchestrator</span>
+                            <span class="text-purple-600 font-bold">5 deps</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-purple-600 h-2 rounded-full" style="width: 22%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">TDDOrchestrator</span>
+                            <span class="text-blue-600 font-bold">4 deps</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 17%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">RefactoringOrchestrator</span>
+                            <span class="text-green-600 font-bold">3 deps</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 13%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">LENSOrchestrator</span>
+                            <span class="text-orange-600 font-bold">2 deps</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-600 h-2 rounded-full" style="width: 9%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Orchestrator Registry Table -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                📋 Complete Orchestrator Registry
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Name</th>
+                            <th class="px-4 py-2 text-left">Category</th>
+                            <th class="px-4 py-2 text-left">Module</th>
+                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Dependencies</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 font-medium">MasterOrchestrator</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Core</span></td>
+                            <td class="px-4 py-2 font-mono text-xs">cortex.orchestrators.core</td>
+                            <td class="px-4 py-2"><span class="text-green-600">✓ Wired</span></td>
+                            <td class="px-4 py-2 text-xs">5</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 font-medium">IntentRouter</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Core</span></td>
+                            <td class="px-4 py-2 font-mono text-xs">cortex.orchestrators.core</td>
+                            <td class="px-4 py-2"><span class="text-green-600">✓ Wired</span></td>
+                            <td class="px-4 py-2 text-xs">3</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 font-medium">TDDOrchestrator</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Core</span></td>
+                            <td class="px-4 py-2 font-mono text-xs">cortex.orchestrators.core</td>
+                            <td class="px-4 py-2"><span class="text-green-600">✓ Wired</span></td>
+                            <td class="px-4 py-2 text-xs">4</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 font-medium">RefactoringOrchestrator</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Domain</span></td>
+                            <td class="px-4 py-2 font-mono text-xs">cortex.orchestrators.domain</td>
+                            <td class="px-4 py-2"><span class="text-green-600">✓ Wired</span></td>
+                            <td class="px-4 py-2 text-xs">3</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="px-4 py-2 font-medium">LENSOrchestrator</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Support</span></td>
+                            <td class="px-4 py-2 font-mono text-xs">cortex.orchestrators.support</td>
+                            <td class="px-4 py-2"><span class="text-green-600">✓ Wired</span></td>
+                            <td class="px-4 py-2 text-xs">2</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td colspan="5" class="px-4 py-2 text-center text-gray-500">
+                                ... 18 more orchestrators
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

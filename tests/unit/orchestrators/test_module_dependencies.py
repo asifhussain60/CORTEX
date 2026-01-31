@@ -121,7 +121,7 @@ class TestCriticalDependencies:
             from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
             from cortex.core.interfaces import IOrchestrator
             from cortex.core.result import Result, Ok, Err
-            from cortex.brain.core.governance_registry import GovernanceRegistry
+            from cortex.orchestrators.core.governance_registry import GovernanceRegistry
             from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
             from cortex.orchestrators.tools.todo_manager import TodoManager
             
@@ -181,7 +181,7 @@ class TestModuleAttributeAvailability:
 
     def test_governance_registry_required_methods(self) -> None:
         """Test AC-FR-MODULE-007: GovernanceRegistry has required methods."""
-        from cortex.brain.core.governance_registry import GovernanceRegistry
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry
         
         registry = GovernanceRegistry.instance()
         
@@ -230,7 +230,7 @@ class TestModuleInitializationOrder:
         """Test AC-FR-MODULE-009: Governance registry initializes before MasterOrchestrator."""
         try:
             # Import governance
-            from cortex.brain.core.governance_registry import GovernanceRegistry
+            from cortex.orchestrators.core.governance_registry import GovernanceRegistry
             
             # Get instance (initialization)
             gov = GovernanceRegistry.instance()
@@ -418,7 +418,7 @@ class TestModuleConsistency:
 
     def test_governance_registry_consistency(self) -> None:
         """Test AC-FR-MODULE-013: GovernanceRegistry instances are consistent."""
-        from cortex.brain.core.governance_registry import GovernanceRegistry
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry
         
         g1 = GovernanceRegistry.instance()
         g2 = GovernanceRegistry.instance()

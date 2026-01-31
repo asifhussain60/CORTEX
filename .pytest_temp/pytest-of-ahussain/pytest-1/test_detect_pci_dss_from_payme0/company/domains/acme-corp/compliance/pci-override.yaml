@@ -1,0 +1,8 @@
+
+metadata:
+  company: acme-corp
+  overrides: PCI-DSS
+custom_requirements:
+  - id: ACME-PCI-001
+    title: Extended key rotation
+    description: Rotate keys every 30 days (stricter than standard)

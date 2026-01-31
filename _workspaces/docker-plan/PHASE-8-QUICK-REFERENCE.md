@@ -31,7 +31,7 @@
 
 ### Step 2: Execute Test Archiving (2 min)
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 python3 scripts/archive-legacy-tests.py
 ```
 

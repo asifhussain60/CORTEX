@@ -58,15 +58,15 @@ class SpecRegistry:
     """
     
     # Default spec directory
-    DEFAULT_SPEC_DIR = Path(__file__).parent
+    DEFAULT_SPEC_DIR = Path(__file__).parent / "specs"
     
     # Maximum cache size (LRU)
     MAX_CACHE_SIZE = 128
     
     # Spec files to load
+    # Note: orchestrator_dispatch moved to canonical wiring.yaml (CORE-035)
     SPEC_FILES = {
         "routing_rules": "routing-rules-intent.yaml",
-        "orchestrator_dispatch": "orchestrator.yaml",
         "governance_gates": "gov-gates-val-rules.yaml",
         "execution_flow": "exec-flow.yaml",
     }

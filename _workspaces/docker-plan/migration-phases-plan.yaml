@@ -4,7 +4,7 @@
 # Date: 2026-01-27
 # Phase: 0 Complete, Phases 1-6 Queued
 # Status: APPROVED (Versioning removed per Option A decision)
-# Author: Asif Hussain
+# Author: CORTEX Team
 # Authority: CORTEX Master Orchestrator
 #
 # This is the SINGLE SOURCE OF TRUTH for migrating CORTEX to a clean,
@@ -33,12 +33,19 @@ metadata:
   date: "2026-01-31"
   phase: "Phase 6 Complete - Phase 7+ Enhancement Phases Planned"
   status: "CORE_COMPLETE_ENHANCEMENTS_PLANNED"
-  author: "Asif Hussain"
+  author: "CORTEX Team"
   git_checkpoint: "phase6-test-suite-20260128"
   last_updated: "2026-01-31T00:00:00Z"
   
   # SEQUENTIAL EXECUTION - NO SKIPPING
-  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 8 → 9 → 14"
+  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 8 → 9 → 14 → 16"
+  
+  # Phase 16: Remediation & Lessons Learned Framework ✅ ESTABLISHED
+  #   - Captures lessons learned from debugging sessions
+  #   - Tracks AC-PERMANENT-FIX registry (010 fixes active)
+  #   - Establishes prevention framework (pre-commit hooks, CI gates)
+  #   - Documents Documentation-Code Sync pattern
+  #   - See: PHASE-16-REMEDIATION-FRAMEWORK.yaml
   
   # Phase 0 (Pre-Flight): Validation complete ✅
   # Phase 1: Component Analysis & Inventory Discovery ✅ COMPLETE
@@ -98,6 +105,19 @@ metadata:
   # Phase 8: CORE-035 Duplicate Consolidation 📋 PLANNED (P1-HIGH - 12-16 hours)
   #   - P0 Critical: 20 duplicates (git_history_analyzer, ast_analyzer, etc.)
   #   - P1 High: 45 duplicates (common utilities, infrastructure)
+  # Phase 8.2: Unified User-Request-to-Orchestrator Mapping 🚧 ACTIVE (P0-CRITICAL)
+  #   - Task ROUTE-001: Extend intent-routing.yaml schema 📋 PLANNED
+  #   - Task ROUTE-002: Create OrchestratorLookup adapter 📋 PLANNED
+  #   - Task ROUTE-003: Enhance IntentRouter with keyword extraction 📋 PLANNED
+  #   - Task ROUTE-004: Update RoutingDecision dataclass 📋 PLANNED
+  #   - Task ROUTE-005: Add RoutingEnforcementEngine (Tier 0 blocking) 📋 PLANNED
+  #   - Task ROUTE-006: Integration tests (15 end-to-end scenarios) 📋 PLANNED
+  #   - Phase 8.3: Semantic ranking + disambiguation 📋 PLANNED
+  #   - Phase 8.4: Optional NLP enhancement 📋 PLANNED
+  #   - Phase 8.5: LENS Microsoft stack expertise (C#, SQL, Oracle, Angular) 📋 PLANNED
+  #   - Phase 8.6: Production readiness verification (6 new checks) 📋 PLANNED
+  #   - Timeline: 4 weeks (6 sub-phases), ~1200 LOC, 60+ tests
+  #   - See: PHASE-8.2-UNIFIED-ROUTING.yaml for complete specification
   #   - P2 Medium: 48 duplicates (domain-specific implementations)
   #   - 113 total violations → 113 canonical implementations
   #   - 9% codebase reduction (237 → 113 files)
@@ -246,7 +266,7 @@ phase_0:
     - id: "PF-001"
       name: "Git State Verification"
       commands:
-        - "cd /Users/asifhussain/PROJECTS/CORTEX"
+        - "cd /path/to/CORTEX"
         - "git status"
         - "git stash list"
       validation: "No uncommitted changes or unstaged files"

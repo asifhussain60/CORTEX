@@ -8,7 +8,7 @@
 **EVERY response MUST begin with:**
 ```markdown
 ## 🧠 CORTEX Git
-**Author:** Asif Hussain | **Phase:** Git Operations | **Orchestrator:** GitOrchestrator ✅
+**Author:** Asif Hussain | **Orchestrator:** GitOrchestrator ✅
 
 ---
 ```

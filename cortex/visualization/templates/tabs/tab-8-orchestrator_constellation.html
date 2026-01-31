@@ -1,0 +1,416 @@
+<!-- Tab 8: Orchestrator Constellation (CORTEX-Specific) -->
+<div class="tab-panel cortex-specific" x-show="activeTab === 'orchestrators'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">🎼 Orchestrator Constellation</h2>
+    <p class="tab-subtitle">23 orchestrators network visualization</p>
+  </div>
+
+  <!-- Orchestrator Overview -->
+  <div class="orchestrator-overview glass-panel">
+    <div class="overview-stats">
+      <div class="stat-card">
+        <div class="stat-icon">🎼</div>
+        <div class="stat-value" x-text="data.orchestrators?.stats?.total || 23"></div>
+        <div class="stat-label">Total Orchestrators</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🟢</div>
+        <div class="stat-value" x-text="data.orchestrators?.stats?.active || 0"></div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔗</div>
+        <div class="stat-value" x-text="data.orchestrators?.stats?.connections || 0"></div>
+        <div class="stat-label">Connections</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" x-text="data.orchestrators?.stats?.invocations || 0"></div>
+        <div class="stat-label">Total Invocations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orchestrator Network Graph -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🕸️ Orchestrator Network</h3>
+    <div class="network-controls">
+      <div class="control-group">
+        <label>Category Filter</label>
+        <select x-model="orchestratorFilter.category" @change="updateOrchestratorGraph()">
+          <option value="all">All Categories</option>
+          <option value="core">Core</option>
+          <option value="domain">Domain</option>
+          <option value="support">Support</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Layout</label>
+        <select x-model="orchestratorFilter.layout" @change="updateOrchestratorGraph()">
+          <option value="force">Force-Directed</option>
+          <option value="hierarchical">Hierarchical</option>
+          <option value="circular">Circular</option>
+          <option value="radial">Radial</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Show Connections</label>
+        <input type="checkbox" x-model="orchestratorFilter.showConnections" @change="updateOrchestratorGraph()">
+      </div>
+    </div>
+    
+    <div id="orchestrator-network-canvas" class="network-canvas"></div>
+    
+    <div class="network-legend">
+      <div class="legend-category">
+        <span class="legend-color core"></span>
+        <span class="legend-label">Core Orchestrators (6)</span>
+      </div>
+      <div class="legend-category">
+        <span class="legend-color domain"></span>
+        <span class="legend-label">Domain Orchestrators (5)</span>
+      </div>
+      <div class="legend-category">
+        <span class="legend-color support"></span>
+        <span class="legend-label">Support Orchestrators (12)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orchestrator List -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📋 Orchestrator Registry</h3>
+    
+    <!-- Core Orchestrators -->
+    <div class="orchestrator-category">
+      <h4 class="category-title core">🔵 Core Orchestrators</h4>
+      <div class="orchestrator-grid">
+        <template x-for="orch in data.orchestrators?.categories?.core || []" :key="orch.name">
+          <div class="orchestrator-card core" @click="selectOrchestrator(orch)">
+            <div class="orch-header">
+              <span class="orch-icon" x-text="orch.icon"></span>
+              <span class="orch-name" x-text="orch.name"></span>
+              <span class="orch-status" :class="orch.status"></span>
+            </div>
+            <div class="orch-description" x-text="orch.description"></div>
+            <div class="orch-metrics">
+              <span class="metric">
+                <span class="metric-label">Invocations:</span>
+                <span class="metric-value" x-text="orch.invocations"></span>
+              </span>
+              <span class="metric">
+                <span class="metric-label">Avg Time:</span>
+                <span class="metric-value" x-text="`${orch.avg_time}ms`"></span>
+              </span>
+            </div>
+            <div class="orch-file" x-text="orch.file_path"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Domain Orchestrators -->
+    <div class="orchestrator-category">
+      <h4 class="category-title domain">🟢 Domain Orchestrators</h4>
+      <div class="orchestrator-grid">
+        <template x-for="orch in data.orchestrators?.categories?.domain || []" :key="orch.name">
+          <div class="orchestrator-card domain" @click="selectOrchestrator(orch)">
+            <div class="orch-header">
+              <span class="orch-icon" x-text="orch.icon"></span>
+              <span class="orch-name" x-text="orch.name"></span>
+              <span class="orch-status" :class="orch.status"></span>
+            </div>
+            <div class="orch-description" x-text="orch.description"></div>
+            <div class="orch-metrics">
+              <span class="metric">
+                <span class="metric-label">Invocations:</span>
+                <span class="metric-value" x-text="orch.invocations"></span>
+              </span>
+              <span class="metric">
+                <span class="metric-label">Avg Time:</span>
+                <span class="metric-value" x-text="`${orch.avg_time}ms`"></span>
+              </span>
+            </div>
+            <div class="orch-file" x-text="orch.file_path"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Support Orchestrators -->
+    <div class="orchestrator-category">
+      <h4 class="category-title support">🟡 Support Orchestrators</h4>
+      <div class="orchestrator-grid">
+        <template x-for="orch in data.orchestrators?.categories?.support || []" :key="orch.name">
+          <div class="orchestrator-card support" @click="selectOrchestrator(orch)">
+            <div class="orch-header">
+              <span class="orch-icon" x-text="orch.icon"></span>
+              <span class="orch-name" x-text="orch.name"></span>
+              <span class="orch-status" :class="orch.status"></span>
+            </div>
+            <div class="orch-description" x-text="orch.description"></div>
+            <div class="orch-metrics">
+              <span class="metric">
+                <span class="metric-label">Invocations:</span>
+                <span class="metric-value" x-text="orch.invocations"></span>
+              </span>
+              <span class="metric">
+                <span class="metric-label">Avg Time:</span>
+                <span class="metric-value" x-text="`${orch.avg_time}ms`"></span>
+              </span>
+            </div>
+            <div class="orch-file" x-text="orch.file_path"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selected Orchestrator Details -->
+  <div class="content-section glass-panel" x-show="selectedOrchestrator" x-transition>
+    <h3 class="section-title">🔍 Orchestrator Details</h3>
+    <div class="orchestrator-details">
+      <div class="details-header">
+        <span class="details-icon" x-text="selectedOrchestrator?.icon"></span>
+        <span class="details-name" x-text="selectedOrchestrator?.name"></span>
+        <span class="details-category" :class="selectedOrchestrator?.category" x-text="selectedOrchestrator?.category"></span>
+      </div>
+
+      <div class="details-section">
+        <h5>Description</h5>
+        <p x-text="selectedOrchestrator?.full_description"></p>
+      </div>
+
+      <div class="details-section">
+        <h5>Responsibilities</h5>
+        <ul>
+          <template x-for="resp in selectedOrchestrator?.responsibilities || []" :key="resp">
+            <li x-text="resp"></li>
+          </template>
+        </ul>
+      </div>
+
+      <div class="details-section">
+        <h5>Dependencies</h5>
+        <div class="dependency-list">
+          <template x-for="dep in selectedOrchestrator?.dependencies || []" :key="dep">
+            <span class="dependency-badge" x-text="dep"></span>
+          </template>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h5>Methods</h5>
+        <div class="method-list">
+          <template x-for="method in selectedOrchestrator?.methods || []" :key="method.name">
+            <div class="method-item">
+              <span class="method-name" x-text="method.name"></span>
+              <span class="method-signature" x-text="`(${method.params})`"></span>
+              <span class="method-return" x-text="`→ ${method.return_type}`"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <h5>Performance Metrics</h5>
+        <div class="performance-metrics">
+          <div class="perf-metric">
+            <span class="perf-label">Total Invocations:</span>
+            <span class="perf-value" x-text="selectedOrchestrator?.metrics?.total_invocations"></span>
+          </div>
+          <div class="perf-metric">
+            <span class="perf-label">Average Response Time:</span>
+            <span class="perf-value" x-text="`${selectedOrchestrator?.metrics?.avg_response_time}ms`"></span>
+          </div>
+          <div class="perf-metric">
+            <span class="perf-label">Success Rate:</span>
+            <span class="perf-value" x-text="`${selectedOrchestrator?.metrics?.success_rate}%`"></span>
+          </div>
+          <div class="perf-metric">
+            <span class="perf-label">Last Invoked:</span>
+            <span class="perf-value" x-text="formatDate(selectedOrchestrator?.metrics?.last_invoked)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orchestrator Usage Patterns -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📊 Usage Patterns</h3>
+    <div id="orchestrator-usage-chart" class="usage-chart-canvas"></div>
+  </div>
+
+  <!-- Orchestrator Health -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">💚 Orchestrator Health</h3>
+    <div class="health-grid">
+      <template x-for="orch in data.orchestrators?.health || []" :key="orch.name">
+        <div class="health-card" :class="getHealthStatus(orch.health_score)">
+          <div class="health-name" x-text="orch.name"></div>
+          <div class="health-score">
+            <div class="score-circle" :class="getHealthStatus(orch.health_score)">
+              <span x-text="orch.health_score"></span>
+            </div>
+          </div>
+          <div class="health-indicators">
+            <div class="indicator" :class="orch.uptime > 99 ? 'good' : 'warning'">
+              <span class="indicator-label">Uptime:</span>
+              <span class="indicator-value" x-text="`${orch.uptime}%`"></span>
+            </div>
+            <div class="indicator" :class="orch.error_rate < 1 ? 'good' : 'warning'">
+              <span class="indicator-label">Error Rate:</span>
+              <span class="indicator-value" x-text="`${orch.error_rate}%`"></span>
+            </div>
+            <div class="indicator" :class="orch.response_time < 1000 ? 'good' : 'warning'">
+              <span class="indicator-label">Avg Time:</span>
+              <span class="indicator-value" x-text="`${orch.response_time}ms`"></span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Wiring Configuration -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🔌 Wiring Configuration</h3>
+    <div class="wiring-info">
+      <div class="wiring-status">
+        <span class="status-icon">✅</span>
+        <span class="status-text">Git-backed YAML wiring active</span>
+      </div>
+      <div class="wiring-path">
+        <span class="path-label">Configuration:</span>
+        <code>cortex/wiring/specifications/wiring.yaml</code>
+      </div>
+      <div class="wiring-stats">
+        <div class="wiring-stat">
+          <span class="stat-label">Last Updated:</span>
+          <span class="stat-value" x-text="formatDate(data.orchestrators?.wiring?.last_updated)"></span>
+        </div>
+        <div class="wiring-stat">
+          <span class="stat-label">Hot Reload:</span>
+          <span class="stat-value">Enabled</span>
+        </div>
+        <div class="wiring-stat">
+          <span class="stat-label">Validation:</span>
+          <span class="stat-value" :class="data.orchestrators?.wiring?.valid ? 'success' : 'error'">
+            <span x-text="data.orchestrators?.wiring?.valid ? 'Valid' : 'Invalid'"></span>
+          </span>
+        </div>
+      </div>
+      <button class="btn-reload" @click="reloadWiring()">🔄 Reload Wiring</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Orchestrator network visualization
+function initOrchestratorNetwork(data, layout) {
+  const width = document.getElementById('orchestrator-network-canvas').clientWidth;
+  const height = 600;
+
+  d3.select('#orchestrator-network-canvas').html('');
+
+  const svg = d3.select('#orchestrator-network-canvas')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+  // Category colors
+  const categoryColors = {
+    core: '#4299e1',
+    domain: '#48bb78',
+    support: '#ed8936'
+  };
+
+  // Force simulation
+  const simulation = d3.forceSimulation(data.nodes)
+    .force('link', d3.forceLink(data.links).id(d => d.id).distance(150))
+    .force('charge', d3.forceManyBody().strength(-500))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(40));
+
+  // Links
+  const link = svg.append('g')
+    .selectAll('line')
+    .data(data.links)
+    .enter()
+    .append('line')
+    .attr('stroke', '#718096')
+    .attr('stroke-width', d => d.strength * 2)
+    .attr('opacity', 0.6);
+
+  // Nodes
+  const node = svg.append('g')
+    .selectAll('circle')
+    .data(data.nodes)
+    .enter()
+    .append('circle')
+    .attr('r', d => d.importance * 15 + 10)
+    .attr('fill', d => categoryColors[d.category])
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 3)
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended))
+    .on('click', (event, d) => {
+      window.dashboardApp.selectOrchestrator(d);
+    });
+
+  // Labels
+  const labels = svg.append('g')
+    .selectAll('text')
+    .data(data.nodes)
+    .enter()
+    .append('text')
+    .text(d => d.name)
+    .attr('font-size', 11)
+    .attr('font-weight', 'bold')
+    .attr('text-anchor', 'middle')
+    .attr('dy', -25);
+
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y);
+
+    labels
+      .attr('x', d => d.x)
+      .attr('y', d => d.y);
+  });
+
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+}
+
+function getHealthStatus(score) {
+  if (score >= 90) return 'excellent';
+  if (score >= 75) return 'good';
+  if (score >= 50) return 'fair';
+  return 'poor';
+}
+</script>

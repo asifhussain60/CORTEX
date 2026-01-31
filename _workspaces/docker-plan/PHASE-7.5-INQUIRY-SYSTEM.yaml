@@ -24,7 +24,7 @@ metadata:
   phase: "7.5"
   status: "STAGE_1_COMPLETE"
   completion_date: "2026-01-27"
-  author: "Asif Hussain"
+  author: "CORTEX Team"
   authority: "Strategic planning session (hybrid approach agreed)"
   
   # Stage 1 Completion
@@ -208,7 +208,7 @@ stage_1_mvp:
       
       step_2_working_directory:
         description: "Check current working directory path"
-        cortex_path: "/Users/asifhussain/PROJECTS/CORTEX"
+        cortex_path: "/path/to/CORTEX"
         detection: "Exact match or parent directory"
         confidence: "Very High (95%)"
       
@@ -220,7 +220,7 @@ stage_1_mvp:
       
       step_4_git_remote:
         description: "Check git remote URL if available"
-        cortex_remote: "github.com/asifhussain60/CORTEX"
+        cortex_remote: "github.com/your-org/CORTEX"
         confidence: "Very High (98%)"
       
       step_5_fallback:
@@ -1347,7 +1347,7 @@ completion_certificate:
   total_timeline: "~3 weeks (including validation)"
   
   sign_off:
-    author: "Asif Hussain"
+    author: "CORTEX Team"
     date: "2026-01-27"
     authority: "CORTEX Master Orchestrator"
     approval: "✅ APPROVED (Hybrid MVP → Docker approach)"

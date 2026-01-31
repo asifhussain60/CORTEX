@@ -1,0 +1,144 @@
+<div x-show="activeTab === 'authors'" class="space-y-6">
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">👥 Author Collaboration Network</h2>
+        <p class="text-sm text-gray-500 mb-4">
+            Force-directed network showing author collaborations through shared files.
+            Node size represents commit count.
+        </p>
+        
+        <!-- Network Statistics -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                <div class="text-2xl font-bold text-blue-600">{{ network_data.stats.total_authors }}</div>
+                <div class="text-sm text-gray-600">Contributors</div>
+            </div>
+            <div class="text-center p-3 bg-green-50 rounded-lg">
+                <div class="text-2xl font-bold text-green-600">{{ network_data.stats.total_collaborations }}</div>
+                <div class="text-sm text-gray-600">Collaborations</div>
+            </div>
+            <div class="text-center p-3 bg-purple-50 rounded-lg">
+                <div class="text-2xl font-bold text-purple-600">{{ network_data.stats.average_commits_per_author }}</div>
+                <div class="text-sm text-gray-600">Avg. Commits</div>
+            </div>
+        </div>
+        
+        <!-- D3.js Network Visualization -->
+        <div id="author-network" class="w-full h-96 border border-gray-200 rounded-lg"></div>
+    </section>
+    
+    <!-- Most Active Author -->
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Most Active Contributor</h3>
+        <div class="flex items-center space-x-4">
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                {{ network_data.stats.most_active_author[0] if network_data.stats.most_active_author else '?' }}
+            </div>
+            <div>
+                <div class="text-xl font-bold text-gray-900">{{ network_data.stats.most_active_author }}</div>
+                <div class="text-sm text-gray-500">{{ network_data.stats.most_commits }} commits</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- D3.js Script -->
+<script src="/static/vendor/d3-7.8.5.min.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.watch('activeTab', (value) => {
+            if (value === 'authors') {
+                renderAuthorNetwork();
+            }
+        });
+    });
+    
+    function renderAuthorNetwork() {
+        const networkData = {{ network_data|tojson }};
+        
+        const container = d3.select('#author-network');
+        container.selectAll('*').remove();
+        
+        const width = container.node().getBoundingClientRect().width;
+        const height = 400;
+        
+        const svg = container.append('svg')
+            .attr('width', width)
+            .attr('height', height);
+        
+        // Create force simulation
+        const simulation = d3.forceSimulation(networkData.nodes)
+            .force('link', d3.forceLink(networkData.links).id(d => d.id).distance(150))
+            .force('charge', d3.forceManyBody().strength(-300))
+            .force('center', d3.forceCenter(width / 2, height / 2));
+        
+        // Render links
+        const link = svg.append('g')
+            .selectAll('line')
+            .data(networkData.links)
+            .join('line')
+            .attr('stroke', '#999')
+            .attr('stroke-opacity', 0.6)
+            .attr('stroke-width', d => Math.sqrt(d.strength));
+        
+        // Render nodes
+        const node = svg.append('g')
+            .selectAll('circle')
+            .data(networkData.nodes)
+            .join('circle')
+            .attr('r', d => d.size)
+            .attr('fill', d3.schemeCategory10[0])
+            .call(drag(simulation));
+        
+        // Add labels
+        const label = svg.append('g')
+            .selectAll('text')
+            .data(networkData.nodes)
+            .join('text')
+            .text(d => d.name)
+            .attr('font-size', 12)
+            .attr('dx', d => d.size + 5)
+            .attr('dy', 4);
+        
+        // Update positions on simulation tick
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+            
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+            
+            label
+                .attr('x', d => d.x)
+                .attr('y', d => d.y);
+        });
+        
+        // Drag behavior
+        function drag(simulation) {
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+            
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+            
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+            
+            return d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended);
+        }
+    }
+</script>

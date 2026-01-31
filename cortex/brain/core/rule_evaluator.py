@@ -10,7 +10,7 @@ AC-GOV-CTX-001-04: Context-aware rule evaluation with validators
 import time
 from dataclasses import dataclass
 from typing import Dict, Any, List, Optional
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 # from cortex.brain.core.governance.context_extractor import ContextExtractor, GovernanceContext

@@ -1,0 +1,136 @@
+<!-- Tab 1: Repository Overview (Business Language) -->
+<div class="tab-panel" x-show="activeTab === 'overview'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">📊 Repository Overview</h2>
+    <p class="tab-subtitle">High-level business language summary</p>
+  </div>
+
+  <div class="metrics-grid">
+    <!-- Primary Metrics -->
+    <div class="metric-card glass-panel">
+      <div class="metric-icon">📁</div>
+      <div class="metric-value" x-text="data.overview?.total_files || 0"></div>
+      <div class="metric-label">Total Files</div>
+    </div>
+
+    <div class="metric-card glass-panel">
+      <div class="metric-icon">📝</div>
+      <div class="metric-value" x-text="data.overview?.lines_of_code || 0"></div>
+      <div class="metric-label">Lines of Code</div>
+    </div>
+
+    <div class="metric-card glass-panel">
+      <div class="metric-icon">👥</div>
+      <div class="metric-value" x-text="data.overview?.contributors || 0"></div>
+      <div class="metric-label">Contributors</div>
+    </div>
+
+    <div class="metric-card glass-panel">
+      <div class="metric-icon">📦</div>
+      <div class="metric-value" x-text="data.overview?.modules || 0"></div>
+      <div class="metric-label">Modules</div>
+    </div>
+  </div>
+
+  <!-- Business Language Summary -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🎯 What This Repository Does</h3>
+    <div class="business-language" x-html="data.overview?.business_summary || '<p>Loading...</p>'"></div>
+  </div>
+
+  <!-- Key Components -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🔧 Key Components</h3>
+    <div class="component-grid">
+      <template x-for="component in data.overview?.key_components || []" :key="component.name">
+        <div class="component-card">
+          <div class="component-name" x-text="component.name"></div>
+          <div class="component-purpose" x-text="component.purpose"></div>
+          <div class="component-metrics">
+            <span class="component-metric">
+              <span class="metric-label">Files:</span>
+              <span class="metric-value" x-text="component.files"></span>
+            </span>
+            <span class="component-metric">
+              <span class="metric-label">LOC:</span>
+              <span class="metric-value" x-text="component.loc"></span>
+            </span>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Repository Health -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">💚 Repository Health</h3>
+    <div class="health-indicators">
+      <div class="health-indicator">
+        <div class="health-label">Documentation Coverage</div>
+        <div class="health-bar">
+          <div class="health-fill" 
+               :style="`width: ${data.overview?.health?.documentation || 0}%`"
+               :class="getHealthColor(data.overview?.health?.documentation)"></div>
+        </div>
+        <div class="health-percentage" x-text="`${data.overview?.health?.documentation || 0}%`"></div>
+      </div>
+
+      <div class="health-indicator">
+        <div class="health-label">Test Coverage</div>
+        <div class="health-bar">
+          <div class="health-fill" 
+               :style="`width: ${data.overview?.health?.test_coverage || 0}%`"
+               :class="getHealthColor(data.overview?.health?.test_coverage)"></div>
+        </div>
+        <div class="health-percentage" x-text="`${data.overview?.health?.test_coverage || 0}%`"></div>
+      </div>
+
+      <div class="health-indicator">
+        <div class="health-label">Type Hints Coverage</div>
+        <div class="health-bar">
+          <div class="health-fill" 
+               :style="`width: ${data.overview?.health?.type_hints || 0}%`"
+               :class="getHealthColor(data.overview?.health?.type_hints)"></div>
+        </div>
+        <div class="health-percentage" x-text="`${data.overview?.health?.type_hints || 0}%`"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technology Stack -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">⚙️ Technology Stack</h3>
+    <div class="tech-stack">
+      <template x-for="tech in data.overview?.tech_stack || []" :key="tech.name">
+        <div class="tech-badge" :class="tech.category">
+          <span class="tech-icon" x-text="tech.icon"></span>
+          <span class="tech-name" x-text="tech.name"></span>
+          <span class="tech-version" x-text="tech.version"></span>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📈 Recent Activity (Last 30 Days)</h3>
+    <div class="activity-stats">
+      <div class="activity-stat">
+        <span class="activity-value" x-text="data.overview?.activity?.commits || 0"></span>
+        <span class="activity-label">Commits</span>
+      </div>
+      <div class="activity-stat">
+        <span class="activity-value" x-text="data.overview?.activity?.pull_requests || 0"></span>
+        <span class="activity-label">Pull Requests</span>
+      </div>
+      <div class="activity-stat">
+        <span class="activity-value" x-text="data.overview?.activity?.active_contributors || 0"></span>
+        <span class="activity-label">Active Contributors</span>
+      </div>
+      <div class="activity-stat">
+        <span class="activity-value" x-text="data.overview?.activity?.files_changed || 0"></span>
+        <span class="activity-label">Files Changed</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Optional
 
 from cortex.cli.commands.lens import lens
+from cortex.cli.lens_dashboard import dashboard
 
 
 @click.group()
@@ -138,6 +139,7 @@ def ask(question: str, category: Optional[str] = None) -> None:
 
 # Register command groups
 cli.add_command(lens)
+cli.add_command(dashboard)
 
 
 def main() -> None:

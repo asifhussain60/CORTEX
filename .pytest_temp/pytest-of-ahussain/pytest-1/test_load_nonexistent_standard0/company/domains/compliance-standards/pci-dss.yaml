@@ -1,0 +1,11 @@
+
+metadata:
+  standard: PCI-DSS
+  version: "4.0"
+requirements:
+  - id: REQ-1.1
+    title: Install and maintain firewall
+    description: Network security controls
+  - id: REQ-3.4
+    title: Encrypt stored cardholder data
+    description: Use strong cryptography

@@ -1,0 +1,325 @@
+<!-- Tab 4: Temporal Analysis (Git Timeline D3.js) -->
+<div class="tab-panel" x-show="activeTab === 'timeline'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">⏰ Temporal Analysis</h2>
+    <p class="tab-subtitle">Repository evolution and commit patterns</p>
+  </div>
+
+  <!-- Timeline Controls -->
+  <div class="timeline-controls glass-panel">
+    <div class="control-group">
+      <label class="control-label">Time Range</label>
+      <select x-model="timelineSettings.range" @change="updateTimeline()">
+        <option value="all">All Time</option>
+        <option value="year">Last Year</option>
+        <option value="6months">Last 6 Months</option>
+        <option value="3months">Last 3 Months</option>
+        <option value="month">Last Month</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Group By</label>
+      <select x-model="timelineSettings.groupBy" @change="updateTimeline()">
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="quarter">Quarter</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Show</label>
+      <select x-model="timelineSettings.metric" @change="updateTimeline()">
+        <option value="commits">Commits</option>
+        <option value="loc_added">Lines Added</option>
+        <option value="loc_removed">Lines Removed</option>
+        <option value="files_changed">Files Changed</option>
+        <option value="contributors">Active Contributors</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Author Filter</label>
+      <select x-model="timelineSettings.author" @change="updateTimeline()">
+        <option value="all">All Authors</option>
+        <template x-for="author in data.timeline?.authors || []" :key="author">
+          <option :value="author" x-text="author"></option>
+        </template>
+      </select>
+    </div>
+  </div>
+
+  <!-- Timeline Visualization -->
+  <div class="timeline-container glass-panel">
+    <div id="git-timeline-canvas" class="d3-timeline-canvas"></div>
+  </div>
+
+  <!-- Timeline Statistics -->
+  <div class="timeline-stats glass-panel">
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="stat-label">Total Commits</div>
+        <div class="stat-value" x-text="data.timeline?.stats?.total_commits || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Total Contributors</div>
+        <div class="stat-value" x-text="data.timeline?.stats?.total_contributors || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Lines Added</div>
+        <div class="stat-value positive" x-text="`+${data.timeline?.stats?.lines_added || 0}`"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Lines Removed</div>
+        <div class="stat-value negative" x-text="`-${data.timeline?.stats?.lines_removed || 0}`"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Net Change</div>
+        <div class="stat-value" 
+             :class="(data.timeline?.stats?.net_change || 0) > 0 ? 'positive' : 'negative'"
+             x-text="data.timeline?.stats?.net_change || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Files Changed</div>
+        <div class="stat-value" x-text="data.timeline?.stats?.files_changed || 0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commit Activity Heatmap -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🔥 Commit Activity Heatmap</h3>
+    <div id="commit-heatmap" class="heatmap-canvas"></div>
+    <div class="heatmap-legend">
+      <span class="legend-label">Less</span>
+      <span class="legend-color" style="background: #1a365d;"></span>
+      <span class="legend-color" style="background: #2c5282;"></span>
+      <span class="legend-color" style="background: #2b6cb0;"></span>
+      <span class="legend-color" style="background: #3182ce;"></span>
+      <span class="legend-color" style="background: #4299e1;"></span>
+      <span class="legend-label">More</span>
+    </div>
+  </div>
+
+  <!-- Top Contributors -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">👥 Top Contributors</h3>
+    <div class="contributor-list">
+      <template x-for="(contributor, index) in data.timeline?.top_contributors || []" :key="contributor.email">
+        <div class="contributor-card">
+          <div class="contributor-rank" x-text="index + 1"></div>
+          <div class="contributor-info">
+            <div class="contributor-name" x-text="contributor.name"></div>
+            <div class="contributor-email" x-text="contributor.email"></div>
+          </div>
+          <div class="contributor-stats">
+            <div class="stat-badge">
+              <span class="badge-value" x-text="contributor.commits"></span>
+              <span class="badge-label">Commits</span>
+            </div>
+            <div class="stat-badge">
+              <span class="badge-value positive" x-text="`+${contributor.additions}`"></span>
+              <span class="badge-label">Added</span>
+            </div>
+            <div class="stat-badge">
+              <span class="badge-value negative" x-text="`-${contributor.deletions}`"></span>
+              <span class="badge-label">Removed</span>
+            </div>
+            <div class="stat-badge">
+              <span class="badge-value" x-text="contributor.files"></span>
+              <span class="badge-label">Files</span>
+            </div>
+          </div>
+          <div class="contributor-chart">
+            <div class="mini-timeline" :style="`width: ${(contributor.commits / data.timeline?.stats?.total_commits * 100)}%`"></div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Recent Commits -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📝 Recent Commits</h3>
+    <div class="commit-list">
+      <template x-for="commit in data.timeline?.recent_commits || []" :key="commit.sha">
+        <div class="commit-card">
+          <div class="commit-header">
+            <span class="commit-sha" x-text="commit.sha.substring(0, 7)"></span>
+            <span class="commit-date" x-text="formatDate(commit.date)"></span>
+          </div>
+          <div class="commit-message" x-text="commit.message"></div>
+          <div class="commit-author">
+            <span class="author-name" x-text="commit.author"></span>
+            <span class="author-email" x-text="`<${commit.email}>`"></span>
+          </div>
+          <div class="commit-stats">
+            <span class="stat-item positive">+<span x-text="commit.additions"></span></span>
+            <span class="stat-item negative">-<span x-text="commit.deletions"></span></span>
+            <span class="stat-item neutral"><span x-text="commit.files"></span> files</span>
+          </div>
+          <template x-if="commit.files_changed?.length > 0">
+            <details class="commit-files">
+              <summary>Changed Files (<span x-text="commit.files_changed.length"></span>)</summary>
+              <div class="file-list">
+                <template x-for="file in commit.files_changed" :key="file.path">
+                  <div class="file-item">
+                    <span class="file-status" :class="file.status" x-text="file.status"></span>
+                    <span class="file-path" x-text="file.path"></span>
+                    <span class="file-changes">
+                      <span class="additions">+<span x-text="file.additions"></span></span>
+                      <span class="deletions">-<span x-text="file.deletions"></span></span>
+                    </span>
+                  </div>
+                </template>
+              </div>
+            </details>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Commit Patterns -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📊 Commit Patterns</h3>
+    <div class="pattern-analysis">
+      <div class="pattern-section">
+        <h4>Most Active Days</h4>
+        <div class="day-chart">
+          <template x-for="day in data.timeline?.patterns?.days || []" :key="day.name">
+            <div class="day-bar">
+              <span class="day-name" x-text="day.name"></span>
+              <div class="day-bar-fill" :style="`width: ${day.percentage}%`"></div>
+              <span class="day-value" x-text="day.commits"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="pattern-section">
+        <h4>Most Active Hours</h4>
+        <div class="hour-chart">
+          <template x-for="hour in data.timeline?.patterns?.hours || []" :key="hour.hour">
+            <div class="hour-bar">
+              <span class="hour-name" x-text="`${hour.hour}:00`"></span>
+              <div class="hour-bar-fill" :style="`width: ${hour.percentage}%`"></div>
+              <span class="hour-value" x-text="hour.commits"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="pattern-section">
+        <h4>Commit Types</h4>
+        <div class="type-chart">
+          <template x-for="type in data.timeline?.patterns?.commit_types || []" :key="type.type">
+            <div class="type-item">
+              <span class="type-icon" x-text="type.icon"></span>
+              <span class="type-name" x-text="type.type"></span>
+              <span class="type-count" x-text="type.count"></span>
+              <span class="type-percentage" x-text="`(${type.percentage}%)`"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// D3.js Timeline Initialization
+function initGitTimeline(data) {
+  const margin = { top: 20, right: 30, bottom: 40, left: 60 };
+  const width = document.getElementById('git-timeline-canvas').clientWidth - margin.left - margin.right;
+  const height = 300 - margin.top - margin.bottom;
+
+  // Clear existing
+  d3.select('#git-timeline-canvas').html('');
+
+  // Create SVG
+  const svg = d3.select('#git-timeline-canvas')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Parse dates
+  const parseDate = d3.timeParse('%Y-%m-%d');
+  data.timeline_data.forEach(d => {
+    d.date = parseDate(d.date);
+    d.value = +d.value;
+  });
+
+  // Scales
+  const x = d3.scaleTime()
+    .domain(d3.extent(data.timeline_data, d => d.date))
+    .range([0, width]);
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(data.timeline_data, d => d.value)])
+    .nice()
+    .range([height, 0]);
+
+  // Axes
+  svg.append('g')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x))
+    .selectAll('text')
+    .attr('transform', 'rotate(-45)')
+    .style('text-anchor', 'end');
+
+  svg.append('g')
+    .call(d3.axisLeft(y));
+
+  // Line
+  const line = d3.line()
+    .x(d => x(d.date))
+    .y(d => y(d.value))
+    .curve(d3.curveMonotoneX);
+
+  svg.append('path')
+    .datum(data.timeline_data)
+    .attr('fill', 'none')
+    .attr('stroke', '#4299e1')
+    .attr('stroke-width', 2)
+    .attr('d', line);
+
+  // Area
+  const area = d3.area()
+    .x(d => x(d.date))
+    .y0(height)
+    .y1(d => y(d.value))
+    .curve(d3.curveMonotoneX);
+
+  svg.append('path')
+    .datum(data.timeline_data)
+    .attr('fill', 'rgba(66, 153, 225, 0.2)')
+    .attr('d', area);
+
+  // Dots
+  svg.selectAll('dot')
+    .data(data.timeline_data)
+    .enter()
+    .append('circle')
+    .attr('cx', d => x(d.date))
+    .attr('cy', d => y(d.value))
+    .attr('r', 3)
+    .attr('fill', '#4299e1')
+    .on('mouseover', function(event, d) {
+      d3.select(this).attr('r', 5);
+      // Show tooltip
+    })
+    .on('mouseout', function(event, d) {
+      d3.select(this).attr('r', 3);
+    });
+}
+
+// Heatmap for commit activity
+function initCommitHeatmap(data) {
+  // Implementation for GitHub-style contribution heatmap
+  // Shows commits by day of week and time of day
+}
+</script>

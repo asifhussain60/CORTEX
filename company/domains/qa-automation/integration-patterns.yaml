@@ -1,0 +1,536 @@
+# QA Automation Integration Patterns - HealthEquity Platform
+# Extracted from: Platform.Classic.Tests ClassicQA documentation
+# Version: 1.0
+# Date: 2026-01-28
+
+framework: "ClassicQA Test Automation Framework"
+integrations:
+  - Database (SQL Server, Dapper ORM)
+  - WCF Services
+  - Authentication (Auth0, HqyLogin)
+  - Azure DevOps (ADO)
+  - Caching (Couchbase)
+  - Browser Automation (Playwright MCP)
+
+# Database Integration
+database_integration:
+  orm: "Dapper"
+  database_type: "SQL Server"
+  
+  connection:
+    method: "FW.GetDbConnectionString()"
+    description: "Get connection string for current test environment"
+    environments:
+      - Development
+      - UAT
+      - UAT2
+      - Integration
+  
+  query_execution:
+    basic_query:
+      method: "FW.RunSqlQueryDapper<T>(query, parameters)"
+      description: "Execute parameterized SQL query and return typed results"
+      examples: |
+        // Query with parameters
+        var clientData = FW.RunSqlQueryDapper<dynamic>(
+            "SELECT ServiceLevel, KeepInCash FROM Advisor.dbo.Client WHERE MemberId = @MemberId",
+            new { MemberId = memberId }
+        ).FirstOrDefault();
+        
+        // Query without parameters
+        var count = FW.RunSqlQueryDapper<int>(
+            "SELECT COUNT(*) FROM Member"
+        ).FirstOrDefault();
+    
+    sql_data_reader:
+      method: "FW.RunSqlQuery(query, parameters)"
+      returns: "SqlDataReader"
+      usage: "For streaming large result sets"
+      example: |
+        using (var reader = FW.RunSqlQuery(query, new Dictionary<string, string>()))
+        {
+            while (reader.Read())
+            {
+                var value = reader.GetValue(0);
+            }
+        }
+  
+  parameterized_queries:
+    rule: "ALWAYS use parameterized queries to prevent SQL injection"
+    syntax_dapper: "Use @ prefix for parameters with anonymous objects"
+    examples:
+      correct: |
+        var query = "SELECT * FROM Member WHERE MemberId = @Id AND Active = @Active";
+        var results = FW.RunSqlQueryDapper<Member>(query, new { Id = memberId, Active = 1 });
+      
+      incorrect: |
+        // NEVER DO THIS - SQL injection risk
+        var query = $"SELECT * FROM Member WHERE MemberId = '{memberId}'";
+  
+  common_queries:
+    member_lookup:
+      query: "SELECT * FROM Member WHERE MemberId = @MemberId"
+      parameters: ["MemberId"]
+    
+    login_lookup:
+      query: "SELECT * FROM Login WHERE Authentication_Username = @Username"
+      parameters: ["Username"]
+    
+    advisor_client:
+      query: "SELECT ServiceLevel, AllowNetSells, KeepInCash FROM Advisor.dbo.Client WHERE MemberId = @MemberId"
+      parameters: ["MemberId"]
+    
+    cash_replenish_settings:
+      query: |
+        SELECT TOP 1 IsSellToReplenish, CashReplenishThreshold, CashReplenishThresholdOption
+        FROM Advisor.dbo.CashReplenishSettings
+        WHERE MemberId = @MemberId AND IsActive = 1
+        ORDER BY CreatedDate DESC
+      parameters: ["MemberId"]
+    
+    auto_invest_settings:
+      query: |
+        SELECT AutoInvestThreshold, IsEnabled
+        FROM Advisor.dbo.AutoInvestSettings
+        WHERE AccountId = @AccountId
+      parameters: ["AccountId"]
+  
+  database_schemas:
+    main_database:
+      tables:
+        - Login
+        - Member
+        - Employer
+        - Partner
+        - Broker
+        - Subaccount
+        - Product
+        - Agreement
+        - Lookup
+        - ScheduledItem
+    
+    advisor_database:
+      name: "Advisor.dbo"
+      tables:
+        - Client
+        - AutoInvestSettings
+        - CashReplenishSettings
+        - ProductSetting
+  
+  cleanup_patterns:
+    delete_test_data:
+      example: |
+        var cleanupQuery = $@"
+            DELETE FROM Advisor.dbo.AutoInvestSettings WHERE AccountId IN
+                (SELECT AccountId FROM Subaccount WHERE Member = '{memberId}');
+            DELETE FROM Advisor.dbo.CashReplenishSettings WHERE MemberId = '{memberId}';
+            DELETE FROM Advisor.dbo.Client WHERE MemberId = '{memberId}';";
+        
+        FW.RunSqlQueryDapper<dynamic>(cleanupQuery);
+    
+    conditional_cleanup:
+      example: |
+        var cleanupQuery = $@"
+            IF EXISTS (SELECT 1 FROM Advisor.dbo.ProductSetting WHERE ProductId = {productId})
+            BEGIN
+                DELETE FROM Advisor.dbo.ProductSetting WHERE ProductId = {productId};
+            END";
+  
+  best_practices:
+    - "Always use parameterized queries"
+    - "Use Dapper for type-safe queries"
+    - "Clean up test data in TestCleanup method"
+    - "Use transactions when modifying multiple tables"
+    - "Avoid direct database manipulation when service methods exist"
+    - "Use multi-line strings (@\"\") for complex queries"
+
+# WCF Service Integration
+wcf_service_integration:
+  configuration:
+    method: "FW.ConfigureWCFDefaultAdminCredentials()"
+    placement: "TestInitialize or before first service call"
+    description: "Configure WCF services with default admin credentials"
+    example: |
+      [TestInitialize]
+      public void TestSetup()
+      {
+          FW.ConfigureWCFDefaultAdminCredentials();
+      }
+  
+  service_locator:
+    pattern: "ServiceLocator.Get<IServiceInterface>()"
+    description: "Resolve service instances from IoC container"
+    examples: |
+      var agreementService = ServiceLocator.Get<IAgreementService>();
+      var memberService = ServiceLocator.Get<IMemberService>();
+  
+  transaction_runner:
+    method: "TransactionRunner.ExecuteRequest(request)"
+    description: "Execute WCF requests with transaction support"
+    example: |
+      var qlookupRequest = new QLookupRequest { lookupType = "RuntimeOptions" };
+      var response = TransactionRunner.ExecuteRequest(qlookupRequest);
+  
+  common_services:
+    agreement_service:
+      interface: "IAgreementService"
+      methods:
+        - "SignAgreementWithState(entityType, entityId, agreementType, version, state, dateTerminated)"
+        - "GetAgreementById(agreementId, entityId)"
+        - "GetAgreement(entityType, entityId, agreementType)"
+        - "GetReviewableAgreements(entityType, entityId)"
+      
+      example: |
+        var agreementService = ServiceLocator.Get<IAgreementService>();
+        var agreement = agreementService.SignAgreementWithState(
+            "Member",
+            memberId,
+            "MemberAgreement",
+            "1.0",
+            "Accepted",
+            DateTime.Today.AddYears(1)
+        );
+    
+    agreement_template_service:
+      interface: "IAgreementTemplateService"
+      methods:
+        - "AddOverrideTemplate(agreementTemplateDto)"
+        - "GetAllAgreementTemplates()"
+      
+      example: |
+        var templateDto = new AgreementTemplateDto
+        {
+            AgreementObjectType = "TestAgreement",
+            Body = "<agreement body>"
+        };
+        AgreementsDomainServiceActions.AgreementTemplateService_AddOverrideTemplate(templateDto);
+  
+  retry_patterns:
+    polly_integration:
+      description: "Use Polly for retry policies on flaky operations"
+      example: |
+        private static Policy GetDefaultRetryPolicy()
+        {
+            return Policy
+                .Handle<Exception>()
+                .WaitAndRetry(
+                    2,
+                    retryAttempt => TimeSpan.FromSeconds(new Random().Next(1, 60) + Math.Pow(5, retryAttempt)),
+                    (result, timeSpan, retryCount, context) =>
+                    {
+                        // Optionally log retry
+                        FW.Log($"Retry {retryCount}. Waiting {timeSpan}");
+                    });
+        }
+        
+        // Usage
+        var retryPolicy = GetDefaultRetryPolicy();
+        retryPolicy.Execute(() =>
+        {
+            // Operation that might fail transiently
+        });
+
+# Authentication Integration
+authentication_integration:
+  auth0:
+    description: "Third-party authentication provider for business users"
+    user_types:
+      - Employer
+      - Partner
+      - Broker
+    
+    login_flow:
+      page_object: "BusinessLoginPage"
+      method: "LoginAndAgreeToPrivacy(username, password)"
+      example: |
+        Browser.Load(FW.BaseDomain.Client);
+        FW.WaitUntil(() => _businessLoginPage.ForBusinessLoginTitle.IsDisplayed(), TimeSpan.FromSeconds(20));
+        _businessLoginPage.LoginAndAgreeToPrivacy(username, password);
+    
+    redirects:
+      employer: "UnifiedEmployerDashboardPage"
+      partner: "PartnerHomePage"
+      broker: "BrokerHomePage"
+  
+  hqy_login:
+    description: "HealthEquity login system for member users"
+    namespace: "HqyLogin"
+    
+    login_utilities:
+      login_as_user:
+        method: "LoginUtilities.LoginAsUser(username, password)"
+        default_password: "TestEnvironmentSecurables.PasswordResetValue"
+        example: |
+          LoginUtilities.LoginAsUser(member.Authentication.Username);
+          LoginUtilities.LoadWebPortal();
+      
+      login_as_admin:
+        method: "LoginUtilities.LoginAsAdmin()"
+        returns: "HttpClientObjects (with HttpClient and CookieContainer)"
+        example: |
+          LoginUtilities.LoginAsAdmin();
+          LoginUtilities.LoadWebPortal();
+      
+      impersonation:
+        method: "LoginUtilities.ImpersonateEntity(entityId, entityType)"
+        entity_types:
+          - "ImpersonationEntityType.Member"
+          - "ImpersonationEntityType.Employer"
+        example: |
+          LoginUtilities.LoginAsAdmin();
+          LoginUtilities.ImpersonateEntity(employer.EmployerId, ImpersonationEntityType.Employer);
+      
+      logout:
+        method: "LoginUtilities.Logout()"
+        verification: "Check for 'Logout successful.' message"
+    
+    login_troubleshooting:
+      failed_login_troubleshooter:
+        exception_messages:
+          - "BadPasswordExceptionMessage"
+          - "UsernameDoesNotExistExceptionMessage"
+          - "LoginHistoryHasLockExceptionMessage"
+          - "IsLoginLockedExceptionMessage"
+        
+        lockout_handling:
+          threshold: "UserFailedAttemptsLockoutThreshold"
+          helper: "LockoutHelperMethods.GenerateLogon()"
+  
+  mfa_integration:
+    description: "Multi-Factor Authentication support"
+    session_flags:
+      - "EnableUseMfaLoginFlowFeatureFlag"
+      - "ForceEnrollInMfaLoginFlowKey"
+    
+    example: |
+      var mfaHelperMethods = new MfaHelperMethods();
+      mfaHelperMethods.WithSessionOverrides(qaHarness =>
+      {
+          var sessionCookie = FW.Browser.Manage().Cookies.GetCookieNamed("HEQPortalSessionId");
+          qaHarness.SetEnableUseMfaLoginFlowFeatureFlag(sessionCookie.Value, true);
+      });
+
+# Azure DevOps Integration
+azure_devops_integration:
+  work_item_fetching:
+    description: "Fetch ADO work items for context-driven test generation"
+    includes:
+      - "Work item title, description, acceptance criteria"
+      - "Test steps if specified"
+      - "Related user stories"
+      - "Parent/child work items"
+      - "Linked work items (predecessor, successor, related)"
+      - "Associated test cases"
+  
+  test_property_linking:
+    attribute: "[TestProperty(\"ADOTestCaseId\", \"123456\")]"
+    purpose: "Link test method to ADO test case"
+    best_practice: "Always include for traceability"
+    example: |
+      [TestMethod]
+      [TestProperty("ADOTestCaseId", "509873")]
+      [TestProperty("Priority", "2")]
+      public void TC509873_TestMethod()
+  
+  test_run_integration:
+    description: "Tests can be executed from ADO test plans"
+    test_categories: "Used to filter test runs"
+
+# Caching Integration (Couchbase)
+caching_integration:
+  couchbase:
+    description: "Distributed caching layer for lookup tables and configuration"
+    cache_duration: "Configurable (6+ seconds observed in tests)"
+    
+    cached_entities:
+      - "Lookup tables (RuntimeOptions, etc.)"
+      - "Configuration values"
+      - "Session data"
+    
+    cache_invalidation:
+      pattern: "Wait for cache expiration before verifying updates"
+      example: |
+        // Update database
+        lookupRepository.SetLookupDescriptionByLookupId(lookupId, newDescription);
+        
+        // Wait for cache (6 seconds minimum observed)
+        System.Threading.Thread.Sleep(6000);
+        
+        // Verify cached value (should still be old value)
+        response = TransactionRunner.ExecuteRequest(qlookupRequest);
+        var cachedLookup = response.Values.Find(x => x.LookupId == lookupId);
+        Assert.AreEqual(originalDescription, cachedLookup.Description,
+            "Expected cached description, not updated value");
+
+# Browser Automation Integration
+browser_automation:
+  playwright_mcp:
+    description: "Browser automation for test generation and verification"
+    capabilities:
+      - "Navigate to application URLs"
+      - "Perform test steps manually"
+      - "Capture page snapshots"
+      - "Verify element locators"
+      - "Identify missing page objects"
+      - "Generate verified locators"
+    
+    workflow:
+      - "Fetch ADO work item for requirements"
+      - "Read framework documentation"
+      - "Open browser and navigate"
+      - "Execute each test step"
+      - "Capture accessibility snapshot"
+      - "Verify element locators (ID > Class > XPath)"
+      - "Generate page objects with verified locators"
+      - "Generate test class with framework patterns"
+    
+    prompt_examples:
+      basic: "Automate ADO 123456"
+      with_url: "Automate ADO 123456 starting at https://uat2.healthequity.com"
+      with_context: "Automate ADO 123456 as employer user"
+      visible: "Automate ADO 123456 with visible browser"
+
+# API Integration Patterns
+api_integration:
+  internal_api:
+    base_url_pattern: "GetApiUrl(\"/internal/{endpoint}\")"
+    authentication: "Bearer token with Subject header"
+    
+    example: |
+      var tokens = GetTokensForAdminImpersonatingMemberAsync(memberId).Result;
+      var cookieContainer = LoginUtilities.LoginAsAdmin().CookieContainer;
+      
+      using (var handler = new HttpClientHandler() { CookieContainer = cookieContainer })
+      using (var httpClient = new HttpClient(handler))
+      {
+          httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens.ClientCredential);
+          httpClient.DefaultRequestHeaders.Add("Subject", tokens.UserToken);
+          
+          var response = httpClient.PostAsync(GetApiUrl("/internal/endpoint"), content).Result;
+      }
+  
+  acme_integration:
+    description: "Access Control Management Engine for permissions"
+    check_access:
+      endpoint: "/internal/acme/hasAcmeModifyAccess/{entityId}"
+      payload: "AcmeRequest { ResourceId }"
+      returns: "bool (true = allowed, false = denied)"
+    
+    development_authorization:
+      description: "Override ACME permissions in test environments"
+      api: "DevelopmentAuthorizationApi"
+      methods:
+        - "AddProtectedResourceWithAccess(resourceId)"
+        - "AddProtectedResourceWithoutAccess(resourceId)"
+        - "ClearExistingDevelopmentAuthorizations()"
+
+# Helper Utilities
+helper_utilities:
+  test_steps_class:
+    description: "Common test setup operations"
+    methods:
+      - "TestSteps.ConfigureWcfAgent()"
+    
+    example: |
+      [TestInitialize]
+      public void TestSetup()
+      {
+          TestSteps.ConfigureWcfAgent();
+      }
+  
+  date_time_utils:
+    description: "Date/time utilities for test data"
+    properties:
+      - "DateTimeUtils.Today"
+    
+    usage: "Consistent date handling across time zones"
+  
+  setup_class:
+    description: "Test environment setup"
+    methods:
+      - "Setup.ArrangeWCF()"
+      - "Setup.ArrangeJams()"
+
+# Error Handling Patterns
+error_handling:
+  exception_handling:
+    login_exceptions:
+      - "InvalidTestDataException (bad username/password)"
+      - "WebDriverException (element not found)"
+      - "TimeoutException (wait timeout)"
+    
+    example: |
+      try
+      {
+          LoginUtilities.LoginAsUser(username, "WrongPassword");
+      }
+      catch (InvalidTestDataException ex)
+      {
+          Assert.IsTrue(ex.Message.Contains(FailedLoginTroubleshooter.BadPasswordExceptionMessage));
+      }
+  
+  cleanup_error_handling:
+    pattern: "Catch and log cleanup errors without failing test"
+    example: |
+      [TestCleanup]
+      public void TestCleanup()
+      {
+          if (!string.IsNullOrEmpty(_testMemberId))
+          {
+              try
+              {
+                  DeleteTestData(_testMemberId);
+              }
+              catch (Exception ex)
+              {
+                  Console.WriteLine($"Test cleanup warning: {ex.Message}");
+                  // Don't fail the test due to cleanup errors
+              }
+          }
+      }
+
+# Best Practices Summary
+best_practices:
+  database:
+    - "Always use parameterized queries"
+    - "Prefer service methods over direct database access"
+    - "Clean up test data in TestCleanup"
+    - "Use Dapper for type-safe queries"
+  
+  wcf_services:
+    - "Configure credentials in TestInitialize"
+    - "Use ServiceLocator for dependency resolution"
+    - "Implement retry policies for flaky operations"
+  
+  authentication:
+    - "Use LoginUtilities for consistent login behavior"
+    - "Never hardcode credentials"
+    - "Use TestEnvironmentSecurables for sensitive values"
+    - "Always logout after impersonation tests"
+  
+  api_calls:
+    - "Use HttpClient with proper disposal (using statement)"
+    - "Include authentication tokens in headers"
+    - "Verify response status codes"
+    - "Deserialize responses with type safety"
+  
+  caching:
+    - "Wait for cache expiration before verifying updates"
+    - "Document expected cache duration in tests"
+    - "Test both cached and fresh data scenarios"
+
+# CORTEX Integration
+cortex_integration:
+  when_generating_tests:
+    - "Use LoginUtilities instead of manual login steps"
+    - "Prefer service methods over direct database manipulation"
+    - "Include proper WCF configuration"
+    - "Implement proper cleanup patterns"
+    - "Use parameterized database queries"
+  
+  when_analyzing_failures:
+    - "Check WCF configuration"
+    - "Verify database connection string"
+    - "Check authentication credentials"
+    - "Review cache expiration timing"
+    - "Validate API endpoint URLs"

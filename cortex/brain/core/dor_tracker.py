@@ -120,7 +120,7 @@ class DoRTracker:
         """Initialize DoR tracker for session."""
         self.session_id = session_id or str(uuid.uuid4())[:12]
         self.turns: List[DoRTurn] = []
-        self.logger = EnhancedAuditLogger("DoRTracker")
+        self.logger = EnhancedAuditLogger.instance()
         logger.info(f"DoRTracker initialized for session {self.session_id}")
     
     def start_turn(

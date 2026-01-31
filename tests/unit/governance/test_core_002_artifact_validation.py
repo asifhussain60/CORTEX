@@ -8,7 +8,7 @@ requested by user. Rule applies workspace-wide (root + subdirectories).
 """
 
 import pytest
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
 class TestCore002ArtifactValidation:

@@ -17,7 +17,6 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, Optional
 
-from cortex.infrastructure.database import DatabaseManager
 from cortex.models.canonical_enums import IntentType
 
 
@@ -86,14 +85,11 @@ class GovernanceEnforcer:
     All enforcement decisions are audit-logged.
     """
     
-    def __init__(self, db: DatabaseManager):
+    def __init__(self):
         """
-        Initialize enforcer with database.
-        
-        Args:
-            db: Initialized DatabaseManager instance
+        Initialize enforcer.
         """
-        self._db = db
+        pass  # No database needed
     
     # =========================================================================
     # Phase Lock Enforcement

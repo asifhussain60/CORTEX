@@ -26,7 +26,7 @@ from typing import Dict, Any, List, Optional
 import logging
 
 from cortex.core.result import Result, Ok, Err
-from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -362,6 +362,170 @@ class EnforcementOrchestrator:
         
         return Ok(enforcement_result)
     
+    def validate_intent_classification(self, intent_reflection: Dict[str, Any]) -> Result[List[str], List[str]]:
+        """
+        Validate intent classification integrity (Layer 1: Pre-Execution Gate).
+        
+        Ensures DoR (Definition of Ready) displays all required fields:
+        - Intent type mapped correctly
+        - Target handler appropriate for intent
+        - Business principles populated
+        - Governance rules present
+        - Scope/Impact assessed
+        
+        Args:
+            intent_reflection: IntentReflection dict with DoR fields
+            
+        Returns:
+            Ok([]) if valid, Err([violations]) if invalid
+        
+        AC-ID: REM-003-01 (Governance Defense-in-Depth Layer 1)
+        """
+        violations = []
+        
+        # Required fields validation
+        required_fields = ["intent_type", "target_handler", "dor_confidence", "scope"]
+        for field in required_fields:
+            if not intent_reflection.get(field):
+                violations.append(
+                    f"Intent classification incomplete: missing '{field}' field"
+                )
+        
+        # Business principles validation
+        governance_rules = intent_reflection.get("governance_rules", [])
+        business_principles = intent_reflection.get("business_principles", {})
+        
+        if governance_rules and not business_principles:
+            violations.append(
+                "Intent classification integrity violation: "
+                "governance_rules present but business_principles not populated"
+            )
+        
+        # DoR confidence range validation
+        dor_confidence = intent_reflection.get("dor_confidence", 0)
+        if not (0.0 <= dor_confidence <= 1.0):
+            violations.append(
+                f"DoR confidence out of range: {dor_confidence} (must be 0.0-1.0)"
+            )
+        
+        if violations:
+            return Err(violations)
+        return Ok([])
+    
+    def validate_dor_confidence(
+        self,
+        promised_confidence: float,
+        intent_type: str,
+        available_context: Dict[str, Any]
+    ) -> Result[List[str], List[str]]:
+        """
+        Validate DoR confidence is not artificially inflated (Layer 1).
+        
+        Prevents confidence manipulation by checking if promised confidence
+        matches available context evidence.
+        
+        Args:
+            promised_confidence: DoR confidence from intent classification
+            intent_type: Type of intent (IMPLEMENT, FIX, etc.)
+            available_context: Context used for confidence calculation
+            
+        Returns:
+            Ok([]) if confidence justified, Err([violations]) if suspicious
+        
+        AC-ID: REM-003-01 (Governance Defense-in-Depth Layer 1)
+        """
+        violations = []
+        
+        # Check confidence vs context quality
+        context_score = 0.0
+        
+        if available_context.get("target_file_exists"):
+            context_score += 0.2
+        if available_context.get("test_file_exists"):
+            context_score += 0.2
+        if available_context.get("similar_patterns_found"):
+            context_score += 0.2
+        if available_context.get("clear_requirements"):
+            context_score += 0.2
+        if available_context.get("dependencies_known"):
+            context_score += 0.2
+        
+        # Confidence should not exceed context quality by >30%
+        if promised_confidence > (context_score + 0.3):
+            violations.append(
+                f"DoR confidence suspiciously high: {promised_confidence:.0%} "
+                f"with only {context_score:.0%} context quality "
+                f"(maximum justified: {(context_score + 0.3):.0%})"
+            )
+        
+        # Minimum confidence thresholds by intent
+        min_confidence = {
+            "IMPLEMENT": 0.60,
+            "FIX": 0.50,
+            "REFACTOR": 0.70,
+            "ANALYZE": 0.40,
+        }.get(intent_type, 0.50)
+        
+        if promised_confidence < min_confidence:
+            violations.append(
+                f"DoR confidence too low for {intent_type}: {promised_confidence:.0%} "
+                f"(minimum: {min_confidence:.0%})"
+            )
+        
+        if violations:
+            return Err(violations)
+        return Ok([])
+    
+    def validate_business_principles_mapping(
+        self,
+        governance_rules: List[str],
+        business_principles: Dict[str, str]
+    ) -> Result[List[str], List[str]]:
+        """
+        Validate governance rules correctly mapped to business principles (Layer 1).
+        
+        Ensures CORE rules are explained in human-readable business terms.
+        
+        Args:
+            governance_rules: List of CORE-XXX rule IDs
+            business_principles: Dict of {principle_name: technical_term}
+            
+        Returns:
+            Ok([]) if mapping valid, Err([violations]) if incorrect
+        
+        AC-ID: REM-003-01 (Governance Defense-in-Depth Layer 1)
+        """
+        violations = []
+        
+        if not governance_rules:
+            return Ok([])  # No rules to map
+        
+        if not business_principles:
+            violations.append(
+                f"Business principles mapping missing: "
+                f"{len(governance_rules)} governance rules require explanation"
+            )
+            return Err(violations)
+        
+        # Validate each rule has a principle mapping
+        # Note: Multiple rules can map to same principle (e.g., CORE-008, CORE-011 → Quality First)
+        rules_mentioned = []
+        for principle, technical in business_principles.items():
+            # Extract CORE-XXX from technical term
+            if "CORE-" in technical:
+                rules_mentioned.append(technical.split("(")[1].split(")")[0] if "(" in technical else "")
+        
+        unmapped_rules = [rule for rule in governance_rules if rule not in rules_mentioned]
+        
+        if unmapped_rules:
+            violations.append(
+                f"Governance rules not mapped to business principles: {', '.join(unmapped_rules)}"
+            )
+        
+        if violations:
+            return Err(violations)
+        return Ok([])
+    
     def get_capabilities(self) -> List[str]:
         """
         Get enforcement orchestrator capabilities.
@@ -375,6 +539,9 @@ class EnforcementOrchestrator:
             "pre_execution_gate",
             "tier_0_blocking",
             "tier_1_escalation",
+            "intent_classification_validation",  # NEW: REM-003-01
+            "dor_confidence_validation",  # NEW: REM-003-01
+            "business_principles_mapping_validation",  # NEW: REM-003-01
         ]
 
 

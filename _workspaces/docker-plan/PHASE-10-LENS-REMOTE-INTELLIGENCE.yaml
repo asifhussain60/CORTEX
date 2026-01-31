@@ -689,7 +689,7 @@ governance:
   audit_trail:
     - event: "PHASE-10-PLANNED"
       timestamp: "2026-01-27"
-      author: "Asif Hussain"
+      author: "CORTEX Team"
       ac_id: "PHASE-10-LENS-REMOTE-INTELLIGENCE"
   
   checkpoints:

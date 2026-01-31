@@ -41,6 +41,7 @@ Based on git history review (1000+ commits), the following enhancement phases ad
 **➡️ [PHASE-8-ENFORCEMENT-ORCHESTRATOR.md](./PHASE-8-ENFORCEMENT-ORCHESTRATOR.md)** ⭐ **ENFORCEMENT COMPLETE** 🎉 **NEW**  
 **➡️ [PHASE-8-QUICK-REFERENCE.md](./PHASE-8-QUICK-REFERENCE.md)** ⭐ **10-MINUTE ACTION PLAN** 🎉 **NEW**  
 **➡️ [PHASE-8.2-CORE-035-COMPLETION.md](./PHASE-8.2-CORE-035-COMPLETION.md)** ⭐ **IORCHESTRATOR CONSOLIDATION** 🎉 **NEW**  
+**➡️ [PHASE-8.2-UNIFIED-ROUTING.yaml](./PHASE-8.2-UNIFIED-ROUTING.yaml)** 🚧 **ACTIVE - ROUTING SYSTEM** 🎉 **NEW**  
 **➡️ [PHASE-9-IMPLEMENTATION-TRUTH.md](./PHASE-9-IMPLEMENTATION-TRUTH.md)** ⭐ **DISCOVERY COMPLETE**  
 **➡️ [PHASE-10-LENS-REMOTE-INTELLIGENCE.yaml](./PHASE-10-LENS-REMOTE-INTELLIGENCE.yaml)** ⭐ **REMOTE GIT SPEC**  
 **➡️ [docs/phases/phase-10-completion-report.md](../../docs/phases/phase-10-completion-report.md)** ⭐ **PHASE 10 COMPLETE** 🎉
@@ -311,7 +312,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 
 ### Option 1: Dry-Run (Recommended First Step)
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --dry-run --phase 1
 ```
 - **Time:** 10-15 minutes
@@ -320,7 +321,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 
 ### Option 2: Full Phase 1 Execution
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --phase 1
 ```
 - **Time:** 4 hours
@@ -329,7 +330,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 
 ### Option 3: Full Execution with Test Skip
 ```bash
-cd /Users/asifhussain/PROJECTS/CORTEX
+cd /path/to/CORTEX
 ./migrate-to-docker-clean.sh --phase 1 --skip-tests
 ```
 - **Time:** 2-3 hours

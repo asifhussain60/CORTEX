@@ -9,7 +9,7 @@
 
 set -e
 
-CORTEX_ROOT="/Users/asifhussain/PROJECTS/CORTEX"
+CORTEX_ROOT="/path/to/CORTEX"
 LOG_FILE="core-038-cleanup.log"
 
 # Color codes

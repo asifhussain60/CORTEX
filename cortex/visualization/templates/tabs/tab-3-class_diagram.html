@@ -1,0 +1,279 @@
+<!-- Tab 3: Class Diagrams (Mermaid.js) -->
+<div class="tab-panel" x-show="activeTab === 'classes'" x-transition>
+  <div class="tab-header">
+    <h2 class="tab-title">🏗️ Class Architecture</h2>
+    <p class="tab-subtitle">UML class diagrams and relationships</p>
+  </div>
+
+  <!-- Diagram Controls -->
+  <div class="diagram-controls glass-panel">
+    <div class="control-group">
+      <label class="control-label">Package</label>
+      <select x-model="diagramSettings.selectedPackage" @change="loadClassDiagram()">
+        <option value="all">All Packages</option>
+        <template x-for="pkg in data.classes?.packages || []" :key="pkg">
+          <option :value="pkg" x-text="pkg"></option>
+        </template>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Diagram Type</label>
+      <select x-model="diagramSettings.diagramType" @change="loadClassDiagram()">
+        <option value="class">Class Diagram</option>
+        <option value="erd">Entity-Relationship (ERD)</option>
+        <option value="state">State Machine</option>
+        <option value="sequence">Sequence Diagram</option>
+        <option value="architecture">Architecture Overview</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label">Detail Level</label>
+      <select x-model="diagramSettings.detailLevel" @change="loadClassDiagram()">
+        <option value="high">High (Methods + Attributes)</option>
+        <option value="medium">Medium (Methods Only)</option>
+        <option value="low">Low (Classes Only)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <button class="btn-download" @click="downloadDiagram('class')">💾 Download PNG</button>
+      <button class="btn-copy" @click="copyMermaidCode()">📋 Copy Code</button>
+    </div>
+  </div>
+
+  <!-- Mermaid Diagram Container -->
+  <div class="diagram-container glass-panel">
+    <div id="class-diagram-canvas" class="mermaid-canvas">
+      <pre class="mermaid" x-text="data.classes?.current_diagram || 'graph LR\n  A[Loading...]'"></pre>
+    </div>
+  </div>
+
+  <!-- Class Statistics -->
+  <div class="class-stats glass-panel">
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="stat-label">Total Classes</div>
+        <div class="stat-value" x-text="data.classes?.stats?.total_classes || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Abstract Classes</div>
+        <div class="stat-value" x-text="data.classes?.stats?.abstract_classes || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Interfaces</div>
+        <div class="stat-value" x-text="data.classes?.stats?.interfaces || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Inheritance Depth (Max)</div>
+        <div class="stat-value" x-text="data.classes?.stats?.max_inheritance_depth || 0"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Average Methods/Class</div>
+        <div class="stat-value" x-text="(data.classes?.stats?.avg_methods || 0).toFixed(1)"></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Average Attributes/Class</div>
+        <div class="stat-value" x-text="(data.classes?.stats?.avg_attributes || 0).toFixed(1)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design Patterns Detected -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">🎨 Design Patterns Detected</h3>
+    <template x-if="data.classes?.patterns?.length > 0">
+      <div class="pattern-grid">
+        <template x-for="pattern in data.classes?.patterns || []" :key="pattern.name">
+          <div class="pattern-card">
+            <div class="pattern-header">
+              <span class="pattern-icon" x-text="pattern.icon"></span>
+              <span class="pattern-name" x-text="pattern.name"></span>
+            </div>
+            <div class="pattern-description" x-text="pattern.description"></div>
+            <div class="pattern-instances">
+              <span class="instance-label">Found in:</span>
+              <template x-for="instance in pattern.instances" :key="instance">
+                <span class="instance-badge" x-text="instance"></span>
+              </template>
+            </div>
+            <div class="pattern-confidence">
+              <span class="confidence-label">Confidence:</span>
+              <div class="confidence-bar">
+                <div class="confidence-fill" 
+                     :style="`width: ${pattern.confidence}%`"
+                     :class="pattern.confidence > 80 ? 'high' : pattern.confidence > 50 ? 'medium' : 'low'"></div>
+              </div>
+              <span class="confidence-value" x-text="`${pattern.confidence}%`"></span>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+    <template x-if="!data.classes?.patterns || data.classes?.patterns?.length === 0">
+      <div class="empty-state">
+        <p>No design patterns detected in this repository.</p>
+      </div>
+    </template>
+  </div>
+
+  <!-- Class Details Panel -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">📚 Class Details</h3>
+    <div class="class-list">
+      <template x-for="cls in data.classes?.class_details || []" :key="cls.name">
+        <div class="class-detail-card" @click="selectClass(cls)">
+          <div class="class-header">
+            <span class="class-type" x-text="cls.type"></span>
+            <span class="class-name" x-text="cls.name"></span>
+          </div>
+          
+          <div class="class-meta">
+            <span class="meta-item">
+              <span class="meta-label">LOC:</span>
+              <span class="meta-value" x-text="cls.loc"></span>
+            </span>
+            <span class="meta-item">
+              <span class="meta-label">Methods:</span>
+              <span class="meta-value" x-text="cls.methods?.length || 0"></span>
+            </span>
+            <span class="meta-item">
+              <span class="meta-label">Attributes:</span>
+              <span class="meta-value" x-text="cls.attributes?.length || 0"></span>
+            </span>
+          </div>
+
+          <template x-if="cls.docstring">
+            <div class="class-docstring" x-text="cls.docstring"></div>
+          </template>
+
+          <template x-if="cls.parent_classes?.length > 0">
+            <div class="class-inheritance">
+              <span class="inheritance-label">Inherits from:</span>
+              <template x-for="parent in cls.parent_classes" :key="parent">
+                <span class="parent-badge" x-text="parent"></span>
+              </template>
+            </div>
+          </template>
+
+          <!-- Methods (collapsible) -->
+          <template x-if="cls.methods?.length > 0">
+            <details class="class-methods">
+              <summary>Methods (<span x-text="cls.methods.length"></span>)</summary>
+              <div class="method-list">
+                <template x-for="method in cls.methods" :key="method.name">
+                  <div class="method-item">
+                    <span class="method-visibility" x-text="method.visibility"></span>
+                    <span class="method-name" x-text="method.name"></span>
+                    <span class="method-signature" x-text="`(${method.parameters})`"></span>
+                    <template x-if="method.return_type">
+                      <span class="method-return">→ <span x-text="method.return_type"></span></span>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </details>
+          </template>
+
+          <!-- Attributes (collapsible) -->
+          <template x-if="cls.attributes?.length > 0">
+            <details class="class-attributes">
+              <summary>Attributes (<span x-text="cls.attributes.length"></span>)</summary>
+              <div class="attribute-list">
+                <template x-for="attr in cls.attributes" :key="attr.name">
+                  <div class="attribute-item">
+                    <span class="attribute-visibility" x-text="attr.visibility"></span>
+                    <span class="attribute-name" x-text="attr.name"></span>
+                    <template x-if="attr.type">
+                      <span class="attribute-type">: <span x-text="attr.type"></span></span>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </details>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- SOLID Principles Analysis -->
+  <div class="content-section glass-panel">
+    <h3 class="section-title">✅ SOLID Principles Compliance</h3>
+    <div class="solid-analysis">
+      <template x-for="principle in data.classes?.solid_analysis || []" :key="principle.name">
+        <div class="solid-card">
+          <div class="solid-header">
+            <span class="solid-icon" x-text="principle.icon"></span>
+            <span class="solid-name" x-text="principle.name"></span>
+            <span class="solid-score" 
+                  :class="principle.score >= 80 ? 'excellent' : principle.score >= 60 ? 'good' : 'needs-work'"
+                  x-text="`${principle.score}%`"></span>
+          </div>
+          <div class="solid-description" x-text="principle.description"></div>
+          <template x-if="principle.violations?.length > 0">
+            <div class="solid-violations">
+              <span class="violations-label">Violations:</span>
+              <template x-for="violation in principle.violations" :key="violation.class">
+                <div class="violation-item">
+                  <span class="violation-class" x-text="violation.class"></span>
+                  <span class="violation-reason" x-text="violation.reason"></span>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mermaid.js initialization (called on tab activation)
+function initMermaidDiagram() {
+  mermaid.initialize({ 
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#4299e1',
+      primaryTextColor: '#fff',
+      primaryBorderColor: '#2c5282',
+      lineColor: '#718096',
+      secondaryColor: '#48bb78',
+      tertiaryColor: '#ed8936'
+    }
+  });
+  mermaid.contentLoaded();
+}
+
+// Download diagram as PNG
+function downloadDiagram(type) {
+  const svg = document.querySelector('.mermaid-canvas svg');
+  const svgData = new XMLSerializer().serializeToString(svg);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  
+  img.onload = () => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    const pngFile = canvas.toDataURL('image/png');
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `${type}-diagram.png`;
+    downloadLink.href = pngFile;
+    downloadLink.click();
+  };
+  
+  img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+}
+
+// Copy Mermaid code to clipboard
+function copyMermaidCode() {
+  const code = document.querySelector('.mermaid').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    alert('Mermaid code copied to clipboard!');
+  });
+}
+</script>

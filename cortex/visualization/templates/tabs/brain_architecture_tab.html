@@ -1,0 +1,288 @@
+<!-- Tab 6: Brain Architecture (CORTEX-Specific) -->
+<div class="tab-panel" x-show="activeTab === 'brain_architecture'" x-transition>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                🧠 Brain Architecture
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">
+                Visualize CORTEX's 4-tier brain structure and orchestrator constellation
+            </p>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-red-600">4</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Tiers</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-orange-600">35+</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">CORE Rules</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-purple-600">23</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Orchestrators</div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="text-3xl font-bold text-green-600">100%</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Wired</div>
+            </div>
+        </div>
+        
+        <!-- Tier Hierarchy Visualization -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                4-Tier Brain Hierarchy
+            </h3>
+            <div id="tier-hierarchy-container" class="w-full">
+                <!-- Mermaid diagram will be rendered here -->
+                <div class="mermaid">
+graph TB
+    %% CORTEX 4-Tier Brain Architecture
+    tier0["🔒 Tier 0: Governance<br/>35+ CORE Rules<br/>Immutable"]
+    tier1["✅ Tier 1: Acceptance Criteria<br/>Phase Validation<br/>AC Specifications"]
+    tier2["📋 Tier 2: Response Templates<br/>Hallucination Prevention<br/>Boundaries"]
+    tier3["📚 Tier 3: Knowledge<br/>35+ YAML Files<br/>Best Practices"]
+    
+    tier0 --> tier1
+    tier1 --> tier2
+    tier2 --> tier3
+    
+    classDef tier0 fill:#ef4444,stroke:#991b1b,color:#fff
+    classDef tier1 fill:#f97316,stroke:#9a3412,color:#fff
+    classDef tier2 fill:#3b82f6,stroke:#1e40af,color:#fff
+    classDef tier3 fill:#10b981,stroke:#065f46,color:#fff
+    
+    class tier0 tier0
+    class tier1 tier1
+    class tier2 tier2
+    class tier3 tier3
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tier Details -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Tier 0: Governance -->
+            <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900 dark:to-red-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-red-900 dark:text-white mb-3">
+                    🔒 Tier 0: Governance
+                </h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-red-800 dark:text-red-200">CORE Rules:</span>
+                        <span class="font-bold">CORE-001 to CORE-040</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-red-800 dark:text-red-200">Status:</span>
+                        <span class="font-bold">Immutable</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-red-800 dark:text-red-200">Location:</span>
+                        <span class="font-mono text-xs">cortex_brain/tier0/</span>
+                    </div>
+                </div>
+                <p class="text-red-700 dark:text-red-300 mt-3 text-xs">
+                    Foundation rules: TDD, type hints, docstrings, audit logging, file placement
+                </p>
+            </div>
+            
+            <!-- Tier 1: Acceptance Criteria -->
+            <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-orange-900 dark:text-white mb-3">
+                    ✅ Tier 1: Acceptance Criteria
+                </h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-orange-800 dark:text-orange-200">Phase Specs:</span>
+                        <span class="font-bold">14 Phases</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-orange-800 dark:text-orange-200">AC Count:</span>
+                        <span class="font-bold">200+ Criteria</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-orange-800 dark:text-orange-200">Location:</span>
+                        <span class="font-mono text-xs">cortex_brain/tier1/</span>
+                    </div>
+                </div>
+                <p class="text-orange-700 dark:text-orange-300 mt-3 text-xs">
+                    Phase validation specifications and AC-ID tracking
+                </p>
+            </div>
+            
+            <!-- Tier 2: Response Templates -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-blue-900 dark:text-white mb-3">
+                    📋 Tier 2: Response Templates
+                </h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-blue-800 dark:text-blue-200">Templates:</span>
+                        <span class="font-bold">15+ Templates</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-blue-800 dark:text-blue-200">Boundaries:</span>
+                        <span class="font-bold">Hallucination Prevention</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-blue-800 dark:text-blue-200">Location:</span>
+                        <span class="font-mono text-xs">cortex_brain/tier2/</span>
+                    </div>
+                </div>
+                <p class="text-blue-700 dark:text-blue-300 mt-3 text-xs">
+                    Response formatting and DoR approval gates
+                </p>
+            </div>
+            
+            <!-- Tier 3: Knowledge -->
+            <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-green-900 dark:text-white mb-3">
+                    📚 Tier 3: Knowledge
+                </h4>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-green-800 dark:text-green-200">YAML Files:</span>
+                        <span class="font-bold">35+ Files</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-green-800 dark:text-green-200">Topics:</span>
+                        <span class="font-bold">TDD, API Design, Refactoring</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-green-800 dark:text-green-200">Location:</span>
+                        <span class="font-mono text-xs">cortex_brain/tier3/</span>
+                    </div>
+                </div>
+                <p class="text-green-700 dark:text-green-300 mt-3 text-xs">
+                    Best practices and pattern library
+                </p>
+            </div>
+        </div>
+        
+        <!-- Orchestrator Constellation -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                🌌 Orchestrator Constellation
+            </h3>
+            <div id="orchestrator-constellation-container" class="w-full h-96 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                <!-- D3.js force-directed graph will be rendered here -->
+                <div class="flex items-center justify-center h-full text-gray-400">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        <p>Orchestrator constellation loading...</p>
+                        <p class="text-xs mt-2">23 orchestrators across 3 categories</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="mt-4 flex items-center justify-center space-x-6 text-sm">
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                    <span>Core (6)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-purple-500 mr-2"></div>
+                    <span>Domain (5)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+                    <span>Support (12)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Orchestrator Categories -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Core Orchestrators -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-blue-600 mb-3">Core (6)</h4>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>MasterOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>IntentRouter</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>TDDOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>WorkflowOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>InteractionOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>WrappedTDDOrchestrator</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Domain Orchestrators -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-purple-600 mb-3">Domain (5)</h4>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>RefactoringOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>PlanningOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>DomainOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>ConversationOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>SeleniumPlaywrightOrch.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Support Orchestrators -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-bold text-green-600 mb-3">Support (12)</h4>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>LENSOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>OnboardingOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>SetupOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>UpgradeOrchestrator</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-green-500 mr-2">✓</span>
+                        <span>...and 8 more</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

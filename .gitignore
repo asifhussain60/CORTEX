@@ -92,3 +92,6 @@ _build/
 tests/test_ac_nfr_003_02_secrets.py
 
 tests/_archive/
+
+# CLI generated dashboard output
+lens-dashboards/

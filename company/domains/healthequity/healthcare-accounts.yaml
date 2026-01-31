@@ -1,0 +1,511 @@
+# HealthEquity Healthcare Financial Accounts Domain Knowledge
+# Extracted from: Platform.Classic.Tests ClassicQA documentation
+# Version: 1.0
+# Date: 2026-01-28
+# Source: ClassicQA test automation framework analysis
+
+domain:
+  name: "HealthEquity Healthcare Financial Services"
+  description: "Core business domain for healthcare financial account management"
+  organization: "HealthEquity, Inc."
+  location: "15 West Scenic Pointe Drive, Draper, UT 84020"
+
+# Healthcare Account Types
+account_types:
+  hsa:
+    name: "Health Savings Account"
+    description: "Tax-advantaged medical savings account for qualified high-deductible health plans"
+    features:
+      - tax_advantaged
+      - investment_options
+      - card_enabled
+      - rollover_allowed
+      - portable
+    compliance:
+      - IRS_regulations
+      - HIPAA_compliant
+    
+  fsa:
+    name: "Flexible Spending Account"
+    types:
+      medical: "Medical FSA"
+      dependent_care: "Dependent Care FSA (DCRA)"
+    features:
+      - pre_tax_contributions
+      - use_it_or_lose_it
+      - limited_rollover_allowed
+      - card_enabled
+    
+  hcra:
+    name: "Health Care Reimbursement Account"
+    description: "Employer-funded reimbursement account for medical expenses"
+    features:
+      - employer_funded
+      - carryover_settings
+      - spend_down_status
+      - coverage_tier_based
+    
+  dcra:
+    name: "Dependent Care Reimbursement Account"
+    description: "Reimbursement account for qualified dependent care expenses"
+    features:
+      - employer_funded
+      - dependent_coverage
+      - scheduled_deductions
+    
+  hra:
+    name: "Health Reimbursement Arrangement"
+    description: "Employer-funded health benefit for medical expenses"
+    features:
+      - employer_funded_only
+      - rollover_allowed
+      - not_portable
+
+# Investment Services
+investment_services:
+  service_levels:
+    autopilot:
+      level: 10
+      name: "Advisor AutoPilot"
+      description: "Fully automated investment management with rebalancing"
+      features:
+        - automated_rebalancing
+        - allow_net_sells
+        - keep_in_cash_threshold
+        - auto_invest_threshold
+        - risk_based_allocation
+      configuration:
+        allow_net_sells: 1
+        default_investment_threshold: 1000
+        minimum_cash_replenish: 0
+    
+    gps:
+      level: 5
+      name: "Guided Portfolio Service (GPS)"
+      description: "Guided investment portfolio with cash replenish"
+      features:
+        - guided_portfolio_selection
+        - cash_replenish
+        - sell_to_replenish
+        - auto_invest_optional
+      configuration:
+        allow_net_sells: 1
+        cash_replenish_enabled: true
+        sell_to_replenish: 1
+  
+  investment_concepts:
+    keep_in_cash:
+      description: "Minimum cash balance maintained in account before investing"
+      default: 0
+      configurable: true
+      affects: [cash_replenish_threshold, auto_invest_behavior]
+    
+    cash_replenish:
+      description: "Automatic selling of investments to maintain minimum cash balance"
+      threshold_options: ["Custom", "Default", "Product_Based"]
+      minimum_threshold: 0
+      affects: [sell_to_replenish, available_cash]
+    
+    auto_invest:
+      description: "Automatic investment of excess cash above threshold"
+      default_threshold: 1000
+      configurable: true
+      requires: [investment_agreement, risk_assessment]
+    
+    allow_net_sells:
+      description: "Permission to sell investments to cover expenses/replenish cash"
+      values: [0, 1]
+      default: 1
+      service_levels: [autopilot, gps]
+
+# Business Entities
+entities:
+  member:
+    description: "Primary account holder/participant"
+    attributes:
+      - member_id
+      - login_id
+      - personal_information
+      - tax_information
+      - authentication_credentials
+    relationships:
+      - employer (many-to-one)
+      - accounts (one-to-many)
+      - dependents (one-to-many)
+      - agreements (many-to-many)
+    
+  employer:
+    description: "Group sponsor/plan administrator"
+    attributes:
+      - employer_id
+      - company_name
+      - plan_configurations
+      - product_settings
+      - fee_schedules
+    relationships:
+      - members (one-to-many)
+      - partner (many-to-one)
+      - tpa (many-to-one, optional)
+    
+  partner:
+    description: "Integration partner organization"
+    types:
+      - health_plan_partner
+      - payroll_partner
+      - benefits_platform
+      - financial_institution
+    attributes:
+      - partner_id
+      - integration_type
+      - api_credentials
+    
+  broker:
+    description: "Benefits broker/consultant"
+    attributes:
+      - broker_id
+      - broker_firm
+      - assigned_employers
+    capabilities:
+      - employer_administration
+      - enrollment_support
+      - reporting_access
+    
+  tpa:
+    description: "Third-Party Administrator"
+    attributes:
+      - tpa_id
+      - administration_services
+      - service_level_agreement
+    relationships:
+      - employers (one-to-many)
+
+# Portal Types
+portals:
+  member_portal:
+    name: "Member Portal"
+    description: "Self-service portal for account holders"
+    url_pattern: "{domain}/member"
+    features:
+      - account_dashboard
+      - transaction_history
+      - claims_submission
+      - investment_management
+      - profile_management
+      - agreements_permissions
+    
+  employer_portal:
+    name: "Employer Portal"
+    description: "Administrative portal for employers"
+    url_pattern: "{domain}/employer"
+    features:
+      - employee_roster_management
+      - contribution_management
+      - reporting_analytics
+      - plan_administration
+    
+  unified_employer:
+    name: "Unified Employer Portal"
+    description: "Next-generation employer experience"
+    url_pattern: "{domain}/client"
+    features:
+      - unified_dashboard
+      - multi_account_management
+      - advanced_analytics
+      - modern_ui
+    
+  partner_portal:
+    name: "Partner Portal"
+    description: "Portal for integration partners"
+    url_pattern: "{domain}/partner"
+    features:
+      - integration_monitoring
+      - batch_file_management
+      - error_reporting
+    
+  broker_portal:
+    name: "Broker Portal"
+    description: "Portal for benefits brokers"
+    url_pattern: "{domain}/broker"
+    features:
+      - multi_employer_view
+      - enrollment_tracking
+      - commission_reporting
+    
+  team_portal:
+    name: "Team Portal (Admin)"
+    description: "Internal administrative portal"
+    url_pattern: "{domain}/team"
+    features:
+      - member_services
+      - impersonation
+      - advanced_administration
+      - support_tools
+
+# Account Operations
+account_operations:
+  carryover_rollover:
+    description: "Transfer of unused funds to next plan year"
+    types:
+      manual_rollover:
+        requires_admin_action: true
+        configurable_percentage: true
+      automatic_rollover:
+        scheduled_execution: true
+        rule_based: true
+    settings:
+      percentage_to_rollover: "0-100%"
+      min_self: "Decimal"
+      max_self: "Decimal"
+      min_family: "Decimal"
+      max_family: "Decimal"
+      rollover_date: "Date"
+    
+  spend_down:
+    description: "Status indicating grace period for spending remaining balance"
+    triggers:
+      - plan_year_end
+      - employment_termination
+      - plan_cancellation
+    
+  coverage_tiers:
+    description: "Coverage levels affecting contribution limits and eligibility"
+    tiers:
+      - Self
+      - Couple
+      - Family
+      - Self_Plus_One
+      - Employee_Plus_Children
+    affects:
+      - contribution_limits
+      - dependent_eligibility
+      - carryover_maximums
+    
+  scheduled_deductions:
+    description: "Automated recurring deductions from paycheck"
+    types:
+      - employer_contribution (ER)
+      - employee_contribution (EE)
+    attributes:
+      - deduction_amount
+      - deduction_frequency
+      - tax_type (PreTax, PostTax, Roth)
+      - authorized_flag
+
+# Agreements and Compliance
+agreements:
+  types:
+    member_agreement:
+      name: "Member Agreement"
+      description: "Primary account holder agreement"
+      required: true
+      version_tracked: true
+      states: [Accepted, Declined, Expired, null]
+    
+    investment_agreement:
+      subtypes:
+        - FundInvestmentAgreement
+        - HealthEquity_Investment_Agreement
+        - Nationwide_Investment_Agreement
+        - Anheuser_Busch_Investment_Agreement
+        - Dimensional_Advisors_Investment_Supplement
+        - TIAA_Employee_Investment_Agreement
+        - TIAA_Investment_Agreement
+        - HSAdministratorsStandard_Investments_Agreement
+      features:
+        - no_edit_button
+        - view_only
+        - version_tracking
+    
+    phi_agreement:
+      name: "PHI (Protected Health Information) Agreement"
+      description: "HIPAA privacy acknowledgement"
+      required: true
+      reviewable: true
+    
+    template_agreement:
+      description: "Custom agreements from database templates"
+      customizable: true
+      body_template_required: true
+      reviewable: true
+  
+  agreement_lifecycle:
+    states:
+      - Accepted
+      - Declined
+      - Expired
+      - null (unsigned)
+    audit_tracking:
+      - AuditInfo_CreatedBy_ObjectId
+      - AuditInfo_CreatedAt
+      - AuditInfo_ModifiedBy_ObjectId
+      - AuditInfo_ModifiedAt
+    termination:
+      date_terminated_max: "DateTime.MaxValue (no expiration)"
+      date_terminated_custom: "Specific date"
+
+# Access Control (ACME)
+access_control:
+  acme:
+    description: "Access Control Management Engine"
+    resource_pattern: "/[Entity]/[Module]/[Action]"
+    examples:
+      - "/Member/CardManagement/RemoveCardSecurityFraud"
+      - "/Member/VPaySuspectedFraud/VPayFraudAuditor/Edit"
+    permissions:
+      - allow_access
+      - deny_access
+    applies_to:
+      - internal_api_endpoints
+      - protected_resources
+      - modify_operations
+
+# Product Configuration
+product_configuration:
+  features:
+    feature_allow_advisor:
+      description: "Enable advisor/investment services for product"
+      values: [0, 1]
+      affects: [investment_enrollment, service_levels]
+    
+    investment_threshold:
+      description: "Minimum balance required for investments"
+      default: 1000
+      configurable: true
+      currency: USD
+    
+    enable_cash_replenish_not_allowed_flow:
+      description: "Enable alternative flow when product doesn't allow cash replenish"
+      values: [true, false]
+      database: "Advisor.dbo.ProductSetting"
+    
+    minimum_cash_replenish:
+      description: "Minimum required KeepInCash value"
+      default: 0
+      configurable: true
+      database: "Advisor.dbo.ProductSetting"
+
+# Database Schemas (High-Level)
+database_schemas:
+  main_database:
+    tables:
+      - Login
+      - Member
+      - Employer
+      - Subaccount
+      - Product
+      - Agreement
+      - Lookup
+      - ScheduledItem
+  
+  advisor_database:
+    name: "Advisor.dbo"
+    tables:
+      - Client (ServiceLevel, AllowNetSells, KeepInCash)
+      - AutoInvestSettings (AccountId, AutoInvestThreshold, IsEnabled)
+      - CashReplenishSettings (MemberId, IsSellToReplenish, CashReplenishThreshold, CashReplenishThresholdOption)
+      - ProductSetting (ProductId, MinimumCashReplenish, EnableCashReplenishNotAllowedFlow)
+
+# Business Rules
+business_rules:
+  autopilot_enrollment:
+    - rule: "Member with minimum required 0 can enroll with KeepInCash = 0"
+      validation: "MinimumCashReplenish from ProductSetting"
+      outcome: "Creates Client record with ServiceLevel=10, AllowNetSells=1"
+    
+    - rule: "AutoPilot creates CashReplenishSettings with IsSellToReplenish=0"
+      explanation: "AutoPilot doesn't sell to replenish, only for rebalancing"
+    
+    - rule: "KeepInCash updates affect CashReplenishThreshold"
+      sync: "Client.KeepInCash = CashReplenishSettings.CashReplenishThreshold"
+  
+  gps_conversion:
+    - rule: "Converting from AutoPilot to GPS changes ServiceLevel from 10 to 5"
+      database_changes:
+        - "Client.ServiceLevel = 5"
+        - "CashReplenishSettings.IsSellToReplenish = 1"
+        - "AutoInvestSettings.AutoInvestThreshold = Product.InvestmentThreshold"
+    
+    - rule: "GPS enables sell-to-replenish functionality"
+      behavior: "Automatically sells investments when cash drops below threshold"
+  
+  investment_agreements:
+    - rule: "Investment agreements do not show Edit button"
+      ui_constraint: "View-only for all investment agreement types"
+      exception: "None"
+
+# Integration Points
+integration_points:
+  auth0:
+    description: "Authentication provider for business users"
+    user_types:
+      - employer
+      - partner
+      - broker
+    flows:
+      - login_with_privacy_agreement
+      - business_login_redirect
+  
+  couchbase:
+    description: "Caching layer for lookup tables"
+    cache_duration: "Configurable (6+ seconds observed in tests)"
+    cached_entities:
+      - RuntimeOptions
+      - LookupType values
+  
+  agreements_service:
+    description: "Domain service for agreement management"
+    operations:
+      - SignAgreementWithState
+      - GetAgreement
+      - GetReviewableAgreements
+      - TerminateCurrentAgreement
+  
+  agreement_template_service:
+    description: "Service for managing agreement templates"
+    operations:
+      - AddOverrideTemplate
+      - GetAllAgreementTemplates
+
+# Common Patterns
+common_patterns:
+  entity_types:
+    - Member
+    - Employer
+    - Partner
+    - Broker
+    - Account
+  
+  coverage_types:
+    - Self
+    - Couple
+    - Family
+    - Self_Plus_One
+  
+  tax_types:
+    - PreTax
+    - PostTax
+    - Roth
+  
+  deduction_types:
+    - ER (Employer)
+    - EE (Employee)
+  
+  relationship_types:
+    - Spouse
+    - Child
+    - Dependent
+
+# Notes for CORTEX
+notes:
+  extraction_source: "Platform.Classic.Tests/ClassicQA/docs/*.md and test code analysis"
+  extraction_date: "2026-01-28"
+  confidence: "High - extracted from production test suite documentation"
+  usage:
+    - "Reference when generating HealthEquity-specific test automation"
+    - "Understand business domain for intelligent code assistance"
+    - "Validate test data creation patterns"
+    - "Guide API integration implementations"
+  limitations:
+    - "Documentation reflects test automation perspective, not complete business rules"
+    - "Some values are test-specific defaults, not production configuration"
+    - "Database schemas are high-level, not exhaustive"

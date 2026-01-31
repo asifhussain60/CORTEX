@@ -23,7 +23,6 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.result import Result, Ok, Err
-from cortex.infrastructure.database import DatabaseManager
 
 
 class ACState(Enum):
@@ -102,26 +101,22 @@ class StateMachine:
         PhaseState.COMPLETE: [],  # Terminal state
     }
     
-    def __init__(self, db: Optional[DatabaseManager] = None):
+    def __init__(self):
         """
         Initialize state machine.
-        
-        Args:
-            db: DatabaseManager instance for persistence
         """
-        self._db = db
         self._ac_states: Dict[str, ACState] = {}
         self._phase_states: Dict[str, PhaseState] = {}
         self._transition_history: List[StateTransition] = []
         self._state_lock = threading.Lock()
     
     @classmethod
-    def instance(cls, db: Optional[DatabaseManager] = None) -> 'StateMachine':
+    def instance(cls) -> 'StateMachine':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
-                    cls._instance = cls(db)
+                    cls._instance = cls()
         return cls._instance
     
     @classmethod

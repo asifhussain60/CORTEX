@@ -135,6 +135,7 @@ class ApprovalStatus(Enum):
 class CheckpointStatus(Enum):
     """Status of a checkpoint."""
     CREATED = "created"
+    ACTIVE = "active"
     VALIDATED = "validated"
     COMMITTED = "committed"
     ROLLED_BACK = "rolled_back"

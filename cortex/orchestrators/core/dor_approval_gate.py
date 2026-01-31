@@ -17,6 +17,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.core.intent_router import RoutingDecision, IntentType, IntentRouter
+from cortex.orchestrators.core.governance_principles import get_display_name
 from cortex.core.result import Ok, Err
 from cortex.models.canonical_enums import ApprovalStatus
 
@@ -63,15 +64,155 @@ class IntentReflection:
     governance_rules: List[str] = field(default_factory=lambda: [])
     """Applicable governance rules"""
     
+    business_principles: Dict[str, str] = field(default_factory=dict)
+    """Business principles mapped to CORE rules (e.g., {'Quality First': 'CORE-008'})"""    
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     """When reflection was generated"""
 
+    def __post_init__(self) -> None:
+        """Auto-populate business_principles from governance_rules if not provided."""
+        if not self.business_principles and self.governance_rules:
+            # Map CORE rules to business principles
+            rule_mappings = {
+                "CORE-008": ("Quality First", "TDD (CORE-008)"),
+                "CORE-011": ("Maintainability", "Type Safety (CORE-011)"),
+                "CORE-012": ("Documentation", "Docstrings (CORE-012)"),
+                "CORE-013": ("Reliability", "Exception Handling (CORE-013)"),
+                "CORE-026": ("Git Safety", "Checkpoints (CORE-026)"),
+                "CORE-027": ("Auditability", "Audit Trail (CORE-027)"),
+                "CORE-030": ("Implementation Truth", "Verify Code (CORE-030)"),
+                "CORE-035": ("Single Implementation", "No Duplicates (CORE-035)"),
+            }
+            
+            for rule in self.governance_rules:
+                if rule in rule_mappings:
+                    principle, description = rule_mappings[rule]
+                    self.business_principles[principle] = description
+
+    def _get_execution_plan(self) -> List[str]:
+        """
+        Generate execution plan bullets based on intent type.
+        
+        Returns:
+            List of action bullets describing what CORTEX will do
+        """
+        plan: List[str] = []
+        
+        if self.intent_type == "IMPLEMENT":
+            plan = [
+                f"Create implementation in {self.key_entities[0] if self.key_entities else 'target module'}",
+                "Write unit tests first (RED phase)",
+                "Implement functionality to pass tests (GREEN phase)",
+                "Refactor for code quality and maintainability (REFACTOR phase)"
+            ]
+        elif self.intent_type == "FIX":
+            plan = [
+                "Identify root cause of the issue",
+                "Write failing test that reproduces the bug",
+                "Implement fix to resolve the issue",
+                "Verify all tests pass and no regressions introduced"
+            ]
+        elif self.intent_type == "REFACTOR":
+            plan = [
+                "Analyze code structure and identify improvement opportunities",
+                "Apply SOLID principles and design patterns",
+                "Preserve existing functionality with comprehensive tests",
+                "Validate metrics and performance improvements"
+            ]
+        elif self.intent_type == "ANALYZE":
+            plan = [
+                "Examine codebase, architecture, or design",
+                "Identify patterns, issues, or opportunities",
+                "Provide findings and recommendations",
+                "Suggest next steps for implementation or improvement"
+            ]
+        elif self.intent_type == "TEST":
+            plan = [
+                "Generate comprehensive test suite covering critical paths",
+                "Ensure >80% code coverage where applicable",
+                "Validate edge cases and error scenarios",
+                "Integrate tests into CI/CD pipeline"
+            ]
+        elif self.intent_type == "DOCUMENT":
+            plan = [
+                "Generate clear, concise documentation",
+                "Include code examples and usage patterns",
+                "Add diagrams or visual explanations where helpful",
+                "Ensure documentation stays synchronized with code"
+            ]
+        else:
+            plan = [
+                f"Execute {self.intent_type.lower()} operation",
+                "Validate against acceptance criteria",
+                "Track progress and report results",
+                "Log completion in audit trail"
+            ]
+        
+        return plan
+    
+    def _get_dod_criteria(self) -> List[str]:
+        """
+        Generate Definition of Done criteria based on intent type and rules.
+        
+        Returns:
+            List of success criteria that must be met
+        """
+        dod: List[str] = []
+        
+        # Universal DoD criteria (always apply)
+        dod.append("✅ Operation completed without errors")
+        dod.append("✅ Audit trail logged (AC_START → AC_COMPLETE)")
+        
+        # CORE-008: TDD requirement
+        if self.requires_tests or self.intent_type in ["IMPLEMENT", "FIX", "TEST"]:
+            dod.append("✅ All tests passing (100% of new/modified code)")
+        
+        # CORE-011: Type hints
+        if "CORE-011" in self.governance_rules:
+            dod.append("✅ Type hints present on all functions")
+        
+        # CORE-012: Docstrings
+        if "CORE-012" in self.governance_rules:
+            dod.append("✅ Google-style docstrings on all public functions")
+        
+        # Intent-specific criteria
+        if self.intent_type == "IMPLEMENT":
+            dod.extend([
+                "✅ Feature works as specified",
+                "✅ Code review approved",
+                "✅ No regressions in existing tests"
+            ])
+        elif self.intent_type == "FIX":
+            dod.extend([
+                "✅ Bug is fixed and verified",
+                "✅ Test added to prevent regression",
+                "✅ No new bugs introduced"
+            ])
+        elif self.intent_type == "REFACTOR":
+            dod.extend([
+                "✅ Code quality improved (metrics verified)",
+                "✅ All existing tests still passing",
+                "✅ Performance meets or exceeds baseline"
+            ])
+        elif self.intent_type == "ANALYZE":
+            dod.extend([
+                "✅ Analysis complete with findings documented",
+                "✅ Recommendations provided and validated",
+                "✅ Report ready for review"
+            ])
+        
+        return dod
+
     def to_markdown(self) -> str:
         """
-        Generate concise markdown representation.
+        Generate concise markdown representation with execution plan and DoD.
         
-        Designed to be scannable in <10 seconds.
-        Includes DoR blocking indicator if confidence is below threshold.
+        Designed to be scannable in <15 seconds.
+        Includes:
+        1. Intent classification table
+        2. Execution plan (what CORTEX will do)
+        3. Definition of Done (success criteria)
+        4. Approval/blocking decision
         
         Returns:
             Markdown string for user display
@@ -95,7 +236,7 @@ class IntentReflection:
         }
         impact_badge = impact_badges.get(self.estimated_impact, "⚪")
         
-        # Build concise markdown
+        # Build markdown with three sections
         lines = [
             "### 📋 Intent Classification",
             "",
@@ -115,12 +256,42 @@ class IntentReflection:
                 entities_str += f" +{len(self.key_entities) - 3} more"
             lines.append(f"| **Entities** | {entities_str} |")
         
-        # Governance (only if applicable rules)
-        if self.governance_rules:
+        # Business Principles (mapped to CORE rules)
+        if self.business_principles:
+            # Format: **Quality First** → TDD (CORE-008) | **Maintainability** → Type Safety (CORE-011)
+            principles_parts = []
+            for principle, rule in self.business_principles.items():
+                principles_parts.append(f"**{principle}** → {rule}")
+            principles_str = " | ".join(principles_parts)
+            lines.append(f"| **Business Principles** | {principles_str} |")
+        # Governance rules fallback (if no business principles mapped)
+        elif self.governance_rules:
             rules_str = ", ".join(self.governance_rules[:3])
             lines.append(f"| **Rules** | {rules_str} |")
         
-        # Add DoR status indicator
+        # Add execution plan section
+        lines.extend([
+            "",
+            "### 📝 Execution Plan",
+            "",
+            "What CORTEX will do:",
+            ""
+        ])
+        for bullet in self._get_execution_plan():
+            lines.append(f"- {bullet}")
+        
+        # Add Definition of Done section
+        lines.extend([
+            "",
+            "### ✅ Definition of Done",
+            "",
+            "Success looks like:",
+            ""
+        ])
+        for criterion in self._get_dod_criteria():
+            lines.append(f"- {criterion}")
+        
+        # Add DoR status indicator and approval section
         if dor_met:
             lines.extend([
                 "",
@@ -210,6 +381,11 @@ class DoRApprovalGate:
         self._approval_decision: Optional[ApprovalDecision] = None
         self._pending_text: Optional[str] = None
         self._pending_context: Optional[Dict[str, Any]] = None
+        
+        # Initialize router with enforcement blocking disabled for DoR classification
+        # (DoR is pre-execution validation, not runtime execution)
+        self._router = IntentRouter()
+        self._router.enforcement_engine.blocking_enabled = False
     
     def classify_and_reflect(
         self,
@@ -240,7 +416,12 @@ class DoRApprovalGate:
         # Get router and classify
         if self._router is None:
             self._router = IntentRouter()
-        routing_decision = self._router.classify_intent(text, context)
+        routing_decision = self._router.route({
+            "operation": text,
+            "description": text,
+            "keywords": text.lower().split(),
+            "context": context
+        })
         
         if routing_decision is None:
             raise RuntimeError("Intent classification returned None")
@@ -293,6 +474,30 @@ class DoRApprovalGate:
         if "test" in text.lower():
             rules.append("CORE-008")
         
+        # Map business principles to CORE rules based on intent type
+        business_principles: Dict[str, str] = {}
+        
+        # Universal principles
+        business_principles["Quality First"] = "TDD (CORE-008)"
+        
+        if decision.intent_type == IntentType.IMPLEMENT:
+            business_principles["Maintainability"] = "Type Safety (CORE-011)"
+            business_principles["Documentation"] = "Docstrings (CORE-012)"
+        elif decision.intent_type == IntentType.FIX:
+            business_principles["Reliability"] = "Test Coverage (CORE-008)"
+            business_principles["Root Cause Analysis"] = "Implementation Truth (CORE-030)"
+        elif decision.intent_type == IntentType.REFACTOR:
+            business_principles["Code Quality"] = "SOLID Principles"
+            business_principles["Maintainability"] = "Type Safety (CORE-011)"
+        elif decision.intent_type == IntentType.ANALYZE:
+            business_principles["Evidence-Based"] = "Implementation Truth (CORE-030)"
+        elif decision.intent_type == IntentType.TEST:
+            business_principles["Quality First"] = "TDD (CORE-008)"
+            business_principles["Coverage"] = "Comprehensive Testing"
+        elif decision.intent_type == IntentType.DOCUMENT:
+            business_principles["Clarity"] = "Docstrings (CORE-012)"
+            business_principles["Accuracy"] = "Implementation Truth (CORE-030)"
+        
         # Extract key entities (simple heuristic)
         entities: List[str] = []
         for word in text.split():
@@ -308,6 +513,7 @@ class DoRApprovalGate:
             estimated_impact=impact,
             requires_tests=True,
             governance_rules=list(set(rules)),
+            business_principles=business_principles,
         )
     
     def approve(self, feedback: Optional[str] = None) -> None:

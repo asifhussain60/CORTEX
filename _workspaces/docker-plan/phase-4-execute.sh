@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-WORKSPACE="/Users/asifhussain/PROJECTS/CORTEX"
+WORKSPACE="/path/to/CORTEX"
 cd "${WORKSPACE}"
 
 echo "╔════════════════════════════════════════════════════════════╗"

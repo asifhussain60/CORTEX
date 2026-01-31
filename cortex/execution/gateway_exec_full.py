@@ -28,7 +28,7 @@ import logging
 
 if TYPE_CHECKING:
     from cortex.execution.spec_registry_impl import SpecRegistry
-    from cortex.brain.core.governance_registry import GovernanceRegistry
+    from cortex.orchestrators.core.governance_registry import GovernanceRegistry
     from cortex.execution.structured_decision import StructuredDecisionFormatter
 
 
@@ -160,12 +160,12 @@ class MasterGatewayExecutor:
             governance_registry: GovernanceRegistry singleton (default: get_registry())
         """
         # Import at runtime to avoid circular dependencies
-        from cortex.execution.spec_registry_impl import SpecRegistry as _SpecRegistry  # type: ignore
-        from cortex.brain.core.governance_registry import GovernanceRegistry as _GovRegistry  # type: ignore
+        from cortex.execution.spec_registry_impl import get_registry as _get_spec_registry  # type: ignore
+        from cortex.orchestrators.core.governance_registry import GovernanceRegistry as _GovRegistry  # type: ignore
         from cortex.execution.structured_decision import StructuredDecisionFormatter as _SDF  # type: ignore
         
-        self.spec_registry = spec_registry or _SpecRegistry.get_registry()
-        self.governance_registry = governance_registry or _GovRegistry.get_registry()
+        self.spec_registry = spec_registry or _get_spec_registry()
+        self.governance_registry = governance_registry or _GovRegistry.instance()
         self.decision_formatter = _SDF()
 
     def execute(
@@ -814,25 +814,29 @@ class MasterGatewayExecutor:
             Intent type (e.g., "intent_implement") or None if unclassified
         """
         try:
-            routing_rules = self.spec_registry.get_routing_rules()
-            if not routing_rules:
+            routing_rules_data = self.spec_registry.get_routing_rules()
+            if not routing_rules_data:
                 return None
 
+            # routing-rules-intent.yaml has structure: {routing_rules: {intents: [...]}}
+            routing_rules = routing_rules_data.get("routing_rules", routing_rules_data)
+            
             intent_lower = intent_text.lower()
             best_match = None
-            best_score = 0.0
+            best_match_count = 0
 
             for intent_rule in routing_rules.get("intents", []):
                 keywords = intent_rule.get("keywords", [])
+                # Count how many keywords appear in the intent text
                 matches = sum(1 for kw in keywords if kw.lower() in intent_lower)
-                match_score = matches / max(len(keywords), 1)
 
-                if match_score > best_score:
-                    best_score = match_score
+                # Best match is the one with most keyword matches
+                if matches > best_match_count:
+                    best_match_count = matches
                     best_match = intent_rule.get("id")
 
-            # Use confidence threshold from routing rule
-            if best_match and best_score >= 0.5:
+            # Return match if at least one keyword matched
+            if best_match and best_match_count >= 1:
                 return best_match
 
             return None

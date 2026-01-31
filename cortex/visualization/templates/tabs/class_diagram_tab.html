@@ -1,0 +1,37 @@
+<div x-show="activeTab === 'classes'" class="space-y-6">
+    <section class="bg-white rounded-lg shadow-sm p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">📐 Class Diagram</h2>
+        <p class="text-sm text-gray-500 mb-4">
+            UML class diagram showing inheritance relationships and class structures.
+        </p>
+        
+        <!-- Mermaid.js Visualization Container -->
+        <div id="class-diagram" class="mermaid w-full overflow-x-auto">
+{{ mermaid_diagram }}
+        </div>
+    </section>
+</div>
+
+<!-- Mermaid.js Script -->
+<script src="/static/vendor/mermaid-10.6.1.min.js"></script>
+<script>
+    // Initialize Mermaid.js
+    mermaid.initialize({ 
+        startOnLoad: false,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+    
+    // Lazy load Mermaid rendering when tab is activated
+    document.addEventListener('alpine:init', () => {
+        Alpine.watch('activeTab', (value) => {
+            if (value === 'classes') {
+                setTimeout(() => {
+                    mermaid.run({
+                        querySelector: '#class-diagram'
+                    });
+                }, 100);
+            }
+        });
+    });
+</script>

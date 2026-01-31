@@ -23,7 +23,8 @@ from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, Operation
 from cortex.core.result import Result, Ok, Err
 from cortex.brain.core.response_header_injector import ResponseHeaderInjector
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
-from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+from cortex.execution.exec_gateway_impl import GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
 from cortex.brain.knowledge.hybrid_loader import HybridKnowledgeLoader, get_hybrid_loader
@@ -36,7 +37,6 @@ from cortex.domain_brain.business_knowledge_repository import (
     get_business_knowledge_repository
 )
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 from cortex.brain.mcp.decorator import mcp_tool
 from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge
@@ -144,7 +144,6 @@ class MasterOrchestrator(IOrchestrator):
     def __init__(self):
         """Initialize MasterOrchestrator"""
         self.logger = EnhancedAuditLogger.instance()
-        self.db = DatabaseManager()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
         
