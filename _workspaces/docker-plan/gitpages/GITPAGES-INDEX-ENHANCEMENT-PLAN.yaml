@@ -1,0 +1,885 @@
+# docs/index.html Enhancement Plan
+# Refresh content to match live implementation + industry standards
+#
+# Author: CORTEX Architect
+# Date: 2026-01-31
+# Status: PLANNING → READY FOR EXECUTION
+# Duration: 7-14 hours total (3 phases)
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  phase_id: "gitpages-index-refresh"
+  version: "1.0"
+  author: "CORTEX Architect"
+  created: "2026-01-31"
+  status: "READY"
+  target_file: "docs/index.html"
+  backup_location: "docs/index.html.pre-enhancement-backup"
+  
+objectives:
+  primary: "Refresh docs/index.html to showcase live implementation with industry best practices"
+  
+  secondary:
+    - "Maintain 100% visual design preservation (glassmorphism, colors, animations)"
+    - "Achieve WCAG 2.1 AA accessibility compliance"
+    - "Optimize Core Web Vitals (LCP < 2.5s, FID < 100ms, CLS < 0.1)"
+    - "Add industry-standard SEO (Schema.org) and security (CSP)"
+    - "Update content with real metrics (23 orchestrators, MCP-first architecture)"
+  
+  non_goals:
+    - "NO visual design changes"
+    - "NO CSS rewrite"
+    - "NO framework migration (saved for future phase)"
+    - "NO component library build (future)"
+
+# ============================================================================
+# CURRENT STATE ANALYSIS
+# ============================================================================
+
+current_state:
+  file: "docs/index.html"
+  size: "1447 lines (~125KB)"
+  structure:
+    - "Inline CSS (250+ lines)"
+    - "Inline JavaScript (400+ lines)"
+    - "4 external CSS files"
+    - "1 CDN dependency (Font Awesome)"
+  
+  strengths:
+    - "Beautiful glassmorphism design"
+    - "Comprehensive content coverage"
+    - "Interactive demos and tabs"
+    - "Mobile-responsive"
+  
+  issues:
+    accessibility:
+      - "Missing skip-to-main-content link"
+      - "Empty ARIA labels in loading overlay"
+      - "Insufficient color contrast ratios"
+      - "No reduced-motion media query"
+      - "Video controls missing keyboard hints"
+      score: "~75/100 (needs WCAG 2.1 AA)"
+    
+    performance:
+      - "Inline scripts block rendering"
+      - "No lazy loading for below-fold content"
+      - "Font Awesome CDN (blocking)"
+      - "No resource preloading"
+      - "Multiple CSS files (4+) without bundling"
+      score: "~70/100 (needs Core Web Vitals)"
+    
+    seo:
+      - "Missing Schema.org JSON-LD"
+      - "Incomplete Open Graph tags"
+      - "No canonical URL"
+      - "No meta robots directive"
+      score: "~80/100 (needs rich snippets)"
+    
+    security:
+      - "No Content Security Policy"
+      - "CDN resources without SRI"
+      - "Missing security headers"
+      score: "~60/100 (needs OWASP compliance)"
+    
+    content:
+      - "MCP-first architecture not emphasized"
+      - "Missing live metrics (23 orchestrators)"
+      - "Outdated capability descriptions"
+      - "No real implementation stats"
+
+# ============================================================================
+# DESIGN PRESERVATION GUARANTEES
+# ============================================================================
+
+design_preservation:
+  commitment: "100% visual identity preservation"
+  
+  protected_elements:
+    glassmorphism:
+      - "backdrop-filter: blur(10px)"
+      - "background: rgba(26, 31, 58, 0.35)"
+      - "border: 1px solid rgba(255, 255, 255, 0.12)"
+      status: "LOCKED"
+    
+    color_palette:
+      primary: "#00d4ff (cyan)"
+      secondary: "#7b61ff (purple)"
+      background: "rgba(10, 14, 39, 0.85)"
+      glass_bg: "rgba(26, 31, 58, 0.35)"
+      glass_border: "rgba(255, 255, 255, 0.12)"
+      status: "LOCKED"
+    
+    animations:
+      - "fade-in transitions"
+      - "pulse-glow effects"
+      - "slide-in animations"
+      - "logo scaling on scroll"
+      - "tab switching transitions"
+      status: "LOCKED"
+    
+    layout:
+      - "Hero section with logo"
+      - "Multi-panel system"
+      - "Tab navigation (glassmorphism)"
+      - "Card grids"
+      - "Demo video showcase"
+      status: "LOCKED"
+    
+    typography:
+      fonts: "Segoe UI, Inter, system sans-serif"
+      sizes: "Current hierarchy maintained"
+      weights: "Current weights maintained"
+      status: "LOCKED"
+  
+  validation_strategy:
+    pre_execution:
+      - "Create git checkpoint"
+      - "Take full-page screenshots (desktop + mobile)"
+      - "Document CSS snapshot"
+    
+    during_execution:
+      - "Live browser visual diff"
+      - "CSS computed styles comparison"
+      - "Layout measurements verification"
+    
+    post_execution:
+      - "Before/after screenshot comparison"
+      - "Lighthouse visual comparison"
+      - "Manual review of all sections"
+      - "Rollback plan if regression detected"
+
+# ============================================================================
+# PHASE 1: IMMEDIATE NON-VISUAL FIXES (1-2 HOURS)
+# ============================================================================
+
+phase_1_immediate:
+  name: "Non-Visual Enhancements"
+  duration: "1-2 hours"
+  priority: "HIGH"
+  visual_impact: "ZERO (invisible to users)"
+  
+  tasks:
+    task_1_1:
+      name: "WCAG 2.1 AA Accessibility"
+      duration: "30 minutes"
+      changes:
+        - id: "A11Y-001"
+          description: "Add skip-to-main-content link"
+          location: "After <body> tag"
+          code: |
+            <a href="#main-content" class="skip-link">Skip to main content</a>
+          css: |
+            .skip-link {
+              position: absolute;
+              top: -40px;
+              left: 0;
+              background: #00d4ff;
+              color: #0a0e27;
+              padding: 8px;
+              text-decoration: none;
+              z-index: 100;
+            }
+            .skip-link:focus {
+              top: 0;
+            }
+        
+        - id: "A11Y-002"
+          description: "Fix ARIA labels in loading overlay"
+          location: "Line ~240"
+          before: '<div class="page-loading-overlay" id="pageLoadingOverlay" role="status">'
+          after: '<div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite" aria-label="Page loading">'
+          additional: |
+            <span class="sr-only">Loading page content, please wait</span>
+        
+        - id: "A11Y-003"
+          description: "Add reduced-motion support"
+          location: "In <style> section"
+          code: |
+            @media (prefers-reduced-motion: reduce) {
+              *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+              }
+            }
+        
+        - id: "A11Y-004"
+          description: "Add keyboard navigation hints to tabs"
+          location: "Tab button elements"
+          attribute: 'aria-keyshortcuts="ArrowLeft ArrowRight Home End"'
+      
+      acceptance_criteria:
+        - "Lighthouse Accessibility score ≥ 95"
+        - "WCAG 2.1 AA compliance validated"
+        - "Keyboard navigation fully functional"
+        - "Screen reader tested (NVDA/JAWS)"
+    
+    task_1_2:
+      name: "SEO Enhancement - Structured Data"
+      duration: "20 minutes"
+      changes:
+        - id: "SEO-001"
+          description: "Add JSON-LD Schema.org markup"
+          location: "In <head>, before </head>"
+          code: |
+            <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "CORTEX",
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Cross-platform",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "description": "AI-Powered Development Intelligence with MCP orchestration, 4-tier governance, and TDD mastery",
+              "author": {
+                "@type": "Person",
+                "name": "Asif Hussain"
+              },
+              "featureList": [
+                "23 Orchestrators",
+                "4-Tier Governance",
+                "MCP-First Architecture",
+                "TDD Master",
+                "CORTEX LENS",
+                "Evidence Bundles"
+              ]
+            }
+            </script>
+        
+        - id: "SEO-002"
+          description: "Add canonical URL"
+          location: "In <head>"
+          code: '<link rel="canonical" href="https://asifhussain60.github.io/CORTEX/" />'
+        
+        - id: "SEO-003"
+          description: "Add robots meta directive"
+          location: "In <head>"
+          code: '<meta name="robots" content="index, follow, max-image-preview:large" />'
+        
+        - id: "SEO-004"
+          description: "Complete Open Graph tags"
+          location: "In <head>"
+          additions:
+            - '<meta property="og:site_name" content="CORTEX" />'
+            - '<meta property="og:locale" content="en_US" />'
+            - '<meta name="twitter:card" content="summary_large_image" />'
+      
+      acceptance_criteria:
+        - "Google Rich Results Test passes"
+        - "Lighthouse SEO score = 100"
+        - "Open Graph Debugger validates"
+    
+    task_1_3:
+      name: "Security Headers - CSP"
+      duration: "20 minutes"
+      changes:
+        - id: "SEC-001"
+          description: "Add Content Security Policy"
+          location: "In <head>"
+          code: |
+            <meta http-equiv="Content-Security-Policy" 
+                  content="default-src 'self'; 
+                           script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; 
+                           style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com;
+                           font-src 'self' cdnjs.cloudflare.com data:;
+                           img-src 'self' data: https:;
+                           connect-src 'self';
+                           media-src 'self';
+                           object-src 'none';
+                           frame-ancestors 'none';
+                           base-uri 'self';
+                           form-action 'self';">
+        
+        - id: "SEC-002"
+          description: "Add SRI to Font Awesome CDN"
+          location: "Font Awesome link tag"
+          before: '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous"/>'
+          after: |
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+                  rel="stylesheet" 
+                  integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+                  crossorigin="anonymous"
+                  referrerpolicy="no-referrer"/>
+        
+        - id: "SEC-003"
+          description: "Add security meta tags"
+          location: "In <head>"
+          code: |
+            <meta http-equiv="X-Content-Type-Options" content="nosniff">
+            <meta http-equiv="X-Frame-Options" content="DENY">
+            <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+            <meta name="referrer" content="strict-origin-when-cross-origin">
+      
+      acceptance_criteria:
+        - "Security Headers scanner passes"
+        - "OWASP compliance validated"
+        - "CSP violations monitored (0 errors)"
+  
+  validation:
+    automated:
+      - "Lighthouse audit (all categories)"
+      - "WAVE accessibility checker"
+      - "Google Rich Results Test"
+      - "Security Headers scanner"
+    
+    manual:
+      - "Visual inspection (no design changes)"
+      - "Cross-browser testing (Chrome, Firefox, Safari)"
+      - "Mobile responsiveness check"
+    
+    rollback_triggers:
+      - "ANY visual regression detected"
+      - "ANY functionality broken"
+      - "Lighthouse score decrease"
+
+# ============================================================================
+# PHASE 2: PERFORMANCE OPTIMIZATION (4-8 HOURS)
+# ============================================================================
+
+phase_2_performance:
+  name: "Performance Optimization"
+  duration: "4-8 hours"
+  priority: "MEDIUM"
+  visual_impact: "ZERO (faster load, same appearance)"
+  
+  tasks:
+    task_2_1:
+      name: "Self-host Font Awesome"
+      duration: "1 hour"
+      rationale: "Eliminate CDN dependency, improve load time, offline support"
+      steps:
+        - "Download Font Awesome 6.5.1 (webfonts)"
+        - "Copy to docs/assets/fonts/fontawesome/"
+        - "Update CSS reference"
+        - "Test icon rendering"
+      
+      changes:
+        - id: "PERF-001"
+          description: "Replace CDN with self-hosted fonts"
+          before: '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" .../>'
+          after: '<link href="assets/fonts/fontawesome/all.min.css" rel="stylesheet">'
+          preload: '<link rel="preload" href="assets/fonts/fontawesome/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>'
+      
+      acceptance_criteria:
+        - "All icons render identically"
+        - "Font load time < 100ms"
+        - "No CDN requests in Network tab"
+    
+    task_2_2:
+      name: "Externalize JavaScript"
+      duration: "2 hours"
+      rationale: "Enable caching, reduce HTML size, improve maintainability"
+      steps:
+        - "Extract inline JS to docs/assets/js/index.js"
+        - "Maintain execution order"
+        - "Add defer attribute"
+        - "Test all interactions"
+      
+      changes:
+        - id: "PERF-002"
+          description: "Move inline JavaScript to external file"
+          location: "Bottom of <body>"
+          extract_from: "Line ~1100-1447 (3 script blocks)"
+          create_file: "docs/assets/js/index.js"
+          html_change: '<script src="assets/js/index.js" defer></script>'
+      
+      acceptance_criteria:
+        - "All features work identically"
+        - "No console errors"
+        - "First Contentful Paint improves"
+        - "JavaScript cached on repeat visits"
+    
+    task_2_3:
+      name: "Implement Lazy Loading"
+      duration: "1 hour"
+      rationale: "Load below-fold content only when needed"
+      changes:
+        - id: "PERF-003"
+          description: "Add loading='lazy' to images and iframes"
+          targets:
+            - "Hero logo (above fold - keep eager)"
+            - "Panel images (below fold - lazy)"
+            - "Video elements (lazy)"
+          code: |
+            <img src="..." loading="lazy" decoding="async" alt="...">
+            <video src="..." loading="lazy" preload="metadata">
+      
+      acceptance_criteria:
+        - "Above-fold content loads immediately"
+        - "Below-fold deferred until scroll"
+        - "LCP score improves"
+    
+    task_2_4:
+      name: "Resource Preloading"
+      duration: "30 minutes"
+      changes:
+        - id: "PERF-004"
+          description: "Preload critical resources"
+          location: "In <head>"
+          code: |
+            <link rel="preload" href="assets/css/main.css" as="style">
+            <link rel="preload" href="assets/js/index.js" as="script">
+            <link rel="preload" href="assets/images/CORTEX-logo-512.png" as="image">
+    
+    task_2_5:
+      name: "Add Web Vitals Monitoring"
+      duration: "1 hour"
+      changes:
+        - id: "PERF-005"
+          description: "Add Web Vitals tracking"
+          location: "In <head>"
+          code: |
+            <script type="module">
+              import {onCLS, onFID, onLCP} from 'https://unpkg.com/web-vitals@3?module';
+              
+              function sendToAnalytics({name, value, id}) {
+                console.log('Web Vital:', name, value);
+                // TODO: Send to analytics endpoint
+              }
+              
+              onCLS(sendToAnalytics);
+              onFID(sendToAnalytics);
+              onLCP(sendToAnalytics);
+            </script>
+  
+  target_metrics:
+    before:
+      lighthouse_performance: "~70"
+      lcp: "~3.5s"
+      fid: "~150ms"
+      cls: "~0.15"
+      tti: "~4.0s"
+    
+    after:
+      lighthouse_performance: "≥95"
+      lcp: "<2.5s"
+      fid: "<100ms"
+      cls: "<0.1"
+      tti: "<2.0s"
+  
+  validation:
+    tools:
+      - "Lighthouse (Performance)"
+      - "WebPageTest.org"
+      - "Chrome DevTools Performance tab"
+      - "Network waterfall analysis"
+    
+    acceptance:
+      - "Core Web Vitals GREEN for all metrics"
+      - "Lighthouse Performance ≥ 95"
+      - "Time to Interactive < 2s"
+      - "Total page size < 100KB (gzipped)"
+
+# ============================================================================
+# PHASE 3: CONTENT REFRESH (2-4 HOURS)
+# ============================================================================
+
+phase_3_content:
+  name: "Content Refresh with Live Implementation"
+  duration: "2-4 hours"
+  priority: "HIGH"
+  visual_impact: "MINIMAL (text updates only)"
+  
+  tasks:
+    task_3_1:
+      name: "MCP-First Architecture Messaging"
+      duration: "1 hour"
+      changes:
+        - id: "CONTENT-001"
+          description: "Add MCP-First callout banner"
+          location: "After hero section, before persona tiles"
+          code: |
+            <div class="level0-container">
+              <div class="glass-card mcp-first-badge animation-t3">
+                <div class="mcp-badge-icon">🔌</div>
+                <div class="mcp-badge-content">
+                  <h3 class="mcp-badge-title">MCP-First Architecture</h3>
+                  <p class="mcp-badge-text">
+                    CORTEX runs as <strong>SaaS behind MCP server</strong> — 
+                    all 23 orchestrators exposed via Model Context Protocol for seamless integration.
+                    <a href="architecture/mcp-architecture.html" class="mcp-learn-more">Learn More →</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          css: |
+            .mcp-first-badge {
+              display: flex;
+              align-items: center;
+              gap: 1.5rem;
+              padding: 2rem;
+              margin: 2rem 0;
+            }
+            .mcp-badge-icon {
+              font-size: 3rem;
+              flex-shrink: 0;
+            }
+            .mcp-badge-title {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: #00d4ff;
+              margin: 0 0 0.5rem 0;
+            }
+            .mcp-badge-text {
+              font-size: 1rem;
+              line-height: 1.6;
+              margin: 0;
+            }
+            .mcp-learn-more {
+              color: #7b61ff;
+              text-decoration: none;
+              font-weight: 600;
+            }
+    
+    task_3_2:
+      name: "Update Governance Panel with Live Metrics"
+      duration: "30 minutes"
+      changes:
+        - id: "CONTENT-002"
+          description: "Add orchestrator count to governance panel"
+          location: "Governance & Audit section"
+          before: '<p class="panel-subtitle-main">4‑tier rule merger, hash‑chain audit, state, lifecycle, and evidence</p>'
+          after: |
+            <p class="panel-subtitle-main">4‑tier rule merger, hash‑chain audit, state, lifecycle, and evidence</p>
+            <div class="governance-live-stats">
+              <div class="live-stat">
+                <span class="live-stat-value">23</span>
+                <span class="live-stat-label">Orchestrators Wired</span>
+              </div>
+              <div class="live-stat">
+                <span class="live-stat-value">100%</span>
+                <span class="live-stat-label">Hash-Chain Coverage</span>
+              </div>
+              <div class="live-stat">
+                <span class="live-stat-value">4-Tier</span>
+                <span class="live-stat-label">Governance Merger</span>
+              </div>
+              <div class="live-stat">
+                <span class="live-stat-value">≥80%</span>
+                <span class="live-stat-label">Test Coverage Gate</span>
+              </div>
+            </div>
+    
+    task_3_3:
+      name: "Enhance CORTEX LENS Capabilities"
+      duration: "45 minutes"
+      changes:
+        - id: "CONTENT-003"
+          description: "Add capability showcase to LENS panel"
+          location: "Discovery & TOOLKIT Panel → LENS tab"
+          additions: |
+            <div class="lens-capabilities-grid">
+              <div class="lens-capability">
+                <span class="capability-icon">🔍</span>
+                <h4>AST Analysis</h4>
+                <p>6+ languages: Python, JavaScript, TypeScript, Java, C#, Go</p>
+              </div>
+              <div class="lens-capability">
+                <span class="capability-icon">🗺️</span>
+                <h4>Knowledge Graph</h4>
+                <p>Auto-generated dependency maps with D3.js visualization</p>
+              </div>
+              <div class="lens-capability">
+                <span class="capability-icon">🧩</span>
+                <h4>Reverse Engineering</h4>
+                <p>Extract architecture, complexity, and domain from existing codebases</p>
+              </div>
+              <div class="lens-capability">
+                <span class="capability-icon">🎯</span>
+                <h4>MCP Exposed</h4>
+                <p>All analyzers available via cortex_lens_analyze MCP tool</p>
+              </div>
+            </div>
+    
+    task_3_4:
+      name: "Update 'Built with CORTEX' Stats"
+      duration: "30 minutes"
+      changes:
+        - id: "CONTENT-004"
+          description: "Update achievement panel with real numbers"
+          location: "Built with CORTEX panel"
+          updates:
+            orchestrators: "23 Orchestrators"
+            test_coverage: "400+ Tests"
+            mcp_tools: "15+ MCP Tools"
+            governance_rules: "22 SKULL Rules"
+    
+    task_3_5:
+      name: "Refresh 'What is CORTEX?' Section"
+      duration: "45 minutes"
+      changes:
+        - id: "CONTENT-005"
+          description: "Emphasize MCP-first + 23 orchestrators"
+          location: "What is CORTEX? panel"
+          revised_text: |
+            <p class="level0-card-text">
+              CORTEX is an <strong>MCP-first SaaS orchestration system</strong> with 
+              <strong>23 wired orchestrators</strong> that turn Copilot into a governed, 
+              auditable execution engine. Every request flows through 
+              <strong>MasterOrchestrator → TodoManager</strong> with 
+              <strong>4-tier governance</strong> (Tier 0 SKULL → Tier 3 Learned) enforcement.
+            </p>
+            <p class="level0-card-text">
+              Foundation-first architecture provides <strong>hash‑chain audit</strong>, 
+              <strong>state management</strong>, <strong>7‑state lifecycle</strong>, and 
+              <strong>Evidence Bundles</strong> proving completion. 
+              <strong>TDD‑Master</strong> enforces <em>RED → GREEN → REFACTOR</em> with 
+              gates that block untested code.
+            </p>
+            <p class="level0-card-text">
+              Discover capabilities with <strong>CORTEX LENS</strong> (AST + Git + Comments), 
+              generate HTML views with <strong>TOOLKIT</strong>, and expose all functionality 
+              via <strong>15+ MCP tools</strong> for seamless integration.
+            </p>
+  
+  validation:
+    content_accuracy:
+      - "All metrics verified against live implementation"
+      - "Orchestrator count confirmed (23)"
+      - "MCP tools count verified (15+)"
+      - "Test coverage numbers accurate"
+    
+    messaging:
+      - "MCP-first architecture prominent"
+      - "Technical accuracy maintained"
+      - "Value propositions clear"
+      - "Call-to-actions compelling"
+
+# ============================================================================
+# EXECUTION STRATEGY
+# ============================================================================
+
+execution:
+  prerequisites:
+    - "Git checkpoint: git commit -am 'Pre-enhancement checkpoint'"
+    - "Backup: cp docs/index.html docs/index.html.pre-enhancement-backup"
+    - "Screenshots: Full page (desktop + mobile + tablet)"
+    - "CSS snapshot: Copy all linked CSS files"
+  
+  phase_order:
+    sequence: "SEQUENTIAL (phase by phase)"
+    rationale: "Validate after each phase before proceeding"
+    gates:
+      - "Phase 1 complete → Validate → Approve Phase 2"
+      - "Phase 2 complete → Validate → Approve Phase 3"
+      - "Phase 3 complete → Final validation → Deploy"
+  
+  validation_gates:
+    after_each_phase:
+      automated:
+        - "Lighthouse audit (all categories ≥90)"
+        - "Visual regression test (0 differences)"
+        - "Functional smoke test (all interactions work)"
+      
+      manual:
+        - "Side-by-side visual comparison"
+        - "Cross-browser check (Chrome, Firefox, Safari)"
+        - "Mobile responsiveness verification"
+      
+      approval:
+        required: "YES"
+        approver: "User (Asif Hussain)"
+        format: "Explicit 'proceed' command"
+  
+  rollback_plan:
+    triggers:
+      - "ANY visual regression"
+      - "ANY functionality broken"
+      - "Lighthouse score decrease"
+      - "User dissatisfaction"
+    
+    procedure:
+      - "git reset --hard HEAD~1"
+      - "Restore backup: mv docs/index.html.pre-enhancement-backup docs/index.html"
+      - "Document issue in _workspaces/docker-plan/gitpages/ROLLBACK-NOTES.md"
+      - "Revise plan based on findings"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  technical:
+    accessibility:
+      - "Lighthouse Accessibility score ≥ 95"
+      - "WCAG 2.1 AA compliant (0 violations)"
+      - "Keyboard navigation 100% functional"
+      - "Screen reader compatible"
+    
+    performance:
+      - "Lighthouse Performance score ≥ 95"
+      - "LCP < 2.5s"
+      - "FID < 100ms"
+      - "CLS < 0.1"
+      - "TTI < 2.0s"
+    
+    seo:
+      - "Lighthouse SEO score = 100"
+      - "Google Rich Results Test passes"
+      - "Schema.org validation passes"
+    
+    security:
+      - "CSP implemented (0 violations)"
+      - "SRI for all CDN resources"
+      - "Security Headers A+ rating"
+  
+  design:
+    - "Visual regression tests: 0 differences"
+    - "Before/after screenshots: Identical"
+    - "User approval: Explicit confirmation"
+  
+  content:
+    - "MCP-first architecture prominent"
+    - "23 orchestrators referenced"
+    - "Live metrics displayed"
+    - "Capability descriptions accurate"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+
+deliverables:
+  code:
+    - file: "docs/index.html"
+      changes: "~100 lines modified/added"
+      backup: "docs/index.html.pre-enhancement-backup"
+    
+    - file: "docs/assets/js/index.js"
+      status: "NEW"
+      size: "~400 lines (extracted from inline)"
+    
+    - file: "docs/assets/fonts/fontawesome/"
+      status: "NEW"
+      contents: "Font Awesome 6.5.1 webfonts"
+    
+    - file: "docs/assets/css/index-enhancements.css"
+      status: "NEW"
+      size: "~50 lines (new components)"
+  
+  documentation:
+    - file: "_workspaces/docker-plan/gitpages/GITPAGES-INDEX-ENHANCEMENT-PLAN.yaml"
+      status: "THIS FILE"
+    
+    - file: "_workspaces/docker-plan/gitpages/GITPAGES-QUICK-REFERENCE.md"
+      description: "Executive summary + 10-minute action plan"
+    
+    - file: "_workspaces/docker-plan/gitpages/GITPAGES-IMPLEMENTATION-PHASES.md"
+      description: "Detailed phase breakdown"
+    
+    - file: "_workspaces/docker-plan/gitpages/GITPAGES-DESIGN-PRESERVATION-CHECKLIST.md"
+      description: "CSS/design validation checklist"
+  
+  validation_artifacts:
+    - "Before/after screenshots (3 viewports)"
+    - "Lighthouse reports (before/after)"
+    - "Visual diff comparison"
+    - "Accessibility audit reports"
+
+# ============================================================================
+# TIMELINE
+# ============================================================================
+
+timeline:
+  planning: "1 hour (COMPLETE)"
+  phase_1: "1-2 hours"
+  phase_2: "4-8 hours"
+  phase_3: "2-4 hours"
+  validation: "1 hour"
+  total: "9-16 hours"
+  
+  suggested_schedule:
+    day_1:
+      - "Complete planning (DONE)"
+      - "Execute Phase 1 (2 hours)"
+      - "Validate Phase 1 (30 minutes)"
+    
+    day_2:
+      - "Execute Phase 2 (6 hours)"
+      - "Validate Phase 2 (30 minutes)"
+    
+    day_3:
+      - "Execute Phase 3 (3 hours)"
+      - "Final validation (1 hour)"
+      - "Deploy to GitHub Pages"
+
+# ============================================================================
+# GOVERNANCE COMPLIANCE
+# ============================================================================
+
+governance:
+  rules_applied:
+    - "ARCH-003: Challenge presented (SSG vs manual HTML)"
+    - "ARCH-006: No backward compatibility (fall-forward only)"
+    - "ARCH-011: Execute to completion (no phase breakdowns during execution)"
+    - "ARCH-012: Industry standards gate (WCAG, OWASP, Core Web Vitals)"
+    - "CORE-026: Git checkpoint before major changes"
+    - "CORE-027: Audit trail (planning → execution → validation)"
+    - "CORE-028: Filename conventions (kebab-case for new files)"
+    - "CORE-035: Single canonical implementation (no duplicates)"
+    - "CORE-036: Industry standards compliance verified"
+  
+  evidence:
+    planning: "This YAML file + supporting docs"
+    execution: "Git commits with descriptive messages"
+    validation: "Lighthouse reports + screenshots"
+    completion: "Evidence bundle in _workspaces/docker-plan/gitpages/"
+
+# ============================================================================
+# NOTES & DECISIONS
+# ============================================================================
+
+notes:
+  - "Design preservation is PARAMOUNT — any regression = rollback"
+  - "Each phase requires explicit approval before proceeding"
+  - "Industry standards (WCAG, Core Web Vitals, OWASP) are non-negotiable"
+  - "Content updates reflect ACTUAL live implementation (no aspirational claims)"
+  - "Future SSG migration is SEPARATE project (not in scope)"
+
+decisions:
+  - decision: "Preserve current design 100%"
+    rationale: "User invested heavily in glassmorphism theme"
+    alternatives_rejected: ["Design refresh", "Component rewrite"]
+  
+  - decision: "Phase-by-phase execution with gates"
+    rationale: "Minimize risk, enable rollback at any point"
+    alternatives_rejected: ["Big-bang deployment"]
+  
+  - decision: "Self-host Font Awesome"
+    rationale: "Performance + offline support + security"
+    alternatives_rejected: ["Keep CDN", "Switch to different icons"]
+  
+  - decision: "External JavaScript file"
+    rationale: "Caching + maintainability"
+    alternatives_rejected: ["Keep inline", "Bundle with framework"]
+
+# ============================================================================
+# NEXT ACTIONS
+# ============================================================================
+
+next_actions:
+  immediate:
+    - "Create supporting documentation (QUICK-REFERENCE.md, etc.)"
+    - "Review and approve plan"
+    - "Create git checkpoint"
+  
+  execution:
+    - "Await user approval: 'proceed with Phase 1'"
+    - "Execute Phase 1 tasks"
+    - "Validate Phase 1"
+    - "Repeat for Phases 2 & 3"
+  
+  completion:
+    - "Deploy to GitHub Pages"
+    - "Update CHANGELOG.md"
+    - "Archive planning docs"
+
+# ============================================================================
+# END OF PLAN
+# ============================================================================

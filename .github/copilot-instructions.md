@@ -21,7 +21,9 @@
 | **CORE-029** | Response header MANDATORY |
 | **CORE-030** | Implementation Truth — verify code, not docs |
 | **CORE-035** | Single canonical implementation |
+| **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
+| **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
 
 ---
 
@@ -99,6 +101,7 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | CORE-013 | No bare except |
 | CORE-026 | Git checkpoint before major changes |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
+| CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 
 ---
 

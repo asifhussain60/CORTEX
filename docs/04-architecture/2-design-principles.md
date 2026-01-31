@@ -257,6 +257,75 @@ orchestrators:
     timeout: 30.0
 ```
 
+### Prompt ≠ Runtime Data Access
+
+**Critical Pattern**: Prompts define behavior, orchestrators access data at runtime.
+
+```
+┌──────────────────────┐
+│ Design-Time Prompts  │ ← Define standards, patterns, rules
+│ (cortex-architect)   │ ← Contains detailed YAML documentation
+└──────────┬───────────┘
+           │ references (behavior only)
+           ↓
+┌──────────────────────┐
+│ Production Prompts   │ ← Define rules ONLY (e.g., CORE-036)
+│ (CORTEX, copilot)    │ ← NO implementation details
+└──────────┬───────────┘
+           │ invoke
+           ↓
+┌──────────────────────┐
+│ MCP Tools            │ ← Protocol layer
+└──────────┬───────────┘
+           │ use
+           ↓
+┌──────────────────────┐
+│ Orchestrators        │ ← Access knowledge YAMLs at runtime
+└──────────┬───────────┘
+           │ load
+           ↓
+┌──────────────────────┐
+│ Knowledge YAMLs      │ ← 45+ authoritative sources
+│ (cortex_brain/tier3) │
+└──────────────────────┘
+```
+
+**Why This Matters:**
+
+| Anti-Pattern | Problem | Correct Pattern |
+|--------------|---------|-----------------|
+| Production prompt contains YAML locations | Coupling, maintenance burden | Rule reference → orchestrator loads |
+| Prompt documents implementation | Design-time concerns leak to runtime | Behavior in prompt, data via orchestrator |
+| Hardcoded knowledge in prompts | Can't update without prompt changes | Dynamic knowledge access |
+
+**Example (CORRECT):**
+
+```python
+# Production prompt: CORE-036 says "verify standards compliance"
+# Runtime: Orchestrator decides HOW to verify
+class TDDOrchestrator:
+    def validate_standards(self, code: str) -> List[Violation]:
+        # Load knowledge YAMLs dynamically
+        tdd_rules = self.knowledge.load("TESTING-VALIDATION/tdd-best-practices.yaml")
+        solid_rules = self.knowledge.load("ARCHITECTURE/solid-principles.yaml")
+        
+        # Apply rules at runtime
+        return self._check_compliance(code, tdd_rules + solid_rules)
+```
+
+**Example (INCORRECT):**
+
+```python
+# ❌ Production prompt hardcodes: "Check TESTING-VALIDATION/tdd-best-practices.yaml"
+# Problem: Adding new YAML requires prompt update
+```
+
+**Principles:**
+- **12-Factor (III. Config)**: Data sources (YAMLs) are configuration, not code (prompts)
+- **SOLID (SRP)**: Prompts = behavior definition, orchestrators = data access
+- **SOLID (DIP)**: Depend on abstraction ("standards exist"), not concrete YAML paths
+- **Clean Code**: Low coupling between prompts and implementation details
+
 ---
 
 ## 6. Observability as a Feature

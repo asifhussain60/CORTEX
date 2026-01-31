@@ -106,6 +106,7 @@
 | CORE-029 | Response header |
 | CORE-030 | Implementation Truth |
 | CORE-035 | Single canonical implementation |
+| CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 
 ---
 
