@@ -1,0 +1,551 @@
+# =========================================================================
+# PHASE 8.3B - CONSOLIDATION MIGRATION LAYER
+# =========================================================================
+# Authority: CORTEX Consolidation Architecture (3-Phase Sequential)
+# Date: 2026-01-31
+# Status: PLANNED
+# Dependencies: Phase 8.3A (Foundation Layer COMPLETE)
+# Downstream: Phase 8.3C (Cleanup Layer)
+#
+# Purpose:
+#   Build adapters, shims, and migration infrastructure to consolidate
+#   duplications WITHOUT breaking existing code. This phase establishes
+#   backward compatibility during transition to single canonical implementations.
+#   
+# Philosophy:
+#   "Refactor by adding layers, not by deleting code"
+#   - Create adapter pattern wrappers
+#   - Build shim layer for deprecated implementations
+#   - Run dual-path tests (old vs new side-by-side)
+#   - Gradual migration (module by module)
+#   - Full rollback capability if issues discovered
+#
+# Risk Profile: 🟡 MEDIUM (Additive changes, but affects core systems)
+# =========================================================================
+
+phase:
+  id: "PHASE-8.3B"
+  name: "Consolidation Migration Layer"
+  version: "1.0"
+  authority: "CORTEX Consolidation Architecture"
+  status: "PLANNED"
+  scheduled_start: "2026-02-10"
+  scheduled_end: "2026-02-21"
+  duration_days: 10
+  owner: "Asif Hussain"
+  
+# =========================================================================
+# ACCEPTANCE CRITERIA
+# =========================================================================
+acceptance_criteria:
+  
+  AC-8.3B-001: "BaseRegistry[T] Generic Base Class Implemented"
+    description: "Generic registry base class that all 15 registries inherit from"
+    status: "NOT_MET"
+    validation: |
+      - BaseRegistry exists at cortex/core/registry/base_registry.py
+      - Implements: __init__, register, get, list, delete, clear
+      - Thread-safe singleton pattern (RLock)
+      - Generic type T for type safety
+      - Health check protocol for registry state
+      - 100% unit test coverage (20 tests)
+      - All 15 registries migrated to inherit from BaseRegistry
+      - Zero behavioral changes from original implementations
+    test_file: "tests/unit/core/registry/test_base_registry.py"
+    
+  AC-8.3B-002: "ExecutionContextAdapter Bridges All 6 Formats"
+    description: "Adapter pattern that converts between 6 ExecutionContext variants"
+    status: "NOT_MET"
+    validation: |
+      - ExecutionContextAdapter at cortex/core/adapters/execution_context_adapter.py
+      - Converts OrchestrationContext ↔ ExecutionContext (all 6 variants)
+      - Preserves all field data during conversion
+      - Idempotent conversions (A→B→A = A)
+      - Type hints for all conversions
+      - 100% unit test coverage (30 tests)
+      - Integration tests verify no data loss (15 tests)
+      - Zero behavioral changes to existing code
+    test_file: "tests/unit/core/adapters/test_execution_context_adapter.py"
+    
+  AC-8.3B-003: "Wiring Shim Layer for Legacy Systems"
+    description: "Compatibility layer for 3 legacy wiring systems"
+    status: "NOT_MET"
+    validation: |
+      - WiringShim at cortex/wiring/legacy_shim.py
+      - Detects old wiring system calls
+      - Redirects to Git-backed YAML system
+      - Logs all legacy usage for migration tracking
+      - 100% backward compatible (no breaking changes)
+      - All 23 orchestrators loadable via legacy API
+      - 20 unit tests verifying shim behavior
+      - 10 integration tests with real wiring scenarios
+    test_file: "tests/unit/wiring/test_legacy_shim.py"
+    
+  AC-8.3B-004: "ConsolidatedOrchestratorBase Wrapper"
+    description: "Unified base class that accepts OrchestratorBase or experimental BaseOrchestrator"
+    status: "NOT_MET"
+    validation: |
+      - ConsolidatedOrchestratorBase at cortex/orchestrators/consolidated_base.py
+      - Wraps canonical OrchestratorBase
+      - Accepts legacy BaseOrchestrator subclasses
+      - Provides unified lifecycle interface
+      - Graceful degradation for experimental orchestrators
+      - 100% backward compatible
+      - 15 unit tests
+      - 10 integration tests with real orchestrators
+    test_file: "tests/unit/orchestrators/test_consolidated_base.py"
+    
+  AC-8.3B-005: "Dual-Path Testing Framework"
+    description: "Test infrastructure that runs old vs new implementations side-by-side"
+    status: "NOT_MET"
+    validation: |
+      - DualPathTestBase at tests/framework/dual_path_testing.py
+      - Supports @dual_path decorator for test methods
+      - Runs test with old implementation (original code)
+      - Runs test with new implementation (adapter layer)
+      - Compares results for equivalence
+      - Reports discrepancies with detailed diffs
+      - 50+ tests using dual-path framework
+      - All dual-path tests passing with 100% equivalence
+    test_file: "tests/framework/test_dual_path_testing.py"
+    
+  AC-8.3B-006: "Migration Tracking Dashboard"
+    description: "Real-time visibility into migration progress per registry"
+    status: "NOT_MET"
+    validation: |
+      - Dashboard at cortex-lens/migration-progress-dashboard.html
+      - Shows 15 registries with migration status
+      - Tracks percentage of imports via new BaseRegistry
+      - Tracks percentage of calls via adapter layers
+      - Shows estimated completion date per registry
+      - Identifies blockers and rollback risk
+      - Updates daily as code is migrated
+    test_file: "tests/integration/test_migration_dashboard.py"
+    
+  AC-8.3B-007: "All Existing Tests Pass"
+    description: "No regressions from migration layer changes"
+    status: "NOT_MET"
+    validation: |
+      - All 172+ existing tests pass with migration layer
+      - 50+ new dual-path tests pass
+      - No performance regression (< 5% slower)
+      - No memory overhead (< 2MB additional)
+      - All orchestrators loadable and executable
+      - All registries functional
+      - Zero breaking changes to public APIs
+    test_file: "N/A (regression validation)"
+    
+# =========================================================================
+# DELIVERABLES
+# =========================================================================
+deliverables:
+
+  D1: "BaseRegistry[T] Generic Base Class"
+    type: "Python Module"
+    location: "cortex/core/registry/base_registry.py"
+    description: "Generic registry base class with standard interface"
+    owner: "Asif Hussain"
+    methods:
+      - "__init__(self, name: str)"
+      - "register(self, key: str, value: T) -> None"
+      - "get(self, key: str) -> Optional[T]"
+      - "list(self) -> List[Tuple[str, T]]"
+      - "delete(self, key: str) -> bool"
+      - "clear(self) -> None"
+      - "health_check(self) -> HealthCheckResult"
+    test_coverage: "100%"
+    
+  D2: "ExecutionContextAdapter"
+    type: "Python Module"
+    location: "cortex/core/adapters/execution_context_adapter.py"
+    description: "Adapter pattern for all 6 ExecutionContext formats"
+    owner: "Asif Hussain"
+    conversions:
+      - "OrchestrationContext ↔ cortex/core/interfaces.py:ExecutionContext"
+      - "OrchestrationContext ↔ cortex/execution/adaptive_execution_engine.py:ExecutionContext"
+      - "OrchestrationContext ↔ cortex/mcp/executor.py:ExecutionContext"
+      - "OrchestrationContext ↔ cortex/mcp/orchestrator_mcp_server.py:ExecutionContext"
+      - "OrchestrationContext ↔ cortex/orchestrators/adaptive/execution_context_analyzer.py:ExecutionContext"
+      - "OrchestrationContext ↔ cortex/orchestrators/refactored_architecture.py:ExecutionContext"
+    test_coverage: "100%"
+    
+  D3: "Wiring Legacy Shim"
+    type: "Python Module"
+    location: "cortex/wiring/legacy_shim.py"
+    description: "Compatibility layer for 3 legacy wiring systems"
+    owner: "Asif Hussain"
+    shims:
+      - "transform_001_implementation compatibility layer"
+      - "wiring_harness_integration compatibility layer"
+      - "guided_wiring_orchestrator compatibility layer"
+    test_coverage: "100%"
+    
+  D4: "ConsolidatedOrchestratorBase"
+    type: "Python Module"
+    location: "cortex/orchestrators/consolidated_base.py"
+    description: "Unified base class for orchestrators"
+    owner: "Asif Hussain"
+    inheritance_support:
+      - "OrchestratorBase (canonical)"
+      - "BaseOrchestrator (experimental, deprecated)"
+      - "Orchestrator (from refactored_architecture.py)"
+    test_coverage: "100%"
+    
+  D5: "Dual-Path Testing Framework"
+    type: "Python Test Framework"
+    location: "tests/framework/dual_path_testing.py"
+    description: "Framework for comparing old vs new implementations"
+    owner: "Asif Hussain"
+    features:
+      - "@dual_path decorator"
+      - "side_by_side_execution()"
+      - "assert_equivalence()"
+      - "detailed_diff_on_mismatch()"
+    test_count: 50+
+    test_coverage: "N/A (framework)"
+    
+  D6: "Migration Progress Dashboard"
+    type: "HTML + JavaScript"
+    location: "cortex-lens/migration-progress-dashboard.html"
+    description: "Real-time migration progress visualization"
+    owner: "Asif Hussain"
+    metrics:
+      - "Per-registry migration status (%)"
+      - "Estimated completion date"
+      - "Blockers and rollback risk"
+      - "Test pass rate per registry"
+    refresh_frequency: "Daily"
+    
+  D7: "Migration Guide Documentation"
+    type: "Markdown Files"
+    locations:
+      - "docs/12-infrastructure/consolidation-migration-guide.md"
+      - "docs/architecture/ADR-8.3B-consolidation-migration.md"
+      - "CONTRIBUTING.md (updated with migration policy)"
+    owner: "Asif Hussain"
+    
+# =========================================================================
+# IMPLEMENTATION TASKS
+# =========================================================================
+tasks:
+
+  T1: "BaseRegistry[T] Implementation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: []
+    subtasks:
+      - "Design generic registry interface"
+      - "Implement thread-safe singleton pattern"
+      - "Add type hints and generic support"
+      - "Implement health check protocol"
+      - "Create 20 unit tests"
+      - "Validate with all 15 existing registries"
+    
+  T2: "ExecutionContextAdapter Implementation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 16
+    dependencies: []
+    subtasks:
+      - "Analyze all 6 ExecutionContext definitions"
+      - "Design adapter interface"
+      - "Implement 6 conversion pathways"
+      - "Add idempotency validation"
+      - "Create 30 unit tests"
+      - "Create 15 integration tests"
+    
+  T3: "Wiring Legacy Shim Layer"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: ["T1"]
+    subtasks:
+      - "Analyze 3 legacy wiring systems"
+      - "Design shim layer interface"
+      - "Implement compatibility redirects"
+      - "Add legacy usage logging"
+      - "Create 20 unit tests"
+      - "Create 10 integration tests"
+    
+  T4: "ConsolidatedOrchestratorBase"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T1", "T3"]
+    subtasks:
+      - "Analyze 3 competing base classes"
+      - "Design unified wrapper"
+      - "Implement graceful degradation"
+      - "Create 15 unit tests"
+      - "Create 10 integration tests"
+    
+  T5: "Dual-Path Testing Framework"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: ["T1", "T2", "T3", "T4"]
+    subtasks:
+      - "Design test framework architecture"
+      - "Implement @dual_path decorator"
+      - "Implement side_by_side_execution()"
+      - "Implement assert_equivalence()"
+      - "Create 50+ tests using framework"
+      - "Validate 100% equivalence across 50+ tests"
+    
+  T6: "Registry Migration (All 15)"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 20
+    dependencies: ["T1", "T5"]
+    subtasks:
+      - "Migrate GovernanceRegistry to BaseRegistry"
+      - "Migrate MCPToolsRegistry to BaseRegistry"
+      - "Migrate OrchestratorRegistry to BaseRegistry"
+      - "Migrate OrchestratorLookup to BaseRegistry"
+      - "Migrate FeatureRegistry to BaseRegistry"
+      - "Migrate DependencyRegistry to BaseRegistry"
+      - "Migrate TemplateEngineRegistry to BaseRegistry"
+      - "Migrate 8 more registries to BaseRegistry"
+      - "Dual-path tests for each migration"
+      - "Verify zero behavior changes"
+    
+  T7: "Migration Progress Dashboard"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T6"]
+    subtasks:
+      - "Design dashboard layout"
+      - "Implement metric collection"
+      - "Create daily metric aggregation"
+      - "Create HTML/JS visualization"
+      - "Add progress tracking per registry"
+    
+  T8: "Documentation and Migration Guide"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T1", "T2", "T3", "T4", "T5", "T6"]
+    subtasks:
+      - "Write migration guide"
+      - "Create ADR for Phase 8.3B rationale"
+      - "Update CONTRIBUTING.md"
+      - "Create examples of old vs new usage"
+      - "Document rollback procedure"
+    
+  T9: "Regression Testing and Validation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]
+    subtasks:
+      - "Run all 172+ existing tests"
+      - "Run all 50+ new dual-path tests"
+      - "Performance benchmarking"
+      - "Memory usage analysis"
+      - "Verify all orchestrators still work"
+      - "Verify all registries still work"
+      - "Generate final regression report"
+    
+# =========================================================================
+# TEST STRATEGY
+# =========================================================================
+test_strategy:
+  
+  unit_tests:
+    target_coverage: "100%"
+    test_files:
+      - "tests/unit/core/registry/test_base_registry.py (20 tests)"
+      - "tests/unit/core/adapters/test_execution_context_adapter.py (30 tests)"
+      - "tests/unit/wiring/test_legacy_shim.py (20 tests)"
+      - "tests/unit/orchestrators/test_consolidated_base.py (15 tests)"
+    test_count: 85
+    
+  integration_tests:
+    test_files:
+      - "tests/integration/test_registry_migration.py (25 tests)"
+      - "tests/integration/test_execution_context_adapter.py (15 tests)"
+      - "tests/integration/test_wiring_legacy_shim.py (10 tests)"
+      - "tests/integration/test_consolidated_base.py (10 tests)"
+    test_count: 60
+    
+  dual_path_tests:
+    description: "Tests running old vs new implementations side-by-side"
+    test_files:
+      - "tests/consolidation/test_dual_path_registries.py (15 tests)"
+      - "tests/consolidation/test_dual_path_execution_context.py (15 tests)"
+      - "tests/consolidation/test_dual_path_wiring.py (10 tests)"
+      - "tests/consolidation/test_dual_path_orchestrators.py (10 tests)"
+    test_count: 50
+    success_criteria: "100% equivalence (old vs new produce same results)"
+    
+  regression_tests:
+    description: "Ensure Phase 8.3B doesn't break existing functionality"
+    test_files:
+      - "Run all 172+ existing tests"
+    acceptance_criteria: "100% pass rate"
+    
+  performance_tests:
+    description: "Validate no performance regression from migration layer"
+    metrics:
+      - "Registry lookup time (target: < 5% slower)"
+      - "Orchestrator instantiation time (target: < 5% slower)"
+      - "Memory overhead (target: < 2MB additional)"
+      - "Pre-commit hook latency (target: < 2 seconds)"
+    
+# =========================================================================
+# SUCCESS METRICS
+# =========================================================================
+success_metrics:
+  
+  M1: "All Registries Migrated"
+    description: "15/15 registries inherit from BaseRegistry"
+    measurement: "Registry migration count"
+    target: "15/15 (100%)"
+    baseline: "0/15"
+    
+  M2: "ExecutionContext Conversions Work"
+    description: "All 6 ExecutionContext types convertible"
+    measurement: "Conversion test pass rate"
+    target: "100% (30 tests passing)"
+    baseline: "0%"
+    
+  M3: "Zero Breaking Changes"
+    description: "All existing code continues to work"
+    measurement: "Existing test pass rate"
+    target: "100% (172+ tests)"
+    baseline: "100% (baseline)"
+    
+  M4: "Dual-Path Equivalence Proven"
+    description: "Old and new implementations produce same results"
+    measurement: "Dual-path test pass rate"
+    target: "100% (50 tests)"
+    baseline: "0%"
+    
+  M5: "No Performance Regression"
+    description: "Migration layer adds minimal overhead"
+    measurement: "Performance benchmark comparison"
+    target: "< 5% regression"
+    baseline: "0% (baseline)"
+    
+  M6: "Documentation Complete"
+    description: "Team understands migration and can support it"
+    measurement: "Documentation completeness"
+    target: "100% (ADR + guide + examples)"
+    baseline: "0%"
+    
+# =========================================================================
+# DEPENDENCIES AND BLOCKERS
+# =========================================================================
+dependencies:
+  - "Phase 8.3A (Foundation Layer) - MUST BE COMPLETE"
+  - "DuplicationDetector orchestrator operational"
+  - "Pre-commit hook deployed"
+  - "Duplication registry accurate"
+  
+blockers: []
+  
+# =========================================================================
+# MIGRATION ORDER (Recommended Sequence)
+# =========================================================================
+migration_sequence:
+  step_1: "BaseRegistry[T] - Foundation (no dependencies)"
+  step_2: "ExecutionContextAdapter - Core (independent)"
+  step_3: "15 Registries - Systematic (each via dual-path tests)"
+  step_4: "Wiring Legacy Shim - After registries stable"
+  step_5: "ConsolidatedOrchestratorBase - After shim stable"
+  step_6: "Full Regression Testing - After all migrations"
+  
+# =========================================================================
+# ROLLBACK PLAN
+# =========================================================================
+rollback:
+  description: "If Phase 8.3B discovers issues, rollback is straightforward"
+  steps:
+    - "Keep old implementations alongside new (no deletions)"
+    - "Redirect import statements back to old implementations"
+    - "Disable adapter layer and shims"
+    - "Restore old wiring system usage"
+    - "Verify all tests pass with old implementations"
+  risk_level: "🟢 LOW (no data loss, clean separation)"
+  estimated_time: "< 1 hour"
+  
+# =========================================================================
+# HANDOFF TO PHASE 8.3C
+# =========================================================================
+handoff_criteria:
+  - "All 7 ACs met"
+  - "All 85 unit tests passing"
+  - "All 60 integration tests passing"
+  - "All 50 dual-path tests passing (100% equivalence)"
+  - "172+ existing tests still passing"
+  - "Performance benchmarks show < 5% regression"
+  - "All 15 registries migrated to BaseRegistry"
+  - "Migration dashboard operational"
+  - "Documentation complete"
+  - "Team trained on new architecture"
+  
+handoff_deliverables:
+  - "BaseRegistry[T] implementation (input to Phase C)"
+  - "ExecutionContextAdapter (validates consolidation works)"
+  - "Wiring shim layer (enables safe Phase C execution)"
+  - "ConsolidatedOrchestratorBase (bridges old/new)"
+  - "Dual-path test framework (validates equivalence)"
+  - "Migration dashboard (measures Phase C progress)"
+  - "Test suite (prevents Phase C regressions)"
+  - "Documentation (guides Phase C deletions)"
+
+# =========================================================================
+# RISK ASSESSMENT
+# =========================================================================
+risks:
+
+  R1: "Adapter Pattern Adds Complexity"
+    severity: "LOW"
+    probability: "40%"
+    mitigation: "Document adapter interfaces clearly"
+    contingency: "Provide integration tests for each adapter"
+    
+  R2: "Performance Regression Larger Than Expected"
+    severity: "MEDIUM"
+    probability: "30%"
+    mitigation: "Optimize hot paths in BaseRegistry and adapters"
+    contingency: "Cache frequently-accessed conversions"
+    
+  R3: "Registries Have Incompatible Interfaces"
+    severity: "MEDIUM"
+    probability: "25%"
+    mitigation: "Design BaseRegistry with common interface subset"
+    contingency: "Add optional methods for domain-specific registries"
+    
+  R4: "Dual-Path Tests Inconclusive"
+    severity: "LOW"
+    probability: "20%"
+    mitigation: "Create detailed diff reports on equivalence failures"
+    contingency: "Manual comparison for tricky cases"
+    
+  R5: "Wiring Shim Breaks Legacy Code"
+    severity: "MEDIUM"
+    probability: "35%"
+    mitigation: "Extensive integration testing with legacy code"
+    contingency: "Delay Phase C until issues resolved"
+
+# =========================================================================
+# PHASE 8.3B COMPLETE DECLARATION
+# =========================================================================
+# This phase is COMPLETE when:
+# 1. All 7 acceptance criteria met
+# 2. All tests passing (85 unit + 60 integration + 50 dual-path = 195 new, 172 existing = 367 total)
+# 3. All 15 registries migrated to BaseRegistry
+# 4. ExecutionContext adapter proven via dual-path tests
+# 5. Wiring shim layer stable
+# 6. Performance benchmarks acceptable (< 5% regression)
+# 7. Documentation complete and team trained
+# 8. Handoff criteria satisfied
+#
+# Phase Duration: 10 working days
+# Estimated Completion: 2026-02-21
+# 
+# Next Phase: PHASE-8.3C-CONSOLIDATION-CLEANUP.yaml
+# =========================================================================
