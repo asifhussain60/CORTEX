@@ -30,15 +30,15 @@
 
 metadata:
   plan_name: "CORTEX Docker-First Migration"
-  date: "2026-01-28"
+  date: "2026-01-31"
   phase: "Phase 6 Complete - Phase 7+ Enhancement Phases Planned"
   status: "CORE_COMPLETE_ENHANCEMENTS_PLANNED"
   author: "Asif Hussain"
   git_checkpoint: "phase6-test-suite-20260128"
-  last_updated: "2026-01-27T23:00:00Z"
+  last_updated: "2026-01-31T00:00:00Z"
   
   # SEQUENTIAL EXECUTION - NO SKIPPING
-  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 8 → 9"
+  execution_order: "0 → 1 → 2 → 3 → 4 → 5 → 5.5 → 6 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 8 → 9 → 14"
   
   # Phase 0 (Pre-Flight): Validation complete ✅
   # Phase 1: Component Analysis & Inventory Discovery ✅ COMPLETE
@@ -115,6 +115,14 @@ metadata:
   #   - LENS-powered config verification (CORE-030 compliance)
   #   - Integration with 6 orchestrators (Onboarding, Setup, Doc, Refactor, TDD, LENS)
   #   - See: PHASE-9-DISCOVERY-ORCHESTRATOR.yaml for complete specification
+  # Phase 14: Prompt Consolidation & Architect Mode 📋 PLANNED (P0 - 4-6 hours) ⭐ NEW
+  #   - Stage 1: Delete all prompts/agents except CORTEX.prompt.md ecosystem
+  #   - Stage 2: Create cortex-architect.prompt.md for design-phase work
+  #   - Stage 3: Automated cleanup of .bak files and orphan reports
+  #   - Auto-behaviors: LENS 24h context, request enhancement, challenge engine
+  #   - Holistic audit mode when invoked without request
+  #   - NO backward compatibility (CORTEX in design phase)
+  #   - See: PHASE-14-PROMPT-CONSOLIDATION.yaml for complete specification
   # Phase 12: Capacity Planning & Estimation System 📋 PLANNED (P1-HIGH - 44-60 hours)
   #   - CAP-1: Evidence Collection Layer (LENS + Git + Domain) - 8-12h
   #   - CAP-2: Multi-Model Estimation Engine (PERT + Story Points + CPM) - 12-16h
