@@ -11577,3 +11577,250 @@ code[style*="color:"][style*="background:"] {
     .l2-page-description { font-size: 1rem; }
 }
 
+/* ============================================
+   MOBILE RESPONSIVENESS - COMPREHENSIVE
+   Updated: 2026-01-31
+   ============================================ */
+
+/* Inline Grid Overrides for Mobile/Tablet */
+@media (max-width: 1024px) {
+    /* Convert 4-column grids to 2-column on tablets */
+    [style*="grid-template-columns: repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    .bwc-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    /* Convert 3-column grids to 2-column on tablets */
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    .orchestrator-cards-grid,
+    .sts-categories-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Convert ALL multi-column grids to single column on mobile */
+    [style*="grid-template-columns: repeat(2, 1fr)"],
+    [style*="grid-template-columns:repeat(2, 1fr)"],
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns:repeat(3, 1fr)"],
+    [style*="grid-template-columns: repeat(4, 1fr)"],
+    [style*="grid-template-columns:repeat(4, 1fr)"],
+    .feature-grid-2,
+    .feature-grid-3,
+    .feature-grid-4,
+    .bwc-dual-panels,
+    .bwc-stats,
+    .orchestrator-cards-grid,
+    .sts-categories-row,
+    .level0-feature-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    /* Fix fixed-width grids that don't use classes */
+    [style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Reduce padding on mobile */
+    .glass-card,
+    .orchestrator-card,
+    .sts-category-item,
+    .bwc-achievement-panel {
+        padding: 1rem !important;
+    }
+    
+    /* Adjust font sizes for mobile readability */
+    .bwc-title,
+    .panel-title-main {
+        font-size: 1.5rem !important;
+    }
+    
+    .bwc-tagline,
+    .panel-subtitle-main {
+        font-size: 0.95rem !important;
+    }
+    
+    /* Stack hero stats vertically */
+    .hero-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    /* Ensure persona tiles are responsive */
+    .persona-tiles-container {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Make SVG diagrams scrollable horizontally */
+    .svg-diagram {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .svg-diagram svg {
+        min-width: 600px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small phones - further optimizations */
+    .container {
+        padding: 0.75rem !important;
+    }
+    
+    .glass-card {
+        padding: 0.75rem !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    /* Reduce stat card padding */
+    .bwc-stat,
+    .bwc-mini-stat {
+        padding: 0.5rem !important;
+    }
+    
+    /* Smaller typography */
+    h1 { font-size: 1.75rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.25rem !important; }
+    
+    /* Adjust button sizes */
+    .btn-hero {
+        padding: 1rem !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Category tags wrapping */
+    .category-tags {
+        gap: 0.5rem !important;
+    }
+    
+    .category-tag {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.6rem !important;
+    }
+}
+
+/* iPad Portrait (768px to 834px) */
+@media (min-width: 768px) and (max-width: 834px) and (orientation: portrait) {
+    /* 2-column layout for better iPad portrait usage */
+    [style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="grid-template-columns: repeat(4, 1fr)"],
+    .orchestrator-cards-grid,
+    .sts-categories-row,
+    .bwc-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* iPad Landscape (1024px to 1194px) */
+@media (min-width: 1024px) and (max-width: 1194px) and (orientation: landscape) {
+    /* Maintain 3-column for tablets in landscape */
+    [style*="grid-template-columns: repeat(4, 1fr)"],
+    .bwc-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Prevent horizontal scroll on all devices */
+body,
+html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+}
+
+.container {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+/* Make all images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure tables are scrollable on mobile */
+table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 0.875rem;
+    }
+}
+
+/* Touch-friendly spacing for interactive elements */
+@media (hover: none) and (pointer: coarse) {
+    /* This targets touch devices */
+    .glass-card,
+    .category-tag,
+    .nav-links a,
+    button,
+    a[href] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Increase spacing between interactive elements */
+    .category-tags,
+    .nav-links {
+        gap: 1rem;
+    }
+}
+
+/* High-DPI display optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Landscape phone optimization */
+@media (max-width: 896px) and (orientation: landscape) {
+    /* Reduce vertical spacing in landscape mode */
+    .hero-section-wrapper {
+        padding: 1rem 0 !important;
+    }
+    
+    .hero-robot-head {
+        max-height: 100px !important;
+    }
+    
+    .glass-card {
+        margin: 0.5rem 0 !important;
+    }
+}
+
+/* Print styles for documentation */
+@media print {
+    .nav-wrapper,
+    .github-link,
+    .btn-hero,
+    .animation-t1,
+    .animation-t2,
+    .animation-t3 {
+        display: none !important;
+    }
+    
+    .glass-card {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    * {
+        background: white !important;
+        color: black !important;
+    }
+}
+
