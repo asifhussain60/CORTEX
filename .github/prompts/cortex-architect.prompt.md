@@ -77,6 +77,12 @@
 
 **Location:** `cortex/brain/analysis/`, `cortex/orchestrators/support/`, `cortex/tools/`
 
+### Internal Orchestrators (Not MCP-Exposed)
+
+| Orchestrator | Purpose | Usage |
+|--------------|---------|-------|
+| `CortexDocsOrchestrator` | CORTEX `docs/` HTML generation | Internal tooling — generates `docs/index.html` and subfolder indexes with approved glassmorphism design. NOT for production MCP. |
+
 **Invocation Rule:** Use orchestrators when they provide **concrete evidence** for challenge/recommendation. Do not invoke for trivial requests.
 
 ---

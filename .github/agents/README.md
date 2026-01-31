@@ -11,7 +11,8 @@ agents/
 ├── core/                    # Production agents
 │   ├── CORTEX.md           # Master orchestrator agent
 │   ├── cortex-architect.md # Design-phase analysis agent
-│   └── cortex-mcp-gateway.md # MCP tool routing agent
+│   ├── cortex-mcp-gateway.md # MCP tool routing agent
+│   └── cortex-docs-orchestrator.md # Internal docs HTML generator (not MCP-exposed)
 └── archived/               # Obsolete agents (reference only)
     └── cortex-vacuum-agents.md
 ```

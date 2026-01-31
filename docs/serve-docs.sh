@@ -1,121 +1,96 @@
 #!/bin/bash
 
 ################################################################################
-# CORTEX MkDocs Server Launcher (Mac/Linux)
+# CORTEX Documentation Server (Mac/Linux)
 # One-click: Kill existing → Start server → Open browser
+# Serves static HTML on port 8080
 #
 # Usage: 
 #   chmod +x serve-docs.sh
 #   ./serve-docs.sh
-#
-# For Windows: Use serve-docs.bat instead
 ################################################################################
 
 set -e
+
+PORT=8080
 
 # Color codes for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-
-cd "$PROJECT_ROOT"
+# Get the directory where this script is located (docs/)
+DOCS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo ""
 echo "========================================"
-echo -e "${BLUE}   CORTEX Documentation Server${NC}"
+echo -e "${BLUE}   🧠 CORTEX Documentation Server${NC}"
 echo "   Platform: $(uname -s)"
 echo "========================================"
 echo ""
 
 # Detect Python executable
 PYTHON_EXE=""
-if [ -f ".venv/bin/python" ]; then
-    PYTHON_EXE=".venv/bin/python"
-elif [ -f ".venv/bin/python3" ]; then
-    PYTHON_EXE=".venv/bin/python3"
-elif command -v python3 &> /dev/null; then
+if command -v python3 &> /dev/null; then
     PYTHON_EXE="python3"
 elif command -v python &> /dev/null; then
     PYTHON_EXE="python"
 else
     echo -e "${RED}ERROR: Python not found${NC}"
-    echo "Please install Python 3.8+ or activate virtual environment"
+    echo "Please install Python 3.x"
     exit 1
 fi
 
-echo "[1/4] Stopping existing server on port 8000..."
+echo "[1/3] Checking port $PORT..."
 
-# Mac: Check if port is in use and kill process
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    PIDS=$(lsof -i :8000 -t 2>/dev/null || true)
-    if [ ! -z "$PIDS" ]; then
-        echo "$PIDS" | xargs kill -9 2>/dev/null || true
-        echo "   Stopped existing process(es)"
-    fi
+# Kill any existing process on port 8080
+PIDS=$(lsof -ti:$PORT 2>/dev/null || true)
+if [ ! -z "$PIDS" ]; then
+    echo -e "${YELLOW}   Found existing process(es) on port $PORT${NC}"
+    echo "$PIDS" | xargs kill -9 2>/dev/null || true
+    sleep 1
+    echo -e "${GREEN}   ✅ Port cleared${NC}"
 else
-    # Linux
-    PIDS=$(lsof -i :8000 -t 2>/dev/null || true)
-    if [ ! -z "$PIDS" ]; then
-        echo "$PIDS" | xargs kill -9 2>/dev/null || true
-        echo "   Stopped existing process(es)"
-    fi
+    echo -e "${GREEN}   ✅ Port $PORT available${NC}"
 fi
 
-sleep 1
-
-# Check and install dependencies
-echo "[2/4] Checking dependencies..."
-if ! "$PYTHON_EXE" -m pip show mkdocs &>/dev/null; then
-    echo "   Installing mkdocs and material theme..."
-    "$PYTHON_EXE" -m pip install mkdocs mkdocs-material >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}   FAILED to install mkdocs${NC}"
-        echo "   Please run: pip install mkdocs mkdocs-material"
-        exit 1
-    fi
-fi
-echo -e "${GREEN}   Dependencies OK${NC}"
-
-# Start mkdocs serve
-echo "[3/4] Starting MkDocs server..."
-"$PYTHON_EXE" -m mkdocs serve --dev-addr 127.0.0.1:8000 &
-MKDOCS_PID=$!
+# Start HTTP server in background
+echo "[2/3] Starting HTTP server..."
+cd "$DOCS_DIR"
+nohup "$PYTHON_EXE" -m http.server $PORT > /dev/null 2>&1 &
+SERVER_PID=$!
 
 # Wait for server to start
-sleep 3
+sleep 2
 
-# Open browser
-echo "[4/4] Opening browser..."
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    open "http://127.0.0.1:8000/INDEX/"
-elif command -v xdg-open &> /dev/null; then
-    # Linux with xdg-open
-    xdg-open "http://127.0.0.1:8000/INDEX/" 2>/dev/null &
-elif command -v gnome-open &> /dev/null; then
-    # Linux with gnome-open
-    gnome-open "http://127.0.0.1:8000/INDEX/" 2>/dev/null &
+# Verify server is running
+if lsof -i:$PORT > /dev/null 2>&1; then
+    echo -e "${GREEN}   ✅ Server running (PID: $SERVER_PID)${NC}"
+    echo "   📂 Serving: $DOCS_DIR"
+    
+    # Open browser
+    echo "[3/3] Opening browser..."
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        open "http://localhost:$PORT/index.html"
+        echo -e "${GREEN}   ✅ Browser opened${NC}"
+    elif command -v xdg-open &> /dev/null; then
+        # Linux with xdg-open
+        xdg-open "http://localhost:$PORT/index.html" 2>/dev/null &
+        echo -e "${GREEN}   ✅ Browser opened${NC}"
+    else
+        echo -e "${YELLOW}   ⚠️  Please open manually: http://localhost:$PORT/index.html${NC}"
+    fi
+    
+    echo ""
+    echo "========================================"
+    echo -e "${GREEN}   🌐 Server: http://localhost:$PORT/index.html${NC}"
+    echo -e "${BLUE}   ℹ️  To stop: kill $SERVER_PID${NC}"
+    echo "========================================"
+    echo ""
 else
-    echo "   Skipping browser open (no browser launcher found)"
-    echo "   Visit: http://127.0.0.1:8000/INDEX/"
+    echo -e "${RED}   ❌ Failed to start server${NC}"
+    exit 1
 fi
-
-echo ""
-echo "========================================"
-echo -e "${GREEN}   Server running at http://127.0.0.1:8000${NC}"
-echo "   Press Ctrl+C to stop"
-echo "========================================"
-echo ""
-
-# Keep the script running and display server output
-wait $MKDOCS_PID 2>/dev/null || true
-
-echo ""
-echo -e "${BLUE}   Server stopped${NC}"
-echo ""
