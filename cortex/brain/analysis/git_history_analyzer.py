@@ -687,8 +687,10 @@ class GitHistoryAnalyzer:
             
             hash_val, author, date_str, message = parts
             
-            # Parse date (format: 2026-01-27 10:00:00 +0000)
-            date = datetime.strptime(date_str.split("+")[0].strip(), "%Y-%m-%d %H:%M:%S")
+            # Parse date (format: 2026-01-27 10:00:00 +0000 or -0500)
+            # Remove timezone by taking only the first two parts (date and time)
+            date_str_no_tz = ' '.join(date_str.strip().split()[:2])
+            date = datetime.strptime(date_str_no_tz, "%Y-%m-%d %H:%M:%S")
             
             return GitCommit(
                 hash=hash_val,

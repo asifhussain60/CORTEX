@@ -260,18 +260,18 @@ def generate_timeline_json(repo_path: Path, output_path: Path) -> None:
         timeline_data = {
             "commits": [
                 {
-                    "date": commit.date,
+                    "date": commit.date.isoformat() if hasattr(commit.date, 'isoformat') else str(commit.date),
                     "author": commit.author,
                     "message": commit.message[:100],  # Truncate
                     "hash": commit.hash[:8],  # Short hash
-                    "files_changed": len(commit.files)
+                    "files_changed": len(commit.files_changed)
                 }
                 for commit in commits
             ],
             "total_commits": len(commits),
             "date_range": {
-                "start": commits[-1].date if commits else "",
-                "end": commits[0].date if commits else ""
+                "start": commits[-1].date.isoformat() if commits and hasattr(commits[-1].date, 'isoformat') else "",
+                "end": commits[0].date.isoformat() if commits and hasattr(commits[0].date, 'isoformat') else ""
             },
             "authors": list(set(c.author for c in commits))
         }
@@ -313,7 +313,7 @@ def generate_impact_json(repo_path: Path, output_path: Path) -> None:
         # Count file changes
         file_changes: Dict[str, int] = {}
         for commit in commits:
-            for file_path in commit.files:
+            for file_path in commit.files_changed:
                 file_changes[file_path] = file_changes.get(file_path, 0) + 1
         
         # Identify hotspots (files changed > 5 times)
