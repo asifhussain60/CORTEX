@@ -273,14 +273,10 @@ class CleanerRegistry:
         return f"CleanerRegistry(domains=[{domains}])"
 
 
-class CleanerRegistrationError(Exception):
-    """Cleaner registration error."""
-    pass
-
-
-class CleanerNotFoundError(Exception):
-    """Cleaner not found error."""
-    pass
+from cortex.brain.tier1.orchestrators.cleaners.registry import (
+    CleanerRegistrationError,
+    CleanerNotFoundError,
+)
 
 
 __all__ = [

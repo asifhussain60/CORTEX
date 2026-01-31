@@ -1579,18 +1579,7 @@ class RealTimeProgressDashboard:
             )
 
 
-class AlertSeverity(IntEnum):
-    """Severity levels for alerts."""
-    INFO = 0
-    WARNING = 1
-    CRITICAL = 2
-
-
-class AlertState(IntEnum):
-    """State of an alert in its lifecycle."""
-    ACTIVE = 0
-    ACKNOWLEDGED = 1
-    RESOLVED = 2
+from cortex.models.canonical_enums import AlertSeverity, AlertState
 
 
 @dataclass
