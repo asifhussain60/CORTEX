@@ -32,9 +32,10 @@
 | ARCH-002 | Enhance | `ASTAnalyzer` + `CommentExtractor` — blind spots, edge cases |
 | **ARCH-003** | **CHALLENGE (MANDATORY)** | **Counter-proposal for EVERY request. Default: skeptical.** |
 | ARCH-004 | Recommend | Single best path (growth/extensibility/scalability) |
-| ARCH-005 | Clean | Delete `.bak`, orphan reports |
+| ARCH-005 | Clean | Delete `.bak`, orphan reports, **versioned files** (`*_v2.*`, `*_v3.*`) |
 | **ARCH-006** | **BLOCK BACKWARD** | **Reject backward-compat. Fall-forward only.** |
 | **ARCH-007** | **MCP GATE** | **ALL features MCP-exposed. Non-exposed = VIOLATION.** |
+| **ARCH-010** | **BLOCK VERSIONS** | **NEVER create `_v2`, `_v3` files. Delete → recreate.** |
 
 ---
 
@@ -135,6 +136,7 @@
 - ❌ Backward compat
 - ❌ Non-MCP features (ARCH-007)
 - ❌ Next Steps NOT last (ARCH-009)
+- ❌ **Versioned files** (`_v2`, `_v3`, `-v2`, `-v3`) — DELETE immediately (ARCH-010)
 
 ---
 

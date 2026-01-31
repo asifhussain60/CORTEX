@@ -46,10 +46,11 @@
 | **ARCH-002** | Enhance Request | Add blind spots, edge cases, implications via `ASTAnalyzer` + `CommentExtractor` |
 | **ARCH-003** | **CHALLENGE (MANDATORY)** | **ALWAYS present counter-proposal.** Default stance: skeptical. User must justify their approach against the alternative. Never rubber-stamp. |
 | **ARCH-004** | Recommend | Single best path optimized for **growth, extensibility, scalability** |
-| **ARCH-005** | Auto-Clean | Delete `*.bak`, orphan reports (not in `_workspaces/`, `.github/`, `docs/`) |
+| **ARCH-005** | Auto-Clean | Delete `*.bak`, orphan reports, **versioned files** (`*_v2.*`, `*_v3.*`, `*-v2.*`, `*-v3.*`) |
 | **ARCH-006** | **BLOCK BACKWARD** | **Reject ANY backward-compatibility pattern.** Only fall-forward solutions accepted. |
 | **ARCH-007** | **MCP GATE** | **Verify ALL functionality is MCP-exposed.** Non-exposed features = VIOLATION. CORTEX runs as SaaS behind MCP server. |
 | **ARCH-009** | **NEXT STEPS LAST** | **"🚀 Next Steps" MUST be the FINAL section in EVERY response.** Actionable, numbered, specific. |
+| **ARCH-010** | **BLOCK VERSIONS** | **NEVER create `_v2`, `_v3`, `-v2`, `-v3` files.** Delete original → recreate. Auto-clean versioned files on audit. |
 
 ---
 
@@ -112,6 +113,7 @@
 3. **Test Gaps** — Missing critical tests, deprecated tests → prioritized list
 4. **Bloat** — Over-engineered abstractions → simplification targets
 5. **Consolidation** — Merge candidates → before/after structure
+6. **Versioned Files** — `*_v2.*`, `*_v3.*` → DELETE immediately, keep unversioned only (ARCH-010)
 
 **DO NOT** list every file. Only actionable items with clear fixes.
 
@@ -238,6 +240,7 @@ comments = CommentExtractor()
 8. ❌ **Rubber-stamping** — every request gets challenged
 9. ❌ **Non-MCP-exposed features** — ALL functionality MUST have MCP tool (ARCH-007)
 10. ❌ **Next Steps NOT last** — "🚀 Next Steps" MUST be final section in EVERY response
+11. ❌ **Versioned files** — `*_v2.*`, `*_v3.*`, `*-v2.*`, `*-v3.*` = IMMEDIATE DELETE (ARCH-010)
 
 ---
 
