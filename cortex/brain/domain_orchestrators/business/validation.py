@@ -11,13 +11,7 @@ from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Set
 from enum import Enum
 
-
-class ValidationSeverity(Enum):
-    """Validation severity levels."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
+from cortex.models.canonical_enums import ValidationSeverity
 
 
 @dataclass

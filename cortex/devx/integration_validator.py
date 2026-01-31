@@ -9,13 +9,7 @@ from typing import Dict, List, Optional, Any, Set, Callable
 from datetime import datetime
 import inspect
 
-
-class ValidationSeverity(Enum):
-    """Validation severity levels."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
+from cortex.models.canonical_enums import ValidationSeverity
 
 
 class IntegrationStatus(Enum):

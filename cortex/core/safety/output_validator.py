@@ -12,14 +12,9 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
 
+from cortex.models.canonical_enums import ValidationSeverity
+
 logger = logging.getLogger(__name__)
-
-
-class ValidationSeverity(Enum):
-    """Severity level of validation violations."""
-    ERROR = "error"      # Response must be rejected
-    WARNING = "warning"  # Response should be reviewed
-    INFO = "info"        # Informational, accept anyway
 
 
 @dataclass

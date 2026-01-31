@@ -7,12 +7,7 @@ from typing import Dict, Any, List, Callable, Optional
 from dataclasses import dataclass
 from enum import Enum
 
-
-class ValidationSeverity(Enum):
-    """Validation severity levels."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
+from cortex.models.canonical_enums import ValidationSeverity
 
 
 @dataclass

@@ -492,6 +492,20 @@ class WorkflowStage(Enum):
     CLEANUP = "cleanup"
 
 
+class ValidationSeverity(Enum):
+    """Validation severity levels.
+    
+    CORE-035: Canonical definition - import from here, not redefine.
+    Used by: Integration validators, domain validation, output validators
+    
+    Values ordered by severity (INFO < WARNING < ERROR < CRITICAL)
+    """
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
+
 # ============================================================================
 # RISK & COMPLEXITY ENUMS (CORE-035 Consolidated)
 # ============================================================================
@@ -811,4 +825,5 @@ __all__ = [
     "LENSPhase",
     "ResponseFormat",
     "UserPreferenceMode",
+    "ValidationSeverity",
 ]

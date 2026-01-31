@@ -33,13 +33,7 @@ from typing import (
 from dataclasses import dataclass, field
 from enum import Enum
 
-
-class ValidationSeverity(Enum):
-    """Severity of validation issue."""
-    INFO = "info"
-    WARNING = "warning"
-    ERROR = "error"
-    CRITICAL = "critical"
+from cortex.models.canonical_enums import ValidationSeverity
 
 
 class IntegrationStatus(Enum):
