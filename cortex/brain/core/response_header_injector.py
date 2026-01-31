@@ -1,11 +1,11 @@
 """
 Response Header Injector
 
-Composition layer that wraps ResponseTemplateEngine to inject
+Composition layer that wraps template engines to inject
 CORTEX headers into all responses. Non-invasive decorator pattern.
 
 This module implements header/footer injection as a separate concern,
-allowing ResponseTemplateEngine to remain focused on template rendering.
+allowing template engines to remain focused on template rendering.
 
 Classes:
     ResponseHeaderInjector: Main injector that wraps template engine
@@ -14,9 +14,11 @@ Classes:
 from typing import Dict, Any, Optional
 from datetime import datetime
 from .response_header_config import HeaderConfigurationManager
-from cortex.core.response_template_engine import ResponseTemplateEngine
 import re
 import yaml
+
+# Note: ResponseTemplateEngine stub removed (CORE-035 consolidation)
+# Response formatting now handled by scaffolder_templates or orchestrator-specific templates
 
 
 # =============================================================================
@@ -203,29 +205,29 @@ class ResponseHeaderInjector:
     """
     Injects CORTEX headers and footers into template responses.
 
-    This is a composition layer that wraps ResponseTemplateEngine.
+    This is a composition layer that wraps template engines (duck-typed interface).
     It intercepts rendered output and adds global headers/footers.
 
     Architecture:
-    - Wraps ResponseTemplateEngine (does not modify it)
+    - Wraps any template engine with a render() method (does not modify it)
     - Loads header config from HeaderConfigurationManager
     - Injects header BEFORE content
     - Injects copyright section AFTER header
     - Optionally injects footer AFTER content
 
-    Non-invasive: ResponseTemplateEngine is unaware of this layer.
+    Non-invasive: Template engines are unaware of this layer.
     """
 
     def __init__(
         self,
-        template_engine: ResponseTemplateEngine,
+        template_engine: Any,  # Type stub removed - accepts any template engine
         config_manager: Optional[HeaderConfigurationManager] = None
     ):
         """
         Initialize header injector.
 
         Args:
-            template_engine: ResponseTemplateEngine instance to wrap
+            template_engine: Template engine instance to wrap (duck-typed interface)
             config_manager: HeaderConfigurationManager (defaults to singleton)
         """
         self.engine = template_engine

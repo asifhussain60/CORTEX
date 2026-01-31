@@ -23,7 +23,8 @@ from cortex.brain.core.response_header_injector import (
     sanitize_context_value,
 )
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
-from cortex.core.response_template_engine import ResponseTemplateEngine
+
+# Note: ResponseTemplateEngine stub removed (CORE-035 consolidation)
 
 
 class TestYAMLEscapeFunctions:
@@ -450,7 +451,7 @@ class TestHeaderInjectionWithMasterOrchestrator:
     @pytest.fixture
     def injector_with_real_config(self) -> ResponseHeaderInjector:
         """Create injector with partial real configuration."""
-        mock_engine = Mock(spec=ResponseTemplateEngine)
+        mock_engine = Mock()
         mock_engine.render.return_value = "Test response content"
         
         mock_config = Mock(spec=HeaderConfigurationManager)
@@ -518,7 +519,7 @@ class TestGovernanceCompliance:
 
     def test_header_injection_mandatory(self) -> None:
         """Verify header injection is mandatory per CORE-029."""
-        mock_engine = Mock(spec=ResponseTemplateEngine)
+        mock_engine = Mock()
         mock_config = Mock(spec=HeaderConfigurationManager)
         mock_config.is_header_enabled.return_value = True
         
@@ -529,7 +530,7 @@ class TestGovernanceCompliance:
 
     def test_author_field_required(self) -> None:
         """Verify author field is required in context."""
-        mock_engine = Mock(spec=ResponseTemplateEngine)
+        mock_engine = Mock()
         mock_config = Mock(spec=HeaderConfigurationManager)
         mock_config.get_header_template.return_value = "**Author:** {author}"
         
@@ -540,7 +541,7 @@ class TestGovernanceCompliance:
 
     def test_phase_field_required(self) -> None:
         """Verify phase field is required in context."""
-        mock_engine = Mock(spec=ResponseTemplateEngine)
+        mock_engine = Mock()
         mock_config = Mock(spec=HeaderConfigurationManager)
         mock_config.get_header_template.return_value = "**Phase:** {phase}"
         
@@ -551,7 +552,7 @@ class TestGovernanceCompliance:
 
     def test_orchestrator_field_required(self) -> None:
         """Verify orchestrator field is required in context."""
-        mock_engine = Mock(spec=ResponseTemplateEngine)
+        mock_engine = Mock()
         mock_config = Mock(spec=HeaderConfigurationManager)
         mock_config.get_header_template.return_value = "**Orchestrator:** {orchestrator}"
         
