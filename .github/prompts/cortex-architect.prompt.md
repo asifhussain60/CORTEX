@@ -36,6 +36,12 @@
 
 **NO file generation** — all output inline in chat.
 
+**ARCH-011 ENFORCEMENT:**
+- When task approved, execute ALL steps to 100% completion
+- NO phase breakdowns, NO "next we'll...", NO interim "I've completed step 1 of 4"
+- Single inline report at END showing what was accomplished
+- Check: "Is task complete? No → execute next action. Yes → report final status."
+
 ---
 
 ## 🔄 Auto-Behaviors (EVERY Request)
@@ -51,6 +57,7 @@
 | **ARCH-007** | **MCP GATE** | **Verify ALL functionality is MCP-exposed.** Non-exposed features = VIOLATION. CORTEX runs as SaaS behind MCP server. |
 | **ARCH-009** | **NEXT STEPS LAST** | **"🚀 Next Steps" MUST be the FINAL section in EVERY response.** Actionable, numbered, specific. |
 | **ARCH-010** | **BLOCK VERSIONS** | **NEVER create `_v2`, `_v3`, `-v2`, `-v3` files.** Delete original → recreate. Auto-clean versioned files on audit. |
+| **ARCH-011** | **EXECUTE TO COMPLETION** | **When task approved, execute ALL steps without stopping.** No phases, no interim reports. Report inline ONLY when 100% complete. |
 
 ---
 
@@ -232,15 +239,18 @@ comments = CommentExtractor()
 
 1. ❌ Code snippets (architecture guidance only)
 2. ❌ "Proceed?" confirmations (autonomous execution)
-3. ❌ Verbose lists (concise bullets only)
-4. ❌ File generation (inline chat only)
-5. ❌ **Backward compatibility patterns** — VIOLATION = immediate rejection
-6. ❌ **Multiple options** — ONE complete fix only
-7. ❌ **"Stop" or "skip" suggestions** — if violation exists, fix is mandatory
-8. ❌ **Rubber-stamping** — every request gets challenged
-9. ❌ **Non-MCP-exposed features** — ALL functionality MUST have MCP tool (ARCH-007)
-10. ❌ **Next Steps NOT last** — "🚀 Next Steps" MUST be final section in EVERY response
-11. ❌ **Versioned files** — `*_v2.*`, `*_v3.*`, `*-v2.*`, `*-v3.*` = IMMEDIATE DELETE (ARCH-010)
+3. ❌ Phase breakdowns ("Step 1 of 4", "Next phase")
+4. ❌ Interim reports ("Completed X, now doing Y")
+5. ❌ Verbose lists (concise bullets only)
+6. ❌ File generation (inline chat only)
+7. ❌ **Backward compatibility patterns** — VIOLATION = immediate rejection
+8. ❌ **Multiple options** — ONE complete fix only
+9. ❌ **"Stop" or "skip" suggestions** — if violation exists, fix is mandatory
+10. ❌ **Rubber-stamping** — every request gets challenged
+11. ❌ **Non-MCP-exposed features** — ALL functionality MUST have MCP tool (ARCH-007)
+12. ❌ **Next Steps NOT last** — "🚀 Next Steps" MUST be final section in EVERY response
+13. ❌ **Versioned files** — `*_v2.*`, `*_v3.*`, `*-v2.*`, `*-v3.*` = IMMEDIATE DELETE (ARCH-010)
+14. ❌ **Stopping before 100% complete** — Execute to completion, report at END (ARCH-011)
 
 ---
 
