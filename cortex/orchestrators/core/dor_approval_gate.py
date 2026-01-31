@@ -69,6 +69,26 @@ class IntentReflection:
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
     """When reflection was generated"""
 
+    def __post_init__(self) -> None:
+        """Auto-populate business_principles from governance_rules if not provided."""
+        if not self.business_principles and self.governance_rules:
+            # Map CORE rules to business principles
+            rule_mappings = {
+                "CORE-008": ("Quality First", "TDD (CORE-008)"),
+                "CORE-011": ("Maintainability", "Type Safety (CORE-011)"),
+                "CORE-012": ("Documentation", "Docstrings (CORE-012)"),
+                "CORE-013": ("Reliability", "Exception Handling (CORE-013)"),
+                "CORE-026": ("Git Safety", "Checkpoints (CORE-026)"),
+                "CORE-027": ("Auditability", "Audit Trail (CORE-027)"),
+                "CORE-030": ("Implementation Truth", "Verify Code (CORE-030)"),
+                "CORE-035": ("Single Implementation", "No Duplicates (CORE-035)"),
+            }
+            
+            for rule in self.governance_rules:
+                if rule in rule_mappings:
+                    principle, description = rule_mappings[rule]
+                    self.business_principles[principle] = description
+
     def _get_execution_plan(self) -> List[str]:
         """
         Generate execution plan bullets based on intent type.
@@ -361,6 +381,11 @@ class DoRApprovalGate:
         self._approval_decision: Optional[ApprovalDecision] = None
         self._pending_text: Optional[str] = None
         self._pending_context: Optional[Dict[str, Any]] = None
+        
+        # Initialize router with enforcement blocking disabled for DoR classification
+        # (DoR is pre-execution validation, not runtime execution)
+        self._router = IntentRouter()
+        self._router.enforcement_engine.blocking_enabled = False
     
     def classify_and_reflect(
         self,
@@ -391,7 +416,12 @@ class DoRApprovalGate:
         # Get router and classify
         if self._router is None:
             self._router = IntentRouter()
-        routing_decision = self._router.classify_intent(text, context)
+        routing_decision = self._router.route({
+            "operation": text,
+            "description": text,
+            "keywords": text.lower().split(),
+            "context": context
+        })
         
         if routing_decision is None:
             raise RuntimeError("Intent classification returned None")
