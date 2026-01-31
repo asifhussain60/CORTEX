@@ -262,4 +262,11 @@ def get_cortex_tools() -> list[Tool]:
     except ImportError:
         logger.warning("Phase 12 capacity planning tools not available")
     
+    # Add Phase 15 static visualization tool if available
+    try:
+        from cortex.mcp.tools.static_visualization import CORTEX_VISUALIZATION_TOOLS
+        tools.extend(CORTEX_VISUALIZATION_TOOLS)
+    except ImportError:
+        logger.warning("Phase 15 static visualization tools not available")
+    
     return tools
