@@ -27,7 +27,8 @@ import threading
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.orchestrators.registry import OrchestratorMetadata
+# AC-CORE-035-01: Import canonical WiringMetadata
+from cortex.models.orchestrator_metadata import WiringMetadata as OrchestratorMetadata
 
 
 class OrchestratorLookup:
@@ -103,45 +104,64 @@ class OrchestratorLookup:
     
     def _load_registry(self) -> None:
         """
-        Load orchestrator registry from wiring.yaml.
+        Load orchestrator registry from wiring.yaml (SSOT).
         
         Builds indexes for fast keyword and capability lookup.
         
-        Raises:
-            FileNotFoundError: If wiring.yaml not found
-            ValueError: If wiring.yaml has invalid format
+        FIX: After moving intelligence from prompts to code, this must load
+        from the actual wiring registry, not hardcoded values.
+        
+        Uses GitBackedRegistry to load all 26 orchestrators from wiring.yaml.
         """
         try:
-            # Import wiring specification
-            from cortex.wiring.specifications import load_wiring_spec
+            # Import the wiring bootstrap to get actual orchestrator registry
+            from cortex.wiring import bootstrap_cortex
             
-            spec = load_wiring_spec()
+            # Get the wiring registry (loads from wiring.yaml)
+            wiring_registry = bootstrap_cortex()
+            orchestrator_names = wiring_registry.list_orchestrators()
             
-            # Process core orchestrators
-            for orch_config in spec.get("orchestrators", {}).get("core", []):
-                self._register_orchestrator(orch_config, "core")
-            
-            # Process domain orchestrators
-            for orch_config in spec.get("orchestrators", {}).get("domain", []):
-                self._register_orchestrator(orch_config, "domain")
-            
-            # Process support orchestrators
-            for orch_config in spec.get("orchestrators", {}).get("support", []):
-                self._register_orchestrator(orch_config, "support")
+            # Load each orchestrator's metadata from wiring
+            for name in orchestrator_names:
+                spec = wiring_registry.get_orchestrator_spec(name)
+                if spec:
+                    # FIX: wiring.yaml has 'name' (alias) and 'class' (actual class name)
+                    # E.g., name="DocumentationOrchestrator", class="EnhancedDocumentationOrchestrator"
+                    # We need to use 'class' for instantiation but 'name' as registry key
+                    metadata = OrchestratorMetadata(
+                        name=name,
+                        module=spec.get("module", ""),
+                        category=spec.get("category", "unknown"),
+                        capabilities=spec.get("capabilities", []),
+                        priority=spec.get("priority", 50),
+                        wired=True,
+                        class_name=spec.get("class", name)  # Use actual class name for import
+                    )
+                    self._registry_cache[name] = metadata
+                    
+                    # Build capability index
+                    for capability in metadata.capabilities:
+                        if capability not in self._capability_index:
+                            self._capability_index[capability] = []
+                        self._capability_index[capability].append(name)
             
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.2-01",
-                operation="REGISTRY_LOADED",
+                operation="REGISTRY_LOADED_FROM_WIRING",
                 success=True,
-                details={"orchestrators": len(self._registry_cache)}
+                details={
+                    "orchestrators": len(self._registry_cache),
+                    "source": "wiring.yaml",
+                    "capabilities_indexed": len(self._capability_index)
+                }
             )
         
-        except (FileNotFoundError, ValueError, ImportError) as e:
+        except (ImportError, ValueError, Exception) as e:
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.2-01",
                 operation="REGISTRY_LOAD_FAILED",
                 success=False,
-                details={"error": str(e)}
+                details={"error": str(e), "fallback": "empty_registry"}
             )
             # Fallback: empty registry (graceful degradation)
             self._registry_cache = {}
@@ -181,7 +201,7 @@ class OrchestratorLookup:
     
     def get_by_name(self, name: str) -> Optional[IOrchestrator]:
         """
-        Get orchestrator instance by name.
+        Get orchestrator instance by name (case-insensitive).
         
         Looks up orchestrator in registry, loads module dynamically,
         and returns cached instance.
@@ -198,13 +218,15 @@ class OrchestratorLookup:
             if orch is not None:
                 orch.execute(params)
         """
-        # Check instance cache first
-        if name in self._instance_cache:
-            return self._instance_cache[name]
+        # AC-ROUTE-002-AC04: Case-insensitive lookup
+        # Normalize to match registry keys (original case)
+        normalized_name = None
+        for registry_name in self._registry_cache.keys():
+            if registry_name.lower() == name.lower():
+                normalized_name = registry_name
+                break
         
-        # Check registry
-        metadata = self._registry_cache.get(name)
-        if metadata is None:
+        if normalized_name is None:
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.2-01",
                 operation="ORCHESTRATOR_NOT_FOUND",
@@ -213,10 +235,19 @@ class OrchestratorLookup:
             )
             return None
         
+        # Check instance cache first (use normalized name)
+        if normalized_name in self._instance_cache:
+            return self._instance_cache[normalized_name]
+        
+        # Check registry
+        metadata = self._registry_cache.get(normalized_name)
+        if metadata is None:
+            return None
+        
         # Load orchestrator instance
         instance = self._load_orchestrator_instance(metadata)
         if instance is not None:
-            self._instance_cache[name] = instance
+            self._instance_cache[normalized_name] = instance
         
         return instance
     
@@ -237,8 +268,11 @@ class OrchestratorLookup:
             # Import module
             module = importlib.import_module(metadata.module)
             
-            # Get class
-            orchestrator_class = getattr(module, metadata.name)
+            # Get class - use class_name if available, otherwise use name
+            # FIX: wiring.yaml has name (alias) vs class (actual class)
+            # E.g., name="DocumentationOrchestrator", class="EnhancedDocumentationOrchestrator"
+            class_name = metadata.class_name if metadata.class_name else metadata.name
+            orchestrator_class = getattr(module, class_name)
             
             # Instantiate (assuming no-arg constructor)
             instance = orchestrator_class()
@@ -249,21 +283,25 @@ class OrchestratorLookup:
                 success=True,
                 details={
                     "name": metadata.name,
+                    "class": class_name,
                     "module": metadata.module
                 }
             )
             
             return instance
         
-        except (ImportError, AttributeError, TypeError) as e:
+        except (ImportError, AttributeError, TypeError, Exception) as e:
+            # Catch all exceptions to prevent crashes during loading
             self.logger.log_operation_complete(
                 ac_id="AC-PHASE-8.2-01",
                 operation="ORCHESTRATOR_LOAD_FAILED",
                 success=False,
                 details={
                     "name": metadata.name,
+                    "class": metadata.class_name if metadata.class_name else metadata.name,
                     "module": metadata.module,
-                    "error": str(e)
+                    "error": str(e),
+                    "error_type": type(e).__name__
                 }
             )
             return None
@@ -442,6 +480,57 @@ class OrchestratorLookup:
         """Clear instance and metadata caches (for testing)."""
         self._instance_cache.clear()
         self.get_orchestrator_metadata.cache_clear()
+    
+    def get_multiple(
+        self,
+        names: List[str],
+        filter_none: bool = False
+    ) -> List[Optional[IOrchestrator]]:
+        """
+        Get multiple orchestrator instances at once.
+        
+        AC-ID: AC-ROUTE-002-AC06, AC-ROUTE-002-AC07
+        Purpose: Bulk resolution of orchestrators (e.g., for fallback chains)
+        
+        Args:
+            names: List of orchestrator class names
+            filter_none: If True, filter out None values from result
+        
+        Returns:
+            List of orchestrator instances (may contain None if not filter_none)
+        
+        Example:
+            lookup = OrchestratorLookup.instance()
+            orchs = lookup.get_multiple(["TDDOrchestrator", "LENSOrchestrator"])
+        """
+        instances = []
+        
+        for name in names:
+            instance = self.get_by_name(name)
+            if filter_none:
+                if instance is not None:
+                    instances.append(instance)
+            else:
+                instances.append(instance)
+        
+        return instances
+    
+    def list_available(self) -> List[str]:
+        """
+        List all available orchestrator names in registry.
+        
+        AC-ID: AC-ROUTE-002-AC08
+        Purpose: Discovery of available orchestrators for routing
+        
+        Returns:
+            List of orchestrator class names
+        
+        Example:
+            lookup = OrchestratorLookup.instance()
+            available = lookup.list_available()
+            print(f"Available orchestrators: {available}")
+        """
+        return list(self._registry_cache.keys())
 
 
 # Module-level exports
