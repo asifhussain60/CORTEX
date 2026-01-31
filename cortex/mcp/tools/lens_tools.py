@@ -383,6 +383,101 @@ def cortex_tools_catalog() -> Dict[str, Any]:
         }
 
 
+@mcp_tool(
+    name="cortex_vision_analyze",
+    description="Analyze images via Vision API for UI elements, URLs, issues, and structural mappings",
+    parameters={
+        "image_data": "string",
+        "image_url": "string",
+        "image_type": "string",
+        "analysis_depth": "string",
+        "extract_urls": "boolean",
+        "extract_elements": "boolean",
+        "detect_issues": "boolean",
+    }
+)
+def cortex_vision_analyze(
+    image_data: Optional[str] = None,
+    image_url: Optional[str] = None,
+    image_type: str = "unknown",
+    analysis_depth: str = "standard",
+    extract_urls: bool = True,
+    extract_elements: bool = True,
+    detect_issues: bool = True,
+) -> Dict[str, Any]:
+    """
+    Analyze images via Vision API.
+    
+    Extracts UI elements, URLs, issues, and structural information
+    from screenshots, diagrams, mockups, and error messages.
+    
+    Args:
+        image_data: Base64-encoded image data (provide this OR image_url)
+        image_url: URL to image (provide this OR image_data)
+        image_type: Type of image (screenshot/diagram/mockup/error/unknown)
+        analysis_depth: Depth of analysis (quick/standard/thorough)
+        extract_urls: Extract URLs from image
+        extract_elements: Extract UI elements (buttons, inputs, etc.)
+        detect_issues: Detect visual bugs, accessibility issues, errors
+        
+    Returns:
+        Dict with urls, ui_elements, issues, text_content, structural_map
+    """
+    try:
+        from cortex.brain.analysis.vision_analyzer import (
+            VisionAnalyzer,
+            ImageType,
+            AnalysisDepth,
+        )
+        
+        if not image_data and not image_url:
+            return {
+                "status": "error",
+                "error": "Must provide either image_data (base64) or image_url",
+            }
+        
+        analyzer = VisionAnalyzer()
+        
+        # Parse enums
+        try:
+            img_type = ImageType(image_type.lower())
+        except ValueError:
+            img_type = ImageType.UNKNOWN
+            
+        try:
+            depth = AnalysisDepth(analysis_depth.lower())
+        except ValueError:
+            depth = AnalysisDepth.STANDARD
+        
+        # Analyze based on input type
+        if image_data:
+            result = analyzer.analyze_base64(
+                image_data=image_data,
+                image_type=img_type,
+                depth=depth,
+                extract_urls=extract_urls,
+                extract_elements=extract_elements,
+                detect_issues=detect_issues,
+            )
+        else:
+            result = analyzer.analyze_url(
+                image_url=image_url,
+                image_type=img_type,
+                depth=depth,
+                extract_urls=extract_urls,
+                extract_elements=extract_elements,
+                detect_issues=detect_issues,
+            )
+        
+        return result.to_dict()
+        
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e),
+        }
+
+
 # Export all tools for registration
 __all__ = [
     "cortex_lens_analyze",
@@ -391,4 +486,5 @@ __all__ = [
     "cortex_extract_comments",
     "cortex_detect_duplicates",
     "cortex_tools_catalog",
+    "cortex_vision_analyze",
 ]
