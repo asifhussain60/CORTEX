@@ -188,8 +188,9 @@ print(result)
         overview2 = json.loads((data_dir / "overview.json").read_text())
         
         # Key metrics should be identical (timestamps may differ)
-        assert overview1["total_modules"] == overview2["total_modules"]
-        assert overview1["total_files"] == overview2["total_files"]
+        # Check file_stats which is the actual structure
+        assert overview1["file_stats"]["files"] == overview2["file_stats"]["files"]
+        assert overview1["file_stats"]["orchestrators"] == overview2["file_stats"]["orchestrators"]
 
 
 # Summary: 5 integration tests
