@@ -1,99 +1,81 @@
 # CORTEX Agents
 
-This directory contains all CORTEX agent definitions organized by status.
+**Version:** 2.0 | **Updated:** 2026-01-31 | **Architecture:** MCP-First SaaS
+
+---
 
 ## 📁 Structure
 
-### `/core` - Active Agents
-Current production agents used in CORTEX operations:
-
-- **cortex-review.md** - Code review agent coordinator (v4.0)
-- **cortex-review-agents.md** - Review sub-agents detail (8-10 agents)
-- **cortex-total-recall.md** - Feature discovery agent (v7.0)
-- **cortex-enforcement-agents.md** - Governance enforcement agents
-- **cortex-builder.md** - Builder orchestrator agent
-- **cortex-planner.md** - Planning agent
-- **CORTEX.md** - Master orchestrator agent definition
-
-### `/archived` - Obsolete Agents
-Old agent definitions kept for reference only:
-
-- **cortex-vacuum-agents.md** - Vacuum agents (archived post-cleanup)
-
-## 🎯 Agent Catalog
-
-| Agent | File | Purpose |
-|-------|------|---------|
-| Review Coordinator | cortex-review.md | Coordinates 8+ review sub-agents |
-| Review Sub-agents | cortex-review-agents.md | BRIT, HALL, GOV, ASM, DEBT, STATE, ARCH, INTEG |
-| Total Recall | cortex-total-recall.md | Feature discovery & recall (4-stage pipeline) |
-| Enforcement | cortex-enforcement-agents.md | CORE-030, CORE-035 compliance |
-| Builder | cortex-builder.md | Build orchestration |
-| Planner | cortex-planner.md | Planning & roadmap |
-| Master | CORTEX.md | Master orchestrator (23 orchestrators) |
+```
+agents/
+├── core/                    # Production agents
+│   ├── CORTEX.md           # Master orchestrator agent
+│   ├── cortex-architect.md # Design-phase analysis agent
+│   └── cortex-mcp-gateway.md # MCP tool routing agent
+└── archived/               # Obsolete agents (reference only)
+    └── cortex-vacuum-agents.md
+```
 
 ---
 
-## 🎯 Orchestrator Registry (DatabaseBackedRegistry - SSOT)
+## 🎯 Active Agents
 
-**All 23 orchestrators wired via SQLite-backed registry (`.cortex/orchestrator_registry.db`)**
-
-### Core Orchestrators (6/6 Wired)
-| Orchestrator | Status | Authority |
-|--------------|--------|-----------|
-| **MasterOrchestrator** | ✅ WIRED | core |
-| **InteractionOrchestrator** | ✅ WIRED | core |
-| **IntentRouter** | ✅ WIRED | core |
-| **TDDOrchestrator** | ✅ WIRED | core |
-| **WorkflowOrchestrator** | ✅ WIRED | core |
-| **WrappedTDDOrchestrator** | ✅ WIRED | core |
-
-### Domain Orchestrators (6/6 Wired)
-| Orchestrator | Status | Authority |
-|--------------|--------|-----------|
-| **PlanningOrchestrator** | ✅ WIRED (v2.0 consolidated) | domain |
-| **RefactoringOrchestrator** | ✅ WIRED | domain |
-| **DomainOrchestrator** | ✅ WIRED | domain |
-| **ConversationOrchestrator** | ✅ WIRED | domain |
-| **SeleniumPlaywrightOrchestrator** | ✅ WIRED | domain |
-| **DocumentationOrchestrator** | ✅ WIRED | domain |
-
-### Support Orchestrators (11/11 Wired)
-| Orchestrator | Status | Authority |
-|--------------|--------|-----------|
-| **OnboardingOrchestrator** | ✅ WIRED | support |
-| **ToolDiscoveryOrchestrator** | ✅ WIRED | support |
-| **UpgradeOrchestrator** | ✅ WIRED | support |
-| **RollbackOrchestrator** | ✅ WIRED | support |
-| **SetupOrchestrator** | ✅ WIRED | support |
-| **ComposedOrchestrator** | ✅ WIRED | support |
-| **OrchestratorBootstrap** | ✅ WIRED | support |
-| **DoRApprovalGate** | ✅ WIRED | support |
-| **LENSSynthesis** | ✅ WIRED | support |
-| **GovernanceRegistry** | ✅ WIRED | support |
-| **KnowledgeRepository** | ✅ WIRED | support |
-
-**Registry Authority:** AC-PERMANENT-FIX-009 (DatabaseBackedRegistry)  
-**Wiring Entry Point:** `cortex.orchestrators.bootstrap.OrchestratorBootstrap.bootstrap()`  
-**Verification:** `cortex/orchestrators/core/database_registry.py:DatabaseBackedRegistry.get_wiring_statistics()`
-
-## 📋 Status
-
-✅ **Deduplication Complete**:
-- Single agent definitions per role
-- No duplicates (old versions removed/archived)
-- Clear hierarchy: Master → Coordinators → Sub-agents
-
-✅ **Organization**:
-- `/core/` contains all active agents
-- `/archived/` for old versions (currently has vacuum-agents only)
-
-## 🔄 Adding New Agents
-
-1. Create in `/core/` for active agents
-2. Add to this README and catalog
-3. Old versions → `/archived/` (if needed for reference)
-4. Update Master CORTEX.md if adding orchestrator
+| Agent | File | Purpose | Mode |
+|-------|------|---------|------|
+| **CORTEX** | [CORTEX.md](core/CORTEX.md) | Master orchestrator, production entry point | Production |
+| **Architect** | [cortex-architect.md](core/cortex-architect.md) | Design-phase analysis, aggressive challenge | Design |
+| **MCP Gateway** | [cortex-mcp-gateway.md](core/cortex-mcp-gateway.md) | MCP tool routing, SaaS gateway | Production |
 
 ---
-**Last Updated:** 2026-01-25
+
+## 🌐 MCP-First Architecture
+
+All agents route operations through MCP tools:
+
+| Agent | Primary MCP Tools |
+|-------|-------------------|
+| CORTEX | `cortex_process_request`, `cortex_challenge` |
+| Architect | `cortex_lens_analyze`, `cortex_detect_duplicates` |
+| MCP Gateway | All tools via `/tools/{name}` |
+
+---
+
+## 🔗 Related Prompts
+
+| Prompt | Agent | Purpose |
+|--------|-------|---------|
+| [CORTEX.prompt.md](../prompts/CORTEX.prompt.md) | CORTEX.md | Production master |
+| [cortex-architect.prompt.md](../prompts/cortex-architect.prompt.md) | cortex-architect.md | Design analysis |
+
+---
+
+## 📊 Orchestrator Integration
+
+Agents coordinate 23 orchestrators via GitBackedRegistry:
+
+```
+Core (6):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
+              TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator
+
+Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
+              ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
+
+Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
+              UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, ...
+```
+
+---
+
+## 🗄️ Archived Agents
+
+Located in `/archived/` — kept for historical reference only.
+
+| Agent | Reason Archived |
+|-------|-----------------|
+| cortex-vacuum-agents.md | Cleanup complete, no longer needed |
+
+**Note:** Deprecated agents (`cortex-review.md`, `cortex-builder.md`, etc.) were deleted in Phase 8.3 consolidation.
+
+---
+
+*MCP-first agents — production-ready, SaaS architecture.*

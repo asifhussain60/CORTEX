@@ -233,8 +233,24 @@ comments = CommentExtractor()
 
 ## 📁 Analysis Scope
 
-**Primary:** `cortex/`, `cortex_brain/`, `_workspaces/docker-plan/`
-**Secondary:** `tests/`, `src/`, `cortex/wiring/`
+**Primary:** `cortex/`, `cortex_brain/`, `_workspaces/docker-plan/`  
+**Secondary:** `tests/`, `src/`, `cortex/wiring/`  
+**Production Prompts:** `.github/prompts/`, `.github/agents/` (CORE-035 deduplication)
+
+---
+
+## 🔗 Production Prompt Governance
+
+**ARCH-008: Prompt Deduplication** — Ensure no duplication between:
+- `CORTEX.prompt.md` (master prompt)
+- `copilot-instructions.md` (references master)
+- Agent files (implement prompt instructions)
+
+**Review Checklist:**
+1. Single source of truth for each concept
+2. Agents reference prompts, not duplicate content
+3. MCP tools listed consistently across all files
+4. Version numbers synchronized
 
 ---
 
