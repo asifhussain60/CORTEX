@@ -81,7 +81,27 @@
 
 | Orchestrator | Purpose | Usage |
 |--------------|---------|-------|
-| `CortexDocsOrchestrator` | CORTEX `docs/` HTML generation | Internal tooling — generates `docs/index.html` and subfolder indexes with approved glassmorphism design. NOT for production MCP. |
+| `CortexDocsOrchestrator` | CORTEX `docs/` HTML generation + advisory | **Advisor + Generator** for impressive documentation. Two modes: (1) Advisory — suggests diagrams, content, features; (2) Generation — produces HTML. NOT for production MCP. |
+
+**CortexDocsOrchestrator Operations:**
+
+| Mode | Operation | Description |
+|------|-----------|-------------|
+| **Advisory** | `advise_section` | Get diagram/content recommendations for L2 section |
+| **Advisory** | `advise_page` | Get recommendations for L3 detail page |
+| **Advisory** | `compare_approaches` | Compare D3.js vs SVG vs Mermaid for visualization |
+| **Advisory** | `list_sections` | List all sections with status and effort estimates |
+| **Generation** | `generate_l2_page` | Generate specific L2 section landing page |
+| **Generation** | `generate_all` | Generate all documentation HTML |
+| **Generation** | `validate` | Validate HTML5 structure and accessibility |
+
+**Advisory Knowledge Base Sections:**
+- `01-cortex-brain` → Tier Pyramid, Brain Network, Pipeline
+- `02-orchestrators` → Orchestrator Network, Request Flow, Wiring (APPROVED)
+- `03-getting-started` → Installation Flow, Decision Tree
+- `04-architecture` → Data Flow Sankey, Interaction Matrix (APPROVED)
+- `05-lens-protocol` → LENS Pipeline, AST Tree, Timeline
+- `11-mcp-tools` → Tool Graph, API Map, Capability Radar
 
 **Invocation Rule:** Use orchestrators when they provide **concrete evidence** for challenge/recommendation. Do not invoke for trivial requests.
 

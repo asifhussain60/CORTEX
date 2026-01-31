@@ -1,6 +1,6 @@
 # CortexDocsOrchestrator Agent
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Updated:** 2026-01-31  
 **Authority:** [cortex-architect.prompt.md](../../prompts/cortex-architect.prompt.md)  
 **Status:** ACTIVE (Internal Tooling Only)
@@ -12,7 +12,32 @@
 **Name:** CortexDocsOrchestrator Agent  
 **Orchestrator:** `CortexDocsOrchestrator` (`cortex.orchestrators.internal.cortex_docs_orchestrator`)  
 **Mode:** Internal — NOT MCP-Exposed  
-**Purpose:** Generate and maintain HTML documentation for CORTEX repository
+**Purpose:** **Advisor + Generator** for CORTEX documentation site
+
+---
+
+## 🧠 TWO MODES OF OPERATION
+
+### 1. ADVISORY MODE (Consult First)
+**Purpose:** Get intelligent recommendations BEFORE generating HTML
+
+| Operation | Description |
+|-----------|-------------|
+| `advise_section` | Get diagram, content, and feature recommendations for L2 section |
+| `advise_page` | Get page-specific recommendations for L3 detail page |
+| `compare_approaches` | Compare D3.js vs SVG vs Mermaid for a visualization |
+| `list_sections` | List all sections with status and advisory availability |
+
+### 2. GENERATION MODE (Execute)
+**Purpose:** Generate HTML from templates and content
+
+| Operation | Description |
+|-----------|-------------|
+| `extract_template` | Extract Jinja2 from docs/index.html |
+| `generate_main` | Generate docs/index.html |
+| `generate_subfolders` | Generate docs/*/index.html |
+| `generate_l2_page` | Generate specific L2 page |
+| `validate` | Validate HTML5 & accessibility |
 
 ---
 
@@ -22,6 +47,7 @@
 - ❌ **NOT MCP-exposed** — Intentionally internal tooling
 - ✅ **CORTEX-specific** — Generates `docs/index.html` and subfolder indexes
 - ✅ **Approved design** — Dark blue glassmorphism theme from existing documentation
+- ✅ **Advisory intelligence** — Suggests diagrams, content, unique features
 
 **For external repository documentation, use:**
 - `DocumentationOrchestrator` (production, MCP-exposed)
@@ -29,66 +55,95 @@
 
 ---
 
-## 🏗️ Behavior Reference
+## 🏗️ 3-Level Documentation Hierarchy
 
-**Agent implements instructions from:**
-- [cortex-architect.prompt.md](../../prompts/cortex-architect.prompt.md) — Design governance
-- [CORTEX.prompt.md](../../prompts/CORTEX.prompt.md) — Production behavior
+```
+Level 1: docs/index.html                    ← Landing page (APPROVED, DO NOT MODIFY)
+Level 2: docs/{section}/index.html          ← Section landing (unique per section)
+Level 3: docs/{section}/{page}.html         ← Detail pages
+```
 
-**Key Behaviors:**
-- **ARCH-011:** Execute to completion (no interim reports)
-- **CORE-008:** TDD (tests before implementation) — ✅ 19/19 passing
-- **CORE-011:** Type hints on all methods
-- **CORE-012:** Google-style docstrings
+**Design Principles:**
+- L1: 512px logo centered, hero section, section cards
+- L2: 300x300 logo left-justified, NO hero, D3.js visualization, glass cards
+- L3: Breadcrumbs, sidebar navigation, full-width content
 
 ---
 
-## 🎼 Orchestrator Capabilities
+## 🎼 Advisory Knowledge Base
+
+The orchestrator has built-in intelligence for these sections:
+
+| Section | Recommended Diagrams | Unique Features |
+|---------|---------------------|-----------------|
+| **01-cortex-brain** | Tier Pyramid (D3-hierarchy), Brain Network (D3-force), Pipeline (SVG) | Tier rule hover cards, governance explorer |
+| **02-orchestrators** | Orchestrator Network (D3-force), Request Flow (SVG), Wiring (SVG) | Category filtering, MCP badges |
+| **03-getting-started** | Installation Flow (SVG-steps), Decision Tree (D3-decision) | Animated code blocks, copy-to-clipboard |
+| **04-architecture** | Data Flow Sankey (D3-sankey), Interaction Matrix (D3-matrix) | Layer zoom, hover responsibilities |
+| **05-lens-protocol** | LENS Pipeline (SVG), AST Tree (D3-tree), Timeline (D3-timeline) | Live code analysis demo |
+| **11-mcp-tools** | Tool Graph (D3-force), API Map (SVG), Capability Radar (D3-radar) | Try-it-now playground |
+
+---
+
+## 🚀 Usage Examples
+
+### Example 1: Get Advisory Before Building
 
 ```python
 from cortex.orchestrators.internal import get_cortex_docs_orchestrator
 
-orchestrator = get_cortex_docs_orchestrator()
+orch = get_cortex_docs_orchestrator()
 
-# Available operations:
-orchestrator.execute("extract_template")      # Extract Jinja2 from docs/index.html
-orchestrator.execute("generate_main")         # Generate docs/index.html
-orchestrator.execute("generate_subfolders")   # Generate docs/*/index.html
-orchestrator.execute("generate_all")          # Full generation cycle
-orchestrator.execute("validate")              # Validate HTML5 & accessibility
+# Ask for recommendations before generating
+result = orch.execute("advise_section", section_id="01-cortex-brain")
+
+if result.is_ok():
+    advisory = result.value
+    print(f"Section: {advisory.section_title}")
+    print(f"Theme: {advisory.theme_accent}")
+    print(f"Effort: {advisory.effort_estimate_hours}h")
+    print(f"\nRecommended Diagrams:")
+    for d in advisory.recommended_diagrams:
+        print(f"  - {d.name} ({d.diagram_type}): {d.description[:50]}...")
 ```
 
----
+### Example 2: Compare Visualization Approaches
 
-## 📁 Scope
+```python
+# Should I use D3.js, SVG, or Mermaid for a network diagram?
+result = orch.execute(
+    "compare_approaches",
+    visualization_type="network",
+    data_complexity="high"
+)
 
-**Target Documentation:**
-- `docs/index.html` — Main landing page
-- `docs/01-cortex-brain/index.html` — Subfolder indexes
-- `docs/02-orchestrators/index.html`
-- `docs/03-getting-started/index.html`
-- (All numbered documentation subfolders)
+if result.is_ok():
+    comparison = result.value
+    print(f"Verdict: {comparison['verdict'].upper()}")
+    print(f"Reason: {comparison['verdict_reason']}")
+```
 
-**Assets:**
-- `docs/assets/css/` — Glassmorphism design system (11,532 lines)
-- `docs/assets/js/` — Interactive features
-- `docs/assets/images/` — Logos and icons
+### Example 3: List All Sections with Status
 
----
+```python
+result = orch.execute("list_sections")
 
-## 🎨 Design System
+if result.is_ok():
+    data = result.value
+    for section in data["sections"]:
+        status_icon = "✅" if section["status"] == "COMPLETE" else "⏳"
+        print(f"{status_icon} {section['section_id']}: {section['title']}")
+```
 
-**Approved from `docs/index.html`:**
-- **Theme:** Dark blue glassmorphism
-- **Colors:** 
-  - `--bg-primary: #0a0e27` (dark navy)
-  - `--accent-primary: #00d4ff` (cyan)
-  - `--accent-secondary: #7b61ff` (purple)
-- **Features:**
-  - Backdrop blur glassmorphism cards
-  - Responsive navigation with breadcrumbs
-  - D3.js visualizations
-  - Full accessibility (ARIA, keyboard nav, 44px tap targets)
+### Example 4: Full Generation (After Advisory)
+
+```python
+result = orch.execute("generate_all")
+
+if result.is_ok():
+    report = result.value
+    print(f"✅ Generated {len(report.generated_files)} files")
+```
 
 ---
 
@@ -105,34 +160,11 @@ orchestrator.execute("validate")              # Validate HTML5 & accessibility
 | `components/footer.html.jinja2` | Footer component |
 
 **Generation Flow:**
-1. **Extract:** Parse existing `docs/index.html` → Jinja2 templates
-2. **Generate:** Render templates with dynamic content (navigation, docs list)
-3. **Validate:** Check HTML5 structure, accessibility, broken links
-
----
-
-## 🚀 Usage Examples
-
-### Example 1: Full Documentation Regeneration
-
-```python
-from cortex.orchestrators.internal import get_cortex_docs_orchestrator
-
-orchestrator = get_cortex_docs_orchestrator()
-
-# Complete regeneration
-result = orchestrator.execute("generate_all")
-
-if result.is_ok():
-    report = result.value
-    print(f"✅ Generated {len(report.generated_files)} files")
-    print(f"   Total size: {report.total_size_bytes // 1024} KB")
-    print(f"   Time: {report.generation_time_seconds:.2f}s")
-```
-
-### Example 2: Extract Templates Only
-
-```python
+1. **Advise:** Get recommendations for diagrams, content, features
+2. **Review:** Human reviews and approves approach
+3. **Extract:** Parse existing `docs/index.html` → Jinja2 templates
+4. **Generate:** Render templates with dynamic content
+5. **Validate:** Check HTML5 structure, accessibility
 # Extract Jinja2 templates from existing HTML
 result = orchestrator.execute("extract_template")
 

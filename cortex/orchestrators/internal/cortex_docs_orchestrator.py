@@ -1,10 +1,15 @@
 """
-CortexDocsOrchestrator - Internal CORTEX Documentation HTML Generator
+CortexDocsOrchestrator - Internal CORTEX Documentation HTML Generator + Advisor
 
 INTERNAL USE ONLY — NOT MCP-EXPOSED
+
+TWO MODES:
+1. ADVISORY MODE - Suggest diagrams, content structure, visual strategies
+2. GENERATION MODE - Generate HTML from templates and content
+
 Generates HTML documentation for CORTEX repository using approved design:
 - Dark blue glassmorphism theme from docs/index.html
-- Hierarchical navigation with drill-down
+- 3-Level hierarchy: L1 (landing) → L2 (section) → L3 (detail pages)
 - D3.js visualizations and interactive features
 - Subfolder index.html generation with consistent styling
 
@@ -86,6 +91,295 @@ class HTMLGenerationReport:
     assets_copied: List[Path]
     total_size_bytes: int
     generation_time_seconds: float
+
+
+@dataclass
+class DiagramRecommendation:
+    """Recommendation for a diagram type."""
+    diagram_type: str  # d3-force, d3-sankey, d3-tree, svg-pipeline, etc.
+    name: str
+    description: str
+    data_format: str
+    effort_hours: float
+    uniqueness_score: float  # 1-10, how unique this makes the page
+
+
+@dataclass
+class SectionAdvisory:
+    """Advisory output for a documentation section."""
+    section_id: str
+    section_title: str
+    theme_accent: str
+    recommended_diagrams: List[DiagramRecommendation]
+    content_structure: List[str]
+    unique_features: List[str]
+    effort_estimate_hours: float
+    design_rationale: str
+
+
+# ============================================================================
+# DIAGRAM KNOWLEDGE BASE
+# ============================================================================
+
+DIAGRAM_RECOMMENDATIONS: Dict[str, Dict[str, Any]] = {
+    "01-cortex-brain": {
+        "title": "CORTEX Brain",
+        "theme_accent": "#7b61ff",  # Purple
+        "diagrams": [
+            {
+                "type": "d3-hierarchy",
+                "name": "Tier Governance Pyramid",
+                "description": "Interactive pyramid showing Tier0 > Tier1 > Tier2 > Tier3 precedence with rule counts",
+                "data_format": '{"name": "root", "children": [{"name": "tier", "rules": [...]}]}',
+                "effort": 4.0,
+                "uniqueness": 9
+            },
+            {
+                "type": "d3-force",
+                "name": "Brain Component Network",
+                "description": "Force-directed graph of brain modules (state, governance, knowledge) and their dependencies",
+                "data_format": '{"nodes": [...], "links": [...]}',
+                "effort": 3.0,
+                "uniqueness": 7
+            },
+            {
+                "type": "svg-pipeline",
+                "name": "Request Processing Flow",
+                "description": "Linear SVG showing: Input → Brain Analysis → Governance Check → Output",
+                "data_format": "Static SVG with CSS animations",
+                "effort": 2.0,
+                "uniqueness": 6
+            }
+        ],
+        "unique_features": [
+            "Tier rule hover cards with violation examples",
+            "Clickable governance rule explorer",
+            "State machine visualization with transitions",
+            "Knowledge graph sample with entity relationships"
+        ],
+        "content_structure": [
+            "Executive Summary: What is CORTEX Brain?",
+            "4-Tier Governance Model (interactive diagram)",
+            "Core Components: State, Governance, Knowledge",
+            "Integration with Orchestrators",
+            "L3 Links: Tier0 Details, Tier1 Details, State Management"
+        ]
+    },
+    "02-orchestrators": {
+        "title": "Orchestrators",
+        "theme_accent": "#00d4ff",  # Cyan
+        "diagrams": [
+            {
+                "type": "d3-force",
+                "name": "Orchestrator Network",
+                "description": "23 orchestrators with category coloring (Core/Domain/Support) and relationship links",
+                "data_format": '{"nodes": [{"id": "name", "category": "core|domain|support"}], "links": [...]}',
+                "effort": 3.0,
+                "uniqueness": 8
+            },
+            {
+                "type": "svg-pipeline",
+                "name": "Request Flow Architecture",
+                "description": "Request → IntentRouter → Orchestrator Selection → MCP Response",
+                "data_format": "Static SVG with layer boxes",
+                "effort": 2.0,
+                "uniqueness": 7
+            },
+            {
+                "type": "svg-pipeline",
+                "name": "Wiring & Registry",
+                "description": "YAML Config → GitBackedRegistry → MCP Gateway → Tools",
+                "data_format": "Static SVG matching approved design",
+                "effort": 1.5,
+                "uniqueness": 6
+            }
+        ],
+        "unique_features": [
+            "Interactive filtering by category (Core/Domain/Support)",
+            "MCP tool endpoint badges on each orchestrator",
+            "Click orchestrator → expand capabilities panel",
+            "Wiring.yaml live syntax highlighting"
+        ],
+        "content_structure": [
+            "Overview: 23 Orchestrators, 3 Categories",
+            "Interactive Network Visualization",
+            "Core Orchestrators (6): Master, Interaction, Intent, TDD, Workflow, Enforcement",
+            "Domain Orchestrators (6): Refactoring, Planning, Documentation, etc.",
+            "Support Orchestrators (11): Onboarding, LENS, Discovery, etc.",
+            "Wiring & Registration System",
+            "L3 Links: Individual orchestrator detail pages"
+        ]
+    },
+    "03-getting-started": {
+        "title": "Getting Started",
+        "theme_accent": "#10b981",  # Emerald
+        "diagrams": [
+            {
+                "type": "svg-steps",
+                "name": "Installation Flow",
+                "description": "Step-by-step visual: Clone → Install → Configure → Run → Success",
+                "data_format": "Static SVG with numbered steps",
+                "effort": 2.0,
+                "uniqueness": 6
+            },
+            {
+                "type": "d3-decision",
+                "name": "Quick Start Decision Tree",
+                "description": "Interactive: What do you want to do? → Click path → Suggested commands",
+                "data_format": '{"question": "...", "options": [{"answer": "...", "next": "..."}]}',
+                "effort": 4.0,
+                "uniqueness": 9
+            }
+        ],
+        "unique_features": [
+            "Animated code blocks with typing effect",
+            "Copy-to-clipboard on all commands",
+            "Progress indicator for multi-step tutorials",
+            "Environment detection (macOS/Linux/Windows)"
+        ],
+        "content_structure": [
+            "30-Second Quick Start (copy-paste ready)",
+            "Prerequisites Check (interactive)",
+            "Installation Methods: pip, Docker, source",
+            "First Request: Hello CORTEX",
+            "Common Issues & Solutions",
+            "L3 Links: Detailed tutorials"
+        ]
+    },
+    "04-architecture": {
+        "title": "Architecture",
+        "theme_accent": "#6366f1",  # Indigo
+        "diagrams": [
+            {
+                "type": "d3-sankey",
+                "name": "Data Flow Sankey",
+                "description": "Show data flow volumes through system layers with proportional widths",
+                "data_format": '{"nodes": [...], "links": [{"source": 0, "target": 1, "value": 10}]}',
+                "effort": 5.0,
+                "uniqueness": 10
+            },
+            {
+                "type": "d3-matrix",
+                "name": "Component Interaction Matrix",
+                "description": "Heatmap showing which components communicate (density = coupling)",
+                "data_format": '{"rows": [...], "columns": [...], "values": [[...]]}',
+                "effort": 4.0,
+                "uniqueness": 9
+            },
+            {
+                "type": "svg-layers",
+                "name": "Layer Architecture",
+                "description": "Presentation → Application → Domain → Infrastructure stacked diagram",
+                "data_format": "Static SVG with layer labels",
+                "effort": 2.0,
+                "uniqueness": 5
+            }
+        ],
+        "unique_features": [
+            "Zoom into any layer for component detail",
+            "Hover shows component responsibilities",
+            "Architecture decision records (ADR) links",
+            "Live dependency graph from imports"
+        ],
+        "content_structure": [
+            "System Overview (high-level diagram)",
+            "Layered Architecture Principles",
+            "Data Flow Through System (Sankey)",
+            "Component Coupling Analysis (Matrix)",
+            "Design Decisions & Trade-offs",
+            "L3 Links: Layer details, ADRs"
+        ]
+    },
+    "05-lens-protocol": {
+        "title": "LENS Protocol",
+        "theme_accent": "#8b5cf6",  # Violet
+        "diagrams": [
+            {
+                "type": "svg-pipeline",
+                "name": "LENS Pipeline",
+                "description": "Language → Examination → Navigation → Synthesis with data transformation at each stage",
+                "data_format": "Static SVG with stage boxes",
+                "effort": 2.0,
+                "uniqueness": 7
+            },
+            {
+                "type": "d3-tree",
+                "name": "AST Visualization",
+                "description": "Collapsible tree showing sample Python AST with node type coloring",
+                "data_format": '{"name": "Module", "children": [{"name": "FunctionDef", ...}]}',
+                "effort": 4.0,
+                "uniqueness": 9
+            },
+            {
+                "type": "d3-timeline",
+                "name": "Git History Timeline",
+                "description": "24h commit activity with author grouping and change size bubbles",
+                "data_format": '[{"time": "2026-01-31T10:00", "author": "...", "files": 5}]',
+                "effort": 3.0,
+                "uniqueness": 8
+            }
+        ],
+        "unique_features": [
+            "Live code analysis demo (paste code → see analysis)",
+            "Interactive AST explorer with syntax highlighting",
+            "Git blame integration example",
+            "Comment extraction showcase"
+        ],
+        "content_structure": [
+            "What is LENS? (acronym breakdown)",
+            "The 4-Stage Pipeline (interactive)",
+            "Language Analysis: AST, Comments, Patterns",
+            "Examination: Complexity, Duplicates, Dead Code",
+            "Navigation: Git History, Blame, Dependencies",
+            "Synthesis: Unified Context, Recommendations",
+            "L3 Links: Each analyzer in detail"
+        ]
+    },
+    "11-mcp-tools": {
+        "title": "MCP Tools",
+        "theme_accent": "#f59e0b",  # Amber
+        "diagrams": [
+            {
+                "type": "d3-force",
+                "name": "Tool-Orchestrator Graph",
+                "description": "Which MCP tools map to which orchestrators with usage frequency",
+                "data_format": '{"nodes": [{"id": "tool", "type": "tool|orchestrator"}], "links": [...]}',
+                "effort": 3.0,
+                "uniqueness": 8
+            },
+            {
+                "type": "svg-api",
+                "name": "REST Endpoint Map",
+                "description": "Visual API documentation with method colors (GET=green, POST=blue)",
+                "data_format": "Static SVG with endpoint boxes",
+                "effort": 2.5,
+                "uniqueness": 7
+            },
+            {
+                "type": "d3-radar",
+                "name": "Tool Capability Radar",
+                "description": "Compare tools on axes: Speed, Complexity, Coverage, Automation",
+                "data_format": '[{"tool": "name", "speed": 8, "complexity": 3, ...}]',
+                "effort": 4.0,
+                "uniqueness": 9
+            }
+        ],
+        "unique_features": [
+            "Try-it-now API playground (mock responses)",
+            "Request/response examples with syntax highlighting",
+            "Tool search with filtering",
+            "MCP protocol explainer animation"
+        ],
+        "content_structure": [
+            "What is MCP? (protocol overview)",
+            "Tool Discovery: /tools endpoint",
+            "Tool Categories: Analysis, Generation, Validation",
+            "Tool-Orchestrator Mapping (interactive graph)",
+            "API Reference (visual endpoint map)",
+            "L3 Links: Individual tool documentation"
+        ]
+    }
+}
 
 
 # ============================================================================
@@ -176,8 +470,16 @@ class CortexDocsOrchestrator(IOrchestrator):
     def get_capabilities(self) -> List[str]:
         """Get orchestrator capabilities."""
         return [
+            # Advisory Mode
+            "advise_section",
+            "advise_page",
+            "compare_approaches",
+            "list_sections",
+            # Generation Mode
             "generate_main_index",
             "generate_subfolder_indexes",
+            "generate_l2_page",
+            "generate_l3_page",
             "extract_template",
             "optimize_assets",
             "validate_html"
@@ -202,23 +504,52 @@ class CortexDocsOrchestrator(IOrchestrator):
         
         Args:
             operation: Operation to execute
+            
+                ADVISORY MODE:
+                - "advise_section": Get recommendations for a specific L2 section
+                - "advise_page": Get recommendations for a specific L3 page
+                - "compare_approaches": Compare D3/SVG/Mermaid for a visualization
+                - "list_sections": List all available sections with status
+                
+                GENERATION MODE:
                 - "extract_template": Extract template from docs/index.html
                 - "generate_main": Generate docs/index.html
                 - "generate_subfolders": Generate all subfolder indexes
+                - "generate_l2_page": Generate specific L2 page
                 - "generate_all": Generate everything
                 - "validate": Validate generated HTML
+                
             **kwargs: Operation-specific parameters
         
         Returns:
             Result containing operation outcome
         """
         try:
-            if operation == "extract_template":
+            # Advisory Mode Operations
+            if operation == "advise_section":
+                return self._advise_section(kwargs.get("section_id", ""))
+            elif operation == "advise_page":
+                return self._advise_page(
+                    kwargs.get("section_id", ""),
+                    kwargs.get("page_id", "")
+                )
+            elif operation == "compare_approaches":
+                return self._compare_approaches(
+                    kwargs.get("visualization_type", ""),
+                    kwargs.get("data_complexity", "medium")
+                )
+            elif operation == "list_sections":
+                return self._list_sections()
+            
+            # Generation Mode Operations
+            elif operation == "extract_template":
                 return self._extract_template()
             elif operation == "generate_main":
                 return self._generate_main_index()
             elif operation == "generate_subfolders":
                 return self._generate_subfolder_indexes()
+            elif operation == "generate_l2_page":
+                return self._generate_l2_page(kwargs.get("section_id", ""))
             elif operation == "generate_all":
                 return self._generate_all()
             elif operation == "validate":
@@ -240,6 +571,406 @@ class CortexDocsOrchestrator(IOrchestrator):
     def get_audit_trail(self, limit: int = 100) -> List[Dict[str, Any]]:
         """Get audit trail."""
         return []
+    
+    # ========================================================================
+    # ADVISORY MODE OPERATIONS
+    # ========================================================================
+    
+    def _advise_section(self, section_id: str) -> Result[SectionAdvisory, str]:
+        """
+        Get advisory recommendations for a documentation section.
+        
+        Provides intelligent suggestions for:
+        - Recommended diagrams (type, description, effort)
+        - Content structure
+        - Unique features to make the page impressive
+        - Effort estimates
+        
+        Args:
+            section_id: Section identifier (e.g., "01-cortex-brain", "02-orchestrators")
+        
+        Returns:
+            Result containing SectionAdvisory dataclass
+        """
+        # Normalize section_id
+        section_key = section_id.lstrip("0123456789-").lower().replace(" ", "-")
+        
+        # Try exact match first, then fuzzy match
+        recommendations = None
+        for key, data in DIAGRAM_RECOMMENDATIONS.items():
+            if key == section_id or section_key in key or key in section_id:
+                recommendations = data
+                break
+        
+        if not recommendations:
+            available = list(DIAGRAM_RECOMMENDATIONS.keys())
+            return Err(
+                f"Section '{section_id}' not found in knowledge base.\n"
+                f"Available sections: {', '.join(available)}\n"
+                f"Use 'list_sections' to see all options."
+            )
+        
+        # Build diagram recommendations
+        diagram_recs = [
+            DiagramRecommendation(
+                diagram_type=d["type"],
+                name=d["name"],
+                description=d["description"],
+                data_format=d["data_format"],
+                effort_hours=d["effort"],
+                uniqueness_score=d["uniqueness"]
+            )
+            for d in recommendations["diagrams"]
+        ]
+        
+        # Calculate total effort
+        total_effort = sum(d.effort_hours for d in diagram_recs) + 2.0  # +2h for content
+        
+        # Build advisory
+        advisory = SectionAdvisory(
+            section_id=section_id,
+            section_title=recommendations["title"],
+            theme_accent=recommendations["theme_accent"],
+            recommended_diagrams=diagram_recs,
+            content_structure=recommendations["content_structure"],
+            unique_features=recommendations["unique_features"],
+            effort_estimate_hours=total_effort,
+            design_rationale=self._generate_design_rationale(section_id, recommendations)
+        )
+        
+        return Ok(advisory)
+    
+    def _generate_design_rationale(self, section_id: str, data: Dict) -> str:
+        """Generate design rationale for a section."""
+        diagrams = data.get("diagrams", [])
+        features = data.get("unique_features", [])
+        
+        rationale_parts = [
+            f"## Design Rationale for {data.get('title', section_id)}",
+            "",
+            f"**Theme Accent:** `{data.get('theme_accent', '#00d4ff')}` — chosen for visual distinction from other sections.",
+            "",
+            "### Why These Diagrams?",
+        ]
+        
+        for d in diagrams:
+            rationale_parts.append(
+                f"- **{d['name']}** ({d['type']}): "
+                f"Uniqueness score {d['uniqueness']}/10. "
+                f"{d['description'][:100]}..."
+            )
+        
+        rationale_parts.extend([
+            "",
+            "### Unique Features Strategy",
+            "These features differentiate this page from generic documentation:",
+        ])
+        
+        for f in features[:3]:
+            rationale_parts.append(f"- {f}")
+        
+        rationale_parts.extend([
+            "",
+            "### Implementation Priority",
+            "1. Start with SVG pipeline diagram (lowest effort, immediate impact)",
+            "2. Add D3.js interactive visualization (highest uniqueness)",
+            "3. Polish with unique features and animations"
+        ])
+        
+        return "\n".join(rationale_parts)
+    
+    def _advise_page(self, section_id: str, page_id: str) -> Result[Dict[str, Any], str]:
+        """
+        Get advisory recommendations for a specific L3 page.
+        
+        Args:
+            section_id: Parent section (e.g., "01-cortex-brain")
+            page_id: Page identifier (e.g., "tier0-governance")
+        
+        Returns:
+            Result with page-specific recommendations
+        """
+        # Get section advisory first
+        section_result = self._advise_section(section_id)
+        if section_result.is_err():
+            return Err(section_result.error)
+        
+        section = section_result.value
+        
+        # Page-specific recommendations
+        page_advisory = {
+            "section_id": section_id,
+            "page_id": page_id,
+            "page_title": page_id.replace("-", " ").title(),
+            "breadcrumbs": [
+                ("Home", "/"),
+                (section.section_title, f"/{section_id}/"),
+                (page_id.replace("-", " ").title(), f"/{section_id}/{page_id}.html")
+            ],
+            "inherited_theme_accent": section.theme_accent,
+            "suggested_diagrams": [
+                d for d in section.recommended_diagrams 
+                if d.uniqueness_score >= 7  # Only high-uniqueness for L3
+            ][:2],  # Max 2 diagrams per L3 page
+            "content_template": self._suggest_l3_content_template(page_id),
+            "related_pages": self._suggest_related_pages(section_id, page_id),
+            "effort_estimate_hours": 3.0  # Average L3 page
+        }
+        
+        return Ok(page_advisory)
+    
+    def _suggest_l3_content_template(self, page_id: str) -> List[str]:
+        """Suggest content structure for an L3 page."""
+        return [
+            f"# {page_id.replace('-', ' ').title()}",
+            "",
+            "## Overview",
+            "Brief description of what this page covers.",
+            "",
+            "## Key Concepts",
+            "Core concepts with explanations.",
+            "",
+            "## Implementation Details",
+            "Technical details, code examples, configuration.",
+            "",
+            "## Examples",
+            "Practical examples with explanations.",
+            "",
+            "## Related Topics",
+            "Links to related L3 pages and external resources."
+        ]
+    
+    def _suggest_related_pages(self, section_id: str, page_id: str) -> List[str]:
+        """Suggest related L3 pages."""
+        # Common related pages per section
+        related_map = {
+            "01-cortex-brain": ["tier0-governance", "tier1-acceptance", "state-management", "knowledge-graph"],
+            "02-orchestrators": ["master-orchestrator", "tdd-orchestrator", "planning-orchestrator", "wiring"],
+            "04-architecture": ["layer-architecture", "design-decisions", "component-map"],
+            "05-lens-protocol": ["ast-analyzer", "git-history", "comment-extractor"],
+            "11-mcp-tools": ["tool-registry", "api-reference", "integration-guide"]
+        }
+        
+        section_pages = related_map.get(section_id, [])
+        return [p for p in section_pages if p != page_id][:4]
+    
+    def _compare_approaches(
+        self, 
+        visualization_type: str, 
+        data_complexity: str = "medium"
+    ) -> Result[Dict[str, Any], str]:
+        """
+        Compare D3.js vs SVG vs Mermaid for a visualization type.
+        
+        Args:
+            visualization_type: Type of visualization (e.g., "network", "pipeline", "tree")
+            data_complexity: "low", "medium", or "high"
+        
+        Returns:
+            Result with comparison and recommendation
+        """
+        comparisons = {
+            "network": {
+                "d3": {
+                    "rating": 9,
+                    "pros": ["Full interactivity", "Force-directed layout", "Drag nodes", "Filter/highlight"],
+                    "cons": ["More code (~150 lines)", "Requires D3.js knowledge"],
+                    "effort_hours": 4.0,
+                    "best_for": "Complex relationships, large datasets, exploration"
+                },
+                "svg": {
+                    "rating": 5,
+                    "pros": ["Simple static layout", "Fast to create"],
+                    "cons": ["No interactivity", "Manual positioning", "Hard to maintain"],
+                    "effort_hours": 2.0,
+                    "best_for": "Simple, fixed networks (<10 nodes)"
+                },
+                "mermaid": {
+                    "rating": 3,
+                    "pros": ["Declarative syntax", "Quick prototyping"],
+                    "cons": ["Limited styling", "Poor glassmorphism fit", "No drag/filter"],
+                    "effort_hours": 0.5,
+                    "best_for": "Documentation drafts, not production"
+                }
+            },
+            "pipeline": {
+                "d3": {
+                    "rating": 6,
+                    "pros": ["Animated flows", "Interactive stages"],
+                    "cons": ["Overkill for linear flows", "More maintenance"],
+                    "effort_hours": 3.0,
+                    "best_for": "Complex branching, animated data flow"
+                },
+                "svg": {
+                    "rating": 9,
+                    "pros": ["Perfect glassmorphism control", "CSS animations", "Lightweight"],
+                    "cons": ["Manual updates for changes"],
+                    "effort_hours": 2.0,
+                    "best_for": "Linear flows, layer diagrams, approved production style"
+                },
+                "mermaid": {
+                    "rating": 4,
+                    "pros": ["Quick syntax", "Auto-layout"],
+                    "cons": ["Styling conflicts", "Generic look"],
+                    "effort_hours": 0.5,
+                    "best_for": "Quick drafts only"
+                }
+            },
+            "tree": {
+                "d3": {
+                    "rating": 10,
+                    "pros": ["Collapsible nodes", "Zoom/pan", "Search", "Large trees"],
+                    "cons": ["Requires tree data format"],
+                    "effort_hours": 4.0,
+                    "best_for": "AST, hierarchies, file trees, org charts"
+                },
+                "svg": {
+                    "rating": 4,
+                    "pros": ["Simple static trees"],
+                    "cons": ["No interactivity", "Manual layout calculations"],
+                    "effort_hours": 3.0,
+                    "best_for": "Small fixed trees (<20 nodes)"
+                },
+                "mermaid": {
+                    "rating": 2,
+                    "pros": ["Quick syntax"],
+                    "cons": ["No collapse", "Poor large tree handling"],
+                    "effort_hours": 0.5,
+                    "best_for": "Tiny trees, prototyping only"
+                }
+            },
+            "sankey": {
+                "d3": {
+                    "rating": 10,
+                    "pros": ["D3-sankey plugin", "Flow proportions", "Hover details"],
+                    "cons": ["Requires d3-sankey library"],
+                    "effort_hours": 5.0,
+                    "best_for": "Data flow, resource allocation, any proportional flow"
+                },
+                "svg": {
+                    "rating": 2,
+                    "pros": ["Possible but painful"],
+                    "cons": ["Manual path calculations", "No flow proportions"],
+                    "effort_hours": 8.0,
+                    "best_for": "Not recommended"
+                },
+                "mermaid": {
+                    "rating": 0,
+                    "pros": [],
+                    "cons": ["Not supported"],
+                    "effort_hours": 0,
+                    "best_for": "N/A - use D3.js"
+                }
+            },
+            "timeline": {
+                "d3": {
+                    "rating": 9,
+                    "pros": ["Zoom to range", "Event markers", "Brush selection"],
+                    "cons": ["Time scale complexity"],
+                    "effort_hours": 4.0,
+                    "best_for": "Git history, event sequences, version history"
+                },
+                "svg": {
+                    "rating": 6,
+                    "pros": ["Simple linear timeline"],
+                    "cons": ["No zoom", "Fixed time range"],
+                    "effort_hours": 2.5,
+                    "best_for": "Small, fixed timelines"
+                },
+                "mermaid": {
+                    "rating": 5,
+                    "pros": ["Gantt chart support"],
+                    "cons": ["Limited styling", "Fixed layout"],
+                    "effort_hours": 1.0,
+                    "best_for": "Gantt charts only"
+                }
+            }
+        }
+        
+        viz_type = visualization_type.lower()
+        if viz_type not in comparisons:
+            available = list(comparisons.keys())
+            return Err(
+                f"Unknown visualization type: {visualization_type}\n"
+                f"Available types: {', '.join(available)}"
+            )
+        
+        comp = comparisons[viz_type]
+        
+        # Determine verdict based on complexity
+        complexity_weight = {"low": 0.5, "medium": 1.0, "high": 1.5}.get(data_complexity, 1.0)
+        
+        # Score adjustments for complexity
+        scores = {}
+        for lib, data in comp.items():
+            base_score = data["rating"]
+            if data_complexity == "high" and lib == "d3":
+                base_score += 2  # D3 handles complexity better
+            elif data_complexity == "low" and lib == "svg":
+                base_score += 1  # SVG is fine for simple cases
+            scores[lib] = min(10, base_score)
+        
+        winner = max(scores, key=scores.get)
+        
+        return Ok({
+            "visualization_type": visualization_type,
+            "data_complexity": data_complexity,
+            "comparison": comp,
+            "scores": scores,
+            "verdict": winner,
+            "verdict_reason": f"{winner.upper()} is best for {viz_type} with {data_complexity} complexity. "
+                            f"Score: {scores[winner]}/10. "
+                            f"{comp[winner]['best_for']}"
+        })
+    
+    def _list_sections(self) -> Result[Dict[str, Any], str]:
+        """
+        List all documentation sections with status and advisory availability.
+        
+        Returns:
+            Result with sections list and status
+        """
+        sections = []
+        
+        for section_id, data in DIAGRAM_RECOMMENDATIONS.items():
+            # Check if section folder exists
+            section_path = self.docs_root / section_id
+            has_folder = section_path.exists()
+            has_index = (section_path / "index.html").exists() if has_folder else False
+            
+            sections.append({
+                "section_id": section_id,
+                "title": data["title"],
+                "theme_accent": data["theme_accent"],
+                "status": "COMPLETE" if has_index else ("FOLDER_EXISTS" if has_folder else "PENDING"),
+                "diagram_count": len(data["diagrams"]),
+                "total_effort_hours": sum(d["effort"] for d in data["diagrams"]) + 2.0,
+                "advisory_available": True
+            })
+        
+        # Check for sections not in knowledge base
+        for folder in self.docs_root.iterdir():
+            if not folder.is_dir():
+                continue
+            if folder.name.startswith(("_", ".", "assets", "archives", "stylesheets", "theme")):
+                continue
+            if not any(s["section_id"] == folder.name for s in sections):
+                sections.append({
+                    "section_id": folder.name,
+                    "title": folder.name.replace("-", " ").title(),
+                    "theme_accent": "#6b7280",  # Gray - no specific theme
+                    "status": "NO_ADVISORY",
+                    "diagram_count": 0,
+                    "total_effort_hours": 0,
+                    "advisory_available": False
+                })
+        
+        return Ok({
+            "sections": sorted(sections, key=lambda x: x["section_id"]),
+            "total_sections": len(sections),
+            "with_advisory": sum(1 for s in sections if s["advisory_available"]),
+            "completed": sum(1 for s in sections if s["status"] == "COMPLETE")
+        })
     
     # ========================================================================
     # TEMPLATE EXTRACTION
