@@ -46,13 +46,8 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 logger = logging.getLogger(__name__)
 
-
-class SeverityLevel(Enum):
-    """Duplication severity levels"""
-    CRITICAL = 4  # Exact duplicates, must consolidate
-    HIGH = 3      # Semantic duplicates, should consolidate
-    MEDIUM = 2    # Partial duplicates, consider consolidating
-    LOW = 1       # Minor duplicates, informational
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+from cortex.models.canonical_enums import SeverityLevel
 
 
 class DuplicationType(Enum):

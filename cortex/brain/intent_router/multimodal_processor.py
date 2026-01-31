@@ -25,19 +25,13 @@ import json
 from cortex.brain.intent_router.classifier import IntentClassifier, IntentCategory
 
 
-# CONSOLIDATED: Import from cortex.intent_router.multimodal_processor
-# class InputModality(Enum):
-    """Input modality types for intent processing.
-    
-    Attributes:
-        TEXT: Natural language text
-        JSON: Structured JSON/dict format
-        COMMAND: Command-line style input
-        CODE: Code snippet or context
-        SCHEMA: Domain-specific schema
-    """
+class InputModality(Enum):
+    """Input modality types for intent processing."""
     TEXT = "text"
     JSON = "json"
+    COMMAND = "command"
+    CODE = "code"
+    SCHEMA = "schema"
     COMMAND = "command"
     CODE = "code"
     SCHEMA = "schema"

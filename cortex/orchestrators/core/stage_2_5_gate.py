@@ -10,10 +10,8 @@ from typing import Any, Dict, Optional, List
 from enum import Enum
 
 
-# CONSOLIDATED: Import from cortex.core.orchestrator.stage_2_5_gate
-# class GateDecision(Enum):
+class GateDecision(Enum):
     """Gate decision outcomes."""
-
     ALLOW = "allow"
     REJECT = "reject"
     REVIEW = "review"

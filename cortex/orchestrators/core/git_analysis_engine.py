@@ -25,14 +25,8 @@ from datetime import datetime
 from pathlib import Path
 from enum import Enum
 
-
 # CONSOLIDATED: Import from cortex.models.canonical_enums
-# class RiskLevel(Enum):
-    """Risk levels for changes."""
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    CRITICAL = "critical"
+from cortex.models.canonical_enums import RiskLevel
 
 
 @dataclass

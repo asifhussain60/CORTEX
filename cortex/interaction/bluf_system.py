@@ -16,36 +16,8 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
-
-class RiskLevel(Enum):
-    """Risk levels for operations."""
-    LOW = "low"          # No code modification
-    MEDIUM = "medium"    # Reversible changes
-    HIGH = "high"        # Irreversible changes
-
-
-class ComplexityLevel(Enum):
-    """Complexity score (1-13) mapping."""
-    TRIVIAL = 1           # Doc updates
-    VERY_SIMPLE = 2       # Config changes
-    SIMPLE = 3            # Single file fixes
-    MODERATE = 4          # Multi-file changes
-    COMPLEX = 5           # Moderate refactoring
-    VERY_COMPLEX = 6      # Significant changes
-    HIGHLY_COMPLEX = 7    # Major refactoring
-    EXTREME = 8           # System-wide impact
-    CRITICAL = 9          # High uncertainty
-    SYSTEM_CRITICAL = 10  # Multiple systems affected
-    ARCHITECTURAL = 11    # Architecture changes
-    TRANSFORMATIONAL = 12 # Business-model level
-    UNKNOWN = 13          # Completely unknown
-
-
-class ResponseFormat(Enum):
-    """Response formats."""
-    BLUF_ONLY = "bluf_only"        # Executive summary only
-    HYBRID = "hybrid"              # Summary + essentials
-    FULL_DETAIL = "full_detail"    # Complete analysis
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+from cortex.models.canonical_enums import RiskLevel, ComplexityLevel, ResponseFormat
 
 
 class UserPreferenceMode(Enum):

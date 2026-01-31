@@ -18,14 +18,8 @@ from pathlib import Path
 from typing import Dict, List, Set, Optional, Any
 from enum import Enum
 
-
 # CONSOLIDATED: Import from cortex.models.canonical_enums
-# class RiskLevel(Enum):
-    """Risk level classification for change impact."""
-    LOW = "LOW"
-    MEDIUM = "MEDIUM"
-    HIGH = "HIGH"
-    CRITICAL = "CRITICAL"
+from cortex.models.canonical_enums import RiskLevel
 
 
 @dataclass

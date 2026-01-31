@@ -13,20 +13,14 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, TypeVar, Union
+from enum import Enum
 
 
 T = TypeVar('T')
 
 
-# CONSOLIDATED: Import from cortex.config.unified_onboarding
-# class JourneyState(str, Enum):
-    """Onboarding journey states.
-    
-    Attributes:
-        NEW: Journey created but not started
-        IN_PROGRESS: Journey actively in progress
-        COMPLETED: Journey successfully completed
-    """
+class JourneyState(str, Enum):
+    """Onboarding journey states."""
     NEW = "new"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"

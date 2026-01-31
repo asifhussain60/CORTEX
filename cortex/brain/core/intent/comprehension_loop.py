@@ -40,10 +40,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 import yaml
 
-
 from cortex.brain.core.knowledge.knowledge_graph import KnowledgeGraph, NodeType, EdgeType
 from cortex.brain.core.intent.comprehension_yaml import (
-from cortex.models.canonical_enums import ApprovalStatus, BrainTier
     ComprehensionYAML,
     IntentSection,
     ChallengeSection,
@@ -51,6 +49,7 @@ from cortex.models.canonical_enums import ApprovalStatus, BrainTier
     RecommendationSection,
     RecommendationItem,
 )
+from cortex.models.canonical_enums import ApprovalStatus, BrainTier
 
 
 # =============================================================================

@@ -19,22 +19,8 @@ from datetime import datetime
 import time
 import threading
 
-
 # CONSOLIDATED: Import from cortex.models.canonical_enums
-# class HealthStatus(Enum):
-    """Health status enumeration.
-    
-    Values:
-        HEALTHY: System is operating normally.
-        DEGRADED: System is partially operational but functional.
-        UNHEALTHY: System cannot serve requests.
-        UNKNOWN: Health status not yet determined.
-    """
-
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
-    UNKNOWN = "unknown"
+from cortex.models.canonical_enums import HealthStatus
 
 
 @dataclass

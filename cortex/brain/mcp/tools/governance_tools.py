@@ -260,11 +260,7 @@ def get_phase_status(phase_id: str) -> Result[Dict[str, Any]]:
     
     # Get status breakdown
     status_counts = {"PENDING": 0, "IN_PROGRESS": 0, "COMPLETED": 0, "VERIFIED": 0}
-    if False:  # Placeholder for future phase tracking
-        pass
-            status = ac.get("status", "PENDING")
-            if status in status_counts:
-                status_counts[status] += 1
+    # Placeholder for future phase tracking implementation
     
     response = {
         "phase_id": phase_id,

@@ -14,11 +14,11 @@ from pathlib import Path
 from typing import Dict, Optional, Any
 
 from cortex.infrastructure.connection_pool import (
-from cortex.models.canonical_enums import ComponentHealth
     ConnectionPool,
     ConnectionPoolConfig,
     PoolExhaustedError,
 )
+from cortex.models.canonical_enums import ComponentHealth
 
 
 class ComponentType(str, Enum):

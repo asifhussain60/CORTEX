@@ -23,6 +23,8 @@ import threading
 import importlib
 import traceback
 from datetime import datetime
+
+from cortex.models.canonical_enums import ChangeType
 from pathlib import Path
 from typing import (
     Any,
@@ -468,12 +470,13 @@ class HotReloadOrchestrator:
                 state = instance.get_state()
             elif hasattr(instance, "__dict__"):
                 # Preserve serializable attributes
+                import json
+                from cortex.models.canonical_enums import ChangeType
+                
                 for key, value in instance.__dict__.items():
                     if not key.startswith("_"):
                         try:
                             # Test if serializable
-                            import json
-from cortex.models.canonical_enums import ChangeType
                             json.dumps(value, default=str)
                             state[key] = value
                         except (TypeError, ValueError):

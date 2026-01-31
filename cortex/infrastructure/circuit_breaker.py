@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T")
 
 
+# Local enum for this module (different values than canonical CircuitBreakerState)
 class CircuitState(str, Enum):
     """States for the circuit breaker."""
     CLOSED = "CLOSED"           # Normal operation

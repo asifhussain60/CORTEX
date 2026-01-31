@@ -15,6 +15,8 @@ from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime
 
+from cortex.infrastructure.enhanced_audit_logger import AuditEntry
+
 
 # =============================================================================
 # DATA STRUCTURES
@@ -39,17 +41,6 @@ class AuditValidationResult(Enum):
     SEQUENCING_ERROR = "operation_sequencing_error"
     DATABASE_ERROR = "database_error"
     NOT_FOUND = "ac_id_not_found"
-
-
-from cortex.infrastructure.enhanced_audit_logger import AuditEntry
-        return {
-            "id": self.id,
-            "timestamp": self.timestamp,
-            "ac_id": self.ac_id,
-            "operation": self.operation,
-            "actor": self.actor,
-            "details": self.details
-        }
 
 
 @dataclass

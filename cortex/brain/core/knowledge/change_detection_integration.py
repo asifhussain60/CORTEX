@@ -26,13 +26,13 @@ import logging
 from enum import Enum
 
 from cortex.brain.core.knowledge.change_detection import (
-from cortex.models.canonical_enums import ActionType
     ChangeDetectionService,
     AnomalyDetection,
     AnomalyType,
     SeverityLevel,
     ChangeHistory,
 )
+from cortex.models.canonical_enums import ActionType
 
 logger = logging.getLogger(__name__)
 

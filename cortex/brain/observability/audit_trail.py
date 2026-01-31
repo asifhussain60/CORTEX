@@ -21,6 +21,8 @@ from enum import Enum
 from pathlib import Path
 import threading
 
+from cortex.models.canonical_enums import AuditEventType
+
 logger = logging.getLogger(__name__)
 
 
@@ -166,7 +168,7 @@ class AuditTrail:
     ) -> AuditEvent:
         """Record an audit event."""
         import uuid
-from cortex.models.canonical_enums import AuditEventType
+        from cortex.models.canonical_enums import AuditEventType
         
         event_id = event_id or str(uuid.uuid4())
         event = AuditEvent(

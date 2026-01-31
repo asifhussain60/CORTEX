@@ -20,9 +20,7 @@ CORE Governance Rules Applied:
 
 from typing import Dict, Any, Optional, List, Tuple
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
-from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
@@ -208,29 +206,6 @@ class CompositeIntentDetector:
                 pass
         
         return list(set(intents))  # Remove duplicates, maintain order
-
-
-@dataclass
-class RoutingContext:
-    """
-    Represents the full context for a routing decision.
-    
-    Attributes:
-        operation: Operation name/identifier
-        description: Human-readable operation description
-        domain: Target domain (core, orchestrators, infrastructure, etc.)
-        keywords: Keywords from operation description
-        urgency: Operation urgency level (low, medium, high, critical)
-        user_intent: User's stated intent or goal
-        metadata: Additional context metadata
-    """
-    operation: str
-    description: Optional[str] = None
-    domain: Optional[str] = None
-    keywords: Optional[List[str]] = None
-    urgency: str = "medium"
-    user_intent: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class IntentRouter(IOrchestrator):
