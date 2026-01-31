@@ -1,4 +1,4 @@
-# QA Automation Integration Patterns - HealthEquity Platform
+# QA Automation Integration Patterns
 # Extracted from: Platform.Classic.Tests ClassicQA documentation
 # Version: 1.0
 # Date: 2026-01-28
@@ -7,7 +7,7 @@ framework: "ClassicQA Test Automation Framework"
 integrations:
   - Database (SQL Server, Dapper ORM)
   - WCF Services
-  - Authentication (Auth0, HqyLogin)
+  - Authentication (Auth0)
   - Azure DevOps (ADO)
   - Caching (Couchbase)
   - Browser Automation (Playwright MCP)
@@ -252,9 +252,9 @@ authentication_integration:
       partner: "PartnerHomePage"
       broker: "BrokerHomePage"
   
-  hqy_login:
-    description: "HealthEquity login system for member users"
-    namespace: "HqyLogin"
+  custom_login:
+    description: "Custom login system for member users"
+    namespace: "CustomLogin"
     
     login_utilities:
       login_as_user:
@@ -386,7 +386,7 @@ browser_automation:
     
     prompt_examples:
       basic: "Automate ADO 123456"
-      with_url: "Automate ADO 123456 starting at https://uat2.healthequity.com"
+      with_url: "Automate ADO 123456 starting at https://uat2.example.com"
       with_context: "Automate ADO 123456 as employer user"
       visible: "Automate ADO 123456 with visible browser"
 

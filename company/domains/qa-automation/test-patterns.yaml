@@ -1,4 +1,4 @@
-# QA Automation Test Patterns - HealthEquity Platform
+# QA Automation Test Patterns
 # Extracted from: Platform.Classic.Tests ClassicQA documentation
 # Version: 1.0
 # Date: 2026-01-28
@@ -327,7 +327,7 @@ data_creation_patterns:
       usage: "Complex multi-entity test setups"
       example: |
         var entity = new CardScenario(FW)
-            .WithPartner("HealthEquity")
+            .WithPartner("Partner")
             .WithProduct(FeeScheduleBuilder.GenericProductXmlAttachment)
             .WithTpa()
             .WithPurseType("HS")
