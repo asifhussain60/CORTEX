@@ -23,6 +23,16 @@ from cortex.brain.analysis.comment_extractor import (
     DocstringInfo,
     CommentExtractionResult,
 )
+from cortex.brain.analysis.vision_analyzer import (
+    VisionAnalyzer,
+    VisionAnalysisResult,
+    UIElement,
+    ExtractedURL,
+    DetectedIssue,
+    ImageType,
+    AnalysisDepth,
+    analyze_image,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -38,4 +48,12 @@ __all__ = [
     "Comment",
     "DocstringInfo",
     "CommentExtractionResult",
+    "VisionAnalyzer",
+    "VisionAnalysisResult",
+    "UIElement",
+    "ExtractedURL",
+    "DetectedIssue",
+    "ImageType",
+    "AnalysisDepth",
+    "analyze_image",
 ]
