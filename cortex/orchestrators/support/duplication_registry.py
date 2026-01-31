@@ -38,14 +38,7 @@ from cortex.brain.core.orchestrator_base import (
     OrchestrationStatus,
 )
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-
-
-class SeverityLevel(Enum):
-    """Duplication severity levels."""
-    CRITICAL = "CRITICAL"
-    HIGH = "HIGH"
-    MEDIUM = "MEDIUM"
-    LOW = "LOW"
+from cortex.models.canonical_enums import SeverityLevel
 
 
 class DuplicationStatus(Enum):

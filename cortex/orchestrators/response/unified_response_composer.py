@@ -52,17 +52,7 @@ class FormattingProfile(str, Enum):
     RICH = "rich"
 
 
-
-
-class VariableType(str, Enum):
-    """Template variable type (from response_templates)."""
-    STRING = "string"
-    INTEGER = "integer"
-    BOOLEAN = "boolean"
-    LIST = "list"
-    OPTIONAL = "optional"
-
-
+from cortex.models.canonical_enums import VariableType
 
 
 class QualityMetricType(str, Enum):

@@ -506,6 +506,33 @@ class ValidationSeverity(Enum):
     CRITICAL = "critical"
 
 
+class SeverityLevel(str, Enum):
+    """Severity levels for duplication detection and performance bottlenecks.
+    
+    CORE-035: Canonical definition - import from here, not redefine.
+    Used by: Duplication registry, performance profiler
+    
+    Note: Uses (str, Enum) for string comparison and JSON serialization.
+    """
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+
+class VariableType(str, Enum):
+    """Template variable types.
+    
+    CORE-035: Canonical definition - import from here, not redefine.
+    Used by: Response templates, unified response composer
+    """
+    STRING = "string"
+    INTEGER = "integer"
+    BOOLEAN = "boolean"
+    LIST = "list"
+    OPTIONAL = "optional"
+
+
 # ============================================================================
 # RISK & COMPLEXITY ENUMS (CORE-035 Consolidated)
 # ============================================================================
@@ -786,6 +813,9 @@ __all__ = [
     # Coherence & Validation
     "CoherenceType",
     "ValidationLevel",
+    "ValidationSeverity",
+    "SeverityLevel",
+    "VariableType",
     # Continuation & Decision
     "ContinuationReason",
     "DecisionStatus",

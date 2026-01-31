@@ -25,13 +25,7 @@ class BottleneckType(str, Enum):
     THROUGHPUT = "throughput"
 
 
-class SeverityLevel(str, Enum):
-    """Severity levels for bottlenecks."""
-
-    LOW = "LOW"
-    MEDIUM = "MEDIUM"
-    HIGH = "HIGH"
-    CRITICAL = "CRITICAL"
+from cortex.models.canonical_enums import SeverityLevel
 
 
 class ComplexityLevel(str, Enum):

@@ -11,24 +11,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-from cortex.models.canonical_enums import ResponseType
-
-
-class VariableType(str, Enum):
-    """Template variable types.
-    
-    Attributes:
-        STRING: String value
-        INTEGER: Integer value
-        BOOLEAN: Boolean value
-        LIST: List value
-        OPTIONAL: Any type (optional variable)
-    """
-    STRING = "string"
-    INTEGER = "integer"
-    BOOLEAN = "boolean"
-    LIST = "list"
-    OPTIONAL = "optional"
+from cortex.models.canonical_enums import ResponseType, VariableType
 
 
 @dataclass
