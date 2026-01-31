@@ -15,6 +15,7 @@ AC-ID: LENS-DASH-GENERATOR-001
 """
 
 import json
+import yaml
 from pathlib import Path
 from typing import Any, Dict, List, Set
 
@@ -179,23 +180,63 @@ def generate_orchestrators_json(repo_path: Path, output_path: Path) -> None:
     """
     print("📊 Generating orchestrators.json...")
     
-    # TODO: Parse wiring.yaml + analyze method calls
+    # Load wiring.yaml
+    wiring_path = repo_path / "cortex" / "wiring" / "specifications" / "wiring.yaml"
+    if not wiring_path.exists():
+        print(f"   ⚠️  wiring.yaml not found at {wiring_path}")
+        return
+    
+    with open(wiring_path) as f:
+        wiring_data = yaml.safe_load(f)
+    
+    # Extract orchestrators
+    orchestrators = wiring_data.get("orchestrators", {})
+    nodes = []
+    links = []
+    
+    # Process each category
+    for category in ["core", "domain", "support"]:
+        orch_list = orchestrators.get(category, [])
+        for orch in orch_list:
+            name = orch.get("name", "Unknown")
+            capabilities = orch.get("capabilities", [])
+            dependencies = orch.get("dependencies", [])
+            
+            # Create node
+            nodes.append({
+                "id": name,
+                "category": category,
+                "capabilities": capabilities,
+                "method_count": len(capabilities),  # Approximate
+                "wired": True,
+                "module": orch.get("module", ""),
+                "tier": orch.get("tier", 0),
+                "priority": orch.get("priority", 0)
+            })
+            
+            # Create edges for dependencies
+            for dep in dependencies:
+                links.append({
+                    "source": name,
+                    "target": dep,
+                    "type": "depends_on"
+                })
+    
     orchestrators_data = {
-        "nodes": [
-            {"id": "MasterOrchestrator", "category": "core", "methods": 15, "wired": True},
-            {"id": "TDDOrchestrator", "category": "core", "methods": 8, "wired": True},
-            {"id": "IntentRouter", "category": "core", "methods": 12, "wired": True},
-            {"id": "EnforcementOrchestrator", "category": "core", "methods": 10, "wired": True}
-        ],
-        "links": [
-            {"source": "MasterOrchestrator", "target": "TDDOrchestrator", "type": "invokes"},
-            {"source": "MasterOrchestrator", "target": "IntentRouter", "type": "invokes"}
-        ]
+        "nodes": nodes,
+        "links": links,
+        "stats": {
+            "total": len(nodes),
+            "core": len([n for n in nodes if n["category"] == "core"]),
+            "domain": len([n for n in nodes if n["category"] == "domain"]),
+            "support": len([n for n in nodes if n["category"] == "support"])
+        }
     }
     
     with open(output_path, 'w') as f:
         json.dump(orchestrators_data, f, indent=2)
     
+    print(f"   ✅ Found {len(nodes)} orchestrators ({orchestrators_data['stats']['core']} core, {orchestrators_data['stats']['domain']} domain, {orchestrators_data['stats']['support']} support)")
     print(f"   ✅ Saved to {output_path}")
 
 
@@ -209,17 +250,47 @@ def generate_timeline_json(repo_path: Path, output_path: Path) -> None:
     """
     print("⏰ Generating timeline.json...")
     
-    # TODO: Use GitHistoryAnalyzer
-    timeline_data = {
-        "commits": [],
-        "total_commits": 0,
-        "date_range": {"start": "2025-01-01", "end": "2026-01-31"}
-    }
-    
-    with open(output_path, 'w') as f:
-        json.dump(timeline_data, f, indent=2)
-    
-    print(f"   ✅ Saved to {output_path}")
+    try:
+        analyzer = GitHistoryAnalyzer(repo_path=repo_path)
+        
+        # Get recent commits (last 200)
+        result = analyzer.get_recent_commits(max_commits=200)
+        commits = result.commits if result.success else []
+        
+        timeline_data = {
+            "commits": [
+                {
+                    "date": commit.date,
+                    "author": commit.author,
+                    "message": commit.message[:100],  # Truncate
+                    "hash": commit.hash[:8],  # Short hash
+                    "files_changed": len(commit.files)
+                }
+                for commit in commits
+            ],
+            "total_commits": len(commits),
+            "date_range": {
+                "start": commits[-1].date if commits else "",
+                "end": commits[0].date if commits else ""
+            },
+            "authors": list(set(c.author for c in commits))
+        }
+        
+        with open(output_path, 'w') as f:
+            json.dump(timeline_data, f, indent=2)
+        
+        print(f"   ✅ Found {len(commits)} commits from {len(timeline_data['authors'])} authors")
+        print(f"   ✅ Saved to {output_path}")
+    except Exception as e:
+        print(f"   ⚠️  Error analyzing git history: {e}")
+        # Fallback placeholder
+        timeline_data = {
+            "commits": [],
+            "total_commits": 0,
+            "date_range": {"start": "", "end": ""}
+        }
+        with open(output_path, 'w') as f:
+            json.dump(timeline_data, f, indent=2)
 
 
 def generate_impact_json(repo_path: Path, output_path: Path) -> None:
@@ -232,17 +303,51 @@ def generate_impact_json(repo_path: Path, output_path: Path) -> None:
     """
     print("💥 Generating impact.json...")
     
-    impact_data = {
-        "target": "all",
-        "affected_files": [],
-        "impact_score": 0.0,
-        "hotspots": []
-    }
-    
-    with open(output_path, 'w') as f:
-        json.dump(impact_data, f, indent=2)
-    
-    print(f"   ✅ Saved to {output_path}")
+    try:
+        analyzer = GitHistoryAnalyzer(repo_path=repo_path)
+        
+        # Get file change frequencies (recent 100 commits)
+        result = analyzer.get_recent_commits(max_commits=100)
+        commits = result.commits if result.success else []
+        
+        # Count file changes
+        file_changes: Dict[str, int] = {}
+        for commit in commits:
+            for file_path in commit.files:
+                file_changes[file_path] = file_changes.get(file_path, 0) + 1
+        
+        # Identify hotspots (files changed > 5 times)
+        hotspots = [
+            {"file": f, "changes": count}
+            for f, count in sorted(file_changes.items(), key=lambda x: x[1], reverse=True)
+            if count > 5
+        ][:20]  # Top 20
+        
+        impact_data = {
+            "target": "all",
+            "affected_files": list(file_changes.keys())[:50],  # Top 50
+            "impact_score": len(file_changes) / max(len(commits), 1),  # Files per commit
+            "hotspots": hotspots,
+            "total_files_changed": len(file_changes),
+            "analysis_period_days": 30
+        }
+        
+        with open(output_path, 'w') as f:
+            json.dump(impact_data, f, indent=2)
+        
+        print(f"   ✅ Analyzed {len(file_changes)} files, found {len(hotspots)} hotspots")
+        print(f"   ✅ Saved to {output_path}")
+    except Exception as e:
+        print(f"   ⚠️  Error analyzing impact: {e}")
+        # Fallback placeholder
+        impact_data = {
+            "target": "all",
+            "affected_files": [],
+            "impact_score": 0.0,
+            "hotspots": []
+        }
+        with open(output_path, 'w') as f:
+            json.dump(impact_data, f, indent=2)
 
 
 def generate_brain_json(repo_path: Path, output_path: Path) -> None:

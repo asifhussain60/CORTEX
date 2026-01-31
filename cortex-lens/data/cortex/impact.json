@@ -2,5 +2,7 @@
   "target": "all",
   "affected_files": [],
   "impact_score": 0.0,
-  "hotspots": []
+  "hotspots": [],
+  "total_files_changed": 0,
+  "analysis_period_days": 30
 }

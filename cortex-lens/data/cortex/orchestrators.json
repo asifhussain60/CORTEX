@@ -1,40 +1,498 @@
 {
   "nodes": [
     {
-      "id": "MasterOrchestrator",
+      "id": "InteractionOrchestrator",
       "category": "core",
-      "methods": 15,
-      "wired": true
-    },
-    {
-      "id": "TDDOrchestrator",
-      "category": "core",
-      "methods": 8,
-      "wired": true
+      "capabilities": [
+        "comprehension",
+        "lens_protocol",
+        "challenge_generation",
+        "pattern_enforcement"
+      ],
+      "method_count": 4,
+      "wired": true,
+      "module": "cortex.orchestrators.core.interaction_orchestrator",
+      "tier": 1,
+      "priority": 10
     },
     {
       "id": "IntentRouter",
       "category": "core",
-      "methods": 12,
-      "wired": true
+      "capabilities": [
+        "intent_classification",
+        "confidence_scoring",
+        "domain_routing",
+        "fuzzy_matching"
+      ],
+      "method_count": 4,
+      "wired": true,
+      "module": "cortex.orchestrators.core.intent_router",
+      "tier": 1,
+      "priority": 20
+    },
+    {
+      "id": "LENSSynthesis",
+      "category": "core",
+      "capabilities": [
+        "dor_generation",
+        "approval_gate",
+        "synthesis"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.core.lens_synthesis",
+      "tier": 1,
+      "priority": 25
     },
     {
       "id": "EnforcementOrchestrator",
       "category": "core",
-      "methods": 10,
-      "wired": true
+      "capabilities": [
+        "governance_enforcement",
+        "tier0_blocking",
+        "tier1_escalation",
+        "parallel_validation"
+      ],
+      "method_count": 4,
+      "wired": true,
+      "module": "cortex.orchestrators.core.enforcement_orchestrator",
+      "tier": 1,
+      "priority": 27
+    },
+    {
+      "id": "TDDOrchestrator",
+      "category": "core",
+      "capabilities": [
+        "test_generation",
+        "tdd_workflow",
+        "test_execution"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.core.tdd_orchestrator",
+      "tier": 1,
+      "priority": 30
+    },
+    {
+      "id": "WorkflowOrchestrator",
+      "category": "core",
+      "capabilities": [
+        "workflow_management",
+        "step_orchestration"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.workflow_orchestrator",
+      "tier": 1,
+      "priority": 35
+    },
+    {
+      "id": "MasterOrchestrator",
+      "category": "core",
+      "capabilities": [
+        "coordination",
+        "stage_management",
+        "orchestrator_routing"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.core.master_orchestrator",
+      "tier": 1,
+      "priority": 100
+    },
+    {
+      "id": "RefactoringOrchestrator",
+      "category": "domain",
+      "capabilities": [
+        "code_refactoring",
+        "pattern_application",
+        "smell_detection"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.domain.enhanced_refactoring_orchestrator",
+      "tier": 2,
+      "priority": 50
+    },
+    {
+      "id": "PlanningOrchestrator",
+      "category": "domain",
+      "capabilities": [
+        "plan_generation",
+        "phase_management",
+        "milestone_tracking"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.domain.enhanced_planning_orchestrator",
+      "tier": 2,
+      "priority": 51
+    },
+    {
+      "id": "DocumentationOrchestrator",
+      "category": "domain",
+      "capabilities": [
+        "doc_generation",
+        "api_documentation",
+        "changelog_management"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.domain.enhanced_documentation_orchestrator",
+      "tier": 2,
+      "priority": 52
+    },
+    {
+      "id": "PhaseExecutor",
+      "category": "domain",
+      "capabilities": [
+        "phase_execution",
+        "checkpoint_management"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.domain.phase_executor",
+      "tier": 2,
+      "priority": 53
+    },
+    {
+      "id": "AutonomousExecutionEngine",
+      "category": "domain",
+      "capabilities": [
+        "autonomous_execution",
+        "multi_step_operations"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.domain.autonomous_execution_engine",
+      "tier": 2,
+      "priority": 54
+    },
+    {
+      "id": "ConversationOrchestrator",
+      "category": "domain",
+      "capabilities": [
+        "conversation_management",
+        "context_tracking"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.conversation_orchestrator",
+      "tier": 2,
+      "priority": 55
+    },
+    {
+      "id": "OnboardingOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "user_onboarding",
+        "tutorial_guidance"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.onboarding_orchestrator",
+      "tier": 3,
+      "priority": 60
+    },
+    {
+      "id": "ToolDiscoveryOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "tool_discovery",
+        "capability_enumeration"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.tool_discovery_orchestrator",
+      "tier": 3,
+      "priority": 61
+    },
+    {
+      "id": "UpgradeOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "version_upgrade",
+        "migration_assistance"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.support.upgrade_orchestrator",
+      "tier": 3,
+      "priority": 62
+    },
+    {
+      "id": "RollbackOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "rollback_execution",
+        "checkpoint_restore"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.support.rollback_orchestrator",
+      "tier": 3,
+      "priority": 63
+    },
+    {
+      "id": "SetupOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "environment_setup",
+        "dependency_installation"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.support.setup_orchestrator",
+      "tier": 3,
+      "priority": 64
+    },
+    {
+      "id": "GovernanceRegistry",
+      "category": "support",
+      "capabilities": [
+        "governance_enforcement",
+        "rule_management"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.brain.core.governance_registry",
+      "tier": 3,
+      "priority": 66
+    },
+    {
+      "id": "KnowledgeRepository",
+      "category": "support",
+      "capabilities": [
+        "knowledge_retrieval",
+        "relationship_mapping"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.brain.core.knowledge.knowledge_repository",
+      "tier": 3,
+      "priority": 67
+    },
+    {
+      "id": "WrappedTDDOrchestrator",
+      "category": "support",
+      "capabilities": [
+        "wrapped_tdd",
+        "enhanced_testing"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.wrapped_tdd_orchestrator",
+      "tier": 3,
+      "priority": 68
+    },
+    {
+      "id": "FuzzyIntentMatcher",
+      "category": "support",
+      "capabilities": [
+        "fuzzy_matching",
+        "intent_disambiguation"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.fuzzy_intent_matcher",
+      "tier": 3,
+      "priority": 69
+    },
+    {
+      "id": "ComprehensionSession",
+      "category": "support",
+      "capabilities": [
+        "session_management",
+        "comprehension_tracking"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.comprehension_session",
+      "tier": 3,
+      "priority": 70
+    },
+    {
+      "id": "DoRApprovalGate",
+      "category": "support",
+      "capabilities": [
+        "approval_gating",
+        "dor_validation"
+      ],
+      "method_count": 2,
+      "wired": true,
+      "module": "cortex.orchestrators.core.dor_approval_gate",
+      "tier": 3,
+      "priority": 73
+    },
+    {
+      "id": "ChallengeEngine",
+      "category": "support",
+      "capabilities": [
+        "hard_security_gates",
+        "threat_blocking",
+        "challenge_enforcement"
+      ],
+      "method_count": 3,
+      "wired": true,
+      "module": "cortex.orchestrators.core.challenge_engine",
+      "tier": 3,
+      "priority": 71
+    },
+    {
+      "id": "DuplicationDetector",
+      "category": "support",
+      "capabilities": [
+        "exact_duplication_detection",
+        "semantic_duplication_detection",
+        "copy_paste_pattern_detection",
+        "severity_scoring",
+        "consolidation_suggestions",
+        "duplication_reporting"
+      ],
+      "method_count": 6,
+      "wired": true,
+      "module": "cortex.orchestrators.support.duplication_detector_orchestrator",
+      "tier": 3,
+      "priority": 74
+    },
+    {
+      "id": "RecommendationEngine",
+      "category": "support",
+      "capabilities": [
+        "security_recommendations",
+        "solid_recommendations",
+        "performance_recommendations",
+        "compliance_recommendations",
+        "best_practice_advisory"
+      ],
+      "method_count": 5,
+      "wired": true,
+      "module": "cortex.orchestrators.support.recommendation_engine",
+      "tier": 3,
+      "priority": 72
     }
   ],
   "links": [
     {
-      "source": "MasterOrchestrator",
+      "source": "IntentRouter",
+      "target": "InteractionOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "LENSSynthesis",
+      "target": "IntentRouter",
+      "type": "depends_on"
+    },
+    {
+      "source": "EnforcementOrchestrator",
+      "target": "LENSSynthesis",
+      "type": "depends_on"
+    },
+    {
+      "source": "TDDOrchestrator",
+      "target": "InteractionOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "TDDOrchestrator",
+      "target": "IntentRouter",
+      "type": "depends_on"
+    },
+    {
+      "source": "WorkflowOrchestrator",
       "target": "TDDOrchestrator",
-      "type": "invokes"
+      "type": "depends_on"
+    },
+    {
+      "source": "MasterOrchestrator",
+      "target": "InteractionOrchestrator",
+      "type": "depends_on"
     },
     {
       "source": "MasterOrchestrator",
       "target": "IntentRouter",
-      "type": "invokes"
+      "type": "depends_on"
+    },
+    {
+      "source": "MasterOrchestrator",
+      "target": "LENSSynthesis",
+      "type": "depends_on"
+    },
+    {
+      "source": "MasterOrchestrator",
+      "target": "TDDOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "RefactoringOrchestrator",
+      "target": "MasterOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "PlanningOrchestrator",
+      "target": "MasterOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "DocumentationOrchestrator",
+      "target": "MasterOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "PhaseExecutor",
+      "target": "PlanningOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "AutonomousExecutionEngine",
+      "target": "MasterOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "AutonomousExecutionEngine",
+      "target": "TDDOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "ConversationOrchestrator",
+      "target": "InteractionOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "WrappedTDDOrchestrator",
+      "target": "TDDOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "FuzzyIntentMatcher",
+      "target": "IntentRouter",
+      "type": "depends_on"
+    },
+    {
+      "source": "ComprehensionSession",
+      "target": "InteractionOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "DoRApprovalGate",
+      "target": "LENSSynthesis",
+      "type": "depends_on"
+    },
+    {
+      "source": "ChallengeEngine",
+      "target": "EnforcementOrchestrator",
+      "type": "depends_on"
+    },
+    {
+      "source": "RecommendationEngine",
+      "target": "ChallengeEngine",
+      "type": "depends_on"
     }
-  ]
+  ],
+  "stats": {
+    "total": 27,
+    "core": 7,
+    "domain": 6,
+    "support": 14
+  }
 }
