@@ -14,7 +14,7 @@ AC-FIX-HALLUCINATION-001: Boundary enforcement integration
 
 from __future__ import annotations
 
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -93,8 +93,7 @@ except ImportError:
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
     from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
-    from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
-    from cortex.brain.core.orchestrator.round_context import RoundContext
+    from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol, RoundContext
 except ImportError:
     # Fallback if module not accessible
     InteractionOrchestrator = None
