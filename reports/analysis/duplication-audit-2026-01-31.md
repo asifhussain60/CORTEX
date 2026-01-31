@@ -2,17 +2,17 @@
 🧠 CORTEX COMPREHENSIVE DUPLICATION AUDIT REPORT
 ================================================================================
 
-📅 Generated: 2026-01-31T07:48:43.964121
+📅 Generated: 2026-01-31T07:55:06.189586
 📍 Repository: /Users/asifhussain/PROJECTS/CORTEX
 
 ================================================================================
 📊 DUPLICATION SUMMARY
 ================================================================================
 
-✅ Total Unique Classes: 605
+✅ Total Unique Classes: 606
 ✅ Total Unique Functions: 419
-⚠️  CORE-035 Violations Found: 218
-📈 Duplicate Items: 122
+⚠️  CORE-035 Violations Found: 211
+📈 Duplicate Items: 121
 
 ================================================================================
 🔴 DETAILED VIOLATIONS (CORE-035 Enforcement)
@@ -64,17 +64,11 @@
    [2] cortex_brain/tier1/orchestrators/cleaners.py:276
 
 ❌ CLASS: ComplexityLevel
-   Locations: 10 implementations found
+   Locations: 4 implementations found
    [1] cortex/core/orchestrator/complexity_assessment.py:14
    [2] cortex/models/canonical_enums.py:511
-   [3] cortex/orchestrators/core/tool_discovery_orchestrator.py:50
-   [4] cortex/orchestrators/core/orchestrator_bootstrap.py:8
-   [5] cortex/orchestrators/support/composed_orchestrator.py:9
-   [6] cortex/orchestrators/support/setup_orchestrator.py:30
-   [7] cortex/orchestrators/support/rollback_orchestrator.py:65
-   [8] cortex/orchestrators/support/upgrade_orchestrator.py:66
-   [9] cortex/brain/core/observability/performance_profiler.py:37
-   [10] cortex/interaction/bluf_system.py:27
+   [3] cortex/brain/core/observability/performance_profiler.py:37
+   [4] cortex/interaction/bluf_system.py:27
 
 ❌ CLASS: ComplianceFramework
    Locations: 2 implementations found
@@ -147,7 +141,7 @@
 
 ❌ CLASS: DisagreementType
    Locations: 3 implementations found
-   [1] cortex/models/canonical_enums.py:523
+   [1] cortex/models/canonical_enums.py:536
    [2] cortex/orchestrators/core/challenge_engine.py:45
    [3] cortex/orchestrators/core/challenge_engine_plugins.py:21
 
@@ -159,15 +153,10 @@
 
 ❌ CLASS: EntityType
    Locations: 4 implementations found
-   [1] cortex/models/canonical_enums.py:536
+   [1] cortex/models/canonical_enums.py:549
    [2] cortex/orchestrators/core/repository_scanner.py:37
    [3] cortex/orchestrators/core/relationship_analyzer.py:31
    [4] cortex_brain/domain_brain/models.py:16
-
-❌ CLASS: EventType
-   Locations: 2 implementations found
-   [1] cortex/orchestrators/cortical/cortical_orchestrators.py:34
-   [2] cortex/sensory/git_sensory_receptor.py:22
 
 ❌ CLASS: ExecutionState
    Locations: 2 implementations found
@@ -187,7 +176,7 @@
 ❌ CLASS: HealthStatus
    Locations: 4 implementations found
    [1] cortex/core/registry/base_registry.py:53
-   [2] cortex/models/canonical_enums.py:552
+   [2] cortex/models/canonical_enums.py:565
    [3] cortex/api/health_endpoints.py:23
    [4] cortex/brain/core/production_readiness_manager.py:33
 
@@ -343,7 +332,7 @@
    Locations: 6 implementations found
    [1] cortex/core/intent/lens_response_formatter.py:15
    [2] cortex/core/orchestrator/turn_response_generator.py:13
-   [3] cortex/models/canonical_enums.py:576
+   [3] cortex/models/canonical_enums.py:589
    [4] cortex/orchestrators/response_challenge_injector.py:13
    [5] cortex/brain/core/intent/lens_response_formatter.py:32
    [6] cortex/interaction/bluf_system.py:44
@@ -422,7 +411,7 @@
    [1] cortex/mcp/unified_tool_discovery.py:27
    [2] cortex/mcp/tool_governance.py:16
    [3] cortex/orchestrators/mcp_tools_registry.py:21
-   [4] cortex/orchestrators/core/tool_discovery_orchestrator.py:58
+   [4] cortex/orchestrators/core/tool_discovery_orchestrator.py:52
 
 ❌ CLASS: TransitionType
    Locations: 2 implementations found
@@ -431,7 +420,7 @@
 
 ❌ CLASS: UserPreferenceMode
    Locations: 2 implementations found
-   [1] cortex/models/canonical_enums.py:587
+   [1] cortex/models/canonical_enums.py:600
    [2] cortex/interaction/bluf_system.py:51
 
 ❌ CLASS: ValidationError
@@ -747,7 +736,7 @@
 📋 CORE-035 COMPLIANCE STATUS
 ================================================================================
 
-⚠️  NON-COMPLIANT - 218 violations
+⚠️  NON-COMPLIANT - 211 violations
 ❌ Duplication detected - consolidation required
 🔒 DEPLOYMENT BLOCKED until duplicates resolved
 
