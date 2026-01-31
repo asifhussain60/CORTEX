@@ -23,13 +23,8 @@ logger = logging.getLogger(__name__)
 # Global in-memory registry for decorated orchestrators
 _ORCHESTRATOR_REGISTRY: Dict[str, Dict[str, Any]] = {}
 
-
-class OrchestratorMetadata:
-    """Metadata container for orchestrators."""
-    def __init__(self, name: str, class_type: Any = None, **kwargs):
-        self.name = name
-        self.class_type = class_type
-        self.__dict__.update(kwargs)
+# AC-CORE-035-01: Import canonical DecoratorMetadata
+from cortex.models.orchestrator_metadata import DecoratorMetadata as OrchestratorMetadata
 
 
 class OrchestratorRegistry:
