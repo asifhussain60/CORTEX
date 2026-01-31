@@ -31,40 +31,6 @@ button, a, input, select, textarea, [role="button"] {
 <meta content="CORTEX - AI-Powered Development Intelligence with Planning, TDD, and Autonomous Orchestration" name="description"/>
 <meta content="CORTEX, AI development, TDD, Planning System, GitHub Copilot, orchestrators" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
-
-<!-- SEO Enhancements -->
-<link rel="canonical" href="https://asifhussain60.github.io/CORTEX/" />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-
-<!-- Security Headers -->
-<meta http-equiv="Content-Security-Policy" 
-      content="default-src 'self'; 
-               script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com https://unpkg.com; 
-               style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com;
-               font-src 'self' cdnjs.cloudflare.com data:;
-               img-src 'self' data: https:;
-               connect-src 'self';
-               media-src 'self';
-               object-src 'none';
-               frame-ancestors 'none';
-               base-uri 'self';
-               form-action 'self';">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="X-XSS-Protection" content="1; mode=block">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-
-<!-- Open Graph Enhancements -->
-<meta content="CORTEX - Enterprise Development Intelligence" property="og:site_name" />
-<meta content="en_US" property="og:locale" />
-<meta content="2026-01-31T00:00:00Z" property="og:updated_time" />
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="CORTEX - Enterprise Development Intelligence" />
-<meta name="twitter:description" content="Transform your development workflow with CORTEX 4-Tier Brain, automated planning, and TDD mastery" />
-<meta name="twitter:image" content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png" />
-
 <meta content="website" property="og:type"/>
 <meta content="CORTEX - Enterprise Development Intelligence" property="og:title"/>
 <meta content="Transform your development workflow with CORTEX 4-Tier Brain, automated planning, and TDD mastery" property="og:description"/>
@@ -75,86 +41,13 @@ button, a, input, select, textarea, [role="button"] {
 <meta content="0" http-equiv="Expires"/>
 <title>CORTEX - Enterprise Development Intelligence</title>
 <link href="assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
-
-<!-- Resource Preloading for Performance -->
 <link as="image" href="assets/images/CORTEX-logo-512.png" rel="preload"/>
 <link as="image" href="assets/images/Awakening-200.png" rel="preload"/>
-<link rel="preload" href="assets/css/main.css" as="style">
-<link rel="preload" href="assets/css/index-multipanel.css" as="style">
-<link rel="preload" href="assets/js/index.js" as="script">
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
-      rel="stylesheet" 
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous"/>
 <link href="assets/css/main.css" rel="stylesheet"/>
 <link href="assets/css/index-multipanel.css" rel="stylesheet"/>
 <link href="assets/css/generated-classes.css" rel="stylesheet"/>
 <link href="assets/css/intentional-classes.css" rel="stylesheet"/>
-
-<!-- JSON-LD Structured Data for SEO -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "CORTEX",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Cross-platform",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "description": "AI-Powered Development Intelligence with MCP orchestration, 4-tier governance, and TDD mastery. 23 orchestrators for autonomous execution.",
-  "author": {
-    "@type": "Person",
-    "name": "Asif Hussain"
-  },
-  "featureList": [
-    "23 Orchestrators",
-    "4-Tier Governance (SKULL to Learned)",
-    "MCP-First Architecture",
-    "TDD Master (RED-GREEN-REFACTOR)",
-    "CORTEX LENS (AST + Git + Comments)",
-    "Evidence Bundles",
-    "Hash-Chain Audit",
-    "State Management",
-    "15+ MCP Tools"
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "1"
-  }
-}
-</script>
-
-<!-- Web Vitals Monitoring for Performance -->
-<script type="module">
-  import {onCLS, onFID, onLCP, onTTFB, onINP} from 'https://unpkg.com/web-vitals@3?module';
-  
-  function sendToAnalytics({name, value, rating, id}) {
-    // Log to console (can later send to analytics endpoint)
-    console.log(`[Web Vital] ${name}:`, {
-      value: Math.round(value),
-      rating,
-      id
-    });
-    
-    // Visual indicator for dev
-    if (rating === 'poor') {
-      console.warn(`⚠️ ${name} needs improvement: ${Math.round(value)}ms`);
-    }
-  }
-  
-  onCLS(sendToAnalytics);
-  onFID(sendToAnalytics);
-  onLCP(sendToAnalytics);
-  onTTFB(sendToAnalytics);
-  onINP(sendToAnalytics);
-</script>
-
 <style>
         /* ============================================
            PAGE LOADING OVERLAY - Glassmorphism Theme
@@ -368,55 +261,11 @@ button, a, input, select, textarea, [role="button"] {
             padding: 0.75rem;
             border-radius: 12px;
         }
-        /* Accessibility: Skip Link */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--accent-primary, #00d4ff);
-            color: #0a0e27;
-            padding: 8px 16px;
-            text-decoration: none;
-            z-index: 10001;
-            font-weight: 600;
-            border-radius: 0 0 4px 0;
-            transition: top 0.2s ease;
-        }
-        .skip-link:focus {
-            top: 0;
-        }
-
-        /* Accessibility: Screen Reader Only */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-
-        /* Accessibility: Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
     </style>
 </head>
 <body>
-<!-- Skip to Main Content Link for Accessibility -->
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
 <!-- Page Loading Overlay -->
-<div class="page-loading-overlay" id="pageLoadingOverlay" role="status" aria-live="polite" aria-label="Page is loading">
-<span class="sr-only">Loading CORTEX page content, please wait...</span>
+<div aria-live="polite" class="page-loading-overlay" id="pageLoadingOverlay" role="status">
 <div class="loading-spinner-container">
 <div class="search-results-loading">
 <div class="loading-spinner-ring"></div>
@@ -443,11 +292,11 @@ button, a, input, select, textarea, [role="button"] {
             <p class="panel-subtitle-main">4‑tier rule merger, hash‑chain audit, state, lifecycle, and evidence</p>
         </div>
         <div class="cortex-tabs" role="tablist" aria-label="Governance and audit capabilities">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="ga-tab-governance" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-governance">🧾 Governance Merger</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-audit" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-audit">🔗 Audit Infrastructure</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-state" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-state">💾 State Manager</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-lifecycle" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-lifecycle">🔁 Lifecycle</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-evidence" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="ga-tab-evidence">📑 Evidence Bundles</button>
+            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="ga-tab-governance" data-target="ga-tab-governance">🧾 Governance Merger</button>
+            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-audit" data-target="ga-tab-audit">🔗 Audit Infrastructure</button>
+            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-state" data-target="ga-tab-state">💾 State Manager</button>
+            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-lifecycle" data-target="ga-tab-lifecycle">🔁 Lifecycle</button>
+            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="ga-tab-evidence" data-target="ga-tab-evidence">📑 Evidence Bundles</button>
         </div>
         <div class="cortex-tab-panels">
             <div id="ga-tab-governance" class="cortex-tab-panel active" role="tabpanel">
@@ -499,8 +348,8 @@ button, a, input, select, textarea, [role="button"] {
             <p class="panel-subtitle-main">Phase 1.5 capabilities: universal code intelligence and HTML viewers</p>
         </div>
         <div class="cortex-tabs" role="tablist" aria-label="Discovery and toolkit">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="dt-tab-lens" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="dt-tab-lens">🔍 CORTEX LENS</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="dt-tab-toolkit" aria-keyshortcuts="ArrowLeft ArrowRight Home End" data-target="dt-tab-toolkit">🧰 CORTEX TOOLKIT</button>
+            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="dt-tab-lens" data-target="dt-tab-lens">🔍 CORTEX LENS</button>
+            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="dt-tab-toolkit" data-target="dt-tab-toolkit">🧰 CORTEX TOOLKIT</button>
         </div>
         <div class="cortex-tab-panels">
             <!-- CORTEX LENS -->
@@ -537,7 +386,7 @@ button, a, input, select, textarea, [role="button"] {
 </div>
 <section class="hero level0-hero-section" id="main-content">
 <div class="logo-container animation-t3">
-<img alt="CORTEX Logo" class="hero-logo" loading="eager" fetchpriority="high" height="500" id="heroLogo" src="assets/images/CORTEX-logo-512.png" width="500"/>
+<img alt="CORTEX Logo" class="hero-logo" height="500" id="heroLogo" src="assets/images/CORTEX-logo-512.png" width="500"/>
 </div>
 <h1 class="hero-title">CORTEX</h1>
 <p class="hero-acronym">
@@ -1124,7 +973,7 @@ button, a, input, select, textarea, [role="button"] {
 <div class="demo-video-area">
 <div aria-labelledby="e2e" class="demo-tab-panel active" id="tab-e2e" role="tabpanel">
 <div class="demo-video-wrapper">
-<video class="demo-video" controls="" loading="lazy" poster="assets/images/CORTEX-logo-512.png" preload="metadata">
+<video class="demo-video" controls="" poster="assets/images/CORTEX-logo-512.png" preload="metadata">
 <source src="assets/images/MP4/E2E-Execution.mp4" type="video/mp4"/>
                                     Your browser does not support video playback.
                                 </video>
@@ -1196,9 +1045,401 @@ button, a, input, select, textarea, [role="button"] {
 </div>
 </div>
 </section>
+<script>
+        // Mobile Logo Scroll Animation
+        (function() {
+            // Only run on mobile devices (≤768px)
+            if (window.innerWidth > 768) return;
+            
+            const logo = document.querySelector('.hero-logo');
+            if (!logo) return;
+            
+            // Start with expanded logo on mobile
+            logo.classList.add('logo-expanded');
+            
+            let ticking = false;
+            const scrollThreshold = 100; // px scrolled before shrinking
+            
+            function updateLogoSize() {
+                const scrollY = window.scrollY || window.pageYOffset;
+                
+                if (scrollY < scrollThreshold) {
+                    // At top - expand logo
+                    logo.classList.add('logo-expanded');
+                } else {
+                    // Scrolled down - shrink logo
+                    logo.classList.remove('logo-expanded');
+                }
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateLogoSize);
+                    ticking = true;
+                }
+            }
+            
+            // Listen to scroll events
+            window.addEventListener('scroll', requestTick, { passive: true });
+            
+            // Handle window resize (if user rotates device)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    logo.classList.remove('logo-expanded');
+                } else {
+                    updateLogoSize();
+                }
+            });
+            
+            // Initial check
+            updateLogoSize();
+        })();
 
-<!-- External JavaScript for Performance -->
-<script src="assets/js/index.js" defer></script>
+        // Demo Videos Tab Navigation
+        (function() {
+            const tabs = document.querySelectorAll('.demo-tab-v');
+            const panels = document.querySelectorAll('.demo-tab-panel');
+            const infoContents = document.querySelectorAll('.demo-info-content');
+            
+            if (!tabs.length || !panels.length) return;
+            
+            function switchTab(targetTab) {
+                const target = targetTab.getAttribute('data-tab');
+                
+                // Update tab states
+                tabs.forEach(tab => {
+                    const isActive = tab === targetTab;
+                    tab.classList.toggle('active', isActive);
+                    tab.setAttribute('aria-selected', isActive);
+                });
+                
+                // Update panel visibility with animation
+                panels.forEach(panel => {
+                    const isActive = panel.id === `tab-${target}`;
+                    if (isActive) {
+                        panel.classList.add('active');
+                        // Pause video when switching to new tab
+                        const video = panel.querySelector('video');
+                        if (video) video.pause();
+                    } else {
+                        panel.classList.remove('active');
+                        // Pause videos in inactive panels
+                        const video = panel.querySelector('video');
+                        if (video) video.pause();
+                    }
+                });
+                
+                // Update info panel content
+                infoContents.forEach(info => {
+                    const isTarget = info.getAttribute('data-for') === target;
+                    info.classList.toggle('hidden', !isTarget);
+                });
+                
+                // Reset play button visibility
+                const activePanel = document.querySelector('.demo-tab-panel.active');
+                if (activePanel) {
+                    const playBtn = activePanel.querySelector('.video-play-btn');
+                    if (playBtn) playBtn.classList.remove('hidden');
+                }
+            }
+            
+            // Click handler for tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab));
+            });
+            
+            // Keyboard navigation (A11y)
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('keydown', (e) => {
+                    let targetIndex;
+                    
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        targetIndex = (index + 1) % tabs.length;
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        targetIndex = (index - 1 + tabs.length) % tabs.length;
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        targetIndex = 0;
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        targetIndex = tabs.length - 1;
+                    }
+                    
+                    if (targetIndex !== undefined) {
+                        tabs[targetIndex].focus();
+                        switchTab(tabs[targetIndex]);
+                    }
+                });
+            });
+            
+            // Touch swipe support for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const videoArea = document.querySelector('.demo-video-area');
+            
+            if (videoArea) {
+                videoArea.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                
+                videoArea.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                }, { passive: true });
+                
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    const diff = touchStartX - touchEndX;
+                    
+                    if (Math.abs(diff) < swipeThreshold) return;
+                    
+                    const currentIndex = Array.from(tabs).findIndex(tab => tab.classList.contains('active'));
+                    let targetIndex;
+                    
+                    if (diff > 0) {
+                        // Swipe left - next tab
+                        targetIndex = Math.min(currentIndex + 1, tabs.length - 1);
+                    } else {
+                        // Swipe right - previous tab
+                        targetIndex = Math.max(currentIndex - 1, 0);
+                    }
+                    
+                    if (targetIndex !== currentIndex) {
+                        switchTab(tabs[targetIndex]);
+                    }
+                }
+            }
+            
+            // Custom Play Button functionality
+            document.querySelectorAll('.video-play-btn').forEach(btn => {
+                const wrapper = btn.closest('.demo-video-wrapper');
+                const video = wrapper ? wrapper.querySelector('video') : null;
+                
+                if (!video) return;
+                
+                // Click play button to start video
+                btn.addEventListener('click', () => {
+                    video.play();
+                    btn.classList.add('hidden');
+                });
+                
+                // Show play button when video is paused
+                video.addEventListener('pause', () => {
+                    btn.classList.remove('hidden');
+                });
+                
+                // Hide play button when video plays
+                video.addEventListener('play', () => {
+                    btn.classList.add('hidden');
+                });
+                
+                // Show play button when video ends
+                video.addEventListener('ended', () => {
+                    btn.classList.remove('hidden');
+                });
+            });
+        })();
+
+        // Page Loading Overlay for Navigation
+        (function() {
+            const overlay = document.getElementById('pageLoadingOverlay');
+            const destinationText = document.getElementById('loadingDestination');
+            
+            if (!overlay || !destinationText) return;
+
+            // Map of link href patterns to destination names
+            const destinationNames = {
+                'architecture': '🧠 Architecture',
+                'security': '🛡️ Security',
+                'orchestrators': '🎯 Orchestrators',
+                'token-optimization': '💰 Token Optimization',
+                'sts': '🔧 Sharpen The Saw',
+                'knowledge': '📚 Best Practices',
+                'lens': '🔍 CORTEX Lens',
+                'getting-started': '🚀 Getting Started',
+                'features': '✨ Features',
+                'governance': '🛡️ SKULL Rules',
+                'technical': '📚 Technical Docs',
+                'faq': '❓ FAQ',
+                'sitemap': '🗺️ Site Map',
+                'story': '📖 The Awakening'
+            };
+
+            // Get friendly destination name from URL
+            function getDestinationName(href) {
+                for (const [key, name] of Object.entries(destinationNames)) {
+                    if (href.includes(key)) {
+                        return name;
+                    }
+                }
+                return 'CORTEX';
+            }
+
+            // Show loading overlay
+            function showLoading(destinationName) {
+                destinationText.textContent = destinationName;
+                overlay.classList.add('active');
+            }
+
+            // Hide loading overlay (on page unload/navigation complete)
+            function hideLoading() {
+                overlay.classList.remove('active');
+            }
+
+            // Force hide overlay immediately on page load
+            hideLoading();
+
+            // Attach click handlers to navigation links
+            // Target: btn-hero links (feature tiles) and glass-card links
+            const navigationLinks = document.querySelectorAll(
+                '.btn-hero[href], .glass-card.card-link[href], .btn-hero-story[href]'
+            );
+
+            navigationLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Skip if it's an anchor link, external link, or same page
+                    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:')) {
+                        return;
+                    }
+
+                    // Show loading overlay with destination name
+                    const destinationName = getDestinationName(href);
+                    showLoading(destinationName);
+                    
+                    // Note: Navigation will proceed naturally
+                    // The overlay provides visual feedback during the load time
+                });
+            });
+
+            // Hide overlay when returning to page via back button
+            window.addEventListener('pageshow', function(e) {
+                if (e.persisted) {
+                    hideLoading();
+                }
+            });
+
+            // Also hide on focus (for browser caching scenarios)
+            window.addEventListener('focus', function() {
+                setTimeout(hideLoading, 100);
+            });
+
+            // Prevent flash on initial page load
+            document.addEventListener('DOMContentLoaded', function() {
+                hideLoading();
+                initStatsCounter();
+            });
+            
+            // Stats Counter Animation
+            function initStatsCounter() {
+                const stats = document.querySelectorAll('.bwc-stat');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const valueElement = entry.target.querySelector('.bwc-stat-value');
+                            const targetValue = parseInt(valueElement.getAttribute('data-value'));
+                            const isPercentage = valueElement.textContent.includes('%');
+                            const hasPlus = valueElement.textContent.includes('+');
+                            
+                            if (targetValue > 0) {
+                                animateValue(valueElement, 0, targetValue, 2000, isPercentage, hasPlus);
+                            }
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                stats.forEach(stat => observer.observe(stat));
+            }
+            
+            function animateValue(element, start, end, duration, isPercentage, hasPlus) {
+                const startTime = performance.now();
+                const range = end - start;
+                
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.floor(start + range * easeOut);
+                    
+                    let displayValue = current;
+                    if (hasPlus) displayValue += '+';
+                    if (isPercentage) displayValue += '%';
+                    
+                    element.textContent = displayValue;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        let finalValue = end;
+                        if (hasPlus) finalValue += '+';
+                        if (isPercentage) finalValue += '%';
+                        element.textContent = finalValue;
+                    }
+                }
+                
+                requestAnimationFrame(update);
+            }
+        })();
+
+        // Generic Tabs for Cortex Panels (Security, Orchestrators, Governance & Audit)
+        (function() {
+            const groups = document.querySelectorAll('.cortex-tabs');
+            if (!groups.length) return;
+
+            groups.forEach(group => {
+                const tabs = group.querySelectorAll('.cortex-tab');
+                const container = group.parentElement; // parent holds panels
+                const panels = container.querySelectorAll('.cortex-tab-panel');
+
+                function activate(targetId, clickedTab) {
+                    tabs.forEach(t => {
+                        const isActive = t === clickedTab;
+                        t.classList.toggle('active', isActive);
+                        t.setAttribute('aria-selected', isActive);
+                    });
+                    panels.forEach(p => {
+                        const isActive = p.id === targetId;
+                        p.classList.toggle('active', isActive);
+                        p.hidden = !isActive;
+                    });
+                }
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const target = tab.getAttribute('data-target');
+                        if (target) activate(target, tab);
+                    });
+                    // Keyboard support
+                    tab.addEventListener('keydown', (e) => {
+                        let idx = Array.from(tabs).indexOf(tab);
+                        let nextIdx = idx;
+                        if (e.key === 'ArrowRight') nextIdx = Math.min(idx + 1, tabs.length - 1);
+                        if (e.key === 'ArrowLeft') nextIdx = Math.max(idx - 1, 0);
+                        if (e.key === 'Home') nextIdx = 0;
+                        if (e.key === 'End') nextIdx = tabs.length - 1;
+                        if (nextIdx !== idx) {
+                            e.preventDefault();
+                            const nextTab = tabs[nextIdx];
+                            nextTab.focus();
+                            const target = nextTab.getAttribute('data-target');
+                            if (target) activate(target, nextTab);
+                        }
+                    });
+                });
+
+                // Initialize: hide non-active panels
+                panels.forEach(p => {
+                    if (!p.classList.contains('active')) p.hidden = true;
+                });
+            });
+        })();
+    </script>
 <!-- CORTEX CSS Layout Validator -->
 <script src="assets/js/css-layout-validator.js"></script>
 </section></body>
