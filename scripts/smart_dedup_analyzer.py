@@ -20,8 +20,11 @@ class SmartDedupAnalyzer:
         self.root = Path(root_path)
         self.enum_definitions: Dict[str, List[Tuple[Path, Set[str]]]] = defaultdict(list)
         
-    def extract_enum_values(self, filepath: Path, class_name: str) -> Set[str]:
-        """Extract enum values from a class definition."""
+    def extract_enum_values(self, filepath: Path, class_name: str) -> Set[Tuple[str, str]]:
+        """Extract enum values from a class definition.
+        
+        Returns set of (member_name, member_value) tuples for accurate comparison.
+        """
         try:
             content = filepath.read_text()
             tree = ast.parse(content)
@@ -33,7 +36,13 @@ class SmartDedupAnalyzer:
                         if isinstance(item, ast.Assign):
                             for target in item.targets:
                                 if isinstance(target, ast.Name):
-                                    values.add(target.id)
+                                    # Extract BOTH name and value for accurate comparison
+                                    member_name = target.id
+                                    if isinstance(item.value, ast.Constant):
+                                        member_value = repr(item.value.value)
+                                    else:
+                                        member_value = ast.unparse(item.value)
+                                    values.add((member_name, member_value))
                     return values
         except Exception as e:
             print(f"Error parsing {filepath}: {e}", file=sys.stderr)
@@ -73,7 +82,7 @@ class SmartDedupAnalyzer:
             if len(definitions) < 2:
                 continue
             
-            # Group by value sets
+            # Group by value sets (now includes both names and values)
             value_groups = defaultdict(list)
             for filepath, values in definitions:
                 # Convert set to frozen set for hashing
@@ -83,7 +92,9 @@ class SmartDedupAnalyzer:
             # Find groups with multiple files (true duplicates)
             for value_set, filepaths in value_groups.items():
                 if len(filepaths) > 1:
-                    key = f"{class_name} ({', '.join(sorted(value_set)[:3])}...)"
+                    # Extract just member names for display
+                    member_names = sorted([name for name, _ in value_set])
+                    key = f"{class_name} ({', '.join(member_names[:3])}...)"
                     true_dups[key] = filepaths
         
         return true_dups
@@ -142,7 +153,9 @@ class SmartDedupAnalyzer:
                 print(f"\n✓ {class_name} ({len(definitions)} implementations)")
                 for filepath, values in definitions:
                     print(f"   - {filepath.relative_to(self.root)}")
-                    print(f"     Values: {', '.join(sorted(values)[:5])}")
+                    # Display member_name=member_value format
+                    value_display = ", ".join(f"{name}={val}" for name, val in sorted(values)[:3])
+                    print(f"     Values: {value_display}")
         
         return len(true_dups)
 
