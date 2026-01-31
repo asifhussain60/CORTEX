@@ -19,7 +19,8 @@ from typing import Dict, List, Set, Optional, Any
 from enum import Enum
 
 
-class RiskLevel(Enum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class RiskLevel(Enum):
     """Risk level classification for change impact."""
     LOW = "LOW"
     MEDIUM = "MEDIUM"

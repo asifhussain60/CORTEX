@@ -25,7 +25,8 @@ import json
 from cortex.brain.intent_router.classifier import IntentClassifier, IntentCategory
 
 
-class InputModality(Enum):
+# CONSOLIDATED: Import from cortex.intent_router.multimodal_processor
+# class InputModality(Enum):
     """Input modality types for intent processing.
     
     Attributes:

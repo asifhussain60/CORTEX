@@ -30,7 +30,8 @@ class FeedbackSentiment(str, Enum):
     VERY_POSITIVE = "very_positive"
 
 
-class QualityMetricType(str, Enum):
+# CONSOLIDATED: Import from cortex.orchestrators.response.unified_response_composer
+# class QualityMetricType(str, Enum):
     """Quality metric types.
     
     Attributes:

@@ -353,7 +353,8 @@ from enum import Enum
 
 
 
-class ExecutionState(Enum):
+# CONSOLIDATED: Import from cortex.mcp.executor
+# class ExecutionState(Enum):
     """States of execution."""
     PENDING = "pending"
     RUNNING = "running"

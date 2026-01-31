@@ -46,7 +46,8 @@ class ScenarioCategory(Enum):
     STRESS = "stress"  # Stress test
 
 
-class ScenarioStatus(Enum):
+# CONSOLIDATED: Import from cortex.devx.scenario_library
+# class ScenarioStatus(Enum):
     """Execution status of scenario."""
     PENDING = "pending"
     RUNNING = "running"

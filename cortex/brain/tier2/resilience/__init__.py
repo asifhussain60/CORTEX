@@ -824,7 +824,8 @@ class CircuitBreakerOpen(Exception):
     pass
 
 
-class CircuitBreakerState(IntEnum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class CircuitBreakerState(IntEnum):
     """States of the circuit breaker."""
     CLOSED = 0      # Normal operation, all requests pass through
     OPEN = 1        # Failing, requests rejected immediately

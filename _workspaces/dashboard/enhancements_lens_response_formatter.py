@@ -29,14 +29,16 @@ import yaml
 # ENUMS
 # ============================================================================
 
-class ResponseFormat(Enum):
+# CONSOLIDATED: Import from cortex.brain.core.intent.lens_response_formatter
+# class ResponseFormat(Enum):
     """Output formats supported by the response formatter."""
     JSON = "json"
     YAML = "yaml"
     MARKDOWN = "markdown"
 
 
-class SeverityColor(Enum):
+# CONSOLIDATED: Import from cortex.brain.core.intent.lens_response_formatter
+# class SeverityColor(Enum):
     """Color mapping for severity levels (for terminal output)."""
     CRITICAL = "\033[91m"  # Red
     HIGH = "\033[93m"  # Yellow

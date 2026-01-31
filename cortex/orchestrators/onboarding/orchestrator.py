@@ -18,7 +18,8 @@ from typing import Any, Dict, List, Optional, TypeVar, Union
 T = TypeVar('T')
 
 
-class JourneyState(str, Enum):
+# CONSOLIDATED: Import from cortex.config.unified_onboarding
+# class JourneyState(str, Enum):
     """Onboarding journey states.
     
     Attributes:

@@ -5,7 +5,8 @@ from enum import Enum
 import json
 import re
 
-class FormattingProfile(Enum):
+# CONSOLIDATED: Import from cortex.orchestrators.response.unified_response_composer
+# class FormattingProfile(Enum):
     """Formatting profile presets for different use cases."""
     COMPACT = "compact"              # Minimal formatting, max content
     STANDARD = "standard"            # Balanced formatting

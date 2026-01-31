@@ -26,7 +26,8 @@ from pathlib import Path
 from enum import Enum
 
 
-class RiskLevel(Enum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class RiskLevel(Enum):
     """Risk levels for changes."""
     LOW = "low"
     MEDIUM = "medium"

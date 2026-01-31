@@ -2,7 +2,7 @@
 🧠 CORTEX COMPREHENSIVE DUPLICATION AUDIT REPORT
 ================================================================================
 
-📅 Generated: 2026-01-31T07:56:56.841426
+📅 Generated: 2026-01-31T07:58:16.447319
 📍 Repository: /Users/asifhussain/PROJECTS/CORTEX
 
 ================================================================================
@@ -11,22 +11,12 @@
 
 ✅ Total Unique Classes: 606
 ✅ Total Unique Functions: 419
-⚠️  CORE-035 Violations Found: 211
-📈 Duplicate Items: 121
+⚠️  CORE-035 Violations Found: 207
+📈 Duplicate Items: 117
 
 ================================================================================
 🔴 DETAILED VIOLATIONS (CORE-035 Enforcement)
 ================================================================================
-
-❌ CLASS: AlertSeverity
-   Locations: 2 implementations found
-   [1] cortex/models/canonical_enums.py:69
-   [2] cortex/brain/tier2/resilience/__init__.py:1582
-
-❌ CLASS: AlertState
-   Locations: 2 implementations found
-   [1] cortex/models/canonical_enums.py:85
-   [2] cortex/brain/tier2/resilience/__init__.py:1589
 
 ❌ CLASS: AuditOperationType
    Locations: 2 implementations found
@@ -52,16 +42,6 @@
    Locations: 2 implementations found
    [1] cortex/brain/tier1/orchestrators/cleaners/interface.py:160
    [2] cortex_brain/tier1/orchestrators/cleaners.py:98
-
-❌ CLASS: CleanerNotFoundError
-   Locations: 2 implementations found
-   [1] cortex/brain/tier1/orchestrators/cleaners/registry.py:31
-   [2] cortex_brain/tier1/orchestrators/cleaners.py:281
-
-❌ CLASS: CleanerRegistrationError
-   Locations: 2 implementations found
-   [1] cortex/brain/tier1/orchestrators/cleaners/registry.py:25
-   [2] cortex_brain/tier1/orchestrators/cleaners.py:276
 
 ❌ CLASS: ComplexityLevel
    Locations: 4 implementations found
@@ -736,7 +716,7 @@
 📋 CORE-035 COMPLIANCE STATUS
 ================================================================================
 
-⚠️  NON-COMPLIANT - 211 violations
+⚠️  NON-COMPLIANT - 207 violations
 ❌ Duplication detected - consolidation required
 🔒 DEPLOYMENT BLOCKED until duplicates resolved
 

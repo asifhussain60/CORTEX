@@ -14,17 +14,9 @@ from enum import Enum
 import importlib
 import logging
 
+from cortex.orchestrators.core.challenge_engine import DisagreementType
 
 logger = logging.getLogger(__name__)
-
-
-class DisagreementType(Enum):
-    """Built-in disagreement types"""
-    ARCHITECTURAL_VIOLATION = "architectural_violation"
-    HARMFUL_ACTION = "harmful_action"
-    BETTER_SOLUTION = "better_solution"
-    MISSING_CONTEXT = "missing_context"
-    REDUNDANT_WORK = "redundant_work"
 
 
 @dataclass

@@ -20,7 +20,8 @@ import time
 import threading
 
 
-class HealthStatus(Enum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class HealthStatus(Enum):
     """Health status enumeration.
     
     Values:

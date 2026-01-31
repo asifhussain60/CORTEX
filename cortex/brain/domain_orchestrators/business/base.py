@@ -24,7 +24,8 @@ class ComplianceFramework(Enum):
     SOC2 = "SOC2"         # Service Organization Control
 
 
-class RiskLevel(Enum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class RiskLevel(Enum):
     """Risk assessment levels."""
     LOW = "low"
     MEDIUM = "medium"

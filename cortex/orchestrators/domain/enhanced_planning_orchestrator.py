@@ -69,7 +69,8 @@ class ResourceType(Enum):
     DEVELOPER_HOURS = "developer_hours"
 
 
-class RiskLevel(Enum):
+# CONSOLIDATED: Import from cortex.models.canonical_enums
+# class RiskLevel(Enum):
     """Risk levels for matrix assessment (AC-DOMAIN-PLAN-012)."""
     LOW = "low"
     MEDIUM = "medium"
