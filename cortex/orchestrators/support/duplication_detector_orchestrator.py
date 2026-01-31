@@ -147,7 +147,25 @@ class DuplicationDetector(OrchestratorBase):
         
         # Initialize LENS analyzers
         self.ast_analyzer = ASTAnalyzer()
-        self.git_analyzer = GitHistoryAnalyzer()
+        
+        # Try to detect CORTEX repo path for GitHistoryAnalyzer
+        try:
+            from pathlib import Path
+            # Look for .git directory starting from current file location
+            current_file = Path(__file__)
+            search_path = current_file.parent
+            for _ in range(10):  # Search up to 10 levels
+                if (search_path / ".git").exists():
+                    self.git_analyzer = GitHistoryAnalyzer(repo_path=search_path)
+                    break
+                search_path = search_path.parent
+            else:
+                # Fallback: use current working directory
+                self.git_analyzer = GitHistoryAnalyzer(repo_path=Path.cwd())
+        except Exception:
+            # Last resort: initialize without git analysis
+            self.git_analyzer = None
+        
         self.comment_extractor = CommentExtractor()
         
         # Audit logger
@@ -409,6 +427,10 @@ class DuplicationDetector(OrchestratorBase):
         """
         duplications = []
         
+        # Skip if git analyzer not available
+        if self.git_analyzer is None:
+            return duplications
+        
         try:
             # Get git history for files
             git_data = self.git_analyzer.analyze_batch(files)
@@ -465,9 +487,13 @@ class DuplicationDetector(OrchestratorBase):
         else:
             base_level = SeverityLevel.LOW
         
-        # Factor 2: Type
-        if duplication.type == DuplicationType.COPY_PASTE.value:
-            if base_level.value < SeverityLevel.HIGH.value:
+        # Factor 2: Type - copy_paste and exact are always critical
+        if duplication.type in (DuplicationType.COPY_PASTE.value, DuplicationType.EXACT.value):
+            if base_level == SeverityLevel.HIGH or base_level == SeverityLevel.CRITICAL:
+                # Upgrade HIGH to CRITICAL for copy-paste/exact, keep CRITICAL
+                if base_level == SeverityLevel.HIGH and duplication.similarity >= 0.80:
+                    base_level = SeverityLevel.CRITICAL
+            elif base_level == SeverityLevel.MEDIUM and duplication.lines > 50:
                 base_level = SeverityLevel.HIGH
         
         # Factor 3: Lines of code
