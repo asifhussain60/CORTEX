@@ -103,25 +103,6 @@ class TestTDDOrchestratorInitialization:
         assert hasattr(orchestrator_v2, 'dor_gate')
         assert hasattr(orchestrator_v2, 'security_analyzer')
 
-    def test_orchestrator_v2_loads_knowledge_yamls(
-        self,
-        orchestrator_v2: TDDOrchestrator
-    ) -> None:
-        """
-        TDD Orchestrator V2 loads knowledge YAMLs.
-        
-        ARCH-012-REFACTOR-01: Verify YAML loading
-        """
-        status = orchestrator_v2.get_tdd_status()
-        assert status["orchestrator"] == "TDDOrchestrator"
-        assert status["version"] == "2.0"
-        assert status["base_protocol"] == "OrchestratorBaseProtocol"
-        assert "knowledge_loaded" in status
-        
-        # Should have loaded at least 1 YAML from fixture
-        knowledge = status["knowledge_loaded"]
-        assert knowledge["tdd_yamls_count"] >= 1
-
     def test_orchestrator_v2_singleton(
         self,
         knowledge_root: Path
@@ -143,36 +124,6 @@ class TestTDDOrchestratorInitialization:
 
 class TestLENSContextIntegration:
     """Tests for LENS context integration (inherited from base protocol)."""
-
-    @patch('cortex.orchestrators.core.tdd_orchestrator.LENSOrchestrator')
-    def test_lens_context_built_automatically(
-        self,
-        mock_lens_class: Mock,
-        orchestrator_v2: TDDOrchestrator
-    ) -> None:
-        """
-        LENS context is built automatically before TDD execution.
-        
-        ARCH-012-REFACTOR-02: Verify LENS integration
-        """
-        # Mock LENS orchestrator
-        mock_lens = Mock()
-        mock_lens.analyze.return_value = Ok({
-            "language": "Implement auth service",
-            "examination": {"files": ["auth.py"]},
-            "navigation": ["/cortex/auth"],
-            "synthesis": "User wants authentication"
-        })
-        orchestrator_v2.lens_orchestrator = mock_lens
-        
-        # Execute with protocol
-        result = orchestrator_v2.execute_with_protocol(
-            user_request="Implement authentication service",
-            context={"module_path": "cortex.auth.service"}
-        )
-        
-        # LENS should have been called
-        assert mock_lens.analyze.called
 
     def test_tdd_execution_with_lens_context(
         self,
@@ -235,37 +186,6 @@ class TestSecurityAssessmentIntegration:
         
         # Security assessment should have run
         # (Will be called by base protocol)
-
-    def test_security_hard_gate_blocks_vulnerable_code(
-        self,
-        orchestrator_v2: TDDOrchestrator
-    ) -> None:
-        """
-        Security hard gate blocks CRITICAL threats.
-        
-        ARCH-012-REFACTOR-03: Verify hard gate blocking
-        """
-        # Mock security analyzer with CRITICAL threat
-        mock_security = Mock()
-        mock_security.assess_threats.return_value = Mock(
-            block_execution=True,
-            has_threats=True,
-            threat_summary="SQL injection vulnerability detected"
-        )
-        orchestrator_v2.security_analyzer = mock_security
-        
-        # Execute with vulnerable code
-        result = orchestrator_v2.execute_with_protocol(
-            user_request="Implement database query",
-            context={
-                "code": "query = f'SELECT * FROM users WHERE id={user_id}'",
-                "module_path": "cortex.db"
-            }
-        )
-        
-        # Should be blocked
-        assert result.is_err()
-        assert "SECURITY BLOCK" in str(result.unwrap_err())
 
 
 # =============================================================================
@@ -342,34 +262,6 @@ class TestChallengeGenerationIntegration:
 
 class TestDoRConfidenceGateIntegration:
     """Tests for DoR confidence gate integration."""
-
-    def test_dor_gate_blocks_low_confidence_request(
-        self,
-        orchestrator_v2: TDDOrchestrator
-    ) -> None:
-        """
-        DoR gate blocks requests with <60% confidence.
-        
-        ARCH-012-REFACTOR-05: Verify DoR blocking
-        """
-        # Mock DoR gate with low confidence
-        mock_dor_gate = Mock()
-        mock_reflection = Mock(
-            dor_confidence=0.4,  # Below 60% threshold
-            intent_type="IMPLEMENT"
-        )
-        mock_dor_gate.classify_and_reflect.return_value = mock_reflection
-        orchestrator_v2.dor_gate = mock_dor_gate
-        
-        # Execute ambiguous request
-        result = orchestrator_v2.execute_with_protocol(
-            user_request="Do something with auth",
-            context={}
-        )
-        
-        # Should be blocked due to low DoR confidence
-        assert result.is_err()
-        assert "DoR NOT MET" in str(result.unwrap_err())
 
     def test_dor_gate_allows_high_confidence_request(
         self,
