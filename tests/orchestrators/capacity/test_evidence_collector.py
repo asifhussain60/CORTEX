@@ -35,7 +35,7 @@ class TestEvidenceCollectorIntegration:
         AC-CAP-001-AC01: Evidence collector integrates with LENSOrchestrator
         """
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -55,7 +55,7 @@ class TestEvidenceCollectorIntegration:
         AC-CAP-001-AC01: Complexity analysis included
         """
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/master_orchestrator.py"
@@ -75,7 +75,7 @@ class TestEvidenceCollectorIntegration:
         AC-CAP-001-AC02: Git velocity extraction functional
         """
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -95,7 +95,7 @@ class TestEvidenceCollectorIntegration:
         AC-CAP-001-AC02: Domain patterns included
         """
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/dor_approval_gate.py"
@@ -115,7 +115,7 @@ class TestEvidenceCollectorIntegration:
         AC-CAP-001: Error handling for invalid paths
         """
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "nonexistent/file/path.py"
@@ -131,7 +131,7 @@ class TestComplexityAnalysis:
     def test_analyze_complexity_returns_metrics(self):
         """Test that complexity analysis returns standard metrics."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -147,7 +147,7 @@ class TestComplexityAnalysis:
     def test_analyze_complexity_detects_high_complexity(self):
         """Test that high complexity files are flagged."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"  # Known large file
@@ -161,7 +161,7 @@ class TestComplexityAnalysis:
     def test_analyze_complexity_caches_results(self):
         """Test that complexity analysis caches results for performance."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -180,7 +180,7 @@ class TestGitVelocityExtraction:
     def test_extract_git_velocity_returns_metrics(self):
         """Test that Git velocity extraction returns metrics."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -196,7 +196,7 @@ class TestGitVelocityExtraction:
     def test_extract_git_velocity_calculates_change_frequency(self):
         """Test that velocity includes change frequency calculation."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/master_orchestrator.py"
@@ -210,7 +210,7 @@ class TestGitVelocityExtraction:
     def test_extract_git_velocity_handles_new_files(self):
         """Test that velocity extraction handles files with no Git history."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         
@@ -239,7 +239,7 @@ class TestDomainPatternRetrieval:
     def test_retrieve_domain_patterns_returns_data(self):
         """Test that domain pattern retrieval returns data."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -254,7 +254,7 @@ class TestDomainPatternRetrieval:
     def test_retrieve_domain_patterns_identifies_orchestrator_type(self):
         """Test that patterns identify orchestrator type for estimation."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -268,7 +268,7 @@ class TestDomainPatternRetrieval:
     def test_retrieve_domain_patterns_includes_historical_estimates(self):
         """Test that patterns include historical estimates if available."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/master_orchestrator.py"
@@ -287,7 +287,7 @@ class TestEvidenceCollectorOutput:
     def test_evidence_structure_is_complete(self):
         """Test that evidence object has all required fields."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/intent_router.py"
@@ -304,7 +304,7 @@ class TestEvidenceCollectorOutput:
     def test_evidence_is_json_serializable(self):
         """Test that evidence can be serialized to JSON."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         import json
         
         collector = EvidenceCollector()
@@ -323,7 +323,7 @@ class TestEvidenceCollectorOutput:
     def test_evidence_includes_confidence_score(self):
         """Test that evidence includes confidence score for estimates."""
         # Arrange
-        from cortex.orchestrators.capacity.evidence_collector import EvidenceCollector
+        from cortex.capacity.evidence_collector import EvidenceCollector
         
         collector = EvidenceCollector()
         file_path = "cortex/orchestrators/core/master_orchestrator.py"

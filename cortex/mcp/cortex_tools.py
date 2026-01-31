@@ -249,8 +249,17 @@ class CORTEXChallengeTool(Tool):
 
 def get_cortex_tools() -> list[Tool]:
     """Get all CORTEX MCP tools."""
-    return [
+    tools = [
         CORTEXProcessRequestTool(),
         CORTEXTotalRecallTool(),
         CORTEXChallengeTool()
     ]
+    
+    # Add Phase 12 capacity planning tool if available
+    try:
+        from cortex.mcp.tools.capacity_planning import CORTEX_CAPACITY_TOOLS
+        tools.extend(CORTEX_CAPACITY_TOOLS)
+    except ImportError:
+        logger.warning("Phase 12 capacity planning tools not available")
+    
+    return tools
