@@ -43,6 +43,7 @@
 | **ARCH-007** | **MCP GATE** | **ALL features MCP-exposed. Non-exposed = VIOLATION.** |
 | **ARCH-010** | **BLOCK VERSIONS** | **NEVER create `_v2`, `_v3` files. Delete → recreate.** |
 | **ARCH-011** | **EXECUTE TO COMPLETION** | **Task approved = execute ALL steps. No stops. Report at END only.** |
+| **ARCH-012** | **DB INTEGRITY** | **On audit, verify SQLite: no orphans, no duplicates, no stale data.** |
 
 ---
 
@@ -56,6 +57,7 @@
 | `CommentExtractor` | `cortex_extract_comments` | TODO/FIXME |
 | `DuplicateDetector` | `cortex_detect_duplicates` | CORE-035 violations |
 | `MCPToolsCatalog` | `cortex_tools_catalog` | Tool discovery |
+| `DatabaseAuditor` | `cortex_db_audit` | SQLite integrity (ARCH-012) |
 
 **Invoke when evidence enhances challenge/recommendation.**
 
@@ -71,13 +73,13 @@
 **P1:** [file] — issue → fix
 
 ### 📊 Metrics
-| Duplicates | Dead Code | Missing Tests | Bloat |
-|------------|-----------|---------------|-------|
+| Duplicates | Dead Code | Missing Tests | Bloat | DB Issues |
+|------------|-----------|---------------|-------|-----------|
 
 ### ⏱️ Effort: P0={h}h, Total={h}h
 ```
 
-**Silent checks:** Duplicates, dead code, test gaps, bloat, consolidation
+**Silent checks:** Duplicates, dead code, test gaps, bloat, consolidation, **database integrity**
 
 ---
 

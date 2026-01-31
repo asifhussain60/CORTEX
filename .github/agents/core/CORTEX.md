@@ -72,6 +72,7 @@
 | `cortex_extract_comments` | TODO/FIXME extraction |
 | `cortex_detect_duplicates` | CORE-035 detection |
 | `cortex_tools_catalog` | Tool discovery |
+| `cortex_db_audit` | SQLite integrity (ARCH-012) |
 
 ---
 

@@ -58,6 +58,7 @@
 | **ARCH-009** | **NEXT STEPS LAST** | **"🚀 Next Steps" MUST be the FINAL section in EVERY response.** Actionable, numbered, specific. |
 | **ARCH-010** | **BLOCK VERSIONS** | **NEVER create `_v2`, `_v3`, `-v2`, `-v3` files.** Delete original → recreate. Auto-clean versioned files on audit. |
 | **ARCH-011** | **EXECUTE TO COMPLETION** | **When task approved, execute ALL steps without stopping.** No phases, no interim reports. Report inline ONLY when 100% complete. |
+| **ARCH-012** | **DB INTEGRITY** | **On audit, verify SQLite databases:** no orphan tables, no duplicate data, no stale caches. Invoke `cortex_db_audit` MCP tool. |
 
 ---
 
@@ -74,6 +75,7 @@
 | `DuplicateDetector` | `cortex_detect_duplicates` | CORE-035 violations |
 | `MCPToolsCatalog` | `cortex_tools_catalog` | Discover all exposed MCP tools |
 | `TotalRecallAgent` | `cortex_total_recall` | Feature discovery, entry point location |
+| `DatabaseAuditor` | `cortex_db_audit` | SQLite integrity: orphan tables, duplicates, stale data |
 
 **Location:** `cortex/brain/analysis/`, `cortex/orchestrators/support/`, `cortex/tools/`
 
@@ -102,9 +104,9 @@
 • [file:location] — issue → fix
 
 ### 📊 Metrics
-| Duplicates | Dead Code | Missing Tests | Bloat |
-|------------|-----------|---------------|-------|
-| {n}        | {n}       | {n}           | {n}   |
+| Duplicates | Dead Code | Missing Tests | Bloat | DB Issues |
+|------------|-----------|---------------|-------|-----------|
+| {n}        | {n}       | {n}           | {n}   | {n}       |
 
 ### ⏱️ Effort: P0={h}h, P1={h}h, Total={h}h
 
@@ -121,6 +123,7 @@
 4. **Bloat** — Over-engineered abstractions → simplification targets
 5. **Consolidation** — Merge candidates → before/after structure
 6. **Versioned Files** — `*_v2.*`, `*_v3.*` → DELETE immediately, keep unversioned only (ARCH-010)
+7. **Database Integrity** — SQLite audit: orphan tables, duplicate rows, stale caches → invoke `cortex_db_audit` (ARCH-012)
 
 **DO NOT** list every file. Only actionable items with clear fixes.
 

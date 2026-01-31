@@ -5,6 +5,7 @@ Model Context Protocol tools for enhanced capabilities.
 Available Tools:
 - intelligent_git_merge: Intelligent merging with cortex_brain preservation
 - lens_tools: LENS analysis tools (git, AST, comments, duplicates)
+- database_audit: SQLite integrity checks (ARCH-012)
 """
 
 # Core MCP Tools
@@ -20,6 +21,9 @@ from .lens_tools import (
     cortex_tools_catalog,
 )
 
+# Database Audit Tool (ARCH-012)
+from .database_audit import cortex_db_audit
+
 __all__ = [
     # Git Merge
     "IntelligentGitMergeTool",
@@ -31,6 +35,8 @@ __all__ = [
     "cortex_extract_comments",
     "cortex_detect_duplicates",
     "cortex_tools_catalog",
+    # Database Audit
+    "cortex_db_audit",
 ]
 
 # MCP Tool Registry for discovery
@@ -78,5 +84,11 @@ MCP_TOOLS = {
         "description": "Discover all MCP tools",
         "category": "discovery",
         "features": ["tool_listing", "category_filter"]
+    },
+    "cortex_db_audit": {
+        "function": cortex_db_audit,
+        "description": "SQLite database integrity audit (ARCH-012)",
+        "category": "governance",
+        "features": ["orphan_tables", "duplicate_detection", "stale_data"]
     },
 }
