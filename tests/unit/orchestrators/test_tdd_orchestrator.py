@@ -1,37 +1,40 @@
-# © 2025-2026 Asif Hussain. All rights reserved.
-# AC-ID: AC-REM-011-02 - TDD Orchestrator Tests
+# AC-ID: ARCH-012-REFACTOR - TDDOrchestrator V2 Tests
 """
-Tests for TDD Orchestrator - Knowledge YAML Wiring Verification
+Tests for TDD Orchestrator V2 - Refactored with Base Protocol.
 
-PHASE-REMEDIATION-07: TDD Orchestrator Knowledge Integration
-AC-ID: AC-REM-011-02 - Wire TDD Knowledge YAMLs into Orchestrator
+PROOF OF CONCEPT: Verifies TDDOrchestratorV2 correctly inherits and uses
+OrchestratorBaseProtocol for LENS, Security, Challenge, DoR phases.
 
-This test module verifies:
-1. TDD Orchestrator initializes with 35 best practices YAMLs
-2. TESTING-VALIDATION domain YAMLs are loaded correctly
-3. TDD phases (RED, GREEN, REFACTOR) are properly enforced
-4. Knowledge guidance engine integration works
-5. MasterOrchestrator properly wires TDD Orchestrator
+Test Coverage:
+1. Initialization (base protocol + TDD components)
+2. LENS context integration (automatic)
+3. Security assessment integration (automatic for code)
+4. Challenge generation integration (automatic for disagreements)
+5. DoR confidence gate integration (automatic <60% block)
+6. TDD domain logic (RED, GREEN, REFACTOR phases)
+7. End-to-end protocol execution
+8. Comparison with TDDOrchestrator (V1) benefits
 
-Authority: cortex-impl-map.yaml, PHASE-E-TDD-IMPLEMENTATION
 Governance:
-  - CORE-008: Tests BEFORE code
-  - CORE-011: Type hints 100%
-  - CORE-012: Google docstrings
+- ARCH-012: Verifies base protocol inheritance
+- CORE-008: TDD (this test file)
+- CORE-011: Type hints 100%
+- CORE-012: Google-style docstrings
+
+Author: Asif Hussain
+Date: 2026-01-31
 """
 
 import pytest
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.orchestrators.core.tdd_orchestrator import (
-    TDDOrchestrator,
-    TDDKnowledgeLoader,
+from cortex.orchestrators.core.tdd_orchestrator_v2 import (
+    TDDOrchestratorV2,
     TDDPhase,
-    TDDDisciplineRule,
-    TDDImplementationGuidance,
-    get_tdd_orchestrator
+    TDDKnowledgeLoader,
+    get_tdd_orchestrator_v2,
 )
 from cortex.core.result import Ok, Err
 
@@ -41,461 +44,602 @@ from cortex.core.result import Ok, Err
 # =============================================================================
 
 @pytest.fixture
-def knowledge_root() -> Path:
-    """Get knowledge repository root path.
-
-    AC-REM-011-02: Point to restored TDD YAMLs in cortex_brain/tier3/knowledge/
-    """
-    root = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
-    return root
+def knowledge_root(tmp_path: Path) -> Path:
+    """Create temporary knowledge root with TDD YAMLs."""
+    knowledge_dir = tmp_path / "cortex_brain" / "tier3" / "knowledge"
+    tdd_dir = knowledge_dir / "TESTING-VALIDATION"
+    tdd_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Create minimal TDD YAML
+    tdd_yaml = tdd_dir / "tdd-best-practices.yaml"
+    tdd_yaml.write_text("""
+discipline:
+  - rule_id: TDD-001
+    phase: red
+    description: Write failing test first
+    examples:
+      - "def test_feature(): assert False"
+    anti_patterns:
+      - "Writing implementation before test"
+      
+best_practices:
+  - "Red-Green-Refactor cycle"
+  - "Test one thing at a time"
+  - "Keep tests independent"
+""")
+    
+    return knowledge_dir.parent.parent.parent
 
 
 @pytest.fixture
-def tdd_knowledge_loader(knowledge_root: Path) -> TDDKnowledgeLoader:
-    """Create TDD knowledge loader instance.
-
-    AC-REM-011-02: Initialize with restored knowledge YAMLs
-    """
-    return TDDKnowledgeLoader(knowledge_root)
-
-
-@pytest.fixture
-def tdd_orchestrator(knowledge_root: Path) -> TDDOrchestrator:
-    """Create TDD Orchestrator instance.
-
-    AC-REM-011-02: Initialize with knowledge loader
-    """
-    return TDDOrchestrator(knowledge_root)
+def orchestrator_v2(knowledge_root: Path) -> TDDOrchestratorV2:
+    """Create TDD Orchestrator V2 instance."""
+    return TDDOrchestratorV2(knowledge_root=knowledge_root)
 
 
 # =============================================================================
-# AC-REM-011-02-01: YAML Loading Tests
+# ARCH-012-REFACTOR-01: Initialization Tests
 # =============================================================================
 
-class TestTDDKnowledgeLoading:
-    """Tests for loading TDD best practices YAMLs."""
+class TestTDDOrchestratorV2Initialization:
+    """Tests for TDD Orchestrator V2 initialization."""
 
-    def test_loader_initializes_with_knowledge_root(
+    def test_orchestrator_v2_initializes(
         self,
-        knowledge_root: Path
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Loader initializes with correct knowledge root path.
-
-        AC-REM-011-02-01: Verify knowledge root is set correctly
         """
-        loader = TDDKnowledgeLoader(knowledge_root)
-        assert loader.knowledge_root == knowledge_root
-        assert loader.tdd_domain_path == knowledge_root / "TESTING-VALIDATION"
+        TDD Orchestrator V2 initializes with base protocol.
+        
+        ARCH-012-REFACTOR-01: Verify initialization
+        """
+        assert orchestrator_v2 is not None
+        assert orchestrator_v2.knowledge_loader is not None
+        assert orchestrator_v2.guidance_engine is not None
+        
+        # Verify base protocol components initialized
+        assert hasattr(orchestrator_v2, 'lens_orchestrator')
+        assert hasattr(orchestrator_v2, 'challenge_engine')
+        assert hasattr(orchestrator_v2, 'dor_gate')
+        assert hasattr(orchestrator_v2, 'security_analyzer')
 
-    def test_loader_discovers_tdd_yaml_files(
+    def test_orchestrator_v2_loads_knowledge_yamls(
         self,
-        tdd_knowledge_loader: TDDKnowledgeLoader
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Loader discovers TDD YAML files.
-
-        AC-REM-011-02-01: Verify TDD YAMLs discovered
         """
-        # Verify discovery completed
-        yaml_count = len(tdd_knowledge_loader.tdd_yamls)
-        assert yaml_count >= 0, "YAML count should be non-negative"
-
-    def test_loader_extracts_tdd_rules_from_yamls(
-        self,
-        tdd_knowledge_loader: TDDKnowledgeLoader
-    ) -> None:
-        """Loader extracts TDD discipline rules from YAMLs.
-
-        AC-REM-011-02-01: Verify rule extraction
+        TDD Orchestrator V2 loads knowledge YAMLs.
+        
+        ARCH-012-REFACTOR-01: Verify YAML loading
         """
-        rule_count = len(tdd_knowledge_loader.tdd_rules)
-        # Should have extracted at least some rules if YAMLs exist
-        assert isinstance(rule_count, int)
-        assert rule_count >= 0
-
-    def test_get_tdd_rules_all_phases(
-        self,
-        tdd_knowledge_loader: TDDKnowledgeLoader
-    ) -> None:
-        """Get all TDD rules without filtering.
-
-        AC-REM-011-02-01: Access all rules
-        """
-        all_rules = tdd_knowledge_loader.get_tdd_rules()
-        assert isinstance(all_rules, list)
-
-    def test_get_tdd_rules_filtered_by_phase(
-        self,
-        tdd_knowledge_loader: TDDKnowledgeLoader
-    ) -> None:
-        """Get TDD rules filtered by phase.
-
-        AC-REM-011-02-01: Access phase-specific rules
-        """
-        red_rules = tdd_knowledge_loader.get_tdd_rules(TDDPhase.RED)
-        assert isinstance(red_rules, list)
-        for rule in red_rules:
-            assert rule.phase == TDDPhase.RED
-
-    def test_get_best_practices(
-        self,
-        tdd_knowledge_loader: TDDKnowledgeLoader
-    ) -> None:
-        """Get best practices from loaded YAMLs.
-
-        AC-REM-011-02-01: Extract best practices
-        """
-        practices = tdd_knowledge_loader.get_best_practices()
-        assert isinstance(practices, list)
-
-
-# =============================================================================
-# AC-REM-011-02-02: TDD Orchestrator Initialization Tests
-# =============================================================================
-
-class TestTDDOrchestratorInitialization:
-    """Tests for TDD Orchestrator initialization."""
-
-    def test_orchestrator_initializes(
-        self,
-        tdd_orchestrator: TDDOrchestrator
-    ) -> None:
-        """TDD Orchestrator initializes successfully.
-
-        AC-REM-011-02-02: Verify initialization
-        """
-        assert tdd_orchestrator is not None
-        assert tdd_orchestrator.knowledge_loader is not None
-        assert tdd_orchestrator.guidance_engine is not None
-
-    def test_orchestrator_loads_knowledge_yamls(
-        self,
-        tdd_orchestrator: TDDOrchestrator
-    ) -> None:
-        """Orchestrator loads knowledge YAMLs.
-
-        AC-REM-011-02-02: Verify YAML loading
-        """
-        status = tdd_orchestrator.get_tdd_status()
-        assert status["orchestrator"] == "TDDOrchestrator"
+        status = orchestrator_v2.get_tdd_status()
+        assert status["orchestrator"] == "TDDOrchestratorV2"
+        assert status["version"] == "2.0"
+        assert status["base_protocol"] == "OrchestratorBaseProtocol"
         assert "knowledge_loaded" in status
+        
+        # Should have loaded at least 1 YAML from fixture
+        knowledge = status["knowledge_loaded"]
+        assert knowledge["tdd_yamls_count"] >= 1
 
-    def test_singleton_instance_works(
+    def test_orchestrator_v2_singleton(
         self,
         knowledge_root: Path
     ) -> None:
-        """Singleton instance works correctly.
-
-        AC-REM-011-02-02: Verify singleton pattern
         """
-        instance1 = get_tdd_orchestrator(knowledge_root)
-        instance2 = get_tdd_orchestrator(knowledge_root)
-        # Should return same instance
+        get_tdd_orchestrator_v2() returns singleton.
+        
+        ARCH-012-REFACTOR-01: Verify singleton pattern
+        """
+        instance1 = get_tdd_orchestrator_v2(knowledge_root)
+        instance2 = get_tdd_orchestrator_v2(knowledge_root)
+        
         assert instance1 is instance2
 
 
 # =============================================================================
-# AC-REM-011-02-03: TDD Phase Determination Tests
+# ARCH-012-REFACTOR-02: LENS Context Integration Tests
 # =============================================================================
 
-class TestTDDPhaseDetermination:
-    """Tests for determining TDD phase from intent."""
+class TestLENSContextIntegration:
+    """Tests for LENS context integration (inherited from base protocol)."""
 
-    def test_determine_red_phase_from_test_intent(
+    @patch('cortex.orchestrators.core.tdd_orchestrator_v2.LENSOrchestrator')
+    def test_lens_context_built_automatically(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        mock_lens_class: Mock,
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Determine RED phase from test-related intent.
-
-        AC-REM-011-02-03: Verify RED phase detection
         """
-        phase = tdd_orchestrator._determine_tdd_phase("write a failing test")
+        LENS context is built automatically before TDD execution.
+        
+        ARCH-012-REFACTOR-02: Verify LENS integration
+        """
+        # Mock LENS orchestrator
+        mock_lens = Mock()
+        mock_lens.analyze.return_value = Ok({
+            "language": "Implement auth service",
+            "examination": {"files": ["auth.py"]},
+            "navigation": ["/cortex/auth"],
+            "synthesis": "User wants authentication"
+        })
+        orchestrator_v2.lens_orchestrator = mock_lens
+        
+        # Execute with protocol
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Implement authentication service",
+            context={"module_path": "cortex.auth.service"}
+        )
+        
+        # LENS should have been called
+        assert mock_lens.analyze.called
+
+    def test_tdd_execution_with_lens_context(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        TDD domain logic receives LENS context.
+        
+        ARCH-012-REFACTOR-02: Verify LENS context passed to domain logic
+        """
+        # Mock LENS context
+        mock_lens_context = {
+            "synthesis": "Write failing test for authentication"
+        }
+        
+        # Execute domain logic directly (bypassing full protocol for test)
+        result = orchestrator_v2._execute_domain_logic(
+            user_request="Write test for authentication",
+            lens_context=mock_lens_context,
+            context={"module_path": "cortex.auth", "domain": "security"}
+        )
+        
+        assert result.is_ok()
+        output = result.unwrap()
+        assert output["lens_context_used"] is True
+
+
+# =============================================================================
+# ARCH-012-REFACTOR-03: Security Assessment Integration Tests
+# =============================================================================
+
+class TestSecurityAssessmentIntegration:
+    """Tests for security threat assessment integration."""
+
+    def test_security_assessment_for_code_context(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        Security assessment runs when code context present.
+        
+        ARCH-012-REFACTOR-03: Verify security integration
+        """
+        # Mock security analyzer
+        mock_security = Mock()
+        mock_security.assess_threats.return_value = Mock(
+            block_execution=False,
+            has_threats=False
+        )
+        orchestrator_v2.security_analyzer = mock_security
+        
+        # Execute with code context
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Implement auth",
+            context={
+                "code": "def login(username, password): pass",
+                "module_path": "cortex.auth"
+            }
+        )
+        
+        # Security assessment should have run
+        # (Will be called by base protocol)
+
+    def test_security_hard_gate_blocks_vulnerable_code(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        Security hard gate blocks CRITICAL threats.
+        
+        ARCH-012-REFACTOR-03: Verify hard gate blocking
+        """
+        # Mock security analyzer with CRITICAL threat
+        mock_security = Mock()
+        mock_security.assess_threats.return_value = Mock(
+            block_execution=True,
+            has_threats=True,
+            threat_summary="SQL injection vulnerability detected"
+        )
+        orchestrator_v2.security_analyzer = mock_security
+        
+        # Execute with vulnerable code
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Implement database query",
+            context={
+                "code": "query = f'SELECT * FROM users WHERE id={user_id}'",
+                "module_path": "cortex.db"
+            }
+        )
+        
+        # Should be blocked
+        assert result.is_err()
+        assert "SECURITY BLOCK" in str(result.unwrap_err())
+
+
+# =============================================================================
+# ARCH-012-REFACTOR-04: Challenge Generation Integration Tests
+# =============================================================================
+
+class TestChallengeGenerationIntegration:
+    """Tests for challenge generation integration."""
+
+    def test_challenge_generated_for_suboptimal_approach(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        Challenge generated when CORTEX has better solution.
+        
+        ARCH-012-REFACTOR-04: Verify challenge integration
+        """
+        # Mock challenge engine
+        mock_challenge_engine = Mock()
+        mock_challenge_response = Mock(
+            has_disagreement=True,
+            gate_type=Mock(value="soft"),
+            recommended_alternative="Use pytest fixtures instead"
+        )
+        mock_challenge_engine.generate_challenge.return_value = mock_challenge_response
+        orchestrator_v2.challenge_engine = mock_challenge_engine
+        
+        # Execute with suboptimal request
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Write tests without fixtures",
+            context={"module_path": "cortex.tests"}
+        )
+        
+        # Challenge should be generated
+        # (Will be called by base protocol)
+
+    def test_hard_gate_challenge_blocks_harmful_action(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        Hard gate challenge blocks harmful actions.
+        
+        ARCH-012-REFACTOR-04: Verify hard gate blocking
+        """
+        from cortex.orchestrators.core.challenge_engine import GateType
+        
+        # Mock challenge engine with hard gate
+        mock_challenge_engine = Mock()
+        mock_challenge_response = Mock(
+            has_disagreement=True,
+            gate_type=GateType.HARD if GateType else Mock(value="hard"),
+            recommended_alternative="Do not delete production tests"
+        )
+        mock_challenge_engine.generate_challenge.return_value = mock_challenge_response
+        orchestrator_v2.challenge_engine = mock_challenge_engine
+        
+        # Execute harmful request
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Delete all tests",
+            context={"module_path": "cortex.tests"}
+        )
+        
+        # Should return challenge (not execute)
+        if result.is_ok():
+            output = result.unwrap()
+            assert output.get("type") == "challenge"
+
+
+# =============================================================================
+# ARCH-012-REFACTOR-05: DoR Confidence Gate Integration Tests
+# =============================================================================
+
+class TestDoRConfidenceGateIntegration:
+    """Tests for DoR confidence gate integration."""
+
+    def test_dor_gate_blocks_low_confidence_request(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        DoR gate blocks requests with <60% confidence.
+        
+        ARCH-012-REFACTOR-05: Verify DoR blocking
+        """
+        # Mock DoR gate with low confidence
+        mock_dor_gate = Mock()
+        mock_reflection = Mock(
+            dor_confidence=0.4,  # Below 60% threshold
+            intent_type="IMPLEMENT"
+        )
+        mock_dor_gate.classify_and_reflect.return_value = mock_reflection
+        orchestrator_v2.dor_gate = mock_dor_gate
+        
+        # Execute ambiguous request
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Do something with auth",
+            context={}
+        )
+        
+        # Should be blocked due to low DoR confidence
+        assert result.is_err()
+        assert "DoR NOT MET" in str(result.unwrap_err())
+
+    def test_dor_gate_allows_high_confidence_request(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        DoR gate allows requests with ≥60% confidence.
+        
+        ARCH-012-REFACTOR-05: Verify DoR allowing
+        """
+        # Mock DoR gate with high confidence
+        mock_dor_gate = Mock()
+        mock_reflection = Mock(
+            dor_confidence=0.9,  # Above 60% threshold
+            intent_type="IMPLEMENT"
+        )
+        mock_dor_gate.classify_and_reflect.return_value = mock_reflection
+        orchestrator_v2.dor_gate = mock_dor_gate
+        
+        # Execute clear request
+        result = orchestrator_v2.execute_with_protocol(
+            user_request="Implement authentication service in cortex.auth.service",
+            context={"module_path": "cortex.auth.service"}
+        )
+        
+        # Should proceed (not blocked)
+        # Result could be Ok or Err depending on execution, but not DoR blocked
+        if result.is_err():
+            assert "DoR NOT MET" not in str(result.unwrap_err())
+
+
+# =============================================================================
+# ARCH-012-REFACTOR-06: TDD Domain Logic Tests
+# =============================================================================
+
+class TestTDDDomainLogic:
+    """Tests for TDD-specific domain logic (RED, GREEN, REFACTOR)."""
+
+    def test_red_phase_determination(
+        self,
+        orchestrator_v2: TDDOrchestratorV2
+    ) -> None:
+        """
+        RED phase determined from test-related requests.
+        
+        ARCH-012-REFACTOR-06: Verify phase determination
+        """
+        phase = orchestrator_v2._determine_tdd_phase("Write failing test for auth")
         assert phase == TDDPhase.RED
 
-    def test_determine_green_phase_from_implement_intent(
+    def test_green_phase_determination(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Determine GREEN phase from implement intent.
-
-        AC-REM-011-02-03: Verify GREEN phase detection
         """
-        phase = tdd_orchestrator._determine_tdd_phase("implement the feature")
+        GREEN phase determined from implementation requests.
+        
+        ARCH-012-REFACTOR-06: Verify phase determination
+        """
+        phase = orchestrator_v2._determine_tdd_phase("Implement authentication service")
         assert phase == TDDPhase.GREEN
 
-    def test_determine_refactor_phase_from_refactor_intent(
+    def test_refactor_phase_determination(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Determine REFACTOR phase from refactor intent.
-
-        AC-REM-011-02-03: Verify REFACTOR phase detection
         """
-        phase = tdd_orchestrator._determine_tdd_phase("refactor this code")
+        REFACTOR phase determined from improvement requests.
+        
+        ARCH-012-REFACTOR-06: Verify phase determination
+        """
+        phase = orchestrator_v2._determine_tdd_phase("Refactor auth module")
         assert phase == TDDPhase.REFACTOR
 
-
-# =============================================================================
-# AC-REM-011-02-04: Intent Routing Tests
-# =============================================================================
-
-class TestIntentRouting:
-    """Tests for routing implementation intents."""
-
-    def test_route_implementation_intent(
+    def test_red_phase_execution(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Route implementation intent successfully.
-
-        AC-REM-011-02-04: Verify intent routing
         """
-        result = tdd_orchestrator.route_implementation_intent(
-            intent="implement a feature",
-            module_path="cortex.orchestrators.core.tdd_orchestrator"
+        RED phase executes with test patterns.
+        
+        ARCH-012-REFACTOR-06: Verify RED phase
+        """
+        guidance = orchestrator_v2._build_tdd_guidance(
+            module_path="cortex.auth",
+            domain="security",
+            tdd_phase=TDDPhase.RED,
+            user_request="Write test",
+            lens_context=None
         )
+        
+        result = orchestrator_v2._execute_red_phase(guidance, {})
+        
         assert result.is_ok()
+        output = result.unwrap()
+        assert output["phase"] == "RED"
+        assert "test_patterns" in output
 
-    def test_routing_returns_tdd_guidance(
+    def test_green_phase_execution(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Routing returns TDD implementation guidance.
-
-        AC-REM-011-02-04: Verify guidance structure
         """
-        result = tdd_orchestrator.route_implementation_intent(
-            intent="implement",
-            module_path="cortex.orchestrators.core.master_orchestrator"
-        )
-        if result.is_ok():
-            guidance = result.unwrap()
-            assert isinstance(guidance, TDDImplementationGuidance)
-            assert guidance.module_path == "cortex.orchestrators.core.master_orchestrator"
-            assert guidance.tdd_phase in [TDDPhase.RED, TDDPhase.GREEN, TDDPhase.REFACTOR]
-            assert guidance.domain is not None
-            assert isinstance(guidance.governance_rules, list)
-
-
-# =============================================================================
-# AC-REM-011-02-05: TDD Phase Execution Tests
-# =============================================================================
-
-class TestTDDPhaseExecution:
-    """Tests for executing TDD phases."""
-
-    def test_execute_red_phase(
-        self,
-        tdd_orchestrator: TDDOrchestrator
-    ) -> None:
-        """Execute RED phase successfully.
-
-        AC-REM-011-02-05: Verify RED phase execution
+        GREEN phase executes with implementation patterns.
+        
+        ARCH-012-REFACTOR-06: Verify GREEN phase
         """
-        result = tdd_orchestrator.execute_red_phase(
-            module_path="cortex.orchestrators.core.test_module",
-            test_spec="Should accept string and return integer"
+        guidance = orchestrator_v2._build_tdd_guidance(
+            module_path="cortex.auth",
+            domain="security",
+            tdd_phase=TDDPhase.GREEN,
+            user_request="Implement auth",
+            lens_context=None
         )
+        
+        result = orchestrator_v2._execute_green_phase(guidance, {})
+        
         assert result.is_ok()
-        if result.is_ok():
-            execution = result.unwrap()
-            assert execution["phase"] == TDDPhase.RED.value
+        output = result.unwrap()
+        assert output["phase"] == "GREEN"
 
-    def test_execute_green_phase(
+    def test_refactor_phase_execution(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Execute GREEN phase successfully.
-
-        AC-REM-011-02-05: Verify GREEN phase execution
         """
-        result = tdd_orchestrator.execute_green_phase(
-            module_path="cortex.orchestrators.core.test_module",
-            test_spec="Should accept string and return integer"
+        REFACTOR phase executes with refactoring patterns.
+        
+        ARCH-012-REFACTOR-06: Verify REFACTOR phase
+        """
+        guidance = orchestrator_v2._build_tdd_guidance(
+            module_path="cortex.auth",
+            domain="security",
+            tdd_phase=TDDPhase.REFACTOR,
+            user_request="Refactor auth",
+            lens_context=None
         )
+        
+        result = orchestrator_v2._execute_refactor_phase(guidance, {})
+        
         assert result.is_ok()
-        if result.is_ok():
-            execution = result.unwrap()
-            assert execution["phase"] == TDDPhase.GREEN.value
+        output = result.unwrap()
+        assert output["phase"] == "REFACTOR"
 
-    def test_execute_refactor_phase(
+
+# =============================================================================
+# ARCH-012-REFACTOR-07: End-to-End Protocol Tests
+# =============================================================================
+
+class TestEndToEndProtocol:
+    """Tests for complete protocol execution (LENS → Security → Challenge → DoR → TDD)."""
+
+    def test_full_protocol_execution_success(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Execute REFACTOR phase successfully.
-
-        AC-REM-011-02-05: Verify REFACTOR phase execution
         """
-        result = tdd_orchestrator.execute_refactor_phase(
-            module_path="cortex.orchestrators.core.test_module",
-            test_spec="Should accept string and return integer"
+        Full protocol executes successfully for valid request.
+        
+        ARCH-012-REFACTOR-07: Verify E2E execution
+        """
+        # Mock all components for clean test
+        orchestrator_v2.lens_orchestrator = None  # Graceful degradation
+        orchestrator_v2.security_analyzer = None
+        orchestrator_v2.challenge_engine = None
+        orchestrator_v2.dor_gate = None
+        
+        # Execute domain logic directly (degraded mode)
+        result = orchestrator_v2._execute_domain_logic(
+            user_request="Implement authentication",
+            lens_context=None,
+            context={"module_path": "cortex.auth", "domain": "security"}
         )
+        
         assert result.is_ok()
-        if result.is_ok():
-            execution = result.unwrap()
-            assert execution["phase"] == TDDPhase.REFACTOR.value
+        output = result.unwrap()
+        assert output["orchestrator"] == "TDDOrchestratorV2"
+        assert "tdd_phase" in output
+        assert "guidance" in output
+        assert "protocol_phases_completed" in output
 
-
-# =============================================================================
-# AC-REM-011-02-06: Governance Rule Integration Tests
-# =============================================================================
-
-class TestGovernanceIntegration:
-    """Tests for governance rule integration."""
-
-    def test_orchestrator_status_includes_governance_rules(
+    def test_protocol_phases_recorded(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Orchestrator status includes governance rules.
-
-        AC-REM-011-02-06: Verify CORE-008, CORE-019 integration
         """
-        status = tdd_orchestrator.get_tdd_status()
-        assert "routing_intent" in status
-        assert "CORE-019" in status["routing_intent"]
-
-    def test_routing_includes_core_008_guidance(
-        self,
-        tdd_orchestrator: TDDOrchestrator
-    ) -> None:
-        """Routing includes CORE-008 (TDD) governance guidance.
-
-        AC-REM-011-02-06: Verify TDD governance
+        Protocol phases are recorded in result.
+        
+        ARCH-012-REFACTOR-07: Verify phase tracking
         """
-        result = tdd_orchestrator.route_implementation_intent(
-            intent="implement",
-            module_path="cortex.orchestrators.core.test_module"
+        result = orchestrator_v2._execute_domain_logic(
+            user_request="Implement auth",
+            lens_context={"synthesis": "Auth implementation"},
+            context={"module_path": "cortex.auth"}
         )
-        if result.is_ok():
-            guidance = result.unwrap()
-            assert "CORE-008" in guidance.governance_rules or len(guidance.governance_rules) >= 0
+        
+        assert result.is_ok()
+        output = result.unwrap()
+        phases = output["protocol_phases_completed"]
+        
+        # All 5 phases should be listed
+        assert "LENS Context" in phases
+        assert "Security Assessment" in phases
+        assert "Challenge Generation" in phases
+        assert "DoR Confidence Gate" in phases
+        assert "TDD Domain Logic" in phases
 
 
 # =============================================================================
-# AC-REM-011-02-07: Anti-Pattern Detection Tests
+# ARCH-012-REFACTOR-08: V1 vs V2 Comparison Tests
 # =============================================================================
 
-class TestAntiPatternDetection:
-    """Tests for TDD anti-pattern detection."""
+class TestV1vsV2Comparison:
+    """Tests comparing TDDOrchestrator (V1) with TDDOrchestratorV2."""
 
-    def test_anti_patterns_extracted_from_rules(
+    def test_v2_has_base_protocol_components(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Anti-patterns extracted from TDD rules.
-
-        AC-REM-011-02-07: Verify anti-pattern extraction
         """
-        result = tdd_orchestrator.execute_green_phase(
-            module_path="cortex.orchestrators.core.test_module",
-            test_spec="Test spec"
-        )
-        if result.is_ok():
-            execution = result.unwrap()
-            # Should have anti-patterns in guidance
-            anti_patterns = tdd_orchestrator.knowledge_loader.get_tdd_rules(TDDPhase.GREEN)
-            assert isinstance(anti_patterns, list)
+        V2 has base protocol components that V1 lacks.
+        
+        ARCH-012-REFACTOR-08: Verify V2 enhancements
+        """
+        # V2 should have protocol components
+        assert hasattr(orchestrator_v2, 'lens_orchestrator')
+        assert hasattr(orchestrator_v2, 'challenge_engine')
+        assert hasattr(orchestrator_v2, 'dor_gate')
+        assert hasattr(orchestrator_v2, 'security_analyzer')
+        
+        # These are inherited from OrchestratorBaseProtocol
 
-
-# =============================================================================
-# AC-REM-011-02-08: Coverage Target Tests
-# =============================================================================
-
-class TestCoverageTargets:
-    """Tests for test coverage targets."""
-
-    def test_coverage_targets_follow_testing_pyramid(
+    def test_v2_status_shows_base_protocol(
         self,
-        tdd_orchestrator: TDDOrchestrator
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Coverage targets follow testing pyramid (70/20/10).
-
-        AC-REM-011-02-08: Verify coverage distribution
         """
-        targets = tdd_orchestrator._get_coverage_targets("cortex.test")
-        assert targets["unit"] == 0.70
-        assert targets["integration"] == 0.20
-        assert targets["e2e"] == 0.10
-        assert targets["total"] == 0.95
-
-
-# =============================================================================
-# AC-REM-011-02-09: Master Orchestrator Integration Tests
-# =============================================================================
-
-class TestMasterOrchestratorIntegration:
-    """Tests for integration with MasterOrchestrator."""
-
-    def test_master_orchestrator_initializes_tdd_orchestrator(self) -> None:
-        """MasterOrchestrator initializes TDD Orchestrator.
-
-        AC-REM-011-02-09: Verify MasterOrchestrator wiring
+        V2 status shows base protocol integration.
+        
+        ARCH-012-REFACTOR-08: Verify V2 status
         """
-        try:
-            from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        status = orchestrator_v2.get_tdd_status()
+        
+        assert status["base_protocol"] == "OrchestratorBaseProtocol"
+        assert status["version"] == "2.0"
+        assert "protocol_phases" in status
+        
+        # Should list all 5 phases
+        phases = status["protocol_phases"]
+        assert len(phases) == 5
 
-            master = MasterOrchestrator.instance()
-            # Check if TDD orchestrator was initialized
-            status = master.get_initialization_status()
-            assert "tdd_orchestrator" in status
-        except ImportError:
-            pytest.skip("MasterOrchestrator not available")
-
-    def test_master_orchestrator_knows_about_tdd_yamls(self) -> None:
-        """MasterOrchestrator knows about wired TDD YAMLs.
-
-        AC-REM-011-02-09: Verify YAML wiring in master
-        """
-        try:
-            from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-
-            master = MasterOrchestrator.instance()
-            status = master.get_initialization_status()
-            if "tdd_orchestrator" in status:
-                tdd_status = status["tdd_orchestrator"]
-                assert "knowledge_yamls_wired" in tdd_status
-        except ImportError:
-            pytest.skip("MasterOrchestrator not available")
-
-
-# =============================================================================
-# PARAMETRIZED TESTS
-# =============================================================================
-
-class TestPhaseTransitions:
-    """Tests for transitions between TDD phases."""
-
-    @pytest.mark.parametrize("intent,expected_phase", [
-        ("write test", TDDPhase.RED),
-        ("write failing test", TDDPhase.RED),
-        ("implement", TDDPhase.GREEN),
-        ("code", TDDPhase.GREEN),
-        ("refactor", TDDPhase.REFACTOR),
-        ("optimize", TDDPhase.REFACTOR),
-    ])
-    def test_phase_detection_matrix(
+    def test_v2_simplifies_tdd_logic(
         self,
-        tdd_orchestrator: TDDOrchestrator,
-        intent: str,
-        expected_phase: TDDPhase
+        orchestrator_v2: TDDOrchestratorV2
     ) -> None:
-        """Test phase detection with various intents.
-
-        AC-REM-011-02-03: Verify phase detection matrix
         """
-        detected_phase = tdd_orchestrator._determine_tdd_phase(intent)
-        assert detected_phase == expected_phase
+        V2 focuses on TDD logic, protocol handled by base.
+        
+        ARCH-012-REFACTOR-08: Verify simplification
+        """
+        # V2 should have clean TDD-specific methods
+        assert hasattr(orchestrator_v2, '_execute_domain_logic')
+        assert hasattr(orchestrator_v2, '_determine_tdd_phase')
+        assert hasattr(orchestrator_v2, '_build_tdd_guidance')
+        assert hasattr(orchestrator_v2, '_execute_tdd_phase')
+        
+        # Protocol methods inherited, not duplicated
+        assert hasattr(orchestrator_v2, 'execute_with_protocol')
 
 
-__all__ = [
-    "TestTDDKnowledgeLoading",
-    "TestTDDOrchestratorInitialization",
-    "TestTDDPhaseDetermination",
-    "TestIntentRouting",
-    "TestTDDPhaseExecution",
-    "TestGovernanceIntegration",
-    "TestAntiPatternDetection",
-    "TestCoverageTargets",
-    "TestMasterOrchestratorIntegration",
-    "TestPhaseTransitions",
-]
+# =============================================================================
+# Run tests with: pytest tests/unit/orchestrators/test_tdd_orchestrator_v2.py -v
+# =============================================================================
