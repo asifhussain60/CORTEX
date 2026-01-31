@@ -42,18 +42,12 @@ from functools import lru_cache
 from typing import Any, Callable, Dict, List, Optional, Tuple
 from datetime import datetime
 
+from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
+
 
 # ============================================================================
 # ENUMS & TYPES
 # ============================================================================
-
-class ComplexityLevel(Enum):
-    """SUP-HIGH-003: Complexity classification (4 levels)."""
-    BASIC = 1
-    INTERMEDIATE = 2
-    ADVANCED = 3
-    EXPERT = 4
-
 
 class ToolCategory(Enum):
     """Tool categorization for discovery."""

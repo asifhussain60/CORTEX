@@ -40,6 +40,8 @@ from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 from datetime import datetime
 
+from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
+
 
 # ============================================================================
 # ENUMS & TYPES
@@ -60,14 +62,6 @@ class RollbackPhase(Enum):
     REVERSAL = "reversal"
     VERIFICATION = "verification"
     CLEANUP = "cleanup"
-
-
-class ComplexityLevel(Enum):
-    """Complexity classification (4 levels)."""
-    BASIC = 1
-    INTERMEDIATE = 2
-    ADVANCED = 3
-    EXPERT = 4
 
 
 @dataclass

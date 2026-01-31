@@ -5,8 +5,7 @@ from enum import Enum
 from typing import Any, Callable, Dict
 from datetime import datetime
 
-class ComplexityLevel(Enum):
-    BASIC, INTERMEDIATE, ADVANCED, EXPERT = 1, 2, 3, 4
+from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
 
 @dataclass
 class BootstrapContext:

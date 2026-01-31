@@ -520,6 +520,19 @@ class ComplexityLevel(Enum):
     VERY_HIGH = "VERY_HIGH"
 
 
+class OrchestratorComplexityLevel(Enum):
+    """Orchestrator setup/configuration complexity (1-4 scale).
+    
+    CORE-035: Canonical definition for orchestrator complexity.
+    Used by: SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator,
+             ComposedOrchestrator, BootstrapOrchestrator, ToolDiscoveryOrchestrator
+    """
+    BASIC = 1
+    INTERMEDIATE = 2
+    ADVANCED = 3
+    EXPERT = 4
+
+
 class DisagreementType(Enum):
     """Types of challenge/disagreement.
     

@@ -27,26 +27,7 @@ import threading
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-
-
-@dataclass
-class OrchestratorMetadata:
-    """Metadata for an orchestrator from wiring registry.
-    
-    Attributes:
-        name: Orchestrator class name
-        module: Python module path
-        category: core, domain, or support
-        capabilities: List of capabilities
-        priority: Loading priority
-        wired: Whether orchestrator is wired
-    """
-    name: str
-    module: str
-    category: str
-    capabilities: List[str]
-    priority: int = 0
-    wired: bool = False
+from cortex.orchestrators.registry import OrchestratorMetadata
 
 
 class OrchestratorLookup:

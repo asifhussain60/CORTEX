@@ -27,12 +27,7 @@ class SetupPhase(Enum):
     VERIFICATION = "verification"
 
 
-class ComplexityLevel(Enum):
-    """Complexity classification."""
-    BASIC = 1
-    INTERMEDIATE = 2
-    ADVANCED = 3
-    EXPERT = 4
+from cortex.models.canonical_enums import OrchestratorComplexityLevel as ComplexityLevel
 
 
 @dataclass

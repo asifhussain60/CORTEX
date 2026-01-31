@@ -14,7 +14,7 @@ AC-FIX-HALLUCINATION-001: Boundary enforcement integration
 
 from __future__ import annotations
 
-from typing import Dict, List, Any, Optional, Set, Union
+from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -26,20 +26,16 @@ from cortex.brain.core.response_header_config import HeaderConfigurationManager
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.execution.exec_gateway_impl import GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
-from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
-from cortex.brain.knowledge.hybrid_loader import HybridKnowledgeLoader, get_hybrid_loader
+from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository
 from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
-from cortex.core.hallucination_prevention.output_validator import validate_llm_output, OutputValidationError
 from cortex.brain.core.state_manager import StateManager, OperationState, get_state_manager
 from cortex.domain_brain.business_knowledge_repository import (
-    BusinessKnowledgeRepository,
-    BusinessKnowledgeEntry,
-    get_business_knowledge_repository
+    BusinessKnowledgeRepository
 )
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 from cortex.brain.mcp.decorator import mcp_tool
-from cortex.core.intent.challenge_generator import ChallengeGenerator, Challenge
+from cortex.core.intent.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 
 # AC-PHASE-2-5-WIRE-001: Import ComponentHealthTracker for health monitoring
@@ -107,23 +103,8 @@ except ImportError:
 
 # Docker-First Architecture: YAML-backed wiring (no database registries)
 # Orchestrator config loaded from cortex/wiring/specifications/wiring.yaml
-from cortex.orchestrators import (
-    get_orchestrator_count_by_category,
-    ALL_ORCHESTRATORS,
-    CORE_ORCHESTRATORS,
-    DOMAIN_ORCHESTRATORS,
-    SUPPORT_ORCHESTRATORS,
-)
 
-
-@dataclass
-class OrchestratorMetadata:
-    """Metadata for registered orchestrators"""
-    domain: str
-    orchestrator: IOrchestrator
-    version: str = "1.0"
-    capabilities: List[str] = field(default_factory=list)
-    registered_at: str = field(default_factory=lambda: datetime.now().isoformat())
+from cortex.orchestrators.registry import OrchestratorMetadata
 
 
 class MasterOrchestrator(IOrchestrator):
