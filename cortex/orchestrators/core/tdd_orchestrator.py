@@ -12,7 +12,7 @@ Before (TDDOrchestrator):
 - No security threat assessment
 - Pure TDD logic only
 
-After (TDDOrchestratorV2):
+After (TDDOrchestrator):
 - ~250 lines (55% reduction)
 - Automatic LENS context (inherited)
 - Automatic challenge generation (inherited)
@@ -168,7 +168,7 @@ class TDDKnowledgeLoader:
         return practices
 
 
-class TDDOrchestratorV2(OrchestratorBaseProtocol):
+class TDDOrchestrator(OrchestratorBaseProtocol):
     """
     TDD Orchestrator V2 - Refactored with OrchestratorBaseProtocol.
     
@@ -189,7 +189,7 @@ class TDDOrchestratorV2(OrchestratorBaseProtocol):
     All intelligence/security/quality gates handled by base protocol.
     
     Usage:
-        >>> orchestrator = TDDOrchestratorV2()
+        >>> orchestrator = TDDOrchestrator()
         >>> result = orchestrator.execute_with_protocol(
         ...     user_request="Implement authentication service",
         ...     context={"module_path": "cortex.auth.service"}
@@ -273,7 +273,7 @@ class TDDOrchestratorV2(OrchestratorBaseProtocol):
             
             # Return comprehensive TDD result
             return Ok({
-                "orchestrator": "TDDOrchestratorV2",
+                "orchestrator": "TDDOrchestrator",
                 "tdd_phase": tdd_phase.value,
                 "guidance": {
                     "module_path": guidance.module_path,
@@ -468,7 +468,7 @@ class TDDOrchestratorV2(OrchestratorBaseProtocol):
             Dictionary with status information
         """
         return {
-            "orchestrator": "TDDOrchestratorV2",
+            "orchestrator": "TDDOrchestrator",
             "version": "2.0",
             "base_protocol": "OrchestratorBaseProtocol",
             "protocol_phases": [
@@ -490,26 +490,26 @@ class TDDOrchestratorV2(OrchestratorBaseProtocol):
         }
 
 
-def get_tdd_orchestrator_v2(knowledge_root: Optional[Path] = None) -> TDDOrchestratorV2:
+def get_tdd_orchestrator(knowledge_root: Optional[Path] = None) -> TDDOrchestrator:
     """
-    Singleton factory for TDDOrchestratorV2.
+    Singleton factory for TDDOrchestrator.
     
     Args:
         knowledge_root: Root path to knowledge repository
         
     Returns:
-        TDDOrchestratorV2 instance
+        TDDOrchestrator instance
     """
-    if not hasattr(get_tdd_orchestrator_v2, "_instance"):
-        get_tdd_orchestrator_v2._instance = TDDOrchestratorV2(knowledge_root)
-    return get_tdd_orchestrator_v2._instance
+    if not hasattr(get_tdd_orchestrator, "_instance"):
+        get_tdd_orchestrator._instance = TDDOrchestrator(knowledge_root)
+    return get_tdd_orchestrator._instance
 
 
 __all__ = [
-    "TDDOrchestratorV2",
+    "TDDOrchestrator",
     "TDDPhase",
     "TDDDisciplineRule",
     "TDDImplementationGuidance",
     "TDDKnowledgeLoader",
-    "get_tdd_orchestrator_v2",
+    "get_tdd_orchestrator",
 ]
