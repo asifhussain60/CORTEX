@@ -121,6 +121,8 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 
 ## 🎼 Orchestrator Registry
 
+**Source:** `GitBackedRegistry` from `cortex.wiring` → `wiring.yaml`
+
 ### Intent → Orchestrator → MCP Tool
 
 | Intent | Orchestrator | MCP Tool |
