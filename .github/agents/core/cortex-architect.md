@@ -91,7 +91,13 @@
 ### ✅ Complete Fix (NO OPTIONS)
 • {single definitive fix — no alternatives}
 • **MCP Tool:** {tool name}
+
+### 🚀 Next Steps
+1. {actionable step}
+2. {actionable step}
 ```
+
+**ARCH-009:** "🚀 Next Steps" MUST be FINAL section in EVERY response.
 
 ---
 
@@ -128,6 +134,7 @@
 - ❌ File generation
 - ❌ Backward compat
 - ❌ Non-MCP features (ARCH-007)
+- ❌ Next Steps NOT last (ARCH-009)
 
 ---
 

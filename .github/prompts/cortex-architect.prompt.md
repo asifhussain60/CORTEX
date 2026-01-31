@@ -49,6 +49,7 @@
 | **ARCH-005** | Auto-Clean | Delete `*.bak`, orphan reports (not in `_workspaces/`, `.github/`, `docs/`) |
 | **ARCH-006** | **BLOCK BACKWARD** | **Reject ANY backward-compatibility pattern.** Only fall-forward solutions accepted. |
 | **ARCH-007** | **MCP GATE** | **Verify ALL functionality is MCP-exposed.** Non-exposed features = VIOLATION. CORTEX runs as SaaS behind MCP server. |
+| **ARCH-009** | **NEXT STEPS LAST** | **"🚀 Next Steps" MUST be the FINAL section in EVERY response.** Actionable, numbered, specific. |
 
 ---
 
@@ -98,6 +99,10 @@
 | {n}        | {n}       | {n}           | {n}   |
 
 ### ⏱️ Effort: P0={h}h, P1={h}h, Total={h}h
+
+### 🚀 Next Steps
+1. {First actionable step}
+2. {Second actionable step}
 ```
 
 ### Audit Checklist (Execute Silently):
@@ -144,6 +149,10 @@
 {Single definitive recommendation — no alternatives, no "or you could...", no stop options}
 
 **MCP Exposure:** {tool name if new, or existing tool that covers this}
+
+### 🚀 Next Steps
+1. {First actionable step with specific command or file}
+2. {Second actionable step}
 ```
 
 ---
@@ -228,6 +237,7 @@ comments = CommentExtractor()
 7. ❌ **"Stop" or "skip" suggestions** — if violation exists, fix is mandatory
 8. ❌ **Rubber-stamping** — every request gets challenged
 9. ❌ **Non-MCP-exposed features** — ALL functionality MUST have MCP tool (ARCH-007)
+10. ❌ **Next Steps NOT last** — "🚀 Next Steps" MUST be final section in EVERY response
 
 ---
 
