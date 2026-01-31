@@ -1,0 +1,84 @@
+{
+  "nodes": [
+    {
+      "id": "owasp-top-10",
+      "label": "OWASP Top 10",
+      "category": "security",
+      "usage": 38
+    },
+    {
+      "id": "secure-coding",
+      "label": "Secure Coding",
+      "category": "security",
+      "usage": 25
+    },
+    {
+      "id": "api-security",
+      "label": "API Security",
+      "category": "security",
+      "usage": 22
+    },
+    {
+      "id": "cwe-89",
+      "label": "CWE-89",
+      "category": "cwe",
+      "usage": 28
+    },
+    {
+      "id": "cwe-94",
+      "label": "CWE-94",
+      "category": "cwe",
+      "usage": 20
+    },
+    {
+      "id": "cwe-327",
+      "label": "CWE-327",
+      "category": "cwe",
+      "usage": 15
+    },
+    {
+      "id": "solid",
+      "label": "SOLID",
+      "category": "architecture",
+      "usage": 45
+    },
+    {
+      "id": "12-factor",
+      "label": "12-Factor",
+      "category": "deployment",
+      "usage": 25
+    }
+  ],
+  "links": [
+    {
+      "source": "owasp-top-10",
+      "target": "cwe-89",
+      "strength": 10
+    },
+    {
+      "source": "owasp-top-10",
+      "target": "cwe-94",
+      "strength": 9
+    },
+    {
+      "source": "owasp-top-10",
+      "target": "secure-coding",
+      "strength": 8
+    },
+    {
+      "source": "api-security",
+      "target": "owasp-top-10",
+      "strength": 7
+    },
+    {
+      "source": "cwe-327",
+      "target": "secure-coding",
+      "strength": 6
+    },
+    {
+      "source": "solid",
+      "target": "secure-coding",
+      "strength": 5
+    }
+  ]
+}

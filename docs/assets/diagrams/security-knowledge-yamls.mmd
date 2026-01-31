@@ -1,0 +1,19 @@
+graph LR
+    KB[45+ Knowledge YAMLs] --> SecYAMLs[Security YAMLs]
+    
+    SecYAMLs --> OWASP[owasp-top-10.yaml]
+    SecYAMLs --> Secure[secure-coding-practices.yaml]
+    SecYAMLs --> API[api-security-checklist.yaml]
+    SecYAMLs --> CWE89[cwe-89-sql-injection.yaml]
+    SecYAMLs --> CWE94[cwe-94-code-injection.yaml]
+    SecYAMLs --> CWE22[cwe-22-path-traversal.yaml]
+    
+    OWASP -.->|References| Secure
+    API -.->|Uses| OWASP
+    CWE89 -.->|Part of| OWASP
+    
+    style KB fill:#7b61ff
+    style SecYAMLs fill:#ef4444
+    style OWASP fill:#f59e0b
+    style Secure fill:#10b981
+    style API fill:#3b82f6

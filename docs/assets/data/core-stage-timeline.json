@@ -1,0 +1,32 @@
+{
+  "stages": [
+    {
+      "name": "Comprehension",
+      "avg_ms": 150,
+      "min_ms": 80,
+      "max_ms": 300,
+      "p95_ms": 250
+    },
+    {
+      "name": "Intent Analysis",
+      "avg_ms": 200,
+      "min_ms": 100,
+      "max_ms": 400,
+      "p95_ms": 350
+    },
+    {
+      "name": "Execution",
+      "avg_ms": 500,
+      "min_ms": 200,
+      "max_ms": 2000,
+      "p95_ms": 1500
+    },
+    {
+      "name": "Coordination",
+      "avg_ms": 100,
+      "min_ms": 50,
+      "max_ms": 300,
+      "p95_ms": 200
+    }
+  ]
+}

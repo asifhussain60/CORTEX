@@ -1,0 +1,708 @@
+# L2 VIEW: KNOWLEDGE BASE
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/knowledge/index.html
+# Theme: Violet (#8b5cf6) - Knowledge & Learning
+# Reference: http://localhost:8080/architecture/index.html
+
+---
+metadata:
+  view_id: "knowledge"
+  title: "Knowledge Base"
+  tagline: "45+ Standards • RAG Integration • Vector Search"
+  path: "docs/knowledge/index.html"
+  icon: "📚"
+  theme_accent: "#8b5cf6"
+  status: "PENDING"
+  effort_hours: 20
+  target_audience:
+    - "Software Engineers (standards reference)"
+    - "Architects (best practices)"
+    - "Compliance Officers (regulations)"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "CORTEX Knowledge Base"
+  tagline: "Industry Standards Enforced by Design"
+  description: |
+    45+ authoritative knowledge YAMLs covering SOLID, Clean Code, OWASP, 12-Factor App, 
+    TDD, REST/GraphQL, DDD, and compliance standards. RAG-powered retrieval ensures 
+    every recommendation is standards-backed.
+  
+  stats_pills:
+    - label: "Knowledge YAMLs"
+      value: "45+"
+      icon: "📄"
+    - label: "Standards"
+      value: "25+"
+      icon: "✅"
+    - label: "Embeddings"
+      value: "50K"
+      icon: "🧠"
+    - label: "Query Time"
+      value: "<150ms"
+      icon: "⚡"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  knowledge_network:
+    type: "d3-force"
+    name: "Knowledge Dependency Network"
+    description: "Interactive graph showing relationships between standards and domains"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "SOLID", "category": "architecture", "references": 35, "size": 120},
+          {"id": "Clean Code", "category": "architecture", "references": 42, "size": 140},
+          {"id": "12-Factor", "category": "deployment", "references": 28, "size": 100},
+          {"id": "OWASP Top 10", "category": "security", "references": 38, "size": 130},
+          {"id": "TDD", "category": "testing", "references": 31, "size": 110},
+          {"id": "REST API", "category": "architecture", "references": 25, "size": 95},
+          {"id": "DDD", "category": "architecture", "references": 22, "size": 90},
+          {"id": "CWE-89", "category": "security", "references": 18, "size": 80},
+          {"id": "SOC2", "category": "compliance", "references": 15, "size": 75}
+        ],
+        "links": [
+          {"source": "SOLID", "target": "Clean Code", "strength": 0.9},
+          {"source": "SOLID", "target": "DDD", "strength": 0.7},
+          {"source": "12-Factor", "target": "Clean Code", "strength": 0.6},
+          {"source": "OWASP Top 10", "target": "CWE-89", "strength": 0.8},
+          {"source": "TDD", "target": "Clean Code", "strength": 0.75},
+          {"source": "REST API", "target": "12-Factor", "strength": 0.5},
+          {"source": "SOC2", "target": "OWASP Top 10", "strength": 0.85}
+        ],
+        "categories": {
+          "architecture": "#7b61ff",
+          "security": "#ef4444",
+          "testing": "#10b981",
+          "deployment": "#f59e0b",
+          "compliance": "#06b6d4"
+        }
+      }
+    
+    interactive_features:
+      - "Drag nodes to explore relationships"
+      - "Hover shows standard summary + YAML path"
+      - "Click to view full standard documentation"
+      - "Node size = number of references in codebase"
+      - "Edge thickness = cross-reference frequency"
+      - "Filter by category"
+    
+    unique_aspects:
+      - "Real-time reference counting from codebase"
+      - "Highlight standards used in current file"
+      - "Show orphaned standards (never referenced)"
+
+  rag_retrieval_flow:
+    type: "d3-sankey"
+    name: "RAG Retrieval Pipeline"
+    description: "Sankey diagram showing knowledge flow from query to recommendation"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "user_query", "label": "User Query", "color": "#7b61ff"},
+          {"id": "embedding", "label": "Query Embedding", "color": "#8b5cf6"},
+          {"id": "vector_search", "label": "Vector Search", "color": "#a78bfa"},
+          {"id": "knowledge_yaml", "label": "Knowledge YAMLs", "color": "#c4b5fd"},
+          {"id": "rerank", "label": "Reranking", "color": "#8b5cf6"},
+          {"id": "context", "label": "Context Assembly", "color": "#7b61ff"},
+          {"id": "recommendation", "label": "Standards-Backed Response", "color": "#10b981"}
+        ],
+        "links": [
+          {"source": "user_query", "target": "embedding", "value": 100},
+          {"source": "embedding", "target": "vector_search", "value": 100},
+          {"source": "vector_search", "target": "knowledge_yaml", "value": 100},
+          {"source": "knowledge_yaml", "target": "rerank", "value": 80},
+          {"source": "rerank", "target": "context", "value": 60},
+          {"source": "context", "target": "recommendation", "value": 60}
+        ]
+      }
+    
+    interactive_features:
+      - "Hover shows example query/result"
+      - "Click node to see detailed metrics"
+      - "Animated flow simulation"
+      - "Toggle between different query types"
+
+  standards_coverage_sunburst:
+    type: "d3-hierarchy"
+    name: "Standards Coverage by Domain"
+    description: "Hierarchical sunburst chart showing knowledge organization"
+    data_structure: |
+      {
+        "name": "CORTEX Knowledge Base",
+        "children": [
+          {
+            "name": "Architecture",
+            "children": [
+              {"name": "SOLID Principles", "value": 12, "coverage": 0.95},
+              {"name": "Design Patterns", "value": 23, "coverage": 0.88},
+              {"name": "Clean Code", "value": 15, "coverage": 0.92},
+              {"name": "REST API Design", "value": 10, "coverage": 0.85},
+              {"name": "DDD", "value": 8, "coverage": 0.78}
+            ]
+          },
+          {
+            "name": "Security",
+            "children": [
+              {"name": "OWASP Top 10", "value": 10, "coverage": 0.98},
+              {"name": "CWE Standards", "value": 6, "coverage": 0.90},
+              {"name": "Secure Coding", "value": 12, "coverage": 0.87}
+            ]
+          },
+          {
+            "name": "Testing",
+            "children": [
+              {"name": "TDD Best Practices", "value": 8, "coverage": 0.93},
+              {"name": "Testing Pyramid", "value": 5, "coverage": 0.89},
+              {"name": "Test Doubles", "value": 6, "coverage": 0.85}
+            ]
+          },
+          {
+            "name": "Deployment",
+            "children": [
+              {"name": "12-Factor App", "value": 12, "coverage": 0.91},
+              {"name": "CI/CD Pipelines", "value": 10, "coverage": 0.86},
+              {"name": "Infrastructure as Code", "value": 8, "coverage": 0.82}
+            ]
+          },
+          {
+            "name": "Compliance",
+            "children": [
+              {"name": "SOC2", "value": 15, "coverage": 0.88},
+              {"name": "GDPR", "value": 12, "coverage": 0.85},
+              {"name": "PCI-DSS", "value": 10, "coverage": 0.80}
+            ]
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Click segment to zoom in"
+      - "Hover shows coverage percentage"
+      - "Color intensity = coverage level"
+      - "Search for specific standard"
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS (Minimum 2)
+# ============================================================================
+
+mermaid_diagrams:
+  knowledge_organization:
+    type: "mindmap"
+    title: "Knowledge Base Organization"
+    code: |
+      mindmap
+        root((CORTEX<br/>Knowledge<br/>Base))
+          Architecture & Design
+            SOLID Principles
+              SRP
+              OCP
+              LSP
+              ISP
+              DIP
+            Design Patterns
+              Creational
+              Structural
+              Behavioral
+            Clean Code
+            REST/GraphQL API
+            DDD
+              Bounded Contexts
+              Aggregates
+              Entities
+          Security
+            OWASP Top 10
+            CWE Standards
+              CWE-89 SQL Injection
+              CWE-327 Weak Crypto
+              CWE-22 Path Traversal
+            Secure Coding Practices
+            API Security
+          Testing & Validation
+            TDD Best Practices
+            Testing Pyramid
+            Test Doubles
+            Coverage Strategies
+          Deployment & DevOps
+            12-Factor App
+            CI/CD Pipelines
+            Infrastructure as Code
+            Monitoring & Observability
+          Compliance
+            SOC2
+            GDPR
+            PCI-DSS
+            HIPAA
+            ISO27001
+          Performance
+            Optimization Techniques
+            Caching Strategies
+            Profiling & Analysis
+          Data Management
+            Oracle Best Practices
+            Vector Databases
+            Embeddings Strategy
+
+  rag_integration_flow:
+    type: "flowchart"
+    title: "RAG Integration Workflow"
+    code: |
+      flowchart TD
+        A[User Request] --> B[Intent Classification]
+        B --> C{Standards<br/>Required?}
+        C -->|Yes| D[Query Vector DB]
+        C -->|No| E[Direct Processing]
+        D --> F[Retrieve Top-K YAMLs]
+        F --> G[Rerank by Relevance]
+        G --> H[Extract Sections]
+        H --> I[Assemble Context]
+        I --> J[Generate Response<br/>with Citations]
+        E --> J
+        J --> K{Standards<br/>Applied?}
+        K -->|Yes| L[✅ Compliant Response]
+        K -->|No| M[❌ Block + Suggest Fix]
+        
+        style A fill:#7b61ff,color:#fff
+        style D fill:#8b5cf6,color:#fff
+        style L fill:#10b981,color:#fff
+        style M fill:#ef4444,color:#fff
+
+  standards_enforcement:
+    type: "sequenceDiagram"
+    title: "Standards Enforcement at Runtime"
+    code: |
+      sequenceDiagram
+        participant User
+        participant CORTEX
+        participant KnowledgeBase
+        participant RAG
+        participant Validator
+        
+        User->>CORTEX: "Create UserManager class"
+        CORTEX->>KnowledgeBase: Query SOLID principles
+        KnowledgeBase-->>CORTEX: SRP violation detected
+        CORTEX->>RAG: Retrieve alternatives
+        RAG->>KnowledgeBase: Search "repository pattern"
+        KnowledgeBase-->>RAG: Repository + Service patterns
+        RAG-->>CORTEX: Recommendations with YAML refs
+        CORTEX->>Validator: Check compliance
+        Validator-->>CORTEX: ✅ Standards-aligned
+        CORTEX-->>User: Counter-proposal + citations
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+sections:
+  overview:
+    title: "Industry Standards at Your Fingertips"
+    icon: "🎯"
+    content_blocks:
+      - type: "business_case"
+        title: "Why Knowledge Base Matters"
+        points:
+          - "**Standards-First Development**: Every recommendation backed by industry best practices"
+          - "**Compliance Ready**: SOC2, GDPR, PCI-DSS, HIPAA evidence built-in"
+          - "**Reduce Technical Debt**: Prevent anti-patterns before they ship"
+          - "**Onboard Faster**: New engineers learn standards through AI guidance"
+          - "**Audit Trail**: Every decision linked to authoritative source"
+      
+      - type: "technical_approach"
+        title: "How CORTEX Uses Knowledge"
+        points:
+          - "**45+ Knowledge YAMLs**: Authoritative sources in `cortex_brain/tier3/knowledge/`"
+          - "**RAG-Powered Retrieval**: Vector search finds relevant standards in <150ms"
+          - "**Runtime Enforcement**: Standards checked during orchestration, not post-hoc"
+          - "**Citation Required**: Every recommendation includes YAML path + line numbers"
+          - "**Auto-Update**: Knowledge YAMLs versioned in Git, auto-loaded on change"
+      
+      - type: "metrics"
+        title: "Knowledge Base Metrics"
+        stats:
+          - label: "Knowledge YAMLs"
+            value: "45+"
+            description: "Authoritative standards"
+          - label: "Total Sections"
+            value: "500+"
+            description: "Granular best practices"
+          - label: "Vector Embeddings"
+            value: "50K"
+            description: "Semantic search ready"
+          - label: "Query Latency"
+            value: "<150ms"
+            description: "P95 retrieval time"
+
+  knowledge_structure:
+    title: "Knowledge Organization"
+    icon: "🗂️"
+    content_blocks:
+      - type: "directory_tree"
+        title: "cortex_brain/tier3/knowledge/"
+        structure: |
+          ARCHITECTURE/
+            ├── solid-principles.yaml           # SOLID (SRP, OCP, LSP, ISP, DIP)
+            ├── design-patterns.yaml            # GoF + Modern patterns
+            ├── clean-code.yaml                 # Uncle Bob principles
+            ├── rest-api-design.yaml            # REST best practices
+            ├── graphql-best-practices.yaml     # GraphQL standards
+            ├── refactoring.yaml                # Martin Fowler catalog
+            ├── anti-patterns.yaml              # Common mistakes
+            ├── resilience-patterns.yaml        # Cloud Native patterns
+            ├── bounded-contexts.yaml           # DDD contexts
+            └── aggregates-entities.yaml        # DDD tactical patterns
+          
+          SECURITY/
+            ├── owasp-top-10.yaml               # OWASP Top 10 2021
+            ├── secure-coding-practices.yaml    # OWASP secure coding
+            ├── api-security-checklist.yaml     # API security
+            ├── cwe_89_sql_injection.yaml       # SQL injection CWE
+            ├── cwe_327_weak_crypto.yaml        # Weak cryptography
+            ├── cwe_22_path_traversal.yaml      # Path traversal
+            ├── cwe_78_os_injection.yaml        # OS command injection
+            ├── cwe_94_code_injection.yaml      # Code injection
+            └── cwe_95_eval_injection.yaml      # Eval injection
+          
+          TESTING-VALIDATION/
+            ├── tdd-best-practices.yaml         # TDD principles
+            ├── testing-pyramid.yaml            # Mike Cohn pyramid
+            └── test-doubles.yaml               # Mocks, stubs, fakes
+          
+          DEPLOYMENT/
+            ├── cicd-pipelines.yaml             # CI/CD best practices
+            ├── infrastructure-as-code.yaml     # IaC patterns
+            ├── aws-best-practices.yaml         # AWS-specific
+            └── monitoring-observability.yaml   # Observability
+          
+          PERFORMANCE/
+            ├── optimization-techniques.yaml    # General optimization
+            ├── caching-strategies.yaml         # Cache patterns
+            └── profiling-analysis.yaml         # Profiling tools
+          
+          COMPLIANCE/
+            ├── soc2-controls.yaml              # SOC2 Type II
+            ├── gdpr-requirements.yaml          # GDPR compliance
+            ├── pci-dss-requirements.yaml       # PCI-DSS
+            ├── hipaa-safeguards.yaml           # HIPAA
+            └── iso27001-controls.yaml          # ISO27001
+      
+      - type: "yaml_structure"
+        title: "Knowledge YAML Schema"
+        example: |
+          # Example: solid-principles.yaml
+          standard:
+            name: "SOLID Principles"
+            source: "Robert C. Martin (Uncle Bob)"
+            version: "2021"
+            category: "architecture"
+          
+          principles:
+            - id: "SRP"
+              name: "Single Responsibility Principle"
+              description: "A class should have one, and only one, reason to change"
+              
+              rules:
+                - "Each class addresses a specific concern"
+                - "High cohesion within class"
+                - "Low coupling between classes"
+              
+              violations:
+                - pattern: "class.*Manager"
+                  reason: "'Manager' suffix often indicates SRP violation"
+                  fix: "Split into Repository + Service + Validator"
+                
+                - pattern: "God Object"
+                  reason: "Class with >10 public methods likely violates SRP"
+                  fix: "Extract cohesive subsets into separate classes"
+              
+              examples:
+                - good: |
+                    class UserRepository:
+                        def save(self, user): ...
+                        def find_by_id(self, id): ...
+                    
+                    class UserValidator:
+                        def validate(self, user): ...
+                
+                - bad: |
+                    class UserManager:  # SRP violation
+                        def save(self, user): ...
+                        def validate(self, user): ...
+                        def send_email(self, user): ...
+                        def log_activity(self, user): ...
+
+  rag_integration:
+    title: "RAG-Powered Knowledge Retrieval"
+    icon: "🔍"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Vector Search for Standards"
+        description: |
+          CORTEX embeds all knowledge YAMLs into vector database. When you ask 
+          a question, relevant sections retrieved via semantic search in <150ms.
+        
+        workflow:
+          - step: "Offline Indexing"
+            description: "All YAMLs chunked → embedded → stored in ChromaDB"
+            frequency: "On YAML change (Git hook)"
+          
+          - step: "Query Embedding"
+            description: "User query → OpenAI ada-002 → 1536-dim vector"
+            latency: "<50ms"
+          
+          - step: "Vector Search"
+            description: "Cosine similarity search → Top-K chunks (K=10)"
+            latency: "<80ms"
+          
+          - step: "Reranking"
+            description: "Cross-encoder model reranks by relevance"
+            latency: "<20ms"
+          
+          - step: "Context Assembly"
+            description: "Extract full sections from Top-5 chunks"
+            latency: "<10ms"
+      
+      - type: "code_example"
+        language: "python"
+        title: "RAG Retrieval Example"
+        code: |
+          # cortex/brain/knowledge/rag_retriever.py
+          from cortex.brain.knowledge.vector_store import VectorStore
+          
+          class RAGRetriever:
+              def __init__(self):
+                  self.vector_store = VectorStore(collection="knowledge_base")
+              
+              def retrieve(self, query: str, top_k: int = 5) -> list[dict]:
+                  """Retrieve relevant knowledge sections"""
+                  # 1. Embed query
+                  query_vector = self.embed(query)
+                  
+                  # 2. Vector search
+                  results = self.vector_store.search(
+                      query_vector=query_vector,
+                      top_k=top_k * 2,  # Over-retrieve for reranking
+                      similarity_threshold=0.7
+                  )
+                  
+                  # 3. Rerank
+                  reranked = self.rerank(query, results)
+                  
+                  # 4. Return top-K with metadata
+                  return [
+                      {
+                          "yaml_path": r["metadata"]["path"],
+                          "section": r["metadata"]["section"],
+                          "content": r["text"],
+                          "similarity": r["score"],
+                          "citation": f"{r['metadata']['path']} lines {r['metadata']['lines']}"
+                      }
+                      for r in reranked[:top_k]
+                  ]
+
+  standards_enforcement:
+    title: "Runtime Standards Enforcement"
+    icon: "⚖️"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "ARCH-012: Industry Standards Gate"
+        description: |
+          Every orchestrator checks recommendations against knowledge base 
+          BEFORE execution. Non-compliant solutions rejected with fix suggestions.
+        
+        enforcement_points:
+          - stage: "Request Analysis"
+            check: "Classify domain (architecture, security, testing, etc.)"
+            action: "Load relevant knowledge YAMLs"
+          
+          - stage: "Solution Generation"
+            check: "Query RAG for applicable standards"
+            action: "Inject standards context into orchestrator"
+          
+          - stage: "Validation"
+            check: "Compare proposed solution against standards"
+            action: "Score compliance (0.0-1.0)"
+          
+          - stage: "Gate Decision"
+            check: "Compliance score >= 0.8?"
+            action: "PROCEED if pass, BLOCK + suggest fix if fail"
+      
+      - type: "example_scenario"
+        title: "Standards Enforcement in Action"
+        scenario: |
+          **User Request:** "Create a password validation function"
+          
+          **1. Domain Classification:**
+          - Primary: Security
+          - Secondary: Architecture (function design)
+          
+          **2. Knowledge Retrieval:**
+          - SECURITY/secure-coding-practices.yaml § cryptography
+          - SECURITY/owasp-top-10.yaml § A02:2021 Cryptographic Failures
+          - SECURITY/cwe_327_weak_crypto.yaml
+          
+          **3. Standards Check:**
+          - ✅ Use bcrypt/Argon2 (not MD5/SHA1)
+          - ✅ Parameterized queries (prevent SQLi)
+          - ✅ Input validation (whitelist approach)
+          - ❌ User proposed plain text storage → BLOCKED
+          
+          **4. Counter-Proposal:**
+          ```python
+          # Standards-compliant implementation
+          import bcrypt
+          
+          def validate_and_hash_password(password: str) -> dict:
+              # Input validation (OWASP)
+              if len(password) < 12:
+                  return {"valid": False, "error": "Min 12 chars"}
+              
+              # Hash with bcrypt (CWE-327 compliant)
+              salt = bcrypt.gensalt(rounds=12)
+              hashed = bcrypt.hashpw(password.encode(), salt)
+              
+              return {"valid": True, "hash": hashed}
+          ```
+          
+          **5. Citations:**
+          - SECURITY/secure-coding-practices.yaml lines 200-250
+          - SECURITY/cwe_327_weak_crypto.yaml lines 45-89
+          - SECURITY/owasp-top-10.yaml lines 120-145
+
+  compliance_evidence:
+    title: "Compliance Evidence Generation"
+    icon: "📋"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "SOC2/GDPR/PCI-DSS Ready"
+        description: |
+          Knowledge base contains compliance standards. CORTEX generates 
+          audit evidence showing code adheres to requirements.
+        
+        compliance_standards:
+          - name: "SOC2 Type II"
+            controls: 15
+            yaml: "COMPLIANCE/soc2-controls.yaml"
+            evidence: "Automated control testing + audit logs"
+          
+          - name: "GDPR"
+            requirements: 12
+            yaml: "COMPLIANCE/gdpr-requirements.yaml"
+            evidence: "Data flow tracking + consent management"
+          
+          - name: "PCI-DSS"
+            requirements: 10
+            yaml: "COMPLIANCE/pci-dss-requirements.yaml"
+            evidence: "Encryption validation + access control"
+          
+          - name: "HIPAA"
+            safeguards: 8
+            yaml: "COMPLIANCE/hipaa-safeguards.yaml"
+            evidence: "PHI handling audit + encryption"
+      
+      - type: "evidence_report_example"
+        title: "Sample Compliance Report"
+        example: |
+          # SOC2 Control CC6.1: Logical Access Controls
+          
+          **Requirement:** System implements logical access controls to restrict 
+          access to information assets
+          
+          **Implementation:**
+          - ✅ Role-based access control (RBAC) enforced
+          - ✅ Multi-factor authentication (MFA) available
+          - ✅ Session timeout after 30 minutes
+          - ✅ Audit logging of all access attempts
+          
+          **Evidence:**
+          - Code: cortex/security/rbac.py (SOLID-compliant)
+          - Tests: tests/security/test_rbac.py (95% coverage)
+          - Audit Logs: Hash-chain verified (CORE-027)
+          - Standards: SECURITY/api-security-checklist.yaml § authentication
+          
+          **Verification:**
+          - Manual: Security engineer review (2026-01-25)
+          - Automated: Daily compliance scan (last: 2026-01-31 08:00 UTC)
+          - Penetration Test: Passed (2026-01-15)
+
+  best_practices:
+    title: "Using Knowledge Base Effectively"
+    icon: "💡"
+    content_blocks:
+      - type: "checklist"
+        title: "Developer Guide"
+        items:
+          - text: "Query knowledge before implementing new features"
+            command: "cortex knowledge search 'REST API pagination'"
+          - text: "Review standards for your domain (architecture, security, etc.)"
+            command: "cortex knowledge list --category security"
+          - text: "Cite standards in code comments and PRs"
+            example: "# Follows SOLID/SRP (solid-principles.yaml lines 45-120)"
+          - text: "Update knowledge YAMLs when industry standards change"
+            priority: "P1"
+          - text: "Contribute new standards as you discover them"
+            priority: "P2"
+      
+      - type: "tips"
+        title: "Pro Tips"
+        tips:
+          - "Use semantic search, not keyword: 'prevent SQL injection' > 'SQLi'"
+          - "Check multiple standards: architecture + security + testing"
+          - "Review anti-patterns YAML to avoid common mistakes"
+          - "Link YAML sections in documentation for traceability"
+
+---
+# ============================================================================
+# CALL TO ACTION
+# ============================================================================
+
+cta_section:
+  title: "Explore the Knowledge Base"
+  description: "Search 45+ standards and best practices"
+  
+  quick_links:
+    - text: "Browse All Standards"
+      link: "/knowledge"
+      description: "Categorized index of all YAMLs"
+    - text: "Semantic Search"
+      link: "/knowledge/search"
+      description: "Natural language queries"
+    - text: "Compliance Dashboard"
+      link: "/compliance"
+      description: "SOC2/GDPR/PCI-DSS status"
+  
+  example_queries:
+    - query: "How to implement pagination in REST APIs?"
+      result: "REST API Design § Pagination (cursor vs offset)"
+    - query: "Best practices for password hashing?"
+      result: "Secure Coding Practices § Cryptography + CWE-327"
+    - query: "What is the Testing Pyramid?"
+      result: "Testing Pyramid § Ratios (70% unit, 20% integration, 10% E2E)"
+
+---
+# ============================================================================
+# VISUALIZATION DATA FILES
+# ============================================================================
+
+data_files:
+  - name: "knowledge-network.json"
+    description: "Force-directed graph of standards relationships"
+  - name: "rag-retrieval-flow.json"
+    description: "Sankey diagram of RAG pipeline"
+  - name: "standards-coverage-sunburst.json"
+    description: "Hierarchical coverage by domain"
+
+---
+*Knowledge Base view — 45+ standards enforced by design, RAG-powered retrieval.*

@@ -1,0 +1,35 @@
+{
+  "timeline": [
+    {
+      "date": "2026-01-01",
+      "tokens_raw": 150000,
+      "tokens_optimized": 45000,
+      "cost_saved": 105
+    },
+    {
+      "date": "2026-01-08",
+      "tokens_raw": 160000,
+      "tokens_optimized": 48500,
+      "cost_saved": 115
+    },
+    {
+      "date": "2026-01-15",
+      "tokens_raw": 170000,
+      "tokens_optimized": 52000,
+      "cost_saved": 125
+    },
+    {
+      "date": "2026-01-22",
+      "tokens_raw": 180000,
+      "tokens_optimized": 55500,
+      "cost_saved": 135
+    },
+    {
+      "date": "2026-01-29",
+      "tokens_raw": 190000,
+      "tokens_optimized": 59000,
+      "cost_saved": 145
+    }
+  ],
+  "total_saved_30d": 658
+}

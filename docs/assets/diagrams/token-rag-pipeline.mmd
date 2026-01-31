@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant User
+    participant Embedder
+    participant VectorDB
+    participant RAG
+    participant LLM
+    
+    User->>Embedder: Query
+    Embedder->>VectorDB: Search Embedding
+    VectorDB->>RAG: Top 5 Results
+    RAG->>RAG: Rank & Filter
+    RAG->>LLM: Optimized Context
+    LLM->>User: Response

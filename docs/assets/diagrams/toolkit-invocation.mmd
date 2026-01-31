@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant User
+    participant MCP Server
+    participant Tool Registry
+    participant Tool
+    
+    User->>MCP Server: Request
+    MCP Server->>Tool Registry: Discover Tool
+    Tool Registry->>MCP Server: Tool Schema
+    MCP Server->>Tool: Invoke
+    Tool->>Tool: Execute
+    Tool->>MCP Server: Result
+    MCP Server->>User: Response

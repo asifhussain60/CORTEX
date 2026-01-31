@@ -1,0 +1,99 @@
+{
+  "tiers": [
+    {
+      "id": "tier0",
+      "name": "Tier 0: SKULL",
+      "color": "#ef4444",
+      "nodes": [
+        {
+          "id": "skull-001",
+          "role": "Core Validator",
+          "connections": [
+            "tier1-001",
+            "tier1-002"
+          ]
+        },
+        {
+          "id": "skull-002",
+          "role": "Safety Guard",
+          "connections": [
+            "tier1-003"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tier1",
+      "name": "Tier 1: Working Memory",
+      "color": "#10b981",
+      "nodes": [
+        {
+          "id": "tier1-001",
+          "role": "Context Manager",
+          "connections": [
+            "tier2-001"
+          ]
+        },
+        {
+          "id": "tier1-002",
+          "role": "Buffer Handler",
+          "connections": [
+            "tier2-002"
+          ]
+        },
+        {
+          "id": "tier1-003",
+          "role": "Query Router",
+          "connections": [
+            "tier2-003"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tier2",
+      "name": "Tier 2: Knowledge Graph",
+      "color": "#3b82f6",
+      "nodes": [
+        {
+          "id": "tier2-001",
+          "role": "Pattern Learner",
+          "connections": [
+            "tier3-001"
+          ]
+        },
+        {
+          "id": "tier2-002",
+          "role": "Relationship Mapper",
+          "connections": [
+            "tier3-002"
+          ]
+        },
+        {
+          "id": "tier2-003",
+          "role": "Semantic Linker",
+          "connections": [
+            "tier3-001"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tier3",
+      "name": "Tier 3: Dev Context",
+      "color": "#f59e0b",
+      "nodes": [
+        {
+          "id": "tier3-001",
+          "role": "Metrics Collector",
+          "connections": []
+        },
+        {
+          "id": "tier3-002",
+          "role": "Analytics Engine",
+          "connections": []
+        }
+      ]
+    }
+  ]
+}

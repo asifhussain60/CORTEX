@@ -1,0 +1,84 @@
+{
+  "nodes": [
+    {
+      "id": "cortex_process_request",
+      "label": "Process Request",
+      "category": "core",
+      "usage": 1500
+    },
+    {
+      "id": "cortex_challenge",
+      "label": "Challenge",
+      "category": "core",
+      "usage": 800
+    },
+    {
+      "id": "cortex_total_recall",
+      "label": "Total Recall",
+      "category": "discovery",
+      "usage": 600
+    },
+    {
+      "id": "cortex_lens_analyze",
+      "label": "LENS Analyze",
+      "category": "analysis",
+      "usage": 1200
+    },
+    {
+      "id": "cortex_git_history",
+      "label": "Git History",
+      "category": "analysis",
+      "usage": 900
+    },
+    {
+      "id": "cortex_ast_analyze",
+      "label": "AST Analyze",
+      "category": "analysis",
+      "usage": 700
+    },
+    {
+      "id": "cortex_detect_duplicates",
+      "label": "Detect Duplicates",
+      "category": "quality",
+      "usage": 400
+    },
+    {
+      "id": "cortex_tools_catalog",
+      "label": "Tools Catalog",
+      "category": "discovery",
+      "usage": 300
+    }
+  ],
+  "links": [
+    {
+      "source": "cortex_process_request",
+      "target": "cortex_lens_analyze",
+      "strength": 10
+    },
+    {
+      "source": "cortex_lens_analyze",
+      "target": "cortex_git_history",
+      "strength": 8
+    },
+    {
+      "source": "cortex_lens_analyze",
+      "target": "cortex_ast_analyze",
+      "strength": 9
+    },
+    {
+      "source": "cortex_process_request",
+      "target": "cortex_challenge",
+      "strength": 6
+    },
+    {
+      "source": "cortex_total_recall",
+      "target": "cortex_lens_analyze",
+      "strength": 7
+    },
+    {
+      "source": "cortex_detect_duplicates",
+      "target": "cortex_ast_analyze",
+      "strength": 5
+    }
+  ]
+}

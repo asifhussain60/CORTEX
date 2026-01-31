@@ -1,0 +1,18 @@
+graph TB
+    Start[Choose Path] --> Beginner{Level?}
+    Beginner -->|New| Junior[Junior Developer Path]
+    Beginner -->|Some Exp| Mid[Mid-Level Path]
+    Beginner -->|Advanced| Senior[Senior Path]
+    
+    Junior --> JuniorSkills[Python + Git + Testing]
+    Mid --> MidSkills[Architecture + Design + TDD]
+    Senior --> SeniorSkills[Leadership + Strategy + Mentoring]
+    
+    JuniorSkills --> Career1[Junior Developer]
+    MidSkills --> Career2[Senior Developer]
+    SeniorSkills --> Career3[Tech Lead / Architect]
+    
+    style Start fill:#7b61ff
+    style Junior fill:#10b981
+    style Mid fill:#3b82f6
+    style Senior fill:#f59e0b

@@ -1,0 +1,78 @@
+{
+  "nodes": [
+    {
+      "id": "python-basics",
+      "label": "Python Basics",
+      "level": "beginner",
+      "duration": 40
+    },
+    {
+      "id": "python-advanced",
+      "label": "Python Advanced",
+      "level": "intermediate",
+      "duration": 60
+    },
+    {
+      "id": "python-expert",
+      "label": "Python Expert",
+      "level": "advanced",
+      "duration": 80
+    },
+    {
+      "id": "testing-basics",
+      "label": "Testing Basics",
+      "level": "beginner",
+      "duration": 30
+    },
+    {
+      "id": "tdd-mastery",
+      "label": "TDD Mastery",
+      "level": "advanced",
+      "duration": 50
+    },
+    {
+      "id": "architecture-intro",
+      "label": "Architecture Intro",
+      "level": "intermediate",
+      "duration": 45
+    },
+    {
+      "id": "microservices",
+      "label": "Microservices",
+      "level": "advanced",
+      "duration": 70
+    }
+  ],
+  "links": [
+    {
+      "source": "python-basics",
+      "target": "python-advanced",
+      "type": "prerequisite"
+    },
+    {
+      "source": "python-advanced",
+      "target": "python-expert",
+      "type": "prerequisite"
+    },
+    {
+      "source": "python-basics",
+      "target": "testing-basics",
+      "type": "prerequisite"
+    },
+    {
+      "source": "testing-basics",
+      "target": "tdd-mastery",
+      "type": "prerequisite"
+    },
+    {
+      "source": "python-advanced",
+      "target": "architecture-intro",
+      "type": "prerequisite"
+    },
+    {
+      "source": "architecture-intro",
+      "target": "microservices",
+      "type": "prerequisite"
+    }
+  ]
+}

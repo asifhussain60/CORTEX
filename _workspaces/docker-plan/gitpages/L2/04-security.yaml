@@ -1,0 +1,312 @@
+# L2 VIEW: SECURITY
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/security/index.html
+# Theme: Red (#ef4444) - Protection & Vigilance
+# Reference: http://localhost:8080/architecture/index.html
+# Images: Protection/Assessment/Compliance cards (Pasted Image 1)
+
+---
+metadata:
+  view_id: "security"
+  title: "Security"
+  tagline: "Protection • Assessment • Compliance"
+  path: "docs/security/index.html"
+  icon: "🛡️"
+  theme_accent: "#ef4444"
+  status: "PENDING"
+  effort_hours: 18
+  target_audience:
+    - "Security Engineers (primary)"
+    - "Compliance Officers"
+    - "CISOs"
+    - "Software Engineers"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "Security Framework"
+  tagline: "STRIDE • 6 CWE Patterns • OWASP Top 10 • SOC 2 Ready"
+  description: |
+    Enterprise-grade security built into every orchestrator. Role-based access control,
+    hash-chain audit logging, 6 CWE pattern detection, and SOC 2 compliance evidence tracking.
+  
+  stats_pills:
+    - label: "CWE Patterns"
+      value: "6"
+      icon: "🛡️"
+    - label: "OWASP Coverage"
+      value: "10/10"
+      icon: "✅"
+    - label: "Audit Logs"
+      value: "100%"
+      icon: "📝"
+    - label: "Compliance"
+      value: "SOC 2"
+      icon: "🏆"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  threat_matrix:
+    type: "d3-matrix"
+    name: "STRIDE Threat Model Matrix"
+    description: "Interactive heatmap showing threat coverage across CORTEX components"
+    data_structure: |
+      {
+        "threats": ["Spoofing", "Tampering", "Repudiation", "Info Disclosure", "DoS", "Elevation"],
+        "components": ["MCP Gateway", "Orchestrators", "Brain", "State Manager", "Audit Logger"],
+        "coverage": [
+          [0.9, 0.8, 0.95, 0.7, 0.6, 0.85],
+          [0.85, 0.9, 0.9, 0.8, 0.7, 0.8],
+          [0.95, 0.95, 1.0, 0.9, 0.8, 0.9],
+          [0.8, 0.9, 0.95, 0.75, 0.7, 0.8],
+          [0.9, 1.0, 1.0, 0.95, 0.85, 0.9]
+        ]
+      }
+    
+    interactive_features:
+      - "Hover shows threat details + mitigation"
+      - "Click cell to see implementation evidence"
+      - "Color intensity = coverage level (red=low, green=high)"
+      - "Filter by threat category"
+  
+  cwe_detection_timeline:
+    type: "d3-timeline"
+    name: "CWE Pattern Detection History"
+    description: "Real-time timeline of security vulnerabilities detected over 30 days"
+    data_structure: |
+      {
+        "detections": [
+          {
+            "date": "2026-01-25",
+            "cwe": "89",
+            "severity": "HIGH",
+            "file": "user_repo.py",
+            "status": "fixed"
+          },
+          {
+            "date": "2026-01-28",
+            "cwe": "327",
+            "severity": "MEDIUM",
+            "file": "crypto_utils.py",
+            "status": "open"
+          }
+        ]
+      }
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS
+# ============================================================================
+
+mermaid_diagrams:
+  security_architecture:
+    type: "flowchart"
+    title: "Security Layer Architecture"
+    source: |
+      flowchart TD
+        Request([Incoming Request]) --> Auth[🔐 Authentication]
+        Auth --> RBAC[👥 RBAC Check]
+        RBAC --> InputVal[✅ Input Validation]
+        InputVal --> RateLimit[⏱️ Rate Limiting]
+        RateLimit --> Execute[⚙️ Execute Orchestrator]
+        Execute --> AuditLog[📝 Audit Logger]
+        AuditLog --> HashChain[🔗 Hash Chain]
+        HashChain --> Response([Response])
+        
+        Auth -.->|Failed| Reject([❌ 401 Unauthorized])
+        RBAC -.->|Failed| Reject2([❌ 403 Forbidden])
+        InputVal -.->|Failed| Reject3([❌ 400 Bad Request])
+        RateLimit -.->|Exceeded| Reject4([❌ 429 Too Many Requests])
+        
+        style Auth fill:#ef4444
+        style RBAC fill:#f59e0b
+        style InputVal fill:#10b981
+        style AuditLog fill:#7b61ff
+  
+  cwe_patterns_mindmap:
+    type: "mindmap"
+    title: "6 CWE Patterns Detected"
+    source: |
+      mindmap
+        root((CWE<br/>Patterns))
+          CWE-89
+            SQL Injection
+            Unsanitized queries
+            String concatenation
+            Detection: AST analysis
+          CWE-94
+            Code Injection
+            eval() usage
+            exec() calls
+            Detection: Pattern matching
+          CWE-95
+            Eval Injection
+            Dynamic code execution
+            Unsafe deserialization
+            Detection: AST nodes
+          CWE-22
+            Path Traversal
+            ../ sequences
+            Unvalidated paths
+            Detection: String analysis
+          CWE-78
+            Command Injection
+            os.system() calls
+            subprocess misuse
+            Detection: Function calls
+          CWE-327
+            Weak Cryptography
+            MD5/SHA1 usage
+            Hardcoded keys
+            Detection: Import analysis
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+content_sections:
+  section_1_three_pillars:
+    title: "🏛️ Three Pillars of Security"
+    audience: ["All roles"]
+    layout: "3-column glass cards (Protection, Assessment, Compliance)"
+    content:
+      protection:
+        icon: "🔒"
+        title: "Protection"
+        description: |
+          Role-based access control, data encryption, privacy safeguards,
+          and hash-chain audit logging for tamper-proof security compliance.
+        features:
+          - "RBAC with granular permissions"
+          - "AES-256 data encryption at rest"
+          - "TLS 1.3 for data in transit"
+          - "Secrets management via environment variables"
+          - "Hash-chain audit logs (tamper-proof)"
+        links:
+          - label: "RBAC"
+            href: "access-control.html"
+          - label: "Data Encryption"
+            href: "data-encryption.html"
+          - label: "Audit Logging"
+            href: "audit-logging.html"
+      
+      assessment:
+        icon: "📋"
+        title: "Assessment"
+        description: |
+          STRIDE threat modeling, 6 CWE pattern detection (CWE-94, CWE-78, CWE-89,
+          CWE-327, CWE-22, CWE-95), and automated vulnerability scanning.
+        features:
+          - "STRIDE threat model coverage"
+          - "6 CWE patterns via AST analysis"
+          - "Automated security scanning"
+          - "Dependency vulnerability checking"
+          - "Penetration testing results"
+        links:
+          - label: "STRIDE"
+            href: "threat-modeling.html"
+          - label: "6 CWEs"
+            href: "cwe-patterns.html"
+          - label: "Scanner"
+            href: "ast-scanner.html"
+      
+      compliance:
+        icon: "✅"
+        title: "Compliance"
+        description: |
+          OWASP Top 10 coverage, SOC 2 / ISO 27001 readiness, GDPR / HIPAA
+          checklists with evidence tracking and team security training.
+        features:
+          - "OWASP Top 10 compliance (10/10)"
+          - "SOC 2 Type II audit trail"
+          - "ISO 27001 controls mapping"
+          - "GDPR data privacy compliance"
+          - "HIPAA security safeguards"
+        links:
+          - label: "OWASP"
+            href: "owasp.html"
+          - label: "SOC 2"
+            href: "soc2.html"
+          - label: "Training"
+            href: "security-training.html"
+  
+  section_2_cwe_details:
+    title: "🛡️ Six CWE Patterns in Detail"
+    audience: ["Engineers", "Security Engineers"]
+    layout: "glass-card accordion with CWE details"
+    content:
+      patterns:
+        - cwe_id: "89"
+          name: "SQL Injection"
+          severity: "HIGH"
+          description: "Unsanitized SQL queries allowing attacker-controlled input"
+          detection_method: "AST analysis for string concatenation in SQL contexts"
+          example_vulnerable: |
+            query = f"SELECT * FROM users WHERE name = '{user_input}'"
+            cursor.execute(query)
+          example_secure: |
+            query = "SELECT * FROM users WHERE name = ?"
+            cursor.execute(query, (user_input,))
+          mitigation:
+            - "Use parameterized queries ALWAYS"
+            - "ORM frameworks (SQLAlchemy)"
+            - "Input validation with whitelist"
+        
+        - cwe_id: "94"
+          name: "Code Injection"
+          severity: "CRITICAL"
+          description: "Dynamic code execution with untrusted input"
+          detection_method: "Pattern matching for eval(), exec(), compile()"
+          example_vulnerable: |
+            user_code = request.POST['code']
+            eval(user_code)
+          example_secure: |
+            # Avoid eval entirely. Use safe parsing libraries.
+            import ast
+            tree = ast.parse(user_code, mode='eval')
+          mitigation:
+            - "Never use eval() with user input"
+            - "Sandboxing if dynamic execution required"
+            - "Code review for exec() usage"
+  
+  section_3_audit_trail:
+    title: "📝 Hash-Chain Audit Logging"
+    audience: ["Compliance Officers", "Security Engineers"]
+    layout: "glass-card with audit log viewer"
+    content:
+      description: |
+        Every CORTEX operation logged with cryptographic hash-chain ensuring tamper-proof audit trail.
+        Categories: GOVERNANCE, ORCHESTRATOR, VALIDATION, SECURITY.
+      
+      log_entry_example: |
+        {
+          "id": "uuid",
+          "timestamp": "2026-01-31T10:00:00Z",
+          "category": "SECURITY",
+          "action": "CWE_89_DETECTED",
+          "user": "dev1",
+          "file": "user_repo.py",
+          "line": 45,
+          "severity": "HIGH",
+          "previous_hash": "abc123...",
+          "current_hash": "def456..."
+        }
+      
+      prometheus_metrics:
+        - "audit_entries_total{category='SECURITY'}"
+        - "tamper_alerts_total"
+        - "audit_chain_integrity"
+
+---
+*Security view - comprehensive protection framework with STRIDE matrix, 6 CWE patterns, and compliance evidence.*

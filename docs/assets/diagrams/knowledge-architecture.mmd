@@ -1,0 +1,23 @@
+graph TB
+    KB[Knowledge Base] --> Arch[Architecture<br/>9 YAMLs]
+    KB --> Sec[Security<br/>10 YAMLs]
+    KB --> Test[Testing<br/>3 YAMLs]
+    KB --> Perf[Performance<br/>3 YAMLs]
+    KB --> Deploy[Deployment<br/>6 YAMLs]
+    KB --> Compliance[Compliance<br/>8 YAMLs]
+    KB --> Data[Data Management<br/>1 YAML]
+    KB --> Doc[Documentation<br/>1 YAML]
+    KB --> Curate[Knowledge Curation<br/>3 YAMLs]
+    
+    Arch --> SOLID[SOLID Principles]
+    Arch --> Patterns[Design Patterns]
+    Arch --> Clean[Clean Code]
+    
+    Sec --> OWASP[OWASP Top 10]
+    Sec --> CWE[CWE Standards]
+    Sec --> SecureCoding[Secure Coding]
+    
+    style KB fill:#7b61ff
+    style Arch fill:#3b82f6
+    style Sec fill:#ef4444
+    style Test fill:#10b981

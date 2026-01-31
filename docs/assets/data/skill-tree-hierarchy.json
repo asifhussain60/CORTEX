@@ -1,0 +1,65 @@
+{
+  "name": "Software Engineering",
+  "children": [
+    {
+      "name": "Programming",
+      "children": [
+        {
+          "name": "Python",
+          "value": 85,
+          "status": "advanced"
+        },
+        {
+          "name": "TypeScript",
+          "value": 60,
+          "status": "intermediate"
+        },
+        {
+          "name": "JavaScript",
+          "value": 75,
+          "status": "advanced"
+        }
+      ]
+    },
+    {
+      "name": "Architecture",
+      "children": [
+        {
+          "name": "Design Patterns",
+          "value": 70,
+          "status": "intermediate"
+        },
+        {
+          "name": "Microservices",
+          "value": 55,
+          "status": "intermediate"
+        },
+        {
+          "name": "Event-Driven",
+          "value": 50,
+          "status": "beginner"
+        }
+      ]
+    },
+    {
+      "name": "DevOps",
+      "children": [
+        {
+          "name": "Docker",
+          "value": 70,
+          "status": "intermediate"
+        },
+        {
+          "name": "Kubernetes",
+          "value": 45,
+          "status": "beginner"
+        },
+        {
+          "name": "CI/CD",
+          "value": 65,
+          "status": "intermediate"
+        }
+      ]
+    }
+  ]
+}

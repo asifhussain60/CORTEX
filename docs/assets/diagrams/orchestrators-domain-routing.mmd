@@ -1,0 +1,20 @@
+graph TB
+    Master[Master Orchestrator] --> Routing{Intent Type}
+    
+    Routing -->|REFACTOR| Refactoring[Refactoring Orchestrator]
+    Routing -->|PLAN| Planning[Planning Orchestrator]
+    Routing -->|DOCUMENT| Documentation[Documentation Orchestrator]
+    Routing -->|EXECUTE_PHASE| PhaseExecutor[PhaseExecutor Orchestrator]
+    Routing -->|AUTO_FIX| Autonomous[Autonomous Orchestrator]
+    Routing -->|CHAT| Conversation[Conversation Orchestrator]
+    
+    Refactoring --> Result[Execution Result]
+    Planning --> Result
+    Documentation --> Result
+    PhaseExecutor --> Result
+    Autonomous --> Result
+    Conversation --> Result
+    
+    style Master fill:#7b61ff
+    style Routing fill:#3b82f6
+    style Result fill:#10b981

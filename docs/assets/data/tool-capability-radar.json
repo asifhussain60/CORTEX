@@ -1,0 +1,60 @@
+{
+  "metrics": [
+    "Performance",
+    "Accuracy",
+    "Coverage",
+    "Ease of Use",
+    "Integration",
+    "Documentation"
+  ],
+  "categories": [
+    {
+      "name": "Core Tools",
+      "values": [
+        0.95,
+        0.98,
+        0.92,
+        0.9,
+        1.0,
+        0.95
+      ],
+      "color": "#7b61ff"
+    },
+    {
+      "name": "Analysis Tools",
+      "values": [
+        0.88,
+        0.95,
+        0.97,
+        0.85,
+        0.92,
+        0.9
+      ],
+      "color": "#3b82f6"
+    },
+    {
+      "name": "Discovery Tools",
+      "values": [
+        0.82,
+        0.9,
+        0.88,
+        0.92,
+        0.88,
+        0.85
+      ],
+      "color": "#10b981"
+    },
+    {
+      "name": "Quality Tools",
+      "values": [
+        0.85,
+        0.93,
+        0.9,
+        0.88,
+        0.9,
+        0.87
+      ],
+      "color": "#f59e0b"
+    }
+  ]
+}

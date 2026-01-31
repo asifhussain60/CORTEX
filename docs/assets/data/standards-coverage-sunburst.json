@@ -1,0 +1,80 @@
+{
+  "name": "Knowledge Base",
+  "children": [
+    {
+      "name": "Architecture",
+      "children": [
+        {
+          "name": "SOLID Principles",
+          "value": 45,
+          "coverage": 1.0
+        },
+        {
+          "name": "Design Patterns",
+          "value": 35,
+          "coverage": 0.95
+        },
+        {
+          "name": "Clean Code",
+          "value": 50,
+          "coverage": 1.0
+        },
+        {
+          "name": "REST API Design",
+          "value": 30,
+          "coverage": 0.9
+        }
+      ]
+    },
+    {
+      "name": "Security",
+      "children": [
+        {
+          "name": "OWASP Top 10",
+          "value": 38,
+          "coverage": 1.0
+        },
+        {
+          "name": "CWE Standards",
+          "value": 28,
+          "coverage": 0.85
+        },
+        {
+          "name": "Secure Coding",
+          "value": 25,
+          "coverage": 0.92
+        }
+      ]
+    },
+    {
+      "name": "Testing",
+      "children": [
+        {
+          "name": "TDD Best Practices",
+          "value": 42,
+          "coverage": 1.0
+        },
+        {
+          "name": "Testing Pyramid",
+          "value": 20,
+          "coverage": 0.88
+        }
+      ]
+    },
+    {
+      "name": "Deployment",
+      "children": [
+        {
+          "name": "12-Factor App",
+          "value": 25,
+          "coverage": 0.95
+        },
+        {
+          "name": "CI/CD Pipelines",
+          "value": 18,
+          "coverage": 0.85
+        }
+      ]
+    }
+  ]
+}

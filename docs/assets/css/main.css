@@ -11529,3 +11529,51 @@ code[style*="color:"][style*="background:"] {
     }
 }
 
+
+
+/* ============================================
+   L2 PAGE TITLES (Token Optimization, etc.)
+   ============================================ */
+
+.l2-page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    text-align: left;
+}
+
+.l2-page-subtitle {
+    font-size: 1.25rem;
+    color: #f59e0b;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.l2-page-description {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(230, 233, 240, 0.9);
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Color variations for different L2 sections */
+.l2-page-subtitle.amber { color: #f59e0b; }
+.l2-page-subtitle.cyan { color: #06b6d4; }
+.l2-page-subtitle.violet { color: #8b5cf6; }
+.l2-page-subtitle.emerald { color: #10b981; }
+.l2-page-subtitle.purple { color: #7b61ff; }
+.l2-page-subtitle.pink { color: #ec4899; }
+.l2-page-subtitle.red { color: #ef4444; }
+.l2-page-subtitle.blue { color: #3b82f6; }
+.l2-page-subtitle.green { color: #10b981; }
+
+@media (max-width: 768px) {
+    .l2-page-title { font-size: 2rem; }
+    .l2-page-subtitle { font-size: 1.1rem; }
+    .l2-page-description { font-size: 1rem; }
+}
+

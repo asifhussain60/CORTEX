@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant User
+    participant Input Validator
+    participant Auth
+    participant RBAC
+    participant Action
+    
+    User->>Input Validator: Request
+    Input Validator->>Input Validator: Whitelist Check
+    Input Validator->>Auth: Validated Input
+    Auth->>Auth: Verify Token
+    Auth->>RBAC: Check Permissions
+    RBAC->>Action: Execute
+    Action->>User: Response

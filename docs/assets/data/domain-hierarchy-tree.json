@@ -1,0 +1,81 @@
+{
+  "name": "Master Orchestrator",
+  "children": [
+    {
+      "name": "Refactoring Orchestrator",
+      "intents": [
+        "REFACTOR",
+        "IMPROVE_CODE",
+        "CLEAN_CODE"
+      ],
+      "capabilities": [
+        "Pattern Detection",
+        "Code Smell Analysis",
+        "Automated Refactoring"
+      ]
+    },
+    {
+      "name": "Planning Orchestrator",
+      "intents": [
+        "PLAN",
+        "DESIGN",
+        "ARCHITECT"
+      ],
+      "capabilities": [
+        "Task Decomposition",
+        "Dependency Analysis",
+        "Timeline Estimation"
+      ]
+    },
+    {
+      "name": "Documentation Orchestrator",
+      "intents": [
+        "DOCUMENT",
+        "EXPLAIN",
+        "GENERATE_DOCS"
+      ],
+      "capabilities": [
+        "Auto-Doc Generation",
+        "Diagram Creation",
+        "API Reference"
+      ]
+    },
+    {
+      "name": "PhaseExecutor Orchestrator",
+      "intents": [
+        "EXECUTE_PHASE",
+        "RUN_STEP"
+      ],
+      "capabilities": [
+        "Multi-Phase Execution",
+        "Checkpoint Management",
+        "Rollback Support"
+      ]
+    },
+    {
+      "name": "Autonomous Orchestrator",
+      "intents": [
+        "AUTO_FIX",
+        "SELF_HEAL"
+      ],
+      "capabilities": [
+        "Error Detection",
+        "Auto-Correction",
+        "Learning"
+      ]
+    },
+    {
+      "name": "Conversation Orchestrator",
+      "intents": [
+        "CHAT",
+        "CLARIFY",
+        "EXPLAIN"
+      ],
+      "capabilities": [
+        "Context Management",
+        "Memory Retrieval",
+        "Natural Language"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,601 @@
+# L2 VIEW: CORTEX TOOLKIT
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/toolkit-manager/index.html
+# Theme: Cyan (#06b6d4) - Tools & Integration
+# Reference: http://localhost:8080/architecture/index.html
+
+---
+metadata:
+  view_id: "toolkit-manager"
+  title: "CORTEX Toolkit"
+  tagline: "Discover • Validate • Execute"
+  path: "docs/toolkit-manager/index.html"
+  icon: "🛠️"
+  theme_accent: "#06b6d4"
+  status: "PENDING"
+  effort_hours: 16
+  target_audience:
+    - "Software Engineers (tool integration)"
+    - "Platform Engineers (tool management)"
+    - "DevOps Engineers (automation)"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "CORTEX Toolkit Manager"
+  tagline: "100+ MCP Tools, Validated, Categorized, Ready to Execute"
+  description: |
+    Centralized tool discovery and management. All CORTEX capabilities exposed 
+    via MCP protocol with automatic validation, schema enforcement, and 
+    intelligent routing.
+  
+  stats_pills:
+    - label: "MCP Tools"
+      value: "100+"
+      icon: "🔌"
+    - label: "Categories"
+      value: "12"
+      icon: "📂"
+    - label: "Uptime"
+      value: "99.9%"
+      icon: "✅"
+    - label: "Avg Response"
+      value: "<200ms"
+      icon: "⚡"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  tool_dependency_graph:
+    type: "d3-force"
+    name: "Tool Dependency Network"
+    description: "Interactive force-directed graph showing tool relationships and dependencies"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "cortex_process_request", "category": "core", "calls_per_day": 500},
+          {"id": "cortex_lens_analyze", "category": "analysis", "calls_per_day": 300},
+          {"id": "cortex_git_history", "category": "git", "calls_per_day": 250},
+          {"id": "cortex_ast_analyze", "category": "analysis", "calls_per_day": 200},
+          {"id": "cortex_challenge", "category": "core", "calls_per_day": 180},
+          {"id": "cortex_total_recall", "category": "discovery", "calls_per_day": 150}
+        ],
+        "links": [
+          {"source": "cortex_process_request", "target": "cortex_lens_analyze", "strength": 0.8},
+          {"source": "cortex_lens_analyze", "target": "cortex_git_history", "strength": 0.6},
+          {"source": "cortex_lens_analyze", "target": "cortex_ast_analyze", "strength": 0.7},
+          {"source": "cortex_process_request", "target": "cortex_challenge", "strength": 0.9}
+        ],
+        "categories": {
+          "core": "#7b61ff",
+          "analysis": "#06b6d4",
+          "git": "#10b981",
+          "discovery": "#8b5cf6"
+        }
+      }
+    
+    interactive_features:
+      - "Drag nodes to reposition"
+      - "Hover shows tool details (params, return type, usage)"
+      - "Click to filter by category"
+      - "Node size = call frequency"
+      - "Edge thickness = dependency strength"
+      - "Zoom and pan"
+    
+    unique_aspects:
+      - "Real-time usage data from metrics"
+      - "Highlight critical path tools"
+      - "Show orphaned/unused tools"
+
+  tool_usage_timeline:
+    type: "d3-timeline"
+    name: "Tool Invocation History (7 Days)"
+    description: "Timeline showing tool usage patterns and peak times"
+    data_structure: |
+      {
+        "timeline": [
+          {"timestamp": "2026-01-25T09:00", "tool": "cortex_process_request", "count": 45},
+          {"timestamp": "2026-01-25T10:00", "tool": "cortex_lens_analyze", "count": 32},
+          {"timestamp": "2026-01-25T14:00", "tool": "cortex_git_history", "count": 28},
+          {"timestamp": "2026-01-26T09:30", "tool": "cortex_challenge", "count": 25}
+        ],
+        "peak_hours": ["09:00-11:00", "14:00-16:00"],
+        "total_invocations_7d": 8500
+      }
+    
+    interactive_features:
+      - "Brush to select time range"
+      - "Hover shows tool + count"
+      - "Group by hour/day/week"
+      - "Overlay peak hours"
+
+  tool_capability_radar:
+    type: "d3-radar"
+    name: "Tool Category Capabilities"
+    description: "Radar chart comparing tool categories across key metrics"
+    data_structure: |
+      {
+        "metrics": ["Speed", "Complexity", "Usage", "Stability", "Integration", "Documentation"],
+        "categories": [
+          {
+            "name": "Core Tools",
+            "values": [0.9, 0.8, 1.0, 0.95, 0.9, 1.0],
+            "color": "#7b61ff"
+          },
+          {
+            "name": "Analysis Tools",
+            "values": [0.7, 0.9, 0.8, 0.9, 0.85, 0.9],
+            "color": "#06b6d4"
+          },
+          {
+            "name": "Git Tools",
+            "values": [0.85, 0.7, 0.9, 0.95, 0.9, 0.85],
+            "color": "#10b981"
+          },
+          {
+            "name": "Discovery Tools",
+            "values": [0.8, 0.75, 0.7, 0.85, 0.8, 0.8],
+            "color": "#8b5cf6"
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Click category to isolate"
+      - "Hover shows metric definition"
+      - "Toggle absolute vs relative"
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS (Minimum 2)
+# ============================================================================
+
+mermaid_diagrams:
+  tool_discovery_flow:
+    type: "flowchart"
+    title: "Tool Discovery & Validation Flow"
+    code: |
+      flowchart TD
+        A[User Request] --> B{Parse Intent}
+        B --> C[Query Tool Catalog]
+        C --> D{Tool Exists?}
+        D -->|Yes| E[Validate Parameters]
+        D -->|No| F[Suggest Alternatives]
+        E --> G{Schema Valid?}
+        G -->|Yes| H[Execute Tool]
+        G -->|No| I[Return Schema Error]
+        H --> J{Success?}
+        J -->|Yes| K[Return Result]
+        J -->|No| L[Retry Logic]
+        L --> M{Max Retries?}
+        M -->|No| H
+        M -->|Yes| N[Return Error + Logs]
+        
+        style A fill:#7b61ff,color:#fff
+        style H fill:#10b981,color:#fff
+        style K fill:#10b981,color:#fff
+        style I fill:#ef4444,color:#fff
+        style N fill:#ef4444,color:#fff
+
+  tool_categories_mindmap:
+    type: "mindmap"
+    title: "CORTEX Tool Categories"
+    code: |
+      mindmap
+        root((CORTEX<br/>Toolkit))
+          Core
+            cortex_process_request
+            cortex_challenge
+            cortex_validate_context
+          Analysis
+            cortex_lens_analyze
+            cortex_ast_analyze
+            cortex_detect_duplicates
+          Git
+            cortex_git_history
+            cortex_branch_compare
+            cortex_remote_git
+          Discovery
+            cortex_total_recall
+            cortex_tools_catalog
+            cortex_feature_map
+          Planning
+            cortex_plan_epic
+            cortex_estimate_effort
+            cortex_dependency_graph
+          Testing
+            cortex_generate_tests
+            cortex_run_tests
+            cortex_coverage_report
+          Documentation
+            cortex_extract_comments
+            cortex_generate_docs
+            cortex_api_reference
+          Security
+            cortex_scan_vulnerabilities
+            cortex_audit_log
+            cortex_compliance_check
+          Performance
+            cortex_profile_code
+            cortex_optimize_queries
+            cortex_cache_strategy
+          Deployment
+            cortex_canary_deploy
+            cortex_rollback
+            cortex_health_check
+          Observability
+            cortex_metrics
+            cortex_traces
+            cortex_alerts
+          Compliance
+            cortex_soc2_evidence
+            cortex_gdpr_check
+            cortex_pci_scan
+
+  tool_execution_sequence:
+    type: "sequenceDiagram"
+    title: "MCP Tool Execution Lifecycle"
+    code: |
+      sequenceDiagram
+        participant User
+        participant Gateway as MCP Gateway
+        participant Catalog as Tool Catalog
+        participant Validator as Schema Validator
+        participant Tool as Actual Tool
+        participant Logger as Audit Logger
+        
+        User->>Gateway: POST /tools/cortex_lens_analyze
+        Gateway->>Catalog: Lookup tool metadata
+        Catalog-->>Gateway: Tool spec + schema
+        Gateway->>Validator: Validate params
+        Validator-->>Gateway: ✅ Valid
+        Gateway->>Logger: Log invocation (AC_START)
+        Gateway->>Tool: Execute(params)
+        Tool-->>Gateway: Result
+        Gateway->>Logger: Log completion (AC_COMPLETE)
+        Gateway->>Validator: Validate response
+        Validator-->>Gateway: ✅ Valid
+        Gateway-->>User: Return result + metadata
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+sections:
+  overview:
+    title: "Centralized Tool Management"
+    icon: "🎯"
+    content_blocks:
+      - type: "business_case"
+        title: "Why Toolkit Manager?"
+        points:
+          - "**Single Source of Truth**: All 100+ tools cataloged with schemas, docs, examples"
+          - "**Automatic Validation**: Schema enforcement prevents invalid tool calls"
+          - "**Intelligent Routing**: Route requests to optimal tool based on intent"
+          - "**Usage Analytics**: Track which tools are used, by whom, when"
+          - "**Dependency Management**: Detect tool dependencies and ensure availability"
+      
+      - type: "technical_approach"
+        title: "How It Works"
+        points:
+          - "**MCP Protocol**: All tools exposed via standardized MCP interface"
+          - "**Schema Registry**: JSON Schema validation for all tool params/responses"
+          - "**GitBackedRegistry**: Tools versioned in Git, auto-discovered on startup"
+          - "**Health Monitoring**: Continuous health checks, auto-disable failing tools"
+          - "**Audit Logging**: Every invocation logged with params, result, duration"
+      
+      - type: "metrics"
+        title: "Toolkit Metrics"
+        stats:
+          - label: "Total Tools"
+            value: "100+"
+            description: "Across 12 categories"
+          - label: "Avg Response Time"
+            value: "<200ms"
+            description: "P95 latency"
+          - label: "Success Rate"
+            value: "99.2%"
+            description: "Last 30 days"
+          - label: "Daily Invocations"
+            value: "8.5K"
+            description: "Typical workday"
+
+  tool_catalog:
+    title: "Tool Catalog & Discovery"
+    icon: "📖"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "MCPToolsCatalog: Central Registry"
+        description: |
+          All CORTEX tools registered in `MCPToolsCatalog` with metadata, 
+          schemas, examples, and usage stats. Auto-discovered from Git.
+        
+        registration_example:
+          code: |
+            # cortex/mcp/tools/lens_analyze.py
+            from cortex.mcp.registry import mcp_tool, MCPToolsCatalog
+            
+            @mcp_tool(
+                name="cortex_lens_analyze",
+                category="analysis",
+                description="Unified code intelligence via LENS protocol"
+            )
+            def lens_analyze(
+                repo_path: str,
+                scope: str = "full",
+                include_git: bool = True,
+                include_ast: bool = True
+            ) -> dict:
+                """Analyze codebase using LENS (Language→Examination→Navigation→Synthesis)"""
+                # Implementation
+                return {"status": "success", "findings": [...]}
+            
+            # Auto-registered on import
+      
+      - type: "catalog_structure"
+        title: "Tool Metadata"
+        fields:
+          - name: "name"
+            type: "string"
+            description: "Unique tool identifier (e.g., cortex_lens_analyze)"
+          - name: "category"
+            type: "enum"
+            description: "Tool category (core, analysis, git, etc.)"
+          - name: "description"
+            type: "string"
+            description: "One-line summary of tool purpose"
+          - name: "parameters"
+            type: "JSONSchema"
+            description: "Input parameter schema with types, defaults, validation"
+          - name: "return_type"
+            type: "JSONSchema"
+            description: "Expected response structure"
+          - name: "examples"
+            type: "array"
+            description: "Usage examples with expected output"
+          - name: "dependencies"
+            type: "array"
+            description: "Other tools this tool calls internally"
+          - name: "health_check"
+            type: "function"
+            description: "Health check function (returns bool)"
+
+  validation_engine:
+    title: "Schema Validation & Enforcement"
+    icon: "✅"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Automatic Parameter Validation"
+        description: |
+          All tool invocations pass through schema validator. Invalid params 
+          rejected BEFORE execution, with clear error messages.
+        
+        validation_rules:
+          - "**Type checking**: Ensure int/str/bool/dict/list match schema"
+          - "**Required fields**: Fail if required param missing"
+          - "**Range validation**: Check min/max for numeric values"
+          - "**Enum validation**: Ensure value in allowed list"
+          - "**Regex patterns**: Validate string formats (email, URL, etc.)"
+          - "**Custom validators**: Run tool-specific validation logic"
+      
+      - type: "code_example"
+        language: "python"
+        title: "Validation in Action"
+        code: |
+          # Example: Invalid tool call
+          result = cortex_lens_analyze(
+              repo_path="/invalid/path",
+              scope="invalid_scope",  # Should be: full|partial|file
+              include_git="yes"       # Should be: True/False (bool)
+          )
+          
+          # Response:
+          {
+              "error": "ValidationError",
+              "details": [
+                  "scope: 'invalid_scope' not in ['full', 'partial', 'file']",
+                  "include_git: expected bool, got str"
+              ],
+              "status": "rejected",
+              "tool": "cortex_lens_analyze"
+          }
+
+  intelligent_routing:
+    title: "Intent-Based Tool Routing"
+    icon: "🧭"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "IntentRouter: Match Request to Best Tool"
+        description: |
+          CORTEX analyzes user request and routes to optimal tool(s) automatically.
+          No manual tool selection needed.
+        
+        routing_algorithm:
+          - step: "Parse user intent via LENS classification"
+            description: "IMPLEMENT, FIX, REFACTOR, ANALYZE, etc."
+          - step: "Query Tool Catalog for matching tools"
+            description: "Filter by category + description similarity"
+          - step: "Score tools by relevance"
+            description: "Embedding similarity + usage frequency"
+          - step: "Select top tool or orchestrate multiple"
+            description: "Single tool or pipeline of tools"
+      
+      - type: "example_table"
+        title: "Intent → Tool Mapping Examples"
+        headers: ["User Request", "Detected Intent", "Routed Tool(s)", "Confidence"]
+        rows:
+          - ["Analyze this codebase", "ANALYZE", "cortex_lens_analyze", "0.95"]
+          - ["Find duplicate code", "ANALYZE", "cortex_detect_duplicates", "0.92"]
+          - ["What changed in last 24h?", "GIT_HISTORY", "cortex_git_history", "0.89"]
+          - ["Run tests", "TEST", "cortex_run_tests", "0.98"]
+          - ["Fix this bug", "FIX", "cortex_process_request → cortex_lens_analyze → cortex_ast_analyze", "0.87"]
+
+  usage_analytics:
+    title: "Usage Analytics & Insights"
+    icon: "📊"
+    content_blocks:
+      - type: "metrics_dashboard"
+        title: "Tool Performance Metrics"
+        metrics:
+          - name: "Invocations (7d)"
+            value: "59,500"
+            trend: "+12%"
+            description: "Total tool calls"
+          - name: "Success Rate"
+            value: "99.2%"
+            trend: "+0.3%"
+            description: "Successful executions"
+          - name: "Avg Response Time"
+            value: "185ms"
+            trend: "-15ms"
+            description: "P95 latency"
+          - name: "Error Rate"
+            value: "0.8%"
+            trend: "-0.2%"
+            description: "Failed calls"
+      
+      - type: "top_tools_ranking"
+        title: "Most Used Tools (Last 30 Days)"
+        tools:
+          - name: "cortex_process_request"
+            invocations: 15000
+            avg_duration: "450ms"
+            success_rate: "98.5%"
+          - name: "cortex_lens_analyze"
+            invocations: 9000
+            avg_duration: "320ms"
+            success_rate: "99.1%"
+          - name: "cortex_git_history"
+            invocations: 7500
+            avg_duration: "210ms"
+            success_rate: "99.8%"
+          - name: "cortex_ast_analyze"
+            invocations: 6000
+            avg_duration: "280ms"
+            success_rate: "99.3%"
+          - name: "cortex_challenge"
+            invocations: 5400
+            avg_duration: "520ms"
+            success_rate: "97.9%"
+
+  health_monitoring:
+    title: "Health Monitoring & Auto-Recovery"
+    icon: "💚"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Continuous Health Checks"
+        description: |
+          Every tool has health check function. Monitored every 60s. 
+          Failing tools auto-disabled until recovered.
+        
+        health_check_criteria:
+          - "**Availability**: Tool responds within timeout (5s)"
+          - "**Dependencies**: Required services reachable (DB, Redis, Git)"
+          - "**Resource usage**: Memory/CPU within limits"
+          - "**Error rate**: <5% over last 100 calls"
+          - "**Response validation**: Returns valid schema"
+      
+      - type: "recovery_strategy"
+        title: "Auto-Recovery Actions"
+        actions:
+          - condition: "Tool fails health check"
+            action: "Mark as DEGRADED, retry after 60s"
+          - condition: "3 consecutive failures"
+            action: "Mark as UNAVAILABLE, notify ops team"
+          - condition: "Dependency service down"
+            action: "Disable all dependent tools, log alert"
+          - condition: "Recovery detected"
+            action: "Re-enable tool, log recovery event"
+
+  best_practices:
+    title: "Tool Integration Best Practices"
+    icon: "📋"
+    content_blocks:
+      - type: "checklist"
+        title: "Creating New Tools"
+        items:
+          - text: "Use @mcp_tool decorator with complete metadata"
+            priority: "P0"
+          - text: "Define JSON Schema for all params and return type"
+            priority: "P0"
+          - text: "Include 2-3 usage examples with expected output"
+            priority: "P1"
+          - text: "Implement health_check function"
+            priority: "P1"
+          - text: "Add comprehensive docstring (Google style)"
+            priority: "P1"
+          - text: "Log all invocations (AC_START → AC_COMPLETE)"
+            priority: "P0"
+          - text: "Handle errors gracefully with clear messages"
+            priority: "P0"
+          - text: "Write unit tests (>90% coverage)"
+            priority: "P1"
+      
+      - type: "anti_patterns"
+        title: "Common Pitfalls to Avoid"
+        patterns:
+          - mistake: "Direct Python imports instead of MCP calls"
+            solution: "Always use MCP gateway in production"
+          - mistake: "Missing parameter validation"
+            solution: "Define complete JSON Schema"
+          - mistake: "No error handling"
+            solution: "Wrap execution in try/except with logging"
+          - mistake: "Hardcoded configuration"
+            solution: "Use environment variables + config service"
+
+---
+# ============================================================================
+# CALL TO ACTION
+# ============================================================================
+
+cta_section:
+  title: "Explore the Toolkit"
+  description: "Discover all available CORTEX tools"
+  
+  quick_links:
+    - text: "Browse Tool Catalog"
+      link: "/tools"
+      description: "Interactive catalog with search and filters"
+    - text: "API Reference"
+      link: "../06-api-reference/mcp-tools.html"
+      description: "Complete API documentation"
+    - text: "Create Custom Tool"
+      link: "../07-guides/custom-mcp-tool.html"
+      description: "Step-by-step guide"
+  
+  example_commands:
+    - description: "List all tools"
+      command: "curl http://localhost:8000/tools"
+    - description: "Get tool details"
+      command: "curl http://localhost:8000/tools/cortex_lens_analyze"
+    - description: "Invoke tool"
+      command: |
+        curl -X POST http://localhost:8000/tools/cortex_lens_analyze \
+          -H "Content-Type: application/json" \
+          -d '{"repo_path": ".", "scope": "full"}'
+
+---
+# ============================================================================
+# VISUALIZATION DATA FILES
+# ============================================================================
+
+data_files:
+  - name: "tool-dependency-graph.json"
+    description: "Force-directed graph of tool relationships"
+  - name: "tool-usage-timeline.json"
+    description: "7-day invocation history"
+  - name: "tool-capability-radar.json"
+    description: "Category comparison metrics"
+
+---
+*CORTEX Toolkit view — comprehensive tool catalog and management system.*

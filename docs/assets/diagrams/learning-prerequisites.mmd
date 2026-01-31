@@ -1,0 +1,17 @@
+graph LR
+    PythonBasics[Python Basics] --> PythonAdv[Python Advanced]
+    PythonAdv --> PythonExpert[Python Expert]
+    
+    PythonBasics --> TestBasics[Testing Basics]
+    TestBasics --> TDDMastery[TDD Mastery]
+    
+    PythonAdv --> ArchIntro[Architecture Intro]
+    ArchIntro --> Microservices[Microservices]
+    
+    TDDMastery --> ArchIntro
+    
+    style PythonBasics fill:#10b981
+    style PythonAdv fill:#3b82f6
+    style PythonExpert fill:#7b61ff
+    style TestBasics fill:#f59e0b
+    style TDDMastery fill:#ef4444

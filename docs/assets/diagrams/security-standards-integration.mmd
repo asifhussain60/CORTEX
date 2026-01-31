@@ -1,0 +1,27 @@
+graph TB
+    CORTEX[CORTEX Security] --> OWASP[OWASP Top 10]
+    CORTEX --> CWE[CWE Standards]
+    CORTEX --> Standards[Industry Standards]
+    CORTEX --> Compliance[Compliance]
+    
+    OWASP --> A01[A01: Access Control]
+    OWASP --> A03[A03: Injection]
+    OWASP --> A08[A08: Data Integrity]
+    
+    CWE --> CWE89[CWE-89: SQL Injection]
+    CWE --> CWE94[CWE-94: Code Injection]
+    CWE --> CWE22[CWE-22: Path Traversal]
+    
+    Standards --> SOLID[SOLID Principles]
+    Standards --> TwelveFactor[12-Factor App]
+    Standards --> CleanCode[Clean Code]
+    
+    Compliance --> PCI[PCI-DSS]
+    Compliance --> HIPAA[HIPAA]
+    Compliance --> GDPR[GDPR]
+    
+    style CORTEX fill:#7b61ff
+    style OWASP fill:#ef4444
+    style CWE fill:#f59e0b
+    style Standards fill:#3b82f6
+    style Compliance fill:#10b981

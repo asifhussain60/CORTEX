@@ -1,0 +1,16 @@
+graph TB
+    Beginner[Beginner<br/>0-25%] --> Intermediate[Intermediate<br/>25-50%]
+    Intermediate --> Advanced[Advanced<br/>50-75%]
+    Advanced --> Expert[Expert<br/>75-95%]
+    Expert --> Master[Master<br/>95-100%]
+    
+    Beginner -.->|Study| Resources[Learning Resources]
+    Intermediate -.->|Practice| Projects[Projects]
+    Advanced -.->|Mentor| Team[Team Teaching]
+    Expert -.->|Innovate| Research[R&D]
+    
+    style Beginner fill:#ef4444
+    style Intermediate fill:#f59e0b
+    style Advanced fill:#10b981
+    style Expert fill:#3b82f6
+    style Master fill:#7b61ff

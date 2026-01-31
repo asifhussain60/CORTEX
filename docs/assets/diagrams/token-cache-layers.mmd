@@ -1,0 +1,10 @@
+graph TB
+    Request[Request] --> L1[L1: Memory Cache<br/>95% hit rate<br/>1ms latency]
+    L1 -->|Miss| L2[L2: Redis Cache<br/>85% hit rate<br/>10ms latency]
+    L2 -->|Miss| L3[L3: Vector DB<br/>70% hit rate<br/>50ms latency]
+    L3 -->|Miss| Generate[Generate New]
+    
+    style L1 fill:#10b981
+    style L2 fill:#06b6d4
+    style L3 fill:#8b5cf6
+    style Generate fill:#ef4444

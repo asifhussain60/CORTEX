@@ -1,0 +1,23 @@
+graph TB
+    Catalog[Tools Catalog] --> Core[Core Tools]
+    Catalog --> Analysis[Analysis Tools]
+    Catalog --> Discovery[Discovery Tools]
+    Catalog --> Quality[Quality Tools]
+    
+    Core --> ProcessRequest[cortex_process_request]
+    Core --> Challenge[cortex_challenge]
+    
+    Analysis --> LENS[cortex_lens_analyze]
+    Analysis --> GitHistory[cortex_git_history]
+    Analysis --> AST[cortex_ast_analyze]
+    
+    Discovery --> TotalRecall[cortex_total_recall]
+    Discovery --> ToolsCatalog[cortex_tools_catalog]
+    
+    Quality --> Duplicates[cortex_detect_duplicates]
+    
+    style Catalog fill:#7b61ff
+    style Core fill:#3b82f6
+    style Analysis fill:#10b981
+    style Discovery fill:#f59e0b
+    style Quality fill:#ef4444

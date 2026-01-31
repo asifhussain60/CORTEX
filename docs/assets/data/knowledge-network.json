@@ -1,0 +1,84 @@
+{
+  "nodes": [
+    {
+      "id": "solid-principles",
+      "label": "SOLID Principles",
+      "category": "architecture",
+      "references": 45
+    },
+    {
+      "id": "owasp-top-10",
+      "label": "OWASP Top 10",
+      "category": "security",
+      "references": 38
+    },
+    {
+      "id": "tdd-best-practices",
+      "label": "TDD Best Practices",
+      "category": "testing",
+      "references": 42
+    },
+    {
+      "id": "clean-code",
+      "label": "Clean Code",
+      "category": "architecture",
+      "references": 50
+    },
+    {
+      "id": "design-patterns",
+      "label": "Design Patterns",
+      "category": "architecture",
+      "references": 35
+    },
+    {
+      "id": "cwe-89",
+      "label": "CWE-89 SQL Injection",
+      "category": "security",
+      "references": 28
+    },
+    {
+      "id": "rest-api",
+      "label": "REST API Design",
+      "category": "architecture",
+      "references": 30
+    },
+    {
+      "id": "12-factor",
+      "label": "12-Factor App",
+      "category": "deployment",
+      "references": 25
+    }
+  ],
+  "links": [
+    {
+      "source": "solid-principles",
+      "target": "clean-code",
+      "strength": 10
+    },
+    {
+      "source": "clean-code",
+      "target": "design-patterns",
+      "strength": 8
+    },
+    {
+      "source": "owasp-top-10",
+      "target": "cwe-89",
+      "strength": 9
+    },
+    {
+      "source": "tdd-best-practices",
+      "target": "clean-code",
+      "strength": 7
+    },
+    {
+      "source": "rest-api",
+      "target": "solid-principles",
+      "strength": 6
+    },
+    {
+      "source": "12-factor",
+      "target": "rest-api",
+      "strength": 5
+    }
+  ]
+}

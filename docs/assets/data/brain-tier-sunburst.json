@@ -1,0 +1,73 @@
+{
+  "name": "CORTEX Brain",
+  "children": [
+    {
+      "name": "Tier 0: SKULL",
+      "children": [
+        {
+          "name": "TDD Enforcement",
+          "value": 25
+        },
+        {
+          "name": "Git Isolation",
+          "value": 20
+        },
+        {
+          "name": "Safety Validation",
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Tier 1: Working Memory",
+      "children": [
+        {
+          "name": "70-Conv Buffer",
+          "value": 40
+        },
+        {
+          "name": "Context Cache",
+          "value": 35
+        },
+        {
+          "name": "Query Processing",
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Tier 2: Knowledge Graph",
+      "children": [
+        {
+          "name": "Pattern Learning",
+          "value": 35
+        },
+        {
+          "name": "Relationships",
+          "value": 30
+        },
+        {
+          "name": "Semantic Links",
+          "value": 25
+        }
+      ]
+    },
+    {
+      "name": "Tier 3: Dev Context",
+      "children": [
+        {
+          "name": "Metrics",
+          "value": 30
+        },
+        {
+          "name": "Analytics",
+          "value": 25
+        },
+        {
+          "name": "Insights",
+          "value": 20
+        }
+      ]
+    }
+  ]
+}

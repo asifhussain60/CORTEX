@@ -1,0 +1,34 @@
+{
+  "milestones": [
+    {
+      "date": "2026-01-01",
+      "skill": "Python Advanced",
+      "status": "completed",
+      "progress": 100
+    },
+    {
+      "date": "2026-01-15",
+      "skill": "TypeScript Basics",
+      "status": "in-progress",
+      "progress": 60
+    },
+    {
+      "date": "2026-02-01",
+      "skill": "React Hooks",
+      "status": "planned",
+      "progress": 0
+    },
+    {
+      "date": "2026-02-15",
+      "skill": "Docker Compose",
+      "status": "planned",
+      "progress": 0
+    },
+    {
+      "date": "2026-03-01",
+      "skill": "AWS Lambda",
+      "status": "planned",
+      "progress": 0
+    }
+  ]
+}

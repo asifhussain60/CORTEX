@@ -1,0 +1,15 @@
+graph LR
+    Input[Raw Input<br/>10K tokens] --> Chunk[Semantic<br/>Chunking]
+    Chunk --> Cache{Cache<br/>Check}
+    Cache -->|Hit| Serve[Serve<br/>500 tokens]
+    Cache -->|Miss| RAG[RAG<br/>Retrieval]
+    RAG --> Assembly[Context<br/>Assembly]
+    Assembly --> LLM[LLM<br/>3K tokens]
+    
+    style Input fill:#ef4444
+    style Chunk fill:#f59e0b
+    style Cache fill:#10b981
+    style RAG fill:#8b5cf6
+    style Assembly fill:#06b6d4
+    style LLM fill:#22c55e
+    style Serve fill:#22c55e

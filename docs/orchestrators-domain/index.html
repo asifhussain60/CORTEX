@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="Domain Orchestrators - Refactoring, Planning, Domain, Conversation, Documentation" name="description"/>
+    <meta content="domain orchestrators, refactoring, planning, domain modeling" name="keywords"/>
+    <meta content="Asif Hussain" name="author"/>
+    <title>Domain Orchestrators | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css?v=2026-01-31" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <main class="container level1-main-a5853dbc" id="main-content">
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-512.png" style="width: 300px; height: 300px;"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <section class="glass-card-display hero-introduction glass-panel-amber">
+            <h1 class="l2-page-title">🎨 Domain Orchestrators</h1>
+            <p class="l2-page-subtitle purple">Refactoring • Planning • Domain • Conversation • Documentation • Challenge</p>
+            <p class="l2-page-description">
+                6 domain orchestrators handle specialized workflows. RefactoringOrchestrator improves code 
+                quality, PlanningOrchestrator creates execution plans, DomainOrchestrator models business 
+                logic, and ChallengeEngine generates learning challenges.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">🎨 6 Domain</span>
+                <span class="stat-pill">🔄 Specialized</span>
+                <span class="stat-pill">⚡ Optimized</span>
+                <span class="stat-pill">✅ Health Checked</span>
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-sitemap"></i> Domain Hierarchy</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TD
+    A[IntentRouter] --> B{Domain Type}
+    B -->|Code Quality| C[RefactoringOrchestrator]
+    B -->|Strategy| D[PlanningOrchestrator]
+    B -->|Business Logic| E[DomainOrchestrator]
+    B -->|Dialog| F[ConversationOrchestrator]
+    B -->|Docs| G[DocumentationOrchestrator]
+    B -->|Learning| H[ChallengeEngine]
+    
+    C --> I[Code Improvements]
+    D --> J[Execution Plans]
+    E --> K[Domain Models]
+    F --> L[Contextual Responses]
+    G --> M[Generated Docs]
+    H --> N[Learning Challenges]
+    
+    style A fill:#7b61ff,color:#fff
+    style C fill:#8b5cf6,color:#fff
+    style D fill:#7b61ff,color:#fff
+    style E fill:#6366f1,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t1 glass-panel-amber">
+            <h2 class="section-title"><i class="fas fa-book"></i> Orchestrator Resources</h2>
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-clickable">
+                    <h3 class="card-title">Core Orchestrators</h3>
+                    <ul class="feature-list">
+                        <li><a href="../orchestrators-core/index.html" style="color: #00d4ff;">Core Orchestrators</a></li>
+                    </ul>
+                </div>
+                <div class="glass-card-clickable">
+                    <h3 class="card-title">Support Orchestrators</h3>
+                    <ul class="feature-list">
+                        <li><a href="../orchestrators-support/index.html" style="color: #00d4ff;">Support Orchestrators</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Asif Hussain. Domain Orchestrators.</p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

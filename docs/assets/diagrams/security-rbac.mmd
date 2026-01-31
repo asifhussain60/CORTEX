@@ -1,0 +1,12 @@
+graph TB
+    Admin[Admin<br/>ALL Permissions] --> SuperAdmin[Super Admin<br/>System Config]
+    Admin --> DevLead[Dev Lead<br/>Deploy Prod]
+    
+    Developer[Developer<br/>Code + Test] --> Senior[Senior Developer<br/>Code Review]
+    Developer --> Junior[Junior Developer<br/>Code Read/Write]
+    
+    Viewer[Viewer<br/>Read Only] --> Guest[Guest<br/>Docs Only]
+    
+    style Admin fill:#ef4444
+    style Developer fill:#3b82f6
+    style Viewer fill:#10b981

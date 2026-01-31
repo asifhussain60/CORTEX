@@ -1,0 +1,78 @@
+{
+  "nodes": [
+    {
+      "id": "cwe-89",
+      "label": "SQL Injection",
+      "severity": "critical",
+      "detections": 0
+    },
+    {
+      "id": "cwe-94",
+      "label": "Code Injection",
+      "severity": "critical",
+      "detections": 0
+    },
+    {
+      "id": "cwe-95",
+      "label": "Eval Injection",
+      "severity": "high",
+      "detections": 0
+    },
+    {
+      "id": "cwe-22",
+      "label": "Path Traversal",
+      "severity": "high",
+      "detections": 0
+    },
+    {
+      "id": "cwe-78",
+      "label": "Command Injection",
+      "severity": "critical",
+      "detections": 0
+    },
+    {
+      "id": "cwe-327",
+      "label": "Weak Crypto",
+      "severity": "medium",
+      "detections": 0
+    },
+    {
+      "id": "ast-analyzer",
+      "label": "AST Analyzer",
+      "severity": "tool",
+      "detections": 50
+    }
+  ],
+  "links": [
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-89",
+      "strength": 10
+    },
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-94",
+      "strength": 10
+    },
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-95",
+      "strength": 8
+    },
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-22",
+      "strength": 7
+    },
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-78",
+      "strength": 9
+    },
+    {
+      "source": "ast-analyzer",
+      "target": "cwe-327",
+      "strength": 6
+    }
+  ]
+}

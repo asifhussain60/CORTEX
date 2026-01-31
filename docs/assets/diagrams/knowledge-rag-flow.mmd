@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant User
+    participant CORTEX
+    participant Embedder
+    participant VectorDB
+    participant YAMLs
+    
+    User->>CORTEX: Question
+    CORTEX->>Embedder: Generate Embedding
+    Embedder->>VectorDB: Query
+    VectorDB->>YAMLs: Retrieve Top-K
+    YAMLs->>CORTEX: Context
+    CORTEX->>CORTEX: Rank & Filter
+    CORTEX->>User: Answer + References

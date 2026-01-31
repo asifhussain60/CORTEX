@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="Token Optimization - 70% Cost Reduction Through Intelligent Context Management" name="description"/>
+    <meta content="token optimization, cost reduction, caching, RAG, semantic chunking, LLM efficiency" name="keywords"/>
+    <meta content="Asif Hussain" name="author"/>
+    <title>Token Optimization | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css?v=2026-01-31" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+</head>
+<body>
+    <!-- Main Content -->
+    <main class="container level1-main-a5853dbc" id="main-content">
+        <!-- Hero Section with Robot Head -->
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-512.png" style="width: 300px; height: 300px;"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Page Title Card -->
+        <section class="glass-card-display hero-introduction glass-panel-amber">
+            <h1 class="l2-page-title">
+                💰 Token Optimization
+            </h1>
+            <p class="l2-page-subtitle amber">
+                70% Cost Reduction Through Intelligent Context Management
+            </p>
+            <p class="l2-page-description">
+                Advanced token optimization using semantic chunking, context caching, and 
+                intelligent retrieval. Reduce LLM costs while maintaining accuracy through 
+                RAG-powered context selection and multi-tier caching strategies.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">💰 70% Cost Savings</span>
+                <span class="stat-pill">⚡ 85% Cache Hit</span>
+                <span class="stat-pill">🎯 92% Precision</span>
+                <span class="stat-pill">⏱️ 1.2s Avg Response</span>
+            </div>
+        </section>
+
+        <!-- D3.js Visualization 1: Token Flow Sankey -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-stream"></i>
+                Token Flow & Optimization Pipeline
+            </h2>
+            <p class="intro-text">
+                Interactive Sankey diagram showing token flow from raw input through optimization stages to LLM processing.
+                Hover over nodes and links to see token counts and reduction percentages.
+            </p>
+            <div id="token-flow-sankey" style="width: 100%; height: 600px; background: rgba(19, 23, 46, 0.3); border-radius: 12px; padding: 20px;"></div>
+        </section>
+
+        <!-- D3.js Visualization 2: Cost Savings Timeline -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-chart-line"></i>
+                Cost Savings Over Time
+            </h2>
+            <p class="intro-text">
+                30-day timeline showing token usage and cost reduction trends. Toggle between token count and cost views.
+            </p>
+            <div style="margin-bottom: 1rem;">
+                <button id="toggle-view" class="cortex-tab active" style="margin-right: 0.5rem;">📊 Tokens View</button>
+                <button id="toggle-cost-view" class="cortex-tab">💰 Cost View</button>
+            </div>
+            <div id="cost-savings-timeline" style="width: 100%; height: 500px; background: rgba(19, 23, 46, 0.3); border-radius: 12px; padding: 20px;"></div>
+        </section>
+
+        <!-- D3.js Visualization 3: Cache Strategy Radar -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-radar"></i>
+                Cache Strategy Effectiveness
+            </h2>
+            <p class="intro-text">
+                Radar chart comparing L1/L2/L3 cache performance across 6 key metrics. Click a strategy to isolate it.
+            </p>
+            <div id="cache-strategy-radar" style="width: 100%; height: 600px; background: rgba(19, 23, 46, 0.3); border-radius: 12px; padding: 20px;"></div>
+        </section>
+
+        <!-- Mermaid Diagram 1: Optimization Pipeline -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                Token Optimization Pipeline
+            </h2>
+            <p class="intro-text">
+                End-to-end flow showing how CORTEX processes requests through semantic chunking, caching, and RAG retrieval.
+            </p>
+            <div class="diagram-container">
+                <div class="mermaid">
+flowchart TD
+    A[Raw Request<br/>10K tokens] --> B{Semantic<br/>Chunking}
+    B --> C[Relevance Scoring]
+    C --> D{Cache Check}
+    D -->|Hit 85%| E[Return Cached<br/>500 tokens]
+    D -->|Miss 15%| F[RAG Retrieval]
+    F --> G[Embedding Search]
+    G --> H[Top-K Selection]
+    H --> I[Context Assembly<br/>3K tokens]
+    I --> J[LLM Processing]
+    
+    style A fill:#ef4444,color:#fff
+    style E fill:#10b981,color:#fff
+    style J fill:#10b981,color:#fff
+    style D fill:#f59e0b,color:#000
+                </div>
+            </div>
+        </section>
+
+        <!-- Mermaid Diagram 2: Caching Architecture -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
+                Multi-Tier Caching Architecture
+            </h2>
+            <p class="intro-text">
+                Three-tier caching strategy optimizes for speed (L1), scale (L2), and long-term knowledge (L3).
+            </p>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    subgraph L1[L1: In-Memory Cache]
+        L1A[Recent Queries<br/>TTL: 5 min]
+        L1B[Hot Embeddings<br/>LRU: 100 items]
+    end
+    
+    subgraph L2[L2: Redis Cache]
+        L2A[Session Context<br/>TTL: 1 hour]
+        L2B[Vector Results<br/>TTL: 6 hours]
+    end
+    
+    subgraph L3[L3: Vector DB]
+        L3A[Knowledge Embeddings]
+        L3B[Historical Context]
+    end
+    
+    Request --> L1
+    L1 -->|Miss| L2
+    L2 -->|Miss| L3
+    L3 --> Populate[Populate L2/L1]
+    
+    style L1 fill:#10b981,color:#fff
+    style L2 fill:#06b6d4,color:#fff
+    style L3 fill:#8b5cf6,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Mermaid Diagram 3: Context Selection Sequence -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-exchange-alt"></i>
+                Intelligent Context Selection Flow
+            </h2>
+            <p class="intro-text">
+                Sequence diagram showing how CORTEX selects and assembles optimal context using RAG retrieval.
+            </p>
+            <div class="diagram-container">
+                <div class="mermaid">
+sequenceDiagram
+    participant User
+    participant CORTEX
+    participant SemanticChunker
+    participant RAG
+    participant VectorDB
+    participant LLM
+    
+    User->>CORTEX: Request (10K tokens)
+    CORTEX->>SemanticChunker: Chunk by semantic boundaries
+    SemanticChunker-->>CORTEX: 20 chunks (avg 500 tokens)
+    CORTEX->>RAG: Query relevance
+    RAG->>VectorDB: Embedding search
+    VectorDB-->>RAG: Top 5 chunks (similarity > 0.8)
+    RAG-->>CORTEX: Relevant context (2.5K tokens)
+    CORTEX->>LLM: Optimized request (3K tokens)
+    LLM-->>CORTEX: Response
+    CORTEX-->>User: Result + metadata
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section: Why Token Optimization Matters -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>
+                Why Token Optimization Matters
+            </h2>
+            
+            <div class="highlight-box">
+                <div class="highlight-icon"><i class="fas fa-chart-bar"></i></div>
+                <div class="highlight-content">
+                    <h3>Business Impact</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i><strong>70% Cost Reduction:</strong> From $10K/month to $3K/month at 1M tokens/day</li>
+                        <li><i class="fas fa-check-circle"></i><strong>3x Faster Responses:</strong> Cache hits return in &lt;100ms vs 2-3s LLM calls</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Improved Accuracy:</strong> RAG retrieval ensures relevant context, reducing hallucinations</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Scalability:</strong> Handle 10x traffic with same infrastructure through caching</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-icon"><i class="fas fa-cogs"></i></div>
+                <div class="highlight-content">
+                    <h3>How CORTEX Optimizes</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i><strong>Semantic Chunking:</strong> Break input by meaning, not arbitrary limits</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Relevance Scoring:</strong> ML-powered ranking of context importance</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Multi-Tier Caching:</strong> L1 (memory) → L2 (Redis) → L3 (Vector DB)</li>
+                        <li><i class="fas fa-check-circle"></i><strong>RAG Integration:</strong> Vector search retrieves only relevant knowledge</li>
+                        <li><i class="fas fa-check-circle"></i><strong>Context Compression:</strong> Remove redundant information while preserving meaning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card-grid columns-4" style="margin-top: 2rem;">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-percentage"></i></div>
+                    <h3 class="card-title">70%</h3>
+                    <p class="card-subtitle">Avg Token Reduction</p>
+                    <p class="card-description">10K tokens → 3K tokens typical</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-bolt"></i></div>
+                    <h3 class="card-title">85%</h3>
+                    <p class="card-subtitle">Cache Hit Rate</p>
+                    <p class="card-description">Most queries served from cache</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);"><i class="fas fa-crosshairs"></i></div>
+                    <h3 class="card-title">92%</h3>
+                    <p class="card-subtitle">Context Precision</p>
+                    <p class="card-description">Relevance score accuracy</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><i class="fas fa-clock"></i></div>
+                    <h3 class="card-title">1.8s</h3>
+                    <p class="card-subtitle">P95 Latency</p>
+                    <p class="card-description">Including cache misses</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section: Semantic Chunking Engine -->
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title">
+                <i class="fas fa-cut"></i>
+                Semantic Chunking Engine
+            </h2>
+            
+            <p class="intro-text">
+                CORTEX chunks text by semantic boundaries (paragraphs, logical sections, code blocks) 
+                rather than arbitrary character limits. This preserves context and improves retrieval accuracy.
+            </p>
+
+            <div class="highlight-box">
+                <div class="highlight-icon"><i class="fas fa-code"></i></div>
+                <div class="highlight-content">
+                    <h3>Implementation Highlights</h3>
+                    <ul class="feature-list-compact">
+                        <li>AST-aware chunking for code files</li>
+                        <li>Paragraph and section detection for docs</li>
+                        <li>Overlap strategy: 10% overlap between chunks</li>
+                        <li>Size limits: 200-800 tokens per chunk</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: rgba(19, 23, 46, 0.5); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                <h4 style="color: #00d4ff; margin-bottom: 1rem;">Example: Semantic Chunking in Action</h4>
+                <pre style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 8px; overflow-x: auto;"><code style="color: #e6e9f0; font-family: 'Courier New', monospace;"># Example: Semantic chunking in action
+from cortex.brain.context.semantic_chunker import SemanticChunker
+
+chunker = SemanticChunker(
+    chunk_size_range=(200, 800),
+    overlap_pct=0.1,
+    boundary_types=["paragraph", "code_block", "function"]
+)
+
+chunks = chunker.chunk_document(large_document)
+# Result: 25 chunks with clean semantic boundaries
+# vs 40 chunks with arbitrary splitting</code></pre>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="glass-card-display animation-t1 glass-panel-amber">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Start Optimizing Today
+            </h2>
+            <p class="intro-text">
+                Enable token optimization in your CORTEX instance with these simple steps:
+            </p>
+            
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-clickable">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-play-circle"></i></div>
+                    <h3 class="card-title">Quick Start Commands</h3>
+                    <ol class="feature-list" style="list-style: decimal; margin-left: 1.5rem;">
+                        <li>Configure cache tiers: <code>cortex config set cache.enabled=true</code></li>
+                        <li>Enable semantic chunking: <code>cortex config set chunking.strategy=semantic</code></li>
+                        <li>Set up Redis: <code>docker run -d -p 6379:6379 redis:7</code></li>
+                        <li>Monitor savings: <code>cortex metrics tokens --period 7d</code></li>
+                    </ol>
+                </div>
+                
+                <div class="glass-card-clickable">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #7b61ff, #6366f1);"><i class="fas fa-arrow-right"></i></div>
+                    <h3 class="card-title">Next Steps</h3>
+                    <ul class="feature-list">
+                        <li><a href="../07-guides/knowledge-base.html" style="color: #00d4ff;">Explore Knowledge Base Integration</a></li>
+                        <li><a href="../11-mcp-tools/index.html" style="color: #00d4ff;">Configure MCP Tools</a></li>
+                        <li><a href="../07-guides/rag-optimization.html" style="color: #00d4ff;">Advanced RAG Strategies</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Asif Hussain. CORTEX Token Optimization.</p>
+            <nav aria-label="Footer Navigation">
+                <a href="../index.html">Home</a>
+                <a href="../architecture/index.html">Architecture</a>
+                <a href="../11-mcp-tools/index.html">MCP Tools</a>
+                <a href="../security/index.html">Security</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#7b61ff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#f59e0b'
+            }
+        });
+
+        // D3.js Visualization 1: Token Flow Sankey
+        function createTokenFlowSankey() {
+            const data = {
+                nodes: [
+                    { id: 0, name: "Raw Input (10K tokens)" },
+                    { id: 1, name: "Semantic Chunking" },
+                    { id: 2, name: "Cache Check" },
+                    { id: 3, name: "Cache Hit (500 tokens)" },
+                    { id: 4, name: "RAG Retrieval" },
+                    { id: 5, name: "Context Assembly" },
+                    { id: 6, name: "LLM (3K tokens)" }
+                ],
+                links: [
+                    { source: 0, target: 1, value: 10000 },
+                    { source: 1, target: 2, value: 6000 },
+                    { source: 2, target: 3, value: 3000 },
+                    { source: 2, target: 4, value: 3000 },
+                    { source: 4, target: 5, value: 2000 },
+                    { source: 5, target: 6, value: 2000 }
+                ]
+            };
+
+            const container = d3.select("#token-flow-sankey");
+            const width = container.node().getBoundingClientRect().width;
+            const height = 600;
+
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const sankey = d3.sankey()
+                .nodeWidth(200)
+                .nodePadding(40)
+                .extent([[50, 50], [width - 50, height - 50]]);
+
+            const graph = sankey({
+                nodes: data.nodes.map(d => Object.assign({}, d)),
+                links: data.links.map(d => Object.assign({}, d))
+            });
+
+            const colorScale = d3.scaleOrdinal()
+                .domain([0, 1, 2, 3, 4, 5, 6])
+                .range(["#ef4444", "#f59e0b", "#fbbf24", "#10b981", "#8b5cf6", "#06b6d4", "#10b981"]);
+
+            // Links
+            svg.append("g")
+                .selectAll("path")
+                .data(graph.links)
+                .join("path")
+                .attr("d", d3.sankeyLinkHorizontal())
+                .attr("stroke", d => colorScale(d.source.id))
+                .attr("stroke-width", d => Math.max(1, d.width))
+                .attr("fill", "none")
+                .attr("opacity", 0.5)
+                .on("mouseover", function() {
+                    d3.select(this).attr("opacity", 0.8);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("opacity", 0.5);
+                })
+                .append("title")
+                .text(d => `${d.source.name} → ${d.target.name}\n${d.value.toLocaleString()} tokens`);
+
+            // Nodes
+            const node = svg.append("g")
+                .selectAll("g")
+                .data(graph.nodes)
+                .join("g");
+
+            node.append("rect")
+                .attr("x", d => d.x0)
+                .attr("y", d => d.y0)
+                .attr("height", d => d.y1 - d.y0)
+                .attr("width", d => d.x1 - d.x0)
+                .attr("fill", d => colorScale(d.id))
+                .attr("stroke", "#00d4ff")
+                .attr("stroke-width", 2)
+                .attr("rx", 8)
+                .on("mouseover", function() {
+                    d3.select(this).attr("stroke-width", 4);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("stroke-width", 2);
+                })
+                .append("title")
+                .text(d => d.name);
+
+            node.append("text")
+                .attr("x", d => (d.x0 + d.x1) / 2)
+                .attr("y", d => (d.y0 + d.y1) / 2)
+                .attr("dy", "0.35em")
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ffffff")
+                .attr("font-size", "12px")
+                .attr("font-weight", "600")
+                .text(d => d.name);
+        }
+
+        // D3.js Visualization 2: Cost Savings Timeline
+        function createCostSavingsTimeline() {
+            const data = [
+                { date: new Date("2026-01-01"), tokens_raw: 150000, tokens_optimized: 45000, cost_saved: 105 },
+                { date: new Date("2026-01-08"), tokens_raw: 180000, tokens_optimized: 52000, cost_saved: 128 },
+                { date: new Date("2026-01-15"), tokens_raw: 200000, tokens_optimized: 58000, cost_saved: 142 },
+                { date: new Date("2026-01-22"), tokens_raw: 175000, tokens_optimized: 50000, cost_saved: 125 },
+                { date: new Date("2026-01-29"), tokens_raw: 220000, tokens_optimized: 62000, cost_saved: 158 }
+            ];
+
+            const container = d3.select("#cost-savings-timeline");
+            const width = container.node().getBoundingClientRect().width;
+            const height = 500;
+            const margin = { top: 40, right: 100, bottom: 60, left: 80 };
+
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleTime()
+                .domain(d3.extent(data, d => d.date))
+                .range([0, width - margin.left - margin.right]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.tokens_raw)])
+                .range([height - margin.top - margin.bottom, 0]);
+
+            // X-axis
+            g.append("g")
+                .attr("transform", `translate(0,${height - margin.top - margin.bottom})`)
+                .call(d3.axisBottom(x).ticks(5))
+                .attr("color", "#e6e9f0");
+
+            // Y-axis
+            g.append("g")
+                .call(d3.axisLeft(y).ticks(5).tickFormat(d => `${d/1000}K`))
+                .attr("color", "#e6e9f0");
+
+            // Y-axis label
+            g.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -60)
+                .attr("x", -(height - margin.top - margin.bottom) / 2)
+                .attr("fill", "#e6e9f0")
+                .attr("text-anchor", "middle")
+                .text("Tokens");
+
+            // Line for raw tokens
+            const lineRaw = d3.line()
+                .x(d => x(d.date))
+                .y(d => y(d.tokens_raw));
+
+            g.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "#ef4444")
+                .attr("stroke-width", 3)
+                .attr("d", lineRaw);
+
+            // Line for optimized tokens
+            const lineOptimized = d3.line()
+                .x(d => x(d.date))
+                .y(d => y(d.tokens_optimized));
+
+            g.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "#10b981")
+                .attr("stroke-width", 3)
+                .attr("d", lineOptimized);
+
+            // Points for raw tokens
+            g.selectAll(".dot-raw")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot-raw")
+                .attr("cx", d => x(d.date))
+                .attr("cy", d => y(d.tokens_raw))
+                .attr("r", 6)
+                .attr("fill", "#ef4444")
+                .attr("stroke", "#ffffff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("r", 8);
+                    showTooltip(event, `Raw: ${d.tokens_raw.toLocaleString()} tokens`);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("r", 6);
+                    hideTooltip();
+                });
+
+            // Points for optimized tokens
+            g.selectAll(".dot-optimized")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot-optimized")
+                .attr("cx", d => x(d.date))
+                .attr("cy", d => y(d.tokens_optimized))
+                .attr("r", 6)
+                .attr("fill", "#10b981")
+                .attr("stroke", "#ffffff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("r", 8);
+                    showTooltip(event, `Optimized: ${d.tokens_optimized.toLocaleString()} tokens<br/>Saved: $${d.cost_saved}`);
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("r", 6);
+                    hideTooltip();
+                });
+
+            // Legend
+            const legend = g.append("g")
+                .attr("transform", `translate(${width - margin.left - margin.right - 80}, 20)`);
+
+            legend.append("line")
+                .attr("x1", 0).attr("x2", 30)
+                .attr("y1", 0).attr("y2", 0)
+                .attr("stroke", "#ef4444")
+                .attr("stroke-width", 3);
+            
+            legend.append("text")
+                .attr("x", 35).attr("y", 5)
+                .attr("fill", "#e6e9f0")
+                .attr("font-size", "12px")
+                .text("Raw Tokens");
+
+            legend.append("line")
+                .attr("x1", 0).attr("x2", 30)
+                .attr("y1", 20).attr("y2", 20)
+                .attr("stroke", "#10b981")
+                .attr("stroke-width", 3);
+            
+            legend.append("text")
+                .attr("x", 35).attr("y", 25)
+                .attr("fill", "#e6e9f0")
+                .attr("font-size", "12px")
+                .text("Optimized");
+
+            // Tooltip helper functions
+            function showTooltip(event, html) {
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "d3-tooltip")
+                    .style("position", "absolute")
+                    .style("background", "rgba(26, 31, 58, 0.95)")
+                    .style("border", "1px solid #00d4ff")
+                    .style("border-radius", "8px")
+                    .style("padding", "10px")
+                    .style("color", "#e6e9f0")
+                    .style("font-size", "12px")
+                    .style("pointer-events", "none")
+                    .style("z-index", "10000")
+                    .html(html)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            }
+
+            function hideTooltip() {
+                d3.selectAll(".d3-tooltip").remove();
+            }
+        }
+
+        // D3.js Visualization 3: Cache Strategy Radar
+        function createCacheStrategyRadar() {
+            const metrics = ["Hit Rate", "Speed", "Size Efficiency", "Cost Reduction", "Freshness", "Accuracy"];
+            const strategies = [
+                { name: "L1 Memory Cache", values: [0.95, 1.0, 0.7, 0.8, 0.9, 1.0], color: "#10b981" },
+                { name: "L2 Redis Cache", values: [0.85, 0.8, 0.9, 0.9, 0.7, 0.95], color: "#06b6d4" },
+                { name: "L3 Vector DB", values: [0.7, 0.6, 0.85, 0.95, 0.6, 0.9], color: "#8b5cf6" }
+            ];
+
+            const container = d3.select("#cache-strategy-radar");
+            const width = container.node().getBoundingClientRect().width;
+            const height = 600;
+            const radius = Math.min(width, height) / 2 - 100;
+
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${width / 2},${height / 2})`);
+
+            const angleSlice = (Math.PI * 2) / metrics.length;
+
+            // Radial scale
+            const rScale = d3.scaleLinear()
+                .domain([0, 1])
+                .range([0, radius]);
+
+            // Draw circular grid
+            const levels = 5;
+            for (let i = 1; i <= levels; i++) {
+                const levelRadius = radius * (i / levels);
+                g.append("circle")
+                    .attr("r", levelRadius)
+                    .attr("fill", "none")
+                    .attr("stroke", "rgba(255, 255, 255, 0.1)")
+                    .attr("stroke-width", 1);
+
+                // Grid labels
+                g.append("text")
+                    .attr("x", 5)
+                    .attr("y", -levelRadius)
+                    .attr("fill", "#e6e9f0")
+                    .attr("font-size", "10px")
+                    .text(`${i * 20}%`);
+            }
+
+            // Draw axes
+            metrics.forEach((metric, i) => {
+                const angle = angleSlice * i - Math.PI / 2;
+                const x = rScale(1.15) * Math.cos(angle);
+                const y = rScale(1.15) * Math.sin(angle);
+
+                // Axis line
+                g.append("line")
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", rScale(1) * Math.cos(angle))
+                    .attr("y2", rScale(1) * Math.sin(angle))
+                    .attr("stroke", "rgba(255, 255, 255, 0.2)")
+                    .attr("stroke-width", 1);
+
+                // Axis label
+                g.append("text")
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#00d4ff")
+                    .attr("font-size", "12px")
+                    .attr("font-weight", "600")
+                    .text(metric);
+            });
+
+            // Draw radar areas for each strategy
+            strategies.forEach((strategy, idx) => {
+                const points = strategy.values.map((value, i) => {
+                    const angle = angleSlice * i - Math.PI / 2;
+                    return {
+                        x: rScale(value) * Math.cos(angle),
+                        y: rScale(value) * Math.sin(angle)
+                    };
+                });
+
+                const lineGenerator = d3.line()
+                    .x(d => d.x)
+                    .y(d => d.y)
+                    .curve(d3.curveLinearClosed);
+
+                // Area
+                g.append("path")
+                    .datum(points)
+                    .attr("d", lineGenerator)
+                    .attr("fill", strategy.color)
+                    .attr("fill-opacity", 0.2)
+                    .attr("stroke", strategy.color)
+                    .attr("stroke-width", 2)
+                    .on("mouseover", function() {
+                        d3.select(this).attr("fill-opacity", 0.4);
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).attr("fill-opacity", 0.2);
+                    });
+
+                // Points
+                points.forEach((point, i) => {
+                    g.append("circle")
+                        .attr("cx", point.x)
+                        .attr("cy", point.y)
+                        .attr("r", 4)
+                        .attr("fill", strategy.color)
+                        .attr("stroke", "#ffffff")
+                        .attr("stroke-width", 2)
+                        .on("mouseover", function(event) {
+                            d3.select(this).attr("r", 6);
+                            showTooltip(event, `${strategy.name}<br/>${metrics[i]}: ${(strategy.values[i] * 100).toFixed(0)}%`);
+                        })
+                        .on("mouseout", function() {
+                            d3.select(this).attr("r", 4);
+                            hideTooltip();
+                        });
+                });
+            });
+
+            // Legend
+            const legend = g.append("g")
+                .attr("transform", `translate(${-radius}, ${radius + 40})`);
+
+            strategies.forEach((strategy, i) => {
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 25})`);
+
+                legendRow.append("rect")
+                    .attr("width", 20)
+                    .attr("height", 20)
+                    .attr("fill", strategy.color)
+                    .attr("rx", 4);
+
+                legendRow.append("text")
+                    .attr("x", 30)
+                    .attr("y", 15)
+                    .attr("fill", "#e6e9f0")
+                    .attr("font-size", "12px")
+                    .text(strategy.name);
+            });
+
+            function showTooltip(event, html) {
+                const tooltip = d3.select("body").append("div")
+                    .attr("class", "d3-tooltip")
+                    .style("position", "absolute")
+                    .style("background", "rgba(26, 31, 58, 0.95)")
+                    .style("border", "1px solid #00d4ff")
+                    .style("border-radius", "8px")
+                    .style("padding", "10px")
+                    .style("color", "#e6e9f0")
+                    .style("font-size", "12px")
+                    .style("pointer-events", "none")
+                    .style("z-index", "10000")
+                    .html(html)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            }
+
+            function hideTooltip() {
+                d3.selectAll(".d3-tooltip").remove();
+            }
+        }
+
+        // Initialize all visualizations
+        document.addEventListener('DOMContentLoaded', function() {
+            createTokenFlowSankey();
+            createCostSavingsTimeline();
+            createCacheStrategyRadar();
+        });
+
+        // Toggle button functionality (placeholder)
+        document.getElementById('toggle-view')?.addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('toggle-cost-view')?.classList.remove('active');
+        });
+
+        document.getElementById('toggle-cost-view')?.addEventListener('click', function() {
+            this.classList.add('active');
+            document.getElementById('toggle-view')?.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
