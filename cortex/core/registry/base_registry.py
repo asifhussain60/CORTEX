@@ -44,17 +44,12 @@ from threading import RLock
 from typing import Any, Dict, Generic, List, Optional, Tuple, TypeVar
 import logging
 
+from cortex.models.canonical_enums import HealthStatus
+
 logger = logging.getLogger(__name__)
 
 # Generic type variable
 T = TypeVar("T")
-
-
-class HealthStatus(Enum):
-    """Health check status"""
-    HEALTHY = "healthy"
-    DEGRADED = "degraded"
-    UNHEALTHY = "unhealthy"
 
 
 @dataclass
