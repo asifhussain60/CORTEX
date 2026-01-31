@@ -17,13 +17,7 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 
-
-class ToolCategory(Enum):
-    """MCP Tool Categories"""
-    GOVERNANCE = "governance"
-    ORCHESTRATION = "orchestration"
-    KNOWLEDGE = "knowledge"
-    UTILITY = "utility"
+from cortex.mcp.tool_governance import ToolCategory
 
 
 @dataclass

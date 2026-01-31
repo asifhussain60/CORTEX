@@ -8,9 +8,6 @@ AC-PHX-010-01: Dynamic strategy selection based on:
 - Resource availability
 - Deadline constraints
 - Historical performance patterns
-
-Author: Asif Hussain
-Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass, field
@@ -19,12 +16,7 @@ from enum import Enum
 from datetime import datetime
 import statistics
 
-
-class StrategyType(Enum):
-    """Execution strategy types."""
-    FAST = "FAST"
-    BALANCED = "BALANCED"
-    THOROUGH = "THOROUGH"
+from cortex.orchestrators.adaptive.unified_adaptive_layer import StrategyType
 
 
 @dataclass
