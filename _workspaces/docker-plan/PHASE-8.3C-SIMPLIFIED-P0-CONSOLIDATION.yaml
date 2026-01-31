@@ -1,0 +1,145 @@
+"""
+PHASE 8.3C SIMPLIFIED - P0 CONSOLIDATION ACTION PLAN
+
+Authority: CORTEX Challenge Engine + Strategic Review (2026-01-31)
+Strategy: Option 3 - Production-Driven Selective Consolidation
+Status: READY FOR EXECUTION
+
+Executive Summary:
+==================
+CORTEX is not yet in production. Therefore:
+- ✅ KEEP Phase 8.3A (Detection + Prevention) - Ships with product
+- ❌ DELETE Phase 8.3B (Adapters) - Unnecessary backward compatibility overhead
+- ✅ EXECUTE Phase 8.3C SIMPLIFIED (P0 only) - Consolidate high-impact duplicates
+
+P0 Consolidated Files:
+======================
+These 10 files appear 2-4 times in codebase, heavily imported (8-24 imports each).
+Consolidating them removes ambiguity and establishes canonical paths for clean growth.
+
+1. git_history_analyzer.py (4 copies)
+   Canonical: cortex/brain/analysis/git_history_analyzer.py (KEEPER)
+   Remove: 3 other copies
+   Imports: 8+ locations
+   Impact: CRITICAL (used by DuplicationDetector, IntentRouter, etc.)
+
+2. input_validator.py (4 copies)
+   Canonical: cortex/brain/core/input_validator.py (KEEPER)
+   Remove: 3 other copies
+   Imports: 15+ locations
+   Impact: CRITICAL (security/validation layer)
+
+3. enhanced_audit_logger.py (2+ copies)
+   Canonical: cortex/infrastructure/enhanced_audit_logger.py (KEEPER)
+   Remove: Other copies
+   Imports: 22+ locations
+   Impact: CRITICAL (governance/audit trail)
+
+4. checkpoint_manager.py (3 copies)
+   Canonical: cortex/brain/core/checkpoint_manager.py (KEEPER)
+   Remove: 2 other copies
+   Imports: 12+ locations
+   Impact: HIGH (git checkpoint infrastructure)
+
+5. knowledge_graph.py (3 copies)
+   Canonical: cortex/brain/core/knowledge/knowledge_graph.py (KEEPER)
+   Remove: 2 other copies
+   Imports: 18+ locations
+   Impact: HIGH (knowledge infrastructure)
+
+6-10. Other P0 files (to be identified via grep)
+   Similar pattern: 2-3 copies each, 8-15 imports
+   Strategy: Same consolidation approach
+
+Consolidation Process (Per File):
+==================================
+
+For each file:
+1. Identify canonical location (usually cortex/brain/core or cortex/infrastructure)
+2. Grep all imports from that file across codebase
+3. Update all imports to point to canonical
+4. Delete duplicate copies
+5. Run regression tests (172+ tests must pass)
+6. Commit: "consolidation: canonical {filename} (CORE-035)"
+
+Example - git_history_analyzer.py:
+-----------------------------------
+STEP 1: Find all imports
+$ grep -r "from.*git_history_analyzer import\|import.*git_history_analyzer" cortex --include="*.py"
+
+STEP 2: Update each import to canonical path
+OLD: from cortex.orchestrators.core.git_history_analyzer import GitHistoryAnalyzer
+NEW: from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
+
+STEP 3: Delete non-canonical copies
+$ rm cortex/orchestrators/core/git_history_analyzer.py
+$ rm cortex/brain/core/intelligence/git_history_analyzer.py
+$ rm cortex/mcp/tools/git_history_analyzer.py
+
+STEP 4: Verify no imports remain from old paths
+$ grep -r "cortex.orchestrators.core.git_history_analyzer" cortex --include="*.py"
+(Should return 0 results)
+
+STEP 5: Run tests
+$ pytest tests/ -v --tb=short
+
+STEP 6: Commit
+$ git add -A
+$ git commit -m "consolidation: canonical git_history_analyzer (CORE-035)"
+
+Success Criteria:
+=================
+✅ All 10 P0 files consolidated to single canonical path
+✅ All imports updated (0 dangling references)
+✅ All 172+ existing tests pass
+✅ DuplicationDetector reports 0 violations for P0 files
+✅ No regressions in functionality
+✅ P1-P3 files remain as-is (deferred until production data)
+✅ Pre-commit hook active (prevents future P0 duplications)
+
+Timeline:
+=========
+- Phase 8.3A: Complete by 2026-02-07 (5 days)
+- Phase 8.3C (Simplified): Complete by 2026-02-14 (3-5 days)
+- Total: 2.5 weeks to production-clean codebase
+- Ship to production: 2026-02-21 ✅
+
+Risk Assessment:
+================
+🟢 LOW RISK:
+- Consolidations are mechanical (find-replace imports)
+- Existing test suite validates no breakage
+- Can quickly revert if needed (git history intact)
+- P0 files are highest-confidence consolidations
+- No architectural changes, just file path migration
+
+Deferred (P1-P3 Files):
+======================
+After 2-3 months in production:
+- Analyze actual usage patterns
+- Identify which P1-P3 duplicates cause real friction
+- Consolidate based on production evidence
+- Build adapters/shims only if external integrations demand
+
+Dependencies:
+==============
+- Phase 8.3A completion (DuplicationDetector wired)
+- Pre-commit hook active (prevents regression)
+- All existing tests green (regression baseline)
+
+Next Steps:
+===========
+1. ✅ Review this plan
+2. ✅ Approve execution
+3. ⏳ Execute consolidation script (bulk find-replace + test)
+4. ⏳ Commit to main branch
+5. ⏳ Ship Phase 8.3A + 8.3C to production
+6. ⏳ Monitor production for consolidation issues
+7. ⏳ Plan Phase 8.4 (P1-P3 consolidation) based on production data
+
+Author: Asif Hussain
+Date: 2026-01-31
+Authority: CORTEX Challenge Engine (Option 3 Decision)
+"""
+
+# This is a documentation file, not Python code
