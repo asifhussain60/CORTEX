@@ -16,11 +16,12 @@ AC-ID: LENS-DASH-GENERATOR-001
 
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Set
 
 from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
 from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
 from cortex.visualization.business_language_generator import BusinessLanguageGenerator
+from cortex.visualization.renderers.d3_import_graph_renderer import D3ImportGraphRenderer
 
 
 def generate_overview_json(repo_path: Path, output_path: Path) -> None:
@@ -81,23 +82,90 @@ def generate_dependencies_json(repo_path: Path, output_path: Path) -> None:
     """
     print("🕸️ Generating dependencies.json...")
     
-    # TODO: Use d3_import_graph_renderer.py
-    # For now, create placeholder
-    dependencies_data = {
+    # Initialize analyzers
+    ast_analyzer = ASTAnalyzer()
+    renderer = D3ImportGraphRenderer()
+    
+    # Collect all Python files
+    python_files = list(repo_path.glob("**/*.py"))
+    # Filter out __pycache__, test files, and virtual environments
+    python_files = [
+        f for f in python_files 
+        if "__pycache__" not in str(f) 
+        and not str(f).startswith(str(repo_path / "tests"))
+        and ".venv" not in str(f)
+        and "venv" not in str(f)
+        and "site-packages" not in str(f)
+    ]
+    
+    print(f"   Analyzing {len(python_files)} Python files...")
+    
+    # Build import graph
+    modules: Set[str] = set()
+    edges: List[Dict[str, str]] = []
+    
+    for py_file in python_files:
+        # Get module name from file path
+        try:
+            rel_path = py_file.relative_to(repo_path)
+            module_parts = list(rel_path.parts[:-1])  # Remove filename
+            if rel_path.name != "__init__.py":
+                # Add filename without .py extension
+                module_parts.append(rel_path.stem)
+            
+            source_module = ".".join(module_parts) if module_parts else rel_path.stem
+            
+            # Skip if empty
+            if not source_module:
+                continue
+            
+            modules.add(source_module)
+            
+            # Analyze imports
+            result = ast_analyzer.analyze_file(py_file)
+            if result.success:
+                for import_info in result.imports:
+                    target_module = import_info.module
+                    if target_module:
+                        # Only include internal CORTEX modules or major external libraries
+                        if target_module.startswith(("cortex", "cortex_brain")):
+                            modules.add(target_module)
+                            edges.append({
+                                "source": source_module,
+                                "target": target_module
+                            })
+                        elif target_module in ["pytest", "fastapi", "click", "yaml"]:
+                            # Include major external dependencies
+                            modules.add(target_module)
+                            edges.append({
+                                "source": source_module,
+                                "target": target_module
+                            })
+        except (ValueError, OSError) as e:
+            # Skip files that can't be processed
+            continue
+    
+    # Build graph data
+    graph_data = {
         "nodes": [
-            {"id": "cortex.orchestrators.core.master_orchestrator", "group": "core", "size": 3109},
-            {"id": "cortex.brain.analysis.ast_analyzer", "group": "brain", "size": 847},
-            {"id": "cortex.governance.enforcement_engine", "group": "governance", "size": 1205}
+            {
+                "id": module,
+                "type": "module",
+                "is_external": not module.startswith(("cortex", "cortex_brain"))
+            }
+            for module in modules
         ],
-        "links": [
-            {"source": "cortex.orchestrators.core.master_orchestrator", "target": "cortex.brain.analysis.ast_analyzer", "value": 1},
-            {"source": "cortex.orchestrators.core.master_orchestrator", "target": "cortex.governance.enforcement_engine", "value": 1}
-        ]
+        "edges": edges
     }
+    
+    # Render to D3.js format
+    d3_graph = renderer.render(graph_data)
+    dependencies_data = renderer.to_json(d3_graph)
     
     with open(output_path, 'w') as f:
         json.dump(dependencies_data, f, indent=2)
     
+    print(f"   ✅ Found {len(modules)} modules, {len(edges)} imports")
     print(f"   ✅ Saved to {output_path}")
 
 
