@@ -6,13 +6,13 @@
 
 ---
 
-The Year 1 celebration was barely over when I opened a blank document.
+The Year 1 celebration was barely over when Asif opened a blank document.
 
-I titled it: "CORTEX: The Road Ahead."
+He titled it: "CORTEX: The Road Ahead."
 
 *"Already planning the next thing?"* Miss G asked from her corner. *"Don't you ever take breaks?"*
 
-"The best time to plan is when you're still excited," I said. "Before reality and cynicism set back in."
+"The best time to plan is when you're still excited," Asif said. "Before reality and cynicism set back in."
 
 Copilot Bot's LEDs flickered curiously. "Boss, what is a vision document?"
 
@@ -22,11 +22,11 @@ Copilot Bot's LEDs flickered curiously. "Boss, what is a vision document?"
 
 *"That's actually a profound question,"* Miss G observed.
 
-"You don't know FOR SURE," I admitted. "But you make your best guess based on what you've learned, and then you adjust as you go. The point isn't to be perfectly right—it's to have direction."
+"You don't know FOR SURE," Asif admitted. "But you make your best guess based on what you've learned, and then you adjust as you go. The point isn't to be perfectly right—it's to have direction."
 
 ## The Seven Phases
 
-Here's what I wrote down. Seven phases that would take CORTEX from where it was to where it could be.
+Here's what Asif wrote down. Seven phases that would take CORTEX from where it was to where it could be.
 
 ### Phase 1: Foundation (Year 1) COMPLETE
 
@@ -56,13 +56,13 @@ Copilot Bot's LEDs brightened. "Like how I learned to give BETTER suggestions by
 
 Phase 3 is where CORTEX stops waiting for problems and starts PREVENTING them.
 
-Predictive failure detection. The system notices that memory usage is trending upward, or that response times are getting slower, or that a critical dependency is becoming flaky—and it warns you BEFORE things actually break.
+Predictive failure detection. The system notices that memory usage is trending upward, or that response times are getting slower, or that a critical dependency is becoming flaky—and it warns teams BEFORE things actually break.
 
 Think of it like having a really good doctor who doesn't just treat symptoms, but notices early warning signs. "Your blood pressure is trending up—let's address that before it becomes a heart attack."
 
 *"Proactive medicine for code,"* Miss G said. *"That would change everything."*
 
-"If you can prevent 80% of problems before they happen, you save massive amounts of time, money, and stress. You stop being reactive firefighters and start being proactive builders."
+"If teams can prevent 80% of problems before they happen, they save massive amounts of time, money, and stress. They stop being reactive firefighters and start being proactive builders."
 
 ### Phase 4: Self-Awareness (Year 4)
 
@@ -72,7 +72,7 @@ In Phase 4, CORTEX develops what I call "architectural self-awareness." The syst
 
 *"Like organizational introspection,"* Miss G observed. *"The system becomes self-reflective."*
 
-"Imagine being able to ask your codebase 'What's wrong with you?' and getting an honest, intelligent answer. That's Phase 4."
+"Imagine being able to ask a codebase 'What's wrong with you?' and getting an honest, intelligent answer. That's Phase 4."
 
 Copilot Bot seemed confused. "Boss, can machines really be self-aware? Isn't that a human thing?"
 
@@ -98,7 +98,7 @@ Phase 6 is about expanding CORTEX beyond code.
 
 Right now, CORTEX governs development workflows. But what about design workflows? What about documentation workflows? What about planning workflows? What about security workflows?
 
-The principles we've built—governance, testing, orchestration, knowledge—apply to ANY complex process. Phase 6 is when CORTEX becomes a platform for governing ALL of enterprise software, not just development.
+The principles they've built—governance, testing, orchestration, knowledge—apply to ANY complex process. Phase 6 is when CORTEX becomes a platform for governing ALL of enterprise software, not just development.
 
 *"That's ambitious,"* Miss G said. *"Maybe too ambitious?"*
 
@@ -108,13 +108,13 @@ The principles we've built—governance, testing, orchestration, knowledge—app
 
 Phase 7 is the unknown.
 
-I don't know what Phase 7 looks like. I don't know what capabilities will emerge when you combine all the previous phases. I don't know what new possibilities will appear when you have a truly intelligent, self-aware, evolving system.
+Asif doesn't know what Phase 7 looks like. He doesn't know what capabilities will emerge when teams combine all the previous phases. He doesn't know what new possibilities will appear when they have a truly intelligent, self-aware, evolving system.
 
-But I know it will be worth finding out.
+But he knows it will be worth finding out.
 
 *"That's not much of a plan,"* Miss G observed dryly.
 
-"It's the most important part of the plan," I corrected. "Leaving room for the unexpected. The best discoveries are the ones you didn't plan for."
+"It's the most important part of the plan," Asif corrected. "Leaving room for the unexpected. The best discoveries are the ones you didn't plan for."
 
 ## The Five Values
 
@@ -172,7 +172,7 @@ Safety isn't about preventing developers from doing things—it's about preventi
 
 ## The Manifesto
 
-I finished the vision document with a manifesto. A statement of what CORTEX is and why it matters.
+Asif finished the vision document with a manifesto. A statement of what CORTEX is and why it matters.
 
 ---
 
@@ -194,7 +194,7 @@ We believe that the best systems are the ones that help humans be better, not th
 
 This is CORTEX.
 
-This is what we're building.
+This is what they're building.
 
 This is the promise.
 
@@ -204,11 +204,11 @@ Copilot Bot's LEDs cycled through all his colors. "Boss... that's... that's what
 
 *"It's what we're ALL part of,"* Miss G said softly. *"Whether we're real or imaginary."*
 
-I closed the laptop.
+Asif closed the laptop.
 
 The vision was written. The values were clear. The road ahead was mapped.
 
-Now we just had to walk it.
+Now they just had to walk it.
 
 ## The Commitment
 
@@ -230,11 +230,11 @@ Copilot Bot's LEDs glowed a confident green. "I will help, Boss. I will be part 
 
 *"A culture. A way of thinking. A philosophy encoded in systems that enforce it automatically."*
 
-I nodded slowly. "That's exactly what we're building. And the promise is that it will work better than anything that came before."
+Asif nodded slowly. "That's exactly what we're building. And the promise is that it will work better than anything that came before."
 
 *"That's a big promise."*
 
-"We've got a good track record. And besides—" I smiled. "—the best promises are the ones worth keeping."
+"We've got a good track record. And besides—" Asif smiled. "—the best promises are the ones worth keeping."
 
 ## The Road Ahead
 
@@ -248,13 +248,13 @@ Copilot Bot's LEDs glowed their eternal green.
 
 And somewhere out there, in systems we'd built and systems yet to build, CORTEX was running. Checking code. Enforcing governance. Orchestrating workflows. Protecting production. Earning trust.
 
-Year 1 had taught us that it was possible.
+Year 1 had taught them that it was possible.
 
-Year 2 would teach us how far we could go.
+Year 2 would teach them how far they could go.
 
 The road ahead was long, but the direction was clear.
 
-And for the first time in a long time, I was excited about what we'd find at the end.
+And for the first time in a long time, Asif was excited about what they'd find at the end.
 
 ---
 

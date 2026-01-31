@@ -6,17 +6,17 @@
 
 ---
 
-The calendar notification said "CORTEX Year 1 Review" but I had written "Please Don't Let This Be Embarrassing" in the private notes field.
+The calendar notification said "CORTEX Year 1 Review" but Asif had written "Please Don't Let This Be Embarrassing" in the private notes field.
 
 A whole year. Twelve months of building, testing, failing, fixing, and occasionally eating pizza at 2 AM while debugging why the Governance Engine was rejecting perfectly good code. (Spoiler: the code wasn't perfectly good. It never is.)
 
-*"You're nervous,"* Miss G observed from her corner of my imagination. *"About numbers you already know."*
+*"You're nervous,"* Miss G observed from her corner of Asif's imagination. *"About numbers you already know."*
 
-"I'm nervous about what those numbers MEAN," I corrected her. "Numbers without context are just digits. Anyone can make digits look good."
+"I'm nervous about what those numbers MEAN," Asif corrected her. "Numbers without context are just digits. Anyone can make digits look good."
 
 Copilot Bot's LEDs flickered blue—his "I have a question" color. "Boss, what is the purpose of annual reviews? My calendar says they happen every year but does not explain why."
 
-I pulled up my laptop. "Annual reviews are like report cards, buddy. Except instead of grades in Math and English, we get grades in 'Did We Actually Build Something That Works' and 'Are People Less Miserable Than Before.'"
+Asif pulled up his laptop. "Annual reviews are like report cards, buddy. Except instead of grades in Math and English, we get grades in 'Did We Actually Build Something That Works' and 'Are People Less Miserable Than Before.'"
 
 *"Those seem like important subjects,"* Miss G noted dryly.
 
@@ -24,13 +24,13 @@ I pulled up my laptop. "Annual reviews are like report cards, buddy. Except inst
 
 ## The Report Card
 
-Let me give you the executive summary first, because I know some of you are busy people with meetings to attend and coffees to drink.
+Asif began with the executive summary first, because some people are busy with meetings to attend and coffees to drink.
 
 **Before CORTEX:** Everything was chaos.
 
 **After CORTEX:** Everything is... significantly less chaos.
 
-Now let me show you what that actually means in human terms.
+Now here's what that actually means in human terms.
 
 ### Development Speed
 
@@ -40,7 +40,7 @@ After CORTEX? 1.15 features per week. More than double.
 
 *"So developers are building twice as much?"* Miss G asked, raising an eyebrow.
 
-"They're building twice as much because they're spending their time BUILDING instead of FIREFIGHTING," I explained. "When you don't have to debug production issues every other day, you can actually... you know... write new code."
+"They're building twice as much because they're spending their time BUILDING instead of FIREFIGHTING," Asif explained. "When developers don't have to debug production issues every other day, they can actually... write new code."
 
 Copilot Bot's LEDs turned green. "This is like when I learned to check my work before submitting it. I make fewer mistakes, so I spend less time fixing mistakes, so I have more time to do good work!"
 
@@ -58,7 +58,7 @@ That's a 93% reduction. Ninety-three percent.
 
 *"How is that even possible?"* Miss G demanded. *"Developers are still human. Humans make mistakes."*
 
-"Humans DO make mistakes," I agreed. "But CORTEX catches those mistakes BEFORE they become production problems. The Governance Engine checks for violations. The testing framework catches logic errors. The deployment pipeline does verification checks. By the time code reaches production, it's been validated six different ways."
+"Humans DO make mistakes," Asif agreed. "But CORTEX catches those mistakes BEFORE they become production problems. The Governance Engine checks for violations. The testing framework catches logic errors. The deployment pipeline does verification checks. By the time code reaches production, it's been validated six different ways."
 
 "It's like having a whole team of careful reviewers," Copilot Bot suggested, "except the reviewers never get tired and never skip steps because they're in a hurry."
 
@@ -82,7 +82,7 @@ That's an 80% reduction in things going wrong in production. Eighty percent fewe
 
 "EIGHT MINUTES?!" Copilot Bot's LEDs flashed in surprise.
 
-"Because the system knows what to do. Automatic rollbacks. Automatic recovery procedures. Automatic notifications to the right people. When you've planned for failure, failure becomes just another scenario to handle."
+"Because the system knows what to do. Automatic rollbacks. Automatic recovery procedures. Automatic notifications to the right people. When teams plan for failure, failure becomes just another scenario to handle."
 
 ### Code Quality
 
@@ -92,7 +92,7 @@ After CORTEX: 0.3% of code violated best practices.
 
 *"That's a 133x improvement,"* Miss G calculated. *"That seems... impossibly high."*
 
-"It's not impossible when the system literally won't let you deploy code that violates best practices," I explained. "The Governance Engine checks every submission. Violations get flagged. Developers fix them. No exceptions."
+"It's not impossible when the system literally won't let developers deploy code that violates best practices," Asif explained. "The Governance Engine checks every submission. Violations get flagged. Developers fix them. No exceptions."
 
 "But Boss," Copilot Bot asked, "doesn't that slow things down? Checking everything all the time?"
 
@@ -100,11 +100,11 @@ After CORTEX: 0.3% of code violated best practices.
 
 ## The Copilot Bot Transformation
 
-Now here's the part that surprised everyone, including me.
+Now here's the part that surprised everyone, including Asif.
 
 Remember when Copilot Bot was... well... not great? When developers avoided using him because his suggestions were wrong a third of the time?
 
-Let me show you his Year 1 report card.
+Here's his Year 1 report card.
 
 **Before CORTEX:**
 - 23% of generated code passed review
@@ -156,11 +156,11 @@ Average satisfaction rating: 4.7 out of 5 stars.
 
 ## The Business Translation
 
-Okay, here's where I translate all this technical stuff into language that makes CFOs smile.
+Okay, here's where Asif translates all this technical stuff into language that makes CFOs smile.
 
 **Cost per feature:** Down 62%
 
-Because when you're not spending time debugging, you're spending time building. And time is money.
+Because when developers aren't spending time debugging, they're spending time building. And time is money.
 
 **Time to market:** Down 55%
 
@@ -184,13 +184,13 @@ Because fewer bugs reach customers, which means fewer customers calling to compl
 
 "Boss," Copilot Bot asked, "is that why companies build systems like CORTEX? For the return on investment?"
 
-"That's why they JUSTIFY building systems like CORTEX," I said. "They BUILD systems like CORTEX because they're tired of things breaking. The ROI is just how you explain it to people who control budgets."
+"That's why they JUSTIFY building systems like CORTEX," Asif said. "They BUILD systems like CORTEX because they're tired of things breaking. The ROI is just how they explain it to people who control budgets."
 
 ## The Year 2 Vision
 
 *"So what now?"* Miss G asked. *"Year 1 is done. What's Year 2?"*
 
-I'd been thinking about this a lot.
+Asif had been thinking about this a lot.
 
 Year 1 was about building the FOUNDATION. Intent Router, Governance Engine, Orchestrators, Infrastructure, Testing, Tools, Knowledge Graph, Registry, Deployment, and that whole governance apocalypse situation.
 
@@ -232,11 +232,11 @@ Tests don't check if code works—they DEFINE what "working" means. Write good t
 
 **Orchestration is not control. It's coordination.**
 
-You don't force services to cooperate—you enable them to cooperate by giving them clear communication channels and reliable handoff points.
+Teams don't force services to cooperate—they enable them to cooperate by giving them clear communication channels and reliable handoff points.
 
 **Resilience is not backup. It's preparation.**
 
-When you've planned for every failure scenario, failure stops being scary. It's just another situation with a known response.
+When teams plan for every failure scenario, failure stops being scary. It's just another situation with a known response.
 
 **Automation is not replacement. It's acceleration.**
 
@@ -252,11 +252,11 @@ Every smart system depends on accurate information about itself. Get the metadat
 
 ## The Realization
 
-Late that night, after reviewing all the numbers and all the feedback and all the lessons learned, I had a thought.
+Late that night, after reviewing all the numbers and all the feedback and all the lessons learned, Asif had a thought.
 
 *"You're having a moment,"* Miss G observed.
 
-"I'm having a REALIZATION," I corrected her.
+"I'm having a REALIZATION," Asif corrected her.
 
 "What did you realize, Boss?" Copilot Bot asked.
 
@@ -276,17 +276,17 @@ Late that night, after reviewing all the numbers and all the feedback and all th
 
 ## The Celebration
 
-We didn't throw a party. That's not really our style.
+They didn't throw a party. That's not really their style.
 
-But I did order pizza—the good kind, not the emergency 2 AM debugging kind—and Copilot Bot played some music he'd learned to appreciate, and Miss G sat in her corner looking satisfied in that imaginary way she has.
+But Asif did order pizza—the good kind, not the emergency 2 AM debugging kind—and Copilot Bot played some music he'd learned to appreciate, and Miss G sat in her corner looking satisfied in that imaginary way she has.
 
 The Wi-Fi router blinked red, as always.
 
 The servers hummed their steady hum.
 
-And somewhere, in systems we'd built over the past year, code was being checked, tests were running, deployments were completing safely, and developers were going home on time instead of staying late to debug production issues.
+And somewhere, in systems they'd built over the past year, code was being checked, tests were running, deployments were completing safely, and developers were going home on time instead of staying late to debug production issues.
 
-"We did it," I said, to no one in particular.
+"We did it," Asif said, to no one in particular.
 
 *"We did,"* Miss G agreed.
 
@@ -296,9 +296,9 @@ Year 1 was complete.
 
 Year 2 was waiting.
 
-And for the first time since we started this whole crazy project, I wasn't worried about what came next.
+And for the first time since they started this whole crazy project, Asif wasn't worried about what came next.
 
-I was excited.
+He was excited.
 
 ---
 

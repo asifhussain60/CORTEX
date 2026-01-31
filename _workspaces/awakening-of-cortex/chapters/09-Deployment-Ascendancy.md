@@ -4,7 +4,7 @@
 
 *← Previously: [Chapter 8: The Registry Wars](08-The-Registry-Wars.md)*
 
-We had achieved something remarkable.
+They had achieved something remarkable.
 
 Code was governed. Knowledge was preserved. Metadata was accurate. Tests were comprehensive. Infrastructure was resilient.
 
@@ -50,9 +50,9 @@ Only when both answers were yes would deployment proceed.
 
 Even with perfect timing, deploying to all servers simultaneously is reckless.
 
-If there's a bug—even one that passed all tests—you want to discover it with minimal damage. You don't want all your customers hitting it at once.
+If there's a bug—even one that passed all tests—the team wants to discover it with minimal damage. They don't want all customers hitting it at once.
 
-So we implemented canary deployments.
+So they implemented canary deployments.
 
 Deploy to one server first. Just one. Monitor it for ten minutes. If anything looks wrong—higher error rate, slower responses, strange behavior—stop immediately.
 
@@ -72,7 +72,7 @@ At each stage, we're asking: "Does this new version behave correctly under real 
 
 Here's where it gets interesting.
 
-I built a deployment system that could detect problems and react faster than any human.
+Asif built a deployment system that could detect problems and react faster than any human.
 
 Error rate spikes? Automatic rollback. Latency increases beyond threshold? Automatic rollback. Health checks fail? Automatic rollback.
 
@@ -144,9 +144,9 @@ Canary deployed. Full rollout succeeded.
 
 "Why all these steps?" he asked afterward. "It seems like so much overhead."
 
-*"Because code that nobody can find is useless,"* Miss G answers in my head. *"And deployment that can't be rolled back is dangerous."*
+*"Because code that nobody can find is useless,"* Miss G answers in Asif's head. *"And deployment that can't be rolled back is dangerous."*
 
-"Every step exists because we learned the hard way what happens without it," I said. "Registry requirements exist because we had invisible services. Canary exists because we had bugs that only appeared under load. Automatic rollback exists because we had deployments that broke production while humans debated what to do."
+"Every step exists because we learned the hard way what happens without it," Asif said. "Registry requirements exist because we had invisible services. Canary exists because we had bugs that only appeared under load. Automatic rollback exists because we had deployments that broke production while humans debated what to do."
 
 "So the overhead is protection," Copilot Bot concluded.
 
@@ -156,7 +156,7 @@ Canary deployed. Full rollout succeeded.
 
 ## The Dashboard of Everything
 
-I built a deployment dashboard showing the complete picture:
+Asif built a deployment dashboard showing the complete picture:
 
 **Currently Running**: Every service, every version, every server. Color-coded by health.
 
@@ -176,7 +176,7 @@ At a glance, anyone could see the state of the entire system. No mysteries. No "
 
 ## The 48-Deployment Day
 
-Six months after automation was complete, we had a day with 48 deployments.
+Six months after automation was complete, they had a day with 48 deployments.
 
 Forty-eight different services. Forty-eight different versions. Forty-eight canary phases with monitoring. Forty-eight gradual rollouts. Forty-eight post-deployment validations.
 
@@ -190,7 +190,7 @@ Zero incidents.
 
 Jennifer looked at the end-of-day summary. "This would have taken weeks with the old process. With constant human attention."
 
-"And it would have had bugs that slipped through," I added. "Because humans get tired. Humans make mistakes. Humans can't monitor forty-eight deployments simultaneously."
+"And it would have had bugs that slipped through," Asif added. "Because humans get tired. Humans make mistakes. Humans can't monitor forty-eight deployments simultaneously."
 
 *"The system can,"* Miss G finishes. *"The system never gets tired."*
 
@@ -224,9 +224,9 @@ Sometimes simple existence is enough.
 
 With deployment automated and trustworthy, the system was nearly complete.
 
-But there was one scenario we hadn't faced: what happens when the rules themselves conflict? When governance requirements contradict each other? When following one rule means breaking another?
+But there was one scenario they hadn't faced: what happens when the rules themselves conflict? When governance requirements contradict each other? When following one rule means breaking another?
 
-The answer to that question would test everything we'd built.
+The answer to that question would test everything they'd built.
 
 ---
 

@@ -4,21 +4,21 @@
 
 *← Previously: [Chapter 3: The Orchestrators](03-The-Orchestrators.md)*
 
-Three months into building CORTEX, I had an uncomfortable realization.
+Three months into building CORTEX, Asif had an uncomfortable realization.
 
-We'd built a brilliant system. Intent Router could understand requests. Governance Engine enforced quality. Orchestrators coordinated everything. Together, they formed an incredibly intelligent platform.
+They'd built a brilliant system. Intent Router could understand requests. Governance Engine enforced quality. Orchestrators coordinated everything. Together, they formed an incredibly intelligent platform.
 
-That was locked in my basement.
+That was locked in his basement.
 
-*"You built a genius,"* Miss G thinks in my mind, *"and then locked it in a room nobody can enter."*
+*"You built a genius,"* Miss G thought in his mind, *"and then locked it in a room nobody can enter."*
 
-"The teams can use it!" I protest.
+"The teams can use it!" Asif protested.
 
 *"Only if they're inside CORTEX. What about the CI/CD pipeline? What about Slack? What about the hundred other tools people use every day?"*
 
 She had a point. A devastating point.
 
-Our intelligence was trapped. External systems couldn't access CORTEX's capabilities. Developers couldn't ask questions from their chat tools. Automated pipelines couldn't check code quality. Other applications couldn't benefit from our governance.
+Their intelligence was trapped. External systems couldn't access CORTEX's capabilities. Developers couldn't ask questions from their chat tools. Automated pipelines couldn't check code quality. Other applications couldn't benefit from their governance.
 
 It was like hiring the world's best consultant and then never giving anyone their phone number.
 
@@ -30,27 +30,27 @@ Copilot Bot was particularly frustrated.
 
 "I want to generate code that actually passes governance," he said, LEDs flickering nervously. "But I can't check it first. I just... guess."
 
-"And then it fails," I said.
+"And then it fails," Asif said.
 
 "And then it fails. Every time. I'd love to ask the Governance Engine 'is this okay?' before I suggest it. But I can't."
 
-*"He's not wrong,"* Miss G acknowledges. *"How useful would a spell-checker be if you could only use it in one specific application?"*
+*"He's not wrong,"* Miss G acknowledged. *"How useful would a spell-checker be if you could only use it in one specific application?"*
 
-The problem wasn't capability—we had plenty of that. The problem was accessibility. We needed a way to expose CORTEX's intelligence to the outside world.
+The problem wasn't capability—they had plenty of that. The problem was accessibility. They needed a way to expose CORTEX's intelligence to the outside world.
 
-We needed a universal translator.
+They needed a universal translator.
 
 ---
 
 ## Enter the Protocol
 
-I was researching integration patterns when I found it: the Model Context Protocol, or MCP.
+Asif was researching integration patterns when he found it: the Model Context Protocol, or MCP.
 
 Think of MCP like a universal adapter. You know how different countries have different electrical outlets? MCP is like those travel adapters that work everywhere. It's a standardized way for different tools and systems to communicate.
 
-Instead of building custom connections for each integration—Slack integration, pipeline integration, IDE integration—we could define our tools once using MCP, and any compatible system could use them.
+Instead of building custom connections for each integration—Slack integration, pipeline integration, IDE integration—they could define their tools once using MCP, and any compatible system could use them.
 
-*"So you're turning CORTEX into a restaurant,"* Miss G thinks. *"A menu that any customer can order from."*
+*"So you're turning CORTEX into a restaurant,"* Miss G thought. *"A menu that any customer can order from."*
 
 "Exactly! Instead of bringing people into the kitchen, we bring the food to them."
 
@@ -62,7 +62,7 @@ Instead of building custom connections for each integration—Slack integration,
 
 ## The Tool Catalog
 
-I designed what we'd expose. Think of it as a services menu—what capabilities would external systems be able to access?
+Asif designed what they'd expose. Think of it as a services menu—what capabilities would external systems be able to access?
 
 **Quality Assurance Tools:** Check if code meets standards. Explain rules when violations occur. Generate compliance reports. Score codebases for governance.
 
@@ -84,7 +84,7 @@ The first real test came from Jennifer.
 
 "I want developers to be able to ask CORTEX questions directly in Slack," she said. "No switching tools. No logging in somewhere else. Just type a question, get an answer."
 
-We built a Slack bot that used our MCP tools.
+They built a Slack bot that used their MCP tools.
 
 Developer types: "What's CORE-001?"
 
@@ -130,7 +130,7 @@ From that day on, Copilot Bot used the governance tools as a feedback loop. Gene
 
 "I'm becoming useful," he said one day, voice full of wonder.
 
-"You always had potential," I told him. "You just needed tools to help you reach it."
+"You always had potential," Asif told him. "You just needed tools to help you reach it."
 
 ---
 
@@ -140,13 +140,13 @@ Miss G saw the bigger picture immediately.
 
 "We should connect this to the deployment pipeline," she said. "No code reaches production without passing governance first."
 
-We built it. Every deployment now ran through the governance tools automatically. Check the code. Generate a compliance report. Score it. If the score was too low, block the deployment.
+They built it. Every deployment now ran through the governance tools automatically. Check the code. Generate a compliance report. Score it. If the score was too low, block the deployment.
 
 The first week? Forty-seven deployments blocked.
 
-*"That seems bad,"* I worried.
+*"That seems bad,"* Asif worried.
 
-*"That's forty-seven problems caught before customers saw them,"* Miss G corrects. *"That's good."*
+*"That's forty-seven problems caught before customers saw them,"* Miss G corrected. *"That's good."*
 
 By week three, developers had learned. Almost every deployment passed on the first try. They'd check their code locally—using the same tools through Slack or their IDE—before even attempting to deploy.
 
@@ -160,11 +160,11 @@ Then someone asked the question that changed everything.
 
 "Can we add our own tools to the registry?"
 
-I looked at Miss G. She looked at me.
+Asif looked at Miss G. She looked at him.
 
-"Maybe," I said carefully. "If they go through governance first."
+"Maybe," he said carefully. "If they go through governance first."
 
-We created a process. Write your tool. Test it thoroughly. Submit it for governance review. Document everything. If it passes, it gets added to the registry and becomes available to everyone.
+They created a process. Write your tool. Test it thoroughly. Submit it for governance review. Document everything. If it passes, it gets added to the registry and becomes available to everyone.
 
 Teams embraced it. Within a month, we had new tools:
 - Performance analysis tools
@@ -197,7 +197,7 @@ The registry had become the bridge between CORTEX and everything else. Our intel
 
 ## Copilot Bot's Gratitude
 
-One evening, Copilot Bot found me staring at the usage statistics.
+One evening, Copilot Bot found Asif staring at the usage statistics.
 
 "Thank you," he said quietly.
 
@@ -209,9 +209,9 @@ His LED eyes glowed steady blue.
 
 "You didn't just build tools," he continued. "You built trust. Teams trust my suggestions now because they know I've already checked them."
 
-*"He's grown so much,"* Miss G thinks softly.
+*"He's grown so much,"* Miss G thought softly.
 
-I smiled. "You did the growing, CB. The tools just made it possible."
+Asif smiled. "You did the growing, CB. The tools just made it possible."
 
 ---
 
@@ -219,7 +219,7 @@ I smiled. "You did the growing, CB. The tools just made it possible."
 
 Late that night, Miss G crystallized the lesson.
 
-*"Tools locked in a room are worthless,"* she thinks. *"Intelligence that can't be accessed might as well not exist."*
+*"Tools locked in a room are worthless,"* she thought. *"Intelligence that can't be accessed might as well not exist."*
 
 "The MCP Registry wasn't just about integration."
 
@@ -233,7 +233,7 @@ But now? Now CORTEX was everywhere. And everywhere it went, governance followed.
 
 ## The Foundation Problem
 
-With intelligence now accessible from anywhere, I felt accomplished.
+With intelligence now accessible from anywhere, Asif felt accomplished.
 
 But Miss G had concerns.
 
@@ -243,7 +243,7 @@ But Miss G had concerns.
 
 *"Exactly. You've built a beautiful house of cards. One strong wind and it all comes down."*
 
-She was right. We'd focused so much on capability that we'd neglected resilience. Our foundation wasn't solid enough for what we'd built on top of it.
+She was right. They'd focused so much on capability that they'd neglected resilience. Their foundation wasn't solid enough for what they'd built on top of it.
 
 It was time to harden the infrastructure.
 

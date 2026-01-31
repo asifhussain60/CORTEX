@@ -46,9 +46,9 @@ All that information lives in a registry: a big organized list of everything in 
 
 If the registry is accurate, everything works beautifully. If the registry is wrong, everything downstream is wrong.
 
-And our registry was catastrophically wrong.
+And the registry was catastrophically wrong.
 
-I ran some queries:
+Asif ran some queries:
 
 "Show me services in the registry that don't actually exist in the code."
 
@@ -72,7 +72,7 @@ Someone deleted an old service but forgot to remove the registry entry. Ghost.
 
 Someone renamed a service but created a new registry entry instead of updating the old one. Duplicate.
 
-Repeat this across dozens of developers over months of work. The registry became a archaeological dig site—layers of history, some accurate, some outdated, most contradictory.
+Repeat this across dozens of developers over months of work. The registry became an archaeological dig site—layers of history, some accurate, some outdated, most contradictory.
 
 *"The registry is supposed to be truth,"* Miss G thinks. *"But nobody governed it. So it became fantasy."*
 
@@ -86,7 +86,7 @@ Repeat this across dozens of developers over months of work. The registry became
 
 ## The Great Cleanup
 
-I spent two weeks fixing 35 broken registry entries.
+Asif spent two weeks fixing 35 broken registry entries.
 
 For each one:
 1. Find what actually exists in the codebase
@@ -106,9 +106,9 @@ Jennifer noticed the difference immediately. "My deployments started working on 
 
 ## The Automated Truth Keeper
 
-Fixing the registry once wasn't enough. We needed to keep it fixed.
+Fixing the registry once wasn't enough. They needed to keep it fixed.
 
-I built automation:
+Asif built automation:
 
 Every hour, scan the codebase and compare it to the registry. New services? Add them. Removed services? Mark them deprecated. Changed services? Update the entries. Conflicts? Alert a human.
 
@@ -124,7 +124,7 @@ The registry couldn't drift anymore. It was automatically synchronized with real
 
 Miss G pushed for the next step: "Make registry accuracy a governance requirement."
 
-So we did. A new rule: CORE-030: All metadata must be valid and current.
+So they did. A new rule: CORE-030: All metadata must be valid and current.
 
 Now every deployment checked:
 1. Does the code pass? (Governance rules CORE-001 through CORE-029)
@@ -156,7 +156,7 @@ Copilot Bot started including metadata in everything he generated. He learned th
 
 ## The Naming Wars
 
-When we scaled to 47 domains, naming became a battlefield.
+When the team scaled to 47 domains, naming became a battlefield.
 
 Customer domain had a "customer" service.
 
@@ -168,9 +168,9 @@ Three different services, same name, completely different purposes.
 
 "How do we distinguish them?" Jennifer asked.
 
-"Hierarchy," I said. "Like addresses. Instead of just 'customer,' it's 'customer_domain/customer_service' or 'payments_domain/customer_service.'"
+"Hierarchy," Asif said. "Like addresses. Instead of just 'customer,' it's 'customer_domain/customer_service' or 'payments_domain/customer_service.'"
 
-We established naming conventions. Every service name included its domain. No ambiguity. No collisions. No confusion about which "customer" you meant.
+They established naming conventions. Every service name included its domain. No ambiguity. No collisions. No confusion about which "customer" was meant.
 
 *"It's like postal codes,"* Miss G observes. *"There are hundreds of 'Main Streets' in the world. The address tells you which one."*
 
@@ -192,7 +192,7 @@ The registry had to track which version was canonical. Which was being phased ou
 
 "This is getting complicated," Jennifer sighed.
 
-"This is reality," I said. "Production systems don't upgrade instantly. They migrate gradually. Multiple versions coexist."
+"This is reality," Asif said. "Production systems don't upgrade instantly. They migrate gradually. Multiple versions coexist."
 
 The registry evolved from a simple list to a sophisticated routing guide. Not just "what exists" but "what versions exist, which to use when, and how traffic should flow."
 
@@ -208,7 +208,7 @@ Addresses A through C worked. D was an old server that had been decommissioned. 
 
 "The registry is hallucinating," she said.
 
-I added health checks. Every registered service instance had to periodically prove it was alive. If the health check failed, that instance got marked unhealthy and excluded from routing.
+Asif added health checks. Every registered service instance had to periodically prove it was alive. If the health check failed, that instance got marked unhealthy and excluded from routing.
 
 Ghosts were automatically exercised. Only healthy instances received traffic.
 
@@ -242,13 +242,13 @@ The registry wasn't just tracking information. It was the central nervous system
 
 ## The Hard Lesson
 
-Late one night, reviewing registry statistics, I understood something profound.
+Late one night, reviewing registry statistics, Asif understood something profound.
 
 Metadata is harder than code.
 
 Code has compilers that catch errors. Code has tests that verify behavior. Code has syntax that must be correct.
 
-Metadata can be wrong in ways nothing automatically catches. You can register a service that doesn't exist. You can claim dependencies that aren't real. You can list versions that have never been deployed.
+Metadata can be wrong in ways nothing automatically catches. Someone can register a service that doesn't exist. They can claim dependencies that aren't real. They can list versions that have never been deployed.
 
 The only protection against wrong metadata is governance: validation, synchronization, enforcement. Treating metadata with the same rigor as code.
 

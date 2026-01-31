@@ -8,7 +8,7 @@ Jennifer showed up at the basement looking defeated.
 
 "I built a simple feature," she said. "A retry button for failed payments. Click the button, retry the payment. Super simple."
 
-"Sounds straightforward," I offered.
+"Sounds straightforward," Asif offered.
 
 "It was! I wrote the code. I tested it myself. It worked perfectly. Then I submitted it."
 
@@ -16,13 +16,13 @@ Jennifer showed up at the basement looking defeated.
 
 "REJECTED," Jennifer confirmed. "Governance said my test coverage was too low. Sixty percent. They wanted eighty."
 
-I pulled up her test file. Three tests total:
+Asif pulled up her test file. Three tests total:
 
 1. Button shows up when payment fails
 2. Clicking button calls the payment service
 3. Success message appears when it works
 
-"What happens when the retry fails?" I asked.
+"What happens when the retry fails?" Asif asked.
 
 "Well... the payment service returns an error..."
 
@@ -38,7 +38,7 @@ Silence.
 
 Jennifer's eyes widened. "I didn't think about any of that."
 
-"That's the problem," I said gently. "Your code handles scenarios you didn't test. You don't actually know if it handles them correctly."
+"That's the problem," Asif said gently. "Your code handles scenarios you didn't test. You don't actually know if it handles them correctly."
 
 ---
 
@@ -52,7 +52,7 @@ Here's what most developers do:
 4. Ship it
 5. Discover in production all the scenarios they didn't test
 
-It's like building a bridge, then checking afterward whether it can hold weight. By then, the design is fixed. If you missed something important, you're rebuilding the whole bridge.
+It's like building a bridge, then checking afterward whether it can hold weight. By then, the design is fixed. If someone missed something important, they're rebuilding the whole bridge.
 
 *"There's a better way,"* Miss G observes.
 
@@ -99,31 +99,31 @@ When she submitted to governance?
 
 *"Twenty-three tests for a retry button,"* Miss G muses. *"Seems like a lot."*
 
-"Twenty-three scenarios that could go wrong," I corrected. "Twenty-three ways the button could misbehave. Now none of them will."
+"Twenty-three scenarios that could go wrong," Asif corrected. "Twenty-three ways the button could misbehave. Now none of them will."
 
 ---
 
 ## The Philosophical Shift
 
-Here's the mental model that changed everything for our team:
+Here's the mental model that changed everything for the team:
 
 **Tests are not verification. Tests are specification.**
 
 A test doesn't ask "does the code work?" A test declares "this is what should happen." The code's job is to make that declaration true.
 
-When you write "the retry button should be disabled after three attempts," you're not testing code—you're specifying behavior. The code that follows is just the implementation of that specification.
+When someone writes "the retry button should be disabled after three attempts," they're not testing code—they're specifying behavior. The code that follows is just the implementation of that specification.
 
 *"So if all tests pass,"* Miss G thinks, *"the code is correct by definition."*
 
 "Exactly. The only way code can be 'wrong' is if the specification was wrong. But that's a human problem—someone specified the wrong thing. The code faithfully does what was specified."
 
-This is surprisingly liberating. You never have to wonder "does my code work?" If the tests pass, yes. If they don't, no. Binary. Certain.
+This is surprisingly liberating. Developers never have to wonder "does my code work?" If the tests pass, yes. If they don't, no. Binary. Certain.
 
 ---
 
 ## The Pyramid of Confidence
 
-Not all tests are created equal. We organized them into layers:
+Not all tests are created equal. The team organized them into layers:
 
 **Unit Tests** (the foundation, most numerous): Test individual pieces in isolation. Super fast. Run in milliseconds. Tell you exactly where something broke.
 
@@ -137,7 +137,7 @@ Think of it like quality control at a car factory:
 - Integration tests are checking systems (engine + transmission work together)
 - End-to-end tests are test-driving the completed car
 
-You need all three, but you need far more part checks than test drives.
+They need all three, but far more part checks than test drives.
 
 ---
 
@@ -157,7 +157,7 @@ That was it. One test. Assuming success.
 
 *"Oh, CB,"* Miss G thinks with something like affection. *"Everything fails eventually."*
 
-I sat down with him. "Every time you call something external, ask: what if it doesn't respond? Every time you do something, ask: what if it's already been done? Every time you change something, ask: what if someone else is changing it simultaneously?"
+Asif sat down with him. "Every time you call something external, ask: what if it doesn't respond? Every time you do something, ask: what if it's already been done? Every time you change something, ask: what if someone else is changing it simultaneously?"
 
 He processed this. LEDs cycling through colors.
 
@@ -177,15 +177,15 @@ Somebody asked: "What coverage percentage should we aim for?"
 
 This is a common question, and it's the wrong question.
 
-Coverage percentage measures how much of your code is exercised by tests. 80% coverage means 20% of your code runs without any test verifying it behaves correctly.
+Coverage percentage measures how much of code is exercised by tests. 80% coverage means 20% of code runs without any test verifying it behaves correctly.
 
-But high coverage doesn't mean good tests. You can have 100% coverage with tests that don't actually verify anything meaningful.
+But high coverage doesn't mean good tests. A team can have 100% coverage with tests that don't actually verify anything meaningful.
 
 The right question is: "Have we tested every scenario that matters?"
 
 *"The business scenarios,"* Miss G adds. *"What can go wrong that would hurt customers? Test those."*
 
-We aimed for comprehensive scenario coverage, not just line coverage. Every way a feature could misbehave, every edge case that could surprise users, every failure mode that could cause problems—all tested.
+The team aimed for comprehensive scenario coverage, not just line coverage. Every way a feature could misbehave, every edge case that could surprise users, every failure mode that could cause problems—all tested.
 
 The numbers followed naturally. When you test everything that matters, coverage tends to be high.
 
@@ -213,7 +213,7 @@ Nobody asked if the code worked. The tests answered that question.
 
 ## The Certainty Engine
 
-Late one night, I was reviewing our test suite. Over a thousand tests across all components. Each one a declaration of expected behavior. Each one passing.
+Late one night, Asif was reviewing the test suite. Over a thousand tests across all components. Each one a declaration of expected behavior. Each one passing.
 
 *"You've built an oracle,"* Miss G thinks.
 
@@ -231,11 +231,11 @@ The Wi-Fi router blinked red. Even it seemed to appreciate the elegance: tests a
 
 ## The Missing Ingredient
 
-Our system was tested. Our infrastructure was hardened. Our tools were accessible. Our governance was enforced.
+The system was tested. The infrastructure was hardened. The tools were accessible. The governance was enforced.
 
 But there was something missing.
 
-Every time someone asked "have we seen this problem before?" we scrambled to remember. Every time someone wanted to know "what's the best way to handle this scenario?" we searched through old conversations and documentation.
+Every time someone asked "have we seen this problem before?" the team scrambled to remember. Every time someone wanted to know "what's the best way to handle this scenario?" they searched through old conversations and documentation.
 
 The system had no memory. It couldn't learn from experience. It couldn't build on past knowledge.
 

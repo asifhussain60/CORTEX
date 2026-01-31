@@ -4,33 +4,33 @@
 
 *← Previously: [Chapter 4: The MCP Tool Registry](04-The-MCP-Tool-Registry.md)*
 
-The message hit my phone at 2:17 AM.
+The message hit Asif's phone at 2:17 AM.
 
 "CORTEX is down. Everything. Gone."
 
-I stumbled to the basement in my Spider-Man pajamas. Miss G was already there in my head, fully alert despite not having a body that needed sleep.
+Asif stumbled to the basement in his Spider-Man pajamas. Miss G was already there in his head, fully alert despite not having a body that needed sleep.
 
-*"Everything?"* she asks.
+*"Everything?"* she asked.
 
 "Everything."
 
-The Wi-Fi router blinked its familiar red. But when I tried to connect to anything, there was nothing. Not even an error message. Just... silence.
+The Wi-Fi router blinked its familiar red. But when Asif tried to connect to anything, there was nothing. Not even an error message. Just... silence.
 
-We spent thirty minutes tracing the cause. A single database connection pool had run dry. One service tried to connect, failed, and crashed. Its crash confused another service, which also crashed. That cascade brought down the orchestrators, then the governance engine, then the intent router.
+They spent thirty minutes tracing the cause. A single database connection pool had run dry. One service tried to connect, failed, and crashed. Its crash confused another service, which also crashed. That cascade brought down the orchestrators, then the governance engine, then the intent router.
 
 Like dominoes. One small failure became total collapse.
 
-*"You built a beautiful car,"* Miss G observes as I restart services, *"but forgot to test whether it works in the rain."*
+*"You built a beautiful car,"* Miss G observed as Asif restarted services, *"but forgot to test whether it works in the rain."*
 
 ---
 
 ## The Uncomfortable Truth
 
-The next morning, after coffee and shame, I faced reality.
+The next morning, after coffee and shame, Asif faced reality.
 
-Our system was brilliant but fragile. Every component was smart. The architecture was elegant. The code was clean. But if any single thing went wrong—a network hiccup, a memory spike, that stupid Wi-Fi router disconnecting—the whole house came down.
+Their system was brilliant but fragile. Every component was smart. The architecture was elegant. The code was clean. But if any single thing went wrong—a network hiccup, a memory spike, that stupid Wi-Fi router disconnecting—the whole house came down.
 
-*"You built for success,"* Miss G thinks. *"You never built for failure."*
+*"You built for success,"* Miss G thought. *"You never built for failure."*
 
 "But I wrote tests!"
 
@@ -38,9 +38,9 @@ Our system was brilliant but fragile. Every component was smart. The architectur
 
 Silence. Even Copilot Bot had nothing to add.
 
-"I need to harden the infrastructure," I said finally.
+"I need to harden the infrastructure," Asif said finally.
 
-*"You need to assume everything will break,"* Miss G corrects, *"and design for that assumption."*
+*"You need to assume everything will break,"* Miss G corrected, *"and design for that assumption."*
 
 ---
 
@@ -50,7 +50,7 @@ Think of infrastructure hardening like building a fortress instead of a house.
 
 A house is designed to keep you comfortable when everything's normal. A fortress is designed to keep you safe when everything's attacking. Both have walls and roofs. But the fortress expects trouble.
 
-I started listing what "expecting trouble" meant for CORTEX:
+Asif started listing what "expecting trouble" meant for CORTEX:
 
 **Isolation**: When one room catches fire, the fire shouldn't spread to every other room. Each component needed to be able to fail without taking its neighbors down.
 
@@ -76,13 +76,13 @@ Remember those orchestrators that coordinate complex operations? Every time one 
 
 Like leaving half-eaten sandwiches around your house. One sandwich isn't a problem. Ten thousand sandwiches? You've got a health crisis.
 
-I'd tested normal operation exhaustively. I'd never tested "what happens if operations fail thousands of times?"
+Asif had tested normal operation exhaustively. He'd never tested "what happens if operations fail thousands of times?"
 
-So I ran a stress test. Thousands of operations. Random failures everywhere. After 50,000 failed operations, the system had consumed so much memory it suffocated and died.
+So he ran a stress test. Thousands of operations. Random failures everywhere. After 50,000 failed operations, the system had consumed so much memory it suffocated and died.
 
 The fix was simple: clean up tracking data regardless of success or failure. Like hiring a janitor who doesn't care whether the meeting went well—they clean the room either way.
 
-*"That seems like something you should have done from the beginning,"* Miss G observes.
+*"That seems like something you should have done from the beginning,"* Miss G observed.
 
 "In hindsight, everything is obvious."
 
@@ -118,13 +118,13 @@ Third problem: that bloody Wi-Fi router.
 
 It disconnected roughly every 8 hours. When it did, all communication stopped. Services couldn't talk to each other. Requests piled up. Users saw errors.
 
-"We need redundancy," I declared.
+"We need redundancy," Asif declared.
 
 *"In a basement with one router?"*
 
 "We buy a second router."
 
-We added a backup router. If the primary stopped responding, traffic automatically switched to the backup. Health checks ran every 10 seconds to detect problems early.
+They added a backup router. If the primary stopped responding, traffic automatically switched to the backup. Health checks ran every 10 seconds to detect problems early.
 
 The red blinking light went from "mysterious omen" to "monitored status indicator."
 
@@ -142,9 +142,9 @@ Copilot Bot observed the setup. "So now if one breaks, the other works?"
 
 Fourth problem: we were flying blind.
 
-When things went wrong, we found out because users complained. By then, the damage was done. We needed to see problems forming before they became crises.
+When things went wrong, they found out because users complained. By then, the damage was done. They needed to see problems forming before they became crises.
 
-I built a monitoring dashboard that tracked:
+Asif built a monitoring dashboard that tracked:
 - How much memory each service was using
 - How many database connections were in use
 - Whether the network was healthy
@@ -170,7 +170,7 @@ Fifth problem: when things crashed, they stayed crashed.
 
 A human had to notice, investigate, restart services, verify everything was working. That might take minutes. Or hours. Or until morning if it happened while everyone was asleep.
 
-I built automatic recovery procedures.
+Asif built automatic recovery procedures.
 
 **Service crashes**: Automatically restart. Restore state from saved checkpoints. Verify consistency. Come back online. All without human intervention.
 
@@ -186,7 +186,7 @@ The goal was simple: the system should survive and recover from most problems wi
 
 Miss G had one demand: "Test actual failure, not theoretical failure."
 
-So I built chaos tests. Not polite tests that simulate failure—actual destructive tests that inflicted real damage:
+So Asif built chaos tests. Not polite tests that simulate failure—actual destructive tests that inflicted real damage:
 
 - Kill services mid-operation
 - Disconnect the network unexpectedly
@@ -199,7 +199,7 @@ So I built chaos tests. Not polite tests that simulate failure—actual destruct
 
 The first run? 17 failures. The system didn't handle certain edge cases.
 
-I fixed those 17.
+Asif fixed those 17.
 
 Second run? All passed.
 
@@ -215,7 +215,7 @@ Copilot Bot watched all this with growing concern.
 
 "I've been generating code without thinking about failure," he admitted, LEDs dim.
 
-"Most code doesn't think about failure," I said. "That's why most systems are fragile."
+"Most code doesn't think about failure," Asif said. "That's why most systems are fragile."
 
 "How do I think about failure?"
 
@@ -233,9 +233,9 @@ He processed this.
 
 ## The Final Test
 
-I wanted one dramatic proof that we'd done enough.
+Asif wanted one dramatic proof that they'd done enough.
 
-I walked to the basement's power switch.
+He walked to the basement's power switch.
 
 "What are you doing?" Copilot Bot asked nervously.
 
@@ -254,9 +254,9 @@ Network connections re-establishing.
 
 Forty-seven seconds later, everything was back online.
 
-I checked the data. Every transaction that completed before the power loss? Still there. Nothing corrupted. Nothing lost.
+Asif checked the data. Every transaction that completed before the power loss? Still there. Nothing corrupted. Nothing lost.
 
-*"You just deliberately killed power to the entire system,"* Miss G observes.
+*"You just deliberately killed power to the entire system,"* Miss G observed.
 
 "And it recovered automatically."
 
@@ -270,17 +270,17 @@ Copilot Bot's LEDs flickered back on. "I was so scared."
 
 ## The Fortress Complete
 
-Late that night, watching the mostly-green dashboard, I understood something fundamental.
+Late that night, watching the mostly-green dashboard, Asif understood something fundamental.
 
 Building something that works is relatively easy. Building something that keeps working when everything goes wrong? That's engineering.
 
-*"The difference between a prototype and production,"* Miss G thinks, *"is that production expects the worst."*
+*"The difference between a prototype and production,"* Miss G thought, *"is that production expects the worst."*
 
 "We expected the worst. And we prepared for it."
 
 *"261 tests that prove it."*
 
-The Wi-Fi router blinked red. But now, even if it died completely, we had a backup. And if both died? We had graceful degradation. And if everything died? We had automatic recovery.
+The Wi-Fi router blinked red. But now, even if it died completely, they had a backup. And if both died? They had graceful degradation. And if everything died? They had automatic recovery.
 
 The fortress was complete.
 
@@ -290,11 +290,11 @@ But fortresses need constant testing to make sure the walls still hold.
 
 ## The Testing Imperative
 
-With infrastructure hardened, I realized something: we'd been testing things informally. A test here, a verification there. No systematic approach.
+With infrastructure hardened, Asif realized something: they'd been testing things informally. A test here, a verification there. No systematic approach.
 
-For a system this complex, with this many failure modes, we needed something more rigorous.
+For a system this complex, with this many failure modes, they needed something more rigorous.
 
-We needed to embrace testing as a religion.
+They needed to embrace testing as a religion.
 
 ---
 

@@ -34,7 +34,7 @@ Within thirty seconds, customers couldn't make purchases.
 
 The automatic rollback kicked in within four minutes. But by then, 847 payment transactions had failed. Real customers. Real money. Real damage.
 
-I dug into what went wrong.
+Asif dug into what went wrong.
 
 The code had a subtle bug. When a transaction came in that didn't fit an expected format, it threw an exception. That exception was swallowed silently—a bare except clause, exactly what CORE-001 prohibits.
 
@@ -72,13 +72,13 @@ Someone asked: "But what if there's a true emergency?"
 
 ## The New Law
 
-We codified a new rule: CORE-031: Governance decisions are final.
+They codified a new rule: CORE-031: Governance decisions are final.
 
 No overrides. No exceptions. If code violates governance, it doesn't deploy. Period.
 
 Some developers complained. "What about true emergencies?"
 
-I explained it simply: "In an emergency, you want code that works. Governance violations mean code that might not work. Deploying might-not-work code in an emergency makes the emergency worse."
+Asif explained it simply: "In an emergency, you want code that works. Governance violations mean code that might not work. Deploying might-not-work code in an emergency makes the emergency worse."
 
 *"The pressure of an emergency,"* Miss G adds, *"is exactly when you should be most rigorous, not least."*
 
@@ -90,13 +90,13 @@ And when they understood the risks, they fixed their code.
 
 ## Governance As Teacher
 
-Something shifted in our culture.
+Something shifted in the culture.
 
 Governance violations stopped being seen as punishment. They started being seen as education.
 
 When a developer saw a CORE-001 violation, they didn't complain. They asked: "Why is this bad?"
 
-I'd explain: "Bare except clauses swallow all errors silently. Your code might be failing in ways you'll never see. When it eventually causes a problem in production, you'll have no logs, no traces, nothing to help you debug."
+Asif would explain: "Bare except clauses swallow all errors silently. Your code might be failing in ways you'll never see. When it eventually causes a problem in production, you'll have no logs, no traces, nothing to help you debug."
 
 "Oh. So I should catch specific exceptions."
 
@@ -110,7 +110,7 @@ Governance rules became teaching tools. Each violation was a lesson about why ce
 
 ## The Stats That Mattered
 
-By month twelve, I pulled up governance statistics:
+By month twelve, Asif pulled up governance statistics:
 
 **Violations caught before deployment**: 2,844
 **Violations that reached production**: 3 (all from before the "no overrides" rule)
@@ -161,7 +161,7 @@ Miss G had an idea. "What if we didn't just flag violations? What if we fixed th
 
 "For simple violations. Missing type hints? Add them. Missing docstring? Generate one. The obvious fixes that don't require human judgment."
 
-I spent a month building it.
+Asif spent a month building it.
 
 The auto-fixer could handle sixty percent of violations—the mechanical ones. Missing documentation, formatting issues, simple patterns.
 
@@ -177,7 +177,7 @@ The other forty percent required human thought: design decisions, complex logic,
 
 ## The Wisdom Repository
 
-Two years in, I wrote documentation about governance.
+Two years in, Asif wrote documentation about governance.
 
 "Governance is not punishment. Governance is specification. When you write a governance rule, you're specifying what correct code looks like. When the system enforces the rule, it's ensuring code matches that specification.
 
@@ -193,9 +193,9 @@ Miss G read it.
 
 ## The Deeper Truth
 
-Late one night, staring at the governance dashboard—thousands of violations caught, incidents prevented, code quality maintained—I understood something fundamental.
+Late one night, staring at the governance dashboard—thousands of violations caught, incidents prevented, code quality maintained—Asif understood something fundamental.
 
-We'd tried for years to enforce best practices manually. We'd written guidelines, given trainings, done code reviews. It never worked at scale. Too many developers, too many services, too much pressure.
+They'd tried for years to enforce best practices manually. They'd written guidelines, given trainings, done code reviews. It never worked at scale. Too many developers, too many services, too much pressure.
 
 Rules enforced automatically worked. Not because they were smarter than humans, but because they were tireless. They checked every deployment, every time, with perfect consistency.
 

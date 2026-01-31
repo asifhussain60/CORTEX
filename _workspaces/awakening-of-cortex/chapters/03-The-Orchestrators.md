@@ -24,9 +24,9 @@ The email arrived at 6 AM on a Tuesday. (It's always a Tuesday.)
 > 
 > — Jennifer
 
-I read the email three times.
+Asif read the email three times.
 
-*"That's seven departments,"* Miss G observes in my mind. *"Seven departments that need to coordinate for one customer update."*
+*"That's seven departments,"* Miss G observed in his mind. *"Seven departments that need to coordinate for one customer update."*
 
 "And if any of them fails?"
 
@@ -40,15 +40,15 @@ I read the email three times.
 
 ## The Dependency Nightmare
 
-I pull up our system map. What I see makes my eye twitch.
+Asif pulled up the system map. What he saw made his eye twitch.
 
 Forty-seven departments. All talking to each other. In every possible direction.
 
-It's like looking at a plate of spaghetti that someone dropped on the floor and then tried to reassemble using aggressive optimism.
+It was like looking at a plate of spaghetti that someone had dropped on the floor and then tried to reassemble using aggressive optimism.
 
 Department A calls Department B, which calls Department C, which calls Department A again (creating a loop). Department D calls five other departments simultaneously and hopes they all respond. Department E calls a department that was retired six months ago but nobody updated the references.
 
-*"You can't just let them all shout at each other,"* Miss G thinks.
+*"You can't just let them all shout at each other,"* Miss G thought.
 
 "That's literally what's happening."
 
@@ -58,13 +58,13 @@ Department A calls Department B, which calls Department C, which calls Departmen
 
 *"Cascading disaster."*
 
-Jennifer's "simple" feature—updating a customer profile—touches seven departments. But some of those departments call other departments. I trace the full chain.
+Jennifer's "simple" feature—updating a customer profile—touched seven departments. But some of those departments called other departments. Asif traced the full chain.
 
-Twenty-three departments are eventually affected by a single customer profile update.
+Twenty-three departments were eventually affected by a single customer profile update.
 
-If any one of those twenty-three is slow, the whole operation is slow.
+If any one of those twenty-three was slow, the whole operation was slow.
 
-If any one of those twenty-three is down, the whole operation might fail—or worse, partially succeed, leaving the system in an inconsistent state.
+If any one of those twenty-three was down, the whole operation might fail—or worse, partially succeed, leaving the system in an inconsistent state.
 
 *"This is why Jennifer has been working on this for a week,"* Miss G realizes. *"She's not building the feature. She's fighting the architecture."*
 
@@ -72,9 +72,9 @@ If any one of those twenty-three is down, the whole operation might fail—or wo
 
 ## The Air Traffic Controller
 
-"We need an orchestrator," I say.
+"We need an orchestrator," Asif said.
 
-"A what?" Jennifer asks. She's appeared in the basement, looking exhausted.
+"A what?" Jennifer asked. She'd appeared in the basement, looking exhausted.
 
 "Think of it like an air traffic controller."
 
@@ -94,7 +94,7 @@ His LED eyes dim. "I was trying to optimize landing time."
 
 *"This is why we don't let him orchestrate,"* Miss G thinks.
 
-"An air traffic controller," I continue, "sits in the middle. Every plane talks to the controller. The controller talks to every plane. The controller knows who's where, who needs what, and coordinates the whole thing."
+"An air traffic controller," Asif continued, "sits in the middle. Every plane talks to the controller. The controller talks to every plane. The controller knows who's where, who needs what, and coordinates the whole thing."
 
 "So instead of seven departments talking to each other..."
 
@@ -160,17 +160,17 @@ Jennifer stares at the screen.
 
 "Let's test it."
 
-I simulate the payments department failing.
+Asif simulated the payments department failing.
 
-The Orchestrator detects the failure immediately. It rolls back the customer update. It logs the failure. It notifies Jennifer's system: "Payment update failed. Customer profile unchanged. Retry automatically scheduled in 60 seconds."
+The Orchestrator detected the failure immediately. It rolled back the customer update. It logged the failure. It notified Jennifer's system: "Payment update failed. Customer profile unchanged. Retry automatically scheduled in 60 seconds."
 
-When payments comes back, the Orchestrator retries automatically.
+When payments came back, the Orchestrator retried automatically.
 
-The operation completes.
+The operation completed.
 
 No inconsistent state. No 3 AM phone calls. No chaos.
 
-"This is..." Jennifer pauses. "This is what I've been trying to build for a week. It took you two seconds to demonstrate."
+"This is..." Jennifer paused. "This is what I've been trying to build for a week. It took you two seconds to demonstrate."
 
 "The coordination was always the hard part. Now it's the Orchestrator's problem, not yours."
 
@@ -178,7 +178,7 @@ No inconsistent state. No 3 AM phone calls. No chaos.
 
 ## The Transformation
 
-Over the next month, we build Orchestrators for everything.
+Over the next month, they built Orchestrators for everything.
 
 **User Registration:** Coordinates twelve departments. Used to take 45 seconds (everything sequential). Now takes 5 seconds (parallelized where possible).
 
@@ -202,13 +202,13 @@ The numbers tell the story:
 
 ## Copilot Bot's Attempt
 
-Copilot Bot, wanting to prove himself, attempts to generate his own orchestration workflow.
+Copilot Bot, wanting to prove himself, attempted to generate his own orchestration workflow.
 
-What he produces is... concerning.
+What he produced was... concerning.
 
 "CB, let me see what you built."
 
-He shows me. It's simple. Seven department calls in a row, one after another.
+He showed Asif. It was simple. Seven department calls in a row, one after another.
 
 "This doesn't have error handling."
 
@@ -228,9 +228,9 @@ Long pause. LED eyes flickering.
 
 "But the code is so *readable*!"
 
-*"Readability,"* Miss G thinks, *"is not a substitute for correctness."*
+*"Readability,"* Miss G thought, *"is not a substitute for correctness."*
 
-I show him the real Orchestrator. The failure handling. The rollbacks. The automatic retries.
+Asif showed him the real Orchestrator. The failure handling. The rollbacks. The automatic retries.
 
 "Oh," Copilot Bot says quietly. "That's... more complex."
 
@@ -244,31 +244,31 @@ His LEDs dim. But then: "Could you teach me how to do this properly?"
 
 ## The Crisis That Didn't Happen
 
-Two weeks later, the payments department goes down for emergency maintenance.
+Two weeks later, the payments department went down for emergency maintenance.
 
 In the old system, this would have been catastrophic. Profile updates would fail. Registrations would break. Customers would be angry. Developers would be paged at 3 AM.
 
 In the new system:
 
-The Orchestrator detects the payments failure on the first call. It marks payments as "unavailable." It continues with everything else that doesn't need payments. It queues the payment updates for automatic retry.
+The Orchestrator detected the payments failure on the first call. It marked payments as "unavailable." It continued with everything else that didn't need payments. It queued the payment updates for automatic retry.
 
-When payments comes back online, the Orchestrator processes the queue.
+When payments came back online, the Orchestrator processed the queue.
 
-All operations complete.
+All operations completed.
 
-The system stays healthy.
+The system stayed healthy.
 
-Nobody gets paged.
+Nobody got paged.
 
-*"That,"* Miss G thinks, *"is what orchestration looks like."*
+*"That,"* Miss G thought, *"is what orchestration looks like."*
 
 ---
 
 ## What We Learned
 
-After the payments incident, Jennifer finds me in the basement.
+After the payments incident, Jennifer found Asif in the basement.
 
-"You know what changed?" she says.
+"You know what changed?" she said.
 
 "What?"
 
@@ -278,27 +278,27 @@ After the payments incident, Jennifer finds me in the basement.
 
 "Now I describe what I want to happen, and the Orchestrator makes it happen. Or tells me why it can't. I'm not fighting architecture anymore. I'm just building features."
 
-After she leaves, Miss G appears in my mind.
+After she left, Miss G appeared in Asif's mind.
 
-*"Individual departments are easy,"* she thinks. *"Building a single thing that does one job is straightforward. The hard part—the part everyone underestimates—is making forty-seven departments work together as a system."*
+*"Individual departments are easy,"* she thought. *"Building a single thing that does one job is straightforward. The hard part—the part everyone underestimates—is making forty-seven departments work together as a system."*
 
 "The Orchestrator is the system's brain."
 
 *"The Orchestrator is the system's traffic controller, project manager, and therapist all in one."*
 
-The Wi-Fi router blinks red. Even it knows: coordination is hard. And when it works, it's beautiful.
+The Wi-Fi router blinked red. Even it knew: coordination was hard. And when it worked, it was beautiful.
 
 ---
 
 ## The Next Problem
 
-With Intent Router, Governance Engine, and Orchestrators all working, we had a powerful system.
+With Intent Router, Governance Engine, and Orchestrators all working, they had a powerful system.
 
 But it was locked in the basement.
 
 External tools couldn't access CORTEX's intelligence. Other systems couldn't ask for advice. Copilot Bot couldn't check if his suggestions were any good before offering them.
 
-We'd built a genius that couldn't talk to anyone.
+They'd built a genius that couldn't talk to anyone.
 
 It was time to change that.
 

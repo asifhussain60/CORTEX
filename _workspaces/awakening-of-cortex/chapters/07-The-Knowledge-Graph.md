@@ -16,11 +16,11 @@ Someone else: "Actually, we do dispute handling inline in the payment service no
 
 A fourth person: "The tests reference a helper function that doesn't exist anymore."
 
-Me, looking at the code: "There's a TODO comment from eighteen months ago that says 'fix this.'"
+Asif, looking at the code: "There's a TODO comment from eighteen months ago that says 'fix this.'"
 
-*"So,"* Miss G summarizes in my head, *"the answer to 'how do we handle disputes' is: nobody knows."*
+*"So,"* Miss G summarizes in Asif's head, *"the answer to 'how do we handle disputes' is: nobody knows."*
 
-"We all know pieces," I protested.
+"We all know pieces," Asif protested.
 
 *"Pieces that contradict each other. That's worse than knowing nothing."*
 
@@ -36,11 +36,11 @@ The next person encounters the same problem. They solve it from scratch. Maybe t
 
 Repeat this for years across dozens of people and thousands of problems. The organization becomes a collection of partial, overlapping, contradictory memories scattered across individual brains.
 
-*"It's like having a team with collective amnesia,"* Miss G observes. *"Every week you wake up and have to rediscover what you already knew."*
+*"It's like having a team with collective amnesia,"* Miss G observes. *"Every week they wake up and have to rediscover what they already knew."*
 
-We needed a system memory. Something that could remember what the organization had learned—not just documentation, but actual knowledge about how things work, why decisions were made, and what depends on what.
+They needed a system memory. Something that could remember what the organization had learned—not just documentation, but actual knowledge about how things work, why decisions were made, and what depends on what.
 
-We needed a Knowledge Graph.
+They needed a Knowledge Graph.
 
 ---
 
@@ -62,9 +62,9 @@ Everything is connected to everything else, and the Knowledge Graph captures tho
 
 ## Building the Memory
 
-I started by documenting what we actually knew—not what the documentation claimed, but reality.
+Asif started by documenting what they actually knew—not what the documentation claimed, but reality.
 
-For each service, I recorded:
+For each service, he recorded:
 - What does it actually do (not what it was supposed to do)
 - What does it actually depend on (not what the architecture diagram shows)
 - What actually happens when it fails
@@ -108,7 +108,7 @@ When asked to generate code, he didn't know what existed in the system. He'd inv
 
 "I don't have context," he complained. "I'm generating in the dark."
 
-We connected him to the Knowledge Graph.
+They connected him to the Knowledge Graph.
 
 Now when someone asks Copilot Bot to "add payment retry logic," he first queries the graph:
 - What services handle payments? (payment service)
@@ -132,7 +132,7 @@ Miss G saw an opportunity.
 
 If a service claims to have no dependencies but the code shows it calling six other services, that's a discrepancy. The Knowledge Graph says one thing; reality says another. That's exactly the kind of inconsistency that causes problems.
 
-We added governance rules:
+They added governance rules:
 
 Services must document their actual dependencies. If code calls another service, the Knowledge Graph must list that relationship. Inconsistency is a violation.
 
@@ -184,7 +184,7 @@ But the Knowledge Graph could see all 47 domains simultaneously. It could answer
 
 ## The Self-Explaining System
 
-Late one night, staring at the Knowledge Graph visualization—a vast network of interconnected nodes and relationships spanning the entire organization—I had a realization.
+Late one night, staring at the Knowledge Graph visualization—a vast network of interconnected nodes and relationships spanning the entire organization—Asif had a realization.
 
 "This is the system explaining itself to itself."
 
@@ -202,9 +202,9 @@ Late one night, staring at the Knowledge Graph visualization—a vast network of
 
 ## The Integration Multiplier
 
-The real power emerged when we connected the Knowledge Graph to everything else.
+The real power emerged when they connected the Knowledge Graph to everything else.
 
-The Intent Router used it to understand requests in context. "Add payment retry" becomes meaningful when you know what payment and retry mean in this specific system.
+The Intent Router used it to understand requests in context. "Add payment retry" becomes meaningful when the system knows what payment and retry mean in this specific system.
 
 The Governance Engine used it to enforce consistency. Rules could reference actual system structure, not abstract concepts.
 
