@@ -1,0 +1,40 @@
+{
+  "nodes": [
+    {
+      "id": "MasterOrchestrator",
+      "category": "core",
+      "methods": 15,
+      "wired": true
+    },
+    {
+      "id": "TDDOrchestrator",
+      "category": "core",
+      "methods": 8,
+      "wired": true
+    },
+    {
+      "id": "IntentRouter",
+      "category": "core",
+      "methods": 12,
+      "wired": true
+    },
+    {
+      "id": "EnforcementOrchestrator",
+      "category": "core",
+      "methods": 10,
+      "wired": true
+    }
+  ],
+  "links": [
+    {
+      "source": "MasterOrchestrator",
+      "target": "TDDOrchestrator",
+      "type": "invokes"
+    },
+    {
+      "source": "MasterOrchestrator",
+      "target": "IntentRouter",
+      "type": "invokes"
+    }
+  ]
+}

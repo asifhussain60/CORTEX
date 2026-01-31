@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "id": "cortex.orchestrators.core.master_orchestrator",
+      "group": "core",
+      "size": 3109
+    },
+    {
+      "id": "cortex.brain.analysis.ast_analyzer",
+      "group": "brain",
+      "size": 847
+    },
+    {
+      "id": "cortex.governance.enforcement_engine",
+      "group": "governance",
+      "size": 1205
+    }
+  ],
+  "links": [
+    {
+      "source": "cortex.orchestrators.core.master_orchestrator",
+      "target": "cortex.brain.analysis.ast_analyzer",
+      "value": 1
+    },
+    {
+      "source": "cortex.orchestrators.core.master_orchestrator",
+      "target": "cortex.governance.enforcement_engine",
+      "value": 1
+    }
+  ]
+}

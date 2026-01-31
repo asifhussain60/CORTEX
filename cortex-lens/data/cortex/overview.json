@@ -1,0 +1,27 @@
+{
+  "description": "CORTEX is a Python-based cognitive orchestration system that provides AI-driven code analysis, governance enforcement, and autonomous development workflows through 27 specialized orchestrators operating across a 4-tier brain architecture.",
+  "capabilities": [
+    "Intent-based routing (IntentRouter)",
+    "Test-driven development automation (TDDOrchestrator)",
+    "LENS code intelligence (git+AST+comments)",
+    "Governance rule enforcement (EnforcementOrchestrator)",
+    "MCP server integration (MCPGateway)",
+    "Challenge-based evaluation (ChallengeEngine)"
+  ],
+  "tech_stack": [
+    "Python 3.9+",
+    "pytest (testing framework)",
+    "YAML (configuration)",
+    "git (version control)",
+    "FastAPI (MCP server)",
+    "D3.js (visualizations)"
+  ],
+  "architecture_pattern": "4-Tier Brain Architecture (Tier 0: Governance \u2192 Tier 1: Audit \u2192 Tier 2: Templates \u2192 Tier 3: Knowledge) + 27 Orchestrators (6 core, 6 domain, 11 support)",
+  "file_stats": {
+    "files": 1247,
+    "lines_of_code": 187423,
+    "test_coverage": "85%",
+    "orchestrators": 27,
+    "core_rules": 35
+  }
+}
