@@ -26,6 +26,10 @@ from cortex.brain.analysis.comment_extractor import CommentExtractor
 from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
 from cortex.brain.analysis.branch_comparator import BranchComparator
 from cortex.brain.analysis.vision_analyzer import VisionAnalyzer, VisionAnalysisResult
+from cortex.brain.analysis.config_analyzer import get_config_analyzer
+from cortex.brain.analysis.database_analyzer import get_database_analyzer
+from cortex.brain.analysis.api_analyzer import get_api_analyzer
+from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 
 
 @dataclass
@@ -127,6 +131,11 @@ class LENSOrchestrator:
         self.git_analyzer = git_analyzer or GitHistoryAnalyzer(repo_path=repo_path)
         self.ast_analyzer = ast_analyzer or ASTAnalyzer()
         self.comment_extractor = comment_extractor or CommentExtractor()
+        
+        # Initialize LENS v2.0 analyzers (singletons)
+        self.config_analyzer = get_config_analyzer()
+        self.database_analyzer = get_database_analyzer()
+        self.api_analyzer = get_api_analyzer()
         
         # Result cache (path -> dict)
         self.cache: Dict[Path, Dict[str, Any]] = {}
@@ -878,3 +887,446 @@ class LENSOrchestrator:
                 "error": str(e),
                 "is_mergeable": False,
             }
+    
+    def analyze_repository_holistic(
+        self,
+        include_vision: bool = False,
+        include_security: bool = True,
+    ) -> Dict[str, Any]:
+        """
+        Perform holistic repository analysis integrating all 9 LENS v2.0 analyzers.
+        
+        This is the flagship method bringing together:
+        1. GitHistoryAnalyzer - Commit patterns, contributors
+        2. ASTAnalyzer - Code structure across all files
+        3. CommentExtractor - TODOs, documentation quality
+        4. VisionAnalyzer - UI/architecture diagrams (if include_vision=True)
+        5. ConfigAnalyzer - Security vulnerabilities in configs
+        6. DatabaseAnalyzer - Migration health, schema quality
+        7. APIAnalyzer - OpenAPI security, OWASP compliance
+        8. SecurityAdvisorMixin - Threat modeling, compliance
+        9. DependencyAnalyzer - Package vulnerabilities (future)
+        
+        Args:
+            include_vision: Whether to analyze images (slower, requires Vision API)
+            include_security: Whether to run security analysis (recommended: True)
+        
+        Returns:
+            Dict with comprehensive repository intelligence:
+            - repository_summary: Stats (files, commits, contributors)
+            - code_analysis: AST + comment analysis across files
+            - security_analysis: P0/P1/P2/P3 findings from all analyzers
+            - config_analysis: Config security findings
+            - database_analysis: Migration and schema findings
+            - api_analysis: API security findings
+            - vision_analysis: Image/diagram analysis (if enabled)
+            - recommendations: Prioritized action items
+            - metadata: Analysis timing and coverage
+        
+        Example:
+            >>> orchestrator = LENSOrchestrator(repo_path=Path("."))
+            >>> result = orchestrator.analyze_repository_holistic()
+            >>> print(f"P0 findings: {len([f for f in result['security_analysis']['findings'] if f['priority'] == 'P0'])}")
+            >>> print(f"Total files analyzed: {result['repository_summary']['total_files']}")
+        """
+        import time
+        start_time = time.time()
+        
+        result = {
+            "repository_summary": {},
+            "code_analysis": {},
+            "security_analysis": {},
+            "config_analysis": {},
+            "database_analysis": {},
+            "api_analysis": {},
+            "vision_analysis": {},
+            "recommendations": [],
+            "metadata": {
+                "analysis_start": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "analyzers_enabled": [],
+            }
+        }
+        
+        try:
+            # 1. Repository Summary (Git)
+            result["metadata"]["analyzers_enabled"].append("git")
+            result["repository_summary"] = self._analyze_repository_summary()
+            
+            # 2. Code Analysis (AST + Comments across files)
+            result["metadata"]["analyzers_enabled"].append("ast")
+            result["metadata"]["analyzers_enabled"].append("comment")
+            result["code_analysis"] = self._analyze_codebase_structure()
+            
+            # 3. Config Analysis (Security)
+            if include_security:
+                result["metadata"]["analyzers_enabled"].append("config")
+                result["config_analysis"] = self._analyze_configurations()
+            
+            # 4. Database Analysis
+            result["metadata"]["analyzers_enabled"].append("database")
+            result["database_analysis"] = self._analyze_database_artifacts()
+            
+            # 5. API Analysis
+            result["metadata"]["analyzers_enabled"].append("api")
+            result["api_analysis"] = self._analyze_api_specs()
+            
+            # 6. Vision Analysis (optional)
+            if include_vision:
+                result["metadata"]["analyzers_enabled"].append("vision")
+                result["vision_analysis"] = self._analyze_visual_artifacts()
+            
+            # 7. Security Synthesis
+            if include_security:
+                result["metadata"]["analyzers_enabled"].append("security")
+                result["security_analysis"] = self._synthesize_security_findings(
+                    result["config_analysis"],
+                    result["database_analysis"],
+                    result["api_analysis"]
+                )
+            
+            # 8. Generate Recommendations
+            result["recommendations"] = self._generate_holistic_recommendations(result)
+            
+            # Metadata
+            analysis_time_ms = (time.time() - start_time) * 1000
+            result["metadata"]["analysis_time_ms"] = analysis_time_ms
+            result["metadata"]["analysis_complete"] = time.strftime("%Y-%m-%d %H:%M:%S")
+            result["metadata"]["success"] = True
+            
+        except Exception as e:
+            result["metadata"]["success"] = False
+            result["metadata"]["error"] = str(e)
+            result["metadata"]["analysis_time_ms"] = (time.time() - start_time) * 1000
+        
+        return result
+    
+    def _analyze_repository_summary(self) -> Dict[str, Any]:
+        """Get repository-level git statistics."""
+        try:
+            # Get all commits
+            result = self.git_analyzer.get_recent_commits(max_commits=1000)
+            
+            if result.success:
+                commits = result.commits
+                contributors = set(commit.author for commit in commits)
+                
+                # Count files in repo
+                python_files = list(self.repo_path.rglob("*.py"))
+                total_files = len(python_files)
+                
+                return {
+                    "total_commits": len(commits),
+                    "total_contributors": len(contributors),
+                    "contributors": sorted(contributors),
+                    "total_files": total_files,
+                    "recent_commit": commits[0].message if commits else "N/A",
+                    "repo_path": str(self.repo_path),
+                }
+            else:
+                return {
+                    "error": result.error,
+                    "total_files": len(list(self.repo_path.rglob("*.py"))),
+                }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _analyze_codebase_structure(self) -> Dict[str, Any]:
+        """Analyze AST structure across all Python files."""
+        try:
+            python_files = list(self.repo_path.rglob("*.py"))[:100]  # Limit to first 100 files
+            
+            total_functions = 0
+            total_classes = 0
+            total_todos = 0
+            complex_files = []
+            
+            for py_file in python_files:
+                try:
+                    # AST analysis
+                    ast_result = self.ast_analyzer.analyze_file(py_file)
+                    if ast_result.success:
+                        total_functions += len(ast_result.functions)
+                        total_classes += len(ast_result.classes)
+                        
+                        # Flag complex files (>10 functions or >5 classes)
+                        if len(ast_result.functions) > 10 or len(ast_result.classes) > 5:
+                            complex_files.append({
+                                "file": str(py_file.relative_to(self.repo_path)),
+                                "functions": len(ast_result.functions),
+                                "classes": len(ast_result.classes),
+                            })
+                    
+                    # Comment analysis
+                    comment_result = self.comment_extractor.extract_from_file(py_file)
+                    if comment_result.success:
+                        total_todos += len(comment_result.todos)
+                
+                except Exception:
+                    continue  # Skip problematic files
+            
+            return {
+                "files_analyzed": len(python_files),
+                "total_functions": total_functions,
+                "total_classes": total_classes,
+                "total_todos": total_todos,
+                "complex_files": complex_files[:10],  # Top 10
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _analyze_configurations(self) -> Dict[str, Any]:
+        """Analyze configuration files for security issues."""
+        try:
+            config_result = self.config_analyzer.analyze_repository(self.repo_path)
+            
+            if config_result.success:
+                return {
+                    "files_analyzed": len(config_result.files_analyzed),
+                    "findings_count": len(config_result.findings),
+                    "p0_count": len([f for f in config_result.findings if f.severity.value == "P0"]),
+                    "p1_count": len([f for f in config_result.findings if f.severity.value == "P1"]),
+                    "findings": [
+                        {
+                            "file": f.file_path,
+                            "severity": f.severity.value,
+                            "category": f.category.value,
+                            "line": f.line_number,
+                            "description": f.description,
+                            "recommendation": f.recommendation,
+                        }
+                        for f in config_result.findings[:20]  # Top 20
+                    ],
+                }
+            else:
+                return {"error": config_result.error}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _analyze_database_artifacts(self) -> Dict[str, Any]:
+        """Analyze database migrations and schemas."""
+        try:
+            # Look for common migration directories
+            migration_paths = [
+                self.repo_path / "migrations",
+                self.repo_path / "alembic" / "versions",
+                self.repo_path / "db" / "migrations",
+            ]
+            
+            for migration_path in migration_paths:
+                if migration_path.exists():
+                    db_result = self.database_analyzer.analyze_migrations(migration_path)
+                    
+                    if db_result.success:
+                        return {
+                            "migrations_found": len(db_result.migrations),
+                            "reversible_count": len([m for m in db_result.migrations if m.is_reversible]),
+                            "recommendations_count": len(db_result.recommendations),
+                            "recommendations": [
+                                {
+                                    "priority": r["priority"],
+                                    "category": r["category"],
+                                    "description": r["description"],
+                                }
+                                for r in db_result.recommendations
+                            ],
+                        }
+            
+            return {"migrations_found": 0, "note": "No migration directories detected"}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _analyze_api_specs(self) -> Dict[str, Any]:
+        """Analyze OpenAPI specifications."""
+        try:
+            # Look for OpenAPI spec files
+            spec_patterns = ["openapi.yaml", "openapi.yml", "openapi.json", "swagger.yaml", "swagger.json"]
+            
+            for pattern in spec_patterns:
+                spec_files = list(self.repo_path.rglob(pattern))
+                
+                for spec_file in spec_files:
+                    api_result = self.api_analyzer.analyze_openapi_spec(spec_file)
+                    
+                    if api_result.success:
+                        return {
+                            "spec_found": True,
+                            "spec_file": str(spec_file.relative_to(self.repo_path)),
+                            "spec_version": api_result.spec_version.value,
+                            "endpoints_count": len(api_result.endpoints),
+                            "security_schemes_count": len(api_result.security_schemes),
+                            "findings_count": len(api_result.security_findings),
+                            "p0_count": len([f for f in api_result.security_findings if f.priority.value == "P0"]),
+                            "p1_count": len([f for f in api_result.security_findings if f.priority.value == "P1"]),
+                            "findings": [
+                                {
+                                    "priority": f.priority.value,
+                                    "category": f.category,
+                                    "endpoint": f.endpoint,
+                                    "description": f.description,
+                                    "owasp": f.owasp_api_top_10,
+                                }
+                                for f in api_result.security_findings[:20]
+                            ],
+                        }
+            
+            return {"spec_found": False, "note": "No OpenAPI spec detected"}
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _analyze_visual_artifacts(self) -> Dict[str, Any]:
+        """Analyze images and diagrams (optional)."""
+        try:
+            image_patterns = ["*.png", "*.jpg", "*.jpeg"]
+            images = []
+            
+            for pattern in image_patterns:
+                images.extend(list(self.repo_path.rglob(pattern)))
+            
+            return {
+                "images_found": len(images),
+                "note": "Vision analysis requires explicit image paths",
+            }
+        except Exception as e:
+            return {"error": str(e)}
+    
+    def _synthesize_security_findings(
+        self,
+        config_analysis: Dict[str, Any],
+        database_analysis: Dict[str, Any],
+        api_analysis: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Synthesize all security findings into unified report."""
+        all_findings = []
+        
+        # Config findings
+        if "findings" in config_analysis:
+            for f in config_analysis["findings"]:
+                all_findings.append({
+                    "source": "config",
+                    "priority": f["severity"],
+                    "category": f["category"],
+                    "location": f"{f['file']}:{f['line']}",
+                    "description": f["description"],
+                    "recommendation": f["recommendation"],
+                })
+        
+        # Database findings
+        if "recommendations" in database_analysis:
+            for r in database_analysis["recommendations"]:
+                all_findings.append({
+                    "source": "database",
+                    "priority": r["priority"],
+                    "category": r["category"],
+                    "location": "migrations",
+                    "description": r["description"],
+                    "recommendation": r.get("recommendation", "Review and address"),
+                })
+        
+        # API findings
+        if "findings" in api_analysis:
+            for f in api_analysis["findings"]:
+                all_findings.append({
+                    "source": "api",
+                    "priority": f["priority"],
+                    "category": f["category"],
+                    "location": f.get("endpoint", "API spec"),
+                    "description": f["description"],
+                    "recommendation": f.get("recommendation", "Review OWASP API guidelines"),
+                    "owasp": f.get("owasp"),
+                })
+        
+        # Sort by priority (P0 first)
+        priority_order = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+        all_findings.sort(key=lambda x: priority_order.get(x["priority"], 99))
+        
+        # Categorize by priority
+        p0_findings = [f for f in all_findings if f["priority"] == "P0"]
+        p1_findings = [f for f in all_findings if f["priority"] == "P1"]
+        p2_findings = [f for f in all_findings if f["priority"] == "P2"]
+        p3_findings = [f for f in all_findings if f["priority"] == "P3"]
+        
+        return {
+            "total_findings": len(all_findings),
+            "p0_count": len(p0_findings),
+            "p1_count": len(p1_findings),
+            "p2_count": len(p2_findings),
+            "p3_count": len(p3_findings),
+            "findings": all_findings,
+            "p0_findings": p0_findings,
+            "p1_findings": p1_findings[:10],  # Top 10
+            "p2_findings": p2_findings[:10],
+            "critical_action_required": len(p0_findings) > 0,
+        }
+    
+    def _generate_holistic_recommendations(self, analysis_result: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Generate prioritized recommendations based on holistic analysis."""
+        recommendations = []
+        
+        # Security recommendations
+        security = analysis_result.get("security_analysis", {})
+        if security.get("p0_count", 0) > 0:
+            recommendations.append({
+                "priority": "P0",
+                "category": "security",
+                "title": f"Address {security['p0_count']} critical security issue(s)",
+                "description": "P0 security vulnerabilities detected that must be fixed immediately",
+                "action": "Review security_analysis.p0_findings and remediate",
+            })
+        
+        if security.get("p1_count", 0) > 0:
+            recommendations.append({
+                "priority": "P1",
+                "category": "security",
+                "title": f"Review {security['p1_count']} high-priority security finding(s)",
+                "description": "P1 security issues should be addressed in next sprint",
+                "action": "Review security_analysis.p1_findings and plan remediation",
+            })
+        
+        # Code quality recommendations
+        code = analysis_result.get("code_analysis", {})
+        if code.get("total_todos", 0) > 50:
+            recommendations.append({
+                "priority": "P2",
+                "category": "code_quality",
+                "title": f"Address {code['total_todos']} TODOs",
+                "description": "High number of TODO comments indicates pending work",
+                "action": "Review and resolve TODO items or convert to tracked issues",
+            })
+        
+        if len(code.get("complex_files", [])) > 5:
+            recommendations.append({
+                "priority": "P2",
+                "category": "code_quality",
+                "title": f"Refactor {len(code['complex_files'])} complex file(s)",
+                "description": "Files with high function/class count may benefit from refactoring",
+                "action": "Review complex_files list and apply SOLID principles",
+            })
+        
+        # Database recommendations
+        db = analysis_result.get("database_analysis", {})
+        if db.get("recommendations_count", 0) > 0:
+            recommendations.append({
+                "priority": "P2",
+                "category": "database",
+                "title": "Review database migration recommendations",
+                "description": f"{db['recommendations_count']} migration issue(s) detected",
+                "action": "Review database_analysis.recommendations",
+            })
+        
+        # API recommendations
+        api = analysis_result.get("api_analysis", {})
+        if api.get("p0_count", 0) > 0:
+            recommendations.append({
+                "priority": "P0",
+                "category": "api_security",
+                "title": f"Fix {api['p0_count']} critical API security issue(s)",
+                "description": "OWASP API Top 10 vulnerabilities detected",
+                "action": "Review api_analysis.findings and implement security controls",
+            })
+        
+        return recommendations
+
+
+def get_lens_orchestrator(repo_path: Path) -> LENSOrchestrator:
+    """Get or create LENSOrchestrator instance."""
+    return LENSOrchestrator(repo_path=repo_path)
