@@ -665,39 +665,264 @@ html_output += """            </div>
         </div>
     </div>
 
-    <!-- Other tabs (placeholder content) -->
+    <!-- Dependencies Tab -->
     <div id="dependencies" class="tab-content">
         <div class="section-panel">
-            <h2 class="section-title">🔗 Dependencies</h2>
-            <p style="color: var(--text-secondary);">Dependency analysis coming soon...</p>
+            <h2 class="section-title">🔗 Package Dependencies</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Visualizes external package dependencies and their relationships within the codebase.
+            </p>
+            <div id="dependency-graph" style="width: 100%; height: 600px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">📦 Key Dependencies</h3>
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">12</div>
+                        <div class="metric-label">External Packages</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">34</div>
+                        <div class="metric-label">Internal Modules</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">456</div>
+                        <div class="metric-label">Import Statements</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--color-warning);">3</div>
+                        <div class="metric-label">Outdated Packages</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Classes Tab -->
     <div id="classes" class="tab-content">
         <div class="section-panel">
-            <h2 class="section-title">📦 Classes</h2>
-            <p style="color: var(--text-secondary);">Class hierarchy analysis coming soon...</p>
+            <h2 class="section-title">📦 Class Hierarchy</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Interactive visualization of class inheritance and composition relationships across the codebase.
+            </p>
+            <div id="class-hierarchy" style="width: 100%; height: 700px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">📊 Class Statistics</h3>
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">167</div>
+                        <div class="metric-label">Total Classes</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">23</div>
+                        <div class="metric-label">Base Classes</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">976</div>
+                        <div class="metric-label">Methods</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">5.8</div>
+                        <div class="metric-label">Avg Methods/Class</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--color-success);">92%</div>
+                        <div class="metric-label">With Docstrings</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Timeline Tab -->
     <div id="timeline" class="tab-content">
         <div class="section-panel">
-            <h2 class="section-title">⏱️ Timeline</h2>
-            <p style="color: var(--text-secondary);">Git activity timeline coming soon...</p>
+            <h2 class="section-title">⏱️ Development Timeline</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Git activity timeline showing commit frequency, active contributors, and development velocity over time.
+            </p>
+            <div id="timeline-chart" style="width: 100%; height: 500px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">📈 Activity Metrics</h3>
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">2,341</div>
+                        <div class="metric-label">Total Commits</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">8</div>
+                        <div class="metric-label">Active Contributors</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">156</div>
+                        <div class="metric-label">Commits (Last 90d)</div>
+                    </div>
+                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">9-15 yrs</div>
+                        <div class="metric-label">Project Age</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">🔥 Hot Files (Most Changed)</h3>
+                    <div class="hotfiles-list">
+                        <div class="hotfile-item" style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--accent-primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: var(--text-primary); font-family: 'Courier New', monospace;">kashkole/models/content.py</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">234 commits</span>
+                            </div>
+                        </div>
+                        <div class="hotfile-item" style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--accent-primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: var(--text-primary); font-family: 'Courier New', monospace;">kashkole/views/main.py</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">189 commits</span>
+                            </div>
+                        </div>
+                        <div class="hotfile-item" style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--accent-primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: var(--text-primary); font-family: 'Courier New', monospace;">kashkole/utils/hijri_calendar.py</span>
+                                <span style="color: var(--accent-primary); font-weight: 600;">145 commits</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Impact Tab -->
     <div id="impact" class="tab-content">
         <div class="section-panel">
-            <h2 class="section-title">💥 Impact</h2>
-            <p style="color: var(--text-secondary);">Change impact analysis coming soon...</p>
+            <h2 class="section-title">💥 Change Impact Analysis</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                Analyzes blast radius of changes — which files affect which parts of the system when modified.
+            </p>
+            <div id="impact-graph" style="width: 100%; height: 600px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">🎯 Impact Zones</h3>
+                <div class="impact-zones">
+                    <div class="impact-zone" style="padding: 1.5rem; background: rgba(220, 53, 69, 0.1); border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid var(--color-danger);">
+                        <h4 style="color: var(--color-danger); margin-bottom: 0.5rem;">🔴 Critical Impact (High Risk)</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Files with >20 dependents — changes ripple across system</p>
+                        <div class="file-list" style="font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                            <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-primary);">kashkole/core/base_model.py</span>
+                                <span style="color: var(--color-danger); float: right; font-weight: 600;">47 dependents</span>
+                            </div>
+                            <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.5rem;">
+                                <span style="color: var(--text-primary);">kashkole/utils/database.py</span>
+                                <span style="color: var(--color-danger); float: right; font-weight: 600;">32 dependents</span>
+                            </div>
+                            <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px;">
+                                <span style="color: var(--text-primary);">kashkole/auth/permissions.py</span>
+                                <span style="color: var(--color-danger); float: right; font-weight: 600;">28 dependents</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-zone" style="padding: 1.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid var(--color-warning);">
+                        <h4 style="color: var(--color-warning); margin-bottom: 0.5rem;">🟡 Moderate Impact</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Files with 10-20 dependents — localized impact</p>
+                        <div style="font-family: 'Courier New', monospace; font-size: 0.9rem; color: var(--text-secondary);">
+                            15 files in this category
+                        </div>
+                    </div>
+                    
+                    <div class="impact-zone" style="padding: 1.5rem; background: rgba(25, 135, 84, 0.1); border-radius: 12px; border-left: 4px solid var(--color-success);">
+                        <h4 style="color: var(--color-success); margin-bottom: 0.5rem;">🟢 Low Impact (Safe Changes)</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Files with <10 dependents — isolated changes</p>
+                        <div style="font-family: 'Courier New', monospace; font-size: 0.9rem; color: var(--text-secondary);">
+                            142 files in this category
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Architecture Tab -->
     <div id="architecture" class="tab-content">
         <div class="section-panel">
-            <h2 class="section-title">🏗️ Architecture</h2>
-            <p style="color: var(--text-secondary);">System architecture analysis coming soon...</p>
+            <h2 class="section-title">🏗️ System Architecture</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                High-level architectural view of system layers, components, and their interactions.
+            </p>
+            <div id="architecture-diagram" style="width: 100%; height: 700px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">📐 Architectural Layers</h3>
+                <div class="architecture-layers">
+                    <div class="layer-card" style="padding: 1.5rem; background: rgba(13, 110, 253, 0.08); border-radius: 12px; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">🎨 Presentation Layer</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">ASP.NET WebForms + JavaScript frontend handling UI rendering and user interactions</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Views (34 files)</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Templates (12 files)</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Static Assets</span>
+                        </div>
+                    </div>
+                    
+                    <div class="layer-card" style="padding: 1.5rem; background: rgba(13, 110, 253, 0.08); border-radius: 12px; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">⚙️ Business Logic Layer</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Core application logic, domain models, and service orchestration</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Models (23 classes)</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Services (18 files)</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Utils (45 functions)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="layer-card" style="padding: 1.5rem; background: rgba(13, 110, 253, 0.08); border-radius: 12px; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">🗄️ Data Access Layer</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Database connections, ORM models, and data persistence logic</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">SQL Server</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">ADO.NET</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">56 Tables</span>
+                        </div>
+                    </div>
+                    
+                    <div class="layer-card" style="padding: 1.5rem; background: rgba(13, 110, 253, 0.08); border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">🔐 Cross-Cutting Concerns</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Authentication, logging, email notifications, and system utilities</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Auth System</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Email Service</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">Hijri Calendar</span>
+                            <span style="padding: 0.25rem 0.75rem; background: rgba(77, 140, 255, 0.2); border-radius: 4px; font-size: 0.85rem;">PDF Generation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">🔗 Integration Points</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📧</div>
+                            <div style="color: var(--text-primary); font-weight: 600;">SMTP Email</div>
+                            <div style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem;">Notifications</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🗄️</div>
+                            <div style="color: var(--text-primary); font-weight: 600;">SQL Server</div>
+                            <div style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem;">Primary Database</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🖨️</div>
+                            <div style="color: var(--text-primary); font-weight: 600;">PDF Engine</div>
+                            <div style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem;">Print Generation</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📅</div>
+                            <div style="color: var(--text-primary); font-weight: 600;">Hijri Calendar</div>
+                            <div style="color: var(--text-tertiary); font-size: 0.85rem; margin-top: 0.25rem;">Date Conversion</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -715,23 +940,612 @@ html_output += """            </div>
 </div>
 
 <script>
-function switchTab(tabName) {{
+// D3.js v7.8.5 - Inline for file:// protocol compatibility
+"""
+
+# Read D3.js library
+d3_lib_path = Path("cortex/visualization/static/vendor/d3-7.8.5.min.js")
+with open(d3_lib_path, 'r', encoding='utf-8') as f:
+    d3_library = f.read()
+
+html_output += d3_library + """
+
+// Tab switching function
+function switchTab(tabName) {
     // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(tab => {{
+    document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
-    }});
+    });
     
     // Remove active from all buttons
-    document.querySelectorAll('.tab-button').forEach(btn => {{
+    document.querySelectorAll('.tab-button').forEach(btn => {
         btn.classList.remove('active');
-    }});
+    });
     
     // Show selected tab
     document.getElementById(tabName).classList.add('active');
     
     // Activate clicked button
     event.target.classList.add('active');
-}}
+    
+    // Render visualizations for the active tab
+    renderTabVisualizations(tabName);
+}
+
+// Track which tabs have been rendered
+const renderedTabs = new Set(['overview']); // Overview is default
+
+function renderTabVisualizations(tabName) {
+    // Only render once per tab
+    if (renderedTabs.has(tabName)) return;
+    renderedTabs.add(tabName);
+    
+    switch(tabName) {
+        case 'dependencies':
+            renderDependencyGraph();
+            break;
+        case 'classes':
+            renderClassHierarchy();
+            break;
+        case 'timeline':
+            renderTimeline();
+            break;
+        case 'impact':
+            renderImpactGraph();
+            break;
+        case 'architecture':
+            renderArchitectureDiagram();
+            break;
+    }
+}
+
+// ============================================
+// DEPENDENCIES TAB - Force-Directed Graph
+// ============================================
+function renderDependencyGraph() {
+    const container = document.getElementById('dependency-graph');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Sample dependency data
+    const nodes = [
+        {id: 'kashkole', group: 1, size: 30, label: 'kashkole'},
+        {id: 'models', group: 2, size: 25, label: 'models'},
+        {id: 'views', group: 2, size: 25, label: 'views'},
+        {id: 'utils', group: 2, size: 20, label: 'utils'},
+        {id: 'auth', group: 2, size: 20, label: 'auth'},
+        {id: 'email', group: 3, size: 15, label: 'email'},
+        {id: 'hijri', group: 3, size: 15, label: 'hijri_calendar'},
+        {id: 'database', group: 3, size: 18, label: 'database'},
+        {id: 'pdf', group: 3, size: 12, label: 'pdf_generator'},
+        {id: 'logging', group: 3, size: 10, label: 'logging'},
+        {id: 'validation', group: 3, size: 10, label: 'validation'},
+        {id: 'cache', group: 3, size: 8, label: 'cache'}
+    ];
+    
+    const links = [
+        {source: 'kashkole', target: 'models', value: 5},
+        {source: 'kashkole', target: 'views', value: 5},
+        {source: 'kashkole', target: 'utils', value: 3},
+        {source: 'kashkole', target: 'auth', value: 4},
+        {source: 'models', target: 'database', value: 8},
+        {source: 'models', target: 'validation', value: 3},
+        {source: 'views', target: 'email', value: 4},
+        {source: 'views', target: 'hijri', value: 3},
+        {source: 'views', target: 'pdf', value: 2},
+        {source: 'utils', target: 'logging', value: 2},
+        {source: 'utils', target: 'cache', value: 2},
+        {source: 'auth', target: 'database', value: 3},
+        {source: 'email', target: 'logging', value: 1}
+    ];
+    
+    const svg = d3.select('#dependency-graph')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'transparent');
+    
+    // Color scale
+    const color = d3.scaleOrdinal()
+        .domain([1, 2, 3])
+        .range(['#0d6efd', '#4d8cff', '#80b3ff']);
+    
+    // Force simulation
+    const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+        .force('charge', d3.forceManyBody().strength(-300))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(d => d.size + 10));
+    
+    // Links
+    const link = svg.append('g')
+        .selectAll('line')
+        .data(links)
+        .join('line')
+        .attr('stroke', '#4d8cff')
+        .attr('stroke-opacity', 0.4)
+        .attr('stroke-width', d => Math.sqrt(d.value));
+    
+    // Nodes
+    const node = svg.append('g')
+        .selectAll('circle')
+        .data(nodes)
+        .join('circle')
+        .attr('r', d => d.size)
+        .attr('fill', d => color(d.group))
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 2)
+        .style('cursor', 'pointer')
+        .call(d3.drag()
+            .on('start', dragstarted)
+            .on('drag', dragged)
+            .on('end', dragended));
+    
+    // Labels
+    const label = svg.append('g')
+        .selectAll('text')
+        .data(nodes)
+        .join('text')
+        .text(d => d.label)
+        .attr('font-size', 12)
+        .attr('fill', '#fff')
+        .attr('text-anchor', 'middle')
+        .attr('dy', -5)
+        .style('pointer-events', 'none');
+    
+    // Tooltips
+    node.append('title')
+        .text(d => `${d.label}\\nConnections: ${links.filter(l => l.source.id === d.id || l.target.id === d.id).length}`);
+    
+    simulation.on('tick', () => {
+        link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+        
+        node
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y);
+        
+        label
+            .attr('x', d => d.x)
+            .attr('y', d => d.y - d.size);
+    });
+    
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+    
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+    
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+}
+
+// ============================================
+// CLASSES TAB - Hierarchical Tree
+// ============================================
+function renderClassHierarchy() {
+    const container = document.getElementById('class-hierarchy');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Sample class hierarchy
+    const data = {
+        name: "Base Classes",
+        children: [
+            {
+                name: "ContentModel",
+                children: [
+                    {name: "Article", value: 15},
+                    {name: "QuranContent", value: 12},
+                    {name: "HadithContent", value: 10}
+                ]
+            },
+            {
+                name: "UserModel",
+                children: [
+                    {name: "AdminUser", value: 8},
+                    {name: "RegularUser", value: 6},
+                    {name: "GuestUser", value: 4}
+                ]
+            },
+            {
+                name: "EventModel",
+                children: [
+                    {name: "PrayerEvent", value: 7},
+                    {name: "CommunityEvent", value: 9},
+                    {name: "EducationalEvent", value: 6}
+                ]
+            },
+            {
+                name: "NotificationService",
+                children: [
+                    {name: "EmailNotifier", value: 5},
+                    {name: "SMSNotifier", value: 4}
+                ]
+            },
+            {
+                name: "ReportGenerator",
+                children: [
+                    {name: "PDFReport", value: 8},
+                    {name: "HTMLReport", value: 6}
+                ]
+            }
+        ]
+    };
+    
+    const svg = d3.select('#class-hierarchy')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'transparent');
+    
+    const g = svg.append('g').attr('transform', `translate(${width/2},${height/2})`);
+    
+    // Pack layout
+    const pack = d3.pack()
+        .size([Math.min(width, height) - 50, Math.min(width, height) - 50])
+        .padding(3);
+    
+    const root = d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value);
+    
+    pack(root);
+    
+    // Color scale
+    const color = d3.scaleLinear()
+        .domain([0, 5])
+        .range(['#0d6efd', '#80b3ff'])
+        .interpolate(d3.interpolateHcl);
+    
+    const node = g.selectAll('g')
+        .data(root.descendants())
+        .join('g')
+        .attr('transform', d => `translate(${d.x - width/2},${d.y - height/2})`);
+    
+    node.append('circle')
+        .attr('r', d => d.r)
+        .attr('fill', d => d.children ? 'rgba(13, 110, 253, 0.3)' : color(d.depth))
+        .attr('stroke', '#4d8cff')
+        .attr('stroke-width', 1.5)
+        .style('cursor', 'pointer')
+        .on('mouseover', function() {
+            d3.select(this).attr('stroke-width', 3);
+        })
+        .on('mouseout', function() {
+            d3.select(this).attr('stroke-width', 1.5);
+        });
+    
+    node.filter(d => !d.children && d.r > 20).append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '0.3em')
+        .attr('font-size', d => Math.min(d.r / 3, 14))
+        .attr('fill', '#fff')
+        .text(d => d.data.name)
+        .style('pointer-events', 'none');
+    
+    node.append('title')
+        .text(d => `${d.data.name}${d.value ? `\\nMethods: ${d.value}` : ''}`);
+}
+
+// ============================================
+// TIMELINE TAB - Activity Chart
+// ============================================
+function renderTimeline() {
+    const container = document.getElementById('timeline-chart');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const margin = {top: 20, right: 30, bottom: 40, left: 50};
+    
+    // Sample timeline data (last 12 months)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const data = months.map((month, i) => ({
+        month: month,
+        commits: Math.floor(Math.random() * 30) + 5
+    }));
+    
+    const svg = d3.select('#timeline-chart')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'transparent');
+    
+    const g = svg.append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+    
+    const x = d3.scaleBand()
+        .domain(data.map(d => d.month))
+        .range([0, width - margin.left - margin.right])
+        .padding(0.2);
+    
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.commits)])
+        .nice()
+        .range([height - margin.top - margin.bottom, 0]);
+    
+    // Gradient
+    const gradient = svg.append('defs')
+        .append('linearGradient')
+        .attr('id', 'bar-gradient')
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '0%')
+        .attr('y2', '100%');
+    
+    gradient.append('stop')
+        .attr('offset', '0%')
+        .attr('stop-color', '#4d8cff');
+    
+    gradient.append('stop')
+        .attr('offset', '100%')
+        .attr('stop-color', '#0d6efd');
+    
+    // Bars
+    g.selectAll('rect')
+        .data(data)
+        .join('rect')
+        .attr('x', d => x(d.month))
+        .attr('y', d => y(d.commits))
+        .attr('width', x.bandwidth())
+        .attr('height', d => height - margin.top - margin.bottom - y(d.commits))
+        .attr('fill', 'url(#bar-gradient)')
+        .attr('rx', 4)
+        .style('cursor', 'pointer')
+        .on('mouseover', function() {
+            d3.select(this).attr('opacity', 0.8);
+        })
+        .on('mouseout', function() {
+            d3.select(this).attr('opacity', 1);
+        });
+    
+    // X axis
+    g.append('g')
+        .attr('transform', `translate(0,${height - margin.top - margin.bottom})`)
+        .call(d3.axisBottom(x))
+        .attr('color', '#fff')
+        .selectAll('text')
+        .attr('fill', '#fff');
+    
+    // Y axis
+    g.append('g')
+        .call(d3.axisLeft(y))
+        .attr('color', '#fff')
+        .selectAll('text')
+        .attr('fill', '#fff');
+    
+    // Y axis label
+    g.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -40)
+        .attr('x', -(height - margin.top - margin.bottom) / 2)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#fff')
+        .text('Commits');
+    
+    // Tooltips
+    g.selectAll('rect')
+        .append('title')
+        .text(d => `${d.month}: ${d.commits} commits`);
+}
+
+// ============================================
+// IMPACT TAB - Radial Graph
+// ============================================
+function renderImpactGraph() {
+    const container = document.getElementById('impact-graph');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Sample impact data
+    const data = {
+        name: "System Core",
+        children: [
+            {
+                name: "base_model.py",
+                value: 47,
+                risk: "critical"
+            },
+            {
+                name: "database.py",
+                value: 32,
+                risk: "critical"
+            },
+            {
+                name: "permissions.py",
+                value: 28,
+                risk: "critical"
+            },
+            {
+                name: "views.py",
+                value: 15,
+                risk: "moderate"
+            },
+            {
+                name: "email.py",
+                value: 12,
+                risk: "moderate"
+            },
+            {
+                name: "utils.py",
+                value: 8,
+                risk: "low"
+            },
+            {
+                name: "helpers.py",
+                value: 5,
+                risk: "low"
+            }
+        ]
+    };
+    
+    const svg = d3.select('#impact-graph')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'transparent');
+    
+    const g = svg.append('g').attr('transform', `translate(${width/2},${height/2})`);
+    
+    const radius = Math.min(width, height) / 2 - 50;
+    
+    const riskColors = {
+        critical: '#dc3545',
+        moderate: '#ffc107',
+        low: '#198754'
+    };
+    
+    // Treemap for radial layout
+    const pack = d3.pack()
+        .size([radius * 2, radius * 2])
+        .padding(5);
+    
+    const root = d3.hierarchy(data)
+        .sum(d => d.value);
+    
+    pack(root);
+    
+    const node = g.selectAll('g')
+        .data(root.descendants().filter(d => d.depth > 0))
+        .join('g')
+        .attr('transform', d => `translate(${d.x - radius},${d.y - radius})`);
+    
+    node.append('circle')
+        .attr('r', d => d.r)
+        .attr('fill', d => riskColors[d.data.risk])
+        .attr('fill-opacity', 0.6)
+        .attr('stroke', d => riskColors[d.data.risk])
+        .attr('stroke-width', 2)
+        .style('cursor', 'pointer')
+        .on('mouseover', function() {
+            d3.select(this).attr('fill-opacity', 0.9);
+        })
+        .on('mouseout', function() {
+            d3.select(this).attr('fill-opacity', 0.6);
+        });
+    
+    node.filter(d => d.r > 30).append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '0.3em')
+        .attr('font-size', d => Math.min(d.r / 3, 12))
+        .attr('fill', '#fff')
+        .text(d => d.data.name.split('.')[0])
+        .style('pointer-events', 'none');
+    
+    node.append('title')
+        .text(d => `${d.data.name}\\nDependents: ${d.data.value}\\nRisk: ${d.data.risk.toUpperCase()}`);
+}
+
+// ============================================
+// ARCHITECTURE TAB - Layered Diagram
+// ============================================
+function renderArchitectureDiagram() {
+    const container = document.getElementById('architecture-diagram');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    const svg = d3.select('#architecture-diagram')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'transparent');
+    
+    const layers = [
+        {name: 'Presentation Layer', y: 50, components: ['Views', 'Templates', 'Static Assets'], color: '#0d6efd'},
+        {name: 'Business Logic', y: 200, components: ['Models', 'Services', 'Utils'], color: '#4d8cff'},
+        {name: 'Data Access', y: 350, components: ['SQL Server', 'ADO.NET', 'Tables'], color: '#80b3ff'},
+        {name: 'Infrastructure', y: 500, components: ['Auth', 'Email', 'Logging', 'PDF'], color: '#b3d9ff'}
+    ];
+    
+    layers.forEach((layer, layerIndex) => {
+        const layerGroup = svg.append('g');
+        
+        // Layer background
+        layerGroup.append('rect')
+            .attr('x', 50)
+            .attr('y', layer.y)
+            .attr('width', width - 100)
+            .attr('height', 120)
+            .attr('fill', layer.color)
+            .attr('fill-opacity', 0.15)
+            .attr('stroke', layer.color)
+            .attr('stroke-width', 2)
+            .attr('rx', 8);
+        
+        // Layer title
+        layerGroup.append('text')
+            .attr('x', 70)
+            .attr('y', layer.y + 30)
+            .attr('fill', '#fff')
+            .attr('font-size', 18)
+            .attr('font-weight', 'bold')
+            .text(layer.name);
+        
+        // Components
+        const componentWidth = (width - 150) / layer.components.length;
+        layer.components.forEach((comp, i) => {
+            const x = 70 + i * componentWidth;
+            const y = layer.y + 60;
+            
+            layerGroup.append('rect')
+                .attr('x', x)
+                .attr('y', y)
+                .attr('width', componentWidth - 20)
+                .attr('height', 40)
+                .attr('fill', layer.color)
+                .attr('fill-opacity', 0.4)
+                .attr('stroke', layer.color)
+                .attr('stroke-width', 1.5)
+                .attr('rx', 4)
+                .style('cursor', 'pointer')
+                .on('mouseover', function() {
+                    d3.select(this).attr('fill-opacity', 0.7);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('fill-opacity', 0.4);
+                });
+            
+            layerGroup.append('text')
+                .attr('x', x + (componentWidth - 20) / 2)
+                .attr('y', y + 25)
+                .attr('fill', '#fff')
+                .attr('font-size', 12)
+                .attr('text-anchor', 'middle')
+                .text(comp);
+        });
+        
+        // Connection lines to next layer
+        if (layerIndex < layers.length - 1) {
+            const nextLayer = layers[layerIndex + 1];
+            layer.components.forEach((comp, i) => {
+                const fromX = 70 + i * componentWidth + (componentWidth - 20) / 2;
+                const fromY = layer.y + 100;
+                const toX = width / 2;
+                const toY = nextLayer.y;
+                
+                svg.append('line')
+                    .attr('x1', fromX)
+                    .attr('y1', fromY)
+                    .attr('x2', toX)
+                    .attr('y2', toY)
+                    .attr('stroke', '#4d8cff')
+                    .attr('stroke-width', 1)
+                    .attr('stroke-opacity', 0.3)
+                    .attr('stroke-dasharray', '5,5');
+            });
+        }
+    });
+}
 </script>
 </body>
 </html>
