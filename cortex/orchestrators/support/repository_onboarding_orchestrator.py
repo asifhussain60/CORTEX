@@ -146,16 +146,21 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 domain_updates = self._update_company_domains(lens_context, repo_path)
                 result.company_domain_updates = domain_updates
             
-            # Step 4: Generate dashboard
-            if include_dashboard:
-                logger.info("Step 4: Generating dashboard...")
-                dashboard_path = self._generate_dashboard(lens_context, repo_path)
-                result.dashboard_path = str(dashboard_path) if dashboard_path else None
-            
-            # Step 5: Generate recommendations
-            logger.info("Step 5: Generating recommendations...")
+            # Step 4: Generate recommendations BEFORE dashboard
+            logger.info("Step 4: Generating recommendations...")
             recommendations = self._prioritize_recommendations(security_model, lens_context)
             result.recommendations = recommendations
+            
+            # Step 5: Generate dashboard (with recommendations)
+            if include_dashboard:
+                logger.info("Step 5: Generating dashboard...")
+                dashboard_path = self._generate_dashboard(
+                    lens_context,
+                    repo_path,
+                    recommendations=recommendations,
+                    security_model=security_model
+                )
+                result.dashboard_path = str(dashboard_path) if dashboard_path else None
             
             logger.info("Repository onboarding complete: %s", repo_path)
             
@@ -347,28 +352,56 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         self,
         lens_context: Dict[str, Any],
         repo_path: Path,
+        recommendations: List[Dict[str, Any]] = None,
+        security_model: Dict[str, Any] = None,
     ) -> Optional[Path]:
         """
         Generate PHASE-14 multi-tab dashboard.
         
-        Uses LensDashboardOrchestrator to create static HTML dashboard.
+        Uses DomainDashboardGenerator for company domains with glassmorphism theme.
         """
         try:
-            # Lazy-load dashboard generator
-            if self.dashboard_generator is None:
-                from cortex.orchestrators.support.lens_dashboard_orchestrator import (
-                    LensDashboardOrchestrator
+            # Determine if this is a company domain
+            domain_name = repo_path.name.lower()
+            company_domain_path = Path("company/domains") / domain_name
+            
+            if company_domain_path.exists():
+                # Generate glassmorphism dashboard for company domain
+                from cortex.orchestrators.support.domain_dashboard_generator import (
+                    DomainDashboardGenerator
                 )
-                self.dashboard_generator = LensDashboardOrchestrator(repo_path=repo_path)
-            
-            # Generate dashboard data
-            dashboard_path = Path("cortex-lens") / "onboarding-dashboard.html"
-            
-            logger.info("Dashboard generated: %s", dashboard_path)
-            return dashboard_path
+                
+                generator = DomainDashboardGenerator(
+                    domain_name=domain_name,
+                    domain_path=company_domain_path
+                )
+                
+                # Prepare onboarding data
+                onboarding_data = {
+                    'repo_path': str(repo_path),
+                    'timestamp': datetime.now().isoformat(),
+                    'security_risks': security_model or {},
+                    'holistic_context': lens_context,
+                    'recommendations': recommendations or []
+                }
+                
+                dashboard_path = generator.generate_dashboard(onboarding_data)
+                logger.info("Generated glassmorphism dashboard: %s", dashboard_path)
+                return dashboard_path
+            else:
+                # Use standard LENS dashboard orchestrator
+                if self.dashboard_generator is None:
+                    from cortex.orchestrators.support.lens_dashboard_orchestrator import (
+                        LensDashboardOrchestrator
+                    )
+                    self.dashboard_generator = LensDashboardOrchestrator(repo_path=repo_path)
+                
+                dashboard_path = Path("cortex-lens") / "onboarding-dashboard.html"
+                logger.info("Dashboard generated: %s", dashboard_path)
+                return dashboard_path
             
         except Exception as e:
-            logger.error("Dashboard generation failed: %s", e)
+            logger.error("Dashboard generation failed: %s", e, exc_info=True)
             return None
     
     def _prioritize_recommendations(
