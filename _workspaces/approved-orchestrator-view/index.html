@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="CORTEX Orchestrators - 23 Production Orchestrators with MCP Integration, TDD Enforcement, and Autonomous Workflows" name="description"/>
+  <meta content="CORTEX, orchestrators, MCP, TDD, planning, refactoring, domain orchestrators, workflow automation" name="keywords"/>
+  <meta content="Asif Hussain" name="author"/>
+  <title>
+   Orchestrators | CORTEX
+  </title>
+  <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+  <link href="../assets/css/main.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    /* Orchestrator-specific accent colors */
+    :root {
+      --orch-core: #7b61ff;
+      --orch-domain: #00d4ff;
+      --orch-support: #10b981;
+      --orch-planning: #f59e0b;
+      --orch-tdd: #ef4444;
+    }
+    
+    /* ============================================
+       SVG DIAGRAM STYLING
+       ============================================ */
+    
+    .svg-diagram {
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    
+    .svg-diagram svg {
+      width: 100%;
+      height: auto;
+      min-height: 250px;
+    }
+    
+    .architecture-svg,
+    .wiring-svg {
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    .svg-diagram .layer-group {
+      transition: opacity 0.3s ease;
+    }
+    
+    .svg-diagram .node-group:hover rect {
+      filter: brightness(1.15);
+    }
+    
+    .svg-diagram .connections line,
+    .svg-diagram .connections path {
+      transition: stroke-width 0.2s ease;
+    }
+    
+    .svg-diagram:hover .connections line,
+    .svg-diagram:hover .connections path {
+      stroke-width: 2.5px;
+    }
+    
+    /* ============================================
+       SUBTLE GLASS ANIMATIONS
+       ============================================ */
+    
+    /* Shimmer effect keyframes */
+    @keyframes glassShimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+    
+    /* Subtle border glow pulse */
+    @keyframes borderGlow {
+      0%, 100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+      50% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+    }
+    
+    /* Floating effect */
+    @keyframes subtleFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+    
+    /* Glass card base animation styles */
+    .glass-card-clickable {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      animation: borderGlow 4s ease-in-out infinite;
+    }
+    
+    /* Shimmer overlay */
+    .glass-card-clickable::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: glassShimmer 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Hover enhancement */
+    .glass-card-clickable:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                  0 0 30px rgba(123, 97, 255, 0.15),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    }
+    
+    .glass-card-clickable:hover::before {
+      animation: glassShimmer 2s ease-in-out infinite;
+    }
+    
+    /* Category-specific hover glows */
+    .orch-category-core:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                  0 0 40px rgba(123, 97, 255, 0.25),
+                  inset 0 0 0 1px rgba(123, 97, 255, 0.3);
+    }
+    
+    .orch-category-domain:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                  0 0 40px rgba(0, 212, 255, 0.25),
+                  inset 0 0 0 1px rgba(0, 212, 255, 0.3);
+    }
+    
+    .orch-category-support:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                  0 0 40px rgba(16, 185, 129, 0.25),
+                  inset 0 0 0 1px rgba(16, 185, 129, 0.3);
+    }
+    
+    /* Icon pulse animation on hover */
+    .glass-card-clickable:hover .card-icon {
+      animation: subtleFloat 2s ease-in-out infinite;
+    }
+    
+    /* Section panel animations */
+    .glass-card-display {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .glass-card-display::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.02) 0%,
+        transparent 50%
+      );
+      animation: subtleFloat 6s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    /* MCP badge pulse */
+    .mcp-badge {
+      transition: all 0.3s ease;
+    }
+    
+    .glass-card-clickable:hover .mcp-badge {
+      background: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+    }
+    
+    /* Stat pill subtle animation */
+    .stat-pill {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+    }
+    
+    /* D3 Visualization Container */
+    .d3-visualization {
+      width: 100%;
+      min-height: 400px;
+      background: rgba(10, 14, 39, 0.6);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 1.5rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* D3 container subtle glow */
+    .d3-visualization::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(123, 97, 255, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 70% 80%,
+        rgba(0, 212, 255, 0.06) 0%,
+        transparent 50%
+      );
+      animation: subtleFloat 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    .d3-visualization svg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Orchestrator Category Cards */
+    .orch-category {
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    
+    .orch-category-core {
+      background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(123, 97, 255, 0.05));
+      border-left: 4px solid var(--orch-core);
+    }
+    
+    .orch-category-domain {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+      border-left: 4px solid var(--orch-domain);
+    }
+    
+    .orch-category-support {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+      border-left: 4px solid var(--orch-support);
+    }
+    
+    /* Orchestrator Count Badge */
+    .orch-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+    }
+    
+    .orch-count-core { background: var(--orch-core); }
+    .orch-count-domain { background: var(--orch-domain); color: #0a0e27; }
+    .orch-count-support { background: var(--orch-support); }
+    
+    /* MCP Tool Badge */
+    .mcp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      background: rgba(0, 212, 255, 0.2);
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #00d4ff;
+    }
+    
+    /* Orchestrator Grid */
+    .orchestrator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    /* D3 Node Styles */
+    .node circle {
+      stroke-width: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .node:hover circle {
+      stroke-width: 4px;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+    
+    .node text {
+      font-size: 11px;
+      fill: #e6e9f0;
+      pointer-events: none;
+    }
+    
+    .link {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1.5px;
+    }
+    
+    /* Interactive Legend */
+    .viz-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(26, 31, 58, 0.5);
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+    
+    .legend-item.dimmed {
+      opacity: 0.3;
+    }
+    
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+  </style>
+ </head>
+ <body>
+  <!-- Main Content -->
+  <main class="container level1-main-a5853dbc" id="main-content">
+   <!-- Hero Section with Robot Head -->
+   <div class="hero-section-wrapper">
+    <div class="hero-robot-container">
+     <a href="../index.html" title="Back to Home">
+      <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-200.png" style="width: 300px; height: 300px;"/>
+     </a>
+    </div>
+    <div class="hero-divider-line"></div>
+   </div>
+
+   <!-- Page Title Card -->
+   <section class="glass-card-display hero-introduction glass-panel-purple">
+    <div class="card-header-centered">
+     <i class="card-icon-primary fas fa-sitemap"></i>
+     <h2>CORTEX Orchestrators</h2>
+    </div>
+    <p class="hero-description">
+     23 production orchestrators providing intelligent workflow automation, TDD enforcement, and domain-specific operations.
+     All orchestrators are MCP-exposed for SaaS integration and governed by the 4-Tier Brain system.
+    </p>
+    <div class="hero-stats">
+     <span class="stat-pill">23 Orchestrators</span>
+     <span class="stat-pill">6 Core</span>
+     <span class="stat-pill">6 Domain</span>
+     <span class="stat-pill">11 Support</span>
+     <span class="stat-pill">MCP-First</span>
+    </div>
+   </section>
+
+   <!-- Executive Summary -->
+   <section class="glass-card-display animation-t1 glass-panel-purple">
+    <h2 class="section-title">
+     <i class="fas fa-clipboard-list"></i>
+     Executive Summary
+    </h2>
+    <p class="intro-text">
+     CORTEX orchestrators are the <strong>execution engine</strong> of the system. They coordinate complex multi-phase workflows, 
+     enforce governance rules, and provide intelligent automation through the MCP server interface.
+     Each orchestrator is <strong>wired via GitBackedRegistry</strong> for hot-reload configuration and audit trail.
+    </p>
+    <div class="highlight-box">
+     <div class="highlight-icon">
+      <i class="fas fa-key"></i>
+     </div>
+     <div class="highlight-content">
+      <h3>Key Orchestration Principles</h3>
+      <ul class="feature-list">
+       <li>
+        <i class="fas fa-check-circle"></i>
+        <strong>MCP-First Architecture:</strong> All orchestrators exposed via MCP tools for SaaS integration
+       </li>
+       <li>
+        <i class="fas fa-check-circle"></i>
+        <strong>TDD Enforcement:</strong> TDDOrchestrator gates all code with RED→GREEN→REFACTOR
+       </li>
+       <li>
+        <i class="fas fa-check-circle"></i>
+        <strong>Governance Integration:</strong> 4-Tier Brain validation on every operation
+       </li>
+       <li>
+        <i class="fas fa-check-circle"></i>
+        <strong>Audit Trail:</strong> Every orchestrator action logged with hash-chain integrity
+       </li>
+       <li>
+        <i class="fas fa-check-circle"></i>
+        <strong>Hot-Reload Wiring:</strong> GitBackedRegistry enables runtime configuration updates
+       </li>
+      </ul>
+     </div>
+    </div>
+   </section>
+
+   <!-- Orchestrator Ecosystem D3 Visualization -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-project-diagram"></i>
+     Orchestrator Ecosystem
+    </h2>
+    <p class="intro-text">
+     Interactive visualization of all 23 orchestrators organized by category. 
+     Click on nodes to explore relationships and dependencies.
+    </p>
+    <div class="d3-visualization" id="orchestrator-network"></div>
+    <div class="viz-legend">
+     <div class="legend-item" data-category="core">
+      <span class="legend-dot" style="background: #7b61ff;"></span>
+      <span>Core (6)</span>
+     </div>
+     <div class="legend-item" data-category="domain">
+      <span class="legend-dot" style="background: #00d4ff;"></span>
+      <span>Domain (6)</span>
+     </div>
+     <div class="legend-item" data-category="support">
+      <span class="legend-dot" style="background: #10b981;"></span>
+      <span>Support (11)</span>
+     </div>
+    </div>
+   </section>
+
+   <!-- Orchestrator Architecture SVG -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-stream"></i>
+     Request Flow Architecture
+    </h2>
+    <p class="intro-text">
+     Every request flows through the MasterOrchestrator, which routes to specialized orchestrators based on intent classification.
+    </p>
+    <div class="diagram-container svg-diagram">
+     <svg viewBox="0 0 1100 650" xmlns="http://www.w3.org/2000/svg" class="architecture-svg">
+      <defs>
+       <!-- Glassmorphism filters -->
+       <filter id="glow-amber" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <filter id="glow-emerald" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <!-- Arrow markers -->
+       <marker id="arrowhead-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#00d4ff"/>
+       </marker>
+       <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#7b61ff"/>
+       </marker>
+      </defs>
+      
+      <!-- MCP Layer Box -->
+      <g class="layer-group">
+       <rect x="30" y="20" width="200" height="90" rx="16" fill="rgba(26, 31, 58, 0.6)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+       <text x="130" y="45" text-anchor="middle" fill="#00d4ff" font-size="12" font-weight="600" letter-spacing="0.1em">MCP LAYER</text>
+       <!-- MCP Server Node -->
+       <rect x="55" y="55" width="150" height="45" rx="10" fill="rgba(245, 158, 11, 0.3)" stroke="#f59e0b" stroke-width="2" filter="url(#glow-amber)"/>
+       <text x="130" y="75" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">🌐 MCP Server</text>
+       <text x="130" y="92" text-anchor="middle" fill="#fbbf24" font-size="10">cortex_process_request</text>
+      </g>
+      
+      <!-- Core Orchestrators Box -->
+      <g class="layer-group">
+       <rect x="30" y="130" width="500" height="240" rx="16" fill="rgba(26, 31, 58, 0.5)" stroke="rgba(123, 97, 255, 0.3)" stroke-width="1"/>
+       <text x="280" y="155" text-anchor="middle" fill="#7b61ff" font-size="12" font-weight="600" letter-spacing="0.1em">CORE ORCHESTRATORS</text>
+       
+       <!-- MasterOrchestrator -->
+       <rect x="55" y="170" width="150" height="50" rx="10" fill="rgba(123, 97, 255, 0.35)" stroke="#7b61ff" stroke-width="2" filter="url(#glow-purple)"/>
+       <text x="130" y="192" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🎼 MasterOrchestrator</text>
+       <text x="130" y="208" text-anchor="middle" fill="#b8bfd0" font-size="9">Central Coordinator</text>
+       
+       <!-- IntentRouter -->
+       <rect x="55" y="240" width="150" height="50" rx="10" fill="rgba(123, 97, 255, 0.35)" stroke="#7b61ff" stroke-width="2" filter="url(#glow-purple)"/>
+       <text x="130" y="262" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🎯 IntentRouter</text>
+       <text x="130" y="278" text-anchor="middle" fill="#b8bfd0" font-size="9">LENS Classification</text>
+       
+       <!-- TDDOrchestrator -->
+       <rect x="240" y="170" width="140" height="45" rx="10" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="2"/>
+       <text x="310" y="190" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">✅ TDDOrchestrator</text>
+       <text x="310" y="205" text-anchor="middle" fill="#fca5a5" font-size="9">RED→GREEN→REFACTOR</text>
+       
+       <!-- WorkflowOrchestrator -->
+       <rect x="240" y="230" width="140" height="45" rx="10" fill="rgba(123, 97, 255, 0.35)" stroke="#7b61ff" stroke-width="2"/>
+       <text x="310" y="250" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">📋 WorkflowOrchestrator</text>
+       <text x="310" y="265" text-anchor="middle" fill="#b8bfd0" font-size="9">Phase Management</text>
+       
+       <!-- InteractionOrchestrator -->
+       <rect x="240" y="290" width="140" height="45" rx="10" fill="rgba(123, 97, 255, 0.35)" stroke="#7b61ff" stroke-width="2"/>
+       <text x="310" y="310" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">💬 InteractionOrchestrator</text>
+       <text x="310" y="325" text-anchor="middle" fill="#b8bfd0" font-size="9">User Dialogue</text>
+       
+       <!-- EnforcementOrchestrator -->
+       <rect x="400" y="200" width="120" height="50" rx="10" fill="rgba(239, 68, 68, 0.3)" stroke="#ef4444" stroke-width="2"/>
+       <text x="460" y="222" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">🛡️ Enforcement</text>
+       <text x="460" y="238" text-anchor="middle" fill="#fca5a5" font-size="9">Governance Gates</text>
+      </g>
+      
+      <!-- Domain Orchestrators Box -->
+      <g class="layer-group">
+       <rect x="550" y="130" width="260" height="240" rx="16" fill="rgba(26, 31, 58, 0.5)" stroke="rgba(0, 212, 255, 0.3)" stroke-width="1"/>
+       <text x="680" y="155" text-anchor="middle" fill="#00d4ff" font-size="12" font-weight="600" letter-spacing="0.1em">DOMAIN ORCHESTRATORS</text>
+       
+       <!-- RefactoringOrchestrator -->
+       <rect x="570" y="170" width="110" height="40" rx="8" fill="rgba(0, 212, 255, 0.25)" stroke="#00d4ff" stroke-width="1.5"/>
+       <text x="625" y="195" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">🔧 Refactoring</text>
+       
+       <!-- PlanningOrchestrator -->
+       <rect x="690" y="170" width="110" height="40" rx="8" fill="rgba(245, 158, 11, 0.25)" stroke="#f59e0b" stroke-width="1.5"/>
+       <text x="745" y="195" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">📊 Planning</text>
+       
+       <!-- DomainOrchestrator -->
+       <rect x="570" y="220" width="110" height="40" rx="8" fill="rgba(0, 212, 255, 0.25)" stroke="#00d4ff" stroke-width="1.5"/>
+       <text x="625" y="245" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">🏢 Domain</text>
+       
+       <!-- ConversationOrchestrator -->
+       <rect x="690" y="220" width="110" height="40" rx="8" fill="rgba(0, 212, 255, 0.25)" stroke="#00d4ff" stroke-width="1.5"/>
+       <text x="745" y="245" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">💭 Conversation</text>
+       
+       <!-- DocumentationOrchestrator -->
+       <rect x="570" y="270" width="110" height="40" rx="8" fill="rgba(0, 212, 255, 0.25)" stroke="#00d4ff" stroke-width="1.5"/>
+       <text x="625" y="295" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">📝 Documentation</text>
+       
+       <!-- ChallengeEngine -->
+       <rect x="690" y="270" width="110" height="40" rx="8" fill="rgba(239, 68, 68, 0.25)" stroke="#ef4444" stroke-width="1.5"/>
+       <text x="745" y="295" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">⚔️ Challenge</text>
+       
+       <!-- Route Labels -->
+       <rect x="570" y="320" width="230" height="40" rx="8" fill="rgba(26, 31, 58, 0.8)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+       <text x="685" y="338" text-anchor="middle" fill="#b8bfd0" font-size="9">Routes: IMPLEMENT | REFACTOR | PLAN</text>
+       <text x="685" y="352" text-anchor="middle" fill="#b8bfd0" font-size="9">ANALYZE | DOCUMENT | CHALLENGE</text>
+      </g>
+      
+      <!-- Support Orchestrators Box -->
+      <g class="layer-group">
+       <rect x="830" y="130" width="250" height="240" rx="16" fill="rgba(26, 31, 58, 0.5)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1"/>
+       <text x="955" y="155" text-anchor="middle" fill="#10b981" font-size="12" font-weight="600" letter-spacing="0.1em">SUPPORT ORCHESTRATORS</text>
+       
+       <!-- LENSOrchestrator -->
+       <rect x="850" y="170" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+       <text x="900" y="195" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">� LENS</text>
+       
+       <!-- GitHistoryAnalyzer -->
+       <rect x="960" y="170" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+       <text x="1010" y="195" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">📜 GitHistory</text>
+       
+       <!-- ASTAnalyzer -->
+       <rect x="850" y="220" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+       <text x="900" y="245" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">🌳 AST</text>
+       
+       <!-- OnboardingOrchestrator -->
+       <rect x="960" y="220" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+       <text x="1010" y="245" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">🚀 Onboarding</text>
+       
+       <!-- ToolDiscovery -->
+       <rect x="850" y="270" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+       <text x="900" y="295" text-anchor="middle" fill="#fff" font-size="10" font-weight="500">🔍 ToolDiscovery</text>
+       
+       <!-- +6 More -->
+       <rect x="960" y="270" width="100" height="40" rx="8" fill="rgba(16, 185, 129, 0.15)" stroke="rgba(16, 185, 129, 0.4)" stroke-width="1" stroke-dasharray="4,2"/>
+       <text x="1010" y="295" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="500">+6 more</text>
+      </g>
+      
+      <!-- Connection Lines -->
+      <g class="connections">
+       <!-- MCP to Master -->
+       <line x1="130" y1="100" x2="130" y2="170" stroke="#00d4ff" stroke-width="2" marker-end="url(#arrowhead-cyan)"/>
+       
+       <!-- Master to Intent -->
+       <line x1="130" y1="220" x2="130" y2="240" stroke="#7b61ff" stroke-width="2" marker-end="url(#arrowhead-purple)"/>
+       
+       <!-- Intent to TDD -->
+       <path d="M 205 265 L 225 265 L 225 192 L 240 192" stroke="#00d4ff" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-cyan)"/>
+       <text x="215" y="200" fill="#00d4ff" font-size="8" font-weight="500">IMPLEMENT</text>
+       
+       <!-- Intent to Domain -->
+       <path d="M 205 265 L 540 265 L 540 190 L 570 190" stroke="#00d4ff" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-cyan)"/>
+       <text x="440" y="255" fill="#00d4ff" font-size="8" font-weight="500">REFACTOR</text>
+       
+       <!-- Intent to LENS -->
+       <path d="M 205 265 L 540 265 L 540 340 L 820 340 L 820 190 L 850 190" stroke="#00d4ff" stroke-width="1.5" fill="none" marker-end="url(#arrowhead-cyan)"/>
+       <text x="720" y="350" fill="#00d4ff" font-size="8" font-weight="500">ANALYZE</text>
+       
+       <!-- Master to Enforcement -->
+       <line x1="205" y1="195" x2="400" y2="225" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrowhead-cyan)"/>
+       <text x="300" y="200" fill="#ef4444" font-size="8" font-weight="500">validates</text>
+       
+       <!-- TDD to Workflow -->
+       <line x1="310" y1="215" x2="310" y2="230" stroke="#7b61ff" stroke-width="1.5" marker-end="url(#arrowhead-purple)"/>
+      </g>
+      
+      <!-- Legend -->
+      <g class="legend" transform="translate(30, 390)">
+       <rect x="0" y="0" width="250" height="60" rx="10" fill="rgba(26, 31, 58, 0.7)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+       <text x="15" y="20" fill="#fff" font-size="10" font-weight="600">Legend:</text>
+       <circle cx="25" cy="35" r="6" fill="#7b61ff"/><text x="40" y="39" fill="#b8bfd0" font-size="9">Core</text>
+       <circle cx="85" cy="35" r="6" fill="#00d4ff"/><text x="100" y="39" fill="#b8bfd0" font-size="9">Domain</text>
+       <circle cx="155" cy="35" r="6" fill="#10b981"/><text x="170" y="39" fill="#b8bfd0" font-size="9">Support</text>
+       <circle cx="225" cy="35" r="6" fill="#ef4444"/><text x="15" y="53" fill="#b8bfd0" font-size="9">TDD/Governance</text>
+      </g>
+     </svg>
+    </div>
+   </section>
+
+   <!-- Core Orchestrators Section -->
+   <section class="glass-card-display animation-t1 glass-panel-purple">
+    <h2 class="section-title">
+     <i class="fas fa-crown"></i>
+     Core Orchestrators
+     <span class="orch-count orch-count-core">6</span>
+    </h2>
+    <p class="intro-text">
+     The foundational orchestrators that power CORTEX's central intelligence. These handle request routing,
+     TDD enforcement, governance validation, and workflow coordination.
+    </p>
+    
+    <div class="orchestrator-grid">
+     <!-- MasterOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-core);">
+       <i class="fas fa-brain"></i>
+      </div>
+      <h3 class="card-title">MasterOrchestrator</h3>
+      <p class="card-subtitle">Central Coordination Hub</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Route requests to specialized orchestrators</li>
+        <li>Maintain global state and context</li>
+        <li>Coordinate multi-orchestrator workflows</li>
+        <li>Aggregate results and format responses</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_process_request</span>
+      </div>
+     </div>
+     
+     <!-- IntentRouter -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-core);">
+       <i class="fas fa-route"></i>
+      </div>
+      <h3 class="card-title">IntentRouter</h3>
+      <p class="card-subtitle">LENS-Based Classification</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Parse user intent via LENS protocol</li>
+        <li>Classify: IMPLEMENT, REFACTOR, ANALYZE, etc.</li>
+        <li>Route to appropriate domain orchestrator</li>
+        <li>Handle ambiguous requests with clarification</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_lens_analyze</span>
+      </div>
+     </div>
+     
+     <!-- TDDOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-tdd);">
+       <i class="fas fa-vial"></i>
+      </div>
+      <h3 class="card-title">TDDOrchestrator</h3>
+      <p class="card-subtitle">Test-Driven Development Enforcer</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Enforce RED→GREEN→REFACTOR cycle</li>
+        <li>Block code without tests (CORE-008)</li>
+        <li>Generate test scaffolds from specifications</li>
+        <li>Validate test coverage thresholds</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_tdd_cycle</span>
+      </div>
+     </div>
+     
+     <!-- WorkflowOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-core);">
+       <i class="fas fa-tasks"></i>
+      </div>
+      <h3 class="card-title">WorkflowOrchestrator</h3>
+      <p class="card-subtitle">Phase Management Engine</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Manage multi-phase execution workflows</li>
+        <li>Handle phase transitions and gates</li>
+        <li>Persist progress for resumption</li>
+        <li>Coordinate parallel task execution</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_workflow</span>
+      </div>
+     </div>
+     
+     <!-- InteractionOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-core);">
+       <i class="fas fa-comments"></i>
+      </div>
+      <h3 class="card-title">InteractionOrchestrator</h3>
+      <p class="card-subtitle">User Dialogue Manager</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Manage multi-turn conversations</li>
+        <li>Handle confirmation dialogs</li>
+        <li>Process user feedback and corrections</li>
+        <li>Maintain conversation context</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_interact</span>
+      </div>
+     </div>
+     
+     <!-- EnforcementOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-core">
+      <div class="card-icon" style="color: var(--orch-tdd);">
+       <i class="fas fa-shield-alt"></i>
+      </div>
+      <h3 class="card-title">EnforcementOrchestrator</h3>
+      <p class="card-subtitle">4-Layer Governance Defense</p>
+      <div class="card-section">
+       <h4>Responsibilities</h4>
+       <ul class="feature-list-compact">
+        <li>Pre-execution validation gate</li>
+        <li>Runtime violation monitoring</li>
+        <li>Post-execution audit</li>
+        <li>Production deployment gate</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_validate</span>
+      </div>
+     </div>
+    </div>
+   </section>
+
+   <!-- Domain Orchestrators Section -->
+   <section class="glass-card-display animation-t1 glass-panel-cyan">
+    <h2 class="section-title">
+     <i class="fas fa-cubes"></i>
+     Domain Orchestrators
+     <span class="orch-count orch-count-domain">6</span>
+    </h2>
+    <p class="intro-text">
+     Specialized orchestrators for specific development domains. Each handles a distinct category of operations
+     with deep domain knowledge and optimized workflows.
+    </p>
+    
+    <div class="orchestrator-grid">
+     <!-- RefactoringOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-domain);">
+       <i class="fas fa-code-branch"></i>
+      </div>
+      <h3 class="card-title">RefactoringOrchestrator</h3>
+      <p class="card-subtitle">Code Improvement Engine</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>Extract method/class refactoring</li>
+        <li>SOLID principle enforcement</li>
+        <li>Dead code elimination</li>
+        <li>Dependency injection patterns</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_refactor</span>
+      </div>
+     </div>
+     
+     <!-- PlanningOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-planning);">
+       <i class="fas fa-project-diagram"></i>
+      </div>
+      <h3 class="card-title">PlanningOrchestrator</h3>
+      <p class="card-subtitle">10-Phase Autonomous Planning</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>Context gathering and analysis</li>
+        <li>Knowledge graph reasoning</li>
+        <li>Task decomposition</li>
+        <li>Dependency ordering</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_plan</span>
+      </div>
+     </div>
+     
+     <!-- DomainOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-domain);">
+       <i class="fas fa-building"></i>
+      </div>
+      <h3 class="card-title">DomainOrchestrator</h3>
+      <p class="card-subtitle">Business Logic Specialist</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>Domain model generation</li>
+        <li>Business rule validation</li>
+        <li>Entity relationship mapping</li>
+        <li>Domain event handling</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_domain</span>
+      </div>
+     </div>
+     
+     <!-- ConversationOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-domain);">
+       <i class="fas fa-comment-dots"></i>
+      </div>
+      <h3 class="card-title">ConversationOrchestrator</h3>
+      <p class="card-subtitle">Context-Aware Dialogue</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>Long-term context preservation</li>
+        <li>Session state management</li>
+        <li>Clarification requests</li>
+        <li>Multi-turn reasoning</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_converse</span>
+      </div>
+     </div>
+     
+     <!-- DocumentationOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-domain);">
+       <i class="fas fa-book"></i>
+      </div>
+      <h3 class="card-title">DocumentationOrchestrator</h3>
+      <p class="card-subtitle">Auto-Doc Generation</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>API documentation generation</li>
+        <li>README scaffolding</li>
+        <li>Docstring completion</li>
+        <li>Architecture diagrams</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_document</span>
+      </div>
+     </div>
+     
+     <!-- ChallengeEngine -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-domain">
+      <div class="card-icon" style="color: var(--orch-tdd);">
+       <i class="fas fa-gavel"></i>
+      </div>
+      <h3 class="card-title">ChallengeEngine</h3>
+      <p class="card-subtitle">ARCH-003 Counter-Proposals</p>
+      <div class="card-section">
+       <h4>Capabilities</h4>
+       <ul class="feature-list-compact">
+        <li>Generate alternative approaches</li>
+        <li>Evaluate trade-offs</li>
+        <li>Present counter-arguments</li>
+        <li>Force justification of decisions</li>
+       </ul>
+      </div>
+      <div class="card-section">
+       <span class="mcp-badge"><i class="fas fa-plug"></i> cortex_challenge</span>
+      </div>
+     </div>
+    </div>
+   </section>
+
+   <!-- Support Orchestrators Section -->
+   <section class="glass-card-display animation-t1 glass-panel-emerald">
+    <h2 class="section-title">
+     <i class="fas fa-tools"></i>
+     Support Orchestrators
+     <span class="orch-count orch-count-support">11</span>
+    </h2>
+    <p class="intro-text">
+     Utility orchestrators providing analysis, discovery, and operational support for the core and domain orchestrators.
+    </p>
+    
+    <div class="orchestrator-grid">
+     <!-- OnboardingOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-rocket"></i>
+      </div>
+      <h3 class="card-title">OnboardingOrchestrator</h3>
+      <p class="card-subtitle">New User Guide</p>
+      <ul class="feature-list-compact">
+       <li>Guided setup wizard</li>
+       <li>Feature discovery</li>
+       <li>Configuration assistance</li>
+      </ul>
+     </div>
+     
+     <!-- ToolDiscoveryOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-search"></i>
+      </div>
+      <h3 class="card-title">ToolDiscoveryOrchestrator</h3>
+      <p class="card-subtitle">MCP Tool Catalog</p>
+      <ul class="feature-list-compact">
+       <li>List available tools</li>
+       <li>Search by capability</li>
+       <li>Usage examples</li>
+      </ul>
+     </div>
+     
+     <!-- LENSOrchestrator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-microscope"></i>
+      </div>
+      <h3 class="card-title">LENSOrchestrator</h3>
+      <p class="card-subtitle">Unified Code Intelligence</p>
+      <ul class="feature-list-compact">
+       <li>Language analysis</li>
+       <li>Examination of structure</li>
+       <li>Navigation synthesis</li>
+      </ul>
+     </div>
+     
+     <!-- GitHistoryAnalyzer -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-history"></i>
+      </div>
+      <h3 class="card-title">GitHistoryAnalyzer</h3>
+      <p class="card-subtitle">24h Context (ARCH-001)</p>
+      <ul class="feature-list-compact">
+       <li>Recent commit analysis</li>
+       <li>Blame information</li>
+       <li>Branch comparison</li>
+      </ul>
+     </div>
+     
+     <!-- ASTAnalyzer -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-tree"></i>
+      </div>
+      <h3 class="card-title">ASTAnalyzer</h3>
+      <p class="card-subtitle">Structure Analysis</p>
+      <ul class="feature-list-compact">
+       <li>Parse code structure</li>
+       <li>Complexity metrics</li>
+       <li>Dead code detection</li>
+      </ul>
+     </div>
+     
+     <!-- CommentExtractor -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-sticky-note"></i>
+      </div>
+      <h3 class="card-title">CommentExtractor</h3>
+      <p class="card-subtitle">TODO/FIXME Hunter</p>
+      <ul class="feature-list-compact">
+       <li>Extract code comments</li>
+       <li>Prioritize TODOs</li>
+       <li>Docstring gaps</li>
+      </ul>
+     </div>
+     
+     <!-- DuplicateDetector -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-clone"></i>
+      </div>
+      <h3 class="card-title">DuplicateDetector</h3>
+      <p class="card-subtitle">CORE-035 Enforcement</p>
+      <ul class="feature-list-compact">
+       <li>Find duplicate code</li>
+       <li>Suggest consolidation</li>
+       <li>Track canonical sources</li>
+      </ul>
+     </div>
+     
+     <!-- TotalRecallAgent -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-brain"></i>
+      </div>
+      <h3 class="card-title">TotalRecallAgent</h3>
+      <p class="card-subtitle">Feature Discovery</p>
+      <ul class="feature-list-compact">
+       <li>Find entry points</li>
+       <li>Locate implementations</li>
+       <li>Map dependencies</li>
+      </ul>
+     </div>
+     
+     <!-- MCPToolsCatalog -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-list-alt"></i>
+      </div>
+      <h3 class="card-title">MCPToolsCatalog</h3>
+      <p class="card-subtitle">Tool Registry</p>
+      <ul class="feature-list-compact">
+       <li>Register MCP tools</li>
+       <li>Schema validation</li>
+       <li>Discovery endpoint</li>
+      </ul>
+     </div>
+     
+     <!-- BranchComparator -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fas fa-code-compare"></i>
+      </div>
+      <h3 class="card-title">BranchComparator</h3>
+      <p class="card-subtitle">Divergence Detection</p>
+      <ul class="feature-list-compact">
+       <li>Compare branches</li>
+       <li>Merge conflict preview</li>
+       <li>Change impact analysis</li>
+      </ul>
+     </div>
+     
+     <!-- RemoteGitAdapter -->
+     <div class="glass-card-clickable animation-t1 orch-category orch-category-support">
+      <div class="card-icon" style="color: var(--orch-support);">
+       <i class="fab fa-github"></i>
+      </div>
+      <h3 class="card-title">RemoteGitAdapter</h3>
+      <p class="card-subtitle">GitHub/GitLab Integration</p>
+      <ul class="feature-list-compact">
+       <li>PR analysis</li>
+       <li>Issue linking</li>
+       <li>CI/CD integration</li>
+      </ul>
+     </div>
+    </div>
+   </section>
+
+   <!-- Wiring & Registry -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-plug"></i>
+     Wiring & Registry
+    </h2>
+    <p class="intro-text">
+     All orchestrators are registered via <code>GitBackedRegistry</code> in <code>cortex/wiring/specifications/wiring.yaml</code>.
+     This enables hot-reload configuration and centralized audit.
+    </p>
+    <div class="diagram-container svg-diagram">
+     <svg viewBox="0 0 1100 280" xmlns="http://www.w3.org/2000/svg" class="wiring-svg">
+      <defs>
+       <filter id="glow-amber-w" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <filter id="glow-purple-w" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <filter id="glow-cyan-w" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+       </filter>
+       <marker id="arrow-cyan-w" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#00d4ff"/>
+       </marker>
+      </defs>
+      
+      <!-- Wiring Layer Box -->
+      <g class="layer-group">
+       <rect x="30" y="30" width="580" height="220" rx="20" fill="rgba(26, 31, 58, 0.6)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+       <text x="320" y="60" text-anchor="middle" fill="#00d4ff" font-size="14" font-weight="600" letter-spacing="0.1em">WIRING LAYER</text>
+       
+       <!-- wiring.yaml Node -->
+       <g class="node-group" transform="translate(60, 90)">
+        <rect x="0" y="0" width="150" height="70" rx="12" fill="rgba(245, 158, 11, 0.35)" stroke="#f59e0b" stroke-width="2" filter="url(#glow-amber-w)"/>
+        <text x="75" y="30" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">📄 wiring.yaml</text>
+        <text x="75" y="52" text-anchor="middle" fill="#fbbf24" font-size="11">Specification</text>
+       </g>
+       
+       <!-- GitBackedRegistry Node -->
+       <g class="node-group" transform="translate(240, 90)">
+        <rect x="0" y="0" width="160" height="70" rx="12" fill="rgba(123, 97, 255, 0.4)" stroke="#7b61ff" stroke-width="2" filter="url(#glow-purple-w)"/>
+        <text x="80" y="30" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">📚 GitBackedRegistry</text>
+        <text x="80" y="52" text-anchor="middle" fill="#b8bfd0" font-size="11">Runtime Registration</text>
+       </g>
+       
+       <!-- OrchestratorFactory Node -->
+       <g class="node-group" transform="translate(430, 90)">
+        <rect x="0" y="0" width="160" height="70" rx="12" fill="rgba(26, 31, 58, 0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text x="80" y="30" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">🏭 OrchestratorFactory</text>
+        <text x="80" y="52" text-anchor="middle" fill="#b8bfd0" font-size="11">Instance Creation</text>
+       </g>
+       
+       <!-- Connection arrows within Wiring Layer -->
+       <line x1="210" y1="125" x2="240" y2="125" stroke="#00d4ff" stroke-width="2.5" marker-end="url(#arrow-cyan-w)"/>
+       <line x1="400" y1="125" x2="430" y2="125" stroke="#00d4ff" stroke-width="2.5" marker-end="url(#arrow-cyan-w)"/>
+      </g>
+      
+      <!-- MCP Exposure Box -->
+      <g class="layer-group">
+       <rect x="650" y="30" width="420" height="220" rx="20" fill="rgba(26, 31, 58, 0.6)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+       <text x="860" y="60" text-anchor="middle" fill="#00d4ff" font-size="14" font-weight="600" letter-spacing="0.1em">MCP EXPOSURE</text>
+       
+       <!-- MCP Server Node -->
+       <g class="node-group" transform="translate(680, 90)">
+        <rect x="0" y="0" width="140" height="70" rx="12" fill="rgba(0, 212, 255, 0.35)" stroke="#00d4ff" stroke-width="2" filter="url(#glow-cyan-w)"/>
+        <text x="70" y="30" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">🌐 MCP Server</text>
+        <text x="70" y="52" text-anchor="middle" fill="#67e8f9" font-size="11">SaaS Endpoint</text>
+       </g>
+       
+       <!-- /tools Endpoint Node -->
+       <g class="node-group" transform="translate(870, 70)">
+        <rect x="0" y="0" width="140" height="50" rx="10" fill="rgba(26, 31, 58, 0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text x="70" y="22" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔧 /tools Endpoint</text>
+        <text x="70" y="40" text-anchor="middle" fill="#b8bfd0" font-size="10">Tool Discovery</text>
+       </g>
+       
+       <!-- JSON Schema Node -->
+       <g class="node-group" transform="translate(870, 140)">
+        <rect x="0" y="0" width="140" height="50" rx="10" fill="rgba(26, 31, 58, 0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <text x="70" y="22" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">📋 JSON Schema</text>
+        <text x="70" y="40" text-anchor="middle" fill="#b8bfd0" font-size="10">Input Validation</text>
+       </g>
+       
+       <!-- Connection arrows to MCP endpoints -->
+       <line x1="820" y1="115" x2="850" y2="95" stroke="#00d4ff" stroke-width="2" marker-end="url(#arrow-cyan-w)"/>
+       <line x1="820" y1="135" x2="850" y2="165" stroke="#00d4ff" stroke-width="2" marker-end="url(#arrow-cyan-w)"/>
+      </g>
+      
+      <!-- Main connection: Factory to MCP Server -->
+      <line x1="590" y1="125" x2="680" y2="125" stroke="#00d4ff" stroke-width="3" marker-end="url(#arrow-cyan-w)"/>
+     </svg>
+    </div>
+   </section>
+
+   <!-- Quick Reference -->
+   <section class="glass-card-display animation-t1">
+    <h2 class="section-title">
+     <i class="fas fa-bookmark"></i>
+     Quick Reference
+    </h2>
+    <div class="reference-grid">
+     <div class="reference-section">
+      <h3>Core Locations</h3>
+      <ul class="reference-list">
+       <li><code>cortex/orchestrators/core/</code> - Core orchestrators</li>
+       <li><code>cortex/orchestrators/domain/</code> - Domain orchestrators</li>
+       <li><code>cortex/orchestrators/support/</code> - Support orchestrators</li>
+       <li><code>cortex/wiring/specifications/wiring.yaml</code> - Registry</li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>Key Interfaces</h3>
+      <ul class="reference-list">
+       <li><code>IOrchestrator</code> - Base interface</li>
+       <li><code>execute()</code> - Main entry point</li>
+       <li><code>get_mcp_tools()</code> - MCP exposure</li>
+       <li><code>get_capabilities()</code> - Feature list</li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>MCP Tools</h3>
+      <ul class="reference-list">
+       <li><code>cortex_process_request</code> - Main entry</li>
+       <li><code>cortex_challenge</code> - Counter-proposals</li>
+       <li><code>cortex_total_recall</code> - Feature discovery</li>
+       <li><code>cortex_lens_analyze</code> - Code intelligence</li>
+      </ul>
+     </div>
+     <div class="reference-section">
+      <h3>Related Documentation</h3>
+      <ul class="reference-list">
+       <li><a href="../architecture/index.html">Architecture Overview</a></li>
+       <li><a href="../01-cortex-brain/">CORTEX Brain</a></li>
+       <li><a href="../11-mcp-tools/">MCP Tools</a></li>
+      </ul>
+     </div>
+    </div>
+   </section>
+  </main>
+
+  <!-- D3.js Orchestrator Network Visualization -->
+  <script>
+    // Orchestrator data
+    const orchestrators = {
+      nodes: [
+        // Core (6)
+        { id: "MasterOrchestrator", category: "core", radius: 25 },
+        { id: "IntentRouter", category: "core", radius: 20 },
+        { id: "TDDOrchestrator", category: "core", radius: 22 },
+        { id: "WorkflowOrchestrator", category: "core", radius: 18 },
+        { id: "InteractionOrchestrator", category: "core", radius: 16 },
+        { id: "EnforcementOrchestrator", category: "core", radius: 20 },
+        
+        // Domain (6)
+        { id: "RefactoringOrchestrator", category: "domain", radius: 18 },
+        { id: "PlanningOrchestrator", category: "domain", radius: 20 },
+        { id: "DomainOrchestrator", category: "domain", radius: 16 },
+        { id: "ConversationOrchestrator", category: "domain", radius: 16 },
+        { id: "DocumentationOrchestrator", category: "domain", radius: 16 },
+        { id: "ChallengeEngine", category: "domain", radius: 18 },
+        
+        // Support (11)
+        { id: "OnboardingOrchestrator", category: "support", radius: 14 },
+        { id: "ToolDiscoveryOrchestrator", category: "support", radius: 14 },
+        { id: "LENSOrchestrator", category: "support", radius: 16 },
+        { id: "GitHistoryAnalyzer", category: "support", radius: 14 },
+        { id: "ASTAnalyzer", category: "support", radius: 14 },
+        { id: "CommentExtractor", category: "support", radius: 12 },
+        { id: "DuplicateDetector", category: "support", radius: 14 },
+        { id: "TotalRecallAgent", category: "support", radius: 14 },
+        { id: "MCPToolsCatalog", category: "support", radius: 14 },
+        { id: "BranchComparator", category: "support", radius: 12 },
+        { id: "RemoteGitAdapter", category: "support", radius: 12 }
+      ],
+      links: [
+        // Master routes to all
+        { source: "MasterOrchestrator", target: "IntentRouter" },
+        { source: "MasterOrchestrator", target: "EnforcementOrchestrator" },
+        { source: "MasterOrchestrator", target: "WorkflowOrchestrator" },
+        
+        // Intent routes to domain
+        { source: "IntentRouter", target: "TDDOrchestrator" },
+        { source: "IntentRouter", target: "RefactoringOrchestrator" },
+        { source: "IntentRouter", target: "PlanningOrchestrator" },
+        { source: "IntentRouter", target: "DocumentationOrchestrator" },
+        { source: "IntentRouter", target: "LENSOrchestrator" },
+        
+        // TDD uses support
+        { source: "TDDOrchestrator", target: "ASTAnalyzer" },
+        { source: "TDDOrchestrator", target: "DuplicateDetector" },
+        
+        // Refactoring uses support
+        { source: "RefactoringOrchestrator", target: "ASTAnalyzer" },
+        { source: "RefactoringOrchestrator", target: "CommentExtractor" },
+        
+        // Planning uses support
+        { source: "PlanningOrchestrator", target: "GitHistoryAnalyzer" },
+        { source: "PlanningOrchestrator", target: "TotalRecallAgent" },
+        
+        // LENS uses analyzers
+        { source: "LENSOrchestrator", target: "ASTAnalyzer" },
+        { source: "LENSOrchestrator", target: "GitHistoryAnalyzer" },
+        { source: "LENSOrchestrator", target: "CommentExtractor" },
+        
+        // Challenge uses LENS
+        { source: "ChallengeEngine", target: "LENSOrchestrator" }
+      ]
+    };
+    
+    const colors = {
+      core: "#7b61ff",
+      domain: "#00d4ff", 
+      support: "#10b981"
+    };
+    
+    // Create visualization
+    const container = document.getElementById("orchestrator-network");
+    const width = container.clientWidth;
+    const height = 450;
+    
+    const svg = d3.select("#orchestrator-network")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [0, 0, width, height]);
+    
+    // Create force simulation
+    const simulation = d3.forceSimulation(orchestrators.nodes)
+      .force("link", d3.forceLink(orchestrators.links).id(d => d.id).distance(80))
+      .force("charge", d3.forceManyBody().strength(-200))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(d => d.radius + 10));
+    
+    // Add links
+    const link = svg.append("g")
+      .selectAll("line")
+      .data(orchestrators.links)
+      .join("line")
+      .attr("class", "link");
+    
+    // Add nodes
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(orchestrators.nodes)
+      .join("g")
+      .attr("class", "node")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+    
+    node.append("circle")
+      .attr("r", d => d.radius)
+      .attr("fill", d => colors[d.category])
+      .attr("stroke", d => colors[d.category])
+      .attr("stroke-opacity", 0.6);
+    
+    node.append("text")
+      .text(d => d.id.replace("Orchestrator", "").replace("Analyzer", ""))
+      .attr("dy", d => d.radius + 12)
+      .attr("text-anchor", "middle");
+    
+    // Tooltip
+    node.append("title")
+      .text(d => d.id);
+    
+    // Update positions - CONSTRAIN TO BOUNDS
+    const padding = 50; // Keep nodes away from edges
+    simulation.on("tick", () => {
+      // Constrain nodes within viewport
+      orchestrators.nodes.forEach(d => {
+        d.x = Math.max(padding + d.radius, Math.min(width - padding - d.radius, d.x));
+        d.y = Math.max(padding + d.radius, Math.min(height - padding - d.radius, d.y));
+      });
+      
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+      
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+    
+    // Drag functions
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+    
+    // Legend filtering
+    document.querySelectorAll('.legend-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const category = item.dataset.category;
+        const isDimmed = item.classList.toggle('dimmed');
+        
+        node.filter(d => d.category === category)
+          .transition()
+          .duration(300)
+          .style('opacity', isDimmed ? 0.1 : 1);
+        
+        link.filter(d => 
+          orchestrators.nodes.find(n => n.id === d.source.id)?.category === category ||
+          orchestrators.nodes.find(n => n.id === d.target.id)?.category === category
+        )
+          .transition()
+          .duration(300)
+          .style('opacity', isDimmed ? 0.1 : 1);
+      });
+    });
+  </script>
+ </body>
+</html>
