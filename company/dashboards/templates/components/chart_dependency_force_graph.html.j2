@@ -1,0 +1,117 @@
+{# 
+  D3.js Dependency Force Graph Component
+  CORTEX Phase 18 - Architecture Tab
+  Interactive force-directed graph for dependencies
+#}
+
+<div class="chart-container">
+  <div class="chart-header">
+    <h3>Dependency Graph</h3>
+    <p class="chart-description">Interactive force-directed dependency visualization</p>
+  </div>
+  <svg id="dependency-force-graph" 
+       class="visualization-canvas" 
+       role="img" 
+       aria-label="Dependency force-directed graph"
+       style="width: 100%; height: 600px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+  </svg>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  
+  function renderDependencyForceGraph(data) {
+    const container = document.getElementById('dependency-force-graph');
+    if (!container) return;
+    
+    const width = container.clientWidth || 800;
+    const height = 600;
+    
+    const svg = d3.select("#dependency-force-graph");
+    svg.selectAll("*").remove();
+    
+    const simulation = d3.forceSimulation(data.nodes)
+      .force("link", d3.forceLink(data.links).id(d => d.id).distance(100))
+      .force("charge", d3.forceManyBody().strength(-400))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(30));
+    
+    // Add links
+    const link = svg.append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(data.links)
+      .join("line")
+      .attr("stroke", "rgba(255,255,255,0.3)")
+      .attr("stroke-width", d => Math.sqrt(d.value || 1));
+    
+    // Add nodes
+    const node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("g")
+      .data(data.nodes)
+      .join("g")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+    
+    // Add circles to nodes
+    node.append("circle")
+      .attr("r", 12)
+      .attr("fill", d => d3.schemeCategory10[d.group % 10])
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 2);
+    
+    // Add labels
+    node.append("text")
+      .text(d => d.id.length > 15 ? d.id.substring(0, 12) + "..." : d.id)
+      .attr("x", 16)
+      .attr("y", 4)
+      .attr("font-size", "11px")
+      .attr("fill", "rgba(255,255,255,0.9)")
+      .style("pointer-events", "none");
+    
+    // Add tooltips
+    node.append("title")
+      .text(d => d.id);
+    
+    // Update positions on tick
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+      
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+    
+    // Drag functions
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+  }
+  
+  // Initialize
+  if (typeof window.dashboardData !== 'undefined' && window.dashboardData.dependencies) {
+    renderDependencyForceGraph(window.dashboardData.dependencies);
+  } else {
+    console.warn("Dependency data not available");
+  }
+})();
+</script>

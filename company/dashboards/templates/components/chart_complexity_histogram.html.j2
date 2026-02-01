@@ -1,0 +1,118 @@
+{# 
+  Chart.js Complexity Histogram Component
+  CORTEX Phase 18 - Quality Tab
+  Cyclomatic complexity distribution histogram
+#}
+
+<div class="chart-container">
+  <div class="chart-header">
+    <h3>Complexity Distribution</h3>
+    <p class="chart-description">Cyclomatic complexity across codebase</p>
+  </div>
+  <div class="chart-canvas-wrapper" style="position: relative; height: 400px; padding: 20px;">
+    <canvas id="complexity-histogram" 
+            role="img" 
+            aria-label="Cyclomatic complexity histogram showing distribution of code complexity"></canvas>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  
+  function renderComplexityHistogram(data) {
+    const ctx = document.getElementById('complexity-histogram');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'File Count',
+          data: data.values,
+          backgroundColor: [
+            'rgba(34, 197, 94, 0.6)',    // Green: 0-5 (good)
+            'rgba(77, 140, 255, 0.6)',   // Blue: 6-10 (acceptable)
+            'rgba(245, 158, 11, 0.6)',   // Orange: 11-15 (moderate)
+            'rgba(239, 68, 68, 0.6)',    // Red: 16-20 (high)
+            'rgba(220, 38, 38, 0.8)'     // Dark Red: 21+ (critical)
+          ],
+          borderColor: [
+            'rgb(34, 197, 94)',
+            'rgb(77, 140, 255)',
+            'rgb(245, 158, 11)',
+            'rgb(239, 68, 68)',
+            'rgb(220, 38, 38)'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {size: 12}
+            },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            title: {
+              display: true,
+              text: 'Number of Files',
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {size: 13}
+            }
+          },
+          x: {
+            ticks: {
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {size: 12}
+            },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            title: {
+              display: true,
+              text: 'Cyclomatic Complexity Range',
+              color: 'rgba(255, 255, 255, 0.8)',
+              font: {size: 13}
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Cyclomatic Complexity Distribution',
+            color: 'rgba(255, 255, 255, 0.9)',
+            font: {size: 16, weight: '600'}
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((context.parsed.y / total) * 100).toFixed(1);
+                return `${context.parsed.y} files (${percentage}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Initialize
+  if (typeof window.dashboardData !== 'undefined' && window.dashboardData.complexityData) {
+    renderComplexityHistogram(window.dashboardData.complexityData);
+  } else {
+    console.warn("Complexity data not available");
+  }
+})();
+</script>
