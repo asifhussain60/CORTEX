@@ -1,24 +1,173 @@
 """
 LENS v2.0 Usage Examples
 
-Demonstrates new LENS v2.0 capabilities:
-- Repository onboarding with holistic analysis
-- Configuration security analysis
-- Security-first orchestrator development
+Demonstrates all 9 analyzers, holistic repository analysis, security-first patterns,
+and company domain integration.
+
+Enhanced for LENS v2.0 with:
+- CompanyDomainLoader (compliance, architecture)
+- DependencyAnalyzer (CVE detection, outdated packages)
+- Security-first orchestration workflow
+- Holistic analysis integration
+
+AC-ID: AC-LENS-V2-EXAMPLES-001
+Authority: P2-3, CORE-012 (Comprehensive examples)
 """
 
 from pathlib import Path
+from cortex.brain.analysis import (
+    # Core analyzers
+    GitHistoryAnalyzer,
+    ASTAnalyzer,
+    CommentExtractor,
+    VisionAnalyzer,
+    get_config_analyzer,
+    get_database_analyzer,
+    get_api_analyzer,
+    get_company_domain_loader,
+    get_dependency_analyzer,
+)
+from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
 from cortex.mcp.tools import (
     cortex_onboard_repository,
     cortex_analyze_config,
     cortex_analyze_repository_configs,
 )
-from cortex.brain.analysis import get_config_analyzer
 from cortex.orchestrators.mixins import SecurityAdvisorMixin
+import logging
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# Example 1: Onboard Repository with Holistic LENS Analysis
+# Example 1: Git History Analysis
+# ============================================================================
+
+def example_1_git_history_analysis():
+    """
+    Example 1: Git History Analysis
+    
+    Analyze commit history, contributors, hotspots, and recent changes.
+    """
+    print("\n" + "="*80)
+    print("EXAMPLE 1: Git History Analysis")
+    print("="*80 + "\n")
+    
+    analyzer = GitHistoryAnalyzer()
+    repo_path = Path(".")
+    
+    # Get recent commits
+    print("📜 Recent Commits (last 10):")
+    result = analyzer.get_recent_commits(repo_path, days_back=7, limit=10)
+    
+    if result.success:
+        for commit in result.commits[:3]:
+            print(f"  {commit.hash[:8]} - {commit.author} - {commit.message[:60]}")
+        print(f"  ... and {len(result.commits) - 3} more commits\n")
+    
+    # Get hotspots
+    print("🔥 Code Hotspots (most changed files):")
+    hotspots = analyzer.get_code_hotspots(repo_path, days_back=30, limit=5)
+    
+    if hotspots.success:
+        for file_path, count in hotspots.hotspots[:5]:
+            print(f"  {file_path}: {count} changes")
+    
+    print("\n✅ Git analysis complete")
+
+
+# ============================================================================
+# Example 2: Company Domain Compliance
+# ============================================================================
+
+def example_2_company_domain_compliance():
+    """
+    Example 2: Company Domain Compliance
+    
+    Load company-specific compliance standards and domain knowledge.
+    """
+    print("\n" + "="*80)
+    print("EXAMPLE 2: Company Domain Compliance")
+    print("="*80 + "\n")
+    
+    loader = get_company_domain_loader()
+    
+    print("🏢 Loading company domain knowledge...")
+    result = loader.load_all_domains()
+    
+    if result.success:
+        print(f"\n📊 Summary:")
+        print(f"  Domains loaded: {len(result.domains_loaded)}")
+        print(f"  YAML files: {result.total_files}")
+        print(f"  Load time: {result.load_time_ms:.2f}ms")
+        
+        # Show domains by category
+        print(f"\n📂 Domains:")
+        for domain in result.domains_loaded[:5]:
+            print(f"  - {domain.domain_name} ({domain.data.get('category', 'N/A')})")
+            if domain.description:
+                print(f"    {domain.description}")
+        
+        # Search for specific compliance
+        print(f"\n🔍 Compliance Standards:")
+        compliance_domains = loader.get_domains_by_category("compliance")
+        for domain in compliance_domains[:3]:
+            print(f"  - {domain.domain_name}")
+            rules_count = len(domain.data.get("rules", []))
+            print(f"    Rules: {rules_count}")
+    
+    print("\n✅ Company domain analysis complete")
+
+
+# ============================================================================
+# Example 3: Dependency Vulnerability Analysis
+# ============================================================================
+
+def example_3_dependency_vulnerability_analysis():
+    """
+    Example 3: Dependency Vulnerability Analysis
+    
+    Scan package dependencies for CVEs, outdated versions, and license issues.
+    """
+    print("\n" + "="*80)
+    print("EXAMPLE 3: Dependency Vulnerability Analysis")
+    print("="*80 + "\n")
+    
+    analyzer = get_dependency_analyzer()
+    repo_path = Path(".")
+    
+    print("📦 Scanning dependencies...")
+    result = analyzer.analyze_project(repo_path)
+    
+    if result.success:
+        print(f"\n📊 Summary:")
+        print(f"  Total packages: {result.total_packages}")
+        print(f"  Outdated packages: {result.outdated_packages}")
+        print(f"  Vulnerable packages: {result.vulnerable_packages}")
+        print(f"  License issues: {result.license_issues}")
+        print(f"  Dependency files: {len(result.dependency_files)}")
+        
+        # Show vulnerable packages
+        vuln_findings = [f for f in result.findings if f.finding_type == "vulnerability"]
+        print(f"\n🚨 Vulnerable Packages ({len(vuln_findings)}):")
+        for finding in vuln_findings[:5]:
+            print(f"  - {finding.package.name} {finding.package.current_version}")
+            print(f"    Severity: {finding.severity.value}")
+            print(f"    Vulnerabilities: {len(finding.vulnerabilities)}")
+            for vuln in finding.vulnerabilities[:2]:
+                print(f"      • {vuln.cve_id}: {vuln.description}")
+            print()
+    
+    print("✅ Dependency analysis complete")
+
+# ============================================================================
+# Example 4: Onboard Repository with Holistic LENS Analysis
 # ============================================================================
 
 def example_onboard_repository():
@@ -77,7 +226,7 @@ def example_onboard_repository():
 
 
 # ============================================================================
-# Example 2: Analyze Configuration File
+# Example 5: Analyze Configuration File
 # ============================================================================
 
 def example_analyze_config_file():
@@ -120,7 +269,7 @@ def example_analyze_config_file():
 
 
 # ============================================================================
-# Example 3: Analyze All Repository Configs
+# Example 6: Analyze All Repository Configs
 # ============================================================================
 
 def example_analyze_repository_configs():
@@ -164,7 +313,7 @@ def example_analyze_repository_configs():
 
 
 # ============================================================================
-# Example 4: Use SecurityAdvisorMixin in Custom Orchestrator
+# Example 7: Use SecurityAdvisorMixin in Custom Orchestrator
 # ============================================================================
 
 from cortex.orchestrators.core.interfaces import IOrchestrator
@@ -253,34 +402,42 @@ def example_custom_orchestrator():
 # Run Examples
 # ============================================================================
 
-if __name__ == "__main__":
-    print("\n")
-    print("██╗     ███████╗███╗   ██╗███████╗    ██╗   ██╗██████╗     ██████╗ ")
-    print("██║     ██╔════╝████╗  ██║██╔════╝    ██║   ██║╚════██╗   ██╔═████╗")
-    print("██║     █████╗  ██╔██╗ ██║███████╗    ██║   ██║ █████╔╝   ██║██╔██║")
-    print("██║     ██╔══╝  ██║╚██╗██║╚════██║    ╚██╗ ██╔╝██╔═══╝    ████╔╝██║")
-    print("███████╗███████╗██║ ╚████║███████║     ╚████╔╝ ███████╗██╗╚██████╔╝")
-    print("╚══════╝╚══════╝╚═╝  ╚═══╝╚══════╝      ╚═══╝  ╚══════╝╚═╝ ╚═════╝ ")
-    print("\nHolistic Intelligence System - Security-First Repository Analysis\n")
+def main():
+    """Run all LENS v2.0 examples."""
+    print("\n" + "🧠" * 40)
+    print("CORTEX LENS v2.0 - Comprehensive Usage Examples")
+    print("🧠" * 40)
     
     try:
-        # Example 1: Repository onboarding
-        # example_onboard_repository()
+        # New LENS v2.0 examples
+        example_1_git_history_analysis()
+        example_2_company_domain_compliance()
+        example_3_dependency_vulnerability_analysis()
         
-        # Example 2: Single config file analysis
+        # Original examples (updated)
+        example_onboard_repository()
         example_analyze_config_file()
-        
-        # Example 3: Repository-wide config scan
         example_analyze_repository_configs()
-        
-        # Example 4: Custom orchestrator with security mixin
         example_custom_orchestrator()
         
-        print("\n" + "=" * 80)
-        print("✅ All examples completed successfully!")
-        print("=" * 80)
+        print("\n" + "="*80)
+        print("🎉 All LENS v2.0 examples completed successfully!")
+        print("="*80 + "\n")
+        
+        print("📚 Summary:")
+        print("  7 examples demonstrating 9 analyzers")
+        print("  Security-first approach validated")
+        print("  Holistic orchestration demonstrated")
+        print("\nFor more information, see:")
+        print("  - docs/05-lens-protocol/")
+        print("  - cortex/brain/analysis/")
+        print("  - cortex/orchestrators/support/lens_orchestrator.py")
+        print("  - cortex-lens/security-dashboard.html")
         
     except Exception as e:
-        print(f"\n❌ Error running examples: {e}")
-        import traceback
-        traceback.print_exc()
+        logger.error(f"Example execution failed: {e}", exc_info=True)
+        print(f"\n❌ Error: {e}")
+
+
+if __name__ == "__main__":
+    main()
