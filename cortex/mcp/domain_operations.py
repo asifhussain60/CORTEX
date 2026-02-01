@@ -11,7 +11,7 @@ Author: Asif Hussain
 import logging
 from typing import Dict, Any, Optional, List
 
-from cortex.mcp.decorator import mcp_tool
+from cortex.mcp.decorators import mcp_tool
 
 logger = logging.getLogger(__name__)
 

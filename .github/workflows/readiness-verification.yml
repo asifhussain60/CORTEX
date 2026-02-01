@@ -40,10 +40,9 @@ jobs:
 
       - name: Run CORE-035 Enforcement Check
         id: core035
-        continue-on-error: true
         run: |
           echo "::group::CORE-035: Single Canonical Implementation"
-          python cortex/ci_cd/enforce_core_035.py --verbose || echo "CORE-035 violations detected (Phase 8 cleanup)"
+          python cortex/ci_cd/enforce_core_035.py --verbose
           echo "::endgroup::"
 
       - name: Run Production Readiness Verification

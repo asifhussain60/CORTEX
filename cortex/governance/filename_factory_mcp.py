@@ -10,7 +10,7 @@ CORE Rules Applied:
 """
 
 from typing import Optional, Dict, Any, List
-from cortex.mcp.decorator import mcp_tool
+from cortex.mcp.decorators import mcp_tool
 from cortex.governance.filename_factory import (
     FilenameFactory,
     FilenameValidator,

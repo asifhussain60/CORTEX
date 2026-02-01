@@ -1,11 +1,26 @@
 """MCP Decorator
 
+DEPRECATED: Use cortex.mcp.decorators (plural) instead.
+This module will be removed in Phase 9 cleanup.
+
+Migration: Replace `from cortex.mcp.decorator import mcp_tool`
+           with `from cortex.mcp.decorators import mcp_tool`
+
 Author: CORTEX Framework
+Status: DEPRECATED (2026-02-01)
 """
 
+import warnings
 import inspect
 from dataclasses import dataclass, field
 from typing import Dict, Any, Callable, Optional, List, get_type_hints
+
+# Deprecation warning
+warnings.warn(
+    "cortex.mcp.decorator is deprecated. Use cortex.mcp.decorators instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 # Global registry for tools
 _tool_registry: Dict[str, 'MCPToolRegistration'] = {}

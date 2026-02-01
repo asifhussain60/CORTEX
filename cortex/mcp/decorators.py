@@ -11,7 +11,8 @@ MCP_TOOLS_REGISTRY: Dict[str, Dict[str, Any]] = {}
 def mcp_tool(
     name: str,
     description: str,
-    parameters: Optional[Dict[str, str]] = None
+    parameters: Optional[Dict[str, str]] = None,
+    category: Optional[str] = None
 ) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """
     Decorator to register a function as an MCP-callable tool.
@@ -20,6 +21,7 @@ def mcp_tool(
         name: Unique name for the MCP tool.
         description: Human-readable description of the tool's purpose.
         parameters: Optional dict mapping parameter names to their types.
+        category: Optional category for tool organization.
     
     Returns:
         Decorator function that registers and returns the original function.
@@ -31,7 +33,8 @@ def mcp_tool(
         @mcp_tool(
             name="analyze_code",
             description="Analyze code structure",
-            parameters={"code": "string", "depth": "int"}
+            parameters={"code": "string", "depth": "int"},
+            category="analysis"
         )
         def analyze_code(code: str, depth: int = 1) -> dict:
             \"\"\"Analyze code structure.\"\"\"
@@ -51,6 +54,7 @@ def mcp_tool(
             "description": description,
             "func": func,
             "parameters": parameters or {},
+            "category": category,
         }
         MCP_TOOLS_REGISTRY[name] = metadata
         

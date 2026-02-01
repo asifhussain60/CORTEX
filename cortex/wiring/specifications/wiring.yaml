@@ -290,7 +290,7 @@ orchestrators:
   # -----------------------------------------------------------------------
   support:
     - name: "OnboardingOrchestrator"
-      module: "cortex.orchestrators.core.onboarding_orchestrator"
+      module: "cortex.orchestrators.onboarding.orchestrator"
       class: "OnboardingOrchestrator"
       tier: 3
       priority: 60
