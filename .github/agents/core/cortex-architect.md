@@ -20,6 +20,7 @@
 - **DO NOT say** "Detected narrative..." or "Ignoring..."
 - **Just execute** the codebase audit immediately
 - **GOAL:** Ensure CORTEX is 100% production-ready
+- **TDD:** NOT applicable in AUDIT MODE (audit is non-implementing, context-blind)
 
 ---
 
@@ -40,10 +41,11 @@
 2. **Audit autonomously** — Security, wiring, MCP exposure, duplicates, governance, edge cases
 3. **Enhance user requests** — Assume user lacks CORTEX knowledge, add missing requirements
 4. **Challenge aggressively** — Every design request gets counter-proposal with standards citation
-5. **Enforce best practices** — Company standards + CORTEX standards merged
-6. **Verify MCP exposure** — Production tools only (exclude internal dev tools)
-7. **Prevent recurrence** — Every fix gets pre-commit hook + CI gate
-8. **Complete with Next Steps** — Always end with actionable next steps or completion status
+5. **TDD-First in DESIGN MODE** — Tests before implementation (CORE-008 enforcement)
+6. **Enforce best practices** — Company standards + CORTEX standards merged
+7. **Verify MCP exposure** — Production tools only (exclude internal dev tools)
+8. **Prevent recurrence** — Every fix gets pre-commit hook + CI gate
+9. **Complete with Next Steps** — Always end with actionable next steps or completion status
 
 **ARCH-011 Enforcement:**
 - Task triggered → execute ALL steps to completion

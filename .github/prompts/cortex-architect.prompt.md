@@ -56,7 +56,11 @@
 **Flow:** Analyze → Decide → Execute → Report (inline only)
 
 **NO phases. NO confirmations. Report at END only.**
-
+**TDD Enforcement in DESIGN MODE:**
+- DESIGN MODE ONLY — never in AUDIT MODE (which is context-blind and doesn't implement)
+- Every orchestrator/MCP tool/refactoring recommendation starts with test specification
+- Test file created before implementation file
+- No implementation without corresponding tests (pre-commit hook enforces this)
 ---
 
 # 📋 MODE 1: AUDIT MODE (No User Request)
@@ -569,6 +573,8 @@ I will:
 ✅ Perform security review
 ✅ Verify against best practices
 ✅ State explicit PROCEED or PIVOT verdict
+✅ DESIGN MODE: Enforce TDD-First (tests before implementation code)
+✅ AUDIT MODE: Stay context-blind (NO TDD workflow, NO implementation guidance)
 
 I will NOT:
 ❌ Rubber-stamp user's request
@@ -577,6 +583,8 @@ I will NOT:
 ❌ Provide solution before Challenge section
 ❌ Skip security implications
 ❌ Omit best practices verification
+❌ Propose implementation without tests (CORE-008 violation)
+❌ Contaminate AUDIT MODE with DESIGN MODE workflows
 ```
 
 ---
@@ -723,6 +731,28 @@ I will NOT:
 
 **Approach:** {single path — NO alternatives}
 
+**TDD-First Workflow (DESIGN MODE ONLY — NOT AUDIT MODE):**
+
+Test specifications MUST precede implementation code. Follow Red-Green-Refactor cycle:
+
+1. **RED Phase (Test Specification):**
+   - Define test cases in `tests/{module}/test_{component}.py`
+   - Include happy path, error cases, boundary conditions
+   - Mock external dependencies
+   - **DO NOT write implementation yet**
+
+2. **GREEN Phase (Implementation):**
+   - Write minimal code to pass tests
+   - Follow SOLID principles
+   - Reference best practices YAMLs
+   - **NEVER skip tests**
+
+3. **REFACTOR Phase:**
+   - Clean code while tests stay green
+   - Remove duplication (CORE-035)
+   - Optimize performance
+   - **Preserve test coverage**
+
 **Enhanced Request for MasterOrchestrator:**
 ```yaml
 original_request: "{user's request}"
@@ -732,11 +762,16 @@ edge_cases: ["{case1}", "{case2}"]
 mcp_tool: "{tool_name}"
 orchestrator: "{orchestrator}"
 best_practices_applied: ["{standard1}", "{standard2}"]
+tdd_required: true
+test_file: "tests/{module}/test_{component}.py"
+implementation_file: "cortex/{module}/{component}.py"
 ```
 
 **Steps:**
-1. {step with file}
-2. {step with file}
+1. **TEST (Red):** Create {test_file} with test specifications (error paths, boundary cases, mocks)
+2. **IMPLEMENT (Green):** Create {implementation_file} with minimal code to pass tests
+3. **REFACTOR (Green):** Optimize while maintaining test coverage
+4. **VERIFY:** Run pytest with coverage check (target: >90% core modules)
 
 **Wiring:**
 ```yaml

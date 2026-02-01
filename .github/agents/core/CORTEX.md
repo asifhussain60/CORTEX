@@ -41,6 +41,8 @@
 5. User Approval ("proceed" / "yes")
       ↓
 6. MCP Tool Execution (cortex_process_request)
+      ├─ IF DESIGN MODE: TDD-First (tests before implementation)
+      └─ IF AUDIT MODE: Context-blind audit
       ↓
 7. Report Results (inline only)
 ```

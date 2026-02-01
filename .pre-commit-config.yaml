@@ -48,6 +48,14 @@ repos:
       - id: cortex-docs-link-check
         name: DOC-013 - Documentation Link Integrity
         entry: python3 scripts/check_docs_links.py
+
+      - id: cortex-tdd-gate
+        name: CORE-008 - TDD Gate (Tests Before Implementation)
+        entry: python3 .cortex-tdd-gate
+        language: system
+        pass_filenames: false
+        stages: [commit]
+        files: ^cortex/.*\.py$
         language: system
         pass_filenames: false
         always_run: false
