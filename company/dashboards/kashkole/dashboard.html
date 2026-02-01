@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KASHKOLE - Modern Dashboard | CORTEX v8.0</title>
+    
+    <!-- Professional Typography: Inter Font Family with Performance Optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
 /* ============================================
    CORTEX Glassmorphism - Universal Dashboard Theme
@@ -16,6 +21,47 @@
 
 /* Color Palette - Dark Blue Glassmorphism */
 :root {
+    /* Typography Scale - Professional Inter Font System */
+    --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Font Sizes - Fluid Typography (WCAG Compliant) */
+    --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);      /* 12-14px */
+    --font-size-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);       /* 14-16px */
+    --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);      /* 16-18px */
+    --font-size-md: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);    /* 18-20px */
+    --font-size-lg: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);        /* 20-24px */
+    --font-size-xl: clamp(1.5rem, 1.35rem + 0.75vw, 2rem);          /* 24-32px */
+    --font-size-2xl: clamp(2rem, 1.75rem + 1.25vw, 3rem);           /* 32-48px */
+    
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights - Optimal Readability */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* Letter Spacing */
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+    
+    /* Content Width Constraints - Optimal Readability */
+    --content-width-narrow: 45ch;   /* Short-form content */
+    --content-width-optimal: 65ch;  /* Body text (45-75ch optimal) */
+    --content-width-wide: 80ch;     /* WCAG max line length */
+    --content-width-full: 100%;     /* Full width sections */
+    --container-max-width: 1400px;  /* Overall page constraint */
+    
+    /* Responsive Margin System - Device-Aware */
+    --margin-mobile: 1rem;          /* 16px - thumb-friendly */
+    --margin-tablet: 1.5rem;        /* 24px - moderate spacing */
+    --margin-desktop: clamp(1rem, 1.5vw, 1.5rem); /* 16-24px - adaptive */
+    
     /* Primary Background Colors */
     --color-dark-bg: #0a1428;
     --bg-primary: #0a1428;
@@ -68,12 +114,35 @@
 
 /* Body - Dark Gradient Background */
 body {
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     background: linear-gradient(135deg, #0a1428 0%, #1a2a4a 100%);
     background-attachment: fixed;
     color: var(--text-primary);
-    line-height: 1.6;
     min-height: 100vh;
+    /* Font rendering optimization */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Main Container - Responsive with Optimized Margins */
+.container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--margin-desktop);
+}
+
+/* Dashboard Container - Reduced Horizontal Spacing */
+.dashboard-container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 2rem var(--margin-desktop);
 }
 
 /* ============================================
@@ -263,18 +332,23 @@ h1::before {
 }
 
 .dashboard-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3rem;
-    font-weight: 700;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
     background: linear-gradient(135deg, #4d8cff 0%, #7fb3ff 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
-    letter-spacing: 2px;
+    letter-spacing: var(--letter-spacing-tight);
 }
 
 .dashboard-subtitle {
-    font-size: 1.1rem;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
     color: var(--text-secondary);
     margin-bottom: 1rem;
 }
@@ -348,9 +422,11 @@ h1::before {
     backdrop-filter: blur(15px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    padding: 2rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
     margin-bottom: 1.5rem;
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 100%;
 }
 
 .section-panel:hover {
@@ -359,14 +435,62 @@ h1::before {
 }
 
 .section-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
     color: var(--accent-primary);
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+}
+
+/* Professional Typography for Content Sections */
+.section-panel p {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--text-primary);
+    max-width: 100%;
+    margin: 0 0 1.25rem;
+}
+
+/* Project Description - Enhanced Typography with Wider Layout */
+.project-description {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--text-primary);
+    max-width: 100%;
+    margin: 0;
+    white-space: pre-line;
+    columns: auto 2;
+    column-gap: 3rem;
+    column-rule: 1px solid rgba(77, 140, 255, 0.2);
+}
+
+/* Prevent column break on first letter */
+.project-description::first-letter {
+    font-size: 1.8em;
+    font-weight: var(--font-weight-semibold);
+    color: var(--accent-primary);
+    float: left;
+    line-height: 1;
+    margin-right: 0.1em;
+}
+
+/* Single column on smaller screens */
+@media (max-width: 1024px) {
+    .project-description {
+        columns: 1;
+        column-rule: none;
+    }
 }
 
 /* Metrics Grid */
@@ -475,16 +599,20 @@ h1::before {
 }
 
 .use-case-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
     color: var(--accent-primary);
     margin-bottom: 0.5rem;
 }
 
 .use-case-description {
-    font-size: 0.95rem;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
     color: var(--text-secondary);
-    line-height: 1.6;
 }
 
 /* Impact Cards - Styled beautifully */
@@ -698,15 +826,115 @@ h1::before {
     color: var(--text-tertiary);
 }
 
-/* Responsive */
+/* Responsive Typography & Layout */
 @media (max-width: 768px) {
-    .dashboard-container { padding: 1rem; }
-    .dashboard-header { flex-direction: column; text-align: center; }
-    .cortex-logo { width: 150px; height: 150px; }
-    .dashboard-title { font-size: 2rem; }
-    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    :root {
+        --margin-desktop: var(--margin-mobile);
+    }
+    
+    .dashboard-container { 
+        padding: 1rem var(--margin-mobile);
+    }
+    
+    .container {
+        padding: 0 var(--margin-mobile);
+    }
+    
+    .dashboard-header { 
+        flex-direction: column; 
+        text-align: center; 
+    }
+    
+    .cortex-logo { 
+        width: 150px; 
+        height: 150px; 
+    }
+    
+    .dashboard-title { 
+        font-size: var(--font-size-xl); 
+    }
+    
+    .metrics-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+    
+    /* Adjust content width for mobile */
+    .section-panel p,
+    .project-description {
+        max-width: 100%;
+        font-size: var(--font-size-base);
+        padding: 0;
+    }
+}
+
+/* Tablet Optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root {
+        --margin-desktop: var(--margin-tablet);
+    }
+    
+    .dashboard-container {
+        padding: 2rem var(--margin-tablet);
+    }
+    
+    .container {
+        padding: 0 var(--margin-tablet);
+    }
+    
+    .section-panel p,
+    .project-description {
+        max-width: var(--content-width-wide);
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+        font-family: 'Inter', Georgia, serif;
+    }
+    
+    .glass-card,
+    .section-panel {
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+    
+    .project-description {
+        max-width: 100%;
+        font-size: 12pt;
+        line-height: 1.6;
+    }
+}
+
+/* High Contrast Mode Support (Accessibility) */
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #ffffff;
+        --text-secondary: #e0e0e0;
+        --glass-border: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Reduced Motion (Accessibility) */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
     </style>
+
+    <!-- Chart.js v4.x (for bar charts, pie charts, radar charts) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" 
+            integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"
+            crossorigin="anonymous"></script>
+
 </head>
 <body>
 <div class="dashboard-container">
@@ -724,12 +952,14 @@ h1::before {
     <nav class="tabs-container">
         <button class="tab-button active" onclick="switchTab('overview')">📊 Overview</button>
         <button class="tab-button" onclick="switchTab('dependencies')">🔗 Dependencies</button>
-        <button class="tab-button" onclick="switchTab('classes')">📦 Classes</button>
         <button class="tab-button" onclick="switchTab('timeline')">⏱️ Timeline</button>
         <button class="tab-button" onclick="switchTab('impact')">💥 Impact</button>
         <button class="tab-button" onclick="switchTab('security')">🔒 Security</button>
         <button class="tab-button" onclick="switchTab('techstack')">⚙️ Tech Stack</button>
         <button class="tab-button" onclick="switchTab('architecture')">🏗️ Architecture</button>
+        <button class="tab-button" onclick="switchTab('quality')">✨ Quality</button>
+        <button class="tab-button" onclick="switchTab('vulnerabilities')">⚠️ Vulnerabilities</button>
+        <button class="tab-button" onclick="switchTab('testing')">🧪 Testing</button>
     </nav>
 
     <!-- ============================================
@@ -770,7 +1000,7 @@ h1::before {
         <!-- Project Description -->
         <section class="section-panel">
             <h2 class="section-title">📋 Project Description</h2>
-            <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-primary); white-space: pre-line;">Islamic knowledge management and educational platform that helps educational institutions 
+            <p class="project-description">Islamic knowledge management and educational platform that helps educational institutions 
 and Islamic centers deliver Quranic studies, manage religious content, and coordinate community activities. 
 Built with ASP.NET, VB.NET, C#, and JavaScript, this platform provides a complete solution for organizations 
 seeking to modernize their Islamic educational operations.
@@ -836,7 +1066,47 @@ to meet specific institutional requirements.</p>
         <section class="section-panel">
             <h2 class="section-title">📊 Language Distribution</h2>
             <div class="viz-container" id="language-chart"></div>
+        
+        
+        <!-- Directory Structure Treemap (Phase 18) -->
+        <section class="section-panel">
+            <h2 class="section-title">📁 Directory Structure</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Hierarchical visualization of repository files</p>
+            <div id="directory-treemap" 
+                 role="img" 
+                 aria-label="Directory structure treemap visualization"
+                 style="min-height: 500px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+            </div>
         </section>
+
+        <!-- Two-Column Layout for Dependency Graph and Architecture Layers -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <!-- Dependency Force Graph (Phase 18) - Left Column -->
+            <section class="section-panel">
+                <h2 class="section-title">🔗 Dependency Graph</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Interactive force-directed dependency visualization</p>
+                <svg id="dependency-force-graph" 
+                     role="img" 
+                     aria-label="Dependency force-directed graph"
+                     style="width: 100%; height: 600px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                </svg>
+            </section>
+
+            <!-- Layer Diagram (Phase 18) - Right Column -->
+            <section class="section-panel">
+                <h2 class="section-title">📐 Architecture Layers</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Layer flow: Presentation → Domain → Infrastructure</p>
+                <div id="layer-diagram" 
+                     role="img" 
+                     aria-label="Architecture layer diagram"
+                     style="min-height: 600px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 20px;">
+                </div>
+            </section>
+
+        </div>
+
+    </section>
     </div>
 
     <!-- ============================================
@@ -866,12 +1136,27 @@ to meet specific institutional requirements.</p>
             </div>
         </section>
 
-        <!-- Dependency Graph -->
-        <section class="section-panel">
-            <h2 class="section-title">🔗 Dependency Graph</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Interactive visualization of module dependencies. Drag nodes to explore relationships.</p>
-            <div class="viz-container" id="dependency-graph" style="min-height: 600px;"></div>
-        </section>
+        <!-- Two-Column Layout for Dependency Visualizations -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <!-- Dependency Graph (Left Column) -->
+            <section class="section-panel">
+                <h2 class="section-title">🔗 Dependency Graph</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Interactive visualization of module dependencies. Drag nodes to explore relationships.</p>
+                <div class="viz-container" id="dependency-graph" style="min-height: 900px;"></div>
+            </section>
+
+            <!-- Dependency Tree (Right Column) -->
+            <section class="section-panel">
+                <h2 class="section-title">🌳 Dependency Tree</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Hierarchical view of package dependencies</p>
+                <div id="dependency-tree" 
+                     role="img" 
+                     aria-label="Dependency tree hierarchical visualization" 
+                     style="min-height: 900px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 20px;"></div>
+            </section>
+
+        </div>
 
         <!-- External Packages Drill-Down -->
         <section id="external-panel" class="drill-down-panel">
@@ -1088,106 +1373,253 @@ to meet specific institutional requirements.</p>
     <!-- ============================================
          CLASSES TAB
          ============================================ -->
-    <div id="classes" class="tab-content">
-        <!-- At-a-Glance Tiles -->
-        <section class="section-panel" style="background: linear-gradient(135deg, rgba(13, 110, 253, 0.08) 0%, rgba(77, 140, 255, 0.05) 100%); border: 2px solid rgba(77, 140, 255, 0.3);">
-            <h2 class="section-title" style="text-align: center;">📦 Class Overview</h2>
+    
+    <!-- ============================================
+         CODE QUALITY TAB (NEW - PHASE 18)
+         ============================================ -->
+    <div id="quality" class="tab-content">
+        <!-- Quality Metrics Overview -->
+        <section class="section-panel" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(77, 140, 255, 0.05) 100%);">
+            <h2 class="section-title" style="text-align: center;">✨ Code Quality Overview</h2>
             <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-                <div class="metric-card interactive-card" onclick="togglePanel('classes-list-panel')">
-                    <div class="metric-value">167</div>
-                    <div class="metric-label">Total Classes</div>
-                </div>
-                <div class="metric-card interactive-card" onclick="togglePanel('base-classes-panel')">
-                    <div class="metric-value">23</div>
-                    <div class="metric-label">Base Classes</div>
-                </div>
-                <div class="metric-card interactive-card" onclick="togglePanel('methods-panel')">
-                    <div class="metric-value">976</div>
-                    <div class="metric-label">Total Methods</div>
+                <div class="metric-card">
+                    <div class="metric-value" style="color: var(--success);">65/100</div>
+                    <div class="metric-label">Overall Quality</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-value">5.8</div>
-                    <div class="metric-label">Avg Methods/Class</div>
+                    <div class="metric-value">2,345</div>
+                    <div class="metric-label">Technical Debt (hrs)</div>
                 </div>
-                <div class="metric-card" style="background: rgba(34, 197, 94, 0.15);">
-                    <div class="metric-value" style="color: #22c55e;">92%</div>
-                    <div class="metric-label">With Docstrings</div>
+                <div class="metric-card">
+                    <div class="metric-value" style="color: var(--warning);">12.5</div>
+                    <div class="metric-label">Avg Complexity</div>
                 </div>
             </div>
         </section>
 
-        <!-- Class Hierarchy Visualization -->
+        <!-- Quality Radar Chart -->
         <section class="section-panel">
-            <h2 class="section-title">🌳 Class Hierarchy</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Interactive visualization of inheritance relationships. Click nodes to explore.</p>
-            <div class="viz-container" id="class-hierarchy" style="min-height: 600px;"></div>
+            <h2 class="section-title">📊 Multi-Dimensional Quality Assessment</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Quality metrics across 6 dimensions</p>
+            <div style="position: relative; height: 450px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="quality-radar" 
+                        role="img" 
+                        aria-label="Code quality radar chart showing maintainability, complexity, test coverage, documentation, security, and performance scores"></canvas>
+            </div>
         </section>
 
-        <!-- Class Hierarchy Drill-Down -->
-        <section id="classes-list-panel" class="drill-down-panel">
-            <h3 style="color: var(--accent-primary); margin-bottom: 1rem;">📂 Class Hierarchy Details</h3>
+        <!-- Complexity Histogram -->
+        <section class="section-panel">
+            <h2 class="section-title">📈 Complexity Distribution</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Cyclomatic complexity across codebase</p>
+            <div style="position: relative; height: 400px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="complexity-histogram" 
+                        role="img" 
+                        aria-label="Cyclomatic complexity histogram"></canvas>
+            </div>
+        </section>
 
-            <div style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">📁 ContentModel</div>
-                <div style="padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── Article <span style="color: var(--text-tertiary);">(15 methods)</span>
+        <!-- LOC Distribution -->
+        <section class="section-panel">
+            <h2 class="section-title">📏 Lines of Code Distribution</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">File size distribution by line count</p>
+            <div style="position: relative; height: 400px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="loc-bar-chart" 
+                        role="img" 
+                        aria-label="Lines of code distribution bar chart"></canvas>
+            </div>
+        </section>
+    </div>
+
+
+    
+    <!-- ============================================
+         VULNERABILITIES TAB (NEW - PHASE 18)
+         ============================================ -->
+    <div id="vulnerabilities" class="tab-content">
+        <!-- Vulnerability Summary -->
+        <section class="section-panel" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid rgba(239, 68, 68, 0.3);">
+            <h2 class="section-title" style="text-align: center;">⚠️ Vulnerability Summary</h2>
+            <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                <div class="metric-card" style="border-left: 4px solid var(--danger);">
+                    <div class="metric-value" style="color: var(--danger);">9</div>
+                    <div class="metric-label">Code Smells</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--warning);">
+                    <div class="metric-value" style="color: var(--warning);">5</div>
+                    <div class="metric-label">Anti-Patterns</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--danger);">
+                    <div class="metric-value" style="color: var(--danger);">3</div>
+                    <div class="metric-label">Security Issues</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--info);">
+                    <div class="metric-value" style="color: var(--info);">8</div>
+                    <div class="metric-label">Best Practice Gaps</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vulnerability Distribution Pie Chart -->
+        <section class="section-panel">
+            <h2 class="section-title">🥧 Vulnerability Breakdown</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Distribution by category</p>
+            <div style="position: relative; height: 450px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="vulnerability-pie-chart" 
+                        role="img" 
+                        aria-label="Vulnerability distribution pie chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Code Smells Detail -->
+        <section class="section-panel">
+            <h3 class="section-title" style="font-size: var(--font-size-lg);">🔍 Code Smells Detected</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">From CORTEX best-practices analysis (engineering-anti-patterns.yaml)</p>
+            
+            <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); padding: 1.25rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h4 style="margin: 0; color: var(--danger); font-size: 1.1rem;">God Object</h4>
+                            <p style="margin: 0.5rem 0; color: var(--text-secondary); font-size: 0.95rem;">Class exceeds 1000 LOC with 30+ methods</p>
+                            <code style="background: rgba(0,0,0,0.5); padding: 0.35rem 0.65rem; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-top: 0.5rem;">
+                                Models/HealthPlan.cs:45 (1,234 LOC, 38 methods)
+                            </code>
+                        </div>
+                        <span style="background: var(--danger); color: #fff; padding: 0.35rem 0.85rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700;">
+                            HIGH
+                        </span>
                     </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── QuranContent <span style="color: var(--text-tertiary);">(12 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── HadithContent <span style="color: var(--text-tertiary);">(10 methods)</span>
+                </div>
+                
+                <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); padding: 1.25rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h4 style="margin: 0; color: var(--warning); font-size: 1.1rem;">Spaghetti Code</h4>
+                            <p style="margin: 0.5rem 0; color: var(--text-secondary); font-size: 0.95rem;">Cyclomatic complexity >20</p>
+                            <code style="background: rgba(0,0,0,0.5); padding: 0.35rem 0.65rem; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-top: 0.5rem;">
+                                Utils/Validator.cs:89 (complexity: 24)
+                            </code>
+                        </div>
+                        <span style="background: var(--warning); color: #000; padding: 0.35rem 0.85rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700;">
+                            MEDIUM
+                        </span>
                     </div>
                 </div>
             </div>
-            <div style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">📁 UserModel</div>
-                <div style="padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── AdminUser <span style="color: var(--text-tertiary);">(8 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── RegularUser <span style="color: var(--text-tertiary);">(6 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── GuestUser <span style="color: var(--text-tertiary);">(4 methods)</span>
-                    </div>
-                </div>
-            </div>
-            <div style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">📁 EventModel</div>
-                <div style="padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── PrayerEvent <span style="color: var(--text-tertiary);">(7 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── CommunityEvent <span style="color: var(--text-tertiary);">(9 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── EducationalEvent <span style="color: var(--text-tertiary);">(6 methods)</span>
+        </section>
+
+        <!-- OWASP Security Issues -->
+        <section class="section-panel">
+            <h3 class="section-title" style="font-size: var(--font-size-lg);">🔒 Security Vulnerabilities (OWASP)</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">From CORTEX owasp-top-10.yaml analysis</p>
+            
+            <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                <div style="background: rgba(220, 38, 38, 0.15); border-left: 4px solid #dc2626; padding: 1.25rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h4 style="margin: 0; color: #dc2626; font-size: 1.1rem;">A03:2021 - Injection</h4>
+                            <p style="margin: 0.5rem 0; color: var(--text-secondary); font-size: 0.95rem;">SQL injection vulnerability - unsanitized input</p>
+                            <code style="background: rgba(0,0,0,0.5); padding: 0.35rem 0.65rem; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-top: 0.5rem;">
+                                Data/MemberRepository.cs:127
+                            </code>
+                        </div>
+                        <span style="background: #dc2626; color: #fff; padding: 0.35rem 0.85rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700;">
+                            CRITICAL
+                        </span>
                     </div>
                 </div>
             </div>
-            <div style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">📁 NotificationService</div>
-                <div style="padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── EmailNotifier <span style="color: var(--text-tertiary);">(5 methods)</span>
-                    </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── SMSNotifier <span style="color: var(--text-tertiary);">(4 methods)</span>
-                    </div>
+        </section>
+    </div>
+
+    <!-- ============================================
+         TESTING TAB (NEW - PHASE 18)
+         ============================================ -->
+    <div id="testing" class="tab-content">
+        <!-- Testing Summary -->
+        <section class="section-panel" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(77, 140, 255, 0.05) 100%); border: 2px solid rgba(34, 197, 94, 0.3);">
+            <h2 class="section-title" style="text-align: center;">🧪 Test Coverage Overview</h2>
+            <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                <div class="metric-card" style="border-left: 4px solid var(--success);">
+                    <div class="metric-value" style="color: var(--success);">78%</div>
+                    <div class="metric-label">Overall Coverage</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">1,245</div>
+                    <div class="metric-label">Total Tests</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--success);">
+                    <div class="metric-value">892</div>
+                    <div class="metric-label">Unit Tests</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--info);">
+                    <div class="metric-value">234</div>
+                    <div class="metric-label">Integration Tests</div>
+                </div>
+                <div class="metric-card" style="border-left: 4px solid var(--warning);">
+                    <div class="metric-value">119</div>
+                    <div class="metric-label">E2E Tests</div>
                 </div>
             </div>
-            <div style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 1rem;">
-                <div style="font-weight: 600; color: var(--accent-primary); font-size: 1.1rem; margin-bottom: 0.5rem;">📁 ReportGenerator</div>
-                <div style="padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── PDFReport <span style="color: var(--text-tertiary);">(8 methods)</span>
+        </section>
+
+        <!-- Testing Pyramid -->
+        <section class="section-panel">
+            <h2 class="section-title">📊 Testing Pyramid</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Distribution of unit, integration, and end-to-end tests</p>
+            <div style="position: relative; height: 500px; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="testing-pyramid" 
+                        role="img" 
+                        aria-label="Testing pyramid showing distribution of unit, integration, and end-to-end tests"></canvas>
+            </div>
+        </section>
+
+        <!-- Test Health Metrics -->
+        <section class="section-panel">
+            <h3 class="section-title" style="font-size: var(--font-size-lg);">📈 Test Health Metrics</h3>
+            <div class="metrics-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="metric-card">
+                    <div class="metric-value" style="color: var(--success);">95.2%</div>
+                    <div class="metric-label">Pass Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2.3s</div>
+                    <div class="metric-label">Avg Test Duration</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">45</div>
+                    <div class="metric-label">Flaky Tests</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coverage by Module -->
+        <section class="section-panel">
+            <h3 class="section-title" style="font-size: var(--font-size-lg);">🎯 Coverage by Module</h3>
+            <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
+                <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--success); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: monospace;">kashkole.models</span>
+                        <span style="color: var(--success); font-weight: 700; font-size: 1.1rem;">92%</span>
                     </div>
-                    <div style="padding: 0.5rem; color: var(--text-secondary); font-family: monospace;">
-                        └── HTMLReport <span style="color: var(--text-tertiary);">(6 methods)</span>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--success); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: monospace;">kashkole.views</span>
+                        <span style="color: var(--success); font-weight: 700; font-size: 1.1rem;">85%</span>
+                    </div>
+                </div>
+                <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: monospace;">kashkole.utils</span>
+                        <span style="color: var(--warning); font-weight: 700; font-size: 1.1rem;">68%</span>
+                    </div>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--success); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: monospace;">kashkole.auth</span>
+                        <span style="color: var(--success); font-weight: 700; font-size: 1.1rem;">94%</span>
                     </div>
                 </div>
             </div>
@@ -1741,7 +2173,141 @@ to meet specific institutional requirements.</p>
 </div>
 
 <!-- D3.js v7 (Minified, Inline for file:// protocol) -->
-<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<script>
+// ============================================
+// GLOBAL DASHBOARD DATA
+// ============================================
+window.dashboardData = {
+  // Architecture Tab
+  directoryTree: {
+    name: "KASHKOLE",
+    children: [
+      {
+        name: "App_Code",
+        children: [
+          {name: "Utils", size: 45000},
+          {name: "Models", size: 89000},
+          {name: "Services", size: 67000},
+          {name: "Helpers", size: 34000}
+        ]
+      },
+      {
+        name: "Views",
+        children: [
+          {name: "Member", size: 78000},
+          {name: "Admin", size: 56000},
+          {name: "Shared", size: 43000},
+          {name: "Partials", size: 28000}
+        ]
+      },
+      {
+        name: "Controllers",
+        children: [
+          {name: "MemberController", size: 52000},
+          {name: "AdminController", size: 48000},
+          {name: "AuthController", size: 31000}
+        ]
+      },
+      {
+        name: "Static",
+        children: [
+          {name: "CSS", size: 23000},
+          {name: "JavaScript", size: 45000},
+          {name: "Images", size: 12000}
+        ]
+      },
+      {
+        name: "Data",
+        children: [
+          {name: "Repositories", size: 56000},
+          {name: "Context", size: 28000}
+        ]
+      }
+    ]
+  },
+  
+  dependencies: {
+    nodes: [
+      {id: "System.Web", group: 1},
+      {id: "System.Data", group: 2},
+      {id: "System.Configuration", group: 3},
+      {id: "CustomAuth", group: 4},
+      {id: "EmailService", group: 4},
+      {id: "PDFEngine", group: 4}
+    ],
+    links: [
+      {source: "System.Web", target: "System.Data", value: 2},
+      {source: "System.Web", target: "System.Configuration", value: 1},
+      {source: "CustomAuth", target: "System.Configuration", value: 1},
+      {source: "EmailService", target: "System.Configuration", value: 1},
+      {source: "PDFEngine", target: "System.Data", value: 1}
+    ]
+  },
+  
+  // Quality Tab
+  qualityMetrics: {
+    maintainability: 70,
+    complexity: 65,
+    testCoverage: 45,
+    documentation: 60,
+    security: 55,
+    performance: 70
+  },
+  
+  complexityData: {
+    labels: ['0-5', '6-10', '11-15', '16-20', '21+'],
+    values: [45, 32, 15, 6, 2]
+  },
+  
+  locDistribution: {
+    labels: ['<100', '100-500', '500-1000', '1000+'],
+    values: [34, 28, 15, 12]
+  },
+  
+  // Vulnerabilities Tab (NEW)
+  vulnerabilities: {
+    codeSmells: 9,
+    antiPatterns: 5,
+    securityIssues: 3,
+    bestPractices: 8
+  },
+  
+  // Dependencies Tab
+  dependencyTree: {
+    name: "KASHKOLE",
+    children: [
+      {
+        name: "System.Web",
+        children: [
+          {name: "System.Web.UI", children: []},
+          {name: "System.Web.Security", children: []}
+        ]
+      },
+      {
+        name: "System.Data",
+        children: [
+          {name: "System.Data.SqlClient", children: []}
+        ]
+      },
+      {name: "System.Configuration", children: []}
+    ]
+  },
+  
+  // Testing Tab
+  testingPyramid: {
+    unit: 45,
+    integration: 23,
+    e2e: 8
+  }
+};
+</script>
+
+
+<!-- D3.js v7 (Minified, Inline for file:// protocol) -->
+<script src="https://d3js.org/d3.v7.min.js" 
+        integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i"
+        crossorigin="anonymous"></script>
 <script>
 // ============================================
 // TAB NAVIGATION
@@ -1783,7 +2349,7 @@ function togglePanel(panelId) {
 // ============================================
 // D3.js VISUALIZATIONS
 // ============================================
-const renderedViz = new Set(['overview']);
+const renderedViz = new Set();
 
 function renderVisualization(tabName) {
     if (renderedViz.has(tabName)) return;
@@ -1793,12 +2359,13 @@ function renderVisualization(tabName) {
         switch(tabName) {
             case 'overview':
                 renderLanguageChart();
+                renderDirectoryTreemap();
+                renderDependencyForceGraph();
+                renderLayerDiagram();
                 break;
             case 'dependencies':
                 renderDependencyGraph();
-                break;
-            case 'classes':
-                renderClassHierarchy();
+                renderDependencyTree();
                 break;
             case 'timeline':
                 renderTimelineChart();
@@ -1811,6 +2378,17 @@ function renderVisualization(tabName) {
                 break;
             case 'architecture':
                 renderArchitectureDiagram();
+                break;
+            case 'quality':
+                renderQualityRadar();
+                renderComplexityHistogram();
+                renderLOCBarChart();
+                break;
+            case 'vulnerabilities':
+                renderVulnerabilityPieChart();
+                break;
+            case 'testing':
+                renderTestingPyramid();
                 break;
         }
     }, 100);
@@ -1870,7 +2448,7 @@ function renderDependencyGraph() {
     if (!container || typeof d3 === 'undefined') return;
     
     const width = container.clientWidth;
-    const height = 600;
+    const height = 900;
     
     const nodes = [
         {id: 'kashkole', group: 1, size: 40},
@@ -1958,58 +2536,6 @@ function renderDependencyGraph() {
         node.attr('cx', d => d.x).attr('cy', d => d.y);
         label.attr('x', d => d.x).attr('y', d => d.y - d.size);
     });
-}
-
-// Class Hierarchy
-function renderClassHierarchy() {
-    const container = document.getElementById('class-hierarchy');
-    if (!container || typeof d3 === 'undefined') return;
-    
-    const width = container.clientWidth;
-    const height = 600;
-    
-    const data = {
-        name: "Base",
-        children: [{"name": "ContentModel", "children": [{"name": "Article", "methods": 15}, {"name": "QuranContent", "methods": 12}, {"name": "HadithContent", "methods": 10}]}, {"name": "UserModel", "children": [{"name": "AdminUser", "methods": 8}, {"name": "RegularUser", "methods": 6}, {"name": "GuestUser", "methods": 4}]}, {"name": "EventModel", "children": [{"name": "PrayerEvent", "methods": 7}, {"name": "CommunityEvent", "methods": 9}, {"name": "EducationalEvent", "methods": 6}]}, {"name": "NotificationService", "children": [{"name": "EmailNotifier", "methods": 5}, {"name": "SMSNotifier", "methods": 4}]}, {"name": "ReportGenerator", "children": [{"name": "PDFReport", "methods": 8}, {"name": "HTMLReport", "methods": 6}]}]
-    };
-    
-    const svg = d3.select('#class-hierarchy')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
-    
-    const g = svg.append('g').attr('transform', `translate(${width/2},${height/2})`);
-    
-    const pack = d3.pack().size([Math.min(width, height) - 100, Math.min(width, height) - 100]).padding(8);
-    const root = d3.hierarchy(data).sum(d => d.methods || 10);
-    pack(root);
-    
-    const color = d3.scaleLinear().domain([0, 3]).range(['#0d6efd', '#b3d9ff']);
-    
-    g.selectAll('circle')
-        .data(root.descendants())
-        .join('circle')
-        .attr('cx', d => d.x - width/2 + 50)
-        .attr('cy', d => d.y - height/2 + 50)
-        .attr('r', d => d.r)
-        .attr('fill', d => d.children ? 'rgba(13, 110, 253, 0.2)' : color(d.depth))
-        .attr('stroke', '#4d8cff')
-        .attr('stroke-width', 1.5)
-        .style('cursor', 'pointer')
-        .append('title')
-        .text(d => d.data.name + (d.data.methods ? ` (${d.data.methods} methods)` : ''));
-    
-    g.selectAll('text')
-        .data(root.descendants().filter(d => d.r > 25))
-        .join('text')
-        .attr('x', d => d.x - width/2 + 50)
-        .attr('y', d => d.y - height/2 + 50)
-        .attr('text-anchor', 'middle')
-        .attr('dy', '0.3em')
-        .attr('font-size', d => Math.min(d.r / 3, 12))
-        .attr('fill', '#fff')
-        .text(d => d.data.name)
-        .style('pointer-events', 'none');
 }
 
 // Timeline Chart
@@ -2239,5 +2765,583 @@ document.addEventListener('DOMContentLoaded', () => {
     renderVisualization('overview');
 });
 </script>
+
+<script>
+// ============================================
+// VISUALIZATION RENDERING FUNCTIONS
+// ============================================
+
+// Track rendered visualizations
+const renderedVisualizations = new Set();
+
+// Render Directory Treemap
+function renderDirectoryTreemap() {
+    if (renderedVisualizations.has('treemap')) return;
+    if (!window.dashboardData || !window.dashboardData.directoryTree) return;
+    
+    const container = d3.select("#directory-treemap");
+    const width = container.node().getBoundingClientRect().width || 1200;
+    const height = 500;
+    
+    container.html("");
+    
+    const svg = container.append("svg")
+        .attr("width", "100%")
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height]);
+    
+    const root = d3.hierarchy(window.dashboardData.directoryTree)
+        .sum(d => d.size || 0)
+        .sort((a, b) => b.value - a.value);
+    
+    d3.treemap()
+        .size([width, height])
+        .paddingOuter(3)
+        .paddingTop(20)
+        .paddingInner(2)
+        .round(true)(root);
+    
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    
+    // Add parent group labels
+    const parents = svg.selectAll("g.parent")
+        .data(root.descendants().filter(d => d.depth === 1))
+        .join("g")
+        .attr("class", "parent");
+    
+    parents.append("rect")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", "none")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 2)
+        .attr("stroke-opacity", 0.5);
+    
+    parents.append("text")
+        .attr("x", d => d.x0 + 5)
+        .attr("y", d => d.y0 + 15)
+        .text(d => d.data.name)
+        .attr("font-size", "14px")
+        .attr("font-weight", "600")
+        .attr("fill", "#fff");
+    
+    // Add child leaf nodes
+    const leaf = svg.selectAll("g.leaf")
+        .data(root.leaves())
+        .join("g")
+        .attr("class", "leaf")
+        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+    
+    leaf.append("rect")
+        .attr("fill", d => color(d.parent.data.name))
+        .attr("fill-opacity", 0.7)
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .append("title")
+        .text(d => `${d.parent.data.name}/${d.data.name}\n${(d.value/1000).toFixed(1)}KB`);
+    
+    leaf.append("text")
+        .attr("x", 4)
+        .attr("y", 16)
+        .text(d => {
+            const width = d.x1 - d.x0;
+            return width > 50 ? d.data.name : "";
+        })
+        .attr("font-size", "11px")
+        .attr("fill", "#fff");
+    
+    renderedVisualizations.add('treemap');
+}
+
+// Render Dependency Force Graph
+function renderDependencyForceGraph() {
+    if (renderedVisualizations.has('forcegraph')) return;
+    if (!window.dashboardData || !window.dashboardData.dependencies) return;
+    
+    const svg = d3.select("#dependency-force-graph");
+    const width = svg.node().getBoundingClientRect().width || 1200;
+    const height = 600;
+    
+    svg.selectAll("*").remove();
+    svg.attr("viewBox", [0, 0, width, height]);
+    
+    const simulation = d3.forceSimulation(window.dashboardData.dependencies.nodes)
+        .force("link", d3.forceLink(window.dashboardData.dependencies.links).id(d => d.id).distance(100))
+        .force("charge", d3.forceManyBody().strength(-400))
+        .force("center", d3.forceCenter(width / 2, height / 2));
+    
+    const link = svg.append("g")
+        .selectAll("line")
+        .data(window.dashboardData.dependencies.links)
+        .join("line")
+        .attr("stroke", "rgba(255,255,255,0.3)")
+        .attr("stroke-width", 2);
+    
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(window.dashboardData.dependencies.nodes)
+        .join("g")
+        .call(d3.drag()
+            .on("start", function(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            })
+            .on("drag", function(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            })
+            .on("end", function(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }));
+    
+    node.append("circle")
+        .attr("r", 12)
+        .attr("fill", d => d3.schemeCategory10[d.group % 10])
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 2);
+    
+    node.append("text")
+        .text(d => d.id)
+        .attr("x", 16)
+        .attr("y", 4)
+        .attr("font-size", "11px")
+        .attr("fill", "#fff");
+    
+    node.append("title")
+        .text(d => d.id);
+    
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+    
+    renderedVisualizations.add('forcegraph');
+}
+
+// Render Layer Diagram
+function renderLayerDiagram() {
+    if (renderedVisualizations.has('layerdiagram')) return;
+    
+    const container = d3.select("#layer-diagram");
+    container.html("");
+    
+    const width = container.node().getBoundingClientRect().width || 1200;
+    const height = 550;
+    
+    const layers = [
+        {name: "Presentation Layer", color: "#4d8cff", y: 30},
+        {name: "Domain Layer", color: "#7fb3ff", y: 130},
+        {name: "Infrastructure Layer", color: "#a3c9ff", y: 230}
+    ];
+    
+    const svg = container.append("svg")
+        .attr("width", "100%")
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height]);
+    
+    svg.append("defs").append("marker")
+        .attr("id", "arrowhead")
+        .attr("markerWidth", 10)
+        .attr("markerHeight", 10)
+        .attr("refX", 5)
+        .attr("refY", 3)
+        .attr("orient", "auto")
+        .append("polygon")
+        .attr("points", "0 0, 10 3, 0 6")
+        .attr("fill", "#fff");
+    
+    layers.forEach(layer => {
+        svg.append("rect")
+            .attr("x", width * 0.15)
+            .attr("y", layer.y)
+            .attr("width", width * 0.7)
+            .attr("height", 70)
+            .attr("fill", layer.color)
+            .attr("fill-opacity", 0.7)
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2)
+            .attr("rx", 8);
+        
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", layer.y + 45)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#fff")
+            .attr("font-size", "18px")
+            .attr("font-weight", "600")
+            .text(layer.name);
+    });
+    
+    [100, 200].forEach(y => {
+        svg.append("path")
+            .attr("d", `M ${width / 2} ${y} L ${width / 2} ${y + 30}`)
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 3)
+            .attr("marker-end", "url(#arrowhead)");
+    });
+    
+    renderedVisualizations.add('layerdiagram');
+}
+
+// Render Quality Radar
+function renderQualityRadar() {
+    if (renderedVisualizations.has('qualityradar')) return;
+    if (!window.dashboardData || !window.dashboardData.qualityMetrics) return;
+    
+    const ctx = document.getElementById('quality-radar');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Maintainability', 'Complexity', 'Test Coverage', 'Documentation', 'Security', 'Performance'],
+            datasets: [{
+                label: 'Quality Score',
+                data: [
+                    window.dashboardData.qualityMetrics.maintainability,
+                    window.dashboardData.qualityMetrics.complexity,
+                    window.dashboardData.qualityMetrics.testCoverage,
+                    window.dashboardData.qualityMetrics.documentation,
+                    window.dashboardData.qualityMetrics.security,
+                    window.dashboardData.qualityMetrics.performance
+                ],
+                fill: true,
+                backgroundColor: 'rgba(77, 140, 255, 0.2)',
+                borderColor: 'rgb(77, 140, 255)',
+                pointBackgroundColor: 'rgb(77, 140, 255)',
+                pointBorderColor: '#fff'
+            }]
+        },
+        options: {
+            elements: {line: {borderWidth: 3}},
+            scales: {
+                r: {
+                    angleLines: {color: 'rgba(255, 255, 255, 0.1)'},
+                    grid: {color: 'rgba(255, 255, 255, 0.1)'},
+                    pointLabels: {color: 'rgba(255, 255, 255, 0.8)', font: {size: 13}},
+                    ticks: {color: 'rgba(255, 255, 255, 0.6)', backdropColor: 'transparent', min: 0, max: 100}
+                }
+            },
+            plugins: {legend: {labels: {color: 'rgba(255, 255, 255, 0.8)'}}}
+        }
+    });
+    
+    renderedVisualizations.add('qualityradar');
+}
+
+// Render Complexity Histogram
+function renderComplexityHistogram() {
+    if (renderedVisualizations.has('complexityhistogram')) return;
+    if (!window.dashboardData || !window.dashboardData.complexityData) return;
+    
+    const ctx = document.getElementById('complexity-histogram');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: window.dashboardData.complexityData.labels,
+            datasets: [{
+                label: 'File Count',
+                data: window.dashboardData.complexityData.values,
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.6)',
+                    'rgba(77, 140, 255, 0.6)',
+                    'rgba(245, 158, 11, 0.6)',
+                    'rgba(239, 68, 68, 0.6)',
+                    'rgba(220, 38, 38, 0.8)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {beginAtZero: true, ticks: {color: 'rgba(255, 255, 255, 0.8)'}, grid: {color: 'rgba(255, 255, 255, 0.1)'}},
+                x: {ticks: {color: 'rgba(255, 255, 255, 0.8)'}, grid: {color: 'rgba(255, 255, 255, 0.1)'}}
+            },
+            plugins: {
+                legend: {display: false},
+                title: {display: true, text: 'Cyclomatic Complexity Distribution', color: 'rgba(255, 255, 255, 0.9)', font: {size: 16}}
+            }
+        }
+    });
+    
+    renderedVisualizations.add('complexityhistogram');
+}
+
+// Render LOC Bar Chart
+function renderLOCBarChart() {
+    if (renderedVisualizations.has('locbarchart')) return;
+    if (!window.dashboardData || !window.dashboardData.locDistribution) return;
+    
+    const ctx = document.getElementById('loc-bar-chart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: window.dashboardData.locDistribution.labels,
+            datasets: [{
+                label: 'Files',
+                data: window.dashboardData.locDistribution.values,
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.6)',
+                    'rgba(77, 140, 255, 0.6)',
+                    'rgba(245, 158, 11, 0.6)',
+                    'rgba(239, 68, 68, 0.6)'
+                ]
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {beginAtZero: true, ticks: {color: 'rgba(255, 255, 255, 0.8)'}, grid: {color: 'rgba(255, 255, 255, 0.1)'}},
+                y: {ticks: {color: 'rgba(255, 255, 255, 0.8)'}, grid: {color: 'rgba(255, 255, 255, 0.1)'}}
+            },
+            plugins: {
+                legend: {display: false},
+                title: {display: true, text: 'File Size Distribution (LOC)', color: 'rgba(255, 255, 255, 0.9)', font: {size: 16}}
+            }
+        }
+    });
+    
+    renderedVisualizations.add('locbarchart');
+}
+
+// Render Vulnerability Pie Chart
+function renderVulnerabilityPieChart() {
+    if (renderedVisualizations.has('vulnerabilitypie')) return;
+    if (!window.dashboardData || !window.dashboardData.vulnerabilities) return;
+    
+    const ctx = document.getElementById('vulnerability-pie-chart');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Code Smells', 'Anti-Patterns', 'Security Issues', 'Best Practice Gaps'],
+            datasets: [{
+                data: [
+                    window.dashboardData.vulnerabilities.codeSmells,
+                    window.dashboardData.vulnerabilities.antiPatterns,
+                    window.dashboardData.vulnerabilities.securityIssues,
+                    window.dashboardData.vulnerabilities.bestPractices
+                ],
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(245, 158, 11, 0.7)',
+                    'rgba(220, 38, 38, 0.9)',
+                    'rgba(77, 140, 255, 0.7)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {position: 'right', labels: {color: 'rgba(255, 255, 255, 0.8)', font: {size: 14}}},
+                title: {display: true, text: 'Vulnerability Distribution', color: 'rgba(255, 255, 255, 0.9)', font: {size: 18}}
+            }
+        }
+    });
+    
+    renderedVisualizations.add('vulnerabilitypie');
+}
+
+// Render Dependency Tree (D3.js Hierarchical Layout)
+function renderDependencyTree() {
+    if (renderedVisualizations.has('dependencytree')) return;
+    if (!window.dashboardData || !window.dashboardData.dependencyTree) return;
+    if (typeof d3 === 'undefined') return;
+    
+    const container = document.getElementById('dependency-tree');
+    if (!container) return;
+    
+    const width = container.clientWidth;
+    const height = 900;
+    
+    const svg = d3.select('#dependency-tree')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', [0, 0, width, height])
+        .style('font', '12px sans-serif')
+        .style('user-select', 'none');
+    
+    const tree = d3.tree().size([width - 160, height - 160]);
+    const root = d3.hierarchy(window.dashboardData.dependencyTree);
+    tree(root);
+    
+    const g = svg.append('g')
+        .attr('transform', 'translate(80, 80)');
+    
+    // Links
+    g.selectAll('.link')
+        .data(root.links())
+        .join('path')
+        .attr('class', 'link')
+        .attr('fill', 'none')
+        .attr('stroke', 'rgba(77, 140, 255, 0.4)')
+        .attr('stroke-width', 2)
+        .attr('d', d3.linkVertical()
+            .x(d => d.x)
+            .y(d => d.y));
+    
+    // Nodes
+    const node = g.selectAll('.node')
+        .data(root.descendants())
+        .join('g')
+        .attr('class', 'node')
+        .attr('transform', d => `translate(${d.x},${d.y})`);
+    
+    node.append('circle')
+        .attr('r', 6)
+        .attr('fill', d => d.children ? '#4d8cff' : '#22c55e')
+        .attr('stroke', '#0a1428')
+        .attr('stroke-width', 2);
+    
+    node.append('text')
+        .attr('dy', 20)
+        .attr('x', 0)
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'rgba(255, 255, 255, 0.87)')
+        .text(d => d.data.name);
+    
+    renderedVisualizations.add('dependencytree');
+}
+
+// Render Testing Pyramid (Chart.js Stacked Bar)
+function renderTestingPyramid() {
+    if (renderedVisualizations.has('testingpyramid')) return;
+    if (!window.dashboardData || !window.dashboardData.testingPyramid) return;
+    
+    const ctx = document.getElementById('testing-pyramid');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Test Distribution'],
+            datasets: [
+                {
+                    label: 'Unit Tests',
+                    data: [window.dashboardData.testingPyramid.unit],
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Integration Tests',
+                    data: [window.dashboardData.testingPyramid.integration],
+                    backgroundColor: 'rgba(77, 140, 255, 0.7)',
+                    borderColor: 'rgba(77, 140, 255, 1)',
+                    borderWidth: 2
+                },
+                {
+                    label: 'E2E Tests',
+                    data: [window.dashboardData.testingPyramid.e2e],
+                    backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                    borderColor: 'rgba(245, 158, 11, 1)',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    grid: {color: 'rgba(255, 255, 255, 0.1)'},
+                    ticks: {color: 'rgba(255, 255, 255, 0.7)'}
+                },
+                y: {
+                    stacked: true,
+                    grid: {color: 'rgba(255, 255, 255, 0.1)'},
+                    ticks: {color: 'rgba(255, 255, 255, 0.7)'}
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {color: 'rgba(255, 255, 255, 0.8)', font: {size: 14}}
+                },
+                title: {
+                    display: true,
+                    text: 'Testing Pyramid - Recommended 70% Unit, 20% Integration, 10% E2E',
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    font: {size: 16}
+                }
+            }
+        }
+    });
+    
+    renderedVisualizations.add('testingpyramid');
+}
+
+// Auto-render on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Render architecture visualizations if tab is active
+    if (document.getElementById('architecture').classList.contains('active')) {
+        renderDirectoryTreemap();
+        renderDependencyForceGraph();
+        renderLayerDiagram();
+    }
+    
+    // Render quality visualizations if tab is active
+    if (document.getElementById('quality') && document.getElementById('quality').classList.contains('active')) {
+        renderQualityRadar();
+        renderComplexityHistogram();
+        renderLOCBarChart();
+    }
+    
+    // Render vulnerability visualizations if tab is active
+    if (document.getElementById('vulnerabilities') && document.getElementById('vulnerabilities').classList.contains('active')) {
+        renderVulnerabilityPieChart();
+    }
+});
+
+// Modify existing switchTab function to render visualizations
+const originalSwitchTab = window.switchTab;
+if (originalSwitchTab) {
+    window.switchTab = function(tabName) {
+        originalSwitchTab.call(this, tabName);
+        
+        // Render visualizations for switched tab
+        switch(tabName) {
+            case 'architecture':
+                renderDirectoryTreemap();
+                renderDependencyForceGraph();
+                renderLayerDiagram();
+                break;
+            case 'quality':
+                renderQualityRadar();
+                renderComplexityHistogram();
+                renderLOCBarChart();
+                break;
+            case 'vulnerabilities':
+                renderVulnerabilityPieChart();
+                break;
+        }
+    };
+}
+</script>
+
 </body>
 </html>
