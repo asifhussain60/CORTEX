@@ -51,7 +51,7 @@ repos:
 
       - id: cortex-tdd-gate
         name: CORE-008 - TDD Gate (Tests Before Implementation)
-        entry: python3 .cortex-tdd-gate
+        entry: python3 scripts/governance/tdd_gate.py
         language: system
         pass_filenames: false
         stages: [commit]
