@@ -5,6 +5,7 @@ Model Context Protocol tools for enhanced capabilities.
 Available Tools:
 - intelligent_git_merge: Intelligent merging with cortex_brain preservation
 - lens_tools: LENS analysis tools (git, AST, comments, duplicates)
+- intelligent_lens_tools: Tiered LENS with LLM enhancement (NEW)
 - onboarding_tools: Repository onboarding and config analysis (LENS v2.0)
 """
 
@@ -19,6 +20,11 @@ from .lens_tools import (
     cortex_extract_comments,
     cortex_detect_duplicates,
     cortex_tools_catalog,
+)
+
+# Intelligent LENS Tools with LLM (AC-LENS-LLM-004)
+from .intelligent_lens_tools import (
+    cortex_lens_deep_analyze,
 )
 
 # Onboarding Tools (LENS v2.0 - AC-LENS-V2-ONBOARD-001)
@@ -39,6 +45,8 @@ __all__ = [
     "cortex_extract_comments",
     "cortex_detect_duplicates",
     "cortex_tools_catalog",
+    # Intelligent LENS Tools (LLM-enhanced)
+    "cortex_lens_deep_analyze",
     # Onboarding Tools
     "cortex_onboard_repository",
     "cortex_analyze_config",
@@ -60,6 +68,20 @@ MCP_TOOLS = {
         "description": "Unified LENS code intelligence analysis",
         "category": "analysis",
         "features": ["git_analysis", "ast_analysis", "comment_extraction"]
+    },
+    # Intelligent LENS Tools (AC-LENS-LLM-004: LLM-enhanced tiered analysis)
+    "cortex_lens_deep_analyze": {
+        "function": cortex_lens_deep_analyze,
+        "description": "Intelligent tiered LENS analysis with optional LLM enhancement and company domain context",
+        "category": "analysis",
+        "features": [
+            "tiered_analysis",
+            "llm_enhancement",
+            "company_domain_context",
+            "pii_sanitization",
+            "token_budget_management",
+            "natural_language_triggers"
+        ]
     },
     # Onboarding Tools (LENS v2.0)
     "cortex_onboard_repository": {

@@ -38,6 +38,14 @@ httpx==0.25.2              # Async HTTP client (API calls, testing)
 requests==2.31.0           # Synchronous HTTP client (backward compat)
 
 # ============================================================================
+# LLM PROVIDERS (AC-LENS-LLM-001 - Intelligent LENS Enhancement)
+# ============================================================================
+# Optional: Install only if using LLM-enhanced analysis
+
+openai>=1.10.0             # OpenAI GPT-4, GPT-4o, GPT-4o-mini
+anthropic>=0.21.0          # Anthropic Claude 3 (Opus, Sonnet, Haiku)
+
+# ============================================================================
 # DATA SCIENCE & ANALYSIS (Optional but recommended)
 # ============================================================================
 # Used for: orchestrator analytics, performance metrics, usage patterns

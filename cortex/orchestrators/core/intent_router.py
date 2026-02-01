@@ -261,6 +261,13 @@ class IntentRouter(IOrchestrator):
         "export", "create file", "write file", "output file", "report file"
     ]
     
+    # AC-LENS-LLM-005: ANALYZE intent keywords (intelligent LENS)
+    ANALYZE_KEYWORDS: List[str] = [
+        "analyze", "analyse", "investigate", "inspect", "examine", "scan",
+        "deep dive", "deep analysis", "use lens", "cortex lens", "find patterns",
+        "detect", "discover", "explore", "review", "audit", "check"
+    ]
+    
     # AC-ONBOARD-001: Repository onboarding keywords
     ONBOARD_KEYWORDS: List[str] = [
         "onboard", "onboarding", "setup", "initialize", "bootstrap", "configure",
@@ -295,6 +302,7 @@ class IntentRouter(IOrchestrator):
             IntentType.FIX: self.FIX_KEYWORDS,
             IntentType.REFACTOR: self.REFACTOR_KEYWORDS,
             IntentType.DOCUMENT: self.DOCUMENT_KEYWORDS,
+            IntentType.ANALYZE: self.ANALYZE_KEYWORDS,  # AC-LENS-LLM-005
             IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
         }
         
