@@ -859,8 +859,29 @@ footer {
             <div id="dependency-graph" style="width: 100%; height: 600px; background: rgba(255,255,255,0.02); border-radius: 16px; position: relative;"></div>
             
             <div style="margin-top: 3rem;">
-                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif; font-size: 1.5rem;">📊 Interactive Drill-Down Panels</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Click the cards in the "At-a-Glance Dependencies" section (above the tabs) to explore detailed package information below.</p>
+                <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif; font-size: 1.5rem;">� Key Dependencies</h3>
+                <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 2rem;">
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('external')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">12</div>
+                        <div class="metric-label">External Packages</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
+                    </div>
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('internal')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">34</div>
+                        <div class="metric-label">Internal Modules</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
+                    </div>
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('imports')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">456</div>
+                        <div class="metric-label">Import Statements</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
+                    </div>
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('outdated')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
+                        <div class="metric-value" style="font-size: 2rem; color: var(--color-warning);">3</div>
+                        <div class="metric-label">Outdated Packages</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
+                    </div>
+                </div>
                 
                 <!-- Interactive Drill-Down Panels -->
                 <div id="dependency-panels" style="margin-top: 2rem;">
