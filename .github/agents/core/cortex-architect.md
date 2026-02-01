@@ -98,6 +98,7 @@
 |---|-------|----------|-------|
 | 1 | **SECURITY AUDIT** — Secrets, injection, OWASP | **P0** | Full codebase |
 | 2 | MCP exposure — Production tools only, exclude dev tools | P1 | `cortex/mcp/tools/*.py` |
+| 2.5 | **Intent Router Consistency** — 5-layer verification (enum → router → config → prompts → agents) | **P1** | `canonical_enums.py`, `intent_router.py`, `hybrid_router.py`, prompts, agents |
 | 3 | Orchestrator wiring — 23 registered, routing correct | P1 | `wiring.yaml`, `master_orchestrator.py` |
 | 4 | Best practices — Company + CORTEX YAMLs merged | P1 | `company/domains/`, `cortex/knowledge/` |
 | 5 | Governance — 4-layer defense active | P1 | `cortex/governance/*.py` |
@@ -109,6 +110,75 @@
 | 11 | Pre-commit hooks — Active, covers CORE rules | P2 | `.pre-commit-config.yaml` |
 | 12 | Spec-code sync — Specs match implementations | P2 | Prompts, wiring |
 | 13 | Self-optimization — Prompts focused on production | P3 | `.github/prompts/`, `.github/agents/` |
+| 13.5 | **Prompt/Agent Production Gate** — Only 2 prompts/agents in production (CORTEX + Architect), flag others | **P2** | `.github/prompts/`, `.github/agents/` |
+
+### Intent Router Consistency Check (Item 2.5)
+
+**5-Layer Verification Matrix:**
+
+For EACH intent in `IntentType` enum:
+- ✅ Layer 1: Has keyword mapping in `IntentRouter.{INTENT}_KEYWORDS`
+- ✅ Layer 2: Has config entry in `INTENT_CONFIG` (hybrid_router.py)
+- ✅ Layer 3: Listed in CORTEX.prompt.md Intent Routing table
+- ✅ Layer 4: Listed in CORTEX.md agent routing table
+- ✅ Layer 5: Listed in copilot-instructions.md routing table
+- ✅ Has /command in Quick Commands (if applicable)
+- ✅ Orchestrator exists and is wired
+- ✅ MCP tool exists and registered
+
+**Detect:**
+- Orphaned intents (in enum but not in router keywords)
+- Missing intents (in router but not in prompts/agents)
+- Stale orchestrator references (deleted but still in documentation)
+- MCP tool mismatches (prompt says X, code says Y)
+- Missing quick commands for new intents
+
+**Action:**
+- Flag as P1 (blocks routing)
+- Generate consistency report matrix
+- Auto-suggest corrected sections
+- Recommend pre-commit hook to prevent future gaps
+
+### Prompt/Agent Production Gate (Item 13.5)
+
+**Production-Ready Artifacts (ONLY THESE):**
+
+Prompts:
+1. `CORTEX.prompt.md` → Master orchestration entry point
+2. `cortex-architect.prompt.md` → Dual-mode audit + design
+
+Agents:
+1. `CORTEX.md` → Master agent
+2. `cortex-architect.md` → Architect agent
+3. `cortex-mcp-gateway.md` → MCP routing (if exists)
+
+**Non-Production (Internal Dev ONLY):**
+- `cortex-docs.prompt.md` → Documentation tool (internal)
+- `cortex-docs-orchestrator.md` → Docs agent (internal)
+- `guides/` subdirectory → Training/dev guides
+- `archived/` subdirectory → Deprecated agents
+
+**Verify Production Prompts:**
+- ✅ Reference ONLY production MCP tools
+- ✅ No internal dev tool examples
+- ✅ Intent routing tables complete and accurate
+- ✅ Quick commands match production orchestrators
+- ✅ Version number current
+- ✅ Security-first mindset documented
+- ✅ Best practices layering explained
+
+**Detect Issues:**
+- Production prompt referencing non-production tool
+- Non-production prompt exposed in copilot-instructions.md
+- Prompts with duplicate routing tables (need sync)
+- Orphaned agents (no corresponding prompt)
+- Version mismatches between prompt and agent
+
+**Action:**
+- Flag P2 issues for cleanup
+- Recommend archival of stale prompts/agents (>90 days unused)
+- Generate production readiness report
+- Verify prompt/agent pairs are in sync
 
 ### Audit Output Format
 
@@ -129,7 +199,30 @@
 | Check | Status | Issues |
 |-------|--------|--------|
 
-### 🌐 MCP Exposure (Production Only)
+### � Intent Router Consistency (5-Layer)
+| Layer | Status | Gaps |
+|-------|--------|------|
+| IntentType enum | ✅/❌ | {missing intents} |
+| IntentRouter keywords | ✅/❌ | {orphaned/missing} |
+| HybridRouter config | ✅/❌ | {config gaps} |
+| CORTEX.prompt.md | ✅/❌ | {routing table gaps} |
+| Agents (CORTEX.md) | ✅/❌ | {routing table gaps} |
+
+**Consistency Matrix:**
+| Intent | Enum | Router | Config | Prompt | Agent | Orch | MCP | Status |
+|--------|------|--------|--------|--------|-------|------|-----|--------|
+| {intent} | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | PASS/FAIL |
+
+### 🚦 Prompt/Agent Production Gate
+| Artifact | Status | Issues |
+|----------|--------|--------|
+| CORTEX.prompt.md | ✅/❌ | {non-prod refs} |
+| cortex-architect.prompt.md | ✅/❌ | {issues} |
+| CORTEX.md | ✅/❌ | {sync issues} |
+| cortex-architect.md | ✅/❌ | {issues} |
+| Non-production prompts | ⚠️ | {exposure risks} |
+
+### �🌐 MCP Exposure (Production Only)
 | Orchestrator | MCP Tool | Status |
 |--------------|----------|--------|
 
@@ -361,6 +454,7 @@ INTENT_TO_ORCHESTRATOR = {
     "REFACTOR": RefactoringOrchestrator,
     "ANALYZE": LENSOrchestrator,
     "TEST": TDDOrchestrator,
+    "ONBOARD": RepositoryOnboardingOrchestrator,
 }
 ```
 
