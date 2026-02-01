@@ -1455,6 +1455,13 @@ function switchTab(tabName) {
 // ============================================
 function toggleDependencyPanel(panelId) {
     const panel = document.getElementById('panel-' + panelId);
+    
+    // Null-safety: Check if panel exists
+    if (!panel) {
+        console.error('Panel not found: panel-' + panelId);
+        return;
+    }
+    
     const isVisible = panel.style.display !== 'none';
     
     // Hide all panels
@@ -1466,11 +1473,23 @@ function toggleDependencyPanel(panelId) {
     if (!isVisible) {
         panel.style.display = 'block';
         panel.style.animation = 'slideDown 0.3s ease';
+        
+        // Scroll panel into view for better UX
+        setTimeout(() => {
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
     }
 }
 
 function toggleTransitive(packageId) {
     const transitiveDiv = document.getElementById('transitive-' + packageId);
+    
+    // Null-safety: Check if element exists
+    if (!transitiveDiv) {
+        console.error('Transitive element not found: transitive-' + packageId);
+        return;
+    }
+    
     if (transitiveDiv.style.display === 'none') {
         transitiveDiv.style.display = 'block';
     } else {
