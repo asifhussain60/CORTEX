@@ -61,6 +61,12 @@ from cortex.brain.analysis.api_analyzer import (
     APIAnalysisResult,
     get_api_analyzer,
 )
+from cortex.brain.analysis.company_domain_loader import (
+    CompanyDomainLoader,
+    DomainKnowledge,
+    CompanyDomainResult,
+    get_company_domain_loader,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -106,4 +112,8 @@ __all__ = [
     "APISecurityFinding",
     "APIAnalysisResult",
     "get_api_analyzer",
+    "CompanyDomainLoader",
+    "DomainKnowledge",
+    "CompanyDomainResult",
+    "get_company_domain_loader",
 ]
