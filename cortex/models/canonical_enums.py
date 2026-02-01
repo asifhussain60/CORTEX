@@ -185,6 +185,7 @@ class IntentType(Enum):
     QUERY = "query"
     VALIDATE = "validate"
     MIGRATE = "migrate"
+    ONBOARD = "onboard"  # AC-ONBOARD-001: Repository onboarding intent
     UNKNOWN = "unknown"
 
 

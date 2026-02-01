@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KASHKOLE - CORTEX Onboarding Dashboard</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-card: #1a1a24;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --glass-bg: rgba(26, 26, 36, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+        }
+        
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .header-meta {
+            text-align: right;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .tab:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .tab.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(20px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Metrics */
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Severity Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-p0 { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .badge-p1 { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
+        .badge-p2 { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .badge-p3 { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        
+        /* Lists */
+        .finding-list {
+            list-style: none;
+        }
+        
+        .finding-item {
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            background: var(--bg-secondary);
+        }
+        
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .finding-id {
+            font-family: monospace;
+            color: var(--accent-purple);
+        }
+        
+        .finding-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .finding-location {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Tech Stack */
+        .tech-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--glass-border);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+        
+        .timeline-item.complete::before {
+            background: var(--accent-green);
+        }
+        
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .data-table th {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Health Score */
+        .health-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-red) 0% 35%, var(--bg-secondary) 35% 100%);
+            margin: 0 auto;
+        }
+        
+        .health-score-inner {
+            width: 100px;
+            height: 100px;
+            background: var(--bg-card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .health-score-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .health-score-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <span class="logo">📚</span>
+                <div>
+                    <h1>KASHKOLE</h1>
+                    <p class="header-subtitle">Islamic Knowledge Management Platform</p>
+                </div>
+            </div>
+            <div class="header-meta">
+                <div>Onboarded: <strong>February 1, 2026</strong></div>
+                <div>CORTEX v8.0</div>
+            </div>
+        </header>
+
+        <!-- Tabs -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="overview">📊 Overview</button>
+            <button class="tab" data-tab="security">🛡️ Security</button>
+            <button class="tab" data-tab="architecture">🏗️ Architecture</button>
+            <button class="tab" data-tab="tech-stack">⚙️ Tech Stack</button>
+            <button class="tab" data-tab="database">🗄️ Database</button>
+            <button class="tab" data-tab="recommendations">💡 Recommendations</button>
+            <button class="tab" data-tab="modernization">🚀 Modernization</button>
+            <button class="tab" data-tab="compliance">📋 Compliance</button>
+            <button class="tab" data-tab="metrics">📈 Metrics</button>
+            <button class="tab" data-tab="timeline">📅 Timeline</button>
+        </nav>
+
+        <!-- Tab: Overview -->
+        <div class="tab-content active" id="overview">
+            <div class="card-grid">
+                <div class="card">
+                    <div class="health-score">
+                        <div class="health-score-inner">
+                            <div class="health-score-value" style="color: var(--accent-red);">35</div>
+                            <div class="health-score-label">Health Score</div>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--accent-red);">⚠️ Critical Issues Found</p>
+                </div>
+                
+                <div class="card">
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">Solution Projects</div>
+                </div>
+                
+                <div class="card">
+                    <div class="metric-value">96</div>
+                    <div class="metric-label">Source Files</div>
+                </div>
+                
+                <div class="card">
+                    <div class="metric-value">13</div>
+                    <div class="metric-label">Years Old</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Security Summary</h2>
+                </div>
+                <div class="card-grid">
+                    <div>
+                        <span class="badge badge-p0">● 3 P0 Critical</span>
+                        <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            Hardcoded credentials, machine keys
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-p1">● 3 P1 High</span>
+                        <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            Deprecated algorithms, outdated framework
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-p2">● 2 P2 Medium</span>
+                        <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+                            Flash content, legacy web services
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Project Description</h2>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    KASHKOLE is an Islamic knowledge management and educational platform built with ASP.NET Web Forms 
+                    and VB.NET. The application provides Quran browsing, Islamic calendar (Hijri) functionality, 
+                    knowledge articles management, and email notifications. Originally developed in 2011-2013, 
+                    it represents a legacy codebase requiring modernization.
+                </p>
+            </div>
+        </div>
+
+        <!-- Tab: Security -->
+        <div class="tab-content" id="security">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">P0 Critical Findings</h2>
+                    <span class="badge badge-p0">Immediate Action Required</span>
+                </div>
+                <ul class="finding-list">
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-001</span>
+                            <span class="badge badge-p0">P0</span>
+                        </div>
+                        <div><strong>Hardcoded Email Password</strong></div>
+                        <div class="finding-desc">Email password hardcoded in web.config appSettings</div>
+                        <div class="finding-location">📁 KWebApp/web.config → DefaultEmailPassword</div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-002</span>
+                            <span class="badge badge-p0">P0</span>
+                        </div>
+                        <div><strong>Hardcoded Database Password</strong></div>
+                        <div class="finding-desc">SQL Server password hardcoded in connection string</div>
+                        <div class="finding-location">📁 KWebApp/web.config → connectionStrings</div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-003</span>
+                            <span class="badge badge-p0">P0</span>
+                        </div>
+                        <div><strong>Hardcoded Machine Keys</strong></div>
+                        <div class="finding-desc">Encryption/validation keys hardcoded in config</div>
+                        <div class="finding-location">📁 KWebApp/web.config → machineKey</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">P1 High Findings</h2>
+                    <span class="badge badge-p1">Short-term Action</span>
+                </div>
+                <ul class="finding-list">
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-004</span>
+                            <span class="badge badge-p1">P1</span>
+                        </div>
+                        <div><strong>Deprecated SHA1 Algorithm</strong></div>
+                        <div class="finding-desc">SHA1 is vulnerable to collision attacks</div>
+                        <div class="finding-location">📁 KWebApp/web.config → machineKey.validation</div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-005</span>
+                            <span class="badge badge-p1">P1</span>
+                        </div>
+                        <div><strong>Outdated .NET Framework</strong></div>
+                        <div class="finding-desc">.NET Framework 4.0 is out of support since 2016</div>
+                        <div class="finding-location">📁 KWebApp/web.config → targetFramework</div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="finding-id">SEC-KASHKOLE-006</span>
+                            <span class="badge badge-p1">P1</span>
+                        </div>
+                        <div><strong>Request Validation Weakened</strong></div>
+                        <div class="finding-desc">requestValidationMode="2.0" may miss XSS attacks</div>
+                        <div class="finding-location">📁 KWebApp/web.config → httpRuntime</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab: Architecture -->
+        <div class="tab-content" id="architecture">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Solution Structure</h2>
+                </div>
+                <pre style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.875rem;">
+KASHKOLE.sln
+├── KWebApp/                  [ASP.NET Website - Main Application]
+│   ├── App_Code/             [Server-side VB.NET classes]
+│   ├── KADMIN/               [Admin portal]
+│   ├── KEDITOR/              [Content editor]
+│   ├── KQURAN/               [Quran viewer module]
+│   ├── KVIEWER/              [Content viewer]
+│   ├── WebServices/          [ASMX web services]
+│   └── ...
+├── QuranLINQ/                [Class Library - Quran data access]
+├── KashkoleLINQ/             [Class Library - Kashkole data access]
+├── HijriLINQ/                [Class Library - Islamic calendar]
+├── PathDispenser/            [Class Library - Path/URL management]
+├── KashkoleEMAILER/          [Class Library - Email functionality]
+└── ScheduledEmailer/         [Console App - Email scheduler]
+                </pre>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Dependency Graph</h2>
+                </div>
+                <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                    <pre style="display: inline-block; text-align: left;">
+┌──────────────────┐
+│     KWebApp      │ ◄── Main Website
+└────────┬─────────┘
+         │ references
+    ┌────┴────┬──────────┬──────────┬───────────┐
+    ▼         ▼          ▼          ▼           ▼
+┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌──────────┐
+│Quran   │ │Kashkole│ │ Hijri  │ │  Path  │ │ Kashkole │
+│ LINQ   │ │  LINQ  │ │  LINQ  │ │Dispens.│ │ EMAILER  │
+└────────┘ └────────┘ └────────┘ └────────┘ └──────────┘
+    │           │          │
+    ▼           ▼          ▼
+┌────────────────────────────────┐
+│         SQL Server             │
+│  KASHKOLE DB  |  HijriCal DB   │
+└────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Tech Stack -->
+        <div class="tab-content" id="tech-stack">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Current Technology Stack</h2>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Backend</h3>
+                    <span class="tech-tag">ASP.NET Web Forms</span>
+                    <span class="tech-tag">.NET Framework 4.0</span>
+                    <span class="tech-tag">VB.NET</span>
+                    <span class="tech-tag">LINQ to SQL</span>
+                    <span class="tech-tag">ASMX Web Services</span>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Database</h3>
+                    <span class="tech-tag">SQL Server</span>
+                    <span class="tech-tag">SQL Authentication</span>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">Frontend</h3>
+                    <span class="tech-tag">HTML/CSS</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">CKEditor</span>
+                    <span class="tech-tag" style="border-color: var(--accent-red); color: var(--accent-red);">Flash/SWF (EOL)</span>
+                </div>
+                <div style="padding: 1rem 0;">
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1rem;">IDE & Tools</h3>
+                    <span class="tech-tag">Visual Studio 2012</span>
+                    <span class="tech-tag">ReSharper</span>
+                    <span class="tech-tag">NCrunch</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Database -->
+        <div class="tab-content" id="database">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Database Overview</h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Database</th>
+                            <th>Purpose</th>
+                            <th>Access Library</th>
+                            <th>Technology</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>KASHKOLE</strong></td>
+                            <td>Main application data</td>
+                            <td>KashkoleLINQ.dll</td>
+                            <td>LINQ to SQL</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HijriCal</strong></td>
+                            <td>Islamic calendar data</td>
+                            <td>HijriLINQ.dll</td>
+                            <td>LINQ to SQL</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Estimated Tables (KASHKOLE DB)</h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Purpose</th>
+                            <th>Est. Columns</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Articles</td>
+                            <td>Knowledge articles and content</td>
+                            <td>10-15</td>
+                        </tr>
+                        <tr>
+                            <td>Users</td>
+                            <td>User accounts and profiles</td>
+                            <td>8-12</td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>Content categorization</td>
+                            <td>5-8</td>
+                        </tr>
+                        <tr>
+                            <td>EmailQueue</td>
+                            <td>Scheduled notifications</td>
+                            <td>8-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Recommendations -->
+        <div class="tab-content" id="recommendations">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Prioritized Recommendations</h2>
+                </div>
+                <ul class="finding-list">
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="badge badge-p0">P0 - Immediate</span>
+                        </div>
+                        <div><strong>1. Remove Hardcoded Credentials</strong></div>
+                        <div class="finding-desc">
+                            Move all passwords and API keys to secure storage:
+                            <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                                <li>Use Azure Key Vault or Windows Credential Manager</li>
+                                <li>Implement IConfiguration with environment variables</li>
+                                <li>Rotate all exposed credentials immediately</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="badge badge-p0">P0 - Immediate</span>
+                        </div>
+                        <div><strong>2. Regenerate Machine Keys</strong></div>
+                        <div class="finding-desc">
+                            Generate new random machine keys and store securely. Update validation algorithm from SHA1 to SHA256.
+                        </div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="badge badge-p1">P1 - Short-term</span>
+                        </div>
+                        <div><strong>3. Upgrade .NET Framework</strong></div>
+                        <div class="finding-desc">
+                            Minimum upgrade to .NET Framework 4.8, plan migration to .NET 6/8 LTS for long-term support.
+                        </div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="badge badge-p1">P1 - Short-term</span>
+                        </div>
+                        <div><strong>4. Remove Flash Content</strong></div>
+                        <div class="finding-desc">
+                            Flash is end-of-life. Inventory all SWF files and replace with HTML5/JavaScript alternatives.
+                        </div>
+                    </li>
+                    <li class="finding-item">
+                        <div class="finding-header">
+                            <span class="badge badge-p2">P2 - Medium-term</span>
+                        </div>
+                        <div><strong>5. Modernize Web Services</strong></div>
+                        <div class="finding-desc">
+                            Migrate ASMX web services to ASP.NET Core Web API with OAuth 2.0 authentication.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab: Modernization -->
+        <div class="tab-content" id="modernization">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Modernization Roadmap</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Phase 1: Security Hardening</strong> <span class="badge badge-p0">Priority: P0</span>
+                        <div class="finding-desc" style="margin-top: 0.5rem;">
+                            Remove hardcoded credentials, implement secrets management, regenerate machine keys
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Phase 2: Framework Upgrade</strong> <span class="badge badge-p1">Priority: P1</span>
+                        <div class="finding-desc" style="margin-top: 0.5rem;">
+                            Upgrade from .NET Framework 4.0 to .NET 6/8 LTS
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Phase 3: Replace Web Forms</strong> <span class="badge badge-p2">Priority: P2</span>
+                        <div class="finding-desc" style="margin-top: 0.5rem;">
+                            Migrate to ASP.NET Core with Razor Pages or Blazor
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Phase 4: Modernize Data Access</strong> <span class="badge badge-p2">Priority: P2</span>
+                        <div class="finding-desc" style="margin-top: 0.5rem;">
+                            Replace LINQ to SQL with Entity Framework Core
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Phase 5: Remove Legacy Content</strong> <span class="badge badge-p1">Priority: P1</span>
+                        <div class="finding-desc" style="margin-top: 0.5rem;">
+                            Replace Flash/SWF files with HTML5/JavaScript
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Target Architecture</h2>
+                </div>
+                <div class="card-grid">
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Current</h4>
+                        <span class="tech-tag">ASP.NET Web Forms</span>
+                        <span class="tech-tag">.NET 4.0</span>
+                        <span class="tech-tag">LINQ to SQL</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                        →
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">Target</h4>
+                        <span class="tech-tag" style="background: var(--accent-green); color: white;">ASP.NET Core</span>
+                        <span class="tech-tag" style="background: var(--accent-green); color: white;">.NET 8 LTS</span>
+                        <span class="tech-tag" style="background: var(--accent-green); color: white;">EF Core</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Compliance -->
+        <div class="tab-content" id="compliance">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">OWASP Top 10 2021 Compliance</h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Issues</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A01: Broken Access Control</td>
+                            <td><span class="badge badge-p2">Review Needed</span></td>
+                            <td>Access control patterns not analyzed</td>
+                        </tr>
+                        <tr>
+                            <td>A02: Cryptographic Failures</td>
+                            <td><span class="badge badge-p0">Non-Compliant</span></td>
+                            <td>SHA1 algorithm, hardcoded keys</td>
+                        </tr>
+                        <tr>
+                            <td>A03: Injection</td>
+                            <td><span class="badge badge-p1">Risk</span></td>
+                            <td>Request validation weakened</td>
+                        </tr>
+                        <tr>
+                            <td>A06: Vulnerable Components</td>
+                            <td><span class="badge badge-p0">Non-Compliant</span></td>
+                            <td>.NET 4.0 EOL, Flash EOL</td>
+                        </tr>
+                        <tr>
+                            <td>A07: Authentication Failures</td>
+                            <td><span class="badge badge-p0">Non-Compliant</span></td>
+                            <td>Hardcoded credentials</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Metrics -->
+        <div class="tab-content" id="metrics">
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-title">Source Files</div>
+                    <div class="metric-value">96</div>
+                    <div class="metric-label">Total (.aspx, .vb, .cs)</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Projects</div>
+                    <div class="metric-value">7</div>
+                    <div class="metric-label">In Solution</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Age</div>
+                    <div class="metric-value">13</div>
+                    <div class="metric-label">Years</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Last Modified</div>
+                    <div class="metric-value" style="font-size: 1.5rem;">2023-01</div>
+                    <div class="metric-label">KWebApp</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">File Distribution</h2>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>File Type</th>
+                            <th>Count</th>
+                            <th>Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>.aspx</td>
+                            <td>~50</td>
+                            <td>
+                                <div class="progress-bar" style="width: 200px;">
+                                    <div class="progress-fill" style="width: 52%; background: var(--accent-blue);"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>.vb</td>
+                            <td>~40</td>
+                            <td>
+                                <div class="progress-bar" style="width: 200px;">
+                                    <div class="progress-fill" style="width: 42%; background: var(--accent-purple);"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>.cs</td>
+                            <td>~6</td>
+                            <td>
+                                <div class="progress-bar" style="width: 200px;">
+                                    <div class="progress-fill" style="width: 6%; background: var(--accent-green);"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Timeline -->
+        <div class="tab-content" id="timeline">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Project History</h2>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item complete">
+                        <strong>2011</strong> - Project Created
+                        <div class="finding-desc">Initial development with VS2010, .NET 4.0</div>
+                    </div>
+                    <div class="timeline-item complete">
+                        <strong>2012-2013</strong> - Active Development
+                        <div class="finding-desc">Visual Studio 2012, ReSharper integration</div>
+                    </div>
+                    <div class="timeline-item complete">
+                        <strong>2014</strong> - NCrunch Added
+                        <div class="finding-desc">Test runner integration</div>
+                    </div>
+                    <div class="timeline-item complete">
+                        <strong>2017</strong> - Database Updates
+                        <div class="finding-desc">KashkoleDB modifications</div>
+                    </div>
+                    <div class="timeline-item complete">
+                        <strong>2020</strong> - Git Migration
+                        <div class="finding-desc">Moved to Git version control</div>
+                    </div>
+                    <div class="timeline-item complete">
+                        <strong>2023</strong> - Last Update
+                        <div class="finding-desc">KWebApp modifications</div>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>2026-02-01</strong> - CORTEX Onboarding
+                        <div class="finding-desc">Analysis, domain YAMLs, modernization planning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching logic
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

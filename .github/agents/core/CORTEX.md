@@ -57,6 +57,7 @@
 | ANALYZE | MasterOrchestrator | `cortex_lens_analyze` |
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | DEPLOY | GitOrchestrator | `cortex_process_request` |
+| ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
 
 ---
 
@@ -72,6 +73,7 @@
 | `cortex_ast_analyze` | AST analysis |
 | `cortex_detect_duplicates` | CORE-035 detection |
 | `cortex_tools_catalog` | Tool discovery |
+| `cortex_onboard_repository` | Repository onboarding + security scan |
 
 **Excluded from Production:**
 - docs/ management tools
@@ -124,6 +126,7 @@
 | `/refactor {target}` | Code improvement |
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
+| `/onboard {path}` | Repository onboarding + security scan |
 
 ---
 

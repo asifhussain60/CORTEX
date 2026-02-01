@@ -261,6 +261,13 @@ class IntentRouter(IOrchestrator):
         "export", "create file", "write file", "output file", "report file"
     ]
     
+    # AC-ONBOARD-001: Repository onboarding keywords
+    ONBOARD_KEYWORDS: List[str] = [
+        "onboard", "onboarding", "setup", "initialize", "bootstrap", "configure",
+        "register", "integrate", "import project", "analyze repository", "scan repo",
+        "discover", "inventory"
+    ]
+    
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -288,6 +295,7 @@ class IntentRouter(IOrchestrator):
             IntentType.FIX: self.FIX_KEYWORDS,
             IntentType.REFACTOR: self.REFACTOR_KEYWORDS,
             IntentType.DOCUMENT: self.DOCUMENT_KEYWORDS,
+            IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
         }
         
         # AC-FUTURE-001: Try loading routing rules from YAML

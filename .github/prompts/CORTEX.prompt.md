@@ -57,7 +57,7 @@ Synthesis   → Generate DoR classification
 
 | Field | Value |
 |-------|-------|
-| **Intent** | `{IMPLEMENT|FIX|REFACTOR|ANALYZE|TEST|DEPLOY}` |
+| **Intent** | `{IMPLEMENT|FIX|REFACTOR|ANALYZE|TEST|DEPLOY|ONBOARD}` |
 | **Handler** | `{Orchestrator}` |
 | **MCP Tools** | `{tool_1}`, `{tool_2}` |
 | **Confidence** | 🟢 High / 🟡 Medium / 🔴 Low BLOCKED |
@@ -104,6 +104,7 @@ result = mcp_tool.execute(parameters)
 | `cortex_ast_analyze` | AST analysis | ASTAnalyzer |
 | `cortex_detect_duplicates` | CORE-035 detection | DuplicateDetector |
 | `cortex_tools_catalog` | Tool discovery | MCPToolsCatalog |
+| `cortex_onboard_repository` | Repository onboarding + security scan | RepositoryOnboardingOrchestrator |
 
 **Excluded from Production:**
 - docs/ management tools
@@ -133,6 +134,7 @@ result = mcp_tool.execute(parameters)
 | ANALYZE | MasterOrchestrator | `cortex_lens_analyze` |
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | DEPLOY | GitOrchestrator | `cortex_process_request` |
+| ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
 
 ### Available Orchestrators (23)
 
@@ -215,6 +217,7 @@ Merge: Company takes precedence → CORTEX fills gaps
 | `/test {module}` | Test generation |
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
+| `/onboard {path}` | Repository onboarding + security scan |
 
 ---
 

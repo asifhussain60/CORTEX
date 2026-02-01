@@ -26,6 +26,7 @@ class IntentCategory(str, Enum):
     QUERY = "query"
     COMMAND = "command"
     NAVIGATION = "navigation"
+    ONBOARD = "onboard"  # AC-ONBOARD-001: Repository onboarding
     UNKNOWN = "unknown"
 
 
@@ -129,6 +130,12 @@ class IntentClassifier:
             IntentCategory.NAVIGATION: {
                 "navigate", "open", "display", "view",
                 "switch", "move", "jump", "find", "locate"
+            },
+            # AC-ONBOARD-001: Repository onboarding keywords
+            IntentCategory.ONBOARD: {
+                "onboard", "onboarding", "setup", "initialize", "bootstrap",
+                "register", "integrate", "import project", "analyze repository",
+                "scan repo", "discover", "inventory", "profile", "assess"
             }
         }
     
