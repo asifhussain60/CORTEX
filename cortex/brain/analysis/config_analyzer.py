@@ -136,6 +136,32 @@ class ConfigAnalyzer:
             "Hardcoded JWT secret detected",
             "Generate secrets at runtime or use environment variables"
         ),
+        # .NET specific patterns
+        "dotnet_connection_string": (
+            r'(?i)connectionString\s*=\s*["\'].*?(password|pwd)\s*=\s*([^;"\'\s]+)',
+            "Hardcoded database password in .NET connection string",
+            "Use Azure Key Vault, Windows Credential Manager, or environment variables for connection strings"
+        ),
+        "dotnet_smtp_password": (
+            r'(?i)(DefaultEmail[Pp]assword|smtp[Pp]assword|mail[Pp]assword)\s*value\s*=\s*["\']([^"\']+)',
+            "Hardcoded email/SMTP password detected",
+            "Store SMTP credentials in secure secret management system"
+        ),
+        "dotnet_machinekey": (
+            r'(?i)machineKey.*validationKey\s*=\s*["\']([A-F0-9]{40,})',
+            "Machine key exposed in config (should be auto-generated)",
+            "Use auto-generated machine keys or store in secure configuration"
+        ),
+        "dotnet_appkey": (
+            r'(?i)<add\s+key\s*=\s*["\'][^"\']*password[^"\']*["\']\s+value\s*=\s*["\']([^"\']+)',
+            "Password in appSettings",
+            "Store passwords in Azure Key Vault or encrypted config sections"
+        ),
+        "sql_sa_account": (
+            r'(?i)User\s*ID\s*=\s*sa[;\s]',
+            "Using SQL Server 'sa' account (critical security risk)",
+            "Use a dedicated service account with least privilege, never use 'sa'"
+        ),
     }
     
     # Insecure defaults (P1 severity)
@@ -164,6 +190,32 @@ class ConfigAnalyzer:
             r"(?i)(auth|authentication|require_auth)\s*[:=]\s*(false|0|no|off|null|none)",
             "Authentication disabled",
             "Enable authentication for all production endpoints"
+        ),
+        # .NET specific insecure defaults
+        "dotnet_debug_compilation": (
+            r'(?i)<compilation\s+[^>]*debug\s*=\s*["\']true["\']',
+            "ASP.NET debug compilation enabled",
+            "Set compilation debug='false' in production"
+        ),
+        "dotnet_custom_errors_off": (
+            r'(?i)<customErrors\s+mode\s*=\s*["\']Off["\']',
+            "Custom errors disabled - stack traces exposed to users",
+            "Set customErrors mode='RemoteOnly' or 'On' in production"
+        ),
+        "dotnet_request_validation_disabled": (
+            r'(?i)requestValidationMode\s*=\s*["\']2\.0["\']',
+            "Legacy request validation mode (XSS risk)",
+            "Remove requestValidationMode or set to 4.5+ for better XSS protection"
+        ),
+        "dotnet_sha1_validation": (
+            r'(?i)validation\s*=\s*["\']SHA1["\']',
+            "SHA1 validation is deprecated (use SHA256 or better)",
+            "Update machineKey to use validation='HMACSHA256' or better"
+        ),
+        "dotnet_trace_enabled": (
+            r'(?i)<trace\s+enabled\s*=\s*["\']true["\']',
+            "ASP.NET tracing enabled - information disclosure risk",
+            "Disable tracing in production environments"
         ),
     }
     
@@ -257,6 +309,13 @@ class ConfigAnalyzer:
             "**/*.ini",
             "**/docker-compose*.yml",
             "**/docker-compose*.yaml",
+            # .NET config files
+            "**/web.config",
+            "**/app.config",
+            "**/appsettings.json",
+            "**/appsettings.*.json",
+            "**/*.csproj",
+            "**/*.vbproj",
         ]
         
         for pattern in patterns:
@@ -287,8 +346,19 @@ class ConfigAnalyzer:
         }
     
     def _detect_config_type(self, path: Path) -> str:
-        """Detect config file type from extension."""
+        """Detect config file type from extension or filename."""
+        name = path.name.lower()
         suffix = path.suffix.lower()
+        
+        # .NET config files
+        if name in ["web.config", "app.config"]:
+            return "dotnet-xml"
+        if name.startswith("appsettings") and suffix == ".json":
+            return "dotnet-json"
+        if suffix in [".csproj", ".vbproj"]:
+            return "dotnet-project"
+        
+        # Standard config types
         if suffix in [".yaml", ".yml"]:
             return "yaml"
         elif suffix == ".json":
@@ -297,6 +367,8 @@ class ConfigAnalyzer:
             return "toml"
         elif suffix in [".env", ".ini"]:
             return "env"
+        elif suffix == ".xml" or suffix == ".config":
+            return "xml"
         return "unknown"
     
     def _detect_secrets(self, content: str, file_path: str) -> None:

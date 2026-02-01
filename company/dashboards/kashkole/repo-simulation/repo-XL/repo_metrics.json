@@ -1,0 +1,379 @@
+{
+  "metadata": {
+    "repo_name": "ContosoFinancialPlatform",
+    "description": "Enterprise Financial Services Platform - Banking, Investments, Insurance",
+    "organization": "Contoso Financial Services",
+    "tier": "xlarge",
+    "generated_date": "2026-02-01",
+    "simulation_version": "1.0"
+  },
+  "summary": {
+    "total_files": 35000,
+    "total_directories": 4800,
+    "total_loc": 1850000,
+    "total_classes": 1850,
+    "total_interfaces": 620,
+    "total_methods": 28500,
+    "languages": ["C#", "TypeScript", "JavaScript", "SQL", "Python", "YAML", "Dockerfile", "Bicep"],
+    "primary_language": "C#",
+    "primary_framework": "ASP.NET Core 8.0 Modular Monolith + Microservices Hybrid"
+  },
+  "tech_stack": {
+    "backend": {
+      "frameworks": ["ASP.NET Core 8.0", ".NET 8.0 Worker Services", "Azure Functions"],
+      "language": "C# 12",
+      "orm": ["Entity Framework Core 8.0", "Dapper", "NHibernate (legacy)"],
+      "api_types": ["REST", "gRPC", "GraphQL", "SignalR", "SOAP (legacy)"],
+      "authentication": ["Azure AD", "IdentityServer4", "Certificate Auth"],
+      "caching": ["Redis Cluster", "Azure Cache for Redis", "NCache"],
+      "messaging": ["Azure Service Bus", "RabbitMQ", "Azure Event Grid", "Apache Kafka"],
+      "search": "Azure Cognitive Search",
+      "api_gateway": "Azure API Management"
+    },
+    "frontend": {
+      "frameworks": ["Angular 17", "React 18", "Blazor Server"],
+      "language": "TypeScript 5.3",
+      "css_frameworks": ["Bootstrap 5", "Tailwind CSS", "Angular Material"],
+      "state_management": ["NgRx", "Redux Toolkit", "Recoil"]
+    },
+    "data_science": {
+      "language": "Python 3.11",
+      "frameworks": ["scikit-learn", "pandas", "Azure ML"],
+      "notebooks": 85
+    },
+    "database": {
+      "primary": {
+        "type": "SQL Server",
+        "version": "2022 Enterprise",
+        "size_tb": 4.5,
+        "tables": 1250,
+        "stored_procedures": 850,
+        "views": 380,
+        "always_on": true,
+        "replicas": 3
+      },
+      "oracle_legacy": {
+        "type": "Oracle",
+        "version": "19c",
+        "size_tb": 2.8,
+        "tables": 680,
+        "packages": 285,
+        "status": "migration_in_progress"
+      },
+      "document": {
+        "type": "Azure Cosmos DB",
+        "api": "MongoDB",
+        "size_tb": 1.2,
+        "collections": 125
+      },
+      "timeseries": {
+        "type": "Azure Data Explorer",
+        "size_tb": 8.5,
+        "tables": 45
+      },
+      "cache": {
+        "type": "Redis Cluster",
+        "nodes": 12,
+        "size_gb": 128
+      }
+    },
+    "hosting": {
+      "environment": "Azure (Hybrid Cloud)",
+      "kubernetes": "Azure Kubernetes Service (AKS)",
+      "serverless": "Azure Functions",
+      "ci_cd": "Azure DevOps + GitHub Actions",
+      "infrastructure_as_code": "Bicep + Terraform"
+    }
+  },
+  "architecture": {
+    "pattern": "Modular Monolith + Microservices Hybrid",
+    "domains": [
+      {
+        "name": "CoreBanking",
+        "type": "modular_monolith",
+        "modules": ["Accounts", "Transactions", "Cards", "Loans", "Deposits"],
+        "path": "src/Domains/CoreBanking",
+        "files": 4500,
+        "classes": 285,
+        "database": "SQL Server"
+      },
+      {
+        "name": "InvestmentServices",
+        "type": "microservices",
+        "services": ["Portfolio", "Trading", "MarketData", "Compliance", "Reporting"],
+        "path": "src/Domains/Investments",
+        "files": 3800,
+        "classes": 245,
+        "database": "SQL Server + Cosmos DB"
+      },
+      {
+        "name": "InsuranceServices",
+        "type": "microservices",
+        "services": ["Policy", "Claims", "Underwriting", "Actuarial", "Billing"],
+        "path": "src/Domains/Insurance",
+        "files": 3200,
+        "classes": 210,
+        "database": "Oracle (migrating)"
+      },
+      {
+        "name": "CustomerExperience",
+        "type": "microservices",
+        "services": ["Profile", "Preferences", "Notifications", "Support", "Onboarding"],
+        "path": "src/Domains/CustomerExperience",
+        "files": 2800,
+        "classes": 180,
+        "database": "Cosmos DB + SQL Server"
+      },
+      {
+        "name": "RiskManagement",
+        "type": "microservices",
+        "services": ["CreditRisk", "MarketRisk", "FraudDetection", "AML", "KYC"],
+        "path": "src/Domains/RiskManagement",
+        "files": 4200,
+        "classes": 265,
+        "database": "SQL Server + Azure Data Explorer"
+      },
+      {
+        "name": "Reporting",
+        "type": "modular_monolith",
+        "modules": ["RegulatoryReporting", "ManagementReporting", "ClientReporting", "AuditTrail"],
+        "path": "src/Domains/Reporting",
+        "files": 2500,
+        "classes": 165,
+        "database": "SQL Server + Data Lake"
+      }
+    ],
+    "shared_infrastructure": [
+      {
+        "name": "Platform.Identity",
+        "path": "src/Platform/Identity",
+        "files": 850,
+        "classes": 55
+      },
+      {
+        "name": "Platform.Messaging",
+        "path": "src/Platform/Messaging",
+        "files": 620,
+        "classes": 42
+      },
+      {
+        "name": "Platform.Observability",
+        "path": "src/Platform/Observability",
+        "files": 380,
+        "classes": 28
+      },
+      {
+        "name": "Platform.ApiGateway",
+        "path": "src/Platform/ApiGateway",
+        "files": 420,
+        "classes": 32
+      }
+    ],
+    "frontends": [
+      {
+        "name": "CustomerPortal",
+        "technology": "Angular 17",
+        "path": "src/WebApps/CustomerPortal",
+        "files": 2800,
+        "components": 285
+      },
+      {
+        "name": "AdvisorDashboard",
+        "technology": "React 18",
+        "path": "src/WebApps/AdvisorDashboard",
+        "files": 2200,
+        "components": 220
+      },
+      {
+        "name": "AdminConsole",
+        "technology": "Blazor Server",
+        "path": "src/WebApps/AdminConsole",
+        "files": 1500,
+        "components": 145
+      }
+    ]
+  },
+  "file_distribution": {
+    "by_extension": {
+      ".cs": 12500,
+      ".tsx": 4800,
+      ".ts": 3500,
+      ".html": 1850,
+      ".scss": 1200,
+      ".json": 850,
+      ".sql": 680,
+      ".yaml": 520,
+      ".bicep": 185,
+      ".py": 450,
+      ".md": 380,
+      ".dockerfile": 85
+    },
+    "by_category": {
+      "source_code": 22500,
+      "tests": 8500,
+      "configuration": 1850,
+      "documentation": 1250,
+      "infrastructure": 900
+    }
+  },
+  "classes": [
+    {"name": "AccountAggregate", "type": "Aggregate", "loc": 680, "methods": 52, "complexity": 78},
+    {"name": "TransactionProcessor", "type": "DomainService", "loc": 1250, "methods": 85, "complexity": 145},
+    {"name": "LoanOriginator", "type": "DomainService", "loc": 920, "methods": 62, "complexity": 98},
+    {"name": "PortfolioManager", "type": "DomainService", "loc": 1080, "methods": 75, "complexity": 125},
+    {"name": "TradingEngine", "type": "DomainService", "loc": 1450, "methods": 95, "complexity": 185},
+    {"name": "PolicyUnderwriter", "type": "DomainService", "loc": 850, "methods": 58, "complexity": 92},
+    {"name": "ClaimsProcessor", "type": "DomainService", "loc": 780, "methods": 52, "complexity": 85},
+    {"name": "FraudDetectionService", "type": "DomainService", "loc": 1350, "methods": 88, "complexity": 165},
+    {"name": "AMLScreeningService", "type": "DomainService", "loc": 980, "methods": 65, "complexity": 112},
+    {"name": "CreditRiskCalculator", "type": "DomainService", "loc": 1180, "methods": 78, "complexity": 135},
+    {"name": "RegulatoryReportGenerator", "type": "Service", "loc": 1650, "methods": 105, "complexity": 198},
+    {"name": "MarketDataAggregator", "type": "Service", "loc": 720, "methods": 48, "complexity": 75},
+    {"name": "NotificationOrchestrator", "type": "Service", "loc": 580, "methods": 42, "complexity": 58}
+  ],
+  "dependencies": {
+    "nuget_packages_count": 185,
+    "npm_packages_count": 320,
+    "python_packages_count": 45,
+    "total_direct_dependencies": 550,
+    "total_transitive_dependencies": 4500,
+    "critical_dependencies": [
+      {"name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.0.0", "type": "nuget"},
+      {"name": "Azure.Messaging.ServiceBus", "version": "7.17.0", "type": "nuget"},
+      {"name": "MassTransit.Azure.ServiceBus.Core", "version": "8.1.0", "type": "nuget"},
+      {"name": "Microsoft.Azure.Cosmos", "version": "3.37.0", "type": "nuget"},
+      {"name": "Oracle.ManagedDataAccess.Core", "version": "23.4.0", "type": "nuget"},
+      {"name": "Confluent.Kafka", "version": "2.3.0", "type": "nuget"},
+      {"name": "Microsoft.ML", "version": "3.0.0", "type": "nuget"}
+    ]
+  },
+  "quality_metrics": {
+    "code_coverage": 58.5,
+    "test_count": 18500,
+    "avg_cyclomatic_complexity": 18.5,
+    "max_cyclomatic_complexity": 198,
+    "maintainability_index": 55,
+    "technical_debt_hours": 2850,
+    "duplicated_lines_percentage": 8.5
+  },
+  "security": {
+    "vulnerabilities": {
+      "critical": 3,
+      "high": 12,
+      "medium": 45,
+      "low": 128
+    },
+    "secrets_detected": 5,
+    "owasp_compliance": {
+      "A01_broken_access_control": "warning",
+      "A02_cryptographic_failures": "fail",
+      "A03_injection": "pass",
+      "A04_insecure_design": "warning",
+      "A05_security_misconfiguration": "warning",
+      "A06_vulnerable_components": "fail",
+      "A07_auth_failures": "pass",
+      "A08_data_integrity_failures": "warning",
+      "A09_logging_failures": "pass",
+      "A10_ssrf": "pass"
+    },
+    "compliance": {
+      "PCI_DSS": "partial",
+      "SOX": "compliant",
+      "GDPR": "compliant",
+      "CCPA": "compliant"
+    }
+  },
+  "anti_patterns_detected": [
+    {
+      "name": "God Class",
+      "severity": "critical",
+      "count": 8,
+      "files": ["TransactionProcessor.cs", "TradingEngine.cs", "RegulatoryReportGenerator.cs"],
+      "description": "Multiple classes exceed 1000 LOC with complexity > 100"
+    },
+    {
+      "name": "Legacy Integration Hell",
+      "severity": "critical",
+      "count": 12,
+      "files": ["src/Domains/Insurance/LegacyBridge"],
+      "description": "Complex adapters for Oracle legacy system integration"
+    },
+    {
+      "name": "Distributed Transaction Anti-pattern",
+      "severity": "high",
+      "count": 5,
+      "files": ["src/Domains/CoreBanking/Services/TransferService.cs"],
+      "description": "Two-phase commits across multiple databases"
+    },
+    {
+      "name": "Shared Database Anti-pattern",
+      "severity": "high",
+      "count": 3,
+      "description": "Multiple services directly accessing same database"
+    },
+    {
+      "name": "Missing Saga Pattern",
+      "severity": "high",
+      "count": 8,
+      "description": "Long-running transactions without compensation logic"
+    },
+    {
+      "name": "Spaghetti Architecture",
+      "severity": "medium",
+      "count": 15,
+      "files": ["src/Domains/Insurance"],
+      "description": "Legacy code with unclear boundaries"
+    },
+    {
+      "name": "Copy-Paste Programming",
+      "severity": "medium",
+      "count": 85,
+      "description": "8.5% code duplication across domains"
+    }
+  ],
+  "git_metrics": {
+    "total_commits": 85000,
+    "contributors": 125,
+    "branches": 250,
+    "last_commit_date": "2026-01-31",
+    "commit_frequency_per_week": 450,
+    "hotspots": [
+      "src/Domains/CoreBanking/Services/TransactionProcessor.cs",
+      "src/Domains/Investments/Services/TradingEngine.cs",
+      "src/Domains/RiskManagement/Services/FraudDetectionService.cs"
+    ]
+  },
+  "api_endpoints": {
+    "total": 1250,
+    "by_protocol": {
+      "REST": 850,
+      "gRPC": 280,
+      "GraphQL": 85,
+      "SOAP": 35
+    },
+    "by_domain": {
+      "CoreBanking": 320,
+      "Investments": 285,
+      "Insurance": 245,
+      "CustomerExperience": 180,
+      "RiskManagement": 165,
+      "Reporting": 55
+    }
+  },
+  "infrastructure": {
+    "kubernetes": {
+      "clusters": 3,
+      "namespaces": 25,
+      "deployments": 85,
+      "services": 120,
+      "pods_typical": 450
+    },
+    "azure_resources": {
+      "app_services": 15,
+      "functions": 45,
+      "service_bus_queues": 85,
+      "storage_accounts": 12,
+      "key_vaults": 8
+    }
+  }
+}

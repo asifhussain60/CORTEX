@@ -1,0 +1,464 @@
+{
+  "metadata": {
+    "repo_name": "ContosoGlobalPlatform",
+    "description": "Global Enterprise Platform - Multi-Region, Multi-Tenant SaaS",
+    "organization": "Contoso Corporation",
+    "tier": "enterprise",
+    "generated_date": "2026-02-01",
+    "simulation_version": "1.0",
+    "business_context": {
+      "users": "50 million active",
+      "transactions_per_day": "2 billion",
+      "regions": 12,
+      "compliance": ["SOC2", "ISO27001", "GDPR", "HIPAA", "PCI-DSS", "FedRAMP"]
+    }
+  },
+  "summary": {
+    "total_files": 125000,
+    "total_directories": 18500,
+    "total_loc": 8500000,
+    "total_classes": 5850,
+    "total_interfaces": 1950,
+    "total_methods": 95000,
+    "languages": ["C#", "TypeScript", "JavaScript", "Python", "Go", "Rust", "SQL", "YAML", "Bicep", "Terraform"],
+    "primary_language": "C#",
+    "primary_framework": "Multi-Platform: .NET 8, Node.js, Python, Go"
+  },
+  "tech_stack": {
+    "backend": {
+      "frameworks": ["ASP.NET Core 8.0", "Node.js 20", "FastAPI", "Go Fiber", "Rust Actix"],
+      "languages": {"csharp": 55, "typescript": 20, "python": 12, "go": 8, "rust": 5},
+      "orm": ["Entity Framework Core", "Dapper", "Prisma", "SQLAlchemy", "GORM"],
+      "api_types": ["REST", "gRPC", "GraphQL", "WebSocket", "MQTT", "Server-Sent Events"],
+      "authentication": ["Azure AD B2C", "Okta", "Auth0", "Custom OAuth2"],
+      "caching": ["Redis Enterprise", "Memcached", "Azure Cache", "Local LRU"],
+      "messaging": ["Apache Kafka", "Azure Event Hubs", "RabbitMQ", "Azure Service Bus", "AWS SQS"],
+      "search": ["Elasticsearch", "Azure Cognitive Search", "Algolia"],
+      "api_gateway": ["Azure API Management", "Kong", "AWS API Gateway"]
+    },
+    "frontend": {
+      "web": ["React 18", "Angular 17", "Vue 3", "Blazor"],
+      "mobile": ["React Native", "Flutter", ".NET MAUI"],
+      "desktop": ["Electron", "WPF", ".NET MAUI"]
+    },
+    "ai_ml": {
+      "frameworks": ["Azure ML", "TensorFlow", "PyTorch", "Scikit-learn"],
+      "models_deployed": 85,
+      "inference_requests_per_day": "500 million"
+    },
+    "database": {
+      "relational": {
+        "sql_server": {
+          "clusters": 8,
+          "total_size_tb": 45,
+          "tables": 4500,
+          "stored_procedures": 2850
+        },
+        "postgresql": {
+          "clusters": 5,
+          "total_size_tb": 12,
+          "tables": 1250
+        },
+        "oracle": {
+          "status": "legacy_migration",
+          "total_size_tb": 8,
+          "migration_complete_percent": 65
+        }
+      },
+      "nosql": {
+        "cosmos_db": {
+          "accounts": 12,
+          "total_size_tb": 25,
+          "throughput_ru": 5000000
+        },
+        "mongodb": {
+          "clusters": 6,
+          "total_size_tb": 18
+        },
+        "dynamodb": {
+          "tables": 85,
+          "total_size_tb": 15
+        }
+      },
+      "timeseries": {
+        "azure_data_explorer": {
+          "clusters": 4,
+          "total_size_tb": 85
+        },
+        "influxdb": {
+          "clusters": 3,
+          "total_size_tb": 25
+        }
+      },
+      "cache": {
+        "redis_enterprise": {
+          "clusters": 15,
+          "total_size_tb": 2.5,
+          "keys": "50 billion"
+        }
+      },
+      "data_lake": {
+        "azure_data_lake": {
+          "total_size_pb": 2.5
+        },
+        "aws_s3": {
+          "total_size_pb": 1.8
+        }
+      }
+    },
+    "hosting": {
+      "multi_cloud": ["Azure", "AWS", "GCP"],
+      "kubernetes_clusters": 45,
+      "serverless_functions": 850,
+      "edge_locations": 120,
+      "ci_cd": ["Azure DevOps", "GitHub Actions", "Jenkins", "ArgoCD", "Flux"]
+    }
+  },
+  "architecture": {
+    "pattern": "Multi-Region Event-Driven Microservices + Cell-Based Architecture",
+    "domains": [
+      {
+        "name": "Identity",
+        "services": 12,
+        "files": 8500,
+        "classes": 420,
+        "team_size": 25
+      },
+      {
+        "name": "Commerce",
+        "services": 28,
+        "files": 18500,
+        "classes": 850,
+        "team_size": 65
+      },
+      {
+        "name": "Payments",
+        "services": 18,
+        "files": 12500,
+        "classes": 580,
+        "team_size": 45
+      },
+      {
+        "name": "Logistics",
+        "services": 22,
+        "files": 14000,
+        "classes": 650,
+        "team_size": 55
+      },
+      {
+        "name": "Analytics",
+        "services": 15,
+        "files": 9500,
+        "classes": 380,
+        "team_size": 35
+      },
+      {
+        "name": "CustomerExperience",
+        "services": 20,
+        "files": 15000,
+        "classes": 720,
+        "team_size": 60
+      },
+      {
+        "name": "SupplyChain",
+        "services": 25,
+        "files": 16500,
+        "classes": 780,
+        "team_size": 70
+      },
+      {
+        "name": "Finance",
+        "services": 16,
+        "files": 11000,
+        "classes": 520,
+        "team_size": 40
+      },
+      {
+        "name": "Compliance",
+        "services": 10,
+        "files": 6500,
+        "classes": 280,
+        "team_size": 22
+      },
+      {
+        "name": "Platform",
+        "services": 35,
+        "files": 13000,
+        "classes": 670,
+        "team_size": 85
+      }
+    ],
+    "total_microservices": 201,
+    "total_teams": 502,
+    "shared_infrastructure": {
+      "services": ["API Gateway", "Service Mesh", "Observability", "Security", "Secrets Management"],
+      "files": 25000,
+      "classes": 1200
+    }
+  },
+  "file_distribution": {
+    "by_extension": {
+      ".cs": 42000,
+      ".ts": 28000,
+      ".tsx": 18500,
+      ".js": 8500,
+      ".py": 12000,
+      ".go": 6500,
+      ".rs": 3500,
+      ".sql": 2800,
+      ".yaml": 4500,
+      ".json": 3200,
+      ".bicep": 850,
+      ".tf": 650,
+      ".md": 2500,
+      ".dockerfile": 450
+    },
+    "by_category": {
+      "source_code": 85000,
+      "tests": 28000,
+      "configuration": 6500,
+      "documentation": 3500,
+      "infrastructure": 2000
+    }
+  },
+  "classes_sample": [
+    {"name": "GlobalTransactionCoordinator", "type": "Orchestrator", "loc": 2850, "methods": 185, "complexity": 285},
+    {"name": "DistributedSagaManager", "type": "Infrastructure", "loc": 1850, "methods": 125, "complexity": 195},
+    {"name": "MultiRegionReplicator", "type": "Infrastructure", "loc": 1650, "methods": 108, "complexity": 175},
+    {"name": "GlobalInventoryOptimizer", "type": "DomainService", "loc": 2200, "methods": 145, "complexity": 225},
+    {"name": "CrossBorderPaymentProcessor", "type": "DomainService", "loc": 1950, "methods": 128, "complexity": 198},
+    {"name": "FraudDetectionMLPipeline", "type": "MLService", "loc": 1450, "methods": 95, "complexity": 145},
+    {"name": "RealTimeAnalyticsEngine", "type": "Analytics", "loc": 2500, "methods": 165, "complexity": 245},
+    {"name": "ComplianceRuleEngine", "type": "Compliance", "loc": 1800, "methods": 118, "complexity": 185},
+    {"name": "GlobalConfigurationManager", "type": "Platform", "loc": 1250, "methods": 85, "complexity": 125},
+    {"name": "ChaosEngineeringFramework", "type": "SRE", "loc": 1650, "methods": 108, "complexity": 165}
+  ],
+  "dependencies": {
+    "nuget_packages_count": 650,
+    "npm_packages_count": 1250,
+    "python_packages_count": 280,
+    "go_modules_count": 180,
+    "total_direct_dependencies": 2360,
+    "total_transitive_dependencies": 18500,
+    "vulnerability_summary": {
+      "critical": 8,
+      "high": 35,
+      "medium": 125,
+      "low": 450
+    }
+  },
+  "quality_metrics": {
+    "code_coverage": 52.5,
+    "test_count": 85000,
+    "avg_cyclomatic_complexity": 22.5,
+    "max_cyclomatic_complexity": 285,
+    "maintainability_index": 48,
+    "technical_debt_hours": 12500,
+    "duplicated_lines_percentage": 12.5
+  },
+  "security": {
+    "vulnerabilities": {
+      "critical": 8,
+      "high": 35,
+      "medium": 125,
+      "low": 450
+    },
+    "secrets_detected": 12,
+    "penetration_test_findings": {
+      "critical": 2,
+      "high": 8,
+      "medium": 25,
+      "low": 45
+    },
+    "compliance_status": {
+      "SOC2_Type2": "compliant",
+      "ISO27001": "compliant",
+      "GDPR": "compliant",
+      "HIPAA": "compliant",
+      "PCI_DSS": "compliant",
+      "FedRAMP": "in_progress"
+    }
+  },
+  "anti_patterns_detected": [
+    {
+      "name": "God Service",
+      "severity": "critical",
+      "count": 15,
+      "description": "Services with >2000 LOC and >150 methods"
+    },
+    {
+      "name": "Distributed Monolith",
+      "severity": "critical",
+      "count": 8,
+      "description": "Tightly coupled microservices requiring coordinated deployments"
+    },
+    {
+      "name": "Missing Saga Pattern",
+      "severity": "critical",
+      "count": 25,
+      "description": "Distributed transactions without compensation"
+    },
+    {
+      "name": "Database-per-Request",
+      "severity": "high",
+      "count": 45,
+      "description": "Connection pooling issues"
+    },
+    {
+      "name": "Chatty Microservices",
+      "severity": "high",
+      "count": 35,
+      "description": "Excessive inter-service calls"
+    },
+    {
+      "name": "Missing Circuit Breaker",
+      "severity": "high",
+      "count": 28,
+      "description": "External calls without resilience"
+    },
+    {
+      "name": "Shared Database",
+      "severity": "high",
+      "count": 12,
+      "description": "Multiple services accessing same database"
+    },
+    {
+      "name": "Legacy Code Island",
+      "severity": "medium",
+      "count": 85,
+      "description": "Unmaintained legacy components"
+    },
+    {
+      "name": "Copy-Paste Programming",
+      "severity": "medium",
+      "count": 250,
+      "description": "12.5% code duplication"
+    },
+    {
+      "name": "Missing Idempotency",
+      "severity": "medium",
+      "count": 65,
+      "description": "Non-idempotent operations in distributed systems"
+    }
+  ],
+  "git_metrics": {
+    "total_commits": 450000,
+    "contributors": 502,
+    "active_contributors_30d": 385,
+    "branches": 1250,
+    "pull_requests_per_week": 850,
+    "hotspots": [
+      "src/Domains/Commerce/Services/OrderOrchestrator.cs",
+      "src/Domains/Payments/Services/GlobalPaymentProcessor.cs",
+      "src/Platform/ApiGateway/RoutingEngine.cs"
+    ],
+    "code_churn_high": [
+      "src/Domains/Commerce",
+      "src/Domains/Payments",
+      "src/Platform/Observability"
+    ]
+  },
+  "api_endpoints": {
+    "total": 4500,
+    "by_protocol": {
+      "REST": 2850,
+      "gRPC": 1250,
+      "GraphQL": 280,
+      "WebSocket": 85,
+      "MQTT": 35
+    },
+    "by_domain": {
+      "Identity": 180,
+      "Commerce": 850,
+      "Payments": 520,
+      "Logistics": 650,
+      "Analytics": 380,
+      "CustomerExperience": 720,
+      "SupplyChain": 580,
+      "Finance": 420,
+      "Compliance": 120,
+      "Platform": 80
+    }
+  },
+  "infrastructure": {
+    "kubernetes": {
+      "clusters": 45,
+      "namespaces": 450,
+      "deployments": 850,
+      "services": 1250,
+      "pods_typical": 8500,
+      "regions": ["eastus", "westus", "westeurope", "eastasia", "australiaeast", "brazilsouth"]
+    },
+    "serverless": {
+      "azure_functions": 450,
+      "aws_lambda": 280,
+      "gcp_functions": 120
+    },
+    "cdn_edge": {
+      "locations": 120,
+      "cached_objects": "50 billion",
+      "bandwidth_tb_per_day": 85
+    },
+    "observability": {
+      "logs_per_day": "50 TB",
+      "metrics_per_minute": "500 million",
+      "traces_per_day": "10 billion",
+      "dashboards": 850,
+      "alerts": 1250
+    }
+  },
+  "operational_metrics": {
+    "availability_sla": 99.99,
+    "actual_availability_30d": 99.97,
+    "mttr_minutes": 15,
+    "deployments_per_day": 85,
+    "incidents_per_week": 12,
+    "sev1_incidents_per_month": 2
+  },
+  "crawler_requirements": {
+    "description": "CORTEX LENS crawler requirements for enterprise-scale analysis",
+    "crawlers_needed": [
+      {
+        "name": "SourceCodeCrawler",
+        "scope": "125K files across 45 clusters",
+        "estimated_time_hours": 8,
+        "parallelization": 50
+      },
+      {
+        "name": "DatabaseSchemaCrawler",
+        "scope": "8 SQL Server clusters + 6 MongoDB + 12 CosmosDB",
+        "estimated_time_hours": 4,
+        "credentials_required": true
+      },
+      {
+        "name": "APICrawler",
+        "scope": "4500 endpoints across 201 services",
+        "estimated_time_hours": 2,
+        "openapi_specs": 185
+      },
+      {
+        "name": "DependencyCrawler",
+        "scope": "2360 direct + 18500 transitive dependencies",
+        "estimated_time_hours": 1,
+        "vulnerability_db": "required"
+      },
+      {
+        "name": "InfrastructureCrawler",
+        "scope": "45 K8s clusters + 850 serverless functions",
+        "estimated_time_hours": 3,
+        "cloud_credentials": ["Azure", "AWS", "GCP"]
+      },
+      {
+        "name": "GitHistoryCrawler",
+        "scope": "450K commits, 502 contributors",
+        "estimated_time_hours": 6,
+        "incremental_support": true
+      },
+      {
+        "name": "ObservabilityCrawler",
+        "scope": "850 dashboards, 1250 alerts",
+        "estimated_time_hours": 2
+      }
+    ]
+  }
+}

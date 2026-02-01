@@ -1,0 +1,191 @@
+{
+  "repository_name": "ContosoECommerce",
+  "total_files": 8523,
+  "total_directories": 1245,
+  "architecture": "microservices",
+  "services": [
+    {
+      "name": "ApiGateway",
+      "path": "src/ApiGateway/",
+      "files": 125,
+      "subdirs": ["Controllers/", "Configuration/", "Middleware/", "Models/"]
+    },
+    {
+      "name": "CatalogService",
+      "path": "src/Services/Catalog/",
+      "files": 485,
+      "subdirs": {
+        "Catalog.API/": {"files": 145},
+        "Catalog.Domain/": {"files": 185},
+        "Catalog.Infrastructure/": {"files": 125},
+        "Catalog.Application/": {"files": 30}
+      }
+    },
+    {
+      "name": "OrderService",
+      "path": "src/Services/Order/",
+      "files": 625,
+      "subdirs": {
+        "Order.API/": {"files": 185},
+        "Order.Domain/": {"files": 245},
+        "Order.Infrastructure/": {"files": 145},
+        "Order.Application/": {"files": 50}
+      }
+    },
+    {
+      "name": "PaymentService",
+      "path": "src/Services/Payment/",
+      "files": 385,
+      "subdirs": {
+        "Payment.API/": {"files": 125},
+        "Payment.Domain/": {"files": 145},
+        "Payment.Infrastructure/": {"files": 85},
+        "Payment.Application/": {"files": 30}
+      }
+    },
+    {
+      "name": "InventoryService",
+      "path": "src/Services/Inventory/",
+      "files": 425,
+      "subdirs": {
+        "Inventory.API/": {"files": 145},
+        "Inventory.Domain/": {"files": 165},
+        "Inventory.Infrastructure/": {"files": 95},
+        "Inventory.Application/": {"files": 20}
+      }
+    },
+    {
+      "name": "NotificationService",
+      "path": "src/Services/Notification/",
+      "files": 285,
+      "subdirs": {
+        "Notification.API/": {"files": 85},
+        "Notification.Domain/": {"files": 105},
+        "Notification.Infrastructure/": {"files": 75},
+        "Notification.Application/": {"files": 20}
+      }
+    },
+    {
+      "name": "ShippingService",
+      "path": "src/Services/Shipping/",
+      "files": 385,
+      "subdirs": {
+        "Shipping.API/": {"files": 125},
+        "Shipping.Domain/": {"files": 145},
+        "Shipping.Infrastructure/": {"files": 95},
+        "Shipping.Application/": {"files": 20}
+      }
+    },
+    {
+      "name": "SearchService",
+      "path": "src/Services/Search/",
+      "files": 325,
+      "subdirs": {
+        "Search.API/": {"files": 105},
+        "Search.Domain/": {"files": 125},
+        "Search.Infrastructure/": {"files": 85},
+        "Search.Application/": {"files": 10}
+      }
+    },
+    {
+      "name": "AnalyticsService",
+      "path": "src/Services/Analytics/",
+      "files": 485,
+      "subdirs": {
+        "Analytics.API/": {"files": 145},
+        "Analytics.Domain/": {"files": 185},
+        "Analytics.Infrastructure/": {"files": 125},
+        "Analytics.Application/": {"files": 30}
+      }
+    },
+    {
+      "name": "RecommendationService",
+      "path": "src/Services/Recommendation/",
+      "files": 625,
+      "subdirs": {
+        "Recommendation.API/": {"files": 185},
+        "Recommendation.Domain/": {"files": 225},
+        "Recommendation.Infrastructure/": {"files": 165},
+        "Recommendation.Application/": {"files": 50}
+      }
+    }
+  ],
+  "frontend_apps": {
+    "AdminSPA": {
+      "path": "src/Web/Admin/",
+      "framework": "React 18",
+      "files": 1285,
+      "subdirs": {
+        "src/components/": {"files": 485},
+        "src/pages/": {"files": 285},
+        "src/services/": {"files": 125},
+        "src/hooks/": {"files": 85},
+        "src/utils/": {"files": 65},
+        "src/assets/": {"files": 185},
+        "public/": {"files": 55}
+      }
+    },
+    "CustomerSPA": {
+      "path": "src/Web/Customer/",
+      "framework": "Next.js 14",
+      "files": 1685,
+      "subdirs": {
+        "app/": {"files": 625},
+        "components/": {"files": 485},
+        "lib/": {"files": 185},
+        "public/": {"files": 285},
+        "styles/": {"files": 105}
+      }
+    }
+  },
+  "shared_libraries": {
+    "path": "src/BuildingBlocks/",
+    "files": 825,
+    "subdirs": {
+      "EventBus/": {"files": 125},
+      "Common/": {"files": 285},
+      "Logging/": {"files": 85},
+      "HealthChecks/": {"files": 65},
+      "Authentication/": {"files": 145},
+      "Caching/": {"files": 85},
+      "MessageBroker/": {"files": 35}
+    }
+  },
+  "tests": {
+    "path": "tests/",
+    "files": 1485,
+    "subdirs": {
+      "UnitTests/": {"files": 825},
+      "IntegrationTests/": {"files": 485},
+      "E2ETests/": {"files": 125},
+      "LoadTests/": {"files": 50}
+    }
+  },
+  "infrastructure": {
+    "path": "infrastructure/",
+    "files": 185,
+    "key_files": [
+      "docker-compose.yml",
+      "docker-compose.override.yml",
+      "k8s/deployments/",
+      "k8s/services/",
+      "terraform/",
+      "helm-charts/"
+    ]
+  },
+  "file_type_distribution": {
+    ".cs": 4850,
+    ".tsx/.jsx": 2285,
+    ".ts": 985,
+    ".json": 285,
+    ".yml/.yaml": 85,
+    ".md": 43
+  },
+  "largest_directories": [
+    {"path": "src/Web/Customer/app", "files": 625},
+    {"path": "src/Services/Order/Order.Domain", "files": 245},
+    {"path": "src/Web/Admin/src/components", "files": 485},
+    {"path": "tests/UnitTests", "files": 825},
+    {"path": "src/Services/Recommendation/Recommendation.Domain", "files": 225}
+  ]
+}

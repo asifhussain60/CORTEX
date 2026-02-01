@@ -1,0 +1,295 @@
+{
+  "vulnerability_summary": {
+    "total": 618,
+    "by_severity": {"critical": 8, "high": 35, "medium": 125, "low": 450}
+  },
+  "code_smells": [
+    {
+      "id": "CS001",
+      "type": "God Service",
+      "severity": "critical",
+      "count": 15,
+      "examples": [
+        {"path": "Domains/Commerce/Services/GlobalTransactionCoordinator.cs", "loc": 2850, "methods": 185, "complexity": 285},
+        {"path": "Platform/Messaging/DistributedSagaManager.cs", "loc": 1850, "methods": 125, "complexity": 195},
+        {"path": "Domains/Analytics/Services/RealTimeAnalyticsEngine.cs", "loc": 2500, "methods": 165, "complexity": 245}
+      ],
+      "rule_source": "engineering-anti-patterns.yaml",
+      "recommended_fix": "Decompose into focused services following Single Responsibility Principle"
+    },
+    {
+      "id": "CS002",
+      "type": "Deep Inheritance",
+      "severity": "high",
+      "count": 25,
+      "description": "Inheritance hierarchies exceeding 5 levels",
+      "rule_source": "engineering-anti-patterns.yaml"
+    },
+    {
+      "id": "CS003",
+      "type": "Circular Dependencies",
+      "severity": "high",
+      "count": 18,
+      "description": "Cross-domain circular references requiring coordinated deployments",
+      "rule_source": "ddd-bounded-contexts.yaml"
+    },
+    {
+      "id": "CS004",
+      "type": "Code Duplication",
+      "severity": "medium",
+      "percentage": 12.5,
+      "clusters": 250,
+      "loc_duplicated": 1062500,
+      "description": "12.5% duplicated code across 10 domains",
+      "rule_source": "engineering-anti-patterns.yaml"
+    },
+    {
+      "id": "CS005",
+      "type": "Long Method",
+      "severity": "medium",
+      "count": 450,
+      "description": "Methods exceeding 100 lines",
+      "rule_source": "clean-code.yaml"
+    },
+    {
+      "id": "CS006",
+      "type": "Complex Conditional",
+      "severity": "medium",
+      "count": 180,
+      "description": "Nested conditionals exceeding 4 levels",
+      "rule_source": "engineering-anti-patterns.yaml"
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "AP001",
+      "type": "Distributed Monolith",
+      "severity": "critical",
+      "count": 8,
+      "description": "Tightly coupled microservices requiring coordinated deployments across 3+ services",
+      "affected_domains": ["Commerce", "Payments", "Logistics", "Inventory"],
+      "rule_source": "microservices-resilience-patterns.yaml",
+      "recommended_fix": "Implement event-driven architecture with eventual consistency"
+    },
+    {
+      "id": "AP002",
+      "type": "Missing Saga Pattern",
+      "severity": "critical",
+      "count": 25,
+      "description": "Long-running distributed transactions without compensation logic",
+      "affected_workflows": ["OrderFulfillment", "PaymentSettlement", "CrossBorderShipping"],
+      "rule_source": "microservices-resilience-patterns.yaml",
+      "recommended_fix": "Implement Orchestration-based Saga with MassTransit or NServiceBus"
+    },
+    {
+      "id": "AP003",
+      "type": "Missing Circuit Breaker",
+      "severity": "high",
+      "count": 28,
+      "description": "External service calls without resilience patterns",
+      "rule_source": "microservices-resilience-patterns.yaml"
+    },
+    {
+      "id": "AP004",
+      "type": "Shared Database",
+      "severity": "high",
+      "count": 12,
+      "description": "Multiple services accessing same database directly",
+      "rule_source": "ddd-bounded-contexts.yaml"
+    },
+    {
+      "id": "AP005",
+      "type": "Database-per-Request",
+      "severity": "high",
+      "count": 45,
+      "description": "Connection pooling issues causing resource exhaustion",
+      "rule_source": "engineering-anti-patterns.yaml"
+    },
+    {
+      "id": "AP006",
+      "type": "Chatty Microservices",
+      "severity": "high",
+      "count": 35,
+      "description": "Services making 10+ calls for single operation",
+      "rule_source": "microservices-resilience-patterns.yaml"
+    },
+    {
+      "id": "AP007",
+      "type": "Legacy Code Island",
+      "severity": "medium",
+      "count": 85,
+      "loc": 2500000,
+      "description": "Unmaintained legacy components with no owners",
+      "rule_source": "engineering-anti-patterns.yaml"
+    },
+    {
+      "id": "AP008",
+      "type": "Missing Idempotency",
+      "severity": "medium",
+      "count": 65,
+      "description": "Non-idempotent operations in distributed systems causing data inconsistency",
+      "rule_source": "rest-api-design.yaml"
+    }
+  ],
+  "security_issues": [
+    {
+      "id": "SEC001",
+      "type": "Hardcoded Secrets",
+      "severity": "critical",
+      "count": 12,
+      "locations": ["appsettings files", "Dockerfile ENV", "Legacy config"],
+      "rule_source": "secure-coding-practices.yaml",
+      "compliance_impact": ["SOC2", "PCI-DSS"],
+      "recommended_fix": "Migrate all secrets to Azure Key Vault with managed identity"
+    },
+    {
+      "id": "SEC002",
+      "type": "Cryptographic Failures",
+      "severity": "critical",
+      "count": 5,
+      "description": "Weak encryption algorithms (DES, MD5, SHA1) in legacy components",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A02:2021 Cryptographic Failures"
+    },
+    {
+      "id": "SEC003",
+      "type": "Broken Access Control",
+      "severity": "critical",
+      "count": 3,
+      "description": "Internal APIs accessible without authentication from compromised services",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A01:2021 Broken Access Control",
+      "compliance_impact": ["SOC2", "ISO27001"]
+    },
+    {
+      "id": "SEC004",
+      "type": "Vulnerable Dependencies",
+      "severity": "high",
+      "count": 35,
+      "critical_cves": 8,
+      "high_cves": 27,
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A06:2021 Vulnerable and Outdated Components"
+    },
+    {
+      "id": "SEC005",
+      "type": "Missing Security Headers",
+      "severity": "high",
+      "count": 45,
+      "description": "Services missing CSP, HSTS, X-Frame-Options headers",
+      "rule_source": "api-security-checklist.yaml"
+    },
+    {
+      "id": "SEC006",
+      "type": "SQL Injection Risk",
+      "severity": "high",
+      "count": 8,
+      "description": "Dynamic SQL in legacy reporting modules",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A03:2021 Injection"
+    },
+    {
+      "id": "SEC007",
+      "type": "Sensitive Data in Logs",
+      "severity": "medium",
+      "count": 125,
+      "description": "PII and financial data appearing in application logs",
+      "rule_source": "secure-coding-practices.yaml",
+      "compliance_impact": ["GDPR", "CCPA", "HIPAA"]
+    }
+  ],
+  "compliance_issues": [
+    {
+      "id": "COMP001",
+      "type": "PCI-DSS Non-Compliance",
+      "severity": "critical",
+      "count": 5,
+      "findings": [
+        "Credit card data retention exceeding 90 days",
+        "Unencrypted PAN in memory dumps",
+        "Missing audit trail for cardholder data access"
+      ],
+      "requirement": "PCI-DSS 3.2.1"
+    },
+    {
+      "id": "COMP002",
+      "type": "GDPR Violations",
+      "severity": "high",
+      "count": 8,
+      "findings": [
+        "No automated data subject access request workflow",
+        "Data retention policies not enforced",
+        "Cross-border data transfer without SCCs"
+      ]
+    },
+    {
+      "id": "COMP003",
+      "type": "HIPAA Concerns",
+      "severity": "high",
+      "count": 3,
+      "findings": [
+        "PHI accessible without BAA",
+        "Missing audit logs for PHI access"
+      ]
+    },
+    {
+      "id": "COMP004",
+      "type": "FedRAMP Gaps",
+      "severity": "medium",
+      "count": 15,
+      "status": "in_progress",
+      "description": "Controls not yet implemented for FedRAMP authorization"
+    }
+  ],
+  "best_practice_violations": [
+    {
+      "id": "BP001",
+      "type": "Missing Observability",
+      "severity": "high",
+      "count": 85,
+      "description": "Services lacking proper metrics, traces, or structured logging",
+      "rule_source": "monitoring-observability.yaml"
+    },
+    {
+      "id": "BP002",
+      "type": "Missing Health Checks",
+      "severity": "medium",
+      "count": 45,
+      "description": "Services without /health or /ready endpoints",
+      "rule_source": "monitoring-observability.yaml"
+    },
+    {
+      "id": "BP003",
+      "type": "Inconsistent API Design",
+      "severity": "medium",
+      "count": 120,
+      "description": "Inconsistent naming, versioning, and error handling across APIs",
+      "rule_source": "rest-api-design.yaml"
+    },
+    {
+      "id": "BP004",
+      "type": "Missing Documentation",
+      "severity": "low",
+      "count": 250,
+      "description": "Public APIs without OpenAPI specifications",
+      "rule_source": "rest-api-design.yaml"
+    }
+  ],
+  "technical_debt_summary": {
+    "total_hours": 12500,
+    "by_category": {
+      "code_smells": 4500,
+      "anti_patterns": 3800,
+      "security": 2200,
+      "compliance": 1200,
+      "documentation": 800
+    },
+    "estimated_cost_usd": 1875000,
+    "recommended_priority": [
+      "SEC001 - Hardcoded Secrets",
+      "AP001 - Distributed Monolith",
+      "COMP001 - PCI-DSS Non-Compliance",
+      "SEC002 - Cryptographic Failures"
+    ]
+  }
+}

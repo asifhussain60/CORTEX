@@ -1,0 +1,117 @@
+{
+  "databases": {
+    "sql_server_primary": {
+      "name": "ContosoFinancial_Core",
+      "type": "SQL Server",
+      "version": "2022 Enterprise",
+      "size_tb": 4.5,
+      "always_on_group": "CFP_AG",
+      "replicas": 3,
+      "tables_summary": {
+        "total_tables": 1250,
+        "total_rows": "85 billion",
+        "largest_tables": [
+          {"name": "Transactions", "rows": 12500000000, "columns": 45, "partitions": 365},
+          {"name": "TransactionDetails", "rows": 45000000000, "columns": 28, "partitions": 365},
+          {"name": "AuditTrail", "rows": 25000000000, "columns": 22, "partitions": 180},
+          {"name": "AccountBalances", "rows": 850000000, "columns": 35, "partitions": 12},
+          {"name": "CardTransactions", "rows": 8500000000, "columns": 42, "partitions": 365},
+          {"name": "LoanPayments", "rows": 2500000000, "columns": 38, "partitions": 60}
+        ]
+      },
+      "stored_procedures": {
+        "total": 850,
+        "critical": [
+          {"name": "sp_ProcessTransaction", "lines": 2500, "complexity": "critical"},
+          {"name": "sp_CalculateInterest", "lines": 1800, "complexity": "critical"},
+          {"name": "sp_GenerateStatement", "lines": 1500, "complexity": "high"},
+          {"name": "sp_RegulatoryReport_FR2052", "lines": 3200, "complexity": "critical"},
+          {"name": "sp_EOD_Processing", "lines": 4500, "complexity": "critical"}
+        ]
+      },
+      "jobs": {
+        "total": 185,
+        "critical": [
+          {"name": "EOD_BatchProcessing", "frequency": "daily", "duration_hours": 4},
+          {"name": "InterestCalculation", "frequency": "daily", "duration_hours": 2},
+          {"name": "RegulatoryReporting", "frequency": "daily", "duration_hours": 3},
+          {"name": "DataArchival", "frequency": "weekly", "duration_hours": 8}
+        ]
+      }
+    },
+    "oracle_legacy": {
+      "name": "ContosoInsurance_Legacy",
+      "type": "Oracle",
+      "version": "19c",
+      "size_tb": 2.8,
+      "status": "migration_in_progress",
+      "migration_progress": 45,
+      "tables_summary": {
+        "total_tables": 680,
+        "tables_migrated": 285,
+        "tables_remaining": 395
+      },
+      "packages": {
+        "total": 285,
+        "critical": [
+          {"name": "PKG_POLICY_PROCESSING", "lines": 15000},
+          {"name": "PKG_CLAIMS_ADJUDICATION", "lines": 12000},
+          {"name": "PKG_PREMIUM_CALCULATION", "lines": 8500},
+          {"name": "PKG_UNDERWRITING", "lines": 9500}
+        ]
+      }
+    },
+    "cosmos_db": {
+      "name": "ContosoFinancial_Documents",
+      "type": "Azure Cosmos DB",
+      "api": "MongoDB",
+      "size_tb": 1.2,
+      "throughput_ru": 100000,
+      "collections": [
+        {"name": "customerProfiles", "documents": 25000000, "avg_size_kb": 8.5},
+        {"name": "customerPreferences", "documents": 25000000, "avg_size_kb": 2.5},
+        {"name": "communicationHistory", "documents": 850000000, "avg_size_kb": 1.8},
+        {"name": "documents", "documents": 120000000, "avg_size_kb": 45},
+        {"name": "notifications", "documents": 2500000000, "avg_size_kb": 0.8}
+      ]
+    },
+    "azure_data_explorer": {
+      "name": "ContosoFinancial_TimeSeries",
+      "type": "Azure Data Explorer",
+      "size_tb": 8.5,
+      "retention_days": 730,
+      "tables": [
+        {"name": "TransactionEvents", "rows_per_day": 500000000},
+        {"name": "FraudSignals", "rows_per_day": 85000000},
+        {"name": "MarketData", "rows_per_day": 1200000000},
+        {"name": "SystemMetrics", "rows_per_day": 250000000},
+        {"name": "UserBehavior", "rows_per_day": 180000000}
+      ]
+    },
+    "redis_cluster": {
+      "name": "ContosoFinancial_Cache",
+      "type": "Redis Enterprise",
+      "nodes": 12,
+      "size_gb": 128,
+      "memory_usage_percent": 72,
+      "key_patterns": [
+        {"pattern": "session:*", "count": 2500000, "ttl": 1800},
+        {"pattern": "account:*", "count": 85000000, "ttl": 300},
+        {"pattern": "rate:*", "count": 50000, "ttl": 60},
+        {"pattern": "fraud:score:*", "count": 25000000, "ttl": 3600}
+      ]
+    }
+  },
+  "data_flows": {
+    "realtime": [
+      {"name": "TransactionProcessing", "throughput": "50,000 TPS", "latency_p99_ms": 25},
+      {"name": "FraudDetection", "throughput": "50,000 TPS", "latency_p99_ms": 50},
+      {"name": "MarketDataFeed", "throughput": "100,000 msgs/sec", "latency_p99_ms": 5}
+    ],
+    "batch": [
+      {"name": "EOD_Processing", "volume": "12B transactions", "duration_hours": 4},
+      {"name": "RegulatoryReporting", "volume": "500GB", "duration_hours": 3},
+      {"name": "DataWarehouse_ETL", "volume": "2TB", "duration_hours": 6}
+    ]
+  }
+}

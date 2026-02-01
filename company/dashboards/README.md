@@ -222,9 +222,9 @@ python -m company.dashboards.tooling.universal_generator \
 
 - [ ] Integrate universal_generator.py with CORTEX LENS MCP tool
 - [ ] Add real-time data collection from repository analysis
-- [ ] Implement dependency graph visualization (Mermaid.js inline)
-- [ ] Add class hierarchy tree (D3.js inline)
-- [ ] Create timeline chart (Chart.js inline)
+- [x] Implement dependency graph visualization (D3.js force-directed - static compatible)
+- [x] Add class hierarchy tree (D3.js pack layout - static compatible)
+- [x] Create timeline chart (D3.js bar chart - static compatible)
 - [ ] Add export functionality (PDF, PNG)
 
 ---

@@ -1,0 +1,22 @@
+[
+  {"name": "Microsoft.AspNetCore.Authentication.JwtBearer", "version": "8.0.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.0.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "MediatR", "version": "12.2.0", "type": "nuget", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "FluentValidation", "version": "11.9.0", "type": "nuget", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "AutoMapper", "version": "12.0.1", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "Serilog.AspNetCore", "version": "8.0.0", "type": "nuget", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "HotChocolate.AspNetCore", "version": "13.9.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "StackExchange.Redis", "version": "2.7.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "Azure.Messaging.ServiceBus", "version": "7.17.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "Polly", "version": "8.2.0", "type": "nuget", "license": "BSD-3-Clause", "vulnerabilities": [], "is_direct": true},
+  {"name": "Swashbuckle.AspNetCore", "version": "6.5.0", "type": "nuget", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "xunit", "version": "2.6.0", "type": "nuget", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "Moq", "version": "4.20.0", "type": "nuget", "license": "BSD-3-Clause", "vulnerabilities": [], "is_direct": true},
+  {"name": "FluentAssertions", "version": "6.12.0", "type": "nuget", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "@angular/core", "version": "17.1.0", "type": "npm", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "@angular/material", "version": "17.1.0", "type": "npm", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "@ngrx/store", "version": "17.0.0", "type": "npm", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "tailwindcss", "version": "3.4.0", "type": "npm", "license": "MIT", "vulnerabilities": [], "is_direct": true},
+  {"name": "rxjs", "version": "7.8.0", "type": "npm", "license": "Apache-2.0", "vulnerabilities": [], "is_direct": true},
+  {"name": "chart.js", "version": "4.4.0", "type": "npm", "license": "MIT", "vulnerabilities": [], "is_direct": true}
+]

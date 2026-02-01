@@ -1,0 +1,247 @@
+{
+  "overview": {
+    "total_databases": 35,
+    "total_storage_pb": 5.8,
+    "total_tables": 8500,
+    "total_collections": 850,
+    "total_indices": 450,
+    "replication_factor": 3,
+    "regions": 12
+  },
+  "relational_databases": {
+    "sql_server": {
+      "clusters": [
+        {
+          "name": "Commerce_Primary",
+          "region": "eastus",
+          "size_tb": 12,
+          "tables": 1250,
+          "rows_total": "150 billion",
+          "throughput": "500K TPS",
+          "replicas": ["westus", "westeurope"]
+        },
+        {
+          "name": "Payments_Primary",
+          "region": "westeurope",
+          "size_tb": 8,
+          "tables": 850,
+          "rows_total": "85 billion",
+          "throughput": "350K TPS",
+          "replicas": ["eastus", "eastasia"],
+          "pci_compliant": true
+        },
+        {
+          "name": "Logistics_Primary",
+          "region": "eastasia",
+          "size_tb": 6,
+          "tables": 680,
+          "rows_total": "45 billion",
+          "throughput": "280K TPS",
+          "replicas": ["australiaeast", "westus"]
+        },
+        {
+          "name": "Finance_Primary",
+          "region": "eastus",
+          "size_tb": 5,
+          "tables": 520,
+          "rows_total": "35 billion",
+          "throughput": "150K TPS",
+          "replicas": ["westeurope"],
+          "sox_compliant": true
+        },
+        {
+          "name": "Analytics_DW",
+          "region": "westus",
+          "size_tb": 14,
+          "tables": 1200,
+          "rows_total": "500 billion",
+          "throughput": "50K queries/hour",
+          "type": "data_warehouse"
+        }
+      ],
+      "largest_tables": [
+        {"cluster": "Commerce_Primary", "name": "Orders", "rows": 25000000000, "partitions": 365},
+        {"cluster": "Commerce_Primary", "name": "OrderItems", "rows": 85000000000, "partitions": 365},
+        {"cluster": "Payments_Primary", "name": "Transactions", "rows": 45000000000, "partitions": 365},
+        {"cluster": "Logistics_Primary", "name": "Shipments", "rows": 12000000000, "partitions": 180},
+        {"cluster": "Analytics_DW", "name": "FactSales", "rows": 250000000000, "partitions": 730}
+      ],
+      "critical_stored_procedures": [
+        {"name": "sp_ProcessGlobalOrder", "cluster": "Commerce_Primary", "lines": 5500, "calls_per_day": 50000000},
+        {"name": "sp_SettlePayment", "cluster": "Payments_Primary", "lines": 3800, "calls_per_day": 45000000},
+        {"name": "sp_RouteShipment", "cluster": "Logistics_Primary", "lines": 2500, "calls_per_day": 25000000},
+        {"name": "sp_GenerateInvoice", "cluster": "Finance_Primary", "lines": 1800, "calls_per_day": 8000000},
+        {"name": "sp_RefreshMaterializedViews", "cluster": "Analytics_DW", "lines": 4500, "calls_per_day": 24}
+      ]
+    },
+    "postgresql": {
+      "clusters": [
+        {
+          "name": "Identity_Primary",
+          "region": "eastus",
+          "size_tb": 3,
+          "tables": 420,
+          "extensions": ["pgcrypto", "uuid-ossp", "pg_stat_statements"]
+        },
+        {
+          "name": "Analytics_Realtime",
+          "region": "westus",
+          "size_tb": 5,
+          "tables": 280,
+          "extensions": ["timescaledb", "pg_partman"]
+        }
+      ]
+    },
+    "oracle_legacy": {
+      "status": "migration_in_progress",
+      "clusters": 3,
+      "total_size_tb": 8,
+      "tables_total": 1850,
+      "tables_migrated": 1200,
+      "packages_total": 450,
+      "packages_migrated": 280,
+      "estimated_completion": "2026-Q3"
+    }
+  },
+  "nosql_databases": {
+    "cosmos_db": {
+      "accounts": [
+        {
+          "name": "CustomerExperience",
+          "api": "MongoDB",
+          "regions": ["eastus", "westeurope", "eastasia"],
+          "size_tb": 8,
+          "collections": 85,
+          "throughput_ru": 2000000
+        },
+        {
+          "name": "ProductCatalog",
+          "api": "SQL",
+          "regions": ["eastus", "westus", "westeurope"],
+          "size_tb": 5,
+          "containers": 45,
+          "throughput_ru": 1500000
+        },
+        {
+          "name": "SessionStore",
+          "api": "Table",
+          "regions": "all",
+          "size_tb": 2,
+          "throughput_ru": 500000
+        }
+      ]
+    },
+    "mongodb": {
+      "clusters": [
+        {
+          "name": "ContentManagement",
+          "size_tb": 6,
+          "collections": 120,
+          "documents_total": "5 billion",
+          "shards": 12
+        },
+        {
+          "name": "SearchIndex",
+          "size_tb": 4,
+          "collections": 45,
+          "documents_total": "2 billion",
+          "atlas_search_enabled": true
+        }
+      ]
+    },
+    "dynamodb": {
+      "tables": [
+        {"name": "GlobalConfig", "size_gb": 50, "items": 5000000, "gsi": 3},
+        {"name": "FeatureFlags", "size_gb": 5, "items": 250000, "gsi": 2},
+        {"name": "RateLimits", "size_gb": 25, "items": 50000000, "gsi": 1}
+      ]
+    }
+  },
+  "timeseries_databases": {
+    "azure_data_explorer": {
+      "clusters": [
+        {
+          "name": "Telemetry",
+          "size_tb": 45,
+          "tables": 85,
+          "ingestion_rate": "10 TB/day",
+          "retention_days": 365
+        },
+        {
+          "name": "SecurityEvents",
+          "size_tb": 25,
+          "tables": 35,
+          "ingestion_rate": "5 TB/day",
+          "retention_days": 730
+        }
+      ]
+    },
+    "influxdb": {
+      "clusters": [
+        {
+          "name": "IoTMetrics",
+          "size_tb": 15,
+          "measurements": 850,
+          "points_per_second": 5000000
+        }
+      ]
+    }
+  },
+  "caching_layer": {
+    "redis_enterprise": {
+      "clusters": [
+        {
+          "name": "SessionCache",
+          "nodes": 6,
+          "size_gb": 256,
+          "keys": "500 million",
+          "hit_rate": 98.5
+        },
+        {
+          "name": "DataCache",
+          "nodes": 12,
+          "size_gb": 512,
+          "keys": "2 billion",
+          "hit_rate": 95.2
+        },
+        {
+          "name": "RateLimiter",
+          "nodes": 4,
+          "size_gb": 64,
+          "keys": "50 million"
+        }
+      ]
+    }
+  },
+  "data_lake": {
+    "azure_data_lake": {
+      "storage_accounts": 8,
+      "total_size_pb": 2.5,
+      "file_systems": [
+        {"name": "raw", "size_pb": 1.2, "retention_days": 365},
+        {"name": "processed", "size_pb": 0.8, "retention_days": 730},
+        {"name": "curated", "size_pb": 0.3, "retention_days": 1825},
+        {"name": "archive", "size_pb": 0.2, "retention_days": 2555}
+      ]
+    },
+    "aws_s3": {
+      "buckets": 25,
+      "total_size_pb": 1.8,
+      "cross_region_replication": true
+    }
+  },
+  "data_pipelines": {
+    "realtime": [
+      {"name": "OrderStream", "throughput": "150K events/sec", "latency_p99_ms": 15},
+      {"name": "PaymentStream", "throughput": "100K events/sec", "latency_p99_ms": 10},
+      {"name": "InventoryStream", "throughput": "80K events/sec", "latency_p99_ms": 20},
+      {"name": "UserActivityStream", "throughput": "500K events/sec", "latency_p99_ms": 50}
+    ],
+    "batch": [
+      {"name": "DailyAggregation", "volume_tb": 25, "duration_hours": 4},
+      {"name": "MLFeatureEngineering", "volume_tb": 15, "duration_hours": 6},
+      {"name": "RegulatoryReporting", "volume_tb": 8, "duration_hours": 3},
+      {"name": "DataArchival", "volume_tb": 50, "duration_hours": 8}
+    ]
+  }
+}

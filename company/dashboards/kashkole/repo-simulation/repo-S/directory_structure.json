@@ -1,0 +1,161 @@
+{
+  "name": "ContosoPOS",
+  "type": "solution",
+  "children": [
+    {
+      "name": "ContosoPOS.Web",
+      "type": "project",
+      "framework": "ASP.NET Core 8.0",
+      "children": [
+        {
+          "name": "Controllers",
+          "type": "directory",
+          "children": [
+            {"name": "ProductController.cs", "type": "file", "loc": 120, "language": "csharp"},
+            {"name": "SaleController.cs", "type": "file", "loc": 180, "language": "csharp"},
+            {"name": "CustomerController.cs", "type": "file", "loc": 95, "language": "csharp"},
+            {"name": "ReportController.cs", "type": "file", "loc": 85, "language": "csharp"},
+            {"name": "AccountController.cs", "type": "file", "loc": 150, "language": "csharp"}
+          ]
+        },
+        {
+          "name": "Models",
+          "type": "directory",
+          "children": [
+            {"name": "ProductViewModel.cs", "type": "file", "loc": 35, "language": "csharp"},
+            {"name": "SaleViewModel.cs", "type": "file", "loc": 45, "language": "csharp"},
+            {"name": "CustomerViewModel.cs", "type": "file", "loc": 30, "language": "csharp"},
+            {"name": "ReportViewModel.cs", "type": "file", "loc": 40, "language": "csharp"},
+            {"name": "DashboardViewModel.cs", "type": "file", "loc": 55, "language": "csharp"}
+          ]
+        },
+        {
+          "name": "Views",
+          "type": "directory",
+          "children": [
+            {
+              "name": "Product",
+              "type": "directory",
+              "children": [
+                {"name": "Index.cshtml", "type": "file", "loc": 85, "language": "razor"},
+                {"name": "Create.cshtml", "type": "file", "loc": 65, "language": "razor"},
+                {"name": "Edit.cshtml", "type": "file", "loc": 70, "language": "razor"},
+                {"name": "Details.cshtml", "type": "file", "loc": 45, "language": "razor"}
+              ]
+            },
+            {
+              "name": "Sale",
+              "type": "directory",
+              "children": [
+                {"name": "Index.cshtml", "type": "file", "loc": 120, "language": "razor"},
+                {"name": "Create.cshtml", "type": "file", "loc": 150, "language": "razor"},
+                {"name": "Receipt.cshtml", "type": "file", "loc": 80, "language": "razor"}
+              ]
+            },
+            {
+              "name": "Shared",
+              "type": "directory",
+              "children": [
+                {"name": "_Layout.cshtml", "type": "file", "loc": 180, "language": "razor"},
+                {"name": "_ValidationScriptsPartial.cshtml", "type": "file", "loc": 15, "language": "razor"},
+                {"name": "Error.cshtml", "type": "file", "loc": 35, "language": "razor"}
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wwwroot",
+          "type": "directory",
+          "children": [
+            {
+              "name": "css",
+              "type": "directory",
+              "children": [
+                {"name": "site.css", "type": "file", "loc": 250, "language": "css"}
+              ]
+            },
+            {
+              "name": "js",
+              "type": "directory",
+              "children": [
+                {"name": "site.js", "type": "file", "loc": 180, "language": "javascript"},
+                {"name": "sale.js", "type": "file", "loc": 220, "language": "javascript"}
+              ]
+            }
+          ]
+        },
+        {"name": "Program.cs", "type": "file", "loc": 85, "language": "csharp"},
+        {"name": "appsettings.json", "type": "file", "loc": 35, "language": "json"},
+        {"name": "appsettings.Development.json", "type": "file", "loc": 20, "language": "json"}
+      ]
+    },
+    {
+      "name": "ContosoPOS.Services",
+      "type": "project",
+      "framework": ".NET 8.0",
+      "children": [
+        {"name": "ProductService.cs", "type": "file", "loc": 200, "language": "csharp"},
+        {"name": "SaleService.cs", "type": "file", "loc": 280, "language": "csharp"},
+        {"name": "CustomerService.cs", "type": "file", "loc": 150, "language": "csharp"},
+        {"name": "ReportService.cs", "type": "file", "loc": 180, "language": "csharp"},
+        {"name": "InventoryService.cs", "type": "file", "loc": 220, "language": "csharp"},
+        {
+          "name": "Interfaces",
+          "type": "directory",
+          "children": [
+            {"name": "IProductService.cs", "type": "file", "loc": 25, "language": "csharp"},
+            {"name": "ISaleService.cs", "type": "file", "loc": 30, "language": "csharp"},
+            {"name": "ICustomerService.cs", "type": "file", "loc": 20, "language": "csharp"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ContosoPOS.Data",
+      "type": "project",
+      "framework": ".NET 8.0",
+      "children": [
+        {
+          "name": "Entities",
+          "type": "directory",
+          "children": [
+            {"name": "Product.cs", "type": "file", "loc": 45, "language": "csharp"},
+            {"name": "Sale.cs", "type": "file", "loc": 65, "language": "csharp"},
+            {"name": "SaleItem.cs", "type": "file", "loc": 35, "language": "csharp"},
+            {"name": "Customer.cs", "type": "file", "loc": 55, "language": "csharp"},
+            {"name": "Category.cs", "type": "file", "loc": 25, "language": "csharp"}
+          ]
+        },
+        {
+          "name": "Repositories",
+          "type": "directory",
+          "children": [
+            {"name": "ProductRepository.cs", "type": "file", "loc": 150, "language": "csharp"},
+            {"name": "SaleRepository.cs", "type": "file", "loc": 180, "language": "csharp"},
+            {"name": "CustomerRepository.cs", "type": "file", "loc": 120, "language": "csharp"}
+          ]
+        },
+        {"name": "ApplicationDbContext.cs", "type": "file", "loc": 120, "language": "csharp"},
+        {
+          "name": "Migrations",
+          "type": "directory",
+          "children": [
+            {"name": "20260101000000_InitialCreate.cs", "type": "file", "loc": 180, "language": "csharp"},
+            {"name": "20260115000000_AddCategories.cs", "type": "file", "loc": 85, "language": "csharp"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Database",
+      "type": "directory",
+      "children": [
+        {"name": "Schema.sql", "type": "file", "loc": 250, "language": "sql"},
+        {"name": "SeedData.sql", "type": "file", "loc": 180, "language": "sql"}
+      ]
+    },
+    {"name": "ContosoPOS.sln", "type": "file", "language": "solution"},
+    {"name": "README.md", "type": "file", "loc": 120, "language": "markdown"},
+    {"name": ".gitignore", "type": "file", "loc": 45, "language": "text"}
+  ]
+}

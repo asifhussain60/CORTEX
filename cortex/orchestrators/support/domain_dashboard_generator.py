@@ -4,6 +4,8 @@ Domain Dashboard Generator for Company Domains.
 Generates rich, glassmorphism-themed dashboards for company domain analysis
 with D3.js visualizations, security findings, and comprehensive metrics.
 
+NOW GENERATES STRUCTURED JSON DATA FILES for dynamic rendering.
+
 Authority: cortex-architect.prompt.md v8.0
 Author: Asif Hussain
 """
@@ -42,6 +44,8 @@ class DomainDashboardGenerator:
         self.domain_name = domain_name
         self.domain_path = domain_path
         self.assets_path = domain_path / "assets"
+        self.data_dir = domain_path / "data"
+        self.data_dir.mkdir(parents=True, exist_ok=True)
         
     def generate_dashboard(
         self,
@@ -49,7 +53,10 @@ class DomainDashboardGenerator:
         output_path: Optional[Path] = None
     ) -> Path:
         """
-        Generate complete dashboard HTML.
+        Generate complete dashboard with JSON data files and HTML template.
+        
+        PHASE 1: Generate structured JSON data files
+        PHASE 2: Generate HTML template that reads JSON
         
         Args:
             onboarding_data: Data from RepositoryOnboardingOrchestrator
@@ -60,13 +67,228 @@ class DomainDashboardGenerator:
         """
         if output_path is None:
             output_path = self.domain_path / "dashboard.html"
-            
+        
+        # PHASE 1: Generate JSON data files
+        logger.info(f"Generating JSON data files for {self.domain_name}...")
+        self._generate_overview_data(onboarding_data)
+        self._generate_security_data(onboarding_data)
+        self._generate_tech_stack_data(onboarding_data)
+        # Additional tabs will be implemented in subsequent phases
+        
+        # PHASE 2: Generate HTML template
         html_content = self._generate_html(onboarding_data)
         
         output_path.write_text(html_content, encoding='utf-8')
         logger.info(f"Generated dashboard: {output_path}")
+        logger.info(f"Data files saved to: {self.data_dir}")
         
         return output_path
+    
+    def _generate_overview_data(self, data: Dict[str, Any]) -> None:
+        """
+        Generate overview.json with comprehensive business narrative.
+        
+        Uses BusinessLanguageOrchestrator for rich, human-readable content.
+        """
+        from cortex.orchestrators.support.business_language_orchestrator import (
+            get_business_language_orchestrator
+        )
+        
+        repo_path_str = data.get('repo_path', '')
+        repo_path = Path(repo_path_str) if repo_path_str else Path.cwd()
+        holistic_context = data.get('holistic_context', {})
+        security_risks = data.get('security_risks', {})
+        
+        # Generate business narrative using orchestrator
+        biz_orchestrator = get_business_language_orchestrator()
+        narrative = biz_orchestrator.generate_narrative(repo_path, holistic_context)
+        
+        # Calculate metrics
+        health_score = self._calculate_health_score(security_risks)
+        health_label = self._get_health_label(health_score)
+        health_category = self._get_health_category(health_score)
+        
+        p0_count = len(security_risks.get('p0_risks', []))
+        p1_count = len(security_risks.get('p1_risks', []))
+        p2_count = len(security_risks.get('p2_risks', []))
+        
+        # Extract file counts
+        code_analysis = holistic_context.get('code_analysis', {})
+        files = code_analysis.get('files', [])
+        
+        # Build overview JSON
+        overview_data = {
+            "metadata": {
+                "generated_at": data.get('timestamp', datetime.now().isoformat()),
+                "cortex_version": "8.0",
+                "repo_name": narrative.name,
+                "repo_path": str(repo_path)
+            },
+            "health": {
+                "score": health_score,
+                "label": health_label,
+                "category": health_category,
+                "color": self._get_health_color(health_score)
+            },
+            "metrics": {
+                "technologies_detected": len(narrative.tech_stack),
+                "use_cases_identified": len(narrative.use_cases),
+                "security_findings": p0_count + p1_count + p2_count,
+                "source_files": len(files),
+                "solution_projects": len(self._extract_solution_projects(holistic_context))
+            },
+            "project": {
+                "name": narrative.title,
+                "tagline": narrative.tagline,
+                "description": narrative.description,
+                "architecture_summary": narrative.architecture_summary,
+                "target_users": narrative.target_users,
+                "confidence": {
+                    "score": narrative.confidence.score,
+                    "level": narrative.confidence.level,
+                    "evidence": narrative.confidence.evidence,
+                    "assumptions": narrative.confidence.assumptions
+                }
+            },
+            "use_cases": [
+                {
+                    "title": uc.title,
+                    "description": uc.description,
+                    "icon": uc.icon,
+                    "actors": uc.actors,
+                    "confidence": {
+                        "score": uc.confidence.score,
+                        "level": uc.confidence.level
+                    },
+                    "evidence_files": uc.evidence_files[:5],  # Show top 5 only
+                    "evidence_file_count": len(uc.evidence_files)
+                }
+                for uc in narrative.use_cases
+            ],
+            "tech_stack": [
+                {
+                    "name": tech["name"],
+                    "icon": tech["icon"],
+                    "category": tech["category"],
+                    "confidence": tech.get("confidence", "high"),
+                    "evidence_files": tech.get("evidence_files", [])[:3]
+                }
+                for tech in narrative.tech_stack
+            ]
+        }
+        
+        # Save to JSON
+        overview_file = self.data_dir / "overview.json"
+        with open(overview_file, 'w', encoding='utf-8') as f:
+            json.dump(overview_data, f, indent=2, ensure_ascii=False)
+        
+        logger.info(f"✅ Generated overview.json with {len(narrative.use_cases)} use cases")
+    
+    def _generate_security_data(self, data: Dict[str, Any]) -> None:
+        """Generate security.json with detailed security findings."""
+        security_risks = data.get('security_risks', {})
+        
+        security_data = {
+            "summary": {
+                "p0_count": len(security_risks.get('p0_risks', [])),
+                "p1_count": len(security_risks.get('p1_risks', [])),
+                "p2_count": len(security_risks.get('p2_risks', [])),
+                "total_findings": sum([
+                    len(security_risks.get('p0_risks', [])),
+                    len(security_risks.get('p1_risks', [])),
+                    len(security_risks.get('p2_risks', []))
+                ])
+            },
+            "findings": {
+                "p0_risks": security_risks.get('p0_risks', []),
+                "p1_risks": security_risks.get('p1_risks', []),
+                "p2_risks": security_risks.get('p2_risks', [])
+            },
+            "remediation_guidance": self._generate_remediation_guidance(security_risks)
+        }
+        
+        # Save to JSON
+        security_file = self.data_dir / "security.json"
+        with open(security_file, 'w', encoding='utf-8') as f:
+            json.dump(security_data, f, indent=2, ensure_ascii=False)
+        
+        logger.info(f"✅ Generated security.json with {security_data['summary']['total_findings']} findings")
+    
+    def _generate_tech_stack_data(self, data: Dict[str, Any]) -> None:
+        """Generate tech_stack.json with detailed technology analysis."""
+        holistic_context = data.get('holistic_context', {})
+        
+        # Extract tech stack using business language orchestrator
+        from cortex.orchestrators.support.business_language_orchestrator import (
+            get_business_language_orchestrator
+        )
+        
+        repo_path_str = data.get('repo_path', '')
+        repo_path = Path(repo_path_str) if repo_path_str else Path.cwd()
+        
+        biz_orchestrator = get_business_language_orchestrator()
+        narrative = biz_orchestrator.generate_narrative(repo_path, holistic_context)
+        
+        # Group technologies by category
+        tech_by_category = {}
+        for tech in narrative.tech_stack:
+            category = tech["category"]
+            if category not in tech_by_category:
+                tech_by_category[category] = []
+            tech_by_category[category].append(tech)
+        
+        tech_stack_data = {
+            "technologies": narrative.tech_stack,
+            "by_category": tech_by_category,
+            "summary": {
+                "total_technologies": len(narrative.tech_stack),
+                "categories": list(tech_by_category.keys()),
+                "high_confidence_count": len([t for t in narrative.tech_stack if t.get("confidence") == "high"])
+            }
+        }
+        
+        # Save to JSON
+        tech_file = self.data_dir / "tech_stack.json"
+        with open(tech_file, 'w', encoding='utf-8') as f:
+            json.dump(tech_stack_data, f, indent=2, ensure_ascii=False)
+        
+        logger.info(f"✅ Generated tech_stack.json with {len(narrative.tech_stack)} technologies")
+    
+    def _generate_remediation_guidance(self, security_risks: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate remediation guidance for security findings."""
+        p0_risks = security_risks.get('p0_risks', [])
+        p1_risks = security_risks.get('p1_risks', [])
+        
+        guidance = {
+            "immediate_actions": [],
+            "short_term": [],
+            "long_term": []
+        }
+        
+        if p0_risks:
+            guidance["immediate_actions"].append({
+                "title": "Address P0 Critical Findings",
+                "description": "Fix hardcoded credentials, rotate keys, secure sensitive data",
+                "priority": "P0",
+                "estimated_effort": "1-2 weeks"
+            })
+        
+        if p1_risks:
+            guidance["short_term"].append({
+                "title": "Address P1 High Priority Findings",
+                "description": "Update deprecated algorithms, upgrade frameworks, fix injection vulnerabilities",
+                "priority": "P1",
+                "estimated_effort": "2-4 weeks"
+            })
+        
+        guidance["long_term"].append({
+            "title": "Implement Security Best Practices",
+            "description": "Add automated security scanning, implement CI/CD security gates, conduct regular audits",
+            "priority": "P2",
+            "estimated_effort": "Ongoing"
+        })
+        
+        return guidance
     
     def _generate_html(self, data: Dict[str, Any]) -> str:
         """Generate complete HTML content."""

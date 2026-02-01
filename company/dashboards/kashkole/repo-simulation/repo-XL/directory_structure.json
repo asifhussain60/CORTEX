@@ -1,0 +1,258 @@
+{
+  "repository_name": "ContosoFinancialPlatform",
+  "total_files": 35248,
+  "total_directories": 4850,
+  "architecture": "domain_driven_design",
+  "bounded_contexts": [
+    {
+      "name": "Banking",
+      "path": "src/Domains/Banking/",
+      "files": 6850,
+      "services": [
+        {"name": "AccountService", "files": 1285, "path": "Services/Account/"},
+        {"name": "TransactionService", "files": 1485, "path": "Services/Transaction/"},
+        {"name": "LoanService", "files": 985, "path": "Services/Loan/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 1250},
+        "Application/": {"files": 850},
+        "Infrastructure/": {"files": 1245},
+        "API/": {"files": 735}
+      }
+    },
+    {
+      "name": "Payments",
+      "path": "src/Domains/Payments/",
+      "files": 5425,
+      "services": [
+        {"name": "PaymentProcessing", "files": 1685, "path": "Services/Processing/"},
+        {"name": "Settlement", "files": 1285, "path": "Services/Settlement/"},
+        {"name": "Reconciliation", "files": 1125, "path": "Services/Reconciliation/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 985},
+        "Application/": {"files": 625},
+        "Infrastructure/": {"files": 905}
+      }
+    },
+    {
+      "name": "Trading",
+      "path": "src/Domains/Trading/",
+      "files": 7285,
+      "services": [
+        {"name": "OrderMatching", "files": 2185, "path": "Services/OrderMatching/"},
+        {"name": "MarketData", "files": 1985, "path": "Services/MarketData/"},
+        {"name": "RiskManagement", "files": 1685, "path": "Services/RiskManagement/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 1650},
+        "Application/": {"files": 1285},
+        "Infrastructure/": {"files": 1495}
+      }
+    },
+    {
+      "name": "WealthManagement",
+      "path": "src/Domains/WealthManagement/",
+      "files": 4685,
+      "services": [
+        {"name": "Portfolio", "files": 1485, "path": "Services/Portfolio/"},
+        {"name": "Advisory", "files": 1285, "path": "Services/Advisory/"},
+        {"name": "Reporting", "files": 985, "path": "Services/Reporting/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 825},
+        "Application/": {"files": 625},
+        "Infrastructure/": {"files": 480}
+      }
+    },
+    {
+      "name": "Compliance",
+      "path": "src/Domains/Compliance/",
+      "files": 3985,
+      "services": [
+        {"name": "AML", "files": 1285, "path": "Services/AML/"},
+        {"name": "KYC", "files": 985, "path": "Services/KYC/"},
+        {"name": "Audit", "files": 825, "path": "Services/Audit/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 685},
+        "Application/": {"files": 525},
+        "Infrastructure/": {"files": 680}
+      }
+    },
+    {
+      "name": "CRM",
+      "path": "src/Domains/CRM/",
+      "files": 3825,
+      "services": [
+        {"name": "Customer", "files": 1185, "path": "Services/Customer/"},
+        {"name": "LeadManagement", "files": 985, "path": "Services/LeadManagement/"},
+        {"name": "Campaign", "files": 825, "path": "Services/Campaign/"}
+      ],
+      "subdirs": {
+        "Domain/": {"files": 625},
+        "Application/": {"files": 485},
+        "Infrastructure/": {"files": 545}
+      }
+    }
+  ],
+  "platform_services": {
+    "path": "src/Platform/",
+    "files": 4285,
+    "subdirs": {
+      "IdentityServer/": {"files": 985},
+      "ApiGateway/": {"files": 685},
+      "MessageBus/": {"files": 485},
+      "EventStore/": {"files": 425},
+      "ServiceDiscovery/": {"files": 285},
+      "ConfigurationService/": {"files": 385},
+      "NotificationHub/": {"files": 485},
+      "WorkflowEngine/": {"files": 550}
+    }
+  },
+  "shared_kernel": {
+    "path": "src/SharedKernel/",
+    "files": 1685,
+    "subdirs": {
+      "Common/": {"files": 485},
+      "ValueObjects/": {"files": 385},
+      "Exceptions/": {"files": 185},
+      "Extensions/": {"files": 285},
+      "Specifications/": {"files": 145},
+      "Interfaces/": {"files": 200}
+    }
+  },
+  "frontend_applications": {
+    "AdminPortal": {
+      "path": "src/Frontend/AdminPortal/",
+      "framework": "Angular 17",
+      "files": 3485,
+      "subdirs": {
+        "src/app/modules/": {"files": 1685},
+        "src/app/shared/": {"files": 685},
+        "src/app/core/": {"files": 485},
+        "src/assets/": {"files": 485},
+        "src/environments/": {"files": 145}
+      }
+    },
+    "TraderWorkstation": {
+      "path": "src/Frontend/TraderWorkstation/",
+      "framework": "React 18",
+      "files": 2985,
+      "subdirs": {
+        "src/features/": {"files": 1485},
+        "src/components/": {"files": 685},
+        "src/services/": {"files": 385},
+        "src/hooks/": {"files": 185},
+        "src/utils/": {"files": 145},
+        "public/": {"files": 100}
+      }
+    },
+    "MobileBanking": {
+      "path": "src/Frontend/MobileBanking/",
+      "framework": "React Native",
+      "files": 2185,
+      "subdirs": {
+        "src/screens/": {"files": 685},
+        "src/components/": {"files": 585},
+        "src/navigation/": {"files": 185},
+        "src/services/": {"files": 285},
+        "ios/": {"files": 245},
+        "android/": {"files": 200}
+      }
+    },
+    "CustomerPortal": {
+      "path": "src/Frontend/CustomerPortal/",
+      "framework": "Next.js 14",
+      "files": 2685,
+      "subdirs": {
+        "app/": {"files": 1085},
+        "components/": {"files": 785},
+        "lib/": {"files": 385},
+        "public/": {"files": 285},
+        "styles/": {"files": 145}
+      }
+    }
+  },
+  "data_layer": {
+    "path": "src/DataAccess/",
+    "files": 2485,
+    "subdirs": {
+      "Migrations/": {"files": 985},
+      "EntityConfigurations/": {"files": 685},
+      "Repositories/": {"files": 485},
+      "UnitOfWork/": {"files": 185},
+      "Interceptors/": {"files": 145}
+    }
+  },
+  "integration_layer": {
+    "path": "src/Integrations/",
+    "files": 1985,
+    "subdirs": {
+      "External/Salesforce/": {"files": 385},
+      "External/Dynamics365/": {"files": 285},
+      "External/Bloomberg/": {"files": 485},
+      "External/SWIFT/": {"files": 385},
+      "Legacy/Mainframe/": {"files": 285},
+      "Legacy/OracleApps/": {"files": 160}
+    }
+  },
+  "tests": {
+    "path": "tests/",
+    "files": 8685,
+    "subdirs": {
+      "UnitTests/": {"files": 4285},
+      "IntegrationTests/": {"files": 2485},
+      "E2ETests/": {"files": 985},
+      "LoadTests/": {"files": 485},
+      "SecurityTests/": {"files": 285},
+      "ContractTests/": {"files": 160}
+    }
+  },
+  "infrastructure": {
+    "path": "infrastructure/",
+    "files": 985,
+    "subdirs": {
+      "terraform/": {"files": 285},
+      "helm/": {"files": 185},
+      "k8s/": {"files": 285},
+      "docker/": {"files": 145},
+      "scripts/": {"files": 85}
+    }
+  },
+  "documentation": {
+    "path": "docs/",
+    "files": 285,
+    "subdirs": {
+      "architecture/": {"files": 85},
+      "api/": {"files": 125},
+      "deployment/": {"files": 45},
+      "runbooks/": {"files": 30}
+    }
+  },
+  "file_type_distribution": {
+    ".cs": 18250,
+    ".tsx/.jsx": 6285,
+    ".ts": 4850,
+    ".json": 985,
+    ".yml/.yaml": 485,
+    ".sql": 285,
+    ".md": 185,
+    ".proto": 125,
+    ".xml": 85
+  },
+  "largest_directories": [
+    {"path": "src/Domains/Trading/Services/OrderMatching", "files": 2185},
+    {"path": "src/Domains/Trading/Services/MarketData", "files": 1985},
+    {"path": "src/Domains/Banking/Services/Transaction", "files": 1485},
+    {"path": "src/Domains/Payments/Services/Processing", "files": 1685},
+    {"path": "tests/UnitTests", "files": 4285}
+  ],
+  "code_organization": {
+    "layered_architecture": true,
+    "clean_architecture": true,
+    "ddd_patterns": ["Aggregates", "Entities", "ValueObjects", "DomainEvents", "Repositories"],
+    "cqrs": true,
+    "event_sourcing": "Partial (Trading domain only)"
+  }
+}

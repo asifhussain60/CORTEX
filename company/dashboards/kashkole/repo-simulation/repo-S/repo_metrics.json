@@ -1,0 +1,196 @@
+{
+  "metadata": {
+    "repo_name": "ContosoPOS",
+    "description": "Small Point-of-Sale system for retail stores",
+    "organization": "Contoso Retail Solutions",
+    "tier": "small",
+    "generated_date": "2026-02-01",
+    "simulation_version": "1.0"
+  },
+  "summary": {
+    "total_files": 89,
+    "total_directories": 24,
+    "total_loc": 8500,
+    "total_classes": 32,
+    "total_interfaces": 8,
+    "total_methods": 245,
+    "languages": ["C#", "JavaScript", "HTML", "CSS", "SQL"],
+    "primary_language": "C#",
+    "primary_framework": "ASP.NET Core MVC 8.0"
+  },
+  "tech_stack": {
+    "backend": {
+      "framework": "ASP.NET Core 8.0",
+      "language": "C# 12",
+      "orm": "Entity Framework Core 8.0",
+      "api_type": "REST",
+      "authentication": "ASP.NET Identity"
+    },
+    "frontend": {
+      "framework": "Razor Pages + jQuery",
+      "css_framework": "Bootstrap 5.3",
+      "bundler": "None (CDN)"
+    },
+    "database": {
+      "primary": {
+        "type": "SQL Server",
+        "version": "2022 Express",
+        "size_gb": 0.5,
+        "tables": 18,
+        "stored_procedures": 12,
+        "views": 5
+      }
+    },
+    "hosting": {
+      "environment": "On-premises IIS",
+      "ci_cd": "None"
+    }
+  },
+  "architecture": {
+    "pattern": "MVC Monolith",
+    "layers": [
+      {
+        "name": "Presentation",
+        "path": "ContosoPOS.Web",
+        "files": 28,
+        "classes": 8
+      },
+      {
+        "name": "Business Logic",
+        "path": "ContosoPOS.Services",
+        "files": 15,
+        "classes": 12
+      },
+      {
+        "name": "Data Access",
+        "path": "ContosoPOS.Data",
+        "files": 12,
+        "classes": 10
+      }
+    ],
+    "projects": [
+      {
+        "name": "ContosoPOS.Web",
+        "type": "ASP.NET Core MVC",
+        "files": 45,
+        "references": ["ContosoPOS.Services", "ContosoPOS.Data"]
+      },
+      {
+        "name": "ContosoPOS.Services",
+        "type": "Class Library",
+        "files": 22,
+        "references": ["ContosoPOS.Data"]
+      },
+      {
+        "name": "ContosoPOS.Data",
+        "type": "Class Library",
+        "files": 18,
+        "references": []
+      }
+    ]
+  },
+  "file_distribution": {
+    "by_extension": {
+      ".cs": 42,
+      ".cshtml": 18,
+      ".js": 8,
+      ".css": 5,
+      ".json": 6,
+      ".sql": 4,
+      ".md": 3,
+      ".config": 3
+    },
+    "by_directory": {
+      "Controllers": 5,
+      "Models": 12,
+      "Views": 18,
+      "Services": 8,
+      "Data": 10,
+      "wwwroot": 15,
+      "Migrations": 6
+    }
+  },
+  "classes": [
+    {"name": "ProductController", "type": "Controller", "loc": 120, "methods": 8, "complexity": 12},
+    {"name": "SaleController", "type": "Controller", "loc": 180, "methods": 12, "complexity": 18},
+    {"name": "CustomerController", "type": "Controller", "loc": 95, "methods": 6, "complexity": 8},
+    {"name": "ReportController", "type": "Controller", "loc": 85, "methods": 5, "complexity": 7},
+    {"name": "AccountController", "type": "Controller", "loc": 150, "methods": 10, "complexity": 15},
+    {"name": "ProductService", "type": "Service", "loc": 200, "methods": 15, "complexity": 20},
+    {"name": "SaleService", "type": "Service", "loc": 280, "methods": 18, "complexity": 25},
+    {"name": "CustomerService", "type": "Service", "loc": 150, "methods": 10, "complexity": 12},
+    {"name": "ReportService", "type": "Service", "loc": 180, "methods": 12, "complexity": 15},
+    {"name": "InventoryService", "type": "Service", "loc": 220, "methods": 14, "complexity": 18},
+    {"name": "Product", "type": "Entity", "loc": 45, "methods": 3, "complexity": 2},
+    {"name": "Sale", "type": "Entity", "loc": 65, "methods": 4, "complexity": 3},
+    {"name": "SaleItem", "type": "Entity", "loc": 35, "methods": 2, "complexity": 2},
+    {"name": "Customer", "type": "Entity", "loc": 55, "methods": 3, "complexity": 2},
+    {"name": "ApplicationDbContext", "type": "DbContext", "loc": 120, "methods": 5, "complexity": 8},
+    {"name": "ProductRepository", "type": "Repository", "loc": 150, "methods": 12, "complexity": 10},
+    {"name": "SaleRepository", "type": "Repository", "loc": 180, "methods": 15, "complexity": 12},
+    {"name": "CustomerRepository", "type": "Repository", "loc": 120, "methods": 10, "complexity": 8}
+  ],
+  "dependencies": {
+    "nuget_packages": [
+      {"name": "Microsoft.AspNetCore.Identity.EntityFrameworkCore", "version": "8.0.0"},
+      {"name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.0.0"},
+      {"name": "Microsoft.EntityFrameworkCore.Tools", "version": "8.0.0"},
+      {"name": "Serilog.AspNetCore", "version": "8.0.0"},
+      {"name": "AutoMapper", "version": "12.0.1"},
+      {"name": "FluentValidation", "version": "11.9.0"}
+    ],
+    "npm_packages": [],
+    "total_direct_dependencies": 6,
+    "total_transitive_dependencies": 45
+  },
+  "quality_metrics": {
+    "code_coverage": 45.2,
+    "test_count": 28,
+    "avg_cyclomatic_complexity": 8.5,
+    "max_cyclomatic_complexity": 25,
+    "maintainability_index": 72,
+    "technical_debt_hours": 24,
+    "duplicated_lines_percentage": 3.2
+  },
+  "security": {
+    "vulnerabilities": {
+      "critical": 0,
+      "high": 1,
+      "medium": 3,
+      "low": 5
+    },
+    "secrets_detected": 0,
+    "owasp_compliance": {
+      "A01_broken_access_control": "pass",
+      "A02_cryptographic_failures": "warning",
+      "A03_injection": "pass",
+      "A05_security_misconfiguration": "warning"
+    }
+  },
+  "anti_patterns_detected": [
+    {
+      "name": "Missing Repository Interface",
+      "severity": "medium",
+      "files": ["Data/ProductRepository.cs", "Data/SaleRepository.cs"],
+      "description": "Repositories don't implement interfaces, violating DIP"
+    },
+    {
+      "name": "Fat Controller",
+      "severity": "low",
+      "files": ["Controllers/SaleController.cs"],
+      "description": "Controller has too much business logic (180 LOC)"
+    }
+  ],
+  "git_metrics": {
+    "total_commits": 156,
+    "contributors": 2,
+    "branches": 3,
+    "last_commit_date": "2026-01-28",
+    "commit_frequency_per_week": 4.2,
+    "most_changed_files": [
+      "Controllers/SaleController.cs",
+      "Services/SaleService.cs",
+      "Views/Sale/Index.cshtml"
+    ]
+  }
+}

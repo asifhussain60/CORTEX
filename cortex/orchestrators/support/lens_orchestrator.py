@@ -1001,39 +1001,84 @@ class LENSOrchestrator:
         return result
     
     def _analyze_repository_summary(self) -> Dict[str, Any]:
-        """Get repository-level git statistics."""
+        """Get repository-level git statistics and multi-language file counts."""
         try:
-            # Get all commits
+            # Multi-language file extensions
+            language_extensions = {
+                "Python": [".py"],
+                "JavaScript": [".js", ".jsx", ".mjs"],
+                "TypeScript": [".ts", ".tsx"],
+                "C#": [".cs"],
+                "VB.NET": [".vb"],
+                "Java": [".java"],
+                "Go": [".go"],
+                "Rust": [".rs"],
+                "Ruby": [".rb"],
+                "PHP": [".php"],
+                "ASP.NET": [".aspx", ".ascx", ".asmx"],
+                "HTML": [".html", ".htm"],
+                "CSS": [".css", ".scss", ".sass"],
+                "SQL": [".sql"],
+                "Config": [".yaml", ".yml", ".json", ".xml", ".config"],
+            }
+            
+            # Count files by language
+            file_counts = {}
+            total_source_files = 0
+            for lang, exts in language_extensions.items():
+                count = 0
+                for ext in exts:
+                    count += len(list(self.repo_path.rglob(f"*{ext}")))
+                if count > 0:
+                    file_counts[lang] = count
+                    total_source_files += count
+            
+            # Get git statistics
             result = self.git_analyzer.get_recent_commits(max_commits=1000)
             
             if result.success:
                 commits = result.commits
                 contributors = set(commit.author for commit in commits)
                 
-                # Count files in repo
-                python_files = list(self.repo_path.rglob("*.py"))
-                total_files = len(python_files)
+                # Determine primary language
+                primary_language = max(file_counts, key=file_counts.get) if file_counts else "Unknown"
                 
                 return {
                     "total_commits": len(commits),
                     "total_contributors": len(contributors),
                     "contributors": sorted(contributors),
-                    "total_files": total_files,
+                    "total_source_files": total_source_files,
+                    "primary_language": primary_language,
+                    "file_counts_by_language": file_counts,
                     "recent_commit": commits[0].message if commits else "N/A",
                     "repo_path": str(self.repo_path),
                 }
             else:
                 return {
                     "error": result.error,
-                    "total_files": len(list(self.repo_path.rglob("*.py"))),
+                    "total_source_files": total_source_files,
+                    "file_counts_by_language": file_counts,
+                    "primary_language": max(file_counts, key=file_counts.get) if file_counts else "Unknown",
                 }
         except Exception as e:
             return {"error": str(e)}
     
     def _analyze_codebase_structure(self) -> Dict[str, Any]:
-        """Analyze AST structure across all Python files."""
+        """Analyze code structure across all supported languages."""
         try:
-            python_files = list(self.repo_path.rglob("*.py"))[:100]  # Limit to first 100 files
+            # Multi-language source file patterns
+            source_patterns = {
+                "Python": "**/*.py",
+                "JavaScript": "**/*.js",
+                "TypeScript": "**/*.ts",
+                "C#": "**/*.cs",
+                "VB.NET": "**/*.vb",
+                "Java": "**/*.java",
+                "ASP.NET": "**/*.aspx",
+            }
+            
+            # Python-specific deep analysis (AST available)
+            python_files = list(self.repo_path.rglob("*.py"))[:100]
             
             total_functions = 0
             total_classes = 0
@@ -1064,8 +1109,34 @@ class LENSOrchestrator:
                 except Exception:
                     continue  # Skip problematic files
             
+            # Multi-language file counts (for non-Python repos)
+            language_file_counts = {}
+            for lang, pattern in source_patterns.items():
+                files = list(self.repo_path.rglob(pattern.replace("**/", "")))
+                if files:
+                    language_file_counts[lang] = len(files)
+            
+            # Detect TODOs/FIXMEs in all text files (language-agnostic)
+            todo_locations = []
+            for pattern in ["**/*.cs", "**/*.vb", "**/*.js", "**/*.ts", "**/*.java"]:
+                for file in list(self.repo_path.rglob(pattern.replace("**/", "")))[:50]:
+                    try:
+                        content = file.read_text(encoding='utf-8', errors='ignore')
+                        for i, line in enumerate(content.splitlines(), 1):
+                            if "TODO" in line.upper() or "FIXME" in line.upper():
+                                total_todos += 1
+                                if len(todo_locations) < 20:
+                                    todo_locations.append({
+                                        "file": str(file.relative_to(self.repo_path)),
+                                        "line": i,
+                                        "text": line.strip()[:100],
+                                    })
+                    except Exception:
+                        continue
+            
             return {
                 "files_analyzed": len(python_files),
+                "language_file_counts": language_file_counts,
                 "total_functions": total_functions,
                 "total_classes": total_classes,
                 "total_todos": total_todos,
@@ -1077,29 +1148,27 @@ class LENSOrchestrator:
     def _analyze_configurations(self) -> Dict[str, Any]:
         """Analyze configuration files for security issues."""
         try:
+            # analyze_repository returns a Dict, not ConfigAnalysisResult
             config_result = self.config_analyzer.analyze_repository(self.repo_path)
             
-            if config_result.success:
-                return {
-                    "files_analyzed": len(config_result.files_analyzed),
-                    "findings_count": len(config_result.findings),
-                    "p0_count": len([f for f in config_result.findings if f.severity.value == "P0"]),
-                    "p1_count": len([f for f in config_result.findings if f.severity.value == "P1"]),
-                    "findings": [
-                        {
-                            "file": f.file_path,
-                            "severity": f.severity.value,
-                            "category": f.category.value,
-                            "line": f.line_number,
-                            "description": f.description,
-                            "recommendation": f.recommendation,
-                        }
-                        for f in config_result.findings[:20]  # Top 20
-                    ],
-                }
-            else:
-                return {"error": config_result.error}
+            # Extract findings from the dict result
+            p0_findings = config_result.get("p0_findings", [])
+            p1_findings = config_result.get("p1_findings", [])
+            p2_findings = config_result.get("p2_findings", [])
+            
+            all_findings = p0_findings + p1_findings + p2_findings
+            
+            return {
+                "files_analyzed": config_result.get("analyzed_files", 0),
+                "findings_count": len(all_findings),
+                "p0_count": len(p0_findings),
+                "p1_count": len(p1_findings),
+                "p2_count": len(p2_findings),
+                "findings": all_findings[:20],  # Top 20
+                "summary": config_result.get("summary", ""),
+            }
         except Exception as e:
+            logger.warning("Config analysis failed: %s", e)
             return {"error": str(e)}
     
     def _analyze_database_artifacts(self) -> Dict[str, Any]:
@@ -1198,17 +1267,21 @@ class LENSOrchestrator:
         """Synthesize all security findings into unified report."""
         all_findings = []
         
-        # Config findings
-        if "findings" in config_analysis:
-            for f in config_analysis["findings"]:
-                all_findings.append({
-                    "source": "config",
-                    "priority": f["severity"],
-                    "category": f["category"],
-                    "location": f"{f['file']}:{f['line']}",
-                    "description": f["description"],
-                    "recommendation": f["recommendation"],
-                })
+        # Config findings - handle both old and new format
+        findings_list = config_analysis.get("findings", [])
+        for f in findings_list:
+            # Handle both file and file_path keys
+            file_path = f.get("file") or f.get("file_path", "unknown")
+            line_num = f.get("line") or f.get("line_number", 0)
+            
+            all_findings.append({
+                "source": "config",
+                "priority": f.get("severity", "P2"),
+                "category": f.get("category", "security"),
+                "location": f"{file_path}:{line_num}",
+                "description": f.get("description", ""),
+                "recommendation": f.get("recommendation", "Review and fix"),
+            })
         
         # Database findings
         if "recommendations" in database_analysis:

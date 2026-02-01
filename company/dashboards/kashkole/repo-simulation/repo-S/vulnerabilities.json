@@ -1,0 +1,96 @@
+{
+  "vulnerability_summary": {
+    "total": 9,
+    "by_severity": {"critical": 0, "high": 1, "medium": 3, "low": 5}
+  },
+  "code_smells": [
+    {
+      "id": "CS001",
+      "type": "Fat Controller",
+      "severity": "medium",
+      "file": "Controllers/SaleController.cs",
+      "line": 45,
+      "description": "Controller has 180 LOC with business logic that should be in service layer",
+      "rule_source": "engineering-anti-patterns.yaml",
+      "recommended_fix": "Extract business logic to SaleService class"
+    },
+    {
+      "id": "CS002",
+      "type": "Missing Interface",
+      "severity": "low",
+      "file": "Data/ProductRepository.cs",
+      "line": 1,
+      "description": "Repository class does not implement an interface, violating Dependency Inversion Principle",
+      "rule_source": "engineering-solid-principles.yaml",
+      "recommended_fix": "Create IProductRepository interface"
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "AP001",
+      "type": "Service Locator",
+      "severity": "low",
+      "file": "Services/InventoryService.cs",
+      "line": 25,
+      "description": "Using service locator pattern instead of constructor injection",
+      "rule_source": "engineering-anti-patterns.yaml",
+      "recommended_fix": "Use constructor injection via DI container"
+    }
+  ],
+  "security_issues": [
+    {
+      "id": "SEC001",
+      "type": "Missing HTTPS Enforcement",
+      "severity": "high",
+      "file": "Program.cs",
+      "line": 15,
+      "description": "Application does not enforce HTTPS in production",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A02:2021 Cryptographic Failures",
+      "recommended_fix": "Add app.UseHttpsRedirection() and configure HSTS"
+    },
+    {
+      "id": "SEC002",
+      "type": "SQL Injection Risk",
+      "severity": "medium",
+      "file": "Data/SaleRepository.cs",
+      "line": 78,
+      "description": "String concatenation in SQL query - potential SQL injection",
+      "rule_source": "secure-coding-practices.yaml",
+      "owasp_category": "A03:2021 Injection",
+      "recommended_fix": "Use parameterized queries or EF Core LINQ"
+    }
+  ],
+  "best_practice_violations": [
+    {
+      "id": "BP001",
+      "type": "Missing Input Validation",
+      "severity": "medium",
+      "file": "Controllers/ProductController.cs",
+      "line": 32,
+      "description": "No input validation on Create action",
+      "rule_source": "clean-code.yaml",
+      "recommended_fix": "Add FluentValidation validators"
+    },
+    {
+      "id": "BP002",
+      "type": "Magic Numbers",
+      "severity": "low",
+      "file": "Services/SaleService.cs",
+      "line": 145,
+      "description": "Hardcoded tax rate value 0.08",
+      "rule_source": "clean-code.yaml",
+      "recommended_fix": "Extract to configuration or constants"
+    },
+    {
+      "id": "BP003",
+      "type": "Missing Error Handling",
+      "severity": "low",
+      "file": "Services/ReportService.cs",
+      "line": 89,
+      "description": "No try-catch around file operations",
+      "rule_source": "clean-code.yaml",
+      "recommended_fix": "Add proper exception handling"
+    }
+  ]
+}

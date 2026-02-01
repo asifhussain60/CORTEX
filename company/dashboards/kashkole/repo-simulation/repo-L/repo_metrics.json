@@ -1,0 +1,380 @@
+{
+  "metadata": {
+    "repo_name": "ContosoECommerce",
+    "description": "Enterprise E-Commerce Platform with Microservices Architecture",
+    "organization": "Contoso Digital Commerce",
+    "tier": "large",
+    "generated_date": "2026-02-01",
+    "simulation_version": "1.0"
+  },
+  "summary": {
+    "total_files": 8500,
+    "total_directories": 1250,
+    "total_loc": 450000,
+    "total_classes": 485,
+    "total_interfaces": 165,
+    "total_methods": 8500,
+    "languages": ["C#", "TypeScript", "JavaScript", "HTML", "SCSS", "SQL", "YAML", "Dockerfile"],
+    "primary_language": "C#",
+    "primary_framework": "ASP.NET Core 8.0 Microservices + React 18"
+  },
+  "tech_stack": {
+    "backend": {
+      "framework": "ASP.NET Core 8.0",
+      "language": "C# 12",
+      "orm": "Entity Framework Core 8.0 + Dapper",
+      "api_type": "REST + gRPC + GraphQL",
+      "authentication": "IdentityServer4 + Azure AD B2C",
+      "caching": "Redis Cluster",
+      "messaging": "RabbitMQ + Azure Event Hubs",
+      "search": "Elasticsearch",
+      "api_gateway": "Ocelot"
+    },
+    "frontend": {
+      "framework": "React 18",
+      "language": "TypeScript 5.3",
+      "css_framework": "Tailwind CSS 3.4 + Styled Components",
+      "state_management": "Redux Toolkit + React Query",
+      "ui_library": "Ant Design 5.x"
+    },
+    "database": {
+      "primary": {
+        "type": "SQL Server",
+        "version": "2022 Enterprise",
+        "size_gb": 850,
+        "tables": 285,
+        "stored_procedures": 180,
+        "views": 95
+      },
+      "document": {
+        "type": "MongoDB",
+        "version": "7.0",
+        "size_gb": 120,
+        "collections": 45
+      },
+      "cache": {
+        "type": "Redis Cluster",
+        "version": "7.2",
+        "nodes": 6,
+        "size_gb": 32
+      },
+      "search": {
+        "type": "Elasticsearch",
+        "version": "8.12",
+        "indices": 15,
+        "size_gb": 85
+      }
+    },
+    "hosting": {
+      "environment": "Azure Kubernetes Service (AKS)",
+      "ci_cd": "GitHub Actions + ArgoCD",
+      "containers": true,
+      "container_registry": "Azure Container Registry"
+    }
+  },
+  "architecture": {
+    "pattern": "Microservices + Domain-Driven Design",
+    "microservices": [
+      {
+        "name": "CatalogService",
+        "path": "src/Services/Catalog",
+        "files": 420,
+        "classes": 45,
+        "database": "SQL Server",
+        "port": 5001
+      },
+      {
+        "name": "OrderService",
+        "path": "src/Services/Order",
+        "files": 580,
+        "classes": 62,
+        "database": "SQL Server",
+        "port": 5002
+      },
+      {
+        "name": "PaymentService",
+        "path": "src/Services/Payment",
+        "files": 380,
+        "classes": 38,
+        "database": "SQL Server",
+        "port": 5003
+      },
+      {
+        "name": "InventoryService",
+        "path": "src/Services/Inventory",
+        "files": 350,
+        "classes": 35,
+        "database": "SQL Server",
+        "port": 5004
+      },
+      {
+        "name": "CustomerService",
+        "path": "src/Services/Customer",
+        "files": 420,
+        "classes": 42,
+        "database": "SQL Server + MongoDB",
+        "port": 5005
+      },
+      {
+        "name": "NotificationService",
+        "path": "src/Services/Notification",
+        "files": 280,
+        "classes": 28,
+        "database": "MongoDB",
+        "port": 5006
+      },
+      {
+        "name": "SearchService",
+        "path": "src/Services/Search",
+        "files": 220,
+        "classes": 22,
+        "database": "Elasticsearch",
+        "port": 5007
+      },
+      {
+        "name": "ReportingService",
+        "path": "src/Services/Reporting",
+        "files": 450,
+        "classes": 48,
+        "database": "SQL Server",
+        "port": 5008
+      },
+      {
+        "name": "IdentityService",
+        "path": "src/Services/Identity",
+        "files": 320,
+        "classes": 32,
+        "database": "SQL Server",
+        "port": 5009
+      },
+      {
+        "name": "APIGateway",
+        "path": "src/Gateway",
+        "files": 85,
+        "classes": 12,
+        "database": null,
+        "port": 5000
+      }
+    ],
+    "shared_libraries": [
+      {
+        "name": "BuildingBlocks.EventBus",
+        "path": "src/BuildingBlocks/EventBus",
+        "files": 85,
+        "classes": 18
+      },
+      {
+        "name": "BuildingBlocks.Contracts",
+        "path": "src/BuildingBlocks/Contracts",
+        "files": 120,
+        "classes": 45
+      },
+      {
+        "name": "BuildingBlocks.Infrastructure",
+        "path": "src/BuildingBlocks/Infrastructure",
+        "files": 95,
+        "classes": 22
+      }
+    ],
+    "frontend": {
+      "name": "WebSPA",
+      "path": "src/WebApps/WebSPA",
+      "files": 1850,
+      "components": 185,
+      "pages": 42
+    }
+  },
+  "file_distribution": {
+    "by_extension": {
+      ".cs": 2450,
+      ".tsx": 1250,
+      ".ts": 680,
+      ".html": 185,
+      ".scss": 220,
+      ".json": 285,
+      ".sql": 180,
+      ".yaml": 125,
+      ".md": 85,
+      ".dockerfile": 12
+    },
+    "by_directory": {
+      "Controllers": 95,
+      "Commands": 180,
+      "Queries": 145,
+      "Handlers": 325,
+      "Entities": 120,
+      "Aggregates": 35,
+      "ValueObjects": 65,
+      "Repositories": 85,
+      "Services": 145,
+      "IntegrationEvents": 95,
+      "Components": 185,
+      "Pages": 42,
+      "Migrations": 285,
+      "Tests": 1250
+    }
+  },
+  "classes": [
+    {"name": "OrderAggregate", "type": "Aggregate", "loc": 450, "methods": 35, "complexity": 48},
+    {"name": "ProductCatalog", "type": "Aggregate", "loc": 380, "methods": 28, "complexity": 38},
+    {"name": "ShoppingCart", "type": "Aggregate", "loc": 320, "methods": 24, "complexity": 32},
+    {"name": "Customer", "type": "Aggregate", "loc": 280, "methods": 22, "complexity": 28},
+    {"name": "Payment", "type": "Aggregate", "loc": 350, "methods": 26, "complexity": 42},
+    {"name": "OrderProcessingService", "type": "DomainService", "loc": 580, "methods": 42, "complexity": 68},
+    {"name": "InventoryManagementService", "type": "DomainService", "loc": 420, "methods": 32, "complexity": 52},
+    {"name": "PaymentProcessingService", "type": "DomainService", "loc": 520, "methods": 38, "complexity": 65},
+    {"name": "PricingService", "type": "DomainService", "loc": 380, "methods": 28, "complexity": 45},
+    {"name": "ShippingCalculationService", "type": "DomainService", "loc": 340, "methods": 25, "complexity": 38},
+    {"name": "OrderController", "type": "Controller", "loc": 280, "methods": 18, "complexity": 28},
+    {"name": "CatalogController", "type": "Controller", "loc": 320, "methods": 22, "complexity": 32},
+    {"name": "CheckoutController", "type": "Controller", "loc": 250, "methods": 15, "complexity": 25},
+    {"name": "SearchController", "type": "Controller", "loc": 180, "methods": 12, "complexity": 18},
+    {"name": "OrderCreatedIntegrationEventHandler", "type": "EventHandler", "loc": 150, "methods": 5, "complexity": 18},
+    {"name": "PaymentCompletedIntegrationEventHandler", "type": "EventHandler", "loc": 180, "methods": 6, "complexity": 22},
+    {"name": "InventoryUpdatedIntegrationEventHandler", "type": "EventHandler", "loc": 140, "methods": 4, "complexity": 15}
+  ],
+  "dependencies": {
+    "nuget_packages": [
+      {"name": "Microsoft.AspNetCore.Authentication.JwtBearer", "version": "8.0.0"},
+      {"name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.0.0"},
+      {"name": "MediatR", "version": "12.2.0"},
+      {"name": "MassTransit.RabbitMQ", "version": "8.1.0"},
+      {"name": "Grpc.AspNetCore", "version": "2.60.0"},
+      {"name": "HotChocolate.AspNetCore", "version": "13.9.0"},
+      {"name": "MongoDB.Driver", "version": "2.23.0"},
+      {"name": "NEST", "version": "7.17.5"},
+      {"name": "StackExchange.Redis", "version": "2.7.0"},
+      {"name": "Ocelot", "version": "23.0.0"},
+      {"name": "Polly", "version": "8.2.0"},
+      {"name": "Serilog.AspNetCore", "version": "8.0.0"},
+      {"name": "OpenTelemetry.Exporter.Prometheus", "version": "1.7.0"},
+      {"name": "Dapper", "version": "2.1.0"}
+    ],
+    "npm_packages": [
+      {"name": "react", "version": "18.2.0"},
+      {"name": "react-dom", "version": "18.2.0"},
+      {"name": "@reduxjs/toolkit", "version": "2.0.0"},
+      {"name": "@tanstack/react-query", "version": "5.17.0"},
+      {"name": "antd", "version": "5.13.0"},
+      {"name": "tailwindcss", "version": "3.4.0"},
+      {"name": "styled-components", "version": "6.1.0"},
+      {"name": "axios", "version": "1.6.0"},
+      {"name": "react-router-dom", "version": "6.21.0"}
+    ],
+    "total_direct_dependencies": 23,
+    "total_transitive_dependencies": 1250
+  },
+  "quality_metrics": {
+    "code_coverage": 68.5,
+    "test_count": 2850,
+    "avg_cyclomatic_complexity": 15.2,
+    "max_cyclomatic_complexity": 68,
+    "maintainability_index": 62,
+    "technical_debt_hours": 580,
+    "duplicated_lines_percentage": 6.2
+  },
+  "security": {
+    "vulnerabilities": {
+      "critical": 1,
+      "high": 5,
+      "medium": 18,
+      "low": 42
+    },
+    "secrets_detected": 2,
+    "owasp_compliance": {
+      "A01_broken_access_control": "pass",
+      "A02_cryptographic_failures": "warning",
+      "A03_injection": "pass",
+      "A04_insecure_design": "warning",
+      "A05_security_misconfiguration": "fail",
+      "A06_vulnerable_components": "warning",
+      "A07_auth_failures": "pass",
+      "A08_data_integrity_failures": "pass",
+      "A09_logging_failures": "warning",
+      "A10_ssrf": "pass"
+    }
+  },
+  "anti_patterns_detected": [
+    {
+      "name": "God Class",
+      "severity": "critical",
+      "files": ["Services/Order/OrderProcessingService.cs"],
+      "description": "OrderProcessingService exceeds 580 LOC with complexity 68"
+    },
+    {
+      "name": "Distributed Monolith",
+      "severity": "high",
+      "files": ["Services/Order", "Services/Inventory", "Services/Payment"],
+      "description": "Tight coupling between services via synchronous calls"
+    },
+    {
+      "name": "Missing Circuit Breaker",
+      "severity": "high",
+      "files": ["Services/Payment/PaymentProcessingService.cs"],
+      "description": "External payment gateway calls lack resilience patterns"
+    },
+    {
+      "name": "Anemic Domain Model",
+      "severity": "medium",
+      "files": ["Services/Catalog/Domain/Entities"],
+      "description": "Entities are data containers without behavior"
+    },
+    {
+      "name": "Chatty Interface",
+      "severity": "medium",
+      "files": ["Services/Order/Controllers/OrderController.cs"],
+      "description": "Multiple fine-grained API calls for single operation"
+    },
+    {
+      "name": "Database-per-Request Anti-pattern",
+      "severity": "medium",
+      "files": ["Services/Reporting/ReportGenerationService.cs"],
+      "description": "Opening new DB connections per request without pooling"
+    }
+  ],
+  "git_metrics": {
+    "total_commits": 12500,
+    "contributors": 25,
+    "branches": 45,
+    "last_commit_date": "2026-01-31",
+    "commit_frequency_per_week": 85,
+    "most_changed_files": [
+      "src/Services/Order/OrderProcessingService.cs",
+      "src/WebApps/WebSPA/src/features/checkout/CheckoutPage.tsx",
+      "src/Services/Catalog/Controllers/CatalogController.cs"
+    ]
+  },
+  "api_endpoints": {
+    "total": 285,
+    "by_method": {
+      "GET": 145,
+      "POST": 85,
+      "PUT": 35,
+      "DELETE": 20
+    },
+    "by_service": {
+      "Catalog": 42,
+      "Order": 55,
+      "Payment": 28,
+      "Inventory": 32,
+      "Customer": 38,
+      "Notification": 18,
+      "Search": 22,
+      "Reporting": 35,
+      "Identity": 15
+    }
+  },
+  "infrastructure": {
+    "kubernetes": {
+      "deployments": 12,
+      "services": 15,
+      "configmaps": 18,
+      "secrets": 8,
+      "ingresses": 3
+    },
+    "docker": {
+      "dockerfiles": 12,
+      "compose_files": 3
+    }
+  }
+}

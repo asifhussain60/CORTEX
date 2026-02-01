@@ -1,0 +1,78 @@
+{
+  "repository_name": "ContosoHR",
+  "total_files": 892,
+  "total_directories": 145,
+  "root_structure": {
+    "src/": {
+      "ContosoHR.API/": {
+        "type": "aspnet_core_api",
+        "files": 85,
+        "key_files": ["Program.cs", "Startup.cs", "appsettings.json"],
+        "subdirs": ["Controllers/", "Services/", "Models/", "DTOs/", "Middleware/"]
+      },
+      "ContosoHR.Core/": {
+        "type": "class_library",
+        "files": 120,
+        "key_files": ["Entities/", "Interfaces/", "Services/", "ValueObjects/"]
+      },
+      "ContosoHR.Infrastructure/": {
+        "type": "class_library",
+        "files": 95,
+        "subdirs": ["Data/", "Repositories/", "Migrations/", "Caching/"]
+      },
+      "ContosoHR.Web/": {
+        "type": "angular_spa",
+        "files": 485,
+        "subdirs": {
+          "src/app/": {
+            "components/": {"files": 180},
+            "services/": {"files": 45},
+            "models/": {"files": 35},
+            "guards/": {"files": 12},
+            "pipes/": {"files": 8},
+            "directives/": {"files": 5}
+          },
+          "src/assets/": {"files": 85},
+          "src/environments/": {"files": 3}
+        },
+        "key_files": ["angular.json", "package.json", "tsconfig.json"]
+      }
+    },
+    "tests/": {
+      "ContosoHR.Tests/": {
+        "type": "xunit",
+        "files": 65,
+        "subdirs": ["UnitTests/", "IntegrationTests/"]
+      },
+      "ContosoHR.Web.Tests/": {
+        "type": "jasmine_karma",
+        "files": 42,
+        "key_files": ["karma.conf.js"]
+      }
+    },
+    "deployment/": {
+      "files": 8,
+      "key_files": ["docker-compose.yml", "Dockerfile", "azure-pipelines.yml"]
+    },
+    "docs/": {
+      "files": 12,
+      "key_files": ["API.md", "SETUP.md", "ARCHITECTURE.md"]
+    }
+  },
+  "file_type_distribution": {
+    ".cs": 345,
+    ".ts": 285,
+    ".html": 125,
+    ".css/.scss": 85,
+    ".json": 32,
+    ".md": 12,
+    ".yml/.yaml": 8
+  },
+  "largest_directories": [
+    {"path": "src/ContosoHR.Web/src/app/components", "files": 180},
+    {"path": "src/ContosoHR.Core/Entities", "files": 85},
+    {"path": "src/ContosoHR.API/Controllers", "files": 58},
+    {"path": "src/ContosoHR.Infrastructure/Data", "files": 48},
+    {"path": "tests/ContosoHR.Tests/UnitTests", "files": 42}
+  ]
+}

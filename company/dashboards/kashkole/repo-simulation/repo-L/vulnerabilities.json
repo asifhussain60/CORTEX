@@ -1,0 +1,193 @@
+{
+  "vulnerability_summary": {
+    "total": 66,
+    "by_severity": {"critical": 1, "high": 5, "medium": 18, "low": 42}
+  },
+  "code_smells": [
+    {
+      "id": "CS001",
+      "type": "God Class",
+      "severity": "critical",
+      "file": "Services/Order/OrderProcessingService.cs",
+      "line": 1,
+      "description": "Class has 580 LOC with 42 methods and cyclomatic complexity of 68",
+      "rule_source": "engineering-anti-patterns.yaml",
+      "metrics": {"loc": 580, "methods": 42, "complexity": 68},
+      "recommended_fix": "Decompose into OrderValidator, OrderFulfillment, OrderNotification services"
+    },
+    {
+      "id": "CS002",
+      "type": "God Class",
+      "severity": "high",
+      "file": "Services/Payment/PaymentProcessingService.cs",
+      "line": 1,
+      "description": "Class has 520 LOC with 38 methods",
+      "rule_source": "engineering-anti-patterns.yaml",
+      "metrics": {"loc": 520, "methods": 38, "complexity": 65},
+      "recommended_fix": "Split into PaymentGateway, RefundProcessor, PaymentValidator"
+    },
+    {
+      "id": "CS003",
+      "type": "Primitive Obsession",
+      "severity": "medium",
+      "files": ["Services/*/Domain/Entities/*.cs"],
+      "count": 25,
+      "description": "Using string for Money, Email, PhoneNumber instead of Value Objects",
+      "rule_source": "ddd-aggregates-entities.yaml",
+      "recommended_fix": "Create Money, Email, PhoneNumber value objects"
+    },
+    {
+      "id": "CS004",
+      "type": "Feature Envy",
+      "severity": "medium",
+      "count": 12,
+      "description": "Services reaching into other aggregates' internals",
+      "rule_source": "engineering-anti-patterns.yaml"
+    },
+    {
+      "id": "CS005",
+      "type": "Long Method",
+      "severity": "medium",
+      "count": 18,
+      "description": "Methods exceeding 50 lines",
+      "rule_source": "clean-code.yaml"
+    }
+  ],
+  "anti_patterns": [
+    {
+      "id": "AP001",
+      "type": "Distributed Monolith",
+      "severity": "high",
+      "services": ["OrderService", "InventoryService", "PaymentService"],
+      "description": "Services are tightly coupled via synchronous calls, requiring coordinated deployments",
+      "rule_source": "microservices-resilience-patterns.yaml",
+      "evidence": "OrderService makes 5 sync calls to InventoryService per order",
+      "recommended_fix": "Implement async messaging via RabbitMQ for inventory checks"
+    },
+    {
+      "id": "AP002",
+      "type": "Missing Circuit Breaker",
+      "severity": "high",
+      "file": "Services/Payment/PaymentProcessingService.cs",
+      "line": 185,
+      "description": "External payment gateway calls lack resilience patterns",
+      "rule_source": "microservices-resilience-patterns.yaml",
+      "recommended_fix": "Add Polly circuit breaker with retry and fallback"
+    },
+    {
+      "id": "AP003",
+      "type": "Anemic Domain Model",
+      "severity": "medium",
+      "files": ["Services/Catalog/Domain/Entities"],
+      "description": "Product entities are data containers without behavior",
+      "rule_source": "ddd-aggregates-entities.yaml",
+      "recommended_fix": "Add domain methods like Product.ApplyDiscount(), Product.MarkOutOfStock()"
+    },
+    {
+      "id": "AP004",
+      "type": "Chatty Interface",
+      "severity": "medium",
+      "file": "Services/Order/Controllers/OrderController.cs",
+      "description": "Creating an order requires 8 separate API calls from frontend",
+      "rule_source": "rest-api-design.yaml",
+      "recommended_fix": "Create composite CreateOrderCommand with all required data"
+    },
+    {
+      "id": "AP005",
+      "type": "Database-per-Request Anti-pattern",
+      "severity": "medium",
+      "file": "Services/Reporting/ReportGenerationService.cs",
+      "description": "Opening new DB connections per request without pooling",
+      "rule_source": "engineering-anti-patterns.yaml",
+      "recommended_fix": "Use connection pooling, configure DbContext lifecycle"
+    }
+  ],
+  "security_issues": [
+    {
+      "id": "SEC001",
+      "type": "Hardcoded API Key",
+      "severity": "critical",
+      "file": "Services/Payment/appsettings.json",
+      "line": 25,
+      "description": "Payment gateway API key is hardcoded in config file",
+      "rule_source": "secure-coding-practices.yaml",
+      "recommended_fix": "Use Azure Key Vault or environment variables"
+    },
+    {
+      "id": "SEC002",
+      "type": "Missing Input Validation",
+      "severity": "high",
+      "file": "Services/Order/Controllers/OrderController.cs",
+      "line": 45,
+      "description": "No validation on order creation payload",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A03:2021 Injection",
+      "recommended_fix": "Add FluentValidation with CreateOrderValidator"
+    },
+    {
+      "id": "SEC003",
+      "type": "Insecure Deserialization",
+      "severity": "high",
+      "file": "Services/Notification/MessageProcessor.cs",
+      "line": 78,
+      "description": "Using BinaryFormatter for message deserialization",
+      "rule_source": "owasp-top-10.yaml",
+      "owasp_category": "A08:2021 Software and Data Integrity Failures",
+      "recommended_fix": "Use System.Text.Json with type validation"
+    },
+    {
+      "id": "SEC004",
+      "type": "Excessive Data Exposure",
+      "severity": "medium",
+      "file": "Services/Customer/Controllers/CustomerController.cs",
+      "description": "GET /customers returns full customer objects including sensitive fields",
+      "rule_source": "api-security-checklist.yaml",
+      "recommended_fix": "Create CustomerDto with only required public fields"
+    },
+    {
+      "id": "SEC005",
+      "type": "Missing CORS Configuration",
+      "severity": "medium",
+      "file": "Gateway/Program.cs",
+      "description": "API Gateway has overly permissive CORS settings",
+      "rule_source": "owasp-top-10.yaml",
+      "recommended_fix": "Restrict CORS to specific origins"
+    }
+  ],
+  "best_practice_violations": [
+    {
+      "id": "BP001",
+      "type": "Missing Health Checks",
+      "severity": "medium",
+      "services": ["CatalogService", "NotificationService", "SearchService"],
+      "description": "Services lack proper health check endpoints",
+      "rule_source": "monitoring-observability.yaml",
+      "recommended_fix": "Add /health and /ready endpoints with dependency checks"
+    },
+    {
+      "id": "BP002",
+      "type": "Inconsistent Error Responses",
+      "severity": "medium",
+      "count": 28,
+      "description": "Different error formats across services",
+      "rule_source": "rest-api-design.yaml",
+      "recommended_fix": "Implement Problem Details (RFC 7807) format"
+    },
+    {
+      "id": "BP003",
+      "type": "Missing Correlation IDs",
+      "severity": "medium",
+      "description": "No correlation ID propagation across services",
+      "rule_source": "monitoring-observability.yaml",
+      "recommended_fix": "Add X-Correlation-ID header middleware"
+    },
+    {
+      "id": "BP004",
+      "type": "Missing Retry Logic",
+      "severity": "low",
+      "count": 15,
+      "description": "External service calls lack retry policies",
+      "rule_source": "microservices-resilience-patterns.yaml"
+    }
+  ]
+}

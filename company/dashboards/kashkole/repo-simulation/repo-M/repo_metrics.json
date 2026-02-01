@@ -1,0 +1,299 @@
+{
+  "metadata": {
+    "repo_name": "ContosoHR",
+    "description": "Human Resources Management System with Employee Portal",
+    "organization": "Contoso Enterprise Solutions",
+    "tier": "medium",
+    "generated_date": "2026-02-01",
+    "simulation_version": "1.0"
+  },
+  "summary": {
+    "total_files": 892,
+    "total_directories": 156,
+    "total_loc": 85000,
+    "total_classes": 145,
+    "total_interfaces": 42,
+    "total_methods": 1850,
+    "languages": ["C#", "TypeScript", "JavaScript", "HTML", "SCSS", "SQL"],
+    "primary_language": "C#",
+    "primary_framework": "ASP.NET Core Web API 8.0 + Angular 17"
+  },
+  "tech_stack": {
+    "backend": {
+      "framework": "ASP.NET Core 8.0",
+      "language": "C# 12",
+      "orm": "Entity Framework Core 8.0",
+      "api_type": "REST + GraphQL",
+      "authentication": "Azure AD B2C + JWT",
+      "caching": "Redis",
+      "messaging": "Azure Service Bus"
+    },
+    "frontend": {
+      "framework": "Angular 17",
+      "language": "TypeScript 5.3",
+      "css_framework": "Tailwind CSS 3.4",
+      "state_management": "NgRx",
+      "ui_library": "Angular Material"
+    },
+    "database": {
+      "primary": {
+        "type": "SQL Server",
+        "version": "2022",
+        "size_gb": 25,
+        "tables": 68,
+        "stored_procedures": 45,
+        "views": 22
+      },
+      "cache": {
+        "type": "Redis",
+        "version": "7.2",
+        "size_mb": 512
+      }
+    },
+    "hosting": {
+      "environment": "Azure App Service",
+      "ci_cd": "Azure DevOps Pipelines",
+      "containers": false
+    }
+  },
+  "architecture": {
+    "pattern": "Clean Architecture + CQRS",
+    "layers": [
+      {
+        "name": "Presentation",
+        "path": "src/ContosoHR.API",
+        "files": 125,
+        "classes": 35
+      },
+      {
+        "name": "Application",
+        "path": "src/ContosoHR.Application",
+        "files": 180,
+        "classes": 52
+      },
+      {
+        "name": "Domain",
+        "path": "src/ContosoHR.Domain",
+        "files": 85,
+        "classes": 28
+      },
+      {
+        "name": "Infrastructure",
+        "path": "src/ContosoHR.Infrastructure",
+        "files": 95,
+        "classes": 30
+      },
+      {
+        "name": "Frontend SPA",
+        "path": "src/ContosoHR.Web",
+        "files": 320,
+        "classes": 0
+      }
+    ],
+    "projects": [
+      {
+        "name": "ContosoHR.API",
+        "type": "ASP.NET Core Web API",
+        "files": 125,
+        "references": ["ContosoHR.Application"]
+      },
+      {
+        "name": "ContosoHR.Application",
+        "type": "Class Library",
+        "files": 180,
+        "references": ["ContosoHR.Domain"]
+      },
+      {
+        "name": "ContosoHR.Domain",
+        "type": "Class Library",
+        "files": 85,
+        "references": []
+      },
+      {
+        "name": "ContosoHR.Infrastructure",
+        "type": "Class Library",
+        "files": 95,
+        "references": ["ContosoHR.Application", "ContosoHR.Domain"]
+      },
+      {
+        "name": "ContosoHR.Web",
+        "type": "Angular 17 SPA",
+        "files": 320,
+        "references": []
+      },
+      {
+        "name": "ContosoHR.Tests.Unit",
+        "type": "xUnit Test Project",
+        "files": 65,
+        "references": ["ContosoHR.Application", "ContosoHR.Domain"]
+      },
+      {
+        "name": "ContosoHR.Tests.Integration",
+        "type": "xUnit Test Project",
+        "files": 22,
+        "references": ["ContosoHR.API", "ContosoHR.Infrastructure"]
+      }
+    ]
+  },
+  "file_distribution": {
+    "by_extension": {
+      ".cs": 285,
+      ".ts": 195,
+      ".html": 85,
+      ".scss": 72,
+      ".json": 45,
+      ".sql": 28,
+      ".yaml": 15,
+      ".md": 12
+    },
+    "by_directory": {
+      "Controllers": 18,
+      "Commands": 45,
+      "Queries": 38,
+      "Handlers": 83,
+      "Entities": 22,
+      "ValueObjects": 15,
+      "Repositories": 18,
+      "Services": 25,
+      "Components": 65,
+      "Pages": 28,
+      "Migrations": 35
+    }
+  },
+  "classes": [
+    {"name": "EmployeeController", "type": "Controller", "loc": 180, "methods": 12, "complexity": 18},
+    {"name": "DepartmentController", "type": "Controller", "loc": 120, "methods": 8, "complexity": 12},
+    {"name": "LeaveRequestController", "type": "Controller", "loc": 150, "methods": 10, "complexity": 15},
+    {"name": "PayrollController", "type": "Controller", "loc": 200, "methods": 14, "complexity": 22},
+    {"name": "RecruitmentController", "type": "Controller", "loc": 165, "methods": 11, "complexity": 16},
+    {"name": "PerformanceController", "type": "Controller", "loc": 140, "methods": 9, "complexity": 14},
+    {"name": "ReportController", "type": "Controller", "loc": 185, "methods": 13, "complexity": 20},
+    {"name": "CreateEmployeeCommandHandler", "type": "Handler", "loc": 95, "methods": 3, "complexity": 8},
+    {"name": "UpdateEmployeeCommandHandler", "type": "Handler", "loc": 85, "methods": 3, "complexity": 7},
+    {"name": "GetEmployeeQueryHandler", "type": "Handler", "loc": 65, "methods": 2, "complexity": 5},
+    {"name": "GetEmployeesQueryHandler", "type": "Handler", "loc": 120, "methods": 3, "complexity": 12},
+    {"name": "ProcessLeaveRequestCommandHandler", "type": "Handler", "loc": 150, "methods": 4, "complexity": 18},
+    {"name": "CalculatePayrollCommandHandler", "type": "Handler", "loc": 280, "methods": 8, "complexity": 35},
+    {"name": "Employee", "type": "Entity", "loc": 185, "methods": 12, "complexity": 8},
+    {"name": "Department", "type": "Entity", "loc": 95, "methods": 6, "complexity": 4},
+    {"name": "LeaveRequest", "type": "Entity", "loc": 120, "methods": 8, "complexity": 6},
+    {"name": "Payroll", "type": "Entity", "loc": 145, "methods": 10, "complexity": 7},
+    {"name": "EmployeeRepository", "type": "Repository", "loc": 220, "methods": 18, "complexity": 15},
+    {"name": "DepartmentRepository", "type": "Repository", "loc": 150, "methods": 12, "complexity": 10},
+    {"name": "PayrollService", "type": "Service", "loc": 380, "methods": 22, "complexity": 45},
+    {"name": "LeaveCalculationService", "type": "Service", "loc": 250, "methods": 15, "complexity": 28},
+    {"name": "NotificationService", "type": "Service", "loc": 180, "methods": 12, "complexity": 15},
+    {"name": "ReportGenerationService", "type": "Service", "loc": 420, "methods": 25, "complexity": 52}
+  ],
+  "dependencies": {
+    "nuget_packages": [
+      {"name": "Microsoft.AspNetCore.Authentication.JwtBearer", "version": "8.0.0"},
+      {"name": "Microsoft.EntityFrameworkCore.SqlServer", "version": "8.0.0"},
+      {"name": "MediatR", "version": "12.2.0"},
+      {"name": "FluentValidation", "version": "11.9.0"},
+      {"name": "AutoMapper", "version": "12.0.1"},
+      {"name": "Serilog.AspNetCore", "version": "8.0.0"},
+      {"name": "HotChocolate.AspNetCore", "version": "13.9.0"},
+      {"name": "StackExchange.Redis", "version": "2.7.0"},
+      {"name": "Azure.Messaging.ServiceBus", "version": "7.17.0"},
+      {"name": "Polly", "version": "8.2.0"},
+      {"name": "Swashbuckle.AspNetCore", "version": "6.5.0"},
+      {"name": "xunit", "version": "2.6.0"},
+      {"name": "Moq", "version": "4.20.0"},
+      {"name": "FluentAssertions", "version": "6.12.0"}
+    ],
+    "npm_packages": [
+      {"name": "@angular/core", "version": "17.1.0"},
+      {"name": "@angular/material", "version": "17.1.0"},
+      {"name": "@ngrx/store", "version": "17.0.0"},
+      {"name": "tailwindcss", "version": "3.4.0"},
+      {"name": "rxjs", "version": "7.8.0"},
+      {"name": "chart.js", "version": "4.4.0"},
+      {"name": "date-fns", "version": "3.0.0"}
+    ],
+    "total_direct_dependencies": 21,
+    "total_transitive_dependencies": 385
+  },
+  "quality_metrics": {
+    "code_coverage": 72.5,
+    "test_count": 342,
+    "avg_cyclomatic_complexity": 12.8,
+    "max_cyclomatic_complexity": 52,
+    "maintainability_index": 68,
+    "technical_debt_hours": 156,
+    "duplicated_lines_percentage": 4.8
+  },
+  "security": {
+    "vulnerabilities": {
+      "critical": 0,
+      "high": 2,
+      "medium": 8,
+      "low": 15
+    },
+    "secrets_detected": 0,
+    "owasp_compliance": {
+      "A01_broken_access_control": "pass",
+      "A02_cryptographic_failures": "pass",
+      "A03_injection": "pass",
+      "A04_insecure_design": "warning",
+      "A05_security_misconfiguration": "pass",
+      "A07_auth_failures": "pass"
+    }
+  },
+  "anti_patterns_detected": [
+    {
+      "name": "God Class",
+      "severity": "high",
+      "files": ["Services/PayrollService.cs", "Services/ReportGenerationService.cs"],
+      "description": "Classes exceed 350 LOC with high complexity"
+    },
+    {
+      "name": "Feature Envy",
+      "severity": "medium",
+      "files": ["Handlers/CalculatePayrollCommandHandler.cs"],
+      "description": "Handler uses too many methods from external classes"
+    },
+    {
+      "name": "Long Parameter List",
+      "severity": "low",
+      "files": ["Services/ReportGenerationService.cs"],
+      "description": "Methods with more than 5 parameters"
+    },
+    {
+      "name": "Duplicated Code",
+      "severity": "medium",
+      "files": ["Controllers/EmployeeController.cs", "Controllers/DepartmentController.cs"],
+      "description": "Similar validation logic repeated across controllers"
+    }
+  ],
+  "git_metrics": {
+    "total_commits": 2450,
+    "contributors": 8,
+    "branches": 12,
+    "last_commit_date": "2026-01-31",
+    "commit_frequency_per_week": 18.5,
+    "most_changed_files": [
+      "src/ContosoHR.Application/Services/PayrollService.cs",
+      "src/ContosoHR.Web/src/app/employees/employee-list.component.ts",
+      "src/ContosoHR.API/Controllers/EmployeeController.cs"
+    ]
+  },
+  "api_endpoints": {
+    "total": 85,
+    "by_method": {
+      "GET": 42,
+      "POST": 22,
+      "PUT": 12,
+      "DELETE": 9
+    },
+    "by_controller": {
+      "Employee": 15,
+      "Department": 8,
+      "LeaveRequest": 12,
+      "Payroll": 18,
+      "Recruitment": 14,
+      "Performance": 10,
+      "Report": 8
+    }
+  }
+}

@@ -397,6 +397,10 @@ class DependencyAnalyzer:
             return self._parse_package_json(dep_file)
         elif dep_file.name == "pom.xml":
             return self._parse_pom_xml(dep_file)
+        elif dep_file.name == "packages.config":
+            return self._parse_packages_config(dep_file)
+        elif dep_file.suffix == ".csproj":
+            return self._parse_csproj(dep_file)
         else:
             return []
     
@@ -489,7 +493,134 @@ class DependencyAnalyzer:
     def _check_vulnerabilities(self, package: PackageInfo) -> List[Vulnerability]:
         """Check if package has known vulnerabilities."""
         # Check local vulnerability database
-        return self._vulnerability_db.get(package.name, [])
+        vulns = self._vulnerability_db.get(package.name, [])
+        
+        # Also check against known vulnerable packages (hardcoded for common issues)
+        known_vulns = self._get_known_vulnerabilities(package)
+        vulns.extend(known_vulns)
+        
+        return vulns
+    
+    def _get_known_vulnerabilities(self, package: PackageInfo) -> List[Vulnerability]:
+        """Get known vulnerabilities for common packages."""
+        vulns = []
+        
+        # Known vulnerable Python packages
+        python_vulns = {
+            "requests": {"max_safe": "2.31.0", "cve": "CVE-2023-32681", "desc": "Proxy-Authorization header leak"},
+            "urllib3": {"max_safe": "2.0.6", "cve": "CVE-2023-45803", "desc": "Request body not stripped on redirect"},
+            "pyyaml": {"max_safe": "6.0.1", "cve": "CVE-2020-14343", "desc": "Arbitrary code execution"},
+            "cryptography": {"max_safe": "41.0.4", "cve": "CVE-2023-49083", "desc": "NULL dereference DoS"},
+            "pillow": {"max_safe": "10.0.1", "cve": "CVE-2023-44271", "desc": "DoS via decompression bomb"},
+            "django": {"max_safe": "4.2.7", "cve": "CVE-2023-43665", "desc": "ReDoS vulnerability"},
+            "flask": {"max_safe": "2.3.3", "cve": "CVE-2023-30861", "desc": "Session cookie issue"},
+        }
+        
+        # Known vulnerable Node packages
+        node_vulns = {
+            "lodash": {"max_safe": "4.17.21", "cve": "CVE-2021-23337", "desc": "Prototype pollution"},
+            "axios": {"max_safe": "1.6.0", "cve": "CVE-2023-45857", "desc": "CSRF vulnerability"},
+            "express": {"max_safe": "4.18.2", "cve": "CVE-2022-24999", "desc": "Open redirect"},
+            "jquery": {"max_safe": "3.5.0", "cve": "CVE-2020-11023", "desc": "XSS in HTML parsing"},
+            "moment": {"max_safe": "2.29.4", "cve": "CVE-2022-31129", "desc": "ReDoS vulnerability"},
+        }
+        
+        # Known vulnerable .NET packages
+        dotnet_vulns = {
+            "Newtonsoft.Json": {"max_safe": "13.0.3", "cve": "CVE-2024-21907", "desc": "Stack overflow"},
+            "System.Text.Json": {"max_safe": "8.0.0", "cve": "CVE-2024-21319", "desc": "DoS vulnerability"},
+            "Microsoft.AspNetCore.Mvc": {"max_safe": "2.2.0", "cve": "CVE-2019-0564", "desc": "DoS via malformed request"},
+            "log4net": {"max_safe": "2.0.15", "cve": "CVE-2018-1285", "desc": "XXE vulnerability"},
+        }
+        
+        vuln_db = {}
+        if package.dependency_type == DependencyType.PYTHON:
+            vuln_db = python_vulns
+        elif package.dependency_type == DependencyType.NODEJS:
+            vuln_db = node_vulns
+        elif package.dependency_type == DependencyType.DOTNET:
+            vuln_db = dotnet_vulns
+        
+        pkg_name = package.name.lower()
+        for name, info in vuln_db.items():
+            if name.lower() == pkg_name:
+                # Simple version comparison (in production, use semver)
+                try:
+                    current = package.current_version.split(".")
+                    safe = info["max_safe"].split(".")
+                    # Very basic check - real impl would use proper semver
+                    if current < safe:
+                        vulns.append(Vulnerability(
+                            cve_id=info["cve"],
+                            severity=VulnerabilitySeverity.HIGH,
+                            description=info["desc"],
+                            affected_versions=f"< {info['max_safe']}",
+                            fixed_version=info["max_safe"]
+                        ))
+                except Exception:
+                    pass  # Version parsing failed, skip
+        
+        return vulns
+    
+    def _parse_packages_config(self, packages_config: Path) -> List[PackageInfo]:
+        """Parse .NET packages.config (NuGet)."""
+        packages: List[PackageInfo] = []
+        
+        try:
+            content = packages_config.read_text(encoding="utf-8")
+            
+            # Parse NuGet packages.config XML
+            # <package id="Newtonsoft.Json" version="13.0.1" targetFramework="net48" />
+            pattern = r'<package\s+id="([^"]+)"\s+version="([^"]+)"'
+            
+            for match in re.finditer(pattern, content):
+                name, version = match.groups()
+                packages.append(PackageInfo(
+                    name=name,
+                    current_version=version,
+                    dependency_type=DependencyType.DOTNET
+                ))
+        
+        except Exception as e:
+            logger.error(f"Failed to parse packages.config: {e}")
+        
+        return packages
+    
+    def _parse_csproj(self, csproj: Path) -> List[PackageInfo]:
+        """Parse .NET .csproj file for PackageReference elements."""
+        packages: List[PackageInfo] = []
+        
+        try:
+            content = csproj.read_text(encoding="utf-8")
+            
+            # Parse PackageReference elements
+            # <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+            pattern = r'<PackageReference\s+Include="([^"]+)"\s+Version="([^"]+)"'
+            
+            for match in re.finditer(pattern, content):
+                name, version = match.groups()
+                packages.append(PackageInfo(
+                    name=name,
+                    current_version=version,
+                    dependency_type=DependencyType.DOTNET
+                ))
+            
+            # Also check for old-style Reference elements with HintPath
+            # This catches DLL references in legacy projects
+            ref_pattern = r'<Reference\s+Include="([^,"]+)'
+            for match in re.finditer(ref_pattern, content):
+                name = match.group(1)
+                if not name.startswith("System"):  # Skip system assemblies
+                    packages.append(PackageInfo(
+                        name=name,
+                        current_version="unknown",
+                        dependency_type=DependencyType.DOTNET
+                    ))
+        
+        except Exception as e:
+            logger.error(f"Failed to parse .csproj: {e}")
+        
+        return packages
 
 
 # Singleton instance

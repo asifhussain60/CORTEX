@@ -141,6 +141,13 @@ def ask(question: str, category: Optional[str] = None) -> None:
 cli.add_command(lens)
 cli.add_command(dashboard)
 
+# Register onboard command group
+try:
+    from cortex.cli.commands.onboard import onboard
+    cli.add_command(onboard)
+except ImportError:
+    pass  # Graceful fallback if dependencies not available
+
 
 def main() -> None:
     """Main entry point."""

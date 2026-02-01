@@ -195,13 +195,14 @@ Edit `static/css/cortex-lens.css` to customize:
 
 ---
 
-##  Related Documentation
+## 📚 Related Documentation
 
-- [Phase 14 Implementation Plan](_workspaces/cortex-plan/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml)
+- [Phase 18 Enterprise Dashboard System](_workspaces/cortex-plan/PHASE-18-ENTERPRISE-DASHBOARD-SYSTEM.yaml) — Current dashboard architecture
+- [Phase 14 Implementation Plan (Archived)](_workspaces/cortex-plan/.archive/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml) — Historical reference
 - [LENS Intelligence System](docs/05-lens-protocol/)
 - [LENS Analyzers](cortex/brain/analysis/)
 
 ---
 
 **Maintained by:** Asif Hussain  
-**Last Updated:** 2026-01-29
+**Last Updated:** 2026-02-01

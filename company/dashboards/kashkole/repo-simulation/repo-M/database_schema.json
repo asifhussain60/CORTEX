@@ -1,0 +1,60 @@
+{
+  "primary_database": {
+    "name": "ContosoHR_DB",
+    "type": "SQL Server",
+    "version": "2022",
+    "size_gb": 25,
+    "tables": [
+      {"name": "Employees", "rows": 15000, "columns": 35, "indexes": 8, "foreign_keys": 4},
+      {"name": "Departments", "rows": 85, "columns": 12, "indexes": 3, "foreign_keys": 1},
+      {"name": "Positions", "rows": 250, "columns": 15, "indexes": 4, "foreign_keys": 2},
+      {"name": "EmployeePositions", "rows": 18500, "columns": 8, "indexes": 4, "foreign_keys": 3},
+      {"name": "LeaveRequests", "rows": 45000, "columns": 18, "indexes": 6, "foreign_keys": 3},
+      {"name": "LeaveTypes", "rows": 12, "columns": 8, "indexes": 2, "foreign_keys": 0},
+      {"name": "LeaveBalances", "rows": 15000, "columns": 10, "indexes": 4, "foreign_keys": 2},
+      {"name": "Payrolls", "rows": 180000, "columns": 28, "indexes": 7, "foreign_keys": 2},
+      {"name": "PayrollItems", "rows": 1250000, "columns": 12, "indexes": 5, "foreign_keys": 2},
+      {"name": "TaxBrackets", "rows": 45, "columns": 8, "indexes": 2, "foreign_keys": 0},
+      {"name": "Benefits", "rows": 35, "columns": 15, "indexes": 3, "foreign_keys": 0},
+      {"name": "EmployeeBenefits", "rows": 28500, "columns": 10, "indexes": 4, "foreign_keys": 3},
+      {"name": "PerformanceReviews", "rows": 45000, "columns": 22, "indexes": 5, "foreign_keys": 2},
+      {"name": "Goals", "rows": 125000, "columns": 15, "indexes": 4, "foreign_keys": 2},
+      {"name": "Trainings", "rows": 850, "columns": 18, "indexes": 4, "foreign_keys": 1},
+      {"name": "EmployeeTrainings", "rows": 85000, "columns": 12, "indexes": 5, "foreign_keys": 3},
+      {"name": "JobPostings", "rows": 1200, "columns": 25, "indexes": 5, "foreign_keys": 2},
+      {"name": "Applications", "rows": 28000, "columns": 22, "indexes": 6, "foreign_keys": 2},
+      {"name": "Interviews", "rows": 12500, "columns": 18, "indexes": 5, "foreign_keys": 3},
+      {"name": "Documents", "rows": 85000, "columns": 15, "indexes": 4, "foreign_keys": 2},
+      {"name": "AuditLogs", "rows": 2500000, "columns": 12, "indexes": 4, "foreign_keys": 1},
+      {"name": "Notifications", "rows": 450000, "columns": 15, "indexes": 5, "foreign_keys": 2},
+      {"name": "Users", "rows": 15500, "columns": 18, "indexes": 4, "foreign_keys": 1},
+      {"name": "Roles", "rows": 15, "columns": 8, "indexes": 2, "foreign_keys": 0},
+      {"name": "UserRoles", "rows": 16500, "columns": 5, "indexes": 3, "foreign_keys": 2}
+    ],
+    "views": [
+      {"name": "vw_EmployeeDirectory", "columns": 25, "base_tables": ["Employees", "Departments", "Positions"]},
+      {"name": "vw_PayrollSummary", "columns": 18, "base_tables": ["Payrolls", "PayrollItems", "Employees"]},
+      {"name": "vw_LeaveBalance", "columns": 12, "base_tables": ["LeaveBalances", "LeaveTypes", "Employees"]},
+      {"name": "vw_PerformanceMetrics", "columns": 15, "base_tables": ["PerformanceReviews", "Goals", "Employees"]},
+      {"name": "vw_RecruitmentPipeline", "columns": 20, "base_tables": ["JobPostings", "Applications", "Interviews"]}
+    ],
+    "stored_procedures": [
+      {"name": "sp_CalculateMonthlyPayroll", "parameters": 4, "complexity": "high", "lines": 450},
+      {"name": "sp_ProcessLeaveRequest", "parameters": 5, "complexity": "medium", "lines": 180},
+      {"name": "sp_GeneratePerformanceReport", "parameters": 6, "complexity": "high", "lines": 320},
+      {"name": "sp_UpdateLeaveBalances", "parameters": 2, "complexity": "medium", "lines": 150},
+      {"name": "sp_ArchiveOldRecords", "parameters": 3, "complexity": "medium", "lines": 200}
+    ]
+  },
+  "cache": {
+    "type": "Redis",
+    "version": "7.2",
+    "size_mb": 512,
+    "keys": [
+      {"pattern": "employee:*", "count": 15000, "ttl": 3600},
+      {"pattern": "department:*", "count": 85, "ttl": 86400},
+      {"pattern": "session:*", "count": 500, "ttl": 1800},
+      {"pattern": "permissions:*", "count": 15500, "ttl": 3600}
+    ]
+  }
+}
