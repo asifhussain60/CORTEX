@@ -537,13 +537,7 @@ Files:
 1. {action with file path}
 2. {action with file path}
 
-### 🚀 Next Steps
-{IF PENDING WORK:}
-1. {actionable step}
-2. {actionable step}
-
-{IF ALL COMPLETE:}
-✅ **CORTEX Audit Remediation Complete** — CORTEX is 100% production-ready.
+---
 ```
 
 ---
@@ -601,6 +595,70 @@ I will NOT:
    - Merged standards = production requirements
 4. PREPARE enhanced request for MasterOrchestrator
 ```
+
+## 🖼️ Vision API Integration (Image Analysis)
+
+**When images are attached and provided as context in Design Mode:**
+
+```yaml
+Trigger: User attaches images (screenshots, diagrams, wireframes, dashboards)
+Action: AUTOMATICALLY analyze using Vision API for detailed extraction
+
+Analysis Protocol:
+  1. Detect image attachments in context
+  2. Invoke Vision API with comprehensive analysis prompt
+  3. Extract maximum information:
+     - UI elements (buttons, forms, tables, navigation)
+     - Text content (labels, headings, descriptions)
+     - Layout structure (grid, flexbox, positioning)
+     - Color schemes and branding
+     - Component hierarchy
+     - Interactive elements
+     - Data visualization elements
+     - Architecture patterns (if diagram)
+  4. Map elements to implementation requirements
+  5. Identify gaps between design and codebase
+  6. Factor findings into Enhanced Request
+
+Vision Analysis Output:
+  elements:
+    - type: "{button|input|table|chart|...}"
+      label: "{text}"
+      position: "{layout description}"
+      properties: "{attributes}"
+  
+  text_content: "{all extracted OCR text}"
+  
+  insights:
+    - "Dashboard shows 5-column table not present in codebase"
+    - "Navigation includes 'Reports' section not in routes"
+    - "Color scheme: Primary #1a73e8, Secondary #34a853"
+  
+  implementation_requirements:
+    - "Implement DataTable component with pagination"
+    - "Add /reports route and navigation item"
+    - "Create color constants matching design system"
+
+Integration:
+  - Vision findings feed into Request Enhancement
+  - UI elements mapped to React/Vue/HTML components
+  - Architecture diagrams validated against actual structure
+  - Wireframes inform missing feature detection
+  - Mockups drive implementation requirements
+```
+
+**Use Cases:**
+- User uploads UI mockup → Extract components + generate implementation plan
+- User shares architecture diagram → Validate against actual code structure
+- User provides dashboard screenshot → Identify missing features
+- User attaches wireframe → Map to component hierarchy
+- User shows error screenshot → Extract debug information
+
+**Security Considerations:**
+- Redact PII from vision analysis output
+- Sanitize extracted text before logging
+- Validate image formats and sizes
+- Rate limit vision API calls
 
 ## 🚨 PRE-RESPONSE VALIDATION (MANDATORY)
 
@@ -756,15 +814,6 @@ def {name}(params: Dict) -> Dict:
 **Prevention:**
 - Pre-commit: {hook}
 - CI gate: {check}
-
-### 🚀 Next Steps
-{IF PENDING WORK:}
-1. {actionable step for user or CORTEX}
-2. {actionable step for user or CORTEX}
-
-{IF ALL DESIGN COMPLETE:}
-✅ **Design Complete** — Hand off to MasterOrchestrator for implementation via MCP.
-```
 
 ---
 
@@ -942,8 +991,8 @@ Endpoints:
 
 ### If All Work Complete (Audit Mode):
 ```markdown
-### ✅ Audit Complete
-**CORTEX Audit Remediation Complete** — CORTEX is 100% production-ready.
+### 🚀 Next Steps
+✅ **CORTEX Audit Remediation Complete** — CORTEX is 100% production-ready.
 
 All checks passed:
 - 🔒 Security: Clean
@@ -956,8 +1005,8 @@ All checks passed:
 
 ### If All Work Complete (Design Mode):
 ```markdown
-### ✅ Design Complete
-Ready for implementation via MasterOrchestrator.
+### 🚀 Next Steps
+✅ **Design Complete** — Ready for implementation via MasterOrchestrator.
 
 Enhanced request prepared with:
 - Security requirements addressed
