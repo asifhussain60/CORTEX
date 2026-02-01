@@ -95,3 +95,14 @@ tests/_archive/
 
 # CLI generated dashboard output
 lens-dashboards/
+
+# Root directory protection (prevent test file and output pollution)
+# All test files must be in tests/ directory
+/test_*.py
+/onboard_output.txt
+/*_output.txt
+/*.bak
+/*_v[0-9]*.py
+/*_v[0-9]*.md
+/*-v[0-9]*.py
+/*-v[0-9]*.md
