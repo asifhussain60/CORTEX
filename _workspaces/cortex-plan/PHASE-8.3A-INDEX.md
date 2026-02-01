@@ -7,32 +7,32 @@
 ## 📑 Documentation Index
 
 ### Executive Summaries
-- **[PHASE-8.3A-STATUS.txt](_workspaces/docker-plan/PHASE-8.3A-STATUS.txt)** ⭐ START HERE
+- **[PHASE-8.3A-STATUS.txt](_workspaces/cortex-plan/PHASE-8.3A-STATUS.txt)** ⭐ START HERE
   - 100-line executive summary
   - Key metrics, deliverables, sign-off
   - Status: ✅ COMPLETE & OPERATIONAL
 
-- **[PHASE-8.3A-COMPLETION-REPORT.md](_workspaces/docker-plan/PHASE-8.3A-COMPLETION-REPORT.md)**
+- **[PHASE-8.3A-COMPLETION-REPORT.md](_workspaces/cortex-plan/PHASE-8.3A-COMPLETION-REPORT.md)**
   - Full 200+ line specification
   - All 4 artifacts documented
   - Governance compliance matrix
   - Risk assessment & mitigation
 
 ### Quick References
-- **[PHASE-8.3A-QUICK-REFERENCE.md](_workspaces/docker-plan/PHASE-8.3A-QUICK-REFERENCE.md)**
+- **[PHASE-8.3A-QUICK-REFERENCE.md](_workspaces/cortex-plan/PHASE-8.3A-QUICK-REFERENCE.md)**
   - API usage examples
   - Technical specifications
   - Troubleshooting guide
   - Validation checklist
 
 ### Strategic Context
-- **[PHASE-8.3-DECISION-FRAMEWORK.md](_workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md)**
+- **[PHASE-8.3-DECISION-FRAMEWORK.md](_workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md)**
   - Why we chose PATH 2 (Selective)
   - Comparison of 3 options
   - Risk/benefit analysis
   - Timeline impact
 
-- **[PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md](_workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)**
+- **[PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md](_workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)**
   - Discovery audit results
   - 90 duplicates analyzed
   - 6 P0 consolidations identified

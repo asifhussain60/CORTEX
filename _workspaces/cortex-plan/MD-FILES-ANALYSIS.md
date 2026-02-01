@@ -1,4 +1,4 @@
-# Docker-Plan Markdown Files Analysis
+# cortex-plan Markdown Files Analysis
 ## Review & Deletion Recommendation
 
 **Date:** 2026-01-28 | **Authority:** CORTEX Cleanup Review
@@ -22,8 +22,8 @@ These files provide critical current status, deployment guidance, and reference 
 
 | File | Purpose | Status | Keep? | Reason |
 |------|---------|--------|-------|--------|
-| **README.md** | Main entry point | Current | ✅ YES | Master index for docker-plan workspace |
-| **docker-plan-index.md** | Documentation index | Current | ✅ YES | Comprehensive navigation guide |
+| **README.md** | Main entry point | Current | ✅ YES | Master index for cortex-plan workspace |
+| **cortex-plan-index.md** | Documentation index | Current | ✅ YES | Comprehensive navigation guide |
 | **docker-configuration-guide.md** | Docker setup reference | Active | ✅ YES | Operational deployment guide |
 | **observability-runbook.md** | Prometheus/Grafana guide | Active | ✅ YES | Production monitoring setup |
 | **health-verification-tests.md** | Health check procedures | Active | ✅ YES | Validation and testing guide |
@@ -41,11 +41,11 @@ These are execution logs, completion reports, and intermediate working files tha
 #### **Category 1: Execution Completion Reports** (DELETE - Superseded by Final Reports)
 | File | Reason for Deletion |
 |------|-------------------|
-| **DOCKER-PLAN-PHASE-2-3-EXECUTION-COMPLETE.md** | Phase 2-3 complete; superseded by docker-plan-index.md |
-| **DOCKER-PLAN-PHASE-4-EXECUTION-COMPLETE.md** | Phase 4 complete; superseded by docker-plan-index.md |
+| **cortex-plan-PHASE-2-3-EXECUTION-COMPLETE.md** | Phase 2-3 complete; superseded by cortex-plan-index.md |
+| **cortex-plan-PHASE-4-EXECUTION-COMPLETE.md** | Phase 4 complete; superseded by cortex-plan-index.md |
 | **PHASE-2-EXECUTION-PLAN.md** | Phase 2 plan; obsolete after execution |
 | **PHASE-5-IMPLEMENTATION-TRUTH-ANALYSIS.md** | Phase 5 analysis; work completed, summarized elsewhere |
-| **PHASE-6-CLEANUP-COMPLETE.md** | Phase 6 completion report; summarized in docker-plan-index.md |
+| **PHASE-6-CLEANUP-COMPLETE.md** | Phase 6 completion report; summarized in cortex-plan-index.md |
 | **PHASE-7.5-EXECUTION-SUMMARY.md** | Phase 7.5 summary; intermediate work product |
 | **PHASE-7.5-STAGE-1-COMPLETE.md** | Phase 7.5 stage 1; intermediate checkpoint |
 | **PHASE-8-ACTUAL-STATUS.md** | Phase 8 status snapshot; obsolete |
@@ -123,11 +123,11 @@ These supporting files support the essential .md files:
 
 ```bash
 #!/bin/bash
-cd /path/to/CORTEX/_workspaces/docker-plan
+cd /path/to/CORTEX/_workspaces/cortex-plan
 
 # Category 1: Execution Completion Reports
-rm -f DOCKER-PLAN-PHASE-2-3-EXECUTION-COMPLETE.md
-rm -f DOCKER-PLAN-PHASE-4-EXECUTION-COMPLETE.md
+rm -f cortex-plan-PHASE-2-3-EXECUTION-COMPLETE.md
+rm -f cortex-plan-PHASE-4-EXECUTION-COMPLETE.md
 rm -f PHASE-2-EXECUTION-PLAN.md
 rm -f PHASE-5-IMPLEMENTATION-TRUTH-ANALYSIS.md
 rm -f PHASE-6-CLEANUP-COMPLETE.md
@@ -179,7 +179,7 @@ ls -1 *.md | wc -l
 
 **Remaining Essential Files:**
 1. **README.md** - Master workspace index
-2. **docker-plan-index.md** - Comprehensive documentation navigation
+2. **cortex-plan-index.md** - Comprehensive documentation navigation
 3. **docker-configuration-guide.md** - Docker setup & deployment
 4. **observability-runbook.md** - Prometheus/Grafana operational guide
 5. **health-verification-tests.md** - Health check procedures

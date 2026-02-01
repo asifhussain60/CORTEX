@@ -1,7 +1,7 @@
 """
 Wiring Registry - Git-backed orchestrator registry.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 """
 
 from cortex.wiring.registry.git_backed_registry import (

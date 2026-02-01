@@ -282,7 +282,7 @@ cortex_errors_total{type="database_error"} 0
 **2. Import Dashboard Template**
 ```bash
 # Dashboard JSON available at:
-# _workspaces/docker-plan/grafana-dashboard-cortex.json
+# _workspaces/cortex-plan/grafana-dashboard-cortex.json
 ```
 
 ---

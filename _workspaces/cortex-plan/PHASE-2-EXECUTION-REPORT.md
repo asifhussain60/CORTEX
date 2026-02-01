@@ -71,8 +71,8 @@ CURRENT STATUS:
 
 REFERENCE DOCUMENTS:
   - docs/phases/PHASE-8-EPIC.md - Detailed refactoring epic
-  - _workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md - Cleanup overview
-  - _workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md - Quick reference
+  - _workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md - Cleanup overview
+  - _workspaces/cortex-plan/DATABASE-CLEANUP-QUICKREF.md - Quick reference
 """
 ```
 
@@ -137,7 +137,7 @@ class DatabaseManager:
 
 ### 3. Updated Cleanup Strategy ✅
 
-**File:** `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md`
+**File:** `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md`
 
 **Changes:**
 - Phase 2 status updated to COMPLETE
@@ -357,5 +357,5 @@ class DatabaseManager:
 ### After Phase 8:
 - [ ] Delete database.py permanently
 - [ ] Update all documentation (CHEATSHEET.md, START-HERE.md)
-- [ ] Archive _workspaces/docker-plan cleanup documents
+- [ ] Archive _workspaces/cortex-plan cleanup documents
 - [ ] Create CORE-035 consolidation completion report

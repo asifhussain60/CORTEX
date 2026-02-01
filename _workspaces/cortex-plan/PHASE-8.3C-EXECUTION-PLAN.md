@@ -298,10 +298,10 @@ python3 scripts/phase_8_3c_p0_consolidation.py --execute
 
 ## 📚 Reference Documentation
 
-- **Phase 8.3A Index:** [PHASE-8.3A-INDEX.md](_workspaces/docker-plan/PHASE-8.3A-INDEX.md)
-- **Quick Reference:** [PHASE-8.3A-QUICK-REFERENCE.md](_workspaces/docker-plan/PHASE-8.3A-QUICK-REFERENCE.md)
-- **Decision Framework:** [PHASE-8.3-DECISION-FRAMEWORK.md](_workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
-- **Audit Findings:** [PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md](_workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)
+- **Phase 8.3A Index:** [PHASE-8.3A-INDEX.md](_workspaces/cortex-plan/PHASE-8.3A-INDEX.md)
+- **Quick Reference:** [PHASE-8.3A-QUICK-REFERENCE.md](_workspaces/cortex-plan/PHASE-8.3A-QUICK-REFERENCE.md)
+- **Decision Framework:** [PHASE-8.3-DECISION-FRAMEWORK.md](_workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
+- **Audit Findings:** [PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md](_workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)
 
 ---
 

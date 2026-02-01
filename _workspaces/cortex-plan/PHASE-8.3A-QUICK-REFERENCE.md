@@ -251,9 +251,9 @@ print(stats['total_duplications'])
 
 ## 📚 Documentation References
 
-- [Phase 8.3A Completion Report](_workspaces/docker-plan/PHASE-8.3A-COMPLETION-REPORT.md)
+- [Phase 8.3A Completion Report](_workspaces/cortex-plan/PHASE-8.3A-COMPLETION-REPORT.md)
 - [CORTEX Instructions](.github/copilot-instructions.md)
-- [Phase 8 Decision Framework](_workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
+- [Phase 8 Decision Framework](_workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
 - [Registry API Reference](cortex/orchestrators/support/duplication_registry.py)
 - [DuplicationDetector Implementation](cortex/orchestrators/support/duplication_detector_orchestrator.py)
 

@@ -4,7 +4,7 @@ Database Manager Stub (Docker-First Architecture)
 This is a minimal stub for backward compatibility during docker-first migration.
 The actual database management has been replaced with YAML-backed configuration.
 
-See: _workspaces/docker-plan/migration-phases-plan.yaml
+See: _workspaces/cortex-plan/migration-phases-plan.yaml
 """
 
 from dataclasses import dataclass

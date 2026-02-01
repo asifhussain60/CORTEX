@@ -237,10 +237,10 @@ class TestProductionReadinessHooks:
     # AC-HOOK-TEST-003
     def test_verify_prod_ready_script_exists(self):
         """Verify production readiness script exists."""
-        script_path = cortex_root / "_workspaces" / "docker-plan" / "verify_prod_ready.py"
+        script_path = cortex_root / "_workspaces" / "cortex-plan" / "verify_prod_ready.py"
         
         assert script_path.exists(), (
-            "verify_prod_ready.py must exist in _workspaces/docker-plan/"
+            "verify_prod_ready.py must exist in _workspaces/cortex-plan/"
         )
         
         # Check it's executable
@@ -251,7 +251,7 @@ class TestProductionReadinessHooks:
     # AC-HOOK-TEST-004
     def test_verify_prod_ready_has_16_checks(self):
         """Verify production readiness script has all checks."""
-        script_path = cortex_root / "_workspaces" / "docker-plan" / "verify_prod_ready.py"
+        script_path = cortex_root / "_workspaces" / "cortex-plan" / "verify_prod_ready.py"
         content = script_path.read_text()
         
         # Should have 16 check methods

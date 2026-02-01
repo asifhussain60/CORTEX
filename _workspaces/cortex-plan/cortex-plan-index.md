@@ -1,4 +1,4 @@
-# CORTEX DOCKER-PLAN - Complete Documentation Index
+# CORTEX cortex-plan - Complete Documentation Index
 
 **Generated:** 2026-01-27  
 **Phase:** PHASES 0-6 COMPLETE ✅ | PHASE 7+ PLANNED 📋  
@@ -136,7 +136,7 @@ Based on git history review (1000+ commits), the following enhancement phases ad
 - **Validation:** Confirms wiring is deterministic, reproducible, and git-tracked
 
 **Phase Report ✅ DOCUMENTED**
-- **File:** `_workspaces/docker-plan/PHASE-6-TEST-SUITE-REPORT.md`
+- **File:** `_workspaces/cortex-plan/PHASE-6-TEST-SUITE-REPORT.md`
 - **Comprehensive documentation of:**
   - All 19 tests created
   - 6 findings with severity ratings
@@ -183,7 +183,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 - `tests/wiring/test_single_path_enforcement.py` (10 tests)
 - `tests/wiring/test_no_database_files.py` (5 tests)
 - `tests/wiring/test_wiring_determinism.py` (4 tests)
-- `_workspaces/docker-plan/PHASE-6-TEST-SUITE-REPORT.md` (comprehensive report)
+- `_workspaces/cortex-plan/PHASE-6-TEST-SUITE-REPORT.md` (comprehensive report)
 
 ---
 
@@ -222,7 +222,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 - **Best for:** Quick overview, decision-making
 
 ### 2. Detailed Completion Report
-**File:** [`PHASE-0-COMPLETION-DOCKER-PLAN.md`](PHASE-0-COMPLETION-DOCKER-PLAN.md)  
+**File:** [`PHASE-0-COMPLETION-cortex-plan.md`](PHASE-0-COMPLETION-cortex-plan.md)  
 **Size:** 7.5 KB  
 **Contents:**
 - Comprehensive validation results
@@ -233,7 +233,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 - **Best for:** Deep dive, verification, compliance
 
 ### 3. Phase 1 Readiness Guide
-**File:** [`PHASE-1-READINESS-DOCKER-PLAN.md`](PHASE-1-READINESS-DOCKER-PLAN.md)  
+**File:** [`PHASE-1-READINESS-cortex-plan.md`](PHASE-1-READINESS-cortex-plan.md)  
 **Size:** 8.6 KB  
 **Contents:**
 - Phase 1 objective and tasks (Tasks 1.1-1.4)
@@ -245,7 +245,7 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 - **Best for:** Phase 1 preparation, execution planning
 
 ### 4. Execution Audit Log
-**File:** [`DOCKER-PLAN-EXECUTION-LOG.txt`](DOCKER-PLAN-EXECUTION-LOG.txt)  
+**File:** [`cortex-plan-EXECUTION-LOG.txt`](cortex-plan-EXECUTION-LOG.txt)  
 **Size:** 3.1 KB  
 **Contents:**
 - AC_START → AC_COMPLETE timestamps
@@ -256,23 +256,23 @@ TOTAL: 13/19 PASSED, 6 FAILURES (intentional - identified legacy code)
 
 ---
 
-## 🗂️ Reference Documentation (in _workspaces/docker-plan/)
+## 🗂️ Reference Documentation (in _workspaces/cortex-plan/)
 
 ### Master Plan (SSOT)
-**File:** `_workspaces/docker-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml`
+**File:** `_workspaces/cortex-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml`
 - **Lines:** 2,313
 - **Status:** Validated ✅
 - **Contents:** Complete migration specification with 7 phases
 - **Authority:** Single Source of Truth (SSOT)
 
 ### Wiring Specification
-**File:** `_workspaces/docker-plan/wiring.yaml`
+**File:** `_workspaces/cortex-plan/wiring.yaml`
 - **Lines:** 770
 - **Status:** Validated ✅
 - **Contents:** Unified orchestrator wiring definitions
 
 ### Migration Script
-**File:** `_workspaces/docker-plan/migrate-to-docker-clean.sh`
+**File:** `_workspaces/cortex-plan/migrate-to-docker-clean.sh`
 - **Lines:** 719
 - **Status:** Executable ✅
 - **Contents:** Automated phase execution script
@@ -387,7 +387,7 @@ cd /path/to/CORTEX
 ✅ **CORTEX Protocol:** 5-stage pipeline completed
 
 **Git Checkpoint:**
-- Tag: `phase0-docker-plan-validation-20260127`
+- Tag: `phase0-cortex-plan-validation-20260127`
 - Commit: `34b257ee2`
 - Message: Phase 0 Pre-Flight Validation: All checks passed
 
@@ -430,7 +430,7 @@ cd /path/to/CORTEX
 - Momentum is good (context is fresh) ✅
 
 **If needing to pause:**
-- Review documentation: Read [`PHASE-1-READINESS-DOCKER-PLAN.md`](PHASE-1-READINESS-DOCKER-PLAN.md)
+- Review documentation: Read [`PHASE-1-READINESS-cortex-plan.md`](PHASE-1-READINESS-cortex-plan.md)
 - Adjust timeline: Can modify in Phase 1 start
 - Verify team ready: All prerequisites confirmed in Phase 0
 
@@ -439,16 +439,16 @@ cd /path/to/CORTEX
 ## 📚 Reading Guide
 
 **If you have 5 minutes:**
-→ Read [`DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md`](DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md)
+→ Read [`cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md`](cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md)
 
 **If you have 15 minutes:**
-→ Read [`PHASE-0-COMPLETION-DOCKER-PLAN.md`](PHASE-0-COMPLETION-DOCKER-PLAN.md)
+→ Read [`PHASE-0-COMPLETION-cortex-plan.md`](PHASE-0-COMPLETION-cortex-plan.md)
 
 **If you're ready for Phase 1:**
-→ Read [`PHASE-1-READINESS-DOCKER-PLAN.md`](PHASE-1-READINESS-DOCKER-PLAN.md)
+→ Read [`PHASE-1-READINESS-cortex-plan.md`](PHASE-1-READINESS-cortex-plan.md)
 
 **If you need details:**
-→ Review [`_workspaces/docker-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml`](_workspaces/docker-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml)
+→ Review [`_workspaces/cortex-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml`](_workspaces/cortex-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml)
 
 ---
 
@@ -480,13 +480,13 @@ cd /path/to/CORTEX
 
 | Resource | Location |
 |----------|----------|
-| Executive Summary | [`DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md`](DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md) |
-| Completion Report | [`PHASE-0-COMPLETION-DOCKER-PLAN.md`](PHASE-0-COMPLETION-DOCKER-PLAN.md) |
-| Phase 1 Guide | [`PHASE-1-READINESS-DOCKER-PLAN.md`](PHASE-1-READINESS-DOCKER-PLAN.md) |
-| Execution Log | [`DOCKER-PLAN-EXECUTION-LOG.txt`](DOCKER-PLAN-EXECUTION-LOG.txt) |
-| Master Plan | `_workspaces/docker-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml` |
-| Migration Script | `_workspaces/docker-plan/migrate-to-docker-clean.sh` |
-| Wiring Spec | `_workspaces/docker-plan/wiring.yaml` |
+| Executive Summary | [`cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md`](cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md) |
+| Completion Report | [`PHASE-0-COMPLETION-cortex-plan.md`](PHASE-0-COMPLETION-cortex-plan.md) |
+| Phase 1 Guide | [`PHASE-1-READINESS-cortex-plan.md`](PHASE-1-READINESS-cortex-plan.md) |
+| Execution Log | [`cortex-plan-EXECUTION-LOG.txt`](cortex-plan-EXECUTION-LOG.txt) |
+| Master Plan | `_workspaces/cortex-plan/CORTEX-MIGRATION-MASTER-PLAN.yaml` |
+| Migration Script | `_workspaces/cortex-plan/migrate-to-docker-clean.sh` |
+| Wiring Spec | `_workspaces/cortex-plan/wiring.yaml` |
 
 ---
 

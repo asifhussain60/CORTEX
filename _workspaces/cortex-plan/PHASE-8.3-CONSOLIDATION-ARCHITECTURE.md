@@ -111,7 +111,7 @@ This approach prioritizes **safety, learning, and confidence** over speed, with 
 
 ## 📁 YAML Phase Documents
 
-Created in `_workspaces/docker-plan/`:
+Created in `_workspaces/cortex-plan/`:
 
 1. **PHASE-8.3A-CONSOLIDATION-FOUNDATION.yaml** (484 lines)
    - Foundation layer specification

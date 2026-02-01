@@ -75,7 +75,7 @@ Guideline:
   - HARD LIMIT: 55 characters (filesystem compatibility)
 
 Examples:
-  - 16 chars: docker-plan-index.md ✅
+  - 16 chars: cortex-plan-index.md ✅
   - 22 chars: migration-phases-plan.yaml ✅
   - 27 chars: wiring-schema-specification.md ✅
   - 32 chars: health-verification-tests.md ✅
@@ -190,7 +190,7 @@ NEVER USE:
     - handle-data.py (use: validate-data.py or sanitize-data.py)
 
   ❌ Version numbers in filenames:
-    - docker-plan-v2.1.yaml (use: migration-phases-plan.yaml)
+    - cortex-plan-v2.1.yaml (use: migration-phases-plan.yaml)
     - guide-v3.md (use: deployment-guide.md)
     - config-2.0.yaml (use: docker-configuration.yaml)
     Note: Git provides version control, not filenames!

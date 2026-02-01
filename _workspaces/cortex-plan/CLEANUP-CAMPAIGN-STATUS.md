@@ -38,13 +38,13 @@
    - Migration patterns with code examples
 
 3. ✅ **Updated Cleanup Strategy**
-   - File: `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md`
+   - File: `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md`
    - Phase 8 scope documented
    - Current stub status shown
    - Clear references to epic
 
 4. ✅ **Phase 2 Execution Report** (360+ lines)
-   - File: `_workspaces/docker-plan/PHASE-2-EXECUTION-REPORT.md`
+   - File: `_workspaces/cortex-plan/PHASE-2-EXECUTION-REPORT.md`
    - Complete metrics and results
    - Honest assessment of complexity
    - Lessons learned for team
@@ -206,11 +206,11 @@
 ## 📚 Documentation Package
 
 All reports and documentation available in:
-- `_workspaces/docker-plan/PHASE-1-EXECUTION-REPORT.md` - Phase 1 results
-- `_workspaces/docker-plan/PHASE-2-EXECUTION-REPORT.md` - Phase 2 results
+- `_workspaces/cortex-plan/PHASE-1-EXECUTION-REPORT.md` - Phase 1 results
+- `_workspaces/cortex-plan/PHASE-2-EXECUTION-REPORT.md` - Phase 2 results
 - `docs/phases/PHASE-8-EPIC.md` - Phase 8 planning epic
-- `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md` - Overall strategy
-- `_workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md` - Quick reference
+- `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md` - Overall strategy
+- `_workspaces/cortex-plan/DATABASE-CLEANUP-QUICKREF.md` - Quick reference
 
 ---
 

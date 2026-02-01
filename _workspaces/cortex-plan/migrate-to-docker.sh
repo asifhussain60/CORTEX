@@ -297,12 +297,12 @@ phase_3_wiring_system() {
     run_cmd "mkdir -p cortex/wiring/registry" "Create wiring/registry"
     run_cmd "mkdir -p cortex/wiring/specifications" "Create wiring/specifications"
     
-    # Copy wiring.yaml from docker-plan
-    if [ -f "_workspaces/docker-plan/wiring.yaml" ]; then
+    # Copy wiring.yaml from cortex-plan
+    if [ -f "_workspaces/cortex-plan/wiring.yaml" ]; then
         log "Copying wiring.yaml specification..."
-        run_cmd "cp _workspaces/docker-plan/wiring.yaml cortex/wiring/specifications/wiring.yaml" "Copy wiring.yaml"
+        run_cmd "cp _workspaces/cortex-plan/wiring.yaml cortex/wiring/specifications/wiring.yaml" "Copy wiring.yaml"
     else
-        log_warning "wiring.yaml not found in docker-plan - create manually"
+        log_warning "wiring.yaml not found in cortex-plan - create manually"
     fi
     
     # Create __init__.py files
@@ -384,10 +384,10 @@ phase_4_workspaces_migration() {
         run_cmd "mv _workspaces/cortex-vision _workspaces/vision" "Rename cortex-vision"
     fi
     
-    # Rename docker-plan to migration
-    if [ -d "_workspaces/docker-plan" ]; then
-        log "Renaming docker-plan to migration..."
-        run_cmd "mv _workspaces/docker-plan _workspaces/migration" "Rename docker-plan"
+    # Rename cortex-plan to migration
+    if [ -d "_workspaces/cortex-plan" ]; then
+        log "Renaming cortex-plan to migration..."
+        run_cmd "mv _workspaces/cortex-plan _workspaces/migration" "Rename cortex-plan"
     fi
     
     # Create archives directory

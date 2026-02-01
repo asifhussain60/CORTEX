@@ -2,7 +2,7 @@
 # =========================================================================
 # PHASE 6 CLEANUP SCRIPT - Final Docker Migration Cleanup
 # =========================================================================
-# Authority: _workspaces/docker-plan/PHASE-6-TEST-SUITE-REPORT.md
+# Authority: _workspaces/cortex-plan/PHASE-6-TEST-SUITE-REPORT.md
 # Purpose: Delete stub files, fix imports, achieve 100% single-path wiring
 # Date: 2026-01-27
 # =========================================================================
@@ -88,13 +88,13 @@ echo ""
 # -------------------------------------------------------------------------
 echo "STEP 4: Creating completion report..."
 
-cat > "_workspaces/docker-plan/PHASE-6-CLEANUP-COMPLETE.md" << 'EOF'
+cat > "_workspaces/cortex-plan/PHASE-6-CLEANUP-COMPLETE.md" << 'EOF'
 # Phase 6 Cleanup Complete - Docker Migration 100%
 
 **Date:** 2026-01-27  
 **Phase:** Phase 6 (Final Cleanup)  
 **Status:** ✅ COMPLETE  
-**Authority:** `_workspaces/docker-plan/PHASE-6-TEST-SUITE-REPORT.md`
+**Authority:** `_workspaces/cortex-plan/PHASE-6-TEST-SUITE-REPORT.md`
 
 ---
 
@@ -179,7 +179,7 @@ orch = registry.get_orchestrator("TDDOrchestrator")
 
 EOF
 
-echo "  ✅ Report created: _workspaces/docker-plan/PHASE-6-CLEANUP-COMPLETE.md"
+echo "  ✅ Report created: _workspaces/cortex-plan/PHASE-6-CLEANUP-COMPLETE.md"
 
 echo ""
 

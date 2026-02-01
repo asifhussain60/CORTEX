@@ -282,8 +282,8 @@
 - `scripts/consolidate_medium_high_risk.py` - MEDIUM+HIGH RISK execution
 
 **Documentation Created:**
-- `_workspaces/docker-plan/PHASE-8.3D-ARCHAEOLOGY-REPORT.md` - Code archaeology findings
-- `_workspaces/docker-plan/PHASE-8.3C-CRITICAL-REASSESSMENT.md` - Initial assessment
+- `_workspaces/cortex-plan/PHASE-8.3D-ARCHAEOLOGY-REPORT.md` - Code archaeology findings
+- `_workspaces/cortex-plan/PHASE-8.3C-CRITICAL-REASSESSMENT.md` - Initial assessment
 
 **Commits:**
 - `4018b4127` - Phase 8.3D: LOW RISK Consolidation (8 files)

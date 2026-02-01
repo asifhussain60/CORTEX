@@ -437,14 +437,14 @@ format = routing_matrix[risk][complexity]
 ### Questions During Implementation
 
 1. **LENS Integration:** Contact `LENSOrchestrator` maintainers (Phase 7.1)
-2. **Neo4j Setup:** See `_workspaces/docker-plan/docker-compose.monitoring.yml`
+2. **Neo4j Setup:** See `_workspaces/cortex-plan/docker-compose.monitoring.yml`
 3. **Git Webhooks:** GitHub/GitLab webhook format specs in CMS-1 implementation plan
 4. **CORE Rules:** Reference `cortex_brain/tier0/governance/` for specific rules
 
 ### Blockers or Issues
 
 1. Document in issue tracker with `ac_id` and test name
-2. Update `_workspaces/docker-plan/` with blocker status
+2. Update `_workspaces/cortex-plan/` with blocker status
 3. Escalate to CORTEX Master Orchestrator if critical path blocked
 
 ---

@@ -1,7 +1,7 @@
 """
 CORTEX Bootstrap - Initialize Git-backed wiring system.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 
 Entry point for CORTEX system initialization.

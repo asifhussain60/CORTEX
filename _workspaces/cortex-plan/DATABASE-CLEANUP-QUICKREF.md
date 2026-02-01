@@ -146,4 +146,4 @@ After this cleanup, Phase 8 deletion becomes trivial:
 
 ---
 
-See `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md` for full details.
+See `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md` for full details.

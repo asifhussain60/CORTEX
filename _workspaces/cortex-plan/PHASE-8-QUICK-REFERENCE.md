@@ -40,7 +40,7 @@ python3 scripts/archive-legacy-tests.py
 git add scripts/archive-legacy-tests.py \
         cortex/orchestrators/core/enforcement_orchestrator.py \
         tests/orchestrators/test_enforcement_orchestrator.py \
-        _workspaces/docker-plan/PHASE-8-*.md \
+        _workspaces/cortex-plan/PHASE-8-*.md \
         cortex/wiring/specifications/wiring.yaml
 
 git commit -m "feat: Phase 8 governance enhancement (EnforcementOrchestrator + test archiving)

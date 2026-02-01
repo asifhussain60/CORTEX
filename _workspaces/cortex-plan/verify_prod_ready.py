@@ -626,7 +626,7 @@ class CORTEXVerification:
                 test_count_match = re.search(r'(\d+) tests? collected', result.stdout)
                 test_count = int(test_count_match.group(1)) if test_count_match else 0
                 
-                # Thresholds based on docker-plan requirements
+                # Thresholds based on cortex-plan requirements
                 min_tests_tier1 = 100  # Tier 1: Single-user
                 min_tests_tier2 = 500  # Tier 2: Team
                 min_tests_tier3 = 1000 # Tier 3: Enterprise
@@ -684,18 +684,18 @@ class CORTEXVerification:
             ))
     
     def check_07_docker_plan_compliance(self):
-        """CHECK 7: No violations against docker-plan."""
+        """CHECK 7: No violations against cortex-plan."""
         try:
-            docker_plan = self.cortex_root / "_workspaces/docker-plan/migration-phases-plan.yaml"
+            docker_plan = self.cortex_root / "_workspaces/cortex-plan/migration-phases-plan.yaml"
             
             if not docker_plan.exists():
                 self.results.append(CheckResult(
                     check_number=7,
-                    check_name="Docker-Plan Compliance",
+                    check_name="cortex-plan Compliance",
                     status=CheckStatus.FAILED,
                     details="migration-phases-plan.yaml not found",
                     evidence=[f"Missing: {docker_plan}"],
-                    remediation="Ensure _workspaces/docker-plan/migration-phases-plan.yaml exists"
+                    remediation="Ensure _workspaces/cortex-plan/migration-phases-plan.yaml exists"
                 ))
             else:
                 # Count completed phases
@@ -709,9 +709,9 @@ class CORTEXVerification:
                 if "COMPLETE" in phase_status or "6" in phase_status:
                     self.results.append(CheckResult(
                         check_number=7,
-                        check_name="Docker-Plan Compliance",
+                        check_name="cortex-plan Compliance",
                         status=CheckStatus.PASSED,
-                        details="Docker-plan Phases 0-6+ complete, no violations detected",
+                        details="cortex-plan Phases 0-6+ complete, no violations detected",
                         evidence=[
                             "✅ Phases 0-6: COMPLETE",
                             "✅ Phases 7.1-7.5: COMPLETE or IN-PROGRESS",
@@ -722,7 +722,7 @@ class CORTEXVerification:
                 else:
                     self.results.append(CheckResult(
                         check_number=7,
-                        check_name="Docker-Plan Compliance",
+                        check_name="cortex-plan Compliance",
                         status=CheckStatus.WARNING,
                         details=f"Phase status: {phase_status}",
                         evidence=[f"Current status: {phase_status}"],
@@ -731,9 +731,9 @@ class CORTEXVerification:
         except Exception as e:
             self.results.append(CheckResult(
                 check_number=7,
-                check_name="Docker-Plan Compliance",
+                check_name="cortex-plan Compliance",
                 status=CheckStatus.WARNING,
-                details=f"Docker-plan check failed: {str(e)}",
+                details=f"cortex-plan check failed: {str(e)}",
                 evidence=[str(e)],
                 remediation="Manual review of migration-phases-plan.yaml"
             ))
@@ -1157,7 +1157,7 @@ class CORTEXVerification:
                 issues.append("company/domains/compliance-standards/ directory missing")
             
             # Check 3: Cortical Memory System specification exists
-            cms_spec = self.cortex_root / "_workspaces" / "docker-plan" / "CORTICAL-MEMORY-SYSTEM.yaml"
+            cms_spec = self.cortex_root / "_workspaces" / "cortex-plan" / "CORTICAL-MEMORY-SYSTEM.yaml"
             if cms_spec.exists():
                 readiness_score += 1
                 evidence.append("✅ Cortical Memory System specification exists")
@@ -1263,7 +1263,7 @@ class CORTEXVerification:
                 issues.append("LENS orchestrator missing (prerequisite)")
             
             # Check 3: Capacity Planning specification exists
-            capacity_spec = self.cortex_root / "_workspaces" / "docker-plan" / "CAPACITY-PLANNING-SYSTEM.yaml"
+            capacity_spec = self.cortex_root / "_workspaces" / "cortex-plan" / "CAPACITY-PLANNING-SYSTEM.yaml"
             if capacity_spec.exists():
                 readiness_score += 1
                 evidence.append("✅ Capacity Planning System specification exists")
@@ -1360,7 +1360,7 @@ class CORTEXVerification:
                 issues.append("InteractionOrchestrator missing (prerequisite)")
             
             # Check 3: Adaptive BLUF specification exists
-            bluf_spec = self.cortex_root / "_workspaces" / "docker-plan" / "PHASE-13-ADAPTIVE-BLUF-SYSTEM.yaml"
+            bluf_spec = self.cortex_root / "_workspaces" / "cortex-plan" / "PHASE-13-ADAPTIVE-BLUF-SYSTEM.yaml"
             if bluf_spec.exists():
                 readiness_score += 1
                 evidence.append("✅ Adaptive BLUF System specification exists")
@@ -1422,7 +1422,7 @@ class CORTEXVerification:
         """CHECK 16: Complete Production Readiness Summary.
         
         Aggregates all previous checks to determine overall production tier.
-        Based on docker-plan migration-phases-plan.yaml production tiers:
+        Based on cortex-plan migration-phases-plan.yaml production tiers:
         - Tier 1 (Single-User): 100% ready
         - Tier 2 (Team Collaboration): 85% ready
         - Tier 3 (Enterprise): 70% ready

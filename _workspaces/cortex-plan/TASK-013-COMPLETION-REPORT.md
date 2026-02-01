@@ -449,7 +449,7 @@ def test_mermaid_diagrams_display():
 
 - **CORE-030 (Implementation Truth):** All templates verified to load in browser
 - **CORE-038 (File Placement):** All files in `cortex/visualization/templates/tabs/`
-- **CORE-039 (MD File Generation):** This report generated in `_workspaces/docker-plan/`
+- **CORE-039 (MD File Generation):** This report generated in `_workspaces/cortex-plan/`
 
 ---
 

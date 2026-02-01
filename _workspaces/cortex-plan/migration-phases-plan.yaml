@@ -401,8 +401,8 @@ regression_prevention:
       
       files_requiring_updates:
         - ".github/prompts/CORTEX.prompt.md"  # ❌ Still references database_registry
-        - "_workspaces/docker-plan/wiring-schema-specification.md"
-        - "_workspaces/docker-plan/wiring-integration-tests.md"
+        - "_workspaces/cortex-plan/wiring-schema-specification.md"
+        - "_workspaces/cortex-plan/wiring-integration-tests.md"
       
       stale_imports_found:
         count: 19
@@ -2130,10 +2130,10 @@ workspaces_migration:
     - source: "_workspaces/roadmap/"
       action: "DEPRECATED"
       status: "ARCHIVED"
-      reason: "Superseded by docker-plan tracking system (see DEPRECATED.md)"
-      note: "Historical reference only - do not update. Use docker-plan for tracking."
+      reason: "Superseded by cortex-plan tracking system (see DEPRECATED.md)"
+      note: "Historical reference only - do not update. Use cortex-plan for tracking."
       migration_date: "2026-01-27"
-      replaced_by: "_workspaces/docker-plan/migration-phases-plan.yaml"
+      replaced_by: "_workspaces/cortex-plan/migration-phases-plan.yaml"
       target: "_workspaces/roadmap/"
       
     # KEEP: Strategic vision
@@ -2156,7 +2156,7 @@ workspaces_migration:
       target: "_workspaces/config/"
       
     # KEEP: This plan
-    - source: "_workspaces/docker-plan/"
+    - source: "_workspaces/cortex-plan/"
       action: "KEEP_ALL"
       reason: "Migration plan documentation"
       target: "_workspaces/migration/"
@@ -2214,13 +2214,13 @@ workspaces_migration:
           - "cortex-roadmap.yaml (archived)"
           - "phases/ (archived)"
           - "specs/ (archived)"
-      docker-plan:
+      cortex-plan:
         status: "ACTIVE - CANONICAL TRACKING"
         files:
           - "migration-phases-plan.yaml (SSOT)"
           - "PHASE-7-FUTURE-ENHANCEMENTS.yaml"
           - "PHASE-*-COMPLETION-REPORT.md"
-          - "docker-plan-index.md"
+          - "cortex-plan-index.md"
       vision:
         - "cortex-vision.yaml"
         - "orchestrators.yaml"
@@ -2426,10 +2426,10 @@ migration_script:
         log "Renamed cortex-vision to vision"
     fi
     
-    # Rename docker-plan to migration
-    if [[ -d "_workspaces/docker-plan" ]]; then
-        mv _workspaces/docker-plan _workspaces/migration
-        log "Renamed docker-plan to migration"
+    # Rename cortex-plan to migration
+    if [[ -d "_workspaces/cortex-plan" ]]; then
+        mv _workspaces/cortex-plan _workspaces/migration
+        log "Renamed cortex-plan to migration"
     fi
     
     # Create archives

@@ -1,5 +1,5 @@
 # ============================================================================
-# CORTEX DOCKER-PLAN: PHASE 7+ FUTURE ENHANCEMENTS
+# CORTEX cortex-plan: PHASE 7+ FUTURE ENHANCEMENTS
 # ============================================================================
 # Date: 2026-01-27
 # Authority: CORTEX Master Orchestrator
@@ -89,7 +89,7 @@ phase_7_1:
         status: "IMPLEMENTED"
     
     documentation:
-      - "_workspaces/docker-plan/LENS-ENHANCEMENT-IMPLEMENTATION-COMPLETE.md"
+      - "_workspaces/cortex-plan/LENS-ENHANCEMENT-IMPLEMENTATION-COMPLETE.md"
     
     git_commits:
       - "bda8298c4 - feat: Implement Week 1 + Week 2-4 LENS enhancements"
@@ -314,7 +314,7 @@ phase_7_2:
       name: "Create Observability Runbook"
       description: "Document how to monitor CORTEX in production"
       deliverables:
-        file: "_workspaces/docker-plan/observability-runbook.md"
+        file: "_workspaces/cortex-plan/observability-runbook.md"
         contents:
           - "Health endpoint usage"
           - "Prometheus scrape configuration"
@@ -448,11 +448,11 @@ phase_7_4:
       - "tests/unit/brain/analysis/test_git_history_analyzer.py (underscore)"
     
     policy_documentation:
-      - "_workspaces/docker-plan/CORE-038-FILE-PLACEMENT-POLICY.md"
+      - "_workspaces/cortex-plan/CORE-038-FILE-PLACEMENT-POLICY.md"
       - "cortex_brain/tier0/governance/core-rules.yaml (CORE-028)"
     
     existing_scripts:
-      - "_workspaces/docker-plan/refactor-file-names.sh"
+      - "_workspaces/cortex-plan/refactor-file-names.sh"
 
   tasks:
     - id: "NAMING-001"
@@ -481,7 +481,7 @@ phase_7_4:
       name: "Create migration inventory"
       description: "List all files requiring rename with priority"
       deliverables:
-        file: "_workspaces/docker-plan/naming-migration-inventory.yaml"
+        file: "_workspaces/cortex-plan/naming-migration-inventory.yaml"
         contents:
           - "File path → suggested new name mapping"
           - "Priority (P0/P1/P2)"
@@ -578,7 +578,7 @@ success_criteria:
     - "100% requirement coverage alignment achieved"
     - "All gaps from git history review resolved"
     - "No undocumented implementations"
-    - "All tracking in docker-plan (no cortex-impl-map.yaml dependencies)"
+    - "All tracking in cortex-plan (no cortex-impl-map.yaml dependencies)"
 
 # ============================================================================
 # END OF PHASE 7+ PLAN

@@ -898,7 +898,7 @@ documentation:
     - "docs/12-infrastructure/README.md"  # Neo4j, event ingestion
     - "docs/15-observability/dashboards.md"  # New Grafana dashboards
     - "deployment/health_checks.yaml"  # 5 new health endpoints
-    - "_workspaces/docker-plan/verify_prod_ready.py"  # Add Cortical Memory System checks
+    - "_workspaces/cortex-plan/verify_prod_ready.py"  # Add Cortical Memory System checks
 
 # ============================================================================
 # AUDIT TRAIL

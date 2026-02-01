@@ -137,7 +137,7 @@ logger.log_operation_start(operation_type=operation, user_id=user_id)
 | DATABASE-CLEANUP-QUICKREF.md | Quick reference guide | Available | ✅ Available |
 
 **All files located in:**
-- Phase reports: `_workspaces/docker-plan/`
+- Phase reports: `_workspaces/cortex-plan/`
 - Phase 8 epic: `docs/phases/PHASE-8-EPIC.md`
 
 ---
@@ -226,13 +226,13 @@ logger.log_operation_start(operation_type=operation, user_id=user_id)
 ## Quick Links
 
 **Phase Reports:**
-- Phase 1: `_workspaces/docker-plan/PHASE-1-EXECUTION-REPORT.md`
-- Phase 2: `_workspaces/docker-plan/PHASE-2-EXECUTION-REPORT.md`
+- Phase 1: `_workspaces/cortex-plan/PHASE-1-EXECUTION-REPORT.md`
+- Phase 2: `_workspaces/cortex-plan/PHASE-2-EXECUTION-REPORT.md`
 - Phase 8: `docs/phases/PHASE-8-EPIC.md`
 
 **Campaign Status:**
-- `_workspaces/docker-plan/CLEANUP-CAMPAIGN-STATUS.md`
-- `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md`
+- `_workspaces/cortex-plan/CLEANUP-CAMPAIGN-STATUS.md`
+- `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md`
 
 **Code Changes:**
 - Phase 1 commit: `293f12dd0`

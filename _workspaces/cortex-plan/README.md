@@ -1,4 +1,4 @@
-# CORTEX Docker-Plan Workspace
+# CORTEX cortex-plan Workspace
 
 **Status:** 🎉 **PHASE 8.1 COMPLETE** (Governance Enforcement + Test Optimization)  
 **Updated:** 2026-01-28  
@@ -87,7 +87,7 @@ enforcement_agents: 3 (Governance, Security, Compliance)
 ## 📚 Documentation Hub
 
 ### Quick Navigation
-- **[docker-plan-index.md](./docker-plan-index.md)** - Complete file index
+- **[cortex-plan-index.md](./cortex-plan-index.md)** - Complete file index
 - **[migration-summary.md](./migration-summary.md)** - Executive overview
 - **[PHASE-6-FINAL-STATUS-REPORT.md](./PHASE-6-FINAL-STATUS-REPORT.md)** - Comprehensive status
 - **[PHASE-7-FUTURE-ENHANCEMENTS.yaml](./PHASE-7-FUTURE-ENHANCEMENTS.yaml)** - Future roadmap
@@ -127,7 +127,7 @@ git add cortex/orchestrators/core/enforcement_orchestrator.py \
         tests/orchestrators/test_enforcement_orchestrator.py \
         scripts/archive-legacy-tests.py \
         cortex/wiring/specifications/wiring.yaml \
-        _workspaces/docker-plan/PHASE-8-*.md
+        _workspaces/cortex-plan/PHASE-8-*.md
 git commit -m "feat: Phase 8.1 governance enforcement + test optimization"
 ```
 
@@ -169,9 +169,9 @@ docker-compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
 ## 📊 Project Structure
 
 ```
-_workspaces/docker-plan/
+_workspaces/cortex-plan/
 ├── README.md                                    ⭐ YOU ARE HERE
-├── docker-plan-index.md                         # Complete file index
+├── cortex-plan-index.md                         # Complete file index
 ├── migration-summary.md                         # Executive overview
 ├── PHASE-0-3-*.md                              # Core migration phases
 ├── PHASE-4-DOCKER-INFRASTRUCTURE.md            # Docker setup
@@ -237,4 +237,4 @@ _workspaces/docker-plan/
 
 ---
 
-**CORTEX Docker-Plan Workspace** | Updated: 2026-01-28 | Phase 8.1 Complete ✅
+**CORTEX cortex-plan Workspace** | Updated: 2026-01-28 | Phase 8.1 Complete ✅

@@ -14,7 +14,7 @@
 4. ✅ Extend intent-routing.yaml with orchestrator mappings
 5. ✅ Add Microsoft stack support to LENS roadmap (C#, SQL, Oracle, Angular)
 6. ✅ Define production verification checks (6 new checks)
-7. ✅ Update docker-plan tracking documentation
+7. ✅ Update cortex-plan tracking documentation
 
 ---
 
@@ -106,7 +106,7 @@ Returns: RoutingDecision(target_handler="GeneralImplementationHandler")
    - Added LOC estimate (~1200)
    - Added test count (60+ tests)
 
-3. **docker-plan-index.md** (+1 line)
+3. **cortex-plan-index.md** (+1 line)
    - Added Phase 8.2 reference link
 
 ---
@@ -290,7 +290,7 @@ Returns: RoutingDecision(
 2. ✅ **PHASE-8.2-QUICK-REFERENCE.md** - 10-minute guide
 3. ✅ **intent-routing.yaml** - Extended schema with examples
 4. ✅ **migration-phases-plan.yaml** - Master plan updated
-5. ✅ **docker-plan-index.md** - Index updated
+5. ✅ **cortex-plan-index.md** - Index updated
 6. ✅ **Git commit message** - Comprehensive changelog
 
 ---

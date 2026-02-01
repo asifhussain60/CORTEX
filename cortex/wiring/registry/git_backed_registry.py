@@ -1,7 +1,7 @@
 """
 Git-Backed Orchestrator Registry - Single source of truth from YAML.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 """
 

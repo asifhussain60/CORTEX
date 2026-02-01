@@ -1,7 +1,7 @@
 """
 Lazy Orchestrator Proxy - Load orchestrators on first access.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 """
 

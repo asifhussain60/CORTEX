@@ -323,9 +323,9 @@ critical_dups = registry.list_by_severity(SeverityLevel.CRITICAL)
 
 ## References
 
-- [Phase 8.3 Decision Framework](_workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
-- [Phase 8.3C Simplified Plan](_workspaces/docker-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml)
-- [Audit Findings](_workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)
+- [Phase 8.3 Decision Framework](_workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md)
+- [Phase 8.3C Simplified Plan](_workspaces/cortex-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml)
+- [Audit Findings](_workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md)
 - [CORTEX Instructions](.github/copilot-instructions.md)
 
 **End of Phase 8.3A Completion Report**

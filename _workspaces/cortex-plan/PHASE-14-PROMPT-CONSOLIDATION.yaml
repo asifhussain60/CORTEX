@@ -183,7 +183,7 @@ stage_2:
             - Implications for other components
           implementation: |
             Cross-reference request against:
-            - docker-plan phases
+            - cortex-plan phases
             - cortex/ implementation
             - cortex_brain/ governance
             - src/ domain code
@@ -298,7 +298,7 @@ stage_2:
       - CommentExtractor: "TODO/FIXME priority extraction"
       
     analysis_targets:
-      - "docker-plan/migration-phases-plan.yaml"
+      - "cortex-plan/migration-phases-plan.yaml"
       - "cortex/**/*.py"
       - "cortex_brain/**/*.py"
       - "src/**/*"

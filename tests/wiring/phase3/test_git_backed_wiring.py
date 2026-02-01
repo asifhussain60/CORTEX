@@ -3,7 +3,7 @@ Tests for Git-Backed Wiring Registry (Phase 3)
 
 Validates YAML-based orchestrator wiring system.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 """
 
 import pytest

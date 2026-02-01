@@ -1,7 +1,7 @@
 """
 Wiring Validator - Validate orchestrator wiring integrity.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 """
 
 from typing import List, Dict, Any, Set, Tuple, Optional

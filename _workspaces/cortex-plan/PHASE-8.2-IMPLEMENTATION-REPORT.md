@@ -442,14 +442,14 @@ assert len(decision.fallback_orchestrators) >= 1
 ## 📖 Documentation
 
 **Planning Documents:**
-- `_workspaces/docker-plan/PHASE-8.2-UNIFIED-ROUTING.yaml` (780 lines)
-- `_workspaces/docker-plan/PHASE-8.2-QUICK-REFERENCE.md` (378 lines)
+- `_workspaces/cortex-plan/PHASE-8.2-UNIFIED-ROUTING.yaml` (780 lines)
+- `_workspaces/cortex-plan/PHASE-8.2-QUICK-REFERENCE.md` (378 lines)
 
 **Knowledge Base:**
 - `cortex_brain/tier3/knowledge/intent-routing.yaml` (extended +116 lines)
 
 **Session Reports:**
-- `_workspaces/docker-plan/PHASE-8.2-SESSION-REPORT.md` (planning completion)
+- `_workspaces/cortex-plan/PHASE-8.2-SESSION-REPORT.md` (planning completion)
 - This report (implementation completion)
 
 ---

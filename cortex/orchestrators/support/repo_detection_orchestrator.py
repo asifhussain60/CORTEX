@@ -65,7 +65,7 @@ class RepoDetectionOrchestrator:
         "DatabaseBackedRegistry",
         "CORE-",  # CORE rules
         "Tier3",
-        "docker-plan",
+        "cortex-plan",
         "cortex_brain",
     ]
     

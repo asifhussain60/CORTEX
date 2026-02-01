@@ -1,5 +1,5 @@
 # ============================================================================
-# CORTEX DOCKER-PLAN: PHASE 7.5 - INQUIRY ORCHESTRATOR SYSTEM
+# CORTEX cortex-plan: PHASE 7.5 - INQUIRY ORCHESTRATOR SYSTEM
 # ============================================================================
 # Date: 2026-01-27
 # Authority: CORTEX Master Orchestrator
@@ -203,7 +203,7 @@ stage_1_mvp:
       step_1_keyword_analysis:
         description: "Scan question text for CORTEX-specific keywords"
         keywords: ["CORTEX", "TDDOrchestrator", "MasterOrchestrator", "LENS", 
-                   "DatabaseBackedRegistry", "CORE-", "Tier3", "docker-plan"]
+                   "DatabaseBackedRegistry", "CORE-", "Tier3", "cortex-plan"]
         confidence: "High if 2+ keywords found"
       
       step_2_working_directory:
@@ -439,7 +439,7 @@ stage_1_mvp:
         file: "evolution_inquiry_handler.py"
         focus: "Future planning, extensibility, technical roadmap"
         data_sources:
-          - "docker-plan YAML files (roadmap)"
+          - "cortex-plan YAML files (roadmap)"
           - "PHASE-*.yaml (planned features)"
           - "Technical debt tracking"
         example_questions:
@@ -1048,7 +1048,7 @@ stage_2_docker:
       - id: "INQUIRY-024"
         name: "Create deployment runbook"
         files:
-          - "_workspaces/docker-plan/inquiry-deployment-runbook.md"
+          - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
         time: "0.5 hours"
       
       - id: "INQUIRY-025"
@@ -1089,7 +1089,7 @@ stage_2_docker:
       - "cortex/api/inquiry_api.py"
       - "cortex/visualization/inquiry_dashboard.py"
       - "cortex/observability/inquiry_metrics.py"
-      - "_workspaces/docker-plan/inquiry-deployment-runbook.md"
+      - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
       - "tests/infrastructure/test_code_index_client.py"
     
     modified_files:
@@ -1308,9 +1308,9 @@ tracking:
     - "phase7.5-stage2-docker-YYYYMMDD"
   
   reports:
-    - "_workspaces/docker-plan/PHASE-7.5-STAGE-1-MVP-COMPLETE.md"
-    - "_workspaces/docker-plan/PHASE-7.5-STAGE-2-DOCKER-COMPLETE.md"
-    - "_workspaces/docker-plan/PHASE-7.5-INQUIRY-SYSTEM-COMPLETE.md"
+    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-1-MVP-COMPLETE.md"
+    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-2-DOCKER-COMPLETE.md"
+    - "_workspaces/cortex-plan/PHASE-7.5-INQUIRY-SYSTEM-COMPLETE.md"
 
 governance:
   core_rules_applied:

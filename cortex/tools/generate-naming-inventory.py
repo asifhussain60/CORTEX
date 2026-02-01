@@ -106,7 +106,7 @@ def main():
     }
     
     # Write to file
-    output_path = Path("_workspaces/docker-plan/naming-migration-inventory.yaml")
+    output_path = Path("_workspaces/cortex-plan/naming-migration-inventory.yaml")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_path, "w") as f:

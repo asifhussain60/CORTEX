@@ -16,13 +16,13 @@ cf0cdde4f Phase 8.3A Complete: Detection & Prevention Infrastructure
 
 **Files Committed:**
 ```
-✅ _workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md
-✅ _workspaces/docker-plan/PHASE-8.3A-COMPLETION-REPORT.md
-✅ _workspaces/docker-plan/PHASE-8.3A-INDEX.md
-✅ _workspaces/docker-plan/PHASE-8.3A-QUICK-REFERENCE.md
-✅ _workspaces/docker-plan/PHASE-8.3A-STATUS.txt
-✅ _workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
-✅ _workspaces/docker-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml
+✅ _workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md
+✅ _workspaces/cortex-plan/PHASE-8.3A-COMPLETION-REPORT.md
+✅ _workspaces/cortex-plan/PHASE-8.3A-INDEX.md
+✅ _workspaces/cortex-plan/PHASE-8.3A-QUICK-REFERENCE.md
+✅ _workspaces/cortex-plan/PHASE-8.3A-STATUS.txt
+✅ _workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
+✅ _workspaces/cortex-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml
 ✅ cortex-lens/duplication-metrics-dashboard.html
 ✅ cortex/core/adapters/execution_context_adapter.py
 ✅ cortex/core/registry/base_registry.py
@@ -166,10 +166,10 @@ Target Deployment:  Feb 14, 2026
 **Quick Start:**
 ```bash
 # 1. Review Phase 8.3C plan
-cat _workspaces/docker-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml
+cat _workspaces/cortex-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml
 
 # 2. Check duplication details
-cat _workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
+cat _workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
 
 # 3. View metrics dashboard
 open cortex-lens/duplication-metrics-dashboard.html
@@ -304,8 +304,8 @@ git commit -m "Phase 8.3C: Consolidated 6 P0 duplications"
 
 ## 🔗 References
 
-- [PHASE-8.3A-INDEX.md](_workspaces/docker-plan/PHASE-8.3A-INDEX.md) - Full documentation index
-- [PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml](_workspaces/docker-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml) - Consolidation spec
+- [PHASE-8.3A-INDEX.md](_workspaces/cortex-plan/PHASE-8.3A-INDEX.md) - Full documentation index
+- [PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml](_workspaces/cortex-plan/PHASE-8.3C-SIMPLIFIED-P0-CONSOLIDATION.yaml) - Consolidation spec
 - [scripts/phase_8_3c_p0_consolidation.py](scripts/phase_8_3c_p0_consolidation.py) - Automation script
 - [cortex-lens/duplication-metrics-dashboard.html](cortex-lens/duplication-metrics-dashboard.html) - Metrics visualization
 

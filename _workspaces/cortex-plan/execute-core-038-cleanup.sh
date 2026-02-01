@@ -72,11 +72,11 @@ log_success "Created: deployment/config/"
 mkdir -p docs/archive
 log_success "Created: docs/archive/"
 
-mkdir -p _workspaces/docker-plan/logs
-log_success "Created: _workspaces/docker-plan/logs/"
+mkdir -p _workspaces/cortex-plan/logs
+log_success "Created: _workspaces/cortex-plan/logs/"
 
-mkdir -p _workspaces/docker-plan/archive
-log_success "Created: _workspaces/docker-plan/archive/"
+mkdir -p _workspaces/cortex-plan/archive
+log_success "Created: _workspaces/cortex-plan/archive/"
 
 # ============================================================================
 # STEP 2: MOVE CONFIGURATION FILES
@@ -142,29 +142,29 @@ fi
 
 log "\n📊 STEP 5: MOVE PHASE DOCUMENTATION & LOGS"
 
-if [ -f "DOCKER-PLAN-EXECUTION-LOG.txt" ]; then
-    mv DOCKER-PLAN-EXECUTION-LOG.txt _workspaces/docker-plan/logs/execution-log-20260127.txt
-    log_success "Moved: DOCKER-PLAN-EXECUTION-LOG.txt → _workspaces/docker-plan/logs/"
+if [ -f "cortex-plan-EXECUTION-LOG.txt" ]; then
+    mv cortex-plan-EXECUTION-LOG.txt _workspaces/cortex-plan/logs/execution-log-20260127.txt
+    log_success "Moved: cortex-plan-EXECUTION-LOG.txt → _workspaces/cortex-plan/logs/"
 fi
 
-if [ -f "DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md" ]; then
-    mv DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md _workspaces/docker-plan/archive/phase-0-executive-summary.md
-    log_success "Moved: DOCKER-PLAN-PHASE-0-EXECUTIVE-SUMMARY.md → _workspaces/docker-plan/archive/"
+if [ -f "cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md" ]; then
+    mv cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md _workspaces/cortex-plan/archive/phase-0-executive-summary.md
+    log_success "Moved: cortex-plan-PHASE-0-EXECUTIVE-SUMMARY.md → _workspaces/cortex-plan/archive/"
 fi
 
-if [ -f "PHASE-1-READINESS-DOCKER-PLAN.md" ]; then
-    mv PHASE-1-READINESS-DOCKER-PLAN.md _workspaces/docker-plan/archive/phase-1-readiness.md
-    log_success "Moved: PHASE-1-READINESS-DOCKER-PLAN.md → _workspaces/docker-plan/archive/"
+if [ -f "PHASE-1-READINESS-cortex-plan.md" ]; then
+    mv PHASE-1-READINESS-cortex-plan.md _workspaces/cortex-plan/archive/phase-1-readiness.md
+    log_success "Moved: PHASE-1-READINESS-cortex-plan.md → _workspaces/cortex-plan/archive/"
 fi
 
 if [ -f "phase2-execution.log" ]; then
-    mv phase2-execution.log _workspaces/docker-plan/logs/phase-2-execution.log
-    log_success "Moved: phase2-execution.log → _workspaces/docker-plan/logs/"
+    mv phase2-execution.log _workspaces/cortex-plan/logs/phase-2-execution.log
+    log_success "Moved: phase2-execution.log → _workspaces/cortex-plan/logs/"
 fi
 
 if [ -f "phase3-execution.log" ]; then
-    mv phase3-execution.log _workspaces/docker-plan/logs/phase-3-execution.log
-    log_success "Moved: phase3-execution.log → _workspaces/docker-plan/logs/"
+    mv phase3-execution.log _workspaces/cortex-plan/logs/phase-3-execution.log
+    log_success "Moved: phase3-execution.log → _workspaces/cortex-plan/logs/"
 fi
 
 # ============================================================================
@@ -262,8 +262,8 @@ Moves configuration, documentation, and phase files to appropriate locations:
 - docs/: mkdocs.yml, START-HERE.md
 - docs/archive/: versioning and strategy documents
 - deployment/: requirements.txt
-- _workspaces/docker-plan/logs/: execution logs
-- _workspaces/docker-plan/archive/: phase documentation
+- _workspaces/cortex-plan/logs/: execution logs
+- _workspaces/cortex-plan/archive/: phase documentation
 
 Root now contains only 8 permitted files (Git/Docker infrastructure).
 Completes CORE-038 enforcement." -q
@@ -289,8 +289,8 @@ log "   cortex/config/ - Configuration files"
 log "   docs/ - Documentation and START-HERE"
 log "   docs/archive/ - Strategy documents"
 log "   deployment/ - requirements.txt"
-log "   _workspaces/docker-plan/logs/ - Execution logs"
-log "   _workspaces/docker-plan/archive/ - Phase docs"
+log "   _workspaces/cortex-plan/logs/ - Execution logs"
+log "   _workspaces/cortex-plan/archive/ - Phase docs"
 
 log "\n🎯 POLICY ENFORCED:"
 log "   CORE-038: All non-infrastructure files now in subfolders"

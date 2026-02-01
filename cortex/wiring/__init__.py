@@ -1,7 +1,7 @@
 """
 CORTEX Wiring System - Git-backed YAML orchestrator configuration.
 
-Authority: _workspaces/docker-plan/migration-phases-plan.yaml (Phase 3)
+Authority: _workspaces/cortex-plan/migration-phases-plan.yaml (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 
 This is the SINGLE SOURCE OF TRUTH for orchestrator wiring.

@@ -27,8 +27,8 @@
 
 | File | Purpose |
 |------|---------|
-| `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md` | Full cleanup strategy (4000+ words) |
-| `_workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md` | Quick reference guide |
+| `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md` | Full cleanup strategy (4000+ words) |
+| `_workspaces/cortex-plan/DATABASE-CLEANUP-QUICKREF.md` | Quick reference guide |
 
 ---
 
@@ -161,8 +161,8 @@ Impact:
 Database imports reduced: 16 files → 13 files
 Phase 8 deletion simplified: requires 16 file changes → will require 2-3
 
-See: _workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md
-See: _workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md
+See: _workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md
+See: _workspaces/cortex-plan/DATABASE-CLEANUP-QUICKREF.md
 ```
 
 ---
@@ -205,8 +205,8 @@ Phase 2 will take 3-4 hours and further reduce imports from 13 → 2-3 files.
 
 ## 📚 Reference Documentation
 
-- **Full Strategy:** `_workspaces/docker-plan/DATABASE-CLEANUP-STRATEGY.md`
-- **Quick Reference:** `_workspaces/docker-plan/DATABASE-CLEANUP-QUICKREF.md`
+- **Full Strategy:** `_workspaces/cortex-plan/DATABASE-CLEANUP-STRATEGY.md`
+- **Quick Reference:** `_workspaces/cortex-plan/DATABASE-CLEANUP-QUICKREF.md`
 - **Commit Details:** `git show 293f12dd0`
 - **Governance:** CORE-026 (Git checkpoints), CORE-027 (Audit trail)
 

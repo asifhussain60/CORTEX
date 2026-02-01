@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================================
-# CORTEX Docker-Plan: Production-Ready File Naming Refactor
+# CORTEX cortex-plan: Production-Ready File Naming Refactor
 # ============================================================================
 # Date: 2026-01-27
 # Phase: File Naming Standardization
@@ -33,7 +33,7 @@ RENAMED=0
 UPDATED_REFS=0
 
 echo "============================================================================"
-echo "CORTEX Docker-Plan: File Naming Refactor"
+echo "CORTEX cortex-plan: File Naming Refactor"
 echo "============================================================================"
 echo ""
 
@@ -74,7 +74,7 @@ rename_file "08-HEALTH-RECOVERY-TESTS.md" "health-verification-tests.md"
 
 rename_file "migration-phases-plan.yaml" "migration-phases-plan.yaml"
 rename_file "OPTION-A-COMPLETION-REPORT.md" "versioning-cleanup-report.md"
-rename_file "INDEX.md" "docker-plan-index.md"
+rename_file "INDEX.md" "cortex-plan-index.md"
 rename_file "wiring.yaml" "wiring-schema.yaml"
 rename_file "migrate-to-docker.sh" "migrate-to-docker.sh"
 
@@ -140,7 +140,7 @@ update_refs "08-HEALTH-RECOVERY-TESTS" "health-verification-tests"
 
 update_refs "migration-phases-plan" "migration-phases-plan"
 update_refs "OPTION-A-COMPLETION-REPORT" "versioning-cleanup-report"
-update_refs "INDEX\.md" "docker-plan-index.md"
+update_refs "INDEX\.md" "cortex-plan-index.md"
 update_refs "wiring\.yaml" "wiring-schema.yaml"
 update_refs "migrate-to-docker" "migrate-to-docker"
 
@@ -155,9 +155,9 @@ echo ""
 echo -e "${BLUE}PHASE 3: Updating Index Content${NC}"
 echo "---"
 
-# Update docker-plan-index.md to reflect new naming
-cat > "$PLAN_DIR/docker-plan-index.md" << 'EOF'
-# CORTEX Docker-Plan - Document Index
+# Update cortex-plan-index.md to reflect new naming
+cat > "$PLAN_DIR/cortex-plan-index.md" << 'EOF'
+# CORTEX cortex-plan - Document Index
 
 **Date:** 2026-01-27  
 **Phase:** 0 Complete  
@@ -271,12 +271,12 @@ When adding new files:
 
 ---
 
-*CORTEX Docker-Plan Index*  
+*CORTEX cortex-plan Index*  
 *Production-Ready File Organization*  
 *Phase 0 Complete → Ready for Phases 1-6*
 EOF
 
-echo -e "${GREEN}✓${NC} Updated docker-plan-index.md"
+echo -e "${GREEN}✓${NC} Updated cortex-plan-index.md"
 echo ""
 
 # ============================================================================
@@ -313,7 +313,7 @@ File Renames (14 files):
   08-HEALTH-RECOVERY-TESTS.md → health-verification-tests.md
   migration-phases-plan.yaml → migration-phases-plan.yaml
   OPTION-A-COMPLETION-REPORT.md → versioning-cleanup-report.md
-  INDEX.md → docker-plan-index.md
+  INDEX.md → cortex-plan-index.md
   wiring.yaml → wiring-schema.yaml
   migrate-to-docker.sh → migrate-to-docker.sh
   (Files 07, 09 already compliant)
@@ -329,7 +329,7 @@ Benefits:
   - Improved grep/search discoverability
   - Professional production appearance
   - Reduced cognitive load for new users
-  - Consistent across entire docker-plan
+  - Consistent across entire cortex-plan
 
 Governance:
   - CORE-035: Single Canonical Implementation ✅
@@ -343,7 +343,7 @@ echo -e "${GREEN}✓${NC} Commit created: $COMMIT_HASH"
 git tag -a "file-naming-refactor-20260127" \
   -m "Production-ready file naming: kebab-case + RFC 3986
 
-All CORTEX docker-plan files now follow industry standards:
+All CORTEX cortex-plan files now follow industry standards:
 - Kebab-case naming convention
 - Purpose-first (no adjectives)
 - Scope-specific context

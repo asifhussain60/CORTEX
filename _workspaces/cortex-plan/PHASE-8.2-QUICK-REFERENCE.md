@@ -115,7 +115,7 @@ cortex/brain/analysis/typescript_analyzer.py
 cortex/brain/analysis/edge_case_detector.py
   + NEW: Multi-language edge cases
 
-_workspaces/docker-plan/verify_prod_ready.py
+_workspaces/cortex-plan/verify_prod_ready.py
   + Checks 13-18
 ```
 
@@ -220,7 +220,7 @@ implement:
 
 ```bash
 # Run production verification
-python _workspaces/docker-plan/verify_prod_ready.py
+python _workspaces/cortex-plan/verify_prod_ready.py
 
 # Run routing tests
 pytest tests/integration/orchestrators/test_unified_routing.py -v
@@ -236,9 +236,9 @@ curl http://localhost:8000/health/routing
 
 ## 📚 Documentation
 
-- **Full Spec:** [PHASE-8.2-UNIFIED-ROUTING.yaml](_workspaces/docker-plan/PHASE-8.2-UNIFIED-ROUTING.yaml)
-- **Master Plan:** [migration-phases-plan.yaml](_workspaces/docker-plan/migration-phases-plan.yaml)
-- **Prod Checks:** [verify_prod_ready.py](_workspaces/docker-plan/verify_prod_ready.py)
+- **Full Spec:** [PHASE-8.2-UNIFIED-ROUTING.yaml](_workspaces/cortex-plan/PHASE-8.2-UNIFIED-ROUTING.yaml)
+- **Master Plan:** [migration-phases-plan.yaml](_workspaces/cortex-plan/migration-phases-plan.yaml)
+- **Prod Checks:** [verify_prod_ready.py](_workspaces/cortex-plan/verify_prod_ready.py)
 
 ---
 

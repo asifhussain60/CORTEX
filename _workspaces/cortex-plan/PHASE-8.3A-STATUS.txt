@@ -166,16 +166,16 @@ Production Readiness:
 ================================================================================
 
 Completion Report:
-  _workspaces/docker-plan/PHASE-8.3A-COMPLETION-REPORT.md
+  _workspaces/cortex-plan/PHASE-8.3A-COMPLETION-REPORT.md
 
 Quick Reference:
-  _workspaces/docker-plan/PHASE-8.3A-QUICK-REFERENCE.md
+  _workspaces/cortex-plan/PHASE-8.3A-QUICK-REFERENCE.md
 
 Decision Framework:
-  _workspaces/docker-plan/PHASE-8.3-DECISION-FRAMEWORK.md
+  _workspaces/cortex-plan/PHASE-8.3-DECISION-FRAMEWORK.md
 
 Audit Findings:
-  _workspaces/docker-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
+  _workspaces/cortex-plan/PHASE-8.3C-ACTUAL-AUDIT-FINDINGS.md
 
 ================================================================================
 ✅ SIGN-OFF

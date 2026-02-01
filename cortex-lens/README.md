@@ -197,7 +197,7 @@ Edit `static/css/cortex-lens.css` to customize:
 
 ##  Related Documentation
 
-- [Phase 14 Implementation Plan](_workspaces/docker-plan/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml)
+- [Phase 14 Implementation Plan](_workspaces/cortex-plan/PHASE-14-LENS-DASHBOARD-IMPLEMENTATION.yaml)
 - [LENS Intelligence System](docs/05-lens-protocol/)
 - [LENS Analyzers](cortex/brain/analysis/)
 

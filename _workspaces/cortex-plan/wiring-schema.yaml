@@ -32,7 +32,7 @@
 version_specification: "3.8"  # Docker Compose format (not CORTEX version)
 specification_date: "2026-01-27"
 phase_status: "Phase 0 Complete"
-git_checkpoint: "phase0-docker-plan-validation-20260127"
+git_checkpoint: "phase0-cortex-plan-validation-20260127"
 git_safe: true
 
 # ============================================================================

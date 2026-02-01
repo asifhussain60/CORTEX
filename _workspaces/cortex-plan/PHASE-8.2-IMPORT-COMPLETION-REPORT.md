@@ -85,7 +85,7 @@ lookup = OrchestratorLookup.instance()
 | **170+ New Tests** | Large test suite | Contradicts Phase 8.1 test archiving strategy |
 | **Business Principles** | DoR enhancements | Requires MasterOrchestrator refactor (deferred) |
 
-**Recommendation:** Defer Phase 17-18 until CORTEX completes Phase 11-16 (current docker-plan roadmap).
+**Recommendation:** Defer Phase 17-18 until CORTEX completes Phase 11-16 (current cortex-plan roadmap).
 
 ---
 
