@@ -50,6 +50,17 @@ from cortex.brain.analysis.database_analyzer import (
     DatabaseAnalysisResult,
     get_database_analyzer,
 )
+from cortex.brain.analysis.api_analyzer import (
+    APIAnalyzer,
+    OpenAPIVersion,
+    SecuritySchemeType,
+    APISecurityPriority,
+    APIEndpoint,
+    SecurityScheme,
+    APISecurityFinding,
+    APIAnalysisResult,
+    get_api_analyzer,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -86,4 +97,13 @@ __all__ = [
     "MigrationInfo",
     "DatabaseAnalysisResult",
     "get_database_analyzer",
+    "APIAnalyzer",
+    "OpenAPIVersion",
+    "SecuritySchemeType",
+    "APISecurityPriority",
+    "APIEndpoint",
+    "SecurityScheme",
+    "APISecurityFinding",
+    "APIAnalysisResult",
+    "get_api_analyzer",
 ]
