@@ -109,6 +109,7 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | CORE-026 | Git checkpoint before major changes |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
+| CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
 
 ---
 
@@ -142,11 +143,12 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
 
-### Orchestrators (23 Total)
+### Orchestrators (24 Total)
 
 ```
-Core (6):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
-              TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator
+Core (7):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
+              LENSSynthesis, EnforcementOrchestrator, TDDOrchestrator,
+              WorkflowOrchestrator
 
 Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
               ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine

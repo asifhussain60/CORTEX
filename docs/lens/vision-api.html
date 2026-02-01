@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Vision API - Screenshot Analysis and Visual Understanding" name="description"/>
+    <title>Vision API | CORTEX LENS</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>👁️ Vision API</h1>
+            <p class="subtitle">Screenshot Analysis & Visual Code Intelligence</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p>CORTEX Vision API extends LENS with visual understanding capabilities, enabling screenshot analysis, UI/UX intelligence, and diagram comprehension.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Capabilities</h2>
+            <ul>
+                <li><strong>Screenshot Analysis:</strong> Extract UI elements, layouts, and component hierarchies from screenshots</li>
+                <li><strong>Diagram Understanding:</strong> Parse architecture diagrams, flowcharts, and technical drawings</li>
+                <li><strong>Error Detection:</strong> Identify visual anomalies in UI rendering</li>
+                <li><strong>Accessibility Scanning:</strong> Detect contrast issues, missing labels, touch target sizes</li>
+                <li><strong>Design System Validation:</strong> Verify compliance with design tokens and glassmorphism patterns</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>Use Cases</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>UI Testing</h3>
+                    <p>Visual regression testing and component validation</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Documentation</h3>
+                    <p>Auto-generate docs from UI screenshots</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Debugging</h3>
+                    <p>Analyze error screenshots for root cause analysis</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Accessibility</h3>
+                    <p>Automated WCAG 2.1 AA compliance checks</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Integration</h2>
+            <p>Vision API integrates with LENS analyzers to provide multi-modal code intelligence:</p>
+            <pre><code>
+# Analyze code + screenshot together
+result = cortex_lens_analyze(
+    file_path="components/Button.tsx",
+    screenshot="screenshots/button-render.png",
+    include_vision=True
+)
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="index.html" class="btn-back">← Back to LENS Overview</a>
+        </footer>
+    </div>
+</body>
+</html>

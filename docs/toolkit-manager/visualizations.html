@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Visualizations - D3.js Charts and Glassmorphism Components" name="description"/>
+    <title>Visualizations | CORTEX Toolkit</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🧩 CORTEX Visualizations</h1>
+            <p class="subtitle">D3.js Charts & Interactive Diagrams</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p>CORTEX Toolkit provides pre-built D3.js visualizations and glassmorphism components for generating interactive documentation, dashboards, and reports.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Available Visualizations</h2>
+
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>📊 Orchestrator Dependency Graph</h3>
+                    <p>Force-directed graph showing orchestrator relationships and wiring</p>
+                    <pre><code>
+import { createDependencyGraph } from 'visualizations/dependency-graph.js';
+
+createDependencyGraph('#graph-container', {
+    nodes: orchestrators,
+    edges: dependencies
+});
+                    </code></pre>
+                </div>
+
+                <div class="feature-item">
+                    <h3>📈 Governance Compliance Chart</h3>
+                    <p>Bar chart showing CORE rule compliance across codebase</p>
+                    <pre><code>
+import { createComplianceChart } from 'visualizations/compliance.js';
+
+createComplianceChart('#chart-container', {
+    rules: coreRules,
+    violations: violations
+});
+                    </code></pre>
+                </div>
+
+                <div class="feature-item">
+                    <h3>🔥 Duplication Heatmap</h3>
+                    <p>Heatmap showing code duplication across files and modules</p>
+                    <pre><code>
+import { createDuplicationHeatmap } from 'visualizations/heatmap.js';
+
+createDuplicationHeatmap('#heatmap', {
+    duplicates: duplicationData,
+    threshold: 0.8
+});
+                    </code></pre>
+                </div>
+
+                <div class="feature-item">
+                    <h3>🎯 Phase Progress Timeline</h3>
+                    <p>Interactive timeline with phase milestones and completion status</p>
+                    <pre><code>
+import { createTimeline } from 'visualizations/timeline.js';
+
+createTimeline('#timeline', {
+    phases: epicPhases,
+    current: currentPhase
+});
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Glassmorphism Components</h2>
+            <p>Pre-styled glassmorphism components matching CORTEX design system:</p>
+            <ul>
+                <li><strong>Glass Cards:</strong> Translucent containers with backdrop blur</li>
+                <li><strong>Modern Tabs:</strong> Tab navigation with smooth transitions</li>
+                <li><strong>Progress Bars:</strong> Animated progress indicators</li>
+                <li><strong>Tooltips:</strong> Context-aware hover tooltips</li>
+                <li><strong>Modals:</strong> Dialog overlays with glassmorphism styling</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>Live Examples</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>Duplication Dashboard</h3>
+                    <a href="../cortex-lens/duplication-metrics-dashboard.html" class="btn-primary">View Live →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>Security Dashboard</h3>
+                    <a href="../cortex-lens/security-dashboard.html" class="btn-primary">View Live →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>LENS Dashboard</h3>
+                    <a href="../cortex-lens/lens-dashboard.html" class="btn-primary">View Live →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>Orchestrators</h3>
+                    <a href="../orchestrators/index.html" class="btn-primary">View Live →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Custom Visualization API</h2>
+            <pre><code>
+// Create custom D3.js visualization with glassmorphism styling
+import { CortexVisualization } from 'toolkit/visualization-base.js';
+
+const customViz = new CortexVisualization({
+    container: '#my-viz',
+    theme: 'glassmorphism',
+    responsive: true,
+    data: myData
+});
+
+customViz.render();
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="plan-viewer.html" class="btn-back">← Plan Viewer</a>
+            <a href="index.html" class="btn-secondary">Toolkit Overview</a>
+        </footer>
+    </div>
+</body>
+</html>

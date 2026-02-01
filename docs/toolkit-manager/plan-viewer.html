@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Toolkit - HTML View Generators and Plan Viewer" name="description"/>
+    <title>Plan Viewer | CORTEX Toolkit</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🧭 Epic Plan Viewer</h1>
+            <p class="subtitle">Interactive HTML View Generator for CORTEX Plans</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p>The Epic Plan Viewer transforms YAML epic plans into beautiful, interactive HTML visualizations with phase tracking, dependency graphs, and progress monitoring.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Features</h2>
+            <ul>
+                <li><strong>Phase Visualization:</strong> Multi-phase epic plans with progress bars</li>
+                <li><strong>Dependency Graphs:</strong> D3.js visualizations of task dependencies</li>
+                <li><strong>DoR/DoD Validation:</strong> Color-coded Definition of Ready/Done status</li>
+                <li><strong>Evidence Tracking:</strong> Link to evidence bundles for completed phases</li>
+                <li><strong>Glassmorphism Design:</strong> Modern glass-style UI matching CORTEX theme</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>Usage</h2>
+            <pre><code>
+from cortex.toolkit.plan_viewer import generate_plan_view
+
+# Generate HTML from YAML epic plan
+generate_plan_view(
+    plan_path="epic-plans/user-auth-epic.yaml",
+    output_path="docs/plans/user-auth.html"
+)
+
+# Result: Interactive HTML page with:
+# - Phase timeline
+# - Task breakdown with complexity scores
+# - Dependency visualization
+# - Progress tracking
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Generated View Components</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>📊 Phase Timeline</h3>
+                    <p>Horizontal timeline showing epic phases with completion status</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🎯 Task Cards</h3>
+                    <p>Interactive cards for each task with DoR/DoD checklists</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔗 Dependency Graph</h3>
+                    <p>D3.js force-directed graph showing task relationships</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📈 Progress Metrics</h3>
+                    <p>Real-time completion percentage and velocity tracking</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Example Output</h2>
+            <p>View a sample generated plan:</p>
+            <a href="../architecture/index.html" class="btn-primary">See Example Plan →</a>
+        </section>
+
+        <footer class="page-footer">
+            <a href="index.html" class="btn-back">← Toolkit Overview</a>
+            <a href="visualizations.html" class="btn-secondary">Next: Visualizations →</a>
+        </footer>
+    </div>
+</body>
+</html>

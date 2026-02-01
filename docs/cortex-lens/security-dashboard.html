@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX LENS | Security Findings</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="static/assets/cortex-logo-200.png">
+    
+    <!-- Custom Styles (Dark Glassmorphism) -->
+    <link rel="stylesheet" href="static/css/cortex-lens.css">
+    
+    <!-- Alpine.js (SPA Framework) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        /* Security-specific styles */
+        .finding-severity-critical {
+            border-left: 4px solid #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+        }
+        
+        .finding-severity-high {
+            border-left: 4px solid #ea580c;
+            background: rgba(234, 88, 12, 0.1);
+        }
+        
+        .finding-severity-medium {
+            border-left: 4px solid #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .finding-severity-low {
+            border-left: 4px solid #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .finding-card {
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .severity-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-critical {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .badge-high {
+            background: #ea580c;
+            color: white;
+        }
+        
+        .badge-medium {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .badge-low {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .filter-tab.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Alpine.js App -->
+    <div x-data="securityDashboard()" x-init="initialize()">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-glow">
+                <img 
+                    src="static/assets/cortex-logo-200.png" 
+                    alt="CORTEX Logo" 
+                    class="hero-logo"
+                    onerror="this.style.display='none'"
+                >
+            </div>
+            <h1 class="hero-title">🔒 Security Findings</h1>
+            <p class="hero-subtitle">
+                LENS v2.0 Multi-Analyzer Security Intelligence<br>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">
+                    Config • Database • API • Dependencies • Company Compliance
+                </span>
+            </p>
+        </section>
+        
+        <!-- Main Content -->
+        <main class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
+            
+            <!-- Stats Overview -->
+            <section>
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📊</span>
+                    <span>Overview</span>
+                </h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #dc2626;" x-text="stats.critical"></div>
+                        <div class="stat-label">Critical Findings</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #ea580c;" x-text="stats.high"></div>
+                        <div class="stat-label">High Priority</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #f59e0b;" x-text="stats.medium"></div>
+                        <div class="stat-label">Medium Priority</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #3b82f6;" x-text="stats.low"></div>
+                        <div class="stat-label">Low Priority</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--accent-primary);" x-text="stats.total"></div>
+                        <div class="stat-label">Total Findings</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--accent-success);" x-text="stats.sources"></div>
+                        <div class="stat-label">Analysis Sources</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Charts Section -->
+            <section style="margin-top: 3rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>📈</span>
+                    <span>Visualizations</span>
+                </h2>
+                
+                <div class="glass-card">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+                        <!-- Findings by Priority Chart -->
+                        <div>
+                            <h3 style="margin-bottom: 1rem;">Findings by Priority</h3>
+                            <div class="chart-container">
+                                <canvas id="priorityChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Findings by Source Chart -->
+                        <div>
+                            <h3 style="margin-bottom: 1rem;">Findings by Source</h3>
+                            <div class="chart-container">
+                                <canvas id="sourceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Filters -->
+            <section style="margin-top: 3rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🔍</span>
+                    <span>Findings</span>
+                    <span class="badge badge-primary" style="margin-left: 0.5rem;" x-text="filteredFindings.length + ' results'"></span>
+                </h2>
+                
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button 
+                        class="filter-tab"
+                        :class="{ 'active': activeFilter === 'all' }"
+                        @click="setFilter('all')"
+                    >
+                        All (<span x-text="findings.length"></span>)
+                    </button>
+                    <button 
+                        class="filter-tab"
+                        :class="{ 'active': activeFilter === 'critical' }"
+                        @click="setFilter('critical')"
+                    >
+                        Critical (<span x-text="stats.critical"></span>)
+                    </button>
+                    <button 
+                        class="filter-tab"
+                        :class="{ 'active': activeFilter === 'high' }"
+                        @click="setFilter('high')"
+                    >
+                        High (<span x-text="stats.high"></span>)
+                    </button>
+                    <button 
+                        class="filter-tab"
+                        :class="{ 'active': activeFilter === 'medium' }"
+                        @click="setFilter('medium')"
+                    >
+                        Medium (<span x-text="stats.medium"></span>)
+                    </button>
+                    <button 
+                        class="filter-tab"
+                        :class="{ 'active': activeFilter === 'low' }"
+                        @click="setFilter('low')"
+                    >
+                        Low (<span x-text="stats.low"></span>)
+                    </button>
+                    
+                    <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+                        <button 
+                            class="filter-tab"
+                            :class="{ 'active': activeSource === 'config' }"
+                            @click="setSource('config')"
+                        >
+                            📄 Config
+                        </button>
+                        <button 
+                            class="filter-tab"
+                            :class="{ 'active': activeSource === 'database' }"
+                            @click="setSource('database')"
+                        >
+                            🗄️ Database
+                        </button>
+                        <button 
+                            class="filter-tab"
+                            :class="{ 'active': activeSource === 'api' }"
+                            @click="setSource('api')"
+                        >
+                            🌐 API
+                        </button>
+                        <button 
+                            class="filter-tab"
+                            :class="{ 'active': activeSource === 'dependencies' }"
+                            @click="setSource('dependencies')"
+                        >
+                            📦 Dependencies
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Findings List -->
+                <div>
+                    <template x-for="finding in filteredFindings" :key="finding.id">
+                        <div 
+                            class="finding-card"
+                            :class="'finding-severity-' + finding.severity.toLowerCase()"
+                        >
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                                <div>
+                                    <span 
+                                        class="severity-badge"
+                                        :class="'badge-' + finding.severity.toLowerCase()"
+                                        x-text="finding.severity"
+                                    ></span>
+                                    <span 
+                                        class="badge badge-secondary" 
+                                        style="margin-left: 0.5rem;"
+                                        x-text="finding.source"
+                                    ></span>
+                                </div>
+                                <span style="color: var(--text-muted); font-size: 0.85rem;" x-text="finding.category"></span>
+                            </div>
+                            
+                            <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;" x-text="finding.title"></h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 0.75rem;" x-text="finding.message"></p>
+                            
+                            <div x-show="finding.file" style="font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                📁 <span x-text="finding.file"></span>
+                                <span x-show="finding.line" x-text="':L' + finding.line"></span>
+                            </div>
+                            
+                            <div x-show="finding.recommendation" style="margin-top: 0.75rem; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; font-size: 0.9rem;">
+                                <strong style="color: var(--accent-success);">💡 Recommendation:</strong>
+                                <span x-text="finding.recommendation"></span>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Empty State -->
+                    <div 
+                        x-show="filteredFindings.length === 0"
+                        class="empty-state"
+                    >
+                        <div class="empty-state-icon">✅</div>
+                        <h3 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No findings match your filters</h3>
+                        <p>Try adjusting your filter criteria</p>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+        
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--glass-border);">
+            <p>
+                🔒 CORTEX LENS Security Dashboard • LENS v2.0 • 
+                <span style="color: var(--accent-primary);">Multi-Analyzer Security Intelligence</span>
+            </p>
+            <p style="margin-top: 0.5rem;">
+                Author: Asif Hussain • Built with Alpine.js, Chart.js
+            </p>
+        </footer>
+        
+    </div>
+    
+    <!-- Alpine.js Component -->
+    <script>
+        function securityDashboard() {
+            return {
+                findings: [],
+                activeFilter: 'all',
+                activeSource: 'all',
+                stats: {
+                    critical: 0,
+                    high: 0,
+                    medium: 0,
+                    low: 0,
+                    total: 0,
+                    sources: 0
+                },
+                priorityChart: null,
+                sourceChart: null,
+                
+                get filteredFindings() {
+                    let filtered = this.findings;
+                    
+                    // Filter by severity
+                    if (this.activeFilter !== 'all') {
+                        filtered = filtered.filter(f => 
+                            f.severity.toLowerCase() === this.activeFilter.toLowerCase()
+                        );
+                    }
+                    
+                    // Filter by source
+                    if (this.activeSource !== 'all') {
+                        filtered = filtered.filter(f => 
+                            f.source.toLowerCase() === this.activeSource.toLowerCase()
+                        );
+                    }
+                    
+                    return filtered;
+                },
+                
+                async initialize() {
+                    console.log('🔒 CORTEX LENS Security Dashboard initialized');
+                    await this.loadFindings();
+                    this.calculateStats();
+                    this.renderCharts();
+                },
+                
+                async loadFindings() {
+                    try {
+                        // Try to load from JSON file (generated by LENS v2.0)
+                        const response = await fetch('data/security-findings.json');
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.findings = data.findings || [];
+                            console.log(`✅ Loaded ${this.findings.length} security findings`);
+                        } else {
+                            // Use demo data
+                            this.findings = this.generateDemoFindings();
+                            console.log('ℹ️ Using demo security findings');
+                        }
+                    } catch (error) {
+                        // Use demo data
+                        this.findings = this.generateDemoFindings();
+                        console.log('ℹ️ Could not load findings, using demo data');
+                    }
+                },
+                
+                generateDemoFindings() {
+                    return [
+                        {
+                            id: 1,
+                            severity: 'critical',
+                            source: 'config',
+                            category: 'Secrets Exposure',
+                            title: 'Hardcoded API Key Detected',
+                            message: 'API key found in config.yaml (SK-PROD-1234567890)',
+                            file: 'config/config.yaml',
+                            line: 45,
+                            recommendation: 'Move to environment variables or secrets manager (AWS Secrets Manager, HashiCorp Vault)'
+                        },
+                        {
+                            id: 2,
+                            severity: 'high',
+                            source: 'database',
+                            category: 'Missing Encryption',
+                            title: 'PII Column Not Encrypted',
+                            message: 'Column "users.ssn" stores social security numbers without encryption',
+                            file: 'migrations/001_create_users.sql',
+                            line: 12,
+                            recommendation: 'Implement column-level encryption (AES-256) or use encrypted database fields'
+                        },
+                        {
+                            id: 3,
+                            severity: 'high',
+                            source: 'api',
+                            category: 'BOLA Vulnerability',
+                            title: 'Broken Object Level Authorization',
+                            message: 'Endpoint /api/users/{id} lacks ownership verification',
+                            file: 'openapi.yaml',
+                            line: 89,
+                            recommendation: 'Add authorization check to verify user owns the requested resource'
+                        },
+                        {
+                            id: 4,
+                            severity: 'critical',
+                            source: 'dependencies',
+                            category: 'CVE-2021-45115',
+                            title: 'Django DoS Vulnerability',
+                            message: 'django==3.2.10 has known denial-of-service vulnerability (CVE-2021-45115, CVSS 7.5)',
+                            file: 'requirements.txt',
+                            line: 3,
+                            recommendation: 'Upgrade to django>=3.2.11'
+                        },
+                        {
+                            id: 5,
+                            severity: 'medium',
+                            source: 'api',
+                            category: 'Missing Rate Limiting',
+                            title: 'No Rate Limiting on Auth Endpoint',
+                            message: 'POST /api/auth/login lacks rate limiting, vulnerable to brute force',
+                            file: 'openapi.yaml',
+                            line: 45,
+                            recommendation: 'Implement rate limiting (e.g., 5 requests per minute per IP)'
+                        },
+                        {
+                            id: 6,
+                            severity: 'medium',
+                            source: 'config',
+                            category: 'Insecure Protocol',
+                            title: 'HTTP Used Instead of HTTPS',
+                            message: 'External API calls use HTTP instead of HTTPS',
+                            file: 'config/api_config.yaml',
+                            line: 23,
+                            recommendation: 'Update all external API URLs to use HTTPS'
+                        },
+                        {
+                            id: 7,
+                            severity: 'low',
+                            source: 'database',
+                            category: 'Missing Index',
+                            title: 'Performance: Missing Index on Foreign Key',
+                            message: 'Table "orders" foreign key "user_id" lacks index',
+                            file: 'migrations/003_orders.sql',
+                            line: 18,
+                            recommendation: 'Add index: CREATE INDEX idx_orders_user_id ON orders(user_id)'
+                        },
+                        {
+                            id: 8,
+                            severity: 'high',
+                            source: 'dependencies',
+                            category: 'CVE-2020-8203',
+                            title: 'Lodash Prototype Pollution',
+                            message: 'lodash@4.17.20 vulnerable to prototype pollution (CVE-2020-8203, CVSS 7.4)',
+                            file: 'package.json',
+                            line: 15,
+                            recommendation: 'Upgrade to lodash>=4.17.21'
+                        },
+                        {
+                            id: 9,
+                            severity: 'medium',
+                            source: 'config',
+                            category: 'Debug Mode Enabled',
+                            title: 'Debug Mode Enabled in Production',
+                            message: 'DEBUG=True detected in production configuration',
+                            file: 'settings.py',
+                            line: 7,
+                            recommendation: 'Set DEBUG=False in production and use logging instead'
+                        },
+                        {
+                            id: 10,
+                            severity: 'low',
+                            source: 'api',
+                            category: 'Missing CORS Policy',
+                            title: 'Permissive CORS Configuration',
+                            message: 'CORS allows all origins (*), should be restricted',
+                            file: 'openapi.yaml',
+                            line: 12,
+                            recommendation: 'Restrict CORS to specific trusted origins'
+                        }
+                    ];
+                },
+                
+                calculateStats() {
+                    this.stats.critical = this.findings.filter(f => f.severity === 'critical').length;
+                    this.stats.high = this.findings.filter(f => f.severity === 'high').length;
+                    this.stats.medium = this.findings.filter(f => f.severity === 'medium').length;
+                    this.stats.low = this.findings.filter(f => f.severity === 'low').length;
+                    this.stats.total = this.findings.length;
+                    
+                    const sources = new Set(this.findings.map(f => f.source));
+                    this.stats.sources = sources.size;
+                },
+                
+                renderCharts() {
+                    this.$nextTick(() => {
+                        this.renderPriorityChart();
+                        this.renderSourceChart();
+                    });
+                },
+                
+                renderPriorityChart() {
+                    const ctx = document.getElementById('priorityChart');
+                    if (!ctx) return;
+                    
+                    if (this.priorityChart) {
+                        this.priorityChart.destroy();
+                    }
+                    
+                    this.priorityChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Critical', 'High', 'Medium', 'Low'],
+                            datasets: [{
+                                data: [this.stats.critical, this.stats.high, this.stats.medium, this.stats.low],
+                                backgroundColor: [
+                                    '#dc2626',
+                                    '#ea580c',
+                                    '#f59e0b',
+                                    '#3b82f6'
+                                ],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#a0a0a0',
+                                        padding: 15
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                
+                renderSourceChart() {
+                    const ctx = document.getElementById('sourceChart');
+                    if (!ctx) return;
+                    
+                    if (this.sourceChart) {
+                        this.sourceChart.destroy();
+                    }
+                    
+                    const sourceCounts = {};
+                    this.findings.forEach(f => {
+                        sourceCounts[f.source] = (sourceCounts[f.source] || 0) + 1;
+                    });
+                    
+                    this.sourceChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(sourceCounts),
+                            datasets: [{
+                                label: 'Findings',
+                                data: Object.values(sourceCounts),
+                                backgroundColor: '#7b2cbf',
+                                borderRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        color: '#a0a0a0',
+                                        stepSize: 1
+                                    },
+                                    grid: {
+                                        color: '#2a2a2a'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: '#a0a0a0'
+                                    },
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                
+                setFilter(filter) {
+                    this.activeFilter = filter;
+                },
+                
+                setSource(source) {
+                    if (this.activeSource === source) {
+                        this.activeSource = 'all';
+                    } else {
+                        this.activeSource = source;
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>

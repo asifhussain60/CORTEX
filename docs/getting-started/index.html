@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="Get Started with CORTEX - 5-Minute Setup Guide for MCP Configuration" name="description"/>
+    <title>Get Started | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🚀 Get Started with CORTEX</h1>
+            <p class="subtitle">5-Minute Setup • MCP Configuration • Your First Request</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Prerequisites</h2>
+            <ul>
+                <li>Python 3.11+ installed</li>
+                <li>VS Code with GitHub Copilot extension</li>
+                <li>Git repository for your project</li>
+                <li>Basic familiarity with command line</li>
+            </ul>
+        </section>
+
+        <section class="glass-card">
+            <h2>Step 1: Clone & Install</h2>
+            <pre><code>
+# Clone CORTEX repository
+git clone https://github.com/asifhussain60/CORTEX.git
+cd CORTEX
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify installation
+python -m cortex.cli --version
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Step 2: Configure MCP Server</h2>
+            <p>Add CORTEX to your VS Code settings (<code>.vscode/settings.json</code>):</p>
+            <pre><code>
+{
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp.server"],
+      "env": {
+        "CORTEX_ROOT": "${workspaceFolder}",
+        "CORTEX_MODE": "production"
+      }
+    }
+  }
+}
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Step 3: Start CORTEX</h2>
+            <pre><code>
+# Start MCP server
+python -m cortex.mcp.server
+
+# Server will start on http://localhost:8000
+# Health check: http://localhost:8000/health
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Step 4: Your First Request</h2>
+            <p>In GitHub Copilot Chat, try:</p>
+            <pre><code>
+@cortex analyze this file for security issues
+
+@cortex /implement add user authentication with TDD
+
+@cortex /refactor extract this function into a service class
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Step 5: Verify MCP Tools</h2>
+            <pre><code>
+# List available MCP tools
+curl http://localhost:8000/tools
+
+# Expected output:
+# - cortex_process_request
+# - cortex_lens_analyze
+# - cortex_git_history
+# - cortex_challenge
+# - cortex_detect_duplicates
+# ... (15+ tools)
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Next Steps</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>📚 Explore MCP Tools</h3>
+                    <p>Learn about all 15+ available MCP tools</p>
+                    <a href="../11-mcp-tools/index.html" class="btn-primary">MCP Tools →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>🧠 Architecture Deep-Dive</h3>
+                    <p>Understand 4-tier brain and orchestrator system</p>
+                    <a href="../architecture/index.html" class="btn-primary">Architecture →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>📖 Knowledge Base</h3>
+                    <p>Browse 45+ knowledge YAMLs</p>
+                    <a href="../knowledge/index.html" class="btn-primary">Knowledge →</a>
+                </div>
+                <div class="feature-item">
+                    <h3>🎓 Learning Paths</h3>
+                    <p>Follow interactive learning journeys</p>
+                    <a href="../learning-paths/index.html" class="btn-primary">Learn →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card">
+            <h2>Troubleshooting</h2>
+            <h3>MCP Server Not Starting?</h3>
+            <pre><code>
+# Check Python version
+python --version  # Should be 3.11+
+
+# Check dependencies
+pip list | grep cortex
+
+# Check logs
+tail -f cortex/logs/mcp-server.log
+            </code></pre>
+
+            <h3>Tools Not Appearing in Copilot?</h3>
+            <ul>
+                <li>Restart VS Code after modifying <code>settings.json</code></li>
+                <li>Verify MCP server is running: <code>curl http://localhost:8000/health</code></li>
+                <li>Check VS Code Developer Console for errors</li>
+            </ul>
+        </section>
+
+        <footer class="page-footer">
+            <a href="../index.html" class="btn-back">← Back to Home</a>
+        </footer>
+    </div>
+</body>
+</html>

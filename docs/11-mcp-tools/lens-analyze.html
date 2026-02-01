@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="cortex_lens_analyze - Unified LENS Code Intelligence Analysis" name="description"/>
+    <title>cortex_lens_analyze | MCP Tools</title>
+    <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🔍 cortex_lens_analyze</h1>
+            <p class="subtitle">Unified Code Intelligence Analysis</p>
+        </header>
+
+        <section class="glass-card">
+            <h2>Overview</h2>
+            <p><code>cortex_lens_analyze</code> combines AST analysis, Git history, comment extraction, and security scanning into a single unified analysis for any file.</p>
+        </section>
+
+        <section class="glass-card">
+            <h2>Function Signature</h2>
+            <pre><code>
+cortex_lens_analyze(
+    file_path: str,
+    repo_path: str = ".",
+    include_git: bool = True,
+    include_ast: bool = True,
+    include_comments: bool = True,
+    include_security: bool = True
+) -> Dict[str, Any]
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Parameters</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>file_path</code></td>
+                        <td>string</td>
+                        <td>Path to file to analyze (absolute or relative)</td>
+                    </tr>
+                    <tr>
+                        <td><code>repo_path</code></td>
+                        <td>string</td>
+                        <td>Git repository root (default: current directory)</td>
+                    </tr>
+                    <tr>
+                        <td><code>include_git</code></td>
+                        <td>boolean</td>
+                        <td>Include git history analysis (24h commits, blame)</td>
+                    </tr>
+                    <tr>
+                        <td><code>include_ast</code></td>
+                        <td>boolean</td>
+                        <td>Include AST structure analysis (functions, classes, imports)</td>
+                    </tr>
+                    <tr>
+                        <td><code>include_comments</code></td>
+                        <td>boolean</td>
+                        <td>Include comment extraction (TODOs, FIXMEs, docstrings)</td>
+                    </tr>
+                    <tr>
+                        <td><code>include_security</code></td>
+                        <td>boolean</td>
+                        <td>Include security threat analysis (6 CWE patterns)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="glass-card">
+            <h2>Returns</h2>
+            <pre><code>
+{
+    "status": "success",
+    "file_path": "api/auth.py",
+    "git_analysis": {
+        "recent_commits": [...],
+        "blame": {...},
+        "authors": [...]
+    },
+    "ast_analysis": {
+        "functions": [...],
+        "classes": [...],
+        "imports": [...],
+        "complexity": 12
+    },
+    "comment_analysis": {
+        "todos": [...],
+        "fixmes": [...],
+        "docstrings": [...]
+    },
+    "security_analysis": {
+        "threats": [
+            {
+                "cwe": "CWE-89",
+                "severity": "CRITICAL",
+                "line": 45,
+                "pattern": "SQL Injection",
+                "recommendation": "Use parameterized queries"
+            }
+        ]
+    },
+    "metadata": {
+        "language": "python",
+        "lines": 250,
+        "analyzed_at": "2026-02-01T12:00:00Z"
+    }
+}
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Example Usage</h2>
+            <pre><code>
+# Full analysis (all analyzers)
+result = cortex_lens_analyze(
+    file_path="cortex/orchestrators/core/master_orchestrator.py"
+)
+
+# Security-focused analysis
+result = cortex_lens_analyze(
+    file_path="api/payment.py",
+    include_git=False,
+    include_ast=False,
+    include_comments=False,
+    include_security=True
+)
+
+# AST + Git only (skip comments and security)
+result = cortex_lens_analyze(
+    file_path="utils/helpers.py",
+    include_comments=False,
+    include_security=False
+)
+            </code></pre>
+        </section>
+
+        <section class="glass-card">
+            <h2>Integration with Challenge Engine</h2>
+            <p>If security threats are detected with CRITICAL severity, ChallengeEngine is automatically triggered:</p>
+            <pre><code>
+# LENS detects SQL injection
+result = cortex_lens_analyze("api/users.py")
+
+# ChallengeEngine blocks execution
+if result['security_analysis']['threats']:
+    # User must acknowledge and override
+    override_result = cortex_challenge(
+        threat_id=result['security_analysis']['threats'][0]['id'],
+        action="OVERRIDE"
+    )
+            </code></pre>
+        </section>
+
+        <footer class="page-footer">
+            <a href="process-request.html" class="btn-back">← process_request</a>
+            <a href="challenge.html" class="btn-secondary">Next: challenge →</a>
+        </footer>
+    </div>
+</body>
+</html>
