@@ -5,6 +5,7 @@ Model Context Protocol tools for enhanced capabilities.
 Available Tools:
 - intelligent_git_merge: Intelligent merging with cortex_brain preservation
 - lens_tools: LENS analysis tools (git, AST, comments, duplicates)
+- onboarding_tools: Repository onboarding and config analysis (LENS v2.0)
 """
 
 # Core MCP Tools
@@ -20,6 +21,13 @@ from .lens_tools import (
     cortex_tools_catalog,
 )
 
+# Onboarding Tools (LENS v2.0 - AC-LENS-V2-ONBOARD-001)
+from .onboarding_tools import (
+    cortex_onboard_repository,
+    cortex_analyze_config,
+    cortex_analyze_repository_configs,
+)
+
 __all__ = [
     # Git Merge
     "IntelligentGitMergeTool",
@@ -31,6 +39,10 @@ __all__ = [
     "cortex_extract_comments",
     "cortex_detect_duplicates",
     "cortex_tools_catalog",
+    # Onboarding Tools
+    "cortex_onboard_repository",
+    "cortex_analyze_config",
+    "cortex_analyze_repository_configs",
 ]
 
 # MCP Tool Registry for discovery
@@ -48,6 +60,25 @@ MCP_TOOLS = {
         "description": "Unified LENS code intelligence analysis",
         "category": "analysis",
         "features": ["git_analysis", "ast_analysis", "comment_extraction"]
+    },
+    # Onboarding Tools (LENS v2.0)
+    "cortex_onboard_repository": {
+        "function": cortex_onboard_repository,
+        "description": "Onboard repository with holistic LENS analysis + security assessment",
+        "category": "onboarding",
+        "features": ["multi_layer_analysis", "security_threat_modeling", "dashboard_generation"]
+    },
+    "cortex_analyze_config": {
+        "function": cortex_analyze_config,
+        "description": "Analyze configuration file for security issues",
+        "category": "security",
+        "features": ["secret_detection", "insecure_defaults", "compliance_check"]
+    },
+    "cortex_analyze_repository_configs": {
+        "function": cortex_analyze_repository_configs,
+        "description": "Analyze all config files in repository",
+        "category": "security",
+        "features": ["repository_scan", "aggregated_findings", "p0_p1_p2_classification"]
     },
     "cortex_git_history": {
         "function": cortex_git_history,

@@ -33,6 +33,14 @@ from cortex.brain.analysis.vision_analyzer import (
     AnalysisDepth,
     analyze_image,
 )
+from cortex.brain.analysis.config_analyzer import (
+    ConfigAnalyzer,
+    ConfigFinding,
+    ConfigSeverity,
+    ConfigCategory,
+    ConfigAnalysisResult,
+    get_config_analyzer,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -48,6 +56,21 @@ __all__ = [
     "Comment",
     "DocstringInfo",
     "CommentExtractionResult",
+    "VisionAnalyzer",
+    "VisionAnalysisResult",
+    "UIElement",
+    "ExtractedURL",
+    "DetectedIssue",
+    "ImageType",
+    "AnalysisDepth",
+    "analyze_image",
+    "ConfigAnalyzer",
+    "ConfigFinding",
+    "ConfigSeverity",
+    "ConfigCategory",
+    "ConfigAnalysisResult",
+    "get_config_analyzer",
+]
     "VisionAnalyzer",
     "VisionAnalysisResult",
     "UIElement",
