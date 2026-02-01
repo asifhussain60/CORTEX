@@ -67,6 +67,17 @@ from cortex.brain.analysis.company_domain_loader import (
     CompanyDomainResult,
     get_company_domain_loader,
 )
+from cortex.brain.analysis.dependency_analyzer import (
+    DependencyAnalyzer,
+    DependencyType,
+    VulnerabilitySeverity,
+    LicenseCategory,
+    PackageInfo,
+    Vulnerability,
+    DependencyFinding,
+    DependencyAnalysisResult,
+    get_dependency_analyzer,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -116,4 +127,13 @@ __all__ = [
     "DomainKnowledge",
     "CompanyDomainResult",
     "get_company_domain_loader",
+    "DependencyAnalyzer",
+    "DependencyType",
+    "VulnerabilitySeverity",
+    "LicenseCategory",
+    "PackageInfo",
+    "Vulnerability",
+    "DependencyFinding",
+    "DependencyAnalysisResult",
+    "get_dependency_analyzer",
 ]
