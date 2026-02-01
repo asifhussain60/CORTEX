@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "created": "2026-02-01T07:53:51.839029",
+  "repos": [
+    {
+      "name": "kashkole",
+      "title": "KASHKOLE",
+      "description": "Data Management platform built with Python",
+      "health_score": 0,
+      "health_category": "critical",
+      "confidence": 100,
+      "dashboard_path": "kashkole/dashboard.html",
+      "icon": "\ud83d\udcff",
+      "tech_stack": [],
+      "onboarded_at": "2026-02-01T07:53:51.839051",
+      "updated_at": "2026-02-01T09:52:43.946434"
+    }
+  ],
+  "updated": "2026-02-01T09:52:43.946450"
+}
