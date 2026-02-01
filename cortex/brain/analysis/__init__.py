@@ -41,6 +41,15 @@ from cortex.brain.analysis.config_analyzer import (
     ConfigAnalysisResult,
     get_config_analyzer,
 )
+from cortex.brain.analysis.database_analyzer import (
+    DatabaseAnalyzer,
+    MigrationType,
+    ColumnInfo,
+    TableInfo,
+    MigrationInfo,
+    DatabaseAnalysisResult,
+    get_database_analyzer,
+)
 
 __all__ = [
     "GitHistoryAnalyzer",
@@ -70,4 +79,11 @@ __all__ = [
     "ConfigCategory",
     "ConfigAnalysisResult",
     "get_config_analyzer",
+    "DatabaseAnalyzer",
+    "MigrationType",
+    "ColumnInfo",
+    "TableInfo",
+    "MigrationInfo",
+    "DatabaseAnalysisResult",
+    "get_database_analyzer",
 ]
