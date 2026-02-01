@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 6.0 | **Updated:** 2026-01-31 | **Authority:** MCP-First SaaS Architecture
+**Version:** 7.0 | **Updated:** 2026-02-01 | **Authority:** MCP-First SaaS Architecture
 
 ---
 
@@ -9,7 +9,8 @@
 
 **Primary Prompt:** [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md)  
 **Production Mode:** MCP Server (SaaS)  
-**Orchestrators:** 23 wired via GitBackedRegistry
+**Orchestrators:** 23 wired via GitBackedRegistry  
+**Mindset:** Security-First + Best Practices Layering
 
 ---
 
@@ -58,10 +59,10 @@
 
 **CORTEX = SaaS behind MCP server.** All operations through MCP tools.
 
-### Core MCP Tools
+### Core MCP Tools (Production Only)
 
 | Tool | Purpose |
-|------|---------|
+|------|--------|
 | `cortex_process_request` | Main request processing |
 | `cortex_challenge` | Challenge generation |
 | `cortex_total_recall` | Feature discovery |
@@ -70,6 +71,11 @@
 | `cortex_ast_analyze` | AST analysis |
 | `cortex_detect_duplicates` | CORE-035 detection |
 | `cortex_tools_catalog` | Tool discovery |
+
+**Excluded from Production:**
+- docs/ management tools
+- Internal CORTEX design utilities
+- Development-only debugging tools
 
 ### MCP Endpoints
 
@@ -200,4 +206,37 @@ curl http://localhost:8000/health/orchestrators
 
 ---
 
-*Production instructions — MCP-first, SaaS-ready. See CORTEX.prompt.md for full protocol.*
+## 🔒 Security-First Mindset
+
+**For EVERY request, consider:**
+- Input validation requirements
+- Authentication/authorization needs
+- Secrets via environment variables only
+- OWASP Top 10 compliance
+- Injection prevention
+
+---
+
+## 📋 Best Practices Layering
+
+```yaml
+Company Standards (PRECEDENCE): company/domains/
+CORTEX Standards (FILLS GAPS): cortex/knowledge/best-practices/
+Result: Merged production standards
+```
+
+---
+
+## 🔄 Request Enhancement
+
+**Assume user may lack full CORTEX context.**
+
+Enhance requests with:
+- Security implications
+- Edge cases
+- MCP exposure needs
+- Best practices alignment
+
+---
+
+*v7.0 — Production instructions with security-first mindset and best practices layering. MCP-first, SaaS-ready.*

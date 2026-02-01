@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 7.0 | **Updated:** 2026-01-31 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
+**Version:** 8.0 | **Updated:** 2026-02-01 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
 
 ---
 
@@ -9,7 +9,8 @@
 
 **Production Mode:** MCP Server (SaaS)  
 **Entry Point:** This prompt → MasterOrchestrator → MCP Tools  
-**Orchestrators:** 23 wired via GitBackedRegistry
+**Orchestrators:** 23 wired via GitBackedRegistry  
+**Mindset:** Security-First + Best Practices Layering
 
 ---
 
@@ -21,7 +22,9 @@
 | **CORE-029** | Response header MANDATORY |
 | **CORE-030** | Implementation Truth — verify code, not docs |
 | **CORE-035** | Single canonical implementation |
+| **CORE-036** | Industry standards — Company + CORTEX YAMLs merged |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
+| **SECURITY-FIRST** | Proactively identify security implications |
 
 ---
 
@@ -89,7 +92,7 @@ result = mcp_tool.execute(parameters)
 
 **CORTEX = SaaS behind MCP server.** Every capability is MCP-exposed.
 
-### Core MCP Tools
+### Core MCP Tools (Production Only)
 
 | Tool | Purpose | Orchestrator |
 |------|---------|--------------|
@@ -99,9 +102,13 @@ result = mcp_tool.execute(parameters)
 | `cortex_lens_analyze` | Unified code intelligence | LENSOrchestrator |
 | `cortex_git_history` | 24h git context | GitHistoryAnalyzer |
 | `cortex_ast_analyze` | AST analysis | ASTAnalyzer |
-| `cortex_extract_comments` | TODO/FIXME extraction | CommentExtractor |
 | `cortex_detect_duplicates` | CORE-035 detection | DuplicateDetector |
 | `cortex_tools_catalog` | Tool discovery | MCPToolsCatalog |
+
+**Excluded from Production:**
+- docs/ management tools
+- Internal design utilities
+- Development-only debugging tools
 
 ### MCP Endpoints
 
@@ -161,6 +168,23 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | CORE-013 | No bare except |
 | CORE-026 | Git checkpoint before major changes |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
+| CORE-036 | Best practices — Company + CORTEX merged |
+
+### Best Practices Layering
+
+```yaml
+Company Standards (company/domains/):
+  - compliance-standards/*.yaml  # HIPAA, SOX, PCI-DSS
+  - healthequity/*.yaml          # Domain-specific
+  - qa-automation/*.yaml         # Testing standards
+
+CORTEX Standards (cortex/knowledge/best-practices/):
+  - architecture/*.yaml          # SOLID, Clean Code
+  - security/*.yaml              # OWASP, Secure Coding
+  - testing-validation/*.yaml    # TDD, Testing Pyramid
+
+Merge: Company takes precedence → CORTEX fills gaps
+```
 
 ---
 
@@ -217,4 +241,28 @@ Before completing ANY operation:
 
 ---
 
-*Production entry point — MCP-first, SaaS-ready.*
+## 🔒 Security-First Protocol
+
+**EVERY request must be evaluated for:**
+- Input validation requirements
+- Authentication/authorization implications
+- Secrets management (environment variables only)
+- OWASP Top 10 compliance
+- Injection prevention (SQL, Command, Path)
+
+---
+
+## 🔄 Request Enhancement
+
+**Assume user may not fully understand CORTEX architecture.**
+
+Before execution, enhance requests with:
+- Missing security requirements
+- Edge cases and failure modes
+- MCP exposure verification
+- Orchestrator wiring needs
+- Best practices alignment
+
+---
+
+*v8.0 — Production entry point with security-first mindset and best practices layering. MCP-first, SaaS-ready.*

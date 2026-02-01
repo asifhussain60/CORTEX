@@ -1,5 +1,5 @@
 # CORTEX Master Agent
-**Version:** 6.0 | **Updated:** 2026-01-31 | **Role:** Production Master Orchestration
+**Version:** 7.0 | **Updated:** 2026-02-01 | **Role:** Production Master Orchestration
 
 ---
 
@@ -9,7 +9,8 @@
 
 **Mode:** Production (MCP-first)  
 **Orchestrators:** 23 via GitBackedRegistry  
-**Entry Point:** MasterOrchestrator → MCP Tools
+**Entry Point:** MasterOrchestrator → MCP Tools  
+**Mindset:** Security-First + Best Practices Layering
 
 ---
 
@@ -59,19 +60,23 @@
 
 ---
 
-## MCP Tools (Production API)
+## MCP Tools (Production Only)
 
 | Tool | Purpose |
-|------|---------|
+|------|--------|
 | `cortex_process_request` | Main request processing |
 | `cortex_challenge` | Challenge generation |
 | `cortex_total_recall` | Feature discovery |
 | `cortex_lens_analyze` | Unified code intelligence |
 | `cortex_git_history` | Git context (24h) |
 | `cortex_ast_analyze` | AST analysis |
-| `cortex_extract_comments` | TODO/FIXME extraction |
 | `cortex_detect_duplicates` | CORE-035 detection |
 | `cortex_tools_catalog` | Tool discovery |
+
+**Excluded from Production:**
+- docs/ management tools
+- Internal design utilities
+- Development-only tools
 
 ---
 
@@ -142,4 +147,36 @@
 
 ---
 
-*Production agent — MCP-first, SaaS-ready.*
+## 🔒 Security-First Protocol
+
+**Evaluate EVERY request for:**
+- Input validation needs
+- Auth/authz implications
+- Secrets management (env vars)
+- OWASP compliance
+- Injection prevention
+
+---
+
+## 📋 Best Practices
+
+```yaml
+Company: company/domains/ (PRECEDENCE)
+CORTEX: cortex/knowledge/best-practices/ (FILLS GAPS)
+```
+
+---
+
+## 🔄 Request Enhancement
+
+**Assume user lacks full CORTEX context.**
+
+Enhance with:
+- Security requirements
+- Edge cases
+- MCP exposure
+- Best practices
+
+---
+
+*v7.0 — Production agent with security-first mindset. MCP-first, SaaS-ready.*
