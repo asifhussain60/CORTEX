@@ -356,3 +356,363 @@ class TestExecuteOperation:
         
         # Should attempt extraction
         assert result is not None
+
+
+class TestLinkIntegrityAudit:
+    """Test DOC-013 through DOC-020: Link integrity auditing."""
+    
+    def test_audit_documentation_links_returns_summary(self, tmp_path: Path) -> None:
+        """Test that link audit returns proper summary structure."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create minimal index.html
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>
+    <a href="about.html">About</a>
+    <a href="section/index.html">Section</a>
+</body>
+</html>
+""")
+        
+        # Create about.html (valid link)
+        about_html = docs_root / "about.html"
+        about_html.write_text("<!DOCTYPE html><html><body>About</body></html>")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_documentation_links",
+            entry_point="index.html",
+            mode="l1-only",
+            skip_external=True,
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Verify structure
+        assert "summary" in audit
+        assert "total_links_checked" in audit["summary"]
+        assert "broken_links_by_severity" in audit["summary"]
+        assert "p0_navigation" in audit["summary"]["broken_links_by_severity"]
+        assert "p1_assets" in audit["summary"]["broken_links_by_severity"]
+        assert "p2_external" in audit["summary"]["broken_links_by_severity"]
+    
+    def test_audit_detects_broken_links(self, tmp_path: Path) -> None:
+        """Test that broken links are detected."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create index.html with broken link
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>
+    <a href="nonexistent.html">Broken Link</a>
+</body>
+</html>
+""")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_documentation_links",
+            entry_point="index.html",
+            mode="l1-only",
+            skip_external=True,
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Should detect the broken link
+        p0_count = audit["summary"]["broken_links_by_severity"]["p0_navigation"]
+        assert p0_count >= 1
+    
+    def test_audit_detects_security_violations(self, tmp_path: Path) -> None:
+        """DOC-020: Test that security violations are detected."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create index.html with XSS attempt
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>
+    <a href="javascript:alert('xss')">XSS Link</a>
+    <a href="../../../etc/passwd">Path Traversal</a>
+</body>
+</html>
+""")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_documentation_links",
+            entry_point="index.html",
+            mode="l1-only",
+            skip_external=True,
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Should detect security violations
+        security_violations = audit["summary"]["security_violations"]
+        assert security_violations >= 1
+    
+    def test_audit_detects_orphaned_files(self, tmp_path: Path) -> None:
+        """DOC-017: Test that orphaned files are detected."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create index.html with no links
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>No links here</body>
+</html>
+""")
+        
+        # Create orphaned file
+        orphan = docs_root / "orphan.html"
+        orphan.write_text("<!DOCTYPE html><html><body>Orphan</body></html>")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_documentation_links",
+            entry_point="index.html",
+            mode="full",
+            skip_external=True,
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Should detect orphaned file
+        orphaned_count = audit["summary"]["orphaned_files"]
+        assert orphaned_count >= 1
+
+
+class TestResponsiveDesignAudit:
+    """Test DOC-021 through DOC-028: Responsive design auditing."""
+    
+    def test_audit_responsive_design_returns_summary(self, tmp_path: Path) -> None:
+        """Test that responsive audit returns proper summary structure."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create responsive index.html
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @media (max-width: 768px) { .container { width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="container">Content</div>
+</body>
+</html>
+""")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_responsive_design",
+            entry_point="index.html",
+            mode="l1-only",
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Verify structure
+        assert "summary" in audit
+        assert "pages_audited" in audit["summary"]
+        assert "pages_passed" in audit["summary"]
+        assert "pages_failed" in audit["summary"]
+        assert "critical_issues" in audit["summary"]
+        assert "pass_percentage" in audit["summary"]
+    
+    def test_audit_detects_missing_viewport(self, tmp_path: Path) -> None:
+        """DOC-021: Test that missing viewport is detected as critical."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create page without viewport
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>Content</body>
+</html>
+""")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_responsive_design",
+            entry_point="index.html",
+            mode="l1-only",
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Should detect critical issue
+        critical_count = audit["summary"]["critical_issues"]
+        assert critical_count >= 1
+        
+        # Check page details
+        pages = audit.get("pages", [])
+        assert len(pages) >= 1
+        assert not pages[0]["has_viewport"]
+    
+    def test_audit_detects_responsive_css(self, tmp_path: Path) -> None:
+        """DOC-022: Test that media queries are detected."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create page with media queries
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @media (max-width: 768px) { .mobile { display: block; } }
+        @media (min-width: 1024px) { .desktop { display: block; } }
+    </style>
+</head>
+<body>Content</body>
+</html>
+""")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        result = orchestrator.execute(
+            "audit_responsive_design",
+            entry_point="index.html",
+            mode="l1-only",
+        )
+        
+        assert result.is_ok()
+        audit = result.value
+        
+        # Should detect responsive CSS
+        pages = audit.get("pages", [])
+        assert len(pages) >= 1
+        assert pages[0]["has_responsive_css"]
+        assert pages[0]["media_query_count"] >= 2
+
+
+class TestCleanupOrphanedFiles:
+    """Test DOC-019: Safe cleanup protocol."""
+    
+    def test_cleanup_orphaned_files_requires_audit_report(self, tmp_path: Path) -> None:
+        """Test that cleanup requires audit_report parameter."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        # Run cleanup without audit report
+        result = orchestrator.execute(
+            "cleanup_orphaned_files",
+            audit_report=None,
+            mode="archive",
+        )
+        
+        # Should fail without audit_report
+        assert result.is_err()
+        assert "audit_report is required" in result.error
+    
+    def test_cleanup_requires_confirm_for_delete_mode(self, tmp_path: Path) -> None:
+        """Test that delete mode requires confirm=True."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        # Mock audit report with orphans
+        audit_report = {
+            "detailed_report": {
+                "phase_4_cleanup": {
+                    "orphans_by_category": {
+                        "html": [{"path": "orphan.html", "risk": "LOW"}]
+                    }
+                }
+            }
+        }
+        
+        # Try delete without confirm
+        result = orchestrator.execute(
+            "cleanup_orphaned_files",
+            audit_report=audit_report,
+            mode="delete",
+            confirm=False,
+        )
+        
+        # Should fail without confirm
+        assert result.is_err()
+        assert "confirm=True required" in result.error
+
+
+class TestFixBrokenLinks:
+    """Test DOC-018: Broken link remediation."""
+    
+    def test_fix_broken_links_suggests_corrections(self, tmp_path: Path) -> None:
+        """Test that fix_broken_links provides suggestions."""
+        docs_root = tmp_path / "docs"
+        docs_root.mkdir()
+        
+        # Create index with broken link (case mismatch)
+        index_html = docs_root / "index.html"
+        index_html.write_text("""<!DOCTYPE html>
+<html lang="en">
+<head><title>Test</title></head>
+<body>
+    <a href="About.html">About</a>
+</body>
+</html>
+""")
+        
+        # Create correctly named file
+        about_html = docs_root / "about.html"  # lowercase
+        about_html.write_text("<!DOCTYPE html><html><body>About</body></html>")
+        
+        orchestrator = CortexDocsOrchestrator(docs_root=docs_root)
+        
+        # First run audit
+        audit_result = orchestrator.execute(
+            "audit_documentation_links",
+            entry_point="index.html",
+            mode="full",
+            skip_external=True,
+        )
+        
+        assert audit_result.is_ok()
+        
+        # Run fix suggestions
+        result = orchestrator.execute(
+            "fix_broken_links",
+            audit_report=audit_result.value,
+            mode="suggest",
+            dry_run=True,
+        )
+        
+        assert result.is_ok()
+

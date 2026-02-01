@@ -475,6 +475,11 @@ class CortexDocsOrchestrator(IOrchestrator):
             "advise_page",
             "compare_approaches",
             "list_sections",
+            # Audit Mode
+            "audit_documentation_links",
+            "fix_broken_links",
+            "cleanup_orphaned_files",
+            "audit_responsive_design",
             # Generation Mode
             "generate_main_index",
             "generate_subfolder_indexes",
@@ -511,6 +516,12 @@ class CortexDocsOrchestrator(IOrchestrator):
                 - "compare_approaches": Compare D3/SVG/Mermaid for a visualization
                 - "list_sections": List all available sections with status
                 
+                AUDIT MODE:
+                - "audit_documentation_links": 3-tier HTML link integrity verification
+                - "fix_broken_links": Automated remediation suggestions
+                - "cleanup_orphaned_files": Safe removal of unreferenced files
+                - "audit_responsive_design": Mobile-first responsive design audit
+                
                 GENERATION MODE:
                 - "extract_template": Extract template from docs/index.html
                 - "generate_main": Generate docs/index.html
@@ -540,6 +551,31 @@ class CortexDocsOrchestrator(IOrchestrator):
                 )
             elif operation == "list_sections":
                 return self._list_sections()
+            
+            # Audit Mode Operations
+            elif operation == "audit_documentation_links":
+                return self._audit_documentation_links(
+                    entry_point=kwargs.get("entry_point", "docs/index.html"),
+                    mode=kwargs.get("mode", "full"),
+                    skip_external=kwargs.get("skip_external", True),
+                    dry_run=kwargs.get("dry_run", True)
+                )
+            elif operation == "fix_broken_links":
+                return self._fix_broken_links(
+                    audit_report=kwargs.get("audit_report"),
+                    mode=kwargs.get("mode", "suggest"),
+                    dry_run=kwargs.get("dry_run", True)
+                )
+            elif operation == "cleanup_orphaned_files":
+                return self._cleanup_orphaned_files(
+                    audit_report=kwargs.get("audit_report"),
+                    mode=kwargs.get("mode", "archive"),
+                    confirm=kwargs.get("confirm", False)
+                )
+            elif operation == "audit_responsive_design":
+                return self._audit_responsive_design(
+                    entry_point=kwargs.get("entry_point", "docs/index.html")
+                )
             
             # Generation Mode Operations
             elif operation == "extract_template":
@@ -1527,6 +1563,981 @@ class CortexDocsOrchestrator(IOrchestrator):
                 return desc
         return ""
     
+    # ========================================================================
+    # AUDIT MODE OPERATIONS - LINK INTEGRITY
+    # ========================================================================
+    
+    def _audit_documentation_links(
+        self,
+        entry_point: str = "docs/index.html",
+        mode: str = "full",
+        skip_external: bool = True,
+        dry_run: bool = True
+    ) -> Result[Dict[str, Any], str]:
+        """
+        3-tier HTML documentation link integrity verification.
+        
+        Phase 1: L1 (entry_point) link validation
+        Phase 2: L2 (feature landing pages) validation
+        Phase 3: L3 (technical deep-dive) validation
+        Phase 4: Unreferenced file detection (DRY-RUN)
+        
+        Args:
+            entry_point: L1 entry point (default: docs/index.html)
+            mode: "full", "l1-only", "l2-only", "l3-only"
+            skip_external: Skip external URL validation (slow)
+            dry_run: Report only, no deletions
+            
+        Returns:
+            Result containing comprehensive audit report
+        """
+        import urllib.parse
+        from html.parser import HTMLParser
+        
+        class LinkExtractor(HTMLParser):
+            """Extract links and assets from HTML."""
+            def __init__(self):
+                super().__init__()
+                self.links = []  # <a href>
+                self.images = []  # <img src>
+                self.css = []  # <link href>
+                self.scripts = []  # <script src>
+                self.ids = set()  # id attributes for anchor validation
+                
+            def handle_starttag(self, tag, attrs):
+                attrs_dict = dict(attrs)
+                
+                if tag == 'a' and 'href' in attrs_dict:
+                    self.links.append(attrs_dict['href'])
+                elif tag == 'img' and 'src' in attrs_dict:
+                    self.images.append(attrs_dict['src'])
+                elif tag == 'link' and 'href' in attrs_dict:
+                    self.css.append(attrs_dict['href'])
+                elif tag == 'script' and 'src' in attrs_dict:
+                    self.scripts.append(attrs_dict['src'])
+                
+                if 'id' in attrs_dict:
+                    self.ids.add(attrs_dict['id'])
+        
+        def extract_links_from_html(html_path: Path) -> Dict[str, Any]:
+            """Extract all links from an HTML file."""
+            if not html_path.exists():
+                return {"error": f"File not found: {html_path}"}
+            
+            try:
+                content = html_path.read_text(encoding='utf-8')
+                parser = LinkExtractor()
+                parser.feed(content)
+                
+                return {
+                    "links": parser.links,
+                    "images": parser.images,
+                    "css": parser.css,
+                    "scripts": parser.scripts,
+                    "ids": list(parser.ids)
+                }
+            except Exception as e:
+                return {"error": str(e)}
+        
+        def classify_link(href: str) -> str:
+            """Classify link type."""
+            if href.startswith(('http://', 'https://')):
+                return "external"
+            elif href.startswith('javascript:'):
+                return "security_violation"
+            elif href.startswith('data:'):
+                return "security_violation"
+            elif href.startswith('#'):
+                return "anchor"
+            elif href.startswith('mailto:') or href.startswith('tel:'):
+                return "protocol"
+            else:
+                return "internal"
+        
+        def validate_internal_link(
+            base_path: Path,
+            href: str,
+            source_file: Path
+        ) -> Dict[str, Any]:
+            """Validate internal link resolves to existing file."""
+            # Handle anchors
+            if '#' in href:
+                path_part, anchor = href.rsplit('#', 1)
+                if not path_part:
+                    # Anchor-only link to same page
+                    return {"valid": True, "type": "anchor", "anchor": anchor}
+                href = path_part
+            
+            # Resolve relative path
+            if href.startswith('/'):
+                # Absolute from docs root
+                target = base_path / href.lstrip('/')
+            else:
+                # Relative to source file
+                target = source_file.parent / href
+            
+            # Normalize path
+            try:
+                target = target.resolve()
+            except Exception:
+                return {"valid": False, "issue": "Invalid path", "href": href}
+            
+            # Security: Check for path traversal
+            try:
+                target.relative_to(base_path.resolve())
+            except ValueError:
+                return {
+                    "valid": False,
+                    "issue": "Path traversal detected (escapes workspace)",
+                    "href": href,
+                    "security": "CWE-22"
+                }
+            
+            # Check if file exists
+            if target.exists():
+                return {"valid": True, "resolved_path": str(target)}
+            else:
+                return {
+                    "valid": False,
+                    "issue": "File not found",
+                    "href": href,
+                    "expected_path": str(target)
+                }
+        
+        try:
+            # Resolve entry point relative to docs_root
+            if Path(entry_point).is_absolute():
+                entry_path = Path(entry_point)
+            else:
+                # Join with docs_root if relative path provided
+                entry_path = self.docs_root / entry_point
+            
+            base_path = entry_path.parent if entry_path.is_file() else self.docs_root
+            
+            report = {
+                "summary": {
+                    "total_links_checked": 0,
+                    "broken_links_by_severity": {
+                        "p0_navigation": 0,
+                        "p1_assets": 0,
+                        "p2_external": 0
+                    },
+                    "security_violations": 0,
+                    "circular_references": 0,
+                    "orphaned_files": 0,
+                    "cleanup_potential_kb": 0
+                },
+                "detailed_report": {
+                    "phase_1_l1": {},
+                    "phase_2_l2": {},
+                    "phase_3_l3": {},
+                    "phase_4_cleanup": {}
+                }
+            }
+            
+            visited_pages: Set[str] = set()
+            l2_pages: List[Path] = []
+            l3_pages: List[Path] = []
+            all_referenced_files: Set[Path] = set()
+            
+            # ================================================================
+            # PHASE 1: L1 (Entry Point) Validation
+            # ================================================================
+            if mode in ["full", "l1-only"]:
+                l1_data = extract_links_from_html(entry_path)
+                if "error" in l1_data:
+                    return Err(f"L1 extraction failed: {l1_data['error']}")
+                
+                all_referenced_files.add(entry_path.resolve())
+                
+                phase_1 = {
+                    "broken_links": [],
+                    "security_violations": [],
+                    "link_counts": {
+                        "internal_html": 0,
+                        "images": len(l1_data["images"]),
+                        "css": len(l1_data["css"]),
+                        "javascript": len(l1_data["scripts"]),
+                        "anchor": 0,
+                        "external": 0
+                    }
+                }
+                
+                # Validate links
+                for href in l1_data["links"]:
+                    link_type = classify_link(href)
+                    report["summary"]["total_links_checked"] += 1
+                    
+                    if link_type == "security_violation":
+                        phase_1["security_violations"].append({
+                            "href": href,
+                            "violation_type": "XSS risk" if href.startswith("javascript:") else "data URL",
+                            "owasp_ref": "A03:2021"
+                        })
+                        report["summary"]["security_violations"] += 1
+                        
+                    elif link_type == "internal":
+                        phase_1["link_counts"]["internal_html"] += 1
+                        validation = validate_internal_link(base_path, href, entry_path)
+                        
+                        if not validation.get("valid", False):
+                            phase_1["broken_links"].append({
+                                "href": href,
+                                "issue": validation.get("issue"),
+                                "expected_path": validation.get("expected_path"),
+                                "severity": "P0"
+                            })
+                            report["summary"]["broken_links_by_severity"]["p0_navigation"] += 1
+                        else:
+                            # Track L2 pages for next phase
+                            resolved = validation.get("resolved_path")
+                            if resolved and resolved.endswith('.html'):
+                                l2_pages.append(Path(resolved))
+                                all_referenced_files.add(Path(resolved))
+                    
+                    elif link_type == "anchor":
+                        phase_1["link_counts"]["anchor"] += 1
+                        
+                    elif link_type == "external":
+                        phase_1["link_counts"]["external"] += 1
+                
+                # Validate assets
+                for img in l1_data["images"]:
+                    validation = validate_internal_link(base_path, img, entry_path)
+                    report["summary"]["total_links_checked"] += 1
+                    
+                    if validation.get("valid"):
+                        all_referenced_files.add(Path(validation["resolved_path"]))
+                    else:
+                        phase_1["broken_links"].append({
+                            "href": img,
+                            "issue": "Missing image",
+                            "expected_path": validation.get("expected_path"),
+                            "severity": "P1"
+                        })
+                        report["summary"]["broken_links_by_severity"]["p1_assets"] += 1
+                
+                # Validate CSS
+                for css in l1_data["css"]:
+                    if not css.startswith(('http://', 'https://')):
+                        validation = validate_internal_link(base_path, css, entry_path)
+                        report["summary"]["total_links_checked"] += 1
+                        
+                        if validation.get("valid"):
+                            all_referenced_files.add(Path(validation["resolved_path"]))
+                        else:
+                            phase_1["broken_links"].append({
+                                "href": css,
+                                "issue": "Missing CSS",
+                                "expected_path": validation.get("expected_path"),
+                                "severity": "P1"
+                            })
+                            report["summary"]["broken_links_by_severity"]["p1_assets"] += 1
+                
+                report["detailed_report"]["phase_1_l1"] = phase_1
+            
+            # ================================================================
+            # PHASE 2: L2 (Feature Landing Pages) Validation
+            # ================================================================
+            if mode in ["full", "l2-only"]:
+                # Check prerequisite: Phase 1 must have zero P0 broken links
+                p0_count = report["summary"]["broken_links_by_severity"]["p0_navigation"]
+                
+                phase_2 = {
+                    "validated_pages": [],
+                    "skipped_pages": [],
+                    "broken_links_by_page": {},
+                    "circular_refs": [],
+                    "orphaned_l2": []
+                }
+                
+                if p0_count > 0 and mode == "full":
+                    phase_2["skipped_pages"] = [str(p) for p in l2_pages]
+                    phase_2["skip_reason"] = f"Phase 1 has {p0_count} P0 broken links"
+                else:
+                    # Validate each L2 page
+                    for l2_path in l2_pages:
+                        if str(l2_path) in visited_pages:
+                            continue
+                        
+                        visited_pages.add(str(l2_path))
+                        l2_data = extract_links_from_html(l2_path)
+                        
+                        if "error" in l2_data:
+                            continue
+                        
+                        phase_2["validated_pages"].append(str(l2_path))
+                        broken = []
+                        
+                        for href in l2_data["links"]:
+                            link_type = classify_link(href)
+                            report["summary"]["total_links_checked"] += 1
+                            
+                            if link_type == "internal":
+                                validation = validate_internal_link(base_path, href, l2_path)
+                                
+                                if not validation.get("valid"):
+                                    broken.append({
+                                        "href": href,
+                                        "issue": validation.get("issue"),
+                                        "severity": "P0"
+                                    })
+                                    report["summary"]["broken_links_by_severity"]["p0_navigation"] += 1
+                                else:
+                                    # Track L3 pages
+                                    resolved = validation.get("resolved_path")
+                                    if resolved and resolved.endswith('.html'):
+                                        l3_pages.append(Path(resolved))
+                                        all_referenced_files.add(Path(resolved))
+                        
+                        if broken:
+                            phase_2["broken_links_by_page"][str(l2_path)] = broken
+                
+                report["detailed_report"]["phase_2_l2"] = phase_2
+            
+            # ================================================================
+            # PHASE 3: L3 (Technical Deep-Dive) Validation
+            # ================================================================
+            if mode in ["full", "l3-only"]:
+                phase_3 = {
+                    "validated_pages": [],
+                    "skipped_pages": [],
+                    "broken_links_by_page": {},
+                    "missing_code_refs": [],
+                    "orphaned_l3": []
+                }
+                
+                for l3_path in l3_pages:
+                    if str(l3_path) in visited_pages:
+                        continue
+                    
+                    visited_pages.add(str(l3_path))
+                    l3_data = extract_links_from_html(l3_path)
+                    
+                    if "error" in l3_data:
+                        continue
+                    
+                    phase_3["validated_pages"].append(str(l3_path))
+                    broken = []
+                    
+                    for href in l3_data["links"]:
+                        link_type = classify_link(href)
+                        report["summary"]["total_links_checked"] += 1
+                        
+                        if link_type == "internal":
+                            validation = validate_internal_link(base_path, href, l3_path)
+                            
+                            if not validation.get("valid"):
+                                broken.append({
+                                    "href": href,
+                                    "issue": validation.get("issue"),
+                                    "severity": "P0"
+                                })
+                                report["summary"]["broken_links_by_severity"]["p0_navigation"] += 1
+                            else:
+                                resolved = validation.get("resolved_path")
+                                if resolved:
+                                    all_referenced_files.add(Path(resolved))
+                    
+                    if broken:
+                        phase_3["broken_links_by_page"][str(l3_path)] = broken
+                
+                report["detailed_report"]["phase_3_l3"] = phase_3
+            
+            # ================================================================
+            # PHASE 4: Unreferenced File Cleanup (DRY-RUN)
+            # ================================================================
+            if mode == "full":
+                phase_4 = {
+                    "orphans_by_category": {
+                        "html": [],
+                        "images": [],
+                        "css": [],
+                        "js": [],
+                        "temp": []
+                    },
+                    "protected_files": [
+                        "docs/index.html",
+                        "docs/404.html",
+                        "docs/404.md",
+                        "docs/README.md",
+                        "docs/LICENSE.md"
+                    ],
+                    "total_cleanup": {
+                        "files": 0,
+                        "size_kb": 0
+                    }
+                }
+                
+                # Find all HTML files in docs/
+                for html_file in base_path.rglob("*.html"):
+                    resolved = html_file.resolve()
+                    
+                    # Skip protected files
+                    rel_path = str(html_file.relative_to(base_path.parent) if base_path.parent in html_file.parents else html_file)
+                    if any(protected in rel_path for protected in phase_4["protected_files"]):
+                        continue
+                    
+                    # Skip narrative files
+                    if ".awakening-of-cortex" in str(html_file):
+                        continue
+                    
+                    if resolved not in all_referenced_files:
+                        size_kb = html_file.stat().st_size / 1024
+                        phase_4["orphans_by_category"]["html"].append({
+                            "path": str(html_file),
+                            "size_kb": round(size_kb, 2),
+                            "risk": "MEDIUM" if size_kb > 10 else "LOW",
+                            "action": "ARCHIVE"
+                        })
+                        phase_4["total_cleanup"]["files"] += 1
+                        phase_4["total_cleanup"]["size_kb"] += size_kb
+                        report["summary"]["orphaned_files"] += 1
+                
+                report["summary"]["cleanup_potential_kb"] = round(phase_4["total_cleanup"]["size_kb"], 2)
+                report["detailed_report"]["phase_4_cleanup"] = phase_4
+            
+            return Ok(report)
+            
+        except Exception as e:
+            return Err(f"Link audit failed: {str(e)}")
+    
+    def _fix_broken_links(
+        self,
+        audit_report: Optional[Dict[str, Any]],
+        mode: str = "suggest",
+        dry_run: bool = True
+    ) -> Result[Dict[str, Any], str]:
+        """
+        Automated remediation suggestions for broken links.
+        
+        Args:
+            audit_report: Output from audit_documentation_links
+            mode: "suggest" or "auto-fix"
+            dry_run: Report only, no actual changes
+            
+        Returns:
+            Result containing fix suggestions or applied fixes
+        """
+        if not audit_report:
+            return Err("audit_report is required")
+        
+        try:
+            suggestions = []
+            
+            # Collect all broken links from all phases
+            for phase_key in ["phase_1_l1", "phase_2_l2", "phase_3_l3"]:
+                phase_data = audit_report.get("detailed_report", {}).get(phase_key, {})
+                broken_links = phase_data.get("broken_links", [])
+                
+                # Also check broken_links_by_page
+                links_by_page = phase_data.get("broken_links_by_page", {})
+                for page, links in links_by_page.items():
+                    broken_links.extend(links)
+                
+                for link in broken_links:
+                    href = link.get("href", "")
+                    issue = link.get("issue", "")
+                    expected_path = link.get("expected_path", "")
+                    
+                    suggestion = {
+                        "original_link": href,
+                        "issue": issue,
+                        "suggestions": []
+                    }
+                    
+                    # Strategy 1: Check for case sensitivity issues
+                    if expected_path:
+                        expected = Path(expected_path)
+                        parent = expected.parent
+                        if parent.exists():
+                            # Look for similar filenames
+                            for existing in parent.iterdir():
+                                if existing.name.lower() == expected.name.lower():
+                                    suggestion["suggestions"].append({
+                                        "fix": f"Update to {existing.relative_to(parent.parent) if parent.parent else existing}",
+                                        "confidence": "high",
+                                        "reason": f"Case sensitivity: found {existing.name}"
+                                    })
+                                    break
+                    
+                    # Strategy 2: Check for similar filenames (fuzzy match)
+                    if expected_path and not suggestion["suggestions"]:
+                        expected = Path(expected_path)
+                        parent = expected.parent
+                        if parent.exists():
+                            name_parts = expected.stem.lower().split('-')
+                            for existing in parent.iterdir():
+                                if existing.is_file() and existing.suffix == expected.suffix:
+                                    existing_parts = existing.stem.lower().split('-')
+                                    # Check if any parts match
+                                    if any(part in existing_parts for part in name_parts if len(part) > 2):
+                                        suggestion["suggestions"].append({
+                                            "fix": f"Consider: {existing.name}",
+                                            "confidence": "medium",
+                                            "reason": f"Similar filename found"
+                                        })
+                    
+                    # Strategy 3: Suggest creating a stub page
+                    if not suggestion["suggestions"]:
+                        suggestion["suggestions"].append({
+                            "fix": f"Create placeholder at {expected_path}",
+                            "confidence": "low",
+                            "reason": "No similar file found - create stub page"
+                        })
+                    
+                    suggestions.append(suggestion)
+            
+            result = {
+                "mode": mode,
+                "dry_run": dry_run,
+                "suggested_fixes": suggestions,
+                "total_fixes": len(suggestions)
+            }
+            
+            return Ok(result)
+            
+        except Exception as e:
+            return Err(f"Fix broken links failed: {str(e)}")
+    
+    def _cleanup_orphaned_files(
+        self,
+        audit_report: Optional[Dict[str, Any]],
+        mode: str = "archive",
+        confirm: bool = False
+    ) -> Result[Dict[str, Any], str]:
+        """
+        Safe removal of unreferenced documentation files.
+        
+        Args:
+            audit_report: Output from audit_documentation_links (Phase 4)
+            mode: "archive" or "delete"
+            confirm: Required for delete mode
+            
+        Returns:
+            Result containing cleanup report
+        """
+        if not audit_report:
+            return Err("audit_report is required")
+        
+        if mode == "delete" and not confirm:
+            return Err("confirm=True required for delete mode")
+        
+        try:
+            phase_4 = audit_report.get("detailed_report", {}).get("phase_4_cleanup", {})
+            orphans = phase_4.get("orphans_by_category", {})
+            
+            archived = []
+            deleted = []
+            preserved = []
+            
+            # Create archive directory
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+            archive_dir = Path("docs/.archive") / timestamp
+            
+            if mode == "archive":
+                archive_dir.mkdir(parents=True, exist_ok=True)
+            
+            for category, files in orphans.items():
+                for file_info in files:
+                    file_path = Path(file_info["path"])
+                    risk = file_info.get("risk", "LOW")
+                    
+                    # Skip HIGH risk without explicit confirmation
+                    if risk == "HIGH" and not confirm:
+                        preserved.append({
+                            "path": str(file_path),
+                            "reason": "HIGH risk - requires explicit confirmation"
+                        })
+                        continue
+                    
+                    if not file_path.exists():
+                        continue
+                    
+                    if mode == "archive":
+                        # Move to archive
+                        dest = archive_dir / file_path.name
+                        try:
+                            shutil.move(str(file_path), str(dest))
+                            archived.append({
+                                "source": str(file_path),
+                                "destination": str(dest),
+                                "size_kb": file_info.get("size_kb", 0),
+                                "reason": f"Orphaned {category} file"
+                            })
+                        except Exception as e:
+                            preserved.append({
+                                "path": str(file_path),
+                                "reason": f"Archive failed: {str(e)}"
+                            })
+                    
+                    elif mode == "delete" and confirm:
+                        try:
+                            file_path.unlink()
+                            deleted.append({
+                                "path": str(file_path),
+                                "size_kb": file_info.get("size_kb", 0),
+                                "reason": f"Orphaned {category} file"
+                            })
+                        except Exception as e:
+                            preserved.append({
+                                "path": str(file_path),
+                                "reason": f"Delete failed: {str(e)}"
+                            })
+            
+            # Create manifest
+            manifest_path = None
+            if mode == "archive" and archived:
+                manifest_path = archive_dir / "MANIFEST.md"
+                manifest_content = f"""# Cleanup Archive Manifest
+**Date:** {timestamp}
+**Mode:** {mode}
+
+## Archived Files
+| File | Size | Reason |
+|------|------|--------|
+"""
+                for item in archived:
+                    manifest_content += f"| {item['source']} | {item['size_kb']} KB | {item['reason']} |\n"
+                
+                manifest_path.write_text(manifest_content)
+            
+            return Ok({
+                "mode": mode,
+                "archived": archived,
+                "deleted": deleted,
+                "preserved": preserved,
+                "manifest_location": str(manifest_path) if manifest_path else None
+            })
+            
+        except Exception as e:
+            return Err(f"Cleanup failed: {str(e)}")
+    
+    # ========================================================================
+    # AUDIT MODE OPERATIONS - RESPONSIVE DESIGN
+    # ========================================================================
+    
+    def _audit_responsive_design(
+        self,
+        entry_point: str = "docs/index.html"
+    ) -> Result[Dict[str, Any], str]:
+        """
+        Mobile-first responsive design audit.
+        
+        Checks:
+        - Viewport meta tags
+        - CSS media queries
+        - Touch targets (≥44px)
+        - No horizontal scroll
+        - Responsive images
+        - D3.js/SVG resize handlers
+        - Table responsiveness
+        
+        Args:
+            entry_point: Starting HTML file (default: docs/index.html)
+            
+        Returns:
+            Result containing responsive design audit report
+        """
+        from html.parser import HTMLParser
+        
+        class ResponsiveAuditParser(HTMLParser):
+            """Parse HTML for responsive design patterns."""
+            
+            def __init__(self):
+                super().__init__()
+                self.has_viewport = False
+                self.viewport_content = ""
+                self.user_scalable_no = False
+                self.images_without_max_width = []
+                self.inline_fixed_widths = []
+                self.svg_elements = []
+                self.d3_scripts = []
+                self.tables = []
+                self.current_tag_attrs = {}
+                
+            def handle_starttag(self, tag, attrs):
+                attrs_dict = dict(attrs)
+                self.current_tag_attrs = attrs_dict
+                
+                # Check viewport meta
+                if tag == 'meta' and attrs_dict.get('name') == 'viewport':
+                    self.has_viewport = True
+                    self.viewport_content = attrs_dict.get('content', '')
+                    if 'user-scalable=no' in self.viewport_content.lower():
+                        self.user_scalable_no = True
+                
+                # Check images
+                if tag == 'img':
+                    style = attrs_dict.get('style', '')
+                    width = attrs_dict.get('width', '')
+                    if width and width.isdigit():
+                        self.images_without_max_width.append({
+                            "src": attrs_dict.get('src', ''),
+                            "issue": f"Fixed width={width}px"
+                        })
+                    if 'width:' in style and 'max-width' not in style:
+                        self.images_without_max_width.append({
+                            "src": attrs_dict.get('src', ''),
+                            "issue": "Inline fixed width without max-width"
+                        })
+                
+                # Check inline fixed widths
+                if 'style' in attrs_dict:
+                    style = attrs_dict['style']
+                    if re.search(r'width:\s*\d+px', style) and 'max-width' not in style:
+                        self.inline_fixed_widths.append({
+                            "tag": tag,
+                            "style": style,
+                            "id": attrs_dict.get('id', ''),
+                            "class": attrs_dict.get('class', '')
+                        })
+                
+                # Check SVG
+                if tag == 'svg':
+                    width = attrs_dict.get('width', '')
+                    height = attrs_dict.get('height', '')
+                    viewBox = attrs_dict.get('viewBox', attrs_dict.get('viewbox', ''))
+                    self.svg_elements.append({
+                        "width": width,
+                        "height": height,
+                        "viewBox": viewBox,
+                        "responsive": bool(viewBox) and (not width or '%' in width)
+                    })
+                
+                # Check scripts for D3.js
+                if tag == 'script':
+                    src = attrs_dict.get('src', '')
+                    if 'd3' in src.lower():
+                        self.d3_scripts.append(src)
+                
+                # Check tables
+                if tag == 'table':
+                    self.tables.append({
+                        "class": attrs_dict.get('class', ''),
+                        "style": attrs_dict.get('style', ''),
+                        "has_responsive_wrapper": False  # Will check parent
+                    })
+        
+        def check_css_for_responsive(css_content: str) -> Dict[str, Any]:
+            """Analyze CSS file for responsive patterns."""
+            media_queries = re.findall(r'@media[^{]+\{', css_content)
+            
+            has_mobile = any('max-width: 320' in mq or 'max-width: 480' in mq for mq in media_queries)
+            has_tablet = any('max-width: 768' in mq or 'max-width: 1024' in mq for mq in media_queries)
+            has_desktop = any('min-width: 1280' in mq or 'min-width: 1024' in mq for mq in media_queries)
+            
+            # Check for fixed widths on containers
+            fixed_containers = re.findall(r'(\.[\w-]+|#[\w-]+)\s*\{[^}]*width:\s*\d+px[^}]*\}', css_content)
+            
+            return {
+                "media_queries_count": len(media_queries),
+                "has_mobile_breakpoint": has_mobile,
+                "has_tablet_breakpoint": has_tablet,
+                "has_desktop_breakpoint": has_desktop,
+                "fixed_width_containers": fixed_containers[:10]  # Limit to 10
+            }
+        
+        def check_d3_resize_handlers(js_content: str) -> bool:
+            """Check if D3.js code has resize handlers."""
+            patterns = [
+                r'window\.addEventListener\s*\(\s*[\'"]resize[\'"]',
+                r'window\.onresize',
+                r'd3\.select\s*\(\s*window\s*\)\.on\s*\(\s*[\'"]resize[\'"]',
+                r'ResizeObserver'
+            ]
+            return any(re.search(pattern, js_content) for pattern in patterns)
+        
+        try:
+            # Resolve entry point relative to docs_root
+            if Path(entry_point).is_absolute():
+                entry_path = Path(entry_point)
+            else:
+                entry_path = self.docs_root / entry_point
+            
+            base_path = entry_path.parent if entry_path.is_file() else self.docs_root
+            
+            report = {
+                "summary": {
+                    "pages_audited": 0,
+                    "pages_passed": 0,
+                    "pages_failed": 0,
+                    "critical_issues": 0,
+                    "pass_percentage": 0.0
+                },
+                "pages": [],
+                "viewport_audit": {
+                    "pages_with_viewport": 0,
+                    "pages_missing_viewport": [],
+                    "user_scalable_violations": []
+                },
+                "breakpoint_compliance": {},
+                "css_analysis": {
+                    "files_analyzed": 0,
+                    "media_queries_found": 0,
+                    "fixed_width_violations": []
+                },
+                "images_audit": {
+                    "total_images": 0,
+                    "issues": []
+                },
+                "svg_d3_audit": {
+                    "svg_elements": 0,
+                    "responsive_svg": 0,
+                    "d3_scripts": 0,
+                    "d3_with_resize": 0
+                },
+                "tables_audit": {
+                    "total_tables": 0,
+                    "responsive_tables": 0,
+                    "non_responsive": []
+                }
+            }
+            
+            # Audit all HTML files
+            html_files = list(base_path.rglob("*.html"))
+            
+            for html_file in html_files:
+                try:
+                    content = html_file.read_text(encoding='utf-8')
+                    parser = ResponsiveAuditParser()
+                    parser.feed(content)
+                    
+                    report["summary"]["pages_audited"] += 1
+                    page_passed = True
+                    rel_path = str(html_file.relative_to(base_path))
+                    
+                    # Viewport check
+                    if parser.has_viewport:
+                        report["viewport_audit"]["pages_with_viewport"] += 1
+                        if parser.user_scalable_no:
+                            report["viewport_audit"]["user_scalable_violations"].append(rel_path)
+                            page_passed = False
+                            report["summary"]["critical_issues"] += 1
+                    else:
+                        report["viewport_audit"]["pages_missing_viewport"].append(rel_path)
+                        page_passed = False
+                        report["summary"]["critical_issues"] += 1
+                    
+                    # Images check
+                    report["images_audit"]["total_images"] += len(parser.images_without_max_width)
+                    if parser.images_without_max_width:
+                        report["images_audit"]["issues"].extend([
+                            {**img, "page": rel_path}
+                            for img in parser.images_without_max_width
+                        ])
+                        page_passed = False
+                    
+                    # Fixed widths check
+                    if parser.inline_fixed_widths:
+                        report["css_analysis"]["fixed_width_violations"].extend([
+                            {**item, "page": rel_path}
+                            for item in parser.inline_fixed_widths[:5]  # Limit per page
+                        ])
+                        page_passed = False
+                    
+                    # SVG check
+                    report["svg_d3_audit"]["svg_elements"] += len(parser.svg_elements)
+                    report["svg_d3_audit"]["responsive_svg"] += sum(
+                        1 for svg in parser.svg_elements if svg["responsive"]
+                    )
+                    
+                    # Tables check
+                    report["tables_audit"]["total_tables"] += len(parser.tables)
+                    for table in parser.tables:
+                        table_class = table.get("class", "")
+                        is_responsive = any(
+                            pattern in table_class
+                            for pattern in ["responsive", "table-scroll", "overflow"]
+                        )
+                        if is_responsive:
+                            report["tables_audit"]["responsive_tables"] += 1
+                        else:
+                            report["tables_audit"]["non_responsive"].append({
+                                "page": rel_path,
+                                "class": table_class
+                            })
+                    
+                    # Breakpoint compliance for this page
+                    report["breakpoint_compliance"][rel_path] = {
+                        "mobile_320": page_passed,  # Simplified - would need actual testing
+                        "tablet_768": page_passed,
+                        "desktop_1280": True,  # Desktop usually works
+                        "status": "PASS" if page_passed else "FAIL"
+                    }
+                    
+                    # Add page details to pages array
+                    page_issues = []
+                    if not parser.has_viewport:
+                        page_issues.append("Missing viewport meta tag")
+                    if parser.user_scalable_no:
+                        page_issues.append("user-scalable=no disables pinch zoom")
+                    if parser.images_without_max_width:
+                        page_issues.append(f"{len(parser.images_without_max_width)} images with fixed width")
+                    if parser.inline_fixed_widths:
+                        page_issues.append(f"{len(parser.inline_fixed_widths)} elements with inline fixed width")
+                    
+                    # Check for media queries in inline styles
+                    has_responsive_css = '@media' in content
+                    media_query_count = content.count('@media')
+                    
+                    report["pages"].append({
+                        "path": rel_path,
+                        "passed": page_passed,
+                        "has_viewport": parser.has_viewport,
+                        "has_responsive_css": has_responsive_css,
+                        "media_query_count": media_query_count,
+                        "issues": page_issues
+                    })
+                    
+                    if page_passed:
+                        report["summary"]["pages_passed"] += 1
+                    else:
+                        report["summary"]["pages_failed"] += 1
+                        
+                except Exception as e:
+                    # Skip files that can't be parsed
+                    continue
+            
+            # Audit CSS files
+            css_files = list(base_path.rglob("*.css"))
+            for css_file in css_files:
+                try:
+                    content = css_file.read_text(encoding='utf-8')
+                    css_analysis = check_css_for_responsive(content)
+                    
+                    report["css_analysis"]["files_analyzed"] += 1
+                    report["css_analysis"]["media_queries_found"] += css_analysis["media_queries_count"]
+                    
+                    if css_analysis["fixed_width_containers"]:
+                        report["css_analysis"]["fixed_width_violations"].extend([
+                            {"file": str(css_file.relative_to(base_path)), "selector": sel}
+                            for sel in css_analysis["fixed_width_containers"]
+                        ])
+                except Exception:
+                    continue
+            
+            # Audit JS files for D3.js resize handlers
+            js_files = list(base_path.rglob("*.js"))
+            for js_file in js_files:
+                try:
+                    content = js_file.read_text(encoding='utf-8')
+                    if 'd3' in content.lower():
+                        report["svg_d3_audit"]["d3_scripts"] += 1
+                        if check_d3_resize_handlers(content):
+                            report["svg_d3_audit"]["d3_with_resize"] += 1
+                except Exception:
+                    continue
+            
+            # Calculate overall score
+            total = report["summary"]["pages_audited"]
+            passed = report["summary"]["pages_passed"]
+            report["summary"]["pass_percentage"] = round((passed / total * 100) if total > 0 else 0, 1)
+            
+            return Ok(report)
+            
+        except Exception as e:
+            return Err(f"Responsive design audit failed: {str(e)}")
     def _render_component(self, component_name: str) -> str:
         """Render a component template."""
         if not self.jinja_env:

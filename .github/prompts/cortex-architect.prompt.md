@@ -326,8 +326,8 @@ Production-Ready Agents (ONLY THESE):
   3. cortex-mcp-gateway.md → MCP routing agent (if exists)
 
 Non-Production (INTERNAL DEV ONLY):
-  - cortex-docs.prompt.md → Documentation orchestration (internal)
-  - cortex-docs-orchestrator.md → Docs agent (internal)
+  - cortex-documentor.prompt.md → Documentation orchestration (internal)
+  - cortex-documentor.md → Docs agent (internal)
   - Any prompts in guides/ subdirectory
   - Archived agents in archived/ subdirectory
 
@@ -367,8 +367,8 @@ Files:
     - .github/agents/core/cortex-architect.md
   
   Non-Production (Exclude from Production Release):
-    - .github/prompts/cortex-docs.prompt.md
-    - .github/agents/core/cortex-docs-orchestrator.md
+    - .github/prompts/cortex-documentor.prompt.md
+    - .github/agents/core/cortex-documentor.md
     - .github/prompts/guides/*
     - .github/agents/archived/*
 ```

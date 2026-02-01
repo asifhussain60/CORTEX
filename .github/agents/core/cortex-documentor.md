@@ -1,9 +1,10 @@
 # CortexDocsOrchestrator Agent
 
-**Version:** 2.0  
-**Updated:** 2026-01-31  
-**Authority:** [cortex-architect.prompt.md](../../prompts/cortex-architect.prompt.md)  
-**Status:** ACTIVE (Internal Tooling Only)
+**Version:** 3.0  
+**Updated:** 2026-02-01  
+**Authority:** [cortex-documentor.prompt.md](../../prompts/cortex-documentor.prompt.md)  
+**Status:** ACTIVE (Internal Tooling Only)  
+**New in v3.0:** 3-Tier HTML Link Integrity Auditing System
 
 ---
 
@@ -27,6 +28,9 @@
 | `advise_page` | Get page-specific recommendations for L3 detail page |
 | `compare_approaches` | Compare D3.js vs SVG vs Mermaid for a visualization |
 | `list_sections` | List all sections with status and advisory availability |
+| `audit_documentation_links` | **NEW:** 3-tier (L1→L2→L3) HTML link integrity verification |
+| `fix_broken_links` | **NEW:** Automated remediation suggestions for broken links |
+| `cleanup_orphaned_files` | **NEW:** Safe removal of unreferenced documentation files |
 
 ### 2. GENERATION MODE (Execute)
 **Purpose:** Generate HTML from templates and content
@@ -145,6 +149,128 @@ if result.is_ok():
     print(f"✅ Generated {len(report.generated_files)} files")
 ```
 
+### Example 5: Audit Documentation Links (3-Tier)
+
+```python
+# Comprehensive link integrity check
+result = orch.execute(
+    "audit_documentation_links",
+    entry_point="docs/index.html",
+    mode="full",  # "full", "l1-only", "l2-only", "l3-only"
+    skip_external=True,  # Skip slow external URL checks
+    dry_run=True  # Report only, no deletions
+)
+
+if result.is_ok():
+    audit = result.value
+    
+    # Summary
+    print(f"Links Checked: {audit['summary']['total_links_checked']}")
+    print(f"P0 Broken (Navigation): {audit['summary']['broken_links_by_severity']['p0_navigation']}")
+    print(f"P1 Broken (Assets): {audit['summary']['broken_links_by_severity']['p1_assets']}")
+    print(f"P2 Issues (External): {audit['summary']['broken_links_by_severity']['p2_external']}")
+    print(f"Circular References: {audit['summary']['circular_references']}")
+    print(f"Orphaned Files: {audit['summary']['orphaned_files']}")
+    
+    # Detailed issues
+    for phase in ["phase_1_l1", "phase_2_l2", "phase_3_l3"]:
+        if phase in audit["detailed_report"]:
+            print(f"\n{phase.upper()}:")
+            for link in audit["detailed_report"][phase].get("broken_links", []):
+                print(f"  ❌ {link['href']} → {link['issue']}")
+```
+
+### Example 6: Fix Broken Links (Automated Suggestions)
+
+```python
+# Get remediation suggestions
+result = orch.execute(
+    "fix_broken_links",
+    audit_report=audit_result,  # From previous audit
+    mode="suggest",  # "suggest" or "auto-fix"
+    dry_run=True
+)
+
+if result.is_ok():
+    fixes = result.value
+    
+    print("Suggested Fixes:")
+    for fix in fixes["suggested_fixes"]:
+        print(f"\nOriginal: {fix['original_link']}")
+        print(f"Issue: {fix['issue']}")
+        for suggestion in fix["suggestions"]:
+            confidence_icon = "🟢" if suggestion['confidence'] == "high" else "🟡" if suggestion['confidence'] == "medium" else "🔴"
+            print(f"  {confidence_icon} {suggestion['fix']}")
+            print(f"     Reason: {suggestion['reason']}")
+```
+
+### Example 7: Cleanup Orphaned Files (Safe Archival)
+
+```python
+# Remove unreferenced documentation files
+result = orch.execute(
+    "cleanup_orphaned_files",
+    audit_report=audit_result,  # From link audit Phase 4
+    mode="archive",  # "archive" (safe) or "delete" (risky)
+    confirm=False  # Require explicit approval for HIGH RISK files
+)
+
+if result.is_ok():
+    cleanup = result.value
+    
+    print(f"Archived: {len(cleanup['archived'])} files")
+    print(f"Deleted: {len(cleanup['deleted'])} files")
+    print(f"Preserved: {len(cleanup['preserved'])} files")
+    print(f"\nManifest: {cleanup['manifest_location']}")
+    
+    # Review HIGH RISK files
+    for orphan in audit_result["detailed_report"]["phase_4_cleanup"]["orphans_by_category"]["html"]:
+        if orphan["risk"] == "HIGH":
+            print(f"⚠️ HIGH RISK: {orphan['path']} ({orphan['size']} KB)")
+            print(f"   Recommended: {orphan['action']}")
+```
+
+### Example 8: Audit Responsive Design (Mobile-First)
+
+```python
+# Comprehensive responsive design audit
+result = orch.execute(
+    "audit_responsive_design",
+    entry_point="docs/index.html",
+    mode="full",  # "full", "l1-only", "l2-only", "l3-only"
+    breakpoints=[320, 768, 1024, 1440],  # Mobile, tablet, desktop, wide
+    include_screenshots=False  # Requires headless browser
+)
+
+if result.is_ok():
+    audit = result.value
+    
+    # Summary
+    print(f"Pages Audited: {audit['summary']['pages_audited']}")
+    print(f"Pages Passed: {audit['summary']['pages_passed']} ({audit['summary']['pass_percentage']}%)")
+    print(f"Critical Issues: {audit['summary']['critical_issues']}")
+    
+    # Detailed results
+    for page in audit["pages"]:
+        status_icon = "✅" if page["passed"] else "❌"
+        print(f"\n{status_icon} {page['path']}")
+        
+        if page["has_viewport"]:
+            print(f"   ✅ Viewport meta tag present")
+        else:
+            print(f"   ❌ CRITICAL: Missing viewport meta tag")
+        
+        if page["has_responsive_css"]:
+            print(f"   ✅ Responsive CSS (media queries: {page['media_query_count']})")
+        else:
+            print(f"   ⚠️ No media queries detected")
+        
+        if page["issues"]:
+            print(f"   Issues ({len(page['issues'])}):")
+            for issue in page["issues"]:
+                print(f"      - {issue}")
+```
+
 ---
 
 ## 🔧 Template System
@@ -247,25 +373,52 @@ if result.is_ok():
 ```yaml
 agent:
   name: CortexDocsOrchestrator Agent
-  version: "1.0"
+  version: "3.0"
   orchestrator: cortex.orchestrators.internal.cortex_docs_orchestrator
   mode: internal
   mcp_exposed: false
-  test_coverage: 19/19 passing
+  test_coverage: 19/19 passing (core) + audit methods
   authority: cortex-architect.prompt.md
   
 capabilities:
+  # Core Operations
   - extract_template
   - generate_main_index
   - generate_subfolder_indexes
   - validate_html
   - optimize_assets
+  - list_sections
+  - advise_section
+  - compare_approaches
+  - generate_all
+  # Link Integrity (v3.0)
+  - audit_documentation_links
+  - fix_broken_links
+  - cleanup_orphaned_files
+  # Responsive Design (v3.0)
+  - audit_responsive_design
 
 governance:
   - CORE-008  # TDD
   - CORE-011  # Type hints
   - CORE-012  # Docstrings
   - ARCH-011  # Execute to completion
+  - DOC-013   # 3-Tier link validation mandatory
+  - DOC-014   # Phase 1 L1 entry validation
+  - DOC-015   # Phase 2 L2 recursive validation  
+  - DOC-016   # Phase 3 L3 exhaustive validation
+  - DOC-017   # Phase 4 orphan detection
+  - DOC-018   # Broken link remediation
+  - DOC-019   # Safe cleanup protocol
+  - DOC-020   # Security link validation
+  - DOC-021   # Viewport meta mandatory
+  - DOC-022   # Media query verification
+  - DOC-023   # Fluid typography check
+  - DOC-024   # Touch target sizing
+  - DOC-025   # Responsive images
+  - DOC-026   # SVG/D3 responsiveness
+  - DOC-027   # Container queries
+  - DOC-028   # Mobile navigation
   
 separation:
   production: DocumentationOrchestrator
@@ -276,5 +429,6 @@ separation:
 ---
 
 **Author:** Asif Hussain  
-**Date:** 2026-01-31  
+**Date:** 2026-02-01  
+**Version:** 3.0 — Added link auditing + responsive design audit capabilities
 **Status:** Active — Internal tooling for CORTEX documentation generation

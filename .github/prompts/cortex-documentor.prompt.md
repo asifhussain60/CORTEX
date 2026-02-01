@@ -1,7 +1,9 @@
 # CORTEX Documentor Prompt
-**Version:** 3.0 | **Updated:** 2026-02-01 | **Mode:** Dual-Mode Documentation + Narrative | **Status:** ACTIVE  
+**Version:** 4.1 | **Updated:** 2026-02-01 | **Mode:** Dual-Mode Documentation + Narrative | **Status:** ACTIVE  
 **Implementation:** Based on PHASE-17-DOCUMENTATION-ARCHITECTURE.yaml + Awakening of CORTEX Narrative System  
-**Orchestrator:** CortexDocsOrchestrator (cortex/orchestrators/internal/cortex_docs_orchestrator.py)
+**Orchestrator:** CortexDocsOrchestrator (cortex/orchestrators/internal/cortex_docs_orchestrator.py)  
+**New in v4.0:** 3-Tier HTML Link Integrity Auditing with automated cleanup system  
+**New in v4.1:** Comprehensive Mobile-First Responsive Design Audit (320px → 768px → 1280px)
 
 ---
 
@@ -132,15 +134,173 @@ Files:
   - cortex/api/**/*.py
 ```
 
-### 6. BROKEN LINKS
+### 6. DOCUMENTATION LINK INTEGRITY (3-TIER AUDIT)
 ```yaml
-Detect:
-  - Internal links pointing to non-existent files
-  - External links that return 4xx/5xx
-  - Image references to missing assets
+Phase 1: L1 (docs/index.html) Link Validation
+  Scan:
+    - All <a href="..."> tags in docs/index.html
+    - All <img src="..."> tags for assets
+    - All <link href="..."> for CSS
+    - All <script src="..."> for JavaScript
+  Validate:
+    - Internal links resolve to existing files
+    - Anchor links (#section) target existing IDs
+    - Relative paths correctly resolve
+    - No case-sensitivity issues (macOS vs Linux)
+  Security:
+    - No javascript: or data: URLs (XSS prevention)
+    - External URLs use https:// only
+    - No path traversal patterns (../ escaping workspace)
+  Report:
+    - Broken links with severity (P0: navigation, P1: asset, P2: external)
+    - Missing target files with expected paths
+    - Security violations with OWASP reference
+  
+Phase 2: L2 (Feature Landing Pages) Link Validation
+  Prerequisite: Phase 1 must have ZERO P0 broken links
+  Scope:
+    - All L2 HTML files referenced from docs/index.html
+    - Skip L2 files NOT reachable from L1
+  Validate:
+    - Same checks as Phase 1
+    - Breadcrumb links back to L1
+    - Cross-references to other L2 pages
+    - Links forward to L3 pages
+  Circular Reference Detection:
+    - Track visited pages (L2-A → L2-B → L2-C → L2-A = CIRCULAR)
+    - Flag infinite loops with traversal path
+  Report:
+    - Broken links per L2 page
+    - Orphaned L2 pages (exist but not linked from L1)
+    - Circular reference chains
+  
+Phase 3: L3 (Technical Deep-Dive) Link Validation
+  Prerequisite: Phase 2 must have ZERO P0 broken links
+  Scope:
+    - All L3 HTML files referenced from validated L2 pages
+    - Skip L3 files NOT reachable from L2
+  Validate:
+    - Same checks as Phase 1
+    - Breadcrumb links back to L2 and L1
+    - Code snippet references to actual files
+    - API endpoint links to docs/06-api-reference/
+  Report:
+    - Broken links per L3 page
+    - Orphaned L3 pages (exist but not linked from L2)
+    - Missing code snippets or API references
+  
+Phase 4: Unreferenced File Cleanup (DRY-RUN FIRST)
+  Detect Orphans:
+    - HTML files NOT in L1→L2→L3 traversal graph
+    - Assets (images, CSS, JS) NOT referenced by any HTML
+    - Markdown files in docs/ NOT in build pipeline
+    - Temporary files (*.tmp, *.bak, *~)
+  Preserve (NEVER DELETE):
+    - docs/index.html (L1 entry point)
+    - docs/404.md, docs/404.html
+    - docs/README.md, docs/LICENSE.md
+    - docs/assets/favicon.ico, docs/assets/logo.*
+    - Files in docs/.awakening-of-cortex/ (narrative)
+    - Files matching .gitignore patterns (already ignored)
+  Safety Rails:
+    - DRY-RUN: Report what WOULD be deleted (no action)
+    - BACKUP: Move to docs/.archive/{timestamp}/ instead of delete
+    - CONFIRM: Require explicit user approval before deletion
+  Report:
+    - List of orphaned files with size and last modified
+    - Potential space savings
+    - Risk assessment (low/medium/high for each file)
+    - Recommended action (delete/archive/keep)
+
+External Link Validation (Optional, Slow):
+  Behavior:
+    - Check HTTP status of external URLs (timeout: 5s, max redirects: 3)
+    - Cache results for 24h to avoid rate limiting
+    - Respect robots.txt and rate limits
+  Report:
+    - External links returning 4xx/5xx
+    - Redirect chains (>2 hops)
+    - Slow external links (>3s response)
+  Skip:
+    - If --skip-external flag provided
+    - If external URL whitelist provided, check only those
+
+Files:
+  - docs/index.html (L1)
+  - docs/**/*.html (L2, L3)
+  - docs/assets/** (CSS, JS, images)
+  - docs/_diagrams/** (SVG, JSON)
 ```
 
-### 7. STALE DATES
+### 7. RESPONSIVE DESIGN AUDIT (Mobile-First)
+```yaml
+Viewport Breakpoints:
+  mobile_small: 320px (iPhone SE, small phones)
+  mobile_large: 428px (iPhone 14 Pro Max, large phones)
+  tablet_portrait: 768px (iPad Mini, standard tablets)
+  tablet_landscape: 1024px (iPad Pro, landscape tablets)
+  desktop: 1280px+ (laptops, desktops)
+
+Scan All HTML Files:
+  Metadata:
+    - <meta name="viewport" content="width=device-width, initial-scale=1"> REQUIRED
+    - No fixed-width viewport (width=1024 = VIOLATION)
+    - No user-scalable=no (accessibility violation)
+  
+  CSS Verification:
+    - Media queries exist for all breakpoints
+    - No fixed pixel widths on containers (max-width preferred)
+    - Flexible grid/flexbox layouts used
+    - Font sizes use rem/em (not px for body text)
+    - Touch targets ≥44px (WCAG 2.1 AA)
+  
+  Navigation:
+    - Mobile hamburger menu or collapsible nav present
+    - Touch-friendly tap targets
+    - No hover-only interactions (must work on touch)
+    - Breadcrumbs collapse gracefully on mobile
+  
+  Images & Media:
+    - All <img> have max-width: 100%
+    - SVG diagrams scale properly
+    - D3.js visualizations have responsive resize handlers
+    - No horizontal scroll on mobile (overflow-x: hidden)
+  
+  Tables:
+    - Responsive table patterns used (scroll, stack, or collapse)
+    - No tables wider than viewport without scroll wrapper
+  
+  Forms (if any):
+    - Input fields ≥16px font (prevents iOS zoom)
+    - Labels above inputs on mobile (not beside)
+    - Buttons full-width on mobile screens
+  
+  Performance:
+    - No large images without srcset/responsive variants
+    - Critical CSS inlined or prioritized
+    - Lazy loading for below-fold images
+
+Test Simulation (Report Only):
+  For each HTML file, report:
+    - Mobile (320px): ✅/❌ {issues}
+    - Tablet (768px): ✅/❌ {issues}
+    - Desktop (1280px): ✅/❌ {issues}
+  
+  Common Issues to Flag:
+    - Horizontal scrollbar on mobile
+    - Text too small to read (<14px on mobile)
+    - Touch targets too close together (<8px gap)
+    - Fixed-position elements blocking content
+    - Unreadable tables without scroll
+    - D3.js charts not resizing on orientation change
+
+Files:
+  - docs/**/*.html
+  - docs/assets/css/*.css
+  - docs/assets/js/*.js (for D3.js resize handlers)
+```
+
+### 8. STALE DATES
 ```yaml
 Detect:
   - Files not updated in >90 days with active code changes
@@ -148,7 +308,7 @@ Detect:
   - Outdated copyright years
 ```
 
-### 8. NARRATIVE CONTINUITY AUDIT (Awakening of CORTEX)
+### 9. NARRATIVE CONTINUITY AUDIT (Awakening of CORTEX)
 ```yaml
 Verify:
   Chapter Count:
@@ -232,14 +392,209 @@ Files:
 |---------|------|--------|-------|
 | {name} | {path} | ✅/❌ | {description} |
 
-### 🔗 Link Health
-| Type | Total | Broken | Status |
-|------|-------|--------|--------|
-| Internal | {n} | {n} | ✅/❌ |
-| External | {n} | {n} | ✅/❌ |
-| Images | {n} | {n} | ✅/❌ |
+### 🔗 Documentation Link Integrity (3-Tier Audit)
 
-### 📅 Freshness
+#### Phase 1: L1 (docs/index.html) Links
+| Link Type | Total | Broken | Status |
+|-----------|-------|--------|--------|
+| Internal HTML | {n} | {n} | ✅/❌ |
+| Images | {n} | {n} | ✅/❌ |
+| CSS | {n} | {n} | ✅/❌ |
+| JavaScript | {n} | {n} | ✅/❌ |
+| Anchor Links | {n} | {n} | ✅/❌ |
+
+**P0 Broken Links (Navigation):**
+- `{href}` → Expected: `{expected_path}` (NOT FOUND)
+- `{href}` → Security: XSS risk (javascript: URL detected)
+
+**P1 Broken Links (Assets):**
+- `{src}` → Missing image: `{path}`
+- `{href}` → Missing CSS: `{path}`
+
+**P2 Issues (External):**
+- `{href}` → HTTP 404 (external link dead)
+- `{href}` → Redirect chain (3 hops)
+
+#### Phase 2: L2 (Feature Landing) Links
+| Status | Count | Details |
+|--------|-------|---------|
+| L2 Pages Validated | {n} | {list of validated pages} |
+| L2 Pages Skipped | {n} | {unreachable from L1} |
+| Broken Links | {n} | {details below} |
+| Circular References | {n} | {A→B→C→A paths} |
+
+**Broken Links by L2 Page:**
+- `docs/orchestrators/index.html`: {n} broken ({list})
+- `docs/02-orchestrators/master.html`: {n} broken ({list})
+
+**Circular Reference Chains:**
+- `docs/guides/A.html` → `docs/guides/B.html` → `docs/guides/A.html`
+
+**Orphaned L2 Pages (Not Linked from L1):**
+- `docs/legacy/old-feature.html` (last modified: {date})
+- `docs/wip/draft-page.html` (last modified: {date})
+
+#### Phase 3: L3 (Technical Deep-Dive) Links
+| Status | Count | Details |
+|--------|-------|---------|
+| L3 Pages Validated | {n} | {list of validated pages} |
+| L3 Pages Skipped | {n} | {unreachable from L2} |
+| Broken Links | {n} | {details below} |
+| Missing Code Refs | {n} | {files referenced but not found} |
+
+**Broken Links by L3 Page:**
+- `docs/architecture/deep-dive.html`: {n} broken ({list})
+
+**Orphaned L3 Pages (Not Linked from L2):**
+- `docs/architecture/old-design.html` (last modified: {date})
+
+#### Phase 4: Unreferenced File Cleanup (DRY-RUN)
+| Category | Count | Size | Risk | Action |
+|----------|-------|------|------|--------|
+| Orphaned HTML | {n} | {kb} KB | {LOW/MED/HIGH} | {DELETE/ARCHIVE/KEEP} |
+| Orphaned Images | {n} | {kb} KB | {LOW/MED/HIGH} | {DELETE/ARCHIVE/KEEP} |
+| Orphaned CSS | {n} | {kb} KB | {LOW/MED/HIGH} | {DELETE/ARCHIVE/KEEP} |
+| Orphaned JS | {n} | {kb} KB | {LOW/MED/HIGH} | {DELETE/ARCHIVE/KEEP} |
+| Temp Files | {n} | {kb} KB | LOW | DELETE |
+
+**HIGH RISK (Review Before Deletion):**
+- `docs/legacy/critical-reference.html` (55 KB, 120 days old)
+  - Risk: May be linked from external documentation
+  - Recommendation: Archive to docs/.archive/2026-02-01/
+
+**MEDIUM RISK:**
+- `docs/assets/unused-diagram.svg` (12 KB, 30 days old)
+  - Recommendation: Archive
+
+**LOW RISK (Safe to Delete):**
+- `docs/.DS_Store` (6 KB)
+- `docs/**/*.tmp` (45 files, 230 KB)
+- `docs/**/*~` (12 files, 89 KB)
+
+**Total Cleanup Potential:** {n} files, {kb} KB
+
+**Protected Files (NEVER DELETE):**
+- docs/index.html
+- docs/404.md, docs/404.html
+- docs/README.md, docs/LICENSE.md
+- docs/assets/favicon.ico
+- docs/.awakening-of-cortex/** (narrative system)
+
+#### External Link Validation (Optional)
+| Status | Count | Details |
+|--------|-------|---------|
+| Total External | {n} | - |
+| Validated | {n} | ✅ |
+| 4xx/5xx Errors | {n} | ❌ {list} |
+| Slow (>3s) | {n} | ⚠️ {list} |
+| Skipped | {n} | {reason} |
+
+**External Link Issues:**
+- `https://example.com/api/docs` → HTTP 404
+- `https://slow-site.com/resource` → Timeout (>5s)
+- `https://redirect.com/path` → 3+ redirects
+
+### � Responsive Design Audit (Mobile-First)
+
+#### Viewport & Meta Tags
+| Check | Status | Issues |
+|-------|--------|--------|
+| viewport meta tag | ✅/❌ | {missing files or incorrect values} |
+| user-scalable allowed | ✅/❌ | {files with user-scalable=no} |
+| initial-scale=1 | ✅/❌ | {files with incorrect scale} |
+
+#### Breakpoint Compliance
+| Page | Mobile (320px) | Tablet (768px) | Desktop (1280px) | Status |
+|------|----------------|----------------|------------------|--------|
+| docs/index.html | ✅/❌ | ✅/❌ | ✅/❌ | {PASS/FAIL} |
+| docs/orchestrators/index.html | ✅/❌ | ✅/❌ | ✅/❌ | {PASS/FAIL} |
+| {page} | ✅/❌ | ✅/❌ | ✅/❌ | {PASS/FAIL} |
+
+**Mobile Issues (320px):**
+- `docs/architecture/diagram.html`: Horizontal scroll detected (content width: 1200px)
+- `docs/api-reference/endpoints.html`: Table overflows viewport
+- `docs/guides/setup.html`: Touch targets too small (32px, need ≥44px)
+
+**Tablet Issues (768px):**
+- `docs/dashboards/metrics.html`: D3.js chart not resizing on orientation change
+- `docs/tutorials/advanced.html`: Navigation overlap with content
+
+**Desktop Issues (1280px):**
+- (Usually fewer issues, list if any)
+
+#### CSS Analysis
+| Check | Status | Files Affected |
+|-------|--------|----------------|
+| Media queries present | ✅/❌ | {count} files missing responsive CSS |
+| Flexible layouts (grid/flex) | ✅/❌ | {count} files with fixed widths |
+| Font sizes (rem/em) | ✅/❌ | {count} files with px body text |
+| Touch targets ≥44px | ✅/❌ | {count} files with small targets |
+| max-width containers | ✅/❌ | {count} files with fixed widths |
+
+**CSS Violations:**
+- `docs/assets/css/main.css:45`: `.container { width: 1200px }` → Use `max-width: 1200px`
+- `docs/assets/css/tables.css:12`: No responsive table styles
+- `docs/orchestrators/index.html:inline`: `font-size: 12px` → Use `0.75rem`
+
+#### Navigation & Interaction
+| Check | Status | Issues |
+|-------|--------|--------|
+| Mobile menu/hamburger | ✅/❌ | {pages missing mobile nav} |
+| Touch-friendly taps | ✅/❌ | {elements with hover-only} |
+| Breadcrumb collapse | ✅/❌ | {pages with broken breadcrumbs} |
+| No hover-only interactions | ✅/❌ | {elements requiring hover} |
+
+**Interaction Issues:**
+- `docs/index.html`: Dropdown menu requires hover (no touch support)
+- `docs/guides/index.html`: Breadcrumb text wraps awkwardly at 320px
+
+#### Images & Media
+| Check | Status | Issues |
+|-------|--------|--------|
+| img max-width: 100% | ✅/❌ | {count} images overflow |
+| SVG responsive | ✅/❌ | {count} SVGs with fixed dimensions |
+| D3.js resize handlers | ✅/❌ | {count} charts without resize |
+| srcset/responsive images | ✅/❌ | {count} large images without variants |
+
+**Media Issues:**
+- `docs/architecture/system-diagram.svg`: Fixed width="1400" (should be 100%)
+- `docs/dashboards/metrics.html`: D3.js chart lacks `window.onresize` handler
+- `docs/assets/images/hero.png`: 2.4MB without responsive srcset
+
+#### Tables
+| Page | Table Count | Responsive Pattern | Status |
+|------|-------------|-------------------|--------|
+| docs/api-reference/endpoints.html | 3 | scroll-wrapper | ✅/❌ |
+| docs/guides/comparison.html | 2 | stacked (mobile) | ✅/❌ |
+| {page} | {n} | {pattern or NONE} | ✅/❌ |
+
+**Table Issues:**
+- `docs/api-reference/endpoints.html`: Table #2 missing scroll wrapper
+- `docs/guides/comparison.html`: Headers not sticky on scroll
+
+#### Performance (Mobile)
+| Check | Status | Impact |
+|-------|--------|--------|
+| Critical CSS inlined | ✅/❌ | {render blocking files} |
+| Lazy loading images | ✅/❌ | {count} below-fold images loaded eagerly |
+| Large assets | ✅/❌ | {count} images >500KB on mobile |
+
+**Performance Issues:**
+- `docs/index.html`: 3 render-blocking CSS files
+- `docs/tutorials/index.html`: 12 images loaded without lazy loading
+- `docs/assets/images/diagram-full.png`: 3.2MB (should use responsive srcset)
+
+#### Summary
+| Category | Pass | Fail | Total |
+|----------|------|------|-------|
+| Viewport Meta | {n} | {n} | {n} |
+| Mobile (320px) | {n} | {n} | {n} |
+| Tablet (768px) | {n} | {n} | {n} |
+| Desktop (1280px) | {n} | {n} | {n} |
+| Touch Accessibility | {n} | {n} | {n} |
+| **Overall** | {n}% | {n}% | {total pages} |
+
+### �📅 Freshness
 | File | Last Updated | Code Changed | Status |
 |------|--------------|--------------|--------|
 | {file} | {date} | {date} | ✅/STALE |
@@ -316,9 +671,9 @@ Files:
 **Trigger:** Invoked with a specific documentation or narrative request  
 **Mission:** Advisory-first, then generate L1/L2/L3 documentation OR narrative chapters with approved systems
 
-## Documentation Advisory (see original cortex-documentor.prompt.md for full L1/L2/L3 specs)
+## Documentation Advisory
 
-[RETAIN ALL EXISTING L1/L2/L3 DOCUMENTATION SPECIFICATIONS FROM ORIGINAL FILE]
+[See full L1/L2/L3 documentation specifications earlier in this file]
 
 ---
 
@@ -498,6 +853,163 @@ Characters:
 *Caption: {Description of what's happening in the scene}*
 
 [Narrative text continues...]
+```
+
+### Advisory Operations for Documentation Link Auditing
+
+```yaml
+audit_documentation_links:
+  purpose: "3-tier HTML documentation link integrity verification"
+  input:
+    entry_point: "docs/index.html" (default)
+    mode: "full" | "l1-only" | "l2-only" | "l3-only"
+    skip_external: true | false (default: true)
+    dry_run: true | false (default: true)
+  phases:
+    phase_1_l1:
+      scope: "docs/index.html"
+      validates:
+        - internal_links: "All <a href> to HTML files"
+        - assets: "All <img src>, <link href>, <script src>"
+        - anchors: "All #section links to valid IDs"
+        - security: "No javascript:, data:, or ../ traversal"
+      blocks_phase_2_if: "P0 broken links detected"
+    
+    phase_2_l2:
+      scope: "All L2 HTML files linked from docs/index.html"
+      validates:
+        - all_phase_1_checks: true
+        - breadcrumbs: "Links back to docs/index.html"
+        - cross_references: "Links to sibling L2 pages"
+        - forward_links: "Links to L3 pages"
+      detects:
+        - circular_references: "A→B→C→A loops"
+        - orphaned_pages: "L2 HTML not linked from L1"
+      blocks_phase_3_if: "P0 broken links detected"
+    
+    phase_3_l3:
+      scope: "All L3 HTML files linked from validated L2 pages"
+      validates:
+        - all_phase_1_checks: true
+        - breadcrumbs: "Links back to L2 and L1"
+        - code_references: "Links to actual source files"
+        - api_references: "Links to docs/06-api-reference/"
+      detects:
+        - orphaned_pages: "L3 HTML not linked from L2"
+        - missing_code_refs: "Referenced files don't exist"
+    
+    phase_4_cleanup:
+      prerequisite: "User approval required (or --auto-cleanup flag)"
+      detects:
+        - orphaned_html: "HTML not in L1→L2→L3 graph"
+        - orphaned_assets: "Images, CSS, JS not referenced"
+        - temp_files: "*.tmp, *.bak, *~, .DS_Store"
+      preserves:
+        - entry_points: ["docs/index.html", "docs/404.html"]
+        - documentation: ["docs/README.md", "docs/LICENSE.md"]
+        - narrative: ["docs/.awakening-of-cortex/**"]
+        - protected_assets: ["docs/assets/favicon.ico", "docs/assets/logo.*"]
+      actions:
+        - dry_run: "Report only, no deletion"
+        - archive: "Move to docs/.archive/{timestamp}/"
+        - delete: "Permanent removal (HIGH RISK only with explicit approval)"
+  
+  output:
+    summary:
+      total_links_checked: {n}
+      broken_links_by_severity:
+        p0_navigation: {n}
+        p1_assets: {n}
+        p2_external: {n}
+      circular_references: {n}
+      orphaned_files: {n}
+      cleanup_potential_kb: {kb}
+    
+    detailed_report:
+      phase_1_l1:
+        broken_links: [{href, expected_path, issue}]
+        security_violations: [{href, violation_type, owasp_ref}]
+      
+      phase_2_l2:
+        validated_pages: ["docs/orchestrators/index.html", ...]
+        skipped_pages: ["docs/legacy/old.html", ...]
+        broken_links_by_page: {page: [links]}
+        circular_refs: ["A→B→C→A", ...]
+        orphaned_l2: [{path, size, last_modified}]
+      
+      phase_3_l3:
+        validated_pages: ["docs/architecture/details.html", ...]
+        broken_links_by_page: {page: [links]}
+        missing_code_refs: [{html_page, referenced_file}]
+        orphaned_l3: [{path, size, last_modified}]
+      
+      phase_4_cleanup:
+        orphans_by_category:
+          html: [{path, size, risk, action}]
+          images: [{path, size, risk, action}]
+          css: [{path, size, risk, action}]
+          js: [{path, size, risk, action}]
+          temp: [{path, size, risk, action}]
+        protected_files: ["docs/index.html", ...]
+        total_cleanup: {files: n, size_kb: kb}
+
+fix_broken_links:
+  purpose: "Automated remediation of broken documentation links"
+  input:
+    audit_report: "Output from audit_documentation_links"
+    mode: "suggest" | "auto-fix" (default: suggest)
+    dry_run: true | false (default: true)
+  strategies:
+    missing_files:
+      - detect_renames: "Find moved/renamed files via git log"
+      - suggest_similar: "Fuzzy match similar filenames"
+      - create_stub: "Generate placeholder page with 'Coming Soon'"
+    
+    broken_anchors:
+      - scan_target_ids: "List all available #ids in target page"
+      - suggest_closest: "Fuzzy match intended anchor"
+    
+    case_sensitivity:
+      - normalize_paths: "Fix Index.html → index.html mismatches"
+    
+    relative_path_issues:
+      - convert_to_absolute: "Fix ../../path to /docs/path"
+      - verify_from_root: "Test all links from workspace root"
+  
+  output:
+    suggested_fixes:
+      - original_link: "{href}"
+        issue: "File not found"
+        suggestions:
+          - fix: "Update to {new_href}"
+            confidence: "high" | "medium" | "low"
+            reason: "File renamed via git mv {old} {new}"
+          - fix: "Create stub at {path}"
+            confidence: "low"
+            reason: "No similar file found"
+    
+    auto_fixes_applied: (if mode=auto-fix)
+      - file: "{html_file}"
+        changes: [{old_href, new_href, line_number}]
+        backup: "docs/.backup/{timestamp}/{file}"
+
+cleanup_orphaned_files:
+  purpose: "Safe removal of unreferenced documentation files"
+  input:
+    audit_report: "Phase 4 output from audit_documentation_links"
+    mode: "archive" | "delete" (default: archive)
+    confirm: true | false (REQUIRED for delete mode)
+  safety_rails:
+    - always_dry_run_first: true
+    - require_explicit_approval: true (for each HIGH RISK file)
+    - create_manifest: "docs/.archive/{timestamp}/MANIFEST.md"
+    - backup_before_delete: true (if mode=delete)
+  
+  output:
+    archived: [{source, destination, size, reason}]
+    deleted: [{path, size, reason}] (only if mode=delete AND confirm=true)
+    preserved: [{path, reason}]
+    manifest_location: "docs/.archive/{timestamp}/MANIFEST.md"
 ```
 
 ### Advisory Operations for Narrative
@@ -740,6 +1252,22 @@ update_narrative_to_latest:
 | DOC-010 | **Uniqueness target: At least 1 unique feature per L2 page** |
 | DOC-011 | **L1 docs/index.html is APPROVED - DO NOT MODIFY THEME** |
 | DOC-012 | **Diagram data in docs/{section}/_diagrams/ as JSON** |
+| DOC-013 | **Link auditing: 3-tier validation (L1 → L2 → L3) before cleanup** |
+| DOC-014 | **Dry-run MANDATORY before any file deletion** |
+| DOC-015 | **Protected files: NEVER delete index.html, README.md, LICENSE.md, 404.html, .awakening-of-cortex/** |
+| DOC-016 | **Security: No javascript:, data: URLs in documentation links** |
+| DOC-017 | **External links: https:// only, validate before publishing** |
+| DOC-018 | **Circular references: DETECT and REPORT, never allow A→B→A loops** |
+| DOC-019 | **Orphaned cleanup: Archive to docs/.archive/ before deletion** |
+| DOC-020 | **Link remediation: Suggest fixes, auto-fix only with approval** |
+| DOC-021 | **Responsive: All pages must pass 320px, 768px, 1280px breakpoint tests** |
+| DOC-022 | **Viewport meta tag REQUIRED: width=device-width, initial-scale=1** |
+| DOC-023 | **Touch targets: Minimum 44px for WCAG 2.1 AA compliance** |
+| DOC-024 | **No horizontal scroll: Content must fit viewport at all breakpoints** |
+| DOC-025 | **D3.js/SVG: Must include resize handlers for orientation changes** |
+| DOC-026 | **Images: Must use max-width:100% and srcset for large images** |
+| DOC-027 | **Tables: Must use responsive pattern (scroll, stack, or collapse)** |
+| DOC-028 | **No hover-only: All interactions must work on touch devices** |
 
 ### Narrative (New)
 
@@ -775,6 +1303,21 @@ update_narrative_to_latest:
 10. ❌ **Using Mermaid for production (D3.js or SVG only)**
 11. ❌ **Modifying docs/index.html theme (APPROVED)**
 12. ❌ **Generic content without unique features**
+13. ❌ **Deleting files without dry-run first**
+14. ❌ **Link validation: Skipping L1 or L2 before proceeding to next tier**
+15. ❌ **Cleanup: Deleting protected files (index.html, README.md, 404.html, narrative)**
+16. ❌ **Security: javascript:, data:, or ../ traversal in documentation links**
+17. ❌ **Circular references: Allowing A→B→A link loops**
+18. ❌ **Auto-fix: Applying link corrections without user review**
+19. ❌ **Responsive: Missing viewport meta tag on any HTML page**
+20. ❌ **Responsive: Fixed pixel widths on containers (use max-width)**
+21. ❌ **Responsive: Horizontal scroll at any breakpoint (320px, 768px, 1280px)**
+22. ❌ **Responsive: Touch targets smaller than 44px**
+23. ❌ **Responsive: Hover-only interactions (must support touch)**
+24. ❌ **Responsive: user-scalable=no in viewport (accessibility violation)**
+25. ❌ **Responsive: Images without max-width:100%**
+26. ❌ **Responsive: D3.js/SVG without resize handlers**
+27. ❌ **Responsive: Tables without responsive pattern (scroll/stack/collapse)**
 
 ### Narrative (New)
 1. ❌ **Modifying Prologue (00-PROLOGUE) — IMMUTABLE**

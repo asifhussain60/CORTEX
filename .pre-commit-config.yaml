@@ -44,3 +44,19 @@ repos:
         pass_filenames: false
         always_run: false
         files: ^tests/.*test_.*\.py$
+
+      - id: cortex-docs-link-check
+        name: DOC-013 - Documentation Link Integrity
+        entry: python3 scripts/check_docs_links.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^docs/.*\.(html|md)$
+
+      - id: cortex-docs-responsive-check
+        name: DOC-021 - Documentation Responsive Design
+        entry: python3 scripts/check_docs_responsive.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: ^docs/.*\.html$

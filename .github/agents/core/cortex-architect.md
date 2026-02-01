@@ -153,8 +153,8 @@ Agents:
 3. `cortex-mcp-gateway.md` → MCP routing (if exists)
 
 **Non-Production (Internal Dev ONLY):**
-- `cortex-docs.prompt.md` → Documentation tool (internal)
-- `cortex-docs-orchestrator.md` → Docs agent (internal)
+- `cortex-documentor.prompt.md` → Documentation tool (internal)
+- `cortex-documentor.md` → Docs agent (internal)
 - `guides/` subdirectory → Training/dev guides
 - `archived/` subdirectory → Deprecated agents
 
