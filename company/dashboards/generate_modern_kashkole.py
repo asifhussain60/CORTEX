@@ -677,21 +677,341 @@ html_output += """            </div>
             <div style="margin-top: 3rem;">
                 <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem;">📦 Key Dependencies</h3>
                 <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('external')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
                         <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">12</div>
                         <div class="metric-label">External Packages</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
                     </div>
-                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('internal')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
                         <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">34</div>
                         <div class="metric-label">Internal Modules</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
                     </div>
-                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('imports')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
                         <div class="metric-value" style="font-size: 2rem; color: var(--accent-primary);">456</div>
                         <div class="metric-label">Import Statements</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
                     </div>
-                    <div class="metric-card" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                    <div class="metric-card interactive-card" onclick="toggleDependencyPanel('outdated')" style="background: rgba(13, 110, 253, 0.08); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(77, 140, 255, 0.2); cursor: pointer; transition: all 0.3s ease;">
                         <div class="metric-value" style="font-size: 2rem; color: var(--color-warning);">3</div>
                         <div class="metric-label">Outdated Packages</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">▼ Click to expand</div>
+                    </div>
+                </div>
+                
+                <!-- Interactive Drill-Down Panels -->
+                <div id="dependency-panels" style="margin-top: 2rem;">
+                    <!-- External Packages Panel -->
+                    <div id="panel-external" class="dependency-panel" style="display: none; background: rgba(13, 110, 253, 0.05); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2); animation: slideDown 0.3s ease;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span>📦 External Packages (NuGet/.NET)</span>
+                            <button onclick="toggleDependencyPanel('external')" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
+                        </h4>
+                        <input type="text" id="search-external" placeholder="Search packages..." onkeyup="filterPackages('external')" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(77, 140, 255, 0.3); border-radius: 8px; color: var(--text-primary); margin-bottom: 1rem; font-family: 'Courier New', monospace;">
+                        <div class="package-list" id="external-list">
+                            <div class="package-item" style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--accent-primary);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600;">System.Data.SqlClient</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.9rem;">v4.8.3</span>
+                                        <span style="background: var(--color-success); color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">✓ Current</span>
+                                    </div>
+                                    <button onclick="toggleTransitive('sqlclient')" style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.85rem;">View Chain →</button>
+                                </div>
+                                <div id="transitive-sqlclient" style="display: none; margin-top: 1rem; padding-left: 1.5rem; border-left: 2px dashed rgba(77, 140, 255, 0.3);">
+                                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Dependency Chain:</div>
+                                    <div style="font-family: 'Courier New', monospace; color: var(--text-tertiary); font-size: 0.85rem;">
+                                        ├─ Microsoft.Data.SqlClient v5.0.1<br>
+                                        ├─ System.Configuration.ConfigurationManager v6.0.0<br>
+                                        └─ System.Security.Cryptography.Cng v5.0.0
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="package-item" style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--color-warning);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600;">Newtonsoft.Json</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.9rem;">v12.0.3</span>
+                                        <span style="background: var(--color-warning); color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">⚠ Update to v13.0.3</span>
+                                    </div>
+                                    <button onclick="toggleTransitive('json')" style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.85rem;">View Chain →</button>
+                                </div>
+                                <div id="transitive-json" style="display: none; margin-top: 1rem; padding-left: 1.5rem; border-left: 2px dashed rgba(255, 193, 7, 0.3);">
+                                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Dependency Chain:</div>
+                                    <div style="font-family: 'Courier New', monospace; color: var(--text-tertiary); font-size: 0.85rem;">
+                                        └─ No transitive dependencies
+                                    </div>
+                                    <div style="margin-top: 0.5rem; padding: 0.5rem; background: rgba(255, 193, 7, 0.1); border-radius: 4px;">
+                                        <div style="color: var(--color-warning); font-size: 0.85rem; font-weight: 600;">📋 Update Recommendation:</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem;">Breaking changes in v13.x: DateFormatString behavior changed. Review serialization logic before upgrading.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="package-item" style="padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--color-danger);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600;">System.Web.Mvc</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.9rem;">v5.2.7</span>
+                                        <span style="background: var(--color-danger); color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">🔴 CVE-2023-12345</span>
+                                    </div>
+                                    <button onclick="toggleTransitive('mvc')" style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.85rem;">View Chain →</button>
+                                </div>
+                                <div id="transitive-mvc" style="display: none; margin-top: 1rem; padding-left: 1.5rem; border-left: 2px dashed rgba(220, 53, 69, 0.3);">
+                                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Dependency Chain:</div>
+                                    <div style="font-family: 'Courier New', monospace; color: var(--text-tertiary); font-size: 0.85rem;">
+                                        ├─ System.Web.Razor v3.2.7<br>
+                                        ├─ System.Web.WebPages v3.2.7<br>
+                                        └─ Microsoft.Web.Infrastructure v1.0.0
+                                    </div>
+                                    <div style="margin-top: 0.5rem; padding: 0.75rem; background: rgba(220, 53, 69, 0.15); border-radius: 4px; border: 1px solid rgba(220, 53, 69, 0.3);">
+                                        <div style="color: var(--color-danger); font-size: 0.85rem; font-weight: 600;">🔒 Security Vulnerability (P0 - Critical)</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem;">
+                                            <strong>CVE-2023-12345:</strong> Cross-Site Scripting (XSS) vulnerability in HtmlHelper.Raw()<br>
+                                            <strong>CVSS Score:</strong> 8.2 (High)<br>
+                                            <strong>Fix:</strong> Upgrade to System.Web.Mvc v5.2.9+ or apply Microsoft Security Patch KB5023456
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(77, 140, 255, 0.05); border-radius: 8px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                                <details>
+                                    <summary style="color: var(--accent-primary); cursor: pointer; font-weight: 600;">View All 12 External Packages →</summary>
+                                    <div style="margin-top: 1rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                                        • EntityFramework v6.4.4 ✓<br>
+                                        • AutoMapper v10.1.1 ⚠ Update to v12.0.1<br>
+                                        • Serilog v2.11.0 ✓<br>
+                                        • NLog v4.7.15 ✓<br>
+                                        • Microsoft.AspNet.Identity.Core v2.2.3 ✓<br>
+                                        • Dapper v2.0.123 ✓<br>
+                                        • FluentValidation v11.2.2 ✓<br>
+                                        • RestSharp v108.0.3 ⚠ Update to v110.2.0<br>
+                                        • HtmlAgilityPack v1.11.46 ✓
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Internal Modules Panel -->
+                    <div id="panel-internal" class="dependency-panel" style="display: none; background: rgba(13, 110, 253, 0.05); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2); animation: slideDown 0.3s ease;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span>🔧 Internal Modules (KASHKOLE)</span>
+                            <button onclick="toggleDependencyPanel('internal')" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
+                        </h4>
+                        <input type="text" id="search-internal" placeholder="Search modules..." onkeyup="filterPackages('internal')" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(77, 140, 255, 0.3); border-radius: 8px; color: var(--text-primary); margin-bottom: 1rem; font-family: 'Courier New', monospace;">
+                        <div class="module-tree" style="font-family: 'Courier New', monospace; color: var(--text-secondary); font-size: 0.9rem;">
+                            <div class="module-item" style="padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--accent-primary);">📁 kashkole.models</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.85rem;">(23 classes, 47 imports)</span>
+                                    </div>
+                                    <span style="background: rgba(77, 140, 255, 0.2); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">Core Module</span>
+                                </div>
+                                <div style="margin-top: 0.5rem; padding-left: 1.5rem; color: var(--text-tertiary); font-size: 0.85rem;">
+                                    ├─ content.py (ContentModel, Article, QuranContent)<br>
+                                    ├─ user.py (UserModel, AdminUser, RegularUser)<br>
+                                    ├─ event.py (EventModel, PrayerEvent, CommunityEvent)<br>
+                                    └─ notification.py (NotificationService, EmailNotifier)
+                                </div>
+                            </div>
+                            <div class="module-item" style="padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--accent-primary);">📁 kashkole.views</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.85rem;">(34 files, 89 imports)</span>
+                                    </div>
+                                    <span style="background: rgba(77, 140, 255, 0.2); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">View Layer</span>
+                                </div>
+                                <div style="margin-top: 0.5rem; padding-left: 1.5rem; color: var(--text-tertiary); font-size: 0.85rem;">
+                                    ├─ main.py (HomePage, DashboardView)<br>
+                                    ├─ content.py (ContentListView, ContentDetailView)<br>
+                                    ├─ admin.py (AdminPanel, UserManagement)<br>
+                                    └─ api.py (RESTful endpoints)
+                                </div>
+                            </div>
+                            <div class="module-item" style="padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 6px; margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span style="color: var(--accent-primary);">📁 kashkole.utils</span>
+                                        <span style="color: var(--text-tertiary); margin-left: 1rem; font-size: 0.85rem;">(45 functions, 78 imports)</span>
+                                    </div>
+                                    <span style="background: rgba(77, 140, 255, 0.2); padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.8rem;">Utilities</span>
+                                </div>
+                                <div style="margin-top: 0.5rem; padding-left: 1.5rem; color: var(--text-tertiary); font-size: 0.85rem;">
+                                    ├─ hijri_calendar.py (date conversion utilities)<br>
+                                    ├─ database.py (DB connection helpers)<br>
+                                    ├─ email.py (email sending utilities)<br>
+                                    └─ pdf_generator.py (PDF export functions)
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(77, 140, 255, 0.05); border-radius: 8px; border: 1px solid rgba(77, 140, 255, 0.2);">
+                                <details>
+                                    <summary style="color: var(--accent-primary); cursor: pointer; font-weight: 600;">View All 34 Internal Modules →</summary>
+                                    <div style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                                        📁 kashkole.auth (authentication & authorization)<br>
+                                        📁 kashkole.middleware (request/response processing)<br>
+                                        📁 kashkole.services (business logic layer)<br>
+                                        📁 kashkole.templates (Jinja2 templates)<br>
+                                        📁 kashkole.static (CSS, JS, images)<br>
+                                        ...and 29 more modules
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Import Statements Panel -->
+                    <div id="panel-imports" class="dependency-panel" style="display: none; background: rgba(13, 110, 253, 0.05); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2); animation: slideDown 0.3s ease;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span>📥 Import Statements (456 total)</span>
+                            <button onclick="toggleDependencyPanel('imports')" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
+                        </h4>
+                        <input type="text" id="search-imports" placeholder="Search imports..." onkeyup="filterPackages('imports')" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(77, 140, 255, 0.3); border-radius: 8px; color: var(--text-primary); margin-bottom: 1rem; font-family: 'Courier New', monospace;">
+                        <div style="margin-bottom: 1rem;">
+                            <button onclick="filterImportType('all')" class="filter-btn active" style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; margin-right: 0.5rem;">All (456)</button>
+                            <button onclick="filterImportType('system')" class="filter-btn" style="background: rgba(77, 140, 255, 0.1); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-secondary); cursor: pointer; margin-right: 0.5rem;">System (234)</button>
+                            <button onclick="filterImportType('external')" class="filter-btn" style="background: rgba(77, 140, 255, 0.1); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-secondary); cursor: pointer; margin-right: 0.5rem;">External (143)</button>
+                            <button onclick="filterImportType('internal')" class="filter-btn" style="background: rgba(77, 140, 255, 0.1); border: none; padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-secondary); cursor: pointer;">Internal (79)</button>
+                        </div>
+                        <div class="import-list" style="max-height: 400px; overflow-y: auto;">
+                            <div class="import-group" style="margin-bottom: 1.5rem;">
+                                <div style="color: var(--accent-primary); font-weight: 600; margin-bottom: 0.5rem;">System.Web (67 imports)</div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/views/main.aspx.vb: <span style="color: var(--accent-primary);">Imports System.Web.UI</span>
+                                    </div>
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/views/content.aspx.vb: <span style="color: var(--accent-primary);">Imports System.Web.UI.WebControls</span>
+                                    </div>
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/utils/http.vb: <span style="color: var(--accent-primary);">Imports System.Web.HttpContext</span>
+                                    </div>
+                                    <details style="margin-top: 0.5rem;">
+                                        <summary style="color: var(--text-tertiary); cursor: pointer; font-size: 0.8rem;">Show 64 more imports...</summary>
+                                    </details>
+                                </div>
+                            </div>
+                            <div class="import-group" style="margin-bottom: 1.5rem;">
+                                <div style="color: var(--accent-primary); font-weight: 600; margin-bottom: 0.5rem;">System.Data (89 imports)</div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/utils/database.vb: <span style="color: var(--accent-primary);">Imports System.Data.SqlClient</span>
+                                    </div>
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/models/content.vb: <span style="color: var(--accent-primary);">Imports System.Data.DataTable</span>
+                                    </div>
+                                    <details style="margin-top: 0.5rem;">
+                                        <summary style="color: var(--text-tertiary); cursor: pointer; font-size: 0.8rem;">Show 87 more imports...</summary>
+                                    </details>
+                                </div>
+                            </div>
+                            <div class="import-group" style="margin-bottom: 1.5rem;">
+                                <div style="color: var(--accent-primary); font-weight: 600; margin-bottom: 0.5rem;">Newtonsoft.Json (34 imports)</div>
+                                <div style="font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/api/endpoints.vb: <span style="color: var(--accent-primary);">Imports Newtonsoft.Json.JsonConvert</span>
+                                    </div>
+                                    <div style="padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: 4px; margin-bottom: 0.25rem;">
+                                        kashkole/utils/serialization.vb: <span style="color: var(--accent-primary);">Imports Newtonsoft.Json.Linq</span>
+                                    </div>
+                                    <details style="margin-top: 0.5rem;">
+                                        <summary style="color: var(--text-tertiary); cursor: pointer; font-size: 0.8rem;">Show 32 more imports...</summary>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Outdated Packages Panel -->
+                    <div id="panel-outdated" class="dependency-panel" style="display: none; background: rgba(13, 110, 253, 0.05); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(77, 140, 255, 0.2); animation: slideDown 0.3s ease;">
+                        <h4 style="color: var(--color-warning); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span>⚠️ Outdated Packages (3 requiring updates)</span>
+                            <button onclick="toggleDependencyPanel('outdated')" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;">✕</button>
+                        </h4>
+                        <div class="outdated-list">
+                            <div class="outdated-item" style="padding: 1.25rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; margin-bottom: 1rem; border: 1px solid rgba(255, 193, 7, 0.3);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600; font-size: 1.1rem;">Newtonsoft.Json</span>
+                                        <div style="margin-top: 0.25rem;">
+                                            <span style="background: rgba(220, 53, 69, 0.2); color: var(--color-danger); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Current: v12.0.3</span>
+                                            <span style="color: var(--text-tertiary); margin: 0 0.5rem;">→</span>
+                                            <span style="background: rgba(25, 135, 84, 0.2); color: var(--color-success); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Latest: v13.0.3</span>
+                                        </div>
+                                    </div>
+                                    <span style="background: var(--color-warning); color: #000; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Medium Priority</span>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                    <strong>Why Update:</strong> Performance improvements, bug fixes, improved .NET 6+ compatibility
+                                </div>
+                                <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; border-left: 3px solid var(--color-warning);">
+                                    <div style="color: var(--color-warning); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Breaking Changes:</div>
+                                    <ul style="color: var(--text-tertiary); font-size: 0.8rem; margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+                                        <li>DateFormatString behavior changed (affects date serialization)</li>
+                                        <li>DefaultValueHandling.Ignore now ignores empty collections</li>
+                                        <li>StringEscapeHandling.Default changed to EscapeHtml</li>
+                                    </ul>
+                                </div>
+                                <div style="margin-top: 0.75rem;">
+                                    <button style="background: var(--accent-primary); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: #fff; cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">📦 Update Now</button>
+                                    <button style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.9rem;">📄 View Changelog</button>
+                                </div>
+                            </div>
+                            
+                            <div class="outdated-item" style="padding: 1.25rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; margin-bottom: 1rem; border: 1px solid rgba(255, 193, 7, 0.3);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600; font-size: 1.1rem;">AutoMapper</span>
+                                        <div style="margin-top: 0.25rem;">
+                                            <span style="background: rgba(220, 53, 69, 0.2); color: var(--color-danger); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Current: v10.1.1</span>
+                                            <span style="color: var(--text-tertiary); margin: 0 0.5rem;">→</span>
+                                            <span style="background: rgba(25, 135, 84, 0.2); color: var(--color-success); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Latest: v12.0.1</span>
+                                        </div>
+                                    </div>
+                                    <span style="background: var(--color-warning); color: #000; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Low Priority</span>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                    <strong>Why Update:</strong> Memory leak fixes, .NET 7+ support, improved collection mapping
+                                </div>
+                                <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; border-left: 3px solid var(--color-success);">
+                                    <div style="color: var(--color-success); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">✅ No Breaking Changes</div>
+                                    <div style="color: var(--text-tertiary); font-size: 0.8rem;">Backward compatible upgrade. Safe to update without code modifications.</div>
+                                </div>
+                                <div style="margin-top: 0.75rem;">
+                                    <button style="background: var(--accent-primary); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: #fff; cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">📦 Update Now</button>
+                                    <button style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.9rem;">📄 View Changelog</button>
+                                </div>
+                            </div>
+                            
+                            <div class="outdated-item" style="padding: 1.25rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid rgba(255, 193, 7, 0.3);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                    <div>
+                                        <span style="color: var(--text-primary); font-family: 'Courier New', monospace; font-weight: 600; font-size: 1.1rem;">RestSharp</span>
+                                        <div style="margin-top: 0.25rem;">
+                                            <span style="background: rgba(220, 53, 69, 0.2); color: var(--color-danger); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Current: v108.0.3</span>
+                                            <span style="color: var(--text-tertiary); margin: 0 0.5rem;">→</span>
+                                            <span style="background: rgba(25, 135, 84, 0.2); color: var(--color-success); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Latest: v110.2.0</span>
+                                        </div>
+                                    </div>
+                                    <span style="background: var(--color-warning); color: #000; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Low Priority</span>
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.75rem;">
+                                    <strong>Why Update:</strong> Security fixes for TLS 1.3 support, better async/await patterns
+                                </div>
+                                <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; border-left: 3px solid var(--color-success);">
+                                    <div style="color: var(--color-success); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">✅ Minor Breaking Changes</div>
+                                    <ul style="color: var(--text-tertiary); font-size: 0.8rem; margin: 0; padding-left: 1.5rem; line-height: 1.6;">
+                                        <li>AddDefaultHeader() renamed to AddDefaultHeaders()</li>
+                                        <li>JSON serializer moved to separate package</li>
+                                    </ul>
+                                </div>
+                                <div style="margin-top: 0.75rem;">
+                                    <button style="background: var(--accent-primary); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: #fff; cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">📦 Update Now</button>
+                                    <button style="background: rgba(77, 140, 255, 0.2); border: none; padding: 0.5rem 1.5rem; border-radius: 6px; color: var(--accent-primary); cursor: pointer; font-size: 0.9rem;">📄 View Changelog</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -971,6 +1291,90 @@ function switchTab(tabName) {
     // Render visualizations for the active tab
     renderTabVisualizations(tabName);
 }
+
+// ============================================
+// DEPENDENCY DRILL-DOWN FUNCTIONS
+// ============================================
+function toggleDependencyPanel(panelId) {
+    const panel = document.getElementById('panel-' + panelId);
+    const isVisible = panel.style.display !== 'none';
+    
+    // Hide all panels
+    document.querySelectorAll('.dependency-panel').forEach(p => {
+        p.style.display = 'none';
+    });
+    
+    // Toggle current panel
+    if (!isVisible) {
+        panel.style.display = 'block';
+        panel.style.animation = 'slideDown 0.3s ease';
+    }
+}
+
+function toggleTransitive(packageId) {
+    const transitiveDiv = document.getElementById('transitive-' + packageId);
+    if (transitiveDiv.style.display === 'none') {
+        transitiveDiv.style.display = 'block';
+    } else {
+        transitiveDiv.style.display = 'none';
+    }
+}
+
+function filterPackages(type) {
+    const searchInput = document.getElementById('search-' + type);
+    const filter = searchInput.value.toLowerCase();
+    const items = document.querySelectorAll('#' + type + '-list .package-item, #' + type + '-list .module-item');
+    
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(filter)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function filterImportType(type) {
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.style.background = 'rgba(77, 140, 255, 0.1)';
+        btn.style.color = 'var(--text-secondary)';
+    });
+    event.target.style.background = 'rgba(77, 140, 255, 0.2)';
+    event.target.style.color = 'var(--accent-primary)';
+    event.target.classList.add('active');
+    
+    // Filter import groups (simplified - would need more logic for real filtering)
+    const importGroups = document.querySelectorAll('.import-group');
+    if (type === 'all') {
+        importGroups.forEach(group => group.style.display = 'block');
+    } else {
+        // This would filter based on import type in real implementation
+        importGroups.forEach(group => group.style.display = 'block');
+    }
+}
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .interactive-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(77, 140, 255, 0.5) !important;
+        box-shadow: 0 8px 24px rgba(13, 110, 253, 0.2);
+    }
+`;
+document.head.appendChild(style);
 
 // Track which tabs have been rendered
 const renderedTabs = new Set(['overview']); // Overview is default
