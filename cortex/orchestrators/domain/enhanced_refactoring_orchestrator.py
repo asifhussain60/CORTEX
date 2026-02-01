@@ -37,6 +37,7 @@ import re
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 
 logger = logging.getLogger(__name__)
 
@@ -509,10 +510,7 @@ class ParallelStrategyEvaluator:
                     result = future.result()
                     evaluated.append(result)
                 except Exception as e:
-                    self.logger.log_operation_error(
-                        "strategy_evaluation_failed",
-                        {'error': str(e)}
-                    )
+                    logger.error(f"Strategy evaluation failed: {e}", exc_info=True)
         
         return sorted(evaluated, key=lambda s: s.confidence, reverse=True)
     
@@ -636,7 +634,7 @@ class CircuitBreaker:
 # ENHANCED REFACTORING ORCHESTRATOR
 # ============================================================================
 
-class EnhancedRefactoringOrchestrator(IOrchestrator):
+class EnhancedRefactoringOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     """
     Enhanced RefactoringOrchestrator with all AC-DOMAIN-REF-001 through 009 fixes.
     
@@ -650,6 +648,7 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
     - AC-DOMAIN-REF-007: Pattern caching (60%+ target)
     - AC-DOMAIN-REF-008: Circuit breaker
     - AC-DOMAIN-REF-009: Differential SOLID checking
+    - P1: Security-first with SecurityAdvisorMixin integration
     """
     
     _instance: Optional[EnhancedRefactoringOrchestrator] = None
@@ -730,7 +729,61 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
         operation: str,
         parameters: Dict[str, Any],
     ) -> Result[Dict[str, Any]]:
-        """Execute refactoring operation."""
+        """
+        Execute refactoring operation with security assessment.
+        
+        P1 Enhancement: Security-first approach.
+        - Assesses security risks before refactoring
+        - Blocks on P0 security threats
+        - Logs P1/P2/P3 findings for audit trail
+        """
+        # Security-first: Assess risks before refactoring (P1)
+        file_path = parameters.get('file_path', '')
+        code = parameters.get('code', '')
+        
+        if file_path or code:
+            security_assessment = self.assess_security_risks(
+                file_path=Path(file_path) if file_path else None,
+                code_content=code if code else None
+            )
+            
+            # P0 BLOCKING: Stop on critical security threats
+            p0_threats = [
+                finding for finding in security_assessment.get("findings", [])
+                if finding.get("priority") == "P0"
+            ]
+            
+            if p0_threats:
+                self.logger.log_security_event(
+                    event_type="P0_SECURITY_BLOCK",
+                    details={
+                        "operation": operation,
+                        "file_path": file_path,
+                        "p0_threats": p0_threats
+                    }
+                )
+                return Err(
+                    f"BLOCKED: {len(p0_threats)} P0 security threat(s) detected. "
+                    f"Must remediate before refactoring: {[t.get('category') for t in p0_threats]}"
+                )
+            
+            # Log P1/P2/P3 findings for awareness
+            p1_p2_p3 = [
+                f for f in security_assessment.get("findings", [])
+                if f.get("priority") in ("P1", "P2", "P3")
+            ]
+            if p1_p2_p3:
+                self.logger.log_security_event(
+                    event_type="SECURITY_FINDINGS_DETECTED",
+                    details={
+                        "operation": operation,
+                        "file_path": file_path,
+                        "findings_count": len(p1_p2_p3),
+                        "priorities": [f.get("priority") for f in p1_p2_p3]
+                    }
+                )
+        
+        # Proceed with refactoring operation
         if operation == "analyze_code":
             return self._analyze_code(parameters)
         elif operation == "generate_refactoring_plan":
@@ -751,10 +804,7 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
         )
         
         if not yaml_path.exists():
-            self.logger.log_operation_error(
-                "yaml_load_failed",
-                {"message": f"YAML file not found: {yaml_path}"}
-            )
+            logger.warning(f"Refactoring strategies YAML not found: {yaml_path}")
             return
         
         try:
@@ -796,7 +846,7 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
             )
         
         except Exception as e:
-            self.logger.log_operation_error(
+            self.logger.log_error(
                 "yaml_parse_failed",
                 {"error": str(e)}
             )
@@ -852,7 +902,7 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
             })
         
         except Exception as e:
-            self.logger.log_operation_error(
+            self.logger.log_error(
                 "code_analysis_failed",
                 {"file_path": file_path, "error": str(e)}
             )
@@ -956,6 +1006,25 @@ class EnhancedRefactoringOrchestrator(IOrchestrator):
     def _get_cb_status(self, parameters: Dict[str, Any]) -> Result[Dict[str, Any]]:
         """Get circuit breaker status."""
         return Ok(self._circuit_breaker.get_status())
+    
+    def get_audit_trail(self) -> List[Dict[str, Any]]:
+        """
+        Get audit trail for SecurityAdvisorMixin compliance.
+        
+        Required by SecurityAdvisorMixin abstract method.
+        Returns audit entries as dictionaries for security analysis.
+        """
+        with self._audit_lock:
+            return [
+                {
+                    "audit_id": entry.audit_id,
+                    "operation": entry.operation,
+                    "timestamp": entry.timestamp,
+                    "details": entry.details,
+                    "hash": entry.compute_hash(),
+                }
+                for entry in self._audit_trail
+            ]
     
     def _log_audit(self, operation: str, details: Dict[str, Any], result: str) -> None:
         """Log audit entry."""
