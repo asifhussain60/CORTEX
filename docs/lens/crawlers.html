@@ -8,6 +8,91 @@
     <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
     <link href="../assets/css/main.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --analyzer-ast: #7b61ff;
+            --analyzer-git: #00d4ff;
+            --analyzer-comments: #10b981;
+            --analyzer-security: #ef4444;
+        }
+        
+        .d3-viz-container {
+            background: rgba(10, 14, 39, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 400px;
+        }
+        
+        .analyzer-card {
+            background: rgba(26, 31, 58, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .analyzer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .capability-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .capability-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--analyzer-ast);
+        }
+        
+        .mcp-tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .data-flow-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .data-flow-node:hover circle {
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .data-flow-node text {
+            font-size: 11px;
+            fill: #e6e9f0;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        
+        .flow-link {
+            stroke: rgba(255, 255, 255, 0.3);
+            stroke-width: 2px;
+            fill: none;
+        }
+        
+        .flow-arrow {
+            fill: rgba(255, 255, 255, 0.5);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -16,72 +101,230 @@
             <p class="subtitle">4 Specialized Code Intelligence Crawlers</p>
         </header>
 
-        <section class="glass-card" id="ast">
-            <h2>1. AST Analyzer</h2>
+        <section class="glass-card">
+            <h2>📊 Analyzer Data Flow</h2>
+            <p>Interactive visualization showing how data flows through CORTEX LENS analyzers</p>
+            <div class="d3-viz-container" id="data-flow"></div>
+        </section>
+
+        <section class="analyzer-card" id="ast" style="border-left: 4px solid var(--analyzer-ast);">
+            <h2><i class="fas fa-project-diagram" style="color: var(--analyzer-ast);"></i> 1. AST Analyzer</h2>
             <p><strong>Purpose:</strong> Extract code structure, functions, classes, imports</p>
             <p><strong>Languages:</strong> Python, JavaScript, TypeScript, Java, C#, Go (6+)</p>
+            
             <h3>Capabilities</h3>
-            <ul>
-                <li>Function/method signatures with parameters and return types</li>
-                <li>Class hierarchies and inheritance</li>
-                <li>Import/dependency graphs</li>
-                <li>Variable declarations and scope analysis</li>
-                <li>Decorator/annotation extraction</li>
-            </ul>
-            <h3>MCP Tool</h3>
-            <pre><code>cortex_ast_analyze(file_path, language)</code></pre>
+            <div class="capability-list">
+                <div class="capability-item">
+                    <i class="fas fa-function"></i> Function/method signatures with parameters and return types
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-sitemap"></i> Class hierarchies and inheritance
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-project-diagram"></i> Import/dependency graphs
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-code"></i> Variable declarations and scope analysis
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-at"></i> Decorator/annotation extraction
+                </div>
+                <div class="capability-item">
+                    <i class="fas fa-layer-group"></i> Nested structure parsing
+                </div>
+            </div>
+            
+            <div class="mcp-tool-badge" style="border-color: var(--analyzer-ast); background: rgba(123, 97, 255, 0.2);">
+                <i class="fas fa-plug"></i> cortex_ast_analyze(file_path, language)
+            </div>
         </section>
 
-        <section class="glass-card" id="git">
-            <h2>2. Git History Analyzer</h2>
+        <section class="analyzer-card" id="git" style="border-left: 4px solid var(--analyzer-git);">
+            <h2><i class="fab fa-git-alt" style="color: var(--analyzer-git);"></i> 2. Git History Analyzer</h2>
             <p><strong>Purpose:</strong> Extract commit history, blame, author patterns</p>
             <p><strong>Context Window:</strong> 24 hours (configurable)</p>
+            
             <h3>Capabilities</h3>
-            <ul>
-                <li>Recent commits affecting file (last 24h default)</li>
-                <li>Git blame line-by-line authorship</li>
-                <li>Author contribution patterns</li>
-                <li>Commit frequency and change velocity</li>
-                <li>File modification hotspots</li>
-            </ul>
-            <h3>MCP Tool</h3>
-            <pre><code>cortex_git_history(file_path, repo_path, hours=24)</code></pre>
+            <div class="capability-list">
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-history"></i> Recent commits affecting file (last 24h default)
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-user-check"></i> Git blame line-by-line authorship
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-chart-line"></i> Author contribution patterns
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-tachometer-alt"></i> Commit frequency and change velocity
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-fire"></i> File modification hotspots
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-git);">
+                    <i class="fas fa-code-branch"></i> Branch and merge analysis
+                </div>
+            </div>
+            
+            <div class="mcp-tool-badge" style="border-color: var(--analyzer-git); background: rgba(0, 212, 255, 0.2);">
+                <i class="fas fa-plug"></i> cortex_git_history(file_path, repo_path, hours=24)
+            </div>
         </section>
 
-        <section class="glass-card" id="comments">
-            <h2>3. Comment Extractor</h2>
+        <section class="analyzer-card" id="comments" style="border-left: 4px solid var(--analyzer-comments);">
+            <h2><i class="fas fa-comments" style="color: var(--analyzer-comments);"></i> 3. Comment Extractor</h2>
             <p><strong>Purpose:</strong> Extract TODOs, FIXMEs, intent hints from comments</p>
+            
             <h3>Capabilities</h3>
-            <ul>
-                <li>TODO/FIXME/HACK/NOTE pattern detection</li>
-                <li>Docstring extraction (Google, NumPy, Sphinx styles)</li>
-                <li>Inline comment analysis</li>
-                <li>Intent signals from developer notes</li>
-                <li>Technical debt markers</li>
-            </ul>
-            <h3>MCP Tool</h3>
-            <pre><code>cortex_extract_comments(file_path)</code></pre>
+            <div class="capability-list">
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-tasks"></i> TODO/FIXME/HACK/NOTE pattern detection
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-book"></i> Docstring extraction (Google, NumPy, Sphinx styles)
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-comment-dots"></i> Inline comment analysis
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-lightbulb"></i> Intent signals from developer notes
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-exclamation-triangle"></i> Technical debt markers
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-comments);">
+                    <i class="fas fa-flag"></i> Priority and severity classification
+                </div>
+            </div>
+            
+            <div class="mcp-tool-badge" style="border-color: var(--analyzer-comments); background: rgba(16, 185, 129, 0.2);">
+                <i class="fas fa-plug"></i> cortex_extract_comments(file_path)
+            </div>
         </section>
 
-        <section class="glass-card" id="security">
-            <h2>4. Security Threat Analyzer</h2>
+        <section class="analyzer-card" id="security" style="border-left: 4px solid var(--analyzer-security);">
+            <h2><i class="fas fa-shield-alt" style="color: var(--analyzer-security);"></i> 4. Security Threat Analyzer</h2>
             <p><strong>Purpose:</strong> Detect CWE vulnerabilities in code</p>
             <p><strong>Coverage:</strong> 6 CWE patterns</p>
+            
             <h3>Detected Patterns</h3>
-            <ul>
-                <li><strong>CWE-94:</strong> Code Injection</li>
-                <li><strong>CWE-95:</strong> Unsafe Deserialization</li>
-                <li><strong>CWE-78:</strong> Command Injection</li>
-                <li><strong>CWE-89:</strong> SQL Injection</li>
-                <li><strong>CWE-327:</strong> Weak Cryptography</li>
-                <li><strong>CWE-22:</strong> Path Traversal</li>
-            </ul>
-            <p><a href="security.html" class="btn-primary">See Security Details →</a></p>
+            <div class="capability-list">
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-94:</strong> Code Injection
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-95:</strong> Unsafe Deserialization
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-78:</strong> Command Injection
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-89:</strong> SQL Injection
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-327:</strong> Weak Cryptography
+                </div>
+                <div class="capability-item" style="border-color: var(--analyzer-security);">
+                    <strong>CWE-22:</strong> Path Traversal
+                </div>
+            </div>
+            
+            <p style="margin-top: 2rem;">
+                <a href="security.html" class="btn-primary">
+                    <i class="fas fa-shield-alt"></i> See Security Details →
+                </a>
+            </p>
         </section>
 
         <footer class="page-footer">
             <a href="index.html" class="btn-back">← Back to LENS Overview</a>
         </footer>
     </div>
+
+    <script>
+        // Data Flow Visualization
+        const container = document.getElementById('data-flow');
+        const width = Math.min(container.offsetWidth - 40, 1200);
+        const height = 400;
+
+        const svg = d3.select('#data-flow')
+            .append('svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        // Define the flow
+        const flowNodes = [
+            { id: 'source', label: 'Source\nCode', x: 100, y: height/2, r: 40, color: '#ffffff' },
+            { id: 'ast', label: 'AST\nAnalyzer', x: 250, y: 80, r: 35, color: '#7b61ff' },
+            { id: 'git', label: 'Git\nHistory', x: 250, y: 160, r: 35, color: '#00d4ff' },
+            { id: 'comments', label: 'Comment\nExtractor', x: 250, y: 240, r: 35, color: '#10b981' },
+            { id: 'security', label: 'Security\nScanner', x: 250, y: 320, r: 35, color: '#ef4444' },
+            { id: 'lens', label: 'LENS\nUnified API', x: 450, y: height/2, r: 45, color: '#ffffff' },
+            { id: 'mcp', label: 'MCP\nTools', x: 650, y: height/2, r: 40, color: '#00d4ff' },
+            { id: 'output', label: 'Analysis\nOutput', x: 850, y: height/2, r: 40, color: '#10b981' },
+        ];
+
+        const flowLinks = [
+            { source: 'source', target: 'ast' },
+            { source: 'source', target: 'git' },
+            { source: 'source', target: 'comments' },
+            { source: 'source', target: 'security' },
+            { source: 'ast', target: 'lens' },
+            { source: 'git', target: 'lens' },
+            { source: 'comments', target: 'lens' },
+            { source: 'security', target: 'lens' },
+            { source: 'lens', target: 'mcp' },
+            { source: 'mcp', target: 'output' },
+        ];
+
+        // Draw links with arrows
+        const defs = svg.append('defs');
+        flowLinks.forEach((link, i) => {
+            defs.append('marker')
+                .attr('id', `arrow-${i}`)
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 8)
+                .attr('refY', 5)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto')
+                .append('path')
+                .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+                .attr('class', 'flow-arrow');
+        });
+
+        const linkGroup = svg.append('g');
+        flowLinks.forEach((link, i) => {
+            const source = flowNodes.find(n => n.id === link.source);
+            const target = flowNodes.find(n => n.id === link.target);
+            
+            linkGroup.append('path')
+                .attr('class', 'flow-link')
+                .attr('d', `M ${source.x} ${source.y} L ${target.x} ${target.y}`)
+                .attr('marker-end', `url(#arrow-${i})`);
+        });
+
+        // Draw nodes
+        const nodeGroup = svg.append('g');
+        flowNodes.forEach(node => {
+            const g = nodeGroup.append('g')
+                .attr('class', 'data-flow-node')
+                .attr('transform', `translate(${node.x}, ${node.y})`);
+            
+            g.append('circle')
+                .attr('r', node.r)
+                .attr('fill', node.color)
+                .attr('fill-opacity', 0.2)
+                .attr('stroke', node.color)
+                .attr('stroke-width', 3);
+            
+            const lines = node.label.split('\n');
+            lines.forEach((line, i) => {
+                g.append('text')
+                    .attr('dy', (i - (lines.length - 1) / 2) * 13)
+                    .text(line);
+            });
+        });
+    </script>
 </body>
 </html>

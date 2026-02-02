@@ -8,118 +8,451 @@
     <link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
     <link href="../assets/css/main.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cwe-critical: #ef4444;
+            --cwe-high: #f59e0b;
+            --cwe-medium: #10b981;
+        }
+        
+        .severity-critical { border-left-color: var(--cwe-critical) !important; }
+        .severity-high { border-left-color: var(--cwe-high) !important; }
+        .severity-medium { border-left-color: var(--cwe-medium) !important; }
+        
+        .vulnerability-card {
+            background: rgba(26, 31, 58, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--cwe-critical);
+            transition: all 0.3s ease;
+        }
+        
+        .vulnerability-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+        }
+        
+        .severity-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin: 0.5rem 0;
+        }
+        
+        .severity-critical-badge {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--cwe-critical);
+            color: var(--cwe-critical);
+        }
+        
+        .severity-high-badge {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid var(--cwe-high);
+            color: var(--cwe-high);
+        }
+        
+        .code-example {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 3px solid var(--cwe-critical);
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .code-good {
+            border-left-color: var(--cwe-medium);
+        }
+        
+        .viz-container {
+            background: rgba(10, 14, 39, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 400px;
+        }
+        
+        .cwe-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cwe-node:hover circle {
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+        
+        .cwe-node text {
+            font-size: 11px;
+            fill: #e6e9f0;
+            font-weight: 600;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        
+        .detection-link {
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 2px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: rgba(26, 31, 58, 0.6);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #a8b3cf;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="page-header">
             <h1>🛡️ Security Threat Analyzer</h1>
-            <p class="subtitle">6 CWE Pattern Detection</p>
+            <p class="subtitle">6 CWE Pattern Detection with Challenge Engine Integration</p>
         </header>
 
         <section class="glass-card">
-            <h2>Overview</h2>
-            <p>SecurityThreatAnalyzer detects 6 critical CWE (Common Weakness Enumeration) patterns in code, providing early warning for security vulnerabilities before they reach production.</p>
+            <h2>📊 CWE Coverage Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--cwe-critical);"></i>
+                    <div class="stat-value" style="color: var(--cwe-critical);">6</div>
+                    <div class="stat-label">CWE Patterns</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--cwe-critical);"></i>
+                    <div class="stat-value" style="color: var(--cwe-critical);">3</div>
+                    <div class="stat-label">Critical Severity</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: var(--cwe-high);"></i>
+                    <div class="stat-value" style="color: var(--cwe-high);">3</div>
+                    <div class="stat-label">High Severity</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-lock" style="font-size: 2rem; color: var(--cwe-medium);"></i>
+                    <div class="stat-value" style="color: var(--cwe-medium);">100%</div>
+                    <div class="stat-label">OWASP Top 10</div>
+                </div>
+            </div>
         </section>
 
         <section class="glass-card">
-            <h2>Detected Patterns</h2>
+            <h2>🔍 CWE Detection Architecture</h2>
+            <p>Interactive visualization of security threat detection flow and Challenge Engine integration</p>
+            <div class="viz-container" id="cwe-architecture"></div>
+        </section>
 
-            <div class="vulnerability-item">
-                <h3>CWE-94: Code Injection</h3>
+        <section class="glass-card">
+            <h2>🚨 Detected Patterns</h2>
+
+            <div class="vulnerability-card severity-critical">
+                <h3><i class="fas fa-code"></i> CWE-94: Code Injection</h3>
+                <div class="severity-badge severity-critical-badge">
+                    <i class="fas fa-skull-crossbones"></i> CRITICAL - AUTO BLOCKED
+                </div>
                 <p><strong>Risk:</strong> Arbitrary code execution from untrusted input</p>
                 <p><strong>Detection:</strong> <code>eval()</code>, <code>exec()</code>, dynamic code compilation</p>
-                <pre><code class="bad">
-# VULNERABLE
-user_input = request.GET['code']
-eval(user_input)  # CWE-94 detected
-                </code></pre>
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+# VULNERABLE - CWE-94 Detected<br/>
+user_input = request.GET['code']<br/>
+eval(user_input)  # <span style="color: var(--cwe-critical);">← BLOCKED BY CHALLENGE ENGINE</span>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+# SECURE - Input validation + safe execution<br/>
+if is_valid_expression(user_input):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;result = safe_eval(user_input, allowed_functions)
+                </div>
             </div>
 
-            <div class="vulnerability-item">
-                <h3>CWE-95: Unsafe Deserialization</h3>
+            <div class="vulnerability-card severity-high">
+                <h3><i class="fas fa-file-import"></i> CWE-95: Unsafe Deserialization</h3>
+                <div class="severity-badge severity-high-badge">
+                    <i class="fas fa-exclamation-triangle"></i> HIGH - WARNING + RECOMMENDATION
+                </div>
                 <p><strong>Risk:</strong> Remote code execution via malicious serialized objects</p>
                 <p><strong>Detection:</strong> <code>pickle.loads()</code>, <code>yaml.load()</code> without SafeLoader</p>
-                <pre><code class="bad">
-# VULNERABLE
-import pickle
-data = pickle.loads(untrusted_input)  # CWE-95 detected
-                </code></pre>
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+import pickle<br/>
+data = pickle.loads(untrusted_input)  # <span style="color: var(--cwe-high);">← CWE-95 DETECTED</span>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+import json<br/>
+data = json.loads(untrusted_input)  # Use JSON instead
+                </div>
             </div>
 
-            <div class="vulnerability-item">
-                <h3>CWE-78: Command Injection</h3>
+            <div class="vulnerability-card severity-critical">
+                <h3><i class="fas fa-terminal"></i> CWE-78: Command Injection</h3>
+                <div class="severity-badge severity-critical-badge">
+                    <i class="fas fa-skull-crossbones"></i> CRITICAL - AUTO BLOCKED
+                </div>
                 <p><strong>Risk:</strong> OS command execution from untrusted input</p>
                 <p><strong>Detection:</strong> <code>os.system()</code>, <code>subprocess.call()</code> with shell=True</p>
-                <pre><code class="bad">
-# VULNERABLE
-import os
-os.system(f"rm {user_file}")  # CWE-78 detected
-                </code></pre>
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+import os<br/>
+os.system(f"rm {user_file}")  # <span style="color: var(--cwe-critical);">← BLOCKED BY CHALLENGE ENGINE</span>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+import subprocess<br/>
+subprocess.run(['rm', user_file], shell=False)  # Safe execution
+                </div>
             </div>
 
-            <div class="vulnerability-item">
-                <h3>CWE-89: SQL Injection</h3>
+            <div class="vulnerability-card severity-critical">
+                <h3><i class="fas fa-database"></i> CWE-89: SQL Injection</h3>
+                <div class="severity-badge severity-critical-badge">
+                    <i class="fas fa-skull-crossbones"></i> CRITICAL - AUTO BLOCKED
+                </div>
                 <p><strong>Risk:</strong> Database manipulation via SQL injection</p>
                 <p><strong>Detection:</strong> String concatenation in SQL queries</p>
-                <pre><code class="bad">
-# VULNERABLE
-query = f"SELECT * FROM users WHERE id = {user_id}"  # CWE-89 detected
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+query = f"SELECT * FROM users WHERE id = {user_id}"  # <span style="color: var(--cwe-critical);">← CWE-89 DETECTED</span><br/>
 cursor.execute(query)
-                </code></pre>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+query = "SELECT * FROM users WHERE id = %s"<br/>
+cursor.execute(query, (user_id,))  # Parameterized query
+                </div>
             </div>
 
-            <div class="vulnerability-item">
-                <h3>CWE-327: Weak Cryptography</h3>
+            <div class="vulnerability-card severity-high">
+                <h3><i class="fas fa-key"></i> CWE-327: Weak Cryptography</h3>
+                <div class="severity-badge severity-high-badge">
+                    <i class="fas fa-exclamation-triangle"></i> HIGH - WARNING + RECOMMENDATION
+                </div>
                 <p><strong>Risk:</strong> Data compromise via weak encryption algorithms</p>
                 <p><strong>Detection:</strong> MD5, SHA1, DES usage</p>
-                <pre><code class="bad">
-# VULNERABLE
-import hashlib
-password_hash = hashlib.md5(password).hexdigest()  # CWE-327 detected
-                </code></pre>
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+import hashlib<br/>
+password_hash = hashlib.md5(password).hexdigest()  # <span style="color: var(--cwe-high);">← CWE-327 DETECTED</span>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+import bcrypt<br/>
+password_hash = bcrypt.hashpw(password, bcrypt.gensalt())  # Strong hashing
+                </div>
             </div>
 
-            <div class="vulnerability-item">
-                <h3>CWE-22: Path Traversal</h3>
+            <div class="vulnerability-card severity-high">
+                <h3><i class="fas fa-folder-open"></i> CWE-22: Path Traversal</h3>
+                <div class="severity-badge severity-high-badge">
+                    <i class="fas fa-exclamation-triangle"></i> HIGH - WARNING + RECOMMENDATION
+                </div>
                 <p><strong>Risk:</strong> Unauthorized file system access</p>
                 <p><strong>Detection:</strong> <code>../</code> patterns in file paths, unvalidated user paths</p>
-                <pre><code class="bad">
-# VULNERABLE
-file_path = f"/uploads/{user_filename}"  # CWE-22 if user_filename contains ../
+                
+                <h4>❌ Vulnerable Code:</h4>
+                <div class="code-example">
+file_path = f"/uploads/{user_filename}"  # <span style="color: var(--cwe-high);">← CWE-22 if user_filename contains ../</span><br/>
 open(file_path, 'r')
-                </code></pre>
+                </div>
+                
+                <h4>✅ Secure Alternative:</h4>
+                <div class="code-example code-good">
+from pathlib import Path<br/>
+safe_path = Path("/uploads").joinpath(user_filename).resolve()<br/>
+if safe_path.is_relative_to("/uploads"):<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;open(safe_path, 'r')
+                </div>
             </div>
         </section>
 
         <section class="glass-card">
-            <h2>Integration with ChallengeEngine</h2>
-            <p>Security violations detected by LENS trigger the <strong>ChallengeEngine</strong> (Phase 8.3), which blocks execution and requires explicit override approval.</p>
-            <p>Severity levels:</p>
-            <ul>
-                <li><strong>CRITICAL:</strong> Code/SQL/Command Injection → BLOCKED</li>
-                <li><strong>HIGH:</strong> Deserialization, Weak Crypto → WARNING + Recommendation</li>
-                <li><strong>MEDIUM:</strong> Path Traversal → RECOMMENDATION</li>
-            </ul>
-        </section>
-
-        <section class="glass-card">
-            <h2>MCP Integration</h2>
-            <pre><code>
-# Security scan via MCP
-result = cortex_lens_analyze(
-    file_path="api/auth.py",
-    include_security=True
-)
-
-# Result includes detected vulnerabilities
-vulnerabilities = result['security_analysis']['threats']
-            </code></pre>
+            <h2>🔗 Integration with Challenge Engine</h2>
+            <p>Security violations detected by LENS trigger the <strong>ChallengeEngine</strong> (Phase 8.3), which implements a governance flow:</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card" style="border-left: 4px solid var(--cwe-critical);">
+                    <h4>CRITICAL Violations</h4>
+                    <p>CWE-94, CWE-78, CWE-89</p>
+                    <p style="color: var(--cwe-critical); font-weight: 700;">→ AUTO BLOCKED</p>
+                    <p style="font-size: 0.875rem;">Execution halted immediately</p>
+                </div>
+                
+                <div class="stat-card" style="border-left: 4px solid var(--cwe-high);">
+                    <h4>HIGH Violations</h4>
+                    <p>CWE-95, CWE-327, CWE-22</p>
+                    <p style="color: var(--cwe-high); font-weight: 700;">→ WARNING</p>
+                    <p style="font-size: 0.875rem;">Requires explicit approval</p>
+                </div>
+                
+                <div class="stat-card" style="border-left: 4px solid var(--cwe-medium);">
+                    <h4>Remediation</h4>
+                    <p>Secure code patterns</p>
+                    <p style="color: var(--cwe-medium); font-weight: 700;">→ AUTO SUGGESTED</p>
+                    <p style="font-size: 0.875rem;">AI-powered fixes provided</p>
+                </div>
+            </div>
         </section>
 
         <footer class="page-footer">
-            <a href="crawlers.html" class="btn-back">← Back to Analyzers</a>
-            <a href="index.html" class="btn-secondary">LENS Overview</a>
+            <a href="index.html" class="btn-back">← Back to LENS Overview</a>
         </footer>
     </div>
+
+    <script>
+        // CWE Architecture Visualization
+        const container = document.getElementById('cwe-architecture');
+        const width = Math.min(container.offsetWidth - 40, 1200);
+        const height = 450;
+
+        const svg = d3.select('#cwe-architecture')
+            .append('svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        const nodes = [
+            // Input
+            { id: 'code', label: 'Source\nCode', x: 100, y: height/2, r: 40, color: '#ffffff' },
+            
+            // CWE Detectors (left arc)
+            { id: 'cwe94', label: 'CWE-94\nCode Inj', x: 280, y: 80, r: 32, color: '#ef4444' },
+            { id: 'cwe95', label: 'CWE-95\nDeserial', x: 280, y: 145, r: 32, color: '#f59e0b' },
+            { id: 'cwe78', label: 'CWE-78\nCmd Inj', x: 280, y: 210, r: 32, color: '#ef4444' },
+            { id: 'cwe89', label: 'CWE-89\nSQL Inj', x: 280, y: 275, r: 32, color: '#ef4444' },
+            { id: 'cwe327', label: 'CWE-327\nWeak Crypto', x: 280, y: 340, r: 32, color: '#f59e0b' },
+            { id: 'cwe22', label: 'CWE-22\nPath Trav', x: 280, y: 405, r: 32, color: '#f59e0b' },
+            
+            // Aggregator
+            { id: 'scanner', label: 'Security\nScanner', x: 500, y: height/2, r: 45, color: '#7b61ff' },
+            
+            // Challenge Engine
+            { id: 'challenge', label: 'Challenge\nEngine', x: 700, y: height/2, r: 45, color: '#00d4ff' },
+            
+            // Outputs
+            { id: 'block', label: 'BLOCK\n(Critical)', x: 900, y: 150, r: 35, color: '#ef4444' },
+            { id: 'warn', label: 'WARN\n(High)', x: 900, y: 280, r: 35, color: '#f59e0b' },
+            { id: 'pass', label: 'PASS\n(Safe)', x: 900, y: 350, r: 35, color: '#10b981' },
+        ];
+
+        const links = [
+            // Code to detectors
+            { source: 'code', target: 'cwe94' },
+            { source: 'code', target: 'cwe95' },
+            { source: 'code', target: 'cwe78' },
+            { source: 'code', target: 'cwe89' },
+            { source: 'code', target: 'cwe327' },
+            { source: 'code', target: 'cwe22' },
+            
+            // Detectors to scanner
+            { source: 'cwe94', target: 'scanner' },
+            { source: 'cwe95', target: 'scanner' },
+            { source: 'cwe78', target: 'scanner' },
+            { source: 'cwe89', target: 'scanner' },
+            { source: 'cwe327', target: 'scanner' },
+            { source: 'cwe22', target: 'scanner' },
+            
+            // Scanner to challenge
+            { source: 'scanner', target: 'challenge' },
+            
+            // Challenge to outputs
+            { source: 'challenge', target: 'block' },
+            { source: 'challenge', target: 'warn' },
+            { source: 'challenge', target: 'pass' },
+        ];
+
+        // Draw links
+        const linkGroup = svg.append('g');
+        links.forEach(link => {
+            const source = nodes.find(n => n.id === link.source);
+            const target = nodes.find(n => n.id === link.target);
+            
+            linkGroup.append('line')
+                .attr('class', 'detection-link')
+                .attr('x1', source.x)
+                .attr('y1', source.y)
+                .attr('x2', target.x)
+                .attr('y2', target.y)
+                .attr('stroke', source.color)
+                .attr('opacity', 0.4);
+        });
+
+        // Draw nodes
+        const nodeGroup = svg.append('g');
+        nodes.forEach(node => {
+            const g = nodeGroup.append('g')
+                .attr('class', 'cwe-node')
+                .attr('transform', `translate(${node.x}, ${node.y})`);
+            
+            g.append('circle')
+                .attr('r', node.r)
+                .attr('fill', node.color)
+                .attr('fill-opacity', 0.2)
+                .attr('stroke', node.color)
+                .attr('stroke-width', 3);
+            
+            const lines = node.label.split('\n');
+            lines.forEach((line, i) => {
+                g.append('text')
+                    .attr('dy', (i - (lines.length - 1) / 2) * 13)
+                    .text(line);
+            });
+        });
+
+        // Add hover effects
+        svg.selectAll('.cwe-node')
+            .on('mouseover', function(event, d) {
+                d3.select(this).select('circle')
+                    .transition()
+                    .duration(200)
+                    .attr('r', function() {
+                        return parseFloat(d3.select(this).attr('r')) * 1.15;
+                    });
+            })
+            .on('mouseout', function(event, d) {
+                d3.select(this).select('circle')
+                    .transition()
+                    .duration(200)
+                    .attr('r', function() {
+                        return parseFloat(d3.select(this).attr('r')) / 1.15;
+                    });
+            });
+    </script>
 </body>
 </html>
