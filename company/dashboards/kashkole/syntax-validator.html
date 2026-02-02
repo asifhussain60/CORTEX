@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Syntax Validator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-results {
+            margin-top: 1.5rem;
+        }
+        .test-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #f8f9fa;
+        }
+        .test-item.pass {
+            border-left: 4px solid #28a745;
+        }
+        .test-item.fail {
+            border-left: 4px solid #dc3545;
+        }
+        .test-icon {
+            font-size: 1.5rem;
+        }
+        .test-details {
+            flex: 1;
+        }
+        .test-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .test-message {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        .summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary h2 {
+            margin-bottom: 1rem;
+        }
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.25rem;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        .button:hover {
+            background: #5568d3;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Dashboard Syntax Validator</h1>
+        
+        <div id="status" class="status pending">
+            ⏳ Loading dashboard and running validation...
+        </div>
+
+        <div class="test-results" id="results"></div>
+
+        <div class="summary" id="summary" style="display: none;">
+            <h2>Test Summary</h2>
+            <div class="summary-stats">
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold;" id="passCount">0</div>
+                    <div>Passed</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold;" id="failCount">0</div>
+                    <div>Failed</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold;" id="totalCount">0</div>
+                    <div>Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tests = [];
+        let passCount = 0;
+        let failCount = 0;
+
+        function addTest(name, passed, message = '') {
+            tests.push({ name, passed, message });
+            if (passed) passCount++;
+            else failCount++;
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('results');
+            const statusDiv = document.getElementById('status');
+            const summaryDiv = document.getElementById('summary');
+
+            // Update status
+            if (failCount === 0) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ All syntax validation tests passed!';
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `❌ ${failCount} test(s) failed. See details below.`;
+            }
+
+            // Display test results
+            tests.forEach(test => {
+                const testItem = document.createElement('div');
+                testItem.className = `test-item ${test.passed ? 'pass' : 'fail'}`;
+                testItem.innerHTML = `
+                    <div class="test-icon">${test.passed ? '✅' : '❌'}</div>
+                    <div class="test-details">
+                        <div class="test-name">${test.name}</div>
+                        ${test.message ? `<div class="test-message">${test.message}</div>` : ''}
+                    </div>
+                `;
+                resultsDiv.appendChild(testItem);
+            });
+
+            // Update summary
+            document.getElementById('passCount').textContent = passCount;
+            document.getElementById('failCount').textContent = failCount;
+            document.getElementById('totalCount').textContent = tests.length;
+            summaryDiv.style.display = 'block';
+        }
+
+        // Run tests
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = 'dashboard-gpt.html';
+                document.body.appendChild(iframe);
+
+                iframe.onerror = () => {
+                    addTest('Dashboard Load', false, 'Failed to load dashboard-gpt.html');
+                    displayResults();
+                };
+
+                iframe.onload = () => {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const iframeWindow = iframe.contentWindow;
+
+                    // Test 1: No JavaScript errors
+                    let hasJsErrors = false;
+                    const originalError = window.console.error;
+                    window.console.error = function(...args) {
+                        hasJsErrors = true;
+                        originalError.apply(console, args);
+                    };
+                    
+                    setTimeout(() => {
+                        addTest('JavaScript Loads Without Errors', !hasJsErrors, 
+                            hasJsErrors ? 'Console errors detected' : 'No console errors');
+
+                        // Test 2: Script tag exists
+                        const scripts = iframeDoc.querySelectorAll('script');
+                        addTest('Script Tag Present', scripts.length > 0, 
+                            `Found ${scripts.length} script tag(s)`);
+
+                        // Test 3: DOMContentLoaded listener
+                        const scriptContent = Array.from(scripts).map(s => s.textContent).join('');
+                        const hasDOMReady = scriptContent.includes('DOMContentLoaded');
+                        addTest('DOMContentLoaded Listener', hasDOMReady,
+                            hasDOMReady ? 'Event listener found' : 'Missing DOMContentLoaded');
+
+                        // Test 4: chartConfigs object
+                        const hasChartConfigs = scriptContent.includes('const chartConfigs');
+                        addTest('chartConfigs Object Defined', hasChartConfigs,
+                            hasChartConfigs ? 'Chart configuration object found' : 'Missing chartConfigs');
+
+                        // Test 5: All 9 chart functions
+                        const chartIds = [
+                            'code-smells-chart', 'anti-patterns-chart', 'security-chart',
+                            'best-practices-chart', 'dep-audit-chart', 'complexity-chart',
+                            'duplication-chart', 'license-chart', 'coverage-trend-chart'
+                        ];
+                        let missingCharts = [];
+                        chartIds.forEach(id => {
+                            if (!scriptContent.includes(`'${id}':`)) {
+                                missingCharts.push(id);
+                            }
+                        });
+                        addTest('All Chart Functions Present', missingCharts.length === 0,
+                            missingCharts.length === 0 ? '9/9 charts found' : `Missing: ${missingCharts.join(', ')}`);
+
+                        // Test 6: initializeChart function
+                        const hasInitFunc = scriptContent.includes('function initializeChart');
+                        addTest('initializeChart Function', hasInitFunc,
+                            hasInitFunc ? 'Function defined' : 'Missing function');
+
+                        // Test 7: Tab navigation
+                        const hasTabNav = scriptContent.includes('const tabButtons');
+                        addTest('Tab Navigation Code', hasTabNav,
+                            hasTabNav ? 'Tab handling code found' : 'Missing tab navigation');
+
+                        // Test 8: Progress bars selector
+                        const hasProgressBars = scriptContent.includes('const progressBars');
+                        addTest('Progress Bars Selector', hasProgressBars,
+                            hasProgressBars ? 'Selector defined' : 'Missing progressBars variable');
+
+                        // Test 9: Braces balance
+                        const openBraces = (scriptContent.match(/\{/g) || []).length;
+                        const closeBraces = (scriptContent.match(/\}/g) || []).length;
+                        const balanced = openBraces === closeBraces;
+                        addTest('Balanced Braces', balanced,
+                            balanced ? `${openBraces} open, ${closeBraces} close` : `Mismatch: ${openBraces} open, ${closeBraces} close`);
+
+                        // Test 10: No obvious syntax errors
+                        const hasSyntaxErrors = 
+                            scriptContent.includes(');on') ||
+                            scriptContent.includes(')on') ||
+                            scriptContent.includes('};on') ||
+                            /\)\s*[a-z][a-z]+\s*=/.test(scriptContent);
+                        addTest('No Obvious Syntax Errors', !hasSyntaxErrors,
+                            !hasSyntaxErrors ? 'No concatenated statements found' : 'Possible syntax issues detected');
+
+                        // Display all results
+                        displayResults();
+                        
+                        // Clean up
+                        document.body.removeChild(iframe);
+                    }, 2000);
+                };
+            }, 500);
+        });
+    </script>
+</body>
+</html>
