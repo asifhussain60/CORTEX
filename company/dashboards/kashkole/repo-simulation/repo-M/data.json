@@ -1,0 +1,1362 @@
+{
+  "tier": "repo-M",
+  "directoryTree": {
+    "name": "root",
+    "children": [
+      {
+        "name": "item_0",
+        "children": [
+          {
+            "name": "item_0",
+            "value": 2910,
+            "type": "file"
+          },
+          {
+            "name": "item_1",
+            "value": 3194,
+            "type": "file"
+          },
+          {
+            "name": "item_2",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 1687,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 2275,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 1218,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 4278,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 503,
+                "type": "file"
+              },
+              {
+                "name": "item_5",
+                "value": 326,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_3",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 4300,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 3613,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 837,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 340,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 1119,
+                "type": "file"
+              },
+              {
+                "name": "item_5",
+                "value": 3267,
+                "type": "file"
+              },
+              {
+                "name": "item_6",
+                "value": 3477,
+                "type": "file"
+              },
+              {
+                "name": "item_7",
+                "value": 3390,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_4",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 4167,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 4649,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 1404,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_5",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 1189,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 3322,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 1776,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 2744,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 1992,
+                "type": "file"
+              },
+              {
+                "name": "item_5",
+                "value": 1713,
+                "type": "file"
+              },
+              {
+                "name": "item_6",
+                "value": 4772,
+                "type": "file"
+              },
+              {
+                "name": "item_7",
+                "value": 4319,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_6",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 1028,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 270,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_7",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 3682,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 2806,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 4067,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 164,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 3580,
+                "type": "file"
+              },
+              {
+                "name": "item_5",
+                "value": 491,
+                "type": "file"
+              },
+              {
+                "name": "item_6",
+                "value": 1225,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          }
+        ],
+        "type": "directory"
+      },
+      {
+        "name": "item_1",
+        "children": [
+          {
+            "name": "item_0",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 139,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 1421,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 2913,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 734,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 3293,
+                "type": "file"
+              },
+              {
+                "name": "item_5",
+                "value": 844,
+                "type": "file"
+              },
+              {
+                "name": "item_6",
+                "value": 1764,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_1",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 4012,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 55,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 3507,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 1256,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_2",
+            "value": 1821,
+            "type": "file"
+          },
+          {
+            "name": "item_3",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 4460,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 3820,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_4",
+            "value": 3631,
+            "type": "file"
+          },
+          {
+            "name": "item_5",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 2274,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 2579,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 1922,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          }
+        ],
+        "type": "directory"
+      }
+    ],
+    "type": "directory"
+  },
+  "dependencies": {
+    "nodes": [
+      {
+        "id": "module_0",
+        "group": 4
+      },
+      {
+        "id": "module_1",
+        "group": 5
+      },
+      {
+        "id": "module_2",
+        "group": 2
+      },
+      {
+        "id": "module_3",
+        "group": 2
+      },
+      {
+        "id": "module_4",
+        "group": 5
+      },
+      {
+        "id": "module_5",
+        "group": 3
+      },
+      {
+        "id": "module_6",
+        "group": 2
+      },
+      {
+        "id": "module_7",
+        "group": 3
+      },
+      {
+        "id": "module_8",
+        "group": 1
+      },
+      {
+        "id": "module_9",
+        "group": 5
+      },
+      {
+        "id": "module_10",
+        "group": 1
+      },
+      {
+        "id": "module_11",
+        "group": 2
+      },
+      {
+        "id": "module_12",
+        "group": 5
+      },
+      {
+        "id": "module_13",
+        "group": 3
+      },
+      {
+        "id": "module_14",
+        "group": 2
+      },
+      {
+        "id": "module_15",
+        "group": 3
+      },
+      {
+        "id": "module_16",
+        "group": 1
+      },
+      {
+        "id": "module_17",
+        "group": 4
+      },
+      {
+        "id": "module_18",
+        "group": 3
+      },
+      {
+        "id": "module_19",
+        "group": 2
+      },
+      {
+        "id": "module_20",
+        "group": 3
+      },
+      {
+        "id": "module_21",
+        "group": 5
+      },
+      {
+        "id": "module_22",
+        "group": 5
+      },
+      {
+        "id": "module_23",
+        "group": 2
+      },
+      {
+        "id": "module_24",
+        "group": 2
+      },
+      {
+        "id": "module_25",
+        "group": 3
+      },
+      {
+        "id": "module_26",
+        "group": 4
+      },
+      {
+        "id": "module_27",
+        "group": 2
+      },
+      {
+        "id": "module_28",
+        "group": 2
+      },
+      {
+        "id": "module_29",
+        "group": 1
+      },
+      {
+        "id": "module_30",
+        "group": 2
+      },
+      {
+        "id": "module_31",
+        "group": 1
+      },
+      {
+        "id": "module_32",
+        "group": 3
+      },
+      {
+        "id": "module_33",
+        "group": 3
+      },
+      {
+        "id": "module_34",
+        "group": 1
+      },
+      {
+        "id": "module_35",
+        "group": 5
+      },
+      {
+        "id": "module_36",
+        "group": 3
+      },
+      {
+        "id": "module_37",
+        "group": 1
+      },
+      {
+        "id": "module_38",
+        "group": 3
+      },
+      {
+        "id": "module_39",
+        "group": 3
+      },
+      {
+        "id": "module_40",
+        "group": 2
+      },
+      {
+        "id": "module_41",
+        "group": 3
+      },
+      {
+        "id": "module_42",
+        "group": 2
+      },
+      {
+        "id": "module_43",
+        "group": 2
+      }
+    ],
+    "links": [
+      {
+        "source": "module_0",
+        "target": "module_4",
+        "value": 7
+      },
+      {
+        "source": "module_1",
+        "target": "module_4",
+        "value": 7
+      },
+      {
+        "source": "module_1",
+        "target": "module_8",
+        "value": 7
+      },
+      {
+        "source": "module_1",
+        "target": "module_24",
+        "value": 9
+      },
+      {
+        "source": "module_1",
+        "target": "module_11",
+        "value": 5
+      },
+      {
+        "source": "module_1",
+        "target": "module_38",
+        "value": 5
+      },
+      {
+        "source": "module_2",
+        "target": "module_14",
+        "value": 1
+      },
+      {
+        "source": "module_2",
+        "target": "module_25",
+        "value": 7
+      },
+      {
+        "source": "module_3",
+        "target": "module_16",
+        "value": 7
+      },
+      {
+        "source": "module_3",
+        "target": "module_31",
+        "value": 7
+      },
+      {
+        "source": "module_4",
+        "target": "module_29",
+        "value": 6
+      },
+      {
+        "source": "module_5",
+        "target": "module_19",
+        "value": 7
+      },
+      {
+        "source": "module_5",
+        "target": "module_13",
+        "value": 8
+      },
+      {
+        "source": "module_5",
+        "target": "module_40",
+        "value": 5
+      },
+      {
+        "source": "module_6",
+        "target": "module_4",
+        "value": 4
+      },
+      {
+        "source": "module_6",
+        "target": "module_22",
+        "value": 2
+      },
+      {
+        "source": "module_6",
+        "target": "module_3",
+        "value": 9
+      },
+      {
+        "source": "module_6",
+        "target": "module_41",
+        "value": 1
+      },
+      {
+        "source": "module_7",
+        "target": "module_5",
+        "value": 6
+      },
+      {
+        "source": "module_7",
+        "target": "module_42",
+        "value": 7
+      },
+      {
+        "source": "module_7",
+        "target": "module_27",
+        "value": 4
+      },
+      {
+        "source": "module_7",
+        "target": "module_32",
+        "value": 2
+      },
+      {
+        "source": "module_8",
+        "target": "module_32",
+        "value": 8
+      },
+      {
+        "source": "module_8",
+        "target": "module_0",
+        "value": 7
+      },
+      {
+        "source": "module_8",
+        "target": "module_4",
+        "value": 7
+      },
+      {
+        "source": "module_8",
+        "target": "module_10",
+        "value": 3
+      },
+      {
+        "source": "module_9",
+        "target": "module_11",
+        "value": 8
+      },
+      {
+        "source": "module_9",
+        "target": "module_4",
+        "value": 3
+      },
+      {
+        "source": "module_9",
+        "target": "module_42",
+        "value": 1
+      },
+      {
+        "source": "module_9",
+        "target": "module_25",
+        "value": 2
+      },
+      {
+        "source": "module_9",
+        "target": "module_30",
+        "value": 2
+      },
+      {
+        "source": "module_10",
+        "target": "module_0",
+        "value": 1
+      },
+      {
+        "source": "module_10",
+        "target": "module_34",
+        "value": 2
+      },
+      {
+        "source": "module_11",
+        "target": "module_40",
+        "value": 10
+      },
+      {
+        "source": "module_11",
+        "target": "module_3",
+        "value": 8
+      },
+      {
+        "source": "module_11",
+        "target": "module_20",
+        "value": 8
+      },
+      {
+        "source": "module_11",
+        "target": "module_43",
+        "value": 9
+      },
+      {
+        "source": "module_11",
+        "target": "module_19",
+        "value": 6
+      },
+      {
+        "source": "module_12",
+        "target": "module_9",
+        "value": 3
+      },
+      {
+        "source": "module_12",
+        "target": "module_38",
+        "value": 9
+      },
+      {
+        "source": "module_12",
+        "target": "module_10",
+        "value": 10
+      },
+      {
+        "source": "module_13",
+        "target": "module_27",
+        "value": 8
+      },
+      {
+        "source": "module_13",
+        "target": "module_19",
+        "value": 5
+      },
+      {
+        "source": "module_13",
+        "target": "module_2",
+        "value": 1
+      },
+      {
+        "source": "module_13",
+        "target": "module_34",
+        "value": 8
+      },
+      {
+        "source": "module_13",
+        "target": "module_4",
+        "value": 10
+      },
+      {
+        "source": "module_14",
+        "target": "module_28",
+        "value": 3
+      },
+      {
+        "source": "module_14",
+        "target": "module_21",
+        "value": 5
+      },
+      {
+        "source": "module_15",
+        "target": "module_40",
+        "value": 3
+      },
+      {
+        "source": "module_15",
+        "target": "module_38",
+        "value": 5
+      },
+      {
+        "source": "module_15",
+        "target": "module_28",
+        "value": 3
+      },
+      {
+        "source": "module_15",
+        "target": "module_37",
+        "value": 10
+      },
+      {
+        "source": "module_16",
+        "target": "module_23",
+        "value": 4
+      },
+      {
+        "source": "module_16",
+        "target": "module_4",
+        "value": 10
+      },
+      {
+        "source": "module_17",
+        "target": "module_43",
+        "value": 8
+      },
+      {
+        "source": "module_18",
+        "target": "module_35",
+        "value": 2
+      },
+      {
+        "source": "module_19",
+        "target": "module_16",
+        "value": 8
+      },
+      {
+        "source": "module_20",
+        "target": "module_31",
+        "value": 5
+      },
+      {
+        "source": "module_20",
+        "target": "module_23",
+        "value": 5
+      },
+      {
+        "source": "module_20",
+        "target": "module_14",
+        "value": 10
+      },
+      {
+        "source": "module_20",
+        "target": "module_41",
+        "value": 6
+      },
+      {
+        "source": "module_21",
+        "target": "module_30",
+        "value": 10
+      },
+      {
+        "source": "module_21",
+        "target": "module_27",
+        "value": 4
+      },
+      {
+        "source": "module_21",
+        "target": "module_5",
+        "value": 2
+      },
+      {
+        "source": "module_22",
+        "target": "module_18",
+        "value": 8
+      },
+      {
+        "source": "module_22",
+        "target": "module_15",
+        "value": 1
+      },
+      {
+        "source": "module_22",
+        "target": "module_43",
+        "value": 7
+      },
+      {
+        "source": "module_22",
+        "target": "module_24",
+        "value": 7
+      },
+      {
+        "source": "module_23",
+        "target": "module_35",
+        "value": 9
+      },
+      {
+        "source": "module_23",
+        "target": "module_22",
+        "value": 5
+      },
+      {
+        "source": "module_23",
+        "target": "module_43",
+        "value": 2
+      },
+      {
+        "source": "module_24",
+        "target": "module_32",
+        "value": 2
+      },
+      {
+        "source": "module_24",
+        "target": "module_8",
+        "value": 9
+      },
+      {
+        "source": "module_24",
+        "target": "module_41",
+        "value": 5
+      },
+      {
+        "source": "module_24",
+        "target": "module_26",
+        "value": 5
+      },
+      {
+        "source": "module_24",
+        "target": "module_28",
+        "value": 6
+      },
+      {
+        "source": "module_25",
+        "target": "module_38",
+        "value": 5
+      },
+      {
+        "source": "module_26",
+        "target": "module_21",
+        "value": 1
+      },
+      {
+        "source": "module_26",
+        "target": "module_16",
+        "value": 4
+      },
+      {
+        "source": "module_26",
+        "target": "module_2",
+        "value": 9
+      },
+      {
+        "source": "module_27",
+        "target": "module_28",
+        "value": 7
+      },
+      {
+        "source": "module_27",
+        "target": "module_37",
+        "value": 10
+      },
+      {
+        "source": "module_27",
+        "target": "module_0",
+        "value": 8
+      },
+      {
+        "source": "module_27",
+        "target": "module_28",
+        "value": 6
+      },
+      {
+        "source": "module_28",
+        "target": "module_31",
+        "value": 7
+      },
+      {
+        "source": "module_28",
+        "target": "module_20",
+        "value": 9
+      },
+      {
+        "source": "module_29",
+        "target": "module_7",
+        "value": 5
+      },
+      {
+        "source": "module_29",
+        "target": "module_39",
+        "value": 4
+      },
+      {
+        "source": "module_29",
+        "target": "module_2",
+        "value": 5
+      },
+      {
+        "source": "module_29",
+        "target": "module_10",
+        "value": 5
+      },
+      {
+        "source": "module_30",
+        "target": "module_7",
+        "value": 5
+      },
+      {
+        "source": "module_30",
+        "target": "module_42",
+        "value": 2
+      },
+      {
+        "source": "module_30",
+        "target": "module_3",
+        "value": 3
+      },
+      {
+        "source": "module_30",
+        "target": "module_7",
+        "value": 5
+      },
+      {
+        "source": "module_31",
+        "target": "module_25",
+        "value": 1
+      },
+      {
+        "source": "module_31",
+        "target": "module_36",
+        "value": 1
+      },
+      {
+        "source": "module_31",
+        "target": "module_37",
+        "value": 9
+      },
+      {
+        "source": "module_31",
+        "target": "module_40",
+        "value": 10
+      },
+      {
+        "source": "module_31",
+        "target": "module_3",
+        "value": 5
+      },
+      {
+        "source": "module_32",
+        "target": "module_28",
+        "value": 10
+      },
+      {
+        "source": "module_33",
+        "target": "module_16",
+        "value": 4
+      },
+      {
+        "source": "module_33",
+        "target": "module_15",
+        "value": 6
+      },
+      {
+        "source": "module_33",
+        "target": "module_26",
+        "value": 10
+      },
+      {
+        "source": "module_34",
+        "target": "module_17",
+        "value": 5
+      },
+      {
+        "source": "module_34",
+        "target": "module_40",
+        "value": 10
+      },
+      {
+        "source": "module_34",
+        "target": "module_10",
+        "value": 3
+      },
+      {
+        "source": "module_35",
+        "target": "module_12",
+        "value": 7
+      },
+      {
+        "source": "module_35",
+        "target": "module_14",
+        "value": 7
+      },
+      {
+        "source": "module_35",
+        "target": "module_37",
+        "value": 5
+      },
+      {
+        "source": "module_36",
+        "target": "module_26",
+        "value": 6
+      },
+      {
+        "source": "module_37",
+        "target": "module_32",
+        "value": 4
+      },
+      {
+        "source": "module_37",
+        "target": "module_20",
+        "value": 9
+      },
+      {
+        "source": "module_37",
+        "target": "module_13",
+        "value": 3
+      },
+      {
+        "source": "module_37",
+        "target": "module_39",
+        "value": 4
+      },
+      {
+        "source": "module_37",
+        "target": "module_1",
+        "value": 6
+      },
+      {
+        "source": "module_38",
+        "target": "module_12",
+        "value": 4
+      },
+      {
+        "source": "module_38",
+        "target": "module_26",
+        "value": 1
+      },
+      {
+        "source": "module_38",
+        "target": "module_11",
+        "value": 4
+      },
+      {
+        "source": "module_38",
+        "target": "module_3",
+        "value": 2
+      },
+      {
+        "source": "module_39",
+        "target": "module_7",
+        "value": 9
+      },
+      {
+        "source": "module_39",
+        "target": "module_40",
+        "value": 10
+      },
+      {
+        "source": "module_39",
+        "target": "module_12",
+        "value": 9
+      },
+      {
+        "source": "module_39",
+        "target": "module_20",
+        "value": 6
+      },
+      {
+        "source": "module_40",
+        "target": "module_13",
+        "value": 3
+      },
+      {
+        "source": "module_40",
+        "target": "module_42",
+        "value": 9
+      },
+      {
+        "source": "module_40",
+        "target": "module_7",
+        "value": 3
+      },
+      {
+        "source": "module_40",
+        "target": "module_35",
+        "value": 3
+      },
+      {
+        "source": "module_40",
+        "target": "module_15",
+        "value": 2
+      },
+      {
+        "source": "module_41",
+        "target": "module_25",
+        "value": 9
+      },
+      {
+        "source": "module_42",
+        "target": "module_20",
+        "value": 10
+      },
+      {
+        "source": "module_42",
+        "target": "module_15",
+        "value": 1
+      },
+      {
+        "source": "module_42",
+        "target": "module_7",
+        "value": 1
+      },
+      {
+        "source": "module_42",
+        "target": "module_2",
+        "value": 2
+      },
+      {
+        "source": "module_43",
+        "target": "module_40",
+        "value": 10
+      },
+      {
+        "source": "module_43",
+        "target": "module_2",
+        "value": 1
+      },
+      {
+        "source": "module_43",
+        "target": "module_5",
+        "value": 5
+      },
+      {
+        "source": "module_43",
+        "target": "module_34",
+        "value": 6
+      }
+    ]
+  },
+  "qualityMetrics": {
+    "maintainability": 86,
+    "complexity": 85,
+    "testCoverage": 77,
+    "documentation": 84,
+    "security": 88,
+    "performance": 86
+  },
+  "complexityData": {
+    "labels": [
+      "1-5 (Simple)",
+      "6-10 (Moderate)",
+      "11-15 (Complex)",
+      "16-20 (High)",
+      "21+ (Very High)"
+    ],
+    "data": [
+      2676,
+      1115,
+      446,
+      178,
+      44
+    ]
+  },
+  "locDistribution": {
+    "labels": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "CSS",
+      "HTML",
+      "SQL",
+      "YAML",
+      "JSON"
+    ],
+    "data": [
+      46830,
+      33450,
+      20070,
+      13380,
+      10704,
+      5352,
+      2676,
+      1338
+    ]
+  },
+  "vulnerabilities": {
+    "codeSmells": 8,
+    "antiPatterns": 4,
+    "securityIssues": 2,
+    "bestPractices": 7
+  },
+  "dependencyTree": {
+    "name": "root"
+  },
+  "testingPyramid": {
+    "unit": 7492,
+    "integration": 2140,
+    "e2e": 1070
+  },
+  "repoMetrics": {
+    "totalFiles": 892,
+    "totalCommits": 2341,
+    "contributors": 8,
+    "branches": 36,
+    "pullRequests": 702,
+    "issues": 351,
+    "stars": 9354,
+    "forks": 654
+  },
+  "securityFindings": [
+    {
+      "id": "SEC-0001",
+      "severity": "MEDIUM",
+      "category": "XSS",
+      "title": "Security issue in module 89",
+      "file": "src/module_583.py",
+      "line": 280,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0002",
+      "severity": "LOW",
+      "category": "Crypto",
+      "title": "Security issue in module 59",
+      "file": "src/module_73.py",
+      "line": 324,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0003",
+      "severity": "CRITICAL",
+      "category": "Input Validation",
+      "title": "Security issue in module 67",
+      "file": "src/module_739.py",
+      "line": 114,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0004",
+      "severity": "MEDIUM",
+      "category": "Input Validation",
+      "title": "Security issue in module 76",
+      "file": "src/module_568.py",
+      "line": 63,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0005",
+      "severity": "HIGH",
+      "category": "CSRF",
+      "title": "Security issue in module 18",
+      "file": "src/module_376.py",
+      "line": 192,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0006",
+      "severity": "LOW",
+      "category": "Config",
+      "title": "Security issue in module 21",
+      "file": "src/module_358.py",
+      "line": 351,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0007",
+      "severity": "CRITICAL",
+      "category": "Injection",
+      "title": "Security issue in module 56",
+      "file": "src/module_555.py",
+      "line": 189,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0008",
+      "severity": "CRITICAL",
+      "category": "AuthN/AuthZ",
+      "title": "Security issue in module 25",
+      "file": "src/module_283.py",
+      "line": 463,
+      "description": "Potential security vulnerability detected by static analysis"
+    }
+  ]
+}

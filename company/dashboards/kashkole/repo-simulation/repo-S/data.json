@@ -1,0 +1,283 @@
+{
+  "tier": "repo-S",
+  "directoryTree": {
+    "name": "root",
+    "children": [
+      {
+        "name": "item_0",
+        "children": [
+          {
+            "name": "item_0",
+            "value": 1441,
+            "type": "file"
+          },
+          {
+            "name": "item_1",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 647,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 1632,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 715,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 2946,
+                "type": "file"
+              },
+              {
+                "name": "item_4",
+                "value": 4236,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          },
+          {
+            "name": "item_2",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 4425,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 3788,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          }
+        ],
+        "type": "directory"
+      },
+      {
+        "name": "item_1",
+        "value": 4207,
+        "type": "file"
+      },
+      {
+        "name": "item_2",
+        "children": [
+          {
+            "name": "item_0",
+            "value": 3864,
+            "type": "file"
+          },
+          {
+            "name": "item_1",
+            "value": 3632,
+            "type": "file"
+          },
+          {
+            "name": "item_2",
+            "value": 1608,
+            "type": "file"
+          },
+          {
+            "name": "item_3",
+            "children": [
+              {
+                "name": "item_0",
+                "value": 3870,
+                "type": "file"
+              },
+              {
+                "name": "item_1",
+                "value": 4960,
+                "type": "file"
+              },
+              {
+                "name": "item_2",
+                "value": 300,
+                "type": "file"
+              },
+              {
+                "name": "item_3",
+                "value": 3559,
+                "type": "file"
+              }
+            ],
+            "type": "directory"
+          }
+        ],
+        "type": "directory"
+      }
+    ],
+    "type": "directory"
+  },
+  "dependencies": {
+    "nodes": [
+      {
+        "id": "module_0",
+        "group": 1
+      },
+      {
+        "id": "module_1",
+        "group": 2
+      },
+      {
+        "id": "module_2",
+        "group": 4
+      },
+      {
+        "id": "module_3",
+        "group": 1
+      }
+    ],
+    "links": [
+      {
+        "source": "module_0",
+        "target": "module_2",
+        "value": 4
+      },
+      {
+        "source": "module_1",
+        "target": "module_3",
+        "value": 5
+      },
+      {
+        "source": "module_1",
+        "target": "module_2",
+        "value": 6
+      },
+      {
+        "source": "module_2",
+        "target": "module_1",
+        "value": 3
+      },
+      {
+        "source": "module_3",
+        "target": "module_2",
+        "value": 6
+      }
+    ]
+  },
+  "qualityMetrics": {
+    "maintainability": 79,
+    "complexity": 75,
+    "testCoverage": 74,
+    "documentation": 81,
+    "security": 85,
+    "performance": 83
+  },
+  "complexityData": {
+    "labels": [
+      "1-5 (Simple)",
+      "6-10 (Moderate)",
+      "11-15 (Complex)",
+      "16-20 (High)",
+      "21+ (Very High)"
+    ],
+    "data": [
+      267,
+      111,
+      44,
+      17,
+      4
+    ]
+  },
+  "locDistribution": {
+    "labels": [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "CSS",
+      "HTML",
+      "SQL",
+      "YAML",
+      "JSON"
+    ],
+    "data": [
+      4672,
+      3337,
+      2002,
+      1335,
+      1068,
+      534,
+      267,
+      133
+    ]
+  },
+  "vulnerabilities": {
+    "codeSmells": 1,
+    "antiPatterns": 1,
+    "securityIssues": 1,
+    "bestPractices": 1
+  },
+  "dependencyTree": {
+    "name": "root"
+  },
+  "testingPyramid": {
+    "unit": 747,
+    "integration": 213,
+    "e2e": 106
+  },
+  "repoMetrics": {
+    "totalFiles": 89,
+    "totalCommits": 234,
+    "contributors": 2,
+    "branches": 15,
+    "pullRequests": 70,
+    "issues": 35,
+    "stars": 3998,
+    "forks": 813
+  },
+  "securityFindings": [
+    {
+      "id": "SEC-0001",
+      "severity": "HIGH",
+      "category": "Input Validation",
+      "title": "Security issue in module 45",
+      "file": "src/module_64.py",
+      "line": 458,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0002",
+      "severity": "CRITICAL",
+      "category": "Injection",
+      "title": "Security issue in module 66",
+      "file": "src/module_89.py",
+      "line": 57,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0003",
+      "severity": "MEDIUM",
+      "category": "Config",
+      "title": "Security issue in module 32",
+      "file": "src/module_89.py",
+      "line": 359,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0004",
+      "severity": "CRITICAL",
+      "category": "Crypto",
+      "title": "Security issue in module 41",
+      "file": "src/module_35.py",
+      "line": 442,
+      "description": "Potential security vulnerability detected by static analysis"
+    },
+    {
+      "id": "SEC-0005",
+      "severity": "LOW",
+      "category": "XSS",
+      "title": "Security issue in module 9",
+      "file": "src/module_80.py",
+      "line": 229,
+      "description": "Potential security vulnerability detected by static analysis"
+    }
+  ]
+}

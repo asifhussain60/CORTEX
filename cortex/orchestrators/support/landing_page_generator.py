@@ -406,7 +406,7 @@ class LandingPageGenerator:
         try:
             dt = datetime.fromisoformat(iso_date.replace('Z', '+00:00'))
             return dt.strftime('%b %d, %Y')
-        except:
+        except (ValueError, AttributeError, TypeError):
             return iso_date[:10] if len(iso_date) >= 10 else iso_date
 
 

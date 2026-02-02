@@ -68,3 +68,12 @@ repos:
         pass_filenames: false
         always_run: false
         files: ^docs/.*\.html$
+
+      - id: no-bare-except
+        name: CORE-013 - No Bare Except Blocks
+        entry: bash -c 'if grep -rn "except:\s*$" cortex/ scripts/ --include="*.py" | grep -v "tests/"; then echo "❌ CORE-013 violation: Bare except blocks found. Use specific exceptions."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: false
+        files: \.py$
+
