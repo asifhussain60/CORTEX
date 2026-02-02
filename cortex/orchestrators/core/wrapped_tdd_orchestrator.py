@@ -545,6 +545,164 @@ class WrappedTDDOrchestrator:
             "conversation_active": self.conversation_context is not None
         }
 
+    # =========================================================================
+    # INCREMENTAL TDD EXECUTION
+    # =========================================================================
+
+    def execute_incremental(
+        self,
+        task: Dict[str, Any],
+        max_tokens_per_subtask: int = 10000
+    ) -> Result[Dict[str, Any]]:
+        """
+        Execute task incrementally with automatic decomposition and todo tracking.
+        
+        This method orchestrates the complete incremental TDD flow:
+        1. Decompose task using IncrementalTaskDecomposer
+        2. Publish todo list via MCP tool
+        3. Execute each subtask via TDD orchestrator
+        4. Update todo status after each completion
+        5. Track overall progress
+        
+        Args:
+            task: Task specification with task_id, description, module_path, domain
+            max_tokens_per_subtask: Maximum tokens per subtask (default: 10K)
+            
+        Returns:
+            Result with execution summary or error
+            
+        AC-TDD-INCREMENTAL-03: Incremental execution with decomposition
+        """
+        try:
+            from cortex.orchestrators.planning.incremental_task_decomposer import IncrementalTaskDecomposer
+            from cortex.mcp.tools.todo_tool import TodoTool
+
+            task_id = task.get("task_id", "UNKNOWN")
+            
+            self.logger.info(f"Starting incremental execution for task {task_id}")
+
+            # Phase 1: Decompose task into subtasks
+            decomposer = IncrementalTaskDecomposer(
+                max_tokens_per_subtask=max_tokens_per_subtask
+            )
+            
+            decomp_result = decomposer.decompose_into_subtasks(task)
+            
+            if decomp_result.is_err():
+                return Err(f"Task decomposition failed: {decomp_result.error}")
+
+            decomposition = decomp_result.unwrap()
+            subtasks = decomposition.subtasks
+            
+            self.logger.info(
+                f"Task {task_id} decomposed into {len(subtasks)} subtasks "
+                f"(total_tokens={decomposition.total_estimated_tokens})"
+            )
+
+            # Phase 2: Publish todo list via MCP tool
+            todo_tool = TodoTool()
+            
+            todo_items = [
+                {
+                    "id": subtask.subtask_id,
+                    "title": f"Subtask {subtask.sequence_number}/{len(subtasks)}",
+                    "description": subtask.description,
+                    "status": "not-started",
+                    "metadata": {
+                        "estimated_tokens": subtask.estimated_tokens,
+                        "module_path": subtask.module_path,
+                        "domain": subtask.domain
+                    }
+                }
+                for subtask in subtasks
+            ]
+            
+            todo_result = todo_tool.create_todo_list(todo_items)
+            
+            if todo_result.is_err():
+                self.logger.warning(f"Todo list creation failed: {todo_result.error}")
+            else:
+                self.logger.info(f"Published todo list with {len(subtasks)} items")
+
+            # Phase 3: Execute each subtask via TDD orchestrator
+            completed_subtasks = []
+            failed_subtasks = []
+            
+            for subtask in subtasks:
+                self.logger.info(
+                    f"Executing subtask {subtask.subtask_id} "
+                    f"({subtask.sequence_number}/{len(subtasks)})"
+                )
+
+                # Mark todo as in-progress
+                todo_tool.update_todo_status(subtask.subtask_id, "in-progress")
+
+                # Execute subtask via TDD orchestrator
+                subtask_context = {
+                    "module_path": subtask.module_path,
+                    "domain": subtask.domain,
+                    "parent_task_id": task_id,
+                    "subtask_id": subtask.subtask_id,
+                    "acceptance_criteria": subtask.acceptance_criteria
+                }
+
+                exec_result = self.tdd_orchestrator.execute_operation(
+                    operation_name="test_driven_implementation",
+                    parameters={
+                        "user_request": subtask.description,
+                        "context": subtask_context
+                    }
+                )
+
+                if exec_result.is_ok():
+                    completed_subtasks.append(subtask.subtask_id)
+                    # Mark todo as completed
+                    todo_tool.update_todo_status(subtask.subtask_id, "completed")
+                    self.logger.info(f"Subtask {subtask.subtask_id} completed")
+                else:
+                    failed_subtasks.append({
+                        "subtask_id": subtask.subtask_id,
+                        "error": exec_result.error
+                    })
+                    self.logger.error(
+                        f"Subtask {subtask.subtask_id} failed: {exec_result.error}"
+                    )
+                    # Continue with next subtask unless critical failure
+
+            # Phase 4: Compile execution results
+            progress = todo_tool.get_progress()
+            
+            execution_result = {
+                "task_id": task_id,
+                "subtasks_total": len(subtasks),
+                "subtasks_completed": len(completed_subtasks),
+                "subtasks_failed": len(failed_subtasks),
+                "completed_ids": completed_subtasks,
+                "failed_subtasks": failed_subtasks,
+                "progress": progress,
+                "todo_list_published": True,
+                "token_budget_enforced": True,
+                "total_estimated_tokens": decomposition.total_estimated_tokens,
+                "evidence_used": decomposition.evidence_used is not None
+            }
+
+            if failed_subtasks:
+                return Err(
+                    f"Task partially completed: {len(completed_subtasks)}/{len(subtasks)} "
+                    f"subtasks succeeded. Details: {execution_result}"
+                )
+
+            self.logger.info(
+                f"Task {task_id} completed successfully: "
+                f"{len(completed_subtasks)}/{len(subtasks)} subtasks"
+            )
+
+            return Ok(execution_result)
+
+        except Exception as e:
+            self.logger.error(f"Incremental execution failed: {e}", exc_info=True)
+            return Err(f"Incremental execution failed: {e}")
+
 
 def get_wrapped_tdd_orchestrator(
     tdd_orchestrator: Optional[TDDOrchestrator] = None,

@@ -1,13 +1,19 @@
 # CORTEX Architect Agent
-**Version:** 9.0 | **Updated:** 2026-02-02 | **Role:** Mode Router
+**Version:** 10.0 | **Updated:** 2026-02-02 | **Role:** Mode Router | **Incremental TDD:** ✅
 
 ---
 
 ## Agent Identity
 
-**CORTEX Architect** — mode detection and routing to specialist agents.
+**CORTEX Architect** — mode detection and routing to specialist agents with incremental TDD coordination.
 
-**Responsibility:** Detect AUDIT vs DESIGN mode, delegate to appropriate specialist.
+**Responsibility:** Detect AUDIT vs DESIGN mode, delegate to appropriate specialist, coordinate incremental TDD execution.
+
+**New Capabilities:**
+- 🚀 Incremental task decomposition (10K token subtasks)
+- 📋 MCP todo list publication
+- 🎯 Evidence-based sizing via CAP framework
+- ✅ Real-time progress tracking
 
 ---
 
@@ -54,9 +60,25 @@
 | Agent | Scope |
 |-------|-------|
 | cortex-auditor | Autonomous codebase health |
-| cortex-designer | TDD + mandatory challenge |
+| cortex-designer | TDD + mandatory challenge + incremental execution |
 | CORTEX.md | Master orchestration |
 
 ---
 
-*v9.0 — Compact router agent.*
+## Incremental TDD Workflow
+
+```
+User Request → Mode Detection → cortex-designer
+              ↓
+     Task Decomposition (IncrementalTaskDecomposer)
+              ↓
+     Todo Publication (cortex_manage_todo MCP tool)
+              ↓
+     Subtask Execution (WrappedTDDOrchestrator)
+              ↓
+     Progress Updates (todo status tracking)
+```
+
+---
+
+*v10.0 — Incremental TDD with task decomposition and MCP todo tracking.*

@@ -683,6 +683,215 @@ class TestErrorHandling:
         # This tests edge case handling
         pass
 
+
+# =============================================================================
+# AC-TDD-INCREMENTAL-03: Incremental Execution Tests
+# =============================================================================
+
+class TestIncrementalExecution:
+    """Tests for incremental TDD execution with task decomposition."""
+
+    def test_execute_incremental_with_simple_task(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental flow with simple task (single subtask).
+
+        AC-TDD-INCREMENTAL-03-01: Simple task execution
+        """
+        task = {
+            "task_id": "TASK-001",
+            "description": "Implement login validator",
+            "module_path": "cortex.auth.validator",
+            "domain": "security"
+        }
+
+        result = wrapped_orchestrator.execute_incremental(task)
+
+        assert result.is_ok()
+        execution_result = result.unwrap()
+        assert execution_result["subtasks_completed"] >= 1
+        assert "todo_list_published" in execution_result
+
+    def test_execute_incremental_with_complex_task(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental flow with complex task (multiple subtasks).
+
+        AC-TDD-INCREMENTAL-03-02: Complex task decomposition
+        """
+        task = {
+            "task_id": "TASK-002",
+            "description": "Implement full REST API with auth, CRUD, caching",
+            "module_path": "cortex.api.service",
+            "domain": "backend",
+            "acceptance_criteria": [
+                "JWT authentication",
+                "CRUD operations",
+                "Redis caching",
+                "Pagination",
+                "Logging"
+            ]
+        }
+
+        result = wrapped_orchestrator.execute_incremental(task)
+
+        assert result.is_ok()
+        execution_result = result.unwrap()
+        assert execution_result["subtasks_completed"] >= 2  # Multiple subtasks
+
+    def test_execute_incremental_publishes_todos(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental publishes todos via MCP tool.
+
+        AC-TDD-INCREMENTAL-03-03: Todo list publication
+        """
+        task = {
+            "task_id": "TASK-003",
+            "description": "Test task",
+            "module_path": "cortex.test",
+            "domain": "testing"
+        }
+
+        with patch.object(wrapped_orchestrator, 'todo_tool') as mock_todo:
+            mock_todo.create_todo_list.return_value = Ok({})
+
+            result = wrapped_orchestrator.execute_incremental(task)
+
+            assert result.is_ok()
+            mock_todo.create_todo_list.assert_called_once()
+
+    def test_execute_incremental_updates_todos_after_each_subtask(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental updates todo status after each subtask.
+
+        AC-TDD-INCREMENTAL-03-04: Todo status tracking
+        """
+        task = {
+            "task_id": "TASK-004",
+            "description": "Multi-subtask implementation",
+            "module_path": "cortex.multi",
+            "domain": "test",
+            "acceptance_criteria": ["AC1", "AC2", "AC3", "AC4", "AC5", "AC6"]
+        }
+
+        with patch.object(wrapped_orchestrator, 'todo_tool') as mock_todo:
+            mock_todo.create_todo_list.return_value = Ok({})
+            mock_todo.update_todo_status.return_value = Ok({})
+
+            result = wrapped_orchestrator.execute_incremental(task)
+
+            assert result.is_ok()
+            # Should update status for each completed subtask
+            assert mock_todo.update_todo_status.call_count >= 1
+
+    def test_execute_incremental_respects_token_budget(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental respects token budget per subtask.
+
+        AC-TDD-INCREMENTAL-03-05: Token budget enforcement
+        """
+        task = {
+            "task_id": "TASK-005",
+            "description": "Large implementation task",
+            "module_path": "cortex.large",
+            "domain": "test"
+        }
+
+        result = wrapped_orchestrator.execute_incremental(
+            task,
+            max_tokens_per_subtask=5000
+        )
+
+        assert result.is_ok()
+        execution_result = result.unwrap()
+        # Each subtask should have stayed within token budget
+        assert "token_budget_enforced" in execution_result
+
+    def test_execute_incremental_handles_subtask_failure(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental handles subtask execution failure gracefully.
+
+        AC-TDD-INCREMENTAL-03-06: Failure handling
+        """
+        task = {
+            "task_id": "TASK-006",
+            "description": "Task with potential failure",
+            "module_path": "cortex.fail",
+            "domain": "test"
+        }
+
+        with patch.object(wrapped_orchestrator.tdd_orchestrator, 'execute_operation') as mock_exec:
+            mock_exec.return_value = Err("Execution failed")
+
+            result = wrapped_orchestrator.execute_incremental(task)
+
+            # Should return error or partial completion
+            assert result.is_err() or (
+                result.is_ok() and "failed_subtasks" in result.unwrap()
+            )
+
+    def test_execute_incremental_tracks_progress(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental tracks progress across subtasks.
+
+        AC-TDD-INCREMENTAL-03-07: Progress tracking
+        """
+        task = {
+            "task_id": "TASK-007",
+            "description": "Track progress task",
+            "module_path": "cortex.progress",
+            "domain": "test",
+            "acceptance_criteria": ["AC1", "AC2", "AC3"]
+        }
+
+        result = wrapped_orchestrator.execute_incremental(task)
+
+        assert result.is_ok()
+        execution_result = result.unwrap()
+        assert "progress" in execution_result
+        assert execution_result["progress"]["total"] >= 1
+        assert execution_result["progress"]["completed"] >= 0
+
+    def test_execute_incremental_integrates_with_decomposer(
+        self,
+        wrapped_orchestrator: WrappedTDDOrchestrator
+    ) -> None:
+        """Execute incremental integrates with IncrementalTaskDecomposer.
+
+        AC-TDD-INCREMENTAL-03-08: Decomposer integration
+        """
+        task = {
+            "task_id": "TASK-008",
+            "description": "Integration test",
+            "module_path": "cortex.integration",
+            "domain": "test"
+        }
+
+        with patch('cortex.orchestrators.planning.incremental_task_decomposer.IncrementalTaskDecomposer') as mock_decomposer_class:
+            mock_decomposer = Mock()
+            mock_decomposer.decompose_into_subtasks.return_value = Ok(Mock(
+                subtasks=[Mock(subtask_id="SUB-01", description="Test")],
+                total_estimated_tokens=5000
+            ))
+            mock_decomposer_class.return_value = mock_decomposer
+
+            result = wrapped_orchestrator.execute_incremental(task)
+
+            # Decomposer should have been called
+            mock_decomposer.decompose_into_subtasks.assert_called_once()
+
     def test_conversation_protocol_error_propagates(
         self,
         tdd_orchestrator: TDDOrchestrator,

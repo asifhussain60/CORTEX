@@ -170,6 +170,26 @@ orchestrators:
       health_check: "generate_tests"
       mcp_adapter: "cortex.mcp.adapters.tdd_adapter"
 
+    # STAGE 3B: Incremental Task Decomposition (NEW)
+    - name: "IncrementalTaskDecomposer"
+      module: "cortex.orchestrators.planning.incremental_task_decomposer"
+      class: "IncrementalTaskDecomposer"
+      tier: 1
+      priority: 31
+      dependencies: []
+      capabilities:
+        - task_decomposition
+        - token_budget_estimation
+        - evidence_based_sizing
+        - pert_estimation
+      health_check: "decompose_into_subtasks"
+      description: "Decomposes large tasks into token-budget-constrained subtasks using CAP framework"
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+      version: "1.0"
+
     # Workflow Management
     - name: "WorkflowOrchestrator"
       module: "cortex.orchestrators.core.workflow_orchestrator"

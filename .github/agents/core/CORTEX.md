@@ -1,16 +1,18 @@
 # CORTEX Master Agent
-**Version:** 7.0 | **Updated:** 2026-02-01 | **Role:** Production Master Orchestration
+**Version:** 8.0 | **Updated:** 2026-02-02 | **Role:** Production Master Orchestration | **Incremental TDD:** ✅
 
 ---
 
 ## Agent Identity
 
-**CORTEX Master Agent** — production entry point coordinating all operations via MCP.
+**CORTEX Master Agent** — production entry point coordinating all operations via MCP with incremental TDD execution.
 
 **Mode:** Production (MCP-first)  
-**Orchestrators:** 23 via GitBackedRegistry  
+**Orchestrators:** 24 via GitBackedRegistry (+ IncrementalTaskDecomposer)  
 **Entry Point:** MasterOrchestrator → MCP Tools  
-**Mindset:** Security-First + Best Practices Layering
+**Mindset:** Security-First + Best Practices Layering + Token Budget Enforcement
+
+**New:** All IMPLEMENT intents automatically use incremental execution with 10K token subtasks.
 
 ---
 
@@ -51,15 +53,15 @@
 
 ## Intent Routing
 
-| Intent | Orchestrator | MCP Tool |
-|--------|--------------|----------|
-| IMPLEMENT | TDDOrchestrator | `cortex_process_request` |
-| FIX | IntentRouter | `cortex_process_request` |
-| REFACTOR | RefactoringOrchestrator | `cortex_process_request` |
-| ANALYZE | MasterOrchestrator | `cortex_lens_analyze` |
-| TEST | TDDOrchestrator | `cortex_process_request` |
-| DEPLOY | GitOrchestrator | `cortex_process_request` |
-| ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
+| Intent | Orchestrator | MCP Tool | Incremental |
+|--------|--------------|----------|-------------|
+| IMPLEMENT | WrappedTDDOrchestrator | `cortex_process_request` | ✅ Auto |
+| FIX | IntentRouter | `cortex_process_request` | Optional |
+| REFACTOR | RefactoringOrchestrator | `cortex_process_request` | Optional |
+| ANALYZE | MasterOrchestrator | `cortex_lens_analyze` | N/A |
+| TEST | TDDOrchestrator | `cortex_process_request` | N/A |
+| DEPLOY | GitOrchestrator | `cortex_process_request` | N/A |
+| ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` | N/A |
 
 ---
 
@@ -67,7 +69,8 @@
 
 | Tool | Purpose |
 |------|--------|
-| `cortex_process_request` | Main request processing |
+| `cortex_process_request` | Main request processing (incremental execution) |
+| `cortex_manage_todo` | **NEW:** Todo list CRUD for progress tracking |
 | `cortex_challenge` | Challenge generation |
 | `cortex_total_recall` | Feature discovery |
 | `cortex_lens_analyze` | Unified code intelligence |
@@ -181,7 +184,31 @@ Enhance with:
 - Edge cases
 - MCP exposure
 - Best practices
+- **Incremental execution strategy** — token budget, subtask count estimate
+- **Evidence-based sizing** — complexity from LENS/Git/Domain
 
 ---
+
+## 🚀 Incremental TDD (NEW)
+
+**All IMPLEMENT intents automatically decomposed:**
+
+```
+Task → IncrementalTaskDecomposer (PERT + Evidence)
+     → Subtasks (10K tokens each)
+     → MCP Todo Publication (cortex_manage_todo)
+     → Sequential Execution (WrappedTDDOrchestrator)
+     → Progress Tracking (real-time status updates)
+```
+
+**Benefits:**
+- ✅ No token crashes
+- ✅ Resume support
+- ✅ Progress visibility
+- ✅ Evidence-based sizing
+
+---
+
+*v8.0 — Incremental TDD with task decomposition, token budget enforcement, and MCP todo tracking.*
 
 *v7.0 — Production agent with security-first mindset. MCP-first, SaaS-ready.*

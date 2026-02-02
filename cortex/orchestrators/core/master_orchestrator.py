@@ -1266,14 +1266,54 @@ class MasterOrchestrator(IOrchestrator):
                     )
             
             # AC-FR-WIRING-001: STAGE 3B - TDD Orchestrator for IMPLEMENT intents
+            # AC-TDD-INCREMENTAL-04: Route through incremental TDD with task decomposition
             # Wire tdd_orchestrator for test-driven implementation
             if self.tdd_orchestrator and operation_name == "implement":
                 try:
-                    # Stage 3B: Route IMPLEMENT intents through TDD orchestrator
-                    tdd_result = self.tdd_orchestrator.execute_operation(
-                        operation_name="test_driven_implementation",
-                        parameters=parameters
-                    )
+                    # Check if incremental execution requested
+                    use_incremental = parameters.get("incremental", True)  # Default to incremental
+                    
+                    if use_incremental:
+                        # Stage 3B-INCREMENTAL: Route through WrappedTDDOrchestrator.execute_incremental()
+                        from cortex.orchestrators.core.wrapped_tdd_orchestrator import get_wrapped_tdd_orchestrator
+                        
+                        wrapped_tdd = get_wrapped_tdd_orchestrator(
+                            tdd_orchestrator=self.tdd_orchestrator
+                        )
+                        
+                        # Build task specification for incremental execution
+                        task = {
+                            "task_id": parameters.get("task_id", f"TASK-{operation_name}"),
+                            "description": parameters.get("user_request", parameters.get("target", "Implementation task")),
+                            "module_path": parameters.get("module_path", parameters.get("target", "unknown")),
+                            "domain": parameters.get("domain", "unknown"),
+                            "acceptance_criteria": parameters.get("acceptance_criteria", [])
+                        }
+                        
+                        max_tokens = parameters.get("max_tokens_per_subtask", 10000)
+                        
+                        tdd_result = wrapped_tdd.execute_incremental(
+                            task=task,
+                            max_tokens_per_subtask=max_tokens
+                        )
+                        
+                        self.logger.log_operation_complete(
+                            ac_id="AC-TDD-INCREMENTAL-04",
+                            operation="INCREMENTAL_TDD_EXECUTION",
+                            success=tdd_result.is_ok(),
+                            details={
+                                "task_id": task["task_id"],
+                                "incremental": True,
+                                "max_tokens_per_subtask": max_tokens
+                            }
+                        )
+                    else:
+                        # Stage 3B: Standard TDD orchestrator execution (non-incremental)
+                        tdd_result = self.tdd_orchestrator.execute_operation(
+                            operation_name="test_driven_implementation",
+                            parameters=parameters
+                        )
+                    
                     if tdd_result.is_ok():
                         self.logger.log_operation_complete(
                             ac_id="AC-FR-WIRING-001-STAGE3B",

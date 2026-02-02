@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 9.1 | **Updated:** 2026-02-02 | **Mode:** Dual-Mode (AUDIT + DESIGN) | **Status:** ACTIVE
+**Version:** 10.0 | **Updated:** 2026-02-02 | **Mode:** Dual-Mode (AUDIT + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅
 
 ---
 
@@ -8,7 +8,7 @@
 | Trigger | Mode | Behavior |
 |---------|------|----------|
 | No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan |
-| User request provided | **DESIGN** | Enhanced request + mandatory challenge + TDD |
+| User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD |
 
 ---
 
@@ -109,16 +109,37 @@
 ```
 1. LENS Context (cortex_git_history) — Always first
       ↓
-2. Enhance Request (security, MCP, edge cases)
+2. Enhance Request (security, MCP, edge cases, incremental execution)
       ↓
 3. MANDATORY Challenge (3+ weaknesses)
       ↓
 4. DoR + Await Approval
       ↓
-5. Autonomous Execution (all phases, no stops)
+5. Autonomous Execution (incremental TDD with subtask decomposition)
       ↓
-6. Completion Report
+6. Todo List Publication (via MCP tool)
+      ↓
+7. Subtask Execution (one at a time, token budget enforced)
+      ↓
+8. Completion Report
 ```
+
+## 🚀 INCREMENTAL TDD EXECUTION (NEW)
+
+**All IMPLEMENT intents automatically use incremental execution:**
+
+| Component | Purpose |
+|-----------|---------|
+| **IncrementalTaskDecomposer** | Decomposes tasks using CAP framework (PERT, evidence) |
+| **Token Budget** | Default 10K tokens per subtask (configurable) |
+| **MCP Todo Tool** | Publishes todo list to Copilot/client |
+| **WrappedTDDOrchestrator** | Coordinates subtask execution, updates todos |
+
+**Benefits:**
+- ✅ No token limit crashes — subtasks stay within budget
+- ✅ Progress visibility — real-time todo tracking
+- ✅ Resume support — can continue after interruption
+- ✅ Evidence-based sizing — uses complexity analysis
 
 ## ⚠️ MANDATORY CHALLENGE (Response Invalid Without)
 
@@ -153,24 +174,31 @@
 **Verdict:** {PROCEED | PIVOT}
 ```
 
-## TDD-First (CORE-008)
+## TDD-First (CORE-008) + Incremental Execution
 
-| Phase | Action |
-|-------|--------|
-| RED | Test spec first |
-| GREEN | Minimal implementation |
-| REFACTOR | Clean while tests pass |
+| Phase | Action | Incremental Behavior |
+|-------|--------|---------------------|
+| RED | Test spec first | Per subtask with token budget |
+| GREEN | Minimal implementation | One subtask at a time |
+| REFACTOR | Clean while tests pass | After each subtask completion |
 
-**Never:** Implementation before tests, mixed old/new code.
+**Token Budget Enforcement:**
+- Default: 10K tokens per subtask
+- Override: Set `max_tokens_per_subtask` in parameters
+- Evidence-based: Uses PERT estimation from CAP framework
+
+**Never:** Implementation before tests, mixed old/new code, monolithic execution.
 
 ## Request Enhancement
 
 | Add | Details |
 |-----|---------|
 | Security | OWASP, input validation |
-| MCP | Tool exposure |
+| MCP | Tool exposure, todo list publication |
 | Edge Cases | Boundaries, errors |
 | Wiring | Orchestrator registration |
+| Incremental | Task decomposition strategy, token budget |
+| Evidence | Complexity assessment from LENS/Git/Domain |
 
 ## DoR Template
 
@@ -189,7 +217,7 @@
 
 ---
 
-## 🔧 LENS TOOLS
+## 🔧 TOOLS & MCP
 
 | Tool | Use |
 |------|-----|
@@ -197,6 +225,7 @@
 | `cortex_lens_analyze` | Code patterns |
 | `cortex_detect_duplicates` | CORE-035 |
 | `cortex_ast_analyze` | Structure |
+| `cortex_manage_todo` | **NEW:** Todo list CRUD via MCP |
 
 ---
 
@@ -216,8 +245,8 @@
 ## ✅ COMPLETION
 
 **AUDIT:** "✅ CORTEX Audit Complete — 100% production-ready" or P0 Actions table  
-**DESIGN:** Implementation table with files modified, tests passing
+**DESIGN:** Implementation table with files modified, tests passing, todos tracked
 
 ---
 
-*v9.1 — Single entry point. AUDIT autonomous, DESIGN with mandatory challenge.*
+*v10.0 — Incremental TDD with task decomposition, token budget enforcement, and MCP todo tracking.*
