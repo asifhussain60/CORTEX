@@ -114,13 +114,112 @@
 | 5 | Governance — 4-layer defense active | P1 | `cortex/governance/*.py` |
 | 6 | Edge cases & blind spots — Unhandled paths, race conditions | P2 | Full codebase |
 | 7 | Duplicates (CORE-035) — True vs intentional layering | P2 | Full codebase |
-| 8 | Dead code — Unused imports, orphan functions | P2 | Full codebase |
-| 9 | Cleanup — *.bak, *_v2.*, orphan *.md/*.txt | P3 | Full codebase |
-| 10 | Test health — Skipped, failing, deprecated tests | P2 | `tests/` |
-| 11 | Pre-commit hooks — Active, covers CORE rules | P2 | `.pre-commit-config.yaml` |
-| 12 | Spec-code sync — Specs match implementations | P2 | Prompts, wiring |
-| 13 | Self-optimization — Prompts focused on production | P3 | `.github/prompts/`, `.github/agents/` |
-| 13.5 | **Prompt/Agent Production Gate** — Only 2 prompts/agents in production (CORTEX + Architect), flag others | **P2** | `.github/prompts/`, `.github/agents/` |
+| **8** | **Import Path Consistency** — Detect scattered imports after consolidations, verify new patterns | **P1** | `cortex/**/*.py`, `tests/**/*.py` |
+| **9** | **Circular Dependencies** — Import graph analysis, detect A→B→A cycles | **P1** | Full Python codebase |
+| **10** | **Package Structure Integrity** — __init__.py exports match files, no missing factory functions | **P1** | All Python packages |
+| **11** | **Consolidation Completeness** — Files moved + imports updated + tests pass + docs updated | **P1** | Post-consolidation verification |
+| 12 | Dead code — Unused imports, orphan functions | P2 | Full codebase |
+| 12.5 | **Stub Implementation Detection** — Prevent shipping incomplete functionality disguised as working | **P0** | Full codebase |
+| 13 | Cleanup — *.bak, *_v2.*, orphan *.md/*.txt | P3 | Full codebase |
+| 14 | Test health — Skipped, failing, deprecated tests | P2 | `tests/` |
+| 15 | Pre-commit hooks — Active, covers CORE rules | P2 | `.pre-commit-config.yaml` |
+| 16 | Spec-code sync — Specs match implementations | P2 | Prompts, wiring |
+| 17 | Self-optimization — Prompts focused on production | P3 | `.github/prompts/`, `.github/agents/` |
+| 17.5 | **Prompt/Agent Production Gate** — Only 2 prompts/agents in production (CORTEX + Architect), flag others | **P2** | `.github/prompts/`, `.github/agents/` |
+
+### Import Path Consistency Check (Item 8)
+
+**Purpose:** Detect scattered import patterns after consolidations/refactoring
+
+**5-Layer Verification:**
+- ✅ Layer 1: Source files moved to new location
+- ✅ Layer 2: Old imports eliminated (exceptions: re-export layers)
+- ✅ Layer 3: Re-export validation (imports from new location, no errors)
+- ✅ Layer 4: Deprecation stubs emit warnings, scheduled for removal
+- ✅ Layer 5: Test coverage uses new import paths
+
+**Example Patterns:**
+```python
+# OLD (Scattered):
+from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
+
+# NEW (Consolidated):
+from cortex.lens import LENSOrchestrator, LENSContext
+from cortex.lens.analyzers import ASTAnalyzer, GitHistoryAnalyzer
+```
+
+**Detection Commands:**
+```bash
+# Find old import patterns
+grep -r "from cortex\.brain\.analysis\." cortex/ tests/ examples/
+
+# Verify new imports work
+python -c "from cortex.lens import LENSOrchestrator"
+
+# Check for orphaned files
+find cortex/brain/analysis/ -name "*.py" -type f
+```
+
+**Action:**
+- Flag files with old imports (P1 violation)
+- Update to canonical paths
+- Verify re-export layers temporary (scheduled deletion)
+
+### Circular Dependency Detection (Item 9)
+
+**Purpose:** Prevent runtime ImportError from circular dependencies
+
+**Detection:**
+- Use `pydeps cortex --show-cycles --max-bacon=2`
+- Look for A→B→A patterns
+- Check __init__.py importing from submodules that import parent
+
+**Action:**
+- Map full import graph
+- Identify cycles with file paths
+- Recommend lazy imports or dependency inversion
+- Verify fix doesn't introduce new cycle
+
+### Package Structure Integrity (Item 10)
+
+**Purpose:** Ensure Python packages properly structured and discoverable
+
+**Verify:**
+- __init__.py exists and exports match files
+- __all__ list accurate
+- Factory functions don't import non-existent functions
+
+**Test Command:**
+```python
+python -c "
+from cortex.lens import LENSOrchestrator, LENSContext
+from cortex.lens.analyzers import ASTAnalyzer, GitHistoryAnalyzer
+print('✅ Package structure valid')
+"
+```
+
+**Action:**
+- Validate imports programmatically
+- Fix __init__.py to match actual contents
+- Add missing __init__.py files
+
+### Consolidation Completeness Check (Item 11)
+
+**Purpose:** Ensure file moves 100% complete (files + imports + tests + docs)
+
+**5-Phase Verification:**
+1. **Files Moved:** Source in new location, old deleted or stubbed
+2. **Imports Updated:** All code uses new paths (production, tests, examples)
+3. **Re-Export Layer:** Old location re-exports with deprecation warnings
+4. **Tests Pass:** pytest passes, no ImportError, coverage maintained
+5. **Documentation:** README updated, migration guide created, examples updated
+
+**Action:**
+- Create consolidation checklist
+- Track progress in todo list
+- Validate each phase before next
+- Document exceptions
 
 ### Intent Router Consistency Check (Item 2.5)
 
@@ -149,7 +248,7 @@ For EACH intent in `IntentType` enum:
 - Auto-suggest corrected sections
 - Recommend pre-commit hook to prevent future gaps
 
-### Prompt/Agent Production Gate (Item 13.5)
+### Prompt/Agent Production Gate (Item 17.5)
 
 **Production-Ready Artifacts (ONLY THESE):**
 
@@ -292,6 +391,19 @@ Agents:
 ### 🛡️ Governance (4-Layer)
 | Layer | Status |
 |-------|--------|
+
+### 📦 Import Path Consistency
+| Layer | Status | Old Imports | Files |
+|-------|--------|-------------|-------|
+
+### 🔄 Circular Dependencies
+| Status | Cycles | Severity | Files |
+
+### 📂 Package Structure
+| Package | Valid | Issues |
+
+### ✅ Consolidation Status
+| Phase | Complete | Issues |
 
 ### ⚠️ Edge Cases & Blind Spots
 | Issue | File | Severity |

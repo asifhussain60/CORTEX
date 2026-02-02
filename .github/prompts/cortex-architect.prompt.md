@@ -247,7 +247,201 @@ Ignore:
   - __init__.py, empty files, stubs (<50 bytes)
 ```
 
-### 8. DEAD CODE DETECTION
+### 8. IMPORT PATH CONSISTENCY (PACKAGE INTEGRITY)
+```yaml
+Purpose: Detect scattered import patterns after consolidations/refactoring
+
+Detect Old Patterns:
+  Scattered Imports (Pre-Consolidation):
+    - from cortex.orchestrators.support.lens_orchestrator import X
+    - from cortex.brain.analysis.{analyzer} import X
+    - from cortex.brain.discovery.{plugin} import X
+  
+  Expected New Patterns (Post-Consolidation):
+    - from cortex.lens import LENSOrchestrator, LENSContext
+    - from cortex.lens.analyzers import ASTAnalyzer, GitHistoryAnalyzer
+    - from cortex.lens.discovery import ConfigurationDiscovery
+
+Verification Layers:
+  Layer 1 - Source Files Moved:
+    grep: "ls cortex/lens/analyzers/*.py" → Should find 7+ analyzers
+    grep: "ls cortex/lens/discovery/*.py" → Should find 2+ plugins
+    
+  Layer 2 - Old Imports Eliminated:
+    grep: "from cortex\.brain\.analysis\.(ast|git|comment|config|database|api|dependency)" → Should be 0 matches
+    grep: "from cortex\.orchestrators\.support\.lens_orchestrator" → Should be 0 matches
+    Exception: cortex/brain/analysis/__init__.py (re-export layer allowed)
+    
+  Layer 3 - Re-Export Validation:
+    Check: cortex/brain/analysis/__init__.py imports from cortex.lens.analyzers
+    Check: Re-exports work (no ImportError when importing old path)
+    
+  Layer 4 - Deprecation Stubs:
+    Check: Stubs emit DeprecationWarning
+    Check: Stubs scheduled for removal (comment with date)
+    
+  Layer 5 - Test Coverage:
+    Check: Tests use new import paths
+    Check: No tests importing from deprecated locations
+
+Action:
+  - Flag files still using old import paths (P1 violation)
+  - Verify re-export layers are temporary (scheduled deletion)
+  - Update imports to new canonical paths
+  - Run import test: python -c "from cortex.lens import X"
+
+Files to Check:
+  - cortex/**/*.py (exclude __pycache__, .venv)
+  - tests/**/*.py
+  - examples/**/*.py
+  - _workspaces/**/*.py
+```
+
+### 9. CIRCULAR DEPENDENCY DETECTION
+```yaml
+Purpose: Prevent runtime import failures from circular dependencies
+
+Detection Strategy:
+  Tool: Use Python's import graph analysis
+  Command: python -m pydeps cortex --show-cycles --max-bacon=2
+  
+  Manual Detection:
+    - Look for A imports B, B imports A patterns
+    - Check __init__.py files importing from submodules that import parent
+    - Verify lazy imports (inside functions) where needed
+
+Common Patterns:
+  BAD (Circular):
+    # cortex/lens/__init__.py
+    from cortex.lens.orchestrator import LENSOrchestrator
+    
+    # cortex/lens/orchestrator.py  
+    from cortex.lens.analyzers import ASTAnalyzer
+    
+    # cortex/lens/analyzers/__init__.py
+    from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+    
+    # cortex/lens/analyzers/ast_analyzer.py
+    from cortex.brain.analysis import SomeHelper  # If SomeHelper imports from cortex.lens
+  
+  GOOD (Broken Cycle):
+    - Re-export layer in cortex/brain/analysis/__init__.py imports from cortex.lens
+    - cortex.lens never imports from cortex.brain.analysis (one-way dependency)
+
+Action:
+  - Map full import graph
+  - Identify cycles with file paths
+  - Recommend lazy imports or dependency inversion
+  - Verify fix doesn't introduce new cycle
+
+Priority:
+  - P0: Cycles causing ImportError at runtime
+  - P1: Cycles that work but fragile (import order dependent)
+  - P2: Potential cycles (tight coupling detected)
+```
+
+### 10. PACKAGE STRUCTURE INTEGRITY
+```yaml
+Purpose: Ensure Python packages are properly structured and discoverable
+
+Verify Each Package:
+  Required Files:
+    - __init__.py exists (even if empty)
+    - __init__.py exports match actual module contents
+    - __all__ list is accurate (if present)
+  
+  Check Exports:
+    # Example: cortex/lens/analyzers/__init__.py
+    Expected exports: ASTAnalyzer, GitHistoryAnalyzer, CommentExtractor, etc.
+    Actual files: ast_analyzer.py, git_history_analyzer.py, comment_extractor.py
+    Validation: from cortex.lens.analyzers import ASTAnalyzer → Should work
+  
+  Detect Issues:
+    - __init__.py imports non-existent get_* factory functions
+    - __all__ lists classes not actually exported
+    - Files exist but not imported in __init__.py (not discoverable)
+    - Empty __init__.py but users expect exports (bad UX)
+
+Critical Packages to Verify:
+  - cortex/lens/__init__.py (exports LENSOrchestrator, LENSContext, 7 analyzers)
+  - cortex/lens/analyzers/__init__.py (exports all 7 analyzers)
+  - cortex/lens/discovery/__init__.py (exports 2+ plugins)
+  - cortex/mcp/tools/__init__.py (exports all MCP tools)
+  - cortex/orchestrators/*/__init__.py (exports orchestrators)
+
+Action:
+  - Validate imports programmatically: python -c "from X import Y"
+  - Fix __init__.py exports to match actual module contents
+  - Remove non-existent factory function imports
+  - Add missing __init__.py files
+
+Test Command:
+  python -c "
+  from cortex.lens import LENSOrchestrator, LENSContext
+  from cortex.lens.analyzers import ASTAnalyzer, GitHistoryAnalyzer
+  print('✅ Package structure valid')
+  "
+```
+
+### 11. CONSOLIDATION COMPLETENESS VERIFICATION
+```yaml
+Purpose: Ensure file moves are 100% complete (files + imports + tests + docs)
+
+After Any Consolidation (e.g., LENS to cortex/lens/), Verify:
+  
+  Phase 1 - Files Moved:
+    ✅ Source files exist in new location
+    ✅ Old locations either deleted OR contain deprecation stubs
+    ✅ No orphaned files in old locations (except intentional)
+  
+  Phase 2 - Imports Updated:
+    ✅ All production code uses new import paths
+    ✅ All test code uses new import paths
+    ✅ All example code uses new import paths
+    ✅ All workspace code uses new import paths
+  
+  Phase 3 - Re-Export Layer (If Applicable):
+    ✅ Old location has __init__.py re-exporting from new location
+    ✅ Re-exports have deprecation warnings
+    ✅ Re-exports scheduled for removal (date in comment)
+  
+  Phase 4 - Tests Pass:
+    ✅ pytest tests/unit/ -k {feature} passes
+    ✅ No ImportError exceptions
+    ✅ Coverage maintained or improved
+  
+  Phase 5 - Documentation Updated:
+    ✅ README.md reflects new structure
+    ✅ Migration guide created (if breaking change)
+    ✅ Import examples updated in docstrings
+    ✅ Deprecation notices in old locations
+
+Detection Commands:
+  # Find old import patterns
+  grep -r "from cortex\.brain\.analysis\." cortex/ tests/ examples/
+  
+  # Verify new imports work
+  python -c "from cortex.lens import LENSOrchestrator"
+  
+  # Check for orphaned files
+  find cortex/brain/analysis/ -name "*.py" -type f
+  
+  # Verify deprecation stubs emit warnings
+  python -c "import warnings; warnings.simplefilter('always'); from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator" 2>&1 | grep -i deprecation
+
+Action:
+  - Create consolidation checklist for each migration
+  - Track progress in todo list (manage_todo_list tool)
+  - Validate each phase before moving to next
+  - Document exceptions (intentional old locations)
+
+Severity:
+  - P0: Files moved but imports broken (blocks usage)
+  - P1: Imports updated but tests failing (blocks validation)
+  - P2: Tests pass but docs outdated (blocks adoption)
+```
+
+### 12. DEAD CODE DETECTION
 ```yaml
 Find:
   - Unused imports
@@ -259,7 +453,7 @@ Action:
   - Delete or flag for deletion
 ```
 
-### 8.5. STUB IMPLEMENTATION DETECTION (CRITICAL)
+### 12.5. STUB IMPLEMENTATION DETECTION (CRITICAL)
 ```yaml
 Purpose: Prevent shipping incomplete functionality disguised as working code
 
@@ -324,7 +518,7 @@ Example Violations:
         raise NotImplementedError("Holistic analysis scheduled for v2.0")
 ```
 
-### 9. LEFTOVER CLEANUP
+### 13. LEFTOVER CLEANUP
 ```yaml
 Delete:
   - *.bak files
@@ -339,7 +533,7 @@ Preserve:
   - requirements.txt, setup.py, pyproject.toml
 ```
 
-### 10. TEST HEALTH
+### 14. TEST HEALTH
 ```yaml
 Identify:
   - Constantly skipped tests (@pytest.mark.skip)
@@ -352,7 +546,7 @@ Action:
   - Target: >90% coverage on core modules
 ```
 
-### 11. PRE-COMMIT HOOKS
+### 15. PRE-COMMIT HOOKS
 ```yaml
 Verify:
   - .pre-commit-config.yaml exists and active
@@ -363,7 +557,7 @@ Files:
   - .github/workflows/*.yml
 ```
 
-### 12. SPEC-CODE SYNC
+### 16. SPEC-CODE SYNC
 ```yaml
 Verify:
   - wiring.yaml orchestrator list matches actual files
@@ -371,7 +565,7 @@ Verify:
   - __wiring_contract__.yaml aligns with code
 ```
 
-### 13. PROMPT SELF-OPTIMIZATION
+### 17. PROMPT SELF-OPTIMIZATION
 ```yaml
 Detect:
   - Prompts/agents referencing non-production tools
@@ -383,7 +577,7 @@ Action:
   - Recommend focused production scope
 ```
 
-### 13.5. PROMPT/AGENT PRODUCTION GATE
+### 17.5. PROMPT/AGENT PRODUCTION GATE
 ```yaml
 Production-Ready Prompts (ONLY THESE):
   1. CORTEX.prompt.md → Master orchestration entry point
@@ -463,6 +657,37 @@ Files:
 | Registry (23) | ✅/❌ | {details} |
 | MasterOrchestrator routing | ✅/❌ | {details} |
 | Circular deps | ✅/❌ | {details} |
+
+### 📦 Import Path Consistency
+| Layer | Status | Old Imports Found | Files |
+|-------|--------|-------------------|-------|
+| Source Files Moved | ✅/❌ | N/A | {paths} |
+| Old Imports Eliminated | ✅/❌ | {count} | {file list} |
+| Re-Export Validation | ✅/❌ | N/A | {status} |
+| Deprecation Stubs | ✅/❌ | {missing warnings} | {files} |
+| Test Coverage | ✅/❌ | {old imports in tests} | {test files} |
+
+### 🔄 Circular Dependencies
+| Status | Cycles Found | Severity | Files Involved |
+|--------|--------------|----------|----------------|
+| ✅/❌ | {count} | P0/P1/P2 | {A → B → A paths} |
+
+### 📂 Package Structure Integrity
+| Package | __init__.py | Exports Valid | Issues |
+|---------|-------------|---------------|--------|
+| cortex.lens | ✅/❌ | ✅/❌ | {details} |
+| cortex.lens.analyzers | ✅/❌ | ✅/❌ | {details} |
+| cortex.lens.discovery | ✅/❌ | ✅/❌ | {details} |
+| cortex.mcp.tools | ✅/❌ | ✅/❌ | {details} |
+
+### ✅ Consolidation Completeness
+| Phase | Status | Completion % | Issues |
+|-------|--------|--------------|--------|
+| Files Moved | ✅/❌ | {%} | {orphaned files} |
+| Imports Updated | ✅/❌ | {%} | {files with old imports} |
+| Re-Export Layer | ✅/❌ | {%} | {missing warnings} |
+| Tests Pass | ✅/❌ | {%} | {failing tests} |
+| Documentation | ✅/❌ | {%} | {outdated docs} |
 
 ### � Intent Router Consistency (5-Layer)
 | Layer | Status | Gaps |
