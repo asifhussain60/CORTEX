@@ -162,6 +162,7 @@ Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 | Command | Action |
 |---------|--------|
+| `/audit` | Autonomous codebase health scan |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
 | `/refactor {target}` | Code improvement |
@@ -176,9 +177,11 @@ Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 | File | Purpose |
 |------|---------|
 | [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md) | Production master prompt |
-| [cortex-architect.prompt.md](.github/prompts/cortex-architect.prompt.md) | Design-phase prompt |
+| [cortex-architect.prompt.md](.github/prompts/cortex-architect.prompt.md) | AUDIT + DESIGN dual-mode prompt |
 | [CORTEX.md](.github/agents/core/CORTEX.md) | Master agent |
-| [cortex-architect.md](.github/agents/core/cortex-architect.md) | Design agent |
+| [cortex-architect.md](.github/agents/core/cortex-architect.md) | Mode router agent |
+| [cortex-auditor.md](.github/agents/core/cortex-auditor.md) | AUDIT specialist agent |
+| [cortex-designer.md](.github/agents/core/cortex-designer.md) | DESIGN specialist agent |
 | [cortex-mcp-gateway.md](.github/agents/core/cortex-mcp-gateway.md) | MCP gateway agent |
 
 ---
