@@ -3316,6 +3316,14 @@ body::before {
                     const targetContent = document.getElementById(`${targetSubTab}-content`);
                     if (targetContent) {
                         targetContent.classList.add('active');
+                        
+                        // Initialize charts in the newly activated sub-tab
+                        setTimeout(() => {
+                            const chartContainers = targetContent.querySelectorAll('[id$="-chart"]');
+                            chartContainers.forEach(chart => {
+                                initializeChart(chart.id);
+                            });
+                        }, 100);
                     }
                 });
             });
@@ -3684,26 +3692,18 @@ body::before {
             });
         });
 
-        // Override sub-tab button click to initialize charts when sub-tab becomes active
-        subTabContainers.forEach(container => {
-            const subTabButtons = container.querySelectorAll('.sub-tab-button');
-            subTabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    setTimeout(() => {
-                        const activeContent = container.querySelector('.sub-tab-content.active');
-                        if (activeContent) {
-                            const chartContainers = activeContent.querySelectorAll('[id$="-chart"]');
-                            chartContainers.forEach(chart => {
-                                initializeChart(chart.id);
-                            });
-                        }
-                    }, 100);
+        // Initialize charts in the first visible tab (Overview) and first sub-tab (Code Smells)
+        setTimeout(() => {
+            initializeTabCharts('overview');
+            // Initialize first visible sub-tab charts
+            const firstActiveSubTab = document.querySelector('.sub-tab-content.active');
+            if (firstActiveSubTab) {
+                const chartContainers = firstActiveSubTab.querySelectorAll('[id$="-chart"]');
+                chartContainers.forEach(chart => {
+                    initializeChart(chart.id);
                 });
-            });
-        });
-
-        // Initialize charts in the first visible tab (Overview)
-        setTimeout(() => initializeTabCharts('overview'), 200);
+            }
+        }, 200);
 
         // ============================================
         // Progress Bar Animations
