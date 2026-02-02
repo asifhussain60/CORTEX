@@ -60,8 +60,8 @@ try:
         print(f"⚠ {blockers} blocker(s) detected")
         for b in data['blockers']:
             print(f"  - {b[0]}")
-except:
-    print(f"Parse error (exit code {result.returncode})")
+except (json.JSONDecodeError, KeyError, TypeError, IndexError) as e:
+    print(f"Parse error (exit code {result.returncode}): {e}")
     if result.stderr:
         print(result.stderr[:200])
 

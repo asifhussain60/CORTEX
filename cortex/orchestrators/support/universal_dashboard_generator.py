@@ -391,7 +391,8 @@ class UniversalDashboardGenerator:
         try:
             dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
             formatted_date = dt.strftime('%B %d, %Y')
-        except:
+        except (ValueError, AttributeError, TypeError) as e:
+            logger.debug(f"Failed to parse timestamp '{timestamp}': {e}")
             formatted_date = timestamp[:10] if len(timestamp) >= 10 else timestamp
         
         return f'''<!DOCTYPE html>

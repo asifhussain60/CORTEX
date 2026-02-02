@@ -340,7 +340,7 @@ class BusinessLanguageOrchestrator:
             if readme_path.exists():
                 try:
                     return readme_path.read_text(encoding='utf-8', errors='ignore')[:5000]
-                except:
+                except (OSError, IOError, UnicodeDecodeError):
                     pass
         return ""
     
@@ -371,7 +371,7 @@ class BusinessLanguageOrchestrator:
                             try:
                                 content = file_path.read_text(encoding='utf-8', errors='ignore')[:2000]
                                 file_contents_cache[rel_path] = content
-                            except:
+                            except (OSError, IOError, UnicodeDecodeError):
                                 file_contents_cache[rel_path] = ""
                         
                         if re.search(pattern, file_contents_cache[rel_path], re.IGNORECASE):
@@ -513,7 +513,7 @@ class BusinessLanguageOrchestrator:
                 mtime = f.stat().st_mtime
                 if oldest_file is None or mtime < oldest_file:
                     oldest_file = mtime
-            except:
+            except (OSError, IOError):
                 pass
         
         if oldest_file:

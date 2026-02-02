@@ -330,7 +330,7 @@ class IntelligentGitMergeTool:
                 check=True
             )
             return result.stdout.strip()
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError, OSError):
             return "main"  # fallback
     
     def _is_working_tree_clean(self) -> bool:
@@ -344,7 +344,7 @@ class IntelligentGitMergeTool:
                 check=True
             )
             return len(result.stdout.strip()) == 0
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError, OSError):
             return False
     
     def _get_uncommitted_files(self) -> List[str]:
@@ -362,7 +362,7 @@ class IntelligentGitMergeTool:
                 if line:
                     files.append(line[3:])  # Remove status prefix
             return files
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError, OSError):
             return []
     
     def _fetch_origin(self) -> None:
@@ -386,7 +386,7 @@ class IntelligentGitMergeTool:
             )
             ahead, behind = result.stdout.strip().split('\t')
             return int(ahead), int(behind)
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError, ValueError, OSError):
             return 0, 0
     
     def _get_cortex_brain_files(self) -> List[str]:
@@ -415,7 +415,7 @@ class IntelligentGitMergeTool:
             # Filter for cortex_brain files
             cortex_brain_mods = [f for f in modified_files if f.startswith('cortex_brain/')]
             return cortex_brain_mods
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError, OSError):
             return []
     
     def _identify_potential_conflicts(self) -> List[str]:
@@ -447,7 +447,7 @@ class IntelligentGitMergeTool:
             if 'files changed' in line or 'file changed' in line:
                 try:
                     return int(line.split()[0])
-                except:
+                except (ValueError, IndexError):
                     pass
         return 0
     
