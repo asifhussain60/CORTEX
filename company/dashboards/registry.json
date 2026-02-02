@@ -1,20 +1,56 @@
 {
-  "version": "1.0.0",
-  "created": "2026-02-01T07:53:51.839029",
-  "repos": [
-    {
-      "name": "kashkole",
-      "title": "KASHKOLE",
-      "description": "Data Management platform built with Python",
-      "health_score": 0,
-      "health_category": "critical",
-      "confidence": 100,
-      "dashboard_path": "kashkole/dashboard.html",
-      "icon": "\ud83d\udcff",
-      "tech_stack": [],
-      "onboarded_at": "2026-02-01T07:53:51.839051",
-      "updated_at": "2026-02-01T09:52:43.946434"
-    }
-  ],
-  "updated": "2026-02-01T09:52:43.946450"
+    "repos": [
+        {
+            "slug": "cortex",
+            "display_name": "CORTEX",
+            "description": "COgnitive Real-Time EXecution System - Enterprise Code Intelligence Platform with MCP-first architecture, 23 orchestrators, and unified LENS analysis.",
+            "owner": "Enterprise Architecture",
+            "primary_language": "Python",
+            "health_score": 85,
+            "risk_score": 25,
+            "loc": 125000,
+            "files": 850,
+            "coverage_pct": 78,
+            "version": "9.0",
+            "icon": "🧠",
+            "tags": ["critical", "platform", "mcp"],
+            "last_analyzed_at": "2026-02-02T08:00:00Z"
+        },
+        {
+            "slug": "cortex-brain",
+            "display_name": "CORTEX Brain",
+            "description": "Domain orchestration layer with tier-based governance and intelligent routing capabilities.",
+            "owner": "Core Platform",
+            "primary_language": "Python",
+            "health_score": 82,
+            "risk_score": 30,
+            "loc": 45000,
+            "files": 280,
+            "coverage_pct": 72,
+            "version": "4.0",
+            "icon": "🔮",
+            "tags": ["core", "governance"],
+            "last_analyzed_at": "2026-02-02T08:00:00Z"
+        },
+        {
+            "slug": "cortex-lens",
+            "display_name": "CORTEX LENS",
+            "description": "Unified code intelligence with security scanning, quality analysis, and architectural insights.",
+            "owner": "DevX Team",
+            "primary_language": "Python",
+            "health_score": 88,
+            "risk_score": 20,
+            "loc": 32000,
+            "files": 180,
+            "coverage_pct": 85,
+            "version": "3.0",
+            "icon": "🔍",
+            "tags": ["lens", "security", "analysis"],
+            "last_analyzed_at": "2026-02-02T08:00:00Z"
+        }
+    ],
+    "generated_at": "2026-02-02T08:35:00Z",
+    "version": "9.0",
+    "total_loc": 202000,
+    "avg_health": 85
 }

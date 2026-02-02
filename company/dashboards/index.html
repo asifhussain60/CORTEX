@@ -3,113 +3,598 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Onboarding Dashboard Hub - Security-analyzed repository dashboards">
-    <title>CORTEX Onboarding Hub | Repository Dashboards</title>
+    <title>CORTEX Repository Dashboards</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="assets/images/CORTEX-logo-64.png">
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="assets/css/dashboard-combined.css">
-    <link rel="stylesheet" href="assets/css/landing.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="spa/css/variables.css">
+    <link rel="stylesheet" href="spa/css/base.css">
+    <link rel="stylesheet" href="spa/css/components.css">
+    <link rel="stylesheet" href="spa/css/layout.css">
     
     <style>
-        /* Additional inline styles for landing page */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Landing page specific styles */
+        .landing-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
         }
         
-        html {
-            scroll-behavior: smooth;
+        .landing-stat {
+            text-align: center;
         }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
-            background-attachment: fixed;
-            color: #ffffff;
-            min-height: 100vh;
-            line-height: 1.6;
+        .landing-stat__value {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--accent-primary);
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
+        .landing-stat__label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
         }
         
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 3rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-smooth);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(77, 140, 255, 0.2), var(--shadow-glow);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+        }
+        
+        .filter-btn:hover {
+            background: var(--glass-bg-light);
+            border-color: var(--glass-border-accent);
+            color: var(--text-primary);
+        }
+        
+        .filter-btn.active {
+            background: var(--glass-bg-light);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .repo-tile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 1.75rem;
+            background: var(--glass-bg-card);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--transition-smooth);
+            overflow: hidden;
+        }
+        
+        .repo-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity var(--transition-smooth);
+        }
+        
+        .repo-tile:hover {
+            transform: translateY(-6px);
+            border-color: var(--glass-border-accent);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .repo-tile:hover::before {
+            opacity: 1;
+        }
+        
+        .repo-tile__header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .repo-tile__icon {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        
+        .repo-tile__info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .repo-tile__name {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .repo-tile__owner {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+        }
+        
+        .repo-tile__language {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--glass-bg-light);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+        }
+        
+        .repo-tile__language::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+        }
+        
+        .repo-tile__description {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            line-height: var(--line-height-normal);
+            margin-bottom: 1.25rem;
+            flex: 1;
+        }
+        
+        .repo-tile__stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .repo-tile__stat {
+            text-align: center;
+        }
+        
+        .repo-tile__stat-value {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+        }
+        
+        .repo-tile__stat-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+        }
+        
+        .repo-tile__stat--health .repo-tile__stat-value {
+            color: var(--success);
+        }
+        
+        .repo-tile__stat--risk .repo-tile__stat-value {
+            color: var(--warning);
+        }
+        
+        .repo-tile__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .repo-tile__tag {
+            padding: 0.2rem 0.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            color: var(--text-tertiary);
+        }
+        
+        .no-repos {
+            grid-column: 1 / -1;
+        }
+        
+        /* Footer */
+        .landing-footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="app-container">
+        
         <!-- Hero Section -->
         <section class="landing-hero">
-            <img src="assets/images/CORTEX-logo-512.png" 
+            <img src="spa/images/cortex-logo-200.png" 
                  alt="CORTEX Logo" 
-                 class="landing-logo"
-                 width="150" 
-                 height="150">
-            <h1 class="landing-title">CORTEX Onboarding Hub</h1>
-            <p class="landing-subtitle">
-                Security-Analyzed Repository Dashboards
-            </p>
-            <p style="color: rgba(255,255,255,0.5); margin-top: 1rem; font-size: 0.9rem;">
-                1 repositories onboarded • Powered by CORTEX v8.0
-            </p>
-        </section>
-        
-        <!-- Repository Tiles Grid -->
-        <section class="repos-section">
-            <div class="repos-grid">
-                
-                <a href="kashkole/dashboard.html" class="repo-tile">
-                    <span class="repo-tile-icon">📿</span>
-                    <h3 class="repo-tile-title">KASHKOLE</h3>
-                    <p class="repo-tile-description">Data Management platform built with Python</p>
-                    
-                    <div class="repo-tile-meta">
-                        <span class="repo-tile-health critical">
-                            <span style="font-size: 1.25rem;">🔴</span>
-                            0% Health
-                        </span>
-                        <span class="repo-tile-date">Feb 01, 2026</span>
-                    </div>
-                </a>
+                 class="landing-hero__logo">
             
+            <h1 class="landing-hero__title">CORTEX Dashboards</h1>
+            <p class="landing-hero__subtitle">
+                Enterprise Code Intelligence Platform — Unified repository analysis, 
+                security scanning, and actionable insights.
+            </p>
+            
+            <div class="landing-stats" id="global-stats">
+                <div class="landing-stat">
+                    <div class="landing-stat__value" id="total-repos">--</div>
+                    <div class="landing-stat__label">Repositories</div>
+                </div>
+                <div class="landing-stat">
+                    <div class="landing-stat__value" id="total-loc">--</div>
+                    <div class="landing-stat__label">Lines of Code</div>
+                </div>
+                <div class="landing-stat">
+                    <div class="landing-stat__value" id="avg-health">--</div>
+                    <div class="landing-stat__label">Avg Health</div>
+                </div>
             </div>
         </section>
         
+        <!-- Search & Filters -->
+        <div class="search-container">
+            <input type="text" 
+                   id="repo-search" 
+                   class="search-input" 
+                   placeholder="🔍 Search repositories..."
+                   aria-label="Search repositories">
+        </div>
+        
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="critical">🔴 Critical</button>
+            <button class="filter-btn" data-filter="high-risk">⚠️ High Risk</button>
+            <button class="filter-btn" data-filter="healthy">✅ Healthy</button>
+        </div>
+        
+        <!-- Repository Grid -->
+        <div class="repo-grid" id="repo-grid">
+            <!-- Tiles rendered by JavaScript -->
+            <div class="no-data no-repos">
+                <div class="no-data__icon">📊</div>
+                <div class="no-data__title">Loading Repositories...</div>
+                <div class="no-data__description">Repository data will appear here.</div>
+            </div>
+        </div>
+        
         <!-- Footer -->
         <footer class="landing-footer">
-            <p>Generated by CORTEX • 2026-02-01 09:52</p>
+            <p>CORTEX v9.0 — Code Intelligence Platform</p>
             <p style="margin-top: 0.5rem;">
-                <a href="https://github.com/asifhussain60/CORTEX" 
-                   style="color: #00d4ff; text-decoration: none;"
-                   target="_blank">
-                    View CORTEX on GitHub →
-                </a>
+                Generated <span id="generation-date">--</span>
             </p>
         </footer>
     </div>
     
-    <!-- Tile hover sound effect (optional) -->
+    <!-- Registry Data -->
+    <script type="application/json" id="registry-data">
+    {
+        "repos": [
+            {
+                "slug": "cortex",
+                "display_name": "CORTEX",
+                "description": "COgnitive Real-Time EXecution System - Enterprise Code Intelligence Platform with MCP-first architecture, 23 orchestrators, and unified LENS analysis.",
+                "owner": "Enterprise Architecture",
+                "primary_language": "Python",
+                "health_score": 85,
+                "risk_score": 25,
+                "loc": 125000,
+                "files": 850,
+                "coverage_pct": 78,
+                "version": "9.0",
+                "icon": "🧠",
+                "tags": ["critical", "platform", "mcp"],
+                "last_analyzed_at": "2026-02-02T08:00:00Z"
+            },
+            {
+                "slug": "cortex-brain",
+                "display_name": "CORTEX Brain",
+                "description": "Domain orchestration layer with tier-based governance and intelligent routing capabilities.",
+                "owner": "Core Platform",
+                "primary_language": "Python",
+                "health_score": 82,
+                "risk_score": 30,
+                "loc": 45000,
+                "files": 280,
+                "coverage_pct": 72,
+                "version": "4.0",
+                "icon": "🔮",
+                "tags": ["core", "governance"],
+                "last_analyzed_at": "2026-02-02T08:00:00Z"
+            },
+            {
+                "slug": "cortex-lens",
+                "display_name": "CORTEX LENS",
+                "description": "Unified code intelligence with security scanning, quality analysis, and architectural insights.",
+                "owner": "DevX Team",
+                "primary_language": "Python",
+                "health_score": 88,
+                "risk_score": 20,
+                "loc": 32000,
+                "files": 180,
+                "coverage_pct": 85,
+                "version": "3.0",
+                "icon": "🔍",
+                "tags": ["lens", "security", "analysis"],
+                "last_analyzed_at": "2026-02-02T08:00:00Z"
+            }
+        ],
+        "generated_at": "2026-02-02T08:35:00Z",
+        "version": "9.0",
+        "total_loc": 202000,
+        "avg_health": 85
+    }
+    </script>
+    
+    <!-- Vendor Scripts -->
+    <script src="spa/vendor/fuse.min.js"></script>
+    
+    <!-- Landing Page Script -->
     <script>
-        // Add subtle interaction effects
-        document.querySelectorAll('.repo-tile').forEach(tile => {
-            tile.addEventListener('mouseenter', () => {
-                tile.style.zIndex = '10';
+    (function() {
+        'use strict';
+        
+        // Load registry data
+        const registryScript = document.getElementById('registry-data');
+        let registry = { repos: [], generated_at: null };
+        
+        try {
+            registry = JSON.parse(registryScript.textContent);
+        } catch (e) {
+            console.error('Failed to parse registry data:', e);
+        }
+        
+        const repos = registry.repos || [];
+        let filteredRepos = [...repos];
+        let fuse = null;
+        
+        // Initialize Fuse.js for search
+        if (typeof Fuse !== 'undefined' && repos.length > 0) {
+            fuse = new Fuse(repos, {
+                keys: ['display_name', 'slug', 'owner', 'primary_language', 'tags'],
+                threshold: 0.3
             });
-            tile.addEventListener('mouseleave', () => {
-                tile.style.zIndex = '1';
-            });
+        }
+        
+        // Render global stats
+        function renderStats() {
+            document.getElementById('total-repos').textContent = repos.length;
+            
+            const totalLoc = repos.reduce((sum, r) => sum + (r.loc || 0), 0);
+            document.getElementById('total-loc').textContent = formatNumber(totalLoc);
+            
+            const avgHealth = repos.length > 0 
+                ? Math.round(repos.reduce((sum, r) => sum + (r.health_score || 0), 0) / repos.length)
+                : 0;
+            document.getElementById('avg-health').textContent = avgHealth + '%';
+            
+            if (registry.generated_at) {
+                document.getElementById('generation-date').textContent = 
+                    new Date(registry.generated_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+            }
+        }
+        
+        // Render repo tiles
+        function renderRepos() {
+            const grid = document.getElementById('repo-grid');
+            
+            if (filteredRepos.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-data no-repos">
+                        <div class="no-data__icon">🔍</div>
+                        <div class="no-data__title">No Repositories Found</div>
+                        <div class="no-data__description">Try adjusting your search or filters.</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredRepos.map(repo => renderTile(repo)).join('');
+        }
+        
+        function renderTile(repo) {
+            const healthClass = repo.health_score >= 80 ? 'text-success' : 
+                               repo.health_score >= 60 ? 'text-warning' : 'text-danger';
+            const riskClass = repo.risk_score <= 30 ? 'text-success' : 
+                             repo.risk_score <= 60 ? 'text-warning' : 'text-danger';
+            
+            const tags = (repo.tags || []).slice(0, 3);
+            
+            return `
+                <a href="repos/${repo.slug}/index.html" class="repo-tile">
+                    <div class="repo-tile__header">
+                        <span class="repo-tile__icon">${repo.icon || '📁'}</span>
+                        <div class="repo-tile__info">
+                            <h3 class="repo-tile__name">${escapeHtml(repo.display_name)}</h3>
+                            <span class="repo-tile__owner">${escapeHtml(repo.owner || 'Unknown')}</span>
+                        </div>
+                        <span class="repo-tile__language">${escapeHtml(repo.primary_language || 'Unknown')}</span>
+                    </div>
+                    
+                    <p class="repo-tile__description">
+                        ${escapeHtml(truncate(repo.description || 'Repository analysis dashboard', 100))}
+                    </p>
+                    
+                    <div class="repo-tile__stats">
+                        <div class="repo-tile__stat repo-tile__stat--health">
+                            <div class="repo-tile__stat-value ${healthClass}">${repo.health_score || '--'}</div>
+                            <div class="repo-tile__stat-label">Health</div>
+                        </div>
+                        <div class="repo-tile__stat repo-tile__stat--risk">
+                            <div class="repo-tile__stat-value ${riskClass}">${repo.risk_score || '--'}</div>
+                            <div class="repo-tile__stat-label">Risk</div>
+                        </div>
+                        <div class="repo-tile__stat">
+                            <div class="repo-tile__stat-value">${formatNumber(repo.loc || 0)}</div>
+                            <div class="repo-tile__stat-label">LOC</div>
+                        </div>
+                        <div class="repo-tile__stat">
+                            <div class="repo-tile__stat-value">${repo.files || '--'}</div>
+                            <div class="repo-tile__stat-label">Files</div>
+                        </div>
+                    </div>
+                    
+                    ${tags.length > 0 ? `
+                    <div class="repo-tile__tags">
+                        ${tags.map(t => `<span class="repo-tile__tag">${escapeHtml(t)}</span>`).join('')}
+                    </div>
+                    ` : ''}
+                </a>
+            `;
+        }
+        
+        // Search handler
+        document.getElementById('repo-search').addEventListener('input', debounce(function(e) {
+            const query = e.target.value.trim();
+            
+            if (!query) {
+                filteredRepos = [...repos];
+            } else if (fuse) {
+                filteredRepos = fuse.search(query).map(r => r.item);
+            } else {
+                const lowerQuery = query.toLowerCase();
+                filteredRepos = repos.filter(r => 
+                    r.display_name?.toLowerCase().includes(lowerQuery) ||
+                    r.slug?.toLowerCase().includes(lowerQuery)
+                );
+            }
+            
+            applyCurrentFilter();
+            renderRepos();
+        }, 200));
+        
+        // Filter handlers
+        let currentFilter = 'all';
+        
+        document.getElementById('filter-bar').addEventListener('click', function(e) {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            currentFilter = btn.dataset.filter;
+            applyCurrentFilter();
+            renderRepos();
         });
+        
+        function applyCurrentFilter() {
+            let base = document.getElementById('repo-search').value.trim() 
+                ? filteredRepos 
+                : [...repos];
+            
+            switch (currentFilter) {
+                case 'critical':
+                    filteredRepos = base.filter(r => (r.tags || []).includes('critical'));
+                    break;
+                case 'high-risk':
+                    filteredRepos = base.filter(r => (r.risk_score || 0) > 60);
+                    break;
+                case 'healthy':
+                    filteredRepos = base.filter(r => (r.health_score || 0) >= 80);
+                    break;
+                default:
+                    filteredRepos = base;
+            }
+        }
+        
+        // Utilities
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toLocaleString();
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function truncate(text, length) {
+            if (!text || text.length <= length) return text || '';
+            return text.substring(0, length) + '...';
+        }
+        
+        function debounce(fn, delay) {
+            let timeoutId;
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+        
+        // Initialize
+        renderStats();
+        renderRepos();
+        
+        console.log('✅ CORTEX Landing initialized with', repos.length, 'repositories');
+    })();
     </script>
 </body>
 </html>

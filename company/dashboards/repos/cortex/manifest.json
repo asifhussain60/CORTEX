@@ -1,0 +1,398 @@
+{
+    "repo": {
+        "slug": "cortex",
+        "display_name": "CORTEX",
+        "description": "COgnitive Real-Time EXecution System - Enterprise Code Intelligence Platform",
+        "owner": "Enterprise Architecture",
+        "primary_language": "Python",
+        "version": "9.0",
+        "last_analyzed_at": "2026-02-02T08:00:00Z"
+    },
+    "overview": {
+        "summary": "Enterprise Code Intelligence Dashboard powered by CORTEX LENS",
+        "business_summary": "CORTEX is an enterprise-grade code intelligence platform that provides real-time code analysis, security scanning, and automated refactoring recommendations. Built on a Model Context Protocol (MCP) first architecture, it orchestrates 23 specialized modules to deliver comprehensive repository insights. The platform serves as the central nervous system for engineering teams, enabling proactive code quality management, security vulnerability detection, and architectural compliance monitoring across the entire codebase.",
+        "key_findings": [
+            "Strong overall health score with excellent test coverage",
+            "Active MCP server providing 15+ production tools",
+            "23 orchestrators fully wired and operational",
+            "Security posture is solid with minor improvements needed",
+            "Code quality metrics above industry benchmarks"
+        ]
+    },
+    "metrics": {
+        "health_score": 85,
+        "risk_score": 25,
+        "loc": 125000,
+        "code_lines": 95000,
+        "comment_lines": 18000,
+        "blank_lines": 12000,
+        "files": 850,
+        "coverage_pct": 78,
+        "languages": {
+            "Python": 85000,
+            "TypeScript": 15000,
+            "JavaScript": 12000,
+            "HTML": 8000,
+            "CSS": 3000,
+            "YAML": 2000
+        }
+    },
+    "security": {
+        "total_count": 12,
+        "critical_count": 0,
+        "high_count": 2,
+        "medium_count": 5,
+        "low_count": 5,
+        "vulnerabilities": [
+            {
+                "id": "SEC-001",
+                "title": "Potential SQL Injection in Query Builder",
+                "severity": "high",
+                "cwe_id": "CWE-89",
+                "location": "cortex/database/query_builder.py:145",
+                "status": "open",
+                "description": "User input not properly sanitized before SQL query construction"
+            },
+            {
+                "id": "SEC-002",
+                "title": "Sensitive Data Exposure in Logs",
+                "severity": "high",
+                "cwe_id": "CWE-532",
+                "location": "cortex/logging/handlers.py:89",
+                "status": "in_progress",
+                "description": "API keys may be logged in debug mode"
+            },
+            {
+                "id": "SEC-003",
+                "title": "Missing Input Validation",
+                "severity": "medium",
+                "cwe_id": "CWE-20",
+                "location": "cortex/api/endpoints.py:234",
+                "status": "open",
+                "description": "File path input not validated for path traversal"
+            },
+            {
+                "id": "SEC-004",
+                "title": "Weak Cryptographic Algorithm",
+                "severity": "medium",
+                "cwe_id": "CWE-327",
+                "location": "cortex/security/crypto.py:56",
+                "status": "open",
+                "description": "MD5 used for non-security purposes but could be upgraded"
+            },
+            {
+                "id": "SEC-005",
+                "title": "Insecure Default Configuration",
+                "severity": "medium",
+                "cwe_id": "CWE-276",
+                "location": "cortex/config/defaults.py:12",
+                "status": "open",
+                "description": "Debug mode enabled by default in configuration"
+            },
+            {
+                "id": "SEC-006",
+                "title": "Missing Rate Limiting",
+                "severity": "medium",
+                "cwe_id": "CWE-770",
+                "location": "cortex/api/middleware.py:45",
+                "status": "open",
+                "description": "API endpoints lack rate limiting protection"
+            },
+            {
+                "id": "SEC-007",
+                "title": "Hardcoded Test Credentials",
+                "severity": "medium",
+                "cwe_id": "CWE-798",
+                "location": "tests/fixtures/auth_fixtures.py:23",
+                "status": "accepted",
+                "description": "Test credentials in fixture file (acceptable for tests)"
+            },
+            {
+                "id": "SEC-008",
+                "title": "Missing CSRF Protection",
+                "severity": "low",
+                "cwe_id": "CWE-352",
+                "location": "cortex/api/forms.py:78",
+                "status": "open",
+                "description": "Form submission endpoint lacks CSRF token validation"
+            },
+            {
+                "id": "SEC-009",
+                "title": "Verbose Error Messages",
+                "severity": "low",
+                "cwe_id": "CWE-209",
+                "location": "cortex/error_handling.py:34",
+                "status": "open",
+                "description": "Stack traces exposed in error responses"
+            },
+            {
+                "id": "SEC-010",
+                "title": "Missing Security Headers",
+                "severity": "low",
+                "cwe_id": "CWE-693",
+                "location": "cortex/api/response.py:12",
+                "status": "open",
+                "description": "X-Content-Type-Options header not set"
+            },
+            {
+                "id": "SEC-011",
+                "title": "Outdated Dependency",
+                "severity": "low",
+                "cwe_id": "CWE-1104",
+                "location": "requirements.txt:45",
+                "status": "open",
+                "description": "requests library has known vulnerability in older version"
+            },
+            {
+                "id": "SEC-012",
+                "title": "Missing Cookie Flags",
+                "severity": "low",
+                "cwe_id": "CWE-614",
+                "location": "cortex/auth/session.py:67",
+                "status": "open",
+                "description": "Session cookies missing Secure and SameSite flags"
+            }
+        ]
+    },
+    "dependencies": {
+        "direct_count": 45,
+        "dev_count": 28,
+        "transitive_count": 156,
+        "outdated_count": 8,
+        "packages": [
+            {"name": "fastapi", "version": "0.109.0", "latest": "0.109.0", "license": "MIT", "type": "direct"},
+            {"name": "pydantic", "version": "2.5.3", "latest": "2.5.3", "license": "MIT", "type": "direct"},
+            {"name": "uvicorn", "version": "0.27.0", "latest": "0.27.0", "license": "BSD-3-Clause", "type": "direct"},
+            {"name": "sqlalchemy", "version": "2.0.25", "latest": "2.0.25", "license": "MIT", "type": "direct"},
+            {"name": "redis", "version": "5.0.1", "latest": "5.0.1", "license": "MIT", "type": "direct"},
+            {"name": "pytest", "version": "7.4.4", "latest": "8.0.0", "license": "MIT", "type": "dev"},
+            {"name": "mypy", "version": "1.8.0", "latest": "1.8.0", "license": "MIT", "type": "dev"},
+            {"name": "ruff", "version": "0.1.14", "latest": "0.2.0", "license": "MIT", "type": "dev"}
+        ],
+        "licenses": {
+            "MIT": 180,
+            "Apache-2.0": 25,
+            "BSD-3-Clause": 15,
+            "ISC": 8,
+            "Other": 1
+        }
+    },
+    "quality": {
+        "maintainability": 82,
+        "readability": 78,
+        "documentation": 75,
+        "complexity": 35,
+        "code_smells_count": 23,
+        "code_smells": [
+            {
+                "name": "Long Method",
+                "description": "Method exceeds 50 lines of code",
+                "location": "cortex/orchestrators/master_orchestrator.py:process_request",
+                "severity": "medium"
+            },
+            {
+                "name": "Complex Conditional",
+                "description": "Nested conditionals exceed 3 levels",
+                "location": "cortex/intent_router/router.py:route_intent",
+                "severity": "medium"
+            },
+            {
+                "name": "God Class",
+                "description": "Class has too many responsibilities",
+                "location": "cortex/lens/analyzer.py:LensAnalyzer",
+                "severity": "high"
+            },
+            {
+                "name": "Magic Number",
+                "description": "Hardcoded numeric literal",
+                "location": "cortex/governance/rules.py:45",
+                "severity": "low"
+            },
+            {
+                "name": "Duplicate Code",
+                "description": "Similar code blocks detected",
+                "location": "cortex/mcp/tools/*.py",
+                "severity": "medium"
+            }
+        ]
+    },
+    "use_cases": [
+        {
+            "id": "UC-001",
+            "title": "Automated Code Review",
+            "description": "Enable developers to receive instant feedback on code quality, security vulnerabilities, and best practice violations during pull request reviews.",
+            "persona": "Developer",
+            "category": "Code Quality",
+            "business_value": "Reduces code review time by 40% and catches 85% of common issues before human review.",
+            "implementation_notes": "Uses LENS analyzer with configurable rule sets. Integrates with GitHub Actions for PR automation.",
+            "related_files": [
+                "cortex/lens/analyzer.py",
+                "cortex/mcp/tools/review_tools.py",
+                "cortex/ci_cd/github_integration.py"
+            ],
+            "tags": ["automation", "code-review", "ci-cd"]
+        },
+        {
+            "id": "UC-002",
+            "title": "Security Vulnerability Scanning",
+            "description": "Continuously scan codebase for security vulnerabilities, outdated dependencies, and compliance issues with OWASP standards.",
+            "persona": "Security",
+            "category": "Security",
+            "business_value": "Proactive security posture reduces incident response time and compliance audit preparation by 60%.",
+            "implementation_notes": "Integrates with Bandit, Safety, and custom OWASP rule engine. Results feed into security dashboard.",
+            "related_files": [
+                "cortex/security/scanner.py",
+                "cortex/security/owasp_rules.py",
+                "cortex/mcp/tools/security_tools.py"
+            ],
+            "tags": ["security", "owasp", "compliance"]
+        },
+        {
+            "id": "UC-003",
+            "title": "Technical Debt Tracking",
+            "description": "Identify, quantify, and prioritize technical debt across the codebase with actionable remediation recommendations.",
+            "persona": "Manager",
+            "category": "Planning",
+            "business_value": "Enables data-driven sprint planning with clear ROI calculations for debt reduction efforts.",
+            "implementation_notes": "Combines code complexity metrics, TODO tracking, and architectural analysis for comprehensive debt scoring.",
+            "related_files": [
+                "cortex/quality/debt_calculator.py",
+                "cortex/orchestrators/planning_orchestrator.py",
+                "cortex/reports/debt_report.py"
+            ],
+            "tags": ["technical-debt", "planning", "metrics"]
+        },
+        {
+            "id": "UC-004",
+            "title": "Architecture Compliance Monitoring",
+            "description": "Ensure codebase adheres to defined architectural patterns, layer boundaries, and dependency rules.",
+            "persona": "Architect",
+            "category": "Architecture",
+            "business_value": "Prevents architectural erosion and maintains system maintainability over time.",
+            "implementation_notes": "Uses AST analysis to verify layer dependencies and pattern compliance. Violations trigger alerts.",
+            "related_files": [
+                "cortex/lens/architecture_analyzer.py",
+                "cortex/governance/arch_rules.py",
+                "cortex/wiring/specifications/wiring.yaml"
+            ],
+            "tags": ["architecture", "compliance", "governance"]
+        },
+        {
+            "id": "UC-005",
+            "title": "Onboarding New Repositories",
+            "description": "Automatically analyze and generate comprehensive documentation for new repositories joining the CORTEX ecosystem.",
+            "persona": "DevOps",
+            "category": "Operations",
+            "business_value": "Reduces onboarding time from days to hours with automated analysis and documentation generation.",
+            "implementation_notes": "MCP-exposed onboarding orchestrator generates JSON manifests consumed by SPA dashboards.",
+            "related_files": [
+                "cortex/orchestrators/onboarding_orchestrator.py",
+                "cortex/mcp/tools/onboarding_tools.py",
+                "cortex/documentation/auto_docs.py"
+            ],
+            "tags": ["onboarding", "automation", "documentation"]
+        },
+        {
+            "id": "UC-006",
+            "title": "Dependency Impact Analysis",
+            "description": "Assess the impact of upgrading or changing dependencies across the codebase before making changes.",
+            "persona": "Developer",
+            "category": "Dependencies",
+            "business_value": "Reduces failed deployments by 70% through proactive impact assessment.",
+            "implementation_notes": "Traces dependency usage throughout codebase and simulates upgrade impacts.",
+            "related_files": [
+                "cortex/dependencies/impact_analyzer.py",
+                "cortex/dependencies/upgrade_planner.py"
+            ],
+            "tags": ["dependencies", "impact-analysis", "risk"]
+        },
+        {
+            "id": "UC-007",
+            "title": "Test Coverage Optimization",
+            "description": "Identify critical code paths lacking test coverage and prioritize testing efforts based on risk.",
+            "persona": "QA",
+            "category": "Testing",
+            "business_value": "Maximizes test ROI by focusing coverage on highest-risk code paths.",
+            "implementation_notes": "Combines coverage data with complexity and change frequency for risk-based prioritization.",
+            "related_files": [
+                "cortex/testing/coverage_analyzer.py",
+                "cortex/testing/test_prioritizer.py"
+            ],
+            "tags": ["testing", "coverage", "quality"]
+        },
+        {
+            "id": "UC-008",
+            "title": "Performance Bottleneck Detection",
+            "description": "Identify potential performance issues through static analysis of complexity, database queries, and resource usage patterns.",
+            "persona": "Developer",
+            "category": "Performance",
+            "business_value": "Catches performance issues before production, reducing incident rates by 50%.",
+            "implementation_notes": "Analyzes query patterns, loop complexity, and memory allocation patterns.",
+            "related_files": [
+                "cortex/performance/static_analyzer.py",
+                "cortex/performance/query_analyzer.py"
+            ],
+            "tags": ["performance", "optimization", "analysis"]
+        }
+    ],
+    "lens": {
+        "patterns_detected": [
+            {"name": "Repository Pattern", "count": 12, "confidence": 0.95},
+            {"name": "Factory Pattern", "count": 8, "confidence": 0.92},
+            {"name": "Strategy Pattern", "count": 6, "confidence": 0.88},
+            {"name": "Observer Pattern", "count": 4, "confidence": 0.85},
+            {"name": "Decorator Pattern", "count": 15, "confidence": 0.97}
+        ],
+        "architecture_summary": "The codebase follows a clean layered architecture with clear separation between API, business logic, and data access layers. MCP-first design ensures all functionality is exposed through well-defined tool interfaces. The orchestrator pattern provides flexible workflow composition.",
+        "recommendations": [
+            "Consider extracting LensAnalyzer into smaller focused analyzers",
+            "Implement caching layer for frequently accessed analysis results",
+            "Add circuit breaker pattern for external service calls"
+        ]
+    },
+    "refactoring": {
+        "total_recommendations": 8,
+        "recommendations": [
+            {
+                "title": "Extract Query Builder Module",
+                "description": "The query_builder.py contains multiple concerns. Extract SQL generation into dedicated module.",
+                "priority": "high",
+                "impact": "Improves testability and reduces security risk",
+                "effort": "medium",
+                "files": ["cortex/database/query_builder.py"]
+            },
+            {
+                "title": "Decompose LensAnalyzer Class",
+                "description": "God class with 1500+ lines. Split into SecurityAnalyzer, QualityAnalyzer, and ArchitectureAnalyzer.",
+                "priority": "high",
+                "impact": "Major improvement in maintainability and testing",
+                "effort": "high",
+                "files": ["cortex/lens/analyzer.py"]
+            },
+            {
+                "title": "Implement Caching Strategy",
+                "description": "Repeated analysis of unchanged files. Add intelligent caching with invalidation.",
+                "priority": "medium",
+                "impact": "50% reduction in analysis time for incremental runs",
+                "effort": "medium",
+                "files": ["cortex/lens/cache.py", "cortex/analysis/runner.py"]
+            },
+            {
+                "title": "Standardize Error Handling",
+                "description": "Inconsistent error handling across modules. Implement centralized exception hierarchy.",
+                "priority": "medium",
+                "impact": "Better debugging and consistent error responses",
+                "effort": "low",
+                "files": ["cortex/core/exceptions.py", "cortex/api/error_handlers.py"]
+            },
+            {
+                "title": "Remove Duplicate Code in MCP Tools",
+                "description": "Similar boilerplate across tool implementations. Create base tool class.",
+                "priority": "low",
+                "impact": "Reduces code duplication by 30%",
+                "effort": "low",
+                "files": ["cortex/mcp/tools/base_tool.py"]
+            }
+        ]
+    }
+}
