@@ -1,0 +1,777 @@
+# PHASE 20.2: Orchestrator Activity Bar (Training Wheels Feature)
+# Authority: AC-UX-VISIBILITY-001
+# Version: 1.0
+# Date: 2026-02-02
+# Status: APPROVED
+# Feature Type: TRAINING WHEELS (Toggleable)
+
+metadata:
+  phase_id: "PHASE-20.2"
+  title: "Orchestrator Activity Bar - Training Wheels UX"
+  authority: "AC-UX-VISIBILITY-001"
+  version: "1.0"
+  status: "APPROVED"
+  created: "2026-02-02"
+  approval:
+    approved_by: "Asif Hussain"
+    approved_date: "2026-02-02"
+    approval_context: "User requested orchestrator visibility with toggle-off capability once confidence gained"
+  
+  feature_type: "TRAINING_WHEELS"
+  toggle_strategy: "Environment variable + config setting"
+  default_state: "ENABLED (for new users)"
+  maturity_path: "Enable → Monitor → Disable when confidence achieved"
+
+# =============================================================================
+# EXECUTIVE SUMMARY
+# =============================================================================
+
+executive_summary: |
+  Provide inline visibility into CORTEX orchestrator engagement, stage progress,
+  and intelligence activation—designed as TRAINING WHEELS that can be disabled
+  once engineers gain confidence in orchestration patterns.
+  
+  **Problem:**
+  - Engineers lack visibility into which orchestrator is handling their request
+  - No feedback on stage progress (4-stage flow)
+  - Unknown whether LENS/knowledge synthesis engaged
+  - Failures occur silently without clear indicators
+  - Need builds trust, then becomes noise once mastered
+  
+  **Solution:**
+  - Enhanced Response Header with rich orchestrator indicators
+  - Orchestrator badges (🧪 TDD, 🔧 Fix, ♻️ Refactor, 🔍 Analyze)
+  - Stage progress dots (●●○○ showing 4-stage flow)
+  - Intelligence badges (🧠 +LENS, 📚 +Knowledge, 🧠📚 +Intelligence)
+  - Failure indicators (●●✗○ with red warning)
+  - **TOGGLE-OFF capability via config/env var**
+  
+  **Impact:**
+  - ✅ Engineers understand orchestrator engagement (learning phase)
+  - ✅ Transparent failure states for debugging
+  - ✅ Builds confidence in CORTEX automation
+  - ✅ **Removes noise once mastery achieved** (mature phase)
+  - ✅ Zero performance overhead when disabled
+
+# =============================================================================
+# TRAINING WHEELS PHILOSOPHY
+# =============================================================================
+
+training_wheels_design:
+  rationale: |
+    Like training wheels on a bicycle:
+    1. **ESSENTIAL during learning** - provides safety and confidence
+    2. **REMOVABLE after mastery** - no longer needed, becomes hindrance
+    3. **GRADUAL transition** - monitor usage, disable when ready
+    
+  lifecycle_stages:
+    learning:
+      duration: "2-4 weeks per engineer"
+      visibility: "FULL (all badges, dots, indicators)"
+      purpose: "Build mental model of orchestrator flow"
+      metrics:
+        - "Request count per orchestrator"
+        - "Stage completion rates"
+        - "Failure recovery patterns"
+    
+    transitioning:
+      duration: "1-2 weeks"
+      visibility: "REDUCED (failures only, no success details)"
+      purpose: "Wean off constant feedback"
+      trigger: "Engineer completes 50+ successful requests"
+    
+    mature:
+      duration: "Ongoing"
+      visibility: "DISABLED (clean responses)"
+      purpose: "Focus on content, not process"
+      trigger: "Engineer manually disables or team policy"
+  
+  toggle_mechanisms:
+    environment_variable:
+      name: "CORTEX_ORCHESTRATOR_VISIBILITY"
+      values:
+        - "full: All indicators (learning phase)"
+        - "failures: Only show failures (transitioning)"
+        - "off: Disabled (mature phase)"
+      default: "full"
+      scope: "Per-user or system-wide"
+    
+    config_file:
+      location: "cortex/config/settings.yaml"
+      setting: "observability.orchestrator_visibility"
+      override_precedence: "ENV VAR > Config > Default"
+    
+    runtime_command:
+      command: "/visibility [full|failures|off]"
+      scope: "Current session only"
+      persistence: "Saved to user preferences"
+
+# =============================================================================
+# ARCHITECTURE
+# =============================================================================
+
+architecture:
+  components:
+    - name: "ResponseHeaderInjector Enhancement"
+      type: "Enhancement"
+      location: "cortex/brain/core/response_header_injector.py"
+      responsibility: "Generate enhanced headers with orchestrator badges"
+      new_methods:
+        - "_format_orchestrator_badge()"
+        - "_format_stage_progress()"
+        - "_format_intelligence_badges()"
+        - "_is_visibility_enabled()"
+      
+    - name: "VisibilityController"
+      type: "New Service"
+      location: "cortex/observability/visibility_controller.py"
+      responsibility: "Manage visibility state and lifecycle transitions"
+      methods:
+        - "get_visibility_mode() -> VisibilityMode"
+        - "should_show_success_details() -> bool"
+        - "should_show_failure_details() -> bool"
+        - "record_usage_metrics(orchestrator, stage, success)"
+        - "suggest_transition() -> Optional[str]"
+    
+    - name: "UsageMetricsCollector"
+      type: "New Service"
+      location: "cortex/observability/usage_metrics_collector.py"
+      responsibility: "Track engineer engagement for lifecycle transitions"
+      metrics:
+        - "requests_per_orchestrator"
+        - "stage_completion_rates"
+        - "failure_recovery_time"
+        - "maturity_score"
+
+  data_models:
+    visibility_mode:
+      type: "Enum"
+      values:
+        - "FULL: All indicators shown"
+        - "FAILURES_ONLY: Only show failures"
+        - "OFF: Disabled"
+    
+    orchestrator_context:
+      fields:
+        orchestrator_name: "str"
+        orchestrator_icon: "str (🧪/🔧/♻️/🔍)"
+        current_stage: "int (1-4)"
+        stages_completed: "List[str]"
+        intelligence_active: "IntelligenceFlags"
+        failure_stage: "Optional[int]"
+        failure_reason: "Optional[str]"
+    
+    intelligence_flags:
+      fields:
+        lens_enabled: "bool"
+        knowledge_enabled: "bool"
+        synthesis_enabled: "bool"
+
+# =============================================================================
+# ENHANCED RESPONSE HEADER FORMAT
+# =============================================================================
+
+response_header_format:
+  full_mode:
+    success_example: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain | **🧪 TDDOrchestrator** ●●●○ 🧠📚
+      
+      ---
+    
+    failure_example: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain | **🔧 FixOrchestrator** ●●✗○ ⚠️
+      **Failure:** Stage 3 (Governance) - CORE-013 violation detected
+      
+      ---
+  
+  failures_only_mode:
+    success_example: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain
+      
+      ---
+    
+    failure_example: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain | **⚠️ Stage 3 Failure**
+      **Error:** CORE-013 violation detected
+      
+      ---
+  
+  off_mode:
+    example: |
+      ## 🧠 CORTEX Implementation
+      **Author:** Asif Hussain
+      
+      ---
+
+  badge_legend:
+    orchestrator_icons:
+      "🧪": "TDDOrchestrator (IMPLEMENT intent)"
+      "🔧": "FixOrchestrator (FIX intent)"
+      "♻️": "RefactoringOrchestrator (REFACTOR intent)"
+      "🔍": "AnalysisOrchestrator (ANALYZE intent)"
+      "📋": "PlanningOrchestrator (PLAN intent)"
+      "🤝": "ConversationOrchestrator (INQUIRY intent)"
+    
+    stage_progress:
+      "●●●●": "All 4 stages complete"
+      "●●●○": "Stage 3 complete, Stage 4 in progress"
+      "●●○○": "Stage 2 complete, Stage 3 in progress"
+      "●○○○": "Stage 1 complete, Stage 2 in progress"
+      "●●✗○": "Failed at Stage 3"
+    
+    intelligence_indicators:
+      "🧠": "LENS intelligence active"
+      "📚": "Company knowledge active"
+      "🧠📚": "Full intelligence synthesis active"
+      "⚠️": "Failure or warning state"
+
+# =============================================================================
+# IMPLEMENTATION SPECIFICATION
+# =============================================================================
+
+implementation:
+  phase_1_response_header_enhancement:
+    duration: "9 hours"
+    priority: "P1 High"
+    
+    tasks:
+      1_visibility_controller:
+        file: "cortex/observability/visibility_controller.py"
+        lines: ~150
+        tests: 12
+        description: "Toggle logic for visibility modes"
+        
+      2_usage_metrics_collector:
+        file: "cortex/observability/usage_metrics_collector.py"
+        lines: ~120
+        tests: 10
+        description: "Track usage for lifecycle transitions"
+        
+      3_response_header_injector:
+        file: "cortex/brain/core/response_header_injector.py"
+        enhancement: "Add orchestrator badge methods"
+        new_lines: ~200
+        tests: 15
+        methods:
+          - "_format_orchestrator_badge(context: OrchestratorContext) -> str"
+          - "_format_stage_progress(current: int, completed: List[str], failed: Optional[int]) -> str"
+          - "_format_intelligence_badges(flags: IntelligenceFlags) -> str"
+          - "_is_visibility_enabled() -> bool"
+          - "_get_visibility_mode() -> VisibilityMode"
+      
+      4_orchestrator_context_propagation:
+        files:
+          - "cortex/orchestrators/core/master_orchestrator.py"
+          - "cortex/orchestrators/core/intent_router.py"
+          - "cortex/orchestrators/domain/tdd_orchestrator.py"
+        description: "Pass OrchestratorContext through execution pipeline"
+        tests: 8
+      
+      5_configuration_setup:
+        files:
+          - "cortex/config/settings.yaml"
+          - ".env.example"
+        settings:
+          - "CORTEX_ORCHESTRATOR_VISIBILITY=full"
+          - "observability.orchestrator_visibility.enabled=true"
+          - "observability.orchestrator_visibility.mode=full"
+  
+  phase_2_maturity_detection:
+    duration: "6 hours"
+    priority: "P2 Medium"
+    
+    tasks:
+      1_maturity_analyzer:
+        file: "cortex/observability/maturity_analyzer.py"
+        lines: ~180
+        tests: 14
+        description: "Analyze usage patterns to suggest transitions"
+        algorithm: |
+          maturity_score = (
+            0.4 * success_rate +
+            0.3 * request_diversity +
+            0.2 * recovery_speed +
+            0.1 * session_count
+          )
+          
+          if maturity_score >= 0.85:
+            suggest("Consider transitioning to 'failures' mode")
+          if maturity_score >= 0.95:
+            suggest("Consider disabling visibility (mature phase)")
+      
+      2_transition_notifications:
+        file: "cortex/observability/transition_notifier.py"
+        lines: ~100
+        tests: 8
+        description: "Notify users when ready to reduce visibility"
+        triggers:
+          - "50+ successful requests"
+          - "90%+ success rate"
+          - "All orchestrator types used"
+          - "Low failure recovery time"
+
+# =============================================================================
+# TOGGLE IMPLEMENTATION
+# =============================================================================
+
+toggle_implementation:
+  environment_variable:
+    name: "CORTEX_ORCHESTRATOR_VISIBILITY"
+    location: ".env"
+    validation:
+      allowed_values: ["full", "failures", "off"]
+      default: "full"
+      error_handling: "Log warning, fall back to 'full'"
+    
+    code_example: |
+      # cortex/observability/visibility_controller.py
+      
+      class VisibilityMode(str, Enum):
+          FULL = "full"
+          FAILURES_ONLY = "failures"
+          OFF = "off"
+      
+      class VisibilityController:
+          def __init__(self):
+              self._mode_cache: Optional[VisibilityMode] = None
+              self._config = get_config()
+          
+          def get_visibility_mode(self) -> VisibilityMode:
+              """Get current visibility mode with precedence: ENV > Config > Default."""
+              if self._mode_cache is None:
+                  # 1. Check environment variable (highest precedence)
+                  env_mode = os.getenv("CORTEX_ORCHESTRATOR_VISIBILITY", "").lower()
+                  if env_mode in ["full", "failures", "off"]:
+                      self._mode_cache = VisibilityMode(env_mode)
+                  
+                  # 2. Check config file
+                  elif self._config.observability.orchestrator_visibility.mode:
+                      self._mode_cache = VisibilityMode(
+                          self._config.observability.orchestrator_visibility.mode
+                      )
+                  
+                  # 3. Default to FULL
+                  else:
+                      self._mode_cache = VisibilityMode.FULL
+              
+              return self._mode_cache
+          
+          def should_show_success_details(self) -> bool:
+              """Check if success details should be shown."""
+              return self.get_visibility_mode() == VisibilityMode.FULL
+          
+          def should_show_failure_details(self) -> bool:
+              """Check if failure details should be shown."""
+              mode = self.get_visibility_mode()
+              return mode in [VisibilityMode.FULL, VisibilityMode.FAILURES_ONLY]
+
+  config_file_integration:
+    file: "cortex/config/settings.yaml"
+    section: |
+      observability:
+        orchestrator_visibility:
+          enabled: true
+          mode: "full"  # Options: full, failures, off
+          transition_suggestions: true
+          maturity_tracking: true
+          metrics:
+            enable_usage_tracking: true
+            suggest_transition_at_score: 0.85
+            auto_disable_at_score: 0.95  # Optional auto-disable
+
+  runtime_command:
+    command: "/visibility"
+    usage: |
+      /visibility                  # Show current mode
+      /visibility full             # Enable full visibility
+      /visibility failures         # Show failures only
+      /visibility off              # Disable visibility
+      /visibility reset            # Reset to default (full)
+    
+    implementation:
+      file: "cortex/cli/commands/visibility_command.py"
+      handler: "VisibilityCommandHandler"
+      persistence: "Save to user config (~/.cortex/preferences.yaml)"
+
+# =============================================================================
+# RESPONSE HEADER INJECTOR ENHANCEMENT
+# =============================================================================
+
+response_header_enhancement:
+  existing_implementation:
+    file: "cortex/brain/core/response_header_injector.py"
+    authority: "AC-ENH-002-01"
+    current_format: |
+      ## 🧠 CORTEX {operation}
+      **Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
+      
+      ---
+  
+  enhanced_implementation:
+    new_method_format_orchestrator_badge:
+      signature: "_format_orchestrator_badge(self, context: OrchestratorContext) -> str"
+      logic: |
+        def _format_orchestrator_badge(self, context: OrchestratorContext) -> str:
+            """Generate orchestrator badge with stage progress and intelligence indicators."""
+            
+            # Check if visibility enabled
+            if not self._visibility_controller.should_show_success_details():
+                if context.failure_stage is not None:
+                    if self._visibility_controller.should_show_failure_details():
+                        return self._format_failure_badge(context)
+                return ""  # No badge if disabled and no failure
+            
+            # Icon mapping
+            icon_map = {
+                "TDDOrchestrator": "🧪",
+                "FixOrchestrator": "🔧",
+                "RefactoringOrchestrator": "♻️",
+                "AnalysisOrchestrator": "🔍",
+                "PlanningOrchestrator": "📋",
+                "ConversationOrchestrator": "🤝",
+            }
+            icon = icon_map.get(context.orchestrator_name, "🔄")
+            
+            # Stage progress
+            progress = self._format_stage_progress(
+                context.current_stage,
+                context.stages_completed,
+                context.failure_stage
+            )
+            
+            # Intelligence indicators
+            intelligence = self._format_intelligence_badges(context.intelligence_active)
+            
+            return f"**{icon} {context.orchestrator_name}** {progress} {intelligence}".strip()
+      
+      example_outputs:
+        - "**🧪 TDDOrchestrator** ●●●○ 🧠📚"
+        - "**🔧 FixOrchestrator** ●●✗○ ⚠️"
+        - "**♻️ RefactoringOrchestrator** ●●●● ✅"
+        - "**🔍 AnalysisOrchestrator** ●●○○ 🧠"
+    
+    new_method_format_stage_progress:
+      signature: "_format_stage_progress(self, current: int, completed: List[str], failed: Optional[int]) -> str"
+      logic: |
+        def _format_stage_progress(self, current: int, completed: List[str], failed: Optional[int]) -> str:
+            """Generate stage progress dots (●●○○)."""
+            if failed is not None:
+                # Show failure at specific stage
+                dots = ["●" if i < failed else ("✗" if i == failed else "○") for i in range(1, 5)]
+            else:
+                # Show current progress
+                dots = ["●" if i <= current else "○" for i in range(1, 5)]
+            
+            return "".join(dots)
+    
+    new_method_format_intelligence_badges:
+      signature: "_format_intelligence_badges(self, flags: IntelligenceFlags) -> str"
+      logic: |
+        def _format_intelligence_badges(self, flags: IntelligenceFlags) -> str:
+            """Generate intelligence indicator badges."""
+            if flags.synthesis_enabled:
+                return "🧠📚"  # Full synthesis
+            elif flags.lens_enabled and flags.knowledge_enabled:
+                return "🧠📚"  # Both active
+            elif flags.lens_enabled:
+                return "🧠"    # LENS only
+            elif flags.knowledge_enabled:
+                return "📚"    # Knowledge only
+            return ""
+
+# =============================================================================
+# MATURITY DETECTION & TRANSITIONS
+# =============================================================================
+
+maturity_detection:
+  metrics_tracked:
+    request_count:
+      description: "Total successful requests per orchestrator"
+      threshold: "50+ for transition suggestion"
+    
+    success_rate:
+      description: "Successful completions / total requests"
+      threshold: "90%+ for transition suggestion"
+    
+    orchestrator_diversity:
+      description: "Unique orchestrators used"
+      threshold: "5+ different orchestrators"
+    
+    failure_recovery_time:
+      description: "Average time to resolve failures"
+      threshold: "<5 minutes for mature users"
+    
+    session_count:
+      description: "Distinct coding sessions"
+      threshold: "20+ sessions over 2+ weeks"
+  
+  transition_triggers:
+    learning_to_transitioning:
+      conditions:
+        - "50+ successful requests"
+        - "90%+ success rate"
+        - "5+ orchestrators used"
+      action: "Suggest: /visibility failures"
+      notification: |
+        🎉 You've mastered CORTEX orchestration! (50+ successful requests, 90%+ success rate)
+        
+        Consider reducing visibility noise: `/visibility failures`
+        This will only show failures, keeping your focus on content.
+    
+    transitioning_to_mature:
+      conditions:
+        - "100+ successful requests"
+        - "95%+ success rate"
+        - "All orchestrators used"
+        - "Low failure recovery time"
+      action: "Suggest: /visibility off"
+      notification: |
+        🚀 Expert level achieved! (100+ requests, 95%+ success)
+        
+        You no longer need orchestrator visibility. Disable it with: `/visibility off`
+        You can always re-enable it later if needed.
+  
+  auto_disable_option:
+    enabled: false  # Default: require manual approval
+    config_setting: "observability.orchestrator_visibility.auto_disable_at_score"
+    threshold: 0.95  # maturity_score >= 0.95
+    notification: |
+      Orchestrator visibility auto-disabled (maturity score: 0.96/1.0)
+      Re-enable anytime with: /visibility full
+
+# =============================================================================
+# TESTING STRATEGY
+# =============================================================================
+
+testing:
+  unit_tests:
+    test_visibility_controller:
+      file: "tests/unit/observability/test_visibility_controller.py"
+      test_count: 12
+      coverage:
+        - "get_visibility_mode() with ENV precedence"
+        - "get_visibility_mode() with config precedence"
+        - "get_visibility_mode() with default fallback"
+        - "should_show_success_details() in FULL mode"
+        - "should_show_success_details() in FAILURES mode"
+        - "should_show_success_details() in OFF mode"
+        - "should_show_failure_details() in FULL mode"
+        - "should_show_failure_details() in FAILURES mode"
+        - "should_show_failure_details() in OFF mode"
+        - "Cache invalidation on mode change"
+        - "Invalid mode value handling"
+        - "Thread-safe mode retrieval"
+    
+    test_response_header_injector:
+      file: "tests/unit/brain/core/test_response_header_injector_enhanced.py"
+      test_count: 15
+      coverage:
+        - "_format_orchestrator_badge() success case"
+        - "_format_orchestrator_badge() failure case"
+        - "_format_orchestrator_badge() with LENS only"
+        - "_format_orchestrator_badge() with Knowledge only"
+        - "_format_orchestrator_badge() with full synthesis"
+        - "_format_stage_progress() all stages complete"
+        - "_format_stage_progress() partial progress"
+        - "_format_stage_progress() with failure"
+        - "_format_intelligence_badges() all flags"
+        - "_format_intelligence_badges() no flags"
+        - "Visibility OFF mode - no badge"
+        - "Visibility FAILURES mode - success no badge"
+        - "Visibility FAILURES mode - failure shows badge"
+        - "Icon mapping for all orchestrators"
+        - "Progressive disclosure with hover tooltips"
+    
+    test_maturity_analyzer:
+      file: "tests/unit/observability/test_maturity_analyzer.py"
+      test_count: 14
+      coverage:
+        - "calculate_maturity_score() with full metrics"
+        - "calculate_maturity_score() with partial metrics"
+        - "suggest_transition() at 85% threshold"
+        - "suggest_transition() at 95% threshold"
+        - "suggest_transition() below threshold"
+        - "Orchestrator diversity calculation"
+        - "Failure recovery time calculation"
+        - "Session count tracking"
+        - "Request count per orchestrator"
+        - "Success rate calculation"
+        - "Edge case: zero requests"
+        - "Edge case: all failures"
+        - "Transition notification generation"
+        - "Auto-disable suggestion generation"
+
+  integration_tests:
+    test_full_lifecycle:
+      file: "tests/integration/observability/test_visibility_lifecycle.py"
+      test_count: 8
+      coverage:
+        - "Full visibility mode end-to-end"
+        - "Failures-only mode end-to-end"
+        - "Off mode end-to-end"
+        - "ENV variable override"
+        - "Config file override"
+        - "Runtime command override"
+        - "Transition from FULL to FAILURES"
+        - "Transition from FAILURES to OFF"
+    
+    test_orchestrator_integration:
+      file: "tests/integration/orchestrators/test_visibility_integration.py"
+      test_count: 10
+      coverage:
+        - "TDDOrchestrator with visibility"
+        - "FixOrchestrator with visibility"
+        - "RefactoringOrchestrator with visibility"
+        - "AnalysisOrchestrator with visibility"
+        - "Stage 3 failure visibility"
+        - "LENS intelligence badge"
+        - "Knowledge synthesis badge"
+        - "Full intelligence badge"
+        - "Visibility disabled - clean response"
+        - "Visibility failures-only - shows errors"
+
+  test_summary:
+    total_tests: 59
+    breakdown:
+      unit: 41
+      integration: 18
+    coverage_target: "95%+"
+    duration: "~4 hours (TDD approach)"
+
+# =============================================================================
+# PERFORMANCE IMPACT
+# =============================================================================
+
+performance:
+  visibility_enabled:
+    overhead: "~2-5ms per response"
+    breakdown:
+      mode_check: "0.5ms (cached after first call)"
+      badge_generation: "1-2ms"
+      string_formatting: "0.5-2ms"
+    impact: "NEGLIGIBLE (<1% of total request time)"
+  
+  visibility_disabled:
+    overhead: "~0.5ms per response"
+    breakdown:
+      mode_check: "0.5ms (early exit)"
+    impact: "NEAR-ZERO"
+  
+  metrics_collection:
+    overhead: "~1-3ms per request"
+    async: true
+    description: "Recorded asynchronously, no blocking"
+
+# =============================================================================
+# MIGRATION & ROLLOUT
+# =============================================================================
+
+migration:
+  phase_1_pilot:
+    duration: "1 week"
+    target: "Internal CORTEX team only"
+    mode: "FULL visibility"
+    goal: "Gather feedback on badge design"
+  
+  phase_2_beta:
+    duration: "2 weeks"
+    target: "Early adopters (5-10 engineers)"
+    mode: "FULL visibility with transition suggestions"
+    goal: "Validate maturity detection algorithm"
+  
+  phase_3_general_availability:
+    duration: "Ongoing"
+    target: "All CORTEX users"
+    mode: "FULL visibility (default)"
+    documentation: "Quick start guide + /visibility command"
+
+  rollback_plan:
+    trigger: "Negative feedback or performance issues"
+    action: "Set CORTEX_ORCHESTRATOR_VISIBILITY=off globally"
+    recovery: "Disable via ENV var, no code changes needed"
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+
+documentation:
+  user_guide:
+    location: "docs/07-guides/orchestrator-visibility.md"
+    sections:
+      - "What is Orchestrator Visibility?"
+      - "Badge Legend (icons, dots, intelligence)"
+      - "Lifecycle: Learning → Transitioning → Mature"
+      - "How to Toggle Visibility"
+      - "When to Disable"
+      - "FAQ"
+  
+  developer_guide:
+    location: "docs/08-reference/visibility-controller-api.md"
+    sections:
+      - "VisibilityController API"
+      - "Custom Badge Formatters"
+      - "Maturity Detection Algorithm"
+      - "Integration with Custom Orchestrators"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  adoption:
+    - "90%+ of new users enable visibility during onboarding"
+    - "50%+ of users transition to 'failures' mode within 4 weeks"
+    - "20%+ of users disable visibility after 8 weeks (maturity)"
+  
+  performance:
+    - "<5ms overhead with visibility enabled"
+    - "<0.5ms overhead with visibility disabled"
+    - "Zero blocking operations"
+  
+  user_satisfaction:
+    - "80%+ find badges helpful during learning phase"
+    - "80%+ prefer clean responses after mastery"
+    - "Low noise complaints (<5%)"
+
+# =============================================================================
+# FUTURE ENHANCEMENTS (Post-MVP)
+# =============================================================================
+
+future_enhancements:
+  phase_2_mcp_progress_notifications:
+    description: "Real-time stage progress via MCP protocol"
+    protocol: "JSON-RPC progress notifications"
+    benefit: "Live updates during long-running operations"
+    priority: "P2 Medium"
+    duration: "2 weeks"
+  
+  phase_3_interactive_dashboard:
+    description: "Web-based orchestrator activity dashboard"
+    features:
+      - "Real-time stage visualization"
+      - "Historical request timeline"
+      - "Orchestrator usage heatmap"
+    priority: "P3 Low"
+    duration: "4 weeks"
+
+# =============================================================================
+# CONCLUSION
+# =============================================================================
+
+conclusion: |
+  Phase 20.2 delivers orchestrator visibility as TRAINING WHEELS:
+  
+  ✅ **During Learning:** Full visibility builds confidence and understanding
+  ✅ **During Transition:** Reduced noise focuses on failures only
+  ✅ **At Maturity:** Disable entirely for clean, distraction-free responses
+  
+  Toggle-off capability ensures this feature serves engineers at all skill levels
+  without becoming permanent noise. Engineers control their own learning path.
+  
+  **Duration:** 9 hours (Phase 1) + 6 hours (Phase 2) = 15 hours total
+  **Tests:** 59 comprehensive tests
+  **Impact:** Builds trust → Enables mastery → Removes itself when no longer needed
