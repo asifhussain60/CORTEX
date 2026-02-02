@@ -4,9 +4,16 @@ Model Context Protocol tools for enhanced capabilities.
 
 Available Tools:
 - intelligent_git_merge: Intelligent merging with cortex_brain preservation
-- lens_tools: LENS analysis tools (git, AST, comments, duplicates)
+- lens_tools: LENS analysis tools (git, AST, comments, duplicates) - UNIFIED in cortex.lens
 - intelligent_lens_tools: Tiered LENS with LLM enhancement (NEW)
 - onboarding_tools: Repository onboarding and config analysis (LENS v2.0)
+
+LENS CONSOLIDATION (2026-02-02):
+All LENS analyzers consolidated in cortex.lens package:
+- cortex.lens.analyzers: ASTAnalyzer, GitHistoryAnalyzer, CommentExtractor, etc.
+- cortex.lens.discovery: ConfigurationDiscovery, DatabaseDiscovery
+- cortex.lens.orchestrator: LENSOrchestrator (unified analysis)
+MCP tools import from cortex.lens (thin wrappers)
 """
 
 # Core MCP Tools

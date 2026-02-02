@@ -12,7 +12,7 @@ from unittest.mock import Mock, patch, MagicMock
 
 import pytest
 
-from cortex.brain.analysis.git_history_analyzer import (
+from cortex.lens.analyzers.git_history_analyzer import (
     GitHistoryAnalyzer,
     GitCommit,
     GitBlame,

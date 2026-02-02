@@ -12,12 +12,9 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, MagicMock, patch
 
-# Test will import once implemented:
-# from cortex.orchestrators.support.lens_orchestrator import (
-#     LENSOrchestrator,
-#     LENSAnalysisResult,
-#     LENSContext,
-# )
+# Import from unified LENS package:
+from cortex.lens import LENSOrchestrator, LENSContext
+from cortex.lens.analyzers import LENSAnalysisResult
 
 
 # ============================================================================
@@ -90,7 +87,7 @@ def test_lens_orchestrator_initialization(test_repo_path: Path) -> None:
     
     RED Phase: LENSOrchestrator class doesn't exist yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(repo_path=test_repo_path)
     
@@ -106,7 +103,7 @@ def test_lens_orchestrator_accepts_custom_analyzers() -> None:
     
     RED Phase: Constructor doesn't accept analyzer parameters yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     mock_git = Mock()
     mock_ast = Mock()
@@ -142,7 +139,7 @@ def test_analyze_file_returns_lens_context(
     
     RED Phase: analyze_file() method doesn't exist yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -175,7 +172,7 @@ def test_analyze_file_calls_all_analyzers(
     
     RED Phase: Analyzer methods not called yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -206,7 +203,7 @@ def test_analyze_file_formats_for_intent_router(
     
     RED Phase: Output format not standardized yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -255,7 +252,7 @@ def test_analyze_file_caches_results(
     
     RED Phase: No caching mechanism exists yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -293,7 +290,7 @@ def test_cache_can_be_cleared(
     
     RED Phase: No clear_cache() method exists yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -334,7 +331,7 @@ def test_analyze_batch_processes_multiple_files(
     
     RED Phase: analyze_batch() method doesn't exist yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -373,7 +370,7 @@ def test_handles_git_analyzer_failure(
     
     RED Phase: No error handling exists yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     # Mock git analyzer that fails
     mock_git = Mock()
@@ -410,7 +407,7 @@ def test_handles_ast_analyzer_failure(
     
     RED Phase: No error handling exists yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     # Mock AST analyzer that fails
     mock_ast = Mock()
@@ -448,7 +445,7 @@ def test_output_directly_usable_by_intent_router(
     
     RED Phase: Format compatibility not guaranteed yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     from cortex.orchestrators.core.intent_router import IntentRouter
     
     orchestrator = LENSOrchestrator(
@@ -492,7 +489,7 @@ def test_tracks_analysis_time(
     
     RED Phase: No timing tracking exists yet.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     
     orchestrator = LENSOrchestrator(
         repo_path=test_repo_path,
@@ -518,7 +515,7 @@ def test_analyze_remote_file(test_repo_path: Path) -> None:
     
     Should fetch remote file and analyze with LENS.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter, RemoteFile
     from datetime import datetime
     
@@ -565,7 +562,7 @@ def test_analyze_remote_error_handling(test_repo_path: Path) -> None:
     
     Should handle API errors gracefully.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
     
     orchestrator = LENSOrchestrator(repo_path=test_repo_path)
@@ -590,9 +587,9 @@ def test_compare_branches_local(test_repo_path: Path) -> None:
     
     Should compare branches in local repository.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     from cortex.brain.analysis.branch_comparator import BranchComparison, FileDiff
-    from cortex.brain.analysis.git_history_analyzer import GitCommit
+    from cortex.lens.analyzers.git_history_analyzer import GitCommit
     from datetime import datetime
     
     orchestrator = LENSOrchestrator(repo_path=test_repo_path)
@@ -639,7 +636,7 @@ def test_compare_branches_remote(test_repo_path: Path) -> None:
     
     Should compare branches in remote repository.
     """
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
     from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
     from cortex.brain.analysis.branch_comparator import BranchComparison
     
@@ -672,3 +669,4 @@ def test_compare_branches_remote(test_repo_path: Path) -> None:
         assert result["base_branch"] == "main"
         assert result["commits_ahead"] == 2
         assert result["is_mergeable"] is True
+

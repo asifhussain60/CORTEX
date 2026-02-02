@@ -21,7 +21,7 @@ from cortex.brain.analysis.security_threat_analyzer import (
     ThreatSeverity,
     get_security_threat_analyzer,
 )
-from cortex.brain.analysis.config_analyzer import (
+from cortex.lens.analyzers.config_analyzer import (
     ConfigAnalyzer,
     ConfigSeverity,
     get_config_analyzer,

@@ -9,7 +9,7 @@ from typing import List
 
 import pytest
 
-from cortex.brain.analysis.comment_extractor import (
+from cortex.lens.analyzers.comment_extractor import (
     CommentExtractor,
     Comment,
     DocstringInfo,

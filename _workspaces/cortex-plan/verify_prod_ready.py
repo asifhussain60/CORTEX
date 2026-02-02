@@ -182,9 +182,9 @@ class CORTEXVerification:
         """CHECK 2: LENS Intelligence wired with Conversation Protocol."""
         try:
             # Verify LENS components exist
-            from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
-            from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
-            from cortex.brain.analysis.comment_extractor import CommentExtractor
+            from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
+            from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+            from cortex.lens.analyzers.comment_extractor import CommentExtractor
             from cortex.brain.core.orchestrator.conversation_protocol import ConversationProtocol
             
             # Verify LENSSynthesis in registry

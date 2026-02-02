@@ -10,7 +10,7 @@ from typing import List
 
 import pytest
 
-from cortex.brain.analysis.ast_analyzer import (
+from cortex.lens.analyzers.ast_analyzer import (
     ASTAnalyzer,
     FunctionInfo,
     ClassInfo,

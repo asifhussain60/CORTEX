@@ -9,7 +9,7 @@ import pytest
 import json
 import yaml
 from pathlib import Path
-from cortex.brain.analysis.api_analyzer import (
+from cortex.lens.analyzers.api_analyzer import (
     APIAnalyzer,
     get_api_analyzer,
     OpenAPIVersion,

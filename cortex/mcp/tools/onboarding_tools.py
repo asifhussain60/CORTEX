@@ -139,7 +139,7 @@ def cortex_analyze_config(config_path: str) -> Dict[str, Any]:
         ...     print(f"P0: {finding['description']}")
     """
     try:
-        from cortex.brain.analysis.config_analyzer import get_config_analyzer
+        from cortex.lens.analyzers.config_analyzer import get_config_analyzer
         
         analyzer = get_config_analyzer()
         result = analyzer.analyze_file(Path(config_path))
@@ -207,7 +207,7 @@ def cortex_analyze_repository_configs(repo_path: str) -> Dict[str, Any]:
         >>> print(result["summary"])
     """
     try:
-        from cortex.brain.analysis.config_analyzer import get_config_analyzer
+        from cortex.lens.analyzers.config_analyzer import get_config_analyzer
         
         analyzer = get_config_analyzer()
         result = analyzer.analyze_repository(Path(repo_path))

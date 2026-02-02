@@ -43,7 +43,7 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 # Import LENS, Challenge, DoR, Security components
 try:
-    from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+    from cortex.lens import LENSOrchestrator
 except ImportError:
     LENSOrchestrator = None
 

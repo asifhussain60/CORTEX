@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from cortex.brain.analysis.config_analyzer import (
+from cortex.lens.analyzers.config_analyzer import (
     ConfigAnalyzer,
     ConfigFinding,
     ConfigSeverity,

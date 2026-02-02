@@ -1,39 +1,33 @@
 """
 Analysis module for CORTEX brain.
 
-Provides code and repository analysis capabilities.
+NOTE: LENS analyzers have moved to cortex.lens.analyzers (v2.0)
+This module re-exports for backward compatibility - will be removed next sprint.
+
+Non-LENS components (VisionAnalyzer, RemoteGitAdapter, CompanyDomainLoader) remain here.
 """
 
-from cortex.brain.analysis.git_history_analyzer import (
+# LENS analyzers - re-export from new location (DEPRECATED)
+from cortex.lens.analyzers.git_history_analyzer import (
     GitHistoryAnalyzer,
     GitCommit,
     GitBlame,
     GitHistoryResult,
 )
-from cortex.brain.analysis.ast_analyzer import (
+from cortex.lens.analyzers.ast_analyzer import (
     ASTAnalyzer,
     FunctionInfo,
     ClassInfo,
     ImportInfo,
     ASTAnalysisResult,
 )
-from cortex.brain.analysis.comment_extractor import (
+from cortex.lens.analyzers.comment_extractor import (
     CommentExtractor,
     Comment,
     DocstringInfo,
     CommentExtractionResult,
 )
-from cortex.brain.analysis.vision_analyzer import (
-    VisionAnalyzer,
-    VisionAnalysisResult,
-    UIElement,
-    ExtractedURL,
-    DetectedIssue,
-    ImageType,
-    AnalysisDepth,
-    analyze_image,
-)
-from cortex.brain.analysis.config_analyzer import (
+from cortex.lens.analyzers.config_analyzer import (
     ConfigAnalyzer,
     ConfigFinding,
     ConfigSeverity,
@@ -41,7 +35,7 @@ from cortex.brain.analysis.config_analyzer import (
     ConfigAnalysisResult,
     get_config_analyzer,
 )
-from cortex.brain.analysis.database_analyzer import (
+from cortex.lens.analyzers.database_analyzer import (
     DatabaseAnalyzer,
     MigrationType,
     ColumnInfo,
@@ -50,7 +44,7 @@ from cortex.brain.analysis.database_analyzer import (
     DatabaseAnalysisResult,
     get_database_analyzer,
 )
-from cortex.brain.analysis.api_analyzer import (
+from cortex.lens.analyzers.api_analyzer import (
     APIAnalyzer,
     OpenAPIVersion,
     SecuritySchemeType,
@@ -61,13 +55,7 @@ from cortex.brain.analysis.api_analyzer import (
     APIAnalysisResult,
     get_api_analyzer,
 )
-from cortex.brain.analysis.company_domain_loader import (
-    CompanyDomainLoader,
-    DomainKnowledge,
-    CompanyDomainResult,
-    get_company_domain_loader,
-)
-from cortex.brain.analysis.dependency_analyzer import (
+from cortex.lens.analyzers.dependency_analyzer import (
     DependencyAnalyzer,
     DependencyType,
     VulnerabilitySeverity,
@@ -77,6 +65,24 @@ from cortex.brain.analysis.dependency_analyzer import (
     DependencyFinding,
     DependencyAnalysisResult,
     get_dependency_analyzer,
+)
+
+# Non-LENS components remain in cortex.brain.analysis
+from cortex.brain.analysis.vision_analyzer import (
+    VisionAnalyzer,
+    VisionAnalysisResult,
+    UIElement,
+    ExtractedURL,
+    DetectedIssue,
+    ImageType,
+    AnalysisDepth,
+    analyze_image,
+)
+from cortex.brain.analysis.company_domain_loader import (
+    CompanyDomainLoader,
+    DomainKnowledge,
+    CompanyDomainResult,
+    get_company_domain_loader,
 )
 
 __all__ = [

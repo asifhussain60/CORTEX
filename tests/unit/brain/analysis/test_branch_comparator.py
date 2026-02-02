@@ -23,7 +23,7 @@ from cortex.brain.analysis.remote_git_adapter import (
     RemoteGitAdapter,
     RemoteCommit,
 )
-from cortex.brain.analysis.git_history_analyzer import GitCommit
+from cortex.lens.analyzers.git_history_analyzer import GitCommit
 
 
 class TestFileDiff:

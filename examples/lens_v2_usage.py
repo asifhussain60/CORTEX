@@ -27,7 +27,7 @@ from cortex.brain.analysis import (
     get_company_domain_loader,
     get_dependency_analyzer,
 )
-from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+from cortex.lens import LENSOrchestrator
 from cortex.mcp.tools import (
     cortex_onboard_repository,
     cortex_analyze_config,

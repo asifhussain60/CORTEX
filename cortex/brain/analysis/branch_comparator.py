@@ -16,7 +16,7 @@ from typing import List, Dict, Any, Optional, Set
 import subprocess
 
 from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
-from cortex.brain.analysis.git_history_analyzer import GitCommit
+from cortex.lens.analyzers.git_history_analyzer import GitCommit
 
 
 @dataclass

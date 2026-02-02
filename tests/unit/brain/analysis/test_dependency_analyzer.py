@@ -10,7 +10,7 @@ Authority: CORE-008 (TDD)
 
 import pytest
 from pathlib import Path
-from cortex.brain.analysis.dependency_analyzer import (
+from cortex.lens.analyzers.dependency_analyzer import (
     DependencyAnalyzer,
     DependencyType,
     VulnerabilitySeverity,

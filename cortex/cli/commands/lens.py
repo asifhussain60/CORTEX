@@ -12,7 +12,7 @@ import click
 from pathlib import Path
 from typing import Optional
 
-from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+from cortex.lens import LENSOrchestrator
 from cortex.brain.analysis.remote_git_adapter import create_adapter, ProviderConfig
 
 

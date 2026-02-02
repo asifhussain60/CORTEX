@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
+    from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 
 
 # =============================================================================

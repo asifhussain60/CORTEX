@@ -31,9 +31,7 @@ from cortex.orchestrators.support.duplication_detector_orchestrator import (
     DuplicateEntry,
     SeverityLevel,
 )
-from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
-from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
-from cortex.brain.analysis.comment_extractor import CommentExtractor
+from cortex.lens.analyzers import ASTAnalyzer, GitHistoryAnalyzer, CommentExtractor
 
 
 @dataclass

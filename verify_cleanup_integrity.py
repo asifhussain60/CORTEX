@@ -35,7 +35,7 @@ def test_imports():
 
     # Test 2: Import lens orchestrator
     try:
-        from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+        from cortex.lens import LENSOrchestrator
         print("✅ lens_orchestrator imports OK")
         tests_passed += 1
     except Exception as e:

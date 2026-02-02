@@ -55,7 +55,7 @@ def cortex_lens_analyze(
         Dict with git_analysis, ast_analysis, comment_analysis, metadata
     """
     try:
-        from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+        from cortex.lens import LENSOrchestrator
         
         orchestrator = LENSOrchestrator(repo_path=Path(repo_path))
         
@@ -109,7 +109,7 @@ def cortex_git_history(
         Dict with commits, patterns, blame (if requested)
     """
     try:
-        from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=Path(repo_path))
         
@@ -176,7 +176,7 @@ def cortex_ast_analyze(
         Dict with functions, classes, complexity, dead_code
     """
     try:
-        from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
+        from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
         
         analyzer = ASTAnalyzer()
         
@@ -247,7 +247,7 @@ def cortex_extract_comments(
         Dict with todos, fixmes, comments, docstrings
     """
     try:
-        from cortex.brain.analysis.comment_extractor import CommentExtractor
+        from cortex.lens.analyzers.comment_extractor import CommentExtractor
         
         extractor = CommentExtractor()
         

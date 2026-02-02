@@ -37,9 +37,9 @@ from cortex.brain.core.orchestrator_base import (
     OrchestrationResult,
     OrchestrationStatus,
 )
-from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
-from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
-from cortex.brain.analysis.comment_extractor import CommentExtractor
+from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
+from cortex.lens.analyzers.comment_extractor import CommentExtractor
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 

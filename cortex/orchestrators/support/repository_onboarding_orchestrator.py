@@ -302,7 +302,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         try:
             # Lazy-load LENSOrchestrator with correct repo path
             if self.lens_orchestrator is None:
-                from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+                from cortex.lens import LENSOrchestrator
                 self.lens_orchestrator = LENSOrchestrator(repo_path=repo_path)
             else:
                 # Update repo path if different
@@ -476,7 +476,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         Returns comprehensive dependency data for dashboard display.
         """
         try:
-            from cortex.brain.analysis.dependency_analyzer import get_dependency_analyzer
+            from cortex.lens.analyzers.dependency_analyzer import get_dependency_analyzer
             
             analyzer = get_dependency_analyzer()
             result = analyzer.analyze_project(repo_path)

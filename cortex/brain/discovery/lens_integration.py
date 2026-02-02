@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 import logging
 
-from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
+from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
 from cortex.brain.analysis.comment_extractor import CommentExtractor
 

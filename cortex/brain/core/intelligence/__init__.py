@@ -32,7 +32,7 @@ from cortex.brain.core.intelligence.dependency_mapper import (
     DependencyMap,
     ImportInfo,
 )
-from cortex.brain.analysis.git_history_analyzer import (
+from cortex.lens.analyzers.git_history_analyzer import (
     GitHistoryAnalyzer,
     CommitInfo,
     RenameInfo,

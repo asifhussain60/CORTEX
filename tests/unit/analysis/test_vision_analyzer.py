@@ -364,7 +364,7 @@ class TestLENSOrchestratorVisionIntegration:
     
     def test_analyze_image_method_exists(self):
         """Verify analyze_image method exists on LENSOrchestrator."""
-        from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+        from cortex.lens import LENSOrchestrator
         
         orchestrator = LENSOrchestrator(repo_path=Path("."))
         assert hasattr(orchestrator, "analyze_image")
@@ -372,7 +372,7 @@ class TestLENSOrchestratorVisionIntegration:
     
     def test_analyze_with_vision_method_exists(self):
         """Verify analyze_with_vision method exists."""
-        from cortex.orchestrators.support.lens_orchestrator import LENSOrchestrator
+        from cortex.lens import LENSOrchestrator
         
         orchestrator = LENSOrchestrator(repo_path=Path("."))
         assert hasattr(orchestrator, "analyze_with_vision")
@@ -380,14 +380,14 @@ class TestLENSOrchestratorVisionIntegration:
     
     def test_lens_context_has_vision_field(self):
         """Verify LENSContext includes vision_analysis field."""
-        from cortex.orchestrators.support.lens_orchestrator import LENSContext
+        from cortex.lens import LENSContext
         
         context = LENSContext()
         assert hasattr(context, "vision_analysis")
     
     def test_lens_context_to_dict_includes_vision(self):
         """Verify to_dict includes vision_analysis when present."""
-        from cortex.orchestrators.support.lens_orchestrator import LENSContext
+        from cortex.lens import LENSContext
         
         context = LENSContext(
             vision_analysis={"urls": [{"url": "https://example.com"}]}
@@ -399,7 +399,7 @@ class TestLENSOrchestratorVisionIntegration:
     
     def test_lens_context_to_dict_excludes_empty_vision(self):
         """Verify to_dict excludes vision_analysis when empty."""
-        from cortex.orchestrators.support.lens_orchestrator import LENSContext
+        from cortex.lens import LENSContext
         
         context = LENSContext()
         d = context.to_dict()
@@ -438,3 +438,4 @@ class TestConvenienceFunction:
         
         assert result["status"] == "success"
         mock_analyze.assert_called_once()
+

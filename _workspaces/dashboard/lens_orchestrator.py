@@ -19,9 +19,9 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 
-from cortex.brain.analysis.git_history_analyzer import GitHistoryAnalyzer
-from cortex.brain.analysis.ast_analyzer import ASTAnalyzer
-from cortex.brain.analysis.comment_extractor import CommentExtractor
+from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
+from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
+from cortex.lens.analyzers.comment_extractor import CommentExtractor
 from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
 from cortex.brain.analysis.branch_comparator import BranchComparator
 

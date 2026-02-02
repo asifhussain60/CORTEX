@@ -7,7 +7,7 @@ Authority: CORE-008 (TDD)
 
 import pytest
 from pathlib import Path
-from cortex.brain.analysis.database_analyzer import (
+from cortex.lens.analyzers.database_analyzer import (
     DatabaseAnalyzer,
     get_database_analyzer,
     MigrationType,
