@@ -469,27 +469,6 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             logger.warning("Config analysis failed: %s", e)
             return {"error": str(e)}
     
-    def _analyze_database_layer(self, repo_path: Path) -> Dict[str, Any]:
-        """Analyze database schemas and migrations."""
-        # Placeholder for DatabaseAnalyzer (to be implemented)
-        migrations_path = repo_path / "migrations"
-        
-        return {
-            "has_migrations": migrations_path.exists(),
-            "migrations_path": str(migrations_path) if migrations_path.exists() else None,
-            "note": "DatabaseAnalyzer not yet implemented",
-        }
-    
-    def _analyze_api_layer(self, repo_path: Path) -> Dict[str, Any]:
-        """Analyze API endpoints and security."""
-        # Placeholder for APIAnalyzer (to be implemented)
-        api_paths = list(repo_path.glob("**/api/**/*.py"))
-        
-        return {
-            "api_files_found": len(api_paths),
-            "note": "APIAnalyzer not yet implemented",
-        }
-    
     def _analyze_dependency_layer(self, repo_path: Path) -> Dict[str, Any]:
         """
         Analyze dependencies and vulnerabilities using DependencyAnalyzer.
@@ -649,25 +628,6 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             security_model["error"] = str(e)
         
         return security_model
-    
-    def _update_company_domains(
-        self,
-        lens_context: Dict[str, Any],
-        repo_path: Path,
-    ) -> List[str]:
-        """
-        Update company domain knowledge based on detected patterns.
-        
-        Creates new YAML files in company/domains/ for unrecognized patterns.
-        """
-        updates = []
-        
-        # Placeholder: Would analyze lens_context for domain-specific patterns
-        # and create new YAML files if needed
-        
-        logger.info("Company domain update: Not yet implemented")
-        
-        return updates
     
     def _generate_dashboard(
         self,
