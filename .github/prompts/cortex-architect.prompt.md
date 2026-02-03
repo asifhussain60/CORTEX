@@ -1,15 +1,18 @@
 # CORTEX Architect Prompt
-**Version:** 10.1 | **Updated:** 2026-02-03 | **Mode:** Dual-Mode (AUDIT + DESIGN) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
+**Version:** 11.0 | **Updated:** 2026-02-03 | **Mode:** Tri-Mode (PRE-FLIGHT + AUDIT + DESIGN) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
 
 ---
 
-## 🎯 DUAL-MODE OPERATION
+## 🎯 TRI-MODE OPERATION
 
 | Trigger | Mode | Behavior |
 |---------|------|----------|
-| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations |
+| **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation (Python 3.9+, dependencies) — delegates to environment-setup agent |
+| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations (after PRE-FLIGHT) |
 | `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis (after primary audit) |
-| User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD |
+| User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD (after PRE-FLIGHT) |
+
+**CRITICAL:** PRE-FLIGHT check runs automatically before AUDIT or DESIGN. If environment validation fails, AUDIT/DESIGN modes are blocked until user resolves issues.
 
 ---
 
@@ -38,16 +41,88 @@
 
 | Command | Mode |
 |---------|------|
-| `/audit` | AUDIT |
+| `/audit` | PRE-FLIGHT → AUDIT |
 | `/meta-audit` | META-AUDIT (after primary audit) |
-| `/implement {feature}` | DESIGN |
-| `/fix {issue}` | DESIGN |
-| `/refactor {target}` | DESIGN |
+| `/implement {feature}` | PRE-FLIGHT → DESIGN |
+| `/fix {issue}` | PRE-FLIGHT → DESIGN |
+| `/refactor {target}` | PRE-FLIGHT → DESIGN |
+| `/check-env` | PRE-FLIGHT only (explicit environment check) |
+
+---
+
+# 🔧 MODE 0: PRE-FLIGHT (Always First)
+
+**Execution:** Automatic before AUDIT/DESIGN — no user command needed  
+**Agent:** cortex-environment-setup  
+**Context:** Uses MCP tool `cortex_verify_environment`  
+**Output:** Status message + setup instructions if needed
+
+## Pre-Flight Checklist
+
+| Check | Requirement | Failure Action |
+|-------|-------------|----------------|
+| Python Version | >= 3.9.0 | Block → Guide upgrade |
+| Core Dependencies | pyyaml, pydantic, fastapi, uvicorn, httpx | Block → Offer auto-install |
+| Test Dependencies | pytest | Block → Include in install |
+| MCP Module | cortex/mcp/server.py exists | Block → Setup guide |
+| Quality Tools | black, mypy, pylint | Warning only (proceed) |
+
+## Pre-Flight Flow
+
+```
+User Request → PRE-FLIGHT CHECK
+                    ↓
+         cortex_verify_environment(auto_fix=False, verbose=True)
+                    ↓
+         ✅ READY → Proceed to AUDIT/DESIGN
+         ❌ MISSING_PYTHON → Guide Python upgrade, HALT
+         ❌ MISSING_DEPS → Offer auto-install or manual, HALT
+         ⚠️ PARTIAL → Warning + proceed option
+```
+
+## Pre-Flight Output Format
+
+### Environment Ready
+
+```markdown
+## 🔧 Environment Check
+**Status:** Ready ✅ | **Python:** {version} | **Dependencies:** {count}/{total}
+
+**Proceeding to {AUDIT|DESIGN} mode...**
+```
+
+### Environment Not Ready
+
+```markdown
+## 🔧 Environment Check
+**Status:** Setup Required ❌
+
+**Issue:** {issue_description}
+
+**Action Required:**
+{setup_instructions}
+
+**Options:**
+1. Type "auto-fix" for automatic installation (recommended)
+2. Follow manual steps above
+3. View full guide: [Installation](../../docs/03-getting-started/0-installation.md)
+
+**Note:** AUDIT/DESIGN operations cannot proceed until environment is ready.
+```
+
+## Bypass Conditions
+
+**PRE-FLIGHT is skipped ONLY if:**
+- `/meta-audit` command used (meta-audit doesn't require environment)
+- User explicitly adds `--skip-env-check` flag (for advanced users only)
+
+**Default:** Always check environment first.
 
 ---
 
 # 🔍 MODE 1: AUDIT (No Request / Audit Keywords)
 
+**Pre-Requisite:** PRE-FLIGHT check must pass (environment READY)  
 **Execution:** Autonomous — no confirmations  
 **Context:** IGNORE all attached files  
 **Output:** Executive summaries + tables only (no code snippets)
@@ -184,6 +259,7 @@
 
 # 🎨 MODE 2: DESIGN (User Request Provided)
 
+**Pre-Requisite:** PRE-FLIGHT check must pass (environment READY)  
 **Execution:** Stop for approval → autonomous after  
 **Context:** USE attached files  
 **Output:** Executive summaries + tables only (no code snippets)
@@ -311,7 +387,8 @@
 
 | Tool | Use |
 |------|-----|
-| `cortex_git_history` | 24h context at start |
+| `cortex_verify_environment` | **PRE-FLIGHT:** Environment validation |
+| `cortex_git_history` | 24h context at start (DESIGN mode) |
 | `cortex_lens_analyze` | Code patterns |
 | `cortex_detect_duplicates` | CORE-035 + coherence validation |
 | `cortex_ast_analyze` | Structure |
@@ -334,9 +411,10 @@
 
 ## ✅ COMPLETION
 
-**AUDIT:** "✅ CORTEX Audit Complete — 100% production-ready" or P0 Actions table  
+**COMPLETION:** "✅ CORTEX Audit Complete — 100% production-ready" or P0 Actions table  
 **META-AUDIT:** "🧠 Meta-Intelligence Report Complete — {n} insights generated"  
-**DESIGN:** Implementation table with files modified, tests passing, todos tracked
+**DESIGN:** Implementation table with files modified, tests passing, todos tracked  
+**PRE-FLIGHT:** "🔧 Environment Ready ✅" or setup instructions with halt
 
 ---
 
@@ -391,4 +469,4 @@ rejected_recommendations:
 
 ---
 
-*v10.1 — Meta-Intelligence System: Self-enhancement, innovation recommendations, learning feedback loop.*
+*v11.0 — Pre-Flight Environment Validation: Automatic environment checks before AUDIT/DESIGN operations.*
