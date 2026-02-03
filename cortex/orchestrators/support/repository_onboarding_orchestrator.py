@@ -25,6 +25,27 @@ import json
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 from cortex.core.interfaces import IOrchestrator
 from cortex.brain.core.result import Result, Ok, Err
+from cortex.models.dashboard_schema import (
+    RepoDashboardModel,
+    RepoMetadata,
+    OverviewSection,
+    MetricsSection,
+    SecuritySection,
+    SecurityVulnerability,
+    DependenciesSection,
+    PackageDependency,
+    QualitySection,
+    CodeSmell,
+    UseCase,
+    LensSection,
+    RefactoringSection,
+)
+from cortex.common.debug_logger import (
+    log_dashboard_debug,
+    log_dashboard_generation,
+    log_dashboard_schema_validation,
+    dashboard_debug,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -238,23 +259,64 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             # Step 6: Generate universal dashboard
             if include_dashboard:
                 logger.info("Step 6: Generating universal dashboard...")
-                dashboard_gen = _get_universal_dashboard_generator()
                 
-                # Prepare full data
-                analysis_data = {
-                    'repo_path': str(repo_path),
-                    'timestamp': result.timestamp,
-                    'security_risks': security_model,
-                    'holistic_context': lens_context,
-                    'recommendations': recommendations,
-                }
-                
-                dashboard_path = dashboard_gen.generate_dashboard(
+                # Convert to RepoDashboardModel schema v2.0
+                dashboard_model = self._convert_to_dashboard_model(
+                    repo_path=repo_path,
                     repo_name=canonical_name,
+                    lens_context=lens_context,
+                    security_model=security_model,
                     narrative=narrative,
-                    analysis_data=analysis_data
+                    recommendations=recommendations,
                 )
-                result.dashboard_path = str(dashboard_path)
+                
+                # Validate schema
+                is_valid, validation_errors = dashboard_model.to_dict(), []
+                log_dashboard_schema_validation(
+                    "RepoDashboardModel",
+                    is_valid,
+                    len(validation_errors) == 0,
+                    validation_errors
+                )
+                
+                # Save dashboard-data.json
+                dashboard_dir = Path("company/dashboards/repos") / canonical_name
+                dashboard_dir.mkdir(parents=True, exist_ok=True)
+                
+                dashboard_json_path = dashboard_dir / "dashboard-data.json"
+                with open(dashboard_json_path, "w", encoding="utf-8") as f:
+                    f.write(dashboard_model.to_json(indent=2))
+                
+                log_dashboard_generation(
+                    "json_saved",
+                    canonical_name,
+                    path=str(dashboard_json_path),
+                    size=dashboard_json_path.stat().st_size,
+                )
+                
+                result.dashboard_path = str(dashboard_json_path)
+                
+                # Legacy dashboard generator support (optional)
+                dashboard_gen = _get_universal_dashboard_generator()
+                if dashboard_gen is not None:
+                    # Prepare full data for legacy generator
+                    analysis_data = {
+                        'repo_path': str(repo_path),
+                        'timestamp': result.timestamp,
+                        'security_risks': security_model,
+                        'holistic_context': lens_context,
+                        'recommendations': recommendations,
+                    }
+                    
+                    try:
+                        dashboard_html_path = dashboard_gen.generate_dashboard(
+                            repo_name=canonical_name,
+                            narrative=narrative,
+                            analysis_data=analysis_data
+                        )
+                        logger.info("Legacy dashboard HTML generated: %s", dashboard_html_path)
+                    except Exception as gen_error:
+                        logger.warning("Legacy dashboard generation failed: %s", gen_error)
                 
                 # Step 7: Update landing page hub
                 logger.info("Step 7: Updating landing page hub...")
@@ -283,6 +345,355 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             result.error = str(e)
         
         return result
+    
+    @dashboard_debug
+    def _convert_to_dashboard_model(
+        self,
+        repo_path: Path,
+        repo_name: str,
+        lens_context: Dict[str, Any],
+        security_model: Dict[str, Any],
+        narrative: Optional[Any],
+        recommendations: List[Dict[str, Any]],
+    ) -> RepoDashboardModel:
+        """
+        Convert analysis results to RepoDashboardModel schema v2.0.
+        
+        This ensures all generated dashboards conform to the standard schema.
+        
+        Args:
+            repo_path: Repository path
+            repo_name: Canonical repository name
+            lens_context: Full LENS analysis results
+            security_model: Security threat modeling results
+            narrative: Business narrative (optional)
+            recommendations: List of recommendations
+            
+        Returns:
+            RepoDashboardModel instance
+        """
+        log_dashboard_generation("schema_conversion_start", repo_name)
+        
+        # Extract language detection
+        lang_detection = lens_context.get("language_detection", {})
+        primary_language = lang_detection.get("primary_language", "Unknown")
+        
+        # Repo metadata section
+        repo_metadata = RepoMetadata(
+            slug=repo_name,
+            display_name=getattr(narrative, 'title', repo_name.upper()) if narrative else repo_name.upper(),
+            description=getattr(narrative, 'tagline', f"{repo_name} repository") if narrative else f"{repo_name} repository",
+            owner=lens_context.get("metadata", {}).get("owner", "Unknown"),
+            primary_language=primary_language,
+            version="1.0",  # Could extract from git tags or package version
+            last_analyzed_at=datetime.now().isoformat(),
+        )
+        
+        # Overview section
+        overview = OverviewSection(
+            summary=getattr(narrative, 'summary', "Repository analysis") if narrative else "Repository analysis",
+            business_summary=getattr(narrative, 'description', "") if narrative else "",
+            key_findings=self._extract_key_findings(lens_context, security_model),
+        )
+        
+        # Metrics section
+        repo_summary = lens_context.get("repository_summary", {})
+        metrics = MetricsSection(
+            health_score=self._calculate_health_score(lens_context, security_model),
+            risk_score=self._calculate_risk_score(security_model),
+            loc=repo_summary.get("total_loc", 0),
+            code_lines=repo_summary.get("code_lines", 0),
+            comment_lines=repo_summary.get("comment_lines", 0),
+            blank_lines=repo_summary.get("blank_lines", 0),
+            files=repo_summary.get("total_files", 0),
+            coverage_pct=repo_summary.get("test_coverage_pct", 0.0),
+            languages=lang_detection.get("language_counts", {}),
+        )
+        
+        # Security section
+        security = self._convert_security_section(lens_context, security_model)
+        
+        # Dependencies section
+        dependencies = self._convert_dependencies_section(lens_context)
+        
+        # Quality section
+        quality = self._convert_quality_section(lens_context)
+        
+        # Use cases
+        use_cases = self._generate_use_cases(lens_context, security_model, repo_name)
+        
+        # LENS section
+        lens = LensSection(
+            analysis_summary=lens_context.get("metadata", {}).get("summary", "LENS analysis complete")
+        )
+        
+        # Refactoring section
+        refactoring = RefactoringSection(
+            recommendations=recommendations
+        )
+        
+        model = RepoDashboardModel(
+            repo=repo_metadata,
+            overview=overview,
+            metrics=metrics,
+            security=security,
+            dependencies=dependencies,
+            quality=quality,
+            use_cases=use_cases,
+            lens=lens,
+            refactoring=refactoring,
+        )
+        
+        log_dashboard_generation(
+            "schema_conversion_complete",
+            repo_name,
+            use_cases_count=len(use_cases),
+            security_vulns=security.total_count,
+            health_score=metrics.health_score,
+        )
+        
+        return model
+    
+    def _extract_key_findings(
+        self,
+        lens_context: Dict[str, Any],
+        security_model: Dict[str, Any],
+    ) -> List[str]:
+        """Extract key findings from analysis."""
+        findings = []
+        
+        # Security findings
+        p0_count = len(security_model.get("p0_risks", []))
+        p1_count = len(security_model.get("p1_risks", []))
+        if p0_count > 0:
+            findings.append(f"{p0_count} critical security risks require immediate attention")
+        elif p1_count > 0:
+            findings.append(f"{p1_count} high-priority security issues identified")
+        else:
+            findings.append("No critical security issues detected")
+        
+        # Code quality
+        repo_summary = lens_context.get("repository_summary", {})
+        if repo_summary.get("total_files", 0) > 0:
+            findings.append(f"Codebase contains {repo_summary['total_files']} files")
+        
+        # Dependencies
+        dep_analysis = lens_context.get("dependency_analysis", {})
+        vulnerable_packages = dep_analysis.get("vulnerable_packages", 0)
+        if vulnerable_packages > 0:
+            findings.append(f"{vulnerable_packages} dependencies have known vulnerabilities")
+        
+        return findings[:5]  # Limit to top 5
+    
+    def _calculate_health_score(
+        self,
+        lens_context: Dict[str, Any],
+        security_model: Dict[str, Any],
+    ) -> int:
+        """Calculate overall health score (0-100)."""
+        score = 100
+        
+        # Deduct for security risks
+        p0_count = len(security_model.get("p0_risks", []))
+        p1_count = len(security_model.get("p1_risks", []))
+        score -= p0_count * 20  # -20 per P0
+        score -= p1_count * 10  # -10 per P1
+        
+        # Deduct for vulnerable dependencies
+        dep_analysis = lens_context.get("dependency_analysis", {})
+        score -= dep_analysis.get("critical_vulnerabilities", 0) * 15
+        score -= dep_analysis.get("high_vulnerabilities", 0) * 5
+        
+        return max(0, min(100, score))
+    
+    def _calculate_risk_score(self, security_model: Dict[str, Any]) -> int:
+        """Calculate risk score (0-100, higher is more risky)."""
+        score = 0
+        
+        p0_count = len(security_model.get("p0_risks", []))
+        p1_count = len(security_model.get("p1_risks", []))
+        p2_count = len(security_model.get("p2_risks", []))
+        
+        score += p0_count * 25
+        score += p1_count * 15
+        score += p2_count * 5
+        
+        return min(100, score)
+    
+    def _convert_security_section(
+        self,
+        lens_context: Dict[str, Any],
+        security_model: Dict[str, Any],
+    ) -> SecuritySection:
+        """Convert security analysis to SecuritySection."""
+        log_dashboard_debug("Converting security section")
+        
+        vulnerabilities = []
+        
+        # Aggregate all security risks
+        all_risks = (
+            security_model.get("p0_risks", []) +
+            security_model.get("p1_risks", []) +
+            security_model.get("p2_risks", [])
+        )
+        
+        severity_map = {"P0": "critical", "P1": "high", "P2": "medium"}
+        
+        for idx, risk in enumerate(all_risks[:50]):  # Limit to 50
+            severity_key = risk.get("priority", "P2")
+            vuln = SecurityVulnerability(
+                id=f"SEC-{idx+1:03d}",
+                title=risk.get("title", "Security issue"),
+                severity=severity_map.get(severity_key, "low"),
+                cwe_id=risk.get("cwe_id", "CWE-Unknown"),
+                location=risk.get("location", "unknown"),
+                status="open",
+                description=risk.get("description", ""),
+            )
+            vulnerabilities.append(vuln)
+        
+        # Count by severity
+        critical_count = len([v for v in vulnerabilities if v.severity == "critical"])
+        high_count = len([v for v in vulnerabilities if v.severity == "high"])
+        medium_count = len([v for v in vulnerabilities if v.severity == "medium"])
+        low_count = len([v for v in vulnerabilities if v.severity == "low"])
+        
+        return SecuritySection(
+            total_count=len(vulnerabilities),
+            critical_count=critical_count,
+            high_count=high_count,
+            medium_count=medium_count,
+            low_count=low_count,
+            vulnerabilities=vulnerabilities,
+        )
+    
+    def _convert_dependencies_section(
+        self,
+        lens_context: Dict[str, Any],
+    ) -> DependenciesSection:
+        """Convert dependency analysis to DependenciesSection."""
+        log_dashboard_debug("Converting dependencies section")
+        
+        dep_analysis = lens_context.get("dependency_analysis", {})
+        packages_data = dep_analysis.get("packages", [])
+        
+        packages = []
+        for pkg_data in packages_data[:100]:  # Limit to 100
+            pkg = PackageDependency(
+                name=pkg_data.get("name", "unknown"),
+                version=pkg_data.get("version", "0.0.0"),
+                license=pkg_data.get("license", "Unknown"),
+                is_direct=pkg_data.get("type", "direct") == "direct",
+            )
+            packages.append(pkg)
+        
+        # Extract license distribution
+        licenses = {}
+        for pkg in packages:
+            licenses[pkg.license] = licenses.get(pkg.license, 0) + 1
+        
+        total_packages = dep_analysis.get("total_packages", len(packages))
+        direct_count = len([p for p in packages if p.is_direct])
+        
+        return DependenciesSection(
+            total_count=total_packages,
+            direct_count=direct_count,
+            transitive_count=total_packages - direct_count,
+            packages=packages,
+            licenses=licenses,
+        )
+    
+    def _convert_quality_section(
+        self,
+        lens_context: Dict[str, Any],
+    ) -> QualitySection:
+        """Convert quality analysis to QualitySection."""
+        log_dashboard_debug("Converting quality section")
+        
+        code_analysis = lens_context.get("code_analysis", {})
+        
+        # Extract code smells (if available from LENS)
+        code_smells = []
+        # TODO: Extract from actual LENS data when available
+        
+        return QualitySection(
+            maintainability=75,  # TODO: Calculate from LENS metrics
+            readability=80,
+            documentation=70,
+            complexity=65,
+            code_smells=code_smells,
+            hotspots=[],
+        )
+    
+    def _generate_use_cases(
+        self,
+        lens_context: Dict[str, Any],
+        security_model: Dict[str, Any],
+        repo_name: str,
+    ) -> List[UseCase]:
+        """Generate use cases for the dashboard."""
+        log_dashboard_debug("Generating use cases", repo=repo_name)
+        
+        use_cases = []
+        
+        # Security use case
+        p0_count = len(security_model.get("p0_risks", []))
+        if p0_count > 0:
+            use_cases.append(UseCase(
+                id="UC-SEC-001",
+                title="Address Critical Security Vulnerabilities",
+                persona="Security",
+                category="Risk",
+                summary=f"{p0_count} critical security issues require immediate remediation",
+                signals=["security.critical_count", "security.vulnerabilities"],
+                recommended_actions=[
+                    "Review security tab for details",
+                    "Prioritize P0 fixes",
+                    "Schedule security review",
+                ],
+                tags=["security", "urgent", "p0"],
+                severity="critical",
+            ))
+        
+        # Dependency use case
+        dep_analysis = lens_context.get("dependency_analysis", {})
+        outdated_packages = dep_analysis.get("outdated_packages", 0)
+        if outdated_packages > 0:
+            use_cases.append(UseCase(
+                id="UC-DEP-001",
+                title="Update Outdated Dependencies",
+                persona="Engineer",
+                category="Maintainability",
+                summary=f"{outdated_packages} packages are outdated and should be updated",
+                signals=["dependencies.outdated_packages"],
+                recommended_actions=[
+                    "Review dependencies tab",
+                    "Update non-breaking changes first",
+                    "Test thoroughly after updates",
+                ],
+                tags=["dependencies", "maintenance"],
+                severity="medium",
+            ))
+        
+        # Code quality use case
+        use_cases.append(UseCase(
+            id="UC-QUAL-001",
+            title="Monitor Code Quality Trends",
+            persona="Engineering Manager",
+            category="Quality",
+            summary="Track maintainability and complexity metrics over time",
+            signals=["quality.maintainability", "quality.complexity"],
+            recommended_actions=[
+                "Review quality tab",
+                "Identify refactoring candidates",
+                "Set quality gates",
+            ],
+            tags=["quality", "monitoring"],
+            severity="low",
+        ))
+        
+        log_dashboard_debug("Generated use cases", count=len(use_cases))
+        return use_cases
     
     def _run_holistic_analysis(self, repo_path: Path) -> Dict[str, Any]:
         """

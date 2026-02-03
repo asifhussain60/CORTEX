@@ -502,62 +502,123 @@
     <script src="js/charts/ChartFactory.js"></script>
     <script src="js/app.js"></script>
     
-    <!-- Dynamic Data Loader -->
+    <!-- Dynamic Data Loader (file:// + http:// compatible) -->
     <script>
-        // Extract repo name from URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const repoName = urlParams.get('repo') || 'cortex';
+        /**
+         * CORTEX SPA Dashboard Loader
+         * 
+         * Supports two modes:
+         * 1. Static (file://): Reads embedded JSON from #dashboard-data script tag
+         * 2. Dynamic (http://): Fetches JSON from ?repo=name parameter
+         * 
+         * Mode is auto-detected based on #dashboard-data content.
+         */
         
-        console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
-        
-        // Fetch dashboard data for the specified repo
-        fetch(`../repos/${repoName}/dashboard-data.json`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load dashboard data: ${response.status} ${response.statusText}`);
+        (function initializeDashboard() {
+            console.log('🚀 [SPA] Initializing dashboard...');
+            
+            // Check if data is already embedded (static mode for file://)
+            const embeddedDataScript = document.getElementById('dashboard-data');
+            let embeddedData = null;
+            
+            if (embeddedDataScript && embeddedDataScript.textContent.trim() !== '{}') {
+                try {
+                    embeddedData = JSON.parse(embeddedDataScript.textContent);
+                    console.log('📦 [SPA] Using embedded data (file:// mode):', {
+                        repo: embeddedData.repo?.display_name,
+                        mode: 'static'
+                    });
+                } catch (e) {
+                    console.warn('⚠️ [SPA] Failed to parse embedded data:', e);
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('✅ [SPA] Dashboard data loaded successfully:', {
-                    repo: data.repo?.display_name,
-                    hasMetrics: !!data.metrics,
-                    hasSecurity: !!data.security,
-                    hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
+            }
+            
+            // If embedded data exists and is valid, use it (file:// protocol)
+            if (embeddedData && embeddedData.repo) {
+                initializeWithData(embeddedData);
+                return;
+            }
+            
+            // Otherwise, fetch dynamically (http:// protocol)
+            console.log('🌐 [SPA] Using dynamic fetch mode (http://)');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const repoName = urlParams.get('repo') || 'cortex';
+            
+            console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
+            
+            fetch(`../repos/${repoName}/dashboard-data.json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('✅ [SPA] Dashboard data loaded via fetch:', {
+                        repo: data.repo?.display_name,
+                        hasMetrics: !!data.metrics,
+                        hasSecurity: !!data.security,
+                        hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
+                    });
+                    
+                    // Replace embedded data script for app.js
+                    embeddedDataScript.textContent = JSON.stringify(data);
+                    
+                    initializeWithData(data);
+                })
+                .catch(error => {
+                    console.error('❌ [SPA] Failed to load dashboard data:', error);
+                    showError(repoName, error.message);
                 });
-                
-                // Inject data into a script tag for app.js to consume
-                const dataScript = document.createElement('script');
-                dataScript.type = 'application/json';
-                dataScript.id = 'dashboard-data';
-                dataScript.textContent = JSON.stringify(data);
-                document.body.appendChild(dataScript);
-                
-                // Initialize the dashboard
+        })();
+        
+        function initializeWithData(data) {
+            console.log('⚙️ [SPA] Initializing dashboard with data...');
+            
+            // Validate data structure
+            if (!data.repo || !data.overview || !data.metrics) {
+                console.error('❌ [SPA] Invalid data structure:', {
+                    hasRepo: !!data.repo,
+                    hasOverview: !!data.overview,
+                    hasMetrics: !!data.metrics
+                });
+                showError('unknown', 'Invalid dashboard data structure');
+                return;
+            }
+            
+            // Initialize the dashboard
+            try {
                 const dashboard = new CortexDashboard();
                 dashboard.init();
-            })
-            .catch(error => {
-                console.error('❌ [SPA] Failed to load dashboard data:', error);
-                
-                // Show error message
-                const errorHtml = `
-                    <div style="padding: 3rem; text-align: center;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
-                        <h2 style="color: var(--error); margin-bottom: 1rem;">Dashboard Data Not Found</h2>
-                        <p style="color: var(--text-muted); margin-bottom: 2rem;">
-                            Could not load dashboard data for repository: <strong>${repoName}</strong>
-                        </p>
-                        <p style="color: var(--text-muted); margin-bottom: 2rem;">
-                            ${error.message}
-                        </p>
-                        <a href="../index.html" class="btn">
-                            <span>←</span> Back to Repository List
-                        </a>
-                    </div>
-                `;
-                document.querySelector('.app-container').innerHTML = errorHtml;
-            });
+                console.log('✅ [SPA] Dashboard initialized successfully');
+            } catch (error) {
+                console.error('❌ [SPA] Dashboard initialization failed:', error);
+                showError(data.repo.slug, error.message);
+            }
+        }
+        
+        function showError(repoName, errorMessage) {
+            const errorHtml = `
+                <div style="padding: 3rem; text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+                    <h2 style="color: var(--error); margin-bottom: 1rem;">Dashboard Error</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                        Could not load dashboard for: <strong>${repoName}</strong>
+                    </p>
+                    <pre style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; margin: 0 auto 2rem; max-width: 600px; text-align: left; overflow-x: auto;">
+${errorMessage}
+                    </pre>
+                    <a href="../index.html" class="btn">
+                        <span>←</span> Back to Repository List
+                    </a>
+                </div>
+            `;
+            const container = document.querySelector('.app-container');
+            if (container) {
+                container.innerHTML = errorHtml;
+            }
+        }
     </script>
 </body>
 </html>
