@@ -1,0 +1,3574 @@
+# PHASE-21: ENTERPRISE REPOSITORY INTELLIGENCE SYSTEM
+# Version: 2.0 | Created: 2026-02-03 | Rewritten: Complete Overhaul
+# Scope: Multi-Repo SPA Dashboard + LENS Data Generation + LLM Business Language
+# Authority: cortex-architect.prompt.md, chat01.txt, chat03-gpt-recommendation.txt
+# Status: PLANNING - Comprehensive Architecture
+
+---
+metadata:
+  phase: "21"
+  title: "Enterprise Repository Intelligence System"
+  version: "2.0"
+  status: "PLANNING"
+  author: "Asif Hussain"
+  created: "2026-02-03"
+  rewritten: "2026-02-03"
+  priority: "P0"
+  estimated_effort: "4 weeks"
+  governance:
+    - "ARCH-011: Execute to completion"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-008: Tests BEFORE code (TDD)"
+    - "CORE-036: Industry standards compliance"
+    - "MCP-FIRST: All functionality exposed via MCP tools"
+  depends_on:
+    - "PHASE-18-ENTERPRISE-DASHBOARD-SYSTEM.yaml"
+    - "PHASE-19-LENS-UNIFIED-INTELLIGENCE.yaml"
+    - "PHASE-20-LENS-COMPANY-INTEGRATION.yaml"
+  supersedes:
+    - "Previous PHASE-21-LENS-DASHBOARD-DATA-GENERATION.yaml"
+
+---
+# ============================================================================
+# EXECUTIVE VISION
+# ============================================================================
+
+vision:
+  mission: |
+    Create an enterprise-grade Repository Intelligence Platform that:
+    1. Reverse-engineers ANY codebase using CORTEX LENS crawlers
+    2. Generates LLM-enhanced business-language documentation
+    3. Provides beautiful, scalable dashboards for hundreds of repositories
+    4. Enables business leaders and new team members to understand code instantly
+    5. Serves as the single source of truth for all repository metrics and insights
+    
+  target_personas:
+    - name: "Business Leaders & Executives"
+      needs: "High-level KPIs, risk assessment, investment priorities"
+      solution: "Executive Summary tab with business-language insights"
+      
+    - name: "Product Owners"
+      needs: "Feature inventory, use case documentation, roadmap alignment"
+      solution: "Use Cases tab with business value mapping"
+      
+    - name: "New Team Members"
+      needs: "Quick onboarding, codebase understanding, architecture overview"
+      solution: "Overview + Architecture tabs with visual diagrams"
+      
+    - name: "Software Engineers"
+      needs: "Code quality metrics, technical debt, refactoring priorities"
+      solution: "Quality, Metrics, Refactoring tabs with file-level drill-down"
+      
+    - name: "Security Teams"
+      needs: "Vulnerability tracking, OWASP compliance, risk heatmaps"
+      solution: "Security tab with severity-based filtering"
+      
+    - name: "Architects"
+      needs: "Dependency analysis, pattern detection, layer compliance"
+      solution: "Architecture + LENS tabs with visual graphs"
+  
+  key_outcomes:
+    - "Single index.html displaying tiles for ALL onboarded repositories"
+    - "Single dashboard.html loading ANY repo's data dynamically"
+    - "MCP tool: cortex_onboard_repository for complete repo intelligence"
+    - "LLM-generated business-language for Executive, Overview, and Use Cases"
+    - "Schema v3.0 supporting 13 tabs with role-specific content"
+    - "HTTP-served SPA with environment-adaptive server detection"
+    - "Auto-hiding components when data unavailable"
+    - "SQLite data layer via sql.js (WASM) — single solution for low/high volume"
+    - "Native SQL pagination, search, filtering — zero external dependencies"
+    - "Domain Model UML diagrams from company/domains YAML files"
+    - "Interactive code visualization with Cytoscape"
+    - "Separate dashboard.sqlite per repo (SOLID compliance with cortex.db)"
+    - "Seamless scalability path: local sql.js → enterprise PostgreSQL/Vector DB"
+
+---
+# ============================================================================
+# CURRENT STATE AUDIT
+# ============================================================================
+
+current_state:
+  working_infrastructure:
+    landing_page:
+      file: "company/dashboards/index.html"
+      status: "✅ WORKING"
+      features:
+        - "Dark glassmorphism theme with electric ring animation"
+        - "Dynamic tile generation from registry.json"
+        - "Hero section with CORTEX branding"
+        - "Responsive grid layout"
+      lines: 732
+      
+    spa_dashboard:
+      file: "company/dashboards/spa/dashboard.html"
+      status: "✅ WORKING"
+      features:
+        - "8-tab navigation (Overview, Metrics, Security, Dependencies, Quality, Use Cases, LENS, Refactoring)"
+        - "Data binding via data-bind attributes"
+        - "ECharts visualizations"
+        - "Null handling via data-show-if"
+      lines: 625
+      
+    component_architecture:
+      app_js: "spa/js/app.js (624 lines) - CortexDashboard class"
+      data_binder: "spa/js/components/DataBinder.js - DOM binding"
+      tab_manager: "spa/js/components/TabManager.js - Tab navigation"
+      use_cases_manager: "spa/js/components/UseCasesManager.js - Filtering"
+      chart_factory: "spa/js/charts/ChartFactory.js - Chart creation"
+      chart_host: "spa/js/components/ChartHost.js - Chart lifecycle"
+      
+    vendors_integrated:
+      - "ECharts (echarts.min.js) - Primary charting"
+      - "Fuse.js (fuse.min.js) - Fuzzy search"
+      - "GridJS (gridjs.umd.js) - Data tables"
+      
+    sample_data:
+      repos_onboarded:
+        - "cortex (dashboard-data.json - 399 lines)"
+        - "cortex-brain (placeholder)"
+        - "cortex-lens (placeholder)"
+      schema_version: "v1.0"
+      completeness:
+        overview: "Complete with business_summary"
+        metrics: "Complete with languages breakdown"
+        security: "Complete with 12 vulnerabilities array"
+        dependencies: "Complete with 8 packages sample"
+        quality: "Complete with 5 code_smells"
+        use_cases: "Complete with 8 detailed use cases"
+        lens: "Partial (patterns, recommendations)"
+        refactoring: "Complete with 5 recommendations"
+        
+  lens_analyzers_available:
+    ast_analyzer:
+      file: "cortex/lens/analyzers/ast_analyzer.py"
+      capabilities: "Functions, classes, imports, decorators, async detection"
+      
+    git_history_analyzer:
+      file: "cortex/lens/analyzers/git_history_analyzer.py"
+      capabilities: "Commits, contributors, churn, hotspots"
+      
+    config_analyzer:
+      file: "cortex/lens/analyzers/config_analyzer.py"
+      capabilities: "Package.json, requirements.txt, pyproject.toml parsing"
+      
+    dependency_analyzer:
+      file: "cortex/lens/analyzers/dependency_analyzer.py"
+      capabilities: "Direct, dev, transitive dependencies, versions"
+      
+    database_analyzer:
+      file: "cortex/lens/analyzers/database_analyzer.py"
+      capabilities: "Schema extraction, table relationships"
+      
+    api_analyzer:
+      file: "cortex/lens/analyzers/api_analyzer.py"
+      capabilities: "REST endpoints, parameters, responses"
+      
+    vendor_detector:
+      file: "cortex/lens/analyzers/vendor_detector.py"
+      capabilities: "Third-party library detection"
+      
+    comment_extractor:
+      file: "cortex/lens/analyzers/comment_extractor.py"
+      capabilities: "Docstrings, TODOs, annotations"
+      
+  existing_aggregator:
+    file: "cortex/lens/dashboard_data_aggregator.py"
+    status: "PARTIAL - Needs enhancement for v3.0 schema"
+    current_models:
+      - "OverviewData, MetricsData, SecurityData"
+      - "DependencyData, QualityData, LENSData"
+      - "RefactoringData, UseCaseData, DomainData"
+
+  gaps_identified:
+    critical:
+      - "No automated LENS → JSON pipeline"
+      - "No LLM integration for business language generation"
+      - "No schema enhancement detection on new repo onboarding"
+      - "Missing sub-tabs (Architecture layers, Testing pyramid, Executive KPIs)"
+      - "No Sankey/Network graph visualizations"
+      
+    important:
+      - "Dashboard.html loads data from embedded script, not external JSON"
+      - "No lazy loading of repo data"
+      - "Missing error boundaries for failed chart rendering"
+      - "No refresh/re-analyze capability"
+      
+    nice_to_have:
+      - "Dark/light theme toggle"
+      - "Export to PDF/PNG"
+      - "Comparison view between repos"
+
+---
+# ============================================================================
+# ARCHITECTURE: MULTI-LAYER INTELLIGENCE SYSTEM
+# ============================================================================
+
+architecture:
+  overview_diagram: |
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │                          USER INTERFACE LAYER                                │
+    │  ┌─────────────────────┐    ┌────────────────────────────────────────────┐  │
+    │  │   index.html        │    │   spa/dashboard.html                       │  │
+    │  │   (Landing Page)    │───▶│   (Repository Dashboard)                   │  │
+    │  │   - Registry tiles  │    │   - Dynamic JSON loading                   │  │
+    │  │   - Search/filter   │    │   - 12 tabs with sub-tabs                  │  │
+    │  └─────────────────────┘    │   - ECharts + D3.js visualizations        │  │
+    │                             └────────────────────────────────────────────┘  │
+    └─────────────────────────────────────────────────────────────────────────────┘
+                                           │
+                                           ▼
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │                    SQLITE DATA LAYER (sql.js WASM)                           │
+    │  ┌─────────────────────┐    ┌────────────────────────────────────────────┐  │
+    │  │   registry.sqlite   │    │   repos/{slug}/dashboard.sqlite            │  │
+    │  │   - All repos       │    │   Tables:                                  │  │
+    │  │   - Quick metrics   │    │   ├── repo_summary (overview)              │  │
+    │  │   - Auto-updated    │    │   ├── use_cases (paginated, searchable)    │  │
+    │  └─────────────────────┘    │   ├── metrics_summary                      │  │
+    │                             │   ├── vulnerabilities (indexed)            │  │
+    │                             │   ├── packages (tree structure)            │  │
+    │                             │   ├── code_smells (paginated)              │  │
+    │                             │   ├── entities (domain model)              │  │
+    │                             │   ├── relationships (UML data)             │  │
+    │                             │   ├── components (architecture)            │  │
+    │                             │   ├── files (code explorer)                │  │
+    │                             │   ├── test_results                         │  │
+    │                             │   └── lens_insights                        │  │
+    │                             │   Views:                                   │  │
+    │                             │   ├── executive_kpis (computed)            │  │
+    │                             │   ├── refactoring_suggestions (computed)   │  │
+    │                             │   └── search_index (full-text search)      │  │
+    │                             │   Benefits:                                │  │
+    │                             │   • Single file per repo (~2-20MB)         │  │
+    │                             │   • Native pagination (LIMIT/OFFSET)       │  │
+    │                             │   • Full-text search (FTS5)                │  │
+    │                             │   • Indexes for performance                │  │
+    │                             └────────────────────────────────────────────┘  │
+    └─────────────────────────────────────────────────────────────────────────────┘
+                                           ▲
+                                           │
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │                       DATA GENERATION LAYER (PYTHON)                         │
+    │  ┌───────────────────────────────────────────────────────────────────────┐  │
+    │  │              RepositoryOnboardingOrchestrator                          │  │
+    │  │  1. Schema Enhancement Check (Copilot scan for new tabs needed)       │  │
+    │  │  2. LENS Crawler Execution (all analyzers)                             │  │
+    │  │  3. LLM Business Language Generation (via Copilot in VSCode)          │  │
+    │  │  4. JSON Aggregation (DashboardDataAggregator v3.0)                   │  │
+    │  │  5. Registry Update (auto-add to registry.json)                       │  │
+    │  │  6. Existing JSON Migration (if schema changed)                       │  │
+    │  └───────────────────────────────────────────────────────────────────────┘  │
+    │                                      │                                       │
+    │         ┌────────────────────────────┼────────────────────────────────┐     │
+    │         │                            │                                │     │
+    │         ▼                            ▼                                ▼     │
+    │  ┌─────────────┐  ┌────────────────────────────┐  ┌──────────────────────┐ │
+    │  │ LENS Suite  │  │ LLM Integration Service    │  │ Schema Manager       │ │
+    │  │ - AST       │  │ - Overview generation      │  │ - Version tracking   │ │
+    │  │ - Git       │  │ - Use case business value  │  │ - Migration scripts  │ │
+    │  │ - Security  │  │ - Key findings synthesis   │  │ - Backward compat    │ │
+    │  │ - Deps      │  │ - Architecture summary     │  │ - Validation         │ │
+    │  │ - Quality   │  │ - Refactoring guidance     │  └──────────────────────┘ │
+    │  │ - API       │  └────────────────────────────┘                           │
+    │  │ - Database  │                                                            │
+    │  └─────────────┘                                                            │
+    └─────────────────────────────────────────────────────────────────────────────┘
+                                           │
+                                           ▼
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │                          MCP EXPOSURE LAYER                                  │
+    │  ┌───────────────────────────────────────────────────────────────────────┐  │
+    │  │  cortex_onboard_repository       - Full repo analysis + JSON gen      │  │
+    │  │  cortex_regenerate_dashboard     - Re-run analysis for existing repo  │  │
+    │  │  cortex_enhance_schema           - Add new tabs/components to schema  │  │
+    │  │  cortex_migrate_repos            - Update all repos to new schema     │  │
+    │  │  cortex_validate_dashboard_data  - Validate JSON against schema       │  │
+    │  └───────────────────────────────────────────────────────────────────────┘  │
+    └─────────────────────────────────────────────────────────────────────────────┘
+
+  data_flow: |
+    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+    │   Raw Code   │────▶│ LENS Analysis│────▶│ LLM Enhance  │────▶│ JSON Output  │
+    │   Repository │     │ (Crawlers)   │     │ (Copilot)    │     │ (dashboard-  │
+    │              │     │              │     │              │     │  data.json)  │
+    └──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+           │                    │                    │                    │
+           │                    ▼                    ▼                    ▼
+           │             ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+           │             │ Metrics     │      │ Business    │      │ Bound to    │
+           │             │ Extraction  │      │ Language    │      │ dashboard   │
+           │             │ - LOC       │      │ Generation  │      │ .html via   │
+           │             │ - Complexity│      │ - Overview  │      │ DataBinder  │
+           │             │ - Coverage  │      │ - Use Cases │      │             │
+           │             └─────────────┘      └─────────────┘      └─────────────┘
+           │
+           └──────▶ Git History ──────▶ Commit Analysis ──────▶ Velocity Trends
+
+---
+# ============================================================================
+# SQLITE DATA LAYER (sql.js WASM Architecture)
+# ============================================================================
+
+sqlite_data_layer:
+  rationale:
+    problem: "JSON files lack native pagination, search, filtering; require external libraries"
+    solution: "SQLite via sql.js (WASM) provides all data operations natively"
+    benefits:
+      - "Single data solution scales from local (sql.js) to enterprise (PostgreSQL)"
+      - "Native pagination: LIMIT/OFFSET eliminates custom logic"
+      - "Full-text search: FTS5 replaces Fuse.js"
+      - "Indexes for performance on large datasets"
+      - "Views for computed data (executive summaries, refactoring suggestions)"
+      - "Transactions for data integrity"
+      - "Browser-compatible (runs in any modern browser via WASM)"
+      - "Single file per repo (2-20MB typical, handles GB+ efficiently)"
+    
+  database_separation:
+    principle: "SOLID Separation of Concerns"
+    databases:
+      cortex_internal:
+        file: "cortex/data/cortex.db"
+        purpose: "CORTEX internal operations"
+        tables:
+          - "audit_logs (CORE-027 compliance)"
+          - "wiring_registry (orchestrator config)"
+          - "governance_violations (enforcement tracking)"
+          - "mcp_tool_invocations (usage metrics)"
+        access: "Python only (SQLAlchemy ORM)"
+        isolation: "Never accessed by dashboard"
+        
+      dashboard_registry:
+        file: "company/dashboards/registry.sqlite"
+        purpose: "Repository registry for landing page"
+        tables:
+          - "repositories (slug, name, description, health_score, last_updated)"
+          - "quick_metrics (per-repo summary stats)"
+        access: "Browser via sql.js"
+        size: "<1MB for 100+ repos"
+        
+      per_repo_dashboard:
+        file: "company/dashboards/repos/{slug}/dashboard.sqlite"
+        purpose: "Complete repository intelligence data"
+        tables: "See schema below"
+        access: "Browser via sql.js"
+        size: "2-20MB typical, efficient for GB+ repos"
+        
+    no_shared_state: "Each database is independent, no foreign keys across boundaries"
+    
+  schema_v3_sqlite:
+    description: "SQLite schema for dashboard.sqlite (per repository)"
+    tables:
+      repo_summary:
+        purpose: "Overview tab — high-level repository metadata"
+        columns:
+          - "id INTEGER PRIMARY KEY"
+          - "repo_name TEXT NOT NULL"
+          - "repo_slug TEXT NOT NULL UNIQUE"
+          - "description TEXT"
+          - "primary_language TEXT"
+          - "tech_stack TEXT (JSON array)"
+          - "total_loc INTEGER"
+          - "file_count INTEGER"
+          - "contributor_count INTEGER"
+          - "health_score INTEGER (0-100)"
+          - "last_commit_date TEXT (ISO8601)"
+          - "created_at TEXT (ISO8601)"
+          - "llm_overview TEXT (LLM-generated summary)"
+        indexes:
+          - "CREATE INDEX idx_slug ON repo_summary(repo_slug)"
+          
+      use_cases:
+        purpose: "Use Cases tab — business capabilities (PAGINATED)"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "title TEXT NOT NULL"
+          - "category TEXT (e.g., 'Authentication', 'Payment')"
+          - "business_value TEXT (LLM-generated)"
+          - "user_stories TEXT (JSON array)"
+          - "acceptance_criteria TEXT (JSON array)"
+          - "priority TEXT (low|medium|high|critical)"
+          - "implementation_status TEXT (implemented|partial|planned)"
+          - "related_files TEXT (JSON array of file paths)"
+          - "created_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_category ON use_cases(category)"
+          - "CREATE INDEX idx_priority ON use_cases(priority)"
+        fts:
+          - "CREATE VIRTUAL TABLE use_cases_fts USING fts5(title, business_value, content=use_cases)"
+        note: "Full-text search for 'show me authentication use cases'"
+        
+      metrics_summary:
+        purpose: "Metrics tab — aggregate code metrics"
+        columns:
+          - "id INTEGER PRIMARY KEY"
+          - "total_loc INTEGER"
+          - "code_loc INTEGER (excluding comments/blanks)"
+          - "comment_loc INTEGER"
+          - "avg_complexity REAL"
+          - "max_complexity INTEGER"
+          - "maintainability_index REAL (0-100)"
+          - "technical_debt_hours INTEGER"
+          - "calculated_at TEXT (ISO8601)"
+          
+      metrics_by_file:
+        purpose: "Metrics drill-down — per-file metrics"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "file_path TEXT NOT NULL"
+          - "language TEXT"
+          - "loc INTEGER"
+          - "complexity INTEGER"
+          - "maintainability REAL"
+          - "churn_count INTEGER (commits in last 30d)"
+          - "last_modified TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_file_path ON metrics_by_file(file_path)"
+          - "CREATE INDEX idx_complexity ON metrics_by_file(complexity DESC)"
+          
+      vulnerabilities:
+        purpose: "Security tab — CVEs and security issues (PAGINATED)"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "cve_id TEXT"
+          - "severity TEXT (critical|high|medium|low)"
+          - "package_name TEXT"
+          - "package_version TEXT"
+          - "fixed_version TEXT"
+          - "description TEXT"
+          - "file_path TEXT"
+          - "line_number INTEGER"
+          - "remediation TEXT"
+          - "detected_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_severity ON vulnerabilities(severity)"
+          - "CREATE INDEX idx_package ON vulnerabilities(package_name)"
+          
+      packages:
+        purpose: "Dependencies tab — package tree (PAGINATED)"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "package_name TEXT NOT NULL"
+          - "package_version TEXT"
+          - "package_type TEXT (direct|transitive)"
+          - "license TEXT"
+          - "size_kb INTEGER"
+          - "vulnerability_count INTEGER"
+          - "parent_package_id INTEGER (for tree structure)"
+          - "installed_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_package_name ON packages(package_name)"
+          - "CREATE INDEX idx_parent ON packages(parent_package_id)"
+        fts:
+          - "CREATE VIRTUAL TABLE packages_fts USING fts5(package_name, content=packages)"
+          
+      code_smells:
+        purpose: "Code Quality tab — quality issues (PAGINATED)"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "smell_type TEXT (e.g., 'Long Method', 'God Class')"
+          - "category TEXT (complexity|duplication|smell|maintainability)"
+          - "severity TEXT (low|medium|high|critical)"
+          - "file_path TEXT NOT NULL"
+          - "line_number INTEGER"
+          - "code_snippet TEXT"
+          - "explanation TEXT (LLM-generated)"
+          - "remediation TEXT (LLM-generated)"
+          - "effort_hours INTEGER"
+          - "detected_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_smell_type ON code_smells(smell_type)"
+          - "CREATE INDEX idx_file_path ON code_smells(file_path)"
+          
+      entities:
+        purpose: "Domain Model tab — domain entities"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "name TEXT NOT NULL UNIQUE"
+          - "type TEXT (aggregate_root|entity|value_object|service)"
+          - "description TEXT (LLM-generated)"
+          - "file_path TEXT"
+          - "line_range TEXT (e.g., '45-120')"
+          - "attributes TEXT (JSON array)"
+          - "methods TEXT (JSON array)"
+          - "stereotypes TEXT (JSON array)"
+        indexes:
+          - "CREATE INDEX idx_entity_name ON entities(name)"
+          - "CREATE INDEX idx_entity_type ON entities(type)"
+          
+      relationships:
+        purpose: "Domain Model tab — entity relationships"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "source_entity TEXT NOT NULL"
+          - "target_entity TEXT NOT NULL"
+          - "relationship_type TEXT (association|aggregation|composition|inheritance)"
+          - "cardinality TEXT (e.g., '1..n', '0..1')"
+          - "label TEXT"
+          - "bidirectional INTEGER (boolean)"
+        indexes:
+          - "CREATE INDEX idx_source ON relationships(source_entity)"
+          - "CREATE INDEX idx_target ON relationships(target_entity)"
+          
+      components:
+        purpose: "Architecture tab — system components"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "name TEXT NOT NULL"
+          - "type TEXT (service|module|library|database|external)"
+          - "description TEXT (LLM-generated)"
+          - "dependencies TEXT (JSON array of component names)"
+          - "api_count INTEGER"
+          - "loc INTEGER"
+          - "layer TEXT (e.g., 'Presentation', 'Business', 'Data')"
+        indexes:
+          - "CREATE INDEX idx_component_name ON components(name)"
+          - "CREATE INDEX idx_layer ON components(layer)"
+          
+      files:
+        purpose: "Code Explorer tab — file tree (PAGINATED)"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "file_path TEXT NOT NULL UNIQUE"
+          - "file_name TEXT"
+          - "file_type TEXT (file|folder)"
+          - "parent_path TEXT"
+          - "language TEXT"
+          - "loc INTEGER"
+          - "complexity INTEGER"
+          - "last_modified TEXT (ISO8601)"
+          - "churn_count INTEGER"
+        indexes:
+          - "CREATE INDEX idx_file_path ON files(file_path)"
+          - "CREATE INDEX idx_parent ON files(parent_path)"
+        fts:
+          - "CREATE VIRTUAL TABLE files_fts USING fts5(file_path, file_name, content=files)"
+          
+      code_snippets:
+        purpose: "Code Explorer tab — highlighted code examples"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "title TEXT"
+          - "file_path TEXT NOT NULL"
+          - "start_line INTEGER"
+          - "end_line INTEGER"
+          - "language TEXT"
+          - "code TEXT"
+          - "explanation TEXT (LLM-generated)"
+          - "category TEXT (pattern|anti-pattern|example|entry-point)"
+        indexes:
+          - "CREATE INDEX idx_snippet_file ON code_snippets(file_path)"
+          
+      test_results:
+        purpose: "Testing tab — test execution results"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "test_name TEXT NOT NULL"
+          - "test_type TEXT (unit|integration|e2e)"
+          - "status TEXT (pass|fail|skip)"
+          - "duration_ms INTEGER"
+          - "file_path TEXT"
+          - "failure_message TEXT"
+          - "run_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_test_type ON test_results(test_type)"
+          - "CREATE INDEX idx_status ON test_results(status)"
+          
+      lens_insights:
+        purpose: "LENS Analysis tab — CORTEX findings"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "insight_type TEXT (pattern|anti-pattern|recommendation)"
+          - "category TEXT"
+          - "description TEXT (LLM-generated)"
+          - "evidence TEXT (JSON array of file paths)"
+          - "impact TEXT (low|medium|high)"
+          - "confidence INTEGER (0-100)"
+          - "detected_at TEXT (ISO8601)"
+        indexes:
+          - "CREATE INDEX idx_insight_type ON lens_insights(insight_type)"
+          
+    views:
+      executive_kpis:
+        purpose: "Executive Summary tab — computed KPIs"
+        definition: |
+          CREATE VIEW executive_kpis AS
+          SELECT
+            (SELECT health_score FROM repo_summary) AS health_score,
+            (SELECT COUNT(*) FROM vulnerabilities WHERE severity IN ('critical', 'high')) AS critical_vulnerabilities,
+            (SELECT technical_debt_hours FROM metrics_summary) AS tech_debt_hours,
+            (SELECT COUNT(*) FROM test_results WHERE status = 'pass') * 100.0 / 
+              NULLIF((SELECT COUNT(*) FROM test_results), 0) AS test_pass_rate,
+            (SELECT maintainability_index FROM metrics_summary) AS maintainability
+        note: "No data duplication — references source tables"
+        
+      refactoring_suggestions:
+        purpose: "Refactoring tab — prioritized improvements"
+        definition: |
+          CREATE VIEW refactoring_suggestions AS
+          SELECT
+            id,
+            smell_type AS suggestion,
+            file_path,
+            severity,
+            effort_hours,
+            CASE
+              WHEN severity = 'critical' AND effort_hours < 4 THEN 'quick_win'
+              WHEN severity IN ('high', 'critical') THEN 'high_priority'
+              ELSE 'backlog'
+            END AS priority_bucket
+          FROM code_smells
+          ORDER BY 
+            CASE severity 
+              WHEN 'critical' THEN 1
+              WHEN 'high' THEN 2
+              WHEN 'medium' THEN 3
+              ELSE 4
+            END,
+            effort_hours ASC
+        note: "Computed from code_smells — no duplication"
+        
+  sql_js_implementation:
+    library: "sql.js v1.10.x"
+    files:
+      - "company/dashboards/spa/vendor/sql-wasm.js (JavaScript loader)"
+      - "company/dashboards/spa/vendor/sql-wasm.wasm (SQLite WASM binary)"
+    initialization: |
+      // In browser (SQLiteDataLayer.js)
+      const SQL = await initSqlJs({
+        locateFile: file => `/spa/vendor/${file}`
+      });
+      
+      // Load database
+      const response = await fetch(`/repos/${slug}/dashboard.sqlite`);
+      const buffer = await response.arrayBuffer();
+      const db = new SQL.Database(new Uint8Array(buffer));
+      
+    query_examples:
+      pagination:
+        query: "SELECT * FROM use_cases ORDER BY priority DESC LIMIT 20 OFFSET 40"
+        note: "Page 3 of use cases (20 per page)"
+        
+      search:
+        query: "SELECT * FROM use_cases_fts WHERE use_cases_fts MATCH 'authentication' LIMIT 10"
+        note: "Full-text search for 'authentication'"
+        
+      filter:
+        query: "SELECT * FROM vulnerabilities WHERE severity = 'critical' AND package_name LIKE 'django%'"
+        note: "Critical Django vulnerabilities"
+        
+      drill_down:
+        query: "SELECT * FROM metrics_by_file WHERE complexity > 20 ORDER BY complexity DESC"
+        note: "High-complexity files"
+        
+  scalability_path:
+    phase_1_local:
+      database: "sql.js (WASM)"
+      deployment: "Static file server (Python, nginx, Node)"
+      capacity: "Up to 100MB SQLite files, 1000+ repos"
+      performance: "Instant load (<2s), all queries local"
+      
+    phase_2_hybrid:
+      database: "sql.js (local) + optional API for large queries"
+      deployment: "Static files + lightweight API (FastAPI)"
+      capacity: "Up to 500MB SQLite files"
+      performance: "Most queries local, heavy queries offloaded"
+      
+    phase_3_enterprise:
+      database: "PostgreSQL / Azure SQL / AWS RDS"
+      deployment: "Full SaaS with authentication"
+      capacity: "Unlimited (TB-scale repositories)"
+      performance: "<100ms queries with proper indexing"
+      migration: "Same SQL queries, swap connection layer only"
+      additional:
+        - "Vector database for semantic code search (Pinecone, Weaviate)"
+        - "Redis cache for hot data"
+        - "Elasticsearch for advanced search"
+      
+    key_principle: "SQL abstraction layer allows swapping backends without frontend changes"
+  purpose: |
+    Large enterprise repositories can have millions of files and TB of code.
+    A single JSON file would be impractical. The sharded approach splits
+    data into logical chunks that are loaded on-demand by the dashboard.
+    
+  strategy: "Lazy Loading with Manifest"
+  
+  file_structure: |
+    repos/{slug}/
+    ├── manifest.json           # Metadata + shard map (always loaded first)
+    ├── core.json               # Overview, metrics, executive (small, always loaded)
+    ├── security.json           # Security vulnerabilities (loaded on tab click)
+    ├── dependencies.json       # Package dependencies (loaded on tab click)
+    ├── quality.json            # Code smells, technical debt (loaded on tab click)
+    ├── use-cases.json          # Business use cases (loaded on tab click)
+    ├── domain.json             # Domain entities, UML data (loaded on tab click)
+    ├── architecture.json       # Layers, components, data flow (loaded on tab click)
+    ├── testing.json            # Test coverage, results (loaded on tab click)
+    ├── refactoring.json        # Recommendations (loaded on tab click)
+    ├── lens.json               # LENS analysis results (loaded on tab click)
+    ├── graphs/                 # Large graph data (loaded on demand)
+    │   ├── dependency-graph.json    # D3/Cytoscape format
+    │   ├── call-graph.json          # Function call relationships
+    │   ├── import-graph.json        # File import relationships
+    │   └── coupling-matrix.json     # Module coupling data
+    └── diagrams/               # Pre-rendered diagram definitions
+        ├── class-diagram.mmd        # Mermaid class diagram
+        ├── er-diagram.mmd           # Mermaid ER diagram
+        ├── sequence-*.mmd           # Sequence diagrams
+        └── c4-context.mmd           # C4 context diagram
+        
+  manifest_schema:
+    version: "3.0"
+    fields:
+      repo: "Repository metadata (same as before)"
+      schema_version: "string"
+      generated_at: "ISO8601"
+      shards:
+        type: "object"
+        description: "Map of shard name → file info"
+        example:
+          core:
+            file: "core.json"
+            size_kb: 45
+            loaded: true
+          security:
+            file: "security.json"
+            size_kb: 120
+            count: 47
+          dependencies:
+            file: "dependencies.json"
+            size_kb: 85
+            count: 234
+          graphs:
+            dependency_graph:
+              file: "graphs/dependency-graph.json"
+              size_kb: 2400
+              node_count: 1500
+              edge_count: 3200
+      total_size_kb: "number - Combined size of all shards"
+      diagrams:
+        available: "string[] - List of available diagram files"
+        
+  loading_strategy:
+    initial_load:
+      - "manifest.json (always, <5KB)"
+      - "core.json (always, <50KB)"
+    on_tab_click:
+      - "Load corresponding shard JSON"
+      - "Cache in memory for session"
+      - "Show loading spinner during fetch"
+    on_graph_view:
+      - "Load graph data on demand"
+      - "Progressive rendering for large graphs"
+      - "Virtualization for >1000 nodes"
+      
+  dashboard_loader_implementation: |
+    class ShardedDataLoader {
+      constructor(repoSlug) {
+        this.slug = repoSlug;
+        this.baseUrl = `repos/${repoSlug}/`;
+        this.manifest = null;
+        this.cache = new Map();
+      }
+      
+      async init() {
+        // Always load manifest first
+        this.manifest = await this.fetch('manifest.json');
+        // Load core data (overview, metrics, executive)
+        this.cache.set('core', await this.fetch('core.json'));
+      }
+      
+      async loadShard(name) {
+        if (this.cache.has(name)) return this.cache.get(name);
+        
+        const shardInfo = this.manifest.shards[name];
+        if (!shardInfo) return null;
+        
+        const data = await this.fetch(shardInfo.file);
+        this.cache.set(name, data);
+        return data;
+      }
+      
+      async loadGraph(name) {
+        const graphPath = this.manifest.shards.graphs?.[name]?.file;
+        if (!graphPath) return null;
+        return this.fetch(graphPath);
+      }
+      
+      async fetch(path) {
+        const response = await fetch(this.baseUrl + path);
+        if (!response.ok) throw new Error(`Failed to load ${path}`);
+        return response.json();
+      }
+    }
+    
+  size_thresholds:
+    small_repo: "< 10MB total → Single dashboard-data.json (legacy)"
+    medium_repo: "10MB - 100MB → Sharded by tab"
+    large_repo: "100MB - 1GB → Sharded with graph separation"
+    enterprise_repo: "> 1GB → Full sharding + pagination + virtualization"
+
+---
+# ============================================================================
+# JSON SCHEMA v3.0 - COMPREHENSIVE DASHBOARD DATA
+# ============================================================================
+
+json_schema_v3:
+  version: "3.0"
+  description: |
+    Complete schema for enterprise repository intelligence.
+    Supports 13 main sections with extensibility for future additions.
+    All sections follow null-safe patterns for graceful UI degradation.
+    For large repos, sections are split into separate shard files.
+  
+  structure:
+    repo:
+      required: true
+      description: "Repository metadata"
+      fields:
+        slug: "string - URL-safe identifier (e.g., 'my-app')"
+        display_name: "string - Human-readable name"
+        description: "string - Repository description"
+        owner: "string - Team/organization"
+        primary_language: "string - Main programming language"
+        version: "string|null - Current version/tag"
+        icon: "string - Emoji icon for tiles"
+        tags: "string[] - Categorization tags"
+        last_analyzed_at: "ISO8601 datetime"
+        analysis_depth: "string - quick|standard|deep"
+        schema_version: "string - '3.0'"
+        is_sharded: "boolean - Whether data is split into shards"
+    
+    executive_summary:
+      required: true
+      description: "C-suite dashboard with business KPIs"
+      llm_generated: true
+      shard: "core.json"
+      target_role: "Business Leaders, Executives"
+      fields:
+        headline: "string - One-line status (e.g., 'System Healthy - No Action Required')"
+        health_status: "string - healthy|warning|critical"
+        key_metrics:
+          type: "array"
+          items:
+            name: "string - Metric name"
+            value: "string - Display value"
+            trend: "string - up|down|stable"
+            trend_value: "string - e.g., '+5% this month'"
+            status: "string - good|warning|critical"
+        risk_summary: |
+          string - LLM-generated 2-3 sentence risk overview in business terms.
+          Focus on business impact, not technical details.
+          Example: "The system has 2 high-priority security issues that could
+          impact customer data. Estimated remediation effort is 3 days."
+        investment_recommendations:
+          type: "array"
+          items:
+            area: "string - e.g., 'Security', 'Performance', 'Technical Debt'"
+            recommendation: "string - What to invest in"
+            effort: "string - hours|days|weeks"
+            impact: "string - Business impact description"
+            roi: "string - Expected return"
+        compliance_status:
+          overall: "string - compliant|partial|non-compliant"
+          frameworks:
+            type: "array"
+            items:
+              name: "string - e.g., 'SOC2', 'GDPR', 'HIPAA'"
+              status: "string - compliant|partial|non-compliant"
+              gaps: "number"
+              next_audit: "string|null"
+      diagrams:
+        - "executive_kpi_gauges: ECharts gauge cluster"
+        - "risk_heatmap: ECharts heatmap"
+        - "investment_roadmap: Mermaid gantt"
+        
+    overview:
+      required: true
+      description: "Product and technical leadership dashboard"
+      llm_generated: true
+      shard: "core.json"
+      target_role: "Product Owners, Dev Managers"
+      fields:
+        summary: "string - One-line summary"
+        business_summary: |
+          string - 2-3 paragraph executive summary written in business language.
+          Generated by LLM from code analysis. Explains:
+          - What the system does
+          - Key capabilities
+          - Business value
+          - Technology stack
+        key_findings: "string[] - 5-7 bullet points of critical insights"
+        key_metrics_summary: |
+          object - Quick reference metrics:
+          {
+            health_score: number,
+            total_files: number,
+            total_loc: number,
+            test_coverage: number,
+            security_issues: number,
+            technical_debt_hours: number
+          }
+      null_behavior: "Show placeholder text if empty"
+    
+    metrics:
+      required: true
+      description: "Quantitative code metrics"
+      fields:
+        health_score: "number (0-100)"
+        risk_score: "number (0-100)"
+        loc:
+          total: "number - Total lines"
+          code: "number - Code lines"
+          comment: "number - Comment lines"
+          blank: "number - Blank lines"
+        files:
+          total: "number"
+          by_type: "object - {extension: count}"
+        coverage:
+          overall: "number|null (0-100)"
+          unit: "number|null"
+          integration: "number|null"
+          e2e: "number|null"
+        languages: "object - {language: line_count}"
+        complexity:
+          average: "number"
+          max: "number"
+          distribution: "object - {low: count, medium: count, high: count}"
+        trends:
+          health_30d: "number[] - Daily health scores"
+          loc_30d: "number[] - Daily LOC counts"
+          coverage_30d: "number[] - Daily coverage"
+      null_behavior: "Show '--' for null numeric values"
+    
+    security:
+      required: true
+      description: "Security vulnerabilities and compliance"
+      fields:
+        security_score: "number (0-100)"
+        total_count: "number"
+        by_severity:
+          critical: "number"
+          high: "number"
+          medium: "number"
+          low: "number"
+          info: "number"
+        vulnerabilities:
+          type: "array"
+          items:
+            id: "string"
+            title: "string"
+            severity: "string - critical|high|medium|low|info"
+            cwe_id: "string|null"
+            owasp_category: "string|null"
+            location: "string - file:line"
+            description: "string"
+            recommendation: "string"
+            status: "string - open|in_progress|accepted|resolved"
+            detected_at: "ISO8601"
+        secrets_scan:
+          clean: "boolean"
+          findings: "array - detected secrets (redacted)"
+        dependency_vulnerabilities:
+          type: "array"
+          items:
+            package: "string"
+            vulnerability_id: "string"
+            severity: "string"
+            fixed_in: "string|null"
+        owasp_compliance:
+          score: "number"
+          findings: "object - {category: finding_count}"
+      null_behavior: "Show 'No vulnerabilities detected' banner"
+    
+    dependencies:
+      required: true
+      description: "Package dependencies analysis"
+      fields:
+        summary:
+          direct: "number"
+          dev: "number"
+          transitive: "number"
+          outdated: "number"
+          vulnerable: "number"
+        packages:
+          type: "array"
+          items:
+            name: "string"
+            version: "string"
+            latest: "string|null"
+            license: "string"
+            type: "string - direct|dev|transitive"
+            is_outdated: "boolean"
+            is_vulnerable: "boolean"
+            vulnerabilities: "string[]"
+        licenses:
+          distribution: "object - {license: count}"
+          risk_assessment: "string - low|medium|high"
+          problematic: "string[] - GPL, AGPL, etc."
+        dependency_graph:
+          nodes: "array - [{id, name, type, level}]"
+          edges: "array - [{source, target, type}]"
+      null_behavior: "Show 'No dependencies' message"
+    
+    quality:
+      required: true
+      description: "Code quality and technical debt"
+      fields:
+        scores:
+          maintainability: "number (0-100)"
+          readability: "number (0-100)"
+          documentation: "number (0-100)"
+          testability: "number (0-100)"
+        technical_debt:
+          hours: "number"
+          rating: "string - A|B|C|D|E"
+          breakdown: "object - {category: hours}"
+        complexity:
+          average_cyclomatic: "number"
+          max_cyclomatic: "number"
+          cognitive_load: "number"
+          hotspots: "array - [{file, function, complexity}]"
+        code_smells:
+          total_count: "number"
+          by_category: "object - {category: count}"
+          items:
+            type: "array"
+            items:
+              id: "string"
+              name: "string"
+              description: "string"
+              location: "string"
+              severity: "string - low|medium|high"
+              effort_to_fix: "string"
+        duplication:
+          percentage: "number"
+          blocks: "number"
+          lines: "number"
+          files_affected: "string[]"
+      null_behavior: "Show 'No code smells detected' card"
+    
+    use_cases:
+      required: true
+      description: "Business use cases extracted from code"
+      llm_generated: true
+      fields:
+        type: "array"
+        items:
+          id: "string"
+          title: "string - Human-readable title"
+          description: |
+            string - LLM-generated business description explaining:
+            - What the use case enables
+            - Who benefits
+            - How it works (non-technical)
+          persona: "string - Developer|Manager|QA|Architect|DevOps|Security|Business"
+          category: "string - Grouping category"
+          business_value: |
+            string - LLM-generated value proposition:
+            - Quantified benefits where possible
+            - Time/cost savings
+            - Risk reduction
+          implementation_notes: "string|null - Technical details"
+          code_references:
+            type: "array"
+            items:
+              file: "string"
+              module: "string"
+              function: "string|null"
+              line_start: "number"
+              line_end: "number"
+          api_endpoints: "string[] - Related API endpoints"
+          database_tables: "string[] - Related tables"
+          tags: "string[]"
+          priority: "string - low|medium|high|critical"
+      null_behavior: "Hide tab or show 'No use cases defined'"
+    
+    lens:
+      required: true
+      description: "LENS unified intelligence results"
+      fields:
+        patterns:
+          detected:
+            type: "array"
+            items:
+              name: "string"
+              count: "number"
+              confidence: "number (0-1)"
+              locations: "string[]"
+          missing: "string[] - Recommended patterns not found"
+        architecture:
+          summary: "string - LLM-generated architecture description"
+          layers:
+            type: "array"
+            items:
+              name: "string - e.g., 'Presentation', 'Business', 'Data'"
+              components: "string[]"
+              files: "string[]"
+          layer_violations: "array - [{from_layer, to_layer, file, severity}]"
+        vendors:
+          count: "number"
+          by_category: "object - {category: [vendors]}"
+          risk_assessment: "array - [{vendor, risk, reason}]"
+        capabilities:
+          discovered: "string[]"
+          coverage: "number (0-100)"
+      null_behavior: "Show 'Analysis pending' state"
+    
+    refactoring:
+      required: true
+      description: "Refactoring recommendations"
+      llm_generated: true
+      fields:
+        summary:
+          total_recommendations: "number"
+          by_priority: "object - {critical: n, high: n, medium: n, low: n}"
+          estimated_effort_hours: "number"
+        recommendations:
+          type: "array"
+          items:
+            id: "string"
+            title: "string"
+            description: |
+              string - LLM-generated explanation:
+              - Current problem
+              - Proposed solution
+              - Expected benefits
+            priority: "string - low|medium|high|critical"
+            category: "string - complexity|duplication|smell|security|performance"
+            impact: "string"
+            effort: "string - hours|days|weeks"
+            roi_score: "number (0-100)"
+            files: "string[]"
+            before_code: "string|null - Code snippet before"
+            after_code: "string|null - Suggested code after"
+      null_behavior: "Show 'No refactoring needed' celebration"
+    
+    architecture:
+      required: false
+      description: "Architecture visualization data (NEW)"
+      fields:
+        overview:
+          style: "string - monolith|microservices|serverless|hybrid"
+          summary: "string - LLM-generated architecture overview"
+        components:
+          type: "array"
+          items:
+            name: "string"
+            type: "string - service|module|library|database|external"
+            description: "string"
+            dependencies: "string[]"
+            api_count: "number"
+            loc: "number"
+        layers:
+          type: "array"
+          items:
+            name: "string"
+            order: "number"
+            components: "string[]"
+            color: "string - hex color"
+        data_flow:
+          nodes: "array - [{id, name, type}]"
+          edges: "array - [{source, target, label, data_type}]"
+        database_schema:
+          tables: "array - [{name, columns, relationships}]"
+          er_diagram_data: "object - For rendering ER diagram"
+      null_behavior: "Hide Architecture tab"
+    
+    domain_model:
+      required: false
+      description: "Domain model and UML visualization (NEW - reads from company/domains/{repo}/)"
+      data_source: "company/domains/{repo}/*.yaml → entities.yaml, patterns.yaml, vendors.yaml"
+      llm_generated: true
+      fields:
+        summary:
+          entity_count: "number"
+          relationship_count: "number"
+          pattern_count: "number"
+          bounded_context_count: "number"
+          description: "string - LLM-generated domain overview"
+        entities:
+          type: "array"
+          source: "company/domains/{repo}/entities.yaml"
+          items:
+            name: "string"
+            type: "string - aggregate_root|entity|value_object|domain_event|repository|service"
+            description: "string - LLM-generated entity purpose"
+            attributes:
+              type: "array"
+              items:
+                name: "string"
+                type: "string"
+                required: "boolean"
+            methods:
+              type: "array"
+              items:
+                name: "string"
+                visibility: "string - public|private|protected"
+                parameters: "string"
+                return_type: "string"
+            stereotypes: "string[] - e.g., ['<<aggregate>>', '<<entity>>']"
+            file_path: "string - Source file location"
+            line_range: "[number, number]"
+        relationships:
+          type: "array"
+          description: "Extracted from code analysis + entities.yaml"
+          items:
+            source: "string - Entity name"
+            target: "string - Entity name"
+            type: "string - association|aggregation|composition|inheritance|implementation|dependency"
+            cardinality: "string - e.g., '1..n', '0..1', '*'"
+            label: "string|null - Relationship name"
+            bidirectional: "boolean"
+        patterns:
+          type: "array"
+          source: "company/domains/{repo}/patterns.yaml"
+          items:
+            name: "string - e.g., Repository, Factory, Strategy, Observer"
+            category: "string - creational|structural|behavioral|architectural"
+            description: "string - LLM-generated pattern usage explanation"
+            implementations:
+              type: "array"
+              items:
+                class_name: "string"
+                file_path: "string"
+                confidence: "number (0-100)"
+            benefits: "string[] - Why this pattern is used here"
+            related_patterns: "string[] - Other patterns it works with"
+        bounded_contexts:
+          type: "array"
+          description: "DDD bounded contexts (auto-detected or from yaml)"
+          items:
+            name: "string"
+            description: "string - LLM-generated context purpose"
+            entities: "string[] - Entities belonging to this context"
+            external_interfaces: "string[] - APIs/events exposed"
+            dependencies: "string[] - Other bounded contexts it depends on"
+            color: "string - Hex color for visualization"
+        vendors:
+          type: "array"
+          source: "company/domains/{repo}/vendors.yaml"
+          items:
+            name: "string"
+            category: "string - framework|library|tool|service"
+            version: "string"
+            purpose: "string"
+            integration_points: "string[] - Where it's used in the codebase"
+        uml_diagrams:
+          class_diagram:
+            mermaid_definition: "string - Mermaid classDiagram syntax"
+            entities_included: "string[]"
+            max_entities: "number - Limit for readability (default: 20)"
+          er_diagram:
+            mermaid_definition: "string - Mermaid erDiagram syntax"
+            tables_included: "string[]"
+          sequence_diagrams:
+            type: "array"
+            description: "Key workflows as sequence diagrams"
+            items:
+              name: "string - Workflow name"
+              mermaid_definition: "string"
+              actors: "string[]"
+          component_diagram:
+            mermaid_definition: "string - C4 or Mermaid component diagram"
+            bounded_contexts_shown: "string[]"
+          state_diagrams:
+            type: "array"
+            description: "Entity lifecycle state machines"
+            items:
+              entity: "string"
+              mermaid_definition: "string"
+              states: "string[]"
+        cytoscape_graph:
+          description: "Interactive graph data for Cytoscape.js"
+          nodes:
+            type: "array"
+            items:
+              data:
+                id: "string"
+                label: "string"
+                type: "string"
+                parent: "string|null - For compound nodes"
+              classes: "string - CSS classes"
+          edges:
+            type: "array"
+            items:
+              data:
+                id: "string"
+                source: "string"
+                target: "string"
+                type: "string"
+                label: "string|null"
+        llm_insights:
+          architecture_smell: "string[] - Detected domain issues"
+          missing_patterns: "string[] - Patterns that could improve the design"
+          coupling_concerns: "string[] - High-coupling areas"
+          recommendations: "string[] - Domain model improvements"
+      null_behavior: "Hide Domain Model tab"
+    
+    code_explorer:
+      required: false
+      description: "Interactive code exploration (NEW)"
+      fields:
+        file_tree:
+          type: "object"
+          description: "Hierarchical file structure with metadata"
+          structure: |
+            {
+              name: string,
+              type: 'folder' | 'file',
+              path: string,
+              children?: FileNode[],
+              metadata?: {
+                language: string,
+                loc: number,
+                complexity: number,
+                last_modified: string
+              }
+            }
+        hot_files:
+          type: "array"
+          description: "Files with most churn or complexity"
+          items:
+            path: "string"
+            churn_count: "number - Changes in last 30 days"
+            complexity: "number"
+            authors: "string[]"
+            risk_score: "number"
+        code_snippets:
+          type: "array"
+          description: "Highlighted code examples"
+          items:
+            title: "string"
+            file_path: "string"
+            start_line: "number"
+            end_line: "number"
+            language: "string"
+            code: "string"
+            explanation: "string - LLM-generated explanation"
+            category: "string - pattern|anti-pattern|example|entry-point"
+        dependency_graph:
+          description: "Module/file dependency visualization"
+          cytoscape_data:
+            nodes: "array - Cytoscape node format"
+            edges: "array - Cytoscape edge format"
+          elk_layout:
+            algorithm: "string - layered|force|radial"
+            options: "object"
+        search_index:
+          description: "Pre-built Fuse.js search index"
+          documents:
+            type: "array"
+            items:
+              id: "string"
+              type: "string - file|function|class|variable"
+              name: "string"
+              path: "string"
+              preview: "string"
+              tags: "string[]"
+          index_options:
+            keys: "string[] - Fields to search"
+            threshold: "number"
+      null_behavior: "Hide Code Explorer tab"
+    
+    testing:
+      required: false
+      description: "Testing analysis (NEW)"
+      fields:
+        summary:
+          total_tests: "number"
+          by_type: "object - {unit: n, integration: n, e2e: n}"
+          coverage: "number"
+          pass_rate: "number"
+        pyramid:
+          unit: "number - percentage"
+          integration: "number - percentage"
+          e2e: "number - percentage"
+          is_healthy: "boolean"
+        coverage_by_module: "object - {module: coverage_pct}"
+        uncovered_critical:
+          type: "array"
+          items:
+            file: "string"
+            function: "string"
+            complexity: "number"
+            risk: "string"
+        flaky_tests: "array - [{name, failure_rate, last_failed}]"
+        test_trends:
+          pass_rate_30d: "number[]"
+          coverage_30d: "number[]"
+      null_behavior: "Hide Testing tab"
+    
+    executive:
+      required: false
+      description: "Executive KPIs (NEW)"
+      llm_generated: true
+      fields:
+        headline: "string - One-line status for executives"
+        health_status: "string - healthy|warning|critical"
+        key_metrics:
+          type: "array"
+          items:
+            name: "string"
+            value: "string"
+            trend: "string - up|down|stable"
+            status: "string - good|warning|critical"
+        risk_summary: "string - LLM-generated risk overview"
+        investment_recommendations: |
+          array - [{
+            area: string,
+            recommendation: string,
+            effort: string,
+            impact: string,
+            roi: string
+          }]
+        compliance_status:
+          overall: "string - compliant|partial|non-compliant"
+          frameworks: "array - [{name, status, gaps}]"
+      null_behavior: "Hide Executive tab"
+
+---
+# ============================================================================
+# USER INTERFACE DESIGN
+# ============================================================================
+
+ui_design:
+  ux_components:
+    design_system:
+      theme: "Dark Glassmorphism Professional"
+      principles:
+        - "Card/tile-based layouts with glass effects"
+        - "Subtle animations (glass shimmer, hover glow)"
+        - "Progressive disclosure (summary → details)"
+        - "Mobile-first responsive design"
+        - "WCAG 2.1 AA accessibility"
+        - "Zero compromise on visual beauty"
+      css_architecture:
+        - "BEM methodology for component naming"
+        - "CSS custom properties (variables) for theming"
+        - "CSS Grid + Flexbox for layouts"
+        - "No CSS framework (Tailwind/Bootstrap) — full custom control"
+        - "Separate files per component (metric-card.css, data-table.css)"
+      
+    core_components:
+      metric_card:
+        description: "Glassmorphism tile showing single KPI"
+        html: "<div class='metric-card'>"
+        css_features:
+          - "background: rgba(255, 255, 255, 0.05)"
+          - "backdrop-filter: blur(10px)"
+          - "border: 1px solid rgba(255, 255, 255, 0.1)"
+          - "box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3)"
+          - "transition: all 0.3s ease"
+          - "hover: border-color: #00ffff, box-shadow glow"
+        layout:
+          description: "Intelligent multi-column grid — flows horizontally"
+          strategy: "Content-aware column count (NOT standardized)"
+          column_logic:
+            - "2 columns: Large cards (charts, detailed metrics, >300px width)"
+            - "3 columns: Medium cards (KPIs with descriptions, ~250px width)"
+            - "4 columns: Small cards (single metrics, icons, ~200px width)"
+          css_grid: "display: grid; grid-template-columns: repeat(auto-fit, minmax({min-width}, 1fr))"
+          responsive:
+            mobile: "1 column (< 768px) — full-width stack"
+            tablet: "2-3 columns (768-1024px) — adaptive based on card width"
+            desktop: "2-4 columns (> 1024px) — intelligent based on content"
+          examples:
+            executive_summary:
+              cards: "4 KPI cards (Health, Vulnerabilities, Tech Debt, Pass Rate)"
+              layout: "4 columns (small cards, icon + number + label)"
+              min_width: "200px"
+            overview:
+              cards: "6 metric cards (LOC, Files, Contributors, Languages, Commits, Health)"
+              layout: "3 columns (medium cards with descriptions)"
+              min_width: "250px"
+            metrics:
+              cards: "2 chart cards (LOC Breakdown, Complexity Histogram)"
+              layout: "2 columns (large cards with ECharts)"
+              min_width: "400px"
+        use_cases:
+          - "Executive Summary — 4 columns (small KPI cards)"
+          - "Overview — 3 columns (medium info cards)"
+          - "Metrics — 2 columns (large chart cards)"
+        
+      data_table:
+        description: "Paginated table with search/filter/sort"
+        html: "<table class='data-table'>"
+        features:
+          - "Virtual scrolling for 10,000+ rows (only render visible)"
+          - "Column sorting (SQL ORDER BY)"
+          - "Search bar (SQL LIKE or FTS5)"
+          - "Filter dropdowns (SQL WHERE)"
+          - "Pagination controls (SQL LIMIT/OFFSET)"
+          - "Export to CSV"
+        css_features:
+          - "Glass table header (sticky)"
+          - "Alternating row colors (rgba transparency)"
+          - "Hover row highlight"
+          - "Responsive: card layout on mobile"
+        sql_integration:
+          pagination: "SELECT * FROM use_cases LIMIT 20 OFFSET {page*20}"
+          search: "WHERE title LIKE '%{query}%' OR business_value LIKE '%{query}%'"
+          filter: "WHERE category = '{category}' AND priority = '{priority}'"
+          sort: "ORDER BY {column} {direction}"
+        use_cases:
+          - "Use Cases tab — 100+ use cases paginated"
+          - "Dependencies tab — 1000+ packages"
+          - "Code Quality tab — 500+ code smells"
+          - "Security tab — 200+ vulnerabilities"
+          
+      accordion_section:
+        description: "Collapsible section for grouped content"
+        html: "<details class='accordion'>"
+        css_features:
+          - "Glass header with expand/collapse icon"
+          - "Smooth height transition"
+          - "Nested accordions supported"
+        use_cases:
+          - "Security tab — Vulnerabilities / Secrets / Compliance"
+          - "Architecture tab — Layers / Components / Data Flow"
+          
+      wizard_stepper:
+        description: "Multi-step flow with breadcrumb trail"
+        html: "<div class='wizard'>"
+        css_features:
+          - "Breadcrumb with glass pills"
+          - "Progress bar (glass gradient)"
+          - "Step content with fade transitions"
+        use_cases:
+          - "Architecture tab — 4-step overview"
+          - "Code Explorer — Browse → Select → View → Analyze"
+          
+      chart_container:
+        description: "Wrapper for ECharts/Mermaid/Cytoscape"
+        html: "<div class='chart-container'>"
+        css_features:
+          - "Glass card styling"
+          - "Loading spinner (CSS animation)"
+          - "Toolbar (export, fullscreen)"
+        use_cases:
+          - "All tabs with visualizations"
+          
+      search_bar:
+        description: "Global search with autocomplete"
+        html: "<input class='search-bar' type='search'>"
+        features:
+          - "Debounced input (300ms)"
+          - "SQLite FTS5 full-text search"
+          - "Autocomplete dropdown (glass)"
+          - "Keyboard navigation (⌘+K to open)"
+        sql: "SELECT * FROM search_index WHERE search_index MATCH '{query}' LIMIT 10"
+        
+      pagination_controls:
+        description: "Page navigation with SQL LIMIT/OFFSET"
+        html: "<nav class='pagination'>"
+        css_features:
+          - "Glass pill buttons"
+          - "Active page highlighted"
+          - "Ellipsis for large page counts (1 ... 5 6 7 ... 50)"
+        logic:
+          - "SQL: LIMIT {pageSize} OFFSET {(currentPage-1)*pageSize}"
+          - "Show: Prev | 1 2 3 ... 10 | Next"
+          
+      filter_panel:
+        description: "Multi-select filters for data tables"
+        html: "<aside class='filter-panel'>"
+        css_features:
+          - "Glass sidebar (collapsible on mobile)"
+          - "Checkbox groups"
+          - "Range sliders (complexity, LOC)"
+          - "Date pickers (ISO8601)"
+        sql: "WHERE category IN ('auth', 'payment') AND severity >= 'medium'"
+        
+      breadcrumb_trail:
+        description: "Navigation history for drill-downs"
+        html: "<nav class='breadcrumb'>"
+        css_features:
+          - "Glass pills with separators"
+          - "Clickable ancestors"
+          - "Overflow: ... on mobile"
+        use_cases:
+          - "Code Explorer — Root > src > core > auth.py"
+          - "Dependencies — Root > react > react-dom"
+          
+      modal_dialog:
+        description: "Overlay for detail views"
+        html: "<dialog class='modal'>"
+        css_features:
+          - "Glass modal with backdrop blur"
+          - "Smooth fade-in animation"
+          - "ESC to close, click outside to dismiss"
+        use_cases:
+          - "Vulnerability detail"
+          - "Use case full view"
+          - "Code snippet viewer"
+          
+    animations:
+      glass_shimmer:
+        effect: "Subtle light reflection moving across glass surfaces"
+        css: "@keyframes shimmer { 0% { background-position: -1000px; } 100% { background-position: 1000px; } }"
+        usage: "Landing page hero, card hover states"
+        
+      hover_glow:
+        effect: "Border glow on interactive elements"
+        css: "box-shadow: 0 0 20px rgba(0, 255, 255, 0.5)"
+        usage: "Metric cards, buttons, links"
+        
+      fade_transition:
+        effect: "Smooth content transitions"
+        css: "transition: opacity 0.3s ease"
+        usage: "Tab switching, wizard steps"
+        
+      skeleton_loader:
+        effect: "Animated placeholder while data loads"
+        css: "background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)"
+        usage: "Initial dashboard load, chart rendering"
+        
+    responsive_breakpoints:
+      mobile: "< 768px"
+      tablet: "768px - 1024px"
+      desktop: "> 1024px"
+      
+      mobile_adaptations:
+        - "Navigation: Hamburger drawer"
+        - "Card grids: 1 column (full-width stack)"
+        - "Tables: Transform to card layout"
+        - "Charts: Full-width, scroll to pan"
+        - "Filters: Bottom sheet modal"
+        - "Pagination: Simplified (Prev/Next only)"
+        
+      tablet_adaptations:
+        - "Navigation: Vertical sidebar with icons"
+        - "Card grids: 2-3 columns (adaptive, content-aware)"
+        - "Tables: Show 3-5 columns"
+        - "Charts: 2 columns or full-width based on size"
+        
+      desktop_adaptations:
+        - "Navigation: Horizontal tabs"
+        - "Card grids: 2-4 columns (intelligent, content-aware)"
+        - "Tables: Show all columns"
+        - "Charts: Multi-column dashboard grid"
+        
+      grid_intelligence:
+        description: "CSS Grid auto-fit with content-aware min-width"
+        principle: "Cards determine columns, not viewport standardization"
+        css_pattern: "grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr))"
+        decision_matrix:
+          small_cards:
+            min_width: "200px"
+            example_content: "Icon + Number + Label (Health Score: 85%)"
+            desktop_columns: "4 columns typical"
+            tablet_columns: "3 columns"
+            mobile_columns: "1 column"
+          medium_cards:
+            min_width: "250px"
+            example_content: "Title + Description + 2-3 metrics"
+            desktop_columns: "3 columns typical"
+            tablet_columns: "2 columns"
+            mobile_columns: "1 column"
+          large_cards:
+            min_width: "400px"
+            example_content: "Chart + Legend + Controls"
+            desktop_columns: "2 columns typical"
+            tablet_columns: "1-2 columns adaptive"
+            mobile_columns: "1 column"
+          extra_large_cards:
+            min_width: "600px"
+            example_content: "Complex diagram + Interactive controls"
+            desktop_columns: "1-2 columns (full-width preferred)"
+            tablet_columns: "1 column"
+            mobile_columns: "1 column"
+        
+  progressive_disclosure_patterns:
+    overview_tab:
+      level_1: "Cards: LOC, Files, Contributors, Health Score"
+      level_2: "Expand: Tech Stack List"
+      level_3: "Drill-down: File Structure Tree"
+      level_4: "Modal: Individual File Detail"
+      
+    use_cases_tab:
+      level_1: "Table: Use Case Titles (20 per page)"
+      level_2: "Row click: Expand inline for Business Value"
+      level_3: "Button: Show User Stories"
+      level_4: "Modal: Full Use Case with Acceptance Criteria"
+      
+    security_tab:
+      level_1: "Cards: Critical (12), High (45), Medium (120)"
+      level_2: "Accordion: Expand Vulnerabilities section"
+      level_3: "Table: CVE List (paginated)"
+      level_4: "Modal: CVE Detail with Remediation"
+      
+    architecture_tab:
+      level_1: "Wizard Step 1: Overview Diagram"
+      level_2: "Wizard Step 2: Layers (click layer)"
+      level_3: "Wizard Step 3: Components in Layer (click component)"
+      level_4: "Wizard Step 4: Component Detail + Dependencies"
+      
+    code_explorer_tab:
+      level_1: "File Tree (folders collapsed)"
+      level_2: "Expand folder: Show files"
+      level_3: "Click file: Show metadata card"
+      level_4: "Button: View Code Snippet"
+      level_5: "Modal: Full file with syntax highlighting"
+    
+  visualization_libraries:
+    core_stack:
+      echarts:
+        version: "5.4.x"
+        size: "~1MB (minified)"
+        purpose: "Primary charting library — beautiful, performant, feature-complete"
+        security: "✅ No known vulnerabilities, actively maintained by Apache"
+        use_cases:
+          - "Gauge charts (health scores, KPIs)"
+          - "Pie/doughnut charts (distributions)"
+          - "Line charts (trends, timelines)"
+          - "Bar charts (comparisons)"
+          - "Radar charts (quality metrics)"
+          - "Sunburst charts (hierarchy navigation)"
+          - "Treemap charts (file sizes, code distribution)"
+          - "Heatmap charts (complexity matrix, risk)"
+          - "Graph charts (simple relationships)"
+        file: "vendor/echarts.min.js"
+        justification: "Single library replaces Chart.js + custom viz — dark theme native"
+        
+      mermaid:
+        version: "10.x"
+        size: "~800KB"
+        purpose: "UML diagrams — class, sequence, ER, C4, flowcharts"
+        security: "✅ No known vulnerabilities, 60K+ GitHub stars"
+        use_cases:
+          - "Class diagrams (Domain Model tab)"
+          - "Sequence diagrams (Architecture workflows)"
+          - "ER diagrams (database schema)"
+          - "Flowcharts (business logic)"
+          - "State diagrams (entity lifecycles)"
+        file: "vendor/mermaid.min.js"
+        justification: "Lightweight, no server required, dark theme support"
+        
+      cytoscape:
+        version: "3.28.x"
+        size: "~600KB"
+        purpose: "Interactive graph exploration — dependency trees, call graphs"
+        security: "✅ No known vulnerabilities, MIT license, active community"
+        use_cases:
+          - "Module dependency graphs (Code Explorer)"
+          - "Call graphs (function relationships)"
+          - "Import graphs (file dependencies)"
+          - "Architecture component relationships"
+        file: "vendor/cytoscape.min.js"
+        justification: "Best-in-class for large interactive graphs, mobile-friendly"
+        
+      prismjs:
+        version: "1.29.x"
+        size: "~15KB + languages"
+        purpose: "Code syntax highlighting"
+        security: "✅ No known vulnerabilities, actively maintained"
+        file: "vendor/prism.min.js"
+        justification: "Tiny, extensible, excellent dark themes"
+        
+    data_layer:
+      sqljs:
+        version: "1.10.x"
+        size: "~1MB (WASM)"
+        purpose: "SQLite in browser — replaces JSON + Fuse.js + GridJS + pagination libs"
+        security: "✅ No known vulnerabilities, official SQLite port"
+        capabilities:
+          - "Full-text search (FTS5)"
+          - "Pagination (LIMIT/OFFSET)"
+          - "Filtering (WHERE clauses)"
+          - "Sorting (ORDER BY)"
+          - "Aggregations (COUNT, SUM, AVG)"
+          - "Joins (for computed views)"
+          - "Indexes (performance)"
+        files:
+          - "vendor/sql-wasm.js"
+          - "vendor/sql-wasm.wasm"
+        justification: "Single solution for low/high volume, scales to enterprise"
+        
+    removed_libraries:
+      description: "Consolidated functionality into core stack"
+      removed:
+        - "D3.js → ECharts handles all chart types"
+        - "Fuse.js → SQLite FTS5 full-text search"
+        - "GridJS → Native HTML tables + CSS + SQL"
+        - "ELK.js → Cytoscape has built-in layouts"
+        - "PlantUML encoder → Mermaid sufficient for most UML"
+        - "Highlight.js → Prism.js covers all needs"
+      savings: "~2MB fewer dependencies, simpler maintenance"
+      
+    total_footprint:
+      vendor_js: "~2.5MB (ECharts + Mermaid + Cytoscape + sql.js + Prism)"
+      comparison: "Previous JSON stack: ~4MB (more libs, less capability)"
+      load_time: "<1 second on 3G, instant on WiFi"
+        file: "vendor/highlight.min.js"
+        
+      markdownit:
+        purpose: "Render markdown content in descriptions"
+        file: "vendor/markdown-it.min.js"
+        
+      splitjs:
+        purpose: "Resizable panels for code/diagram views"
+        file: "vendor/split.min.js"
+        
+  tab_structure:
+    landing_page:
+      file: "index.html"
+      components:
+        - name: "Hero Section"
+          description: "CORTEX branding with animated logo"
+        - name: "Search Bar"
+          description: "Filter repos by name, tag, language"
+        - name: "Repository Tiles Grid"
+          description: "Dynamic cards from registry.json"
+        - name: "Statistics Bar"
+          description: "Total repos, avg health, total LOC"
+          
+    # ===========================================================================
+    # TAB ORDER: Designed to progressively build knowledge
+    # Role progression: Executives → Product Owners → Engineers → Specialists
+    # ===========================================================================
+    
+    dashboard_tabs:
+      # -------------------------------------------------------------------------
+      # TAB 1: EXECUTIVE SUMMARY (Business Leaders, C-Suite)
+      # -------------------------------------------------------------------------
+      executive_summary:
+        order: 1
+        icon: "👔"
+        target_role: "Business Leaders, Executives, C-Suite"
+        description: |
+          High-level business intelligence dashboard providing instant situational
+          awareness. Shows health status, key risks, investment recommendations,
+          and compliance posture. All content in business language - no technical
+          jargon. Includes strategic diagrams showing system value and risk.
+        llm_instructions: |
+          Generate content suitable for executives with 30 seconds to assess:
+          - One-line headline status ("System Healthy" or "Action Required")
+          - 3-5 key business metrics with trend indicators
+          - Risk summary in business impact terms (revenue, reputation, compliance)
+          - Top 3 investment recommendations with ROI estimates
+          - Compliance status against frameworks (SOC2, GDPR, HIPAA if applicable)
+        diagrams:
+          - type: "KPI Dashboard"
+            library: "ECharts"
+            description: "Gauge clusters showing health, risk, compliance scores"
+          - type: "Risk Heatmap"
+            library: "ECharts"
+            description: "Business area vs risk level matrix"
+          - type: "Investment Roadmap"
+            library: "Mermaid"
+            description: "Gantt-style diagram of recommended investments"
+        components:
+          - "Headline status banner (healthy/warning/critical)"
+          - "Executive KPI gauges (4-6 metrics)"
+          - "Risk summary card with business impact"
+          - "Investment recommendations table with ROI"
+          - "Compliance status badges"
+          - "30-day trend sparklines"
+          
+      # -------------------------------------------------------------------------
+      # TAB 2: OVERVIEW (Product Owners, Dev Managers)
+      # -------------------------------------------------------------------------
+      overview:
+        order: 2
+        icon: "📊"
+        target_role: "Product Owners, Development Managers, Tech Leads"
+        description: |
+          Comprehensive system overview for product and technical leadership.
+          Explains what the system does, its capabilities, and current state.
+          Provides context needed for sprint planning and roadmap decisions.
+          Visual diagrams show system boundaries and key capabilities.
+        llm_instructions: |
+          Generate content for product owners and dev managers:
+          - 2-3 paragraph business summary explaining system purpose and value
+          - Key capabilities list (what can users do with this system?)
+          - Current state assessment (stability, maintainability, scalability)
+          - Key findings that affect product decisions
+          - Technology stack summary (frameworks, databases, integrations)
+        diagrams:
+          - type: "System Context Diagram"
+            library: "Mermaid (C4)"
+            description: "C4 context diagram showing system and external actors"
+          - type: "Capability Map"
+            library: "ECharts Treemap"
+            description: "Interactive treemap of system capabilities by module"
+          - type: "Health Dashboard"
+            library: "ECharts"
+            description: "Gauges and trends for health, coverage, quality"
+        components:
+          - "Business summary card (LLM-generated)"
+          - "Key metrics grid (health, LOC, files, coverage, risk)"
+          - "System context diagram (C4 level 1)"
+          - "Capability treemap (clickable modules)"
+          - "Key findings list (5-7 bullets)"
+          - "Technology stack badges"
+          - "Language distribution pie chart"
+          
+      # -------------------------------------------------------------------------
+      # TAB 3: USE CASES (Product Owners, Business Analysts)
+      # -------------------------------------------------------------------------
+      use_cases:
+        order: 3
+        icon: "💡"
+        target_role: "Product Owners, Business Analysts, New Team Members"
+        description: |
+          Business-language catalog of what the system enables. Each use case
+          explains the feature, who benefits, business value, and links to
+          implementation. Searchable and filterable by persona and category.
+          Helps POs understand feature inventory and new members learn the system.
+        llm_instructions: |
+          Generate use case descriptions for non-technical stakeholders:
+          - Title: Clear, action-oriented (e.g., "Process Customer Orders")
+          - Description: What it enables, who benefits, how it works (no code)
+          - Business Value: Quantified benefits, time savings, risk reduction
+          - Priority: Critical/High/Medium/Low based on business impact
+        diagrams:
+          - type: "Use Case Diagram"
+            library: "Mermaid"
+            description: "UML use case diagram showing actors and features"
+          - type: "Feature Journey Map"
+            library: "Mermaid Sequence"
+            description: "User journey through key features"
+          - type: "Category Distribution"
+            library: "ECharts"
+            description: "Pie/sunburst of use cases by category"
+        components:
+          - "Search bar with fuzzy search (Fuse.js)"
+          - "Persona filter (Developer, Manager, QA, etc.)"
+          - "Category filter dropdown"
+          - "Use case cards with expandable details"
+          - "Business value highlights"
+          - "Code reference links (file:line)"
+          - "API endpoint references"
+          - "Pagination for large lists"
+          
+      # -------------------------------------------------------------------------
+      # TAB 4: DOMAIN MODEL (Architects, Senior Engineers)
+      # -------------------------------------------------------------------------
+      domain_model:
+        order: 4
+        icon: "🏛️"
+        target_role: "Architects, Senior Engineers, Domain Experts"
+        status: "NEW TAB"
+        description: |
+          UML diagrams visualizing domain entities, relationships, and business
+          rules extracted from code. Reads from company/domains/{repo}/*.yaml
+          files generated by CORTEX LENS. Shows class diagrams, entity relationships,
+          and domain boundaries. Essential for understanding business logic.
+        data_source: "company/domains/{repo}/entities.yaml, patterns.yaml, vendors.yaml"
+        diagrams:
+          - type: "Class Diagram"
+            library: "Mermaid"
+            description: "UML class diagram of domain entities with relationships"
+          - type: "Entity Relationship Diagram"
+            library: "Mermaid"
+            description: "Database ER diagram from schema analysis"
+          - type: "Domain Boundaries"
+            library: "Cytoscape"
+            description: "Interactive graph of bounded contexts"
+          - type: "Aggregate Roots"
+            library: "Mermaid"
+            description: "DDD aggregate structure visualization"
+        sub_tabs:
+          - name: "Entities"
+            components: ["Class diagram", "Entity table with properties", "Relationship list"]
+          - name: "Relationships"
+            components: ["ER diagram", "Cardinality matrix", "Foreign key map"]
+          - name: "Patterns"
+            components: ["Design pattern detection", "Pattern locations", "Usage examples"]
+          - name: "Boundaries"
+            components: ["Bounded context diagram", "Module coupling matrix"]
+          
+      # -------------------------------------------------------------------------
+      # TAB 5: ARCHITECTURE (Architects, Platform Engineers)
+      # -------------------------------------------------------------------------
+      architecture:
+        order: 5
+        icon: "🏗️"
+        target_role: "Architects, Platform Engineers, Tech Leads"
+        description: |
+          System architecture visualization showing components, layers, data flow,
+          and integration points. Interactive diagrams allow drilling into modules.
+          Identifies architectural violations and technical debt at system level.
+        llm_instructions: |
+          Generate architecture summary explaining:
+          - Architectural style (monolith, microservices, serverless, hybrid)
+          - Key components and their responsibilities
+          - Data flow between components
+          - Integration points with external systems
+        diagrams:
+          - type: "C4 Container Diagram"
+            library: "Mermaid"
+            description: "C4 level 2 showing containers and relationships"
+          - type: "Layer Diagram"
+            library: "ELK.js"
+            description: "Layered architecture with dependency arrows"
+          - type: "Data Flow Diagram"
+            library: "D3 Sankey"
+            description: "Sankey diagram showing data movement"
+          - type: "Component Graph"
+            library: "Cytoscape"
+            description: "Interactive component dependency graph"
+        sub_tabs:
+          - name: "Overview"
+            components: ["Architecture style badge", "C4 container diagram", "Component summary"]
+          - name: "Layers"
+            components: ["Layer visualization", "Layer violation warnings", "Dependency matrix"]
+          - name: "Data Flow"
+            components: ["Sankey diagram", "API call graph", "Event flow"]
+          - name: "Database"
+            components: ["ER diagram", "Table details", "Index analysis"]
+          
+      # -------------------------------------------------------------------------
+      # TAB 6: DEPENDENCIES (Engineers, DevOps)
+      # -------------------------------------------------------------------------
+      dependencies:
+        order: 6
+        icon: "📦"
+        target_role: "Engineers, DevOps, Security"
+        description: |
+          Package dependency analysis showing direct, dev, and transitive deps.
+          Identifies outdated packages, license risks, and security vulnerabilities.
+          Interactive dependency graph for impact analysis.
+        diagrams:
+          - type: "Dependency Tree"
+            library: "Cytoscape"
+            description: "Interactive tree of all dependencies"
+          - type: "License Distribution"
+            library: "ECharts"
+            description: "Pie chart of license types"
+          - type: "Vulnerability Timeline"
+            library: "ECharts"
+            description: "CVE history over time"
+        sub_tabs:
+          - name: "Summary"
+            components: ["Dependency counts", "Outdated warnings", "License distribution pie"]
+          - name: "Packages"
+            components: ["Searchable package table", "Version comparison", "Update recommendations"]
+          - name: "Graph"
+            components: ["Cytoscape dependency graph", "Impact analysis on select"]
+          - name: "Licenses"
+            components: ["License breakdown", "Risk assessment", "Problematic licenses list"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 7: QUALITY (Engineers, Tech Leads)
+      # -------------------------------------------------------------------------
+      quality:
+        order: 7
+        icon: "✨"
+        target_role: "Engineers, Tech Leads, QA"
+        description: |
+          Code quality metrics including maintainability, complexity, duplication,
+          and code smells. Identifies hotspots requiring attention. Technical debt
+          quantified in hours with breakdown by category.
+        diagrams:
+          - type: "Quality Radar"
+            library: "ECharts"
+            description: "Radar chart of quality dimensions"
+          - type: "Complexity Heatmap"
+            library: "ECharts"
+            description: "Heatmap of file complexity"
+          - type: "Technical Debt Breakdown"
+            library: "ECharts"
+            description: "Sunburst of debt by category"
+        sub_tabs:
+          - name: "Scores"
+            components: ["Quality radar chart", "Technical debt card", "Trend lines"]
+          - name: "Complexity"
+            components: ["Complexity histogram", "Hotspots heatmap", "Top 10 complex files"]
+          - name: "Code Smells"
+            components: ["Filterable smells table", "Category breakdown", "Severity distribution"]
+          - name: "Duplication"
+            components: ["Duplication percentage", "Clone map visualization", "Affected files"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 8: METRICS (Engineers, Managers)
+      # -------------------------------------------------------------------------
+      metrics:
+        order: 8
+        icon: "📈"
+        target_role: "Engineers, Managers, Analysts"
+        description: |
+          Quantitative code metrics with trends over time. Lines of code, file counts,
+          language distribution, complexity trends, and velocity indicators.
+          Historical data shows improvement or degradation.
+        diagrams:
+          - type: "LOC Trend"
+            library: "ECharts"
+            description: "Line chart of code growth over time"
+          - type: "Language Distribution"
+            library: "ECharts"
+            description: "Stacked bar of languages"
+          - type: "Velocity Chart"
+            library: "ECharts"
+            description: "Commits/changes over time"
+        sub_tabs:
+          - name: "Summary"
+            components: ["Metrics cards grid", "Health trend line", "Key indicators"]
+          - name: "Trends"
+            components: ["30-day health chart", "LOC growth chart", "Coverage trend"]
+          - name: "Breakdown"
+            components: ["Language breakdown", "File type distribution", "Complexity histogram"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 9: SECURITY (Security Team, DevOps)
+      # -------------------------------------------------------------------------
+      security:
+        order: 9
+        icon: "🔒"
+        target_role: "Security Team, DevOps, Compliance"
+        description: |
+          Security vulnerability dashboard with OWASP compliance, CVE tracking,
+          secrets scanning, and dependency vulnerabilities. Severity-based filtering
+          and remediation guidance.
+        diagrams:
+          - type: "Security Score Gauge"
+            library: "ECharts"
+            description: "Overall security health gauge"
+          - type: "OWASP Radar"
+            library: "ECharts"
+            description: "Radar chart of OWASP Top 10 compliance"
+          - type: "Vulnerability Trend"
+            library: "ECharts"
+            description: "Open vs resolved over time"
+        sub_tabs:
+          - name: "Overview"
+            components: ["Security score gauge", "Severity distribution pie", "OWASP radar"]
+          - name: "Vulnerabilities"
+            components: ["Sortable table", "Severity filter", "Status filter", "Remediation links"]
+          - name: "Dependencies"
+            components: ["Vulnerable packages list", "CVE details", "Upgrade paths"]
+          - name: "Secrets"
+            components: ["Scan status", "Findings (redacted)", "Rotation recommendations"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 10: TESTING (QA, Engineers)
+      # -------------------------------------------------------------------------
+      testing:
+        order: 10
+        icon: "🧪"
+        target_role: "QA Engineers, Developers"
+        description: |
+          Test coverage analysis with test pyramid visualization. Identifies
+          uncovered critical paths, flaky tests, and coverage gaps. Shows
+          test health trends over time.
+        diagrams:
+          - type: "Test Pyramid"
+            library: "ECharts"
+            description: "Pyramid showing unit/integration/e2e distribution"
+          - type: "Coverage Treemap"
+            library: "ECharts"
+            description: "Treemap of coverage by module"
+          - type: "Flaky Test Chart"
+            library: "ECharts"
+            description: "Bar chart of flaky test frequency"
+        sub_tabs:
+          - name: "Coverage"
+            components: ["Test pyramid visualization", "Coverage by module treemap", "Uncovered files"]
+          - name: "Health"
+            components: ["Pass rate trend", "Flaky tests list", "Failure patterns"]
+          - name: "Gaps"
+            components: ["Uncovered critical paths", "Risk assessment", "Test recommendations"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 11: REFACTORING (Engineers)
+      # -------------------------------------------------------------------------
+      refactoring:
+        order: 11
+        icon: "🔧"
+        target_role: "Engineers, Tech Leads"
+        description: |
+          Prioritized refactoring recommendations with effort estimates and ROI.
+          Shows before/after code examples and impact analysis. Helps engineers
+          plan technical debt reduction.
+        llm_instructions: |
+          Generate refactoring guidance explaining:
+          - Current problem in plain language
+          - Proposed solution with approach
+          - Expected benefits (maintainability, performance, security)
+          - Effort estimate and ROI score
+        diagrams:
+          - type: "Priority Matrix"
+            library: "ECharts"
+            description: "Scatter plot of effort vs impact"
+          - type: "ROI Chart"
+            library: "ECharts"
+            description: "Bar chart of recommendations by ROI"
+        components:
+          - "Priority filter (Critical/High/Medium/Low)"
+          - "Category filter (complexity, duplication, smell, security)"
+          - "Effort estimation chart"
+          - "Recommendation cards with before/after code (Prism.js)"
+          - "ROI calculator display"
+          - "File impact list"
+          
+      # -------------------------------------------------------------------------
+      # TAB 12: LENS ANALYSIS (Architects, Senior Engineers)
+      # -------------------------------------------------------------------------
+      lens:
+        order: 12
+        icon: "🔍"
+        target_role: "Architects, Senior Engineers"
+        description: |
+          CORTEX LENS unified intelligence results including pattern detection,
+          capability discovery, vendor analysis, and architectural insights.
+          Deep technical analysis for advanced users.
+        diagrams:
+          - type: "Pattern Radar"
+            library: "ECharts"
+            description: "Radar of detected design patterns"
+          - type: "Capability Coverage"
+            library: "ECharts"
+            description: "Gauge of capability coverage percentage"
+          - type: "Vendor Risk Matrix"
+            library: "ECharts"
+            description: "Heatmap of vendor dependencies by risk"
+        sub_tabs:
+          - name: "Patterns"
+            components: ["Pattern detection radar", "Pattern locations table", "Confidence scores"]
+          - name: "Capabilities"
+            components: ["Capability coverage chart", "Discovered features list", "Gap analysis"]
+          - name: "Vendors"
+            components: ["Vendor breakdown", "Risk matrix", "License compliance"]
+          - name: "Insights"
+            components: ["Architecture summary", "Recommendations", "Anomaly detection"]
+            
+      # -------------------------------------------------------------------------
+      # TAB 13: CODE EXPLORER (Engineers)
+      # -------------------------------------------------------------------------
+      code_explorer:
+        order: 13
+        icon: "🗂️"
+        target_role: "Engineers, New Team Members"
+        status: "NEW TAB"
+        description: |
+          Interactive code visualization for engineers to explore the codebase.
+          Directory treemap, file browser with metrics overlay, call graphs,
+          and import relationships. Helps engineers navigate and understand code.
+        diagrams:
+          - type: "Directory Treemap"
+            library: "ECharts"
+            description: "Treemap of directories sized by LOC, colored by complexity"
+          - type: "Call Graph"
+            library: "Cytoscape"
+            description: "Interactive function call graph"
+          - type: "Import Graph"
+            library: "Cytoscape"
+            description: "File import relationships"
+          - type: "Module Coupling"
+            library: "D3 Chord"
+            description: "Chord diagram of module interdependencies"
+        sub_tabs:
+          - name: "Structure"
+            components: ["Directory treemap", "File list with metrics", "Size/complexity filter"]
+          - name: "Call Graph"
+            components: ["Interactive call graph", "Function search", "Path finder"]
+          - name: "Imports"
+            components: ["Import graph", "Circular dependency detector", "Unused imports"]
+          - name: "Coupling"
+            components: ["Module coupling matrix", "Chord diagram", "Decoupling suggestions"]
+
+  null_handling_patterns:
+    data_show_if:
+      syntax: 'data-show-if="path.to.value"'
+      behavior: "Show element only if value is truthy"
+      
+    data_hide_if:
+      syntax: 'data-hide-if="path.to.value"'
+      behavior: "Hide element if value is truthy"
+      
+    data_fallback:
+      syntax: 'data-fallback="N/A"'
+      behavior: "Show fallback when value is null/undefined"
+      
+    tab_visibility:
+      implementation: |
+        // In CortexDashboard.initTabVisibility()
+        const tabRules = {
+          'architecture-tab': () => !!this.data?.architecture,
+          'testing-tab': () => !!this.data?.testing,
+          'executive-tab': () => !!this.data?.executive,
+        };
+        
+    chart_empty_state:
+      implementation: |
+        // In ChartFactory
+        static createChart(container, data, options) {
+          if (!container) return null;
+          if (!data || (Array.isArray(data) && data.length === 0)) {
+            container.innerHTML = `
+              <div class="chart-empty-state">
+                <span class="chart-empty-icon">📭</span>
+                <span class="chart-empty-text">No data available</span>
+              </div>
+            `;
+            return null;
+          }
+          // ... create chart
+        }
+
+---
+# ============================================================================
+# REPO ONBOARDING ORCHESTRATOR
+# ============================================================================
+
+repo_onboarding:
+  orchestrator_flow: |
+    ┌─────────────────────────────────────────────────────────────────┐
+    │           RepositoryOnboardingOrchestrator                       │
+    │                                                                  │
+    │  INPUT: repo_path, options                                       │
+    │                                                                  │
+    │  STEP 1: Schema Enhancement Detection                            │
+    │  ┌─────────────────────────────────────────────────────────┐    │
+    │  │ - Scan repo with Copilot (manual GitHub Copilot scan)   │    │
+    │  │ - Detect new tab requirements (e.g., GraphQL API found) │    │
+    │  │ - If new tabs needed:                                    │    │
+    │  │   a. Enhance schema (add to JSON schema v3.x)           │    │
+    │  │   b. Enhance dashboard.html (add tab button + panel)    │    │
+    │  │   c. Migrate ALL existing repo JSONs to new schema      │    │
+    │  └─────────────────────────────────────────────────────────┘    │
+    │                              │                                   │
+    │                              ▼                                   │
+    │  STEP 2: LENS Full Analysis                                      │
+    │  ┌─────────────────────────────────────────────────────────┐    │
+    │  │ - ASTAnalyzer → functions, classes, imports             │    │
+    │  │ - GitHistoryAnalyzer → commits, contributors, hotspots  │    │
+    │  │ - ConfigAnalyzer → dependencies, settings               │    │
+    │  │ - DependencyAnalyzer → packages, versions, licenses     │    │
+    │  │ - SecurityScanner → vulnerabilities, OWASP              │    │
+    │  │ - CodeSmellDetector → smells, complexity                │    │
+    │  │ - APIAnalyzer → endpoints, parameters                   │    │
+    │  │ - DatabaseAnalyzer → schema, tables, relationships      │    │
+    │  │ - PatternDiscoveryEngine → design patterns              │    │
+    │  │ - UseCaseExtractor → features from docs/tests           │    │
+    │  └─────────────────────────────────────────────────────────┘    │
+    │                              │                                   │
+    │                              ▼                                   │
+    │  STEP 3: LLM Business Language Generation                        │
+    │  ┌─────────────────────────────────────────────────────────┐    │
+    │  │ - Generate prompts for Copilot in VSCode:               │    │
+    │  │   • Overview.business_summary                           │    │
+    │  │   • Overview.key_findings                               │    │
+    │  │   • Use_cases[].description                             │    │
+    │  │   • Use_cases[].business_value                          │    │
+    │  │   • Refactoring[].description                           │    │
+    │  │   • Architecture.summary                                │    │
+    │  │   • Executive.risk_summary                              │    │
+    │  │ - User reviews/approves LLM-generated content           │    │
+    │  └─────────────────────────────────────────────────────────┘    │
+    │                              │                                   │
+    │                              ▼                                   │
+    │  STEP 4: JSON Aggregation                                        │
+    │  ┌─────────────────────────────────────────────────────────┐    │
+    │  │ - DashboardDataAggregator.aggregate_all()               │    │
+    │  │ - Validate against schema v3.0                          │    │
+    │  │ - Handle null fields gracefully                         │    │
+    │  │ - Output: repos/{slug}/dashboard-data.json              │    │
+    │  └─────────────────────────────────────────────────────────┘    │
+    │                              │                                   │
+    │                              ▼                                   │
+    │  STEP 5: Registry Update                                         │
+    │  ┌─────────────────────────────────────────────────────────┐    │
+    │  │ - Add entry to registry.json                            │    │
+    │  │ - Include: slug, display_name, icon, health, LOC, tags  │    │
+    │  │ - Backup existing registry before modification          │    │
+    │  └─────────────────────────────────────────────────────────┘    │
+    │                                                                  │
+    │  OUTPUT: DashboardGenerationResult                               │
+    │  - dashboard_path: Path to generated JSON                        │
+    │  - registry_updated: boolean                                     │
+    │  - schema_enhanced: boolean                                      │
+    │  - llm_prompts_pending: string[] (if manual review needed)      │
+    └─────────────────────────────────────────────────────────────────┘
+  
+  schema_enhancement_detection:
+    triggers:
+      - "GraphQL schema detected → Add GraphQL tab"
+      - "Kubernetes manifests found → Add Infrastructure tab"
+      - "gRPC proto files found → Add gRPC API section"
+      - "Machine learning models detected → Add ML/AI tab"
+      - "Mobile app structure → Add Platform-specific tabs"
+      
+    enhancement_workflow: |
+      1. Copilot scans new repo (manual in VSCode)
+      2. Copilot identifies unique characteristics
+      3. If new tab/component needed:
+         a. Update json_schema_v3 (add new section)
+         b. Update dashboard.html (add tab button + panel)
+         c. Update app.js (add rendering logic)
+         d. Run migration on ALL existing repos:
+            - Read each dashboard-data.json
+            - Add new section with null/default values
+            - Write updated JSON
+         e. Increment schema version (3.0 → 3.1)
+      4. Proceed with normal onboarding
+      
+  llm_integration:
+    approach: "Human-in-the-loop via GitHub Copilot in VSCode"
+    workflow: |
+      1. Orchestrator extracts raw data from LENS analyzers
+      2. Orchestrator generates prompts for LLM generation:
+         
+         PROMPT: business_summary
+         ```
+         Based on this repository analysis:
+         - Primary Language: Python
+         - Frameworks: FastAPI, Pydantic, SQLAlchemy
+         - Total Files: 850
+         - Lines of Code: 125,000
+         - Test Coverage: 78%
+         - Main Capabilities: API server, Data processing, MCP tools
+         
+         Write a 2-3 paragraph executive summary in business language
+         suitable for executives and product owners. Explain what the
+         system does, its key capabilities, and business value.
+         Do NOT use technical jargon.
+         ```
+         
+      3. User triggers Copilot completion in VSCode
+      4. User reviews and adjusts generated content
+      5. Content saved to JSON
+      
+    prompts_template:
+      overview_business_summary: |
+        Based on repository analysis:
+        {analysis_summary}
+        
+        Write a 2-3 paragraph executive summary in business language.
+        Target audience: Business leaders, Product Owners, new team members.
+        Explain: What the system does, key capabilities, business value.
+        Avoid technical jargon. Focus on outcomes and benefits.
+        
+      use_case_description: |
+        For use case: {use_case_title}
+        Code references: {code_files}
+        API endpoints: {endpoints}
+        
+        Write a business-friendly description (3-5 sentences) explaining:
+        - What this feature enables
+        - Who benefits from it
+        - How it works (non-technical)
+        
+      use_case_business_value: |
+        For use case: {use_case_title}
+        Category: {category}
+        
+        Write a value proposition (2-3 sentences) including:
+        - Quantified benefits where possible
+        - Time/cost savings
+        - Risk reduction
+        
+      refactoring_description: |
+        Refactoring opportunity:
+        Type: {smell_type}
+        Location: {location}
+        Current code issues: {issues}
+        
+        Write a clear explanation (3-4 sentences) covering:
+        - Current problem in plain language
+        - Proposed solution
+        - Expected benefits
+
+---
+# ============================================================================
+# MCP TOOLS SPECIFICATION
+# ============================================================================
+
+mcp_tools:
+  cortex_onboard_repository:
+    name: "cortex_onboard_repository"
+    description: |
+      Onboard a new repository to the CORTEX dashboard system.
+      Runs full LENS analysis, generates LLM prompts for business language,
+      creates dashboard-data.json, and updates registry.json.
+    parameters:
+      repo_path:
+        type: "string"
+        required: true
+        description: "Absolute path to repository root"
+      repo_name:
+        type: "string"
+        required: false
+        description: "Display name (defaults to folder name)"
+      icon:
+        type: "string"
+        default: "📁"
+        description: "Emoji icon for landing page tile"
+      tags:
+        type: "array"
+        items: "string"
+        description: "Tags for categorization"
+      analysis_depth:
+        type: "string"
+        enum: ["quick", "standard", "deep"]
+        default: "standard"
+        description: |
+          quick: Metrics only (~30 seconds)
+          standard: Full analysis (~2 minutes)
+          deep: Including security scans (~5 minutes)
+      generate_llm_prompts:
+        type: "boolean"
+        default: true
+        description: "Generate prompts for LLM business language"
+      auto_update_registry:
+        type: "boolean"
+        default: true
+        description: "Auto-add to registry.json"
+    returns:
+      success: "boolean"
+      dashboard_path: "string"
+      registry_updated: "boolean"
+      schema_enhanced: "boolean"
+      llm_prompts: "array - Prompts for Copilot if generate_llm_prompts=true"
+      analysis_summary:
+        total_files: "number"
+        total_loc: "number"
+        health_score: "number"
+        vulnerabilities: "number"
+        duration_ms: "number"
+        
+  cortex_regenerate_dashboard:
+    name: "cortex_regenerate_dashboard"
+    description: "Re-run analysis for existing repo and update its JSON"
+    parameters:
+      repo_slug:
+        type: "string"
+        required: true
+        description: "Slug of existing repo in registry"
+      analysis_depth:
+        type: "string"
+        enum: ["quick", "standard", "deep"]
+        default: "standard"
+      preserve_llm_content:
+        type: "boolean"
+        default: true
+        description: "Keep existing LLM-generated content"
+    returns:
+      success: "boolean"
+      changes_detected: "array - Changed sections"
+      
+  cortex_enhance_schema:
+    name: "cortex_enhance_schema"
+    description: "Add new tabs/components to the dashboard schema"
+    parameters:
+      enhancement_type:
+        type: "string"
+        enum: ["new_tab", "new_sub_tab", "new_field"]
+        required: true
+      tab_name:
+        type: "string"
+        required: true
+      schema_definition:
+        type: "object"
+        required: true
+        description: "JSON schema for new section"
+      migrate_existing:
+        type: "boolean"
+        default: true
+        description: "Migrate all existing repos to new schema"
+    returns:
+      success: "boolean"
+      repos_migrated: "number"
+      new_schema_version: "string"
+      
+  cortex_migrate_repos:
+    name: "cortex_migrate_repos"
+    description: "Migrate all repos to a new schema version"
+    parameters:
+      target_version:
+        type: "string"
+        required: true
+        description: "Target schema version (e.g., '3.1')"
+      dry_run:
+        type: "boolean"
+        default: true
+        description: "Preview changes without applying"
+    returns:
+      success: "boolean"
+      repos_migrated: "number"
+      changes: "array - [{repo, changes}]"
+      
+  cortex_validate_dashboard_data:
+    name: "cortex_validate_dashboard_data"
+    description: "Validate a dashboard-data.json against schema"
+    parameters:
+      json_path:
+        type: "string"
+        required: true
+    returns:
+      valid: "boolean"
+      errors: "array - Validation errors"
+      warnings: "array - Non-critical issues"
+
+---
+# ============================================================================
+# IMPLEMENTATION PHASES
+# ============================================================================
+
+implementation_phases:
+  phase_1:
+    name: "Core Infrastructure & Schema v3.0"
+    duration: "Week 1"
+    deliverables:
+      - id: "P21-001"
+        title: "JSON Schema v3.0 Definition"
+        file: "cortex/models/dashboard_schema_v3.py"
+        tests: "tests/unit/models/test_dashboard_schema_v3.py"
+        description: "Pydantic models for complete v3.0 schema"
+        acceptance_criteria:
+          - "All 12 sections defined with validation"
+          - "Null-safe field definitions"
+          - "JSON serialization/deserialization"
+          - "Schema version tracking"
+          
+      - id: "P21-002"
+        title: "Enhanced DashboardDataAggregator"
+        file: "cortex/lens/dashboard_data_aggregator_v3.py"
+        tests: "tests/unit/lens/test_dashboard_data_aggregator_v3.py"
+        description: "Aggregator supporting v3.0 schema"
+        acceptance_criteria:
+          - "aggregate_*() for all 12 sections"
+          - "LENS analyzer integration"
+          - "LLM prompt generation"
+          - "Null handling"
+          
+      - id: "P21-003"
+        title: "RegistryManager Enhancement"
+        file: "cortex/visualization/registry_manager.py"
+        tests: "tests/unit/visualization/test_registry_manager.py"
+        description: "Registry.json management with backup"
+        acceptance_criteria:
+          - "CRUD operations"
+          - "Atomic writes with backup"
+          - "Schema migration support"
+          
+  phase_2:
+    name: "LENS Integration & Analyzers"
+    duration: "Week 2"
+    deliverables:
+      - id: "P21-004"
+        title: "Security Scanner Integration"
+        file: "cortex/lens/security_scanner.py"
+        description: "Unified security scanning"
+        acceptance_criteria:
+          - "Bandit integration for Python"
+          - "npm audit for JavaScript"
+          - "OWASP rule matching"
+          - "CVE lookup for dependencies"
+          
+      - id: "P21-005"
+        title: "Code Smell Detector"
+        file: "cortex/quality/code_smell_detector.py"
+        description: "Detect code smells and complexity"
+        acceptance_criteria:
+          - "God Class detection (>1000 LOC)"
+          - "Long Method detection (>50 lines)"
+          - "Cyclomatic complexity calculation"
+          - "Duplication detection"
+          
+      - id: "P21-006"
+        title: "Pattern Discovery Engine"
+        file: "cortex/lens/patterns/pattern_discovery_engine.py"
+        description: "Detect design patterns"
+        acceptance_criteria:
+          - "Repository, Factory, Strategy patterns"
+          - "Confidence scoring"
+          - "Location references"
+          
+      - id: "P21-007"
+        title: "Use Case Extractor"
+        file: "cortex/documentation/use_case_extractor.py"
+        description: "Extract use cases from code/docs"
+        acceptance_criteria:
+          - "README.md parsing"
+          - "Docstring extraction"
+          - "Test file analysis"
+          - "API endpoint discovery"
+          
+  phase_3:
+    name: "UI Enhancement & New Tabs"
+    duration: "Week 3"
+    deliverables:
+      - id: "P21-008"
+        title: "Dashboard.html v3.0 Update"
+        file: "company/dashboards/spa/dashboard.html"
+        description: "Add new tabs (Architecture, Testing, Executive)"
+        acceptance_criteria:
+          - "12 tabs with sub-tabs"
+          - "Conditional tab visibility"
+          - "Updated styling for new tabs"
+          
+      - id: "P21-009"
+        title: "D3.js Integration for Graphs"
+        files:
+          - "company/dashboards/spa/js/charts/D3Charts.js"
+          - "company/dashboards/spa/vendor/d3.min.js"
+        description: "Add D3 visualizations"
+        acceptance_criteria:
+          - "Force-directed dependency graph"
+          - "Sankey data flow diagram"
+          - "Hierarchical tree for architecture"
+          
+      - id: "P21-010"
+        title: "Enhanced ChartFactory"
+        file: "company/dashboards/spa/js/charts/ChartFactory.js"
+        description: "Support new chart types"
+        acceptance_criteria:
+          - "Heatmap charts"
+          - "Treemap charts"
+          - "Sunburst charts"
+          - "Empty state handling"
+          
+      - id: "P21-011"
+        title: "Dynamic Data Loading"
+        file: "company/dashboards/spa/js/app.js"
+        description: "Load JSON from URL parameter"
+        acceptance_criteria:
+          - "?repo=slug parameter support"
+          - "Fetch from repos/{slug}/dashboard-data.json"
+          - "Loading states"
+          - "Error boundaries"
+          
+  phase_4:
+    name: "Orchestrator & MCP Tools"
+    duration: "Week 4"
+    deliverables:
+      - id: "P21-012"
+        title: "RepositoryOnboardingOrchestrator v3"
+        file: "cortex/orchestrators/support/repository_onboarding_orchestrator_v3.py"
+        tests: "tests/unit/orchestrators/test_repository_onboarding_v3.py"
+        description: "Full orchestrator with schema enhancement"
+        acceptance_criteria:
+          - "LENS analyzer coordination"
+          - "LLM prompt generation"
+          - "Schema enhancement detection"
+          - "Registry update"
+          
+      - id: "P21-013"
+        title: "MCP Tool: cortex_onboard_repository"
+        file: "cortex/mcp/tools/dashboard_tools.py"
+        tests: "tests/unit/mcp/test_dashboard_tools.py"
+        description: "MCP-exposed onboarding tool"
+        acceptance_criteria:
+          - "Full parameter support"
+          - "Progress reporting"
+          - "Error handling"
+          
+      - id: "P21-014"
+        title: "Schema Migration System"
+        file: "cortex/visualization/schema_migrator.py"
+        tests: "tests/unit/visualization/test_schema_migrator.py"
+        description: "Migrate repos between schema versions"
+        acceptance_criteria:
+          - "Version detection"
+          - "Backward-compatible migration"
+          - "Dry-run mode"
+          
+      - id: "P21-015"
+        title: "HTTP Serving Documentation"
+        file: "company/dashboards/README.md"
+        description: "Setup guide for serving"
+        acceptance_criteria:
+          - "Python http.server instructions"
+          - "nginx configuration"
+          - "Docker compose file"
+          - "Troubleshooting guide"
+
+---
+# ============================================================================
+# TESTING REQUIREMENTS
+# ============================================================================
+
+testing:
+  unit_tests:
+    coverage_target: "85%"
+    categories:
+      - "Schema v3.0 validation"
+      - "DashboardDataAggregator methods"
+      - "RegistryManager CRUD"
+      - "Each LENS analyzer"
+      - "MCP tool parameters"
+      
+  integration_tests:
+    scenarios:
+      - name: "Full Repo Onboarding"
+        description: "Onboard real repository end-to-end"
+        assertions:
+          - "dashboard-data.json created"
+          - "JSON validates against schema"
+          - "registry.json updated"
+          - "All sections populated or null-handled"
+          
+      - name: "Schema Migration"
+        description: "Migrate repos from v2.0 to v3.0"
+        assertions:
+          - "All repos migrated"
+          - "New fields added with defaults"
+          - "Existing data preserved"
+          
+      - name: "Large Repository"
+        description: "100K+ LOC repository"
+        assertions:
+          - "Completes in <5 minutes (deep)"
+          - "Memory usage <2GB"
+          - "Progress reported"
+          
+  ui_tests:
+    scenarios:
+      - name: "Null Data Rendering"
+        assertions:
+          - "No JavaScript errors"
+          - "Empty states display"
+          - "Tabs without data hidden"
+          
+      - name: "Full Data Rendering"
+        assertions:
+          - "All charts render"
+          - "All tabs accessible"
+          - "Data binding correct"
+          
+      - name: "Dynamic Loading"
+        assertions:
+          - "?repo=slug loads correct JSON"
+          - "Loading state shown"
+          - "Error state on 404"
+
+---
+# ============================================================================
+# DEPLOYMENT & HTTP SERVING (Environment-Adaptive)
+# ============================================================================
+
+deployment:
+  http_serving:
+    requirement: "MUST serve via HTTP, NOT file://"
+    philosophy: |
+      The server selection is ENVIRONMENT-ADAPTIVE. The system will detect
+      the user's environment and recommend the best serving option automatically.
+      All options produce identical results - choose based on your context.
+    
+    # =========================================================================
+    # AUTOMATIC SERVER DETECTION (serve.py script)
+    # =========================================================================
+    auto_detect:
+      script: "company/dashboards/serve.py"
+      description: |
+        Python script that detects environment and starts best available server.
+        Checks in order: Docker → Node.js → Python → PowerShell
+      usage: "python serve.py [--port 8080] [--open]"
+      detection_logic: |
+        1. Check if Docker is available → use nginx:alpine container
+        2. Check if Node.js is available → use http-server or live-server
+        3. Check if Python 3 is available → use python -m http.server
+        4. Windows: use PowerShell HttpListener
+        5. Fallback: Print manual instructions
+      features:
+        - "Auto-opens browser on start"
+        - "Graceful shutdown handling"
+        - "Port conflict detection"
+        - "Live reload support (if available)"
+    
+    # =========================================================================
+    # SERVING OPTIONS (in preference order)
+    # =========================================================================
+    
+    option_1_docker:
+      name: "Docker (Recommended for Production)"
+      when_to_use: "Production, CI/CD, team environments"
+      command: |
+        cd company/dashboards
+        docker-compose up -d
+      url: "http://localhost:8080"
+      features:
+        - "Nginx with optimized config"
+        - "GZIP compression"
+        - "Proper caching headers"
+        - "Consistent across environments"
+      docker_compose: |
+        version: '3.8'
+        services:
+          dashboard:
+            image: nginx:alpine
+            ports:
+              - "8080:80"
+            volumes:
+              - ./:/usr/share/nginx/html:ro
+              - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+            restart: unless-stopped
+            healthcheck:
+              test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+              interval: 30s
+              timeout: 10s
+              retries: 3
+              
+    option_2_nodejs:
+      name: "Node.js (Best for Development)"
+      when_to_use: "Development with live reload, frontend work"
+      commands:
+        http_server: |
+          npx http-server company/dashboards -p 8080 --cors -c-1
+        live_server: |
+          npx live-server company/dashboards --port=8080 --no-browser
+        serve: |
+          npx serve company/dashboards -l 8080
+      url: "http://localhost:8080"
+      features:
+        - "No installation required (npx)"
+        - "Live reload option"
+        - "CORS support"
+        - "Cache control"
+        
+    option_3_python:
+      name: "Python (Quick & Universal)"
+      when_to_use: "Quick testing, minimal setup, Python environments"
+      commands:
+        python3: |
+          cd company/dashboards
+          python -m http.server 8080
+        python3_bind: |
+          cd company/dashboards
+          python -m http.server 8080 --bind 0.0.0.0
+      url: "http://localhost:8080"
+      features:
+        - "Zero dependencies"
+        - "Available on most systems"
+        - "Simple and reliable"
+      note: "Development only - no caching, compression, or SPA routing"
+      
+    option_4_powershell:
+      name: "PowerShell (Windows Native)"
+      when_to_use: "Windows without Python/Node/Docker"
+      script: |
+        # company/dashboards/serve.ps1
+        $port = 8080
+        $root = $PSScriptRoot
+        $listener = New-Object System.Net.HttpListener
+        $listener.Prefixes.Add("http://localhost:$port/")
+        $listener.Start()
+        Write-Host "Serving at http://localhost:$port"
+        Start-Process "http://localhost:$port"
+        
+        while ($listener.IsListening) {
+            $context = $listener.GetContext()
+            $request = $context.Request
+            $response = $context.Response
+            
+            $localPath = $request.Url.LocalPath
+            if ($localPath -eq "/") { $localPath = "/index.html" }
+            $filePath = Join-Path $root $localPath
+            
+            if (Test-Path $filePath -PathType Leaf) {
+                $content = [System.IO.File]::ReadAllBytes($filePath)
+                $response.ContentType = Get-MimeType $filePath
+                $response.OutputStream.Write($content, 0, $content.Length)
+            } else {
+                $response.StatusCode = 404
+            }
+            $response.Close()
+        }
+      url: "http://localhost:8080"
+      
+    option_5_iis:
+      name: "IIS (Windows Server)"
+      when_to_use: "Windows Server production environment"
+      setup: |
+        1. Create IIS site pointing to company/dashboards
+        2. Add web.config for SPA routing:
+           <configuration>
+             <system.webServer>
+               <rewrite>
+                 <rules>
+                   <rule name="SPA" stopProcessing="true">
+                     <match url=".*" />
+                     <conditions>
+                       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                     </conditions>
+                     <action type="Rewrite" url="/index.html" />
+                   </rule>
+                 </rules>
+               </rewrite>
+               <staticContent>
+                 <mimeMap fileExtension=".json" mimeType="application/json" />
+               </staticContent>
+             </system.webServer>
+           </configuration>
+           
+    option_6_nginx_standalone:
+      name: "Nginx (Linux/Mac Production)"
+      when_to_use: "Production on Linux/Mac without Docker"
+      config: |
+        server {
+            listen 80;
+            server_name dashboards.cortex.local;
+            root /var/www/cortex-dashboards;
+            index index.html;
+            
+            # SPA routing
+            location / {
+                try_files $uri $uri/ /index.html;
+            }
+            
+            # Sharded repo data with no-cache
+            location /repos/ {
+                alias /var/www/cortex-dashboards/repos/;
+                add_header Cache-Control "no-cache, must-revalidate";
+                add_header Access-Control-Allow-Origin "*";
+            }
+            
+            # Static assets with long cache
+            location /spa/ {
+                alias /var/www/cortex-dashboards/spa/;
+                expires 7d;
+                add_header Cache-Control "public, immutable";
+            }
+            
+            # GZIP for JSON and assets
+            gzip on;
+            gzip_types application/json text/css application/javascript text/plain;
+            gzip_min_length 1000;
+        }
+        
+  production_checklist:
+    - "✅ HTTPS enabled (use reverse proxy or load balancer)"
+    - "✅ CSP headers configured"
+    - "✅ GZIP compression enabled"
+    - "✅ Cache headers: no-cache for JSON, long-cache for static"
+    - "✅ CDN for vendor libraries (optional)"
+    - "✅ Error logging configured"
+    - "✅ Health checks for container/service"
+    - "✅ Rate limiting if public-facing"
+
+---
+# ============================================================================
+# FILE INVENTORY
+# ============================================================================
+
+file_inventory:
+  new_files:
+    python:
+      - "cortex/models/dashboard_schema_v3_sqlite.py"
+      - "cortex/lens/sqlite_data_generator.py"           # NEW: Generates SQLite from LENS analysis
+      - "cortex/lens/dashboard_data_aggregator_v3.py"
+      - "cortex/lens/security_scanner.py"
+      - "cortex/quality/code_smell_detector.py"
+      - "cortex/lens/patterns/pattern_discovery_engine.py"
+      - "cortex/documentation/use_case_extractor.py"
+      - "cortex/domain/domain_model_extractor.py"          # NEW: Extracts domain model from code + yamls
+      - "cortex/domain/uml_generator.py"                   # NEW: Generates Mermaid UML diagrams
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator_v3.py"
+      - "cortex/mcp/tools/dashboard_tools.py"
+      - "cortex/data/sqlite_schema_v3.sql"                 # NEW: SQLite schema definition
+      
+    tests:
+      - "tests/unit/models/test_dashboard_schema_v3_sqlite.py"
+      - "tests/unit/lens/test_sqlite_data_generator.py"   # NEW
+      - "tests/unit/lens/test_dashboard_data_aggregator_v3.py"
+      - "tests/unit/lens/test_security_scanner.py"
+      - "tests/unit/quality/test_code_smell_detector.py"
+      - "tests/unit/lens/test_pattern_discovery_engine.py"
+      - "tests/unit/documentation/test_use_case_extractor.py"
+      - "tests/unit/domain/test_domain_model_extractor.py" # NEW
+      - "tests/unit/domain/test_uml_generator.py"          # NEW
+      - "tests/unit/orchestrators/test_repository_onboarding_v3.py"
+      - "tests/unit/mcp/test_dashboard_tools.py"
+      - "tests/integration/test_full_repo_onboarding.py"
+      - "tests/integration/test_sqlite_queries.py"         # NEW: Test SQL queries
+      
+    frontend:
+      # Core Dashboard Files
+      - "company/dashboards/spa/js/data/SQLiteDataLayer.js"     # NEW: sql.js wrapper
+      - "company/dashboards/spa/js/charts/EChartsFactory.js"    # NEW: ECharts components
+      - "company/dashboards/spa/js/charts/MermaidRenderer.js"   # NEW: Mermaid diagram renderer
+      - "company/dashboards/spa/js/charts/CytoscapeGraph.js"    # NEW: Interactive graph explorer
+      - "company/dashboards/spa/js/components/DataTable.js"     # NEW: Paginated table with SQL
+      - "company/dashboards/spa/js/components/SearchBar.js"     # NEW: FTS5 search
+      - "company/dashboards/spa/js/components/FilterPanel.js"   # NEW: SQL WHERE filters
+      - "company/dashboards/spa/js/components/Pagination.js"    # NEW: SQL LIMIT/OFFSET
+      - "company/dashboards/spa/js/components/DomainModelViewer.js"  # NEW: UML visualization
+      - "company/dashboards/spa/js/components/Wizard.js"        # NEW: Multi-step flows
+      - "company/dashboards/spa/js/components/Accordion.js"     # NEW: Collapsible sections
+      - "company/dashboards/spa/js/components/MetricCard.js"    # NEW: Glassmorphism tiles
+      - "company/dashboards/spa/js/utils/QueryBuilder.js"       # NEW: SQL query helper
+      
+      # Vendor Libraries (Minimal Stack)
+      - "company/dashboards/spa/vendor/echarts.min.js"          # ~1MB - Primary charts
+      - "company/dashboards/spa/vendor/mermaid.min.js"          # ~800KB - UML diagrams
+      - "company/dashboards/spa/vendor/cytoscape.min.js"        # ~600KB - Interactive graphs
+      - "company/dashboards/spa/vendor/sql-wasm.js"             # ~1MB - SQLite WASM
+      - "company/dashboards/spa/vendor/sql-wasm.wasm"           # ~1MB - SQLite binary
+      - "company/dashboards/spa/vendor/prism.min.js"            # ~15KB - Code highlighting
+      - "company/dashboards/spa/vendor/prism-autoloader.min.js" # Auto language detection
+      
+      # Stylesheets (Component-Based)
+      - "company/dashboards/spa/css/core/variables.css"         # CSS custom properties
+      - "company/dashboards/spa/css/core/glassmorphism.css"     # Glass effects
+      - "company/dashboards/spa/css/core/animations.css"        # Shimmer, glow, fade
+      - "company/dashboards/spa/css/components/metric-card.css"
+      - "company/dashboards/spa/css/components/data-table.css"
+      - "company/dashboards/spa/css/components/wizard.css"
+      - "company/dashboards/spa/css/components/accordion.css"
+      - "company/dashboards/spa/css/components/pagination.css"
+      - "company/dashboards/spa/css/components/search-bar.css"
+      - "company/dashboards/spa/css/components/filter-panel.css"
+      - "company/dashboards/spa/css/components/breadcrumb.css"
+      - "company/dashboards/spa/css/components/modal.css"
+      - "company/dashboards/spa/css/tabs/overview.css"
+      - "company/dashboards/spa/css/tabs/architecture.css"
+      - "company/dashboards/spa/css/tabs/domain-model.css"
+      - "company/dashboards/spa/css/tabs/security.css"
+      - "company/dashboards/spa/css/tabs/code-explorer.css"
+      - "company/dashboards/spa/css/prism-dark-glass.css"       # Custom Prism theme
+      
+    documentation:
+      - "company/dashboards/README.md"
+      - "company/dashboards/SQLITE-ARCHITECTURE.md"             # NEW: SQLite design doc
+      - "company/dashboards/SCALABILITY-PATH.md"               # NEW: Local → Enterprise
+      - "company/dashboards/docker-compose.yml"
+      - "company/dashboards/nginx.conf"
+      - "company/dashboards/SERVING-OPTIONS.md"                # HTTP server guide
+      
+    domain_model_templates:
+      description: "Templates for company/domains/{repo}/ YAML files"
+      files:
+        - "company/domains/_templates/entities.yaml"
+        - "company/domains/_templates/patterns.yaml"
+        - "company/domains/_templates/vendors.yaml"
+        - "company/domains/_templates/bounded-contexts.yaml"
+        
+    database_files:
+      description: "SQLite databases (separate from cortex.db)"
+      files:
+        - "company/dashboards/registry.sqlite"                  # Repository registry
+        - "company/dashboards/repos/{slug}/dashboard.sqlite"    # Per-repo intelligence
+      note: "Completely isolated from cortex/data/cortex.db (SOLID compliance)"
+      
+  modified_files:
+    - "company/dashboards/spa/dashboard.html"
+    - "company/dashboards/spa/js/app.js"
+    - "company/dashboards/spa/js/charts/ChartFactory.js"
+    - "company/dashboards/spa/js/components/DataBinder.js"
+    - "company/dashboards/spa/js/components/TabManager.js"
+    - "company/dashboards/index.html"
+    - "company/dashboards/registry.json"
+    - "cortex/wiring/specifications/wiring.yaml"
+
+---
+# ============================================================================
+# HIGH-VALUE SEQUENCE DIAGRAMS
+# ============================================================================
+
+sequence_diagrams:
+  description: "Key workflows visualized as Mermaid sequence diagrams"
+  purpose: "Shown in Architecture tab, Use Cases tab, and documentation"
+  
+  diagrams:
+    user_onboarding_flow:
+      title: "User Discovers Repository via Dashboard"
+      participants:
+        - "User"
+        - "index.html (Landing)"
+        - "registry.sqlite"
+        - "dashboard.html"
+        - "dashboard.sqlite"
+      flow: |
+        sequenceDiagram
+            participant U as User
+            participant I as index.html
+            participant R as registry.sqlite (sql.js)
+            participant D as dashboard.html
+            participant DB as dashboard.sqlite (sql.js)
+            
+            U->>I: Visit http://localhost:8080
+            I->>R: Load registry.sqlite
+            R-->>I: Repository list
+            I->>I: Render tiles (glassmorphism cards)
+            U->>I: Click "CORTEX" tile
+            I->>D: Navigate to ?repo=cortex
+            D->>DB: Fetch /repos/cortex/dashboard.sqlite
+            DB-->>D: SQLite file loaded
+            D->>DB: SELECT * FROM repo_summary
+            DB-->>D: Overview data
+            D->>D: Render Overview tab
+            U->>D: Click "Use Cases" tab
+            D->>DB: SELECT * FROM use_cases LIMIT 20
+            DB-->>D: Paginated use cases
+            D->>D: Render table with pagination
+      
+    repository_analysis_pipeline:
+      title: "Repository Onboarding via MCP Tool"
+      participants:
+        - "User (VSCode)"
+        - "MCP Gateway"
+        - "RepositoryOnboardingOrchestrator"
+        - "LENS Crawlers"
+        - "LLM (Copilot)"
+        - "SQLiteDataGenerator"
+      flow: |
+        sequenceDiagram
+            participant U as User (VSCode)
+            participant M as MCP Gateway
+            participant O as RepositoryOnboardingOrchestrator
+            participant L as LENS Crawlers
+            participant LLM as LLM (Copilot)
+            participant S as SQLiteDataGenerator
+            participant DB as dashboard.sqlite
+            
+            U->>M: cortex_onboard_repository(path, name)
+            M->>O: Orchestrate onboarding
+            O->>L: Run all analyzers (AST, Git, Security)
+            L-->>O: Raw metrics, patterns, vulnerabilities
+            O->>LLM: Generate business language
+            LLM-->>O: Overview, use cases, insights
+            O->>S: Aggregate data + create SQLite
+            S->>DB: CREATE TABLE repo_summary, use_cases, ...
+            S->>DB: INSERT INTO ... (raw data)
+            S->>DB: CREATE VIEW executive_kpis
+            S->>DB: CREATE VIRTUAL TABLE ... USING fts5
+            S-->>O: dashboard.sqlite created
+            O->>M: Update registry.sqlite
+            M-->>U: Onboarding complete (slug: cortex)
+            U->>U: Open dashboard in browser
+      
+    search_query_execution:
+      title: "User Searches for 'authentication' in Use Cases"
+      participants:
+        - "User"
+        - "SearchBar.js"
+        - "SQLiteDataLayer.js"
+        - "dashboard.sqlite"
+        - "DataTable.js"
+      flow: |
+        sequenceDiagram
+            participant U as User
+            participant S as SearchBar.js
+            participant Q as SQLiteDataLayer.js
+            participant DB as dashboard.sqlite (sql.js)
+            participant T as DataTable.js
+            
+            U->>S: Type "authentication"
+            S->>S: Debounce 300ms
+            S->>Q: search('authentication', 'use_cases')
+            Q->>DB: SELECT * FROM use_cases_fts WHERE use_cases_fts MATCH 'authentication'
+            DB-->>Q: Results (5 rows)
+            Q-->>S: Search results
+            S->>T: Update table
+            T->>T: Render rows with highlight
+            U->>T: Click row to expand
+            T->>Q: getUseCaseById(42)
+            Q->>DB: SELECT * FROM use_cases WHERE id = 42
+            DB-->>Q: Full use case data
+            Q-->>T: Use case detail
+            T->>T: Render expanded row
+      
+    drill_down_navigation:
+      title: "Engineer Explores Code from Overview to File Detail"
+      participants:
+        - "Engineer"
+        - "Overview Tab"
+        - "Code Explorer Tab"
+        - "SQLiteDataLayer.js"
+        - "Modal Dialog"
+      flow: |
+        sequenceDiagram
+            participant E as Engineer
+            participant O as Overview Tab
+            participant C as Code Explorer Tab
+            participant Q as SQLiteDataLayer.js
+            participant M as Modal Dialog
+            
+            E->>O: View file structure tree
+            E->>O: Click "src/" folder
+            O->>Q: SELECT * FROM files WHERE parent_path = 'src/'
+            Q-->>O: Files in src/
+            O->>O: Expand tree node
+            E->>O: Click "Code Explorer" tab
+            O->>C: Switch tab
+            C->>Q: SELECT * FROM files WHERE file_type = 'folder' AND parent_path = '/'
+            Q-->>C: Root folders
+            C->>C: Render tree
+            E->>C: Click "src" > "core" > "auth.py"
+            C->>Q: SELECT * FROM files WHERE file_path = 'src/core/auth.py'
+            Q-->>C: File metadata (LOC, complexity, churn)
+            C->>C: Render file card
+            E->>C: Click "View Code" button
+            C->>Q: SELECT * FROM code_snippets WHERE file_path = 'src/core/auth.py'
+            Q-->>C: Code snippet
+            C->>M: Open modal with code
+            M->>M: Prism.js syntax highlight
+            M-->>E: Display highlighted code
+      
+    pagination_workflow:
+      title: "User Navigates 500 Use Cases with Pagination"
+      participants:
+        - "User"
+        - "Pagination.js"
+        - "SQLiteDataLayer.js"
+        - "dashboard.sqlite"
+      flow: |
+        sequenceDiagram
+            participant U as User
+            participant P as Pagination.js
+            participant Q as SQLiteDataLayer.js
+            participant DB as dashboard.sqlite
+            
+            U->>P: Load Use Cases tab
+            P->>Q: getUseCases(page=1, pageSize=20)
+            Q->>DB: SELECT * FROM use_cases LIMIT 20 OFFSET 0
+            DB-->>Q: Rows 1-20
+            Q->>DB: SELECT COUNT(*) FROM use_cases
+            DB-->>Q: Total: 500
+            Q-->>P: {rows: [...], total: 500}
+            P->>P: Render "Page 1 of 25"
+            U->>P: Click "Page 5"
+            P->>Q: getUseCases(page=5, pageSize=20)
+            Q->>DB: SELECT * FROM use_cases LIMIT 20 OFFSET 80
+            DB-->>Q: Rows 81-100
+            Q-->>P: {rows: [...], total: 500}
+            P->>P: Render "Page 5 of 25"
+            P->>P: Highlight active page button
+      
+    scalability_migration:
+      title: "Migrate from Local sql.js to Enterprise PostgreSQL"
+      participants:
+        - "Admin"
+        - "Migration Script"
+        - "dashboard.sqlite"
+        - "PostgreSQL"
+        - "API Server"
+      flow: |
+        sequenceDiagram
+            participant A as Admin
+            participant M as Migration Script
+            participant S as dashboard.sqlite
+            participant P as PostgreSQL
+            participant API as API Server (FastAPI)
+            
+            A->>M: Run migration.py --to-postgres
+            M->>S: Load all .sqlite files
+            loop For each repository
+                M->>S: Read tables
+                S-->>M: All data
+                M->>P: CREATE SCHEMA {repo_slug}
+                M->>P: INSERT INTO {repo_slug}.use_cases ...
+                M->>P: CREATE INDEX ...
+            end
+            M-->>A: Migration complete
+            A->>API: Deploy API server
+            A->>A: Update dashboard.html config
+            Note over API: SQLiteDataLayer.js now calls API
+            A->>A: Test dashboard
+            A->>API: GET /api/repos/cortex/use_cases?page=1
+            API->>P: SELECT * FROM cortex.use_cases LIMIT 20
+            P-->>API: Results
+            API-->>A: JSON response
+            Note over A: Same SQL queries, different backend
+
+---
+# ============================================================================
+# MODIFIED FILES
+# ============================================================================
+
+success_criteria:
+  functional:
+    - "Single index.html displays tiles for ALL repos from registry.sqlite"
+    - "Single dashboard.html loads ANY repo via ?repo=slug parameter"
+    - "MCP tool cortex_onboard_repository generates dashboard.sqlite end-to-end"
+    - "LLM prompts generated for business language (overview, use cases, insights)"
+    - "SQLite schema v3.0 supports 13 tabs with graceful null handling"
+    - "New repos auto-appear on landing page after onboarding"
+    - "Domain Model tab renders UML from company/domains/*.yaml + SQLite entities"       # UPDATED
+    - "Native SQL pagination works (LIMIT/OFFSET) with page controls"                     # NEW
+    - "Full-text search works (FTS5) across use cases, files, packages"                   # NEW
+    - "HTTP serving works in Docker, Node, Python, PowerShell, nginx"  
+    - "Separate databases: cortex.db vs. registry.sqlite vs. dashboard.sqlite"            # NEW
+    
+  performance:
+    - "Quick analysis: <30 seconds for 10K LOC"
+    - "Standard analysis: <2 minutes for 50K LOC"
+    - "Deep analysis: <5 minutes for 100K LOC"
+    - "Large repos: <10 minutes for 500K+ LOC (SQLite handles GB efficiently)"            # UPDATED
+    - "Dashboard initial load: <2 seconds (SQLite file loads in browser)"                 # UPDATED
+    - "Chart rendering: <500ms per chart"
+    - "SQL queries: <50ms for paginated data (indexed tables)"                            # NEW
+    - "Search queries: <100ms for FTS5 full-text search"                                  # NEW
+    
+  quality:
+    - "85%+ test coverage on new code"
+    - "Zero console errors in dashboard"
+    - "WCAG 2.1 AA accessibility"
+    - "Works in Chrome, Firefox, Edge, Safari"
+    - "Mermaid diagrams render correctly"                              
+    - "Cytoscape graphs are interactive and performant"                
+    - "SQL queries use proper indexes (no full table scans)"                              # NEW
+    - "All vendor libraries verified for CVEs (security scanned)"                         # NEW
+    
+  scalability:
+    - "Supports 100+ repositories in registry.sqlite"
+    - "Handles 500K+ LOC repositories efficiently"
+    - "SQLite files: 2-20MB typical (handles GB+ without sharding)"                       # UPDATED
+    - "Pagination supports 10,000+ rows without performance degradation"                  # NEW
+    - "Seamless migration path to PostgreSQL/Vector DB for enterprise"                    # NEW
+    - "Supports 1000+ entities in domain model with interactive graph"
+
+---
+# ============================================================================
+# APPENDIX: VISUAL DESIGN REFERENCE (FROM GPT RECOMMENDATIONS)
+# ============================================================================
+
+visual_design_reference:
+  source: "chat03 - gpt recommendation.txt"
+  
+  theme:
+    - "Dark glassmorphism (existing)"
+    - "Electric ring animation on logo"
+    - "Gradient accents (cyan to purple)"
+    - "Card-based layouts with blur effects"
+    
+  charts_recommended:
+    from_chat01:
+      - "Directory Treemap — D3.js treemap for directory structure"
+      - "Dependency Force Graph — D3.js force-directed graph"
+      - "Layer Diagram — Architecture layers visualization"
+      - "Complexity Histogram — Chart.js histogram"
+      - "Code Quality Radar — Chart.js radar chart"
+      - "LOC Distribution Bar — Chart.js bar chart"
+      - "Vulnerability Distribution Pie — D3.js/Chart.js pie"
+      - "Testing Pyramid — Chart.js pyramid visualization"
+      - "Dependency Tree — D3.js hierarchical tree"
+      
+    from_chat03:
+      - "Sankey Diagram — Replace force graph for better readability"
+      - "Coupling vs Cohesion Scatter Plot"
+      - "Risk Heatmap — Module vs risk category matrix"
+      - "Evolution Timeline — LOC over time stacked area"
+      - "Box-and-Whisker for complexity distribution"
+      - "Sunburst for hierarchical data"
+      
+  libraries_approved:
+    - "ECharts (primary) — Already integrated"
+    - "D3.js v7 — For custom visualizations"
+    - "Chart.js v4 — Simple charts (backup)"
+    - "GridJS — Data tables"
+    - "Fuse.js — Fuzzy search"
+    - "Prism.js — Code highlighting (NEW)"
+    - "Mermaid — ER diagrams only (NEW, lightweight)"
+    
+  accessibility:
+    - "ARIA roles for tabs and panels"
+    - "Keyboard navigation"
+    - "Contrast ratio compliance"
+    - "Screen reader support"
+    
+  responsive:
+    - "Mobile: Single column layout"
+    - "Tablet: 2-column grid"
+    - "Desktop: 3-4 column grid"
+    - "Collapsible sidebar for navigation"
+
+---
+# ============================================================================
+# QUICK REFERENCE CARD
+# ============================================================================
+
+quick_reference:
+  start_server:
+    description: "Environment-adaptive HTTP serving (choose based on your setup)"
+    options:
+      docker: |
+        cd company/dashboards
+        docker-compose up -d
+        # Open http://localhost:8080
+        
+      node: |
+        npx serve company/dashboards -p 8080
+        # or: npx http-server company/dashboards -p 8080
+        
+      python: |
+        cd company/dashboards
+        python -m http.server 8080
+        # Open http://localhost:8080
+        
+      powershell: |
+        # One-liner HTTP server (Windows)
+        $listener = [System.Net.HttpListener]::new()
+        $listener.Prefixes.Add("http://localhost:8080/")
+        $listener.Start()
+        # See SERVING-OPTIONS.md for full script
+        
+      iis: "Create application pointing to company/dashboards"
+      nginx: "See deployment/nginx.conf for configuration"
+    
+  onboard_repo: |
+    # Via MCP tool (in VSCode Copilot)
+    Use cortex_onboard_repository with:
+    - repo_path: "C:/path/to/repo"
+    - repo_name: "My App"
+    - analysis_depth: "standard"  # quick|standard|deep
+    - output_format: "sqlite"     # Generates dashboard.sqlite
+    
+  view_dashboard: |
+    http://localhost:8080/spa/dashboard.html?repo=my-app
+    
+  schema_version: "3.0 (SQLite)"
+  
+  tabs_available:
+    by_role:
+      executives:
+        - "1. Executive Summary (👔) - Health status, KPIs, risk overview"
+      product_owners:
+        - "2. Overview (🌐) - Repository snapshot, tech stack, structure"
+        - "3. Use Cases (💡) - Business capabilities, user stories (PAGINATED)"
+      architects:
+        - "4. Domain Model (🏛️) - UML diagrams, entity relationships"
+        - "5. Architecture (🏗️) - Layers, components, data flow"
+        - "6. Dependencies (📦) - Package ecosystem, vulnerabilities (PAGINATED)"
+      engineers:
+        - "7. Code Quality (✨) - Code smells, complexity, debt (PAGINATED)"
+        - "8. Metrics (📈) - LOC, cyclomatic complexity, maintainability"
+        - "9. Security (🔒) - Vulnerabilities, compliance, secrets (PAGINATED)"
+        - "10. Testing (🧪) - Coverage, test pyramid, flaky tests"
+        - "11. Code Explorer (🗂️) - Interactive file browser (SEARCHABLE)"
+        - "12. Refactoring (🔧) - Improvement opportunities, quick wins"
+        - "13. LENS Analysis (🔍) - CORTEX insights, patterns, anti-patterns"
+        
+  sqlite_architecture:
+    databases:
+      - "cortex.db - CORTEX internal (Python only, isolated)"
+      - "registry.sqlite - Repository list (browser, <1MB)"
+      - "dashboard.sqlite - Per-repo data (browser, 2-20MB typical)"
+    key_features:
+      - "Native pagination: SELECT * FROM use_cases LIMIT 20 OFFSET 40"
+      - "Full-text search: SELECT * FROM use_cases_fts WHERE use_cases_fts MATCH 'auth'"
+      - "Filtering: WHERE severity = 'critical' AND category = 'security'"
+      - "Sorting: ORDER BY complexity DESC, effort_hours ASC"
+      - "Views: CREATE VIEW executive_kpis AS ..."
+    benefits:
+      - "Single data solution scales local → enterprise"
+      - "No external dependencies (Fuse.js, GridJS removed)"
+      - "Handles GB+ repos efficiently"
+      - "Browser-compatible (sql.js WASM)"
+      
+  tech_stack:
+    minimal_libraries:
+      - "ECharts 5.4.x (~1MB) - Beautiful charts"
+      - "Mermaid 10.x (~800KB) - UML diagrams"
+      - "Cytoscape 3.x (~600KB) - Interactive graphs"
+      - "sql.js (~1MB) - SQLite in browser"
+      - "Prism.js (~15KB) - Code highlighting"
+    total_size: "~2.5MB vendor JS (down from ~4MB JSON stack)"
+    css: "Custom glassmorphism (zero framework, full control)"
+    
+  scalability_path:
+    phase_1: "Local (sql.js WASM) - static file server"
+    phase_2: "Hybrid (sql.js + optional API for heavy queries)"
+    phase_3: "Enterprise (PostgreSQL/Vector DB + full SaaS)"
+    key: "Same SQL queries, swap backend only"
+
+---
+# END OF PHASE 21 SPECIFICATION
+# v3.0 - Enterprise Repository Intelligence with SQLite Data Layer
+# Features: 13 tabs, UML diagrams, native pagination/search, minimal dependencies
+# Data: Separate SQLite databases (SOLID compliance), scales local → enterprise
+# UX: Dark glassmorphism, card/tile based, progressive disclosure, mobile-friendly
+# Last updated: 2026-02-03
+# Features: 13 tabs, UML diagrams, TB-scale support, environment-adaptive serving
+# Last updated: 2026-02-03
