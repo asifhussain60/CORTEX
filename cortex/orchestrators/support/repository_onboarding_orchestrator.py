@@ -221,10 +221,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         )
         
         try:
-            # Step 0: Ensure shared assets exist
-            logger.info("Step 0: Ensuring shared dashboard assets...")
-            asset_manager = _get_asset_manager()
-            asset_manager.ensure_assets_exist()
+            # Step 0: Ensure shared assets exist (only if dashboard enabled)
+            if include_dashboard:
+                logger.info("Step 0: Ensuring shared dashboard assets...")
+                asset_manager = _get_asset_manager()
+                asset_manager.ensure_assets_exist()
             
             # Step 1: Holistic LENS analysis
             logger.info("Step 1: Running holistic LENS analysis...")
