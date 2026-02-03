@@ -1,553 +1,441 @@
-0) Mission and non-negotiables
-What we are building
+GitHub Copilot Instructions: Multi-Repo Dashboard Suite + Landing Page + MCP Exposure
+Goal
 
-A static “SPA-like” dashboard suite:
+Build a Repo Dashboard Suite that can:
 
-A single landing page at: dist/index.html (root)
+Generate N dashboards (one HTML per repo) with a consistent theme and shared reusable UI components.
 
-A dashboard per repo at: dist/repos/<repoSlug>/index.html
+Generate a single landing HTML entry point with:
 
-Shared reusable assets/components (CSS/JS/vendor libs) in: dist/assets/*
+A large hero (style aligned with index.html) 
 
-Each repo dashboard embeds hardcoded JSON (no fetch, no API calls, no network).
+index
 
-Non-negotiables
+A search + filter + sortable tile grid of all repos (works for 10 repos or 500).
 
-Must work via file:// (double-click open), not served via HTTP.
+Each tile navigates to the repo’s dashboard HTML (relative links, file:// safe).
 
-No runtime network calls (no fetch() for data, no CDNs, no remote fonts).
+Be deployable in production and exposed via MCP such that an MCP tool can generate:
 
-Each repo has its own dedicated subfolder under dist/repos/<repoSlug>/.
+A dashboard for one repo, or
 
-Only one index.html at the root (dist/index.html landing).
+A full suite (landing + all repo dashboards) in one execution.
 
-All dashboards must use current cortex-logo.png and include:
+Non-Negotiable Constraints
 
-A beautiful sticky header with logo + title + quick actions.
+No server required to view output; must work from file://.
 
-A Back-to-Top component (floating button + keyboard accessible).
+No runtime network calls from generated dashboards (no fetching JSON, no API calls).
 
-Must preserve/restore all major visualizations from the old dashboard when consolidating tabs (do not “lose” visuals by reduction). 
+All data is hardcoded into each generated HTML (or embedded as JS objects).
 
-dashboardcreation
+All third-party libraries must be vendored locally (no CDN) to avoid file:// + CSP issues.
 
-Must include a Use Cases tab that supports 100+ use cases with search + filters + grouping. 
+Keep it modern and interactive, but don’t overengineer: minimal build steps, maximal clarity.
 
-dashboardcreation
+Deliverables (Files Copilot Must Create)
+1) Generator entrypoints
 
-1) Recommended approach: “SPA ergonomics, static output”
+Create these scripts:
 
-Use React + Vite (or Angular if you strongly prefer) to get reusable components, but compile to static files and generate multiple HTML entry points:
+company/dashboards/generate_repo_dashboard.py
 
-Root landing: dist/index.html
+Input: repo path OR repo descriptor JSON
 
-Per repo: dist/repos/<repoSlug>/index.html
+Output: dashboard.html for that repo (or dashboard-{repoSlug}.html)
 
-Important: Avoid client-side routing that requires server rewrites. Under file://, a router can be fragile. Use:
+company/dashboards/generate_dashboard_suite.py
 
-Normal links between HTML files (href="./repos/<slug>/index.html")
+Input: list of repos (paths or descriptors)
 
-Or hash navigation inside each page only (optional)
+Output:
 
-This matches the “static-first” plan direction and avoids the class of “diagrams didn’t load” issues caused by tabs rendering hidden canvases/SVGs. 
+out/index.html (landing page)
 
-dashboardcreation
+out/repos/<repoSlug>/dashboard.html (per repo)
 
-2) Output folder contract (must match exactly)
-Final build output
-dist/
-  index.html                          # landing only (root)
-  assets/
-    css/
-      theme.css                        # dark glassmorphism theme
-      components.css                   # shared component styles
-    js/
-      landing.bundle.js                # landing behavior
-      repo.bundle.js                   # repo dashboard behavior
-    vendor/
-      echarts.min.js
-      d3.min.js
-      chart.umd.js
-      fuse.min.js
-      gridjs.umd.js (or tabulator)
-  images/
-    cortex-logo.png                    # copy of current logo
-  repos/
-    repo-a/
-      index.html                       # repo dashboard entry
-    repo-b/
-      index.html
-    ...
+out/assets/... (shared CSS/JS/libs)
 
-Source folder contract (suggested)
-company/dashboards/spa/
-  src/
-    app/
-      build/
-        build-suite.ts                 # node script: reads repo list + data + emits dist/*
-        emit-landing.ts
-        emit-repo.ts
-      data/
-        repos.manifest.json            # list of repos to build
-        repos/
-          repo-a.json                  # hardcoded data (source) -> embedded into html
-          repo-b.json
-    ui/
-      components/
-        Header.tsx                     # sticky header with logo + actions
-        Hero.tsx                       # landing hero section (style matches attached index.html)
-        RepoTiles.tsx                  # landing tiles
-        Tabs.tsx                       # tab system with ARIA + keyboard nav
-        SubTabs.tsx                    # optional
-        Card.tsx
-        MetricCard.tsx
-        SeverityBadge.tsx
-        SearchBox.tsx
-        FilterChips.tsx
-        BackToTop.tsx                  # floating + keyboard accessible
-        Drawer.tsx                     # drill-down side panel (optional but high-value)
-      charts/
-        ChartHost.tsx                  # lazy-init chart wrapper (critical)
-        echarts/
-        d3/
-        chartjs/
-      pages/
-        LandingPage.tsx
-        RepoDashboardPage.tsx
-      styles/
-        theme.css
-        tokens.css
-  public/
-    images/cortex-logo.png
-  package.json
-  vite.config.ts
+Should generate relative links so landing page can open dashboards via file://.
 
-3) Data model: per-repo hardcoded JSON (embedded, not fetched)
-Hard rule
+2) Shared front-end assets (vendored)
 
-Each repo dashboard must embed its JSON data inside the HTML:
+Create a shared asset directory in the output:
 
-<script type="application/json" id="repo-data">{ ... }</script>
+out/assets/css/dashboard-theme.css
 
+out/assets/js/dashboard-runtime.js
 
-Then JS reads and parses it:
+out/assets/js/landing-runtime.js
 
-const data = JSON.parse(document.getElementById("repo-data").textContent);
+out/assets/vendor/ (third-party libs vendored locally)
+
+3) Landing page template
+
+Create:
+
+company/dashboards/templates/landing_index.html.j2
+
+Landing page must include:
+
+Hero section aligned to your attached index.html:
+
+Big logo + title + tagline + subtitle rhythm
+
+Glassmorphism background, accent glow, responsive spacing
+
+Use the same design vocabulary (glass cards, tile grids, hover glow, animated subtlety)
+
+Adopt the same accessibility patterns (skip link, focus states, reduced motion) 
+
+index
+
+Repo tiles grid:
+
+Each tile: repo name, owner/org, primary language, risk score badge, last updated, key metrics.
+
+Clicking tile navigates to repos/<repoSlug>/dashboard.html.
+
+Controls:
+
+Search (client-side, no network)
+
+Filter chips (language, risk level, owner/team)
+
+Sort (risk desc, activity desc, alphabetical)
+
+“Pinned” repos section (optional but low effort/high value)
+
+4) Per-repo dashboard template
+
+Create:
+
+company/dashboards/templates/repo_dashboard.html.j2
+
+Must keep visual parity with original dashboards:
+
+No tab reduction that deletes content; if you consolidate tabs, use:
+
+Subtabs, accordions, or “sections within tab”
+
+Maintain all prior charts/diagrams in some form (either same chart type or upgraded)
+
+Include a “Use Cases” tab (see below).
+
+Data Contract (Hardcoded Data Strategy)
+
+Copilot must implement a single data shape used by both landing and per-repo dashboards.
 
 Required objects
-Landing manifest
 
-repos.manifest.json is compiled into root index.html similarly:
+RepoManifest[] used by landing page:
 
-<script type="application/json" id="repos-manifest">[ ... ]</script>
+slug, displayName, path, owner, primaryLanguage
 
+healthScore, riskScore, securityFindingsCount
 
-Each repo in manifest:
-
-slug, displayName, owner, primaryLanguage
-
-healthScore, riskScore
-
-loc, files, servicesCount, coveragePct
+loc, files, servicesCount, testCoveragePct
 
 lastAnalyzedAt, version
 
-tags[] (e.g., “critical”, “regulated”, “customer-facing”)
+RepoDashboardModel used by repo dashboard:
 
-Repo dashboard model (minimum)
+overview metrics
 
-Must include:
+architecture (folders, services, dependency graph)
 
-Overview: metrics cards + trend samples
+quality (complexity, duplication, hotspots)
 
-Architecture: directory treemap / layers / key modules
+security (vuln breakdown)
 
-Dependencies: package list + dependency visualization
+testing (coverage, tests, gaps)
 
-Quality: complexity distribution + hotspots
+useCases (array of use case records, searchable)
 
-Security/Vulnerabilities: severity breakdown + list
+actions (recommendations/backlog items)
 
-Testing: coverage + pyramid + risky areas
+Embed pattern
 
-Use Cases: large list (100+) with search/filter/grouping
+For each generated HTML:
 
-Recommendations: actionable “next steps” cards
+Add <script type="application/json" id="repo-data">...</script> containing the JSON.
 
-This is consistent with the plan/notes you captured and the gaps identified in the GPT dashboard iteration. 
+JS reads it and renders charts.
 
-dashboardcreation
+This avoids messy escaping and keeps file:// safe.
 
-4) Visual design: glassmorphism theme + hero aligned to your index.html
-Landing page hero requirements
+“Use Cases” Tab Requirements (Missing Tab Fix)
 
-Landing dist/index.html must include a large hero (top-of-page) modeled after your attached index.html structure and style vocabulary (big title, subtitle rhythm, glass panels, strong spacing hierarchy). 
+Add a Use Cases tab to each repo dashboard.
+
+Use case data shape
+
+Each use case item:
+
+id, title, persona (Leadership / Production Owner / Engineer / Security / QA)
+
+category (Delivery, Risk, Compliance, Reliability, Cost, Maintainability, Observability)
+
+summary (1–2 lines)
+
+signals[] (what metrics/alerts drive it)
+
+recommendedActions[] (action cards linking to other tabs/sections)
+
+tags[]
+
+severity (info/low/med/high/critical)
+
+UX requirement (handles 100+)
+
+Must be searchable (title + summary + tags)
+
+Must support:
+
+Filter chips (persona/category/severity)
+
+“Saved views” (e.g., Leadership view, Security view)
+
+Grouping strategy:
+
+Default grouping: by persona
+
+Secondary toggle: by category
+
+Each use case is a clickable card that opens a side panel/modal with:
+
+Summary
+
+Evidence signals (charts it depends on)
+
+Jump links to relevant dashboard sections
+
+Diagram Strategy: High-Value Upgrades Without Overengineering
+
+Copilot should keep D3/Chart.js where they fit, but upgrade a few diagrams to increase “enterprise value per pixel”.
+
+Replace low-signal D3 visuals with these higher-signal ones
+
+Dependency Force Graph → “Dependency Risk Map”
+
+Same data, but encode:
+
+Node size = transitive dependency count
+
+Node ring = vulnerability count
+
+Edge thickness = coupling strength
+
+Provide a “focus” click: isolate neighborhood of a service/package.
+
+Basic Treemap → “Hotspot Treemap”
+
+Treemap rectangles sized by LOC, colored by churn/complexity.
+
+Clicking a rectangle drills into file metrics + linked issues.
+
+Simple bars → “Pareto Hotspots (Top 20)”
+
+A ranked bar chart for “top 20 risky files” + cumulative line.
+
+This is leadership-friendly and engineering-actionable.
+
+Any hand-rolled D3 tables → “Virtualized Data Grid”
+
+Use a lightweight local grid for large lists (see library section).
+
+Sorting, filtering, sticky header = instantly more enterprise.
+
+Offline-Friendly Visual Libraries (File:// Safe)
+
+Copilot should vendor libraries locally (copy into out/assets/vendor/ and reference relatively).
+
+Recommended options:
+
+ECharts (excellent interactivity; works locally when vendored)
+
+ApexCharts (nice defaults; small and clean)
+
+Tabulator or Grid.js (tables with sorting/filtering/pagination; good for large use case lists)
+
+Tippy.js (tooltips)
+
+Popper.js (if needed for positioning)
+
+noUiSlider (range filtering like “risk 0–100”)
+
+Lunr.js (client-side search index for use cases and file lists)
+
+D3 stays for custom graphs; keep it but focus on diagrams where D3 adds unique value.
+
+Avoid anything that assumes a server or blocks file://.
+
+Front-End Structure: Reusable Components Without SPA Overkill
+
+Even in plain static HTML, Copilot must modularize.
+
+Required component pattern
+
+Implement small JS “renderers”:
+
+renderHero(container, config)
+
+renderRepoTiles(container, repoManifest[])
+
+renderTabs(container, tabModel)
+
+renderUseCaseSearch(container, useCases[])
+
+renderCharts(model) with per-chart functions
+
+All charts must render only when their tab becomes visible (lazy init) to prevent “canvas is null” and “SVG size 0” bugs.
+
+Mandatory chart-loading safeguards
+
+Copilot must implement:
+
+requestAnimationFrame after tab activation before drawing charts
+
+A ResizeObserver to reflow charts when containers resize
+
+A once() guard so each chart initializes exactly once unless explicitly re-rendered
+
+This is the #1 reason “diagrams don’t load properly” in tabbed UIs.
+
+Can We Build This as an SPA (React/Angular) and Still “Static HTML”?
+
+Yes—as a static build artifact.
+
+Rule
+
+You can use React/Angular only if the output is still:
+
+index.html + bundled JS/CSS in assets/
+
+No runtime server required (you open index.html directly)
+
+Practical guidance (file:// reality check)
+
+Many SPA routers assume server rewrite rules. For file://:
+
+Use hash routing (/#/repo/foo) OR avoid routing and use simple links to per-repo HTML.
+
+Keep it simple:
+
+Landing page = static HTML + JS (no router)
+
+Each repo dashboard = static HTML + JS (no router)
+
+If you still want SPA ergonomics:
+
+Use a component build but emit multiple HTML entry points at build time (landing + each repo). That keeps file:// trivial and avoids routing gotchas.
+
+MCP Exposure Requirements (Production + Multi-Repo)
+
+Copilot must add MCP tools that generate dashboards.
+
+MCP tools to implement
+
+cortex_generate_repo_dashboard
+
+Inputs: repo identifier/path + output dir
+
+Output: path to generated dashboard HTML + summary stats
+
+cortex_generate_dashboard_suite
+
+Inputs: list of repos + output dir
+
+Output:
+
+landing page path
+
+list of repo dashboard paths
+
+manifest JSON path
+
+Output structure
+
+The suite generator must produce:
+
+out/index.html (landing)
+
+out/repos/<repoSlug>/dashboard.html
+
+out/repos/<repoSlug>/data.json (optional; but if used, must still be loaded without fetch—so embed or inline)
+
+out/assets/...
+
+Landing page navigation tiles
+
+Landing tiles must be generated from a repos-manifest.json that is also embedded into landing as application/json (no fetch). Clicking tile opens relative dashboard.
+
+Styling Requirements: Match the Attached Hero + Glass Theme
+
+Copilot must reuse the design patterns present in your index.html:
+
+Glass cards, glow accents, crisp typography, strong spacing hierarchy
+
+Accessibility: skip link, focus rings, reduced motion handling 
 
 index
 
-Hero must include:
-
-cortex-logo.png (local)
-
-Title: “CORTEX Repository Intelligence”
-
-Subtitle: “Offline enterprise dashboards • file:// compatible • MCP-generated”
-
-Primary CTA: “Open a Repository Dashboard” (scrolls to tile grid)
-
-Secondary CTA: “Export Suite Manifest” (downloads JSON)
-
-Sticky header requirements (ALL pages)
-
-Every page (landing + repo dashboards) includes:
-
-Sticky header with:
-
-Logo (left)
-
-Page title
-
-Quick actions:
-
-“Back to landing”
-
-“Export JSON”
-
-“Print”
-
-“Copy link” (works as file path copy)
-
-Header stays readable while scrolling; uses glass blur and subtle border glow.
-
-Back-to-Top component (ALL repo dashboards + landing)
-
-Add a floating button:
-
-Appears after user scrolls > 600px
-
-Smooth scroll to top
-
-Keyboard accessible (tab, enter)
-
-Has aria-label="Back to top"
-
-5) Tabs & drill-down: do not lose original visuals
-
-You may consolidate tabs only if all original visuals still exist somewhere:
-
-If you reduce top-level tabs, use sub-tabs, accordion sections, or “sections within tab”—but do not drop charts. 
-
-dashboardcreation
-
-Mandatory top-level tabs (repo dashboard)
-
-Overview
-
-Architecture
-
-Dependencies
-
-Quality
-
-Vulnerabilities / Security (can be combined with subtabs)
-
-Testing
-
-Use Cases (mandatory; missing previously) 
-
-dashboardcreation
-
-Lens / Patterns / Vendors (optional but recommended if data exists)
-
-6) Use Cases tab: scalable organization strategy (100+)
-
-The Use Cases tab must support:
-
-Search (title + summary + tags) using Fuse.js (vendored locally).
-
-Filters:
-
-Persona: Leadership / Production Owner / Engineer / Security / QA
-
-Category: Delivery / Risk / Compliance / Reliability / Cost / Maintainability / Observability
-
-Severity: info/low/med/high/critical
-
-Grouping:
-
-Default: group by Persona
-
-Toggle: group by Category
-
-Saved Views:
-
-“Leadership View”
-
-“Security View”
-
-“Release Readiness”
-
-Virtualization/pagination for performance:
-
-Use Grid.js or Tabulator to render large lists without DOM choking.
-
-Clicking a use case opens a side drawer (or modal) with:
-
-Summary + signals + recommended actions
-
-Jump links to the relevant charts/sections in other tabs
-
-This directly fixes the “use cases integrated into overview and not scalable” issue. 
-
-dashboardcreation
-
-7) Charting stack: offline-friendly and reliable
-Allowed libraries (vendored locally)
-
-ECharts: primary for interactive charts with drill-down (recommended)
-
-D3: only for visuals that genuinely need it (treemap, sankey, custom graphs)
-
-Chart.js: simple charts where convenient
-
-Grid.js / Tabulator: data grids
-
-Diagram upgrade guidance (high value, low complexity)
-
-Replace/upgrade low-signal D3 diagrams with:
-
-Dependency force graph → “Dependency Risk Map” (still graph, but encode risk + coupling)
-
-Simple directory treemap → “Hotspot Treemap” (size=LOC, color=complexity/churn)
-
-Raw tables → virtualized grid with sort/filter
-
-Add Pareto “Top 20 hotspots” chart for executive clarity
-
-Keep it modern; avoid heavy, fragile custom D3 when ECharts can do it faster.
-
-8) The #1 reliability requirement: charts must render only when visible
-
-A lot of “broken diagrams” comes from initializing charts when:
-
-Tab panel is hidden (width=0)
-
-Element isn’t mounted
-
-ID mismatch
-
-Script loads after init triggers
-
-Mandatory ChartHost component behavior
-
-Implement ChartHost wrapper that:
-
-Waits until container is visible
-
-Initializes chart once
-
-Reflows on resize
-
-Re-renders when tab becomes active
-
-Required mechanics:
-
-IntersectionObserver or “tab activated” events
-
-requestAnimationFrame twice before init (ensures layout settled)
-
-ResizeObserver to call chart.resize()
-
-A per-chart initialized guard
-
-This is a direct prevention strategy for the “diagrams not loading properly” class of issues. 
-
-dashboardcreation
-
-9) Build system: generate multiple dashboards + landing page
-Build pipeline responsibilities
-
-Copilot must implement a build script (Node/TS recommended) that:
-
-Reads repos.manifest.json
-
-For each repo entry:
-
-Loads src/app/data/repos/<slug>.json
-
-Builds a static HTML page at dist/repos/<slug>/index.html
-
-Embeds the JSON into the HTML
-
-Writes landing page at dist/index.html
-
-Embeds repo manifest JSON into landing HTML
-
-Renders tiles pointing to ./repos/<slug>/index.html
-
-Copies cortex-logo.png into dist/images/
-
-Copies vendor libs into dist/assets/vendor/
-
-Ensures all links are relative (file:// safe)
-
-MCP exposure requirement
-
-Add (or extend) MCP tool(s) so production can generate:
-
-One repo dashboard OR
-
-A full suite
-
-Tool contract:
-
-cortex_generate_dashboard_suite(repos: RepoDescriptor[], outDir: string) -> { landingPath, repoDashboards[] }
-
-Must produce the exact folder structure above.
-
-Must be deterministic and safe (no path traversal; outDir constrained).
-
-10) Landing page requirements (tile navigation + hero)
-
-Landing (dist/index.html) must include:
-
-Hero (as above) 
+Performance: preload critical CSS/logo (but avoid unnecessary preload spam) 
 
 index
 
-Repo tile grid with:
+Implementation direction:
 
-Search bar (filters tiles)
+Extract the minimal reusable theme into dashboard-theme.css
 
-Filter chips (language, risk, tags)
+Keep dashboard-specific CSS separate from site-wide docs CSS (avoid collisions)
 
-Sort dropdown (risk desc, activity desc, alphabetical)
+All class names namespaced (e.g., .dash-*, .landing-*) to avoid future bleed
 
-Tile design:
+Acceptance Criteria (Copilot must validate)
 
-Repo name + owner
+Suite generation produces:
 
-Badges: risk, health
+landing + N dashboards
 
-Quick metrics: LOC, files, coverage
+all open correctly via file://
 
-“Open dashboard” button linking to repo page
+Landing page:
 
-11) SOLID + DRY implementation rules (Copilot guardrails)
-
-Copilot must follow:
-
-Single Responsibility: each component renders one thing well.
-
-Open/Closed: adding a new chart/tab doesn’t require rewriting tab system.
-
-Dependency Inversion: pages depend on interfaces (RepoDashboardModel) not hardcoded shapes.
-
-DRY:
-
-No repeated chart init logic in multiple places; all through ChartHost.
-
-No repeated card markup; use MetricCard, InfoCard, SeverityCard.
-
-Shared theme tokens in one place (tokens.css).
-
-12) Testing & validation (must exist even for static)
-
-Add a basic test harness so regressions don’t creep back:
-
-Validate build output exists:
-
-dist/index.html
-
-dist/repos/<slug>/index.html for each repo
-
-dist/images/cortex-logo.png
-
-Validate all script/src/href references are relative and resolve
-
-Validate chart containers exist for expected tab panels
-
-Optional: run Playwright in headless mode to open file URLs and assert no console errors
-
-This lines up with your broader “enterprise-grade” expectation from the plan and notes. 
-
-dashboardcreation
-
-13) Copilot execution plan (what to do, in order)
-Phase A — Project scaffold
-
-Create company/dashboards/spa/ with Vite + React + TS.
-
-Add shared theme CSS implementing dark glassmorphism.
-
-Copy company/.../cortex-logo.png into public/images/.
-
-Phase B — Core UI components
-
-Implement Header (sticky, logo, actions).
-
-Implement BackToTop.
-
-Implement Tabs with ARIA + keyboard navigation.
-
-Implement cards + badges.
-
-Phase C — Chart reliability layer
-
-Implement ChartHost with the visibility guards + ResizeObserver + lazy init.
-
-Vendor libs into src/vendor/ and configure Vite to copy to dist.
-
-Phase D — Landing page
-
-Implement hero modeled after attached index.html hero patterns. 
+hero present and visually aligned with index.html 
 
 index
 
-Implement tile grid, search/filter/sort.
+tiles render, search/filter works
 
-Phase E — Repo dashboard page
+Repo dashboards:
 
-Implement required tabs and ensure visual parity (no dropped visuals). 
+all original visualizations remain (or upgraded), none silently removed
 
-dashboardcreation
+“Use Cases” tab exists and supports 100+ use cases with search + grouping
 
-Implement Use Cases tab (search/filter/group/drawer).
+No console errors:
 
-Phase F — Static suite generator
+charts render after tab open
 
-Implement build script that emits:
+no missing assets
 
-Root landing dist/index.html
+“Enterprise usability”:
 
-Per repo pages dist/repos/<slug>/index.html
+drill-down interactions exist (click a hotspot -> show details panel)
 
-Embeds JSON into each HTML
+export button exists (download JSON, or copy-to-clipboard) for offline sharing
 
-Ensure only root has index.html—repo indexes only under repos/.
+What Copilot Should Not Do
 
-Phase G — MCP exposure
+Don’t add a backend.
 
-Implement cortex_generate_dashboard_suite tool:
+Don’t rely on CDNs.
 
-Accept repos + output dir
+Don’t fetch JSON at runtime.
 
-Invokes the same generator and writes to out dir
+Don’t add a complex SPA router unless using hash routing and it’s truly needed.
 
-Returns list of output paths
+Don’t remove diagrams just to reduce tabs—use subtabs/accordions instead.
 
-14) Final acceptance checklist (Copilot must verify)
-
- Double-click dist/index.html and everything works (file://)
-
- Clicking any repo tile opens dist/repos/<slug>/index.html
-
- Sticky header shows cortex-logo.png and stays on scroll
-
- Back-to-top button appears and works
-
- No console errors
-
- Charts load only when their tab is opened (no blank charts---
-
-If you want, Copilot can also generate a sample dataset for 2–3 repos (small/medium/enterprise tiers) so you can validate that the UI holds up under scale—without changing the “hardcoded JSON per repo” rule.
+If you want this to feel ridiculously polished without adding complexity, the single highest-leverage move is: landing page + tiles + “Use Cases” search + drill-down side panels. That’s the “enterprise vibe” sweet spot: executive-friendly, operator-friendly, engineer-actionable—without turning the repo into a frontend framework war.
