@@ -12,6 +12,7 @@ Available Analyzers:
 - APIAnalyzer: API endpoint security analysis
 - DependencyAnalyzer: Dependency vulnerability analysis
 - VendorDetector: Third-party vendor dependency detection (Phase 19)
+- DatabaseCrawlerPlugin: Abstract interface for database schema extraction (Phase 19)
 
 Authority: CORE-035 (Consolidation)
 """
@@ -30,6 +31,12 @@ from cortex.lens.analyzers.dependency_analyzer import (
     get_dependency_analyzer,
 )
 from cortex.lens.analyzers.vendor_detector import VendorDetector, get_vendor_detector
+from cortex.lens.analyzers.database_crawler_plugin import (
+    DatabaseCrawlerPlugin,
+    SchemaEntity,
+    DatabaseConnection,
+    get_database_crawler_plugin,
+)
 
 __all__ = [
     "ASTAnalyzer",
@@ -45,4 +52,8 @@ __all__ = [
     "get_dependency_analyzer",
     "VendorDetector",
     "get_vendor_detector",
+    "DatabaseCrawlerPlugin",
+    "SchemaEntity",
+    "DatabaseConnection",
+    "get_database_crawler_plugin",
 ]
