@@ -1,12 +1,10 @@
 # CORTEX Architect Prompt
-**Version:** 13.1 | **Updated:** 2026-02-03 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + EXEC) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
+**Updated:** 2026-02-03 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + EXEC) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
 
-**Changelog (v13.1):**
+**Recent Changes:**
 - ✅ Added VacuumAgent integration - P3 cleanup automation (markdown sprawl, archives)
 - ✅ Fixed pytest_plugins configuration - moved to root conftest
 - ✅ Created docs/archive/ structure with 40+ historical documents
-
-**Changelog (v13.0):**
 - ✅ Added Learning Extraction (Step 9) - mandatory for all DESIGN/EXEC completions
 - ✅ Added Frontend TDD Standards - Vitest/Playwright guidance
 - ✅ Enhanced Challenge Template - regression prevention with similarity scoring
@@ -229,7 +227,7 @@ User Request → PRE-FLIGHT CHECK
 |-------|-------------|
 | Section Clarity | All sections have clear purpose and non-overlapping scope |
 | Rule Specificity | CORE rules have measurable criteria (not vague) |
-| Version Sync | Prompt version matches agent versions |
+| Update Sync | Prompt updates aligned with agent behaviors |
 | Example Freshness | Code examples reference current orchestrators (not deprecated) |
 
 ### Agent Coherence
@@ -835,9 +833,9 @@ rejected_recommendations:
 | **No Recursion** | Meta-audit cannot trigger another meta-audit (max depth = 1) |
 | **Evidence-Based** | All recommendations cite Implementation Truth (CORE-030) |
 | **User Control** | No auto-modifications to prompt/agents without approval |
-| **Version Tracking** | All changes update version number and changelog |
+| **Change Tracking** | All changes documented with update dates and changelog |
 | **Feedback Loop** | Outcomes tracked in registry for continuous learning |
 
 ---
 
-*v13.0 — Learning Extraction: Mandatory lessons capture for all completions. Frontend TDD standards. Enhanced Challenge with regression prevention.*
+*CORTEX Architect — Learning Extraction: Mandatory lessons capture for all completions. Frontend TDD standards. Enhanced Challenge with regression prevention.*

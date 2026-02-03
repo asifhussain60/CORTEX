@@ -1,67 +1,69 @@
 metadata:
   title: "CORTEX Registry Manifest"
-  version: "1.0"
+  version: "2.0"
   created: "2026-01-21"
+  updated: "2026-02-03"
   authority: "cortex-registry-001-migration"
+  cleanup: "cortex-architect-v13.1"
 
 structure:
   master:
-    description: "Master plans with highest authority"
+    description: "Master orchestrator configurations"
     location: "cortex-registry/master/"
-    purpose: "System-wide strategic plans"
+    purpose: "System-wide orchestrator strategic configs"
     content_type: "*.yaml"
+    usage: "MasterOrchestrator, site infrastructure"
     
   planning:
-    description: "Planning documents and roadmaps"
+    description: "Planning documents and phase tracking"
     location: "cortex-registry/planning/"
-    purpose: "Development roadmaps, sprint plans"
+    purpose: "Development roadmaps, phase completion docs"
     content_type: "*.yaml, *.md"
-    
-  ado:
-    description: "Azure DevOps integration"
-    location: "cortex-registry/ado/"
-    purpose: "ADO work items, sprints"
-    content_type: "*.yaml"
+    usage: "PlanningOrchestrator, PlanningRegistryLoader"
     
   interaction:
-    description: "Interaction patterns and protocols"
+    description: "Communication patterns and protocols"
     location: "cortex-registry/interaction/"
-    purpose: "Communication patterns, event flows"
+    purpose: "Orchestrator-to-orchestrator communication patterns"
     content_type: "*.yaml"
+    usage: "InteractionOrchestrator, PatternEnforcer"
+    active_patterns:
+      - "request-response.yaml"
+      - "event-driven.yaml"
+      - "pub-sub.yaml"
+      - "orchestrator-coordination.yaml"
     
   domains:
     description: "Domain-specific registries"
     location: "cortex-registry/domains/"
-    purpose: "Segregated registries per business domain"
-    content_type: "folders with domain/ structure"
-    substructure:
-      - "master/"
-      - "planning/"
-      - "ado/"
-      - "interaction/"
+    purpose: "Business domain segregation"
+    content_type: "index.yaml"
+    usage: "PlanningRegistryLoader, domain orchestrators"
 
 registry_access:
   master_orchestrator:
-    - "cortex-registry/master/"
-    - authority: "highest"
+    paths:
+      - "cortex-registry/master/"
+    authority: "highest"
     
   planning_orchestrator:
-    - "cortex-registry/planning/"
-    - "cortex-registry/domains/*/planning/"
-    - authority: "medium-high"
-    
-  ado_orchestrator:
-    - "cortex-registry/ado/"
-    - "cortex-registry/domains/*/ado/"
-    - authority: "medium"
+    paths:
+      - "cortex-registry/planning/"
+    authority: "phase tracking"
     
   interaction_orchestrator:
-    - "cortex-registry/interaction/"
-    - "cortex-registry/domains/*/interaction/"
-    - authority: "medium"
+    paths:
+      - "cortex-registry/interaction/"
+    authority: "pattern enforcement"
+    
+  domain_orchestrators:
+    paths:
+      - "cortex-registry/domains/"
+    authority: "domain-specific"
 
-migration_status:
-  _workspaces_roadmap: "Ready for archival"
-  cortex_registry: "ACTIVE"
-  cutover_date: "2026-01-21"
-  backward_compatibility: "Symlinks maintained during transition"
+removed_in_v2:
+  deployment:
+    reason: "Duplicate of /deployment root folder"
+    archived_to: "docs/archive/cortex-registry-removed/deployment/"
+    date_removed: "2026-02-03"
+    files: "canary_config.yaml, health_checks.yaml, grafana/, prometheus/"
