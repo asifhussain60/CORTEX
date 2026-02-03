@@ -27,7 +27,8 @@ from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.execution.exec_gateway_impl import GovernanceViolationError
 from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository
-from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
+from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine, get_synthesis_engine
+from cortex.brain.knowledge.unified_intelligence_context import UnifiedIntelligenceContext
 from cortex.brain.core.state_manager import StateManager, OperationState, get_state_manager
 from cortex.domain_brain.business_knowledge_repository import (
     BusinessKnowledgeRepository
@@ -146,6 +147,8 @@ class MasterOrchestrator(IOrchestrator):
         self.interaction_orchestrator: Optional[IOrchestrator] = None
         # Stage 2: Intent Router
         self.intent_router: Optional[IOrchestrator] = None
+        # Stage 2.5: Knowledge Synthesis Engine (Phase 20.5)
+        self._synthesis_engine: KnowledgeSynthesisEngine = get_synthesis_engine()
         # Stage 3 Registry: Orchestrator registry for delegation
         self.orchestrator_registry: Dict[str, IOrchestrator] = {}
         
@@ -566,12 +569,18 @@ class MasterOrchestrator(IOrchestrator):
     
     def _stage_2_routing(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Stage 2: Route request with LENS auto-fetch integration.
+        Stage 2: Route request with unified intelligence synthesis.
         
         Phase 20 Component #4: MasterOrchestrator LENS Integration
+        Phase 20.5 Component #3: Knowledge Synthesis at Stage 2
         
-        Automatically fetches LENS context via IntentRouter.route_with_lens_auto_fetch().
-        Uses cache-first strategy from LENSContextProvider.
+        Workflow:
+        1. Classify intent via IntentRouter
+        2. Fetch LENS context (Phase 20)
+        3. Synthesize unified intelligence (Phase 20.5) - LENS + Company + CORTEX
+        4. Detect violations early (prevent vs detect)
+        5. Provide proactive guidance
+        6. Return enhanced routing decision with citations
         
         Args:
             request: Request dictionary with:
@@ -588,17 +597,13 @@ class MasterOrchestrator(IOrchestrator):
                 - target_orchestrator: Target orchestrator name
                 - confidence_score: Routing confidence
                 - reasoning: Routing explanation
-                - context: Enhanced context with LENS insights if fetched
+                - context: Enhanced context with unified intelligence
+                - unified_intelligence: UnifiedIntelligenceContext (Phase 20.5)
+                - cited_rules: List of rules cited
+                - violations: List of detected violations
+                - guidance: Proactive guidance for engineer
         
-        Example:
-            request = {
-                "operation": "IMPLEMENT",
-                "description": "Add authentication",
-                "file_path": "/app/auth.py",
-                "company_name": "AcmeCorp"
-            }
-            result = master._stage_2_routing(request)
-            # Result includes lens_insights if fetched
+        Authority: AC-PHASE-20-COMPONENT-4, AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
         """
         try:
             # Ensure IntentRouter is initialized
@@ -617,8 +622,69 @@ class MasterOrchestrator(IOrchestrator):
                 "context": request.get("context", {})
             }
             
-            # Call IntentRouter with LENS auto-fetch
+            # Call IntentRouter with LENS auto-fetch (Phase 20)
             result = self.intent_router.route_with_lens_auto_fetch(routing_request)
+            intent_type = result.get("intent", "UNKNOWN")
+            
+            # Phase 20.5: Synthesize unified intelligence context
+            try:
+                # Extract LENS intelligence from result
+                from cortex.brain.knowledge.unified_intelligence_context import (
+                    LENSIntelligence,
+                    CompanyKnowledge,
+                )
+                
+                lens_context = result.get("context", {}).get("lens_insights", {})
+                lens_intelligence = LENSIntelligence(
+                    git_analysis=lens_context.get("git_analysis", {}),
+                    ast_analysis=lens_context.get("ast_analysis", {}),
+                    comment_analysis=lens_context.get("comment_analysis", {})
+                )
+                
+                # Extract company knowledge from result
+                company_context = lens_context.get("company_knowledge", {})
+                company_knowledge = CompanyKnowledge(
+                    domain_rules=company_context.get("domain_rules", {}),
+                    compliance_standards=company_context.get("compliance_standards", []),
+                    precedence="OVERRIDE"
+                )
+                
+                # Synthesize unified intelligence
+                unified_context = self._synthesis_engine.synthesize_unified_context(
+                    intent_type=intent_type,
+                    lens_intelligence=lens_intelligence,
+                    company_knowledge=company_knowledge,
+                    file_path=request.get("file_path")
+                )
+                
+                # Enhance result with unified intelligence
+                result["unified_intelligence"] = unified_context.to_dict()
+                result["cited_rules"] = unified_context.get_cited_rules()
+                result["violations"] = unified_context.get_violations()
+                result["guidance"] = unified_context.get_guidance()
+                
+                # Log synthesis activity
+                self.logger.log_operation_complete(
+                    ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                    operation="STAGE_2_UNIFIED_SYNTHESIS",
+                    success=True,
+                    details={
+                        "intent": intent_type,
+                        "cited_rules_count": len(unified_context.get_cited_rules()),
+                        "violations_count": len(unified_context.get_violations()),
+                        "guidance_count": len(unified_context.get_guidance()),
+                        "cortex_practices_loaded": len(unified_context.cortex_knowledge.best_practices),
+                    }
+                )
+                
+            except Exception as synthesis_err:
+                # Fail-safe: Continue without synthesis
+                self.logger.log_operation_complete(
+                    ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                    operation="STAGE_2_UNIFIED_SYNTHESIS_FAILED",
+                    success=False,
+                    details={"error": str(synthesis_err)}
+                )
             
             # Log LENS integration activity
             lens_fetched = "lens_insights" in result.get("context", {})
