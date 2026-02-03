@@ -1104,6 +1104,106 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             logger.error("Dashboard generation failed: %s", e, exc_info=True)
             return None
     
+    def _update_company_domains(
+        self,
+        lens_context: Dict[str, Any],
+        repo_path: Path,
+    ) -> Dict[str, Any]:
+        """
+        Update company domain YAMLs with snowball effect.
+        
+        This method implements the Phase 19 "snowball effect":
+        - Each repository scan enriches existing domain knowledge
+        - Merges new entities, patterns, vendors with existing data
+        - Respects company precedence (company YAMLs override CORTEX)
+        - Creates YAML files in company/domains/{repo_name}/
+        
+        Args:
+            lens_context: LENS holistic analysis result
+            repo_path: Path to repository
+            
+        Returns:
+            Dict with:
+                - created_files: List of new YAML files created
+                - updated_files: List of existing files updated
+                - entities_added: Count of new entities
+                - patterns_promoted: Count of patterns promoted to Tier 2
+                
+        Note:
+            This is a placeholder implementation for Phase 19 integration.
+            Full implementation requires DomainKnowledgeMerger orchestrator.
+        """
+        repo_name = repo_path.name
+        domain_dir = Path("company/domains") / repo_name
+        domain_dir.mkdir(parents=True, exist_ok=True)
+        
+        result = {
+            "created_files": [],
+            "updated_files": [],
+            "entities_added": 0,
+            "patterns_promoted": 0,
+        }
+        
+        # Extract entities from LENS context
+        entities = lens_context.get("entities", [])
+        if entities:
+            entities_yaml = domain_dir / "entities.yaml"
+            
+            # Merge with existing (snowball effect)
+            existing_entities = []
+            if entities_yaml.exists():
+                import yaml
+                try:
+                    with open(entities_yaml, "r") as f:
+                        existing_data = yaml.safe_load(f) or {}
+                        existing_entities = existing_data.get("entities", [])
+                except Exception as e:
+                    logger.warning(f"Could not load existing entities.yaml: {e}")
+            
+            # Merge (preserve existing, add new)
+            all_entities = list(set(existing_entities + entities))
+            result["entities_added"] = len(all_entities) - len(existing_entities)
+            
+            # Write back
+            import yaml
+            with open(entities_yaml, "w") as f:
+                yaml.dump({"entities": all_entities}, f)
+            
+            if entities_yaml in result["created_files"] or entities_yaml.exists():
+                result["updated_files"].append(str(entities_yaml))
+            else:
+                result["created_files"].append(str(entities_yaml))
+        
+        # Extract patterns
+        patterns = lens_context.get("patterns", {})
+        if patterns:
+            patterns_yaml = domain_dir / "patterns.yaml"
+            
+            with open(patterns_yaml, "w") as f:
+                import yaml
+                yaml.dump(patterns, f)
+            
+            result["created_files"].append(str(patterns_yaml))
+            result["patterns_promoted"] = len(patterns.get("learned", []))
+        
+        # Extract vendors
+        vendors = lens_context.get("vendors", [])
+        if vendors:
+            vendors_yaml = domain_dir / "vendors.yaml"
+            
+            with open(vendors_yaml, "w") as f:
+                import yaml
+                yaml.dump({"vendors": vendors}, f)
+            
+            result["created_files"].append(str(vendors_yaml))
+        
+        logger.info(
+            f"Company domain update: {result['entities_added']} entities added, "
+            f"{result['patterns_promoted']} patterns promoted"
+        )
+        
+        return result
+    
     def _prioritize_recommendations(
         self,
         security_model: Dict[str, Any],
