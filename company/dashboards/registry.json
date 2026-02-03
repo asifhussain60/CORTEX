@@ -47,10 +47,42 @@
             "icon": "🔍",
             "tags": ["lens", "security", "analysis"],
             "last_analyzed_at": "2026-02-02T08:00:00Z"
+        },
+        {
+            "slug": "ksessions",
+            "display_name": "KSESSIONS",
+            "description": "Session management and orchestration system with comprehensive audit logging and governance capabilities.",
+            "owner": "Session Management",
+            "primary_language": "Python",
+            "health_score": 79,
+            "risk_score": 35,
+            "loc": 28500,
+            "files": 319,
+            "coverage_pct": 68,
+            "version": "2.1",
+            "icon": "🔐",
+            "tags": ["sessions", "governance", "audit"],
+            "last_analyzed_at": "2026-02-03T11:45:48Z"
+        },
+        {
+            "slug": "kashkole",
+            "display_name": "Kashkole",
+            "description": "Repository simulation and testing framework for validation and experimentation.",
+            "owner": "Testing Team",
+            "primary_language": "Python",
+            "health_score": 75,
+            "risk_score": 40,
+            "loc": 15000,
+            "files": 125,
+            "coverage_pct": 65,
+            "version": "1.5",
+            "icon": "🧪",
+            "tags": ["testing", "simulation"],
+            "last_analyzed_at": "2026-02-02T10:30:00Z"
         }
     ],
-    "generated_at": "2026-02-02T08:35:00Z",
-    "version": "9.0",
-    "total_loc": 202000,
-    "avg_health": 85
+    "generated_at": "2026-02-03T15:05:00Z",
+    "version": "9.1",
+    "total_loc": 245500,
+    "avg_health": 82
 }

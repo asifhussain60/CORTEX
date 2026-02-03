@@ -525,6 +525,31 @@ orchestrators:
         - "CORE-030"
         - "CORE-035"
 
+    - name: "DebuggingOrchestrator"
+      module: "cortex.orchestrators.support.debugging_orchestrator"
+      class: "DebuggingOrchestrator"
+      tier: 3
+      priority: 75
+      dependencies: []
+      capabilities:
+        - smart_debug_injection
+        - marker_based_cleanup
+        - session_management
+        - ast_based_analysis
+        - sensitive_value_exclusion
+        - correlation_id_tracking
+      health_check: "execute_operation"
+      description: "Smart Debug Injection System for CORTEX-assisted debugging with surgical cleanup"
+      mcp_tools:
+        - "cortex_debug_inject"
+        - "cortex_debug_cleanup"
+        - "cortex_debug_status"
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+        - "CORE-027"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------

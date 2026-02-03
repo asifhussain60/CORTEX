@@ -455,64 +455,10 @@
         </footer>
     </div>
     
-    <!-- Registry Data -->
-    <script type="application/json" id="registry-data">
-    {
-        "repos": [
-            {
-                "slug": "cortex",
-                "display_name": "CORTEX",
-                "description": "COgnitive Real-Time EXecution System - Enterprise Code Intelligence Platform with MCP-first architecture, 23 orchestrators, and unified LENS analysis.",
-                "owner": "Enterprise Architecture",
-                "primary_language": "Python",
-                "health_score": 85,
-                "risk_score": 25,
-                "loc": 125000,
-                "files": 850,
-                "coverage_pct": 78,
-                "version": "9.0",
-                "icon": "🧠",
-                "tags": ["critical", "platform", "mcp"],
-                "last_analyzed_at": "2026-02-02T08:00:00Z"
-            },
-            {
-                "slug": "cortex-brain",
-                "display_name": "CORTEX Brain",
-                "description": "Domain orchestration layer with tier-based governance and intelligent routing capabilities.",
-                "owner": "Core Platform",
-                "primary_language": "Python",
-                "health_score": 82,
-                "risk_score": 30,
-                "loc": 45000,
-                "files": 280,
-                "coverage_pct": 72,
-                "version": "4.0",
-                "icon": "🔮",
-                "tags": ["core", "governance"],
-                "last_analyzed_at": "2026-02-02T08:00:00Z"
-            },
-            {
-                "slug": "cortex-lens",
-                "display_name": "CORTEX LENS",
-                "description": "Unified code intelligence with security scanning, quality analysis, and architectural insights.",
-                "owner": "DevX Team",
-                "primary_language": "Python",
-                "health_score": 88,
-                "risk_score": 20,
-                "loc": 32000,
-                "files": 180,
-                "coverage_pct": 85,
-                "version": "3.0",
-                "icon": "🔍",
-                "tags": ["lens", "security", "analysis"],
-                "last_analyzed_at": "2026-02-02T08:00:00Z"
-            }
-        ],
-        "generated_at": "2026-02-02T08:35:00Z",
-        "version": "9.0",
-        "total_loc": 202000,
-        "avg_health": 85
-    }
+    <!-- Registry Data Loader -->
+    <script id="registry-loader">
+    // Placeholder for dynamic loading
+    window.registryData = null;
     </script>
     
     <!-- Vendor Scripts -->
@@ -523,26 +469,51 @@
     (function() {
         'use strict';
         
-        // Load registry data
-        const registryScript = document.getElementById('registry-data');
+        // Load registry data from registry.json
         let registry = { repos: [], generated_at: null };
-        
-        try {
-            registry = JSON.parse(registryScript.textContent);
-        } catch (e) {
-            console.error('Failed to parse registry data:', e);
-        }
-        
-        const repos = registry.repos || [];
-        let filteredRepos = [...repos];
+        let repos = [];
+        let filteredRepos = [];
         let fuse = null;
         
-        // Initialize Fuse.js for search
-        if (typeof Fuse !== 'undefined' && repos.length > 0) {
-            fuse = new Fuse(repos, {
-                keys: ['display_name', 'slug', 'owner', 'primary_language', 'tags'],
-                threshold: 0.3
-            });
+        // Fetch and parse registry
+        async function loadRegistry() {
+            try {
+                const response = await fetch('./registry.json');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                registry = await response.json();
+                repos = registry.repos || [];
+                filteredRepos = [...repos];
+                
+                // Initialize Fuse.js for search
+                if (typeof Fuse !== 'undefined' && repos.length > 0) {
+                    fuse = new Fuse(repos, {
+                        keys: ['display_name', 'slug', 'owner', 'primary_language', 'tags'],
+                        threshold: 0.3
+                    });
+                }
+                
+                // Render page
+                renderStats();
+                renderRepos();
+                attachEventListeners();
+                
+                console.log('✅ CORTEX Landing initialized with', repos.length, 'repositories');
+            } catch (e) {
+                console.error('Failed to load registry:', e);
+                showError('Failed to load repository data. Please refresh the page.');
+            }
+        }
+        
+        // Show error state
+        function showError(message) {
+            const grid = document.getElementById('repo-grid');
+            grid.innerHTML = `
+                <div class="no-data no-repos">
+                    <div class="no-data__icon">⚠️</div>
+                    <div class="no-data__title">Error Loading Dashboard</div>
+                    <div class="no-data__description">${escapeHtml(message)}</div>
+                </div>
+            `;
         }
         
         // Render global stats
@@ -638,40 +609,43 @@
             `;
         }
         
-        // Search handler
-        document.getElementById('repo-search').addEventListener('input', debounce(function(e) {
-            const query = e.target.value.trim();
+        // Attach event listeners
+        function attachEventListeners() {
+            // Search handler
+            document.getElementById('repo-search').addEventListener('input', debounce(function(e) {
+                const query = e.target.value.trim();
+                
+                if (!query) {
+                    filteredRepos = [...repos];
+                } else if (fuse) {
+                    filteredRepos = fuse.search(query).map(r => r.item);
+                } else {
+                    const lowerQuery = query.toLowerCase();
+                    filteredRepos = repos.filter(r => 
+                        r.display_name?.toLowerCase().includes(lowerQuery) ||
+                        r.slug?.toLowerCase().includes(lowerQuery)
+                    );
+                }
+                
+                applyCurrentFilter();
+                renderRepos();
+            }, 200));
             
-            if (!query) {
-                filteredRepos = [...repos];
-            } else if (fuse) {
-                filteredRepos = fuse.search(query).map(r => r.item);
-            } else {
-                const lowerQuery = query.toLowerCase();
-                filteredRepos = repos.filter(r => 
-                    r.display_name?.toLowerCase().includes(lowerQuery) ||
-                    r.slug?.toLowerCase().includes(lowerQuery)
-                );
-            }
-            
-            applyCurrentFilter();
-            renderRepos();
-        }, 200));
+            // Filter handlers
+            document.getElementById('filter-bar').addEventListener('click', function(e) {
+                const btn = e.target.closest('.filter-btn');
+                if (!btn) return;
+                
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentFilter = btn.dataset.filter;
+                applyCurrentFilter();
+                renderRepos();
+            });
+        }
         
-        // Filter handlers
         let currentFilter = 'all';
-        
-        document.getElementById('filter-bar').addEventListener('click', function(e) {
-            const btn = e.target.closest('.filter-btn');
-            if (!btn) return;
-            
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            currentFilter = btn.dataset.filter;
-            applyCurrentFilter();
-            renderRepos();
-        });
         
         function applyCurrentFilter() {
             let base = document.getElementById('repo-search').value.trim() 
@@ -720,11 +694,12 @@
             };
         }
         
-        // Initialize
-        renderStats();
-        renderRepos();
-        
-        console.log('✅ CORTEX Landing initialized with', repos.length, 'repositories');
+        // Initialize on load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadRegistry);
+        } else {
+            loadRegistry();
+        }
     })();
     </script>
 </body>
