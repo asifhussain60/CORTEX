@@ -560,6 +560,101 @@ class MasterOrchestrator(IOrchestrator):
         """
         return self._adaptive_router
     
+    def _get_intent_router(self):
+        """Get IntentRouter instance (for testing/mocking)."""
+        return self.intent_router
+    
+    def _stage_2_routing(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Stage 2: Route request with LENS auto-fetch integration.
+        
+        Phase 20 Component #4: MasterOrchestrator LENS Integration
+        
+        Automatically fetches LENS context via IntentRouter.route_with_lens_auto_fetch().
+        Uses cache-first strategy from LENSContextProvider.
+        
+        Args:
+            request: Request dictionary with:
+                - operation: Operation name/intent
+                - description: Operation description
+                - file_path: Optional file path for LENS analysis
+                - company_name: Optional company name for company knowledge
+                - domain: Optional target domain
+                - keywords: Optional keywords list
+        
+        Returns:
+            Dict[str, Any]: Routing result with:
+                - intent: Detected intent type
+                - target_orchestrator: Target orchestrator name
+                - confidence_score: Routing confidence
+                - reasoning: Routing explanation
+                - context: Enhanced context with LENS insights if fetched
+        
+        Example:
+            request = {
+                "operation": "IMPLEMENT",
+                "description": "Add authentication",
+                "file_path": "/app/auth.py",
+                "company_name": "AcmeCorp"
+            }
+            result = master._stage_2_routing(request)
+            # Result includes lens_insights if fetched
+        """
+        try:
+            # Ensure IntentRouter is initialized
+            if not self.intent_router:
+                from cortex.orchestrators.core.intent_router import IntentRouter
+                self.intent_router = IntentRouter()
+            
+            # Prepare request for route_with_lens_auto_fetch
+            routing_request = {
+                "intent": request.get("operation", ""),
+                "description": request.get("description", ""),
+                "file_path": request.get("file_path"),
+                "company_name": request.get("company_name"),
+                "domain": request.get("domain"),
+                "keywords": request.get("keywords"),
+                "context": request.get("context", {})
+            }
+            
+            # Call IntentRouter with LENS auto-fetch
+            result = self.intent_router.route_with_lens_auto_fetch(routing_request)
+            
+            # Log LENS integration activity
+            lens_fetched = "lens_insights" in result.get("context", {})
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-20-COMPONENT-4",
+                operation="STAGE_2_LENS_INTEGRATION",
+                success=True,
+                details={
+                    "intent": result.get("intent"),
+                    "target_orchestrator": result.get("target_orchestrator"),
+                    "lens_fetched": lens_fetched,
+                    "company_name": request.get("company_name"),
+                    "file_path": request.get("file_path")
+                }
+            )
+            
+            return result
+            
+        except Exception as e:
+            # Fail-safe: Return basic routing result
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-20-COMPONENT-4",
+                operation="STAGE_2_LENS_INTEGRATION_FAILED",
+                success=False,
+                details={"error": str(e)}
+            )
+            
+            # Return minimal valid result
+            return {
+                "intent": request.get("operation", "UNKNOWN"),
+                "target_orchestrator": "MasterOrchestrator",
+                "confidence_score": 0.0,
+                "reasoning": f"Stage 2 error: {str(e)}",
+                "context": request.get("context", {})
+            }
+    
     def get_initialization_status(self) -> Dict[str, Any]:
         """Get initialization status of all components.
         
