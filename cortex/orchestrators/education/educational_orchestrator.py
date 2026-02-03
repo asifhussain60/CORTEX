@@ -94,7 +94,7 @@ class EducationalOrchestrator(IOrchestrator):
     
     def __init__(self):
         """Initialize Educational Orchestrator."""
-        self.logger = EnhancedAuditLogger(component="EducationalOrchestrator")
+        self.logger = EnhancedAuditLogger.instance()
         self._conversation_contexts: Dict[str, EducationalContext] = {}
         
         self.logger.log_operation_start(
@@ -546,3 +546,86 @@ Extension Points:
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "EducationalOrchestrator"
+    
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        return "1.0.0"
+    
+    def initialize(self) -> Result[str]:
+        """Initialize orchestrator."""
+        try:
+            self.logger.log_operation_start(
+                ac_id="AC-EDUCATIONAL-INTERACTION-001",
+                operation="INITIALIZE",
+                details={}
+            )
+            
+            # Initialize conversation contexts
+            self._conversation_contexts = {}
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-EDUCATIONAL-INTERACTION-001",
+                operation="INITIALIZE",
+                success=True
+            )
+            
+            return Ok("EducationalOrchestrator initialized")
+        except Exception as e:
+            return Err(f"Initialization failed: {str(e)}")
+    
+    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
+        """Get exposed MCP tools for educational interaction."""
+        tools = {
+            "cortex_ask": {
+                "name": "cortex_ask",
+                "description": "Ask educational questions about CORTEX architecture",
+                "parameters": {
+                    "query": {
+                        "type": "string",
+                        "description": "Educational question to ask",
+                        "required": True
+                    },
+                    "knowledge_level": {
+                        "type": "string",
+                        "description": "User knowledge level (beginner/intermediate/advanced)",
+                        "required": False,
+                        "enum": ["beginner", "intermediate", "advanced"]
+                    },
+                    "history": {
+                        "type": "array",
+                        "description": "Conversation history for context",
+                        "required": False
+                    }
+                },
+                "returns": {
+                    "title": "string",
+                    "implementation_reality": "string",
+                    "evidence": "array",
+                    "explanation": "string",
+                    "next_steps": "array",
+                    "knowledge_level": "string"
+                }
+            }
+        }
+        
+        return Ok(tools)
+    
+    def execute_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """Execute named operation with audit logging."""
+        if operation_name == "ask":
+            return self.execute(parameters)
+        else:
+            return Err(f"Unknown operation: {operation_name}")
+    
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """Get audit trail with hash chain."""
+        try:
+            # Retrieve audit logs from logger
+            audit_trail = self.logger.get_recent_logs(limit)
+            return Ok(audit_trail)
+        except Exception as e:
+            return Err(f"Failed to retrieve audit trail: {str(e)}")

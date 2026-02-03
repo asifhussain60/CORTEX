@@ -22,6 +22,7 @@ class OperationMode(Enum):
     EXECUTION = auto()
     VALIDATION = auto()
     RECOVERY = auto()
+    EDUCATIONAL = auto()  # Phase 22: ASK Mode
 
 
 class IOrchestrator(ABC):
