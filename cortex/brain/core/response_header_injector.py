@@ -17,6 +17,14 @@ from .response_header_config import HeaderConfigurationManager
 import re
 import yaml
 
+# Phase 20.2: Orchestrator Visibility Enhancement
+from cortex.observability.visibility_controller import (
+    get_visibility_controller,
+    OrchestratorContext,
+    IntelligenceFlags,
+    VisibilityMode,
+)
+
 # Note: ResponseTemplateEngine stub removed (CORE-035 consolidation)
 # Response formatting now handled by scaffolder_templates or orchestrator-specific templates
 
@@ -233,6 +241,9 @@ class ResponseHeaderInjector:
         self.engine = template_engine
         self.config_manager = config_manager or HeaderConfigurationManager.get_instance()
         self._render_cache: Dict[str, str] = {}
+        
+        # Phase 20.2: Orchestrator Visibility Controller
+        self._visibility_controller = get_visibility_controller()
 
     def render(self, domain_id: str, template_name: str, context: Dict[str, Any]) -> str:
         """
@@ -516,3 +527,196 @@ class ResponseHeaderInjector:
     def clear_cache(self) -> None:
         """Clear render cache."""
         self._render_cache.clear()
+    
+    # =========================================================================
+    # PHASE 20.2: ORCHESTRATOR VISIBILITY ENHANCEMENT
+    # Authority: AC-UX-VISIBILITY-001
+    # =========================================================================
+    
+    def inject_header(
+        self,
+        operation: str,
+        orchestrator_context: Optional[OrchestratorContext] = None
+    ) -> str:
+        """
+        Inject CORTEX response header with optional orchestrator visibility.
+        
+        This is the main entry point for Phase 20.2 orchestrator badges.
+        Generates enhanced header with:
+        - Orchestrator icon and name (🧪 TDDOrchestrator)
+        - Stage progress dots (●●●○)
+        - Intelligence badges (🧠📚)
+        - Failure indicators (●●✗○ ⚠️)
+        
+        Respects CORTEX_ORCHESTRATOR_VISIBILITY environment variable:
+        - full: All indicators (learning phase)
+        - failures: Only show failures (transitioning)
+        - off: Clean responses (mature phase)
+        
+        Args:
+            operation: Operation name (e.g., "Implementation", "Refactoring")
+            orchestrator_context: Optional orchestrator execution context
+        
+        Returns:
+            Formatted header with orchestrator visibility (if enabled)
+        
+        Example:
+            ## 🧠 CORTEX Implementation
+            **Author:** Asif Hussain | **🧪 TDDOrchestrator** ●●●○ 🧠📚
+            
+            ---
+        
+        Authority: AC-UX-VISIBILITY-001 (Phase 20.2)
+        """
+        # Base header
+        header_lines = [f"## 🧠 CORTEX {operation}"]
+        
+        # Author line (mandatory)
+        author_line = "**Author:** Asif Hussain"
+        
+        # Add orchestrator badge if context provided and visibility enabled
+        if orchestrator_context:
+            badge = self._format_orchestrator_badge(orchestrator_context)
+            if badge:
+                author_line += f" | {badge}"
+        
+        header_lines.append(author_line)
+        
+        # Add failure details if present and visibility enabled
+        if (orchestrator_context and 
+            orchestrator_context.failure_stage is not None and
+            self._visibility_controller.should_show_failure_details()):
+            failure_line = (
+                f"**Failure:** Stage {orchestrator_context.failure_stage} - "
+                f"{orchestrator_context.failure_reason or 'Unknown error'}"
+            )
+            header_lines.append(failure_line)
+        
+        header_lines.append("")  # Blank line
+        header_lines.append("---")
+        
+        return "\n".join(header_lines)
+    
+    def _format_orchestrator_badge(self, context: OrchestratorContext) -> str:
+        """
+        Generate orchestrator badge with stage progress and intelligence indicators.
+        
+        Badge format:
+        - Success: **🧪 TDDOrchestrator** ●●●○ 🧠📚
+        - Failure: **🔧 FixOrchestrator** ●●✗○ ⚠️
+        
+        Respects visibility mode:
+        - FULL: Show all indicators
+        - FAILURES_ONLY: Show only if failure
+        - OFF: Empty string
+        
+        Args:
+            context: Orchestrator execution context
+        
+        Returns:
+            Formatted badge string or empty if visibility disabled
+        
+        Authority: AC-UX-VISIBILITY-001
+        """
+        # Check if visibility enabled
+        if context.failure_stage is not None:
+            # Show failure if failure details enabled
+            if not self._visibility_controller.should_show_failure_details():
+                return ""
+        else:
+            # Show success if success details enabled
+            if not self._visibility_controller.should_show_success_details():
+                return ""
+        
+        # Icon mapping
+        icon_map = {
+            "TDDOrchestrator": "🧪",
+            "FixOrchestrator": "🔧",
+            "RefactoringOrchestrator": "♻️",
+            "AnalysisOrchestrator": "🔍",
+            "PlanningOrchestrator": "📋",
+            "ConversationOrchestrator": "🤝",
+        }
+        icon = icon_map.get(context.orchestrator_name, context.orchestrator_icon)
+        
+        # Stage progress
+        progress = self._format_stage_progress(
+            context.current_stage,
+            context.stages_completed,
+            context.failure_stage
+        )
+        
+        # Intelligence indicators
+        intelligence = self._format_intelligence_badges(context.intelligence_active)
+        
+        # Add failure indicator
+        if context.failure_stage is not None:
+            intelligence = "⚠️"
+        
+        return f"**{icon} {context.orchestrator_name}** {progress} {intelligence}".strip()
+    
+    def _format_stage_progress(
+        self,
+        current: int,
+        completed: list[str],
+        failed: Optional[int]
+    ) -> str:
+        """
+        Generate stage progress dots (●●○○).
+        
+        Progress indicators:
+        - ●●●●: All 4 stages complete
+        - ●●●○: Stage 3 complete, Stage 4 in progress
+        - ●●○○: Stage 2 complete, Stage 3 in progress
+        - ●○○○: Stage 1 complete, Stage 2 in progress
+        - ●●✗○: Failed at Stage 3
+        
+        Args:
+            current: Current stage number (1-4)
+            completed: List of completed stage names
+            failed: Stage number where failure occurred (None if no failure)
+        
+        Returns:
+            Progress dots string
+        
+        Authority: AC-UX-VISIBILITY-001
+        """
+        if failed is not None:
+            # Show failure at specific stage
+            dots = [
+                "●" if i < failed else ("✗" if i == failed else "○")
+                for i in range(1, 5)
+            ]
+        else:
+            # Show current progress
+            dots = ["●" if i <= current else "○" for i in range(1, 5)]
+        
+        return "".join(dots)
+    
+    def _format_intelligence_badges(self, flags: IntelligenceFlags) -> str:
+        """
+        Generate intelligence indicator badges.
+        
+        Intelligence indicators:
+        - 🧠📚: Full synthesis (LENS + Knowledge + Synthesis)
+        - 🧠: LENS intelligence active
+        - 📚: Company knowledge active
+        - (empty): No intelligence active
+        
+        Args:
+            flags: Intelligence activation flags
+        
+        Returns:
+            Intelligence badge string
+        
+        Authority: AC-UX-VISIBILITY-001
+        """
+        if flags.synthesis_enabled:
+            return "🧠📚"  # Full synthesis
+        elif flags.lens_enabled and flags.knowledge_enabled:
+            return "🧠📚"  # Both active
+        elif flags.lens_enabled:
+            return "🧠"    # LENS only
+        elif flags.knowledge_enabled:
+            return "📚"    # Knowledge only
+        return ""
