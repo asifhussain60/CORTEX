@@ -1399,6 +1399,136 @@ class IntentRouter(IOrchestrator):
             )
             raise
     
+    def route_with_lens_auto_fetch(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Route request with automatic LENS context fetching.
+        
+        Phase 20 Component #3: IntentRouter LENS Auto-Fetch
+        
+        Automatically fetches LENS context if missing for IMPLEMENT/FIX/REFACTOR/ANALYZE intents.
+        Uses cache-first strategy from LENSContextProvider.
+        
+        Args:
+            request: Request dictionary with:
+                - intent: Intent type string (IMPLEMENT, FIX, REFACTOR, etc.)
+                - description: Operation description
+                - file_path: Optional file path for LENS analysis
+                - company_name: Optional company name for company knowledge
+                - context: Optional existing context dict
+        
+        Returns:
+            Dict[str, Any]: Routing result with:
+                - intent: Detected intent type
+                - target_orchestrator: Target orchestrator name
+                - confidence_score: Routing confidence (0.0-1.0)
+                - reasoning: Routing explanation
+                - context: Enhanced context with LENS insights if fetched
+        
+        Example:
+            request = {
+                "intent": "IMPLEMENT",
+                "description": "Add authentication",
+                "file_path": "/app/auth.py",
+                "company_name": "AcmeCorp",
+                "context": {}
+            }
+            result = router.route_with_lens_auto_fetch(request)
+            # LENS context auto-fetched and added to result["context"]
+        """
+        try:
+            # Extract request components
+            intent_str = request.get("intent", "")
+            file_path = request.get("file_path")
+            company_name = request.get("company_name")
+            context = request.get("context", {})
+            
+            # Check if LENS context already exists
+            has_lens_context = "lens_insights" in context
+            
+            # Determine if should auto-fetch LENS (only for IMPLEMENT/FIX/REFACTOR/ANALYZE)
+            should_fetch = (
+                not has_lens_context
+                and intent_str in ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE"]
+                and file_path is not None
+            )
+            
+            # Auto-fetch LENS context if needed
+            if should_fetch:
+                try:
+                    from cortex.orchestrators.core.lens_context_provider import get_lens_context_provider
+                    
+                    lens_provider = get_lens_context_provider()
+                    lens_data = lens_provider.get_context(
+                        intent=intent_str,
+                        file_path=file_path,
+                        company_name=company_name
+                    )
+                    
+                    # Merge LENS insights into context
+                    context.update(lens_data)
+                    
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-20-COMPONENT-3",
+                        operation="LENS_AUTO_FETCH",
+                        success=True,
+                        details={
+                            "intent": intent_str,
+                            "file_path": file_path,
+                            "company_name": company_name,
+                            "context_size": len(str(lens_data))
+                        }
+                    )
+                    
+                except Exception as e:
+                    # Fail-safe: Continue without LENS context
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-20-COMPONENT-3",
+                        operation="LENS_AUTO_FETCH_FAILED",
+                        success=False,
+                        details={"error": str(e)}
+                    )
+            
+            # Perform standard routing
+            routing_context = {
+                "operation": request.get("description", ""),
+                "description": request.get("description"),
+                "domain": request.get("domain"),
+                "keywords": request.get("keywords"),
+                "user_intent": intent_str,
+                "lens_context": context.get("lens_insights")
+            }
+            
+            decision = self.route(routing_context)
+            
+            # Build result with enhanced context
+            result = {
+                "intent": decision.intent_type.value,
+                "target_orchestrator": decision.target_handler,
+                "confidence_score": decision.confidence_score,
+                "reasoning": decision.reasoning,
+                "context": context
+            }
+            
+            return result
+            
+        except Exception as e:
+            # Fail-safe: Return basic routing result
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-20-COMPONENT-3",
+                operation="ROUTING_WITH_AUTO_FETCH_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            
+            # Return minimal valid result
+            return {
+                "intent": request.get("intent", "UNKNOWN"),
+                "target_orchestrator": "MasterOrchestrator",
+                "confidence_score": 0.0,
+                "reasoning": f"Error during routing: {str(e)}",
+                "context": request.get("context", {})
+            }
+    
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """
         Execute routing operation (IOrchestrator interface).
