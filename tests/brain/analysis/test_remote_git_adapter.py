@@ -6,10 +6,17 @@ Phase: 10 - LENS Remote Intelligence
 Task: LENS-010
 """
 
+import os
 import pytest
 from datetime import datetime
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
+
+# Environment checks for integration tests
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
+HAS_GITHUB_TOKEN = GITHUB_TOKEN is not None
+HAS_GITLAB_TOKEN = GITLAB_TOKEN is not None
 
 from cortex.brain.analysis.remote_git_adapter import (
     RemoteGitProvider,
@@ -248,18 +255,13 @@ class TestCreateAdapter:
 class TestGitHubProviderIntegration:
     """Integration tests for GitHub provider (requires real token)."""
     
-    @pytest.mark.skip(reason="Requires GitHub token")
+    @pytest.mark.skipif(not HAS_GITHUB_TOKEN, reason="Requires GITHUB_TOKEN environment variable")
+    @pytest.mark.integration
     def test_github_fetch_file_real(self):
         """Test fetching real file from GitHub."""
-        import os
-        
-        token = os.getenv("GITHUB_TOKEN")
-        if not token:
-            pytest.skip("GITHUB_TOKEN not set")
-        
         config = ProviderConfig(
             provider_type=ProviderType.GITHUB,
-            token=token,
+            token=GITHUB_TOKEN,
         )
         
         adapter = create_adapter(config)
@@ -273,18 +275,13 @@ class TestGitHubProviderIntegration:
 class TestGitLabProviderIntegration:
     """Integration tests for GitLab provider (requires real token)."""
     
-    @pytest.mark.skip(reason="Requires GitLab token")
+    @pytest.mark.skipif(not HAS_GITLAB_TOKEN, reason="Requires GITLAB_TOKEN environment variable")
+    @pytest.mark.integration
     def test_gitlab_fetch_file_real(self):
         """Test fetching real file from GitLab."""
-        import os
-        
-        token = os.getenv("GITLAB_TOKEN")
-        if not token:
-            pytest.skip("GITLAB_TOKEN not set")
-        
         config = ProviderConfig(
             provider_type=ProviderType.GITLAB,
-            token=token,
+            token=GITLAB_TOKEN,
         )
         
         adapter = create_adapter(config)
