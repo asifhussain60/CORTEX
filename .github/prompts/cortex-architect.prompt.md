@@ -83,6 +83,7 @@
 | Dead Code | Unused imports, orphan functions |
 | Skipped Tests | @pytest.mark.skip >30 days |
 | Refactoring Needs | Complexity hotspots (>15 cyclomatic), SOLID violations, technical debt ratio >5%, code smells >100, functions >50 LOC (via cortex_lens_analyze) |
+| Database Hygiene | SQLite databases: audit logs >90 days old, cache >30 days, orphaned tables, size >100MB, unused indexes, record count >10K |
 
 ### P3 — Cleanup
 | Check | Description |

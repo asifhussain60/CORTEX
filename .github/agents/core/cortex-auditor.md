@@ -56,6 +56,7 @@
 | Dead Code | Unused imports |
 | Skipped Tests | Stale @pytest.mark.skip |
 | **Refactoring Needs** | **Complexity >15, SOLID violations, tech debt >5%, code smells >100, functions >50 LOC** |
+| **Database Hygiene** | **.cortex/*.db files: audit logs >90d, cache >30d, orphaned tables, size >100MB, unused indexes** |
 
 ### P3 — Cleanup
 | Check | Target |
@@ -186,6 +187,59 @@
 |---|------|----------|--------|----------------|
 | 1 | Complexity | orchestrator.py:45 | CC=22 | Extract method |
 | 2 | SOLID | handler.py | SRP violation | Split class |
+```
+
+---
+
+## Database Hygiene Verification Logic
+
+**Triggered by:** P2 Quality check during AUDIT mode
+
+**Target Databases:**
+- `.cortex/knowledge.db` — Domain knowledge, synthesis rules
+- `.cortex/inquiry_cache.db` — Cached inquiry results
+- Any `governance.db` — Audit trail logs (if exists)
+
+**Verification Steps:**
+```
+1. Check database file sizes (flag >100MB)
+2. Query table list and identify orphaned/unused tables
+3. Count records in audit/log tables (flag >10K records)
+4. Check oldest record timestamps (audit >90 days, cache >30 days)
+5. Identify unused indexes (no usage stats)
+6. Detect vacuum needed (fragmentation check)
+```
+
+**SQL Queries Used:**
+```sql
+-- Table list
+SELECT name FROM sqlite_master WHERE type='table';
+
+-- Record counts
+SELECT COUNT(*) FROM [table_name];
+
+-- Oldest records (if timestamp column exists)
+SELECT MIN(created_at), MAX(created_at) FROM [table_name];
+
+-- Database size
+SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size();
+```
+
+**Data Source:** Direct SQLite queries via `sqlite3` command or Python `sqlite3` module
+
+**Output Format:**
+```markdown
+### P2 Quality — Database Hygiene
+| Database | Size | Tables | Records | Oldest Data | Status |
+|----------|------|--------|---------|-------------|--------|
+| knowledge.db | 45MB | 4 | 2.3K | 14d | ✅ |
+| inquiry_cache.db | 120MB | 2 | 15K | 120d | ⚠️ Size + Age |
+
+**Actions Required:**
+| # | Database | Issue | Action |
+|---|----------|-------|--------|
+| 1 | inquiry_cache.db | 15K records >30 days | Delete records older than 30 days |
+| 2 | inquiry_cache.db | 120MB size | Run VACUUM after cleanup |
 ```
 
 ---
