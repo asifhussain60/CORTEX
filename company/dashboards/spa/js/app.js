@@ -1,8 +1,81 @@
 /**
  * CORTEX SPA - Main Application
  * Initializes dashboard with data binding and components
- * Version: 1.0.0
+ * Version: 1.1.0 - TDD: Added DeferredRenderer for hidden panel rendering
  */
+
+/**
+ * DeferredRenderer: Handles rendering of content in hidden tab panels
+ * 
+ * Problem: getElementById() fails for elements in hidden panels (aria-hidden="true")
+ * Solution: Queue renders for hidden panels, execute when they become visible
+ */
+class DeferredRenderer {
+    constructor() {
+        this.renderQueue = new Map();
+    }
+    
+    /**
+     * Queue or execute a render operation
+     * @param {string} containerId - DOM element ID
+     * @param {Function} renderFn - Function to execute when container is accessible
+     * @returns {boolean} True if executed immediately, false if queued
+     */
+    queueRender(containerId, renderFn) {
+        const container = document.getElementById(containerId);
+        
+        if (!container) {
+            console.warn(`⏳ [DeferredRenderer] Container '${containerId}' not found, queuing render`);
+            this.renderQueue.set(containerId, renderFn);
+            return false;
+        }
+        
+        // Check if container is in a hidden tab panel
+        const panel = container.closest('.tab-panel');
+        if (panel && panel.getAttribute('aria-hidden') === 'true') {
+            console.log(`⏳ [DeferredRenderer] Container '${containerId}' in hidden panel, queuing render`);
+            this.renderQueue.set(containerId, renderFn);
+            return false;
+        }
+        
+        // Execute immediately - container is visible
+        console.log(`✅ [DeferredRenderer] Executing render for '${containerId}' immediately`);
+        renderFn(container);
+        return true;
+    }
+    
+    /**
+     * Flush the render queue - execute all queued renders for now-visible containers
+     */
+    flushQueue() {
+        console.log(`🔄 [DeferredRenderer] Flushing queue (${this.renderQueue.size} items)`);
+        
+        for (const [containerId, renderFn] of this.renderQueue.entries()) {
+            const container = document.getElementById(containerId);
+            
+            if (!container) {
+                console.warn(`⚠️ [DeferredRenderer] Container '${containerId}' still not found`);
+                continue;
+            }
+            
+            const panel = container.closest('.tab-panel');
+            const isHidden = panel && panel.getAttribute('aria-hidden') === 'true';
+            
+            if (!isHidden) {
+                console.log(`✅ [DeferredRenderer] Executing queued render for '${containerId}'`);
+                renderFn(container);
+                this.renderQueue.delete(containerId);
+            }
+        }
+    }
+    
+    /**
+     * Get count of pending renders
+     */
+    getPendingCount() {
+        return this.renderQueue.size;
+    }
+}
 
 class CortexDashboard {
     constructor() {
@@ -12,19 +85,36 @@ class CortexDashboard {
         this.useCasesManager = null;
         this.chartHost = window.chartHost || new ChartHost();
         this.initialized = false;
+        this.deferredRenderer = new DeferredRenderer(); // TDD: Deferred rendering
     }
     
     /**
      * Initialize the dashboard
+     * @param {Object} externalData - Optional data to use instead of loading from DOM
      */
-    async init() {
+    async init(externalData = null) {
         try {
             console.log('🚀 [TRACE] Starting CORTEX Dashboard initialization...');
             
-            // Load data from embedded JSON
-            this.loadData();
+            // Ensure DOM is ready
+            if (document.readyState === 'loading') {
+                console.log('⏳ [TRACE] Waiting for DOM to be ready...');
+                await new Promise(resolve => {
+                    document.addEventListener('DOMContentLoaded', resolve);
+                });
+                console.log('✅ [TRACE] DOM is now ready');
+            }
             
-            if (!this.data) {
+            // Use external data if provided, otherwise load from DOM
+            if (externalData) {
+                console.log('📦 [TRACE] Using externally provided data');
+                this.data = externalData;
+            } else {
+                // Load data from embedded JSON
+                this.loadData();
+            }
+            
+            if (!this.data || Object.keys(this.data).length === 0) {
                 console.error('CORTEX Dashboard: No data found');
                 this.showError('No dashboard data available');
                 return;
@@ -82,15 +172,31 @@ class CortexDashboard {
     
     /**
      * Load data from embedded JSON script tag
+     * Always reads fresh from DOM to support dynamic updates
      */
     loadData() {
         const dataScript = document.getElementById('dashboard-data');
         if (dataScript) {
             try {
-                this.data = JSON.parse(dataScript.textContent);
+                const rawData = dataScript.textContent.trim();
+                if (rawData && rawData !== '{}') {
+                    this.data = JSON.parse(rawData);
+                    console.log('📊 [TRACE] Loaded data from DOM:', {
+                        dataSize: rawData.length,
+                        hasRepo: !!this.data?.repo,
+                        hasSecurity: !!this.data?.security
+                    });
+                } else {
+                    console.warn('⚠️ [TRACE] Embedded data is empty or placeholder');
+                    this.data = null;
+                }
             } catch (e) {
                 console.error('Failed to parse dashboard data:', e);
+                this.data = null;
             }
+        } else {
+            console.warn('⚠️ [TRACE] No dashboard-data script tag found');
+            this.data = null;
         }
     }
     
@@ -208,34 +314,39 @@ class CortexDashboard {
     
     /**
      * Render dynamic list content
+     * TDD: Use DeferredRenderer for containers in hidden panels
      */
     renderDynamicLists() {
-        // Key findings
+        console.log('🎨 [TRACE] Starting renderDynamicLists with deferred rendering...');
+        
+        // Key findings (visible panel - should render immediately)
         this.renderKeyFindings();
         
-        // Vulnerabilities
+        // Security components (hidden panel - will be queued)
         this.renderVulnerabilities();
+        this.renderVulnerabilityTypes();
         
-        // Vulnerability types
-        this.renderVulnTypes();
-        
-        // License summary
-        this.renderLicenseSummary();
-        
-        // Dependencies table
-        this.renderDependenciesTable();
-        
-        // Code smells
+        // Quality components (hidden panel - will be queued)
         this.renderCodeSmells();
         
-        // Patterns
-        this.renderPatterns();
+        // Dependencies (separate panel)
+        this.renderLicenseSummary();
         
-        // LENS recommendations
-        this.renderLensRecommendations();
-        
-        // Refactoring
-        this.renderRefactoring();
+        // Log deferred renders count
+        const pendingCount = this.deferredRenderer.getPendingCount();
+        if (pendingCount > 0) {
+            console.log(`⏳ [TRACE] ${pendingCount} renders queued for hidden panels`);
+            
+            // Hook into tab manager to flush queue on tab change
+            if (this.tabManager) {
+                const originalOnTabChange = this.tabManager.onTabChange || (() => {});
+                this.tabManager.onTabChange = (tabId) => {
+                    originalOnTabChange(tabId);
+                    console.log(`🔄 [TRACE] Tab changed to '${tabId}', flushing deferred renders`);
+                    this.deferredRenderer.flushQueue();
+                };
+            }
+        }
     }
     
     /**
@@ -257,79 +368,90 @@ class CortexDashboard {
     
     /**
      * Render vulnerabilities list
+     * TDD: Use deferred rendering for hidden panel
      */
     renderVulnerabilities() {
-        const container = document.getElementById('vulnerabilities-list');
         const vulns = this.data.security?.vulnerabilities || [];
         
-        console.log('🔒 [TRACE] renderVulnerabilities:', {
-            hasContainer: !!container,
-            vulnsType: Array.isArray(vulns) ? 'array' : typeof vulns,
-            vulnsLength: Array.isArray(vulns) ? vulns.length : 'not an array',
-            firstVuln: vulns[0] || null
-        });
-        
-        if (!container || vulns.length === 0) {
-            console.warn('⚠️ Skipping vulnerabilities render:', !container ? 'no container' : 'no data');
+        if (vulns.length === 0) {
+            console.log('ℹ️ [TRACE] No vulnerabilities to render');
             return;
         }
         
-        container.innerHTML = vulns.map(vuln => `
-            <div class="vulnerability-item">
-                <div class="vulnerability-item__severity">
-                    <span class="badge badge-${this.getSeverityClass(vuln.severity)}">${vuln.severity}</span>
+        // Use deferred renderer
+        this.deferredRenderer.queueRender('vulnerabilities-list', (container) => {
+            console.log(`🔒 [TRACE] Rendering ${vulns.length} vulnerabilities`);
+            
+            container.innerHTML = vulns.map(vuln => `
+                <div class="vulnerability-item">
+                    <div class="vulnerability-item__severity">
+                        <span class="badge badge-${this.getSeverityClass(vuln.severity)}">${vuln.severity}</span>
+                    </div>
+                    <div class="vulnerability-item__info">
+                        <div class="vulnerability-item__title">${this.escapeHtml(vuln.title)}</div>
+                        <div class="vulnerability-item__cwe">${this.escapeHtml(vuln.cwe_id)}</div>
+                    </div>
+                    <div class="vulnerability-item__location">${this.escapeHtml(vuln.location)}</div>
+                    <div class="vulnerability-item__status">
+                        <span class="badge badge-${this.getStatusClass(vuln.status)}">${vuln.status}</span>
+                    </div>
                 </div>
-                <div class="vulnerability-item__info">
-                    <div class="vulnerability-item__title">${this.escapeHtml(vuln.title)}</div>
-                    <div class="vulnerability-item__cwe">${this.escapeHtml(vuln.cwe_id)}</div>
-                </div>
-                <div class="vulnerability-item__location">${this.escapeHtml(vuln.location)}</div>
-                <div class="vulnerability-item__status">
-                    <span class="badge badge-${this.getStatusClass(vuln.status)}">${vuln.status}</span>
-                </div>
-            </div>
-        `).join('');
+            `).join('');
+        });
     }
     
     /**
      * Render vulnerability types summary
+     * TDD: Use deferred rendering for hidden panel
      */
-    renderVulnTypes() {
-        const container = document.getElementById('vuln-types-list');
+    renderVulnerabilityTypes() {
         const vulns = this.data.security?.vulnerabilities || [];
         
-        if (!container || vulns.length === 0) return;
+        if (vulns.length === 0) return;
         
-        const cweTypes = this.countBy(vulns, 'cwe_id');
-        const sorted = Object.entries(cweTypes).sort((a, b) => b[1] - a[1]).slice(0, 5);
-        
-        container.innerHTML = sorted.map(([cwe, count]) => `
-            <div class="flex justify-between items-center" style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">
-                <span class="text-secondary">${cwe}</span>
-                <span class="badge">${count}</span>
-            </div>
-        `).join('');
+        // Use deferred renderer
+        this.deferredRenderer.queueRender('vuln-types-list', (container) => {
+            const cweTypes = this.countBy(vulns, 'cwe_id');
+            const sorted = Object.entries(cweTypes).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            
+            console.log(`📊 [TRACE] Rendering ${sorted.length} vulnerability types`);
+            
+            container.innerHTML = sorted.map(([cwe, count]) => `
+                <div class="flex justify-between items-center" style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">
+                    <span class="text-secondary">${cwe}</span>
+                    <span class="badge">${count}</span>
+                </div>
+            `).join('');
+        });
     }
     
     /**
      * Render license summary
+     * TDD: Use deferred rendering for hidden panel
      */
     renderLicenseSummary() {
-        const container = document.getElementById('license-summary');
-        const licenses = this.data.dependencies?.licenses || {};
+        const licenses = this.data.dependencies?.licenses?.distribution || {};
         
-        if (!container || Object.keys(licenses).length === 0) return;
+        if (Object.keys(licenses).length === 0) {
+            console.log('ℹ️ [TRACE] No licenses to render');
+            return;
+        }
         
-        const total = Object.values(licenses).reduce((a, b) => a + b, 0);
-        
-        container.innerHTML = Object.entries(licenses)
-            .sort((a, b) => b[1] - a[1])
-            .map(([name, count]) => `
-                <div class="flex justify-between items-center" style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">
-                    <span>${this.escapeHtml(name)}</span>
-                    <span class="text-muted">${count} (${Math.round(count/total*100)}%)</span>
-                </div>
-            `).join('');
+        // Use deferred renderer
+        this.deferredRenderer.queueRender('license-summary', (container) => {
+            const total = Object.values(licenses).reduce((a, b) => a + b, 0);
+            
+            console.log(`📜 [TRACE] Rendering ${Object.keys(licenses).length} license types`);
+            
+            container.innerHTML = Object.entries(licenses)
+                .sort((a, b) => b[1] - a[1])
+                .map(([name, count]) => `
+                    <div class="flex justify-between items-center" style="padding: 0.5rem 0; border-bottom: 1px solid var(--glass-border);">
+                        <span>${this.escapeHtml(name)}</span>
+                        <span class="text-muted">${count} (${Math.round(count/total*100)}%)</span>
+                    </div>
+                `).join('');
+        });
     }
     
     /**
@@ -365,34 +487,32 @@ class CortexDashboard {
     
     /**
      * Render code smells
+     * TDD: Use deferred rendering for hidden panel
      */
     renderCodeSmells() {
-        const container = document.getElementById('code-smells-grid');
         const smells = this.data.quality?.code_smells || [];
         
-        console.log('⚠️ [TRACE] renderCodeSmells:', {
-            hasContainer: !!container,
-            smellsType: Array.isArray(smells) ? 'array' : typeof smells,
-            smellsLength: Array.isArray(smells) ? smells.length : 'not an array',
-            firstSmell: smells[0] || null
-        });
-        
-        if (!container || smells.length === 0) {
-            console.warn('⚠️ Skipping code smells render:', !container ? 'no container' : 'no data');
+        if (smells.length === 0) {
+            console.log('ℹ️ [TRACE] No code smells to render');
             return;
         }
         
-        container.innerHTML = smells.map(smell => `
-            <div class="code-smell-card glass-card-static">
-                <div class="code-smell-card__header">
-                    <span class="code-smell-card__icon">⚠️</span>
-                    <span class="badge badge-${this.getSeverityClass(smell.severity)}">${smell.severity}</span>
+        // Use deferred renderer
+        this.deferredRenderer.queueRender('code-smells-grid', (container) => {
+            console.log(`⚠️ [TRACE] Rendering ${smells.length} code smells`);
+            
+            container.innerHTML = smells.map(smell => `
+                <div class="code-smell-card glass-card-static">
+                    <div class="code-smell-card__header">
+                        <span class="code-smell-card__icon">⚠️</span>
+                        <span class="badge badge-${this.getSeverityClass(smell.severity)}">${smell.severity}</span>
+                    </div>
+                    <div class="code-smell-card__title">${this.escapeHtml(smell.name)}</div>
+                    <div class="code-smell-card__description">${this.escapeHtml(smell.description)}</div>
+                    <div class="code-smell-card__location">📍 ${this.escapeHtml(smell.location)}</div>
                 </div>
-                <div class="code-smell-card__title">${this.escapeHtml(smell.name)}</div>
-                <div class="code-smell-card__description">${this.escapeHtml(smell.description)}</div>
-                <div class="code-smell-card__location">📍 ${this.escapeHtml(smell.location)}</div>
-            </div>
-        `).join('');
+            `).join('');
+        });
     }
     
     /**

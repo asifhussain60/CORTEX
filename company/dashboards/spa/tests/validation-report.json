@@ -1,0 +1,50 @@
+{
+  "status": "SUCCESS",
+  "total": 8,
+  "passed": 7,
+  "failed": 0,
+  "warned": 1,
+  "success_rate": 87.5,
+  "results": [
+    {
+      "check": "app.js: External data parameter",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "app.js: External data check",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "app.js: Empty data validation",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "app.js: Fresh DOM read",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "dashboard.html: Direct data injection",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "dashboard.html: Script content update",
+      "status": "PASS",
+      "message": "Implementation found"
+    },
+    {
+      "check": "data structure",
+      "status": "WARN",
+      "message": "Data file not found"
+    },
+    {
+      "check": "test file",
+      "status": "PASS",
+      "message": "5 suites, 16 tests"
+    }
+  ]
+}
