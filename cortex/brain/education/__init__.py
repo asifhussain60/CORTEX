@@ -17,6 +17,17 @@ from cortex.brain.education.next_step_generator import (
     KnowledgeLevel,
     StepType,
 )
+from cortex.brain.education.knowledge_level_detector import (
+    KnowledgeLevelDetector,
+    DetectionSignals,
+)
+from cortex.brain.education.fault_detection_reporter import (
+    FaultDetectionReporter,
+    FaultReport,
+    Fault,
+    FaultSeverity,
+    FaultCategory,
+)
 
 __all__ = [
     "NextStepGenerator",
@@ -24,4 +35,11 @@ __all__ = [
     "NextStepContext",
     "KnowledgeLevel",
     "StepType",
+    "KnowledgeLevelDetector",
+    "DetectionSignals",
+    "FaultDetectionReporter",
+    "FaultReport",
+    "Fault",
+    "FaultSeverity",
+    "FaultCategory",
 ]
