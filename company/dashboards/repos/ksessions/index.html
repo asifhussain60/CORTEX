@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSESSIONS | Enterprise Code Intelligence Dashboard</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../spa/css/variables.css">
+    <link rel="stylesheet" href="../../spa/css/base.css">
+    <link rel="stylesheet" href="../../spa/css/components.css">
+    <link rel="stylesheet" href="../../spa/css/layout.css">
+    <link rel="stylesheet" href="../../spa/css/tabs.css">
+    <link rel="stylesheet" href="../../spa/css/metrics-enhanced.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav style="margin-bottom: 1.5rem;">
+            <a href="../../index.html" class="btn btn-sm">
+                <span>←</span> Back to All Repositories
+            </a>
+        </nav>
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-header__content">
+                <h1 class="dashboard-header__title">KSESSIONS</h1>
+                <p class="dashboard-header__subtitle">Enterprise Code Intelligence Dashboard</p>
+                
+                <div class="dashboard-header__meta">
+                    <div class="health-badge" id="health-badge">
+                        <span class="status-pulse"></span>
+                        <span>Health: </span>
+                        <strong data-bind="security.security_score" data-format="number">--</strong>/10
+                    </div>
+                    <span class="badge" data-bind="overview.primary_language">C#</span>
+                    <span class="badge badge-info">
+                        <span data-bind="overview.total_files">--</span> files
+                    </span>
+                    <span class="badge badge-success">
+                        <span data-bind="metrics.test_coverage">--</span>% coverage
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div id="loading-indicator" class="loading-overlay">
+                <div class="loading-spinner"></div>
+                <p>Loading dashboard data...</p>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs-wrapper">
+                <div class="tabs-container" role="tablist">
+                    <button class="tab-btn active" role="tab" data-tab="overview">Overview</button>
+                    <button class="tab-btn" role="tab" data-tab="metrics">Metrics</button>
+                    <button class="tab-btn" role="tab" data-tab="security">Security</button>
+                    <button class="tab-btn" role="tab" data-tab="dependencies">Dependencies</button>
+                    <button class="tab-btn" role="tab" data-tab="quality">Quality</button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div class="tab-panels">
+                    <!-- Overview Tab -->
+                    <div class="tab-panel active" id="overview-panel" role="tabpanel">
+                        <div class="cards-grid">
+                            <div class="card">
+                                <h3>Repository Summary</h3>
+                                <p><strong>Files:</strong> <span data-bind="overview.total_files">--</span></p>
+                                <p><strong>Lines of Code:</strong> <span data-bind="overview.total_lines" data-format="number">--</span></p>
+                                <p><strong>Primary Language:</strong> <span data-bind="overview.primary_language">--</span></p>
+                                <p><strong>Contributors:</strong> <span data-bind="overview.contributors">--</span></p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Languages</h3>
+                                <div id="languages-list"></div>
+                            </div>
+
+                            <div class="card">
+                                <h3>Frameworks</h3>
+                                <div id="frameworks-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Tab -->
+                    <div class="tab-panel" id="metrics-panel" role="tabpanel">
+                        <div class="cards-grid">
+                            <div class="card">
+                                <h3>Code Quality</h3>
+                                <p class="metric-value" data-bind="metrics.code_quality">--</p>
+                                <p class="metric-label">out of 10</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Test Coverage</h3>
+                                <p class="metric-value"><span data-bind="metrics.test_coverage">--</span>%</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Technical Debt</h3>
+                                <p class="metric-value"><span data-bind="metrics.technical_debt_hours">--</span>h</p>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top: 1rem;">
+                            <h3>Coverage Trend</h3>
+                            <div id="coverage-trend-chart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="tab-panel" id="security-panel" role="tabpanel">
+                        <div class="cards-grid">
+                            <div class="card">
+                                <h3>Security Score</h3>
+                                <p class="metric-value"><span data-bind="security.security_score">--</span>/10</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Vulnerabilities</h3>
+                                <div id="vulnerabilities-list"></div>
+                            </div>
+
+                            <div class="card">
+                                <h3>Secret Scan</h3>
+                                <p data-bind="security.secret_scan_clean">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dependencies Tab -->
+                    <div class="tab-panel" id="dependencies-panel" role="tabpanel">
+                        <div class="cards-grid">
+                            <div class="card">
+                                <h3>Direct Dependencies</h3>
+                                <p class="metric-value" data-bind="dependencies.direct_dependencies">--</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Outdated Packages</h3>
+                                <p class="metric-value" data-bind="dependencies.outdated_count">--</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Vulnerable</h3>
+                                <p class="metric-value" data-bind="dependencies.vulnerable_count">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quality Tab -->
+                    <div class="tab-panel" id="quality-panel" role="tabpanel">
+                        <div class="cards-grid">
+                            <div class="card">
+                                <h3>Code Smells</h3>
+                                <p class="metric-value" data-bind="quality.code_smells">--</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Duplication</h3>
+                                <p class="metric-value"><span data-bind="quality.duplication_percentage">--</span>%</p>
+                            </div>
+
+                            <div class="card">
+                                <h3>Maintainability</h3>
+                                <p class="metric-value" data-bind="quality.maintainability_rating">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Dashboard Data -->
+    <script id="dashboard-data-loader" type="module">
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('./dashboard-data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // Create data script element
+                const dataScript = document.createElement('script');
+                dataScript.id = 'dashboard-data';
+                dataScript.type = 'application/json';
+                dataScript.textContent = JSON.stringify(data);
+                document.body.appendChild(dataScript);
+                
+                // Initialize dashboard
+                const dashboard = new CortexDashboard();
+                await dashboard.init();
+                
+                // Hide loading indicator
+                document.getElementById('loading-indicator').style.display = 'none';
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+                document.getElementById('loading-indicator').innerHTML = 
+                    '<p style="color: var(--color-danger);">Failed to load dashboard data. Please check console for details.</p>';
+            }
+        }
+        
+        loadDashboardData();
+    </script>
+
+    <!-- Scripts -->
+    <script src="../../spa/vendor/echarts.min.js"></script>
+    <script src="../../spa/js/components/TabManager.js"></script>
+    <script src="../../spa/js/components/ChartHost.js"></script>
+    <script src="../../spa/js/components/DataBinder.js"></script>
+    <script src="../../spa/js/app.js"></script>
+    
+    <script>
+        // Simple chart rendering
+        window.addEventListener('load', () => {
+            const data = JSON.parse(document.getElementById('dashboard-data')?.textContent || '{}');
+            
+            // Coverage trend chart
+            if (data.metrics?.coverage_trend && echarts) {
+                const chart = echarts.init(document.getElementById('coverage-trend-chart'));
+                chart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    xAxis: {
+                        type: 'category',
+                        data: data.metrics.coverage_trend.map(d => d.date)
+                    },
+                    yAxis: { type: 'value', name: 'Coverage %' },
+                    series: [{
+                        type: 'line',
+                        data: data.metrics.coverage_trend.map(d => d.coverage),
+                        smooth: true,
+                        lineStyle: { color: '#00ff00' }
+                    }]
+                });
+            }
+            
+            // Languages list
+            const langsList = document.getElementById('languages-list');
+            if (langsList && data.overview?.languages) {
+                const languages = Object.entries(data.overview.languages);
+                langsList.innerHTML = languages.map(([lang, loc]) => 
+                    `<p><strong>${lang}:</strong> ${loc.toLocaleString()} LOC</p>`
+                ).join('');
+            }
+            
+            // Frameworks list
+            const fwList = document.getElementById('frameworks-list');
+            if (fwList && data.overview?.frameworks) {
+                fwList.innerHTML = data.overview.frameworks.map(fw => 
+                    `<span class="badge">${fw}</span>`
+                ).join(' ');
+            }
+            
+            // Vulnerabilities
+            const vulnList = document.getElementById('vulnerabilities-list');
+            if (vulnList && data.security?.vulnerabilities) {
+                const vulns = Object.entries(data.security.vulnerabilities);
+                vulnList.innerHTML = vulns.map(([severity, count]) => 
+                    `<p><strong>${severity}:</strong> ${count}</p>`
+                ).join('');
+            }
+        });
+    </script>
+</body>
+</html>

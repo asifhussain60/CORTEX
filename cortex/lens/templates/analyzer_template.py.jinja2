@@ -1,0 +1,94 @@
+"""
+{{ description }}
+
+Generated analyzer for {{ crawler_name }}.
+
+AC_START: AC-Generated-{{ crawler_name }}
+"""
+
+import logging
+from pathlib import Path
+from typing import Dict, Any, List, Optional
+
+from cortex.lens.analyzers.base import BaseAnalyzer
+
+logger = logging.getLogger(__name__)
+
+
+class {{ crawler_name }}({{ base_class }}):
+    """{{ description }}"""
+    
+    def __init__(self):
+        """Initialize {{ crawler_name }}."""
+        super().__init__()
+        self.dependencies = {{ dependencies }}
+        self.priority = "{{ priority }}"
+    
+    def analyze(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Analyze repository for {{ description|lower }}.
+        
+        Args:
+            repo_path: Path to repository root
+            
+        Returns:
+            Analysis results dictionary with findings
+        """
+        logger.info(f"Running {{ crawler_name }} on {repo_path}")
+        
+        if not repo_path.exists():
+            raise FileNotFoundError(f"Repository not found: {repo_path}")
+        
+        results = {
+            "analyzer": "{{ crawler_name }}",
+            "repository": str(repo_path),
+            "findings": [],
+            "metrics": {},
+            "errors": [],
+        }
+        
+        try:
+            # TODO: Implement custom analysis logic
+            # Example:
+            # findings = self._scan_files(repo_path)
+            # results["findings"] = findings
+            
+            logger.info(f"{{ crawler_name }} completed: {len(results['findings'])} findings")
+            
+        except Exception as e:
+            logger.error(f"{{ crawler_name }} failed: {e}")
+            results["errors"].append(str(e))
+        
+        return results
+    
+    def _scan_files(self, repo_path: Path) -> List[Dict[str, Any]]:
+        """
+        Scan repository files.
+        
+        Args:
+            repo_path: Repository path
+            
+        Returns:
+            List of findings
+        """
+        findings = []
+        
+        # TODO: Implement file scanning logic
+        
+        return findings
+    
+    def validate_results(self, results: Dict[str, Any]) -> bool:
+        """
+        Validate analysis results.
+        
+        Args:
+            results: Analysis results
+            
+        Returns:
+            True if results are valid
+        """
+        required_keys = ["analyzer", "findings", "metrics"]
+        return all(key in results for key in required_keys)
+
+
+# AC_COMPLETE: AC-Generated-{{ crawler_name }}

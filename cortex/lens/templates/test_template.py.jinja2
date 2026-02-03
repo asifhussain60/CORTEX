@@ -1,0 +1,110 @@
+"""
+Tests for {{ crawler_name }}.
+
+Generated test file for custom analyzer.
+
+AC_START: AC-Test-{{ crawler_name }}
+"""
+
+import pytest
+from pathlib import Path
+from typing import Dict, Any
+
+from {{ module_path }} import {{ crawler_name }}
+
+
+@pytest.fixture
+def analyzer():
+    """Create analyzer instance."""
+    return {{ crawler_name }}()
+
+
+@pytest.fixture
+def sample_repo(tmp_path):
+    """Create sample repository for testing."""
+    repo = tmp_path / "sample_repo"
+    repo.mkdir()
+    
+    # Create sample files
+    (repo / "README.md").write_text("# Sample Repository")
+    (repo / "src").mkdir()
+    (repo / "src" / "main.py").write_text("print('Hello')")
+    
+    return repo
+
+
+@pytest.fixture
+def empty_repo(tmp_path):
+    """Create empty repository."""
+    repo = tmp_path / "empty_repo"
+    repo.mkdir()
+    return repo
+
+
+class Test{{ crawler_name }}:
+    """Test suite for {{ crawler_name }}."""
+    
+    def test_initialization(self, analyzer):
+        """Test analyzer initialization."""
+        assert analyzer is not None
+        assert hasattr(analyzer, 'analyze')
+        assert hasattr(analyzer, 'dependencies')
+        assert analyzer.priority == "{{ priority }}"
+    
+    def test_analyze_returns_dict(self, analyzer, sample_repo):
+        """Test analyze returns properly structured dictionary."""
+        result = analyzer.analyze(sample_repo)
+        
+        assert isinstance(result, dict)
+        assert "analyzer" in result
+        assert result["analyzer"] == "{{ crawler_name }}"
+        assert "findings" in result
+        assert "metrics" in result
+        assert isinstance(result["findings"], list)
+    
+    def test_analyze_nonexistent_path(self, analyzer):
+        """Test analyze raises error for nonexistent path."""
+        with pytest.raises(FileNotFoundError):
+            analyzer.analyze(Path("/nonexistent/path"))
+    
+    def test_analyze_empty_repo(self, analyzer, empty_repo):
+        """Test analyze handles empty repository."""
+        result = analyzer.analyze(empty_repo)
+        
+        assert isinstance(result, dict)
+        assert "findings" in result
+        # Empty repo should return empty or minimal findings
+    
+    def test_validate_results(self, analyzer, sample_repo):
+        """Test validate_results method."""
+        result = analyzer.analyze(sample_repo)
+        assert analyzer.validate_results(result) is True
+    
+    def test_invalid_results_structure(self, analyzer):
+        """Test validate_results detects invalid structure."""
+        invalid_result = {"analyzer": "{{ crawler_name }}"}
+        assert analyzer.validate_results(invalid_result) is False
+
+{% for scenario in test_scenarios %}
+    def test_{{ scenario|lower|replace(' ', '_')|replace('-', '_') }}(self, analyzer, sample_repo):
+        """Test: {{ scenario }}."""
+        # TODO: Implement test scenario
+        result = analyzer.analyze(sample_repo)
+        assert result is not None
+        # Add specific assertions for: {{ scenario }}
+{% endfor %}
+
+    def test_error_handling(self, analyzer, tmp_path):
+        """Test error handling for corrupted data."""
+        # Create repo with corrupted files
+        corrupted_repo = tmp_path / "corrupted"
+        corrupted_repo.mkdir()
+        
+        result = analyzer.analyze(corrupted_repo)
+        
+        # Should not raise, but may record errors
+        assert "errors" in result
+        assert isinstance(result["errors"], list)
+
+
+# AC_COMPLETE: AC-Test-{{ crawler_name }}
