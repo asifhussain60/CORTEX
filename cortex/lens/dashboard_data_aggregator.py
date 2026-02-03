@@ -193,7 +193,7 @@ class DashboardDataAggregator:
             for file in code_files[:100]:  # Sample first 100 files
                 try:
                     total_lines += len(file.read_text(errors='ignore').splitlines())
-                except:
+                except (OSError, UnicodeDecodeError):
                     pass
             
             # Extrapolate

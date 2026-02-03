@@ -362,7 +362,7 @@ class FingerprintAnalyzer:
                 if "express" in deps or "fastify" in deps or "koa" in deps:
                     has_api = True
                     api_types.append("REST")
-            except:
+            except (OSError, ValueError, json.JSONDecodeError):
                 pass
         
         return has_api, api_types, api_files
@@ -401,7 +401,7 @@ class FingerprintAnalyzer:
                     test_frameworks.append("mocha")
                 if "vitest" in deps:
                     test_frameworks.append("vitest")
-            except:
+            except (OSError, ValueError, json.JSONDecodeError):
                 pass
         
         return test_frameworks
