@@ -596,7 +596,7 @@
             const tags = (repo.tags || []).slice(0, 3);
             
             return `
-                <a href="repos/${repo.slug}/index.html" class="repo-tile">
+                <a href="spa/dashboard.html?repo=${repo.slug}" class="repo-tile">
                     <div class="repo-tile__header">
                         <span class="repo-tile__icon">${repo.icon || '📁'}</span>
                         <div class="repo-tile__info">

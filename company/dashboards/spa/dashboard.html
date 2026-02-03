@@ -11,25 +11,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../../spa/css/variables.css">
-    <link rel="stylesheet" href="../../spa/css/base.css">
-    <link rel="stylesheet" href="../../spa/css/components.css">
-    <link rel="stylesheet" href="../../spa/css/layout.css">
-    <link rel="stylesheet" href="../../spa/css/tabs.css">
-    <link rel="stylesheet" href="../../spa/vendor/gridjs.min.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="vendor/gridjs.min.css">
 </head>
 <body>
     <div class="app-container">
         <!-- Navigation -->
         <nav style="margin-bottom: 1.5rem;">
-            <a href="../../index.html" class="btn btn-sm">
+            <a href="../index.html" class="btn btn-sm">
                 <span>←</span> Back to All Repositories
             </a>
         </nav>
         
         <!-- Header -->
         <header class="dashboard-header">
-            <img src="../../spa/images/cortex-logo-200.png" 
+            <img src="images/cortex-logo-200.png" 
                  alt="CORTEX Logo" 
                  class="dashboard-header__logo"
                  data-bind-attr="alt:repo.display_name">
@@ -490,16 +490,74 @@
     </template>
     
     <!-- Vendor Scripts (no CDN - file:// compatible) -->
-    <script src="../../spa/vendor/fuse.min.js"></script>
-    <script src="../../spa/vendor/echarts.min.js"></script>
-    <script src="../../spa/vendor/gridjs.umd.js"></script>
+    <script src="vendor/fuse.min.js"></script>
+    <script src="vendor/echarts.min.js"></script>
+    <script src="vendor/gridjs.umd.js"></script>
     
     <!-- Application Scripts -->
-    <script src="../../spa/js/components/TabManager.js"></script>
-    <script src="../../spa/js/components/ChartHost.js"></script>
-    <script src="../../spa/js/components/DataBinder.js"></script>
-    <script src="../../spa/js/components/UseCasesManager.js"></script>
-    <script src="../../spa/js/charts/ChartFactory.js"></script>
-    <script src="../../spa/js/app.js"></script>
+    <script src="js/components/TabManager.js"></script>
+    <script src="js/components/ChartHost.js"></script>
+    <script src="js/components/DataBinder.js"></script>
+    <script src="js/components/UseCasesManager.js"></script>
+    <script src="js/charts/ChartFactory.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Dynamic Data Loader -->
+    <script>
+        // Extract repo name from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const repoName = urlParams.get('repo') || 'cortex';
+        
+        console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
+        
+        // Fetch dashboard data for the specified repo
+        fetch(`../repos/${repoName}/dashboard-data.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load dashboard data: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('✅ [SPA] Dashboard data loaded successfully:', {
+                    repo: data.repo?.display_name,
+                    hasMetrics: !!data.metrics,
+                    hasSecurity: !!data.security,
+                    hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
+                });
+                
+                // Inject data into a script tag for app.js to consume
+                const dataScript = document.createElement('script');
+                dataScript.type = 'application/json';
+                dataScript.id = 'dashboard-data';
+                dataScript.textContent = JSON.stringify(data);
+                document.body.appendChild(dataScript);
+                
+                // Initialize the dashboard
+                const dashboard = new CortexDashboard();
+                dashboard.init();
+            })
+            .catch(error => {
+                console.error('❌ [SPA] Failed to load dashboard data:', error);
+                
+                // Show error message
+                const errorHtml = `
+                    <div style="padding: 3rem; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+                        <h2 style="color: var(--error); margin-bottom: 1rem;">Dashboard Data Not Found</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                            Could not load dashboard data for repository: <strong>${repoName}</strong>
+                        </p>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                            ${error.message}
+                        </p>
+                        <a href="../index.html" class="btn">
+                            <span>←</span> Back to Repository List
+                        </a>
+                    </div>
+                `;
+                document.querySelector('.app-container').innerHTML = errorHtml;
+            });
+    </script>
 </body>
 </html>
