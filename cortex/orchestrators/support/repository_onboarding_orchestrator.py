@@ -10,11 +10,13 @@ Universal repository onboarding with comprehensive analysis:
 - Universal dashboard generation in company/dashboards/
 - Landing page hub with repository tiles
 - Collapsible file references and evidence tracking
+- LLM Mode support (interactive/batch/skip) for scalability
 
 AC-ID: AC-UNIVERSAL-ONBOARD-001
 Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 """
 
+from enum import Enum
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
@@ -48,6 +50,23 @@ from cortex.common.debug_logger import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class LLMMode(Enum):
+    """
+    LLM generation mode for repository onboarding.
+    
+    Modes:
+    - INTERACTIVE: Print prompts to console for manual copy/paste (default)
+    - BATCH: Save prompts to files for batch processing (scales to 100+ repos)
+    - SKIP: Skip LLM generation entirely (fast analysis only)
+    
+    Authority: PHASE-21-ENTERPRISE-REPOSITORY-INTELLIGENCE.yaml lines 2842-2950
+    """
+    
+    INTERACTIVE = 'interactive'
+    BATCH = 'batch'
+    SKIP = 'skip'
 
 # Lazy imports for new components
 _asset_manager = None
@@ -167,6 +186,8 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         update_company_domain: bool = True,
         repo_name: Optional[str] = None,
         icon: str = "📁",
+        llm_mode: LLMMode = LLMMode.INTERACTIVE,
+        llm_output_dir: Optional[Path] = None,
     ) -> OnboardingResult:
         """
         Onboard repository with comprehensive analysis.
@@ -186,6 +207,8 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             update_company_domain: Whether to update company domains
             repo_name: Override repo name (default: folder name)
             icon: Emoji icon for landing page tile
+            llm_mode: LLM generation mode (interactive/batch/skip)
+            llm_output_dir: Output directory for batch mode prompts
             
         Returns:
             OnboardingResult with analysis, dashboard, and landing page
@@ -194,12 +217,19 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             >>> result = orchestrator.onboard_repository(
             ...     Path("/workspace/kashkole"),
             ...     repo_name="kashkole",
-            ...     icon="💼"
+            ...     icon="💼",
+            ...     llm_mode=LLMMode.BATCH,
+            ...     llm_output_dir=Path("llm_prompts")
             ... )
             >>> print(result.dashboard_path)
             >>> print(result.business_narrative.description)
         """
-        logger.info("Starting universal repository onboarding: %s", repo_path)
+        logger.info("Starting universal repository onboarding: %s (LLM mode: %s)", 
+                   repo_path, llm_mode.value)
+        
+        # Store LLM mode for use in helper methods
+        self._llm_mode = llm_mode
+        self._llm_output_dir = llm_output_dir or (repo_path / "llm_prompts")
         
         # Canonical name
         canonical_name = (repo_name or repo_path.name).lower().strip()
@@ -1344,6 +1374,102 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         """Get audit trail with hash chain."""
         # Basic audit trail - would be enhanced with hash chain in production
         return Ok([])
+    
+    # =========================================================================
+    # LLM MODE HELPERS (GAP-003)
+    # =========================================================================
+    
+    def _run_lens_analysis(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Run LENS analysis (mock for testing).
+        
+        In production, this would call LENSOrchestrator.
+        """
+        return {
+            'repo_summary': {
+                'repo_name': repo_path.name,
+                'repo_slug': repo_path.name.lower(),
+                'primary_language': 'Python',
+                'last_commit_date': datetime.now().isoformat(),
+            },
+            'use_cases': [],
+            'metrics_summary': {
+                'total_complexity': 0,
+                'avg_complexity': 0.0,
+                'total_maintainability': 100.0,
+                'test_coverage': 0.0,
+                'duplication_ratio': 0.0,
+            }
+        }
+    
+    def _generate_llm_content(self, prompt_type: str, context: Dict[str, Any]) -> str:
+        """
+        Generate LLM content based on mode.
+        
+        Args:
+            prompt_type: Type of prompt (overview, use_cases, etc.)
+            context: Context data for prompt generation
+            
+        Returns:
+            Generated content (or empty if skipped)
+        """
+        if not hasattr(self, '_llm_mode'):
+            self._llm_mode = LLMMode.INTERACTIVE
+        
+        if self._llm_mode == LLMMode.SKIP:
+            logger.info(f"Skipping LLM generation: {prompt_type}")
+            return ""
+        
+        # Generate prompt
+        prompt = self._build_prompt(prompt_type, context)
+        
+        if self._llm_mode == LLMMode.INTERACTIVE:
+            # Print to console for manual copy/paste
+            self._print_interactive_prompt(prompt_type, prompt)
+            return ""  # User will manually paste result
+        
+        elif self._llm_mode == LLMMode.BATCH:
+            # Save to file
+            self._save_batch_prompt(prompt_type, prompt)
+            return ""  # Will be processed in batch
+        
+        return ""
+    
+    def _build_prompt(self, prompt_type: str, context: Dict[str, Any]) -> str:
+        """Build LLM prompt based on type and context."""
+        repo_name = context.get('repo_name', 'unknown')
+        
+        prompts = {
+            'overview': f"Generate a comprehensive overview for repository: {repo_name}\n\nContext:\n{json.dumps(context, indent=2)}",
+            'use_cases': f"Identify and describe key use cases for repository: {repo_name}\n\nContext:\n{json.dumps(context, indent=2)}",
+            'summary': f"Generate an executive summary for repository: {repo_name}\n\nContext:\n{json.dumps(context, indent=2)}",
+        }
+        
+        return prompts.get(prompt_type, f"Generate {prompt_type} for {repo_name}")
+    
+    def _print_interactive_prompt(self, prompt_type: str, prompt: str):
+        """Print prompt to console for interactive mode."""
+        print("\n" + "=" * 80)
+        print(f"LLM PROMPT ({prompt_type.upper()})")
+        print("=" * 80)
+        print(prompt)
+        print("=" * 80)
+        print("Copy the above prompt, paste into your LLM, and paste the response back.")
+        print("=" * 80 + "\n")
+    
+    def _save_batch_prompt(self, prompt_type: str, prompt: str):
+        """Save prompt to file for batch mode."""
+        if not hasattr(self, '_llm_output_dir'):
+            self._llm_output_dir = Path("llm_prompts")
+        
+        self._llm_output_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{prompt_type}_{timestamp}.txt"
+        filepath = self._llm_output_dir / filename
+        
+        filepath.write_text(prompt)
+        logger.info(f"Saved batch prompt: {filepath}")
 
 
 # Singleton instance
