@@ -1,0 +1,540 @@
+# PHASE 22: ASK Mode System - Truth-Based Educational Interaction
+# Version: 1.0
+# Author: Asif Hussain
+# Date: 2026-02-03
+# Status: SPECIFICATION COMPLETE ✅
+# Priority: P1 High
+# Duration: 2-3 weeks (160 hours)
+
+---
+
+metadata:
+  phase_id: "PHASE-22"
+  phase_name: "ASK Mode System"
+  version: "1.0"
+  status: "SPECIFICATION_COMPLETE"
+  priority: "P1"
+  duration_estimate: "2-3 weeks"
+  prerequisites:
+    - "PHASE-8: Challenge Orchestrator (COMPLETE)"
+    - "PHASE-19: LENS Unified Intelligence (PLANNED)"
+    - "InteractionOrchestrator with ChallengeEngine (COMPLETE)"
+  dependencies:
+    - "cortex/orchestrators/core/interaction_orchestrator.py"
+    - "cortex/orchestrators/core/challenge_engine.py"
+    - ".github/prompts/cortex-architect.prompt.md"
+    - ".github/agents/core/cortex-architect.md"
+
+---
+
+## 🎯 MISSION
+
+Create an ASK mode that provides **implementation-truth-based** education about CORTEX architecture, engaging users progressively through intelligent interaction patterns with numbered next-step suggestions.
+
+**Core Principles:**
+1. **Implementation Truth** - ALWAYS verify live code, never rely on documentation
+2. **Progressive Disclosure** - Meet users where they are, guide them deeper
+3. **Intelligent Interaction** - Use InteractionOrchestrator + ChallengeEngine for engagement
+4. **Numbered Options** - Every response ends with 3-5 intelligent next steps
+5. **Fault Detection** - Identify implementation issues early with recommendations
+
+---
+
+## 🏗️ ARCHITECTURE
+
+### Mode Hierarchy
+```
+cortex-architect.prompt.md
+    ├── AUDIT Mode (context-blind health scan)
+    ├── DESIGN Mode (enhanced request + challenge + TDD)
+    └── ASK Mode (NEW - educational truth-based interaction)
+```
+
+### Component Architecture
+```
+cortex-ask.prompt.md (NEW)
+    ├── Uses: InteractionOrchestrator (engagement patterns)
+    ├── Uses: ChallengeEngine (intelligent disagreement)
+    ├── Uses: LENSOrchestrator (implementation verification)
+    ├── Uses: EducationalOrchestrator (NEW - progressive disclosure)
+    └── Uses: TruthVerificationEngine (NEW - code vs docs)
+```
+
+---
+
+## 📦 DELIVERABLES
+
+### P0 - Core Components (Week 1: 60 hours)
+
+#### 1. Prompt Enhancement
+- **File:** `.github/prompts/cortex-ask.prompt.md` (NEW)
+- **Size:** ~400 lines
+- **Tests:** N/A (prompt)
+- **AC:**
+  - Mode detection: "ask about", "explain", "how does", "what is"
+  - Response format: Implementation truth + numbered options
+  - Progressive disclosure levels: Beginner → Intermediate → Advanced
+  - Integration with cortex-architect.prompt.md
+
+#### 2. Agent Specifications
+- **File:** `.github/agents/education/cortex-ask-coordinator.md` (NEW)
+- **Size:** ~200 lines
+- **Tests:** N/A (agent spec)
+- **AC:**
+  - Routes educational queries
+  - Coordinates with InteractionOrchestrator
+  - Generates numbered next-step options
+
+- **File:** `.github/agents/education/truth-verifier.md` (NEW)
+- **Size:** ~150 lines
+- **Tests:** N/A (agent spec)
+- **AC:**
+  - Verifies claims against live code
+  - Detects documentation drift
+  - Flags implementation issues
+
+#### 3. EducationalOrchestrator
+- **File:** `cortex/orchestrators/education/educational_orchestrator.py` (NEW)
+- **Size:** ~600 lines
+- **Tests:** `tests/unit/orchestrators/education/test_educational_orchestrator.py` (20 tests)
+- **AC:**
+  - Progressive disclosure engine (beginner/intermediate/advanced)
+  - Context tracking across conversation
+  - Integration with InteractionOrchestrator
+  - Numbered option generation (3-5 intelligent next steps)
+  - CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
+
+### P0 - Truth Verification (Week 1: 40 hours)
+
+#### 4. TruthVerificationEngine
+- **File:** `cortex/brain/verification/truth_verification_engine.py` (NEW)
+- **Size:** ~800 lines
+- **Tests:** `tests/unit/brain/verification/test_truth_verification_engine.py` (30 tests)
+- **AC:**
+  - Code vs documentation verification
+  - Implementation reality checks
+  - Drift detection (docs vs code)
+  - Evidence collection (file paths, line numbers, AST nodes)
+  - Integration with LENSOrchestrator for code inspection
+  - CORE-008, CORE-011, CORE-012, CORE-030 (Implementation Truth)
+
+#### 5. ImplementationVerifier
+- **File:** `cortex/brain/verification/implementation_verifier.py` (NEW)
+- **Size:** ~500 lines
+- **Tests:** `tests/unit/brain/verification/test_implementation_verifier.py` (25 tests)
+- **AC:**
+  - Live code inspection via AST
+  - Wiring verification (wiring.yaml vs implementations)
+  - Orchestrator existence checks
+  - MCP tool registration verification
+  - CORE-008, CORE-011, CORE-012
+
+### P1 - Interactive Features (Week 2: 60 hours)
+
+#### 6. NextStepGenerator
+- **File:** `cortex/brain/education/next_step_generator.py` (NEW)
+- **Size:** ~400 lines
+- **Tests:** `tests/unit/brain/education/test_next_step_generator.py` (20 tests)
+- **AC:**
+  - Context-aware option generation
+  - 3-5 numbered options per response
+  - Intelligent suggestions based on user knowledge level
+  - Integration with cortex-plan for phase awareness
+  - CORE-008, CORE-011, CORE-012
+
+#### 7. KnowledgeLevelDetector
+- **File:** `cortex/brain/education/knowledge_level_detector.py` (NEW)
+- **Size:** ~350 lines
+- **Tests:** `tests/unit/brain/education/test_knowledge_level_detector.py` (18 tests)
+- **AC:**
+  - Detects user knowledge level from queries
+  - Tracks progression: Beginner → Intermediate → Advanced
+  - Adapts explanations to knowledge level
+  - CORE-008, CORE-011, CORE-012
+
+#### 8. FaultDetectionReporter
+- **File:** `cortex/brain/education/fault_detection_reporter.py` (NEW)
+- **Size:** ~450 lines
+- **Tests:** `tests/unit/brain/education/test_fault_detection_reporter.py` (22 tests)
+- **AC:**
+  - Identifies implementation issues during explanation
+  - Generates recommendations for fixes
+  - Integrates with ChallengeEngine for intelligent suggestions
+  - Provides evidence (file paths, code snippets)
+  - CORE-008, CORE-011, CORE-012, CORE-030
+
+### P1 - MCP Integration (Week 2-3: 40 hours)
+
+#### 9. MCP Tool: cortex_ask
+- **File:** `cortex/mcp/tools/cortex_ask.py` (NEW)
+- **Size:** ~300 lines
+- **Tests:** `tests/unit/mcp/tools/test_cortex_ask.py` (15 tests)
+- **AC:**
+  - MCP tool registration (@mcp_tool decorator)
+  - Routes to EducationalOrchestrator
+  - Returns implementation-verified responses
+  - Includes numbered next-step options
+  - CORE-008, CORE-011, CORE-012, MCP-FIRST
+
+#### 10. MCP Tool: cortex_verify_claim
+- **File:** `cortex/mcp/tools/cortex_verify_claim.py` (NEW)
+- **Size:** ~250 lines
+- **Tests:** `tests/unit/mcp/tools/test_cortex_verify_claim.py` (12 tests)
+- **AC:**
+  - Standalone claim verification
+  - Returns: verified/false/partial with evidence
+  - Integration with TruthVerificationEngine
+  - CORE-008, CORE-011, CORE-012, MCP-FIRST
+
+### P2 - Enhancements (Week 3: 40 hours)
+
+#### 11. Interactive Tutorial System
+- **File:** `cortex/brain/education/tutorial_system.py` (NEW)
+- **Size:** ~550 lines
+- **Tests:** `tests/unit/brain/education/test_tutorial_system.py` (25 tests)
+- **AC:**
+  - Guided tutorials based on cortex-plan phases
+  - Step-by-step walkthroughs
+  - Checkpoint validation (verify understanding)
+  - CORE-008, CORE-011, CORE-012
+
+#### 12. Example Generator
+- **File:** `cortex/brain/education/example_generator.py` (NEW)
+- **Size:** ~400 lines
+- **Tests:** `tests/unit/brain/education/test_example_generator.py` (20 tests)
+- **AC:**
+  - Generates live examples from actual code
+  - Shows before/after for refactorings
+  - Demonstrates patterns from knowledge YAMLs
+  - CORE-008, CORE-011, CORE-012
+
+---
+
+## 🔄 INTEGRATION POINTS
+
+### 1. cortex-architect.prompt.md
+```yaml
+Mode Detection Addition:
+  - Existing: No request → AUDIT
+  - Existing: User request → DESIGN
+  - NEW: Educational keywords → ASK
+  
+Educational Keywords:
+  - "ask about", "explain", "how does", "what is"
+  - "show me", "walk me through", "teach me"
+  - "why does", "when should", "difference between"
+```
+
+### 2. InteractionOrchestrator Integration
+```python
+# Existing: challenge_engine for disagreement
+# NEW: educational_orchestrator for progressive disclosure
+# NEW: truth_verification_engine for implementation checks
+```
+
+### 3. ChallengeEngine Enhancement
+```python
+# NEW DisagreementType: EDUCATIONAL_CORRECTION
+# When user has incorrect understanding of CORTEX
+# Gently corrects with evidence from live code
+```
+
+### 4. LENS Integration
+```python
+# Use LENSOrchestrator for code inspection
+# Use cortex_git_history for recent changes
+# Use cortex_ast_analyze for structural verification
+```
+
+---
+
+## 📊 RESPONSE FORMAT
+
+### ASK Mode Response Template
+```markdown
+## 🧠 CORTEX ASK
+**Author:** Asif Hussain | **Mode:** Educational | **Level:** {Beginner|Intermediate|Advanced} ✅
+
+---
+
+### {Question Title}
+
+**Implementation Reality:**
+{verified information from live code}
+
+**Evidence:**
+- File: `{file_path}` (lines {start}-{end})
+- Wiring: `{wiring.yaml reference}`
+- Tests: `{test file coverage}`
+
+**{Detailed Explanation}**
+
+{Progressive disclosure based on knowledge level}
+
+---
+
+### ⚠️ Detected Issues (Optional)
+{If implementation drift or issues found}
+
+**Issue:** {description}
+**Recommendation:** {how to fix}
+**Priority:** {P0|P1|P2}
+
+---
+
+### 🔮 Next Steps
+
+Choose an option to continue learning:
+
+1. **{Deeper Dive}** - {description}
+2. **{Related Concept}** - {description}
+3. **{Practical Example}** - {description}
+4. **{Common Pitfall}** - {description}
+5. **{Advanced Topic}** - {description}
+
+*Tip: {contextual suggestion based on user's path}*
+```
+
+---
+
+## 🧪 TESTING STRATEGY
+
+### Unit Tests (150 total)
+| Component | Tests | Coverage |
+|-----------|-------|----------|
+| EducationalOrchestrator | 20 | 90%+ |
+| TruthVerificationEngine | 30 | 95%+ |
+| ImplementationVerifier | 25 | 90%+ |
+| NextStepGenerator | 20 | 90%+ |
+| KnowledgeLevelDetector | 18 | 90%+ |
+| FaultDetectionReporter | 22 | 90%+ |
+| MCP Tools (2) | 27 | 95%+ |
+| Tutorial System | 25 | 90%+ |
+| Example Generator | 20 | 90%+ |
+
+### Integration Tests (30)
+- ASK mode end-to-end flow
+- Interaction with InteractionOrchestrator
+- ChallengeEngine integration
+- MCP tool invocation
+- Progressive disclosure validation
+
+### Acceptance Tests (20)
+- Educational scenarios (beginner → advanced)
+- Truth verification accuracy
+- Fault detection effectiveness
+- Numbered option intelligence
+- User engagement patterns
+
+---
+
+## 📋 ACCEPTANCE CRITERIA
+
+### Must-Have (P0)
+- ✅ ASK mode detects educational queries
+- ✅ Always verifies against live implementation
+- ✅ Every response includes 3-5 numbered next steps
+- ✅ Progressive disclosure based on knowledge level
+- ✅ Fault detection with recommendations
+- ✅ Integration with InteractionOrchestrator
+- ✅ MCP tool exposure (cortex_ask, cortex_verify_claim)
+- ✅ CORE rules compliance (CORE-008, CORE-011, CORE-012, CORE-030)
+
+### Should-Have (P1)
+- ✅ Tutorial system for guided learning
+- ✅ Example generation from live code
+- ✅ Documentation drift detection
+- ✅ Context tracking across conversation
+- ✅ Evidence collection (files, lines, tests)
+
+### Nice-to-Have (P2)
+- Interactive quizzes
+- Learning path visualization
+- Progress tracking dashboard
+- Knowledge graph exploration
+
+---
+
+## 🔗 RELATED PHASES
+
+| Phase | Relation |
+|-------|----------|
+| Phase 8 | Uses ChallengeEngine for intelligent disagreement |
+| Phase 19 | Uses LENS for code intelligence |
+| Phase 20 | Integrates company + CORTEX knowledge YAMLs |
+| Phase 20.5 | Knowledge synthesis for educational content |
+
+---
+
+## 🚀 EXECUTION PLAN
+
+### Week 1: Foundation (100 hours)
+**Days 1-2:** Prompt + Agent Specs
+- cortex-ask.prompt.md
+- cortex-ask-coordinator.md
+- truth-verifier.md
+
+**Days 3-4:** Core Orchestrator
+- EducationalOrchestrator (TDD)
+- Integration with InteractionOrchestrator
+
+**Day 5:** Truth Verification
+- TruthVerificationEngine (TDD)
+- ImplementationVerifier (TDD)
+
+### Week 2: Interaction (100 hours)
+**Days 1-2:** Interactive Features
+- NextStepGenerator (TDD)
+- KnowledgeLevelDetector (TDD)
+- FaultDetectionReporter (TDD)
+
+**Days 3-4:** MCP Integration
+- cortex_ask MCP tool
+- cortex_verify_claim MCP tool
+- Integration tests
+
+**Day 5:** Testing + Documentation
+- Acceptance tests
+- Quick reference guide
+
+### Week 3: Enhancement + Polish (40 hours)
+**Days 1-2:** Tutorial System
+- TutorialSystem implementation
+- Example Generator
+
+**Days 3-4:** Integration + Testing
+- End-to-end scenarios
+- Performance optimization
+- Bug fixes
+
+**Day 5:** Documentation + Deployment
+- User guide
+- Phase completion report
+- Production readiness checklist
+
+---
+
+## 📊 SUCCESS METRICS
+
+| Metric | Target |
+|--------|--------|
+| Implementation Accuracy | 95%+ (truth verification) |
+| User Engagement | 80%+ choose next step option |
+| Fault Detection Rate | 90%+ issues identified |
+| Response Time | <2s for simple queries |
+| Test Coverage | 90%+ across all components |
+| Documentation Drift Detection | 85%+ accuracy |
+
+---
+
+## 🎯 INNOVATION FRAMEWORK ENHANCEMENT
+
+### Current Framework (Phase 8)
+```python
+ChallengeEngine:
+  - Detects disagreement
+  - Generates alternatives
+  - Presents options
+```
+
+### Enhanced Framework (Phase 22)
+```python
+ChallengeEngine + EducationalOrchestrator:
+  - Detects disagreement OR knowledge gap
+  - Generates alternatives OR educational content
+  - Presents options with numbered next steps
+  - Verifies against implementation truth
+  - Detects faults proactively
+  - Progressive disclosure based on user level
+```
+
+### Integration Pattern
+```python
+@dataclass
+class EnhancedChallengeResponse:
+    # Existing ChallengeResponse fields
+    has_disagreement: bool
+    disagreement_type: Optional[DisagreementType]
+    recommended_alternative: str
+    reasoning: str
+    
+    # NEW: Educational enhancements
+    is_educational: bool = False
+    knowledge_level: str = "beginner"
+    implementation_evidence: Dict[str, Any] = field(default_factory=dict)
+    next_steps: List[NextStepOption] = field(default_factory=list)
+    detected_faults: List[FaultReport] = field(default_factory=list)
+```
+
+---
+
+## 🛡️ GOVERNANCE COMPLIANCE
+
+| Rule | Implementation |
+|------|----------------|
+| CORE-002 | No markdown generation (inline responses only) |
+| CORE-008 | TDD for all components (150 unit tests) |
+| CORE-011 | Type hints mandatory (mypy validation) |
+| CORE-012 | Google-style docstrings all functions |
+| CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
+| CORE-029 | Response header mandatory |
+| CORE-030 | Implementation truth enforcement |
+| CORE-035 | Single canonical implementation |
+| MCP-FIRST | All functionality via MCP tools |
+
+---
+
+## 📝 NOTES
+
+### Design Decisions
+1. **Why separate ASK mode?**
+   - AUDIT = autonomous scan (no user context)
+   - DESIGN = enhanced request (user wants to build)
+   - ASK = educational (user wants to learn)
+
+2. **Why implementation truth?**
+   - Docs drift, code is reality
+   - Builds trust through verification
+   - Identifies issues early
+
+3. **Why numbered options?**
+   - Reduces cognitive load
+   - Guides exploration naturally
+   - Tracks user journey
+
+4. **Why progressive disclosure?**
+   - Meets users where they are
+   - Prevents information overload
+   - Encourages deeper learning
+
+### Risk Mitigation
+- **Risk:** Verification overhead slows responses
+  - **Mitigation:** Cache verification results, async checking
+
+- **Risk:** Options too generic/unhelpful
+  - **Mitigation:** Context-aware generation, user feedback loop
+
+- **Risk:** Over-correction confuses users
+  - **Mitigation:** Gentle corrections, evidence-based explanations
+
+---
+
+## ✅ DEFINITION OF DONE
+
+- [ ] All 12 components implemented with TDD
+- [ ] 150 unit tests passing (90%+ coverage)
+- [ ] 30 integration tests passing
+- [ ] 20 acceptance tests passing
+- [ ] MCP tools registered and tested
+- [ ] Prompts and agents documented
+- [ ] Integration with cortex-architect.prompt.md
+- [ ] Quick reference guide created
+- [ ] Phase completion report generated
+- [ ] Production deployment successful
+
+---
+
+**Status:** SPECIFICATION COMPLETE ✅  
+**Next Action:** Review and approval for execution  
+**Estimated Start:** Week of 2026-02-03  
+**Estimated Completion:** Week of 2026-02-24

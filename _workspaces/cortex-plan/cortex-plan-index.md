@@ -22,6 +22,7 @@
 
 | Phase | Name | Priority | Duration | Status |
 |-------|------|----------|----------|--------|
+| **22** | ASK Mode System | P1 High | 2-3 weeks | 📋 PLANNED (NEW) |
 | **20.5** | Knowledge Synthesis | P0 Critical | 4 days | ✅ APPROVED (NEW) |
 | **20.2** | Orchestrator Visibility | P0 Critical | 9 hours | ✅ APPROVED (NEW) |
 | **20** | LENS + Company Knowledge | P0 Critical | 5 days | ✅ APPROVED |
@@ -76,6 +77,8 @@
 
 ### 🎯 START HERE
 - **[LIVE-STATUS.md](./LIVE-STATUS.md)** ⭐ **CURRENT IMPLEMENTATION STATE** 🚀
+- **[PHASE-22-QUICK-REFERENCE.md](./PHASE-22-QUICK-REFERENCE.md)** 🆕 **ASK MODE GUIDE** 📋
+- **[PHASE-22-ASK-MODE-SYSTEM.yaml](./PHASE-22-ASK-MODE-SYSTEM.yaml)** 📋 **ASK MODE SPEC**
 - **[PHASE-20.5-QUICK-REFERENCE.md](./PHASE-20.5-QUICK-REFERENCE.md)** 🚀 **KNOWLEDGE SYNTHESIS GUIDE** ✅
 - **[PHASE-20.5-KNOWLEDGE-SYNTHESIS.yaml](./PHASE-20.5-KNOWLEDGE-SYNTHESIS.yaml)** 📋 **45+ YAMLs ACTIVE**
 - **[PHASE-20.2-QUICK-REFERENCE.md](./PHASE-20.2-QUICK-REFERENCE.md)** 🚀 **ORCHESTRATOR VISIBILITY GUIDE** ✅
