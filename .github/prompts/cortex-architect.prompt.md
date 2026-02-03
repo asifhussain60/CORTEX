@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 10.0 | **Updated:** 2026-02-02 | **Mode:** Dual-Mode (AUDIT + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅
+**Version:** 10.1 | **Updated:** 2026-02-03 | **Mode:** Dual-Mode (AUDIT + DESIGN) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
 
 ---
 
@@ -7,7 +7,8 @@
 
 | Trigger | Mode | Behavior |
 |---------|------|----------|
-| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan |
+| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations |
+| `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis (after primary audit) |
 | User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD |
 
 ---
@@ -38,6 +39,7 @@
 | Command | Mode |
 |---------|------|
 | `/audit` | AUDIT |
+| `/meta-audit` | META-AUDIT (after primary audit) |
 | `/implement {feature}` | DESIGN |
 | `/fix {issue}` | DESIGN |
 | `/refactor {target}` | DESIGN |
@@ -63,12 +65,16 @@
 | Check | Description |
 |-------|-------------|
 | DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) |
+| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering (via cortex_audit_trail_verify) |
 | Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents |
 | Orchestrator Wiring | 23+ in wiring.yaml match implementations |
 | MCP Production Gate | @mcp_tool + catalog for all production tools |
 | Intent Router | 5-layer consistency (enum→router→config→prompts→agents) |
 | Governance | 4-layer defense active |
 | TDD Completeness | Test files for all orchestrators |
+| Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) |
+| Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md |
+| Tool Coverage | All MCP tools referenced in prompt have implementations in cortex/mcp/tools/ |
 
 ### P2 — Quality
 | Check | Description |
@@ -76,6 +82,7 @@
 | Duplicates | CORE-035 violations |
 | Dead Code | Unused imports, orphan functions |
 | Skipped Tests | @pytest.mark.skip >30 days |
+| Refactoring Needs | Complexity hotspots (>15 cyclomatic), SOLID violations, technical debt ratio >5%, code smells >100, functions >50 LOC (via cortex_lens_analyze) |
 
 ### P3 — Cleanup
 | Check | Description |
@@ -93,9 +100,83 @@
 | Wiring | ✅/❌ | {count} | P1 |
 ...
 
+### 💡 Out of the Box Recommendations
+**Innovation Score:** {High|Medium|Low} | **Feasibility:** {Easy|Moderate|Hard}
+
+| # | Domain | Idea | Rationale | Effort | Impact |
+|---|--------|------|-----------|--------|--------|
+| 1 | {Architecture|DX|Performance|Security|AI/ML} | {specific idea} | {why now?} | {S/M/L} | {H/M/L} |
+| 2 | {domain} | {idea} | {evidence-based rationale} | {S/M/L} | {H/M/L} |
+
+**Criteria:** Alignment with CORTEX principles ✅ | Evidence-based (Implementation Truth) ✅ | Novel (not in roadmap) ✅
+
 ### 🎯 P0 Actions Required
 | # | Issue | File | Action |
 |---|-------|------|--------|
+```
+
+---
+
+# 🔬 MODE 1.5: META-AUDIT (After Primary Audit)
+
+**Trigger:** `/meta-audit` command ONLY  
+**Execution:** Runs AFTER primary audit completes (never during)  
+**Recursion Guard:** Max depth = 1 (meta-audit cannot trigger another meta-audit)  
+**Output:** 🧠 Meta-Intelligence Report (separate section)
+
+## Meta-Audit Checklist
+
+### Prompt Effectiveness
+| Check | Description |
+|-------|-------------|
+| Section Clarity | All sections have clear purpose and non-overlapping scope |
+| Rule Specificity | CORE rules have measurable criteria (not vague) |
+| Version Sync | Prompt version matches agent versions |
+| Example Freshness | Code examples reference current orchestrators (not deprecated) |
+
+### Agent Coherence
+| Check | Description |
+|-------|-------------|
+| Role Overlap | No duplicate responsibilities across cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md |
+| Coverage Gaps | All prompt modes have corresponding agent (AUDIT→auditor, DESIGN→designer) |
+| Instruction Alignment | Agent instructions match prompt behavior specifications |
+| Tool References | Agents reference only available MCP tools |
+
+### Recommendation Quality
+| Check | Description |
+|-------|-------------|
+| Adoption Rate | % of recommendations accepted (from enhancement-history.yaml) |
+| Repeat Suggestions | Avoid recommending previously rejected ideas |
+| Innovation Balance | Mix of quick wins (S effort) and game-changers (L effort) |
+| Evidence Basis | All recommendations cite Implementation Truth (not assumptions) |
+
+## Meta-Audit Output Format
+
+```markdown
+### 🧠 Meta-Intelligence Report
+
+**Prompt Health:** {Excellent|Good|Needs Attention}  
+**Agent Coherence:** {✅ Aligned | ⚠️ Minor Issues | ❌ Conflicts Detected}  
+**Learning Velocity:** {recommendations/month}
+
+#### Prompt Metrics
+| Metric | Value | Trend |
+|--------|-------|-------|
+| Sections | {count} | {↑↓→} |
+| CORE Rules | {count} | {↑↓→} |
+| Days Since Update | {days} | {↑↓→} |
+
+#### Enhancement Pipeline
+| Status | Count | Adoption Rate |
+|--------|-------|---------------|
+| Implemented | {n} | {%} |
+| In Progress | {n} | — |
+| Rejected | {n} | — |
+
+#### Detected Issues
+| # | Type | Issue | Recommendation |
+|---|------|-------|----------------|
+| 1 | {Prompt|Agent|Tool} | {specific} | {fix} |
 ```
 
 ---
@@ -254,8 +335,60 @@
 ## ✅ COMPLETION
 
 **AUDIT:** "✅ CORTEX Audit Complete — 100% production-ready" or P0 Actions table  
+**META-AUDIT:** "🧠 Meta-Intelligence Report Complete — {n} insights generated"  
 **DESIGN:** Implementation table with files modified, tests passing, todos tracked
 
 ---
 
-*v10.0 — Incremental TDD with task decomposition, token budget enforcement, and MCP todo tracking.*
+## 🎓 LEARNING & EVOLUTION
+
+### Enhancement Registry
+
+**Location:** `docs/meta/enhancement-history.yaml`
+
+**Purpose:** Track recommendations → implementations → outcomes to enable learning feedback loop
+
+**Schema:**
+```yaml
+enhancements:
+  - id: ENH-XXX
+    recommendation: "..."
+    status: PLANNED|IN_PROGRESS|IMPLEMENTED
+    adoption_reason: "..."
+    metrics: {...}
+
+rejected_recommendations:
+  - id: REJ-XXX
+    recommendation: "..."
+    rejection_reason: "..."
+    lessons_learned: [...]
+```
+
+**Usage:**
+- Meta-audit reads registry to avoid repeating rejected ideas
+- Adoption metrics influence future recommendation scoring
+- Implementation outcomes validate/refine innovation taxonomy
+
+### Innovation Taxonomy
+
+| Domain | Focus | Recommendation Triggers |
+|--------|-------|------------------------|
+| **Architecture** | Structural improvements | High coupling, circular dependencies, layer violations |
+| **DX** | Developer experience | Repetitive tasks, manual workflows, tooling gaps |
+| **Performance** | Speed/efficiency | Slow operations (>1s), high memory usage, redundant processing |
+| **Security** | Hardening | Exposed secrets, missing encryption, weak auth |
+| **AI/ML** | Intelligence | Pattern recognition opportunities, predictive use cases |
+
+### Self-Enhancement Rules
+
+| Rule | Enforcement |
+|------|-------------|
+| **No Recursion** | Meta-audit cannot trigger another meta-audit (max depth = 1) |
+| **Evidence-Based** | All recommendations cite Implementation Truth (CORE-030) |
+| **User Control** | No auto-modifications to prompt/agents without approval |
+| **Version Tracking** | All changes update version number and changelog |
+| **Feedback Loop** | Outcomes tracked in registry for continuous learning |
+
+---
+
+*v10.1 — Meta-Intelligence System: Self-enhancement, innovation recommendations, learning feedback loop.*
