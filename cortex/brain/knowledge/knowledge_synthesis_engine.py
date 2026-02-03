@@ -1,18 +1,20 @@
 """
 Knowledge Synthesis Engine - Compose CORTEX + Company knowledge into instructions
 
-Authority: AC-HYBRID-KNOWLEDGE-004
-Version: 1.0
-Date: 2026-01-26
+Authority: AC-HYBRID-KNOWLEDGE-004, AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
+Version: 2.0
+Date: 2026-02-03
 
 This engine:
 1. Retrieves applicable CORTEX best practices
 2. Overlays/merges with Company knowledge domains
 3. Applies composition rules
 4. Generates final instruction sets for Master Orchestrator
+5. [Phase 20.5] Creates UnifiedIntelligenceContext for Stage 2 routing
 
 Integration:
 - Called by Master Orchestrator during stage 3 (knowledge synthesis)
+- [Phase 20.5] Auto-invoked at Stage 2 for unified intelligence
 - Returns explicit source attribution (CORTEX + Company layers)
 - Supports caching for performance
 
@@ -25,8 +27,19 @@ CORE Governance:
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+# Phase 20.5: Unified Intelligence Context
+from cortex.brain.knowledge.unified_intelligence_context import (
+    UnifiedIntelligenceContext,
+    LENSIntelligence,
+    CompanyKnowledge,
+    CORTEXKnowledge,
+    SynthesisResult,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +76,352 @@ class KnowledgeSynthesisEngine:
     def __init__(self):
         """Initialize synthesis engine."""
         self._cache: Dict[str, SynthesizedInstruction] = {}
+        self._cortex_knowledge_cache: Dict[str, Dict[str, Any]] = {}
+    
+    # =========================================================================
+    # PHASE 20.5: UNIFIED INTELLIGENCE CONTEXT SYNTHESIS
+    # Authority: AC-KNOWLEDGE-SYNTHESIS-001
+    # =========================================================================
+    
+    def synthesize_unified_context(
+        self,
+        intent_type: str,
+        lens_intelligence: Optional[LENSIntelligence] = None,
+        company_knowledge: Optional[CompanyKnowledge] = None,
+        file_path: Optional[str] = None,
+    ) -> UnifiedIntelligenceContext:
+        """
+        Synthesize unified intelligence context combining all knowledge sources.
+        
+        This is the main Phase 20.5 entry point for MasterOrchestrator Stage 2.
+        Combines LENS + Company + CORTEX knowledge into single context with:
+        - Precedence resolution (Company > CORTEX)
+        - Rule citations
+        - Violation detection
+        - Proactive guidance
+        
+        Args:
+            intent_type: Intent type (IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.)
+            lens_intelligence: Optional LENS intelligence from Phase 20
+            company_knowledge: Optional company knowledge from Phase 20
+            file_path: Optional file path being analyzed
+        
+        Returns:
+            UnifiedIntelligenceContext with all intelligence sources synthesized
+        
+        Example:
+            >>> engine = KnowledgeSynthesisEngine()
+            >>> lens = LENSIntelligence(git_analysis={...}, ast_analysis={...}, comment_analysis={...})
+            >>> company = CompanyKnowledge(domain_rules={...}, compliance_standards=[...], precedence="OVERRIDE")
+            >>> context = engine.synthesize_unified_context("IMPLEMENT", lens, company, "/src/main.py")
+            >>> if context.has_violations():
+            ...     print("Violations:", context.get_violations())
+        
+        Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5 Component #2)
+        """
+        # Use empty defaults if not provided (graceful degradation)
+        if lens_intelligence is None:
+            lens_intelligence = LENSIntelligence(
+                git_analysis={},
+                ast_analysis={},
+                comment_analysis={}
+            )
+        
+        if company_knowledge is None:
+            company_knowledge = CompanyKnowledge(
+                domain_rules={},
+                compliance_standards=[],
+                precedence="OVERRIDE"
+            )
+        
+        # Load CORTEX best practices (45+ YAMLs)
+        cortex_best_practices = self._load_cortex_best_practices(intent_type)
+        applicable_patterns = self._extract_applicable_patterns(intent_type, cortex_best_practices)
+        anti_patterns = self._extract_anti_patterns(cortex_best_practices)
+        
+        cortex_knowledge = CORTEXKnowledge(
+            best_practices=cortex_best_practices,
+            applicable_patterns=applicable_patterns,
+            anti_patterns=anti_patterns,
+            synthesis_metadata={
+                "rules_loaded": len(cortex_best_practices),
+                "intent_type": intent_type,
+                "timestamp": time.time(),
+            }
+        )
+        
+        # Resolve precedence conflicts (Company > CORTEX)
+        merged_rules = self._resolve_rule_conflicts(
+            cortex_best_practices,
+            company_knowledge.domain_rules
+        )
+        
+        # Generate citations (rules that will be cited)
+        citations = self._generate_citations(merged_rules, intent_type)
+        
+        # Detect violations (rules violated based on LENS intelligence)
+        violations = self._detect_violations(
+            merged_rules,
+            lens_intelligence,
+            company_knowledge
+        )
+        
+        # Generate proactive guidance
+        guidance = self._generate_guidance(
+            intent_type,
+            merged_rules,
+            violations,
+            lens_intelligence
+        )
+        
+        # Create synthesis result
+        synthesis_result = SynthesisResult(
+            merged_rules=merged_rules,
+            citations=citations,
+            violations=violations,
+            guidance=guidance
+        )
+        
+        # Create unified context
+        return UnifiedIntelligenceContext(
+            lens_intelligence=lens_intelligence,
+            company_knowledge=company_knowledge,
+            cortex_knowledge=cortex_knowledge,
+            synthesis_result=synthesis_result,
+            intent_type=intent_type,
+            file_path=file_path,
+            timestamp=time.time()
+        )
+    
+    def _load_cortex_best_practices(self, intent_type: str) -> Dict[str, Any]:
+        """
+        Load applicable CORTEX best practices from 45+ YAMLs.
+        
+        Args:
+            intent_type: Intent type to filter applicable practices
+        
+        Returns:
+            Dictionary of best practices keyed by rule ID
+        """
+        # Check cache first
+        cache_key = f"cortex_practices_{intent_type}"
+        if cache_key in self._cortex_knowledge_cache:
+            return self._cortex_knowledge_cache[cache_key]
+        
+        practices = {}
+        
+        try:
+            # TODO: Load from cortex_brain/tier3/knowledge/*.yaml
+            # For now, return common CORE rules
+            practices = {
+                "CORE-008": "TDD First - Write tests before implementation",
+                "CORE-011": "Type Hints - All functions must have type annotations",
+                "CORE-012": "Google-style Docstrings - Document all public methods",
+                "CORE-013": "No Bare Except - Always specify exception types",
+                "CORE-026": "Git Checkpoint - Commit before major changes",
+                "CORE-027": "Audit Trail - Log AC_START and AC_COMPLETE",
+                "CORE-029": "Response Header - Include CORTEX header in responses",
+                "CORE-030": "Implementation Truth - Verify code, not docs",
+                "CORE-035": "Single Implementation - One canonical implementation",
+                "CORE-036": "Industry Standards - Comply with 12-Factor, SOLID, Clean Code, OWASP",
+            }
+            
+            # Filter by intent type (all CORE rules apply to all intents for now)
+            # In full implementation, load YAMLs and filter by intent
+            
+            self._cortex_knowledge_cache[cache_key] = practices
+            
+        except Exception as e:
+            logger.error(f"Failed to load CORTEX best practices: {e}")
+        
+        return practices
+    
+    def _extract_applicable_patterns(
+        self,
+        intent_type: str,
+        best_practices: Dict[str, Any]
+    ) -> List[str]:
+        """
+        Extract applicable patterns for intent type.
+        
+        Args:
+            intent_type: Intent type
+            best_practices: Best practices dict
+        
+        Returns:
+            List of applicable pattern names
+        """
+        patterns = []
+        
+        # Intent-specific patterns
+        if intent_type == "IMPLEMENT":
+            patterns = ["Repository Pattern", "Factory Pattern", "TDD Pattern"]
+        elif intent_type == "FIX":
+            patterns = ["Root Cause Analysis", "Defensive Programming"]
+        elif intent_type == "REFACTOR":
+            patterns = ["Extract Method", "Introduce Parameter Object", "Replace Conditional with Polymorphism"]
+        elif intent_type == "ANALYZE":
+            patterns = ["Code Metrics", "Dependency Analysis", "Complexity Analysis"]
+        
+        return patterns
+    
+    def _extract_anti_patterns(self, best_practices: Dict[str, Any]) -> List[str]:
+        """
+        Extract anti-patterns to avoid.
+        
+        Args:
+            best_practices: Best practices dict
+        
+        Returns:
+            List of anti-pattern names
+        """
+        return [
+            "God Object",
+            "Spaghetti Code",
+            "Copy-Paste Programming",
+            "Magic Numbers",
+            "Premature Optimization",
+        ]
+    
+    def _resolve_rule_conflicts(
+        self,
+        cortex_rules: Dict[str, Any],
+        company_rules: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Resolve conflicts between CORTEX and company rules.
+        
+        Company rules have OVERRIDE precedence.
+        
+        Args:
+            cortex_rules: CORTEX best practices
+            company_rules: Company domain rules
+        
+        Returns:
+            Merged rules with conflicts resolved
+        """
+        merged = cortex_rules.copy()
+        
+        # Company rules override CORTEX rules
+        for rule_key, rule_value in company_rules.items():
+            if rule_key in merged:
+                logger.info(f"Company rule overrides CORTEX rule: {rule_key}")
+            merged[rule_key] = rule_value
+        
+        return merged
+    
+    def _generate_citations(
+        self,
+        merged_rules: Dict[str, Any],
+        intent_type: str
+    ) -> List[str]:
+        """
+        Generate list of rule IDs to cite in routing decision.
+        
+        Args:
+            merged_rules: Merged ruleset
+            intent_type: Intent type
+        
+        Returns:
+            List of rule IDs to cite
+        """
+        citations = []
+        
+        # Always cite these CORE rules
+        always_cite = ["CORE-008", "CORE-011", "CORE-012"]
+        for rule_id in always_cite:
+            if rule_id in merged_rules:
+                citations.append(rule_id)
+        
+        # Cite intent-specific rules
+        if intent_type == "IMPLEMENT":
+            if "CORE-026" in merged_rules:
+                citations.append("CORE-026")
+        elif intent_type == "FIX":
+            if "CORE-013" in merged_rules:
+                citations.append("CORE-013")
+        
+        return citations
+    
+    def _detect_violations(
+        self,
+        merged_rules: Dict[str, Any],
+        lens_intelligence: LENSIntelligence,
+        company_knowledge: CompanyKnowledge
+    ) -> List[str]:
+        """
+        Detect rule violations based on LENS intelligence.
+        
+        Args:
+            merged_rules: Merged ruleset
+            lens_intelligence: LENS analysis
+            company_knowledge: Company knowledge
+        
+        Returns:
+            List of violation strings
+        """
+        violations = []
+        
+        # Check complexity violations
+        ast_analysis = lens_intelligence.ast_analysis
+        if ast_analysis.get("complexity", 0) > 20:
+            violations.append("CORTEX: High complexity detected (>20), refactoring recommended")
+        
+        # Check TODO/FIXME violations
+        comment_analysis = lens_intelligence.comment_analysis
+        if comment_analysis.get("fixmes", 0) > 5:
+            violations.append("CORTEX: Excessive FIXMEs detected (>5), technical debt accumulating")
+        
+        # Check compliance violations
+        if "PCI-DSS" in company_knowledge.compliance_standards:
+            # Check if file handles payment data (simplified check)
+            if lens_intelligence.git_analysis.get("payment_related", False):
+                violations.append("COMPANY: PCI-DSS compliance check required for payment data")
+        
+        return violations
+    
+    def _generate_guidance(
+        self,
+        intent_type: str,
+        merged_rules: Dict[str, Any],
+        violations: List[str],
+        lens_intelligence: LENSIntelligence
+    ) -> List[str]:
+        """
+        Generate proactive guidance for engineer.
+        
+        Args:
+            intent_type: Intent type
+            merged_rules: Merged ruleset
+            violations: Detected violations
+            lens_intelligence: LENS intelligence
+        
+        Returns:
+            List of guidance strings
+        """
+        guidance = []
+        
+        # Intent-specific guidance
+        if intent_type == "IMPLEMENT":
+            if "CORE-008" in merged_rules:
+                guidance.append("Start with TDD: Write test first, then implement")
+            if "CORE-011" in merged_rules:
+                guidance.append("Add type hints to all function signatures")
+        
+        # Violation-based guidance
+        if violations:
+            guidance.append(f"Address {len(violations)} violation(s) before proceeding")
+        
+        # LENS-based guidance
+        complexity = lens_intelligence.ast_analysis.get("complexity", 0)
+        if complexity > 15:
+            guidance.append(f"Consider refactoring to reduce complexity (current: {complexity})")
+        
+        return guidance
+
+    # =========================================================================
+    # ORIGINAL METHODS (Phase 1)
+    # =========================================================================
 
     def synthesize_for_intent(
         self,
