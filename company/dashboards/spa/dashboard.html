@@ -661,7 +661,26 @@
                     code_smells_count: data.code_smells?.length || 0,
                     code_smells: data.code_smells || []
                 },
-                use_cases: data.use_cases || []
+                use_cases: data.use_cases || [],
+                // LENS intelligence section
+                lens: {
+                    patterns: data.lens_insights?.filter(i => i.insight_type === 'pattern') || [],
+                    architecture_summary: data.repo_summary?.architecture_summary || 'No architecture analysis available.',
+                    insights: data.lens_insights || [],
+                    entities: data.entities || [],
+                    components: data.components || []
+                },
+                // Refactoring recommendations
+                refactoring: {
+                    recommendations: data.code_smells?.map(smell => ({
+                        title: smell.name || 'Code Improvement',
+                        description: smell.description || 'Consider refactoring this code.',
+                        priority: smell.severity || 'medium',
+                        location: smell.location || 'Unknown',
+                        effort: 'medium',
+                        impact: 'medium'
+                    })) || []
+                }
             };
         }
         

@@ -498,23 +498,30 @@ class CortexDashboard {
     
     /**
      * Hide tabs that don't have corresponding data
+     * NOTE: Changed to show all 8 tabs always - each panel has built-in "no data" states
+     * This provides better UX by showing the full capability of the dashboard
      */
     hideEmptyTabs() {
+        // Previously hidden tabs based on empty data arrays
+        // Now we show all tabs and let panels display "no data" states
+        // This ensures all 8 tabs are visible: Overview, Metrics, Security, 
+        // Dependencies, Quality, Use Cases, LENS, Refactoring
+        
         const tabDataMap = {
-            'security-tab': 'security.vulnerabilities',
-            'dependencies-tab': 'dependencies.packages',
+            'security-tab': 'security',
+            'dependencies-tab': 'dependencies',
             'quality-tab': 'quality',
             'use-cases-tab': 'use_cases',
             'lens-tab': 'lens',
-            'refactoring-tab': 'refactoring.recommendations'
+            'refactoring-tab': 'refactoring'
         };
         
+        // Show all tabs - check for section existence only (not array length)
         Object.entries(tabDataMap).forEach(([tabId, dataPath]) => {
-            if (!this.dataBinder.hasValue(dataPath)) {
-                const tab = document.getElementById(tabId);
-                if (tab) {
-                    tab.style.display = 'none';
-                }
+            const tab = document.getElementById(tabId);
+            if (tab) {
+                // Always show tab - panel will handle empty state
+                tab.style.display = '';
             }
         });
     }
