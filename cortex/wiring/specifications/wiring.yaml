@@ -506,6 +506,25 @@ orchestrators:
       mcp_adapter: "cortex.mcp.adapters.recommendation_adapter"
       description: "Advisory layer providing contextualized best practice recommendations (Phase 8.4)"
 
+    - name: "RecommendationGate"
+      module: "cortex.orchestrators.core.recommendation_gate"
+      class: "RecommendationGate"
+      tier: 2
+      priority: 73
+      dependencies:
+        - "RecommendationEngine"
+      capabilities:
+        - regression_prevention
+        - rejection_history_check
+        - risk_scoring
+        - test_health_check
+        - duplication_check
+      health_check: "evaluate"
+      description: "Regression prevention layer that validates recommendations before emission (Self-Enhancement)"
+      governance:
+        - "CORE-030"
+        - "CORE-035"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
