@@ -59,9 +59,9 @@ class TemplateBlock:
     def render(self, context: Dict[str, Any]) -> str:
         """Render block with context."""
         if self.condition:
-            # Evaluate condition
+            # Safely evaluate condition without eval()
             try:
-                if not eval(self.condition, {"__builtins__": {}}, context):
+                if not self._evaluate_condition(self.condition, context):
                     return ""
             except Exception:
                 return ""
@@ -72,6 +72,81 @@ class TemplateBlock:
             indent_str = ' ' * self.indent
             content = '\n'.join(indent_str + line if line.strip() else line for line in lines)
         return content
+    
+    @staticmethod
+    def _evaluate_condition(condition: str, context: Dict[str, Any]) -> bool:
+        """Safely evaluate a condition expression without eval().
+        
+        Supports simple boolean logic:
+        - Variable references: {key_name}
+        - Comparisons: ==, !=, <, >, <=, >=
+        - Boolean operators: and, or, not
+        - Parentheses for grouping
+        
+        Args:
+            condition: Condition string (e.g., "has_tests and is_core")
+            context: Context dict with variable values
+            
+        Returns:
+            Boolean result of condition evaluation
+            
+        Raises:
+            ValueError: If condition syntax is invalid or contains disallowed operations
+        """
+        import re
+        
+        # Disallow dangerous operations
+        dangerous_patterns = [
+            r'__',  # Dunder attributes
+            r'import',
+            r'exec',
+            r'eval',
+            r'compile',
+            r'open',
+            r'file',
+        ]
+        for pattern in dangerous_patterns:
+            if re.search(pattern, condition, re.IGNORECASE):
+                raise ValueError(f"Condition contains disallowed operation: {pattern}")
+        
+        # Replace context variables with their values (quoted for strings)
+        def replace_var(match):
+            var_name = match.group(1)
+            if var_name not in context:
+                return "False"  # Missing var = False
+            value = context[var_name]
+            
+            if isinstance(value, bool):
+                return str(value)
+            elif isinstance(value, (int, float)):
+                return str(value)
+            elif isinstance(value, str):
+                return repr(value)
+            elif value is None:
+                return "None"
+            elif isinstance(value, list):
+                return f"len({repr(value)}) > 0"
+            else:
+                return "True"  # Non-falsy objects
+        
+        # Replace {var_name} patterns with values
+        safe_condition = re.sub(r'\{\s*(\w+)\s*\}', replace_var, condition)
+        
+        # Only allow safe Python boolean expressions
+        allowed_names = {'True', 'False', 'None', 'and', 'or', 'not', 'len'}
+        # Check that only allowed names/operators are used
+        identifiers = set(re.findall(r'\b([a-zA-Z_]\w*)\b', safe_condition))
+        disallowed = identifiers - allowed_names - set(str(i) for i in range(10))
+        if disallowed:
+            raise ValueError(f"Condition contains disallowed identifiers: {disallowed}")
+        
+        # Safely evaluate the condition using compile + limited namespace
+        try:
+            code = compile(safe_condition, '<condition>', 'eval')
+            result = eval(code, {'__builtins__': {}, 'len': len}, {})
+            return bool(result)
+        except SyntaxError as e:
+            raise ValueError(f"Invalid condition syntax: {e}")
     
     def _interpolate(self, text: str, context: Dict[str, Any]) -> str:
         """Interpolate variables in text."""
