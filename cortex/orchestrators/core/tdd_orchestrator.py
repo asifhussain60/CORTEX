@@ -247,8 +247,31 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             Result with TDD guidance and execution status
             
         CORE-008: Enforces TDD discipline (RED → GREEN → REFACTOR)
+        MCP-GATE: Rejects non-MCP invocations for IMPLEMENT intents
         """
         try:
+            # MCP-GATE ENFORCEMENT: Block direct chat invocations
+            invocation_source = context.get("source", "unknown")
+            if invocation_source != "mcp_gateway":
+                logger.warning(
+                    f"TDD Orchestrator invoked from {invocation_source} instead of MCP gateway"
+                )
+                return Err(
+                    "❌ MCP-GATE VIOLATION (CORE-019)\n\n"
+                    "Implementation requests MUST route through MCP gateway.\n"
+                    "Direct file creation bypasses:\n"
+                    "  - TDD enforcement (CORE-008)\n"
+                    "  - Security gates (ARCH-012)\n"
+                    "  - Cross-layer validation (CORE-035)\n"
+                    "  - Challenge generation\n"
+                    "  - DoR confidence gating\n\n"
+                    "✅ FIX: Use cortex_process_request MCP tool:\n"
+                    "  cortex_process_request(\n"
+                    "    request='implement feature X',\n"
+                    "    context={'module_path': 'cortex/...', 'domain': '...'}\n"
+                    "  )"
+                )
+            
             # Extract context
             module_path = context.get("module_path", "unknown")
             domain = context.get("domain", "unknown")

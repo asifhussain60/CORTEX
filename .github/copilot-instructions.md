@@ -19,12 +19,51 @@
 | Rule | Enforcement |
 |------|-------------|
 | **CORE-002** | NO markdown file generation (inline chat only) |
+| **CORE-008** | TDD MANDATORY — Tests BEFORE code (use TDDOrchestrator via MCP) |
+| **CORE-019** | ALL IMPLEMENT intents MUST route through TDDOrchestrator |
 | **CORE-029** | Response header MANDATORY |
 | **CORE-030** | Implementation Truth — verify code, not docs |
 | **CORE-035** | Single canonical implementation |
 | **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
+| **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
+
+---
+
+## 🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
+
+**FORBIDDEN:** Direct file creation when intent = IMPLEMENT
+
+**REQUIRED:** Use MCP tools for all implementation requests:
+
+```yaml
+IMPLEMENT Intent:
+  Tool: cortex_process_request
+  Flow: User → MCP Gateway → IntentRouter → TDDOrchestrator → RED→GREEN→REFACTOR
+  
+DESIGN/AUDIT Intent:
+  Tool: cortex_challenge (design reviews)
+  Tool: cortex_lens_analyze (code intelligence)
+  Tool: cortex_audit (health scans)
+
+ANALYZE Intent:
+  Tool: cortex_lens_analyze
+  Tool: cortex_detect_duplicates
+  Tool: cortex_git_history
+```
+
+**WHY:** Direct chat bypasses:
+- ❌ TDD enforcement (CORE-008)
+- ❌ Security gates (ARCH-012)
+- ❌ Cross-layer validation (CORE-035)
+- ❌ Challenge generation (disagreement detection)
+- ❌ DoR confidence gating
+
+**Exception:** Only for trivial operations:
+- Reading files (analysis only)
+- Documentation updates (non-code)
+- Configuration changes (non-implementation)
 
 ---
 
