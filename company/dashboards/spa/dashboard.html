@@ -493,6 +493,11 @@
     <script src="vendor/fuse.min.js"></script>
     <script src="vendor/echarts.min.js"></script>
     <script src="vendor/gridjs.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    
+    <!-- Data Layer -->
+    <script src="js/data/DualFormatDataLoader.js"></script>
+    <script src="js/data/SQLiteDataLayer.js"></script>
     
     <!-- Application Scripts -->
     <script src="js/components/TabManager.js"></script>
@@ -507,14 +512,15 @@
         /**
          * CORTEX SPA Dashboard Loader
          * 
-         * Supports two modes:
+         * Supports three modes:
          * 1. Static (file://): Reads embedded JSON from #dashboard-data script tag
-         * 2. Dynamic (http://): Fetches JSON from ?repo=name parameter
+         * 2. Dynamic JSON (http://): Fetches JSON from repos/{name}/dashboard-data.json
+         * 3. Dynamic SQLite (http://): Fetches SQLite from repos/{name}/dashboard.sqlite
          * 
-         * Mode is auto-detected based on #dashboard-data content.
+         * Mode is auto-detected with fallback: SQLite → JSON → embedded
          */
         
-        (function initializeDashboard() {
+        (async function initializeDashboard() {
             console.log('🚀 [SPA] Initializing dashboard...');
             
             // Check if data is already embedded (static mode for file://)
@@ -547,31 +553,117 @@
             
             console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
             
-            fetch(`../repos/${repoName}/dashboard-data.json`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('✅ [SPA] Dashboard data loaded via fetch:', {
-                        repo: data.repo?.display_name,
-                        hasMetrics: !!data.metrics,
-                        hasSecurity: !!data.security,
-                        hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
-                    });
-                    
-                    // Replace embedded data script for app.js
-                    embeddedDataScript.textContent = JSON.stringify(data);
-                    
-                    initializeWithData(data);
-                })
-                .catch(error => {
-                    console.error('❌ [SPA] Failed to load dashboard data:', error);
-                    showError(repoName, error.message);
+            try {
+                // Try DualFormatDataLoader (SQLite → JSON fallback)
+                const loader = new DualFormatDataLoader('../repos');
+                const dataLayer = await loader.load(repoName);
+                
+                // Check if it's a SQLiteDataLayer (needs queries) or plain JSON data
+                let data;
+                if (dataLayer.query && typeof dataLayer.query === 'function') {
+                    // SQLite format - fetch all data via queries
+                    console.log('📊 [SPA] Loading SQLite data...');
+                    data = await loadFromSQLite(dataLayer);
+                } else {
+                    // JSON format - data is already loaded
+                    console.log('📦 [SPA] Using JSON data...');
+                    data = dataLayer;
+                }
+                
+                console.log('✅ [SPA] Dashboard data loaded:', {
+                    repo: data.repo?.display_name || data.repo_summary?.repo_name,
+                    hasMetrics: !!data.metrics || !!data.metrics_summary,
+                    hasSecurity: !!data.security || !!data.vulnerabilities,
+                    hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
                 });
+                
+                // Convert SQLite format to legacy dashboard format if needed
+                const dashboardData = convertToLegacyFormat(data);
+                
+                // Replace embedded data script for app.js
+                embeddedDataScript.textContent = JSON.stringify(dashboardData);
+                
+                initializeWithData(dashboardData);
+                
+            } catch (error) {
+                console.error('❌ [SPA] Failed to load dashboard data:', error);
+                showError(repoName, error.message);
+            }
         })();
+        
+        /**
+         * Load all dashboard data from SQLite data layer
+         */
+        async function loadFromSQLite(dataLayer) {
+            const [repo_summary] = await dataLayer.query('SELECT * FROM repo_summary LIMIT 1');
+            const [metrics_summary] = await dataLayer.query('SELECT * FROM metrics_summary LIMIT 1');
+            const use_cases = await dataLayer.query('SELECT * FROM use_cases');
+            const vulnerabilities = await dataLayer.query('SELECT * FROM vulnerabilities');
+            const packages = await dataLayer.query('SELECT * FROM packages');
+            const code_smells = await dataLayer.query('SELECT * FROM code_smells');
+            const entities = await dataLayer.query('SELECT * FROM entities');
+            const components = await dataLayer.query('SELECT * FROM components');
+            const files = await dataLayer.query('SELECT * FROM files LIMIT 100');
+            
+            return {
+                repo_summary,
+                metrics_summary,
+                use_cases,
+                vulnerabilities,
+                packages,
+                code_smells,
+                entities,
+                components,
+                files
+            };
+        }
+        
+        /**
+         * Convert SQLite format to legacy dashboard format
+         */
+        function convertToLegacyFormat(data) {
+            // If already in legacy format, return as-is
+            if (data.repo && data.overview && data.metrics) {
+                return data;
+            }
+            
+            // Convert from SQLite schema v3.0 to legacy format
+            return {
+                repo: {
+                    display_name: data.repo_summary?.repo_name || 'Unknown',
+                    slug: data.repo_summary?.repo_slug || 'unknown',
+                    primary_language: data.repo_summary?.primary_language || 'Unknown',
+                    last_analyzed_at: data.repo_summary?.created_at || new Date().toISOString(),
+                    version: null
+                },
+                overview: {
+                    summary: data.repo_summary?.description || '',
+                    health_score: data.repo_summary?.health_score || 0
+                },
+                metrics: {
+                    health_score: data.repo_summary?.health_score || 0,
+                    total_lines: data.metrics_summary?.total_loc || 0,
+                    total_files: data.repo_summary?.file_count || 0,
+                    coverage_pct: 0,  // TODO: Add to schema
+                    complexity_avg: data.metrics_summary?.avg_complexity || 0,
+                    maintainability_index: data.metrics_summary?.maintainability_index || 0
+                },
+                security: {
+                    total_count: data.vulnerabilities?.length || 0,
+                    critical_count: data.vulnerabilities?.filter(v => v.severity === 'high').length || 0,
+                    vulnerabilities: data.vulnerabilities || []
+                },
+                dependencies: {
+                    total_count: data.packages?.length || 0,
+                    packages: data.packages || []
+                },
+                quality: {
+                    code_smells_count: data.code_smells?.length || 0,
+                    code_smells: data.code_smells || []
+                },
+                use_cases: data.use_cases || []
+            };
+        }
         
         function initializeWithData(data) {
             console.log('⚙️ [SPA] Initializing dashboard with data...');

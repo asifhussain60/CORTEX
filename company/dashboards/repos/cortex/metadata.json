@@ -1,0 +1,27 @@
+{
+  "slug": "cortex",
+  "repo_path": "D:\\PROJECTS\\CORTEX",
+  "generated_at": "2026-02-03T11:48:40.208585",
+  "lens_analysis": {
+    "files_analyzed": 1633,
+    "total_vulnerabilities": 0,
+    "total_code_smells": 0
+  },
+  "business_language_generated": true,
+  "stats": {
+    "repo_summary": 1,
+    "use_cases": 1,
+    "metrics_summary": 1,
+    "metrics_by_file": 0,
+    "vulnerabilities": 0,
+    "packages": 0,
+    "code_smells": 0,
+    "entities": 0,
+    "relationships": 0,
+    "components": 0,
+    "files": 0,
+    "code_snippets": 0,
+    "test_results": 0,
+    "lens_insights": 0
+  }
+}
