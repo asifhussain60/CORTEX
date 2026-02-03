@@ -65,10 +65,18 @@
 
 ---
 
-## Incremental TDD Workflow
+## Design Mode Workflow
 
 ```
 User Request → Mode Detection → cortex-designer
+              ↓
+     LENS Context Gathering (cortex_git_history)
+              ↓
+     MANDATORY Challenge (FIRST OUTPUT)
+              ↓
+     Enhanced Request + DoR
+              ↓
+     Await Approval (FINAL RESPONSE)
               ↓
      Task Decomposition (IncrementalTaskDecomposer)
               ↓

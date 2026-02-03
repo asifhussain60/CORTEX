@@ -34,6 +34,8 @@
 ### P1 — Infrastructure
 | Check | Target |
 |-------|--------|
+| DB Audit Logging | AuditTrailVerifier active (via cortex_audit_trail_verify) |
+| Architectural Coherence | wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents consistency |
 | Orchestrator Wiring | 23+ in wiring.yaml |
 | MCP Production Gate | @mcp_tool decorators |
 | Intent Router | 5-layer consistency |
@@ -61,8 +63,9 @@
 |------|-----|
 | `cortex_git_history` | Context at start |
 | `cortex_lens_analyze` | Code patterns |
-| `cortex_detect_duplicates` | CORE-035 |
+| `cortex_detect_duplicates` | CORE-035 + coherence |
 | `cortex_ast_analyze` | Structure |
+| `cortex_audit_trail_verify` | DB audit logging active |
 
 ---
 

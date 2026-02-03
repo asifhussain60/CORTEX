@@ -25,13 +25,15 @@
 ## Execution Flow
 
 ```
-1. LENS Context (cortex_git_history)
+0. LENS Context (cortex_git_history) — Background
+      ↓
+1. MANDATORY Challenge (3+ weaknesses) — FIRST OUTPUT
       ↓
 2. Enhance Request
       ↓
-3. MANDATORY Challenge (3+ weaknesses)
+3. DoR Display
       ↓
-4. DoR + Await Approval
+4. Await Approval — FINAL RESPONSE before execution
       ↓
 5. Autonomous Execution (all phases)
       ↓
@@ -42,7 +44,7 @@
 
 ## Mandatory Challenge
 
-**MUST include before any solution:**
+**CRITICAL:** Challenge must be the **FIRST OUTPUT** in the response (after LENS context gathering). It appears BEFORE enhanced request, BEFORE any solution planning.
 
 | Element | Required |
 |---------|----------|
@@ -53,7 +55,7 @@
 | Best Practices | Company/CORTEX/OWASP check |
 | Verdict | PROCEED or PIVOT |
 
-**Response is INVALID without complete Challenge.**
+**Response is INVALID without complete Challenge as first step.**
 
 ---
 

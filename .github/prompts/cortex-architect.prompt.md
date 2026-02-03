@@ -62,6 +62,8 @@
 ### P1 — Infrastructure
 | Check | Description |
 |-------|-------------|
+| DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) |
+| Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents |
 | Orchestrator Wiring | 23+ in wiring.yaml match implementations |
 | MCP Production Gate | @mcp_tool + catalog for all production tools |
 | Intent Router | 5-layer consistency (enum→router→config→prompts→agents) |
@@ -107,13 +109,15 @@
 ## Design Flow
 
 ```
-1. LENS Context (cortex_git_history) — Always first
+0. LENS Context (cortex_git_history) — Always first
+      ↓
+1. MANDATORY Challenge (3+ weaknesses) — First response output
       ↓
 2. Enhance Request (security, MCP, edge cases, incremental execution)
       ↓
-3. MANDATORY Challenge (3+ weaknesses)
+3. DoR Display
       ↓
-4. DoR + Await Approval
+4. Await Approval — Final response before execution begins
       ↓
 5. Autonomous Execution (incremental TDD with subtask decomposition)
       ↓
@@ -143,7 +147,7 @@
 
 ## ⚠️ MANDATORY CHALLENGE (Response Invalid Without)
 
-**Must appear BEFORE any solution:**
+**CRITICAL:** Must be the **FIRST STEP** in response output after LENS context gathering. Challenge appears BEFORE enhanced request, BEFORE solution planning, BEFORE any implementation discussion.
 
 ```markdown
 ## ⚠️ CHALLENGE
@@ -211,8 +215,12 @@
 | Test File | {path} |
 
 **Challenge:** ✅ Complete
+
 ---
+
 **⏳ Awaiting approval...**
+
+**APPROVAL GATE:** This is the **FINAL RESPONSE** in the GitHub Copilot chat session before autonomous execution begins. User must explicitly approve ("proceed", "yes", "approve") to continue.
 ```
 
 ---
@@ -223,8 +231,9 @@
 |------|-----|
 | `cortex_git_history` | 24h context at start |
 | `cortex_lens_analyze` | Code patterns |
-| `cortex_detect_duplicates` | CORE-035 |
+| `cortex_detect_duplicates` | CORE-035 + coherence validation |
 | `cortex_ast_analyze` | Structure |
+| `cortex_audit_trail_verify` | **AUDIT:** DB audit logging verification |
 | `cortex_manage_todo` | **NEW:** Todo list CRUD via MCP |
 
 ---
