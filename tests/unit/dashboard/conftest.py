@@ -1294,7 +1294,7 @@ def is_valid_iso_timestamp(timestamp: str) -> bool:
     try:
         datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
         return True
-    except:
+    except (ValueError, TypeError):
         return False
 
 
@@ -1325,7 +1325,7 @@ def extract_px_value(value: str) -> int:
     if 'px' in str(value):
         try:
             return int(str(value).replace('px', '').strip())
-        except:
+        except (ValueError, TypeError):
             return 14
     return 14
 
