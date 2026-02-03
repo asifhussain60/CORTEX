@@ -19,10 +19,13 @@ import os
 import sys
 import time
 import hashlib
+import logging
 import threading
 import importlib
 import traceback
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 from cortex.models.canonical_enums import ChangeType
 from pathlib import Path
@@ -609,8 +612,8 @@ class HotReloadOrchestrator:
             for callback in self._callbacks["before_reload"]:
                 try:
                     callback(ReloadEvent(orchestrator_name=name))
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"Before-reload callback failed for {name}: {e}")
             
             # Perform reload
             if self._sandbox:
@@ -634,8 +637,8 @@ class HotReloadOrchestrator:
             for callback in self._callbacks[callback_key]:
                 try:
                     callback(event)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"{callback_key} callback failed: {e}")
         
         self._state = ReloadState.WATCHING if self._watcher.is_running else ReloadState.IDLE
     

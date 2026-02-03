@@ -215,9 +215,9 @@ class WriteAheadLog:
                             entry = WALEntry.from_dict(json.loads(line))
                             max_seq = max(max_seq, entry.sequence_number)
                         except (json.JSONDecodeError, KeyError):
-                            pass  # Skip corrupted entries
-            except Exception:
-                pass
+                            logger.warning(f"Skipping corrupted WAL entry in {wal_file}")
+            except Exception as e:
+                logger.warning(f"Error reading WAL file {wal_file}: {e}")
         
         self._current_sequence = max_seq
         self._current_file = self.storage_path / f"wal_{datetime.utcnow():%Y%m%d_%H%M%S}.log"

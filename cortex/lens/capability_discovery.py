@@ -670,16 +670,25 @@ class CapabilityDiscoveryEngine:
         return hashlib.sha256(chain.encode()).hexdigest()
     
     def _enforce_timeout(self) -> bool:
-        """Placeholder for timeout enforcement.
+        """Enforce timeout for capability discovery operations.
         
-        TODO(AC-CDF-Timeout-001): Implement actual timeout logic
-        - Track operation start time
-        - Compare against max_duration threshold
-        - Raise TimeoutError if exceeded
+        Checks if current operation has exceeded max_duration threshold.
         
         Returns:
-            bool: Always True (placeholder - no timeout enforcement)
+            bool: True if within timeout, raises TimeoutError otherwise
+            
+        Raises:
+            TimeoutError: If operation exceeds max_duration
         """
+        if not hasattr(self, '_operation_start_time'):
+            self._operation_start_time = time.time()
+            return True
+            
+        elapsed = time.time() - self._operation_start_time
+        if elapsed > self.max_duration:
+            raise TimeoutError(
+                f"Capability discovery exceeded timeout: {elapsed:.2f}s > {self.max_duration}s"
+            )
         return True
 
 

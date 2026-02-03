@@ -158,8 +158,8 @@ class SecurityDiscovery(DiscoveryPlugin):
                                 "type": "jwt",
                                 "config_file": str(config_file),
                             })
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Error reading auth config from {config_file}: {e}")
         
         # Check for OAuth
         for env_file in repo_path.rglob(".env*"):
@@ -170,8 +170,8 @@ class SecurityDiscovery(DiscoveryPlugin):
                         "type": "oauth",
                         "config_file": str(env_file),
                     })
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Error reading OAuth config from {env_file}: {e}")
         
         # Check for SAML
         for saml_file in repo_path.rglob("*.xml"):
@@ -183,8 +183,8 @@ class SecurityDiscovery(DiscoveryPlugin):
                             "type": "saml",
                             "config_file": str(saml_file),
                         })
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug(f"Error reading SAML config from {saml_file}: {e}")
         
         logger.debug(f"Detected {len(providers)} authentication providers")
         return providers

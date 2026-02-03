@@ -18,6 +18,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from abc import ABC, abstractmethod
 
+# Configure logger for this module
+logger = logging.getLogger(__name__)
+
 try:
     from cortex.infrastructure.audit_logger import EnhancedAuditLogger
 except (ImportError, ModuleNotFoundError):
@@ -584,8 +587,8 @@ class LENSPipeline:
                         "confidence": synthesis_output.final_confidence,
                     }
                 )
-            except Exception:
-                pass  # Graceful degradation for audit failures
+            except Exception as e:
+                logger.warning(f"Audit logging failed (graceful degradation): {e}")
         
         return LENSPipelineOutput(
             language_output=language_output,
