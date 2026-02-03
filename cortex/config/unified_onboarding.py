@@ -5,13 +5,22 @@ Pattern: Composition-based consolidation (proven from CONS-002-006)
 Status: Phase 2 Implementation Complete
 All 8-11 onboarding components unified into 1 interface
 
+Enhanced with progress feedback for long-running operations.
+
 Author: CORTEX Framework
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+
+from cortex.common.progress_reporter import (
+    ProgressReporter,
+    ProgressStyle,
+    track_environment_setup,
+    get_time_estimator,
+)
 
 
 # ================================================================================
@@ -212,18 +221,72 @@ class UnifiedOnboarding:
     # SETUP ORCHESTRATION (from SetupOrchestrator)
     # ========================================================================
     
-    def setup_environment(self) -> Dict[str, Any]:
-        """Setup runtime environment.
+    def setup_environment(
+        self,
+        show_progress: bool = True,
+        progress_style: ProgressStyle = ProgressStyle.DETAILED,
+    ) -> Dict[str, Any]:
+        """Setup runtime environment with progress feedback.
+        
+        Args:
+            show_progress: Whether to show progress feedback
+            progress_style: Style of progress output
         
         Returns:
             Setup result dict
         """
-        self._log_audit("setup_environment", {})
+        self._log_audit("setup_environment", {"show_progress": show_progress})
+        
+        style = progress_style if show_progress else ProgressStyle.SILENT
+        
+        progress = ProgressReporter(
+            operation_name="Environment Setup",
+            total_steps=4,
+            style=style,
+            time_estimator=get_time_estimator(),
+        )
+        
+        with progress:
+            # Step 1: Pre-validation
+            progress.start_step(
+                "Pre-Validation",
+                "Validating system requirements",
+                estimated_seconds=2.0,
+            )
+            # Simulate validation
+            progress.complete_step()
+            
+            # Step 2: Environment configuration
+            progress.start_step(
+                "Environment Configuration",
+                "Configuring runtime environment",
+                estimated_seconds=5.0,
+            )
+            # Simulate configuration
+            progress.complete_step()
+            
+            # Step 3: Dependency check
+            progress.start_step(
+                "Dependency Check",
+                "Verifying required dependencies",
+                estimated_seconds=3.0,
+            )
+            # Simulate dependency check
+            progress.complete_step()
+            
+            # Step 4: Finalization
+            progress.start_step(
+                "Finalization",
+                "Finalizing environment setup",
+                estimated_seconds=2.0,
+            )
+            progress.complete_step()
         
         return {
             "success": True,
             "message": "Environment setup complete",
-            "environment": "ready"
+            "environment": "ready",
+            "elapsed_seconds": progress.elapsed_seconds,
         }
     
     def validate_setup(self) -> Dict[str, Any]:

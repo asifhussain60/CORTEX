@@ -2,6 +2,8 @@
 Repository Onboarding Script
 Onboards external repositories using RepositoryOnboardingOrchestrator.
 
+Enhanced with progress feedback and time estimates.
+
 Author: Asif Hussain
 Date: 2026-02-03
 AC-ID: AC-ONBOARD-EXTERNAL-001
@@ -17,14 +19,16 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from cortex.orchestrators.support.repository_onboarding_orchestrator import (
     get_repository_onboarding_orchestrator
 )
+from cortex.common.progress_reporter import ProgressStyle
 
 
-def onboard_repository(repo_path: str) -> None:
+def onboard_repository(repo_path: str, show_progress: bool = True) -> None:
     """
-    Onboard a single repository.
+    Onboard a single repository with progress feedback.
     
     Args:
         repo_path: Path to repository
+        show_progress: Whether to show progress feedback
     """
     print(f"\n{'='*80}")
     print(f"🚀 ONBOARDING: {repo_path}")
@@ -36,10 +40,12 @@ def onboard_repository(repo_path: str) -> None:
             repo_path=Path(repo_path),
             include_dashboard=False,  # Disabled due to missing dashboard_asset_manager
             update_company_domain=True,
+            show_progress=show_progress,
+            progress_style=ProgressStyle.DETAILED,
         )
         
         if result.success:
-            print(f"✅ SUCCESS: {result.repo_path}")
+            print(f"\n✅ SUCCESS: {result.repo_path}")
             print(f"   Timestamp: {result.timestamp}")
             
             # Security risks
@@ -85,11 +91,19 @@ def main():
     print(f"Author: Asif Hussain")
     print(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Repositories: {len(repos)}")
+    
+    # Estimate total time
+    estimated_per_repo = 80  # ~80 seconds per repo based on default estimates
+    total_estimated = estimated_per_repo * len([r for r in repos if Path(r).exists()])
+    total_mins = total_estimated // 60
+    total_secs = total_estimated % 60
+    print(f"Estimated Time: ~{total_mins}m {total_secs}s total")
     print("="*80)
     
-    for repo in repos:
+    for idx, repo in enumerate(repos, 1):
         if Path(repo).exists():
-            onboard_repository(repo)
+            print(f"\n[Repository {idx}/{len(repos)}]")
+            onboard_repository(repo, show_progress=True)
         else:
             print(f"\n⚠️  SKIPPING: {repo} (does not exist)")
     

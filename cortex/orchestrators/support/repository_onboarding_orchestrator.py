@@ -46,6 +46,12 @@ from cortex.common.debug_logger import (
     log_dashboard_schema_validation,
     dashboard_debug,
 )
+from cortex.common.progress_reporter import (
+    ProgressReporter,
+    ProgressStyle,
+    track_repository_onboarding,
+    get_time_estimator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -167,6 +173,8 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         update_company_domain: bool = True,
         repo_name: Optional[str] = None,
         icon: str = "📁",
+        progress_style: ProgressStyle = ProgressStyle.DETAILED,
+        show_progress: bool = True,
     ) -> OnboardingResult:
         """
         Onboard repository with comprehensive analysis.
@@ -186,6 +194,8 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             update_company_domain: Whether to update company domains
             repo_name: Override repo name (default: folder name)
             icon: Emoji icon for landing page tile
+            progress_style: Progress output style (MINIMAL, DETAILED, VERBOSE)
+            show_progress: Whether to show progress feedback
             
         Returns:
             OnboardingResult with analysis, dashboard, and landing page
@@ -220,46 +230,104 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             timestamp=datetime.now().isoformat(),
         )
         
+        # Calculate total steps based on options
+        total_steps = 5  # Core steps
+        if include_dashboard:
+            total_steps += 2  # Dashboard + landing page
+        if update_company_domain:
+            total_steps += 1  # Domain updates
+        
+        # Use silent style if progress is disabled
+        style = progress_style if show_progress else ProgressStyle.SILENT
+        
+        # Create progress reporter
+        progress = ProgressReporter(
+            operation_name=f"Repository Onboarding: {canonical_name}",
+            total_steps=total_steps,
+            style=style,
+            time_estimator=get_time_estimator(),
+        )
+        
         try:
-            # Step 0: Ensure shared assets exist (only if dashboard enabled)
-            if include_dashboard:
-                logger.info("Step 0: Ensuring shared dashboard assets...")
-                asset_manager = _get_asset_manager()
-                asset_manager.ensure_assets_exist()
-            
-            # Step 1: Holistic LENS analysis
-            logger.info("Step 1: Running holistic LENS analysis...")
-            lens_context = self._run_holistic_analysis(repo_path)
-            result.holistic_context = lens_context
-            
-            # Step 2: Generate business narrative
-            logger.info("Step 2: Generating business narrative...")
-            business_orchestrator = _get_business_language_orchestrator()
-            narrative = business_orchestrator.generate_narrative(
-                repo_path=repo_path,
-                analysis_data=lens_context  # Correct parameter name
-            )
-            result.business_narrative = narrative
-            
-            # Step 3: Security threat modeling
-            logger.info("Step 3: Running security threat modeling...")
-            security_model = self._run_threat_modeling(lens_context, repo_path)
-            result.security_risks = security_model
-            
-            # Step 4: Company domain updates
-            if update_company_domain:
-                logger.info("Step 4: Updating company domains...")
-                domain_updates = self._update_company_domains(lens_context, repo_path)
-                result.company_domain_updates = domain_updates
-            
-            # Step 5: Generate recommendations BEFORE dashboard
-            logger.info("Step 5: Generating recommendations...")
-            recommendations = self._prioritize_recommendations(security_model, lens_context)
-            result.recommendations = recommendations
-            
-            # Step 6: Generate universal dashboard
-            if include_dashboard:
-                logger.info("Step 6: Generating universal dashboard...")
+            with progress:
+                # Step 0: Ensure shared assets exist (only if dashboard enabled)
+                if include_dashboard:
+                    progress.start_step(
+                        "Ensure Assets",
+                        "Ensuring shared dashboard assets exist",
+                        estimated_seconds=2.0,
+                    )
+                    asset_manager = _get_asset_manager()
+                    asset_manager.ensure_assets_exist()
+                    progress.complete_step()
+                
+                # Step 1: Holistic LENS analysis
+                progress.start_step(
+                    "LENS Analysis",
+                    "Running holistic LENS analysis (Git, AST, Security)",
+                    estimated_seconds=30.0,
+                )
+                lens_context = self._run_holistic_analysis(repo_path)
+                result.holistic_context = lens_context
+                progress.complete_step({
+                    "files_analyzed": lens_context.get("repository_summary", {}).get("total_files", 0)
+                })
+                
+                # Step 2: Generate business narrative
+                progress.start_step(
+                    "Business Narrative",
+                    "Generating business narrative and descriptions",
+                    estimated_seconds=15.0,
+                )
+                business_orchestrator = _get_business_language_orchestrator()
+                narrative = business_orchestrator.generate_narrative(
+                    repo_path=repo_path,
+                    analysis_data=lens_context  # Correct parameter name
+                )
+                result.business_narrative = narrative
+                progress.complete_step()
+                
+                # Step 3: Security threat modeling
+                progress.start_step(
+                    "Security Modeling",
+                    "Running security threat modeling (P0/P1/P2)",
+                    estimated_seconds=10.0,
+                )
+                security_model = self._run_threat_modeling(lens_context, repo_path)
+                result.security_risks = security_model
+                progress.complete_step({
+                    "p0_count": len(security_model.get("p0_risks", [])),
+                    "p1_count": len(security_model.get("p1_risks", [])),
+                })
+                
+                # Step 4: Company domain updates
+                if update_company_domain:
+                    progress.start_step(
+                        "Domain Updates",
+                        "Updating company domain configurations",
+                        estimated_seconds=5.0,
+                    )
+                    domain_updates = self._update_company_domains(lens_context, repo_path)
+                    result.company_domain_updates = domain_updates
+                    progress.complete_step({"domains_updated": len(domain_updates)})
+                
+                # Step 5: Generate recommendations BEFORE dashboard
+                progress.start_step(
+                    "Recommendations",
+                    "Generating prioritized recommendations",
+                    estimated_seconds=5.0,
+                )
+                recommendations = self._prioritize_recommendations(security_model, lens_context)
+                result.recommendations = recommendations
+                progress.complete_step({"recommendations_count": len(recommendations)})
+                
+                # Step 6: Generate universal dashboard
+                if include_dashboard:
+                    progress.start_step(
+                        "Dashboard Generation",
+                        "Generating universal dashboard with metrics",
+                        estimated_seconds=10.0,
+                    )
                 
                 # Convert to RepoDashboardModel schema v2.0
                 dashboard_model = self._convert_to_dashboard_model(
@@ -296,6 +364,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 )
                 
                 result.dashboard_path = str(dashboard_json_path)
+                progress.complete_step({"dashboard_size": dashboard_json_path.stat().st_size})
                 
                 # Legacy dashboard generator support (optional)
                 dashboard_gen = _get_universal_dashboard_generator()
@@ -308,7 +377,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         'holistic_context': lens_context,
                         'recommendations': recommendations,
                     }
-                    
+                        
                     try:
                         dashboard_html_path = dashboard_gen.generate_dashboard(
                             repo_name=canonical_name,
@@ -320,7 +389,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                         logger.warning("Legacy dashboard generation failed: %s", gen_error)
                 
                 # Step 7: Update landing page hub
-                logger.info("Step 7: Updating landing page hub...")
+                progress.start_step(
+                    "Landing Page",
+                    "Updating landing page hub with new repository",
+                    estimated_seconds=3.0,
+                )
                 landing_gen = _get_landing_page_generator()
                 
                 # Determine tagline
@@ -337,6 +410,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 )
                 landing_page_path = landing_gen.regenerate_landing_page()
                 result.landing_page_path = str(landing_page_path)
+                progress.complete_step()
             
             logger.info("Repository onboarding complete: %s", repo_path)
             

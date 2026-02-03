@@ -7,19 +7,27 @@ Extends existing cortex_onboard_repository with SQLite-first architecture:
 - SQLite dashboard.sqlite generation (13 tabs)
 - Registry update (landing page tile)
 - Validation pipeline
+- Progress feedback with time estimates
 
 AC-ID: AC-P21-MCP-ONBOARD-001
 Authority: PHASE-21-ENTERPRISE-REPOSITORY-INTELLIGENCE.yaml
 """
 
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Callable
 from datetime import datetime
 import logging
 import json
 import sqlite3
+import sys
 
 from cortex.mcp.decorators import mcp_tool
+from cortex.common.progress_reporter import (
+    ProgressReporter,
+    ProgressStyle,
+    track_mcp_onboarding_v3,
+    get_time_estimator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +42,8 @@ logger = logging.getLogger(__name__)
         "generate_business_language": "boolean",
         "update_registry": "boolean",
         "validate": "boolean",
+        "show_progress": "boolean",
+        "progress_style": "string",
     }
 )
 def cortex_onboard_repository_v3(
@@ -43,6 +53,8 @@ def cortex_onboard_repository_v3(
     generate_business_language: bool = True,
     update_registry: bool = True,
     validate: bool = True,
+    show_progress: bool = True,
+    progress_style: str = "detailed",
 ) -> Dict[str, Any]:
     """
     Onboard repository with full Phase 21 intelligence pipeline.
@@ -62,6 +74,8 @@ def cortex_onboard_repository_v3(
         generate_business_language: Whether to invoke LLM for business context
         update_registry: Whether to add/update registry tile
         validate: Whether to run post-generation validation
+        show_progress: Whether to show progress feedback (default: True)
+        progress_style: Progress style: 'minimal', 'detailed', 'verbose' (default: 'detailed')
         
     Returns:
         Dict with:
@@ -74,6 +88,7 @@ def cortex_onboard_repository_v3(
         - stats: Dict[str, int] (row counts per table)
         - validation_results: Dict[str, Any]
         - timestamp: str (ISO 8601)
+        - elapsed_seconds: float
         - error: str (if failed)
         
     Example:
@@ -96,106 +111,175 @@ def cortex_onboard_repository_v3(
     dashboard_path = output_dir_obj / "dashboard.sqlite"
     metadata_path = output_dir_obj / "metadata.json"
     
+    # Parse progress style
+    style_map = {
+        "minimal": ProgressStyle.MINIMAL,
+        "detailed": ProgressStyle.DETAILED,
+        "verbose": ProgressStyle.VERBOSE,
+        "silent": ProgressStyle.SILENT,
+    }
+    style = style_map.get(progress_style.lower(), ProgressStyle.DETAILED)
+    if not show_progress:
+        style = ProgressStyle.SILENT
+    
+    # Calculate total steps
+    total_steps = 4  # Schema check, LENS, SQLite aggregation, metadata
+    if generate_business_language:
+        total_steps += 1  # LLM generation
+    if update_registry:
+        total_steps += 1  # Registry update
+    if validate:
+        total_steps += 1  # Validation
+    
+    # Create progress reporter
+    progress = ProgressReporter(
+        operation_name=f"MCP Onboarding V3: {slug}",
+        total_steps=total_steps,
+        style=style,
+        time_estimator=get_time_estimator(),
+    )
+    
     try:
-        # Step 1: Schema Enhancement Check
-        logger.info(f"[P21-ONBOARD] Step 1: Schema Enhancement Check for {slug}")
-        schema_check = _check_schema_enhancement()
-        if not schema_check["valid"]:
-            return {
-                "success": False,
-                "error": f"Schema validation failed: {schema_check['error']}",
-                "repo_path": str(repo_path_obj),
-                "slug": slug,
-            }
-        
-        # Step 2: LENS Analysis
-        logger.info(f"[P21-ONBOARD] Step 2: LENS Analysis for {slug}")
-        lens_result = _run_lens_analysis(repo_path_obj)
-        if not lens_result["success"]:
-            return {
-                "success": False,
-                "error": f"LENS analysis failed: {lens_result['error']}",
-                "repo_path": str(repo_path_obj),
-                "slug": slug,
-            }
-        
-        # Step 3: LLM Business Language Generation (optional)
-        llm_result = None
-        if generate_business_language:
-            logger.info(f"[P21-ONBOARD] Step 3: LLM Business Language Generation for {slug}")
-            llm_result = _generate_business_language(lens_result["data"], repo_path_obj)
-            if not llm_result["success"]:
-                logger.warning(f"LLM generation failed: {llm_result['error']}, continuing without business context")
-        
-        # Step 4: SQLite Aggregation
-        logger.info(f"[P21-ONBOARD] Step 4: SQLite Aggregation for {slug}")
-        output_dir_obj.mkdir(parents=True, exist_ok=True)
-        
-        aggregation_result = _aggregate_to_sqlite(
-            lens_data=lens_result["data"],
-            llm_data=llm_result["data"] if llm_result and llm_result["success"] else None,
-            repo_path=repo_path_obj,
-            dashboard_path=dashboard_path,
-            slug=slug,
-        )
-        
-        if not aggregation_result["success"]:
-            return {
-                "success": False,
-                "error": f"SQLite aggregation failed: {aggregation_result['error']}",
-                "repo_path": str(repo_path_obj),
-                "slug": slug,
-            }
-        
-        # Step 5: Registry Update (optional)
-        registry_updated = False
-        if update_registry:
-            logger.info(f"[P21-ONBOARD] Step 5: Registry Update for {slug}")
-            registry_result = _update_registry(
-                slug=slug,
+        with progress:
+            # Step 1: Schema Enhancement Check
+            progress.start_step(
+                "Schema Check",
+                "Verifying dashboard_schema_v3.py completeness",
+                estimated_seconds=2.0,
+            )
+            schema_check = _check_schema_enhancement()
+            if not schema_check["valid"]:
+                progress.fail_step(f"Schema validation failed: {schema_check['error']}")
+                return {
+                    "success": False,
+                    "error": f"Schema validation failed: {schema_check['error']}",
+                    "repo_path": str(repo_path_obj),
+                    "slug": slug,
+                }
+            progress.complete_step()
+            
+            # Step 2: LENS Analysis
+            progress.start_step(
+                "LENS Analysis",
+                "Running complete repository scan (security, architecture, metrics)",
+                estimated_seconds=45.0,
+            )
+            lens_result = _run_lens_analysis(repo_path_obj)
+            if not lens_result["success"]:
+                progress.fail_step(f"LENS analysis failed: {lens_result['error']}")
+                return {
+                    "success": False,
+                    "error": f"LENS analysis failed: {lens_result['error']}",
+                    "repo_path": str(repo_path_obj),
+                    "slug": slug,
+                }
+            progress.complete_step({
+                "files_analyzed": lens_result["data"].get("files_analyzed", 0)
+            })
+            
+            # Step 3: LLM Business Language Generation (optional)
+            llm_result = None
+            if generate_business_language:
+                progress.start_step(
+                    "LLM Generation",
+                    "Generating use cases, personas, business impact via LLM",
+                    estimated_seconds=30.0,
+                )
+                llm_result = _generate_business_language(lens_result["data"], repo_path_obj)
+                if not llm_result["success"]:
+                    progress.update_message(f"LLM generation failed: {llm_result['error']}, continuing without business context")
+                    logger.warning(f"LLM generation failed: {llm_result['error']}, continuing without business context")
+                progress.complete_step()
+            
+            # Step 4: SQLite Aggregation
+            progress.start_step(
+                "SQLite Aggregation",
+                "Combining LENS + LLM data into dashboard.sqlite",
+                estimated_seconds=15.0,
+            )
+            output_dir_obj.mkdir(parents=True, exist_ok=True)
+            
+            aggregation_result = _aggregate_to_sqlite(
+                lens_data=lens_result["data"],
+                llm_data=llm_result["data"] if llm_result and llm_result["success"] else None,
                 repo_path=repo_path_obj,
                 dashboard_path=dashboard_path,
-                stats=aggregation_result["stats"],
+                slug=slug,
             )
-            registry_updated = registry_result["success"]
-            if not registry_updated:
-                logger.warning(f"Registry update failed: {registry_result['error']}")
-        
-        # Step 6: Validation (optional)
-        validation_results = {}
-        if validate:
-            logger.info(f"[P21-ONBOARD] Step 6: Validation for {slug}")
-            validation_results = _validate_dashboard(dashboard_path)
-        
-        # Generate metadata.json
-        metadata = {
-            "slug": slug,
-            "repo_path": str(repo_path_obj),
-            "generated_at": datetime.now().isoformat(),
-            "lens_analysis": {
-                "files_analyzed": lens_result["data"].get("files_analyzed", 0),
-                "total_vulnerabilities": lens_result["data"].get("total_vulnerabilities", 0),
-                "total_code_smells": lens_result["data"].get("total_code_smells", 0),
-            },
-            "business_language_generated": llm_result is not None and llm_result["success"],
-            "stats": aggregation_result["stats"],
-        }
-        metadata_path.write_text(json.dumps(metadata, indent=2))
-        
-        elapsed = (datetime.now() - start_time).total_seconds()
-        
-        return {
-            "success": True,
-            "repo_path": str(repo_path_obj),
-            "slug": slug,
-            "dashboard_path": str(dashboard_path),
-            "metadata_path": str(metadata_path),
-            "registry_updated": registry_updated,
-            "stats": aggregation_result["stats"],
-            "validation_results": validation_results,
-            "elapsed_seconds": round(elapsed, 2),
-            "timestamp": datetime.now().isoformat(),
-        }
+            
+            if not aggregation_result["success"]:
+                progress.fail_step(f"SQLite aggregation failed: {aggregation_result['error']}")
+                return {
+                    "success": False,
+                    "error": f"SQLite aggregation failed: {aggregation_result['error']}",
+                    "repo_path": str(repo_path_obj),
+                    "slug": slug,
+                }
+            progress.complete_step({"tables_created": len(aggregation_result.get("stats", {}))})
+            
+            # Step 5: Registry Update (optional)
+            registry_updated = False
+            if update_registry:
+                progress.start_step(
+                    "Registry Update",
+                    "Adding/updating repository tile in registry.sqlite",
+                    estimated_seconds=5.0,
+                )
+                registry_result = _update_registry(
+                    slug=slug,
+                    repo_path=repo_path_obj,
+                    dashboard_path=dashboard_path,
+                    stats=aggregation_result["stats"],
+                )
+                registry_updated = registry_result["success"]
+                if not registry_updated:
+                    progress.update_message(f"Registry update failed: {registry_result['error']}")
+                    logger.warning(f"Registry update failed: {registry_result['error']}")
+                progress.complete_step()
+            
+            # Step 6: Validation (optional)
+            validation_results = {}
+            if validate:
+                progress.start_step(
+                    "Validation",
+                    "Verifying database integrity, FTS5, and views",
+                    estimated_seconds=10.0,
+                )
+                validation_results = _validate_dashboard(dashboard_path)
+                progress.complete_step({
+                    "database_valid": validation_results.get("database_valid", False),
+                    "tables_present": len(validation_results.get("tables_present", [])),
+                })
+            
+            # Generate metadata.json
+            metadata = {
+                "slug": slug,
+                "repo_path": str(repo_path_obj),
+                "generated_at": datetime.now().isoformat(),
+                "lens_analysis": {
+                    "files_analyzed": lens_result["data"].get("files_analyzed", 0),
+                    "total_vulnerabilities": lens_result["data"].get("total_vulnerabilities", 0),
+                    "total_code_smells": lens_result["data"].get("total_code_smells", 0),
+                },
+                "business_language_generated": llm_result is not None and llm_result["success"],
+                "stats": aggregation_result["stats"],
+            }
+            metadata_path.write_text(json.dumps(metadata, indent=2))
+            
+            elapsed = (datetime.now() - start_time).total_seconds()
+            
+            return {
+                "success": True,
+                "repo_path": str(repo_path_obj),
+                "slug": slug,
+                "dashboard_path": str(dashboard_path),
+                "metadata_path": str(metadata_path),
+                "registry_updated": registry_updated,
+                "stats": aggregation_result["stats"],
+                "validation_results": validation_results,
+                "elapsed_seconds": round(elapsed, 2),
+                "timestamp": datetime.now().isoformat(),
+            }
         
     except Exception as e:
         logger.error(f"cortex_onboard_repository_v3 failed: {e}", exc_info=True)
