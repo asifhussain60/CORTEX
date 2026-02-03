@@ -158,6 +158,44 @@ GitHub Actions:
 ✓ Estimated 4+ hours saved per developer per week
 
 
+🔐 ENVIRONMENT-GATED INTEGRATION TESTS
+
+Some integration tests require external API access and are conditionally executed:
+
+# Set tokens to enable integration tests (optional)
+export GITHUB_TOKEN="ghp_your_token_here"
+export GITLAB_TOKEN="glpat-your_token_here"
+
+# Run integration tests (will use tokens if available)
+./scripts/run_tests.sh integration
+
+# Or run specific integration tests
+pytest -v -m integration tests/brain/analysis/test_remote_git_adapter.py
+
+Environment Variables:
+  GITHUB_TOKEN      - GitHub API access (for remote Git adapter tests)
+  GITLAB_TOKEN      - GitLab API access (for remote Git adapter tests)
+
+Behavior:
+  - If token is SET: Test runs against real API
+  - If token is UNSET: Test skips gracefully with clear message
+  - CI/CD: Set tokens as pipeline secrets to enable in automation
+
+Pattern (for new tests):
+  ```python
+  import os
+  import pytest
+  
+  HAS_TOKEN = os.getenv("SERVICE_TOKEN") is not None
+  
+  @pytest.mark.skipif(not HAS_TOKEN, reason="Requires SERVICE_TOKEN environment variable")
+  @pytest.mark.integration
+  def test_real_api_call(self):
+      token = os.getenv("SERVICE_TOKEN")
+      # ... test code using token
+  ```
+
+
 🎯 SYSTEM INFO
 
 Supported: macOS 10.14+, Linux (Ubuntu 18.04+), Windows 10+ (WSL/Git Bash)
@@ -168,3 +206,4 @@ pytest-xdist: 3.8.0+ (already installed)
 
 ═══════════════════════════════════════════════════════════════════════════════
 Version: 2.0 (2026-01-22) | Status: Production Ready | Estimated Impact: 85%+ faster
+
