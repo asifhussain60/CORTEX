@@ -13,10 +13,20 @@ from cortex.brain.verification.truth_verification_engine import (
     VerificationStatus,
     ClaimType,
 )
+from cortex.brain.verification.implementation_verifier import (
+    ImplementationVerifier,
+    ImplementationReport,
+    ImplementationStatus,
+    ImplementationIssue,
+)
 
 __all__ = [
     "TruthVerificationEngine",
     "VerificationResult",
     "VerificationStatus",
     "ClaimType",
+    "ImplementationVerifier",
+    "ImplementationReport",
+    "ImplementationStatus",
+    "ImplementationIssue",
 ]
