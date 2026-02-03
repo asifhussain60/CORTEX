@@ -567,6 +567,97 @@ class MasterOrchestrator(IOrchestrator):
         """Get IntentRouter instance (for testing/mocking)."""
         return self.intent_router
     
+    def _filter_critical_violations(self, violations: List[str]) -> List[str]:
+        """
+        Filter violations to identify critical ones that should block execution.
+        
+        Phase 20.5 Component #5: Early Violation Prevention
+        
+        Critical violations are those that:
+        - Violate mandatory CORE rules (CORE-008, CORE-011, CORE-013)
+        - Could cause production failures
+        - Represent security issues
+        
+        Args:
+            violations: List of all detected violations
+        
+        Returns:
+            List[str]: Critical violations that warrant blocking execution
+        
+        Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
+        """
+        critical_patterns = [
+            "CORE-008",  # TDD required
+            "CORE-013",  # No bare except
+            "security",
+            "authentication",
+            "authorization",
+            "injection",
+            "production",
+            "critical",
+            "unsafe",
+        ]
+        
+        critical = []
+        for violation in violations:
+            violation_lower = violation.lower()
+            if any(pattern.lower() in violation_lower for pattern in critical_patterns):
+                critical.append(violation)
+        
+        return critical
+    
+    def _format_violation_summary(
+        self,
+        critical_violations: List[str],
+        unified_intelligence: UnifiedIntelligenceContext
+    ) -> str:
+        """
+        Format violation summary with remediation guidance.
+        
+        Phase 20.5 Component #5: Early Violation Prevention
+        
+        Args:
+            critical_violations: List of critical violations
+            unified_intelligence: Full unified intelligence context
+        
+        Returns:
+            str: Formatted violation summary with remediation steps
+        
+        Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
+        """
+        lines = [
+            "🛑 EXECUTION BLOCKED - Critical CORE Rule Violations Detected",
+            "",
+            f"Found {len(critical_violations)} critical violation(s):",
+            ""
+        ]
+        
+        for i, violation in enumerate(critical_violations, 1):
+            lines.append(f"{i}. {violation}")
+        
+        # Add guidance if available
+        guidance = unified_intelligence.get_guidance()
+        if guidance:
+            lines.append("")
+            lines.append("📋 Remediation Guidance:")
+            lines.append("")
+            for i, guide in enumerate(guidance[:5], 1):  # Top 5 guidance items
+                lines.append(f"{i}. {guide}")
+        
+        # Add cited rules
+        cited_rules = unified_intelligence.get_cited_rules()
+        if cited_rules:
+            lines.append("")
+            lines.append("📖 Relevant CORE Rules:")
+            lines.append("")
+            for rule in cited_rules[:5]:  # Top 5 rules
+                lines.append(f"  - {rule}")
+        
+        lines.append("")
+        lines.append("Please address these violations before proceeding.")
+        
+        return "\n".join(lines)
+    
     def _stage_2_routing(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Stage 2: Route request with unified intelligence synthesis.
@@ -736,27 +827,58 @@ class MasterOrchestrator(IOrchestrator):
                             "cortex_practices_loaded": len(unified_context.cortex_knowledge.best_practices),
                         }
                     )
-                
-            except Exception as post_synthesis_err:
-                # Fail-safe: Continue without post-synthesis
-                self.logger.log_operation_complete(
-                    ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
-                    operation="STAGE_2_POST_SYNTHESIS_FAILED",
-                    success=False,
-                    details={"error": str(post_synthesis_err)}
-                )
-            
-            # Log LENS integration activity
-            lens_fetched = "lens_insights" in result.get("context", {})
-            self.logger.log_operation_complete(
-                    details={
-                        "intent": intent_type,
-                        "cited_rules_count": len(unified_context.get_cited_rules()),
-                        "violations_count": len(unified_context.get_violations()),
-                        "guidance_count": len(unified_context.get_guidance()),
-                        "cortex_practices_loaded": len(unified_context.cortex_knowledge.best_practices),
-                    }
-                )
+                    
+                    # Phase 20.5 Component #5: Early Violation Prevention
+                    # Check for critical violations and block execution if found
+                    violations = unified_context.get_violations()
+                    if violations:
+                        critical_violations = self._filter_critical_violations(violations)
+                        
+                        if critical_violations:
+                            # Block execution - return error result
+                            violation_summary = self._format_violation_summary(
+                                critical_violations,
+                                unified_context
+                            )
+                            
+                            self.logger.log_operation_complete(
+                                ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                                operation="STAGE_2_VIOLATION_BLOCK",
+                                success=True,
+                                details={
+                                    "intent": intent_type,
+                                    "critical_violations": len(critical_violations),
+                                    "total_violations": len(violations),
+                                    "action": "BLOCKED"
+                                }
+                            )
+                            
+                            # Return blocked result with violation details
+                            return {
+                                "intent": intent_type,
+                                "target_orchestrator": "BLOCKED",
+                                "confidence_score": 0.0,
+                                "reasoning": "Execution blocked due to critical violations",
+                                "context": result.get("context", {}),
+                                "violations": violations,
+                                "critical_violations": critical_violations,
+                                "violation_summary": violation_summary,
+                                "guidance": unified_context.get_guidance(),
+                                "status": "BLOCKED",
+                                "error": "Critical CORE rule violations detected. Please address violations before proceeding."
+                            }
+                        else:
+                            # Non-critical violations - log warning but continue
+                            self.logger.log_operation_complete(
+                                ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                                operation="STAGE_2_VIOLATION_WARNING",
+                                success=True,
+                                details={
+                                    "intent": intent_type,
+                                    "non_critical_violations": len(violations),
+                                    "action": "WARNING"
+                                }
+                            )
                 
             except Exception as post_synthesis_err:
                 # Fail-safe: Continue without post-synthesis
