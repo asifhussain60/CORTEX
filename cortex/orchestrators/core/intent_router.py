@@ -30,6 +30,7 @@ from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, Operation
 from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
+from cortex.brain.knowledge.unified_intelligence_context import UnifiedIntelligenceContext
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 
 # Phase 8.2: Import orchestrator lookup and enforcement
@@ -1399,14 +1400,22 @@ class IntentRouter(IOrchestrator):
             )
             raise
     
-    def route_with_lens_auto_fetch(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    def route_with_lens_auto_fetch(
+        self, 
+        request: Dict[str, Any],
+        unified_intelligence: Optional[UnifiedIntelligenceContext] = None
+    ) -> Dict[str, Any]:
         """
-        Route request with automatic LENS context fetching.
+        Route request with automatic LENS context fetching and smart rule citations.
         
         Phase 20 Component #3: IntentRouter LENS Auto-Fetch
+        Phase 20.5 Component #4: Smart Rule Citations
         
         Automatically fetches LENS context if missing for IMPLEMENT/FIX/REFACTOR/ANALYZE intents.
         Uses cache-first strategy from LENSContextProvider.
+        
+        Phase 20.5 Enhancement: Accepts UnifiedIntelligenceContext from MasterOrchestrator
+        Stage 2 synthesis and cites specific CORE rules in routing reasoning.
         
         Args:
             request: Request dictionary with:
@@ -1415,25 +1424,32 @@ class IntentRouter(IOrchestrator):
                 - file_path: Optional file path for LENS analysis
                 - company_name: Optional company name for company knowledge
                 - context: Optional existing context dict
+            unified_intelligence: Optional UnifiedIntelligenceContext from Stage 2 synthesis
+                - Contains merged LENS + Company + CORTEX knowledge
+                - Provides cited rules for intelligent routing decisions
+                - Includes violations and proactive guidance
         
         Returns:
             Dict[str, Any]: Routing result with:
                 - intent: Detected intent type
                 - target_orchestrator: Target orchestrator name
                 - confidence_score: Routing confidence (0.0-1.0)
-                - reasoning: Routing explanation
+                - reasoning: Routing explanation (with rule citations if unified_intelligence provided)
                 - context: Enhanced context with LENS insights if fetched
+                - cited_rules: List of CORE rules cited in decision (if unified_intelligence provided)
         
         Example:
-            request = {
-                "intent": "IMPLEMENT",
-                "description": "Add authentication",
-                "file_path": "/app/auth.py",
-                "company_name": "AcmeCorp",
-                "context": {}
-            }
+            # Without unified intelligence (backward compatible)
+            request = {"intent": "IMPLEMENT", "description": "Add auth"}
             result = router.route_with_lens_auto_fetch(request)
-            # LENS context auto-fetched and added to result["context"]
+            
+            # With unified intelligence (Phase 20.5)
+            unified_context = synthesis_engine.synthesize_unified_context(...)
+            result = router.route_with_lens_auto_fetch(request, unified_context)
+            # result["reasoning"] now includes rule citations like:
+            # "Routing to TDDOrchestrator (CORE-008: TDD required for IMPLEMENT)"
+        
+        Authority: AC-PHASE-20-COMPONENT-3, AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5 Component #4)
         """
         try:
             # Extract request components
@@ -1500,14 +1516,66 @@ class IntentRouter(IOrchestrator):
             
             decision = self.route(routing_context)
             
+            # Phase 20.5: Enhance reasoning with rule citations if unified intelligence available
+            enhanced_reasoning = decision.reasoning
+            cited_rules: List[str] = []
+            
+            if unified_intelligence:
+                try:
+                    # Extract cited rules from synthesis result
+                    cited_rules = unified_intelligence.synthesis_result.citations
+                    
+                    # Build rule citation text
+                    if cited_rules:
+                        # Get intent-specific applicable rules
+                        intent_rules = self._get_intent_applicable_rules(
+                            intent_str, 
+                            cited_rules,
+                            unified_intelligence
+                        )
+                        
+                        if intent_rules:
+                            rule_text = ", ".join(intent_rules[:3])  # Top 3 rules
+                            enhanced_reasoning = f"{decision.reasoning} (Cited: {rule_text})"
+                    
+                    # Add violation warnings to reasoning if present
+                    violations = unified_intelligence.synthesis_result.violations
+                    if violations:
+                        violation_text = f" ⚠️ {len(violations)} violation(s) detected"
+                        enhanced_reasoning += violation_text
+                    
+                    self.logger.log_operation_complete(
+                        ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                        operation="SMART_CITATIONS_APPLIED",
+                        success=True,
+                        details={
+                            "intent": intent_str,
+                            "cited_rules_count": len(cited_rules),
+                            "violations_count": len(violations)
+                        }
+                    )
+                    
+                except Exception as citation_err:
+                    # Fail-safe: Continue without citations
+                    self.logger.log_operation_complete(
+                        ac_id="AC-KNOWLEDGE-SYNTHESIS-001",
+                        operation="SMART_CITATIONS_FAILED",
+                        success=False,
+                        details={"error": str(citation_err)}
+                    )
+            
             # Build result with enhanced context
             result = {
                 "intent": decision.intent_type.value,
                 "target_orchestrator": decision.target_handler,
                 "confidence_score": decision.confidence_score,
-                "reasoning": decision.reasoning,
+                "reasoning": enhanced_reasoning,  # Enhanced with citations
                 "context": context
             }
+            
+            # Add cited rules to result if available
+            if cited_rules:
+                result["cited_rules"] = cited_rules
             
             return result
             
@@ -1528,6 +1596,60 @@ class IntentRouter(IOrchestrator):
                 "reasoning": f"Error during routing: {str(e)}",
                 "context": request.get("context", {})
             }
+    
+    def _get_intent_applicable_rules(
+        self,
+        intent: str,
+        cited_rules: List[str],
+        unified_intelligence: UnifiedIntelligenceContext
+    ) -> List[str]:
+        """
+        Filter cited rules to only those applicable to current intent.
+        
+        Phase 20.5 Component #4: Smart Citations Helper
+        
+        Args:
+            intent: Current intent type (IMPLEMENT, FIX, etc.)
+            cited_rules: All cited rule IDs from synthesis
+            unified_intelligence: Full unified intelligence context
+        
+        Returns:
+            List[str]: Filtered rule IDs applicable to intent with titles
+        
+        Example:
+            For IMPLEMENT intent with cited_rules ["CORE-008", "CORE-011", "CORE-013"]:
+            Returns: ["CORE-008: TDD Required", "CORE-011: Type Hints"]
+        
+        Authority: AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
+        """
+        # Intent-specific rule priorities
+        intent_priorities = {
+            "IMPLEMENT": ["CORE-008", "CORE-011", "CORE-012", "CORE-026"],  # TDD, types, docs, git
+            "FIX": ["CORE-013", "CORE-027", "CORE-008"],  # Exceptions, audit, TDD
+            "REFACTOR": ["CORE-011", "CORE-012", "CORE-035"],  # Types, docs, no duplication
+            "ANALYZE": ["CORE-030", "CORE-036"],  # Implementation truth, standards
+            "TEST": ["CORE-008", "CORE-013"],  # TDD, exceptions
+        }
+        
+        # Get priority rules for intent
+        priority_rules = intent_priorities.get(intent, [])
+        
+        # Filter cited rules to only priority ones for this intent
+        applicable = [rule for rule in cited_rules if rule in priority_rules]
+        
+        # Add rule titles from unified intelligence
+        result = []
+        merged_practices = unified_intelligence.synthesis_result.merged_rules
+        
+        for rule_id in applicable:
+            if rule_id in merged_practices:
+                rule_data = merged_practices[rule_id]
+                title = rule_data.get("title", rule_id)
+                result.append(f"{rule_id}: {title}")
+            else:
+                result.append(rule_id)
+        
+        return result
     
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """
