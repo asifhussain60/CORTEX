@@ -19,6 +19,8 @@ class CortexDashboard {
      */
     async init() {
         try {
+            console.log('🚀 [TRACE] Starting CORTEX Dashboard initialization...');
+            
             // Load data from embedded JSON
             this.loadData();
             
@@ -27,6 +29,23 @@ class CortexDashboard {
                 this.showError('No dashboard data available');
                 return;
             }
+            
+            console.log('📊 [TRACE] Data loaded successfully:', {
+                hasRepo: !!this.data?.repo,
+                repoName: this.data?.repo?.display_name,
+                hasOverview: !!this.data?.overview,
+                hasMetrics: !!this.data?.metrics,
+                hasSecurity: !!this.data?.security,
+                vulnerabilitiesIsArray: Array.isArray(this.data?.security?.vulnerabilities),
+                vulnerabilitiesCount: this.data?.security?.vulnerabilities?.length || 0,
+                hasDependencies: !!this.data?.dependencies,
+                hasQuality: !!this.data?.quality,
+                codeSmellsIsArray: Array.isArray(this.data?.quality?.code_smells),
+                codeSmellsCount: this.data?.quality?.code_smells?.length || 0,
+                hasUseCases: !!this.data?.use_cases,
+                useCasesIsArray: Array.isArray(this.data?.use_cases),
+                useCasesCount: this.data?.use_cases?.length || 0
+            });
             
             // Initialize data binder
             this.dataBinder = new DataBinder(this.data);
@@ -247,10 +266,13 @@ class CortexDashboard {
             hasContainer: !!container,
             vulnsType: Array.isArray(vulns) ? 'array' : typeof vulns,
             vulnsLength: Array.isArray(vulns) ? vulns.length : 'not an array',
-            vulnsData: vulns
+            firstVuln: vulns[0] || null
         });
         
-        if (!container || vulns.length === 0) return;
+        if (!container || vulns.length === 0) {
+            console.warn('⚠️ Skipping vulnerabilities render:', !container ? 'no container' : 'no data');
+            return;
+        }
         
         container.innerHTML = vulns.map(vuln => `
             <div class="vulnerability-item">
@@ -352,10 +374,13 @@ class CortexDashboard {
             hasContainer: !!container,
             smellsType: Array.isArray(smells) ? 'array' : typeof smells,
             smellsLength: Array.isArray(smells) ? smells.length : 'not an array',
-            smellsData: smells
+            firstSmell: smells[0] || null
         });
         
-        if (!container || smells.length === 0) return;
+        if (!container || smells.length === 0) {
+            console.warn('⚠️ Skipping code smells render:', !container ? 'no container' : 'no data');
+            return;
+        }
         
         container.innerHTML = smells.map(smell => `
             <div class="code-smell-card glass-card-static">
