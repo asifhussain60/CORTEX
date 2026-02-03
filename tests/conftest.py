@@ -8,6 +8,10 @@ import sys
 from pathlib import Path
 from _pytest.python import Module
 
+# Disable pytest-asyncio plugin inheritance for all tests
+# This resolves the "pytest_plugins in non-top-level conftest" deprecation
+pytest_plugins = []
+
 # Add tier modules to path
 project_root = Path(__file__).parent
 tier_paths = [

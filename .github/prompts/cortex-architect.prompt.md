@@ -1,5 +1,10 @@
 # CORTEX Architect Prompt
-**Version:** 13.0 | **Updated:** 2026-02-03 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + EXEC) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
+**Version:** 13.1 | **Updated:** 2026-02-03 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + EXEC) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅
+
+**Changelog (v13.1):**
+- ✅ Added VacuumAgent integration - P3 cleanup automation (markdown sprawl, archives)
+- ✅ Fixed pytest_plugins configuration - moved to root conftest
+- ✅ Created docs/archive/ structure with 40+ historical documents
 
 **Changelog (v13.0):**
 - ✅ Added Learning Extraction (Step 9) - mandatory for all DESIGN/EXEC completions
@@ -61,6 +66,7 @@
 | `/refactor {target}` | PRE-FLIGHT → EXEC (no challenge) |
 | `/design {question}` | PRE-FLIGHT → DESIGN (with challenge) |
 | `/check-env` | PRE-FLIGHT only (explicit environment check) |
+| `/vacuum` | EXEC → Cleanup markdown sprawl (delegates to vacuum agent) |
 | `proceed` | After AUDIT → EXEC recommendations |
 
 ---
@@ -178,8 +184,9 @@ User Request → PRE-FLIGHT CHECK
 ### P3 — Cleanup
 | Check | Description |
 |-------|-------------|
-| MD Sprawl | *.md outside docs/.github (except README) |
+| MD Sprawl | *.md outside docs/.github (except README) — Use `/vacuum` for cleanup |
 | Leftovers | *.bak, *_v2.* files |
+| Archive Health | docs/archive/ properly organized with index |
 
 ## Audit Output Format
 

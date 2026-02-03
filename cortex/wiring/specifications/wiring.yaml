@@ -10,7 +10,7 @@
 #   orchestrators:
 #     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 12 support orchestrators (added EducationalOrchestrator - Phase 22.1)
+#     support: [...]   # 13 support orchestrators (added VacuumOrchestrator - Phase 22.5)
 # =========================================================================
 
 version: "2.0"
@@ -306,7 +306,7 @@ orchestrators:
       health_check: "manage_conversation"
 
   # -----------------------------------------------------------------------
-  # SUPPORT ORCHESTRATORS (11)
+  # SUPPORT ORCHESTRATORS (13 - Added VacuumOrchestrator)
   # -----------------------------------------------------------------------
   support:
     - name: "OnboardingOrchestrator"
@@ -524,6 +524,28 @@ orchestrators:
       governance:
         - "CORE-030"
         - "CORE-035"
+
+    - name: "VacuumOrchestrator"
+      module: "cortex.orchestrators.support.vacuum_orchestrator"
+      class: "VacuumOrchestrator"
+      tier: 3
+      priority: 75
+      dependencies: []
+      capabilities:
+        - markdown_cleanup
+        - file_archival
+        - verification_workflow
+        - audit_offering
+      health_check: "scan_repository"
+      description: "Markdown cleanup with post-cleanup validation workflow (CORE-002 enforcement)"
+      mcp_tools:
+        - "cortex_vacuum"
+      workflow_stages:
+        - "scan"
+        - "plan"
+        - "cleanup"
+        - "verify"
+        - "audit_offer"
 
     - name: "DebuggingOrchestrator"
       module: "cortex.orchestrators.support.debugging_orchestrator"

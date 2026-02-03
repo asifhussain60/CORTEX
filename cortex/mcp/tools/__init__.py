@@ -41,6 +41,11 @@ from .onboarding_tools import (
     cortex_analyze_repository_configs,
 )
 
+# Vacuum Tools (Markdown Cleanup - CORE-002)
+from .vacuum_tools import (
+    cortex_vacuum,
+)
+
 __all__ = [
     # Git Merge
     "IntelligentGitMergeTool",
@@ -58,6 +63,8 @@ __all__ = [
     "cortex_onboard_repository",
     "cortex_analyze_config",
     "cortex_analyze_repository_configs",
+    # Vacuum Tools
+    "cortex_vacuum",
 ]
 
 # MCP Tool Registry for discovery
@@ -138,5 +145,12 @@ MCP_TOOLS = {
         "description": "Discover all MCP tools",
         "category": "discovery",
         "features": ["tool_listing", "category_filter"]
+    },
+    # Vacuum Tool (CORE-002: Markdown cleanup)
+    "cortex_vacuum": {
+        "function": cortex_vacuum,
+        "description": "Markdown cleanup with post-cleanup validation workflow",
+        "category": "maintenance",
+        "features": ["markdown_cleanup", "file_archival", "verification", "audit_offering"]
     },
 }
