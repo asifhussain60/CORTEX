@@ -243,6 +243,13 @@ class CortexDashboard {
         const container = document.getElementById('vulnerabilities-list');
         const vulns = this.data.security?.vulnerabilities || [];
         
+        console.log('🔒 [TRACE] renderVulnerabilities:', {
+            hasContainer: !!container,
+            vulnsType: Array.isArray(vulns) ? 'array' : typeof vulns,
+            vulnsLength: Array.isArray(vulns) ? vulns.length : 'not an array',
+            vulnsData: vulns
+        });
+        
         if (!container || vulns.length === 0) return;
         
         container.innerHTML = vulns.map(vuln => `
@@ -340,6 +347,13 @@ class CortexDashboard {
     renderCodeSmells() {
         const container = document.getElementById('code-smells-grid');
         const smells = this.data.quality?.code_smells || [];
+        
+        console.log('⚠️ [TRACE] renderCodeSmells:', {
+            hasContainer: !!container,
+            smellsType: Array.isArray(smells) ? 'array' : typeof smells,
+            smellsLength: Array.isArray(smells) ? smells.length : 'not an array',
+            smellsData: smells
+        });
         
         if (!container || smells.length === 0) return;
         
