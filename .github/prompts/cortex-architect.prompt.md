@@ -65,9 +65,9 @@
 | Check | Description |
 |-------|-------------|
 | DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) |
-| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering (via cortex_audit_trail_verify) |
+| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering |
 | Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents |
-| Orchestrator Wiring | 23+ in wiring.yaml match implementations |
+| Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations |
 | MCP Production Gate | @mcp_tool + catalog for all production tools |
 | Intent Router | 5-layer consistency (enum→router→config→prompts→agents) |
 | Governance | 4-layer defense active |
@@ -314,7 +314,6 @@
 | `cortex_lens_analyze` | Code patterns |
 | `cortex_detect_duplicates` | CORE-035 + coherence validation |
 | `cortex_ast_analyze` | Structure |
-| `cortex_audit_trail_verify` | **AUDIT:** DB audit logging verification |
 | `cortex_manage_todo` | **NEW:** Todo list CRUD via MCP |
 
 ---

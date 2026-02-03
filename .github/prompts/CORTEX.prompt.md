@@ -9,7 +9,7 @@
 
 **Production Mode:** MCP Server (SaaS)  
 **Entry Point:** This prompt → MasterOrchestrator → MCP Tools  
-**Orchestrators:** 23 wired via GitBackedRegistry  
+**Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
 
 ---
@@ -136,17 +136,22 @@ result = mcp_tool.execute(parameters)
 | DEPLOY | GitOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
 
-### Available Orchestrators (23)
+### Available Orchestrators (28)
 
 ```
-Core (6):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
-              TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator
+Core (8):     MasterOrchestrator, InteractionOrchestrator, IntentRouter, LENSSynthesis,
+              EnforcementOrchestrator, TDDOrchestrator, IncrementalTaskDecomposer,
+              WorkflowOrchestrator
 
 Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
               ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
 
-Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, UpgradeOrchestrator,
-              RollbackOrchestrator, SetupOrchestrator, LENSOrchestrator, ...
+Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, UpgradeOrchestrator,
+              RollbackOrchestrator, SetupOrchestrator, LENSOrchestrator,
+              DuplicationDetectorOrchestrator, ContextAssemblyOrchestrator,
+              LENSVisualizationOrchestrator, RepoDetectionOrchestrator,
+              InquiryOrchestrator, CorticalIntegrationOrchestrator,
+              SensoryInputOrchestrator, RepositoryOnboardingOrchestrator
 ```
 
 ---

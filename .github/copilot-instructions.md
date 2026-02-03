@@ -9,7 +9,7 @@
 
 **Primary Prompt:** [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md)  
 **Production Mode:** MCP Server (SaaS)  
-**Orchestrators:** 23 wired via GitBackedRegistry  
+**Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
 
 ---

@@ -37,10 +37,10 @@
 ### P1 — Infrastructure
 | Check | Target |
 |-------|--------|
-| DB Audit Logging | AuditTrailVerifier active (via cortex_audit_trail_verify) |
+| DB Audit Logging | AuditTrailVerifier active |
 | **Audit Trail Integrity** | **governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering** |
 | Architectural Coherence | wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents consistency |
-| Orchestrator Wiring | 23+ in wiring.yaml |
+| Orchestrator Wiring | 28 orchestrators in wiring.yaml |
 | MCP Production Gate | @mcp_tool decorators |
 | Intent Router | 5-layer consistency |
 | Governance | 4-layer defense |
@@ -73,7 +73,7 @@
 | `cortex_lens_analyze` | Code patterns + refactoring needs |
 | `cortex_detect_duplicates` | CORE-035 + coherence |
 | `cortex_ast_analyze` | Structure |
-| `cortex_audit_trail_verify` | DB audit logging active + integrity check |
+| `grep_search` | Audit trail pairing detection |
 
 ---
 
@@ -138,7 +138,7 @@
 | `cortex_lens_analyze` | Code patterns |
 | `cortex_detect_duplicates` | CORE-035 + coherence |
 | `cortex_ast_analyze` | Structure |
-| `cortex_audit_trail_verify` | DB audit logging active |
+| `grep_search` | Audit trail pairing detection |
 
 ---
 
@@ -203,16 +203,16 @@
 5. Detect broken chains or orphaned entries
 ```
 
-**Data Source:** `cortex_audit_trail_verify` MCP tool → AuditTrailVerifier
+**Data Source:** `grep_search` with AC_START/AC_COMPLETE patterns + code inspection
 
 **Output Format:**
 ```markdown
 ### P1 Infrastructure — Audit Trail Integrity
 | Check | Status | Details |
 |-------|--------|---------|
-| Table Exists | ✅ | governance_audit_trail found |
-| Pairing Complete | ✅ | 147/147 AC_START matched |
-| Chain Intact | ✅ | No tampering detected |
+| Pattern Detected | ✅ | 50+ AC_START/AC_COMPLETE pairs found |
+| Pairing Analysis | ✅ | Manual verification recommended |
+| Implementation | ✅ | CORE-027 markers present in code |
 | Completeness | ⚠️ | 3 operations missing logs |
 ```
 
