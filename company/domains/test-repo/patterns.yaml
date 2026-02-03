@@ -1,0 +1,6 @@
+candidates:
+- custom_auth_handler
+known:
+- repository_pattern
+- service_layer
+learned: []
