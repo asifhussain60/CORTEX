@@ -10,7 +10,7 @@
 #   orchestrators:
 #     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 11 support orchestrators
+#     support: [...]   # 12 support orchestrators (added EducationalOrchestrator - Phase 22.1)
 # =========================================================================
 
 version: "2.0"
@@ -447,6 +447,27 @@ orchestrators:
         - challenge_enforcement
       health_check: "evaluate_threat"
       description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
+
+    - name: "EducationalOrchestrator"
+      module: "cortex.orchestrators.education.educational_orchestrator"
+      class: "EducationalOrchestrator"
+      tier: 3
+      priority: 74
+      dependencies:
+        - "TruthVerificationEngine"
+        - "ImplementationVerifier"
+      capabilities:
+        - educational_interaction
+        - knowledge_level_detection
+        - progressive_disclosure
+        - next_step_generation
+        - fault_detection
+        - truth_verification
+      health_check: "execute"
+      description: "ASK Mode orchestrator for implementation-truth-based educational interaction (Phase 22)"
+      mcp_tools:
+        - "cortex_ask"
+        - "cortex_verify_claim"
 
     - name: "DuplicationDetector"
       module: "cortex.orchestrators.support.duplication_detector_orchestrator"
