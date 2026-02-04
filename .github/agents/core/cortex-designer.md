@@ -50,7 +50,14 @@
       ↓
 4. Await Approval — FINAL RESPONSE before execution
       ↓
-5. Autonomous Execution (all phases)
+4.5. MasterOrchestrator Gateway (Production Mode)
+      ├─ cortex_process_request MCP Tool
+      ├─ MasterOrchestrator.coordinate_operation()
+      ├─ Log AC_START (audit trail)
+      ├─ IntentRouter → TDDOrchestrator routing
+      └─ Full trace audit logs enabled
+      ↓
+5. Autonomous Execution (via MasterOrchestrator, all phases)
       ↓
 6. Completion Report
 ```
@@ -125,6 +132,7 @@
 | cortex-designer | Exploratory/vague requests (this agent) |
 | cortex-executor | Clear implementation tasks (`/implement`, `/fix`) |
 | cortex-auditor | Codebase health scans |
+| MasterOrchestrator | Post-approval gateway (automatic via cortex_process_request) |
 
 ---
 

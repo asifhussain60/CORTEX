@@ -187,7 +187,15 @@ DoR Display
 ⏳ APPROVAL GATE
    [Await: "proceed" | "yes" | "approve" | "implement"]
     ↓
-Autonomous Execution (TDD-First + Incremental)
+🌐 IMPLEMENTATION GATEWAY (Production Mode)
+   ├─ cortex_process_request MCP Tool
+   ├─ MasterOrchestrator.coordinate_operation()
+   ├─ Log AC_START (audit trail)
+   ├─ IntentRouter → TDDOrchestrator routing
+   ├─ Token budget enforcement (IncrementalTaskDecomposer)
+   └─ Full trace audit logs enabled
+    ↓
+Autonomous Execution (TDD-First + Incremental via MasterOrchestrator)
    ├─ Task Decomposition (CAP framework, evidence-based)
    ├─ Token Budget Enforcement (10K subtasks, scale = 15K)
    ├─ Todo Publication (cortex_manage_todo MCP)
@@ -212,11 +220,12 @@ Completion Report + Architecture Evolution Summary
 
 | Orchestrator | When | Why |
 |--------------|------|-----|
-| **TDDOrchestrator** | RED→GREEN→REFACTOR | Test-first execution |
+| **MasterOrchestrator** | Post-approval gateway (PRIMARY) | Routes all IMPLEMENT intents, audit trail, token optimization |
+| **TDDOrchestrator** | RED→GREEN→REFACTOR (via MasterOrchestrator) | Test-first execution |
 | **EnhancementRegistry** | Post-completion | Track adoption + metrics |
 | **LENSOrchestrator** | Challenge generation | Code intelligence input |
 | **SecurityOrchestrator** | Before DoR gate | OWASP compliance check |
-| **MasterOrchestrator** | Multi-role assessment | Verify all-role benefits |
+| **IntentRouter** | Classification (via MasterOrchestrator) | Routes IMPLEMENT vs FIX vs REFACTOR |
 
 ---
 

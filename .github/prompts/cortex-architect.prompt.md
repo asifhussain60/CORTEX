@@ -293,7 +293,13 @@ User Request → PRE-FLIGHT CHECK
       ↓
 4. Await Approval — Final response before execution begins
       ↓
-5. Autonomous Execution (incremental TDD with subtask decomposition)
+4.5. MasterOrchestrator Gateway (Production Mode)
+      ├─ Log AC_START (audit trail)
+      ├─ Route via cortex_process_request MCP tool
+      ├─ MasterOrchestrator → IntentRouter → TDDOrchestrator
+      └─ Full trace audit logs enabled
+      ↓
+5. Autonomous Execution (incremental TDD with subtask decomposition via MasterOrchestrator)
       ↓
 6. Todo List Publication (via MCP tool)
       ↓
@@ -341,6 +347,76 @@ Every request is elevated with:
 - ✅ Progress visibility — real-time todo tracking
 - ✅ Resume support — can continue after interruption
 - ✅ Evidence-based sizing — uses complexity analysis
+
+## 🌐 MASTERORCHESTRATOR GATEWAY (Production Mode)
+
+**POST-APPROVAL ROUTING:** After user approves DoR (types "proceed" / "yes" / "approve"), ALL implementation requests route through MasterOrchestrator.
+
+### Gateway Flow
+
+```
+User Approval ("proceed")
+         ↓
+cortex_process_request MCP Tool
+         ↓
+MasterOrchestrator.coordinate_operation()
+         ├─ Log AC_START (audit trail)
+         ├─ Load context from InteractionOrchestrator
+         ├─ Classify intent via IntentRouter
+         ├─ Route to TDDOrchestrator (for IMPLEMENT)
+         ├─ Token budget enforcement
+         ├─ Incremental execution coordination
+         └─ Log AC_COMPLETE (audit trail)
+         ↓
+Response to user (via templates)
+```
+
+### Why MasterOrchestrator?
+
+| Capability | Benefit |
+|------------|---------|
+| **Audit Trail** | Full AC_START → AC_COMPLETE logging for governance |
+| **Intent Routing** | Intelligent orchestrator selection based on request type |
+| **Token Optimization** | Automatic subtask decomposition via IncrementalTaskDecomposer |
+| **Challenge System** | Built-in disagreement detection via InteractionOrchestrator |
+| **Gap Analysis** | Post-implementation enhancement detection |
+| **Test-First** | TDDOrchestrator enforces RED→GREEN→REFACTOR |
+| **Production Ready** | Battle-tested with 28 orchestrators wired |
+
+### MCP Tool Integration
+
+**Tool:** `cortex_process_request`  
+**Parameters:**
+```python
+{
+    "user_request": str,          # Original user request
+    "context": dict,               # LENS context + DoR metadata
+    "enable_challenge": bool,      # Already done in DESIGN mode
+    "token_budget": int,           # Default 10K per subtask
+    "audit_enabled": bool          # Always True in production
+}
+```
+
+**Response:**
+```python
+{
+    "status": "success" | "error",
+    "result": {
+        "files_modified": int,
+        "tests_passing": bool,
+        "gap_analysis": str,
+        "architecture_evolution": dict,
+        "audit_trail_id": str
+    }
+}
+```
+
+### CRITICAL: No Direct Orchestrator Calls
+
+**❌ FORBIDDEN:** `TDDOrchestrator.generate_tests()` directly  
+**✅ REQUIRED:** `cortex_process_request` → MasterOrchestrator → TDDOrchestrator
+
+**Why:** Direct calls bypass audit trail, token optimization, and governance gates.
 
 ## ⚠️ MANDATORY CHALLENGE + RECOMMENDATION (Response Invalid Without)
 
