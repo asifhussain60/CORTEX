@@ -31,6 +31,7 @@ from typing import Any, Callable, Dict, List, Optional, AsyncIterator
 from uuid import uuid4
 
 from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 logger = logging.getLogger(__name__)
 
@@ -223,6 +224,7 @@ class AutonomousExecutionEngine:
         self._is_running = False
         self._pause_requested = False
 
+    @inject_orchestrator_context
     async def execute_plan_autonomously(
         self,
         plan: PlanSpecification,

@@ -86,6 +86,10 @@ orchestrators:
         - pattern_enforcement
       health_check: "execute_turn"
       mcp_adapter: "cortex.mcp.adapters.interaction_adapter"
+      metadata:
+        icon: "💬"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
       requires_params:
         conversation_protocol:
           type: "ConversationProtocol"
@@ -113,6 +117,10 @@ orchestrators:
         - fuzzy_matching
       health_check: "classify_intent"
       mcp_adapter: "cortex.mcp.adapters.intent_router_adapter"
+      metadata:
+        icon: "🎯"
+        stages: 3
+        intelligence: ["lens"]
 
     # STAGE 2.5: LENS Synthesis & DoR Gate
     - name: "LENSSynthesis"
@@ -128,6 +136,10 @@ orchestrators:
         - synthesis
       health_check: "synthesize"
       mcp_adapter: "cortex.mcp.adapters.lens_adapter"
+      metadata:
+        icon: "🔬"
+        stages: 4
+        intelligence: ["lens", "knowledge", "synthesis"]
 
     # STAGE 2.7: Governance Enforcement (Phase 8.1)
     - name: "EnforcementOrchestrator"
@@ -144,6 +156,10 @@ orchestrators:
         - parallel_validation
       health_check: "validate_operation"
       mcp_adapter: "cortex.mcp.adapters.enforcement_adapter"
+      metadata:
+        icon: "🛡️"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
       requires_params:
         governance_registry:
           type: "GovernanceRegistry"
@@ -169,6 +185,10 @@ orchestrators:
         - test_execution
       health_check: "generate_tests"
       mcp_adapter: "cortex.mcp.adapters.tdd_adapter"
+      metadata:
+        icon: "🧪"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
     # STAGE 3B: Incremental Task Decomposition (NEW)
     - name: "IncrementalTaskDecomposer"
@@ -189,6 +209,10 @@ orchestrators:
         - "CORE-011"
         - "CORE-012"
       version: "1.0"
+      metadata:
+        icon: "🧩"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
 
     # Workflow Management
     - name: "WorkflowOrchestrator"
@@ -203,6 +227,10 @@ orchestrators:
         - step_orchestration
       health_check: "execute_workflow"
       mcp_adapter: "cortex.mcp.adapters.workflow_adapter"
+      metadata:
+        icon: "⚙️"
+        stages: 4
+        intelligence: ["lens"]
 
     # STAGE 4: Master Coordination
     - name: "MasterOrchestrator"
@@ -221,6 +249,10 @@ orchestrators:
         - orchestrator_routing
       health_check: "coordinate_operation"
       mcp_adapter: "cortex.mcp.adapters.master_adapter"
+      metadata:
+        icon: "🧠"
+        stages: 4
+        intelligence: ["lens", "knowledge", "synthesis"]
 
   # -----------------------------------------------------------------------
   # DOMAIN ORCHESTRATORS (6)
@@ -239,6 +271,10 @@ orchestrators:
         - smell_detection
       health_check: "analyze_refactoring"
       mcp_adapter: "cortex.mcp.adapters.refactoring_adapter"
+      metadata:
+        icon: "♻️"
+        stages: 7
+        intelligence: ["lens", "knowledge"]
 
     - name: "PlanningOrchestrator"
       module: "cortex.orchestrators.domain.enhanced_planning_orchestrator"
@@ -253,6 +289,10 @@ orchestrators:
         - milestone_tracking
       health_check: "generate_plan"
       mcp_adapter: "cortex.mcp.adapters.planning_adapter"
+      metadata:
+        icon: "📋"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
     - name: "DocumentationOrchestrator"
       module: "cortex.orchestrators.domain.enhanced_documentation_orchestrator"
@@ -267,6 +307,10 @@ orchestrators:
         - changelog_management
       health_check: "generate_documentation"
       mcp_adapter: "cortex.mcp.adapters.documentation_adapter"
+      metadata:
+        icon: "📝"
+        stages: 4
+        intelligence: ["lens"]
 
     - name: "PhaseExecutor"
       module: "cortex.orchestrators.domain.phase_executor"
@@ -279,6 +323,10 @@ orchestrators:
         - phase_execution
         - checkpoint_management
       health_check: "execute_phase"
+      metadata:
+        icon: "▶️"
+        stages: 4
+        intelligence: ["lens"]
 
     - name: "AutonomousExecutionEngine"
       module: "cortex.orchestrators.domain.autonomous_execution_engine"
@@ -292,6 +340,10 @@ orchestrators:
         - autonomous_execution
         - multi_step_operations
       health_check: "execute_autonomous"
+      metadata:
+        icon: "🤖"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
     - name: "ConversationOrchestrator"
       module: "cortex.orchestrators.conversation_orchestrator"
@@ -304,6 +356,10 @@ orchestrators:
         - conversation_management
         - context_tracking
       health_check: "manage_conversation"
+      metadata:
+        icon: "🤝"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
   # -----------------------------------------------------------------------
   # SUPPORT ORCHESTRATORS (13 - Added VacuumOrchestrator)
@@ -319,6 +375,10 @@ orchestrators:
         - user_onboarding
         - tutorial_guidance
       health_check: "start_onboarding"
+      metadata:
+        icon: "🎓"
+        stages: 3
+        intelligence: ["knowledge"]
 
     - name: "ToolDiscoveryOrchestrator"
       module: "cortex.orchestrators.core.tool_discovery_orchestrator"
@@ -330,6 +390,10 @@ orchestrators:
         - tool_discovery
         - capability_enumeration
       health_check: "discover_tools"
+      metadata:
+        icon: "🔍"
+        stages: 2
+        intelligence: ["lens"]
 
     - name: "UpgradeOrchestrator"
       module: "cortex.orchestrators.support.upgrade_orchestrator"
@@ -341,6 +405,10 @@ orchestrators:
         - version_upgrade
         - migration_assistance
       health_check: "check_upgrade"
+      metadata:
+        icon: "⬆️"
+        stages: 4
+        intelligence: ["knowledge"]
 
     - name: "RollbackOrchestrator"
       module: "cortex.orchestrators.support.rollback_orchestrator"
@@ -352,6 +420,10 @@ orchestrators:
         - rollback_execution
         - checkpoint_restore
       health_check: "check_rollback"
+      metadata:
+        icon: "⏪"
+        stages: 3
+        intelligence: ["knowledge"]
 
     - name: "SetupOrchestrator"
       module: "cortex.orchestrators.support.setup_orchestrator"
@@ -363,6 +435,10 @@ orchestrators:
         - environment_setup
         - dependency_installation
       health_check: "check_setup"
+      metadata:
+        icon: "🔧"
+        stages: 3
+        intelligence: ["knowledge"]
 
     - name: "GovernanceRegistry"
       module: "cortex.brain.core.governance_registry"
@@ -374,6 +450,10 @@ orchestrators:
         - governance_enforcement
         - rule_management
       health_check: "get_rules"
+      metadata:
+        icon: "⚖️"
+        stages: 2
+        intelligence: ["knowledge"]
 
     - name: "KnowledgeRepository"
       module: "cortex.brain.core.knowledge.knowledge_repository"
@@ -385,6 +465,10 @@ orchestrators:
         - knowledge_retrieval
         - relationship_mapping
       health_check: "query_knowledge"
+      metadata:
+        icon: "📚"
+        stages: 3
+        intelligence: ["knowledge"]
 
     - name: "WrappedTDDOrchestrator"
       module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
@@ -397,6 +481,10 @@ orchestrators:
         - wrapped_tdd
         - enhanced_testing
       health_check: "generate_wrapped_tests"
+      metadata:
+        icon: "🧬"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
     - name: "FuzzyIntentMatcher"
       module: "cortex.orchestrators.core.fuzzy_intent_matcher"
@@ -409,6 +497,10 @@ orchestrators:
         - fuzzy_matching
         - intent_disambiguation
       health_check: "match_intent"
+      metadata:
+        icon: "🎲"
+        stages: 2
+        intelligence: ["lens"]
 
     - name: "ComprehensionSession"
       module: "cortex.orchestrators.core.comprehension_session"
@@ -421,6 +513,10 @@ orchestrators:
         - session_management
         - comprehension_tracking
       health_check: "get_session"
+      metadata:
+        icon: "💭"
+        stages: 2
+        intelligence: ["lens", "knowledge"]
 
     - name: "DoRApprovalGate"
       module: "cortex.orchestrators.core.dor_approval_gate"
@@ -433,6 +529,10 @@ orchestrators:
         - approval_gating
         - dor_validation
       health_check: "validate_dor"
+      metadata:
+        icon: "✅"
+        stages: 2
+        intelligence: ["lens", "knowledge"]
 
     - name: "ChallengeEngine"
       module: "cortex.orchestrators.core.challenge_engine"
@@ -447,6 +547,10 @@ orchestrators:
         - challenge_enforcement
       health_check: "evaluate_threat"
       description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
+      metadata:
+        icon: "🛡️"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
 
     - name: "EducationalOrchestrator"
       module: "cortex.orchestrators.education.educational_orchestrator"
@@ -468,6 +572,10 @@ orchestrators:
       mcp_tools:
         - "cortex_ask"
         - "cortex_verify_claim"
+      metadata:
+        icon: "🎓"
+        stages: 4
+        intelligence: ["lens", "knowledge", "synthesis"]
 
     - name: "DuplicationDetector"
       module: "cortex.orchestrators.support.duplication_detector_orchestrator"
@@ -488,6 +596,10 @@ orchestrators:
         - "GitHistoryAnalyzer"
         - "ASTAnalyzer"
         - "CommentExtractor"
+      metadata:
+        icon: "🔍"
+        stages: 3
+        intelligence: ["lens"]
 
     - name: "RecommendationEngine"
       module: "cortex.orchestrators.support.recommendation_engine"
@@ -505,6 +617,10 @@ orchestrators:
       health_check: "recommend_for_security"
       mcp_adapter: "cortex.mcp.adapters.recommendation_adapter"
       description: "Advisory layer providing contextualized best practice recommendations (Phase 8.4)"
+      metadata:
+        icon: "💡"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
 
     - name: "RecommendationGate"
       module: "cortex.orchestrators.core.recommendation_gate"
@@ -524,6 +640,10 @@ orchestrators:
       governance:
         - "CORE-030"
         - "CORE-035"
+      metadata:
+        icon: "🚦"
+        stages: 2
+        intelligence: ["knowledge"]
 
     - name: "VacuumOrchestrator"
       module: "cortex.orchestrators.support.vacuum_orchestrator"
@@ -546,6 +666,10 @@ orchestrators:
         - "cleanup"
         - "verify"
         - "audit_offer"
+      metadata:
+        icon: "🧹"
+        stages: 5
+        intelligence: ["lens", "knowledge"]
 
     - name: "DebuggingOrchestrator"
       module: "cortex.orchestrators.support.debugging_orchestrator"
@@ -571,6 +695,10 @@ orchestrators:
         - "CORE-011"
         - "CORE-012"
         - "CORE-027"
+      metadata:
+        icon: "🐛"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES

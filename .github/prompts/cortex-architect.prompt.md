@@ -162,6 +162,7 @@ User Request → PRE-FLIGHT CHECK
 | Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) |
 | Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md |
 | Tool Coverage | All MCP tools referenced in prompt have implementations in cortex/mcp/tools/ |
+| **Orchestrator Badge System** | **100% metadata coverage in wiring.yaml, @inject_orchestrator_context decorator applied, E2E tests passing** |
 
 ### P2 — Quality
 | Check | Description |

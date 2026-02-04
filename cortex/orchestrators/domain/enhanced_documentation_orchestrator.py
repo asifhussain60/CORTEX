@@ -36,6 +36,7 @@ import re
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 logger = logging.getLogger(__name__)
 
@@ -666,6 +667,7 @@ class EnhancedDocumentationOrchestrator(IOrchestrator):
         
         return Err(f"Unknown operation: {operation}")
     
+    @inject_orchestrator_context
     def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Result:
         """Execute named operation."""
         if operation_name == 'extract_api':

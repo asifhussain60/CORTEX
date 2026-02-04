@@ -10,6 +10,10 @@ AC-AR-006-01: MasterOrchestrator coordinates domain orchestrators
 
 AC-FIX-HALLUCINATION-001: Boundary enforcement integration
 - Validates operations against behavioral boundaries before delegation
+
+AC-UX-VISIBILITY-001: Orchestrator badge visibility integration
+- Auto-injects OrchestratorContext via decorator
+- Displays visual indicators in responses (icons, stage progress, intelligence flags)
 """
 
 from __future__ import annotations
@@ -38,6 +42,9 @@ from cortex.infrastructure.database_transaction_manager import DatabaseTransacti
 from cortex.brain.mcp.decorator import mcp_tool
 from cortex.core.intent.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
+
+# AC-UX-VISIBILITY-001: Import orchestrator context decorator
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 # AC-PHASE-2-5-WIRE-001: Import ComponentHealthTracker for health monitoring
 from cortex.orchestrators.core.component_health import ComponentHealthTracker, ComponentType
@@ -2095,6 +2102,7 @@ class MasterOrchestrator(IOrchestrator):
         name="coordinate_operation",
         description="Coordinate an operation across domain orchestrators"
     )
+    @inject_orchestrator_context
     def coordinate_operation(
         self,
         operation: str,
