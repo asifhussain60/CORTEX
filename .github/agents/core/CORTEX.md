@@ -144,8 +144,10 @@
 - [ ] AC_START logged
 - [ ] MCP tool invoked
 - [ ] CORE rules applied
+- [ ] **All P0/P1/P2 issues auto-fixed (AUDIT mode)**
 - [ ] AC_COMPLETE logged
 - [ ] Results inline (no files)
+- [ ] **Success reported ONLY when 100% production-ready**
 
 ---
 

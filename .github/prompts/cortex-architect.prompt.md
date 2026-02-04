@@ -283,47 +283,59 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 ## Audit Checklist
 
+**MANDATORY:** All checks must be executed with ZERO tolerance for "Not analyzed" statuses.
+
 ### P0 — Security & Critical
-| Check | Description |
-|-------|-------------|
-| Security Scan | Hardcoded secrets, injection, OWASP |
-| Stub Detection | `# TODO`, `# PLACEHOLDER`, `pass` bodies |
-| Broken Code | Mixed old/new implementations incomplete |
+| Check | Description | Tool |
+|-------|-------------|------|
+| Security Scan | Hardcoded secrets, injection, OWASP | `grep_search`, manual review |
+| Stub Detection | `# TODO`, `# PLACEHOLDER`, `pass` bodies | `grep_search` |
+| Broken Code | Mixed old/new implementations incomplete | `cortex_lens_analyze` |
+
+**P0 Auto-Fix:** Review stubs → implement or document as intentional → verify
 
 ### P1 — Infrastructure
-| Check | Description |
-|-------|-------------|
-| DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) |
-| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering |
-| Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents |
-| Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations |
-| MCP Production Gate | @mcp_tool + catalog for all production tools |
-| Intent Router | 5-layer consistency (enum→router→config→prompts→agents) |
-| Governance | 4-layer defense active |
-| TDD Completeness | Test files for all orchestrators |
-| Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) |
-| Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md |
-| Tool Coverage | All MCP tools referenced in prompt have implementations in cortex/mcp/tools/ |
-| **Orchestrator Badge System** | **100% metadata coverage in wiring.yaml, @inject_orchestrator_context decorator applied, E2E tests passing** |
+| Check | Description | Tool |
+|-------|-------------|------|
+| DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) | `grep_search`, code inspection |
+| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering | `cortex_audit_trail_verify` |
+| Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents | Manual cross-check |
+| Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations | `cortex_lens_analyze`, wiring validation |
+| MCP Production Gate | @mcp_tool + catalog for all production tools | `grep_search` |
+| Intent Router | 5-layer consistency (enum→router→config→prompts→agents) | Manual verification |
+| Governance | 4-layer defense active | Code inspection |
+| TDD Completeness | Test files for all orchestrators | `file_search` |
+| Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) | Manual review |
+| Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md | Manual review |
+| Tool Coverage | All MCP tools referenced in prompt have implementations in cortex/mcp/tools/ | `file_search` |
+| **Orchestrator Badge System** | **100% metadata coverage in wiring.yaml, @inject_orchestrator_context decorator applied, E2E tests passing** | Code inspection |
 
-### P2 — Quality
-| Check | Description |
-|-------|-------------|
-| Duplicates | CORE-035 violations |
-| Dead Code | Unused imports, orphan functions |
-| Skipped Tests | @pytest.mark.skip >30 days |
-| Refactoring Needs | Complexity hotspots (>15 cyclomatic), SOLID violations, technical debt ratio >5%, code smells >100, functions >50 LOC (via cortex_lens_analyze) |
-| Database Hygiene | SQLite databases: audit logs >90 days old, cache >30 days, orphaned tables, size >100MB, unused indexes, record count >10K |
+**P1 Auto-Fix:** Update wiring.yaml, add missing tests, fix coherence issues
+
+### P2 — Quality (MANDATORY ANALYSIS)
+| Check | Description | Tool |
+|-------|-------------|------|
+| Duplicates | CORE-035 violations | **`cortex_detect_duplicates` (MANDATORY)** |
+| Dead Code | Unused imports, orphan functions | **`cortex_lens_analyze` (MANDATORY)** |
+| Skipped Tests | @pytest.mark.skip >30 days | `grep_search` |
+| Refactoring Needs | Complexity hotspots (>15 cyclomatic), SOLID violations, technical debt ratio >5%, code smells >100, functions >50 LOC | **`cortex_lens_analyze` (MANDATORY)** |
+| Database Hygiene | SQLite databases: audit logs >90 days old, cache >30 days, orphaned tables, size >100MB, unused indexes, record count >10K | SQLite inspection |
+
+**P2 Auto-Fix:** Remove duplicates, delete dead code, enable skipped tests, refactor hotspots
+
+**CRITICAL:** NO "Not analyzed" allowed — invoke all mandatory tools or HALT with error.
 
 ### P3 — Cleanup
-| Check | Description |
-|-------|-------------|
-| MD Sprawl | *.md outside docs/.github (except README) |
-| Markdown Links | Verify all relative links resolve (handle VS Code false positives) |
-| Code Fences | All \`\`\` blocks have language specified (MD040) |
-| Table Formatting | All markdown tables have proper spacing (MD060) |
-| Heading Blanks | Headings surrounded by blank lines (MD022) |
-| Leftovers | *.bak, *_v2.* files |
+| Check | Description | Tool |
+|-------|-------------|------|
+| MD Sprawl | *.md outside docs/.github (except README) | `file_search` |
+| Markdown Links | Verify all relative links resolve (handle VS Code false positives) | Manual check |
+| Code Fences | All \`\`\` blocks have language specified (MD040) | Markdown linter |
+| Table Formatting | All markdown tables have proper spacing (MD060) | Markdown linter |
+| Heading Blanks | Headings surrounded by blank lines (MD022) | Markdown linter |
+| Leftovers | *.bak, *_v2.* files | `file_search` |
+
+**P3 Auto-Fix:** Route to VacuumOrchestrator for automated cleanup
 
 ## Audit Output Format
 
@@ -1232,7 +1244,17 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ## ✅ COMPLETION
 
-**COMPLETION:** "✅ CORTEX Audit Complete — 100% production-ready" or P0 Actions table  
+**CRITICAL:** Success reported ONLY when ALL issues resolved (0 P0, 0 P1, 0 P2 remaining).
+
+**AUDIT COMPLETION:**
+- ✅ **100% Production-Ready:** Report success only when: P0=0, P1=0, P2=0, P3 auto-fixed
+- ❌ **Issues Remaining:** Auto-fix all detected issues BEFORE reporting to user
+- 🔄 **Autonomous Cycle:** Detect → Fix → Verify → (Repeat if issues found) → Report
+
+**Format:**
+- **All Clean:** "✅ CORTEX 100% Production-Ready — All checks passed (P0: 0, P1: 0, P2: 0, P3: auto-fixed)"
+- **Issues Fixed:** "✅ CORTEX 100% Production-Ready — {n} issues auto-fixed (details: ...)"
+
 **META-AUDIT:** "🧠 Meta-Intelligence Report Complete — {n} insights generated"  
 **DESIGN:** Implementation table with files modified, tests passing, todos tracked  
 **EXEC:** "⚡ EXEC Complete — {n} files modified, tests passing"  

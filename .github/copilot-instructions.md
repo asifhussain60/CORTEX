@@ -290,6 +290,7 @@ curl http://localhost:8000/health/orchestrators
 - [ ] DoR displayed and approved
 - [ ] MCP tool invoked (not direct import)
 - [ ] CORE rules applied
+- [ ] **AUDIT: All P0/P1/P2 issues auto-fixed before success report**
 - [ ] Results inline (no file generation)
 
 ---
