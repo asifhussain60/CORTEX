@@ -22,14 +22,38 @@
 
 | Phase | Name | Priority | Duration | Status |
 |-------|------|----------|----------|--------|
-| **22** | ASK Mode System | P1 High | 2-3 weeks | 📋 PLANNED (NEW) |
-| **20.5** | Knowledge Synthesis | P0 Critical | 4 days | ✅ APPROVED (NEW) |
+| **SDLC-001** | SDLC Governance & Orchestration | P0 Critical | 3-4 weeks | 📋 PLANNED (NEW) ⭐ |
+| **22** | ASK Mode System | P1 High | 2-3 weeks | 📋 PLANNED |
+| **21-REWRITE** | JSON-First Dashboard Rewrite | P0 Critical | 2 weeks | 📋 PLANNED |
+| **20.5** | Knowledge Synthesis | P0 Critical | 4 days | ✅ APPROVED |
 | **20.2** | Orchestrator Visibility | P0 Critical | 9 hours | ✅ COMPLETE (4 hrs) |
 | **20** | LENS + Company Knowledge | P0 Critical | 5 days | ✅ APPROVED |
 | **19** | LENS Unified Intelligence | P0 Critical | 4 weeks | 📋 PLANNED |
 | **18** | Enterprise Dashboard System | P0 Critical | 5-7 days | ✅ COMPLETE |
 | **15** | Static Repo Visualization | P1 High | 18-24 days | ✅ COMPLETE |
 | **10** | LENS Remote Intelligence | P1 High | 5-7 days | ✅ COMPLETE |
+
+---
+
+## 🧠 CORTEX SELF-IMPROVEMENT (TOP PRIORITY)
+
+**➡️ [CORTEX-SELF-IMPROVEMENT-SDLC.yaml](./CORTEX-SELF-IMPROVEMENT-SDLC.yaml)** 🚀 **CRITICAL - SDLC GOVERNANCE FIX** ⭐
+
+**Why This Phase Exists:**
+Phase 21 implementation revealed that CORTEX's own governance was bypassed:
+- TDD Orchestrator never invoked (0 calls in 3846-line session)
+- No planning phase generated code-level specs
+- Cross-layer misalignments discovered at runtime (4+ hours debugging)
+- MCP gateway bypassed via direct chat
+
+**Key Enhancements:**
+1. **PlanningOrchestrator v4.0** - Code-level planning (files, functions, interfaces)
+2. **InteractionOrchestrator Enhancement** - Mandatory planning for IMPLEMENT intents
+3. **Cross-Layer Coherence Validation** - Python ↔ JavaScript alignment
+4. **Post-Phase Review** - Automated verification gates
+5. **New MCP Tools** - cortex_generate_code_plan, cortex_validate_plan_coherence
+
+**➡️ [PHASE-21-JSON-FIRST-REWRITE.yaml](./PHASE-21-JSON-FIRST-REWRITE.yaml)** 📋 **Dashboard Clean Slate Rewrite**
 
 ---
 

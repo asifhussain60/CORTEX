@@ -2,14 +2,36 @@
 # Tracks recommendations, adoptions, and learning feedback loop
 # 
 # Authority: cortex-architect.prompt.md v12.0
-# Updated: 2026-02-03
+# Updated: 2026-02-04
 
-meta_version: "1.2"
-last_updated: "2026-02-03"
+meta_version: "1.3"
+last_updated: "2026-02-04"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-015
+    date: "2026-02-04"
+    recommendation: "Fix RiskLevel import + Create contract tests directory"
+    status: IMPLEMENTED
+    domain: Infrastructure
+    source: "SDLC Plan holistic validation"
+    adoption_reason: "Unblock test suite (355 tests) and establish contract test foundation"
+    expected_benefits:
+      - "PlanningOrchestrator tests now runnable (30 tests passing)"
+      - "Contract tests validate cross-layer alignment"
+      - "Prevents Phase 21-style schema misalignments"
+    implementation_notes: |
+      Files modified:
+      - cortex/orchestrators/domain/enhanced_planning_orchestrator.py (re-export RiskLevel)
+      - tests/contracts/__init__.py (NEW - contract tests package)
+      - tests/contracts/test_python_js_enums.py (NEW - 6 contract tests)
+      - _workspaces/cortex-plan/CORTEX-SELF-IMPROVEMENT-SDLC.yaml (updated phases 0-2)
+    metrics:
+      tests_unblocked: 30
+      contract_tests_created: 6
+      files_modified: 4
+      
   - id: ENH-001
     date: "2026-02-03"
     recommendation: "Add refactoring gap detection to AUDIT mode"
@@ -294,6 +316,162 @@ enhancements:
     related_enhancements:
       - ENH-010
     fix_category: "Accuracy + User Education"
+
+  - id: ENH-012
+    date: "2026-02-04"
+    recommendation: "SDLC Governance & Orchestrator Enhancement - Code-Level Planning"
+    status: PLANNED
+    domain: Architecture
+    source: "sesh01-tdd-break.md digest - Phase 21 failure analysis"
+    adoption_reason: |
+      Phase 21 revealed systematic SDLC gaps:
+      - TDD orchestrator never invoked (0 calls)
+      - No planning phase in CORTEX workflow
+      - Cross-layer schema misalignments discovered at runtime
+      - 4+ hours debugging vs 30 min with proper planning
+    expected_benefits:
+      - "Code-level planning without code generation"
+      - "Cross-layer coherence validation (Python ↔ JavaScript)"
+      - "Automated post-phase review with verification gates"
+      - "50% reduction in layer alignment debugging"
+      - "Multi-layer coordination at design time"
+    implementation_notes: |
+      Plan file: _workspaces/cortex-plan/CORTEX-SELF-IMPROVEMENT-SDLC.yaml
+      
+      Key Enhancements:
+      1. PlanningOrchestrator v4.0:
+         - generate_code_level_plan() - File/function/interface specs
+         - validate_cross_layer_coherence() - Enum/field alignment
+         - execute_post_phase_review() - Automated verification
+         
+      2. InteractionOrchestrator Enhancement:
+         - Mandatory planning for IMPLEMENT intents
+         - Multi-layer coordination capability
+         - Enhanced challenges for coherence issues
+         
+      3. New MCP Tools:
+         - cortex_generate_code_plan
+         - cortex_validate_plan_coherence
+         - cortex_execute_phase_review
+         - cortex_coordinate_layers
+         
+      Implementation Phases:
+      - Phase 0: Foundation data models (2 days)
+      - Phase 1: Code-level planning (4 days)
+      - Phase 2: Coherence validation (3 days)
+      - Phase 3: Post-phase review (3 days)
+      - Phase 4: Interaction enhancement (3 days)
+      - Phase 5: MCP tools (2 days)
+      - Phase 6: Prompt/agent updates (2 days)
+    metrics:
+      estimated_effort_weeks: 4
+      estimated_test_count: 175
+      target_coverage: "85%"
+      root_causes_addressed: 5
+    related_files:
+      - "cortex/orchestrators/domain/enhanced_planning_orchestrator.py"
+      - "cortex/orchestrators/core/interaction_orchestrator.py"
+      - ".github/prompts/cortex-architect.prompt.md"
+
+  - id: ENH-014
+    date: "2026-02-04"
+    recommendation: "Event-Driven Orchestrator Mesh with Intelligent Switching + Mandatory CORTEX Review"
+    status: PLANNED
+    domain: Architecture
+    source: "User request - automatic orchestrator switching + git-based final review"
+    adoption_reason: |
+      ENH-012 enhanced with:
+      1. Automatic orchestrator switching based on complexity classification
+      2. Event-driven communication (no direct orchestrator imports)
+      3. Mandatory CORTEX Review Phase using git lens/history
+      4. InteractionOrchestrator + PlanningOrchestrator close collaboration via events
+    expected_benefits:
+      - "Zero over-planning for trivial tasks (complexity gating)"
+      - "Decoupled orchestrators (extensible, testable)"
+      - "100% implementation verification via git analysis"
+      - "Non-blocking review (async with badges)"
+      - "Full event stream for debugging"
+    implementation_notes: |
+      Extends CORTEX-SELF-IMPROVEMENT-SDLC.yaml with:
+      
+      New Components:
+      1. OrchestratorEventBus:
+         - Publish/subscribe communication backbone
+         - Event types: REQUEST_RECEIVED, INTENT_CLASSIFIED, PLANNING_REQUIRED,
+           PLAN_GENERATED, PLAN_APPROVED, PHASE_COMPLETE, PHASE_REVIEW_COMPLETE,
+           IMPLEMENTATION_COMPLETE, FINAL_REVIEW_COMPLETE
+         
+      2. ComplexityClassifier:
+         - Levels: TRIVIAL (skip), SIMPLE (lightweight), MODERATE (standard),
+           COMPLEX (full), CRITICAL (extended)
+         - Based on: LOC impact, layers affected, security sensitivity
+         
+      3. ReviewOrchestrator:
+         - Unified post-phase + final review
+         - Git commit analysis (messages, sequence, atomicity)
+         - Plan fidelity scoring (0-100)
+         - Cross-layer coherence re-verification
+         - Async execution (non-blocking)
+         
+      New Implementation Phases (total: 9 phases, 6 weeks):
+      - Phase 1: Event Bus Infrastructure
+      - Phase 2: Complexity Classifier
+      - Phase 5: Review Orchestrator (renamed)
+      
+      New Tests:
+      - 300+ total tests (vs 175 originally)
+      - Event flow tests
+      - Complexity classification tests
+      - Review workflow tests
+    metrics:
+      estimated_effort_weeks: 6
+      estimated_test_count: 300
+      target_coverage: "85%"
+      new_orchestrators: 3
+      new_mcp_tools: 9
+    related_enhancements:
+      - ENH-012
+    related_files:
+      - "_workspaces/cortex-plan/CORTEX-SELF-IMPROVEMENT-SDLC.yaml"
+      - "cortex/infrastructure/orchestrator_event_bus.py (new)"
+      - "cortex/orchestrators/core/complexity_classifier.py (new)"
+      - "cortex/orchestrators/core/review_orchestrator.py (new)"
+
+  - id: ENH-013
+    date: "2026-02-04"
+    recommendation: "4-Layer TDD Enforcement Defense"
+    status: IMPLEMENTED
+    domain: Governance
+    source: "sesh01-tdd-break.md digest - MCP bypass analysis"
+    adoption_reason: "Direct chat bypassed MCP gateway, all CORTEX governance was skipped"
+    expected_benefits:
+      - "100% MCP gateway enforcement for IMPLEMENT intents"
+      - "Pre-commit hook catches TDD violations locally"
+      - "CI/CD gate blocks non-compliant PRs"
+      - "Contract tests catch cross-layer issues"
+    implementation_notes: |
+      4-Layer Defense Implemented:
+      
+      Layer 1: Pre-Commit Hook
+      - File: .github/hooks/pre-commit-tdd-check.sh
+      - Checks: Test files exist for new Python modules
+      
+      Layer 2: MCP-GATE Rule
+      - Updated: .github/copilot-instructions.md
+      - Rule: IMPLEMENT intents MUST use cortex_process_request
+      
+      Layer 3: CI/CD Workflow
+      - File: .github/workflows/tdd-gate.yml
+      - Checks: No production code without tests in PR
+      
+      Layer 4: Contract Tests
+      - File: tests/contracts/test_phase21_contracts.py
+      - Tests: 14 cross-layer alignment tests
+    metrics:
+      layers_implemented: 4
+      contract_tests: 14
+      enforcement_coverage: "100%"
+      implementation_time_hours: 2
 
 # Rejected Recommendations (Learning History)
 rejected_recommendations:
