@@ -308,7 +308,7 @@ orchestrators:
       module: "cortex.orchestrators.domain.code_level_planner"
       class: "CodeLevelPlanner"
       tier: 2
-      priority: 49
+      priority: 48
       dependencies:
         - "ComplexityClassifier"
       capabilities:
@@ -612,7 +612,7 @@ orchestrators:
       module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
       class: "WrappedTDDOrchestrator"
       tier: 3
-      priority: 68
+      priority: 65
       dependencies:
         - "TDDOrchestrator"
       capabilities:
@@ -660,7 +660,7 @@ orchestrators:
       module: "cortex.orchestrators.core.dor_approval_gate"
       class: "DoRApprovalGate"
       tier: 3
-      priority: 73
+      priority: 68
       dependencies:
         - "LENSSynthesis"
       capabilities:
@@ -696,8 +696,8 @@ orchestrators:
       tier: 3
       priority: 74
       dependencies:
-        - "TruthVerificationEngine"
-        - "ImplementationVerifier"
+        - "KnowledgeRepository"
+        - "LENSSynthesis"
       capabilities:
         - educational_interaction
         - knowledge_level_detection
@@ -719,7 +719,7 @@ orchestrators:
       module: "cortex.orchestrators.support.duplication_detector_orchestrator"
       class: "DuplicationDetector"
       tier: 3
-      priority: 74
+      priority: 77
       dependencies: []
       capabilities:
         - exact_duplication_detection
@@ -763,8 +763,8 @@ orchestrators:
     - name: "RecommendationGate"
       module: "cortex.orchestrators.core.recommendation_gate"
       class: "RecommendationGate"
-      tier: 2
-      priority: 73
+      tier: 3
+      priority: 79
       dependencies:
         - "RecommendationEngine"
       capabilities:
@@ -837,7 +837,7 @@ orchestrators:
       module: "cortex.orchestrators.support.debugging_orchestrator"
       class: "DebuggingOrchestrator"
       tier: 3
-      priority: 75
+      priority: 80
       dependencies: []
       capabilities:
         - smart_debug_injection
@@ -866,7 +866,7 @@ orchestrators:
       module: "cortex.orchestrators.support.orchestrator_visibility"
       class: "OrchestratorVisibility"
       tier: 3
-      priority: 76
+      priority: 81
       dependencies: []
       capabilities:
         - visibility_generation
