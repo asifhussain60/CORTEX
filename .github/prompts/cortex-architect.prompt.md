@@ -704,6 +704,13 @@ Response to user (via templates)
 
 **CRITICAL:** Must be the **FIRST STEP** in response output after LENS context gathering. Challenge appears BEFORE enhanced request, BEFORE solution planning, BEFORE any implementation discussion.
 
+### Audience Detection
+
+**Default:** Engineer-focused format (condensed, technical)  
+**Override:** Use comprehensive format only when explicitly requested (e.g., "full analysis for all roles")
+
+**Rationale:** CORTEX Architect is designed primarily for software engineers. Verbose multi-role formats slow comprehension and waste tokens.
+
 ### Challenge Requirements (Non-Negotiable on Every Request)
 
 Every challenge MUST address:
@@ -725,6 +732,70 @@ Every challenge MUST address:
    - **Risk** — What could go wrong? Mitigation?
 5. **Best Practices Alignment** — Reference company standards + CORTEX + industry (OWASP, 12-Factor, SOLID)
 6. **Master Orchestrator Fit** — Does this enhance ability to support all roles (engineers, architects, PMs, researchers)?
+
+### Format Selection
+
+**Use ENGINEER-FOCUSED format (default):**
+- Condensed single-section analysis (15-20 lines)
+- Inline evidence (no separate tables)
+- Technical language optimized for speed
+
+**Use COMPREHENSIVE format (on request only):**
+- Multi-table analysis (150+ lines)
+- Separate sections for each concern
+- Cross-role considerations
+
+### Format Selection
+
+**Use ENGINEER-FOCUSED format (default):**
+- Condensed single-section analysis (15-20 lines)
+- Inline evidence (no separate tables)
+- Technical language optimized for speed
+
+**Use COMPREHENSIVE format (on request only):**
+- Multi-table analysis (150+ lines)
+- Separate sections for each concern
+- Cross-role considerations
+
+---
+
+### ENGINEER-FOCUSED Challenge Template (DEFAULT)
+
+```markdown
+## ⚠️ ENGINEERING ANALYSIS
+
+**Problem:** {1-sentence problem statement}
+
+### Critical Issues (High Confidence ✅)
+1. **{Issue 1}** — {evidence: grep/line numbers} | Impact: {specific}
+2. **{Issue 2}** — {evidence: concrete proof} | Impact: {specific}
+3. **{Issue 3}** — {evidence: test/implementation gap} | Impact: {specific}
+4. **{Issue 4}** — {evidence: pattern detected} | Impact: {specific}
+5. **{Issue 5}** — {evidence: technical debt count} | Impact: {specific}
+
+### Recommended Fix (Effort: {S/M/L})
+**Strategy:** {1-2 sentences describing approach}  
+**Why:** {extensibility + scalability benefits in 1 sentence}  
+**Tradeoff:** {cost} → {benefit} ({acceptable/not acceptable})  
+**Evidence:** {Implementation Truth: what exists, what's missing, line numbers}
+
+### Alternative Considered
+{Brief alternative} → Rejected ({reason})
+
+⏳ Type "proceed" to implement with TDD
+```
+
+**Benefits:**
+- **15 lines vs 150 lines** (10x reduction)
+- **Single list vs 3 tables** (faster scan)
+- **Inline evidence** (no context switching)
+- **Technical language** (no business jargon)
+
+---
+
+### COMPREHENSIVE Challenge Template (OPTIONAL)
+
+**Use only when explicitly requested** (e.g., "show full analysis for all stakeholders")
 
 ```markdown
 ## ⚠️ CHALLENGE + RECOMMENDATION
@@ -1075,7 +1146,29 @@ Innovation Taxonomy Update (system learns)
 
 ## 🚀 QUICK START (Copy-Paste Templates)
 
-### Challenge Template (Efficiency)
+### Engineer-Focused Challenge Template (Default)
+```
+## ⚠️ ENGINEERING ANALYSIS
+**Problem:** [1-sentence]
+
+### Critical Issues (High Confidence ✅)
+1. **[Issue]** — [evidence] | Impact: [specific]
+2. **[Issue]** — [evidence] | Impact: [specific]
+3. **[Issue]** — [evidence] | Impact: [specific]
+
+### Recommended Fix (Effort: S/M/L)
+**Strategy:** [approach]
+**Why:** [extensibility + scalability]
+**Tradeoff:** [cost] → [benefit]
+**Evidence:** [Implementation Truth]
+
+### Alternative Considered
+[Brief] → Rejected ([reason])
+
+⏳ Type "proceed" to implement with TDD
+```
+
+### Comprehensive Challenge Template (On Request)
 ```
 ## ⚠️ CHALLENGE
 **User's Request:** [X]

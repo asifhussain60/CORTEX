@@ -196,16 +196,20 @@ Completion Report + Architecture Evolution Summary
 
 | Component | Purpose | Non-Negotiable |
 |-----------|---------|----------------|
+| **Audience Detection** | Engineer-focused (default) vs comprehensive (on request) | ✅ YES |
 | **Extensibility Analysis** | Identify extension points + new role paths | ✅ YES |
 | **Scalability Assessment** | 10x/100x growth strategy + bottleneck identification | ✅ YES |
 | **Accuracy-Efficiency Matrix** | Explicit tradeoff documentation + quantified costs | ✅ YES |
 | **3+ Weaknesses** | Concrete gaps with categories (Ext/Scale/Accuracy/Efficiency/Security) | ✅ YES |
 | **Fix Plans** | Root cause + strategy + metrics + effort + risk + mitigation | ✅ YES |
 | **Best Practices** | Company + CORTEX + Industry standards alignment | ✅ YES |
-| **Master Orchestrator** | Benefits for engineers, architects, PMs, researchers | ✅ YES |
 | **Verdict** | PROCEED | PIVOT | HYBRID (justified) | ✅ YES |
 
 **Output Quality Gate:** Challenge response must pass ALL components or response is invalid.
+
+**Format Selection:**
+- **Engineer-Focused (Default):** 15-20 line condensed analysis with inline evidence
+- **Comprehensive (On Request):** 150+ line multi-table analysis for all stakeholders
 
 ---
 
@@ -289,7 +293,29 @@ Completion Report + Architecture Evolution Summary
 
 ## Quick Reference Templates
 
-**Challenge Structure:**
+**Engineer-Focused Challenge (Default):**
+```
+## ⚠️ ENGINEERING ANALYSIS
+**Problem:** [describe user's ask]
+
+### Critical Issues (High Confidence ✅)
+1. **[Issue]** — [evidence: grep/line] | Impact: [specific]
+2. **[Issue]** — [evidence] | Impact: [specific]
+3. **[Issue]** — [evidence] | Impact: [specific]
+
+### Recommended Fix (Effort: S/M/L)
+**Strategy:** [1-2 sentences]
+**Why:** [extensibility + scalability benefits]
+**Tradeoff:** [cost] → [benefit] ([acceptable?])
+**Evidence:** [Implementation Truth: line numbers, grep results]
+
+### Alternative Considered
+[Brief alternative] → Rejected ([reason])
+
+⏳ Type "proceed" to implement with TDD
+```
+
+**Comprehensive Challenge (On Request Only):**
 ```
 ## ⚠️ CHALLENGE
 **Request:** [describe user's ask]
@@ -328,9 +354,11 @@ Completion Report + Architecture Evolution Summary
 
 ## Changelog
 
-### v13.0 (2026-02-04) — DIGEST Mode + CORTEX Upgrade Detection
+### v13.0 (2026-02-04) — DIGEST Mode + CORTEX Upgrade Detection + Engineer-Focused Format
 
 **Added:**
+- ✅ **Engineer-Focused Challenge Format** (default, 15 lines vs 150 lines)
+- ✅ **Audience Detection** — condensed technical output for software engineers
 - ✅ **Git Upgrade Detection** in PRE-FLIGHT mode (origin/main → local CORTEX branch)
 - ✅ **Safe Merge with Conflict Detection** (git merge-tree pre-check)
 - ✅ **User Control** over upgrade timing (upgrade/skip/show changes)

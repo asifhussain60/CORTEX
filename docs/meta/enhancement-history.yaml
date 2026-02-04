@@ -1,11 +1,11 @@
 # CORTEX Meta-Intelligence Enhancement Registry
 # Tracks recommendations, adoptions, and learning feedback loop
 # 
-# Authority: cortex-architect.prompt.md v12.0
-# Updated: 2026-02-03
+# Authority: cortex-architect.prompt.md v13.0
+# Updated: 2026-02-04
 
-meta_version: "1.2"
-last_updated: "2026-02-03"
+meta_version: "1.3"
+last_updated: "2026-02-04"
 schema_version: "1.0"
 
 # Implemented Enhancements
@@ -294,6 +294,61 @@ enhancements:
     related_enhancements:
       - ENH-010
     fix_category: "Accuracy + User Education"
+
+  - id: ENH-012
+    date: "2026-02-04"
+    recommendation: "Engineer-focused challenge format in DESIGN mode"
+    status: IMPLEMENTED
+    domain: DX
+    source: "Chat01 DIGEST analysis - user feedback on verbosity"
+    adoption_reason: "Reduce cognitive load for software engineers (primary audience) with condensed, technical format"
+    expected_benefits:
+      - "10x reduction in challenge length (15 lines vs 150 lines)"
+      - "Single list format vs 3 separate tables (faster scanning)"
+      - "Inline evidence vs separate Implementation Truth rows (no context switching)"
+      - "Technical language optimized for engineers (no business jargon)"
+      - "Maintain accuracy while improving comprehension speed"
+    implementation_notes: |
+      Files modified:
+      - .github/prompts/cortex-architect.prompt.md (v13.0 - engineer-focused template)
+      - .github/agents/core/cortex-architect.md (v13.0 - audience detection)
+      - docs/meta/enhancement-history.yaml (this file - ENH-012)
+      
+      Features:
+      - Audience detection logic (engineer-focused by default)
+      - Two challenge formats:
+        * Engineer-Focused (default): 15-20 lines, condensed analysis
+        * Comprehensive (on request): 150+ lines, multi-role analysis
+      - Quick Reference Templates updated with both formats
+      - Inline evidence in Critical Issues list
+      - Condensed Recommended Fix section
+      - Alternative Considered (brief rejection reason)
+      
+      Template Changes:
+      - Merged "Extensibility & Scalability Analysis" → Critical Issues list
+      - Merged "Accuracy vs Efficiency Tradeoff" → Recommended Fix section
+      - Merged "Identified Weaknesses" → Critical Issues list
+      - Removed "Best Practices" table (engineers know standards)
+      - Kept Counter-Proposal (3-4 sentences max)
+      - Removed "Master Orchestrator Alignment" multi-role breakdown
+      
+      Backward Compatibility:
+      - Comprehensive format still available on explicit request
+      - All challenge components still validated (quality gate intact)
+    metrics:
+      verbosity_reduction: "10x (150 lines → 15 lines)"
+      tables_eliminated: 3
+      comprehension_improvement: "Expected High (based on user feedback)"
+      accuracy_preserved: true
+      files_modified: 3
+      implementation_time_hours: 0.5
+    evidence_basis:
+      - "Chat01 DIGEST: User stated 'too verbose' in DESIGN mode"
+      - "User explicitly: '#file:cortex-architect.md is designed ONLY for software engineers'"
+      - "Analysis: 3 redundant tables (Extensibility, Tradeoffs, Weaknesses) repeating info"
+      - "Comparison: Engineer-focused format 15 lines vs original 150 lines"
+    related_enhancements:
+      - ENH-009
 
 # Rejected Recommendations (Learning History)
 rejected_recommendations:
