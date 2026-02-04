@@ -817,12 +817,10 @@
     <script src="vendor/fuse.min.js"></script>
     <script src="vendor/echarts.min.js"></script>
     <script src="vendor/gridjs.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     
-    <!-- Data Layer -->
+    <!-- Data Layer (Phase 21 JSON-First Architecture) -->
+    <script src="js/data/JSONDataLayer.js"></script>
     <script src="js/data/JSONDataAdapter.js"></script>
-    <script src="js/data/DualFormatDataLoader.js"></script>
-    <script src="js/data/SQLiteDataLayer.js"></script>
     
     <!-- Application Scripts -->
     <script src="js/components/TabManager.js"></script>
@@ -835,18 +833,19 @@
     <!-- Dynamic Data Loader (file:// + http:// compatible) -->
     <script>
         /**
-         * CORTEX SPA Dashboard Loader
+         * CORTEX SPA Dashboard Loader (Phase 21 JSON-First)
          * 
-         * Supports three modes:
+         * Supports two modes:
          * 1. Static (file://): Reads embedded JSON from #dashboard-data script tag
-         * 2. Dynamic JSON (http://): Fetches JSON from repos/{name}/dashboard-data.json
-         * 3. Dynamic SQLite (http://): Fetches SQLite from repos/{name}/dashboard.sqlite
+         * 2. Dynamic JSON (http://): Fetches JSON via JSONDataLayer.load()
          * 
-         * Mode is auto-detected with fallback: SQLite → JSON → embedded
+         * Mode is auto-detected: JSONDataLayer → embedded fallback
+         * 
+         * Authority: PHASE-21-JSON-FIRST-REWRITE.yaml
          */
         
         (async function initializeDashboard() {
-            console.log('🚀 [SPA] Initializing dashboard...');
+            console.log('🚀 [SPA] Initializing dashboard (Phase 21 JSON-First)...');
             
             // Check if data is already embedded (static mode for file://)
             const embeddedDataScript = document.getElementById('dashboard-data');
@@ -870,79 +869,23 @@
                 return;
             }
             
-            // Otherwise, fetch dynamically (http:// protocol)
-            console.log('🌐 [SPA] Using dynamic fetch mode (http://)');
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            const repoName = urlParams.get('repo') || 'cortex';
-            
-            console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
+            // Otherwise, fetch dynamically (http:// protocol or JSONDataLayer)
+            console.log('🌐 [SPA] Loading dashboard via JSONDataLayer (Phase 21 JSON-First)');
             
             try {
-                // Try multiple possible locations for repository data
-                // 1. Parent directory (e.g., ksessions, kashkole)
-                // 2. repos subdirectory (e.g., cortex)
-                let dataLayer = null;
-                let loadError = null;
+                // Get repository slug from URL parameters
+                const repoSlug = JSONDataLayer.getRepoSlugFromURL();
+                console.log('🔍 [SPA] Loading dashboard for repo:', repoSlug);
                 
-                // Try multiple locations in order:
-                // 1. data/ subdirectory (primary location for generated data)
-                // 2. Parent directory (e.g., ksessions, kashkole)
-                // 3. repos subdirectory (e.g., cortex)
-                
-                try {
-                    // Try data/ subdirectory first
-                    const dataLoader = new DualFormatDataLoader({ basePath: './data' });
-                    dataLayer = await dataLoader.load(repoName);
-                    console.log('✅ [SPA] Loaded from data/ subdirectory:', repoName);
-                } catch (e) {
-                    loadError = e;
-                    console.log('⚠️ [SPA] Not found in data/, trying parent directory...');
-                    
-                    try {
-                        const parentLoader = new DualFormatDataLoader({ basePath: '..' });
-                        dataLayer = await parentLoader.load(repoName);
-                        console.log('✅ [SPA] Loaded from parent directory:', repoName);
-                    } catch (e2) {
-                        console.log('⚠️ [SPA] Not found in parent directory, trying repos/...');
-                        
-                        // Final fallback to repos subdirectory
-                        try {
-                            const reposLoader = new DualFormatDataLoader({ basePath: '../repos' });
-                            dataLayer = await reposLoader.load(repoName);
-                            console.log('✅ [SPA] Loaded from repos/ subdirectory:', repoName);
-                        } catch (e3) {
-                            // All locations failed
-                            throw new Error(`Repository '${repoName}' not found in data/, parent directory, or repos/ subdirectory. Original error: ${loadError.message}`);
-                        }
-                    }
-                }
-                
-                if (!dataLayer) {
-                    throw new Error(`Failed to load data for repository: ${repoName}`);
-                }
-                
-                // Check if it's a SQLiteDataLayer (needs queries) or plain JSON data
-                let data;
-                if (dataLayer.query && typeof dataLayer.query === 'function') {
-                    // SQLite format - fetch all data via queries
-                    console.log('📊 [SPA] Loading SQLite data...');
-                    data = await loadFromSQLite(dataLayer);
-                } else {
-                    // JSON format - data is already loaded
-                    console.log('📦 [SPA] Using JSON data...');
-                    data = dataLayer;
-                }
+                // Load dashboard data using JSONDataLayer
+                const dashboardData = await JSONDataLayer.load(repoSlug);
                 
                 console.log('✅ [SPA] Dashboard data loaded:', {
-                    repo: data.repo?.display_name || data.repo_summary?.repo_name,
-                    hasMetrics: !!data.metrics || !!data.metrics_summary,
-                    hasSecurity: !!data.security || !!data.vulnerabilities,
-                    hasUseCases: Array.isArray(data.use_cases) && data.use_cases.length > 0
+                    repo: dashboardData.repo?.display_name,
+                    hasMetrics: !!dashboardData.metrics,
+                    hasSecurity: !!dashboardData.security,
+                    hasUseCases: Array.isArray(dashboardData.use_cases) && dashboardData.use_cases.length > 0
                 });
-                
-                // Convert SQLite format to legacy dashboard format if needed
-                const dashboardData = convertToLegacyFormat(data);
                 
                 // Replace embedded data script for app.js
                 embeddedDataScript.textContent = JSON.stringify(dashboardData);
