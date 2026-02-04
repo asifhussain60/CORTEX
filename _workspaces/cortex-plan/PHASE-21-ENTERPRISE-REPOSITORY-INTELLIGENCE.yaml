@@ -1,25 +1,33 @@
 # PHASE-21: ENTERPRISE REPOSITORY INTELLIGENCE SYSTEM
-# Version: 3.1 | Created: 2026-02-03 | Updated: 2026-02-03
-# Scope: Multi-Repo SPA Dashboard + LENS Data Generation + LLM Business Language
-# Authority: cortex-architect.prompt.md, chat01.txt, chat03-gpt-recommendation.txt
-# Status: READY - P0 Issues Resolved (Migration Adapter + LLM Modes + CVE Audit)
+# Version: 4.0 | Created: 2026-02-03 | Updated: 2026-02-04
+# Scope: JSON-First Dashboard SPA + Parallel Tool Enhancement via Instrumentation
+# Authority: cortex-architect.prompt.md, chat01.txt (instrumentation-first decision)
+# Status: IN_PROGRESS - Branch: CORTEX-dashboard | Strategy: Parallel Evolution
+# Architecture: JSON-first (SQLite graduation path), Instrumentation-driven tool enhancement
 
 ---
 metadata:
   phase: "21"
   title: "Enterprise Repository Intelligence System"
-  version: "3.1"
-  status: "READY"
+  version: "4.0"
+  status: "IN_PROGRESS"
   author: "Asif Hussain"
   created: "2026-02-03"
-  rewritten: "2026-02-03"
-  updated: "2026-02-03"
+  rewritten: "2026-02-04"
+  updated: "2026-02-04"
+  branch: "CORTEX-dashboard"
+  architecture_decisions:
+    - "JSON-first data layer (40x faster load, 15x smaller files)"
+    - "SQLite graduation path when search/aggregation needed"
+    - "Instrumentation-first for evidence-driven tool enhancement"
+    - "Parallel workstreams (dashboard + tool improvements)"
+    - "Location: cortex/visualization/dashboards/ (MCP integration)"
   p0_resolutions:
-    - "JSON→SQLite migration adapter with backward compatibility"
-    - "LLM integration modes (API/batch/interactive)"
-    - "CVE audit documentation with verification dates"
+    - "JSON-first architecture replacing SQLite (chat01.txt decision)"
+    - "Instrumentation layer for tool gap detection (Phase 20.9)"
+    - "Parallel evolution strategy (no blocking dependencies)"
   priority: "P0"
-  estimated_effort: "4 weeks"
+  estimated_effort: "2 weeks (accelerated via parallel strategy)"
   governance:
     - "ARCH-011: Execute to completion"
     - "CORE-035: Single canonical implementation"
@@ -30,8 +38,68 @@ metadata:
     - "PHASE-18-ENTERPRISE-DASHBOARD-SYSTEM.yaml"
     - "PHASE-19-LENS-UNIFIED-INTELLIGENCE.yaml"
     - "PHASE-20-LENS-COMPANY-INTEGRATION.yaml"
+    - "PHASE-20.9-INSTRUMENTATION-LAYER.yaml"  # NEW: Instrumentation prerequisite
+  enables:
+    - "Evidence-driven tool enhancements (parallel PRs to main)"
   supersedes:
     - "Previous PHASE-21-LENS-DASHBOARD-DATA-GENERATION.yaml"
+    - "SQLite-first architecture (v3.1)"
+
+---
+# ============================================================================
+# PARALLEL EVOLUTION STRATEGY (NEW)
+# ============================================================================
+
+parallel_strategy:
+  overview: |
+    Instead of sequential phases (tool enhancement → dashboard), this strategy
+    implements both in parallel with instrumentation providing feedback loop:
+    
+    Workstream A: Dashboard SPA on CORTEX-dashboard branch
+    Workstream B: Tool enhancements on main branch (triggered by metrics)
+    
+    Benefits:
+    - No blocking dependencies
+    - Evidence-driven prioritization
+    - Faster time-to-value
+    - Continuous improvement loop
+    
+  workstream_a:
+    name: "Dashboard SPA Implementation"
+    branch: "CORTEX-dashboard"
+    scope:
+      - "JSON-first data layer"
+      - "Glassmorphism dark theme SPA"
+      - "8-tab navigation (Overview, Metrics, Security, etc.)"
+      - "Full instrumentation active (metrics captured)"
+    timeline: "Week 1-2"
+    merge_target: "main (after tests pass)"
+    
+  workstream_b:
+    name: "Tool Enhancements"
+    branch: "main (via PRs)"
+    trigger: "Metrics exceed thresholds (defined in Phase 20.9)"
+    scope:
+      - "TDD Orchestrator improvements (if cycle time >5min)"
+      - "Debugger reliability (if failure rate >5%)"
+      - "Code generator templates (if customization rate >10%)"
+    timeline: "Week 2+ (as evidence emerges)"
+    
+  feedback_loop:
+    source: "InstrumentationOrchestrator (Phase 20.9)"
+    metrics_captured:
+      - "TDD cycle times"
+      - "Debugging session success rates"
+      - "Code generation customizations"
+      - "Orchestrator latencies"
+    enhancement_triggers:
+      - "P0: >5min TDD cycle OR >5% debug failures"
+      - "P1: >10% codegen customizations OR >2s orchestrator latency"
+
+---
+# ============================================================================
+# EXECUTIVE VISION
+# ============================================================================
 
 ---
 # ============================================================================
