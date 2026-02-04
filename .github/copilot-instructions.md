@@ -51,6 +51,11 @@ ANALYZE Intent:
   Tool: cortex_lens_analyze
   Tool: cortex_detect_duplicates
   Tool: cortex_git_history
+
+DIGEST Intent:
+  Tool: cortex_digest_session
+  Flow: File → Auto-Detect Markers → Extract Learnings → Enhance CORTEX
+  Trigger: File contains Copilot chat markers (score ≥ 5)
 ```
 
 **WHY:** Direct chat bypasses:
@@ -241,6 +246,7 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
+| `/check-env` | **Environment check + CORTEX upgrade detection** |
 
 ---
 

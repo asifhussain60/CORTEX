@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.1 | **Updated:** 2026-02-03 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
+**Version:** 8.2 | **Updated:** 2026-02-04 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
 
 ---
 
@@ -10,7 +10,7 @@
 **Production Mode:** MCP Server (SaaS)  
 **Entry Point:** This prompt → MasterOrchestrator → MCP Tools  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
-**Mindset:** Security-First + Best Practices Layering
+**Mindset:** Security-First + Best Practices Layering + Continuous Learning
 
 ---
 
@@ -165,6 +165,7 @@ result = mcp_tool.execute(parameters)
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | DEPLOY | GitOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
+| **DIGEST** | **DigestOrchestrator** | `cortex_digest_session` |
 
 ### Available Orchestrators (28)
 
@@ -253,6 +254,7 @@ Merge: Company takes precedence → CORTEX fills gaps
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
+| `/digest {file}` | **Extract learnings from chat session** |
 
 ---
 

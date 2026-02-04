@@ -62,6 +62,7 @@
 | TEST | TDDOrchestrator | `cortex_process_request` | N/A |
 | DEPLOY | GitOrchestrator | `cortex_process_request` | N/A |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` | N/A |
+| **DIGEST** | **DigestOrchestrator** | `cortex_digest_session` | N/A |
 
 ---
 

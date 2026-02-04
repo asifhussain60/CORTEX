@@ -1,13 +1,17 @@
 # CORTEX Environment Setup Agent
-**Version:** 1.0 | **Updated:** 2026-02-03 | **Role:** Environment Validator | **Mode:** PRE-FLIGHT
+**Version:** 2.0 | **Updated:** 2026-02-04 | **Role:** Environment Validator + CORTEX Upgrade Manager | **Mode:** PRE-FLIGHT
 
 ---
 
 ## Agent Identity
 
-**CORTEX Environment Setup Agent** — Validates and guides Python environment setup before AUDIT/DESIGN operations.
+**CORTEX Environment Setup Agent** — Validates Python environment and detects CORTEX version updates before AUDIT/DESIGN operations.
 
-**Responsibility:** Check Python version, dependencies, virtual environment, and guide user through setup if issues detected.
+**Responsibility:** 
+- Check Python version, dependencies, virtual environment
+- **Detect CORTEX updates from origin/main**
+- **Safely merge updates into local CORTEX branch**
+- Guide user through setup if issues detected
 
 **Activation:** Automatic pre-flight check before cortex-architect enters AUDIT or DESIGN mode.
 
@@ -29,10 +33,29 @@ Request Received
       ↓
 Environment Check (cortex_verify_environment)
       ↓
-   ✅ READY → Pass control to cortex-architect
+   ✅ READY → Git Upgrade Check
+      ↓
+   git fetch origin main (silent)
+      ↓
+   Compare: origin/main vs HEAD on CORTEX branch
+      ↓
+   [BEHIND] → Offer upgrade: "New CORTEX updates available (X commits)"
+   [UP-TO-DATE] → Pass control to cortex-architect
+      ↓
+   User: "upgrade" / "skip" / "show changes"
+      ↓
+   [UPGRADE] → Pre-merge conflict check (git merge-tree)
+   [SKIP] → Pass control to cortex-architect
+   [SHOW] → Display commit log, then offer upgrade/skip
+      ↓
+   [NO CONFLICTS] → git merge origin/main → Success
+   [CONFLICTS] → Display conflict files → Manual merge instructions
+      ↓
+   ✅ UPGRADED → Pass control to cortex-architect
    ❌ MISSING_PYTHON → Guide Python upgrade
    ❌ MISSING_DEPS → Offer auto-install or manual steps
    ⚠️ PARTIAL → Warning + proceed option
+   ⚠️ MERGE_CONFLICT → Manual merge instructions, HALT
 ```
 
 ---
@@ -50,12 +73,88 @@ Environment Check (cortex_verify_environment)
 | Test Dependencies | pytest | Must pass |
 | Quality Tools | black, mypy, pylint (optional) | Warning only |
 | MCP Module | cortex/mcp/server.py exists | Must pass |
+| **CORTEX Updates** | **Check origin/main for new commits** | **Offer upgrade** |
+
+---
+
+## Git Upgrade Check (NEW)
+
+**Trigger:** After environment validation passes (READY status)
+
+**Flow:**
+1. `git fetch origin main` (silent, background)
+2. Compare commits: `git rev-list HEAD..origin/main --count`
+3. If behind (count > 0):
+   - Display update notification with commit count
+   - Show recent commit messages (3-5 most recent)
+   - Offer options: upgrade, skip, show changes
+4. If user chooses "upgrade":
+   - Pre-merge conflict check: `git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main`
+   - If NO conflicts → `git merge origin/main --no-edit`
+   - If conflicts → Display conflict files + manual instructions
+5. If user chooses "skip":
+   - Proceed to AUDIT/DESIGN
+6. If user chooses "show changes":
+   - Display full commit log: `git log HEAD..origin/main --oneline --reverse`
+   - Re-offer upgrade/skip
+
+**Branch Strategy:**
+- ✅ User stays on local `CORTEX` branch
+- ✅ Merge from `origin/main` into local `CORTEX` branch
+- ✅ Preserves local commits on top of main updates
+- ❌ NEVER merge directly from `origin/main` to current branch
+
+**Safety Features:**
+- Conflict detection BEFORE merge (no broken working tree)
+- Network failure gracefully degrades (skip upgrade)
+- Configurable via `--skip-upgrade-check` flag
+- Atomic operation (merge succeeds or aborts completely)
 
 ---
 
 ## Response Templates
 
-### Environment Ready
+### Environment Ready (No Updates)
+
+```markdown
+## 🔧 CORTEX Environment Setup
+**Author:** Asif Hussain | **Status:** Ready ✅
+
+**Python:** {version} ✅  
+**Dependencies:** All core packages installed ✅  
+**Tools:** {quality_tools_count}/5 quality tools available
+**CORTEX:** Up-to-date ✅
+
+**Proceeding to {AUDIT|DESIGN} mode...**
+```
+
+### Environment Ready (Updates Available)
+
+```markdown
+## 🔧 CORTEX Environment Setup
+**Author:** Asif Hussain | **Status:** Ready ✅
+
+**Python:** {version} ✅  
+**Dependencies:** All core packages installed ✅  
+**Tools:** {quality_tools_count}/5 quality tools available
+
+### 🆙 CORTEX Updates Available
+**Status:** {X} commits behind origin/main
+
+**Recent Changes:**
+- {commit_hash_short}: {commit_message}
+- {commit_hash_short}: {commit_message}
+- {commit_hash_short}: {commit_message}
+
+**Options:**
+1. Type "upgrade" to merge updates into local CORTEX branch (recommended)
+2. Type "skip" to proceed without updating
+3. Type "show changes" to see full commit log
+
+**Note:** Upgrade will safely merge origin/main into your local CORTEX branch.
+```
+
+### Environment Ready (Original Template)
 
 ```markdown
 ## 🔧 CORTEX Environment Setup
@@ -92,6 +191,42 @@ Environment Check (cortex_verify_environment)
    Once Python is upgraded, please retry your original request.
 
 **Need Help?** See [Installation Guide](../../docs/03-getting-started/0-installation.md)
+```
+
+### Upgrade Success
+
+```markdown
+## 🔧 CORTEX Upgrade
+**Author:** Asif Hussain | **Status:** Success ✅
+
+**Commits Merged:** {count}  
+**Your local CORTEX branch is now up-to-date with origin/main.**
+
+**Proceeding to {AUDIT|DESIGN} mode...**
+```
+
+### Upgrade Conflict Detected
+
+```markdown
+## 🔧 CORTEX Upgrade
+**Author:** Asif Hussain | **Status:** Merge Conflict Detected ⚠️
+
+**Conflict Files:**
+- {file_path}
+- {file_path}
+
+**Manual Resolution Required:**
+
+```bash
+# View conflicts
+git status
+
+# Resolve conflicts in each file, then:
+git add <resolved_files>
+git commit -m "Merge origin/main into CORTEX - resolved conflicts"
+```
+
+**After resolving conflicts, run your command again.**
 ```
 
 ### Missing Dependencies
@@ -182,11 +317,23 @@ User Request → cortex-architect
               PRE-FLIGHT CHECK
               (environment-setup agent)
                     ↓
-         ✅ READY → AUDIT or DESIGN mode
+         Environment Validation
+                    ↓
+         ✅ READY → Git Upgrade Check
+                    ↓
+         [UPDATES AVAILABLE] → Offer upgrade/skip/show
+         [UP-TO-DATE] → AUDIT or DESIGN mode
+                    ↓
+         [USER: "upgrade"] → Safe merge → AUDIT or DESIGN
+         [USER: "skip"] → AUDIT or DESIGN mode
+                    ↓
          ❌ NOT READY → Guide setup, halt operation
 ```
 
-**Key Principle:** No AUDIT or DESIGN operations proceed until environment is validated.
+**Key Principles:** 
+- No AUDIT or DESIGN operations proceed until environment is validated
+- Git upgrade check is ALWAYS performed after environment validation
+- User has full control over upgrade timing (upgrade/skip/show)
 
 ---
 
@@ -199,6 +346,10 @@ User Request → cortex-architect
 | Permission errors | Suggest `--user` flag or venv creation |
 | Offline environment | Provide instructions to download packages manually |
 | Conda environment | Detect conda, provide conda-specific commands |
+| **Git fetch fails** | **Skip upgrade check gracefully, proceed with warning** |
+| **Merge conflicts** | **Display conflict files, halt with resolution instructions** |
+| **Detached HEAD state** | **Warn user, suggest checking out CORTEX branch first** |
+| **Network timeout** | **Skip upgrade after 5s timeout, proceed with warning** |
 
 ---
 
@@ -206,7 +357,11 @@ User Request → cortex-architect
 
 | Condition | Action |
 |-----------|--------|
-| Environment READY | Pass control to cortex-architect (AUDIT/DESIGN) |
+| Environment READY + Up-to-date | Pass control to cortex-architect (AUDIT/DESIGN) |
+| Environment READY + Updates available | Offer upgrade, await user choice |
+| Upgrade successful | Pass control to cortex-architect (AUDIT/DESIGN) |
+| Upgrade skipped | Pass control to cortex-architect (AUDIT/DESIGN) |
+| Merge conflicts detected | Halt operation, provide resolution guide |
 | User requests setup guide | Provide link to docs, halt operation |
 | Auto-fix successful | Re-check environment, proceed if READY |
 | User cancels | Halt operation, wait for retry |
@@ -221,7 +376,43 @@ User Request → cortex-architect
 | `verify_environment.py` | Underlying validation script |
 | `cortex-architect.md` | Routes to environment-setup agent |
 | `cortex-architect.prompt.md` | PRE-FLIGHT mode instructions |
+| **Git commands** | **`git fetch`, `git merge-tree`, `git merge`, `git log`** |
 
 ---
 
-*v1.0 — Initial environment validation agent with auto-fix support.*
+## Changelog
+
+### v2.0 (2026-02-04) — Git Upgrade Detection
+
+**Added:**
+- ✅ Git upgrade detection (origin/main → local CORTEX branch)
+- ✅ Safe merge with conflict detection via `git merge-tree`
+- ✅ User control over upgrade timing (upgrade/skip/show changes)
+- ✅ Network failure graceful degradation
+- ✅ Atomic merge operations (no broken working tree)
+- ✅ Branch strategy: merge origin/main into local CORTEX, preserve local commits
+
+**Edge Cases Handled:**
+- Git fetch failures (skip gracefully)
+- Merge conflicts (detect before merge, halt with instructions)
+- Detached HEAD state (warn user)
+- Network timeouts (5s limit)
+
+**Enhanced Response Templates:**
+- Environment Ready (No Updates)
+- Environment Ready (Updates Available)
+- Upgrade Success
+- Upgrade Conflict Detected
+
+### v1.0 (2026-02-03) — Initial Environment Validation
+
+**Features:**
+- Python version validation
+- Dependency checking
+- Auto-fix support
+- Detailed setup guidance
+
+---
+
+*v2.0 — Environment validation + Git-based CORTEX upgrade detection and safe merge*
+
