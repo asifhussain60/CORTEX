@@ -1,16 +1,17 @@
 # CORTEX Environment Setup Agent
-**Version:** 2.0 | **Updated:** 2026-02-04 | **Role:** Environment Validator + CORTEX Upgrade Manager | **Mode:** PRE-FLIGHT
+**Version:** 2.0 | **Updated:** 2026-02-04 | **Role:** Environment Validator + CORTEX Ecosystem Upgrade Manager | **Mode:** PRE-FLIGHT
 
 ---
 
 ## Agent Identity
 
-**CORTEX Environment Setup Agent** — Validates Python environment and detects CORTEX version updates before AUDIT/DESIGN operations.
+**CORTEX Environment Setup Agent** — Validates Python environment and detects CORTEX ecosystem updates (prompts, agents, orchestrators) before AUDIT/DESIGN operations.
 
 **Responsibility:** 
 - Check Python version, dependencies, virtual environment
-- **Detect CORTEX updates from origin/main**
-- **Safely merge updates into local CORTEX branch**
+- **Detect CORTEX ecosystem updates from origin/main (prompts/agents/orchestrators/wiring)**
+- **Branch topology analysis (ahead/behind/diverged)**
+- **Safely merge ecosystem updates into local CORTEX branch**
 - Guide user through setup if issues detected
 
 **Activation:** Automatic pre-flight check before cortex-architect enters AUDIT or DESIGN mode.
@@ -33,29 +34,47 @@ Request Received
       ↓
 Environment Check (cortex_verify_environment)
       ↓
-   ✅ READY → Git Upgrade Check
+   ✅ READY → Git Ecosystem Upgrade Check
       ↓
-   git fetch origin main (silent)
+   git fetch origin main (silent, 5s timeout)
       ↓
-   Compare: origin/main vs HEAD on CORTEX branch
+   Branch Topology Analysis:
+   - Find common ancestor: git merge-base HEAD origin/main
+   - Count CORTEX ahead: git rev-list --count <base>..HEAD
+   - Count origin/main ahead: git rev-list --count <base>..origin/main
       ↓
-   [BEHIND] → Offer upgrade: "New CORTEX updates available (X commits)"
-   [UP-TO-DATE] → Pass control to cortex-architect
+   Classify Branch State:
+   ├─ [UP_TO_DATE] → Both 0 commits ahead → Pass to cortex-architect
+   ├─ [AHEAD] → CORTEX ahead, origin/main 0 → Check if user wants ecosystem sync
+   ├─ [BEHIND] → CORTEX 0, origin/main ahead → Offer upgrade
+   └─ [DIVERGED] → Both have commits → Detect ecosystem changes + offer merge
       ↓
-   User: "upgrade" / "skip" / "show changes"
+   [BEHIND/DIVERGED] → Detect Ecosystem Changes:
+                       - .github/prompts/*.md modified?
+                       - .github/agents/core/*.md added/updated?
+                       - cortex/wiring/specifications/wiring.yaml changed?
+                       - New orchestrators in cortex/orchestrators/?
+      ↓
+   Display: "CORTEX Ecosystem Updates Detected"
+   Show: Prompt updates, Agent updates, Orchestrator additions, Wiring changes
+      ↓
+   User: "upgrade" / "skip" / "show changes" / "rebase" (DIVERGED only)
       ↓
    [UPGRADE] → Pre-merge conflict check (git merge-tree)
-   [SKIP] → Pass control to cortex-architect
-   [SHOW] → Display commit log, then offer upgrade/skip
+               → Merge origin/main (preserves local work + adds ecosystem)
+   [REBASE] → git rebase origin/main (DIVERGED only, clean history)
+   [SKIP] → Pass to cortex-architect (warn: older ecosystem)
+   [SHOW] → Display commit log + file changes, then offer actions
       ↓
    [NO CONFLICTS] → git merge origin/main → Success
    [CONFLICTS] → Display conflict files → Manual merge instructions
       ↓
-   ✅ UPGRADED → Pass control to cortex-architect
+   ✅ UPGRADED → Pass control to cortex-architect (latest ecosystem)
    ❌ MISSING_PYTHON → Guide Python upgrade
    ❌ MISSING_DEPS → Offer auto-install or manual steps
    ⚠️ PARTIAL → Warning + proceed option
    ⚠️ MERGE_CONFLICT → Manual merge instructions, HALT
+   ⚠️ NETWORK_FAILURE → Skip upgrade check, proceed with warning
 ```
 
 ---
@@ -77,26 +96,99 @@ Environment Check (cortex_verify_environment)
 
 ---
 
-## Git Upgrade Check (NEW)
+## Git Upgrade Check (NEW - v2.0)
 
 **Trigger:** After environment validation passes (READY status)
 
+**Purpose:** Detect CORTEX ecosystem updates (prompts, agents, orchestrators, wiring) published to origin/main
+
 **Flow:**
-1. `git fetch origin main` (silent, background)
-2. Compare commits: `git rev-list HEAD..origin/main --count`
-3. If behind (count > 0):
-   - Display update notification with commit count
-   - Show recent commit messages (3-5 most recent)
-   - Offer options: upgrade, skip, show changes
-4. If user chooses "upgrade":
-   - Pre-merge conflict check: `git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main`
-   - If NO conflicts → `git merge origin/main --no-edit`
-   - If conflicts → Display conflict files + manual instructions
-5. If user chooses "skip":
-   - Proceed to AUDIT/DESIGN
-6. If user chooses "show changes":
-   - Display full commit log: `git log HEAD..origin/main --oneline --reverse`
-   - Re-offer upgrade/skip
+
+### 1. Branch Topology Analysis
+```bash
+# Fetch latest (5s timeout, graceful failure)
+git fetch origin main 2>&1 | timeout 5s
+
+# Find common ancestor
+MERGE_BASE=$(git merge-base HEAD origin/main)
+
+# Count commits
+CORTEX_AHEAD=$(git rev-list --count $MERGE_BASE..HEAD)
+MAIN_AHEAD=$(git rev-list --count $MERGE_BASE..origin/main)
+```
+
+### 2. Classify Branch State
+| State | CORTEX Ahead | origin/main Ahead | Action |
+|-------|--------------|-------------------|--------|
+| UP_TO_DATE | 0 | 0 | ✅ Pass to architect |
+| AHEAD | >0 | 0 | ℹ️ Notify (optional sync) |
+| BEHIND | 0 | >0 | ⬇️ Offer upgrade |
+| DIVERGED | >0 | >0 | 🔀 Detect ecosystem changes + offer merge |
+
+### 3. Detect Ecosystem Changes (BEHIND/DIVERGED only)
+```bash
+# Check for ecosystem file changes
+git diff --name-only $MERGE_BASE..origin/main | grep -E "^\.github/(prompts|agents)/|^cortex/wiring/specifications/wiring\.yaml|^cortex/orchestrators/"
+```
+
+**Categories:**
+- **Prompts:** `.github/prompts/*.md` files
+- **Agents:** `.github/agents/core/*.md` files  
+- **Orchestrators:** New directories in `cortex/orchestrators/`
+- **Wiring:** `cortex/wiring/specifications/wiring.yaml`
+
+### 4. Display Update Notification
+```markdown
+### 🆙 CORTEX Ecosystem Updates Available
+**Branch Status:** {BEHIND|DIVERGED} origin/main
+
+**Topology:**
+- **Your CORTEX branch:** {X} commits ahead (your new work)
+- **origin/main:** {Y} commits ahead (ecosystem updates)
+- **Common ancestor:** {hash}
+
+### 🎯 Ecosystem Changes Detected
+| Category | Changes | Files |
+|----------|---------|-------|
+| Prompts | 2 updated | cortex-architect.prompt.md, CORTEX.prompt.md |
+| Agents | 1 added | cortex-digest.md |
+| Orchestrators | 1 new | InstrumentationOrchestrator |
+| Wiring | changed | wiring.yaml |
+
+**Recent Upstream Commits:**
+- 4b3a518: Merge CORTEX-dashboard: Phase 20.9 Instrumentation Layer
+- 0540082: feat(phase-20.9): Implement InstrumentationOrchestrator with TDD
+
+**Why Upgrade Matters:**
+- Latest prompts may have enhanced capabilities you need
+- New agents could simplify your implementation  
+- Orchestrator additions might provide needed functionality
+- Wiring updates ensure architectural coherence
+```
+
+### 5. User Options
+| Option | Description | When Available |
+|--------|-------------|----------------|
+| **upgrade** | Merge origin/main → CORTEX (preserves your work + adds ecosystem) | BEHIND, DIVERGED |
+| **rebase** | Rebase CORTEX onto origin/main (clean linear history) | DIVERGED only |
+| **skip** | Proceed without updates (⚠️ developing on older ecosystem) | Always |
+| **show changes** | Full commit log + file-level diff | Always |
+
+### 6. Conflict Pre-Check (before merge)
+```bash
+# Simulate merge to detect conflicts
+git merge-tree $MERGE_BASE HEAD origin/main | grep -q "<<<<<<< "
+
+if [ $? -eq 0 ]; then
+  # Conflicts detected
+  echo "⚠️ MERGE_CONFLICT"
+  # Display conflicting files
+  # Show manual resolution guide
+else
+  # Safe to merge
+  git merge origin/main --no-edit -m "Merge origin/main: CORTEX ecosystem updates"
+fi
+```
 
 **Branch Strategy:**
 - ✅ User stays on local `CORTEX` branch

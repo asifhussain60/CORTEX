@@ -8,13 +8,14 @@
 #
 # Structure:
 #   orchestrators:
-#     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
+#     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 14 support orchestrators (added InstrumentationOrchestrator - Phase 20.9)
+#     support: [...]   # 19 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator)
+#   Total: 33 orchestrators + 4 LENS analyzers
 # =========================================================================
 
 version: "2.0"
-specification_date: "2026-01-28"
+specification_date: "2026-02-04"
 git_safe: true
 
 # -------------------------------------------------------------------------
@@ -68,7 +69,7 @@ analyzers:
       - "CWE-22"   # Path Traversal
 
 # -------------------------------------------------------------------------
-# CORE ORCHESTRATORS (7 - Phase 8.1: Added EnforcementOrchestrator)
+# CORE ORCHESTRATORS (8 - Phase 8.1)
 # -------------------------------------------------------------------------
 orchestrators:
   core:

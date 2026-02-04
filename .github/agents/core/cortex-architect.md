@@ -43,25 +43,36 @@ User Request
     ↓
 PRE-FLIGHT CHECK (cortex_verify_environment)
     ↓
-         ✅ READY → Check CORTEX Updates
+         ✅ READY → Check CORTEX Ecosystem Updates
                     ↓
          git fetch origin main (silent)
                     ↓
-         Compare: origin/main vs HEAD on CORTEX branch
+         Branch Topology Analysis:
+         - Find common ancestor: git merge-base HEAD origin/main
+         - Count CORTEX ahead: git rev-list --count <base>..HEAD
+         - Count origin/main ahead: git rev-list --count <base>..origin/main
                     ↓
-         [BEHIND] → Offer upgrade: "New CORTEX updates available (X commits)"
-         [UP-TO-DATE] → Proceed to Mode Detection
+         Classify: UP_TO_DATE | AHEAD | BEHIND | DIVERGED
                     ↓
-         User: "upgrade" / "skip" / "show changes"
+         [BEHIND/DIVERGED] → Detect Ecosystem Changes
+                             (.github/prompts/, .github/agents/, wiring.yaml, new orchestrators)
                     ↓
-         [UPGRADE] → Git merge origin/main into CORTEX branch (conflict-safe)
-         [SKIP] → Proceed to Mode Detection
-         [SHOW] → Display commit log, then offer upgrade/skip
+         Display: "CORTEX Ecosystem Updates Available"
+         Show: Prompt updates, Agent updates, Orchestrator additions
                     ↓
-         ✅ UPGRADED → Proceed to Mode Detection
+         User: "upgrade" / "skip" / "show changes" / "rebase"
+                    ↓
+         [UPGRADE] → Merge origin/main into CORTEX (conflict pre-check)
+                     Preserves local work + pulls ecosystem enhancements
+         [REBASE] → Rebase CORTEX onto origin/main (DIVERGED only)
+         [SKIP] → Proceed to Mode Detection (warn: older ecosystem)
+         [SHOW] → Display commit log + file changes
+                    ↓
+         ✅ UPGRADED → Proceed to Mode Detection (latest ecosystem)
          ❌ MISSING_PYTHON → Guide upgrade, HALT
          ❌ MISSING_DEPS → Offer auto-install, HALT
          ⚠️ MERGE_CONFLICT → Manual instructions, HALT
+         ⚠️ NETWORK_FAILURE → Skip upgrade, proceed with warning
     ↓
 Mode Detection → LENS Context Gathering
     ↓

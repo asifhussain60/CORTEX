@@ -68,8 +68,8 @@ python -c "import cortex; print('CORTEX installed successfully')"
 # Initialize governance database
 python scripts/setup_cortex_hub.py
 
-# Verify database
-python -c "import sqlite3; conn = sqlite3.connect('governance.db'); print(f'Database ready: {conn.execute(\"SELECT COUNT(*) FROM audit_log\").fetchone()[0]} entries')"
+# Verify database (located in cortex_brain/state/)
+python -c "import sqlite3; conn = sqlite3.connect('cortex_brain/state/governance.db'); print(f'Database ready: {conn.execute(\"SELECT COUNT(*) FROM audit_log\").fetchone()[0]} entries')"
 ```
 
 ### 5. Verify Installation
@@ -100,7 +100,7 @@ environment: "development"
 
 # Governance settings
 governance:
-  database: "governance.db"
+  database: "cortex_brain/state/governance.db"
   strict_mode: true
   audit_enabled: true
 
@@ -133,7 +133,7 @@ Override configuration via environment variables:
 export CORTEX_LOG_LEVEL=DEBUG
 
 # Set database path
-export CORTEX_DB_PATH=/path/to/governance.db
+export CORTEX_DB_PATH=/path/to/cortex_brain/state/governance.db
 
 # Set config file
 export CORTEX_CONFIG=/path/to/cortex-config.yaml
@@ -257,7 +257,7 @@ except ImportError:
     checks.append(('Dependencies installed', False))
 
 # Check database
-db_path = Path('governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 checks.append(('Governance DB exists', db_path.exists()))
 
 # Check config
@@ -323,7 +323,7 @@ Error: Unable to connect to governance.db
 python scripts/setup_cortex_hub.py --force
 
 # Check file permissions
-chmod 644 governance.db
+chmod 644 cortex_brain/state/governance.db
 ```
 
 #### MCP Server Won't Start
