@@ -92,26 +92,49 @@ User Request → PRE-FLIGHT CHECK
                     ↓
          cortex_verify_environment(auto_fix=False, verbose=True)
                     ↓
-         ✅ READY → Check CORTEX Updates
+         ✅ READY → Check CORTEX Ecosystem Updates (Branch Topology Analysis)
                     ↓
-         git fetch origin main (silent)
+         git fetch origin main (silent, 5s timeout)
                     ↓
-         Compare: origin/main vs HEAD on CORTEX branch
+         Find common ancestor: git merge-base HEAD origin/main
                     ↓
-         [BEHIND] → Offer upgrade: "New CORTEX updates available (X commits)"
-         [UP-TO-DATE] → Proceed to AUDIT/DESIGN
+         Count CORTEX ahead: git rev-list --count <base>..HEAD
+         Count origin/main ahead: git rev-list --count <base>..origin/main
                     ↓
-         User: "upgrade" / "skip" / "show changes"
+         Classify Branch State:
+         ├─ [UP_TO_DATE] → Both 0 commits ahead → Proceed to AUDIT/DESIGN
+         ├─ [AHEAD] → CORTEX ahead, origin/main 0 → Check if user needs ecosystem sync, then proceed
+         ├─ [BEHIND] → CORTEX 0, origin/main ahead → Offer upgrade (pull ecosystem changes)
+         └─ [DIVERGED] → Both have commits → Analyze upstream changes + offer merge
                     ↓
-         [UPGRADE] → Git merge origin/main into CORTEX branch (conflict-safe)
-         [SKIP] → Proceed to AUDIT/DESIGN
-         [SHOW] → Display commit log, then offer upgrade/skip
+         [BEHIND/DIVERGED] → Detect Ecosystem Changes:
+                             - .github/prompts/*.md modified?
+                             - .github/agents/core/*.md added/updated?
+                             - cortex/wiring/specifications/wiring.yaml changed?
+                             - New orchestrators in cortex/orchestrators/?
                     ↓
-         ✅ UPGRADED → Proceed to AUDIT/DESIGN
+         Display: "CORTEX Ecosystem Updates Detected"
+         Show: Prompt updates, Agent updates, Orchestrator additions, Wiring changes
+                    ↓
+         **STOP** → Await User Decision (MANDATORY)
+                    ↓
+         User: "upgrade" / "skip" / "show changes" / "rebase" (DIVERGED only)
+                    ↓
+         [UPGRADE] → After explicit "upgrade" command only
+                     Merge origin/main into CORTEX (conflict pre-check via merge-tree)
+                     Preserve local work + pull ecosystem enhancements
+         [REBASE] → After explicit "rebase" command only (DIVERGED only)
+                    Clean linear history, local work replayed on latest ecosystem
+         [SKIP] → After explicit "skip" command only
+                  Proceed to AUDIT/DESIGN (warn: developing against older ecosystem)
+         [SHOW] → Display full commit log with timestamps + file changes, then offer actions
+                    ↓
+         ✅ UPGRADED → Proceed to AUDIT/DESIGN (with latest prompts/agents/orchestrators)
          ❌ MISSING_PYTHON → Guide Python upgrade, HALT
          ❌ MISSING_DEPS → Offer auto-install or manual, HALT
          ⚠️ PARTIAL → Warning + proceed option
          ⚠️ MERGE_CONFLICT → Manual merge instructions, HALT
+         ⚠️ NETWORK_FAILURE → Skip upgrade check, proceed with warning
 ```
 
 ## Pre-Flight Output Format
@@ -131,20 +154,47 @@ User Request → PRE-FLIGHT CHECK
 ## 🔧 Environment Check
 **Status:** Ready ✅ | **Python:** {version} | **Dependencies:** {count}/{total}
 
-### 🆙 CORTEX Updates Available
-**Status:** {X} commits behind origin/main
+### 🆙 CORTEX Ecosystem Updates Available
+**Branch Status:** {BEHIND|DIVERGED} origin/main
 
-**Recent Changes:**
+**Topology:**
+- **Your CORTEX branch:** {X} commits ahead (your new work)
+- **origin/main:** {Y} commits ahead (ecosystem updates)
+- **Common ancestor:** {commit_hash_short}
+
+### 🎯 Ecosystem Changes Detected
+| Category | Changes | Files |
+|----------|---------|-------|
+| **Prompts** | {count} updated | {.github/prompts/*.md files} |
+| **Agents** | {count} added/updated | {.github/agents/core/*.md files} |
+| **Orchestrators** | {count} new | {cortex/orchestrators/* directories} |
+| **Wiring** | {changed|unchanged} | cortex/wiring/specifications/wiring.yaml |
+
+**Recent Upstream Commits:**
 - {commit_hash_short}: {commit_message}
 - {commit_hash_short}: {commit_message}
 ...
 
-**Options:**
-1. Type "upgrade" to merge updates into local CORTEX branch (recommended)
-2. Type "skip" to proceed without updating
-3. Type "show changes" to see full commit log
+### 🔄 Recommended Strategy
+**{MERGE|REBASE}** — {rationale based on branch state}
 
-**Note:** Upgrade will merge origin/main into your local CORTEX branch safely.
+**⏸️  AWAITING YOUR DECISION — No automatic upgrades**
+
+**Options:**
+1. Type **"upgrade"** to merge ecosystem updates (preserves your work + adds upstream)
+2. Type **"rebase"** to rebase your work onto latest ecosystem (clean linear history)
+3. Type **"skip"** to proceed with current ecosystem (⚠️ may miss latest prompts/agents)
+4. Type **"show changes"** to see detailed file-level changes
+
+**Why Upgrade Matters:**
+- Latest prompts may have enhanced capabilities you need
+- New agents could simplify your implementation
+- Orchestrator additions might provide needed functionality
+- Wiring updates ensure architectural coherence
+
+**Note:** Merge is safer (preserves exact history), rebase is cleaner (linear log).
+
+**⚠️  CRITICAL:** System will NOT proceed until you explicitly choose an option above.
 ```
 
 ### Environment Not Ready
@@ -169,10 +219,20 @@ User Request → PRE-FLIGHT CHECK
 ### Upgrade Success
 
 ```markdown
-## 🔧 CORTEX Upgrade
-**Status:** Success ✅ | **Commits Merged:** {count}
+## 🔧 CORTEX Ecosystem Upgrade
+**Status:** Success ✅ | **Strategy:** {Merge|Rebase}
 
-**Your local CORTEX branch is now up-to-date with origin/main.**
+**Integrated Changes:**
+- **Commits Merged:** {count}
+- **Prompts Updated:** {list}
+- **Agents Added/Updated:** {list}
+- **Orchestrators Added:** {list}
+- **Wiring Changes:** {summary}
+
+**Your Local Work:** Preserved ✅
+**Ecosystem Version:** Up-to-date with origin/main ✅
+
+**Next:** You're now developing on the latest CORTEX architecture.
 
 **Proceeding to {AUDIT|DESIGN} mode...**
 ```
