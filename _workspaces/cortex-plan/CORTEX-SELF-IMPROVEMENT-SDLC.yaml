@@ -652,6 +652,11 @@ implementation_phases:
   phase_0_foundation:
     title: "Foundation - Data Models & Interfaces"
     duration: "2 days"
+    checkpoint:
+      pre_tag: "sdlc/phase-0/pre"
+      complete_tag: "sdlc/phase-0/complete"
+      restore_command: "git checkout sdlc/phase-0/pre"
+      status: "✅ COMPLETE - Commit: 6dbdb8594"
     immediate_fixes:
       - file: "cortex/orchestrators/domain/enhanced_planning_orchestrator.py"
         change: "Re-export RiskLevel from canonical_enums for backward compatibility"
@@ -674,6 +679,11 @@ implementation_phases:
     title: "Orchestrator Event Bus Infrastructure (EXTEND)"
     duration: "3 days"
     dependencies: ["phase_0_foundation"]
+    checkpoint:
+      pre_tag: "sdlc/phase-1/pre"
+      complete_tag: "sdlc/phase-1/complete"
+      restore_command: "git checkout sdlc/phase-1/pre"
+      validation_gate: "All event bus tests pass + existing EventBus tests pass"
     approach: |
       EXTEND existing cortex/core/event_bus.py rather than creating entirely new infrastructure.
       This reduces risk and preserves existing feature integrations.
@@ -708,6 +718,11 @@ implementation_phases:
     title: "Intelligent Complexity Classification (EXTEND)"
     duration: "2 days"
     dependencies: ["phase_1_event_bus"]
+    checkpoint:
+      pre_tag: "sdlc/phase-2/pre"
+      complete_tag: "sdlc/phase-2/complete"
+      restore_command: "git checkout sdlc/phase-2/pre"
+      validation_gate: "RequestComplexityClassifier backward compatible + all classifier tests pass"
     approach: |
       EXTEND existing RequestComplexityClassifier in conversation_protocol.py.
       Current implementation is keyword-based (SIMPLE/MEDIUM/COMPLEX/CRITICAL).
@@ -739,6 +754,11 @@ implementation_phases:
     title: "Code-Level Planning Intelligence"
     duration: "4 days"
     dependencies: ["phase_2_complexity_classifier"]
+    checkpoint:
+      pre_tag: "sdlc/phase-3/pre"
+      complete_tag: "sdlc/phase-3/complete"
+      restore_command: "git checkout sdlc/phase-3/pre"
+      validation_gate: "Code level planner tests pass + LENS integration works"
     deliverables:
       - "cortex/orchestrators/domain/code_level_planner.py"
         description: "Intelligence for generating file/function/interface specs"
@@ -760,6 +780,11 @@ implementation_phases:
     title: "Cross-Layer Coherence Validation"
     duration: "3 days"
     dependencies: ["phase_3_code_level_planning"]
+    checkpoint:
+      pre_tag: "sdlc/phase-4/pre"
+      complete_tag: "sdlc/phase-4/complete"
+      restore_command: "git checkout sdlc/phase-4/pre"
+      validation_gate: "Coherence validator tests pass + contract tests pass"
     deliverables:
       - "cortex/orchestrators/domain/coherence_validator.py"
         description: "Validates cross-layer alignment"
@@ -784,6 +809,11 @@ implementation_phases:
     title: "Review Orchestrator (NEW)"
     duration: "4 days"
     dependencies: ["phase_4_coherence_validation"]
+    checkpoint:
+      pre_tag: "sdlc/phase-5/pre"
+      complete_tag: "sdlc/phase-5/complete"
+      restore_command: "git checkout sdlc/phase-5/pre"
+      validation_gate: "Review orchestrator tests pass + event subscriptions work + git operations verified"
     deliverables:
       - "cortex/orchestrators/core/review_orchestrator.py"
         description: "Holistic implementation verification using LENS + Git"
@@ -815,6 +845,13 @@ implementation_phases:
     title: "Interaction Orchestrator Enhancement"
     duration: "3 days"
     dependencies: ["phase_5_review_orchestrator"]
+    checkpoint:
+      pre_tag: "sdlc/phase-6/pre"
+      complete_tag: "sdlc/phase-6/complete"
+      restore_command: "git checkout sdlc/phase-6/pre"
+      validation_gate: "ALL existing InteractionOrchestrator tests pass + new event integration works"
+      risk_level: "HIGH - Core orchestrator modification"
+      rollback_priority: "CRITICAL"
     deliverables:
       - "Update cortex/orchestrators/core/interaction_orchestrator.py"
         changes:
@@ -839,6 +876,11 @@ implementation_phases:
     title: "MCP Tool Exposure"
     duration: "2 days"
     dependencies: ["phase_6_interaction_enhancement"]
+    checkpoint:
+      pre_tag: "sdlc/phase-7/pre"
+      complete_tag: "sdlc/phase-7/complete"
+      restore_command: "git checkout sdlc/phase-7/pre"
+      validation_gate: "MCP tools tests pass + MCP server starts + existing tools unaffected"
     deliverables:
       - "cortex/mcp/tools/planning_tools.py"
         tools:
@@ -857,6 +899,11 @@ implementation_phases:
     title: "Prompt & Agent Updates"
     duration: "2 days"
     dependencies: ["phase_7_mcp_tools"]
+    checkpoint:
+      pre_tag: "sdlc/phase-8/pre"
+      complete_tag: "sdlc/phase-8/complete"
+      restore_command: "git checkout sdlc/phase-8/pre"
+      validation_gate: "Prompt coherence check passes + no conflicting instructions"
     deliverables:
       - "Update .github/prompts/cortex-architect.prompt.md"
         changes:
@@ -1089,6 +1136,222 @@ rollout_timeline:
   week_6:
     days_1_3: "Phase 8: Prompt & agent updates"
     days_4_5: "Final integration testing & documentation"
+
+---
+# ============================================================================
+# GIT CHECKPOINT & RESTORE STRATEGY (CORE-026 Compliance)
+# ============================================================================
+
+git_checkpoint_strategy:
+  overview: |
+    Every phase creates a Git checkpoint before execution and after completion.
+    If a phase fails or introduces regressions, restore to the pre-phase checkpoint.
+    
+    Principle: "Fail fast, recover faster"
+    Authority: CORE-026 (Git checkpoint before major changes)
+    
+  checkpoint_naming:
+    format: "sdlc/{phase_id}/{stage}"
+    stages:
+      - "pre" - Before phase begins (restore point)
+      - "complete" - After phase passes all tests
+    examples:
+      - "sdlc/phase-0/pre"
+      - "sdlc/phase-0/complete"
+      - "sdlc/phase-1/pre"
+      - "sdlc/phase-1/complete"
+      
+  checkpoint_protocol:
+    before_phase:
+      steps:
+        1: "Ensure working tree is clean (no uncommitted changes)"
+        2: "Create checkpoint tag: git tag sdlc/{phase}/pre"
+        3: "Log checkpoint in audit trail"
+        4: "Verify tag created: git describe --tags --abbrev=0"
+      command: |
+        git status --porcelain | grep -q . && echo "ERROR: Uncommitted changes" && exit 1
+        git tag -a "sdlc/{phase}/pre" -m "SDLC Checkpoint: Before {phase_title}"
+        echo "✅ Checkpoint created: sdlc/{phase}/pre"
+        
+    after_phase_success:
+      steps:
+        1: "Run all phase tests: pytest tests/{phase_scope}/ -v"
+        2: "Run contract tests: pytest tests/contracts/ -v"
+        3: "Run LENS analysis: cortex_lens_analyze (no new HIGH issues)"
+        4: "Commit all changes with phase reference"
+        5: "Create completion tag: git tag sdlc/{phase}/complete"
+      command: |
+        pytest tests/{phase_scope}/ -v --tb=short || exit 1
+        pytest tests/contracts/ -v --tb=short || exit 1
+        git add -A
+        git commit -m "feat(sdlc): {phase_title} - Complete ({test_count} tests passing)"
+        git tag -a "sdlc/{phase}/complete" -m "SDLC Checkpoint: {phase_title} complete"
+        
+    on_phase_failure:
+      steps:
+        1: "Identify failure type (test failure, LENS issue, integration issue)"
+        2: "Log failure details in audit trail"
+        3: "Evaluate: fixable in < 30 minutes?"
+        4: "If fixable: attempt fix, re-run tests"
+        5: "If not fixable: restore to pre-phase checkpoint"
+      restore_command: |
+        echo "⚠️ Phase {phase} failed - restoring to checkpoint"
+        git checkout sdlc/{phase}/pre
+        git reset --hard sdlc/{phase}/pre
+        echo "✅ Restored to sdlc/{phase}/pre"
+        
+  phase_checkpoints:
+    phase_0_foundation:
+      pre_tag: "sdlc/phase-0/pre"
+      complete_tag: "sdlc/phase-0/complete"
+      validation_tests:
+        - "tests/unit/models/test_planning_models.py"
+        - "tests/unit/models/test_coherence_models.py"
+        - "tests/unit/models/test_review_models.py"
+        - "tests/unit/models/test_event_models.py"
+      restore_risk: "LOW - No external dependencies, isolated models"
+      status: "✅ COMPLETE - Tag: 6dbdb8594"
+      
+    phase_1_event_bus:
+      pre_tag: "sdlc/phase-1/pre"
+      complete_tag: "sdlc/phase-1/complete"
+      validation_tests:
+        - "tests/unit/infrastructure/test_orchestrator_event_bus.py"
+        - "tests/events/test_event_correlation.py"
+      restore_risk: "LOW - New infrastructure, no modifications"
+      dependencies_to_verify:
+        - "Existing EventBus still functional"
+        - "No import path changes"
+        
+    phase_2_complexity_classifier:
+      pre_tag: "sdlc/phase-2/pre"
+      complete_tag: "sdlc/phase-2/complete"
+      validation_tests:
+        - "tests/unit/orchestrators/core/test_complexity_classifier.py"
+        - "tests/unit/brain/core/test_conversation_protocol.py"
+      restore_risk: "MEDIUM - Extends existing class"
+      dependencies_to_verify:
+        - "RequestComplexityClassifier backward compatible"
+        - "conversation_protocol tests still pass"
+        
+    phase_3_code_level_planning:
+      pre_tag: "sdlc/phase-3/pre"
+      complete_tag: "sdlc/phase-3/complete"
+      validation_tests:
+        - "tests/unit/orchestrators/domain/test_code_level_planner.py"
+        - "tests/integration/test_code_level_planning_e2e.py"
+      restore_risk: "LOW - New orchestrator, no modifications"
+      dependencies_to_verify:
+        - "LENS analyzers functional"
+        - "Event bus receives PLANNING_REQUIRED"
+        
+    phase_4_coherence_validation:
+      pre_tag: "sdlc/phase-4/pre"
+      complete_tag: "sdlc/phase-4/complete"
+      validation_tests:
+        - "tests/unit/orchestrators/domain/test_coherence_validator.py"
+        - "tests/integration/test_cross_layer_contracts.py"
+        - "tests/contracts/"
+      restore_risk: "LOW - New functionality, non-breaking"
+      
+    phase_5_review_orchestrator:
+      pre_tag: "sdlc/phase-5/pre"
+      complete_tag: "sdlc/phase-5/complete"
+      validation_tests:
+        - "tests/unit/orchestrators/core/test_review_orchestrator.py"
+        - "tests/integration/test_review_workflow_e2e.py"
+      restore_risk: "LOW - New orchestrator in wiring.yaml"
+      dependencies_to_verify:
+        - "Event bus handles PHASE_COMPLETE"
+        - "Git operations work (git log, git diff)"
+        
+    phase_6_interaction_enhancement:
+      pre_tag: "sdlc/phase-6/pre"
+      complete_tag: "sdlc/phase-6/complete"
+      validation_tests:
+        - "tests/unit/orchestrators/core/test_interaction_orchestrator_enhanced.py"
+        - "tests/unit/orchestrators/core/test_interaction_orchestrator.py"
+        - "tests/integration/test_planning_workflow_e2e.py"
+      restore_risk: "HIGH - Modifies core orchestrator"
+      dependencies_to_verify:
+        - "ALL existing InteractionOrchestrator tests pass"
+        - "Challenge system still functional"
+        - "LENS context building unaffected"
+      rollback_priority: "CRITICAL"
+      
+    phase_7_mcp_tools:
+      pre_tag: "sdlc/phase-7/pre"
+      complete_tag: "sdlc/phase-7/complete"
+      validation_tests:
+        - "tests/unit/mcp/tools/test_planning_tools.py"
+        - "tests/integration/test_mcp_planning_e2e.py"
+      restore_risk: "LOW - New tools, no modifications"
+      dependencies_to_verify:
+        - "MCP server starts correctly"
+        - "Existing tools unaffected"
+        
+    phase_8_prompt_agent_updates:
+      pre_tag: "sdlc/phase-8/pre"
+      complete_tag: "sdlc/phase-8/complete"
+      validation_tests:
+        - "Prompt coherence check (manual)"
+        - "Agent role clarity check (manual)"
+      restore_risk: "LOW - Documentation changes"
+      dependencies_to_verify:
+        - "No conflicting instructions"
+        - "All MCP tools referenced exist"
+        
+  emergency_procedures:
+    full_sdlc_rollback:
+      description: "Restore to before any SDLC changes"
+      when_to_use:
+        - "Multiple phases corrupted"
+        - "Cascading test failures"
+        - "Production deployment blocked"
+      command: |
+        git checkout main
+        git branch -D CORTEX-SDLC-backup 2>/dev/null
+        git checkout -b CORTEX-SDLC-backup CORTEX
+        git checkout CORTEX
+        git reset --hard sdlc/phase-0/pre~1
+        echo "✅ Full rollback complete - at pre-SDLC state"
+        echo "Backup branch: CORTEX-SDLC-backup"
+        
+    partial_rollback:
+      description: "Rollback to specific phase checkpoint"
+      command: |
+        git checkout sdlc/{target_phase}/complete
+        git checkout -b CORTEX-{target_phase}-recovery
+        echo "✅ Partial rollback - branched from {target_phase}"
+        
+    recover_specific_file:
+      description: "Restore single file from checkpoint"
+      command: |
+        git checkout sdlc/{phase}/pre -- {file_path}
+        echo "✅ File {file_path} restored from {phase} checkpoint"
+        
+  audit_trail_integration:
+    log_format: |
+      {
+        "event": "SDLC_CHECKPOINT",
+        "phase": "{phase_id}",
+        "stage": "{pre|complete|rollback}",
+        "timestamp": "{ISO8601}",
+        "tag": "{git_tag}",
+        "commit": "{commit_hash}",
+        "tests_passed": {test_count},
+        "operator": "{user}"
+      }
+    storage: "cortex_brain/state/governance.db - sdlc_checkpoints table"
+    
+  best_practices:
+    - "ALWAYS create pre-checkpoint before starting a phase"
+    - "NEVER force-push over checkpoint tags"
+    - "Commit frequently within phases (atomic commits)"
+    - "Run tests BEFORE creating completion checkpoint"
+    - "Document rollback reason in commit message if restoring"
+    - "Keep checkpoint tags for 30 days minimum"
+    - "Use descriptive tag messages with phase title"
 
 ---
 # ============================================================================
