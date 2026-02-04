@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.0 | **Updated:** 2026-02-01 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
+**Version:** 8.1 | **Updated:** 2026-02-03 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
 
 ---
 
@@ -85,6 +85,36 @@ result = mcp_tool.execute(parameters)
 
 - Log AC_START → Execute → Log AC_COMPLETE
 - Report results in chat (NO file generation)
+
+### Stage 5.5: Recommendation Gate (If Recommendations Present)
+
+**BEFORE outputting any recommendation:**
+
+1. Load `docs/meta/enhancement-history.yaml`
+2. Cross-check against `rejected_recommendations`
+3. Calculate regression risk score
+4. IF blocked → suppress recommendation, log reason
+5. IF safe → emit with safety badge
+
+**Gate Checks:**
+
+| Gate | Check | Block Condition |
+|------|-------|-----------------|
+| REJ-History | Similarity to rejected | > 0.3 similarity |
+| Regression-Risk | Impact score | > 0.7 |
+| Test-Health | Failing tests | In affected scope |
+| Duplication | CORE-035 | Duplicates found |
+
+**Output Format:**
+```markdown
+### ⚡ Recommendation Safety Check
+| Gate | Status | Score |
+|------|--------|-------|
+| REJ-History | ✅/❌ | {similarity} |
+| Regression-Risk | ✅/❌ | {score} |
+
+**Verdict:** {SAFE | BLOCKED}
+```
 
 ---
 

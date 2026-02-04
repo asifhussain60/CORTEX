@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeferredRenderer Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #0a0e27;
+            color: #e0e6ff;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .test-summary {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .test-suite {
+            margin-bottom: 30px;
+        }
+        
+        .suite-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-case {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #666;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-case.pass {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        .test-case.fail {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .test-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .test-status {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .test-status.pass {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .test-status.fail {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .test-details {
+            margin-top: 8px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-family: monospace;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+        
+        /* Hidden test panels */
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel[aria-hidden="false"] {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧪 DeferredRenderer Test Suite</h1>
+        <p>Phase 21 Enterprise Repository Intelligence - TDD Validation</p>
+    </div>
+    
+    <div class="test-summary">
+        <div class="stat-card">
+            <div class="stat-value" id="total-tests">0</div>
+            <div class="stat-label">Total Tests</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="passed-tests" style="color: #22c55e;">0</div>
+            <div class="stat-label">Passed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="failed-tests" style="color: #ef4444;">0</div>
+            <div class="stat-label">Failed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="pass-rate">0%</div>
+            <div class="stat-label">Pass Rate</div>
+        </div>
+    </div>
+    
+    <div id="test-results"></div>
+    
+    <!-- Test DOM structure -->
+    <div id="test-dom">
+        <!-- Visible panel -->
+        <div class="tab-panel" id="overview-panel" aria-hidden="false">
+            <div id="visible-container"></div>
+        </div>
+        
+        <!-- Hidden panels -->
+        <div class="tab-panel" id="security-panel" aria-hidden="true">
+            <div id="vulnerabilities-list"></div>
+            <div id="vuln-types-list"></div>
+        </div>
+        
+        <div class="tab-panel" id="quality-panel" aria-hidden="true">
+            <div id="code-smells-grid"></div>
+        </div>
+        
+        <div class="tab-panel" id="dependencies-panel" aria-hidden="true">
+            <div id="license-summary"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Import DeferredRenderer (embedded for testing)
+        class DeferredRenderer {
+            constructor() {
+                this.renderQueue = new Map();
+            }
+            
+            queueRender(containerId, renderFn) {
+                const container = document.getElementById(containerId);
+                
+                if (!container) {
+                    this.renderQueue.set(containerId, renderFn);
+                    return false;
+                }
+                
+                const panel = container.closest('.tab-panel');
+                if (panel && panel.getAttribute('aria-hidden') === 'true') {
+                    this.renderQueue.set(containerId, renderFn);
+                    return false;
+                }
+                
+                renderFn(container);
+                return true;
+            }
+            
+            flushQueue() {
+                for (const [containerId, renderFn] of this.renderQueue.entries()) {
+                    const container = document.getElementById(containerId);
+                    
+                    if (!container) {
+                        continue;
+                    }
+                    
+                    const panel = container.closest('.tab-panel');
+                    const isHidden = panel && panel.getAttribute('aria-hidden') === 'true';
+                    
+                    if (!isHidden) {
+                        renderFn(container);
+                        this.renderQueue.delete(containerId);
+                    }
+                }
+            }
+            
+            getPendingCount() {
+                return this.renderQueue.size;
+            }
+        }
+        
+        // Test framework
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.passed = 0;
+                this.failed = 0;
+            }
+            
+            test(name, fn) {
+                this.tests.push({ name, fn });
+            }
+            
+            async run() {
+                const resultsDiv = document.getElementById('test-results');
+                
+                for (const test of this.tests) {
+                    const result = await this.runTest(test);
+                    this.renderResult(result, resultsDiv);
+                }
+                
+                this.updateSummary();
+            }
+            
+            async runTest(test) {
+                try {
+                    await test.fn();
+                    this.passed++;
+                    return { name: test.name, status: 'pass' };
+                } catch (error) {
+                    this.failed++;
+                    return { name: test.name, status: 'fail', error: error.message };
+                }
+            }
+            
+            renderResult(result, container) {
+                const testCase = document.createElement('div');
+                testCase.className = `test-case ${result.status}`;
+                
+                testCase.innerHTML = `
+                    <div class="test-name">
+                        <span class="test-status ${result.status}">${result.status.toUpperCase()}</span>
+                        ${result.name}
+                    </div>
+                    ${result.error ? `<div class="error-message">${result.error}</div>` : ''}
+                `;
+                
+                container.appendChild(testCase);
+            }
+            
+            updateSummary() {
+                const total = this.passed + this.failed;
+                const passRate = total > 0 ? ((this.passed / total) * 100).toFixed(1) : 0;
+                
+                document.getElementById('total-tests').textContent = total;
+                document.getElementById('passed-tests').textContent = this.passed;
+                document.getElementById('failed-tests').textContent = this.failed;
+                document.getElementById('pass-rate').textContent = `${passRate}%`;
+            }
+        }
+        
+        // Test assertions
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+        
+        function assertEqual(actual, expected, message) {
+            if (actual !== expected) {
+                throw new Error(message || `Expected ${expected}, got ${actual}`);
+            }
+        }
+        
+        // Test suite
+        const runner = new TestRunner();
+        
+        // Suite 1: Queue behavior for hidden panels
+        runner.test('Should queue render when container in hidden panel', () => {
+            const renderer = new DeferredRenderer();
+            let executed = false;
+            
+            const result = renderer.queueRender('vulnerabilities-list', (container) => {
+                executed = true;
+            });
+            
+            assert(!result, 'Should return false when queued');
+            assert(!executed, 'Should not execute immediately for hidden panel');
+            assertEqual(renderer.getPendingCount(), 1, 'Should have 1 pending render');
+        });
+        
+        runner.test('Should execute immediately when container visible', () => {
+            const renderer = new DeferredRenderer();
+            let executed = false;
+            
+            const result = renderer.queueRender('visible-container', (container) => {
+                executed = true;
+            });
+            
+            assert(result, 'Should return true when executed immediately');
+            assert(executed, 'Should execute immediately for visible panel');
+            assertEqual(renderer.getPendingCount(), 0, 'Should have 0 pending renders');
+        });
+        
+        runner.test('Should queue render when container not found', () => {
+            const renderer = new DeferredRenderer();
+            let executed = false;
+            
+            const result = renderer.queueRender('nonexistent-container', (container) => {
+                executed = true;
+            });
+            
+            assert(!result, 'Should return false when queued');
+            assert(!executed, 'Should not execute for nonexistent container');
+            assertEqual(renderer.getPendingCount(), 1, 'Should have 1 pending render');
+        });
+        
+        // Suite 2: Queue flushing
+        runner.test('Should flush queue when panel becomes visible', () => {
+            const renderer = new DeferredRenderer();
+            let executed = false;
+            
+            // Queue render for hidden panel
+            renderer.queueRender('code-smells-grid', (container) => {
+                executed = true;
+                container.innerHTML = '<p>Test content</p>';
+            });
+            
+            assertEqual(renderer.getPendingCount(), 1, 'Should have 1 pending render');
+            
+            // Make panel visible
+            const panel = document.getElementById('quality-panel');
+            panel.setAttribute('aria-hidden', 'false');
+            
+            // Flush queue
+            renderer.flushQueue();
+            
+            assert(executed, 'Should execute queued render after flush');
+            assertEqual(renderer.getPendingCount(), 0, 'Should have 0 pending renders after flush');
+            
+            // Verify content was rendered
+            const container = document.getElementById('code-smells-grid');
+            assert(container.innerHTML.includes('Test content'), 'Should render content correctly');
+            
+            // Reset
+            panel.setAttribute('aria-hidden', 'true');
+            container.innerHTML = '';
+        });
+        
+        runner.test('Should not flush renders for still-hidden panels', () => {
+            const renderer = new DeferredRenderer();
+            let executed = false;
+            
+            // Queue render for hidden panel
+            renderer.queueRender('license-summary', (container) => {
+                executed = true;
+            });
+            
+            // Panel remains hidden
+            renderer.flushQueue();
+            
+            assert(!executed, 'Should not execute render for still-hidden panel');
+            assertEqual(renderer.getPendingCount(), 1, 'Should still have 1 pending render');
+        });
+        
+        // Suite 3: Multiple queued renders
+        runner.test('Should handle multiple queued renders', () => {
+            const renderer = new DeferredRenderer();
+            const executionOrder = [];
+            
+            // Queue multiple renders
+            renderer.queueRender('vulnerabilities-list', () => executionOrder.push('vulnerabilities'));
+            renderer.queueRender('vuln-types-list', () => executionOrder.push('vuln-types'));
+            renderer.queueRender('license-summary', () => executionOrder.push('license'));
+            
+            assertEqual(renderer.getPendingCount(), 3, 'Should have 3 pending renders');
+            
+            // Make security panel visible
+            const securityPanel = document.getElementById('security-panel');
+            securityPanel.setAttribute('aria-hidden', 'false');
+            
+            // Flush queue
+            renderer.flushQueue();
+            
+            assert(executionOrder.includes('vulnerabilities'), 'Should execute vulnerabilities render');
+            assert(executionOrder.includes('vuln-types'), 'Should execute vuln-types render');
+            assert(!executionOrder.includes('license'), 'Should not execute license render (still hidden)');
+            assertEqual(renderer.getPendingCount(), 1, 'Should have 1 pending render remaining');
+            
+            // Reset
+            securityPanel.setAttribute('aria-hidden', 'true');
+        });
+        
+        // Suite 4: Tab activation integration
+        runner.test('Should work with tab manager integration', () => {
+            const renderer = new DeferredRenderer();
+            let securityRendered = false;
+            let qualityRendered = false;
+            
+            // Queue renders for hidden panels
+            renderer.queueRender('vulnerabilities-list', () => { securityRendered = true; });
+            renderer.queueRender('code-smells-grid', () => { qualityRendered = true; });
+            
+            // Simulate tab activation (security tab)
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.setAttribute('aria-hidden', 'true');
+            });
+            document.getElementById('security-panel').setAttribute('aria-hidden', 'false');
+            
+            renderer.flushQueue();
+            
+            assert(securityRendered, 'Should render security panel content');
+            assert(!qualityRendered, 'Should not render quality panel content yet');
+            
+            // Simulate tab activation (quality tab)
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.setAttribute('aria-hidden', 'true');
+            });
+            document.getElementById('quality-panel').setAttribute('aria-hidden', 'false');
+            
+            renderer.flushQueue();
+            
+            assert(qualityRendered, 'Should render quality panel content after tab activation');
+            assertEqual(renderer.getPendingCount(), 0, 'Should have no pending renders');
+        });
+        
+        // Suite 5: Edge cases
+        runner.test('Should handle empty queue flush', () => {
+            const renderer = new DeferredRenderer();
+            
+            // Flush empty queue (should not throw)
+            renderer.flushQueue();
+            
+            assertEqual(renderer.getPendingCount(), 0, 'Should have 0 pending renders');
+        });
+        
+        runner.test('Should handle duplicate container IDs', () => {
+            const renderer = new DeferredRenderer();
+            let executionCount = 0;
+            
+            // Queue same container twice
+            renderer.queueRender('vulnerabilities-list', () => { executionCount++; });
+            renderer.queueRender('vulnerabilities-list', () => { executionCount++; });
+            
+            // Second call should override first
+            assertEqual(renderer.getPendingCount(), 1, 'Should have 1 pending render (override)');
+            
+            // Make panel visible and flush
+            const panel = document.getElementById('security-panel');
+            panel.setAttribute('aria-hidden', 'false');
+            renderer.flushQueue();
+            
+            assertEqual(executionCount, 1, 'Should execute only once (latest render)');
+            
+            // Reset
+            panel.setAttribute('aria-hidden', 'true');
+        });
+        
+        runner.test('Should handle render function errors gracefully', () => {
+            const renderer = new DeferredRenderer();
+            
+            // Queue render that throws error
+            const result = renderer.queueRender('visible-container', (container) => {
+                throw new Error('Render error');
+            });
+            
+            // Should still return true (execution attempted)
+            assert(result, 'Should return true even if render throws');
+        });
+        
+        // Run all tests
+        document.addEventListener('DOMContentLoaded', () => {
+            runner.run();
+        });
+    </script>
+</body>
+</html>

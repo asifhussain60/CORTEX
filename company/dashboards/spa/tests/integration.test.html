@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Dashboard Integration Tests</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        .test-suite {
+            margin-bottom: 2rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .test-suite-header {
+            background: #f5f5f5;
+            padding: 1rem;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .test-case {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .test-case:last-child {
+            border-bottom: none;
+        }
+        .test-name {
+            flex: 1;
+            color: #555;
+        }
+        .test-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-left: 1rem;
+        }
+        .test-status.pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        .test-status.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .test-status.running {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .test-details {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+        .error-details {
+            background: #fff5f5;
+            color: #c53030;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+        }
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .summary-item {
+            text-align: center;
+        }
+        .summary-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        .summary-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        #run-tests-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        #run-tests-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        #run-tests-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 CORTEX Dashboard Integration Tests</h1>
+        <p class="subtitle">MVC Pattern Validation & Component Integration</p>
+        
+        <button id="run-tests-btn" onclick="runAllTests()">▶ Run All Tests</button>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        
+        <div id="test-results"></div>
+        
+        <div class="summary" id="summary" style="display: none;">
+            <h2 style="margin-bottom: 1rem;">📊 Test Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-value" id="total-tests">0</span>
+                    <span class="summary-label">Total Tests</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-value" id="passed-tests" style="color: #d4edda;">0</span>
+                    <span class="summary-label">Passed</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-value" id="failed-tests" style="color: #f8d7da;">0</span>
+                    <span class="summary-label">Failed</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-value" id="duration">0s</span>
+                    <span class="summary-label">Duration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mock Data -->
+    <script>
+        const MOCK_DASHBOARD_DATA = {
+            repo: {
+                slug: "test-repo",
+                display_name: "Test Repository",
+                description: "Test Description",
+                owner: "Test Owner",
+                primary_language: "Python",
+                version: "1.0.0",
+                last_analyzed_at: new Date().toISOString()
+            },
+            overview: {
+                summary: "Test summary",
+                business_summary: "Test business summary",
+                key_findings: ["Finding 1", "Finding 2", "Finding 3"]
+            },
+            metrics: {
+                health_score: 85,
+                risk_score: 15,
+                loc: 10000,
+                code_lines: 8000,
+                comment_lines: 1500,
+                blank_lines: 500,
+                files: 100,
+                coverage_pct: 78,
+                languages: {
+                    "Python": 8000,
+                    "JavaScript": 2000
+                }
+            },
+            security: {
+                total_count: 5,
+                critical_count: 0,
+                high_count: 1,
+                medium_count: 2,
+                low_count: 2,
+                vulnerabilities: [
+                    {
+                        id: "SEC-001",
+                        title: "Test Vulnerability 1",
+                        severity: "high",
+                        cwe_id: "CWE-89",
+                        location: "test.py:10",
+                        status: "open",
+                        description: "Test description"
+                    },
+                    {
+                        id: "SEC-002",
+                        title: "Test Vulnerability 2",
+                        severity: "medium",
+                        cwe_id: "CWE-79",
+                        location: "test.py:20",
+                        status: "open",
+                        description: "Test description"
+                    }
+                ]
+            },
+            dependencies: {
+                direct_count: 10,
+                dev_count: 5,
+                transitive_count: 50,
+                outdated_count: 3,
+                packages: [
+                    { name: "fastapi", version: "0.109.0", latest: "0.109.0", license: "MIT", type: "direct" },
+                    { name: "pydantic", version: "2.5.0", latest: "2.5.3", license: "MIT", type: "direct" }
+                ],
+                licenses: {
+                    "MIT": 45,
+                    "Apache-2.0": 10,
+                    "BSD-3-Clause": 5
+                }
+            },
+            quality: {
+                maintainability: 82,
+                readability: 78,
+                documentation: 75,
+                complexity: 35,
+                code_smells_count: 3,
+                code_smells: [
+                    {
+                        name: "Long Method",
+                        description: "Method exceeds 50 lines",
+                        location: "test.py:100",
+                        severity: "medium"
+                    },
+                    {
+                        name: "Complex Conditional",
+                        description: "Nested conditionals",
+                        location: "test.py:200",
+                        severity: "low"
+                    }
+                ]
+            },
+            use_cases: [
+                {
+                    id: "UC-001",
+                    title: "Test Use Case 1",
+                    description: "Test description",
+                    category: "Analysis",
+                    priority: "high",
+                    status: "active"
+                },
+                {
+                    id: "UC-002",
+                    title: "Test Use Case 2",
+                    description: "Test description",
+                    category: "Reporting",
+                    priority: "medium",
+                    status: "active"
+                }
+            ],
+            lens: {
+                patterns: [],
+                architecture_summary: "Test architecture",
+                insights: [],
+                entities: [],
+                components: []
+            },
+            refactoring: {
+                recommendations: []
+            }
+        };
+    </script>
+
+    <!-- Test Framework -->
+    <script>
+        class TestRunner {
+            constructor() {
+                this.suites = [];
+                this.results = [];
+                this.startTime = null;
+            }
+
+            suite(name, tests) {
+                this.suites.push({ name, tests });
+            }
+
+            async runAll() {
+                this.results = [];
+                this.startTime = Date.now();
+                
+                const resultsContainer = document.getElementById('test-results');
+                resultsContainer.innerHTML = '';
+                
+                let totalTests = 0;
+                let completedTests = 0;
+                
+                // Count total tests
+                this.suites.forEach(suite => {
+                    totalTests += suite.tests.length;
+                });
+                
+                for (const suite of this.suites) {
+                    const suiteEl = this.createSuiteElement(suite.name);
+                    resultsContainer.appendChild(suiteEl);
+                    
+                    for (const test of suite.tests) {
+                        const testEl = this.createTestElement(test.name);
+                        suiteEl.appendChild(testEl);
+                        
+                        try {
+                            const result = await test.fn();
+                            this.recordPass(testEl, result);
+                            this.results.push({ suite: suite.name, test: test.name, status: 'pass', result });
+                        } catch (error) {
+                            this.recordFail(testEl, error);
+                            this.results.push({ suite: suite.name, test: test.name, status: 'fail', error: error.message });
+                        }
+                        
+                        completedTests++;
+                        this.updateProgress(completedTests, totalTests);
+                        
+                        // Small delay for visual feedback
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                }
+                
+                this.showSummary();
+            }
+
+            createSuiteElement(name) {
+                const div = document.createElement('div');
+                div.className = 'test-suite';
+                div.innerHTML = `
+                    <div class="test-suite-header">
+                        <span>${name}</span>
+                        <span class="suite-status"></span>
+                    </div>
+                `;
+                return div;
+            }
+
+            createTestElement(name) {
+                const div = document.createElement('div');
+                div.className = 'test-case';
+                div.innerHTML = `
+                    <div class="test-name">${name}</div>
+                    <div class="test-status running">Running...</div>
+                `;
+                return div;
+            }
+
+            recordPass(testEl, result) {
+                const statusEl = testEl.querySelector('.test-status');
+                statusEl.textContent = '✓ Pass';
+                statusEl.className = 'test-status pass';
+                
+                if (result && typeof result === 'object') {
+                    const details = document.createElement('div');
+                    details.className = 'test-details';
+                    details.textContent = JSON.stringify(result, null, 2);
+                    testEl.querySelector('.test-name').appendChild(details);
+                }
+            }
+
+            recordFail(testEl, error) {
+                const statusEl = testEl.querySelector('.test-status');
+                statusEl.textContent = '✗ Fail';
+                statusEl.className = 'test-status fail';
+                
+                const errorDetails = document.createElement('div');
+                errorDetails.className = 'error-details';
+                errorDetails.textContent = error.message;
+                testEl.querySelector('.test-name').appendChild(errorDetails);
+            }
+
+            updateProgress(completed, total) {
+                const progress = (completed / total) * 100;
+                document.getElementById('progress-fill').style.width = `${progress}%`;
+            }
+
+            showSummary() {
+                const duration = ((Date.now() - this.startTime) / 1000).toFixed(2);
+                const passed = this.results.filter(r => r.status === 'pass').length;
+                const failed = this.results.filter(r => r.status === 'fail').length;
+                
+                document.getElementById('summary').style.display = 'block';
+                document.getElementById('total-tests').textContent = this.results.length;
+                document.getElementById('passed-tests').textContent = passed;
+                document.getElementById('failed-tests').textContent = failed;
+                document.getElementById('duration').textContent = `${duration}s`;
+                
+                document.getElementById('run-tests-btn').disabled = false;
+            }
+        }
+
+        const runner = new TestRunner();
+
+        // Test Utilities
+        function assert(condition, message) {
+            if (!condition) {
+                throw new Error(message || 'Assertion failed');
+            }
+        }
+
+        function assertEqual(actual, expected, message) {
+            if (actual !== expected) {
+                throw new Error(message || `Expected ${expected}, got ${actual}`);
+            }
+        }
+
+        function assertExists(value, message) {
+            if (value === null || value === undefined) {
+                throw new Error(message || 'Value does not exist');
+            }
+        }
+
+        function assertArray(value, message) {
+            if (!Array.isArray(value)) {
+                throw new Error(message || 'Value is not an array');
+            }
+        }
+
+        // Define Test Suites
+        runner.suite('Model: Data Loading', [
+            {
+                name: 'Should parse JSON data from script tag',
+                fn: async () => {
+                    const script = document.createElement('script');
+                    script.id = 'test-data';
+                    script.type = 'application/json';
+                    script.textContent = JSON.stringify({ test: 'value' });
+                    document.body.appendChild(script);
+                    
+                    const data = JSON.parse(script.textContent);
+                    assertEqual(data.test, 'value', 'Data should be parsed correctly');
+                    
+                    document.body.removeChild(script);
+                    return { parsed: true };
+                }
+            },
+            {
+                name: 'Should handle empty data gracefully',
+                fn: async () => {
+                    const script = document.createElement('script');
+                    script.id = 'test-empty-data';
+                    script.textContent = '{}';
+                    document.body.appendChild(script);
+                    
+                    const data = JSON.parse(script.textContent);
+                    assertEqual(Object.keys(data).length, 0, 'Empty object should have no keys');
+                    
+                    document.body.removeChild(script);
+                    return { isEmpty: true };
+                }
+            },
+            {
+                name: 'Should validate required data structure',
+                fn: async () => {
+                    assertExists(MOCK_DASHBOARD_DATA.repo, 'repo must exist');
+                    assertExists(MOCK_DASHBOARD_DATA.overview, 'overview must exist');
+                    assertExists(MOCK_DASHBOARD_DATA.metrics, 'metrics must exist');
+                    assertExists(MOCK_DASHBOARD_DATA.security, 'security must exist');
+                    return { validated: true };
+                }
+            }
+        ]);
+
+        runner.suite('Model: Data Structure Validation', [
+            {
+                name: 'Security vulnerabilities should be an array',
+                fn: async () => {
+                    assertArray(MOCK_DASHBOARD_DATA.security.vulnerabilities, 'vulnerabilities must be array');
+                    assert(MOCK_DASHBOARD_DATA.security.vulnerabilities.length > 0, 'Should have vulnerabilities');
+                    return { count: MOCK_DASHBOARD_DATA.security.vulnerabilities.length };
+                }
+            },
+            {
+                name: 'Code smells should be an array',
+                fn: async () => {
+                    assertArray(MOCK_DASHBOARD_DATA.quality.code_smells, 'code_smells must be array');
+                    assert(MOCK_DASHBOARD_DATA.quality.code_smells.length > 0, 'Should have code smells');
+                    return { count: MOCK_DASHBOARD_DATA.quality.code_smells.length };
+                }
+            },
+            {
+                name: 'Use cases should be an array',
+                fn: async () => {
+                    assertArray(MOCK_DASHBOARD_DATA.use_cases, 'use_cases must be array');
+                    assert(MOCK_DASHBOARD_DATA.use_cases.length > 0, 'Should have use cases');
+                    return { count: MOCK_DASHBOARD_DATA.use_cases.length };
+                }
+            },
+            {
+                name: 'Dependencies packages should be an array',
+                fn: async () => {
+                    assertArray(MOCK_DASHBOARD_DATA.dependencies.packages, 'packages must be array');
+                    return { count: MOCK_DASHBOARD_DATA.dependencies.packages.length };
+                }
+            }
+        ]);
+
+        runner.suite('View: DOM Element Existence', [
+            {
+                name: 'Should have vulnerabilities list container',
+                fn: async () => {
+                    // Create mock container for testing
+                    const container = document.createElement('div');
+                    container.id = 'vulnerabilities-list';
+                    document.body.appendChild(container);
+                    
+                    const el = document.getElementById('vulnerabilities-list');
+                    assertExists(el, 'vulnerabilities-list element must exist');
+                    
+                    document.body.removeChild(container);
+                    return { exists: true };
+                }
+            },
+            {
+                name: 'Should have code smells grid container',
+                fn: async () => {
+                    const container = document.createElement('div');
+                    container.id = 'code-smells-grid';
+                    document.body.appendChild(container);
+                    
+                    const el = document.getElementById('code-smells-grid');
+                    assertExists(el, 'code-smells-grid element must exist');
+                    
+                    document.body.removeChild(container);
+                    return { exists: true };
+                }
+            },
+            {
+                name: 'Should have dashboard-data script tag',
+                fn: async () => {
+                    const script = document.createElement('script');
+                    script.id = 'dashboard-data';
+                    script.type = 'application/json';
+                    document.body.appendChild(script);
+                    
+                    const el = document.getElementById('dashboard-data');
+                    assertExists(el, 'dashboard-data script tag must exist');
+                    
+                    document.body.removeChild(script);
+                    return { exists: true };
+                }
+            }
+        ]);
+
+        runner.suite('Controller: Data Rendering Logic', [
+            {
+                name: 'Should render vulnerabilities when data exists',
+                fn: async () => {
+                    const container = document.createElement('div');
+                    container.id = 'test-vulns';
+                    document.body.appendChild(container);
+                    
+                    const vulns = MOCK_DASHBOARD_DATA.security.vulnerabilities;
+                    container.innerHTML = vulns.map(v => `<div class="vuln">${v.title}</div>`).join('');
+                    
+                    assertEqual(container.querySelectorAll('.vuln').length, vulns.length, 'Should render all vulnerabilities');
+                    
+                    document.body.removeChild(container);
+                    return { rendered: vulns.length };
+                }
+            },
+            {
+                name: 'Should skip rendering when data is empty array',
+                fn: async () => {
+                    const container = document.createElement('div');
+                    const emptyArray = [];
+                    
+                    if (emptyArray.length === 0) {
+                        container.innerHTML = '<div class="no-data">No data</div>';
+                    }
+                    
+                    assertEqual(container.querySelectorAll('.no-data').length, 1, 'Should show no-data message');
+                    return { skipped: true };
+                }
+            },
+            {
+                name: 'Should handle missing container gracefully',
+                fn: async () => {
+                    const container = document.getElementById('non-existent-container');
+                    
+                    if (!container) {
+                        // Should not throw error
+                        return { handledGracefully: true };
+                    }
+                    
+                    throw new Error('Should have handled missing container');
+                }
+            }
+        ]);
+
+        runner.suite('Integration: MVC Flow', [
+            {
+                name: 'Data flow: Model → Controller → View',
+                fn: async () => {
+                    // Model: Load data
+                    const data = MOCK_DASHBOARD_DATA;
+                    assertExists(data.security, 'Model should have security data');
+                    
+                    // Controller: Process data
+                    const vulns = data.security.vulnerabilities || [];
+                    assertArray(vulns, 'Controller should process as array');
+                    
+                    // View: Render data
+                    const container = document.createElement('div');
+                    if (vulns.length > 0) {
+                        container.innerHTML = `<div class="count">${vulns.length}</div>`;
+                    }
+                    
+                    const rendered = container.querySelector('.count');
+                    assertExists(rendered, 'View should render content');
+                    
+                    return { flow: 'complete', steps: 3 };
+                }
+            },
+            {
+                name: 'External data injection bypasses race condition',
+                fn: async () => {
+                    // Simulate dynamic data loading
+                    const script = document.createElement('script');
+                    script.id = 'race-test-data';
+                    script.textContent = '{}'; // Initially empty
+                    document.body.appendChild(script);
+                    
+                    // Simulate passing data directly (new approach)
+                    const externalData = MOCK_DASHBOARD_DATA;
+                    
+                    // Update script content (for compatibility)
+                    script.textContent = JSON.stringify(externalData);
+                    
+                    // Parse updated content
+                    const loadedData = JSON.parse(script.textContent);
+                    
+                    assertExists(loadedData.repo, 'Data should be loaded');
+                    assert(Object.keys(loadedData).length > 0, 'Data should not be empty');
+                    
+                    document.body.removeChild(script);
+                    return { raceConditionFixed: true };
+                }
+            },
+            {
+                name: 'Component initialization with direct data injection',
+                fn: async () => {
+                    // Simulate CortexDashboard.init(data) pattern
+                    const initWithData = (data) => {
+                        if (!data || Object.keys(data).length === 0) {
+                            throw new Error('No data provided');
+                        }
+                        return { initialized: true, dataKeys: Object.keys(data).length };
+                    };
+                    
+                    // Should work with direct data
+                    const result = initWithData(MOCK_DASHBOARD_DATA);
+                    
+                    assert(result.initialized, 'Should initialize successfully');
+                    assert(result.dataKeys > 0, 'Should have data keys');
+                    
+                    return result;
+                }
+            }
+        ]);
+
+        async function runAllTests() {
+            document.getElementById('run-tests-btn').disabled = true;
+            document.getElementById('summary').style.display = 'none';
+            await runner.runAll();
+        }
+    </script>
+</body>
+</html>

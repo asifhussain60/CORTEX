@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 7.0 | **Updated:** 2026-02-01 | **Authority:** MCP-First SaaS Architecture
+**Version:** 7.1 | **Updated:** 2026-02-03 | **Authority:** MCP-First SaaS Architecture
 
 ---
 
@@ -152,7 +152,39 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 
 ---
 
-## 📁 File Placement (SSOT)
+## �️ Recommendation Gate (MANDATORY)
+
+**BEFORE emitting any recommendation:**
+
+1. Load `docs/meta/enhancement-history.yaml` → check `rejected_recommendations`
+2. Calculate regression risk score (0-1.0)
+3. BLOCK if risk > 0.7 OR matches REJ-* pattern (similarity > 0.3)
+
+**Gate Checks:**
+
+| Gate | Check | Block Condition |
+|------|-------|-----------------|
+| **REJ-History** | Cross-check with rejected_recommendations | Similarity > 0.3 to any REJ-* |
+| **Regression-Risk** | Score based on affected files + change type | Score > 0.7 |
+| **Test-Health** | Recent test failures in affected area | Failing tests in scope |
+| **Duplication** | CORE-035 violation potential | Duplicates detected |
+
+**Output Format:**
+```markdown
+### ⚡ Recommendation Safety Check
+| Gate | Status | Score |
+|------|--------|-------|
+| REJ-History | ✅/❌ | {similarity} |
+| Regression-Risk | ✅/❌ | {score} |
+
+**Verdict:** {SAFE TO RECOMMEND | BLOCKED}
+```
+
+**If BLOCKED:** Do NOT emit recommendation. Log rejection reason for learning.
+
+---
+
+## �📁 File Placement (SSOT)
 
 | Content | Location |
 |---------|----------|
@@ -182,17 +214,18 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
 
-### Orchestrators (24 Total)
+### Orchestrators (28 Total)
 
 ```
-Core (7):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
+Core (8):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
               LENSSynthesis, EnforcementOrchestrator, TDDOrchestrator,
-              WorkflowOrchestrator
+              IncrementalTaskDecomposer, WorkflowOrchestrator
 
 Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
               ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
 
-Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator, ...
+Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
+              RecommendationGate, EducationalOrchestrator, ...
 ```
 
 ---

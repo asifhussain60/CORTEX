@@ -1,6 +1,6 @@
 # CORTEX Agents
 
-**Version:** 3.0 | **Updated:** 2026-02-03 | **Architecture:** MCP-First SaaS
+**Version:** 4.0 | **Updated:** 2026-02-03 | **Architecture:** MCP-First SaaS
 
 ---
 
@@ -11,9 +11,10 @@ agents/
 ├── core/                           # Production agents
 │   ├── CORTEX.md                  # Master orchestrator agent
 │   ├── cortex-architect.md        # Mode router + environment validator
-│   ├── cortex-environment-setup.md # Environment validation agent (NEW)
+│   ├── cortex-environment-setup.md # Environment validation agent
 │   ├── cortex-auditor.md          # Codebase health auditor
-│   ├── cortex-designer.md         # TDD + challenge specialist
+│   ├── cortex-designer.md         # DESIGN mode: challenge + approval
+│   ├── cortex-executor.md         # EXEC mode: direct implementation (NEW)
 │   └── cortex-mcp-gateway.md      # MCP tool routing agent
 ├── education/                      # Educational agents
 │   ├── cortex-ask-coordinator.md
@@ -32,8 +33,24 @@ agents/
 | **Architect** | [cortex-architect.md](core/cortex-architect.md) | Mode router + pre-flight environment check | Routing |
 | **Environment Setup** | [cortex-environment-setup.md](core/cortex-environment-setup.md) | Python environment validation | Pre-Flight |
 | **Auditor** | [cortex-auditor.md](core/cortex-auditor.md) | Autonomous codebase health scan | Audit |
-| **Designer** | [cortex-designer.md](core/cortex-designer.md) | TDD + mandatory challenge | Design |
+| **Designer** | [cortex-designer.md](core/cortex-designer.md) | Challenge + approval for exploratory requests | Design |
+| **Executor** | [cortex-executor.md](core/cortex-executor.md) | Direct implementation (no challenge) | **Exec (NEW)** |
 | **MCP Gateway** | [cortex-mcp-gateway.md](core/cortex-mcp-gateway.md) | MCP tool routing, SaaS gateway | Production |
+
+---
+
+## ⚡ EXEC vs DESIGN Mode
+
+| Trigger | Mode | Agent | Challenge? |
+|---------|------|-------|------------|
+| `/implement {feature}` | EXEC | cortex-executor | ❌ No |
+| `/fix {issue}` | EXEC | cortex-executor | ❌ No |
+| `/exec {task}` | EXEC | cortex-executor | ❌ No |
+| `/refactor {target}` | EXEC | cortex-executor | ❌ No |
+| `/design {question}` | DESIGN | cortex-designer | ✅ Yes |
+| Vague/exploratory | DESIGN | cortex-designer | ✅ Yes |
+
+**Key Insight:** Challenge adds value for exploratory requests but creates friction for clear tasks.
 
 ---
 
@@ -48,6 +65,7 @@ All agents route operations through MCP tools:
 | Environment Setup | `cortex_verify_environment` |
 | Auditor | `cortex_lens_analyze`, `cortex_detect_duplicates` |
 | Designer | `cortex_git_history`, `cortex_manage_todo`, `cortex_ast_analyze` |
+| Executor | `cortex_git_history`, `cortex_manage_todo` (no challenge) |
 | MCP Gateway | All tools via `/tools/{name}` |
 
 ---

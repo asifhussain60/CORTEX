@@ -484,6 +484,87 @@ cd /path/to/CORTEX
 
 ---
 
+## 🧹 Maintenance Tools
+
+### VacuumOrchestrator - Markdown Cleanup
+**Authority:** CORE-002 (No markdown outside docs/.github), AC-VACUUM-CLEANUP-001  
+**MCP Tool:** `cortex_vacuum`  
+**Orchestrator:** VacuumOrchestrator (Tier 3, Priority 75)  
+**Status:** ✅ PRODUCTION (Phase 22.5)
+
+**Purpose:** Automated markdown sprawl detection, archival, and post-cleanup validation.
+
+**5-Stage Workflow:**
+1. **SCAN** - Detect markdown files outside `docs/.github` (excludes README.md)
+2. **PLAN** - Categorize files: phases, testing, workspaces, reports, other
+3. **CLEANUP** - Move files to `docs/archive/` with conflict resolution
+4. **VERIFY** - Validate no deletions, check broken links, git status
+5. **AUDIT OFFER** - Suggest post-cleanup audit if verification passes
+
+**Safety Guarantees:**
+- ✅ Never deletes files (only moves to archive)
+- ✅ Respects 30-day age threshold (configurable)
+- ✅ Resolves naming conflicts automatically (numeric suffix)
+- ✅ Validates git status and broken links
+- ✅ Full test coverage (23/23 tests passing)
+
+**Usage:**
+
+```bash
+# Dry-run (scan only)
+cortex_vacuum(repo_path="/path/to/repo", execute=False)
+
+# Execute cleanup
+cortex_vacuum(repo_path="/path/to/repo", execute=True, age_threshold_days=30)
+```
+
+**Example Output:**
+```json
+{
+  "success": true,
+  "mode": "execute",
+  "scan_result": {"total_count": 15},
+  "cleanup_result": {
+    "files_moved": 15,
+    "files_deleted": 0,
+    "conflicts_resolved": 2
+  },
+  "verification": {
+    "files_preserved": true,
+    "broken_links_count": 0,
+    "git_status_clean": false
+  },
+  "offer_audit": true,
+  "audit_message": "✅ Cleanup verification complete..."
+}
+```
+
+**Files:**
+- **Orchestrator:** `cortex/orchestrators/support/vacuum_orchestrator.py` (508 lines)
+- **MCP Tool:** `cortex/mcp/tools/vacuum_tools.py` (242 lines)
+- **Tests:** `tests/unit/orchestrators/support/test_vacuum_orchestrator.py` (23 tests)
+- **Agent Spec:** `.github/agents/support/cortex-vacuum.md` (275 lines)
+- **Wiring:** `cortex/wiring/specifications/wiring.yaml` (entry added)
+
+**Post-Cleanup Workflow:**
+After successful cleanup with `offer_audit=true`, the orchestrator suggests:
+1. Run test collection validation
+2. Check for import errors
+3. Verify code quality maintained
+4. Execute full AUDIT mode via cortex-architect
+
+**Archive Structure:**
+```
+docs/archive/
+├── README.md (index with search guide)
+├── phases/ (PHASE-*.md, completion summaries)
+├── testing/ (test documentation)
+├── workspaces/ (chat logs, implementation reports)
+└── reports/ (duplication audits, governance docs)
+```
+
+---
+
 ## 📝 Document Metadata
 
 | Field | Value |

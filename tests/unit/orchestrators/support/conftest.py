@@ -4,10 +4,7 @@ Conftest for support orchestrator tests
 
 import pytest
 
-# Disable pytest-asyncio for these tests
-pytest_plugins = []
-
 
 def pytest_configure(config):
-    """Configure pytest"""
+    """Configure pytest - asyncio mode inherited from root conftest"""
     config.option.asyncio_mode = "auto"

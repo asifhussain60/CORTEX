@@ -554,9 +554,35 @@
             console.log('🔍 [SPA] Loading dashboard for repo:', repoName);
             
             try {
-                // Try DualFormatDataLoader (SQLite → JSON fallback)
-                const loader = new DualFormatDataLoader('../repos');
-                const dataLayer = await loader.load(repoName);
+                // Try multiple possible locations for repository data
+                // 1. Parent directory (e.g., ksessions, kashkole)
+                // 2. repos subdirectory (e.g., cortex)
+                let dataLayer = null;
+                let loadError = null;
+                
+                // Try parent directory first
+                try {
+                    const parentLoader = new DualFormatDataLoader({ basePath: '..' });
+                    dataLayer = await parentLoader.load(repoName);
+                    console.log('✅ [SPA] Loaded from parent directory:', repoName);
+                } catch (e) {
+                    loadError = e;
+                    console.log('⚠️ [SPA] Not found in parent directory, trying repos/...');
+                    
+                    // Fallback to repos subdirectory
+                    try {
+                        const reposLoader = new DualFormatDataLoader({ basePath: '../repos' });
+                        dataLayer = await reposLoader.load(repoName);
+                        console.log('✅ [SPA] Loaded from repos/ subdirectory:', repoName);
+                    } catch (e2) {
+                        // Both locations failed
+                        throw new Error(`Repository '${repoName}' not found in parent directory or repos/ subdirectory. Original error: ${loadError.message}`);
+                    }
+                }
+                
+                if (!dataLayer) {
+                    throw new Error(`Failed to load data for repository: ${repoName}`);
+                }
                 
                 // Check if it's a SQLiteDataLayer (needs queries) or plain JSON data
                 let data;
@@ -661,7 +687,26 @@
                     code_smells_count: data.code_smells?.length || 0,
                     code_smells: data.code_smells || []
                 },
-                use_cases: data.use_cases || []
+                use_cases: data.use_cases || [],
+                // LENS intelligence section
+                lens: {
+                    patterns: data.lens_insights?.filter(i => i.insight_type === 'pattern') || [],
+                    architecture_summary: data.repo_summary?.architecture_summary || 'No architecture analysis available.',
+                    insights: data.lens_insights || [],
+                    entities: data.entities || [],
+                    components: data.components || []
+                },
+                // Refactoring recommendations
+                refactoring: {
+                    recommendations: data.code_smells?.map(smell => ({
+                        title: smell.name || 'Code Improvement',
+                        description: smell.description || 'Consider refactoring this code.',
+                        priority: smell.severity || 'medium',
+                        location: smell.location || 'Unknown',
+                        effort: 'medium',
+                        impact: 'medium'
+                    })) || []
+                }
             };
         }
         
@@ -679,15 +724,24 @@
                 return;
             }
             
-            // Initialize the dashboard
-            try {
-                const dashboard = new CortexDashboard();
-                dashboard.init();
-                console.log('✅ [SPA] Dashboard initialized successfully');
-            } catch (error) {
-                console.error('❌ [SPA] Dashboard initialization failed:', error);
-                showError(data.repo.slug, error.message);
+            // Update embedded data script for compatibility
+            const embeddedDataScript = document.getElementById('dashboard-data');
+            if (embeddedDataScript) {
+                embeddedDataScript.textContent = JSON.stringify(data);
             }
+            
+            // Small delay to ensure DOM is fully settled
+            setTimeout(() => {
+                // Initialize the dashboard with data directly (avoids race condition)
+                try {
+                    const dashboard = new CortexDashboard();
+                    dashboard.init(data); // Pass data directly
+                    console.log('✅ [SPA] Dashboard initialized successfully');
+                } catch (error) {
+                    console.error('❌ [SPA] Dashboard initialization failed:', error);
+                    showError(data.repo.slug, error.message);
+                }
+            }, 100);
         }
         
         function showError(repoName, errorMessage) {

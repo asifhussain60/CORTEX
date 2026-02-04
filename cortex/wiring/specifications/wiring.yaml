@@ -10,7 +10,7 @@
 #   orchestrators:
 #     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 11 support orchestrators
+#     support: [...]   # 13 support orchestrators (added VacuumOrchestrator - Phase 22.5)
 # =========================================================================
 
 version: "2.0"
@@ -306,7 +306,7 @@ orchestrators:
       health_check: "manage_conversation"
 
   # -----------------------------------------------------------------------
-  # SUPPORT ORCHESTRATORS (11)
+  # SUPPORT ORCHESTRATORS (13 - Added VacuumOrchestrator)
   # -----------------------------------------------------------------------
   support:
     - name: "OnboardingOrchestrator"
@@ -448,6 +448,27 @@ orchestrators:
       health_check: "evaluate_threat"
       description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
 
+    - name: "EducationalOrchestrator"
+      module: "cortex.orchestrators.education.educational_orchestrator"
+      class: "EducationalOrchestrator"
+      tier: 3
+      priority: 74
+      dependencies:
+        - "TruthVerificationEngine"
+        - "ImplementationVerifier"
+      capabilities:
+        - educational_interaction
+        - knowledge_level_detection
+        - progressive_disclosure
+        - next_step_generation
+        - fault_detection
+        - truth_verification
+      health_check: "execute"
+      description: "ASK Mode orchestrator for implementation-truth-based educational interaction (Phase 22)"
+      mcp_tools:
+        - "cortex_ask"
+        - "cortex_verify_claim"
+
     - name: "DuplicationDetector"
       module: "cortex.orchestrators.support.duplication_detector_orchestrator"
       class: "DuplicationDetector"
@@ -484,6 +505,72 @@ orchestrators:
       health_check: "recommend_for_security"
       mcp_adapter: "cortex.mcp.adapters.recommendation_adapter"
       description: "Advisory layer providing contextualized best practice recommendations (Phase 8.4)"
+
+    - name: "RecommendationGate"
+      module: "cortex.orchestrators.core.recommendation_gate"
+      class: "RecommendationGate"
+      tier: 2
+      priority: 73
+      dependencies:
+        - "RecommendationEngine"
+      capabilities:
+        - regression_prevention
+        - rejection_history_check
+        - risk_scoring
+        - test_health_check
+        - duplication_check
+      health_check: "evaluate"
+      description: "Regression prevention layer that validates recommendations before emission (Self-Enhancement)"
+      governance:
+        - "CORE-030"
+        - "CORE-035"
+
+    - name: "VacuumOrchestrator"
+      module: "cortex.orchestrators.support.vacuum_orchestrator"
+      class: "VacuumOrchestrator"
+      tier: 3
+      priority: 75
+      dependencies: []
+      capabilities:
+        - markdown_cleanup
+        - file_archival
+        - verification_workflow
+        - audit_offering
+      health_check: "scan_repository"
+      description: "Markdown cleanup with post-cleanup validation workflow (CORE-002 enforcement)"
+      mcp_tools:
+        - "cortex_vacuum"
+      workflow_stages:
+        - "scan"
+        - "plan"
+        - "cleanup"
+        - "verify"
+        - "audit_offer"
+
+    - name: "DebuggingOrchestrator"
+      module: "cortex.orchestrators.support.debugging_orchestrator"
+      class: "DebuggingOrchestrator"
+      tier: 3
+      priority: 75
+      dependencies: []
+      capabilities:
+        - smart_debug_injection
+        - marker_based_cleanup
+        - session_management
+        - ast_based_analysis
+        - sensitive_value_exclusion
+        - correlation_id_tracking
+      health_check: "execute_operation"
+      description: "Smart Debug Injection System for CORTEX-assisted debugging with surgical cleanup"
+      mcp_tools:
+        - "cortex_debug_inject"
+        - "cortex_debug_cleanup"
+        - "cortex_debug_status"
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+        - "CORE-027"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
