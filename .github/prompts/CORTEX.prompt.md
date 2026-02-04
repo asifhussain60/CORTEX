@@ -3,6 +3,41 @@
 
 ---
 
+## 🔧 PRE-FLIGHT PROMPT CHECK (AUTO-UPGRADE)
+
+**AUTOMATIC EXECUTION:** Before any operation, this prompt checks for newer versions in origin/main
+
+### Upgrade Detection Flow
+
+```
+Load this prompt → Check origin/main for newer version
+         ↓
+git fetch origin main (silent, 5s timeout)
+         ↓
+Compare: Local version (8.2) vs origin/main version
+         ↓
+[UP_TO_DATE] → Version 8.2, no changes needed → Proceed
+         ↓
+[NEWER_VERSION_AVAILABLE] → New version detected → User decides
+         ↓
+User: "upgrade prompt" / "skip" / "show changes"
+         ↓
+[UPGRADE] → Load latest CORTEX.prompt.md from origin/main
+[SKIP] → Continue with v8.2 (warn: may miss prompt enhancements)
+[SHOW] → Display version diff before deciding
+```
+
+### Auto-Upgrade Options
+
+**If newer version exists:**
+1. Type **"upgrade prompt"** → Reload CORTEX.prompt.md from origin/main
+2. Type **"skip"** → Continue with v8.2 (⚠️ may miss features)
+3. Type **"show changes"** → Display version comparison
+
+**Network failure?** Gracefully degrade to v8.2 with warning
+
+---
+
 ## 🎯 System Identity
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
