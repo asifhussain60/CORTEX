@@ -820,7 +820,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     
     <!-- Data Layer -->
-    <script src="js/data/JSONDataAdapter.js"></script>
     <script src="js/data/DualFormatDataLoader.js"></script>
     <script src="js/data/SQLiteDataLayer.js"></script>
     
@@ -885,23 +884,36 @@
                 let dataLayer = null;
                 let loadError = null;
                 
-                // Try parent directory first
+                // Try multiple locations in order:
+                // 1. data/ subdirectory (primary location for generated data)
+                // 2. Parent directory (e.g., ksessions, kashkole)
+                // 3. repos subdirectory (e.g., cortex)
+                
                 try {
-                    const parentLoader = new DualFormatDataLoader({ basePath: '..' });
-                    dataLayer = await parentLoader.load(repoName);
-                    console.log('✅ [SPA] Loaded from parent directory:', repoName);
+                    // Try data/ subdirectory first
+                    const dataLoader = new DualFormatDataLoader({ basePath: './data' });
+                    dataLayer = await dataLoader.load(repoName);
+                    console.log('✅ [SPA] Loaded from data/ subdirectory:', repoName);
                 } catch (e) {
                     loadError = e;
-                    console.log('⚠️ [SPA] Not found in parent directory, trying repos/...');
+                    console.log('⚠️ [SPA] Not found in data/, trying parent directory...');
                     
-                    // Fallback to repos subdirectory
                     try {
-                        const reposLoader = new DualFormatDataLoader({ basePath: '../repos' });
-                        dataLayer = await reposLoader.load(repoName);
-                        console.log('✅ [SPA] Loaded from repos/ subdirectory:', repoName);
+                        const parentLoader = new DualFormatDataLoader({ basePath: '..' });
+                        dataLayer = await parentLoader.load(repoName);
+                        console.log('✅ [SPA] Loaded from parent directory:', repoName);
                     } catch (e2) {
-                        // Both locations failed
-                        throw new Error(`Repository '${repoName}' not found in parent directory or repos/ subdirectory. Original error: ${loadError.message}`);
+                        console.log('⚠️ [SPA] Not found in parent directory, trying repos/...');
+                        
+                        // Final fallback to repos subdirectory
+                        try {
+                            const reposLoader = new DualFormatDataLoader({ basePath: '../repos' });
+                            dataLayer = await reposLoader.load(repoName);
+                            console.log('✅ [SPA] Loaded from repos/ subdirectory:', repoName);
+                        } catch (e3) {
+                            // All locations failed
+                            throw new Error(`Repository '${repoName}' not found in data/, parent directory, or repos/ subdirectory. Original error: ${loadError.message}`);
+                        }
                     }
                 }
                 
@@ -909,18 +921,14 @@
                     throw new Error(`Failed to load data for repository: ${repoName}`);
                 }
                 
-                // Check if it's SQLiteDataLayer, JSONDataAdapter, or plain JSON data
+                // Check if it's a SQLiteDataLayer (needs queries) or plain JSON data
                 let data;
-                if (dataLayer instanceof window.JSONDataAdapter) {
-                    // JSONDataAdapter - access underlying data
-                    console.log('📦 [SPA] Using JSONDataAdapter data...');
-                    data = dataLayer.data;
-                } else if (dataLayer.query && typeof dataLayer.query === 'function') {
-                    // SQLiteDataLayer format - fetch all data via queries
+                if (dataLayer.query && typeof dataLayer.query === 'function') {
+                    // SQLite format - fetch all data via queries
                     console.log('📊 [SPA] Loading SQLite data...');
                     data = await loadFromSQLite(dataLayer);
                 } else {
-                    // Plain JSON format - data is already loaded
+                    // JSON format - data is already loaded
                     console.log('📦 [SPA] Using JSON data...');
                     data = dataLayer;
                 }
