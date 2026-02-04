@@ -248,6 +248,9 @@ Merge: Company takes precedence → CORTEX fills gaps
 |---------|--------|
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
+| `/dashboard generate {repo}` | Generate dashboard v3 JSON data |
+| `/dashboard serve {port}` | Serve dashboard via HTTP |
+| `/dashboard test` | Run Playwright E2E tests |
 | `/refactor {target}` | Code improvement |
 | `/test {module}` | Test generation |
 | `/analyze {scope}` | LENS analysis |

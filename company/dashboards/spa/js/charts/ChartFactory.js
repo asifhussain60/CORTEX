@@ -321,6 +321,95 @@ const ChartFactory = {
         return chart;
     },
     
+    /**
+     * Create a heatmap chart
+     * @param {HTMLElement} container - DOM container
+     * @param {Array<string>} xAxisData - X-axis categories
+     * @param {Array<string>} yAxisData - Y-axis categories
+     * @param {Array<Array<number>>} data - 2D array [[x, y, value], ...]
+     * @param {Object} options - Additional options
+     */
+    createHeatmap(container, xAxisData, yAxisData, data, options = {}) {
+        const chart = echarts.init(container);
+        
+        // Find min/max for color scaling
+        const values = data.map(item => item[2]);
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        
+        const chartOptions = {
+            ...this.baseOptions,
+            grid: {
+                top: 80,
+                right: 100,
+                bottom: 60,
+                left: 100,
+                containLabel: false
+            },
+            tooltip: {
+                position: 'top',
+                backgroundColor: 'rgba(10, 20, 40, 0.95)',
+                borderColor: 'rgba(77, 140, 255, 0.3)',
+                textStyle: { color: 'rgba(255, 255, 255, 0.87)' },
+                formatter: params => {
+                    const [x, y, value] = params.data;
+                    return `${yAxisData[y]}<br/>${xAxisData[x]}: <strong>${value}</strong>`;
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: xAxisData,
+                splitArea: { show: true },
+                axisLine: { lineStyle: { color: this.colors.border } },
+                axisLabel: { 
+                    color: this.colors.textSecondary,
+                    rotate: options.rotateXLabels || 0
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: yAxisData,
+                splitArea: { show: true },
+                axisLine: { lineStyle: { color: this.colors.border } },
+                axisLabel: { color: this.colors.textSecondary }
+            },
+            visualMap: {
+                min: min,
+                max: max,
+                calculable: true,
+                orient: 'vertical',
+                right: 10,
+                top: 'center',
+                inRange: {
+                    color: options.colorRange || [
+                        '#313695', '#4575b4', '#74add1', '#abd9e9',
+                        '#e0f3f8', '#ffffbf', '#fee090', '#fdae61',
+                        '#f46d43', '#d73027', '#a50026'
+                    ]
+                },
+                textStyle: { color: this.colors.textSecondary }
+            },
+            series: [{
+                type: 'heatmap',
+                data: data,
+                label: {
+                    show: options.showLabels || false,
+                    color: this.colors.text,
+                    fontSize: 10
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+        
+        chart.setOption(chartOptions);
+        return chart;
+    },
+    
     // Helper methods
     getColor(index, alpha = 1) {
         const palette = [

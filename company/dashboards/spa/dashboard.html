@@ -64,44 +64,120 @@
         <!-- Tab Navigation -->
         <div class="tabs-wrapper" role="tablist" aria-label="Dashboard sections">
             <div class="tabs-container">
+                <!-- Executive Tab (NEW) -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="executive-panel" id="executive-tab" data-show-if="executive">
+                    <span class="tab-button__icon">📋</span>
+                    Executive
+                </button>
+                <!-- Overview Tab -->
                 <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-panel" id="overview-tab">
                     <span class="tab-button__icon">📊</span>
                     Overview
                 </button>
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="metrics-panel" id="metrics-tab">
-                    <span class="tab-button__icon">📈</span>
-                    Metrics
-                </button>
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="security-panel" id="security-tab">
-                    <span class="tab-button__icon">🔒</span>
-                    Security
-                    <span class="tab-button__count" data-bind="security.total_count" data-fallback="">--</span>
-                </button>
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="dependencies-panel" id="dependencies-tab">
-                    <span class="tab-button__icon">📦</span>
-                    Dependencies
-                </button>
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="quality-panel" id="quality-tab">
-                    <span class="tab-button__icon">✨</span>
-                    Quality
-                </button>
+                <!-- Use Cases Tab -->
                 <button class="tab-button" role="tab" aria-selected="false" aria-controls="use-cases-panel" id="use-cases-tab">
                     <span class="tab-button__icon">💡</span>
                     Use Cases
                     <span class="tab-button__count" data-bind="use_cases.length" data-fallback="">--</span>
                 </button>
+                <!-- Domain Model Tab (NEW) -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="domain-model-panel" id="domain-model-tab" data-show-if="domain_model">
+                    <span class="tab-button__icon">🧬</span>
+                    Domain Model
+                </button>
+                <!-- Architecture Tab (NEW) -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="architecture-panel" id="architecture-tab" data-show-if="architecture">
+                    <span class="tab-button__icon">🏗️</span>
+                    Architecture
+                </button>
+                <!-- Dependencies Tab -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="dependencies-panel" id="dependencies-tab">
+                    <span class="tab-button__icon">📦</span>
+                    Dependencies
+                </button>
+                <!-- Quality Tab -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="quality-panel" id="quality-tab">
+                    <span class="tab-button__icon">✨</span>
+                    Quality
+                </button>
+                <!-- Metrics Tab -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="metrics-panel" id="metrics-tab">
+                    <span class="tab-button__icon">📈</span>
+                    Metrics
+                </button>
+                <!-- Security Tab -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="security-panel" id="security-tab">
+                    <span class="tab-button__icon">🔒</span>
+                    Security
+                    <span class="tab-button__count" data-bind="security.total_count" data-fallback="">--</span>
+                </button>
+                <!-- Testing Tab (NEW) -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="testing-panel" id="testing-tab" data-show-if="testing">
+                    <span class="tab-button__icon">🧪</span>
+                    Testing
+                </button>
+                <!-- Refactoring Tab -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="refactoring-panel" id="refactoring-tab">
+                    <span class="tab-button__icon">🔧</span>
+                    Refactoring
+                </button>
+                <!-- LENS Tab -->
                 <button class="tab-button" role="tab" aria-selected="false" aria-controls="lens-panel" id="lens-tab">
                     <span class="tab-button__icon">🔍</span>
                     LENS
                 </button>
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="refactoring-panel" id="refactoring-tab">
-                    <span class="tab-button__icon">🔧</span>
-                    Refactoring
+                <!-- Code Explorer Tab (NEW) -->
+                <button class="tab-button" role="tab" aria-selected="false" aria-controls="code-explorer-panel" id="code-explorer-tab" data-show-if="files">
+                    <span class="tab-button__icon">🗂️</span>
+                    Code Explorer
                 </button>
             </div>
             
             <!-- Tab Panels -->
             <div class="tab-panels">
+                
+                <!-- Executive Panel (NEW) -->
+                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="executive-tab" id="executive-panel" data-show-if="executive">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Executive Summary</h2>
+                            <p class="section-subtitle">Business-language insights for stakeholders</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Executive KPIs Grid -->
+                    <div class="overview-grid" style="--card-min-width: 200px;">
+                        <div class="metric-card" data-show-if="executive.health_status">
+                            <span class="metric-card__label">Health Status</span>
+                            <span class="metric-card__value" data-bind="executive.health_status">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="executive.security_posture">
+                            <span class="metric-card__label">Security Posture</span>
+                            <span class="metric-card__value" data-bind="executive.security_posture">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="executive.tech_debt_hours">
+                            <span class="metric-card__label">Tech Debt</span>
+                            <span class="metric-card__value" data-bind="executive.tech_debt_hours" data-format="number">--</span>
+                            <span class="metric-card__unit">hours</span>
+                        </div>
+                        <div class="metric-card" data-show-if="executive.test_pass_rate">
+                            <span class="metric-card__label">Test Pass Rate</span>
+                            <span class="metric-card__value" data-bind="executive.test_pass_rate" data-format="percent">--</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Summary -->
+                    <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" data-show-if="executive.risk_summary">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">⚠️ Risk Summary</h3>
+                        <p data-bind="executive.risk_summary">Loading risk analysis...</p>
+                    </div>
+                    
+                    <!-- Recommendations -->
+                    <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" data-show-if="executive.recommendations">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">💡 Top Recommendations</h3>
+                        <div id="executive-recommendations-list"></div>
+                    </div>
+                </section>
                 
                 <!-- Overview Panel -->
                 <section class="tab-panel active" role="tabpanel" aria-hidden="false" aria-labelledby="overview-tab" id="overview-panel">
@@ -434,6 +510,254 @@
                     </div>
                 </section>
                 
+                <!-- Domain Model Panel (NEW) -->
+                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="domain-model-tab" id="domain-model-panel" data-show-if="domain_model">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Domain Model</h2>
+                            <p class="section-subtitle">Business domain entities, relationships, and bounded contexts</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Entity Statistics -->
+                    <div class="overview-grid" style="--card-min-width: 200px; margin-bottom: 2rem;">
+                        <div class="metric-card" data-show-if="domain_model.entities">
+                            <span class="metric-card__label">Entities</span>
+                            <span class="metric-card__value" data-bind="domain_model.entities.length">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="domain_model.relationships">
+                            <span class="metric-card__label">Relationships</span>
+                            <span class="metric-card__value" data-bind="domain_model.relationships.length">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="domain_model.bounded_contexts">
+                            <span class="metric-card__label">Bounded Contexts</span>
+                            <span class="metric-card__value" data-bind="domain_model.bounded_contexts.length">--</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Entity Relationship Diagram (Mermaid) -->
+                    <div class="glass-card-static" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">🧬 Entity Relationship Diagram</h3>
+                        <div id="domain-er-diagram" class="mermaid-container"></div>
+                    </div>
+                    
+                    <!-- Class Diagram (Mermaid) -->
+                    <div class="glass-card-static" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">📐 Class Diagram</h3>
+                        <div id="domain-class-diagram" class="mermaid-container"></div>
+                    </div>
+                    
+                    <!-- Entities Table -->
+                    <div class="glass-card-static" style="padding: 1.5rem;">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">📋 Domain Entities</h3>
+                        <div id="domain-entities-table"></div>
+                    </div>
+                    
+                    <div class="no-data" data-hide-if="domain_model">
+                        <div class="no-data__icon">🧬</div>
+                        <div class="no-data__title">Domain Model Not Generated</div>
+                        <div class="no-data__description">Run LENS analysis to extract domain entities and relationships.</div>
+                    </div>
+                </section>
+                
+                <!-- Architecture Panel (NEW) -->
+                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="architecture-tab" id="architecture-panel" data-show-if="architecture">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Architecture</h2>
+                            <p class="section-subtitle">System layers, components, and data flow</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Architecture Wizard (4-step) -->
+                    <div class="wizard glass-card-static" id="architecture-wizard" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <div class="wizard__steps">
+                            <button class="wizard__step active" data-step="overview">1. Overview</button>
+                            <button class="wizard__step" data-step="layers">2. Layers</button>
+                            <button class="wizard__step" data-step="components">3. Components</button>
+                            <button class="wizard__step" data-step="dataflow">4. Data Flow</button>
+                        </div>
+                        
+                        <div class="wizard__content">
+                            <!-- Step 1: Overview Diagram -->
+                            <div class="wizard__panel active" id="arch-step-overview">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">🏗️ Architecture Overview</h3>
+                                <div id="architecture-overview-diagram" class="mermaid-container"></div>
+                                <p data-bind="architecture.summary" style="margin-top: 1rem;">Loading architecture summary...</p>
+                            </div>
+                            
+                            <!-- Step 2: Layers -->
+                            <div class="wizard__panel" id="arch-step-layers">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">📚 Architectural Layers</h3>
+                                <div id="architecture-layers-diagram" class="mermaid-container"></div>
+                                <div id="architecture-layers-list" style="margin-top: 1rem;"></div>
+                            </div>
+                            
+                            <!-- Step 3: Components -->
+                            <div class="wizard__panel" id="arch-step-components">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">🧩 System Components</h3>
+                                <div id="architecture-components-graph" class="cytoscape-container"></div>
+                                <div id="architecture-components-table" style="margin-top: 1rem;"></div>
+                            </div>
+                            
+                            <!-- Step 4: Data Flow -->
+                            <div class="wizard__panel" id="arch-step-dataflow">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">🔄 Data Flow</h3>
+                                <div id="architecture-dataflow-diagram" class="mermaid-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="no-data" data-hide-if="architecture">
+                        <div class="no-data__icon">🏗️</div>
+                        <div class="no-data__title">Architecture Not Analyzed</div>
+                        <div class="no-data__description">Run LENS analysis to detect architectural patterns and components.</div>
+                    </div>
+                </section>
+                
+                <!-- Testing Panel (NEW) -->
+                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="testing-tab" id="testing-panel" data-show-if="testing">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Testing</h2>
+                            <p class="section-subtitle">Test coverage, execution results, and quality metrics</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Testing KPIs -->
+                    <div class="overview-grid" style="--card-min-width: 200px; margin-bottom: 2rem;">
+                        <div class="metric-card" data-show-if="testing.coverage_percent">
+                            <span class="metric-card__label">Coverage</span>
+                            <span class="metric-card__value text-success" data-bind="testing.coverage_percent" data-format="percent">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="testing.total_tests">
+                            <span class="metric-card__label">Total Tests</span>
+                            <span class="metric-card__value" data-bind="testing.total_tests" data-format="number">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="testing.passed_tests">
+                            <span class="metric-card__label">Passed</span>
+                            <span class="metric-card__value text-success" data-bind="testing.passed_tests" data-format="number">--</span>
+                        </div>
+                        <div class="metric-card" data-show-if="testing.failed_tests">
+                            <span class="metric-card__label">Failed</span>
+                            <span class="metric-card__value text-danger" data-bind="testing.failed_tests" data-format="number">--</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Coverage Treemap -->
+                    <div class="chart-container" style="margin-bottom: 2rem;">
+                        <div class="chart-container__header">
+                            <h4 class="chart-container__title">Coverage by File</h4>
+                        </div>
+                        <div id="coverage-treemap" class="chart-container__canvas"></div>
+                    </div>
+                    
+                    <!-- Test Results Table -->
+                    <div class="glass-card-static" style="padding: 1.5rem;">
+                        <h3 class="section-title" style="margin-bottom: 1rem;">📋 Test Results</h3>
+                        <div id="test-results-table"></div>
+                        <div id="test-results-pagination" class="pagination" style="margin-top: 1rem;"></div>
+                    </div>
+                    
+                    <div class="no-data" data-hide-if="testing">
+                        <div class="no-data__icon">🧪</div>
+                        <div class="no-data__title">No Test Data</div>
+                        <div class="no-data__description">Run tests to generate coverage reports and execution results.</div>
+                    </div>
+                </section>
+                
+                <!-- Code Explorer Panel (NEW) -->
+                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="code-explorer-tab" id="code-explorer-panel" data-show-if="files">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Code Explorer</h2>
+                            <p class="section-subtitle">Browse files, view code, and analyze dependencies</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Sub-tabs for Code Explorer -->
+                    <div class="sub-tabs" style="margin-bottom: 2rem;">
+                        <button class="sub-tab active" data-subtab="structure">📁 Structure</button>
+                        <button class="sub-tab" data-subtab="callgraph">🔗 Call Graph</button>
+                        <button class="sub-tab" data-subtab="imports">📥 Imports</button>
+                        <button class="sub-tab" data-subtab="coupling">🔀 Coupling</button>
+                    </div>
+                    
+                    <!-- Structure Sub-panel -->
+                    <div class="sub-panel active" id="code-explorer-structure">
+                        <div class="grid grid-cols-2">
+                            <!-- Directory Treemap -->
+                            <div class="chart-container">
+                                <div class="chart-container__header">
+                                    <h4 class="chart-container__title">Directory Treemap</h4>
+                                </div>
+                                <div id="directory-treemap" class="chart-container__canvas"></div>
+                            </div>
+                            
+                            <!-- File Browser -->
+                            <div class="glass-card-static" style="padding: 1.5rem;">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">📂 File Browser</h3>
+                                <div class="search-bar-container" style="margin-bottom: 1rem;">
+                                    <input type="search" class="search-bar" id="file-search" placeholder="Search files...">
+                                </div>
+                                <div id="file-tree" class="file-tree"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Selected File Details -->
+                        <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" id="file-detail-panel" data-show-if="selected_file">
+                            <h3 class="section-title" style="margin-bottom: 1rem;">📄 File Details</h3>
+                            <div id="file-details-content"></div>
+                            <div id="code-snippet-viewer" class="code-snippet" style="margin-top: 1rem;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Call Graph Sub-panel -->
+                    <div class="sub-panel" id="code-explorer-callgraph">
+                        <div class="glass-card-static" style="padding: 1.5rem;">
+                            <h3 class="section-title" style="margin-bottom: 1rem;">🔗 Function Call Graph</h3>
+                            <div class="search-bar-container" style="margin-bottom: 1rem;">
+                                <input type="search" class="search-bar" id="function-search" placeholder="Search functions...">
+                            </div>
+                            <div id="call-graph" class="cytoscape-container" style="height: 500px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Imports Sub-panel -->
+                    <div class="sub-panel" id="code-explorer-imports">
+                        <div class="glass-card-static" style="padding: 1.5rem;">
+                            <h3 class="section-title" style="margin-bottom: 1rem;">📥 Import Graph</h3>
+                            <div id="import-graph" class="cytoscape-container" style="height: 500px;"></div>
+                            <div id="circular-deps-warning" class="alert alert-warning" style="margin-top: 1rem; display: none;">
+                                <strong>⚠️ Circular Dependencies Detected</strong>
+                                <ul id="circular-deps-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Coupling Sub-panel -->
+                    <div class="sub-panel" id="code-explorer-coupling">
+                        <div class="grid grid-cols-2">
+                            <div class="chart-container">
+                                <div class="chart-container__header">
+                                    <h4 class="chart-container__title">Module Coupling Chord</h4>
+                                </div>
+                                <div id="coupling-chord" class="chart-container__canvas"></div>
+                            </div>
+                            <div class="glass-card-static" style="padding: 1.5rem;">
+                                <h3 class="section-title" style="margin-bottom: 1rem;">📊 Coupling Matrix</h3>
+                                <div id="coupling-matrix-heatmap"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="no-data" data-hide-if="files">
+                        <div class="no-data__icon">🗂️</div>
+                        <div class="no-data__title">No File Data</div>
+                        <div class="no-data__description">Run LENS analysis to explore the codebase structure.</div>
+                    </div>
+                </section>
+                
             </div>
         </div>
         
@@ -496,6 +820,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     
     <!-- Data Layer -->
+    <script src="js/data/JSONDataAdapter.js"></script>
     <script src="js/data/DualFormatDataLoader.js"></script>
     <script src="js/data/SQLiteDataLayer.js"></script>
     
@@ -584,14 +909,18 @@
                     throw new Error(`Failed to load data for repository: ${repoName}`);
                 }
                 
-                // Check if it's a SQLiteDataLayer (needs queries) or plain JSON data
+                // Check if it's SQLiteDataLayer, JSONDataAdapter, or plain JSON data
                 let data;
-                if (dataLayer.query && typeof dataLayer.query === 'function') {
-                    // SQLite format - fetch all data via queries
+                if (dataLayer instanceof window.JSONDataAdapter) {
+                    // JSONDataAdapter - access underlying data
+                    console.log('📦 [SPA] Using JSONDataAdapter data...');
+                    data = dataLayer.data;
+                } else if (dataLayer.query && typeof dataLayer.query === 'function') {
+                    // SQLiteDataLayer format - fetch all data via queries
                     console.log('📊 [SPA] Loading SQLite data...');
                     data = await loadFromSQLite(dataLayer);
                 } else {
-                    // JSON format - data is already loaded
+                    // Plain JSON format - data is already loaded
                     console.log('📦 [SPA] Using JSON data...');
                     data = dataLayer;
                 }

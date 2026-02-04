@@ -334,7 +334,11 @@ if (typeof window !== 'undefined') {
     });
 }
 
-// Export for module systems
+// Export for module systems AND browser globals
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DualFormatDataLoader;
+}
+// Browser global export
+if (typeof window !== 'undefined') {
+    window.DualFormatDataLoader = DualFormatDataLoader;
 }
