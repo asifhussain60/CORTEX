@@ -7,7 +7,7 @@
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
-**Primary Prompt:** [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md)  
+**Primary Prompt:** [CORTEX.prompt.md](prompts/CORTEX.prompt.md)  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
@@ -51,6 +51,11 @@ ANALYZE Intent:
   Tool: cortex_lens_analyze
   Tool: cortex_detect_duplicates
   Tool: cortex_git_history
+
+DIGEST Intent:
+  Tool: cortex_digest_session
+  Flow: File → Auto-Detect Markers → Extract Learnings → Enhance CORTEX
+  Trigger: File contains Copilot chat markers (score ≥ 5)
 ```
 
 **WHY:** Direct chat bypasses:
@@ -82,7 +87,7 @@ ANALYZE Intent:
 
 ## 🔄 Interaction Protocol
 
-**See [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md) for full protocol.**
+**See [CORTEX.prompt.md](prompts/CORTEX.prompt.md) for full protocol.**
 
 ### Quick Reference:
 
@@ -243,6 +248,7 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 | `/onboard {path}` | Repository onboarding + security scan |
 | `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
 | `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
+| `/check-env` | **Environment check + CORTEX upgrade detection** |
 
 ---
 
@@ -250,13 +256,13 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 | File | Purpose |
 |------|---------|
-| [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md) | Production master prompt |
-| [cortex-architect.prompt.md](.github/prompts/cortex-architect.prompt.md) | AUDIT + DESIGN dual-mode prompt |
-| [CORTEX.md](.github/agents/core/CORTEX.md) | Master agent |
-| [cortex-architect.md](.github/agents/core/cortex-architect.md) | Mode router agent |
-| [cortex-auditor.md](.github/agents/core/cortex-auditor.md) | AUDIT specialist agent |
-| [cortex-designer.md](.github/agents/core/cortex-designer.md) | DESIGN specialist agent |
-| [cortex-mcp-gateway.md](.github/agents/core/cortex-mcp-gateway.md) | MCP gateway agent |
+| [CORTEX.prompt.md](prompts/CORTEX.prompt.md) | Production master prompt |
+| [cortex-architect.prompt.md](prompts/cortex-architect.prompt.md) | AUDIT + DESIGN dual-mode prompt |
+| [CORTEX.md](agents/core/CORTEX.md) | Master agent ✅ |
+| [cortex-architect.md](agents/core/cortex-architect.md) | Mode router agent ✅ |
+| [cortex-auditor.md](agents/core/cortex-auditor.md) | AUDIT specialist agent ✅ |
+| [cortex-designer.md](agents/core/cortex-designer.md) | DESIGN specialist agent ✅ |
+| [cortex-mcp-gateway.md](agents/core/cortex-mcp-gateway.md) | MCP gateway agent ✅ |
 
 ---
 

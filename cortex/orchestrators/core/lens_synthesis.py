@@ -28,6 +28,7 @@ from datetime import datetime
 
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 
 class SynthesisPhase(Enum):
@@ -142,6 +143,7 @@ class LENSSynthesis:
             details={"phase_weights": self.phase_weights}
         )
     
+    @inject_orchestrator_context
     def synthesize(
         self,
         context: LENSContext

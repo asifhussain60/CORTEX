@@ -38,6 +38,7 @@
 | Check | Target |
 |-------|--------|
 | DB Audit Logging | AuditTrailVerifier active |
+| Markdown Link Validation | All relative paths resolve OR documented as VS Code false positives |
 | **Audit Trail Integrity** | **governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering** |
 | Architectural Coherence | wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents consistency |
 | Orchestrator Wiring | 28 orchestrators in wiring.yaml |
@@ -46,7 +47,8 @@
 | Governance | 4-layer defense |
 | TDD Completeness | Test file coverage |
 | **Prompt Coherence** | **cortex-architect.prompt.md sections align with agent behaviors** |
-| **Agent Role Clarity** | **No overlap between auditor/designer/gateway agents** |
+| **Prompt Sync** | **cortex-architect.prompt.md ↔ CORTEX.prompt.md — no semantic drift (DIGEST mode parity)** |
+| **Agent Role Clarity** | **No overlap between auditor/designer/gateway/digest agents** |
 | **Tool Coverage** | **All MCP tools in prompt exist in cortex/mcp/tools/** |
 
 ### P2 — Quality
@@ -62,7 +64,39 @@
 | Check | Target |
 |-------|--------|
 | MD Sprawl | *.md outside docs/.github |
+| Markdown Lint | MD040 (language), MD060 (spacing), MD022 (blanks), MD032 (lists) |
+| Link Validation | Relative paths resolve OR document as VS Code false positives |
 | Leftovers | *.bak, *_v2.* |
+
+---
+
+## VS Code Markdown Link Resolver (Know Your Quirks)
+
+**Issue:** VS Code's link resolver treats relative links as relative to the file location, not workspace root.
+
+**Examples:**
+- File: `.github/prompts/cortex-architect.prompt.md`
+- Link: `[CORTEX.md](.github/agents/core/CORTEX.md)`
+- 🔴 VS Code resolves from: `.github/prompts/.github/agents/core/CORTEX.md` (doesn't exist)
+- ✅ Actual location: `.github/agents/core/CORTEX.md` (exists at workspace root)
+
+**Audit Handling:**
+1. ✅ Verify file actually exists in workspace
+2. 📋 Document error as "VS Code false positive — file verified"
+3. ⏳ Classify as P3 (low priority) unless blocking actual functionality
+4. 🤖 Auto-fix: Use fully-qualified relative paths OR update link format
+
+**Output in Audit Report:**
+```markdown
+### 🧹 P3 Cleanup Summary
+
+| File | Lint Issues | Link False Positives | Status |
+|------|-------------|---------------------|--------|
+| cortex-lens/README.md | MD040 (3), MD060 (12) | 0 | ✅ Auto-fixed |
+| .github/copilot-instructions.md | 0 | 9 verified | ⏳ Documented |
+
+**Note:** Remaining link errors verified to exist at correct workspace paths.
+```
 
 ---
 

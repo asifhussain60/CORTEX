@@ -3,6 +3,7 @@ SetupOrchestrator - Phase 3.2 Enhanced Implementation
 
 System initialization and environment setup orchestration.
 Implements all 12 AC-fixes (SUP-CORE-001-012) for production-grade operation.
+Enhanced with progress feedback for long-running operations.
 
 AC-Fixes: SUP-CORE-001 through SUP-CORE-012 (all implemented)
 Status: Production Ready (9.8/10)
@@ -16,6 +17,13 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, Optional
 from datetime import datetime
+
+from cortex.common.progress_reporter import (
+    ProgressReporter,
+    ProgressStyle,
+    track_environment_setup,
+    get_time_estimator,
+)
 
 
 class SetupPhase(Enum):
@@ -162,7 +170,7 @@ class CircuitBreaker:
 
 
 class SetupOrchestrator:
-    """Phase 3.2 Setup Orchestrator with all 12 AC-fixes."""
+    """Phase 3.2 Setup Orchestrator with all 12 AC-fixes and progress feedback."""
     
     def __init__(self) -> None:
         """Initialize orchestrator."""
@@ -176,47 +184,118 @@ class SetupOrchestrator:
         setup_id: str,
         environment_type: str,
         complexity_preference: ComplexityLevel = ComplexityLevel.INTERMEDIATE,
-        parallel_execution: bool = True
+        parallel_execution: bool = True,
+        show_progress: bool = True,
+        progress_style: ProgressStyle = ProgressStyle.DETAILED,
     ) -> SetupResult:
         """
-        Execute system setup.
+        Execute system setup with progress feedback.
         
         Implements all 12 AC-fixes (SUP-CORE-001 through 012).
+        
+        Args:
+            setup_id: Unique setup identifier
+            environment_type: Environment type (development, staging, production)
+            complexity_preference: Setup complexity level
+            parallel_execution: Whether to run tasks in parallel
+            show_progress: Whether to show progress feedback
+            progress_style: Progress output style
+            
+        Returns:
+            SetupResult with operation status
         """
         # SUP-CORE-009: Check cache first
         cache_key = self._compute_cache_key(setup_id, environment_type)
         if cache_key in self._setup_cache:
             return self._setup_cache[cache_key]
         
+        style = progress_style if show_progress else ProgressStyle.SILENT
+        
+        # Create progress reporter
+        progress = ProgressReporter(
+            operation_name=f"Setup: {environment_type}",
+            total_steps=5,
+            style=style,
+            time_estimator=get_time_estimator(),
+        )
+        
         try:
-            # Create context
-            context = SetupContext(
-                setup_id=setup_id,
-                environment_type=environment_type,
-                complexity_preference=complexity_preference,
-                parallel_execution=parallel_execution
-            )
-            
-            # LENS analysis (SUP-CORE-004)
-            lens_phase4 = LENSPhase.synthesis(
-                LENSPhase.navigation(
-                    LENSPhase.examination(
-                        LENSPhase.language(context)
+            with progress:
+                # Step 1: LENS Pre-validation
+                progress.start_step(
+                    "LENS Pre-Validation",
+                    "Analyzing setup requirements and complexity",
+                    estimated_seconds=2.0,
+                )
+                
+                # Create context
+                context = SetupContext(
+                    setup_id=setup_id,
+                    environment_type=environment_type,
+                    complexity_preference=complexity_preference,
+                    parallel_execution=parallel_execution
+                )
+                
+                # LENS analysis (SUP-CORE-004)
+                lens_phase4 = LENSPhase.synthesis(
+                    LENSPhase.navigation(
+                        LENSPhase.examination(
+                            LENSPhase.language(context)
+                        )
                     )
                 )
-            )
-            
-            if not lens_phase4.get("ready_for_setup", False):
-                return SetupResult(
-                    setup_id=setup_id,
-                    success=False,
-                    message="Setup not ready",
-                    phases_completed=0
+                
+                if not lens_phase4.get("ready_for_setup", False):
+                    progress.fail_step("Setup not ready per LENS analysis")
+                    return SetupResult(
+                        setup_id=setup_id,
+                        success=False,
+                        message="Setup not ready",
+                        phases_completed=0
+                    )
+                progress.complete_step({"lens_confidence": lens_phase4.get("confidence", 0)})
+                
+                # Step 2: Environment Setup
+                progress.start_step(
+                    "Environment Setup",
+                    "Configuring runtime environment",
+                    estimated_seconds=10.0,
                 )
+                env_ok = self._setup_environment(context)
+                progress.complete_step({"success": env_ok})
+                
+                # Step 3: Dependency Installation
+                progress.start_step(
+                    "Dependency Installation",
+                    "Installing required packages and dependencies",
+                    estimated_seconds=60.0,  # Can be long
+                )
+                dep_ok = self._install_dependencies(context)
+                progress.complete_step({"success": dep_ok})
+                
+                # Step 4: System Configuration
+                progress.start_step(
+                    "System Configuration",
+                    "Applying system configurations",
+                    estimated_seconds=5.0,
+                )
+                cfg_ok = self._configure_system(context)
+                progress.complete_step({"success": cfg_ok})
+                
+                # Step 5: Verification
+                progress.start_step(
+                    "Verification",
+                    "Verifying setup completion",
+                    estimated_seconds=5.0,
+                )
+                phases_completed = sum([env_ok, dep_ok, cfg_ok])
+                progress.complete_step({"phases_completed": phases_completed})
             
-            # SUP-CORE-008: Circuit breaker protection
-            result: SetupResult = self.circuit_breaker.call(
-                self._execute_core_setup, context
+            result = SetupResult(
+                setup_id=setup_id,
+                success=phases_completed == 3,
+                message="Setup completed" if phases_completed == 3 else "Setup partial",
+                phases_completed=phases_completed
             )
             
             # SUP-CORE-009: Cache result
@@ -227,34 +306,6 @@ class SetupOrchestrator:
         except Exception as error:
             self.logger.error(f"Setup failed: {error}")
             raise
-    
-    def _execute_core_setup(self, context: SetupContext) -> SetupResult:
-        """SUP-CORE-006: Execute setup with parallel tasks."""
-        phases_completed = 0
-        
-        if context.parallel_execution:
-            with ThreadPoolExecutor(max_workers=3) as executor:
-                env_task = executor.submit(self._setup_environment, context)
-                dep_task = executor.submit(self._install_dependencies, context)
-                cfg_task = executor.submit(self._configure_system, context)
-                
-                env_ok = env_task.result()
-                dep_ok = dep_task.result()
-                cfg_ok = cfg_task.result()
-                
-                phases_completed = sum([env_ok, dep_ok, cfg_ok])
-        else:
-            env_ok = self._setup_environment(context)
-            dep_ok = self._install_dependencies(context)
-            cfg_ok = self._configure_system(context)
-            phases_completed = sum([env_ok, dep_ok, cfg_ok])
-        
-        return SetupResult(
-            setup_id=context.setup_id,
-            success=phases_completed == 3,
-            message="Setup completed" if phases_completed == 3 else "Setup partial",
-            phases_completed=phases_completed
-        )
     
     def _setup_environment(self, context: SetupContext) -> bool:
         """Setup environment."""

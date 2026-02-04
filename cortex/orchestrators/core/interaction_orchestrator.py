@@ -30,6 +30,7 @@ from cortex.orchestrators.core.challenge_engine import (
     ChallengeResponse,
     SecurityThreatAssessment,
 )
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 logger = logging.getLogger(__name__)
 
@@ -238,6 +239,7 @@ class InteractionOrchestrator:
         
         return result
     
+    @inject_orchestrator_context
     def execute_turn_with_challenge(
         self,
         user_request: str,

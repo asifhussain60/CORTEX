@@ -49,6 +49,8 @@ from cortex.brain.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason
 )
+from cortex.orchestrators.decorators import inject_orchestrator_context
+from cortex.core.result import Result
 from cortex.core.orchestrator.terminal_events import (
     EventRegistry,
     TerminalEvent,
@@ -549,6 +551,7 @@ class WrappedTDDOrchestrator:
     # INCREMENTAL TDD EXECUTION
     # =========================================================================
 
+    @inject_orchestrator_context
     def execute_incremental(
         self,
         task: Dict[str, Any],

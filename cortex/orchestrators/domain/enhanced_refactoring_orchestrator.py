@@ -38,6 +38,7 @@ from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
+from cortex.orchestrators.decorators import inject_orchestrator_context
 
 logger = logging.getLogger(__name__)
 
@@ -724,6 +725,7 @@ class EnhancedRefactoringOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             "get_circuit_breaker_status": self._get_cb_status,
         })
     
+    @inject_orchestrator_context
     def execute_operation(
         self,
         operation: str,

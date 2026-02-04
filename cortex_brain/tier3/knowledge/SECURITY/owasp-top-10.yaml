@@ -447,7 +447,7 @@ injection:
   common_vulnerabilities:
     - name: "SQL Injection"
       description: "Attacker can read/modify database by injecting SQL"
-      example: "SELECT * FROM users WHERE username = '" + input + "'"
+      example: "SELECT * FROM users WHERE username = '\" + input + \"'\""
     
     - name: "Cross-Site Scripting (XSS)"
       description: "Injecting malicious scripts into web pages"
@@ -459,7 +459,7 @@ injection:
     
     - name: "LDAP Injection"
       description: "Manipulating LDAP queries"
-      example: "(&(uid=" + username + ")(password=" + password + "))"
+      example: "(&(uid=\" + username + \")(password=\" + password + \"))\""
     
     - name: "NoSQL Injection"
       description: "Manipulating NoSQL queries"
