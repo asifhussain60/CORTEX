@@ -10,8 +10,8 @@
 #   orchestrators:
 #     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 19 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator)
-#   Total: 33 orchestrators + 4 LENS analyzers
+#     support: [...]   # 20 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility)
+#   Total: 34 orchestrators + 4 LENS analyzers
 # =========================================================================
 
 version: "2.0"
@@ -724,6 +724,32 @@ orchestrators:
         icon: "🐛"
         stages: 4
         intelligence: ["lens", "knowledge"]
+
+    - name: "OrchestratorVisibility"
+      module: "cortex.orchestrators.support.orchestrator_visibility"
+      class: "OrchestratorVisibility"
+      tier: 3
+      priority: 76
+      dependencies: []
+      capabilities:
+        - visibility_generation
+        - training_wheels
+        - badge_rendering
+        - stage_progress
+        - intelligence_indicators
+      health_check: "health_check"
+      description: "Training wheels visibility system for orchestrator activity (Phase 20.2)"
+      mcp_tools: []
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+      version: "1.0"
+      metadata:
+        icon: "👁️"
+        stages: 1
+        intelligence: []
+        toggle: "CORTEX_ORCHESTRATOR_VISIBILITY"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES

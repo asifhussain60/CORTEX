@@ -49,15 +49,24 @@ from .onboarding_tools import (
 )
 
 # Dashboard Tools v3 (PHASE-21)
-from .dashboard_aggregator_v3_tool import (
-    cortex_aggregate_dashboard_data_v3,
-    cortex_serve_dashboard,
-    cortex_test_dashboard_e2e,
-)
+# TODO: Implement dashboard_aggregator_v3_tool.py
+# from .dashboard_aggregator_v3_tool import (
+#     cortex_aggregate_dashboard_data_v3,
+#     cortex_serve_dashboard,
+#     cortex_test_dashboard_e2e,
+# )
 
 # Vacuum Tools (Markdown Cleanup - CORE-002)
 from .vacuum_tools import (
     cortex_vacuum,
+)
+
+# Educational Tools (Phase 22 - ASK Mode)
+from .cortex_ask import (
+    cortex_ask,
+)
+from .cortex_verify_claim import (
+    cortex_verify_claim,
 )
 
 __all__ = [
@@ -78,11 +87,14 @@ __all__ = [
     "cortex_analyze_config",
     "cortex_analyze_repository_configs",
     # Dashboard Tools v3
-    "cortex_aggregate_dashboard_data_v3",
-    "cortex_serve_dashboard",
-    "cortex_test_dashboard_e2e",
+    # "cortex_aggregate_dashboard_data_v3",  # TODO: Implement
+    # "cortex_serve_dashboard",  # TODO: Implement
+    # "cortex_test_dashboard_e2e",  # TODO: Implement
     # Vacuum Tools
     "cortex_vacuum",
+    # Educational Tools (Phase 22)
+    "cortex_ask",
+    "cortex_verify_claim",
 ]
 
 # MCP Tool Registry for discovery
@@ -164,25 +176,25 @@ MCP_TOOLS = {
         "category": "discovery",
         "features": ["tool_listing", "category_filter"]
     },
-    # Dashboard Tools v3 (PHASE-21: JSON-first SPA)
-    "cortex_aggregate_dashboard_data_v3": {
-        "function": cortex_aggregate_dashboard_data_v3,
-        "description": "Generate dashboard-data.json (v3 schema) for repository intelligence SPA",
-        "category": "dashboard",
-        "features": ["json_generation", "pydantic_validation", "13_tab_schema", "dual_format_ready"]
-    },
-    "cortex_serve_dashboard": {
-        "function": cortex_serve_dashboard,
-        "description": "Serve dashboard SPA via HTTP (Python http.server)",
-        "category": "dashboard",
-        "features": ["http_server", "local_viewing", "background_process"]
-    },
-    "cortex_test_dashboard_e2e": {
-        "function": cortex_test_dashboard_e2e,
-        "description": "Run Playwright E2E tests for dashboard browser validation",
-        "category": "testing",
-        "features": ["playwright", "browser_e2e", "ui_validation", "console_error_detection"]
-    },
+    # Dashboard Tools v3 (PHASE-21: JSON-first SPA) - NOT YET IMPLEMENTED
+    # "cortex_aggregate_dashboard_data_v3": {
+    #     "function": cortex_aggregate_dashboard_data_v3,
+    #     "description": "Generate dashboard-data.json (v3 schema) for repository intelligence SPA",
+    #     "category": "dashboard",
+    #     "features": ["json_generation", "pydantic_validation", "13_tab_schema", "dual_format_ready"]
+    # },
+    # "cortex_serve_dashboard": {
+    #     "function": cortex_serve_dashboard,
+    #     "description": "Serve dashboard SPA via HTTP (Python http.server)",
+    #     "category": "dashboard",
+    #     "features": ["http_server", "local_viewing", "background_process"]
+    # },
+    # "cortex_test_dashboard_e2e": {
+    #     "function": cortex_test_dashboard_e2e,
+    #     "description": "Run Playwright E2E tests for dashboard browser validation",
+    #     "category": "testing",
+    #     "features": ["playwright", "browser_e2e", "ui_validation", "console_error_detection"]
+    # },
     # Vacuum Tool (CORE-002: Markdown cleanup)
     "cortex_vacuum": {
         "category": "governance",
