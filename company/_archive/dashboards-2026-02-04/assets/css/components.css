@@ -9,37 +9,37 @@
 
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-glass);
+    box-shadow: var(--shadow-glass), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
     transition: all var(--transition-smooth);
 }
 
 .glass-card:hover {
     transform: translateY(-2px);
-    background: rgba(77, 140, 255, 0.12);
+    background: rgba(0, 212, 255, 0.08);
     border-color: var(--glass-border-accent);
-    box-shadow: var(--shadow-card-hover);
+    box-shadow: var(--shadow-card-hover), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 .glass-card-static {
     background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-glass);
+    box-shadow: var(--shadow-glass), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .glass-card-accent {
     background: var(--glass-bg-light);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--glass-border-accent);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-glass), var(--shadow-glow);
+    box-shadow: var(--shadow-glass), var(--shadow-glow), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ============================================
@@ -55,6 +55,8 @@
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-md);
     background: var(--glass-bg);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
     color: var(--text-primary);
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
@@ -62,13 +64,14 @@
     cursor: pointer;
     transition: all var(--transition-smooth);
     text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .btn:hover {
     background: var(--glass-bg-light);
     border-color: var(--glass-border-accent);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 212, 255, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 .btn:active {
@@ -177,15 +180,18 @@
     flex-direction: column;
     padding: 1.5rem;
     background: var(--glass-bg-card);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-glass), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
     transition: all var(--transition-smooth);
 }
 
 .metric-card:hover {
     border-color: var(--glass-border-accent);
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--shadow-glow), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
 }
 
 .metric-card__label {

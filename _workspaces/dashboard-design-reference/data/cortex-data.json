@@ -1,0 +1,479 @@
+{
+  "repo": {
+    "slug": "cortex",
+    "display_name": "CORTEX",
+    "owner": "CORTEX Team",
+    "primary_language": "Python",
+    "version": "8.2",
+    "last_analyzed_at": "2026-02-04T14:57:11.239806Z",
+    "repo_url": "https://github.com/cortex-ai/cortex"
+  },
+  "metrics": {
+    "health_score": 87,
+    "risk_score": 13,
+    "loc": 45821,
+    "files": 342,
+    "coverage_pct": 82.0,
+    "test_pass_rate": 98.5,
+    "avg_complexity": 3.2,
+    "technical_debt_days": 145
+  },
+  "overview": {
+    "summary": "Cognitive Real-Time Execution System - AI orchestration platform for enterprise applications",
+    "business_summary": "Enterprise-grade Python system providing advanced capabilities for production environments. Actively maintained with strong test coverage and security focus.",
+    "total_files": 342,
+    "total_lines": 45821,
+    "last_commit": "2 hours ago",
+    "contributors": 12,
+    "languages": [
+      {
+        "name": "Python",
+        "percentage": 65
+      },
+      {
+        "name": "YAML",
+        "percentage": 15
+      },
+      {
+        "name": "JSON",
+        "percentage": 12
+      },
+      {
+        "name": "Markdown",
+        "percentage": 8
+      }
+    ],
+    "recent_activity": [
+      {
+        "date": "2026-02-04",
+        "commits": 12
+      },
+      {
+        "date": "2026-02-03",
+        "commits": 8
+      },
+      {
+        "date": "2026-02-02",
+        "commits": 15
+      },
+      {
+        "date": "2026-02-01",
+        "commits": 7
+      },
+      {
+        "date": "2026-01-31",
+        "commits": 10
+      }
+    ]
+  },
+  "executive_summary": {
+    "key_findings": [
+      "Overall health score is excellent at 87/100",
+      "Test coverage at 82% exceeds industry standards (75%)",
+      "No critical vulnerabilities identified",
+      "Technical debt is manageable at 145 days of effort"
+    ],
+    "risks": [
+      {
+        "level": "low",
+        "title": "Dependency version drift",
+        "mitigation": "Automated update checks every 2 weeks"
+      },
+      {
+        "level": "medium",
+        "title": "High cyclomatic complexity in core",
+        "mitigation": "Scheduled for refactoring Q1 2026"
+      }
+    ],
+    "recommendations": [
+      "Increase integration test coverage to 90%",
+      "Implement continuous performance monitoring",
+      "Plan refactoring sprint for high-complexity modules"
+    ]
+  },
+  "domain_model": {
+    "entities": [
+      {
+        "name": "Orchestrator",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "config"
+        ],
+        "relationships": [
+          "manages_agents",
+          "executes_tasks"
+        ],
+        "description": "Core execution unit for AI task orchestration"
+      },
+      {
+        "name": "Agent",
+        "fields": [
+          "id",
+          "name",
+          "capability",
+          "state",
+          "metrics"
+        ],
+        "relationships": [
+          "belongs_to_orchestrator",
+          "executes_in_tasks"
+        ],
+        "description": "Specialized compute node for domain-specific operations"
+      },
+      {
+        "name": "Task",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "result"
+        ],
+        "relationships": [
+          "owned_by_orchestrator",
+          "assigned_to_agents"
+        ],
+        "description": "Unit of work assigned to agents"
+      }
+    ],
+    "patterns": [
+      "Event-Driven",
+      "Command-Query Separation",
+      "Actor Model"
+    ],
+    "diagram_type": "entity-relationship"
+  },
+  "architecture": {
+    "layers": [
+      {
+        "name": "Presentation",
+        "components": [
+          "API Gateway",
+          "Dashboard",
+          "CLI"
+        ],
+        "technologies": [
+          "REST",
+          "WebSocket",
+          "gRPC"
+        ]
+      },
+      {
+        "name": "Business Logic",
+        "components": [
+          "Orchestrator",
+          "Pipeline Manager",
+          "State Manager"
+        ],
+        "technologies": [
+          "SOLID Principles",
+          "Design Patterns",
+          "Domain-Driven Design"
+        ]
+      },
+      {
+        "name": "Data Access",
+        "components": [
+          "Repository Pattern",
+          "Query Engine",
+          "Cache Layer"
+        ],
+        "technologies": [
+          "SQLAlchemy",
+          "Redis",
+          "PostgreSQL"
+        ]
+      },
+      {
+        "name": "Infrastructure",
+        "components": [
+          "Kubernetes",
+          "Message Queue",
+          "Observability"
+        ],
+        "technologies": [
+          "Docker",
+          "RabbitMQ",
+          "Prometheus"
+        ]
+      }
+    ],
+    "diagram_type": "layered-architecture"
+  },
+  "use_cases": [
+    {
+      "title": "Architecture Analysis",
+      "description": "Analyze codebase structure, design patterns, and architectural decisions",
+      "category": "analysis",
+      "persona": "architect",
+      "stakeholders": [
+        "Lead Architects",
+        "Tech Leads"
+      ],
+      "value": "Identify patterns, bottlenecks, and improvement opportunities"
+    },
+    {
+      "title": "Security Assessment",
+      "description": "Identify and prioritize security vulnerabilities and compliance issues",
+      "category": "security",
+      "persona": "security-lead",
+      "stakeholders": [
+        "Security Team",
+        "Compliance Officers"
+      ],
+      "value": "Reduce risk exposure and ensure regulatory compliance"
+    },
+    {
+      "title": "Quality Metrics",
+      "description": "Track code quality, test coverage, and technical debt metrics",
+      "category": "quality",
+      "persona": "tech-lead",
+      "stakeholders": [
+        "Engineering Managers",
+        "QA Team"
+      ],
+      "value": "Maintain and improve code quality standards"
+    },
+    {
+      "title": "Performance Optimization",
+      "description": "Identify performance bottlenecks and optimization opportunities",
+      "category": "performance",
+      "persona": "performance-engineer",
+      "stakeholders": [
+        "DevOps Team",
+        "Platform Engineers"
+      ],
+      "value": "Improve system throughput and reduce latency"
+    },
+    {
+      "title": "Dependency Management",
+      "description": "Track dependencies, versions, and security updates",
+      "category": "maintenance",
+      "persona": "platform-engineer",
+      "stakeholders": [
+        "Release Engineers",
+        "Infrastructure Team"
+      ],
+      "value": "Reduce dependency-related incidents and upgrades"
+    }
+  ],
+  "dependencies": {
+    "internal": {
+      "core": [
+        {
+          "name": "cortex-core",
+          "version": "1.2.3",
+          "type": "library"
+        },
+        {
+          "name": "cortex-lens",
+          "version": "0.8.1",
+          "type": "library"
+        }
+      ],
+      "utilities": [
+        {
+          "name": "cortex-utils",
+          "version": "0.5.2",
+          "type": "library"
+        }
+      ]
+    },
+    "external": {
+      "web": [
+        {
+          "name": "fastapi",
+          "version": "0.104.1",
+          "type": "framework",
+          "license": "MIT"
+        },
+        {
+          "name": "pydantic",
+          "version": "2.5.0",
+          "type": "library",
+          "license": "MIT"
+        }
+      ],
+      "data": [
+        {
+          "name": "sqlalchemy",
+          "version": "2.0.23",
+          "type": "orm",
+          "license": "MIT"
+        },
+        {
+          "name": "redis",
+          "version": "5.0.1",
+          "type": "cache",
+          "license": "MIT"
+        }
+      ],
+      "testing": [
+        {
+          "name": "pytest",
+          "version": "7.4.3",
+          "type": "testing",
+          "license": "MIT"
+        },
+        {
+          "name": "pytest-cov",
+          "version": "4.1.0",
+          "type": "testing",
+          "license": "MIT"
+        }
+      ]
+    },
+    "updates_available": 4,
+    "security_updates": 1
+  },
+  "quality": {
+    "issues": [
+      {
+        "type": "Long Method",
+        "location": "core/orchestrator.py:245",
+        "severity": "medium",
+        "count": 3,
+        "lines": 78,
+        "description": "Methods exceeding 50 lines should be refactored"
+      },
+      {
+        "type": "Duplicate Code",
+        "location": "lens/analyzers.py:120-180",
+        "severity": "low",
+        "count": 2,
+        "lines": 45,
+        "description": "Extract common logic to shared utilities"
+      },
+      {
+        "type": "High Complexity",
+        "location": "api/routes.py:450",
+        "severity": "medium",
+        "count": 1,
+        "cc": 8,
+        "description": "Cyclomatic complexity exceeds 5"
+      }
+    ],
+    "metrics": {
+      "cyclomatic_complexity": 3.2,
+      "maintainability_index": 78,
+      "technical_debt_ratio": 5.2,
+      "code_duplication": 2.1
+    },
+    "test_metrics": {
+      "total_tests": 285,
+      "pass_rate": 98.5,
+      "coverage": 82.0,
+      "execution_time_ms": 4230
+    }
+  },
+  "security": {
+    "total_count": 2,
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 1,
+    "vulnerabilities": [
+      {
+        "id": "GHSA-2024-001",
+        "title": "Potential SQL Injection in Query Builder",
+        "severity": "medium",
+        "status": "open",
+        "cwe": "CWE-89",
+        "cvss_score": 6.5,
+        "location": "api/query_builder.py:120-145",
+        "description": "User input not properly sanitized in SQL query construction",
+        "recommendation": "Use parameterized queries exclusively"
+      },
+      {
+        "id": "CVE-2024-12345",
+        "title": "Dependency Vulnerability in FastAPI",
+        "severity": "low",
+        "status": "resolved",
+        "cwe": "CWE-400",
+        "cvss_score": 3.2,
+        "affected_version": "0.95.0",
+        "patched_version": "0.104.1",
+        "description": "Rate limiting bypass in dependency"
+      }
+    ],
+    "last_scan": "2026-02-04T14:57:11.239828",
+    "scan_frequency": "daily"
+  },
+  "testing": {
+    "total_tests": 285,
+    "pass_rate": 98.5,
+    "coverage_pct": 82.0,
+    "execution_time_ms": 4230,
+    "test_types": {
+      "unit": {
+        "count": 180,
+        "pass_rate": 99.2
+      },
+      "integration": {
+        "count": 65,
+        "pass_rate": 96.9
+      },
+      "e2e": {
+        "count": 40,
+        "pass_rate": 97.5
+      }
+    },
+    "recent_runs": [
+      {
+        "timestamp": "2026-02-04T13:57:11.239830",
+        "status": "pass",
+        "duration": 4230
+      },
+      {
+        "timestamp": "2026-02-04T12:57:11.239835",
+        "status": "pass",
+        "duration": 4156
+      },
+      {
+        "timestamp": "2026-02-04T11:57:11.239836",
+        "status": "pass",
+        "duration": 4412
+      }
+    ]
+  },
+  "refactoring": {
+    "candidates": [
+      {
+        "title": "Extract Authentication Logic",
+        "priority": "high",
+        "effort_days": 5,
+        "impact": "Improves security and testability",
+        "files": [
+          "api/auth.py",
+          "api/middleware.py"
+        ],
+        "description": "Move auth logic to dedicated module with clear interface"
+      },
+      {
+        "title": "Consolidate Query Builders",
+        "priority": "medium",
+        "effort_days": 3,
+        "impact": "Reduces code duplication by 12%",
+        "files": [
+          "db/queries.py",
+          "db/filters.py"
+        ],
+        "description": "Merge similar query builder implementations"
+      },
+      {
+        "title": "Improve Error Handling",
+        "priority": "medium",
+        "effort_days": 4,
+        "impact": "Better error messages for users",
+        "files": [
+          "api/exceptions.py",
+          "api/handlers.py"
+        ],
+        "description": "Standardize error responses across all endpoints"
+      }
+    ]
+  }
+}

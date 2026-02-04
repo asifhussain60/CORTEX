@@ -40,26 +40,26 @@
     --margin-desktop: clamp(1rem, 2vw, 2rem);
     
     /* Primary Background Colors */
-    --color-dark-bg: #0a1428;
-    --bg-primary: #0a1428;
-    --bg-secondary: #1a2a4a;
+    --color-dark-bg: #0a0e27;
+    --bg-primary: #0a0e27;
+    --bg-secondary: #1a1f3a;
     --bg-tertiary: #0d1a30;
     
     /* Glass Effect Colors */
-    --glass-bg: rgba(10, 20, 40, 0.7);
-    --glass-bg-light: rgba(77, 140, 255, 0.1);
-    --glass-bg-dark: rgba(5, 10, 20, 0.85);
-    --glass-bg-card: rgba(15, 25, 45, 0.8);
+    --glass-bg: rgba(26, 31, 58, 0.7);
+    --glass-bg-light: rgba(77, 140, 255, 0.12);
+    --glass-bg-dark: rgba(10, 14, 39, 0.85);
+    --glass-bg-card: rgba(26, 31, 58, 0.75);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-border-accent: rgba(77, 140, 255, 0.3);
-    --glass-border-highlight: rgba(77, 140, 255, 0.5);
+    --glass-border-accent: rgba(0, 212, 255, 0.3);
+    --glass-border-highlight: rgba(0, 212, 255, 0.5);
     
-    /* Accent Colors - CORTEX Blue */
-    --color-primary: #0d6efd;
-    --color-primary-light: #4d8cff;
-    --color-primary-dark: #0a58ca;
-    --accent-primary: #4d8cff;
-    --accent-secondary: #7fb3ff;
+    /* Accent Colors - CORTEX Cyan/Blue */
+    --color-primary: #00d4ff;
+    --color-primary-light: #4de1ff;
+    --color-primary-dark: #00a8cc;
+    --accent-primary: #00d4ff;
+    --accent-secondary: #7b61ff;
     --accent-tertiary: #a3c9ff;
     
     /* Text Colors */
@@ -95,13 +95,13 @@
     --severity-info-bg: rgba(99, 102, 241, 0.15);
     
     /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
-    --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.5);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.2);
-    --shadow-glow: 0 0 30px rgba(77, 140, 255, 0.15);
-    --shadow-card-hover: 0 12px 40px rgba(77, 140, 255, 0.25);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.6);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.37);
+    --shadow-glow: 0 0 30px rgba(0, 212, 255, 0.3);
+    --shadow-card-hover: 0 12px 40px rgba(0, 212, 255, 0.25);
     
     /* Border Radius */
     --radius-sm: 6px;

@@ -1,0 +1,466 @@
+# ============================================================================
+# PHASE-23: STATIC DASHBOARD GENERATOR
+# ============================================================================
+# Purpose: Generate self-contained dashboard.html per repository
+# Theme: Dark Blue Glassmorphism (13+ tabs)
+# Architecture: Single HTML file with embedded JSON, inline CSS/JS
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-04"
+status: PLANNING
+priority: HIGH
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+references:
+  design_system: "_workspaces/dashboard-design-reference/design-system.md"
+  phase_18_spec: "_workspaces/cortex-plan/PHASE-18-ENTERPRISE-DASHBOARD-SYSTEM.yaml"
+  
+  key_commits:
+    glassmorphism_theme: "3144a4a4a"
+    dashboard_theme_template: "fc2194696"
+    eight_tab_dashboard: "615805c9b"
+    gpt_enhanced: "eeb039277"
+    final_structure: "b6d7d2b09"
+    
+  source_files:
+    theme_template: "company/dashboards/core/dashboard_theme.py"
+    generator: "company/dashboards/generate_modern_kashkole.py"
+    existing_dashboards: "company/dashboards/repos/{repo}/index.html"
+
+# ============================================================================
+# OVERVIEW
+# ============================================================================
+overview:
+  goal: |
+    Create a Python-based static dashboard generator that produces
+    self-contained HTML files for any repository. Each dashboard
+    embeds all data, styles, and scripts inline for file:// compatibility.
+    
+  deliverables:
+    - "company/dashboards/core/static_dashboard_generator.py"
+    - "company/dashboards/repos/{repo}/index.html (per repo)"
+    - "company/dashboards/shared/dashboard_template.html (optional Jinja2)"
+    
+  architecture: |
+    Self-Contained HTML (Approved)
+    company/dashboards/repos/{repo}/index.html
+    ├── Embedded JSON data (no external fetch)
+    ├── Inline CSS (glassmorphism theme)
+    ├── Inline JS (tab navigation, lazy charts)
+    └── Works with file:// protocol ✅
+
+# ============================================================================
+# DESIGN SYSTEM
+# ============================================================================
+design_system:
+  theme: "Dark Blue Glassmorphism"
+  
+  colors:
+    primary_bg: "#0a1428"
+    secondary_bg: "#1a2a4a"
+    accent: "#4d8cff"
+    accent_light: "#7fb3ff"
+    text_primary: "#ffffff"
+    text_secondary: "#a0b4d4"
+    success: "#22c55e"
+    warning: "#f59e0b"
+    danger: "#ef4444"
+    
+  glass_card:
+    background: "rgba(26, 42, 74, 0.6)"
+    border: "1px solid rgba(77, 140, 255, 0.3)"
+    backdrop_filter: "blur(10px)"
+    border_radius: "12px"
+    
+  typography:
+    font_family: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+    header_weight: 700
+    body_weight: 400
+    
+  tabs:
+    horizontal: 13  # Main navigation
+    vertical: "per-section sub-navigation"
+
+# ============================================================================
+# TAB STRUCTURE (13+ Tabs)
+# ============================================================================
+tab_structure:
+  main_tabs:
+    - id: "overview"
+      label: "Overview"
+      icon: "📊"
+      sub_tabs:
+        - "Executive Summary"
+        - "Key Metrics"
+        - "Health Score"
+        
+    - id: "architecture"
+      label: "Architecture"
+      icon: "🏗️"
+      sub_tabs:
+        - "Structure Treemap"
+        - "Dependency Graph"
+        - "Module Breakdown"
+        
+    - id: "quality"
+      label: "Quality"
+      icon: "✅"
+      sub_tabs:
+        - "Code Metrics"
+        - "Complexity Analysis"
+        - "Technical Debt"
+        
+    - id: "vulnerabilities"
+      label: "Vulnerabilities"
+      icon: "🛡️"
+      sub_tabs:
+        - "Security Scan"
+        - "CVE Tracking"
+        - "Risk Matrix"
+        
+    - id: "security"
+      label: "Security"
+      icon: "🔒"
+      sub_tabs:
+        - "OWASP Compliance"
+        - "Secret Detection"
+        - "Access Patterns"
+        
+    - id: "dependencies"
+      label: "Dependencies"
+      icon: "📦"
+      sub_tabs:
+        - "Package Analysis"
+        - "Version Status"
+        - "License Compliance"
+        
+    - id: "testing"
+      label: "Testing"
+      icon: "🧪"
+      sub_tabs:
+        - "Coverage Report"
+        - "Test Pyramid"
+        - "Mutation Testing"
+        
+    - id: "patterns"
+      label: "Patterns"
+      icon: "🎨"
+      sub_tabs:
+        - "Design Patterns"
+        - "Anti-Patterns"
+        - "Refactoring Candidates"
+        
+    - id: "vendors"
+      label: "Vendors"
+      icon: "🏢"
+      sub_tabs:
+        - "Third-Party Analysis"
+        - "SDK Usage"
+        - "Integration Points"
+        
+    - id: "usecases"
+      label: "Use Cases"
+      icon: "📋"
+      sub_tabs:
+        - "Feature Mapping"
+        - "User Journeys"
+        - "API Endpoints"
+        
+    - id: "timeline"
+      label: "Timeline"
+      icon: "📅"
+      sub_tabs:
+        - "Commit History"
+        - "Release Notes"
+        - "Burndown"
+        
+    - id: "impact"
+      label: "Impact"
+      icon: "💥"
+      sub_tabs:
+        - "Change Analysis"
+        - "Blast Radius"
+        - "Risk Assessment"
+        
+    - id: "database"
+      label: "Database"
+      icon: "🗄️"
+      sub_tabs:
+        - "Schema Analysis"
+        - "Query Patterns"
+        - "Performance"
+
+# ============================================================================
+# SIZE TIER SYSTEM
+# ============================================================================
+size_tiers:
+  small:
+    threshold: "<100 files"
+    rendering: "Immediate (all charts)"
+    features: "Full detail"
+    
+  medium:
+    threshold: "100-1000 files"
+    rendering: "Lazy load tabs"
+    features: "Full with pagination"
+    
+  large:
+    threshold: "1000-10000 files"
+    rendering: "Progressive disclosure"
+    features: "Aggregated views, drill-down"
+    
+  enterprise:
+    threshold: ">10000 files"
+    rendering: "Virtual scrolling"
+    features: "Summary views, sampling"
+
+# ============================================================================
+# VISUALIZATION LIBRARIES
+# ============================================================================
+visualization:
+  primary: "D3.js v7"
+  charts:
+    - library: "Chart.js v4"
+      purpose: "Bar, Line, Pie, Doughnut"
+      cdn: "https://cdn.jsdelivr.net/npm/chart.js"
+      
+    - library: "D3.js v7"
+      purpose: "Treemaps, Force Graphs, Hierarchies"
+      cdn: "https://cdn.jsdelivr.net/npm/d3@7"
+      
+    - library: "ECharts"
+      purpose: "Interactive complex charts (optional)"
+      cdn: "https://cdn.jsdelivr.net/npm/echarts@5"
+      
+  strategy: |
+    INLINE all libraries to ensure file:// compatibility.
+    Use minified versions to reduce file size.
+    Lazy-load chart initialization per tab.
+
+# ============================================================================
+# DATA EMBEDDING STRATEGY
+# ============================================================================
+data_embedding:
+  format: "JSON"
+  location: "<script type='application/json' id='dashboard-data'>"
+  
+  schema:
+    metadata:
+      - repo_name
+      - generated_at
+      - generator_version
+      - size_tier
+      
+    sections:
+      overview:
+        - health_score
+        - file_count
+        - loc_total
+        - test_coverage
+        
+      architecture:
+        - structure_tree
+        - dependency_graph
+        - module_stats
+        
+      quality:
+        - complexity_metrics
+        - code_smells
+        - duplication_ratio
+        
+      vulnerabilities:
+        - cve_list
+        - severity_counts
+        - risk_score
+        
+      # ... additional sections as needed
+
+# ============================================================================
+# GENERATOR IMPLEMENTATION
+# ============================================================================
+generator:
+  class_name: "StaticDashboardGenerator"
+  module: "company/dashboards/core/static_dashboard_generator.py"
+  
+  methods:
+    - name: "generate"
+      params:
+        - "repo_path: Path"
+        - "output_path: Path"
+        - "size_tier: str = 'auto'"
+      returns: "Path"
+      
+    - name: "collect_data"
+      params:
+        - "repo_path: Path"
+      returns: "DashboardData"
+      
+    - name: "render_html"
+      params:
+        - "data: DashboardData"
+        - "template: str"
+      returns: "str"
+      
+    - name: "embed_assets"
+      params:
+        - "html: str"
+        - "css: str"
+        - "js: str"
+      returns: "str"
+      
+  dependencies:
+    - "pathlib"
+    - "json"
+    - "jinja2 (optional)"
+    - "company.dashboards.core.dashboard_theme"
+
+# ============================================================================
+# HTML TEMPLATE STRUCTURE
+# ============================================================================
+html_template:
+  structure: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ repo_name }} Dashboard</title>
+        <style>
+            /* INLINE: Glassmorphism CSS from design-system.md */
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>{{ repo_name }}</h1>
+            <span class="health-badge {{ health_class }}">{{ health_score }}%</span>
+        </header>
+        
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            {% for tab in tabs %}
+            <button class="tab-btn" data-tab="{{ tab.id }}">
+                {{ tab.icon }} {{ tab.label }}
+            </button>
+            {% endfor %}
+        </nav>
+        
+        <!-- Tab Content -->
+        <main class="tab-content">
+            {% for tab in tabs %}
+            <section id="{{ tab.id }}" class="tab-panel">
+                <!-- Sub-tab content -->
+            </section>
+            {% endfor %}
+        </main>
+        
+        <!-- Embedded Data -->
+        <script type="application/json" id="dashboard-data">
+            {{ data | tojson }}
+        </script>
+        
+        <!-- Inline JavaScript -->
+        <script>
+            /* INLINE: Tab navigation, chart initialization */
+        </script>
+    </body>
+    </html>
+
+# ============================================================================
+# IMPLEMENTATION PHASES
+# ============================================================================
+phases:
+  phase_1:
+    name: "Foundation"
+    duration: "1 day"
+    tasks:
+      - "Create StaticDashboardGenerator class skeleton"
+      - "Port glassmorphism CSS from design-system.md"
+      - "Implement basic tab navigation JS"
+      - "Create HTML template with Jinja2"
+      
+  phase_2:
+    name: "Data Collection"
+    duration: "2 days"
+    tasks:
+      - "Implement collect_data() for each section"
+      - "Define DashboardData dataclass/schema"
+      - "Add size tier detection logic"
+      - "Create JSON embedding mechanism"
+      
+  phase_3:
+    name: "Visualization"
+    duration: "2 days"
+    tasks:
+      - "Inline D3.js for treemaps"
+      - "Inline Chart.js for basic charts"
+      - "Implement lazy chart initialization"
+      - "Add responsive chart containers"
+      
+  phase_4:
+    name: "Tab Content"
+    duration: "3 days"
+    tasks:
+      - "Implement all 13 tab sections"
+      - "Add vertical sub-tab navigation"
+      - "Create reusable metric card components"
+      - "Add table rendering with sorting"
+      
+  phase_5:
+    name: "Polish & Testing"
+    duration: "2 days"
+    tasks:
+      - "Test with file:// protocol"
+      - "Verify all size tiers render correctly"
+      - "Optimize embedded asset size"
+      - "Add generation timestamp and metadata"
+
+# ============================================================================
+# QUALITY GATES
+# ============================================================================
+quality_gates:
+  file_size:
+    target: "<2MB per dashboard"
+    warning: ">5MB"
+    
+  render_time:
+    target: "<2s initial render"
+    warning: ">5s"
+    
+  offline_compatibility:
+    requirement: "file:// protocol must work"
+    test: "Open index.html directly in browser"
+    
+  browser_support:
+    - "Chrome 90+"
+    - "Firefox 90+"
+    - "Safari 14+"
+    - "Edge 90+"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functional:
+    - "All 13 tabs render with data"
+    - "Sub-tabs navigate correctly"
+    - "Charts display without external fetches"
+    - "Works offline with file:// protocol"
+    
+  performance:
+    - "Initial render <2 seconds"
+    - "Tab switch <500ms"
+    - "File size <2MB"
+    
+  quality:
+    - "No console errors"
+    - "Responsive on mobile"
+    - "Accessible (keyboard navigation)"
+    
+  integration:
+    - "Generator can be called from CLI"
+    - "Integrates with existing company/dashboards/ structure"
+    - "Supports all current repositories (cortex, ksessions, kashkole)"
