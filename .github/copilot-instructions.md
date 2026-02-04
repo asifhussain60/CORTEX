@@ -241,6 +241,8 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
+| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
+| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
 
 ---
 

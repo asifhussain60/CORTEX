@@ -65,6 +65,8 @@
 | `/design {question}` | PRE-FLIGHT → DESIGN (with challenge) |
 | `/check-env` | PRE-FLIGHT only (explicit environment check) |
 | `/vacuum` | EXEC → Cleanup markdown sprawl (delegates to vacuum agent) |
+| `/debug {path}` | EXEC → Debug orchestrator (inject → capture → analyze → fix-plan → cleanup) |
+| `/debug-cleanup` | EXEC → Remove all CORTEX_DEBUG markers from codebase |
 | `proceed` | After AUDIT → EXEC recommendations |
 
 ---
@@ -760,6 +762,112 @@ enhancements:
 | `cortex_detect_duplicates` | CORE-035 + coherence validation |
 | `cortex_ast_analyze` | Structure |
 | `cortex_manage_todo` | **NEW:** Todo list CRUD via MCP |
+| `cortex_debug_inject` | **DEBUG:** Inject CORTEX_DEBUG markers into source files |
+| `cortex_debug_cleanup` | **DEBUG:** Remove CORTEX_DEBUG markers (production-ready cleanup) |
+| `cortex_debug_status` | **DEBUG:** Check active debug sessions and markers |
+
+---
+
+## 🔬 DEBUG ORCHESTRATOR
+
+**Purpose:** Universal multi-stack debugging capability that floods code with traceable markers.
+
+### Debug Phases
+
+```
+INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
+   │        │         │          │          │
+   │        │         │          │          └── Remove markers, restore production
+   │        │         │          └── Generate fix recommendations
+   │        │         └── Pattern detection (race conditions, timing, dependencies)
+   │        └── Playwright/runtime log capture
+   └── Insert CORTEX_DEBUG_<SESSION> markers
+```
+
+### Marker Format
+
+```
+[CORTEX_DEBUG_<SESSION>:<PHASE>:<FILE>:<LINE>] <message>
+```
+
+- **SESSION:** 8-char UUID (grep-able, unique per debug run)
+- **PHASE:** INIT, ENTRY, EXIT, ASYNC, DOM, EVENT, ERROR
+- **FILE:** Source filename (no path)
+- **LINE:** Line number
+
+### Supported Technology Stacks
+
+| Stack | Adapter | Injection Points |
+|-------|---------|------------------|
+| **JavaScript/TypeScript** | JavaScriptAdapter | Functions, async/await, DOM queries, events |
+| **React** | ReactAdapter | Components, hooks, effects, state changes |
+| **Angular** | AngularAdapter | Components, services, lifecycle hooks, RxJS |
+| **Vue** | VueAdapter | Components, computed, watchers, lifecycle |
+| **Python** | PythonAdapter | Functions, classes, decorators, async |
+| **Django** | DjangoAdapter | Views, models, middleware, signals |
+| **Flask/FastAPI** | FlaskAdapter | Routes, middleware, request handlers |
+| **C#/.NET** | CSharpAdapter | Methods, async, events, constructors |
+| **ASP.NET** | AspNetAdapter | Controllers, middleware, filters, Razor |
+
+### Debug Commands
+
+| Command | Action |
+|---------|--------|
+| `/debug {path}` | Full debug cycle: inject → capture → analyze → fix-plan |
+| `/debug-inject {path}` | Inject markers only |
+| `/debug-cleanup` | Remove all CORTEX_DEBUG markers |
+| `/debug-status` | Show active sessions and marker counts |
+
+### Issue Detection Patterns
+
+| Pattern | Detection |
+|---------|-----------|
+| **Race Condition** | Multiple async operations without proper sequencing |
+| **Missing Dependency** | Referenced modules not loaded |
+| **DOM Mismatch** | Element queries returning null |
+| **Async Timing** | Operations completing in unexpected order |
+| **Script Load Order** | Dependencies loading after consumers |
+| **Resource Not Found** | 404s for scripts, styles, data |
+
+### Example Debug Session
+
+```bash
+# Full debug cycle
+/debug company/dashboards/spa
+
+# Output:
+## 🔬 Debug Session: abc12345
+### Phase: INJECT
+- Injected 47 markers across 8 files
+- Stacks detected: JavaScript, HTML
+
+### Phase: CAPTURE
+- Captured 312 console entries
+- Filtered 89 noise entries (Grammarly, etc.)
+
+### Phase: ANALYZE
+**Issues Found:**
+1. ⚠️ RACE CONDITION: DataStore.loadAll() called before JSONDataAdapter registered
+2. ⚠️ MISSING DEPENDENCY: JSONDataAdapter.js not in script load order
+3. ⚠️ ASYNC TIMING: renderDashboard() fires before data fetch completes
+
+### Phase: FIX-PLAN
+| Priority | Issue | Fix |
+|----------|-------|-----|
+| P0 | Missing JSONDataAdapter.js | Add script tag before main.js |
+| P0 | Race condition | Add readiness gate in DataStore |
+| P1 | Async timing | Await data load in render pipeline |
+
+**Cleanup command:** `/debug-cleanup` (removes all 47 markers)
+```
+
+### Safety Guarantees
+
+- **Unique markers:** `CORTEX_DEBUG_` prefix is grep-able and unique
+- **Backup preservation:** Original files backed up before injection
+- **Surgical cleanup:** Only removes CORTEX markers, preserves all other code
+- **Verification pass:** Post-cleanup verification ensures no orphaned markers
+- **Dry-run support:** Preview changes before applying
 
 ---
 
