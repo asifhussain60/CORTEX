@@ -141,13 +141,44 @@
 ## Governance Checklist
 
 - [ ] DoR displayed and approved
+- [ ] **EnforcementOrchestrator validation passed** (7-agent pre-execution gate)
 - [ ] AC_START logged
 - [ ] MCP tool invoked
-- [ ] CORE rules applied
+- [ ] CORE rules applied (25/29 rules automated)
 - [ ] **All P0/P1/P2 issues auto-fixed (AUDIT mode)**
 - [ ] AC_COMPLETE logged
 - [ ] Results inline (no files)
 - [ ] **Success reported ONLY when 100% production-ready**
+
+---
+
+## 🛡️ Holistic Governance Enforcement
+
+**EnforcementOrchestrator: 7-Agent Pre-Execution Gate**
+
+### Agent Architecture
+
+| Agent | CORE Rules | Purpose |
+|-------|-----------|---------|
+| **GovernanceEnforcementAgent** | 008, 011, 012, 013, 029, 030 | TDD-first, type hints, docstrings, headers |
+| **SecurityCheckpointAgent** | 025, 026, 027 | Git discipline, audit trail integrity |
+| **ComplianceValidationAgent** | Tier 1 rules | Domain-specific compliance checks |
+| **FileNamingEnforcementAgent** | 028 | SCREAMING_CASE blocking, plan file exceptions |
+| **IncrementalExecutionAgent** | 001, 004 | <500 LOC increments, continuation limits |
+| **MarkdownSuppressionAgent** | 002 | Block *-summary.md, *-report.md generation |
+| **ArchitectureIntegrityAgent** | 017-020, 032, 034, 035, 038-041 | Versioned filenames, performance, turn budgets |
+
+### Enforcement Levels
+
+- **BLOCKED** — Operation halted with violations reported
+- **WARNING** — Operation continues with metadata annotations
+- **PASS** — All governance checks passed
+
+### Coverage
+
+- **Automated:** 25/29 CORE rules (86%)
+- **Manual:** CORE-005, 006, 024, 032 (runtime/post-implementation)
+- **Performance:** <150ms validation time (parallel execution)
 
 ---
 

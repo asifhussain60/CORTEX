@@ -42,6 +42,7 @@
 | **Audit Trail Integrity** | **governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering** |
 | Architectural Coherence | wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents consistency |
 | Orchestrator Wiring | 28 orchestrators in wiring.yaml |
+| **Governance Enforcement** | **7-agent system active (EnforcementOrchestrator)** |
 | MCP Production Gate | @mcp_tool decorators |
 | Intent Router | 5-layer consistency |
 | Governance | 4-layer defense |

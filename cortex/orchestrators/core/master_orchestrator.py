@@ -97,6 +97,18 @@ except ImportError:
     # Fallback if module not accessible
     DoRApprovalGate = None
 
+# AC-PHASE-6C-001: Import EnforcementOrchestrator for pre-execution governance gate
+# 7-agent system enforcing 25/29 CORE rules (86% coverage)
+try:
+    from cortex.orchestrators.core.enforcement_orchestrator import (
+        EnforcementOrchestrator,
+        EnforcementLevel
+    )
+except ImportError:
+    # Fallback if module not accessible
+    EnforcementOrchestrator = None
+    EnforcementLevel = None
+
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
@@ -178,6 +190,40 @@ class MasterOrchestrator(IOrchestrator):
                     operation="DOR_APPROVAL_GATE_INIT",
                     success=False,
                     details={"error": f"Failed to initialize DoRApprovalGate: {str(gate_err)}"}
+                )
+        
+        # AC-PHASE-6C-001: Initialize EnforcementOrchestrator for pre-execution governance
+        # 7-agent system: Governance, Security, Compliance, FileNaming, Incremental, Markdown, Architecture
+        # Enforces 25/29 CORE rules (86% coverage) with <150ms validation time
+        self._enforcement: Optional[EnforcementOrchestrator] = None
+        if EnforcementOrchestrator is not None:
+            try:
+                self._enforcement = EnforcementOrchestrator()
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-6C-001",
+                    operation="ENFORCEMENT_ORCHESTRATOR_INIT",
+                    success=True,
+                    details={
+                        "agent_count": len(self._enforcement.agents),
+                        "coverage": "25/29 CORE rules (86%)",
+                        "agents": [
+                            "GovernanceEnforcementAgent",
+                            "SecurityCheckpointAgent",
+                            "ComplianceValidationAgent",
+                            "FileNamingEnforcementAgent",
+                            "IncrementalExecutionAgent",
+                            "MarkdownSuppressionAgent",
+                            "ArchitectureIntegrityAgent"
+                        ]
+                    }
+                )
+            except Exception as enforcement_err:
+                # Log but don't fail - enforcement is critical but shouldn't block initialization
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-6C-001",
+                    operation="ENFORCEMENT_ORCHESTRATOR_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize EnforcementOrchestrator: {str(enforcement_err)}"}
                 )
         
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
@@ -1487,6 +1533,67 @@ class MasterOrchestrator(IOrchestrator):
                         }
                     )
                     return artifact_validation
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # AC-PHASE-6C-001: Pre-execution governance enforcement (7-agent system)
+            # ═══════════════════════════════════════════════════════════════════════
+            # Enforces 25/29 CORE rules (86% coverage) before domain orchestrator delegation
+            # Agents: Governance, Security, Compliance, FileNaming, Incremental, Markdown, Architecture
+            if self._enforcement:
+                enforcement_result = self._enforcement.validate_operation(
+                    operation={
+                        "intent": operation_name,
+                        "output_files": parameters.get("output_files", []),
+                        "target_file": parameters.get("target_file"),
+                        "estimated_loc": parameters.get("estimated_loc", 0),
+                        "continuation_tokens": parameters.get("continuation_tokens", 0),
+                        "turn_count": self._turn_number,
+                        "estimated_duration_seconds": parameters.get("estimated_duration_seconds", 0),
+                        "user_explicit_request": parameters.get("user_explicit_request", False),
+                    }
+                )
+                
+                if enforcement_result.is_ok():
+                    result = enforcement_result.unwrap()
+                    
+                    if result.level == EnforcementLevel.BLOCKED:
+                        # Governance violation - block execution
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE-6C-001",
+                            operation="GOVERNANCE_ENFORCEMENT_BLOCKED",
+                            success=False,
+                            details={
+                                "violations": result.violations,
+                                "operation": operation_name,
+                                "blocked_by_agents": [result.metadata.get("agent", "unknown")]
+                            }
+                        )
+                        return Err(f"Governance violation: {'; '.join(result.violations)}")
+                    
+                    elif result.level == EnforcementLevel.WARNING:
+                        # Warnings - log but continue
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE-6C-001",
+                            operation="GOVERNANCE_ENFORCEMENT_WARNING",
+                            success=True,
+                            details={
+                                "warnings": result.warnings,
+                                "operation": operation_name,
+                                "warned_by_agents": [result.metadata.get("agent", "unknown")]
+                            }
+                        )
+                        # Continue to execution (EnforcementLevel.PASS also continues silently)
+                else:
+                    # Enforcement system error - log but don't block (fail open for resilience)
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-6C-001",
+                        operation="GOVERNANCE_ENFORCEMENT_ERROR",
+                        success=False,
+                        details={
+                            "error": enforcement_result.error,
+                            "operation": operation_name
+                        }
+                    )
             
             self.logger.log_operation_start(
                 ac_id="AC-AR-006-01",

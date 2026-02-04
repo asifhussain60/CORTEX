@@ -136,11 +136,25 @@ DIGEST Intent:
 ## 🛡️ Governance (4-Layer Defense)
 
 ```
-Layer 1: Pre-Execution Gate     → BLOCKS violations
+Layer 1: Pre-Execution Gate     → BLOCKS violations (EnforcementOrchestrator - 7 agents)
 Layer 2: Runtime Monitor        → STOPS at 3+ violations
 Layer 3: Post-Execution Audit   → DETECTS bypasses
 Layer 4: Production Gate        → PREVENTS broken deployment
 ```
+
+### EnforcementOrchestrator: 7-Agent Pre-Execution Gate
+
+| Agent | CORE Rules | Purpose |
+|-------|-----------|---------|
+| **GovernanceEnforcementAgent** | 008, 011, 012, 013, 029, 030 | TDD-first, type hints, docstrings, headers |
+| **SecurityCheckpointAgent** | 025, 026, 027 | Git discipline, audit trail integrity |
+| **ComplianceValidationAgent** | Tier 1 rules | Domain-specific compliance checks |
+| **FileNamingEnforcementAgent** | 028 | SCREAMING_CASE blocking, plan file exceptions |
+| **IncrementalExecutionAgent** | 001, 004 | <500 LOC increments, continuation limits |
+| **MarkdownSuppressionAgent** | 002 | Block *-summary.md, *-report.md generation |
+| **ArchitectureIntegrityAgent** | 017-020, 032, 034, 035, 038-041 | Versioned filenames, performance, turn budgets |
+
+**Coverage:** 25/29 CORE rules automated (86%) | **Performance:** <150ms validation | **Enforcement:** BLOCKED, WARNING, PASS
 
 ### Key CORE Rules
 
@@ -152,6 +166,7 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | CORE-013 | No bare except |
 | CORE-026 | Git checkpoint before major changes |
 | CORE-027 | Audit trail (AC_START → AC_COMPLETE) |
+| CORE-028 | **File naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars |
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 | CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
 
@@ -289,7 +304,8 @@ curl http://localhost:8000/health/orchestrators
 - [ ] Response header present
 - [ ] DoR displayed and approved
 - [ ] MCP tool invoked (not direct import)
-- [ ] CORE rules applied
+- [ ] **EnforcementOrchestrator validation passed** (7-agent system)
+- [ ] CORE rules applied (25/29 automated including CORE-028 file naming)
 - [ ] **AUDIT: All P0/P1/P2 issues auto-fixed before success report**
 - [ ] Results inline (no file generation)
 

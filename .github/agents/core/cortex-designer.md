@@ -50,16 +50,22 @@
       ↓
 4. Await Approval — FINAL RESPONSE before execution
       ↓
-4.5. MasterOrchestrator Gateway (Production Mode)
+4.5. Governance Enforcement (EnforcementOrchestrator - 4 agents)
+      ├─ GovernanceEnforcementAgent (CORE-008, 011, 012, 013, 029, 030, 035)
+      ├─ SecurityCheckpointAgent (CORE-025, 026, 027)
+      ├─ ComplianceValidationAgent (Tier 1 rules)
+      └─ FileNamingEnforcementAgent (CORE-028: kebab-case, no SCREAMING_CASE, plan files ≤40 chars)
+      ↓
+5. MasterOrchestrator Gateway (Production Mode)
       ├─ cortex_process_request MCP Tool
       ├─ MasterOrchestrator.coordinate_operation()
       ├─ Log AC_START (audit trail)
       ├─ IntentRouter → TDDOrchestrator routing
       └─ Full trace audit logs enabled
       ↓
-5. Autonomous Execution (via MasterOrchestrator, all phases)
+6. Autonomous Execution (via MasterOrchestrator, all phases)
       ↓
-6. Completion Report
+7. Completion Report
 ```
 
 ---

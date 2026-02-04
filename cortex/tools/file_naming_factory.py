@@ -317,19 +317,24 @@ class FileNameFactory:
         Raises:
             ValueError: If filename violates standards
         """
+        # Check if this is a plan file (CORE-028 exception - 40 char limit)
+        is_plan_file = filename.endswith(('-plan.yaml', '-spec.yaml', '-system.yaml'))
+        max_length = 40 if is_plan_file else self.config.max_length
+        
         # Length check
         if len(filename) < self.config.min_length:
             raise ValueError(
                 f"Filename too short ({len(filename)} chars, min: {self.config.min_length}): {filename}"
             )
         
-        if len(filename) > self.config.max_length:
+        if len(filename) > max_length:
+            file_type = "plan file" if is_plan_file else "file"
             raise ValueError(
-                f"Filename too long ({len(filename)} chars, max: {self.config.max_length}): {filename}"
+                f"Filename too long ({len(filename)} chars, max: {max_length} for {file_type}): {filename}"
             )
         
-        # Warning for names outside optimal range
-        if len(filename) < self.config.optimal_min or len(filename) > self.config.optimal_max:
+        # Warning for names outside optimal range (unless plan file)
+        if not is_plan_file and (len(filename) < self.config.optimal_min or len(filename) > self.config.optimal_max):
             logger.warning(
                 f"Filename outside optimal range ({self.config.optimal_min}-{self.config.optimal_max}): "
                 f"{filename} ({len(filename)} chars)"
@@ -337,6 +342,13 @@ class FileNameFactory:
         
         # Extract base name (without extension)
         base_name = filename.rsplit(".", 1)[0] if "." in filename else filename
+        
+        # Check for SCREAMING_CASE (BLOCKED for all files)
+        if base_name != base_name.lower():
+            raise ValueError(
+                f"SCREAMING_CASE detected in filename: {filename}\n"
+                f"Must use lowercase kebab-case. Convert to: {base_name.lower()}.{filename.split('.')[-1]}"
+            )
         
         # Check for prohibited patterns
         parts = re.split(r"[-_]", base_name.lower())

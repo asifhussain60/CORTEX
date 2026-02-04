@@ -47,6 +47,7 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 |------|-------------|
 | CORE-002 | NO markdown file generation (inline only) |
 | CORE-008 | TDD-first (tests before code) |
+| CORE-028 | Intelligent file naming (kebab-case, no SCREAMING_CASE, plan files ≤40 chars) |
 | CORE-029 | Response header MANDATORY |
 | CORE-030 | Implementation Truth |
 | CORE-035 | Single implementation (no _v2) |
@@ -299,11 +300,12 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 |-------|-------------|------|
 | DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) | `grep_search`, code inspection |
 | Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering | `cortex_audit_trail_verify` |
+| **File Naming Enforcement** | **CORE-028 validated by FileNamingEnforcementAgent: SCREAMING_CASE blocked, plan files ≤40 chars, kebab-case enforced** | **EnforcementOrchestrator (7-agent system)** |
 | Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents | Manual cross-check |
 | Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations | `cortex_lens_analyze`, wiring validation |
 | MCP Production Gate | @mcp_tool + catalog for all production tools | `grep_search` |
 | Intent Router | 5-layer consistency (enum→router→config→prompts→agents) | Manual verification |
-| Governance | 4-layer defense active | Code inspection |
+| Governance | 7-agent enforcement system active | Code inspection |
 | TDD Completeness | Test files for all orchestrators | `file_search` |
 | Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) | Manual review |
 | Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md | Manual review |

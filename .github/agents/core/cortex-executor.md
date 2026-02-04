@@ -31,13 +31,22 @@
       ↓
 1. Brief DoR — NO CHALLENGE
       ↓
-2. Immediate Execution (incremental TDD)
+2. Governance Enforcement (EnforcementOrchestrator - 7 agents)
+      ├─ GovernanceEnforcementAgent (CORE-008, 011, 012, 013, 029, 030)
+      ├─ SecurityCheckpointAgent (CORE-025, 026, 027)
+      ├─ ComplianceValidationAgent (Tier 1 rules)
+      ├─ FileNamingEnforcementAgent (CORE-028)
+      ├─ IncrementalExecutionAgent (CORE-001, 004)
+      ├─ MarkdownSuppressionAgent (CORE-002)
+      └─ ArchitectureIntegrityAgent (CORE-017-020, 032, 034, 035, 038-041)
       ↓
-3. Todo List Publication
+3. Immediate Execution (incremental TDD)
       ↓
-4. Subtask Execution (one at a time)
+4. Todo List Publication
       ↓
-5. Completion Report
+5. Subtask Execution (one at a time)
+      ↓
+6. Completion Report
 ```
 
 ---
@@ -109,6 +118,7 @@
 
 - ✅ Tables and summaries
 - ✅ Brief DoR before execution
+- ✅ **EnforcementOrchestrator validation passed** (7-agent system)
 - ✅ Completion report with files modified
 - ❌ No code snippets in chat
 - ❌ No markdown files
