@@ -201,7 +201,11 @@ class ProductionReadinessValidator:
         logger.info("=" * 70)
         
         try:
-            from cortex.brain.core.governance_registry import GovernanceRegistry
+            # Import governance registry
+            try:
+                from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+            except ImportError:
+                from cortex.core.registry.repo_registry import GovernanceRegistry
             
             registry = GovernanceRegistry()
             

@@ -176,6 +176,10 @@ User Request → PRE-FLIGHT CHECK
 | Check | Description |
 |-------|-------------|
 | MD Sprawl | *.md outside docs/.github (except README) |
+| Markdown Links | Verify all relative links resolve (handle VS Code false positives) |
+| Code Fences | All \`\`\` blocks have language specified (MD040) |
+| Table Formatting | All markdown tables have proper spacing (MD060) |
+| Heading Blanks | Headings surrounded by blank lines (MD022) |
 | Leftovers | *.bak, *_v2.* files |
 
 ## Audit Output Format
@@ -511,8 +515,42 @@ Every challenge MUST address:
 | `cortex_ast_analyze` | Structure validation + dependency graph | Catch wiring issues early | Custom visitors |
 | `cortex_manage_todo` | **NEW:** Todo publication + tracking | Real-time progress visibility | Orchestrator automation |
 | `cortex_audit_trail` | CORE-027: Governance audit logging | Immutable decision record | Compliance ready |
+| `cortex_markdown_validator` | Lint + link validation + auto-fix | Catch MD000-MD100 violations | Custom rule sets |
 
 **Forward Thinking:** Every tool has a **register** entry in wiring.yaml to enable future orchestrators to discover and compose them.
+
+### 🔧 Markdown Validation & Fix Strategy
+
+**P3 Cleanup includes automatic markdown fixing:**
+
+| Issue | Detection | Auto-Fix | VS Code False Positives |
+|-------|-----------|----------|------------------------|
+| **MD040** | Fenced code without language | Add `python`/`bash`/`yaml` | ✅ Auto-detected |
+| **MD060** | Table column spacing | Reformat with proper spacing | ✅ Detected |
+| **MD022** | Missing blank lines around headings | Add blank lines before/after | ⚠️ Handle context (after YAML frontmatter) |
+| **Broken Links** | Relative paths to non-existent files | Verify file exists OR remove link | 🔴 **VS Code False Positive:** Link resolver treats relative path as from file location, not workspace root |
+| **Link Format** | Inconsistent relative paths (e.g., text wrapped in square brackets with path) | Normalize relative paths and verify syntax | ✅ Auto-correctable |
+
+**VS Code Link Resolver Quirk (Know Your Quirks):**
+- 🔴 **Problem:** When viewing `.github/prompts/cortex-architect.prompt.md`, link `[CORTEX.md](../agents/core/CORTEX.md)` resolves correctly, but VS Code may show path resolution as relative to file location
+- ✅ **Solution:** Use relative paths from the file's directory (`../` for one level up) OR recognize "false positive" errors that don't block compilation
+- 📋 **Action:** AUDIT classifies link resolution as **P3 (Low Priority)** unless they block actual functionality
+- 🤖 **Auto-Fix:** Agents can detect and document "file exists at correct path" when link appears broken in VS Code resolver
+| Ignoring markdown lint errors | MD040/MD060/MD022 accumulate | Documentation decay |
+| Confusing VS Code false positives with real blockers | Noise obscures critical issues | P3 fixes distract from P0 work |correct path" in output
+
+**P3 Fix Output:**
+```markdown
+### 🧹 Markdown Cleanup (P3)
+
+| File | Issues | Status |
+|------|--------|--------|
+| cortex-lens/README.md | MD040 (3), MD060 (12) | ✅ Auto-fixed |
+| .github/agents/core/cortex-architect.md | MD022 (1), MD032 (8) | ✅ Auto-fixed |
+| .github/copilot-instructions.md | Link false positives (9) | ⏳ Documented (not blocking) |
+
+**Note:** Remaining errors are VS Code markdown link resolver false positives — files verified to exist at correct paths in workspace.
+```
 
 ---
 
@@ -520,6 +558,7 @@ Every challenge MUST address:
 
 | Anti-Pattern | Why | Consequence |
 |--------------|-----|-----------|
+- ✅ Markdown cleanup applied (P3: MD040/MD060/MD022 fixed, link validation done)
 | Code snippets in output | Breaks "inline only" rule | CORE-002 violation |
 | Config/YAML dumps | Too large; clogs context | Bury actionable intelligence |
 | "Proceed?" in AUDIT mode | AUDIT is autonomous | Confuses user |
@@ -700,12 +739,12 @@ Innovation Taxonomy Update (system learns)
 
 ## 🔗 REFERENCES & LINKS
 
-- **Master Prompt:** [CORTEX.prompt.md](.github/prompts/CORTEX.prompt.md) — Production execution
-- **Primary Agent:** [cortex-architect.md](.github/agents/core/cortex-architect.md) — This prompt's agent
-- **Supporting Agents:** [cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md](.github/agents/core/)
-- **Architecture Guide:** [04-architecture/](.github/docs/04-architecture/) — Deep dives
-- **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](cortex/wiring/specifications/wiring.yaml) — Orchestrator graph
-- **Enhancement History:** [docs/meta/enhancement-history.yaml](docs/meta/enhancement-history.yaml) — Learning feedback loop
+- **Master Prompt:** [CORTEX.prompt.md](CORTEX.prompt.md) — Production execution
+- **Primary Agent:** [cortex-architect.md](../agents/core/cortex-architect.md) — This prompt's agent ✅
+- **Supporting Agents:** [cortex-auditor.md](../agents/core/cortex-auditor.md), [cortex-designer.md](../agents/core/cortex-designer.md), [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md) ✅
+- **Architecture Guide:** [04-architecture/](../../docs/04-architecture/) — Deep dives
+- **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](../../cortex/wiring/specifications/wiring.yaml) — Orchestrator graph
+- **Enhancement History:** [docs/meta/enhancement-history.yaml](../../docs/meta/enhancement-history.yaml) — Learning feedback loop
 
 ---
 

@@ -273,9 +273,9 @@ Before completing ANY operation:
 
 | Agent | Purpose |
 |-------|---------|
-| [CORTEX.md](.github/agents/core/CORTEX.md) | Master agent |
-| [cortex-architect.md](.github/agents/core/cortex-architect.md) | Design-phase agent |
-| [cortex-mcp-gateway.md](.github/agents/core/cortex-mcp-gateway.md) | MCP routing agent |
+| [CORTEX.md](../agents/core/CORTEX.md) | Master agent ✅ |
+| [cortex-architect.md](../agents/core/cortex-architect.md) | Design-phase agent ✅ |
+| [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md) | MCP routing agent ✅ |
 
 ---
 
