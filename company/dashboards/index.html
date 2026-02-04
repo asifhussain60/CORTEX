@@ -10,11 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="spa/css/variables.css">
-    <link rel="stylesheet" href="spa/css/base.css">
-    <link rel="stylesheet" href="spa/css/components.css">
-    <link rel="stylesheet" href="spa/css/layout.css">
+    <!-- Stylesheets (shared assets) -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
     
     <style>
         /* Landing page specific styles */
@@ -390,7 +390,7 @@
         <!-- Hero Section -->
         <section class="landing-hero">
             <div class="logo-container">
-                <img src="spa/images/cortex-logo-200.png" 
+                <img src="assets/images/cortex-logo-200.png" 
                      alt="CORTEX Logo" 
                      class="landing-hero__logo hero-logo"
                      id="landingLogo"
@@ -462,7 +462,7 @@
     </script>
     
     <!-- Vendor Scripts -->
-    <script src="spa/vendor/fuse.min.js"></script>
+    <script src="assets/vendor/fuse.min.js"></script>
     
     <!-- Landing Page Script -->
     <script>
@@ -475,12 +475,11 @@
         let filteredRepos = [];
         let fuse = null;
         
-        // Fetch and parse registry
-        async function loadRegistry() {
+        // Load and parse embedded registry data
+        function loadRegistry() {
             try {
-                const response = await fetch('./registry.json');
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                registry = await response.json();
+                const registryScript = document.getElementById('registry-data');
+                registry = JSON.parse(registryScript.textContent);
                 repos = registry.repos || [];
                 filteredRepos = [...repos];
                 
@@ -566,8 +565,11 @@
             
             const tags = (repo.tags || []).slice(0, 3);
             
+            // Use dashboard_url from registry or construct from slug
+            const dashboardUrl = repo.dashboard_url || `repos/${repo.slug}/index.html`;
+            
             return `
-                <a href="spa/dashboard.html?repo=${repo.slug}" class="repo-tile">
+                <a href="${dashboardUrl}" class="repo-tile">
                     <div class="repo-tile__header">
                         <span class="repo-tile__icon">${repo.icon || '📁'}</span>
                         <div class="repo-tile__info">
@@ -701,6 +703,74 @@
             loadRegistry();
         }
     })();
+    </script>
+    
+    <!-- Embedded Registry Data (hardcoded for file:// compatibility) -->
+    <script type="application/json" id="registry-data">
+    {
+        "repos": [
+            {
+                "slug": "cortex",
+                "display_name": "CORTEX",
+                "description": "COgnitive Real-Time EXecution System - Complete Enterprise Code Intelligence Platform with MCP-first architecture, Brain, LENS, 34 orchestrators, and unified analysis.",
+                "owner": "Enterprise Architecture",
+                "primary_language": "Python",
+                "health_score": 85,
+                "risk_score": 25,
+                "loc": 202000,
+                "files": 1310,
+                "coverage_pct": 78,
+                "version": "9.0",
+                "icon": "🧠",
+                "tags": ["critical", "platform", "mcp", "brain", "lens"],
+                "last_analyzed_at": "2026-02-04T00:00:00Z",
+                "dashboard_url": "repos/cortex/index.html"
+            },
+            {
+                "slug": "ksessions",
+                "display_name": "KSESSIONS",
+                "description": "Session management and orchestration system with comprehensive audit logging and governance capabilities.",
+                "owner": "Session Management",
+                "primary_language": "Python",
+                "health_score": 79,
+                "risk_score": 35,
+                "loc": 28500,
+                "files": 319,
+                "coverage_pct": 68,
+                "version": "2.1",
+                "icon": "🔐",
+                "tags": ["sessions", "governance", "audit"],
+                "last_analyzed_at": "2026-02-03T11:45:48Z",
+                "dashboard_url": "repos/ksessions/index.html"
+            },
+            {
+                "slug": "kashkole",
+                "display_name": "Kashkole",
+                "description": "Repository simulation and testing framework for validation and experimentation.",
+                "owner": "Testing Team",
+                "primary_language": "Python",
+                "health_score": 75,
+                "risk_score": 40,
+                "loc": 15000,
+                "files": 125,
+                "coverage_pct": 65,
+                "version": "1.5",
+                "icon": "🧪",
+                "tags": ["testing", "simulation"],
+                "last_analyzed_at": "2026-02-02T10:30:00Z",
+                "dashboard_url": "repos/kashkole/index.html"
+            }
+        ],
+        "generated_at": "2026-02-04T14:30:00Z",
+        "version": "10.0",
+        "total_loc": 245500,
+        "avg_health": 80,
+        "structure": {
+            "assets_path": "assets/",
+            "repos_path": "repos/",
+            "template_path": "repos/_template/"
+        }
+    }
     </script>
 </body>
 </html>

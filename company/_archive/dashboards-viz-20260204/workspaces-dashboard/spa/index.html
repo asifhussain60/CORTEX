@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>CORTEX Lens - Enterprise Dashboard</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/data-adapter.js" defer></script>
+    <script src="js/components.js" defer></script>
+    <script src="js/charts.js" defer></script>
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="dashboard-header__content">
+            <h1 class="dashboard-header__title">
+                <span class="icon">🧠</span>
+                CORTEX Lens
+            </h1>
+            <p class="dashboard-header__subtitle">Enterprise Code Intelligence</p>
+            <div class="dashboard-header__meta">
+                <div class="health-badge" id="health-badge">
+                    <span class="status-pulse"></span>
+                    <span>Health: </span>
+                    <strong id="health-score">--</strong>%
+                </div>
+                <span class="badge" id="primary-language">--</span>
+                <span class="text-sm text-muted">
+                    Last analyzed: <span id="last-analyzed">--</span>
+                </span>
+            </div>
+        </div>
+        <div class="dashboard-header__actions">
+            <button class="btn theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <span>🌓</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs-wrapper" role="tablist" aria-label="Dashboard sections">
+        <div class="tabs-container">
+            <!-- Executive Tab -->
+            <button class="tab-button" role="tab" data-tab="executive" id="executive-tab">
+                <span class="tab-button__icon">📋</span>
+                Executive
+            </button>
+            
+            <!-- Overview Tab -->
+            <button class="tab-button active" role="tab" data-tab="overview" id="overview-tab">
+                <span class="tab-button__icon">📊</span>
+                Overview
+            </button>
+            
+            <!-- Use Cases Tab -->
+            <button class="tab-button" role="tab" data-tab="use-cases" id="use-cases-tab">
+                <span class="tab-button__icon">💡</span>
+                Use Cases
+                <span class="tab-button__count" id="use-cases-count">0</span>
+            </button>
+            
+            <!-- Architecture Tab -->
+            <button class="tab-button" role="tab" data-tab="architecture" id="architecture-tab">
+                <span class="tab-button__icon">🏗️</span>
+                Architecture
+            </button>
+            
+            <!-- Dependencies Tab -->
+            <button class="tab-button" role="tab" data-tab="dependencies" id="dependencies-tab">
+                <span class="tab-button__icon">📦</span>
+                Dependencies
+            </button>
+            
+            <!-- Quality Tab -->
+            <button class="tab-button" role="tab" data-tab="quality" id="quality-tab">
+                <span class="tab-button__icon">✨</span>
+                Quality
+            </button>
+            
+            <!-- Security Tab -->
+            <button class="tab-button" role="tab" data-tab="security" id="security-tab">
+                <span class="tab-button__icon">🔒</span>
+                Security
+                <span class="tab-button__count" id="security-count">0</span>
+            </button>
+            
+            <!-- Testing Tab -->
+            <button class="tab-button" role="tab" data-tab="testing" id="testing-tab">
+                <span class="tab-button__icon">🧪</span>
+                Testing
+            </button>
+            
+            <!-- Lens Tab (Unified Intelligence) -->
+            <button class="tab-button" role="tab" data-tab="lens" id="lens-tab">
+                <span class="tab-button__icon">🔍</span>
+                Lens
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Executive Panel -->
+        <section class="tab-panel" id="executive-panel" role="tabpanel" aria-labelledby="executive-tab">
+            <div class="section-header">
+                <h2 class="section-title">Executive Summary</h2>
+                <p class="section-subtitle">Business-language insights for stakeholders</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-card__label">Health Status</span>
+                    <span class="metric-card__value" id="exec-health-status">--</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Security Posture</span>
+                    <span class="metric-card__value" id="exec-security-posture">--</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Tech Debt</span>
+                    <span class="metric-card__value" id="exec-tech-debt">--</span>
+                    <span class="metric-card__unit">hours</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Test Pass Rate</span>
+                    <span class="metric-card__value" id="exec-test-pass-rate">--</span>%
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">⚠️ Risk Summary</h3>
+                <div id="exec-risk-summary">Loading risk analysis...</div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">💡 Top Recommendations</h3>
+                <div id="exec-recommendations"></div>
+            </div>
+        </section>
+
+        <!-- Overview Panel -->
+        <section class="tab-panel active" id="overview-panel" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="glass-card">
+                <h3 class="card-title">📋 Repository Summary</h3>
+                <p id="business-summary">Loading repository analysis...</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <span class="metric-card__label">Health Score</span>
+                    <span class="metric-card__value text-success" id="overview-health-score">--</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📝</div>
+                    <span class="metric-card__label">Lines of Code</span>
+                    <span class="metric-card__value" id="overview-loc">--</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📁</div>
+                    <span class="metric-card__label">Total Files</span>
+                    <span class="metric-card__value" id="overview-files">--</span>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">🧪</div>
+                    <span class="metric-card__label">Test Coverage</span>
+                    <span class="metric-card__value" id="overview-coverage">--</span>%
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">📈 Health Metrics</h3>
+                <canvas id="healthRadarChart" width="400" height="300"></canvas>
+            </div>
+        </section>
+
+        <!-- Use Cases Panel -->
+        <section class="tab-panel" id="use-cases-panel" role="tabpanel" aria-labelledby="use-cases-tab">
+            <div class="section-header">
+                <h2 class="section-title">Use Cases</h2>
+                <p class="section-subtitle">Searchable scenarios and business requirements</p>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="use-case-search" placeholder="🔍 Search use cases..." class="search-input">
+            </div>
+            
+            <div id="use-cases-list" class="use-cases-grid">
+                <!-- Use cases will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Architecture Panel -->
+        <section class="tab-panel" id="architecture-panel" role="tabpanel" aria-labelledby="architecture-tab">
+            <div class="section-header">
+                <h2 class="section-title">Architecture</h2>
+                <p class="section-subtitle">System structure and dependencies</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">📊 Layer Distribution</h3>
+                <canvas id="layerChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🌳 Directory Structure</h3>
+                <div id="directoryTreemap"></div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🔗 Dependency Flow (Sankey)</h3>
+                <div id="dependencySankey" style="width: 100%; height: 500px;"></div>
+            </div>
+        </section>
+
+        <!-- Dependencies Panel -->
+        <section class="tab-panel" id="dependencies-panel" role="tabpanel" aria-labelledby="dependencies-tab">
+            <div class="section-header">
+                <h2 class="section-title">Dependencies</h2>
+                <p class="section-subtitle">Package analysis and risk assessment</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">📦 Package Overview</h3>
+                <div id="dependencies-list"></div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">⚖️ License Distribution</h3>
+                <canvas id="licenseChart" width="400" height="300"></canvas>
+            </div>
+        </section>
+
+        <!-- Quality Panel -->
+        <section class="tab-panel" id="quality-panel" role="tabpanel" aria-labelledby="quality-tab">
+            <div class="section-header">
+                <h2 class="section-title">Code Quality</h2>
+                <p class="section-subtitle">Complexity, duplication, and technical debt</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-card__label">Complexity Score</span>
+                    <span class="metric-card__value" id="quality-complexity">--</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Duplication</span>
+                    <span class="metric-card__value" id="quality-duplication">--</span>%
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Technical Debt</span>
+                    <span class="metric-card__value" id="quality-debt">--</span>h
+                </div>
+                <div class="metric-card">
+                    <span class="metric-card__label">Code Smells</span>
+                    <span class="metric-card__value" id="quality-smells">--</span>
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">📊 Complexity Distribution</h3>
+                <canvas id="complexityChart" width="400" height="300"></canvas>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🎯 Coupling vs Cohesion</h3>
+                <canvas id="couplingScatter" width="400" height="300"></canvas>
+            </div>
+        </section>
+
+        <!-- Security Panel -->
+        <section class="tab-panel" id="security-panel" role="tabpanel" aria-labelledby="security-tab">
+            <div class="section-header">
+                <h2 class="section-title">Security Analysis</h2>
+                <p class="section-subtitle">Vulnerabilities and compliance status</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🔒 Security Overview</h3>
+                <div id="security-summary"></div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">📈 Vulnerability Trends</h3>
+                <canvas id="securityTrendChart" width="400" height="300"></canvas>
+            </div>
+        </section>
+
+        <!-- Testing Panel -->
+        <section class="tab-panel" id="testing-panel" role="tabpanel" aria-labelledby="testing-tab">
+            <div class="section-header">
+                <h2 class="section-title">Testing</h2>
+                <p class="section-subtitle">Test coverage and quality metrics</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🔺 Testing Pyramid</h3>
+                <canvas id="testingPyramid" width="400" height="300"></canvas>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🎯 Coverage by Module</h3>
+                <div id="coverage-by-module"></div>
+            </div>
+        </section>
+
+        <!-- Lens Panel (Unified Intelligence) -->
+        <section class="tab-panel" id="lens-panel" role="tabpanel" aria-labelledby="lens-tab">
+            <div class="section-header">
+                <h2 class="section-title">Lens - Unified Intelligence</h2>
+                <p class="section-subtitle">Pattern discovery and vendor analysis</p>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🎨 Design Patterns</h3>
+                <div id="patterns-network" style="width: 100%; height: 400px;"></div>
+            </div>
+            
+            <div class="glass-card">
+                <h3 class="card-title">🏢 Vendor Analysis</h3>
+                <div id="vendor-risk-matrix"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>CORTEX Lens - Enterprise Code Intelligence | Generated: <span id="generation-time">--</span></p>
+    </footer>
+</body>
+</html>

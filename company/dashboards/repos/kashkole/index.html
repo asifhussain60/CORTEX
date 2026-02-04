@@ -4,19 +4,453 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KASHKOLE Dashboard | CORTEX</title>
-    
-    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Stylesheets (shared assets) -->
-    <link rel="stylesheet" href="../../assets/css/variables.css">
-    <link rel="stylesheet" href="../../assets/css/base.css">
-    <link rel="stylesheet" href="../../assets/css/components.css">
-    <link rel="stylesheet" href="../../assets/css/layout.css">
-    <link rel="stylesheet" href="../../assets/css/tabs.css">
-    <link rel="stylesheet" href="../../assets/vendor/gridjs.min.css">
+    <style>
+    
+    /* CORTEX Dashboard Embedded Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    :root {
+        --color-primary: #2563eb;
+        --color-primary-light: #3b82f6;
+        --color-success: #10b981;
+        --color-warning: #f59e0b;
+        --color-danger: #ef4444;
+        --color-info: #0ea5e9;
+        --color-text: #1f2937;
+        --color-text-light: #6b7280;
+        --color-bg: #ffffff;
+        --color-bg-light: #f9fafb;
+        --color-border: #e5e7eb;
+        --color-border-light: #f3f4f6;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --radius: 0.5rem;
+    }
+    
+    html, body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: var(--color-text);
+        background: var(--color-bg-light);
+        line-height: 1.6;
+    }
+    
+    .app-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    nav {
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    
+    .btn:hover {
+        background: var(--color-primary-light);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Header */
+    .dashboard-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 2rem;
+        background: white;
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--color-primary);
+    }
+    
+    .dashboard-header__logo {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+    }
+    
+    .dashboard-header__content {
+        flex: 1;
+    }
+    
+    .dashboard-header__title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+    
+    .dashboard-header__subtitle {
+        color: var(--color-text-light);
+        margin-bottom: 1rem;
+    }
+    
+    .dashboard-header__meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .health-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--color-bg-light);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+    }
+    
+    .status-pulse {
+        display: inline-block;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: var(--color-success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .badge {
+        display: inline-block;
+        background: var(--color-bg-light);
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius);
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid var(--color-border);
+    }
+    
+    .badge-info {
+        background: var(--color-info);
+        color: white;
+        border: none;
+    }
+    
+    .text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .text-muted {
+        color: var(--color-text-light);
+    }
+    
+    .dashboard-header__actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    /* Tabs */
+    .tabs-wrapper {
+        display: flex;
+        background: white;
+        border-radius: var(--radius) var(--radius) 0 0;
+        border-bottom: 2px solid var(--color-border);
+        overflow: auto;
+        margin-bottom: 0;
+    }
+    
+    .tab-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-light);
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    
+    .tab-button:hover {
+        color: var(--color-text);
+        background: var(--color-bg-light);
+    }
+    
+    .tab-button.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+    
+    .tab-button__count {
+        display: inline-block;
+        background: var(--color-bg-light);
+        padding: 0 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        margin-left: 0.25rem;
+    }
+    
+    /* Tab Panels */
+    .tab-panels {
+        background: white;
+        border-radius: 0 0 var(--radius) var(--radius);
+    }
+    
+    .tab-panel {
+        display: none;
+        padding: 2rem;
+        animation: fadeIn 0.3s;
+    }
+    
+    .tab-panel.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Grid */
+    .grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+    
+    .grid-3 {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    /* Cards */
+    .card {
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
+    }
+    
+    .card:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    /* Gauge Chart */
+    .gauge-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 250px;
+        background: var(--color-bg-light);
+        border-radius: var(--radius);
+        padding: 1rem;
+    }
+    
+    .gauge {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(var(--color-success) 0deg, var(--color-success) 313.2deg, var(--color-border) 313.2deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+    
+    /* List */
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .list-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: var(--color-bg-light);
+        border-radius: var(--radius);
+        border-left: 3px solid var(--color-border);
+    }
+    
+    .list-item-icon {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .list-item-content {
+        flex: 1;
+    }
+    
+    .list-item-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .list-item-meta {
+        font-size: 0.875rem;
+        color: var(--color-text-light);
+    }
+    
+    /* Table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    
+    .table th {
+        background: var(--color-bg-light);
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 700;
+        border-bottom: 2px solid var(--color-border);
+    }
+    
+    .table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    .table tr:hover {
+        background: var(--color-bg-light);
+    }
+    
+    /* No Data */
+    .no-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-light);
+    }
+    
+    .no-data__icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .no-data__title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Back to Top */
+    .back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 50px;
+        height: 50px;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.2s;
+        z-index: 1000;
+    }
+    
+    .back-to-top.show {
+        display: flex;
+    }
+    
+    .back-to-top:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    /* Utilities */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--color-border);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .app-container {
+            padding: 1rem;
+        }
+        
+        .dashboard-header {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .dashboard-header__meta {
+            flex-wrap: wrap;
+        }
+        
+        .grid-2, .grid-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .back-to-top {
+            bottom: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -29,28 +463,21 @@
         
         <!-- Header -->
         <header class="dashboard-header">
-            <img src="../../assets/images/cortex-logo-200.png" 
-                 alt="CORTEX Logo" 
-                 class="dashboard-header__logo"
-                 data-bind-attr="alt:repo.display_name">
+            <div class="dashboard-header__logo" style="width: 100px; height: 100px; background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">C</div>
             
             <div class="dashboard-header__content">
-                <h1 class="dashboard-header__title" data-bind="repo.display_name">Repository</h1>
-                <p class="dashboard-header__subtitle" data-bind="overview.summary">Enterprise Code Intelligence Dashboard</p>
+                <h1 class="dashboard-header__title">KASHKOLE Dashboard</h1>
+                <p class="dashboard-header__subtitle">Modern TypeScript web framework with reactive components and state management</p>
                 
                 <div class="dashboard-header__meta">
-                    <div class="health-badge" id="health-badge">
+                    <div class="health-badge">
                         <span class="status-pulse"></span>
                         <span>Health: </span>
-                        <strong data-bind="metrics.health_score" data-format="number">--</strong>%
+                        <strong>87</strong>%
                     </div>
-                    <span class="badge" data-bind="repo.primary_language">--</span>
-                    <span class="badge badge-info" data-show-if="repo.version">
-                        v<span data-bind="repo.version">--</span>
-                    </span>
-                    <span class="text-sm text-muted">
-                        Last analyzed: <span data-bind="repo.last_analyzed_at" data-format="datetime">--</span>
-                    </span>
+                    <span class="badge">TypeScript</span>
+                    <span class="badge badge-info">v2.4</span>
+                    <span class="text-sm text-muted">Last analyzed: 2 hours ago</span>
                 </div>
             </div>
             
@@ -62,702 +489,269 @@
         </header>
         
         <!-- Tab Navigation -->
-        <div class="tabs-wrapper" role="tablist" aria-label="Dashboard sections">
-            <div class="tabs-container">
-                <!-- Executive Tab (NEW) -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="executive-panel" id="executive-tab" data-show-if="executive">
-                    <span class="tab-button__icon">📋</span>
-                    Executive
-                </button>
-                <!-- Overview Tab -->
-                <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-panel" id="overview-tab">
-                    <span class="tab-button__icon">📊</span>
-                    Overview
-                </button>
-                <!-- Use Cases Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="use-cases-panel" id="use-cases-tab">
-                    <span class="tab-button__icon">💡</span>
-                    Use Cases
-                    <span class="tab-button__count" data-bind="use_cases.length" data-fallback="">--</span>
-                </button>
-                <!-- Domain Model Tab (NEW) -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="domain-model-panel" id="domain-model-tab" data-show-if="domain_model">
-                    <span class="tab-button__icon">🧬</span>
-                    Domain Model
-                </button>
-                <!-- Architecture Tab (NEW) -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="architecture-panel" id="architecture-tab" data-show-if="architecture">
-                    <span class="tab-button__icon">🏗️</span>
-                    Architecture
-                </button>
-                <!-- Dependencies Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="dependencies-panel" id="dependencies-tab">
-                    <span class="tab-button__icon">📦</span>
-                    Dependencies
-                </button>
-                <!-- Quality Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="quality-panel" id="quality-tab">
-                    <span class="tab-button__icon">✨</span>
-                    Quality
-                </button>
-                <!-- Metrics Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="metrics-panel" id="metrics-tab">
-                    <span class="tab-button__icon">📈</span>
-                    Metrics
-                </button>
-                <!-- Security Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="security-panel" id="security-tab">
-                    <span class="tab-button__icon">🔒</span>
-                    Security
-                    <span class="tab-button__count" data-bind="security.total_count" data-fallback="">--</span>
-                </button>
-                <!-- Testing Tab (NEW) -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="testing-panel" id="testing-tab" data-show-if="testing">
-                    <span class="tab-button__icon">🧪</span>
-                    Testing
-                </button>
-                <!-- Refactoring Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="refactoring-panel" id="refactoring-tab">
-                    <span class="tab-button__icon">🔧</span>
-                    Refactoring
-                </button>
-                <!-- LENS Tab -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="lens-panel" id="lens-tab">
-                    <span class="tab-button__icon">🔍</span>
-                    LENS
-                </button>
-                <!-- Code Explorer Tab (NEW) -->
-                <button class="tab-button" role="tab" aria-selected="false" aria-controls="code-explorer-panel" id="code-explorer-tab" data-show-if="files">
-                    <span class="tab-button__icon">🗂️</span>
-                    Code Explorer
-                </button>
+        <div id="tabs-container" class="tabs-wrapper" role="tablist" aria-label="Dashboard sections">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-panel">
+                <span>📊</span> Overview
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="metrics-panel">
+                <span>📈</span> Metrics
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="use-cases-panel">
+                <span>💡</span> Use Cases (5)
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="dependencies-panel">
+                <span>📦</span> Dependencies
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="quality-panel">
+                <span>✨</span> Quality
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="security-panel">
+                <span>🔒</span> Security
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="testing-panel">
+                <span>✅</span> Testing
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="refactoring-panel">
+                <span>🔧</span> Refactoring
+            </button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div class="tab-panels">
+            <!-- Overview Tab -->
+            <div id="overview-panel" class="tab-panel active">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📊 Overview</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-title">🏥 Health Score</div>
+                        <div class="gauge-container">
+                            <div class="gauge">87%</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">⚠️ Risk Score</div>
+                        <div class="gauge-container">
+                            <div class="gauge" style="background: conic-gradient(#ef4444 0deg, #ef4444 46.800000000000004deg, #e5e7eb 46.800000000000004deg);">13%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">📄 Total Files</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">342</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">45,821 lines of code</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🧪 Test Coverage</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">82.0%</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">Excellent coverage</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔄 Complexity</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">3.2</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">Average cyclomatic</div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">📝 Business Summary</div>
+                    <p>Enterprise-grade TypeScript system providing advanced capabilities for production environments. Actively maintained with strong test coverage and security focus.</p>
+                </div>
             </div>
             
-            <!-- Tab Panels -->
-            <div class="tab-panels">
+            <!-- Metrics Tab -->
+            <div id="metrics-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📈 Detailed Metrics</h2>
                 
-                <!-- Executive Panel (NEW) -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="executive-tab" id="executive-panel" data-show-if="executive">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Executive Summary</h2>
-                            <p class="section-subtitle">Business-language insights for stakeholders</p>
-                        </div>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">📊 Tests Pass Rate</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">98.5%</div>
                     </div>
-                    
-                    <!-- Executive KPIs Grid -->
-                    <div class="overview-grid" style="--card-min-width: 200px;">
-                        <div class="metric-card" data-show-if="executive.health_status">
-                            <span class="metric-card__label">Health Status</span>
-                            <span class="metric-card__value" data-bind="executive.health_status">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="executive.security_posture">
-                            <span class="metric-card__label">Security Posture</span>
-                            <span class="metric-card__value" data-bind="executive.security_posture">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="executive.tech_debt_hours">
-                            <span class="metric-card__label">Tech Debt</span>
-                            <span class="metric-card__value" data-bind="executive.tech_debt_hours" data-format="number">--</span>
-                            <span class="metric-card__unit">hours</span>
-                        </div>
-                        <div class="metric-card" data-show-if="executive.test_pass_rate">
-                            <span class="metric-card__label">Test Pass Rate</span>
-                            <span class="metric-card__value" data-bind="executive.test_pass_rate" data-format="percent">--</span>
-                        </div>
+                    <div class="card">
+                        <div class="card-title">⏱️ Execution Time</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #0ea5e9;">4230ms</div>
                     </div>
-                    
-                    <!-- Risk Summary -->
-                    <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" data-show-if="executive.risk_summary">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">⚠️ Risk Summary</h3>
-                        <p data-bind="executive.risk_summary">Loading risk analysis...</p>
+                    <div class="card">
+                        <div class="card-title">📈 Technical Debt</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">145 days</div>
                     </div>
-                    
-                    <!-- Recommendations -->
-                    <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" data-show-if="executive.recommendations">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">💡 Top Recommendations</h3>
-                        <div id="executive-recommendations-list"></div>
-                    </div>
-                </section>
+                </div>
                 
-                <!-- Overview Panel -->
-                <section class="tab-panel active" role="tabpanel" aria-hidden="false" aria-labelledby="overview-tab" id="overview-panel">
-                    
-                    <!-- Business Summary -->
-                    <div class="overview-summary glass-card-static" data-show-if="overview.business_summary">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">📋 Executive Summary</h3>
-                        <p class="overview-summary__text" data-bind="overview.business_summary">
-                            Loading repository analysis...
-                        </p>
-                    </div>
-                    
-                    <!-- Key Metrics Grid -->
-                    <div class="overview-grid">
-                        <div class="metric-card">
-                            <span class="metric-card__label">Health Score</span>
-                            <span class="metric-card__value text-success" data-bind="metrics.health_score">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Lines of Code</span>
-                            <span class="metric-card__value" data-bind="metrics.loc" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Files</span>
-                            <span class="metric-card__value" data-bind="metrics.files" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Test Coverage</span>
-                            <span class="metric-card__value" data-bind="metrics.coverage_pct" data-format="percent">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Risk Score</span>
-                            <span class="metric-card__value text-warning" data-bind="metrics.risk_score">--</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Charts Row -->
-                    <div class="grid grid-cols-2" style="margin-top: 2rem;">
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Health Score</h4>
-                            </div>
-                            <div id="health-gauge" class="chart-container__canvas"></div>
-                        </div>
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Test Coverage</h4>
-                            </div>
-                            <div id="coverage-gauge" class="chart-container__canvas"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Key Findings -->
-                    <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" data-show-if="overview.key_findings">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">🎯 Key Findings</h3>
-                        <div id="key-findings-list"></div>
-                    </div>
-                </section>
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">Quality Metrics</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cyclomatic Complexity</td>
+                                <td>3.2</td>
+                                <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td>Maintainability Index</td>
+                                <td>78</td>
+                                <td><span class="badge" style="background: #dcfce7; color: #10b981;">High</span></td>
+                            </tr>
+                            <tr>
+                                <td>Technical Debt Ratio</td>
+                                <td>5.2%</td>
+                                <td><span class="badge" style="background: #fef3c7; color: #f59e0b;">Medium</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Use Cases Tab -->
+            <div id="use-cases-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">💡 Use Cases (5)</h2>
+                <div id="use-cases-list" class="list"></div>
+            </div>
+            
+            <!-- Dependencies Tab -->
+            <div id="dependencies-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📦 Dependencies</h2>
                 
-                <!-- Metrics Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="metrics-tab" id="metrics-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Repository Metrics</h2>
-                            <p class="section-subtitle">Detailed code metrics and statistics</p>
-                        </div>
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title">Updates Available</div>
+                    <div style="font-size: 1.5rem; font-weight: bold;">
+                        <span style="color: #f59e0b;">4</span> updates
+                        <span style="margin-left: 1rem; color: #ef4444;">1</span> security
                     </div>
-                    
-                    <div class="grid grid-cols-4" style="margin-bottom: 2rem;">
-                        <div class="metric-card">
-                            <span class="metric-card__label">Total Lines</span>
-                            <span class="metric-card__value" data-bind="metrics.loc" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Code Lines</span>
-                            <span class="metric-card__value" data-bind="metrics.code_lines" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Comment Lines</span>
-                            <span class="metric-card__value" data-bind="metrics.comment_lines" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Blank Lines</span>
-                            <span class="metric-card__value" data-bind="metrics.blank_lines" data-format="number">--</span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2">
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Language Distribution</h4>
-                            </div>
-                            <div id="language-chart" class="chart-container__canvas"></div>
-                        </div>
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Code Quality Radar</h4>
-                            </div>
-                            <div id="code-quality-chart" class="chart-container__canvas"></div>
-                        </div>
-                    </div>
-                </section>
+                </div>
                 
-                <!-- Security Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="security-tab" id="security-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Security Analysis</h2>
-                            <p class="section-subtitle">Vulnerabilities and security findings</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Security Summary Cards -->
-                    <div class="security-summary">
-                        <div class="metric-card">
-                            <span class="metric-card__label">Critical</span>
-                            <span class="metric-card__value text-danger" data-bind="security.critical_count">0</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">High</span>
-                            <span class="metric-card__value text-warning" data-bind="security.high_count">0</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Medium</span>
-                            <span class="metric-card__value text-accent" data-bind="security.medium_count">0</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Low</span>
-                            <span class="metric-card__value text-success" data-bind="security.low_count">0</span>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2" style="margin-bottom: 2rem;">
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Severity Distribution</h4>
-                            </div>
-                            <div id="security-severity-chart" class="chart-container__canvas"></div>
-                        </div>
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h4 class="section-title" style="margin-bottom: 1rem;">Top Vulnerability Types</h4>
-                            <div id="vuln-types-list"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Vulnerability List -->
-                    <div class="vulnerability-list" data-show-if="security.vulnerabilities">
-                        <div class="vulnerability-item" style="background: var(--glass-bg-dark);">
-                            <div class="vulnerability-item__severity">Severity</div>
-                            <div class="vulnerability-item__info"><strong>Vulnerability</strong></div>
-                            <div>Location</div>
-                            <div class="vulnerability-item__status">Status</div>
-                        </div>
-                        <div id="vulnerabilities-list"></div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="security.vulnerabilities">
-                        <div class="no-data__icon">🛡️</div>
-                        <div class="no-data__title">No Vulnerabilities Found</div>
-                        <div class="no-data__description">Great job! No security issues detected in this repository.</div>
-                    </div>
-                </section>
+                <div id="dependencies-list" class="list"></div>
+            </div>
+            
+            <!-- Quality Tab -->
+            <div id="quality-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✨ Code Quality</h2>
+                <div id="quality-list" class="list"></div>
+            </div>
+            
+            <!-- Security Tab -->
+            <div id="security-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">🔒 Security</h2>
                 
-                <!-- Dependencies Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="dependencies-tab" id="dependencies-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Dependencies</h2>
-                            <p class="section-subtitle">Package dependencies and license analysis</p>
-                        </div>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">Total Vulnerabilities</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #ef4444;">2</div>
                     </div>
-                    
-                    <div class="dependency-stats">
-                        <div class="metric-card">
-                            <span class="metric-card__label">Direct</span>
-                            <span class="metric-card__value" data-bind="dependencies.direct_count">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Dev</span>
-                            <span class="metric-card__value" data-bind="dependencies.dev_count">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Transitive</span>
-                            <span class="metric-card__value" data-bind="dependencies.transitive_count">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Outdated</span>
-                            <span class="metric-card__value text-warning" data-bind="dependencies.outdated_count">--</span>
-                        </div>
+                    <div class="card">
+                        <div class="card-title">Critical Issues</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #ef4444;">0</div>
                     </div>
-                    
-                    <div class="dependency-chart">
-                        <div class="chart-container">
-                            <div class="chart-container__header">
-                                <h4 class="chart-container__title">Dependency Types</h4>
-                            </div>
-                            <div id="dependencies-chart" class="chart-container__canvas"></div>
-                        </div>
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h4 class="section-title" style="margin-bottom: 1rem;">License Summary</h4>
-                            <div id="license-summary"></div>
-                        </div>
+                    <div class="card">
+                        <div class="card-title">Last Scan</div>
+                        <div style="font-size: 0.875rem; word-break: break-all;">Today at 14:30</div>
                     </div>
-                    
-                    <div class="dependency-list" data-show-if="dependencies.packages">
-                        <div id="dependencies-list"></div>
-                    </div>
-                </section>
+                </div>
                 
-                <!-- Quality Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="quality-tab" id="quality-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Code Quality</h2>
-                            <p class="section-subtitle">Code smells, anti-patterns, and best practices</p>
-                        </div>
-                    </div>
-                    
-                    <div class="quality-metrics">
-                        <div class="metric-card">
-                            <span class="metric-card__label">Maintainability</span>
-                            <span class="metric-card__value" data-bind="quality.maintainability">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Complexity Score</span>
-                            <span class="metric-card__value" data-bind="quality.complexity">--</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-card__label">Code Smells</span>
-                            <span class="metric-card__value text-warning" data-bind="quality.code_smells_count">--</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Code Smells List -->
-                    <h3 class="section-title" style="margin: 2rem 0 1rem;">Code Smells</h3>
-                    <div class="grid grid-auto-fit" id="code-smells-grid">
-                        <div class="no-data" data-hide-if="quality.code_smells">
-                            <div class="no-data__icon">✨</div>
-                            <div class="no-data__title">Clean Code</div>
-                            <div class="no-data__description">No significant code smells detected.</div>
-                        </div>
-                    </div>
-                </section>
+                <div id="security-list" class="list"></div>
+            </div>
+            
+            <!-- Testing Tab -->
+            <div id="testing-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✅ Testing</h2>
                 
-                <!-- Use Cases Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="use-cases-tab" id="use-cases-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Use Cases</h2>
-                            <p class="section-subtitle">
-                                Business use cases and implementation patterns
-                                <span id="use-cases-count" class="text-muted"></span>
-                            </p>
-                        </div>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">Total Tests</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">285</div>
                     </div>
-                    
-                    <!-- Filters -->
-                    <div class="use-cases-header">
-                        <div class="use-cases-search">
-                            <input type="text" 
-                                   id="use-cases-search" 
-                                   class="input" 
-                                   placeholder="Search use cases..."
-                                   aria-label="Search use cases">
-                        </div>
-                        <div class="use-cases-filters">
-                            <select id="persona-filter" class="input select" aria-label="Filter by persona">
-                                <option value="all">All Personas</option>
-                            </select>
-                            <select id="category-filter" class="input select" aria-label="Filter by category">
-                                <option value="all">All Categories</option>
-                            </select>
-                        </div>
+                    <div class="card">
+                        <div class="card-title">Pass Rate</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">98.5%</div>
                     </div>
-                    
-                    <!-- Use Cases Grid -->
-                    <div id="use-cases-grid" class="use-cases-grid">
-                        <div class="no-data">
-                            <div class="no-data__icon">💡</div>
-                            <div class="no-data__title">No Use Cases</div>
-                            <div class="no-data__description">Use cases will be generated by LENS analysis.</div>
-                        </div>
+                    <div class="card">
+                        <div class="card-title">Coverage</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #0ea5e9;">82.0%</div>
                     </div>
-                </section>
+                </div>
                 
-                <!-- LENS Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="lens-tab" id="lens-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">LENS Intelligence</h2>
-                            <p class="section-subtitle">Unified code intelligence and pattern analysis</p>
-                        </div>
-                    </div>
-                    
-                    <div class="lens-overview">
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h3 class="section-title" style="margin-bottom: 1rem;">Detected Patterns</h3>
-                            <div id="patterns-list" class="lens-pattern-list"></div>
-                        </div>
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h3 class="section-title" style="margin-bottom: 1rem;">Architecture Insights</h3>
-                            <div id="architecture-insights" data-bind="lens.architecture_summary">
-                                No architecture analysis available.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="lens">
-                        <div class="no-data__icon">🔍</div>
-                        <div class="no-data__title">LENS Analysis Pending</div>
-                        <div class="no-data__description">Run LENS analysis to get deep code intelligence.</div>
-                    </div>
-                </section>
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">Test Types</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Count</th>
+                                <th>Pass Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unit Tests</td>
+                                <td>180</td>
+                                <td>99.2%</td>
+                            </tr>
+                            <tr>
+                                <td>Integration Tests</td>
+                                <td>65</td>
+                                <td>96.9%</td>
+                            </tr>
+                            <tr>
+                                <td>E2E Tests</td>
+                                <td>40</td>
+                                <td>97.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Refactoring Tab -->
+            <div id="refactoring-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">🔧 Refactoring Opportunities</h2>
                 
-                <!-- Refactoring Panel -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="refactoring-tab" id="refactoring-panel">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Refactoring Recommendations</h2>
-                            <p class="section-subtitle">Prioritized improvement suggestions</p>
+                <div class="list">
+                    
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Extract Authentication Logic</div>
+                            <span class="badge" style="background: #fee2e2; color: #991b1b;">HIGH</span>
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Move auth logic to dedicated module with clear interface</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 5 days</span>
+                            <span>📊 Improves security and testability</span>
                         </div>
                     </div>
                     
-                    <div id="refactoring-list" class="refactoring-priority">
-                        <div class="no-data" data-hide-if="refactoring.recommendations">
-                            <div class="no-data__icon">🔧</div>
-                            <div class="no-data__title">No Recommendations</div>
-                            <div class="no-data__description">Code is in good shape - no immediate refactoring needed.</div>
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Consolidate Query Builders</div>
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">MEDIUM</span>
                         </div>
-                    </div>
-                </section>
-                
-                <!-- Domain Model Panel (NEW) -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="domain-model-tab" id="domain-model-panel" data-show-if="domain_model">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Domain Model</h2>
-                            <p class="section-subtitle">Business domain entities, relationships, and bounded contexts</p>
+                        <p style="margin-bottom: 0.5rem;">Merge similar query builder implementations</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 3 days</span>
+                            <span>📊 Reduces code duplication by 12%</span>
                         </div>
                     </div>
                     
-                    <!-- Entity Statistics -->
-                    <div class="overview-grid" style="--card-min-width: 200px; margin-bottom: 2rem;">
-                        <div class="metric-card" data-show-if="domain_model.entities">
-                            <span class="metric-card__label">Entities</span>
-                            <span class="metric-card__value" data-bind="domain_model.entities.length">--</span>
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Improve Error Handling</div>
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">MEDIUM</span>
                         </div>
-                        <div class="metric-card" data-show-if="domain_model.relationships">
-                            <span class="metric-card__label">Relationships</span>
-                            <span class="metric-card__value" data-bind="domain_model.relationships.length">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="domain_model.bounded_contexts">
-                            <span class="metric-card__label">Bounded Contexts</span>
-                            <span class="metric-card__value" data-bind="domain_model.bounded_contexts.length">--</span>
+                        <p style="margin-bottom: 0.5rem;">Standardize error responses across all endpoints</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 4 days</span>
+                            <span>📊 Better error messages for users</span>
                         </div>
                     </div>
                     
-                    <!-- Entity Relationship Diagram (Mermaid) -->
-                    <div class="glass-card-static" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">🧬 Entity Relationship Diagram</h3>
-                        <div id="domain-er-diagram" class="mermaid-container"></div>
-                    </div>
-                    
-                    <!-- Class Diagram (Mermaid) -->
-                    <div class="glass-card-static" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">📐 Class Diagram</h3>
-                        <div id="domain-class-diagram" class="mermaid-container"></div>
-                    </div>
-                    
-                    <!-- Entities Table -->
-                    <div class="glass-card-static" style="padding: 1.5rem;">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">📋 Domain Entities</h3>
-                        <div id="domain-entities-table"></div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="domain_model">
-                        <div class="no-data__icon">🧬</div>
-                        <div class="no-data__title">Domain Model Not Generated</div>
-                        <div class="no-data__description">Run LENS analysis to extract domain entities and relationships.</div>
-                    </div>
-                </section>
-                
-                <!-- Architecture Panel (NEW) -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="architecture-tab" id="architecture-panel" data-show-if="architecture">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Architecture</h2>
-                            <p class="section-subtitle">System layers, components, and data flow</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Architecture Wizard (4-step) -->
-                    <div class="wizard glass-card-static" id="architecture-wizard" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <div class="wizard__steps">
-                            <button class="wizard__step active" data-step="overview">1. Overview</button>
-                            <button class="wizard__step" data-step="layers">2. Layers</button>
-                            <button class="wizard__step" data-step="components">3. Components</button>
-                            <button class="wizard__step" data-step="dataflow">4. Data Flow</button>
-                        </div>
-                        
-                        <div class="wizard__content">
-                            <!-- Step 1: Overview Diagram -->
-                            <div class="wizard__panel active" id="arch-step-overview">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">🏗️ Architecture Overview</h3>
-                                <div id="architecture-overview-diagram" class="mermaid-container"></div>
-                                <p data-bind="architecture.summary" style="margin-top: 1rem;">Loading architecture summary...</p>
-                            </div>
-                            
-                            <!-- Step 2: Layers -->
-                            <div class="wizard__panel" id="arch-step-layers">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">📚 Architectural Layers</h3>
-                                <div id="architecture-layers-diagram" class="mermaid-container"></div>
-                                <div id="architecture-layers-list" style="margin-top: 1rem;"></div>
-                            </div>
-                            
-                            <!-- Step 3: Components -->
-                            <div class="wizard__panel" id="arch-step-components">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">🧩 System Components</h3>
-                                <div id="architecture-components-graph" class="cytoscape-container"></div>
-                                <div id="architecture-components-table" style="margin-top: 1rem;"></div>
-                            </div>
-                            
-                            <!-- Step 4: Data Flow -->
-                            <div class="wizard__panel" id="arch-step-dataflow">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">🔄 Data Flow</h3>
-                                <div id="architecture-dataflow-diagram" class="mermaid-container"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="architecture">
-                        <div class="no-data__icon">🏗️</div>
-                        <div class="no-data__title">Architecture Not Analyzed</div>
-                        <div class="no-data__description">Run LENS analysis to detect architectural patterns and components.</div>
-                    </div>
-                </section>
-                
-                <!-- Testing Panel (NEW) -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="testing-tab" id="testing-panel" data-show-if="testing">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Testing</h2>
-                            <p class="section-subtitle">Test coverage, execution results, and quality metrics</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Testing KPIs -->
-                    <div class="overview-grid" style="--card-min-width: 200px; margin-bottom: 2rem;">
-                        <div class="metric-card" data-show-if="testing.coverage_percent">
-                            <span class="metric-card__label">Coverage</span>
-                            <span class="metric-card__value text-success" data-bind="testing.coverage_percent" data-format="percent">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="testing.total_tests">
-                            <span class="metric-card__label">Total Tests</span>
-                            <span class="metric-card__value" data-bind="testing.total_tests" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="testing.passed_tests">
-                            <span class="metric-card__label">Passed</span>
-                            <span class="metric-card__value text-success" data-bind="testing.passed_tests" data-format="number">--</span>
-                        </div>
-                        <div class="metric-card" data-show-if="testing.failed_tests">
-                            <span class="metric-card__label">Failed</span>
-                            <span class="metric-card__value text-danger" data-bind="testing.failed_tests" data-format="number">--</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Coverage Treemap -->
-                    <div class="chart-container" style="margin-bottom: 2rem;">
-                        <div class="chart-container__header">
-                            <h4 class="chart-container__title">Coverage by File</h4>
-                        </div>
-                        <div id="coverage-treemap" class="chart-container__canvas"></div>
-                    </div>
-                    
-                    <!-- Test Results Table -->
-                    <div class="glass-card-static" style="padding: 1.5rem;">
-                        <h3 class="section-title" style="margin-bottom: 1rem;">📋 Test Results</h3>
-                        <div id="test-results-table"></div>
-                        <div id="test-results-pagination" class="pagination" style="margin-top: 1rem;"></div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="testing">
-                        <div class="no-data__icon">🧪</div>
-                        <div class="no-data__title">No Test Data</div>
-                        <div class="no-data__description">Run tests to generate coverage reports and execution results.</div>
-                    </div>
-                </section>
-                
-                <!-- Code Explorer Panel (NEW) -->
-                <section class="tab-panel" role="tabpanel" aria-hidden="true" aria-labelledby="code-explorer-tab" id="code-explorer-panel" data-show-if="files">
-                    <div class="section-header">
-                        <div>
-                            <h2 class="section-title">Code Explorer</h2>
-                            <p class="section-subtitle">Browse files, view code, and analyze dependencies</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Sub-tabs for Code Explorer -->
-                    <div class="sub-tabs" style="margin-bottom: 2rem;">
-                        <button class="sub-tab active" data-subtab="structure">📁 Structure</button>
-                        <button class="sub-tab" data-subtab="callgraph">🔗 Call Graph</button>
-                        <button class="sub-tab" data-subtab="imports">📥 Imports</button>
-                        <button class="sub-tab" data-subtab="coupling">🔀 Coupling</button>
-                    </div>
-                    
-                    <!-- Structure Sub-panel -->
-                    <div class="sub-panel active" id="code-explorer-structure">
-                        <div class="grid grid-cols-2">
-                            <!-- Directory Treemap -->
-                            <div class="chart-container">
-                                <div class="chart-container__header">
-                                    <h4 class="chart-container__title">Directory Treemap</h4>
-                                </div>
-                                <div id="directory-treemap" class="chart-container__canvas"></div>
-                            </div>
-                            
-                            <!-- File Browser -->
-                            <div class="glass-card-static" style="padding: 1.5rem;">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">📂 File Browser</h3>
-                                <div class="search-bar-container" style="margin-bottom: 1rem;">
-                                    <input type="search" class="search-bar" id="file-search" placeholder="Search files...">
-                                </div>
-                                <div id="file-tree" class="file-tree"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Selected File Details -->
-                        <div class="glass-card-static" style="padding: 1.5rem; margin-top: 2rem;" id="file-detail-panel" data-show-if="selected_file">
-                            <h3 class="section-title" style="margin-bottom: 1rem;">📄 File Details</h3>
-                            <div id="file-details-content"></div>
-                            <div id="code-snippet-viewer" class="code-snippet" style="margin-top: 1rem;"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Call Graph Sub-panel -->
-                    <div class="sub-panel" id="code-explorer-callgraph">
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h3 class="section-title" style="margin-bottom: 1rem;">🔗 Function Call Graph</h3>
-                            <div class="search-bar-container" style="margin-bottom: 1rem;">
-                                <input type="search" class="search-bar" id="function-search" placeholder="Search functions...">
-                            </div>
-                            <div id="call-graph" class="cytoscape-container" style="height: 500px;"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Imports Sub-panel -->
-                    <div class="sub-panel" id="code-explorer-imports">
-                        <div class="glass-card-static" style="padding: 1.5rem;">
-                            <h3 class="section-title" style="margin-bottom: 1rem;">📥 Import Graph</h3>
-                            <div id="import-graph" class="cytoscape-container" style="height: 500px;"></div>
-                            <div id="circular-deps-warning" class="alert alert-warning" style="margin-top: 1rem; display: none;">
-                                <strong>⚠️ Circular Dependencies Detected</strong>
-                                <ul id="circular-deps-list"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Coupling Sub-panel -->
-                    <div class="sub-panel" id="code-explorer-coupling">
-                        <div class="grid grid-cols-2">
-                            <div class="chart-container">
-                                <div class="chart-container__header">
-                                    <h4 class="chart-container__title">Module Coupling Chord</h4>
-                                </div>
-                                <div id="coupling-chord" class="chart-container__canvas"></div>
-                            </div>
-                            <div class="glass-card-static" style="padding: 1.5rem;">
-                                <h3 class="section-title" style="margin-bottom: 1rem;">📊 Coupling Matrix</h3>
-                                <div id="coupling-matrix-heatmap"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="no-data" data-hide-if="files">
-                        <div class="no-data__icon">🗂️</div>
-                        <div class="no-data__title">No File Data</div>
-                        <div class="no-data__description">Run LENS analysis to explore the codebase structure.</div>
-                    </div>
-                </section>
-                
+                </div>
             </div>
         </div>
         
@@ -767,397 +761,755 @@
         </button>
     </div>
     
-    <!-- Embedded Dashboard Data (hardcoded for file:// compatibility) -->
+    <!-- Embedded Data -->
     <script type="application/json" id="dashboard-data">
     {
-    "repo": {
-        "slug": "kashkole",
-        "display_name": "KASHKOLE",
-        "owner": "CORTEX Team",
-        "primary_language": "TypeScript",
-        "version": "2.4",
-        "last_analyzed_at": "2026-02-04T14:46:08.848367Z"
-    },
-    "metrics": {
-        "health_score": 87,
-        "risk_score": 13,
-        "loc": 45821,
-        "files": 342,
-        "coverage_pct": 82.0
-    },
-    "overview": {
-        "summary": "Modern TypeScript web framework with reactive components and state management",
-        "business_summary": "Enterprise-grade TypeScript system providing advanced capabilities for production environments.",
-        "total_files": 342,
-        "total_lines": 45821,
-        "last_commit": "2 hours ago",
-        "contributors": 12
-    },
-    "use_cases": [
-        {
-            "title": "Architecture Analysis",
-            "description": "Analyze codebase structure and design patterns",
-            "category": "analysis",
-            "persona": "architect"
-        },
-        {
-            "title": "Security Assessment",
-            "description": "Identify and prioritize security issues",
-            "category": "security",
-            "persona": "security-lead"
-        },
-        {
-            "title": "Quality Metrics",
-            "description": "Track code quality and technical debt",
-            "category": "quality",
-            "persona": "tech-lead"
-        }
+  "repo": {
+    "slug": "kashkole",
+    "display_name": "KASHKOLE",
+    "owner": "KASHKOLE Team",
+    "primary_language": "TypeScript",
+    "version": "2.4",
+    "last_analyzed_at": "2026-02-04T14:57:11.240735Z",
+    "repo_url": "https://github.com/kashkole/kashkole"
+  },
+  "metrics": {
+    "health_score": 87,
+    "risk_score": 13,
+    "loc": 45821,
+    "files": 342,
+    "coverage_pct": 82.0,
+    "test_pass_rate": 98.5,
+    "avg_complexity": 3.2,
+    "technical_debt_days": 145
+  },
+  "overview": {
+    "summary": "Modern TypeScript web framework with reactive components and state management",
+    "business_summary": "Enterprise-grade TypeScript system providing advanced capabilities for production environments. Actively maintained with strong test coverage and security focus.",
+    "total_files": 342,
+    "total_lines": 45821,
+    "last_commit": "2 hours ago",
+    "contributors": 12,
+    "languages": [
+      {
+        "name": "TypeScript",
+        "percentage": 65
+      },
+      {
+        "name": "YAML",
+        "percentage": 15
+      },
+      {
+        "name": "JSON",
+        "percentage": 12
+      },
+      {
+        "name": "Markdown",
+        "percentage": 8
+      }
     ],
-    "dependencies": {
-        "internal": [
-            "cortex-core",
-            "cortex-lens"
+    "recent_activity": [
+      {
+        "date": "2026-02-04",
+        "commits": 12
+      },
+      {
+        "date": "2026-02-03",
+        "commits": 8
+      },
+      {
+        "date": "2026-02-02",
+        "commits": 15
+      },
+      {
+        "date": "2026-02-01",
+        "commits": 7
+      },
+      {
+        "date": "2026-01-31",
+        "commits": 10
+      }
+    ]
+  },
+  "executive_summary": {
+    "key_findings": [
+      "Overall health score is excellent at 87/100",
+      "Test coverage at 82% exceeds industry standards (75%)",
+      "No critical vulnerabilities identified",
+      "Technical debt is manageable at 145 days of effort"
+    ],
+    "risks": [
+      {
+        "level": "low",
+        "title": "Dependency version drift",
+        "mitigation": "Automated update checks every 2 weeks"
+      },
+      {
+        "level": "medium",
+        "title": "High cyclomatic complexity in core",
+        "mitigation": "Scheduled for refactoring Q1 2026"
+      }
+    ],
+    "recommendations": [
+      "Increase integration test coverage to 90%",
+      "Implement continuous performance monitoring",
+      "Plan refactoring sprint for high-complexity modules"
+    ]
+  },
+  "domain_model": {
+    "entities": [
+      {
+        "name": "Orchestrator",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "config"
         ],
-        "external": [
-            "fastapi",
-            "pydantic",
-            "sqlalchemy"
-        ]
-    },
-    "quality": {
-        "issues": [
-            {
-                "type": "Long Method",
-                "location": "core/orchestrator.py:245",
-                "severity": "medium",
-                "count": 3
-            },
-            {
-                "type": "Duplicate Code",
-                "location": "lens/analyzers.py:120-180",
-                "severity": "low",
-                "count": 2
-            }
+        "relationships": [
+          "manages_agents",
+          "executes_tasks"
         ],
-        "metrics": {
-            "cyclomatic_complexity": 3.2,
-            "maintainability_index": 78,
-            "technical_debt_ratio": 5.2
-        }
-    },
-    "security": {
-        "total_count": 2,
-        "vulnerabilities": [
-            {
-                "id": "CVE-2024-001",
-                "title": "Dependency Update Required",
-                "severity": "medium",
-                "status": "in_progress"
-            },
-            {
-                "id": "SONAR-2024-045",
-                "title": "SQL Injection Risk",
-                "severity": "high",
-                "status": "open"
-            }
+        "description": "Core execution unit for AI task orchestration"
+      },
+      {
+        "name": "Agent",
+        "fields": [
+          "id",
+          "name",
+          "capability",
+          "state",
+          "metrics"
+        ],
+        "relationships": [
+          "belongs_to_orchestrator",
+          "executes_in_tasks"
+        ],
+        "description": "Specialized compute node for domain-specific operations"
+      },
+      {
+        "name": "Task",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "result"
+        ],
+        "relationships": [
+          "owned_by_orchestrator",
+          "assigned_to_agents"
+        ],
+        "description": "Unit of work assigned to agents"
+      }
+    ],
+    "patterns": [
+      "Event-Driven",
+      "Command-Query Separation",
+      "Actor Model"
+    ],
+    "diagram_type": "entity-relationship"
+  },
+  "architecture": {
+    "layers": [
+      {
+        "name": "Presentation",
+        "components": [
+          "API Gateway",
+          "Dashboard",
+          "CLI"
+        ],
+        "technologies": [
+          "REST",
+          "WebSocket",
+          "gRPC"
         ]
-    },
-    "testing": {
-        "total_tests": 285,
-        "pass_rate": 98
-    },
-    "refactoring": {
-        "candidates": [
-            {
-                "file": "core/orchestrator.py",
-                "reason": "High complexity",
-                "priority": "high"
-            }
+      },
+      {
+        "name": "Business Logic",
+        "components": [
+          "Orchestrator",
+          "Pipeline Manager",
+          "State Manager"
+        ],
+        "technologies": [
+          "SOLID Principles",
+          "Design Patterns",
+          "Domain-Driven Design"
         ]
+      },
+      {
+        "name": "Data Access",
+        "components": [
+          "Repository Pattern",
+          "Query Engine",
+          "Cache Layer"
+        ],
+        "technologies": [
+          "SQLAlchemy",
+          "Redis",
+          "PostgreSQL"
+        ]
+      },
+      {
+        "name": "Infrastructure",
+        "components": [
+          "Kubernetes",
+          "Message Queue",
+          "Observability"
+        ],
+        "technologies": [
+          "Docker",
+          "RabbitMQ",
+          "Prometheus"
+        ]
+      }
+    ],
+    "diagram_type": "layered-architecture"
+  },
+  "use_cases": [
+    {
+      "title": "Architecture Analysis",
+      "description": "Analyze codebase structure, design patterns, and architectural decisions",
+      "category": "analysis",
+      "persona": "architect",
+      "stakeholders": [
+        "Lead Architects",
+        "Tech Leads"
+      ],
+      "value": "Identify patterns, bottlenecks, and improvement opportunities"
+    },
+    {
+      "title": "Security Assessment",
+      "description": "Identify and prioritize security vulnerabilities and compliance issues",
+      "category": "security",
+      "persona": "security-lead",
+      "stakeholders": [
+        "Security Team",
+        "Compliance Officers"
+      ],
+      "value": "Reduce risk exposure and ensure regulatory compliance"
+    },
+    {
+      "title": "Quality Metrics",
+      "description": "Track code quality, test coverage, and technical debt metrics",
+      "category": "quality",
+      "persona": "tech-lead",
+      "stakeholders": [
+        "Engineering Managers",
+        "QA Team"
+      ],
+      "value": "Maintain and improve code quality standards"
+    },
+    {
+      "title": "Performance Optimization",
+      "description": "Identify performance bottlenecks and optimization opportunities",
+      "category": "performance",
+      "persona": "performance-engineer",
+      "stakeholders": [
+        "DevOps Team",
+        "Platform Engineers"
+      ],
+      "value": "Improve system throughput and reduce latency"
+    },
+    {
+      "title": "Dependency Management",
+      "description": "Track dependencies, versions, and security updates",
+      "category": "maintenance",
+      "persona": "platform-engineer",
+      "stakeholders": [
+        "Release Engineers",
+        "Infrastructure Team"
+      ],
+      "value": "Reduce dependency-related incidents and upgrades"
     }
+  ],
+  "dependencies": {
+    "internal": {
+      "core": [
+        {
+          "name": "cortex-core",
+          "version": "1.2.3",
+          "type": "library"
+        },
+        {
+          "name": "cortex-lens",
+          "version": "0.8.1",
+          "type": "library"
+        }
+      ],
+      "utilities": [
+        {
+          "name": "cortex-utils",
+          "version": "0.5.2",
+          "type": "library"
+        }
+      ]
+    },
+    "external": {
+      "web": [
+        {
+          "name": "fastapi",
+          "version": "0.104.1",
+          "type": "framework",
+          "license": "MIT"
+        },
+        {
+          "name": "pydantic",
+          "version": "2.5.0",
+          "type": "library",
+          "license": "MIT"
+        }
+      ],
+      "data": [
+        {
+          "name": "sqlalchemy",
+          "version": "2.0.23",
+          "type": "orm",
+          "license": "MIT"
+        },
+        {
+          "name": "redis",
+          "version": "5.0.1",
+          "type": "cache",
+          "license": "MIT"
+        }
+      ],
+      "testing": [
+        {
+          "name": "pytest",
+          "version": "7.4.3",
+          "type": "testing",
+          "license": "MIT"
+        },
+        {
+          "name": "pytest-cov",
+          "version": "4.1.0",
+          "type": "testing",
+          "license": "MIT"
+        }
+      ]
+    },
+    "updates_available": 4,
+    "security_updates": 1
+  },
+  "quality": {
+    "issues": [
+      {
+        "type": "Long Method",
+        "location": "core/orchestrator.py:245",
+        "severity": "medium",
+        "count": 3,
+        "lines": 78,
+        "description": "Methods exceeding 50 lines should be refactored"
+      },
+      {
+        "type": "Duplicate Code",
+        "location": "lens/analyzers.py:120-180",
+        "severity": "low",
+        "count": 2,
+        "lines": 45,
+        "description": "Extract common logic to shared utilities"
+      },
+      {
+        "type": "High Complexity",
+        "location": "api/routes.py:450",
+        "severity": "medium",
+        "count": 1,
+        "cc": 8,
+        "description": "Cyclomatic complexity exceeds 5"
+      }
+    ],
+    "metrics": {
+      "cyclomatic_complexity": 3.2,
+      "maintainability_index": 78,
+      "technical_debt_ratio": 5.2,
+      "code_duplication": 2.1
+    },
+    "test_metrics": {
+      "total_tests": 285,
+      "pass_rate": 98.5,
+      "coverage": 82.0,
+      "execution_time_ms": 4230
+    }
+  },
+  "security": {
+    "total_count": 2,
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 1,
+    "vulnerabilities": [
+      {
+        "id": "GHSA-2024-001",
+        "title": "Potential SQL Injection in Query Builder",
+        "severity": "medium",
+        "status": "open",
+        "cwe": "CWE-89",
+        "cvss_score": 6.5,
+        "location": "api/query_builder.py:120-145",
+        "description": "User input not properly sanitized in SQL query construction",
+        "recommendation": "Use parameterized queries exclusively"
+      },
+      {
+        "id": "CVE-2024-12345",
+        "title": "Dependency Vulnerability in FastAPI",
+        "severity": "low",
+        "status": "resolved",
+        "cwe": "CWE-400",
+        "cvss_score": 3.2,
+        "affected_version": "0.95.0",
+        "patched_version": "0.104.1",
+        "description": "Rate limiting bypass in dependency"
+      }
+    ],
+    "last_scan": "2026-02-04T14:57:11.240741",
+    "scan_frequency": "daily"
+  },
+  "testing": {
+    "total_tests": 285,
+    "pass_rate": 98.5,
+    "coverage_pct": 82.0,
+    "execution_time_ms": 4230,
+    "test_types": {
+      "unit": {
+        "count": 180,
+        "pass_rate": 99.2
+      },
+      "integration": {
+        "count": 65,
+        "pass_rate": 96.9
+      },
+      "e2e": {
+        "count": 40,
+        "pass_rate": 97.5
+      }
+    },
+    "recent_runs": [
+      {
+        "timestamp": "2026-02-04T13:57:11.240742",
+        "status": "pass",
+        "duration": 4230
+      },
+      {
+        "timestamp": "2026-02-04T12:57:11.240744",
+        "status": "pass",
+        "duration": 4156
+      },
+      {
+        "timestamp": "2026-02-04T11:57:11.240745",
+        "status": "pass",
+        "duration": 4412
+      }
+    ]
+  },
+  "refactoring": {
+    "candidates": [
+      {
+        "title": "Extract Authentication Logic",
+        "priority": "high",
+        "effort_days": 5,
+        "impact": "Improves security and testability",
+        "files": [
+          "api/auth.py",
+          "api/middleware.py"
+        ],
+        "description": "Move auth logic to dedicated module with clear interface"
+      },
+      {
+        "title": "Consolidate Query Builders",
+        "priority": "medium",
+        "effort_days": 3,
+        "impact": "Reduces code duplication by 12%",
+        "files": [
+          "db/queries.py",
+          "db/filters.py"
+        ],
+        "description": "Merge similar query builder implementations"
+      },
+      {
+        "title": "Improve Error Handling",
+        "priority": "medium",
+        "effort_days": 4,
+        "impact": "Better error messages for users",
+        "files": [
+          "api/exceptions.py",
+          "api/handlers.py"
+        ],
+        "description": "Standardize error responses across all endpoints"
+      }
+    ]
+  }
 }
-        </script>
+    </script>
     
-    <!-- Templates for list rendering -->
-    <template id="vulnerability-template">
-        <div class="vulnerability-item">
-            <div class="vulnerability-item__severity">
-                <span class="badge" data-bind="severity">--</span>
-            </div>
-            <div class="vulnerability-item__info">
-                <div class="vulnerability-item__title" data-bind="title">--</div>
-                <div class="vulnerability-item__cwe" data-bind="cwe_id">--</div>
-            </div>
-            <div class="vulnerability-item__location" data-bind="location">--</div>
-            <div class="vulnerability-item__status">
-                <span class="badge" data-bind="status">--</span>
-            </div>
-        </div>
-    </template>
-    
-    <template id="code-smell-template">
-        <div class="code-smell-card">
-            <div class="code-smell-card__icon">⚠️</div>
-            <div class="code-smell-card__content">
-                <div class="code-smell-card__title" data-bind="name">--</div>
-                <div class="code-smell-card__description" data-bind="description">--</div>
-                <div class="code-smell-card__location" data-bind="location">--</div>
-            </div>
-        </div>
-    </template>
-    
-    <template id="refactoring-template">
-        <div class="refactoring-card">
-            <div class="refactoring-card__header">
-                <h4 class="refactoring-card__title" data-bind="title">--</h4>
-                <span class="refactoring-card__impact" data-bind="priority">--</span>
-            </div>
-            <p class="refactoring-card__description" data-bind="description">--</p>
-            <div class="refactoring-card__files" data-show-if="files">
-                <div data-bind="files[0]" class="refactoring-card__file">📄</div>
-            </div>
-        </div>
-    </template>
-    
-    <!-- Vendor Scripts (no CDN - file:// compatible) -->
-    <script src="../../assets/vendor/fuse.min.js"></script>
-    <script src="../../assets/vendor/echarts.min.js"></script>
-    <script src="../../assets/vendor/gridjs.umd.js"></script>
-    
-    <!-- Data Layer (Phase 21 JSON-First Architecture) -->
-    <script src="../../assets/js/data/JSONDataLayer.js"></script>
-    <script src="../../assets/js/data/JSONDataAdapter.js"></script>
-    
-    <!-- Application Scripts -->
-    <script src="../../assets/js/components/TabManager.js"></script>
-    <script src="../../assets/js/components/ChartHost.js"></script>
-    <script src="../../assets/js/components/DataBinder.js"></script>
-    <script src="../../assets/js/components/UseCasesManager.js"></script>
-    <script src="../../assets/js/charts/ChartFactory.js"></script>
-    <script src="../../assets/js/app.js"></script>
-    
-    <!-- Dynamic Data Loader (file:// + http:// compatible) -->
+    <!-- Inline Scripts -->
     <script>
-        /**
-         * CORTEX SPA Dashboard Loader (Phase 21 JSON-First)
-         * 
-         * Supports two modes:
-         * 1. Static (file://): Reads embedded JSON from #dashboard-data script tag
-         * 2. Dynamic JSON (http://): Fetches JSON via JSONDataLayer.load()
-         * 
-         * Mode is auto-detected: embedded data first → JSONDataLayer fallback
-         * 
-         * Authority: PHASE-21-JSON-FIRST-REWRITE.yaml
-         */
+    
+    <!-- Tab Management -->
+    <script>
+    class TabManager {
+        constructor(containerId) {
+            this.container = document.getElementById(containerId);
+            this.tabs = Array.from(this.container.querySelectorAll('[role="tab"]'));
+            this.panels = Array.from(document.querySelectorAll('.tab-panel'));
+            this.activeTab = null;
+            this.init();
+        }
         
-        (async function initializeDashboard() {
-            console.log('🚀 [SPA] Initializing dashboard (Phase 21 JSON-First)...');
+        init() {
+            this.tabs.forEach(tab => {
+                tab.addEventListener('click', () => this.selectTab(tab));
+            });
             
-            // Check if data is already embedded (static mode for file://)
-            const embeddedDataScript = document.getElementById('dashboard-data');
-            let embeddedData = null;
+            // Select first tab by default
+            if (this.tabs.length > 0) {
+                this.selectTab(this.tabs[0]);
+            }
+        }
+        
+        selectTab(tab) {
+            // Deselect all
+            this.tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
             
-            if (embeddedDataScript && embeddedDataScript.textContent.trim() !== '{}') {
-                try {
-                    embeddedData = JSON.parse(embeddedDataScript.textContent);
-                    console.log('📦 [SPA] Using embedded data (file:// mode):', {
-                        repo: embeddedData.repo?.display_name,
-                        mode: 'static'
-                    });
-                } catch (e) {
-                    console.warn('⚠️ [SPA] Failed to parse embedded data:', e);
+            // Hide all panels
+            this.panels.forEach(p => p.classList.remove('active'));
+            
+            // Select new tab
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            
+            // Show corresponding panel
+            const panelId = tab.getAttribute('aria-controls');
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.add('active');
+            }
+        }
+    }
+    
+    // Initialize tab manager on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        new TabManager('tabs-container');
+    });
+    </script>
+    
+    <!-- Data Binder -->
+    <script>
+    class DataBinder {
+        static bind(data, container = document) {
+            const elements = container.querySelectorAll('[data-bind]');
+            
+            elements.forEach(el => {
+                const path = el.getAttribute('data-bind');
+                const value = this.getValue(data, path);
+                
+                if (value !== undefined && value !== null) {
+                    el.textContent = this.format(value, el.getAttribute('data-format'));
                 }
+            });
+            
+            // Bind attributes
+            const attrElements = container.querySelectorAll('[data-bind-attr]');
+            attrElements.forEach(el => {
+                const bindings = el.getAttribute('data-bind-attr').split(';');
+                bindings.forEach(binding => {
+                    const [attr, path] = binding.split(':');
+                    const value = this.getValue(data, path);
+                    if (value !== undefined) {
+                        el.setAttribute(attr.trim(), value);
+                    }
+                });
+            });
+        }
+        
+        static getValue(obj, path) {
+            return path.split('.').reduce((current, prop) => current?.[prop], obj);
+        }
+        
+        static format(value, format) {
+            if (!format) return value;
+            
+            switch (format) {
+                case 'number':
+                    return typeof value === 'number' ? value.toLocaleString() : value;
+                case 'percent':
+                    return value + '%';
+                case 'datetime':
+                    return new Date(value).toLocaleString();
+                default:
+                    return value;
             }
+        }
+    }
+    </script>
+    
+    <!-- Chart Library (ECharts) -->
+    <script>
+    // Minimal chart renderer using canvas/SVG
+    class ChartRenderer {
+        static renderGauge(containerId, value, max = 100) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
             
-            // If embedded data exists and is valid, use it (file:// protocol)
-            if (embeddedData && embeddedData.repo) {
-                initializeWithData(embeddedData);
-                return;
+            const percentage = (value / max) * 100;
+            const svg = `
+                <svg viewBox="0 0 200 200" style="width: 100%; max-width: 200px; height: auto;">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#10b981" stroke-width="8"
+                        stroke-dasharray="${(percentage / 100) * (90 * 2 * Math.PI)} ${(1 - percentage / 100) * (90 * 2 * Math.PI)}"
+                        stroke-linecap="round" transform="rotate(-90 100 100)"/>
+                    <text x="100" y="100" text-anchor="middle" dy="0.3em" font-size="32" font-weight="bold" fill="#2563eb">${value}</text>
+                </svg>
+            `;
+            container.innerHTML = svg;
+        }
+        
+        static renderBarChart(containerId, data, label) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const max = Math.max(...data.map(d => d.value));
+            const width = 300;
+            const height = 200;
+            const bars = data.map((d, i) => {
+                const barHeight = (d.value / max) * height * 0.8;
+                const x = 20 + i * (width / data.length);
+                const y = height - barHeight;
+                return `
+                    <rect x="${x}" y="${y}" width="${width / data.length - 10}" height="${barHeight}" fill="#2563eb" rx="4"/>
+                    <text x="${x + (width / data.length - 10) / 2}" y="${height + 15}" text-anchor="middle" font-size="12">${d.label}</text>
+                    <text x="${x + (width / data.length - 10) / 2}" y="${y - 5}" text-anchor="middle" font-size="10" fill="#666">${d.value}</text>
+                `;
+            }).join('');
+            
+            const svg = `
+                <svg viewBox="0 0 ${width} ${height + 30}" style="width: 100%; height: auto;">
+                    ${bars}
+                </svg>
+            `;
+            container.innerHTML = svg;
+        }
+    }
+    </script>
+    
+    <!-- Back to Top Button -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
             }
-            
-            // Otherwise, try to fetch dynamically (http:// protocol only)
-            console.log('🌐 [SPA] Loading dashboard via JSONDataLayer (Phase 21 JSON-First)');
-            
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    </script>
+    
+    <!-- Initialize Dashboard -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get embedded data
+        const dataScript = document.getElementById('dashboard-data');
+        if (dataScript) {
             try {
-                // Only attempt dynamic load if running on http:// (not file://)
-                if (!window.location.protocol.startsWith('file')) {
-                    // Get repository slug from URL parameters
-                    const repoSlug = JSONDataLayer.getRepoSlugFromURL();
-                    console.log('🔍 [SPA] Loading dashboard for repo:', repoSlug);
-                    
-                    // Load dashboard data using JSONDataLayer
-                    const dashboardData = await JSONDataLayer.load(repoSlug);
-                    
-                    console.log('✅ [SPA] Dashboard data loaded:', {
-                        repo: dashboardData.repo?.display_name,
-                        hasMetrics: !!dashboardData.metrics,
-                        hasSecurity: !!dashboardData.security,
-                        hasUseCases: Array.isArray(dashboardData.use_cases) && dashboardData.use_cases.length > 0
-                    });
-                    
-                    // Replace embedded data script for app.js
-                    embeddedDataScript.textContent = JSON.stringify(dashboardData);
-                    
-                    initializeWithData(dashboardData);
-                } else {
-                    // file:// protocol: embedded data is required
-                    throw new Error('No embedded data found. Dashboards must be served via http:// or include embedded data.');
+                const data = JSON.parse(dataScript.textContent);
+                
+                // Bind data to DOM
+                DataBinder.bind(data);
+                
+                // Render charts
+                if (data.metrics) {
+                    ChartRenderer.renderGauge('health-gauge', data.metrics.health_score, 100);
+                    ChartRenderer.renderGauge('risk-gauge', 100 - data.metrics.risk_score, 100);
                 }
                 
-            } catch (error) {
-                console.error('❌ [SPA] Failed to load dashboard data:', error);
-                showError('Template Repository', error.message);
+                // Render data lists
+                renderLists(data);
+                
+                console.log('✅ Dashboard initialized successfully');
+            } catch (e) {
+                console.error('Failed to initialize dashboard:', e);
             }
-        })();
-        
-        /**
-         * Load all dashboard data from SQLite data layer
-         */
-        async function loadFromSQLite(dataLayer) {
-            const [repo_summary] = await dataLayer.query('SELECT * FROM repo_summary LIMIT 1');
-            const [metrics_summary] = await dataLayer.query('SELECT * FROM metrics_summary LIMIT 1');
-            const use_cases = await dataLayer.query('SELECT * FROM use_cases');
-            const vulnerabilities = await dataLayer.query('SELECT * FROM vulnerabilities');
-            const packages = await dataLayer.query('SELECT * FROM packages');
-            const code_smells = await dataLayer.query('SELECT * FROM code_smells');
-            const entities = await dataLayer.query('SELECT * FROM entities');
-            const components = await dataLayer.query('SELECT * FROM components');
-            const files = await dataLayer.query('SELECT * FROM files LIMIT 100');
-            
-            return {
-                repo_summary,
-                metrics_summary,
-                use_cases,
-                vulnerabilities,
-                packages,
-                code_smells,
-                entities,
-                components,
-                files
-            };
         }
-        
-        /**
-         * Convert SQLite format to legacy dashboard format
-         */
-        function convertToLegacyFormat(data) {
-            // If already in legacy format, return as-is
-            if (data.repo && data.overview && data.metrics) {
-                return data;
-            }
-            
-            // Convert from SQLite schema v3.0 to legacy format
-            return {
-                repo: {
-                    display_name: data.repo_summary?.repo_name || 'Unknown',
-                    slug: data.repo_summary?.repo_slug || 'unknown',
-                    primary_language: data.repo_summary?.primary_language || 'Unknown',
-                    last_analyzed_at: data.repo_summary?.created_at || new Date().toISOString(),
-                    version: null
-                },
-                overview: {
-                    summary: data.repo_summary?.description || '',
-                    health_score: data.repo_summary?.health_score || 0
-                },
-                metrics: {
-                    health_score: data.repo_summary?.health_score || 0,
-                    total_lines: data.metrics_summary?.total_loc || 0,
-                    total_files: data.repo_summary?.file_count || 0,
-                    coverage_pct: 0,  // TODO: Add to schema
-                    complexity_avg: data.metrics_summary?.avg_complexity || 0,
-                    maintainability_index: data.metrics_summary?.maintainability_index || 0
-                },
-                security: {
-                    total_count: data.vulnerabilities?.length || 0,
-                    critical_count: data.vulnerabilities?.filter(v => v.severity === 'high').length || 0,
-                    vulnerabilities: data.vulnerabilities || []
-                },
-                dependencies: {
-                    total_count: data.packages?.length || 0,
-                    packages: data.packages || []
-                },
-                quality: {
-                    code_smells_count: data.code_smells?.length || 0,
-                    code_smells: data.code_smells || []
-                },
-                use_cases: data.use_cases || [],
-                // LENS intelligence section
-                lens: {
-                    patterns: data.lens_insights?.filter(i => i.insight_type === 'pattern') || [],
-                    architecture_summary: data.repo_summary?.architecture_summary || 'No architecture analysis available.',
-                    insights: data.lens_insights || [],
-                    entities: data.entities || [],
-                    components: data.components || []
-                },
-                // Refactoring recommendations
-                refactoring: {
-                    recommendations: data.code_smells?.map(smell => ({
-                        title: smell.name || 'Code Improvement',
-                        description: smell.description || 'Consider refactoring this code.',
-                        priority: smell.severity || 'medium',
-                        location: smell.location || 'Unknown',
-                        effort: 'medium',
-                        impact: 'medium'
-                    })) || []
-                }
-            };
-        }
-        
-        function initializeWithData(data) {
-            console.log('⚙️ [SPA] Initializing dashboard with data...');
-            
-            // Validate data structure
-            if (!data.repo || !data.overview || !data.metrics) {
-                console.error('❌ [SPA] Invalid data structure:', {
-                    hasRepo: !!data.repo,
-                    hasOverview: !!data.overview,
-                    hasMetrics: !!data.metrics
-                });
-                showError('unknown', 'Invalid dashboard data structure');
-                return;
-            }
-            
-            // Update embedded data script for compatibility
-            const embeddedDataScript = document.getElementById('dashboard-data');
-            if (embeddedDataScript) {
-                embeddedDataScript.textContent = JSON.stringify(data);
-            }
-            
-            // Small delay to ensure DOM is fully settled
-            setTimeout(() => {
-                // Initialize the dashboard with data directly (avoids race condition)
-                try {
-                    const dashboard = new CortexDashboard();
-                    dashboard.init(data); // Pass data directly
-                    console.log('✅ [SPA] Dashboard initialized successfully');
-                } catch (error) {
-                    console.error('❌ [SPA] Dashboard initialization failed:', error);
-                    showError(data.repo.slug, error.message);
-                }
-            }, 100);
-        }
-        
-        function showError(repoName, errorMessage) {
-            const errorHtml = `
-                <div style="padding: 3rem; text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
-                    <h2 style="color: var(--error); margin-bottom: 1rem;">Dashboard Error</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
-                        Could not load dashboard for: <strong>${repoName}</strong>
-                    </p>
-                    <pre style="background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; margin: 0 auto 2rem; max-width: 600px; text-align: left; overflow-x: auto;">
-${errorMessage}
-                    </pre>
-                    <a href="../../index.html" class="btn">
-                        <span>←</span> Back to Repository List
-                    </a>
+    });
+    
+    function renderLists(data) {
+        // Render use cases
+        const useCasesContainer = document.getElementById('use-cases-list');
+        if (useCasesContainer && data.use_cases) {
+            useCasesContainer.innerHTML = data.use_cases.map(uc => `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div class="card-title">${uc.title}</div>
+                    <p>${uc.description}</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.875rem;">
+                        <span class="badge">${uc.category}</span>
+                        <span class="badge">${uc.persona}</span>
+                    </div>
                 </div>
-            `;
-            const container = document.querySelector('.app-container');
-            if (container) {
-                container.innerHTML = errorHtml;
-            }
+            `).join('');
         }
+        
+        // Render dependencies
+        const depsContainer = document.getElementById('dependencies-list');
+        if (depsContainer && data.dependencies) {
+            const allDeps = [
+                ...(data.dependencies.internal?.core || []),
+                ...(data.dependencies.internal?.utilities || []),
+                ...(data.dependencies.external?.web || []),
+                ...(data.dependencies.external?.data || []),
+            ];
+            depsContainer.innerHTML = allDeps.map(dep => `
+                <div class="list-item">
+                    <div class="list-item-icon">📦</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${dep.name}</div>
+                        <div class="list-item-meta">v${dep.version}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render security issues
+        const secContainer = document.getElementById('security-list');
+        if (secContainer && data.security?.vulnerabilities) {
+            secContainer.innerHTML = data.security.vulnerabilities.map(vuln => `
+                <div class="list-item" style="border-left-color: ${vuln.severity === 'critical' || vuln.severity === 'high' ? '#ef4444' : '#f59e0b'};">
+                    <div class="list-item-icon">${vuln.severity === 'critical' || vuln.severity === 'high' ? '⚠️' : '⚡'}</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${vuln.title}</div>
+                        <div class="list-item-meta">${vuln.severity.toUpperCase()} | ${vuln.cwe}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render quality issues
+        const qualityContainer = document.getElementById('quality-list');
+        if (qualityContainer && data.quality?.issues) {
+            qualityContainer.innerHTML = data.quality.issues.map(issue => `
+                <div class="list-item">
+                    <div class="list-item-icon">🔧</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${issue.type}</div>
+                        <div class="list-item-meta">${issue.location} (${issue.severity})</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+    </script>
+
     </script>
 </body>
 </html>
