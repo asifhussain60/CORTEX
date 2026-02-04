@@ -809,11 +809,7 @@ class JSONDataAdapter {
     }
 }
 
-// Export for module systems AND browser globals
+// Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = JSONDataAdapter;
-}
-// Browser global export
-if (typeof window !== 'undefined') {
-    window.JSONDataAdapter = JSONDataAdapter;
 }
