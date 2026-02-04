@@ -10,7 +10,7 @@
 #   orchestrators:
 #     core: [...]      # 7 core orchestrators (added EnforcementOrchestrator - Phase 8.1)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 13 support orchestrators (added VacuumOrchestrator - Phase 22.5)
+#     support: [...]   # 14 support orchestrators (added InstrumentationOrchestrator - Phase 20.9)
 # =========================================================================
 
 version: "2.0"
@@ -362,7 +362,7 @@ orchestrators:
         intelligence: ["lens", "knowledge"]
 
   # -----------------------------------------------------------------------
-  # SUPPORT ORCHESTRATORS (13 - Added VacuumOrchestrator)
+  # SUPPORT ORCHESTRATORS (14 - Added InstrumentationOrchestrator)
   # -----------------------------------------------------------------------
   support:
     - name: "OnboardingOrchestrator"
@@ -670,6 +670,30 @@ orchestrators:
         icon: "🧹"
         stages: 5
         intelligence: ["lens", "knowledge"]
+
+    - name: "InstrumentationOrchestrator"
+      module: "cortex.orchestrators.support.instrumentation_orchestrator"
+      class: "InstrumentationOrchestrator"
+      tier: 3
+      priority: 76
+      dependencies: []
+      capabilities:
+        - tdd_metrics_capture
+        - debug_metrics_capture
+        - codegen_metrics_capture
+        - orchestrator_metrics_capture
+        - threshold_monitoring
+        - enhancement_recommendations
+      health_check: "get_metrics_summary"
+      description: "Metrics instrumentation for evidence-driven tool enhancement (Phase 20.9)"
+      mcp_tools:
+        - "cortex_capture_metrics"
+        - "cortex_get_enhancement_recommendations"
+      thresholds:
+        tdd_cycle_time_p90: 300
+        debugger_failure_rate: 0.05
+        codegen_customization_rate: 0.10
+        orchestrator_latency_p95: 2000
 
     - name: "DebuggingOrchestrator"
       module: "cortex.orchestrators.support.debugging_orchestrator"
