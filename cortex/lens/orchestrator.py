@@ -115,6 +115,7 @@ class LENSOrchestrator:
         git_analyzer: Optional[GitHistoryAnalyzer] = None,
         ast_analyzer: Optional[ASTAnalyzer] = None,
         comment_extractor: Optional[CommentExtractor] = None,
+        polyglot_analyzer: Optional["PolyglotAnalyzer"] = None,
     ):
         """
         Initialize LENSOrchestrator.
@@ -122,14 +123,22 @@ class LENSOrchestrator:
         Args:
             repo_path: Path to git repository root
             git_analyzer: Optional custom GitHistoryAnalyzer (for testing)
-            ast_analyzer: Optional custom ASTAnalyzer (for testing)
+            ast_analyzer: Optional custom ASTAnalyzer (for testing, deprecated - use polyglot_analyzer)
             comment_extractor: Optional custom CommentExtractor (for testing)
+            polyglot_analyzer: Optional custom PolyglotAnalyzer (multi-language support)
         """
         self.repo_path = repo_path
         
         # Initialize analyzers (use provided or create defaults)
         self.git_analyzer = git_analyzer or GitHistoryAnalyzer(repo_path=repo_path)
+        
+        # Multi-language AST analysis (Phase 2 - ENH-017)
+        from cortex.lens.analyzers.polyglot_analyzer import PolyglotAnalyzer
+        self.polyglot_analyzer = polyglot_analyzer or PolyglotAnalyzer()
+        
+        # Legacy Python-only analyzer (backward compatibility)
         self.ast_analyzer = ast_analyzer or ASTAnalyzer()
+        
         self.comment_extractor = comment_extractor or CommentExtractor()
         
         # Initialize LENS v2.0 analyzers (singletons)
@@ -254,7 +263,12 @@ class LENSOrchestrator:
     
     def _analyze_ast(self, file_path: Path) -> Dict[str, Any]:
         """
-        Analyze file with ASTAnalyzer.
+        Analyze file with PolyglotAnalyzer (multi-language support).
+        
+        Routes to appropriate language adapter based on file extension:
+        - Python (.py) → ASTAnalyzer
+        - C# (.cs, .csx) → CSharpAdapter
+        - More languages in future phases
         
         Args:
             file_path: Path to file
@@ -263,35 +277,20 @@ class LENSOrchestrator:
             Dict with AST analysis data (functions, classes, error if failed)
         """
         try:
-            result = self.ast_analyzer.analyze_file(file_path)
+            # Use PolyglotAnalyzer for multi-language support (Phase 2 - ENH-017)
+            result = self.polyglot_analyzer.analyze_file(file_path)
             
             if result.success:
-                # Format for IntentRouter compatibility
-                functions = [
-                    {
-                        "name": func.name,
-                        "line_number": func.line_number,
-                        "parameters": func.parameters,
-                        "is_async": func.is_async,
-                    }
-                    for func in result.functions
-                ]
-                
-                classes = [
-                    {
-                        "name": cls.name,
-                        "line_number": cls.line_number,
-                        "methods": cls.methods,
-                        "bases": cls.bases,
-                    }
-                    for cls in result.classes
-                ]
-                
+                # Result is already in unified format (PolyglotAnalysisResult)
                 return {
-                    "functions": functions,
-                    "function_count": len(functions),
-                    "classes": classes,
-                    "class_count": len(classes),
+                    "functions": result.functions,
+                    "function_count": len(result.functions),
+                    "classes": result.classes,
+                    "class_count": len(result.classes),
+                    "imports": result.imports,
+                    "import_count": len(result.imports),
+                    "language": result.language,
+                    "metadata": result.metadata,
                 }
             else:
                 return {
@@ -299,6 +298,9 @@ class LENSOrchestrator:
                     "function_count": 0,
                     "classes": [],
                     "class_count": 0,
+                    "imports": [],
+                    "import_count": 0,
+                    "language": result.language,
                     "error": result.error,
                 }
         except Exception as e:
@@ -307,6 +309,9 @@ class LENSOrchestrator:
                 "function_count": 0,
                 "classes": [],
                 "class_count": 0,
+                "imports": [],
+                "import_count": 0,
+                "language": "unknown",
                 "error": str(e),
             }
     

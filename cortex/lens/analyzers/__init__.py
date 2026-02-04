@@ -13,30 +13,44 @@ Available Analyzers:
 - DependencyAnalyzer: Dependency vulnerability analysis
 - VendorDetector: Third-party vendor dependency detection (Phase 19)
 - DatabaseCrawlerPlugin: Abstract interface for database schema extraction (Phase 19)
+- PolyglotAnalyzer: Multi-language AST analysis (Phase 2 - ENH-017)
 
 Authority: CORE-035 (Consolidation)
+Note: Uses lazy imports to prevent circular dependencies
 """
 
-from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
-from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
-from cortex.lens.analyzers.comment_extractor import CommentExtractor
-from cortex.lens.analyzers.config_analyzer import ConfigAnalyzer, get_config_analyzer
-from cortex.lens.analyzers.database_analyzer import (
-    DatabaseAnalyzer,
-    get_database_analyzer,
-)
-from cortex.lens.analyzers.api_analyzer import APIAnalyzer, get_api_analyzer
-from cortex.lens.analyzers.dependency_analyzer import (
-    DependencyAnalyzer,
-    get_dependency_analyzer,
-)
-from cortex.lens.analyzers.vendor_detector import VendorDetector, get_vendor_detector
-from cortex.lens.analyzers.database_crawler_plugin import (
-    DatabaseCrawlerPlugin,
-    SchemaEntity,
-    DatabaseConnection,
-    get_database_crawler_plugin,
-)
+# Lazy imports to prevent circular dependency:
+# analyzers/__init__.py → git_history_analyzer → brain.analysis → analyzers/__init__.py
+_lazy_imports = {
+    "ASTAnalyzer": ("cortex.lens.analyzers.ast_analyzer", "ASTAnalyzer"),
+    "GitHistoryAnalyzer": ("cortex.lens.analyzers.git_history_analyzer", "GitHistoryAnalyzer"),
+    "CommentExtractor": ("cortex.lens.analyzers.comment_extractor", "CommentExtractor"),
+    "ConfigAnalyzer": ("cortex.lens.analyzers.config_analyzer", "ConfigAnalyzer"),
+    "get_config_analyzer": ("cortex.lens.analyzers.config_analyzer", "get_config_analyzer"),
+    "DatabaseAnalyzer": ("cortex.lens.analyzers.database_analyzer", "DatabaseAnalyzer"),
+    "get_database_analyzer": ("cortex.lens.analyzers.database_analyzer", "get_database_analyzer"),
+    "APIAnalyzer": ("cortex.lens.analyzers.api_analyzer", "APIAnalyzer"),
+    "get_api_analyzer": ("cortex.lens.analyzers.api_analyzer", "get_api_analyzer"),
+    "DependencyAnalyzer": ("cortex.lens.analyzers.dependency_analyzer", "DependencyAnalyzer"),
+    "get_dependency_analyzer": ("cortex.lens.analyzers.dependency_analyzer", "get_dependency_analyzer"),
+    "VendorDetector": ("cortex.lens.analyzers.vendor_detector", "VendorDetector"),
+    "get_vendor_detector": ("cortex.lens.analyzers.vendor_detector", "get_vendor_detector"),
+    "DatabaseCrawlerPlugin": ("cortex.lens.analyzers.database_crawler_plugin", "DatabaseCrawlerPlugin"),
+    "SchemaEntity": ("cortex.lens.analyzers.database_crawler_plugin", "SchemaEntity"),
+    "DatabaseConnection": ("cortex.lens.analyzers.database_crawler_plugin", "DatabaseConnection"),
+    "get_database_crawler_plugin": ("cortex.lens.analyzers.database_crawler_plugin", "get_database_crawler_plugin"),
+    "PolyglotAnalyzer": ("cortex.lens.analyzers.polyglot_analyzer", "PolyglotAnalyzer"),
+    "PolyglotAnalysisResult": ("cortex.lens.analyzers.polyglot_analyzer", "PolyglotAnalysisResult"),
+}
+
+def __getattr__(name):
+    """Lazy import to prevent circular dependencies."""
+    if name in _lazy_imports:
+        module_path, attr_name = _lazy_imports[name]
+        import importlib
+        module = importlib.import_module(module_path)
+        return getattr(module, attr_name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     "ASTAnalyzer",
@@ -56,4 +70,7 @@ __all__ = [
     "SchemaEntity",
     "DatabaseConnection",
     "get_database_crawler_plugin",
+    "PolyglotAnalyzer",
+    "PolyglotAnalysisResult",
 ]
+

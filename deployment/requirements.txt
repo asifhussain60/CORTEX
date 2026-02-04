@@ -46,6 +46,14 @@ openai>=1.10.0             # OpenAI GPT-4, GPT-4o, GPT-4o-mini
 anthropic>=0.21.0          # Anthropic Claude 3 (Opus, Sonnet, Haiku)
 
 # ============================================================================
+# MULTI-LANGUAGE AST PARSING (ENH-017 Phase 1)
+# ============================================================================
+
+# Tree-sitter for multi-language parsing
+tree-sitter>=0.20.0        # Universal parser generator (C#, Java, TS, JS)
+tree-sitter-languages>=1.10.2  # Pre-built grammars for 50+ languages
+
+# ============================================================================
 # DATA SCIENCE & ANALYSIS (Optional but recommended)
 # ============================================================================
 # Used for: orchestrator analytics, performance metrics, usage patterns
