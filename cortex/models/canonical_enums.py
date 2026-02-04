@@ -423,6 +423,15 @@ class ResponseType(Enum):
     CHALLENGING = "challenging"
     CLARIFYING = "clarifying"
     REFERENTIAL = "referential"
+    # AC-REFACTOR-ARCHITECT-001: Added for response template system
+    SUCCESS = "success"
+    ERROR = "error"
+    WARNING = "warning"
+    INFORMATIONAL = "informational"
+    AUDIT = "audit"
+    CHALLENGE = "challenge"
+    APPROVAL_GATE = "approval_gate"
+    IMPLEMENTATION = "implementation"
 
 
 class MessageLevel(Enum):

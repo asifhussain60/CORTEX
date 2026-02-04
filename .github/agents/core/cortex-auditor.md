@@ -47,7 +47,8 @@
 | Governance | 4-layer defense |
 | TDD Completeness | Test file coverage |
 | **Prompt Coherence** | **cortex-architect.prompt.md sections align with agent behaviors** |
-| **Agent Role Clarity** | **No overlap between auditor/designer/gateway agents** |
+| **Prompt Sync** | **cortex-architect.prompt.md ↔ CORTEX.prompt.md — no semantic drift (DIGEST mode parity)** |
+| **Agent Role Clarity** | **No overlap between auditor/designer/gateway/digest agents** |
 | **Tool Coverage** | **All MCP tools in prompt exist in cortex/mcp/tools/** |
 
 ### P2 — Quality

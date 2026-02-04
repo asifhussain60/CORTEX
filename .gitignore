@@ -96,6 +96,24 @@ tests/_archive/
 # CLI generated dashboard output
 lens-dashboards/
 
+# Dashboard v3 artifacts (PHASE-21)
+# Node.js dependencies and build artifacts
+company/dashboards/spa/node_modules/
+company/dashboards/spa/package-lock.json
+company/dashboards/spa/.npm/
+
+# Playwright test artifacts
+company/dashboards/spa/test-results/
+company/dashboards/spa/playwright-report/
+company/dashboards/spa/playwright/.cache/
+
+# Generated dashboard data (large JSON files)
+company/dashboards/spa/*/dashboard-data.json
+company/dashboards/spa/data/dashboard-data.json
+company/dashboards/spa/KSESSIONS/
+company/dashboards/spa/kashkole/
+company/dashboards/spa/cortex/
+
 # Root directory protection (prevent test file and output pollution)
 # All test files must be in tests/ directory
 /test_*.py

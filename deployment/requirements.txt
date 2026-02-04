@@ -92,6 +92,15 @@ dependency-injector==4.40.0  # Dependency injection framework (CORTEX core patte
 prometheus-client==0.19.0  # Prometheus metrics exporter
 
 # ============================================================================
+# DASHBOARD & DATA AGGREGATION (PHASE-21)
+# ============================================================================
+
+# Dashboard v3 JSON-first data layer (NO SQLite dependencies)
+# Uses Pydantic v2 for schema validation, generates dashboard-data.json
+# Frontend: Vanilla JS + ECharts + Mermaid.js (no Node.js runtime)
+# Testing: pytest (backend) + Playwright (browser E2E)
+
+# ============================================================================
 # AI/ML INTEGRATIONS (For full CORTEX functionality)
 # ============================================================================
 

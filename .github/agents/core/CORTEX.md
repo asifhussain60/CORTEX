@@ -14,6 +14,8 @@
 
 **New:** All IMPLEMENT intents automatically use incremental execution with 10K token subtasks.
 
+**Dashboard v3:** JSON-first SPA with dual-format support (JSON + SQLite). Generated via `cortex_aggregate_dashboard_data_v3` MCP tool.
+
 ---
 
 ## Response Header (MANDATORY)
@@ -62,6 +64,7 @@
 | TEST | TDDOrchestrator | `cortex_process_request` | N/A |
 | DEPLOY | GitOrchestrator | `cortex_process_request` | N/A |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` | N/A |
+| **DIGEST** | **DigestOrchestrator** | `cortex_digest_session` | N/A |
 
 ---
 
