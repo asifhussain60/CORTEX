@@ -10,8 +10,8 @@
 #   orchestrators:
 #     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 19 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator)
-#   Total: 33 orchestrators + 4 LENS analyzers
+#     support: [...]   # 20 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility)
+#   Total: 34 orchestrators + 4 LENS analyzers
 # =========================================================================
 
 version: "2.0"
@@ -123,6 +123,27 @@ orchestrators:
         stages: 3
         intelligence: ["lens"]
 
+    # STAGE 2.3: Complexity Classification (Phase 2)
+    - name: "ComplexityClassifier"
+      module: "cortex.orchestrators.core.complexity_classifier"
+      class: "ComplexityClassifier"
+      tier: 1
+      priority: 23
+      dependencies:
+        - "IntentRouter"
+      capabilities:
+        - complexity_classification
+        - orchestrator_routing
+        - complexity_analysis
+      health_check: "classify_complexity"
+      description: "Classifies task complexity (TRIVIAL/SIMPLE/MODERATE/COMPLEX/CRITICAL) and routes to appropriate orchestrator"
+      mcp_adapter: "cortex.mcp.adapters.complexity_adapter"
+      metadata:
+        icon: "📊"
+        stages: 3
+        intelligence: ["lens"]
+      phase: "2"
+
     # STAGE 2.5: LENS Synthesis & DoR Gate
     - name: "LENSSynthesis"
       module: "cortex.orchestrators.core.lens_synthesis"
@@ -131,6 +152,7 @@ orchestrators:
       priority: 25
       dependencies:
         - "IntentRouter"
+        - "ComplexityClassifier"
       capabilities:
         - dor_generation
         - approval_gate
@@ -255,10 +277,76 @@ orchestrators:
         stages: 4
         intelligence: ["lens", "knowledge", "synthesis"]
 
+    # STAGE 4.5: Implementation Review & Gating (Phase 5)
+    - name: "ReviewOrchestrator"
+      module: "cortex.orchestrators.core.review_orchestrator"
+      class: "ReviewOrchestrator"
+      tier: 1
+      priority: 99
+      dependencies:
+        - "MasterOrchestrator"
+      capabilities:
+        - implementation_review
+        - plan_verification
+        - coherence_verification
+        - phase_gating
+      health_check: "execute_final_review"
+      description: "Holistic implementation verification using git analysis (Phase 5)"
+      mcp_adapter: "cortex.mcp.adapters.review_adapter"
+      metadata:
+        icon: "✅"
+        stages: 4
+        intelligence: ["lens", "knowledge"]
+      phase: "5"
+
   # -----------------------------------------------------------------------
-  # DOMAIN ORCHESTRATORS (6)
+  # DOMAIN ORCHESTRATORS (8 - was 6, added Phases 3-4)
   # -----------------------------------------------------------------------
   domain:
+    # Phase 3: Code-Level Planning
+    - name: "CodeLevelPlanner"
+      module: "cortex.orchestrators.domain.code_level_planner"
+      class: "CodeLevelPlanner"
+      tier: 2
+      priority: 48
+      dependencies:
+        - "ComplexityClassifier"
+      capabilities:
+        - code_planning
+        - file_specification
+        - function_specification
+        - interface_contracts
+      health_check: "analyze_task_scope"
+      description: "Generates detailed implementation plans without code generation (Phase 3)"
+      mcp_adapter: "cortex.mcp.adapters.planning_adapter"
+      metadata:
+        icon: "📐"
+        stages: 3
+        intelligence: ["lens", "knowledge"]
+      phase: "3"
+
+    # Phase 4: Cross-Layer Coherence Validation
+    - name: "CoherenceValidator"
+      module: "cortex.orchestrators.domain.coherence_validator"
+      class: "CoherenceValidator"
+      tier: 2
+      priority: 49
+      dependencies:
+        - "CodeLevelPlanner"
+      capabilities:
+        - enum_alignment_validation
+        - field_naming_validation
+        - type_compatibility_validation
+        - contract_test_generation
+      health_check: "validate"
+      description: "Validates Python↔JavaScript cross-layer alignment (Phase 4)"
+      mcp_adapter: "cortex.mcp.adapters.coherence_adapter"
+      metadata:
+        icon: "🔗"
+        stages: 3
+        intelligence: ["lens"]
+      phase: "4"
+
     - name: "RefactoringOrchestrator"
       module: "cortex.orchestrators.domain.enhanced_refactoring_orchestrator"
       class: "EnhancedRefactoringOrchestrator"
@@ -363,9 +451,58 @@ orchestrators:
         intelligence: ["lens", "knowledge"]
 
   # -----------------------------------------------------------------------
-  # SUPPORT ORCHESTRATORS (14 - Added InstrumentationOrchestrator)
+  # SUPPORT ORCHESTRATORS (16 - Added Phase 1, Phase 6, Phase 7 components)
   # -----------------------------------------------------------------------
   support:
+    # Phase 1: Event-Driven Communication Backbone
+    - name: "OrchestratorEventBus"
+      module: "cortex.infrastructure.orchestrator_event_bus"
+      class: "OrchestratorEventBus"
+      tier: 3
+      priority: 1
+      dependencies: []
+      capabilities:
+        - event_publishing
+        - event_subscription
+        - event_history
+        - event_replay
+        - dead_letter_management
+      health_check: "health_check"
+      description: "Event-driven communication backbone enabling decoupled orchestrator communication (Phase 1)"
+      mcp_tools: []
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+      metadata:
+        icon: "📡"
+        stages: 1
+        intelligence: []
+      phase: "1"
+      singleton: true
+
+    # Phase 6: InteractionOrchestrator Enhancement
+    - name: "InteractionOrchestratorEnhancement"
+      module: "cortex.orchestrators.core.interaction_orchestrator_enhancement"
+      class: "InteractionOrchestratorEnhancement"
+      tier: 3
+      priority: 2
+      dependencies:
+        - "OrchestratorEventBus"
+        - "CodeLevelPlanner"
+      capabilities:
+        - event_subscription
+        - planning_integration
+        - multi_layer_coordination
+        - dor_enhancement
+        - challenge_extension
+      health_check: "health_check"
+      description: "Enhances InteractionOrchestrator with event subscription and planning integration (Phase 6)"
+      metadata:
+        icon: "🔌"
+        stages: 1
+        intelligence: []
+      phase: "6"
+
     - name: "OnboardingOrchestrator"
       module: "cortex.orchestrators.onboarding.orchestrator"
       class: "OnboardingOrchestrator"
@@ -475,7 +612,7 @@ orchestrators:
       module: "cortex.orchestrators.core.wrapped_tdd_orchestrator"
       class: "WrappedTDDOrchestrator"
       tier: 3
-      priority: 68
+      priority: 65
       dependencies:
         - "TDDOrchestrator"
       capabilities:
@@ -523,7 +660,7 @@ orchestrators:
       module: "cortex.orchestrators.core.dor_approval_gate"
       class: "DoRApprovalGate"
       tier: 3
-      priority: 73
+      priority: 68
       dependencies:
         - "LENSSynthesis"
       capabilities:
@@ -559,8 +696,8 @@ orchestrators:
       tier: 3
       priority: 74
       dependencies:
-        - "TruthVerificationEngine"
-        - "ImplementationVerifier"
+        - "KnowledgeRepository"
+        - "LENSSynthesis"
       capabilities:
         - educational_interaction
         - knowledge_level_detection
@@ -582,7 +719,7 @@ orchestrators:
       module: "cortex.orchestrators.support.duplication_detector_orchestrator"
       class: "DuplicationDetector"
       tier: 3
-      priority: 74
+      priority: 77
       dependencies: []
       capabilities:
         - exact_duplication_detection
@@ -626,8 +763,8 @@ orchestrators:
     - name: "RecommendationGate"
       module: "cortex.orchestrators.core.recommendation_gate"
       class: "RecommendationGate"
-      tier: 2
-      priority: 73
+      tier: 3
+      priority: 79
       dependencies:
         - "RecommendationEngine"
       capabilities:
@@ -700,7 +837,7 @@ orchestrators:
       module: "cortex.orchestrators.support.debugging_orchestrator"
       class: "DebuggingOrchestrator"
       tier: 3
-      priority: 75
+      priority: 80
       dependencies: []
       capabilities:
         - smart_debug_injection
@@ -724,6 +861,32 @@ orchestrators:
         icon: "🐛"
         stages: 4
         intelligence: ["lens", "knowledge"]
+
+    - name: "OrchestratorVisibility"
+      module: "cortex.orchestrators.support.orchestrator_visibility"
+      class: "OrchestratorVisibility"
+      tier: 3
+      priority: 81
+      dependencies: []
+      capabilities:
+        - visibility_generation
+        - training_wheels
+        - badge_rendering
+        - stage_progress
+        - intelligence_indicators
+      health_check: "health_check"
+      description: "Training wheels visibility system for orchestrator activity (Phase 20.2)"
+      mcp_tools: []
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+      version: "1.0"
+      metadata:
+        icon: "👁️"
+        stages: 1
+        intelligence: []
+        toggle: "CORTEX_ORCHESTRATOR_VISIBILITY"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES

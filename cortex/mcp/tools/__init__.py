@@ -7,6 +7,7 @@ Available Tools:
 - lens_tools: LENS analysis tools (git, AST, comments, duplicates) - UNIFIED in cortex.lens
 - intelligent_lens_tools: Tiered LENS with LLM enhancement (NEW)
 - onboarding_tools: Repository onboarding and config analysis (LENS v2.0)
+- dashboard_aggregator_v3_tool: Dashboard v3 JSON generation + HTTP serving + E2E tests (PHASE-21)
 
 LENS CONSOLIDATION (2026-02-02):
 All LENS analyzers consolidated in cortex.lens package:
@@ -14,6 +15,12 @@ All LENS analyzers consolidated in cortex.lens package:
 - cortex.lens.discovery: ConfigurationDiscovery, DatabaseDiscovery
 - cortex.lens.orchestrator: LENSOrchestrator (unified analysis)
 MCP tools import from cortex.lens (thin wrappers)
+
+DASHBOARD V3 (PHASE-21):
+JSON-first dashboard with dual-format support (JSON + SQLite):
+- cortex_aggregate_dashboard_data_v3: Generate dashboard-data.json
+- cortex_serve_dashboard: HTTP server for local viewing
+- cortex_test_dashboard_e2e: Playwright browser E2E tests
 """
 
 # Core MCP Tools
@@ -41,9 +48,25 @@ from .onboarding_tools import (
     cortex_analyze_repository_configs,
 )
 
+# Dashboard Tools v3 (PHASE-21)
+# TODO: Implement dashboard_aggregator_v3_tool.py
+# from .dashboard_aggregator_v3_tool import (
+#     cortex_aggregate_dashboard_data_v3,
+#     cortex_serve_dashboard,
+#     cortex_test_dashboard_e2e,
+# )
+
 # Vacuum Tools (Markdown Cleanup - CORE-002)
 from .vacuum_tools import (
     cortex_vacuum,
+)
+
+# Educational Tools (Phase 22 - ASK Mode)
+from .cortex_ask import (
+    cortex_ask,
+)
+from .cortex_verify_claim import (
+    cortex_verify_claim,
 )
 
 __all__ = [
@@ -63,8 +86,15 @@ __all__ = [
     "cortex_onboard_repository",
     "cortex_analyze_config",
     "cortex_analyze_repository_configs",
+    # Dashboard Tools v3
+    # "cortex_aggregate_dashboard_data_v3",  # TODO: Implement
+    # "cortex_serve_dashboard",  # TODO: Implement
+    # "cortex_test_dashboard_e2e",  # TODO: Implement
     # Vacuum Tools
     "cortex_vacuum",
+    # Educational Tools (Phase 22)
+    "cortex_ask",
+    "cortex_verify_claim",
 ]
 
 # MCP Tool Registry for discovery
@@ -137,6 +167,36 @@ MCP_TOOLS = {
     "cortex_detect_duplicates": {
         "function": cortex_detect_duplicates,
         "description": "CORE-035 duplicate detection",
+        "category": "governance",
+        "features": ["duplicate_detection", "canonical_location"]
+    },
+    "cortex_tools_catalog": {
+        "function": cortex_tools_catalog,
+        "description": "Discover all MCP tools",
+        "category": "discovery",
+        "features": ["tool_listing", "category_filter"]
+    },
+    # Dashboard Tools v3 (PHASE-21: JSON-first SPA) - NOT YET IMPLEMENTED
+    # "cortex_aggregate_dashboard_data_v3": {
+    #     "function": cortex_aggregate_dashboard_data_v3,
+    #     "description": "Generate dashboard-data.json (v3 schema) for repository intelligence SPA",
+    #     "category": "dashboard",
+    #     "features": ["json_generation", "pydantic_validation", "13_tab_schema", "dual_format_ready"]
+    # },
+    # "cortex_serve_dashboard": {
+    #     "function": cortex_serve_dashboard,
+    #     "description": "Serve dashboard SPA via HTTP (Python http.server)",
+    #     "category": "dashboard",
+    #     "features": ["http_server", "local_viewing", "background_process"]
+    # },
+    # "cortex_test_dashboard_e2e": {
+    #     "function": cortex_test_dashboard_e2e,
+    #     "description": "Run Playwright E2E tests for dashboard browser validation",
+    #     "category": "testing",
+    #     "features": ["playwright", "browser_e2e", "ui_validation", "console_error_detection"]
+    # },
+    # Vacuum Tool (CORE-002: Markdown cleanup)
+    "cortex_vacuum": {
         "category": "governance",
         "features": ["duplicate_detection", "canonical_location"]
     },

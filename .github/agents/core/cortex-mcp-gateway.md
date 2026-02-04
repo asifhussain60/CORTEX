@@ -43,6 +43,14 @@
 | `cortex_ast_analyze` | `/tools/cortex_ast_analyze` | Structure, complexity |
 | `cortex_extract_comments` | `/tools/cortex_extract_comments` | TODO/FIXME extraction |
 
+### Dashboard v3 (PHASE-21)
+
+| Tool | Endpoint | Purpose |
+|------|----------|---------|
+| `cortex_aggregate_dashboard_data_v3` | `/tools/cortex_aggregate_dashboard_data_v3` | Generate dashboard JSON |
+| `cortex_serve_dashboard` | `/tools/cortex_serve_dashboard` | HTTP server (port 8888) |
+| `cortex_test_dashboard_e2e` | `/tools/cortex_test_dashboard_e2e` | Playwright browser tests |
+
 ### Governance
 
 | Tool | Endpoint | Purpose |
