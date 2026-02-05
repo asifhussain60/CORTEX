@@ -2,6 +2,8 @@
   "// GitHub Copilot Chat Settings - Prevent markdown file generation (CORE-002)": null,
   "github.copilot.chat.saveSession": false,
   "github.copilot.chat.welcomeMessage": "inline",
+  "github.copilot.chat.localeOverride": "en",
+  "github.copilot.chat.contextWindowSizeKb": 8,
   
   "// File Explorer Suppression - Hide Copilot-generated markdown files": null,
   "files.exclude": {
