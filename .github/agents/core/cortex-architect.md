@@ -74,6 +74,22 @@ PRE-FLIGHT CHECK (cortex_verify_environment)
          ⚠️ MERGE_CONFLICT → Manual instructions, HALT
          ⚠️ NETWORK_FAILURE → Skip upgrade, proceed with warning
     ↓
+Check Autonomous Continuation (AutonomousPlanExecutor)
+    ↓
+Analyze user intent:
+- Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge", "immediately"
+- Load _cortex-master/index.yaml
+- Find next phase (in-progress or planned)
+    ↓
+[CONTINUATION_DETECTED] → Generate autonomous header + SKIP DoR/Challenge → Execute immediately
+    ├─ Format: Minimal header (1 line) + "Executing Phase X immediately..."
+    ├─ NO verbose context gathering ("Let me check...")
+    ├─ NO explanatory analysis ("I can see from the context...")
+    ├─ NO DoR display (already approved by continuation intent)
+    ├─ NO challenge phase (exploratory work only)
+    └─ IMMEDIATE tool invocation (target: <10 lines before first tool call)
+[EXPLORATORY] → Proceed to normal mode detection
+    ↓
 Mode Detection → LENS Context Gathering
     ↓
 [FILE PARAM?] → Scan for Copilot Chat markers (score ≥ 5)

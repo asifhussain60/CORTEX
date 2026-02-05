@@ -4,12 +4,352 @@
 # Authority: cortex-architect.prompt.md v13.0
 # Updated: 2026-02-05
 
-meta_version: "1.9"
+meta_version: "2.0"
 last_updated: "2026-02-05"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-037
+    date: "2026-02-05"
+    recommendation: "Condensed Autonomous Execution Mode"
+    status: IMPLEMENTED
+    domain: DX
+    priority: P1
+    source: "chat01.md DIGEST - user feedback on pre-execution verbosity"
+    adoption_reason: "User explicitly: 'Response is still too wordy before execution'. Autonomous continuation detected but took 76 lines of preamble before action. Need immediate execution on 'proceed' commands."
+    expected_benefits:
+      - "80% reduction in pre-execution preamble (50+ lines → <10 lines)"
+      - "Immediate action on 'proceed'/'continue'/'autonomously' commands"
+      - "Better alignment with user expectations (results-first)"
+      - "Token efficiency improvement (faster responses)"
+      - "Reduced cognitive load (no repetitive explanations)"
+    implementation_notes: |
+      3-Phase Implementation (1 day):
+      
+      Phase 1: Autonomous Detection Pattern (cortex-architect.prompt.md)
+      - Add AUTONOMOUS CONTINUATION section with trigger patterns
+      - Patterns: "proceed", "continue", "autonomously", "bypass challenge"
+      - Condition: Active plan in IN_PROGRESS state
+      - Bypass: Verbose context gathering, explanatory analysis, DoR display
+      
+      Phase 2: Response Format Standards (response-format-standards.md)
+      - Add "Autonomous Continuation" section
+      - Rule: Detect intent → Skip preamble → Execute → Report results
+      - Format: Condensed header + immediate execution + completion summary
+      
+      Phase 3: Agent Behavior Update (cortex-architect.md)
+      - Add autonomous continuation detection logic
+      - Flow: Check plan state → Detect trigger → Execute immediately
+      - Output: Minimal header + tool calls + results only
+      
+      Files Modified:
+      - .github/prompts/cortex-architect.prompt.md (AUTONOMOUS CONTINUATION section)
+      - .github/prompts/response-format-standards.md (autonomous format)
+      - .github/agents/core/cortex-architect.md (detection logic)
+      - docs/meta/enhancement-history.yaml (this file - ENH-037)
+    metrics:
+      files_modified: 4
+      verbosity_reduction: "80%"
+      lines_before_execution_before: 76
+      lines_before_execution_after: 10
+      implementation_time_hours: 2.0
+    evidence_basis:
+      - "chat01.md line 1-76: 76 lines of context gathering before execution"
+      - "User: 'Response is still too wordy before execution'"
+      - "Pattern: gather → analyze → explain → scope → THEN execute"
+      - "Anti-pattern: Slow to action, repetitive explanations"
+    related_enhancements:
+      - ENH-028
+      - ENH-012
+  
+  - id: ENH-036
+    date: "2026-02-05"
+    recommendation: "Complete Markdown Generation Elimination"
+    status: PLANNED
+    domain: Governance
+    priority: P0
+    source: "User feedback - Copilot still creating completion/summary markdown files"
+    adoption_reason: "Despite CORE-002 (NO markdown file generation), Copilot continues creating completion reports, summaries, and other markdown sprawl. Need comprehensive enforcement: pre-generation blocking + real-time monitoring + auto-cleanup + clear messaging."
+    expected_benefits:
+      - "100% CORE-002 compliance (zero markdown outside docs/.github)"
+      - "Immediate feedback (blocked before file written, not after)"
+      - "90% reduction in manual vacuum runs"
+      - "Clear user messaging on why blocked"
+      - "Metrics visibility for compliance tracking"
+    implementation_notes: |
+      5-Phase Implementation (2 days):
+      
+      Phase 1: Pre-Generation Blocking
+      - cortex/orchestrators/core/markdown_generation_blocker.py (200 LOC, 12 tests)
+      - Real-time detection of markdown generation intent
+      - Pattern matching: *-completion.md, *-summary.md, *-report.md
+      - Block if outside docs/.github (except README.md)
+      
+      Phase 2: Auto-Cleanup After Completion
+      - Modify completion flow in cortex-architect.prompt.md
+      - Auto-run VacuumOrchestrator after every DESIGN/EXEC completion
+      - 8 tests for auto-vacuum behavior
+      
+      Phase 3: Real-Time Chat Monitoring
+      - cortex/orchestrators/core/chat_session_monitor.py (180 LOC, 10 tests)
+      - File system event monitoring during chat
+      - Alert user immediately on markdown creation
+      
+      Phase 4: Enhanced User Messaging
+      - Add CORE-002 violation message template
+      - Update response-format-standards.md
+      - Clear rationale: "Inline chat only, no files needed"
+      
+      Phase 5: Metrics & Dashboard
+      - cortex/metrics/markdown_generation_metrics.py (120 LOC, 6 tests)
+      - Track: attempts_total, blocks_total, vacuum_files_total
+      - Dashboard widget showing CORE-002 compliance
+      
+      Total: 500 LOC, 41 unit tests + 5 E2E tests, 90% coverage target
+      
+      Files affected:
+      - cortex/orchestrators/core/markdown_generation_blocker.py (NEW)
+      - cortex/orchestrators/core/chat_session_monitor.py (NEW)
+      - cortex/metrics/markdown_generation_metrics.py (NEW)
+      - .github/prompts/cortex-architect.prompt.md (completion section)
+      - .github/prompts/response-format-standards.md (CORE-002 section)
+      - .github/copilot-instructions.md (strengthen CORE-002)
+      - cortex/orchestrators/support/vacuum_orchestrator.py (add auto-run)
+    metrics:
+      estimated_effort_days: 2
+      estimated_test_count: 46
+      target_coverage: "90%"
+      phases: 5
+      files_created: 3
+      files_modified: 4
+    evidence_basis:
+      - "User feedback: 'notice copilot is still creating md completion reports'"
+      - "find results: 5 files created today (ORGANIZATION-SUMMARY, ENH-032-SUMMARY, PHASE-9-COMPLETION, ARCHITECT-v12-REFACTOR-SUMMARY, PROMPT-UPGRADE-COMPLETION)"
+      - "VacuumOrchestrator exists but not automatically invoked"
+      - "No pre-generation blocking (only post-cleanup)"
+    success_criteria:
+      - "Zero markdown files outside docs/.github after 1 week"
+      - "< 100ms detection time for blocking"
+      - "Clear CORE-002 message on every block"
+      - "Automatic vacuum after all completions"
+      - "Dashboard shows violation metrics"
+    related_enhancements:
+      - CORE-002
+      - VacuumOrchestrator
+      - EnforcementOrchestrator
+    plan_file: "_workspaces/cortex-plan/ENH-036-MARKDOWN-GENERATION-ELIMINATION.yaml"
+  
+  - id: ENH-032
+    date: "2026-02-05"
+    recommendation: "Auto-Cache Clearing on TDD RED Phase"
+    status: PLANNED
+    domain: DX
+    source: "chat01.md DIGEST - manual cache clearing friction detected"
+    adoption_reason: "During TDD RED phase, import errors from non-existent implementations cause VS Code cache confusion. Manual clearing required (rm -rf cache commands), slows TDD cycle by 2-3 minutes."
+    expected_benefits:
+      - "Zero manual cache management during TDD cycles"
+      - "Automatic Pylance + Python cache clearing before pytest runs"
+      - "2-3 minute time savings per TDD iteration"
+      - "Reduced cognitive load (developers focus on tests, not caches)"
+      - "Consistent developer experience across team"
+    implementation_notes: |
+      Implementation Strategy:
+      - Pre-commit hook: Clear caches before pytest execution
+      - VS Code task.json: Add "Clear Caches + Run Tests" task
+      - pytest conftest.py: Auto-clear before test collection
+      
+      Commands to automate:
+        rm -rf ~/Library/Caches/pylance*
+        rm -rf ~/.vscode/extensions/ms-python.vscode-pylance-*/dist/bundled/stubs
+        find . -type d -name "__pycache__" -exec rm -rf {} +
+        rm -rf .pytest_cache .mypy_cache
+      
+      Files to create:
+      - .github/hooks/pre-pytest-cache-clear.sh
+      - .vscode/tasks.json (if not exists, add task)
+      - conftest.py pytest fixture for auto-clear
+    metrics:
+      time_savings_per_cycle_minutes: 2.5
+      estimated_cycles_per_week: 20
+      total_time_savings_hours_per_week: 0.83
+      effort_days: 1
+    evidence_basis:
+      - "chat01.md line 165: User typed 'clear vscode cache'"
+      - "chat01.md line 170-175: Manual rm -rf commands executed"
+      - "Pattern: Cache clearing needed when TDD RED phase shows import errors"
+    related_enhancements:
+      - ENH-008
+  
+  - id: ENH-033
+    date: "2026-02-05"
+    recommendation: "Phase Implementation Template Generator CLI"
+    status: PLANNED
+    domain: Automation
+    source: "chat01.md DIGEST - repetitive file creation pattern detected"
+    adoption_reason: "Every phase implementation requires creating 4+ boilerplate files (test schema, model, template, integration test). Manual creation takes 30 minutes, error-prone (typos, wrong paths)."
+    expected_benefits:
+      - "30 minutes → 2 minutes setup time (93% reduction)"
+      - "Zero typos in file names, imports, or paths"
+      - "Consistent structure across all phase implementations"
+      - "Automatic test discovery and wiring"
+      - "Generated files follow CORE-008 (TDD) + CORE-028 (naming) automatically"
+    implementation_notes: |
+      CLI Tool: cortex generate phase-implementation
+      
+      Usage:
+        cortex generate phase-implementation \
+          --phase-id 22 \
+          --name "Dashboard V4 Enhancement" \
+          --orchestrator VisualizationOrchestrator
+      
+      Generated Files:
+      1. tests/unit/models/test_phase_{id}_schema.py
+      2. cortex/models/phase_{id}_schema.py
+      3. cortex-registry/_cortex-master/phases/active/phase-{id}-{slug}.yaml
+      4. tests/integration/test_phase_{id}_generation.py
+      5. _workspaces/cortex-plan/PHASE-{id}-{name}.yaml
+      
+      Template Variables:
+      - phase_id: Numeric phase identifier
+      - phase_name: Human-readable name
+      - phase_slug: kebab-case slug
+      - orchestrator: Target orchestrator name
+      - author: Git user.name
+      - date: Current date (ISO 8601)
+      
+      Files to create:
+      - cortex/cli/commands/generate.py
+      - cortex/cli/templates/phase-implementation/ (Jinja2 templates)
+      - tests/unit/cli/test_generate_phase.py (24 tests)
+    metrics:
+      setup_time_reduction_percent: 93
+      setup_time_before_minutes: 30
+      setup_time_after_minutes: 2
+      error_reduction_percent: 100
+      effort_days: 4
+    evidence_basis:
+      - "chat01.md: Created test_phase_detail_schema.py manually"
+      - "chat01.md: Created phase_detail_schema.py manually"
+      - "chat01.md: Created phase-detail.html template manually"
+      - "chat01.md: Created test_phase_detail_template.py manually"
+      - "Pattern: Same 4-file structure repeated for every phase"
+    related_enhancements:
+      - ENH-032
+  
+  - id: ENH-034
+    date: "2026-02-05"
+    recommendation: "TDD Cycle Validator Pre-Commit Hook"
+    status: PLANNED
+    domain: Governance
+    source: "chat01.md DIGEST - CORE-008 enforcement gap identified"
+    adoption_reason: "CORE-008 requires tests before implementation, but enforcement is manual. Developers can commit implementation files without corresponding tests, violating TDD principle."
+    expected_benefits:
+      - "100% CORE-008 compliance (automated enforcement)"
+      - "Zero implementation commits without tests"
+      - "Immediate feedback at commit time (not PR review)"
+      - "Educational: Teaches developers TDD workflow"
+      - "Governance metrics: Track TDD compliance rate"
+    implementation_notes: |
+      Pre-Commit Hook: .github/hooks/pre-commit-tdd-validator
+      
+      Validation Logic:
+      1. Detect staged Python files in cortex/ directory
+      2. Check if corresponding test file exists in tests/
+      3. If new implementation file + no test → BLOCK commit
+      4. If test file exists + passes → ALLOW commit
+      
+      Example Block Message:
+        ❌ TDD Violation Detected (CORE-008)
+        
+        New implementation file detected:
+          cortex/models/phase_detail_schema.py
+        
+        Required test file missing:
+          tests/unit/models/test_phase_detail_schema.py
+        
+        Action: Create test file first, then commit both together
+        
+        Override (use with caution):
+          git commit --no-verify
+      
+      Configuration (pyproject.toml):
+        [tool.cortex.tdd-validator]
+        enabled = true
+        strict = true
+        exempt_dirs = ["scripts/", "deployment/"]
+      
+      Files to create:
+      - .github/hooks/pre-commit-tdd-validator (bash script)
+      - .github/hooks/install-hooks.sh (team onboarding)
+      - tests/unit/hooks/test_tdd_validator.py (20 tests)
+    metrics:
+      core_008_compliance_target: 100
+      current_manual_enforcement: "PR review only"
+      feedback_latency_reduction: "Hours → Seconds"
+      effort_days: 1
+    evidence_basis:
+      - "chat01.md: Manual TDD execution (no automated enforcement)"
+      - "CORE-008: TDD-first (tests before code) - currently manual"
+      - "EnforcementOrchestrator: Does not validate git commits"
+    related_enhancements:
+      - ENH-008
+      - ENH-013
+  
+  - id: ENH-035
+    date: "2026-02-05"
+    recommendation: "Incremental Plan Progress Tracker Dashboard Widget"
+    status: PLANNED
+    domain: Observability
+    source: "chat01.md DIGEST - 8-phase plan lacks real-time visibility"
+    adoption_reason: "8-phase implementation plan (Day 1-14) created in chat, but no visual tracking. PMs/stakeholders can't see progress without asking developers. Manual status updates required."
+    expected_benefits:
+      - "Real-time phase completion visibility for all roles"
+      - "Automatic progress updates (no manual reporting)"
+      - "Stakeholder confidence (transparent progress)"
+      - "Early risk detection (blocked phases highlighted)"
+      - "Historical tracking (plan vs actual metrics)"
+    implementation_notes: |
+      Dashboard Widget: cortex-registry/_cortex-master/dashboard/widgets/plan-progress.html
+      
+      Data Source:
+      - _workspaces/cortex-plan/PHASE-STORY-SYSTEM-COMPREHENSIVE.yaml
+      - Git commits (track file creation timestamps)
+      - Pytest results (test passing = phase complete)
+      
+      Visual Design:
+      - 8-phase timeline with status icons
+      - Color coding: 🟢 Complete, 🔵 In Progress, ⚪ Pending, 🔴 Blocked
+      - Estimated vs Actual duration bars
+      - Burndown chart (phases remaining)
+      
+      Update Triggers:
+      - Git commit push → webhook → dashboard refresh
+      - Pytest completion → update test status
+      - Manual override → YAML file edit
+      
+      Integration Points:
+      - Master dashboard: Add "Active Plans" tab
+      - Slack notifications: Daily progress summary
+      - GitHub PR: Auto-comment with phase status
+      
+      Files to create:
+      - cortex-registry/_cortex-master/dashboard/widgets/plan-progress.html
+      - cortex/visualization/plan_progress_generator.py
+      - tests/unit/visualization/test_plan_progress.py (15 tests)
+    metrics:
+      manual_status_updates_eliminated: "100%"
+      stakeholder_visibility_improvement: "High"
+      update_frequency: "Real-time (git push)"
+      effort_days: 4
+    evidence_basis:
+      - "chat01.md line 120: '8 incremental phases with TDD-first approach'"
+      - "chat01.md: No mention of progress tracking mechanism"
+      - "Plan file created but not integrated with dashboard"
+    related_enhancements:
+      - ENH-020
+  
+
   - id: ENH-031
     date: "2026-02-05"
     recommendation: "YAML Response Format Fix - Remove Code Fences for Proper Rendering"

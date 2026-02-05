@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Repository Intelligence - JSON-First Architecture - CORTEX Phase Details</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Mermaid.js for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        :root {
+            /* Glassmorphism colors matching master dashboard */
+            --bg-primary: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+            --glass-bg: rgba(26, 31, 46, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --text-primary: #e0e6ed;
+            --text-secondary: #8b92a0;
+            --accent-blue: #4a9eff;
+            --accent-green: #00d4aa;
+            --accent-purple: #9d4edd;
+            --accent-orange: #ff6b35;
+            --status-active: #00d4aa;
+            --status-completed: #4a9eff;
+            --status-planned: #9d4edd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .breadcrumb a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent-green);
+        }
+        
+        .breadcrumb-separator {
+            color: var(--text-secondary);
+        }
+        
+        /* Header */
+        .phase-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--glass-shadow);
+        }
+        
+        .phase-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .phase-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .badge-active {
+            background: rgba(0, 212, 170, 0.2);
+            color: var(--status-active);
+            border: 1px solid var(--status-active);
+        }
+        
+        .badge-completed {
+            background: rgba(74, 158, 255, 0.2);
+            color: var(--status-completed);
+            border: 1px solid var(--status-completed);
+        }
+        
+        .badge-planned {
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--status-planned);
+            border: 1px solid var(--status-planned);
+        }
+        
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-button {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tab-button:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.2), rgba(0, 212, 170, 0.2));
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Content Card */
+        .content-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glass-shadow);
+        }
+        
+        .content-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .content-card h3 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-green);
+        }
+        
+        /* Lists */
+        .objective-list, .feature-list, .component-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .objective-list li, .feature-list li, .component-list li {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(74, 158, 255, 0.1);
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 8px;
+        }
+        
+        .feature-list li {
+            background: rgba(0, 212, 170, 0.1);
+            border-left-color: var(--accent-green);
+        }
+        
+        /* Diagrams */
+        .diagram-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .diagram-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .metric-card {
+            background: rgba(74, 158, 255, 0.1);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Decision/Lesson Cards */
+        .decision-card, .lesson-card {
+            background: rgba(157, 78, 221, 0.1);
+            border-left: 4px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .decision-card h4, .lesson-card h4 {
+            color: var(--accent-purple);
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Impact Badges */
+        .impact-high {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+        
+        .impact-medium {
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+        
+        .impact-low {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Navigation Footer */
+        .phase-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+        }
+        
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.2), rgba(0, 212, 170, 0.2));
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.3), rgba(0, 212, 170, 0.3));
+            transform: translateX(-5px);
+        }
+        
+        .nav-button.next:hover {
+            transform: translateX(5px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .phase-title {
+                font-size: 1.75rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .phase-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb">
+            <a href="../../index.html"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+            <a href="../../index.html#phases">Phases</a>
+            <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+            <span>PHASE-21</span>
+        </nav>
+        
+        <!-- Phase Header -->
+        <header class="phase-header">
+            <h1 class="phase-title">Enterprise Repository Intelligence - JSON-First Architecture</h1>
+            <div class="phase-meta">
+                <span class="badge badge-active">
+                    <i class="fas fa-spinner"></i>
+                    ACTIVE
+                </span>
+                
+                <span class="badge" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fas fa-tag"></i>
+                    PHASE-21
+                </span>
+            </div>
+        </header>
+        
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event, 'overview')">
+                <i class="fas fa-info-circle"></i> Overview
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'architecture')">
+                <i class="fas fa-sitemap"></i> Architecture
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'implementation')">
+                <i class="fas fa-code"></i> Implementation
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'testing')">
+                <i class="fas fa-flask"></i> Testing
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'impact')">
+                <i class="fas fa-chart-line"></i> Impact
+            </button>
+        </div>
+        
+        <!-- Tab Content: Overview -->
+        <div id="overview" class="tab-content active">
+            <div class="content-card">
+                <h2><i class="fas fa-book-open"></i> Phase Overview</h2>
+                <p>Enterprise Repository Intelligence with JSON-first architecture</p>
+                
+                
+                <h3>Objectives</h3>
+                <ul class="objective-list">
+                    
+                    <li><i class="fas fa-bullseye"></i> Simplify data architecture with JSON-first approach</li>
+                    
+                    <li><i class="fas fa-bullseye"></i> Enable rapid prototyping without database overhead</li>
+                    
+                    <li><i class="fas fa-bullseye"></i> Provide progressive enhancement path to SQLite/PostgreSQL</li>
+                    
+                    <li><i class="fas fa-bullseye"></i> Reduce system complexity</li>
+                    
+                </ul>
+                
+                
+                
+                <h3>Key Features</h3>
+                <ul class="feature-list">
+                    
+                    <li>
+                        <strong>JSON-First Architecture</strong><br>
+                        Dashboard data in JSON format<br>
+                        <small>Status: ACTIVE | Coverage: 92%</small>
+                    </li>
+                    
+                    <li>
+                        <strong>Pydantic Validation</strong><br>
+                        Schema validation<br>
+                        <small>Status: ACTIVE | Coverage: 90%</small>
+                    </li>
+                    
+                    <li>
+                        <strong>Progressive Enhancement</strong><br>
+                        SQLite/PostgreSQL path<br>
+                        <small>Status: PLANNED | Coverage: 0%</small>
+                    </li>
+                    
+                </ul>
+                
+            </div>
+            
+            
+        </div>
+        
+        <!-- Tab Content: Architecture -->
+        <div id="architecture" class="tab-content">
+            <div class="content-card">
+                <h2><i class="fas fa-project-diagram"></i> Architecture</h2>
+                
+                    <p>JSON-first → SQLite → PostgreSQL graduation path</p>
+                    
+                    
+                    <h3>Key Components</h3>
+                    <ul class="component-list">
+                        
+                        <li><i class="fas fa-cube"></i> JSONDataGenerator</li>
+                        
+                        <li><i class="fas fa-cube"></i> PhaseDetail</li>
+                        
+                        <li><i class="fas fa-cube"></i> DashboardV3</li>
+                        
+                    </ul>
+                    
+                    
+                    
+                
+            </div>
+            
+            
+        </div>
+        
+        <!-- Tab Content: Implementation -->
+        <div id="implementation" class="tab-content">
+            <div class="content-card">
+                <h2><i class="fas fa-code-branch"></i> Implementation Details</h2>
+                
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">1200</div>
+                            <div class="metric-label">Lines of Code</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Files Modified</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">Tier 2</div>
+                            <div class="metric-label">Architecture Tier</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">P1</div>
+                            <div class="metric-label">Priority Level</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Implementation Files</h3>
+                    
+                
+            </div>
+        </div>
+        
+        <!-- Tab Content: Testing -->
+        <div id="testing" class="tab-content">
+            <div class="content-card">
+                <h2><i class="fas fa-vial"></i> Testing & Quality</h2>
+                
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">15</div>
+                            <div class="metric-label">Total Tests</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">100%</div>
+                            <div class="metric-label">Pass Rate</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">92%</div>
+                            <div class="metric-label">Code Coverage</div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Test File:</strong> <code>tests/unit/visualization/test_json_data_generator.py</code></p>
+                    
+                    
+                
+                
+                
+                <h3>Governance Compliance</h3>
+                
+                <div class="lesson-card">
+                    <h4>CORE-008</h4>
+                    <p>TDD-first</p>
+                    <p><strong>Status:</strong> 
+                        <span class="impact-high">
+                            COMPLIANT
+                        </span>
+                    </p>
+                </div>
+                
+                <div class="lesson-card">
+                    <h4>CORE-011</h4>
+                    <p>Type hints</p>
+                    <p><strong>Status:</strong> 
+                        <span class="impact-high">
+                            COMPLIANT
+                        </span>
+                    </p>
+                </div>
+                
+                <div class="lesson-card">
+                    <h4>CORE-012</h4>
+                    <p>Docstrings</p>
+                    <p><strong>Status:</strong> 
+                        <span class="impact-high">
+                            COMPLIANT
+                        </span>
+                    </p>
+                </div>
+                
+                
+            </div>
+            
+            
+        </div>
+        
+        <!-- Tab Content: Impact -->
+        <div id="impact" class="tab-content">
+            <div class="content-card">
+                <h2><i class="fas fa-rocket"></i> Impact Assessment</h2>
+                
+                    <p>Impact assessment coming soon...</p>
+                
+            </div>
+        </div>
+        
+        <!-- Phase Navigation -->
+        <nav class="phase-navigation">
+            
+            <span></span>
+            
+            
+            <a href="../../index.html#phases" class="nav-button">
+                <i class="fas fa-th-large"></i>
+                All Phases
+            </a>
+            
+            
+            <span></span>
+            
+        </nav>
+    </div>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#4a9eff',
+                primaryTextColor: '#e0e6ed',
+                primaryBorderColor: '#00d4aa',
+                lineColor: '#8b92a0',
+                secondaryColor: '#9d4edd',
+                tertiaryColor: '#ff6b35'
+            }
+        });
+        
+        // Tab switching
+        function switchTab(event, tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and mark button as active
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

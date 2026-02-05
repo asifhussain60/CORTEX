@@ -1,0 +1,304 @@
+# ENH-036: Complete Markdown Generation Elimination
+# Comprehensive enforcement to stop all Copilot markdown file creation
+
+id: ENH-036
+title: "Complete Markdown Generation Elimination"
+status: PLANNED
+priority: P0
+domain: Governance
+created: 2026-02-05
+estimated_effort: 2 days
+
+## Problem Statement
+
+Despite CORE-002 (NO markdown file generation), Copilot continues creating:
+- completion reports (*-completion.md, *-COMPLETION*.md)
+- summary files (*-summary.md, *-SUMMARY*.md)
+- report files (*-report.md, *-REPORT*.md)
+- Other markdown sprawl in _workspaces/
+
+**Recent Evidence (2026-02-05):**
+```
+_workspaces/cortex-plan/ORGANIZATION-SUMMARY-2026-02-05.md
+_workspaces/cortex-plan/ENH-032-SUMMARY.md
+_workspaces/PHASE-9-COMPLETION.md
+_workspaces/ARCHITECT-v12-REFACTOR-SUMMARY.md
+.github/prompts/PROMPT-UPGRADE-COMPLETION.md
+```
+
+**Root Cause:**
+- VacuumOrchestrator exists but not automatically invoked
+- No pre-generation prevention (only post-cleanup)
+- No real-time blocking during chat
+- Enforcement is reactive, not proactive
+
+## Objectives
+
+1. **Pre-Generation Blocking**: Stop markdown creation BEFORE files are written
+2. **Real-Time Enforcement**: Block during chat sessions (not just AUDIT)
+3. **Automatic Cleanup**: Auto-run VacuumOrchestrator after every completion
+4. **User Education**: Clear messaging when markdown generation is blocked
+5. **Metrics Tracking**: Monitor violation rate and cleanup frequency
+
+## Implementation Plan
+
+### Phase 1: Pre-Generation Hook (Day 1, Morning)
+**Deliverable:** Markdown generation interceptor
+
+**Files to create:**
+- `cortex/orchestrators/core/markdown_generation_blocker.py` (200 LOC)
+- `tests/unit/orchestrators/core/test_markdown_generation_blocker.py` (150 LOC)
+
+**Functionality:**
+- Detect file creation intent in real-time
+- Pattern matching: `*-completion.md`, `*-summary.md`, `*-report.md`
+- Block if path outside docs/.github (except README.md)
+- Return user-friendly error: "CORE-002 violation: Inline chat only"
+
+**Integration Point:**
+- Hook into copilot-instructions.md checklist
+- Add to EnforcementOrchestrator pre-execution gate
+
+**Test Coverage:** 12 tests
+- test_detect_markdown_generation_intent (6)
+- test_block_completion_files (3)
+- test_allow_docs_github_markdown (3)
+
+### Phase 2: Automatic Post-Completion Vacuum (Day 1, Afternoon)
+**Deliverable:** Auto-cleanup after DESIGN/EXEC completions
+
+**Files to modify:**
+- `.github/prompts/cortex-architect.prompt.md` (completion section)
+- `.github/agents/core/cortex-architect.md` (completion flow)
+- `cortex/orchestrators/support/vacuum_orchestrator.py` (add auto-run)
+
+**Changes:**
+```python
+# In completion flow (after implementation complete)
+def complete_implementation():
+    execute_phase()
+    log_completion()
+    
+    # NEW: Auto-vacuum
+    vacuum_result = VacuumOrchestrator().scan_and_clean_auto()
+    if vacuum_result.files_cleaned > 0:
+        log_warning(f"Cleaned {files_cleaned} markdown files")
+```
+
+**Prompt Addition:**
+```markdown
+### ✅ Before Every Operation (UPDATED)
+
+- [ ] Response header present
+- [ ] DoR displayed and approved
+- [ ] MCP tool invoked (not direct import)
+- [ ] EnforcementOrchestrator validation passed
+- [ ] CORE rules applied
+- [ ] Results inline (no file generation)
+- [ ] **Post-completion vacuum run** ← NEW
+```
+
+**Test Coverage:** 8 tests
+- test_auto_vacuum_after_completion (3)
+- test_vacuum_with_no_files (2)
+- test_vacuum_failure_handling (3)
+
+### Phase 3: Real-Time Chat Monitoring (Day 2, Morning)
+**Deliverable:** Runtime markdown generation detection
+
+**Files to create:**
+- `cortex/orchestrators/core/chat_session_monitor.py` (180 LOC)
+- `tests/unit/orchestrators/core/test_chat_session_monitor.py` (120 LOC)
+
+**Functionality:**
+- Monitor file system events during chat
+- Detect markdown file creation in real-time
+- Alert user immediately (not after completion)
+- Log violations for metrics
+
+**Integration:**
+- Add to InteractionOrchestrator
+- Wire into LENS Stage 0 (context gathering)
+
+**Test Coverage:** 10 tests
+- test_detect_file_creation_event (4)
+- test_markdown_pattern_matching (3)
+- test_user_alert_formatting (3)
+
+### Phase 4: Enhanced User Messaging (Day 2, Afternoon)
+**Deliverable:** Clear CORE-002 enforcement messages
+
+**Files to modify:**
+- `.github/prompts/response-format-standards.md` (add CORE-002 section)
+- `.github/copilot-instructions.md` (strengthen CORE-002)
+
+**New Response Pattern:**
+```markdown
+## 🚫 CORE-002 Violation Detected
+
+**Attempted Action:** Create `_workspaces/PHASE-X-COMPLETION.md`
+
+**Blocked Reason:** CORTEX uses inline chat only (no markdown files)
+
+**What This Means:**
+- All results reported in chat (you're reading this now ✅)
+- No completion reports needed (full context in conversation)
+- Markdown only in docs/.github directories
+
+**Next Steps:**
+Continue with inline reporting. All information visible here.
+```
+
+**Test Coverage:** 5 tests
+- test_core_002_message_formatting (3)
+- test_message_includes_rationale (2)
+
+### Phase 5: Metrics & Dashboard (Day 2, Late)
+**Deliverable:** Violation tracking and visibility
+
+**Files to create:**
+- `cortex/metrics/markdown_generation_metrics.py` (120 LOC)
+- `tests/unit/metrics/test_markdown_generation_metrics.py` (80 LOC)
+
+**Metrics:**
+- `markdown_generation_attempts_total` (counter)
+- `markdown_generation_blocks_total` (counter)
+- `vacuum_cleanup_files_total` (counter)
+- `core_002_violations_by_type` (histogram)
+
+**Dashboard Widget:**
+Add to _cortex-master dashboard:
+```html
+<div class="metric-card">
+  <h3>🚫 CORE-002 Enforcement</h3>
+  <div class="metric-value">0</div>
+  <div class="metric-label">Violations Today</div>
+  <div class="metric-trend">↓ 100% from yesterday</div>
+</div>
+```
+
+**Test Coverage:** 6 tests
+- test_increment_metrics (3)
+- test_dashboard_data_format (3)
+
+## Expected Benefits
+
+| Benefit | Impact |
+|---------|--------|
+| **Zero markdown sprawl** | 100% CORE-002 compliance |
+| **Immediate feedback** | User knows instantly (not after cleanup) |
+| **Reduced cleanup burden** | 90% reduction in manual vacuum runs |
+| **Better UX** | Clear messaging on why blocked |
+| **Metrics visibility** | Track compliance over time |
+
+## Success Criteria
+
+- ✅ No markdown files created outside docs/.github (except README.md)
+- ✅ Markdown generation blocked in real-time (< 100ms detection)
+- ✅ User receives clear CORE-002 message on block
+- ✅ Automatic vacuum runs after all completions
+- ✅ Zero manual cleanup required
+- ✅ Dashboard shows violation metrics
+
+## Testing Strategy
+
+**Unit Tests:** 41 tests total
+- Pre-generation blocking: 12 tests
+- Auto-vacuum: 8 tests
+- Runtime monitoring: 10 tests
+- User messaging: 5 tests
+- Metrics tracking: 6 tests
+
+**Integration Tests:** 5 E2E scenarios
+1. DESIGN completion → auto-vacuum → verify no files
+2. Attempt markdown generation → blocked → clear message
+3. Real-time monitoring → detect → alert
+4. Metrics collection → dashboard → verify display
+5. Multi-session enforcement → consistent behavior
+
+**Validation:**
+```bash
+# Before implementation
+find _workspaces -name "*-completion*.md" -o -name "*-summary*.md" | wc -l
+# Expected: 10-15 files
+
+# After implementation (1 week later)
+find _workspaces -name "*-completion*.md" -o -name "*-summary*.md" | wc -l
+# Expected: 0 files
+```
+
+## Dependencies
+
+- VacuumOrchestrator (already exists)
+- EnforcementOrchestrator (already exists)
+- InteractionOrchestrator (modification)
+- copilot-instructions.md (modification)
+- cortex-architect.prompt.md (modification)
+
+## Risks & Mitigation
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| **False positives** | Medium | Low | Whitelist docs/.github + README.md |
+| **Performance overhead** | Low | Low | < 5ms per check, async monitoring |
+| **User confusion** | Medium | Medium | Clear messaging, rationale in response |
+| **Bypass attempts** | Low | High | Multiple enforcement layers |
+
+## Related Enhancements
+
+- CORE-002 (original rule)
+- VacuumOrchestrator (cleanup tool)
+- EnforcementOrchestrator (7-agent system)
+- ENH-004 (RecommendationGate)
+
+## Rollout Plan
+
+**Week 1 (Implementation):**
+- Day 1: Phases 1-2 (blocking + auto-vacuum)
+- Day 2: Phases 3-5 (monitoring + messaging + metrics)
+
+**Week 2 (Validation):**
+- Monitor violation rate daily
+- Adjust blocking patterns if false positives
+- Refine user messaging based on feedback
+
+**Week 3 (Full Enforcement):**
+- Zero tolerance mode (all blocks logged)
+- Dashboard monitoring active
+- Success criteria validation
+
+## Documentation Updates
+
+**Files to update:**
+- `docs/04-architecture/governance.md` (add CORE-002 enforcement section)
+- `docs/reference/core-rules.md` (expand CORE-002 explanation)
+- `.github/copilot-instructions.md` (strengthen checklist)
+- `README.md` (add "No markdown generation" badge)
+
+## Acceptance Criteria
+
+- [ ] Pre-generation blocking implemented and tested (12 tests passing)
+- [ ] Auto-vacuum after completion working (8 tests passing)
+- [ ] Real-time monitoring active (10 tests passing)
+- [ ] User messaging clear and helpful (5 tests passing)
+- [ ] Metrics tracked and dashboarded (6 tests passing)
+- [ ] Zero markdown files in _workspaces/ after 1 week
+- [ ] Documentation updated with enforcement guide
+- [ ] Team trained on CORE-002 compliance
+
+## Next Steps After Completion
+
+1. Monitor metrics for 2 weeks
+2. Refine blocking patterns based on false positive rate
+3. Extend to other file types (JSON reports, XML configs, etc.)
+4. Consider MCP tool for external enforcement
+5. Add to CI/CD pre-commit hooks
+
+---
+
+**Estimated Timeline:** 2 days (16 hours)  
+**Estimated Tests:** 46 total (41 unit + 5 E2E)  
+**Target Coverage:** 90%  
+**Priority:** P0 (blocking production adoption)  
+**Owner:** cortex-architect agent  
+**Reviewer:** cortex-auditor agent

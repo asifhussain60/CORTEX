@@ -152,6 +152,41 @@
       background: rgba(30, 41, 59, 0.7);
     }
 
+    /* Phase card link wrapper */
+    .phase-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .phase-card-link:hover .glass-card {
+      transform: translateY(-5px);
+      border-color: rgba(96, 165, 250, 0.6);
+      box-shadow: 0 20px 40px rgba(96, 165, 250, 0.2);
+      cursor: pointer;
+    }
+
+    .phase-card {
+      position: relative;
+    }
+
+    .phase-card::after {
+      content: '\f105';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      font-size: 1.5rem;
+      color: rgba(96, 165, 250, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .phase-card-link:hover .phase-card::after {
+      color: rgba(96, 165, 250, 0.8);
+      transform: translateX(5px);
+    }
+
     .glass-card h3 {
       font-size: 1.4rem;
       margin-bottom: 8px;
@@ -417,35 +452,41 @@
       <div class="glass-card full">
         <h3>Active Phases (Current Development)</h3>
         <div class="grid">
-          <div class="glass-card">
-            <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
-            <h3>Phase 21: JSON-First Rewrite</h3>
-            <p>Started: 2026-02-01</p>
-            <p style="color: #a78bfa; margin-top: 12px;">Data-first architecture for dashboard and reporting systems.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 35%"></div>
+          <a href="phases/phase-21/index.html" class="phase-card-link" aria-label="Navigate to Phase 21: JSON-First Rewrite">
+            <div class="glass-card phase-card" data-phase-id="21" data-status="IN_PROGRESS">
+              <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
+              <h3 class="phase-name">Phase 21: JSON-First Rewrite</h3>
+              <p>Started: 2026-02-01</p>
+              <p style="color: #a78bfa; margin-top: 12px;">Data-first architecture for dashboard and reporting systems.</p>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 35%"></div>
+              </div>
             </div>
-          </div>
+          </a>
 
-          <div class="glass-card">
-            <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
-            <h3>Phase 22: ASK Mode System</h3>
-            <p>Started: 2026-02-03</p>
-            <p style="color: #a78bfa; margin-top: 12px;">Implementation-truth based educational interaction pattern.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 25%"></div>
+          <a href="phases/phase-22/index.html" class="phase-card-link" aria-label="Navigate to Phase 22: ASK Mode System">
+            <div class="glass-card phase-card" data-phase-id="22" data-status="IN_PROGRESS">
+              <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
+              <h3 class="phase-name">Phase 22: ASK Mode System</h3>
+              <p>Started: 2026-02-03</p>
+              <p style="color: #a78bfa; margin-top: 12px;">Implementation-truth based educational interaction pattern.</p>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%"></div>
+              </div>
             </div>
-          </div>
+          </a>
 
-          <div class="glass-card">
-            <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
-            <h3>Phase 23: Static Dashboard Generator</h3>
-            <p>Started: 2026-02-04</p>
-            <p style="color: #a78bfa; margin-top: 12px;">Self-contained Material.js observability for repos.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 40%"></div>
+          <a href="phases/phase-23/index.html" class="phase-card-link" aria-label="Navigate to Phase 23: Static Dashboard Generator">
+            <div class="glass-card phase-card" data-phase-id="23" data-status="IN_PROGRESS">
+              <p><span class="badge badge-active">ACTIVE</span><span class="badge badge-priority">P0</span></p>
+              <h3 class="phase-name">Phase 23: Static Dashboard Generator</h3>
+              <p>Started: 2026-02-04</p>
+              <p style="color: #a78bfa; margin-top: 12px;">Self-contained Material.js observability for repos.</p>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
 

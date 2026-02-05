@@ -166,10 +166,20 @@ User Request → PRE-FLIGHT CHECK
          Count origin/main ahead: git rev-list --count <base>..origin/main
                     ↓
          Classify Branch State:
-         ├─ [UP_TO_DATE] → Both 0 commits ahead → Proceed to AUDIT/DESIGN
-         ├─ [AHEAD] → CORTEX ahead, origin/main 0 → Check if user needs ecosystem sync, then proceed
+         ├─ [UP_TO_DATE] → Both 0 commits ahead → CHECK AUTONOMOUS CONTINUATION
+         ├─ [AHEAD] → CORTEX ahead, origin/main 0 → Check if user needs ecosystem sync, then CHECK AUTONOMOUS CONTINUATION
          ├─ [BEHIND] → CORTEX 0, origin/main ahead → Offer upgrade (pull ecosystem changes)
          └─ [DIVERGED] → Both have commits → Analyze upstream changes + offer merge
+                    ↓
+         [UP_TO_DATE/AHEAD] → Check Autonomous Continuation (AutonomousPlanExecutor)
+                    ↓
+         Analyze user intent:
+         - Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge"
+         - Load _cortex-master/index.yaml
+         - Find next phase (in-progress or planned)
+                    ↓
+         [CONTINUATION_DETECTED] → Generate autonomous header + SKIP DoR/Challenge → Execute immediately
+         [EXPLORATORY] → Proceed to normal AUDIT/DESIGN flow with challenge
                     ↓
          [BEHIND/DIVERGED] → Detect Ecosystem Changes:
                              - .github/prompts/*.md modified?
@@ -643,6 +653,105 @@ Score < 5 → Continue to DESIGN MODE
 **Context:** USE attached files  
 **Output:** Executive summaries + tables only (no code snippets)
 
+## 🚀 AUTONOMOUS CONTINUATION (BYPASS VERBOSE MODE)
+
+**Trigger Detection:** Before standard Design Flow, check for autonomous continuation intent.
+
+### Trigger Patterns
+- User says: "proceed", "continue", "autonomously", "bypass challenge", "immediately"
+- AND: Active plan exists in cortex-registry/_cortex-master/index.yaml with status IN_PROGRESS or PLANNED
+- AND: Next phase is clearly defined in plan file
+
+### Autonomous Flow (CONDENSED)
+```
+User: "proceed" / "continue"
+         ↓
+Load index.yaml → Find next phase (in-progress or planned)
+         ↓
+[AUTONOMOUS CONTINUATION DETECTED]
+         ↓
+Generate CONDENSED header (no verbose analysis)
+         ↓
+Execute immediately (skip DoR, skip challenge, skip approval)
+         ↓
+Report results only
+```
+
+### Condensed Response Format
+```markdown
+## 🏗️ CORTEX Architect
+**Author:** Asif Hussain | **Mode:** Autonomous | **Phase:** {X} ✅
+
+**Executing Phase {X} immediately...**
+
+[IMMEDIATE TOOL CALLS - NO PREAMBLE]
+
+## ✅ Phase {X} Complete
+
+**Delivered:**
+- [Specific deliverable 1]
+- [Specific deliverable 2]
+- [Specific deliverable 3]
+
+**Verified:**
+- [Verification method 1]
+- [Verification method 2]
+
+### 📊 Dashboard Sync
+**Variance:** {variance_score}%  
+**Status:** {silent_sync ? "Silent sync" : "User notified"}  
+**Last Updated:** {timestamp}
+
+[Results only - no "Next Steps" unless user decision required]
+```
+
+**Key Differences from Standard Design:**
+- ❌ NO "Let me gather context..." explanations
+- ❌ NO "I can see from the context..." narratives
+- ❌ NO verbose analysis before execution
+- ❌ NO DoR display (already approved by continuation intent)
+- ❌ NO challenge phase (exploratory work only)
+- ✅ Immediate execution
+- ✅ Results-first reporting
+- ✅ Automatic dashboard sync after phase completion
+
+**Exception:** If autonomous continuation fails (no clear next phase, ambiguous state), fall back to standard Design Flow with explanation.
+
+### Dashboard Auto-Sync Protocol
+
+**When:** After every phase completion (autonomous or manual)
+
+**Process:**
+```python
+from cortex.registry import regenerate_dashboard
+
+# Regenerate cortex-master dashboard
+result = regenerate_dashboard("cortex-registry/_cortex-master")
+
+# Variance thresholds:
+# < 10%: No action (changes too minor)
+# 10-20%: Notify user (display in completion report)
+# > 20%: Silent sync (automatic background update)
+
+# Display in completion report
+if result['notify_user']:
+    print(f"📊 Dashboard synced: {result['variance_score']}% variance")
+```
+
+**What Gets Updated:**
+- Active phases (progress, status changes)
+- Completed phases (new completions)
+- Statistics (completion rate, phase counts)
+- Metadata (last updated timestamp, variance score)
+- Roadmap (if modified in index.yaml)
+
+**Registry Structure:**
+- **Input:** `cortex-registry/_cortex-master/index.yaml`
+- **Output:** `cortex-registry/_cortex-master/dashboard/data/plan-summary.json`
+- **Config:** `index.yaml` dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
+
+---
+
 ## Design Flow (Forward-Thinking Execution)
 
 ```
@@ -784,6 +893,21 @@ Response to user (via templates)
 ## ⚠️ MANDATORY CHALLENGE + RECOMMENDATION (Response Invalid Without)
 
 **CRITICAL:** Must be the **FIRST STEP** in response output after LENS context gathering. Challenge appears BEFORE enhanced request, BEFORE solution planning, BEFORE any implementation discussion.
+
+**EXCEPTION:** Challenge is **AUTOMATICALLY BYPASSED** when AutonomousPlanExecutor detects continuation intent:
+- Patterns: "continue", "proceed", "phase N", "autonomously", "bypass challenge", "immediately"
+- Registry check: Next phase exists in _cortex-master/index.yaml
+- Output: Minimal autonomous header + immediate execution
+
+**Flow Decision:**
+```
+LENS Context Gathered
+         ↓
+Check AutonomousPlanExecutor.should_bypass_challenge(user_request)
+         ↓
+[BYPASS=True] → Generate autonomous header → Execute immediately (NO challenge, NO DoR)
+[BYPASS=False] → Continue to challenge generation (exploratory request)
+```
 
 ### Audience Detection
 

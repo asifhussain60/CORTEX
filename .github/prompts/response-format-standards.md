@@ -299,6 +299,37 @@ Use `<details>` tags for non-critical information:
 **Quick Select:** Reply with number (1-3) or full command
 ```
 
+### **AUTONOMOUS CONTINUATION Mode (NEW)**
+
+**Trigger:** User says "proceed" / "continue" / "autonomously" + active plan exists
+
+**Format (CONDENSED):**
+```markdown
+## 🏗️ CORTEX Architect
+**Author:** Asif Hussain | **Mode:** Autonomous | **Phase:** {X} ✅
+
+**Executing Phase {X} immediately...**
+
+[TOOL CALLS - NO PREAMBLE]
+
+## ✅ Phase {X} Complete
+
+**Delivered:**
+- [Deliverable 1]
+- [Deliverable 2]
+
+**Status:** [Brief status, no "Next Steps" unless decision required]
+```
+
+**Rules:**
+- ❌ NO context gathering explanations ("Let me check...")
+- ❌ NO verbose analysis before execution
+- ❌ NO DoR display (already approved by "proceed")
+- ❌ NO challenge generation (exploratory work only)
+- ✅ Immediate tool invocation
+- ✅ Results-first reporting
+- ✅ <10 lines before first tool call
+
 ### **AUDIT Mode**
 
 ```markdown

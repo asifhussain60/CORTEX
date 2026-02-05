@@ -19,7 +19,7 @@
 
 | Rule | Enforcement |
 |------|-------------|
-| **CORE-002** | NO markdown file generation (inline chat only) |
+| **CORE-002** | **NO markdown file generation** — Inline chat ONLY. Blocked patterns: `*-completion.md`, `*-summary.md`, `*-report.md`, `*-COMPLETION*.md`. Exception: docs/.github + README.md. Auto-vacuum after every completion. |
 | **CORE-008** | TDD MANDATORY — Tests BEFORE code (use TDDOrchestrator via MCP) |
 | **CORE-019** | ALL IMPLEMENT intents MUST route through TDDOrchestrator |
 | **CORE-029** | Response header MANDATORY |
@@ -318,6 +318,7 @@ curl http://localhost:8000/health/orchestrators
 - [ ] CORE rules applied (25/29 automated including CORE-028 file naming)
 - [ ] **AUDIT: All P0/P1/P2 issues auto-fixed before success report**
 - [ ] Results inline (no file generation)
+- [ ] **Post-completion markdown vacuum** (ENH-036: auto-cleanup after all completions)
 
 ---
 
