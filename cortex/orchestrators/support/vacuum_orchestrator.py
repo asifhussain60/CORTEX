@@ -106,6 +106,37 @@ class VacuumOrchestrator:
             "**/.archive/**",
             "**/README.md",
         ]
+        
+        # Root-level file categorization for comprehensive cleanup
+        self.root_file_rules = {
+            # Development utilities that should be in scripts/utilities/
+            "utility_scripts": {
+                "patterns": [
+                    "generate_dashboard_complete.py",
+                    "generate_dashboard_data.py",
+                    "run_vacuum.py",
+                    "verify_cleanup_integrity.py",
+                    "verify_dashboard.py",
+                ],
+                "destination": "scripts/utilities/",
+                "action": "move",
+            },
+            # Production-critical root files (KEEP)
+            "production_essential": {
+                "patterns": [
+                    ".cortex-version",
+                    ".dockerignore",
+                    ".gitignore",
+                    ".pre-commit-config.yaml",
+                    "Dockerfile",
+                    "Makefile",
+                    "README.md",
+                    "docker-compose*.yml",
+                    "requirements.txt",  # symlink
+                ],
+                "action": "keep",
+            },
+        }
 
     def scan_repository(self, root_path: str) -> Dict[str, Any]:
         """
@@ -164,6 +195,135 @@ class VacuumOrchestrator:
                 "total_count": 0,
                 "error": str(e),
             }
+
+    def scan_root_level(self, root_path: str) -> Dict[str, Any]:
+        """
+        Scan root-level files and directories for cleanup opportunities.
+        
+        Analyzes:
+        - Root Python scripts (should be in scripts/utilities/)
+        - Root directories (company/, cortex-lens/, etc.)
+        - Production vs development artifacts
+        
+        Args:
+            root_path: Root directory of repository to scan
+            
+        Returns:
+            Dictionary with categorized findings:
+                - utility_scripts: Scripts that should move to scripts/utilities/
+                - production_files: Essential root files (keep)
+                - directories: Root directories with size/purpose analysis
+                - recommendations: List of cleanup actions
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> result = orchestrator.scan_root_level("/path/to/repo")
+            >>> print(result["utility_scripts"])
+            ['generate_dashboard_complete.py', 'run_vacuum.py']
+        """
+        try:
+            root = Path(root_path)
+            utility_scripts = []
+            production_files = []
+            directories = []
+            recommendations = []
+            
+            # Scan root-level files
+            for item in root.iterdir():
+                if item.is_file():
+                    filename = item.name
+                    
+                    # Check against utility script patterns
+                    if filename in self.root_file_rules["utility_scripts"]["patterns"]:
+                        utility_scripts.append(filename)
+                        recommendations.append({
+                            "file": filename,
+                            "action": "move",
+                            "destination": self.root_file_rules["utility_scripts"]["destination"],
+                            "reason": "Development utility should be in scripts/utilities/",
+                            "priority": "medium",
+                        })
+                    # Check against production patterns
+                    elif self._is_production_file(filename):
+                        production_files.append(filename)
+                    else:
+                        # Unknown root file - flag for review
+                        recommendations.append({
+                            "file": filename,
+                            "action": "review",
+                            "reason": f"Unknown root-level file: {filename}",
+                            "priority": "low",
+                        })
+                
+                elif item.is_dir() and not item.name.startswith("."):
+                    # Analyze root directories
+                    try:
+                        size = sum(f.stat().st_size for f in item.rglob("*") if f.is_file())
+                        directories.append({
+                            "name": item.name,
+                            "size_bytes": size,
+                            "size_human": self._format_size(size),
+                            "purpose": self._classify_directory(item.name),
+                        })
+                    except (PermissionError, OSError):
+                        pass  # Skip inaccessible directories
+            
+            return {
+                "status": "success",
+                "utility_scripts": utility_scripts,
+                "production_files": production_files,
+                "directories": directories,
+                "recommendations": recommendations,
+                "summary": {
+                    "utility_scripts_count": len(utility_scripts),
+                    "production_files_count": len(production_files),
+                    "directories_count": len(directories),
+                    "total_recommendations": len(recommendations),
+                },
+            }
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+            }
+    
+    def _format_size(self, size_bytes: int) -> str:
+        """Format byte size to human-readable string."""
+        size: float = float(size_bytes)
+        for unit in ["B", "KB", "MB", "GB"]:
+            if size < 1024:
+                return f"{size:.1f}{unit}"
+            size /= 1024
+        return f"{size:.1f}TB"
+    
+    def _is_production_file(self, filename: str) -> bool:
+        """Check if filename matches production essential patterns."""
+        for pattern in self.root_file_rules["production_essential"]["patterns"]:
+            if "*" in pattern:
+                # Handle wildcard patterns
+                prefix = pattern.replace("*", "")
+                if filename.startswith(prefix):
+                    return True
+            elif filename == pattern:
+                return True
+        return False
+    
+    def _classify_directory(self, dir_name: str) -> str:
+        """Classify directory purpose based on name."""
+        classifications = {
+            "cortex": "Production - Core system",
+            "cortex_brain": "Production - Brain modules",
+            "cortex-registry": "Production - Orchestrator registry",
+            "docs": "Production - Documentation",
+            "tests": "Production - Test suite",
+            "deployment": "Production - Deployment configs",
+            "scripts": "Production - Utility scripts",
+            "company": "Production - Best practices knowledge",
+            "_archives": "Development - Archived artifacts",
+            "cortex-lens": "Development - Standalone analysis tool",
+        }
+        return classifications.get(dir_name, "Unknown")
 
     def generate_cleanup_plan(
         self,
@@ -322,6 +482,100 @@ class VacuumOrchestrator:
                 conflicts_resolved=conflicts_resolved,
                 errors=[str(e)],
             )
+
+    def execute_root_cleanup(
+        self,
+        scan_result: Dict[str, Any],
+        root_path: str = ".",
+        dry_run: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Execute root-level cleanup based on scan results.
+        
+        Moves utility scripts to scripts/utilities/ and reports on directory structure.
+        
+        Args:
+            scan_result: Result from scan_root_level()
+            root_path: Root directory of repository
+            dry_run: If True, only simulate actions without making changes
+            
+        Returns:
+            Dictionary with execution results:
+                - success: Whether cleanup completed successfully
+                - files_moved: Number of files moved
+                - dry_run: Whether this was a dry run
+                - actions_taken: List of actions performed
+                - errors: List of error messages
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> scan = orchestrator.scan_root_level(".")
+            >>> result = orchestrator.execute_root_cleanup(scan, dry_run=True)
+            >>> print(result["files_moved"])
+            5
+        """
+        try:
+            root = Path(root_path)
+            files_moved = 0
+            actions_taken = []
+            errors = []
+            
+            # Process recommendations
+            for rec in scan_result.get("recommendations", []):
+                if rec["action"] == "move":
+                    source = root / rec["file"]
+                    dest_dir = root / rec["destination"]
+                    dest_file = dest_dir / rec["file"]
+                    
+                    try:
+                        if not dry_run:
+                            # Create destination directory if needed
+                            dest_dir.mkdir(parents=True, exist_ok=True)
+                            
+                            # Move file
+                            shutil.move(str(source), str(dest_file))
+                        
+                        files_moved += 1
+                        actions_taken.append({
+                            "action": "moved",
+                            "file": rec["file"],
+                            "from": str(source),
+                            "to": str(dest_file),
+                            "reason": rec["reason"],
+                        })
+                        
+                    except Exception as e:
+                        errors.append(f"Failed to move {rec['file']}: {str(e)}")
+                
+                elif rec["action"] == "review":
+                    actions_taken.append({
+                        "action": "flagged",
+                        "file": rec["file"],
+                        "reason": rec["reason"],
+                        "priority": rec.get("priority", "medium"),
+                    })
+            
+            return {
+                "success": len(errors) == 0,
+                "files_moved": files_moved,
+                "dry_run": dry_run,
+                "actions_taken": actions_taken,
+                "errors": errors,
+                "summary": {
+                    "total_actions": len(actions_taken),
+                    "moves": files_moved,
+                    "reviews": len([a for a in actions_taken if a["action"] == "flagged"]),
+                },
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "files_moved": 0,
+                "dry_run": dry_run,
+                "actions_taken": [],
+                "errors": [str(e)],
+            }
 
     def verify_cleanup(
         self,
