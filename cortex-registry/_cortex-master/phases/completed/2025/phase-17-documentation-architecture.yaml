@@ -1,0 +1,526 @@
+# PHASE-17: CORTEX Documentation Architecture
+# Version: 1.0 | Created: 2026-01-31
+# Scope: 3-Level Documentation System with Advisory Intelligence
+# Authority: cortex-architect.prompt.md
+
+---
+metadata:
+  phase: "17"
+  title: "Documentation Architecture & CortexDocsOrchestrator Enhancement"
+  status: "PLANNING"
+  author: "Asif Hussain"
+  created: "2026-01-31"
+  governance:
+    - "ARCH-007: Internal tooling exemption (NOT MCP-exposed)"
+    - "ARCH-011: Execute to completion"
+    - "CORE-035: Single canonical implementation"
+
+---
+# ============================================================================
+# VISION: IMPRESSIVE DOCUMENTATION SITE
+# ============================================================================
+
+vision:
+  goal: |
+    Create an impressive, unique documentation site where:
+    - Every L2 page has distinct visual identity while maintaining cohesion
+    - Rich D3.js/Mermaid diagrams are intelligently applied
+    - Content is informative, not generic
+    - Automation handles repetitive tasks; humans focus on creativity
+    - GitHub Pages ready with build-time generation
+
+  principles:
+    - "Template + Uniqueness": Shared glassmorphism shell, unique content per page
+    - "Advisory First": Suggest what diagrams/content suit each section BEFORE generating
+    - "Rich Content": Every page should have at least one interactive visualization
+    - "Maintainable": Content lives in Markdown/YAML; HTML is generated
+
+---
+# ============================================================================
+# HIERARCHY: 3-LEVEL STRUCTURE
+# ============================================================================
+
+hierarchy:
+  level_1:
+    name: "Landing Page"
+    path: "docs/index.html"
+    status: "APPROVED - DO NOT MODIFY THEME/CSS"
+    description: |
+      Main entry point. Hero section, navigation to all L2 sections.
+      Dark blue glassmorphism theme is FINAL.
+    content:
+      - Hero with CORTEX logo (512px)
+      - Section cards linking to L2 pages
+      - Quick start tabs
+      - D3.js system architecture visualization
+
+  level_2:
+    name: "Section Landing Pages"
+    path_pattern: "docs/{section}/index.html"
+    status: "IN PROGRESS - orchestrators/index.html approved as reference"
+    description: |
+      Each major documentation section gets its own L2 landing page.
+      Design elements:
+      - 300x300 CORTEX logo left-justified in header
+      - Section title and description
+      - NO hero section (clean header)
+      - At least ONE D3.js visualization (unique to section)
+      - Glass cards with subtle animations
+      - Links to L3 pages within the section
+    
+    sections:
+      - id: "01-cortex-brain"
+        title: "CORTEX Brain"
+        theme_accent: "#7b61ff"  # Purple
+        recommended_diagrams:
+          - type: "d3-hierarchy"
+            name: "Tier Governance Pyramid"
+            description: "Interactive pyramid showing Tier0 > Tier1 > Tier2 > Tier3 precedence"
+          - type: "d3-force"
+            name: "Brain Component Network"
+            description: "Force-directed graph of brain modules and their dependencies"
+          - type: "svg-pipeline"
+            name: "Request Processing Flow"
+            description: "Linear flow from input → brain → output"
+        unique_features:
+          - "Tier rule hover cards"
+          - "Clickable governance violations example"
+
+      - id: "02-orchestrators"
+        title: "Orchestrators"
+        theme_accent: "#00d4ff"  # Cyan
+        status: "APPROVED - docs/orchestrators/index.html"
+        recommended_diagrams:
+          - type: "d3-force"
+            name: "Orchestrator Network"
+            description: "23 orchestrators with category coloring and relationship links"
+          - type: "svg-pipeline"
+            name: "Request Flow Architecture"
+            description: "Request → IntentRouter → Orchestrator → MCP"
+          - type: "svg-pipeline"
+            name: "Wiring & Registry"
+            description: "YAML → Registry → MCP Gateway"
+        unique_features:
+          - "Interactive filtering by category"
+          - "MCP tool badges"
+          - "6 Core + 6 Domain + 11 Support breakdown"
+
+      - id: "03-getting-started"
+        title: "Getting Started"
+        theme_accent: "#10b981"  # Emerald
+        recommended_diagrams:
+          - type: "svg-steps"
+            name: "Installation Flow"
+            description: "Step-by-step visual: Clone → Install → Configure → Run"
+          - type: "d3-decision"
+            name: "Quick Start Decision Tree"
+            description: "Interactive: What do you want to do? → Suggested path"
+        unique_features:
+          - "Animated code blocks"
+          - "Copy-to-clipboard for commands"
+          - "Progress indicator for tutorial steps"
+
+      - id: "04-architecture"
+        title: "Architecture"
+        theme_accent: "#6366f1"  # Indigo
+        status: "APPROVED - docs/architecture/index.html as reference"
+        recommended_diagrams:
+          - type: "d3-sankey"
+            name: "Data Flow Sankey"
+            description: "Show data flow through system layers"
+          - type: "d3-matrix"
+            name: "Component Interaction Matrix"
+            description: "Heatmap of which components communicate"
+          - type: "svg-layers"
+            name: "Layer Architecture"
+            description: "Presentation → Application → Domain → Infrastructure"
+        unique_features:
+          - "Zoom into any layer for detail"
+          - "Hover shows component responsibilities"
+
+      - id: "05-lens-protocol"
+        title: "LENS Protocol"
+        theme_accent: "#8b5cf6"  # Violet
+        recommended_diagrams:
+          - type: "svg-pipeline"
+            name: "LENS Pipeline"
+            description: "Language → Examination → Navigation → Synthesis"
+          - type: "d3-tree"
+            name: "AST Visualization"
+            description: "Sample AST tree from Python code"
+          - type: "d3-timeline"
+            name: "Git History Timeline"
+            description: "24h commit activity visualization"
+        unique_features:
+          - "Live code analysis demo"
+          - "Interactive AST explorer"
+
+      - id: "11-mcp-tools"
+        title: "MCP Tools"
+        theme_accent: "#f59e0b"  # Amber
+        recommended_diagrams:
+          - type: "d3-force"
+            name: "Tool Dependency Graph"
+            description: "Which tools depend on which orchestrators"
+          - type: "svg-api"
+            name: "REST Endpoint Map"
+            description: "Visual API documentation"
+          - type: "d3-radar"
+            name: "Tool Capability Radar"
+            description: "Compare tool features"
+        unique_features:
+          - "Try-it-now API playground"
+          - "Request/response examples"
+
+  level_3:
+    name: "Detail Pages"
+    path_pattern: "docs/{section}/{page}.html"
+    description: |
+      Deep-dive pages for specific topics within a section.
+      Design elements:
+      - Same glassmorphism theme
+      - Breadcrumb navigation: Home > Section > Page
+      - Sidebar with section navigation
+      - Full-width content area
+      - Diagrams as needed (inherited from L2 recommendations)
+    
+    examples:
+      - section: "01-cortex-brain"
+        pages:
+          - "tier0-governance.html"
+          - "tier1-acceptance.html"
+          - "state-management.html"
+      - section: "02-orchestrators"
+        pages:
+          - "master-orchestrator.html"
+          - "tdd-orchestrator.html"
+          - "planning-orchestrator.html"
+
+---
+# ============================================================================
+# ORCHESTRATOR ENHANCEMENT: ADVISORY MODE
+# ============================================================================
+
+orchestrator_enhancement:
+  name: "CortexDocsOrchestrator"
+  location: "cortex/orchestrators/internal/cortex_docs_orchestrator.py"
+  
+  new_capabilities:
+    advisory_mode:
+      description: |
+        BEFORE generating, the orchestrator can advise on:
+        - What diagrams suit this section
+        - Content structure recommendations  
+        - Visual hierarchy suggestions
+        - D3.js vs SVG vs Mermaid selection
+      
+      operations:
+        - name: "advise_section"
+          description: "Get recommendations for a specific L2 section"
+          parameters:
+            - section_id: "e.g., 01-cortex-brain"
+          returns:
+            - recommended_diagrams
+            - content_structure
+            - unique_features
+            - effort_estimate
+        
+        - name: "advise_page"
+          description: "Get recommendations for a specific L3 page"
+          parameters:
+            - section_id
+            - page_id
+          returns:
+            - diagram_placement
+            - content_outline
+            - related_pages
+        
+        - name: "compare_approaches"
+          description: "Compare diagram library options for a visualization"
+          parameters:
+            - visualization_type
+            - data_complexity
+          returns:
+            - d3_recommendation
+            - svg_recommendation
+            - mermaid_recommendation
+            - verdict
+    
+    generation_mode:
+      description: "Execute HTML generation (existing capabilities)"
+      operations:
+        - "extract_template"
+        - "generate_main"
+        - "generate_subfolders"
+        - "generate_page"
+        - "generate_all"
+        - "validate"
+    
+    content_pipeline:
+      description: "Markdown → HTML conversion with diagram injection"
+      flow:
+        1: "Read Markdown source from docs/{section}/*.md"
+        2: "Parse YAML frontmatter for metadata"
+        3: "Detect diagram placeholders (```d3:name``` or ```mermaid:name```)"
+        4: "Load diagram data from _diagrams/ folder"
+        5: "Inject rendered diagram HTML/SVG"
+        6: "Apply Jinja2 template"
+        7: "Write HTML to output location"
+
+---
+# ============================================================================
+# CONTENT STRATEGY: UNIQUENESS + AUTOMATION
+# ============================================================================
+
+content_strategy:
+  balance:
+    automated:
+      - "Navigation generation (breadcrumbs, sidebars)"
+      - "Footer/header injection"
+      - "CSS class application"
+      - "Diagram container scaffolding"
+      - "Meta tags and SEO"
+    
+    manual_with_guidance:
+      - "Hero content per L2 section"
+      - "D3.js visualization data and config"
+      - "Unique section descriptions"
+      - "Page-specific prose content"
+    
+    fully_manual:
+      - "Bespoke interactive features"
+      - "Custom animations beyond standard glass effects"
+
+  content_sources:
+    markdown:
+      location: "docs/{section}/*.md"
+      format: |
+        ---
+        title: Page Title
+        description: SEO description
+        diagram: brain-network  # Reference to _diagrams/{name}.json
+        layout: detail  # or 'landing' for L2
+        ---
+        
+        # Content Header
+        
+        Your markdown content here...
+        
+        ```d3:brain-network
+        # Placeholder - replaced with actual D3 visualization
+        ```
+    
+    diagram_data:
+      location: "docs/{section}/_diagrams/"
+      formats:
+        - "*.json" : "D3.js data files"
+        - "*.mmd"  : "Mermaid source (backup option)"
+        - "*.svg"  : "Pre-rendered SVG diagrams"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATION LIBRARY
+# ============================================================================
+
+d3_visualizations:
+  description: |
+    Reusable D3.js visualization components for CORTEX documentation.
+    Each visualization is configurable via JSON data files.
+
+  components:
+    force_network:
+      name: "Force-Directed Network"
+      use_cases:
+        - "Orchestrator relationships"
+        - "Component dependencies"
+        - "Module connections"
+      features:
+        - "Drag-to-reposition nodes"
+        - "Category-based coloring"
+        - "Hover tooltips"
+        - "Click-to-filter"
+      data_format: |
+        {
+          "nodes": [{"id": "name", "category": "type", "description": "..."}],
+          "links": [{"source": "a", "target": "b", "strength": 0.5}]
+        }
+    
+    sankey_flow:
+      name: "Sankey Diagram"
+      use_cases:
+        - "Data flow through layers"
+        - "Request routing"
+        - "Resource allocation"
+      features:
+        - "Flow width proportional to volume"
+        - "Hover shows flow details"
+        - "Animated flow particles (optional)"
+    
+    hierarchy_tree:
+      name: "Collapsible Tree"
+      use_cases:
+        - "AST visualization"
+        - "Class hierarchies"
+        - "Folder structures"
+      features:
+        - "Click to expand/collapse"
+        - "Zoom and pan"
+        - "Search/highlight nodes"
+    
+    timeline:
+      name: "Timeline"
+      use_cases:
+        - "Git commit history"
+        - "Event sequences"
+        - "Version history"
+      features:
+        - "Zoom to time range"
+        - "Event details on hover"
+        - "Milestone markers"
+    
+    matrix_heatmap:
+      name: "Interaction Matrix"
+      use_cases:
+        - "Component coupling"
+        - "API usage patterns"
+        - "Test coverage"
+      features:
+        - "Color-coded cells"
+        - "Row/column sorting"
+        - "Zoom to cell"
+
+---
+# ============================================================================
+# GITHUB PAGES BUILD PIPELINE
+# ============================================================================
+
+build_pipeline:
+  trigger:
+    on_push:
+      paths:
+        - "docs/**"
+        - "cortex/orchestrators/internal/**"
+  
+  workflow:
+    name: "Deploy CORTEX Docs"
+    file: ".github/workflows/docs.yml"
+    
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      
+      - name: "Setup Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python_version: "3.11"
+      
+      - name: "Install Dependencies"
+        run: "pip install jinja2 markdown pyyaml"
+      
+      - name: "Generate HTML"
+        run: |
+          python -c "
+          from cortex.orchestrators.internal import CortexDocsOrchestrator
+          orch = CortexDocsOrchestrator()
+          orch.execute('generate_all')
+          "
+      
+      - name: "Deploy to GitHub Pages"
+        uses: "peaceiris/actions-gh-pages@v3"
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          publish_dir: "./docs"
+
+---
+# ============================================================================
+# IMPLEMENTATION ROADMAP
+# ============================================================================
+
+roadmap:
+  phase_17a:
+    name: "Advisory Mode"
+    status: "NEXT"
+    deliverables:
+      - "Add advise_section() method to CortexDocsOrchestrator"
+      - "Add advise_page() method"
+      - "Add compare_approaches() method"
+      - "Create diagram recommendation database"
+    effort: "4 hours"
+  
+  phase_17b:
+    name: "L2 Page Generation"
+    status: "PENDING"
+    deliverables:
+      - "Create L2 template (based on orchestrators/index.html)"
+      - "Add generate_l2_page() method"
+      - "Generate all L2 landing pages"
+    effort: "6 hours"
+  
+  phase_17c:
+    name: "L3 Page Generation"
+    status: "PENDING"
+    deliverables:
+      - "Create L3 template with breadcrumbs + sidebar"
+      - "Implement Markdown → HTML pipeline"
+      - "Diagram placeholder injection"
+    effort: "8 hours"
+  
+  phase_17d:
+    name: "D3.js Component Library"
+    status: "PENDING"
+    deliverables:
+      - "Create reusable D3.js components"
+      - "Data format specifications"
+      - "docs/assets/js/cortex-diagrams.js"
+    effort: "10 hours"
+  
+  phase_17e:
+    name: "GitHub Pages Integration"
+    status: "PENDING"
+    deliverables:
+      - ".github/workflows/docs.yml"
+      - "Build script"
+      - "Validation step"
+    effort: "2 hours"
+
+---
+# ============================================================================
+# DECISION LOG
+# ============================================================================
+
+decisions:
+  - id: "D17-001"
+    question: "Separate advisor vs enhanced orchestrator?"
+    decision: "Enhanced orchestrator with advisory mode"
+    rationale: "CORE-035 (single canonical implementation), simpler architecture"
+  
+  - id: "D17-002"
+    question: "D3.js vs Mermaid for complex diagrams?"
+    decision: "D3.js primary, SVG for static, Mermaid deprecated"
+    rationale: "Full control over glassmorphism theming, interactivity"
+  
+  - id: "D17-003"
+    question: "Content source format?"
+    decision: "Markdown with YAML frontmatter + JSON diagram data"
+    rationale: "Maintainable, version-controlled, familiar to developers"
+
+---
+# ============================================================================
+# APPROVAL REQUIREMENTS
+# ============================================================================
+
+approvals_needed:
+  - item: "Phase 17a: Advisory Mode implementation"
+    required_from: "Asif Hussain"
+    status: "PENDING"
+  
+  - item: "L2 template (orchestrators/index.html as base)"
+    required_from: "Asif Hussain"
+    status: "APPROVED"
+  
+  - item: "D3.js visualization library scope"
+    required_from: "Asif Hussain"
+    status: "PENDING"
+
+---
+# END OF PHASE-17 DOCUMENTATION ARCHITECTURE PLAN

@@ -1,0 +1,1357 @@
+# ============================================================================
+# CORTEX cortex-plan: PHASE 7.5 - INQUIRY ORCHESTRATOR SYSTEM
+# ============================================================================
+# Date: 2026-01-27
+# Authority: CORTEX Master Orchestrator
+# Status: PLANNED (Approved for hybrid MVP → Docker-ready approach)
+# 
+# Strategic Context:
+#   User Request: "Create cortex-ask system for Q&A about CORTEX and user repos"
+#   Challenge: Single-dev design inadequate for team collaboration + Docker
+#   Solution: Hybrid staged approach with auto-detection of CORTEX vs. user repos
+#
+# Key Principles:
+#   - Extensibility: Multi-handler architecture for question types + multi-repo support
+#   - Scalability: Docker-ready with distributed cache (Redis/PostgreSQL)
+#   - Accuracy: Implementation Truth via LENS + code verification (CORE-030)
+#   - Efficiency: Smart context assembly, caching, team knowledge reuse
+#   - Intelligence: Auto-detect CORTEX vs. user repo questions, route accordingly
+# ============================================================================
+
+metadata:
+  plan_name: "CORTEX Inquiry System - Team-Ready Q&A Platform"
+  date: "2026-01-27"
+  phase: "7.5"
+  status: "STAGE_1_COMPLETE"
+  completion_date: "2026-01-27"
+  author: "CORTEX Team"
+  authority: "Strategic planning session (hybrid approach agreed)"
+  
+  # Stage 1 Completion
+  stage_1_status: "✅ COMPLETE"
+  stage_1_completion_date: "2026-01-27"
+  stage_1_tests_passing: "85/85 (100%)"
+  stage_1_files_created: 17
+  stage_1_lines_of_code: 2543
+  
+  # Hybrid delivery strategy
+  delivery_strategy: "TWO_STAGE_MVP_TO_PRODUCTION"
+  stage_1: "✅ MVP (Local, 1-3 users) - COMPLETE"
+  stage_2: "⏳ Docker-Ready (Team, 5-100+ users) - PLANNED"
+  
+  # Strategic alignment
+  strategic_goals:
+    extensibility:
+      rating: "★★★★★"
+      rationale: "5 specialized handlers + auto-repo detection, works on any codebase"
+    scalability:
+      rating: "★★★★★"
+      rationale: "Distributed cache, stateless design, load balanced, multi-repo"
+    accuracy:
+      rating: "★★★★★"
+      rationale: "LENS-powered verification, CORE-030 compliance, context-aware routing"
+    efficiency:
+      rating: "★★★★★"
+      rationale: "Smart caching, peer validation, automatic scope detection"
+    intelligence:
+      rating: "★★★★★"
+      rationale: "Auto-detect CORTEX vs. user repo, route to appropriate handlers"
+  
+  # Prerequisites
+  depends_on:
+    - "Phase 7.1 COMPLETE (LENS Protocol formalized)"
+    - "Phase 5.5 COMPLETE (Team collaboration layer)"
+    - "Phase 6 COMPLETE (Test suite validation)"
+  
+  # Timeline (UPDATED: +4-6h Stage 1, +3-4h Stage 2 for auto-detection)
+  total_duration: "34-45 hours (5-6 days)"
+  stage_1_duration: "19-24 hours (3-4 days)"
+  stage_2_duration: "15-21 hours (2-3 days)"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+executive_summary:
+  problem_statement: |
+    Developers need a way to ask intelligent questions about:
+    
+    CORTEX CODEBASE:
+    - Architecture and integration patterns
+    - Feature capabilities and entry points
+    - Best practices for implementation (Tier3 knowledge)
+    - Troubleshooting issues
+    - Future evolution and extensibility
+    
+    USER'S OWN REPOSITORIES:
+    - Architecture and component relationships
+    - Feature discovery and entry points
+    - Code patterns and design decisions
+    - Issue analysis and debugging
+    
+    Current state:
+    - CORTEX: Scattered documentation (50+ MD files)
+    - CORTEX: 6,847+ tests as only source of truth
+    - User repos: No analysis tooling
+    - No centralized Q&A system for either
+    - Knowledge silos (repeated questions)
+    - Slow onboarding for new developers
+
+  solution_overview: |
+    Create CORTEX Inquiry System with INTELLIGENT REPO DETECTION:
+    
+    STAGE 1 (MVP - Local):
+    - Extend MasterOrchestrator with INQUIRY intent type
+    - RepoDetectionOrchestrator (auto-detect CORTEX vs. user repo)
+    - ContextAssemblyOrchestrator for smart context gathering
+    - 5 specialized InquiryHandlers (Architecture, Feature, BestPractice, 
+      Troubleshooting, Evolution)
+    - GenericCodeInquiryHandler (fallback for user repos)
+    - Local SQLite cache for answer storage (repo-scoped)
+    - CLI /ask command interface
+    
+    STAGE 2 (Production - Docker):
+    - Containerized inquiry service (stateless)
+    - Redis distributed cache (multi-repo, team-wide answers)
+    - PostgreSQL question history + analytics (repo-tagged)
+    - CodeIndexService (build-time AST/Git analysis, multi-repo)
+    - Peer validation workflow (CORTEX-only, optional for user repos)
+    - Team learning dashboard
+    - Load-balanced 3-replica deployment
+
+  routing_intelligence: |
+    AUTO-DETECTION ALGORITHM:
+    1. Check question text for "CORTEX" keyword
+    2. Check current working directory path
+    3. Check file paths in evidence sources
+    4. Check git remote URL (CORTEX repo vs. other)
+    5. Route to:
+       - CORTEX handlers (full features: Tier3, team cache, peer validation)
+       - Generic handler (code analysis only, no CORTEX-specific knowledge)
+
+  user_experience:
+    cortex_question: |
+      User: "How does TDDOrchestrator integrate with enforcement?"
+      CORTEX: [Detects CORTEX context, uses specialized handler]
+      Response: [40-60 word answer with Tier3 knowledge, CORE rules, team validation]
+    
+    user_repo_question: |
+      User: "How does authentication work in my app?" (in /Users/john/my-app)
+      CORTEX: [Detects non-CORTEX repo, uses generic code analysis]
+      Response: [40-60 word answer from AST/Git analysis only]
+      Note: "Analyzing your repository code (no domain knowledge available)"
+    
+    explicit_command: |
+      User: /ask architecture "How does wiring registry work?"
+      CORTEX: [Routes to ArchitectureInquiryHandler, returns detailed answer]
+    
+    tier3_suggestion_cortex_only: |
+      [After 3+ identical CORTEX questions across team]
+      CORTEX: "💡 This CORTEX question asked 3 times. Add to Tier3 knowledge? [Y/n]"
+      
+      [User repo questions: No Tier3 suggestion, just cached answers]
+
+  key_differentiators:
+    - "Auto-detects CORTEX vs. user repo questions (intelligent routing)"
+    - "Implementation-first (not docs) - CORE-030 compliance"
+    - "LENS-powered verification (Git/AST/Comment analysis, any repo)"
+    - "CORTEX-optimized: Tier3 knowledge, team cache, peer validation"
+    - "User repo support: Generic code analysis without domain knowledge"
+    - "Team collaboration (shared cache, peer validation for CORTEX)"
+    - "Docker-native (stateless, scalable, HA, multi-repo)"
+    - "Concise responses (40-60 words, no code spam)"
+    - "Voluntary knowledge capture (user-controlled Tier3, CORTEX-only)"
+    - "Voluntary knowledge capture (user controls Tier3)"
+
+# ============================================================================
+# STAGE 1: MVP (LOCAL DEPLOYMENT)
+# ============================================================================
+stage_1_mvp:
+  name: "Inquiry System MVP - Local Validation with Multi-Repo Support"
+  duration: "19-24 hours (3-4 days)"
+  scope: "1-3 core developers, local workspace, CORTEX + user repos"
+  
+  goals:
+    - "Validate inquiry workflow effectiveness"
+    - "Test handler specialization approach"
+    - "Validate auto-detection of CORTEX vs. user repos"
+    - "Measure response quality and accuracy (both repo types)"
+    - "Gather usage patterns for Stage 2 design"
+  
+  architecture:
+    entry_point: "MasterOrchestrator (new INQUIRY intent)"
+    repo_detection: "RepoDetectionOrchestrator (auto-detect CORTEX vs. user)"
+    context_assembly: "ContextAssemblyOrchestrator (repo-aware)"
+    handlers: "5 specialized InquiryHandlers (CORTEX-optimized)"
+    generic_handler: "GenericCodeInquiryHandler (user repos)"
+    cache: "SQLite (.cortex/inquiry_cache.db, repo-scoped)"
+    interface: "CLI (/ask command)"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.0: RepoDetectionOrchestrator (NEW)
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_0:
+    name: "RepoDetectionOrchestrator"
+    duration: "2-3 hours"
+    location: "cortex/orchestrators/support/repo_detection_orchestrator.py"
+    
+    description: |
+      Intelligent detection of whether a question is about CORTEX codebase
+      or the user's own repository. Routes to appropriate handlers based
+      on detection results.
+    
+    detection_algorithm:
+      step_1_keyword_analysis:
+        description: "Scan question text for CORTEX-specific keywords"
+        keywords: ["CORTEX", "TDDOrchestrator", "MasterOrchestrator", "LENS", 
+                   "DatabaseBackedRegistry", "CORE-", "Tier3", "cortex-plan"]
+        confidence: "High if 2+ keywords found"
+      
+      step_2_working_directory:
+        description: "Check current working directory path"
+        cortex_path: "/path/to/CORTEX"
+        detection: "Exact match or parent directory"
+        confidence: "Very High (95%)"
+      
+      step_3_file_paths:
+        description: "Analyze file paths in evidence sources"
+        cortex_indicators: ["cortex/", "cortex_brain/", "_workspaces/"]
+        user_indicators: ["src/", "app/", "lib/", custom paths]
+        confidence: "High (85%)"
+      
+      step_4_git_remote:
+        description: "Check git remote URL if available"
+        cortex_remote: "github.com/your-org/CORTEX"
+        confidence: "Very High (98%)"
+      
+      step_5_fallback:
+        description: "If ambiguous, ask user"
+        prompt: "Is this question about CORTEX or your repository? [C/u]"
+    
+    routing_logic:
+      cortex_detected:
+        handlers: "5 specialized InquiryHandlers"
+        features_enabled:
+          - "Tier3 knowledge access"
+          - "CORE rule context"
+          - "Team cache participation"
+          - "Peer validation (Stage 2)"
+          - "Tier3 suggestion workflow"
+        cache_scope: "cortex_repo"
+      
+      user_repo_detected:
+        handler: "GenericCodeInquiryHandler"
+        features_enabled:
+          - "LENS analysis only (Git/AST/Comment)"
+          - "Generic code patterns"
+          - "Basic caching"
+        features_disabled:
+          - "No Tier3 knowledge"
+          - "No CORE rule context"
+          - "No peer validation"
+          - "No Tier3 suggestions"
+        cache_scope: "{repo_name}_repo"
+        disclaimer: "Analyzing your repository (generic code analysis, no domain knowledge)"
+    
+    tasks:
+      - id: "INQUIRY-000"
+        name: "Create RepoContext data model"
+        files:
+          - "cortex/models/inquiry_models.py (RepoContext, RepoType enum)"
+        tests: 8
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-001-NEW"
+        name: "Implement RepoDetectionOrchestrator"
+        files:
+          - "cortex/orchestrators/support/repo_detection_orchestrator.py"
+        tests: 20
+        time: "2 hours"
+      
+      - id: "INQUIRY-002-NEW"
+        name: "Add repo-scoped caching"
+        files:
+          - "cortex/orchestrators/support/inquiry_cache.py (repo-aware keys)"
+        tests: 10
+        time: "0.5 hours"
+    
+    validation:
+      - "28+ tests passing"
+      - "Detection accuracy > 95%"
+      - "Cache isolation verified (CORTEX vs. user repos)"
+      - "Fallback prompt works for ambiguous cases"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.1: ContextAssemblyOrchestrator (UPDATED)
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_1:
+    name: "ContextAssemblyOrchestrator (Repo-Aware)"
+    duration: "3-4 hours"
+    location: "cortex/orchestrators/support/context_assembly_orchestrator.py"
+    
+    description: |
+      Smart context gathering before answering questions. Assembles evidence
+      from multiple sources (code, tests, git history, documentation) to
+      ensure accurate, verified responses. NOW REPO-AWARE: adjusts context
+      sources based on CORTEX vs. user repo detection.
+    
+    responsibilities:
+      - "Accept RepoContext from RepoDetectionOrchestrator"
+      - "Route to TotalRecallAgent for feature discovery (any repo)"
+      - "Invoke LENS analyzers (Git/AST/Comment) for code intelligence (any repo)"
+      - "Query DatabaseBackedRegistry (CORTEX-only)"
+      - "Access GovernanceRegistry (CORTEX-only)"
+      - "Access Tier3 knowledge (CORTEX-only)"
+      - "Filter test contamination (CORE-030 enforcement)"
+      - "Build unified context object for handlers"
+    
+    key_features:
+      - "Parallel context gathering (reduce latency)"
+      - "Repo-aware source selection (CORTEX vs. user repo)"
+      - "Confidence scoring based on evidence quality"
+      - "Smart caching (invalidate on file change, repo-scoped)"
+      - "Evidence source tracking (file:line references)"
+    
+    interface:
+      input:
+        - "question: str (natural language question)"
+        - "repo_context: RepoContext (from RepoDetectionOrchestrator)"
+        - "category: Optional[InquiryCategory] (hint for optimization)"
+        - "user_context: Optional[UserContext] (team context)"
+      
+      output:
+        - "assembled_context: AssembledContext"
+        - "confidence: float (0.0-1.0)"
+        - "evidence_sources: List[EvidenceSource]"
+        - "cache_hit: bool"
+        - "repo_type: RepoType (CORTEX or USER_REPO)"
+    
+    tasks:
+      - id: "INQUIRY-003"
+        name: "Create AssembledContext data model (repo-aware)"
+        files:
+          - "cortex/models/inquiry_models.py"
+        tests: 12
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-004"
+        name: "Implement ContextAssemblyOrchestrator (repo-aware)"
+        files:
+          - "cortex/orchestrators/support/context_assembly_orchestrator.py"
+        dependencies:
+          - "RepoDetectionOrchestrator (INQUIRY-001-NEW)"
+          - "TotalRecallAgent (existing)"
+          - "LENSOrchestrator (Phase 7.1)"
+          - "DatabaseBackedRegistry (existing, CORTEX-only)"
+          - "GovernanceRegistry (existing, CORTEX-only)"
+        tests: 25
+        time: "2.5 hours"
+      
+      - id: "INQUIRY-005"
+        name: "Add local SQLite cache (already repo-scoped)"
+        files:
+          - "cortex/orchestrators/support/inquiry_cache.py"
+        tests: 10
+        time: "1 hour"
+    
+    validation:
+      - "47+ tests passing"
+      - "Context assembly < 500ms (local, any repo)"
+      - "Cache hit rate > 80% for repeated questions"
+      - "Evidence sources include file:line references"
+      - "Repo-aware source selection validated"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.2: InquiryHandlers (5 Specialized)
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_2:
+    name: "Specialized InquiryHandlers"
+    duration: "6-8 hours"
+    location: "cortex/orchestrators/domain/inquiry/"
+    
+    description: |
+      Five specialized handlers for different question categories. Each
+      handler uses assembled context to generate category-specific answers
+      with appropriate evidence and formatting.
+    
+    handlers:
+      architecture:
+        name: "ArchitectureInquiryHandler"
+        file: "architecture_inquiry_handler.py"
+        focus: "System design, component integration, wiring patterns"
+        data_sources:
+          - "DatabaseBackedRegistry (orchestrator wiring)"
+          - "AST analysis (import graphs, dependency chains)"
+          - "Git history (architectural evolution)"
+        example_questions:
+          - "How does TDDOrchestrator integrate with EnforcementOrchestrator?"
+          - "What's the wiring flow for MCP tools?"
+          - "How does the 5-stage pipeline work?"
+        tests: 30
+        time: "1.5 hours"
+      
+      feature:
+        name: "FeatureInquiryHandler"
+        file: "feature_inquiry_handler.py"
+        focus: "Capability discovery, feature availability, entry points"
+        data_sources:
+          - "TotalRecallAgent (feature locations)"
+          - "AST analysis (function signatures, classes)"
+          - "Test files (feature validation)"
+        example_questions:
+          - "Does CORTEX support async workflows?"
+          - "Where is the cache invalidation feature?"
+          - "Can I run parallel onboarding?"
+        tests: 30
+        time: "1.5 hours"
+      
+      best_practice:
+        name: "BestPracticeInquiryHandler"
+        file: "best_practice_inquiry_handler.py"
+        focus: "Implementation patterns, CORE rules, Tier3 knowledge"
+        data_sources:
+          - "Tier3 knowledge YAMLs (35+ files)"
+          - "GovernanceRegistry (CORE rules)"
+          - "Comment analysis (TODO/FIXME patterns)"
+        example_questions:
+          - "What's the right way to add a CORE rule?"
+          - "How should I implement TDD for feature X?"
+          - "What's the pattern for orchestrator wiring?"
+        tests: 30
+        time: "1.5 hours"
+      
+      troubleshooting:
+        name: "TroubleshootingInquiryHandler"
+        file: "troubleshooting_inquiry_handler.py"
+        focus: "Issue resolution, debugging, error patterns"
+        data_sources:
+          - "Git blame (who changed what)"
+          - "Commit messages (bug fix patterns)"
+          - "Test failures (error scenarios)"
+        example_questions:
+          - "Why isn't my orchestrator wiring?"
+          - "How do I fix CORE-030 violations?"
+          - "What causes DatabaseBackedRegistry errors?"
+        tests: 30
+        time: "1.5 hours"
+      
+      evolution:
+        name: "EvolutionInquiryHandler"
+        file: "evolution_inquiry_handler.py"
+        focus: "Future planning, extensibility, technical roadmap"
+        data_sources:
+          - "cortex-plan YAML files (roadmap)"
+          - "PHASE-*.yaml (planned features)"
+          - "Technical debt tracking"
+        example_questions:
+          - "How should we scale to 100+ orchestrators?"
+          - "What's the plan for multi-tenancy?"
+          - "Can CORTEX support GraphQL?"
+        tests: 30
+        time: "1.5 hours"
+    
+    tasks:
+      - id: "INQUIRY-004"
+        name: "Create base InquiryHandler interface"
+        files:
+          - "cortex/orchestrators/domain/inquiry/base_handler.py"
+        tests: 10
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-005"
+        name: "Implement 5 specialized handlers"
+        files:
+          - "cortex/orchestrators/domain/inquiry/architecture_inquiry_handler.py"
+          - "cortex/orchestrators/domain/inquiry/feature_inquiry_handler.py"
+          - "cortex/orchestrators/domain/inquiry/best_practice_inquiry_handler.py"
+          - "cortex/orchestrators/domain/inquiry/troubleshooting_inquiry_handler.py"
+          - "cortex/orchestrators/domain/inquiry/evolution_inquiry_handler.py"
+        tests: 150
+        time: "6 hours"
+      
+      - id: "INQUIRY-006"
+        name: "Add response synthesis (40-60 word limit)"
+        files:
+          - "cortex/orchestrators/domain/inquiry/response_synthesizer.py"
+        tests: 15
+        time: "1 hour"
+    
+    validation:
+      - "150+ handler tests passing (CORTEX-optimized)"
+      - "Responses 40-60 words (direct answer)"
+      - "Evidence includes file:line references"
+      - "Confidence scores 0.0-1.0"
+      - "Governance rules identified correctly (CORTEX-only)"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.2.5: GenericCodeInquiryHandler (NEW - User Repos)
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_2_5:
+    name: "GenericCodeInquiryHandler (User Repository Support)"
+    duration: "2-3 hours"
+    location: "cortex/orchestrators/domain/inquiry/generic_code_inquiry_handler.py"
+    
+    description: |
+      Fallback handler for user repository questions. Provides code analysis
+      without CORTEX-specific domain knowledge. Uses LENS analyzers only
+      (Git/AST/Comment) to answer questions about any codebase.
+    
+    capabilities:
+      - "AST-based architecture analysis (imports, dependencies)"
+      - "Git history pattern detection (recent changes, authors)"
+      - "Comment-based intent detection (TODO/FIXME patterns)"
+      - "Generic code pattern recognition"
+      - "Function/class discovery"
+    
+    limitations:
+      - "No Tier3 knowledge (domain-agnostic)"
+      - "No CORE rule context (CORTEX-specific)"
+      - "No peer validation (user repos are private)"
+      - "No Tier3 suggestions (no knowledge base)"
+      - "Generic answers only (no framework-specific insights)"
+    
+    response_format:
+      disclaimer: |
+        "🔍 Analyzing your repository code (generic analysis, no domain knowledge)
+        For CORTEX-specific questions, mention 'CORTEX' explicitly."
+      
+      content: "40-60 word answer from code analysis"
+      evidence: "file:line references from LENS"
+      confidence: "0.0-1.0 (typically lower than CORTEX answers)"
+    
+    example_responses:
+      architecture_question: |
+        Q: "How does authentication work in my app?"
+        A: "Your authentication flow uses JWT tokens (src/auth/jwt.py:45).
+           The verify_token function validates tokens via middleware
+           (src/middleware/auth.py:28). Database user lookup happens in
+           UserRepository.find_by_token (src/repos/user.py:102)."
+        
+        Evidence:
+        - src/auth/jwt.py:45 - JWT token generation
+        - src/middleware/auth.py:28 - Token verification middleware
+        - src/repos/user.py:102 - User lookup
+        
+        Confidence: 0.78 (code analysis)
+      
+      feature_question: |
+        Q: "Where is the payment gateway in my code?"
+        A: "Payment processing found in src/payments/gateway.py:67.
+           Stripe integration via StripeAdapter class (src/payments/adapters/stripe.py:12).
+           Transaction logging in PaymentLogger (src/payments/logger.py:34).
+           Last modified 3 days ago by john@example.com."
+        
+        Evidence:
+        - src/payments/gateway.py:67 - Main payment entry point
+        - src/payments/adapters/stripe.py:12 - Stripe adapter
+        - Git: Modified 2026-01-24 by john@example.com
+        
+        Confidence: 0.82 (code + git analysis)
+    
+    tasks:
+      - id: "INQUIRY-006-NEW"
+        name: "Create GenericCodeInquiryHandler"
+        files:
+          - "cortex/orchestrators/domain/inquiry/generic_code_inquiry_handler.py"
+        dependencies:
+          - "LENSOrchestrator (Phase 7.1)"
+          - "TotalRecallAgent (existing)"
+        tests: 25
+        time: "2 hours"
+      
+      - id: "INQUIRY-007-NEW"
+        name: "Add routing logic (CORTEX vs. generic)"
+        files:
+          - "cortex/orchestrators/support/context_assembly_orchestrator.py (route_to_handler)"
+        tests: 10
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-008-NEW"
+        name: "Add disclaimer formatting"
+        files:
+          - "cortex/orchestrators/domain/inquiry/response_synthesizer.py (add_disclaimer)"
+        tests: 5
+        time: "0.5 hours"
+    
+    validation:
+      - "40+ tests passing (generic handler)"
+      - "Answers generic code questions accurately"
+      - "Disclaimer displayed for non-CORTEX repos"
+      - "No Tier3/CORE context leaked to user repos"
+      - "Confidence scores reflect generic analysis (0.6-0.85 typical)"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.3: MasterOrchestrator Integration (UPDATED)
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_3:
+    name: "MasterOrchestrator INQUIRY Integration"
+    duration: "2-3 hours"
+    location: "cortex/orchestrators/core/master_orchestrator.py"
+    
+    description: |
+      Extend MasterOrchestrator to detect question patterns and route to
+      INQUIRY pipeline. No separate prompt file needed - natural language
+      detection via IntentRouter.
+    
+    changes:
+      intent_router:
+        - "Add INQUIRY to IntentType enum"
+        - "Add question pattern detection (How/What/Does/Can/Why)"
+        - "Route INQUIRY → ContextAssemblyOrchestrator"
+      
+      master_orchestrator:
+        - "Handle INQUIRY intent in _route_to_orchestrator()"
+        - "Skip DoR approval for INQUIRY (read-only)"
+        - "Add conversation context tracking"
+        - "Detect follow-up questions"
+      
+      lens_integration:
+        - "Pass LENS context to IntentRouter"
+        - "Boost confidence for code-verified answers"
+    
+    tasks:
+      - id: "INQUIRY-007"
+        name: "Add INQUIRY intent type"
+        files:
+          - "cortex/orchestrators/core/intent_router.py"
+        tests: 10
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-008"
+        name: "Integrate with MasterOrchestrator"
+        files:
+          - "cortex/orchestrators/core/master_orchestrator.py"
+        tests: 15
+        time: "1.5 hours"
+      
+      - id: "INQUIRY-009"
+        name: "Add conversation context tracking"
+        files:
+          - "cortex/orchestrators/core/conversation_tracker.py"
+        tests: 10
+        time: "1 hour"
+    
+    validation:
+      - "35+ integration tests passing"
+      - "Question detection accuracy > 95%"
+      - "Follow-up context preserved"
+      - "Transition to action (IMPLEMENT) works"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 1.4: CLI /ask Command
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_1_4:
+    name: "CLI /ask Command Interface"
+    duration: "2-3 hours"
+    location: "cortex/cli/commands/ask.py"
+    
+    description: |
+      User-friendly CLI command for explicit inquiry mode. Supports category
+      hints, conversation history, and Tier3 knowledge suggestions.
+    
+    features:
+      - "Simple: cortex ask \"question\""
+      - "Category hint: cortex ask architecture \"question\""
+      - "Show evidence: cortex ask --verbose \"question\""
+      - "Code example: cortex ask --show-code \"question\""
+      - "History: cortex ask --history (last 10 questions)"
+    
+    tier3_suggestion_logic:
+      trigger: "Question asked 3+ times (by any user in local cache)"
+      prompt: |
+        💡 This question has been asked 3 times:
+        "How does enforcement work?"
+        
+        Would you like to add this to Tier3 knowledge base?
+        - ✅ Yes → Create tier3/knowledge/enforcement-qa.yaml
+        - ❌ No → Continue answering dynamically
+        - ⏭️ Ask later → Remind after 5 more occurrences
+      
+      yaml_template: |
+        # Auto-generated from inquiry system
+        category: {category}
+        question: {question}
+        answer: {answer}
+        evidence: {sources}
+        confidence: {score}
+        validated_by: {user}
+        date: {timestamp}
+    
+    tasks:
+      - id: "INQUIRY-010"
+        name: "Create /ask CLI command"
+        files:
+          - "cortex/cli/commands/ask.py"
+        tests: 15
+        time: "1.5 hours"
+      
+      - id: "INQUIRY-011"
+        name: "Add Tier3 suggestion workflow"
+        files:
+          - "cortex/cli/commands/tier3_suggester.py"
+        tests: 10
+        time: "1 hour"
+    
+    validation:
+      - "25+ CLI tests passing"
+      - "Category routing works correctly"
+      - "Tier3 suggestion triggers at threshold"
+      - "YAML generation valid"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # STAGE 1 SUMMARY (UPDATED: Multi-Repo Support)
+  # ─────────────────────────────────────────────────────────────────────────
+  deliverables:
+    files_created: 17
+    tests_added: 288
+    lines_of_code: ~2400
+    
+    files:
+      - "cortex/models/inquiry_models.py (RepoContext, RepoType, AssembledContext)"
+      - "cortex/orchestrators/support/repo_detection_orchestrator.py"
+      - "cortex/orchestrators/support/context_assembly_orchestrator.py"
+      - "cortex/orchestrators/support/inquiry_cache.py"
+      - "cortex/orchestrators/domain/inquiry/base_handler.py"
+      - "cortex/orchestrators/domain/inquiry/architecture_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/feature_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/best_practice_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/troubleshooting_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/evolution_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/generic_code_inquiry_handler.py"
+      - "cortex/orchestrators/domain/inquiry/response_synthesizer.py"
+      - "cortex/orchestrators/core/conversation_tracker.py"
+      - "cortex/cli/commands/ask.py"
+      - "cortex/cli/commands/tier3_suggester.py"
+      - "tests/orchestrators/support/test_repo_detection.py"
+      - "tests/orchestrators/domain/inquiry/test_*.py (6 files)"
+      - "tests/cli/commands/test_ask.py"
+  
+  validation_criteria:
+    - "288+ tests passing (100%)"
+    - "Repo detection accuracy > 95% (CORTEX vs. user repos)"
+    - "Question routing accuracy > 95%"
+    - "Response time < 500ms (local, cached, any repo)"
+    - "Response time < 2s (local, uncached, any repo)"
+    - "Evidence sources verified via LENS"
+    - "CORE-030 compliance enforced (CORTEX-only)"
+    - "Tier3 suggestion workflow operational (CORTEX-only)"
+    - "Generic handler works for user repos (no CORTEX leakage)"
+  
+  user_acceptance:
+    - "3 core developers validate for 1 week"
+    - "Test both CORTEX questions AND user repo questions"
+    - "Gather metrics: questions asked, categories, repo types, satisfaction"
+    - "Validate repo detection accuracy in real-world usage"
+    - "Identify pain points for Stage 2 improvements"
+    - "Measure knowledge gap closure rate (CORTEX + user repos)"
+
+# ============================================================================
+# STAGE 2: DOCKER-READY (PRODUCTION SCALE)
+# ============================================================================
+stage_2_docker:
+  name: "Inquiry System - Docker Production Deployment"
+  duration: "12-17 hours (2-3 days)"
+  scope: "5-100+ users, team collaboration, HA deployment"
+  
+  prerequisites:
+    - "Stage 1 MVP validated (1 week usage)"
+    - "User feedback incorporated"
+    - "Usage patterns analyzed"
+  
+  architecture_changes:
+    from: "Local SQLite, direct filesystem access"
+    to: "Redis cache, PostgreSQL history, CodeIndexService API, stateless"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 2.1: Infrastructure Setup
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_2_1:
+    name: "Docker Infrastructure for Inquiry System"
+    duration: "4-6 hours"
+    
+    description: |
+      Create Docker Compose services for inquiry system with distributed
+      cache (Redis), persistent history (PostgreSQL), and pre-built code
+      index service (build-time AST/Git analysis).
+    
+    services:
+      inquiry_service:
+        description: "Stateless inquiry orchestrator (3 replicas)"
+        image: "cortex-inquiry:latest"
+        replicas: 3
+        dependencies:
+          - "redis (cache)"
+          - "postgres (history)"
+          - "code-index-service (analysis)"
+        environment:
+          - "CACHE_BACKEND=redis://redis:6379"
+          - "DB_URL=postgresql://postgres:5432/cortex_inquiry"
+          - "CODE_INDEX_URL=http://code-index-service:8080"
+        volumes:
+          - "cortex_brain/tier0:/app/cortex_brain/tier0:ro (CORE rules only)"
+      
+      code_index_service:
+        description: "Pre-built AST/Git analysis (updated on deploy)"
+        image: "cortex-code-index:latest"
+        build_strategy: "Extract git history + AST at build time"
+        volumes:
+          - "code-index-data:/app/index (persistent)"
+        api_endpoints:
+          - "GET /api/ast/analyze?file={path}"
+          - "GET /api/git/history?file={path}"
+          - "GET /api/git/blame?file={path}&line={num}"
+          - "GET /api/features/search?query={q}"
+      
+      redis:
+        description: "Distributed answer cache (team-wide)"
+        image: "redis:7-alpine"
+        volumes:
+          - "redis-data:/data"
+        persistence: "AOF (append-only file)"
+      
+      postgres:
+        description: "Question history + analytics"
+        image: "postgres:15-alpine"
+        volumes:
+          - "postgres-data:/var/lib/postgresql/data"
+        schema:
+          tables:
+            - "questions (id, text, category, user_id, timestamp)"
+            - "answers (id, question_id, text, confidence, sources, validated)"
+            - "validations (answer_id, user_id, vote, comment, timestamp)"
+            - "tier3_suggestions (question_id, status, created_at)"
+    
+    tasks:
+      - id: "INQUIRY-012"
+        name: "Create docker-compose.inquiry.yml"
+        files:
+          - "docker-compose.inquiry.yml"
+        time: "1 hour"
+      
+      - id: "INQUIRY-013"
+        name: "Create Dockerfile.inquiry"
+        files:
+          - "Dockerfile.inquiry"
+        features:
+          - "Multi-stage build (dependencies cached)"
+          - "LENS disabled (use CodeIndexService)"
+          - "Stateless design (no local cache)"
+        time: "1 hour"
+      
+      - id: "INQUIRY-014"
+        name: "Create CodeIndexService"
+        files:
+          - "services/code-index/Dockerfile"
+          - "services/code-index/indexer.py"
+          - "services/code-index/api.py"
+        description: |
+          Build-time service that extracts git history + AST analysis
+          and serves it via HTTP API (no runtime .git/ access needed)
+        time: "3 hours"
+      
+      - id: "INQUIRY-015"
+        name: "Create PostgreSQL schema"
+        files:
+          - "deployment/inquiry-schema.sql"
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-016"
+        name: "Add health checks + readiness probes"
+        files:
+          - "cortex/mcp/inquiry_health.py"
+        tests: 5
+        time: "0.5 hours"
+    
+    validation:
+      - "docker-compose up -d succeeds"
+      - "All services healthy (health checks pass)"
+      - "CodeIndexService API responds < 100ms"
+      - "Redis cache accessible from all replicas"
+      - "PostgreSQL schema created successfully"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 2.2: Stateless Context Assembly
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_2_2:
+    name: "Refactor ContextAssemblyOrchestrator (Stateless)"
+    duration: "3-4 hours"
+    
+    description: |
+      Modify ContextAssemblyOrchestrator to be stateless and Docker-native.
+      Remove direct filesystem/git access, use CodeIndexService API instead.
+    
+    changes:
+      remove:
+        - "Direct .git/ folder access (GitHistoryAnalyzer)"
+        - "Direct Python module imports (ASTAnalyzer)"
+        - "Local SQLite cache (inquiry_cache.py)"
+        - "Local file reads for LENS"
+      
+      add:
+        - "CodeIndexService HTTP client"
+        - "Redis cache client (distributed)"
+        - "PostgreSQL history logger"
+        - "Cache invalidation via pub/sub"
+    
+    tasks:
+      - id: "INQUIRY-017"
+        name: "Add CodeIndexService client"
+        files:
+          - "cortex/infrastructure/code_index_client.py"
+        tests: 15
+        time: "1.5 hours"
+      
+      - id: "INQUIRY-018"
+        name: "Add Redis cache client"
+        files:
+          - "cortex/infrastructure/redis_cache.py"
+        tests: 10
+        time: "1 hour"
+      
+      - id: "INQUIRY-019"
+        name: "Refactor ContextAssemblyOrchestrator"
+        files:
+          - "cortex/orchestrators/support/context_assembly_orchestrator.py"
+        changes: "Replace local access with service calls"
+        tests: "Update 20 existing tests"
+        time: "1.5 hours"
+    
+    validation:
+      - "All context assembly tests pass (updated)"
+      - "No filesystem access in container"
+      - "Cache hit rate > 90% (team-wide)"
+      - "Context assembly < 300ms (cached)"
+      - "Context assembly < 1s (uncached, service call)"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 2.3: Team Collaboration Features
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_2_3:
+    name: "Team Collaboration + Peer Validation"
+    duration: "4-5 hours"
+    
+    description: |
+      Add team-specific features: shared question history, peer validation
+      workflow, answer voting, expert tagging, and team analytics dashboard.
+    
+    features:
+      question_history:
+        description: "Team-wide question history with search"
+        api_endpoint: "GET /api/inquiry/history?user={id}&days={n}"
+        features:
+          - "Most asked questions (last 7 days)"
+          - "Unanswered questions queue"
+          - "Popular searches"
+      
+      peer_validation:
+        description: "Expert validation workflow for answers"
+        workflow:
+          1: "Answer generated → 'pending validation' state"
+          2: "Notify experts (based on file ownership from git blame)"
+          3: "Expert reviews: ✅ Approve | ❌ Dispute | 🔄 Improve"
+          4: "After 2+ approvals → 'validated answer'"
+          5: "Validated answers rank higher in cache"
+        
+        expert_selection:
+          - "Git blame: who owns the files in evidence?"
+          - "Question history: who answered similar questions?"
+          - "Tier3 contributors: who wrote related knowledge?"
+      
+      answer_voting:
+        description: "Team members vote on answer quality"
+        api_endpoint: "POST /api/inquiry/vote"
+        votes: "👍 Helpful | 👎 Not helpful | 🔄 Needs improvement"
+        impact: "Answer confidence adjusted based on votes"
+      
+      team_analytics:
+        description: "Dashboard for knowledge gaps + learning patterns"
+        metrics:
+          - "Questions per category (which area needs docs?)"
+          - "Unanswered questions (knowledge gaps)"
+          - "Most confused files (high question frequency)"
+          - "Expert leaderboard (who answers most?)"
+          - "Onboarding bottlenecks (new user questions)"
+    
+    tasks:
+      - id: "INQUIRY-020"
+        name: "Create peer validation workflow"
+        files:
+          - "cortex/orchestrators/domain/inquiry/peer_validator.py"
+        tests: 20
+        time: "2 hours"
+      
+      - id: "INQUIRY-021"
+        name: "Add answer voting API"
+        files:
+          - "cortex/api/inquiry_api.py"
+        tests: 15
+        time: "1.5 hours"
+      
+      - id: "INQUIRY-022"
+        name: "Create team analytics dashboard"
+        files:
+          - "cortex/visualization/inquiry_dashboard.py"
+        format: "HTML dashboard (served by MCP server)"
+        time: "1.5 hours"
+    
+    validation:
+      - "Peer validation workflow operational"
+      - "Expert notifications sent correctly"
+      - "Vote tallying accurate"
+      - "Dashboard renders metrics correctly"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # PHASE 2.4: Production Deployment
+  # ─────────────────────────────────────────────────────────────────────────
+  phase_2_4:
+    name: "Production Deployment + Monitoring"
+    duration: "1-2 hours"
+    
+    description: |
+      Deploy to production with monitoring, alerting, and graceful degradation.
+    
+    deployment_checklist:
+      - "Build Docker images: inquiry-service, code-index-service"
+      - "Deploy docker-compose.inquiry.yml"
+      - "Warm Redis cache (pre-populate common questions)"
+      - "Verify health checks passing"
+      - "Test load balancer (3 replicas)"
+      - "Configure Prometheus metrics"
+      - "Set up alerting (PagerDuty/Slack)"
+    
+    monitoring:
+      metrics:
+        - "inquiry_requests_total (counter)"
+        - "inquiry_response_time_seconds (histogram)"
+        - "inquiry_cache_hit_rate (gauge)"
+        - "inquiry_confidence_score (histogram)"
+        - "inquiry_validation_rate (gauge)"
+      
+      alerts:
+        - "Cache hit rate < 70% (15 min window)"
+        - "Response time > 2s (p95, 5 min window)"
+        - "Service unhealthy (any replica)"
+        - "PostgreSQL connection errors"
+    
+    graceful_degradation:
+      redis_down: "Fall back to PostgreSQL cache (slower)"
+      postgres_down: "Disable history logging, continue answering"
+      code_index_down: "Fall back to cached responses only"
+      all_down: "Return 503 with retry-after header"
+    
+    tasks:
+      - id: "INQUIRY-023"
+        name: "Add Prometheus metrics"
+        files:
+          - "cortex/observability/inquiry_metrics.py"
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-024"
+        name: "Create deployment runbook"
+        files:
+          - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
+        time: "0.5 hours"
+      
+      - id: "INQUIRY-025"
+        name: "Production deployment"
+        commands:
+          - "docker-compose -f docker-compose.inquiry.yml build"
+          - "docker-compose -f docker-compose.inquiry.yml up -d"
+          - "docker-compose -f docker-compose.inquiry.yml ps"
+        time: "0.5 hours"
+    
+    validation:
+      - "3 replicas running and healthy"
+      - "Load balancer distributes requests evenly"
+      - "Metrics scraped by Prometheus"
+      - "Health endpoints respond < 50ms"
+      - "End-to-end test passes (ask → answer → validate)"
+  
+  # ─────────────────────────────────────────────────────────────────────────
+  # STAGE 2 SUMMARY
+  # ─────────────────────────────────────────────────────────────────────────
+  deliverables:
+    files_created: 15
+    files_modified: 3
+    tests_added: 65
+    lines_of_code: ~1500
+    
+    new_files:
+      - "docker-compose.inquiry.yml"
+      - "Dockerfile.inquiry"
+      - "services/code-index/Dockerfile"
+      - "services/code-index/indexer.py"
+      - "services/code-index/api.py"
+      - "deployment/inquiry-schema.sql"
+      - "cortex/mcp/inquiry_health.py"
+      - "cortex/infrastructure/code_index_client.py"
+      - "cortex/infrastructure/redis_cache.py"
+      - "cortex/orchestrators/domain/inquiry/peer_validator.py"
+      - "cortex/api/inquiry_api.py"
+      - "cortex/visualization/inquiry_dashboard.py"
+      - "cortex/observability/inquiry_metrics.py"
+      - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
+      - "tests/infrastructure/test_code_index_client.py"
+    
+    modified_files:
+      - "cortex/orchestrators/support/context_assembly_orchestrator.py"
+      - "cortex/orchestrators/domain/inquiry/*.py (all handlers)"
+      - "docker-compose.yml (add inquiry overlay)"
+  
+  validation_criteria:
+    - "65+ new tests passing (100%)"
+    - "3 replicas deployed and load balanced"
+    - "Cache hit rate > 90% (team-wide)"
+    - "Response time < 1s (p95, uncached)"
+    - "Peer validation workflow operational"
+    - "Team analytics dashboard accessible"
+    - "Graceful degradation tested"
+    - "Production monitoring active"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  stage_1_mvp:
+    technical:
+      - "240+ tests passing (100%)"
+      - "5 handlers operational"
+      - "Response accuracy > 95% (verified via LENS)"
+      - "Response time < 500ms (cached), < 2s (uncached)"
+      - "CORE-030 compliance enforced"
+      - "Tier3 suggestion workflow functional"
+    
+    user_validation:
+      - "3 core developers validate for 1 week"
+      - "Answer quality rated 4.5+/5.0"
+      - "Knowledge gap closure measurable"
+      - "Onboarding time reduced by 30%+"
+  
+  stage_2_docker:
+    technical:
+      - "305+ total tests passing (100%)"
+      - "3-replica HA deployment successful"
+      - "Cache hit rate > 90% (team-wide)"
+      - "Response time < 1s (p95, uncached)"
+      - "Zero filesystem access in container"
+      - "Graceful degradation tested"
+    
+    team_validation:
+      - "5-10+ users onboarded successfully"
+      - "Peer validation active (2+ validators per answer)"
+      - "Team analytics dashboard used weekly"
+      - "Repeated questions reduced by 60%+"
+      - "Onboarding time reduced by 50%+"
+  
+  overall:
+    - "Inquiry system becomes primary Q&A channel (80%+ questions)"
+    - "Documentation gaps identified and prioritized"
+    - "Tier3 knowledge base grows organically"
+    - "New developer ramp-up time < 3 days (from 7-10 days)"
+    - "Senior developer interruptions reduced by 70%+"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+risks:
+  risk_1:
+    description: "Answer quality varies by handler"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation:
+      - "Peer validation catches low-quality answers"
+      - "Confidence scoring flags uncertain responses"
+      - "User feedback loop for continuous improvement"
+  
+  risk_2:
+    description: "Cache invalidation complexity (Docker)"
+    probability: "MEDIUM"
+    impact: "LOW"
+    mitigation:
+      - "Redis pub/sub for cache invalidation signals"
+      - "Time-based expiration (24 hours default)"
+      - "Manual invalidation API for urgent updates"
+  
+  risk_3:
+    description: "CodeIndexService stale data"
+    probability: "LOW"
+    impact: "MEDIUM"
+    mitigation:
+      - "Rebuild CodeIndexService on each deploy"
+      - "Webhook trigger on main branch commits"
+      - "Stale data warning if index > 24 hours old"
+  
+  risk_4:
+    description: "Team adoption (change management)"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation:
+      - "Onboarding session (30 min demo)"
+      - "Weekly success metrics (questions answered, time saved)"
+      - "Gamification (expert leaderboard, badges)"
+      - "Integrations (Slack bot, VS Code widget)"
+
+# ============================================================================
+# ROLLBACK STRATEGY
+# ============================================================================
+rollback:
+  stage_1_rollback:
+    trigger: "MVP validation fails (< 4.0/5.0 rating)"
+    steps:
+      - "Git revert all inquiry system commits"
+      - "Remove /ask CLI command"
+      - "Delete .cortex/inquiry_cache.db"
+      - "Analyze failure reasons (gather feedback)"
+      - "Redesign based on feedback, retry in 2 weeks"
+  
+  stage_2_rollback:
+    trigger: "Production issues (error rate > 5%)"
+    steps:
+      - "docker-compose -f docker-compose.inquiry.yml down"
+      - "Fallback to Stage 1 (local SQLite)"
+      - "Analyze logs (Redis/PostgreSQL errors)"
+      - "Fix issues in staging environment"
+      - "Retry deployment after 3 days"
+  
+  partial_rollback:
+    trigger: "Specific handler underperforming"
+    steps:
+      - "Disable problematic handler (feature flag)"
+      - "Route to generic handler temporarily"
+      - "Fix handler offline, redeploy individually"
+      - "Re-enable after validation"
+
+# ============================================================================
+# FUTURE ENHANCEMENTS (Post-7.5)
+# ============================================================================
+future_enhancements:
+  phase_7_6:
+    name: "Multi-Language Support"
+    description: "Extend inquiry system to non-Python codebases"
+    languages: ["TypeScript", "Go", "Rust"]
+    effort: "6-8 hours"
+  
+  phase_7_7:
+    name: "Slack/Discord Integration"
+    description: "Ask CORTEX questions from chat platforms"
+    features: ["Bot command: /cortex ask", "Thread-based Q&A"]
+    effort: "4-6 hours"
+  
+  phase_7_8:
+    name: "Web Dashboard"
+    description: "Public-facing Q&A interface"
+    features: ["Search questions", "Browse by category", "RSS feed"]
+    effort: "8-10 hours"
+  
+  phase_7_9:
+    name: "AI-Powered Summarization"
+    description: "Auto-generate summaries from answer patterns"
+    features: ["Weekly digest", "Trending topics", "Knowledge gaps"]
+    effort: "6-8 hours"
+
+# ============================================================================
+# EXECUTION TIMELINE
+# ============================================================================
+execution_timeline:
+  stage_1_mvp:
+    day_1:
+      - "Phase 1.1: ContextAssemblyOrchestrator (3-4h)"
+    day_2:
+      - "Phase 1.2: InquiryHandlers (6-8h)"
+    day_3:
+      - "Phase 1.3: MasterOrchestrator Integration (2-3h)"
+      - "Phase 1.4: CLI /ask Command (2-3h)"
+    
+    validation_week:
+      - "3 core developers use for 1 week"
+      - "Gather feedback, measure metrics"
+      - "Decide: proceed to Stage 2 or iterate"
+  
+  stage_2_docker:
+    day_1:
+      - "Phase 2.1: Infrastructure Setup (4-6h)"
+    day_2:
+      - "Phase 2.2: Stateless Context Assembly (3-4h)"
+      - "Phase 2.3: Team Collaboration (4-5h, start)"
+    day_3:
+      - "Phase 2.3: Team Collaboration (finish)"
+      - "Phase 2.4: Production Deployment (1-2h)"
+    
+    validation_week:
+      - "5-10+ users onboarded"
+      - "Monitor metrics, gather feedback"
+      - "Iterate based on usage patterns"
+
+# ============================================================================
+# TRACKING & GOVERNANCE
+# ============================================================================
+tracking:
+  ac_ids:
+    - "INQUIRY-000: RepoContext data model"
+    - "INQUIRY-001-NEW: RepoDetectionOrchestrator"
+    - "INQUIRY-002-NEW: Repo-scoped caching"
+    - "INQUIRY-003: AssembledContext data model (repo-aware)"
+    - "INQUIRY-004: ContextAssemblyOrchestrator (repo-aware)"
+    - "INQUIRY-005: Local SQLite cache (repo-scoped)"
+    - "INQUIRY-006-NEW: GenericCodeInquiryHandler"
+    - "INQUIRY-007-NEW: Routing logic (CORTEX vs. generic)"
+    - "INQUIRY-008-NEW: Disclaimer formatting"
+    - "INQUIRY-009 through INQUIRY-025 (original tasks)"
+    - "Total: 33 tasks (25 original + 8 new for multi-repo)"
+  
+  audit_trail:
+    - "AC_START: Phase 7.5 Inquiry System"
+    - "AC_EXECUTE: Stage 1 MVP → Stage 2 Docker"
+    - "AC_COMPLETE: Phase 7.5 Inquiry System"
+  
+  git_checkpoints:
+    - "phase7.5-stage1-mvp-YYYYMMDD"
+    - "phase7.5-stage2-docker-YYYYMMDD"
+  
+  reports:
+    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-1-MVP-COMPLETE.md"
+    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-2-DOCKER-COMPLETE.md"
+    - "_workspaces/cortex-plan/PHASE-7.5-INQUIRY-SYSTEM-COMPLETE.md"
+
+governance:
+  core_rules_applied:
+    - "CORE-008: TDD (tests before code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-026: Git checkpoint before major changes"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth (LENS verification)"
+    - "CORE-035: Single Canonical Implementation"
+    - "CORE-038: File Placement Policy"
+  
+  tier1_acceptance:
+    - "INQUIRY-001 through INQUIRY-025 validated"
+    - "Test coverage > 95%"
+    - "User acceptance criteria met"
+
+# ============================================================================
+# COMPLETION CERTIFICATE
+# ============================================================================
+completion_certificate:
+  phase: "7.5"
+  name: "CORTEX Inquiry System - Team-Ready Q&A Platform"
+  status: "PLANNED (Approved for Execution)"
+  
+  stage_1_mvp:
+    estimated_completion: "2-3 days after start"
+    validation_period: "1 week"
+  
+  stage_2_docker:
+    estimated_completion: "2-3 days after Stage 1 validation"
+    validation_period: "1 week"
+  
+  total_timeline: "~3 weeks (including validation)"
+  
+  sign_off:
+    author: "CORTEX Team"
+    date: "2026-01-27"
+    authority: "CORTEX Master Orchestrator"
+    approval: "✅ APPROVED (Hybrid MVP → Docker approach)"
+
+# ============================================================================
+# END OF PHASE 7.5 SPECIFICATION
+# ============================================================================

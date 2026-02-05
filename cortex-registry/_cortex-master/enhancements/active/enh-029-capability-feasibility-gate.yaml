@@ -1,0 +1,339 @@
+# ENH-029: Capability Feasibility Gate
+# Purpose: Dry-run engineering analysis before execution to prevent architecture drift
+# Source: chat01.md DIGEST analysis - user request for pre-execution validation
+# Created: 2026-02-05
+# Priority: P0 (Critical - Prevents Brittleness)
+
+meta:
+  plan_id: "ENH-029"
+  title: "Capability Feasibility Gate (CFG)"
+  version: "1.0"
+  authority: "CORTEX-SELF-IMPROVEMENT-SDLC.yaml + cortex-architect.prompt.md v13.0"
+  status: "DESIGN"
+  
+objective:
+  summary: |
+    Add mandatory pre-execution feasibility analysis to CORTEX that:
+    1. Validates if requested capabilities exist in CORTEX
+    2. Identifies gaps requiring enhancement vs available tools
+    3. Blocks architecture-breaking requests before execution
+    4. Provides clear capability matrix to user before proceeding
+  
+  business_value:
+    - "Zero architecture drift from blind execution"
+    - "Users know what CORTEX can/cannot do BEFORE approval"
+    - "Prevents brittle implementations that break existing features"
+    - "Accelerates decision-making with capability transparency"
+  
+  success_criteria:
+    - "Every IMPLEMENT intent routes through CFG before DoR display"
+    - "Capability gaps surfaced with evidence (file:line references)"
+    - "Architecture drift score < 0.3 for safe execution"
+    - "BLOCKED responses for drift score > 0.7"
+
+# Gap Analysis (From chat01.md DIGEST)
+current_state:
+  what_exists:
+    - "CapabilityDiscovery in cortex/lens/capability_discovery.py (708 LOC)"
+    - "TechStackFingerprint analysis for repo onboarding"
+    - "CapabilityMapping for analyzer selection"
+    - "CrawlerSpec generation for custom analyzers"
+  
+  what_is_missing:
+    - "Pre-execution feasibility check for user requests"
+    - "Architecture drift detection (new code vs existing patterns)"
+    - "Capability matrix display in DESIGN mode challenge"
+    - "BLOCK mechanism for high-risk architectural changes"
+    - "Integration with InteractionOrchestrator challenge phase"
+
+# Root Cause Analysis (chat01.md)
+root_causes:
+  rc_1:
+    id: "RC-CFG-001"
+    issue: "User requested KSESSIONS onboarding expecting full C# analysis"
+    current_behavior: "CORTEX would have executed with placeholders"
+    desired_behavior: "CORTEX identifies C# gap BEFORE execution, offers alternatives"
+    impact: "Wasted hours, broken dashboards, user frustration"
+    
+  rc_2:
+    id: "RC-CFG-002"
+    issue: "No automatic detection of capability vs request mismatch"
+    current_behavior: "Manual grep searches during challenge phase"
+    desired_behavior: "Automated capability lookup against wired orchestrators/analyzers"
+    impact: "Inconsistent analysis quality across sessions"
+    
+  rc_3:
+    id: "RC-CFG-003"
+    issue: "Architecture drift can happen silently"
+    current_behavior: "No cross-check against existing patterns before new code"
+    desired_behavior: "Similarity analysis: does this request duplicate existing functionality?"
+    impact: "CORE-035 violations, technical debt accumulation"
+
+# Phased Implementation
+phases:
+  phase_0:
+    id: "CFG-PHASE-0"
+    title: "Data Models & Interfaces"
+    duration_days: 2
+    owner: "TDDOrchestrator"
+    deliverables:
+      - "CapabilityFeasibilityResult data model"
+      - "ArchitectureDriftScore data model"
+      - "CapabilityMatrix (what CORTEX can do)"
+      - "RequestCapabilityMapping (what request needs)"
+    files_created:
+      - "cortex/lens/models/capability_feasibility.py"
+      - "tests/unit/lens/models/test_capability_feasibility.py"
+    tests:
+      unit_tests: 12
+      
+  phase_1:
+    id: "CFG-PHASE-1"
+    title: "CapabilityFeasibilityAnalyzer Implementation"
+    duration_days: 3
+    owner: "TDDOrchestrator"
+    dependencies: ["CFG-PHASE-0"]
+    deliverables:
+      - "CapabilityFeasibilityAnalyzer class"
+      - "Request parsing (extract language/framework requirements)"
+      - "Capability lookup (check wiring.yaml + adapters + analyzers)"
+      - "Gap detection with evidence (file:line references)"
+      - "Feasibility score (0-1.0): 1.0 = fully capable, 0.0 = nothing available"
+    files_created:
+      - "cortex/lens/analyzers/capability_feasibility_analyzer.py"
+      - "tests/unit/lens/analyzers/test_capability_feasibility_analyzer.py"
+    tests:
+      unit_tests: 20
+      integration_tests: 8
+      
+  phase_2:
+    id: "CFG-PHASE-2"
+    title: "ArchitectureDriftDetector Implementation"
+    duration_days: 3
+    owner: "TDDOrchestrator"
+    dependencies: ["CFG-PHASE-1"]
+    deliverables:
+      - "ArchitectureDriftDetector class"
+      - "Pattern matching against existing orchestrators"
+      - "Semantic similarity check (does this duplicate functionality?)"
+      - "Dependency graph impact analysis"
+      - "Drift score (0-1.0): 0.0 = aligned, 1.0 = major deviation"
+    files_created:
+      - "cortex/lens/analyzers/architecture_drift_detector.py"
+      - "tests/unit/lens/analyzers/test_architecture_drift_detector.py"
+    tests:
+      unit_tests: 18
+      integration_tests: 6
+    governance_integration:
+      - "CORE-035: Duplication detection"
+      - "CORE-030: Implementation Truth verification"
+      
+  phase_3:
+    id: "CFG-PHASE-3"
+    title: "Integration with InteractionOrchestrator"
+    duration_days: 2
+    owner: "TDDOrchestrator"
+    dependencies: ["CFG-PHASE-2"]
+    deliverables:
+      - "CapabilityFeasibilityGate orchestrator"
+      - "Hook into InteractionOrchestrator.execute_turn()"
+      - "Inject feasibility analysis BEFORE DoR display"
+      - "BLOCK mechanism for drift score > 0.7"
+      - "Capability matrix in challenge output"
+    files_modified:
+      - "cortex/orchestrators/core/interaction_orchestrator.py"
+      - "cortex/orchestrators/core/interaction_orchestrator_enhancement.py"
+    files_created:
+      - "cortex/orchestrators/core/capability_feasibility_gate.py"
+      - "tests/unit/orchestrators/core/test_capability_feasibility_gate.py"
+    tests:
+      unit_tests: 15
+      integration_tests: 10
+      e2e_tests: 3
+    wiring_updates:
+      orchestrator: "CapabilityFeasibilityGate"
+      tier: 3
+      priority: 26
+      dependencies: ["IntentRouter", "EnforcementOrchestrator"]
+      
+  phase_4:
+    id: "CFG-PHASE-4"
+    title: "MCP Tool & Prompt Updates"
+    duration_days: 2
+    owner: "TDDOrchestrator"
+    dependencies: ["CFG-PHASE-3"]
+    deliverables:
+      - "cortex_check_feasibility MCP tool"
+      - "cortex_analyze_drift MCP tool"
+      - "Update cortex-architect.prompt.md with capability matrix display"
+      - "Update copilot-instructions.md with CFG rules"
+    files_created:
+      - "cortex/mcp/tools/capability_feasibility_tool.py"
+      - "tests/unit/mcp/tools/test_capability_feasibility_tool.py"
+    files_modified:
+      - ".github/prompts/cortex-architect.prompt.md"
+      - ".github/copilot-instructions.md"
+    tests:
+      unit_tests: 10
+      integration_tests: 5
+
+# Output Format Specification
+output_format:
+  feasibility_report:
+    template: |
+      ### 🔍 Capability Feasibility Analysis
+      
+      **Request:** {user_request_summary}
+      **Feasibility Score:** {score}/1.0 ({verdict})
+      **Architecture Drift:** {drift_score}/1.0 ({drift_verdict})
+      
+      #### ✅ Available Capabilities
+      | Capability | Provider | Coverage |
+      |------------|----------|----------|
+      | {cap_name} | {orchestrator/analyzer} | {full/partial/none} |
+      
+      #### ❌ Missing Capabilities (Gaps)
+      | Gap | Impact | Enhancement Required |
+      |-----|--------|---------------------|
+      | {gap_name} | {impact_desc} | {ENH-ID or "New"} |
+      
+      #### ⚠️ Architecture Drift Warnings
+      | Warning | Existing Pattern | Proposed Change | Risk |
+      |---------|-----------------|-----------------|------|
+      | {warning} | {file:line} | {proposed} | {HIGH/MEDIUM/LOW} |
+      
+      **Verdict:** {PROCEED / PROCEED_WITH_CAUTION / BLOCKED}
+      **Reason:** {justification}
+      
+  block_conditions:
+    - "Feasibility score < 0.3 (insufficient capabilities)"
+    - "Architecture drift > 0.7 (major deviation from patterns)"
+    - "CORE-035 violation detected (duplicate functionality)"
+    - "Security regression risk > HIGH"
+
+# Scoring Algorithms
+scoring:
+  feasibility_score:
+    formula: "sum(capability_coverage) / total_capabilities_required"
+    inputs:
+      - "Language adapters available (0.0-1.0 per language)"
+      - "Analyzers available (0.0-1.0 per analysis type)"
+      - "Orchestrators available (0.0-1.0 per operation type)"
+    thresholds:
+      full: 0.9  # All capabilities exist
+      partial: 0.5  # Some gaps but can proceed
+      blocked: 0.3  # Too many gaps
+      
+  drift_score:
+    formula: "max(pattern_deviation, dependency_impact, duplication_risk)"
+    inputs:
+      - "Pattern deviation: similarity to existing orchestrators/modules"
+      - "Dependency impact: how many files would need changes"
+      - "Duplication risk: semantic similarity to existing code"
+    thresholds:
+      aligned: 0.2  # Follows existing patterns
+      caution: 0.5  # Some deviation, needs review
+      blocked: 0.7  # Major architectural change
+
+# Integration Points
+integration:
+  interaction_orchestrator:
+    hook_point: "execute_turn() → BEFORE comprehension stage"
+    flow: |
+      User Request → LENS Context → CapabilityFeasibilityGate
+                                           ↓
+                                   [feasibility_score, drift_score]
+                                           ↓
+                              score >= 0.5 AND drift <= 0.7?
+                                     ↓             ↓
+                                   YES            NO
+                                     ↓             ↓
+                            Continue to DoR    BLOCKED Response
+                                              (with gap details)
+    
+  challenge_engine:
+    enhancement: "Add capability matrix to challenge output"
+    new_section: |
+      ### 🔧 CORTEX Capability Matrix
+      | Category | Your Request | CORTEX Status |
+      |----------|--------------|---------------|
+      | Language Analysis | C# | ✅ CSharpAdapter |
+      | Use Case Extraction | API → Use Cases | ⚠️ Partial (needs ENH-017) |
+      | Diagram Generation | Architecture | ❌ Not integrated |
+      
+  enforcement_orchestrator:
+    new_agent: "CapabilityFeasibilityAgent"
+    rules:
+      - "CFG-001: Block if feasibility_score < 0.3"
+      - "CFG-002: Block if drift_score > 0.7"
+      - "CFG-003: Warning if drift_score > 0.5"
+
+# Test Scenarios
+test_scenarios:
+  scenario_1:
+    name: "Full capability match"
+    request: "Implement Python TDD orchestrator"
+    expected_feasibility: 1.0
+    expected_drift: 0.1
+    expected_verdict: "PROCEED"
+    
+  scenario_2:
+    name: "Partial capability with gaps"
+    request: "Onboard .NET repository with full C# analysis"
+    expected_feasibility: 0.7
+    expected_drift: 0.2
+    expected_verdict: "PROCEED_WITH_CAUTION"
+    expected_gaps: ["Use case extraction for C#"]
+    
+  scenario_3:
+    name: "Major architecture drift"
+    request: "Create new TDD orchestrator (duplicate)"
+    expected_feasibility: 1.0
+    expected_drift: 0.9
+    expected_verdict: "BLOCKED"
+    expected_reason: "CORE-035: TDDOrchestrator already exists"
+    
+  scenario_4:
+    name: "Insufficient capabilities"
+    request: "Analyze Rust codebase with AST parsing"
+    expected_feasibility: 0.2
+    expected_drift: 0.3
+    expected_verdict: "BLOCKED"
+    expected_gaps: ["RustAdapter not implemented"]
+
+# Timeline & Metrics
+timeline:
+  total_duration_days: 12
+  phases:
+    - "Phase 0: 2 days (Data Models)"
+    - "Phase 1: 3 days (Feasibility Analyzer)"
+    - "Phase 2: 3 days (Drift Detector)"
+    - "Phase 3: 2 days (Integration)"
+    - "Phase 4: 2 days (MCP + Prompts)"
+
+metrics:
+  tests_required: 101
+  target_coverage: "85%"
+  files_created: 8
+  files_modified: 4
+  wiring_updates: 1
+
+# Risk Assessment
+risks:
+  risk_1:
+    description: "False positives blocking valid requests"
+    mitigation: "Tunable thresholds + override mechanism for advanced users"
+    
+  risk_2:
+    description: "Performance overhead on every request"
+    mitigation: "Cache capability matrix + incremental drift checks"
+    
+  risk_3:
+    description: "Incomplete capability registry"
+    mitigation: "Auto-discover from wiring.yaml + adapters/__init__.py"
+
+# Related Enhancements
+related:
+  - ENH-017: "LENS Multi-Language Enhancement (provides more capabilities)"
+  - ENH-004: "RecommendationGate (similar blocking pattern)"
+  - ENH-027: "Component Integration Verification (validates wiring)"

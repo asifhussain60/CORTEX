@@ -1,0 +1,121 @@
+# CORTEX Master Registry Index
+# Auto-discovery registry for CORTEX internal development planning
+# Authority: cortex-architect.prompt.md v13.0
+# Updated: 2026-02-05
+
+version: "1.0"
+registry_name: "_cortex-master"
+description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
+last_updated: "2026-02-05"
+
+# Active Phases (Current Development)
+active_phases:
+  - id: "phase-21"
+    name: "JSON-First Rewrite"
+    file: "phases/active/phase-21-json-first-rewrite.yaml"
+    started: "2026-02-01"
+    status: "in-progress"
+    priority: "P0"
+  
+  - id: "phase-22"
+    name: "ASK Mode System"
+    file: "phases/active/phase-22-ask-mode-system.yaml"
+    started: "2026-02-03"
+    status: "in-progress"
+    priority: "P0"
+  
+  - id: "phase-23"
+    name: "Static Dashboard Generator"
+    file: "phases/active/phase-23-static-dashboard-generator.yaml"
+    started: "2026-02-04"
+    status: "in-progress"
+    priority: "P0"
+
+# Completed Phases (Historical)
+completed_phases_2026:
+  count: 5
+  directory: "phases/completed/2026/"
+  phases:
+    - "phase-19-lens-unified-intelligence.yaml"
+    - "phase-20-lens-company-integration.yaml"
+    - "phase-20-orch-visibility.yaml"
+    - "phase-20-knowledge-synthesis.yaml"
+    - "phase-20-instrumentation-layer.yaml"
+
+completed_phases_2025:
+  count: 11
+  directory: "phases/completed/2025/"
+  phases:
+    - "phase-07-future-enhancements.yaml"
+    - "phase-07-inquiry-system.yaml"
+    - "phase-08-challenge-orchestrator.yaml"
+    - "phase-08-unified-routing.yaml"
+    - "phase-09-discovery-orchestrator.yaml"
+    - "phase-10-lens-remote-intelligence.yaml"
+    - "phase-13-adaptive-bluf-system.yaml"
+    - "phase-15-static-repo-visualization.yaml"
+    - "phase-16-remediation-framework.yaml"
+    - "phase-17-documentation-architecture.yaml"
+    - "phase-18-enterprise-dashboard-system.yaml"
+
+# Active Enhancements
+active_enhancements:
+  - id: "enh-029"
+    name: "Capability Feasibility Gate"
+    file: "enhancements/active/enh-029-capability-feasibility-gate.yaml"
+    status: "active"
+    priority: "P1"
+
+# Metadata
+statistics:
+  total_phases: 19
+  active_phases: 3
+  completed_2026: 5
+  completed_2025: 11
+  total_enhancements: 1
+  active_enhancements: 1
+  last_phase_completed: "2026-02-04"
+  next_expected_completion: "2026-02-12"
+
+# Dashboard Integration
+dashboard:
+  enabled: true
+  url: "dashboard/index.html"
+  data_source: "dashboard/data/plan-summary.json"
+  sync_trigger: "AUDIT_MODE_VARIANCE_GT_10"
+  auto_sync: true
+  sync_interval_seconds: 300
+  debounce_seconds: 60
+
+# Agent Integration
+agents:
+  - name: "cortex-architect"
+    path: ".github/agents/core/cortex-architect.md"
+    version: "13.0"
+    roles:
+      - "plan_registry_access"
+      - "phase_tracking"
+      - "enhancement_discovery"
+  
+  - name: "cortex-auditor"
+    path: ".github/agents/core/cortex-auditor.md"
+    version: "2.0"
+    roles:
+      - "registry_health_check"
+      - "variance_detection"
+      - "sync_trigger"
+
+# Governance
+governance:
+  managed_by: "cortex-architect"
+  approval_required: "phase_completion"
+  versioning: "semantic"
+  file_naming: "kebab-case"
+  max_file_name_length: 35
+
+# Tags
+tags:
+  - "cortex-development"
+  - "phase-tracking"
+  - "enhancement-pipeline"
+  - "registry-driven"

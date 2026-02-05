@@ -1,0 +1,437 @@
+# LENS Multi-Language Enhancement Plan
+# Generated from: chat01.md DIGEST analysis
+# Created: 2026-02-04
+# Status: DESIGN PHASE
+# Priority: P0 (Critical Gap - Blocks Multi-Stack Adoption)
+
+meta:
+  plan_id: "LENS-MLang-001"
+  enhancement_id: "ENH-017"
+  version: "1.0"
+  authority: "chat01.md DIGEST + cortex-architect.prompt.md v13.0"
+  
+objective:
+  summary: "Enable CORTEX LENS to perform deep code analysis for C#, Java, TypeScript, JavaScript (not just Python)"
+  business_value: "Unlock 30-40% of enterprise repos that are polyglot or non-Python"
+  success_criteria:
+    - "Onboard .NET repositories with full class/method extraction"
+    - "Onboard Java repositories with package/interface analysis"
+    - "Onboard TypeScript/JavaScript with component/module mapping"
+    - "Generate accurate architecture diagrams for polyglot systems"
+    - "Auto-extract use cases from non-Python codebases"
+
+# Gap Analysis (From DIGEST)
+gaps:
+  gap_1:
+    id: "GAP-ML-001"
+    title: "Python-Only AST Parsing"
+    current_state: "LENS v2.0 only parses Python via ast.parse()"
+    missing: "No AST parsing for C#, Java, TypeScript, JavaScript, Go, Rust"
+    impact: "Cannot reverse engineer 70% of enterprise codebases"
+    evidence:
+      - "cortex/lens/analyzers/ast_analyzer.py: Python-specific (ast.parse)"
+      - "cortex/lens/orchestrator.py: _analyze_codebase_structure() filters *.py only"
+      - "No tree-sitter or Roslyn integration detected"
+    stakeholder_impact:
+      business_leaders: "Cannot see what non-Python systems do"
+      product_owners: "Cannot understand feature coverage in .NET/Java"
+      software_engineers: "Cannot navigate polyglot codebases"
+      architects: "Cannot visualize multi-stack architectures"
+
+  gap_2:
+    id: "GAP-ML-002"
+    title: "No Use Case Extraction from Non-Python Code"
+    current_state: "Hardcoded security-based use cases only"
+    missing: "Automated use case discovery from API endpoints, CLI commands, DB models"
+    impact: "Business narratives incomplete for non-Python repos"
+    evidence:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py:_generate_use_cases() manual only"
+    
+  gap_3:
+    id: "GAP-ML-003"
+    title: "Diagram Generation Not Integrated"
+    current_state: "Mermaid renderers exist but not called during onboarding"
+    missing: "Real-time diagram generation step in onboarding workflow"
+    impact: "Dashboards have placeholder text instead of rich visuals"
+    evidence:
+      - "cortex/visualization/mermaid_renderer.py: exists but unused"
+      - "company/dashboards/repos/kashkole/index.html: placeholders only"
+
+# Phased Implementation Roadmap
+phases:
+  phase_0:
+    id: "PHASE-0"
+    title: "Foundation & Data Models"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: []
+    deliverables:
+      - "PolyglotASTResult data model (unified across languages)"
+      - "LanguageAdapter interface (abstract base class)"
+      - "DiagramData model (for visualization integration)"
+      - "UseCaseExtractionContext model"
+    tests:
+      unit_tests: 15
+      integration_tests: 0
+      contract_tests: 5
+    files_created:
+      - "cortex/lens/models/polyglot_ast_result.py"
+      - "cortex/lens/adapters/language_adapter.py"
+      - "cortex/visualization/models/diagram_data.py"
+      - "cortex/lens/models/use_case_context.py"
+      - "tests/unit/lens/models/test_polyglot_ast_result.py"
+      - "tests/unit/lens/adapters/test_language_adapter.py"
+      - "tests/contracts/test_language_adapter_contracts.py"
+    
+  phase_1:
+    id: "PHASE-1"
+    title: "Multi-Language AST Parsing (Tree-sitter Integration)"
+    duration_weeks: 4
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-0"]
+    deliverables:
+      - "PolyglotASTAnalyzer with tree-sitter backend"
+      - "CSharpAdapter (namespaces, classes, methods, properties)"
+      - "JavaAdapter (packages, classes, methods, interfaces)"
+      - "TypeScriptAdapter (interfaces, types, components, decorators)"
+      - "JavaScriptAdapter (functions, modules, React components)"
+      - "Language auto-detection (by file extension + content sniffing)"
+      - "Fallback regex parser (for unsupported languages)"
+    tests:
+      unit_tests: 50
+      integration_tests: 15
+      e2e_tests: 8
+    files_created:
+      - "cortex/lens/analyzers/polyglot_ast_analyzer.py"
+      - "cortex/lens/adapters/csharp_adapter.py"
+      - "cortex/lens/adapters/java_adapter.py"
+      - "cortex/lens/adapters/typescript_adapter.py"
+      - "cortex/lens/adapters/javascript_adapter.py"
+      - "cortex/lens/analyzers/language_detector.py"
+      - "cortex/lens/analyzers/fallback_regex_analyzer.py"
+      - "tests/unit/lens/analyzers/test_polyglot_ast_analyzer.py"
+      - "tests/unit/lens/adapters/test_csharp_adapter.py"
+      - "tests/unit/lens/adapters/test_java_adapter.py"
+      - "tests/unit/lens/adapters/test_typescript_adapter.py"
+      - "tests/unit/lens/adapters/test_javascript_adapter.py"
+      - "tests/integration/lens/test_polyglot_analysis_e2e.py"
+      - "tests/fixtures/sample_repos/dotnet_sample/"
+      - "tests/fixtures/sample_repos/java_sample/"
+      - "tests/fixtures/sample_repos/typescript_sample/"
+    dependencies_added:
+      - "tree-sitter>=0.20.0"
+      - "tree-sitter-languages>=1.9.0"
+    wiring_updates:
+      - "Add PolyglotASTAnalyzer to analyzers section in wiring.yaml"
+      - "Priority: 2 (after GitHistoryAnalyzer)"
+      - "CWE coverage: None (focus on structure, not security)"
+    
+  phase_2:
+    id: "PHASE-2"
+    title: "LENSOrchestrator Integration"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-1"]
+    deliverables:
+      - "Update LENSOrchestrator._analyze_codebase_structure()"
+      - "Multi-language file collection (*.py, *.cs, *.java, *.ts, *.js)"
+      - "Language-specific aggregation (classes by language, methods by language)"
+      - "Unified code analysis result schema"
+    tests:
+      unit_tests: 10
+      integration_tests: 8
+    files_modified:
+      - "cortex/lens/orchestrator.py"
+      - "tests/unit/lens/test_lens_orchestrator.py"
+      - "tests/integration/lens/test_lens_polyglot_integration.py"
+    
+  phase_3:
+    id: "PHASE-3"
+    title: "Automated Use Case Extraction"
+    duration_weeks: 2
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-2"]
+    deliverables:
+      - "UseCaseExtractor orchestrator"
+      - "API endpoint → Use case mapping"
+      - "CLI command → Use case mapping"
+      - "Database model → Use case mapping"
+      - "Business logic method → Use case mapping"
+      - "Persona inference heuristics"
+    tests:
+      unit_tests: 30
+      integration_tests: 10
+    files_created:
+      - "cortex/lens/analyzers/use_case_extractor.py"
+      - "cortex/lens/models/extracted_use_case.py"
+      - "tests/unit/lens/analyzers/test_use_case_extractor.py"
+      - "tests/integration/lens/test_use_case_extraction_e2e.py"
+    files_modified:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      - "tests/unit/orchestrators/support/test_repository_onboarding_orchestrator.py"
+    
+  phase_4:
+    id: "PHASE-4"
+    title: "Real-Time Diagram Generation"
+    duration_weeks: 2
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-2"]
+    deliverables:
+      - "DiagramOrchestrator (coordinates all diagram generation)"
+      - "Class diagram generation (from polyglot AST)"
+      - "ER diagram generation (from database models)"
+      - "Architecture diagram generation (from layer detection)"
+      - "Sequence diagram generation (from API flows)"
+      - "Dependency graph generation (from imports)"
+      - "Integrate into RepositoryOnboardingOrchestrator (Step 7)"
+    tests:
+      unit_tests: 25
+      integration_tests: 8
+      e2e_tests: 5
+    files_created:
+      - "cortex/lens/diagram_orchestrator.py"
+      - "cortex/lens/models/diagram_set.py"
+      - "tests/unit/lens/test_diagram_orchestrator.py"
+      - "tests/integration/lens/test_diagram_generation_e2e.py"
+    files_modified:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      - "cortex/models/dashboard_schema.py (RepoDashboardModel v3.0)"
+      - "cortex/templates/dashboard_template_v3.html"
+      - "tests/unit/orchestrators/support/test_repository_onboarding_orchestrator.py"
+    schema_updates:
+      - "RepoDashboardModel.diagrams: Dict[str, str] (diagram_type → mermaid_content)"
+    
+  phase_5:
+    id: "PHASE-5"
+    title: "Interactive Architecture Explorer"
+    duration_weeks: 3
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-4"]
+    deliverables:
+      - "Pan/zoom support (panzoom.js integration)"
+      - "Layer toggle controls (presentation, business, data)"
+      - "Component search/filter"
+      - "Click-to-expand interactions"
+      - "SVG/PNG export"
+      - "Responsive layout"
+    tests:
+      unit_tests: 15
+      e2e_tests: 10 (Playwright)
+    files_modified:
+      - "cortex/templates/dashboard_template_v3.html"
+      - "company/dashboards/assets/js/diagram-explorer.js (NEW)"
+      - "company/dashboards/assets/css/diagram-explorer.css (NEW)"
+    external_dependencies:
+      - "panzoom.js v4.5.1 (CDN)"
+      - "mermaid.js v10.x (CDN)"
+
+  phase_6:
+    id: "PHASE-6"
+    title: "Cross-Language Call Graph Analysis"
+    duration_weeks: 4
+    owner: "TDDOrchestrator"
+    dependencies: ["PHASE-2"]
+    deliverables:
+      - "Call graph builder (within-language)"
+      - "HTTP API call detection (cross-service)"
+      - "Database access pattern detection"
+      - "Third-party API usage tracking"
+      - "Dependency impact analysis (breaking change detection)"
+    tests:
+      unit_tests: 40
+      integration_tests: 15
+    files_created:
+      - "cortex/lens/analyzers/call_graph_analyzer.py"
+      - "cortex/lens/models/call_graph.py"
+      - "tests/unit/lens/analyzers/test_call_graph_analyzer.py"
+      - "tests/integration/lens/test_call_graph_e2e.py"
+
+# Test Strategy
+testing:
+  total_estimated_tests: 300
+  coverage_target: 85%
+  
+  unit_tests:
+    count: 200
+    focus:
+      - "Language adapter contracts (each language adapter)"
+      - "AST parsing correctness (sample files per language)"
+      - "Use case extraction heuristics"
+      - "Diagram generation logic"
+    
+  integration_tests:
+    count: 75
+    focus:
+      - "LENSOrchestrator + PolyglotASTAnalyzer"
+      - "RepositoryOnboardingOrchestrator + DiagramOrchestrator"
+      - "End-to-end multi-language analysis"
+    
+  e2e_tests:
+    count: 25
+    focus:
+      - "Onboard sample .NET repo → verify dashboard has C# classes"
+      - "Onboard sample Java repo → verify ER diagrams rendered"
+      - "Onboard polyglot repo → verify all languages analyzed"
+      - "Interactive explorer: zoom, filter, export (Playwright)"
+    
+  contract_tests:
+    count: 10
+    focus:
+      - "LanguageAdapter interface contracts"
+      - "DiagramOrchestrator output schema"
+      - "RepoDashboardModel v3.0 schema"
+
+# MCP Tool Exposure
+mcp_tools:
+  new_tools:
+    - name: "cortex_analyze_polyglot"
+      description: "Analyze multi-language codebase with full AST parsing"
+      parameters:
+        - "repo_path: Path"
+        - "languages: List[str] (default: auto-detect)"
+        - "max_files_per_language: int (default: 100)"
+      returns: "PolyglotAnalysisResult"
+      
+    - name: "cortex_extract_use_cases"
+      description: "Auto-extract use cases from code analysis"
+      parameters:
+        - "lens_context: Dict"
+        - "security_model: Dict"
+      returns: "List[UseCase]"
+      
+    - name: "cortex_generate_diagrams"
+      description: "Generate all dashboard diagrams from LENS analysis"
+      parameters:
+        - "lens_context: Dict"
+        - "repo_path: Path"
+        - "security_model: Dict"
+      returns: "Dict[str, str] (diagram_type → mermaid_content)"
+
+# Documentation Updates
+documentation:
+  new_files:
+    - "docs/patterns/gap-analysis-framework.md"
+    - "docs/patterns/enhancement-roadmap-template.md"
+    - "docs/patterns/stakeholder-impact-mapping.md"
+    - "docs/patterns/evidence-based-design.md"
+    - "docs/11-mcp-tools/cortex_analyze_polyglot.md"
+    - "docs/11-mcp-tools/cortex_extract_use_cases.md"
+    - "docs/11-mcp-tools/cortex_generate_diagrams.md"
+  
+  updated_files:
+    - "docs/05-lens-protocol/2-analyzers.md (add polyglot section)"
+    - "docs/03-getting-started/1-quickstart.md (update onboarding example)"
+    - "docs/04-architecture/3-lens-system.md (architecture diagrams)"
+    - "README.md (add multi-language support badge)"
+
+# Risk Assessment
+risks:
+  risk_1:
+    id: "RISK-ML-001"
+    title: "Tree-sitter Performance on Large Repos"
+    likelihood: "Medium"
+    impact: "High"
+    mitigation:
+      - "Limit files per language (default 100, configurable)"
+      - "Parallel parsing (ProcessPoolExecutor)"
+      - "Cache parsed AST results in SQLite"
+      - "Incremental analysis (only changed files)"
+    
+  risk_2:
+    id: "RISK-ML-002"
+    title: "Language-Specific Edge Cases"
+    likelihood: "High"
+    impact: "Medium"
+    mitigation:
+      - "Comprehensive test fixtures (sample repos per language)"
+      - "Fallback regex analyzer (if tree-sitter fails)"
+      - "Language-specific quirks documented"
+      - "Community feedback loop (GitHub issues)"
+    
+  risk_3:
+    id: "RISK-ML-003"
+    title: "Diagram Rendering Complexity"
+    likelihood: "Medium"
+    impact: "Medium"
+    mitigation:
+      - "Progressive disclosure (layer toggle, zoom)"
+      - "Smart diagram simplification (hide private methods)"
+      - "Limit diagram nodes (max 50 classes per diagram)"
+      - "Fallback to text summary (if diagram too large)"
+
+# Success Metrics
+metrics:
+  adoption:
+    target: "30% increase in repositories onboarded within 6 months"
+    measurement: "Onboarding success rate by primary language"
+    
+  coverage:
+    target: "5 languages supported (Python, C#, Java, TypeScript, JavaScript)"
+    measurement: "Test coverage per language adapter (>80%)"
+    
+  business_value:
+    target: "100% of onboarded repos have auto-extracted use cases"
+    measurement: "Dashboard use case count > 0"
+    
+  visualization:
+    target: "Zero dashboards with placeholder diagrams"
+    measurement: "Mermaid diagram presence in all dashboards"
+    
+  performance:
+    target: "Onboarding time <5 minutes for repos with <1000 files"
+    measurement: "P95 onboarding latency"
+
+# Rollout Strategy
+rollout:
+  phase_1_alpha:
+    target_date: "2026-03-01"
+    audience: "CORTEX team only"
+    repos: "Sample test repos (dotnet, java, typescript)"
+    success_criteria: "All 300 tests passing, no P0 bugs"
+    
+  phase_2_beta:
+    target_date: "2026-04-01"
+    audience: "Internal HealthEquity teams"
+    repos: "3-5 production repos (mixed languages)"
+    success_criteria: "Onboarding success rate >80%, stakeholder feedback positive"
+    
+  phase_3_ga:
+    target_date: "2026-05-01"
+    audience: "All users"
+    repos: "Any repository"
+    success_criteria: "Adoption rate >30%, zero critical bugs, documentation complete"
+
+# Governance Enforcement
+governance:
+  core_rules_enforced:
+    - "CORE-008: TDD-first (all 300 tests written before implementation)"
+    - "CORE-011: Type hints mandatory (Pydantic models for all schemas)"
+    - "CORE-012: Google-style docstrings (all public methods)"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE for all phases)"
+    - "CORE-035: Single implementation (no _v2 files)"
+  
+  architecture_gates:
+    - "ARCH-012: Tree-sitter chosen over Roslyn (cross-platform, Python-native)"
+    - "ARCH-015: MCP exposure required (3 new tools)"
+    - "ARCH-020: RepoDashboardModel v3.0 schema (backward compatible)"
+
+# Appendix: Evidence from DIGEST
+digest_evidence:
+  source: "chat01.md"
+  session_date: "2026-02-04"
+  key_findings:
+    - "Gap 1: Python-only AST parsing blocks 70% of repos"
+    - "Gap 2: No automated use case extraction"
+    - "Gap 3: Diagrams not integrated (placeholders only)"
+    - "Gap 4: No cross-language call graphs"
+    - "Gap 5: No interactive exploration"
+  stakeholder_quotes:
+    business_leaders: "Cannot see what the system does"
+    product_owners: "Cannot understand feature coverage"
+    software_engineers: "Cannot navigate capabilities quickly"
+  effort_estimates:
+    multi_language_ast: "3-4 weeks"
+    use_case_extraction: "2-3 weeks"
+    diagram_generation: "1-2 weeks"
+    interactive_explorer: "2-3 weeks"
+    call_graph_analysis: "4-6 weeks"

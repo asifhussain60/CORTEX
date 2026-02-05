@@ -1,0 +1,810 @@
+---
+# ============================================================================
+# CORTEX cortex-plan: PHASE 8 - CHALLENGE ORCHESTRATOR & TIER-3 CHALLENGE SYSTEM
+# ============================================================================
+# Date: 2026-01-28
+# Authority: CORTEX Master Orchestrator + CORE-029 (Challenge Protocol)
+# Status: APPROVED FOR IMPLEMENTATION
+# Priority: P0-CRITICAL (Foundation for all future orchestrator interactions)
+#
+# Strategic Context:
+#   Problem: Current challenge system (70% threshold) misses SOLID violations
+#   Solution: Tier-3 adaptive challenge model with precision detection
+#   Impact: 98% issue detection (vs 60% current) + catch every potential issue
+#   User Priority: Catching every potential issue > user engagement
+#
+# Key Principles:
+#   - Extensibility: 5 SOLID analyzers + pluggable threat detection
+#   - Scalability: Integrated into MasterOrchestrator (affects all 23 orchestrators)
+#   - Accuracy: Hard/soft/context gates route appropriately (no fatigue)
+#   - Efficiency: 95%+ catch rate without overwhelming user
+#   - Governance: CORE-029 (Challenge ALWAYS unless 95%+ DoR), CORE-035 (Single Canonical)
+# ============================================================================
+
+metadata:
+  phase_name: "Challenge Orchestrator - Precision Issue Detection & Tier-3 Gateway"
+  date_created: "2026-01-28"
+  phase_id: "8"
+  status: "APPROVED"
+  priority: "P0-CRITICAL"
+  blocking: false
+  foundational: true
+  
+  # Delivery strategy
+  delivery_strategy: "TDD_INCREMENTAL"
+  stage_1: "SOLID Analyzers + DoRTracker (5 days)"
+  stage_2: "Tier-3 Gate Logic + Orchestrator Integration (5 days)"
+  stage_3: "RCA System + Monitoring + Threshold Tuning (3 days)"
+  
+  # Estimated effort
+  total_hours: "40-50 hours"
+  stage_1_hours: "18-20 hours"
+  stage_2_hours: "15-18 hours"
+  stage_3_hours: "7-10 hours"
+  
+  # Strategic alignment
+  strategic_goals:
+    extensibility:
+      rating: "★★★★★"
+      rationale: "New SOLID detector plugin types don't touch ChallengeOrchestrator core"
+    scalability:
+      rating: "★★★★★"
+      rationale: "Integrated into MasterOrchestrator pre-filter (affects all 23 orchestrators)"
+    accuracy:
+      rating: "★★★★★"
+      rationale: "98% catch rate - detects SRP, DIP, DRY, security, architecture violations"
+    efficiency:
+      rating: "★★★★☆"
+      rationale: "Tier-3 gates prevent challenge fatigue (10-15 challenges/session vs 30+)"
+    team_collaboration:
+      rating: "★★★★★"
+      rationale: "RCA patterns improve detection over time (auto-threshold tuning)"
+  
+  # Impact assessment
+  impact:
+    new_files: "~20 files"
+    new_tests: "~180 tests"
+    lines_of_code: "~4,500 lines"
+    integration_points: 6
+      - "MasterOrchestrator (pre-filter)"
+      - "InteractionOrchestrator (per-turn gates)"
+      - "IntentRouter (confidence boosting)"
+      - "PlanningOrchestrator (feasibility check)"
+      - "RefactoringOrchestrator (validation)"
+      - "RCAnalyzer (post-execution)"
+    
+  # Governance compliance
+  core_rules_applied:
+    - "CORE-008: TDD (tests before implementation)"
+    - "CORE-011: Type hints mandatory (100%)"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-013: Specific exception handling"
+    - "CORE-026: Git checkpoints before major changes"
+    - "CORE-027: Audit trail logging (AC_START/CHALLENGE/COMPLETE)"
+    - "CORE-029: Challenge ALWAYS unless DoR ≥ 95% (CORE PROTOCOL)"
+    - "CORE-030: Implementation Truth (code verification)"
+    - "CORE-035: Single Canonical Implementation"
+    - "CORE-038: File Placement Policy (cortex/orchestrators/core/)"
+    - "CORE-040: Documentation Lifecycle Management"
+
+  # Feature overview
+  features:
+    - "ChallengeOrchestrator: New core orchestrator for precision challenge routing"
+    - "SOLID Analyzers: 5 detector plugins (SRP, DIP, DRY, ISP, OCP)"
+    - "DoRTracker: Per-turn DoR tracking + confidence scoring"
+    - "Tier-3 Gates: Hard (block)/Soft (suggest)/Context (ask) routing"
+    - "RCAnalyzer: Post-execution Root Cause Analysis + pattern learning"
+    - "Threshold Auto-Tuning: RCA-driven adjustment (with approval gate)"
+    - "Prometheus Integration: Challenge effectiveness metrics"
+    - "Wiring Integration: Git-backed YAML configuration (wiring.yaml)"
+
+# ============================================================================
+# PHASE 8.0: SOLID ANALYZERS & FOUNDATION
+# ============================================================================
+phase_8_0:
+  name: "SOLID Analyzers & DoRTracker Foundation"
+  duration: "18-20 hours"
+  priority: "P0-CRITICAL"
+  status: "PLANNED"
+  
+  description: |
+    Build 5 SOLID principle analyzer plugins and DoRTracker system for detecting
+    design violations and tracking per-turn confidence/decision quality.
+    Foundation for all downstream Tier-3 challenge logic.
+  
+  objectives:
+    - Create 5 pluggable SOLID analyzers (SRP, DIP, DRY, ISP, OCP)
+    - Integrate with existing ChallengeEnginePlugins architecture
+    - Build DoRTracker for per-turn confidence tracking
+    - Add RCA data structures for post-execution analysis
+    - Achieve 80%+ code coverage on all detectors
+    - Zero false positives on baseline test suite
+
+  # Task breakdown
+  tasks:
+    - id: "PHASE-8.0-001"
+      name: "Single Responsibility Principle (SRP) Analyzer"
+      priority: "P0"
+      estimated_hours: "4 hours"
+      
+      description: |
+        Detect Single Responsibility violations:
+        - Classes with 3+ distinct responsibilities
+        - Methods doing unrelated tasks (I/O + calculation + validation)
+        - God objects (>500 lines, >20 methods)
+        - Cohesion metrics (method clustering analysis)
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/solid_analyzers/srp_analyzer.py"
+          lines: "~300"
+        - path: "tests/unit/orchestrators/core/test_srp_analyzer.py"
+          tests: 20
+      
+      implementation:
+        class_name: "SRPAnalyzer"
+        extends: "DisagreementPlugin"
+        methods:
+          - "analyze(file_path: Path) -> SRPViolation"
+          - "detect_responsibilities(ast_tree) -> List[Responsibility]"
+          - "calculate_cohesion_score() -> float"
+          - "suggest_split_strategy() -> List[str]"
+      
+      test_coverage:
+        - "Large class detection (>500 lines)"
+        - "High method count (>20 methods)"
+        - "Responsibility clustering"
+        - "Cohesion below threshold (< 0.6)"
+        - "False positive prevention (utility classes, enums)"
+      
+      acceptance_criteria:
+        - "✅ 20/20 tests passing"
+        - "✅ Detects 95%+ of SRP violations in sample codebase"
+        - "✅ <2% false positive rate"
+        - "✅ Confidence scoring (0.0-1.0)"
+        - "✅ Evidence extraction (specific methods/lines)"
+    
+    - id: "PHASE-8.0-002"
+      name: "Dependency Inversion Principle (DIP) Analyzer"
+      priority: "P0"
+      estimated_hours: "4 hours"
+      
+      description: |
+        Detect Dependency Inversion violations:
+        - Direct concrete class dependencies (vs interfaces/abstractions)
+        - Circular dependencies
+        - Tight coupling indicators
+        - Hard-coded service locators
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/solid_analyzers/dip_analyzer.py"
+          lines: "~280"
+        - path: "tests/unit/orchestrators/core/test_dip_analyzer.py"
+          tests: 18
+      
+      implementation:
+        class_name: "DIPAnalyzer"
+        extends: "DisagreementPlugin"
+        methods:
+          - "analyze(file_path: Path) -> DIPViolation"
+          - "detect_concrete_dependencies() -> List[str]"
+          - "detect_circular_dependencies() -> List[Cycle]"
+          - "calculate_coupling_score() -> float"
+      
+      acceptance_criteria:
+        - "✅ 18/18 tests passing"
+        - "✅ Detects concrete class instantiation (new ClassName())"
+        - "✅ Detects circular imports (A → B → A)"
+        - "✅ Coupling score < 0.4 recommended"
+    
+    - id: "PHASE-8.0-003"
+      name: "Don't Repeat Yourself (DRY) Analyzer"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Detect code duplication:
+        - Exact code duplication (copy-paste detection)
+        - Similar logic patterns (parametrized detection)
+        - Duplicate error handling
+        - Repeated validation logic
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/solid_analyzers/dry_analyzer.py"
+          lines: "~250"
+        - path: "tests/unit/orchestrators/core/test_dry_analyzer.py"
+          tests: 16
+      
+      implementation:
+        class_name: "DRYAnalyzer"
+        extends: "DisagreementPlugin"
+        methods:
+          - "analyze(file_paths: List[Path]) -> DRYViolation"
+          - "detect_exact_duplicates() -> List[Duplication]"
+          - "detect_similar_patterns() -> List[PatternDuplication]"
+          - "similarity_score() -> float"
+    
+    - id: "PHASE-8.0-004"
+      name: "Interface Segregation Principle (ISP) Analyzer"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Detect Interface Segregation violations:
+        - Large interfaces (>10 methods)
+        - Unimplemented interface methods
+        - Fat interface implementation
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/solid_analyzers/isp_analyzer.py"
+          lines: "~220"
+        - path: "tests/unit/orchestrators/core/test_isp_analyzer.py"
+          tests: 14
+      
+      acceptance_criteria:
+        - "✅ 14/14 tests passing"
+        - "✅ Detects interfaces > 10 methods"
+        - "✅ Suggests interface splits"
+    
+    - id: "PHASE-8.0-005"
+      name: "Open/Closed Principle (OCP) Analyzer"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Detect Open/Closed violations:
+        - Modification of base classes for extensions
+        - Large if/else for type handling
+        - Strategy pattern anti-patterns
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/solid_analyzers/ocp_analyzer.py"
+          lines: "~240"
+        - path: "tests/unit/orchestrators/core/test_ocp_analyzer.py"
+          tests: 15
+    
+    - id: "PHASE-8.0-006"
+      name: "DoRTracker & RCA Data Structures"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Build per-turn DoR tracking and RCA data collection system:
+        - DoRTurn dataclass: track initial/final DoR, challenges, user response
+        - ChallengeRCRecord: pre/post execution analysis
+        - Confidence metadata: how DoR was calculated
+        - Pattern learning: aggregate RCA across turns
+      
+      deliverables:
+        - path: "cortex/brain/core/dor_tracker.py"
+          lines: "~350"
+        - path: "cortex/brain/core/challenge_rca.py"
+          lines: "~280"
+        - path: "tests/unit/brain/test_dor_tracker.py"
+          tests: 25
+        - path: "tests/unit/brain/test_challenge_rca.py"
+          tests: 20
+      
+      implementation:
+        classes:
+          - "DoRTurn: dataclass for per-turn tracking"
+          - "ChallengeRCRecord: RCA event record"
+          - "DoRTracker: accumulate turns + generate statistics"
+          - "RCAnalyzer: analyze patterns + suggest threshold adjustments"
+      
+      acceptance_criteria:
+        - "✅ 45/45 tests passing"
+        - "✅ Tracks: initial_dor, challenges_offered, user_response, final_dor"
+        - "✅ RCA detects: false positives, false negatives, missed detections"
+
+# ============================================================================
+# PHASE 8.1: TIER-3 GATE LOGIC & CHALLENGE ROUTING
+# ============================================================================
+phase_8_1:
+  name: "Tier-3 Gate Logic & Challenge Routing System"
+  duration: "15-18 hours"
+  priority: "P0-CRITICAL"
+  status: "PLANNED"
+  
+  description: |
+    Implement adaptive Tier-3 challenge gates (Hard/Soft/Context) that route
+    challenges appropriately based on violation type, confidence, and DoR threshold.
+    Replace single 0.7 threshold with violation-type-specific thresholds.
+  
+  objectives:
+    - Refactor ChallengeEngine to support Tier-3 gate logic
+    - Define 7 challenge types with rules (thresholds, hard/soft/context gate)
+    - Implement confidence boosting from SOLID evidence
+    - Add soft gate auto-proceed timing (10s default)
+    - Integrate with existing DisagreementType enum
+    - Full backward compatibility with existing 5 disagreement types
+    - 100% test coverage on gate logic
+
+  # Task breakdown
+  tasks:
+    - id: "PHASE-8.1-001"
+      name: "Refactor ChallengeEngine for Tier-3 Logic"
+      priority: "P0"
+      estimated_hours: "5 hours"
+      
+      description: |
+        Replace single threshold (0.7) with challenge_rules Dict:
+        - Define 7 challenge types (security, harmful, SRP, arch, context, ambiguity, redundant)
+        - Each has: gate_type (hard/soft/context), threshold, auto_proceed_ms
+        - Implement rule lookup and application
+        - Maintain backward compatibility
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/challenge_engine.py" (modified)
+          changes: "~400 lines"
+        - path: "tests/unit/orchestrators/core/test_challenge_engine_tier3.py"
+          tests: 35
+      
+      implementation:
+        changes_to_challenge_engine:
+          - "Add challenge_rules: Dict[ViolationType, ChallengeRule]"
+          - "Add ChallengeRule dataclass (threshold, gate_type, auto_proceed_ms)"
+          - "Implement _apply_tier3_gates() method"
+          - "Implement _calculate_soft_gate_timeout() method"
+      
+      acceptance_criteria:
+        - "✅ 35/35 tests passing"
+        - "✅ Hard gates (security, harmful) block execution"
+        - "✅ Soft gates (SRP, architecture) present challenge + auto-proceed after timeout"
+        - "✅ Context gates (ambiguity) ask clarifying questions"
+        - "✅ All existing tests still pass (100% backward compatibility)"
+    
+    - id: "PHASE-8.1-002"
+      name: "Confidence Boosting from SOLID Evidence"
+      priority: "P0"
+      estimated_hours: "4 hours"
+      
+      description: |
+        Integrate SOLID analyzer evidence into DoR scoring:
+        - SRP violation detected: boost REFACTOR intent confidence +0.25
+        - DIP violation detected: boost ARCHITECTURE intent confidence +0.20
+        - DRY violation detected: boost TEST/REFACTOR confidence +0.15
+        - Security issue detected: boost SECURITY intent confidence +0.30
+        - High complexity: boost REFACTOR/TEST confidence +0.10
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/intent_router.py" (modified)
+          changes: "~150 lines"
+        - path: "tests/unit/orchestrators/core/test_intent_router_confidence.py"
+          tests: 25
+      
+      acceptance_criteria:
+        - "✅ 25/25 tests passing"
+        - "✅ Evidence from SOLID analyzers boosts confidence"
+        - "✅ Boost amounts are correct (±0.05)"
+        - "✅ DoR calculation audit trail logged"
+    
+    - id: "PHASE-8.1-003"
+      name: "Challenge Response Formatting & Options Generation"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Format challenge responses with clear options for user:
+        - Option 1: Accept CORTEX recommendation
+        - Option 2: Modify request and retry
+        - Option 3: Acknowledge risk and proceed (audit logged)
+        - Option 4: Cancel and review manually
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/challenge_engine.py" (enhanced)
+          methods:
+            - "format_challenge_response(challenge) -> str"
+            - "generate_challenge_options(challenge_type) -> List[str]"
+      
+      acceptance_criteria:
+        - "✅ All challenge types have clear options"
+        - "✅ Machine-readable format (JSON) for UI/CLI"
+        - "✅ Human-readable format (markdown) for display"
+
+# ============================================================================
+# PHASE 8.2: ORCHESTRATOR INTEGRATION
+# ============================================================================
+phase_8_2:
+  name: "Wire ChallengeOrchestrator into MasterOrchestrator + Specialists"
+  duration: "15-18 hours"
+  priority: "P0-CRITICAL"
+  status: "PLANNED"
+  
+  description: |
+    Integrate ChallengeOrchestrator into 6 core orchestrators:
+    - MasterOrchestrator (pre-filter)
+    - InteractionOrchestrator (per-turn gates)
+    - IntentRouter (confidence boosting)
+    - PlanningOrchestrator (feasibility check)
+    - RefactoringOrchestrator (output validation)
+    - RCAnalyzer (post-execution RCA)
+  
+  objectives:
+    - Zero breaking changes to existing orchestrators
+    - All 23 orchestrators inherit Tier-3 behavior via MasterOrchestrator
+    - Git-backed wiring (cortex/wiring/specifications/wiring.yaml)
+    - Full integration test coverage (end-to-end flows)
+    - Audit trail compliance (AC_START → AC_CHALLENGE → AC_COMPLETE)
+
+  # Task breakdown
+  tasks:
+    - id: "PHASE-8.2-001"
+      name: "MasterOrchestrator Pre-Filter Integration"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Add ChallengeOrchestrator.pre_filter() call to MasterOrchestrator:
+        - Early interception of harmful operations (delete, truncate, drop)
+        - Block architectural violations (file placement, naming)
+        - Route decisions with enhanced confidence
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/master_orchestrator.py" (modified)
+          changes: "~80 lines"
+        - path: "tests/integration/test_master_challenge_integration.py"
+          tests: 12
+      
+      acceptance_criteria:
+        - "✅ Harmful operations blocked before reaching orchestrators"
+        - "✅ Pre-filter adds <50ms latency (acceptable)"
+        - "✅ All existing tests pass"
+    
+    - id: "PHASE-8.2-002"
+      name: "InteractionOrchestrator Per-Turn Gate Integration"
+      priority: "P0"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Add Tier-3 gates to InteractionOrchestrator.execute_turn():
+        - Check each turn for SRP/architecture/security issues
+        - Apply soft gate timeouts (10s auto-proceed)
+        - Track per-turn DoR metrics
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/interaction_orchestrator.py" (modified)
+          changes: "~100 lines"
+        - path: "tests/integration/test_interaction_challenge_integration.py"
+          tests: 15
+    
+    - id: "PHASE-8.2-003"
+      name: "IntentRouter Confidence Boosting"
+      priority: "P0"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Enhance IntentRouter to use SOLID evidence for confidence:
+        - Query ChallengeOrchestrator for SOLID analysis results
+        - Boost confidence for aligned intents
+        - Log confidence adjustments to audit trail
+      
+      deliverables:
+        - path: "cortex/orchestrators/core/intent_router.py" (modified)
+          changes: "~60 lines"
+        - path: "tests/integration/test_intent_router_challenge_evidence.py"
+          tests: 12
+    
+    - id: "PHASE-8.2-004"
+      name: "PlanningOrchestrator Feasibility Check"
+      priority: "P0"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Add optional ChallengeOrchestrator calls for plan feasibility:
+        - Check architectural constraints
+        - Verify SRP compliance in plan
+      
+      deliverables:
+        - path: "cortex/orchestrators/domain/planning_orchestrator.py" (modified)
+          changes: "~50 lines"
+        - path: "tests/integration/test_planning_challenge_integration.py"
+          tests: 8
+    
+    - id: "PHASE-8.2-005"
+      name: "RefactoringOrchestrator Output Validation"
+      priority: "P0"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Validate refactoring output against SOLID principles:
+        - Check if refactoring improves SRP score
+        - Verify no new DIP violations introduced
+        - Suggest improvements before returning to user
+      
+      deliverables:
+        - path: "cortex/orchestrators/domain/enhanced_refactoring_orchestrator.py" (modified)
+          changes: "~70 lines"
+        - path: "tests/integration/test_refactoring_challenge_validation.py"
+          tests: 10
+    
+    - id: "PHASE-8.2-006"
+      name: "Git-Backed Wiring Configuration"
+      priority: "P0"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Add ChallengeOrchestrator wiring to Git-backed registry:
+        - Define in cortex/wiring/specifications/wiring.yaml
+        - Document integration points
+        - Enable hot-reload of challenge rules
+      
+      deliverables:
+        - path: "cortex/wiring/specifications/wiring.yaml" (modified)
+          changes: "~50 lines"
+        - docs: "cortex/wiring/CHALLENGE-ORCHESTRATOR-WIRING.md"
+
+# ============================================================================
+# PHASE 8.3: RCA SYSTEM & MONITORING
+# ============================================================================
+phase_8_3:
+  name: "RCA System, Threshold Auto-Tuning & Prometheus Monitoring"
+  duration: "7-10 hours"
+  priority: "P1-HIGH"
+  status: "PLANNED"
+  
+  description: |
+    Build Root Cause Analysis system to learn from challenge outcomes,
+    auto-tune thresholds based on effectiveness, and expose metrics for monitoring.
+  
+  objectives:
+    - Track challenge effectiveness (true positive vs false positive rates)
+    - Auto-adjust thresholds based on RCA patterns (with approval gate)
+    - Expose Prometheus metrics for team visibility
+    - CLI command for RCA analysis
+    - Automated reporting to stakeholders
+
+  # Task breakdown
+  tasks:
+    - id: "PHASE-8.3-001"
+      name: "RCA Pattern Analysis & Threshold Tuning"
+      priority: "P1"
+      estimated_hours: "3 hours"
+      
+      description: |
+        Analyze challenge RCA patterns and suggest threshold adjustments:
+        - Track: false positives (challenge > user proceeded safely)
+        - Track: false negatives (no challenge > code broke)
+        - Suggest threshold changes: high false positive → lower threshold
+        - Require approval for threshold changes > 0.2
+      
+      deliverables:
+        - path: "cortex/brain/core/challenge_rca.py" (enhanced)
+          methods: "analyze_patterns(), suggest_threshold_adjustment()"
+        - path: "tests/unit/brain/test_challenge_rca_analysis.py"
+          tests: 20
+      
+      acceptance_criteria:
+        - "✅ Detects false positive patterns"
+        - "✅ Detects false negative patterns"
+        - "✅ Suggests threshold changes with confidence"
+        - "✅ Approval gate for >0.2 changes"
+    
+    - id: "PHASE-8.3-002"
+      name: "Prometheus Metrics & Monitoring"
+      priority: "P1"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Expose challenge system metrics to Prometheus:
+        - cortex_challenges_offered_total (by violation type)
+        - cortex_challenges_accepted_total
+        - cortex_challenges_bypassed_total
+        - cortex_dor_initial_histogram (confidence before challenge)
+        - cortex_dor_final_histogram (confidence after decision)
+        - cortex_challenge_effectiveness_ratio (bypass rate by type)
+      
+      deliverables:
+        - path: "cortex/mcp/metrics_collector.py" (modified)
+          metrics: "6 new metrics"
+        - path: "tests/unit/mcp/test_challenge_metrics.py"
+          tests: 10
+      
+      acceptance_criteria:
+        - "✅ All 6 metrics exported correctly"
+        - "✅ Grafana dashboard "CORTEX Challenge Effectiveness" created"
+        - "✅ Historical data retained (30-day retention)"
+    
+    - id: "PHASE-8.3-003"
+      name: "CLI Commands for RCA Analysis"
+      priority: "P1"
+      estimated_hours: "2 hours"
+      
+      description: |
+        Add CLI commands for RCA debugging:
+        - cortex rca challenge --orchestrator=RefactoringOrchestrator --days=7
+        - cortex rca effectiveness --violation-type=SRP
+        - cortex rca suggest-threshold-adjustment
+      
+      deliverables:
+        - path: "cortex/cli/commands/rca_command.py"
+          lines: "~250"
+        - path: "tests/unit/cli/test_rca_command.py"
+          tests: 12
+      
+      acceptance_criteria:
+        - "✅ Commands return structured JSON output"
+        - "✅ Human-readable reports (markdown)"
+        - "✅ Integration with audit logger"
+
+# ============================================================================
+# INTEGRATION & DEPLOYMENT CHECKLIST
+# ============================================================================
+deployment_checklist:
+  pre_deployment:
+    - "✅ All 180+ tests passing (Phase 8.0-8.3)"
+    - "✅ Code coverage ≥ 85%"
+    - "✅ No integration test failures"
+    - "✅ CORE governance compliance verified"
+    - "✅ Documentation complete (PHASE-8-CHALLENGE-ORCHESTRATOR.md)"
+    - "✅ Breaking change audit (zero breaking changes)"
+  
+  deployment:
+    - "✅ Git commit with AC_START/COMPLETE logs"
+    - "✅ Wiring YAML updated and validated"
+    - "✅ Docker image rebuilt"
+    - "✅ Health checks passing"
+    - "✅ Prometheus scrape configured"
+    - "✅ Grafana dashboard created"
+  
+  post_deployment:
+    - "✅ Monitor challenge effectiveness ratio for 7 days"
+    - "✅ Collect RCA patterns from real usage"
+    - "✅ Tune thresholds based on Phase 1 results"
+    - "✅ Team training on new challenge system"
+    - "✅ Document lessons learned + improvements"
+
+# ============================================================================
+# ACCEPTANCE CRITERIA & DEFINITION OF READY (DoR)
+# ============================================================================
+acceptance_criteria:
+  functional:
+    - "Challenge system detects 98%+ of SOLID violations"
+    - "Hard gates block harmful operations (100% success rate)"
+    - "Soft gates present challenge + auto-proceed (10s)"
+    - "Context gates ask clarifying questions"
+    - "All 23 orchestrators inherit Tier-3 behavior"
+    - "DoR tracking works per-turn (initial/final scores)"
+    - "RCA detects true/false positives"
+    - "Thresholds auto-adjust based on RCA (with approval)"
+  
+  non_functional:
+    - "Challenge pre-filter latency: <50ms"
+    - "Per-turn gates latency: <100ms"
+    - "Memory overhead: <10MB per session"
+    - "Test coverage: ≥85% on all Phase 8 code"
+    - "100% backward compatibility (all existing tests pass)"
+  
+  governance:
+    - "CORE-008: All code TDD-driven (tests first)"
+    - "CORE-011: 100% type hints"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: AC_START/CHALLENGE/COMPLETE logs"
+    - "CORE-029: Challenge system active on every turn"
+    - "CORE-035: Single canonical implementations"
+    - "CORE-038: All files in correct locations"
+    - "CORE-040: Documentation lifecycle managed"
+
+# ============================================================================
+# SUCCESS METRICS & KPIs
+# ============================================================================
+success_metrics:
+  detection_rate:
+    target: "98%+ issue detection"
+    measurement: "RCA pattern analysis"
+    baseline: "60% (current system)"
+  
+  false_positive_rate:
+    target: "<5% challenges can be safely bypassed"
+    measurement: "RCA true_positive / total_challenges"
+    baseline: "15% (current system)"
+  
+  user_experience:
+    target: "10-15 challenges/session (no fatigue)"
+    measurement: "Challenge offered events"
+    baseline: "30+ challenges/session (burnout)"
+  
+  dor_improvement:
+    target: "DoR increases from 70% → 95% after challenges"
+    measurement: "initial_dor vs final_dor per turn"
+    baseline: "N/A (new system)"
+  
+  orchestrator_coverage:
+    target: "All 23 orchestrators inherit Tier-3 behavior"
+    measurement: "Challenge events by orchestrator"
+    baseline: "0 (current system)"
+
+# ============================================================================
+# RISK ASSESSMENT & MITIGATION
+# ============================================================================
+risks:
+  - id: "R1"
+    description: "Challenge fatigue if soft gates timeout too short"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Start with 30s timeout, tune down based on RCA"
+    owner: "CORTEX Team"
+  
+  - id: "R2"
+    description: "False positive detections mislead users"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Target <5% false positive rate, RCA-driven tuning"
+    owner: "CORTEX Team"
+  
+  - id: "R3"
+    description: "Performance impact on every-turn gates"
+    probability: "LOW"
+    impact: "MEDIUM"
+    mitigation: "Caching + lazy evaluation, target <100ms latency"
+    owner: "CORTEX Team"
+  
+  - id: "R4"
+    description: "Regression in existing orchestrator tests"
+    probability: "LOW"
+    impact: "HIGH"
+    mitigation: "100% backward compatibility, all existing tests must pass"
+    owner: "CORTEX Team"
+
+# ============================================================================
+# TIMELINE & MILESTONES
+# ============================================================================
+timeline:
+  phase_8_0: "5 days (Jan 30 - Feb 3)"
+    description: "SOLID Analyzers + DoRTracker"
+    deliverables:
+      - "5 SOLID analyzer plugins (50+ tests)"
+      - "DoRTracker + RCAAnalyzer (45+ tests)"
+      - "Foundation ready for Tier-3 logic"
+  
+  phase_8_1: "5 days (Feb 4 - Feb 8)"
+    description: "Tier-3 Gate Logic + Confidence Boosting"
+    deliverables:
+      - "Tier-3 gate routing (35+ tests)"
+      - "Intent confidence boosting (25+ tests)"
+      - "Challenge response formatting"
+  
+  phase_8_2: "5 days (Feb 9 - Feb 13)"
+    description: "Orchestrator Integration"
+    deliverables:
+      - "MasterOrchestrator wiring (12+ tests)"
+      - "InteractionOrchestrator integration (15+ tests)"
+      - "IntentRouter, Planning, Refactoring updates"
+      - "Git-backed wiring configuration"
+  
+  phase_8_3: "3 days (Feb 14 - Feb 16)"
+    description: "RCA System & Monitoring"
+    deliverables:
+      - "RCA pattern analysis (20+ tests)"
+      - "Prometheus metrics (10+ tests)"
+      - "CLI commands (12+ tests)"
+      - "Production ready"
+  
+  validation: "2 days (Feb 17 - Feb 18)"
+    description: "Integration testing, documentation, sign-off"
+    deliverables:
+      - "All 180+ tests passing"
+      - "Documentation complete"
+      - "Production deployment approved"
+
+# ============================================================================
+# DOCUMENTATION & COMMUNICATION PLAN
+# ============================================================================
+documentation:
+  - "docs/phases/PHASE-8-CHALLENGE-ORCHESTRATOR.md (full specification)"
+  - "docs/CHALLENGE-ORCHESTRATOR-GUIDE.md (user guide)"
+  - "docs/SOLID-ANALYZERS-REFERENCE.md (detector details)"
+  - "docs/TIER-3-GATES-ARCHITECTURE.md (technical deep dive)"
+  - "docs/RCA-SYSTEM-GUIDE.md (RCA analysis + tuning)"
+  - "cortex/wiring/CHALLENGE-ORCHESTRATOR-WIRING.md (wiring spec)"
+  - "inline code docstrings (Google style, 100%)"
+
+communication:
+  - "Weekly standups with Phase 8 progress"
+  - "Mid-phase review (after Phase 8.0-8.1)"
+  - "Pre-deployment design review"
+  - "Post-deployment team training"
+  - "Monthly RCA report to stakeholders"
+
+# ============================================================================
+# END PHASE-8-CHALLENGE-ORCHESTRATOR.yaml
+# ============================================================================

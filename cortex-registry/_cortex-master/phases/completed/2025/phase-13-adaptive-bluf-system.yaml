@@ -1,0 +1,1040 @@
+# ============================================================================
+# CORTEX ADAPTIVE BLUF COMMUNICATION SYSTEM (PHASE 13)
+# ============================================================================
+# Date: 2026-01-28
+# Authority: CORTEX Master Orchestrator + InteractionOrchestrator + ChallengeEngine
+# Status: APPROVED FOR IMPLEMENTATION
+# Priority: P1-HIGH (User experience enhancement, executive communication)
+#
+# Architecture Metaphor: Military Communication Protocol
+#   - BLUF = Bottom Line Up Front (military communication standard)
+#   - Adaptive Response = Context-aware formatting (risk-based routing)
+#   - Progressive Disclosure = Three-tier information architecture
+#   - Executive Mode = Fast decision-making for low-risk operations
+#   - Deep Analysis Mode = Full context for high-risk operations
+#
+# Strategic Context:
+#   User Vision: Always begin with BLUF, then dive deeper into details
+#   Challenge Response: Adaptive BLUF (context-aware) > Pure BLUF (loses context)
+#   Architecture: Smart routing based on operation risk + complexity + user preference
+#   Impact: Executive-friendly + maintains challenge culture + preserves context
+#
+# Key Principles:
+#   - Extensibility: Plugin response formatters, custom templates, user preferences
+#   - Scalability: Works for simple queries to complex multi-phase implementations
+#   - Accuracy: Risk-based routing ensures appropriate detail level
+#   - Efficiency: Fast decisions for low-risk, thorough analysis for high-risk
+#   - User Experience: Progressive disclosure, collapsible sections, scannable tables
+# ============================================================================
+
+metadata:
+  system_name: "Adaptive BLUF Communication System"
+  subsystem: "Response Formatting & User Experience"
+  date_created: "2026-01-28"
+  architecture_version: "1.0"
+  status: "APPROVED"
+  priority: "P1-HIGH"
+  blocking: false  # Enhances UX, doesn't block execution
+  strategic: true  # Improves executive decision-making and user satisfaction
+  
+  # Communication layers
+  communication_layers:
+    bluf_executive: "BLUF Executive Summary (2-3 sentences)"
+    decision_factors: "Quick Decision Factors (scannable table)"
+    deep_dive: "Detailed Analysis (collapsible sections)"
+    adaptive_routing: "Smart format selection based on risk/complexity"
+  
+  # Delivery strategy
+  delivery_strategy: "TDD_INCREMENTAL"
+  stage_1: "Response Format Analyzer + Risk Classifier (BLUF-1)"
+  stage_2: "BLUF Template Engine + Progressive Disclosure (BLUF-2)"
+  stage_3: "Adaptive Router + User Preferences (BLUF-3)"
+  stage_4: "Response Formatter Integration (BLUF-4)"
+  stage_5: "Analytics & Continuous Improvement (BLUF-5)"
+  
+  # Estimated effort
+  total_hours: "28-38 hours"
+  bluf_1_hours: "6-8 hours"
+  bluf_2_hours: "8-10 hours"
+  bluf_3_hours: "6-8 hours"
+  bluf_4_hours: "4-6 hours"
+  bluf_5_hours: "4-6 hours"
+  
+  # Strategic alignment (Challenge-validated)
+  strategic_goals:
+    extensibility:
+      rating: "★★★★★"
+      rationale: "Plugin formatters, custom templates, user-specific preferences"
+    scalability:
+      rating: "★★★★☆"
+      rationale: "Works for all operation types, but adds routing complexity"
+    accuracy:
+      rating: "★★★★★"
+      rationale: "Risk-based routing ensures appropriate context, prevents approval errors"
+    efficiency:
+      rating: "★★★★★"
+      rationale: "Fast decisions for low-risk, no detail loss for high-risk"
+    user_experience:
+      rating: "★★★★★"
+      rationale: "Executive-friendly, progressive disclosure, maintains challenge culture"
+
+# ============================================================================
+# PHASE STRUCTURE
+# ============================================================================
+
+phases:
+  
+  # --------------------------------------------------------------------------
+  # BLUF-1: Response Format Analyzer + Risk Classifier (6-8 hours)
+  # --------------------------------------------------------------------------
+  bluf_1_format_analyzer:
+    name: "Response Format Analyzer + Risk Classifier"
+    priority: "P0-CRITICAL"
+    status: "PLANNED"
+    estimated_hours: "6-8"
+    dependencies: ["IntentRouter", "InteractionOrchestrator"]
+    blocking: false
+    
+    objectives:
+      - "Analyze operation type, complexity, and risk level"
+      - "Classify responses as LOW_RISK, MEDIUM_RISK, or HIGH_RISK"
+      - "Determine appropriate format depth (BLUF only, Hybrid, Full detail)"
+      - "Extract key decision factors for executive summary"
+    
+    deliverables:
+      - file: "cortex/orchestrators/interaction/response_format_analyzer.py"
+        description: "Response format analyzer orchestrator"
+        tests: "tests/orchestrators/interaction/test_response_format_analyzer.py"
+        loc: 220
+      
+      - file: "cortex/brain/analysis/risk_classifier.py"
+        description: "Operation risk classifier"
+        tests: "tests/brain/analysis/test_risk_classifier.py"
+        loc: 180
+      
+      - file: "cortex/brain/analysis/complexity_scorer.py"
+        description: "Operation complexity scorer"
+        tests: "tests/brain/analysis/test_complexity_scorer.py"
+        loc: 150
+      
+      - file: "cortex/models/response_format.py"
+        description: "Response format data models"
+        tests: "tests/models/test_response_format.py"
+        loc: 100
+    
+    technical_approach:
+      risk_classification:
+        low_risk:
+          - "ANALYZE: Code inspection, status queries"
+          - "DOCUMENT: Generate docs (no code changes)"
+          - "READ: File reads, data queries"
+          - "Characteristics: No code modification, read-only, reversible"
+        
+        medium_risk:
+          - "REFACTOR: Code improvements (tests exist)"
+          - "TEST: Test generation (no production code changes)"
+          - "CONFIG: Configuration updates"
+          - "Characteristics: Reversible changes, low blast radius"
+        
+        high_risk:
+          - "IMPLEMENT: New features (code + tests)"
+          - "FIX: Bug fixes (production code changes)"
+          - "DEPLOY: Deployment operations"
+          - "DELETE: File/resource deletion"
+          - "Characteristics: Irreversible, high blast radius, requires approval"
+      
+      complexity_scoring:
+        factors:
+          - "Scope: FILE (1pt), MODULE (2pts), SYSTEM (3pts), DOMAIN (4pts)"
+          - "Impact: Low (1pt), Medium (2pts), High (3pts)"
+          - "Dependencies: 0-2 (1pt), 3-5 (2pts), 6+ (3pts)"
+          - "Estimated hours: <2h (1pt), 2-8h (2pts), 8+ (3pts)"
+        
+        total_score:
+          - "1-4 points: LOW complexity"
+          - "5-8 points: MEDIUM complexity"
+          - "9-13 points: HIGH complexity"
+      
+      format_routing_matrix:
+        decision_table: |
+          | Risk | Complexity | Format | Rationale |
+          |------|-----------|--------|-----------|
+          | LOW | LOW | BLUF_ONLY | Fast decision, minimal risk |
+          | LOW | MEDIUM | BLUF_HYBRID | Executive summary + quick facts |
+          | LOW | HIGH | BLUF_HYBRID | Summary + collapsible deep-dive |
+          | MEDIUM | LOW | BLUF_HYBRID | Summary + decision factors |
+          | MEDIUM | MEDIUM | BLUF_HYBRID | Balanced approach |
+          | MEDIUM | HIGH | FULL_DETAIL | Complex context required |
+          | HIGH | LOW | FULL_DETAIL | Risk requires full context |
+          | HIGH | MEDIUM | FULL_DETAIL | No shortcuts for high-risk |
+          | HIGH | HIGH | FULL_DETAIL | Maximum context for approval |
+      
+      key_extraction:
+        - "Extract action verb from intent (Implement, Fix, Refactor, etc.)"
+        - "Summarize target entity (file, module, system)"
+        - "Calculate risk level and complexity score"
+        - "Identify top 3 decision factors (time, risk, dependencies)"
+        - "Generate 2-3 sentence executive summary"
+    
+    acceptance_criteria:
+      - id: "AC-BLUF-1-01"
+        description: "Risk classifier categorizes operations correctly"
+        verification: "Unit test: IMPLEMENT → HIGH_RISK, ANALYZE → LOW_RISK"
+      
+      - id: "AC-BLUF-1-02"
+        description: "Complexity scorer calculates scores accurately"
+        verification: "Unit test: SYSTEM scope + High impact → 9-13 points"
+      
+      - id: "AC-BLUF-1-03"
+        description: "Format router selects appropriate format"
+        verification: "Unit test: HIGH_RISK + HIGH_COMPLEXITY → FULL_DETAIL"
+      
+      - id: "AC-BLUF-1-04"
+        description: "Key extractor generates concise executive summary"
+        verification: "Unit test: Extract action, target, risk in 2-3 sentences"
+      
+      - id: "AC-BLUF-1-05"
+        description: "Analyzer handles edge cases gracefully"
+        verification: "Unit test: Unknown intent → defaults to FULL_DETAIL"
+    
+    governance_compliance:
+      - rule: "CORE-008"
+        description: "TDD - tests before implementation"
+      - rule: "CORE-011"
+        description: "Type hints on all analyzer functions"
+      - rule: "CORE-012"
+        description: "Google-style docstrings"
+      - rule: "CORE-029"
+        description: "Response format compliance (header + BLUF)"
+      - rule: "CORE-030"
+        description: "Verify risk classification accuracy against historical data"
+  
+  # --------------------------------------------------------------------------
+  # BLUF-2: BLUF Template Engine + Progressive Disclosure (8-10 hours)
+  # --------------------------------------------------------------------------
+  bluf_2_template_engine:
+    name: "BLUF Template Engine + Progressive Disclosure"
+    priority: "P0-CRITICAL"
+    status: "PLANNED"
+    estimated_hours: "8-10"
+    dependencies: ["BLUF-1"]
+    blocking: false
+    
+    objectives:
+      - "Create three response templates (BLUF_ONLY, BLUF_HYBRID, FULL_DETAIL)"
+      - "Implement progressive disclosure with collapsible sections"
+      - "Generate executive summaries with action + risk + impact"
+      - "Format decision factor tables for scannability"
+    
+    deliverables:
+      - file: "cortex/orchestrators/interaction/bluf_template_engine.py"
+        description: "BLUF template rendering engine"
+        tests: "tests/orchestrators/interaction/test_bluf_template_engine.py"
+        loc: 280
+      
+      - file: "cortex_brain/tier2/response_templates/bluf_only.yaml"
+        description: "BLUF-only template (executive summary)"
+        tests: "N/A (YAML template)"
+        loc: 50
+      
+      - file: "cortex_brain/tier2/response_templates/bluf_hybrid.yaml"
+        description: "BLUF hybrid template (summary + decision factors + collapsible)"
+        tests: "N/A (YAML template)"
+        loc: 120
+      
+      - file: "cortex_brain/tier2/response_templates/full_detail.yaml"
+        description: "Full detail template (current format + BLUF header)"
+        tests: "N/A (YAML template)"
+        loc: 80
+      
+      - file: "cortex/brain/formatting/markdown_formatter.py"
+        description: "Enhanced markdown formatter with collapsible sections"
+        tests: "tests/brain/formatting/test_markdown_formatter.py"
+        loc: 200
+    
+    technical_approach:
+      template_structures:
+        bluf_only: |
+          ## 🧠 CORTEX {operation}
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          
+          ---
+          
+          ### 🎯 BLUF
+          **Action:** {action_verb} {target}
+          **Risk:** {risk_emoji} {risk_level}
+          **Impact:** {impact_description}
+          
+          **Decision:** {proceed_recommendation}
+          
+          ---
+          
+          **⏳ Awaiting approval to proceed...**
+        
+        bluf_hybrid: |
+          ## 🧠 CORTEX {operation}
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          
+          ---
+          
+          ### 🎯 BLUF
+          **Action:** {action_verb} {target}
+          **Risk:** {risk_emoji} {risk_level} | **Complexity:** {complexity_level}
+          **Impact:** {impact_description}
+          
+          ### 📊 Quick Decision Factors
+          | Factor | Value | Confidence |
+          |--------|-------|------------|
+          | Duration | {estimated_hours}h | {confidence}% |
+          | Risk Level | {risk_level} | {risk_confidence}% |
+          | Dependencies | {dependency_count} | {dep_confidence}% |
+          | Reversibility | {reversible} | 100% |
+          
+          <details>
+          <summary>📖 Detailed Analysis (click to expand)</summary>
+          
+          {detailed_context}
+          {technical_approach}
+          {acceptance_criteria}
+          
+          </details>
+          
+          ---
+          
+          **⏳ Awaiting approval to proceed...**
+        
+        full_detail: |
+          ## 🧠 CORTEX {operation}
+          **Author:** CORTEX Team | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          
+          ---
+          
+          ### 🎯 BLUF
+          **Action:** {action_verb} {target}
+          **Risk:** {risk_emoji} HIGH | **Complexity:** {complexity_level}
+          **⚠️ Full context required for approval decision**
+          
+          {current_full_detail_format}
+          
+          ---
+          
+          **⏳ Awaiting approval to proceed...**
+      
+      collapsible_sections:
+        - "Use HTML <details> tags for GitHub Copilot Chat compatibility"
+        - "Default state: collapsed (user expands on demand)"
+        - "Section headers: 📖 Detailed Analysis, 🔧 Technical Approach, ✅ Acceptance Criteria"
+        - "Preserve full content for CORE-030 compliance (implementation truth)"
+      
+      risk_emoji_mapping:
+        LOW_RISK: "🔵"
+        MEDIUM_RISK: "🟡"
+        HIGH_RISK: "🔴"
+      
+      action_verb_extraction:
+        IMPLEMENT: "Implement"
+        FIX: "Fix"
+        REFACTOR: "Refactor"
+        ANALYZE: "Analyze"
+        DOCUMENT: "Document"
+        TEST: "Test"
+        DEPLOY: "Deploy"
+        DELETE: "Delete"
+    
+    acceptance_criteria:
+      - id: "AC-BLUF-2-01"
+        description: "BLUF_ONLY template renders executive summary correctly"
+        verification: "Unit test: Render template with mock data, verify structure"
+      
+      - id: "AC-BLUF-2-02"
+        description: "BLUF_HYBRID template includes collapsible sections"
+        verification: "Unit test: Verify <details> tags present in output"
+      
+      - id: "AC-BLUF-2-03"
+        description: "FULL_DETAIL template preserves current format + BLUF header"
+        verification: "Unit test: Current DoR table + BLUF summary both present"
+      
+      - id: "AC-BLUF-2-04"
+        description: "Decision factor table formats correctly"
+        verification: "Unit test: Markdown table with 4 columns, proper alignment"
+      
+      - id: "AC-BLUF-2-05"
+        description: "Risk emoji mapping displays consistently"
+        verification: "Unit test: HIGH_RISK → 🔴, LOW_RISK → 🔵"
+    
+    governance_compliance:
+      - rule: "CORE-008"
+        description: "TDD - tests before template engine"
+      - rule: "CORE-011"
+        description: "Type hints on template rendering functions"
+      - rule: "CORE-012"
+        description: "Docstrings explain template structure"
+      - rule: "CORE-029"
+        description: "Response header enforcement with BLUF addition"
+  
+  # --------------------------------------------------------------------------
+  # BLUF-3: Adaptive Router + User Preferences (6-8 hours)
+  # --------------------------------------------------------------------------
+  bluf_3_adaptive_router:
+    name: "Adaptive Router + User Preferences"
+    priority: "P0-CRITICAL"
+    status: "PLANNED"
+    estimated_hours: "6-8"
+    dependencies: ["BLUF-1", "BLUF-2"]
+    blocking: false
+    
+    objectives:
+      - "Route responses to appropriate template based on risk/complexity"
+      - "Support user preference overrides (always BLUF, always FULL, adaptive)"
+      - "Provide format toggle command (/bluf-mode [auto|bluf|full])"
+      - "Log format decisions to audit trail"
+    
+    deliverables:
+      - file: "cortex/orchestrators/interaction/adaptive_bluf_router.py"
+        description: "Adaptive BLUF routing orchestrator"
+        tests: "tests/orchestrators/interaction/test_adaptive_bluf_router.py"
+        loc: 250
+      
+      - file: "cortex/brain/core/user_preferences.py"
+        description: "User preference manager (BLUF mode)"
+        tests: "tests/brain/core/test_user_preferences.py"
+        loc: 150
+      
+      - file: "cortex/cli/commands/bluf_mode_command.py"
+        description: "CLI command for BLUF mode switching"
+        tests: "tests/cli/commands/test_bluf_mode_command.py"
+        loc: 100
+      
+      - file: "cortex/brain/core/format_decision_logger.py"
+        description: "Format decision audit logger"
+        tests: "tests/brain/core/test_format_decision_logger.py"
+        loc: 120
+    
+    technical_approach:
+      routing_algorithm:
+        - "Step 1: Check user preference (override adaptive)"
+        - "Step 2: If adaptive, call RiskClassifier + ComplexityScorer"
+        - "Step 3: Apply format routing matrix (BLUF-1)"
+        - "Step 4: Log decision to audit trail (format, risk, complexity)"
+        - "Step 5: Return template ID to InteractionOrchestrator"
+      
+      user_preferences:
+        modes:
+          - "AUTO: Adaptive routing based on risk/complexity (default)"
+          - "BLUF: Always use BLUF_HYBRID template"
+          - "FULL: Always use FULL_DETAIL template"
+          - "BLUF_ONLY: Always use BLUF_ONLY template (executive mode)"
+        
+        storage:
+          - "In-memory for current session"
+          - "Persisted to user config file (optional)"
+          - "CLI command: /bluf-mode [auto|bluf|full|bluf-only]"
+        
+        precedence:
+          - "User preference > Adaptive routing > Default (FULL_DETAIL)"
+      
+      cli_commands:
+        - command: "/bluf-mode auto"
+          description: "Enable adaptive routing (default)"
+        
+        - command: "/bluf-mode bluf"
+          description: "Always use BLUF hybrid format"
+        
+        - command: "/bluf-mode full"
+          description: "Always use full detail format"
+        
+        - command: "/bluf-mode bluf-only"
+          description: "Always use BLUF-only format (executive mode)"
+        
+        - command: "/bluf-status"
+          description: "Show current BLUF mode setting"
+      
+      audit_logging:
+        - "Log format decision to AC-ID: BLUF-DECISION-{timestamp}"
+        - "Record: operation, risk, complexity, chosen_format, user_override"
+        - "Enable format effectiveness analysis (Phase BLUF-5)"
+    
+    acceptance_criteria:
+      - id: "AC-BLUF-3-01"
+        description: "Adaptive router selects correct template based on risk/complexity"
+        verification: "Unit test: HIGH_RISK + HIGH_COMPLEXITY → FULL_DETAIL"
+      
+      - id: "AC-BLUF-3-02"
+        description: "User preference overrides adaptive routing"
+        verification: "Unit test: User sets BLUF mode, LOW_RISK → BLUF_HYBRID"
+      
+      - id: "AC-BLUF-3-03"
+        description: "CLI command switches BLUF mode successfully"
+        verification: "Integration test: /bluf-mode bluf → preference saved"
+      
+      - id: "AC-BLUF-3-04"
+        description: "Format decisions logged to audit trail"
+        verification: "Unit test: Verify AC-ID: BLUF-DECISION-* logged"
+      
+      - id: "AC-BLUF-3-05"
+        description: "Router handles missing preferences gracefully"
+        verification: "Unit test: No preference set → defaults to AUTO"
+    
+    governance_compliance:
+      - rule: "CORE-008"
+        description: "TDD - tests before router implementation"
+      - rule: "CORE-011"
+        description: "Type hints on routing functions"
+      - rule: "CORE-012"
+        description: "Docstrings explain routing logic"
+      - rule: "CORE-027"
+        description: "Audit trail for format decisions"
+  
+  # --------------------------------------------------------------------------
+  # BLUF-4: Response Formatter Integration (4-6 hours)
+  # --------------------------------------------------------------------------
+  bluf_4_formatter_integration:
+    name: "Response Formatter Integration"
+    priority: "P1-HIGH"
+    status: "PLANNED"
+    estimated_hours: "4-6"
+    dependencies: ["BLUF-1", "BLUF-2", "BLUF-3"]
+    blocking: false
+    
+    objectives:
+      - "Integrate BLUF system with InteractionOrchestrator"
+      - "Update MasterOrchestrator Stage 1 pipeline"
+      - "Wire AdaptiveBLUFRouter to all response paths"
+      - "Update CORE-029 governance rule for BLUF compliance"
+    
+    deliverables:
+      - file: "cortex/orchestrators/core/interaction_orchestrator.py"
+        description: "Enhanced with BLUF routing integration"
+        tests: "tests/orchestrators/core/test_interaction_orchestrator.py"
+        loc: "+80 lines"
+      
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        description: "Stage 1 pipeline with BLUF routing"
+        tests: "tests/orchestrators/core/test_master_orchestrator.py"
+        loc: "+50 lines"
+      
+      - file: "cortex_brain/tier0/governance/response-header-enforcement.yaml"
+        description: "Updated CORE-029 with BLUF requirement"
+        tests: "N/A (governance rule)"
+        loc: "+20 lines"
+      
+      - file: ".github/prompts/CORTEX.prompt.md"
+        description: "Updated response format documentation"
+        tests: "N/A (documentation)"
+        loc: "+40 lines"
+    
+    technical_approach:
+      integration_points:
+        - "InteractionOrchestrator.format_response() calls AdaptiveBLUFRouter"
+        - "MasterOrchestrator Stage 1 passes intent context to router"
+        - "All response generators use BLUFTemplateEngine"
+        - "DoR approval gate displays BLUF summary"
+      
+      backward_compatibility:
+        - "Existing responses still work (default to FULL_DETAIL)"
+        - "No breaking changes to orchestrator APIs"
+        - "Gradual rollout: Enable BLUF per orchestrator"
+      
+      core_029_update:
+        old_format: |
+          ## 🧠 CORTEX {operation}
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          
+          ---
+          
+          {Direct statement of action or analysis}
+        
+        new_format: |
+          ## 🧠 CORTEX {operation}
+          **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+          
+          ---
+          
+          ### 🎯 BLUF
+          **Action:** {action_verb} {target}
+          **Risk:** {risk_emoji} {risk_level}
+          **Impact:** {impact_description}
+          
+          {Remaining response based on adaptive routing}
+    
+    acceptance_criteria:
+      - id: "AC-BLUF-4-01"
+        description: "InteractionOrchestrator formats responses with BLUF"
+        verification: "Integration test: Call format_response(), verify BLUF header"
+      
+      - id: "AC-BLUF-4-02"
+        description: "MasterOrchestrator Stage 1 uses BLUF routing"
+        verification: "Integration test: Execute Stage 1, verify adaptive format"
+      
+      - id: "AC-BLUF-4-03"
+        description: "CORE-029 rule enforces BLUF compliance"
+        verification: "Unit test: Governance check fails without BLUF header"
+      
+      - id: "AC-BLUF-4-04"
+        description: "Backward compatibility maintained"
+        verification: "Integration test: Old orchestrators still work"
+      
+      - id: "AC-BLUF-4-05"
+        description: "Prompt documentation updated"
+        verification: "Manual review: CORTEX.prompt.md reflects new format"
+    
+    governance_compliance:
+      - rule: "CORE-008"
+        description: "TDD - tests before integration"
+      - rule: "CORE-011"
+        description: "Type hints on integration functions"
+      - rule: "CORE-012"
+        description: "Docstrings explain BLUF integration"
+      - rule: "CORE-029"
+        description: "Response format compliance (updated rule)"
+  
+  # --------------------------------------------------------------------------
+  # BLUF-5: Analytics & Continuous Improvement (4-6 hours)
+  # --------------------------------------------------------------------------
+  bluf_5_analytics:
+    name: "Analytics & Continuous Improvement"
+    priority: "P2-MEDIUM"
+    status: "PLANNED"
+    estimated_hours: "4-6"
+    dependencies: ["BLUF-1", "BLUF-2", "BLUF-3", "BLUF-4"]
+    blocking: false
+    
+    objectives:
+      - "Track format effectiveness (approval rate by format type)"
+      - "Measure user satisfaction with BLUF responses"
+      - "Analyze format decision accuracy (was adaptive routing correct?)"
+      - "Generate format optimization recommendations"
+    
+    deliverables:
+      - file: "cortex/orchestrators/interaction/bluf_analytics.py"
+        description: "BLUF format analytics orchestrator"
+        tests: "tests/orchestrators/interaction/test_bluf_analytics.py"
+        loc: 200
+      
+      - file: "cortex/brain/analysis/format_effectiveness_analyzer.py"
+        description: "Format effectiveness analyzer"
+        tests: "tests/brain/analysis/test_format_effectiveness_analyzer.py"
+        loc: 180
+      
+      - file: "cortex/brain/analysis/approval_rate_tracker.py"
+        description: "Approval rate tracker by format type"
+        tests: "tests/brain/analysis/test_approval_rate_tracker.py"
+        loc: 150
+      
+      - file: "cortex/brain/reporting/bluf_report_generator.py"
+        description: "BLUF effectiveness report generator"
+        tests: "tests/brain/reporting/test_bluf_report_generator.py"
+        loc: 120
+    
+    technical_approach:
+      metrics_tracked:
+        - "Approval rate by format (BLUF_ONLY, BLUF_HYBRID, FULL_DETAIL)"
+        - "Time to decision (BLUF should reduce time for low-risk)"
+        - "Detail expansion rate (% users clicking 'Detailed Analysis')"
+        - "User preference distribution (AUTO vs BLUF vs FULL)"
+        - "Format override rate (user manually switches format)"
+      
+      effectiveness_analysis:
+        - "Calculate approval rate per format type"
+        - "Identify formats with low approval (may need improvement)"
+        - "Compare time to decision (BLUF should be faster)"
+        - "Analyze detail expansion patterns (high expansion = missing context)"
+      
+      optimization_recommendations:
+        - "If BLUF_ONLY has low approval → increase decision factors"
+        - "If FULL_DETAIL has high approval → routing is correct"
+        - "If high detail expansion rate → improve executive summary"
+        - "If frequent format overrides → adjust routing thresholds"
+      
+      report_format: |
+        ## 📊 BLUF Format Effectiveness Report
+        
+        **Period:** Last 30 days (500 responses)
+        
+        ### Format Distribution
+        | Format | Count | % |
+        |--------|-------|---|
+        | BLUF_ONLY | 150 | 30% |
+        | BLUF_HYBRID | 250 | 50% |
+        | FULL_DETAIL | 100 | 20% |
+        
+        ### Approval Rates
+        | Format | Approved | Rejected | Approval Rate |
+        |--------|----------|----------|---------------|
+        | BLUF_ONLY | 135 | 15 | 90% |
+        | BLUF_HYBRID | 225 | 25 | 90% |
+        | FULL_DETAIL | 85 | 15 | 85% |
+        
+        ### Time to Decision
+        | Format | Avg Time | Target | Status |
+        |--------|----------|--------|--------|
+        | BLUF_ONLY | 15s | <30s | ✅ Excellent |
+        | BLUF_HYBRID | 45s | <60s | ✅ Good |
+        | FULL_DETAIL | 120s | <180s | ✅ Good |
+        
+        ### Recommendations
+        - ✅ BLUF_ONLY effective for low-risk operations
+        - ✅ BLUF_HYBRID maintains approval quality
+        - ⚠️ FULL_DETAIL approval rate lower (may need better summaries)
+    
+    acceptance_criteria:
+      - id: "AC-BLUF-5-01"
+        description: "Analytics tracks approval rates by format"
+        verification: "Unit test: Log 10 approvals, calculate rate per format"
+      
+      - id: "AC-BLUF-5-02"
+        description: "Effectiveness analyzer generates recommendations"
+        verification: "Unit test: Low approval → recommendation generated"
+      
+      - id: "AC-BLUF-5-03"
+        description: "Report generator creates formatted output"
+        verification: "Unit test: Generate report with mock data, verify structure"
+      
+      - id: "AC-BLUF-5-04"
+        description: "Time to decision measured accurately"
+        verification: "Integration test: Track approval timestamp, calculate duration"
+      
+      - id: "AC-BLUF-5-05"
+        description: "Analytics handles missing data gracefully"
+        verification: "Unit test: No approvals logged → empty report, no errors"
+    
+    governance_compliance:
+      - rule: "CORE-008"
+        description: "TDD - tests before analytics"
+      - rule: "CORE-011"
+        description: "Type hints on analytics functions"
+      - rule: "CORE-012"
+        description: "Docstrings explain metrics"
+      - rule: "CORE-027"
+        description: "Audit trail for format decisions"
+
+# ============================================================================
+# INTEGRATION WITH EXISTING CORTEX SYSTEMS
+# ============================================================================
+
+integration:
+  
+  # InteractionOrchestrator enhancement
+  interaction_orchestrator:
+    new_capability: "Adaptive BLUF formatting"
+    integration_point: "format_response() method"
+    changes:
+      - "Call AdaptiveBLUFRouter before rendering"
+      - "Pass intent context (operation, risk, complexity)"
+      - "Render response using BLUFTemplateEngine"
+      - "Log format decision to audit trail"
+  
+  # MasterOrchestrator Stage 1 pipeline
+  master_orchestrator:
+    stage_1_enhancement: "BLUF routing in comprehension phase"
+    integration_point: "Stage 1: Comprehension"
+    changes:
+      - "Extract intent context (operation, scope, impact)"
+      - "Pass context to AdaptiveBLUFRouter"
+      - "Format initial response with BLUF"
+      - "Maintain challenge visibility in all formats"
+  
+  # IntentRouter enhancement
+  intent_router:
+    new_metadata: "Risk level and complexity score"
+    integration_point: "route() method"
+    changes:
+      - "Add risk_level field to IntentDecision"
+      - "Add complexity_score field to IntentDecision"
+      - "Pass metadata to InteractionOrchestrator"
+      - "Enable adaptive routing based on classification"
+  
+  # DoRApprovalGate enhancement
+  dor_approval_gate:
+    new_display: "BLUF summary in approval prompt"
+    integration_point: "display_dor() method"
+    changes:
+      - "Show BLUF executive summary"
+      - "Display quick decision factors table"
+      - "Provide detail expansion option"
+      - "Maintain approval workflow"
+  
+  # MCP Tools (1 new)
+  mcp_tools:
+    - name: "set_bluf_mode"
+      description: "Set user BLUF mode preference (auto|bluf|full|bluf-only)"
+      parameters:
+        - "mode: str (auto|bluf|full|bluf-only)"
+      returns: "Confirmation message with new mode"
+    
+    - name: "get_bluf_status"
+      description: "Get current BLUF mode and format statistics"
+      parameters: []
+      returns: "Current mode, format distribution, approval rates"
+  
+  # Governance enforcement
+  governance_hooks:
+    - trigger: "Before response generation"
+      check: "CORE-029 compliance (BLUF header present)"
+    
+    - trigger: "After format decision"
+      check: "Log decision to audit trail (CORE-027)"
+    
+    - trigger: "On high-risk operation"
+      check: "Force FULL_DETAIL format (safety override)"
+
+# ============================================================================
+# PRODUCTION READINESS CRITERIA
+# ============================================================================
+
+production_readiness:
+  
+  health_endpoints:
+    - path: "/health/bluf-system"
+      checks:
+        - "AdaptiveBLUFRouter responsive"
+        - "BLUFTemplateEngine available"
+        - "User preferences accessible"
+      response: "healthy | degraded | unhealthy"
+  
+  metrics:
+    - name: "cortex_bluf_responses_total"
+      type: "counter"
+      description: "Total BLUF responses by format type"
+      labels: ["format_type"]
+    
+    - name: "cortex_bluf_approval_rate"
+      type: "gauge"
+      description: "Approval rate by format type"
+      labels: ["format_type"]
+    
+    - name: "cortex_bluf_time_to_decision_seconds"
+      type: "histogram"
+      description: "Time to approval decision by format"
+      labels: ["format_type"]
+      buckets: [5, 15, 30, 60, 120, 300]
+    
+    - name: "cortex_bluf_detail_expansion_rate"
+      type: "gauge"
+      description: "% users expanding detailed analysis"
+  
+  documentation:
+    user_guide: "docs/02-orchestrators/interaction-orchestrator.md"
+    bluf_guide: "docs/07-guides/bluf-communication.md"
+    api_reference: "docs/06-api-reference/adaptive-bluf-router.md"
+  
+  test_coverage:
+    target: "95%"
+    critical_paths:
+      - "Risk classification accuracy"
+      - "Format routing correctness"
+      - "Template rendering"
+      - "User preference handling"
+  
+  performance_targets:
+    format_decision: "< 50ms"
+    template_rendering: "< 100ms"
+    user_preference_lookup: "< 10ms"
+
+# ============================================================================
+# DEPLOYMENT STRATEGY
+# ============================================================================
+
+deployment:
+  
+  stage_1_development:
+    - "Implement BLUF-1 through BLUF-5 with TDD"
+    - "Wire AdaptiveBLUFRouter to InteractionOrchestrator"
+    - "Create 3 response templates (BLUF_ONLY, BLUF_HYBRID, FULL_DETAIL)"
+    - "Test with historical CORTEX operations"
+  
+  stage_2_alpha:
+    - "Deploy to single user (author) for dogfooding"
+    - "Collect format effectiveness metrics"
+    - "Refine routing thresholds based on feedback"
+    - "Fix template rendering issues"
+  
+  stage_3_beta:
+    - "Deploy to 2-3 users (expand testing)"
+    - "Monitor approval rates by format"
+    - "Tune complexity scoring algorithm"
+    - "Add user preference persistence"
+  
+  stage_4_production:
+    - "Deploy to all users"
+    - "Enable analytics and reporting"
+    - "Generate monthly effectiveness reports"
+    - "Continuous improvement based on metrics"
+  
+  rollback_plan:
+    - "If approval rate drops >10%: Revert to FULL_DETAIL for all"
+    - "If user confusion: Add inline help text in BLUF summary"
+    - "If performance issues: Cache format decisions"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  
+  effectiveness_metrics:
+    - metric: "Approval Rate (BLUF_ONLY)"
+      target: "> 85%"
+      rationale: "Low-risk operations should have high approval"
+    
+    - metric: "Approval Rate (BLUF_HYBRID)"
+      target: "> 85%"
+      rationale: "Balanced format should maintain quality"
+    
+    - metric: "Approval Rate (FULL_DETAIL)"
+      target: "> 80%"
+      rationale: "High-risk requires full context"
+  
+  efficiency_metrics:
+    - metric: "Time to Decision (BLUF_ONLY)"
+      target: "< 30s"
+      rationale: "Executive summary should enable fast decisions"
+    
+    - metric: "Time to Decision (BLUF_HYBRID)"
+      target: "< 60s"
+      rationale: "Quick factors table + optional detail"
+    
+    - metric: "Time to Decision (FULL_DETAIL)"
+      target: "< 180s"
+      rationale: "Full context review for high-risk"
+  
+  user_satisfaction_metrics:
+    - metric: "User Preference Distribution"
+      target: "AUTO > 60%"
+      rationale: "Adaptive routing should work for most users"
+    
+    - metric: "Format Override Rate"
+      target: "< 15%"
+      rationale: "Low overrides = good routing accuracy"
+    
+    - metric: "Detail Expansion Rate"
+      target: "20-40%"
+      rationale: "Some users dig deeper, not all (healthy balance)"
+
+# ============================================================================
+# FUTURE ENHANCEMENTS (Post-MVP)
+# ============================================================================
+
+future_enhancements:
+  
+  ai_summary_generation:
+    description: "Use LLM to generate executive summaries (vs template-based)"
+    estimated_effort: "8-12 hours"
+    priority: "P2-MEDIUM"
+  
+  voice_mode_optimization:
+    description: "Optimize BLUF for voice assistants (audio-friendly summaries)"
+    estimated_effort: "6-8 hours"
+    priority: "P3-LOW"
+  
+  team_format_preferences:
+    description: "Team-level BLUF preferences (all team members use same mode)"
+    estimated_effort: "4-6 hours"
+    priority: "P2-MEDIUM"
+  
+  bluf_training_mode:
+    description: "Interactive tutorial for BLUF system (new user onboarding)"
+    estimated_effort: "6-8 hours"
+    priority: "P2-MEDIUM"
+  
+  multilingual_bluf:
+    description: "BLUF summaries in multiple languages"
+    estimated_effort: "10-14 hours"
+    priority: "P3-LOW"
+
+# ============================================================================
+# COMPARISON WITH OTHER OPTIONS
+# ============================================================================
+
+option_comparison:
+  
+  option_1_pure_bluf:
+    pros:
+      - "Fastest time to decision"
+      - "Simplest implementation (4-6 hours)"
+      - "Most executive-friendly"
+    cons:
+      - "Loses challenge engagement"
+      - "May skip critical context"
+      - "Reduces educational value"
+    verdict: "Good for executives, bad for engineers"
+  
+  option_2_hybrid_bluf_plus:
+    pros:
+      - "Balanced approach (executive + context)"
+      - "Maintains challenge culture"
+      - "Progressive disclosure preserves education"
+    cons:
+      - "More complex implementation (8-12 hours)"
+      - "Requires collapsible sections"
+      - "May confuse users initially"
+    verdict: "Best for mixed audiences (executives + engineers)"
+  
+  option_3_adaptive_bluf:
+    pros:
+      - "Context-aware (right detail for right risk)"
+      - "Supports user preferences"
+      - "Self-improving via analytics"
+    cons:
+      - "Most complex implementation (28-38 hours)"
+      - "Routing logic adds latency"
+      - "Inconsistent format may confuse"
+    verdict: "Best for long-term (scales to diverse use cases)"
+
+# ============================================================================
+# ACCEPTANCE CRITERIA SUMMARY
+# ============================================================================
+
+acceptance_criteria_summary:
+  total_criteria: 25
+  
+  bluf_1: 5  # Risk classifier, complexity scorer, format router, key extractor, edge cases
+  bluf_2: 5  # BLUF_ONLY template, BLUF_HYBRID collapsible, FULL_DETAIL preservation, decision table, risk emoji
+  bluf_3: 5  # Adaptive routing, user preferences, CLI commands, audit logging, missing preferences
+  bluf_4: 5  # InteractionOrchestrator integration, MasterOrchestrator pipeline, CORE-029 update, backward compat, prompt docs
+  bluf_5: 5  # Analytics tracking, effectiveness analysis, report generation, time to decision, missing data handling
+
+# ============================================================================
+# APPENDIX
+# ============================================================================
+
+appendix:
+  
+  bluf_origins:
+    source: "U.S. Military communication standard"
+    purpose: "Enable commanders to make fast decisions in high-pressure situations"
+    structure: "Conclusion first, supporting details second"
+    adoption: "Used in business, government, and executive communication"
+  
+  progressive_disclosure_research:
+    principle: "Show only essential information initially, provide access to details on demand"
+    benefits:
+      - "Reduces cognitive load"
+      - "Improves scannability"
+      - "Maintains depth for interested users"
+    risks:
+      - "Users may not expand details"
+      - "Important context may be hidden"
+      - "Requires good information architecture"
+  
+  risk_classification_frameworks:
+    nist_cybersecurity: "Low, Moderate, High based on CIA triad"
+    iso_27001: "Risk matrix (likelihood × impact)"
+    agile_risk_management: "Risk-adjusted backlog prioritization"
+    cortex_approach: "Operation type + scope + impact + dependencies"
+  
+  references:
+    - title: "Bottom Line Up Front: A Guide to Writing for Leaders"
+      author: "U.S. Army War College"
+      year: 2015
+      relevance: "BLUF communication standard"
+    
+    - title: "Don't Make Me Think"
+      author: "Steve Krug"
+      year: 2000
+      relevance: "Progressive disclosure, information architecture"
+    
+    - title: "The Pyramid Principle"
+      author: "Barbara Minto"
+      year: 1987
+      relevance: "Conclusion-first communication structure"
