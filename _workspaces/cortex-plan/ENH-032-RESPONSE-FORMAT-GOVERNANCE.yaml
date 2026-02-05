@@ -1,0 +1,520 @@
+# ==============================================================================
+# ENH-032: Response Format Governance Migration
+# ==============================================================================
+# Purpose: Migrate response format standards from documentation to governance
+# Status: DESIGN
+# Priority: P1
+# Effort: S (3-4 days)
+# Author: Asif Hussain
+# Date: 2026-02-05
+# ==============================================================================
+
+metadata:
+  enh_id: ENH-032
+  title: "Response Format Governance Migration"
+  status: DESIGN
+  priority: P1
+  effort_estimate: "3-4 days"
+  author: "Asif Hussain"
+  created: "2026-02-05"
+  governance_migration: true
+  related_enhancements:
+    - ENH-028  # Response Format Standards (documentation)
+    - ENH-031  # YAML Code Fence Fix
+
+# ==============================================================================
+# PROBLEM STATEMENT
+# ==============================================================================
+
+problem:
+  summary: |
+    Response format standards are documented but not enforced by governance.
+    Chat UI rendering issues occur because violations are not blocked pre-execution.
+    
+  evidence:
+    - file: "_workspaces/.chats/chat01.md"
+      issue: "Raw markdown syntax visible in Chat UI instead of rendered HTML"
+      line: "Multiple sections throughout file"
+      
+    - file: ".github/prompts/response-format-standards.md"
+      issue: "Standards documented but no enforcement mechanism"
+      impact: "Guidelines ignored, inconsistent responses"
+      
+    - file: "cortex/orchestrators/core/enforcement_orchestrator.py"
+      issue: "No ResponseFormatEnforcementAgent exists"
+      impact: "Format violations pass through to users"
+  
+  root_cause: |
+    Response format standards treated as documentation rather than governance rules.
+    No pre-execution validation of response structure, spacing, or Chat UI compatibility.
+  
+  user_impact:
+    - Poor readability in GitHub Copilot Chat UI
+    - Raw markdown syntax visible (##, **, etc.)
+    - Sections run together without visual separation
+    - Unprofessional presentation
+    - Cognitive overload (no visual hierarchy)
+
+# ==============================================================================
+# SOLUTION DESIGN
+# ==============================================================================
+
+solution:
+  strategy: |
+    Create CORE-042 governance rule + ResponseFormatEnforcementAgent.
+    Migrate standards from response-format-standards.md into tier0 governance.
+    Enforce Chat UI compatibility pre-execution.
+  
+  components:
+    - name: "CORE-042: Response Format Governance"
+      type: "Tier 0 Rule"
+      file: "cortex_brain/tier0/governance/core-rules.yaml"
+      description: "Mandatory response format rules for Chat UI compatibility"
+      
+    - name: "ResponseFormatEnforcementAgent"
+      type: "Enforcement Agent"
+      file: "cortex/orchestrators/core/enforcement_orchestrator.py"
+      description: "Pre-execution validator for response format compliance"
+      
+    - name: "Response Format Validator"
+      type: "Utility Class"
+      file: "cortex/governance/validators/response_format_validator.py"
+      description: "Validates markdown structure, spacing, icons, headings"
+
+# ==============================================================================
+# GOVERNANCE VS IMPLEMENTATION ANALYSIS
+# ==============================================================================
+
+governance_vs_implementation:
+  summary: |
+    Not all response format rules should be governance. Distinguish between:
+    - BLOCKED (Tier 0): Chat UI rendering, mandatory structure
+    - WARNING (Tier 1): Style preferences, recommendations
+    - INFO (Tier 2): Best practices, optional enhancements
+  
+  tier0_rules:  # BLOCKED - Must enforce
+    - rule: "Mandatory Response Header"
+      validation: "## 🧠 CORTEX [operation] present at top"
+      why_tier0: "Users need context about orchestrator/mode"
+      
+    - rule: "2 Blank Lines Between H2 Sections"
+      validation: "Count newlines between ## headings ≥ 2"
+      why_tier0: "Chat UI requires spacing for visual hierarchy"
+      
+    - rule: "Horizontal Rules Surrounded By Blank Lines"
+      validation: "--- has blank line before AND after"
+      why_tier0: "Chat UI rendering breaks without spacing"
+      
+    - rule: "Numbered Lists With Blank Lines"
+      validation: "Blank line before 1️⃣, blank line after last item"
+      why_tier0: "Reading clarity, visual separation"
+      
+    - rule: "H2 Headings With Icons"
+      validation: "## [icon] [space] [title]"
+      why_tier0: "Visual anchoring, professional presentation"
+  
+  tier1_warnings:  # WARNING - Should follow but not blocking
+    - rule: "Impact Statements For Options"
+      validation: "└─ **Impact:** present for each numbered option"
+      why_tier1: "Helps decision-making but not rendering-critical"
+      
+    - rule: "Quick Select Instructions"
+      validation: "**Quick Select:** present when options shown"
+      why_tier1: "UX enhancement, not Chat UI requirement"
+      
+    - rule: "Badge Types (✨ Recommended)"
+      validation: "Recommended option has ✨"
+      why_tier1: "Helpful but optional"
+  
+  tier2_info:  # INFO - Nice to have
+    - rule: "Collapsible Sections"
+      validation: "<details><summary> for long content"
+      why_tier2: "Progressive disclosure, not always needed"
+      
+    - rule: "Tooltips For Acronyms"
+      validation: "<abbr title> for technical terms"
+      why_tier2: "Accessibility enhancement"
+
+# ==============================================================================
+# NOT GOVERNANCE - STAYS AS DOCUMENTATION
+# ==============================================================================
+
+not_governance:
+  items:
+    - name: "Response Templates By Mode"
+      reason: "Examples, not rules - belong in documentation"
+      location: "response-format-standards.md sections 🎭"
+      
+    - name: "Badge Type Definitions"
+      reason: "Vocabulary, not enforcement - documentation appropriate"
+      location: "response-format-standards.md ### Badge Types"
+      
+    - name: "Semantic Layering Examples"
+      reason: "Educational guidance - too contextual to enforce"
+      location: "response-format-standards.md ### Layer 1/2/3"
+      
+    - name: "Anti-Pattern Examples"
+      reason: "Training material - belongs in docs, not rules"
+      location: "response-format-standards.md ## 🚫 Anti-Patterns"
+
+# ==============================================================================
+# IMPLEMENTATION PHASES
+# ==============================================================================
+
+phases:
+  - id: "P1"
+    name: "CORE-042 Rule Definition"
+    duration: "1 day"
+    files_to_modify:
+      - "cortex_brain/tier0/governance/core-rules.yaml"
+    
+    acceptance_criteria:
+      - AC-CORE-042-01: "Add CORE-042 rule with 5 tier0 validations"
+      - AC-CORE-042-02: "Update rule_count metadata to 30"
+      - AC-CORE-042-03: "Add response_formatting category if missing"
+      - AC-CORE-042-04: "Document validation methods for each sub-rule"
+    
+    tests:
+      - test: "test_core_042_rule_exists"
+        validates: "CORE-042 present in core-rules.yaml"
+        
+      - test: "test_core_042_has_5_validations"
+        validates: "5 tier0 format rules defined"
+        
+      - test: "test_response_formatting_category"
+        validates: "Category registered in categories list"
+  
+  - id: "P2"
+    name: "ResponseFormatEnforcementAgent"
+    duration: "1.5 days"
+    dependencies: ["P1"]
+    files_to_create:
+      - "cortex/governance/validators/response_format_validator.py"
+    files_to_modify:
+      - "cortex/orchestrators/core/enforcement_orchestrator.py"
+    
+    acceptance_criteria:
+      - AC-RF-AGENT-01: "Create ResponseFormatEnforcementAgent class"
+      - AC-RF-AGENT-02: "Integrate with EnforcementOrchestrator 7-agent system"
+      - AC-RF-AGENT-03: "Validate response headers (## 🧠 CORTEX)"
+      - AC-RF-AGENT-04: "Validate H2 section spacing (2 blank lines)"
+      - AC-RF-AGENT-05: "Validate horizontal rule spacing"
+      - AC-RF-AGENT-06: "Validate numbered list spacing"
+      - AC-RF-AGENT-07: "Return BLOCKED for violations, PASS otherwise"
+    
+    tests:
+      - test: "test_response_format_agent_validates_header"
+        input: "Response without ## 🧠 CORTEX header"
+        expected: "BLOCKED with violation message"
+        
+      - test: "test_response_format_agent_validates_h2_spacing"
+        input: "## Section1\n## Section2 (0 blank lines)"
+        expected: "BLOCKED - requires 2 blank lines"
+        
+      - test: "test_response_format_agent_validates_hr_spacing"
+        input: "Text\n---\nText (no blank lines)"
+        expected: "BLOCKED - requires blank lines around ---"
+        
+      - test: "test_response_format_agent_passes_valid_response"
+        input: "Properly formatted response"
+        expected: "PASS with no violations"
+        
+      - test: "test_enforcement_orchestrator_includes_rf_agent"
+        validates: "8-agent system (7 existing + ResponseFormatEnforcementAgent)"
+  
+  - id: "P3"
+    name: "Response Format Validator Utility"
+    duration: "0.5 days"
+    dependencies: ["P2"]
+    files_to_create:
+      - "cortex/governance/validators/response_format_validator.py"
+    
+    acceptance_criteria:
+      - AC-RF-VAL-01: "Create ResponseFormatValidator class"
+      - AC-RF-VAL-02: "Method: validate_header(response: str) -> bool"
+      - AC-RF-VAL-03: "Method: validate_h2_spacing(response: str) -> bool"
+      - AC-RF-VAL-04: "Method: validate_hr_spacing(response: str) -> bool"
+      - AC-RF-VAL-05: "Method: validate_list_spacing(response: str) -> bool"
+      - AC-RF-VAL-06: "All methods return (is_valid, violations: List[str])"
+    
+    tests:
+      - test: "test_validate_header_detects_missing"
+        input: "Response without header"
+        expected: "(False, ['Missing mandatory response header'])"
+        
+      - test: "test_validate_h2_spacing_counts_newlines"
+        input: "## A\n\n## B (only 1 blank line)"
+        expected: "(False, ['H2 sections require 2 blank lines'])"
+        
+      - test: "test_validate_all_passes_valid_response"
+        input: "Fully compliant response"
+        expected: "(True, [])"
+  
+  - id: "P4"
+    name: "Documentation Update"
+    duration: "1 day"
+    dependencies: ["P1", "P2", "P3"]
+    files_to_modify:
+      - ".github/prompts/response-format-standards.md"
+      - ".github/prompts/CORTEX.prompt.md"
+      - ".github/prompts/cortex-architect.prompt.md"
+    
+    acceptance_criteria:
+      - AC-DOC-032-01: "Update response-format-standards.md header with CORE-042 authority"
+      - AC-DOC-032-02: "Add governance notice at top of file"
+      - AC-DOC-032-03: "Mark tier0 rules with (ENFORCED BY CORE-042)"
+      - AC-DOC-032-04: "Update CORTEX.prompt.md with Chat UI rendering rules"
+      - AC-DOC-032-05: "Update cortex-architect.prompt.md response examples"
+    
+    tests:
+      - test: "test_docs_reference_core_042"
+        validates: "CORE-042 mentioned in all updated files"
+        
+      - test: "test_governance_notice_present"
+        validates: "Enforcement notice at top of standards doc"
+
+# ==============================================================================
+# VALIDATION RULES (WHAT GETS ENFORCED)
+# ==============================================================================
+
+validation_rules:
+  - rule_id: "RF-001"
+    name: "Mandatory Response Header"
+    pattern: "^## 🧠 CORTEX .+"
+    severity: "BLOCKED"
+    message: "Response must start with ## 🧠 CORTEX [operation] header"
+    
+  - rule_id: "RF-002"
+    name: "H2 Section Spacing"
+    pattern: "##.*\\n\\n\\n##"  # 2 blank lines = 3 newlines total
+    severity: "BLOCKED"
+    message: "H2 sections require 2 blank lines between them"
+    
+  - rule_id: "RF-003"
+    name: "Horizontal Rule Spacing"
+    pattern: "\\n\\n---\\n\\n"  # Blank line before and after
+    severity: "BLOCKED"
+    message: "Horizontal rules (---) require blank line before AND after"
+    
+  - rule_id: "RF-004"
+    name: "Numbered List Spacing"
+    pattern: "\\n\\n[1-9]️⃣.*\\n\\n"  # Blank before first, blank after last
+    severity: "BLOCKED"
+    message: "Numbered lists require blank line before first item and after last item"
+    
+  - rule_id: "RF-005"
+    name: "H2 Icon Prefix"
+    pattern: "## [🔥⚠️🎯✅🔍📊🚀🧠🏗️] "
+    severity: "BLOCKED"
+    message: "H2 headings must include icon + space before title"
+
+# ==============================================================================
+# TEST COVERAGE
+# ==============================================================================
+
+test_coverage:
+  unit_tests: 25
+  integration_tests: 8
+  total: 33
+  
+  breakdown:
+    - component: "CORE-042 Rule"
+      tests: 3
+      
+    - component: "ResponseFormatEnforcementAgent"
+      tests: 12
+      
+    - component: "ResponseFormatValidator"
+      tests: 10
+      
+    - component: "Documentation Updates"
+      tests: 8
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  - metric: "Format Violation Rate"
+    baseline: "~40% (observed in chat01.md)"
+    target: "<5% (pre-execution blocking)"
+    measurement: "Track BLOCKED responses in telemetry"
+    
+  - metric: "Chat UI Rendering Quality"
+    baseline: "Raw markdown visible"
+    target: "Proper HTML rendering"
+    measurement: "Manual inspection of Chat responses"
+    
+  - metric: "Response Consistency"
+    baseline: "Varied format per orchestrator"
+    target: "100% compliance with CORE-042"
+    measurement: "Automated validation in CI/CD"
+    
+  - metric: "User Satisfaction"
+    baseline: "Complaints about readability"
+    target: "Professional, scannable responses"
+    measurement: "User feedback"
+
+# ==============================================================================
+# ROLLOUT PLAN
+# ==============================================================================
+
+rollout:
+  phase1:
+    name: "Silent Monitoring"
+    duration: "2 days"
+    action: "Deploy agent in WARNING mode only (no blocking)"
+    goal: "Collect baseline metrics"
+    
+  phase2:
+    name: "Gradual Enforcement"
+    duration: "3 days"
+    action: "Enable BLOCKED for RF-001 (header) only"
+    goal: "Ensure header compliance"
+    
+  phase3:
+    name: "Full Enforcement"
+    duration: "Ongoing"
+    action: "Enable all 5 validation rules"
+    goal: "100% format compliance"
+
+# ==============================================================================
+# MIGRATION CHECKLIST
+# ==============================================================================
+
+migration_checklist:
+  tier0_rules:
+    - name: "CORE-042 added to core-rules.yaml"
+      status: "PENDING"
+      
+    - name: "ResponseFormatEnforcementAgent created"
+      status: "PENDING"
+      
+    - name: "EnforcementOrchestrator updated to 8 agents"
+      status: "PENDING"
+      
+    - name: "ResponseFormatValidator utility created"
+      status: "PENDING"
+  
+  documentation:
+    - name: "response-format-standards.md updated with governance notice"
+      status: "PENDING"
+      
+    - name: "CORTEX.prompt.md updated with Chat UI rules"
+      status: "PENDING"
+      
+    - name: "cortex-architect.prompt.md examples updated"
+      status: "PENDING"
+  
+  testing:
+    - name: "25 unit tests passing"
+      status: "PENDING"
+      
+    - name: "8 integration tests passing"
+      status: "PENDING"
+  
+  deployment:
+    - name: "Phase 1 (Silent Monitoring) complete"
+      status: "PENDING"
+      
+    - name: "Phase 2 (Header Enforcement) complete"
+      status: "PENDING"
+      
+    - name: "Phase 3 (Full Enforcement) active"
+      status: "PENDING"
+
+# ==============================================================================
+# RELATED WORK
+# ==============================================================================
+
+related_work:
+  - enh_id: "ENH-028"
+    title: "Response Format Standards (Documentation)"
+    relationship: "Source material for CORE-042 rules"
+    
+  - enh_id: "ENH-031"
+    title: "YAML Code Fence Fix"
+    relationship: "Precedent for governance enforcement"
+    
+  - core_rule: "CORE-029"
+    title: "Documentation Drift Prevention"
+    relationship: "Similar enforcement pattern"
+
+# ==============================================================================
+# EFFORT BREAKDOWN
+# ==============================================================================
+
+effort_breakdown:
+  total_days: 4
+  total_tests: 33
+  
+  phases:
+    P1: 1 day (CORE-042 rule definition)
+    P2: 1.5 days (ResponseFormatEnforcementAgent)
+    P3: 0.5 days (Validator utility)
+    P4: 1 day (Documentation updates)
+  
+  confidence: "HIGH"
+  risk: "LOW"
+  dependencies: "None - self-contained enhancement"
+
+# ==============================================================================
+# APPENDIX: GOVERNANCE AREAS IDENTIFICATION
+# ==============================================================================
+
+governance_areas_analysis:
+  summary: |
+    Identify all CORTEX areas that should be governed by rules (not implementation plans).
+  
+  current_state:
+    tier0_count: 29 rules (CORE-001 to CORE-041)
+    enforcement_agents: 7
+    coverage: "86% of CORE rules automated"
+  
+  missing_governance_areas:
+    - area: "Response Format Standards"
+      current: "Documentation only (.github/prompts/response-format-standards.md)"
+      should_be: "CORE-042 + ResponseFormatEnforcementAgent"
+      rationale: "Chat UI rendering is critical user experience"
+      
+    - area: "MCP Tool Interface Standards"
+      current: "No enforcement"
+      should_be: "CORE-043 + MCPInterfaceEnforcementAgent"
+      rationale: "Tool consistency across 28 orchestrators"
+      
+    - area: "Git Commit Message Format"
+      current: "Informal convention"
+      should_be: "CORE-044 + CommitMessageValidator"
+      rationale: "Audit trail quality (CORE-027 depends on it)"
+      
+    - area: "Test Coverage Thresholds"
+      current: "Best practice (docs/testing/)"
+      should_be: "CORE-045 + CoverageEnforcementAgent"
+      rationale: "Quality gate before production"
+      
+    - area: "Orchestrator Wiring Standards"
+      current: "GitBackedRegistry (implicit validation)"
+      should_be: "CORE-046 + WiringValidationAgent"
+      rationale: "Architecture integrity (28 orchestrators)"
+      
+    - area: "Error Message Formatting"
+      current: "Inconsistent across codebase"
+      should_be: "CORE-047 + ErrorMessageValidator"
+      rationale: "User experience + debugging efficiency"
+  
+  prioritization:
+    p0_immediate:
+      - "CORE-042: Response Format (this ENH)"
+      
+    p1_next_sprint:
+      - "CORE-045: Test Coverage Thresholds"
+      - "CORE-046: Orchestrator Wiring Standards"
+      
+    p2_future:
+      - "CORE-043: MCP Tool Interface Standards"
+      - "CORE-044: Git Commit Message Format"
+      - "CORE-047: Error Message Formatting"
+
+# ==============================================================================
+# EOF
+# ==============================================================================

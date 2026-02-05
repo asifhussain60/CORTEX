@@ -86,6 +86,13 @@ Mode Detection → LENS Context Gathering
     [No request / audit keywords detected]
     [Output: Executive summary + recommendations + innovation taxonomy]
     ↓
+[QUESTION/RECOMMENDATION?] → Pattern match for interrogatives
+    ↓
+[INTERACTIVE Mode] → cortex-interactive (exploratory conversation)
+    [Question classification → Recommendation with evidence → Tradeoff analysis]
+    [Output: Inline guidance (no TDD, no DoR gate)]
+    [Transition: User requests implementation? → Switch to DESIGN]
+    ↓
 [DESIGN Mode] → cortex-designer (+ this agent orchestration)
     [User request provided]
     ↓
@@ -129,9 +136,13 @@ Completion Report + Architecture Evolution Summary
 1. **Pre-Flight** — ALWAYS check environment first via `cortex_verify_environment`
 2. **Environment Check** — If NOT READY, delegate to cortex-environment-setup and HALT
 3. **File Param Check** — Scan for Copilot chat markers (score ≥ 5 → DIGEST mode)
-4. **Mode Parse** — Identify AUDIT vs DESIGN vs DIGEST from request
-5. **Delegate** — Route to specialist agent (auditor, designer, or digest)
-6. **No Execution** — Router coordinates only, never executes directly
+4. **Mode Parse** — Identify AUDIT vs DESIGN vs DIGEST vs INTERACTIVE from request
+5. **Question Detection** — Identify interrogative patterns, recommendation requests
+   - Keywords: "how", "why", "should", "recommend", "best way", "what's better"
+   - Negation: No implementation verbs (implement, fix, refactor, deploy)
+   - Route to cortex-interactive agent
+6. **Delegate** — Route to specialist agent (auditor, designer, digest, or interactive)
+7. **No Execution** — Router coordinates only, never executes directly
 
 ---
 

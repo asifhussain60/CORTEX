@@ -1,0 +1,990 @@
+# =========================================================================
+# ENH-034: INTERACTIVE MODE ADDITION
+# =========================================================================
+# Enhancement ID: ENH-034
+# Status: PLANNED
+# Priority: P2 (Medium - enables broader audience, not blocking core functionality)
+# Domain: DX (Developer Experience) + Architecture
+# Source: User request - "add INTERACTIVE mode for questions/recommendations"
+# Author: Asif Hussain
+# Created: 2026-02-05
+# Estimated Effort: 3 days (M)
+# Estimated Test Count: 24 tests
+# Target Coverage: 85%
+# =========================================================================
+
+metadata:
+  enhancement_id: "ENH-034"
+  title: "INTERACTIVE Mode Addition"
+  status: "PLANNED"
+  priority: "P2"
+  domain: "DX + Architecture"
+  effort_estimate: "3 days (M)"
+  effort_breakdown:
+    phase_1_detection: "1 day"
+    phase_2_routing: "0.5 days"
+    phase_3_agent: "1 day"
+    phase_4_integration: "0.5 days"
+  test_count: 24
+  target_coverage: "85%"
+  source: "User request - enable InteractionOrchestrator for exploratory questions"
+  related_enhancements:
+    - "ENH-013: SDLC Governance (InteractionOrchestrator collaboration)"
+    - "ENH-014: Event-Driven Orchestrator Mesh"
+  git_safe: true
+
+# -------------------------------------------------------------------------
+# PROBLEM STATEMENT
+# -------------------------------------------------------------------------
+problem_statement: |
+  Currently, CORTEX has 5 modes (PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT).
+  When users ask questions like:
+  - "How should I structure this feature?"
+  - "What's the best way to implement caching?"
+  - "Can you recommend an architecture for X?"
+  - "Should I use pattern A or pattern B?"
+  
+  These requests are routed to DESIGN mode, which triggers:
+  - Mandatory challenge generation
+  - DoR gate (Definition of Ready)
+  - TDD-first implementation flow
+  - Incremental task decomposition
+  
+  This is overkill for exploratory questions. Users want:
+  - Quick recommendations without implementation
+  - Conversational exploration of options
+  - Architecture guidance without code generation
+  - Educational responses with tradeoff analysis
+  
+  INTERACTIVE mode fills this gap by leveraging the existing InteractionOrchestrator
+  (527 LOC with LENS integration + challenge system) for exploratory conversations
+  without triggering implementation workflows.
+
+user_pain_points:
+  - "Simple questions trigger full TDD flow (waste time)"
+  - "No way to get recommendations without implementation"
+  - "PMs/architects/researchers need guidance, not code"
+  - "Exploratory conversations force premature design decisions"
+
+evidence:
+  - "InteractionOrchestrator exists (cortex/orchestrators/core/interaction_orchestrator.py, 527 LOC)"
+  - "Challenge system integrated (generates alternatives automatically)"
+  - "LENS synthesis built-in (Language→Examination→Navigation→Synthesis)"
+  - "ConversationProtocol enforces patterns (cortex-registry/interaction/)"
+  - "No ASK/INQUIRY/RECOMMEND intent types in intent-routing.yaml"
+  - "Mode table in cortex-architect.prompt.md line 55-63 has 5 modes, needs 6th"
+
+impact_if_not_implemented:
+  - "Non-engineer roles (PMs, architects, researchers) avoid CORTEX (too implementation-heavy)"
+  - "Simple questions waste 10-15 minutes in DESIGN flow"
+  - "No dedicated path for 'help me think through this' conversations"
+  - "InteractionOrchestrator capabilities underutilized (only used internally in DESIGN)"
+
+# -------------------------------------------------------------------------
+# ARCHITECTURE
+# -------------------------------------------------------------------------
+architecture:
+  overview: |
+    Add INTERACTIVE mode as 6th mode in CORTEX ecosystem. Routes ASK/INQUIRY/RECOMMEND
+    intents through InteractionOrchestrator for conversational guidance without implementation.
+    
+    Flow: User question → IntentRouter classifies as ASK → INTERACTIVE mode activates →
+          InteractionOrchestrator builds LENS context → Generates challenge if needed →
+          Provides recommendation with tradeoff analysis → No DoR gate, no TDD
+  
+  new_components:
+    - name: "cortex-interactive.md"
+      type: "Agent"
+      location: ".github/agents/core/cortex-interactive.md"
+      purpose: "Specialist agent for INTERACTIVE mode execution"
+      capabilities:
+        - "Question classification (architecture, pattern, tradeoff, educational)"
+        - "Recommendation generation with evidence"
+        - "Tradeoff analysis (extensibility, scalability, accuracy, efficiency)"
+        - "Educational responses (how/why, not just what)"
+        - "Challenge generation when multiple valid approaches exist"
+      dependencies:
+        - "InteractionOrchestrator (existing)"
+        - "LENSSynthesis (existing)"
+        - "KnowledgeRepository (existing)"
+      lines_of_code: 350
+      test_file: "N/A (agent, not code)"
+      documentation: "Inline in agent file"
+    
+    - name: "InteractiveIntentHandler"
+      type: "Python Class"
+      location: "cortex/orchestrators/core/intent_router.py"
+      purpose: "Detect ASK/INQUIRY/RECOMMEND intent patterns"
+      capabilities:
+        - "Keyword detection (how, why, should, recommend, best way)"
+        - "Question pattern matching (interrogative sentences)"
+        - "Confidence scoring (0-1.0)"
+        - "Negation detection (questions without implementation verbs)"
+      dependencies:
+        - "IntentRouter (existing)"
+      lines_of_code: 120
+      test_file: "tests/unit/orchestrators/core/test_interactive_intent_handler.py"
+      test_count: 12
+      documentation: "Google-style docstrings + inline comments"
+  
+  modified_components:
+    - name: "cortex-architect.prompt.md"
+      location: ".github/prompts/cortex-architect.prompt.md"
+      changes:
+        - section: "QUAD-MODE OPERATION (line 55-63)"
+          modification: "Rename to PENTA-MODE OPERATION, add INTERACTIVE row"
+          before: |
+            | Trigger | Mode | Behavior |
+            |---------|------|----------|
+            | **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation |
+            | No request / "audit" keyword | **AUDIT** | Codebase health scan |
+            | `/meta-audit` command | **META-AUDIT** | Prompt self-enhancement |
+            | **File param = Copilot Chat** | **DIGEST** | Extract learnings |
+            | User request provided | **DESIGN** | Enhanced request + TDD |
+          after: |
+            | Trigger | Mode | Behavior |
+            |---------|------|----------|
+            | **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation |
+            | No request / "audit" keyword | **AUDIT** | Codebase health scan |
+            | `/meta-audit` command | **META-AUDIT** | Prompt self-enhancement |
+            | **File param = Copilot Chat** | **DIGEST** | Extract learnings |
+            | **Question/recommendation request** | **INTERACTIVE** | Exploratory conversation via InteractionOrchestrator |
+            | User request provided | **DESIGN** | Enhanced request + TDD |
+        
+        - section: "QUICK COMMANDS (line 78-90)"
+          modification: "Add /ask, /recommend, /explore commands"
+          added_commands:
+            - "/ask {question} — INTERACTIVE mode (exploratory conversation)"
+            - "/recommend {context} — INTERACTIVE mode (architecture guidance)"
+            - "/explore {topic} — INTERACTIVE mode (tradeoff analysis)"
+    
+    - name: "cortex-architect.md"
+      location: ".github/agents/core/cortex-architect.md"
+      changes:
+        - section: "Master Mode Flow (line 45-80)"
+          modification: "Add INTERACTIVE routing between DIGEST and DESIGN"
+          added_flow: |
+            [QUESTION DETECTED?] → Pattern match for interrogatives/recommendations
+                ↓
+            [INTERACTIVE Mode] → cortex-interactive (exploratory conversation)
+                [Question classification → Recommendation → Tradeoff analysis]
+                [Output: Inline guidance with evidence]
+        
+        - section: "Routing Rules (line 82-90)"
+          modification: "Add rule 6: INTERACTIVE detection"
+          added_rule: |
+            6. **Question Detection** — Identify interrogative patterns, recommendation requests
+               - Keywords: "how", "why", "should", "recommend", "best way", "what's better"
+               - Negation: No implementation verbs (implement, fix, refactor, deploy)
+               - Route to cortex-interactive agent
+    
+    - name: "IntentRouter"
+      location: "cortex/orchestrators/core/intent_router.py"
+      changes:
+        - section: "Intent Enum"
+          modification: "Add ASK, INQUIRY, RECOMMEND intents"
+          before: "IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST, DEPLOY, ONBOARD"
+          after: "IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST, DEPLOY, ONBOARD, ASK, INQUIRY, RECOMMEND"
+        
+        - section: "classify_intent() method"
+          modification: "Add interactive intent detection logic"
+          added_logic: |
+            # Interactive intent detection (questions/recommendations)
+            if self._is_interactive_request(user_request):
+                return IntentClassification(
+                    intent=Intent.ASK,
+                    confidence=0.85,
+                    reasoning="Question pattern detected without implementation verbs",
+                    orchestrator_target="InteractionOrchestrator"
+                )
+
+# -------------------------------------------------------------------------
+# VALIDATION FRAMEWORK
+# -------------------------------------------------------------------------
+validation_framework:
+  overview: |
+    3-layer validation approach for INTERACTIVE mode:
+    1. Intent Detection: Accurately classify questions vs implementation requests
+    2. Response Quality: Recommendations include evidence + tradeoff analysis
+    3. Mode Isolation: INTERACTIVE never triggers TDD/DoR/implementation flows
+  
+  layers:
+    - layer: 1
+      name: "Intent Detection Validation"
+      purpose: "Ensure questions correctly routed to INTERACTIVE, not DESIGN"
+      checks:
+        - check: "Interrogative pattern detection"
+          method: "Regex + keyword matching for how/why/should/recommend/best"
+          tool: "InteractiveIntentHandler.detect_question_pattern()"
+          success_criteria: "True positives >90% on test set"
+          failure_criteria: "False positives >10% (implementation requests misclassified)"
+          test_count: 6
+        
+        - check: "Negation detection"
+          method: "Verify absence of implementation verbs (implement, fix, deploy)"
+          tool: "InteractiveIntentHandler.has_implementation_intent()"
+          success_criteria: "Correctly rejects 'implement X using Y' as non-interactive"
+          failure_criteria: "Misses implementation intent in question format"
+          test_count: 4
+        
+        - check: "Confidence scoring"
+          method: "Weighted score: interrogative (0.5) + keywords (0.3) + negation (0.2)"
+          tool: "InteractiveIntentHandler.calculate_confidence()"
+          success_criteria: "Confidence >0.8 for clear questions, <0.5 for ambiguous"
+          failure_criteria: "Ambiguous requests score >0.8 (overconfidence)"
+          test_count: 2
+      
+      total_tests: 12
+    
+    - layer: 2
+      name: "Response Quality Validation"
+      purpose: "Ensure INTERACTIVE responses include evidence, tradeoffs, alternatives"
+      checks:
+        - check: "Evidence-based recommendations"
+          method: "Verify references to Implementation Truth (code inspection, LENS analysis)"
+          tool: "cortex-interactive agent (manual validation)"
+          success_criteria: "100% of recommendations cite existing code or best practices YAML"
+          failure_criteria: "Recommendations without evidence (cargo-cult advice)"
+          test_count: 3
+        
+        - check: "Tradeoff analysis present"
+          method: "Response includes extensibility/scalability/accuracy/efficiency considerations"
+          tool: "cortex-interactive agent (template enforcement)"
+          success_criteria: "Tradeoff section in 100% of architecture recommendations"
+          failure_criteria: "Missing tradeoff analysis"
+          test_count: 2
+        
+        - check: "Challenge generation"
+          method: "InteractionOrchestrator generates alternative when multiple approaches valid"
+          tool: "ChallengeEngine (existing)"
+          success_criteria: "Challenge presented when CORTEX disagrees or sees better path"
+          failure_criteria: "No challenge when alternative exists"
+          test_count: 3
+      
+      total_tests: 8
+    
+    - layer: 3
+      name: "Mode Isolation Validation"
+      purpose: "Ensure INTERACTIVE never triggers implementation workflows"
+      checks:
+        - check: "No DoR gate"
+          method: "Verify LENSSynthesis.generate_dor() NOT called in INTERACTIVE flow"
+          tool: "Code inspection + integration tests"
+          success_criteria: "0 DoR gates in INTERACTIVE execution trace"
+          failure_criteria: "DoR gate triggered (mode leak)"
+          test_count: 2
+        
+        - check: "No TDD invocation"
+          method: "Verify TDDOrchestrator NOT called in INTERACTIVE flow"
+          tool: "Code inspection + integration tests"
+          success_criteria: "0 TDDOrchestrator invocations in INTERACTIVE trace"
+          failure_criteria: "TDDOrchestrator called (mode leak)"
+          test_count: 1
+        
+        - check: "No file creation"
+          method: "Verify CORE-002 compliance (inline responses only)"
+          tool: "File system monitoring in tests"
+          success_criteria: "0 files created during INTERACTIVE mode"
+          failure_criteria: "Files generated (CORE-002 violation)"
+          test_count: 1
+      
+      total_tests: 4
+  
+  total_validation_tests: 24
+  coverage_target: "85%"
+
+# -------------------------------------------------------------------------
+# IMPLEMENTATION PHASES
+# -------------------------------------------------------------------------
+implementation_phases:
+  - phase: 1
+    name: "Intent Detection Enhancement"
+    duration: "1 day"
+    deliverables:
+      - "InteractiveIntentHandler class (120 LOC)"
+      - "Intent enum expansion (ASK, INQUIRY, RECOMMEND)"
+      - "Question pattern detection (regex + keywords)"
+      - "Confidence scoring logic"
+      - "Unit tests (12 tests, Layer 1 validation)"
+    
+    tasks:
+      - task: "Add ASK/INQUIRY/RECOMMEND to Intent enum"
+        file: "cortex/orchestrators/core/intent_router.py"
+        estimated_lines: 10
+        test_file: "tests/unit/orchestrators/core/test_intent_router.py"
+        test_count: 3
+      
+      - task: "Create InteractiveIntentHandler class"
+        file: "cortex/orchestrators/core/intent_router.py"
+        estimated_lines: 120
+        methods:
+          - "detect_question_pattern(text: str) -> bool"
+          - "has_implementation_intent(text: str) -> bool"
+          - "calculate_confidence(text: str) -> float"
+          - "extract_keywords(text: str) -> List[str]"
+        test_file: "tests/unit/orchestrators/core/test_interactive_intent_handler.py"
+        test_count: 6
+      
+      - task: "Integrate InteractiveIntentHandler into IntentRouter.classify_intent()"
+        file: "cortex/orchestrators/core/intent_router.py"
+        estimated_lines: 15
+        test_file: "tests/unit/orchestrators/core/test_intent_router.py"
+        test_count: 3
+    
+    acceptance_criteria:
+      - "IntentRouter correctly classifies 'How should I...' as ASK intent"
+      - "IntentRouter rejects 'Implement X using Y' as non-interactive"
+      - "Confidence scores: clear questions >0.8, ambiguous <0.5"
+      - "12/12 Layer 1 tests passing"
+  
+  - phase: 2
+    name: "Routing & Agent Creation"
+    duration: "1.5 days"
+    deliverables:
+      - "cortex-interactive.md agent (350 lines)"
+      - "cortex-architect.md routing update"
+      - "PENTA-MODE table in cortex-architect.prompt.md"
+      - "Quick commands (/ask, /recommend, /explore)"
+      - "Integration tests (8 tests, Layer 2 validation)"
+    
+    tasks:
+      - task: "Update QUAD-MODE to PENTA-MODE in cortex-architect.prompt.md"
+        file: ".github/prompts/cortex-architect.prompt.md"
+        section: "Line 55-63"
+        estimated_lines: 2
+        changes:
+          - "Rename header to PENTA-MODE OPERATION"
+          - "Add INTERACTIVE row to mode table"
+      
+      - task: "Add /ask, /recommend, /explore commands"
+        file: ".github/prompts/cortex-architect.prompt.md"
+        section: "QUICK COMMANDS"
+        estimated_lines: 3
+      
+      - task: "Create cortex-interactive.md agent"
+        file: ".github/agents/core/cortex-interactive.md"
+        estimated_lines: 350
+        sections:
+          - "Agent Identity & Mission"
+          - "Response Header (MANDATORY)"
+          - "Execution Flow (4 stages)"
+          - "Question Classification (4 types)"
+          - "Recommendation Framework (evidence-based)"
+          - "Tradeoff Analysis Template"
+          - "Challenge Integration"
+          - "Output Rules (CORE-002 compliance)"
+          - "Related Agents"
+        template_structure: |
+          # CORTEX Interactive Agent
+          **Version:** 1.0 | **Role:** Exploratory Conversation Specialist
+          
+          ## Agent Identity
+          **CORTEX Interactive** — conversational guidance without implementation
+          
+          **Mode:** INTERACTIVE only
+          **Protocol:** InteractionOrchestrator → LENS context → Recommendation
+          **Output:** Inline guidance with evidence + tradeoff analysis
+          
+          ## Execution Flow
+          1. Question Classification (architecture/pattern/tradeoff/educational)
+          2. LENS Context Gathering (Implementation Truth)
+          3. Recommendation Generation (evidence-based)
+          4. Tradeoff Analysis (extensibility/scalability/accuracy/efficiency)
+          5. Challenge (if multiple approaches valid)
+          6. Inline Response (CORE-002 compliance)
+          
+          ## Question Classification
+          | Type | Trigger | Response Style |
+          |------|---------|----------------|
+          | Architecture | "How should I structure..." | High-level design patterns |
+          | Pattern | "Best way to implement..." | Specific patterns with examples |
+          | Tradeoff | "Should I use X or Y..." | Comparison table |
+          | Educational | "Why is X better than Y..." | Explanation with evidence |
+          
+          ## Recommendation Framework
+          **MANDATORY:** All recommendations must include:
+          - Evidence (Implementation Truth: code inspection, LENS analysis, best practices YAML)
+          - Tradeoff analysis (extensibility, scalability, accuracy, efficiency)
+          - Challenge (if CORTEX sees better approach)
+          - Related patterns (cross-references to docs/patterns/)
+          
+          ## Output Rules
+          - ✅ Inline responses only (CORE-002)
+          - ✅ Evidence-based recommendations (CORE-030)
+          - ✅ Tradeoff analysis present
+          - ❌ No DoR gate
+          - ❌ No TDD invocation
+          - ❌ No file generation
+      
+      - task: "Update cortex-architect.md routing logic"
+        file: ".github/agents/core/cortex-architect.md"
+        section: "Master Mode Flow + Routing Rules"
+        estimated_lines: 20
+        changes:
+          - "Add INTERACTIVE detection after DIGEST, before DESIGN"
+          - "Add routing rule 6: Question Detection"
+      
+      - task: "Write integration tests (Layer 2: Response Quality)"
+        file: "tests/integration/test_interactive_mode.py"
+        test_count: 8
+        test_scenarios:
+          - "Architecture question → evidence-based response"
+          - "Pattern question → tradeoff analysis present"
+          - "Challenge generated when multiple approaches valid"
+    
+    acceptance_criteria:
+      - "cortex-interactive.md agent created (350 lines)"
+      - "PENTA-MODE table in cortex-architect.prompt.md"
+      - "Quick commands added (/ask, /recommend, /explore)"
+      - "cortex-architect.md routes INTERACTIVE correctly"
+      - "8/8 Layer 2 tests passing"
+  
+  - phase: 3
+    name: "Mode Isolation & Testing"
+    duration: "0.5 days"
+    deliverables:
+      - "Mode isolation tests (4 tests, Layer 3 validation)"
+      - "CORE-002 compliance verification"
+      - "Documentation updates"
+    
+    tasks:
+      - task: "Write mode isolation tests (Layer 3)"
+        file: "tests/integration/test_interactive_mode_isolation.py"
+        test_count: 4
+        test_scenarios:
+          - "No DoR gate in INTERACTIVE flow"
+          - "No TDDOrchestrator invocation"
+          - "No file creation (CORE-002)"
+          - "InteractionOrchestrator used, not MasterOrchestrator"
+      
+      - task: "Update enhancement-history.yaml"
+        file: "docs/meta/enhancement-history.yaml"
+        section: "enhancements"
+        estimated_lines: 50
+        content: |
+          - id: ENH-034
+            date: "2026-02-05"
+            recommendation: "INTERACTIVE mode for exploratory questions/recommendations"
+            status: IMPLEMENTED
+            domain: DX + Architecture
+            adoption_reason: "Enable non-engineer roles, reduce DESIGN mode overkill"
+            expected_benefits:
+              - "PMs/architects/researchers get guidance without implementation"
+              - "Simple questions answered in <2 minutes (vs 10-15 in DESIGN)"
+              - "InteractionOrchestrator capabilities fully utilized"
+              - "Broader CORTEX audience (not just engineers)"
+            implementation_notes: |
+              Files created:
+              - .github/agents/core/cortex-interactive.md (350 lines)
+              - tests/unit/orchestrators/core/test_interactive_intent_handler.py (12 tests)
+              - tests/integration/test_interactive_mode.py (8 tests)
+              - tests/integration/test_interactive_mode_isolation.py (4 tests)
+              
+              Files modified:
+              - .github/prompts/cortex-architect.prompt.md (PENTA-MODE table, quick commands)
+              - .github/agents/core/cortex-architect.md (INTERACTIVE routing)
+              - cortex/orchestrators/core/intent_router.py (ASK/INQUIRY/RECOMMEND intents, InteractiveIntentHandler)
+              
+              Total: 24 tests, 85% coverage
+            metrics:
+              files_created: 4
+              files_modified: 3
+              lines_of_code: 470
+              test_count: 24
+              implementation_time_days: 3
+      
+      - task: "Update README.md with INTERACTIVE mode examples"
+        file: "README.md"
+        section: "Usage Examples"
+        estimated_lines: 20
+        examples:
+          - "How should I structure a caching layer?"
+          - "What's the best way to implement event-driven communication?"
+          - "Should I use pattern X or Y for this scenario?"
+    
+    acceptance_criteria:
+      - "4/4 Layer 3 tests passing (mode isolation verified)"
+      - "ENH-034 added to enhancement-history.yaml"
+      - "README.md updated with examples"
+      - "All 24 tests passing (100%)"
+
+# -------------------------------------------------------------------------
+# TESTING STRATEGY
+# -------------------------------------------------------------------------
+testing_strategy:
+  overview: |
+    24-test comprehensive suite covering intent detection, response quality, mode isolation.
+    Unit tests (12) for InteractiveIntentHandler, integration tests (12) for end-to-end flow.
+  
+  test_breakdown:
+    unit_tests:
+      - file: "tests/unit/orchestrators/core/test_interactive_intent_handler.py"
+        test_count: 12
+        coverage:
+          - "detect_question_pattern() - 3 tests"
+          - "has_implementation_intent() - 3 tests"
+          - "calculate_confidence() - 3 tests"
+          - "extract_keywords() - 3 tests"
+      
+      - file: "tests/unit/orchestrators/core/test_intent_router.py"
+        test_count: 3
+        coverage:
+          - "ASK intent classification"
+          - "INQUIRY intent classification"
+          - "RECOMMEND intent classification"
+    
+    integration_tests:
+      - file: "tests/integration/test_interactive_mode.py"
+        test_count: 8
+        coverage:
+          - "Architecture question → evidence-based response - 2 tests"
+          - "Pattern question → tradeoff analysis - 2 tests"
+          - "Challenge generation - 2 tests"
+          - "Educational question - 2 tests"
+      
+      - file: "tests/integration/test_interactive_mode_isolation.py"
+        test_count: 4
+        coverage:
+          - "No DoR gate invocation - 1 test"
+          - "No TDDOrchestrator invocation - 1 test"
+          - "No file creation (CORE-002) - 1 test"
+          - "InteractionOrchestrator used - 1 test"
+  
+  mocking_strategy:
+    - component: "InteractionOrchestrator"
+      mock_methods:
+        - "execute_turn() - mock LENS context building"
+        - "generate_challenge() - mock challenge engine"
+    
+    - component: "LENSSynthesis"
+      mock_methods:
+        - "synthesize() - mock synthesis results"
+    
+    - component: "KnowledgeRepository"
+      mock_methods:
+        - "get_by_domain() - mock best practices YAML loading"
+  
+  coverage_target: "85%"
+  performance_target: "INTERACTIVE response <2 seconds"
+
+# -------------------------------------------------------------------------
+# INTERACTIVE MODE INTEGRATION
+# -------------------------------------------------------------------------
+interactive_mode_integration:
+  execution_order: |
+    PRE-FLIGHT (if needed) → Mode Detection → INTERACTIVE mode
+  
+  mode_detection_logic: |
+    1. Check for interrogative patterns (how, why, should, what, which)
+    2. Check for recommendation keywords (recommend, best way, suggest, advice)
+    3. Verify absence of implementation verbs (implement, fix, deploy, refactor)
+    4. Calculate confidence score (>0.8 = INTERACTIVE, <0.5 = ambiguous → fallback to DESIGN)
+    5. Route to cortex-interactive agent
+  
+  interactive_flow: |
+    User Question
+        ↓
+    IntentRouter → ASK/INQUIRY/RECOMMEND
+        ↓
+    cortex-interactive agent
+        ↓
+    1. Question Classification (architecture/pattern/tradeoff/educational)
+        ↓
+    2. LENS Context Gathering (Implementation Truth: code, docs, best practices)
+        ↓
+    3. InteractionOrchestrator (build conversation context)
+        ↓
+    4. Recommendation Generation (evidence-based)
+        ↓
+    5. Tradeoff Analysis (extensibility, scalability, accuracy, efficiency)
+        ↓
+    6. Challenge (if CORTEX disagrees or sees better path)
+        ↓
+    7. Inline Response (CORE-002 compliance)
+  
+  output_format: |
+    ## 🎓 CORTEX Interactive
+    **Author:** Asif Hussain | **Mode:** Interactive | **Question Type:** {type} ✅
+    
+    ---
+    
+    ### 🔍 Question Analysis
+    **Classification:** {Architecture|Pattern|Tradeoff|Educational}  
+    **Confidence:** {High|Medium}
+    
+    ### 💡 Recommendation
+    {Evidence-based recommendation with specific examples}
+    
+    ### ⚖️ Tradeoff Analysis
+    | Factor | Approach A | Approach B | Recommended |
+    |--------|-----------|------------|-------------|
+    | Extensibility | {analysis} | {analysis} | {choice} |
+    | Scalability | {analysis} | {analysis} | {choice} |
+    | Accuracy | {analysis} | {analysis} | {choice} |
+    | Efficiency | {analysis} | {analysis} | {choice} |
+    
+    ### 📚 Evidence
+    - **Implementation Truth:** {code references from CORTEX codebase}
+    - **Best Practices:** {references to cortex/knowledge/best-practices/*.yaml}
+    - **Patterns:** {references to docs/patterns/*.md}
+    
+    ### ⚠️ Challenge (if applicable)
+    **CORTEX Disagrees:** {alternative approach}  
+    **Why:** {reasoning with evidence}
+    
+    ---
+    
+    **Related Topics:** {cross-references}
+  
+  examples:
+    - question: "How should I structure a caching layer for CORTEX?"
+      classification: "Architecture"
+      response_structure: |
+        ### 💡 Recommendation
+        Implement a 3-tier caching strategy:
+        1. In-memory LRU cache (Redis) for hot data (<1ms latency)
+        2. SQLite cache for warm data (cortex_brain/state/cache.db)
+        3. Knowledge base as cold storage (cortex_brain/tier3/knowledge/*.yaml)
+        
+        ### ⚖️ Tradeoff Analysis
+        | Factor | Single-Tier | Multi-Tier | Recommended |
+        |--------|-------------|------------|-------------|
+        | Extensibility | Medium (one layer) | High (pluggable tiers) | Multi-Tier |
+        | Scalability | Low (memory bound) | High (distributed) | Multi-Tier |
+        | Accuracy | High (always fresh) | Medium (TTL needed) | Multi-Tier |
+        | Efficiency | Medium (cold misses) | High (hot path fast) | Multi-Tier |
+        
+        ### 📚 Evidence
+        - **Implementation Truth:** KnowledgeRepository uses SQLite cache (cortex/brain/core/knowledge/knowledge_repository.py:45-67)
+        - **Best Practices:** Caching pyramid pattern (cortex/knowledge/best-practices/architecture/caching-strategies.yaml)
+        - **Patterns:** Multi-tier caching (docs/patterns/caching-pyramid.md)
+    
+    - question: "Should I use pattern X or pattern Y for event handling?"
+      classification: "Tradeoff"
+      response_structure: |
+        ### 💡 Recommendation
+        Use **Pattern X (Event Bus)** for CORTEX because:
+        - Decouples orchestrators (extensibility: can add orchestrators without modifying existing)
+        - Enables event replay (debugging: replay production events in test)
+        - Supports dead letter queue (reliability: no lost events)
+        
+        ### ⚖️ Tradeoff Analysis
+        | Factor | Pattern X (Event Bus) | Pattern Y (Direct Calls) | Recommended |
+        |--------|----------------------|-------------------------|-------------|
+        | Extensibility | High (pub/sub) | Low (tight coupling) | Pattern X |
+        | Scalability | High (async) | Medium (sync) | Pattern X |
+        | Accuracy | High (event history) | Medium (no replay) | Pattern X |
+        | Efficiency | Medium (overhead) | High (direct) | Pattern X |
+        
+        ### 📚 Evidence
+        - **Implementation Truth:** ENH-014 implemented event bus (cortex/infrastructure/orchestrator_event_bus.py)
+        - **Best Practices:** Event-driven architecture (cortex/knowledge/best-practices/architecture/event-driven.yaml)
+
+# -------------------------------------------------------------------------
+# SUCCESS METRICS
+# -------------------------------------------------------------------------
+success_metrics:
+  detection_accuracy:
+    metric: "Intent classification accuracy for ASK/INQUIRY/RECOMMEND"
+    target: ">90% true positives on test set"
+    measurement: "Confusion matrix on 100 test questions"
+  
+  response_quality:
+    metric: "Percentage of responses with evidence + tradeoff analysis"
+    target: "100%"
+    measurement: "Manual review of 20 INTERACTIVE responses"
+  
+  mode_isolation:
+    metric: "Zero DoR gate or TDD invocations in INTERACTIVE mode"
+    target: "100% isolation"
+    measurement: "Integration tests + code inspection"
+  
+  performance:
+    metric: "INTERACTIVE response latency"
+    target: "<2 seconds"
+    measurement: "End-to-end timing in integration tests"
+  
+  adoption:
+    metric: "INTERACTIVE mode usage by non-engineer roles"
+    target: ">30% of total CORTEX interactions"
+    measurement: "Usage analytics (tracked via audit trail)"
+  
+  user_satisfaction:
+    metric: "Reduction in 'question → DESIGN mode → cancel' workflows"
+    target: ">80% reduction"
+    measurement: "Before/after comparison of aborted DESIGN flows"
+
+# -------------------------------------------------------------------------
+# RISKS & MITIGATIONS
+# -------------------------------------------------------------------------
+risks_and_mitigations:
+  - risk: "Ambiguous requests misclassified (false positives)"
+    likelihood: "Medium"
+    impact: "Medium"
+    mitigation: |
+      - Confidence threshold: route to DESIGN if <0.8
+      - Fallback prompt: "Did you mean to ask a question or implement a feature?"
+      - User can override: "treat as question" or "treat as implementation"
+    detection: "Monitor false positive rate via audit trail"
+  
+  - risk: "INTERACTIVE responses lack depth (too superficial)"
+    likelihood: "Low"
+    impact: "High"
+    mitigation: |
+      - Mandatory evidence requirement (CORE-030 compliance)
+      - Tradeoff analysis template enforcement
+      - Challenge generation when multiple approaches exist
+      - Code review: validate cortex-interactive.md agent quality
+    detection: "Manual review of sample responses (20 responses/week)"
+  
+  - risk: "Users expect implementation in INTERACTIVE mode"
+    likelihood: "Medium"
+    impact: "Low"
+    mitigation: |
+      - Clear mode header: "## 🎓 CORTEX Interactive (Guidance Only)"
+      - Response footer: "Ready to implement? Type '/implement {feature}' to switch to DESIGN mode"
+      - Documentation: explain INTERACTIVE vs DESIGN difference
+    detection: "Track follow-up '/implement' commands after INTERACTIVE responses"
+  
+  - risk: "Performance degradation (LENS context expensive)"
+    likelihood: "Low"
+    impact: "Medium"
+    mitigation: |
+      - Cache LENS results for 10 minutes (ENH-023 style)
+      - Lazy loading: only invoke LENS if evidence required
+      - Timeout: halt LENS after 3 seconds, return cached best practices
+    detection: "Monitor INTERACTIVE response latency (target <2s)"
+
+# -------------------------------------------------------------------------
+# FUTURE ENHANCEMENTS
+# -------------------------------------------------------------------------
+future_enhancements:
+  - id: "ENH-034a"
+    title: "INTERACTIVE mode history tracking"
+    description: |
+      Track user question patterns to improve intent detection accuracy.
+      Store anonymized question → classification → confidence → user feedback.
+      Use for ML model training (supervised learning on question classification).
+    effort: "5 days (M)"
+    impact: "High (accuracy improvement +15%)"
+  
+  - id: "ENH-034b"
+    title: "Multi-turn INTERACTIVE conversations"
+    description: |
+      Enable follow-up questions in INTERACTIVE mode (session continuity).
+      Example: "How should I cache?" → "Should I use Redis or SQLite?" → "What's the tradeoff?"
+      Requires session state management + context accumulation.
+    effort: "3 days (M)"
+    impact: "Medium (improves educational use case)"
+  
+  - id: "ENH-034c"
+    title: "INTERACTIVE → DESIGN transition"
+    description: |
+      Seamless handoff: user asks in INTERACTIVE, likes recommendation, types "implement this"
+      CORTEX transitions to DESIGN mode with pre-filled context from INTERACTIVE conversation.
+      Avoids re-gathering context (efficiency gain).
+    effort: "2 days (S)"
+    impact: "High (reduces friction for exploration → implementation flow)"
+
+# -------------------------------------------------------------------------
+# DOCUMENTATION UPDATES
+# -------------------------------------------------------------------------
+documentation_updates:
+  new_docs:
+    - file: ".github/agents/core/cortex-interactive.md"
+      title: "CORTEX Interactive Agent"
+      sections:
+        - "Agent Identity & Mission"
+        - "Execution Flow"
+        - "Question Classification"
+        - "Recommendation Framework"
+        - "Tradeoff Analysis Template"
+        - "Output Rules"
+      lines: 350
+    
+    - file: "docs/guides/interactive-mode-guide.md"
+      title: "INTERACTIVE Mode User Guide"
+      sections:
+        - "When to Use INTERACTIVE vs DESIGN"
+        - "Question Examples"
+        - "Response Format Explanation"
+        - "Transitioning to Implementation"
+      lines: 200
+  
+  modified_docs:
+    - file: ".github/prompts/cortex-architect.prompt.md"
+      changes:
+        - "QUAD-MODE → PENTA-MODE table (line 55-63)"
+        - "Add /ask, /recommend, /explore commands (line 78-90)"
+        - "Add INTERACTIVE mode section (new section after DIGEST)"
+      estimated_lines: 150
+    
+    - file: ".github/agents/core/cortex-architect.md"
+      changes:
+        - "Update Master Mode Flow with INTERACTIVE routing (line 45-80)"
+        - "Add routing rule 6: Question Detection (line 82-90)"
+      estimated_lines: 30
+    
+    - file: "README.md"
+      changes:
+        - "Add INTERACTIVE mode to feature list"
+        - "Add usage examples (3 questions)"
+      estimated_lines: 20
+    
+    - file: "docs/meta/enhancement-history.yaml"
+      changes:
+        - "Add ENH-034 entry"
+      estimated_lines: 50
+
+# -------------------------------------------------------------------------
+# GOVERNANCE COMPLIANCE
+# -------------------------------------------------------------------------
+governance_compliance:
+  core_rules_satisfied:
+    - rule: "CORE-002"
+      requirement: "No markdown file generation (inline only)"
+      compliance: |
+        INTERACTIVE mode outputs inline responses only.
+        cortex-interactive.md agent enforces CORE-002 in Output Rules section.
+        Layer 3 tests verify no file creation.
+    
+    - rule: "CORE-008"
+      requirement: "Tests BEFORE code (TDD)"
+      compliance: |
+        Phase 1: Write 12 unit tests for InteractiveIntentHandler BEFORE implementation.
+        Phase 2: Write 8 integration tests BEFORE cortex-interactive.md agent.
+        Phase 3: Write 4 mode isolation tests BEFORE claiming completion.
+    
+    - rule: "CORE-011"
+      requirement: "Type hints mandatory"
+      compliance: |
+        InteractiveIntentHandler methods have full type hints:
+        - detect_question_pattern(text: str) -> bool
+        - calculate_confidence(text: str) -> float
+    
+    - rule: "CORE-012"
+      requirement: "Google-style docstrings"
+      compliance: |
+        All new methods include Google-style docstrings with Args, Returns, Examples.
+    
+    - rule: "CORE-028"
+      requirement: "Intelligent file naming (kebab-case, plan files ≤40 chars)"
+      compliance: |
+        Plan file: ENH-034-INTERACTIVE-MODE.yaml (28 chars, kebab-case ✅)
+        Agent file: cortex-interactive.md (kebab-case ✅)
+    
+    - rule: "CORE-030"
+      requirement: "Implementation Truth"
+      compliance: |
+        INTERACTIVE responses MUST cite Implementation Truth:
+        - Code references (line numbers from CORTEX codebase)
+        - Best practices YAML (cortex/knowledge/best-practices/)
+        - Pattern docs (docs/patterns/)
+        Enforced via Recommendation Framework (mandatory evidence section).
+
+# -------------------------------------------------------------------------
+# COMPLETION CRITERIA
+# -------------------------------------------------------------------------
+completion_criteria:
+  must_have:
+    - item: "InteractiveIntentHandler implemented (120 LOC)"
+      verification: "Code review + 12 unit tests passing"
+    
+    - item: "cortex-interactive.md agent created (350 lines)"
+      verification: "File exists + manual validation of template structure"
+    
+    - item: "PENTA-MODE table in cortex-architect.prompt.md"
+      verification: "grep 'PENTA-MODE' cortex-architect.prompt.md (exit 0)"
+    
+    - item: "Quick commands added (/ask, /recommend, /explore)"
+      verification: "grep '/ask\\|/recommend\\|/explore' cortex-architect.prompt.md (exit 0)"
+    
+    - item: "cortex-architect.md routing updated"
+      verification: "grep 'INTERACTIVE' cortex-architect.md (exit 0)"
+    
+    - item: "Intent enum expanded (ASK, INQUIRY, RECOMMEND)"
+      verification: "grep 'ASK\\|INQUIRY\\|RECOMMEND' intent_router.py (exit 0)"
+    
+    - item: "All 24 tests passing (100%)"
+      verification: "pytest tests/unit/orchestrators/core/test_interactive_intent_handler.py tests/integration/test_interactive_mode*.py -v"
+    
+    - item: "ENH-034 added to enhancement-history.yaml"
+      verification: "grep 'ENH-034' docs/meta/enhancement-history.yaml (exit 0)"
+  
+  nice_to_have:
+    - item: "docs/guides/interactive-mode-guide.md created"
+      verification: "User guide for INTERACTIVE mode usage"
+    
+    - item: "README.md updated with examples"
+      verification: "3 INTERACTIVE mode examples in README.md"
+    
+    - item: "Performance benchmarks"
+      verification: "INTERACTIVE response latency <2s measured"
+
+# -------------------------------------------------------------------------
+# APPENDIX
+# -------------------------------------------------------------------------
+appendix:
+  user_request_verbatim: |
+    "add to the appropriate plan, update #file:cortex-architect.prompt.md and 
+    #file:agents to add an INTERACTIVE mode. If user asks a question or asks for 
+    recommendation or does not specify design or implementation related requests, 
+    engage the interaction orchestrator to work with user to do what hes trying to do."
+  
+  design_rationale: |
+    Why INTERACTIVE mode instead of DESIGN with flag:
+    - Mode clarity: DESIGN = implementation-bound, INTERACTIVE = exploration-only
+    - Separation of concerns: Different outputs (guidance vs code)
+    - User expectations: Clear mode header signals intent
+    - Simpler prompts: No conditional logic in DESIGN flow
+    
+    Why leverage InteractionOrchestrator:
+    - Already has LENS integration (527 LOC existing)
+    - Challenge system built-in (generates alternatives)
+    - ConversationProtocol enforces patterns
+    - No new orchestrator needed (reuse existing component)
+    
+    Why 3-layer validation:
+    - Layer 1 (Intent Detection): Prevents misrouting to DESIGN
+    - Layer 2 (Response Quality): Ensures recommendations have evidence + tradeoffs
+    - Layer 3 (Mode Isolation): Guarantees INTERACTIVE never triggers TDD/DoR
+  
+  related_work:
+    - enhancement: "ENH-013"
+      title: "SDLC Governance & Orchestrator Enhancement"
+      relevance: "InteractionOrchestrator + PlanningOrchestrator collaboration pattern"
+    
+    - enhancement: "ENH-014"
+      title: "Event-Driven Orchestrator Mesh"
+      relevance: "Event bus for orchestrator communication (referenced in examples)"
+    
+    - enhancement: "ENH-009"
+      title: "DIGEST mode for chat session learning"
+      relevance: "Similar mode addition pattern (QUAD-MODE → PENTA-MODE)"
+  
+  question_patterns_examples:
+    interrogative:
+      - "How should I structure a caching layer?"
+      - "What's the best way to implement event-driven communication?"
+      - "Why is pattern X better than pattern Y?"
+      - "Which approach scales better: A or B?"
+    
+    recommendation:
+      - "Recommend an architecture for feature X"
+      - "Suggest the best pattern for scenario Y"
+      - "Advise on tradeoffs between approach A and B"
+    
+    educational:
+      - "Explain the benefits of CQRS"
+      - "Teach me about event sourcing"
+      - "Help me understand microservices tradeoffs"
+    
+    non_interactive_counter_examples:
+      - "Implement feature X using pattern Y" (implementation verb)
+      - "Fix bug in module Z" (action verb)
+      - "Deploy feature to production" (action verb)
+      - "Refactor orchestrator A" (action verb)
+
+# =========================================================================
+# END OF ENH-034 PLAN
+# =========================================================================

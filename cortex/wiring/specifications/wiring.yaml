@@ -102,6 +102,8 @@ orchestrators:
             token_limit: 20000
             adaptive_turn_limit: true
             memoization_enabled: true
+      mcp_tools:
+        - "cortex_interactive_mode"
 
     # STAGE 2: Intent Classification
     - name: "IntentRouter"

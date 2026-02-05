@@ -51,14 +51,15 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ---
 
-## 🎯 QUAD-MODE OPERATION
+## 🎯 PENTA-MODE OPERATION
 
 | Trigger | Mode | Behavior |
 |---------|------|----------|
 | **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation (Python 3.9+, dependencies) — delegates to environment-setup agent |
 | No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations (after PRE-FLIGHT) |
 | `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis (after primary audit) |
-| **File param = Copilot Chat** | **DIGEST** | Auto-detect chat format → extract learnings → enhance CORTEX (NEW) |
+| **File param = Copilot Chat** | **DIGEST** | Auto-detect chat format → extract learnings → enhance CORTEX |
+| **Question/recommendation request** | **INTERACTIVE** | Exploratory conversation via InteractionOrchestrator (no TDD, no DoR gate) |
 | User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD (after PRE-FLIGHT) |
 
 **CRITICAL:** PRE-FLIGHT check runs automatically before AUDIT or DESIGN. DIGEST mode auto-triggers when file contains Copilot chat markers.
@@ -96,6 +97,9 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 | `/audit` | PRE-FLIGHT → AUDIT |
 | `/meta-audit` | META-AUDIT (after primary audit) |
 | `/digest {file}` | DIGEST mode for chat session file |
+| `/ask {question}` | INTERACTIVE (exploratory conversation) |
+| `/recommend {context}` | INTERACTIVE (architecture guidance) |
+| `/explore {topic}` | INTERACTIVE (tradeoff analysis) |
 | `/implement {feature}` | PRE-FLIGHT → DESIGN |
 | `/fix {issue}` | PRE-FLIGHT → DESIGN |
 | `/refactor {target}` | PRE-FLIGHT → DESIGN |

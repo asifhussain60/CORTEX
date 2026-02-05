@@ -142,6 +142,68 @@ routing_rules:
       confidence_multiplier: 0.70
       blocking: false  # NEW: Phase 8.2
 
+  # INTERACTIVE intent routing (ENH-034: Exploratory conversations)
+  interactive:
+    # Direct questions about architecture, patterns, or approaches
+    ask:
+      handler: InteractionOrchestrator
+      orchestrator: "InteractionOrchestrator"
+      keywords:
+        - "how should i"
+        - "what's the best"
+        - "should i use"
+        - "how do i"
+        - "what would you"
+        - "any thoughts on"
+        - "what's your take"
+      fallback_orchestrators:
+        - "InteractionOrchestrator"
+      confidence_multiplier: 1.0
+      confidence_boost: 0.25
+      blocking: false
+    
+    # Recommendation requests
+    recommend:
+      handler: InteractionOrchestrator
+      orchestrator: "InteractionOrchestrator"
+      keywords:
+        - "recommend"
+        - "suggest"
+        - "what do you think"
+        - "best approach"
+        - "best practice"
+        - "your recommendation"
+        - "advise"
+      fallback_orchestrators:
+        - "InteractionOrchestrator"
+      confidence_multiplier: 1.0
+      confidence_boost: 0.25
+      blocking: false
+    
+    # Open-ended inquiry
+    inquiry:
+      handler: InteractionOrchestrator
+      orchestrator: "InteractionOrchestrator"
+      keywords:
+        - "tell me about"
+        - "explain"
+        - "what about"
+        - "thinking about"
+        - "considering"
+        - "exploring"
+        - "curious about"
+      fallback_orchestrators:
+        - "InteractionOrchestrator"
+      confidence_multiplier: 1.0
+      confidence_boost: 0.20
+      blocking: false
+    
+    default:
+      handler: InteractionOrchestrator
+      orchestrator: "InteractionOrchestrator"
+      confidence_multiplier: 0.85
+      blocking: false
+
   # FILE_CREATION intent routing (CORE-038/CORE-039 compliance)
   file_creation:
     documentation:
@@ -233,6 +295,23 @@ orchestrator_direct_routing:  # NEW: Phase 8.2
     confidence_threshold: 0.70
     fallback_orchestrators:
       - "InteractionOrchestrator"
+    blocking: false
+  
+  # Interactive mode (ENH-034: Exploratory conversations)
+  interactive:
+    orchestrator: "InteractionOrchestrator"
+    keywords:
+      - "how should i"
+      - "what's the best"
+      - "recommend"
+      - "suggest"
+      - "thoughts on"
+      - "advise"
+      - "tell me about"
+      - "explain"
+    confidence_threshold: 0.75
+    fallback_orchestrators:
+      - "ConversationOrchestrator"
     blocking: false
   
   # Testing

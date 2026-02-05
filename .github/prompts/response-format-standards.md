@@ -1,5 +1,5 @@
 # CORTEX Response Format Standards
-**Version:** 1.0 | **Updated:** 2026-02-05 | **Authority:** ENH-028 Response Format Enhancement
+**Version:** 1.2 | **Updated:** 2026-02-05 | **Authority:** ENH-028 + ENH-032 (Chat UI Rendering)
 
 ---
 
@@ -8,11 +8,95 @@
 This document defines the unified response format for all CORTEX operations across all modes (PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT).
 
 **Core Principles:**
+- **Chat UI Compatibility** — Formats render properly in GitHub Copilot Chat panel
+- **Visual Hierarchy** — Generous spacing, H2/H3 headings, color-coded icons
 - **Semantic Layering** — Progressive disclosure (Executive → Tactical → Technical)
 - **Icon Consistency** — Visual status indicators with precise meaning
 - **Numbered Actions** — All user prompts use numbered format for ease
 - **Adaptive Density** — Response complexity matches request complexity
 - **Professional Presentation** — Clean, scannable, accessible
+
+---
+
+## 🖥️ Chat UI Rendering Rules (CRITICAL)
+
+**GitHub Copilot Chat has specific rendering requirements:**
+
+### **1. Spacing for Readability**
+
+- **2 blank lines** between major sections (H2 headings)
+- **1 blank line** before and after numbered lists
+- **1 blank line** before and after horizontal rules (`---`)
+- **1 blank line** between list items for visual breathing room
+
+### **2. Heading Structure**
+
+- Use `##` for major sections (renders as H2)
+- Use `###` for subsections (renders as H3)
+- Always include icon + space before heading text: `## 🔥 Section Title`
+- Blank line before AND after all headings
+
+### **3. Color-Coded Icons (Semantic)**
+
+| Icon | Purpose | Usage |
+|------|---------|-------|
+| 🔥 | **Critical/Urgent** | P0 issues, blocking problems |
+| ⚠️ | **Engineering Analysis** | Challenge sections, warnings |
+| 🎯 | **Decision Points** | User action required, next steps |
+| ✅ | **Success/Complete** | Completion confirmations, verified items |
+| 🔍 | **Analysis/Context** | Investigation results, findings |
+| 📊 | **Metrics/Data** | Tables, statistics, measurements |
+| 🚀 | **Implementation** | Execution, deployment, action items |
+
+### **4. List Formatting**
+
+**Numbered Lists:**
+```markdown
+1️⃣ **`command`** — Description ✨ **Badge**
+   └─ **Impact:** What happens next
+
+2️⃣ **`command`** — Description
+   └─ **Impact:** What happens next
+```
+
+**Bullet Lists:**
+```markdown
+- 🟢 **Item 1** — Details here
+
+- 🔵 **Item 2** — Details here
+
+- ⚪ **Item 3** — Details here
+```
+
+### **5. Horizontal Rules**
+
+Always surround with blank lines:
+```markdown
+[Content above]
+
+
+---
+
+
+[Content below]
+```
+
+### **6. Tables**
+
+Keep tables simple (≤4 columns) for Chat UI:
+```markdown
+| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| Value    | Value    | Value    |
+```
+
+### **7. Code Blocks**
+
+Use sparingly, prefer inline code (`backticks`) for commands:
+```markdown
+**Command:** `cortex_process_request`
+**Not:** ```python code block here ```
+```
 
 ---
 
