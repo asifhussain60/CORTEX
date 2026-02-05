@@ -1,22 +1,17 @@
 """
-Architecture Guard Orchestrator - Phase 24 Layer 1
-Purpose: Pre-implementation validation against master plan to prevent regression
-Authority: cortex-registry/_cortex-master/phases/active/phase-24-architecture-integrity-system.yaml
-Status: PHASE 24 - Layer 1 Implementation
+ArchitectureGuard - Pre-Implementation Validation Gate.
+
+Purpose: Validates requests against master plan before execution.
+Authority: PHASE-24 (Architecture Integrity System)
+Governance: CORE-030 (Implementation Truth), CORE-035 (Single canonical implementation)
 """
 
 from dataclasses import dataclass
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 from enum import Enum
+from pathlib import Path
+from typing import List, Optional, Dict, Any
 import yaml
-import logging
-
-from cortex.core.result import Result, Ok, Err
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-
-logger = logging.getLogger(__name__)
+import re
 
 
 class GateVerdict(Enum):
@@ -26,514 +21,402 @@ class GateVerdict(Enum):
     BLOCK = "BLOCK"
 
 
-@dataclass
-class PhaseAlignment:
-    """Phase alignment analysis result."""
-    active_phases: List[str]
-    conflicts: List[str]
-    regression_risk: float  # 0.0-1.0
-    brittleness_risk: float  # 0.0-1.0
-
-
-@dataclass
-class SuggestedPhase:
-    """Suggested phase structure for CREATE_PHASE verdict."""
-    id: str
-    title: str
-    priority: str
-    estimated_effort: str
-    scope: List[str]
-    dependencies: List[str]
+# Alias for test compatibility
+ValidationType = GateVerdict
 
 
 @dataclass
 class ValidationResult:
     """Complete validation result from ArchitectureGuard."""
-    verdict: GateVerdict
-    phase_alignment: PhaseAlignment
-    reasoning: str
-    suggested_phase: Optional[SuggestedPhase] = None
+    verdict: GateVerdict  # PROCEED, BLOCK, CREATE_PHASE
+    confidence: float  # 0.0-1.0
+    regression_risk: float  # 0.0-1.0
+    aligned_phase_id: Optional[str]  # Phase ID if aligned
+    aligned_phase_name: Optional[str]  # Phase name if aligned
+    rationale: str  # Explanation of verdict
+    violation_details: Optional[str] = None  # Details if BLOCK verdict
+    suggested_phase_name: Optional[str] = None  # If CREATE_PHASE verdict
+    suggested_phase_priority: Optional[str] = None  # If CREATE_PHASE verdict
+    warnings: Optional[List[str]] = None  # Non-blocking warnings
 
 
-class ArchitectureGuard(IOrchestrator):
+class ArchitectureGuard:
     """
-    Architecture Guard - Pre-Implementation Validation Gate
+    Pre-implementation validation gate.
     
-    Validates user requests against master plan to prevent:
+    Validates requests against master plan to prevent:
     - Architectural regression
-    - Master plan drift
-    - Contradictions with completed phases
-    - Untracked significant changes
+    - Phase contradictions
+    - Untracked feature development
     
-    Returns: PROCEED | CREATE_PHASE | BLOCK
+    Usage:
+        guard = ArchitectureGuard()
+        result = guard.validate_request(
+            request_description="Add brittleness scanner",
+            intent_type="IMPLEMENT",
+            scope="ArchitectureGuard",
+            registry_path=Path("path/to/registry")
+        )
+        
+        if result.verdict == ValidationType.BLOCK:
+            print(f"BLOCKED: {result.rationale}")
     """
-    
-    REGISTRY_ROOT = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "_cortex-master"
-    INDEX_FILE = REGISTRY_ROOT / "index.yaml"
-    
-    # Risk thresholds
-    REGRESSION_RISK_THRESHOLD = 0.3  # PROCEED if < 0.3
-    SIGNIFICANT_CHANGE_THRESHOLD = 0.5  # CREATE_PHASE if > 0.5
     
     def __init__(self):
         """Initialize ArchitectureGuard."""
-        self._index_cache: Optional[Dict[str, Any]] = None
-        self._cache_timestamp: Optional[datetime] = None
-        self._cache_ttl_seconds = 300  # 5 minutes
-    
-    def get_name(self) -> str:
-        """Get orchestrator name."""
-        return "ArchitectureGuard"
-    
-    def get_version(self) -> str:
-        """Get orchestrator version."""
-        return "1.0.0"
-    
-    def get_mode(self) -> OperationMode:
-        """Get operation mode."""
-        return OperationMode.VALIDATION
-    
-    def initialize(self) -> Result[str]:
-        """Initialize orchestrator."""
-        try:
-            # Verify registry access
-            if not self.INDEX_FILE.exists():
-                return Err(f"Master plan registry not found: {self.INDEX_FILE}")
-            
-            # Load index to verify format
-            load_result = self._load_index()
-            if load_result.is_err():
-                return Err(f"Failed to load master plan: {load_result.unwrap_err()}")
-            
-            logger.info("ArchitectureGuard initialized successfully")
-            return Ok("ArchitectureGuard initialized")
-        
-        except Exception as e:
-            logger.error(f"ArchitectureGuard initialization failed: {e}")
-            return Err(f"Initialization error: {str(e)}")
-    
-    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
-        """Get MCP tools exposed by this orchestrator."""
-        return Ok({
-            "cortex_validate_architecture": {
-                "name": "cortex_validate_architecture",
-                "description": "Validate user request against master plan to prevent regression",
-                "parameters": {
-                    "request_description": {
-                        "type": "string",
-                        "required": True,
-                        "description": "Description of requested change"
-                    },
-                    "intent_type": {
-                        "type": "string",
-                        "required": True,
-                        "enum": ["IMPLEMENT", "REFACTOR", "FIX", "DESIGN"],
-                        "description": "Type of change intent"
-                    },
-                    "scope": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "required": False,
-                        "description": "Affected files/orchestrators"
-                    }
-                },
-                "returns": {
-                    "verdict": "PROCEED | CREATE_PHASE | BLOCK",
-                    "phase_alignment": "object",
-                    "reasoning": "string",
-                    "suggested_phase": "object (optional)"
-                }
-            }
-        })
-    
-    def execute_operation(
-        self,
-        operation_name: str,
-        parameters: Dict[str, Any],
-    ) -> Result[Any]:
-        """Execute named operation."""
-        if operation_name == "validate_request":
-            return self.validate_request(
-                request_description=parameters.get("request_description", ""),
-                intent_type=parameters.get("intent_type", "IMPLEMENT"),
-                scope=parameters.get("scope", [])
-            )
-        else:
-            return Err(f"Unknown operation: {operation_name}")
-    
-    def get_audit_trail(self, limit: int = 100) -> Result[list]:
-        """Get audit trail (not implemented for this orchestrator)."""
-        return Ok([])
+        self._registry_cache: Optional[Dict[str, Any]] = None
     
     def validate_request(
         self,
         request_description: str,
         intent_type: str,
-        scope: Optional[List[str]] = None
-    ) -> Result[ValidationResult]:
+        scope: str,
+        registry_path: Optional[Path] = None
+    ) -> ValidationResult:
         """
-        Validate user request against master plan.
+        Validate request against master plan.
         
         Args:
-            request_description: Description of requested change
-            intent_type: IMPLEMENT, REFACTOR, FIX, or DESIGN
-            scope: Affected files/orchestrators
+            request_description: Natural language description of request
+            intent_type: IMPLEMENT, FIX, REFACTOR, etc.
+            scope: Scope identifier (file, component, system)
+            registry_path: Optional path to registry (for testing)
         
         Returns:
-            Result[ValidationResult]: Validation decision
+            ValidationResult with verdict and rationale
         """
-        try:
-            # Load master plan index
-            index_result = self._load_index()
-            if index_result.is_err():
-                return Err(f"Failed to load master plan: {index_result.unwrap_err()}")
-            
-            index_data = index_result.unwrap()
-            
-            # Extract active and completed phases
-            active_phases = self._extract_active_phases(index_data)
-            completed_phases = self._extract_completed_phases(index_data)
-            
-            # Check phase alignment
-            alignment_result = self._check_phase_alignment(
-                request_description=request_description,
-                active_phases=active_phases,
-                completed_phases=completed_phases,
-                scope=scope or []
+        # Load registry
+        registry = self._load_registry(registry_path)
+        
+        if registry is None:
+            # Graceful degradation: proceed with warning
+            return ValidationResult(
+                verdict=GateVerdict.PROCEED,
+                confidence=0.5,
+                regression_risk=0.0,
+                aligned_phase_id=None,
+                aligned_phase_name=None,
+                rationale="Registry not available, proceeding with caution",
+                warnings=["Master plan registry could not be loaded"]
             )
-            
-            if alignment_result.is_err():
-                return Err(alignment_result.unwrap_err())
-            
-            phase_alignment = alignment_result.unwrap()
-            
-            # Calculate regression risk
-            regression_risk = self._calculate_regression_risk(
-                phase_alignment=phase_alignment,
-                intent_type=intent_type,
-                scope=scope or [],
-                request_description=request_description
+        
+        # Check alignment with active phases
+        active_alignment = self._check_active_phase_alignment(
+            request_description, intent_type, scope, registry
+        )
+        
+        if active_alignment["aligned"]:
+            return ValidationResult(
+                verdict=GateVerdict.PROCEED,
+                confidence=active_alignment["confidence"],
+                regression_risk=active_alignment["regression_risk"],
+                aligned_phase_id=active_alignment["phase_id"],
+                aligned_phase_name=active_alignment["phase_name"],
+                rationale=f"Request aligns with active phase: {active_alignment['phase_name']}"
             )
-            
-            phase_alignment.regression_risk = regression_risk
-            
-            # Calculate brittleness risk (simplified for now)
-            phase_alignment.brittleness_risk = self._calculate_brittleness_risk(
-                scope=scope or []
-            )
-            
-            # Determine verdict
-            verdict_result = self._determine_verdict(
-                phase_alignment=phase_alignment,
-                request_description=request_description,
-                intent_type=intent_type,
-                scope=scope or []
-            )
-            
-            if verdict_result.is_err():
-                return Err(verdict_result.unwrap_err())
-            
-            return Ok(verdict_result.unwrap())
         
-        except Exception as e:
-            logger.error(f"Request validation failed: {e}")
-            return Err(f"Validation error: {str(e)}")
-    
-    # ==================== Private Methods ====================
-    
-    def _load_index(self) -> Result[Dict[str, Any]]:
-        """Load master plan index with caching."""
-        try:
-            # Check cache validity
-            if self._index_cache and self._cache_timestamp:
-                age_seconds = (datetime.utcnow() - self._cache_timestamp).total_seconds()
-                if age_seconds < self._cache_ttl_seconds:
-                    return Ok(self._index_cache)
-            
-            # Load from file
-            with open(self.INDEX_FILE, 'r') as f:
-                index_data = yaml.safe_load(f)
-            
-            # Update cache
-            self._index_cache = index_data
-            self._cache_timestamp = datetime.utcnow()
-            
-            return Ok(index_data)
+        # Check for conflicts with completed phases
+        completed_conflict = self._check_completed_phase_conflicts(
+            request_description, intent_type, scope, registry
+        )
         
-        except Exception as e:
-            return Err(f"Failed to load index: {str(e)}")
-    
-    def _extract_active_phases(self, index_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Extract active phases from index."""
-        return index_data.get("active_phases", [])
-    
-    def _extract_completed_phases(self, index_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Extract completed phases from index."""
-        completed = []
-        
-        # 2026 completed phases
-        completed_2026 = index_data.get("completed_phases_2026", {})
-        if "phases" in completed_2026:
-            for phase_file in completed_2026["phases"]:
-                completed.append({"file": phase_file, "year": "2026"})
-        
-        # 2025 completed phases
-        completed_2025 = index_data.get("completed_phases_2025", {})
-        if "phases" in completed_2025:
-            for phase_file in completed_2025["phases"]:
-                completed.append({"file": phase_file, "year": "2025"})
-        
-        return completed
-    
-    def _check_phase_alignment(
-        self,
-        request_description: str,
-        active_phases: List[Dict[str, Any]],
-        completed_phases: List[Dict[str, Any]],
-        scope: List[str]
-    ) -> Result[PhaseAlignment]:
-        """Check if request aligns with active phases and doesn't conflict with completed."""
-        try:
-            active_phase_ids = [p.get("id", "") for p in active_phases]
-            conflicts = []
-            
-            # Check for completed phase conflicts
-            # For now, simplified check - in production, would load phase YAMLs and check commitments
-            for phase in completed_phases:
-                phase_file = phase.get("file", "")
-                
-                # Example conflict detection (would be more sophisticated in production)
-                if "screaming" in request_description.lower() and "phase-15" in phase_file:
-                    conflicts.append("phase-15: Committed to kebab-case naming, request may use SCREAMING_CASE")
-                
-                if "sqlite" in request_description.lower() and "phase-21" in phase_file:
-                    conflicts.append("phase-21: Committed to JSON-first approach, request may contradict")
-            
-            return Ok(PhaseAlignment(
-                active_phases=active_phase_ids,
-                conflicts=conflicts,
-                regression_risk=0.0,  # Calculated separately
-                brittleness_risk=0.0  # Calculated separately
-            ))
-        
-        except Exception as e:
-            return Err(f"Phase alignment check failed: {str(e)}")
-    
-    def _calculate_regression_risk(
-        self,
-        phase_alignment: PhaseAlignment,
-        intent_type: str,
-        scope: List[str],
-        request_description: str = ""
-    ) -> float:
-        """
-        Calculate regression risk score (0.0-1.0).
-        
-        Factors:
-        - Number of conflicts (0.4 per conflict)
-        - Intent type (REFACTOR = +0.1, IMPLEMENT on core = +0.2)
-        - Scope breadth (>10 files = +0.2)
-        - Dangerous keywords (rewrite, replace, remove = +0.5)
-        """
-        risk = 0.0
-        
-        # Conflicts contribute heavily
-        risk += len(phase_alignment.conflicts) * 0.4
-        
-        # Check for dangerous keywords
-        dangerous_keywords = ["rewrite", "replace all", "remove all", "delete", "completely"]
-        if any(keyword in request_description.lower() for keyword in dangerous_keywords):
-            risk += 0.5
-        
-        # Intent type
-        if intent_type == "REFACTOR":
-            risk += 0.1
-        elif intent_type == "IMPLEMENT":
-            # Check if touching core files
-            core_files = [f for f in scope if "orchestrators/core" in f]
-            if core_files:
-                risk += 0.2
-        
-        # Scope breadth
-        if len(scope) > 10:
-            risk += 0.2
-        
-        # Cap at 1.0
-        return min(risk, 1.0)
-    
-    def _calculate_brittleness_risk(self, scope: List[str]) -> float:
-        """
-        Calculate brittleness risk (0.0-1.0).
-        
-        Simplified for now - would integrate with BrittlenessScanner in production.
-        """
-        # Simple heuristic: more files = potentially more coupling
-        if len(scope) > 20:
-            return 0.5
-        elif len(scope) > 10:
-            return 0.3
-        else:
-            return 0.1
-    
-    def _determine_verdict(
-        self,
-        phase_alignment: PhaseAlignment,
-        request_description: str,
-        intent_type: str,
-        scope: List[str]
-    ) -> Result[ValidationResult]:
-        """Determine final verdict based on analysis."""
-        try:
-            # BLOCK if conflicts detected and high regression risk
-            if phase_alignment.conflicts and phase_alignment.regression_risk > 0.7:
-                return Ok(ValidationResult(
-                    verdict=GateVerdict.BLOCK,
-                    phase_alignment=phase_alignment,
-                    reasoning=(
-                        f"Request conflicts with {len(phase_alignment.conflicts)} completed phase(s) "
-                        f"and poses high regression risk ({phase_alignment.regression_risk:.2f}). "
-                        f"Conflicts: {'; '.join(phase_alignment.conflicts)}"
-                    )
-                ))
-            
-            # CREATE_PHASE if significant change without active phase coverage
-            if self._is_significant_change(intent_type, scope):
-                # Check if any active phase covers this
-                if not self._has_active_phase_coverage(phase_alignment.active_phases, request_description):
-                    suggested_phase = self._generate_suggested_phase(
-                        request_description=request_description,
-                        intent_type=intent_type,
-                        scope=scope
-                    )
-                    
-                    return Ok(ValidationResult(
-                        verdict=GateVerdict.CREATE_PHASE,
-                        phase_alignment=phase_alignment,
-                        reasoning=(
-                            f"This is a significant change ({intent_type}, {len(scope)} files) "
-                            f"that should be tracked as a dedicated phase for proper planning, "
-                            f"coordination, and dashboard visibility."
-                        ),
-                        suggested_phase=suggested_phase
-                    ))
-            
-            # PROCEED if low regression risk
-            if phase_alignment.regression_risk < self.REGRESSION_RISK_THRESHOLD:
-                return Ok(ValidationResult(
-                    verdict=GateVerdict.PROCEED,
-                    phase_alignment=phase_alignment,
-                    reasoning=(
-                        f"Request aligns with master plan. "
-                        f"Regression risk: {phase_alignment.regression_risk:.2f} (acceptable). "
-                        f"No conflicts with completed phases."
-                    )
-                ))
-            
-            # Default to BLOCK if uncertain
-            return Ok(ValidationResult(
+        if completed_conflict["conflict"]:
+            return ValidationResult(
                 verdict=GateVerdict.BLOCK,
-                phase_alignment=phase_alignment,
-                reasoning=(
-                    f"Request has moderate regression risk ({phase_alignment.regression_risk:.2f}) "
-                    f"and requires careful review before proceeding."
-                )
-            ))
+                confidence=completed_conflict["confidence"],
+                regression_risk=completed_conflict["regression_risk"],
+                aligned_phase_id=None,
+                aligned_phase_name=None,
+                rationale=f"Request contradicts completed phase: {completed_conflict['phase_name']}",
+                violation_details=completed_conflict["details"]
+            )
         
-        except Exception as e:
-            return Err(f"Verdict determination failed: {str(e)}")
-    
-    def _is_significant_change(self, intent_type: str, scope: List[str]) -> bool:
-        """Determine if change is significant enough to warrant a phase."""
-        # REFACTOR affecting many files
-        if intent_type == "REFACTOR" and len(scope) > 5:
-            return True
+        # Check if new phase should be created
+        phase_creation = self._should_create_phase(
+            request_description, intent_type, scope, registry
+        )
         
-        # IMPLEMENT affecting core orchestrators
-        if intent_type == "IMPLEMENT":
-            core_files = [f for f in scope if "orchestrators/core" in f]
-            if core_files:
-                return True
+        if phase_creation["create"]:
+            return ValidationResult(
+                verdict=GateVerdict.CREATE_PHASE,
+                confidence=phase_creation["confidence"],
+                regression_risk=phase_creation["regression_risk"],
+                aligned_phase_id=None,
+                aligned_phase_name=None,
+                rationale=phase_creation["rationale"],
+                suggested_phase_name=phase_creation["suggested_name"],
+                suggested_phase_priority=phase_creation["suggested_priority"]
+            )
         
-        # Large scope (>10 files)
-        if len(scope) > 10:
-            return True
-        
-        return False
-    
-    def _has_active_phase_coverage(
-        self,
-        active_phases: List[str],
-        request_description: str
-    ) -> bool:
-        """Check if any active phase covers this request (simplified)."""
-        # In production, would load phase YAMLs and check scope/description
-        # For now, simple keyword matching
-        request_lower = request_description.lower()
-        
-        for phase_id in active_phases:
-            if "json" in request_lower and "21" in phase_id:
-                return True
-            if "ask" in request_lower and "22" in phase_id:
-                return True
-            if "dashboard" in request_lower and "23" in phase_id:
-                return True
-        
-        return False
-    
-    def _generate_suggested_phase(
-        self,
-        request_description: str,
-        intent_type: str,
-        scope: List[str]
-    ) -> SuggestedPhase:
-        """Generate suggested phase structure."""
-        # Extract next phase number
-        # In production, would query index.yaml for latest phase number
-        next_phase_id = "phase-25"  # Simplified
-        
-        # Generate title from request
-        title = self._generate_phase_title(request_description, intent_type)
-        
-        # Determine priority
-        priority = "P1"
-        if "core" in " ".join(scope):
-            priority = "P0"
-        
-        # Estimate effort
-        estimated_effort = "3 days"
-        if len(scope) > 10:
-            estimated_effort = "1 week"
-        elif len(scope) > 20:
-            estimated_effort = "2 weeks"
-        
-        return SuggestedPhase(
-            id=next_phase_id,
-            title=title,
-            priority=priority,
-            estimated_effort=estimated_effort,
-            scope=scope[:10],  # Top 10 files
-            dependencies=[]
+        # Default: proceed with low confidence
+        return ValidationResult(
+            verdict=GateVerdict.PROCEED,
+            confidence=0.4,
+            regression_risk=0.2,
+            aligned_phase_id=None,
+            aligned_phase_name=None,
+            rationale="No strong alignment or conflicts detected, proceeding with caution",
+            warnings=["Request does not strongly align with any active phase"]
         )
     
-    def _generate_phase_title(self, request_description: str, intent_type: str) -> str:
-        """Generate phase title from request description."""
-        # Simplified - would use NLP in production
-        words = request_description.split()[:5]
-        title = " ".join(words).title()
+    def calculate_regression_risk(
+        self,
+        scope: str,
+        affected_phases: List[str],
+        completed_phase_overlap: float,
+        architectural_impact: float
+    ) -> float:
+        """
+        Calculate regression risk score.
         
-        if intent_type == "REFACTOR":
-            return f"{title} Refactor"
-        elif intent_type == "IMPLEMENT":
-            return f"{title} Implementation"
+        Args:
+            scope: Scope of change (SingleFile, MultiComponent, CoreInfrastructure)
+            affected_phases: List of phase IDs affected
+            completed_phase_overlap: 0.0-1.0 overlap with completed phases
+            architectural_impact: 0.0-1.0 architectural impact score
+        
+        Returns:
+            Risk score 0.0-1.0 (0=low risk, 1=high risk)
+        """
+        # Base risk from scope
+        scope_risk = {
+            "SingleFile": 0.1,
+            "MultiComponent": 0.4,
+            "CoreInfrastructure": 0.7,
+        }.get(scope, 0.3)
+        
+        # Risk from affected phases count
+        phase_risk = min(len(affected_phases) * 0.15, 0.5)
+        
+        # Risk from completed phase overlap
+        overlap_risk = completed_phase_overlap * 0.3
+        
+        # Risk from architectural impact
+        architecture_risk = architectural_impact * 0.4
+        
+        # Combined risk (weighted average)
+        total_risk = (
+            scope_risk * 0.3 +
+            phase_risk * 0.2 +
+            overlap_risk * 0.3 +
+            architecture_risk * 0.2
+        )
+        
+        return min(total_risk, 1.0)
+    
+    def _load_registry(self, registry_path: Optional[Path] = None) -> Optional[Dict[str, Any]]:
+        """Load master plan registry."""
+        if registry_path is None:
+            registry_path = Path.cwd() / "cortex-registry" / "_cortex-master"
+        
+        # Check if registry_path is already the full path (contains index.yaml)
+        if (registry_path / "index.yaml").exists():
+            index_file = registry_path / "index.yaml"
+        # Otherwise assume it's a base path that needs cortex-registry/_cortex-master appended
+        elif (registry_path / "cortex-registry" / "_cortex-master" / "index.yaml").exists():
+            index_file = registry_path / "cortex-registry" / "_cortex-master" / "index.yaml"
         else:
-            return title
-
-
-# Module-level exports
-__all__ = [
-    "ArchitectureGuard",
-    "GateVerdict",
-    "ValidationResult",
-    "PhaseAlignment",
-    "SuggestedPhase",
-]
+            return None
+        
+        try:
+            with open(index_file, 'r') as f:
+                return yaml.safe_load(f)
+        except Exception:
+            return None
+    
+    def _check_active_phase_alignment(
+        self,
+        request_description: str,
+        intent_type: str,
+        scope: str,
+        registry: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Check if request aligns with active phases."""
+        active_phases = registry.get("active_phases", [])
+        
+        for phase in active_phases:
+            phase_id = phase.get("id", "")
+            phase_name = phase.get("name", "")
+            
+            # Check for exact name match or phase ID match
+            if (phase_name.lower() in request_description.lower() or
+                phase_id.lower() in request_description.lower()):
+                return {
+                    "aligned": True,
+                    "phase_id": phase_id,
+                    "phase_name": phase_name,
+                    "confidence": 0.9,
+                    "regression_risk": self.calculate_regression_risk(
+                        scope=scope,
+                        affected_phases=[phase_id],
+                        completed_phase_overlap=0.0,
+                        architectural_impact=0.1
+                    )
+                }
+            
+            # Check if scope parameter matches phase deliverable
+            # e.g., scope="ArchitectureGuard" matches phase-24 (Architecture Integrity System)
+            if scope:
+                scope_words = set(re.findall(r'[A-Z][a-z]+', scope))  # CamelCase words
+                phase_words = set(self._extract_keywords(phase_name))
+                
+                # Check for significant word overlap
+                word_overlap = scope_words & phase_words
+                if word_overlap and len(word_overlap) >= 1:
+                    return {
+                        "aligned": True,
+                        "phase_id": phase_id,
+                        "phase_name": phase_name,
+                        "confidence": 0.85,
+                        "regression_risk": self.calculate_regression_risk(
+                            scope=scope,
+                            affected_phases=[phase_id],
+                            completed_phase_overlap=0.0,
+                            architectural_impact=0.15
+                        )
+                    }
+            
+            # Check for semantic similarity (keywords)
+            phase_keywords = self._extract_keywords(phase_name)
+            request_keywords = self._extract_keywords(request_description)
+            
+            overlap = len(phase_keywords & request_keywords)
+            if overlap >= 2:
+                return {
+                    "aligned": True,
+                    "phase_id": phase_id,
+                    "phase_name": phase_name,
+                    "confidence": min(0.5 + (overlap * 0.1), 0.85),
+                    "regression_risk": self.calculate_regression_risk(
+                        scope=scope,
+                        affected_phases=[phase_id],
+                        completed_phase_overlap=0.0,
+                        architectural_impact=0.2
+                    )
+                }
+        
+        return {"aligned": False}
+    
+    def _check_completed_phase_conflicts(
+        self,
+        request_description: str,
+        intent_type: str,
+        scope: str,
+        registry: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Check for conflicts with completed phases."""
+        completed_2026 = registry.get("completed_phases_2026", {}).get("phases", [])
+        
+        # Check for regression indicators
+        regression_keywords = ["revert", "remove", "disable", "delete", "undo"]
+        has_regression_intent = any(
+            keyword in request_description.lower()
+            for keyword in regression_keywords
+        )
+        
+        if not has_regression_intent:
+            return {"conflict": False}
+        
+        # Check if affects completed phases
+        for phase_filename in completed_2026:
+            phase_name = self._extract_phase_name(phase_filename)
+            phase_id = self._extract_phase_id(phase_filename)
+            
+            if phase_name.lower() in request_description.lower() or phase_id in request_description.lower():
+                return {
+                    "conflict": True,
+                    "phase_name": phase_name,
+                    "phase_id": phase_id,
+                    "confidence": 0.85,
+                    "regression_risk": 0.9,
+                    "details": f"Request attempts to modify completed {phase_id}: {phase_name}"
+                }
+        
+        # High regression risk based on keywords alone
+        if has_regression_intent and scope == "CoreInfrastructure":
+            return {
+                "conflict": True,
+                "phase_name": "Core Infrastructure",
+                "phase_id": "core-infrastructure",
+                "confidence": 0.7,
+                "regression_risk": 0.95,
+                "details": "Request has high risk for core infrastructure"
+            }
+        
+        return {"conflict": False}
+    
+    def _should_create_phase(
+        self,
+        request_description: str,
+        intent_type: str,
+        scope: str,
+        registry: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Determine if new phase should be created."""
+        # Check if this is a significant new feature
+        new_feature_keywords = [
+            "machine learning",
+            "add 10 new",
+            "create pipeline",
+            "build system",
+            "new capability"
+        ]
+        
+        is_new_feature = any(
+            keyword in request_description.lower()
+            for keyword in new_feature_keywords
+        )
+        
+        if is_new_feature:
+            # Extract feature name for suggested phase
+            suggested_name = self._extract_feature_name(request_description)
+            
+            return {
+                "create": True,
+                "confidence": 0.8,
+                "regression_risk": 0.1,
+                "rationale": "Request describes significant new feature not covered by existing phases",
+                "suggested_name": suggested_name,
+                "suggested_priority": "P1"
+            }
+        
+        # Check for scope expansion
+        if "add 10" in request_description.lower() or "expand" in request_description.lower():
+            return {
+                "create": True,
+                "confidence": 0.6,
+                "regression_risk": 0.2,
+                "rationale": "Request represents significant scope expansion",
+                "suggested_name": "Scope Expansion",
+                "suggested_priority": "P2"
+            }
+        
+        return {"create": False}
+    
+    def _extract_keywords(self, text: str) -> set:
+        """Extract meaningful keywords from text."""
+        # Remove common words
+        stop_words = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for"}
+        
+        words = re.findall(r'\w+', text.lower())
+        return {word for word in words if word not in stop_words and len(word) > 3}
+    
+    def _extract_phase_name(self, filename: str) -> str:
+        """Extract phase name from filename."""
+        # Remove phase-XX prefix and .yaml suffix
+        name = re.sub(r'^phase-\d+-', '', filename)
+        name = re.sub(r'\.yaml$', '', name)
+        # Convert kebab-case to Title Case
+        return name.replace('-', ' ').title()
+    
+    def _extract_phase_id(self, filename: str) -> str:
+        """Extract phase ID from filename."""
+        # Extract phase-XX from filename
+        match = re.match(r'(phase-\d+)', filename)
+        return match.group(1) if match else ""
+    
+    def _extract_feature_name(self, description: str) -> str:
+        """Extract feature name from description."""
+        # Simple heuristic: take first 3-5 meaningful words
+        keywords = list(self._extract_keywords(description))[:5]
+        return ' '.join(keywords).title() if keywords else "New Feature"
