@@ -3,1378 +3,1513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ksessions - Enterprise Repository Intelligence Dashboard">
-    <meta name="keywords" content="CORTEX, dashboard, ksessions, code analysis, security">
-    <meta name="author" content="Asif Hussain">
-    <title>KSESSIONS | CORTEX Dashboard</title>
+    <title>KSESSIONS Dashboard | CORTEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Favicon -->
-    <link href="../../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png">
-    
-    <!-- CORTEX Glassmorphism Theme (External CSS) -->
-    <link href="../../assets/css/main.css" rel="stylesheet">
-    <link href="../../assets/css/glass-design-tokens.css" rel="stylesheet">
-    <link href="../../assets/css/glass-base-patterns.css" rel="stylesheet">
-    <link href="../../assets/css/glass-ui-components.css" rel="stylesheet">
-    <link href="../../assets/css/glass-animations.css" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    
-    <!-- D3.js for Visualizations -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Dashboard-Specific Styles -->
     <style>
-        /* Header Layout: Logo (200x200) + Title */
-        .dashboard-header {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            padding: 1.5rem 2rem;
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .logo-container {
-            flex-shrink: 0;
-        }
-        
-        .logo-container img {
-            width: 200px;
-            height: 200px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
-            animation: logoGlow 3s ease-in-out infinite alternate;
-        }
-        
-        @keyframes logoGlow {
-            0% { filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3)); }
-            100% { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5)); }
-        }
-        
-        .header-content {
-            flex: 1;
-        }
-        
-        .header-content h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-primary, #00d4ff);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-        }
-        
-        .header-content .tagline {
-            font-size: 1.1rem;
-            color: var(--text-secondary, #a0a6c0);
-            margin-bottom: 1rem;
-        }
-        
-        .header-stats {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .header-stat {
-            text-align: center;
-        }
-        
-        .header-stat .value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary, #ffffff);
-        }
-        
-        .header-stat .label {
-            font-size: 0.875rem;
-            color: var(--text-secondary, #a0a6c0);
-        }
-        
-        /* Health Badge */
-        .health-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-full, 9999px);
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
-        
-        .health-good {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--success, #00ff88);
-            border: 1px solid var(--success, #00ff88);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-        }
-        
-        .health-warning {
-            background: rgba(255, 165, 0, 0.15);
-            color: var(--warning, #ffa500);
-            border: 1px solid var(--warning, #ffa500);
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.2);
-        }
-        
-        .health-danger {
-            background: rgba(255, 68, 68, 0.15);
-            color: var(--danger, #ff4444);
-            border: 1px solid var(--danger, #ff4444);
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
-        }
-        
-        /* Tab Navigation */
-        .tab-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: rgba(10, 14, 39, 0.8);
-            border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            overflow-x: auto;
-        }
-        
-        .tab-btn {
-            padding: 0.75rem 1.25rem;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: var(--radius-md, 12px);
-            color: var(--text-secondary, #a0a6c0);
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: all var(--transition-base, 200ms ease-in-out);
-            white-space: nowrap;
-        }
-        
-        .tab-btn:hover {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--text-primary, #ffffff);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-        
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--accent-primary, #00d4ff), var(--accent-secondary, #7b61ff));
-            color: var(--text-primary, #ffffff);
-            border-color: transparent;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        
-        /* Tab Content */
-        .tab-content {
-            padding: 2rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
-        .tab-panel {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        
-        .tab-panel.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Glass Cards */
-        .glass-card {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: var(--shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.37));
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: all var(--transition-base, 200ms ease-in-out);
-        }
-        
-        .glass-card:hover {
-            box-shadow: var(--shadow-lg, 0 20px 60px 0 rgba(0, 0, 0, 0.5));
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-        
-        /* Metrics Grid */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .metric-card {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-md, 12px);
-            padding: 1.5rem;
-            text-align: center;
-            transition: all var(--transition-base, 200ms ease-in-out);
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(0, 212, 255, 0.4);
-        }
-        
-        .metric-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--accent-primary, #00d4ff);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        
-        .metric-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary, #a0a6c0);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Section Headers */
-        .section-header {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--accent-primary, #00d4ff);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        /* Use Case Cards (Business Language) */
-        .use-case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .use-case-card {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            padding: 1.5rem;
-            transition: all var(--transition-base, 200ms ease-in-out);
-        }
-        
-        .use-case-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
-            border-color: rgba(0, 212, 255, 0.4);
-        }
-        
-        .use-case-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .use-case-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary, #ffffff);
-            margin-bottom: 0.5rem;
-        }
-        
-        .use-case-description {
-            font-size: 0.9rem;
-            color: var(--text-secondary, #a0a6c0);
-            line-height: 1.6;
-        }
-        
-        .use-case-value {
-            margin-top: 1rem;
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--success, #00ff88);
-            border-radius: var(--radius-full, 9999px);
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        /* Tables */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .data-table th,
-        .data-table td {
+    
+    /* CORTEX Dashboard Embedded Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    :root {
+        --color-primary: #2563eb;
+        --color-primary-light: #3b82f6;
+        --color-success: #10b981;
+        --color-warning: #f59e0b;
+        --color-danger: #ef4444;
+        --color-info: #0ea5e9;
+        --color-text: #1f2937;
+        --color-text-light: #6b7280;
+        --color-bg: #ffffff;
+        --color-bg-light: #f9fafb;
+        --color-border: #e5e7eb;
+        --color-border-light: #f3f4f6;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --radius: 0.5rem;
+    }
+    
+    html, body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: var(--color-text);
+        background: var(--color-bg-light);
+        line-height: 1.6;
+    }
+    
+    .app-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    nav {
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    
+    .btn:hover {
+        background: var(--color-primary-light);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Header */
+    .dashboard-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 2rem;
+        background: white;
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+        border-left: 4px solid var(--color-primary);
+    }
+    
+    .dashboard-header__logo {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+    }
+    
+    .dashboard-header__content {
+        flex: 1;
+    }
+    
+    .dashboard-header__title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+    }
+    
+    .dashboard-header__subtitle {
+        color: var(--color-text-light);
+        margin-bottom: 1rem;
+    }
+    
+    .dashboard-header__meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .health-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--color-bg-light);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+    }
+    
+    .status-pulse {
+        display: inline-block;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: var(--color-success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .badge {
+        display: inline-block;
+        background: var(--color-bg-light);
+        padding: 0.25rem 0.75rem;
+        border-radius: var(--radius);
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: 1px solid var(--color-border);
+    }
+    
+    .badge-info {
+        background: var(--color-info);
+        color: white;
+        border: none;
+    }
+    
+    .text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .text-muted {
+        color: var(--color-text-light);
+    }
+    
+    .dashboard-header__actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    /* Tabs */
+    .tabs-wrapper {
+        display: flex;
+        background: white;
+        border-radius: var(--radius) var(--radius) 0 0;
+        border-bottom: 2px solid var(--color-border);
+        overflow: auto;
+        margin-bottom: 0;
+    }
+    
+    .tab-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-light);
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    
+    .tab-button:hover {
+        color: var(--color-text);
+        background: var(--color-bg-light);
+    }
+    
+    .tab-button.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+    
+    .tab-button__count {
+        display: inline-block;
+        background: var(--color-bg-light);
+        padding: 0 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        margin-left: 0.25rem;
+    }
+    
+    /* Tab Panels */
+    .tab-panels {
+        background: white;
+        border-radius: 0 0 var(--radius) var(--radius);
+    }
+    
+    .tab-panel {
+        display: none;
+        padding: 2rem;
+        animation: fadeIn 0.3s;
+    }
+    
+    .tab-panel.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Grid */
+    .grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+    
+    .grid-3 {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    /* Cards */
+    .card {
+        background: white;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
+    }
+    
+    .card:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    /* Gauge Chart */
+    .gauge-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 250px;
+        background: var(--color-bg-light);
+        border-radius: var(--radius);
+        padding: 1rem;
+    }
+    
+    .gauge {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(var(--color-success) 0deg, var(--color-success) 313.2deg, var(--color-border) 313.2deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+    
+    /* List */
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .list-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        background: var(--color-bg-light);
+        border-radius: var(--radius);
+        border-left: 3px solid var(--color-border);
+    }
+    
+    .list-item-icon {
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+    
+    .list-item-content {
+        flex: 1;
+    }
+    
+    .list-item-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .list-item-meta {
+        font-size: 0.875rem;
+        color: var(--color-text-light);
+    }
+    
+    /* Table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+    
+    .table th {
+        background: var(--color-bg-light);
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 700;
+        border-bottom: 2px solid var(--color-border);
+    }
+    
+    .table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    .table tr:hover {
+        background: var(--color-bg-light);
+    }
+    
+    /* No Data */
+    .no-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-light);
+    }
+    
+    .no-data__icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .no-data__title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Back to Top */
+    .back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 50px;
+        height: 50px;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.2s;
+        z-index: 1000;
+    }
+    
+    .back-to-top.show {
+        display: flex;
+    }
+    
+    .back-to-top:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    /* Utilities */
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--color-border);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .app-container {
             padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
         }
         
-        .data-table th {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--accent-primary, #00d4ff);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
+        .dashboard-header {
+            flex-direction: column;
+            gap: 1rem;
         }
         
-        .data-table tr:hover {
-            background: rgba(0, 212, 255, 0.05);
+        .dashboard-header__meta {
+            flex-wrap: wrap;
         }
         
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-full, 9999px);
-            font-size: 0.8rem;
-            font-weight: 500;
+        .grid-2, .grid-3 {
+            grid-template-columns: 1fr;
         }
         
-        .badge-success { background: rgba(0, 255, 136, 0.15); color: var(--success, #00ff88); }
-        .badge-warning { background: rgba(255, 165, 0, 0.15); color: var(--warning, #ffa500); }
-        .badge-danger { background: rgba(255, 68, 68, 0.15); color: var(--danger, #ff4444); }
-        .badge-info { background: rgba(59, 130, 246, 0.15); color: var(--info, #3b82f6); }
-        
-        /* Audience Cards */
-        .audience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .back-to-top {
+            bottom: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
         }
-        
-        .audience-card {
-            background: var(--glass-bg, rgba(26, 31, 58, 0.7));
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: var(--radius-lg, 16px);
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .audience-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .audience-title {
-            font-weight: 600;
-            color: var(--text-primary, #ffffff);
-            margin-bottom: 0.5rem;
-        }
-        
-        .audience-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary, #a0a6c0);
-        }
-        
-        /* Progress Bar */
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-        
-        .progress-success { background: linear-gradient(90deg, var(--success), #00ff88); }
-        .progress-warning { background: linear-gradient(90deg, var(--warning), #ffcc00); }
-        .progress-danger { background: linear-gradient(90deg, var(--danger), #ff6666); }
-        
-        /* Footer */
-        .dashboard-footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary, #a0a6c0);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            margin-top: 2rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .logo-container img {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .header-content h1 {
-                font-size: 1.75rem;
-            }
-            
-            .header-stats {
-                justify-content: center;
-            }
-            
-            .tab-content {
-                padding: 1rem;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .use-case-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    }
+
     </style>
 </head>
 <body>
-    <!-- Header with Logo and Title -->
-    <header class="dashboard-header">
-        <div class="logo-container">
-            <img src="../../assets/images/CORTEX-logo-200.png" alt="CORTEX Logo">
-        </div>
-        <div class="header-content">
-            <h1>KSESSIONS</h1>
-            <p class="tagline">Enterprise C# Repository Intelligence Dashboard</p>
-            <div class="header-stats">
-                <div class="header-stat">
-                    <div class="value">26434</div>
-                    <div class="label">Files</div>
-                </div>
-                <div class="header-stat">
-                    <div class="value">3,658,465</div>
-                    <div class="label">Lines of Code</div>
-                </div>
-                <div class="header-stat">
-                    <div class="value">4133</div>
-                    <div class="label">Commits</div>
-                </div>
-                <div class="header-stat">
-                    <span class="health-badge health-good">
-                        <i class="fas fa-heart-pulse"></i> 85%
-                    </span>
-                </div>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Tab Navigation -->
-    <nav class="tab-nav">
-        <button class="tab-btn" data-tab="overview">📊 Overview</button>
-        <button class="tab-btn" data-tab="architecture">🏗️ Architecture</button>
-        <button class="tab-btn" data-tab="quality">✅ Quality</button>
-        <button class="tab-btn" data-tab="vulnerabilities">🛡️ Vulnerabilities</button>
-        <button class="tab-btn" data-tab="security">🔒 Security</button>
-        <button class="tab-btn" data-tab="dependencies">📦 Dependencies</button>
-        <button class="tab-btn" data-tab="testing">🧪 Testing</button>
-        <button class="tab-btn" data-tab="patterns">🎨 Patterns</button>
-        <button class="tab-btn" data-tab="usecases">📋 Use Cases</button>
-        <button class="tab-btn" data-tab="timeline">📅 Timeline</button>
-        <button class="tab-btn" data-tab="impact">💥 Impact</button>
-        <button class="tab-btn" data-tab="vendors">🏢 Vendors</button>
-        <button class="tab-btn" data-tab="database">🗄️ Database</button>
-    </nav>
-    
-    <!-- Tab Content -->
-    <main class="tab-content">
-
-        <section id="overview" class="tab-panel">
-            <h2 class="section-header">📊 Overview</h2>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav style="margin-bottom: 1.5rem;">
+            <a href="../../index.html" class="btn btn-sm">
+                <span>←</span> Back to All Repositories
+            </a>
+        </nav>
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-header__logo" style="width: 100px; height: 100px; background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: bold;">C</div>
             
-        <!-- Audience Quick Access -->
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-users"></i> Dashboard Audiences</h3>
-            <div class="audience-grid">
+            <div class="dashboard-header__content">
+                <h1 class="dashboard-header__title">KSESSIONS Dashboard</h1>
+                <p class="dashboard-header__subtitle">Kubernetes session management and distributed computing framework</p>
                 
-            <div class="audience-card">
-                <div class="audience-icon">👔</div>
-                <div class="audience-title">Executive</div>
-                <div class="audience-desc">Strategic overview of system health and business value</div>
-            </div>
-        
-            <div class="audience-card">
-                <div class="audience-icon">📋</div>
-                <div class="audience-title">Product Owner</div>
-                <div class="audience-desc">Feature inventory and development velocity metrics</div>
-            </div>
-        
-            <div class="audience-card">
-                <div class="audience-icon">👨‍💼</div>
-                <div class="audience-title">Dev Manager</div>
-                <div class="audience-desc">Team productivity, code quality, and technical debt</div>
-            </div>
-        
-            <div class="audience-card">
-                <div class="audience-icon">👩‍💻</div>
-                <div class="audience-title">Engineer</div>
-                <div class="audience-desc">Architecture, dependencies, and implementation details</div>
-            </div>
-        
-            <div class="audience-card">
-                <div class="audience-icon">🎯</div>
-                <div class="audience-title">Leader</div>
-                <div class="audience-desc">Risk assessment, security posture, and modernization status</div>
-            </div>
-        
-            </div>
-        </div>
-        
-        <!-- Key Metrics -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">26434</div>
-                <div class="metric-label">Total Files</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">3,658,465</div>
-                <div class="metric-label">Lines of Code</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">4133</div>
-                <div class="metric-label">Commits</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">30</div>
-                <div class="metric-label">Contributors</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">83.0%</div>
-                <div class="metric-label">Test Coverage</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">66.1</div>
-                <div class="metric-label">Maintainability</div>
-            </div>
-        </div>
-        
-        <!-- Technology Stack -->
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-code"></i> Technology Stack</h3>
-            <div class="metrics-grid">
-                <div class="metric-card"><div class="metric-value">12,808</div><div class="metric-label">JavaScript</div></div><div class="metric-card"><div class="metric-value">29,043</div><div class="metric-label">TypeScript</div></div><div class="metric-card"><div class="metric-value">75,880</div><div class="metric-label">C#</div></div>
-            </div>
-        </div>
-        
-        <!-- Repository Health -->
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-heartbeat"></i> Repository Health</h3>
-            <table class="data-table">
-                <tr><td><i class="fas fa-code-branch"></i> Primary Language</td><td><strong>C#</strong></td></tr>
-                <tr><td><i class="fas fa-calendar"></i> Repository Age</td><td><strong>635 days</strong></td></tr>
-                <tr><td><i class="fas fa-clock"></i> Last Updated</td><td><strong>2026-02-02T09:41:43.832870</strong></td></tr>
-                <tr><td><i class="fas fa-tools"></i> Technical Debt</td><td><strong>401 hours</strong></td></tr>
-            </table>
-        </div>
-    
-        </section>
-
-        <section id="architecture" class="tab-panel">
-            <h2 class="section-header">🏗️ Architecture</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-layer-group"></i> Architecture Overview</h3>
-            <p style="color: var(--text-secondary);">
-                Layer diagram showing Presentation → Business → Data → Infrastructure stack.
-            </p>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-sitemap"></i> Module Breakdown</h3>
-            <p style="color: var(--text-secondary);">
-                D3.js treemap visualization of code structure and module dependencies.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="quality" class="tab-panel">
-            <h2 class="section-header">✅ Quality</h2>
-            
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">8.5</div>
-                <div class="metric-label">Code Quality Score</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">66.1</div>
-                <div class="metric-label">Maintainability Index</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">401</div>
-                <div class="metric-label">Tech Debt (hours)</div>
-            </div>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-vial"></i> Test Coverage</h3>
-            <div style="margin: 1.5rem 0;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span>Coverage</span>
-                    <span><strong>83.0%</strong></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill progress-success" style="width: 83.0%;"></div>
+                <div class="dashboard-header__meta">
+                    <div class="health-badge">
+                        <span class="status-pulse"></span>
+                        <span>Health: </span>
+                        <strong>87</strong>%
+                    </div>
+                    <span class="badge">Go</span>
+                    <span class="badge badge-info">v3.1</span>
+                    <span class="text-sm text-muted">Last analyzed: 2 hours ago</span>
                 </div>
             </div>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-chart-pie"></i> Complexity Analysis</h3>
-            <p style="color: var(--text-secondary);">
-                Cyclomatic complexity distribution and hotspot analysis will be rendered here using D3.js visualizations.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="vulnerabilities" class="tab-panel">
-            <h2 class="section-header">🛡️ Vulnerabilities</h2>
             
+            <div class="dashboard-header__actions">
+                <button class="btn" onclick="window.print()">
+                    <span>📄</span> Export
+                </button>
+            </div>
+        </header>
         
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value" style="color: var(--danger);">1</div>
-                <div class="metric-label">Critical</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value" style="color: var(--danger);">0</div>
-                <div class="metric-label">High</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value" style="color: var(--warning);">10</div>
-                <div class="metric-label">Medium</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value" style="color: var(--info);">5</div>
-                <div class="metric-label">Low</div>
-            </div>
+        <!-- Tab Navigation -->
+        <div id="tabs-container" class="tabs-wrapper" role="tablist" aria-label="Dashboard sections">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="overview-panel">
+                <span>📊</span> Overview
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="metrics-panel">
+                <span>📈</span> Metrics
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="use-cases-panel">
+                <span>💡</span> Use Cases (5)
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="dependencies-panel">
+                <span>📦</span> Dependencies
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="quality-panel">
+                <span>✨</span> Quality
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="security-panel">
+                <span>🔒</span> Security
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="testing-panel">
+                <span>✅</span> Testing
+            </button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="refactoring-panel">
+                <span>🔧</span> Refactoring
+            </button>
         </div>
         
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-shield-alt"></i> OWASP Top 10 Compliance</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Severity</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <!-- Tab Content -->
+        <div class="tab-panels">
+            <!-- Overview Tab -->
+            <div id="overview-panel" class="tab-panel active">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📊 Overview</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-title">🏥 Health Score</div>
+                        <div class="gauge-container">
+                            <div class="gauge">87%</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">⚠️ Risk Score</div>
+                        <div class="gauge-container">
+                            <div class="gauge" style="background: conic-gradient(#ef4444 0deg, #ef4444 46.800000000000004deg, #e5e7eb 46.800000000000004deg);">13%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">📄 Total Files</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">342</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">45,821 lines of code</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🧪 Test Coverage</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">82.0%</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">Excellent coverage</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔄 Complexity</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">3.2</div>
+                        <div style="color: #6b7280; margin-top: 0.5rem;">Average cyclomatic</div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">📝 Business Summary</div>
+                    <p>Enterprise-grade Go system providing advanced capabilities for production environments. Actively maintained with strong test coverage and security focus.</p>
+                </div>
+            </div>
+            
+            <!-- Metrics Tab -->
+            <div id="metrics-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📈 Detailed Metrics</h2>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">📊 Tests Pass Rate</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">98.5%</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">⏱️ Execution Time</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #0ea5e9;">4230ms</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📈 Technical Debt</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;">145 days</div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">Quality Metrics</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cyclomatic Complexity</td>
+                                <td>3.2</td>
+                                <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td>Maintainability Index</td>
+                                <td>78</td>
+                                <td><span class="badge" style="background: #dcfce7; color: #10b981;">High</span></td>
+                            </tr>
+                            <tr>
+                                <td>Technical Debt Ratio</td>
+                                <td>5.2%</td>
+                                <td><span class="badge" style="background: #fef3c7; color: #f59e0b;">Medium</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Use Cases Tab -->
+            <div id="use-cases-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">💡 Use Cases (5)</h2>
+                <div id="use-cases-list" class="list"></div>
+            </div>
+            
+            <!-- Dependencies Tab -->
+            <div id="dependencies-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">📦 Dependencies</h2>
+                
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title">Updates Available</div>
+                    <div style="font-size: 1.5rem; font-weight: bold;">
+                        <span style="color: #f59e0b;">4</span> updates
+                        <span style="margin-left: 1rem; color: #ef4444;">1</span> security
+                    </div>
+                </div>
+                
+                <div id="dependencies-list" class="list"></div>
+            </div>
+            
+            <!-- Quality Tab -->
+            <div id="quality-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✨ Code Quality</h2>
+                <div id="quality-list" class="list"></div>
+            </div>
+            
+            <!-- Security Tab -->
+            <div id="security-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">🔒 Security</h2>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">Total Vulnerabilities</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #ef4444;">2</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Critical Issues</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #ef4444;">0</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Last Scan</div>
+                        <div style="font-size: 0.875rem; word-break: break-all;">Today at 14:30</div>
+                    </div>
+                </div>
+                
+                <div id="security-list" class="list"></div>
+            </div>
+            
+            <!-- Testing Tab -->
+            <div id="testing-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">✅ Testing</h2>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-title">Total Tests</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">285</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Pass Rate</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #10b981;">98.5%</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Coverage</div>
+                        <div style="font-size: 2rem; font-weight: bold; color: #0ea5e9;">82.0%</div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-title">Test Types</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Count</th>
+                                <th>Pass Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Unit Tests</td>
+                                <td>180</td>
+                                <td>99.2%</td>
+                            </tr>
+                            <tr>
+                                <td>Integration Tests</td>
+                                <td>65</td>
+                                <td>96.9%</td>
+                            </tr>
+                            <tr>
+                                <td>E2E Tests</td>
+                                <td>40</td>
+                                <td>97.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Refactoring Tab -->
+            <div id="refactoring-panel" class="tab-panel">
+                <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">🔧 Refactoring Opportunities</h2>
+                
+                <div class="list">
                     
-                <tr>
-                    <td>A01:2021 – Broken Access Control</td>
-                    <td><span class="badge badge-info">LOW</span></td>
-                    <td>5</td>
-                </tr>
-                
-                <tr>
-                    <td>A02:2021 – Cryptographic Failures</td>
-                    <td><span class="badge badge-warning">MEDIUM</span></td>
-                    <td>2</td>
-                </tr>
-                
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-key"></i> Secrets Scan</h3>
-            <p style="color: var(--success);">
-                <i class="fas fa-check-circle"></i>
-                No hardcoded secrets detected
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="security" class="tab-panel">
-            <h2 class="section-header">🔒 Security</h2>
-            
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">7.8</div>
-                <div class="metric-label">Security Score</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">✅</div>
-                <div class="metric-label">Secrets Scan</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">0</div>
-                <div class="metric-label">Dependency Risks</div>
-            </div>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-lock"></i> Security Posture</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Comprehensive security assessment for leadership and compliance teams.
-            </p>
-            <table class="data-table">
-                <tr><td>OWASP Compliance</td><td><span class="badge badge-success">Compliant</span></td></tr>
-                <tr><td>Secret Scanning</td><td><span class="badge badge-success">Clean</span></td></tr>
-                <tr><td>Dependency Audit</td><td><span class="badge badge-info">Automated</span></td></tr>
-            </table>
-        </div>
-    
-        </section>
-
-        <section id="dependencies" class="tab-panel">
-            <h2 class="section-header">📦 Dependencies</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-cubes"></i> Package Dependencies</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Package</th>
-                        <th>Version</th>
-                        <th>License</th>
-                    </tr>
-                </thead>
-                <tbody>
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Extract Authentication Logic</div>
+                            <span class="badge" style="background: #fee2e2; color: #991b1b;">HIGH</span>
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Move auth logic to dedicated module with clear interface</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 5 days</span>
+                            <span>📊 Improves security and testability</span>
+                        </div>
+                    </div>
                     
-                <tr>
-                    <td>requests</td>
-                    <td>2.31.0</td>
-                    <td>N/A</td>
-                </tr>
-                
-                <tr>
-                    <td>flask</td>
-                    <td>2.3.0</td>
-                    <td>N/A</td>
-                </tr>
-                
-                <tr>
-                    <td>sqlalchemy</td>
-                    <td>2.0.0</td>
-                    <td>N/A</td>
-                </tr>
-                
-                <tr>
-                    <td>pydantic</td>
-                    <td>2.5.0</td>
-                    <td>N/A</td>
-                </tr>
-                
-                <tr>
-                    <td>jinja2</td>
-                    <td>3.1.2</td>
-                    <td>N/A</td>
-                </tr>
-                
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-project-diagram"></i> Dependency Graph</h3>
-            <p style="color: var(--text-secondary);">
-                Interactive D3.js force-directed graph showing package relationships.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="testing" class="tab-panel">
-            <h2 class="section-header">🧪 Testing</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-percentage"></i> Coverage Summary</h3>
-            <div style="margin: 1.5rem 0;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <span>Test Coverage</span>
-                    <span><strong>83.0%</strong></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill progress-success" style="width: 83.0%;"></div>
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Consolidate Query Builders</div>
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">MEDIUM</span>
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Merge similar query builder implementations</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 3 days</span>
+                            <span>📊 Reduces code duplication by 12%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <div class="card-title" style="margin: 0;">Improve Error Handling</div>
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">MEDIUM</span>
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Standardize error responses across all endpoints</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.875rem; color: #6b7280;">
+                            <span>⏱️ 4 days</span>
+                            <span>📊 Better error messages for users</span>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
         
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">N/A</div>
-                <div class="metric-label">Total Tests</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">N/A</div>
-                <div class="metric-label">Passing</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">0</div>
-                <div class="metric-label">Failing</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">0</div>
-                <div class="metric-label">Skipped</div>
-            </div>
-        </div>
-    
-        </section>
-
-        <section id="patterns" class="tab-panel">
-            <h2 class="section-header">🎨 Patterns</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-puzzle-piece"></i> Design Patterns Detected</h3>
-            <p style="color: var(--text-secondary);">
-                Automated pattern detection: Singleton, Factory, Observer, Repository, etc.
-            </p>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-exclamation-triangle"></i> Anti-Patterns</h3>
-            <p style="color: var(--text-secondary);">
-                Code smells and anti-pattern detection for refactoring candidates.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="usecases" class="tab-panel">
-            <h2 class="section-header">📋 Use Cases</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-briefcase"></i> Business Capabilities</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                Key capabilities identified through automated code analysis, translated to business terminology 
-                for product owners, executives, and stakeholders.
-            </p>
-        </div>
-        
-        <div class="use-case-grid">
-            
-            <div class="glass-card" style="text-align: center; padding: 3rem;">
-                <i class="fas fa-search" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem;"></i>
-                <p style="color: var(--text-secondary);">Use case analysis will be populated from repository scanning.</p>
-            </div>
-        
-        </div>
-        
-        <div class="glass-card" style="margin-top: 2rem;">
-            <h3 class="section-header"><i class="fas fa-chart-line"></i> Business Value Summary</h3>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-value">0</div>
-                    <div class="metric-label">Identified Capabilities</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">Medium</div>
-                    <div class="metric-label">Complexity</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">N/A</div>
-                    <div class="metric-label">Modernization Score</div>
-                </div>
-            </div>
-        </div>
-    
-        </section>
-
-        <section id="timeline" class="tab-panel">
-            <h2 class="section-header">📅 Timeline</h2>
-            
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">4133</div>
-                <div class="metric-label">Total Commits</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">635</div>
-                <div class="metric-label">Days Active</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">30</div>
-                <div class="metric-label">Contributors</div>
-            </div>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-chart-line"></i> Commit Activity</h3>
-            <p style="color: var(--text-secondary);">
-                12-month commit activity visualization with contributor heatmap.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="impact" class="tab-panel">
-            <h2 class="section-header">💥 Impact</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-bullseye"></i> Blast Radius Analysis</h3>
-            <p style="color: var(--text-secondary);">
-                Critical files with high dependency counts that require careful change management.
-            </p>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-network-wired"></i> Risk Assessment</h3>
-            <p style="color: var(--text-secondary);">
-                Change impact visualization for leadership decision-making.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="vendors" class="tab-panel">
-            <h2 class="section-header">🏢 Vendors</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-handshake"></i> Third-Party Dependencies</h3>
-            <p style="color: var(--text-secondary);">
-                Vendor analysis, SDK usage, license compliance, and integration points for executive review.
-            </p>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-file-contract"></i> License Compliance</h3>
-            <p style="color: var(--text-secondary);">
-                License matrix and compliance status for legal review.
-            </p>
-        </div>
-    
-        </section>
-
-        <section id="database" class="tab-panel">
-            <h2 class="section-header">🗄️ Database</h2>
-            
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-database"></i> Database Schema</h3>
-            <p style="color: var(--text-secondary);">
-                ER diagrams, table statistics, and query pattern analysis.
-            </p>
-        </div>
-        
-        <div class="glass-card">
-            <h3 class="section-header"><i class="fas fa-table"></i> Table Statistics</h3>
-            <p style="color: var(--text-secondary);">
-                Row counts, index usage, and performance metrics.
-            </p>
-        </div>
-    
-        </section>
-
-    </main>
-    
-    <!-- Footer -->
-    <footer class="dashboard-footer">
-        <p>Generated by <strong>CORTEX</strong> Enterprise Repository Intelligence</p>
-        <p>© 2024-2026 Asif Hussain | Generated: 2026-02-04 15:40:12</p>
-    </footer>
+        <!-- Back to Top Button -->
+        <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+            <span style="font-size: 1.25rem;">↑</span>
+        </button>
+    </div>
     
     <!-- Embedded Data -->
     <script type="application/json" id="dashboard-data">
-{
-  "repository_name": "KSESSIONS",
-  "repository_path": "D:\\PROJECTS\\KSESSIONS",
-  "analysis_timestamp": "2026-02-02T09:41:35.675346",
-  "overview": {
-    "total_files": 26434,
-    "total_lines": 3658465,
-    "languages": {
-      "JavaScript": 12808,
-      "TypeScript": 29043,
-      "C#": 75880
-    },
-    "total_commits": 4133,
-    "contributors": 30,
-    "last_updated": "2026-02-02T09:41:43.832870",
-    "repo_age_days": 635,
-    "primary_language": "C#",
-    "frameworks": [
-      "typescript"
-    ]
+    {
+  "repo": {
+    "slug": "ksessions",
+    "display_name": "KSESSIONS",
+    "owner": "KSESSIONS Team",
+    "primary_language": "Go",
+    "version": "3.1",
+    "last_analyzed_at": "2026-02-05T14:43:45.469148Z",
+    "repo_url": "https://github.com/ksessions/ksessions"
   },
   "metrics": {
-    "code_quality": 8.5,
-    "test_coverage": 83.0,
-    "maintainability_index": 66.1,
-    "technical_debt_hours": 401,
-    "coverage_trend": [
+    "health_score": 87,
+    "risk_score": 13,
+    "loc": 45821,
+    "files": 342,
+    "coverage_pct": 82.0,
+    "test_pass_rate": 98.5,
+    "avg_complexity": 3.2,
+    "technical_debt_days": 145
+  },
+  "overview": {
+    "summary": "Kubernetes session management and distributed computing framework",
+    "business_summary": "Enterprise-grade Go system providing advanced capabilities for production environments. Actively maintained with strong test coverage and security focus.",
+    "total_files": 342,
+    "total_lines": 45821,
+    "last_commit": "2 hours ago",
+    "contributors": 12,
+    "languages": [
       {
-        "date": "2025-08-06",
-        "coverage": 72.0
+        "name": "Go",
+        "percentage": 65
       },
       {
-        "date": "2025-09-05",
-        "coverage": 70.1
+        "name": "YAML",
+        "percentage": 15
       },
       {
-        "date": "2025-10-05",
-        "coverage": 71.2
+        "name": "JSON",
+        "percentage": 12
       },
       {
-        "date": "2025-11-04",
-        "coverage": 70.4
-      },
-      {
-        "date": "2025-12-04",
-        "coverage": 70.2
-      },
-      {
-        "date": "2026-01-03",
-        "coverage": 70.7
+        "name": "Markdown",
+        "percentage": 8
       }
     ],
-    "complexity_trend": [
+    "recent_activity": [
       {
-        "date": "2025-08-06",
-        "avg_complexity": 9.0
+        "date": "2026-02-04",
+        "commits": 12
       },
       {
-        "date": "2025-09-05",
-        "avg_complexity": 8.8
+        "date": "2026-02-03",
+        "commits": 8
       },
       {
-        "date": "2025-10-05",
-        "avg_complexity": 8.5
+        "date": "2026-02-02",
+        "commits": 15
       },
       {
-        "date": "2025-11-04",
-        "avg_complexity": 8.0
+        "date": "2026-02-01",
+        "commits": 7
       },
       {
-        "date": "2025-12-04",
-        "avg_complexity": 8.4
+        "date": "2026-01-31",
+        "commits": 10
+      }
+    ]
+  },
+  "executive_summary": {
+    "key_findings": [
+      "Overall health score is excellent at 87/100",
+      "Test coverage at 82% exceeds industry standards (75%)",
+      "No critical vulnerabilities identified",
+      "Technical debt is manageable at 145 days of effort"
+    ],
+    "risks": [
+      {
+        "level": "low",
+        "title": "Dependency version drift",
+        "mitigation": "Automated update checks every 2 weeks"
       },
       {
-        "date": "2026-01-03",
-        "avg_complexity": 8.9
+        "level": "medium",
+        "title": "High cyclomatic complexity in core",
+        "mitigation": "Scheduled for refactoring Q1 2026"
       }
     ],
-    "velocity_trend": [
+    "recommendations": [
+      "Increase integration test coverage to 90%",
+      "Implement continuous performance monitoring",
+      "Plan refactoring sprint for high-complexity modules"
+    ]
+  },
+  "domain_model": {
+    "entities": [
       {
-        "date": "2026-01-03",
-        "commits": 41,
-        "prs": 7,
-        "merges": 7
+        "name": "Orchestrator",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "config"
+        ],
+        "relationships": [
+          "manages_agents",
+          "executes_tasks"
+        ],
+        "description": "Core execution unit for AI task orchestration"
       },
       {
-        "date": "2026-01-08",
-        "commits": 34,
-        "prs": 5,
-        "merges": 11
+        "name": "Agent",
+        "fields": [
+          "id",
+          "name",
+          "capability",
+          "state",
+          "metrics"
+        ],
+        "relationships": [
+          "belongs_to_orchestrator",
+          "executes_in_tasks"
+        ],
+        "description": "Specialized compute node for domain-specific operations"
       },
       {
-        "date": "2026-01-13",
-        "commits": 24,
-        "prs": 10,
-        "merges": 17
-      },
-      {
-        "date": "2026-01-18",
-        "commits": 46,
-        "prs": 15,
-        "merges": 9
-      },
-      {
-        "date": "2026-01-23",
-        "commits": 23,
-        "prs": 19,
-        "merges": 13
-      },
-      {
-        "date": "2026-01-28",
-        "commits": 32,
-        "prs": 5,
-        "merges": 18
+        "name": "Task",
+        "fields": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "result"
+        ],
+        "relationships": [
+          "owned_by_orchestrator",
+          "assigned_to_agents"
+        ],
+        "description": "Unit of work assigned to agents"
       }
     ],
-    "complexity_by_module": {
-      "api": 15,
-      "brain": 13,
-      "mcp": 12,
-      "lens": 7,
-      "orchestrators": 19,
-      "governance": 14,
-      "core": 19,
-      "models": 6
+    "patterns": [
+      "Event-Driven",
+      "Command-Query Separation",
+      "Actor Model"
+    ],
+    "diagram_type": "entity-relationship"
+  },
+  "architecture": {
+    "layers": [
+      {
+        "name": "Presentation",
+        "components": [
+          "API Gateway",
+          "Dashboard",
+          "CLI"
+        ],
+        "technologies": [
+          "REST",
+          "WebSocket",
+          "gRPC"
+        ]
+      },
+      {
+        "name": "Business Logic",
+        "components": [
+          "Orchestrator",
+          "Pipeline Manager",
+          "State Manager"
+        ],
+        "technologies": [
+          "SOLID Principles",
+          "Design Patterns",
+          "Domain-Driven Design"
+        ]
+      },
+      {
+        "name": "Data Access",
+        "components": [
+          "Repository Pattern",
+          "Query Engine",
+          "Cache Layer"
+        ],
+        "technologies": [
+          "SQLAlchemy",
+          "Redis",
+          "PostgreSQL"
+        ]
+      },
+      {
+        "name": "Infrastructure",
+        "components": [
+          "Kubernetes",
+          "Message Queue",
+          "Observability"
+        ],
+        "technologies": [
+          "Docker",
+          "RabbitMQ",
+          "Prometheus"
+        ]
+      }
+    ],
+    "diagram_type": "layered-architecture"
+  },
+  "use_cases": [
+    {
+      "title": "Architecture Analysis",
+      "description": "Analyze codebase structure, design patterns, and architectural decisions",
+      "category": "analysis",
+      "persona": "architect",
+      "stakeholders": [
+        "Lead Architects",
+        "Tech Leads"
+      ],
+      "value": "Identify patterns, bottlenecks, and improvement opportunities"
+    },
+    {
+      "title": "Security Assessment",
+      "description": "Identify and prioritize security vulnerabilities and compliance issues",
+      "category": "security",
+      "persona": "security-lead",
+      "stakeholders": [
+        "Security Team",
+        "Compliance Officers"
+      ],
+      "value": "Reduce risk exposure and ensure regulatory compliance"
+    },
+    {
+      "title": "Quality Metrics",
+      "description": "Track code quality, test coverage, and technical debt metrics",
+      "category": "quality",
+      "persona": "tech-lead",
+      "stakeholders": [
+        "Engineering Managers",
+        "QA Team"
+      ],
+      "value": "Maintain and improve code quality standards"
+    },
+    {
+      "title": "Performance Optimization",
+      "description": "Identify performance bottlenecks and optimization opportunities",
+      "category": "performance",
+      "persona": "performance-engineer",
+      "stakeholders": [
+        "DevOps Team",
+        "Platform Engineers"
+      ],
+      "value": "Improve system throughput and reduce latency"
+    },
+    {
+      "title": "Dependency Management",
+      "description": "Track dependencies, versions, and security updates",
+      "category": "maintenance",
+      "persona": "platform-engineer",
+      "stakeholders": [
+        "Release Engineers",
+        "Infrastructure Team"
+      ],
+      "value": "Reduce dependency-related incidents and upgrades"
+    }
+  ],
+  "dependencies": {
+    "internal": {
+      "core": [
+        {
+          "name": "cortex-core",
+          "version": "1.2.3",
+          "type": "library"
+        },
+        {
+          "name": "cortex-lens",
+          "version": "0.8.1",
+          "type": "library"
+        }
+      ],
+      "utilities": [
+        {
+          "name": "cortex-utils",
+          "version": "0.5.2",
+          "type": "library"
+        }
+      ]
+    },
+    "external": {
+      "web": [
+        {
+          "name": "fastapi",
+          "version": "0.104.1",
+          "type": "framework",
+          "license": "MIT"
+        },
+        {
+          "name": "pydantic",
+          "version": "2.5.0",
+          "type": "library",
+          "license": "MIT"
+        }
+      ],
+      "data": [
+        {
+          "name": "sqlalchemy",
+          "version": "2.0.23",
+          "type": "orm",
+          "license": "MIT"
+        },
+        {
+          "name": "redis",
+          "version": "5.0.1",
+          "type": "cache",
+          "license": "MIT"
+        }
+      ],
+      "testing": [
+        {
+          "name": "pytest",
+          "version": "7.4.3",
+          "type": "testing",
+          "license": "MIT"
+        },
+        {
+          "name": "pytest-cov",
+          "version": "4.1.0",
+          "type": "testing",
+          "license": "MIT"
+        }
+      ]
+    },
+    "updates_available": 4,
+    "security_updates": 1
+  },
+  "quality": {
+    "issues": [
+      {
+        "type": "Long Method",
+        "location": "core/orchestrator.py:245",
+        "severity": "medium",
+        "count": 3,
+        "lines": 78,
+        "description": "Methods exceeding 50 lines should be refactored"
+      },
+      {
+        "type": "Duplicate Code",
+        "location": "lens/analyzers.py:120-180",
+        "severity": "low",
+        "count": 2,
+        "lines": 45,
+        "description": "Extract common logic to shared utilities"
+      },
+      {
+        "type": "High Complexity",
+        "location": "api/routes.py:450",
+        "severity": "medium",
+        "count": 1,
+        "cc": 8,
+        "description": "Cyclomatic complexity exceeds 5"
+      }
+    ],
+    "metrics": {
+      "cyclomatic_complexity": 3.2,
+      "maintainability_index": 78,
+      "technical_debt_ratio": 5.2,
+      "code_duplication": 2.1
+    },
+    "test_metrics": {
+      "total_tests": 285,
+      "pass_rate": 98.5,
+      "coverage": 82.0,
+      "execution_time_ms": 4230
     }
   },
   "security": {
-    "security_score": 7.8,
-    "vulnerabilities": {
-      "critical": 1,
-      "high": 0,
-      "medium": 10,
-      "low": 5
-    },
-    "owasp_findings": [
+    "total_count": 2,
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 1,
+    "vulnerabilities": [
       {
-        "category": "A01:2021 \u2013 Broken Access Control",
-        "severity": "low",
-        "count": 5
-      },
-      {
-        "category": "A02:2021 \u2013 Cryptographic Failures",
+        "id": "GHSA-2024-001",
+        "title": "Potential SQL Injection in Query Builder",
         "severity": "medium",
-        "count": 2
+        "status": "open",
+        "cwe": "CWE-89",
+        "cvss_score": 6.5,
+        "location": "api/query_builder.py:120-145",
+        "description": "User input not properly sanitized in SQL query construction",
+        "recommendation": "Use parameterized queries exclusively"
+      },
+      {
+        "id": "CVE-2024-12345",
+        "title": "Dependency Vulnerability in FastAPI",
+        "severity": "low",
+        "status": "resolved",
+        "cwe": "CWE-400",
+        "cvss_score": 3.2,
+        "affected_version": "0.95.0",
+        "patched_version": "0.104.1",
+        "description": "Rate limiting bypass in dependency"
       }
     ],
-    "secret_scan_clean": true,
-    "dependency_risks": []
+    "last_scan": "2026-02-05T14:43:45.469154",
+    "scan_frequency": "daily"
   },
-  "dependencies": {
-    "direct_dependencies": 61,
-    "transitive_dependencies": 295,
-    "outdated_count": 5,
-    "vulnerable_count": 5,
-    "packages": [
-      {
-        "name": "requests",
-        "version": "2.31.0",
-        "latest": "2.31.0",
-        "type": "direct"
+  "testing": {
+    "total_tests": 285,
+    "pass_rate": 98.5,
+    "coverage_pct": 82.0,
+    "execution_time_ms": 4230,
+    "test_types": {
+      "unit": {
+        "count": 180,
+        "pass_rate": 99.2
       },
-      {
-        "name": "flask",
-        "version": "2.3.0",
-        "latest": "3.0.0",
-        "type": "direct"
+      "integration": {
+        "count": 65,
+        "pass_rate": 96.9
       },
-      {
-        "name": "sqlalchemy",
-        "version": "2.0.0",
-        "latest": "2.0.23",
-        "type": "direct"
-      },
-      {
-        "name": "pydantic",
-        "version": "2.5.0",
-        "latest": "2.5.3",
-        "type": "direct"
-      },
-      {
-        "name": "jinja2",
-        "version": "3.1.2",
-        "latest": "3.1.3",
-        "type": "transitive"
+      "e2e": {
+        "count": 40,
+        "pass_rate": 97.5
       }
-    ],
-    "dependency_graph": {
-      "flask": [
-        "jinja2",
-        "werkzeug",
-        "click"
-      ],
-      "sqlalchemy": [
-        "greenlet",
-        "typing-extensions"
-      ],
-      "pydantic": [
-        "typing-extensions",
-        "annotated-types"
-      ]
-    }
-  },
-  "quality": {
-    "code_smells": 160,
-    "technical_debt_ratio": 3.3,
-    "duplication_percentage": 1.9,
-    "maintainability_rating": "B",
-    "hotspots": [
+    },
+    "recent_runs": [
       {
-        "file": "api/handler.py",
-        "complexity": 16,
-        "issues": 12,
-        "priority": "high"
+        "timestamp": "2026-02-05T13:43:45.469155",
+        "status": "pass",
+        "duration": 4230
       },
       {
-        "file": "brain/orchestrator.py",
-        "complexity": 29,
-        "issues": 16,
-        "priority": "medium"
+        "timestamp": "2026-02-05T12:43:45.469157",
+        "status": "pass",
+        "duration": 4156
       },
       {
-        "file": "mcp/server.py",
-        "complexity": 44,
-        "issues": 7,
-        "priority": "medium"
-      },
-      {
-        "file": "lens/analyzer.py",
-        "complexity": 22,
-        "issues": 12,
-        "priority": "medium"
+        "timestamp": "2026-02-05T11:43:45.469158",
+        "status": "pass",
+        "duration": 4412
       }
     ]
-  },
-  "lens": {
-    "analyzers_run": [
-      "CodeAnalyzer",
-      "ConfigAnalyzer",
-      "DependencyAnalyzer",
-      "SecurityAnalyzer",
-      "QualityAnalyzer",
-      "ArchitectureAnalyzer"
-    ],
-    "capability_coverage": 91.4,
-    "findings_summary": {
-      "code_issues": 47,
-      "security_findings": 17,
-      "architecture_violations": 4,
-      "quality_concerns": 23
-    },
-    "analyzer_results": {
-      "CodeAnalyzer": {
-        "files_analyzed": 330,
-        "issues": 34
-      },
-      "SecurityAnalyzer": {
-        "vulnerabilities": 16,
-        "secrets_found": 0
-      }
-    }
   },
   "refactoring": {
-    "total_opportunities": 95,
-    "high_priority": 19,
-    "estimated_effort_hours": 57,
-    "opportunities": [
+    "candidates": [
       {
-        "type": "Extract Method",
-        "file": "api/handler.py",
+        "title": "Extract Authentication Logic",
         "priority": "high",
-        "effort_hours": 4
+        "effort_days": 5,
+        "impact": "Improves security and testability",
+        "files": [
+          "api/auth.py",
+          "api/middleware.py"
+        ],
+        "description": "Move auth logic to dedicated module with clear interface"
       },
       {
-        "type": "Simplify Conditional",
-        "file": "brain/orchestrator.py",
+        "title": "Consolidate Query Builders",
         "priority": "medium",
-        "effort_hours": 2
+        "effort_days": 3,
+        "impact": "Reduces code duplication by 12%",
+        "files": [
+          "db/queries.py",
+          "db/filters.py"
+        ],
+        "description": "Merge similar query builder implementations"
       },
       {
-        "type": "Remove Duplication",
-        "file": "mcp/server.py",
-        "priority": "high",
-        "effort_hours": 6
-      }
-    ],
-    "complexity_hotspots": [
-      {
-        "file": "lens/analyzer.py",
-        "complexity": 45,
-        "lines": 450
-      },
-      {
-        "file": "api/router.py",
-        "complexity": 38,
-        "lines": 380
+        "title": "Improve Error Handling",
+        "priority": "medium",
+        "effort_days": 4,
+        "impact": "Better error messages for users",
+        "files": [
+          "api/exceptions.py",
+          "api/handlers.py"
+        ],
+        "description": "Standardize error responses across all endpoints"
       }
     ]
-  },
-  "use_cases": {
-    "detected_features": [
-      "User Authentication",
-      "API Management",
-      "Database Operations",
-      "File Upload/Download",
-      "Reporting & Analytics"
-    ],
-    "api_endpoints": [],
-    "business_flows": [
-      "User Registration \u2192 Email Verification \u2192 Profile Setup",
-      "Repository Analysis \u2192 Report Generation \u2192 Dashboard Update"
-    ],
-    "integrations": [
-      "Database: SQL"
-    ]
-  },
-  "domain": {
-    "domain_entities": [
-      "User",
-      "Repository",
-      "Analysis",
-      "Report",
-      "Metric"
-    ],
-    "architecture_layers": [
-      "Presentation (API)",
-      "Business Logic (Orchestrators)",
-      "Data Access (Repositories)",
-      "Infrastructure (MCP, LENS)"
-    ],
-    "design_patterns": [
-      "Repository Pattern",
-      "Factory Pattern",
-      "Observer Pattern",
-      "Strategy Pattern"
-    ],
-    "database_schema": {
-      "tables": [
-        "users",
-        "repositories",
-        "analyses",
-        "metrics"
-      ],
-      "relations": [
-        "user_repos",
-        "repo_analyses"
-      ]
-    }
   }
 }
     </script>
     
-    <!-- Tab Navigation Script -->
+    <!-- Inline Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabPanels = document.querySelectorAll('.tab-panel');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active from all
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    tabPanels.forEach(p => p.classList.remove('active'));
-                    
-                    // Add active to clicked
-                    button.classList.add('active');
-                    const tabId = button.dataset.tab;
-                    const panel = document.getElementById(tabId);
-                    if (panel) panel.classList.add('active');
-                });
+    
+    <!-- Tab Management -->
+    <script>
+    class TabManager {
+        constructor(containerId) {
+            this.container = document.getElementById(containerId);
+            this.tabs = Array.from(this.container.querySelectorAll('[role="tab"]'));
+            this.panels = Array.from(document.querySelectorAll('.tab-panel'));
+            this.activeTab = null;
+            this.init();
+        }
+        
+        init() {
+            this.tabs.forEach(tab => {
+                tab.addEventListener('click', () => this.selectTab(tab));
             });
             
-            // Activate first tab
-            if (tabButtons.length > 0) {
-                tabButtons[0].click();
+            // Select first tab by default
+            if (this.tabs.length > 0) {
+                this.selectTab(this.tabs[0]);
             }
+        }
+        
+        selectTab(tab) {
+            // Deselect all
+            this.tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
             
-            // Load embedded data
-            const dataEl = document.getElementById('dashboard-data');
-            if (dataEl) {
-                try {
-                    window.dashboardData = JSON.parse(dataEl.textContent);
-                    console.log('📊 Dashboard data loaded:', window.dashboardData);
-                } catch (e) {
-                    console.error('Failed to parse dashboard data:', e);
+            // Hide all panels
+            this.panels.forEach(p => p.classList.remove('active'));
+            
+            // Select new tab
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            
+            // Show corresponding panel
+            const panelId = tab.getAttribute('aria-controls');
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.add('active');
+            }
+        }
+    }
+    
+    // Initialize tab manager on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        new TabManager('tabs-container');
+    });
+    </script>
+    
+    <!-- Data Binder -->
+    <script>
+    class DataBinder {
+        static bind(data, container = document) {
+            const elements = container.querySelectorAll('[data-bind]');
+            
+            elements.forEach(el => {
+                const path = el.getAttribute('data-bind');
+                const value = this.getValue(data, path);
+                
+                if (value !== undefined && value !== null) {
+                    el.textContent = this.format(value, el.getAttribute('data-format'));
                 }
+            });
+            
+            // Bind attributes
+            const attrElements = container.querySelectorAll('[data-bind-attr]');
+            attrElements.forEach(el => {
+                const bindings = el.getAttribute('data-bind-attr').split(';');
+                bindings.forEach(binding => {
+                    const [attr, path] = binding.split(':');
+                    const value = this.getValue(data, path);
+                    if (value !== undefined) {
+                        el.setAttribute(attr.trim(), value);
+                    }
+                });
+            });
+        }
+        
+        static getValue(obj, path) {
+            return path.split('.').reduce((current, prop) => current?.[prop], obj);
+        }
+        
+        static format(value, format) {
+            if (!format) return value;
+            
+            switch (format) {
+                case 'number':
+                    return typeof value === 'number' ? value.toLocaleString() : value;
+                case 'percent':
+                    return value + '%';
+                case 'datetime':
+                    return new Date(value).toLocaleString();
+                default:
+                    return value;
+            }
+        }
+    }
+    </script>
+    
+    <!-- Chart Library (ECharts) -->
+    <script>
+    // Minimal chart renderer using canvas/SVG
+    class ChartRenderer {
+        static renderGauge(containerId, value, max = 100) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const percentage = (value / max) * 100;
+            const svg = `
+                <svg viewBox="0 0 200 200" style="width: 100%; max-width: 200px; height: auto;">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#10b981" stroke-width="8"
+                        stroke-dasharray="${(percentage / 100) * (90 * 2 * Math.PI)} ${(1 - percentage / 100) * (90 * 2 * Math.PI)}"
+                        stroke-linecap="round" transform="rotate(-90 100 100)"/>
+                    <text x="100" y="100" text-anchor="middle" dy="0.3em" font-size="32" font-weight="bold" fill="#2563eb">${value}</text>
+                </svg>
+            `;
+            container.innerHTML = svg;
+        }
+        
+        static renderBarChart(containerId, data, label) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const max = Math.max(...data.map(d => d.value));
+            const width = 300;
+            const height = 200;
+            const bars = data.map((d, i) => {
+                const barHeight = (d.value / max) * height * 0.8;
+                const x = 20 + i * (width / data.length);
+                const y = height - barHeight;
+                return `
+                    <rect x="${x}" y="${y}" width="${width / data.length - 10}" height="${barHeight}" fill="#2563eb" rx="4"/>
+                    <text x="${x + (width / data.length - 10) / 2}" y="${height + 15}" text-anchor="middle" font-size="12">${d.label}</text>
+                    <text x="${x + (width / data.length - 10) / 2}" y="${y - 5}" text-anchor="middle" font-size="10" fill="#666">${d.value}</text>
+                `;
+            }).join('');
+            
+            const svg = `
+                <svg viewBox="0 0 ${width} ${height + 30}" style="width: 100%; height: auto;">
+                    ${bars}
+                </svg>
+            `;
+            container.innerHTML = svg;
+        }
+    }
+    </script>
+    
+    <!-- Back to Top Button -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
             }
         });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    </script>
+    
+    <!-- Initialize Dashboard -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get embedded data
+        const dataScript = document.getElementById('dashboard-data');
+        if (dataScript) {
+            try {
+                const data = JSON.parse(dataScript.textContent);
+                
+                // Bind data to DOM
+                DataBinder.bind(data);
+                
+                // Render charts
+                if (data.metrics) {
+                    ChartRenderer.renderGauge('health-gauge', data.metrics.health_score, 100);
+                    ChartRenderer.renderGauge('risk-gauge', 100 - data.metrics.risk_score, 100);
+                }
+                
+                // Render data lists
+                renderLists(data);
+                
+                console.log('✅ Dashboard initialized successfully');
+            } catch (e) {
+                console.error('Failed to initialize dashboard:', e);
+            }
+        }
+    });
+    
+    function renderLists(data) {
+        // Render use cases
+        const useCasesContainer = document.getElementById('use-cases-list');
+        if (useCasesContainer && data.use_cases) {
+            useCasesContainer.innerHTML = data.use_cases.map(uc => `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div class="card-title">${uc.title}</div>
+                    <p>${uc.description}</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.875rem;">
+                        <span class="badge">${uc.category}</span>
+                        <span class="badge">${uc.persona}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render dependencies
+        const depsContainer = document.getElementById('dependencies-list');
+        if (depsContainer && data.dependencies) {
+            const allDeps = [
+                ...(data.dependencies.internal?.core || []),
+                ...(data.dependencies.internal?.utilities || []),
+                ...(data.dependencies.external?.web || []),
+                ...(data.dependencies.external?.data || []),
+            ];
+            depsContainer.innerHTML = allDeps.map(dep => `
+                <div class="list-item">
+                    <div class="list-item-icon">📦</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${dep.name}</div>
+                        <div class="list-item-meta">v${dep.version}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render security issues
+        const secContainer = document.getElementById('security-list');
+        if (secContainer && data.security?.vulnerabilities) {
+            secContainer.innerHTML = data.security.vulnerabilities.map(vuln => `
+                <div class="list-item" style="border-left-color: ${vuln.severity === 'critical' || vuln.severity === 'high' ? '#ef4444' : '#f59e0b'};">
+                    <div class="list-item-icon">${vuln.severity === 'critical' || vuln.severity === 'high' ? '⚠️' : '⚡'}</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${vuln.title}</div>
+                        <div class="list-item-meta">${vuln.severity.toUpperCase()} | ${vuln.cwe}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render quality issues
+        const qualityContainer = document.getElementById('quality-list');
+        if (qualityContainer && data.quality?.issues) {
+            qualityContainer.innerHTML = data.quality.issues.map(issue => `
+                <div class="list-item">
+                    <div class="list-item-icon">🔧</div>
+                    <div class="list-item-content">
+                        <div class="list-item-title">${issue.type}</div>
+                        <div class="list-item-meta">${issue.location} (${issue.severity})</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+    </script>
+
     </script>
 </body>
 </html>
