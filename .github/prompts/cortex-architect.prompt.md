@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 13.0 | **Updated:** 2026-02-04 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + DIGEST) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Architect Focus:** Master orchestrator for AI application development
+**Version:** 13.1 | **Updated:** 2026-02-05 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + DIGEST) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Architect Focus:** Master orchestrator for AI application development
 
 ---
 
@@ -411,6 +411,95 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 **P3 Auto-Fix:** VacuumOrchestrator runs FIRST (before P0/P1/P2) to detect if cleanup breaks functionality
 
 **Critical Order:** Vacuum → Verify No Breakage → Continue with P0/P1/P2 checks
+
+### P4 — Repository Structure Cleanup (Production Readiness)
+
+| Category | Items | Action | Priority |
+|----------|-------|--------|----------|
+| **Legacy Duplicates** | cortex_brain/ (5.4MB), cortex-lens/ (2.1MB) | Complete migration, then archive | 🔴 HIGH |
+| **Development Artifacts** | _workspaces/ (9.7MB), reports/, examples/, extensions/ | Archive to _archives/YYYY-MM-DD-dev-cleanup/ | 🟡 MEDIUM |
+| **Root Script Clutter** | 5 Python scripts in root | Consolidate to scripts/utilities/ | 🟡 MEDIUM |
+| **Company Folder** | company/ (~30MB) | Evaluate: production vs examples | ⚪ TBD |
+
+#### Phase 1: Archive Development Artifacts (Safe Immediate)
+```bash
+# Create archive directory
+mkdir -p _archives/$(date +%Y-%m-%d)-dev-cleanup
+
+# Archive development artifacts
+mv _workspaces/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+mv reports/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+mv examples/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+mv extensions/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+
+# Update .gitignore
+echo "_archives/" >> .gitignore
+```
+
+**Impact:** Cleaner root, ~10MB archived, zero risk (fully reversible)
+
+#### Phase 2: Complete cortex_brain Migration (Test Required)
+```bash
+# Run migration script
+python scripts/update_imports.py
+
+# Verify tests pass
+pytest tests/tier2/ -v
+
+# If passing, archive
+mv cortex_brain/ _archives/$(date +%Y-%m-%d)-dev-cleanup/
+
+# Verify full test suite
+pytest
+```
+
+**Impact:** Remove 5.4MB duplicate, **CRITICAL:** Must verify tests pass first
+
+#### Phase 3: Consolidate Root Scripts
+```bash
+# Create utilities folder
+mkdir -p scripts/utilities
+
+# Move root scripts
+mv generate_dashboard_complete.py scripts/utilities/
+mv generate_dashboard_data.py scripts/utilities/
+mv run_vacuum.py scripts/utilities/
+mv verify_cleanup_integrity.py scripts/utilities/
+mv verify_dashboard.py scripts/utilities/
+```
+
+**Impact:** Cleaner repository root, better organization
+
+#### Phase 4: Evaluate cortex-lens/ & company/
+**Decision Points:**
+- cortex-lens/: Keep standalone OR consolidate to cortex/lens/ OR archive
+- company/: Verify if production dashboards or development examples
+
+**Production-Ready Final Structure:**
+```
+CORTEX/
+├── .github/                # CI/CD, prompts, agents
+├── cortex/                 # Main source code
+├── cortex-registry/        # Master plan tracking
+├── tests/                  # Test suite
+├── scripts/                # All utility scripts (consolidated)
+│   └── utilities/          # Root scripts moved here
+├── deployment/             # Production deployment configs
+├── docs/                   # Documentation
+├── _archives/              # Historical artifacts
+│   └── YYYY-MM-DD-dev-cleanup/
+│       ├── _workspaces/, reports/, examples/, extensions/
+│       ├── cortex_brain/   # After migration
+│       └── cortex-lens/    # If archived
+├── requirements.txt, Dockerfile, docker-compose*.yml, Makefile, README.md
+```
+
+**Cleanup Verification Checklist:**
+- [ ] Full test suite passing before Phase 2
+- [ ] Create backup branch: `git checkout -b backup-pre-cleanup`
+- [ ] Archive (not delete) for reversibility
+- [ ] Run `pytest` after each phase
+- [ ] Update documentation if paths change
 
 ## Audit Output Format
 
@@ -1755,6 +1844,17 @@ Innovation Taxonomy Update (system learns)
 ---
 
 ## 📜 CHANGELOG
+
+### v13.1 (2026-02-05) — Repository Structure Cleanup Guidance
+
+**Added:**
+- ✅ **P4 Repository Structure Cleanup** — Comprehensive 4-phase cleanup plan for production readiness
+- ✅ **Phase-Based Approach** — Archive dev artifacts → Complete cortex_brain migration → Consolidate root scripts → Evaluate cortex-lens/company
+- ✅ **Concrete Bash Commands** — Copy-paste commands for each cleanup phase
+- ✅ **Safety Verification Checklist** — Pre-flight checks + per-phase validation
+- ✅ **Production Structure Diagram** — Target repository layout documentation
+
+**Rationale:** Codifies repository hygiene procedures discovered during Phase 22 completion. Ensures systematic cleanup with test verification and rollback safety.
 
 ### v13.0 (2026-02-04) — DIGEST Mode + Continuous Learning
 

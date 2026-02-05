@@ -55,18 +55,19 @@ def main():
             print("\n3️⃣ Executing cleanup...")
             cleanup_result = v.execute_cleanup(plan_result)
             
-            if cleanup_result.status == 'success':
-                archived = cleanup_result.archived_count
+            if cleanup_result.success:
+                archived = cleanup_result.files_moved
                 print(f"   ✅ Archived {archived} files")
                 
                 # Verify
                 print("\n4️⃣ Verifying cleanup...")
-                verify_result = v.verify_cleanup('.')
+                verify_result = v.verify_cleanup(cleanup_result, plan_result)
                 
                 print(f"   ✅ Verification complete")
                 print(f"   📁 Archive location: docs/archive/")
             else:
-                print(f"   ❌ Cleanup failed: {cleanup_result.message}")
+                errors = ", ".join(cleanup_result.errors) if cleanup_result.errors else "Unknown error"
+                print(f"   ❌ Cleanup failed: {errors}")
     else:
         print(f"   ❌ Planning failed")
     
