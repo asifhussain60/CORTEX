@@ -1,0 +1,165 @@
+{
+  "eras": [
+    {
+      "id": "era-1",
+      "number": 1,
+      "name": "Foundation",
+      "theme": "Event-Driven Architecture",
+      "phases": ["1", "2", "3", "4", "5", "6"],
+      "years": ["2026"],
+      "status": "completed",
+      "business_value": "Built the nervous system that lets components talk without tight coupling",
+      "technical_focus": "Event bus infrastructure, orchestrator communication patterns, async handlers",
+      "color": "#7b61ff",
+      "icon": "fa-foundation",
+      "completion_percentage": 100,
+      "key_deliverables": [
+        "OrchestratorEventBus with pub/sub",
+        "Complexity classifier for task routing",
+        "Code-level planner integration",
+        "Coherence validator (cross-layer validation)",
+        "Review orchestrator (mandatory CORTEX review)",
+        "Interaction orchestrator enhancements"
+      ]
+    },
+    {
+      "id": "era-2",
+      "number": 2,
+      "name": "Orchestration",
+      "theme": "Multi-Agent Coordination",
+      "phases": ["7", "7.1", "7.2", "7.3", "7.4", "8", "9"],
+      "years": ["2025"],
+      "status": "completed",
+      "business_value": "Created intelligent routing so requests go to the right specialist",
+      "technical_focus": "LENS formalization, MCP observability, challenge orchestrator, unified routing",
+      "color": "#f59e0b",
+      "icon": "fa-sitemap",
+      "completion_percentage": 100,
+      "key_deliverables": [
+        "LENS Protocol formal integration",
+        "Future enhancements framework",
+        "Inquiry system (educational mode)",
+        "Challenge orchestrator (ARCH-003)",
+        "Unified routing with IntentRouter",
+        "Discovery orchestrator for feature search"
+      ]
+    },
+    {
+      "id": "era-3",
+      "number": 3,
+      "name": "Intelligence",
+      "theme": "LENS + Knowledge Systems",
+      "phases": ["10", "11", "12", "13", "14"],
+      "years": ["2025"],
+      "status": "completed",
+      "business_value": "Added 'eyes' to see code structure and 'memory' for learning",
+      "technical_focus": "Remote intelligence, AST analysis, Git history, knowledge graphs",
+      "color": "#00d4ff",
+      "icon": "fa-brain",
+      "completion_percentage": 100,
+      "key_deliverables": [
+        "LENS remote intelligence API",
+        "AST analyzer for multi-language support",
+        "GitHistoryAnalyzer (24h context)",
+        "Adaptive BLUF system",
+        "Knowledge graph integration"
+      ]
+    },
+    {
+      "id": "era-4",
+      "number": 4,
+      "name": "Visualization",
+      "theme": "Dashboards + Documentation",
+      "phases": ["15", "16", "17", "18"],
+      "years": ["2025"],
+      "status": "completed",
+      "business_value": "Made the invisible visible with beautiful, actionable dashboards",
+      "technical_focus": "Static visualization, remediation, documentation architecture, enterprise dashboards",
+      "color": "#10b981",
+      "icon": "fa-chart-line",
+      "completion_percentage": 100,
+      "key_deliverables": [
+        "Static repository visualization",
+        "Remediation framework (auto-fix P0/P1/P2)",
+        "Documentation architecture overhaul",
+        "Enterprise dashboard system"
+      ]
+    },
+    {
+      "id": "era-5",
+      "number": 5,
+      "name": "Unification",
+      "theme": "LENS Unified + Instrumentation",
+      "phases": ["19", "20", "20.2", "20.5", "20.9"],
+      "years": ["2026"],
+      "status": "completed",
+      "business_value": "Consolidated all intelligence into one coherent system with metrics",
+      "technical_focus": "Unified LENS intelligence, company integration, orchestrator visibility, knowledge synthesis, instrumentation",
+      "color": "#a78bfa",
+      "icon": "fa-layer-group",
+      "completion_percentage": 100,
+      "key_deliverables": [
+        "LENS Unified Intelligence (tiered patterns, vendor detection, DB crawling)",
+        "LENS Company Integration (multi-language AST)",
+        "Orchestrator Visibility (training wheels UI)",
+        "Knowledge Synthesis (runtime aggregation)",
+        "Instrumentation Layer (metrics capture)"
+      ]
+    },
+    {
+      "id": "era-6",
+      "number": 6,
+      "name": "Enterprise Scale",
+      "theme": "JSON-First + ASK Mode + Static Dashboards",
+      "phases": ["21", "22", "23"],
+      "years": ["2026"],
+      "status": "in-progress",
+      "business_value": "Preparing for multi-organization scale with progressive enhancement",
+      "technical_focus": "JSON-first architecture, educational ASK mode, static dashboard generator",
+      "color": "#f472b6",
+      "icon": "fa-rocket",
+      "completion_percentage": 33,
+      "key_deliverables": [
+        "Phase 21: JSON-First Rewrite (35% complete)",
+        "Phase 22: ASK Mode System (25% complete)",
+        "Phase 23: Static Dashboard Generator (40% complete)"
+      ]
+    }
+  ],
+  "statistics": {
+    "total_eras": 6,
+    "completed_eras": 5,
+    "active_eras": 1,
+    "total_phases": 23,
+    "completed_phases": 20,
+    "active_phases": 3,
+    "overall_progress": 87
+  },
+  "milestones": [
+    {
+      "date": "2025-Q2",
+      "event": "CORTEX Foundation Complete",
+      "eras": [1, 2]
+    },
+    {
+      "date": "2025-Q3",
+      "event": "Intelligence Layer Operational",
+      "eras": [3]
+    },
+    {
+      "date": "2025-Q4",
+      "event": "Visualization & Documentation",
+      "eras": [4]
+    },
+    {
+      "date": "2026-Q1",
+      "event": "LENS Unification",
+      "eras": [5]
+    },
+    {
+      "date": "2026-Q2",
+      "event": "Enterprise Scale (In Progress)",
+      "eras": [6]
+    }
+  ]
+}
