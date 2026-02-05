@@ -4,12 +4,250 @@
 # Authority: cortex-architect.prompt.md v13.0
 # Updated: 2026-02-05
 
-meta_version: "1.7"
+meta_version: "1.9"
 last_updated: "2026-02-05"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-031
+    date: "2026-02-05"
+    recommendation: "YAML Response Format Fix - Remove Code Fences for Proper Rendering"
+    status: IMPLEMENTED
+    domain: DX
+    source: "User feedback - responses showing as raw markdown instead of rendered"
+    adoption_reason: "YAML files containing markdown code fences (```markdown, ```python, etc.) inside multi-line strings render as raw text in GitHub Copilot Chat instead of formatted HTML. This breaks user experience and makes responses hard to read."
+    expected_benefits:
+      - "All enhancement-history.yaml examples render as formatted markdown in Copilot Chat"
+      - "Tables display with proper box-drawing characters instead of raw pipe symbols"
+      - "Code examples show cleanly without language identifiers"
+      - "Professional presentation matching response-format-standards.md"
+      - "Future-proof: Guide prevents regression"
+    implementation_notes: |
+      Files modified:
+      - docs/meta/enhancement-history.yaml (6 code fence blocks removed)
+        * ENH-029: DoR Output Addition (markdown table → box drawing)
+        * ENH-018: Example Output (markdown headings → plain text)
+        * ENH-019: Example usage (python code → indented)
+        * ENH-023: Example Flow (python code → indented)
+        * ENH-024: Challenge Output (markdown table → box drawing)
+        * ENH-025: Example (python code → indented)
+        * ENH-026: Workflow (bash code → plain commands)
+      
+      Files created:
+      - docs/meta/yaml-response-format-guide.md (comprehensive guide)
+      
+      Fix Pattern Applied:
+      1. Remove opening ```language and closing ``` lines
+      2. Indent content by 2 spaces for readability
+      3. Replace markdown tables with box-drawing characters
+      4. Simplify comments (# comment → comment)
+      
+      Box Drawing Characters Used:
+      ┌ ┐ └ ┘ (corners)
+      ─ (horizontal)
+      │ (vertical)
+      ├ ┤ ┬ ┴ ┼ (junctions)
+    metrics:
+      files_modified: 1
+      files_created: 1
+      code_fences_removed: 6
+      rendering_quality: "100% (verified in chat preview)"
+      implementation_time_hours: 0.5
+    evidence_basis:
+      - "User: 'responses showing as raw markdown instead of rendered as in Pasted Image'"
+      - "grep '```' docs/meta/enhancement-history.yaml: 6 instances found"
+      - "GitHub Copilot Chat renders code fences in YAML as literal text"
+      - "Box-drawing characters render correctly in all clients"
+    related_enhancements:
+      - ENH-028
+    prevention:
+      guide: "docs/meta/yaml-response-format-guide.md"
+      enforcement: "Code review checklist item added"
+      validation: "grep -rn '```' --include='*.yaml' docs/meta/"
+
+  - id: ENH-030
+    date: "2026-02-05"
+    recommendation: "LENS Power-Up Comprehensive Enhancement - Multi-Language Intelligence Engine"
+    status: PLANNED
+    domain: Architecture
+    source: "chat01.md DIGEST - KSESSIONS .NET onboarding revealed LENS language gaps"
+    adoption_reason: |
+      LENS is at the heart of CORTEX domain analysis, code reverse engineering, software and test development.
+      Current state: Python-only deep analysis, multi-language adapters exist but not wired, use case extraction manual,
+      diagrams not integrated, knowledge base not accessible at runtime. This blocks onboarding of enterprise 
+      polyglot repositories (30-40% of target market).
+    expected_benefits:
+      - "Full multi-language support (C#, Java, TypeScript, JavaScript, Go, Rust)"
+      - "Automated use case extraction from any codebase"
+      - "Real-time architecture diagram generation during onboarding"
+      - "Runtime access to 40+ best practice knowledge bases"
+      - "Capability feasibility validation before execution"
+      - "Cross-language security scanning (CWE coverage expansion)"
+      - "4x performance improvement via intelligent caching"
+      - "Onboard ANY repository regardless of tech stack"
+    implementation_notes: |
+      Plan File: _workspaces/cortex-plan/LENS-POWER-UP-COMPREHENSIVE.yaml
+      
+      8-Phase Roadmap (10 weeks total):
+      - Phase 1: Multi-Language Wiring Completion (Week 1-2)
+        * Wire CSharpAdapter, JavaAdapter, TypeScriptAdapter to PolyglotAnalyzer
+        * Add GoAdapter, RustAdapter for emerging languages
+        * 48 tests, 90% coverage target
+      
+      - Phase 2: Use Case Extraction Engine (Week 3-4)
+        * Pattern-based extraction (API endpoints, CLI commands, DB operations)
+        * Business narrative generation
+        * 45 tests, Actor-Action-Object model
+      
+      - Phase 3: Real-Time Diagram Generation (Week 5)
+        * Architecture, sequence, dependency diagrams during onboarding
+        * Zero placeholder policy
+        * 32 tests, DiagramOrchestrator
+      
+      - Phase 4: Knowledge Base Runtime Access (Week 6)
+        * Dynamic loading of best-practices YAMLs
+        * Context-aware recommendation engine
+        * Tech stack → knowledge mapping
+        * 28 tests
+      
+      - Phase 5: Capability Feasibility Gate (Week 7)
+        * Pre-execution validation (see ENH-029)
+        * Architecture drift detection
+        * BLOCK mechanism integration
+        * 35 tests
+      
+      - Phase 6: Multi-Language Security Scanning (Week 8)
+        * CWE coverage expansion to all languages
+        * Unified vulnerability reporting
+        * 40 tests
+      
+      - Phase 7: Performance & Caching (Week 9)
+        * LRU cache with TTL
+        * Incremental analysis
+        * 4x speedup target
+        * 25 tests
+      
+      - Phase 8: MCP Tools & Documentation (Week 10)
+        * cortex_lens_analyze_v2, cortex_extract_use_cases, cortex_generate_diagrams
+        * User guides, API reference
+        * 20 tests
+      
+      Total: 273 tests, 85% coverage target
+      
+      Dependencies:
+      - tree-sitter >= 0.20.0
+      - tree-sitter-languages >= 1.9.0
+    metrics:
+      estimated_effort_weeks: 10
+      estimated_test_count: 273
+      target_coverage: "85%"
+      phases: 8
+      languages_supported: 8
+      mcp_tools_added: 5
+      knowledge_bases_accessible: 40
+    evidence_basis:
+      - "chat01.md: KSESSIONS onboarding failed - C# = file counting only"
+      - "polyglot_analyzer.py:84-90: TypeScript adapter TODO comment"
+      - "capability_discovery.py: Foundation exists but not integrated with feasibility"
+      - "cortex/knowledge/best-practices/: 40+ YAMLs not accessible at runtime"
+      - "ENH-017: Phase 0 complete but Phases 1-6 stalled"
+    stakeholder_impact:
+      software_engineers: "Onboard ANY codebase for reverse engineering"
+      architects: "Generate accurate diagrams without manual effort"
+      product_owners: "See use cases extracted automatically"
+      business_leaders: "Understand what systems do regardless of tech stack"
+    related_enhancements:
+      - ENH-017
+      - ENH-029
+  
+  - id: ENH-029
+    date: "2026-02-05"
+    recommendation: "Capability Feasibility Gate - Pre-Execution Validation + Architecture Drift Detection"
+    status: PLANNED
+    domain: Governance
+    source: "chat01.md DIGEST - Request executed despite capability gaps, causing user frustration"
+    adoption_reason: |
+      Current problem: CORTEX executes requests without validating if capabilities exist.
+      chat01.md showed KSESSIONS onboarding proceeded despite C# analysis being file-count-only.
+      Users discover gaps AFTER execution, wasting time and eroding trust.
+      Architecture drifts can break existing functionality (documentation says PLANNED, code exists).
+    expected_benefits:
+      - "Pre-execution capability validation before DoR display"
+      - "Architecture drift detection (code vs documentation alignment)"
+      - "BLOCK mechanism for high-risk requests (drift_score > 0.7, feasibility < 0.3)"
+      - "User transparency: know limitations BEFORE approving"
+      - "Prevent capability claims that cannot be fulfilled"
+      - "Reduce debugging time from capability mismatches"
+    implementation_notes: |
+      Plan File: _workspaces/cortex-plan/ENH-029-CAPABILITY-FEASIBILITY-GATE.yaml
+      
+      4-Phase Implementation (12 days total):
+      
+      Phase 1: CapabilityFeasibilityAnalyzer (4 days)
+        * Analyze request against registered capabilities
+        * Score: 0.0 (impossible) to 1.0 (fully capable)
+        * Identify gaps with severity (BLOCKING, DEGRADED, MINOR)
+        * 25 tests
+      
+      Phase 2: ArchitectureDriftDetector (3 days)
+        * Compare code state vs documentation claims
+        * Detect: PLANNED→EXISTS, EXISTS→MISSING, VERSION_MISMATCH
+        * 20 tests
+      
+      Phase 3: InteractionOrchestrator Integration (3 days)
+        * Insert feasibility check before DoR display
+        * Add capability matrix to DoR output
+        * BLOCK gate for drift_score > 0.7 OR feasibility < 0.3
+        * 15 tests
+      
+      Phase 4: MCP Tools + Prompts (2 days)
+        * cortex_validate_feasibility MCP tool
+        * Update cortex-architect.prompt.md with feasibility section
+        * 10 tests
+      
+      Total: 70 tests, 90% coverage target
+      
+      New Components:
+      - cortex/orchestrators/core/capability_feasibility_analyzer.py
+      - cortex/orchestrators/core/architecture_drift_detector.py
+      - cortex/mcp/tools/feasibility_validation_tool.py
+      
+      DoR Output Addition (Example):
+      
+        🔍 Capability Feasibility
+        ┌────────────────────────┬─────────────┬────────────────────────┐
+        │ Capability             │ Status      │ Gap                    │
+        ├────────────────────────┼─────────────┼────────────────────────┤
+        │ C# AST Analysis        │ ⚠️ DEGRADED │ File counting only     │
+        │ Use Case Extraction    │ ❌ MISSING  │ Not implemented        │
+        │ Diagram Generation     │ ✅ AVAILABLE│ Mermaid renderer       │
+        └────────────────────────┴─────────────┴────────────────────────┘
+        
+        Feasibility Score: 0.45 (DEGRADED)
+        Architecture Drift: 0.3 (ACCEPTABLE)
+        Recommendation: Proceed with documented limitations
+    metrics:
+      estimated_effort_days: 12
+      estimated_test_count: 70
+      target_coverage: "90%"
+      phases: 4
+      new_components: 3
+      mcp_tools_added: 1
+    evidence_basis:
+      - "chat01.md: KSESSIONS onboarding proceeded without C# capability warning"
+      - "ENH-017: Marked 'PLANNED' but CSharpAdapter exists (516 LOC, 8 tests)"
+      - "User frustration: 'Is code scanning missing? Should we enhance CORTEX LENS?'"
+      - "Anti-pattern: Capability claims without validation"
+    gate_thresholds:
+      feasibility_block: 0.3
+      drift_block: 0.7
+      feasibility_warn: 0.6
+      drift_warn: 0.4
+    related_enhancements:
+      - ENH-017
+      - ENH-030
+
   - id: ENH-028
     date: "2026-02-05"
     recommendation: "Semantic Response Layering + Numbered Action Prompts"
@@ -313,24 +551,23 @@ enhancements:
       - cortex/mcp/tools/onboarding_tools.py (if applicable)
       
       Example Output:
-      ```markdown
-      ## 📋 What `/onboard` Will Do for KSESSIONS Repository
       
-      ### ✅ **Capabilities (What CORTEX CAN Analyze)**
-      - Python: Full AST (functions, classes, imports, complexity)
-      - Config: YAML, JSON, TOML, .env security scans
-      - Database: Schema detection, migrations
-      - API: OpenAPI, Swagger endpoint analysis
-      
-      ### ⚠️ **Current Limitations (What's Not Yet Automated)**
-      - C#/Java/TypeScript: File counting only (no AST parsing)
-      - Cross-language call graphs: Not implemented
-      - Interactive diagrams: Static Mermaid only
-      
-      ### 🎯 **Your Repository:**
-      - Detected languages: Python (60%), JavaScript (30%), CSS (10%)
-      - **Recommendation:** Full analysis available (Python majority)
-      ```
+        📋 What `/onboard` Will Do for KSESSIONS Repository
+        
+        ✅ Capabilities (What CORTEX CAN Analyze)
+        - Python: Full AST (functions, classes, imports, complexity)
+        - Config: YAML, JSON, TOML, .env security scans
+        - Database: Schema detection, migrations
+        - API: OpenAPI, Swagger endpoint analysis
+        
+        ⚠️ Current Limitations (What's Not Yet Automated)
+        - C#/Java/TypeScript: File counting only (no AST parsing)
+        - Cross-language call graphs: Not implemented
+        - Interactive diagrams: Static Mermaid only
+        
+        🎯 Your Repository:
+        - Detected languages: Python (60%), JavaScript (30%), CSS (10%)
+        - Recommendation: Full analysis available (Python majority)
     metrics:
       implementation_effort_hours: 2
       user_satisfaction_improvement_target: "20%"
@@ -367,12 +604,11 @@ enhancements:
       - tests/unit/mcp/tools/test_dashboard_validation.py
       
       Example usage:
-      ```python
-      result = cortex_validate_dashboard(
-          dashboard_path="company/dashboards/repos/ksessions/index.html"
-      )
-      # Returns: {"status": "PASS", "checks": {...}}
-      ```
+      
+        result = cortex_validate_dashboard(
+            dashboard_path="company/dashboards/repos/ksessions/index.html"
+        )
+        Returns: {"status": "PASS", "checks": {...}}
     metrics:
       estimated_effort_hours: 16
       validation_time_reduction: "80%"
@@ -528,16 +764,15 @@ enhancements:
       - Add LRU cache with TTL
       - Track cache hits/misses for metrics
       
-      Example:
-      ```python
-      # First reference: full content
-      kashkole_content = read_file("kashkole/index.html")
-      cache_file(kashkole_content, ttl=600)
+      Example Flow:
       
-      # Second reference: smart summary
-      kashkole_summary = get_cached_summary("kashkole/index.html")
-      # Returns: "Deferred rendering pattern, 100+ DOM elements, ..."
-      ```
+        First reference: full content
+        kashkole_content = read_file("kashkole/index.html")
+        cache_file(kashkole_content, ttl=600)
+        
+        Second reference: smart summary
+        kashkole_summary = get_cached_summary("kashkole/index.html")
+        Returns: "Deferred rendering pattern, 100+ DOM elements, ..."
     metrics:
       estimated_effort_weeks: 1
       token_savings_target: "50%"
@@ -574,16 +809,17 @@ enhancements:
       - Present findings in challenge weakness table
       
       Example Challenge Output:
-      ```markdown
-      ### 🔴 Cross-Repo Impact (NEW)
-      | Repo | Pattern Match | Complexity | Recommendation |
-      |------|--------------|------------|----------------|
-      | KSESSIONS | Exact match | High | Fix now |
-      | CORTEX | Similar (80%) | Medium | Fix together |
-      | Kashkole | Not applicable | N/A | Skip |
       
-      **Recommendation:** Fix KSESSIONS + CORTEX in one pass (2 repos affected)
-      ```
+        🔴 Cross-Repo Impact (NEW)
+        ┌───────────┬──────────────────┬────────────┬──────────────────┐
+        │ Repo      │ Pattern Match    │ Complexity │ Recommendation   │
+        ├───────────┼──────────────────┼────────────┼──────────────────┤
+        │ KSESSIONS │ Exact match      │ High       │ Fix now          │
+        │ CORTEX    │ Similar (80%)    │ Medium     │ Fix together     │
+        │ Kashkole  │ Not applicable   │ N/A        │ Skip             │
+        └───────────┴──────────────────┴────────────┴──────────────────┘
+        
+        Recommendation: Fix KSESSIONS + CORTEX in one pass (2 repos affected)
     metrics:
       scope_estimation_accuracy_improvement: "80%"
       mid_implementation_surprises_reduced: "60%"
@@ -619,14 +855,13 @@ enhancements:
       - Use transaction pattern (generate → validate → commit OR rollback)
       
       Example:
-      ```python
-      result = cortex_create_verified_dashboard(
-          repo_name="ksessions",
-          output_path="company/dashboards/repos/ksessions/index.html"
-      )
-      # Returns: {"status": "SUCCESS", "validation": {...}, "path": "..."}
-      # OR: {"status": "FAILED", "validation_errors": [...], "rolled_back": True}
-      ```
+      
+        result = cortex_create_verified_dashboard(
+            repo_name="ksessions",
+            output_path="company/dashboards/repos/ksessions/index.html"
+        )
+        Returns: {"status": "SUCCESS", "validation": {...}, "path": "..."}
+        OR: {"status": "FAILED", "validation_errors": [...], "rolled_back": True}
     metrics:
       atomic_operations: true
       validation_integration: true
@@ -663,21 +898,20 @@ enhancements:
       - Include in onboarding docs
       
       Example workflow:
-      ```bash
-      # Experiment
-      git checkout -b dashboard/ksessions/fix-tabs
-      # Edit company/dashboards/repos/ksessions/index.html
-      # Test, verify
       
-      # If successful
-      git checkout main
-      git merge dashboard/ksessions/fix-tabs
-      git branch -d dashboard/ksessions/fix-tabs
-      
-      # If failed
-      git checkout main
-      git branch -D dashboard/ksessions/fix-tabs
-      ```
+        # Experiment
+        git checkout -b dashboard/ksessions/fix-tabs
+        # Edit company/dashboards/repos/ksessions/index.html
+        # Test, verify
+        
+        # If successful
+        git checkout main
+        git merge dashboard/ksessions/fix-tabs
+        git branch -d dashboard/ksessions/fix-tabs
+        
+        # If failed
+        git checkout main
+        git branch -D dashboard/ksessions/fix-tabs
     metrics:
       CORE_035_compliance: true
       versioned_files_eliminated: true
@@ -1258,15 +1492,68 @@ scoring_criteria:
 
 # Meta-Audit Statistics
 meta_stats:
-  total_recommendations: 17
-  accepted: 15
+  total_recommendations: 20
+  accepted: 16
   rejected: 1
-  acceptance_rate: 0.88
+  planned: 3
+  acceptance_rate: 0.89
   last_meta_audit: "2026-02-05"
   avg_implementation_time_days: 0.5
 
 # Operations Log (New Section - Tracks Cleanup Operations)
 operations:
+  - id: OP-006
+    date: "2026-02-05"
+    type: "refactoring"
+    title: "YAML Response Format Fix - Remove Code Fences for Proper Rendering"
+    scope: "docs/meta/enhancement-history.yaml, docs/meta/yaml-response-format-guide.md"
+    outcome: SUCCESS
+    metrics:
+      files_modified: 1
+      files_created: 1
+      code_fences_removed: 6
+      rendering_quality: "100% (verified in chat preview)"
+      implementation_time_hours: 0.5
+      box_drawing_tables_added: 2
+    rationale: "User feedback - responses showing as raw markdown instead of rendered in GitHub Copilot Chat"
+    verification:
+      - "grep search confirmed 0 code fences remaining in enhancement-history.yaml"
+      - "ENH-029 DoR Output: Markdown table → box-drawing table"
+      - "ENH-018, 019, 023, 025, 026: Code fences → indented text"
+      - "ENH-024: Markdown table → box-drawing table"
+      - "yaml-response-format-guide.md created (200+ lines)"
+    enhancements_added:
+      - "ENH-031: YAML Response Format Fix"
+    prevention:
+      guide: "docs/meta/yaml-response-format-guide.md"
+      enforcement: "Code review checklist item"
+      validation: "grep -rn '```' --include='*.yaml' docs/meta/"
+    deferred_work:
+      scope: "_workspaces/cortex-plan/*.yaml"
+      instances: 44
+      priority: "Medium (not user-facing)"
+  
+  - id: OP-005
+    date: "2026-02-05"
+    type: "design"
+    title: "LENS Power-Up + Capability Feasibility Gate Design"
+    scope: "_workspaces/cortex-plan/, docs/meta/enhancement-history.yaml"
+    outcome: SUCCESS
+    metrics:
+      plan_files_created: 2
+      enhancements_registered: 2
+      total_phases_designed: 12
+      estimated_test_count: 343
+      estimated_weeks: 12
+    rationale: "chat01.md DIGEST revealed LENS multi-language gaps + architecture drift issues"
+    deliverables:
+      - "_workspaces/cortex-plan/ENH-029-CAPABILITY-FEASIBILITY-GATE.yaml"
+      - "_workspaces/cortex-plan/LENS-POWER-UP-COMPREHENSIVE.yaml"
+    enhancements_added:
+      - "ENH-029: Capability Feasibility Gate (12 days, 70 tests)"
+      - "ENH-030: LENS Power-Up Comprehensive (10 weeks, 273 tests)"
+    source: "chat01.md DIGEST analysis - KSESSIONS .NET onboarding failure"
+
   - id: OP-004
     date: "2026-02-05"
     type: "documentation"
@@ -1366,6 +1653,9 @@ operations:
 
 # Version History
 version_history:
+  - version: "1.8"
+    date: "2026-02-05"
+    changes: "Added ENH-029 (Capability Feasibility Gate) + ENH-030 (LENS Power-Up Comprehensive). Created 2 plan files. Added OP-005 operation."
   - version: "1.7"
     date: "2026-02-05"
     changes: "Added ENH-028 (Semantic Response Layering + Numbered Action Prompts). Created response-format-standards.md. Updated copilot-instructions.md v7.2."

@@ -1,0 +1,632 @@
+# CORTEX LENS Power-Up: Comprehensive Enhancement Plan
+# Purpose: Transform LENS into the powerful heart of CORTEX domain analysis
+# Source: chat01.md DIGEST + ENH-017 analysis + capability gap identification
+# Created: 2026-02-05
+# Priority: P0 (Critical - Core System Foundation)
+# Status: DESIGN PHASE
+
+meta:
+  plan_id: "LENS-POWER-UP-001"
+  title: "LENS Comprehensive Enhancement - The Heart of CORTEX"
+  version: "1.0"
+  authority: "cortex-architect.prompt.md v13.0 + ENH-017"
+  supersedes: ["LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml (partial)"]
+  
+# =============================================================================
+# VISION: LENS as the Heart of CORTEX
+# =============================================================================
+vision:
+  tagline: "LENS: See Every Codebase. Understand Every Domain."
+  
+  core_principle: |
+    LENS is the unified intelligence layer that powers ALL CORTEX operations:
+    - Repository onboarding (domain discovery)
+    - Code analysis (AST, complexity, patterns)
+    - Reverse engineering (use cases, business logic)
+    - Test development (TDD guidance)
+    - Refactoring (smell detection, improvement suggestions)
+    - Security (vulnerability scanning)
+    
+  current_reality:
+    strengths:
+      - "Git history analysis (GitHistoryAnalyzer)"
+      - "Python AST parsing (ASTAnalyzer)"
+      - "Comment extraction (CommentExtractor)"
+      - "Config analysis (ConfigAnalyzer)"
+      - "Database analysis (DatabaseAnalyzer)"
+      - "API analysis (APIAnalyzer)"
+      - "Capability Discovery Framework (708 LOC)"
+      - "Multi-language adapters exist (C#, Java, TypeScript)"
+      - "40+ best practices knowledge YAMLs"
+      
+    weaknesses:
+      - "Multi-language adapters not fully wired to LENSOrchestrator"
+      - "Use case extraction manual/hardcoded"
+      - "Diagram generation exists but not integrated"
+      - "No pre-execution feasibility checking"
+      - "Knowledge base not queryable at runtime"
+      - "Capability matrix not exposed to users"
+      
+  target_state: |
+    LENS v3.0: A unified, queryable, multi-language intelligence engine that:
+    1. Analyzes ANY codebase (Python, C#, Java, TypeScript, JavaScript, SQL, Go, Rust)
+    2. Automatically extracts business use cases from code structure
+    3. Generates accurate architecture diagrams in real-time
+    4. Provides feasibility analysis before execution
+    5. Leverages 40+ best practices YAMLs for guidance
+    6. Powers all CORTEX orchestrators with deep code intelligence
+
+# =============================================================================
+# ARCHITECTURE OVERVIEW
+# =============================================================================
+architecture:
+  current_structure:
+    location: "cortex/lens/"
+    components:
+      - "orchestrator.py (1618 LOC) - Main coordination"
+      - "capability_discovery.py (708 LOC) - Tech stack detection"
+      - "crawler_generator.py - Custom analyzer generation"
+      - "dashboard_data_aggregator.py - Dashboard data collection"
+      - "analyzers/ - Git, AST, Comment, Config, Database, API, Polyglot"
+      - "adapters/ - Language-specific parsers (C#, Java, TypeScript)"
+      - "models/ - Data models (PolyglotASTResult, etc.)"
+      - "templates/ - Code generation templates"
+      - "discovery/ - Discovery utilities"
+      
+  enhancement_principles:
+    - "NO new top-level modules - extend existing cortex/lens/"
+    - "Follow adapter pattern for new languages"
+    - "Leverage existing CapabilityDiscovery framework"
+    - "Wire to existing orchestrators via events (CORE-041)"
+    - "All new components get wiring.yaml entries"
+    - "40+ knowledge YAMLs accessible at query time"
+
+# =============================================================================
+# PHASED IMPLEMENTATION ROADMAP (8 Phases, 10 Weeks)
+# =============================================================================
+phases:
+
+  # ---------------------------------------------------------------------------
+  # PHASE 1: Complete Multi-Language Wiring (Week 1-2)
+  # ---------------------------------------------------------------------------
+  phase_1:
+    id: "LENS-P1"
+    title: "Complete Multi-Language Adapter Wiring"
+    status: "PRIORITY"
+    duration_weeks: 2
+    owner: "TDDOrchestrator"
+    dependencies: []
+    
+    problem: |
+      CSharpAdapter, JavaAdapter, TypeScriptAdapter exist (1666+ LOC combined)
+      BUT are not fully wired to LENSOrchestrator.analyze_repository_holistic()
+      
+    current_evidence:
+      - "cortex/lens/adapters/__init__.py: 'Phase 4: TypeScriptAdapter (IN PROGRESS)'"
+      - "PolyglotAnalyzer imports CSharpAdapter, JavaAdapter - GOOD"
+      - "LENSOrchestrator has polyglot_analyzer attribute - GOOD"
+      - "TypeScript adapter not in PolyglotAnalyzer.language_map - GAP"
+      - "analyze_repository_holistic() not using polyglot path - GAP"
+      
+    deliverables:
+      - "Wire TypeScriptAdapter to PolyglotAnalyzer"
+      - "Wire JavaScriptAdapter to PolyglotAnalyzer"
+      - "Update LENSOrchestrator.analyze_repository_holistic() to use PolyglotAnalyzer"
+      - "Update LENSOrchestrator._analyze_codebase_structure() to collect all languages"
+      - "Create SQLAdapter for database migration files"
+      - "Integration tests with KSESSIONS repository"
+      
+    files_modified:
+      - "cortex/lens/analyzers/polyglot_analyzer.py (add TS/JS/SQL)"
+      - "cortex/lens/orchestrator.py (wire polyglot path)"
+      - "cortex/lens/adapters/__init__.py (update status)"
+      
+    files_created:
+      - "cortex/lens/adapters/sql_adapter.py"
+      - "tests/unit/lens/adapters/test_sql_adapter.py"
+      - "tests/integration/lens/test_ksessions_onboarding.py"
+      
+    tests:
+      unit_tests: 25
+      integration_tests: 12
+      e2e_tests: 3
+      
+    success_criteria:
+      - "PolyglotAnalyzer.is_supported('.ts') returns True"
+      - "PolyglotAnalyzer.is_supported('.js') returns True"
+      - "PolyglotAnalyzer.is_supported('.sql') returns True"
+      - "LENSOrchestrator.analyze_repository_holistic() returns classes for C#/Java/TS"
+      - "KSESSIONS onboarding produces non-empty code structure tabs"
+
+  # ---------------------------------------------------------------------------
+  # PHASE 2: Use Case Extraction Engine (Week 3-4)
+  # ---------------------------------------------------------------------------
+  phase_2:
+    id: "LENS-P2"
+    title: "Automated Use Case Extraction Engine"
+    status: "PLANNED"
+    duration_weeks: 2
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1"]
+    
+    problem: |
+      Business use cases are currently hardcoded in RepositoryOnboardingOrchestrator.
+      No automatic extraction from API endpoints, CLI commands, or database models.
+      
+    current_evidence:
+      - "repository_onboarding_orchestrator.py:_generate_use_cases() - manual only"
+      - "No ASP.NET route → use case mapping"
+      - "No CLI command → use case mapping"
+      - "Chat01: 'Cannot reverse engineer use cases from C# code'"
+      
+    deliverables:
+      - "UseCaseExtractor class with pluggable pattern detectors"
+      - "ASP.NET Route Detector (HttpGet/Post → Use Case)"
+      - "Spring Boot Route Detector (RequestMapping → Use Case)"
+      - "FastAPI Route Detector (router.get → Use Case)"
+      - "CLI Command Detector (argparse, click → Use Case)"
+      - "Database Model Detector (Entity → CRUD Use Cases)"
+      - "Integration with RepositoryOnboardingOrchestrator"
+      
+    files_created:
+      - "cortex/lens/analyzers/use_case_extractor.py"
+      - "cortex/lens/models/extracted_use_case.py"
+      - "cortex/lens/detectors/aspnet_route_detector.py"
+      - "cortex/lens/detectors/spring_route_detector.py"
+      - "cortex/lens/detectors/fastapi_route_detector.py"
+      - "cortex/lens/detectors/cli_command_detector.py"
+      - "cortex/lens/detectors/database_model_detector.py"
+      - "tests/unit/lens/analyzers/test_use_case_extractor.py"
+      - "tests/unit/lens/detectors/test_aspnet_route_detector.py"
+      
+    files_modified:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      
+    tests:
+      unit_tests: 40
+      integration_tests: 15
+      
+    use_case_format:
+      schema: |
+        @dataclass
+        class ExtractedUseCase:
+            id: str                    # "UC-001"
+            title: str                 # "Create Session"
+            actor: str                 # "User", "Admin", "System"
+            trigger: str               # "POST /api/sessions"
+            source_file: str           # "SessionController.cs"
+            source_line: int           # 45
+            http_method: Optional[str] # "POST"
+            endpoint: Optional[str]    # "/api/sessions"
+            category: str              # "CRUD", "Authentication", "Reporting"
+            confidence: float          # 0.9 (how sure we are this is a use case)
+            
+    extraction_patterns:
+      aspnet:
+        - "[HttpGet('path')]" → "Read {resource}"
+        - "[HttpPost('path')]" → "Create {resource}"
+        - "[HttpPut('path')]" → "Update {resource}"
+        - "[HttpDelete('path')]" → "Delete {resource}"
+        - "[Authorize(Roles='Admin')]" → Actor = "Admin"
+      spring:
+        - "@GetMapping" → "Read {resource}"
+        - "@PostMapping" → "Create {resource}"
+      fastapi:
+        - "@router.get" → "Read {resource}"
+        - "@router.post" → "Create {resource}"
+
+  # ---------------------------------------------------------------------------
+  # PHASE 3: Real-Time Diagram Generation (Week 5)
+  # ---------------------------------------------------------------------------
+  phase_3:
+    id: "LENS-P3"
+    title: "Real-Time Diagram Generation Integration"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1"]
+    
+    problem: |
+      Mermaid renderers exist (cortex/visualization/mermaid_renderer.py) but are
+      not integrated into onboarding flow. Dashboards have placeholder text.
+      
+    current_evidence:
+      - "cortex/visualization/mermaid_renderer.py exists"
+      - "company/dashboards/repos/*/index.html: Architecture tab = placeholder"
+      - "ENH-017 Phase 4 planned but not executed"
+      
+    deliverables:
+      - "DiagramOrchestrator coordinating all diagram types"
+      - "Wire MermaidRenderer to RepositoryOnboardingOrchestrator"
+      - "Class diagram generation from PolyglotASTResult"
+      - "ER diagram generation from DatabaseAnalyzer output"
+      - "Architecture layer diagram from file structure analysis"
+      - "Dependency graph from import analysis"
+      
+    files_created:
+      - "cortex/lens/diagram_orchestrator.py"
+      - "tests/unit/lens/test_diagram_orchestrator.py"
+      
+    files_modified:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      - "cortex/visualization/mermaid_renderer.py"
+      - "cortex/models/dashboard_schema.py (add diagrams field)"
+      
+    tests:
+      unit_tests: 20
+      integration_tests: 8
+      
+    diagram_types:
+      - type: "class_diagram"
+        source: "PolyglotASTResult.classes"
+        format: "Mermaid classDiagram"
+        
+      - type: "er_diagram"
+        source: "DatabaseAnalyzer.tables + relationships"
+        format: "Mermaid erDiagram"
+        
+      - type: "architecture_diagram"
+        source: "Layer detection from folder structure"
+        format: "Mermaid flowchart"
+        
+      - type: "dependency_graph"
+        source: "Import analysis"
+        format: "Mermaid flowchart LR"
+
+  # ---------------------------------------------------------------------------
+  # PHASE 4: Knowledge Base Runtime Access (Week 6)
+  # ---------------------------------------------------------------------------
+  phase_4:
+    id: "LENS-P4"
+    title: "Knowledge Base Runtime Access Layer"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: []
+    
+    problem: |
+      40+ best practices YAMLs exist in cortex/knowledge/best-practices/ but
+      are not queryable at runtime. LENS cannot leverage domain expertise.
+      
+    current_evidence:
+      - "cortex/knowledge/best-practices/INDEX.yaml (450 LOC)"
+      - "40 guides across 10 tech stacks"
+      - "No KnowledgeBaseQuery API in LENS"
+      - "No integration with ChallengeEngine for recommendations"
+      
+    deliverables:
+      - "KnowledgeBaseIndex loader (parse INDEX.yaml + all guides)"
+      - "KnowledgeBaseQuery API (search by keyword, tech stack, domain)"
+      - "Integration with ChallengeEngine (recommend best practices)"
+      - "Integration with TDDOrchestrator (test patterns from guides)"
+      - "Integration with RefactoringOrchestrator (anti-patterns)"
+      
+    files_created:
+      - "cortex/lens/knowledge_query.py"
+      - "tests/unit/lens/test_knowledge_query.py"
+      
+    files_modified:
+      - "cortex/orchestrators/core/challenge_engine.py"
+      - "cortex/orchestrators/core/tdd_orchestrator.py"
+      - "cortex/orchestrators/domain/enhanced_refactoring_orchestrator.py"
+      
+    tests:
+      unit_tests: 15
+      integration_tests: 8
+      
+    query_interface:
+      methods:
+        - "query_by_keyword(keywords: List[str]) -> List[GuideMatch]"
+        - "query_by_tech_stack(stack: str) -> List[GuideMatch]"
+        - "query_by_domain(domain: str) -> List[GuideMatch]"
+        - "get_anti_patterns(context: str) -> List[AntiPattern]"
+        - "get_design_patterns(context: str) -> List[DesignPattern]"
+        
+    example_usage: |
+      # In ChallengeEngine
+      kb = KnowledgeBaseQuery()
+      
+      # User working on C# API
+      matches = kb.query_by_tech_stack("csharp")
+      # Returns: REST API Design, SOLID Principles, Clean Code
+      
+      # Looking for security guidance
+      matches = kb.query_by_keyword(["authentication", "security"])
+      # Returns: Security best practices, OAuth patterns
+
+  # ---------------------------------------------------------------------------
+  # PHASE 5: Capability Feasibility Gate Integration (Week 7)
+  # ---------------------------------------------------------------------------
+  phase_5:
+    id: "LENS-P5"
+    title: "Capability Feasibility Gate Integration"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1", "LENS-P4"]
+    
+    problem: |
+      Users don't know what CORTEX can/cannot do until execution fails.
+      Architecture drift happens silently. (See ENH-029 for details)
+      
+    deliverables:
+      - "Implement ENH-029-CAPABILITY-FEASIBILITY-GATE.yaml"
+      - "CapabilityFeasibilityAnalyzer in LENS"
+      - "ArchitectureDriftDetector in LENS"
+      - "Integration with InteractionOrchestrator"
+      
+    reference: "ENH-029-CAPABILITY-FEASIBILITY-GATE.yaml"
+    
+    tests:
+      unit_tests: 63
+      integration_tests: 29
+      e2e_tests: 9
+
+  # ---------------------------------------------------------------------------
+  # PHASE 6: Security Enhancement (Week 8)
+  # ---------------------------------------------------------------------------
+  phase_6:
+    id: "LENS-P6"
+    title: "Multi-Language Security Scanning"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1"]
+    
+    problem: |
+      SecurityThreatAnalyzer exists but focused on Python patterns.
+      C#/Java/TypeScript security patterns not covered.
+      
+    current_evidence:
+      - "wiring.yaml: SecurityThreatAnalyzer covers CWE-94, 95, 78, 89, 327, 22"
+      - "No .NET-specific security patterns (ASP.NET injection, etc.)"
+      - "No Java-specific security patterns (Spring security, etc.)"
+      
+    deliverables:
+      - "Extend SecurityThreatAnalyzer with multi-language patterns"
+      - "ASP.NET security patterns (SQL injection via EF, CSRF)"
+      - "Spring security patterns (authorization, CORS)"
+      - "TypeScript/JavaScript patterns (XSS, prototype pollution)"
+      - "Update dashboard security tab for multi-language findings"
+      
+    files_modified:
+      - "cortex/brain/analysis/security_threat_analyzer.py"
+      - "tests/unit/brain/analysis/test_security_threat_analyzer.py"
+      
+    tests:
+      unit_tests: 30
+      integration_tests: 10
+      
+    new_patterns:
+      csharp:
+        - "CWE-89: SQL Injection via string concatenation in EF"
+        - "CWE-352: Missing [ValidateAntiForgeryToken]"
+        - "CWE-601: Open redirect in Redirect()"
+      java:
+        - "CWE-89: SQL Injection via JDBC"
+        - "CWE-611: XXE in XML parsing"
+        - "CWE-502: Unsafe deserialization"
+      javascript:
+        - "CWE-79: XSS via innerHTML"
+        - "CWE-1321: Prototype pollution"
+        - "CWE-94: eval() usage"
+
+  # ---------------------------------------------------------------------------
+  # PHASE 7: Performance & Caching (Week 9)
+  # ---------------------------------------------------------------------------
+  phase_7:
+    id: "LENS-P7"
+    title: "LENS Performance Optimization"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1", "LENS-P2", "LENS-P3"]
+    
+    problem: |
+      Large repositories (10K+ files) can slow LENS analysis.
+      No caching between sessions. Reference files re-read multiple times.
+      
+    current_evidence:
+      - "Chat01: Kashkole dashboard content read 4+ times"
+      - "ENH-023: LENS Context Caching proposed"
+      - "No file-level caching in LENSOrchestrator"
+      
+    deliverables:
+      - "LRU cache for file analysis results"
+      - "Incremental analysis (only changed files)"
+      - "Parallel file processing for large repos"
+      - "Smart summarization on re-reference (ENH-023)"
+      - "Performance metrics instrumentation"
+      
+    files_created:
+      - "cortex/lens/caching/analysis_cache.py"
+      - "cortex/lens/caching/incremental_analyzer.py"
+      - "tests/unit/lens/caching/test_analysis_cache.py"
+      
+    files_modified:
+      - "cortex/lens/orchestrator.py"
+      
+    tests:
+      unit_tests: 20
+      performance_tests: 5
+      
+    performance_targets:
+      - "1000 files: < 30 seconds (vs current ~60 seconds)"
+      - "10K files: < 5 minutes (vs current ~15 minutes)"
+      - "Cache hit ratio: > 80% for repeated analysis"
+
+  # ---------------------------------------------------------------------------
+  # PHASE 8: MCP Tools & Documentation (Week 10)
+  # ---------------------------------------------------------------------------
+  phase_8:
+    id: "LENS-P8"
+    title: "MCP Tools & Documentation Finalization"
+    status: "PLANNED"
+    duration_weeks: 1
+    owner: "TDDOrchestrator"
+    dependencies: ["LENS-P1", "LENS-P2", "LENS-P3", "LENS-P4", "LENS-P5", "LENS-P6", "LENS-P7"]
+    
+    deliverables:
+      - "cortex_analyze_polyglot MCP tool"
+      - "cortex_extract_use_cases MCP tool"
+      - "cortex_generate_diagrams MCP tool"
+      - "cortex_query_knowledge MCP tool"
+      - "cortex_check_feasibility MCP tool (from ENH-029)"
+      - "Update LENS documentation (docs/05-lens-protocol/)"
+      - "Update wiring.yaml with all new components"
+      - "End-to-end integration tests"
+      
+    files_created:
+      - "cortex/mcp/tools/lens_polyglot_tool.py"
+      - "cortex/mcp/tools/lens_use_case_tool.py"
+      - "cortex/mcp/tools/lens_diagram_tool.py"
+      - "cortex/mcp/tools/lens_knowledge_tool.py"
+      - "docs/05-lens-protocol/lens-v3-capabilities.md"
+      
+    files_modified:
+      - "cortex/wiring/specifications/wiring.yaml"
+      - "cortex/mcp/tools/lens_tools.py"
+      
+    tests:
+      unit_tests: 25
+      integration_tests: 15
+      e2e_tests: 10
+
+# =============================================================================
+# WIRING UPDATES
+# =============================================================================
+wiring_updates:
+  new_analyzers:
+    - name: "SQLAdapter"
+      module: "cortex.lens.adapters.sql_adapter"
+      class: "SQLAdapter"
+      purpose: "Parse SQL DDL/DML for database intelligence"
+      priority: 5
+      
+    - name: "UseCaseExtractor"
+      module: "cortex.lens.analyzers.use_case_extractor"
+      class: "UseCaseExtractor"
+      purpose: "Extract business use cases from API/CLI/DB patterns"
+      priority: 6
+      
+    - name: "DiagramOrchestrator"
+      module: "cortex.lens.diagram_orchestrator"
+      class: "DiagramOrchestrator"
+      purpose: "Coordinate all diagram generation"
+      priority: 7
+      
+  new_support_orchestrators:
+    - name: "KnowledgeBaseQuery"
+      module: "cortex.lens.knowledge_query"
+      class: "KnowledgeBaseQuery"
+      tier: 3
+      priority: 78
+      capabilities:
+        - "knowledge_retrieval"
+        - "best_practice_lookup"
+        - "anti_pattern_detection"
+        
+    - name: "CapabilityFeasibilityGate"
+      module: "cortex.orchestrators.core.capability_feasibility_gate"
+      class: "CapabilityFeasibilityGate"
+      tier: 3
+      priority: 26
+      dependencies: ["IntentRouter", "EnforcementOrchestrator"]
+      capabilities:
+        - "feasibility_analysis"
+        - "drift_detection"
+        - "capability_blocking"
+
+# =============================================================================
+# SUCCESS METRICS
+# =============================================================================
+metrics:
+  coverage:
+    languages_supported:
+      before: 1  # Python only in deep analysis
+      after: 7   # Python, C#, Java, TypeScript, JavaScript, SQL, Go
+    use_case_extraction:
+      before: "manual"
+      after: "automated for 5 framework patterns"
+    diagram_generation:
+      before: "placeholder"
+      after: "4 diagram types generated"
+    knowledge_access:
+      before: "none"
+      after: "40+ guides queryable"
+      
+  performance:
+    analysis_time_1k_files:
+      before: "60 seconds"
+      after: "30 seconds"
+    cache_hit_ratio:
+      target: "80%"
+      
+  quality:
+    total_tests: 350
+    coverage_target: "85%"
+    
+  adoption:
+    enterprise_repos_supported:
+      before: "30-40% (Python only)"
+      after: "90%+ (polyglot)"
+
+# =============================================================================
+# RISK ASSESSMENT
+# =============================================================================
+risks:
+  risk_1:
+    description: "Tree-sitter dependency version conflicts"
+    probability: "Medium"
+    impact: "High"
+    mitigation: "Pin tree-sitter versions, test in CI matrix"
+    
+  risk_2:
+    description: "Performance regression with multi-language analysis"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation: "Incremental analysis, caching, parallel processing"
+    
+  risk_3:
+    description: "Use case extraction accuracy"
+    probability: "High"
+    impact: "Low"
+    mitigation: "Confidence scoring, manual override, feedback loop"
+
+# =============================================================================
+# TIMELINE SUMMARY
+# =============================================================================
+timeline:
+  total_weeks: 10
+  total_tests: 350
+  files_created: 35
+  files_modified: 20
+  
+  milestones:
+    week_2: "Multi-language wiring complete - KSESSIONS onboardable"
+    week_4: "Use case extraction working"
+    week_5: "Diagrams generating in dashboards"
+    week_6: "Knowledge base queryable"
+    week_7: "Feasibility gate blocking bad requests"
+    week_8: "Multi-language security scanning"
+    week_9: "Performance optimized"
+    week_10: "MCP tools + docs complete"
+
+# =============================================================================
+# RELATED DOCUMENTS
+# =============================================================================
+related:
+  enhancements:
+    - "ENH-017: LENS Multi-Language Enhancement (partial supersede)"
+    - "ENH-029: Capability Feasibility Gate (integrated in Phase 5)"
+    - "ENH-023: LENS Context Caching (integrated in Phase 7)"
+    - "ENH-027: Component Integration Verification"
+    
+  architecture:
+    - "cortex/wiring/specifications/wiring.yaml"
+    - "cortex/knowledge/best-practices/INDEX.yaml"
+    - "docs/05-lens-protocol/"
+    
+  tests:
+    - "tests/unit/lens/"
+    - "tests/integration/lens/"
