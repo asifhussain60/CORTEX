@@ -764,6 +764,8 @@ if result['notify_user']:
 ```
 0. LENS Context (cortex_git_history) — Always first
       ↓
+0.5. Architecture Integrity Gate (Phase 24) — Validate against master plan
+      ↓
 1. MANDATORY Challenge + Recommendation (Extensibility/Scalability/Accuracy/Efficiency + Fix Plans)
       ↓
 2. Enhanced Request (security, MCP, edge cases, scalability implications, role impact)
@@ -810,7 +812,150 @@ Every request is elevated with:
 8. Completion Report
 ```
 
-## 🚀 INCREMENTAL TDD EXECUTION (NEW)
+## �️ ARCHITECTURE INTEGRITY GATE (Phase 24)
+
+**MANDATORY PRE-CHALLENGE VALIDATION:** Before generating challenge, validate request against master plan.
+
+### Gate Purpose
+
+Prevents:
+- **Architectural Regression** — Implementations that contradict completed phases
+- **Phase Drift** — Work misaligned with active/planned phases  
+- **Untracked Features** — Significant features without phase specifications
+
+### Validation Flow
+
+```
+LENS Context Complete
+    ↓
+cortex_validate_architecture(
+    request_description: str,
+    intent_type: "IMPLEMENT" | "REFACTOR" | "FIX" | "DESIGN",
+    scope: List[str]
+)
+    ↓
+Returns: GateVerdict (PROCEED | BLOCK | CREATE_PHASE)
+```
+
+### Phase Alignment Table (Display in Response)
+
+```markdown
+### 🛡️ Architecture Integrity Check
+
+**Request:** {user_request_summary}
+
+┌──────────────────────┬────────────────────────────────────────┐
+│ Verdict              │ {PROCEED ✅ | BLOCK 🔴 | CREATE_PHASE 🟡}│
+│ Regression Risk      │ {score} ({LOW|MEDIUM|HIGH})            │
+│ Phase Alignment      │ {phase_name or "No matching phase"}   │
+│ Confidence           │ {0.0-1.0}                              │
+└──────────────────────┴────────────────────────────────────────┘
+
+**Rationale:** {reasoning from ArchitectureGuard}
+```
+
+### Verdict Handling
+
+| Verdict | Action | User Experience |
+|---------|--------|----------------|
+| **PROCEED ✅** | Continue to Challenge step | Normal flow |
+| **CREATE_PHASE 🟡** | Offer phase creation before continuing | "This is significant work. Should we create Phase {N}?" |
+| **BLOCK 🔴** | HALT execution, display rationale | User must resolve contradiction or modify request |
+
+### BLOCK Response Template
+
+```markdown
+## 🚨 BLOCKED — Architecture Integrity Violation
+
+**Request:** {user_request}
+
+**Issue:** {rationale from ArchitectureGuard}
+
+**Why This Matters:**
+- Contradicts: {completed_phase_name}
+- Regression Risk: {HIGH|CRITICAL} ({risk_score})
+- Impact: {architectural_impact_description}
+
+**Resolution Options:**
+
+1️⃣ **Modify Request** — Adjust scope to avoid contradiction
+   └─ **Example:** {suggestion based on phase alignment}
+
+2️⃣ **Review Master Plan** — Check cortex-registry/_cortex-master/
+   └─ **File:** {conflicting_phase_file}
+
+3️⃣ **Override (Requires Justification)** — Type "override: {reason}"
+   └─ **Warning:** Manual audit trail entry required
+
+**Need Help?** Type "explain {phase_name}" for context
+```
+
+### CREATE_PHASE Response Template
+
+```markdown
+### 🟡 Significant Feature Detected — Phase Creation Recommended
+
+**Request:** {user_request}
+
+**Analysis:**
+- Scope: {MultiComponent|CoreInfrastructure}
+- Estimated Impact: {MEDIUM|HIGH}
+- Current Phase Coverage: {None|Partial}
+
+**Recommendation:** Create Phase {next_phase_number} before implementation
+
+**Options:**
+
+1️⃣ **Create Phase Now** — Generate phase specification (5 min)
+   └─ **Impact:** Proper tracking, better architecture alignment
+
+2️⃣ **Proceed Without Phase** — Continue (not recommended for {scope} changes)
+   └─ **Warning:** Risk of untracked architectural changes
+
+**Quick Select:** Reply with 1 or 2
+```
+
+### Integration with Challenge
+
+**If PROCEED:**
+- Continue to Challenge step (normal flow)
+- Include phase alignment info in challenge context
+
+**If CREATE_PHASE:**
+- Pause before Challenge
+- Offer phase creation workflow
+- Resume after phase created or user skips
+
+**If BLOCK:**
+- Skip Challenge entirely
+- Display BLOCK response
+- Await user resolution (modify request, review plan, override)
+
+### MCP Tool Parameters
+
+```python
+cortex_validate_architecture(
+    request_description="Implement dashboard generator v4",
+    intent_type="IMPLEMENT",
+    scope=["visualization", "dashboard"]
+)
+```
+
+Returns:
+```python
+{
+    "status": "success",
+    "verdict": "PROCEED" | "BLOCK" | "CREATE_PHASE",
+    "reasoning": str,
+    "phase_alignment": {
+        "matched_phase": str | None,
+        "confidence": float,
+        "regression_risk": float
+    }
+}
+```
+
+## �🚀 INCREMENTAL TDD EXECUTION (NEW)
 
 **All IMPLEMENT intents automatically use incremental execution:**
 

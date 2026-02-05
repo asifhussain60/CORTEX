@@ -31,6 +31,7 @@ from cortex.orchestrators.core.challenge_engine import (
     SecurityThreatAssessment,
 )
 from cortex.orchestrators.decorators import inject_orchestrator_context
+from cortex.orchestrators.support.decision_journal import DecisionJournal
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +109,14 @@ class InteractionOrchestrator:
         # Initialize challenge engine (AC-PERMANENT-FIX-006) - MANDATORY
         self.challenge_engine = get_challenge_engine()
         logger.info("CORTEX Protocol ACTIVE: LENS + Challenge + Protocol on every turn (CORE-029, AC-PERMANENT-FIX-006)")
+        
+        # Initialize decision journal (AC-PHASE24-009) - OPTIONAL
+        try:
+            self.decision_journal = DecisionJournal()
+            logger.info("DecisionJournal initialized for architectural decision tracking")
+        except Exception as e:
+            logger.warning(f"DecisionJournal initialization failed (non-critical): {e}")
+            self.decision_journal = None
     
     def _load_patterns(self) -> None:
         """Load communication patterns from registry."""
@@ -676,9 +685,137 @@ class InteractionOrchestrator:
                 ],
                 "can_transition_to_design": True,
             }
-            
+
             logger.info("INTERACTIVE mode response generated successfully")
             return response
+        except Exception as e:
+            logger.error(f"INTERACTIVE mode error: {e}", exc_info=True)
+            return {
+                "status": "error",
+                "error": str(e),
+                "recommendation": "An error occurred while processing your question.",
+            }
+
+    def _capture_challenge_decision(
+        self,
+        request: str,
+        challenge_result: Dict[str, Any]
+    ) -> Optional[str]:
+        """
+        Capture architectural decision when challenge generates verdict.
+        
+        AC-PHASE24-009: DecisionJournal integration for challenge verdicts.
+        
+        Args:
+            request: Original user request
+            challenge_result: Challenge response with verdict and weaknesses
+            
+        Returns:
+            Decision ID if captured, None if journal disabled or error
+        """
+        if not self.decision_journal:
+            return None
+        
+        try:
+            verdict = challenge_result.get("verdict", "UNKNOWN")
+            weaknesses = challenge_result.get("weaknesses", [])
+            counter_proposal = challenge_result.get("counter_proposal", "")
+            
+            # Build rationale from weaknesses
+            rationale = "Challenge identified: " + ", ".join(weaknesses) if weaknesses else "No weaknesses identified"
+            
+            # Build alternatives list
+            alternatives = [counter_proposal] if counter_proposal else ["No alternative approach proposed"]
+            
+            # Build impact assessment
+            impact = f"Verdict: {verdict}. Identified {len(weaknesses)} potential issues."
+            
+            decision_id = self.decision_journal.record_decision(
+                decision=verdict,
+                rationale=rationale,
+                alternatives=alternatives,
+                impact=impact,
+                challenge_verdict=verdict,
+                decision_type="challenge_verdict",
+                alternatives_considered=", ".join(alternatives),
+                context=f"User request: {request}"
+            )
+            
+            logger.info(f"Challenge decision captured: {decision_id} (verdict: {verdict})")
+            return decision_id
+            
+        except Exception as e:
+            logger.error(f"Failed to capture challenge decision: {e}")
+            return None
+    
+    def _capture_dor_approval(
+        self,
+        dor_data: Dict[str, Any],
+        user_response: str
+    ) -> Optional[str]:
+        """
+        Capture architectural decision when user approves DoR.
+        
+        AC-PHASE24-009: DecisionJournal integration for DoR approvals.
+        
+        Args:
+            dor_data: DoR classification data
+            user_response: User's approval response
+            
+        Returns:
+            Decision ID if captured, None if journal disabled or error
+        """
+        if not self.decision_journal:
+            return None
+        
+        try:
+            intent = dor_data.get("intent", "UNKNOWN")
+            scope = dor_data.get("scope", "Unknown scope")
+            confidence = dor_data.get("confidence", 0.0)
+            
+            decision_id = self.decision_journal.record_decision(
+                decision="APPROVED",
+                rationale=f"User approved DoR with confidence {confidence}",
+                alternatives=["Alternatives presented in challenge phase"],
+                impact=f"Intent: {intent}, Scope: {scope}",
+                dor_approved=True,
+                decision_type="dor_approval",
+                context=f"User response: {user_response}. Scope: {scope}. Intent: {intent}"
+            )
+            
+            logger.info(f"DoR approval decision captured: {decision_id}")
+            return decision_id
+            
+        except Exception as e:
+            logger.error(f"Failed to capture DoR approval: {e}")
+            return None
+    
+    def _update_decision_with_outcome(
+        self,
+        decision_id: str,
+        outcome: Dict[str, Any]
+    ) -> None:
+        """
+        Update decision with execution outcome.
+        
+        AC-PHASE24-009: DecisionJournal integration for execution outcomes.
+        
+        Args:
+            decision_id: Decision ID to update
+            outcome: Execution outcome data
+        """
+        if not self.decision_journal:
+            return
+        
+        try:
+            self.decision_journal.update_decision(
+                decision_id=decision_id,
+                outcome=outcome
+            )
+            logger.info(f"Decision {decision_id} updated with execution outcome")
+            
+        except Exception as e:
+            logger.error(f"Failed to update decision outcome: {e}")
         
         except Exception as e:
             logger.error("Error in INTERACTIVE mode engagement: %s", str(e), exc_info=True)

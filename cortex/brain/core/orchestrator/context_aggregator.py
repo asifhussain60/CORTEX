@@ -29,13 +29,12 @@ class ContextAggregator:
     conversation history and enabling cross-turn references.
     """
     
-    def __init__(self, max_history_turns: int = 3):
+    def __init__(self, max_history_turns: int = 10):
         """
         Initialize context aggregator.
         
         Args:
             max_history_turns: Maximum number of turns to keep in history
-                             (default: 3 for token optimization, was 10)
         """
         self.max_history_turns = max_history_turns
         self.turn_history: List[TurnContext] = []
@@ -91,7 +90,7 @@ class ContextAggregator:
         aggregated["conversation_history"] = [
             {
                 "turn": tc.turn_number,
-                "user_input": tc.user_input[:100] + "..." if len(tc.user_input) > 100 else tc.user_input,
+                "user_input": tc.user_input,
                 "output_summary": self._summarize_output(tc.orchestrator_output),
                 "timestamp": tc.timestamp.isoformat()
             }

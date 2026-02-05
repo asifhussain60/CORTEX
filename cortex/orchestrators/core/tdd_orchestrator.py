@@ -48,6 +48,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
+from cortex.orchestrators.support.phase_completion_orchestrator import PhaseCompletionOrchestrator
 from cortex.orchestrators.core.orchestrator_base_protocol import (
     OrchestratorBaseProtocol,
     ProtocolExecutionResult,
@@ -218,10 +220,170 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         self.knowledge_loader = TDDKnowledgeLoader(knowledge_root)
         self.guidance_engine = KnowledgeGuidanceEngine()
         
+        # AC-PHASE24-005: Initialize BrittlenessScanner for regression detection
+        self._brittleness_scanner = BrittlenessScanner()
+        
+        # AC-PHASE24-007: Initialize PhaseCompletionOrchestrator for post-completion hooks
+        self._phase_completion_orchestrator = PhaseCompletionOrchestrator()
+        
         logger.info(
             f"TDD Orchestrator V2 initialized with base protocol + "
-            f"{len(self.knowledge_loader.tdd_yamls)} knowledge YAMLs"
+            f"{len(self.knowledge_loader.tdd_yamls)} knowledge YAMLs + "
+            f"BrittlenessScanner (AC-PHASE24-005) + "
+            f"PhaseCompletionOrchestrator (AC-PHASE24-007)"
         )
+
+    def _run_pre_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:
+        """
+        Run BrittlenessScanner before TDD execution (AC-PHASE24-005).
+        
+        Non-blocking: Violations logged as warnings, execution continues.
+        
+        Args:
+            context: Execution context with module_path
+        """
+        if self._brittleness_scanner is None:
+            return  # Scanner not initialized (e.g., in tests without injection)
+        
+        try:
+            # Get module path from context
+            module_path = context.get("module_path", "")
+            if not module_path:
+                return
+            
+            # Scan for brittleness (convert Path to str for scanner)
+            scan_path = str(Path(module_path).parent)
+            scan_result = self._brittleness_scanner.scan(scan_path)
+            
+            # Log violations as warnings (non-blocking)
+            if scan_result.brittleness_score > 0.5:
+                logger.warning(
+                    f"⚠️ Brittleness detected (score: {scan_result.brittleness_score:.2f}) "
+                    f"in {scan_result.scanned_path}"
+                )
+            
+            if scan_result.circular_dependencies:
+                for violation in scan_result.circular_dependencies:
+                    logger.warning(
+                        f"⚠️ Circular dependency: {' → '.join(violation.cycle_path)} "
+                        f"(severity: {violation.severity})"
+                    )
+            
+            if scan_result.coupling_violations:
+                logger.warning(
+                    f"⚠️ High coupling detected: {len(scan_result.coupling_violations)} violations"
+                )
+        
+        except Exception as e:
+            # Scanner failures don't block TDD execution
+            logger.warning(f"BrittlenessScanner failed (non-blocking): {e}")
+
+    def _run_post_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:
+        """
+        Run BrittlenessScanner AFTER TDD execution (AC-PHASE24-005).
+        
+        Post-execution scan verifies implementation didn't introduce brittleness.
+        Violations logged as warnings (non-blocking).
+        
+        Args:
+            context: Execution context with module_path
+            
+        AC-PHASE24-005: Post-execution brittleness verification
+        """
+        try:
+            module_path = context.get("module_path", "")
+            if not module_path:
+                return
+            
+            # Scan directory containing modified files
+            scan_path = str(Path(module_path).parent)
+            scan_result = self._brittleness_scanner.scan(scan_path)
+            
+            # Log violations as warnings (non-blocking)
+            if scan_result.brittleness_score > 0.5:
+                logger.warning(
+                    f"⚠️ Post-execution brittleness (score: {scan_result.brittleness_score:.2f}) "
+                    f"in {scan_result.scanned_path}"
+                )
+            
+            if scan_result.circular_dependencies:
+                for violation in scan_result.circular_dependencies:
+                    logger.warning(
+                        f"⚠️ Post-execution circular dependency: {' → '.join(violation.cycle_path)} "
+                        f"(severity: {violation.severity})"
+                    )
+            
+            if scan_result.coupling_violations:
+                logger.warning(
+                    f"⚠️ Post-execution high coupling: {len(scan_result.coupling_violations)} violations"
+                )
+        
+        except Exception as e:
+            # Scanner failures don't block TDD execution
+            logger.warning(f"Post-execution BrittlenessScanner failed (non-blocking): {e}")
+
+    def _run_phase_completion_hook(
+        self, 
+        context: Dict[str, Any], 
+        execution_result: Dict[str, Any]
+    ) -> None:
+        """
+        Run PhaseCompletionOrchestrator after successful TDD execution (AC-PHASE24-007).
+        
+        Automatically updates:
+        - Phase YAML completion_status
+        - Dashboard data via regeneration
+        - Registry sync
+        - Enhancement history
+        
+        Non-blocking: Failures logged as warnings.
+        
+        Args:
+            context: Execution context
+            execution_result: TDD execution results
+            
+        AC-PHASE24-007: Automatic post-completion status updates
+        """
+        if self._phase_completion_orchestrator is None:
+            return  # Not initialized (e.g., in tests)
+        
+        try:
+            # Extract phase information from context
+            phase_file_str = context.get("phase_file")
+            phase_key = context.get("phase_key")
+            
+            if not phase_file_str or not phase_key:
+                # Not a phase-tracked operation, skip completion hook
+                logger.debug(
+                    "Skipping phase completion hook: no phase_file or phase_key in context"
+                )
+                return
+            
+            phase_file = Path(phase_file_str)
+            enhancement_id = context.get("enhancement_id")  # Optional
+            
+            # Call PhaseCompletionOrchestrator
+            completion_result = self._phase_completion_orchestrator.complete_phase(
+                phase_file=phase_file,
+                phase_key=phase_key,
+                enhancement_id=enhancement_id
+            )
+            
+            if completion_result.success:
+                logger.info(
+                    f"✅ AC-PHASE24-007: Phase completion hook successful - "
+                    f"File: {phase_file.name}, Key: {phase_key}, "
+                    f"Dashboard: {completion_result.dashboard_regenerated}"
+                )
+            else:
+                logger.warning(
+                    f"⚠️ AC-PHASE24-007: Phase completion hook failed - "
+                    f"Error: {completion_result.error}"
+                )
+        
+        except Exception as e:
+            # Completion hook failures don't block TDD execution
+            logger.warning(f"PhaseCompletionOrchestrator hook failed (non-blocking): {e}")
 
     def _execute_domain_logic(
         self,
@@ -248,8 +410,12 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             
         CORE-008: Enforces TDD discipline (RED → GREEN → REFACTOR)
         MCP-GATE: Rejects non-MCP invocations for IMPLEMENT intents
+        AC-PHASE24-005: BrittlenessScanner pre-execution hook
         """
         try:
+            # AC-PHASE24-005: Pre-execution brittleness scan (non-blocking)
+            self._run_pre_execution_brittleness_scan(context)
+            
             # MCP-GATE ENFORCEMENT: Block direct chat invocations
             invocation_source = context.get("source", "unknown")
             if invocation_source != "mcp_gateway":
@@ -293,6 +459,12 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
             
             if phase_result.is_err():
                 return phase_result
+            
+            # AC-PHASE24-005: Post-execution brittleness scan (non-blocking)
+            self._run_post_execution_brittleness_scan(context)
+            
+            # AC-PHASE24-007: Phase completion hook (automatic status updates)
+            self._run_phase_completion_hook(context, phase_result.unwrap())
             
             # Return comprehensive TDD result
             return Ok({
