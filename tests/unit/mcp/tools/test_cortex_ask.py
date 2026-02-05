@@ -5,12 +5,16 @@ Tests for educational query processing via MCP interface.
 """
 
 import pytest
+import sys
+import importlib
 from unittest.mock import Mock, patch, AsyncMock
 from cortex.mcp.tools.cortex_ask import (
     cortex_ask,
     validate_query,
     format_educational_response,
 )
+from cortex.core.result import Result
+import json
 
 
 class TestCortexAsk:
@@ -108,37 +112,59 @@ class TestCortexAsk:
             assert "description" in step
             assert "query" in step
 
-    def test_cortex_ask_orchestrator_integration(self):
+    def test_cortex_ask_orchestrator_integration(self, monkeypatch):
         """Test integration with EducationalOrchestrator."""
-        with patch('cortex.mcp.tools.cortex_ask.EducationalOrchestrator') as mock_orch:
-            mock_instance = Mock()
-            mock_instance.execute.return_value = {
-                "explanation": "Test explanation",
-                "next_steps": [{"description": "Step 1", "query": "test"}]
-            }
-            mock_orch.return_value = mock_instance
-            
-            result = cortex_ask(
-                user_query="Test query",
-                knowledge_level="beginner"
-            )
-            
-            assert mock_instance.execute.called
+        # Create mock response data
+        response_data = {
+            "explanation": "Test explanation",
+            "next_steps": [{"description": "Step 1", "query": "test"}],
+            "knowledge_level": "beginner"
+        }
+        
+        # Create Result.Ok with JSON string
+        mock_result = Mock()
+        mock_result.is_ok.return_value = True
+        mock_result.unwrap.return_value = json.dumps(response_data)
+        
+        mock_instance = Mock()
+        mock_instance.execute.return_value = mock_result
+        
+        mock_orch = Mock(return_value=mock_instance)
+        
+        # Patch the actual module (not the re-exported function)
+        import sys
+        cortex_ask_module = sys.modules['cortex.mcp.tools.cortex_ask']
+        monkeypatch.setattr(cortex_ask_module, 'EducationalOrchestrator', mock_orch)
+        
+        from cortex.mcp.tools.cortex_ask import cortex_ask
+        result = cortex_ask(
+            user_query="Test query",
+            knowledge_level="beginner"
+        )
+        
+        # Verify orchestrator was called
+        assert mock_orch.called
+        assert mock_instance.execute.called
 
-    def test_cortex_ask_error_handling(self):
+    def test_cortex_ask_error_handling(self, monkeypatch):
         """Test error handling when orchestrator fails."""
-        with patch('cortex.mcp.tools.cortex_ask.EducationalOrchestrator') as mock_orch:
-            mock_instance = Mock()
-            mock_instance.execute.side_effect = Exception("Orchestrator error")
-            mock_orch.return_value = mock_instance
-            
-            result = cortex_ask(
-                user_query="Test query",
-                knowledge_level="beginner"
-            )
-            
-            assert result["status"] == "error"
-            assert "error" in result
+        mock_instance = Mock()
+        mock_instance.execute.side_effect = Exception("Orchestrator error")
+        mock_orch = Mock(return_value=mock_instance)
+        
+        # Patch the actual module (not the re-exported function)
+        import sys
+        cortex_ask_module = sys.modules['cortex.mcp.tools.cortex_ask']
+        monkeypatch.setattr(cortex_ask_module, 'EducationalOrchestrator', mock_orch)
+        
+        from cortex.mcp.tools.cortex_ask import cortex_ask
+        result = cortex_ask(
+            user_query="Test query",
+            knowledge_level="beginner"
+        )
+        
+        assert result["status"] == "error"
+        assert "error" in result
 
     def test_validate_query_valid(self):
         """Test query validation with valid input."""
@@ -157,6 +183,7 @@ class TestCortexAsk:
         long_query = "x" * 10000
         is_valid, error = validate_query(long_query)
         assert is_valid is False
+        assert error is not None
         assert "too long" in error.lower()
 
     def test_format_educational_response(self):
@@ -170,7 +197,7 @@ class TestCortexAsk:
             "knowledge_level": "beginner"
         }
         
-        formatted = format_educational_response(raw_response)
+        formatted = format_educational_response(raw_response, {})
         
         assert formatted["status"] == "success"
         assert formatted["explanation"] == "Test explanation"
