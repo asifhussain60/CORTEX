@@ -146,9 +146,8 @@ class EducationalOrchestrator(IOrchestrator):
             "refactor",
         ]
         
-        # Intermediate signals
+        # Intermediate signals (component-specific or integration queries)
         intermediate_signals = [
-            "how does",
             "integration",
             "wiring",
             "orchestrator",
@@ -156,11 +155,26 @@ class EducationalOrchestrator(IOrchestrator):
             "routing",
             "synthesis",
             "lens",
+            "mcp tool",
+            "challenge engine",
+        ]
+        
+        # Beginner override patterns (general "how does" + generic term)
+        beginner_patterns = [
+            "how does cortex work",
+            "how does cortex",
+            "what is cortex",
+            "what does cortex",
+            "explain cortex",
         ]
         
         # Check for advanced signals
         if any(signal in query_lower for signal in advanced_signals):
             return KnowledgeLevel.ADVANCED
+        
+        # Check beginner override patterns first
+        if any(pattern in query_lower for pattern in beginner_patterns):
+            return KnowledgeLevel.BEGINNER
         
         # Check history length (more history = likely more advanced)
         if len(history) > 5:
