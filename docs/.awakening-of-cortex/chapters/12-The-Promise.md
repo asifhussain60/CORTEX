@@ -1,3 +1,27 @@
+---
+chapter: 12
+title: "The Promise"
+phase: "Phase 22 - Vision Document"
+image_prompts:
+  - id: "ch12-img01"
+    narrative_moment: "Asif writes 'CORTEX: The Road Ahead' - seven-phase vision from foundation to ecosystem"
+    value_score: 5
+    rationale: "Forward-looking climax - mapping the future. Visual metaphor of road/journey from basement to sky. Hope and ambition after surviving Year 1."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Asif (hoodie, messy hair, inspired expression) sits at desk writing in glowing document (warm golden glow - only color besides router) titled "CORTEX: THE ROAD AHEAD". Behind him, large window shows transformation: LEFT SIDE shows basement (where they are), RIGHT SIDE shows sky/clouds (where they're going). Between them, golden road/path rises from basement through 7 milestone markers: "Phase 1: Foundation", "Phase 2: Optimization", "Phase 3: Intelligence", "Phase 4: Self-Awareness", "Phase 5: Collaboration", "Phase 6: Ecosystem", "Phase 7: Evolution". Miss G (ethereal, 30% transparent) gestures at the rising path approvingly. Copilot Bot (LED eyes blue, excited) holds tiny "MAP FOR THE FUTURE" sign. Red Wi-Fi router blinks steadily (confident, not urgent). Coffee cup steaming (warm brown). Visual emphasis on upward journey, hope, and clear direction forward. Clean line art with inspirational tone.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch12-img02"
+    narrative_moment: "Phase 7 vision - CORTEX as ecosystem where other systems build on top"
+    value_score: 4
+    rationale: "Ultimate vision - platform thinking, ecosystem metaphor. Shows CORTEX evolution from tool to foundation for others."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing ecosystem metaphor. Bottom layer: Solid foundation labeled "CORTEX CORE" (stone/bedrock). Middle layer: Various systems built on top like buildings in city: "Intent Understanding", "Governance Engine", "Knowledge Graph", "Deployment Pipeline". Top layer: Multiple diverse applications growing like trees/plants: "HR Bots", "Finance Tools", "Marketing Automation", "Custom Solutions" all connected by golden root system (only gold color besides router) representing CORTEX as shared foundation. Asif (hoodie, visionary expression) stands as gardener tending the ecosystem with watering can. Miss G (ethereal, 30% transparent) floats above surveying the thriving garden approvingly. Copilot Bot (LED eyes green) plants seeds labeled "NEW IDEAS". Red Wi-Fi router blinks from foundation layer. Visual metaphor of platform enabling entire ecosystem. Clean comic book style with organic growth imagery meeting technical architecture.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 12: The Promise — A Map for Tomorrow
 
 ## The Vision Document

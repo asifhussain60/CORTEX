@@ -1,3 +1,27 @@
+---
+chapter: 5
+title: "The Four Walls"
+phase: "Phase 8.1 - Infrastructure Hardening"
+image_prompts:
+  - id: "ch05-img01"
+    narrative_moment: "2:17 AM wake-up call - CORTEX complete system failure (domino cascade)"
+    value_score: 5
+    rationale: "Disaster moment - everything crashing like dominoes. High emotional stakes, visual metaphor of fragility, character vulnerability (Spider-Man pajamas!)."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Asif (early 30s, messy hair, stubble, wearing Spider-Man pajamas) stumbles down basement stairs at 2:17 AM clutching phone showing "CORTEX is down. Everything. Gone." His eyes are wide with panic and half-asleep confusion. Coffee mug abandoned on step (warm brown - only color besides router). Miss G appears as fully alert ghost (30% opacity) already at computer with concerned expression. Behind them, visual metaphor: domino pieces falling in cascade labeled "Database" → "Services" → "Orchestrators" → "Governance" → "Intent Router". Red Wi-Fi router blinks frantically (urgent red - second color). Copilot Bot (LED eyes red) hides behind mini-fridge. Dramatic shadows, sense of urgency, comic timing in pajama choice.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch05-img02"
+    narrative_moment: "Fortress vs house metaphor - expecting trouble vs expecting comfort"
+    value_score: 4
+    rationale: "Architecture philosophy visualization. Side-by-side comparison makes abstract infrastructure concept concrete and memorable."
+    dall_e_prompt: |
+      Black and white cartoon split-screen illustration. LEFT SIDE: Cheerful house labeled "DESIGNED FOR SUCCESS" - windows open, flowers, sunshine, comfortable but fragile. Tiny Asif figure waves from window happily. RIGHT SIDE: Stone fortress labeled "DESIGNED FOR FAILURE" - thick walls, watchtowers, moat, prepared for battle. Same Asif figure stands on ramparts with binoculars looking vigilant. Miss G (ethereal, 30% transparent) stands in center between both sides, pointing at fortress approvingly. Copilot Bot (LED eyes blue) holds clipboard showing "4-LAYER DEFENSE PLAN" with golden glow (only color besides router). Red Wi-Fi router visible in both structures. Clean comic book style with clear architectural details and expressive characters.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 5: The Four Walls — Building a House That Won't Fall Down
 
 ## The 2 AM Wake-Up Call

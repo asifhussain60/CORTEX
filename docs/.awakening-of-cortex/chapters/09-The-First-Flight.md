@@ -1,3 +1,27 @@
+---
+chapter: 9
+title: "The First Flight"
+phase: "Phase 14 - Deployment Ascendancy"
+image_prompts:
+  - id: "ch09-img01"
+    narrative_moment: "Jennifer's perfect code stuck because nobody knows if 'right now' is safe moment to deploy"
+    value_score: 5
+    rationale: "Emotional climax - ready to launch but paralyzed by uncertainty. Visual metaphor of airplane ready for takeoff but unable to get clearance."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Jennifer stands at deployment console showing all green checkmarks: "Tests ✓", "Governance ✓", "Registry ✓", "Knowledge ✓". She reaches toward glowing "DEPLOY" button (warm amber glow - only color besides router) but deployment engineer holds up hand in "STOP" gesture asking: "But is it safe RIGHT NOW?" Behind them, large window shows stormy conditions outside (visual metaphor): "TRAFFIC SPIKE", "MONTH-END PROCESSING", "CRITICAL DEPLOYMENT IN PROGRESS" as weather elements. Asif (hoodie, concerned expression) examines weather monitoring screens. Miss G appears as translucent ghost (30% opacity) pointing at storm. Copilot Bot (LED eyes orange, thinking) holds tiny "TIMING MATTERS" sign with golden text (only gold). Red Wi-Fi router blinks. Sense of readiness but inability to proceed. Clean line art with dramatic weather/timing metaphor.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch09-img02"
+    narrative_moment: "Canary deployment - testing water before diving (toe metaphor progression)"
+    value_score: 4
+    rationale: "Technical strategy visualization with humorous metaphor. Progressive rollout shown as literal toe-testing makes abstract concept memorable."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing deployment as swimming pool metaphor. LEFT: Tiny canary bird (representing 1 server) dips toe in pool labeled "PRODUCTION" with "TESTING..." thought bubble. MIDDLE: Canary now ankle-deep (5%), looking confident. RIGHT: Canary fully swimming happily (100% rollout). Above pool, Asif (hoodie, controlling deployment) operates control panel with sliders: "1 SERVER → 5% → 25% → 100%". Miss G (ethereal, 30% transparent) holds stopwatch and clipboard monitoring each stage. Copilot Bot (LED eyes green) wears tiny lifeguard whistle ready to trigger "AUTOMATIC ROLLBACK" (sign glowing amber - only warm color besides router). Pool temperature gauge shows health metrics. Red Wi-Fi router blinks on poolside table. Visual progression showing careful, staged approach. Clean comic book style with clear stage separation and expressive canary character.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 9: The First Flight — From Basement to Sky
 
 ## The Last Manual Step

@@ -1,3 +1,27 @@
+---
+chapter: 10
+title: "When Everything Broke"
+phase: "Phase 20 - Governance Apocalypse"
+image_prompts:
+  - id: "ch10-img01"
+    narrative_moment: "Kevin clicks 'override' button - 3 minutes later everything cascades into failure"
+    value_score: 5
+    rationale: "Disaster climax - single click destroys everything. Visual metaphor of pushing button that triggers apocalypse. Highest emotional stakes."
+    dall_e_prompt: |
+      Black and white cartoon illustration split in two moments. TOP: Kevin (administrator, nervous expression) hovers finger over giant red "OVERRIDE GOVERNANCE" button (only red color in scene). Small angel Miss G (ethereal, 30% opacity) on one shoulder saying "DON'T", small devil Copilot Bot (LED eyes red) on other shoulder saying "It's urgent!" Clock shows "00:00". BOTTOM: Three minutes later - same scene but everything on fire (dramatic black smoke). Screen shows cascade failure: "Fraud Detection: DEAD" → "Orchestrators: FAILING" → "Payment Processing: TIMEOUT" → "847 TRANSACTIONS: FAILED". Kevin's expression: horror. Asif rushes in from doorway (Spider-Man pajamas, panicked). Miss G now full size (translucent, arms crossed, furious "I told you" look). Red Wi-Fi router blinks frantically. Customers' angry messages flooding screen. Split panel shows before/after of single decision. Clean dramatic comic book style emphasizing cause and catastrophic effect.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch10-img02"
+    narrative_moment: "Miss G's emergency meeting - 'governance decisions are final, no exceptions' decree"
+    value_score: 4
+    rationale: "Character defining moment - Miss G's authority, the law being laid down. Visual metaphor of courtroom/judgment, organizational turning point."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Miss G (normally 30% transparent ghost, now appearing more solid and imposing at 60% opacity) stands at head of conference table in basement, backlit dramatically. She holds gavel (golden glow - only color besides router) with stern, calm but scary expression. Screen behind her shows timeline of disaster: "Code Submitted → Governance Flagged → Kevin Overrode → System Broke → Customers Suffered". Around table: Kevin (devastated, head in hands), Asif (supportive but serious), Jennifer and other developers (solemn, nodding). Large banner unfurls: "CORE-031: GOVERNANCE DECISIONS ARE FINAL". Copilot Bot (LED eyes blue, respectful) takes notes. Red Wi-Fi router dims respectfully. Courtroom-style gravity, emphasis on Miss G's authority and the weight of new rule. Italian grandmother energy meets supreme court justice. Clean line art with dramatic lighting and serious tone.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 10: When Everything Broke — The Day the Rules Collided
 
 ## The Override That Cost Everything

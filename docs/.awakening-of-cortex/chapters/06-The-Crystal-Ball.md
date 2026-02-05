@@ -1,3 +1,27 @@
+---
+chapter: 6
+title: "The Crystal Ball"
+phase: "Phase 8.2 - TDD Enforcement"
+image_prompts:
+  - id: "ch06-img01"
+    narrative_moment: "Jennifer's defeat - simple retry button rejected for missing edge case tests"
+    value_score: 5
+    rationale: "Universal developer pain point - feature that seemed simple, rejected for insufficient testing. Emotional moment of realization about hidden complexity."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Jennifer (professional developer, determined expression turning to shocked realization) sits at basement table holding paper labeled "RETRY BUTTON - REJECTED". Large red "REJECTED" stamp (only red color besides router) dominates paper. Behind her, whiteboard shows her 3 simple tests versus Asif's list of 12+ edge cases (timeouts, rate limits, concurrent clicks, etc.). Asif (hoodie, messy hair, stubble, gentle but firm expression) points at whiteboard explaining. Miss G appears as translucent ghost (30% opacity) with knowing smile. Copilot Bot (LED eyes orange, thinking) holds tiny "Edge Case Encyclopedia" book with golden spine (only gold accent). Red Wi-Fi router blinks on shelf. Coffee cups accumulating. Clean line art, expressive faces showing moment of learning.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch06-img02"
+    narrative_moment: "TDD workflow - crystal ball metaphor (seeing future before building)"
+    value_score: 4
+    rationale: "Core technical concept visualization. Crystal ball makes abstract TDD workflow concrete and memorable. Fortune teller aesthetic adds humor."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing Asif dressed as fortune teller with mystical turban (playful, comedic) gazing into glowing crystal ball (warm amber glow - only color besides router). Inside crystal ball, miniature scenes show: "Test Written" → "Code Fails" → "Code Fixed" → "Test Passes" in sequence like a movie. Miss G (ethereal, 30% transparent) stands beside him as his fortune teller assistant holding "RED → GREEN → REFACTOR" sign with golden text (only gold accent). Jennifer watches from side with enlightened expression. Copilot Bot (LED eyes green, successful) wears tiny fortune teller hat. Red Wi-Fi router blinks on table covered with mystical cloth. Basement transformed into fortune teller's tent with humorous details. Clean comic style emphasizing the "seeing the future" metaphor.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 6: The Crystal Ball — Knowing Before Building
 
 ## The Feature That Bit Back

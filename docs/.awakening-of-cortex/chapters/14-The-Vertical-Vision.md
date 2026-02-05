@@ -1,3 +1,27 @@
+---
+chapter: 14
+title: "The Vertical Vision"
+phase: "Phase 23+ - Vertical Brains / Collective Consciousness"
+image_prompts:
+  - id: "ch14-img01"
+    narrative_moment: "3:47 AM - Asif's dangerous epiphany surrounded by empty coffee cups and napkin diagram"
+    value_score: 5
+    rationale: "Classic Asif moment - 3 AM breakthrough madness. Visual callback to opening chapters, circular narrative. Peak creativity meeting exhaustion."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Asif (hoodie, wild-eyed inspiration, messy hair more chaotic than ever, stubble darker) sits in basement at 3:47 AM (clock prominent) surrounded by monument of empty coffee cups (warm brown - only color besides router) arranged like skyline. Fast food wrappers everywhere. He holds napkin with hand-drawn diagram showing CORTEX CORE in center with five satellite brains: BUSINESS, FINANCE, MARKETING, ENGINEERING, LEGAL. Diagram glows with golden light (only gold accent). Miss G appears as concerned translucent ghost (30% opacity) with expression catalogued as "Look #23: About To Propose Something Requiring 18 Months". Copilot Bot (LED eyes cycling through confused rainbow of colors) looks simultaneously impressed and worried. Red Wi-Fi router blinks FASTER than usual (even it senses danger). Crumpled sticky notes carpet floor. Whiteboard behind shows increasingly chaotic diagrams. Visual emphasis on creative madness, exhaustion, and dangerous brilliance. Clean line art capturing peak Asif energy.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch14-img02"
+    narrative_moment: "Multiple specialized brains diagram - CORTEX evolving from one general brain to many domain experts"
+    value_score: 4
+    rationale: "Revolutionary architecture visualization. Shows evolution from single intelligence to collective consciousness, key to future vision."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing transformation of brain architecture. TOP: Single large brain labeled "CORTEX v1.0 - ONE GENERALIST BRAIN" (looks overworked, trying to do everything). Arrow pointing down labeled "EVOLUTION". BOTTOM: Network of five specialized brains orbiting central coordinator: CORTEX BUSINESS (wearing tiny business suit), CORTEX FINANCE (glasses, calculator), CORTEX MARKETING (creative, colorful aura), CORTEX ENGINEERING (hoodie like Asif), CORTEX LEGAL (judge wig). All connected by golden neural pathways (only gold color besides router) flowing through central "CORTEX CORE" hub (acting as translator/coordinator). Each specialized brain glows with expertise in its domain. Asif (small figure) stands at center conducting like orchestra. Miss G (ethereal, 30% transparent) examines each brain critically. Copilot Bot (LED eyes blue, understanding) holds "HOTEL CONCIERGE" sign recalling earlier metaphor. Red Wi-Fi router blinks from hub. Visual emphasis on specialization, coordination, and intelligence distribution. Clean comic book style with organic neural network aesthetic.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 14: The Vertical Vision — Where Asif Loses His Mind (Again)
 
 ## The 3 AM Epiphany

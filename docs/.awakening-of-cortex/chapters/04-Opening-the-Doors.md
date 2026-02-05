@@ -1,3 +1,27 @@
+---
+chapter: 4
+title: "Opening the Doors"
+phase: "Phase 7 - MCP Tool Registry"
+image_prompts:
+  - id: "ch04-img01"
+    narrative_moment: "Asif's realization that CORTEX is locked in basement, brilliant but inaccessible"
+    value_score: 5
+    rationale: "Emotional climax - the painful moment of discovering you built genius that nobody can reach. Visual metaphor of intelligence trapped behind locked door."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Asif Codenstein (early 30s, hoodie, messy hair, stubble) stands in basement staring at a massive steel door with heavy chains and padlocks. Behind the door, brilliant golden light streams through cracks (only color in image). His expression shows frustration mixed with epiphany. Miss G appears as translucent ghost (30% opacity) beside him with arms crossed, one eyebrow raised knowingly. Copilot Bot (12 inches tall, LED eyes orange) stands on a stack of books trying to reach door handle. Red Wi-Fi router blinks on shelf. Exposed pipes and dim lighting establish basement setting. Speech bubble from Miss G: "You built a genius and locked it in a room." Clean line art style, expressive faces, dramatic lighting from door cracks.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch04-img02"
+    narrative_moment: "MCP as universal adapter - restaurant menu metaphor"
+    value_score: 4
+    rationale: "Technical concept visualization - MCP protocol as communication bridge. Restaurant menu metaphor makes abstract concept concrete."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing Asif holding oversized menu labeled "CORTEX SERVICES" in elegant script. Menu items glow with warm amber color (only color besides router). Behind him, Miss G (ethereal, 30% transparent, 1950s dress) gestures toward multiple diverse customers at different tables - a CI/CD robot, a Slack bot, an IDE character. Each customer examines their own copy of the menu happily. Above scene, thought bubble shows traditional approach: Asif running frantically between kitchen and tables carrying individual plates. Copilot Bot (LED eyes green) stands proudly beside menu with tiny chef's hat. Red Wi-Fi router blinks on counter. Comic book style with clean lines and expressive characters.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 4: Opening the Doors — When CORTEX Learned to Share
 
 ## The Genius Nobody Could Reach

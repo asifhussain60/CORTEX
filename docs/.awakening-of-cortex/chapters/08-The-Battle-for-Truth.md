@@ -1,3 +1,27 @@
+---
+chapter: 8
+title: "The Battle for Truth"
+phase: "Phase 10 - Registry Wars"
+image_prompts:
+  - id: "ch08-img01"
+    narrative_moment: "Jennifer's perfect deployment fails - payment dispute service exists in four contradictory locations"
+    value_score: 5
+    rationale: "Truth crisis moment - single source of truth has multiple truths. Visual metaphor of reality fracturing, emotional stakes of perfect plan collapsing."
+    dall_e_prompt: |
+      Black and white cartoon illustration. Jennifer stands at deployment console (confident expression crumbling to confusion) as screen shows four different locations for same service, each contradicting others: "domains/payment/dispute_handler", "domains/payments/dispute_handler", "services/payment_dispute", "features/payment-disputes". Visual metaphor: four identical ghost copies of service (semi-transparent, 30% opacity) appear around her like multiple realities. Asif (hoodie, messy hair, grimacing) examines screen showing "WHICH ONE IS REAL?" in red alert text (only red color besides router). Miss G appears as solid translucent ghost (30% opacity) with "I told you" expression holding sign: "TRUTH CRISIS". Copilot Bot (LED eyes orange, confused) points at each ghost copy asking questions. Red Wi-Fi router blinks frantically. Deployment frozen, everything paused mid-failure. Clean line art emphasizing confusion and multiplicity.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch08-img02"
+    narrative_moment: "Archaeological dig metaphor - registry as layers of contradictory history"
+    value_score: 4
+    rationale: "Makes abstract metadata problem concrete and visual. Archaeological metaphor adds humor and shows passage of time causing problem."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing Asif dressed as archaeologist (safari hat, brush, magnifying glass - playful style) excavating layers of registry entries like archaeological dig site. Each layer labeled with different time period: "6 MONTHS AGO", "3 MONTHS AGO", "LAST WEEK", "YESTERDAY". Each layer shows conflicting service names written on stones/tablets. Miss G (ethereal, 30% transparent) examines findings with clipboard labeled "CONTRADICTIONS: 35". Fossils of "GHOST SERVICES" (services that don't exist anymore) shown as skeleton bones. "INVISIBLE SERVICES" shown as faint golden outlines buried deep (only gold color besides router). Copilot Bot (LED eyes blue) wears tiny archaeologist hat discovering duplicate registry entry. Red Wi-Fi router blinks on excavation table. Basement transformed into dig site with humorous archaeological tools and references. Clean comic book style emphasizing layers and time passage.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 8: The Battle for Truth — When Everyone Had Their Own Facts
 
 ## The Deployment That Made No Sense

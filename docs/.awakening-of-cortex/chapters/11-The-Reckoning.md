@@ -1,3 +1,27 @@
+---
+chapter: 11
+title: "The Reckoning"
+phase: "Phase 21 - Annual Review"
+image_prompts:
+  - id: "ch11-img01"
+    narrative_moment: "Asif reviews Year 1 numbers - incredible metrics transformation (2x features, 93% fewer bugs, 80% fewer incidents)"
+    value_score: 5
+    rationale: "Triumph moment - vindication through data. Visual before/after comparison showing dramatic improvement. Emotional payoff of year's work."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing dramatic before/after split screen. LEFT SIDE "BEFORE CORTEX" (chaos): Asif drowning in papers, fires everywhere, developers panicking, bugs flying around, alert sirens, everything messy and dark. Numbers floating: "0.5 features/week", "12% bugs", "3 incidents/week". RIGHT SIDE "AFTER CORTEX" (success): Same basement but organized, clean, peaceful. Asif calm with coffee (warm brown - only color besides router), developers high-fiving, clean code flowing smoothly. Numbers floating in golden glow (only gold accent): "1.15 features/week", "0.8% bugs", "0.6 incidents/week". Center dividing line shows CORTEX logo. Miss G (ethereal, 30% transparent) stands in center gesturing at transformation approvingly. Copilot Bot (LED eyes green) holds report card showing "A+ GRADES". Red Wi-Fi router (now calm, steady blink) in both sides. Visual emphasis on dramatic contrast and quantified success.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch11-img02"
+    narrative_moment: "Team celebration - developers no longer firefighting, actually building features"
+    value_score: 4
+    rationale: "Human moment - team victory, cultural transformation. Shows the people behind the metrics, emotional resonance of better work environment."
+    dall_e_patch: |
+      Black and white cartoon illustration of basement transformed into celebration space. String lights (warm golden glow - only color besides router). Asif (hoodie, relaxed for first time, genuine smile) raises coffee mug (warm brown) in toast with Jennifer and team of developers around table. Pizza boxes and celebration snacks. Wall behind shows trophy labeled "YEAR 1: WE BUILT SOMETHING THAT WORKS". Miss G appears as translucent ghost (30% opacity, 1950s dress) smiling genuinely - rare moment of full approval - holding "I'm Proud" sign. Copilot Bot (LED eyes green and pink - happy colors) wears tiny party hat. Red Wi-Fi router has small party hat too, blinking in rhythm like party lights. Whiteboard shows: "THIS WEEK: ZERO PRODUCTION FIRES". Developers laughing, one showing "3 AM CALL: NONE" on phone. Genuine joy, relief, camaraderie. Clean comic book style emphasizing human connection and earned victory.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 11: The Reckoning — What Was Built, What Was Learned
 
 ## The Annual Review

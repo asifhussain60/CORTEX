@@ -1,3 +1,27 @@
+---
+chapter: 7
+title: "The Memory Palace"
+phase: "Phase 9 - Knowledge Graph"
+image_prompts:
+  - id: "ch07-img01"
+    narrative_moment: "Six developers give six contradictory answers to 'how do we handle payment disputes'"
+    value_score: 5
+    rationale: "Organizational amnesia crisis - emotional climax showing knowledge fragmentation. Visual chaos of conflicting information sources."
+    dall_e_prompt: |
+      Black and white cartoon illustration showing six different developers in circle around confused Asif (center, hoodie, messy hair, hands on head in frustration). Each developer has speech bubble with different answer: "Dispute service handles it", "That module was deleted", "We do it inline now", "Tests reference missing function", "18-month-old TODO comment", "Nobody knows". Speech bubbles overlap chaotically forming tangled mess. Miss G appears as translucent ghost (30% opacity) floating above with exasperated expression and notepad labeled "CONTRADICTORY ANSWERS: 6". Copilot Bot (LED eyes red, error state) sits on floor surrounded by scattered documentation pages. Red Wi-Fi router blinks urgently. Coffee cups everywhere. Visual emphasis on chaos and contradiction through overlapping, conflicting elements. Clean line art with expressive confused faces.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+  
+  - id: "ch07-img02"
+    narrative_moment: "Knowledge Graph as connected memory palace - everything relating to everything"
+    value_score: 4
+    rationale: "Complex technical architecture made visual. Palace/library metaphor makes abstract concept concrete and beautiful."
+    dall_e_prompt: |
+      Black and white cartoon illustration of grand library interior (Memory Palace metaphor). Asif (hoodie, determined expression) stands on rolling ladder connecting glowing golden threads (only color besides router) between book spines labeled with service names: "Payment Service", "Governance Service", "Audit Log", "Analytics". Threads form intricate web showing relationships and dependencies like constellation map. Miss G (ethereal, 30% transparent, 1950s dress) floats near ceiling gesturing at the connected web approvingly. Copilot Bot (LED eyes blue, calm) sits at desk with tiny librarian glasses cataloguing relationships. Red Wi-Fi router blinks on ornate desk. High ceiling with classical architecture, but filled with modern tech references. Threads glow warmly showing active knowledge connections. Clean comic book style with elegant architectural details and sense of organized intelligence.
+      
+      Reference: CHARACTER-DESIGN-SHEET.md for character specifications.
+---
+
 # Chapter 7: The Memory Palace — When CORTEX Learned to Remember
 
 ## The Question That Broke Us
