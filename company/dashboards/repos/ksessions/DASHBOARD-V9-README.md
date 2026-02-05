@@ -61,7 +61,7 @@
 
 ## 📁 Files
 
-- **Dashboard:** `dashboard-v9.html` (56.0 KB)
+- **Dashboard:** `index.html` (44.0 KB) ✅ CANONICAL
 - **Generator:** `/_workspaces/dashboard/generate_ksessions_v9.py`
 - **Template Source:** `/company/_archive/dashboards-20260202-083508/_archive/kashkole-20260202/kashkole/dashboard.html`
 
@@ -71,13 +71,13 @@
 
 ### View Dashboard
 ```bash
-open file:///Users/asifhussain/PROJECTS/CORTEX/company/dashboards/repos/ksessions/dashboard-v9.html
+open file:///Users/asifhussain/PROJECTS/CORTEX/company/dashboards/repos/ksessions/index.html
 ```
 
 ### Verify Integrity
 ```bash
 cd /Users/asifhussain/PROJECTS/CORTEX
-grep -c "class=\"tab-button\"" company/dashboards/repos/ksessions/dashboard-v9.html
+grep -c "class=\"tab-button\"" company/dashboards/repos/ksessions/index.html
 # Should output: 9
 ```
 
@@ -96,7 +96,7 @@ The script will:
 1. Load current KSESSIONS data from `index.html`
 2. Apply KASHKOLE archived template specifications
 3. Generate self-contained HTML with embedded data
-4. Output to `dashboard-v9.html`
+4. Output to `index.html` (canonical single implementation)
 
 ---
 

@@ -22,17 +22,21 @@
 
 ```
 cortex-plan/
-├── LIVE-STATUS.md                          ⭐ Current state
-├── cortex-plan-index.md                    📋 Master index
-├── PHASE-19-LENS-UNIFIED-INTELLIGENCE.yaml 📋 Next phase (PLANNED)
-├── PHASE-19-QUICK-REFERENCE.md             📖 Quick guide
-├── PHASE-18-ENTERPRISE-DASHBOARD-SYSTEM.yaml 🚧 Active work
-├── PHASE-15-STATIC-REPO-VISUALIZATION.yaml ✅ Complete
-├── PHASE-10-LENS-REMOTE-INTELLIGENCE.yaml  ✅ Complete
+├── README.md                                📖 This file
+├── cortex-plan-index.md                    📋 Master index (all phases)
+├── ENH-017-PROGRESS.md                     � Multi-language LENS progress
+├── SHELL-SCRIPTS-DEPRECATION.md            � Shell → Python migration plan
+├── CORTEX-SELF-IMPROVEMENT-SDLC.yaml       ⭐ SDLC governance fix (TOP PRIORITY)
+├── PHASE-*.yaml                             📋 Phase specifications (19 files)
 ├── wiring-schema.yaml                       🔧 Orchestrator specs
 ├── deployment-guide.md                      🚀 Production guide
 ├── observability-runbook.md                 📊 Operations
 └── .archive/                                🗄️ Historical content
+    ├── README.md                            📖 Archive guide
+    ├── completed-phases/                    ✅ Completed phase YAMLs
+    ├── shell-scripts/                       🗃️ Deprecated scripts (4 files)
+    ├── enhancements/                        📊 ENH-017 phase reports (3 files)
+    └── completed-reports/                   📁 Historical reports
 ```
 
 ---

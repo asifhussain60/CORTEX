@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 7.1 | **Updated:** 2026-02-03 | **Authority:** MCP-First SaaS Architecture
+**Version:** 7.2 | **Updated:** 2026-02-05 | **Authority:** MCP-First SaaS Architecture
 
 ---
 
@@ -8,6 +8,7 @@
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Primary Prompt:** [CORTEX.prompt.md](prompts/CORTEX.prompt.md)  
+**Response Format:** [response-format-standards.md](prompts/response-format-standards.md) ✨ **NEW**  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
@@ -82,6 +83,15 @@ DIGEST Intent:
 
 ---
 ```
+
+**Response Format Requirements:**
+- ✅ Follow [response-format-standards.md](prompts/response-format-standards.md) for all outputs
+- 🟢 Use correct status icons (🟢=completed, ⚪=planned, 🔴=critical, 🟡=warning, 🔵=in-progress)
+- 1️⃣ Number user prompts ONLY when decision required (not after completion)
+- 📐 Apply linear narrative flow: Context → Analysis → Action → Result (no repetition)
+- ⚠️ NEVER use ✅ for planned/pending work (misleading)
+- ✅ Show "Implementation Complete" when done (not "Next Steps")
+- 🔒 NO exit options during holistic implementation (run to completion)
 
 ---
 
