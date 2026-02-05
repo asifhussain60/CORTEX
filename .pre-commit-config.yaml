@@ -77,3 +77,11 @@ repos:
         always_run: false
         files: \.py$
 
+      - id: root-cleanup-check
+        name: CORE-002 - Root Directory Organization Check
+        entry: python3 scripts/utilities/run_root_cleanup.py --dry-run
+        language: system
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+
