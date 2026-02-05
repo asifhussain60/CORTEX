@@ -40,6 +40,7 @@
 | DB Audit Logging | AuditTrailVerifier active |
 | Markdown Link Validation | All relative paths resolve OR documented as VS Code false positives |
 | **Audit Trail Integrity** | **governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering** |
+| **Component Integration Verification (CIV)** | **3-layer validation via cortex_verify_integration** |
 | Architectural Coherence | wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents consistency |
 | Orchestrator Wiring | 28 orchestrators in wiring.yaml |
 | **Governance Enforcement** | **7-agent system active (EnforcementOrchestrator)** |

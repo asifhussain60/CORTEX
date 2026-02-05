@@ -335,6 +335,7 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 |-------|-------------|------|
 | DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) | `grep_search`, code inspection |
 | Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering | `cortex_audit_trail_verify` |
+| **Component Integration Verification (CIV)** | **3-layer validation: Wiring→Implementation alignment, MCP Tool Registration chain, Health Check execution sampled** | **`cortex_verify_integration` (MANDATORY)** |
 | **File Naming Enforcement** | **CORE-028 validated by FileNamingEnforcementAgent: SCREAMING_CASE blocked, plan files ≤40 chars, kebab-case enforced** | **EnforcementOrchestrator (7-agent system)** |
 | Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents | Manual cross-check |
 | Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations | `cortex_lens_analyze`, wiring validation |
