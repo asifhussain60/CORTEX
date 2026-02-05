@@ -1,17 +1,17 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "last_updated": "2026-02-05T15:23:10.217904Z",
-    "variance_score": 0.0,
+    "last_updated": "2026-02-05T16:49:38.865386Z",
+    "variance_score": 45.0,
     "variance_threshold": 10.0,
-    "silent_sync": false
+    "silent_sync": true
   },
   "statistics": {
-    "total_phases": 21,
-    "active_phases": 4,
-    "completed_2026": 6,
+    "total_phases": 20,
+    "active_phases": 1,
+    "completed_2026": 8,
     "completed_2025": 11,
-    "completion_rate": 80,
+    "completion_rate": 95,
     "overall_status": "ON_TRACK"
   },
   "active_phases": [
@@ -21,30 +21,6 @@
       "status": "in-progress",
       "progress": 0,
       "start_date": "2026-02-01",
-      "estimated_completion": ""
-    },
-    {
-      "number": 22,
-      "name": "ASK Mode System",
-      "status": "complete",
-      "progress": 0,
-      "start_date": "2026-02-03",
-      "estimated_completion": ""
-    },
-    {
-      "number": 23,
-      "name": "Static Dashboard Generator",
-      "status": "complete",
-      "progress": 0,
-      "start_date": "2026-02-04",
-      "estimated_completion": ""
-    },
-    {
-      "number": 24,
-      "name": "Architecture Integrity System",
-      "status": "complete",
-      "progress": 0,
-      "start_date": "2026-02-05",
       "estimated_completion": ""
     }
   ],
@@ -70,7 +46,15 @@
       "completion_date": ""
     },
     {
+      "name": "Phase 22 Ask Mode System",
+      "completion_date": ""
+    },
+    {
       "name": "Phase 23 Static Dashboard Generator",
+      "completion_date": ""
+    },
+    {
+      "name": "Phase 24 Architecture Integrity System",
       "completion_date": ""
     }
   ],

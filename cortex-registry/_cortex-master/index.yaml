@@ -16,36 +16,10 @@ active_phases:
     started: "2026-02-01"
     status: "in-progress"
     priority: "P0"
-  
-  - id: "phase-22"
-    name: "ASK Mode System"
-    file: "phases/active/phase-22-ask-mode-system.yaml"
-    started: "2026-02-03"
-    completed: "2026-02-05"
-    status: "complete"
-    priority: "P0"
-  
-  - id: "phase-23"
-    name: "Static Dashboard Generator"
-    file: "phases/active/phase-23-static-dashboard-generator.yaml"
-    started: "2026-02-04"
-    completed: "2026-02-05"
-    status: "complete"
-    priority: "P0"
-  
-  - id: "phase-24"
-    name: "Architecture Integrity System"
-    file: "phases/active/phase-24-architecture-integrity-system.yaml"
-    started: "2026-02-05"
-    completed: "2026-02-05"
-    status: "complete"
-    priority: "P0"
-    category: "core-infrastructure"
-    description: "4-layer defense system ensuring master plan ↔ implementation sync"
 
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 6
+  count: 9
   directory: "phases/completed/2026/"
   phases:
     - "phase-19-lens-unified-intelligence.yaml"
@@ -53,7 +27,9 @@ completed_phases_2026:
     - "phase-20-orch-visibility.yaml"
     - "phase-20-knowledge-synthesis.yaml"
     - "phase-20-instrumentation-layer.yaml"
+    - "phase-22-ask-mode-system.yaml"
     - "phase-23-static-dashboard-generator.yaml"
+    - "phase-24-architecture-integrity-system.yaml"
 
 completed_phases_2025:
   count: 11
@@ -82,8 +58,8 @@ active_enhancements:
 # Metadata
 statistics:
   total_phases: 20
-  active_phases: 4
-  completed_2026: 5
+  active_phases: 1
+  completed_2026: 9
   completed_2025: 11
   total_enhancements: 1
   active_enhancements: 1

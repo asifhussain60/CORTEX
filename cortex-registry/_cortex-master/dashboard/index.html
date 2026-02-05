@@ -1130,173 +1130,221 @@
   </footer>
 
   <script>
-    // Unified Dashboard Data (Single Source of Truth)
-    const CORTEX_DATA = {
-      stats: {
-        totalPhases: 24,
-        completed: 22,
-        active: 2,
-        blocked: 0,
-        progressPercent: 92,
-        totalEras: 6
-      },
-      health: {
-        score: 95,
-        testsTotal: 400,
-        testsPassing: 380,
-        coverage: 92,
-        warnings: 2,
-        critical: 0
-      },
-      velocity: {
-        phasesPerWeek: 2.1,
-        trend: 15, // percent improvement
-        avgDuration: 8 // days per phase
-      },
-      orchestrators: {
-        core: 8,
-        domain: 8,
-        support: 18,
-        total: 34
-      },
-      mcpTools: {
-        lens: 8,
-        core: 15,
-        other: 19,
-        total: 42
-      },
-      activePhases: [
-        { id: 21, name: 'JSON-First Architecture', progress: 75, status: 'in-progress', startDate: '2026-01-15' },
-        { id: 22, name: 'ASK Mode Education', progress: 60, status: 'in-progress', startDate: '2026-01-20' }
-      ],
-      recentCompleted: [
-        { id: 24, name: 'Architecture Integrity', date: '2026-02-05' },
-        { id: 23, name: 'Static Dashboard', date: '2026-02-05' },
-        { id: 20.9, name: 'Instrumentation', date: '2026-01-10' },
-        { id: 20.2, name: 'Visibility', date: '2026-01-05' },
-        { id: 20, name: 'Company Integration', date: '2025-12-28' }
-      ],
-      eras: [
-        { 
-          id: 1, 
-          name: 'Foundation', 
-          description: 'Core Architecture', 
-          year: '2024-2025',
-          phases: '1-6',
-          progress: 100, 
-          status: 'complete',
-          color: '#7b61ff',
-          colorDark: '#6b4fd9',
-          icon: 'fa-cube',
-          businessValue: 'Established the foundational architecture patterns, governance model, and orchestrator framework that powers all CORTEX capabilities.',
-          deliverables: [
-            'Orchestrator base class with lifecycle management',
-            'Governance enforcement system (CORE rules)',
-            'Git-backed registry for version control',
-            'TDD-first development workflow'
-          ]
-        },
-        { 
-          id: 2, 
-          name: 'Orchestration', 
-          description: 'Multi-Agent Coordination',
-          year: '2025',
-          phases: '7-9',
-          progress: 100, 
-          status: 'complete',
-          color: '#f59e0b',
-          colorDark: '#fb923c',
-          icon: 'fa-sitemap',
-          businessValue: 'Created intelligent routing so requests go to the right specialist. Introduced the LENS protocol and challenge engine to ensure every decision is justified.',
-          deliverables: [
-            'LENS Protocol formal integration (Language→Examination→Navigation→Synthesis)',
-            'Future enhancements framework',
-            'Inquiry system (educational ASK mode foundation)',
-            'Challenge orchestrator implementing ARCH-003',
-            'Unified routing with IntentRouter',
-            'Discovery orchestrator for feature search'
-          ]
-        },
-        { 
-          id: 3, 
-          name: 'Intelligence', 
-          description: 'LENS + Knowledge Systems',
-          year: '2025',
-          phases: '10-14',
-          progress: 100, 
-          status: 'complete',
-          color: '#00d4ff',
-          colorDark: '#38bdf8',
-          icon: 'fa-brain',
-          businessValue: 'Added eyes to see code structure and memory for learning. CORTEX can now analyze AST across multiple languages, track Git history, and build knowledge graphs.',
-          deliverables: [
-            'LENS remote intelligence API',
-            'AST analyzer for multi-language support (Python, TypeScript, JavaScript)',
-            'GitHistoryAnalyzer providing 24h context (ARCH-001)',
-            'Adaptive BLUF system for concise communication',
-            'Knowledge graph integration for relationship mapping'
-          ]
-        },
-        { 
-          id: 4, 
-          name: 'Visualization', 
-          description: 'Dashboards + Documentation',
-          year: '2025',
-          phases: '15-18',
-          progress: 100, 
-          status: 'complete',
-          color: '#10b981',
-          colorDark: '#34d399',
-          icon: 'fa-chart-line',
-          businessValue: 'Made the invisible visible with beautiful, actionable dashboards. Every metric, every pattern, every decision is now observable and auditable.',
-          deliverables: [
-            'Static repository visualization (Material.js glassmorphism)',
-            'Remediation framework (auto-fix P0/P1/P2 issues)',
-            'Documentation architecture overhaul',
-            'Enterprise dashboard system'
-          ]
-        },
-        { 
-          id: 5, 
-          name: 'Unification', 
-          description: 'LENS Unified + Instrumentation',
-          year: '2026',
-          phases: '19-20.9',
-          progress: 100, 
-          status: 'complete',
-          color: '#a78bfa',
-          colorDark: '#c4b5fd',
-          icon: 'fa-layer-group',
-          businessValue: 'Consolidated all intelligence into one coherent system with comprehensive metrics. CORTEX now learns from every execution and improves with each cycle.',
-          deliverables: [
-            'LENS Unified Intelligence (tiered patterns, vendor detection, database crawling)',
-            'LENS Company Integration (multi-language AST analysis)',
-            'Orchestrator Visibility (training wheels UI showing active orchestrators)',
-            'Knowledge Synthesis (runtime knowledge aggregation)',
-            'Instrumentation Layer (metrics capture for TDD, debug, codegen cycles)'
-          ]
-        },
-        { 
-          id: 6, 
-          name: 'Enterprise Scale', 
-          description: 'JSON-First + ASK Mode + Static Dashboards',
-          year: '2026',
-          phases: '21-23',
-          progress: 43, 
-          status: 'active',
-          color: '#f472b6',
-          colorDark: '#fb7185',
-          icon: 'fa-rocket',
-          businessValue: 'Preparing for multi-organization scale with progressive enhancement. JSON-first approach enables rapid iteration while maintaining a clear path to SQLite/PostgreSQL when needed.',
-          deliverables: [
-            'JSON-first data architecture with progressive enhancement',
-            'ASK mode educational patterns for implementation-truth learning',
-            'Static dashboard generator for multi-repo observability',
-            'Real-time metrics and health monitoring'
-          ]
+    // Dynamic Dashboard Data Loader (loads from plan-summary.json)
+    let CORTEX_DATA = null;
+
+    // Load dashboard data from JSON file
+    async function loadDashboardData() {
+      try {
+        const response = await fetch('data/plan-summary.json');
+        if (!response.ok) {
+          throw new Error(`Failed to load dashboard data: ${response.status}`);
         }
-      ]
-    };
+        const data = await response.json();
+        
+        // Transform JSON data to match dashboard structure
+        CORTEX_DATA = transformDashboardData(data);
+        console.log('✅ Dashboard data loaded from plan-summary.json');
+        console.log('📊 Active phases:', CORTEX_DATA.stats.active);
+        console.log('📊 Completed phases:', CORTEX_DATA.stats.completed);
+        console.log('📊 Progress:', CORTEX_DATA.stats.progressPercent + '%');
+        
+        return CORTEX_DATA;
+      } catch (error) {
+        console.error('❌ Failed to load dashboard data:', error);
+        // Fallback to minimal data structure
+        CORTEX_DATA = {
+          stats: { totalPhases: 0, completed: 0, active: 0, blocked: 0, progressPercent: 0, totalEras: 6 },
+          health: { score: 0, testsTotal: 0, testsPassing: 0, coverage: 0, warnings: 0, critical: 0 },
+          velocity: { phasesPerWeek: 0, trend: 0, avgDuration: 0 },
+          orchestrators: { core: 8, domain: 8, support: 18, total: 34 },
+          mcpTools: { lens: 8, core: 15, other: 19, total: 42 },
+          activePhases: [],
+          recentCompleted: [],
+          eras: []
+        };
+        return CORTEX_DATA;
+      }
+    }
+
+    // Transform plan-summary.json to dashboard-compatible format
+    function transformDashboardData(data) {
+      const stats = data.statistics || {};
+      
+      // Calculate total completed
+      const totalCompleted = (stats.completed_2025 || 0) + (stats.completed_2026 || 0);
+      const totalPhases = stats.total_phases || 0;
+      const progressPercent = totalPhases > 0 ? Math.round(totalCompleted / totalPhases * 100) : 0;
+      
+      return {
+        stats: {
+          totalPhases: totalPhases,
+          completed: totalCompleted,
+          active: stats.active_phases || 0,
+          blocked: 0,
+          progressPercent: progressPercent,
+          totalEras: 6
+        },
+        health: {
+          score: 95, // Default values (to be enhanced in future)
+          testsTotal: 400,
+          testsPassing: 380,
+          coverage: 92,
+          warnings: 2,
+          critical: 0
+        },
+        velocity: {
+          phasesPerWeek: 2.1, // Default values (to be enhanced in future)
+          trend: 15,
+          avgDuration: 8
+        },
+        orchestrators: {
+          core: 8,
+          domain: 8,
+          support: 18,
+          total: 34
+        },
+        mcpTools: {
+          lens: 8,
+          core: 15,
+          other: 19,
+          total: 42
+        },
+        activePhases: (data.active_phases || []).map(p => ({
+          id: p.number || p.phase_id || 0,
+          name: p.name || '',
+          progress: p.progress || 0,
+          status: p.status || 'unknown',
+          startDate: p.start_date || ''
+        })),
+        recentCompleted: (data.completed_phases_2026 || []).slice(0, 5).map((p, i) => ({
+          id: 20 + i, // Approximate ID
+          name: p.name || '',
+          date: p.completion_date || ''
+        })),
+        eras: [
+          { 
+            id: 1, 
+            name: 'Foundation', 
+            description: 'Core Architecture', 
+            year: '2024-2025',
+            phases: '1-6',
+            progress: 100, 
+            status: 'complete',
+            color: '#7b61ff',
+            colorDark: '#6b4fd9',
+            icon: 'fa-cube',
+            businessValue: 'Established the foundational architecture patterns, governance model, and orchestrator framework that powers all CORTEX capabilities.',
+            deliverables: [
+              'Orchestrator base class with lifecycle management',
+              'Governance enforcement system (CORE rules)',
+              'Git-backed registry for version control',
+              'TDD-first development workflow'
+            ]
+          },
+          { 
+            id: 2, 
+            name: 'Orchestration', 
+            description: 'Multi-Agent Coordination',
+            year: '2025',
+            phases: '7-9',
+            progress: 100, 
+            status: 'complete',
+            color: '#f59e0b',
+            colorDark: '#fb923c',
+            icon: 'fa-sitemap',
+            businessValue: 'Created intelligent routing so requests go to the right specialist. Introduced the LENS protocol and challenge engine to ensure every decision is justified.',
+            deliverables: [
+              'LENS Protocol formal integration (Language→Examination→Navigation→Synthesis)',
+              'Future enhancements framework',
+              'Inquiry system (educational ASK mode foundation)',
+              'Challenge orchestrator implementing ARCH-003',
+              'Unified routing with IntentRouter',
+              'Discovery orchestrator for feature search'
+            ]
+          },
+          { 
+            id: 3, 
+            name: 'Intelligence', 
+            description: 'LENS + Knowledge Systems',
+            year: '2025',
+            phases: '10-14',
+            progress: 100, 
+            status: 'complete',
+            color: '#00d4ff',
+            colorDark: '#38bdf8',
+            icon: 'fa-brain',
+            businessValue: 'Added eyes to see code structure and memory for learning. CORTEX can now analyze AST across multiple languages, track Git history, and build knowledge graphs.',
+            deliverables: [
+              'LENS remote intelligence API',
+              'AST analyzer for multi-language support (Python, TypeScript, JavaScript)',
+              'GitHistoryAnalyzer providing 24h context (ARCH-001)',
+              'Adaptive BLUF system for concise communication',
+              'Knowledge graph integration for relationship mapping'
+            ]
+          },
+          { 
+            id: 4, 
+            name: 'Visualization', 
+            description: 'Dashboards + Documentation',
+            year: '2025',
+            phases: '15-18',
+            progress: 100, 
+            status: 'complete',
+            color: '#10b981',
+            colorDark: '#34d399',
+            icon: 'fa-chart-line',
+            businessValue: 'Made the invisible visible with beautiful, actionable dashboards. Every metric, every pattern, every decision is now observable and auditable.',
+            deliverables: [
+              'Static repository visualization (Material.js glassmorphism)',
+              'Remediation framework (auto-fix P0/P1/P2 issues)',
+              'Documentation architecture overhaul',
+              'Enterprise dashboard system'
+            ]
+          },
+          { 
+            id: 5, 
+            name: 'Unification', 
+            description: 'LENS Unified + Instrumentation',
+            year: '2026',
+            phases: '19-20.9',
+            progress: 100, 
+            status: 'complete',
+            color: '#a78bfa',
+            colorDark: '#c4b5fd',
+            icon: 'fa-layer-group',
+            businessValue: 'Consolidated all intelligence into one coherent system with comprehensive metrics. CORTEX now learns from every execution and improves with each cycle.',
+            deliverables: [
+              'LENS Unified Intelligence (tiered patterns, vendor detection, database crawling)',
+              'LENS Company Integration (multi-language AST analysis)',
+              'Orchestrator Visibility (training wheels UI showing active orchestrators)',
+              'Knowledge Synthesis (runtime knowledge aggregation)',
+              'Instrumentation Layer (metrics capture for TDD, debug, codegen cycles)'
+            ]
+          },
+          { 
+            id: 6, 
+            name: 'Enterprise Scale', 
+            description: 'JSON-First + ASK Mode + Static Dashboards',
+            year: '2026',
+            phases: '21-24',
+            progress: progressPercent >= 75 ? 100 : Math.round(progressPercent * 1.33), // Calculate based on overall progress
+            status: progressPercent >= 95 ? 'complete' : 'active',
+            color: '#f472b6',
+            colorDark: '#fb7185',
+            icon: 'fa-rocket',
+            businessValue: 'Preparing for multi-organization scale with progressive enhancement. JSON-first approach enables rapid iteration while maintaining a clear path to SQLite/PostgreSQL when needed.',
+            deliverables: [
+              'JSON-first data architecture with progressive enhancement',
+              'ASK mode educational patterns for implementation-truth learning',
+              'Static dashboard generator for multi-repo observability',
+              'Architecture integrity system with 4-layer defense',
+              'Real-time metrics and health monitoring'
+            ]
+          }
+        ]
+      };
+    }
 
     // Initialize Overview tab with CORTEX_DATA
     function initializeOverview() {
@@ -1465,13 +1513,21 @@
     }
 
     // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Load dashboard data first
+      await loadDashboardData();
+      
+      // Then initialize UI
       initializeOverview();
       initializeEvolution();
-      console.log('🚀 CORTEX Evolution Observatory v2.0 loaded');
-      console.log('📊 Tracking 6 eras, 21 phases (81% complete)');
+      console.log('🚀 CORTEX Evolution Observatory v3.0 (Dynamic JSON) loaded');
+      console.log('📊 Total phases:', CORTEX_DATA.stats.totalPhases);
+      console.log('📊 Completed:', CORTEX_DATA.stats.completed);
+      console.log('📊 Active:', CORTEX_DATA.stats.active);
+      console.log('📊 Progress:', CORTEX_DATA.stats.progressPercent + '%');
       console.log('📍 Registry: cortex-registry/_cortex-master/');
       console.log('🎨 Design: Material.js glassmorphism + Unified grid system');
+      console.log('📦 Data Source: data/plan-summary.json');
     });
   </script>
 </body>
