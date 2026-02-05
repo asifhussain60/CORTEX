@@ -53,10 +53,31 @@ env/
 
 # IDE
 .idea/
-.vscode/
 *.swp
 *.swo
 *~
+
+# VS Code - Allow settings.json (Copilot suppression), ignore everything else
+.vscode/*
+!.vscode/settings.json
+
+# GitHub Copilot Auto-Generated Files (CORE-002 enforcement)
+# These files bypass CORTEX governance and create markdown bloat
+*-summary.md
+*-report.md
+*-completion.md
+*-COMPLETION.md
+*-SUMMARY.md
+*-REPORT.md
+PHASE-*-COMPLETION.md
+ENH-*-PHASE-*-COMPLETION.md
+ARCHITECT-*-SUMMARY.md
+
+# VS Code Copilot Chat Sessions (keep in _workspaces/.chats/ only)
+_workspaces/cortex-plan/*-completion.md
+_workspaces/cortex-plan/*-summary.md
+_workspaces/*-COMPLETION.md
+_workspaces/*-SUMMARY.md
 
 # Testing
 .pytest_cache/

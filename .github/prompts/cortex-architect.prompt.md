@@ -362,9 +362,10 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 **CRITICAL:** NO "Not analyzed" allowed — invoke all mandatory tools or HALT with error.
 
-### P3 — Cleanup
+### P3 — Cleanup (Execute FIRST in AUDIT)
 | Check | Description | Tool |
 |-------|-------------|------|
+| **Vacuum Cleanup** | **AUTO-RUN: Remove Copilot-generated markdown bloat (*-summary.md, *-completion.md, PHASE-*.md in _workspaces/)** | **`VacuumOrchestrator` (MANDATORY FIRST)** |
 | MD Sprawl | *.md outside docs/.github (except README) | `file_search` |
 | Markdown Links | Verify all relative links resolve (handle VS Code false positives) | Manual check |
 | Code Fences | All \`\`\` blocks have language specified (MD040) | Markdown linter |
@@ -372,7 +373,9 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 | Heading Blanks | Headings surrounded by blank lines (MD022) | Markdown linter |
 | Leftovers | *.bak, *_v2.* files | `file_search` |
 
-**P3 Auto-Fix:** Route to VacuumOrchestrator for automated cleanup
+**P3 Auto-Fix:** VacuumOrchestrator runs FIRST (before P0/P1/P2) to detect if cleanup breaks functionality
+
+**Critical Order:** Vacuum → Verify No Breakage → Continue with P0/P1/P2 checks
 
 ## Audit Output Format
 

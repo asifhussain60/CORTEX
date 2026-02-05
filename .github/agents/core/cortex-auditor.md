@@ -61,13 +61,19 @@
 | **Refactoring Needs** | **Complexity >15, SOLID violations, tech debt >5%, code smells >100, functions >50 LOC** |
 | **Database Hygiene** | **.cortex/*.db files: audit logs >90d, cache >30d, orphaned tables, size >100MB, unused indexes** |
 
-### P3 — Cleanup
+### P3 — Cleanup (FIRST in execution order)
 | Check | Target |
 |-------|--------|
+| **Vacuum Cleanup (MANDATORY FIRST)** | **Auto-run VacuumOrchestrator to remove Copilot-generated markdown bloat** |
 | MD Sprawl | *.md outside docs/.github |
 | Markdown Lint | MD040 (language), MD060 (spacing), MD022 (blanks), MD032 (lists) |
 | Link Validation | Relative paths resolve OR document as VS Code false positives |
 | Leftovers | *.bak, *_v2.* |
+
+**Execution Flow:**
+1. **Run VacuumOrchestrator FIRST** — Scan & clean Copilot bloat (_workspaces/cortex-plan/*-COMPLETION.md, etc.)
+2. **Verify No Breakage** — Quick sanity check (import tests, basic functionality)
+3. **Continue with P0/P1/P2** — If vacuum broke something, catch it immediately
 
 ---
 
@@ -175,6 +181,7 @@
 | `cortex_detect_duplicates` | CORE-035 + coherence |
 | `cortex_ast_analyze` | Structure |
 | `grep_search` | Audit trail pairing detection |
+| **`VacuumOrchestrator`** | **P3 markdown cleanup (runs FIRST in AUDIT)** |
 
 ---
 

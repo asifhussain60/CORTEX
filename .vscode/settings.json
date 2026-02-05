@@ -1,0 +1,43 @@
+{
+  "// GitHub Copilot Chat Settings - Prevent markdown file generation (CORE-002)": null,
+  "github.copilot.chat.saveSession": false,
+  "github.copilot.chat.welcomeMessage": "inline",
+  
+  "// File Explorer Suppression - Hide Copilot-generated markdown files": null,
+  "files.exclude": {
+    "**/*-summary.md": true,
+    "**/*-report.md": true,
+    "**/*-completion.md": true,
+    "**/*-COMPLETION.md": true,
+    "**/*-SUMMARY.md": true,
+    "**/*-REPORT.md": true,
+    "**/PHASE-*-COMPLETION.md": true,
+    "**/ENH-*-PHASE-*-COMPLETION.md": true,
+    "**/ARCHITECT-*-SUMMARY.md": true
+  },
+  
+  "// Files Watcher - Exclude Copilot patterns from watchers": null,
+  "files.watcherExclude": {
+    "**/*-summary.md": true,
+    "**/*-report.md": true,
+    "**/*-completion.md": true,
+    "**/*-COMPLETION.md": true
+  },
+  
+  "// Search Exclusions - Hide from search results": null,
+  "search.exclude": {
+    "**/*-summary.md": true,
+    "**/*-report.md": true,
+    "**/*-completion.md": true,
+    "**/*-COMPLETION.md": true,
+    "**/*-SUMMARY.md": true,
+    "**/*-REPORT.md": true
+  },
+  
+  "// Python Environment": null,
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.extraPaths": ["${workspaceFolder}/cortex"],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests/"]
+}
