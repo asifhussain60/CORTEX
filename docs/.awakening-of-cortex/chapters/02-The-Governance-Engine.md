@@ -1,23 +1,3 @@
----
-chapter: 2
-title: "The 29 Sacred Rules — Miss G Declares War"
-phase: "Phase 2.7: Governance Engine"
-image_prompts:
-  - id: "ch02-img01"
-    narrative_moment: "Miss G cataloguing Kyle's 47 violations with righteous fury"
-    value_score: 5
-    rationale: "Emotional climax—Miss G's defining character moment, establishes governance as caring not bureaucracy"
-    dall_e_prompt: |
-      Black and white cartoon illustration: Ethereal semi-transparent woman (Miss G, elegant 1950s dress style, hair in bun) standing with arms crossed, holding glowing notepad. Her expression shows patient fury—one eyebrow raised, slight frown. Behind her, nervous developer (Asif, hoodie, messy hair) sits at laptop looking sheepish. Small robot with dimmed red LED eyes shrinks back in shame on desk. Screen shows code with red error highlights. Whiteboard background shows "47 VIOLATIONS" written large. Strategic color highlights: soft white glow around Miss G, red on robot LEDs, red on router blinking rapidly. Comic book style, expressive faces, Miss G's ghostly transparency visible.
-
-  - id: "ch02-img02"
-    narrative_moment: "The SKULL rules as cathedral architecture—governance as protection"
-    value_score: 4
-    rationale: "Technical metaphor transforming dry rules into beautiful structure"
-    dall_e_prompt: |
-      Black and white cartoon illustration: Gothic cathedral interior with elegant arched columns and vaulted ceiling. Each column labeled with governance rules (visible text: "Error Handling", "Audit Logs", "Type Safety"). In foreground, developer (Asif, hoodie) stands looking up in awe, hand on chest. Ethereal woman (Miss G) gestures toward cathedral with proud expression. Small robot with bright green LED eyes (success mode) clasps hands together admiringly. Stained glass window in background shows abstract code patterns. Strategic color: green robot LEDs, soft golden light through windows. Clean lines, reverent mood, comic style.
----
-
 # Chapter 2: The 29 Sacred Rules — Miss G Declares War
 
 ## Monday Morning, 9:03 AM

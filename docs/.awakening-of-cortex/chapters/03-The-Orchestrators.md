@@ -1,23 +1,3 @@
----
-chapter: 3
-title: "The Conductor's Baton — Teaching 47 Departments to Dance"
-phase: "Phase 3: Orchestrators"
-image_prompts:
-  - id: "ch03-img01"
-    narrative_moment: "The spaghetti nightmare—47 departments tangled in dependencies"
-    value_score: 5
-    rationale: "Visual representation of chaos that motivates orchestrator solution—comedic + emotional peak"
-    dall_e_prompt: |
-      Black and white cartoon illustration: Developer (Asif, hoodie, stubble, exhausted expression) stares at laptop screen in horror. Screen shows tangled spaghetti-like diagram—47 circles (departments) connected by chaotic crisscrossing lines creating impossible knots. His hands grip his hair in despair. Ethereal woman (Miss G) behind him covers her mouth in shock. Small robot with bright orange LED eyes processes frantically, small antenna sparking. Coffee mug knocked over (color: brown liquid spill). Wi-Fi router in background blinking red frantically (color highlight). Whiteboard shows even more tangled lines. Comic book style, exaggerated expressions, visual chaos.
-
-  - id: "ch03-img02"
-    narrative_moment: "The symphony orchestra metaphor—conductor bringing harmony to chaos"
-    value_score: 4
-    rationale: "Technical metaphor showing orchestrator pattern as elegant solution"
-    dall_e_prompt: |
-      Black and white cartoon split panel: TOP shows symphony orchestra conductor (elegant pose, baton raised) leading organized musicians. BOTTOM shows developer (Asif, hoodie) standing at whiteboard as "conductor" with marker as baton, orchestrating clean flowchart. Ethereal woman (Miss G) nods approvingly. Small robot with blue LED eyes (learning) holds tiny baton mimicking conductor pose. Whiteboard shows organized boxes labeled "Customer Service", "Payments", "Fraud", connected by clean arrows with single "Orchestrator" box coordinating. Strategic color: blue robot LEDs, conductor's baton has golden highlight. Clean lines, triumphant mood, comic style.
----
-
 # Chapter 3: The Conductor's Baton — Teaching 47 Departments to Dance
 
 ## The Email That Started Everything

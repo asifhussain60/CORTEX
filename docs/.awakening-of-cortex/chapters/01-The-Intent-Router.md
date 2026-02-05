@@ -1,23 +1,3 @@
----
-chapter: 1
-title: "The Hotel Receptionist — When Computers Learn to Listen"
-phase: "Phase 2: Intent Router"
-image_prompts:
-  - id: "ch01-img01"
-    narrative_moment: "Asif's 3:47 AM existential crisis about teaching computers to understand human language"
-    value_score: 5
-    rationale: "Emotional climax establishing core conflict + character introduction"
-    dall_e_prompt: |
-      Black and white cartoon illustration: A developer in early 30s (messy hair, hoodie, stubble) hunched over laptop in dim basement. Multiple coffee mugs visible. Expressive wide eyes staring at screen in existential crisis. Ghost-like transparent woman (Miss G) appears behind him with arms crossed and knowing smile. Small robot with large LED eyes (orange, glowing) sits on desk watching. Wi-Fi router mounted high with red LED blinking. Whiteboard covered in diagrams in background. Warm brown color highlight on coffee mug. Red highlight on router. Orange highlight on robot's LED eyes. Comic book style, clean lines, expressive faces.
-    
-  - id: "ch01-img02"  
-    narrative_moment: "The hotel receptionist metaphor—understanding context and routing intent"
-    value_score: 4
-    rationale: "Technical metaphor making Intent Router concept accessible"
-    dall_e_prompt: |
-      Black and white cartoon split panel: LEFT SIDE shows elegant hotel receptionist at desk with confident smile, routing guests efficiently. RIGHT SIDE shows the same developer from before (hoodie, messy hair) at laptop with thought bubble containing miniature hotel desk. Whiteboard behind him shows flowchart with "Intent Router" label. Small robot with blue LED eyes (learning mode) points at whiteboard. Ethereal woman figure visible as thought presence. Strategic color: blue glow on robot LEDs, warm brown coffee mug. Clean cartoon style, expressive characters.
----
-
 # Chapter 1: The Hotel Receptionist — When Computers Learn to Listen
 
 ## Wednesday Morning, 3:47 AM
