@@ -1442,7 +1442,8 @@ Innovation Taxonomy Update (system learns)
 
 - **Master Prompt:** [CORTEX.prompt.md](CORTEX.prompt.md) — Production execution
 - **Primary Agent:** [cortex-architect.md](../agents/core/cortex-architect.md) — This prompt's agent ✅
-- **Supporting Agents:** [cortex-auditor.md](../agents/core/cortex-auditor.md), [cortex-designer.md](../agents/core/cortex-designer.md), [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md) ✅
+- **Supporting Agents:** [cortex-auditor.md](../agents/core/cortex-auditor.md), [cortex-designer.md](../agents/core/cortex-designer.md), [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md), [cortex-storyteller.md](../agents/core/cortex-storyteller.md) ✅
+- **Story Documentation:** [docs/.awakening-of-cortex/](../../docs/.awakening-of-cortex/) — Living narrative of CORTEX evolution
 - **Architecture Guide:** [04-architecture/](../../docs/04-architecture/) — Deep dives
 - **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](../../cortex/wiring/specifications/wiring.yaml) — Orchestrator graph
 - **Enhancement History:** [docs/meta/enhancement-history.yaml](../../docs/meta/enhancement-history.yaml) — Learning feedback loop
