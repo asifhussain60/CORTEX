@@ -19,17 +19,21 @@ active_phases:
 
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 9
+  count: 12
   directory: "phases/completed/2026/"
   phases:
+    - "phase-01-orchestrator-event-bus.yaml"
+    - "phase-02-complexity-classifier.yaml"
+    - "phase-03-code-level-planner.yaml"
+    - "phase-04-coherence-validator.yaml"
+    - "phase-05-review-orchestrator.yaml"
+    - "phase-06-interaction-orchestrator-enhancement.yaml"
     - "phase-19-lens-unified-intelligence.yaml"
     - "phase-20-lens-company-integration.yaml"
     - "phase-20-orch-visibility.yaml"
     - "phase-20-knowledge-synthesis.yaml"
     - "phase-20-instrumentation-layer.yaml"
     - "phase-22-ask-mode-system.yaml"
-    - "phase-23-static-dashboard-generator.yaml"
-    - "phase-24-architecture-integrity-system.yaml"
 
 completed_phases_2025:
   count: 11
@@ -59,7 +63,7 @@ active_enhancements:
 statistics:
   total_phases: 20
   active_phases: 1
-  completed_2026: 9
+  completed_2026: 12
   completed_2025: 11
   total_enhancements: 1
   active_enhancements: 1
