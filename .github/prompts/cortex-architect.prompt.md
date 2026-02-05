@@ -68,6 +68,26 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ---
 
+## 📋 PLAN REGISTRY INTEGRATION
+
+**Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)
+
+**Access:** 
+- Location: `cortex-registry/_cortex-master/`
+- Auto-discovery: index.yaml with full metadata
+- Statistics: 19 total phases, 1 active enhancement, 16 completed
+
+**Dashboard:**
+- View: `cortex-registry/_cortex-master/dashboard/index.html` (Material.js glassmorphism)
+- Auto-sync: AUDIT triggers sync on variance >10% (silent sync >20%)
+- Tabs: Overview | Phases | Enhancements | Roadmap | Metrics
+
+**Agent Integration:**
+- cortex-architect v13.0 — Phase tracking, variance detection, plan enhancement
+- cortex-auditor v2.0 — Prompt sync validation, governance enforcement
+
+---
+
 ## 🏗️ Response Header (MANDATORY)
 
 ```markdown
