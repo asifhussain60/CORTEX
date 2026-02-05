@@ -1,0 +1,81 @@
+{
+    "meta": {
+        "generated": "2026-02-05T12:00:00Z",
+        "version": "pilot-1.0",
+        "test": true,
+        "generator": "CORTEX Integration Pilot"
+    },
+    "repository": {
+        "name": "pilot-test",
+        "full_name": "cortex/pilot-test",
+        "health_score": 85,
+        "test_count": 42,
+        "coverage": 78.5,
+        "last_commit": "2026-02-05T11:30:00Z",
+        "branch": "main"
+    },
+    "metrics": {
+        "complexity": {
+            "average": 12.3,
+            "max": 45,
+            "hotspots": 3
+        },
+        "duplications": {
+            "count": 3,
+            "percentage": 2.1
+        },
+        "security": {
+            "issues": 0,
+            "critical": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0
+        },
+        "quality": {
+            "code_smells": 12,
+            "technical_debt_hours": 4.5,
+            "maintainability_rating": "A"
+        }
+    },
+    "test_results": {
+        "total": 42,
+        "passed": 40,
+        "failed": 1,
+        "skipped": 1,
+        "duration_seconds": 12.5,
+        "coverage": {
+            "line": 78.5,
+            "branch": 65.2,
+            "function": 82.1
+        }
+    },
+    "visualization_data": {
+        "health_breakdown": [
+            {"label": "Tests", "value": 42, "color": "#00ff88"},
+            {"label": "Coverage", "value": 78.5, "color": "#00ccff"},
+            {"label": "Health", "value": 85, "color": "#ff88ff"}
+        ],
+        "complexity_distribution": [
+            {"range": "1-5", "count": 120},
+            {"range": "6-10", "count": 45},
+            {"range": "11-15", "count": 20},
+            {"range": "16-20", "count": 8},
+            {"range": "21+", "count": 3}
+        ],
+        "trend_data": [
+            {"date": "2026-01-01", "health": 78, "coverage": 72},
+            {"date": "2026-01-15", "health": 80, "coverage": 74},
+            {"date": "2026-02-01", "health": 83, "coverage": 76},
+            {"date": "2026-02-05", "health": 85, "coverage": 78.5}
+        ]
+    },
+    "files": {
+        "total": 156,
+        "by_language": {
+            "python": 98,
+            "javascript": 32,
+            "yaml": 18,
+            "markdown": 8
+        }
+    }
+}
