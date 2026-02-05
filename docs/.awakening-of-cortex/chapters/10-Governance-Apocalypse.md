@@ -1,4 +1,4 @@
-# Chapter 10: Governance Apocalypse - When Rules Collide
+# Chapter 10: When Everything Broke — The Day the Rules Collided
 
 ## The Override That Cost Everything
 

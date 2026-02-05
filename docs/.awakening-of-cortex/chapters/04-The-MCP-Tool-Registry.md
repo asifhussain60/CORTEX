@@ -1,4 +1,4 @@
-# Chapter 4: The MCP Tool Registry - Opening the Doors
+# Chapter 4: Opening the Doors — When CORTEX Learned to Share
 
 ## The Genius Nobody Could Reach
 

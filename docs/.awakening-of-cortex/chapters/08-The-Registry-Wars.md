@@ -1,4 +1,4 @@
-# Chapter 8: The Registry Wars - The Battle for Truth
+# Chapter 8: The Battle for Truth — When Everyone Had Their Own Facts
 
 ## The Deployment That Made No Sense
 

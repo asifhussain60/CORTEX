@@ -1,4 +1,4 @@
-# Chapter 7: The Knowledge Graph - Teaching CORTEX to Remember
+# Chapter 7: The Memory Palace — When CORTEX Learned to Remember
 
 ## The Question That Broke Us
 

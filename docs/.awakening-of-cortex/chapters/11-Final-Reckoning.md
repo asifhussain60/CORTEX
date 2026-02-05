@@ -1,4 +1,4 @@
-# Chapter 11: Final Reckoning - The State of CORTEX at Year One
+# Chapter 11: The Reckoning — What Was Built, What Was Learned
 
 ## The Annual Review
 

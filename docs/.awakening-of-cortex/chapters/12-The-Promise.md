@@ -1,4 +1,4 @@
-# Chapter 12: The Promise - Where CORTEX Goes From Here
+# Chapter 12: The Promise — A Map for Tomorrow
 
 ## The Vision Document
 

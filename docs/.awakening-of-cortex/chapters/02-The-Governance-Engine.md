@@ -1,4 +1,4 @@
-# Chapter 2: The Governance Engine - When Miss G Declared War on Chaos
+# Chapter 2: The 29 Sacred Rules — Miss G Declares War
 
 ## Monday Morning, 9:03 AM
 

@@ -1,4 +1,4 @@
-# Chapter 6: Phase E TDD - The Art of Knowing Before Building
+# Chapter 6: The Crystal Ball — Knowing Before Building
 
 ## The Feature That Bit Back
 

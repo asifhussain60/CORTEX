@@ -1,4 +1,4 @@
-# Chapter 3: The Orchestrators - When 47 Departments Tried to Talk at Once
+# Chapter 3: The Conductor's Baton — Teaching 47 Departments to Dance
 
 ## The Email That Started Everything
 

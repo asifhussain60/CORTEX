@@ -1,4 +1,4 @@
-# Chapter 5: Infrastructure Hardening - Building a House That Won't Fall Down
+# Chapter 5: The Four Walls — Building a House That Won't Fall Down
 
 ## The 2 AM Wake-Up Call
 

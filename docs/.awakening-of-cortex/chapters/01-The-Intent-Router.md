@@ -1,4 +1,4 @@
-# Chapter 1: The Intent Router - Teaching CORTEX to Read Minds (Sort Of)
+# Chapter 1: The Hotel Receptionist — When Computers Learn to Listen
 
 ## Wednesday Morning, 3:47 AM
 
