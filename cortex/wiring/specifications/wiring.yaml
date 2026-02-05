@@ -105,6 +105,28 @@ orchestrators:
       mcp_tools:
         - "cortex_interactive_mode"
 
+    # STAGE 1.5: Architecture Validation Gate (Phase 24)
+    - name: "ArchitectureGuard"
+      module: "cortex.orchestrators.core.architecture_guard"
+      class: "ArchitectureGuard"
+      tier: 1
+      priority: 15
+      dependencies: []
+      capabilities:
+        - architecture_validation
+        - regression_prevention
+        - phase_alignment
+        - brittleness_detection
+      health_check: "validate_request"
+      mcp_adapter: "cortex.mcp.adapters.architecture_guard_adapter"
+      metadata:
+        icon: "🛡️"
+        stages: 1
+        intelligence: ["plan_registry"]
+      description: "Pre-implementation validation gate to prevent architectural regression and master plan drift"
+      mcp_tools:
+        - "cortex_validate_architecture"
+
     # STAGE 2: Intent Classification
     - name: "IntentRouter"
       module: "cortex.orchestrators.core.intent_router"

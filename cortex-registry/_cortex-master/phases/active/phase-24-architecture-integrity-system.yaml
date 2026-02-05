@@ -1,0 +1,814 @@
+# PHASE-24: ARCHITECTURE INTEGRITY SYSTEM
+# Version: 1.0 | Created: 2026-02-05 | Status: PLANNED
+# Authority: cortex-architect.prompt.md v13.0 + User request for holistic regression prevention
+# Scope: 4-layer defense system ensuring master plan ↔ implementation sync
+
+---
+metadata:
+  phase: "24"
+  title: "Architecture Integrity System"
+  version: "1.0"
+  status: "PLANNED"
+  author: "Asif Hussain"
+  created: "2026-02-05"
+  priority: "P0"
+  category: "Core Infrastructure"
+  estimated_effort: "1 week"
+  dependencies:
+    - "phase-23-static-dashboard-generator"
+    - "cortex-architect v13.0"
+    - "PlanRegistrySyncOrchestrator"
+  governance:
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: Single canonical implementation"
+    - "MCP-FIRST: All functionality via MCP tools"
+    - "NO-REGRESSION: Master plan alignment mandatory"
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Build a **4-layer Architecture Integrity System** that ensures:
+    
+    1. **Pre-Implementation Gate:** Validates changes against master plan BEFORE execution
+    2. **Runtime Regression Guard:** Monitors for architectural brittleness during execution
+    3. **Post-Completion Sync:** Auto-updates phases & dashboard after successful completion
+    4. **Architecture Evolution Tracking:** Records all architectural decisions with rationale
+    
+    Result: **ZERO chance of regression** — Every change validated against master plan.
+            **ZERO brittleness** — Architectural patterns enforced at runtime.
+            **100% sync** — Master plan always reflects current implementation state.
+
+  key_outcomes:
+    - "✅ Pre-Implementation Gate: Blocks changes not aligned with active phases"
+    - "✅ Regression Detection: Real-time check against completed phase commitments"
+    - "✅ Auto-Phase Creation: User changes auto-create/update master plan phases"
+    - "✅ Dashboard Sync: Completed work auto-updates phase status + dashboard"
+    - "✅ Brittleness Scanner: Detects architectural anti-patterns during implementation"
+    - "✅ Decision Journal: Records all architectural decisions with rationale"
+    - "✅ MCP Integration: Full exposure via cortex_validate_architecture tool"
+
+---
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+current_state:
+  gaps:
+    gap_001:
+      name: "No Pre-Implementation Phase Validation"
+      description: |
+        cortex-architect can proceed with DESIGN mode without checking if:
+        - Request aligns with active phases
+        - Request contradicts completed phases
+        - New phase needs to be created
+      impact: "User can implement changes that diverge from master plan"
+      severity: "CRITICAL"
+      evidence: "cortex-architect.prompt.md has no 'Check Master Plan' step in DESIGN flow"
+    
+    gap_002:
+      name: "No Architecture Regression Gate"
+      description: |
+        No validation during execution that changes don't:
+        - Violate commitments from completed phases
+        - Introduce brittleness (tight coupling, circular dependencies)
+        - Break architectural patterns
+      impact: "Completed phases can be silently violated"
+      severity: "CRITICAL"
+      evidence: "No ArchitectureGuard or RegressionGate orchestrator exists"
+    
+    gap_003:
+      name: "No Automatic Phase Creation/Update"
+      description: |
+        When user requests DESIGN work:
+        - No automatic phase creation in _cortex-master/
+        - No phase update if work extends existing phase
+        - No dashboard sync until manual intervention
+      impact: "Master plan becomes stale, dashboard shows outdated data"
+      severity: "CRITICAL"
+      evidence: "PlanRegistrySyncOrchestrator is reactive, not proactive"
+    
+    gap_004:
+      name: "No Implementation→Phase Sync"
+      description: |
+        After successful TDD completion:
+        - Phase status not auto-updated to 'completed'
+        - Dashboard not refreshed with completion data
+        - Enhancement-history.yaml not updated
+      impact: "Manual toil, drift between implementation & plan"
+      severity: "HIGH"
+      evidence: "No post-completion hook in TDDOrchestrator"
+    
+    gap_005:
+      name: "cortex-architect Mode Isolation"
+      description: |
+        Modes defined in prompt but not enforced at orchestrator level:
+        - No mode-specific validation logic
+        - No clear boundary between AUDIT/DESIGN/DIGEST orchestrators
+      impact: "Mode behavior can drift from prompt specification"
+      severity: "HIGH"
+      evidence: "cortex-architect.md delegates but doesn't enforce mode contracts"
+    
+    gap_006:
+      name: "No Brittleness Detection"
+      description: |
+        No automated scanning for:
+        - Circular dependencies between orchestrators
+        - Tight coupling violations
+        - Missing abstraction layers
+        - Anti-patterns (God objects, feature envy)
+      impact: "Technical debt accumulates silently"
+      severity: "MEDIUM"
+      evidence: "No BrittlenessScanner orchestrator"
+
+---
+# ============================================================================
+# SOLUTION ARCHITECTURE
+# ============================================================================
+
+solution:
+  name: "4-Layer Architecture Integrity System"
+  layers:
+    layer_1:
+      name: "Pre-Implementation Gate"
+      purpose: "Validate before execution"
+      components:
+        - "ArchitectureGuard orchestrator"
+        - "PhaseAlignmentValidator"
+        - "RegressionRiskAnalyzer"
+      trigger: "cortex-architect DESIGN mode entry"
+      blocking: true
+      checks:
+        - "Does request align with active phases?"
+        - "Does request contradict completed phases?"
+        - "Should new phase be created?"
+        - "Regression risk score < 0.3?"
+      output: "PROCEED | CREATE_PHASE | BLOCK (with explanation)"
+    
+    layer_2:
+      name: "Runtime Regression Guard"
+      purpose: "Monitor during execution"
+      components:
+        - "RegressionMonitor"
+        - "BrittlenessScanner"
+        - "ArchitecturalPatternValidator"
+      trigger: "TDDOrchestrator execution hooks"
+      blocking: false
+      checks:
+        - "Are architectural patterns maintained?"
+        - "Are coupling metrics within bounds?"
+        - "Are abstraction layers respected?"
+        - "Are completed phase commitments honored?"
+      output: "Real-time warnings + violation log"
+    
+    layer_3:
+      name: "Post-Completion Sync"
+      purpose: "Update master plan after success"
+      components:
+        - "PhaseCompletionOrchestrator"
+        - "DashboardSyncTrigger"
+        - "EnhancementHistoryRecorder"
+      trigger: "TDDOrchestrator completion (all tests pass)"
+      blocking: false
+      actions:
+        - "Update phase status to 'completed'"
+        - "Trigger dashboard data regeneration"
+        - "Record in enhancement-history.yaml"
+        - "Update index.yaml statistics"
+      output: "Phase status updated + dashboard refreshed"
+    
+    layer_4:
+      name: "Architecture Evolution Tracking"
+      purpose: "Record all architectural decisions"
+      components:
+        - "DecisionJournal"
+        - "ArchitecturalRationaleCapture"
+        - "PatternLibraryUpdater"
+      trigger: "Any significant architectural change"
+      blocking: false
+      records:
+        - "Decision: What was decided"
+        - "Rationale: Why it was decided"
+        - "Alternatives: What was rejected and why"
+        - "Impact: Which phases/orchestrators affected"
+      output: "Architecture decision records (ADRs)"
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+implementation:
+  phases:
+    phase_1:
+      name: "Layer 1: Pre-Implementation Gate"
+      priority: "P0"
+      effort: "2 days"
+      deliverables:
+        - id: "AC-PHASE24-001"
+          title: "ArchitectureGuard Orchestrator"
+          description: |
+            Create ArchitectureGuard orchestrator that:
+            - Loads cortex-registry/_cortex-master/index.yaml
+            - Validates request against active/completed phases
+            - Calculates regression risk score (0-1.0)
+            - Returns PROCEED | CREATE_PHASE | BLOCK decision
+          tests:
+            - "test_architecture_guard_allows_aligned_request"
+            - "test_architecture_guard_blocks_contradictory_request"
+            - "test_architecture_guard_suggests_phase_creation"
+            - "test_regression_risk_calculation"
+          files:
+            - "cortex/orchestrators/core/architecture_guard.py"
+            - "tests/unit/orchestrators/core/test_architecture_guard.py"
+        
+        - id: "AC-PHASE24-002"
+          title: "cortex-architect Integration"
+          description: |
+            Update cortex-architect.prompt.md DESIGN mode flow:
+            - Add "Check Master Plan" step BEFORE Challenge
+            - Call ArchitectureGuard.validate_request()
+            - Display phase alignment table
+            - Block execution if BLOCK verdict
+            - Offer phase creation if CREATE_PHASE
+          tests:
+            - "test_design_mode_calls_architecture_guard"
+            - "test_phase_creation_flow"
+          files:
+            - ".github/prompts/cortex-architect.prompt.md"
+            - ".github/agents/core/cortex-architect.md"
+        
+        - id: "AC-PHASE24-003"
+          title: "MCP Tool: cortex_validate_architecture"
+          description: |
+            Expose ArchitectureGuard via MCP:
+            - Tool: cortex_validate_architecture
+            - Parameters: request_description, intent_type, scope
+            - Returns: validation_result (JSON)
+          tests:
+            - "test_mcp_validate_architecture_tool"
+          files:
+            - "cortex/mcp/tools/architecture_validation_tool.py"
+            - "cortex/wiring/specifications/wiring.yaml (register tool)"
+    
+    phase_2:
+      name: "Layer 2: Runtime Regression Guard"
+      priority: "P0"
+      effort: "2 days"
+      deliverables:
+        - id: "AC-PHASE24-004"
+          title: "BrittlenessScanner Orchestrator"
+          description: |
+            Create BrittlenessScanner that detects:
+            - Circular dependencies (using AST analysis)
+            - Tight coupling violations (fan-in/fan-out metrics)
+            - Missing abstraction layers
+            - Anti-patterns (God objects, feature envy)
+            Returns brittleness score (0-1.0) + violation details
+          tests:
+            - "test_detect_circular_dependency"
+            - "test_detect_tight_coupling"
+            - "test_calculate_brittleness_score"
+          files:
+            - "cortex/orchestrators/support/brittleness_scanner.py"
+            - "tests/unit/orchestrators/support/test_brittleness_scanner.py"
+        
+        - id: "AC-PHASE24-005"
+          title: "RegressionMonitor Integration"
+          description: |
+            Add hooks to TDDOrchestrator:
+            - Pre-execution: Check completed phase commitments
+            - Post-execution: Run BrittlenessScanner
+            - Log violations to audit trail
+            - Emit warnings (non-blocking)
+          tests:
+            - "test_tdd_calls_regression_monitor"
+            - "test_brittleness_warning_emitted"
+          files:
+            - "cortex/orchestrators/core/tdd_orchestrator.py"
+            - "cortex/orchestrators/core/regression_monitor.py"
+    
+    phase_3:
+      name: "Layer 3: Post-Completion Sync"
+      priority: "P1"
+      effort: "1 day"
+      deliverables:
+        - id: "AC-PHASE24-006"
+          title: "PhaseCompletionOrchestrator"
+          description: |
+            Create PhaseCompletionOrchestrator that:
+            - Detects TDD completion event
+            - Updates phase YAML (status: completed, completed_date)
+            - Regenerates index.yaml statistics
+            - Triggers PlanRegistrySyncOrchestrator
+            - Updates enhancement-history.yaml
+            - Regenerates dashboard data (dashboard/data/plan-summary.json)
+            - Triggers dashboard HTML refresh (dashboard/index.html auto-refresh)
+            - Ensures dashboard reflects changes within 60 seconds
+          tests:
+            - "test_phase_completion_updates_yaml"
+            - "test_dashboard_sync_triggered"
+            - "test_dashboard_data_regenerated"
+            - "test_dashboard_html_reflects_changes"
+          files:
+            - "cortex/orchestrators/support/phase_completion_orchestrator.py"
+            - "tests/unit/orchestrators/support/test_phase_completion_orchestrator.py"
+            - "cortex-registry/_cortex-master/dashboard/data/plan-summary.json (auto-generated)"
+            - "cortex-registry/_cortex-master/dashboard/index.html (displays data)"
+        
+        - id: "AC-PHASE24-007"
+          title: "TDDOrchestrator Post-Completion Hook"
+          description: |
+            Add to TDDOrchestrator.execute():
+            - On success (all tests pass):
+              - Call PhaseCompletionOrchestrator.complete_phase()
+              - Log completion to audit trail
+          tests:
+            - "test_tdd_triggers_phase_completion"
+          files:
+            - "cortex/orchestrators/core/tdd_orchestrator.py"
+    
+    phase_4:
+      name: "Layer 4: Architecture Evolution Tracking"
+      priority: "P2"
+      effort: "1 day"
+      deliverables:
+        - id: "AC-PHASE24-008"
+          title: "DecisionJournal"
+          description: |
+            Create DecisionJournal that records:
+            - Decision: What architectural choice was made
+            - Rationale: Why (evidence-based)
+            - Alternatives: What was rejected and why
+            - Impact: Which phases/orchestrators affected
+            Stored in: cortex-registry/_cortex-master/decisions/
+          tests:
+            - "test_record_architecture_decision"
+            - "test_load_decision_history"
+          files:
+            - "cortex/orchestrators/support/decision_journal.py"
+            - "cortex-registry/_cortex-master/decisions/index.yaml"
+        
+        - id: "AC-PHASE24-009"
+          title: "cortex-architect Decision Capture"
+          description: |
+            Update cortex-architect to capture decisions:
+            - After Challenge phase: Record verdict + rationale
+            - After DoR approval: Record intent + scope
+            - After execution: Record outcome + learnings
+          tests:
+            - "test_challenge_verdict_recorded"
+          files:
+            - ".github/prompts/cortex-architect.prompt.md"
+
+---
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+
+integration:
+  dashboard_integration:
+    file: "cortex-registry/_cortex-master/dashboard/index.html"
+    requirements:
+      - "Auto-refresh mechanism (poll plan-summary.json every 30 seconds)"
+      - "Display phase status changes in real-time"
+      - "Show completion timestamps"
+      - "Highlight newly completed phases"
+      - "Update statistics (total phases, completion rate)"
+    data_source: "cortex-registry/_cortex-master/dashboard/data/plan-summary.json"
+    sync_trigger: "PhaseCompletionOrchestrator updates plan-summary.json"
+    sync_latency: "< 60 seconds from completion to dashboard display"
+  
+  cortex_architect_prompt:
+    file: ".github/prompts/cortex-architect.prompt.md"
+    changes:
+      - section: "MODE 2: DESIGN"
+        line: "~350"
+        addition: |
+          ## Architecture Integrity Gate (NEW - Phase 24)
+          
+          **BEFORE Challenge, ALWAYS check master plan alignment:**
+          
+          ```
+          User Request
+              ↓
+          PRE-FLIGHT CHECK (existing)
+              ↓
+          [NEW] ARCHITECTURE INTEGRITY GATE
+              ├─ Load cortex-registry/_cortex-master/index.yaml
+              ├─ Call ArchitectureGuard.validate_request()
+              ├─ Check: Aligns with active phases?
+              ├─ Check: Contradicts completed phases?
+              ├─ Check: Needs new phase creation?
+              └─ Calculate: Regression risk score
+              ↓
+          [PROCEED] → Continue to LENS Context Gathering
+              ↓
+          [CREATE_PHASE] → Display phase creation template
+              ├─ Offer auto-creation (cortex_create_phase tool)
+              ├─ Await user approval
+              └─ Create phase YAML in _cortex-master/phases/active/
+              ↓
+          [BLOCK] → Display blocking reasons
+              ├─ Show: Conflicting completed phases
+              ├─ Show: Regression risk breakdown
+              └─ Suggest: Alternative approach or phase modification
+          ```
+          
+          **Phase Alignment Table (MANDATORY DISPLAY):**
+          
+          | Check | Status | Details |
+          |-------|--------|---------|
+          | Active Phase Match | ✅/❌ | {phase-21, phase-22, ...} |
+          | Completed Phase Conflict | ✅/❌ | {potential violations} |
+          | Regression Risk | {score} | {Low/Medium/High} |
+          | Verdict | {PROCEED/CREATE_PHASE/BLOCK} | {reasoning} |
+          
+          **If CREATE_PHASE:**
+          - Display suggested phase YAML structure
+          - Offer `/create-phase` command (calls cortex_create_phase MCP tool)
+          - Await user: "create phase" / "skip" / "manual"
+          
+          **If BLOCK:**
+          - Show conflicting phase details
+          - Explain regression risk factors
+          - Suggest remediation (modify request, update phase, seek architect review)
+          - HALT execution until user resolves conflict
+  
+  cortex_architect_agent:
+    file: ".github/agents/core/cortex-architect.md"
+    changes:
+      - section: "Master Mode Flow"
+        line: "~85"
+        addition: |
+          [DESIGN Mode] → cortex-designer (+ this agent orchestration)
+              ↓
+          [NEW] ARCHITECTURE INTEGRITY GATE (Phase 24)
+              ├─ Call: ArchitectureGuard.validate_request()
+              ├─ Display: Phase Alignment Table
+              ├─ Decision: PROCEED | CREATE_PHASE | BLOCK
+              └─ If BLOCK: HALT execution, display remediation
+              ↓
+          LENS Context (existing - only if PROCEED)
+  
+  tdd_orchestrator:
+    file: "cortex/orchestrators/core/tdd_orchestrator.py"
+    changes:
+      - location: "execute() method - start"
+        addition: |
+          # Phase 24: Pre-execution regression check
+          regression_check = self.regression_monitor.check_completed_phases(context)
+          if regression_check.has_violations():
+              self.logger.warning(f"Regression warnings: {regression_check.violations}")
+      
+      - location: "execute() method - end (success path)"
+        addition: |
+          # Phase 24: Post-completion sync
+          if all_tests_passed:
+              phase_completion = PhaseCompletionOrchestrator()
+              completion_result = phase_completion.complete_phase(
+                  phase_id=context.get('phase_id'),
+                  completion_data={
+                      'files_modified': modified_files,
+                      'tests_passed': test_results,
+                      'timestamp': datetime.utcnow().isoformat()
+                  }
+              )
+              if completion_result.is_ok():
+                  self.logger.info(f"Phase {context.get('phase_id')} marked completed, dashboard synced")
+  
+  wiring_yaml:
+    file: "cortex/wiring/specifications/wiring.yaml"
+    additions:
+      - |
+        # Phase 24: Architecture Integrity System
+        - name: "ArchitectureGuard"
+          path: "cortex.orchestrators.core.architecture_guard"
+          class: "ArchitectureGuard"
+          priority: 900  # High priority (runs before DESIGN)
+          description: "Pre-implementation validation against master plan"
+          mcp_tools:
+            - "cortex_validate_architecture"
+        
+        - name: "BrittlenessScanner"
+          path: "cortex.orchestrators.support.brittleness_scanner"
+          class: "BrittlenessScanner"
+          priority: 500
+          description: "Runtime brittleness detection"
+        
+        - name: "PhaseCompletionOrchestrator"
+          path: "cortex.orchestrators.support.phase_completion_orchestrator"
+          class: "PhaseCompletionOrchestrator"
+          priority: 100  # Low priority (runs after TDD)
+          description: "Post-completion master plan sync"
+
+---
+# ============================================================================
+# MCP TOOLS
+# ============================================================================
+
+mcp_tools:
+  cortex_validate_architecture:
+    name: "cortex_validate_architecture"
+    description: "Validate user request against master plan to prevent regression"
+    parameters:
+      request_description:
+        type: "string"
+        required: true
+        description: "Description of requested change"
+      intent_type:
+        type: "string"
+        required: true
+        enum: ["IMPLEMENT", "REFACTOR", "FIX", "DESIGN"]
+        description: "Type of change intent"
+      scope:
+        type: "array"
+        items: "string"
+        required: false
+        description: "Affected files/orchestrators"
+    returns:
+      verdict:
+        type: "string"
+        enum: ["PROCEED", "CREATE_PHASE", "BLOCK"]
+      phase_alignment:
+        type: "object"
+        properties:
+          active_phases: ["phase-21", "phase-22"]
+          conflicts: []
+          regression_risk: 0.15
+      reasoning:
+        type: "string"
+      suggested_phase:
+        type: "object"  # Only if verdict = CREATE_PHASE
+    example: |
+      Input: {
+        "request_description": "Refactor MasterOrchestrator to use async/await",
+        "intent_type": "REFACTOR",
+        "scope": ["cortex/orchestrators/core/master_orchestrator.py"]
+      }
+      Output: {
+        "verdict": "CREATE_PHASE",
+        "phase_alignment": {
+          "active_phases": ["phase-21", "phase-22"],
+          "conflicts": [],
+          "regression_risk": 0.2
+        },
+        "reasoning": "Async refactor is significant architectural change, should be tracked as phase-25",
+        "suggested_phase": {
+          "id": "phase-25",
+          "title": "Async MasterOrchestrator Refactor",
+          "priority": "P1",
+          "estimated_effort": "3 days"
+        }
+      }
+  
+  cortex_create_phase:
+    name: "cortex_create_phase"
+    description: "Auto-create new phase YAML in _cortex-master/phases/active/"
+    parameters:
+      phase_data:
+        type: "object"
+        required: true
+        properties:
+          title: "string"
+          description: "string"
+          priority: "string (P0/P1/P2/P3)"
+          estimated_effort: "string"
+    returns:
+      phase_id: "string"
+      file_path: "string"
+      status: "created"
+    example: |
+      Input: {
+        "phase_data": {
+          "title": "Async MasterOrchestrator Refactor",
+          "description": "Convert MasterOrchestrator to async/await pattern",
+          "priority": "P1",
+          "estimated_effort": "3 days"
+        }
+      }
+      Output: {
+        "phase_id": "phase-25",
+        "file_path": "cortex-registry/_cortex-master/phases/active/phase-25-async-master-refactor.yaml",
+        "status": "created"
+      }
+  
+  cortex_scan_brittleness:
+    name: "cortex_scan_brittleness"
+    description: "Scan codebase for architectural brittleness patterns"
+    parameters:
+      scope:
+        type: "array"
+        items: "string"
+        required: false
+        description: "Files to scan (default: all orchestrators)"
+    returns:
+      brittleness_score: "float (0-1.0)"
+      violations:
+        type: "array"
+        items:
+          type: "string"
+          pattern: "string"
+          severity: "string"
+          file: "string"
+          line: "integer"
+    example: |
+      Output: {
+        "brittleness_score": 0.35,
+        "violations": [
+          {
+            "type": "CIRCULAR_DEPENDENCY",
+            "pattern": "MasterOrchestrator → IntentRouter → MasterOrchestrator",
+            "severity": "HIGH",
+            "file": "cortex/orchestrators/core/intent_router.py",
+            "line": 145
+          },
+          {
+            "type": "TIGHT_COUPLING",
+            "pattern": "TDDOrchestrator directly imports 8 orchestrators",
+            "severity": "MEDIUM",
+            "file": "cortex/orchestrators/core/tdd_orchestrator.py",
+            "line": 20
+          }
+        ]
+      }
+
+---
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+
+testing:
+  unit_tests:
+    - "test_architecture_guard_validates_request"
+    - "test_architecture_guard_calculates_regression_risk"
+    - "test_architecture_guard_blocks_contradictory_request"
+    - "test_brittleness_scanner_detects_circular_deps"
+    - "test_brittleness_scanner_calculates_score"
+    - "test_phase_completion_updates_yaml"
+    - "test_phase_completion_triggers_dashboard_sync"
+    - "test_decision_journal_records_decision"
+  
+  integration_tests:
+    - "test_design_mode_calls_architecture_guard"
+    - "test_blocked_request_halts_execution"
+    - "test_phase_creation_flow_end_to_end"
+    - "test_tdd_completion_updates_phase_status"
+    - "test_dashboard_reflects_completed_phase"
+  
+  e2e_tests:
+    - "test_full_design_flow_with_integrity_gate"
+    - "test_regression_detected_and_blocked"
+    - "test_brittleness_warning_during_tdd"
+    - "test_phase_auto_completed_after_tdd_success"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  mandatory:
+    - "✅ ArchitectureGuard blocks requests that contradict completed phases"
+    - "✅ cortex-architect DESIGN mode calls ArchitectureGuard BEFORE Challenge"
+    - "✅ Phase Alignment Table displayed for every DESIGN request"
+    - "✅ Regression risk score < 0.3 required to PROCEED"
+    - "✅ BrittlenessScanner detects circular dependencies"
+    - "✅ TDDOrchestrator auto-updates phase status on completion"
+    - "✅ Dashboard reflects completed phases within 60 seconds"
+    - "✅ DecisionJournal records all architectural decisions"
+  
+  quality:
+    - "✅ 100% test coverage for ArchitectureGuard"
+    - "✅ Zero false positives in brittleness detection"
+    - "✅ Regression risk calculation accuracy > 95%"
+    - "✅ Phase creation time < 5 seconds"
+  
+  user_experience:
+    - "✅ Clear explanation when request blocked"
+    - "✅ One-click phase creation from blocked request"
+    - "✅ Phase Alignment Table easy to understand"
+    - "✅ Dashboard auto-refreshes without user intervention"
+
+---
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+
+rollout:
+  stage_1:
+    name: "Development (Days 1-3)"
+    actions:
+      - "Implement Phase 1: Pre-Implementation Gate"
+      - "Unit tests for ArchitectureGuard"
+      - "Update cortex-architect.prompt.md"
+  
+  stage_2:
+    name: "Internal Testing (Days 4-5)"
+    actions:
+      - "Implement Phase 2: Runtime Regression Guard"
+      - "Integration tests with TDDOrchestrator"
+      - "Test full DESIGN flow"
+  
+  stage_3:
+    name: "Beta Testing (Days 6-7)"
+    actions:
+      - "Implement Phase 3: Post-Completion Sync"
+      - "Implement Phase 4: Decision Journal"
+      - "E2E testing"
+      - "Documentation updates"
+  
+  stage_4:
+    name: "Production (Day 8)"
+    actions:
+      - "Merge to main"
+      - "Update wiring.yaml"
+      - "Announce in CORTEX changelog"
+      - "Monitor first 10 DESIGN requests"
+
+---
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  risk_1:
+    description: "ArchitectureGuard false positives block valid requests"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+    mitigation: |
+      - Whitelist patterns for known-good changes
+      - Override mechanism: `/bypass-gate {reason}` (audit logged)
+      - Continuous tuning based on false positive rate
+  
+  risk_2:
+    description: "Performance overhead from pre-execution checks"
+    likelihood: "LOW"
+    impact: "MEDIUM"
+    mitigation: |
+      - Cache index.yaml in memory (reload every 5 minutes)
+      - Async validation (non-blocking UI)
+      - Target: <100ms latency for ArchitectureGuard.validate_request()
+  
+  risk_3:
+    description: "Phase YAML format changes break ArchitectureGuard"
+    likelihood: "LOW"
+    impact: "HIGH"
+    mitigation: |
+      - Schema validation on YAML load
+      - Graceful degradation (warn but don't block)
+      - Version compatibility checks
+
+---
+# ============================================================================
+# FUTURE ENHANCEMENTS
+# ============================================================================
+
+future:
+  enhancement_1:
+    name: "AI-Powered Regression Risk Prediction"
+    description: |
+      Train ML model on historical changes + regression outcomes
+      to predict regression risk more accurately than heuristics.
+    effort: "2 weeks"
+    priority: "P3"
+  
+  enhancement_2:
+    name: "Visual Architecture Diff"
+    description: |
+      Before/after visualization of architecture changes
+      (component diagrams, dependency graphs).
+    effort: "1 week"
+    priority: "P3"
+  
+  enhancement_3:
+    name: "Multi-Phase Impact Analysis"
+    description: |
+      Show how a change affects not just current phase, but
+      downstream phases (dependency chain).
+    effort: "1 week"
+    priority: "P2"
+
+---
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  - name: "cortex-architect.prompt.md v13.0"
+    path: ".github/prompts/cortex-architect.prompt.md"
+  - name: "cortex-architect.md agent v13.0"
+    path: ".github/agents/core/cortex-architect.md"
+  - name: "PlanRegistrySyncOrchestrator"
+    path: "cortex/orchestrators/core/plan_registry_sync.py"
+  - name: "_cortex-master registry"
+    path: "cortex-registry/_cortex-master/index.yaml"
+  - name: "Phase 23: Static Dashboard Generator"
+    path: "cortex-registry/_cortex-master/phases/active/phase-23-static-dashboard-generator.yaml"
+
+---
+# Status: READY FOR APPROVAL
+# Next: User approval → Begin Phase 1 implementation (ArchitectureGuard)
