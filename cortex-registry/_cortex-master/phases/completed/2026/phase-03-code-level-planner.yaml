@@ -1,0 +1,202 @@
+# Phase 3: Code-Level Planning
+# SDLC Phase 3 - Detailed Implementation Plans Without Code Generation
+# Status: COMPLETED
+# Date: 2026-02-04
+
+phase_id: "PHASE-03"
+title: "Code-Level Planning"
+status: "COMPLETED"
+completion_date: "2026-02-04"
+git_tag: "sdlc/phase-3/complete"
+git_commit: "baffa12a334a332a041292870c0f84009dd4d813"
+
+# Overview
+description: |
+  Generates detailed implementation plans without code generation.
+  Specifies files, functions, interfaces, and contracts needed for implementation.
+  Provides comprehensive planning for MODERATE+ complexity tasks without over-prescribing
+  the implementation, allowing developer creativity within architectural boundaries.
+
+# Objectives
+objectives:
+  - "Generate file-level specifications (paths, purposes, dependencies)"
+  - "Define function-level specifications (signatures, contracts, test requirements)"
+  - "Specify interface contracts for cross-component communication"
+  - "Identify required test files and test scenarios"
+  - "Provide implementation guidance without prescriptive code"
+  - "Enable verification against plan during review phase"
+
+# Implementation
+implementation:
+  component: "CodeLevelPlanner"
+  module: "cortex.orchestrators.domain.code_level_planner"
+  class: "CodeLevelPlanner"
+  tier: 2
+  priority: 48
+  
+  files:
+    - path: "cortex/orchestrators/domain/code_level_planner.py"
+      lines_of_code: 54
+      purpose: "Code-level planning implementation"
+    
+    - path: "tests/unit/orchestrators/domain/test_code_level_planner.py"
+      lines_of_code: 17
+      purpose: "Test suite for planning functionality"
+  
+  total_loc: 71
+
+# Planning Outputs
+planning_outputs:
+  - name: "File Specifications"
+    content:
+      - "File path (relative to workspace root)"
+      - "Purpose and responsibility"
+      - "Dependencies (imports required)"
+      - "Interfaces exposed"
+      - "Compliance requirements (CORE rules)"
+  
+  - name: "Function Specifications"
+    content:
+      - "Function name and signature"
+      - "Input parameters with types"
+      - "Return type and description"
+      - "Exceptions that may be raised"
+      - "Pre-conditions and post-conditions"
+      - "Test requirements (coverage, edge cases)"
+  
+  - name: "Interface Contracts"
+    content:
+      - "Public API surface"
+      - "Contract guarantees (what callers can depend on)"
+      - "Breaking change policy"
+      - "Versioning strategy"
+  
+  - name: "Test Specifications"
+    content:
+      - "Test file paths"
+      - "Test scenarios to cover"
+      - "Mock/fixture requirements"
+      - "Coverage targets"
+
+# Features
+features:
+  - name: "Task Scope Analysis"
+    description: "Analyze request to determine affected files and components"
+  
+  - name: "Dependency Mapping"
+    description: "Identify import dependencies and module relationships"
+  
+  - name: "Interface Design"
+    description: "Design clean interfaces for new components"
+  
+  - name: "Test Planning"
+    description: "Specify comprehensive test coverage requirements"
+  
+  - name: "Compliance Validation"
+    description: "Ensure plan adheres to CORE rules and best practices"
+  
+  - name: "Implementation Guidance"
+    description: "Provide architectural direction without micromanaging code"
+
+# Capabilities
+capabilities:
+  - "code_planning"
+  - "file_specification"
+  - "function_specification"
+  - "interface_contracts"
+
+# Testing
+testing:
+  test_count: 17
+  test_pass_rate: 1.0
+  coverage: "100%"
+  test_file: "tests/unit/orchestrators/domain/test_code_level_planner.py"
+  
+  test_scenarios:
+    - "File specification generation"
+    - "Function signature planning"
+    - "Interface contract design"
+    - "Test requirement specification"
+    - "Dependency mapping accuracy"
+
+# Compliance
+compliance:
+  - rule: "CORE-008"
+    description: "TDD-first (plan includes test specifications)"
+  
+  - rule: "CORE-011"
+    description: "Type hints in function specs"
+  
+  - rule: "CORE-012"
+    description: "Docstring requirements specified"
+
+# Dependencies
+dependencies:
+  external: []
+  internal:
+    - "ComplexityClassifier"
+
+# Wiring
+wiring:
+  registered: true
+  health_check: "analyze_task_scope"
+  mcp_adapter: "cortex.mcp.adapters.planning_adapter"
+
+# Metadata
+metadata:
+  icon: "📐"
+  stages: 3
+  intelligence: ["lens", "knowledge"]
+  author: "Asif Hussain"
+  phase_number: 3
+
+# Impact
+impact:
+  accuracy: "HIGH - Plans guide implementation without restricting creativity"
+  efficiency: "MEDIUM - Planning overhead pays off in reduced debugging"
+  quality: "HIGH - Comprehensive test specifications improve coverage"
+
+# Integration
+integration:
+  event_bus: "Publishes PLAN_GENERATED events"
+  input_event: "PLANNING_REQUIRED (from ComplexityClassifier)"
+  output: "CodeLevelPlan object with file, function, and test specs"
+
+# Example Plan Output
+example_plan:
+  files:
+    - path: "cortex/new_feature/feature.py"
+      purpose: "Main feature implementation"
+      dependencies: ["typing", "pydantic", "cortex.core.base"]
+      interfaces: ["FeatureInterface"]
+      compliance: ["CORE-008", "CORE-011", "CORE-012"]
+  
+  functions:
+    - name: "process_feature"
+      signature: "def process_feature(data: FeatureData) -> FeatureResult:"
+      pre_conditions: "data must be validated"
+      post_conditions: "Returns FeatureResult or raises FeatureError"
+      tests: ["happy path", "edge cases", "error handling"]
+
+# Success Metrics
+success_metrics:
+  - metric: "All 17 tests passing"
+    target: 17
+    actual: 17
+    status: "✅ ACHIEVED"
+  
+  - metric: "Plan completeness"
+    target: "100% (files, functions, tests specified)"
+    actual: "100%"
+    status: "✅ ACHIEVED"
+
+# Previous Phase
+previous_phase:
+  phase_id: "PHASE-02"
+  title: "ComplexityClassifier"
+
+# Next Phase
+next_phase:
+  phase_id: "PHASE-04"
+  title: "CoherenceValidator"
+  description: "Validates Python↔JavaScript cross-layer alignment"
