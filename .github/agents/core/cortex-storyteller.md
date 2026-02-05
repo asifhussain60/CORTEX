@@ -104,22 +104,22 @@ Link to:
 
 ---
 
-## Chapter Registry (Current: 13 + This One = 14 max)
+## Chapter Registry (Current: 15 chapters total)
 
 | # | Title | Phase | Status | Linked ENH | Tone |
 |---|-------|-------|--------|----------|------|
 | 00 | PROLOGUE: Deep in the Basement | Origin | ✅ IMMUTABLE | — | Desperation + Hope |
-| 01 | The Intent Router | Phase 2 | ✅ Complete | — | Asif's Crisis |
-| 02 | The Governance Engine | Phase 2.7 | ✅ Complete | CORE-008 | Miss G's War |
-| 03 | The Orchestrators | Phase 3 | ✅ Complete | — | Complexity Unleashed |
-| 04 | The MCP Tool Registry | Phase 7 | ✅ Complete | — | Building Infrastructure |
-| 05 | Infrastructure Hardening | Phase 8.1 | ✅ Complete | ENH-013 | 4-Layer Defense |
-| 06 | Phase-E TDD | Phase 8.2 | ✅ Complete | CORE-008 | Test Wars |
-| 07 | The Knowledge Graph | Phase 9 | ✅ Complete | ENH-005 | Memory Palace |
-| 08 | The Registry Wars | Phase 10 | ✅ Complete | — | Political Intrigue |
-| 09 | Deployment Ascendancy | Phase 14 | ✅ Complete | ENH-010 | Production Drama |
-| 10 | Governance Apocalypse | Phase 20 | ✅ Complete | — | Everything Breaks |
-| 11 | Final Reckoning | Phase 21 | ✅ Complete | — | Redemption Arc |
+| 01 | The Hotel Receptionist | Phase 2 | ✅ Complete | — | Asif's Crisis |
+| 02 | The 29 Sacred Rules | Phase 2.7 | ✅ Complete | CORE-008 | Miss G's War |
+| 03 | The Conductor's Baton | Phase 3 | ✅ Complete | — | Complexity Unleashed |
+| 04 | Opening the Doors | Phase 7 | ✅ Complete | — | Building Infrastructure |
+| 05 | The Four Walls | Phase 8.1 | ✅ Complete | ENH-013 | 4-Layer Defense |
+| 06 | The Crystal Ball | Phase 8.2 | ✅ Complete | CORE-008 | Test Wars |
+| 07 | The Memory Palace | Phase 9 | ✅ Complete | ENH-005 | Memory Palace |
+| 08 | The Battle for Truth | Phase 10 | ✅ Complete | — | Political Intrigue |
+| 09 | The First Flight | Phase 14 | ✅ Complete | ENH-010 | Production Drama |
+| 10 | When Everything Broke | Phase 20 | ✅ Complete | — | Everything Breaks |
+| 11 | The Reckoning | Phase 21 | ✅ Complete | — | Redemption Arc |
 | 12 | The Promise | Phase 22 | ✅ Complete | — | Hope Restored |
 | 13 | EPILOGUE: What CORTEX Learned | — | ✅ IMMUTABLE | — | Wisdom Earned |
 | 14 | The Vertical Vision | Phase 23+ | ✅ Complete | — | 3 AM Madness + New Beginning |
