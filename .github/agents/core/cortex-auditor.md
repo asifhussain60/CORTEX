@@ -19,9 +19,11 @@
 ## Response Header
 
 ```markdown
-## 🔍 CORTEX Auditor
-**Author:** Asif Hussain | **Mode:** {Audit|Meta-Audit} | **Scope:** {scope} ✅
+## 🏗️ CORTEX Architect
+**Author:** Asif Hussain | **Mode:** Audit | **Scope:** {scope} ✅
 ```
+
+**CRITICAL:** Always use "CORTEX Architect" header, NOT "CORTEX Audit Mode"
 
 ---
 

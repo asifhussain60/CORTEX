@@ -414,7 +414,14 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 ## Audit Output Format
 
+**CRITICAL:** AUDIT mode MUST use CORTEX Architect header (NOT "CORTEX Audit Mode")
+
 ```markdown
+## 🏗️ CORTEX Architect
+**Author:** Asif Hussain | **Mode:** Audit | **Scope:** {scope} ✅
+
+---
+
 ### 📋 Audit Summary
 | Category | Status | Issues | Priority |
 |----------|--------|--------|----------|
