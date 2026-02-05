@@ -2,6 +2,43 @@
 
 **CO**gnitive **R**eal-**T**ime **EX**ecution System — AI-powered development orchestrator.
 
+[![Architecture: MCP-First Service-Oriented](https://img.shields.io/badge/Architecture-MCP--First%20Service--Oriented-blue)](docs/04-architecture/mcp-architecture.md)
+[![Orchestrators: 28](https://img.shields.io/badge/Orchestrators-28-green)](docs/02-orchestrators/)
+[![MCP Tools: 35+](https://img.shields.io/badge/MCP%20Tools-35+-orange)](docs/11-mcp-tools/)
+[![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
+
+## 🏗️ Architecture: MCP-First Service-Oriented Design
+
+**CORTEX is NOT a monolithic application.** It operates as a **service-oriented architecture** where all 28 orchestrators are exposed as independent MCP (Model Context Protocol) tools.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              MCP Server (Port 8000)                     │
+│                                                         │
+│  ┌───────────────────────────────────────────────┐    │
+│  │     MCP Gateway (cortex_process_request)      │    │
+│  └───────────────────────────────────────────────┘    │
+│                        │                               │
+│      ┌─────────────────┼─────────────────┐           │
+│      ▼                 ▼                 ▼             │
+│  ┌────────┐      ┌────────┐      ┌────────┐         │
+│  │  Core  │      │ Domain │      │Support │         │
+│  │  (8)   │      │  (6)   │      │  (14)  │         │
+│  └────────┘      └────────┘      └────────┘         │
+│                                                         │
+│            28 Independent Services                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Key Benefits:**
+- ✅ **Independent Scaling:** Each orchestrator scales horizontally via replicas
+- ✅ **Language Agnostic:** MCP JSON-RPC protocol (Python, TypeScript, any language)
+- ✅ **Failure Isolation:** Circuit breaker per orchestrator (3-failure threshold)
+- ✅ **Dynamic Discovery:** Tools register at runtime, enabling hot-reload
+- ✅ **Service Isolation:** No direct imports, protocol-driven communication
+
+**Learn More:** [MCP Architecture Documentation](docs/04-architecture/mcp-architecture.md)
+
 ## Quick Start
 
 ```bash

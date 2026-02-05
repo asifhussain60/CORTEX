@@ -30,6 +30,7 @@ from cortex.lens.analyzers.config_analyzer import get_config_analyzer
 from cortex.lens.analyzers.database_analyzer import get_database_analyzer
 from cortex.lens.analyzers.api_analyzer import get_api_analyzer
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
+from cortex.lens.cache import LENSCache, get_lens_cache
 
 
 @dataclass
@@ -146,7 +147,10 @@ class LENSOrchestrator:
         self.database_analyzer = get_database_analyzer()
         self.api_analyzer = get_api_analyzer()
         
-        # Result cache (path -> dict)
+        # ENH-042: TTL-based cache with LRU eviction (replaces simple dict cache)
+        self.lens_cache = get_lens_cache()
+        
+        # Legacy cache (deprecated - will be removed in next sprint)
         self.cache: Dict[Path, Dict[str, Any]] = {}
     
     def analyze_file(self, file_path: Path) -> Dict[str, Any]:
@@ -185,7 +189,16 @@ class LENSOrchestrator:
             todos = result["comment_analysis"]["todos"]
             ```
         """
-        # Check cache first
+        # ENH-042: Check TTL-based cache with intelligent key generation
+        cache_key = self.lens_cache.generate_key(file_path, self.repo_path)
+        cached_result = self.lens_cache.get(cache_key)
+        if cached_result is not None:
+            # Cache hit - add metadata flag
+            cached_result.setdefault("_metadata", {})["cache_hit"] = True
+            cached_result["_metadata"]["cache_key"] = cache_key
+            return cached_result
+        
+        # Legacy cache check (backward compatibility - will be removed)
         if file_path in self.cache:
             return self.cache[file_path]
         
@@ -208,10 +221,15 @@ class LENSOrchestrator:
                 "analysis_time_ms": analysis_time_ms,
                 "file_path": str(file_path),
                 "analyzers_run": ["git", "ast", "comment"],
+                "cache_hit": False,
+                "cache_key": cache_key,
             }
         }
         
-        # Cache result
+        # ENH-042: Store in TTL-based cache
+        self.lens_cache.set(cache_key, context)
+        
+        # Legacy cache (backward compatibility - will be removed)
         self.cache[file_path] = context
         
         return context
@@ -521,8 +539,46 @@ class LENSOrchestrator:
         
         Forces re-analysis on next analyze_file() call.
         Useful after file modifications or for testing.
+        
+        ENH-042: Clears both TTL-based cache and legacy cache.
         """
+        self.lens_cache.clear()
         self.cache.clear()
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """
+        Get cache performance statistics.
+        
+        Returns:
+            Dictionary with cache metrics:
+            - hits: Number of cache hits
+            - misses: Number of cache misses
+            - hit_rate: Cache hit percentage
+            - total_entries: Number of cached entries
+            - total_size_mb: Memory used by cache
+            - avg_hit_latency_ms: Average cache hit latency
+            
+        ENH-042: Exposes TTL-based cache statistics for observability.
+        
+        Example:
+            ```python
+            stats = orchestrator.get_cache_stats()
+            print(f"Cache hit rate: {stats['hit_rate']}%")
+            print(f"Cache size: {stats['total_size_mb']} MB")
+            ```
+        """
+        return self.lens_cache.get_stats().to_dict()
+    
+    def cleanup_expired_cache(self) -> int:
+        """
+        Remove expired cache entries.
+        
+        Returns:
+            Number of entries removed
+            
+        ENH-042: Cleanup utility for expired TTL entries.
+        """
+        return self.lens_cache.cleanup_expired()
     
     def analyze_batch(self, file_paths: List[Path]) -> Dict[Path, Dict[str, Any]]:
         """

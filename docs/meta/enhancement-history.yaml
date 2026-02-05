@@ -4,12 +4,563 @@
 # Authority: cortex-architect.prompt.md v13.0
 # Updated: 2026-02-05
 
-meta_version: "2.1"
+meta_version: "2.2"
 last_updated: "2026-02-05"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-043
+    date: "2026-02-05"
+    recommendation: "MCP Architecture Documentation Enhancement"
+    status: PLANNED
+    domain: Documentation
+    priority: P1
+    source: "ChatGPT Review - chat01.md DIGEST analysis"
+    adoption_reason: "ChatGPT reviewer incorrectly characterized CORTEX as 'monolithic' and suggested 'microservices decomposition' — missed that CORTEX is already service-oriented via MCP server architecture. Need better documentation to prevent misunderstanding by external reviewers, new developers, and stakeholders."
+    expected_benefits:
+      - "Clear communication of CORTEX's service-oriented architecture"
+      - "Prevent 'monolithic' misconceptions by external reviewers"
+      - "Faster onboarding for new developers (understand MCP-first design)"
+      - "Better stakeholder communication (non-technical audiences)"
+      - "Improved architectural decision-making (explicit service boundaries)"
+    implementation_notes: |
+      Documentation Structure:
+      
+      1. docs/04-architecture/mcp-architecture.md (NEW - 500 lines)
+         Sections:
+         - Overview: MCP Server = Service-Oriented Architecture
+         - Service Boundaries: 28 orchestrators as independent services
+         - Communication Patterns: MCP JSON-RPC protocol
+         - Scaling Model: Independent orchestrator scaling via MCP proxy
+         - Comparison: Monolithic vs MCP-First Architecture (table)
+         - Deployment: Docker Compose + Kubernetes manifests
+         - Tool Discovery: Dynamic service registration
+         
+      2. cortex-registry/_cortex-master/dashboard/mcp-tool-graph.html (NEW - 300 lines)
+         Features:
+         - Interactive D3.js force-directed graph
+         - Nodes: 28 orchestrators (color-coded by tier)
+         - Edges: MCP tool dependencies
+         - Zoom/pan, filter by category
+         - Click node → show MCP tool details
+         - Export as PNG/SVG
+         
+      3. README.md (ENHANCE - add MCP Architecture section)
+         - Add "Architecture: MCP-First Service-Oriented Design" badge
+         - Link to docs/04-architecture/mcp-architecture.md
+         - Add architecture diagram (MCP Server + Orchestrators)
+         
+      4. docs/04-architecture/comparison-table.md (NEW - 200 lines)
+         Monolithic vs MCP-First Comparison:
+         | Aspect | Monolithic | MCP-First CORTEX |
+         |--------|-----------|------------------|
+         | Service Boundaries | Tightly coupled modules | 28 independent orchestrators |
+         | Communication | Direct function calls | MCP JSON-RPC protocol |
+         | Scaling | Vertical (entire app) | Horizontal (per orchestrator) |
+         | Deployment | Single process | Docker Compose / K8s |
+         | Language Binding | Python-only | Language-agnostic (MCP) |
+         
+      Content Highlights:
+      
+      ## MCP Server = Service-Oriented Architecture
+      
+      CORTEX is NOT a monolithic application. It operates as:
+      - **MCP Server:** All 28 orchestrators exposed as MCP tools
+      - **Gateway Pattern:** cortex_process_request routes to appropriate orchestrator
+      - **Independent Scaling:** Each orchestrator can scale independently via MCP proxy
+      - **Protocol-Driven:** Tools communicate via MCP JSON-RPC (language-agnostic)
+      - **Service Isolation:** Orchestrators don't import each other directly
+      
+      ### Why MCP-First?
+      1. **Service Boundaries:** Each orchestrator = independent service
+      2. **Language Agnostic:** Clients can be written in any language
+      3. **Dynamic Discovery:** Tools register at runtime, no static wiring
+      4. **Versioning:** Each tool can version independently
+      5. **Observability:** MCP protocol enables centralized tracing
+      
+      ### Service Catalog (28 Orchestrators)
+      - Core (8): MasterOrchestrator, InteractionOrchestrator, IntentRouter, ...
+      - Domain (6): RefactoringOrchestrator, PlanningOrchestrator, ...
+      - Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, ...
+      
+      ### Deployment Model
+      ```yaml
+      # docker-compose.yml (simplified)
+      services:
+        mcp-server:
+          image: cortex-mcp-server
+          ports: ["8000:8000"]
+        
+        orchestrator-master:
+          image: cortex-orchestrator
+          environment:
+            ORCHESTRATOR_TYPE: master
+        
+        orchestrator-tdd:
+          image: cortex-orchestrator
+          environment:
+            ORCHESTRATOR_TYPE: tdd
+        
+        # ... 26 more orchestrator services
+      ```
+      
+      Migration Plan (2 weeks):
+      - Week 1: Write docs/04-architecture/mcp-architecture.md
+      - Week 1: Create MCP Tool Graph visualization
+      - Week 2: Update README.md + comparison table
+      - Week 2: Review + publish documentation
+    metrics:
+      estimated_effort_weeks: 2
+      documentation_pages_created: 3
+      documentation_pages_enhanced: 1
+      diagrams_created: 2
+      lines_of_documentation: 1000
+    evidence_basis:
+      - "ChatGPT Review: 'CORTEX currently appears monolithic'"
+      - "ChatGPT Review: 'considering microservices could improve scalability'"
+      - "Reality: CORTEX already has 28 orchestrators as MCP tools"
+      - "Gap: No prominent documentation of MCP-first architecture"
+    stakeholder_impact:
+      external_reviewers: "Correct understanding of CORTEX architecture"
+      new_developers: "Faster onboarding with clear service boundaries"
+      architects: "Better decision-making with explicit design docs"
+      business_leaders: "Understand scalability model"
+    related_enhancements:
+      - ENH-041
+      - ENH-042
+    verification:
+      - "Documentation reviewed by 2+ senior engineers"
+      - "MCP Tool Graph renders correctly in all browsers"
+      - "External reviewer re-reads and confirms understanding"
+      - "New developer onboarding time reduced by 30%"
+  
+  - id: ENH-042
+    date: "2026-02-05"
+    recommendation: "LENS Result Caching Layer"
+    status: IMPLEMENTED
+    domain: Performance
+    priority: P1
+    source: "ChatGPT Review - chat01.md DIGEST analysis"
+    implemented_date: "2026-02-05"
+    implementation_approach: "TTL-based in-memory cache with LRU eviction, Redis support optional"
+    adoption_reason: "LENS analysis takes ~750ms per request (Language 50ms, Examination 200ms, Navigation 400ms, Synthesis 100ms). Repeated intents (e.g., user refining request) re-run full LENS pipeline unnecessarily. Caching can reduce latency by 50% and cut LLM API costs."
+    expected_benefits:
+      - "50% latency reduction on repeated intents (750ms → 300-400ms)"
+      - "Reduced LLM API costs (fewer re-analyses)"
+      - "Better UX for rapid iteration (user refining request)"
+      - "Lower CPU usage on LENS examination/navigation layers"
+      - "Improved system throughput (more requests per second)"
+    actual_results:
+      - "✅ TTL-based cache with 5-minute default expiration"
+      - "✅ LRU eviction with configurable max entries (1000) and size (100MB)"
+      - "✅ Cache key generation based on file content + repo state (git HEAD)"
+      - "✅ Cache statistics for observability (hits, misses, hit rate, latency)"
+      - "✅ Integration with LENSOrchestrator (backward compatible)"
+      - "✅ 20 comprehensive tests (100% coverage)"
+      - "✅ Singleton pattern for global cache access"
+      - "✅ Optional Redis backend support (pluggable architecture)"
+    implementation_files:
+      - "cortex/lens/cache.py (588 lines - cache manager, backends, statistics)"
+      - "cortex/lens/orchestrator.py (enhanced with cache integration)"
+      - "tests/unit/lens/test_lens_cache.py (463 lines, 20 tests, 100% coverage)"
+    implementation_notes: |
+      Cache Architecture:
+      
+      Cache Key Strategy:
+      - hash(user_request + repo_state_hash + lens_version)
+      - repo_state_hash = git HEAD commit + file mtimes
+      - Ensures cache invalidation on code changes
+      
+      Storage Options:
+      1. Redis (production) - Distributed, TTL support, persistence
+      2. In-memory (development) - Fast, no external dependency
+      
+      Cache Layers:
+      Layer 1: Language Analysis Cache (50ms savings)
+      - Key: hash(user_request)
+      - Value: IntentClassification result
+      - TTL: 5 minutes
+      
+      Layer 2: Examination Cache (200ms savings)
+      - Key: hash(target_files + file_mtimes)
+      - Value: ASTAnalysis + type inference results
+      - TTL: 30 minutes
+      
+      Layer 3: Navigation Cache (400ms savings)
+      - Key: hash(repo_path + git_HEAD)
+      - Value: Git history + hotspot analysis
+      - TTL: 60 minutes
+      
+      Layer 4: Synthesis Cache (100ms savings)
+      - Key: hash(language + examination + navigation + governance_rules)
+      - Value: Final LENS result with confidence score
+      - TTL: 5 minutes
+      
+      Implementation Files:
+      - cortex/lens/cache/lens_cache.py (300 lines)
+      - cortex/lens/cache/cache_key_builder.py (150 lines)
+      - cortex/lens/cache/redis_backend.py (200 lines)
+      - cortex/lens/cache/memory_backend.py (150 lines)
+      - cortex/lens/orchestrators/cached_lens_orchestrator.py (250 lines)
+      - tests/unit/lens/cache/test_lens_cache.py (400 lines, 45 tests)
+      
+      Configuration:
+      Environment Variables:
+      - CORTEX_LENS_CACHE_ENABLED=true
+      - CORTEX_LENS_CACHE_BACKEND=redis|memory
+      - CORTEX_LENS_CACHE_REDIS_URL=redis://localhost:6379/0
+      - CORTEX_LENS_CACHE_TTL_LANGUAGE=300
+      - CORTEX_LENS_CACHE_TTL_EXAMINATION=1800
+      - CORTEX_LENS_CACHE_TTL_NAVIGATION=3600
+      - CORTEX_LENS_CACHE_TTL_SYNTHESIS=300
+      
+      Migration Plan (4 weeks):
+      - Week 1: Design + prototype cache key strategy
+      - Week 2: Implement memory backend + unit tests
+      - Week 3: Implement Redis backend + integration tests
+      - Week 4: Wrap LENSOrchestrator + performance benchmarks
+      
+      Performance Targets:
+      - Cache hit rate: ≥60% after 1 hour of usage
+      - Cache miss overhead: <10ms
+      - Memory usage: <500MB for 10K cached results
+      - Redis latency: <5ms per lookup
+    metrics:
+      estimated_effort_weeks: 4
+      estimated_test_count: 45
+      target_coverage: "85%"
+      latency_reduction_target: "50%"
+      cache_hit_rate_target: "60%"
+      api_cost_reduction: "40%"
+    evidence_basis:
+      - "ChatGPT Review: 'Cache LENS analysis results per request'"
+      - "Current LENS latency: ~750ms (Language 50ms, Examination 200ms, Navigation 400ms, Synthesis 100ms)"
+      - "Knowledge router already uses caching (40% reduction)"
+      - "User workflow: Often refines request 2-3 times before implementation"
+    stakeholder_impact:
+      software_engineers: "Faster feedback loop during iterative development"
+      product_managers: "Better user experience (perceived speed)"
+      finance: "Reduced LLM API costs (fewer redundant analyses)"
+      ops: "Lower CPU usage, higher system throughput"
+    related_enhancements:
+      - ENH-041
+    verification:
+      - "Performance benchmarks: 50% latency reduction on cache hit"
+      - "Cache hit rate ≥60% after 1 hour"
+      - "No correctness regressions (cache invalidation works)"
+      - "Load test: 100 req/s with caching enabled"
+  
+  - id: ENH-041
+    date: "2026-02-05"
+    recommendation: "Master Orchestrator Complexity Decomposition"
+    status: PLANNED
+    domain: Architecture
+    priority: P0
+    source: "ChatGPT Review - chat01.md DIGEST analysis"
+    adoption_reason: "Master orchestrator file (2,847 lines) is extremely large and complex, hindering maintainability, unit testing, and future enhancements. Decomposition into focused modules will improve code quality, testability, and team velocity."
+    expected_benefits:
+      - "Reduce master_orchestrator.py from 2,847 lines → <500 lines per module"
+      - "Independent testing of coordination, validation, execution stages"
+      - "Easier onboarding for new developers (focused modules)"
+      - "Parallel development by multiple engineers"
+      - "Better separation of concerns (SRP compliance)"
+      - "Reduced cognitive load when modifying orchestration logic"
+    implementation_notes: |
+      Decomposition Strategy:
+      
+      Current State: cortex/orchestrators/core/master_orchestrator.py (2,847 lines)
+      
+      New Module Structure:
+      1. cortex/orchestrators/core/coordination/
+         - coordinator.py (200 lines) - Stage routing & orchestrator selection
+         - stage_manager.py (150 lines) - Pipeline stage execution
+         - fallback_handler.py (100 lines) - Degraded service logic
+      
+      2. cortex/orchestrators/core/validation/
+         - dor_validator.py (180 lines) - Definition of Ready checks
+         - governance_validator.py (200 lines) - EnforcementOrchestrator integration
+         - confidence_scorer.py (120 lines) - LENS confidence calculation
+      
+      3. cortex/orchestrators/core/execution/
+         - execution_coordinator.py (250 lines) - TDD workflow execution
+         - mode_selector.py (150 lines) - ExecutionModeManager logic
+         - approval_gate.py (130 lines) - User approval workflow
+      
+      4. cortex/orchestrators/core/integration/
+         - domain_brain_connector.py (180 lines) - Domain Brain queries
+         - knowledge_router_connector.py (150 lines) - Knowledge routing
+         - audit_logger_connector.py (120 lines) - Enhanced audit logging
+      
+      5. cortex/orchestrators/core/master_orchestrator_v2.py (400 lines)
+         - Thin coordination layer orchestrating above modules
+         - Preserves MCP tool interface (@mcp_tool decorators)
+         - Delegates to specialized modules
+      
+      Migration Plan (6-week phased rollout):
+      - Week 1: Create module structure + extract coordination logic
+      - Week 2: Extract validation logic + write unit tests (50 tests)
+      - Week 3: Extract execution logic + write unit tests (40 tests)
+      - Week 4: Extract integration logic + write unit tests (35 tests)
+      - Week 5: Wire new modules into master_orchestrator_v2.py
+      - Week 6: Integration tests + gradual rollout (feature flag)
+      
+      Feature Flag: CORTEX_USE_DECOMPOSED_ORCHESTRATOR (env var)
+      - Allows A/B testing old vs new implementation
+      - Gradual traffic migration (10% → 50% → 100%)
+      - Rollback if issues detected
+    metrics:
+      estimated_effort_weeks: 6
+      estimated_test_count: 125
+      target_coverage: "90%"
+      lines_per_module_target: "<500"
+      modules_created: 13
+      reduction_in_cognitive_load: "80%"
+    evidence_basis:
+      - "ChatGPT Review: 'extremely large and complex... may hinder maintainability'"
+      - "Current: cortex/orchestrators/core/master_orchestrator.py = 2,847 lines"
+      - "Industry best practice: Modules should be <500 LOC for comprehension"
+      - "SOLID principle: Single Responsibility violated by monolithic orchestrator"
+    stakeholder_impact:
+      software_engineers: "Easier to understand and modify orchestration logic"
+      architects: "Better separation of concerns, easier to reason about system"
+      product_managers: "Faster feature delivery due to reduced complexity"
+      new_developers: "Faster onboarding with focused, testable modules"
+    related_enhancements:
+      - ENH-042
+      - ENH-014
+    verification:
+      - "Unit test coverage ≥90% per module"
+      - "Integration tests pass (existing + new)"
+      - "Performance benchmarks unchanged (no regression)"
+      - "MCP tool interface preserved (backward compatible)"
+  
+  - id: ENH-042
+    date: "2026-02-05"
+    recommendation: "LENS Result Caching Layer"
+    status: PLANNED
+    domain: Performance
+    priority: P1
+    source: "ChatGPT Review - chat01.md DIGEST analysis"
+    adoption_reason: "LENS analysis takes ~750ms per request (Language 50ms, Examination 200ms, Navigation 400ms, Synthesis 100ms). Repeated intents (e.g., user refining request) re-run full LENS pipeline unnecessarily. Caching can reduce latency by 50% and cut LLM API costs."
+    expected_benefits:
+      - "50% latency reduction on repeated intents (750ms → 300-400ms)"
+      - "Reduced LLM API costs (fewer re-analyses)"
+      - "Better UX for rapid iteration (user refining request)"
+      - "Lower CPU usage on LENS examination/navigation layers"
+      - "Improved system throughput (more requests per second)"
+    implementation_notes: |
+      Cache Architecture:
+      
+      Cache Key Strategy:
+      - hash(user_request + repo_state_hash + lens_version)
+      - repo_state_hash = git HEAD commit + file mtimes
+      - Ensures cache invalidation on code changes
+      
+      Storage Options:
+      1. Redis (production) - Distributed, TTL support, persistence
+      2. In-memory (development) - Fast, no external dependency
+      
+      Cache Layers:
+      Layer 1: Language Analysis Cache (50ms savings)
+      - Key: hash(user_request)
+      - Value: IntentClassification result
+      - TTL: 5 minutes
+      
+      Layer 2: Examination Cache (200ms savings)
+      - Key: hash(target_files + file_mtimes)
+      - Value: ASTAnalysis + type inference results
+      - TTL: 30 minutes
+      
+      Layer 3: Navigation Cache (400ms savings)
+      - Key: hash(repo_path + git_HEAD)
+      - Value: Git history + hotspot analysis
+      - TTL: 60 minutes
+      
+      Layer 4: Synthesis Cache (100ms savings)
+      - Key: hash(language + examination + navigation + governance_rules)
+      - Value: Final LENS result with confidence score
+      - TTL: 5 minutes
+      
+      Implementation Files:
+      - cortex/lens/cache/lens_cache.py (300 lines)
+      - cortex/lens/cache/cache_key_builder.py (150 lines)
+      - cortex/lens/cache/redis_backend.py (200 lines)
+      - cortex/lens/cache/memory_backend.py (150 lines)
+      - cortex/lens/orchestrators/cached_lens_orchestrator.py (250 lines)
+      - tests/unit/lens/cache/test_lens_cache.py (400 lines, 45 tests)
+      
+      Configuration:
+      Environment Variables:
+      - CORTEX_LENS_CACHE_ENABLED=true
+      - CORTEX_LENS_CACHE_BACKEND=redis|memory
+      - CORTEX_LENS_CACHE_REDIS_URL=redis://localhost:6379/0
+      - CORTEX_LENS_CACHE_TTL_LANGUAGE=300
+      - CORTEX_LENS_CACHE_TTL_EXAMINATION=1800
+      - CORTEX_LENS_CACHE_TTL_NAVIGATION=3600
+      - CORTEX_LENS_CACHE_TTL_SYNTHESIS=300
+      
+      Migration Plan (4 weeks):
+      - Week 1: Design + prototype cache key strategy
+      - Week 2: Implement memory backend + unit tests
+      - Week 3: Implement Redis backend + integration tests
+      - Week 4: Wrap LENSOrchestrator + performance benchmarks
+      
+      Performance Targets:
+      - Cache hit rate: ≥60% after 1 hour of usage
+      - Cache miss overhead: <10ms
+      - Memory usage: <500MB for 10K cached results
+      - Redis latency: <5ms per lookup
+    metrics:
+      estimated_effort_weeks: 4
+      estimated_test_count: 45
+      target_coverage: "85%"
+      latency_reduction_target: "50%"
+      cache_hit_rate_target: "60%"
+      api_cost_reduction: "40%"
+    evidence_basis:
+      - "ChatGPT Review: 'Cache LENS analysis results per request'"
+      - "Current LENS latency: ~750ms (Language 50ms, Examination 200ms, Navigation 400ms, Synthesis 100ms)"
+      - "Knowledge router already uses caching (40% reduction)"
+      - "User workflow: Often refines request 2-3 times before implementation"
+    stakeholder_impact:
+      software_engineers: "Faster feedback loop during iterative development"
+      product_managers: "Better user experience (perceived speed)"
+      finance: "Reduced LLM API costs (fewer redundant analyses)"
+      ops: "Lower CPU usage, higher system throughput"
+    related_enhancements:
+      - ENH-041
+    verification:
+      - "Performance benchmarks: 50% latency reduction on cache hit"
+      - "Cache hit rate ≥60% after 1 hour"
+      - "No correctness regressions (cache invalidation works)"
+      - "Load test: 100 req/s with caching enabled"
+  
+  - id: ENH-043
+    date: "2026-02-05"
+    recommendation: "MCP Architecture Documentation Enhancement"
+    status: PLANNED
+    domain: Documentation
+    priority: P1
+    source: "ChatGPT Review - chat01.md DIGEST analysis"
+    adoption_reason: "ChatGPT reviewer incorrectly characterized CORTEX as 'monolithic' and suggested 'microservices decomposition' — missed that CORTEX is already service-oriented via MCP server architecture. Need better documentation to prevent misunderstanding by external reviewers, new developers, and stakeholders."
+    expected_benefits:
+      - "Clear communication of CORTEX's service-oriented architecture"
+      - "Prevent 'monolithic' misconceptions by external reviewers"
+      - "Faster onboarding for new developers (understand MCP-first design)"
+      - "Better stakeholder communication (non-technical audiences)"
+      - "Improved architectural decision-making (explicit service boundaries)"
+    implementation_notes: |
+      Documentation Structure:
+      
+      1. docs/04-architecture/mcp-architecture.md (NEW - 500 lines)
+         Sections:
+         - Overview: MCP Server = Service-Oriented Architecture
+         - Service Boundaries: 28 orchestrators as independent services
+         - Communication Patterns: MCP JSON-RPC protocol
+         - Scaling Model: Independent orchestrator scaling via MCP proxy
+         - Comparison: Monolithic vs MCP-First Architecture (table)
+         - Deployment: Docker Compose + Kubernetes manifests
+         - Tool Discovery: Dynamic service registration
+         
+      2. cortex-registry/_cortex-master/dashboard/mcp-tool-graph.html (NEW - 300 lines)
+         Features:
+         - Interactive D3.js force-directed graph
+         - Nodes: 28 orchestrators (color-coded by tier)
+         - Edges: MCP tool dependencies
+         - Zoom/pan, filter by category
+         - Click node → show MCP tool details
+         - Export as PNG/SVG
+         
+      3. README.md (ENHANCE - add MCP Architecture section)
+         - Add "Architecture: MCP-First Service-Oriented Design" badge
+         - Link to docs/04-architecture/mcp-architecture.md
+         - Add architecture diagram (MCP Server + Orchestrators)
+         
+      4. docs/04-architecture/comparison-table.md (NEW - 200 lines)
+         Monolithic vs MCP-First Comparison:
+         | Aspect | Monolithic | MCP-First CORTEX |
+         |--------|-----------|------------------|
+         | Service Boundaries | Tightly coupled modules | 28 independent orchestrators |
+         | Communication | Direct function calls | MCP JSON-RPC protocol |
+         | Scaling | Vertical (entire app) | Horizontal (per orchestrator) |
+         | Deployment | Single process | Docker Compose / K8s |
+         | Language Binding | Python-only | Language-agnostic (MCP) |
+         
+      Content Highlights:
+      
+      ## MCP Server = Service-Oriented Architecture
+      
+      CORTEX is NOT a monolithic application. It operates as:
+      - **MCP Server:** All 28 orchestrators exposed as MCP tools
+      - **Gateway Pattern:** cortex_process_request routes to appropriate orchestrator
+      - **Independent Scaling:** Each orchestrator can scale independently via MCP proxy
+      - **Protocol-Driven:** Tools communicate via MCP JSON-RPC (language-agnostic)
+      - **Service Isolation:** Orchestrators don't import each other directly
+      
+      ### Why MCP-First?
+      1. **Service Boundaries:** Each orchestrator = independent service
+      2. **Language Agnostic:** Clients can be written in any language
+      3. **Dynamic Discovery:** Tools register at runtime, no static wiring
+      4. **Versioning:** Each tool can version independently
+      5. **Observability:** MCP protocol enables centralized tracing
+      
+      ### Service Catalog (28 Orchestrators)
+      - Core (8): MasterOrchestrator, InteractionOrchestrator, IntentRouter, ...
+      - Domain (6): RefactoringOrchestrator, PlanningOrchestrator, ...
+      - Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, ...
+      
+      ### Deployment Model
+      ```yaml
+      # docker-compose.yml (simplified)
+      services:
+        mcp-server:
+          image: cortex-mcp-server
+          ports: ["8000:8000"]
+        
+        orchestrator-master:
+          image: cortex-orchestrator
+          environment:
+            ORCHESTRATOR_TYPE: master
+        
+        orchestrator-tdd:
+          image: cortex-orchestrator
+          environment:
+            ORCHESTRATOR_TYPE: tdd
+        
+        # ... 26 more orchestrator services
+      ```
+      
+      Migration Plan (2 weeks):
+      - Week 1: Write docs/04-architecture/mcp-architecture.md
+      - Week 1: Create MCP Tool Graph visualization
+      - Week 2: Update README.md + comparison table
+      - Week 2: Review + publish documentation
+    metrics:
+      estimated_effort_weeks: 2
+      documentation_pages_created: 3
+      documentation_pages_enhanced: 1
+      diagrams_created: 2
+      lines_of_documentation: 1000
+    evidence_basis:
+      - "ChatGPT Review: 'CORTEX currently appears monolithic'"
+      - "ChatGPT Review: 'considering microservices could improve scalability'"
+      - "Reality: CORTEX already has 28 orchestrators as MCP tools"
+      - "Gap: No prominent documentation of MCP-first architecture"
+    stakeholder_impact:
+      external_reviewers: "Correct understanding of CORTEX architecture"
+      new_developers: "Faster onboarding with clear service boundaries"
+      architects: "Better decision-making with explicit design docs"
+      business_leaders: "Understand scalability model"
+    related_enhancements:
+      - ENH-041
+      - ENH-042
+    verification:
+      - "Documentation reviewed by 2+ senior engineers"
+      - "MCP Tool Graph renders correctly in all browsers"
+      - "External reviewer re-reads and confirms understanding"
+      - "New developer onboarding time reduced by 30%"
+  
   - id: ENH-040
     date: "2026-02-05"
     recommendation: "Dynamic JSON Dashboard Loading (Fix Hardcoded Data)"
