@@ -1,0 +1,490 @@
+---
+# Phase 33: Architecture Alignment & Mandatory Governance Enforcement
+# Critical P0 remediation for environment detection and orchestration compliance
+
+id: "phase-33"
+name: "Architecture Alignment & Mandatory Governance Enforcement"
+version: "1.0.0"
+status: "PLANNED"
+created: "2026-02-06"
+completed: null
+authority: "30-day git history audit + specification compliance analysis"
+
+description: |
+  Addresses critical P0 architectural violations discovered through comprehensive
+  git history analysis and specification compliance audit. Implements dual-mode
+  architecture for environment detection, enforces mandatory MasterOrchestrator
+  + LENS routing for all operations, and makes governance checkpoints non-bypassable.
+  
+  Violations detected across 53 commits spanning 6 operational modes (AUDIT, DESIGN,
+  PLAN, DIGEST, INTERACTIVE, META-AUDIT) reveal systematic bypasses of specified
+  governance architecture.
+
+problem_statement: |
+  **VIOLATION 1: Environment Architecture Mismatch (P0)**
+  All 3 prompts (CORTEX.prompt.md, cortex-architect.prompt.md, cortex-ask.prompt.md)
+  declare "MCP-FIRST" architecture but immediately fail when MCP tools unavailable
+  in Copilot/development environments. Zero graceful degradation.
+  
+  **VIOLATION 2: MasterOrchestrator Bypass (P0)**
+  Prompts and agents call MCP tools directly (cortex_lens_analyze, cortex_process_request)
+  instead of routing through MasterOrchestrator → LENS Protocol → Orchestrator Selection.
+  Bypasses governance enforcement and audit trail logging.
+  
+  Specification from commits:
+  - c8bed5805 (2026-02-06): "Entry Point: MasterOrchestrator → MCP Tools"
+  - 1d28f7fd2 (2026-02-04): "Holistic Governance Enforcement System"
+  - 34df5d168 (2026-02-06): "Pre-Execution Discovery Protocol COMPLETE"
+  
+  **VIOLATION 3: Optional Governance Checkpoints (P0)**
+  Mandatory governance specifications from commits are not enforced:
+  - Challenge with 360° view (fcc3c0102) - Optional in practice
+  - Pre-Execution Discovery (34df5d168) - Documented, not mandatory
+  - Exit Gate Context Loading (1fd983128) - Bypassable
+  - DoR Approval Gate - Skippable in INTERACTIVE mode
+  
+  **VIOLATION 4: DIGEST Mode Zero Usage (P1)**
+  Despite specification in all prompts, zero DIGEST mode commits in 30 days.
+  No continuous learning evidence, no session extractions tracked.
+
+objective:
+  summary: |
+    Implement environment-aware dual-mode architecture with mandatory governance
+    enforcement. ALL operations must route through MasterOrchestrator + LENS
+    protocol regardless of environment (MCP/Copilot/Development).
+    
+    Make governance checkpoints non-bypassable: Challenge generation, Pre-Execution
+    Discovery, Exit Gate, DoR approval required for all code-impacting operations.
+
+  align_with:
+    - Commit c8bed5805: MasterOrchestrator as single entry point
+    - Commit 1d28f7fd2: Holistic governance (4-layer defense)
+    - Commit 34df5d168: Pre-Execution Discovery mandatory
+    - Commit fcc3c0102: Challenge framework with 360° view
+    - ENH-046: Exit Gate context consumption governance
+    - CORE-002: Inline chat only (no markdown generation)
+    - CORE-030: Implementation Truth (verify code, not docs)
+    - CORE-035: Single canonical implementation
+
+scope:
+  in_scope:
+    - Environment detection layer (MCP/Copilot/Development)
+    - Tool adapter interface (routes MCP or VS Code tools)
+    - MasterOrchestrator mandatory gateway enforcement
+    - LENS protocol integration (Language→Examination→Navigation→Synthesis)
+    - Challenge Engine non-bypassable integration
+    - Pre-Execution Discovery mandatory checkpoints
+    - Exit Gate forced routing (all context loading)
+    - DoR approval gate enforcement
+    - DIGEST mode activation tracking
+    - Prompt updates (3 files: CORTEX, cortex-architect, cortex-ask)
+    - Agent updates (11 core agents)
+    - Mode compliance validation (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)
+
+  out_of_scope:
+    - MCP server infrastructure changes
+    - VS Code extension development
+    - New orchestrator creation
+    - Dashboard integration
+
+deliverables:
+  - file: "cortex/brain/core/environment_detector.py"
+    status: "PLANNED"
+    lines: 180
+    purpose: "Detect execution environment (MCP/Copilot/Dev) and configure adapter"
+    key_classes:
+      - "EnvironmentType: Enum (MCP_SERVER, COPILOT, DEVELOPMENT)"
+      - "EnvironmentDetector: Detection logic"
+      - "EnvironmentConfig: Runtime configuration"
+    key_methods:
+      - "detect_environment() -> EnvironmentType"
+      - "get_tool_adapter() -> IToolAdapter"
+      - "is_mcp_available() -> bool"
+      - "is_copilot_available() -> bool"
+    tests: 12
+
+  - file: "cortex/brain/core/tool_adapter.py"
+    status: "PLANNED"
+    lines: 320
+    purpose: "Unified tool interface routing MCP or VS Code tools based on environment"
+    key_classes:
+      - "IToolAdapter: Interface"
+      - "MCPToolAdapter: Production MCP server tools"
+      - "CopilotToolAdapter: VS Code Copilot tools"
+      - "DevelopmentToolAdapter: Local development tools"
+    key_methods:
+      - "analyze_code(target) -> Analysis"
+      - "search_workspace(query) -> Results"
+      - "detect_duplicates(path) -> Duplicates"
+      - "git_history(hours) -> History"
+    tests: 18
+
+  - file: "cortex/brain/core/master_orchestrator_gateway.py"
+    status: "PLANNED"
+    lines: 280
+    purpose: "Mandatory entry point enforcing MasterOrchestrator + LENS routing"
+    key_classes:
+      - "MasterOrchestratorGateway: Single entry point"
+      - "LENSProtocol: Language→Examination→Navigation→Synthesis"
+      - "RoutingDecision: Orchestrator + tool selection"
+    key_methods:
+      - "process_request(request) -> Response"
+      - "apply_lens_protocol(request) -> LENSContext"
+      - "route_to_orchestrator(context) -> Orchestrator"
+      - "enforce_governance(context) -> ValidationResult"
+    tests: 22
+
+  - file: "cortex/brain/governance/mandatory_checkpoints.py"
+    status: "PLANNED"
+    lines: 240
+    purpose: "Non-bypassable governance checkpoints (Challenge, Discovery, DoR, Exit Gate)"
+    key_classes:
+      - "CheckpointType: Enum (CHALLENGE, DISCOVERY, DOR_APPROVAL, EXIT_GATE)"
+      - "MandatoryCheckpoint: Base checkpoint enforcer"
+      - "ChallengeCheckpoint: 360° view challenge generation"
+      - "DiscoveryCheckpoint: Pre-execution feature discovery"
+      - "DoRCheckpoint: Definition of Ready approval"
+      - "ExitGateCheckpoint: Context loading governance"
+    key_methods:
+      - "enforce_checkpoint(context) -> CheckpointResult"
+      - "is_bypassable(context) -> bool"  # Always returns False
+      - "generate_challenge(request) -> Challenge"
+      - "discover_existing(scope) -> DiscoveryReport"
+    tests: 20
+
+  - file: "cortex/brain/observability/digest_tracker.py"
+    status: "PLANNED"
+    lines: 140
+    purpose: "Track DIGEST mode activations and learning extractions"
+    key_classes:
+      - "DigestSession: Single digest session"
+      - "DigestTracker: Session tracking"
+      - "LearningExtraction: Extracted knowledge"
+    key_methods:
+      - "start_digest_session(file_path) -> DigestSession"
+      - "complete_digest_session(session_id, learnings)"
+      - "get_digest_statistics() -> DigestStats"
+    tests: 8
+
+  - file: ".github/prompts/CORTEX.prompt.md"
+    status: "PLANNED"
+    changes:
+      - "Add environment detection section (lines 50-80)"
+      - "Replace direct MCP tool calls with MasterOrchestratorGateway routing"
+      - "Add mandatory checkpoint enforcement (lines 200-230)"
+      - "Document dual-mode architecture (MCP/Copilot)"
+      - "Remove 'MCP-FIRST only' language"
+    tests: 0  # Documentation
+
+  - file: ".github/prompts/cortex-architect.prompt.md"
+    status: "PLANNED"
+    changes:
+      - "Add environment detection to PRE-FLIGHT (lines 20-35)"
+      - "Enforce MasterOrchestrator routing for all modes"
+      - "Make Challenge generation mandatory for DESIGN mode"
+      - "Make Pre-Execution Discovery mandatory for IMPLEMENT"
+      - "Add DIGEST mode activation tracking"
+      - "Update mode compliance validation"
+    tests: 0  # Documentation
+
+  - file: ".github/prompts/cortex-ask.prompt.md"
+    status: "PLANNED"
+    changes:
+      - "Add environment detection"
+      - "Route truth verification through MasterOrchestrator"
+      - "Remove direct cortex_lens_analyze calls"
+      - "Add MCP-FIRST with Copilot fallback section"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/CORTEX.md"
+    status: "PLANNED"
+    changes:
+      - "Update MCP-FIRST section with environment detection"
+      - "Document tool adapter usage"
+      - "Add mandatory gateway routing"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/cortex-architect.md"
+    status: "PLANNED"
+    changes:
+      - "Add environment-aware HEXA-mode operation"
+      - "Enforce mandatory checkpoints per mode"
+      - "Update tool routing to use gateway"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/cortex-auditor.md"
+    status: "PLANNED"
+    changes:
+      - "Add architecture violation detection (environment mismatch)"
+      - "Add orchestration bypass detection"
+      - "Add governance checkpoint validation"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/cortex-designer.md"
+    status: "PLANNED"
+    changes:
+      - "Enforce Challenge checkpoint (non-bypassable)"
+      - "Enforce Pre-Execution Discovery (mandatory)"
+      - "Route through MasterOrchestratorGateway"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/cortex-digest.md"
+    status: "PLANNED"
+    changes:
+      - "Add session tracking integration"
+      - "Add learning extraction metrics"
+      - "Add zero-usage detection alerts"
+    tests: 0  # Documentation
+
+  - file: ".github/agents/core/cortex-interactive.md"
+    status: "PLANNED"
+    changes:
+      - "Add DoR gate (non-bypassable for code operations)"
+      - "Route through MasterOrchestrator even for read-only"
+    tests: 0  # Documentation
+
+  - file: "tests/integration/test_environment_detection.py"
+    status: "PLANNED"
+    lines: 220
+    purpose: "Test environment detection and tool adapter routing"
+    tests: 15
+
+  - file: "tests/integration/test_mandatory_checkpoints.py"
+    status: "PLANNED"
+    lines: 280
+    purpose: "Test governance checkpoint enforcement (non-bypassable)"
+    tests: 18
+
+  - file: "tests/integration/test_master_orchestrator_gateway.py"
+    status: "PLANNED"
+    lines: 320
+    purpose: "Test mandatory routing through MasterOrchestrator + LENS"
+    tests: 22
+
+architecture_diagram: |
+  User Request
+       ↓
+  Environment Detection (MCP/Copilot/Dev)
+       ↓
+  Tool Adapter Selection
+       ↓
+  MasterOrchestrator Gateway (MANDATORY - no bypass)
+       ↓
+  LENS Protocol (Language→Examination→Navigation→Synthesis)
+       ↓
+  Mandatory Checkpoints
+   ├─ Challenge Generation (DESIGN mode)
+   ├─ Pre-Execution Discovery (IMPLEMENT intent)
+   ├─ DoR Approval Gate (code operations)
+   └─ Exit Gate (context loading)
+       ↓
+  Orchestrator Selection (from wiring.yaml)
+       ↓
+  Tool Execution (via adapter)
+       ↓
+  Response (inline, no markdown files)
+
+key_design_decisions:
+  environment_detection:
+    rationale: "Prompts must work in both production (MCP) and development (Copilot) environments"
+    approach: "Runtime detection with tool adapter pattern"
+    fallback: "Graceful degradation to VS Code tools when MCP unavailable"
+
+  mandatory_gateway:
+    rationale: "Prevent governance bypass through direct tool calls"
+    approach: "Single entry point (MasterOrchestratorGateway) enforced in all prompts/agents"
+    enforcement: "Prompts explicitly state 'ALL operations through gateway'"
+
+  non_bypassable_checkpoints:
+    rationale: "Governance specifications from commits must be enforced, not optional"
+    approach: "Checkpoint classes with is_bypassable() always returning False"
+    coverage: "Challenge (DESIGN), Discovery (IMPLEMENT), DoR (code ops), Exit Gate (context)"
+
+  lens_integration:
+    rationale: "Uniform orchestration protocol regardless of environment"
+    approach: "LENS protocol (L→E→N→S) applied before orchestrator selection"
+    benefit: "Consistent governance, complete audit trails, testable flow"
+
+mode_compliance_matrix:
+  AUDIT:
+    specifications:
+      - "Autonomous execution (no user approval)"
+      - "Evidence-based findings (file paths, line numbers)"
+      - "P0-P3 classification"
+      - "Inline chat only (CORE-002)"
+    violations_detected:
+      - "Markdown file generation still possible"
+      - "P0 issues not auto-fixed (Phase 26 spec violated)"
+    remediation:
+      - "Enforce CORE-002 in MarkdownSuppressionAgent"
+      - "Add P0 auto-fix requirement to cortex-auditor.md"
+
+  DESIGN:
+    specifications:
+      - "TDD-first (tests before code)"
+      - "Challenge with 360° view (fcc3c0102)"
+      - "Pre-Execution Discovery (34df5d168)"
+      - "Incremental execution (<500 LOC)"
+    violations_detected:
+      - "Challenge generation optional (not enforced)"
+      - "Discovery optional (documented, not mandatory)"
+    remediation:
+      - "ChallengeCheckpoint non-bypassable"
+      - "DiscoveryCheckpoint mandatory for IMPLEMENT"
+
+  PLAN:
+    specifications:
+      - "ROI-based prioritization"
+      - "Inline progress tracking"
+      - "Phase registry authority"
+      - "Progress indicators for code-action modes only"
+    violations_detected:
+      - "Progress bars used in non-code-action modes (AUDIT/DIGEST)"
+      - "Phase-31A conflict with ENH-046 (screaming vs. visual bars)"
+    remediation:
+      - "Mode detection in MinimalPlanSpine"
+      - "Suppress progress for AUDIT/DIGEST/INTERACTIVE/META-AUDIT"
+
+  DIGEST:
+    specifications:
+      - "Auto-detect Copilot chat format"
+      - "Extract learnings → enhance CORTEX"
+      - "Session tracking"
+    violations_detected:
+      - "Zero usage in 30 days (0 commits)"
+      - "No session tracking implemented"
+      - "No learning extraction metrics"
+    remediation:
+      - "DigestTracker implementation"
+      - "Add to cortex-architect.prompt.md mandatory triggers"
+      - "Alert on zero DIGEST sessions per week"
+
+  INTERACTIVE:
+    specifications:
+      - "No TDD requirement"
+      - "No DoR gate for questions"
+      - "Educational/exploratory focus"
+    violations_detected:
+      - "DoR gate bypassable for code operations"
+      - "No distinction between read-only vs. code-impacting"
+    remediation:
+      - "Add operation type detection"
+      - "DoR gate mandatory for code operations even in INTERACTIVE"
+
+  META_AUDIT:
+    specifications:
+      - "Prompt/agent self-analysis"
+      - "Enhancement recommendations"
+      - "Drift detection"
+    violations_detected:
+      - "No systematic execution (2 commits only)"
+      - "No scheduled/triggered execution"
+    remediation:
+      - "Add weekly META-AUDIT trigger"
+      - "Add to /audit command flow"
+
+integration_points:
+  dependencies:
+    - "cortex/brain/core/context_synthesis_gateway.py (ENH-046)"
+    - "cortex/orchestrators/response/minimal_plan_spine.py (Phase 31A)"
+    - "cortex/brain/governance/enforcement_orchestrator.py"
+    - "cortex/wiring/specifications/wiring.yaml"
+
+  affected_systems:
+    - "All 28 orchestrators (routing change)"
+    - "All 3 prompts (CORTEX, architect, ask)"
+    - "All 11 core agents"
+    - "MCP tool catalog"
+    - "Governance enforcement (4-layer defense)"
+
+metrics:
+  compliance:
+    target: "100% operations through MasterOrchestratorGateway"
+    measurement: "Gateway invocation count vs. total operations"
+    
+  governance:
+    target: "Zero checkpoint bypasses"
+    measurement: "Checkpoint enforcement logs (all BLOCKED or PASS)"
+    
+  environment:
+    target: "Zero failures due to tool unavailability"
+    measurement: "Environment detection success rate"
+    
+  digest:
+    target: ">0 DIGEST sessions per week"
+    measurement: "DigestTracker statistics"
+
+verification_checklist:
+  - "✅ Environment detection works in MCP/Copilot/Dev"
+  - "✅ Tool adapter routes correctly per environment"
+  - "✅ MasterOrchestratorGateway is mandatory entry point"
+  - "✅ LENS protocol executes uniformly"
+  - "✅ Challenge checkpoint non-bypassable for DESIGN"
+  - "✅ Discovery checkpoint non-bypassable for IMPLEMENT"
+  - "✅ DoR gate enforced for code operations"
+  - "✅ Exit Gate used for all context loading"
+  - "✅ DIGEST mode tracking active"
+  - "✅ All 3 prompts updated"
+  - "✅ All 11 agents updated"
+  - "✅ 95 tests passing (80 new + 15 updated)"
+
+roi_calculation:
+  architectural_impact: 0.85  # Governance layer + orchestration enforcement
+  efficiency_gain: 0.60       # Eliminates tool unavailability failures
+  accuracy_improvement: 0.80  # Enforces Implementation Truth via checkpoints
+  effort_cost: 0.55           # 2 weeks, 95 tests, 3 prompts + 11 agents
+  blocking_severity: 0.90     # Blocks production deployment (P0)
+  
+  formula: "(0.85 * 0.35) + (0.60 * 0.25) + (0.80 * 0.25) - (0.55 * 0.10) + (0.90 * 0.05)"
+  roi_score: 0.77             # IMMEDIATE tier (≥0.75)
+
+priority: "🔴 IMMEDIATE"
+effort: "2 weeks"
+test_count: 95
+blocking_phases: 
+  - "Phase 34: Production deployment"
+  - "Phase 35: Multi-tenant SaaS"
+  - "All future phases (governance foundation)"
+
+next_phases:
+  - phase: "phase-34"
+    name: "Production Deployment Readiness"
+    description: "Deploy CORTEX with dual-mode architecture to production"
+    depends_on: ["phase-33"]
+
+rollback_plan:
+  - "Revert all prompt changes (git checkout)"
+  - "Revert all agent changes"
+  - "Remove new files (environment_detector.py, tool_adapter.py, etc.)"
+  - "Note: Architecture will revert to MCP-only (broken in Copilot)"
+
+notes:
+  - "P0 priority: Blocks production deployment"
+  - "Discovered via 30-day git history audit (53 commits analyzed)"
+  - "Affects 100% of operations (all prompts, all agents, all orchestrators)"
+  - "Fundamental architecture change: MCP-only → Dual-mode"
+  - "Governance shift: Optional checkpoints → Mandatory enforcement"
+  - "Learning: DIGEST mode specified but never used (0 commits in 30 days)"
+
+violations_by_commit:
+  direct_tool_calls:
+    - "c8bed5805: Declares MasterOrchestrator entry point but not enforced"
+    - "1d28f7fd2: Holistic governance system but checkpoints bypassable"
+    - "fcc3c0102: Challenge framework but generation optional"
+    
+  environment_mismatch:
+    - "All 53 commits: Assume MCP availability without fallback"
+    - "Zero commits: Address Copilot environment compatibility"
+    
+  governance_bypass:
+    - "34df5d168: Pre-Execution Discovery COMPLETE but not mandatory"
+    - "1fd983128: Exit Gate integration but usage optional"
+
+root_cause_analysis:
+  issue: "Architecture assumes production MCP environment but executes in development Copilot"
+  root_cause: "Prompts/agents designed for single environment (MCP-only)"
+  manifestation: "Immediate failure when MCP tools unavailable, governance bypasses"
+  solution: "Dual-mode architecture with mandatory gateway enforcement"
+  prevention: "Environment detection at startup, tool adapter pattern, checkpoint enforcement"
+
+---
