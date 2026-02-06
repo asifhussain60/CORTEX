@@ -1,0 +1,774 @@
+phase_id: "phase-34"
+title: "Continuous Tech Intelligence System"
+status: "active"
+priority: "P0"
+era: "2026-Q1"
+created: "2026-02-06"
+author: "Asif Hussain"
+orchestrator: "MasterOrchestrator"
+
+## EXECUTIVE SUMMARY
+#
+# CORTEX shifts from reactive to proactive tech learning.
+# TechIntelligenceOrchestrator becomes central knowledge hub for ALL orchestrators.
+# Learning triggers: git webhooks, file patterns, scheduled scans, cross-repo analysis.
+# Result: Zero-wait onboarding, predictive capability synthesis, ecosystem awareness.
+
+objective: |
+  Create TechIntelligenceOrchestrator as the central knowledge synthesis engine that:
+  1. Continuously monitors tech ecosystem (repos, files, trends, CVEs)
+  2. Proactively generates best practices, TDD patterns, security rules BEFORE user needs
+  3. Serves all orchestrators with readiness scores and capability verification
+  4. Enables instant onboarding through pre-learned knowledge
+  5. Self-improves through cross-repo pattern recognition
+
+problem_statement: |
+  Current Issues:
+  - RepositoryOnboardingOrchestrator learns reactively (user waits)
+  - No cross-repo intelligence (each onboarding starts from zero)
+  - Missing tech stacks require manual intervention
+  - TDD/security capabilities assumed, not verified
+  - No predictive learning (CORTEX always catching up)
+  
+  Impact:
+  - Slow onboarding (research delays)
+  - Inconsistent quality (knowledge gaps)
+  - Poor scalability (duplicate learning per repo)
+  - User frustration (unexpected capability failures)
+
+solution_approach: |
+  Architecture: Event-Driven Continuous Learning
+  
+  Core Component: TechIntelligenceOrchestrator
+  - Location: cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py
+  - Role: Central knowledge hub for ALL orchestrators
+  - Model: Publisher-subscriber pattern (orchestrators subscribe to tech updates)
+  
+  Learning Triggers (Multi-Channel):
+  1. Git Webhooks → File changes detected
+  2. Scheduled Scans → Nightly ecosystem analysis
+  3. Onboarding Events → Immediate gap analysis
+  4. Cross-Repo Patterns → Predictive synthesis
+  5. External Feeds → CVE, framework updates, language releases
+  
+  Knowledge Artifacts Generated:
+  - Best practices YAMLs (cortex/knowledge/best-practices/{language}/*)
+  - TDD patterns (cortex/knowledge/testing/{framework}/*)
+  - Security rules (cortex/knowledge/security/{tech-stack}/*)
+  - Linting configs (.eslintrc, .pylintrc templates)
+  - CI/CD templates (language-specific workflows)
+  
+  Integration Model:
+  - Every orchestrator queries TechIntelligenceOrchestrator at init
+  - Readiness check: "Can I handle {tech-stack}?" → Score 0-1.0
+  - Low score (<0.7) → Triggers immediate learning cycle
+  - High score (≥0.7) → Proceeds with confidence
+
+## ARCHITECTURE
+
+components:
+  tech_intelligence_orchestrator:
+    path: "cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py"
+    role: "Central tech knowledge hub"
+    responsibilities:
+      - "Monitor git repos for tech stack changes"
+      - "Detect new languages/frameworks/tools"
+      - "Generate missing best practices/TDD patterns"
+      - "Maintain readiness scores per tech stack"
+      - "Serve capability queries from all orchestrators"
+      - "Publish tech update events to subscribers"
+    
+    sub_components:
+      ecosystem_scanner:
+        description: "File pattern analysis across all repos"
+        triggers:
+          - "Git webhook events"
+          - "Scheduled scans (nightly)"
+          - "Manual scan requests"
+        outputs:
+          - "Detected tech stacks (language + frameworks)"
+          - "Missing capability gaps"
+          - "Trend analysis (rising tech adoption)"
+      
+      knowledge_synthesizer:
+        description: "Auto-generates missing knowledge artifacts"
+        inputs:
+          - "Tech stack identifier"
+          - "Existing knowledge base"
+          - "External best practice sources"
+        outputs:
+          - "Best practices YAML files"
+          - "TDD framework patterns"
+          - "Security scanning configs"
+          - "Linting rule templates"
+        intelligence_sources:
+          - "Official framework documentation"
+          - "Industry best practices (OWASP, CWE)"
+          - "Community standards (PEP, PSR, JSR)"
+          - "CVE databases (security patterns)"
+      
+      readiness_engine:
+        description: "Calculates CORTEX readiness per tech stack"
+        scoring_factors:
+          - "Best practices coverage (0-0.4 weight)"
+          - "TDD framework support (0-0.3 weight)"
+          - "Security tooling availability (0-0.2 weight)"
+          - "Cross-repo usage frequency (0-0.1 weight)"
+        thresholds:
+          high_confidence: 0.7
+          medium_confidence: 0.5
+          low_confidence: "<0.5"
+        actions:
+          - "Score <0.5 → Block operation, trigger learning"
+          - "Score 0.5-0.7 → Proceed with warnings"
+          - "Score ≥0.7 → Full confidence proceed"
+      
+      pattern_predictor:
+        description: "Predicts future tech needs from trends"
+        analysis:
+          - "If 3+ repos use React → Auto-learn React comprehensively"
+          - "If TypeScript adoption rising → Pre-generate TypeScript best practices"
+          - "If Python 3.12 detected → Update Python patterns proactively"
+        benefits:
+          - "Zero user wait on 4th React repo"
+          - "Ecosystem-aware (not single-repo reactive)"
+          - "Stays ahead of user needs"
+
+  tech_intelligence_agent:
+    path: "cortex/agents/tech_intelligence_agent.py"
+    role: "Execution engine for TechIntelligenceOrchestrator"
+    capabilities:
+      - "File pattern recognition (language detection)"
+      - "Framework identification (package.json, requirements.txt, etc.)"
+      - "Best practice research (external API queries)"
+      - "YAML generation (knowledge artifact creation)"
+      - "Readiness scoring calculation"
+
+  integration_layer:
+    description: "How orchestrators integrate with tech intelligence"
+    pattern: |
+      class AnyOrchestrator:
+          def __init__(self):
+              self.tech_intel = TechIntelligenceOrchestrator()
+          
+          async def execute(self, request):
+              # Check readiness BEFORE execution
+              tech_stack = self.detect_tech_stack(request)
+              readiness = await self.tech_intel.check_readiness(tech_stack)
+              
+              if readiness.score < 0.7:
+                  # Trigger immediate learning
+                  await self.tech_intel.learn_tech_stack(tech_stack)
+                  readiness = await self.tech_intel.check_readiness(tech_stack)
+              
+              if readiness.score < 0.5:
+                  raise InsufficientCapabilityError(
+                      f"CORTEX readiness for {tech_stack}: {readiness.score}"
+                  )
+              
+              # Proceed with confidence
+              return await self._execute_with_tech_support(request, readiness)
+
+## ORCHESTRATOR INTEGRATION MAP
+
+orchestrators_requiring_enhancement:
+  master_orchestrator:
+    integration: "Central coordinator - queries tech intelligence for all requests"
+    enhancements:
+      - "Init tech intelligence check on startup"
+      - "Subscribe to tech update events"
+      - "Route low-readiness requests to learning cycle"
+    priority: "P0"
+  
+  tdd_orchestrator:
+    integration: "Query test framework capabilities BEFORE implementation"
+    enhancements:
+      - "Verify pytest/jest/junit patterns exist"
+      - "Check mocking library support"
+      - "Validate code coverage tools available"
+      - "Auto-generate test templates if missing"
+    priority: "P0"
+  
+  repository_onboarding_orchestrator:
+    integration: "Becomes knowledge applier (not generator)"
+    enhancements:
+      - "Query pre-learned tech stack knowledge"
+      - "Apply existing best practices immediately"
+      - "Only trigger learning for truly novel tech"
+      - "Zero-wait onboarding for known stacks"
+    priority: "P0"
+  
+  refactoring_orchestrator:
+    integration: "Language-specific refactoring patterns pre-loaded"
+    enhancements:
+      - "Query refactoring rules per language"
+      - "Verify linter/formatter availability"
+      - "Check AST parser support"
+      - "Auto-install missing refactoring tools"
+    priority: "P1"
+  
+  security_checkpoint_agent:
+    integration: "Proactive vulnerability pattern learning"
+    enhancements:
+      - "CVE feed integration (continuous updates)"
+      - "Security scanning tool verification"
+      - "OWASP rule templates per stack"
+      - "Auto-update security patterns from feeds"
+    priority: "P0"
+  
+  documentation_orchestrator:
+    integration: "Framework doc conventions pre-learned"
+    enhancements:
+      - "Query documentation standards per stack"
+      - "Verify doc generator availability (Sphinx, JSDoc)"
+      - "Check API documentation patterns"
+      - "Auto-generate doc templates"
+    priority: "P2"
+  
+  domain_orchestrator:
+    integration: "Industry domain patterns pre-researched"
+    enhancements:
+      - "Financial services compliance patterns"
+      - "Healthcare HIPAA/HL7 standards"
+      - "E-commerce PCI-DSS rules"
+      - "Domain-specific best practices loaded"
+    priority: "P2"
+  
+  enforcement_orchestrator:
+    integration: "Tech-specific governance rules"
+    enhancements:
+      - "Language-specific CORE rules (e.g., Python typing)"
+      - "Framework-specific patterns (React hooks rules)"
+      - "Security gates per tech stack"
+      - "Compliance verification per domain"
+    priority: "P1"
+  
+  lens_orchestrator:
+    integration: "Multi-language analysis capability verification"
+    enhancements:
+      - "AST parser availability check"
+      - "Language server protocol support"
+      - "Static analysis tool verification"
+      - "Auto-install missing analysis tools"
+    priority: "P1"
+  
+  workflow_orchestrator:
+    integration: "Tech-specific workflow patterns"
+    enhancements:
+      - "CI/CD pipeline templates per stack"
+      - "Build tool verification (webpack, maven, cargo)"
+      - "Deployment pattern availability"
+      - "Auto-generate missing workflow configs"
+    priority: "P2"
+
+## SELF-ENABLING PATTERNS (Comprehensive List)
+
+patterns_needing_intelligence:
+  - pattern_id: "INTL-001"
+    name: "Proactive Best Practice Synthesis"
+    description: "Auto-generate missing best practice YAMLs before user needs"
+    applies_to:
+      - "RepositoryOnboardingOrchestrator"
+      - "DocumentationOrchestrator"
+      - "RefactoringOrchestrator"
+    implementation: "TechIntelligenceOrchestrator.knowledge_synthesizer"
+  
+  - pattern_id: "INTL-002"
+    name: "TDD Framework Auto-Discovery"
+    description: "Detect test frameworks and generate patterns proactively"
+    applies_to:
+      - "TDDOrchestrator"
+      - "RepositoryOnboardingOrchestrator"
+    implementation: "Test framework detection + pattern generation"
+  
+  - pattern_id: "INTL-003"
+    name: "Security Intelligence Feed"
+    description: "Continuous CVE monitoring and rule updates"
+    applies_to:
+      - "SecurityCheckpointAgent"
+      - "EnforcementOrchestrator"
+    implementation: "External CVE feed integration + auto-rule generation"
+  
+  - pattern_id: "INTL-004"
+    name: "Cross-Repo Pattern Learning"
+    description: "Learn from multiple repos to predict future needs"
+    applies_to:
+      - "MasterOrchestrator"
+      - "PatternPredictor"
+    implementation: "Multi-repo analysis + trend detection"
+  
+  - pattern_id: "INTL-005"
+    name: "Language Evolution Tracking"
+    description: "Monitor language releases and update patterns"
+    applies_to:
+      - "TechIntelligenceOrchestrator"
+      - "All orchestrators"
+    implementation: "Release feed monitoring + proactive updates"
+  
+  - pattern_id: "INTL-006"
+    name: "Framework Migration Intelligence"
+    description: "Learn migration patterns (React 17→18, Python 3.10→3.12)"
+    applies_to:
+      - "RefactoringOrchestrator"
+      - "RepositoryOnboardingOrchestrator"
+    implementation: "Migration pattern database + version detection"
+  
+  - pattern_id: "INTL-007"
+    name: "Tool Availability Verification"
+    description: "Check linters/formatters/analyzers exist before operations"
+    applies_to:
+      - "LENSOrchestrator"
+      - "RefactoringOrchestrator"
+      - "EnforcementOrchestrator"
+    implementation: "Tool registry + auto-installation triggers"
+  
+  - pattern_id: "INTL-008"
+    name: "Domain Compliance Pre-Loading"
+    description: "Pre-research industry compliance standards"
+    applies_to:
+      - "DomainOrchestrator"
+      - "SecurityCheckpointAgent"
+    implementation: "Compliance database + domain detection"
+  
+  - pattern_id: "INTL-009"
+    name: "Ecosystem Trend Prediction"
+    description: "Predict tech adoption trends and prepare proactively"
+    applies_to:
+      - "MasterOrchestrator"
+      - "TechIntelligenceOrchestrator"
+    implementation: "Cross-repo analytics + predictive modeling"
+  
+  - pattern_id: "INTL-010"
+    name: "Knowledge Gap Auto-Healing"
+    description: "Detect missing capabilities and auto-generate artifacts"
+    applies_to:
+      - "All orchestrators"
+    implementation: "Gap detection + knowledge synthesis loop"
+
+## LEARNING TRIGGER SPECIFICATION
+
+triggers:
+  git_webhook:
+    event_types:
+      - "push"
+      - "pull_request"
+      - "tag"
+    analysis:
+      - "File diff analysis (new languages/frameworks)"
+      - "Package file changes (dependencies added)"
+      - "Config file modifications (tool adoption)"
+    response_time: "<5 seconds"
+    priority: "P0"
+  
+  scheduled_scan:
+    frequency: "nightly (02:00 UTC)"
+    scope:
+      - "All onboarded repositories"
+      - "External tech trend feeds"
+      - "CVE databases"
+    analysis:
+      - "Cross-repo pattern detection"
+      - "Tech adoption trends"
+      - "Missing capability gaps"
+    duration: "<30 minutes"
+    priority: "P2"
+  
+  onboarding_event:
+    trigger: "RepositoryOnboardingOrchestrator.onboard()"
+    immediate_checks:
+      - "Tech stack detection"
+      - "Readiness score calculation"
+      - "Gap identification"
+    response:
+      - "Score ≥0.7 → Proceed immediately"
+      - "Score <0.7 → Trigger learning cycle"
+    max_learning_time: "5 minutes"
+    priority: "P0"
+  
+  cross_repo_threshold:
+    condition: "3+ repos using same tech stack"
+    action: "Comprehensive learning cycle (predict 4th repo needs)"
+    artifacts:
+      - "Complete best practices suite"
+      - "TDD framework patterns"
+      - "Security scanning configs"
+      - "CI/CD pipeline templates"
+    priority: "P1"
+  
+  external_feed:
+    sources:
+      - "CVE feeds (NVD, GitHub Security)"
+      - "Framework release notes (GitHub, official sites)"
+      - "Language version releases (python.org, nodejs.org)"
+      - "Best practice updates (OWASP, CWE)"
+    frequency: "hourly check"
+    response:
+      - "Security: Immediate rule updates"
+      - "Releases: Proactive pattern updates"
+      - "Best practices: Knowledge base enhancement"
+    priority: "P1"
+
+## KNOWLEDGE ARTIFACT STRUCTURE
+
+artifact_types:
+  best_practices:
+    location: "cortex/knowledge/best-practices/{language}/{framework}/"
+    schema:
+      - "language: str"
+      - "framework: str | null"
+      - "version: str"
+      - "practices: List[Practice]"
+      - "anti_patterns: List[AntiPattern]"
+      - "source: str (URL or authority)"
+      - "last_updated: datetime"
+    example: "cortex/knowledge/best-practices/python/django/security.yaml"
+  
+  tdd_patterns:
+    location: "cortex/knowledge/testing/{framework}/"
+    schema:
+      - "framework: str (pytest, jest, junit)"
+      - "language: str"
+      - "test_structure: dict"
+      - "mocking_patterns: List[Pattern]"
+      - "assertion_styles: List[Style]"
+      - "coverage_config: dict"
+    example: "cortex/knowledge/testing/pytest/patterns.yaml"
+  
+  security_rules:
+    location: "cortex/knowledge/security/{tech-stack}/"
+    schema:
+      - "tech_stack: str"
+      - "vulnerabilities: List[Vulnerability]"
+      - "scanning_tools: List[Tool]"
+      - "owasp_mapping: dict"
+      - "cve_references: List[str]"
+    example: "cortex/knowledge/security/nodejs/owasp-top-10.yaml"
+  
+  tool_configs:
+    location: "cortex/knowledge/tooling/{language}/"
+    schema:
+      - "tool_type: str (linter, formatter, analyzer)"
+      - "tool_name: str"
+      - "default_config: str (file content)"
+      - "installation_command: str"
+      - "verification_command: str"
+    example: "cortex/knowledge/tooling/python/pylint-config.yaml"
+
+## READINESS SCORING ALGORITHM
+
+readiness_calculation:
+  formula: |
+    readiness_score = (
+      best_practices_coverage * 0.4 +
+      tdd_framework_support * 0.3 +
+      security_tooling * 0.2 +
+      cross_repo_confidence * 0.1
+    )
+  
+  components:
+    best_practices_coverage:
+      calculation: "artifacts_present / artifacts_required"
+      required_artifacts:
+        - "Language best practices YAML"
+        - "Framework-specific patterns (if applicable)"
+        - "Code style guide"
+        - "Naming conventions"
+      weight: 0.4
+    
+    tdd_framework_support:
+      calculation: "test_capabilities / test_requirements"
+      required_capabilities:
+        - "Test framework patterns"
+        - "Mocking library support"
+        - "Coverage tool config"
+        - "Test structure templates"
+      weight: 0.3
+    
+    security_tooling:
+      calculation: "security_tools / security_requirements"
+      required_tools:
+        - "Static analysis scanner"
+        - "Dependency vulnerability checker"
+        - "OWASP rule templates"
+        - "Secret scanning patterns"
+      weight: 0.2
+    
+    cross_repo_confidence:
+      calculation: "repos_using_stack / total_repos"
+      boost: "+0.1 if 3+ repos using same stack"
+      weight: 0.1
+  
+  thresholds:
+    high_confidence: 
+      score: "≥0.7"
+      action: "Proceed immediately"
+      user_impact: "Zero wait time"
+    
+    medium_confidence:
+      score: "0.5-0.69"
+      action: "Proceed with warnings"
+      user_impact: "Show capability gaps, offer to learn"
+    
+    low_confidence:
+      score: "<0.5"
+      action: "Block operation, trigger learning"
+      user_impact: "Wait for knowledge synthesis (max 5 min)"
+
+## IMPLEMENTATION ROADMAP
+
+phases:
+  phase_1_foundation:
+    title: "TechIntelligenceOrchestrator Core"
+    duration: "2 weeks"
+    deliverables:
+      - "TechIntelligenceOrchestrator skeleton"
+      - "EcosystemScanner (file pattern detection)"
+      - "ReadinessEngine (scoring calculation)"
+      - "Knowledge artifact schemas"
+    success_criteria:
+      - "Can detect tech stacks from files"
+      - "Can calculate readiness scores"
+      - "Can identify knowledge gaps"
+    priority: "P0"
+  
+  phase_2_knowledge_synthesis:
+    title: "Auto-Generation Engine"
+    duration: "3 weeks"
+    deliverables:
+      - "KnowledgeSynthesizer component"
+      - "Best practices YAML generation"
+      - "TDD pattern templates"
+      - "Security rule generation"
+    success_criteria:
+      - "Can generate missing best practices"
+      - "Can create TDD patterns from framework docs"
+      - "Can produce security configs"
+    priority: "P0"
+  
+  phase_3_orchestrator_integration:
+    title: "Wire All Orchestrators"
+    duration: "2 weeks"
+    deliverables:
+      - "MasterOrchestrator integration"
+      - "TDDOrchestrator enhancement"
+      - "RepositoryOnboardingOrchestrator refactor"
+      - "SecurityCheckpointAgent integration"
+    success_criteria:
+      - "All P0 orchestrators query tech intelligence"
+      - "Readiness checks block low-confidence operations"
+      - "Learning cycles triggered automatically"
+    priority: "P0"
+  
+  phase_4_event_driven_system:
+    title: "Continuous Learning Triggers"
+    duration: "2 weeks"
+    deliverables:
+      - "Git webhook integration"
+      - "Scheduled scan scheduler"
+      - "External feed connectors (CVE, releases)"
+      - "Cross-repo pattern analyzer"
+    success_criteria:
+      - "Git changes trigger tech detection"
+      - "Nightly scans update knowledge base"
+      - "CVE feeds auto-update security rules"
+    priority: "P1"
+  
+  phase_5_predictive_intelligence:
+    title: "Pattern Predictor"
+    duration: "2 weeks"
+    deliverables:
+      - "Cross-repo trend analysis"
+      - "Predictive learning triggers"
+      - "Ecosystem awareness dashboard"
+    success_criteria:
+      - "3+ repo pattern triggers comprehensive learning"
+      - "Trending techs auto-researched"
+      - "Dashboard shows readiness across all stacks"
+    priority: "P2"
+  
+  phase_6_remaining_orchestrators:
+    title: "P1/P2 Orchestrator Integration"
+    duration: "2 weeks"
+    deliverables:
+      - "RefactoringOrchestrator enhancement"
+      - "DocumentationOrchestrator integration"
+      - "DomainOrchestrator domain intelligence"
+      - "LENSOrchestrator tool verification"
+    success_criteria:
+      - "All orchestrators tech-intelligence-aware"
+      - "Zero manual intervention for known stacks"
+    priority: "P2"
+
+## SUCCESS METRICS
+
+kpis:
+  onboarding_speed:
+    metric: "Time from onboard request to ready state"
+    current: "5-15 minutes (research + generation)"
+    target: "<30 seconds (known stacks)"
+    measurement: "Repository onboarding logs"
+  
+  knowledge_coverage:
+    metric: "% of detected tech stacks with readiness ≥0.7"
+    current: "40% (manual additions)"
+    target: "90% (proactive learning)"
+    measurement: "Readiness score distribution"
+  
+  learning_efficiency:
+    metric: "Knowledge reuse across repos"
+    current: "1.0 (no sharing)"
+    target: "0.3 (1 learning serves 3+ repos)"
+    measurement: "Learning cycles per tech stack"
+  
+  predictive_accuracy:
+    metric: "% of repos onboarded with pre-learned knowledge"
+    current: "0% (all reactive)"
+    target: "70% (proactive preparation)"
+    measurement: "Zero-wait onboardings / total onboardings"
+  
+  capability_failures:
+    metric: "Operations blocked due to missing capabilities"
+    current: "15% (unknown tech stacks)"
+    target: "<2% (edge cases only)"
+    measurement: "InsufficientCapabilityError count"
+
+## DEPENDENCIES
+
+prerequisites:
+  - "MCP server operational (tool invocation)"
+  - "Git webhook infrastructure (event triggers)"
+  - "Knowledge base structure (cortex/knowledge/)"
+  - "Wiring system (orchestrator registry)"
+
+integrations:
+  - component: "MasterOrchestrator"
+    integration_type: "Central coordination"
+    status: "existing"
+  
+  - component: "RepositoryOnboardingOrchestrator"
+    integration_type: "Primary beneficiary"
+    status: "requires refactor"
+  
+  - component: "TDDOrchestrator"
+    integration_type: "TDD capability verification"
+    status: "requires enhancement"
+  
+  - component: "All orchestrators"
+    integration_type: "Readiness checks"
+    status: "requires interface addition"
+
+external_services:
+  - "GitHub Webhooks (file change events)"
+  - "CVE feeds (NVD, GitHub Security Advisories)"
+  - "Framework documentation APIs (if available)"
+  - "Language release RSS feeds"
+
+## RISKS & MITIGATIONS
+
+risks:
+  - risk_id: "RISK-001"
+    description: "Knowledge synthesis quality (auto-generated artifacts may be incorrect)"
+    severity: "HIGH"
+    mitigation: |
+      - Human review queue for first-gen artifacts
+      - Confidence scores on generated knowledge
+      - User feedback loop (mark artifact as incorrect)
+      - Fallback to manual expert review
+  
+  - risk_id: "RISK-002"
+    description: "Performance impact (continuous scanning overhead)"
+    severity: "MEDIUM"
+    mitigation: |
+      - Background async processing
+      - Rate limiting on scans
+      - Incremental analysis (only changed files)
+      - Caching layer for readiness scores
+  
+  - risk_id: "RISK-003"
+    description: "False positives in tech detection"
+    severity: "MEDIUM"
+    mitigation: |
+      - Multi-signal detection (files + dependencies + configs)
+      - Confidence thresholds on detection
+      - User confirmation for novel tech stacks
+  
+  - risk_id: "RISK-004"
+    description: "External feed reliability (CVE APIs down)"
+    severity: "LOW"
+    mitigation: |
+      - Cached feed data (stale acceptable for 24h)
+      - Multiple feed sources (redundancy)
+      - Degraded mode (proceed without latest updates)
+
+## GOVERNANCE ALIGNMENT
+
+core_rules_affected:
+  - rule: "CORE-008"
+    impact: "TDD enforcement strengthened (framework verification)"
+    enhancement: "TDDOrchestrator verifies test framework capabilities exist"
+  
+  - rule: "CORE-036"
+    impact: "Industry standards compliance automated"
+    enhancement: "Auto-generation ensures standards followed"
+  
+  - rule: "ARCH-012"
+    impact: "Standards gate enhanced (tech-specific rules)"
+    enhancement: "Security gates per tech stack verified"
+
+tier0_additions:
+  - rule_id: "INTL-001"
+    title: "Readiness Gate Mandatory"
+    description: "All orchestrators MUST check tech intelligence readiness before execution"
+    enforcement: "EnforcementOrchestrator pre-execution gate"
+    severity: "BLOCKING"
+
+## FUTURE ENHANCEMENTS
+
+v2_features:
+  - "Machine learning for pattern prediction (replace rule-based)"
+  - "Multi-language knowledge transfer (Python patterns → Ruby patterns)"
+  - "Community knowledge sharing (CORTEX instances exchange learnings)"
+  - "Real-time collaboration intelligence (Slack/Teams tech discussions parsed)"
+  - "Code example mining (GitHub search for framework patterns)"
+
+## REFERENCES
+
+related_phases:
+  - "phase-28-repository-onboarding-system.yaml (primary beneficiary)"
+  - "phase-24-architecture-integrity-system.yaml (pattern similarity)"
+  - "phase-33-architecture-alignment-governance.yaml (governance integration)"
+
+knowledge_sources:
+  - "OWASP Top 10 (security best practices)"
+  - "12-Factor App (deployment patterns)"
+  - "Language PEPs/JSRs/PSRs (official standards)"
+  - "Framework documentation (official sources)"
+
+## VALIDATION CHECKLIST
+
+- [ ] TechIntelligenceOrchestrator implements all 4 sub-components
+- [ ] All P0 orchestrators integrated (Master, TDD, Onboarding, Security)
+- [ ] Readiness scoring formula implemented with 4 components
+- [ ] Git webhook integration functional (file change detection)
+- [ ] Knowledge artifact generation working (at least 3 artifact types)
+- [ ] Cross-repo pattern detection operational (3+ repo threshold)
+- [ ] CVE feed integration active (security rule updates)
+- [ ] Onboarding speed <30 seconds for known stacks
+- [ ] Knowledge coverage ≥70% of detected stacks
+- [ ] Zero regression in existing orchestrator functionality
+
+## SIGN-OFF
+
+created_by: "Asif Hussain (MasterOrchestrator)"
+approved_by: "TBD"
+review_date: "TBD"
+implementation_start: "2026-02-06"
+estimated_completion: "2026-04-01 (8 weeks total)"
+
+tags:
+  - "tech-intelligence"
+  - "proactive-learning"
+  - "orchestrator-enhancement"
+  - "knowledge-synthesis"
+  - "continuous-improvement"
+  - "architecture"
