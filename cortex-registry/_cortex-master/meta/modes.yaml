@@ -1,0 +1,397 @@
+# CORTEX Modes Registry
+# Purpose: Machine-readable specifications for HEXA-MODE operation
+# Authority: cortex-architect.prompt.md v14.2
+# Created: 2026-02-06
+# Version: 1.0
+
+meta:
+  version: "1.0"
+  updated: "2026-02-06"
+  authority: "ENH-048 (Prompt Unbloating System)"
+  source_files:
+    - ".github/prompts/cortex-architect.prompt.md"
+  total_modes: 7
+
+# HEXA-MODE definitions
+modes:
+  PRE-FLIGHT:
+    name: "PRE-FLIGHT"
+    trigger: "ALWAYS FIRST (automatic)"
+    agent: "cortex-environment-setup"
+    priority: 0
+    description: |
+      Automatic environment validation before any operation.
+      Checks Python 3.9+, dependencies, wiring integrity.
+    flow:
+      - "Check Python version (≥3.9)"
+      - "Validate core dependencies (pyyaml, pydantic, fastapi)"
+      - "Check wiring.yaml integrity"
+      - "Verify git state"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Pre-Flight | **Scope:** Environment Validation ✅
+    success_criteria:
+      - "Python ≥3.9"
+      - "All core dependencies installed"
+      - "No wiring conflicts"
+    failure_action: "HALT with clear error message"
+    skip_conditions:
+      - "Explicit /check-env command (run PRE-FLIGHT only)"
+    related_agents:
+      - "cortex-environment-setup"
+
+  AUDIT:
+    name: "AUDIT"
+    trigger: "No request OR /audit command"
+    agent: "cortex-auditor"
+    priority: 1
+    description: |
+      Context-blind codebase health scanning with evidence-based findings.
+      Executes P0→P1→P2→P3 checks, generates recommendations.
+    flow:
+      - "PRE-FLIGHT validation"
+      - "LENS Context (vacuum cleanup first)"
+      - "P0: Security & Critical (blocking)"
+      - "P1: Infrastructure & Governance"
+      - "P2: Quality (MANDATORY via cortex_lens_analyze)"
+      - "P3: Cleanup validation"
+      - "Out-of-the-Box Recommendations"
+      - "Completion Report (inline only)"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Audit | **Scope:** {scope} ✅
+    mandatory_tools:
+      - "cortex_lens_analyze"
+      - "cortex_detect_duplicates"
+      - "cortex_audit (for ENH-046 metrics)"
+    forbidden:
+      - "Markdown file generation (CORE-002)"
+      - "Code snippets in output"
+      - "Assumptions without evidence"
+    output_format:
+      - "Executive summaries"
+      - "Inline markdown tables"
+      - "Priority-based findings"
+    success_criteria:
+      - "All P0 checks executed (no 'Not analyzed')"
+      - "Evidence provided for all findings"
+      - "No markdown file generation"
+    related_agents:
+      - "cortex-auditor"
+    related_enhancements:
+      - "ENH-046"  # Context Consumption Governance
+
+  DESIGN:
+    name: "DESIGN"
+    trigger: "User request provided"
+    agent: "cortex-designer"
+    priority: 2
+    description: |
+      Enhanced request + mandatory challenge + incremental TDD execution.
+      Full DoR (Definition of Ready) workflow with approval gate.
+    flow:
+      - "PRE-FLIGHT validation"
+      - "LENS Context (cortex_git_history for 24h context)"
+      - "Request Enhancement (security, edge cases, MCP exposure)"
+      - "Challenge Generation (3-5 questions, disagreement detection)"
+      - "DoR Display + Approval Gate"
+      - "Await 'proceed' / 'yes' / 'approve'"
+      - "Incremental TDD Execution (<500 LOC per increment)"
+      - "Completion Report"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Design | **Scope:** {scope} ✅
+    mandatory_steps:
+      - "Challenge generation (cannot skip)"
+      - "DoR approval (must wait for user)"
+      - "TDD enforcement (tests before code)"
+    forbidden:
+      - "Skipping challenge phase"
+      - "Direct file creation (must use MCP)"
+      - "Bypassing DoR approval"
+    output_format:
+      - "Enhanced request analysis"
+      - "Challenge questions"
+      - "DoR table"
+      - "Implementation steps"
+    success_criteria:
+      - "Challenge generated and approved"
+      - "Tests written before code"
+      - "Incremental delivery (<500 LOC)"
+    related_agents:
+      - "cortex-designer"
+    related_rules:
+      - "CORE-008"  # TDD Mandatory
+      - "CORE-019"  # IMPLEMENT via TDDOrchestrator
+      - "MCP-GATE"
+
+  PLAN:
+    name: "PLAN"
+    trigger: "/plan command OR cortex-registry/_cortex-master/ files"
+    agent: "cortex-phase-resolver"
+    priority: 2
+    description: |
+      ROI-based phase prioritization with inline ASCII progress indicators.
+      Intelligent continuation across chat sessions.
+    flow:
+      - "Load cortex-registry/_cortex-master/index.yaml"
+      - "Calculate ROI scores (value × success × urgency / effort)"
+      - "Display priority-ordered phases"
+      - "Show inline progress bars (ONLY for code-action modes)"
+      - "Execute selected phase with progress tracking"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Plan | **Scope:** {scope} ✅
+    progress_format: |
+      [✓] Phase 2 | [→] Phase 3 | [ ] Phase 4
+    progress_glyphs:
+      completed: "[✓]"
+      active: "[→]"
+      queued: "[ ]"
+      blocked: "[!]"
+      revisiting: "[~]"
+    progress_rules:
+      - "Max 3 phases shown (rolling window)"
+      - "Single line preferred"
+      - "No screaming blocks (█▓░ forbidden)"
+      - "No emoji (🟢🔴🟡 forbidden)"
+    show_progress_for:
+      - "PLAN mode (phase operations)"
+      - "TDD mode (RED→GREEN→REFACTOR)"
+      - "REFACTOR mode (>5 files)"
+      - "IMPLEMENT mode (multi-step features)"
+    hide_progress_for:
+      - "AUDIT mode (analysis-only)"
+      - "DIGEST mode (learning extraction)"
+      - "INTERACTIVE mode (Q&A)"
+      - "META-AUDIT mode (prompt analysis)"
+    output_format:
+      - "ROI-ranked phase list"
+      - "Execution recommendations"
+      - "Inline progress tracking"
+    success_criteria:
+      - "Phases prioritized by ROI"
+      - "Progress visible for code actions"
+      - "Session continuity enabled"
+    related_agents:
+      - "cortex-phase-resolver"
+    related_enhancements:
+      - "Phase-31A"  # Minimal Plan Spine
+
+  DIGEST:
+    name: "DIGEST"
+    trigger: "File parameter with Copilot chat markers OR /digest command"
+    agent: "cortex-digest"
+    priority: 2
+    description: |
+      Auto-detect chat format → extract learnings → enhance CORTEX.
+      Triggered when file contains ≥5 Copilot chat markers.
+    flow:
+      - "Scan file for Copilot markers (Read [, #file:, Summarizing)"
+      - "Calculate marker score (≥5 triggers DIGEST)"
+      - "Extract learnings (patterns, decisions, violations)"
+      - "Validate learnings against enhancement-history.yaml"
+      - "Propose enhancements (inline only)"
+      - "NO markdown file generation"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Digest | **Scope:** {file} ✅
+    detection_markers:
+      - "Read [](file://"
+      - "#file:"
+      - "Summarizing conversation history"
+      - "GitHub Copilot:"
+      - "asifhussain60:"
+    scoring:
+      "Read [](file://": 2
+      "#file:": 2
+      "Summarizing": 3
+      "GitHub Copilot:": 1
+      "asifhussain60:": 1
+    threshold: 5
+    mandatory_rules:
+      - "NO markdown file generation (CORE-002)"
+      - "Inline learnings only"
+      - "MCP tool usage for state"
+    forbidden:
+      - "cat > *.md patterns"
+      - "create_file for reports"
+      - "Terminal file generation"
+    output_format:
+      - "Structured learnings (inline tables)"
+      - "Enhancement proposals"
+      - "Pattern identification"
+    success_criteria:
+      - "Learnings extracted and validated"
+      - "No markdown files created"
+      - "Enhancement proposals actionable"
+    related_agents:
+      - "cortex-digest"
+    related_rules:
+      - "CORE-002"  # No markdown generation
+
+  INTERACTIVE:
+    name: "INTERACTIVE"
+    trigger: "Question/recommendation request"
+    agent: "cortex-interactive"
+    priority: 3
+    description: |
+      Exploratory conversation via InteractionOrchestrator.
+      No TDD, no DoR gate, educational responses.
+    flow:
+      - "Parse question/request"
+      - "Gather context via semantic search"
+      - "Generate educational response"
+      - "Provide examples and guidance"
+      - "NO implementation (questions only)"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Interactive | **Scope:** {topic} ✅
+    characteristics:
+      - "No TDD enforcement"
+      - "No DoR approval gate"
+      - "No code generation"
+      - "Educational focus"
+    output_format:
+      - "Conversational tone"
+      - "Examples and analogies"
+      - "Architecture guidance"
+      - "Tradeoff analysis"
+    success_criteria:
+      - "Question answered clearly"
+      - "Context provided"
+      - "No implementation performed"
+    related_agents:
+      - "cortex-interactive"
+
+  META-AUDIT:
+    name: "META-AUDIT"
+    trigger: "/meta-audit command (after primary audit)"
+    agent: "cortex-architect"
+    priority: 4
+    description: |
+      Prompt/agent self-enhancement analysis.
+      Analyzes prompts, agents, recommendations for improvement.
+    flow:
+      - "Wait for primary audit to complete"
+      - "Analyze prompt effectiveness"
+      - "Check agent coherence"
+      - "Review recommendation quality"
+      - "Generate meta-intelligence report"
+    header_template: |
+      ## 🧠 CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Meta-Audit | **Scope:** Prompt/Agent Analysis ✅
+    recursion_guard:
+      max_depth: 1
+      description: "Meta-audit cannot trigger another meta-audit"
+    analysis_areas:
+      - "Prompt section clarity"
+      - "Rule specificity"
+      - "Agent role overlap"
+      - "Recommendation adoption rate"
+    output_format:
+      - "Meta-intelligence report"
+      - "Prompt health metrics"
+      - "Enhancement pipeline status"
+      - "Detected issues"
+    success_criteria:
+      - "Meta-analysis complete"
+      - "Issues identified"
+      - "Recommendations generated"
+    related_agents:
+      - "cortex-architect"
+
+# Mode Selection Logic
+mode_detection:
+  priority_order:
+    - "PRE-FLIGHT (always first)"
+    - "DIGEST (if chat markers detected)"
+    - "META-AUDIT (if /meta-audit command)"
+    - "PLAN (if /plan command or _cortex-master/ files)"
+    - "AUDIT (if no request or /audit command)"
+    - "INTERACTIVE (if question detected)"
+    - "DESIGN (if implementation request)"
+  
+  keywords:
+    AUDIT:
+      - "audit"
+      - "health scan"
+      - "check codebase"
+    DESIGN:
+      - "implement"
+      - "fix"
+      - "refactor"
+      - "add feature"
+    PLAN:
+      - "plan"
+      - "phase"
+      - "prioritize"
+    DIGEST:
+      - "digest"
+      - "learn from"
+      - "extract learnings"
+    INTERACTIVE:
+      - "how"
+      - "why"
+      - "what"
+      - "explain"
+      - "recommend"
+    META-AUDIT:
+      - "meta-audit"
+      - "analyze prompts"
+      - "self-check"
+
+# Mode Relationships
+relationships:
+  complementary:
+    - ["AUDIT", "DESIGN"]  # Audit before design
+    - ["DESIGN", "PLAN"]   # Plan phases for design
+    - ["AUDIT", "META-AUDIT"]  # Meta-audit after audit
+  
+  exclusive:
+    - ["AUDIT", "INTERACTIVE"]  # Different purposes
+    - ["DESIGN", "INTERACTIVE"]  # Design requires TDD
+  
+  sequential:
+    - ["PRE-FLIGHT", "*"]  # Always first
+    - ["AUDIT", "META-AUDIT"]  # Meta after primary
+
+# Usage Examples
+usage_examples:
+  load_modes:
+    description: "Load all mode specifications"
+    code: |
+      from cortex.brain.core.yaml_loaders import ModesLoader
+      
+      loader = ModesLoader()
+      modes = loader.load_modes()
+      
+      for mode_name, mode_spec in modes.items():
+          print(f"{mode_name}: {mode_spec.trigger}")
+  
+  detect_mode:
+    description: "Auto-detect mode from user request"
+    code: |
+      from cortex.brain.core.yaml_loaders import ModesLoader
+      from cortex.models import RequestContext
+      
+      loader = ModesLoader()
+      context = RequestContext(
+          user_input="Implement user authentication",
+          files=[]
+      )
+      
+      mode = loader.detect_mode(context)
+      print(f"Detected mode: {mode}")  # Output: DESIGN
+  
+  get_mode_flow:
+    description: "Get execution flow for a mode"
+    code: |
+      from cortex.brain.core.yaml_loaders import ModesLoader
+      
+      loader = ModesLoader()
+      mode_spec = loader.get_mode("DESIGN")
+      
+      print("Design mode flow:")
+      for step in mode_spec.flow:
+          print(f"  - {step}")
