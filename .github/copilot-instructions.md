@@ -41,26 +41,24 @@
 
 **REQUIRED:** Use MCP tools for all implementation requests:
 
-```yaml
-IMPLEMENT Intent:
+**IMPLEMENT Intent:**
   Tool: cortex_process_request
   Flow: User → MCP Gateway → IntentRouter → TDDOrchestrator → RED→GREEN→REFACTOR
-  
-DESIGN/AUDIT Intent:
+
+**DESIGN/AUDIT Intent:**
   Tool: cortex_challenge (design reviews)
   Tool: cortex_lens_analyze (code intelligence)
   Tool: cortex_audit (health scans)
 
-ANALYZE Intent:
+**ANALYZE Intent:**
   Tool: cortex_lens_analyze
   Tool: cortex_detect_duplicates
   Tool: cortex_git_history
 
-DIGEST Intent:
+**DIGEST Intent:**
   Tool: cortex_digest_session
   Flow: File → Auto-Detect Markers → Extract Learnings → Enhance CORTEX
   Trigger: File contains Copilot chat markers (score ≥ 5)
-```
 
 **WHY:** Direct chat bypasses:
 - ❌ TDD enforcement (CORE-008)
@@ -78,14 +76,12 @@ DIGEST Intent:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**EVERY response MUST begin with:**
+**EVERY response MUST begin with this format:**
 
-```markdown
-## 🧠 CORTEX {operation}
-**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
-
----
-```
+    ## 🧠 CORTEX {operation}
+    **Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
+    
+    ---
 
 **Response Format Requirements:**
 - ✅ Follow response-format-standards.md in .github/prompts/ directory for all outputs
@@ -137,23 +133,19 @@ DIGEST Intent:
 
 ### MCP Endpoints
 
-```yaml
-/tools          # Tool discovery
-/tools/{name}   # Tool execution
-/health         # Health check
-/metrics        # Prometheus metrics
-```
+    /tools          # Tool discovery
+    /tools/{name}   # Tool execution
+    /health         # Health check
+    /metrics        # Prometheus metrics
 
 ---
 
 ## 🛡️ Governance (4-Layer Defense)
 
-```
-Layer 1: Pre-Execution Gate     → BLOCKS violations (EnforcementOrchestrator - 7 agents)
-Layer 2: Runtime Monitor        → STOPS at 3+ violations
-Layer 3: Post-Execution Audit   → DETECTS bypasses
-Layer 4: Production Gate        → PREVENTS broken deployment
-```
+    Layer 1: Pre-Execution Gate     → BLOCKS violations (EnforcementOrchestrator - 7 agents)
+    Layer 2: Runtime Monitor        → STOPS at 3+ violations
+    Layer 3: Post-Execution Audit   → DETECTS bypasses
+    Layer 4: Production Gate        → PREVENTS broken deployment
 
 ### EnforcementOrchestrator: 7-Agent Pre-Execution Gate
 
@@ -223,15 +215,14 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 | **Duplication** | CORE-035 violation potential | Duplicates detected |
 
 **Output Format:**
-```markdown
-### ⚡ Recommendation Safety Check
-| Gate | Status | Score |
-|------|--------|-------|
-| REJ-History | ✅/❌ | {similarity} |
-| Regression-Risk | ✅/❌ | {score} |
 
-**Verdict:** {SAFE TO RECOMMEND | BLOCKED}
-```
+    ### ⚡ Recommendation Safety Check
+    | Gate | Status | Score |
+    |------|--------|-------|
+    | REJ-History | ✅/❌ | {similarity} |
+    | Regression-Risk | ✅/❌ | {score} |
+    
+    **Verdict:** {SAFE TO RECOMMEND | BLOCKED}
 
 **If BLOCKED:** Do NOT emit recommendation. Log rejection reason for learning.
 
@@ -269,17 +260,15 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 
 ### Orchestrators (28 Total)
 
-```
-Core (8):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
-              LENSSynthesis, EnforcementOrchestrator, TDDOrchestrator,
-              IncrementalTaskDecomposer, WorkflowOrchestrator
+    Core (8):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
+                  LENSSynthesis, EnforcementOrchestrator, TDDOrchestrator,
+                  IncrementalTaskDecomposer, WorkflowOrchestrator
 
-Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
-              ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
+    Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
+                  ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
 
-Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
-              RecommendationGate, EducationalOrchestrator, ...
-```
+    Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
+                  RecommendationGate, EducationalOrchestrator, ...
 
 ---
 
@@ -328,11 +317,9 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 ### Health Endpoints
 
-```bash
-curl http://localhost:8000/health
-curl http://localhost:8000/health/wiring
-curl http://localhost:8000/health/orchestrators
-```
+    curl http://localhost:8000/health
+    curl http://localhost:8000/health/wiring
+    curl http://localhost:8000/health/orchestrators
 
 ### Prometheus Metrics
 
@@ -368,11 +355,9 @@ curl http://localhost:8000/health/orchestrators
 
 ## 📋 Best Practices Layering
 
-```yaml
-Company Standards (PRECEDENCE): company/domains/
-CORTEX Standards (FILLS GAPS): cortex/knowledge/best-practices/
-Result: Merged production standards
-```
+    Company Standards (PRECEDENCE): company/domains/
+    CORTEX Standards (FILLS GAPS): cortex/knowledge/best-practices/
+    Result: Merged production standards
 
 ---
 
