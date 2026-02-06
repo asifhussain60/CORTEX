@@ -178,7 +178,11 @@ class PlanOrchestrator:
             
             # Step 5-6: Update and regenerate dashboard
             sync_result = self.dashboard_generator.sync_dashboard()
-            result.dashboard_synced = sync_result.success
+            # Handle both bool and result object returns
+            if isinstance(sync_result, bool):
+                result.dashboard_synced = sync_result
+            else:
+                result.dashboard_synced = sync_result.success
             
             # Step 7: Log AC_COMPLETE audit trail
             result.audit_logged = self._log_audit_trail(phase_id, "TEARDOWN")

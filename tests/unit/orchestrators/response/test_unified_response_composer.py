@@ -436,7 +436,7 @@ class TestChallengeComposition:
         challenges = [
             Challenge(
                 challenge_id="ch-001",
-                challenge_type=ChallengeType.QUESTION,
+                challenge_type=ChallengeType.CLARIFICATION_NEEDED,
                 content="What do you think?",
                 confidence_score=0.9
             )
@@ -451,7 +451,7 @@ class TestChallengeComposition:
         challenges = [
             Challenge(
                 challenge_id="ch-001",
-                challenge_type=ChallengeType.QUESTION,
+                challenge_type=ChallengeType.CLARIFICATION_NEEDED,
                 content="Low confidence",
                 confidence_score=0.3
             )

@@ -65,11 +65,11 @@ active_phases:
     priority: "P0"
     execution_order: 3
     progress: "100%"
-    test_status: "60/65 PASSING"
+    test_status: "66/66 PASSING (20+17+29)"
     description: |
       ✅ COMPLETE: PLAN MODE operational with full lifecycle management.
       PhaseManager (20/20 tests), DashboardGenerator (17/17 tests), 
-      PlanOrchestrator (23/28 tests). MCP tools: cortex_plan_setup, 
+      PlanOrchestrator (29/29 tests ✅ FIXED). MCP tools: cortex_plan_setup, 
       cortex_plan_teardown, cortex_plan_resolve, cortex_plan_sync.
       
       Stage Completion:

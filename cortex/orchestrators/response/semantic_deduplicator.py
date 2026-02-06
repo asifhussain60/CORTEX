@@ -250,15 +250,31 @@ class SemanticDeduplicator:
         """
         # Get embeddings (use cache if available)
         embeddings = []
-        for sentence in sentences:
+        uncached_sentences = []
+        uncached_indices = []
+        
+        for i, sentence in enumerate(sentences):
             cached = self.cache.get(sentence)
             if cached is not None:
                 embeddings.append(cached)
             else:
-                # Compute embedding
-                embedding = self.model.encode(sentence, convert_to_numpy=True)
+                # Track uncached sentences for batch encoding
+                embeddings.append(None)  # Placeholder
+                uncached_sentences.append(sentence)
+                uncached_indices.append(i)
+        
+        # Batch encode uncached sentences (much faster than one-by-one)
+        if uncached_sentences:
+            batch_embeddings = self.model.encode(
+                uncached_sentences,
+                convert_to_numpy=True,
+                show_progress_bar=False
+            )
+            
+            # Cache and insert batch embeddings
+            for idx, sentence, embedding in zip(uncached_indices, uncached_sentences, batch_embeddings):
                 self.cache.set(sentence, embedding)
-                embeddings.append(embedding)
+                embeddings[idx] = embedding
         
         # Compute pairwise cosine similarity
         embeddings_array = np.array(embeddings)

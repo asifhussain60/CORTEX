@@ -51,6 +51,22 @@ class EnvironmentConfig:
             EnvironmentType.DEVELOPMENT: "Local Development",
         }
         return env_names.get(self.environment_type, "Unknown")
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert configuration to dictionary.
+        
+        Returns:
+            Dict representation suitable for JSON serialization
+        """
+        return {
+            "environment_type": self.environment_type.value,
+            "mcp_available": self.is_mcp_available,
+            "copilot_available": self.is_copilot_available,
+            "is_development": self.is_development,
+            "cortex_root": str(self.cortex_root),
+            "adapter_type": self.tool_adapter_class.split(".")[-1]  # Class name only
+        }
 
 
 class EnvironmentDetector:
@@ -251,6 +267,24 @@ class EnvironmentDetector:
         """
         config = self.get_environment_config()
         return config.environment_type == EnvironmentType.MCP_SERVER
+    
+    def is_mcp_available(self) -> bool:
+        """
+        Public wrapper to check if MCP tools are available.
+        
+        Returns:
+            True if MCP server environment detected
+        """
+        return self._is_mcp_server()
+    
+    def is_copilot_available(self) -> bool:
+        """
+        Public wrapper to check if Copilot tools are available.
+        
+        Returns:
+            True if Copilot environment detected
+        """
+        return self._is_copilot()
 
     def is_development(self) -> bool:
         """

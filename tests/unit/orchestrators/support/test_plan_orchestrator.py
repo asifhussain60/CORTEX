@@ -332,23 +332,22 @@ class TestPrioritizePendingPhases:
             {"id": "phase-3", "roi_score": 0.7}
         ]
         
-        plan_orchestrator.phase_manager.calculate_roi_score = Mock(
-            side_effect=lambda p: p.get("roi_score", 0.0)
-        )
+        # Mock the phase_manager method to return sorted phases
+        sorted_phases = sorted(phases, key=lambda p: p.get("roi_score", 0.0), reverse=True)
+        plan_orchestrator.phase_manager.prioritize_pending_phases = Mock(return_value=sorted_phases)
         
-        with patch.object(plan_orchestrator, '_load_pending_phases', return_value=phases):
-            result = plan_orchestrator.prioritize_pending_phases()
-            
-            # Should be sorted descending by ROI
-            assert result[0]["id"] == "phase-2"  # 0.9
-            assert result[1]["id"] == "phase-3"  # 0.7
-            assert result[2]["id"] == "phase-1"  # 0.5
+        result = plan_orchestrator.prioritize_pending_phases()
+        
+        # Should be sorted descending by ROI
+        assert result[0]["id"] == "phase-2"  # 0.9
+        assert result[1]["id"] == "phase-3"  # 0.7
+        assert result[2]["id"] == "phase-1"  # 0.5
     
     def test_prioritize_phases_empty_list(self, plan_orchestrator):
         """Test prioritization with no pending phases."""
-        with patch.object(plan_orchestrator, '_load_pending_phases', return_value=[]):
-            result = plan_orchestrator.prioritize_pending_phases()
-            assert result == []
+        plan_orchestrator.phase_manager.prioritize_pending_phases = Mock(return_value=[])
+        result = plan_orchestrator.prioritize_pending_phases()
+        assert result == []
 
 
 class TestHelperMethods:

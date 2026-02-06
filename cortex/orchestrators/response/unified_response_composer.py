@@ -754,20 +754,20 @@ class UnifiedResponseComposer:
         
         # Generate challenges based on context
         if context.get("domain"):
-            # Question challenge
+            # Clarification challenge
             challenges.append(Challenge(
                 challenge_id=f"challenge_{len(challenges)}",
-                challenge_type=ChallengeType.QUESTION,
+                challenge_type=ChallengeType.CLARIFICATION_NEEDED,
                 content=f"How does this apply to {context.get('domain')}?",
                 difficulty_level=2,
                 confidence_score=0.8
             ))
         
         if context.get("advanced"):
-            # Exercise challenge
+            # Alternative approach challenge
             challenges.append(Challenge(
                 challenge_id=f"challenge_{len(challenges)}",
-                challenge_type=ChallengeType.EXERCISE,
+                challenge_type=ChallengeType.ALTERNATIVE_APPROACH,
                 content="Try implementing this yourself",
                 difficulty_level=3,
                 confidence_score=0.75
