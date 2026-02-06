@@ -22,7 +22,7 @@ import json
 import re
 import logging
 
-from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import TechStack
+from cortex.orchestrators.intelligence.types import TechStack
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,6 @@ class ScanResult:
             language=tech_stack_data["language"],
             frameworks=tech_stack_data.get("frameworks", []),
             version=tech_stack_data.get("version"),
-            tools=tech_stack_data.get("tools", []),
         ) if tech_stack_data else None
         
         return cls(
@@ -532,12 +531,14 @@ class EcosystemScanner:
             # Detect version (simplified)
             version = self.detect_version(primary.language, files, {})
             
-            # Build tech stack
+            # Build tech stack (tools now included in frameworks list)
+            # Merge tools into frameworks to maintain functionality
+            all_frameworks = list(set(frameworks + tools))
+            
             tech_stack = TechStack(
                 language=primary.language,
-                frameworks=frameworks,
+                frameworks=all_frameworks,
                 version=version,
-                tools=tools,
             )
             
             duration = (time.time() - start_time) * 1000

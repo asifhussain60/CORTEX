@@ -23,96 +23,14 @@ import time
 
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.result import Result, Ok, Err
-
-
-@dataclass
-class TechStack:
-    """
-    Represents a detected technology stack.
-    
-    Attributes:
-        language: Primary programming language
-        frameworks: List of frameworks/libraries detected
-        version: Language version (optional)
-        tools: Development tools detected (linters, formatters, etc.)
-    """
-    
-    language: str
-    frameworks: List[str] = field(default_factory=list)
-    version: Optional[str] = None
-    tools: List[str] = field(default_factory=list)
-    
-    def __hash__(self):
-        """Enable use as dict key."""
-        return hash((self.language, tuple(sorted(self.frameworks))))
-    
-    def __eq__(self, other):
-        """Enable comparison."""
-        if not isinstance(other, TechStack):
-            return False
-        return (self.language == other.language and
-                set(self.frameworks) == set(other.frameworks))
-
-
-@dataclass
-class ReadinessScore:
-    """
-    Readiness score for a tech stack.
-    
-    Scoring formula:
-        overall = (best_practices * 0.4) + (tdd_support * 0.3) +
-                  (security_tooling * 0.2) + (cross_repo_usage * 0.1)
-    
-    Attributes:
-        overall: Overall readiness score (0-1.0)
-        best_practices_coverage: Best practices knowledge (0-1.0)
-        tdd_support: TDD framework support (0-1.0)
-        security_tooling: Security tool availability (0-1.0)
-        cross_repo_usage: Cross-repo usage frequency (0-1.0)
-        action: Recommended action (PROCEED, PROCEED_WITH_WARNING, TRIGGER_LEARNING)
-        details: Additional details about the score
-    """
-    
-    overall: float
-    best_practices_coverage: float
-    tdd_support: float
-    security_tooling: float
-    cross_repo_usage: float
-    action: str
-    details: Dict[str, Any] = field(default_factory=dict)
-    
-    @classmethod
-    def calculate(
-        cls,
-        best_practices: float,
-        tdd_support: float,
-        security: float,
-        usage: float
-    ) -> "ReadinessScore":
-        """Calculate readiness score from components."""
-        overall = (
-            best_practices * 0.4 +
-            tdd_support * 0.3 +
-            security * 0.2 +
-            usage * 0.1
-        )
-        
-        # Determine action based on score
-        if overall >= 0.7:
-            action = "PROCEED"
-        elif overall >= 0.5:
-            action = "PROCEED_WITH_WARNING"
-        else:
-            action = "TRIGGER_LEARNING"
-        
-        return cls(
-            overall=overall,
-            best_practices_coverage=best_practices,
-            tdd_support=tdd_support,
-            security_tooling=security,
-            cross_repo_usage=usage,
-            action=action
-        )
+from cortex.orchestrators.intelligence.types import TechStack, ReadinessScore
+from cortex.orchestrators.intelligence.ecosystem_scanner import EcosystemScanner
+from cortex.orchestrators.intelligence.readiness_engine import ReadinessEngine
+from cortex.orchestrators.intelligence.knowledge_synthesizer import (
+    KnowledgeSynthesizer,
+    KnowledgeSource,
+)
+from cortex.orchestrators.intelligence.learning_trigger import LearningTrigger
 
 
 class TechIntelligenceOrchestrator(IOrchestrator):
@@ -162,10 +80,14 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         if config:
             self.config.update(config)
         
-        # Initialize sub-components (placeholders for now)
-        self.ecosystem_scanner = self._init_ecosystem_scanner()
-        self.readiness_engine = self._init_readiness_engine()
-        self.knowledge_synthesizer = self._init_knowledge_synthesizer()
+        # Initialize sub-components with real implementations
+        self.ecosystem_scanner = EcosystemScanner()
+        self.readiness_engine = ReadinessEngine()
+        self.knowledge_synthesizer = KnowledgeSynthesizer(config={"cache_enabled": self.config.get("cache_enabled", True)})
+        self.learning_trigger = LearningTrigger(config={
+            "threshold": self.config.get("readiness_threshold", 0.5),
+            "notification_enabled": True,
+        })
         
         # Cache for readiness scores
         self._readiness_cache: Dict[TechStack, ReadinessScore] = {}
@@ -174,35 +96,32 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         # Known tech stacks registry
         self._known_stacks: Dict[str, float] = {}  # language -> usage frequency
     
-    def _init_ecosystem_scanner(self) -> Dict[str, Any]:
+    def _init_ecosystem_scanner(self) -> EcosystemScanner:
         """
-        Initialize ecosystem scanner component.
+        Initialize ecosystem scanner component (DEPRECATED - use direct initialization).
         
         Returns:
-            Dict placeholder for EcosystemScanner (to be implemented in Week 3)
+            EcosystemScanner instance
         """
-        # Placeholder - will be implemented in next increment
-        return {"initialized": True, "type": "EcosystemScanner"}
+        return EcosystemScanner()
     
-    def _init_readiness_engine(self) -> Dict[str, Any]:
+    def _init_readiness_engine(self) -> ReadinessEngine:
         """
-        Initialize readiness engine component.
+        Initialize readiness engine component (DEPRECATED - use direct initialization).
         
         Returns:
-            Dict placeholder for ReadinessEngine (to be implemented in Week 3)
+            ReadinessEngine instance
         """
-        # Placeholder - will be implemented in next increment
-        return {"initialized": True, "type": "ReadinessEngine"}
+        return ReadinessEngine()
     
-    def _init_knowledge_synthesizer(self) -> Dict[str, Any]:
+    def _init_knowledge_synthesizer(self) -> KnowledgeSynthesizer:
         """
-        Initialize knowledge synthesizer component.
+        Initialize knowledge synthesizer component (DEPRECATED - use direct initialization).
         
         Returns:
-            Dict placeholder for KnowledgeSynthesizer (to be implemented in Week 4)
+            KnowledgeSynthesizer instance
         """
-        # Placeholder - will be implemented in next increment
-        return {"initialized": True, "type": "KnowledgeSynthesizer"}
+        return KnowledgeSynthesizer()
     
     # IOrchestrator interface implementation
     def get_name(self) -> str:
@@ -303,10 +222,10 @@ class TechIntelligenceOrchestrator(IOrchestrator):
                     "overall": score.overall,
                     "action": score.action,
                     "components": {
-                        "best_practices": score.best_practices_coverage,
+                        "best_practices": score.best_practices,
                         "tdd_support": score.tdd_support,
-                        "security": score.security_tooling,
-                        "usage": score.cross_repo_usage,
+                        "security": score.security,
+                        "usage": score.usage,
                     },
                 })
             
@@ -316,7 +235,6 @@ class TechIntelligenceOrchestrator(IOrchestrator):
                     "language": tech_stack.language,
                     "frameworks": tech_stack.frameworks,
                     "version": tech_stack.version,
-                    "tools": tech_stack.tools,
                 })
             
             elif operation_name == "synthesize_best_practices":
@@ -341,7 +259,7 @@ class TechIntelligenceOrchestrator(IOrchestrator):
     # Core methods
     def get_readiness_score(self, tech_stack: Optional[TechStack]) -> ReadinessScore:
         """
-        Get readiness score for a tech stack.
+        Get readiness score for a tech stack with automatic learning trigger detection.
         
         Args:
             tech_stack: Technology stack to evaluate
@@ -363,6 +281,13 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         # Calculate readiness score
         score = self._calculate_readiness_score(tech_stack)
         
+        # Use LearningTrigger to detect knowledge gaps and trigger learning
+        trigger_event = self.learning_trigger.check_readiness(tech_stack)
+        if trigger_event.triggered:
+            # Learning trigger detected - log event for future enhancement
+            # In Week 4-5, this will integrate with notification system
+            pass
+        
         # Cache result
         if self.config["cache_enabled"]:
             self._readiness_cache[tech_stack] = score
@@ -371,18 +296,16 @@ class TechIntelligenceOrchestrator(IOrchestrator):
     
     def _calculate_readiness_score(self, tech_stack: TechStack) -> ReadinessScore:
         """
-        Calculate readiness score from components.
+        Calculate readiness score using ReadinessEngine.
         
         Args:
             tech_stack: Technology stack
             
         Returns:
-            Calculated readiness score
+            Calculated readiness score from ReadinessEngine
         """
-        # Simplified scoring for initial implementation
-        # Will be enhanced in Week 3-4 with ReadinessEngine
-        
-        # Best practices coverage (check if we have knowledge)
+        # Use real ReadinessEngine for scoring
+        return self.readiness_engine.calculate_readiness_score(tech_stack)
         best_practices = self._get_best_practices_coverage(tech_stack)
         
         # TDD support (check if we know testing framework)
@@ -427,7 +350,7 @@ class TechIntelligenceOrchestrator(IOrchestrator):
     
     def detect_tech_stack(self, repo_path: str) -> TechStack:
         """
-        Detect tech stack from repository path.
+        Detect tech stack from repository path using EcosystemScanner.
         
         Args:
             repo_path: Path to repository
@@ -435,27 +358,18 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         Returns:
             Detected TechStack
         """
-        # Simplified detection - will be enhanced with EcosystemScanner
-        path = Path(repo_path)
+        # Use EcosystemScanner for comprehensive detection
+        scan_result = self.ecosystem_scanner.scan_repository(repo_path)
         
-        # Check for Python
-        if (path / "requirements.txt").exists() or (path / "setup.py").exists():
-            frameworks = []
-            if (path / "pytest.ini").exists():
-                frameworks.append("pytest")
-            return TechStack(language="python", frameworks=frameworks)
+        if scan_result.tech_stack:
+            return scan_result.tech_stack
         
-        # Check for JavaScript/TypeScript
-        if (path / "package.json").exists():
-            language = "typescript" if (path / "tsconfig.json").exists() else "javascript"
-            return TechStack(language=language, frameworks=[])
-        
-        # Default fallback
+        # Fallback if scan fails
         return TechStack(language="unknown", frameworks=[])
     
     def detect_tech_stack_from_files(self, files: List[str]) -> TechStack:
         """
-        Detect tech stack from file list.
+        Detect tech stack from file list using EcosystemScanner.
         
         Args:
             files: List of filenames
@@ -463,25 +377,30 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         Returns:
             Detected TechStack
         """
-        frameworks = []
+        # Use EcosystemScanner's pattern matching
+        # Convert file list to a format the scanner can use
         
-        # Detect Python
-        if any(f in files for f in ["requirements.txt", "setup.py", "pyproject.toml"]):
-            if "pytest.ini" in files or "tox.ini" in files:
-                frameworks.append("pytest")
-            return TechStack(language="python", frameworks=frameworks)
-        
-        # Detect JavaScript/TypeScript
-        if "package.json" in files:
-            language = "typescript" if "tsconfig.json" in files else "javascript"
-            return TechStack(language=language, frameworks=frameworks)
+        # Extract extension and check against known patterns
+        for file in files:
+            if file.endswith('.py'):
+                return TechStack(language="python", frameworks=[])
+            elif file.endswith(('.js', '.jsx')):
+                return TechStack(language="javascript", frameworks=[])
+            elif file.endswith(('.ts', '.tsx')):
+                return TechStack(language="typescript", frameworks=[])
+            elif file.endswith(('.java')):
+                return TechStack(language="java", frameworks=[])
+            elif file.endswith(('.go')):
+                return TechStack(language="go", frameworks=[])
+            elif file.endswith(('.rs')):
+                return TechStack(language="rust", frameworks=[])
         
         # Default
         return TechStack(language="unknown", frameworks=[])
     
     def synthesize_best_practices(self, tech_stack: TechStack) -> Result:
         """
-        Synthesize best practices for tech stack.
+        Synthesize best practices for tech stack using KnowledgeSynthesizer.
         
         Args:
             tech_stack: Technology stack
@@ -495,20 +414,46 @@ class TechIntelligenceOrchestrator(IOrchestrator):
         if tech_stack.language == "unknown":
             return Err(f"Cannot synthesize for unknown language")
         
-        # Placeholder - will be implemented with KnowledgeSynthesizer
-        return Ok({"status": "synthesized", "tech_stack": tech_stack.language})
+        # Use KnowledgeSynthesizer for real generation
+        synthesis_result = self.knowledge_synthesizer.synthesize_best_practices(
+            tech_stack=tech_stack,
+            source=KnowledgeSource.INTERNAL
+        )
+        
+        # Wrap SynthesisResult in Ok
+        return Ok({
+            "content": synthesis_result.content,
+            "source": synthesis_result.source.value,
+            "template_type": synthesis_result.template_type.value,
+        })
     
     def synthesize_tdd_patterns(self, tech_stack: TechStack) -> Result:
-        """Synthesize TDD patterns for tech stack."""
+        """Synthesize TDD patterns for tech stack using KnowledgeSynthesizer."""
         if tech_stack.language == "unknown":
             return Err("Cannot synthesize TDD patterns for unknown language")
-        return Ok({"status": "synthesized", "type": "tdd_patterns"})
+        
+        # Use KnowledgeSynthesizer for real TDD pattern generation
+        synthesis_result = self.knowledge_synthesizer.generate_tdd_patterns(tech_stack)
+        
+        return Ok({
+            "content": synthesis_result.content,
+            "source": synthesis_result.source.value,
+            "template_type": synthesis_result.template_type.value,
+        })
     
     def synthesize_security_rules(self, tech_stack: TechStack) -> Result:
-        """Synthesize security rules for tech stack."""
+        """Synthesize security rules for tech stack using KnowledgeSynthesizer."""
         if tech_stack.language == "unknown":
             return Err("Cannot synthesize security rules for unknown language")
-        return Ok({"status": "synthesized", "type": "security_rules"})
+        
+        # Use KnowledgeSynthesizer for real security rule generation
+        synthesis_result = self.knowledge_synthesizer.generate_security_rules(tech_stack)
+        
+        return Ok({
+            "content": synthesis_result.content,
+            "source": synthesis_result.source.value,
+            "template_type": synthesis_result.template_type.value,
+        })
     
     def synthesize_knowledge(self, tech_stack: TechStack) -> Result:
         """

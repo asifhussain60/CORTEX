@@ -24,7 +24,7 @@ import threading
 import time
 import yaml
 
-from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import TechStack
+from cortex.orchestrators.intelligence.types import TechStack
 
 
 class KnowledgeSource(Enum):
@@ -499,27 +499,21 @@ class {ClassName}Test {{
             if framework_practices:
                 yaml_data["frameworks"] = framework_practices
         
-        # Add tool-specific practices
-        if tech_stack.tools and "tools" in practices_data:
-            tool_practices = {}
-            for tool in tech_stack.tools:
-                if tool.lower() in practices_data["tools"]:
-                    tool_practices[tool] = practices_data["tools"][tool.lower()]
-            
-            if tool_practices:
-                yaml_data["tools"] = tool_practices
+        # Note: TechStack no longer has tools attribute
+        # Tools are now included in frameworks list
         
         return yaml.dump(yaml_data, default_flow_style=False, sort_keys=False)
 
     def _detect_tdd_framework(self, tech_stack: TechStack) -> str:
-        """Detect TDD framework from tech stack tools."""
-        for tool in tech_stack.tools:
-            tool_lower = tool.lower()
-            if "pytest" in tool_lower:
+        """Detect TDD framework from tech stack frameworks list."""
+        # Check frameworks list for TDD frameworks
+        for framework in tech_stack.frameworks:
+            framework_lower = framework.lower()
+            if "pytest" in framework_lower:
                 return "pytest"
-            elif "jest" in tool_lower:
+            elif "jest" in framework_lower:
                 return "jest"
-            elif "junit" in tool_lower:
+            elif "junit" in framework_lower:
                 return "junit"
         
         # Default based on language

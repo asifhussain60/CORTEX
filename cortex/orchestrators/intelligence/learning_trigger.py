@@ -21,8 +21,8 @@ from typing import Dict, List, Optional, Any
 import threading
 import logging
 
-from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import TechStack
-from cortex.orchestrators.intelligence.readiness_engine import ReadinessEngine, ReadinessScore
+from cortex.orchestrators.intelligence.types import TechStack, ReadinessScore
+from cortex.orchestrators.intelligence.readiness_engine import ReadinessEngine
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -199,9 +199,9 @@ class LearningTrigger:
         """
         # Find weakest component
         components = {
-            "best_practices": score.best_practices_coverage,
+            "best_practices": score.best_practices,
             "tdd_support": score.tdd_support,
-            "security_tooling": score.security_tooling,
+            "security": score.security,
         }
         
         weakest = min(components.keys(), key=lambda k: components[k])

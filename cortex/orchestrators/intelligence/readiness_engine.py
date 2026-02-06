@@ -25,10 +25,7 @@ import time
 import threading
 import logging
 
-from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import (
-    TechStack,
-    ReadinessScore,
-)
+from cortex.orchestrators.intelligence.types import TechStack, ReadinessScore
 
 logger = logging.getLogger(__name__)
 
@@ -222,12 +219,11 @@ class ReadinessEngine:
         if tech_stack is None or not tech_stack.language:
             return ReadinessScore(
                 overall=0.0,
-                best_practices_coverage=0.0,
+                best_practices=0.0,
                 tdd_support=0.0,
-                security_tooling=0.0,
-                cross_repo_usage=0.0,
+                security=0.0,
+                usage=0.0,
                 action="TRIGGER_LEARNING",
-                details={"error": "Invalid tech stack"},
             )
         
         # Check cache
@@ -263,16 +259,11 @@ class ReadinessEngine:
         # Build score object
         score = ReadinessScore(
             overall=overall,
-            best_practices_coverage=bp_score,
+            best_practices=bp_score,
             tdd_support=tdd_score,
-            security_tooling=security_score,
-            cross_repo_usage=usage_score,
+            security=security_score,
+            usage=usage_score,
             action=action,
-            details={
-                "calculated_at": datetime.now().isoformat(),
-                "weights": self.weights,
-                "thresholds": self.thresholds,
-            },
         )
         
         # Store in cache
@@ -341,9 +332,6 @@ class ReadinessEngine:
             # Check in frameworks list
             if framework in [f.lower() for f in tech_stack.frameworks]:
                 detected_count += 1
-            # Check in tools list
-            if framework in [t.lower() for t in tech_stack.tools]:
-                detected_count += 1
         
         # Score based on coverage
         if detected_count == 0:
@@ -371,10 +359,11 @@ class ReadinessEngine:
         if not known_tools:
             return 0.2  # Unknown language
         
-        # Check if any security tools are present
+        # Check if any security tools are present in frameworks
+        # (frameworks can include linters, formatters, security scanners)
         detected_count = 0
         for tool in known_tools:
-            if tool in [t.lower() for t in tech_stack.tools]:
+            if tool in [f.lower() for f in tech_stack.frameworks]:
                 detected_count += 1
         
         # Score based on tool count

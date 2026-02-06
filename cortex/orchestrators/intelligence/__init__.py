@@ -8,10 +8,9 @@ Author: CORTEX Team
 Created: 2026-02-06
 """
 
+from cortex.orchestrators.intelligence.types import TechStack, ReadinessScore
 from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import (
     TechIntelligenceOrchestrator,
-    TechStack,
-    ReadinessScore,
 )
 from cortex.orchestrators.intelligence.ecosystem_scanner import (
     EcosystemScanner,
