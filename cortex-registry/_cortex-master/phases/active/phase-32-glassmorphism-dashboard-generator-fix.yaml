@@ -1,0 +1,261 @@
+# Phase 32: Glassmorphism Dashboard Generator Fix
+# Fix CORTEX dashboard generation tooling to use approved glassmorphism specifications
+# Status: Active | Priority: P0 | Phase: 32
+
+id: "phase-32"
+name: "Glassmorphism Dashboard Generator Fix"
+version: "1.0.0"
+status: "active"
+priority: "P0"
+created: "2026-02-06"
+updated: "2026-02-06"
+author: "Asif Hussain"
+
+authority:
+  - "CORE-008 (TDD)"
+  - "CORE-002 (No markdown file generation)"
+  - "CORE-036 (Industry standards compliance)"
+  - "glassmorphism-design-standard.md v4.0"
+
+problem_statement: |
+  Dashboard generation tooling (cortex/visualization/spa/suite_generator.py) is using
+  an incorrect template that produces light-themed dashboards without glassmorphism effects.
+  
+  Current Issues:
+  - Template path points to archived KASHKOLE template (light theme)
+  - Missing glassmorphism CSS specifications
+  - No dark theme support
+  - Broken file:// protocol compatibility
+  - External CSS links not relative to repo dashboard location
+
+  Example: KSESSIONS dashboard shows white background instead of dark glass with blur effects.
+
+acceptance_criteria:
+  - id: "AC-GLASS-001"
+    description: "Dashboard generator uses approved glassmorphism template"
+    verification: "Generated dashboards have dark glass backgrounds with backdrop-filter blur"
+  
+  - id: "AC-GLASS-002"
+    description: "All dashboards follow glassmorphism-design-standard.md v4.0"
+    verification: "CSS variables match approved design tokens (rgba(26, 31, 58, 0.7), blur(10px), etc.)"
+  
+  - id: "AC-GLASS-003"
+    description: "file:// protocol compatibility maintained"
+    verification: "Dashboards work when opened via file:// URLs (no fetch() calls, embedded data)"
+  
+  - id: "AC-GLASS-004"
+    description: "Asset paths correctly relative to repo subdirectory"
+    verification: "CSS/images load from ../../assets/ for repos/<slug>/index.html"
+  
+  - id: "AC-GLASS-005"
+    description: "Existing test suite passes"
+    verification: "tests/visualization/spa/ tests pass with new template"
+
+phases:
+  - id: 0
+    name: "Create Glassmorphism Dashboard Template"
+    status: "planned"
+    tasks:
+      - "Extract approved glassmorphism CSS from company/dashboards/repos/alist/index.html (commit 6adacaf0d)"
+      - "Create company/dashboards/templates/repo-dashboard-glass-v1.html"
+      - "Include external CSS references (glass-design-tokens.css, glass-base-patterns.css, etc.)"
+      - "Embed data injection markers for suite_generator.py"
+      - "Add Use Cases tab integration"
+    tests:
+      - "Manual verification: template renders with dark glassmorphism theme"
+      - "CSS validation: all --glass-* variables present"
+    deliverables:
+      - "company/dashboards/templates/repo-dashboard-glass-v1.html"
+    loc: 800
+    duration_hours: 3
+  
+  - id: 1
+    name: "Update DashboardSuiteGenerator Template Path"
+    status: "planned"
+    dependencies: [0]
+    tasks:
+      - "Update DASHBOARD_TEMPLATE constant in suite_generator.py"
+      - "Change from _archive/kashkole-20260202/ to templates/repo-dashboard-glass-v1.html"
+      - "Verify _fix_asset_paths() handles ../../assets/ correctly"
+    tests:
+      - "tests/visualization/spa/test_suite_generator.py::test_generate_repo_dashboard"
+    deliverables:
+      - "cortex/visualization/spa/suite_generator.py (updated)"
+    loc: 5
+    duration_hours: 0.5
+  
+  - id: 2
+    name: "MVC Integration Pilot Testing (POC)"
+    status: "planned"
+    dependencies: [1]
+    priority: "CRITICAL"
+    rationale: "Test all dashboard MVC integration logic using EXISTING pilot apps before full generation to ensure proof of concept"
+    existing_pilots:
+      - "tests/dashboard/test_mvc_integration.html (650 LOC - comprehensive MVC testing)"
+      - "tests/dashboard/test_deferred_renderer.html (503 LOC - deferred rendering validation)"
+    tasks:
+      - "Run existing tests/dashboard/test_mvc_integration.html pilot in browser"
+      - "Verify Model: Data injection and JSON embedding (window.dashboardData)"
+      - "Verify View: Glassmorphism CSS rendering and template structure"
+      - "Verify Controller: Tab navigation, chart rendering, data binding"
+      - "Confirm MVC pattern integrity: Model-View separation, Controller event handling"
+      - "Validate data flow: JSON → Model → View → DOM updates"
+      - "Test ChartHost visibility guards and deferred rendering via test_deferred_renderer.html"
+      - "Verify file:// protocol compatibility (no fetch calls)"
+      - "Document any pilot test failures or gaps"
+    tests:
+      - "Manual: Open tests/dashboard/test_mvc_integration.html via file://"
+      - "Manual: Open tests/dashboard/test_deferred_renderer.html via file://"
+      - "Verify all test sections pass (Model, View, Controller, Integration)"
+      - "Check browser console for errors"
+      - "Validate deferred rendering metrics"
+    deliverables:
+      - "POC validation report (inline chat, no markdown file)"
+      - "List of any gaps requiring template updates"
+      - "Confirmation of glassmorphism CSS compatibility"
+    validation_criteria:
+      - "All MVC pilot tests pass in test_mvc_integration.html"
+      - "All deferred renderer tests pass in test_deferred_renderer.html"
+      - "Data flow verified end-to-end"
+      - "Glassmorphism rendering confirmed in pilot"
+      - "No console errors in file:// mode"
+      - "Tab navigation functional"
+      - "Chart rendering tested with ChartHost guards"
+    loc: 0
+    duration_hours: 1.5
+  
+  - id: 3
+    name: "Verify Asset Path Handling"
+    status: "planned"
+    dependencies: [2]
+    tasks:
+      - "Test _fix_asset_paths() with glassmorphism external CSS"
+      - "Ensure href=\"../../assets/css/glass-*.css\" paths correct"
+      - "Verify image paths (logo, icons) resolve from repos/<slug>/"
+      - "Apply learnings from MVC pilot testing"
+    tests:
+      - "tests/visualization/spa/test_suite_generator.py::test_fix_asset_paths"
+      - "Manual test: open generated dashboard via file://"
+    deliverables:
+      - "Updated _fix_asset_paths() method if needed"
+    loc: 20
+    duration_hours: 1
+  
+  - id: 4
+    name: "Regenerate KSESSIONS Dashboard"
+    status: "planned"
+    dependencies: [3]
+    tasks:
+      - "Run onboarding orchestrator to regenerate KSESSIONS dashboard"
+      - "Verify glassmorphism theme applied"
+      - "Check data embedded correctly (no fetch calls)"
+      - "Test file:// protocol compatibility"
+    tests:
+      - "Visual inspection: dark glass backgrounds, blur effects, cyan/purple accents"
+      - "Console check: no network errors in file:// mode"
+    deliverables:
+      - "company/dashboards/repos/ksessions/index.html (regenerated)"
+    duration_hours: 0.5
+  
+  - id: 5
+    name: "Documentation & Test Coverage"
+    status: "planned"
+    dependencies: [4]
+    tasks:
+      - "Update suite_generator.py docstrings to reference glassmorphism template"
+      - "Add test case for glassmorphism CSS presence"
+      - "Document template structure in docs/guides/"
+      - "Document MVC integration patterns from pilot testing"
+      - "Create troubleshooting guide for common MVC issues"
+    tests:
+      - "tests/visualization/spa/test_suite_generator.py::test_glassmorphism_css_present"
+    deliverables:
+      - "tests/visualization/spa/test_suite_generator.py (enhanced)"
+      - "docs/guides/dashboard-template-structure.md"
+      - "docs/guides/dashboard-mvc-integration.md"
+    loc: 200
+    duration_hours: 2.5
+
+technical_details:
+  template_location: "company/dashboards/templates/repo-dashboard-glass-v1.html"
+  generator_file: "cortex/visualization/spa/suite_generator.py"
+  test_file: "tests/visualization/spa/test_suite_generator.py"
+  
+  existing_pilot_apps:
+    mvc_integration: "tests/dashboard/test_mvc_integration.html (650 LOC)"
+    deferred_renderer: "tests/dashboard/test_deferred_renderer.html (503 LOC)"
+    validation_script: "tests/dashboard/validate_dashboard_fix.sh"
+  
+  mvc_architecture:
+    model: "window.dashboardData (embedded JSON)"
+    view: "Glassmorphism HTML template + CSS"
+    controller: "JavaScript event handlers for tabs, charts, interactions"
+    data_flow: "JSON → parse → Model → render → View DOM"
+    
+  pilot_testing_scope:
+    - "Model: Data injection and JSON structure validation (test_mvc_integration.html)"
+    - "View: CSS rendering, glassmorphism effects, responsive layout (test_mvc_integration.html)"
+    - "Controller: Tab switching, chart initialization, event delegation (test_mvc_integration.html)"
+    - "Deferred Rendering: ChartHost visibility guards (test_deferred_renderer.html)"
+    - "Integration: End-to-end data flow from JSON to UI (both pilots)"
+    - "Compatibility: file:// protocol, no external fetches (both pilots)"
+  
+  approved_css_specifications:
+    base_background: "rgba(26, 31, 58, 0.7)"
+    backdrop_filter: "blur(10px)"
+    border_color: "rgba(255, 255, 255, 0.1)"
+    text_primary: "#ffffff"
+    text_secondary: "#a0a6c0"
+    accent_primary: "#00d4ff"
+    accent_secondary: "#7b61ff"
+    
+  external_css_files:
+    - "assets/css/main.css"
+    - "assets/css/glass-design-tokens.css"
+    - "assets/css/glass-base-patterns.css"
+    - "assets/css/glass-ui-components.css"
+    - "assets/css/glass-animations.css"
+
+risks:
+  - risk: "Breaking existing dashboards that rely on light theme"
+    mitigation: "Regenerate all dashboards after fix (CORTEX, KASHKOLE, ALIST)"
+    probability: "low"
+  
+  - risk: "Asset path resolution issues in nested directories"
+    mitigation: "Comprehensive p7"
+total_loc: 1545
+total_hours: 11.5
+
+tracking:
+  phases_completed: 2
+  phases_total: 6
+  progress_percent: 33rds/repos/alist/index.html (reference implementation)"
+  
+  code_dependencies:
+    - "cortex/visualization/spa/suite_generator.py"
+    - "cortex/visualization/spa/models.py"
+    - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+
+estimated_completion: "2026-02-06"
+total_loc: 1195
+total_hours: 9
+
+tracking:
+  phases_completed: 2
+  phases_total: 6
+  progress_percent: 33
+  status_details:
+    phase_0: "COMPLETE - Template created from commit 6adacaf0d"
+    phase_1: "COMPLETE - suite_generator.py updated"
+    phase_2: "PLANNED - MVC Integration Pilot Testing (using EXISTING pilots)"
+    phase_3: "PLANNED - Asset Path Verification"
+    phase_4: "BLOCKED - KSESSIONS Regeneration (awaiting pilot POC)"
+    phase_5: "PENDING - Documentation & Test Coverage"
+
+notes: |
+  - Use commit 6adacaf0d as authority for approved glassmorphism specifications
+  - ALIST dashboard (company/dashboards/repos/alist/index.html) is perfect reference
+  - Template must support data injection via _inject_dashboard_data()
+  - Maintain file:// compatibility (no external fetches)
+  - EXISTING pilot apps: tests/dashboard/test_mvc_integration.html (650 LOC) & test_deferred_renderer.html (503 LOC)
+  - NO DUPLICATION: Use existing pilots for POC validation, do not create new test files

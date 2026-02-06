@@ -73,7 +73,7 @@ class DashboardSuiteGenerator:
     """
     
     # Template paths (relative to CORTEX root)
-    DASHBOARD_TEMPLATE = "company/dashboards/_archive/kashkole-20260202/kashkole/dashboard-gpt-v1.html"
+    DASHBOARD_TEMPLATE = "company/dashboards/templates/repo-dashboard-glass-v1.html"
     ASSETS_DIR = "company/dashboards/assets"
     SPA_ASSETS_DIR = "company/dashboards/spa/assets"
     LOGO_PATH = "company/dashboards/assets/images/CORTEX-logo-512.png"

@@ -1,15 +1,27 @@
 # CORTEX Master Registry Index
 # Auto-discovery registry for CORTEX internal development planning
 # Authority: cortex-architect.prompt.md v13.0
-# Updated: 2026-02-05
+# Updated: 2026-02-06
 
 version: "1.0"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-05"
+last_updated: "2026-02-06"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-32"
+    name: "Glassmorphism Dashboard Generator Fix"
+    file: "phases/active/phase-32-glassmorphism-dashboard-generator-fix.yaml"
+    started: "2026-02-06"
+    status: "active"
+    priority: "P0"
+    execution_order: 0
+    description: |
+      Fix dashboard generation tooling to use approved glassmorphism specifications.
+      Update template from light theme to dark glassmorphism design system.
+      Regenerate KSESSIONS dashboard with correct styling.
+  
   - id: "phase-28"
     name: "Repository Onboarding System"
     file: "phases/active/phase-28-repository-onboarding-system.yaml"
