@@ -132,6 +132,43 @@ Navigation  → Map to orchestrator + MCP tools
 Synthesis   → Generate DoR classification
 ```
 
+### Stage 1.5: Pre-Execution Discovery (MANDATORY)
+
+**CRITICAL:** Before generating DoR, ALWAYS check for existing implementations.
+
+**Enforcement:** ENH-047 Pre-Execution Discovery Protocol
+
+#### Discovery Checklist
+
+| Check | Tool | Condition |
+|-------|------|-----------|
+| **Feature Recall** | `cortex_total_recall` | IF intent IN [IMPLEMENT, DESIGN, REFACTOR] |
+| **Semantic Search** | `semantic_search` | IF scope IN [MODULE, SYSTEM] |
+| **Duplicate Detection** | `cortex_detect_duplicates` | IF creating new files |
+| **Pattern Search** | `file_search` + `grep_search` | Match feature keywords |
+| **Git History** | `cortex_git_history` | Last 24h changes in scope |
+
+#### Discovery Report Format
+
+```markdown
+### 🔍 Pre-Execution Discovery
+
+**Scope:** {feature_name}
+
+| Discovery | Status | Findings |
+|-----------|--------|----------|
+| Existing Features | ✅ Found / ❌ None | {count} similar implementations |
+| Duplicates | ✅ None / ⚠️ Detected | {list if any} |
+| Related Work | ✅ Found / ❌ None | {recent commits, PRs} |
+
+**Recommendation:**
+- ✅ **EXTEND:** {existing_file} — {rationale}
+- 🆕 **CREATE NEW:** {rationale}
+- 🔴 **BLOCKED:** Duplicate detected, consolidate first
+```
+
+**WHY:** Prevents duplicate work (like KSESSIONS dashboard pilot that already existed), enforces CORE-030 (Implementation Truth) and CORE-035 (Single Implementation).
+
 ### Stage 2: DoR Display (MANDATORY before execution)
 
 ```markdown

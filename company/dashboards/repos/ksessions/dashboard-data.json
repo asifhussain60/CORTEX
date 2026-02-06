@@ -1,0 +1,1158 @@
+{
+  "repo": {
+    "slug": "ksessions",
+    "display_name": "KSESSIONS",
+    "description": "User Authentication platform built with Python",
+    "owner": "Unknown",
+    "primary_language": "Unknown",
+    "version": "1.0",
+    "last_analyzed_at": "2026-02-06T11:12:22.157720"
+  },
+  "overview": {
+    "summary": "Repository analysis",
+    "business_summary": "**KSESSIONS** is a comprehensive .NET Framework 4.8 application for managing educational Islamic sessions, featuring audio recordings with transcripts, etymology analysis, and Arabic linguistic tools. built with Python, C#, ASP.NET. The application provides user authentication, data management, search & discovery.",
+    "key_findings": [
+      "32 critical security risks require immediate attention",
+      "Codebase contains 58612 files",
+      "13 dependencies have known vulnerabilities"
+    ]
+  },
+  "metrics": {
+    "health_score": 0,
+    "risk_score": 100,
+    "loc": 0,
+    "code_lines": 0,
+    "comment_lines": 0,
+    "blank_lines": 0,
+    "files": 58612,
+    "coverage_pct": 0.0,
+    "languages": {}
+  },
+  "security": {
+    "total_count": 42,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 42,
+    "low_count": 0,
+    "vulnerabilities": [
+      {
+        "id": "SEC-001",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-002",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-003",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-004",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-005",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-006",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-007",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-008",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-009",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-010",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-011",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-012",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-013",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-014",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-015",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-016",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-017",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-018",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-019",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-020",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-021",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-022",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-023",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-024",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-025",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-026",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-027",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-028",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded password detected"
+      },
+      {
+        "id": "SEC-029",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-030",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Hardcoded database password in .NET connection string"
+      },
+      {
+        "id": "SEC-031",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-032",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Using SQL Server 'sa' account (critical security risk)"
+      },
+      {
+        "id": "SEC-033",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Authentication disabled"
+      },
+      {
+        "id": "SEC-034",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-035",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Custom errors disabled - stack traces exposed to users"
+      },
+      {
+        "id": "SEC-036",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-037",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "Custom errors disabled - stack traces exposed to users"
+      },
+      {
+        "id": "SEC-038",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-039",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-040",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-041",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      },
+      {
+        "id": "SEC-042",
+        "title": "Security issue",
+        "severity": "medium",
+        "cwe_id": "CWE-Unknown",
+        "location": "unknown",
+        "status": "open",
+        "description": "ASP.NET debug compilation enabled"
+      }
+    ]
+  },
+  "dependencies": {
+    "total_count": 8351,
+    "direct_count": 0,
+    "transitive_count": 8351,
+    "packages": [
+      {
+        "name": "safer-buffer",
+        "version": " 2.1.2 < 3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "async",
+        "version": "3.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "c8",
+        "version": "7.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "errto",
+        "version": "0.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "iconv",
+        "version": "2.3.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "3.5.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "request",
+        "version": "2.88.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "semver",
+        "version": "6.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "unorm",
+        "version": "1.6.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/cli",
+        "version": "7.2.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/core",
+        "version": "7.3.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/plugin-proposal-unicode-property-regex",
+        "version": "7.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/preset-env",
+        "version": "7.3.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "6.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "regexgen",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "unicode-12.0.0",
+        "version": "0.7.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/msal-common",
+        "version": "14.16.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jsonwebtoken",
+        "version": "9.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "uuid",
+        "version": "8.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@microsoft/api-extractor",
+        "version": "7.43.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@rollup/plugin-node-resolve",
+        "version": "15.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@rollup/plugin-typescript",
+        "version": "11.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/jest",
+        "version": "29.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/jsonwebtoken",
+        "version": "9.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "20.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/uuid",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-config-msal",
+        "version": "file:../../shared-configs/eslint-config-msal",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jest",
+        "version": "29.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "prettier",
+        "version": "2.8.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup",
+        "version": "4.22.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-msal",
+        "version": "file:../../shared-configs/rollup-msal",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ts-jest",
+        "version": "29.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tslib",
+        "version": "1.10.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "4.9.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "yargs",
+        "version": "17.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@humanfs/types",
+        "version": "0.15.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "c8",
+        "version": "9.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "10.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "5.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "http-proxy-agent",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "https-proxy-agent",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tslib",
+        "version": "2.6.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure-tools/vite-plugin-browser-test-map",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/dev-tool",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@azure/eslint-plugin-azure-sdk",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "20.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@vitest/browser",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@vitest/coverage-istanbul",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "9.9.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "playwright",
+        "version": "1.41.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tsx",
+        "version": "4.19.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "5.8.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "vitest",
+        "version": "3.0.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "babel-minify",
+        "version": "0.5.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "benchmark",
+        "version": "2.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "browserify",
+        "version": "16.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "standard",
+        "version": "*",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tape",
+        "version": "4.x",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/jest",
+        "version": "29.2.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "20.2.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "5.47.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "5.47.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.30.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-config-standard",
+        "version": "17.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-config-standard-with-typescript",
+        "version": "33.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-import",
+        "version": "2.26.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-jest",
+        "version": "27.1.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-n",
+        "version": "15.6.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-promise",
+        "version": "6.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jest",
+        "version": "29.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ts-jest",
+        "version": "29.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tsd",
+        "version": "0.28.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "5.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/core",
+        "version": "7.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/plugin-transform-modules-commonjs",
+        "version": "7.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/preset-env",
+        "version": "7.2.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/register",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@mysticatea/eslint-plugin",
+        "version": "8.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@mysticatea/spy",
+        "version": "0.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "assert",
+        "version": "1.4.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "codecov",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "5.12.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma",
+        "version": "3.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-chrome-launcher",
+        "version": "2.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-coverage",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-firefox-launcher",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-growl-reporter",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-ie-launcher",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-mocha",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-rollup-preprocessor",
+        "version": "7.0.0-rc.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "5.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "npm-run-all",
+        "version": "4.1.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "13.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "opener",
+        "version": "1.5.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "2.6.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup",
+        "version": "1.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-babel",
+        "version": "4.3.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-babel-minify",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-commonjs",
+        "version": "9.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-json",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      }
+    ],
+    "licenses": {
+      "null": 100
+    }
+  },
+  "quality": {
+    "maintainability": 75,
+    "readability": 80,
+    "documentation": 70,
+    "complexity": 65,
+    "code_smells": [],
+    "hotspots": []
+  },
+  "use_cases": [
+    {
+      "id": "UC-SEC-001",
+      "title": "Address Critical Security Vulnerabilities",
+      "persona": "Security",
+      "category": "Risk",
+      "summary": "32 critical security issues require immediate remediation",
+      "signals": [
+        "security.critical_count",
+        "security.vulnerabilities"
+      ],
+      "recommended_actions": [
+        "Review security tab for details",
+        "Prioritize P0 fixes",
+        "Schedule security review"
+      ],
+      "tags": [
+        "security",
+        "urgent",
+        "p0"
+      ],
+      "severity": "critical"
+    },
+    {
+      "id": "UC-QUAL-001",
+      "title": "Monitor Code Quality Trends",
+      "persona": "Engineering Manager",
+      "category": "Quality",
+      "summary": "Track maintainability and complexity metrics over time",
+      "signals": [
+        "quality.maintainability",
+        "quality.complexity"
+      ],
+      "recommended_actions": [
+        "Review quality tab",
+        "Identify refactoring candidates",
+        "Set quality gates"
+      ],
+      "tags": [
+        "quality",
+        "monitoring"
+      ],
+      "severity": "low"
+    }
+  ],
+  "lens": {
+    "analysis_summary": "LENS analysis complete"
+  },
+  "refactoring": {
+    "recommendations": [
+      {
+        "priority": "P0",
+        "category": "secret_exposure",
+        "description": "Hardcoded password detected",
+        "recommendation": "Store passwords in secure secret management system or use environment variables",
+        "impact": "CRITICAL"
+      },
+      {
+        "priority": "P0",
+        "category": "secret_exposure",
+        "description": "Hardcoded password detected",
+        "recommendation": "Store passwords in secure secret management system or use environment variables",
+        "impact": "CRITICAL"
+      },
+      {
+        "priority": "P0",
+        "category": "secret_exposure",
+        "description": "Hardcoded password detected",
+        "recommendation": "Store passwords in secure secret management system or use environment variables",
+        "impact": "CRITICAL"
+      },
+      {
+        "priority": "P0",
+        "category": "secret_exposure",
+        "description": "Hardcoded password detected",
+        "recommendation": "Store passwords in secure secret management system or use environment variables",
+        "impact": "CRITICAL"
+      },
+      {
+        "priority": "P0",
+        "category": "secret_exposure",
+        "description": "Hardcoded database password in .NET connection string",
+        "recommendation": "Use Azure Key Vault, Windows Credential Manager, or environment variables for connection strings",
+        "impact": "CRITICAL"
+      },
+      {
+        "priority": "P1",
+        "category": "insecure_default",
+        "description": "Authentication disabled",
+        "recommendation": "Enable authentication for all production endpoints",
+        "impact": "HIGH"
+      },
+      {
+        "priority": "P1",
+        "category": "insecure_default",
+        "description": "ASP.NET debug compilation enabled",
+        "recommendation": "Set compilation debug='false' in production",
+        "impact": "HIGH"
+      },
+      {
+        "priority": "P1",
+        "category": "insecure_default",
+        "description": "Custom errors disabled - stack traces exposed to users",
+        "recommendation": "Set customErrors mode='RemoteOnly' or 'On' in production",
+        "impact": "HIGH"
+      },
+      {
+        "priority": "P1",
+        "category": "insecure_default",
+        "description": "ASP.NET debug compilation enabled",
+        "recommendation": "Set compilation debug='false' in production",
+        "impact": "HIGH"
+      },
+      {
+        "priority": "P1",
+        "category": "insecure_default",
+        "description": "Custom errors disabled - stack traces exposed to users",
+        "recommendation": "Set customErrors mode='RemoteOnly' or 'On' in production",
+        "impact": "HIGH"
+      }
+    ]
+  }
+}

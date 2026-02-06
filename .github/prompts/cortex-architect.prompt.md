@@ -1762,6 +1762,13 @@ if result['notify_user']:
 ```
 0. LENS Context (cortex_git_history) — Always first
       ↓
+0.25. Pre-Execution Discovery (MANDATORY — ENH-047)
+      ├─ cortex_total_recall (existing features)
+      ├─ semantic_search (related implementations)
+      ├─ cortex_detect_duplicates (CORE-035)
+      ├─ file_search (naming patterns)
+      └─ cortex_git_history (recent activity)
+      ↓
 0.5. Architecture Integrity Gate (Phase 24) — Validate against master plan
       ↓
 1. MANDATORY Challenge + Recommendation (Extensibility/Scalability/Accuracy/Efficiency + Fix Plans)

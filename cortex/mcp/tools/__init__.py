@@ -36,6 +36,9 @@ from .lens_tools import (
     cortex_tools_catalog,
 )
 
+# Discovery Tools (ENH-047)
+from .discovery import cortex_discover
+
 # Intelligent LENS Tools with LLM (AC-LENS-LLM-004)
 from .intelligent_lens_tools import (
     cortex_lens_deep_analyze,
@@ -80,6 +83,8 @@ __all__ = [
     "cortex_extract_comments",
     "cortex_detect_duplicates",
     "cortex_tools_catalog",
+    # Discovery Tools (ENH-047)
+    "cortex_discover",
     # Intelligent LENS Tools (LLM-enhanced)
     "cortex_lens_deep_analyze",
     # Onboarding Tools
