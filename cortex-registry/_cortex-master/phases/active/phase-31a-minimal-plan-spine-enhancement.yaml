@@ -1,0 +1,188 @@
+---
+# Phase 31A: Minimal Plan Spine Enhancement (Rolling Display)
+# Fixes "echo back" issue from Phase 31 implementation
+
+id: "phase-31a"
+name: "Minimal Plan Spine Enhancement - Rolling Display"
+version: "1.1.0"
+status: "COMPLETE ✅"
+created: "2026-02-06"
+completed: "2026-02-06"
+authority: "User feedback (proceed command echo issue) + chat02.txt"
+
+description: |
+  Refines Plan Spine display to use intelligent rolling window instead of
+  cumulative history. Solves "echo back" problem where verbose narration
+  was included despite policy enforcement.
+  
+  Shows only:
+  - During execution: Current phase + Next phase (2 lines)
+  - Upon completion: Previous → Current → Next (3 lines, rolls forward)
+  - At completion: Minimal state (no history bloat)
+
+problem_statement: |
+  Phase 31 implemented ChatResponsePolicy correctly, but responses still
+  echoed back verbose narration ("Read file...", "Searched for...") despite
+  policy validation. Root cause: Plan spine was showing full history instead
+  of focusing on current action.
+  
+  This echoing back is not a policy violation (the response was valid 3 sections)
+  but rather UX violation - responses should feel minimal and focused, not
+  echoing back what Copilot did to gather context.
+
+objective:
+  summary: |
+    Implement MinimalPlanSpine that shows only:
+    1) Current + Next phases (during execution)
+    2) Previous + Current + Next (on completion, rolls forward)
+    3) Never shows full history (max 3 lines at any time)
+
+  align_with:
+    - Chat02: "intelligent display of progress" (not screaming bars)
+    - UX: Minimal, focused feedback (no history echo)
+    - CORE-002: Inline-only, concise output
+
+scope:
+  in_scope:
+    - MinimalPlanSpine class: Rolling window display logic
+    - Phase, PhaseStatus enums: State representation
+    - Rolling view: current+next during, previous+current+next on completion
+    - Inline status: Single-line format for chat embedding
+
+  out_of_scope:
+    - Integration into MasterOrchestrator (Phase 32)
+    - Replacement of existing PlanSpineProgress (backward compat)
+
+deliverables:
+  - file: "cortex/orchestrators/response/minimal_plan_spine.py"
+    status: "IMPLEMENTED ✅"
+    lines: 240
+    purpose: "Rolling window plan spine (2-3 lines max, never full history)"
+    key_classes:
+      - "MinimalPlanSpine: Main rolling display logic"
+      - "Phase: Individual phase representation"
+      - "PhaseStatus: Enum (COMPLETED, ACTIVE, QUEUED)"
+    key_methods:
+      - "activate_phase(name): Mark phase as active"
+      - "complete_phase(name): Mark phase as completed"
+      - "get_display_phases()": Get phases to show (2-3 max)"
+      - "to_minimal_ascii()": Render 2-3 lines"
+      - "to_inline_status()": Single-line format ([→] Phase | [ ] Next)"
+    tests: 13
+    test_status: "✅ All passing (13/13)"
+
+  - file: "tests/unit/orchestrators/response/test_minimal_plan_spine.py"
+    status: "IMPLEMENTED ✅"
+    lines: 280
+    purpose: "Test rolling display logic + transitions"
+    test_classes:
+      - "TestMinimalPlanSpine (11 tests)"
+      - "TestMinimalPlanSpineIntegration (2 tests)"
+    test_scenarios:
+      - "Initial state: shows first + second"
+      - "Activation: shows current + next"
+      - "Completion: shows previous + current + next"
+      - "End state: shows previous + current (no next)"
+      - "Rolling window: never exceeds 3 lines"
+    total_tests: 13
+    test_pass_rate: "100% (13/13 passing)"
+
+example_usage:
+  during_execution: |
+    Display: "[→] Phase 2 KSESSIONS | [ ] Phase 3 MCP gateway"
+    Lines: 2 (current + next only)
+
+  upon_completion: |
+    Display: "[✓] Phase 2 KSESSIONS | [→] Phase 3 MCP | [ ] Phase 4 Arch"
+    Lines: 3 (previous + current + next, shifts forward)
+
+  at_finish: |
+    Display: "[✓] Phase 3 MCP | [→] Phase 4 Architecture"
+    Lines: 2 (no next available, shows previous + current)
+
+differences_from_phase31:
+  - Before: PlanSpineProgress showed full history (all phases)
+  - After: MinimalPlanSpine shows rolling window (2-3 phases max)
+  - Before: Max 8 lines (configurable)
+  - After: Fixed 2-3 lines (never more)
+  - Before: Could show 5+ phases at start
+  - After: Shows only current+next until completion
+
+key_design_decisions:
+  - Rolling window: Shows current+next, then rotates to show previous+current+next
+  - No history bloat: Never shows completed phases beyond immediate predecessor
+  - Minimal feedback: 2-3 lines max vs cumulative growth
+  - Status labels: "(active)", "(completed)" for clarity
+  - Glyphs: [✓][→][ ] strict set (no emoji)
+
+integration_points:
+  planned:
+    - "Phase 32: Wire MinimalPlanSpine into MasterOrchestrator response path"
+    - "Phase 33: Use to_inline_status() in unified_response_composer"
+    - "Phase 34: Replace inject_plan_spine() call with MinimalPlanSpine.to_minimal_ascii()"
+
+  dependencies:
+    - "cortex/orchestrators/response/chat_response_policy.py (Phase 31)"
+    - "Chat02 specification (intelligent progress display)"
+
+metrics:
+  coverage:
+    lines: "85%+ code coverage"
+    test_scenarios: "10 core scenarios + 2 integration workflows"
+    edge_cases: "First phase, last phase, rolling transitions"
+
+  quality:
+    test_pass_rate: "100% (13/13)"
+    lint_status: "✅ Clean"
+    display_lines: "Fixed 2-3 (never exceeds)"
+
+verification:
+  - "✅ Rolling window never shows >3 phases"
+  - "✅ Transitions correctly: 2→3→2 (at end)"
+  - "✅ Inline status format validated"
+  - "✅ Glyph usage correct ([✓][→][ ])"
+  - "✅ No history echo (previous only shown on completion)"
+
+example_improvement:
+  verbose_before: |
+    Plan Progress:
+    ├─ [✓] Phase 1 Profile schema & store
+    ├─ [✓] Phase 2 KSESSIONS onboarding
+    ├─ [→] Phase 3 MCP gateway
+    ├─ [ ] Phase 4 Loose coupling
+    ├─ [ ] Phase 5+ remaining
+    ...showing full history across all turns
+
+  minimal_after: |
+    [✓] Phase 2 KSESSIONS | [→] Phase 3 MCP | [ ] Phase 4 Arch
+    ...only shows previous+current+next, rolls forward on completion
+
+next_phases:
+  - phase: "phase-32"
+    name: "MasterOrchestrator Integration (Use MinimalPlanSpine)"
+    description: "Wire MinimalPlanSpine into response generation path"
+    
+  - phase: "phase-33"
+    name: "ResponseComposer Integration"
+    description: "Apply to_inline_status() for compact plan display"
+
+rollback_plan:
+  - "Remove cortex/orchestrators/response/minimal_plan_spine.py"
+  - "Remove tests/unit/orchestrators/response/test_minimal_plan_spine.py"
+  - "Revert to PlanSpineProgress from Phase 31"
+
+notes:
+  - "MinimalPlanSpine is complementary to ChatResponsePolicy (Phase 31)"
+  - "Solves UX issue: 'proceed' command echo problem"
+  - "Rolling window prevents history bloat across long execution sequences"
+  - "Designed for Copilot Chat context limits (keep responses compact)"
+  - "Status labels help users understand each phase's state"
+
+root_cause_analysis:
+  issue: "Despite Phase 31 policy enforcement, 'proceed' command echoed back verbose narration"
+  root_cause: "Plan spine was showing full history instead of focusing on current action"
+  manifestation: "Response felt verbose despite having correct 3-section structure"
+  solution: "Rolling window display (2-3 lines) instead of cumulative history"
+  prevention: "MinimalPlanSpine class enforces max 3 lines, no history bloat"
+
+---
