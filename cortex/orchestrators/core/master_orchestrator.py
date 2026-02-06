@@ -57,6 +57,9 @@ except ImportError:
     # Fallback if module not accessible
     AdaptiveRouter = None  # type: ignore
 
+# ENH-046 Phase 4 & 5: Import Context Synthesis Gateway (EXIT GATE)
+from cortex.interaction.context_synthesis_gateway import get_gateway
+
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination

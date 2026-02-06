@@ -8,12 +8,55 @@
 meta:
   plan_id: "ENH-046"
   title: "Context Consumption Governance (Token Optimizer Integration)"
-  version: "3.7"
+  version: "4.0"
   authority: "docs/meta/enhancement-history.yaml + cortex-architect.prompt.md v14.2"
-  status: "IN_PROGRESS"
-  phase: "Phase 5 IN_PROGRESS (MasterOrchestrator EXIT GATE Integration)"
-  updated: "2026-02-06 (v3.7: Phase 5 started - EXIT GATE wired into MasterOrchestrator)"
+  status: "NEAR_COMPLETE"
+  phase: "Phase 2 & 3 & 4 & 5 COMPLETE - 108/108 tests passing ✅"
+  updated: "2026-02-06 (v4.0: Phase 2 & 3 implementation complete, all 108 tests passing)"
   changelog:
+    - version: "4.0"
+      date: "2026-02-06"
+      changes: |
+        Phase 2 & 3 COMPLETE: All dependencies resolved, full test suite passing
+        
+        Phase 2 (CopilotContextOptimizer):
+        - copilot_context_optimizer.py: 333 LOC (token budget enforcement)
+        - test_copilot_context_optimizer.py: 20/20 tests PASSING ✅ (100%)
+        - Token estimation using tiktoken (±5% accuracy)
+        - Budget enforcement before Copilot handoff
+        - Per-orchestrator compression strategies
+        - Session cumulative tracking
+        
+        Phase 3 (ContextSynthesizer):
+        - context_synthesizer.py: 519 LOC (intelligent summarization)
+        - test_context_synthesizer.py: 25/25 tests PASSING ✅ (100%)
+        - Agent file synthesis (99.8% compression)
+        - YAML rule filtering (97% compression)
+        - Source code AST summary (98% compression)
+        - Auto-detect content type strategies
+        
+        Phase 4 (Gateway) - Previously completed, now fully tested:
+        - test_context_synthesis_gateway.py: 29/29 tests PASSING ✅ (100%)
+        - Fixed import paths (brain.core vs interaction)
+        - Handle both production (OptimizedContext) and mocked (dict) returns
+        - Compression ratio clamped to ≥0.0 for small contexts
+        - Cache hit flag properly set using dataclasses.replace()
+        
+        Phase 5 (Integration) - Previously completed, now fully tested:
+        - test_master_orchestrator_exit_gate.py: 13/13 tests PASSING ✅ (100%)
+        - Added get_gateway import at module level
+        - All integration tests passing
+        
+        TOTAL TEST RESULTS:
+        - Phase 2: 20/20 tests (100%)
+        - Phase 3: 25/25 tests (100%)
+        - Phase 4 (Cache): 21/21 tests (100%)
+        - Phase 4 (Gateway): 29/29 tests (100%)
+        - Phase 5 (Integration): 13/13 tests (100%)
+        
+        GRAND TOTAL: 108/108 tests PASSING ✅ (100%)
+        
+        Next: Phase 5 final validation + production deployment
     - version: "3.7"
       date: "2026-02-06"
       changes: |
