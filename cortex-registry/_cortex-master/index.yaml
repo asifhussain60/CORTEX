@@ -16,6 +16,13 @@ active_phases:
     started: "2026-02-01"
     status: "in-progress"
     priority: "P0"
+  
+  - id: "phase-24"
+    name: "External Refactoring Tools Integration"
+    file: "phases/active/phase-24-external-refactoring-tools.yaml"
+    started: "2026-02-05"
+    status: "planned"
+    priority: "P1"
 
 # Completed Phases (Historical)
 completed_phases_2026:
@@ -61,12 +68,13 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 20
-  active_phases: 1
+  total_phases: 21
+  active_phases: 2
   completed_2026: 12
   completed_2025: 11
   total_enhancements: 1
   active_enhancements: 1
+  last_phase_created: "2026-02-05"
   last_phase_completed: "2026-02-05"
   next_expected_completion: "2026-02-12"
   last_updated: "2026-02-05"

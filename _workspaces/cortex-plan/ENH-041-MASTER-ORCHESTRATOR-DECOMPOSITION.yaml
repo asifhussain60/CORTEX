@@ -1,0 +1,146 @@
+# Master Orchestrator Complexity Decomposition (ENH-041)
+
+**Plan ID:** ENH-041  
+**Status:** INITIATED  
+**Effort:** 6 weeks  
+**Tests:** 120+ tests, 90% coverage target  
+
+## Overview
+
+Reduce `master_orchestrator.py` from 2,847 lines to focused modules (<500 LOC each).
+
+## Current State
+
+```
+cortex/orchestrators/core/master_orchestrator.py: 2,847 lines
+- Coordination logic (200+ lines)
+- Validation logic (350+ lines) 
+- Execution logic (400+ lines)
+- Integration logic (300+ lines)
+- Helper methods (600+ lines)
+```
+
+## Target State
+
+```
+cortex/orchestrators/core/
+├── master_orchestrator_v2.py (400 lines - thin wrapper)
+├── coordination/
+│   ├── __init__.py
+│   └── coordinator.py (200 lines - stage routing)
+├── validation/
+│   ├── __init__.py
+│   ├── dor_validator.py (180 lines)
+│   └── governance_validator.py (200 lines)
+├── execution/
+│   ├── __init__.py
+│   └── execution_coordinator.py (250 lines)
+└── integration/
+    ├── __init__.py
+    ├── domain_brain_connector.py (180 lines)
+    ├── knowledge_router_connector.py (150 lines)
+    └── audit_logger_connector.py (120 lines)
+```
+
+## Implementation Phases
+
+### Phase 1: Module Structure & Foundation (Week 1-2)
+- Create directory structure ✅ (DONE)
+- Create base classes for each module ✅ (DONE)
+- Add type hints and docstrings
+- Create 50 unit tests
+
+**Deliverables:**
+- 4 new directories with __init__.py
+- 7 foundation classes
+- 50 unit tests passing
+
+### Phase 2: Extract Validation Logic (Week 3)
+- Extract DoR validation → dor_validator.py
+- Extract governance validation → governance_validator.py
+- Create 40 validation-specific tests
+- Update EnforcementOrchestrator integration
+
+**Deliverables:**
+- DoRValidator (180 LOC)
+- GovernanceValidator (200 LOC)
+- 40 tests
+
+### Phase 3: Extract Execution Logic (Week 4)
+- Extract TDD phase execution → execution_coordinator.py
+- Extract mode selection logic
+- Create 35 execution-specific tests
+- Wire to TDD orchestrator
+
+**Deliverables:**
+- ExecutionCoordinator (250 LOC)
+- 35 tests
+
+### Phase 4: Extract Integration Logic (Week 5)
+- Extract Domain Brain queries → domain_brain_connector.py
+- Extract Knowledge Router calls → knowledge_router_connector.py
+- Extract Audit logging → audit_logger_connector.py
+- Create 25 integration tests
+
+**Deliverables:**
+- 3 connector classes (~450 LOC total)
+- 25 tests
+
+### Phase 5: Wire New Modules (Week 6)
+- Update master_orchestrator_v2.py to delegate
+- Feature flag: CORTEX_USE_DECOMPOSED_ORCHESTRATOR
+- Integration tests (10 tests)
+- Gradual traffic migration
+
+**Deliverables:**
+- master_orchestrator_v2.py (400 LOC - thin wrapper)
+- Feature flag implementation
+- 10 integration tests
+- Migration guide
+
+## Benefits
+
+✅ **Maintainability:** Reduce cognitive load from 2,847 LOC → <500 LOC per module  
+✅ **Testability:** Independent unit testing of each component  
+✅ **Extensibility:** Add new handlers without modifying master orchestrator  
+✅ **Onboarding:** New developers can understand each module independently  
+✅ **Team Velocity:** Parallel development by multiple engineers  
+
+## Testing Strategy
+
+- **Phase 1:** 50 foundation tests (TDD RED/GREEN)
+- **Phase 2:** 40 validation tests (module isolation)
+- **Phase 3:** 35 execution tests (TDD cycle simulation)
+- **Phase 4:** 25 integration tests (cross-module communication)
+- **Phase 5:** 10 E2E tests (feature flag migration)
+- **Total:** 160 tests, 90% coverage
+
+## Risks & Mitigations
+
+| Risk | Probability | Mitigation |
+|------|-------------|-----------|
+| Feature flag overhead | Low | Use compile-time constant, no runtime cost |
+| Circular dependencies | Medium | Dependency inversion pattern + type stubs |
+| Performance regression | Low | Benchmark before/after (should improve due to cleaner code) |
+| Incomplete extraction | Medium | Checklist-driven extraction, pre-extraction mapping |
+
+## Success Criteria
+
+- ✅ All tests passing (160/160)
+- ✅ Coverage ≥90%
+- ✅ Performance: No regression vs original
+- ✅ MCP tool interface preserved (backward compatible)
+- ✅ Feature flag enables A/B testing
+- ✅ Code review approved
+
+## Timeline
+
+**Start:** 2026-02-06  
+**Complete:** 2026-03-20  
+**Effort:** 6 weeks, ~120 hours  
+
+## Related Enhancements
+
+- ENH-042: LENS Result Caching Layer
+- ENH-013: SDLC Governance & Code-Level Planning
+- ENH-012: Engineer-Focused Challenge Format

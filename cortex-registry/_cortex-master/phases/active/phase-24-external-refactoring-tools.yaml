@@ -1,0 +1,102 @@
+# PHASE-24: EXTERNAL REFACTORING TOOLS INTEGRATION
+# Version: 1.0 | Created: 2026-02-05
+# Status: ACTIVE - Ready for implementation
+# Authority: cortex-architect.prompt.md v13.0, strategic recommendation 2026-02-05
+
+---
+metadata:
+  phase: "24"
+  title: "External Refactoring Tools Integration - Polyglot Semantic Refactoring"
+  version: "1.0"
+  status: "ACTIVE"
+  author: "Asif Hussain"
+  created: "2026-02-05"
+  estimated_weeks: 8
+  estimated_test_count: 240
+  target_coverage: "85%"
+  priority: "P1"
+
+objectives:
+  - "Integrate Rope for Python semantic refactoring (extract, rename, inline, encapsulate, move, change_signature)"
+  - "Integrate Roslyn for C# type-safe refactorings (extract, rename, inline, encapsulate, pull_up, push_down)"
+  - "Integrate TypeScript Language Service for TS/JS refactorings (extract function/constant/type, organize imports)"
+  - "Create Java Language Server adapter foundation"
+  - "Achieve 100+ refactoring operations across 4 languages"
+  - "Increase enterprise adoption from 40% to 95% (polyglot support)"
+
+business_value:
+  refactoring_operations: "15 → 100+ semantic operations"
+  enterprise_adoption: "40% → 95% (polyglot support)"
+  type_safety: "Compiler-validated for C# and TypeScript"
+  execution_speed: "10x faster than manual refactoring"
+  team_velocity_improvement: "+30% (automation)"
+
+phase_structure:
+  - phase_1: "Foundation + Python Rope (Weeks 1-2, 10 days)"
+  - phase_2: "C# Roslyn Integration (Weeks 3-4, 10 days)"
+  - phase_3: "TypeScript/JavaScript + Java Foundation (Weeks 5-6, 10 days)"
+  - phase_4: "Orchestration + MCP Exposure + Documentation (Weeks 7-8, 10 days)"
+
+deliverables:
+  files_to_create: 13
+  files_to_modify: 8
+  lines_of_code: 2330
+  test_code_lines: 1060
+  total_tests: 1145
+  documentation: "2000+ lines"
+
+success_criteria:
+  - "All 1145 tests passing"
+  - "85%+ code coverage"
+  - "Zero CORE rule violations"
+  - "Type safety: 100% for Roslyn + TypeScript"
+  - "Performance: Tool startup < 3s, execution < 2s"
+  - "Graceful degradation when tools unavailable"
+  - "Full audit logging (CORE-027)"
+  - "MCP tools exposed for all 4 languages"
+
+governance:
+  - "CORE-008: TDD-first (tests BEFORE code)"
+  - "CORE-011: Type hints mandatory"
+  - "CORE-012: Google-style docstrings"
+  - "CORE-030: Implementation Truth"
+  - "CORE-035: Single canonical implementation"
+  - "MCP-FIRST: All tools via MCP integration"
+
+architectural_decisions:
+  plugin_architecture: "RefactoringToolAdapter base class with concrete implementations"
+  language_support: "Python (Rope), C# (Roslyn), TypeScript/JavaScript (LS), Java (LSP)"
+  optional_dependencies: "pip install cortex[refactoring-tools] to avoid bloat"
+  graceful_degradation: "Fallback to analysis-only when tools unavailable"
+  performance_strategy: "Lazy initialization, process pooling, async execution"
+
+risks_and_mitigations:
+  rope_complexity:
+    probability: "Medium"
+    impact: "1-2 week schedule delay"
+    mitigation: "POC before full implementation, pair programming"
+  
+  roslyn_overhead:
+    probability: "Low"
+    impact: "Performance degradation"
+    mitigation: "Process pooling, lazy init, early profiling (Phase 2 Week 1)"
+  
+  java_integration:
+    probability: "High"
+    impact: "Phase 3 delay or feature cut"
+    mitigation: "LSP approach (standard protocol), fallback to IntelliJ CLI"
+  
+  test_coverage:
+    probability: "Medium"
+    impact: "Quality issues in production"
+    mitigation: "TDD-first, weekly reviews, pre-commit coverage gates"
+  
+  tool_versioning:
+    probability: "Medium"
+    impact: "Compatibility issues"
+    mitigation: "Pin versions, Docker containers, CI test matrix"
+
+next_phase: "Phase 25 (TBD)"
+
+---
+# END PHASE-24 METADATA
