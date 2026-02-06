@@ -208,6 +208,26 @@ headings:
 
 # Status Indicators
 status_format:
+  phase_progress:
+    hierarchy: "Phase title MUST be more prominent than progress bar"
+    correct_format: |
+      ### Phase 25: PLAN MODE Enhancement
+      
+      **Progress:** [████░░░░░░] 40% - Core Infrastructure Complete
+    wrong_format: |
+      ### 🔄 Phase 25 Progress - Stage 1
+      **[████░░░░░░] 20% - Core PLAN Mode Infrastructure**
+    rules:
+      - "Phase title = h3 heading (###) with phase number + name"
+      - "Progress bar = Bold paragraph with 'Progress:' label"
+      - "Always on separate lines (title above, bar below)"
+      - "Stage name = Optional subheading after title"
+    alternative_format: |
+      ### Phase 25: PLAN MODE Enhancement
+      **Stage 1: Core Infrastructure**
+      
+      **Progress:** [████░░░░░░] 40%
+  
   progress_bar:
     format: "[████████░░] 80% Task description"
     width: 10
@@ -230,6 +250,8 @@ status_format:
       - "Glyph format ([✓][→][ ])"
       - "Inconsistent block widths"
       - "Missing percentages"
+      - "Phase title inline with progress bar"
+      - "Progress bar more prominent than phase title"
   
   completion:
     use_when: "Work is finished"

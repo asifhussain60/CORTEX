@@ -226,7 +226,40 @@ For multi-step implementations, use visual ASCII progress bars:
 | **Status Icon** | ✅🔵⚪🔴 before description |
 | **Description** | Clear task name + context |
 
-### **When to Use**
+### **Phase Progress Hierarchy (MANDATORY)**
+
+**CRITICAL:** Phase title MUST be more prominent than progress bar.
+
+✅ **CORRECT FORMAT** (Phase title in heading):
+```markdown
+### Phase 25: PLAN MODE Enhancement
+
+**Progress:** [████░░░░░░] 40% - Core Infrastructure Complete
+
+[Content continues...]
+```
+
+❌ **WRONG FORMAT** (Title and bar same level):
+```markdown
+### 🔄 Phase 25 Progress - Stage 1
+**[████░░░░░░] 20% - Core PLAN Mode Infrastructure**
+```
+
+**Visual Hierarchy Rules:**
+1. **Phase Title** = h3 heading (`###`) with phase number + name
+2. **Progress Bar** = Bold paragraph below heading with "Progress:" label
+3. **Stage Name** = Optional subheading or bold text after title
+4. **Always separate** = Progress bar on its own line, not inline with heading
+
+**Alternative Format (Multi-Stage):**
+```markdown
+### Phase 25: PLAN MODE Enhancement
+**Stage 1: Core Infrastructure**
+
+**Progress:** [████░░░░░░] 40%
+```
+
+### **When to Use Progress Bars**
 
 ✅ **Use progress bars for:**
 - Multi-step implementations (>3 steps)
