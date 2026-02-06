@@ -79,6 +79,17 @@ except ImportError:
     MarkdownReportBanPolicy = None
     MinimalPlanSpine = None
 
+# Phase 35: Import autonomous execution components for continuation detection & progress bars
+# AC-PHASE-35-001: Autonomous continuation detection (R1)
+# AC-PHASE-35-002: ASCII progress bar integration (R2)
+try:
+    from cortex.interaction.autonomous_plan_executor import AutonomousPlanExecutor
+    from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
+except ImportError:
+    # Fallback if modules not accessible
+    AutonomousPlanExecutor = None
+    ASCIIProgressBar = None
+
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
@@ -580,6 +591,55 @@ class MasterOrchestrator(IOrchestrator):
                 success=False,
                 details={"error": f"Failed to initialize TDD Orchestrator: {str(e)}"}
             )
+        
+        # AC-PHASE-35-001: Initialize AutonomousPlanExecutor for continuation detection (R1)
+        # Detects "proceed", "continue", "yes", "approve" patterns → autonomous execution
+        self._autonomous_executor: Optional[AutonomousPlanExecutor] = None
+        if AutonomousPlanExecutor is not None:
+            try:
+                self._autonomous_executor = AutonomousPlanExecutor()
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-35-001",
+                    operation="AUTONOMOUS_EXECUTOR_INIT",
+                    success=True,
+                    details={
+                        "feature": "Continuation detection",
+                        "patterns": ["proceed", "continue", "yes", "approve", "phase N"],
+                        "roi_score": 0.7425
+                    }
+                )
+            except Exception as e:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-35-001",
+                    operation="AUTONOMOUS_EXECUTOR_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize AutonomousPlanExecutor: {str(e)}"}
+                )
+        
+        # AC-PHASE-35-002: Initialize ASCIIProgressBar for visual progress indicators (R2)
+        # Format: [████████░░] 80% Phase Name
+        self._progress_bar: Optional[ASCIIProgressBar] = None
+        if ASCIIProgressBar is not None:
+            try:
+                self._progress_bar = ASCIIProgressBar()
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-35-002",
+                    operation="ASCII_PROGRESS_BAR_INIT",
+                    success=True,
+                    details={
+                        "feature": "ASCII progress bars",
+                        "format": "[████████░░] 80%",
+                        "width": 10,
+                        "modes": ["PLAN", "TDD", "IMPLEMENT", "REFACTOR"]
+                    }
+                )
+            except Exception as e:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-35-002",
+                    operation="ASCII_PROGRESS_BAR_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize ASCIIProgressBar: {str(e)}"}
+                )
         
     @classmethod
     def instance(cls) -> 'MasterOrchestrator':
@@ -1449,12 +1509,14 @@ class MasterOrchestrator(IOrchestrator):
         Process user request through challenge-driven interaction (Stage 1).
         
         AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Challenge-driven workflow
+        AC-PHASE-35-001: Autonomous continuation detection (R1+R3+R4)
         
         Stages:
-        1. Stage 1 (InteractionOrchestrator): LENS → Challenge → User Choice
-        2. Stage 2 (IntentRouter): Intent classification
-        3. Stage 3 (GovernanceRegistry): Compliance validation
-        4. Stage 4 (Domain orchestrators): Execution
+        1. Stage 0 (PRE-FLIGHT): Autonomous continuation detection
+        2. Stage 1 (InteractionOrchestrator): LENS → Challenge → User Choice
+        3. Stage 2 (IntentRouter): Intent classification
+        4. Stage 3 (GovernanceRegistry): Compliance validation
+        5. Stage 4 (Domain orchestrators): Execution
         
         Args:
             user_request: Natural language user request
@@ -1464,6 +1526,46 @@ class MasterOrchestrator(IOrchestrator):
             Result with challenge (if disagreement) or execution result
         """
         try:
+            # AC-PHASE-35-001: PRE-FLIGHT - Detect autonomous continuation
+            # R1: Continuation detection, R3: Skip verbose status, R4: Single decision gate
+            autonomous_mode = False
+            if self._autonomous_executor and self._autonomous_executor.detect_continuation(user_request):
+                autonomous_mode = True
+                self.logger.log_operation_start(
+                    ac_id="AC-PHASE-35-001",
+                    operation="AUTONOMOUS_CONTINUATION_DETECTED",
+                    details={
+                        "pattern": self._autonomous_executor.get_continuation_reason(),
+                        "skip_dor": self._autonomous_executor.should_skip_dor(),
+                        "skip_challenge": True,
+                        "mode": "AUTONOMOUS"
+                    }
+                )
+                
+                # AC-PHASE-35-002: Display ASCII progress bar if available
+                if self._progress_bar:
+                    next_phase = self._autonomous_executor.load_next_phase()
+                    if next_phase:
+                        from cortex.orchestrators.response.ascii_progress_bar import Phase as ProgressPhase
+                        progress_phase = ProgressPhase(
+                            name=next_phase.name,
+                            progress=0.0,
+                            status="active"
+                        )
+                        progress_display = self._progress_bar.format_phase_progress(progress_phase)
+                        self.logger.log_operation_start(
+                            ac_id="AC-PHASE-35-002",
+                            operation="PROGRESS_BAR_DISPLAY",
+                            details={"display": progress_display, "phase": next_phase.name}
+                        )
+                
+                # Skip challenge system when in autonomous mode
+                # R4: Single decision gate (no mid-execution prompts)
+                return self.execute_operation(
+                    operation_name="process_request",
+                    parameters={"request": user_request, "context": context or {}, "autonomous": True}
+                )
+            
             # AC-PERMANENT-FIX-006: Stage 1 - Challenge-driven comprehension
             if not self.interaction_orchestrator:
                 # Fallback: skip challenge system if not initialized

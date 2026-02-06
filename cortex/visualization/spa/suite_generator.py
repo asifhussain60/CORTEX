@@ -344,11 +344,11 @@ window.dashboardData = JSON.parse(document.getElementById("repo-data").textConte
             
             modified = template[:start_idx] + new_data_section + template[end_idx:]
         
-        # Update title
-        modified = modified.replace(
-            f"<title>KASHKOLE",
-            f"<title>{repo.display_name}"
-        )
+        # Update title - use regex to match any placeholder before " | CORTEX Dashboard"
+        # This handles KSESSIONS, KASHKOLE, or any other template placeholder
+        title_pattern = r'<title>[^<]+\| CORTEX Dashboard</title>'
+        new_title = f'<title>{repo.display_name} | CORTEX Dashboard</title>'
+        modified = re.sub(title_pattern, new_title, modified)
         
         # Fix asset paths (relative to dist/repos/<slug>/)
         modified = self._fix_asset_paths(modified)

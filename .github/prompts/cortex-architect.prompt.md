@@ -228,11 +228,21 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 **Quick Reference:** 14 CORE rules + 3 special rules (MCP-FIRST, MCP-GATE, ARCH-012)  
 **Enforcement Levels:** BLOCKED, PRE-EXECUTION, WARNING, RUNTIME, PRINCIPLE
 
-**Key Rules:**
-- CORE-002: NO markdown file generation (inline only)
-- CORE-008: TDD-first (tests before code)
-- CORE-028: Intelligent file naming (kebab-case, no SCREAMING_CASE)
-- CORE-035: Single implementation (no _v2)
+**Key Rules (ENFORCEMENT REQUIRED):**
+- CORE-002: NO markdown file generation (inline only) — ❌ BLOCKED
+- CORE-008: TDD-first (tests before code) — ❌ BLOCKED  
+- CORE-028: Intelligent file naming (kebab-case, no SCREAMING_CASE) — ⚠️ WARNING
+- CORE-029: **Response header MANDATORY** — ❌ BLOCKED (every response must start with header)
+- CORE-035: Single implementation (no _v2) — ❌ BLOCKED
+- MCP-GATE: IMPLEMENT intents via cortex_process_request only — ❌ BLOCKED
+
+**CORE-029 Template (EVERY response):**
+```
+## 🧠 CORTEX {mode}
+**Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Interactive|Meta-Audit} | **Scope:** {scope} ✅
+
+---
+```
 
 **Full details:** See cortex-registry/_cortex-master/governance/core-rules.yaml
 
@@ -262,25 +272,36 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 
 # 🎯 MODE 0.5: PLAN (Phase Registry Operations)
 
-**Trigger:** `/plan` command OR working with cortex-registry/_cortex-master/ directory files  
+**Trigger (AUTO-DETECT):** 
+1. `/plan` command explicitly invoked, OR
+2. User request mentions: "master plan", "review plan", "next phase", "phase priority", "ROI score", OR
+3. Working with cortex-registry/_cortex-master/ directory files, OR
+4. Request involves phase selection/execution order decisions
+
 **Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)  
 **Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
 **Output:** Priority-ordered phase recommendations with real-time visual progress
 
+**MANDATORY MODE CLASSIFICATION:** If request contains 2+ triggers above, switch to PLAN mode automatically.
+
 ## Subtle Plan Spine (CODE-ACTION MODES ONLY)
 
-**⚠️ CRITICAL:** Progress indicators are ONLY for code-action modes:
+**⚠️ CRITICAL - ENFORCEMENT MANDATORY:** Progress indicators are ONLY for code-action modes:
 - ✅ **PLAN** — Phase creation, updates, dashboard regeneration
-- ✅ **TDD** — RED→GREEN→REFACTOR implementation cycles
-- ✅ **REFACTOR** — Multi-file refactoring operations (>5 files)
-- ✅ **IMPLEMENT** — Feature implementation with multiple steps
+- ✅ **TDD** — RED→GREEN→REFACTOR implementation cycles (during actual code writing)
+- ✅ **REFACTOR** — Multi-file refactoring operations (>5 files, during actual changes)
+- ✅ **IMPLEMENT** — Feature implementation with multiple steps (during actual coding)
 
 **❌ FORBIDDEN:** Do NOT show progress indicators for:
+- ❌ **DESIGN** — Analysis, verification, discovery (even if part of TDD workflow)
 - ❌ **AUDIT** — Analysis-only (no progress bars)
 - ❌ **DIGEST** — Chat session extraction (no progress bars)
 - ❌ **INTERACTIVE** — Conversational Q&A (no progress bars)
 - ❌ **META-AUDIT** — Prompt self-analysis (no progress bars)
-- ❌ Single file reads, quick greps, simple validation
+- ❌ **File reads, greps, test runs** — Analysis operations (no progress bars)
+- ❌ **Status verification** — Checking phase state, running tests (no progress bars)
+
+**RULE:** If you're NOT writing/modifying code files, NO progress bars allowed.
 
 ### ASCII Progress Bar Format (MANDATORY)
 
@@ -1386,6 +1407,271 @@ Panels:
 - ROI Metrics (cost savings, cycle time, success rate)
 - Module Health (5 patterns with traffic light status)
 
+### P6 — CORTEX Wiring Integrity (Active Phases & Enhancements)
+
+**Purpose:** Validate that new functionality from active phases (_cortex-master) is properly wired, exposed via MCP, and integrated into MasterOrchestrator.
+
+**CRITICAL:** This check is CORTEX-specific. Load ONLY if project contains cortex-registry/_cortex-master/ directory.
+
+**Authority:** cortex-registry/_cortex-master/index.yaml + phases/active/ + enhancements/active/
+
+**Activation Condition:**
+```python
+wiring_integrity_enabled = (
+    Path("cortex-registry/_cortex-master/index.yaml").exists() 
+    and Path("cortex/orchestrators/core/master_orchestrator.py").exists()
+)
+```
+
+**Detection Logic (Auto-Runnable):**
+
+```python
+import yaml
+from pathlib import Path
+
+# Load active phases + enhancements
+index_yaml = yaml.safe_load(Path("cortex-registry/_cortex-master/index.yaml").read_text())
+active_phases = {p["id"]: p for p in index_yaml["active_phases"] if p["status"] in ["active", "planned"]}
+
+# For each active phase, check:
+wiring_gaps = []
+
+for phase_id, phase in active_phases.items():
+    phase_file = Path(phase["file"])
+    phase_yaml = yaml.safe_load(phase_file.read_text())
+    
+    # Check 1: Is MasterOrchestrator wired for this phase?
+    if not _orchestrator_supports_phase(phase_yaml):
+        wiring_gaps.append({
+            "phase": phase_id,
+            "gap": "WIRE-MCP-GATEWAY",
+            "severity": "P0",
+            "evidence": f"Phase {phase_id} has no MasterOrchestrator routing"
+        })
+    
+    # Check 2: Is phase exposed via MCP tools?
+    mcp_tools_needed = phase_yaml.get("mcp_tools", [])
+    for tool in mcp_tools_needed:
+        if not _mcp_tool_exists(tool):
+            wiring_gaps.append({
+                "phase": phase_id,
+                "gap": "WIRE-MCP-TOOL-MISSING",
+                "severity": "P1",
+                "tool": tool
+            })
+    
+    # Check 3: Are tests present?
+    if phase_yaml.get("status") == "active" and phase_yaml.get("priority") in ["P0", "P1"]:
+        phase_id_slug = phase_id.replace("-", "_")
+        test_file = Path(f"tests/integration/phases/test_{phase_id_slug}.py")
+        if not test_file.exists():
+            wiring_gaps.append({
+                "phase": phase_id,
+                "gap": "CORE-008-TESTS-MISSING",
+                "severity": "P1",
+                "expected_file": str(test_file)
+            })
+    
+    # Check 4: Are YAML references consolidated (ENH-048)?
+    if phase_yaml.get("references", {}).get("prompt_inline", 0) > 5:
+        wiring_gaps.append({
+            "phase": phase_id,
+            "gap": "ENH-048-CONSOLIDATION",
+            "severity": "P2",
+            "evidence": f"Phase {phase_id} has {phase_yaml['references']['prompt_inline']} inline references"
+        })
+
+return wiring_gaps
+```
+
+**Wiring Checks (5 Priority Gaps Auto-Detected):**
+
+| Gap ID | Active Phase | Implementation | MCP Tool | Tests | Prompt Ref | Status |
+|--------|--------------|----------------|----------|-------|-----------|--------|
+| **WIRE-001** | Phase-29 | ChatResponsePolicyValidator ✅ | ❌ NOT CALLED | 🟡 PARTIAL | Not in prompt | 🔴 CRITICAL |
+| **WIRE-002** | Phase-25 | PLAN MODE ✅ Partial | ⚠️ PARTIAL | ⚠️ PARTIAL | ❌ OLD DOCS | 🟡 HIGH |
+| **WIRE-003** | ENH-048 | yaml_loaders.py ❌ MISSING | N/A | ❌ NO | Inline only | 🔴 CRITICAL |
+| **WIRE-004** | Phase-28 | OnboardingGate ✅ EXISTS | ✅ cortex_onboard_repository | 🟡 PARTIAL | ❌ NOT INTEGRATED | 🟡 HIGH |
+| **WIRE-005** | Phase-32 | suite_generator.py ✅ EXISTS | N/A | 🟡 PARTIAL | ❌ OLD TEMPLATE | 🟡 MEDIUM |
+
+**Detailed Checks:**
+
+**WIRE-001: ChatResponsePolicyValidator Integration (Phase-29)**
+```python
+# Detection
+imports_present = "ChatResponsePolicyValidator" in read_file("master_orchestrator.py")
+called_in_response = grep_count("master_orchestrator.py", r"suppress_verbosity|inject_plan_spine") > 0
+
+gap_detected = imports_present and not called_in_response
+
+# Report
+if gap_detected:
+    print(f"⚠️ WIRE-001: ChatResponsePolicyValidator imported but NOT called in response assembly")
+    print(f"   Location: cortex/orchestrators/core/master_orchestrator.py:process_user_request()")
+    print(f"   Fix: Add suppress_verbosity() + inject_plan_spine() calls after response composition")
+    print(f"   MCP Tool: cortex_process_request (must apply policies)")
+```
+
+**WIRE-002: PLAN MODE Documentation (Phase-25)**
+```python
+# Detection
+mode_yaml_exists = Path("cortex-registry/_cortex-master/meta/modes.yaml").exists()
+plan_mode_in_yaml = "PLAN:" in yaml.safe_load(...)["modes"]
+plan_mode_in_prompt = grep_count("cortex-architect.prompt.md", r"MODE 0.5: PLAN|PLAN MODE") > 0
+
+gap_detected = mode_yaml_exists and plan_mode_in_yaml and not plan_mode_in_prompt
+
+# Report
+if gap_detected:
+    print(f"⚠️ WIRE-002: PLAN MODE defined in modes.yaml but not documented in cortex-architect.prompt.md")
+    print(f"   Location: .github/prompts/cortex-architect.prompt.md (add MODE 0.5 section)")
+    print(f"   Required: Flow diagram, examples, token cost")
+```
+
+**WIRE-003: ENH-048 yaml_loaders.py Missing (ENH-048)**
+```python
+# Detection
+yaml_loaders_exists = Path("cortex/brain/core/yaml_loaders.py").exists()
+yaml_files_exist = len(list(Path("cortex-registry/_cortex-master/governance").glob("*.yaml"))) > 0
+loads_used = grep_count("cortex-architect.prompt.md", r"from cortex.brain.core.yaml_loaders import") > 0
+
+gap_detected = yaml_files_exist and not yaml_loaders_exists and loads_used
+
+# Report
+if gap_detected:
+    print(f"🔴 WIRE-003: YAML loader utilities missing (ENH-048 Phase 1)")
+    print(f"   Missing: cortex/brain/core/yaml_loaders.py")
+    print(f"   Needed functions:")
+    print(f"     - load_core_rules() → CoreRulesYAML")
+    print(f"     - load_modes() → ModesYAML")
+    print(f"     - load_response_format() → ResponseFormatYAML")
+    print(f"     - load_audit_checklist() → AuditChecklistYAML")
+    print(f"   Severity: P0 (blocks prompt unbloating)")
+```
+
+**WIRE-004: OnboardingGate MasterOrchestrator Wiring (Phase-28)**
+```python
+# Detection
+onboarding_gate_exists = Path("cortex/mcp/middleware/onboarding_gate.py").exists()
+mcp_tool_exists = grep_count("cortex/mcp/tools/onboarding_tools.py", r"@mcp_tool.*cortex_onboard_repository") > 0
+gate_called_in_mo = grep_count("master_orchestrator.py", r"OnboardingGate|onboarding_gate") > 0
+
+gap_detected = onboarding_gate_exists and mcp_tool_exists and not gate_called_in_mo
+
+# Report
+if gap_detected:
+    print(f"⚠️ WIRE-004: OnboardingGate middleware exists but not integrated into MasterOrchestrator")
+    print(f"   Location: cortex/mcp/middleware/onboarding_gate.py (not imported/called)")
+    print(f"   Fix: Add pre-execution check in MasterOrchestrator.process_user_request()")
+    print(f"     if not onboarding_gate.check_onboarding(request):")
+    print(f"         return self._block_with_onboarding_instruction(...)")
+    print(f"   MCP Tool: cortex_onboard_repository (automatic enforcement after wire-in)")
+```
+
+**WIRE-005: Phase-32 Dashboard Template Path (Phase-32)**
+```python
+# Detection
+suite_generator_path = Path("cortex/visualization/spa/suite_generator.py")
+dashboard_template_var = grep_search(suite_generator_path, r'DASHBOARD_TEMPLATE\s*=\s*"([^"]+)"')
+correct_template = "company/dashboards/templates/repo-dashboard-glass-v1.html"
+wrong_template = "_archive"
+
+gap_detected = wrong_template in dashboard_template_var
+
+# Report
+if gap_detected:
+    print(f"🟡 WIRE-005: Dashboard template path needs update (Phase-32)")
+    print(f"   Current: {dashboard_template_var}")
+    print(f"   Expected: {correct_template}")
+    print(f"   File: cortex/visualization/spa/suite_generator.py")
+    print(f"   Action: Update DASHBOARD_TEMPLATE constant + run tests")
+```
+
+**Audit Report Format:**
+
+```markdown
+### P6: CORTEX Wiring Integrity (Active Phases) ✅/❌
+
+**Status:** {PASS|FAIL|DEGRADED}
+
+**Active Phases Audited:** {count}
+
+#### Wiring Gaps Detected
+
+| Gap | Phase | Component | Status | Severity | Fix Time |
+|-----|-------|-----------|--------|----------|----------|
+| WIRE-001 | Phase-29 | ChatResponsePolicyValidator | ❌ NOT WIRED | P0 | 30min |
+| WIRE-002 | Phase-25 | PLAN MODE Docs | ❌ MISSING | P1 | 1h |
+| WIRE-003 | ENH-048 | yaml_loaders.py | ❌ MISSING | P0 | 1h |
+| WIRE-004 | Phase-28 | OnboardingGate | ⚠️ PARTIAL | P1 | 45min |
+| WIRE-005 | Phase-32 | Dashboard Template | ⚠️ WRONG PATH | P2 | 15min |
+
+**Total Gaps:** {n} | **P0:** {n} | **P1:** {n} | **P2:** {n}
+
+#### MCP Exposure Validation
+
+| Phase | MCP Tool | Exposed | Documented | Status |
+|-------|----------|---------|-----------|--------|
+| Phase-28 | cortex_onboard_repository | ✅ | ✅ | ✅ |
+| Phase-29 | (implicit in response) | ⚠️ | ❌ | ⚠️ |
+| Phase-32 | (dashboard generation) | ❌ | ❌ | ❌ |
+
+#### Test Coverage
+
+| Phase | Unit Tests | Integration Tests | Status |
+|-------|-----------|------------------|--------|
+| Phase-28 | 🟢 EXISTS | 🟢 EXISTS | ✅ COMPLIANT |
+| Phase-29 | 🟡 PARTIAL | ❌ MISSING | 🔴 CORE-008 VIOLATION |
+| Phase-32 | 🟡 PARTIAL | 🟡 PARTIAL | 🟡 NEEDS COVERAGE |
+
+#### Recommendations (Auto-Generated from Wiring Gaps)
+
+**P0 Priority:**
+- [ ] **WIRE-001:** Wire ChatResponsePolicyValidator.suppress_verbosity() into response assembly (30 min TDD)
+- [ ] **WIRE-003:** Create cortex/brain/core/yaml_loaders.py with 4 loader functions (1h TDD)
+
+**P1 Priority:**
+- [ ] **WIRE-002:** Add MODE 0.5 PLAN documentation to cortex-architect.prompt.md (1h manual)
+- [ ] **WIRE-004:** Integrate OnboardingGate pre-execution check into MasterOrchestrator (45 min TDD)
+
+**P2 Priority:**
+- [ ] **WIRE-005:** Update DASHBOARD_TEMPLATE path in suite_generator.py + verify tests (15 min TDD)
+
+#### Evidence & Remediation Commands
+
+**WIRE-001 Remediation:**
+```bash
+# Auto-generate wire-001 fix proposal
+cortex_process_request --module wire-001-chat-response-integration --mode TDD
+```
+
+**WIRE-003 Remediation:**
+```bash
+# Auto-generate yaml_loaders.py scaffold
+cortex_process_request --module yaml-loaders-core-rules --mode TDD
+```
+
+**WIRE-004 Remediation:**
+```bash
+# Auto-generate onboarding gate wiring
+cortex_process_request --module onboarding-gate-wiring --mode TDD
+```
+
+**Verification:**
+```bash
+# After fixes, re-run P6 audit
+cortex_audit --focus wiring-integrity --scope cortex-registry/_cortex-master/
+```
+```
+
+**Automated Continuous Monitoring:**
+
+P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cortex-master/ exists. Auto-detects:
+- New active phases (auto-add to wiring checks)
+- Missing MCP tools (auto-flag)
+- Test file gaps (CORE-008 violations)
+- Prompt synchronization issues (ENH-048 violations)
+
 ## Audit Output Format
 
 **CRITICAL:** AUDIT mode MUST use CORTEX Architect header (NOT "CORTEX Audit Mode")
@@ -1808,7 +2094,14 @@ if result['notify_user']:
       ↓
 4. Await Approval — Final response before execution begins
       ↓
-4.5. MasterOrchestrator Gateway (Production Mode)
+4.5. MCP-GATE Enforcement (MANDATORY for IMPLEMENT intents)
+      ├─ **FORBIDDEN:** Direct file edits via replace_string_in_file, create_file
+      ├─ **REQUIRED:** Use cortex_process_request MCP tool
+      ├─ **Exception:** Docs updates, config changes, analysis-only
+      ├─ **Validation:** Check intent classification (IMPLEMENT/FIX = MCP mandatory)
+      └─ **Bypass:** If violated, BLOCK operation and report error
+      ↓
+4.6. MasterOrchestrator Gateway (Production Mode)
       ├─ Log AC_START (audit trail)
       ├─ Route via cortex_process_request MCP tool
       ├─ MasterOrchestrator → IntentRouter → TDDOrchestrator

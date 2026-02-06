@@ -569,3 +569,22 @@ class TestGPTSpecAcceptanceCriteria:
         
         # AC-GLASS-005: Ensure no external fetches (file:// compatibility)
         assert "fetch(" not in content, "Dashboard uses fetch() - not file:// compatible"
+    
+    def test_title_replacement_generic(self, generated_suite: Path) -> None:
+        """Phase 32: Verify title replacement works with generic template placeholders.
+        
+        Bug: Code searches for hardcoded 'KASHKOLE' but template uses 'KSESSIONS'.
+        Fix: Use regex pattern to match any title before ' | CORTEX Dashboard'.
+        """
+        repo_dashboard = generated_suite / "repos" / "acceptance-test" / "index.html"
+        content = repo_dashboard.read_text(encoding="utf-8")
+        
+        # Title should be replaced with repo display name
+        assert "<title>acceptance-test | CORTEX Dashboard</title>" in content, \
+            "Title not correctly replaced with repo display name"
+        
+        # Should NOT contain template placeholder
+        assert "<title>KSESSIONS | CORTEX Dashboard</title>" not in content, \
+            "Template placeholder 'KSESSIONS' not replaced"
+        assert "<title>KASHKOLE | CORTEX Dashboard</title>" not in content, \
+            "Old hardcoded 'KASHKOLE' found in output"
