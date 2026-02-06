@@ -34,6 +34,7 @@ class ChatResponsePolicy:
     - NO tool narration ("Let me read...", "Perfect!", etc.)
     - Single "Next Step: PROCEED" directive (no preference questions)
     - Response header mandatory (CORE-029)
+    - Business-friendly language (optional)
     
     Example:
         >>> policy = ChatResponsePolicy()
@@ -44,6 +45,7 @@ class ChatResponsePolicy:
     required_section_count: int = 3
     suppress_narration_enabled: bool = True
     enforce_proceed_enabled: bool = True
+    enable_business_language: bool = False
     
     # Tool narration patterns to suppress
     NARRATION_PATTERNS = [
@@ -62,12 +64,27 @@ class ChatResponsePolicy:
     # Preference question patterns to remove
     PREFERENCE_PATTERNS = [
         r"Which approach do you prefer\?",
+        r"Which option.*",
         r"Please select.*",
         r"Choose (one|an option).*",
         r"[1-9]️⃣\s+Option [A-Z]",
         r"Option [A-Z]:",
         r"\d+️⃣.*?Option.*",
+        r"\d+\)\s+[A-Z]\b",  # "1) A 2) B"
     ]
+    
+    # Technical to business language mapping
+    TECHNICAL_TO_BUSINESS = {
+        r"\badapter pattern\b": "design approach",
+        r"\bloose coupling\b": "flexible connection",
+        r"\btight coupling\b": "rigid connection",
+        r"\bSOLID principles\b": "best practices",
+        r"\bdependency injection\b": "providing needed components",
+        r"\bfactory pattern\b": "creation strategy",
+        r"\brepository pattern\b": "data access layer",
+        r"\bunit of work\b": "transaction coordinator",
+        r"\bdependency inversion\b": "interface-based design",
+    }
     
     def validate_response_structure(self, response: str) -> Tuple[bool, List[str]]:
         """
@@ -136,16 +153,28 @@ class ChatResponsePolicy:
         cleaned_lines = []
         
         for line in lines:
+            # Skip empty lines initially
+            if not line.strip():
+                cleaned_lines.append(line)
+                continue
+            
             # Skip lines that are pure narration
-            if self.contains_tool_narration(line):
-                # Check if line has technical content after narration
-                # e.g., "Perfect! The adapter uses JSON." -> keep "The adapter uses JSON."
+            contains_narration = False
+            for pattern in self.NARRATION_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    contains_narration = True
+                    break
+            
+            if contains_narration:
+                # Remove narration phrases but keep remaining content
+                cleaned_line = line
                 for pattern in self.NARRATION_PATTERNS:
-                    line = re.sub(pattern, '', line, flags=re.IGNORECASE)
+                    cleaned_line = re.sub(pattern, '', cleaned_line, flags=re.IGNORECASE)
                 
                 # Only keep line if it has substantial content left
-                if line.strip() and len(line.strip()) > 10:
-                    cleaned_lines.append(line.strip())
+                if cleaned_line.strip() and len(cleaned_line.strip()) > 10:
+                    cleaned_lines.append(cleaned_line.strip())
+                # Otherwise skip the entire line (pure narration)
             else:
                 cleaned_lines.append(line)
         
@@ -192,6 +221,39 @@ class ChatResponsePolicy:
         
         return response
     
+    def translate_to_business_language(self, response: str) -> str:
+        """
+        Translate technical jargon to business-friendly language.
+        
+        Args:
+            response: Response with technical terms
+            
+        Returns:
+            Response with business-friendly terms
+        """
+        if not self.enable_business_language:
+            return response
+        
+        # Preserve code blocks
+        code_blocks = []
+        code_pattern = r"```[\s\S]*?```"
+        
+        def preserve_code(match):
+            code_blocks.append(match.group(0))
+            return f"__CODE_BLOCK_{len(code_blocks)-1}__"
+        
+        response = re.sub(code_pattern, preserve_code, response)
+        
+        # Apply translations
+        for technical, business in self.TECHNICAL_TO_BUSINESS.items():
+            response = re.sub(technical, business, response, flags=re.IGNORECASE)
+        
+        # Restore code blocks
+        for i, code_block in enumerate(code_blocks):
+            response = response.replace(f"__CODE_BLOCK_{i}__", code_block)
+        
+        return response
+    
     def apply(self, response: str) -> str:
         """
         Apply all policies to response.
@@ -205,7 +267,10 @@ class ChatResponsePolicy:
         # 1. Suppress narration
         response = self.suppress_narration(response)
         
-        # 2. Enforce PROCEED directive
+        # 2. Translate to business language (if enabled)
+        response = self.translate_to_business_language(response)
+        
+        # 3. Enforce PROCEED directive
         response = self.enforce_proceed_directive(response)
         
         return response
