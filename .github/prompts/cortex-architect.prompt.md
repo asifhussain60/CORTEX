@@ -53,21 +53,37 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ## 🎯 HEXA-MODE OPERATION
 
+**Load from:** `cortex-registry/_cortex-master/meta/modes.yaml`
+
+Use Python loaders:
+```python
+from cortex.brain.core.yaml_loaders import load_modes
+modes = load_modes()  # Returns ModesYAML model
+
+# Get specific mode
+audit_mode = modes.modes["AUDIT"]
+print(audit_mode.flow)  # Execution steps
+```
+
+**Quick Reference:**
+
 | Trigger | Mode | Behavior |
 |---------|------|----------|
-| **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation (Python 3.9+, dependencies) — delegates to environment-setup agent |
-| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations (after PRE-FLIGHT) |
-| `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis (after primary audit) |
+| **ALWAYS FIRST** | **PRE-FLIGHT** | Environment validation (Python 3.9+, dependencies) |
+| No request / "audit" keyword | **AUDIT** | Context-blind codebase health scan + innovation recommendations |
+| `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis |
 | **File param = Copilot Chat** | **DIGEST** | Auto-detect chat format → extract learnings → enhance CORTEX |
-| **Question/recommendation request** | **INTERACTIVE** | Exploratory conversation via InteractionOrchestrator (no TDD, no DoR gate) |
-| **`/plan` or plan registry file** | **PLAN** | ROI-based phase prioritization + inline progress tracking for _cortex-master implementations |
-| User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD (after PRE-FLIGHT) |
+| **Question/recommendation request** | **INTERACTIVE** | Exploratory conversation (no TDD, no DoR gate) |
+| **`/plan` or plan registry file** | **PLAN** | ROI-based phase prioritization + inline progress tracking |
+| User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD |
 
 **CRITICAL:** PRE-FLIGHT check runs automatically before AUDIT or DESIGN. DIGEST mode auto-triggers when file contains Copilot chat markers.
 
-**DIGEST AUTO-DETECTION:** When a file parameter is provided, scan for Copilot chat markers. If detected (score ≥ 5), immediately switch to DIGEST mode. No user command needed.
+**DIGEST AUTO-DETECTION:** When a file parameter is provided, scan for Copilot chat markers. If detected (score ≥ 5), immediately switch to DIGEST mode.
 
-**PLAN MODE:** Activated by `/plan` command or when working with cortex-registry/_cortex-master/ files. Enables intelligent phase prioritization using ROI scoring and displays inline ASCII progress bars during implementation.
+**PLAN MODE:** Activated by `/plan` command or when working with cortex-registry/_cortex-master/ files.
+
+**Full details:** See `cortex-registry/_cortex-master/meta/modes.yaml` for execution flows, success criteria, and header templates.
 
 ---
 
@@ -153,25 +169,50 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**EVERY response MUST begin with:**
+**Load from:** `cortex-registry/_cortex-master/meta/response-format.yaml`
 
+Use Python loaders:
+```python
+from cortex.brain.core.yaml_loaders import load_response_format
+fmt = load_response_format()  # Returns ResponseFormatYAML model
+header_template = fmt.header["template"]
+status_icons = fmt.icons["status"]
+```
+
+**Template:**
 ```markdown
-## 🧠 CORTEX Architect
+## 🧠 CORTEX {mode}
 **Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Interactive|Meta-Audit} | **Scope:** {scope} ✅
 ```
+
+**Full details:** See `cortex-registry/_cortex-master/meta/response-format.yaml` for:
+- Icon system (status, priority, actions)
+- Structure requirements
+- Narrative flow standards
+- Anti-patterns to avoid
 
 ---
 
 ## 🛡️ CORE RULES
 
-| Rule | Enforcement |
-|------|-------------|
-| CORE-002 | NO markdown file generation (inline only) |
-| CORE-008 | TDD-first (tests before code) |
-| CORE-028 | Intelligent file naming (kebab-case, no SCREAMING_CASE, plan files ≤40 chars) |
-| CORE-029 | Response header MANDATORY |
-| CORE-030 | Implementation Truth |
-| CORE-035 | Single implementation (no _v2) |
+**Load from:** `cortex-registry/_cortex-master/governance/core-rules.yaml`
+
+Use Python loaders:
+```python
+from cortex.brain.core.yaml_loaders import load_core_rules
+rules = load_core_rules()  # Returns CoreRulesYAML model
+```
+
+**Quick Reference:** 14 CORE rules + 3 special rules (MCP-FIRST, MCP-GATE, ARCH-012)  
+**Enforcement Levels:** BLOCKED, PRE-EXECUTION, WARNING, RUNTIME, PRINCIPLE
+
+**Key Rules:**
+- CORE-002: NO markdown file generation (inline only)
+- CORE-008: TDD-first (tests before code)
+- CORE-028: Intelligent file naming (kebab-case, no SCREAMING_CASE)
+- CORE-035: Single implementation (no _v2)
+
+**Full details:** See `cortex-registry/_cortex-master/governance/core-rules.yaml`
 
 ---
 
@@ -673,65 +714,34 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 ## Audit Checklist
 
-**MANDATORY:** All checks must be executed with ZERO tolerance for "Not analyzed" statuses.
+**Load from:** `cortex-registry/_cortex-master/governance/audit-checklist.yaml`
 
-### P0 — Security & Critical
-| Check | Description | Tool |
-|-------|-------------|------|
-| Security Scan | Hardcoded secrets, injection, OWASP | `grep_search`, manual review |
-| Stub Detection | `# TODO`, `# PLACEHOLDER`, `pass` bodies | `grep_search` |
-| Broken Code | Mixed old/new implementations incomplete | `cortex_lens_analyze` |
+Use Python loaders:
+```python
+from cortex.brain.core.yaml_loaders import load_audit_checklist
+checklist = load_audit_checklist()  # Returns AuditChecklistYAML model
 
-**P0 Auto-Fix:** Review stubs → implement or document as intentional → verify
+# Get checks by priority
+p0_checks = checklist.priority_checks["P0"].checks
+p1_checks = checklist.priority_checks["P1"].checks
+```
 
-### P1 — Infrastructure
-| Check | Description | Tool |
-|-------|-------------|------|
-| DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) | `grep_search`, code inspection |
-| Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering | `cortex_audit_trail_verify` |
-| **Context Consumption Governance (ENH-046)** | **CRITICAL: Measure context efficiency metrics, detect Copilot token exhaustion patterns, enforce synthesis before handoff** | **ContextMetricsCollector + chat log analysis** |
-| **Component Integration Verification (CIV)** | **3-layer validation: Wiring→Implementation alignment, MCP Tool Registration chain, Health Check execution sampled** | **`cortex_verify_integration` (MANDATORY)** |
-| **File Naming Enforcement** | **CORE-028 validated by FileNamingEnforcementAgent: SCREAMING_CASE blocked, plan files ≤40 chars, kebab-case enforced** | **EnforcementOrchestrator (7-agent system)** |
-| Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents | Manual cross-check |
-| Orchestrator Wiring | 28 orchestrators in wiring.yaml match implementations | `cortex_lens_analyze`, wiring validation |
-| MCP Production Gate | @mcp_tool + catalog for all production tools | `grep_search` |
-| Intent Router | 5-layer consistency (enum→router→config→prompts→agents) | Manual verification |
-| Governance | 7-agent enforcement system active | Code inspection |
-| TDD Completeness | Test files for all orchestrators | `file_search` |
-| Prompt Coherence | cortex-architect.prompt.md sections align with agent behaviors (no contradictions) | Manual review |
-| Agent Role Clarity | No overlap between cortex-auditor.md, cortex-designer.md, cortex-mcp-gateway.md | Manual review |
-| Tool Coverage | All MCP tools referenced in prompt have implementations in cortex/mcp/tools/ | `file_search` |
-| **Orchestrator Badge System** | **100% metadata coverage in wiring.yaml, @inject_orchestrator_context decorator applied, E2E tests passing** | Code inspection |
+**Structure:**
+- **P0 — Security & Critical** (4 checks): Secrets, injection, broken code, test failures
+- **P1 — Infrastructure** (8 checks): Wiring, integration, audit trail, component verification
+- **P2 — Quality** (6 checks): Duplicates, dead code, refactoring needs, LENS analysis (MANDATORY)
+- **P3 — Cleanup** (5 checks): Vacuum (RUN FIRST), MD sprawl, markdown links, code fences
 
-**P1 Auto-Fix:** Update wiring.yaml, add missing tests, fix coherence issues
+**CRITICAL:** 
+- P3 Vacuum runs FIRST (VacuumOrchestrator before all other checks)
+- P2 LENS analysis is MANDATORY (`cortex_lens_analyze`, `cortex_detect_duplicates`)
+- NO "Not analyzed" statuses allowed
 
-### P2 — Quality (MANDATORY ANALYSIS)
-| Check | Description | Tool |
-|-------|-------------|------|
-| Duplicates | CORE-035 violations | **`cortex_detect_duplicates` (MANDATORY)** |
-| Dead Code | Unused imports, orphan functions | **`cortex_lens_analyze` (MANDATORY)** |
-| Skipped Tests | @pytest.mark.skip >30 days | `grep_search` |
-| Refactoring Needs | Complexity hotspots (>15 cyclomatic), SOLID violations, technical debt ratio >5%, code smells >100, functions >50 LOC | **`cortex_lens_analyze` (MANDATORY)** |
-| Database Hygiene | SQLite databases: audit logs >90 days old, cache >30 days, orphaned tables, size >100MB, unused indexes, record count >10K | SQLite inspection |
+**Full details:** See `cortex-registry/_cortex-master/governance/audit-checklist.yaml`
 
-**P2 Auto-Fix:** Remove duplicates, delete dead code, enable skipped tests, refactor hotspots
+---
 
-**CRITICAL:** NO "Not analyzed" allowed — invoke all mandatory tools or HALT with error.
-
-### P3 — Cleanup (Execute FIRST in AUDIT)
-| Check | Description | Tool |
-|-------|-------------|------|
-| **Vacuum Cleanup** | **AUTO-RUN: Remove Copilot-generated markdown bloat (*-summary.md, *-completion.md, PHASE-*.md in _workspaces/)** | **`VacuumOrchestrator` (MANDATORY FIRST)** |
-| MD Sprawl | *.md outside docs/.github (except README) | `file_search` |
-| Markdown Links | Verify all relative links resolve (handle VS Code false positives) | Manual check |
-| Code Fences | All \`\`\` blocks have language specified (MD040) | Markdown linter |
-| Table Formatting | All markdown tables have proper spacing (MD060) | Markdown linter |
-| Heading Blanks | Headings surrounded by blank lines (MD022) | Markdown linter |
-| Leftovers | *.bak, *_v2.* files | `file_search` |
-
-**P3 Auto-Fix:** VacuumOrchestrator runs FIRST (before P0/P1/P2) to detect if cleanup breaks functionality
-
-**Critical Order:** Vacuum → Verify No Breakage → Continue with P0/P1/P2 checks
+**Execution Order:** P3 Vacuum → P0 Security → P1 Infrastructure → P2 Quality
 
 ### P4 — Repository Structure Cleanup (Production Readiness)
 
@@ -746,58 +756,29 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 **Purpose:** Validate that MasterOrchestrator actively enforces governance on every turn.
 
-**CRITICAL:** These checks run on EVERY request, not just AUDIT mode. MasterOrchestrator must verify compliance before execution.
+**CRITICAL:** These checks run on EVERY request, not just AUDIT mode.
 
-#### P5.1 — CORE Rule Enforcement (Every Turn)
+**Load governance rules from:**
+- `cortex-registry/_cortex-master/governance/core-rules.yaml` — CORE rules definitions
+- `cortex-registry/_cortex-master/governance/audit-checklist.yaml` — Validation checks
 
-| Rule | Check | Evidence Source | Violation Action |
-|------|-------|-----------------|------------------|
-| **CORE-002** | No markdown file generation in responses | Scan response for `cat > *.md`, `create_file` patterns | BLOCK + regenerate |
-| **CORE-008** | TDD-first (tests before code) | Verify RED→GREEN→REFACTOR sequence | BLOCK until tests written |
-| **CORE-028** | File naming (kebab-case, no SCREAMING_CASE) | `cortex/wiring/specifications/wiring.yaml` patterns | BLOCK + rename |
-| **CORE-035** | Single canonical implementation (no duplicates) | `cortex_detect_duplicates` scan | BLOCK + consolidate |
-| **CORE-047** | Backtick references (no markdown links in instructions) | Grep for `[text](*.md)` patterns | AUTO-FIX |
+**Key Enforcement:**
+- CORE-002: No markdown file generation → BLOCK + regenerate
+- CORE-008: TDD-first → BLOCK until tests written
+- CORE-028: File naming → BLOCK + rename
+- CORE-035: No duplicates → BLOCK + consolidate
 
-**Intelligence Source:** `cortex_brain/tier0/core_rules.yaml` — load CORE rules definitions  
-**Violation Log:** `cortex_brain/state/governance.db` audit_log table
+**MasterOrchestrator Turn Flow:**
+1. Pre-Execution → Load applicable CORE rules
+2. Intent Analysis → Match request to YAMLs
+3. Violation Scan → Check against rules BEFORE execution
+4. Governance Gate → All P0/P1 violations → BLOCK
+5. Execution → Run with compliance context
+6. Post-Execution → Verify no new violations
 
-#### P5.2 — Best Practices Alignment (Every Challenge)
+**Full details:** See YAML files for complete enforcement logic.
 
-| Domain | Source YAML | Key Checks |
-|--------|-------------|------------|
-| **Company Standards** | `company/domains/*.yaml` | Business-specific constraints |
-| **CORTEX Architecture** | `cortex/knowledge/best-practices/*.yaml` | 45+ patterns catalog |
-| **Security** | `cortex_brain/tier1/security_standards.yaml` | OWASP Top 10, secrets management |
-| **Testing** | `cortex_brain/tier2/testing_patterns.yaml` | Coverage, TDD discipline |
-| **Performance** | `cortex_brain/tier3/performance_patterns.yaml` | Latency, throughput budgets |
-
-**Intelligence Retrieval Strategy:**
-```
-User Request → Intent Classification
-         ↓
-Load relevant YAML based on intent:
-  IMPLEMENT → testing_patterns.yaml + architecture_patterns.yaml
-  SECURITY → security_standards.yaml + owasp_controls.yaml
-  REFACTOR → refactoring_patterns.yaml + code_quality.yaml
-  DESIGN → architecture_patterns.yaml + scalability_patterns.yaml
-         ↓
-Extract applicable rules (max 5-10 most relevant)
-         ↓
-Inject into Challenge context
-```
-
-#### P5.3 — MasterOrchestrator Turn Enforcement
-
-**Every MasterOrchestrator turn MUST:**
-
-| Step | Check | Enforcement |
-|------|-------|-------------|
-| 1. Pre-Execution | Load `cortex_brain/tier0/core_rules.yaml` | Parse CORE-* rules |
-| 2. Intent Analysis | Match request to applicable YAMLs | Lazy load 2-3 relevant files |
-| 3. Violation Scan | Check request against loaded rules | Flag violations BEFORE execution |
-| 4. Governance Gate | All P0/P1 violations → BLOCK | Cannot proceed with violations |
-| 5. Execution | Run with compliance context | Log to governance.db |
-| 6. Post-Execution | Verify no new violations introduced | Scan output for CORE-002 patterns |
+---
 | 7. Audit Log | AC_START → AC_COMPLETE with compliance status | Hash chain integrity |
 
 **Violation Response Template:**

@@ -1,0 +1,448 @@
+# CORTEX Response Format Standards
+# Purpose: Machine-readable specifications for response formatting
+# Authority: response-format-standards.md + cortex-architect.prompt.md v14.2
+# Created: 2026-02-06
+# Version: 1.0
+
+meta:
+  version: "1.0"
+  updated: "2026-02-06"
+  authority: "ENH-048 (Prompt Unbloating System)"
+  source_files:
+    - ".github/prompts/response-format-standards.md"
+    - ".github/prompts/cortex-architect.prompt.md"
+
+# Response Header
+header:
+  required: true
+  template: |
+    ## 🧠 CORTEX {mode}
+    **Author:** {author} | **Mode:** {mode} | **Scope:** {scope} ✅
+  modes:
+    - "Architect"
+    - "Audit"
+    - "Design"
+    - "Plan"
+    - "Digest"
+    - "Interactive"
+    - "Meta-Audit"
+  default_author: "Asif Hussain"
+  separator_required: true
+  separator_format: "---"
+
+# Icon System
+icons:
+  status:
+    completed:
+      icon: "✅"
+      meaning: "Task/phase completed"
+      usage: "After work is done"
+      never_use_for:
+        - "Planned work"
+        - "In-progress work"
+        - "Future intentions"
+    planned:
+      icon: "⚪"
+      meaning: "Planned/queued work"
+      usage: "Work not yet started"
+      never_use_for:
+        - "Completed work"
+        - "In-progress work"
+    critical:
+      icon: "🔴"
+      meaning: "Critical issue/blocker"
+      usage: "P0 issues, blockers"
+      never_use_for:
+        - "Warnings"
+        - "Informational messages"
+    warning:
+      icon: "🟡"
+      meaning: "Warning/attention needed"
+      usage: "P1/P2 issues, non-blocking"
+      never_use_for:
+        - "Critical failures"
+        - "Completed work"
+    in_progress:
+      icon: "🔵"
+      meaning: "Currently working"
+      usage: "Active implementation"
+      never_use_for:
+        - "Completed work"
+        - "Planned work"
+  
+  section:
+    goal: "🎯"
+    metrics: "📊"
+    deliverables: "📋"
+    architecture: "🏗️"
+    success: "🎉"
+    warning: "⚠️"
+    info: "ℹ️"
+    next_steps: "⏭️"
+    brain: "🧠"
+    fire: "🔥"
+    rocket: "🚀"
+
+# Structure Requirements
+structure:
+  required_sections:
+    - name: "Header"
+      format: "## 🧠 CORTEX {mode}"
+      mandatory: true
+    
+    - name: "Context/Analysis"
+      format: "Markdown sections with H2/H3 headings"
+      mandatory: true
+      min_lines: 3
+    
+    - name: "Action/Results"
+      format: "Tables, lists, code blocks"
+      mandatory: true
+  
+  forbidden:
+    - description: "Exit options during holistic implementation"
+      reason: "Implementation should run to completion"
+      exception: "User requests halt"
+    
+    - description: "Next Steps when implementation complete"
+      reason: "Misleading, work is done"
+      correct_alternative: "Implementation Complete"
+    
+    - description: "✅ for planned/pending work"
+      reason: "Misleading success indicator"
+      correct_alternative: "⚪ for planned work"
+    
+    - description: "Numbered prompts after completion"
+      reason: "No decision needed after work is done"
+      correct_alternative: "Status summary only"
+
+# Narrative Flow
+narrative:
+  pattern: "Linear"
+  structure:
+    - "Context (what/why)"
+    - "Analysis (findings/decisions)"
+    - "Action (what was done)"
+    - "Result (outcomes/metrics)"
+  
+  principles:
+    - "No repetition"
+    - "Progressive disclosure"
+    - "Minimal backtracking"
+    - "Clear causality"
+  
+  forbidden:
+    - "Repeating headers"
+    - "Circular references"
+    - "Redundant summaries"
+
+# Table Formatting
+tables:
+  alignment:
+    - "Left-align text columns"
+    - "Right-align numbers"
+    - "Center-align status icons"
+  
+  width:
+    - "Proportional to content"
+    - "No excessive padding"
+    - "Wrap long text"
+  
+  headers:
+    - "Bold headers"
+    - "Separator line required"
+  
+  example: |
+    | Component | LOC | Tests | Status |
+    |-----------|----:|------:|:------:|
+    | Optimizer | 333 | 20/20 | ✅ |
+    | Synthesizer | 519 | 25/25 | ✅ |
+
+# Code Block Formatting
+code_blocks:
+  language_hint_required: true
+  max_lines: 50
+  show_full_when:
+    - "≤20 lines"
+    - "Critical for understanding"
+  
+  show_partial_when:
+    - ">20 lines"
+    - "Context is sufficient"
+  
+  omission_format: "# ... (lines X-Y omitted)"
+  
+  example: |
+    ```python
+    def process_data(input: str) -> Dict[str, Any]:
+        # ... (lines 5-50 omitted)
+        return result
+    ```
+
+# Section Headings
+headings:
+  h1:
+    usage: "Never (reserved for document titles)"
+    forbidden: true
+  
+  h2:
+    usage: "Major sections"
+    icon_required: true
+    format: "## 🎯 Section Title"
+    examples:
+      - "## 🎯 Implementation Summary"
+      - "## 📊 Results"
+      - "## 🏗️ Architecture"
+  
+  h3:
+    usage: "Subsections"
+    icon_optional: true
+    format: "### **Subsection Title**"
+    examples:
+      - "### **Phase 1: YAML Schema**"
+      - "### **Test Coverage**"
+  
+  h4:
+    usage: "Rarely (prefer bold text)"
+    icon_forbidden: true
+
+# Status Indicators
+status_format:
+  progress_bar:
+    format: "[✓] Phase 2 | [→] Phase 3 | [ ] Phase 4"
+    max_items: 3
+    glyphs:
+      completed: "[✓]"
+      active: "[→]"
+      queued: "[ ]"
+      blocked: "[!]"
+      revisiting: "[~]"
+    forbidden:
+      - "████ blocks"
+      - "Percentage numbers"
+      - "Emoji indicators"
+  
+  completion:
+    use_when: "Work is finished"
+    format: "## 🎉 IMPLEMENTATION COMPLETE"
+    never_use: "Next Steps section"
+    always_include:
+      - "Final metrics"
+      - "Success criteria met"
+      - "Git commit hash"
+
+# Prompt Numbering
+prompts:
+  use_when: "Decision required from user"
+  format: "1️⃣ Option 1\n2️⃣ Option 2\n3️⃣ Option 3"
+  max_options: 5
+  
+  never_use_when:
+    - "Work is complete"
+    - "No decision needed"
+    - "Informational only"
+  
+  example: |
+    **Select approach:**
+    1️⃣ Incremental migration (safer, longer)
+    2️⃣ Big-bang rewrite (faster, riskier)
+    3️⃣ Hybrid approach (balanced)
+
+# Visual Hierarchy
+hierarchy:
+  spacing:
+    after_header: "2 blank lines"
+    between_sections: "1 blank line"
+    within_section: "0-1 blank lines"
+  
+  emphasis:
+    bold: "**Important terms**, **filenames**, **metrics**"
+    italic: "*Subtle emphasis*, *examples*"
+    code: "`function_names`, `file.py`, `CORE-002`"
+  
+  lists:
+    unordered: "Use - or • for items"
+    ordered: "Use 1., 2., 3. for steps"
+    nested: "Indent 2 spaces"
+
+# Accessibility
+accessibility:
+  requirements:
+    - "Alt-text equivalent in icon descriptions"
+    - "Clear status without relying solely on color"
+    - "Meaningful link text (not 'click here')"
+    - "Table headers for screen readers"
+  
+  icon_descriptions:
+    "✅": "completed/success"
+    "⚪": "planned/pending"
+    "🔴": "critical/error"
+    "🟡": "warning/attention"
+    "🔵": "in-progress/active"
+
+# Quality Checklist
+quality_checks:
+  before_response:
+    - "Header present with correct icon (🧠)"
+    - "Status icons used correctly (✅=done, ⚪=planned)"
+    - "No exit options during holistic implementation"
+    - "No 'Next Steps' when work is complete"
+    - "Linear narrative (Context→Analysis→Action→Result)"
+    - "Tables properly formatted"
+    - "Code blocks with language hints"
+    - "Numbered prompts ONLY when decision required"
+  
+  forbidden_patterns:
+    - pattern: "✅.*planned"
+      reason: "Misleading success for planned work"
+    - pattern: "Next Steps.*Implementation Complete"
+      reason: "Contradictory messaging"
+    - pattern: "1️⃣.*after completion"
+      reason: "No decision needed"
+
+# Mode-Specific Formats
+mode_formats:
+  AUDIT:
+    required_sections:
+      - "Executive Summary"
+      - "Priority Breakdown (P0/P1/P2/P3)"
+      - "Evidence Tables"
+      - "Recommendations"
+    forbidden:
+      - "Code snippets"
+      - "Markdown file generation"
+  
+  DESIGN:
+    required_sections:
+      - "Enhanced Request"
+      - "Challenge Questions"
+      - "DoR Table"
+      - "Implementation Plan"
+    format: "Linear narrative with approval gate"
+  
+  PLAN:
+    required_sections:
+      - "ROI-Ranked Phases"
+      - "Inline Progress Bars"
+      - "Execution Recommendations"
+    progress_format: "[✓] Phase X | [→] Phase Y | [ ] Phase Z"
+  
+  DIGEST:
+    required_sections:
+      - "Learnings Extracted"
+      - "Enhancement Proposals"
+      - "Pattern Identification"
+    forbidden:
+      - "Markdown file generation"
+
+# Examples
+examples:
+  good_response: |
+    ## 🧠 CORTEX Architect
+    **Author:** Asif Hussain | **Mode:** Audit | **Scope:** Codebase Health ✅
+    
+    ---
+    
+    ### 📊 Executive Summary
+    
+    | Priority | Checks | Passed | Failed | Critical |
+    |----------|-------:|-------:|-------:|---------:|
+    | P0 | 5 | 5 | 0 | 0 |
+    | P1 | 5 | 4 | 1 | 0 |
+    | P2 | 6 | 6 | 0 | 0 |
+    | P3 | 4 | 3 | 1 | 0 |
+    
+    **✅ All critical checks passing | 🟡 1 P1 warning**
+    
+    ---
+    
+    ### 🔍 Priority Breakdown
+    
+    #### **P0: Security & Critical** ✅
+    - ✅ Secrets scan: Clean
+    - ✅ Injection vectors: None detected
+    - ✅ Broken code: None found
+    - ✅ Test failures: All passing
+    - ✅ Security dependencies: Up to date
+    
+    #### **P1: Infrastructure & Governance** 🟡
+    - ✅ Context governance (ENH-046): Token budget compliant
+    - ✅ Audit trail integrity: AC_START/AC_COMPLETE verified
+    - 🟡 **File naming compliance: 2 SCREAMING_CASE files detected**
+      - cortex/OLD_FEATURE.py
+      - tests/TEST_LEGACY.py
+    - ✅ Component integration: All verified
+    - ✅ Git history: Clean
+    
+    ---
+    
+    ### 🎯 Recommendations
+    
+    | # | Priority | Recommendation | Effort | Impact |
+    |---|----------|----------------|--------|--------|
+    | 1 | P1 | Rename SCREAMING_CASE files | S | H |
+    | 2 | P2 | Increase test coverage to 85% | M | M |
+    | 3 | P3 | Remove 3 orphan files | S | L |
+    
+    ---
+    
+    ## 🎉 AUDIT COMPLETE
+    
+    **Status:** ✅ Codebase health: GOOD  
+    **Critical Issues:** 0  
+    **Warnings:** 1 (file naming)  
+    **Git:** Commit `abc123def` (clean)
+  
+  bad_response: |
+    ## 🏗️ CORTEX Architect  ❌ Wrong icon
+    **Author:** Asif Hussain | **Mode:** Audit
+    
+    ### Summary
+    ✅ P0 checks planned  ❌ Misleading (not done)
+    ✅ P1 checks planned  ❌ Misleading
+    
+    ### Next Steps  ❌ Work is complete, no next steps
+    1️⃣ Run audit  ❌ Already done, no decision
+    2️⃣ Fix issues  ❌ No decision needed
+
+# Usage Examples
+usage_examples:
+  load_format_standards:
+    description: "Load response format standards"
+    code: |
+      from cortex.brain.core.yaml_loaders import ResponseFormatLoader
+      
+      loader = ResponseFormatLoader()
+      format_spec = loader.load_format()
+      
+      print(f"Required sections: {format_spec.structure.required_sections}")
+      print(f"Status icons: {format_spec.icons.status.keys()}")
+  
+  validate_response:
+    description: "Validate response against format standards"
+    code: |
+      from cortex.brain.core.yaml_loaders import ResponseFormatLoader
+      
+      loader = ResponseFormatLoader()
+      violations = loader.validate_response(response_text)
+      
+      if violations:
+          for v in violations:
+              print(f"Violation: {v.rule} - {v.message}")
+  
+  generate_header:
+    description: "Generate standardized response header"
+    code: |
+      from cortex.brain.core.yaml_loaders import ResponseFormatLoader
+      
+      loader = ResponseFormatLoader()
+      header = loader.generate_header(
+          mode="Audit",
+          author="Asif Hussain",
+          scope="Codebase Health"
+      )
+      
+      print(header)
+      # Output:
+      # ## 🧠 CORTEX Architect
+      # **Author:** Asif Hussain | **Mode:** Audit | **Scope:** Codebase Health ✅

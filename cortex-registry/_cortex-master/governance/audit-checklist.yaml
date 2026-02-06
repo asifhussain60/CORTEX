@@ -1,0 +1,457 @@
+# CORTEX Audit Checklist Registry
+# Purpose: Machine-readable audit checks for CORTEX codebase health scanning
+# Authority: cortex-architect.prompt.md v14.2 + cortex-auditor.md v2.0
+# Created: 2026-02-06
+# Version: 1.0
+
+meta:
+  version: "1.0"
+  updated: "2026-02-06"
+  authority: "ENH-048 (Prompt Unbloating System)"
+  source_files:
+    - ".github/prompts/cortex-architect.prompt.md"
+    - ".github/agents/core/cortex-auditor.md"
+  total_checks: 23
+
+# Priority-based audit checks
+priority_checks:
+  P0:
+    name: "Security & Critical"
+    description: "Immediate security risks and critical system failures"
+    mandatory: true
+    blocking: true
+    checks:
+      - id: "P0-001"
+        name: "Secrets Scan"
+        description: "Detect hardcoded credentials, API keys, passwords"
+        tool: "grep_search"
+        pattern: "(password|api_key|secret|token|credential)\\s*=\\s*['\"][^'\"]+['\"]"
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+        
+      - id: "P0-002"
+        name: "Injection Vectors"
+        description: "SQL injection, command injection, code injection vulnerabilities"
+        tool: "cortex_lens_analyze"
+        analysis_types: ["security", "injection"]
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+        
+      - id: "P0-003"
+        name: "Broken Code"
+        description: "Syntax errors, import failures, undefined variables"
+        tool: "cortex_lens_analyze"
+        analysis_types: ["syntax", "imports"]
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+        
+      - id: "P0-004"
+        name: "Test Failures"
+        description: "Critical test failures blocking deployment"
+        tool: "runTests"
+        test_pattern: "tests/unit/**/*.py"
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+        
+      - id: "P0-005"
+        name: "Security Dependencies"
+        description: "Known vulnerabilities in dependencies"
+        tool: "run_in_terminal"
+        command: "pip-audit || safety check"
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+
+  P1:
+    name: "Infrastructure & Governance"
+    description: "System health, governance compliance, architectural integrity"
+    mandatory: true
+    blocking: false
+    checks:
+      - id: "P1-001"
+        name: "Context Governance (ENH-046)"
+        description: "Token budget compliance, context synthesis metrics"
+        tool: "cortex_audit"
+        sql_query: |
+          SELECT 
+            session_id,
+            token_count,
+            budget_compliant,
+            compression_ratio,
+            cache_hit_rate
+          FROM context_metrics
+          WHERE created_at >= datetime('now', '-24 hours')
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        related_enhancements: ["ENH-046"]
+        success_criteria:
+          - "token_count <= 20000 (100%)"
+          - "cache_hit_rate >= 0.7 (70%)"
+          - "compression_ratio >= 0.6 (60%)"
+        
+      - id: "P1-002"
+        name: "Audit Trail Integrity (CORE-027)"
+        description: "AC_START ↔ AC_COMPLETE verification"
+        tool: "grep_search"
+        pattern: "AC_START|AC_COMPLETE"
+        validation: "Every AC_START must have matching AC_COMPLETE"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        related_rules: ["CORE-027"]
+        
+      - id: "P1-003"
+        name: "File Naming Compliance (CORE-028)"
+        description: "No SCREAMING_CASE, kebab-case enforcement"
+        tool: "grep_search"
+        pattern: "[A-Z_]{5,}\\.py"
+        exclude_patterns:
+          - "tests/test_*.py"
+          - "CONSTANTS.py"
+          - ".ENV"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        related_rules: ["CORE-028"]
+        
+      - id: "P1-004"
+        name: "Component Integration Verification"
+        description: "Wiring→Implementation alignment, MCP tool registration"
+        tool: "cortex_verify_integration"
+        validation_layers:
+          - "Wiring YAML vs implementation"
+          - "MCP tool registration chain"
+          - "Health check execution"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        
+      - id: "P1-005"
+        name: "Git History Clean"
+        description: "No uncommitted changes for critical files"
+        tool: "get_changed_files"
+        critical_paths:
+          - "cortex/orchestrators/"
+          - "cortex/wiring/specifications/wiring.yaml"
+          - ".github/prompts/"
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+
+  P2:
+    name: "Quality"
+    description: "Code quality, maintainability, technical debt"
+    mandatory: true
+    blocking: false
+    checks:
+      - id: "P2-001"
+        name: "Duplicates (CORE-035)"
+        description: "No _v2, _old, duplicate implementations"
+        tool: "cortex_detect_duplicates"
+        detection_patterns:
+          - ".*_v\\d+\\.py"
+          - ".*_old\\.py"
+          - ".*_backup\\.py"
+          - "Duplicate function signatures"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        related_rules: ["CORE-035"]
+        
+      - id: "P2-002"
+        name: "Dead Code"
+        description: "Unused imports, orphan functions, unreachable code"
+        tool: "cortex_lens_analyze"
+        analysis_types: ["dead_code", "unused_imports"]
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "Remove unused imports"
+        severity: "MEDIUM"
+        
+      - id: "P2-003"
+        name: "Test Coverage"
+        description: "Unit test coverage ≥80%"
+        tool: "run_in_terminal"
+        command: "pytest --cov=cortex --cov-report=term-missing"
+        threshold: 80
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        
+      - id: "P2-004"
+        name: "Complexity Hotspots"
+        description: "Cyclomatic complexity >15, functions >50 LOC"
+        tool: "cortex_lens_analyze"
+        analysis_types: ["complexity"]
+        thresholds:
+          cyclomatic_complexity: 15
+          function_length: 50
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        
+      - id: "P2-005"
+        name: "Type Hints Coverage"
+        description: "Type hints on all public functions"
+        tool: "grep_search"
+        pattern: "def \\w+\\([^:)]*\\):"
+        validation: "Missing type hints detected"
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+        related_rules: ["CORE-011"]
+        
+      - id: "P2-006"
+        name: "Docstring Coverage"
+        description: "Google-style docstrings on all functions/classes"
+        tool: "cortex_lens_analyze"
+        analysis_types: ["documentation"]
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+        related_rules: ["CORE-012"]
+
+  P3:
+    name: "Cleanup & Maintenance"
+    description: "Markdown sprawl, orphan files, temporary artifacts"
+    mandatory: true
+    blocking: false
+    checks:
+      - id: "P3-001"
+        name: "Markdown Sprawl"
+        description: "*.md files outside docs/, .github/"
+        tool: "file_search"
+        pattern: "**/*.md"
+        exclude_paths:
+          - "docs/"
+          - ".github/"
+          - "README.md"
+          - "LICENSE.md"
+          - "cortex-registry/_cortex-master/docs/"
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "Move to _workspaces/.archive/ or delete"
+        severity: "LOW"
+        related_rules: ["CORE-002"]
+        
+      - id: "P3-002"
+        name: "Orphan Files"
+        description: "*.bak, *_v2.*, *.tmp, *.pyc files"
+        tool: "file_search"
+        patterns:
+          - "**/*.bak"
+          - "**/*_v2.*"
+          - "**/*.tmp"
+          - "**/__pycache__/**"
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "Delete"
+        severity: "LOW"
+        
+      - id: "P3-003"
+        name: "Leftover Debug Markers"
+        description: "CORTEX_DEBUG, TODO, FIXME, XXX comments"
+        tool: "grep_search"
+        patterns:
+          - "CORTEX_DEBUG"
+          - "TODO:"
+          - "FIXME:"
+          - "XXX:"
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+        
+      - id: "P3-004"
+        name: "Unused Dependencies"
+        description: "requirements.txt vs actual imports"
+        tool: "run_in_terminal"
+        command: "pip-extra-reqs . && pip-missing-reqs ."
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+
+# Execution Order
+execution_flow:
+  step_0:
+    name: "LENS Context (Vacuum Cleanup)"
+    description: "VacuumOrchestrator MANDATORY FIRST"
+    tool: "cortex_vacuum"
+    blocking: false
+    
+  step_1:
+    name: "P0 Security & Critical"
+    checks: ["P0-001", "P0-002", "P0-003", "P0-004", "P0-005"]
+    blocking: true
+    failure_action: "HALT audit, fix before continuing"
+    
+  step_2:
+    name: "P1 Infrastructure & Governance"
+    checks: ["P1-001", "P1-002", "P1-003", "P1-004", "P1-005"]
+    blocking: false
+    failure_action: "WARN and continue"
+    
+  step_3:
+    name: "P2 Quality"
+    checks: ["P2-001", "P2-002", "P2-003", "P2-004", "P2-005", "P2-006"]
+    blocking: false
+    failure_action: "WARN and continue"
+    
+  step_4:
+    name: "P3 Cleanup"
+    checks: ["P3-001", "P3-002", "P3-003", "P3-004"]
+    blocking: false
+    failure_action: "WARN and continue"
+    
+  step_5:
+    name: "Out-of-the-Box Recommendations"
+    description: "Innovation recommendations after all checks pass"
+    tool: "cortex_recommend"
+    blocking: false
+
+# Tool Mapping
+tools:
+  cortex_audit:
+    description: "Query governance.db for compliance metrics"
+    input: "SQL query"
+    output: "Tabular results"
+    
+  cortex_lens_analyze:
+    description: "Unified code intelligence analysis"
+    input: "Analysis types + file paths"
+    output: "Structured findings"
+    
+  cortex_detect_duplicates:
+    description: "CORE-035 violation detection"
+    input: "File patterns"
+    output: "Duplicate pairs"
+    
+  cortex_verify_integration:
+    description: "3-layer integration validation"
+    input: "Component name"
+    output: "Validation report"
+    
+  grep_search:
+    description: "Text pattern search"
+    input: "Pattern + file scope"
+    output: "Match locations"
+    
+  file_search:
+    description: "File name pattern search"
+    input: "Glob pattern"
+    output: "File paths"
+    
+  run_in_terminal:
+    description: "Execute shell commands"
+    input: "Command string"
+    output: "Command output"
+    
+  runTests:
+    description: "Execute test suite"
+    input: "Test files + test names"
+    output: "Test results"
+
+# Evidence Requirements
+evidence_format:
+  required_fields:
+    - name: "check_id"
+      type: "string"
+    - name: "status"
+      type: "enum"
+      values: ["PASS", "FAIL", "WARN", "NOT_ANALYZED"]
+    - name: "evidence_type"
+      type: "enum"
+      values: ["SQL_RESULT", "FILE_LIST", "COMMAND_OUTPUT", "TOOL_REPORT"]
+    - name: "evidence_data"
+      type: "any"
+      description: "Actual data supporting status"
+    - name: "timestamp"
+      type: "string"
+      format: "ISO 8601"
+  
+  forbidden:
+    - "Not analyzed status without explanation"
+    - "Assumptions without verification"
+    - "Missing evidence for mandatory checks"
+
+# Reporting Format
+report_structure:
+  executive_summary:
+    total_checks: "int"
+    passed: "int"
+    failed: "int"
+    warnings: "int"
+    critical_issues: "int"
+    blocking_issues: "int"
+  
+  priority_breakdown:
+    P0:
+      check_count: "int"
+      pass_rate: "float"
+      critical_failures: "List[str]"
+    P1:
+      check_count: "int"
+      pass_rate: "float"
+      high_priority_issues: "List[str]"
+    P2:
+      check_count: "int"
+      pass_rate: "float"
+      quality_issues: "List[str]"
+    P3:
+      check_count: "int"
+      pass_rate: "float"
+      cleanup_items: "List[str]"
+  
+  recommendations:
+    fields:
+      - "id: str"
+      - "priority: P0|P1|P2|P3"
+      - "category: str"
+      - "description: str"
+      - "roi_score: float"
+      - "effort: S|M|L"
+      - "impact: H|M|L"
+
+# Usage Examples
+usage_examples:
+  load_checklist:
+    description: "Load audit checklist for execution"
+    code: |
+      from cortex.brain.core.yaml_loaders import AuditChecklistLoader
+      
+      loader = AuditChecklistLoader()
+      checklist = loader.load_checklist()
+      
+      print(f"Total checks: {len(checklist.all_checks())}")
+      print(f"P0 checks: {len(checklist.priority_checks['P0'].checks)}")
+  
+  execute_priority_checks:
+    description: "Execute all P0 checks"
+    code: |
+      from cortex.brain.core.yaml_loaders import AuditChecklistLoader
+      
+      loader = AuditChecklistLoader()
+      p0_checks = loader.get_priority_checks("P0")
+      
+      results = []
+      for check in p0_checks:
+          result = loader.execute_check(check.id)
+          results.append(result)
+          if result.status == "FAIL" and check.severity == "CRITICAL":
+              print(f"CRITICAL FAILURE: {check.name}")
+              break  # Halt on critical P0 failure
+  
+  generate_report:
+    description: "Generate audit report"
+    code: |
+      from cortex.brain.core.yaml_loaders import AuditChecklistLoader
+      
+      loader = AuditChecklistLoader()
+      report = loader.generate_report(results)
+      
+      print(f"Pass rate: {report.pass_rate:.1%}")
+      print(f"Critical issues: {report.critical_issues}")
