@@ -92,17 +92,23 @@ Context Breakdown:
 ### Loading Protocol
 
 **DO:**
+- ✅ **Use EXIT GATE (ContextSynthesisGateway) for ALL context loading** — ENH-046 Phase 1.6 complete
+  - MasterOrchestrator automatically invokes `exit_gate.synthesize_context(request, intent)` before intent classification
+  - Returns dict: `{'content': str, 'tokens': int, 'cache_hit': bool, 'synthesis_time_ms': float}`
+  - Minimal initial context (≤250 tokens), incremental on-demand (≤500 tokens per load)
+  - Automatic compression: agent files 95%, YAML 91%, source code 88%
+  - See: `cortex/brain/core/context_synthesis_gateway.py`
 - ✅ Load agents on-demand per mode (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)
-- ✅ Use semantic_search for targeted context retrieval
-- ✅ Read large file chunks (minimize tool calls)
-- ✅ Monitor token usage after every turn
-- ✅ Synthesize context before loading (ContextSynthesisGateway)
+- ✅ Use semantic_search for targeted context retrieval (EXIT GATE synthesizes results)
+- ✅ Read large file chunks only when EXIT GATE determines necessity
+- ✅ Monitor token usage after every turn (EXIT GATE logs to governance.db)
 
 **DON'T:**
-- ❌ Pre-load all 6 mode agents simultaneously
-- ❌ Load full phase/enhancement YAMLs when summaries suffice
-- ❌ Repeat context across multiple turns
-- ❌ Exceed 200k tokens for context loading
+- ❌ Pre-load all 6 mode agents simultaneously (EXIT GATE loads incrementally)
+- ❌ Load full phase/enhancement YAMLs when summaries suffice (EXIT GATE distills)
+- ❌ Repeat context across multiple turns (EXIT GATE caches with 70% hit rate target)
+- ❌ Exceed 200k tokens for context loading (EXIT GATE enforces budget)
+- ❌ Bypass EXIT GATE for manual context assembly (violates ENH-046)
 
 ### Mode-Specific Loading
 
