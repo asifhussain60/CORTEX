@@ -167,6 +167,17 @@ except ImportError:
     # Fallback if module not accessible
     PlanOrchestrator = None
 
+# AC-PHASE-34B-WEEK-3-INC-7: Import TechIntelligenceOrchestrator for proactive tech stack intelligence
+# Provides readiness scoring, ecosystem scanning, knowledge synthesis, learning triggers
+# Priority 82 (high), supports IMPLEMENT intent pre-flight checks
+try:
+    from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import (
+        TechIntelligenceOrchestrator
+    )
+except ImportError:
+    # Fallback if module not accessible
+    TechIntelligenceOrchestrator = None
+
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
@@ -647,6 +658,51 @@ class MasterOrchestrator(IOrchestrator):
                 operation="PLAN_ORCHESTRATOR_INIT",
                 success=False,
                 details={"error": f"Failed to initialize PlanOrchestrator: {str(e)}"}
+            )
+        
+        # AC-PHASE-34B-WEEK-3-INC-7: Initialize TechIntelligenceOrchestrator for proactive tech intelligence
+        # Provides readiness scoring, ecosystem scanning, knowledge synthesis, learning triggers
+        # Priority 82 (high), supports IMPLEMENT intent pre-flight checks
+        self.tech_intelligence_orchestrator: Optional['TechIntelligenceOrchestrator'] = None
+        try:
+            if TechIntelligenceOrchestrator is not None:
+                self.tech_intelligence_orchestrator = TechIntelligenceOrchestrator()
+                # Initialize the orchestrator
+                init_result = self.tech_intelligence_orchestrator.initialize()
+                if init_result:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                        operation="TECH_INTELLIGENCE_ORCHESTRATOR_INIT",
+                        success=True,
+                        details={
+                            "status": "TechIntelligenceOrchestrator initialized",
+                            "components": ["EcosystemScanner", "ReadinessEngine", "KnowledgeSynthesizer", "LearningTrigger"],
+                            "priority": 82,
+                            "features": ["readiness scoring", "tech stack detection", "best practices synthesis", "automatic learning triggers"],
+                            "routing_intent": "IMPLEMENT: Pre-flight readiness checks before implementation"
+                        }
+                    )
+                else:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                        operation="TECH_INTELLIGENCE_ORCHESTRATOR_INIT",
+                        success=False,
+                        details={"error": "TechIntelligenceOrchestrator initialization returned failure"}
+                    )
+            else:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                    operation="TECH_INTELLIGENCE_ORCHESTRATOR_INIT",
+                    success=False,
+                    details={"error": "TechIntelligenceOrchestrator module not available"}
+                )
+        except Exception as e:
+            # Log but don't fail - graceful degradation supported
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                operation="TECH_INTELLIGENCE_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": f"Failed to initialize TechIntelligenceOrchestrator: {str(e)}"}
             )
         
         # AC-PHASE-35-001: Initialize AutonomousPlanExecutor for continuation detection (R1)
@@ -4022,6 +4078,7 @@ class MasterOrchestrator(IOrchestrator):
             from cortex.orchestrators.domain.inquiry_orchestrator import InquiryOrchestrator
             from cortex.models.inquiry_models import InquiryCategory
             
+            
             self.logger.log_operation_start(
                 ac_id="INQUIRY-015",
                 operation="ASK_CODEBASE_QUESTION",
@@ -4077,4 +4134,126 @@ class MasterOrchestrator(IOrchestrator):
                 details={"error": str(e)}
             )
             return Err(f"Inquiry failed: {str(e)}")
+
+    @mcp_tool(
+        name="tech_intelligence_get_readiness",
+        description="Get tech stack readiness score for implementation. Provides 4-factor weighted scoring (best practices 40%, TDD 30%, security 20%, usage 10%) with automatic learning gap detection."
+    )
+    def tech_intelligence_get_readiness(
+        self,
+        repo_path: Optional[str] = None,
+        language: Optional[str] = None,
+        frameworks: Optional[List[str]] = None
+    ) -> Result[Dict[str, Any]]:
+        """
+        Get readiness score for a tech stack before implementation.
+        
+        This tool provides comprehensive readiness assessment combining:
+        - Best practices coverage (40% weight)
+        - TDD framework support (30% weight)
+        - Security tooling availability (20% weight)
+        - Cross-repo usage frequency (10% weight)
+        
+        The readiness score determines recommended action:
+        - ≥0.7: PROCEED (ready for implementation)
+        - 0.4-0.7: PROCEED_WITH_WARNING (needs enhancement)
+        - <0.4: TRIGGER_LEARNING (knowledge gap detected)
+        
+        Automatically triggers learning for low-readiness stacks via LearningTrigger.
+        
+        Args:
+            repo_path: Optional path to repository for tech stack detection
+            language: Optional language override (python, javascript, typescript, etc.)
+            frameworks: Optional frameworks list override
+            
+        Returns:
+            Result with readiness score dict containing:
+            - overall: Overall readiness score (0.0-1.0)
+            - action: Recommended action (PROCEED, PROCEED_WITH_WARNING, TRIGGER_LEARNING)
+            - components: Breakdown by factor (best_practices, tdd_support, security, usage)
+            - tech_stack: Detected or provided tech stack details
+            - learning_triggered: Whether automatic learning was triggered
+            
+        Example:
+            >>> result = master.tech_intelligence_get_readiness(repo_path="/path/to/repo")
+            >>> if result.is_ok():
+            >>>     score = result.value
+            >>>     print(f"Readiness: {score['overall']:.2f} - {score['action']}")
+            >>>     print(f"Best Practices: {score['components']['best_practices']:.2f}")
+        
+        Authority: AC-PHASE-34B-WEEK-3-INC-7
+        """
+        try:
+            if not self.tech_intelligence_orchestrator:
+                return Err("TechIntelligenceOrchestrator not initialized")
+            
+            self.logger.log_operation_start(
+                ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                operation="TECH_INTELLIGENCE_GET_READINESS",
+                details={
+                    "repo_path": repo_path,
+                    "language_override": language,
+                    "frameworks_override": frameworks
+                }
+            )
+            
+            # Detect or build tech stack
+            from cortex.orchestrators.intelligence.types import TechStack
+            
+            if repo_path:
+                # Detect from repository
+                tech_stack = self.tech_intelligence_orchestrator.detect_tech_stack(repo_path)
+            elif language:
+                # Use provided language/frameworks
+                tech_stack = TechStack(
+                    language=language,
+                    frameworks=frameworks or []
+                )
+            else:
+                return Err("Must provide either repo_path or language parameter")
+            
+            # Get readiness score (includes automatic learning trigger)
+            readiness_score = self.tech_intelligence_orchestrator.get_readiness_score(tech_stack)
+            
+            # Build response
+            response = {
+                "overall": readiness_score.overall,
+                "action": readiness_score.action,
+                "components": {
+                    "best_practices": readiness_score.best_practices,
+                    "tdd_support": readiness_score.tdd_support,
+                    "security": readiness_score.security,
+                    "usage": readiness_score.usage,
+                },
+                "tech_stack": {
+                    "language": tech_stack.language,
+                    "frameworks": tech_stack.frameworks,
+                    "version": tech_stack.version,
+                },
+                "learning_triggered": readiness_score.overall < 0.5,  # Learning triggered for low scores
+                "timestamp": readiness_score.timestamp.isoformat(),
+            }
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                operation="TECH_INTELLIGENCE_GET_READINESS",
+                success=True,
+                details={
+                    "overall_score": readiness_score.overall,
+                    "action": readiness_score.action,
+                    "language": tech_stack.language,
+                    "learning_triggered": response["learning_triggered"]
+                }
+            )
+            
+            return Ok(response)
+            
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-34B-WEEK-3-INC-7",
+                operation="TECH_INTELLIGENCE_GET_READINESS",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Err(f"Tech intelligence readiness check failed: {str(e)}")
 
