@@ -18,7 +18,7 @@ Version: 1.0.0
 
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
 import hashlib
 import time
@@ -382,27 +382,58 @@ ONBOARD: repository setup + security scan
         """
         return []
     
-    def estimate_tokens(self, text: str) -> int:
+    def estimate_tokens(self, content: Union[str, Dict[str, Any], List[Any]]) -> int:
         """
         Estimate token count (improved heuristic)
         
         Uses improved heuristic: ~0.75 tokens per word.
         In production, would use tiktoken for GPT-exact accuracy.
         
+        Handles:
+        - str: Direct word counting
+        - dict: Recursively count all string values
+        - list: Recursively count all items
+        
         Args:
-            text: Text to estimate tokens for
+            content: Content to estimate tokens for (str, dict, or list)
         
         Returns:
             Estimated token count
         """
-        if not text:
+        if content is None:
             return 0
         
-        # Count words (split on whitespace)
-        words = len(text.split())
+        # Handle dict with pre-calculated tokens
+        if isinstance(content, dict):
+            if "tokens" in content:
+                return content["tokens"]
+            
+            # Recursively count tokens in all dict values
+            total = 0
+            for value in content.values():
+                if isinstance(value, str):
+                    total += self.estimate_tokens(value)
+                elif isinstance(value, (dict, list)):
+                    total += self.estimate_tokens(value)
+            return total
         
-        # Average: 0.75 tokens per word for English
-        return int(words * 0.75)
+        # Handle list
+        if isinstance(content, list):
+            return sum(self.estimate_tokens(item) for item in content)
+        
+        # Handle string
+        if isinstance(content, str):
+            if not content:
+                return 0
+            
+            # Count words (split on whitespace)
+            words = len(content.split())
+            
+            # Average: 0.75 tokens per word for English
+            return int(words * 0.75)
+        
+        # Fallback: convert to string
+        return self.estimate_tokens(str(content))
     
     def discover_agents(self) -> List[str]:
         """
