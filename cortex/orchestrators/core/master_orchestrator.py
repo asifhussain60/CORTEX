@@ -142,6 +142,14 @@ except ImportError:
     EnforcementOrchestrator = None
     EnforcementLevel = None
 
+# AC-PHASE-25-STAGE-4-002: Import PlanOrchestrator for PLAN MODE operations
+# Phase lifecycle management with setup/teardown hooks, intelligent resolution, dashboard sync
+try:
+    from cortex.orchestrators.support.plan_orchestrator import PlanOrchestrator
+except ImportError:
+    # Fallback if module not accessible
+    PlanOrchestrator = None
+
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
@@ -590,6 +598,38 @@ class MasterOrchestrator(IOrchestrator):
                 operation="TDD_ORCHESTRATOR_INIT",
                 success=False,
                 details={"error": f"Failed to initialize TDD Orchestrator: {str(e)}"}
+            )
+        
+        # AC-PHASE-25-STAGE-4-002: Initialize PlanOrchestrator for PLAN MODE operations
+        # Phase lifecycle with setup/teardown hooks, intelligent resolution, dashboard sync
+        self.plan_orchestrator: Optional['PlanOrchestrator'] = None
+        try:
+            if PlanOrchestrator is not None:
+                self.plan_orchestrator = PlanOrchestrator()
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-25-STAGE-4-002",
+                    operation="PLAN_ORCHESTRATOR_INIT",
+                    success=True,
+                    details={
+                        "status": "PlanOrchestrator initialized for PLAN MODE",
+                        "features": ["setup/teardown hooks", "intelligent resolution", "dashboard sync"],
+                        "routing_intent": "PLAN: Route ALL planning intents through PlanOrchestrator"
+                    }
+                )
+            else:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-25-STAGE-4-002",
+                    operation="PLAN_ORCHESTRATOR_INIT",
+                    success=False,
+                    details={"error": "PlanOrchestrator module not available"}
+                )
+        except Exception as e:
+            # Log but don't fail - PlanOrchestrator is important but graceful degradation supported
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-25-STAGE-4-002",
+                operation="PLAN_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": f"Failed to initialize PlanOrchestrator: {str(e)}"}
             )
         
         # AC-PHASE-35-001: Initialize AutonomousPlanExecutor for continuation detection (R1)

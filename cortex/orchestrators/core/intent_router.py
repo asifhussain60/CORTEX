@@ -469,6 +469,12 @@ class IntentRouter(IOrchestrator):
             (IntentType.DOCUMENT, "governance"): "DocumentationOrchestrator",
             (IntentType.DOCUMENT, "reports"): "DocumentationOrchestrator",
             (IntentType.DOCUMENT, None): "DocumentationOrchestrator",
+            
+            # PLAN routing (PHASE-25: CORTEX planning + registry management)
+            (IntentType.PLAN, "registry"): "PlanOrchestrator",
+            (IntentType.PLAN, "orchestrators"): "PlanOrchestrator",
+            (IntentType.PLAN, "cortex"): "PlanOrchestrator",
+            (IntentType.PLAN, None): "PlanOrchestrator",
         }
     
     # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====
