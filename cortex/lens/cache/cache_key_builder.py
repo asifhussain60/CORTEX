@@ -14,9 +14,34 @@ Enables cache invalidation on:
 
 import hashlib
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Tuple
 import os
+
+
+@dataclass
+class CacheKeyConfig:
+    """Configuration for cache key generation.
+    
+    Attributes:
+        user_request: User's request string or file path
+        repo_path: Repository root path
+        lens_version: LENS version (for cache invalidation)
+        include_repo_state: Include git/file state in key (default: True)
+        
+    Example:
+        >>> config = CacheKeyConfig(
+        ...     user_request="analyze src/models.py",
+        ...     repo_path="/home/user/cortex",
+        ...     lens_version="2.0"
+        ... )
+        >>> key = build_cache_key_from_config(config)
+    """
+    user_request: str
+    repo_path: str
+    lens_version: str = "2.0"
+    include_repo_state: bool = True
 
 
 def build_cache_key(
@@ -183,4 +208,4 @@ def detect_changes(old_hash: str, new_hash: str) -> bool:
     return old_hash != new_hash
 
 
-__all__ = ["build_cache_key", "get_repo_state_hash", "detect_changes"]
+__all__ = ["build_cache_key", "get_repo_state_hash", "detect_changes", "CacheKeyConfig"]
