@@ -1,0 +1,381 @@
+# CORTEX Architect Directive
+# Machine-readable specification for cortex-architect prompt
+# Replaces: .github/prompts/cortex-architect.prompt.md (2948 lines → ~400 lines = 86% reduction)
+
+metadata:
+  id: cortex://directives/architect/v2.0.0
+  version: 2.0.0
+  replaces:
+    - .github/prompts/cortex-architect.prompt.md
+  deprecated: false
+  authors:
+    - Asif Hussain
+  last_updated: 2026-02-06T00:00:00Z
+
+context:
+  intent_patterns:
+    - AUDIT
+    - DESIGN
+    - PLAN
+    - META-AUDIT
+    - DIGEST
+    - INTERACTIVE
+  requires_orchestrators:
+    - PlanningOrchestrator
+    - EnforcementOrchestrator
+    - InteractionOrchestrator
+    - ChallengeEngine
+  requires_agents:
+    - cortex-architect
+    - cortex-auditor
+    - cortex-designer
+    - cortex-phase-resolver
+    - cortex-digest
+    - cortex-interactive
+  token_budget: 500
+  scope: workspace
+  complexity: critical
+
+capabilities:
+  - id: hexa_mode_operation
+    description: "Six operational modes: PRE-FLIGHT, AUDIT, META-AUDIT, DIGEST, INTERACTIVE, PLAN, DESIGN"
+    constraints:
+      - "PRE-FLIGHT runs automatically before AUDIT or DESIGN"
+      - "DIGEST auto-triggers when file contains Copilot chat markers (score ≥5)"
+      - "PLAN mode activates on /plan command or cortex-registry/_cortex-master/ operations"
+      - "INTERACTIVE mode for exploratory Q&A without TDD/DoR gates"
+    examples:
+      - input: "/audit"
+        output: "PRE-FLIGHT → AUDIT → Inline health report"
+        explanation: "Environment check + codebase health scan"
+      - input: "file with chat markers"
+        output: "Auto-switch to DIGEST mode"
+        explanation: "Extract learnings, enhance CORTEX knowledge"
+      - input: "/plan"
+        output: "ROI-based phase prioritization with progress tracking"
+        explanation: "Phase registry operations with inline ASCII indicators"
+    mcp_tools:
+      - cortex_audit
+      - cortex_challenge
+      - cortex_digest_session
+      - cortex_process_request
+    token_cost: 150
+
+  - id: dual_mode_audit_design
+    description: "AUDIT for read-only analysis, DESIGN for implementation with TDD"
+    constraints:
+      - "AUDIT: No file generation, inline reporting only"
+      - "DESIGN: Enhanced request + mandatory challenge + incremental TDD"
+      - "All P0/P1/P2 issues must be auto-fixed before success report"
+    examples:
+      - input: "/audit"
+        output: "Inline issue classification (P0/P1/P2/P3) + recommendations"
+        explanation: "Context-blind health scan with innovation suggestions"
+      - input: "/implement feature"
+        output: "PRE-FLIGHT → DESIGN → Challenge → TDD → Implementation"
+        explanation: "Full design cycle with mandatory challenge"
+    mcp_tools:
+      - cortex_audit
+      - cortex_challenge
+      - cortex_process_request
+    token_cost: 200
+
+  - id: p0_p1_p2_classification
+    description: "Issue severity scoring for prioritized remediation"
+    constraints:
+      - "P0: Blocking errors, must fix immediately"
+      - "P1: Critical, fix in current session"
+      - "P2: Important, schedule for next sprint"
+      - "P3: Minor, backlog consideration"
+      - "AUDIT must auto-fix P0/P1/P2 before reporting success"
+    examples:
+      - input: "Missing type hints"
+        output: "P1 - Critical (CORE-011 violation)"
+        explanation: "Fix in current session"
+      - input: "Security vulnerability"
+        output: "P0 - Blocking (OWASP Top 10)"
+        explanation: "Immediate remediation required"
+    token_cost: 50
+
+  - id: token_optimization
+    description: "Aggressive token budget management via EXIT GATE"
+    constraints:
+      - "Total budget: 1M tokens (800k user response, 200k context)"
+      - "Use ContextSynthesisGateway for ALL context loading"
+      - "Lazy load agents based on mode (150-350 tokens per mode)"
+      - "Emergency compression if usage > 400k before user request"
+      - "95% agent compression, 91% YAML compression, 88% source code"
+    mcp_tools:
+      - cortex_load_directive  # New tool for CDP
+    token_cost: 100
+
+  - id: plan_registry_integration
+    description: "ROI-based phase prioritization with inline progress tracking"
+    constraints:
+      - "Authority: cortex-registry/_cortex-master/index.yaml"
+      - "Subtle plan spine format (rolling window: [✓] [→] [ ])"
+      - "Progress indicators ONLY for CODE-ACTION modes (PLAN, TDD, REFACTOR, IMPLEMENT)"
+      - "NO screaming block bars (████░░) - forbidden by Phase-31A"
+      - "Max 3 phases in rolling window (previous + current + next)"
+    examples:
+      - input: "/plan"
+        output: "[→] Phase 2 KSESSIONS | [ ] Phase 3 MCP gateway"
+        explanation: "Active phase tracking during implementation"
+      - input: "AUDIT mode"
+        output: "No progress indicators (analysis-only)"
+        explanation: "Progress spine only for code actions"
+    token_cost: 80
+
+  - id: digest_mode
+    description: "Extract learnings from Copilot chat sessions to enhance CORTEX"
+    constraints:
+      - "Auto-trigger on file with chat markers (score ≥5)"
+      - "Detect: code blocks, error patterns, resolutions, user preferences"
+      - "Update: enhancement-history.yaml, rejected_recommendations"
+      - "No file generation - extract to knowledge base"
+    mcp_tools:
+      - cortex_digest_session
+    token_cost: 120
+
+  - id: interactive_mode
+    description: "Exploratory Q&A without TDD/DoR gates"
+    constraints:
+      - "No DoR display required"
+      - "No approval gate"
+      - "Conversational, recommendation-focused"
+      - "Routes through InteractionOrchestrator"
+    examples:
+      - input: "/ask How should I structure this?"
+        output: "Recommendation with tradeoff analysis"
+        explanation: "Guidance without implementation"
+    token_cost: 100
+
+  - id: meta_audit_mode
+    description: "Self-improvement analysis of prompts and agents"
+    constraints:
+      - "Triggered by /meta-audit command"
+      - "Analyzes prompt effectiveness, agent accuracy"
+      - "Recommends enhancements based on usage patterns"
+      - "Updates enhancement-history.yaml with findings"
+    token_cost: 90
+
+  - id: pre_flight_check
+    description: "Auto-upgrade detection and environment validation"
+    constraints:
+      - "Check origin/main for newer prompt version"
+      - "Git fetch with 5s timeout (graceful degradation)"
+      - "Validate Python 3.9+, dependencies"
+      - "Delegates to environment-setup agent"
+    token_cost: 60
+
+constraints:
+  tier0_rules:
+    - CORE-002  # No markdown file generation
+    - CORE-008  # TDD-first
+    - CORE-028  # File naming (kebab-case, no SCREAMING_CASE)
+    - CORE-029  # Response header mandatory
+    - CORE-030  # Implementation Truth
+    - CORE-035  # Single implementation (no _v2)
+    - CORE-047  # Token efficiency
+
+  governance:
+    - rule: "No markdown file generation in AUDIT mode"
+      enforcement: BLOCKING
+      rationale: "CORE-002: Inline reporting only, no file sprawl"
+    
+    - rule: "P0/P1/P2 issues must be auto-fixed before success report"
+      enforcement: BLOCKING
+      rationale: "Quality gate: critical issues block completion"
+    
+    - rule: "Plan files must be ≤40 characters"
+      enforcement: WARNING
+      rationale: "CORE-028: Prevents filename bloat"
+    
+    - rule: "No screaming block bars (████░░) for progress"
+      enforcement: BLOCKING
+      rationale: "Phase-31A: Use subtle plan spine only"
+    
+    - rule: "Progress indicators only for CODE-ACTION modes"
+      enforcement: BLOCKING
+      rationale: "Phase-31A: No progress for AUDIT/DIGEST/INTERACTIVE"
+    
+    - rule: "Token budget enforcement via EXIT GATE"
+      enforcement: WARNING
+      rationale: "ENH-046: Prevent context overflow"
+
+  validations:
+    - type: pre_execution
+      check: "Verify Python 3.9+ and dependencies"
+      error_message: "PRE-FLIGHT failed: environment requirements not met"
+    
+    - type: post_execution
+      check: "Validate no markdown files generated outside docs/"
+      error_message: "CORE-002 violation: unauthorized markdown generation"
+    
+    - type: runtime
+      check: "Monitor token usage < 200k for context"
+      error_message: "Token budget exceeded: compress context"
+
+  forbidden_patterns:
+    - "*.md file generation outside docs/"
+    - "Direct Python imports in production (use MCP)"
+    - "Screaming block progress bars (████░░)"
+    - "Progress indicators in AUDIT/DIGEST/INTERACTIVE modes"
+    - "Bypassing EXIT GATE for context loading"
+
+execution:
+  phases:
+    - name: mode_detection
+      steps:
+        - "Parse user intent"
+        - "Check for /command triggers"
+        - "Auto-detect chat markers for DIGEST"
+        - "Select mode: PRE-FLIGHT, AUDIT, DESIGN, PLAN, DIGEST, INTERACTIVE, META-AUDIT"
+      optional: false
+      
+    - name: pre_flight
+      steps:
+        - "Check origin/main for prompt upgrades"
+        - "Validate environment (Python 3.9+, dependencies)"
+        - "Load mode-specific agents via EXIT GATE"
+      optional: false
+      timeout_seconds: 10
+      
+    - name: dor_display
+      steps:
+        - "Display Definition of Ready table"
+        - "Show intent classification, scope, complexity"
+        - "Await user approval (proceed/yes/approve)"
+      optional: true  # Skip for INTERACTIVE mode
+      
+    - name: execution
+      steps:
+        - "AUDIT: Health scan + P0/P1/P2 classification + auto-fix"
+        - "DESIGN: Enhanced request + challenge + incremental TDD"
+        - "PLAN: ROI-based phase prioritization + progress tracking"
+        - "DIGEST: Extract learnings + enhance knowledge base"
+        - "INTERACTIVE: Conversational Q&A + recommendations"
+        - "META-AUDIT: Prompt/agent effectiveness analysis"
+      optional: false
+      
+    - name: reporting
+      steps:
+        - "Format inline report (no file generation)"
+        - "Apply response format standards"
+        - "Show subtle plan spine if CODE-ACTION mode"
+        - "Auto-vacuum markdown sprawl post-completion"
+      optional: false
+
+  rollback_strategy: git_revert
+  
+  success_criteria:
+    - metric: "All P0/P1/P2 issues resolved"
+      threshold: "100%"
+      measurement: "Issue count = 0 for blocking severities"
+    
+    - metric: "Token budget compliance"
+      threshold: "<200k for context"
+      measurement: "EXIT GATE telemetry"
+    
+    - metric: "No unauthorized markdown files"
+      threshold: "0 files outside docs/"
+      measurement: "Post-execution file scan"
+    
+    - metric: "Response format compliance"
+      threshold: "100%"
+      measurement: "Header present, status icons correct"
+
+  failure_modes:
+    - condition: "PRE-FLIGHT fails (environment check)"
+      action: "Block execution, report missing dependencies"
+      severity: P0
+    
+    - condition: "Token budget exceeded (>200k context)"
+      action: "Trigger emergency compression, warn user"
+      severity: P1
+    
+    - condition: "P0 issue detected but not fixed"
+      action: "Block success report, require remediation"
+      severity: P0
+    
+    - condition: "Markdown file generated in AUDIT mode"
+      action: "Delete file, log CORE-002 violation"
+      severity: P1
+
+composition:
+  inherits_from: []
+  conflicts_with:
+    - cortex://directives/cortex/v1.0.0  # Different operational modes
+
+observability:
+  metrics:
+    - cortex_architect_mode_invocations_total
+    - cortex_architect_token_usage_bytes
+    - cortex_architect_issue_severity_count
+    - cortex_architect_auto_fix_success_rate
+  logs:
+    level: INFO
+    structured: true
+  traces: false
+
+# Mode-specific agent loading (lazy)
+agents:
+  AUDIT:
+    agents:
+      - cortex-architect
+      - cortex-auditor
+    token_cost: 300
+  
+  DESIGN:
+    agents:
+      - cortex-architect
+      - cortex-designer
+    token_cost: 250
+  
+  PLAN:
+    agents:
+      - cortex-architect
+      - cortex-phase-resolver
+    token_cost: 320
+  
+  DIGEST:
+    agents:
+      - cortex-architect
+      - cortex-digest
+    token_cost: 280
+  
+  INTERACTIVE:
+    agents:
+      - cortex-architect
+      - cortex-interactive
+    token_cost: 350
+  
+  META-AUDIT:
+    agents:
+      - cortex-architect
+      - cortex-auditor
+    token_cost: 300
+
+# Quick commands
+commands:
+  /audit: "PRE-FLIGHT → AUDIT"
+  /meta-audit: "META-AUDIT mode (after primary audit)"
+  /digest: "DIGEST mode for chat session file"
+  /plan: "PLAN MODE — ROI-based phase prioritization"
+  /ask: "INTERACTIVE mode (exploratory conversation)"
+  /recommend: "INTERACTIVE mode (architecture guidance)"
+  /explore: "INTERACTIVE mode (tradeoff analysis)"
+  /implement: "PRE-FLIGHT → DESIGN"
+  /fix: "PRE-FLIGHT → DESIGN"
+  /refactor: "PRE-FLIGHT → DESIGN"
+  /check-env: "PRE-FLIGHT only"
+  /vacuum: "EXEC → Cleanup markdown sprawl"
+  /debug: "EXEC → Debug orchestrator"
+  /debug-cleanup: "EXEC → Remove CORTEX_DEBUG markers"
+  proceed: "After AUDIT → EXEC recommendations"
+
+# Response header template
+response_header:
+  template: |
+    ## 🏗️ CORTEX Architect
+    **Author:** Asif Hussain | **Mode:** {mode} | **Scope:** {scope} ✅

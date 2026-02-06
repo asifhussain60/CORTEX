@@ -1,0 +1,290 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cortex.ai/schemas/directive/v1.0.0",
+  "title": "CORTEX Directive Protocol Schema",
+  "description": "Machine-readable specification for CORTEX prompts, agents, and behavioral directives",
+  "type": "object",
+  "required": ["metadata", "context", "capabilities", "constraints", "execution"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["id", "version", "replaces"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^cortex://directives/[a-z-]+/v\\d+\\.\\d+\\.\\d+$",
+          "description": "Unique directive identifier with semver"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version (major.minor.patch)"
+        },
+        "replaces": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of deprecated files this directive replaces"
+        },
+        "deprecated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this directive is deprecated"
+        },
+        "deprecation_date": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date when deprecation becomes effective"
+        },
+        "authors": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of authors/contributors"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date of last update"
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "required": ["intent_patterns", "token_budget"],
+      "properties": {
+        "intent_patterns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE", "TEST", "AUDIT", "DESIGN", "PLAN", "DIGEST", "INTERACTIVE", "ONBOARD", "DEBUG"]
+          },
+          "description": "LENS intent patterns this directive handles"
+        },
+        "requires_orchestrators": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Orchestrators required for execution"
+        },
+        "requires_agents": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Agents required for execution"
+        },
+        "token_budget": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 50000,
+          "description": "Maximum tokens for this directive"
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["file", "directory", "workspace", "repository", "multi-repo"],
+          "description": "Operational scope of this directive"
+        },
+        "complexity": {
+          "type": "string",
+          "enum": ["trivial", "simple", "moderate", "complex", "critical"],
+          "description": "Complexity classification"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "constraints"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z_]+$",
+            "description": "Unique capability identifier (snake_case)"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Human-readable capability description"
+          },
+          "constraints": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Operational constraints for this capability"
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["input", "output"],
+              "properties": {
+                "input": {"type": "string"},
+                "output": {"type": "string"},
+                "explanation": {"type": "string"}
+              }
+            },
+            "description": "Usage examples"
+          },
+          "mcp_tools": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "MCP tools used by this capability"
+          },
+          "token_cost": {
+            "type": "integer",
+            "minimum": 10,
+            "description": "Estimated token cost for this capability"
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["tier0_rules", "governance"],
+      "properties": {
+        "tier0_rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CORE-\\d{3}$"
+          },
+          "description": "CORE rules that apply to this directive"
+        },
+        "governance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["rule", "enforcement"],
+            "properties": {
+              "rule": {"type": "string"},
+              "enforcement": {
+                "type": "string",
+                "enum": ["BLOCKING", "WARNING", "ADVISORY"]
+              },
+              "rationale": {"type": "string"}
+            }
+          },
+          "description": "Governance rules and enforcement levels"
+        },
+        "validations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "check"],
+            "properties": {
+              "type": {"type": "string"},
+              "check": {"type": "string"},
+              "error_message": {"type": "string"}
+            }
+          },
+          "description": "Pre/post-execution validations"
+        },
+        "forbidden_patterns": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Code/behavior patterns that must be avoided"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["phases", "success_criteria"],
+      "properties": {
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "steps"],
+            "properties": {
+              "name": {"type": "string"},
+              "steps": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "optional": {"type": "boolean", "default": false},
+              "timeout_seconds": {"type": "integer"},
+              "rollback_on_failure": {"type": "boolean", "default": true}
+            }
+          },
+          "description": "Ordered execution phases"
+        },
+        "rollback_strategy": {
+          "type": "string",
+          "enum": ["git_revert", "state_restore", "manual", "none"],
+          "description": "Strategy for failure recovery"
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["metric", "threshold"],
+            "properties": {
+              "metric": {"type": "string"},
+              "threshold": {"type": "string"},
+              "measurement": {"type": "string"}
+            }
+          },
+          "description": "Criteria for successful execution"
+        },
+        "failure_modes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "condition": {"type": "string"},
+              "action": {"type": "string"},
+              "severity": {
+                "type": "string",
+                "enum": ["P0", "P1", "P2", "P3"]
+              }
+            }
+          },
+          "description": "Known failure modes and responses"
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "properties": {
+        "inherits_from": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Directive IDs to inherit capabilities from"
+        },
+        "extends": {
+          "type": "object",
+          "description": "Override specific sections from inherited directives"
+        },
+        "conflicts_with": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Directive IDs that cannot be used simultaneously"
+        }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "properties": {
+        "metrics": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Prometheus metrics to emit"
+        },
+        "logs": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "string",
+              "enum": ["DEBUG", "INFO", "WARNING", "ERROR"]
+            },
+            "structured": {"type": "boolean", "default": true}
+          }
+        },
+        "traces": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to emit OpenTelemetry traces"
+        }
+      }
+    }
+  }
+}

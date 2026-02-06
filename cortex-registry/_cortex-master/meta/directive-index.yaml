@@ -1,0 +1,79 @@
+# CORTEX Directive Protocol Index
+# Version: 1.0.0
+# Updated: 2026-02-06
+# Authority: Single Source of Truth for directive discovery
+
+version: 1.0.0
+schema_version: v1.0.0
+last_updated: 2026-02-06T00:00:00Z
+
+# Fast lookup registry for O(1) directive discovery
+directives:
+  # Core System Directives
+  architect:
+    id: cortex://directives/architect/v2.0.0
+    version: 2.0.0
+    path: directives/core/architect.directive.yaml
+    replaces:
+      - .github/prompts/cortex-architect.prompt.md
+    status: active
+    token_budget: 500
+    intent_patterns: [AUDIT, DESIGN, PLAN, META-AUDIT, DIGEST, INTERACTIVE]
+    last_updated: 2026-02-06T00:00:00Z
+    
+  cortex:
+    id: cortex://directives/cortex/v1.0.0
+    version: 1.0.0
+    path: directives/core/cortex.directive.yaml
+    replaces:
+      - .github/prompts/CORTEX.prompt.md
+    status: planned
+    token_budget: 800
+    intent_patterns: [IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST]
+    
+  response_format:
+    id: cortex://directives/response-format/v1.0.0
+    version: 1.0.0
+    path: directives/core/response-format.directive.yaml
+    replaces:
+      - .github/prompts/response-format-standards.md
+    status: planned
+    token_budget: 200
+    intent_patterns: [ALL]
+
+# Migration tracking
+migration:
+  total_files: 50
+  migrated: 1
+  in_progress: 2
+  planned: 47
+  
+  timeline:
+    phase_1_foundation: 2026-02-06  # Today
+    phase_2_core_prompts: 2026-02-13
+    phase_3_agents: 2026-02-20
+    phase_4_knowledge: 2026-02-27
+    phase_5_enforcement: 2026-03-06
+    
+  priority_order:
+    - architect  # POC complete
+    - cortex     # High impact
+    - response_format
+    - agents/core/*
+    - agents/domain/*
+    - knowledge/*
+
+# Statistics
+statistics:
+  total_directives: 1
+  active: 1
+  deprecated: 0
+  planned: 49
+  token_savings_estimate: 75  # Percentage reduction
+  
+# Index metadata
+index_metadata:
+  cache_ttl_seconds: 300
+  compression_enabled: true
+  validation_on_load: true
+  auto_upgrade_check: true

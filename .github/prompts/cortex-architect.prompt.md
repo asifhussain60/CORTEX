@@ -1553,6 +1553,32 @@ Score < 5 → Continue to DESIGN MODE
 - **Misunderstandings:** Intent misclassified → improve IntentRouter
 - **Missing Validation:** Bugs caught late → strengthen tests
 
+### 5. 🛡️ Governance Rule Violations (MANDATORY CHECK)
+**CRITICAL:** DIGEST mode MUST analyze chat sessions for CORE rule violations.
+
+**Detection Required:**
+- **CORE-002 Violations:** Markdown file generation outside docs/.github (look for: `cat >`, `create_file`, terminal file writes)
+- **CORE-008 Violations:** Implementation without tests (code added but no test file created)
+- **CORE-028 Violations:** File naming issues (SCREAMING_CASE, plan files >40 chars, non-kebab-case)
+- **CORE-035 Violations:** Duplicate implementations (*_v2, *_old, *_backup patterns)
+- **ARCH-050 Violations:** New .prompt.md files without directive migration
+- **Token Budget Violations:** Context >200k tokens, repeated "Summarizing conversation history"
+
+**For Each Violation:**
+- Document rule violated
+- Extract context (what was attempted)
+- Record whether violation was caught or missed
+- Assess impact (P0/P1/P2/P3)
+- Recommend prevention mechanism
+
+**Output Format:**
+| Rule | Violation | Caught? | Impact | Prevention |
+|------|-----------|---------|--------|------------|
+| CORE-002 | `cat > summary.md` | ❌ No | P1 | Strengthen file generation detection |
+| CORE-008 | Feature added without tests | ✅ Yes | P1 | TDDOrchestrator enforcement worked |
+
+**Enhancement Trigger:** If violations detected → Create ENH-* entry for prevention mechanism
+
 ## DIGEST Output Format
 
 ```markdown
@@ -1583,6 +1609,12 @@ Score < 5 → Continue to DESIGN MODE
 ### 🟢 Successful Patterns ({count})
 | # | Pattern | Context | Reusability | Extract To |
 |---|---------|---------|-------------|------------|
+
+### 🛡️ Governance Rule Violations ({count}) — MANDATORY CHECK
+| Rule | Violation | Caught? | Impact | Prevention |
+|------|-----------|---------|--------|------------|
+
+**Note:** If count = 0, display "✅ No governance violations detected"
 
 ### ⚙️ Tool Environment
 | Tool | Status | Platform | Notes |
@@ -1620,6 +1652,7 @@ Score < 5 → Continue to DESIGN MODE
 | **Rejection** | Compare with rejected_recommendations | Matches REJ-* pattern |
 | **Regression** | Assess impact on existing functionality | Risk > 0.7 |
 | **Coherence** | Validate prompt/agent alignment | Inconsistency detected |
+| **Governance** | Scan for CORE/ARCH rule violations | Violations detected and not addressed |
 
 ## AUDIT Integration
 
