@@ -69,6 +69,20 @@ active_phases:
     depends_on:
       - "phase-26-context-loading-optimization"
   
+  - id: "phase-29"
+    name: "Copilot Chat Response Format Enhancement"
+    file: "phases/active/phase-29-copilot-chat-response-format.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P1"
+    execution_order: null  # Parallel execution
+    description: |
+      Enforce 3-section business-friendly responses + suppress tool narration
+      + ban markdown reports. Wire BusinessLanguageOrchestrator into 
+      MasterOrchestrator for role-inclusive language (Business/PO/Prod/Eng).
+    roi_score: 0.7025
+    priority_tier: "HIGH"
+  
   - id: "phase-27"
     name: "Company Domain Integration System"
     file: "phases/active/phase-27-company-domain-integration.yaml"
@@ -158,8 +172,8 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 25
-  active_phases: 6
+  total_phases: 26
+  active_phases: 7
   completed_2026: 12
   completed_2025: 11
   total_enhancements: 3
