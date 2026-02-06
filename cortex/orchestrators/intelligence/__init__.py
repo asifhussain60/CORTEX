@@ -13,9 +13,17 @@ from cortex.orchestrators.intelligence.tech_intelligence_orchestrator import (
     TechStack,
     ReadinessScore,
 )
+from cortex.orchestrators.intelligence.ecosystem_scanner import (
+    EcosystemScanner,
+    DetectedTech,
+    ScanResult,
+)
 
 __all__ = [
     "TechIntelligenceOrchestrator",
     "TechStack",
     "ReadinessScore",
+    "EcosystemScanner",
+    "DetectedTech",
+    "ScanResult",
 ]
