@@ -24,7 +24,7 @@ class PlanSetupResult:
     phase_id: Optional[str] = None
     checkpoint_created: bool = False
     cleanup_performed: bool = False
-    error_message: str = ""
+    error_message: Optional[str] = None
 
 
 @dataclass
@@ -34,7 +34,7 @@ class PlanTeardownResult:
     artifacts_cleaned: int = 0
     dashboard_synced: bool = False
     audit_logged: bool = False
-    error_message: str = ""
+    error_message: Optional[str] = None
 
 
 class PlanOrchestrator:
@@ -108,13 +108,12 @@ class PlanOrchestrator:
         Returns:
             PlanSetupResult with success status
         """
-        result = PlanSetupResult(success=False)
+        result = PlanSetupResult(success=False, phase_id=phase_id)
         
         try:
             # Step 1: Load phase specification (validates it exists)
             try:
                 phase_data = self.phase_manager._load_phase_yaml(phase_id)
-                result.phase_id = phase_id
             except FileNotFoundError:
                 result.error_message = f"Phase {phase_id} not found in registry"
                 return result
@@ -124,20 +123,13 @@ class PlanOrchestrator:
             
             # Step 3: Run VacuumOrchestrator cleanup
             if self.enable_vacuum:
-                try:
-                    # Would call VacuumOrchestrator here
-                    # For now, mark as done
-                    result.cleanup_performed = True
-                except Exception as e:
-                    # Non-fatal - continue with warning
-                    print(f"⚠️ Vacuum cleanup warning: {e}")
+                result.cleanup_performed = self._run_vacuum_cleanup()
             
             # Step 4: Create git checkpoint (CORE-026)
-            # Would use git commands here
-            result.checkpoint_created = True
+            result.checkpoint_created = self._create_git_checkpoint(f"Setup: {phase_id}")
             
             # Step 5: Initialize AC_START audit trail (CORE-027)
-            # Would log to audit system here
+            self._log_audit_trail(phase_id, "SETUP")
             
             result.success = True
             
@@ -171,32 +163,28 @@ class PlanOrchestrator:
         
         try:
             # Step 1: Verify all deliverables
-            # Would check phase YAML here
+            if not self._verify_deliverables(phase_id):
+                result.error_message = "Deliverables verification failed"
+                return result
             
             # Step 2: Run VacuumOrchestrator cleanup
             if self.enable_vacuum:
-                try:
-                    # Would call VacuumOrchestrator here
-                    result.artifacts_cleaned = 5  # Placeholder
-                except Exception as e:
-                    print(f"⚠️ Vacuum cleanup warning: {e}")
+                self._run_vacuum_cleanup()
             
-            # Step 3-4: Archive temporary files, delete stale markdown
-            # Handled by VacuumOrchestrator
+            # Step 3: Archive temporary files
+            result.artifacts_cleaned = self._archive_artifacts(phase_id)
+            
+            # Step 4: Delete stale markdown (handled by VacuumOrchestrator)
             
             # Step 5-6: Update and regenerate dashboard
             sync_result = self.dashboard_generator.sync_dashboard()
             result.dashboard_synced = sync_result.success
             
-            if not result.dashboard_synced:
-                print(f"⚠️ Dashboard sync failed: {sync_result.error_message}")
-            
             # Step 7: Log AC_COMPLETE audit trail
-            # Would log to audit system here
-            result.audit_logged = True
+            result.audit_logged = self._log_audit_trail(phase_id, "TEARDOWN")
             
             # Step 8: Commit all changes
-            # Would use git commands here
+            self._create_git_checkpoint(f"Teardown: {phase_id}")
             
             result.success = True
             
@@ -206,38 +194,52 @@ class PlanOrchestrator:
         
         return result
     
-    def create_phase(self, phase_data: Dict[str, Any]) -> str:
+    def create_phase(self, phase_data: Dict[str, Any], auto_sync: bool = True) -> bool:
         """
         Create new phase with setup hook.
         
         Args:
             phase_data: Phase metadata
+            auto_sync: Auto-sync dashboard after creation
             
         Returns:
-            phase_id: Created phase ID
+            success: True if created successfully
         """
-        # Create phase
-        phase_id = self.phase_manager.create_phase(phase_data)
-        
-        # Sync dashboard
-        self.dashboard_generator.sync_dashboard()
-        
-        return phase_id
+        try:
+            # Create phase
+            phase_id = self.phase_manager.create_phase(phase_data)
+            
+            # Sync dashboard
+            if auto_sync:
+                self.dashboard_generator.sync_dashboard()
+            
+            return True
+        except Exception:
+            return False
     
-    def update_phase(self, phase_id: str, updates: Dict[str, Any]) -> None:
+    def update_phase(self, phase_id: str, updates: Dict[str, Any], auto_sync: bool = True) -> bool:
         """
         Update existing phase with dashboard sync.
         
         Args:
             phase_id: Phase ID to update
             updates: Updates to apply
+            auto_sync: Auto-sync dashboard after update
+            
+        Returns:
+            success: True if updated successfully
         """
-        # Update phase
-        self.phase_manager.update_phase(phase_id, updates)
-        
-        # Sync dashboard
-        self.dashboard_generator.sync_dashboard()
-    
+        try:
+            # Update phase
+            self.phase_manager.update_phase(phase_id, updates)
+            
+            # Sync dashboard
+            if auto_sync:
+                self.dashboard_generator.sync_dashboard()
+            
+            return True
+        except Exception:
+            return False    
     def complete_phase(self, phase_id: str) -> bool:
         """
         Complete phase with 3-source sync verification.
@@ -282,4 +284,138 @@ class PlanOrchestrator:
             success: True if synced successfully
         """
         result = self.dashboard_generator.sync_dashboard()
+        # Handle both bool and result object returns
+        if isinstance(result, bool):
+            return result
         return result.success
+    
+    # ===== Private Helper Methods =====
+    
+    def _create_git_checkpoint(self, message: str = "Phase checkpoint") -> bool:
+        """
+        Create git checkpoint before phase work.
+        
+        Args:
+            message: Commit message
+            
+        Returns:
+            success: True if checkpoint created
+        """
+        try:
+            import subprocess
+            
+            # Check git status
+            result = subprocess.run(
+                ["git", "status", "--porcelain"],
+                capture_output=True,
+                text=True,
+                cwd=self.registry_root.parent
+            )
+            
+            if result.returncode != 0:
+                return False
+            
+            # If there are changes, create checkpoint
+            if result.stdout.strip():
+                subprocess.run(
+                    ["git", "add", "-A"],
+                    cwd=self.registry_root.parent,
+                    check=True
+                )
+                subprocess.run(
+                    ["git", "commit", "-m", f"[CHECKPOINT] {message}"],
+                    cwd=self.registry_root.parent,
+                    check=True
+                )
+            
+            return True
+            
+        except Exception as e:
+            print(f"⚠️ Git checkpoint failed: {e}")
+            return False
+    
+    def _run_vacuum_cleanup(self) -> bool:
+        """
+        Run VacuumOrchestrator cleanup.
+        
+        Returns:
+            success: True if cleanup successful
+        """
+        try:
+            # Placeholder - VacuumOrchestrator integration in Stage 5
+            # For now, return True (no-op)
+            return True
+            
+        except Exception as e:
+            print(f"⚠️ Vacuum cleanup failed: {e}")
+            return False
+    
+    def _verify_deliverables(self, phase_id: str) -> bool:
+        """
+        Verify phase deliverables are complete.
+        
+        Args:
+            phase_id: Phase ID to verify
+            
+        Returns:
+            success: True if all deliverables present
+        """
+        try:
+            # Placeholder - would check phase YAML deliverables list
+            # For now, always return True
+            return True
+            
+        except Exception:
+            return False
+    
+    def _archive_artifacts(self, phase_id: str) -> int:
+        """
+        Archive temporary phase artifacts.
+        
+        Args:
+            phase_id: Phase ID
+            
+        Returns:
+            count: Number of artifacts archived
+        """
+        try:
+            # Placeholder - would move files to archive directory
+            # For now, return 0
+            return 0
+            
+        except Exception:
+            return 0
+    
+    def _log_audit_trail(self, phase_id: str, operation: str) -> bool:
+        """
+        Log operation to audit trail.
+        
+        Args:
+            phase_id: Phase ID
+            operation: Operation type (SETUP/TEARDOWN/etc)
+            
+        Returns:
+            success: True if logged successfully
+        """
+        try:
+            # Placeholder - would log to audit system
+            # For now, return True
+            return True
+            
+        except Exception:
+            return False
+    
+    def _load_pending_phases(self) -> list:
+        """
+        Load all pending phases from registry.
+        
+        Returns:
+            List of pending phase dicts
+        """
+        try:
+            # Placeholder - would load from index.yaml
+            # For now, return empty list
+            return []
+            
+        except Exception:
+            return []
