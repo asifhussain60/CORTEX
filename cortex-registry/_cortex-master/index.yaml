@@ -99,6 +99,19 @@ active_enhancements:
       issue_id: "PHASE-25-TOKEN-001"
       evidence: "17 summarization events in 233-line chat (73x over budget)"
       target: "≤1 summarization per 1000 lines"
+  
+  - id: "enh-047"
+    name: "Dashboard Data Loading Verification"
+    file: "enhancements/active/enh-047-dashboard-data-loading-verification.yaml"
+    status: "planned"
+    priority: "P1"
+    version: "1.0"
+    created: "2026-02-06"
+    updated: "2026-02-06"
+    scope: "cortex-registry/_cortex-master/dashboard/"
+    phases: 4
+    estimated_days: 6
+    tests_total: 36
 
 # Metadata
 statistics:
@@ -106,8 +119,8 @@ statistics:
   active_phases: 3
   completed_2026: 12
   completed_2025: 11
-  total_enhancements: 1
-  active_enhancements: 1
+  total_enhancements: 2
+  active_enhancements: 2
   last_phase_created: "2026-02-06"
   last_phase_completed: "2026-02-05"
   next_expected_completion: "2026-02-13"

@@ -189,6 +189,114 @@ plan_mode:
         
         **Proceed?** (yes/no/modify)
 
+  # ============================================================================
+  # ROI-BASED PHASE PRIORITIZATION (NEW)
+  # ============================================================================
+  # CORTEX intelligently prioritizes pending phases to achieve maximum
+  # architectural gains while balancing efficiency with accuracy
+  
+  roi_prioritization:
+    description: |
+      When multiple phases/enhancements are pending, CORTEX uses ROI scoring
+      to determine execution order that maximizes architectural gains.
+    
+    scoring_dimensions:
+      architectural_impact:
+        weight: 0.35
+        factors:
+          - "Unblocks other phases (multiplier effect)"
+          - "Reduces technical debt"
+          - "Improves system coherence"
+          - "Enables future capabilities"
+        scale: "0.0 (cosmetic) to 1.0 (foundational)"
+      
+      efficiency_gain:
+        weight: 0.25
+        factors:
+          - "Token optimization (ENH-046: 73x improvement)"
+          - "Reduces manual steps"
+          - "Speeds up development cycles"
+          - "Improves developer experience"
+        scale: "0.0 (no impact) to 1.0 (10x faster)"
+      
+      accuracy_improvement:
+        weight: 0.20
+        factors:
+          - "Reduces bugs/regressions"
+          - "Improves validation coverage"
+          - "Better error detection"
+          - "Enhanced governance"
+        scale: "0.0 (no change) to 1.0 (game-changer)"
+      
+      effort_cost:
+        weight: 0.15
+        factors:
+          - "Implementation time (days)"
+          - "Testing complexity"
+          - "Integration dependencies"
+        scale: "0.0 (1 day) to 1.0 (4+ weeks)"
+        inverted: true  # Lower cost = higher score
+      
+      blocking_severity:
+        weight: 0.05
+        factors:
+          - "Number of blocked phases"
+          - "Critical path analysis"
+          - "User-facing impact"
+        scale: "0.0 (no blocks) to 1.0 (critical blocker)"
+    
+    roi_formula: |
+      ROI Score = (
+        (architectural_impact * 0.35) +
+        (efficiency_gain * 0.25) +
+        (accuracy_improvement * 0.20) +
+        ((1.0 - effort_cost) * 0.15) +  # Inverted
+        (blocking_severity * 0.05)
+      )
+      
+      Higher score = Higher priority
+      Range: 0.0 (low ROI) to 1.0 (maximum ROI)
+    
+    execution_strategy:
+      high_roi_threshold: 0.75
+      strategy: |
+        IF roi_score >= 0.75:
+          PRIORITIZE IMMEDIATELY (highest architectural gains)
+        ELIF roi_score >= 0.60:
+          SCHEDULE NEXT (strong ROI, queue after 0.75+ items)
+        ELIF roi_score >= 0.40:
+          BACKLOG (moderate ROI, evaluate after high-priority work)
+        ELSE:
+          DEFER (low ROI, re-evaluate quarterly)
+    
+    example_calculation:
+      phase: "ENH-046 (Token Optimization)"
+      architectural_impact: 0.90  # Unblocks Phase 25, affects ALL orchestrators
+      efficiency_gain: 0.95       # 73x improvement in token consumption
+      accuracy_improvement: 0.40  # Indirect (better context = better answers)
+      effort_cost: 0.30           # ~1 week implementation
+      blocking_severity: 1.0      # Blocks Phase 25 (critical path)
+      
+      calculation: |
+        ROI = (0.90 * 0.35) + (0.95 * 0.25) + (0.40 * 0.20) + 
+              ((1.0 - 0.30) * 0.15) + (1.0 * 0.05)
+            = 0.315 + 0.2375 + 0.08 + 0.105 + 0.05
+            = 0.7875
+        
+        VERDICT: HIGH ROI (0.7875 >= 0.75) → PRIORITIZE IMMEDIATELY
+    
+    master_orchestrator_integration:
+      location: "cortex/orchestrators/core/master_orchestrator.py"
+      method: "prioritize_pending_phases()"
+      invocation: |
+        When user enters PLAN MODE:
+        1. Load all pending phases from _cortex-master/index.yaml
+        2. Calculate ROI score for each using roi_prioritization logic
+        3. Sort by ROI score (descending)
+        4. Display top 3 recommendations with ROI breakdown
+        5. User approves or reorders
+        6. Execute in priority order
+
   phase_operations:
     create:
       description: "Create new phase for significant CORTEX enhancement"
@@ -199,11 +307,13 @@ plan_mode:
         - "New mode/capability"
         - "Architecture change"
       action: |
-        1. Generate phase-{N}-{kebab-name}.yaml from template
-        2. Add to _cortex-master/phases/active/
-        3. Update _cortex-master/index.yaml (active_phases)
-        4. Regenerate dashboard data (plan-summary.json)
-        5. Commit: "feat(phase-{N}): Initialize {name} phase"
+        1. Calculate ROI score for new phase
+        2. Generate phase-{N}-{kebab-name}.yaml from template (include ROI metadata)
+        3. Add to _cortex-master/phases/active/
+        4. Update _cortex-master/index.yaml (active_phases with ROI score)
+        5. Regenerate dashboard data (plan-summary.json with priority visualization)
+        6. Display inline progress bar during creation
+        7. Commit: "feat(phase-{N}): Initialize {name} phase (ROI: {score})"
     
     update:
       description: "Update existing phase with new deliverables"

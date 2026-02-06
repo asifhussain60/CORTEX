@@ -1,0 +1,333 @@
+# Enhancement 047: Dashboard Data Loading Verification
+# Created: 2026-02-06
+# Priority: P1
+# Status: PLANNED
+# Version: 1.0
+
+metadata:
+  id: "ENH-047"
+  title: "Dashboard Data Loading Verification"
+  created: "2026-02-06"
+  priority: "P1"
+  status: "PLANNED"
+  version: "1.0"
+  category: "Infrastructure"
+  scope: "cortex-registry/_cortex-master/dashboard/"
+  author: "CORTEX Architect"
+
+## Problem Statement
+
+**Issue Discovery:**
+The dashboard at `cortex-registry/_cortex-master/dashboard/index.html` loads data from `plan-summary.json` via async fetch, but there's no verification that the data is correctly loaded and displayed. The screenshot shows 0% complete with 0 active phases, suggesting potential data loading issues.
+
+**Evidence:**
+- Dashboard displays: 0% Complete, 0 Done, 0 Active, 0 Blocked
+- plan-summary.json shows: 25 total phases, 3 active phases, 92% completion rate
+- Console logs exist but no automated verification
+- No end-to-end tests for dashboard rendering
+
+**Impact:**
+- Users may see incorrect/stale data without knowing
+- Silent failures in data loading go undetected
+- No confidence in dashboard accuracy
+- Manual verification required after every update
+
+## Solution Architecture
+
+### Phase 1: Dashboard Data Loading Tests (2 days)
+
+**Objective:** Create automated tests to verify data loading and transformation
+
+**Deliverables:**
+```yaml
+tests:
+  - file: "tests/integration/dashboard/test_data_loading.py"
+    tests:
+      - test_plan_summary_json_exists
+      - test_json_structure_valid
+      - test_statistics_loaded
+      - test_active_phases_loaded
+      - test_completed_phases_loaded
+      - test_critical_issues_loaded
+      - test_enhancements_loaded
+    coverage: 90%
+  
+  - file: "tests/e2e/dashboard/test_dashboard_rendering.py"
+    framework: "playwright"
+    tests:
+      - test_dashboard_loads
+      - test_statistics_displayed
+      - test_active_phases_rendered
+      - test_tabs_functional
+      - test_data_matches_json
+    coverage: 85%
+```
+
+**Implementation:**
+```python
+# tests/integration/dashboard/test_data_loading.py
+import json
+import pytest
+from pathlib import Path
+
+def test_plan_summary_json_exists():
+    """Verify plan-summary.json exists and is readable"""
+    json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+    assert json_path.exists(), "plan-summary.json not found"
+    assert json_path.stat().st_size > 0, "plan-summary.json is empty"
+
+def test_json_structure_valid():
+    """Verify JSON structure matches expected schema"""
+    json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+    with open(json_path) as f:
+        data = json.load(f)
+    
+    # Validate required top-level keys
+    assert "metadata" in data
+    assert "statistics" in data
+    assert "active_phases" in data
+    
+    # Validate statistics structure
+    stats = data["statistics"]
+    assert "total_phases" in stats
+    assert "active_phases" in stats
+    assert "completion_rate" in stats
+    assert stats["total_phases"] > 0
+
+def test_active_phases_loaded():
+    """Verify active phases are correctly loaded"""
+    json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+    with open(json_path) as f:
+        data = json.load(f)
+    
+    active = data["active_phases"]
+    assert len(active) > 0, "No active phases found"
+    
+    for phase in active:
+        assert "number" in phase
+        assert "name" in phase
+        assert "status" in phase
+```
+
+### Phase 2: Dashboard Health Check (1 day)
+
+**Objective:** Add real-time health indicator to dashboard
+
+**Deliverables:**
+```yaml
+components:
+  - file: "cortex-registry/_cortex-master/dashboard/index.html"
+    additions:
+      - data_loading_status_indicator
+      - json_fetch_error_display
+      - fallback_ui_for_load_failures
+      - last_successful_load_timestamp
+```
+
+**Implementation:**
+```javascript
+// Add to index.html after loadDashboardData()
+function displayDataLoadingStatus(success, timestamp, error = null) {
+  const statusEl = document.getElementById('data-loading-status');
+  
+  if (success) {
+    statusEl.innerHTML = `
+      <div class="alert alert-success">
+        ✅ Data loaded successfully at ${timestamp}
+        <br>Active: ${CORTEX_DATA.stats.active} | Completed: ${CORTEX_DATA.stats.completed}
+      </div>
+    `;
+  } else {
+    statusEl.innerHTML = `
+      <div class="alert alert-danger">
+        ❌ Failed to load dashboard data: ${error}
+        <br>Using fallback data. Please refresh or check plan-summary.json
+      </div>
+    `;
+  }
+}
+```
+
+### Phase 3: Automated Sync Verification (1 day)
+
+**Objective:** Verify dashboard auto-sync is working
+
+**Deliverables:**
+```yaml
+verification_script:
+  - file: "scripts/verify_dashboard_sync.py"
+    checks:
+      - index_yaml_vs_plan_summary_json
+      - phase_count_consistency
+      - enhancement_count_consistency
+      - critical_issues_propagation
+      - blocked_by_relationships
+```
+
+**Implementation:**
+```python
+# scripts/verify_dashboard_sync.py
+import yaml
+import json
+from pathlib import Path
+
+def verify_dashboard_sync():
+    """Verify index.yaml and plan-summary.json are synchronized"""
+    
+    # Load index.yaml
+    index_path = Path("cortex-registry/_cortex-master/index.yaml")
+    with open(index_path) as f:
+        index = yaml.safe_load(f)
+    
+    # Load plan-summary.json
+    json_path = Path("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+    with open(json_path) as f:
+        dashboard = json.load(f)
+    
+    # Verify phase counts
+    index_total = index["statistics"]["total_phases"]
+    dashboard_total = dashboard["statistics"]["total_phases"]
+    assert index_total == dashboard_total, \
+        f"Phase count mismatch: index={index_total}, dashboard={dashboard_total}"
+    
+    # Verify active phases count
+    index_active = index["statistics"]["active_phases"]
+    dashboard_active = len(dashboard["active_phases"])
+    assert index_active == dashboard_active, \
+        f"Active phase count mismatch: index={index_active}, dashboard={dashboard_active}"
+    
+    print("✅ Dashboard sync verification PASSED")
+    return True
+
+if __name__ == "__main__":
+    verify_dashboard_sync()
+```
+
+### Phase 4: Dashboard Generation Tool (2 days)
+
+**Objective:** Create tool to regenerate plan-summary.json from index.yaml
+
+**Deliverables:**
+```yaml
+tool:
+  - name: "cortex_regenerate_dashboard_data"
+    type: "MCP Tool"
+    file: "cortex/mcp/tools/dashboard_data_generator.py"
+    capabilities:
+      - read_index_yaml
+      - read_phase_specs
+      - aggregate_statistics
+      - generate_plan_summary_json
+      - validate_output
+```
+
+## Success Criteria
+
+**Verification Gates:**
+
+1. **Data Loading Tests Pass:**
+   - All 13 tests passing (8 integration + 5 E2E)
+   - Coverage ≥ 85% for dashboard data loading code
+   - Playwright tests run in CI/CD
+
+2. **Dashboard Health Indicator Working:**
+   - Status indicator shows "✅ Data loaded successfully"
+   - Timestamp displayed and accurate
+   - Error messages display on fetch failures
+
+3. **Sync Verification Script Passes:**
+   - index.yaml ↔ plan-summary.json consistency verified
+   - Script runs in CI/CD after any registry update
+   - Zero sync discrepancies
+
+4. **Dashboard Displays Correct Data:**
+   - Active phases count matches plan-summary.json
+   - Completion percentage accurate (92% expected)
+   - Critical issues section visible
+   - Phase 25 shows "blocked_by" status
+
+## Implementation Timeline
+
+```yaml
+timeline:
+  total_duration: "6 days"
+  phases:
+    - name: "Phase 1: Data Loading Tests"
+      duration: "2 days"
+      tests: 13
+      priority: "P0"
+    
+    - name: "Phase 2: Health Check UI"
+      duration: "1 day"
+      tests: 5
+      priority: "P1"
+    
+    - name: "Phase 3: Sync Verification"
+      duration: "1 day"
+      tests: 6
+      priority: "P0"
+    
+    - name: "Phase 4: Dashboard Generator Tool"
+      duration: "2 days"
+      tests: 12
+      priority: "P1"
+```
+
+## Risk Assessment
+
+**Risks:**
+1. **Browser Compatibility:** Dashboard may behave differently in Safari vs Chrome
+   - Mitigation: Playwright tests run on multiple browsers
+
+2. **File Protocol Limitations:** fetch() may fail with file:// protocol
+   - Mitigation: Recommend HTTP server (open via `python -m http.server`)
+
+3. **JSON Parse Errors:** Invalid JSON breaks dashboard
+   - Mitigation: JSON schema validation in tests
+
+4. **Async Race Conditions:** Data may load after UI initializes
+   - Mitigation: await loadDashboardData() before rendering
+
+## Related Work
+
+**Dependencies:**
+- Phase 25 (PLAN MODE) - uses same dashboard
+- ENH-046 (Token Optimization) - dashboard tracks progress
+
+**Blocks:**
+- None (independent infrastructure improvement)
+
+**Enables:**
+- Confident dashboard usage
+- Automated dashboard testing in CI/CD
+- Transparent data loading status
+
+## Governance
+
+**CORE Rules Applied:**
+- CORE-008: TDD (tests written before dashboard changes)
+- CORE-027: Audit Trail (sync verification logs)
+- CORE-030: Implementation Truth (verify actual dashboard state)
+
+**Enforcement:**
+- EnforcementOrchestrator validates all dashboard changes
+- CI/CD runs dashboard tests on every commit
+- VacuumOrchestrator cleans up test artifacts
+
+## Metrics
+
+**Target Metrics:**
+```yaml
+metrics:
+  test_coverage: 85%
+  test_pass_rate: 100%
+  sync_verification_pass_rate: 100%
+  dashboard_load_time: "<2s"
+  data_freshness: "<5min"
+```
+
+**Success Indicators:**
+- Zero "0% Complete" false displays
+- Dashboard accurately reflects index.yaml at all times
+- Automated tests catch data loading regressions
+- Users trust dashboard data accuracy
