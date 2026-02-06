@@ -51,24 +51,32 @@ class GenerationResult:
 
 class DashboardSuiteGenerator:
     """
-    Generates complete static dashboard suite.
+    Generates complete static dashboard suite with glassmorphism design.
     
     Produces:
     - dist/index.html (landing with hero + tile grid)
-    - dist/repos/<slug>/index.html (repo dashboards)
+    - dist/repos/<slug>/index.html (repo dashboards with glassmorphism theme)
     - dist/assets/* (CSS, JS, vendor libs)
     - dist/images/* (logo)
     
-    All data embedded as JSON - no fetch() calls.
+    All data embedded as JSON - no fetch() calls (file:// compatible).
+    Uses glassmorphism template: repo-dashboard-glass-v1.html
+    Follows MVC architecture: Model (JSON) → View (HTML/CSS) → Controller (JS)
+    
+    Authority: Phase 32 - Glassmorphism Dashboard Generator Fix
+    Documentation:
+    - docs/guides/dashboard-template-structure.md (template overview)
+    - docs/guides/dashboard-mvc-integration.md (MVC patterns)
     
     Example:
         ```python
         generator = DashboardSuiteGenerator(
-            template_dir=Path("company/dashboards/templates"),
             output_dir=Path("dist")
         )
         result = generator.generate_suite(config)
         print(f"Generated: {result.landing_path}")
+        for dashboard in result.repo_dashboards:
+            print(f"  - {dashboard}")
         ```
     """
     

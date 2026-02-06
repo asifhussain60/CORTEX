@@ -549,3 +549,23 @@ class TestGPTSpecAcceptanceCriteria:
         assert "dashboardData" in content or "repo-data" in content
         # Should have back link
         assert "index.html" in content
+    
+    def test_glassmorphism_css_present(self, generated_suite: Path) -> None:
+        """Phase 32: Verify glassmorphism CSS specifications in generated dashboards."""
+        repo_dashboard = generated_suite / "repos" / "acceptance-test" / "index.html"
+        content = repo_dashboard.read_text(encoding="utf-8")
+        
+        # AC-GLASS-001: Check for glassmorphism template usage
+        assert "glass-design-tokens.css" in content, "Missing glassmorphism CSS file reference"
+        
+        # AC-GLASS-002: Verify glassmorphism color specifications
+        assert "rgba(26, 31, 58, 0.7)" in content, "Missing dark glass background color"
+        
+        # AC-GLASS-003: Check backdrop-filter blur
+        assert "backdrop-filter: blur" in content, "Missing backdrop-filter blur effect"
+        
+        # AC-GLASS-004: Verify relative asset paths for repos/<slug>/
+        assert "../../assets/" in content, "Asset paths not relative to repo subfolder"
+        
+        # AC-GLASS-005: Ensure no external fetches (file:// compatibility)
+        assert "fetch(" not in content, "Dashboard uses fetch() - not file:// compatible"
