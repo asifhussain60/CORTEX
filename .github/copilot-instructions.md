@@ -277,6 +277,7 @@
 | Command | Action |
 |---------|--------|
 | `/audit` | Autonomous codebase health scan |
+| `/plan` | **PLAN:** ROI-based phase prioritization + registry operations |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
 | `/refactor {target}` | Code improvement |
@@ -295,7 +296,7 @@
 | File | Purpose | Load When |
 |------|---------|-----------|
 | CORTEX.prompt.md | Production master prompt | IMPLEMENT/FIX intents |
-| cortex-architect.prompt.md | AUDIT + DESIGN dual-mode | AUDIT/DESIGN intents |
+| cortex-architect.prompt.md | HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | AUDIT/DESIGN/PLAN intents |
 | response-format-standards.md | Response formatting rules | All operations |
 
 **Location:** .github/prompts/ directory  
