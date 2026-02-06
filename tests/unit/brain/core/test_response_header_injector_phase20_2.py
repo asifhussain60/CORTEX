@@ -22,7 +22,10 @@ class TestResponseHeaderInjectorPhase20_2:
     @pytest.fixture
     def injector(self):
         """Create ResponseHeaderInjector instance."""
-        return ResponseHeaderInjector()
+        # Mock template engine (required parameter)
+        mock_engine = Mock()
+        mock_engine.render = Mock(return_value="Test content")
+        return ResponseHeaderInjector(template_engine=mock_engine)
     
     def test_format_orchestrator_badge_full_visibility(self, injector):
         """Test _format_orchestrator_badge in FULL visibility mode."""
