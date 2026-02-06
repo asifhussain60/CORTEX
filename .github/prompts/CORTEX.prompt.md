@@ -73,7 +73,7 @@ Context Breakdown:
 - ✅ **Use EXIT GATE (ContextSynthesisGateway) for ALL context loading** — ENH-046 Phase 1.6 complete
   - Minimal initial context (≤250 tokens), incremental on-demand (≤500 tokens per load)
   - Automatic compression: agent files 95%, YAML 91%, source code 88%
-  - See: `cortex/brain/core/context_synthesis_gateway.py`
+  - See: ContextSynthesisGateway in cortex/brain/core/ directory
 - ✅ Load agents on-demand via intent mapping (see AGENT-INDEX.md)
 - ✅ Use semantic_search for targeted context retrieval (EXIT GATE synthesizes results)
 - ✅ Read files in large chunks only when EXIT GATE determines necessity
@@ -209,7 +209,7 @@ result = mcp_tool.execute(parameters)
 
 **BEFORE outputting any recommendation:**
 
-1. Load `docs/meta/enhancement-history.yaml`
+1. Load enhancement-history.yaml from docs/meta/ directory
 2. Cross-check against `rejected_recommendations`
 3. Calculate regression risk score
 4. IF blocked → suppress recommendation, log reason
@@ -364,15 +364,15 @@ Merge: Company takes precedence → CORTEX fills gaps
 
 | Content | Location |
 |---------|----------|
-| Python Code | `cortex/`, `cortex_brain/` |
-| Tests | `tests/` |
-| Documentation | `docs/` |
-| Wiring | `cortex/wiring/specifications/wiring.yaml` |
+| Python Code | cortex/, cortex_brain/ directories |
+| Tests | tests/ directory |
+| Documentation | docs/ directory |
+| Wiring | cortex/wiring/specifications/wiring.yaml |
 
 ### Forbidden
 
-- ❌ `.md` files outside `docs/`
-- ❌ `.py` files in root
+- ❌ .md files outside docs/
+- ❌ .py files in root
 - ❌ Direct Python imports in production (use MCP)
 
 ---
@@ -415,9 +415,9 @@ Before completing ANY operation:
 
 | Agent | Purpose |
 |-------|---------|
-| `../agents/core/CORTEX.md` (load explicitly when needed) | Master agent ✅ |
-| `../agents/core/cortex-architect.md` (load explicitly when needed) | Design-phase agent ✅ |
-| `../agents/core/cortex-mcp-gateway.md` (load explicitly when needed) | MCP routing agent ✅ |
+| ../agents/core/CORTEX.md (load explicitly when needed) | Master agent ✅ |
+| ../agents/core/cortex-architect.md (load explicitly when needed) | Design-phase agent ✅ |
+| ../agents/core/cortex-mcp-gateway.md (load explicitly when needed) | MCP routing agent ✅ |
 
 ---
 

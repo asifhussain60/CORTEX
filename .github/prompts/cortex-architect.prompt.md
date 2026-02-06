@@ -53,7 +53,7 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ## 🎯 HEXA-MODE OPERATION
 
-**Load from:** `cortex-registry/_cortex-master/meta/modes.yaml`
+**Load from:** modes.yaml in cortex-registry/_cortex-master/meta/ directory
 
 Use Python loaders:
 ```python
@@ -83,7 +83,7 @@ print(audit_mode.flow)  # Execution steps
 
 **PLAN MODE:** Activated by `/plan` command or when working with cortex-registry/_cortex-master/ files.
 
-**Full details:** See `cortex-registry/_cortex-master/meta/modes.yaml` for execution flows, success criteria, and header templates.
+**Full details:** See modes.yaml in cortex-registry/_cortex-master/meta/ directory for execution flows, success criteria, and header templates.
 
 ---
 
@@ -109,11 +109,11 @@ Context Breakdown:
 
 **DO:**
 - ✅ **Use EXIT GATE (ContextSynthesisGateway) for ALL context loading** — ENH-046 Phase 1.6 complete
-  - MasterOrchestrator automatically invokes `exit_gate.synthesize_context(request, intent)` before intent classification
-  - Returns dict: `{'content': str, 'tokens': int, 'cache_hit': bool, 'synthesis_time_ms': float}`
+  - MasterOrchestrator automatically invokes exit_gate.synthesize_context(request, intent) before intent classification
+  - Returns dict with content, tokens, cache_hit, synthesis_time_ms
   - Minimal initial context (≤250 tokens), incremental on-demand (≤500 tokens per load)
   - Automatic compression: agent files 95%, YAML 91%, source code 88%
-  - See: `cortex/brain/core/context_synthesis_gateway.py`
+  - See: ContextSynthesisGateway in cortex/brain/core/ directory
 - ✅ Load agents on-demand per mode (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)
 - ✅ Use semantic_search for targeted context retrieval (EXIT GATE synthesizes results)
 - ✅ Read large file chunks only when EXIT GATE determines necessity
@@ -147,17 +147,39 @@ If token usage > 400k before user request:
 
 ---
 
+## 📋 Context Loading Strategy
+
+**On-Demand Only:** Use semantic_search or read_file when explicitly needed (no auto-loading by VS Code).
+
+**File Discovery Directories:**
+- **Prompts:** .github/prompts/ directory
+- **Agents:** .github/agents/core/ directory  
+- **Knowledge:** cortex/knowledge/best-practices/ directory
+- **Registry:** cortex-registry/_cortex-master/ directory
+- **Wiring:** cortex/wiring/specifications/ directory
+
+**Intent-Based Loading Pattern:**
+- **IMPLEMENT** → Load TDD patterns when implementation starts
+- **AUDIT** → Load governance rules when audit initiated
+- **DESIGN** → Load architecture patterns when design begins
+- **REFACTOR** → Load refactoring best practices when refactoring
+- **PLAN** → Load phase specs when planning
+
+**EXIT GATE Integration:** MasterOrchestrator uses ContextSynthesisGateway for cost-aware context synthesis (≤20KB per turn, 70% cache hit rate target).
+
+---
+
 ## 📋 PLAN REGISTRY INTEGRATION
 
 **Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)
 
 **Access:** 
-- Location: `cortex-registry/_cortex-master/`
+- Location: cortex-registry/_cortex-master/ directory
 - Auto-discovery: index.yaml with full metadata
 - Statistics: 19 total phases, 1 active enhancement, 16 completed
 
 **Dashboard:**
-- View: `cortex-registry/_cortex-master/dashboard/index.html` (Material.js glassmorphism)
+- View: cortex-registry/_cortex-master/dashboard/index.html (Material.js glassmorphism)
 - Auto-sync: AUDIT triggers sync on variance >10% (silent sync >20%)
 - Tabs: Overview | Phases | Enhancements | Roadmap | Metrics
 
@@ -169,7 +191,7 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**Load from:** `cortex-registry/_cortex-master/meta/response-format.yaml`
+**Load from:** cortex-registry/_cortex-master/meta/response-format.yaml
 
 Use Python loaders:
 ```python
@@ -185,7 +207,7 @@ status_icons = fmt.icons["status"]
 **Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Interactive|Meta-Audit} | **Scope:** {scope} ✅
 ```
 
-**Full details:** See `cortex-registry/_cortex-master/meta/response-format.yaml` for:
+**Full details:** See cortex-registry/_cortex-master/meta/response-format.yaml for:
 - Icon system (status, priority, actions)
 - Structure requirements
 - Narrative flow standards
@@ -195,7 +217,7 @@ status_icons = fmt.icons["status"]
 
 ## 🛡️ CORE RULES
 
-**Load from:** `cortex-registry/_cortex-master/governance/core-rules.yaml`
+**Load from:** cortex-registry/_cortex-master/governance/core-rules.yaml
 
 Use Python loaders:
 ```python
@@ -212,7 +234,7 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 - CORE-028: Intelligent file naming (kebab-case, no SCREAMING_CASE)
 - CORE-035: Single implementation (no _v2)
 
-**Full details:** See `cortex-registry/_cortex-master/governance/core-rules.yaml`
+**Full details:** See cortex-registry/_cortex-master/governance/core-rules.yaml
 
 ---
 
@@ -240,7 +262,7 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 
 # 🎯 MODE 0.5: PLAN (Phase Registry Operations)
 
-**Trigger:** `/plan` command OR working with `cortex-registry/_cortex-master/` files  
+**Trigger:** `/plan` command OR working with cortex-registry/_cortex-master/ directory files  
 **Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)  
 **Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
 **Output:** Priority-ordered phase recommendations with real-time visual progress
@@ -493,9 +515,9 @@ Variance > 20%: Silent sync (automatic background update)
 ```
 
 **Registry Structure:**
-- **Input:** `cortex-registry/_cortex-master/index.yaml`
-- **Output:** `cortex-registry/_cortex-master/dashboard/data/plan-summary.json`
-- **Config:** `index.yaml` dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
+- **Input:** cortex-registry/_cortex-master/index.yaml
+- **Output:** cortex-registry/_cortex-master/dashboard/data/plan-summary.json
+- **Config:** index.yaml dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
 
 ---
 
@@ -653,7 +675,7 @@ User Request → PRE-FLIGHT CHECK
 **Options:**
 1. Type "auto-fix" for automatic installation (recommended)
 2. Follow manual steps above
-3. View full guide: `../../docs/03-getting-started/0-installation.md` (load explicitly when needed)
+3. View full guide: ../../docs/03-getting-started/0-installation.md (load explicitly when needed)
 
 **Note:** AUDIT/DESIGN operations cannot proceed until environment is ready.
 ```
@@ -721,7 +743,7 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 
 ## Audit Checklist
 
-**Load from:** `cortex-registry/_cortex-master/governance/audit-checklist.yaml`
+**Load from:** cortex-registry/_cortex-master/governance/audit-checklist.yaml
 
 Use Python loaders:
 ```python
@@ -744,7 +766,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 - P2 LENS analysis is MANDATORY (`cortex_lens_analyze`, `cortex_detect_duplicates`)
 - NO "Not analyzed" statuses allowed
 
-**Full details:** See `cortex-registry/_cortex-master/governance/audit-checklist.yaml`
+**Full details:** See cortex-registry/_cortex-master/governance/audit-checklist.yaml
 
 ---
 
@@ -766,8 +788,8 @@ p1_checks = checklist.priority_checks["P1"].checks
 **CRITICAL:** These checks run on EVERY request, not just AUDIT mode.
 
 **Load governance rules from:**
-- `cortex-registry/_cortex-master/governance/core-rules.yaml` — CORE rules definitions
-- `cortex-registry/_cortex-master/governance/audit-checklist.yaml` — Validation checks
+- cortex-registry/_cortex-master/governance/core-rules.yaml — CORE rules definitions
+- cortex-registry/_cortex-master/governance/audit-checklist.yaml — Validation checks
 
 **Key Enforcement:**
 - CORE-002: No markdown file generation → BLOCK + regenerate
@@ -1167,25 +1189,25 @@ ORDER BY compression_ratio ASC;
 
 1. **If Initial Load Avg > 250 tokens:**
    - Root Cause: {analyze Query 4 - which intents exceed budget}
-   - Action: Refactor `incremental_context_loader.py` minimal context assembly
+   - Action: Refactor incremental_context_loader.py minimal context assembly
    - Files: {list affected files from Query 1}
    - Priority: P0
 
 2. **If Cache Hit Rate < 70%:**
    - Root Cause: {analyze Query 3 - cache eviction patterns}
-   - Action: Tune `context_cache_layer.py` TTL or LRU size
+   - Action: Tune context_cache_layer.py TTL or LRU size
    - Evidence: {cache_hits}/{total_syntheses} over {n} days
    - Priority: P1
 
 3. **If Synthesis Time P99 > 100ms:**
    - Root Cause: {analyze Query 5 - distillation bottlenecks}
-   - Action: Optimize `token_distillation_engine.py` compression algorithms
+   - Action: Optimize token_distillation_engine.py compression algorithms
    - File Types: {agent|yaml|source} taking longest
    - Priority: P2
 
 4. **If Compression Ratio < 85%:**
    - Root Cause: {analyze Query 5 - file types with low compression}
-   - Action: Enhance type-specific compression in `token_distillation_engine.py`
+   - Action: Enhance type-specific compression in token_distillation_engine.py
    - File Types: {list file types with ratio < 85%}
    - Priority: P2
 
@@ -1197,7 +1219,7 @@ ORDER BY compression_ratio ASC;
 **Last Sync:** {timestamp}
 
 **Prometheus Dashboard:** http://localhost:3000/d/cortex-context (real-time metrics)  
-**SQLite Browser:** Open `cortex_brain/state/governance.db` for manual investigation
+**SQLite Browser:** Open cortex_brain/state/governance.db for manual investigation
 
 #### Auto-Fix Actions
 
@@ -1294,15 +1316,15 @@ for deficiency in deficiencies:
 
 | Module ID | File | Responsibility | Audit Criteria | Enhancement Trigger |
 |-----------|------|----------------|----------------|---------------------|
-| `token-synthesis` | `cortex/brain/core/token_synthesis.py` | Token estimation + compression | compression_ratio ≥ 0.6, accuracy ±5% | compression_ratio < 0.4 |
-| `incremental-loader` | `cortex/interaction/incremental_context_loader.py` | On-demand context retrieval | initial_load ≤ 500 tokens | initial_load > 1000 |
-| `semantic-search` | `cortex/core/knowledge/semantic_search.py` | Precision context retrieval | relevance ≥ 0.8, FP ≤ 10% | references_loaded > 5 |
-| `cache-strategy` | `cortex/brain/core/context_cache_layer.py` | LRU cache + invalidation | hit_rate ≥ 0.7, stale ≤ 5% | cache_hit_rate < 0.5 |
-| `synthesis-pipeline` | `cortex/brain/core/context_synthesis_gateway.py` | Multi-stage optimization | P99 ≤ 100ms | p99_latency > 200ms |
+| `token-synthesis` | cortex/brain/core/token_synthesis.py | Token estimation + compression | compression_ratio ≥ 0.6, accuracy ±5% | compression_ratio < 0.4 |
+| `incremental-loader` | cortex/interaction/incremental_context_loader.py | On-demand context retrieval | initial_load ≤ 500 tokens | initial_load > 1000 |
+| `semantic-search` | cortex/core/knowledge/semantic_search.py | Precision context retrieval | relevance ≥ 0.8, FP ≤ 10% | references_loaded > 5 |
+| `cache-strategy` | cortex/brain/core/context_cache_layer.py | LRU cache + invalidation | hit_rate ≥ 0.7, stale ≤ 5% | cache_hit_rate < 0.5 |
+| `synthesis-pipeline` | cortex/brain/core/context_synthesis_gateway.py | Multi-stage optimization | P99 ≤ 100ms | p99_latency > 200ms |
 
 **Similar Patterns for Continuous Audit:**
 
-1. **Query Optimization** (`cortex/core/knowledge/query_optimization.py`)
+1. **Query Optimization** (cortex/core/knowledge/query_optimization.py)
    - Audit: Query latency P99, cache hit rate
    - Trigger: query_latency > 200ms OR cache_hit_rate < 0.7
    - Refactor: Semantic query normalization + better cache keys
@@ -1312,17 +1334,17 @@ for deficiency in deficiencies:
    - Trigger: cache_miss_rate > 0.3 OR stale_rate > 0.05
    - Refactor: Content-hash based keys + LRU with size limits
 
-3. **Prometheus Metrics Collection** (`cortex/infrastructure/prometheus_metrics.py`)
+3. **Prometheus Metrics Collection** (cortex/infrastructure/prometheus_metrics.py)
    - Audit: Histogram bucket alignment, missing metrics
    - Trigger: bucket_misalignment OR missing_metrics_detected
    - Refactor: Dynamic bucket generation + metric discovery
 
-4. **Git Audit Trail Integrity** (`cortex/infrastructure/audit_hash_chain.py`)
+4. **Git Audit Trail Integrity** (cortex/infrastructure/audit_hash_chain.py)
    - Audit: Chain breaks, orphaned AC_START markers
    - Trigger: chain_breaks > 0 OR orphaned_starts > 0
    - Refactor: Auto-repair mechanism + mandatory gates
 
-5. **Orchestrator Performance** (`cortex/brain/observability/performance_profiler.py`)
+5. **Orchestrator Performance** (cortex/brain/observability/performance_profiler.py)
    - Audit: Orchestrator latency, unresolved bottlenecks
    - Trigger: orchestrator_latency_p99 > 1000ms OR bottlenecks_open > 3
    - Refactor: Auto-optimization recommendations + execution
@@ -1498,7 +1520,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 | User Turn | `^User:` or `^Human:` at line start | 2 |
 | Assistant Turn | `^GitHub Copilot:` or `^Assistant:` | 2 |
 | Tool Invocations | `Searched for`, `Read `, `Ran terminal command:` | 1 |
-| File References | `#file:`, `file:///`, `[](file://` | 1 |
+| File References | `#file:`, file protocol, `[](file://` | 1 |
 | Code Blocks | Triple backticks with language | 1 |
 | CORTEX Headers | `## 🏗️ CORTEX`, `## 🧠 CORTEX` | 3 |
 
@@ -1628,11 +1650,11 @@ Score < 5 → Continue to DESIGN MODE
 
 | Target | Condition | Action |
 |--------|-----------|--------|
-| `docs/meta/enhancement-history.yaml` | Efficiency/Accuracy findings | Add ENH-* entries |
-| `docs/meta/lessons-learned/*.yaml` | Session has actionable learnings | Create artifact |
-| `docs/patterns/*.md` | Reusability = HIGH | Extract pattern |
-| `docs/anti-patterns/*.md` | Drifts identified | Document anti-pattern |
-| `CORTEX.prompt.md` | Prompt improvement needed | **Requires AUDIT validation** |
+| docs/meta/enhancement-history.yaml | Efficiency/Accuracy findings | Add ENH-* entries |
+| docs/meta/lessons-learned/*.yaml | Session has actionable learnings | Create artifact |
+| docs/patterns/*.md | Reusability = HIGH | Extract pattern |
+| docs/anti-patterns/*.md | Drifts identified | Document anti-pattern |
+| CORTEX.prompt.md | Prompt improvement needed | **Requires AUDIT validation** |
 
 ## Validation Gates
 
@@ -1758,9 +1780,9 @@ if result['notify_user']:
 - Roadmap (if modified in index.yaml)
 
 **Registry Structure:**
-- **Input:** `cortex-registry/_cortex-master/index.yaml`
-- **Output:** `cortex-registry/_cortex-master/dashboard/data/plan-summary.json`
-- **Config:** `index.yaml` dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
+- **Input:** cortex-registry/_cortex-master/index.yaml
+- **Output:** cortex-registry/_cortex-master/dashboard/data/plan-summary.json
+- **Config:** index.yaml dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
 
 ---
 
@@ -2081,12 +2103,12 @@ Check AutonomousPlanExecutor.should_bypass_challenge(user_request)
 
 | Dimension | Question to Ask | Evidence Source |
 |-----------|-----------------|-----------------|
-| **Extensibility** | Can new agents/orchestrators/roles be added without refactoring core? | `cortex/wiring/specifications/wiring.yaml` |
-| **Scalability** | Will this work at 10x/100x scale? What breaks first? | `cortex_brain/tier3/performance_patterns.yaml` |
-| **Accuracy** | Is correctness guaranteed? What's the precision/recall tradeoff? | `cortex_brain/tier2/testing_patterns.yaml` |
-| **Efficiency** | Is this fast enough? What's the token/latency budget? | `cortex/knowledge/best-practices/performance.yaml` |
-| **Long-term Growth** | Does this support team collaboration and future evolution? | `company/domains/*.yaml` |
-| **Best Practices** | Does this align with CORTEX + company + industry standards? | `cortex/knowledge/best-practices/*.yaml` (45+ patterns) |
+| **Extensibility** | Can new agents/orchestrators/roles be added without refactoring core? | cortex/wiring/specifications/wiring.yaml |
+| **Scalability** | Will this work at 10x/100x scale? What breaks first? | cortex_brain/tier3/performance_patterns.yaml |
+| **Accuracy** | Is correctness guaranteed? What's the precision/recall tradeoff? | cortex_brain/tier2/testing_patterns.yaml |
+| **Efficiency** | Is this fast enough? What's the token/latency budget? | cortex/knowledge/best-practices/performance.yaml |
+| **Long-term Growth** | Does this support team collaboration and future evolution? | company/domains/*.yaml |
+| **Best Practices** | Does this align with CORTEX + company + industry standards? | cortex/knowledge/best-practices/*.yaml (45+ patterns) |
 
 **Mindset:** Think like an architect building a system that will be maintained by a team for years, not a one-off script.
 
@@ -2140,9 +2162,9 @@ max_rules_per_challenge: 10   # Prevent token bloat
 ### 🎓 Best Practices Check
 | Source | Rule ID | Check | Status |
 |--------|---------|-------|--------|
-| `solid.yaml` | SOLID-001 | Single Responsibility | ✅/❌ |
-| `testing_patterns.yaml` | TDD-003 | Test coverage >80% | ✅/❌ |
-| `security_standards.yaml` | SEC-007 | No hardcoded secrets | ✅/❌ |
+| solid.yaml | SOLID-001 | Single Responsibility | ✅/❌ |
+| testing_patterns.yaml | TDD-003 | Test coverage >80% | ✅/❌ |
+| security_standards.yaml | SEC-007 | No hardcoded secrets | ✅/❌ |
 ```
 
 ---
@@ -2182,7 +2204,7 @@ Must answer:
 - **Degradation:** What's the graceful degradation strategy under stress?
 - **Distributed:** Is there a clear path to multi-node/federated architecture?
 
-**Evidence Source:** `cortex/wiring/specifications/wiring.yaml` — check orchestrator count, routing patterns
+**Evidence Source:** cortex/wiring/specifications/wiring.yaml — check orchestrator count, routing patterns
 
 #### 3. Accuracy vs Efficiency Tradeoff (MANDATORY)
 
@@ -2191,7 +2213,7 @@ Must explicitly balance:
 - **Speed Cost:** Skipping checks is faster but risks errors
 - **Quantify:** "5ms validation cost for 99.9% accuracy acceptable" or "100ms unacceptable for P95 SLA"
 
-**Evidence Source:** `cortex_brain/tier3/performance_patterns.yaml` — latency budgets, SLA definitions
+**Evidence Source:** cortex_brain/tier3/performance_patterns.yaml — latency budgets, SLA definitions
 
 #### 4. Evidence-Based Fix Plan (MANDATORY for every weakness)
 
@@ -2210,9 +2232,9 @@ Check against loaded YAMLs:
 
 | Layer | Source | What to Check |
 |-------|--------|---------------|
-| **Company** | `company/domains/*.yaml` | Business constraints, team standards |
-| **CORTEX** | `cortex/knowledge/best-practices/*.yaml` | 45+ patterns (SOLID, Clean Code, 12-Factor) |
-| **Security** | `cortex_brain/tier1/security_standards.yaml` | OWASP, secrets, injection |
+| **Company** | company/domains/*.yaml | Business constraints, team standards |
+| **CORTEX** | cortex/knowledge/best-practices/*.yaml | 45+ patterns (SOLID, Clean Code, 12-Factor) |
+| **Security** | cortex_brain/tier1/security_standards.yaml | OWASP, secrets, injection |
 | **Industry** | Pattern references in YAMLs | SOLID, DRY, KISS, YAGNI |
 
 #### 6. Team & Long-term Fit (MANDATORY)
@@ -2221,7 +2243,7 @@ Must consider:
 - **Maintainability:** Will a new team member understand this in 6 months?
 - **Documentation:** Is the approach self-documenting or needs wiki?
 - **Onboarding:** Does this make onboarding easier or harder?
-- **Evolution:** How does this support CORTEX's roadmap (`cortex-registry/_cortex-master/index.yaml`)?
+- **Evolution:** How does this support CORTEX's roadmap (cortex-registry/_cortex-master/index.yaml)?
 
 ---
 
@@ -2482,8 +2504,8 @@ Every challenge MUST address:
 | **Link Format** | Inconsistent relative paths (e.g., text wrapped in square brackets with path) | Normalize relative paths and verify syntax | ✅ Auto-correctable |
 
 **VS Code Link Resolver Quirk (Know Your Quirks):**
-- 🔴 **Problem:** When viewing `.github/prompts/cortex-architect.prompt.md`, link `[CORTEX.md](../agents/core/CORTEX.md)` resolves correctly, but VS Code may show path resolution as relative to file location
-- ✅ **Solution:** Use relative paths from the file's directory (`../` for one level up) OR recognize "false positive" errors that don't block compilation
+- 🔴 **Problem:** When viewing this prompt file, link `[CORTEX.md](../agents/core/CORTEX.md)` resolves correctly, but VS Code may show path resolution as relative to file location
+- ✅ **Solution:** Use relative paths from the file's directory (parent directory for one level up) OR recognize "false positive" errors that don't block compilation
 - 📋 **Action:** AUDIT classifies link resolution as **P3 (Low Priority)** unless they block actual functionality
 - 🤖 **Auto-Fix:** Agents can detect and document "file exists at correct path" when link appears broken in VS Code resolver
 | Ignoring markdown lint errors | MD040/MD060/MD022 accumulate | Documentation decay |
@@ -2771,7 +2793,7 @@ INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP
 
 ### Enhancement Registry
 
-**Location:** `docs/meta/enhancement-history.yaml`  
+**Location:** docs/meta/enhancement-history.yaml  
 **Update Frequency:** After every DESIGN/META-AUDIT  
 **Owner:** EnhancementRegistry orchestrator
 
@@ -2908,9 +2930,9 @@ Innovation Taxonomy Update (system learns)
 
 ## 🔗 REFERENCES & LINKS
 
-- **Master Prompt:** `CORTEX.prompt.md` (load explicitly when needed) — Production execution
-- **Primary Agent:** `../agents/core/cortex-architect.md` (load explicitly when needed) — This prompt's agent ✅
-- **Supporting Agents:** `../agents/core/cortex-auditor.md` (load explicitly when needed), `../agents/core/cortex-designer.md` (load explicitly when needed), `../agents/core/cortex-mcp-gateway.md` (load explicitly when needed), `../agents/core/cortex-storyteller.md` (load explicitly when needed) ✅
+- **Master Prompt:** CORTEX.prompt.md (load explicitly when needed) — Production execution
+- **Primary Agent:** ../agents/core/cortex-architect.md (load explicitly when needed) — This prompt's agent ✅
+- **Supporting Agents:** ../agents/core/cortex-auditor.md (load explicitly when needed), ../agents/core/cortex-designer.md (load explicitly when needed), ../agents/core/cortex-mcp-gateway.md (load explicitly when needed), ../agents/core/cortex-storyteller.md (load explicitly when needed) ✅
 - **Story Documentation:** [docs/.awakening-of-cortex/](../../docs/.awakening-of-cortex/) — Living narrative of CORTEX evolution
 - **Architecture Guide:** [04-architecture/](../../docs/04-architecture/) — Deep dives
 - **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](../../cortex/wiring/specifications/wiring.yaml) — Orchestrator graph

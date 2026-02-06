@@ -34,22 +34,6 @@ active_phases:
       Test case: KSESSIONS repository. Loose coupling for deletion safety.
       NO stubs or fake implementations. Prerequisite for Phase 27.
   
-  - id: "phase-26"
-    name: "Context Loading Optimization"
-    file: "phases/active/phase-26-context-loading-optimization.yaml"
-    started: "2026-02-06"
-    status: "planned"
-    priority: "P0"
-    execution_order: 2
-    description: |
-      Eliminate eager file loading from prompts, reduce token waste by 83%.
-      Unblocks Phase 25 (resolves ENH-046 blocker). Discovery-based loading
-      with EXIT GATE integration.
-    unblocks:
-      - "phase-25"
-    extends:
-      - "ENH-046"
-  
   - id: "phase-21"
     name: "JSON-First Rewrite"
     file: "phases/active/phase-21-json-first-rewrite.yaml"
@@ -70,7 +54,7 @@ active_phases:
     name: "PLAN MODE Enhancement for cortex-architect"
     file: "phases/active/phase-25-plan-mode-cortex-architect.yaml"
     started: "2026-02-06"
-    status: "planned"
+    status: "ready"
     priority: "P0"
     execution_order: 3
     description: |
@@ -78,8 +62,6 @@ active_phases:
       with mandatory plan registry integration, setup/teardown hooks,
       VacuumOrchestrator cleanup, and dashboard sync on every phase.
     unblocked_by: "phase-26"
-    depends_on:
-      - "phase-26-context-loading-optimization"
   
   - id: "phase-29"
     name: "Copilot Chat Response Format Enhancement"
@@ -111,7 +93,7 @@ active_phases:
 
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 12
+  count: 13
   directory: "phases/completed/2026/"
   phases:
     - "phase-01-orchestrator-event-bus.yaml"
@@ -126,6 +108,7 @@ completed_phases_2026:
     - "phase-20-knowledge-synthesis.yaml"
     - "phase-20-instrumentation-layer.yaml"
     - "phase-22-ask-mode-system.yaml"
+    - "phase-26-context-loading-optimization.yaml"
 
 completed_phases_2025:
   count: 11
@@ -203,16 +186,18 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 26
-  active_phases: 7
-  completed_2026: 12
+  total_phases: 27
+  active_phases: 6
+  completed_2026: 13
   completed_2025: 11
   total_enhancements: 4
   active_enhancements: 4
   last_phase_created: "2026-02-06"
-  last_phase_completed: "2026-02-05"
+  last_phase_completed: "2026-02-06"
   next_expected_completion: "2026-02-13"
   last_updated: "2026-02-06"
+  phases_completed_today:
+    - "phase-26: Context Loading Optimization (P0, execution_order=2, unblocked phase-25)"
   new_phases_today:
     - "phase-28: Repository Onboarding System (P0, execution_order=1)"
     - "phase-26: Context Loading Optimization (P0, execution_order=2, unblocks phase-25)"

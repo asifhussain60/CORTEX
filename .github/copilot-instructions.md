@@ -7,11 +7,13 @@
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
-**Primary Prompt:** `prompts/CORTEX.prompt.md` (load explicitly when needed)  
-**Response Format:** `prompts/response-format-standards.md` (load explicitly when needed)  
+**Primary Prompt:** CORTEX.prompt.md in .github/prompts/ directory  
+**Response Format:** response-format-standards.md in .github/prompts/ directory  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
+
+**Context Loading:** Use semantic_search or read_file when explicitly needed (no auto-load)
 
 ---
 
@@ -26,7 +28,7 @@
 | **CORE-030** | Implementation Truth — verify code, not docs |
 | **CORE-035** | Single canonical implementation |
 | **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
-| **CORE-047** | **Instruction files MUST use backtick references** — NO markdown links `[text](path.md)`. VS Code auto-loads them (51k+ token bloat). Use: `path.md` |
+| **CORE-047** | **Instruction files MUST NOT include file paths** — Even backticks trigger VS Code auto-load (51k+ token bloat). Use directory references only. AI loads via semantic_search or read_file when explicitly needed. |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
@@ -86,7 +88,7 @@ DIGEST Intent:
 ```
 
 **Response Format Requirements:**
-- ✅ Follow `prompts/response-format-standards.md` (load explicitly when needed) for all outputs
+- ✅ Follow response-format-standards.md in .github/prompts/ directory for all outputs
 - 🟢 Use correct status icons (🟢=completed, ⚪=planned, 🔴=critical, 🟡=warning, 🔵=in-progress)
 - 1️⃣ Number user prompts ONLY when decision required (not after completion)
 - 📐 Apply linear narrative flow: Context → Analysis → Action → Result (no repetition)
@@ -98,7 +100,7 @@ DIGEST Intent:
 
 ## 🔄 Interaction Protocol
 
-**See `prompts/CORTEX.prompt.md` (load explicitly when needed) for full protocol.**
+**See CORTEX.prompt.md in .github/prompts/ directory for full protocol.**
 
 ### Quick Reference:
 
@@ -183,11 +185,31 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 
 ---
 
-## �️ Recommendation Gate (MANDATORY)
+## 📋 Context Loading Strategy
+
+**On-Demand Only:** Use semantic_search or read_file when explicitly needed (no auto-loading by VS Code).
+
+**File Discovery Directories:**
+- **Prompts:** .github/prompts/ directory
+- **Agents:** .github/agents/core/ directory  
+- **Knowledge:** cortex/knowledge/best-practices/ directory
+- **Wiring:** cortex/wiring/specifications/ directory
+
+**Intent-Based Loading Pattern:**
+- **IMPLEMENT** → Load TDD patterns when implementation starts
+- **AUDIT** → Load governance rules when audit initiated
+- **DESIGN** → Load architecture patterns when design begins
+- **REFACTOR** → Load refactoring best practices when refactoring
+
+**EXIT GATE Integration:** MasterOrchestrator uses ContextSynthesisGateway for cost-aware context synthesis (≤20KB per turn, 70% cache hit rate target).
+
+---
+
+## 🛡️ Recommendation Gate (MANDATORY)
 
 **BEFORE emitting any recommendation:**
 
-1. Load `docs/meta/enhancement-history.yaml` → check `rejected_recommendations`
+1. Load enhancement-history.yaml from docs/meta/ directory → check rejected_recommendations
 2. Calculate regression risk score (0-1.0)
 3. BLOCK if risk > 0.7 OR matches REJ-* pattern (similarity > 0.3)
 
@@ -215,19 +237,19 @@ Layer 4: Production Gate        → PREVENTS broken deployment
 
 ---
 
-## �📁 File Placement (SSOT)
+## 📁 File Placement (SSOT)
 
 | Content | Location |
 |---------|----------|
-| Python Code | `cortex/`, `cortex_brain/` |
-| Tests | `tests/` |
-| Documentation | `docs/` |
-| Wiring | `cortex/wiring/specifications/wiring.yaml` |
+| Python Code | cortex/, cortex_brain/ directories |
+| Tests | tests/ directory |
+| Documentation | docs/ directory |
+| Wiring | cortex/wiring/specifications/wiring.yaml |
 
 ### Forbidden
 
-- ❌ `.md` files outside `docs/`
-- ❌ `.py` files in root
+- ❌ .md files outside docs/
+- ❌ .py files in root
 - ❌ Direct Python imports in production (use MCP)
 
 ---
@@ -271,13 +293,6 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 | `/refactor {target}` | Code improvement |
 | `/analyze {scope}` | LENS analysis |
 | `/recall {feature}` | Feature discovery |
-| `/onboard {path}` | **Repository onboarding (Phase 28)** - Profile external repos |
-| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
-| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/check-env` | **Environment check + CORTEX upgrade detection** |
-| `/refactor {target}` | Code improvement |
-| `/analyze {scope}` | LENS analysis |
-| `/recall {feature}` | Feature discovery |
 | `/onboard {path}` | Repository onboarding + security scan |
 | `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
 | `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
@@ -287,22 +302,23 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 ## 🔗 Prompts & Agents
 
-### Prompts (Load Explicitly via #file: syntax)
+### Prompts (Load Explicitly)
 | File | Purpose | Load When |
 |------|---------|-----------|
-| `prompts/CORTEX.prompt.md` | Production master prompt | IMPLEMENT/FIX intents |
-| `prompts/cortex-architect.prompt.md` | AUDIT + DESIGN dual-mode | AUDIT/DESIGN intents |
-| `prompts/response-format-standards.md` | Response formatting rules | All operations |
+| CORTEX.prompt.md | Production master prompt | IMPLEMENT/FIX intents |
+| cortex-architect.prompt.md | AUDIT + DESIGN dual-mode | AUDIT/DESIGN intents |
+| response-format-standards.md | Response formatting rules | All operations |
 
-**⚠️ CRITICAL:** Do NOT use markdown links `[text](path.md)` in instruction files. VS Code Copilot auto-loads them, causing 51k+ token context bloat. Use backtick references: `path.md`
+**Location:** .github/prompts/ directory  
+**Loading:** Use semantic_search or read_file when actually needed
 
 ### Agents (Lazy Loading)
-**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using `agents/AGENT-INDEX.md`
+**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using AGENT-INDEX.md
 
 **DO NOT pre-load all agents.** Use intent-based lazy loading:
-- 11 core agents available in `agents/core/`
+- 11 core agents available in agents/core/ directory
 - Load ONLY 1-2 agents per user intent
-- See `agents/AGENT-INDEX.md` (load explicitly when needed) for intent → agent mapping
+- See AGENT-INDEX.md in agents/ directory (load explicitly when needed) for intent → agent mapping
 
 **Token Savings:** 88% reduction (245k → 30k tokens at init)
 

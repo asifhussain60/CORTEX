@@ -310,7 +310,7 @@ Use `<details>` tags for non-critical information:
 ```markdown
 **🔍 Deep Dive Available:**
 - Type `explain [section-name]` for technical details
-- View full trace: `#file:path/to/logs.md`
+- View full trace: #file:path/to/logs.md
 ```
 
 ---
