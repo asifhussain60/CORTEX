@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 14.2 | **Updated:** 2026-02-06 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator for AI application development with ROI-driven phase prioritization
+**Version:** 14.3 | **Updated:** 2026-02-06 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | **Status:** ACTIVE | **Phase 25 Complete:** ✅ | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator with ROI-driven phase prioritization
 
 ---
 
@@ -280,7 +280,13 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 
 **Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)  
 **Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
-**Output:** Priority-ordered phase recommendations with real-time visual progress
+**Output:** Priority-ordered phase recommendations with real-time visual progress  
+**Implementation:** Phase 25 COMPLETE (PhaseManager + DashboardGenerator operational)
+
+**Core Components:**
+- **PhaseManager** (`cortex/registry/phase_manager.py`) - Intelligent phase resolution, CRUD operations, ROI scoring
+- **DashboardGenerator** (`cortex/registry/dashboard_generator.py`) - Real-time plan visualization, JSON/HTML sync
+- **MCP Tools:** `cortex_plan_setup`, `cortex_plan_teardown`, `cortex_plan_sync`
 
 **MANDATORY MODE CLASSIFICATION:** If request contains 2+ triggers above, switch to PLAN mode automatically.
 
