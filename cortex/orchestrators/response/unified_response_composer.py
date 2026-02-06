@@ -163,8 +163,12 @@ class ResponseQualityMetrics:
 
 @dataclass
 class FormattingOptions:
-    """Formatting options (from multi_mode_formatter)."""
-    profile: FormattingProfile = FormattingProfile.STANDARD
+    """
+    Formatting options (from multi_mode_formatter).
+    
+    Phase 33: Changed default profile from STANDARD to COMPACT for verbosity reduction.
+    """
+    profile: FormattingProfile = FormattingProfile.COMPACT
     include_metadata: bool = True
     max_line_length: int = 80
 
@@ -401,9 +405,12 @@ class UnifiedResponseComposer:
         self,
         response: Union[str, TurnResponse, Dict],
         mode: str = 'chat',
-        profile: FormattingProfile = FormattingProfile.STANDARD
+        profile: FormattingProfile = FormattingProfile.COMPACT
     ) -> Any:
-        """Format response for specific delivery mode.
+        """
+        Format response for specific delivery mode.
+        
+        Phase 33: Changed default profile from STANDARD to COMPACT for verbosity reduction.
         
         Args:
             response: Response to format (str, TurnResponse, or Dict)
