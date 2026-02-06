@@ -23,6 +23,12 @@ from cortex.orchestrators.intelligence.readiness_engine import (
     ReadinessComponents,
     ReadinessAction,
 )
+from cortex.orchestrators.intelligence.knowledge_synthesizer import (
+    KnowledgeSynthesizer,
+    SynthesisResult,
+    KnowledgeSource,
+    TemplateType,
+)
 
 __all__ = [
     "TechIntelligenceOrchestrator",
@@ -34,4 +40,8 @@ __all__ = [
     "ReadinessEngine",
     "ReadinessComponents",
     "ReadinessAction",
+    "KnowledgeSynthesizer",
+    "SynthesisResult",
+    "KnowledgeSource",
+    "TemplateType",
 ]
