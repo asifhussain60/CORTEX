@@ -92,9 +92,9 @@ legacy_cleanup:
     - "tests/integration/test_repository_onboarding_e2e.py"  # Rewrite for JSON
     
   archive_files:
-    # Move to .archive for reference
-    - "_workspaces/cortex-plan/PHASE-21-ENTERPRISE-REPOSITORY-INTELLIGENCE.yaml"
-      → ".archive/PHASE-21-v3.1-SQLite-first.yaml"
+    # Historical reference (already migrated to cortex-registry)
+    - "cortex-registry/_cortex-master/phases/active/phase-21-json-first-rewrite.yaml"
+      → "supersedes _workspaces/cortex-plan/PHASE-21-ENTERPRISE-REPOSITORY-INTELLIGENCE.yaml"
   
   refactor_files:
     - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"

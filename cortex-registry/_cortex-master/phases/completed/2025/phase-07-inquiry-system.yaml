@@ -1048,7 +1048,7 @@ stage_2_docker:
       - id: "INQUIRY-024"
         name: "Create deployment runbook"
         files:
-          - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
+          - "docs/archive/inquiry-deployment-runbook.md"
         time: "0.5 hours"
       
       - id: "INQUIRY-025"
@@ -1089,7 +1089,7 @@ stage_2_docker:
       - "cortex/api/inquiry_api.py"
       - "cortex/visualization/inquiry_dashboard.py"
       - "cortex/observability/inquiry_metrics.py"
-      - "_workspaces/cortex-plan/inquiry-deployment-runbook.md"
+      - "docs/archive/inquiry-deployment-runbook.md  # migrated from _workspaces/cortex-plan"
       - "tests/infrastructure/test_code_index_client.py"
     
     modified_files:
@@ -1308,9 +1308,9 @@ tracking:
     - "phase7.5-stage2-docker-YYYYMMDD"
   
   reports:
-    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-1-MVP-COMPLETE.md"
-    - "_workspaces/cortex-plan/PHASE-7.5-STAGE-2-DOCKER-COMPLETE.md"
-    - "_workspaces/cortex-plan/PHASE-7.5-INQUIRY-SYSTEM-COMPLETE.md"
+    - "docs/archive/phase-7.5-stage-1-mvp-complete.md"
+    - "docs/archive/phase-7.5-stage-2-docker-complete.md"
+    - "docs/archive/phase-7.5-inquiry-system-complete.md"
 
 governance:
   core_rules_applied:

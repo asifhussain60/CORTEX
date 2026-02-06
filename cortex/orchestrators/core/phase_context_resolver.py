@@ -89,8 +89,9 @@ class PhaseContextResolver:
     def _find_sdlc_plan() -> Path:
         """Auto-detect SDLC plan in workspace."""
         candidates = [
-            Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/cortex-plan/CORTEX-SELF-IMPROVEMENT-SDLC.yaml"),
-            Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/cortex-plan/PHASE-21-JSON-FIRST-REWRITE.yaml"),
+            # Primary: cortex-registry (canonical location post-migration)
+            Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/active/phase-21-json-first-rewrite.yaml"),
+            Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/meta/cortex-self-improvement-sdlc.yaml"),
         ]
         for candidate in candidates:
             if candidate.exists():

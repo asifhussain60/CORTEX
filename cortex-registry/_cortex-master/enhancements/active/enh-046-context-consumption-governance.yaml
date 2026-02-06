@@ -1,0 +1,1109 @@
+# ENH-046: Context Consumption Governance (Token Optimizer Integration)
+# Purpose: Prevent GitHub Copilot token exhaustion via pre-handoff context synthesis
+# Source: chat01.md analysis - 13 large references causing 5 premature summarizations
+# Created: 2026-02-06
+# Updated: 2026-02-06 (v2.0 - Architecture Correction: Token Optimizer Integration)
+# Priority: P1 (Critical Governance Violation)
+
+meta:
+  plan_id: "ENH-046"
+  title: "Context Consumption Governance (Token Optimizer Integration)"
+  version: "2.0"
+  authority: "docs/meta/enhancement-history.yaml + cortex-architect.prompt.md v13.1"
+  status: "IN_PROGRESS"
+  phase: "Phase 1 COMPLETE ✅ | Phase 2+ REDESIGNED"
+  
+# ═══════════════════════════════════════════════════════════════════════════════
+# v2.0 ARCHITECTURE CORRECTION (2026-02-06)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# ROOT CAUSE ANALYSIS (chat01.md deep dive):
+#   - "Summarized conversation history" appears at lines 809, 827, 835
+#   - Summarization accelerates towards end (3 in final 35 lines)
+#   - This proves cumulative token exhaustion, NOT per-turn issue
+#   - EVERY request compounds: CORTEX context + Copilot context + history
+#
+# ARCHITECTURAL INSIGHT:
+#   The existing Token Optimizer (docs/01-cortex-brain/05-token-optimization.md)
+#   already achieves 95-96% compression for CORTEX's INTERNAL composite requests
+#   (governance rules, AC-IDs, templates, knowledge indices).
+#
+#   BUT: Token Optimizer only compresses the CORTEX → Brain payload.
+#   It does NOT compress the full context that CORTEX hands to GitHub Copilot.
+#
+#   The MISSING piece is a synthesis layer that runs AFTER all orchestrators
+#   assemble their context but BEFORE the governed response is handed to
+#   GitHub Copilot Chat for processing.
+#
+# CORRECT INTEGRATION POINT:
+#   MCP Gateway (cortex_tools.py) → MasterOrchestrator → [orchestrators]
+#                                                              ↓
+#                                                    ContextSynthesisGateway  ← NEW
+#                                                              ↓
+#                                                    GitHub Copilot Chat
+#
+# WHO NEEDS THIS:
+#   EVERY orchestrator that produces context for Copilot:
+#   - MasterOrchestrator (execute_operation → final response)
+#   - InteractionOrchestrator (execute_turn → LENS context)
+#   - IntentRouter (classify_intent → routing context)
+#   - ChallengeEngine (generate_challenge → challenge context)
+#   - KnowledgeSynthesisEngine (synthesize_unified_context → knowledge)
+#   - EnforcementOrchestrator (validate_operation → governance results)
+#   - TDDOrchestrator (RED→GREEN→REFACTOR cycle context)
+#   - RefactoringOrchestrator (refactor analysis context)
+#   - DocumentationOrchestrator (doc analysis context)
+#   - OnboardingOrchestrator (repo analysis context)
+#
+# PRINCIPLE: Optimize at the EXIT point, not inside each orchestrator.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+objective:
+  summary: |
+    Integrate context synthesis into the Token Optimizer pipeline as the
+    FINAL gate before ANY CORTEX-governed response is handed to GitHub
+    Copilot Chat for processing. This ensures EVERY request — regardless
+    of which orchestrator handles it — is synthesized, compressed, and
+    optimized for token efficiency.
+    
+    Evidence: chat01.md (841 lines) triggered 5 summarization events.
+    Summarization ACCELERATES towards end (3 events in final 35 lines),
+    proving cumulative token exhaustion from unsynthesized context.
+    
+    Architecture: Extend existing Token Optimizer (95-96% internal compression)
+    to also optimize the Copilot-bound context (currently 0% compression).
+  
+  business_value:
+    - "80% reduction in Copilot summarization events (5 → 1 per 1000 lines)"
+    - "69% reduction in context size per Copilot handoff (65KB → 20KB)"
+    - "70% cache hit rate for repeated context references"
+    - "100% token budget compliance (≤20K tokens/turn)"
+    - "Improved conversation continuity (less truncation = better answers)"
+    - "Reduced LLM API costs (fewer redundant context loads)"
+    - "EVERY orchestrator benefits automatically (single exit gate)"
+  
+  success_criteria:
+    - "Copilot summarization frequency: ≤1 per 1000 lines (baseline: 5)"
+    - "Context size per Copilot handoff: ≤20KB (baseline: 65KB)"
+    - "Compression ratio: ≥60% (baseline: 0%)"
+    - "Cache hit rate: ≥70% (baseline: 0%)"
+    - "Synthesis latency: <100ms (P99)"
+    - "ALL orchestrator outputs pass through synthesis gate"
+    - "AUDIT mode P1 check passing with metrics dashboard"
+
+# Gap Analysis (From chat01.md + Token Optimizer review)
+current_state:
+  what_exists:
+    - "Token Optimizer (cortex/brain/core/) - 95-96% compression for INTERNAL composite requests"
+    - "  → Compresses: governance rules, AC-IDs, templates, knowledge indices"
+    - "  → DOES NOT compress: context handed to GitHub Copilot Chat"
+    - "ContextAggregator in cortex/interaction/ - aggregates but doesn't compress"
+    - "KnowledgeSynthesisEngine - synthesizes but has no token budgeting"
+    - "ENH-023 (LENS Result Caching) - addresses caching but not synthesis"
+    - "Token budget hardcoded at 20,000 in interactive_mode_tool.py line 93"
+    - "InteractionOrchestrator - builds LENS context, no compression before handoff"
+    - "MasterOrchestrator - 4-stage pipeline, no output compression"
+    - "ChallengeEngine - generates challenges, full context passed uncompressed"
+  
+  what_is_missing:
+    - "EXIT GATE: Synthesis layer before Copilot handoff (critical gap)"
+    - "Token Optimizer extension for Copilot-bound context"
+    - "Token budget enforcement with overflow prevention"
+    - "Intelligent summarization (agent files 1903→3 lines, YAML 500→15 rules)"
+    - "LRU cache with TTL for synthesized summaries"
+    - "Prometheus metrics for context efficiency (observability gap)"
+    - "AUDIT mode P1 Infrastructure check for context governance"
+    - "Cross-orchestrator synthesis (every orchestrator's output needs it)"
+  
+  architecture_gap: |
+    Current flow (BROKEN):
+    
+    User Request → MCP Gateway → MasterOrchestrator
+                                     ↓
+                              [Orchestrators produce context]
+                                     ↓
+                              GitHub Copilot Chat  ← NO SYNTHESIS HERE
+                                     ↓
+                              "Summarized conversation history" (5x too fast)
+    
+    Required flow (FIXED):
+    
+    User Request → MCP Gateway → MasterOrchestrator
+                                     ↓
+                              [Orchestrators produce context]
+                                     ↓
+                              ContextSynthesisGateway  ← NEW EXIT GATE
+                              (Token Optimizer extension)
+                                     ↓
+                              Synthesized, compressed, budgeted context
+                                     ↓
+                              GitHub Copilot Chat  ← Receives optimized context
+    - "Token budget enforcement with overflow prevention"
+    - "Intelligent summarization (agent files 1903→3 lines, YAML 500→15 rules)"
+    - "LRU cache with TTL for synthesized summaries"
+    - "Prometheus metrics for context efficiency (observability gap)"
+    - "AUDIT mode P1 Infrastructure check for context governance"
+
+# Root Cause (Evidence: chat01.md deep analysis)
+root_cause:
+  problem: |
+    chat01.md reveals ACCELERATING summarization towards the end:
+    - Line 809: "Summarized conversation history" (1st in final section)
+    - Line 827: "Summarized conversation history" (2nd, 18 lines later)
+    - Line 835: "Summarized conversation history" (3rd, 8 lines later)
+    
+    This proves CUMULATIVE token exhaustion, not just per-turn overload.
+    Each turn adds unsynthesized context:
+    - LENS context (full agent files, YAML rules, source code)
+    - Challenge context (disagreement analysis, alternatives)
+    - Governance context (enforcement results, audit trail)
+    - Knowledge context (45+ YAML files, domain practices)
+    
+    The Token Optimizer (95-96% compression) only optimizes CORTEX's
+    internal composite requests. The COPILOT-BOUND context — which is
+    the response that gets displayed in chat — has 0% compression.
+    
+    Result: ~65KB context per turn (3.25x over 20KB budget)
+    → GitHub Copilot exhausted after 200 lines of conversation
+    → Summarization accelerates: 200→18→8 lines between events
+  
+  why_not_caught:
+    - "Token Optimizer scope was INTERNAL only (Brain composite requests)"
+    - "No EXIT gate validates context BEFORE Copilot handoff"
+    - "No observability (metrics, dashboards) for Copilot-bound context"
+    - "Each orchestrator assumes its context is small enough"
+    - "Cumulative effect invisible without session-level analysis"
+  
+  why_accelerating: |
+    Copilot maintains conversation history in its context window.
+    Each new turn = previous history + new CORTEX context.
+    Without synthesis:
+    - Turn 1: 65KB new context → OK (within window)
+    - Turn 5: 65KB × 5 = 325KB cumulative → Summarization starts
+    - Turn 8: History compressed + 65KB new → Rapid summarization
+    - Turn 10: History barely fits → 3 summarizations in 35 lines
+
+# Orchestrator Coverage Matrix (v2.0 - ALL orchestrators)
+orchestrator_coverage:
+  description: |
+    Every orchestrator that produces context for Copilot MUST route
+    through ContextSynthesisGateway. This is an EXIT GATE, not an
+    internal optimization.
+  
+  integration_strategy: "Single exit gate in MasterOrchestrator.execute_operation()"
+  
+  orchestrators:
+    - name: "MasterOrchestrator"
+      file: "cortex/orchestrators/core/master_orchestrator.py"
+      method: "execute_operation()"
+      integration: "Wrap return value through ContextSynthesisGateway"
+      context_produced: "Final aggregated response (all 4 stages)"
+      priority: "P0 - Primary exit point for ALL requests"
+    
+    - name: "InteractionOrchestrator"
+      file: "cortex/orchestrators/core/interaction_orchestrator.py"
+      method: "execute_turn()"
+      integration: "Synthesize LENS context before challenge generation"
+      context_produced: "LENS context, challenge responses, security assessments"
+      priority: "P0 - High-context producer (13 large refs in chat01.md)"
+    
+    - name: "IntentRouter"
+      file: "cortex/orchestrators/core/intent_router.py"
+      method: "classify_intent()"
+      integration: "Compress routing context in classification results"
+      context_produced: "Intent classification, routing decisions"
+      priority: "P1 - Moderate context, runs on every request"
+    
+    - name: "ChallengeEngine"
+      file: "cortex/orchestrators/core/challenge_engine.py"
+      method: "generate_challenge()"
+      integration: "Synthesize challenge context (disagreement, alternatives)"
+      context_produced: "Challenge analysis, counter-proposals, evidence"
+      priority: "P1 - Can produce large analysis context"
+    
+    - name: "KnowledgeSynthesisEngine"
+      file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+      method: "synthesize_unified_context()"
+      integration: "Already synthesizes, needs token budget awareness"
+      context_produced: "45+ YAML knowledge files unified"
+      priority: "P0 - Largest single context producer"
+    
+    - name: "EnforcementOrchestrator"
+      file: "cortex/governance/enforcement_orchestrator.py"
+      method: "validate_operation()"
+      integration: "Compress governance validation results"
+      context_produced: "7-agent validation results, rule violations"
+      priority: "P2 - Moderate context, structured output"
+    
+    - name: "TDDOrchestrator"
+      file: "cortex/orchestrators/domain/tdd_orchestrator.py"
+      method: "execute_tdd_cycle()"
+      integration: "Compress RED→GREEN→REFACTOR cycle context"
+      context_produced: "Test plans, implementation plans, refactor analysis"
+      priority: "P1 - Large context during implementation"
+    
+    - name: "RefactoringOrchestrator"
+      file: "cortex/orchestrators/domain/enhanced_refactoring_orchestrator.py"
+      method: "execute_operation()"
+      integration: "Compress code analysis and refactoring context"
+      context_produced: "Code analysis, smell detection, refactoring plans"
+      priority: "P1 - Can produce very large code analysis"
+    
+    - name: "DocumentationOrchestrator"
+      file: "cortex/orchestrators/domain/enhanced_documentation_orchestrator.py"
+      method: "execute_operation()"
+      integration: "Compress documentation analysis context"
+      context_produced: "Documentation analysis, coverage gaps"
+      priority: "P2 - Moderate context"
+    
+    - name: "OnboardingOrchestrator"
+      file: "cortex/orchestrators/onboarding/orchestrator.py"
+      method: "onboard()"
+      integration: "Compress repository analysis context"
+      context_produced: "Full repo analysis, security scan, structure map"
+      priority: "P1 - Very large context (entire repo analysis)"
+
+# Implementation Plan (5 Phases - Token Optimizer Extension)
+# 
+# KEY CHANGE from v1.0:
+#   v1.0: Standalone ContextSynthesisGateway (separate from Token Optimizer)
+#   v2.0: Extends Token Optimizer as EXIT GATE in MasterOrchestrator
+#         EVERY orchestrator's output is automatically synthesized
+#
+phases:
+  - id: "phase-1"
+    name: "Context Metrics & Telemetry"
+    duration: "Week 1"
+    status: "COMPLETE ✅"
+    completion_date: "2026-02-06"
+    deliverables:
+      - file: "cortex/interaction/context_metrics_collector.py"
+        lines: 341
+        purpose: "Prometheus metrics collection (9 metrics)"
+        tests: 12
+        test_status: "12/12 PASSING ✅"
+      
+      - file: "tests/unit/interaction/test_context_metrics_collector.py"
+        lines: 213
+        purpose: "Comprehensive test coverage"
+        tests: 12
+        test_status: "100% pass rate"
+      
+      - file: "deployment/grafana-dashboards/context-consumption-governance.json"
+        lines: 322
+        purpose: "Real-time visualization (8 panels + alerting)"
+        panels: 8
+        alerts: "50KB context threshold, 5m duration"
+      
+      - file: ".github/prompts/cortex-architect.prompt.md"
+        lines: "+85"
+        purpose: "AUDIT mode P1 Integration (lines 372, 505-587)"
+        integration_points:
+          - "Line 372: P1 Infrastructure check row"
+          - "Lines 505-587: Detailed audit procedure with metrics"
+      
+      - file: "docs/meta/enhancement-history.yaml"
+        lines: "+103"
+        purpose: "ENH-046 entry with phase1_complete: true"
+      
+      - file: "cortex/interaction/README-context-governance.md"
+        lines: 228
+        purpose: "Comprehensive documentation"
+    
+    metrics_implemented:
+      - name: "cortex_context_size_before_bytes"
+        type: "histogram"
+        purpose: "Context size before synthesis"
+      
+      - name: "cortex_context_size_after_bytes"
+        type: "histogram"
+        purpose: "Context size after synthesis"
+      
+      - name: "cortex_context_compression_ratio"
+        type: "gauge"
+        purpose: "Compression efficiency (0.0-1.0)"
+      
+      - name: "cortex_context_synthesis_time_ms"
+        type: "histogram"
+        purpose: "Synthesis latency distribution"
+      
+      - name: "cortex_context_cache_hit_rate"
+        type: "gauge"
+        purpose: "Cache efficiency percentage"
+      
+      - name: "cortex_copilot_summarization_total"
+        type: "counter"
+        purpose: "CRITICAL: Copilot summarization event count"
+      
+      - name: "cortex_copilot_reference_total"
+        type: "counter"
+        purpose: "Reference count by type (agent, yaml, source)"
+      
+      - name: "cortex_token_budget_violations_total"
+        type: "counter"
+        purpose: "Token budget overflow events"
+      
+      - name: "cortex_token_budget_usage_tokens"
+        type: "histogram"
+        purpose: "Token usage distribution"
+    
+    verification:
+      - "✅ All 12 unit tests passing"
+      - "✅ Prometheus metrics implemented (9 metrics)"
+      - "✅ AUDIT mode integration verified (3 occurrences in prompt)"
+      - "✅ Grafana dashboard created (8 panels + alerting)"
+      - "✅ Enhancement registry updated (ENH-046 entry)"
+      - "✅ Documentation complete (README-context-governance.md)"
+  
+  - id: "phase-2"
+    name: "Token Optimizer Extension (Copilot-Bound Context)"
+    duration: "Week 2"
+    status: "PLANNED"
+    start_date: "2026-02-10"
+    estimated_completion: "2026-02-14"
+    depends_on:
+      - "phase-1"
+    
+    architecture_rationale: |
+      The existing Token Optimizer achieves 95-96% compression for INTERNAL
+      composite requests. Phase 2 EXTENDS this to Copilot-bound context.
+      
+      Instead of creating a separate ContextBudgetManager, we extend the
+      Token Optimizer's budget allocation to include a "copilot_exit_budget"
+      that enforces limits on what leaves CORTEX.
+    
+    deliverables:
+      - file: "cortex/brain/core/copilot_context_optimizer.py"
+        estimated_lines: 250
+        purpose: "Extends Token Optimizer for Copilot-bound context"
+        features:
+          - "optimize_for_copilot(context: Dict) → OptimizedContext"
+          - "estimate_copilot_tokens(content: str) → int (tiktoken-based)"
+          - "enforce_exit_budget(context: Dict, budget: int = 20000) → Dict"
+          - "compress_orchestrator_output(output: Dict, orchestrator: str) → Dict"
+          - "session_token_tracker(session_id: str) → cumulative token usage"
+        design_notes: |
+          This is NOT a standalone class — it extends the Token Optimizer
+          pipeline with a new Stage 6: Copilot Exit Optimization.
+          
+          Existing stages (internal):
+            Stage 1: Tier Identification & Loading
+            Stage 2: Rule Compression (20-30%)
+            Stage 3: AC-ID Condensing (10-15%)
+            Stage 4: Template Reference (15-25%)
+            Stage 5: Knowledge Abstraction (10-20%)
+          
+          NEW stage (Copilot-bound):
+            Stage 6: Copilot Exit Optimization (60%+ reduction)
+              - Compress LENS context (agent summaries, not full files)
+              - Compress governance results (pass/fail, not full analysis)
+              - Compress challenge context (verdict, not full reasoning)
+              - Track cumulative session tokens (prevent acceleration)
+        tests: 20
+        coverage_target: "90%"
+      
+      - file: "tests/unit/brain/test_copilot_context_optimizer.py"
+        estimated_lines: 350
+        purpose: "Token Optimizer extension validation"
+        test_categories:
+          - "Copilot token estimation accuracy (4 tests)"
+          - "Exit budget enforcement (4 tests)"
+          - "Orchestrator output compression (5 tests, one per orchestrator type)"
+          - "Session cumulative tracking (3 tests)"
+          - "Edge cases: empty context, oversized, nested (4 tests)"
+    
+    dependencies_to_add:
+      - name: "tiktoken"
+        version: ">=0.5.0"
+        purpose: "Accurate GPT tokenization for Copilot context estimation"
+        install: "pip install tiktoken"
+    
+    integration_points:
+      - location: "cortex/interaction/context_synthesis_gateway.py"
+        method: "synthesize()"
+        integration: "Call budget_manager.estimate_tokens() before synthesis"
+      
+      - location: "cortex/orchestrators/core/interaction_orchestrator.py"
+        method: "execute_turn()"
+        integration: "Initialize budget_manager at turn start"
+    
+    acceptance_criteria:
+      - "Token estimation accuracy within ±5% of actual GPT tokens"
+      - "Budget violations caught before Copilot handoff"
+      - "All 15 tests passing with 90% coverage"
+      - "Integration tests with Phase 1 metrics collection"
+  
+  - id: "phase-3"
+    name: "Context Synthesizer (Per-Orchestrator Strategies)"
+    duration: "Week 3"
+    status: "PLANNED"
+    start_date: "2026-02-17"
+    estimated_completion: "2026-02-21"
+    depends_on:
+      - "phase-1"
+      - "phase-2"
+    
+    architecture_rationale: |
+      Each orchestrator produces different types of context.
+      The synthesizer provides per-type compression strategies:
+      - Agent/prompt files: Extract purpose + key API surface (99.8% reduction)
+      - YAML knowledge: Filter by active intent type (97% reduction)
+      - Source code: AST summary (class/method signatures only) (98% reduction)
+      - Governance results: Pass/fail + violated rules only (90% reduction)
+      - Challenge context: Verdict + top alternative only (85% reduction)
+      - LENS context: Classification + confidence only (95% reduction)
+    
+    deliverables:
+      - file: "cortex/brain/core/context_synthesizer.py"
+        estimated_lines: 400
+        purpose: "Per-orchestrator-type intelligent summarization"
+        features:
+          - "synthesize_agent_files() - 1903 lines → 3 lines (99.8% reduction)"
+          - "synthesize_yaml_rules() - 500 rules → 15 applicable (97% reduction)"
+          - "synthesize_file_content() - 250 lines → 5 lines AST summary (98% reduction)"
+          - "synthesize_governance_results() - Full report → pass/fail summary (90%)"
+          - "synthesize_challenge_context() - Full analysis → verdict + top alt (85%)"
+          - "synthesize_lens_context() - Full classification → intent + confidence (95%)"
+          - "synthesize_all() - Orchestrates all strategies based on content type"
+        tests: 25
+        coverage_target: "85%"
+      
+      - file: "tests/unit/interaction/test_context_synthesizer.py"
+        estimated_lines: 450
+        purpose: "Compression accuracy validation"
+        test_categories:
+          - "Agent file synthesis tests (7) - accuracy, compression ratio, key method extraction"
+          - "YAML rule synthesis tests (6) - intent filtering, rule prioritization"
+          - "File content synthesis tests (6) - AST extraction, function signature preservation"
+          - "End-to-end synthesis tests (4) - full pipeline, compression targets"
+          - "Edge case tests (2) - empty files, invalid syntax"
+    
+    compression_targets:
+      agent_files:
+        input_example: "cortex-architect.md (1903 lines)"
+        output_example: |
+          cortex-architect.md (Mode Router):
+          - Routes PRE-FLIGHT → AUDIT → DESIGN → DIGEST
+          - Key methods: check_environment(), audit_codebase(), challenge_request()
+        reduction: "99.8%"
+      
+      yaml_rules:
+        input_example: "enhancement-history.yaml (500+ rules)"
+        output_example: |
+          Filtered to IMPLEMENT intent: 15 rules
+          - ENH-046: Context Synthesis (IN_PROGRESS)
+          - ENH-029: Feasibility Gate (PLANNED)
+          - [13 more applicable rules]
+        reduction: "97%"
+      
+      file_content:
+        input_example: "master_orchestrator.py (250 lines)"
+        output_example: |
+          MasterOrchestrator:
+          - coordinate_operation(request: str) → Result
+          - execute_stage_challenge() → Challenge
+          - execute_stage_execution() → ExecutionResult
+          - [Key interfaces preserved, implementation omitted]
+        reduction: "98%"
+    
+    acceptance_criteria:
+      - "Agent file compression: ≥99% reduction"
+      - "YAML rule filtering: ≥95% reduction"
+      - "File content compression: ≥95% reduction"
+      - "Overall target: 60% context size reduction (65KB → 26KB)"
+      - "Synthesis accuracy: User can understand key capabilities"
+      - "All 25 tests passing with 85% coverage"
+  
+  - id: "phase-4"
+    name: "Exit Gate Integration (MasterOrchestrator + ALL Orchestrators)"
+    duration: "Week 4"
+    status: "PLANNED"
+    start_date: "2026-02-24"
+    estimated_completion: "2026-02-28"
+    depends_on:
+      - "phase-1"
+      - "phase-2"
+      - "phase-3"
+    
+    architecture_rationale: |
+      This is the CRITICAL phase. The ContextSynthesisGateway is wired as
+      an EXIT GATE in MasterOrchestrator.execute_operation() — the single
+      point through which ALL CORTEX responses flow before reaching Copilot.
+      
+      Because MasterOrchestrator is the final aggregation point for ALL
+      orchestrators (InteractionOrchestrator, IntentRouter, ChallengeEngine,
+      EnforcementOrchestrator, TDD, Refactoring, Documentation, Onboarding),
+      a SINGLE integration point automatically covers EVERY request type.
+      
+      Integration point:
+        MasterOrchestrator.execute_operation() → return result
+        BECOMES:
+        MasterOrchestrator.execute_operation() → synthesize(result) → return
+    
+    deliverables:
+      - file: "cortex/brain/core/context_synthesis_gateway.py"
+        estimated_lines: 300
+        purpose: "EXIT GATE: synthesize ALL orchestrator outputs before Copilot"
+        features:
+          - "synthesize(context: Dict, session_id: str) → SynthesizedContext"
+          - "Orchestrates: CopilotContextOptimizer → Synthesizer → Cache → Metrics"
+          - "Pre-synthesis validation: Estimate raw tokens"
+          - "Post-synthesis verification: Confirm compression targets met"
+          - "Session-aware: Tracks cumulative tokens across turns"
+          - "Fail-safe: Returns original context if synthesis errors"
+        tests: 30
+        coverage_target: "90%"
+      
+      - file: "cortex/brain/core/context_cache_layer.py"
+        estimated_lines: 200
+        purpose: "LRU cache with TTL (10 minutes)"
+        features:
+          - "get(cache_key: str) → Optional[SynthesizedContext]"
+          - "set(cache_key: str, context: SynthesizedContext, ttl: int)"
+          - "invalidate(cache_key: str)"
+          - "get_stats() → CacheStats (hit rate, size, evictions)"
+        tests: 20
+        coverage_target: "90%"
+      
+      - file: "cortex/orchestrators/core/master_orchestrator.py"
+        modifications: "EXIT GATE integration in execute_operation()"
+        purpose: "Single integration point for ALL orchestrators"
+        changes:
+          - location: "execute_operation() — after Stage 4 Execution, before return"
+          - integration: |
+              # ═══════════════════════════════════════════════════════════════
+              # ENH-046: Context Synthesis Exit Gate (Token Optimizer Extension)
+              # EVERY orchestrator output passes through here automatically
+              # ═══════════════════════════════════════════════════════════════
+              if self._context_gateway:
+                  result = self._context_gateway.synthesize(
+                      context=result,
+                      session_id=self._session_id,
+                      orchestrator_name=operation_name
+                  )
+        tests: "15 integration tests"
+      
+      - file: "cortex/mcp/cortex_tools.py"
+        modifications: "Session tracking in CORTEXProcessRequestTool"
+        purpose: "Track session tokens across MCP tool invocations"
+        changes:
+          - location: "CORTEXProcessRequestTool.execute()"
+          - integration: |
+              # Pass session_id to MasterOrchestrator for cumulative tracking
+              # This prevents the ACCELERATION pattern seen in chat01.md
+              session_id = context.get("session_id", str(uuid4()))
+        tests: "5 integration tests"
+      
+      - file: "tests/integration/test_context_synthesis_integration.py"
+        estimated_lines: 500
+        purpose: "End-to-end integration validation across ALL orchestrators"
+        test_categories:
+          - "Gateway end-to-end tests (10)"
+          - "Cache integration tests (8)"
+          - "MasterOrchestrator exit gate tests (7)"
+          - "MCP tool session tracking tests (5)"
+          - "Cross-orchestrator synthesis tests (10 — one per orchestrator)"
+          - "Cumulative session token tracking tests (5)"
+          - "Fail-safe tests: synthesis error → original context returned (5)"
+    
+    cache_configuration:
+      max_entries: 1000
+      ttl_seconds: 600  # 10 minutes
+      eviction_policy: "LRU"
+      cache_keys:
+        agent_summary: "agent:{filename}:{mtime}"
+        yaml_rules: "yaml:{filename}:{intent_type}:{mtime}"
+        file_ast: "file:{path}:{mtime}"
+        governance_result: "gov:{operation}:{hash}"
+        challenge_result: "challenge:{request_hash}"
+    
+    acceptance_criteria:
+      - "ALL 10 orchestrators' outputs route through exit gate"
+      - "Cache hit rate ≥70% after 1 hour of usage"
+      - "MasterOrchestrator integration seamless (no breaking changes)"
+      - "End-to-end: 65KB context → <26KB after synthesis"
+      - "Cumulative session tracking prevents acceleration pattern"
+      - "All 70 tests passing (30 gateway + 20 cache + 20 integration)"
+      - "AUDIT mode P1 check auto-fix: Deploys gateway if violations detected"
+  
+  - id: "phase-5"
+    name: "Validation, Metrics Comparison & Production Hardening"
+    duration: "Week 5"
+    status: "PLANNED"
+    start_date: "2026-03-03"
+    estimated_completion: "2026-03-07"
+    depends_on:
+      - "phase-4"
+    
+    architecture_rationale: |
+      Phase 5 validates the entire pipeline with real chat session data,
+      compares before/after metrics, and hardens for production.
+    
+    deliverables:
+      - file: "tests/e2e/test_chat_session_replay.py"
+        estimated_lines: 300
+        purpose: "Replay chat01.md through synthesized pipeline"
+        features:
+          - "Parse chat01.md into individual turns"
+          - "Simulate each turn through ContextSynthesisGateway"
+          - "Measure: context size before/after per turn"
+          - "Measure: cumulative session tokens"
+          - "Validate: summarization would NOT occur with synthesis"
+        tests: 10
+      
+      - file: "cortex/interaction/context_metrics_dashboard.py"
+        estimated_lines: 150
+        purpose: "CLI command for before/after metrics comparison"
+        features:
+          - "/context-metrics — Show current session efficiency"
+          - "/context-compare {chat_file} — Compare with baseline"
+          - "Print compression ratio, cache hits, token savings"
+      
+      - file: "deployment/grafana-dashboards/context-consumption-governance.json"
+        modifications: "Add before/after comparison panels"
+        purpose: "Production dashboard with historical comparison"
+    
+    acceptance_criteria:
+      - "chat01.md replay shows 0-1 summarization events (vs 5 baseline)"
+      - "Before/after metrics dashboard functional"
+      - "Production deployment canary at 10% shows no regression"
+      - "All orchestrators report synthesis metrics via Prometheus"
+
+# Baseline Metrics (Evidence from chat01.md)
+baseline:
+  source: "docs/archive/workspaces/chat01.md"
+  measurements:
+    file_size: "1,002 lines (32KB)"
+    copilot_summarizations: 5
+    lines_per_summarization: 200
+    target_lines_per_summarization: 1000
+    reference_count: 13
+    reference_breakdown:
+      agent_files: 6
+      yaml_files: 5
+      source_files: 2
+    estimated_context_size_per_turn: "~65KB"
+    token_budget: "20,000 tokens"
+    budget_violation: "3.25x overconsumption"
+  
+  evidence_patterns:
+    - pattern: "Summarized conversation history"
+      occurrences: 5
+      grep_command: 'grep -n "Summarized conversation history" chat01.md'
+    
+    - pattern: "Read \\[.*\\]\\(#file:"
+      occurrences: "13+"
+      grep_command: 'grep -n "Read \\[" chat01.md'
+
+# Target Metrics (Post-Implementation)
+targets:
+  copilot_summarization_frequency:
+    current: "5 per 1000 lines"
+    target: "≤1 per 1000 lines"
+    reduction: "80%"
+  
+  context_size_per_turn:
+    current: "~65KB"
+    target: "≤20KB"
+    reduction: "69%"
+  
+  reference_count:
+    current: "13 raw"
+    target: "≤5 synthesized"
+    reduction: "62%"
+  
+  compression_ratio:
+    current: "0% (no compression)"
+    target: "≥60%"
+    improvement: "+60pp"
+  
+  cache_hit_rate:
+    current: "0% (no cache)"
+    target: "≥70%"
+    improvement: "+70pp"
+  
+  synthesis_latency:
+    current: "N/A"
+    target: "<100ms (P99)"
+    requirement: "New capability"
+  
+  token_budget_compliance:
+    current: "325% over budget"
+    target: "100% within budget"
+    improvement: "100% compliance"
+
+# AUDIT Mode Integration
+audit_integration:
+  check_name: "P1: Context Consumption Governance (ENH-046)"
+  location: ".github/prompts/cortex-architect.prompt.md lines 372, 505-587"
+  trigger: "Every AUDIT mode execution"
+  
+  procedure:
+    step_1:
+      action: "Scan chat session files"
+      location: "docs/archive/workspaces/*.md"
+      metrics:
+        - "Count 'Summarized conversation history' events"
+        - "Count file references (Read \\[)"
+        - "Calculate lines per summarization"
+        - "Estimate context size per turn"
+    
+    step_2:
+      action: "Calculate violation severity"
+      thresholds:
+        critical: "Summarizations >3 OR context >50KB"
+        high: "Summarizations >1 OR context >30KB"
+        medium: "Context >20KB"
+        low: "Within targets"
+    
+    step_3:
+      action: "Auto-fix if violations detected"
+      conditions:
+        - "Violations detected: Deploy ContextSynthesisGateway (Phase 4)"
+        - "Phase 4 incomplete: Report status + ETA"
+        - "All clear: Report metrics + compliance"
+  
+  report_format: |
+    ### P1: Context Consumption Governance ✅/❌
+    
+    **Status:** {PASS|FAIL|DEGRADED}
+    
+    **Metrics:**
+    | Metric | Current | Target | Delta | Status |
+    |--------|---------|--------|-------|--------|
+    | Summarization Frequency | {n} per 1000 | ≤1 | {+/-n} | {✅/❌} |
+    | Context Size | {n}KB | ≤20KB | {+/-n} | {✅/❌} |
+    | Cache Hit Rate | {n}% | ≥70% | {+/-n}pp | {✅/❌} |
+    
+    **Violations:** {count} chat sessions flagged
+    **Action Required:** {Deploy Phase 4 | Monitor | None}
+    
+    **Prometheus Dashboard:** http://localhost:3000/d/cortex-context
+
+# Grafana Dashboard
+grafana_dashboard:
+  file: "deployment/grafana-dashboards/context-consumption-governance.json"
+  url: "http://localhost:3000/d/cortex-context"
+  panels:
+    - id: 1
+      title: "Context Size Trends"
+      type: "line_chart"
+      metrics:
+        - "cortex_context_size_before_bytes"
+        - "cortex_context_size_after_bytes"
+      alert: "50KB threshold for 5 minutes"
+    
+    - id: 2
+      title: "Compression Ratio"
+      type: "gauge"
+      metric: "cortex_context_compression_ratio"
+      thresholds:
+        red: "<40%"
+        yellow: "40-60%"
+        green: "≥60%"
+    
+    - id: 3
+      title: "Cache Hit Rate"
+      type: "gauge"
+      metric: "cortex_context_cache_hit_rate"
+      thresholds:
+        red: "<50%"
+        yellow: "50-70%"
+        green: "≥70%"
+    
+    - id: 4
+      title: "Copilot Summarization Events"
+      type: "stat"
+      metric: "cortex_copilot_summarization_total"
+      alert: ">5 events per hour"
+      note: "CRITICAL governance metric"
+    
+    - id: 5
+      title: "Token Budget Violations"
+      type: "stat"
+      metric: "cortex_token_budget_violations_total"
+      target: "0"
+    
+    - id: 6
+      title: "Synthesis Latency P99"
+      type: "stat"
+      metric: "histogram_quantile(0.99, cortex_context_synthesis_time_ms)"
+      target: "<100ms"
+    
+    - id: 7
+      title: "Reference Types Distribution"
+      type: "pie_chart"
+      metric: "cortex_copilot_reference_total"
+      labels: ["agent", "yaml", "source"]
+    
+    - id: 8
+      title: "Token Budget Usage"
+      type: "heatmap"
+      metric: "cortex_token_budget_usage_tokens"
+
+# Testing Strategy (Updated v2.0)
+testing:
+  unit_tests:
+    total: 117
+    breakdown:
+      phase_1: 12   # Context Metrics (COMPLETE ✅)
+      phase_2: 20   # Copilot Context Optimizer (Token Optimizer extension)
+      phase_3: 25   # Context Synthesizer (per-orchestrator strategies)
+      phase_4: 50   # Gateway + Cache + MasterOrchestrator integration
+      phase_5: 10   # E2E chat session replay
+    coverage_target: "85%"
+  
+  integration_tests:
+    total: 45
+    focus:
+      - "Gateway + CopilotContextOptimizer + Synthesizer integration (5)"
+      - "Cache layer integration with gateway (5)"
+      - "MasterOrchestrator EXIT GATE integration (5)"
+      - "MCP tool session tracking (5)"
+      - "Cross-orchestrator synthesis — one per orchestrator type (10)"
+      - "Cumulative session token tracking (5)"
+      - "Fail-safe: synthesis error fallback (5)"
+      - "AUDIT mode P1 check execution (5)"
+  
+  e2e_tests:
+    scenarios:
+      - name: "chat01.md replay (baseline validation)"
+        input: "841 lines, 13 large references, 5 summarization events"
+        expected: "0-1 summarization events after synthesis"
+        validation: "Parse chat turns → synthesize → count estimated summarizations"
+      
+      - name: "Heavy reference session (stress test)"
+        input: "13 large references per turn, 10 turns"
+        expected: "Cumulative tokens stay within budget, no acceleration"
+      
+      - name: "Cache hit scenario"
+        input: "Repeated references (3x cortex-architect.md)"
+        expected: "Cache hit rate ≥70%"
+      
+      - name: "Token budget overflow prevention"
+        input: "50KB context attempt"
+        expected: "Synthesis reduces to <20KB before handoff"
+      
+      - name: "Multi-orchestrator session"
+        input: "IMPLEMENT → FIX → REFACTOR in same session"
+        expected: "All 3 orchestrators' outputs synthesized, cumulative tracked"
+
+# Risk Assessment
+risks:
+  - id: "risk-1"
+    description: "Over-aggressive compression loses critical context"
+    mitigation: "User feedback loop, compression accuracy tests"
+    severity: "medium"
+  
+  - id: "risk-2"
+    description: "Synthesis latency degrades UX (>250ms P99)"
+    mitigation: "LRU cache + async synthesis, latency monitoring"
+    severity: "low"
+  
+  - id: "risk-3"
+    description: "Cache invalidation miss causes stale summaries"
+    mitigation: "mtime-based cache keys, 10-minute TTL"
+    severity: "medium"
+  
+  - id: "risk-4"
+    description: "Integration with InteractionOrchestrator breaks existing flow"
+    mitigation: "15 integration tests, backward compatibility layer"
+    severity: "low"
+
+# Success Verification
+verification_plan:
+  phase_1_complete:
+    - "✅ All 12 unit tests passing"
+    - "✅ Prometheus metrics exported"
+    - "✅ Grafana dashboard accessible"
+    - "✅ AUDIT mode integration verified"
+    - "✅ Enhancement registry updated"
+  
+  phase_2_complete:
+    - "15 unit tests passing"
+    - "Token estimation accuracy ±5%"
+    - "Budget violations caught before handoff"
+    - "Integration with Phase 1 metrics"
+  
+  phase_3_complete:
+    - "25 unit tests passing"
+    - "Agent file compression ≥99%"
+    - "YAML rule filtering ≥95%"
+    - "File content compression ≥95%"
+    - "Overall compression ≥60%"
+  
+  phase_4_complete:
+    - "65 tests passing (30 gateway + 20 cache + 15 integration)"
+    - "Cache hit rate ≥70%"
+    - "End-to-end: 65KB → <26KB compression"
+    - "AUDIT mode auto-fix operational"
+    - "Production deployment ready"
+
+# Deployment Plan (v2.0 — Token Optimizer Extension)
+deployment:
+  phase_1:
+    status: "DEPLOYED ✅"
+    date: "2026-02-06"
+    components:
+      - "ContextMetricsCollector (Prometheus)"
+      - "Grafana dashboard"
+      - "AUDIT mode P1 check"
+  
+  phase_2:
+    status: "PLANNED"
+    target_date: "2026-02-14"
+    components:
+      - "CopilotContextOptimizer (Token Optimizer Stage 6)"
+    prerequisites:
+      - "Install tiktoken: pip install tiktoken"
+  
+  phase_3:
+    status: "PLANNED"
+    target_date: "2026-02-21"
+    components:
+      - "ContextSynthesizer (per-orchestrator strategies)"
+  
+  phase_4:
+    status: "PLANNED"
+    target_date: "2026-02-28"
+    components:
+      - "ContextSynthesisGateway (EXIT GATE)"
+      - "ContextCacheLayer"
+      - "MasterOrchestrator EXIT GATE integration"
+      - "MCP tool session tracking"
+    rollout_strategy: "Canary deployment (10% → 50% → 100%)"
+  
+  phase_5:
+    status: "PLANNED"
+    target_date: "2026-03-07"
+    components:
+      - "chat01.md replay validation"
+      - "Before/after metrics comparison"
+      - "Production hardening"
+    rollout_strategy: "Full production after chat replay validation passes"
+
+# Next Actions (v2.0)
+next_actions:
+  immediate:
+    - action: "Verify Phase 1 metrics operational"
+      command: "pytest tests/unit/interaction/test_context_metrics_collector.py -v"
+      owner: "Agent"
+    
+    - action: "Review chat01.md acceleration pattern"
+      evidence: "Lines 809, 827, 835 — 3 summarizations in final 35 lines"
+      owner: "User"
+  
+  phase_2_kickoff:
+    - action: "Install tiktoken"
+      command: "pip install tiktoken>=0.5.0"
+      owner: "Agent"
+    
+    - action: "Create CopilotContextOptimizer (Token Optimizer Stage 6)"
+      file: "cortex/brain/core/copilot_context_optimizer.py"
+      owner: "Agent"
+      approach: "TDD RED phase: tests first, then implementation"
+    
+    - action: "Wire into Token Optimizer pipeline"
+      integration: "Extend existing 5-stage pipeline with Stage 6"
+      owner: "Agent"
+  
+  phase_4_critical:
+    - action: "Wire EXIT GATE in MasterOrchestrator.execute_operation()"
+      file: "cortex/orchestrators/core/master_orchestrator.py"
+      location: "After Stage 4 Execution, before return statement"
+      impact: "ALL 10 orchestrators automatically covered"
+      owner: "Agent"
+    
+    - action: "Add session tracking to MCP tools"
+      file: "cortex/mcp/cortex_tools.py"
+      impact: "Prevents cumulative acceleration across turns"
+      owner: "Agent"
+
+# Related Enhancements
+related:
+  - id: "ENH-023"
+    name: "LENS Result Caching Layer"
+    status: "PLANNED"
+    relationship: "Complementary - caching + synthesis together"
+  
+  - id: "ENH-017"
+    name: "LENS Multi-Language Enhancement"
+    status: "IN_PROGRESS"
+    relationship: "Reduces reference size via better analysis"
+  
+  - id: "ENH-016"
+    name: "AUDIT Mode Autonomous Fixing"
+    status: "IMPLEMENTED"
+    relationship: "Auto-fix mechanism for P1 violations"
+
+# Metrics Tracking
+metrics_tracking:
+  baseline_date: "2026-02-06"
+  baseline_source: "chat01.md"
+  baseline_values:
+    copilot_summarizations: 5
+    lines_per_summarization: 200
+    context_size_kb: 65
+    reference_count: 13
+    token_budget_violations: "Yes (3.25x over)"
+  
+  target_date: "2026-02-28"
+  target_values:
+    copilot_summarizations: 1
+    lines_per_summarization: 1000
+    context_size_kb: 20
+    reference_count: 5
+    token_budget_violations: "No (100% compliance)"
+  
+  measurement_frequency: "Daily via AUDIT mode"
+  prometheus_dashboard: "http://localhost:3000/d/cortex-context"
+
+# Documentation
+documentation:
+  files:
+    - path: "cortex/interaction/README-context-governance.md"
+      lines: 228
+      purpose: "Comprehensive ENH-046 documentation"
+      sections:
+        - "Problem Statement"
+        - "Metrics System (9 Prometheus metrics)"
+        - "Usage Example"
+        - "AUDIT Mode Integration"
+        - "Next Phases (2-4 roadmap)"
+        - "Success Criteria"
+    
+    - path: "docs/meta/enhancement-history.yaml"
+      entry: "ENH-046"
+      lines: 103
+      status: "IN_PROGRESS"
+      phase1_complete: true
+  
+  update_targets:
+    - file: ".github/prompts/cortex-architect.prompt.md"
+      section: "P1 Infrastructure checks"
+      status: "UPDATED ✅"
+    
+    - file: ".github/agents/core/cortex-auditor.md"
+      section: "P1 Infrastructure checks"
+      status: "NEEDS UPDATE"
+
+# Version History
+version_history:
+  - version: "2.0"
+    date: "2026-02-06"
+    changes: |
+      ARCHITECTURE CORRECTION: Token Optimizer Integration
+      - Root cause: Cumulative token exhaustion (accelerating summarization)
+      - Fix: Extend Token Optimizer as EXIT GATE in MasterOrchestrator
+      - Scope: ALL 10 orchestrators covered via single integration point
+      - Added Phase 5: Validation & Production Hardening
+      - Added orchestrator_coverage matrix (10 orchestrators)
+      - Moved files from cortex/interaction/ to cortex/brain/core/
+      - Total tests: 117 unit + 45 integration = 162
+    author: "cortex-architect"
+    trigger: "chat01.md review showing accelerating summarization pattern"
+  
+  - version: "1.0"
+    date: "2026-02-06"
+    changes: "Initial plan creation with Phase 1 COMPLETE status"
+    author: "cortex-architect"

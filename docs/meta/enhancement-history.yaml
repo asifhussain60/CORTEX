@@ -1,15 +1,102 @@
 # CORTEX Meta-Intelligence Enhancement Registry
 # Tracks recommendations, adoptions, and learning feedback loop
 # 
-# Authority: cortex-architect.prompt.md v13.0
-# Updated: 2026-02-05
+# Authority: cortex-architect.prompt.md v13.1
+# Updated: 2026-02-06
 
-meta_version: "2.2"
-last_updated: "2026-02-05"
+meta_version: "2.3"
+last_updated: "2026-02-06"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-046
+    date: "2026-02-06"
+    recommendation: "Context Synthesis Gateway for Copilot Efficiency"
+    status: IN_PROGRESS
+    domain: Performance + Governance
+    priority: P1
+    source: "chat01.md analysis - 13 large references + 5 'Summarized conversation history' events"
+    adoption_reason: "CRITICAL governance violation: CORTEX loads massive context without pre-synthesis, causing GitHub Copilot token exhaustion. Evidence: chat01.md (1,002 lines) triggered 5 summarization events (1 per 200 lines instead of target 1 per 1000 lines). 13 large file references loaded without caching or compression."
+    expected_benefits:
+      - "60% context size reduction (65KB → 20KB per turn)"
+      - "80% reduction in Copilot summarization events (5 → 1 per 1000 lines)"
+      - "70% cache hit rate for repeated references"
+      - "<100ms synthesis latency"
+      - "100% token budget compliance (≤20K tokens/turn)"
+      - "Improved conversation continuity (less context truncation)"
+    implementation_notes: |
+      4-Phase Implementation + AUDIT Mode Integration:
+      
+      Phase 1: Context Metrics & Telemetry (Week 1) - ✅ COMPLETE
+        Files:
+        - cortex/interaction/context_metrics_collector.py (300 LOC, 12 tests)
+        - tests/unit/interaction/test_context_metrics_collector.py
+        - deployment/grafana-dashboards/context-consumption-governance.json
+        
+        Capabilities:
+        - Prometheus metrics: size before/after, compression ratio, cache hit rate
+        - Copilot summarization event tracking
+        - Token budget violation detection
+        - Session summary aggregation
+        
+        Tests: 12/12 passing ✅
+        
+      Phase 2: Context Budget Manager (Week 2)
+        Files:
+        - cortex/interaction/context_budget_manager.py (150 LOC, 15 tests)
+        - Token allocation and enforcement
+        - Overflow prevention
+        - Estimation using tiktoken library
+        
+      Phase 3: Context Synthesizer (Week 3)
+        Files:
+        - cortex/interaction/context_synthesizer.py (400 LOC, 25 tests)
+        - Agent file summarization (1903 lines → 3 lines)
+        - YAML rule filtering by intent_type
+        - AST-based file content compression
+        
+      Phase 4: Context Synthesis Gateway + Integration (Week 4)
+        Files:
+        - cortex/interaction/context_synthesis_gateway.py (250 LOC, 30 tests)
+        - cortex/interaction/context_cache_layer.py (200 LOC, 20 tests)
+        - Enhancement to InteractionOrchestrator
+        
+      AUDIT Mode Integration (COMPLETE):
+        - Added P1 check: "Context Consumption Governance (ENH-046)"
+        - Detailed audit procedure with metrics collection
+        - Baseline measurement (chat01.md: 5 summarizations, 13 refs)
+        - Target metrics (80% reduction, 69% size reduction)
+        - Auto-fix: Deploy ContextSynthesisGateway if violations detected
+        - Prometheus dashboard: context-consumption-governance.json
+        
+      Prompt Enhancement (.github/prompts/cortex-architect.prompt.md):
+        - Line 369: Added P1 Infrastructure check
+        - Line 503-587: Detailed P1 audit procedure
+        - Includes: metrics table, Python audit script, baseline vs target
+    metrics:
+      estimated_effort_weeks: 4
+      tests_required: 90
+      phase1_complete: true
+      phase1_tests_passing: 12
+      token_savings_target: "60%"
+      copilot_summarization_reduction_target: "80%"
+      cache_hit_rate_target: "70%"
+    evidence_basis:
+      - "chat01.md: 1,002 lines, 5 'Summarized conversation history' events"
+      - "13 large file references (agents, YAMLs, source files)"
+      - "Estimated 65KB context per turn (3x over 20KB budget)"
+      - "Lines per summarization: 200 (target: 1000)"
+      - "ENH-023 identified caching issue, but missed synthesis requirement"
+    related_enhancements:
+      - ENH-023
+      - ENH-017
+    governance_impact:
+      - "AUDIT mode P1 check (critical governance metric)"
+      - "Copilot chat session monitoring via grep patterns"
+      - "Auto-fix deployment if violations detected"
+      - "Prometheus + Grafana real-time tracking"
+  
   - id: ENH-043
     date: "2026-02-05"
     recommendation: "MCP Architecture Documentation Enhancement"
@@ -1006,7 +1093,7 @@ enhancements:
       2. cortex/models/phase_{id}_schema.py
       3. cortex-registry/_cortex-master/phases/active/phase-{id}-{slug}.yaml
       4. tests/integration/test_phase_{id}_generation.py
-      5. _workspaces/cortex-plan/PHASE-{id}-{name}.yaml
+      5. cortex-registry/_cortex-master/phases/active/phase-{id}-{name}.yaml  # migrated from _workspaces/cortex-plan
       
       Template Variables:
       - phase_id: Numeric phase identifier
@@ -2667,7 +2754,7 @@ operations:
       enforcement: "Code review checklist item"
       validation: "grep -rn '```' --include='*.yaml' docs/meta/"
     deferred_work:
-      scope: "_workspaces/cortex-plan/*.yaml"
+      scope: "cortex-registry/_cortex-master/**/*.yaml"  # migrated from _workspaces/cortex-plan
       instances: 44
       priority: "Medium (not user-facing)"
   
@@ -2675,7 +2762,7 @@ operations:
     date: "2026-02-05"
     type: "design"
     title: "LENS Power-Up + Capability Feasibility Gate Design"
-    scope: "_workspaces/cortex-plan/, docs/meta/enhancement-history.yaml"
+    scope: "cortex-registry/_cortex-master/, docs/meta/enhancement-history.yaml"  # migrated from _workspaces/cortex-plan
     outcome: SUCCESS
     metrics:
       plan_files_created: 2

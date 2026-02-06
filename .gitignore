@@ -74,8 +74,6 @@ ENH-*-PHASE-*-COMPLETION.md
 ARCHITECT-*-SUMMARY.md
 
 # VS Code Copilot Chat Sessions (keep in _workspaces/.chats/ only)
-_workspaces/cortex-plan/*-completion.md
-_workspaces/cortex-plan/*-summary.md
 _workspaces/*-COMPLETION.md
 _workspaces/*-SUMMARY.md
 

@@ -65,6 +65,18 @@ active_enhancements:
     file: "enhancements/active/enh-029-capability-feasibility-gate.yaml"
     status: "active"
     priority: "P1"
+  
+  - id: "enh-046"
+    name: "Context Consumption Governance (Token Optimizer Integration)"
+    file: "enhancements/active/enh-046-context-consumption-governance.yaml"
+    status: "in-progress"
+    priority: "P1"
+    version: "2.0"
+    phase: "Phase 1 COMPLETE ✅ | Phase 2+ REDESIGNED"
+    started: "2026-02-06"
+    updated: "2026-02-06"
+    scope: "ALL orchestrators via MasterOrchestrator EXIT GATE"
+    tests_total: 162
 
 # Metadata
 statistics:

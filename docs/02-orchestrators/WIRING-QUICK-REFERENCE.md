@@ -473,7 +473,7 @@ When adding a new orchestrator:
 - **Master Wiring:** `cortex/wiring/specifications/wiring.yaml`
 - **Phase 1-8 Examples:** Phases 1-8 orchestrator implementations
 - **E2E Tests:** `tests/e2e/test_cortex_sdlc_e2e.py`
-- **CORTEX SDLC Plan:** `_workspaces/cortex-plan/CORTEX-SELF-IMPROVEMENT-SDLC.yaml`
+- **CORTEX SDLC Plan:** `cortex-registry/_cortex-master/` (migrated from _workspaces/cortex-plan)
 
 ---
 

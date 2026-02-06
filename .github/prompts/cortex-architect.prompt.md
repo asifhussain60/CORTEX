@@ -369,6 +369,7 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 |-------|-------------|------|
 | DB Audit Logging | Comprehensive audit logging via AuditTrailVerifier active (CORE-027) | `grep_search`, code inspection |
 | Audit Trail Integrity | Verify governance_audit_trail: AC_START↔AC_COMPLETE pairing, hash chain intact, no tampering | `cortex_audit_trail_verify` |
+| **Context Consumption Governance (ENH-046)** | **CRITICAL: Measure context efficiency metrics, detect Copilot token exhaustion patterns, enforce synthesis before handoff** | **ContextMetricsCollector + chat log analysis** |
 | **Component Integration Verification (CIV)** | **3-layer validation: Wiring→Implementation alignment, MCP Tool Registration chain, Health Check execution sampled** | **`cortex_verify_integration` (MANDATORY)** |
 | **File Naming Enforcement** | **CORE-028 validated by FileNamingEnforcementAgent: SCREAMING_CASE blocked, plan files ≤40 chars, kebab-case enforced** | **EnforcementOrchestrator (7-agent system)** |
 | Architectural Coherence | No contradictions across wiring.yaml ↔ orchestrators ↔ config ↔ prompts ↔ agents | Manual cross-check |
@@ -500,6 +501,114 @@ CORTEX/
 - [ ] Archive (not delete) for reversibility
 - [ ] Run `pytest` after each phase
 - [ ] Update documentation if paths change
+
+#### P1 Context Consumption Governance (ENH-046) - DETAILED PROCEDURE
+
+**Authority:** ENH-046 (Context Synthesis Gateway)  
+**Criticality:** CRITICAL — Prevents GitHub Copilot token exhaustion  
+**Evidence:** chat01.md shows 13 large references + 5 "Summarized conversation history" events
+
+**Metrics Collection:**
+
+| Metric | Target | Red Flag Threshold | Measurement Method |
+|--------|--------|-------------------|-------------------|
+| Context size per turn | ≤20KB | >50KB | Estimate references × avg file size |
+| Copilot summarization frequency | ≤1 per 1000 lines | >3 per 1000 lines | Grep "Summarized conversation history" |
+| Reference count per turn | ≤5 synthesized | >10 raw files | Count "Read [file]" patterns |
+| Compression ratio | ≥60% | <40% | (Before - After) / Before |
+| Cache hit rate | ≥70% | <50% | Hits / (Hits + Misses) |
+| Token budget violations | 0 | >0 | Check ContextMetricsCollector |
+
+**Audit Procedure:**
+
+```python
+# Step 1: Scan recent chat sessions (docs/archive/workspaces/*.md)
+chat_files = file_search("docs/archive/workspaces/*.md")
+
+for chat_file in chat_files:
+    # Step 2: Count "Summarized conversation history" events
+    summarization_count = grep_count(chat_file, "Summarized conversation history")
+    
+    # Step 3: Count file references
+    reference_count = grep_count(chat_file, r"Read \[|#file:")
+    
+    # Step 4: Calculate lines per summarization
+    total_lines = wc_l(chat_file)
+    lines_per_summarization = total_lines / max(summarization_count, 1)
+    
+    # Step 5: Flag violations
+    if summarization_count > 3 or lines_per_summarization < 200:
+        violations.append({
+            "file": chat_file,
+            "summarizations": summarization_count,
+            "references": reference_count,
+            "lines_per_summarization": lines_per_summarization,
+            "severity": "CRITICAL" if summarization_count > 5 else "HIGH"
+        })
+```
+
+**Baseline Measurement (Before ENH-046):**
+
+```markdown
+## 📊 Context Consumption Baseline
+
+**Sample:** chat01.md (1,002 lines)
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Copilot Summarizations | 5 | 🔴 CRITICAL |
+| File References | 13+ | 🔴 CRITICAL |
+| Lines per Summarization | 200 | 🔴 Below target (1000) |
+| Reference Types | 6 agents, 5 YAMLs, 2 source | 🔴 No synthesis |
+| Estimated Context Size | ~65KB per turn | 🔴 3x over budget |
+
+**Diagnosis:** CORTEX loads massive context without pre-synthesis, causing rapid token exhaustion.
+```
+
+**Target Metrics (After ENH-046):**
+
+```markdown
+## 🎯 Context Consumption Targets
+
+| Metric | Current | Target | Improvement |
+|--------|---------|--------|-------------|
+| Copilot Summarizations | 5 per 1000 lines | ≤1 per 1000 lines | 80% reduction |
+| Context Size | 65KB | ≤20KB | 69% reduction |
+| Reference Count | 13 raw | ≤5 synthesized | 62% reduction |
+| Cache Hit Rate | 0% (no cache) | ≥70% | +70pp |
+| Synthesis Latency | N/A | <100ms | New capability |
+```
+
+**Audit Report Format:**
+
+```markdown
+### P1: Context Consumption Governance ✅/❌
+
+**Status:** {PASS|FAIL|DEGRADED}
+
+**Metrics:**
+| Metric | Current | Target | Delta | Status |
+|--------|---------|--------|-------|--------|
+| Summarization Frequency | {n} per 1000 | ≤1 | {+/-n} | {✅/❌} |
+| Context Size | {n}KB | ≤20KB | {+/-n} | {✅/❌} |
+| Cache Hit Rate | {n}% | ≥70% | {+/-n}pp | {✅/❌} |
+
+**Violations:** {count} chat sessions flagged  
+**Action Required:** {Deploy ENH-046 Phase 2 | Monitor | None}
+
+**Evidence Files:**
+- {chat_file}: {summarizations} events, {references} refs
+- {chat_file}: {summarizations} events, {references} refs
+
+**Prometheus Dashboard:** http://localhost:3000/d/cortex-context (view real-time metrics)
+```
+
+**P1 Auto-Fix:**  
+If violations detected:
+1. Deploy ContextSynthesisGateway to InteractionOrchestrator
+2. Enable context metrics collection
+3. Activate cache layer with 10min TTL
+4. Re-run audit after 24h to verify improvement
 
 ## Audit Output Format
 

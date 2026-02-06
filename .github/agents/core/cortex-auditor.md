@@ -74,7 +74,7 @@
 | Leftovers | *.bak, *_v2.* |
 
 **Execution Flow:**
-1. **Run VacuumOrchestrator FIRST** — Scan & clean Copilot bloat (_workspaces/cortex-plan/*-COMPLETION.md, etc.)
+1. **Run VacuumOrchestrator FIRST** — Scan & clean Copilot bloat (stale *-COMPLETION.md, etc.)
 2. **Verify No Breakage** — Quick sanity check (import tests, basic functionality)
 3. **Continue with P0/P1/P2** — If vacuum broke something, catch it immediately
 

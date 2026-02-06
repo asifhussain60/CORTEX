@@ -11,7 +11,7 @@ WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
 - No SQLite wiring state
 - Ephemeral container state only
 
-See: _workspaces/cortex-plan/migration-phases-plan.yaml
+See: cortex-registry/_cortex-master/phases/completed/2025/ (migration plan)
 """
 
 from typing import Dict, Any, List, Optional

@@ -612,7 +612,7 @@ phase_8_6:
           blocking: false
       
       files:
-        - _workspaces/cortex-plan/verify_prod_ready.py
+        - cortex/tools/verify_production_readiness.py
       
       loc: 200
       effort: "1 day"
@@ -786,10 +786,10 @@ completion_criteria:
 # ============================================================================
 
 references:
-  parent_plan: "_workspaces/cortex-plan/migration-phases-plan.yaml"
+  parent_plan: "cortex-registry/_cortex-master/phases/completed/2025/phase-08-unified-routing.yaml"
   wiring_specification: "cortex/wiring/specifications/wiring.yaml"
   routing_config: "cortex_brain/tier3/knowledge/intent-routing.yaml"
-  prod_verification: "_workspaces/cortex-plan/verify_prod_ready.py"
+  prod_verification: "cortex/tools/verify_production_readiness.py"  # migrated from _workspaces/cortex-plan
   
   related_phases:
     - "Phase 7.1: LENS Protocol Formalization"
@@ -799,4 +799,4 @@ references:
   documentation:
     - "docs/02-orchestrators/02-intent-router.md"
     - "docs/04-architecture/7-intent-router.md"
-    - "_workspaces/cortex-plan/PHASE-8-CORE-035-CONSOLIDATION.yaml"
+    - "cortex-registry/_cortex-master/phases/completed/2025/phase-08-unified-routing.yaml"  # migrated from _workspaces/cortex-plan

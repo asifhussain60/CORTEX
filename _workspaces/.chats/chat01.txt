@@ -1,0 +1,385 @@
+asifhussain60: review #file:chat01.txt  _workspaces/cortex-plan. There should be no files be created in this location. master plan moved to #file:cortex-registry. Search entire cortex including database layers and ensure all references have been updated to point to the new loction. Delete the old #file:cortex-plan and ensure systemaitcally nothing uses this old location
+
+GitHub Copilot: 
+
+## 🧠 CORTEX Migration Cleanup
+**Author:** Asif Hussain | **Orchestrator:** cortex-architect (AUDIT) ✅
+
+---
+
+Let me systematically find all references to cortex-plan across the entire codebase, then clean up. 
+
+Searched text for `_workspaces/cortex-plan`, 94 results
+
+Searched text for `_workspaces/cortex-plan` (`**/*.py`), 13 results
+
+Now let me also check for references in SQLite databases and any other hidden locations: 
+
+Searched text for `cortex-plan` (`**/*.yml`), 1 result
+
+asifhussain60: @agent Try Again
+
+GitHub Copilot: Searched text for `cortex-plan` (`**/*.yaml`), 44 results
+
+Let me also check for references in prompt files and agent definitions: 
+
+Searched text for `cortex-plan` (`**/.github/**`), 4 results
+
+Now let me check what's in the cortex-plan directory: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces/cortex-plan)
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces)
+
+Good. Now let me check if `verify_prod_ready.py` was migrated to the registry or still only exists in the old location: 
+
+Searched for files matching `**/verify_prod_ready.py`, no matches
+
+Searched for files matching `**/phase_context_resolver.py`, 2 matches
+
+Let me read the critical Python files that have hardcoded paths: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/core/phase_context_resolver.py#80-80), lines 80 to 120
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/tools/generate-naming-inventory.py#1-1), lines 1 to 20
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/tools/generate-naming-inventory.py#100-100), lines 100 to 120
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/__init__.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/registry/git_backed_registry.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/registry/lazy_orchestrator.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/registry/__init__.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/registry/wiring_validator.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/wiring/bootstrap.py#1-1), lines 1 to 15
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/__init__.py#1-1), lines 1 to 20
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/infrastructure/database.py#1-1), lines 1 to 20
+
+Now let me read the test file and the GitHub workflow: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/unit/ci_cd/test_core_035_enforcement.py#235-235), lines 235 to 260
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/workflows/readiness-verification.yml#45-45), lines 45 to 65
+
+Now let me read the cortex-auditor.md and the gitignore: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/agents/core/cortex-auditor.md#70-70), lines 70 to 85
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.gitignore#70-70), lines 70 to 85
+
+Now let me check test_git_backed_wiring: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/wiring/phase3/test_git_backed_wiring.py#1-1), lines 1 to 20
+
+Now I have full context. Let me categorize and fix everything systematically.
+
+### Categories of references:
+
+1. **🔴 CRITICAL — Live Python code with hardcoded paths** (breaks at runtime)
+2. **🔴 CRITICAL — CI/CD workflow** (breaks pipeline)
+3. **🟡 ACTIVE — Python docstring comments** (misleading but non-breaking)
+4. **🟡 ACTIVE — Tests with hardcoded paths** (will fail)
+5. **⚪ ARCHIVE — docs/archive/** (historical, safe to leave)
+6. **⚪ ARCHIVE — completed phases YAML** (historical references)
+
+Let me fix them in priority order:
+
+**Fix 1: Phase Context Resolver (runtime-critical)** 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Those lint errors are pre-existing, not from my change. Now let me fix the generate-naming-inventory output path: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 2: CI/CD Workflow — verify_prod_ready.py reference**
+
+The script no longer exists. Let me check if it was migrated somewhere: 
+
+Searched text for `verify_prod_ready` (`**/*.py`), 8 results
+
+The `verify_prod_ready.py` was deleted during migration but references weren't updated. Let me check if there's a replacement in the registry or scripts: 
+
+Searched for files matching `**/verify_prod*.py`, 2 matches
+
+Found the replacement. Let me verify: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/tools/verify_production_readiness.py#1-1), lines 1 to 30
+
+This is a different script (simplified). The old `verify_prod_ready.py` with 16 checks no longer exists. Let me fix the CI/CD workflow and the tests:
+
+**Fix 3: GitHub Actions Workflow** 
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 4: Tests — update verify_prod_ready tests to point to new location** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/unit/ci_cd/test_core_035_enforcement.py#230-230), lines 230 to 286
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 5: Python docstring Authority references (7 files)** 
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+Pre-existing lint errors. Continuing with the remaining docstring fixes: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 6: Cortex-auditor agent reference** 
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 7: Active phase YAML references in cortex-registry** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/active/phase-23-static-dashboard-generator.yaml#15-15), lines 15 to 30
+
+Using "Replace String in File"
+
+
+```
+
+```
+Let me check if phase-18 exists in the registry: 
+
+Searched for files matching `**/phase-18*`, 2 matches
+
+Good, it exists. Now fix phase-21: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/active/phase-21-json-first-rewrite.yaml#90-90), lines 90 to 100
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 8: cortical-memory-system.yaml** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/meta/reference/cortical-memory-system.yaml#895-895), lines 895 to 910
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 9: .gitignore — remove stale cortex-plan patterns** 
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 10: cortex-lens README** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-lens/README.md#195-195), lines 195 to 209
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 11: WIRING-QUICK-REFERENCE.md** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/02-orchestrators/WIRING-QUICK-REFERENCE.md#472-472), lines 472 to 481
+
+Using "Replace String in File"
+
+
+```
+
+```
+**Fix 12: enhancement-history.yaml — historical references (add migration note)** 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/meta/enhancement-history.yaml#1088-1088), lines 1088 to 1100
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now update the scope references in enhancement-history.yaml: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/meta/enhancement-history.yaml#2750-2750), lines 2750 to 2770
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me delete the cortex-plan directory: 
+
+Ran terminal command: rm -rf /Users/asifhussain/PROJECTS/CORTEX/_workspaces/cortex-plan
+
+Made changes.
+
+asifhussain60: @agent Try Again
+
+GitHub Copilot: Verify the deletion: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/_workspaces)
+
+Perfect. Now let's run a final comprehensive grep to confirm all references are gone or properly updated: 
+
+Searched text for `_workspaces/cortex-plan`, 50 results
+
+Good! Most remaining references are in archive/historical docs which are safe. Let me fix the active references in completed phase YAMLs that have hardcoded old paths: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-08-unified-routing.yaml#610-610), lines 610 to 620
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-08-unified-routing.yaml#785-785), lines 785 to 803
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me fix the phase-07 references: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-07-future-enhancements.yaml#480-480), lines 480 to 490
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-07-future-enhancements.yaml#445-445), lines 445 to 460
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-07-future-enhancements.yaml#310-310), lines 310 to 320
+
+Using "Replace String in File"
+
+
+```
+
+```
+
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-07-future-enhancements.yaml#86-86), lines 86 to 96
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now fix phase-07-inquiry-system.yaml: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/_cortex-master/phases/completed/2025/phase-07-inquiry-system.yaml#1085-1085), lines 1085 to 1095
+
+Made changes.

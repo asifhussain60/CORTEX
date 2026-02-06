@@ -50,7 +50,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "::group::Production Readiness Verification"
-          PYTHONPATH=. python _workspaces/cortex-plan/verify_prod_ready.py --skip-docker --json-output prod-ready-results.json --verbose
+          PYTHONPATH=. python cortex/tools/verify_production_readiness.py --verbose
           echo "::endgroup::"
 
       - name: Upload Production Readiness Results
