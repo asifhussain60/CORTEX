@@ -63,17 +63,17 @@ active_phases:
     status: "in-progress"
     priority: "P0"
     execution_order: 3
-    progress: "70%"
+    progress: "85%"
     description: |
       Add PLAN MODE to cortex-architect.prompt.md for design+implementation
       with mandatory plan registry integration, setup/teardown hooks,
       VacuumOrchestrator cleanup, and dashboard sync on every phase.
       
-      Progress (Stage 2/5 Complete):
+      Progress (Stage 3/5 Complete):
       - ✅ Stage 1: PhaseManager with intelligent resolution (20/20 tests)
       - ✅ Stage 2: Dashboard sync integration (17/17 tests)
-      - 🔵 Stage 3: Prompt refactor (2012→1600 lines)
-      - ⚪ Stage 4: Full integration (MasterOrchestrator + PlanningOrchestrator)
+      - ✅ Stage 3: Prompt refactor v14.3 + agent v14.0 with PLAN routing
+      - 🔵 Stage 4: Full integration (MasterOrchestrator + PlanningOrchestrator)
       - ⚪ Stage 5: Cleanup & agent alignment
     unblocked_by: "phase-26"
   
