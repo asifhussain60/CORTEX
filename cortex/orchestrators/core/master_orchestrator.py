@@ -79,6 +79,23 @@ except ImportError:
     MarkdownReportBanPolicy = None
     MinimalPlanSpine = None
 
+# Phase 34: Import advanced response optimization components
+try:
+    from cortex.orchestrators.response.semantic_deduplicator import SemanticDeduplicator
+    from cortex.orchestrators.response.response_quality_scorer import ResponseQualityScorer
+    from cortex.orchestrators.response.role_verbosity_profiles import (
+        RoleVerbosityProfiles,
+        Role
+    )
+    PHASE_34_AVAILABLE = True
+except ImportError:
+    # Fallback if modules not accessible or dependencies missing
+    SemanticDeduplicator = None
+    ResponseQualityScorer = None
+    RoleVerbosityProfiles = None
+    Role = None
+    PHASE_34_AVAILABLE = False
+
 # Phase 35: Import autonomous execution components for continuation detection & progress bars
 # AC-PHASE-35-001: Autonomous continuation detection (R1)
 # AC-PHASE-35-002: ASCII progress bar integration (R2)
@@ -1380,17 +1397,21 @@ class MasterOrchestrator(IOrchestrator):
     
     def get_response_with_headers(self, response: str) -> str:
         """
-        Wrap response with CORTEX headers and apply verbosity reduction policies.
+        Wrap response with CORTEX headers and apply optimization policies.
         
         AC-ENH-002-01: Integrate ResponseHeaderInjector into MasterOrchestrator
         Phase 33: Apply ChatResponsePolicy for verbosity suppression
+        Phase 34: Apply advanced response optimization (semantic dedup, quality scoring, role profiles)
         
         Policy pipeline:
-        1. suppress_verbosity() - remove narration patterns
-        2. inject_plan_spine() - add progress indicator if phases available
-        3. ChatResponsePolicyValidator - validate 3-section structure
-        4. MarkdownReportBanPolicy - ensure no report files
-        5. Wrap with headers via ResponseHeaderInjector
+        1. suppress_verbosity() - remove narration patterns (Phase 33)
+        2. inject_plan_spine() - add progress indicator if phases available (Phase 33)
+        3. semantic_deduplication() - remove redundant sentences (Phase 34)
+        4. quality_scoring() - evaluate response quality (Phase 34)
+        5. role_profile_application() - apply role-based formatting (Phase 34)
+        6. ChatResponsePolicyValidator - validate 3-section structure (Phase 33)
+        7. MarkdownReportBanPolicy - ensure no report files (Phase 33)
+        8. Wrap with headers via ResponseHeaderInjector
         
         Applies header injection if injector is available, otherwise returns
         response unchanged (graceful degradation).
@@ -1431,7 +1452,97 @@ class MasterOrchestrator(IOrchestrator):
                         details={"error": str(spine_err)}
                     )
             
-            # Step 3: Validate 3-section structure
+            # Phase 34: Advanced response optimization
+            if PHASE_34_AVAILABLE:
+                try:
+                    original_length = len(response)
+                    
+                    # Step 3: Semantic deduplication
+                    if SemanticDeduplicator is not None:
+                        try:
+                            deduplicator = SemanticDeduplicator(similarity_threshold=0.85)
+                            response = deduplicator.deduplicate(response)
+                            metrics = deduplicator.get_metrics()
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-001",
+                                operation="SEMANTIC_DEDUPLICATION",
+                                success=True,
+                                details={
+                                    "original_length": original_length,
+                                    "deduplicated_length": len(response),
+                                    "reduction_rate": metrics.get("reduction_rate", 0),
+                                }
+                            )
+                        except Exception as dedup_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-001",
+                                operation="SEMANTIC_DEDUPLICATION",
+                                success=False,
+                                details={"error": str(dedup_err)}
+                            )
+                    
+                    # Step 4: Quality scoring (monitoring only, not modifying)
+                    if ResponseQualityScorer is not None:
+                        try:
+                            scorer = ResponseQualityScorer()
+                            context = self.current_operation or "general"
+                            score = scorer.score_response(response, context)
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-002",
+                                operation="QUALITY_SCORING",
+                                success=True,
+                                details={
+                                    "overall_score": score.overall,
+                                    "clarity": score.clarity,
+                                    "completeness": score.completeness,
+                                    "conciseness": score.conciseness,
+                                    "accuracy": score.accuracy,
+                                    "relevance": score.relevance,
+                                }
+                            )
+                        except Exception as score_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-002",
+                                operation="QUALITY_SCORING",
+                                success=False,
+                                details={"error": str(score_err)}
+                            )
+                    
+                    # Step 5: Role profile application (default to ENGINEER for now)
+                    if RoleVerbosityProfiles is not None and Role is not None:
+                        try:
+                            profiles = RoleVerbosityProfiles()
+                            # Default to ENGINEER role (high detail, code preserved)
+                            # Future: detect role from context or user preferences
+                            role = Role.ENGINEER
+                            response = profiles.apply_profile(response, role)
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-003",
+                                operation="ROLE_PROFILE_APPLICATION",
+                                success=True,
+                                details={
+                                    "role": role.value,
+                                    "final_length": len(response),
+                                }
+                            )
+                        except Exception as profile_err:
+                            self.logger.log_operation_complete(
+                                ac_id="AC-PHASE-34-003",
+                                operation="ROLE_PROFILE_APPLICATION",
+                                success=False,
+                                details={"error": str(profile_err)}
+                            )
+                            
+                except Exception as phase34_err:
+                    # Log but continue - Phase 34 is additive, not blocking
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-34-000",
+                        operation="ADVANCED_OPTIMIZATION",
+                        success=False,
+                        details={"error": f"Phase 34 optimization failed: {str(phase34_err)}"}
+                    )
+            
+            # Step 6: Validate 3-section structure
             if ChatResponsePolicyValidator is not None:
                 try:
                     validator = ChatResponsePolicyValidator()
