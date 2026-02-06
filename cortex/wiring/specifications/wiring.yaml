@@ -10,8 +10,8 @@
 #   orchestrators:
 #     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 20 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility)
-#   Total: 34 orchestrators + 4 LENS analyzers
+#     support: [...]   # 21 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility, TechIntelligenceOrchestrator)
+#   Total: 35 orchestrators + 4 LENS analyzers
 # =========================================================================
 
 version: "2.0"
@@ -911,6 +911,39 @@ orchestrators:
         stages: 1
         intelligence: []
         toggle: "CORTEX_ORCHESTRATOR_VISIBILITY"
+
+    # Phase 34B: Continuous Tech Intelligence System
+    - name: "TechIntelligenceOrchestrator"
+      module: "cortex.orchestrators.intelligence.tech_intelligence_orchestrator"
+      class: "TechIntelligenceOrchestrator"
+      tier: 3
+      priority: 82
+      dependencies: []
+      capabilities:
+        - readiness_scoring
+        - tech_detection
+        - knowledge_synthesis
+        - proactive_learning
+        - cross_repo_analysis
+      health_check: "initialize"
+      mcp_adapter: "cortex.mcp.adapters.tech_intelligence_adapter"
+      description: "Central knowledge hub monitoring tech ecosystems and providing readiness verification (Phase 34B)"
+      mcp_tools:
+        - "get_tech_readiness"
+        - "detect_tech_stack"
+        - "synthesize_best_practices"
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+        - "CORE-036"
+      version: "1.0.0-week1"
+      metadata:
+        icon: "🧠"
+        stages: 3
+        intelligence: ["knowledge", "lens"]
+        phase: "34B"
+        increment: "week1"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
