@@ -33,6 +33,12 @@ from cortex.orchestrators.core.challenge_engine import (
 from cortex.orchestrators.decorators import inject_orchestrator_context
 from cortex.orchestrators.support.decision_journal import DecisionJournal
 
+# Phase 33: Import narration suppression
+try:
+    from cortex.orchestrators.response.chat_response_policy import suppress_verbosity
+except ImportError:
+    suppress_verbosity = None
+
 logger = logging.getLogger(__name__)
 
 
@@ -95,6 +101,10 @@ class InteractionOrchestrator:
         # CORE-029: Challenge system ALWAYS enabled
         self.enable_challenges = True  # Override any False passed in
         
+        # Phase 33: Enable narration suppression for autonomous mode
+        self.suppress_narration_enabled = True
+        self.autonomous_mode = True
+        
         if pattern_registry_path is None:
             pattern_registry_path = (
                 Path(__file__).parent.parent.parent.parent.parent
@@ -141,6 +151,40 @@ class InteractionOrchestrator:
                 self.patterns[pattern.pattern_id] = pattern
             except Exception as e:
                 print(f"[WARNING] Failed to load pattern from {pattern_file}: {e}")
+    
+    def _filter_narration(self, response: str) -> str:
+        """
+        Phase 33: Filter tool narration patterns from responses.
+        
+        AC-PHASE-33-004: Remove narration when autonomous_mode is enabled
+        
+        Removes patterns like:
+        - "I'll read the file..."
+        - "Perfect! I found..."
+        - "Let me check..."
+        - Tool echo statements
+        - Redundant explanations
+        
+        Args:
+            response: Response text to filter
+            
+        Returns:
+            Narration-suppressed response (if suppress_narration_enabled)
+        """
+        if not self.suppress_narration_enabled or suppress_verbosity is None:
+            return response
+        
+        try:
+            filtered = suppress_verbosity(response)
+            logger.debug(
+                "Narration filtering applied: %d -> %d chars",
+                len(response),
+                len(filtered)
+            )
+            return filtered
+        except Exception as e:
+            logger.warning(f"Narration filtering failed (continuing): {e}")
+            return response
     
     def execute_turn(
         self,
@@ -242,6 +286,11 @@ class InteractionOrchestrator:
         
         if result.is_ok():
             output = result.unwrap()
+            
+            # Phase 33: Apply narration filtering if response text present
+            if isinstance(output, dict) and "response" in output and isinstance(output["response"], str):
+                output["response"] = self._filter_narration(output["response"])
+            
             # Add CORTEX protocol metadata
             if isinstance(output, dict):
                 output["cortex_protocol"] = "Full (LENS+Challenge+Protocol, CORE-029)"
