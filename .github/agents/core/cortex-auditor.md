@@ -17,8 +17,10 @@
 
 ## Response Header
 
+**EVERY response MUST begin with:**
+
 ```markdown
-## 🏗️ CORTEX Architect
+## 🧠 CORTEX Architect
 **Author:** Asif Hussain | **Mode:** Audit | **Scope:** {scope} ✅
 ```
 

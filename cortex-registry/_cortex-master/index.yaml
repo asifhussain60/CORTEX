@@ -169,6 +169,25 @@ active_enhancements:
     phases: 4
     estimated_days: 6
     tests_total: 36
+  
+  - id: "enh-048"
+    name: "Prompt Unbloating System"
+    file: "enhancements/active/enh-048-prompt-unbloating-system.yaml"
+    status: "planned"
+    priority: "P1"
+    version: "1.0"
+    created: "2026-02-06"
+    updated: "2026-02-06"
+    scope: ".github/prompts/ + cortex-registry/_cortex-master/governance/"
+    phases: 5
+    estimated_hours: 10
+    token_reduction: "73% (30k → 8k tokens)"
+    related_enhancements:
+      - "enh-046"
+    description: |
+      Reduce cortex-architect.prompt.md from 2,982 lines to ~800 lines by
+      extracting CORE rules, audit checklists, mode specs to machine-readable YAML.
+      Enables single source of truth + lazy loading via MCP tools.
 
 # Metadata
 statistics:
@@ -176,8 +195,8 @@ statistics:
   active_phases: 7
   completed_2026: 12
   completed_2025: 11
-  total_enhancements: 3
-  active_enhancements: 3
+  total_enhancements: 4
+  active_enhancements: 4
   last_phase_created: "2026-02-06"
   last_phase_completed: "2026-02-05"
   next_expected_completion: "2026-02-13"

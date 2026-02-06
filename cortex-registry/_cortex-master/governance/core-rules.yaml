@@ -1,0 +1,508 @@
+# CORTEX Core Rules Registry
+# Purpose: Machine-readable governance rules for CORTEX development
+# Authority: cortex-architect.prompt.md v14.2 + copilot-instructions.md v7.4
+# Created: 2026-02-06
+# Version: 1.0
+
+meta:
+  version: "1.0"
+  updated: "2026-02-06"
+  authority: "ENH-048 (Prompt Unbloating System)"
+  source_files:
+    - ".github/prompts/cortex-architect.prompt.md"
+    - ".github/copilot-instructions.md"
+  total_rules: 14
+
+core_rules:
+  - id: "CORE-002"
+    name: "No Markdown File Generation"
+    category: "governance"
+    priority: "P0"
+    description: |
+      NO markdown file generation in chat responses. Inline chat ONLY.
+      
+      FORBIDDEN:
+      - cat > *.md patterns
+      - create_file tool for *.md reports
+      - Terminal file generation
+      - Markdown completion/summary/report artifacts
+      
+      REQUIRED:
+      - All findings/results inline in chat
+      - Use markdown tables (chat content, not files)
+      - State via MCP tools or code files
+      - Auto-vacuum after every completion
+      
+      EXCEPTION: docs/, .github/, README.md (legitimate documentation)
+    enforcement: "BLOCKED"
+    violation_action: "Halt execution + regenerate response"
+    detection_patterns:
+      - "cat > .*\\.md"
+      - "create_file.*\\.md"
+      - "echo.*>.*\\.md"
+      - "\\*-summary\\.md"
+      - "\\*-report\\.md"
+      - "\\*-completion\\.md"
+    auto_fix: false
+    enforced_by:
+      - "EnforcementOrchestrator"
+      - "MarkdownSuppressionAgent"
+    related_enhancements:
+      - "ENH-036"  # Markdown sprawl prevention
+  
+  - id: "CORE-008"
+    name: "TDD Mandatory"
+    category: "development"
+    priority: "P0"
+    description: |
+      Tests MUST be written BEFORE code implementation.
+      RED→GREEN→REFACTOR cycle enforced.
+      
+      All IMPLEMENT intents MUST route through TDDOrchestrator.
+    enforcement: "PRE-EXECUTION"
+    violation_action: "Route through TDDOrchestrator"
+    detection_patterns:
+      - "New .py files without corresponding test_*.py"
+      - "Code changes without test changes"
+    auto_fix: false
+    enforced_by:
+      - "TDDOrchestrator"
+      - "GovernanceEnforcementAgent"
+    related_rules:
+      - "CORE-019"
+  
+  - id: "CORE-011"
+    name: "Type Hints Mandatory"
+    category: "code_quality"
+    priority: "P1"
+    description: |
+      All function signatures MUST include type hints for parameters and return values.
+      
+      Example:
+      def process_data(input: str, count: int) -> Dict[str, Any]:
+          ...
+    enforcement: "WARNING"
+    violation_action: "Warn + log"
+    detection_patterns:
+      - "def \\w+\\([^:)]*\\):"  # Function without type hints
+    auto_fix: false
+    enforced_by:
+      - "GovernanceEnforcementAgent"
+  
+  - id: "CORE-012"
+    name: "Google-Style Docstrings"
+    category: "documentation"
+    priority: "P1"
+    description: |
+      All functions, classes, and modules MUST have Google-style docstrings.
+      
+      Required sections:
+      - Summary (one-line)
+      - Args (if applicable)
+      - Returns (if applicable)
+      - Raises (if applicable)
+      
+      Example:
+      '''
+      Process user data and return results.
+      
+      Args:
+          user_id: The unique identifier for the user
+          options: Optional processing parameters
+      
+      Returns:
+          Dictionary containing processed results
+      
+      Raises:
+          ValueError: If user_id is invalid
+      '''
+    enforcement: "WARNING"
+    violation_action: "Warn + log"
+    detection_patterns:
+      - "def \\w+.*:\\s*$"  # Function without docstring
+      - "class \\w+.*:\\s*$"  # Class without docstring
+    auto_fix: false
+    enforced_by:
+      - "GovernanceEnforcementAgent"
+  
+  - id: "CORE-013"
+    name: "No Bare Except"
+    category: "error_handling"
+    priority: "P1"
+    description: |
+      NEVER use bare except clauses (except:).
+      Always specify exception types.
+      
+      FORBIDDEN:
+      try:
+          ...
+      except:  # ❌ Bare except
+          ...
+      
+      REQUIRED:
+      try:
+          ...
+      except (ValueError, TypeError) as e:  # ✅ Specific exceptions
+          ...
+    enforcement: "WARNING"
+    violation_action: "Warn + require fix"
+    detection_patterns:
+      - "except:\\s*$"
+      - "except:\\s*#"
+    auto_fix: false
+    enforced_by:
+      - "GovernanceEnforcementAgent"
+  
+  - id: "CORE-019"
+    name: "IMPLEMENT via TDDOrchestrator"
+    category: "workflow"
+    priority: "P0"
+    description: |
+      ALL IMPLEMENT intents MUST route through TDDOrchestrator.
+      NO direct file creation for implementation requests.
+      
+      Use MCP tool: cortex_process_request
+    enforcement: "MCP_GATE"
+    violation_action: "Block + redirect to MCP"
+    detection_patterns:
+      - "create_file when intent=IMPLEMENT"
+    auto_fix: true
+    auto_fix_action: "Redirect to cortex_process_request"
+    enforced_by:
+      - "IntentRouter"
+      - "MCP Gateway"
+    related_rules:
+      - "CORE-008"
+      - "MCP-FIRST"
+      - "MCP-GATE"
+  
+  - id: "CORE-026"
+    name: "Git Checkpoint Before Major Changes"
+    category: "version_control"
+    priority: "P1"
+    description: |
+      Create git commit checkpoint BEFORE major architectural changes.
+      
+      Major changes include:
+      - Refactoring > 500 LOC
+      - Breaking API changes
+      - Database schema changes
+      - Orchestrator rewiring
+    enforcement: "WARNING"
+    violation_action: "Warn + suggest checkpoint"
+    detection_patterns:
+      - "Large diff without recent commit"
+    auto_fix: false
+    enforced_by:
+      - "SecurityCheckpointAgent"
+  
+  - id: "CORE-027"
+    name: "Audit Trail Integrity"
+    category: "governance"
+    priority: "P1"
+    description: |
+      Maintain audit trail integrity with AC_START → AC_COMPLETE markers.
+      
+      Required for:
+      - Architectural changes
+      - Security modifications
+      - Governance updates
+    enforcement: "WARNING"
+    violation_action: "Warn + log"
+    detection_patterns:
+      - "AC_START without AC_COMPLETE"
+      - "AC_COMPLETE without AC_START"
+    auto_fix: false
+    enforced_by:
+      - "SecurityCheckpointAgent"
+  
+  - id: "CORE-028"
+    name: "Intelligent File Naming"
+    category: "conventions"
+    priority: "P1"
+    description: |
+      File naming conventions:
+      - kebab-case for most files (my-feature.py)
+      - NO SCREAMING_CASE (MY_FEATURE.py) ❌
+      - Plan files ≤40 chars
+      
+      EXCEPTIONS:
+      - Test files: test_*.py (snake_case)
+      - Constants modules: CONSTANTS.py (acceptable)
+      - Environment files: .ENV (acceptable)
+    enforcement: "BLOCKED"
+    violation_action: "Block + suggest rename"
+    detection_patterns:
+      - "[A-Z_]{5,}\\.py"  # SCREAMING_CASE Python files
+      - "phase-.{40,}\\.md"  # Long plan files
+    auto_fix: false
+    enforced_by:
+      - "FileNamingEnforcementAgent"
+  
+  - id: "CORE-029"
+    name: "Response Header Mandatory"
+    category: "formatting"
+    priority: "P0"
+    description: |
+      EVERY response MUST begin with standardized header:
+      
+      ## 🧠 CORTEX {mode}
+      **Author:** Asif Hussain | **Mode:** {mode} | **Scope:** {scope} ✅
+      
+      Modes: Architect, Audit, Design, Plan, Digest, Interactive, Meta-Audit
+    enforcement: "WARNING"
+    violation_action: "Warn (not blocking)"
+    detection_patterns:
+      - "Response without ## 🧠 CORTEX header"
+    auto_fix: false
+    enforced_by:
+      - "GovernanceEnforcementAgent"
+    related_files:
+      - ".github/prompts/response-format-standards.md"
+  
+  - id: "CORE-030"
+    name: "Implementation Truth"
+    category: "validation"
+    priority: "P0"
+    description: |
+      Verify code, not docs. Always validate against actual implementation.
+      
+      Priority:
+      1. Running code (highest truth)
+      2. Tests (behavioral truth)
+      3. Type signatures (contract truth)
+      4. Documentation (lowest truth)
+      
+      NEVER assume documentation is accurate without verification.
+    enforcement: "PRINCIPLE"
+    violation_action: "Code review reminder"
+    detection_patterns: []
+    auto_fix: false
+    enforced_by:
+      - "GovernanceEnforcementAgent"
+  
+  - id: "CORE-035"
+    name: "Single Canonical Implementation"
+    category: "architecture"
+    priority: "P0"
+    description: |
+      NO duplicate implementations. One canonical version only.
+      
+      FORBIDDEN:
+      - feature_v2.py alongside feature.py
+      - Duplicate orchestrators
+      - Redundant utilities
+      
+      Use: cortex_detect_duplicates tool to validate
+    enforcement: "BLOCKED"
+    violation_action: "Block + require consolidation"
+    detection_patterns:
+      - ".*_v\\d+\\.py"
+      - ".*_old\\.py"
+      - ".*_backup\\.py"
+      - "Duplicate function signatures"
+    auto_fix: false
+    enforced_by:
+      - "ArchitectureIntegrityAgent"
+    mcp_tools:
+      - "cortex_detect_duplicates"
+  
+  - id: "CORE-036"
+    name: "Industry Standards Compliance"
+    category: "standards"
+    priority: "P1"
+    description: |
+      Verify compliance against industry standards at runtime.
+      
+      Standards sources:
+      - 45+ knowledge YAML files
+      - company/domains/ standards
+      - OWASP Top 10
+      - 12-Factor App
+      - SOLID principles
+      - Clean Code principles
+    enforcement: "RUNTIME"
+    violation_action: "Warn + cite standard"
+    detection_patterns: []
+    auto_fix: false
+    enforced_by:
+      - "ComplianceValidationAgent"
+    related_enhancements:
+      - "Phase-27"  # Company Domain Integration
+  
+  - id: "CORE-041"
+    name: "Event-Driven Architecture"
+    category: "architecture"
+    priority: "P2"
+    description: |
+      Use event-driven, message-based communication patterns.
+      
+      Preferred:
+      - Event bus for orchestrator communication
+      - Pub/sub patterns
+      - Async message passing
+      
+      Avoid:
+      - Direct function calls across layers
+      - Tight coupling
+    enforcement: "PRINCIPLE"
+    violation_action: "Architecture review"
+    detection_patterns: []
+    auto_fix: false
+    enforced_by:
+      - "ArchitectureIntegrityAgent"
+  
+  - id: "CORE-047"
+    name: "Backtick References Only"
+    category: "documentation"
+    priority: "P1"
+    description: |
+      Instruction files MUST use backtick references, NOT markdown links.
+      
+      FORBIDDEN:
+      [text](path.md) ❌  # VS Code auto-loads, causes 51k+ token bloat
+      
+      REQUIRED:
+      `path.md` ✅  # Reference only, no auto-load
+      
+      Applies to: .github/prompts/, .github/agents/, instruction files
+    enforcement: "WARNING"
+    violation_action: "Warn + suggest fix"
+    detection_patterns:
+      - "\\[.*\\]\\(.*\\.md\\)"  # Markdown links to .md files
+    auto_fix: true
+    auto_fix_action: "Replace [text](path.md) with `path.md`"
+    enforced_by:
+      - "EnforcementOrchestrator"
+    related_enhancements:
+      - "ENH-048"  # Prompt Unbloating
+
+# Special Rules (Non-CORE)
+special_rules:
+  - id: "MCP-FIRST"
+    name: "MCP-First Architecture"
+    category: "architecture"
+    priority: "P0"
+    description: "ALL functionality MUST be exposed via MCP tools"
+    enforcement: "ARCHITECTURAL"
+  
+  - id: "MCP-GATE"
+    name: "MCP Gateway Enforcement"
+    category: "workflow"
+    priority: "P0"
+    description: "IMPLEMENT intents MUST use cortex_process_request tool (NO direct file creation)"
+    enforcement: "BLOCKED"
+  
+  - id: "ARCH-012"
+    name: "Standards Gate"
+    category: "standards"
+    priority: "P0"
+    description: "12-Factor + SOLID + Clean Code + OWASP compliance required"
+    enforcement: "RUNTIME"
+
+# Enforcement Matrix
+enforcement_levels:
+  BLOCKED:
+    description: "Prevents execution, requires fix"
+    severity: "CRITICAL"
+    rules: ["CORE-002", "CORE-008", "CORE-019", "CORE-028", "CORE-035", "MCP-GATE"]
+  
+  PRE-EXECUTION:
+    description: "Validates before execution, can redirect"
+    severity: "HIGH"
+    rules: ["CORE-008", "CORE-019"]
+  
+  WARNING:
+    description: "Logs warning, execution continues"
+    severity: "MEDIUM"
+    rules: ["CORE-011", "CORE-012", "CORE-013", "CORE-026", "CORE-027", "CORE-029", "CORE-047"]
+  
+  RUNTIME:
+    description: "Validates during execution"
+    severity: "MEDIUM"
+    rules: ["CORE-036", "ARCH-012"]
+  
+  PRINCIPLE:
+    description: "Guiding principle, not enforced by automation"
+    severity: "LOW"
+    rules: ["CORE-030", "CORE-041"]
+
+# Rule Categories
+categories:
+  governance:
+    rules: ["CORE-002", "CORE-027"]
+    description: "Process and audit trail rules"
+  
+  development:
+    rules: ["CORE-008", "CORE-019"]
+    description: "Development workflow rules"
+  
+  code_quality:
+    rules: ["CORE-011", "CORE-012", "CORE-013"]
+    description: "Code quality and standards"
+  
+  conventions:
+    rules: ["CORE-028", "CORE-047"]
+    description: "Naming and formatting conventions"
+  
+  architecture:
+    rules: ["CORE-035", "CORE-041", "MCP-FIRST", "ARCH-012"]
+    description: "Architectural principles"
+  
+  formatting:
+    rules: ["CORE-029"]
+    description: "Response formatting rules"
+  
+  validation:
+    rules: ["CORE-030"]
+    description: "Verification and validation rules"
+  
+  standards:
+    rules: ["CORE-036", "ARCH-012"]
+    description: "Industry standards compliance"
+  
+  version_control:
+    rules: ["CORE-026"]
+    description: "Git and version control rules"
+  
+  workflow:
+    rules: ["CORE-019", "MCP-GATE"]
+    description: "Process and workflow rules"
+
+# Usage Examples
+usage_examples:
+  load_all_rules:
+    description: "Load all CORE rules for validation"
+    code: |
+      from cortex.brain.core.yaml_loaders import CoreRulesLoader
+      
+      loader = CoreRulesLoader()
+      rules = loader.load_all_rules()
+      
+      for rule in rules:
+          print(f"{rule.id}: {rule.name} [{rule.enforcement}]")
+  
+  validate_code:
+    description: "Validate code against specific rules"
+    code: |
+      from cortex.brain.core.yaml_loaders import CoreRulesLoader
+      
+      loader = CoreRulesLoader()
+      violations = loader.validate_against_rules(
+          code=my_code,
+          rule_ids=["CORE-002", "CORE-008", "CORE-035"]
+      )
+      
+      if violations:
+          for v in violations:
+              print(f"Violation: {v.rule_id} - {v.message}")
+  
+  get_priority_rules:
+    description: "Get all P0 (critical) rules"
+    code: |
+      from cortex.brain.core.yaml_loaders import CoreRulesLoader
+      
+      loader = CoreRulesLoader()
+      p0_rules = loader.get_rules_by_priority("P0")
+      
+      print(f"Found {len(p0_rules)} P0 rules")

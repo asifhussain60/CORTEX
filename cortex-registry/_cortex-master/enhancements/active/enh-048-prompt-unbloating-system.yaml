@@ -1,0 +1,437 @@
+# ENH-048: Prompt Unbloating System
+# Purpose: Reduce prompt token consumption by 73% via machine-readable YAML references
+# Source: Token budget analysis - cortex-architect.prompt.md consuming ~30k tokens (2,982 lines)
+# Created: 2026-02-06
+# Priority: P1 (Critical Token Optimization)
+
+meta:
+  plan_id: "ENH-048"
+  title: "Prompt Unbloating System"
+  version: "1.0"
+  authority: "cortex-architect.prompt.md v14.2 + ENH-046 (Context Consumption Governance)"
+  status: "PLANNED"
+  phase: "Phase 1: Architecture + YAML Migration"
+  updated: "2026-02-06 (v1.0: Initial planning)"
+  related_enhancements:
+    - "ENH-046"  # Context Consumption Governance (complementary)
+  changelog:
+    - version: "1.0"
+      date: "2026-02-06"
+      changes: |
+        Initial planning phase
+        - Problem identified: cortex-architect.prompt.md = 2,982 lines (~30k tokens)
+        - Target: Reduce to ~800 lines (~8k tokens) = 73% reduction
+        - Strategy: Extract bloat to machine-readable YAML files
+        - Machine-readable registry: 48 YAML files in cortex-registry/_cortex-master/
+
+problem_statement:
+  current_state: |
+    Prompt files contain extensive inline content that should be machine-readable:
+    - CORE rules definitions (170+ lines)
+    - Audit checklists (300+ lines)
+    - Mode specifications (400+ lines)
+    - Tool catalogs (embedded)
+    - Examples and documentation (500+ lines)
+    
+    Total: cortex-architect.prompt.md = 2,982 lines (~30k tokens)
+  
+  impact:
+    - Token budget waste: ~30k tokens per prompt load
+    - Maintenance complexity: Changes require prompt file edits
+    - Duplication risk: Same rules in multiple places
+    - Version control: Hard to track rule changes
+    - Context exhaustion: Contributes to "Summarizing conversation history"
+  
+  target_state: |
+    Thin prompt files (routing layers) that reference machine-readable YAML:
+    - Core rules → cortex-registry/_cortex-master/governance/core-rules.yaml
+    - Audit checklists → cortex-registry/_cortex-master/governance/audit-checklist.yaml
+    - Mode specs → cortex-registry/_cortex-master/meta/modes.yaml
+    - Tool catalog → cortex/mcp/tools_catalog.yaml (already exists)
+    
+    Target: cortex-architect.prompt.md = ~800 lines (~8k tokens) = 73% reduction
+
+success_metrics:
+  token_reduction:
+    target: "73% reduction in prompt token consumption"
+    measurement: "Before: ~30k tokens → After: ~8k tokens"
+  
+  maintenance_efficiency:
+    target: "Single source of truth for rules/checklists"
+    measurement: "Rule changes only in YAML, not prompt files"
+  
+  load_time:
+    target: "Lazy loading via MCP tools"
+    measurement: "Load YAML on-demand, not eagerly in prompt"
+  
+  test_coverage:
+    target: "≥95% coverage for YAML loaders"
+    measurement: "Unit tests for each YAML loader utility"
+
+architecture:
+  components:
+    core_rules_yaml:
+      file: "cortex-registry/_cortex-master/governance/core-rules.yaml"
+      purpose: "CORE-001 through CORE-047 definitions"
+      schema: |
+        core_rules:
+          - id: "CORE-002"
+            name: "No Markdown File Generation"
+            description: "BLOCKED: No markdown file generation in chat responses"
+            enforcement: "BLOCKED"
+            violation_action: "Halt execution"
+            detection_pattern: "cat > *.md|create_file.*\\.md"
+            auto_fix: false
+          - id: "CORE-008"
+            name: "TDD Mandatory"
+            description: "Tests BEFORE code (RED→GREEN→REFACTOR)"
+            enforcement: "PRE-EXECUTION"
+            violation_action: "Route through TDDOrchestrator"
+            detection_pattern: "grep -L 'test_' <new_files>"
+            auto_fix: false
+    
+    audit_checklist_yaml:
+      file: "cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+      purpose: "P0/P1/P2/P3 audit checks with tool mapping"
+      schema: |
+        priority_checks:
+          P0:
+            name: "Security & Critical"
+            checks:
+              - id: "P0-001"
+                name: "Secrets scan"
+                tool: "grep_search"
+                pattern: "(password|api_key|token)\\s*=\\s*['\"]"
+                evidence_required: true
+                auto_fix: false
+              - id: "P0-002"
+                name: "Injection vectors"
+                tool: "cortex_lens_analyze"
+                evidence_required: true
+                auto_fix: false
+          P1:
+            name: "Infrastructure & Governance"
+            checks:
+              - id: "P1-001"
+                name: "Context governance (ENH-046)"
+                tool: "cortex_audit"
+                sql_query: "SELECT session_id, token_count FROM context_metrics"
+                evidence_required: true
+                auto_fix: false
+    
+    modes_yaml:
+      file: "cortex-registry/_cortex-master/meta/modes.yaml"
+      purpose: "HEXA-MODE specifications (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)"
+      schema: |
+        modes:
+          AUDIT:
+            trigger: "No request OR /audit command"
+            agent: "cortex-auditor"
+            flow:
+              - "PRE-FLIGHT: Environment validation"
+              - "P0: Security & Critical"
+              - "P1: Infrastructure & Governance"
+              - "P2: Quality"
+              - "P3: Cleanup"
+              - "Recommendations"
+            header: "## 🧠 CORTEX Architect\\n**Author:** Asif Hussain | **Mode:** Audit"
+          DESIGN:
+            trigger: "User request provided"
+            agent: "cortex-designer"
+            flow:
+              - "PRE-FLIGHT: Environment validation"
+              - "Challenge generation"
+              - "DoR display + approval"
+              - "Incremental TDD execution"
+              - "Completion report"
+    
+    response_format_yaml:
+      file: "cortex-registry/_cortex-master/meta/response-format.yaml"
+      purpose: "Response formatting standards (icons, structure, status indicators)"
+      schema: |
+        response_format:
+          header:
+            required: true
+            template: "## 🧠 CORTEX {mode}\\n**Author:** {author} | **Mode:** {mode} | **Scope:** {scope} ✅"
+          icons:
+            status:
+              completed: "✅"
+              planned: "⚪"
+              critical: "🔴"
+              warning: "🟡"
+              in_progress: "🔵"
+          structure:
+            required_sections:
+              - "Header"
+              - "Context/Analysis"
+              - "Action/Results"
+            forbidden:
+              - "Exit options during holistic implementation"
+              - "Next Steps when implementation complete"
+
+  loaders:
+    core_rules_loader:
+      file: "cortex/brain/core/yaml_loaders.py"
+      class: "CoreRulesLoader"
+      methods:
+        - "load_all_rules() -> List[CoreRule]"
+        - "get_rule(rule_id: str) -> CoreRule"
+        - "validate_against_rules(code: str) -> List[Violation]"
+    
+    audit_checklist_loader:
+      file: "cortex/brain/core/yaml_loaders.py"
+      class: "AuditChecklistLoader"
+      methods:
+        - "load_checklist() -> AuditChecklist"
+        - "get_priority_checks(priority: str) -> List[Check]"
+        - "execute_check(check_id: str) -> CheckResult"
+    
+    modes_loader:
+      file: "cortex/brain/core/yaml_loaders.py"
+      class: "ModesLoader"
+      methods:
+        - "load_modes() -> Dict[str, Mode]"
+        - "get_mode(mode_name: str) -> Mode"
+        - "detect_mode(context: RequestContext) -> str"
+
+phases:
+  phase_1:
+    name: "YAML Schema Design + Migration"
+    duration: "2 hours"
+    deliverables:
+      - file: "cortex-registry/_cortex-master/governance/core-rules.yaml"
+        description: "All 47 CORE rules in machine-readable format"
+        loc: 300
+      
+      - file: "cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+        description: "P0/P1/P2/P3 checks with tool mappings"
+        loc: 400
+      
+      - file: "cortex-registry/_cortex-master/meta/modes.yaml"
+        description: "HEXA-MODE specifications"
+        loc: 200
+      
+      - file: "cortex-registry/_cortex-master/meta/response-format.yaml"
+        description: "Response formatting standards"
+        loc: 150
+    
+    tests:
+      - file: "tests/unit/brain/test_yaml_loaders.py"
+        description: "Test YAML loading and validation"
+        test_count: 15
+    
+    success_criteria:
+      - "All YAML files validate against schema"
+      - "Loaders can parse all YAML files"
+      - "No data loss from prompt → YAML migration"
+  
+  phase_2:
+    name: "Loader Implementation + Testing"
+    duration: "3 hours"
+    deliverables:
+      - file: "cortex/brain/core/yaml_loaders.py"
+        description: "YAML loader utilities (CoreRulesLoader, AuditChecklistLoader, ModesLoader)"
+        loc: 400
+      
+      - file: "cortex/brain/core/models/governance_models.py"
+        description: "Pydantic models for YAML structures"
+        loc: 200
+    
+    tests:
+      - file: "tests/unit/brain/test_yaml_loaders.py"
+        description: "Loader unit tests"
+        test_count: 25
+      
+      - file: "tests/integration/test_yaml_governance.py"
+        description: "Integration tests for governance loading"
+        test_count: 10
+    
+    success_criteria:
+      - "All loaders pass unit tests"
+      - "Load time < 50ms per YAML file"
+      - "Lazy loading validated"
+  
+  phase_3:
+    name: "Prompt Unbloating + References"
+    duration: "2 hours"
+    deliverables:
+      - file: ".github/prompts/cortex-architect.prompt.md"
+        description: "Unbloated prompt (2,982 → ~800 lines)"
+        before_loc: 2982
+        after_loc: 800
+        reduction: "73%"
+      
+      - file: ".github/prompts/CORTEX.prompt.md"
+        description: "Unbloated master orchestrator prompt (411 → ~300 lines)"
+        before_loc: 411
+        after_loc: 300
+        reduction: "27%"
+    
+    changes:
+      - section: "CORE Rules"
+        before: "170+ lines inline"
+        after: "Single reference: Load cortex-registry/_cortex-master/governance/core-rules.yaml"
+      
+      - section: "Audit Checklists"
+        before: "300+ lines of P0/P1/P2/P3 checks"
+        after: "Single reference: Load cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+      
+      - section: "Mode Specifications"
+        before: "400+ lines of HEXA-MODE details"
+        after: "Single reference: Load cortex-registry/_cortex-master/meta/modes.yaml"
+    
+    success_criteria:
+      - "Prompt token count reduced by 73%"
+      - "All references resolve correctly"
+      - "No functionality loss"
+  
+  phase_4:
+    name: "MCP Tool Integration"
+    duration: "2 hours"
+    deliverables:
+      - file: "cortex/mcp/tools/governance_tools.py"
+        description: "MCP tools for loading governance YAML on-demand"
+        loc: 300
+    
+    mcp_tools:
+      - tool: "cortex_load_core_rules"
+        description: "Load CORE rules on-demand"
+        parameters:
+          - name: "rule_ids"
+            type: "List[str]"
+            optional: true
+        returns: "List[CoreRule]"
+      
+      - tool: "cortex_validate_against_rules"
+        description: "Validate code against CORE rules"
+        parameters:
+          - name: "code"
+            type: "str"
+          - name: "rule_ids"
+            type: "List[str]"
+            optional: true
+        returns: "List[Violation]"
+      
+      - tool: "cortex_load_audit_checklist"
+        description: "Load audit checklist on-demand"
+        parameters:
+          - name: "priority"
+            type: "str"
+            optional: true
+        returns: "AuditChecklist"
+    
+    tests:
+      - file: "tests/integration/test_governance_mcp_tools.py"
+        description: "MCP tool integration tests"
+        test_count: 15
+    
+    success_criteria:
+      - "All MCP tools functional"
+      - "Load time < 100ms per tool invocation"
+      - "Cache hit rate ≥80% (via ENH-046)"
+  
+  phase_5:
+    name: "E2E Validation + Documentation"
+    duration: "1 hour"
+    deliverables:
+      - file: "docs/architecture/prompt-unbloating.md"
+        description: "Architecture documentation for unbloating system"
+        loc: 200
+      
+      - file: "cortex-registry/_cortex-master/docs/directives/yaml-governance-usage.md"
+        description: "Usage guide for YAML governance files"
+        loc: 150
+    
+    validation:
+      - test: "Load cortex-architect.prompt.md and verify all references resolve"
+      - test: "Run full audit with YAML-based checklists"
+      - test: "Run DESIGN mode with YAML-based modes"
+      - test: "Validate CORE rules enforcement via YAML"
+    
+    success_criteria:
+      - "All existing functionality preserved"
+      - "Token reduction validated (30k → 8k)"
+      - "No test regressions"
+
+implementation_strategy:
+  approach: "TDD-first, incremental delivery"
+  order:
+    - "Phase 1: YAML schema design (tests first)"
+    - "Phase 2: Loader implementation (RED→GREEN→REFACTOR)"
+    - "Phase 3: Prompt unbloating (verify no data loss)"
+    - "Phase 4: MCP tools (integration tests)"
+    - "Phase 5: E2E validation (smoke tests)"
+  
+  rollback_plan: |
+    If unbloating causes issues:
+    1. Git revert to pre-unbloat state
+    2. Keep YAML files for future attempt
+    3. Document failure reasons in enhancement-history.yaml
+
+risks:
+  - risk: "Data loss during YAML migration"
+    mitigation: "Manual verification of all migrated content"
+    probability: "Low"
+  
+  - risk: "Performance regression (YAML loading overhead)"
+    mitigation: "Lazy loading + caching via ENH-046"
+    probability: "Low"
+  
+  - risk: "Breaking existing workflows"
+    mitigation: "Comprehensive E2E testing before deployment"
+    probability: "Medium"
+
+dependencies:
+  - enhancement: "ENH-046"
+    reason: "Cache layer for YAML loading"
+    status: "COMPLETE"
+  
+  - tool: "pyyaml"
+    reason: "YAML parsing"
+    status: "INSTALLED"
+  
+  - tool: "pydantic"
+    reason: "Data validation"
+    status: "INSTALLED"
+
+estimated_effort:
+  total_hours: 10
+  breakdown:
+    phase_1: 2
+    phase_2: 3
+    phase_3: 2
+    phase_4: 2
+    phase_5: 1
+
+roi_analysis:
+  benefits:
+    - "73% token reduction in prompt loading"
+    - "Single source of truth for governance rules"
+    - "Easier maintenance (edit YAML, not prompts)"
+    - "Version control for rule changes"
+    - "Reduced context exhaustion risk"
+  
+  costs:
+    - "10 hours implementation time"
+    - "Learning curve for YAML structure"
+    - "Slightly more complex debugging (prompt + YAML)"
+  
+  roi_score: 9.2
+  priority: "P1"
+  justification: |
+    High ROI due to:
+    - Immediate 73% token savings
+    - Long-term maintenance benefits
+    - Complements ENH-046 (context governance)
+    - Enables future prompt evolution without bloat
+
+next_steps:
+  immediate:
+    - "Create Phase 1 YAML schema files"
+    - "Write unit tests for YAML loaders"
+    - "Implement CoreRulesLoader (TDD)"
+  
+  after_completion:
+    - "Monitor token usage metrics"
+    - "Track YAML load times"
+    - "Gather feedback on maintainability"

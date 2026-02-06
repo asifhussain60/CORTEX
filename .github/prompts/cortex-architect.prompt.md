@@ -153,9 +153,11 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
+**EVERY response MUST begin with:**
+
 ```markdown
-## 🏗️ CORTEX Architect
-**Author:** Asif Hussain | **Mode:** {Audit|Design} | **Scope:** {scope} ✅
+## 🧠 CORTEX Architect
+**Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Interactive|Meta-Audit} | **Scope:** {scope} ✅
 ```
 
 ---
@@ -935,8 +937,8 @@ CORTEX/
 **Audit Procedure:**
 
 ```python
-# Step 1: Scan recent chat sessions (docs/archive/workspaces/*.md)
-chat_files = file_search("docs/archive/workspaces/*.md")
+# Step 1: Scan recent chat sessions (_workspaces/.chats/*.txt)
+chat_files = file_search("_workspaces/.chats/*.txt")
 
 for chat_file in chat_files:
     # Step 2: Count "Summarized conversation history" events
