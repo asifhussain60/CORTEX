@@ -131,6 +131,44 @@ active_phases:
       - "tests/unit/interaction/test_autonomous_plan_executor.py (18 tests)"
       - "tests/unit/orchestrators/response/test_ascii_progress_bar.py (21 tests)"
       - "tests/unit/orchestrators/core/test_master_orchestrator_phase35.py (10 tests)"
+  
+  - id: "phase-34"
+    name: "Advanced Response Optimization"
+    file: "phases/active/phase-34-advanced-response-optimization.yaml"
+    started: "2026-02-06"
+    status: "active"
+    priority: "P1"
+    execution_order: 6
+    description: |
+      Post-Phase-33 advanced optimization: semantic deduplication, quality
+      scoring framework, per-role verbosity profiles (Engineer/PM/Business/Architect).
+      Builds on Phase 33 policy infrastructure for 15-25% additional reduction.
+    roi_score: 0.6400
+    priority_tier: "HIGH"
+    authority: "PHASE-33-SESSION-SUMMARY.md + ROI analysis"
+    estimated_duration: "2-3 weeks"
+    estimated_tests: 70
+    depends_on:
+      - "phase-33"
+  
+  - id: "phase-36"
+    name: "ML-Based Summarization"
+    file: "phases/active/phase-36-ml-summarization.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P1"
+    execution_order: 8
+    description: |
+      ML-powered summarization with extractive (sentence selection) and
+      abstractive (BART/T5) techniques. Achieves 80-90% total reduction
+      from baseline with <100ms latency. Supports local models + cloud APIs.
+    roi_score: 0.6825
+    priority_tier: "HIGH"
+    authority: "PHASE-33-SESSION-SUMMARY.md + ROI analysis"
+    estimated_duration: "6-8 weeks"
+    estimated_tests: 116
+    depends_on:
+      - "phase-34"
 
 # Completed Phases (Historical)
 completed_phases_2026:
@@ -227,15 +265,15 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 28
-  active_phases: 7
+  total_phases: 30
+  active_phases: 9
   completed_2026: 13
   completed_2025: 11
   total_enhancements: 4
   active_enhancements: 4
   last_phase_created: "2026-02-06"
   last_phase_completed: "2026-02-06"
-  next_expected_completion: "2026-02-07"
+  next_expected_completion: "2026-02-20"
   last_updated: "2026-02-06"
   phases_completed_today:
     - "phase-26: Context Loading Optimization (P0, execution_order=2, unblocked phase-25)"
@@ -245,8 +283,12 @@ statistics:
     - "phase-26: Context Loading Optimization (P0, execution_order=2, unblocks phase-25)"
     - "phase-27: Company Domain Integration (P1, execution_order=4, informed_by phase-28)"
     - "phase-35: Autonomous Execution Enhancement (P0, execution_order=2, roi_score=0.7425)"
+    - "phase-34: Advanced Response Optimization (P1, execution_order=6, roi_score=0.6400)"
+    - "phase-36: ML-Based Summarization (P1, execution_order=8, roi_score=0.6825)"
   phase_updates_today:
     - "phase-25: Unblocked by phase-26, execution_order=3"
+    - "phase-34: Created with ROI-based prioritization"
+    - "phase-36: Created with ROI-based prioritization"
 
 # Dashboard Integration
 dashboard:

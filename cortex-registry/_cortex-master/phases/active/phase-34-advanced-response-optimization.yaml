@@ -1,0 +1,364 @@
+---
+# Phase 34: Advanced Response Optimization
+# Semantic deduplication, quality scoring, per-role verbosity profiles
+
+id: "phase-34"
+name: "Advanced Response Optimization"
+version: "1.0.0"
+status: "ACTIVE"
+created: "2026-02-06"
+updated: "2026-02-06"
+priority: "P1"
+execution_order: 6
+authority: "PHASE-33-SESSION-SUMMARY.md + ROI analysis"
+
+description: |
+  Enhances Phase 33's response verbosity reduction with advanced optimization:
+  - Semantic deduplication to eliminate redundant content
+  - Quality scoring framework for response evaluation
+  - Per-role verbosity profiles (Engineer, PM, Business, Architect)
+  
+  Builds on Phase 33's policy infrastructure to deliver personalized,
+  high-signal responses without manual configuration.
+
+problem_statement: |
+  Phase 33 achieved 61% verbosity reduction through policy enforcement,
+  but responses still contain:
+  1. Semantic duplication (same concept explained multiple ways)
+  2. No quality metrics (can't measure response effectiveness)
+  3. One-size-fits-all verbosity (Engineer vs PM needs differ)
+  
+  Advanced optimization requires semantic analysis + role-aware formatting.
+
+objective:
+  summary: |
+    Implement three subsystems:
+    1. SemanticDeduplicator: Remove redundant content (embedding-based)
+    2. ResponseQualityScorer: Multi-dimension scoring (0-1.0)
+    3. RoleVerbosityProfiles: Per-role formatting preferences
+
+  success_criteria:
+    - Semantic deduplication reduces responses by additional 15-25%
+    - Quality scores correlate with user satisfaction (>0.7 = good)
+    - Role profiles reduce customization requests by 50%
+    - Zero breaking changes to Phase 33 infrastructure
+    - Performance overhead <50ms per response
+
+roi_analysis:
+  architectural_impact: 0.65
+  efficiency_gain: 0.70
+  accuracy_improvement: 0.75
+  effort_cost: 0.45
+  blocking_severity: 0.10
+  roi_score: 0.6400
+  priority_tier: "HIGH"
+  calculation: |
+    ROI = (0.65 × 0.35) + (0.70 × 0.25) + (0.75 × 0.20) + (0.55 × 0.15) + (0.10 × 0.05)
+        = 0.2275 + 0.1750 + 0.1500 + 0.0825 + 0.0050
+        = 0.6400 (HIGH priority)
+
+scope:
+  in_scope:
+    - SemanticDeduplicator with sentence embeddings
+    - ResponseQualityScorer (5-dimension framework)
+    - RoleVerbosityProfiles (4 roles: Engineer, PM, Business, Architect)
+    - Integration with MasterOrchestrator.get_response_with_headers()
+    - Performance monitoring (latency, deduplication rate)
+    - A/B testing foundation (metrics collection)
+
+  out_of_scope:
+    - User preference persistence (Phase 35)
+    - ML model training infrastructure (Phase 36)
+    - Real-time A/B testing execution (Phase 35)
+    - Multi-language support (future)
+
+  dependencies:
+    - Phase 33: Response policy infrastructure (COMPLETE ✅)
+    - Phase 31A: Minimal plan spine (COMPLETE ✅)
+    - sentence-transformers library (install via pip)
+
+deliverables:
+  - name: "SemanticDeduplicator"
+    file: "cortex/orchestrators/response/semantic_deduplicator.py"
+    status: "PLANNED"
+    estimated_loc: 320
+    purpose: "Remove semantically redundant sentences using embeddings"
+    key_classes:
+      - "SemanticDeduplicator: Main deduplication logic"
+      - "EmbeddingCache: LRU cache for sentence embeddings"
+      - "DeduplicationMetrics: Track reduction rates"
+    key_methods:
+      - "deduplicate(text: str) -> str: Remove redundant sentences"
+      - "get_similarity_matrix(sentences) -> ndarray: Compute pairwise similarity"
+      - "select_representative_sentences() -> List[int]: Keep best examples"
+    dependencies:
+      - "sentence-transformers (all-MiniLM-L6-v2 model)"
+      - "numpy for similarity computation"
+      - "sklearn.metrics.pairwise for cosine similarity"
+    tests: 12
+
+  - name: "ResponseQualityScorer"
+    file: "cortex/orchestrators/response/response_quality_scorer.py"
+    status: "PLANNED"
+    estimated_loc: 280
+    purpose: "5-dimension quality scoring for response evaluation"
+    key_classes:
+      - "ResponseQualityScorer: Multi-dimension scoring engine"
+      - "QualityDimension: Enum (CLARITY, COMPLETENESS, CONCISENESS, ACCURACY, RELEVANCE)"
+      - "QualityScore: Dataclass with dimension breakdown"
+    key_methods:
+      - "score_response(response: str, context: str) -> QualityScore"
+      - "calculate_clarity_score() -> float: Readability metrics"
+      - "calculate_completeness_score() -> float: Requirement coverage"
+      - "calculate_conciseness_score() -> float: Signal-to-noise ratio"
+      - "calculate_accuracy_score() -> float: Code/fact verification"
+      - "calculate_relevance_score() -> float: Context alignment"
+    scoring_formula: |
+      Quality Score = (clarity × 0.25) + (completeness × 0.25) + 
+                      (conciseness × 0.20) + (accuracy × 0.20) + 
+                      (relevance × 0.10)
+    tests: 15
+
+  - name: "RoleVerbosityProfiles"
+    file: "cortex/orchestrators/response/role_verbosity_profiles.py"
+    status: "PLANNED"
+    estimated_loc: 240
+    purpose: "Per-role formatting preferences (Engineer, PM, Business, Architect)"
+    key_classes:
+      - "RoleVerbosityProfiles: Profile manager"
+      - "Role: Enum (ENGINEER, PM, BUSINESS, ARCHITECT)"
+      - "VerbosityProfile: Dataclass with formatting rules"
+    profiles:
+      ENGINEER:
+        detail_level: "HIGH"
+        code_examples: "REQUIRED"
+        business_language: "MINIMAL"
+        technical_depth: "MAXIMUM"
+        expected_reduction: "0-10%"
+      PM:
+        detail_level: "MEDIUM"
+        code_examples: "OPTIONAL"
+        business_language: "BALANCED"
+        technical_depth: "MODERATE"
+        expected_reduction: "20-30%"
+      BUSINESS:
+        detail_level: "LOW"
+        code_examples: "NONE"
+        business_language: "PRIMARY"
+        technical_depth: "MINIMAL"
+        expected_reduction: "40-50%"
+      ARCHITECT:
+        detail_level: "MEDIUM-HIGH"
+        code_examples: "SELECTIVE"
+        business_language: "CONTEXTUAL"
+        technical_depth: "HIGH"
+        expected_reduction: "10-20%"
+    tests: 10
+
+  - name: "Integration Tests"
+    file: "tests/integration/test_phase_34_advanced_response_optimization.py"
+    status: "PLANNED"
+    estimated_loc: 380
+    purpose: "End-to-end testing of Phase 34 components"
+    test_classes:
+      - "TestSemanticDeduplicationIntegration (8 tests)"
+      - "TestQualityScoringIntegration (7 tests)"
+      - "TestRoleProfilesIntegration (6 tests)"
+      - "TestPhase34EndToEnd (4 tests)"
+    total_tests: 25
+
+  - name: "MasterOrchestrator Integration"
+    file: "cortex/orchestrators/core/master_orchestrator.py"
+    status: "PLANNED"
+    estimated_loc: 85
+    purpose: "Wire Phase 34 components into response pipeline"
+    integration_points:
+      - "get_response_with_headers(): Add deduplication step"
+      - "get_response_with_headers(): Add quality scoring"
+      - "get_response_with_headers(): Apply role profiles"
+    backward_compatibility: "100% (all features optional with graceful fallback)"
+
+  - name: "Performance Monitoring"
+    file: "cortex/observability/response_optimization_metrics.py"
+    status: "PLANNED"
+    estimated_loc: 180
+    purpose: "Track optimization effectiveness and performance"
+    metrics:
+      - "response_deduplication_rate: Histogram (% reduction)"
+      - "response_quality_score: Gauge (0-1.0)"
+      - "semantic_deduplication_latency_ms: Histogram"
+      - "quality_scoring_latency_ms: Histogram"
+      - "role_profile_application_count: Counter per role"
+    tests: 8
+
+total_estimated_loc: 1485
+total_estimated_tests: 70
+estimated_duration: "2-3 weeks"
+estimated_effort_hours: 120
+
+phases:
+  phase_1:
+    name: "SemanticDeduplicator Implementation"
+    duration: "4 days"
+    deliverables:
+      - "semantic_deduplicator.py (320 LOC)"
+      - "test_semantic_deduplicator.py (12 tests)"
+    acceptance_criteria:
+      - "15-25% additional reduction on sample responses"
+      - "Similarity threshold configurable (default 0.85)"
+      - "Performance <30ms for typical response"
+      - "All 12 tests passing"
+
+  phase_2:
+    name: "ResponseQualityScorer Implementation"
+    duration: "5 days"
+    deliverables:
+      - "response_quality_scorer.py (280 LOC)"
+      - "test_response_quality_scorer.py (15 tests)"
+    acceptance_criteria:
+      - "5 dimensions scored (clarity, completeness, conciseness, accuracy, relevance)"
+      - "Scores correlate with manual evaluation (>0.7 agreement)"
+      - "Performance <20ms per scoring"
+      - "All 15 tests passing"
+
+  phase_3:
+    name: "RoleVerbosityProfiles Implementation"
+    duration: "3 days"
+    deliverables:
+      - "role_verbosity_profiles.py (240 LOC)"
+      - "test_role_verbosity_profiles.py (10 tests)"
+    acceptance_criteria:
+      - "4 role profiles implemented (ENGINEER, PM, BUSINESS, ARCHITECT)"
+      - "Expected reduction rates achieved per role"
+      - "Profile selection via context detection"
+      - "All 10 tests passing"
+
+  phase_4:
+    name: "Integration & Performance Monitoring"
+    duration: "3 days"
+    deliverables:
+      - "MasterOrchestrator integration (85 LOC)"
+      - "response_optimization_metrics.py (180 LOC)"
+      - "test_phase_34_advanced_response_optimization.py (25 tests)"
+    acceptance_criteria:
+      - "All components wired into MasterOrchestrator"
+      - "Performance overhead <50ms total"
+      - "Metrics collecting to Prometheus"
+      - "All 25 integration tests passing"
+      - "Zero breaking changes to Phase 33"
+
+acceptance_criteria:
+  - id: "AC-PHASE-34-001"
+    description: "Semantic deduplication reduces responses by 15-25%"
+    validation: "Measure on 50 sample responses from Phase 33 baseline"
+    
+  - id: "AC-PHASE-34-002"
+    description: "Quality scores range 0.0-1.0 with >0.7 = good"
+    validation: "Manual evaluation of 20 responses against scores"
+    
+  - id: "AC-PHASE-34-003"
+    description: "Role profiles apply correct verbosity per role"
+    validation: "Test responses for each role meet reduction targets"
+    
+  - id: "AC-PHASE-34-004"
+    description: "Performance overhead <50ms total"
+    validation: "Latency histogram p95 <50ms"
+    
+  - id: "AC-PHASE-34-005"
+    description: "Zero breaking changes to Phase 33"
+    validation: "All Phase 33 tests still pass (12/12)"
+    
+  - id: "AC-PHASE-34-006"
+    description: "Graceful fallback if dependencies unavailable"
+    validation: "Test without sentence-transformers installed"
+
+testing_strategy:
+  unit_tests: 37
+  integration_tests: 25
+  performance_tests: 8
+  total_tests: 70
+  coverage_target: "≥90%"
+  tdd_compliance: "100% (tests before code)"
+
+risks:
+  - risk: "sentence-transformers model download latency"
+    mitigation: "Pre-download model during setup, cache embeddings aggressively"
+    severity: "MEDIUM"
+    
+  - risk: "Deduplication removes important context"
+    mitigation: "Configurable similarity threshold, preserve first occurrence"
+    severity: "LOW"
+    
+  - risk: "Quality scoring subjective/inaccurate"
+    mitigation: "Calibrate with manual evaluations, iterate on formula"
+    severity: "MEDIUM"
+    
+  - risk: "Role detection incorrect"
+    mitigation: "Default to ENGINEER profile, allow manual override"
+    severity: "LOW"
+
+rollback_plan:
+  - "Disable deduplication via feature flag"
+  - "Skip quality scoring in MasterOrchestrator"
+  - "Default to Phase 33 behavior (all features optional)"
+  - "No schema changes = instant rollback"
+
+next_phases:
+  - phase: "phase-35"
+    name: "User Preference System"
+    description: "Persistent role preferences, feedback-driven optimization"
+    depends_on: "phase-34"
+    
+  - phase: "phase-36"
+    name: "ML-Based Summarization"
+    description: "Extractive/abstractive summarization for context compression"
+    depends_on: "phase-34"
+
+compliance:
+  core_rules:
+    - "CORE-008: TDD-first (tests before code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-029: Response header mandatory"
+    - "CORE-035: Single canonical implementation"
+  
+  governance:
+    - "EnforcementOrchestrator validation required"
+    - "Git checkpoint before integration"
+    - "Audit trail (AC_START → AC_COMPLETE)"
+
+monitoring:
+  prometheus_metrics:
+    - "cortex_response_deduplication_rate"
+    - "cortex_response_quality_score"
+    - "cortex_semantic_deduplication_latency_ms"
+    - "cortex_quality_scoring_latency_ms"
+    - "cortex_role_profile_usage_total"
+  
+  grafana_dashboard:
+    name: "Phase 34: Advanced Response Optimization"
+    panels:
+      - "Deduplication Rate Histogram"
+      - "Quality Score Distribution"
+      - "Latency P50/P95/P99"
+      - "Role Profile Usage Breakdown"
+
+documentation:
+  - file: "docs/implementation/phase-34-advanced-response-optimization.md"
+    purpose: "Implementation guide and architecture"
+  - file: "docs/guides/response-optimization-tuning.md"
+    purpose: "User guide for tuning deduplication and profiles"
+
+tags:
+  - "response-optimization"
+  - "semantic-deduplication"
+  - "quality-scoring"
+  - "role-profiles"
+  - "phase-34"
+
+related_phases:
+  - "phase-31: Chat Response Policy Foundation"
+  - "phase-31a: Minimal Plan Spine Enhancement"
+  - "phase-33: Response Verbosity Reduction (61% reduction)"
+  - "phase-35: User Preference System (future)"
+  - "phase-36: ML-Based Summarization (future)"
