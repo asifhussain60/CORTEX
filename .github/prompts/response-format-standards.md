@@ -198,6 +198,48 @@ During implementation:
 
 **Why:** Partial implementations create technical debt and inconsistent state
 
+---
+
+## 📊 ASCII Progress Bar Standards
+
+### **Visual Progress Format**
+
+For multi-step implementations, use visual ASCII progress bars:
+
+```markdown
+**Implementation Progress:**
+
+[██████████] 100% ✅ Task 1: Core implementation complete
+[████████░░]  80% 🔵 Task 2: Tests passing (8/10)
+[████░░░░░░]  40% 🔵 Task 3: Documentation in progress
+[░░░░░░░░░░]   0% ⚪ Task 4: Integration pending
+```
+
+### **Format Rules**
+
+| Element | Specification |
+|---------|---------------|
+| **Width** | 10 blocks fixed `[██████████]` |
+| **Filled** | `█` character for completed |
+| **Empty** | `░` character for remaining |
+| **Percentage** | Right-aligned, 3 chars (` 0%`, ` 40%`, `100%`) |
+| **Status Icon** | ✅🔵⚪🔴 before description |
+| **Description** | Clear task name + context |
+
+### **When to Use**
+
+✅ **Use progress bars for:**
+- Multi-step implementations (>3 steps)
+- Long-running operations
+- Phase/sprint tracking
+- TDD cycles (RED→GREEN→REFACTOR)
+
+❌ **Do NOT use for:**
+- Single-step operations
+- Analysis/audit results (use tables)
+- Conversational responses
+- Quick confirmations
+
 ### **Badge Types**
 
 | Badge | When to Use |

@@ -209,18 +209,27 @@ headings:
 # Status Indicators
 status_format:
   progress_bar:
-    format: "[✓] Phase 2 | [→] Phase 3 | [ ] Phase 4"
-    max_items: 3
-    glyphs:
-      completed: "[✓]"
-      active: "[→]"
-      queued: "[ ]"
-      blocked: "[!]"
-      revisiting: "[~]"
+    format: "[████████░░] 80% Task description"
+    width: 10
+    characters:
+      filled: "█"
+      empty: "░"
+    percentage:
+      required: true
+      format: "right-aligned, 3 chars"
+      examples:
+        - "  0%"
+        - " 40%"
+        - "100%"
+    status_icons:
+      completed: "✅"
+      in_progress: "🔵"
+      not_started: "⚪"
+      blocked: "🔴"
     forbidden:
-      - "████ blocks"
-      - "Percentage numbers"
-      - "Emoji indicators"
+      - "Glyph format ([✓][→][ ])"
+      - "Inconsistent block widths"
+      - "Missing percentages"
   
   completion:
     use_when: "Work is finished"

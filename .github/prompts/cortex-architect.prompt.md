@@ -260,29 +260,36 @@ rules = load_core_rules()  # Returns CoreRulesYAML model
 - ❌ **META-AUDIT** — Prompt self-analysis (no progress bars)
 - ❌ Single file reads, quick greps, simple validation
 
-### Subtle Plan Spine Format (MANDATORY)
+### ASCII Progress Bar Format (MANDATORY)
 
-**Use the subtle rolling window format, NOT screaming block bars:**
+**Use visual ASCII progress bars with fill indicators:**
 
 ```
-[✓] Phase 2 KSESSIONS | [→] Phase 3 MCP | [ ] Phase 4 Arch
+[████████░░] 80% Phase 2: KSESSIONS Implementation
+[████░░░░░░] 40% Phase 3: MCP Gateway Setup
+[░░░░░░░░░░]  0% Phase 4: Architecture Refactor
 ```
 
-**Glyphs (strict set):**
-| Glyph | Meaning | Usage |
-|-------|---------|-------|
-| `[✓]` | Completed | Immediate predecessor phase |
-| `[→]` | Active | Current phase being worked on |
-| `[ ]` | Queued | Next phase (1 only) |
-| `[!]` | Blocked | Phase blocked by dependency |
-| `[~]` | Revisiting | Re-opened for updates |
+**Format Specification:**
+| Element | Character | Usage |
+|---------|-----------|-------|
+| Filled | `█` | Completed portion |
+| Empty | `░` | Remaining portion |
+| Total | 10 chars | Fixed width (10 blocks) |
+| Percentage | `0-100%` | Right-aligned, 3 chars |
+| Description | Text | Task/phase name |
+
+**Progress Indicators:**
+- ✅ `[██████████] 100%` — Completed
+- 🔵 `[████████░░]  80%` — In progress
+- ⚪ `[░░░░░░░░░░]   0%` — Not started
+- 🔴 `[████░░░░░░]  40%` — Blocked (note in description)
 
 **Constraints:**
-- **Max 3 phases shown** (rolling window: previous + current + next)
-- **No full history** (never show all completed phases)
-- **Single line preferred** — use `|` separator for inline display
-- **No emoji** (🟢🔴🟡 forbidden)
-- **No screaming blocks** (█▓░ forbidden)
+- **Fixed 10-block width** — consistent visual alignment
+- **Show all relevant tasks** — not just rolling window
+- **Percentage required** — clear numeric progress
+- **Use emoji status** — visual task state (✅🔵⚪🔴)
 
 ### Progress Display Examples
 
