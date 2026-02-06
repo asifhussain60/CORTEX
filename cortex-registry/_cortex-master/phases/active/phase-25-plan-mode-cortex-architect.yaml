@@ -833,6 +833,64 @@ git_history_insights:
 
 ---
 # ============================================================================
+# TOKEN OPTIMIZATION TRACKING (CRITICAL ISSUE)
+# ============================================================================
+
+token_optimization_issue:
+  issue_id: "PHASE-25-TOKEN-001"
+  severity: "CRITICAL"
+  discovered: "2026-02-06"
+  source: "chat01.txt analysis"
+  
+  problem_statement: |
+    Chat sessions going into "Summarized conversation history" 17 times in a
+    single session (chat01.txt). This is against CORTEX promise of efficient
+    operation. Evidence:
+    
+    - chat01.txt: 233 lines, 17 summarization events
+    - Frequency: ~13.7 lines per summarization (should be 1000+)
+    - Root cause: 13 large references (6 agent files @ ~1900 lines each)
+    - Token waste: Uncompressed agent references loaded repeatedly
+    - Impact: GitHub Copilot token exhaustion, poor UX
+  
+  evidence:
+    - command: "grep -c 'Summarized conversation history' chat01.txt"
+    - result: "17"
+    - baseline_expected: "≤1 per 1000 lines"
+    - actual_observed: "1 per 13.7 lines (73x worse than expected)"
+    - reference_count: "13 references (Used 13 references in context)"
+    - agent_file_sizes: "~1900 lines each (cortex-architect, cortex-auditor, etc.)"
+  
+  dependency:
+    enhancement: "ENH-046"
+    name: "Context Consumption Governance (Token Optimizer Integration)"
+    status: "Phase 1 COMPLETE ✅ | Phase 2+ REDESIGNED"
+    file: "enhancements/active/enh-046-context-consumption-governance.yaml"
+    integration_point: "MasterOrchestrator EXIT GATE"
+    
+  success_criteria:
+    - "Summarization frequency: ≤1 per 1000 lines (baseline: 1 per 13.7)"
+    - "Reference synthesis: 13 references → 1 synthesized summary"
+    - "Agent file compression: 1900 lines → 3-line summary (99.8% reduction)"
+    - "Context size per turn: ≤20KB (baseline: 65KB+ estimated)"
+    - "Token budget compliance: ≤20K tokens/turn"
+    
+  verification_gate:
+    type: "POST-COMPLETION MANDATORY CHECK"
+    conditions:
+      - "Phase 25 CANNOT be marked COMPLETE until ENH-046 Phase 2+ is deployed"
+      - "Must demonstrate ≤2 summarizations in equivalent 233-line session"
+      - "Must show reference synthesis metrics in dashboard"
+      - "Must pass token optimization AUDIT (P1 Infrastructure check)"
+    
+  tracking:
+    - "Phase 25 completion BLOCKED until token optimization deployed"
+    - "ENH-046 Phase 2+ must complete BEFORE Phase 25 closure"
+    - "Dashboard must show token metrics (synthesized refs, compression ratio)"
+    - "AUDIT mode P1 check for context governance required"
+
+---
+# ============================================================================
 # COMPLETION CHECKLIST
 # ============================================================================
 
@@ -850,10 +908,18 @@ completion_checklist:
     - "[ ] Stage 4: Integration complete"
     - "[ ] Stage 5: Cleanup complete"
   
+  token_optimization_gate:
+    - "[ ] ENH-046 Phase 2+ deployed (EXIT GATE integration)"
+    - "[ ] Token metrics in dashboard (synthesis ratio, compression %)"
+    - "[ ] Summarization test: ≤2 events in 233-line equivalent session"
+    - "[ ] AUDIT P1 Infrastructure check passing"
+    - "[ ] Reference synthesis working: 13 refs → 1 summary"
+  
   post_implementation:
     - "[ ] All tests passing"
     - "[ ] Prompt lines reduced"
     - "[ ] Agents aligned"
     - "[ ] VacuumOrchestrator final pass"
     - "[ ] Dashboard synced (post)"
+    - "[ ] Token optimization gate PASSED ✅"
     - "[ ] Phase moved to completed/"

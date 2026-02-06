@@ -34,6 +34,11 @@ active_phases:
       Add PLAN MODE to cortex-architect.prompt.md for design+implementation
       with mandatory plan registry integration, setup/teardown hooks,
       VacuumOrchestrator cleanup, and dashboard sync on every phase.
+    blocked_by:
+      issue_id: "PHASE-25-TOKEN-001"
+      enhancement: "ENH-046"
+      reason: "Token optimization (EXIT GATE) must deploy before Phase 25 completion"
+      evidence: "17 summarization events in 233-line chat session (73x worse than expected)"
 
 # Completed Phases (Historical)
 completed_phases_2026:
@@ -88,6 +93,12 @@ active_enhancements:
     updated: "2026-02-06"
     scope: "ALL orchestrators via MasterOrchestrator EXIT GATE"
     tests_total: 162
+    blocks:
+      - "phase-25"
+    critical_issue:
+      issue_id: "PHASE-25-TOKEN-001"
+      evidence: "17 summarization events in 233-line chat (73x over budget)"
+      target: "≤1 summarization per 1000 lines"
 
 # Metadata
 statistics:
