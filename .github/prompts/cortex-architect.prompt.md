@@ -540,6 +540,142 @@ Variance > 20%: Silent sync (automatic background update)
 - **Output:** cortex-registry/_cortex-master/dashboard/data/plan-summary.json
 - **Config:** index.yaml dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
 
+## Intelligent Phase Resolution (CORTEX Decides)
+
+**User NEVER specifies operation** — CORTEX automatically determines CREATE/UPDATE/DEPRECATE based on:
+
+1. **Semantic Analysis:** Extract keywords from user request
+2. **Phase Matching:** Load active_phases from index.yaml, calculate match scores
+3. **Decision Algorithm:**
+   - Match score ≥ 0.8 → **UPDATE** existing phase
+   - Match score 0.6-0.8 → **UPDATE with expansion**
+   - Match score < 0.6 + significant → **CREATE** new phase
+   - Match score < 0.6 + minor → **DESIGN mode** (skip phase tracking)
+   - Deletion intent detected → **DEPRECATE** phase
+
+**Match Score Calculation:**
+```
+FOR each active_phase:
+  keyword_overlap = intersection(phase_keywords, request_keywords)
+  component_match = same_cortex_component(phase, request)
+  scope_match = similar_scope(phase, request)
+  
+  score = (keyword_overlap * 0.4) + (component_match * 0.3) + (scope_match * 0.3)
+  
+  IF score >= 0.6:
+    RETURN PHASE_UPDATE(phase)
+
+RETURN PHASE_CREATE  # No match found
+```
+
+**User Notification Format:**
+```markdown
+### 🎯 Plan Resolution
+**Request:** {user_request_summary}
+**CORTEX Decision:** {CREATE | UPDATE | DEPRECATE}
+**Rationale:** Match score {score}% with Phase {N} ({name})
+**Proceed?** (yes/no/modify)
+```
+
+## Phase Operations
+
+### CREATE (New Phase)
+**Threshold:** Multi-file changes (3+), new orchestrator, new MCP tool, architecture change
+
+**Actions:**
+1. Calculate ROI score for new phase
+2. Generate phase-{N}-{kebab-name}.yaml from template (include ROI)
+3. Add to _cortex-master/phases/active/
+4. Update index.yaml (active_phases with ROI score)
+5. Regenerate dashboard (plan-summary.json with priority visualization)
+6. Git commit: `feat(phase-{N}): Initialize {name} phase (ROI: {score})`
+
+**Plan Spine:**
+```
+[→] Create Phase {N} | [ ] Update Registry | [ ] Sync Dashboard
+```
+
+### UPDATE (Existing Phase)
+**Threshold:** Work aligns with active/planned phase, incremental progress
+
+**Actions:**
+1. Load existing phase YAML
+2. Update deliverables/tasks/status
+3. Update progress percentage
+4. Regenerate dashboard data
+5. Git commit: `feat(phase-{N}): Update {description}`
+
+### DEPRECATE (Remove Feature)
+**Threshold:** Feature removed or superseded
+
+**Actions:**
+1. Move from active/ to deprecated/ (new folder)
+2. Add deprecation metadata (reason, superseded_by)
+3. Update index.yaml (remove from active)
+4. Regenerate dashboard
+5. Git commit: `chore(phase-{N}): Deprecate - {reason}`
+
+### COMPLETE (Phase Closure)
+**Requirements:** All deliverables verified, tests passing, dashboard synced, cleanup done
+
+**Actions:**
+1. Verify sync across 3 sources (registry, implementation, dashboard)
+2. Move from active/ to completed/2026/
+3. Update index.yaml statistics
+4. Regenerate dashboard with completion stats
+5. Git commit: `feat(phase-{N}): ✅ COMPLETE - {summary}`
+
+## Mandatory Hooks
+
+### Setup Hook (Pre-Implementation)
+**Run before ANY phase implementation:**
+1. Load phase specification
+2. Verify no conflicting active phases
+3. Run VacuumOrchestrator.cleanup_stale_artifacts()
+4. Create git checkpoint (CORE-026)
+5. Initialize AC_START audit trail (CORE-027)
+
+**MCP Tool:** `cortex_plan_setup`
+
+### Teardown Hook (Post-Implementation)
+**Run after EVERY phase completion:**
+1. Verify all deliverables
+2. Run VacuumOrchestrator.cleanup_phase_artifacts()
+3. Archive temporary files
+4. Delete stale markdown (CORE-002 enforcement)
+5. Update dashboard data
+6. Regenerate dashboard HTML
+7. Log AC_COMPLETE audit trail
+8. Commit all changes
+
+**MCP Tool:** `cortex_plan_teardown`
+
+## Completion Gate (3-Source Sync Verification)
+
+**Phase CANNOT complete until ALL 3 sources are in sync:**
+
+| Source | Checks |
+|--------|--------|
+| **Registry** (index.yaml) | Phase exists, status correct, deliverables done, statistics accurate |
+| **Implementation** (code) | All files exist, tests passing, no orphans, MCP registered, wiring updated |
+| **Dashboard** (HTML/JSON) | JSON matches index, HTML renders, counts match, links resolve |
+
+**Verification Report:**
+```markdown
+### 🔄 Sync Verification
+| Source | Status | Details |
+|--------|--------|---------|
+| Registry | {✅/❌} | {pass}/{total} checks |
+| Implementation | {✅/❌} | {pass}/{total} checks |
+| Dashboard | {✅/❌} | {pass}/{total} checks |
+
+**Overall:** {ALL SYNCED ✅ | OUT OF SYNC ❌}
+
+{IF failures: show table with issues + fixes}
+```
+
+**BLOCKED:** If NOT all_synced, halt completion and display fix instructions.
+
 ---
 
 # 🔧 MODE 0: PRE-FLIGHT (Always First)

@@ -186,6 +186,7 @@ class IntentType(Enum):
     VALIDATE = "validate"
     MIGRATE = "migrate"
     ONBOARD = "onboard"  # AC-ONBOARD-001: Repository onboarding intent
+    PLAN = "plan"  # PHASE-25: CORTEX development planning and phase management
     UNKNOWN = "unknown"
 
 

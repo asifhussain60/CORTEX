@@ -276,6 +276,14 @@ class IntentRouter(IOrchestrator):
         "discover", "inventory"
     ]
     
+    # PHASE-25: PLAN mode keywords (CORTEX development planning)
+    PLAN_KEYWORDS: List[str] = [
+        "plan", "phase", "enhance cortex", "add to cortex", "modify cortex",
+        "implement orchestrator", "create orchestrator", "add mcp tool",
+        "update wiring", "cortex change", "cortex enhancement", "add mode",
+        "deprecate", "remove orchestrator", "delete feature"
+    ]
+    
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -305,6 +313,7 @@ class IntentRouter(IOrchestrator):
             IntentType.DOCUMENT: self.DOCUMENT_KEYWORDS,
             IntentType.ANALYZE: self.ANALYZE_KEYWORDS,  # AC-LENS-LLM-005
             IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
+            IntentType.PLAN: self.PLAN_KEYWORDS,  # PHASE-25: CORTEX planning
         }
         
         # AC-FUTURE-001: Try loading routing rules from YAML

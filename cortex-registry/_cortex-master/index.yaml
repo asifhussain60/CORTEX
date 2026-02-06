@@ -60,13 +60,25 @@ active_phases:
     name: "PLAN MODE Enhancement for cortex-architect"
     file: "phases/active/phase-25-plan-mode-cortex-architect.yaml"
     started: "2026-02-06"
-    status: "ready"
+    status: "in-progress"
     priority: "P0"
     execution_order: 3
+    progress: "35%"
     description: |
       Add PLAN MODE to cortex-architect.prompt.md for design+implementation
       with mandatory plan registry integration, setup/teardown hooks,
       VacuumOrchestrator cleanup, and dashboard sync on every phase.
+      
+      Progress:
+      - ✅ PLAN IntentType added to canonical_enums.py
+      - ✅ PLAN keywords added to IntentRouter
+      - ✅ Intelligent phase resolution added to cortex-architect.prompt.md
+      - ✅ Phase operations (CREATE/UPDATE/DEPRECATE/COMPLETE) documented
+      - ✅ Setup/Teardown hooks specified
+      - ✅ 3-source completion gate added
+      - 🔵 MCP tools implementation pending
+      - ⚪ Tests implementation pending
+      - ⚪ Dashboard sync implementation pending
     unblocked_by: "phase-26"
   
   - id: "phase-29"
