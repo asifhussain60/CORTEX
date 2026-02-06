@@ -251,6 +251,51 @@ class BusinessLanguageOrchestrator:
         """Initialize Business Language Orchestrator."""
         self.logger = logging.getLogger(__name__)
     
+    def format_narrative_compact(self, narrative: BusinessNarrative) -> str:
+        """
+        Phase 33: Format business narrative in COMPACT mode.
+        
+        AC-PHASE-33-006: BusinessLanguageOrchestrator COMPACT formatting
+        
+        Reduces narrative verbosity by:
+        - Using 1-2 lines per use case (not detailed)
+        - Summarizing tech stack in one line
+        - Keeping description under 150 chars
+        - Omitting evidence maps
+        
+        Args:
+            narrative: BusinessNarrative to format
+            
+        Returns:
+            Compact string representation (typically <300 chars)
+        """
+        sections = []
+        
+        # Title and tagline
+        sections.append(f"## {narrative.title} — {narrative.tagline}")
+        
+        # Brief description (max 100 chars)
+        desc = narrative.description[:100] + ("..." if len(narrative.description) > 100 else "")
+        sections.append(f"📝 {desc}")
+        
+        # Quick use cases (max 3)
+        if narrative.use_cases:
+            uc_summaries = []
+            for uc in narrative.use_cases[:3]:
+                uc_summaries.append(f"{uc.icon} {uc.title}")
+            sections.append(f"🎯 Use Cases: {', '.join(uc_summaries)}")
+        
+        # Tech stack (single line)
+        if narrative.tech_stack:
+            tech_names = [t.get('name', t.get('language', 'unknown')) 
+                         for t in narrative.tech_stack[:5]]
+            sections.append(f"🔧 Stack: {', '.join(tech_names)}")
+        
+        # Confidence summary
+        sections.append(f"📊 Confidence: {narrative.confidence.level.upper()} ({narrative.confidence.score}%)")
+        
+        return "\n".join(sections)
+    
     def generate_narrative(
         self,
         repo_path: Path,
