@@ -1,0 +1,859 @@
+# PHASE-25: PLAN MODE ENHANCEMENT FOR CORTEX-ARCHITECT
+# Version: 1.0 | Created: 2026-02-06 | Authority: cortex-architect.prompt.md v14.0
+# Scope: New PLAN MODE for design+implementation with mandatory plan registry integration
+# Status: PLANNED - Comprehensive system for plan-driven development
+
+---
+metadata:
+  phase: "25"
+  title: "PLAN MODE Enhancement for cortex-architect"
+  version: "1.0"
+  status: "PLANNED"
+  author: "Asif Hussain"
+  created: "2026-02-06"
+  priority: "P0"
+  estimated_effort: "1 week"
+  governance:
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-002: NO markdown file generation (inline only)"
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: Single canonical implementation"
+    - "MCP-FIRST: All functionality via MCP tools"
+  architectural_decision:
+    chosen: "PLAN MODE as mandatory gate for CORTEX changes"
+    rationale: |
+      - All CORTEX modifications must update master plan FIRST
+      - Prevents orphaned features without phase tracking
+      - Enforces cleanup via VacuumOrchestrator on every phase
+      - Dashboard always reflects current state
+      - Single source of truth for development progress
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Transform cortex-architect from 4-mode (PRE-FLIGHT + AUDIT + DESIGN + DIGEST)
+    to 5-mode operation with PLAN MODE as the primary gate for CORTEX changes:
+    
+    **Current Modes (v13.1):**
+    - PRE-FLIGHT: Environment validation
+    - AUDIT: Codebase health scan
+    - DESIGN: Implementation with challenge
+    - DIGEST: Chat session learning extraction
+    - META-AUDIT: Prompt self-enhancement
+    
+    **New Mode (v14.0):**
+    - PLAN: Design + Implementation with mandatory plan registry integration
+      - Detects CORTEX change intent
+      - Creates/updates/deprecates phases in _cortex-master
+      - Mandatory setup/teardown with VacuumOrchestrator
+      - Dashboard sync before and after implementation
+      - Phase completion only after dashboard verified
+  
+  key_outcomes:
+    - "✅ PLAN MODE: Mandatory gate for all CORTEX changes"
+    - "✅ Phase Registry: Automatic phase creation/update/deprecation"
+    - "✅ Dashboard Sync: HTML + JSON updated on every phase change"
+    - "✅ Setup/Teardown: VacuumOrchestrator cleanup on every phase"
+    - "✅ Token Optimization: Full CORTEX capability integration"
+    - "✅ Planning Orchestrator: Integrated for task decomposition"
+    - "✅ Post-Implementation Refactor: Mandatory cleanup step"
+    - "✅ Prompt Efficiency: Refactored modes for reduced duplication"
+
+---
+# ============================================================================
+# PLAN MODE SPECIFICATION
+# ============================================================================
+
+plan_mode:
+  # ============================================================================
+  # SINGLE COMMAND: /plan
+  # ============================================================================
+  # CORTEX intelligently determines operation (create/update/deprecate/complete)
+  # User does NOT specify operation - CORTEX decides based on:
+  # 1. Request semantics
+  # 2. Existing phase alignment
+  # 3. Current plan organization strategy
+  
+  trigger_patterns:
+    # Primary trigger - single command, CORTEX decides operation
+    explicit:
+      - "/plan {description}"
+      - "/plan"  # Opens plan wizard
+    
+    implicit_cortex_change:
+      - "add {feature} to CORTEX"
+      - "implement {orchestrator}"
+      - "enhance cortex-architect"
+      - "modify {cortex component}"
+      - "refactor {cortex module}"
+      - "add mode to CORTEX"
+      - "create orchestrator"
+      - "add MCP tool"
+      - "update wiring"
+      - "delete {cortex feature}"
+      - "remove {orchestrator}"
+      - "deprecate {component}"
+    
+    excluded_patterns:
+      # Don't trigger PLAN mode for these
+      - "audit"
+      - "analyze"
+      - "check"
+      - "review"
+      - "digest"
+      - "fix bug"  # Use DESIGN for bugs
+      - "external project"  # Non-CORTEX work
+  
+  # ============================================================================
+  # INTELLIGENT PHASE RESOLUTION (CORTEX DECIDES)
+  # ============================================================================
+  intelligent_resolution:
+    description: |
+      CORTEX automatically determines whether to CREATE new phase or UPDATE existing phase.
+      User does NOT need to specify - CORTEX uses semantic analysis + plan organization.
+    
+    decision_algorithm:
+      step_1_load_context:
+        - "Load cortex-registry/_cortex-master/index.yaml"
+        - "Parse all active_phases with their deliverables"
+        - "Load current plan organization strategy"
+      
+      step_2_semantic_analysis:
+        - "Extract keywords from user request"
+        - "Identify affected CORTEX components"
+        - "Classify change type: ADD | MODIFY | REMOVE | REFACTOR"
+      
+      step_3_phase_matching:
+        algorithm: |
+          FOR each active_phase IN index.yaml:
+            match_score = 0
+            
+            # Keyword matching (weight: 40%)
+            keywords_in_phase = extract_keywords(phase.name + phase.deliverables)
+            keywords_in_request = extract_keywords(user_request)
+            keyword_overlap = intersection(keywords_in_phase, keywords_in_request)
+            match_score += len(keyword_overlap) * 0.4
+            
+            # Component alignment (weight: 30%)
+            IF request_affects_same_component(phase, request):
+              match_score += 0.3
+            
+            # Scope compatibility (weight: 30%)
+            IF phase.status == "IN_PROGRESS" AND similar_scope(phase, request):
+              match_score += 0.3
+            
+            IF match_score >= 0.6:
+              RETURN PHASE_UPDATE(phase)
+          
+          # No match found - create new phase
+          RETURN PHASE_CREATE
+      
+      step_4_operation_decision:
+        rules:
+          - condition: "match_score >= 0.8"
+            operation: "PHASE_UPDATE"
+            rationale: "Strong alignment with existing phase"
+          
+          - condition: "match_score >= 0.6 AND match_score < 0.8"
+            operation: "PHASE_UPDATE_WITH_EXPANSION"
+            rationale: "Partial alignment - expand existing phase"
+          
+          - condition: "match_score < 0.6 AND is_significant_change"
+            operation: "PHASE_CREATE"
+            rationale: "New significant work needs dedicated phase"
+          
+          - condition: "match_score < 0.6 AND is_minor_change"
+            operation: "DESIGN_MODE"
+            rationale: "Minor change doesn't need phase tracking"
+          
+          - condition: "request_contains_deletion_intent"
+            operation: "PHASE_DEPRECATE"
+            rationale: "Deprecate phase if feature being removed"
+    
+    user_notification:
+      format: |
+        ### 🎯 Plan Resolution
+        
+        **Request:** {user_request_summary}
+        
+        **CORTEX Decision:** {CREATE | UPDATE | DEPRECATE}
+        
+        **Rationale:**
+        - Match Score: {score}% with Phase {N}
+        - Operation: {operation_description}
+        - Affected Phase: {phase_name or "NEW"}
+        
+        **Proceed?** (yes/no/modify)
+
+  phase_operations:
+    create:
+      description: "Create new phase for significant CORTEX enhancement"
+      threshold:
+        - "Multi-file changes (3+)"
+        - "New orchestrator"
+        - "New MCP tool"
+        - "New mode/capability"
+        - "Architecture change"
+      action: |
+        1. Generate phase-{N}-{kebab-name}.yaml from template
+        2. Add to _cortex-master/phases/active/
+        3. Update _cortex-master/index.yaml (active_phases)
+        4. Regenerate dashboard data (plan-summary.json)
+        5. Commit: "feat(phase-{N}): Initialize {name} phase"
+    
+    update:
+      description: "Update existing phase with new deliverables"
+      threshold:
+        - "Work aligns with active/planned phase"
+        - "Incremental progress on existing phase"
+      action: |
+        1. Load existing phase YAML
+        2. Update deliverables/tasks/status
+        3. Update progress percentage
+        4. Regenerate dashboard data
+        5. Commit: "feat(phase-{N}): Update {description}"
+    
+    deprecate:
+      description: "Mark phase as deprecated (not deleted)"
+      threshold:
+        - "Feature removed or superseded"
+        - "Approach changed fundamentally"
+      action: |
+        1. Move from active/ to deprecated/ (new folder)
+        2. Add deprecation metadata (reason, superseded_by)
+        3. Update index.yaml (remove from active)
+        4. Regenerate dashboard
+        5. Commit: "chore(phase-{N}): Deprecate - {reason}"
+    
+    complete:
+      description: "Mark phase as complete and move to completed/"
+      requirements:
+        - "All deliverables verified"
+        - "Tests passing"
+        - "Dashboard synced"
+        - "Cleanup completed via VacuumOrchestrator"
+      action: |
+        1. Move from active/ to completed/2026/
+        2. Update index.yaml (completed_phases_2026)
+        3. Regenerate dashboard with completion stats
+        4. Commit: "feat(phase-{N}): COMPLETE - {summary}"
+
+  mandatory_hooks:
+    setup:
+      description: "Run before any phase implementation"
+      steps:
+        - "Load phase specification"
+        - "Verify no conflicting active phases"
+        - "Run VacuumOrchestrator.cleanup_stale_artifacts()"
+        - "Create git checkpoint (CORE-026)"
+        - "Initialize AC_START audit trail (CORE-027)"
+      mcp_tool: "cortex_plan_setup"
+    
+    teardown:
+      description: "Run after every phase completion"
+      steps:
+        - "Verify all deliverables"
+        - "Run VacuumOrchestrator.cleanup_phase_artifacts()"
+        - "Archive temporary files"
+        - "Delete stale markdown (CORE-002 enforcement)"
+        - "Update dashboard data"
+        - "Regenerate dashboard HTML"
+        - "Log AC_COMPLETE audit trail"
+        - "Commit all changes"
+      mcp_tool: "cortex_plan_teardown"
+
+  # ============================================================================
+  # MANDATORY SYNC VERIFICATION (COMPLETION GATE)
+  # ============================================================================
+  mandatory_sync_verification:
+    description: |
+      CRITICAL: Phase CANNOT be marked complete until all 3 sources are in sync.
+      cortex-architect and all agents MUST verify this before allowing completion.
+    
+    sources_to_sync:
+      source_1:
+        name: "Master Plan Registry"
+        path: "cortex-registry/_cortex-master/index.yaml"
+        checks:
+          - "Phase exists in active_phases OR completed_phases"
+          - "Phase status matches actual state"
+          - "All deliverables marked done"
+          - "statistics.total_phases is accurate"
+          - "statistics.active_phases is accurate"
+          - "statistics.completed_phases is accurate"
+      
+      source_2:
+        name: "CORTEX Live Implementation"
+        description: "Actual code/files in the repository"
+        checks:
+          - "All phase deliverables exist as files"
+          - "All tests passing for phase"
+          - "No orphaned/incomplete code"
+          - "MCP tools registered (if applicable)"
+          - "Wiring.yaml updated (if orchestrators added)"
+          - "Prompts updated (if mode/behavior changed)"
+          - "Agents updated (if routing changed)"
+      
+      source_3:
+        name: "Dashboard HTML"
+        path: "cortex-registry/_cortex-master/dashboard/index.html"
+        checks:
+          - "plan-summary.json reflects index.yaml state"
+          - "Dashboard loads without JS errors"
+          - "Active phases count matches index.yaml"
+          - "Completed phases count matches index.yaml"
+          - "Phase details page exists (if applicable)"
+          - "All links resolve correctly"
+    
+    verification_algorithm:
+      pre_completion_check: |
+        def verify_sync_before_completion(phase_id: str) -> SyncVerificationResult:
+            """
+            MANDATORY: Called by cortex-architect/agents before marking phase complete.
+            Blocks completion if any source is out of sync.
+            """
+            results = SyncVerificationResult()
+            
+            # Source 1: Master Plan Registry
+            index = load_yaml("cortex-registry/_cortex-master/index.yaml")
+            phase = find_phase(index, phase_id)
+            results.registry = RegistryCheck(
+                phase_exists=phase is not None,
+                status_correct=phase.status == "completing",
+                deliverables_done=all(d.done for d in phase.deliverables),
+                statistics_accurate=verify_statistics(index)
+            )
+            
+            # Source 2: Live Implementation
+            results.implementation = ImplementationCheck(
+                files_exist=all_files_exist(phase.deliverables),
+                tests_passing=run_phase_tests(phase_id),
+                no_orphans=check_no_orphaned_code(phase),
+                mcp_registered=verify_mcp_tools(phase),
+                wiring_updated=verify_wiring_yaml(phase),
+                prompts_updated=verify_prompts(phase),
+                agents_updated=verify_agents(phase)
+            )
+            
+            # Source 3: Dashboard
+            dashboard_json = load_json("cortex-registry/_cortex-master/dashboard/data/plan-summary.json")
+            results.dashboard = DashboardCheck(
+                json_matches_index=compare_stats(dashboard_json, index),
+                html_renders=test_dashboard_render(),
+                counts_match=verify_phase_counts(dashboard_json, index),
+                links_resolve=verify_all_links()
+            )
+            
+            # Calculate overall sync status
+            results.all_synced = (
+                results.registry.all_passed() and
+                results.implementation.all_passed() and
+                results.dashboard.all_passed()
+            )
+            
+            return results
+    
+    completion_gate:
+      rule: |
+        Phase completion is BLOCKED unless verify_sync_before_completion() returns all_synced=True.
+        
+        IF NOT all_synced:
+          1. Display sync verification report
+          2. List specific failures
+          3. Suggest fixes for each failure
+          4. HALT completion process
+          5. User must fix issues and re-verify
+        
+        IF all_synced:
+          1. Update phase status to "completed"
+          2. Move phase YAML to completed/ folder
+          3. Update index.yaml statistics
+          4. Final dashboard regeneration
+          5. Git commit: "feat(phase-{N}): ✅ Complete - {name}"
+    
+    output_format: |
+      ### 🔄 Sync Verification Report
+      
+      | Source | Status | Details |
+      |--------|--------|---------|
+      | **Registry** (index.yaml) | {✅/❌} | {pass_count}/{total_checks} |
+      | **Implementation** (code) | {✅/❌} | {pass_count}/{total_checks} |
+      | **Dashboard** (HTML/JSON) | {✅/❌} | {pass_count}/{total_checks} |
+      
+      **Overall:** {ALL SYNCED ✅ | OUT OF SYNC ❌}
+      
+      {IF failures:}
+      ### ❌ Sync Failures
+      | Source | Check | Issue | Fix |
+      |--------|-------|-------|-----|
+      | {source} | {check_name} | {issue} | {suggested_fix} |
+      
+      **BLOCKED:** Cannot mark phase complete until all syncs pass.
+      **Action:** Fix issues above and type `/plan verify` to re-check.
+
+  dashboard_integration:
+    sync_points:
+      - "Phase created"
+      - "Phase updated"
+      - "Phase completed"
+      - "Phase deprecated"
+    
+    regeneration:
+      data_file: "cortex-registry/_cortex-master/dashboard/data/plan-summary.json"
+      html_file: "cortex-registry/_cortex-master/dashboard/index.html"
+      method: |
+        1. Parse index.yaml for all phases
+        2. Calculate statistics (total, active, completed)
+        3. Generate plan-summary.json with current state
+        4. Update dashboard HTML with latest data
+        5. Verify dashboard loads correctly
+    
+    verification:
+      - "JSON valid and parseable"
+      - "HTML renders without JS errors"
+      - "Statistics match actual phase counts"
+      - "Links resolve correctly"
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+implementation:
+  stage_1_foundation:
+    name: "Core PLAN Mode Infrastructure"
+    effort: "2 days"
+    deliverables:
+      - task: "PLAN-001: Intent Detection for CORTEX Changes"
+        description: "Add PLAN intent detection to IntentRouter"
+        files:
+          - "cortex/intent_router/router.py"
+          - "cortex/models/intent.py"
+        tests: "tests/unit/intent_router/test_plan_intent.py"
+        
+      - task: "PLAN-002: Phase CRUD Operations"
+        description: "MCP tools for phase create/update/deprecate/complete"
+        files:
+          - "cortex/mcp/tools/plan_management_tool.py"
+          - "cortex/registry/phase_manager.py"
+        tests: "tests/unit/registry/test_phase_manager.py"
+        
+      - task: "PLAN-003: Setup/Teardown Hooks"
+        description: "Pre/post implementation hooks with VacuumOrchestrator"
+        files:
+          - "cortex/orchestrators/support/plan_orchestrator.py"
+        tests: "tests/unit/orchestrators/test_plan_orchestrator.py"
+
+  stage_2_dashboard:
+    name: "Dashboard Sync Integration"
+    effort: "1 day"
+    deliverables:
+      - task: "PLAN-004: Dashboard Data Generator"
+        description: "Generate plan-summary.json from index.yaml"
+        files:
+          - "cortex/registry/dashboard_generator.py"
+        tests: "tests/unit/registry/test_dashboard_generator.py"
+        
+      - task: "PLAN-005: Dashboard HTML Updater"
+        description: "Update dashboard HTML statistics"
+        files:
+          - "cortex/registry/dashboard_html_updater.py"
+        tests: "tests/integration/registry/test_dashboard_sync.py"
+
+  stage_3_prompt_refactor:
+    name: "cortex-architect.prompt.md Enhancement"
+    effort: "2 days"
+    deliverables:
+      - task: "PLAN-006: Add MODE 3: PLAN Section"
+        description: "Complete PLAN mode documentation in prompt"
+        files:
+          - ".github/prompts/cortex-architect.prompt.md"
+        
+      - task: "PLAN-007: Refactor Existing Modes"
+        description: "Consolidate duplicated sections, improve efficiency"
+        files:
+          - ".github/prompts/cortex-architect.prompt.md"
+        rationale: |
+          Current prompt has duplicated template sections:
+          - Two "Format Selection" sections (lines 1308-1318)
+          - Repeated challenge templates
+          - Verbose mode descriptions
+          Refactor to reduce from ~2000 lines to ~1500 lines
+        
+      - task: "PLAN-008: Update cortex-architect.md Agent"
+        description: "Add PLAN mode routing to agent"
+        files:
+          - ".github/agents/core/cortex-architect.md"
+
+  stage_4_integration:
+    name: "Full Integration & Testing"
+    effort: "2 days"
+    deliverables:
+      - task: "PLAN-009: PlanningOrchestrator Integration"
+        description: "Wire PLAN mode to existing PlanningOrchestrator"
+        files:
+          - "cortex/orchestrators/domain/planning_orchestrator.py"
+          - "cortex/wiring/specifications/wiring.yaml"
+        
+      - task: "PLAN-010: Token Optimization Integration"
+        description: "Connect to ENH-046 context governance"
+        files:
+          - "cortex/orchestrators/core/master_orchestrator.py"
+        
+      - task: "PLAN-011: E2E Tests"
+        description: "Full workflow tests for PLAN mode"
+        files:
+          - "tests/e2e/test_plan_mode_workflow.py"
+
+  stage_5_cleanup:
+    name: "Post-Implementation Refactor & Cleanup"
+    effort: "1 day"
+    mandatory: true
+    deliverables:
+      - task: "PLAN-012: Prompt Consolidation"
+        description: "Remove duplications found during implementation"
+        
+      - task: "PLAN-013: Agent Alignment Verification"
+        description: "Ensure all agents reflect new PLAN mode"
+        files:
+          - ".github/agents/core/cortex-auditor.md"
+          - ".github/agents/core/cortex-designer.md"
+          - ".github/agents/core/cortex-executor.md"
+          - ".github/agents/core/cortex-phase-resolver.md"
+        
+      - task: "PLAN-014: VacuumOrchestrator Final Pass"
+        description: "Clean up any artifacts from implementation"
+        
+      - task: "PLAN-015: Documentation Update"
+        description: "Update copilot-instructions.md with PLAN mode"
+        files:
+          - ".github/copilot-instructions.md"
+
+---
+# ============================================================================
+# PLAN MODE FLOW SPECIFICATION
+# ============================================================================
+
+flow:
+  detection:
+    diagram: |
+      User Request
+           ↓
+      PRE-FLIGHT CHECK (environment validation)
+           ↓
+      Intent Detection (IntentRouter)
+           ↓
+      [CORTEX_CHANGE_DETECTED?]
+           ├─ YES → PLAN MODE
+           │         ↓
+           │   Phase Resolution
+           │         ↓
+           │   [PHASE_EXISTS?]
+           │         ├─ YES → Update existing phase
+           │         └─ NO → Create new phase
+           │                    ↓
+           │   Setup Hook (VacuumOrchestrator + checkpoint)
+           │                    ↓
+           │   Dashboard Sync (pre-implementation)
+           │                    ↓
+           │   DoR Display with Phase Context
+           │                    ↓
+           │   Implementation (TDD via MasterOrchestrator)
+           │                    ↓
+           │   Teardown Hook (cleanup + archive)
+           │                    ↓
+           │   Dashboard Sync (post-implementation)
+           │                    ↓
+           │   Phase Completion (if all deliverables done)
+           │                    ↓
+           │   Completion Report
+           │
+           └─ NO → [AUDIT|DESIGN|DIGEST] (existing modes)
+
+  phase_resolution:
+    description: "Determine if work aligns with existing phase"
+    logic: |
+      1. Load _cortex-master/index.yaml
+      2. Parse user request for keywords
+      3. Match against active_phases[].name
+      4. Match against active_phases[].deliverables
+      5. If match found: return PHASE_UPDATE
+      6. If no match: return PHASE_CREATE
+      7. If deletion requested: return PHASE_DEPRECATE
+
+  response_format:
+    header: |
+      ## 🏗️ CORTEX Architect
+      **Author:** Asif Hussain | **Mode:** Plan | **Phase:** {phase_number} | **Operation:** {Create|Update|Complete} ✅
+    
+    phase_context: |
+      ### 📋 Phase Context
+      | Field | Value |
+      |-------|-------|
+      | Phase | {phase_number}: {phase_name} |
+      | Status | {PLANNED|IN_PROGRESS|COMPLETING} |
+      | Progress | {percentage}% |
+      | Deliverables | {completed}/{total} |
+      
+      **Registry:** cortex-registry/_cortex-master/phases/active/{phase_file}
+      **Dashboard:** Auto-sync enabled ✅
+    
+    setup_report: |
+      ### ⚙️ Setup Complete
+      - ✅ Git checkpoint created
+      - ✅ VacuumOrchestrator cleanup: {files_cleaned} artifacts removed
+      - ✅ Audit trail: AC_START logged
+      - ✅ Phase specification loaded
+    
+    teardown_report: |
+      ### 🧹 Teardown Complete
+      - ✅ VacuumOrchestrator: {files_cleaned} temporary files archived
+      - ✅ Dashboard data regenerated
+      - ✅ Dashboard HTML verified
+      - ✅ Audit trail: AC_COMPLETE logged
+      - ✅ Git commit: {commit_hash}
+    
+    completion_report: |
+      ## ✅ Phase {number} Complete
+      
+      **Delivered:**
+      - {deliverable_1}
+      - {deliverable_2}
+      - {deliverable_3}
+      
+      **Verified:**
+      - Tests: {passing}/{total} passing
+      - Dashboard: Synced ✅
+      - Cleanup: Complete ✅
+      
+      ### 📊 Dashboard Status
+      | Metric | Before | After |
+      |--------|--------|-------|
+      | Active Phases | {n} | {n} |
+      | Completed Phases | {n} | {n+1} |
+      | Total Deliverables | {n} | {n} |
+      
+      **Registry Updated:** cortex-registry/_cortex-master/index.yaml ✅
+
+---
+# ============================================================================
+# PROMPT REFACTOR SPECIFICATION
+# ============================================================================
+
+prompt_refactor:
+  current_issues:
+    - issue: "Duplicated Format Selection sections"
+      location: "Lines 1308-1318 and 1328-1338"
+      fix: "Consolidate into single section"
+    
+    - issue: "Repeated challenge templates"
+      location: "Lines 1350-1400 and 1800-1850"
+      fix: "Create QUICK REFERENCE section with templates"
+    
+    - issue: "Verbose mode descriptions"
+      location: "MODE 0, MODE 1, MODE 2 sections"
+      fix: "Create unified mode table, expand only unique behaviors"
+    
+    - issue: "Outdated version references"
+      location: "Various v12.0, v13.0 mentions in text"
+      fix: "Standardize to current version"
+    
+    - issue: "Disconnected anti-patterns sections"
+      location: "Two PROHIBITED sections"
+      fix: "Consolidate into single comprehensive section"
+
+  target_structure:
+    sections:
+      - "## 🎯 PENTA-MODE OPERATION" # Updated from QUAD
+      - "## 📋 PLAN REGISTRY INTEGRATION"
+      - "## 🏗️ Response Header (MANDATORY)"
+      - "## 🛡️ CORE RULES"
+      - "## 📋 QUICK COMMANDS" # Enhanced with /plan
+      - "## 🔧 MODE 0: PRE-FLIGHT"
+      - "## 🔍 MODE 1: AUDIT"
+      - "## 🔬 MODE 1.5: META-AUDIT"
+      - "## 📚 MODE 1.75: DIGEST"
+      - "## 🎨 MODE 2: DESIGN"
+      - "## 📐 MODE 3: PLAN" # NEW
+      - "## ⚡ MODE 4: EXEC" # Renumbered
+      - "## 🔧 TOOLS & MCP"
+      - "## 🚫 PROHIBITED" # Consolidated
+      - "## ✅ COMPLETION"
+      - "## 🎓 LEARNING & EVOLUTION"
+      - "## 📜 CHANGELOG"
+
+  estimated_reduction:
+    current_lines: 2012
+    target_lines: 1600
+    reduction_percentage: "20%"
+    rationale: |
+      - Remove duplicate sections: -100 lines
+      - Consolidate templates: -150 lines
+      - Streamline verbose descriptions: -150 lines
+      - Add PLAN mode: +200 lines
+      - Net: -200 lines
+
+---
+# ============================================================================
+# AGENT UPDATES SPECIFICATION
+# ============================================================================
+
+agent_updates:
+  cortex-architect.md:
+    version_bump: "13.0 → 14.0"
+    changes:
+      - "Add PLAN mode to mode router"
+      - "Add cortex-plan-orchestrator routing"
+      - "Update mode flow diagram"
+      - "Add PLAN-specific response header"
+  
+  cortex-executor.md:
+    changes:
+      - "Add PLAN mode awareness for direct implementation"
+      - "Skip challenge for PLAN continuation"
+  
+  cortex-phase-resolver.md:
+    changes:
+      - "Enhance phase matching logic"
+      - "Add deprecation detection"
+  
+  cortex-auditor.md:
+    changes:
+      - "Add phase registry health check"
+      - "Verify dashboard sync status"
+  
+  copilot-instructions.md:
+    changes:
+      - "Add /plan to quick commands"
+      - "Update mode count (4 → 5)"
+      - "Add PLAN mode enforcement rule"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  functional:
+    - "PLAN mode triggers on CORTEX change requests"
+    - "Phase CRUD operations work correctly"
+    - "Dashboard syncs automatically"
+    - "Setup/teardown hooks execute"
+    - "VacuumOrchestrator integrates with hooks"
+    - "E2E workflow completes successfully"
+  
+  quality:
+    - "All tests passing (unit + integration + E2E)"
+    - "Prompt reduced by ~20%"
+    - "No duplicate sections in prompt"
+    - "All agents aligned with PLAN mode"
+  
+  governance:
+    - "CORE-002: No markdown generation"
+    - "CORE-008: TDD-first followed"
+    - "CORE-030: Implementation verified"
+    - "CORE-035: No versioned files"
+
+---
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Complex mode detection logic"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Use explicit /plan command as primary trigger, implicit detection as secondary"
+  
+  - risk: "Dashboard sync failures"
+    probability: "LOW"
+    impact: "MEDIUM"
+    mitigation: "Add verification step, rollback on failure"
+  
+  - risk: "VacuumOrchestrator aggressive cleanup"
+    probability: "MEDIUM"
+    impact: "HIGH"
+    mitigation: "Add confirmation for deletions, dry-run mode"
+  
+  - risk: "Prompt becomes too complex"
+    probability: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Aggressive refactoring in Stage 5"
+
+---
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+dependencies:
+  existing:
+    - "VacuumOrchestrator (Phase 22.5)"
+    - "PlanningOrchestrator (Phase 3)"
+    - "MasterOrchestrator (Phase 2)"
+    - "IntentRouter (Phase 8)"
+    - "Dashboard system (Phase 15)"
+  
+  new:
+    - "PlanOrchestrator (this phase)"
+    - "PhaseManager (this phase)"
+    - "DashboardGenerator (this phase)"
+
+---
+# ============================================================================
+# GIT HISTORY INSIGHTS
+# ============================================================================
+
+git_history_insights:
+  prompt_evolution:
+    - "v1.0-v6.0: Basic dual-mode (AUDIT + DESIGN)"
+    - "v7.0: MCP-first architecture"
+    - "v8.0: Security-first mindset"
+    - "v9.0-v10.0: PRE-FLIGHT environment validation"
+    - "v11.0: Incremental TDD execution"
+    - "v12.0: Challenge system + extensibility focus"
+    - "v13.0: DIGEST mode + continuous learning"
+    - "v14.0: PLAN mode (this enhancement)"
+  
+  key_patterns_discovered:
+    - "Every major version adds new mode"
+    - "Refactoring follows feature additions"
+    - "Dashboard integration is critical"
+    - "VacuumOrchestrator essential for cleanup"
+    - "Phase tracking prevents orphaned work"
+  
+  lessons_from_history:
+    - "Phase 21 showed need for plan-first approach"
+    - "Phase 22 demonstrated VacuumOrchestrator value"
+    - "ENH-046 proved token optimization importance"
+    - "Dashboard sync prevents state drift"
+
+---
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+
+completion_checklist:
+  pre_implementation:
+    - "[ ] Git checkpoint created"
+    - "[ ] VacuumOrchestrator cleanup run"
+    - "[ ] Index.yaml updated with phase"
+    - "[ ] Dashboard synced (pre)"
+  
+  implementation:
+    - "[ ] Stage 1: Foundation complete"
+    - "[ ] Stage 2: Dashboard sync complete"
+    - "[ ] Stage 3: Prompt refactor complete"
+    - "[ ] Stage 4: Integration complete"
+    - "[ ] Stage 5: Cleanup complete"
+  
+  post_implementation:
+    - "[ ] All tests passing"
+    - "[ ] Prompt lines reduced"
+    - "[ ] Agents aligned"
+    - "[ ] VacuumOrchestrator final pass"
+    - "[ ] Dashboard synced (post)"
+    - "[ ] Phase moved to completed/"

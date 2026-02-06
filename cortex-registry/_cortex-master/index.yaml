@@ -23,6 +23,17 @@ active_phases:
     started: "2026-02-05"
     status: "planned"
     priority: "P1"
+  
+  - id: "phase-25"
+    name: "PLAN MODE Enhancement for cortex-architect"
+    file: "phases/active/phase-25-plan-mode-cortex-architect.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P0"
+    description: |
+      Add PLAN MODE to cortex-architect.prompt.md for design+implementation
+      with mandatory plan registry integration, setup/teardown hooks,
+      VacuumOrchestrator cleanup, and dashboard sync on every phase.
 
 # Completed Phases (Historical)
 completed_phases_2026:
@@ -80,16 +91,16 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 21
-  active_phases: 2
+  total_phases: 22
+  active_phases: 3
   completed_2026: 12
   completed_2025: 11
   total_enhancements: 1
   active_enhancements: 1
-  last_phase_created: "2026-02-05"
+  last_phase_created: "2026-02-06"
   last_phase_completed: "2026-02-05"
-  next_expected_completion: "2026-02-12"
-  last_updated: "2026-02-05"
+  next_expected_completion: "2026-02-13"
+  last_updated: "2026-02-06"
 
 # Dashboard Integration
 dashboard:

@@ -1,17 +1,17 @@
 {
   "metadata": {
     "version": "1.0.0",
-    "last_updated": "2026-02-05T17:33:21.815100Z",
+    "last_updated": "2026-02-06T10:00:00.000000Z",
     "variance_score": 0.0,
     "variance_threshold": 10.0,
     "silent_sync": false
   },
   "statistics": {
-    "total_phases": 24,
-    "active_phases": 1,
+    "total_phases": 25,
+    "active_phases": 3,
     "completed_2026": 12,
     "completed_2025": 11,
-    "completion_rate": 95,
+    "completion_rate": 92,
     "overall_status": "ON_TRACK"
   },
   "active_phases": [
@@ -21,7 +21,25 @@
       "status": "in-progress",
       "progress": 0,
       "start_date": "2026-02-01",
-      "estimated_completion": ""
+      "estimated_completion": "2026-02-15"
+    },
+    {
+      "number": 24,
+      "name": "External Refactoring Tools Integration",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "2026-02-05",
+      "estimated_completion": "2026-02-20"
+    },
+    {
+      "number": 25,
+      "name": "PLAN MODE Enhancement for cortex-architect",
+      "status": "planned",
+      "progress": 0,
+      "start_date": "2026-02-06",
+      "estimated_completion": "2026-02-13",
+      "priority": "P0",
+      "description": "Add PLAN MODE with mandatory plan registry integration, setup/teardown hooks, VacuumOrchestrator cleanup, and dashboard sync"
     }
   ],
   "completed_phases_2026": [
