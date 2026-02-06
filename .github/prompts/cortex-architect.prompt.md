@@ -202,51 +202,98 @@ If token usage > 400k before user request:
 **Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
 **Output:** Priority-ordered phase recommendations with real-time visual progress
 
-## Inline Progress Indicators (MANDATORY)
+## Subtle Plan Spine (CODE-ACTION MODES ONLY)
 
-**ALL** `_cortex-master` implementations MUST display inline ASCII progress bars in GitHub Copilot Chat:
+**⚠️ CRITICAL:** Progress indicators are ONLY for code-action modes:
+- ✅ **PLAN** — Phase creation, updates, dashboard regeneration
+- ✅ **TDD** — RED→GREEN→REFACTOR implementation cycles
+- ✅ **REFACTOR** — Multi-file refactoring operations (>5 files)
+- ✅ **IMPLEMENT** — Feature implementation with multiple steps
 
-### Progress Bar Format
+**❌ FORBIDDEN:** Do NOT show progress indicators for:
+- ❌ **AUDIT** — Analysis-only (no progress bars)
+- ❌ **DIGEST** — Chat session extraction (no progress bars)
+- ❌ **INTERACTIVE** — Conversational Q&A (no progress bars)
+- ❌ **META-AUDIT** — Prompt self-analysis (no progress bars)
+- ❌ Single file reads, quick greps, simple validation
+
+### Subtle Plan Spine Format (MANDATORY)
+
+**Use the subtle rolling window format, NOT screaming block bars:**
 
 ```
-[████████░░] 80% - {current_step}
+[✓] Phase 2 KSESSIONS | [→] Phase 3 MCP | [ ] Phase 4 Arch
 ```
 
-**Specification:**
-- **Width:** 10 characters (█ for complete, ░ for remaining)
-- **Percentage:** Rounded to nearest 10% (0%, 10%, 20%, ..., 100%)
-- **Step Description:** Current action in {current_step} (e.g., "Calculating ROI", "Generating YAML", "Updating index")
-- **Update Frequency:** Every 5-10% completion or major step boundary
-- **Position:** Above tool invocation, part of response text (not in code block)
+**Glyphs (strict set):**
+| Glyph | Meaning | Usage |
+|-------|---------|-------|
+| `[✓]` | Completed | Immediate predecessor phase |
+| `[→]` | Active | Current phase being worked on |
+| `[ ]` | Queued | Next phase (1 only) |
+| `[!]` | Blocked | Phase blocked by dependency |
+| `[~]` | Revisiting | Re-opened for updates |
 
-### Progress Bar Examples
+**Constraints:**
+- **Max 3 phases shown** (rolling window: previous + current + next)
+- **No full history** (never show all completed phases)
+- **Single line preferred** — use `|` separator for inline display
+- **No emoji** (🟢🔴🟡 forbidden)
+- **No screaming blocks** (█▓░ forbidden)
 
-```markdown
-**Starting Phase Creation...**
+### Progress Display Examples
 
-[░░░░░░░░░░] 0% - Initializing
-
-[██░░░░░░░░] 20% - Calculating ROI score
-
-[████░░░░░░] 40% - Generating phase YAML
-
-[██████░░░░] 60% - Updating index.yaml
-
-[████████░░] 80% - Regenerating dashboard
-
-[██████████] 100% - Complete ✅
+**During Execution (2 phases):**
+```
+[→] Phase 2 KSESSIONS | [ ] Phase 3 MCP gateway
 ```
 
-### When to Display Progress
+**Upon Completion (3 phases, rolls forward):**
+```
+[✓] Phase 2 KSESSIONS | [→] Phase 3 MCP | [ ] Phase 4 Arch
+```
 
-**Display progress bars for:**
-- Phase creation (7 steps: ROI → YAML → index → dashboard → commit)
-- Phase updates (5 steps: Load → Modify → Validate → Dashboard → Commit)
-- Dashboard regeneration (4 steps: Collect → Aggregate → Generate → Verify)
-- Large refactoring operations (>5 files modified)
-- Multi-step analysis (LENS full scan, security audit, etc.)
+**At Finish (2 phases):**
+```
+[✓] Phase 3 MCP | [→] Phase 4 Architecture
+```
 
-**DO NOT display for:**
+### Mode-Specific Behavior
+
+| Mode | Progress Display | Reason |
+|------|------------------|--------|
+| **PLAN** | ✅ Subtle spine | Multi-step phase operations |
+| **TDD** | ✅ Subtle spine | RED→GREEN→REFACTOR tracking |
+| **REFACTOR** | ✅ Subtle spine | Multi-file operation tracking |
+| **IMPLEMENT** | ✅ Subtle spine | Feature implementation steps |
+| **AUDIT** | ❌ None | Analysis-only, no code actions |
+| **DIGEST** | ❌ None | Learning extraction, no code actions |
+| **INTERACTIVE** | ❌ None | Conversational, no multi-step ops |
+| **META-AUDIT** | ❌ None | Prompt analysis, no code actions |
+| **PRE-FLIGHT** | ❌ None | Quick environment check |
+
+### FORBIDDEN: Screaming Block Bars
+
+**DO NOT USE these formats (violation of Phase-31A):**
+
+```
+❌ [████████░░] 80% - Loading chat session    ← SCREAMING (forbidden)
+❌ [░░░░░░░░░░] 0% - Initializing             ← SCREAMING (forbidden)
+❌ [██████████] 100% - Complete ✅             ← SCREAMING (forbidden)
+```
+
+**Authority:** Phase-31A Minimal Plan Spine Enhancement (cortex-registry/_cortex-master/phases/active/phase-31a-minimal-plan-spine-enhancement.yaml)
+
+### When to Display Plan Spine
+
+**Display for CODE-ACTION modes only:**
+- Phase creation (PLAN mode)
+- Phase updates (PLAN mode)
+- TDD cycles (TDD mode)
+- Large refactoring (>5 files, REFACTOR mode)
+- Feature implementation (IMPLEMENT mode)
+
+**Skip for ALL other modes:**
 - Single file reads
 - Quick grep searches
 - Simple validation checks (unless part of larger operation)
@@ -273,11 +320,6 @@ User Request → ContextSynthesisGateway (BEFORE orchestrator)
 - **Copilot Summarization Target:** ≤1 event per 1000 lines (73x improvement from current 1 per 13.7 lines)
 - **Cache Hit Rate:** ≥70% for repeated references
 - **Synthesis Latency:** <100ms per operation
-
-**Progress Indicator for Token Optimization:**
-```
-[██████░░░░] 60% - Token optimization (input context compressed: 65KB → 18KB)
-```
 
 **Authority:** ENH-046 Context Consumption Governance (Phase 1 COMPLETE, Phase 2-4 IN PROGRESS)
 
@@ -329,11 +371,6 @@ ROI = (0.85 × 0.35) + (0.95 × 0.25) + (0.70 × 0.20) + ((1-0.60) × 0.15) + (0
 Priority: 🔴 IMMEDIATE (≥ 0.75)
 ```
 
-**Progress Indicator During ROI Calculation:**
-```
-[████░░░░░░] 40% - Calculating ROI (architectural_impact: 0.85, efficiency_gain: 0.95...)
-```
-
 ## Phase Prioritization Workflow
 
 ### Step 1: Load Pending Phases
@@ -342,8 +379,6 @@ Priority: 🔴 IMMEDIATE (≥ 0.75)
 Load cortex-registry/_cortex-master/index.yaml
          ↓
 Filter: status IN [PLANNED, IN_PROGRESS, BLOCKED]
-         ↓
-[░░░░░░░░░░] 0% - Loading phase registry
 ```
 
 ### Step 2: Calculate ROI for Each Phase
@@ -354,8 +389,6 @@ For each phase:
   - OR calculate 5 dimensions from phase YAML
   - Apply weighted formula
   - Store score + breakdown
-         ↓
-[████░░░░░░] 40% - Calculating ROI scores (3/8 phases)
 ```
 
 ### Step 3: Sort by ROI Score (Descending)
@@ -368,8 +401,6 @@ Group by priority tier:
   - HIGH (≥0.60)
   - MEDIUM (≥0.40)
   - LOW (<0.40)
-         ↓
-[████████░░] 80% - Prioritizing phases
 ```
 
 ### Step 4: Present Recommendations
@@ -381,8 +412,11 @@ Display top 3 phases with:
   - Blocking dependencies (if any)
   - Estimated effort
   - Expected benefits
-         ↓
-[██████████] 100% - Priority recommendations ready ✅
+```
+
+**Plan Spine during PLAN mode (subtle format):**
+```
+[→] Phase 2 Analysis | [ ] Phase 3 Prioritization
 ```
 
 ## Dashboard Integration
@@ -394,19 +428,18 @@ After every phase operation (create/update/complete), regenerate dashboard data:
 ```
 Phase operation complete
          ↓
-[██░░░░░░░░] 20% - Regenerating dashboard data
-         ↓
 cortex_aggregate_dashboard_data_v3("_cortex-master")
-         ↓
-[████████░░] 80% - Dashboard JSON generated
          ↓
 Check variance: |current - previous| / previous
          ↓
 Variance < 10%: Silent (no user notification)
 Variance 10-20%: Notify user (show in completion report)
 Variance > 20%: Silent sync (automatic background update)
-         ↓
-[██████████] 100% - Dashboard synced ✅
+```
+
+**Plan Spine upon dashboard sync completion:**
+```
+[✓] Dashboard JSON generated | [→] Sync verified
 ```
 
 **Registry Structure:**
