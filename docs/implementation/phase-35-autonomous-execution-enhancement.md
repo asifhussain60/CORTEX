@@ -32,12 +32,19 @@
 **File:** `cortex/orchestrators/response/ascii_progress_bar.py`
 
 **Features:**
-- Fixed 10-block format: `[████████░░] 80%`
+- Fixed 10-block format with multiline display
+- Format: Title with status icon on first line, bar+% on second line
+- Example:
+  ```
+  Phase 2: KSESSIONS Implementation 🔵
+  [████████░░] 80%
+  ```
 - Status icons: ✅ completed, 🔵 active, ⚪ queued, 🔴 blocked
-- Multi-phase display (all phases shown, not rolling window)
+- Multi-phase display (all phases shown with blank line separators)
 - Completion summary generation
 - Subtle spine format (Phase-31A compatible)
 - Mode-specific headers
+- Legacy inline format available via `multiline=False` parameter
 
 **Tests:** 21/21 passing
 - Bar generation (6 cases including clamping)
@@ -113,10 +120,17 @@ if coordinator.should_execute_autonomously("proceed"):
     #
     # ### 🎯 IMPLEMENT Mode - 4 phases tracked
     #
-    # [░░░░░░░░░░]   0% R1 - Phase 35 (Continuation Detection) 🔵
-    # [░░░░░░░░░░]   0% R2 - ASCII Progress Bars ⚪
-    # [░░░░░░░░░░]   0% R3 - Minimal Status Updates ⚪
-    # [░░░░░░░░░░]   0% R4 - Single Decision Gate ⚪
+    # R1 - Phase 35 (Continuation Detection) 🔵
+    # [░░░░░░░░░░]   0%
+    #
+    # R2 - ASCII Progress Bars ⚪
+    # [░░░░░░░░░░]   0%
+    #
+    # R3 - Minimal Status Updates ⚪
+    # [░░░░░░░░░░]   0%
+    #
+    # R4 - Single Decision Gate ⚪
+    # [░░░░░░░░░░]   0%
 
     # Execute phases (no interruption)
     for phase in phases:
@@ -131,10 +145,17 @@ if coordinator.should_execute_autonomously("proceed"):
     #
     # Completed: 4/4 phases (100%)
     #
-    # [██████████] 100% R1 - Continuation Detection ✅
-    # [██████████] 100% R2 - ASCII Progress Bars ✅
-    # [██████████] 100% R3 - Minimal Status Updates ✅
-    # [██████████] 100% R4 - Single Decision Gate ✅
+    # R1 - Continuation Detection ✅
+    # [██████████] 100%
+    #
+    # R2 - ASCII Progress Bars ✅
+    # [██████████] 100%
+    #
+    # R3 - Minimal Status Updates ✅
+    # [██████████] 100%
+    #
+    # R4 - Single Decision Gate ✅
+    # [██████████] 100%
 ```
 
 ### Example 2: Progress Bar During TDD Cycle
@@ -154,9 +175,14 @@ tdd_phases = [
 
 print(bar.display_all_phases(tdd_phases))
 # Output:
-# [██████████] 100% RED - Write failing test ✅
-# [███████░░░]  70% GREEN - Implement minimal code 🔵
-# [░░░░░░░░░░]   0% REFACTOR - Improve design ⚪
+# RED - Write failing test ✅
+# [██████████] 100%
+#
+# GREEN - Implement minimal code 🔵
+# [███████░░░]  70%
+#
+# REFACTOR - Improve design ⚪
+# [░░░░░░░░░░]   0%
 ```
 
 ### Example 3: Continuation Detection

@@ -51,63 +51,77 @@ class TestASCIIProgressBar:
         assert result == "[░░░░░░░░░░]"
 
     def test_format_phase_progress_active(self):
-        """Test formatting active phase progress."""
+        """Test formatting active phase progress (multiline format)."""
         bar = ASCIIProgressBar()
         phase = Phase(name="KSESSIONS Implementation", progress=0.8, status="active")
         result = bar.format_phase_progress(phase)
 
-        assert "[████████░░]" in result
-        assert "80%" in result
-        assert "KSESSIONS Implementation" in result
-        assert "🔵" in result  # active status icon
+        # Check multiline format
+        lines = result.split("\n")
+        assert len(lines) == 2
+        assert "KSESSIONS Implementation" in lines[0]
+        assert "🔵" in lines[0]  # active status icon
+        assert "[████████░░]" in lines[1]
+        assert "80%" in lines[1]
 
     def test_format_phase_progress_completed(self):
-        """Test formatting completed phase."""
+        """Test formatting completed phase (multiline format)."""
         bar = ASCIIProgressBar()
         phase = Phase(name="Phase 1", progress=1.0, status="completed")
         result = bar.format_phase_progress(phase)
 
-        assert "[██████████]" in result
-        assert "100%" in result
-        assert "✅" in result  # completed status icon
+        lines = result.split("\n")
+        assert len(lines) == 2
+        assert "Phase 1" in lines[0]
+        assert "✅" in lines[0]  # completed status icon
+        assert "[██████████]" in lines[1]
+        assert "100%" in lines[1]
 
     def test_format_phase_progress_queued(self):
-        """Test formatting queued phase."""
+        """Test formatting queued phase (multiline format)."""
         bar = ASCIIProgressBar()
         phase = Phase(name="Phase 3", progress=0.0, status="queued")
         result = bar.format_phase_progress(phase)
 
-        assert "[░░░░░░░░░░]" in result
-        assert "0%" in result
-        assert "⚪" in result  # queued status icon
+        lines = result.split("\n")
+        assert len(lines) == 2
+        assert "Phase 3" in lines[0]
+        assert "⚪" in lines[0]  # queued status icon
+        assert "[░░░░░░░░░░]" in lines[1]
+        assert "0%" in lines[1]
 
     def test_format_phase_progress_blocked(self):
-        """Test formatting blocked phase."""
+        """Test formatting blocked phase (multiline format)."""
         bar = ASCIIProgressBar()
         phase = Phase(name="Phase 4", progress=0.4, status="blocked")
         result = bar.format_phase_progress(phase)
 
-        assert "[████░░░░░░]" in result
-        assert "40%" in result
-        assert "🔴" in result  # blocked status icon
+        lines = result.split("\n")
+        assert len(lines) == 2
+        assert "Phase 4" in lines[0]
+        assert "🔴" in lines[0]  # blocked status icon
+        assert "[████░░░░░░]" in lines[1]
+        assert "40%" in lines[1]
 
     def test_format_phase_progress_no_icon(self):
-        """Test formatting without status icon."""
+        """Test formatting without status icon (multiline format)."""
         bar = ASCIIProgressBar()
         phase = Phase(name="Test Phase", progress=0.5, status="active")
         result = bar.format_phase_progress(phase, show_status_icon=False)
 
-        assert "[█████░░░░░]" in result
-        assert "50%" in result
-        assert "Test Phase" in result
-        assert "🔵" not in result  # no status icon
+        lines = result.split("\n")
+        assert len(lines) == 2
+        assert "Test Phase" in lines[0]
+        assert "🔵" not in lines[0]  # no status icon
+        assert "[█████░░░░░]" in lines[1]
+        assert "50%" in lines[1]
 
 
 class TestDisplayAllPhases:
     """Test suite for display_all_phases."""
 
     def test_display_multiple_phases(self):
-        """Test displaying multiple phases."""
+        """Test displaying multiple phases (multiline format with blank lines)."""
         bar = ASCIIProgressBar()
         phases = [
             Phase(name="Phase 1", progress=1.0, status="completed"),
@@ -118,10 +132,30 @@ class TestDisplayAllPhases:
         result = bar.display_all_phases(phases)
         lines = result.split("\n")
 
-        assert len(lines) == 3
-        assert "[██████████] 100%" in lines[0]
-        assert "[████████░░]  80%" in lines[1]
-        assert "[░░░░░░░░░░]   0%" in lines[2]
+        # Each phase takes 2 lines + blank line separator = 3 lines per phase (except last)
+        # Phase 1: title + bar (2 lines) + blank (1) = 3
+        # Phase 2: title + bar (2 lines) + blank (1) = 3  
+        # Phase 3: title + bar (2 lines) = 2
+        # Total: 8 lines
+        assert len(lines) == 8
+        
+        # Check Phase 1
+        assert "Phase 1" in lines[0]
+        assert "✅" in lines[0]
+        assert "[██████████]" in lines[1]
+        assert "100%" in lines[1]
+        
+        # Check Phase 2 (after blank line)
+        assert "Phase 2" in lines[3]
+        assert "🔵" in lines[3]
+        assert "[████████░░]" in lines[4]
+        assert "80%" in lines[4]
+        
+        # Check Phase 3 (after blank line)
+        assert "Phase 3" in lines[6]
+        assert "⚪" in lines[6]
+        assert "[░░░░░░░░░░]" in lines[7]
+        assert "0%" in lines[7]
 
     def test_display_empty_phases(self):
         """Test displaying empty phase list."""

@@ -75,22 +75,23 @@ class ASCIIProgressBar:
         return bar
 
     def format_phase_progress(
-        self, phase: Phase, show_status_icon: bool = True
+        self, phase: Phase, show_status_icon: bool = True, multiline: bool = True
     ) -> str:
         """Format phase progress with bar, percentage, and name.
 
         Args:
             phase: Phase with name, progress, and status
             show_status_icon: Include status emoji (default: True)
+            multiline: If True, place bar under title; if False, inline (default: True)
 
         Returns:
-            Formatted string (e.g., "[████████░░] 80% Phase 2: Implementation")
+            Formatted string with title on first line, bar+% on second line
 
         Examples:
             >>> bar = ASCIIProgressBar()
             >>> phase = Phase(name="KSESSIONS", progress=0.8, status="active")
             >>> bar.format_phase_progress(phase)
-            '[████████░░]  80% Phase 2: KSESSIONS 🔵'
+            'Phase 2: KSESSIONS 🔵\\n[████████░░] 80%'
         """
         bar = self.generate_bar(phase.progress)
         percentage = int(phase.progress * 100)
@@ -103,7 +104,12 @@ class ASCIIProgressBar:
         if show_status_icon:
             status_icon = " " + self.STATUS_ICONS.get(phase.status, "")
 
-        return f"{bar} {percentage_str} {phase.name}{status_icon}"
+        # Multiline format: title on first line, bar+% on second
+        if multiline:
+            return f"{phase.name}{status_icon}\n{bar} {percentage_str}"
+        else:
+            # Legacy inline format
+            return f"{bar} {percentage_str} {phase.name}{status_icon}"
 
     def display_all_phases(
         self, phases: List[Phase], show_status_icons: bool = True
@@ -115,23 +121,27 @@ class ASCIIProgressBar:
             show_status_icons: Include status emoji (default: True)
 
         Returns:
-            Multi-line string with all phase progress bars
+            Multi-line string with all phase progress bars (multiline format)
 
         Examples:
             >>> bar = ASCIIProgressBar()
             >>> phases = [
             ...     Phase(name="Phase 2: KSESSIONS", progress=0.8, status="active"),
             ...     Phase(name="Phase 3: MCP Gateway", progress=0.4, status="queued"),
-            ...     Phase(name="Phase 4: Refactor", progress=0.0, status="queued"),
             ... ]
             >>> print(bar.display_all_phases(phases))
-            [████████░░]  80% Phase 2: KSESSIONS 🔵
-            [████░░░░░░]  40% Phase 3: MCP Gateway ⚪
-            [░░░░░░░░░░]   0% Phase 4: Refactor ⚪
+            Phase 2: KSESSIONS 🔵
+            [████████░░]  80%
+
+            Phase 3: MCP Gateway ⚪
+            [████░░░░░░]  40%
         """
         lines = []
-        for phase in phases:
+        for i, phase in enumerate(phases):
             lines.append(self.format_phase_progress(phase, show_status_icons))
+            # Add blank line between phases (except after last)
+            if i < len(phases) - 1:
+                lines.append("")
         return "\n".join(lines)
 
     def format_completion_summary(self, phases: List[Phase]) -> str:
