@@ -10,12 +10,41 @@ last_updated: "2026-02-05"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-28"
+    name: "Repository Onboarding System"
+    file: "phases/active/phase-28-repository-onboarding-system.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P0"
+    execution_order: 1
+    description: |
+      Mandatory first step for external repository interaction.
+      Test case: KSESSIONS repository. Loose coupling for deletion safety.
+      NO stubs or fake implementations. Prerequisite for Phase 27.
+  
+  - id: "phase-26"
+    name: "Context Loading Optimization"
+    file: "phases/active/phase-26-context-loading-optimization.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P0"
+    execution_order: 2
+    description: |
+      Eliminate eager file loading from prompts, reduce token waste by 83%.
+      Unblocks Phase 25 (resolves ENH-046 blocker). Discovery-based loading
+      with EXIT GATE integration.
+    unblocks:
+      - "phase-25"
+    extends:
+      - "ENH-046"
+  
   - id: "phase-21"
     name: "JSON-First Rewrite"
     file: "phases/active/phase-21-json-first-rewrite.yaml"
     started: "2026-02-01"
     status: "in-progress"
     priority: "P0"
+    execution_order: null  # Parallel execution
   
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
@@ -23,6 +52,7 @@ active_phases:
     started: "2026-02-05"
     status: "planned"
     priority: "P1"
+    execution_order: 5
   
   - id: "phase-25"
     name: "PLAN MODE Enhancement for cortex-architect"
@@ -30,15 +60,28 @@ active_phases:
     started: "2026-02-06"
     status: "planned"
     priority: "P0"
+    execution_order: 3
     description: |
       Add PLAN MODE to cortex-architect.prompt.md for design+implementation
       with mandatory plan registry integration, setup/teardown hooks,
       VacuumOrchestrator cleanup, and dashboard sync on every phase.
-    blocked_by:
-      issue_id: "PHASE-25-TOKEN-001"
-      enhancement: "ENH-046"
-      reason: "Token optimization (EXIT GATE) must deploy before Phase 25 completion"
-      evidence: "17 summarization events in 233-line chat session (73x worse than expected)"
+    unblocked_by: "phase-26"
+    depends_on:
+      - "phase-26-context-loading-optimization"
+  
+  - id: "phase-27"
+    name: "Company Domain Integration System"
+    file: "phases/active/phase-27-company-domain-integration.yaml"
+    started: "2026-02-06"
+    status: "planned"
+    priority: "P1"
+    execution_order: 4
+    description: |
+      Read-first strategy for company-specific standards consumption.
+      StandardsResolver with audit intelligence for orchestrator discovery.
+      Informed by Phase 28 repository onboarding profiles.
+    informed_by:
+      - "phase-28"
 
 # Completed Phases (Historical)
 completed_phases_2026:
@@ -115,16 +158,22 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 22
-  active_phases: 3
+  total_phases: 25
+  active_phases: 6
   completed_2026: 12
   completed_2025: 11
-  total_enhancements: 2
-  active_enhancements: 2
+  total_enhancements: 3
+  active_enhancements: 3
   last_phase_created: "2026-02-06"
   last_phase_completed: "2026-02-05"
   next_expected_completion: "2026-02-13"
   last_updated: "2026-02-06"
+  new_phases_today:
+    - "phase-28: Repository Onboarding System (P0, execution_order=1)"
+    - "phase-26: Context Loading Optimization (P0, execution_order=2, unblocks phase-25)"
+    - "phase-27: Company Domain Integration (P1, execution_order=4, informed_by phase-28)"
+  phase_updates_today:
+    - "phase-25: Unblocked by phase-26, execution_order=3"
 
 # Dashboard Integration
 dashboard:

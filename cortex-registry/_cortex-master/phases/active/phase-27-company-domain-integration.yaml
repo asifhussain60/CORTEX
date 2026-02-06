@@ -1,0 +1,616 @@
+# PHASE-27: COMPANY DOMAIN INTEGRATION SYSTEM
+# Version: 1.0 | Created: 2026-02-06 | Authority: cortex-architect.prompt.md v14.2
+# Scope: Read-first strategy for company-specific standards consumption
+# Status: PLANNED - Informed by Phase 28 (Repository Onboarding)
+
+---
+metadata:
+  phase: "27"
+  title: "Company Domain Integration System"
+  version: "1.0"
+  status: "PLANNED"
+  author: "Asif Hussain"
+  created: "2026-02-06"
+  priority: "P1"
+  estimated_effort: "1 week"
+  execution_order: 4  # After Phase 28 (informed by onboarding data)
+  informed_by:
+    - "phase-28"  # Repository onboarding profiles
+  governance:
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+  architectural_decision:
+    chosen: "Read-First Standards Resolution with Audit Intelligence"
+    rationale: |
+      - company/domains/ are AUTHORITATIVE sources (not CORTEX outputs)
+      - READ from company standards BEFORE generating code
+      - FALLBACK to cortex/knowledge/ when company standards missing
+      - GAP REPORTING (not auto-generation) for missing standards
+      - AUDIT INTELLIGENCE auto-discovers new orchestrators for integration
+
+challenge_response: |
+  User proposed: "Save initially, gradually switch to read"
+  
+  CORTEX CHALLENGED and user ACCEPTED counter-proposal:
+  - Company domains should be INPUTS (read), not OUTPUTS (write)
+  - CORTEX doesn't define company policy, it CONSUMES it
+  - Correct flow: company/domains/ → CORTEX → generated code
+  - Exception: Bootstrap mode for empty company/domains/ (explicit)
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Enable orchestrators to consume company-specific standards from 
+    company/domains/ as authoritative sources. Implement read-first strategy
+    with intelligent gap detection and audit-driven orchestrator discovery.
+    
+    **Core Principles:**
+    1. READ FIRST from company/domains/ (authority)
+    2. FALLBACK to cortex/knowledge/ (defaults)
+    3. GAP REPORT when standards missing (don't auto-generate)
+    4. AUDIT INTELLIGENCE discovers new orchestrators automatically
+    5. INFORMED BY Phase 28 repository onboarding profiles
+
+  critical_requirement: |
+    From user Q3: "Yes with audit intelligence to include future orchestrators 
+    by cortex architect as CORTEX evolves"
+    
+    Audit intelligence must:
+    - Auto-discover new orchestrators via wiring.yaml
+    - Recommend company domain integration for each
+    - Generate integration templates
+    - Maintained by cortex-architect
+
+business_impact:
+  value_drivers:
+    - "Enforces company standards automatically (security, API, testing)"
+    - "Reduces standards violations by 80%"
+    - "Automatic discovery of company patterns from onboarded repos"
+    - "Self-evolving orchestrator coverage (audit intelligence)"
+    - "Single source of truth for enterprise governance"
+  
+  roi_calculation:
+    standards_violation_reduction: "80% (automatic enforcement)"
+    manual_standards_checking_time_saved: "4 hours/week per developer"
+    onboarding_time_reduced: "50% (standards auto-discovered)"
+    audit_intelligence_coverage: "100% (all future orchestrators)"
+  
+  roi_score: 0.88  # (violation_reduction + time_saved + coverage) / 3
+
+dependencies:
+  prerequisites:
+    - "phase-28: Repository onboarding (provides company domain profiles)"
+  
+  enables:
+    - "Automatic standards compliance across all orchestrators"
+    - "Company-specific code generation"
+  
+  informed_by:
+    - "Phase 28 repository profiles (company/domains/ structure discovery)"
+  
+  orchestrators_required:
+    - "MasterOrchestrator (standards routing)"
+    - "PlanningOrchestrator (project templates)"
+    - "TDDOrchestrator (test patterns)"
+    - "SecurityCheckpointAgent (security policies)"
+    - "RefactoringOrchestrator (style guides)"
+    - "FUTURE: Auto-discovered via audit intelligence"
+
+---
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+current_pain_points:
+  - pain: "No automatic company standards consumption"
+    impact: "CORTEX generates code without company context"
+    evidence: "Manual standards checking required, frequent violations"
+  
+  - pain: "company/domains/ exists but unused"
+    impact: "Enterprise governance not enforced"
+    evidence: "company/domains/ has security/, api-standards/, but not integrated"
+  
+  - pain: "New orchestrators added without standards integration"
+    impact: "Coverage gaps grow over time"
+    evidence: "No systematic tracking of which orchestrators use company standards"
+  
+  - pain: "CORTEX generates generic patterns, not company-specific"
+    impact: "Generated code doesn't match enterprise patterns"
+    evidence: "Refactoring needed post-generation to align with company style"
+
+root_cause_analysis:
+  primary: "No standards resolution system (company → cortex → defaults)"
+  contributing:
+    - "Orchestrators don't query company/domains/"
+    - "No priority-based loading mechanism"
+    - "No gap detection/reporting"
+    - "No audit intelligence for orchestrator discovery"
+    - "Phase 28 onboarding data not leveraged"
+
+---
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+
+solution_overview: |
+  Build StandardsResolver component with priority-based loading
+  (company → cortex → defaults). Integrate with 5 initial orchestrators,
+  then enable audit intelligence to auto-discover future orchestrators.
+  Leverage Phase 28 repository profiles for company domain discovery.
+
+architecture:
+  approach: "Read-First Standards Resolution + Audit Intelligence"
+  
+  components:
+    - name: "StandardsResolver"
+      responsibility: "Priority-based standards loading with gap detection"
+      location: "cortex/common/standards_resolver.py"
+      behavior: |
+        load_standards(domain, subdomain):
+          1. Try: company/domains/{domain}/{subdomain}/
+          2. If missing: cortex/knowledge/best-practices/{domain}/
+          3. If missing: cortex/defaults/{domain}/
+          4. Log gap if company standard missing
+          5. Return: (standards_content, source_level, gaps)
+      
+      priority_levels:
+        - level: "COMPANY"
+          priority: 1
+          source: "company/domains/"
+          authority: "highest"
+        
+        - level: "CORTEX"
+          priority: 2
+          source: "cortex/knowledge/best-practices/"
+          authority: "fallback"
+        
+        - level: "DEFAULTS"
+          priority: 3
+          source: "cortex/defaults/"
+          authority: "last_resort"
+      
+      caching:
+        strategy: "LRU cache (size=100, TTL=3600s)"
+        invalidation: "File modification time check"
+    
+    - name: "Gap Analyzer"
+      responsibility: "Detect missing company standards, generate reports"
+      location: "cortex/governance/gap_analyzer.py"
+      behavior: |
+        - Track all standards resolution attempts
+        - Log when fallback to cortex/defaults occurs
+        - Generate gap report: "Missing company standards for {domain}"
+        - Recommend what company should provide
+        - DO NOT auto-generate company standards
+      
+      report_format: |
+        # Company Domain Gap Report
+        Generated: 2026-02-06
+        
+        ## Missing Standards
+        - security/authentication.yaml
+          Used by: SecurityCheckpointAgent
+          Fallback: cortex/knowledge/best-practices/security/owasp-top-10.yaml
+          Recommendation: Define company-specific auth patterns
+        
+        - testing/test-patterns.yaml
+          Used by: TDDOrchestrator
+          Fallback: cortex/defaults/testing/pytest-patterns.yaml
+          Recommendation: Document company test conventions
+    
+    - name: "Audit Intelligence System"
+      responsibility: "Auto-discover orchestrators, recommend integrations"
+      location: "cortex/governance/audit_intelligence.py"
+      behavior: |
+        - Scan wiring.yaml for all registered orchestrators
+        - Identify orchestrators without StandardsResolver integration
+        - Generate integration recommendations for cortex-architect
+        - Create integration templates (copy from existing patterns)
+        - Track coverage over time
+      
+      discovery_process: |
+        1. Load cortex/wiring/specifications/wiring.yaml
+        2. Extract all orchestrator classes
+        3. Check: Does orchestrator import StandardsResolver?
+        4. If NO → Add to integration backlog
+        5. Generate template: "How to integrate {orchestrator}"
+        6. Notify cortex-architect in next AUDIT
+      
+      coverage_tracking:
+        initial_orchestrators: 5
+        target_coverage: "100% (all orchestrators)"
+        auto_discovery: true
+        update_frequency: "every AUDIT run"
+    
+    - name: "Repository Profile Integration"
+      responsibility: "Use Phase 28 profiles for company domain discovery"
+      location: "cortex/common/standards_resolver.py"
+      behavior: |
+        - Load repository profile from Phase 28
+        - Check: profile.structure.has_company_domains
+        - If true: Use profile.structure.company_domains_path
+        - Use profile.structure.domains_detected for prioritization
+        - Graceful degradation if profile missing
+      
+      example: |
+        profile = load_repo_profile("ksessions")
+        if profile.structure.has_company_domains:
+          company_path = profile.structure.company_domains_path
+          domains = profile.structure.domains_detected
+          # Use for standards resolution
+    
+    - name: "Orchestrator Integration Pattern"
+      responsibility: "Standard pattern for orchestrators to use StandardsResolver"
+      template: |
+        from cortex.common.standards_resolver import StandardsResolver
+        
+        class MyOrchestrator:
+            def __init__(self):
+                self.standards_resolver = StandardsResolver()
+            
+            def execute(self, request):
+                # Load company standards first
+                standards, source, gaps = self.standards_resolver.load_standards(
+                    domain="security",
+                    subdomain="authentication"
+                )
+                
+                # Log gaps for reporting
+                if gaps:
+                    log_gap_detected(gaps)
+                
+                # Use standards for decision-making
+                auth_pattern = standards.get("auth_pattern", "default")
+
+  data_flow: |
+    Orchestrator Request → StandardsResolver
+                        ↓
+    Try: company/domains/{domain}/{subdomain}/
+                        ↓
+    [FOUND] → Return company standard (authority=COMPANY)
+    [MISSING] → Fallback to cortex/knowledge/
+                        ↓
+    [FOUND] → Return CORTEX standard (authority=CORTEX, gap_logged=True)
+    [MISSING] → Fallback to cortex/defaults/
+                        ↓
+    Return default + log gap
+                        ↓
+    Gap Analyzer generates report
+                        ↓
+    Audit Intelligence discovers new orchestrators
+                        ↓
+    cortex-architect notified in next AUDIT
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+phases:
+  phase_1_standards_resolver:
+    name: "StandardsResolver Component"
+    duration: "2 days"
+    priority: "P0"
+    
+    tasks:
+      - id: "27.1.1"
+        name: "Design standards schema"
+        effort: "3 hours"
+        outputs:
+          - "Standard YAML structure (Pydantic models)"
+          - "Priority levels enum (COMPANY, CORTEX, DEFAULTS)"
+        tests:
+          - "test_standards_schema_validation"
+      
+      - id: "27.1.2"
+        name: "Implement StandardsResolver"
+        effort: "5 hours"
+        files:
+          - "cortex/common/standards_resolver.py"
+        outputs:
+          - "load_standards(domain, subdomain) method"
+          - "Priority-based loading logic"
+          - "LRU caching (size=100, TTL=3600s)"
+        tests:
+          - "test_standards_resolver_company_priority"
+          - "test_standards_resolver_fallback_cortex"
+          - "test_standards_resolver_fallback_defaults"
+          - "test_standards_resolver_caching"
+      
+      - id: "27.1.3"
+        name: "Integrate with Phase 28 profiles"
+        effort: "2 hours"
+        changes:
+          - "Load repository profile for company domain discovery"
+          - "Use profile.structure.company_domains_path"
+          - "Graceful degradation if profile missing"
+        tests:
+          - "test_standards_resolver_uses_profile"
+          - "test_standards_resolver_graceful_no_profile"
+  
+  phase_2_gap_analyzer:
+    name: "Gap Detection & Reporting"
+    duration: "1 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "27.2.1"
+        name: "Implement Gap Analyzer"
+        effort: "4 hours"
+        files:
+          - "cortex/governance/gap_analyzer.py"
+        outputs:
+          - "Gap logging (when fallback occurs)"
+          - "Gap report generation"
+          - "Recommendation system"
+        tests:
+          - "test_gap_analyzer_detects_missing"
+          - "test_gap_analyzer_generates_report"
+      
+      - id: "27.2.2"
+        name: "Integrate with AUDIT mode"
+        effort: "2 hours"
+        changes:
+          - "AUDIT mode includes gap report"
+          - "P2 check: 'Company Domain Coverage'"
+        tests:
+          - "test_audit_includes_gap_report"
+  
+  phase_3_orchestrator_integration:
+    name: "Integrate 5 Initial Orchestrators"
+    duration: "2 days"
+    priority: "P0"
+    
+    tasks:
+      - id: "27.3.1"
+        name: "MasterOrchestrator integration"
+        effort: "2 hours"
+        files:
+          - "cortex/orchestrators/master/orchestrator.py"
+        changes:
+          - "Add StandardsResolver"
+          - "Load governance standards"
+        tests:
+          - "test_master_orchestrator_uses_standards"
+      
+      - id: "27.3.2"
+        name: "PlanningOrchestrator integration"
+        effort: "2 hours"
+        files:
+          - "cortex/orchestrators/planning/orchestrator.py"
+        changes:
+          - "Load project templates from company/domains/"
+        tests:
+          - "test_planning_uses_company_templates"
+      
+      - id: "27.3.3"
+        name: "TDDOrchestrator integration"
+        effort: "2 hours"
+        files:
+          - "cortex/orchestrators/tdd/orchestrator.py"
+        changes:
+          - "Load test patterns from company/domains/"
+        tests:
+          - "test_tdd_uses_company_test_patterns"
+      
+      - id: "27.3.4"
+        name: "SecurityCheckpointAgent integration"
+        effort: "2 hours"
+        files:
+          - "cortex/governance/enforcement/security_checkpoint_agent.py"
+        changes:
+          - "Load security policies from company/domains/"
+        tests:
+          - "test_security_uses_company_policies"
+      
+      - id: "27.3.5"
+        name: "RefactoringOrchestrator integration"
+        effort: "2 hours"
+        files:
+          - "cortex/orchestrators/refactoring/orchestrator.py"
+        changes:
+          - "Load style guides from company/domains/"
+        tests:
+          - "test_refactoring_uses_company_style"
+  
+  phase_4_audit_intelligence:
+    name: "Audit Intelligence System"
+    duration: "2 days"
+    priority: "P1"
+    
+    tasks:
+      - id: "27.4.1"
+        name: "Implement Audit Intelligence"
+        effort: "5 hours"
+        files:
+          - "cortex/governance/audit_intelligence.py"
+        outputs:
+          - "Orchestrator discovery from wiring.yaml"
+          - "Integration coverage tracking"
+          - "Template generation"
+        tests:
+          - "test_audit_intelligence_discovers_orchestrators"
+          - "test_audit_intelligence_generates_templates"
+      
+      - id: "27.4.2"
+        name: "Integrate with cortex-architect AUDIT mode"
+        effort: "3 hours"
+        changes:
+          - "AUDIT mode runs audit intelligence"
+          - "Reports orchestrators without standards integration"
+          - "Generates integration recommendations"
+        tests:
+          - "test_audit_includes_orchestrator_coverage"
+
+test_strategy:
+  test_categories:
+    unit_tests: 25
+    integration_tests: 12
+    e2e_tests: 5
+  
+  critical_tests:
+    - "test_standards_resolver_priority_order"
+    - "test_gap_analyzer_detects_all_missing"
+    - "test_orchestrators_use_company_standards"
+    - "test_audit_intelligence_100_percent_coverage"
+    - "test_phase_28_profile_integration"
+  
+  coverage_target: "95%"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+acceptance_criteria:
+  functional:
+    - criterion: "StandardsResolver reads company/domains/ first"
+      validation: "Load attempt order: company → cortex → defaults"
+      
+    - criterion: "5 orchestrators integrated with StandardsResolver"
+      validation: "All 5 use company standards when available"
+      
+    - criterion: "Gap report generated for missing standards"
+      validation: "Gap analyzer identifies all missing company standards"
+      
+    - criterion: "Audit intelligence discovers all orchestrators"
+      validation: "wiring.yaml parsed, 100% orchestrator coverage reported"
+      
+    - criterion: "Phase 28 profiles used for discovery"
+      validation: "KSESSIONS profile informs company domain paths"
+  
+  performance:
+    - criterion: "Standards resolution <50ms (cache hit)"
+      validation: "LRU cache reduces repeated lookups"
+      
+    - criterion: "Audit intelligence scan <5 seconds"
+      validation: "wiring.yaml parsing + coverage analysis"
+  
+  quality:
+    - criterion: "Read-first strategy enforced"
+      validation: "NO writes to company/domains/ (read-only)"
+      
+    - criterion: "100% orchestrator coverage tracking"
+      validation: "Audit intelligence reports all orchestrators"
+
+---
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Company standards schema incompatible with CORTEX expectations"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation: "Schema validation, clear documentation, examples"
+  
+  - risk: "Performance degradation with large company/domains/ trees"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "LRU caching, lazy loading, index files"
+  
+  - risk: "Audit intelligence misses custom orchestrators"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "wiring.yaml is source of truth, manual overrides supported"
+
+---
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+
+integration:
+  phase_28_onboarding:
+    relationship: "INFORMED BY"
+    data_flow: |
+      Phase 28 profiles → StandardsResolver
+      - Profile indicates company/domains/ presence
+      - Profile provides path: company_domains_path
+      - Profile lists detected domains
+      - StandardsResolver uses for priority loading
+  
+  audit_mode:
+    relationship: "EXTENDS"
+    data_flow: |
+      AUDIT mode → Gap Analyzer report
+      AUDIT mode → Audit Intelligence orchestrator coverage
+      - P2 check: "Company Domain Coverage"
+      - Recommendations for missing standards
+      - Integration templates for new orchestrators
+
+---
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+
+rollout:
+  stage_1_standards_resolver:
+    duration: "Day 1-2"
+    scope: "StandardsResolver + Gap Analyzer"
+    validation: "Priority loading works, gaps detected"
+  
+  stage_2_orchestrators:
+    duration: "Day 3-4"
+    scope: "5 orchestrator integrations"
+    validation: "All 5 use company standards"
+  
+  stage_3_audit_intelligence:
+    duration: "Day 5-6"
+    scope: "Audit Intelligence + cortex-architect integration"
+    validation: "100% orchestrator coverage, templates generated"
+  
+  stage_4_ksessions_test:
+    duration: "Day 7"
+    scope: "KSESSIONS as test case"
+    validation: "KSESSIONS standards consumed, gap report generated"
+
+---
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+
+completion_checklist:
+  - [ ] StandardsResolver implemented (priority loading)
+  - [ ] LRU caching active (size=100, TTL=3600s)
+  - [ ] Phase 28 profile integration complete
+  - [ ] Gap Analyzer implemented
+  - [ ] Gap report generation working
+  - [ ] MasterOrchestrator integrated
+  - [ ] PlanningOrchestrator integrated
+  - [ ] TDDOrchestrator integrated
+  - [ ] SecurityCheckpointAgent integrated
+  - [ ] RefactoringOrchestrator integrated
+  - [ ] Audit Intelligence system implemented
+  - [ ] Orchestrator discovery from wiring.yaml working
+  - [ ] Integration templates generated
+  - [ ] cortex-architect AUDIT mode extended
+  - [ ] KSESSIONS test case validated
+  - [ ] 42 tests written and passing (25 unit + 12 integration + 5 e2e)
+  - [ ] Documentation complete (company-domain-integration.md)
+  - [ ] Read-first strategy enforced (no writes to company/domains/)
+  - [ ] 100% orchestrator coverage tracked
+  - [ ] Code review approved
+
+---
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata_tracking:
+  created_by: "cortex-architect v14.2"
+  created_at: "2026-02-06"
+  phase_type: "integration"
+  complexity: "high"
+  estimated_loc: 2500
+  estimated_tests: 42
+  estimated_days: 7
+  actual_days: null
+  status: "PLANNED"
+  next_review: "2026-02-08"
+  informed_by: ["phase-28"]

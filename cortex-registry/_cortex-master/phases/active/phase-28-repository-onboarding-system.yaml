@@ -1,0 +1,553 @@
+# PHASE-28: REPOSITORY ONBOARDING SYSTEM
+# Version: 1.0 | Created: 2026-02-06 | Authority: cortex-architect.prompt.md v14.2
+# Scope: Mandatory first step for external repository interaction
+# Status: PLANNED - MUST execute before all other external repo operations
+
+---
+metadata:
+  phase: "28"
+  title: "Repository Onboarding System"
+  version: "1.0"
+  status: "PLANNED"
+  author: "Asif Hussain"
+  created: "2026-02-06"
+  priority: "P0"
+  estimated_effort: "3-5 days"
+  execution_order: 1  # MUST BE FIRST
+  governance:
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-002: NO markdown file generation (inline only)"
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: Single canonical implementation"
+    - "MCP-FIRST: All functionality via MCP tools"
+  architectural_decision:
+    chosen: "Loose-coupled repository profiling"
+    rationale: |
+      - Repository profiles stored in CORTEX (not target repo)
+      - Read-only scanning (NO modifications to target)
+      - Graceful degradation if external repo deleted
+      - Enables company domain integration (Phase 27)
+      - Test case: KSESSIONS repository
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Establish repository onboarding as the MANDATORY first step when 
+    interacting with any external repository. NO stubs or fake implementations.
+    Test with KSESSIONS repository, maintain loose coupling for deletion safety.
+    
+    **Core Principles:**
+    1. MUST be first interaction (enforced via MCP gateway)
+    2. Real implementations only (NO placeholders)
+    3. Loosely coupled (external repo can be deleted safely)
+    4. Read-only operation (NO writes to external repo)
+    5. Profile stored in CORTEX (single source of truth)
+
+  critical_requirement: |
+    From user Q1: "onboarding MUST BE the first step when interacting with repo. 
+    Ensure this is completed first. Do not create stubs or fake implementations. 
+    Use the KSESSIONS repo folder at the same location as this CORTEX repo to 
+    onboard it and use it as a test case. Keep it loosely coupled so KSESSIONS 
+    can be deleted."
+
+business_impact:
+  value_drivers:
+    - "Enables company domain integration (Phase 27 prerequisite)"
+    - "Prevents blind operation on external repos"
+    - "Automatic standards discovery (security, testing, style)"
+    - "Reusable patterns across repositories"
+    - "Foundation for multi-repo orchestration"
+  
+  roi_calculation:
+    time_saved_per_repo: "2-4 hours (manual discovery → automated)"
+    error_reduction: "70% (standards violations, security issues)"
+    reusability_factor: "90% (profiles reused across operations)"
+    deletion_safety: "100% (loose coupling ensures CORTEX stability)"
+  
+  roi_score: 0.92  # (time_saved + error_reduction + reusability) / 3
+
+dependencies:
+  prerequisites: []  # None - MUST be first
+  enables:
+    - "phase-27: Company Domain Integration"
+    - "phase-27: Standards resolution"
+  
+  blocks: []
+  
+  orchestrators_required:
+    - "RepositoryOnboardingOrchestrator (primary)"
+    - "SecurityCheckpointAgent (security scan)"
+    - "MasterOrchestrator (profile storage)"
+
+---
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+current_pain_points:
+  - pain: "No systematic external repo discovery"
+    impact: "Blind operation, missed standards, security gaps"
+    evidence: "Manual scanning required for each operation"
+  
+  - pain: "Company standards not automatically discovered"
+    impact: "Violations of company-specific patterns"
+    evidence: "Phase 27 needs input data (company/domains/ structure)"
+  
+  - pain: "No deletion safety for external repos"
+    impact: "CORTEX breaks if test repos removed"
+    evidence: "Hard references would cause failures"
+  
+  - pain: "Stub implementations in test scenarios"
+    impact: "False confidence, production gaps"
+    evidence: "User requirement: 'Do not create stubs or fake implementations'"
+
+root_cause_analysis:
+  primary: "No first-step enforcement for external repo interaction"
+  contributing:
+    - "Existing RepositoryOnboardingOrchestrator not mandatory"
+    - "No profile persistence mechanism"
+    - "No loose coupling architecture"
+    - "No MCP-level gateway enforcement"
+
+---
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+
+solution_overview: |
+  Enhance RepositoryOnboardingOrchestrator to be a mandatory first step,
+  with profile persistence in CORTEX and loose coupling for deletion safety.
+  Test with KSESSIONS repository (/Users/asifhussain/PROJECTS/KSESSIONS).
+
+architecture:
+  approach: "Loose-Coupled Repository Profiling"
+  
+  components:
+    - name: "RepositoryOnboardingOrchestrator (Enhanced)"
+      responsibility: "Scan, analyze, profile external repositories"
+      location: "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      enhancements:
+        - "Profile generation and persistence"
+        - "Company domain structure detection"
+        - "Tech stack auto-discovery"
+        - "Security baseline assessment"
+        - "Standards extraction"
+    
+    - name: "Repository Profile Store"
+      responsibility: "Persist and retrieve repository profiles"
+      location: "cortex_brain/onboarded_repos/"
+      structure: |
+        cortex_brain/onboarded_repos/
+          ksessions.yaml         # Profile for KSESSIONS
+          [repo-name].yaml       # Other repository profiles
+      
+    - name: "MCP Onboarding Gateway"
+      responsibility: "Enforce onboarding-first policy"
+      location: "cortex/mcp/server.py"
+      behavior: |
+        - Check if external repo is onboarded
+        - If not, auto-trigger onboarding
+        - Block operations until profile exists
+    
+    - name: "Loose Coupling Manager"
+      responsibility: "Handle deleted repository scenarios"
+      location: "cortex/common/repo_reference.py"
+      behavior: |
+        - Reference by path, not hard link
+        - Validate existence before operations
+        - Graceful degradation if missing
+        - Log deletion events
+
+  data_flow: |
+    External Repo → RepositoryOnboardingOrchestrator
+                 ↓
+    Scan: structure, tech stack, standards, security
+                 ↓
+    Generate Profile (YAML)
+                 ↓
+    Store in cortex_brain/onboarded_repos/
+                 ↓
+    Operations use profile (NOT direct repo access)
+                 ↓
+    If repo deleted → Operations use cached profile + graceful degradation
+
+profile_schema:
+  example: |
+    # cortex_brain/onboarded_repos/ksessions.yaml
+    repository:
+      name: "KSESSIONS"
+      path: "/Users/asifhussain/PROJECTS/KSESSIONS"
+      onboarded_at: "2026-02-06T10:30:00Z"
+      last_validated: "2026-02-06T10:30:00Z"
+      exists: true  # Updated on each validation
+    
+    tech_stack:
+      primary_language: "Python"
+      languages: ["Python", "YAML", "Markdown"]
+      frameworks: ["FastAPI", "Pydantic"]
+      dependencies:
+        - "pyyaml>=6.0"
+        - "pydantic>=2.0"
+      
+    structure:
+      has_company_domains: true
+      company_domains_path: "company/domains/"
+      domains_detected:
+        - "security/"
+        - "testing/"
+        - "api-standards/"
+      
+      has_tests: true
+      test_framework: "pytest"
+      test_coverage: "85%"
+      
+      has_docs: true
+      doc_format: "markdown"
+    
+    standards:
+      coding_style: "black + mypy + pylint"
+      security_baseline: "OWASP Top 10 compliant"
+      test_patterns: "TDD with pytest"
+      api_patterns: "RESTful + OpenAPI 3.0"
+    
+    security:
+      secrets_management: "environment variables"
+      auth_pattern: "JWT + OAuth2"
+      vulnerabilities_detected: 0
+      last_scan: "2026-02-06T10:30:00Z"
+    
+    loose_coupling:
+      referenced_by_cortex: true
+      deletion_safe: true
+      fallback_strategy: "use_cached_profile"
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+phases:
+  phase_1_profile_generation:
+    name: "Profile Generation & Persistence"
+    duration: "1 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "28.1.1"
+        name: "Design repository profile schema"
+        effort: "2 hours"
+        outputs:
+          - "Profile YAML structure definition"
+          - "Validation rules (Pydantic models)"
+        tests:
+          - "test_profile_schema_validation"
+          - "test_profile_serialization"
+      
+      - id: "28.1.2"
+        name: "Create Repository Profile Store"
+        effort: "3 hours"
+        files:
+          - "cortex_brain/onboarded_repos/__init__.py"
+          - "cortex_brain/onboarded_repos/profile_store.py"
+        outputs:
+          - "ProfileStore class (save, load, list, delete)"
+        tests:
+          - "test_profile_store_save"
+          - "test_profile_store_load"
+          - "test_profile_store_list"
+          - "test_profile_store_graceful_missing"
+      
+      - id: "28.1.3"
+        name: "Enhance RepositoryOnboardingOrchestrator"
+        effort: "3 hours"
+        files:
+          - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+        changes:
+          - "Add profile generation logic"
+          - "Integrate ProfileStore"
+          - "Company domains detection"
+          - "Tech stack analysis"
+        tests:
+          - "test_onboarding_generates_profile"
+          - "test_company_domains_detection"
+  
+  phase_2_ksessions_onboarding:
+    name: "KSESSIONS Test Case"
+    duration: "1 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "28.2.1"
+        name: "Onboard KSESSIONS repository"
+        effort: "2 hours"
+        inputs:
+          - "KSESSIONS repo at /Users/asifhussain/PROJECTS/KSESSIONS"
+        outputs:
+          - "cortex_brain/onboarded_repos/ksessions.yaml"
+        validation:
+          - "Profile generated successfully"
+          - "Company domains detected (if present)"
+          - "Tech stack identified"
+          - "Security baseline established"
+        tests:
+          - "test_ksessions_onboarding_complete"
+          - "test_ksessions_profile_valid"
+      
+      - id: "28.2.2"
+        name: "Verify loose coupling"
+        effort: "1 hour"
+        validation:
+          - "Delete KSESSIONS directory"
+          - "CORTEX operations continue (graceful degradation)"
+          - "Profile still accessible"
+          - "No errors or crashes"
+        tests:
+          - "test_ksessions_deletion_safety"
+          - "test_graceful_degradation"
+  
+  phase_3_mcp_gateway:
+    name: "MCP Onboarding-First Enforcement"
+    duration: "1 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "28.3.1"
+        name: "Create onboarding gateway middleware"
+        effort: "3 hours"
+        files:
+          - "cortex/mcp/middleware/onboarding_gate.py"
+        outputs:
+          - "OnboardingGate class"
+          - "Check if repo onboarded"
+          - "Auto-trigger onboarding if needed"
+        tests:
+          - "test_onboarding_gate_blocks_unonboarded"
+          - "test_onboarding_gate_allows_onboarded"
+      
+      - id: "28.3.2"
+        name: "Integrate with MCP server"
+        effort: "2 hours"
+        files:
+          - "cortex/mcp/server.py"
+        changes:
+          - "Add OnboardingGate to middleware stack"
+          - "Enforce onboarding-first for external repo operations"
+        tests:
+          - "test_mcp_enforces_onboarding"
+  
+  phase_4_loose_coupling:
+    name: "Loose Coupling Architecture"
+    duration: "1 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "28.4.1"
+        name: "Create RepositoryReference abstraction"
+        effort: "3 hours"
+        files:
+          - "cortex/common/repo_reference.py"
+        outputs:
+          - "RepoReference class (path-based, not hard-linked)"
+          - "Existence validation"
+          - "Graceful degradation logic"
+        tests:
+          - "test_repo_reference_exists"
+          - "test_repo_reference_deleted"
+          - "test_graceful_degradation"
+      
+      - id: "28.4.2"
+        name: "Update orchestrators to use RepoReference"
+        effort: "2 hours"
+        files:
+          - "cortex/orchestrators/planning/orchestrator.py"
+          - "cortex/orchestrators/master/orchestrator.py"
+        changes:
+          - "Replace direct path refs with RepoReference"
+        tests:
+          - "test_orchestrators_use_repo_reference"
+  
+  phase_5_documentation:
+    name: "Documentation & Integration"
+    duration: "0.5 day"
+    priority: "P1"
+    
+    tasks:
+      - id: "28.5.1"
+        name: "Document onboarding process"
+        effort: "2 hours"
+        files:
+          - "docs/07-guides/repository-onboarding.md"
+        outputs:
+          - "Onboarding workflow documentation"
+          - "KSESSIONS case study"
+          - "Loose coupling best practices"
+      
+      - id: "28.5.2"
+        name: "Update copilot-instructions.md"
+        effort: "1 hour"
+        files:
+          - ".github/copilot-instructions.md"
+        changes:
+          - "Add onboarding command: /onboard {path}"
+          - "Document onboarding-first requirement"
+
+test_strategy:
+  test_categories:
+    unit_tests: 25
+    integration_tests: 8
+    e2e_tests: 3
+  
+  critical_tests:
+    - "test_ksessions_onboarding_complete"
+    - "test_ksessions_deletion_safety"
+    - "test_profile_persistence"
+    - "test_mcp_enforces_onboarding"
+    - "test_graceful_degradation_deleted_repo"
+  
+  coverage_target: "95%"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+acceptance_criteria:
+  functional:
+    - criterion: "KSESSIONS successfully onboarded"
+      validation: "Profile exists at cortex_brain/onboarded_repos/ksessions.yaml"
+      
+    - criterion: "Deletion safety verified"
+      validation: "KSESSIONS deleted → CORTEX continues without errors"
+      
+    - criterion: "MCP gateway enforces onboarding-first"
+      validation: "Operations blocked until repo onboarded"
+      
+    - criterion: "Profile contains all required fields"
+      validation: "tech_stack, structure, standards, security present"
+      
+    - criterion: "Loose coupling maintained"
+      validation: "No hard references to external repo paths"
+  
+  performance:
+    - criterion: "Onboarding completes in <30 seconds"
+      measurement: "Time from trigger to profile saved"
+      
+    - criterion: "Profile load time <100ms"
+      measurement: "ProfileStore.load() execution time"
+  
+  quality:
+    - criterion: "NO stubs or fake implementations"
+      validation: "All code fully implemented and tested"
+      
+    - criterion: "Test coverage >95%"
+      validation: "pytest --cov report"
+
+---
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "KSESSIONS repository structure changes during development"
+    probability: "Medium"
+    impact: "Low"
+    mitigation: "Profile includes last_validated timestamp, re-scan on mismatch"
+  
+  - risk: "Performance bottleneck for large repositories"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation: "Incremental scanning, async operations, caching"
+  
+  - risk: "Company domain detection false positives"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "Configurable detection rules, manual override option"
+
+---
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+
+integration:
+  phase_27_company_domains:
+    relationship: "PREREQUISITE"
+    data_flow: |
+      Phase 28 profiles → Phase 27 StandardsResolver
+      - Profile indicates company/domains/ presence
+      - StandardsResolver uses profile for discovery
+      - Gap analysis based on profile metadata
+  
+  orchestrators:
+    - orchestrator: "MasterOrchestrator"
+      integration: "Profile storage coordination"
+      
+    - orchestrator: "PlanningOrchestrator"
+      integration: "Use profiles for project templates"
+      
+    - orchestrator: "SecurityCheckpointAgent"
+      integration: "Baseline security from profiles"
+
+---
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+
+rollout:
+  stage_1_ksessions:
+    duration: "Day 1-3"
+    scope: "KSESSIONS onboarding as test case"
+    validation: "Profile generated, deletion safe"
+  
+  stage_2_mcp_enforcement:
+    duration: "Day 4"
+    scope: "MCP gateway integration"
+    validation: "Onboarding-first enforced"
+  
+  stage_3_integration:
+    duration: "Day 5"
+    scope: "Orchestrator updates for RepoReference"
+    validation: "All orchestrators use loose coupling"
+
+---
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+
+completion_checklist:
+  - [ ] Repository profile schema defined (Pydantic models)
+  - [ ] ProfileStore implemented (save, load, list)
+  - [ ] RepositoryOnboardingOrchestrator enhanced
+  - [ ] KSESSIONS onboarded successfully
+  - [ ] ksessions.yaml profile validated
+  - [ ] Deletion safety test passed (KSESSIONS deleted, CORTEX stable)
+  - [ ] OnboardingGate middleware created
+  - [ ] MCP server integration complete
+  - [ ] RepoReference abstraction implemented
+  - [ ] Orchestrators updated to use RepoReference
+  - [ ] 36 tests written and passing (25 unit + 8 integration + 3 e2e)
+  - [ ] Documentation complete (repository-onboarding.md)
+  - [ ] copilot-instructions.md updated (/onboard command)
+  - [ ] NO stubs or fake implementations
+  - [ ] Code review approved
+  - [ ] Phase 27 unblocked (prerequisite met)
+
+---
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata_tracking:
+  created_by: "cortex-architect v14.2"
+  created_at: "2026-02-06"
+  phase_type: "infrastructure"
+  complexity: "medium"
+  estimated_loc: 1200
+  estimated_tests: 36
+  estimated_days: 4
+  actual_days: null
+  status: "PLANNED"
+  next_review: "2026-02-07"

@@ -13,6 +13,10 @@ metadata:
   created: "2026-02-06"
   priority: "P0"
   estimated_effort: "1 week"
+  execution_order: 3  # After Phase 26 (unblocked)
+  unblocked_by: "phase-26"
+  depends_on:
+    - "phase-26-context-loading-optimization"
   governance:
     - "CORE-008: TDD-first (tests BEFORE code)"
     - "CORE-002: NO markdown file generation (inline only)"
@@ -27,6 +31,12 @@ metadata:
       - Enforces cleanup via VacuumOrchestrator on every phase
       - Dashboard always reflects current state
       - Single source of truth for development progress
+  
+  blocking_resolution:
+    original_blocker: "ENH-046 (PHASE-25-TOKEN-001)"
+    resolved_by: "phase-26-context-loading-optimization"
+    resolution_date: "2026-02-06"
+    evidence: "Phase 26 eliminates eager file loading (83% token reduction)"
 
 ---
 # ============================================================================

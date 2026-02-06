@@ -1,0 +1,492 @@
+# PHASE-26: CONTEXT LOADING OPTIMIZATION
+# Version: 1.0 | Created: 2026-02-06 | Authority: cortex-architect.prompt.md v14.2
+# Scope: Eliminate eager file loading, reduce token waste by 83%
+# Status: PLANNED - Unblocks Phase 25 (PLAN MODE)
+
+---
+metadata:
+  phase: "26"
+  title: "Context Loading Optimization"
+  version: "1.0"
+  status: "PLANNED"
+  author: "Asif Hussain"
+  created: "2026-02-06"
+  priority: "P0"
+  estimated_effort: "2-3 days"
+  execution_order: 2  # After Phase 28
+  unblocks:
+    - "phase-25"
+  extends:
+    - "ENH-046"  # Context Consumption Governance
+  governance:
+    - "CORE-002: NO markdown file generation (inline only)"
+    - "CORE-047: NO file paths in instruction files (prevents auto-load)"
+  architectural_decision:
+    chosen: "Discovery-based lazy loading with EXIT GATE"
+    rationale: |
+      - Remove ALL file path references from prompts
+      - Replace with directory-level discovery hints
+      - AI explicitly loads via read_file/semantic_search
+      - EXIT GATE handles cost-aware context synthesis
+      - Zero eager loading by VS Code Copilot
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Eliminate token waste from VS Code Copilot's auto-loading behavior.
+    Current: Backticked file paths trigger auto-load (58k tokens for 4 files).
+    Target: Zero auto-loads, <10k tokens per turn, 83% reduction.
+    
+    **Evidence:**
+    - Screenshot: 4 files auto-loaded (CORTEX.md, copilot-instructions.md, 
+      wiring.yaml, enhancement-history.yaml)
+    - Token cost: ~58k tokens
+    - Actually needed: ~10k tokens (copilot-instructions.md only)
+    - Waste: 48k tokens (83% unnecessary)
+
+  critical_requirement: |
+    From user: "I want minimal eager loading" + "Check audit log history"
+    
+    Audit log shows ENH-046 identified this problem:
+    - chat01.md: 13 large file references loaded without synthesis
+    - Result: 5 summarization events (1 per 200 lines vs target 1 per 1000)
+    - ROOT CAUSE: File paths in prompts trigger VS Code auto-load
+
+business_impact:
+  value_drivers:
+    - "83% token reduction → 5x longer conversations without summarization"
+    - "Faster response times (less context to process)"
+    - "Unblocks Phase 25 (PLAN MODE) by fixing ENH-046 blocker"
+    - "Prevents 'Summarizing conversation history' interruptions"
+    - "Enables cost-aware context loading via EXIT GATE"
+  
+  roi_calculation:
+    token_savings_per_turn: "48k tokens (83% reduction)"
+    conversation_length_increase: "5x (200 lines → 1000 lines per summarization)"
+    response_time_improvement: "30% (less context parsing)"
+    phase_25_unblocked: "critical dependency resolved"
+  
+  roi_score: 0.95  # (savings + length + unblocking) / 3
+
+dependencies:
+  prerequisites:
+    - "ENH-046 Phase 1 (EXIT GATE deployed)"
+  
+  enables:
+    - "phase-25: PLAN MODE Enhancement"
+  
+  blocks: []
+  
+  orchestrators_required:
+    - "MasterOrchestrator (EXIT GATE integration)"
+    - "InteractionOrchestrator (context management)"
+
+---
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+current_pain_points:
+  - pain: "VS Code auto-loads backticked file paths"
+    impact: "58k tokens loaded, 83% waste"
+    evidence: "Screenshot shows 4 files loaded when only 1 needed"
+  
+  - pain: "Summarization events every 200 lines"
+    impact: "Conversation interruption, context loss"
+    evidence: "ENH-046: chat01.md had 5 summarizations (target: 1)"
+  
+  - pain: "Phase 25 blocked by token waste"
+    impact: "Cannot implement PLAN MODE"
+    evidence: "index.yaml: Phase 25 blocked by PHASE-25-TOKEN-001"
+  
+  - pain: "Prompts contain file path references"
+    impact: "Triggers auto-load despite '(load explicitly when needed)' text"
+    evidence: "cortex-architect.prompt.md lines 2581-2583 have backticked paths"
+
+root_cause_analysis:
+  primary: "File paths in instruction files trigger VS Code auto-load"
+  contributing:
+    - "CORE-047 exists but not enforced in prompts themselves"
+    - "copilot-instructions.md lines 11-12, 96, 285-291 have paths"
+    - "cortex-architect.prompt.md has backticked paths"
+    - "No discovery-based loading pattern documented"
+
+---
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+
+solution_overview: |
+  Remove ALL file path references from instruction files.
+  Replace with directory-level discovery hints.
+  AI uses semantic_search or explicit read_file only when needed.
+  EXIT GATE handles cost-aware context synthesis.
+
+architecture:
+  approach: "Discovery-Based Lazy Loading"
+  
+  components:
+    - name: "Prompt Path Removal"
+      responsibility: "Remove file paths from all instruction files"
+      files_affected:
+        - ".github/copilot-instructions.md"
+        - ".github/prompts/cortex-architect.prompt.md"
+        - ".github/prompts/CORTEX.prompt.md"
+        - ".github/prompts/response-format-standards.md"
+      
+      before: |
+        **Primary Prompt:** `prompts/CORTEX.prompt.md` (load explicitly when needed)
+        **Agents:** `agents/core/cortex-architect.md` (load explicitly when needed)
+      
+      after: |
+        **Primary Prompt:** CORTEX.prompt.md
+        **Agents:** cortex-architect.md
+        
+        **Location:** .github/prompts/ directory
+        **Loading:** Use semantic_search or read_file when actually needed
+    
+    - name: "Discovery Hints System"
+      responsibility: "Provide directory-level context for discovery"
+      pattern: |
+        ## Context Loading Strategy
+        **On-Demand Only:** Use semantic_search or read_file when actually needed
+        
+        **File Discovery:**
+        - Prompts: .github/prompts/ directory
+        - Agents: .github/agents/core/ directory
+        - Knowledge: cortex/knowledge/best-practices/
+        
+        **Intent-Based Loading:**
+        - IMPLEMENT → Load TDD patterns via EXIT GATE
+        - AUDIT → Load governance rules via EXIT GATE
+        - DESIGN → Load architecture patterns via EXIT GATE
+    
+    - name: "EXIT GATE Integration"
+      responsibility: "Cost-aware context synthesis"
+      location: "cortex/brain/core/context_synthesis_gateway.py"
+      behavior: |
+        - MasterOrchestrator invokes EXIT GATE before intent classification
+        - EXIT GATE determines minimal context needed
+        - Compression: agents 95%, YAML 91%, code 88%
+        - Cache hit rate target: 70%
+        - Budget enforcement: ≤20k tokens per turn
+    
+    - name: "CORE-047 Enforcement"
+      responsibility: "Update rule to clarify auto-load behavior"
+      location: ".github/copilot-instructions.md"
+      before: |
+        CORE-047: Instruction files MUST use backtick references (NO markdown links)
+      after: |
+        CORE-047: Instruction files MUST NOT include file paths (even backticks 
+        trigger VS Code auto-load). Use directory references only.
+
+  data_flow: |
+    User Request → MasterOrchestrator
+                ↓
+    EXIT GATE synthesizes minimal context (≤20k tokens)
+                ↓
+    AI classifies intent (IMPLEMENT/AUDIT/etc.)
+                ↓
+    IF additional context needed:
+      → AI explicitly calls semantic_search("agent for {intent}")
+      → AI explicitly calls read_file(path) for specific needs
+                ↓
+    NO auto-loading by VS Code
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+phases:
+  phase_1_copilot_instructions:
+    name: "Update copilot-instructions.md"
+    duration: "0.5 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "26.1.1"
+        name: "Remove file paths from System Identity section"
+        effort: "30 minutes"
+        files:
+          - ".github/copilot-instructions.md"
+        changes:
+          - "Lines 11-12: Remove `prompts/CORTEX.prompt.md` path"
+          - "Line 12: Remove `prompts/response-format-standards.md` path"
+          - "Replace with: 'Load via semantic_search when needed'"
+        tests:
+          - "test_no_auto_load_copilot_instructions"
+      
+      - id: "26.1.2"
+        name: "Update Prompts & Agents section (lines 285-291)"
+        effort: "30 minutes"
+        changes:
+          - "Remove backticked file paths from table"
+          - "Add directory-level discovery hints"
+          - "Document semantic_search pattern"
+        tests:
+          - "test_discovery_hints_present"
+      
+      - id: "26.1.3"
+        name: "Enhance CORE-047 rule"
+        effort: "15 minutes"
+        changes:
+          - "Clarify that even backticks trigger auto-load"
+          - "Update to: 'MUST NOT include file paths'"
+          - "Add evidence from screenshot analysis"
+        tests:
+          - "test_core_047_updated"
+  
+  phase_2_cortex_architect_prompt:
+    name: "Update cortex-architect.prompt.md"
+    duration: "0.5 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "26.2.1"
+        name: "Remove file paths from Token Optimization section"
+        effort: "30 minutes"
+        files:
+          - ".github/prompts/cortex-architect.prompt.md"
+        changes:
+          - "Lines 2581-2583: Remove backticked agent paths"
+          - "Replace with mode-specific loading table (no paths)"
+        tests:
+          - "test_no_auto_load_cortex_architect"
+      
+      - id: "26.2.2"
+        name: "Add Discovery Hints section"
+        effort: "30 minutes"
+        changes:
+          - "Add 'Context Loading Strategy' section"
+          - "Document intent-based loading patterns"
+          - "Reference EXIT GATE for cost-aware synthesis"
+        tests:
+          - "test_discovery_hints_cortex_architect"
+  
+  phase_3_other_prompts:
+    name: "Update remaining prompt files"
+    duration: "0.5 day"
+    priority: "P1"
+    
+    tasks:
+      - id: "26.3.1"
+        name: "Audit CORTEX.prompt.md for file paths"
+        effort: "30 minutes"
+        files:
+          - ".github/prompts/CORTEX.prompt.md"
+        changes:
+          - "Search for backticked paths"
+          - "Remove or replace with directory references"
+        tests:
+          - "test_no_auto_load_cortex_prompt"
+      
+      - id: "26.3.2"
+        name: "Audit response-format-standards.md"
+        effort: "15 minutes"
+        files:
+          - ".github/prompts/response-format-standards.md"
+        changes:
+          - "Check for file references"
+          - "Update if found"
+        tests:
+          - "test_no_auto_load_response_format"
+  
+  phase_4_validation:
+    name: "Validation & Metrics"
+    duration: "0.5 day"
+    priority: "P0"
+    
+    tasks:
+      - id: "26.4.1"
+        name: "Token usage validation"
+        effort: "1 hour"
+        validation:
+          - "Trigger cortex-architect prompt"
+          - "Count files auto-loaded (target: 0-1)"
+          - "Measure token cost (target: <10k)"
+          - "Compare before/after (expect 83% reduction)"
+        tests:
+          - "test_token_usage_reduced"
+          - "test_auto_load_count_zero"
+      
+      - id: "26.4.2"
+        name: "EXIT GATE integration test"
+        effort: "1 hour"
+        validation:
+          - "Verify MasterOrchestrator uses EXIT GATE"
+          - "Check context synthesis occurs"
+          - "Validate cache hit rate (target: >70%)"
+        tests:
+          - "test_exit_gate_active"
+          - "test_context_synthesis"
+      
+      - id: "26.4.3"
+        name: "Phase 25 unblocking verification"
+        effort: "30 minutes"
+        validation:
+          - "Update Phase 25 blocked_by to null"
+          - "Add unblocked_by: phase-26"
+          - "Update index.yaml statistics"
+        tests:
+          - "test_phase_25_unblocked"
+
+test_strategy:
+  test_categories:
+    unit_tests: 8
+    integration_tests: 4
+    e2e_tests: 2
+  
+  critical_tests:
+    - "test_no_auto_load_after_changes"
+    - "test_token_usage_under_10k"
+    - "test_discovery_hints_functional"
+    - "test_exit_gate_integration"
+    - "test_phase_25_unblocked"
+  
+  coverage_target: "100% (documentation changes)"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+acceptance_criteria:
+  functional:
+    - criterion: "Zero file auto-loads by VS Code"
+      validation: "Trigger prompt, count auto-loaded files = 0-1"
+      
+    - criterion: "Token usage <10k per turn"
+      validation: "Measure context size after prompt load"
+      
+    - criterion: "83% token reduction achieved"
+      validation: "Before: 58k, After: <10k = 83% savings"
+      
+    - criterion: "Discovery hints present and functional"
+      validation: "AI can discover files via semantic_search"
+      
+    - criterion: "Phase 25 unblocked"
+      validation: "index.yaml shows phase-25 no longer blocked"
+  
+  performance:
+    - criterion: "EXIT GATE cache hit rate >70%"
+      validation: "Monitor EXIT GATE metrics"
+      
+    - criterion: "Context synthesis <100ms"
+      validation: "EXIT GATE synthesis_time_ms metric"
+  
+  quality:
+    - criterion: "CORE-047 updated and enforced"
+      validation: "Rule text clarifies auto-load behavior"
+      
+    - criterion: "All prompts audited"
+      validation: "No file paths remain in instruction files"
+
+---
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "AI forgets to load needed context"
+    probability: "Low"
+    impact: "Medium"
+    mitigation: "EXIT GATE provides baseline context, discovery hints guide AI"
+  
+  - risk: "Discovery process slower than auto-load"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "EXIT GATE caching (70% hit rate), semantic_search optimized"
+  
+  - risk: "Breaking changes to existing workflows"
+    probability: "Low"
+    impact: "Low"
+    mitigation: "Discovery hints maintain same functionality, just explicit"
+
+---
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+
+integration:
+  enh_046_exit_gate:
+    relationship: "EXTENDS"
+    data_flow: |
+      Phase 26 removes eager loads → EXIT GATE handles lazy loads
+      - EXIT GATE synthesizes minimal context (≤20k tokens)
+      - AI requests additional context explicitly
+      - EXIT GATE provides compressed, cached results
+  
+  phase_25_plan_mode:
+    relationship: "UNBLOCKS"
+    data_flow: |
+      Phase 26 resolves ENH-046 blocker → Phase 25 can proceed
+      - Token budget no longer exceeded
+      - PLAN MODE operations won't trigger summarizations
+      - Dashboard updates won't cause context bloat
+
+---
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+
+rollout:
+  stage_1_copilot_instructions:
+    duration: "Day 1 AM"
+    scope: "copilot-instructions.md updates"
+    validation: "File paths removed, discovery hints added"
+  
+  stage_2_prompts:
+    duration: "Day 1 PM"
+    scope: "cortex-architect.prompt.md + other prompts"
+    validation: "All prompts updated, no paths remain"
+  
+  stage_3_validation:
+    duration: "Day 2"
+    scope: "Token metrics + EXIT GATE integration"
+    validation: "83% reduction achieved, Phase 25 unblocked"
+
+---
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+
+completion_checklist:
+  - [ ] copilot-instructions.md: Lines 11-12 updated (no paths)
+  - [ ] copilot-instructions.md: Lines 285-291 updated (discovery hints)
+  - [ ] copilot-instructions.md: CORE-047 enhanced
+  - [ ] cortex-architect.prompt.md: Lines 2581-2583 updated
+  - [ ] cortex-architect.prompt.md: Discovery hints section added
+  - [ ] CORTEX.prompt.md: Audited for file paths
+  - [ ] response-format-standards.md: Audited for file paths
+  - [ ] Token usage test: <10k per turn ✅
+  - [ ] Auto-load test: 0-1 files loaded ✅
+  - [ ] EXIT GATE integration verified ✅
+  - [ ] Discovery hints functional test ✅
+  - [ ] Phase 25 unblocked in index.yaml ✅
+  - [ ] 14 tests written and passing (8 unit + 4 integration + 2 e2e)
+  - [ ] Documentation updated (context-loading-strategy.md)
+  - [ ] ENH-046 status updated (blocker resolved)
+  - [ ] Code review approved
+
+---
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata_tracking:
+  created_by: "cortex-architect v14.2"
+  created_at: "2026-02-06"
+  phase_type: "optimization"
+  complexity: "low"
+  estimated_loc: 0  # Documentation changes only
+  estimated_tests: 14
+  estimated_days: 2.5
+  actual_days: null
+  status: "PLANNED"
+  next_review: "2026-02-07"
+  unblocks: ["phase-25"]
