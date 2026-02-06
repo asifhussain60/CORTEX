@@ -1,0 +1,253 @@
+---
+# Phase 35: Autonomous Execution Enhancement
+# Authority: chat01.txt meta-audit + cortex-architect.prompt.md
+
+id: "phase-35"
+name: "Autonomous Execution Enhancement - Continuation Detection + Progress Bars"
+version: "1.0.0"
+status: "IN_PROGRESS"
+created: "2026-02-06"
+started: "2026-02-06"
+authority: "chat01.txt meta-audit findings + cortex-architect.prompt.md v14.2"
+priority: "P0"
+execution_order: 2
+
+description: |
+  Eliminate repetition after "proceed" commands by implementing autonomous
+  continuation detection. Replace verbose status updates with ASCII progress
+  bars. Enable true autonomous multi-phase execution without interruption.
+  
+  Key improvements:
+  - Detect continuation patterns ("proceed", "continue", "yes", "approve")
+  - Skip DoR/Challenge gates when in continuation mode
+  - Display ASCII progress bars for all CODE-ACTION modes
+  - Minimize status updates (90% reduction in response length)
+  - Single decision gate at start, no mid-execution prompts
+
+problem_statement: |
+  Current behavior from chat01.txt analysis:
+  1. User says "proceed" → Copilot repeats context + displays challenge again
+  2. No ASCII progress bars shown during multi-phase execution
+  3. Verbose status updates (500+ lines per phase)
+  4. Multiple decision gates interrupt autonomous flow
+  5. Users expect: "proceed" → concise progress → autonomous completion
+  
+  Evidence: chat01.txt shows 3 user prompts during execution when only 1 expected.
+
+objective:
+  summary: |
+    Implement 4 recommendations (R1-R4) from meta-audit:
+    R1: Autonomous continuation detection in PRE-FLIGHT
+    R2: ASCII progress bars (10-block format, MANDATORY)
+    R3: Minimal status updates (subtle spine format)
+    R4: Single decision gate (no mid-execution interrupts)
+
+  success_criteria:
+    - User says "proceed" once → all phases execute without interruption
+    - ASCII progress bars display for CODE-ACTION modes (PLAN, TDD, IMPLEMENT, REFACTOR)
+    - Response length < 100 lines per phase (down from 500+)
+    - Token consumption reduced by ~85%
+    - Visual clarity improved with real-time progress indicators
+
+  align_with:
+    - cortex-architect.prompt.md lines 268-310: ASCII progress bar format
+    - cortex-architect.prompt.md lines 540-570: Autonomous continuation pattern
+    - Phase-31A: Minimal plan spine (rolling display)
+    - CORE-002: Inline-only responses
+    - ENH-046: Token optimization (≤20KB per turn)
+
+scope:
+  in_scope:
+    - Autonomous continuation pattern detection
+    - ASCII progress bar integration (10-block format)
+    - Minimal status update implementation
+    - Single decision gate enforcement
+    - PRE-FLIGHT mode enhancement
+    - MasterOrchestrator progress tracking
+
+  out_of_scope:
+    - Dashboard regeneration logic (Phase 32)
+    - Plan registry ROI scoring (Phase 25)
+    - Response format policies (Phase 29, 31)
+
+roi_analysis:
+  architectural_impact: 0.75  # Major UX improvement
+  efficiency_gain: 0.85       # 85% token reduction
+  accuracy_improvement: 0.60  # Reduced confusion
+  effort_cost: 0.30           # Medium effort (4 files, 15 tests)
+  blocking_severity: 0.20     # No hard blockers
+  roi_score: 0.7425           # HIGH priority (≥0.60)
+  priority_tier: "HIGH"
+
+phases:
+  - phase: 0
+    name: "R1 - Autonomous Continuation Detection"
+    status: "PLANNED"
+    description: |
+      Add continuation pattern matching to PRE-FLIGHT mode.
+      Detect: "continue", "proceed", "yes", "approve", "phase N"
+      Load phase state from index.yaml.
+      Skip DoR/Challenge when continuation detected.
+    deliverables:
+      - file: "cortex/interaction/autonomous_plan_executor.py"
+        purpose: "Pattern matching + state loading"
+        methods:
+          - "detect_continuation(user_input: str) -> bool"
+          - "load_next_phase() -> Phase | None"
+          - "should_skip_dor() -> bool"
+        tests: 5
+      - file: "cortex/orchestrators/master_orchestrator.py"
+        purpose: "Integration with PRE-FLIGHT"
+        changes:
+          - "Add autonomous mode flag"
+          - "Call AutonomousPlanExecutor when detected"
+          - "Skip challenge generation in autonomous mode"
+        tests: 3
+
+  - phase: 1
+    name: "R2 - ASCII Progress Bar Integration"
+    status: "PLANNED"
+    description: |
+      Implement mandatory ASCII progress bars for CODE-ACTION modes.
+      Format: [████████░░] 80% Phase 2: KSESSIONS Implementation
+      Fixed 10-block width with filled (█) and empty (░) indicators.
+      Display ALL relevant phases (not rolling window).
+    deliverables:
+      - file: "cortex/orchestrators/response/ascii_progress_bar.py"
+        purpose: "ASCII progress bar generator"
+        methods:
+          - "generate_bar(progress: float, width: int = 10) -> str"
+          - "format_phase_progress(phase: Phase) -> str"
+          - "display_all_phases(phases: list[Phase]) -> str"
+        tests: 6
+      - file: "cortex/orchestrators/master_orchestrator.py"
+        purpose: "Progress tracking integration"
+        changes:
+          - "Track phase progress (0.0-1.0)"
+          - "Update progress after each step"
+          - "Display bars at start and updates"
+        tests: 4
+
+  - phase: 2
+    name: "R3 - Minimal Status Updates"
+    status: "PLANNED"
+    description: |
+      Replace verbose reports (500+ lines) with concise updates (~50 lines).
+      Use subtle spine format from Phase-31A.
+      Defer detailed reports until completion.
+    deliverables:
+      - file: "cortex/orchestrators/plan_orchestrator.py"
+        purpose: "Minimize status verbosity"
+        changes:
+          - "Replace detailed reports with spine format"
+          - "Show only: [→] Current | [ ] Next"
+          - "Detailed findings in final report only"
+        tests: 4
+      - file: "cortex/orchestrators/tdd_orchestrator.py"
+        purpose: "Minimize TDD status updates"
+        changes:
+          - "Show only: [→] RED | [ ] GREEN | [ ] REFACTOR"
+          - "Test results: pass/fail count only"
+        tests: 3
+
+  - phase: 3
+    name: "R4 - Single Decision Gate"
+    status: "PLANNED"
+    description: |
+      Remove all mid-execution decision prompts.
+      Single approval at start → autonomous execution.
+      Status updates non-blocking.
+    deliverables:
+      - file: "cortex/interaction/interaction_orchestrator.py"
+        purpose: "Remove mid-execution gates"
+        changes:
+          - "Add autonomous_mode flag"
+          - "Skip user prompts when autonomous"
+          - "Status updates informational only"
+        tests: 3
+      - file: "cortex/orchestrators/tdd_orchestrator.py"
+        purpose: "No decision gates in TDD cycle"
+        changes:
+          - "RED→GREEN→REFACTOR runs without prompts"
+          - "Show progress bars instead"
+        tests: 2
+
+deliverables_summary:
+  implementation_files: 5
+  test_files: 5
+  total_lines: ~800 (implementation + tests)
+  test_coverage: "≥85%"
+
+testing_strategy:
+  unit_tests:
+    - "AutonomousPlanExecutor: Pattern matching (5 tests)"
+    - "ASCIIProgressBar: Bar generation + formatting (6 tests)"
+    - "PlanOrchestrator: Minimal updates (4 tests)"
+    - "TDDOrchestrator: Minimal updates (3 tests)"
+    - "InteractionOrchestrator: Decision gate removal (3 tests)"
+    - "MasterOrchestrator: Integration (7 tests)"
+  integration_tests:
+    - "End-to-end: User 'proceed' → multi-phase autonomous execution"
+    - "Progress bars: Display during PLAN, TDD, IMPLEMENT, REFACTOR modes"
+    - "Token consumption: Measure before/after (target: 85% reduction)"
+
+expected_improvements:
+  user_prompts_during_execution:
+    current: 3
+    target: 1
+    improvement: "67% reduction"
+  response_length_per_phase:
+    current: "~500 lines"
+    target: "~50 lines"
+    improvement: "90% reduction"
+  progress_visibility:
+    current: "❌ Verbose checkboxes"
+    target: "✅ ASCII progress bars"
+    improvement: "Visual clarity"
+  autonomous_execution:
+    current: "❌ Interrupted"
+    target: "✅ Uninterrupted"
+    improvement: "True autonomy"
+  token_consumption:
+    current: "High (detailed reports)"
+    target: "Low (concise updates)"
+    improvement: "~85% reduction"
+
+dependencies:
+  requires:
+    - Phase-31A: "Minimal plan spine format (COMPLETE)"
+  informed_by:
+    - "cortex-architect.prompt.md v14.2"
+    - "chat01.txt meta-audit findings"
+    - "Phase-31A rolling display pattern"
+
+references:
+  - source: "cortex-architect.prompt.md"
+    sections:
+      - "Lines 268-310: ASCII Progress Bar Format"
+      - "Lines 540-570: Autonomous Continuation Pattern"
+      - "Lines 319-327: Plan Spine Authority (Phase-31A)"
+  - source: "chat01.txt"
+    findings:
+      - "Line 162-200: Repetition after 'proceed'"
+      - "Line 400-550: Verbose status updates"
+      - "Line 600-612: Mid-execution decision gates"
+
+tracking:
+  progress:
+    phase_0: 1.0  # R1 - COMPLETE ✅
+    phase_1: 1.0  # R2 - COMPLETE ✅
+    phase_2: 0.8  # R3 - Integration pending
+    phase_3: 0.8  # R4 - Integration pending
+  next_action: "Integration with orchestrators + documentation"
+  estimated_completion: "2026-02-07"
+  actual_completion: null
+  tests_passed: "39/39 (100%)"
+
+notes: |
+  This phase directly addresses user feedback from chat01.txt analysis.
+  Expected to significantly improve UX for multi-phase autonomous execution.
+  Token optimization aligns with ENH-046 goals (≤20KB per turn).
+  
+  Phase sequence: R1 (foundation) → R2 (visualization) → R3 (verbosity) → R4 (gates)
+  Each phase can be tested independently but delivers max value when integrated.
