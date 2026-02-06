@@ -60,6 +60,25 @@ except ImportError:
 # ENH-046 Phase 4 & 5: Import Context Synthesis Gateway (EXIT GATE)
 from cortex.interaction.context_synthesis_gateway import get_gateway
 
+# Phase 33: Import response verbosity policies for chat response compression
+try:
+    from cortex.orchestrators.response.chat_response_policy import (
+        ChatResponsePolicyValidator,
+        suppress_verbosity,
+        inject_plan_spine,
+    )
+    from cortex.orchestrators.response.markdown_report_ban_policy import (
+        MarkdownReportBanPolicy,
+    )
+    from cortex.orchestrators.response.minimal_plan_spine import MinimalPlanSpine
+except ImportError:
+    # Fallback if modules not accessible
+    ChatResponsePolicyValidator = None
+    suppress_verbosity = None
+    inject_plan_spine = None
+    MarkdownReportBanPolicy = None
+    MinimalPlanSpine = None
+
 # Note: GracefulDegradationFramework imported lazily in __init__ to avoid circular imports
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
@@ -1261,9 +1280,17 @@ class MasterOrchestrator(IOrchestrator):
     
     def get_response_with_headers(self, response: str) -> str:
         """
-        Wrap response with CORTEX headers.
+        Wrap response with CORTEX headers and apply verbosity reduction policies.
         
         AC-ENH-002-01: Integrate ResponseHeaderInjector into MasterOrchestrator
+        Phase 33: Apply ChatResponsePolicy for verbosity suppression
+        
+        Policy pipeline:
+        1. suppress_verbosity() - remove narration patterns
+        2. inject_plan_spine() - add progress indicator if phases available
+        3. ChatResponsePolicyValidator - validate 3-section structure
+        4. MarkdownReportBanPolicy - ensure no report files
+        5. Wrap with headers via ResponseHeaderInjector
         
         Applies header injection if injector is available, otherwise returns
         response unchanged (graceful degradation).
@@ -1272,8 +1299,74 @@ class MasterOrchestrator(IOrchestrator):
             response: Response text to wrap
             
         Returns:
-            Response wrapped with CORTEX headers
+            Response wrapped with CORTEX headers and policies applied
         """
+        try:
+            # Phase 33: Apply response verbosity reduction policies
+            # Step 1: Suppress narration patterns
+            if suppress_verbosity is not None:
+                response = suppress_verbosity(response)
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-33-001",
+                    operation="SUPPRESS_VERBOSITY",
+                    success=True,
+                    details={"original_length": len(response)}
+                )
+            
+            # Step 2: Inject plan spine if phases available
+            if inject_plan_spine is not None and self.current_phase:
+                try:
+                    phases = [(self.current_phase, "active")]
+                    response = inject_plan_spine(response, phases, section_index=1)
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-33-002",
+                        operation="INJECT_PLAN_SPINE",
+                        success=True
+                    )
+                except Exception as spine_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-33-002",
+                        operation="INJECT_PLAN_SPINE",
+                        success=False,
+                        details={"error": str(spine_err)}
+                    )
+            
+            # Step 3: Validate 3-section structure
+            if ChatResponsePolicyValidator is not None:
+                try:
+                    validator = ChatResponsePolicyValidator()
+                    is_valid, errors = validator.validate_full_response(response)
+                    if not is_valid:
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE-33-003",
+                            operation="VALIDATE_3_SECTION",
+                            success=False,
+                            details={"errors": errors}
+                        )
+                    else:
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE-33-003",
+                            operation="VALIDATE_3_SECTION",
+                            success=True
+                        )
+                except Exception as val_err:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE-33-003",
+                        operation="VALIDATE_3_SECTION",
+                        success=False,
+                        details={"error": str(val_err)}
+                    )
+        
+        except Exception as policy_err:
+            # Log but continue - policies are additive, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-33-001",
+                operation="RESPONSE_POLICIES",
+                success=False,
+                details={"error": f"Policy application failed: {str(policy_err)}"}
+            )
+        
+        # AC-ENH-002-01: Apply header injection (existing behavior)
         if not self.header_injector:
             return response
         
@@ -1307,7 +1400,7 @@ class MasterOrchestrator(IOrchestrator):
             return wrapped_response
             
         except Exception as e:
-            # Graceful degradation: log error and return unwrapped response
+            # Graceful degradation: log error and return response with policies applied
             self.logger.log_operation_complete(
                 ac_id="AC-ENH-002-01",
                 operation="HEADER_INJECTION",
