@@ -369,9 +369,9 @@ category: API Reference
 
 ## Related
 
-- [IntentRouter](./intent-router.md)
-- [Master Orchestrator](./master-orchestrator.md)
-- [Quick Reference](../08-reference/quick-reference.md)
+- `./intent-router.md` (load explicitly when needed)
+- `./master-orchestrator.md` (load explicitly when needed)
+- `../08-reference/quick-reference.md` (load explicitly when needed)
 ```
 
 ### Safeguards
@@ -624,7 +624,7 @@ File: cortex/domain_brain/business_knowledge_repository.py
   Action: FIX REQUIRED (update import or delete usage)
 
 File: docs/04-guides/old-feature.md
-  Reference: [See old-feature-reference.md](../old-feature-reference.md)
+  Reference: `../old-feature-reference.md` (load explicitly when needed)
   Status: BROKEN (file deleted in vacuum)
   Action: FIX REQUIRED (update link or remove reference)
 

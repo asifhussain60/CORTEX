@@ -196,9 +196,9 @@ Agent Response:
 
 | Document | Purpose |
 |----------|---------|
-| [cortex-architect.prompt.md](../../prompts/cortex-architect.prompt.md) | DESIGN/AUDIT/EXEC modes |
-| [CORTEX.prompt.md](../../prompts/CORTEX.prompt.md) | Master prompt |
-| [copilot-instructions.md](../../copilot-instructions.md) | Quick command reference |
+| `../../prompts/cortex-architect.prompt.md` (load explicitly when needed) | DESIGN/AUDIT/EXEC modes |
+| `../../prompts/CORTEX.prompt.md` (load explicitly when needed) | Master prompt |
+| `../../copilot-instructions.md` (load explicitly when needed) | Quick command reference |
 
 ---
 

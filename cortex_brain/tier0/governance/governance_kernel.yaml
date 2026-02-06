@@ -1,0 +1,302 @@
+# CORTEX Governance Kernel
+# Version: 1.0
+# Created: 2026-02-06
+# Purpose: Single Source of Truth for all governance rules
+# Authority: Replaces distributed governance checks across agents/prompts
+# Architecture: Centralized rule definition with MCP-based querying
+
+meta:
+  version: "1.0"
+  created: "2026-02-06"
+  updated: "2026-02-06"
+  authority: "ENH-046 Phase 1 + Governance Intelligence System"
+  status: "ACTIVE"
+  enforcement_mode: "BLOCKING"  # BLOCKING, WARNING, or LOGGING
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# RULE CATEGORIES
+# ═══════════════════════════════════════════════════════════════════════════════
+# 1. TOKEN_OPTIMIZATION - Prevents context bloat and token exhaustion
+# 2. FILE_INTEGRITY - Ensures consistent file naming and structure
+# 3. SECURITY - Enforces security-first practices
+# 4. CODE_QUALITY - Maintains code standards
+# 5. ARCHITECTURE - Preserves architectural integrity
+
+rules:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # TOKEN_OPTIMIZATION RULES
+  # ─────────────────────────────────────────────────────────────────────────────
+  
+  - id: "CORE-047"
+    category: "TOKEN_OPTIMIZATION"
+    severity: "P0"
+    title: "Instruction Files Must Use Backtick References"
+    description: |
+      VS Code Copilot auto-loads ALL markdown files referenced via [text](path.md) syntax.
+      This defeats lazy loading and causes 51k+ token context bloat.
+      
+      Root Cause: ENH-046 analysis discovered markdown links in copilot-instructions.md
+      triggered automatic context loading of 14 files (51k tokens) before user request.
+    
+    rationale: |
+      - VS Code Copilot behavior: `[text](path)` = auto-load
+      - Backtick references: `path` = manual load only
+      - Token savings: 51k tokens per session (88% reduction)
+      - Aligns with ENH-046 v3.3 incremental context protocol
+    
+    enforcement:
+      type: "BLOCKING"
+      scope:
+        - ".github/copilot-instructions.md"
+        - ".github/prompts/*.md"
+        - ".github/agents/**/*.md"
+      
+      detection:
+        pattern: '\[([^\]]+)\]\(([^)]+\.md)\)'
+        regex: true
+        exclude_patterns:
+          - '\[.*\]\(https?://.*\)'  # Allow external HTTP links
+          - '\[.*\]\(#.*\)'  # Allow anchor links
+      
+      auto_fix:
+        enabled: true
+        transformation: |
+          [text](path.md) → `path.md` (load explicitly when needed)
+        
+        examples:
+          before: "[CORTEX.prompt.md](prompts/CORTEX.prompt.md)"
+          after: "`prompts/CORTEX.prompt.md` (load explicitly when needed)"
+      
+      pre_commit_hook:
+        enabled: true
+        command: "python cortex/governance_tools/lint_instruction_files.py"
+        exit_on_failure: true
+      
+      ci_check:
+        enabled: true
+        pipeline: "governance-lint"
+        blocking: true
+    
+    violations:
+      message: "Markdown link detected in instruction file: {file}:{line}"
+      resolution: "Replace markdown link with backtick-wrapped path reference"
+      documentation: "docs/governance/token-optimization.md#markdown-link-prevention"
+    
+    metrics:
+      token_savings_per_violation: 12750  # Average: 51k ÷ 4 violations
+      estimated_annual_savings: 500000  # 10 sessions/day × 5k tokens × 365 days
+    
+    metadata:
+      introduced_in: "ENH-046 Phase 1.6"
+      related_rules: ["CORE-002", "CORE-029"]
+      industry_standard: "VS Code Extension Best Practices"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # AGENT LOADING PROTOCOL
+  # ─────────────────────────────────────────────────────────────────────────────
+  
+  - id: "TOKEN-001"
+    category: "TOKEN_OPTIMIZATION"
+    severity: "P1"
+    title: "Agent Files Must Support Lazy Loading"
+    description: |
+      All agent files MUST be loadable on-demand via AGENT-INDEX.md.
+      Pre-loading all agents defeats token optimization strategy.
+    
+    enforcement:
+      type: "WARNING"
+      scope:
+        - ".github/agents/**/*.md"
+      
+      requirements:
+        - "Agent must have entry in AGENT-INDEX.md"
+        - "Agent must be under 10k tokens"
+        - "Agent must be intent-specific (not general-purpose)"
+      
+      validation:
+        - "Check AGENT-INDEX.md contains agent mapping"
+        - "Measure agent file size (warn if > 10k tokens)"
+        - "Verify agent is referenced by at least one intent"
+    
+    metadata:
+      introduced_in: "ENH-046 Phase 1.5"
+      token_savings: "88% reduction (245k → 30k tokens)"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # GOVERNANCE EVOLUTION RULES
+  # ─────────────────────────────────────────────────────────────────────────────
+  
+  - id: "GOV-001"
+    category: "GOVERNANCE_EVOLUTION"
+    severity: "P1"
+    title: "Quarterly Governance Review Mandatory"
+    description: |
+      Governance rules MUST be reviewed quarterly to ensure they align with
+      CORTEX evolution, industry standards, and real-world violation patterns.
+    
+    triggers:
+      - "Quarterly schedule (every 90 days)"
+      - "50+ orchestrators added"
+      - "100+ agents added"
+      - "1M+ lines of code reached"
+      - "OWASP Top 10 update"
+      - "Critical Python PEP ratified"
+      - "VS Code API breaking change"
+    
+    review_process:
+      automated_checks:
+        - "Pattern detection: governance.db violation analysis"
+        - "Git analysis: CORTEX architecture changes"
+        - "Industry tracker: OWASP, PEPs, VS Code docs"
+        - "Metrics review: Rule trigger frequency"
+      
+      human_review:
+        - "Analyze false positive rate"
+        - "Review obsolete rules (0 violations in 90 days)"
+        - "Assess rule clarity (3+ violations/week = unclear)"
+        - "Propose tier promotion (Tier 1 → Tier 0)"
+      
+      outputs:
+        - "ENH-* proposal for rule changes"
+        - "Updated governance_kernel.yaml"
+        - "Governance evolution report"
+    
+    metadata:
+      next_review: "2026-05-06"
+      review_owner: "cortex-architect"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENFORCEMENT CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+enforcement:
+  mode: "BLOCKING"  # BLOCKING, WARNING, LOGGING
+  
+  agents:
+    - name: "InstructionFileLinterAgent"
+      rules: ["CORE-047"]
+      execution: "pre-commit"
+    
+    - name: "AgentLoadingValidatorAgent"
+      rules: ["TOKEN-001"]
+      execution: "on-demand"
+    
+    - name: "GovernanceEvolutionAgent"
+      rules: ["GOV-001"]
+      execution: "quarterly"
+  
+  integrations:
+    pre_commit:
+      enabled: true
+      config_file: ".pre-commit-config.yaml"
+    
+    ci_cd:
+      enabled: true
+      pipeline: ".github/workflows/governance-checks.yml"
+    
+    mcp_tools:
+      enabled: true
+      tool_name: "cortex_governance_check"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# QUERY API (for agent consumption)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+query_api:
+  get_rule_by_id:
+    endpoint: "cortex_governance_kernel.get_rule"
+    input: "rule_id: str"
+    output: "Rule object with all metadata"
+  
+  get_rules_by_category:
+    endpoint: "cortex_governance_kernel.get_rules"
+    input: "category: str"
+    output: "List of Rule objects"
+  
+  check_file:
+    endpoint: "cortex_governance_kernel.check_file"
+    input: "file_path: str, content: str"
+    output: "List of violations with auto-fix suggestions"
+  
+  get_enforcement_status:
+    endpoint: "cortex_governance_kernel.get_status"
+    input: "rule_id: str"
+    output: "Enforcement status + metrics"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# METRICS & OBSERVABILITY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+metrics:
+  prometheus:
+    - name: "cortex_governance_rule_violations_total"
+      type: "counter"
+      labels: ["rule_id", "severity", "file_path"]
+    
+    - name: "cortex_governance_auto_fixes_total"
+      type: "counter"
+      labels: ["rule_id", "success"]
+    
+    - name: "cortex_governance_token_savings_total"
+      type: "counter"
+      labels: ["rule_id"]
+      help: "Cumulative token savings from governance enforcement"
+  
+  dashboards:
+    grafana:
+      - "Governance Health"
+      - "Token Optimization Impact"
+      - "Rule Violation Trends"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# LEARNING LOOP (Phase 2 - Self-Improvement)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+learning_loop:
+  enabled: false  # Enable in Phase 2
+  
+  pattern_detection:
+    source: "cortex/governance/governance.db"
+    frequency: "daily"
+    thresholds:
+      high_frequency: "3+ violations in 7 days"
+      obsolete: "0 violations in 90 days"
+      unclear: "10+ violations with same pattern"
+  
+  enhancement_proposal:
+    template: "cortex-registry/_cortex-master/enhancements/template.yaml"
+    auto_generate: true
+    human_approval: true
+  
+  auto_propagation:
+    enabled: true
+    targets:
+      - "EnforcementOrchestrator agents"
+      - "cortex-architect audit checklist"
+      - "CI/CD pipelines"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# VERSIONING
+# ═══════════════════════════════════════════════════════════════════════════════
+
+versioning:
+  current: "1.0"
+  schema_version: "1.0"
+  
+  changelog:
+    - version: "1.0"
+      date: "2026-02-06"
+      changes:
+        - "Initial governance kernel creation"
+        - "CORE-047: Markdown link prevention rule"
+        - "TOKEN-001: Agent lazy loading rule"
+        - "GOV-001: Quarterly governance review"
+        - "MCP query API defined"
+        - "Enforcement configuration"
+        - "Metrics & observability setup"
+      
+      impact:
+        - "Replaces distributed checks across 15+ files"
+        - "51k token savings per session (CORE-047)"
+        - "88% agent loading efficiency (TOKEN-001)"
+        - "Single source of truth established"

@@ -29,13 +29,13 @@ agents/
 
 | Agent | File | Purpose | Mode |
 |-------|------|---------|------|
-| **CORTEX** | [CORTEX.md](core/CORTEX.md) | Master orchestrator, production entry point | Production |
-| **Architect** | [cortex-architect.md](core/cortex-architect.md) | Mode router + pre-flight environment check | Routing |
-| **Environment Setup** | [cortex-environment-setup.md](core/cortex-environment-setup.md) | Python environment validation | Pre-Flight |
-| **Auditor** | [cortex-auditor.md](core/cortex-auditor.md) | Autonomous codebase health scan | Audit |
-| **Designer** | [cortex-designer.md](core/cortex-designer.md) | Challenge + approval for exploratory requests | Design |
-| **Executor** | [cortex-executor.md](core/cortex-executor.md) | Direct implementation (no challenge) | **Exec (NEW)** |
-| **MCP Gateway** | [cortex-mcp-gateway.md](core/cortex-mcp-gateway.md) | MCP tool routing, SaaS gateway | Production |
+| **CORTEX** | `core/CORTEX.md` (load explicitly when needed) | Master orchestrator, production entry point | Production |
+| **Architect** | `core/cortex-architect.md` (load explicitly when needed) | Mode router + pre-flight environment check | Routing |
+| **Environment Setup** | `core/cortex-environment-setup.md` (load explicitly when needed) | Python environment validation | Pre-Flight |
+| **Auditor** | `core/cortex-auditor.md` (load explicitly when needed) | Autonomous codebase health scan | Audit |
+| **Designer** | `core/cortex-designer.md` (load explicitly when needed) | Challenge + approval for exploratory requests | Design |
+| **Executor** | `core/cortex-executor.md` (load explicitly when needed) | Direct implementation (no challenge) | **Exec (NEW)** |
+| **MCP Gateway** | `core/cortex-mcp-gateway.md` (load explicitly when needed) | MCP tool routing, SaaS gateway | Production |
 
 ---
 
@@ -91,8 +91,8 @@ PRE-FLIGHT CHECK (cortex_verify_environment)
 
 | Prompt | Agent | Purpose |
 |--------|-------|---------|
-| [CORTEX.prompt.md](../prompts/CORTEX.prompt.md) | CORTEX.md | Production master |
-| [cortex-architect.prompt.md](../prompts/cortex-architect.prompt.md) | cortex-architect.md + environment-setup.md | Tri-mode routing + environment validation |
+| `../prompts/CORTEX.prompt.md` (load explicitly when needed) | CORTEX.md | Production master |
+| `../prompts/cortex-architect.prompt.md` (load explicitly when needed) | cortex-architect.md + environment-setup.md | Tri-mode routing + environment validation |
 
 ---
 

@@ -570,7 +570,7 @@ User Request → PRE-FLIGHT CHECK
 **Options:**
 1. Type "auto-fix" for automatic installation (recommended)
 2. Follow manual steps above
-3. View full guide: [Installation](../../docs/03-getting-started/0-installation.md)
+3. View full guide: `../../docs/03-getting-started/0-installation.md` (load explicitly when needed)
 
 **Note:** AUDIT/DESIGN operations cannot proceed until environment is ready.
 ```
@@ -2578,9 +2578,9 @@ Innovation Taxonomy Update (system learns)
 
 ## 🔗 REFERENCES & LINKS
 
-- **Master Prompt:** [CORTEX.prompt.md](CORTEX.prompt.md) — Production execution
-- **Primary Agent:** [cortex-architect.md](../agents/core/cortex-architect.md) — This prompt's agent ✅
-- **Supporting Agents:** [cortex-auditor.md](../agents/core/cortex-auditor.md), [cortex-designer.md](../agents/core/cortex-designer.md), [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md), [cortex-storyteller.md](../agents/core/cortex-storyteller.md) ✅
+- **Master Prompt:** `CORTEX.prompt.md` (load explicitly when needed) — Production execution
+- **Primary Agent:** `../agents/core/cortex-architect.md` (load explicitly when needed) — This prompt's agent ✅
+- **Supporting Agents:** `../agents/core/cortex-auditor.md` (load explicitly when needed), `../agents/core/cortex-designer.md` (load explicitly when needed), `../agents/core/cortex-mcp-gateway.md` (load explicitly when needed), `../agents/core/cortex-storyteller.md` (load explicitly when needed) ✅
 - **Story Documentation:** [docs/.awakening-of-cortex/](../../docs/.awakening-of-cortex/) — Living narrative of CORTEX evolution
 - **Architecture Guide:** [04-architecture/](../../docs/04-architecture/) — Deep dives
 - **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](../../cortex/wiring/specifications/wiring.yaml) — Orchestrator graph

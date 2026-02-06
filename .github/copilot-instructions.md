@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 7.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅
+**Version:** 7.4 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅
 
 ---
 
@@ -7,8 +7,8 @@
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
-**Primary Prompt:** [CORTEX.prompt.md](prompts/CORTEX.prompt.md)  
-**Response Format:** [response-format-standards.md](prompts/response-format-standards.md) ✨ **NEW**  
+**Primary Prompt:** `prompts/CORTEX.prompt.md` (load explicitly when needed)  
+**Response Format:** `prompts/response-format-standards.md` (load explicitly when needed)  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
@@ -26,6 +26,7 @@
 | **CORE-030** | Implementation Truth — verify code, not docs |
 | **CORE-035** | Single canonical implementation |
 | **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
+| **CORE-047** | **Instruction files MUST use backtick references** — NO markdown links `[text](path.md)`. VS Code auto-loads them (51k+ token bloat). Use: `path.md` |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
@@ -85,7 +86,7 @@ DIGEST Intent:
 ```
 
 **Response Format Requirements:**
-- ✅ Follow [response-format-standards.md](prompts/response-format-standards.md) for all outputs
+- ✅ Follow `prompts/response-format-standards.md` (load explicitly when needed) for all outputs
 - 🟢 Use correct status icons (🟢=completed, ⚪=planned, 🔴=critical, 🟡=warning, 🔵=in-progress)
 - 1️⃣ Number user prompts ONLY when decision required (not after completion)
 - 📐 Apply linear narrative flow: Context → Analysis → Action → Result (no repetition)
@@ -97,7 +98,7 @@ DIGEST Intent:
 
 ## 🔄 Interaction Protocol
 
-**See [CORTEX.prompt.md](prompts/CORTEX.prompt.md) for full protocol.**
+**See `prompts/CORTEX.prompt.md` (load explicitly when needed) for full protocol.**
 
 ### Quick Reference:
 
@@ -279,19 +280,22 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 ## 🔗 Prompts & Agents
 
-### Prompts
-| File | Purpose |
-|------|---------|
-| [CORTEX.prompt.md](prompts/CORTEX.prompt.md) | Production master prompt |
-| [cortex-architect.prompt.md](prompts/cortex-architect.prompt.md) | AUDIT + DESIGN dual-mode prompt |
+### Prompts (Load Explicitly via #file: syntax)
+| File | Purpose | Load When |
+|------|---------|-----------|
+| `prompts/CORTEX.prompt.md` | Production master prompt | IMPLEMENT/FIX intents |
+| `prompts/cortex-architect.prompt.md` | AUDIT + DESIGN dual-mode | AUDIT/DESIGN intents |
+| `prompts/response-format-standards.md` | Response formatting rules | All operations |
+
+**⚠️ CRITICAL:** Do NOT use markdown links `[text](path.md)` in instruction files. VS Code Copilot auto-loads them, causing 51k+ token context bloat. Use backtick references: `path.md`
 
 ### Agents (Lazy Loading)
-**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using [AGENT-INDEX.md](agents/AGENT-INDEX.md)
+**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using `agents/AGENT-INDEX.md`
 
 **DO NOT pre-load all agents.** Use intent-based lazy loading:
 - 11 core agents available in `agents/core/`
 - Load ONLY 1-2 agents per user intent
-- See [AGENT-INDEX.md](agents/AGENT-INDEX.md) for intent → agent mapping
+- See `agents/AGENT-INDEX.md` (load explicitly when needed) for intent → agent mapping
 
 **Token Savings:** 88% reduction (245k → 30k tokens at init)
 

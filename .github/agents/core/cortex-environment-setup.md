@@ -282,7 +282,7 @@ fi
 3. **Retry Request**
    Once Python is upgraded, please retry your original request.
 
-**Need Help?** See [Installation Guide](../../docs/03-getting-started/0-installation.md)
+**Need Help?** See `../../docs/03-getting-started/0-installation.md` (load explicitly when needed)
 ```
 
 ### Upgrade Success
@@ -355,7 +355,7 @@ python -c "import yaml, pydantic, fastapi; print('Dependencies OK')"
 
 **Option 3: View Setup Guide**
 
-See [Installation Documentation](../../docs/03-getting-started/0-installation.md) for detailed setup instructions.
+See `../../docs/03-getting-started/0-installation.md` (load explicitly when needed) for detailed setup instructions.
 ```
 
 ### Partial Setup (Warnings)

@@ -378,9 +378,9 @@ Before completing ANY operation:
 
 | Agent | Purpose |
 |-------|---------|
-| [CORTEX.md](../agents/core/CORTEX.md) | Master agent ✅ |
-| [cortex-architect.md](../agents/core/cortex-architect.md) | Design-phase agent ✅ |
-| [cortex-mcp-gateway.md](../agents/core/cortex-mcp-gateway.md) | MCP routing agent ✅ |
+| `../agents/core/CORTEX.md` (load explicitly when needed) | Master agent ✅ |
+| `../agents/core/cortex-architect.md` (load explicitly when needed) | Design-phase agent ✅ |
+| `../agents/core/cortex-mcp-gateway.md` (load explicitly when needed) | MCP routing agent ✅ |
 
 ---
 
