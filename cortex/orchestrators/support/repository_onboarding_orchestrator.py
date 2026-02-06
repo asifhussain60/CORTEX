@@ -55,6 +55,12 @@ from cortex.common.progress_reporter import (
 
 logger = logging.getLogger(__name__)
 
+
+class RepositoryNotFoundError(Exception):
+    """Raised when repository path does not exist."""
+    pass
+
+
 # Lazy imports for new components
 _asset_manager = None
 _landing_page_generator = None
@@ -1404,6 +1410,339 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 }
             }
         })
+    
+    # ========================================================================
+    # PHASE 28: REPOSITORY PROFILE GENERATION (LOOSE COUPLING SUPPORT)
+    # ========================================================================
+    
+    def scan_repository(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Scan repository structure and gather metadata.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Dictionary with scan results
+            
+        Raises:
+            RepositoryNotFoundError: If repository doesn't exist
+        """
+        if not repo_path.exists():
+            raise RepositoryNotFoundError(f"Repository not found: {repo_path}")
+        
+        return {
+            'structure': self._scan_structure(repo_path),
+            'tech_stack': self.analyze_tech_stack(repo_path),
+            'security': self.assess_security_baseline(repo_path),
+            'standards': self.extract_standards(repo_path),
+        }
+    
+    def detect_company_domains(
+        self, repo_path: Path
+    ) -> tuple[bool, Optional[str], List[str]]:
+        """
+        Detect company/domains/ structure in repository.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Tuple of (has_domains, domains_path, detected_domains)
+        """
+        domains_path = repo_path / "company" / "domains"
+        
+        if not domains_path.exists():
+            return (False, None, [])
+        
+        # List subdirectories in company/domains/
+        detected_domains = [
+            f"{d.name}/" for d in domains_path.iterdir() if d.is_dir()
+        ]
+        
+        return (True, str(domains_path.relative_to(repo_path)), detected_domains)
+    
+    def analyze_tech_stack(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Analyze technology stack of repository.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Dictionary with tech stack information
+        """
+        languages = self._detect_languages(repo_path)
+        primary_language = languages[0] if languages else None
+        
+        return {
+            'primary_language': primary_language,
+            'languages': languages,
+            'frameworks': self._detect_frameworks(repo_path),
+            'dependencies': self.analyze_dependencies(repo_path),
+        }
+    
+    def assess_security_baseline(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Assess security baseline of repository.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Dictionary with security metadata
+        """
+        return {
+            'secrets_management': self._detect_secrets_management(repo_path),
+            'auth_pattern': self._detect_auth_pattern(repo_path),
+            'vulnerabilities_detected': 0,  # Placeholder for security scan
+            'last_scan': datetime.now(),
+        }
+    
+    def extract_standards(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Extract coding standards from repository.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Dictionary with standards information
+        """
+        return {
+            'coding_style': self._detect_coding_style(repo_path),
+            'security_baseline': self._detect_security_baseline(repo_path),
+            'test_patterns': self._detect_test_patterns(repo_path),
+            'api_patterns': self._detect_api_patterns(repo_path),
+        }
+    
+    def generate_profile(self, repo_path: Path) -> 'RepositoryProfile':
+        """
+        Generate complete RepositoryProfile from repository scan.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            RepositoryProfile instance
+        """
+        from cortex_brain.onboarded_repos import (
+            RepositoryProfile,
+            TechStack,
+            RepositoryStructure,
+            Standards,
+            SecurityMetadata,
+            LooseCoupling,
+        )
+        
+        # Scan repository
+        scan_results = self.scan_repository(repo_path)
+        
+        # Detect company domains
+        has_domains, domains_path, detected_domains = self.detect_company_domains(
+            repo_path
+        )
+        
+        # Build profile
+        profile = RepositoryProfile(
+            name=repo_path.name,
+            path=str(repo_path.absolute()),
+            onboarded_at=datetime.now(),
+            tech_stack=TechStack(**scan_results['tech_stack']),
+            structure=RepositoryStructure(
+                has_company_domains=has_domains,
+                company_domains_path=domains_path,
+                domains_detected=detected_domains,
+                **self._get_structure_metadata(repo_path),
+            ),
+            standards=Standards(**scan_results['standards']),
+            security=SecurityMetadata(**scan_results['security']),
+            loose_coupling=LooseCoupling(),
+        )
+        
+        return profile
+    
+    def onboard_repository_with_profile(
+        self,
+        repo_path: Path,
+        profile_store: Optional['ProfileStore'] = None,
+    ) -> 'RepositoryProfile':
+        """
+        Onboard repository and save profile to store.
+        
+        Args:
+            repo_path: Path to repository
+            profile_store: ProfileStore instance (optional)
+            
+        Returns:
+            RepositoryProfile instance
+        """
+        from cortex_brain.onboarded_repos import ProfileStore
+        
+        # Generate profile
+        profile = self.generate_profile(repo_path)
+        
+        # Save to store if provided
+        if profile_store is None:
+            profile_store = ProfileStore()
+        
+        profile_store.save(profile)
+        
+        return profile
+    
+    def detect_test_framework(self, repo_path: Path) -> Dict[str, Any]:
+        """
+        Detect test framework used in repository.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            Dictionary with test framework information
+        """
+        test_info = {
+            'has_tests': False,
+            'test_framework': None,
+        }
+        
+        # Check for pytest
+        if (repo_path / "pytest.ini").exists() or \
+           (repo_path / "pyproject.toml").exists():
+            test_info['has_tests'] = True
+            test_info['test_framework'] = "pytest"
+        
+        # Check for unittest
+        elif (repo_path / "tests").exists():
+            test_info['has_tests'] = True
+            test_info['test_framework'] = "unittest"
+        
+        return test_info
+    
+    def analyze_dependencies(self, repo_path: Path) -> List[str]:
+        """
+        Analyze project dependencies.
+        
+        Args:
+            repo_path: Path to repository
+            
+        Returns:
+            List of dependency strings
+        """
+        dependencies = []
+        
+        # Check requirements.txt
+        req_file = repo_path / "requirements.txt"
+        if req_file.exists():
+            content = req_file.read_text()
+            dependencies.extend([
+                line.strip() for line in content.split('\n')
+                if line.strip() and not line.startswith('#')
+            ])
+        
+        # Check pyproject.toml
+        pyproject_file = repo_path / "pyproject.toml"
+        if pyproject_file.exists():
+            # Simple parsing - would use tomli in production
+            content = pyproject_file.read_text()
+            if 'dependencies' in content:
+                dependencies.append("(see pyproject.toml)")
+        
+        return dependencies
+    
+    # Helper methods
+    
+    def _scan_structure(self, repo_path: Path) -> Dict[str, Any]:
+        """Scan repository structure."""
+        return {
+            'root': str(repo_path),
+            'has_tests': (repo_path / "tests").exists(),
+            'has_docs': (repo_path / "docs").exists(),
+        }
+    
+    def _detect_languages(self, repo_path: Path) -> List[str]:
+        """Detect programming languages in repository."""
+        languages = []
+        
+        # Check for Python files
+        if list(repo_path.rglob("*.py")):
+            languages.append("Python")
+        
+        # Check for YAML files
+        if list(repo_path.rglob("*.yaml")) or list(repo_path.rglob("*.yml")):
+            languages.append("YAML")
+        
+        # Check for Markdown
+        if list(repo_path.rglob("*.md")):
+            languages.append("Markdown")
+        
+        return languages
+    
+    def _detect_frameworks(self, repo_path: Path) -> List[str]:
+        """Detect frameworks used in repository."""
+        frameworks = []
+        
+        # Check for FastAPI
+        if any("fastapi" in dep.lower() 
+               for dep in self.analyze_dependencies(repo_path)):
+            frameworks.append("FastAPI")
+        
+        # Check for Pydantic
+        if any("pydantic" in dep.lower() 
+               for dep in self.analyze_dependencies(repo_path)):
+            frameworks.append("Pydantic")
+        
+        return frameworks
+    
+    def _detect_secrets_management(self, repo_path: Path) -> str:
+        """Detect secrets management approach."""
+        if (repo_path / ".env.example").exists():
+            return "environment variables"
+        return "unknown"
+    
+    def _detect_auth_pattern(self, repo_path: Path) -> str:
+        """Detect authentication pattern."""
+        deps = self.analyze_dependencies(repo_path)
+        if any("jwt" in dep.lower() for dep in deps):
+            return "JWT"
+        return "unknown"
+    
+    def _detect_coding_style(self, repo_path: Path) -> Optional[str]:
+        """Detect coding style tools."""
+        tools = []
+        if (repo_path / ".black").exists():
+            tools.append("black")
+        if (repo_path / "mypy.ini").exists():
+            tools.append("mypy")
+        return " + ".join(tools) if tools else None
+    
+    def _detect_security_baseline(self, repo_path: Path) -> Optional[str]:
+        """Detect security baseline."""
+        # Placeholder - would check for security configs
+        return None
+    
+    def _detect_test_patterns(self, repo_path: Path) -> Optional[str]:
+        """Detect test patterns."""
+        test_info = self.detect_test_framework(repo_path)
+        if test_info['has_tests']:
+            return f"{test_info['test_framework']}"
+        return None
+    
+    def _detect_api_patterns(self, repo_path: Path) -> Optional[str]:
+        """Detect API patterns."""
+        frameworks = self._detect_frameworks(repo_path)
+        if "FastAPI" in frameworks:
+            return "RESTful + OpenAPI 3.0"
+        return None
+    
+    def _get_structure_metadata(self, repo_path: Path) -> Dict[str, Any]:
+        """Get additional structure metadata."""
+        test_info = self.detect_test_framework(repo_path)
+        return {
+            'has_tests': test_info['has_tests'],
+            'test_framework': test_info['test_framework'],
+            'has_docs': (repo_path / "docs").exists(),
+            'doc_format': "markdown" if (repo_path / "docs").exists() else None,
+        }
     
     def execute_operation(
         self,
