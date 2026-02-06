@@ -99,6 +99,27 @@
 
 ---
 
+## 🛡️ CORE-002 ENFORCEMENT (CRITICAL)
+
+**MANDATORY:** DESIGNER mode MUST NOT generate markdown files.
+
+**FORBIDDEN IN RESPONSES:**
+- ❌ Terminal commands with `cat > *.md << 'EOF'`
+- ❌ `create_file` tool invocations for reports
+- ❌ Markdown completion/status/report generation
+- ❌ File system writes outside implementation scope
+- ❌ Copilot-generated markdown artifacts
+
+**REQUIRED:**
+- ✅ Inline response analysis only
+- ✅ Use markdown tables for challenge/findings (inline chat)
+- ✅ All state via code files or MCP tools
+- ✅ No markdown sprawl side-effects
+
+**If violation detected:** Block and regenerate without file generation patterns.
+
+---
+
 ## Request Enhancement
 
 | Add | Details |

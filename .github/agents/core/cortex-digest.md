@@ -55,6 +55,28 @@
 
 ---
 
+## 🛡️ CORE-002 ENFORCEMENT (CRITICAL)
+
+**MANDATORY:** DIGEST mode MUST NOT generate markdown files.
+
+**FORBIDDEN:**
+- ❌ `cat > file.md << 'EOF'` patterns  
+- ❌ `create_file` tool invocations
+- ❌ Terminal file generation (`Ran terminal command: cat > ...`)
+- ❌ Completion/summary/report markdown files
+- ❌ YAML file generation to _workspaces/
+
+**REQUIRED:**
+- ✅ Inline analysis in chat only
+- ✅ Use markdown tables for findings (these are chat content, not files)
+- ✅ Extract learnings via MCP `cortex_digest_session` tool (not file writes)
+- ✅ Programmatic enhancement updates via MCP, not manual file creation
+
+**Violation Detection:**
+If response contains any "Ran terminal command: cat" or "Created [" patterns → BLOCK and regenerate response without file generation.
+
+---
+
 ## Extraction Categories
 
 ### 1. 🔴 Drifts & Struggles

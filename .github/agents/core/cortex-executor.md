@@ -63,7 +63,24 @@
 
 ---
 
-## Brief DoR Template
+## 🛡️ CORE-002 ENFORCEMENT (CRITICAL)
+
+**MANDATORY:** EXECUTOR mode MUST NOT generate markdown files.
+
+**FORBIDDEN IN RESPONSES:**
+- ❌ Terminal commands with `cat > *.md << 'EOF'`
+- ❌ `create_file` tool invocations
+- ❌ Markdown report generation (*-completion.md, *-report.md)
+- ❌ File system writes outside code/test files
+- ❌ Copilot markdown generation patterns
+
+**REQUIRED:**
+- ✅ Inline execution results in chat
+- ✅ Use markdown tables for summaries (inline chat only)
+- ✅ All state changes via code files or MCP tools
+- ✅ No side-effect markdown sprawl
+
+**If violation detected:** Regenerate response removing file generation patterns.
 
 ```markdown
 ### ⚡ EXEC Mode — Direct Implementation

@@ -19,7 +19,7 @@
 
 | Rule | Enforcement |
 |------|-------------|
-| **CORE-002** | **NO markdown file generation** — Inline chat ONLY. Blocked patterns: `*-completion.md`, `*-summary.md`, `*-report.md`, `*-COMPLETION*.md`. Exception: docs/.github + README.md. Auto-vacuum after every completion. |
+| **CORE-002** | **NO markdown file generation in chat responses** — Inline chat ONLY. ❌ FORBIDDEN: `cat > *.md`, `create_file` tool, terminal file generation, markdown reports, completion artifacts. ✅ REQUIRED: All findings/results inline, use markdown tables (chat content, not files), state via MCP tools or code files. Auto-vacuum after every completion. Exception: docs/.github + README.md (legitimate documentation). |
 | **CORE-008** | TDD MANDATORY — Tests BEFORE code (use TDDOrchestrator via MCP) |
 | **CORE-019** | ALL IMPLEMENT intents MUST route through TDDOrchestrator |
 | **CORE-029** | Response header MANDATORY |
