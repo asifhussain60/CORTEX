@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 7.2 | **Updated:** 2026-02-05 | **Authority:** MCP-First SaaS Architecture
+**Version:** 7.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅
 
 ---
 
@@ -279,15 +279,21 @@ Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrato
 
 ## 🔗 Prompts & Agents
 
+### Prompts
 | File | Purpose |
 |------|---------|
 | [CORTEX.prompt.md](prompts/CORTEX.prompt.md) | Production master prompt |
 | [cortex-architect.prompt.md](prompts/cortex-architect.prompt.md) | AUDIT + DESIGN dual-mode prompt |
-| [CORTEX.md](agents/core/CORTEX.md) | Master agent ✅ |
-| [cortex-architect.md](agents/core/cortex-architect.md) | Mode router agent ✅ |
-| [cortex-auditor.md](agents/core/cortex-auditor.md) | AUDIT specialist agent ✅ |
-| [cortex-designer.md](agents/core/cortex-designer.md) | DESIGN specialist agent ✅ |
-| [cortex-mcp-gateway.md](agents/core/cortex-mcp-gateway.md) | MCP gateway agent ✅ |
+
+### Agents (Lazy Loading)
+**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using [AGENT-INDEX.md](agents/AGENT-INDEX.md)
+
+**DO NOT pre-load all agents.** Use intent-based lazy loading:
+- 11 core agents available in `agents/core/`
+- Load ONLY 1-2 agents per user intent
+- See [AGENT-INDEX.md](agents/AGENT-INDEX.md) for intent → agent mapping
+
+**Token Savings:** 88% reduction (245k → 30k tokens at init)
 
 ---
 

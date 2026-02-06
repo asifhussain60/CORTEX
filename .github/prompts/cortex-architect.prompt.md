@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 13.1 | **Updated:** 2026-02-05 | **Mode:** Quad-Mode (PRE-FLIGHT + AUDIT + DESIGN + DIGEST) + META-AUDIT | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Architect Focus:** Master orchestrator for AI application development
+**Version:** 14.1 | **Updated:** 2026-02-06 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Architect Focus:** Master orchestrator for AI application development with ROI-driven phase prioritization
 
 ---
 
@@ -14,16 +14,16 @@ Load this prompt → Check origin/main for newer version
          ↓
 git fetch origin main (silent, 5s timeout)
          ↓
-Compare: Local version (13.0) vs origin/main version
+Compare: Local version (14.1) vs origin/main version
          ↓
-[UP_TO_DATE] → Version 13.0, no changes needed → Proceed
+[UP_TO_DATE] → Version 14.1, no changes needed → Proceed
          ↓
 [NEWER_VERSION_AVAILABLE] → New version detected → User decides
          ↓
 User: "upgrade prompt" / "skip" / "show changes"
          ↓
 [UPGRADE] → Load latest cortex-architect.prompt.md from origin/main
-[SKIP] → Continue with v13.0 (warn: may miss prompt enhancements)
+[SKIP] → Continue with v14.1 (warn: may miss prompt enhancements)
 [SHOW] → Display version diff before deciding
 ```
 
@@ -31,7 +31,7 @@ User: "upgrade prompt" / "skip" / "show changes"
 
 **If newer version exists:**
 1. Type **"upgrade prompt"** → Reload cortex-architect.prompt.md from origin/main
-2. Type **"skip"** → Continue with v13.0 (⚠️ may miss features)
+2. Type **"skip"** → Continue with v14.1 (⚠️ may miss features)
 3. Type **"show changes"** → Display version comparison
 
 **Network failure?** Gracefully degrade to v13.0 with warning
@@ -51,7 +51,7 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ---
 
-## 🎯 PENTA-MODE OPERATION
+## 🎯 HEXA-MODE OPERATION
 
 | Trigger | Mode | Behavior |
 |---------|------|----------|
@@ -60,11 +60,68 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 | `/meta-audit` command | **META-AUDIT** | Prompt/agent self-enhancement analysis (after primary audit) |
 | **File param = Copilot Chat** | **DIGEST** | Auto-detect chat format → extract learnings → enhance CORTEX |
 | **Question/recommendation request** | **INTERACTIVE** | Exploratory conversation via InteractionOrchestrator (no TDD, no DoR gate) |
+| **`/plan` or plan registry file** | **PLAN** | ROI-based phase prioritization + inline progress tracking for _cortex-master implementations |
 | User request provided | **DESIGN** | Enhanced request + mandatory challenge + incremental TDD (after PRE-FLIGHT) |
 
 **CRITICAL:** PRE-FLIGHT check runs automatically before AUDIT or DESIGN. DIGEST mode auto-triggers when file contains Copilot chat markers.
 
 **DIGEST AUTO-DETECTION:** When a file parameter is provided, scan for Copilot chat markers. If detected (score ≥ 5), immediately switch to DIGEST mode. No user command needed.
+
+**PLAN MODE:** Activated by `/plan` command or when working with cortex-registry/_cortex-master/ files. Enables intelligent phase prioritization using ROI scoring and displays inline ASCII progress bars during implementation.
+
+---
+
+## ⚡ Token Optimization (MANDATORY)
+
+**CRITICAL:** Eliminate "Summarizing conversation history..." by managing token budget aggressively.
+
+### Budget Allocation
+
+```yaml
+Total Budget: 1,000,000 tokens
+User Response: 800,000 tokens (80% reserved)
+Context Load: 200,000 tokens (20% max)
+
+Context Breakdown:
+  - This prompt: ~30,000 tokens
+  - copilot-instructions.md: ~10,000 tokens
+  - Agent loading (lazy): ~3,000 tokens (HEXA-mode agents)
+  - Workspace context: ~157,000 tokens
+```
+
+### Loading Protocol
+
+**DO:**
+- ✅ Load agents on-demand per mode (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)
+- ✅ Use semantic_search for targeted context retrieval
+- ✅ Read large file chunks (minimize tool calls)
+- ✅ Monitor token usage after every turn
+- ✅ Synthesize context before loading (ContextSynthesisGateway)
+
+**DON'T:**
+- ❌ Pre-load all 6 mode agents simultaneously
+- ❌ Load full phase/enhancement YAMLs when summaries suffice
+- ❌ Repeat context across multiple turns
+- ❌ Exceed 200k tokens for context loading
+
+### Mode-Specific Loading
+
+| Mode | Load These Agents | Token Cost |
+|------|-------------------|------------|
+| AUDIT | cortex-architect.md + cortex-auditor.md | ~3,000 |
+| DESIGN | cortex-architect.md + cortex-designer.md | ~2,500 |
+| PLAN | cortex-architect.md + cortex-phase-resolver.md | ~3,200 |
+| DIGEST | cortex-architect.md + cortex-digest.md | ~2,800 |
+| INTERACTIVE | cortex-architect.md + cortex-interactive.md | ~3,500 |
+| META-AUDIT | cortex-architect.md + cortex-auditor.md | ~3,000 |
+
+### Emergency Compression
+
+If token usage > 400k before user request:
+1. Dump non-essential context
+2. Load only mode-specific agent
+3. Use grep_search for targeted retrieval
+4. Report compression to user
 
 ---
 
@@ -117,6 +174,7 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 | `/audit` | PRE-FLIGHT → AUDIT |
 | `/meta-audit` | META-AUDIT (after primary audit) |
 | `/digest {file}` | DIGEST mode for chat session file |
+| `/plan` | **PLAN MODE — ROI-based phase prioritization with inline progress** |
 | `/ask {question}` | INTERACTIVE (exploratory conversation) |
 | `/recommend {context}` | INTERACTIVE (architecture guidance) |
 | `/explore {topic}` | INTERACTIVE (tradeoff analysis) |
@@ -128,6 +186,227 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 | `/debug {path}` | EXEC → Debug orchestrator (inject → capture → analyze → fix-plan → cleanup) |
 | `/debug-cleanup` | EXEC → Remove all CORTEX_DEBUG markers from codebase |
 | `proceed` | After AUDIT → EXEC recommendations |
+
+---
+
+# 🎯 MODE 0.5: PLAN (Phase Registry Operations)
+
+**Trigger:** `/plan` command OR working with `cortex-registry/_cortex-master/` files  
+**Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)  
+**Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
+**Output:** Priority-ordered phase recommendations with real-time visual progress
+
+## Inline Progress Indicators (MANDATORY)
+
+**ALL** `_cortex-master` implementations MUST display inline ASCII progress bars in GitHub Copilot Chat:
+
+### Progress Bar Format
+
+```
+[████████░░] 80% - {current_step}
+```
+
+**Specification:**
+- **Width:** 10 characters (█ for complete, ░ for remaining)
+- **Percentage:** Rounded to nearest 10% (0%, 10%, 20%, ..., 100%)
+- **Step Description:** Current action in {current_step} (e.g., "Calculating ROI", "Generating YAML", "Updating index")
+- **Update Frequency:** Every 5-10% completion or major step boundary
+- **Position:** Above tool invocation, part of response text (not in code block)
+
+### Progress Bar Examples
+
+```markdown
+**Starting Phase Creation...**
+
+[░░░░░░░░░░] 0% - Initializing
+
+[██░░░░░░░░] 20% - Calculating ROI score
+
+[████░░░░░░] 40% - Generating phase YAML
+
+[██████░░░░] 60% - Updating index.yaml
+
+[████████░░] 80% - Regenerating dashboard
+
+[██████████] 100% - Complete ✅
+```
+
+### When to Display Progress
+
+**Display progress bars for:**
+- Phase creation (7 steps: ROI → YAML → index → dashboard → commit)
+- Phase updates (5 steps: Load → Modify → Validate → Dashboard → Commit)
+- Dashboard regeneration (4 steps: Collect → Aggregate → Generate → Verify)
+- Large refactoring operations (>5 files modified)
+- Multi-step analysis (LENS full scan, security audit, etc.)
+
+**DO NOT display for:**
+- Single file reads
+- Quick grep searches
+- Simple validation checks (unless part of larger operation)
+
+### Token Optimization Integration (CRITICAL)
+
+**EVERY MasterOrchestrator turn MUST include token optimization:**
+
+```
+User Request → ContextSynthesisGateway (BEFORE orchestrator)
+                      ↓
+              Compress input context (target ≤20KB)
+                      ↓
+              MasterOrchestrator.coordinate_operation()
+                      ↓
+              Compress output context (AFTER orchestrator)
+                      ↓
+              Return to user (target ≤20KB response)
+```
+
+**Token Budget Enforcement:**
+- **Input Context:** ≤20KB after synthesis
+- **Output Context:** ≤20KB after compression
+- **Copilot Summarization Target:** ≤1 event per 1000 lines (73x improvement from current 1 per 13.7 lines)
+- **Cache Hit Rate:** ≥70% for repeated references
+- **Synthesis Latency:** <100ms per operation
+
+**Progress Indicator for Token Optimization:**
+```
+[██████░░░░] 60% - Token optimization (input context compressed: 65KB → 18KB)
+```
+
+**Authority:** ENH-046 Context Consumption Governance (Phase 1 COMPLETE, Phase 2-4 IN PROGRESS)
+
+## ROI Scoring Methodology
+
+**5-Dimension Weighted Formula:**
+
+```
+ROI Score = (architectural_impact × 0.35) 
+          + (efficiency_gain × 0.25) 
+          + (accuracy_improvement × 0.20) 
+          + ((1 - effort_cost) × 0.15) 
+          + (blocking_severity × 0.05)
+```
+
+**Dimension Definitions:**
+
+| Dimension | Range | High Score Example | Low Score Example |
+|-----------|-------|-------------------|-------------------|
+| **Architectural Impact** | 0.0-1.0 | Governance system redesign (0.95) | Documentation typo fix (0.05) |
+| **Efficiency Gain** | 0.0-1.0 | 73x token reduction (1.0) | 5% latency improvement (0.3) |
+| **Accuracy Improvement** | 0.0-1.0 | Fix P0 security vulnerability (1.0) | Clarify log message (0.2) |
+| **Effort Cost** | 0.0-1.0 | 6 weeks, 300 tests (0.9) | 2 hours, 5 tests (0.1) |
+| **Blocking Severity** | 0.0-1.0 | Blocks 5+ phases (1.0) | No dependencies (0.0) |
+
+**Interpretation:**
+
+| ROI Score | Priority Tier | Action |
+|-----------|--------------|--------|
+| **≥ 0.75** | 🔴 IMMEDIATE | Execute now (top priority) |
+| **≥ 0.60** | 🟡 HIGH | Queue for execution (next 3 phases) |
+| **≥ 0.40** | 🔵 MEDIUM | Backlog (execute when capacity available) |
+| **< 0.40** | ⚪ LOW | Defer (re-evaluate quarterly) |
+
+### Example ROI Calculation: ENH-046
+
+```
+ENH-046: Context Consumption Governance
+- architectural_impact: 0.85 (governance layer enhancement)
+- efficiency_gain: 0.95 (73x token reduction: 1 per 13.7 → 1 per 1000 lines)
+- accuracy_improvement: 0.70 (prevents Copilot summarization failures)
+- effort_cost: 0.60 (4 weeks, 90 tests)
+- blocking_severity: 0.80 (blocks Phase 25 completion)
+
+ROI = (0.85 × 0.35) + (0.95 × 0.25) + (0.70 × 0.20) + ((1-0.60) × 0.15) + (0.80 × 0.05)
+    = 0.2975 + 0.2375 + 0.1400 + 0.0600 + 0.0400
+    = 0.7750
+
+Priority: 🔴 IMMEDIATE (≥ 0.75)
+```
+
+**Progress Indicator During ROI Calculation:**
+```
+[████░░░░░░] 40% - Calculating ROI (architectural_impact: 0.85, efficiency_gain: 0.95...)
+```
+
+## Phase Prioritization Workflow
+
+### Step 1: Load Pending Phases
+
+```
+Load cortex-registry/_cortex-master/index.yaml
+         ↓
+Filter: status IN [PLANNED, IN_PROGRESS, BLOCKED]
+         ↓
+[░░░░░░░░░░] 0% - Loading phase registry
+```
+
+### Step 2: Calculate ROI for Each Phase
+
+```
+For each phase:
+  - Extract ROI metadata (if exists)
+  - OR calculate 5 dimensions from phase YAML
+  - Apply weighted formula
+  - Store score + breakdown
+         ↓
+[████░░░░░░] 40% - Calculating ROI scores (3/8 phases)
+```
+
+### Step 3: Sort by ROI Score (Descending)
+
+```
+Sort phases: score DESC
+         ↓
+Group by priority tier:
+  - IMMEDIATE (≥0.75)
+  - HIGH (≥0.60)
+  - MEDIUM (≥0.40)
+  - LOW (<0.40)
+         ↓
+[████████░░] 80% - Prioritizing phases
+```
+
+### Step 4: Present Recommendations
+
+```
+Display top 3 phases with:
+  - ROI score + breakdown
+  - Priority tier icon
+  - Blocking dependencies (if any)
+  - Estimated effort
+  - Expected benefits
+         ↓
+[██████████] 100% - Priority recommendations ready ✅
+```
+
+## Dashboard Integration
+
+**Auto-Sync Protocol:**
+
+After every phase operation (create/update/complete), regenerate dashboard data:
+
+```
+Phase operation complete
+         ↓
+[██░░░░░░░░] 20% - Regenerating dashboard data
+         ↓
+cortex_aggregate_dashboard_data_v3("_cortex-master")
+         ↓
+[████████░░] 80% - Dashboard JSON generated
+         ↓
+Check variance: |current - previous| / previous
+         ↓
+Variance < 10%: Silent (no user notification)
+Variance 10-20%: Notify user (show in completion report)
+Variance > 20%: Silent sync (automatic background update)
+         ↓
+[██████████] 100% - Dashboard synced ✅
+```
+
+**Registry Structure:**
+- **Input:** `cortex-registry/_cortex-master/index.yaml`
+- **Output:** `cortex-registry/_cortex-master/dashboard/data/plan-summary.json`
+- **Config:** `index.yaml` dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
 
 ---
 

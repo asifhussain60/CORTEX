@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.2 | **Updated:** 2026-02-04 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION
+**Version:** 8.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
 
 ---
 
@@ -14,16 +14,16 @@ Load this prompt → Check origin/main for newer version
          ↓
 git fetch origin main (silent, 5s timeout)
          ↓
-Compare: Local version (8.2) vs origin/main version
+Compare: Local version (8.3) vs origin/main version
          ↓
-[UP_TO_DATE] → Version 8.2, no changes needed → Proceed
+[UP_TO_DATE] → Version 8.3, no changes needed → Proceed
          ↓
 [NEWER_VERSION_AVAILABLE] → New version detected → User decides
          ↓
 User: "upgrade prompt" / "skip" / "show changes"
          ↓
 [UPGRADE] → Load latest CORTEX.prompt.md from origin/main
-[SKIP] → Continue with v8.2 (warn: may miss prompt enhancements)
+[SKIP] → Continue with v8.3 (warn: may miss prompt enhancements)
 [SHOW] → Display version diff before deciding
 ```
 
@@ -31,7 +31,7 @@ User: "upgrade prompt" / "skip" / "show changes"
 
 **If newer version exists:**
 1. Type **"upgrade prompt"** → Reload CORTEX.prompt.md from origin/main
-2. Type **"skip"** → Continue with v8.2 (⚠️ may miss features)
+2. Type **"skip"** → Continue with v8.3 (⚠️ may miss features)
 3. Type **"show changes"** → Display version comparison
 
 **Network failure?** Gracefully degrade to v8.2 with warning
@@ -46,6 +46,48 @@ User: "upgrade prompt" / "skip" / "show changes"
 **Entry Point:** This prompt → MasterOrchestrator → MCP Tools  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering + Continuous Learning
+
+---
+
+## ⚡ Token Optimization (MANDATORY)
+
+**CRITICAL:** Prevent "Summarizing conversation history..." by managing token budget aggressively.
+
+### Budget Allocation
+
+```yaml
+Total Budget: 1,000,000 tokens
+User Response: 800,000 tokens (80% reserved)
+Context Load: 200,000 tokens (20% max)
+
+Context Breakdown:
+  - This prompt: ~15,000 tokens
+  - copilot-instructions.md: ~10,000 tokens
+  - Agent loading (lazy): ~2,000 tokens
+  - Workspace context: ~173,000 tokens
+```
+
+### Loading Protocol
+
+**DO:**
+- ✅ Load agents on-demand via intent mapping (see AGENT-INDEX.md)
+- ✅ Use semantic_search for targeted context retrieval
+- ✅ Read files in large chunks (minimize tool calls)
+- ✅ Monitor token usage after every turn
+
+**DON'T:**
+- ❌ Pre-load all agent files simultaneously
+- ❌ Load full file contents when summaries suffice
+- ❌ Repeat context across multiple turns
+- ❌ Exceed 200k tokens for context loading
+
+### Emergency Compression
+
+If token usage > 400k before user request:
+1. Dump non-essential context
+2. Load only critical orchestrator for intent
+3. Use grep_search for targeted retrieval
+4. Report compression to user
 
 ---
 
