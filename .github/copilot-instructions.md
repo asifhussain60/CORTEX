@@ -55,6 +55,13 @@
   Tool: cortex_detect_duplicates
   Tool: cortex_git_history
 
+**PLAN Intent:**
+  Tool: cortex_plan_setup (pre-implementation hook)
+  Tool: cortex_plan_teardown (post-completion hook)
+  Tool: cortex_plan_resolve (intelligent phase resolution)
+  Tool: cortex_plan_sync (dashboard synchronization)
+  Flow: User → IntentRouter → PlanOrchestrator → PhaseManager + DashboardGenerator
+
 **DIGEST Intent:**
   Tool: cortex_digest_session
   Flow: File → Auto-Detect Markers → Extract Learnings → Enhance CORTEX
@@ -257,6 +264,7 @@
 | ANALYZE | MasterOrchestrator | `cortex_lens_analyze` |
 | TEST | TDDOrchestrator | `cortex_process_request` |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` |
+| PLAN | PlanOrchestrator | `cortex_plan_setup`, `cortex_plan_teardown`, `cortex_plan_resolve`, `cortex_plan_sync` |
 
 ### Orchestrators (28 Total)
 
@@ -267,8 +275,8 @@
     Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
                   ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
 
-    Support (14): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
-                  RecommendationGate, EducationalOrchestrator, ...
+    Support (15): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
+                  RecommendationGate, EducationalOrchestrator, PlanOrchestrator, ...
 
 ---
 
@@ -277,7 +285,7 @@
 | Command | Action |
 |---------|--------|
 | `/audit` | Autonomous codebase health scan |
-| `/plan` | **PLAN:** ROI-based phase prioritization + registry operations |
+| `/plan` | **PLAN MODE:** Phase lifecycle management with intelligent resolution, setup/teardown hooks, and dashboard sync. Uses PlanOrchestrator → PhaseManager → DashboardGenerator. Supports: create phase, update phase, complete phase, resolve operation, prioritize phases. |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
 | `/refactor {target}` | Code improvement |
