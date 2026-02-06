@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 14.1 | **Updated:** 2026-02-06 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Architect Focus:** Master orchestrator for AI application development with ROI-driven phase prioritization
+**Version:** 14.2 | **Updated:** 2026-02-06 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | **Status:** ACTIVE | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator for AI application development with ROI-driven phase prioritization
 
 ---
 
@@ -14,16 +14,16 @@ Load this prompt → Check origin/main for newer version
          ↓
 git fetch origin main (silent, 5s timeout)
          ↓
-Compare: Local version (14.1) vs origin/main version
+Compare: Local version (14.2) vs origin/main version
          ↓
-[UP_TO_DATE] → Version 14.1, no changes needed → Proceed
+[UP_TO_DATE] → Version 14.2, no changes needed → Proceed
          ↓
 [NEWER_VERSION_AVAILABLE] → New version detected → User decides
          ↓
 User: "upgrade prompt" / "skip" / "show changes"
          ↓
 [UPGRADE] → Load latest cortex-architect.prompt.md from origin/main
-[SKIP] → Continue with v14.1 (warn: may miss prompt enhancements)
+[SKIP] → Continue with v14.2 (warn: may miss prompt enhancements)
 [SHOW] → Display version diff before deciding
 ```
 
@@ -888,6 +888,133 @@ If violations detected:
 2. Enable context metrics collection
 3. Activate cache layer with 10min TTL
 4. Re-run audit after 24h to verify improvement
+
+**P1 Continuous Improvement (MANDATORY):**
+
+After collecting metrics, AUDIT mode MUST analyze deficiency patterns and trigger modular enhancements:
+
+```python
+# Step 1: Deficiency Detection
+deficiencies = []
+
+if compression_ratio < 0.4:
+    deficiencies.append({
+        "module": "token-synthesis",
+        "severity": "P1",
+        "metric": "compression_ratio",
+        "current": compression_ratio,
+        "target": 0.6,
+        "action": "Refactor token_synthesis.py algorithm"
+    })
+
+if initial_load_tokens > 1000:
+    deficiencies.append({
+        "module": "incremental-loader",
+        "severity": "P1",
+        "metric": "initial_load_tokens",
+        "current": initial_load_tokens,
+        "target": 500,
+        "action": "Refactor incremental_context_loader.py"
+    })
+
+if cache_hit_rate < 0.5:
+    deficiencies.append({
+        "module": "cache-strategy",
+        "severity": "P2",
+        "metric": "cache_hit_rate",
+        "current": cache_hit_rate,
+        "target": 0.7,
+        "action": "Enhance context_cache_layer.py invalidation logic"
+    })
+
+# Step 2: Root Cause Analysis (from audit logs)
+for deficiency in deficiencies:
+    audit_logs = grep_search(f".cortex/audit/*.json", deficiency["module"])
+    git_history = get_git_history(deficiency["module"], days=30)
+    
+    deficiency["hypothesis"] = analyze_patterns(audit_logs, git_history)
+    deficiency["affected_files"] = extract_file_paths(audit_logs)
+
+# Step 3: Modular Enhancement Trigger
+for deficiency in deficiencies:
+    if deficiency["severity"] in ["P0", "P1"]:
+        create_enhancement_ticket(deficiency)
+        trigger_refactor_cycle(deficiency["module"])
+```
+
+**Modules Subject to Continuous Improvement:**
+
+| Module ID | File | Responsibility | Audit Criteria | Enhancement Trigger |
+|-----------|------|----------------|----------------|---------------------|
+| `token-synthesis` | `cortex/brain/core/token_synthesis.py` | Token estimation + compression | compression_ratio ≥ 0.6, accuracy ±5% | compression_ratio < 0.4 |
+| `incremental-loader` | `cortex/interaction/incremental_context_loader.py` | On-demand context retrieval | initial_load ≤ 500 tokens | initial_load > 1000 |
+| `semantic-search` | `cortex/core/knowledge/semantic_search.py` | Precision context retrieval | relevance ≥ 0.8, FP ≤ 10% | references_loaded > 5 |
+| `cache-strategy` | `cortex/brain/core/context_cache_layer.py` | LRU cache + invalidation | hit_rate ≥ 0.7, stale ≤ 5% | cache_hit_rate < 0.5 |
+| `synthesis-pipeline` | `cortex/brain/core/context_synthesis_gateway.py` | Multi-stage optimization | P99 ≤ 100ms | p99_latency > 200ms |
+
+**Similar Patterns for Continuous Audit:**
+
+1. **Query Optimization** (`cortex/core/knowledge/query_optimization.py`)
+   - Audit: Query latency P99, cache hit rate
+   - Trigger: query_latency > 200ms OR cache_hit_rate < 0.7
+   - Refactor: Semantic query normalization + better cache keys
+
+2. **LENS Result Caching** (ENH-023)
+   - Audit: Cache miss rate, stale entry rate
+   - Trigger: cache_miss_rate > 0.3 OR stale_rate > 0.05
+   - Refactor: Content-hash based keys + LRU with size limits
+
+3. **Prometheus Metrics Collection** (`cortex/infrastructure/prometheus_metrics.py`)
+   - Audit: Histogram bucket alignment, missing metrics
+   - Trigger: bucket_misalignment OR missing_metrics_detected
+   - Refactor: Dynamic bucket generation + metric discovery
+
+4. **Git Audit Trail Integrity** (`cortex/infrastructure/audit_hash_chain.py`)
+   - Audit: Chain breaks, orphaned AC_START markers
+   - Trigger: chain_breaks > 0 OR orphaned_starts > 0
+   - Refactor: Auto-repair mechanism + mandatory gates
+
+5. **Orchestrator Performance** (`cortex/brain/observability/performance_profiler.py`)
+   - Audit: Orchestrator latency, unresolved bottlenecks
+   - Trigger: orchestrator_latency_p99 > 1000ms OR bottlenecks_open > 3
+   - Refactor: Auto-optimization recommendations + execution
+
+**Continuous Improvement Cycle:**
+
+```
+AUDIT Mode Execution
+        ↓
+Metrics Collection (Step 1)
+        ↓
+Deficiency Detection (Step 2)
+        ↓
+Root Cause Analysis (Step 3)
+        ↓
+Enhancement Ticket Created
+        ↓
+Modular Refactor (not band-aid)
+        ↓
+TDD Implementation
+        ↓
+Deployment + Git Commit
+        ↓
+Re-Audit (within 24h)
+        ↓
+Success Verification → Log to enhancement-history.yaml
+        ↓
+[If still failing] → Escalate to P0 + Manual Intervention
+```
+
+**ROI Tracking Dashboard:**
+
+http://localhost:3000/d/cortex-continuous-improvement
+
+Panels:
+- Token Optimization Metrics (compression, latency, cache hit rate)
+- AUDIT Mode Findings (P0/P1/P2/P3 violations timeline)
+- Enhancement Deployment Timeline (deficiency → fix → verification)
+- ROI Metrics (cost savings, cycle time, success rate)
+- Module Health (5 patterns with traffic light status)
 
 ## Audit Output Format
 

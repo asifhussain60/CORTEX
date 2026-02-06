@@ -8,56 +8,54 @@
 meta:
   plan_id: "ENH-046"
   title: "Context Consumption Governance (Token Optimizer Integration)"
-  version: "2.1"
-  authority: "docs/meta/enhancement-history.yaml + cortex-architect.prompt.md v14.1"
+  version: "3.0"
+  authority: "docs/meta/enhancement-history.yaml + cortex-architect.prompt.md v14.2"
   status: "IN_PROGRESS"
-  phase: "Phase 1 COMPLETE ✅ | Phase 2 IN_PROGRESS 🔵"
-  updated: "2026-02-06 (Phase 1 completed: Lazy loading infrastructure deployed)"
+  phase: "Phase 1.6 IN_PROGRESS 🔵 (Incremental Context Protocol)"
+  updated: "2026-02-06 (v3.0: Architecture pivot - Incremental context loading vs pre-synthesis)"
+  
   
 # ═══════════════════════════════════════════════════════════════════════════════
-# v2.0 ARCHITECTURE CORRECTION (2026-02-06)
+# v3.0 ARCHITECTURE PIVOT (2026-02-06) - Incremental Context Protocol
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# ROOT CAUSE ANALYSIS (chat01.md deep dive):
-#   - "Summarized conversation history" appears at lines 809, 827, 835
-#   - Summarization accelerates towards end (3 in final 35 lines)
-#   - This proves cumulative token exhaustion, NOT per-turn issue
-#   - EVERY request compounds: CORTEX context + Copilot context + history
+# KEY INSIGHT (User feedback - chat01.txt analysis):
+#   "Notice in Pasted Image when I said bypass context, GitHub Copilot Chat Sessions
+#    only loaded 1 reference into 14."
 #
-# ARCHITECTURAL INSIGHT:
-#   The existing Token Optimizer (docs/01-cortex-brain/05-token-optimization.md)
-#   already achieves 95-96% compression for CORTEX's INTERNAL composite requests
-#   (governance rules, AC-IDs, templates, knowledge indices).
+#   Phase 1.5 approach was WRONG:
+#     - Pre-loading AGENT-INDEX.md (1k tokens)
+#     - Pre-loading mode-specific agents (2-3k tokens)
+#     - Total: 3-5k tokens BEFORE user request
+#     - Result: 14 references loaded by Copilot
 #
-#   BUT: Token Optimizer only compresses the CORTEX → Brain payload.
-#   It does NOT compress the full context that CORTEX hands to GitHub Copilot.
+#   Correct approach (v3.0):
+#     - Load ONLY response header (50 tokens)
+#     - Load ONLY mode determination logic (200 tokens)
+#     - Total: 250 tokens BEFORE user request
+#     - Result: 1 reference loaded by Copilot (93% reduction!)
 #
-#   The MISSING piece is a synthesis layer that runs AFTER all orchestrators
-#   assemble their context but BEFORE the governed response is handed to
-#   GitHub Copilot Chat for processing.
+# ARCHITECTURAL PRINCIPLE:
+#   **Let GitHub Copilot pull context on-demand, not pre-synthesize**
 #
-# CORRECT INTEGRATION POINT:
-#   MCP Gateway (cortex_tools.py) → MasterOrchestrator → [orchestrators]
-#                                                              ↓
-#                                                    ContextSynthesisGateway  ← NEW
-#                                                              ↓
-#                                                    GitHub Copilot Chat
+#   GitHub Copilot Chat already has:
+#     ✅ Semantic search capabilities
+#     ✅ Intelligent context retrieval
+#     ✅ Token budget management
+#     ✅ On-demand file loading
 #
-# WHO NEEDS THIS:
-#   EVERY orchestrator that produces context for Copilot:
-#   - MasterOrchestrator (execute_operation → final response)
-#   - InteractionOrchestrator (execute_turn → LENS context)
-#   - IntentRouter (classify_intent → routing context)
-#   - ChallengeEngine (generate_challenge → challenge context)
-#   - KnowledgeSynthesisEngine (synthesize_unified_context → knowledge)
-#   - EnforcementOrchestrator (validate_operation → governance results)
-#   - TDDOrchestrator (RED→GREEN→REFACTOR cycle context)
-#   - RefactoringOrchestrator (refactor analysis context)
-#   - DocumentationOrchestrator (doc analysis context)
-#   - OnboardingOrchestrator (repo analysis context)
+#   We were DUPLICATING work Copilot does better!
 #
-# PRINCIPLE: Optimize at the EXIT point, not inside each orchestrator.
-# ═══════════════════════════════════════════════════════════════════════════════
+# NEW INTEGRATION POINT:
+#   User Request → Minimal Prompt (250 tokens)
+#                        ↓
+#              GitHub Copilot (pulls context as needed)
+#                        ↓
+#              CORTEX MCP Gateway (when execution required)
+#                        ↓
+#              MasterOrchestrator → [orchestrators]
+#                        ↓
+#              Response (with AUDIT-driven continuous improvement)
 
 objective:
   summary: |
@@ -1176,6 +1174,20 @@ documentation:
 
 # Version History
 version_history:
+  - version: "3.0"
+    date: "2026-02-06"
+    changes: |
+      ARCHITECTURE PIVOT: Incremental Context Protocol
+      - User insight: "1 reference loaded vs 14" when using minimal context
+      - Fix: Let GitHub Copilot pull context on-demand (not pre-synthesize)
+      - Phase 1.5 approach WRONG (3-5k tokens pre-loaded)
+      - Phase 1.6 approach CORRECT (250 tokens, 93% reduction)
+      - Added: Continuous Improvement Framework (AUDIT-driven enhancement)
+      - Added: 5 modular optimization patterns for continuous ROI
+      - Integration: Semantic Kernel + LangChain research applied
+    author: "cortex-architect + user feedback"
+    trigger: "chat01.txt Pasted Image evidence + user challenge"
+  
   - version: "2.0"
     date: "2026-02-06"
     changes: |
@@ -1194,3 +1206,245 @@ version_history:
     date: "2026-02-06"
     changes: "Initial plan creation with Phase 1 COMPLETE status"
     author: "cortex-architect"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONTINUOUS IMPROVEMENT FRAMEWORK (v3.0)
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PRINCIPLE: AUDIT-driven enhancement via modular optimization algorithms
+#
+# TRIGGER: cortex-architect.prompt.md AUDIT mode P1 check
+# FREQUENCY: Every AUDIT execution
+# MECHANISM: Analyze audit logs → Detect deficiencies → Refactor underlying logic
+#
+continuous_improvement:
+  framework_id: "ENH-046-CI"
+  authority: "cortex-architect.prompt.md v14.2 AUDIT mode"
+  owner: "EnforcementOrchestrator + cortex-auditor agent"
+  
+  audit_driven_cycle:
+    step_1:
+      name: "Metrics Collection"
+      trigger: "AUDIT mode execution"
+      data_sources:
+        - "Prometheus metrics (cortex_context_*)"
+        - "Audit logs (.cortex/audit/*.json)"
+        - "Git history (context-related commits)"
+        - "Chat session files (_workspaces/.chats/*.txt)"
+      metrics_collected:
+        - "token_synthesis_efficiency: compression_ratio ≥ 60%"
+        - "context_load_timing: initial_load_tokens ≤ 500"
+        - "copilot_reference_count: references_loaded ≤ 3 per turn"
+        - "cache_hit_rate: cache_efficiency ≥ 70%"
+        - "synthesis_latency: p99_ms ≤ 100"
+      
+    step_2:
+      name: "Deficiency Detection"
+      algorithm: "threshold_violation_analysis"
+      red_flags:
+        - condition: "compression_ratio < 0.4"
+          severity: "P1"
+          action: "Refactor token synthesis algorithm"
+        
+        - condition: "initial_load_tokens > 1000"
+          severity: "P1"
+          action: "Refactor incremental context loading"
+        
+        - condition: "references_loaded > 5"
+          severity: "P2"
+          action: "Enhance semantic search precision"
+        
+        - condition: "cache_efficiency < 0.5"
+          severity: "P2"
+          action: "Refactor cache invalidation strategy"
+        
+        - condition: "p99_ms > 200"
+          severity: "P3"
+          action: "Optimize synthesis pipeline"
+      
+    step_3:
+      name: "Root Cause Analysis"
+      inputs:
+        - "Red flag violations from step 2"
+        - "Audit log patterns (repeated failures)"
+        - "Git blame analysis (recent changes)"
+      outputs:
+        - "Hypothesis: {description}"
+        - "Evidence: {audit_log_excerpts}"
+        - "Affected modules: {file_paths}"
+      
+    step_4:
+      name: "Modular Enhancement"
+      principle: "Refactor underlying algorithm, not band-aid fix"
+      approach: "Extract module → Enhance → Test → Deploy"
+      modules:
+        - id: "token-synthesis"
+          file: "cortex/brain/core/token_synthesis.py"
+          responsibility: "Token estimation + compression"
+          audit_criteria:
+            - "Compression ratio ≥ 60%"
+            - "Accuracy within ±5% of actual tokens"
+          enhancement_trigger: "compression_ratio < 0.4"
+        
+        - id: "incremental-loader"
+          file: "cortex/interaction/incremental_context_loader.py"
+          responsibility: "On-demand context retrieval"
+          audit_criteria:
+            - "Initial load ≤ 500 tokens"
+            - "Incremental loads ≤ 2k tokens each"
+          enhancement_trigger: "initial_load_tokens > 1000"
+        
+        - id: "semantic-search"
+          file: "cortex/core/knowledge/semantic_search.py"
+          responsibility: "Precision context retrieval"
+          audit_criteria:
+            - "Relevance score ≥ 0.8 for top 3 results"
+            - "False positive rate ≤ 10%"
+          enhancement_trigger: "references_loaded > 5"
+        
+        - id: "cache-strategy"
+          file: "cortex/brain/core/context_cache_layer.py"
+          responsibility: "LRU cache with intelligent invalidation"
+          audit_criteria:
+            - "Cache hit rate ≥ 70%"
+            - "Stale entry rate ≤ 5%"
+          enhancement_trigger: "cache_efficiency < 0.5"
+        
+        - id: "synthesis-pipeline"
+          file: "cortex/brain/core/context_synthesis_gateway.py"
+          responsibility: "Multi-stage optimization pipeline"
+          audit_criteria:
+            - "P99 latency ≤ 100ms"
+            - "P50 latency ≤ 50ms"
+          enhancement_trigger: "p99_ms > 200"
+      
+    step_5:
+      name: "Deployment + Re-Audit"
+      flow: |
+        1. Enhancement deployed → Git commit
+        2. AUDIT mode re-run (within 24h)
+        3. Metrics comparison (before vs after)
+        4. Success verification → Log to enhancement-history.yaml
+        5. If still failing → Escalate to P0 + manual intervention
+  
+  similar_patterns_identified:
+    pattern_1:
+      name: "Query Optimization (Knowledge System)"
+      current_state:
+        - "Query cache exists (cortex/core/knowledge/query_optimization.py)"
+        - "Hit rate tracking present"
+        - "Basic LRU eviction"
+      deficiency_signals:
+        - "Query latency > 200ms for repeated queries"
+        - "Cache hit rate < 70%"
+        - "Redundant backend queries (same semantic intent)"
+      continuous_improvement:
+        audit_check: "Query performance metrics in AUDIT mode"
+        modular_component: "QueryOptimizer class"
+        enhancement_trigger: "query_latency_p99 > 200ms OR cache_hit_rate < 0.7"
+        refactor_target: "Semantic query normalization + better cache keys"
+      
+    pattern_2:
+      name: "LENS Result Caching (ENH-023)"
+      current_state:
+        - "File-level caching for LENS analysis"
+        - "TTL-based invalidation"
+        - "mtime tracking"
+      deficiency_signals:
+        - "Cache misses for unchanged files"
+        - "Stale results returned (> 5% rate)"
+        - "Cache storage growing unbounded"
+      continuous_improvement:
+        audit_check: "LENS cache efficiency in AUDIT mode"
+        modular_component: "LENSCacheLayer class"
+        enhancement_trigger: "cache_miss_rate > 0.3 OR stale_rate > 0.05"
+        refactor_target: "Content-hash based keys + LRU with size limits"
+      
+    pattern_3:
+      name: "Prometheus Metrics Collection"
+      current_state:
+        - "9 metrics for context governance"
+        - "MetricsCollector in cortex/infrastructure/"
+        - "Manual histogram bucket configuration"
+      deficiency_signals:
+        - "Histogram buckets misaligned (99% in single bucket)"
+        - "Missing critical metrics (e.g., session duration)"
+        - "High cardinality labels causing memory issues"
+      continuous_improvement:
+        audit_check: "Observability health in AUDIT mode"
+        modular_component: "MetricsCollector + metric definitions"
+        enhancement_trigger: "bucket_misalignment OR missing_metrics_detected"
+        refactor_target: "Dynamic bucket generation + metric discovery"
+      
+    pattern_4:
+      name: "Git Audit Trail Integrity"
+      current_state:
+        - "AuditHashChain in cortex/infrastructure/"
+        - "AC_START → AC_COMPLETE tracking"
+        - "Break detection via SHA256 chain"
+      deficiency_signals:
+        - "Chain breaks detected (> 0 per week)"
+        - "Missing AC_COMPLETE markers"
+        - "Orphaned AC_START entries"
+      continuous_improvement:
+        audit_check: "Git discipline in AUDIT mode (CORE-026/027)"
+        modular_component: "AuditHashChain class"
+        enhancement_trigger: "chain_breaks > 0 OR orphaned_starts > 0"
+        refactor_target: "Auto-repair mechanism + mandatory gates"
+      
+    pattern_5:
+      name: "Orchestrator Performance Profiling"
+      current_state:
+        - "PerformanceProfiler in cortex/brain/observability/"
+        - "Per-orchestrator metrics"
+        - "Bottleneck detection"
+      deficiency_signals:
+        - "Orchestrator latency > 1s for simple requests"
+        - "Bottlenecks unresolved (> 7 days old)"
+        - "No optimization recommendations acted upon"
+      continuous_improvement:
+        audit_check: "Performance profiling in AUDIT mode"
+        modular_component: "PerformanceProfiler class"
+        enhancement_trigger: "orchestrator_latency_p99 > 1000ms OR bottlenecks_open > 3"
+        refactor_target: "Auto-optimization recommendations + execution"
+  
+  roi_tracking:
+    measurement_period: "Monthly"
+    kpis:
+      - metric: "Token optimization ROI"
+        calculation: "(tokens_saved * $0.002/1k) / engineering_hours * $150/hr"
+        target: "> 200% ROI"
+      
+      - metric: "AUDIT mode auto-fix rate"
+        calculation: "auto_fixes / total_violations"
+        target: "> 80%"
+      
+      - metric: "Continuous improvement cycle time"
+        calculation: "days(deficiency_detected → enhancement_deployed)"
+        target: "< 3 days"
+      
+      - metric: "Enhancement success rate"
+        calculation: "enhancements_resolved / enhancements_deployed"
+        target: "> 90%"
+  
+  dashboard_integration:
+    grafana_dashboard: "http://localhost:3000/d/cortex-continuous-improvement"
+    panels:
+      - "Token Optimization Metrics (compression, latency, cache hit rate)"
+      - "AUDIT Mode Findings (P0/P1/P2/P3 violations over time)"
+      - "Enhancement Deployment Timeline (deficiency → fix → verification)"
+      - "ROI Tracking (cost savings, cycle time, success rate)"
+      - "Module Health (5 patterns with traffic light status)"
+    
+    alerting:
+      - alert: "Token Compression Below Target"
+        condition: "compression_ratio < 0.4 for > 1h"
+        action: "Trigger AUDIT mode + create enhancement ticket"
+      
+      - alert: "AUDIT Mode P1 Violation"
+        condition: "p1_violations > 0"
+        action: "Auto-fix attempt → Manual escalation if fails"
+      
+      - alert: "Enhancement Cycle Time Exceeded"
+        condition: "days_since_deficiency_detected > 7"
+        action: "Escalate to P0 + notify team"
