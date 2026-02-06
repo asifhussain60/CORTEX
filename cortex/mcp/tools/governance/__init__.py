@@ -14,6 +14,25 @@ Author: CORTEX Framework
 from typing import Dict, List, Any, Optional
 from cortex.mcp.decorators import mcp_tool
 
+# Import YAML loader tools (ENH-048 Phase 4)
+from cortex.mcp.tools.governance.yaml_loader_tools import (
+    cortex_load_core_rules,
+    cortex_load_audit_checklist,
+    cortex_load_modes,
+    cortex_load_response_format,
+    cortex_validate_against_rules,
+)
+
+__all__ = [
+    "query_governance_context",
+    "validate_governance_compliance",
+    "cortex_load_core_rules",
+    "cortex_load_audit_checklist",
+    "cortex_load_modes",
+    "cortex_load_response_format",
+    "cortex_validate_against_rules",
+]
+
 
 @mcp_tool(
     name="query_governance_context",
