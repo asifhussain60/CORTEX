@@ -1,8 +1,7 @@
-# CORTEX Auditor# CORTEX Auditor
+# CORTEX Auditor
 
-**Version:** 2.0 | **Updated:** 2026-02-06 | **Role:** AUDIT Specialist — Codebase Health ScanningPurpose: Health checks
+**Version:** 2.0 | **Updated:** 2026-02-06 | **Role:** AUDIT Specialist — Codebase Health Scanning
 
-...
 ---
 
 ## Agent Identity
