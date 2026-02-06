@@ -1941,6 +1941,62 @@ class MasterOrchestrator(IOrchestrator):
                 details={"result": str(result)}
             )
             
+            # ═══════════════════════════════════════════════════════════════════════
+            # ENH-046 Phase 4: Context Synthesis EXIT GATE
+            # Synthesizes ALL orchestrator outputs before Copilot handoff
+            # ═══════════════════════════════════════════════════════════════════════
+            # This is the SINGLE integration point that automatically covers ALL
+            # orchestrators without per-orchestrator wiring
+            try:
+                from cortex.interaction.context_synthesis_gateway import get_gateway
+                
+                # Get gateway singleton
+                gateway = get_gateway()
+                
+                # Extract session ID from parameters or generate new one
+                session_id = parameters.get("session_id", "default_session")
+                
+                # Synthesize result context before Copilot handoff
+                if result.is_ok():
+                    result_data = result.unwrap()
+                    
+                    # Only synthesize if result is a dict/complex structure
+                    if isinstance(result_data, dict):
+                        synthesized = gateway.synthesize(
+                            context=result_data,
+                            session_id=session_id,
+                            orchestrator_name=operation_name
+                        )
+                        
+                        # Log synthesis metrics
+                        self.logger.log_operation_complete(
+                            ac_id="ENH-046-PHASE-4",
+                            operation="EXIT_GATE_SYNTHESIS",
+                            success=True,
+                            details={
+                                "original_size": synthesized.original_size_bytes,
+                                "synthesized_size": synthesized.synthesized_size_bytes,
+                                "compression_ratio": f"{synthesized.compression_ratio:.1%}",
+                                "tokens": synthesized.token_count,
+                                "budget_compliant": synthesized.budget_compliant,
+                                "cache_hit": synthesized.cache_hit,
+                                "synthesis_time_ms": f"{synthesized.synthesis_time_ms:.2f}",
+                                "session_cumulative_tokens": gateway.get_session_tokens(session_id)
+                            }
+                        )
+                        
+                        # Return synthesized context wrapped in Result
+                        return Ok(synthesized.context)
+                
+            except Exception as gateway_err:
+                # Log failure but don't block - fail-safe returns original result
+                self.logger.log_operation_complete(
+                    ac_id="ENH-046-PHASE-4",
+                    operation="EXIT_GATE_SYNTHESIS",
+                    success=False,
+                    details={"error": str(gateway_err), "fallback": "original_result"}
+                )
+            
             return result
         except Exception as e:
             self.logger.log_operation_complete(
