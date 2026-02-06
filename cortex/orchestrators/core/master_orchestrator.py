@@ -1474,6 +1474,54 @@ class MasterOrchestrator(IOrchestrator):
             ...     print(f"Error: {result.error}")
         """
         try:
+            # ═══════════════════════════════════════════════════════════════════════
+            # ENH-046 Phase 1.6: EXIT GATE - Incremental Context Protocol
+            # ═══════════════════════════════════════════════════════════════════════
+            # Synthesize minimal context BEFORE orchestration (≤250 tokens init)
+            # Enables on-demand context loading during execution (≤500 tokens per load)
+            try:
+                from cortex.brain.core.context_synthesis_gateway import create_exit_gate
+                from pathlib import Path
+                
+                # Create EXIT GATE
+                workspace_root = Path.cwd()
+                exit_gate = create_exit_gate(workspace_root)
+                
+                # Synthesize context for this operation
+                request_text = f"{operation_name}: {str(parameters)}"
+                context_synthesis = exit_gate.synthesize_context(
+                    request=request_text,
+                    intent=operation_name.upper()
+                )
+                
+                # Log context synthesis metrics
+                self.logger.log_operation_complete(
+                    ac_id="ENH-046-PHASE-1.6",
+                    operation="EXIT_GATE_CONTEXT_SYNTHESIS",
+                    success=True,
+                    details={
+                        "tokens": context_synthesis["total_tokens"],
+                        "initial_tokens": context_synthesis["session"].initial_tokens,
+                        "incremental_tokens": context_synthesis["session"].incremental_tokens,
+                        "intent": context_synthesis["intent"],
+                        "synthesis_time_ms": context_synthesis["synthesis_time_ms"],
+                        "budget_remaining": context_synthesis["budget_remaining"],
+                        "session_id": context_synthesis["session"].session_id
+                    }
+                )
+                
+                # Store context in parameters for downstream use
+                parameters["_cortex_context"] = context_synthesis
+                
+            except Exception as exit_gate_err:
+                # Log failure but don't block execution (EXIT GATE is enhancement)
+                self.logger.log_operation_complete(
+                    ac_id="ENH-046-PHASE-1.6",
+                    operation="EXIT_GATE_FAILED",
+                    success=False,
+                    details={"error": str(exit_gate_err)}
+                )
+            
             # AC-GOVE-REM-001: Mandatory intent classification via direct import
             # Enforces intent classification as architectural prerequisite (CORE-032)
             if get_intent_router is not None:
