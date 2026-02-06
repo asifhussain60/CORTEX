@@ -29,6 +29,12 @@ from cortex.orchestrators.intelligence.knowledge_synthesizer import (
     KnowledgeSource,
     TemplateType,
 )
+from cortex.orchestrators.intelligence.learning_trigger import (
+    LearningTrigger,
+    TriggerEvent,
+    TriggerReason,
+    TriggerAction,
+)
 
 __all__ = [
     "TechIntelligenceOrchestrator",
@@ -44,4 +50,8 @@ __all__ = [
     "SynthesisResult",
     "KnowledgeSource",
     "TemplateType",
+    "LearningTrigger",
+    "TriggerEvent",
+    "TriggerReason",
+    "TriggerAction",
 ]
