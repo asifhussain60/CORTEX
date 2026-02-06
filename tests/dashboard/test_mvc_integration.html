@@ -307,7 +307,7 @@
         }
         
         // Import DeferredRenderer (same as in app.js)
-        class DeferredRenderer {
+        class LazyTabRenderer {
             constructor() {
                 this.renderQueue = new Map();
             }
@@ -326,7 +326,12 @@
                     return false;
                 }
                 
-                renderFn(container);
+                try {
+                    renderFn(container);
+                } catch (error) {
+                    console.error(`LazyTabRenderer: Render failed for ${containerId}:`, error);
+                    // Continue execution - don't propagate error
+                }
                 return true;
             }
             
@@ -342,7 +347,12 @@
                     const isHidden = panel && panel.getAttribute('aria-hidden') === 'true';
                     
                     if (!isHidden) {
-                        renderFn(container);
+                        try {
+                            renderFn(container);
+                        } catch (error) {
+                            console.error(`LazyTabRenderer: Flush failed for ${containerId}:`, error);
+                            // Continue processing remaining queue items
+                        }
                         this.renderQueue.delete(containerId);
                     }
                 }
@@ -357,7 +367,7 @@
         class TestDashboard {
             constructor(data) {
                 this.data = data;
-                this.deferredRenderer = new DeferredRenderer();
+                this.lazyTabRenderer = new LazyTabRenderer();
             }
             
             renderAll() {
@@ -368,7 +378,7 @@
                 this.renderCodeSmells();
                 this.renderPatterns();
                 
-                return this.deferredRenderer.getPendingCount();
+                return this.lazyTabRenderer.getPendingCount();
             }
             
             renderKeyFindings() {
@@ -383,7 +393,7 @@
             renderVulnerabilities() {
                 const vulns = this.data.security?.vulnerabilities || [];
                 
-                this.deferredRenderer.queueRender('vulnerabilities-list', (container) => {
+                this.lazyTabRenderer.queueRender('vulnerabilities-list', (container) => {
                     container.innerHTML = vulns.map(v => 
                         `<div class="glass-card">${v.title} (${v.severity})</div>`
                     ).join('');
@@ -393,7 +403,7 @@
             renderVulnerabilityTypes() {
                 const types = this.data.security?.vulnerability_types || [];
                 
-                this.deferredRenderer.queueRender('vuln-types-list', (container) => {
+                this.lazyTabRenderer.queueRender('vuln-types-list', (container) => {
                     container.innerHTML = types.map(t => 
                         `<div class="glass-card">${t.type}: ${t.count}</div>`
                     ).join('');
@@ -403,7 +413,7 @@
             renderLicenseSummary() {
                 const licenses = this.data.dependencies?.licenses || {};
                 
-                this.deferredRenderer.queueRender('license-summary', (container) => {
+                this.lazyTabRenderer.queueRender('license-summary', (container) => {
                     const dist = licenses.distribution || {};
                     container.innerHTML = Object.entries(dist).map(([lic, count]) => 
                         `<div class="glass-card">${lic}: ${count}</div>`
@@ -414,7 +424,7 @@
             renderCodeSmells() {
                 const smells = this.data.quality?.code_smells || [];
                 
-                this.deferredRenderer.queueRender('code-smells-grid', (container) => {
+                this.lazyTabRenderer.queueRender('code-smells-grid', (container) => {
                     container.innerHTML = smells.map(s => 
                         `<div class="glass-card">${s.name} (${s.severity})</div>`
                     ).join('');
@@ -424,7 +434,7 @@
             renderPatterns() {
                 const patterns = this.data.lens?.patterns_detected || [];
                 
-                this.deferredRenderer.queueRender('patterns-list', (container) => {
+                this.lazyTabRenderer.queueRender('patterns-list', (container) => {
                     container.innerHTML = patterns.map(p => 
                         `<div class="glass-card">${p.name}: ${p.count}×</div>`
                     ).join('');
@@ -444,7 +454,7 @@
                 }
                 
                 // Flush deferred renders
-                this.deferredRenderer.flushQueue();
+                this.lazyTabRenderer.flushQueue();
             }
         }
         

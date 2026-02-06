@@ -1,16 +1,16 @@
 #!/bin/bash
 #
-# Dashboard DeferredRenderer Validation Script
+# Dashboard LazyTabRenderer Validation Script
 # Phase 21 - Enterprise Repository Intelligence
 # 
 # Validates that all 5 affected containers now render correctly
-# via the DeferredRenderer pattern.
+# via the LazyTabRenderer pattern.
 #
 # Usage: ./validate_dashboard_fix.sh
 
 set -e
 
-echo "🧪 CORTEX Dashboard DeferredRenderer Validation"
+echo "🧪 CORTEX Dashboard LazyTabRenderer Validation"
 echo "================================================"
 echo ""
 
@@ -59,18 +59,18 @@ test_contains() {
 echo "📁 File Structure Validation"
 echo "----------------------------"
 test_file "company/dashboards/spa/js/app.js" "Main dashboard file exists"
-test_file "tests/dashboard/test_deferred_renderer.html" "Unit test suite exists"
+test_file "tests/dashboard/test_lazy_tab_renderer.html" "Unit test suite exists"
 test_file "tests/dashboard/test_mvc_integration.html" "Integration test suite exists"
 test_file "tests/dashboard/README-TESTS.md" "Test documentation exists"
 echo ""
 
 echo "🔍 Implementation Validation"
 echo "----------------------------"
-test_contains "company/dashboards/spa/js/app.js" "class DeferredRenderer" "DeferredRenderer class defined"
+test_contains "company/dashboards/spa/js/app.js" "class LazyTabRenderer" "LazyTabRenderer class defined"
 test_contains "company/dashboards/spa/js/app.js" "queueRender" "queueRender() method exists"
 test_contains "company/dashboards/spa/js/app.js" "flushQueue" "flushQueue() method exists"
 test_contains "company/dashboards/spa/js/app.js" "getPendingCount" "getPendingCount() method exists"
-test_contains "company/dashboards/spa/js/app.js" "this.deferredRenderer = new DeferredRenderer()" "DeferredRenderer instantiated"
+test_contains "company/dashboards/spa/js/app.js" "this.lazyTabRenderer = new LazyTabRenderer()" "LazyTabRenderer instantiated"
 echo ""
 
 echo "🎯 Container Coverage Validation"
@@ -88,15 +88,15 @@ test_contains "company/dashboards/spa/js/app.js" "queueRender('vulnerabilities-l
 test_contains "company/dashboards/spa/js/app.js" "queueRender('vuln-types-list'" "Vuln types uses queueRender"
 test_contains "company/dashboards/spa/js/app.js" "queueRender('code-smells-grid'" "Code smells uses queueRender"
 test_contains "company/dashboards/spa/js/app.js" "queueRender('license-summary'" "License summary uses queueRender"
-test_contains "company/dashboards/spa/js/app.js" "deferredRenderer.flushQueue" "Queue flushing integrated"
+test_contains "company/dashboards/spa/js/app.js" "lazyTabRenderer.flushQueue" "Queue flushing integrated"
 echo ""
 
 echo "📊 Test Coverage Validation"
 echo "---------------------------"
-test_contains "tests/dashboard/test_deferred_renderer.html" "Should queue render when container in hidden panel" "Hidden panel queueing test"
-test_contains "tests/dashboard/test_deferred_renderer.html" "Should execute immediately when container visible" "Visible panel immediate test"
-test_contains "tests/dashboard/test_deferred_renderer.html" "Should flush queue when panel becomes visible" "Queue flush test"
-test_contains "tests/dashboard/test_deferred_renderer.html" "Should handle multiple queued renders" "Multiple renders test"
+test_contains "tests/dashboard/test_lazy_tab_renderer.html" "Should queue render when container in hidden panel" "Hidden panel queueing test"
+test_contains "tests/dashboard/test_lazy_tab_renderer.html" "Should execute immediately when container visible" "Visible panel immediate test"
+test_contains "tests/dashboard/test_lazy_tab_renderer.html" "Should flush queue when panel becomes visible" "Queue flush test"
+test_contains "tests/dashboard/test_lazy_tab_renderer.html" "Should handle multiple queued renders" "Multiple renders test"
 test_contains "tests/dashboard/test_mvc_integration.html" "testInitialRender" "Integration: Initial render test"
 test_contains "tests/dashboard/test_mvc_integration.html" "testDeferredRendering" "Integration: Deferred rendering test"
 test_contains "tests/dashboard/test_mvc_integration.html" "testTabActivation" "Integration: Tab activation test"

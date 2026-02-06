@@ -177,8 +177,9 @@
     </div>
     
     <script>
-        // Import DeferredRenderer (embedded for testing)
-        class DeferredRenderer {
+        // Import LazyTabRenderer (embedded for testing)
+        // Defers rendering of hidden tab panel content until panels become visible
+        class LazyTabRenderer {
             constructor() {
                 this.renderQueue = new Map();
             }
@@ -197,7 +198,12 @@
                     return false;
                 }
                 
-                renderFn(container);
+                try {
+                    renderFn(container);
+                } catch (error) {
+                    console.error(`LazyTabRenderer: Render failed for ${containerId}:`, error);
+                    // Continue execution - don't propagate error
+                }
                 return true;
             }
             
@@ -213,7 +219,12 @@
                     const isHidden = panel && panel.getAttribute('aria-hidden') === 'true';
                     
                     if (!isHidden) {
-                        renderFn(container);
+                        try {
+                            renderFn(container);
+                        } catch (error) {
+                            console.error(`LazyTabRenderer: Flush failed for ${containerId}:`, error);
+                            // Continue processing remaining queue items
+                        }
                         this.renderQueue.delete(containerId);
                     }
                 }
@@ -302,7 +313,7 @@
         
         // Suite 1: Queue behavior for hidden panels
         runner.test('Should queue render when container in hidden panel', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executed = false;
             
             const result = renderer.queueRender('vulnerabilities-list', (container) => {
@@ -315,7 +326,7 @@
         });
         
         runner.test('Should execute immediately when container visible', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executed = false;
             
             const result = renderer.queueRender('visible-container', (container) => {
@@ -328,7 +339,7 @@
         });
         
         runner.test('Should queue render when container not found', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executed = false;
             
             const result = renderer.queueRender('nonexistent-container', (container) => {
@@ -342,7 +353,7 @@
         
         // Suite 2: Queue flushing
         runner.test('Should flush queue when panel becomes visible', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executed = false;
             
             // Queue render for hidden panel
@@ -373,7 +384,7 @@
         });
         
         runner.test('Should not flush renders for still-hidden panels', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executed = false;
             
             // Queue render for hidden panel
@@ -390,7 +401,7 @@
         
         // Suite 3: Multiple queued renders
         runner.test('Should handle multiple queued renders', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             const executionOrder = [];
             
             // Queue multiple renders
@@ -418,7 +429,7 @@
         
         // Suite 4: Tab activation integration
         runner.test('Should work with tab manager integration', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let securityRendered = false;
             let qualityRendered = false;
             
@@ -451,7 +462,7 @@
         
         // Suite 5: Edge cases
         runner.test('Should handle empty queue flush', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             
             // Flush empty queue (should not throw)
             renderer.flushQueue();
@@ -460,7 +471,7 @@
         });
         
         runner.test('Should handle duplicate container IDs', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
             let executionCount = 0;
             
             // Queue same container twice
@@ -482,15 +493,30 @@
         });
         
         runner.test('Should handle render function errors gracefully', () => {
-            const renderer = new DeferredRenderer();
+            const renderer = new LazyTabRenderer();
+            
+            // CRITICAL: Ensure panel is visible (previous tests may have hidden it)
+            const testContainer = document.getElementById('visible-container');
+            const panel = testContainer.closest('.tab-panel');
+            panel.setAttribute('aria-hidden', 'false');
+            
+            console.log('Test container exists:', !!testContainer);
+            console.log('Test container parent panel:', panel?.id);
+            console.log('Panel aria-hidden:', panel?.getAttribute('aria-hidden'));
             
             // Queue render that throws error
             const result = renderer.queueRender('visible-container', (container) => {
                 throw new Error('Render error');
             });
             
+            console.log('queueRender returned:', result);
+            console.log('Result type:', typeof result);
+            
             // Should still return true (execution attempted)
-            assert(result, 'Should return true even if render throws');
+            assert(result === true, 'Should return true even if render throws');
+            
+            // Cleanup
+            panel.setAttribute('aria-hidden', 'false');
         });
         
         // Run all tests
