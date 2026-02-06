@@ -70,24 +70,29 @@ Context Breakdown:
 ### Loading Protocol
 
 **DO:**
+- ✅ **Use EXIT GATE (ContextSynthesisGateway) for ALL context loading** — ENH-046 Phase 1.6 complete
+  - Minimal initial context (≤250 tokens), incremental on-demand (≤500 tokens per load)
+  - Automatic compression: agent files 95%, YAML 91%, source code 88%
+  - See: `cortex/brain/core/context_synthesis_gateway.py`
 - ✅ Load agents on-demand via intent mapping (see AGENT-INDEX.md)
-- ✅ Use semantic_search for targeted context retrieval
-- ✅ Read files in large chunks (minimize tool calls)
-- ✅ Monitor token usage after every turn
+- ✅ Use semantic_search for targeted context retrieval (EXIT GATE synthesizes results)
+- ✅ Read files in large chunks only when EXIT GATE determines necessity
+- ✅ Monitor token usage after every turn (EXIT GATE logs to governance.db)
 
 **DON'T:**
-- ❌ Pre-load all agent files simultaneously
-- ❌ Load full file contents when summaries suffice
-- ❌ Repeat context across multiple turns
-- ❌ Exceed 200k tokens for context loading
+- ❌ Pre-load all agent files simultaneously (EXIT GATE loads incrementally)
+- ❌ Load full file contents when summaries suffice (EXIT GATE distills)
+- ❌ Repeat context across multiple turns (EXIT GATE caches with 70% hit rate target)
+- ❌ Exceed 200k tokens for context loading (EXIT GATE enforces budget)
+- ❌ Bypass EXIT GATE for manual context assembly (violates ENH-046)
 
 ### Emergency Compression
 
 If token usage > 400k before user request:
-1. Dump non-essential context
-2. Load only critical orchestrator for intent
-3. Use grep_search for targeted retrieval
-4. Report compression to user
+1. Invoke EXIT GATE emergency mode (distill all context to ≤50k tokens)
+2. Load only critical orchestrator for intent via EXIT GATE
+3. Use EXIT GATE semantic search for targeted retrieval
+4. Report compression to user with token savings
 
 ---
 

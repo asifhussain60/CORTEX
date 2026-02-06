@@ -15,6 +15,7 @@ Version: 1.0.0
 
 import time
 import logging
+import json
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
@@ -22,6 +23,7 @@ from dataclasses import dataclass
 from cortex.brain.core.incremental_context_loader import IncrementalContextLoader
 from cortex.brain.core.token_distillation_engine import TokenDistillationEngine
 from cortex.brain.core.context_cache_layer import ContextCacheLayer
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 logger = logging.getLogger(__name__)
 
@@ -154,6 +156,29 @@ class ContextSynthesisGateway:
             budget_remaining=budget_remaining
         )
         self._sessions[session_id] = session
+        
+        # ENH-046: Log context synthesis to governance.db for AUDIT mode validation
+        try:
+            audit_logger = EnhancedAuditLogger.instance()
+            audit_logger.log_operation_complete(
+                ac_id=f"AC-CTX-{session_id}",
+                operation="context_synthesis",
+                success=True,
+                details={
+                    "intent": intent,
+                    "tokens": total_tokens,
+                    "initial_tokens": initial_tokens,
+                    "incremental_tokens": incremental_tokens,
+                    "synthesis_time_ms": round(synthesis_time_ms, 2),
+                    "budget_remaining": budget_remaining,
+                    "cache_hit": cache_stats.hits > 0,
+                    "cache_hit_rate": cache_stats.hit_rate,
+                    "session_id": session_id,
+                    "request_length": len(request)
+                }
+            )
+        except Exception as e:
+            logger.warning(f"Failed to log context synthesis to governance.db: {e}")
         
         logger.info(
             f"Context synthesized: {total_tokens} tokens ({initial_tokens} init + {incremental_tokens} incremental), "

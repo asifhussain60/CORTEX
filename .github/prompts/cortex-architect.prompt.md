@@ -895,6 +895,230 @@ If violations detected:
 3. Activate cache layer with 10min TTL
 4. Re-run audit after 24h to verify improvement
 
+### P1 AUDIT Mode Validation: Context Efficiency Against SQLite Logs
+
+**CRITICAL:** AUDIT mode MUST validate EXIT GATE performance against `governance.db` evidence to eliminate assumptions.
+
+**Query 1: Context Synthesis Events (Last 24h)**
+
+```sql
+SELECT 
+    timestamp,
+    operation,
+    ac_id,
+    json_extract(details, '$.tokens') as tokens,
+    json_extract(details, '$.initial_tokens') as initial_tokens,
+    json_extract(details, '$.incremental_tokens') as incremental_tokens,
+    json_extract(details, '$.intent') as intent,
+    json_extract(details, '$.synthesis_time_ms') as synthesis_ms,
+    json_extract(details, '$.cache_hit') as cache_hit,
+    status
+FROM audit_log
+WHERE operation = 'context_synthesis'
+  AND timestamp >= datetime('now', '-24 hours')
+ORDER BY timestamp DESC
+LIMIT 100;
+```
+
+**Query 2: Budget Violations (Exceeding Thresholds)**
+
+```sql
+SELECT 
+    timestamp,
+    ac_id,
+    json_extract(details, '$.tokens') as total_tokens,
+    json_extract(details, '$.initial_tokens') as initial_tokens,
+    json_extract(details, '$.incremental_tokens') as incremental_tokens,
+    json_extract(details, '$.budget_remaining') as budget_remaining,
+    json_extract(details, '$.intent') as intent,
+    CASE 
+        WHEN json_extract(details, '$.initial_tokens') > 250 THEN 'INITIAL_BUDGET_EXCEEDED'
+        WHEN json_extract(details, '$.incremental_tokens') > 500 THEN 'INCREMENTAL_BUDGET_EXCEEDED'
+        WHEN json_extract(details, '$.tokens') > 2000 THEN 'SESSION_BUDGET_EXCEEDED'
+    END as violation_type
+FROM audit_log
+WHERE operation = 'context_synthesis'
+  AND timestamp >= datetime('now', '-24 hours')
+  AND (
+      json_extract(details, '$.initial_tokens') > 250
+      OR json_extract(details, '$.incremental_tokens') > 500
+      OR json_extract(details, '$.tokens') > 2000
+  )
+ORDER BY timestamp DESC;
+```
+
+**Query 3: Cache Performance Metrics**
+
+```sql
+SELECT 
+    date(timestamp) as date,
+    COUNT(*) as total_syntheses,
+    SUM(CASE WHEN json_extract(details, '$.cache_hit') = 'true' THEN 1 ELSE 0 END) as cache_hits,
+    ROUND(AVG(CASE WHEN json_extract(details, '$.cache_hit') = 'true' THEN 1.0 ELSE 0.0 END) * 100, 2) as cache_hit_rate_pct,
+    ROUND(AVG(json_extract(details, '$.synthesis_time_ms')), 2) as avg_synthesis_ms,
+    ROUND(AVG(json_extract(details, '$.tokens')), 0) as avg_tokens
+FROM audit_log
+WHERE operation = 'context_synthesis'
+  AND timestamp >= datetime('now', '-7 days')
+GROUP BY date(timestamp)
+ORDER BY date DESC;
+```
+
+**Query 4: Intent-Specific Token Consumption**
+
+```sql
+SELECT 
+    json_extract(details, '$.intent') as intent,
+    COUNT(*) as request_count,
+    ROUND(AVG(json_extract(details, '$.tokens')), 0) as avg_total_tokens,
+    ROUND(AVG(json_extract(details, '$.initial_tokens')), 0) as avg_initial_tokens,
+    ROUND(AVG(json_extract(details, '$.incremental_tokens')), 0) as avg_incremental_tokens,
+    ROUND(AVG(json_extract(details, '$.synthesis_time_ms')), 2) as avg_synthesis_ms,
+    MAX(json_extract(details, '$.tokens')) as max_tokens,
+    SUM(CASE WHEN json_extract(details, '$.tokens') > 2000 THEN 1 ELSE 0 END) as budget_violations
+FROM audit_log
+WHERE operation = 'context_synthesis'
+  AND timestamp >= datetime('now', '-7 days')
+GROUP BY json_extract(details, '$.intent')
+ORDER BY avg_total_tokens DESC;
+```
+
+**Query 5: Distillation Effectiveness (Pre/Post Token Counts)**
+
+```sql
+SELECT 
+    timestamp,
+    ac_id,
+    json_extract(details, '$.pre_distillation_tokens') as before_tokens,
+    json_extract(details, '$.post_distillation_tokens') as after_tokens,
+    json_extract(details, '$.compression_ratio') as compression_ratio,
+    json_extract(details, '$.distillation_time_ms') as distillation_ms,
+    json_extract(details, '$.file_type') as file_type
+FROM audit_log
+WHERE operation = 'token_distillation'
+  AND timestamp >= datetime('now', '-24 hours')
+ORDER BY compression_ratio ASC;
+```
+
+**AUDIT Report Template:**
+
+```markdown
+### P1: Context Efficiency Validation (Evidence-Based) ✅/❌
+
+**Status:** {PASS|FAIL|DEGRADED}
+
+**Evidence Period:** {start_date} to {end_date} ({n} days)
+
+#### Metrics (From governance.db)
+
+| Metric | Current | Target | Delta | Status |
+|--------|---------|--------|-------|--------|
+| **Budget Compliance** |
+| Initial Load Avg | {n} tokens | ≤250 | {+/-n} | {✅/❌} |
+| Incremental Load Avg | {n} tokens | ≤500 | {+/-n} | {✅/❌} |
+| Session Budget Violations | {n} events | 0 | {+n} | {✅/❌} |
+| **Cache Performance** |
+| Cache Hit Rate | {n}% | ≥70% | {+/-n}pp | {✅/❌} |
+| Avg Synthesis Time | {n}ms | ≤100ms | {+/-n}ms | {✅/❌} |
+| **Compression** |
+| Avg Compression Ratio | {n}% | ≥85% | {+/-n}pp | {✅/❌} |
+| Distillation Success Rate | {n}% | ≥95% | {+/-n}pp | {✅/❌} |
+
+#### Budget Violations Detected ({n} events)
+
+{List top 5 violations with AC-IDs, timestamps, and violation types}
+
+#### Intent Analysis
+
+| Intent | Requests | Avg Tokens | Max Tokens | Violations | Status |
+|--------|----------|------------|------------|------------|--------|
+| IMPLEMENT | {n} | {n} | {n} | {n} | {✅/❌} |
+| AUDIT | {n} | {n} | {n} | {n} | {✅/❌} |
+| DESIGN | {n} | {n} | {n} | {n} | {✅/❌} |
+| FIX | {n} | {n} | {n} | {n} | {✅/❌} |
+| REFACTOR | {n} | {n} | {n} | {n} | {✅/❌} |
+
+#### Cache Performance Trend (7 Days)
+
+| Date | Syntheses | Cache Hits | Hit Rate | Avg Tokens | Avg Time |
+|------|-----------|------------|----------|------------|----------|
+| {date} | {n} | {n} | {n}% | {n} | {n}ms |
+| ... |
+
+#### Recommendations (Evidence-Based)
+
+1. **If Initial Load Avg > 250 tokens:**
+   - Root Cause: {analyze Query 4 - which intents exceed budget}
+   - Action: Refactor `incremental_context_loader.py` minimal context assembly
+   - Files: {list affected files from Query 1}
+   - Priority: P0
+
+2. **If Cache Hit Rate < 70%:**
+   - Root Cause: {analyze Query 3 - cache eviction patterns}
+   - Action: Tune `context_cache_layer.py` TTL or LRU size
+   - Evidence: {cache_hits}/{total_syntheses} over {n} days
+   - Priority: P1
+
+3. **If Synthesis Time P99 > 100ms:**
+   - Root Cause: {analyze Query 5 - distillation bottlenecks}
+   - Action: Optimize `token_distillation_engine.py` compression algorithms
+   - File Types: {agent|yaml|source} taking longest
+   - Priority: P2
+
+4. **If Compression Ratio < 85%:**
+   - Root Cause: {analyze Query 5 - file types with low compression}
+   - Action: Enhance type-specific compression in `token_distillation_engine.py`
+   - File Types: {list file types with ratio < 85%}
+   - Priority: P2
+
+#### Governance Evidence
+
+**Audit Log Entries Analyzed:** {n} events  
+**Database:** cortex_brain/state/governance.db  
+**Queries Executed:** 5 (context_synthesis, budget_violations, cache_performance, intent_analysis, distillation)  
+**Last Sync:** {timestamp}
+
+**Prometheus Dashboard:** http://localhost:3000/d/cortex-context (real-time metrics)  
+**SQLite Browser:** Open `cortex_brain/state/governance.db` for manual investigation
+
+#### Auto-Fix Actions
+
+{If any P0/P1 violations detected, trigger modular enhancements}
+
+```python
+# Triggered Actions (Evidence-Based)
+if initial_load_avg > 250:
+    create_enhancement({
+        "module": "incremental-context-loader",
+        "severity": "P0",
+        "evidence": f"{violations_count} events with avg {initial_load_avg} tokens",
+        "action": "Refactor minimal context assembly",
+        "affected_files": violation_file_list
+    })
+
+if cache_hit_rate < 0.7:
+    create_enhancement({
+        "module": "context-cache-layer",
+        "severity": "P1",
+        "evidence": f"{cache_hit_rate:.1%} over {days} days",
+        "action": "Tune TTL/LRU parameters",
+        "hypothesis": cache_eviction_pattern_analysis
+    })
+```
+```
+
+**Verification Command:**
+
+```bash
+# Run AUDIT mode validation
+sqlite3 cortex_brain/state/governance.db < cortex/governance/sql/context_efficiency_audit.sql
+
+# Or via MCP tool (preferred)
+cortex_audit --mode governance --focus context_efficiency --period 7d
+```
+
+**MANDATORY:** All AUDIT mode reports for P1 Context Consumption MUST include evidence from governance.db. NO ASSUMPTIONS.
+
 **P1 Continuous Improvement (MANDATORY):**
 
 After collecting metrics, AUDIT mode MUST analyze deficiency patterns and trigger modular enhancements:
