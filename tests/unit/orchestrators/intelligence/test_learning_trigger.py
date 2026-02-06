@@ -30,10 +30,10 @@ def create_readiness_score(overall, best_practices, tdd_support, security_toolin
     """Helper to create ReadinessScore with correct parameter names."""
     return ReadinessScore(
         overall=overall,
-        best_practices_coverage=best_practices,
+        best_practices=best_practices,
         tdd_support=tdd_support,
-        security_tooling=security_tooling,
-        cross_repo_usage=cross_repo_usage,
+        security=security_tooling,
+        usage=cross_repo_usage,
         action=action,
     )
 

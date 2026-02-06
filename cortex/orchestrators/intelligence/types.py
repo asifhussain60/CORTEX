@@ -19,19 +19,21 @@ class TechStack:
     """
     Technology stack representation.
     
-    Captures language, frameworks, and version information
+    Captures language, frameworks, version, and tooling information
     for a codebase.
     """
     language: str
     frameworks: List[str] = field(default_factory=list)
     version: Optional[str] = None
+    tools: List[str] = field(default_factory=list)
     
     def __hash__(self):
         """Make TechStack hashable for caching."""
         return hash((
             self.language,
             tuple(sorted(self.frameworks)),
-            self.version
+            self.version,
+            tuple(sorted(self.tools))
         ))
     
     def __eq__(self, other):
@@ -41,7 +43,8 @@ class TechStack:
         return (
             self.language == other.language and
             sorted(self.frameworks) == sorted(other.frameworks) and
-            self.version == other.version
+            self.version == other.version and
+            sorted(self.tools) == sorted(other.tools)
         )
 
 
