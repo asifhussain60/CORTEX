@@ -217,7 +217,7 @@ active_phases:
 
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 25
+  count: 27
   directory: "phases/completed/2026/"
   phases:
     - "phase-01-orchestrator-event-bus.yaml"
@@ -238,6 +238,8 @@ completed_phases_2026:
     - "phase-27-company-domain-integration.yaml"
     - "phase-28-repository-onboarding-system.yaml"
     - "phase-29-copilot-chat-response-format.yaml"
+    - "phase-31-chat-response-markdown-ban-policies.yaml"
+    - "phase-31a-minimal-plan-spine-enhancement.yaml"
     - "phase-32-glassmorphism-dashboard-generator-fix.yaml"
     - "phase-33-architecture-alignment-governance.yaml"
     - "phase-34-advanced-response-optimization.yaml"
@@ -321,9 +323,10 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 36
-  active_phases: 6
-  completed_2026: 25
+  total_phases: 38
+  active_phases: 4
+  completed_phases: 27
+  completed_2026: 27
   completed_2025: 11
   total_enhancements: 4
   active_enhancements: 4

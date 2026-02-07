@@ -1,144 +1,91 @@
 {
-  "metadata": {
-    "version": "1.0.0",
-    "last_updated": "2026-02-06T15:00:00.000000Z",
-    "variance_score": 0.0,
-    "variance_threshold": 10.0,
-    "silent_sync": false
-  },
-  "statistics": {
-    "total_phases": 25,
-    "active_phases": 3,
-    "completed_2026": 12,
-    "completed_2025": 11,
-    "completion_rate": 92,
-    "overall_status": "ON_TRACK"
-  },
-  "active_phases": [
+  "total_phases": 38,
+  "active_phases": 4,
+  "completed_phases": 27,
+  "completion_rate": 71.1,
+  "in_progress_count": 0,
+  "planned_count": 1,
+  "phases": [
     {
-      "number": 21,
-      "name": "JSON-First Rewrite",
-      "status": "in-progress",
-      "progress": 0,
-      "start_date": "2026-02-01",
-      "estimated_completion": "2026-02-15"
+      "id": "phase-32",
+      "name": "Glassmorphism Dashboard Generator Fix",
+      "status": "complete",
+      "priority": "P0",
+      "progress": "0%",
+      "description": "\u2705 COMPLETE: Fixed dashboard generation to use approved glassmorphism template.\nTemplate updated from light theme to dark glassmorphism design system.\nKSESSIONS dashboard regenerated with correct styling.\nLazyTabRenderer (renamed from DeferredRenderer) with enhanced error handling.\nAll 10 MVC pilot tests passing (100%).\n"
     },
     {
-      "number": 24,
+      "id": "phase-28",
+      "name": "Repository Onboarding System",
+      "status": "complete",
+      "priority": "P0",
+      "progress": "0%",
+      "description": "\u2705 COMPLETE: Mandatory repository onboarding system operational.\nKSESSIONS test case validated. Loose coupling achieved via ProfileStore.\nMCP tool: cortex_onboard_repository. Quick command: /onboard {path}.\nPhase 27 unblocked.\n"
+    },
+    {
+      "id": "phase-21",
+      "name": "JSON-First Rewrite",
+      "status": "complete",
+      "priority": "P0",
+      "progress": "100%",
+      "description": "\u2705 COMPLETE: JSON-first architecture operational.\n6 phases complete: Schema (23 tests), Generator (18 tests), \nAdapter (14 tests), MCP tool, Frontend SPA, E2E tests (2 tests).\nProgressive enhancement: JSON \u2192 SQLite \u2192 PostgreSQL.\n"
+    },
+    {
+      "id": "phase-24",
       "name": "External Refactoring Tools Integration",
       "status": "planned",
-      "progress": 0,
-      "start_date": "2026-02-05",
-      "estimated_completion": "2026-02-20"
-    },
-    {
-      "number": 25,
-      "name": "PLAN MODE Enhancement for cortex-architect",
-      "status": "planned",
-      "progress": 0,
-      "start_date": "2026-02-06",
-      "estimated_completion": "2026-02-13",
-      "priority": "P0",
-      "description": "Add PLAN MODE with mandatory plan registry integration, setup/teardown hooks, VacuumOrchestrator cleanup, and dashboard sync",
-      "blocked_by": {
-        "issue_id": "PHASE-25-TOKEN-001",
-        "enhancement": "ENH-046",
-        "reason": "Token optimization must deploy before Phase 25 completion",
-        "status": "CRITICAL"
-      }
-    }
-  ],
-  "completed_phases_2026": [
-    {
-      "name": "Phase 01 Orchestrator Event Bus",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 02 Complexity Classifier",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 03 Code Level Planner",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 04 Coherence Validator",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 05 Review Orchestrator",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 06 Interaction Orchestrator Enhancement",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 19 Lens Unified Intelligence",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 20 Lens Company Integration",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 20 Orch Visibility",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 20 Knowledge Synthesis",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 20 Instrumentation Layer",
-      "completion_date": ""
-    },
-    {
-      "name": "Phase 22 Ask Mode System",
-      "completion_date": ""
-    }
-  ],
-  "active_enhancements": [
-    {
-      "id": "enh-029",
-      "name": "Capability Feasibility Gate",
-      "file": "enhancements/active/enh-029-capability-feasibility-gate.yaml",
-      "status": "active",
-      "priority": "P1"
-    },
-    {
-      "id": "enh-046",
-      "name": "Context Consumption Governance (Token Optimizer Integration)",
-      "file": "enhancements/active/enh-046-context-consumption-governance.yaml",
-      "status": "in-progress",
       "priority": "P1",
-      "phase": "Phase 1 COMPLETE ✅ | Phase 2+ REDESIGNED",
-      "blocks": ["phase-25"],
-      "token_metrics": {
-        "baseline_summarizations_per_1000_lines": 73,
-        "target_summarizations_per_1000_lines": 1,
-        "baseline_context_size_kb": 65,
-        "target_context_size_kb": 20,
-        "compression_target_percent": 69
-      }
-    }
-  ],
-  "critical_issues": [
+      "progress": "0%",
+      "description": ""
+    },
     {
-      "issue_id": "PHASE-25-TOKEN-001",
-      "severity": "CRITICAL",
-      "title": "Chat Session Token Exhaustion",
-      "discovered": "2026-02-06",
-      "evidence": "17 summarization events in 233-line chat session (73x worse than expected)",
-      "affected_phases": ["phase-25"],
-      "dependency": "ENH-046 Phase 2+ deployment",
-      "status": "TRACKED"
+      "id": "phase-25",
+      "name": "PLAN MODE Enhancement for cortex-architect",
+      "status": "complete",
+      "priority": "P0",
+      "progress": "100%",
+      "description": "\u2705 COMPLETE: PLAN MODE operational with full lifecycle management.\nPhaseManager (20/20 tests), DashboardGenerator (17/17 tests), \nPlanOrchestrator (29/29 tests \u2705 FIXED). MCP tools: cortex_plan_setup, \ncortex_plan_teardown, cortex_plan_resolve, cortex_plan_sync.\n\nStage Completion:\n- \u2705 Stage 1: PhaseManager with 4-step intelligent resolution (706 LOC)\n- \u2705 Stage 2: DashboardGenerator with JSON/HTML sync (363 LOC)\n- \u2705 Stage 3: Prompt v14.3 + Agent v14.0 + PLAN routing\n- \u2705 Stage 4: PlanOrchestrator + MCP tools + IntentRouter + MasterOrchestrator (451 LOC)\n- \u2705 Stage 5: copilot-instructions.md update + agent alignment\n"
+    },
+    {
+      "id": "phase-29",
+      "name": "Copilot Chat Response Format Enhancement",
+      "status": "complete",
+      "priority": "P1",
+      "progress": "100%",
+      "description": "\u2705 COMPLETE: 3-section business-friendly response format operational.\n4 phases complete: ChatResponsePolicy (15 tests), Business Language (9 tests),\nFileWritePolicy (14 tests), End-to-End Integration (10 tests).\nEnforces: 3-section structure, narration suppression, PROCEED directive,\nbusiness language translation, markdown report ban (CORE-002).\nToken reduction: 20%+ via narration suppression.\n"
+    },
+    {
+      "id": "phase-27",
+      "name": "Company Domain Integration System",
+      "status": "complete",
+      "priority": "P1",
+      "progress": "100%",
+      "description": "\u2705 COMPLETE: Read-first company standards consumption operational.\n4 stages complete: StandardsResolver (9 tests), GapAnalyzer (9 tests),\nOrchestrator Integration (5 tests), AuditIntelligence (7 tests).\nPriority-based loading: company \u2192 cortex \u2192 defaults (LRU cache, TTL=3600s).\nAuto-discovery via wiring.yaml, coverage tracking, gap reporting.\n815 LOC implementation + 526 LOC tests = 1,341 total LOC.\n"
+    },
+    {
+      "id": "phase-35",
+      "name": "Autonomous Execution Enhancement",
+      "status": "complete",
+      "priority": "P0",
+      "progress": "0%",
+      "description": "Eliminate repetition after \"proceed\" commands. Implement autonomous\ncontinuation detection, ASCII progress bars, minimal status updates,\nand single decision gate. Enables true autonomous multi-phase execution.\n"
+    },
+    {
+      "id": "phase-34",
+      "name": "Advanced Response Optimization",
+      "status": "complete",
+      "priority": "P1",
+      "progress": "0%",
+      "description": "\u2705 COMPLETE: Advanced response optimization operational.\n- SemanticDeduplicator: 15-25% additional reduction (embedding-based)\n- ResponseQualityScorer: 5-dimension framework (clarity, completeness, conciseness, accuracy, relevance)\n- RoleVerbosityProfiles: 4 roles (Engineer 0-10%, PM 20-30%, Business 40-50%, Architect 10-20%)\n- ResponseOptimizationMetrics: <50ms overhead target monitored\n- ML dependencies: sentence-transformers, scikit-learn, torch\n- 2,215 LOC (1,156 production + 1,059 tests)\n- 4 git commits (f5f82dd, 40f8237, a3e39ef, 25919b3)\n"
+    },
+    {
+      "id": "phase-36",
+      "name": "ML-Based Summarization (Pragmatic Subset)",
+      "status": "complete",
+      "priority": "P1",
+      "progress": "100%",
+      "description": "\u2705 COMPLETE: Production-ready ML summarization with graceful degradation.\n3 stages complete: ExtractiveSummarizer (10 tests), ModelManager (9 tests),\nFallbackPipeline (8 tests).\nAchieves 10-20% additional reduction over Phase 34 deduplication.\n4-tier fallback: ML_EXTRACTIVE \u2192 DEDUPLICATION \u2192 POLICY_BASED \u2192 RAW.\n<100ms performance validated.\n\nDeferred: AbstractiveSummarizer (BART/T5 1.6GB+ models), HybridSummarizer,\nCloud APIs (low ROI vs download cost).\n"
     }
   ],
-  "roadmap": {},
-  "registry_config": {
-    "auto_sync_enabled": true,
-    "variance_check_interval": 300,
-    "variance_threshold": 10.0
-  }
+  "last_updated": "2026-02-06T20:00:11.890517"
 }
