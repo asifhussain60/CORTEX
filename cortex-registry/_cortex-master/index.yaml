@@ -43,9 +43,10 @@ active_phases:
   
   - id: "phase-41"
     name: "DIGEST Mode Enhancement System"
-    file: "phases/active/phase-41-digest-mode-enhancement-system.yaml"
-    started: null
-    status: "planned"
+    file: "phases/completed/phase-41-digest-mode-enhancement-system.yaml"
+    started: "2026-02-07"
+    completed: "2026-02-07"
+    status: "complete"
     priority: "P0"
     execution_order: 3
     roi_score: 0.91
@@ -66,11 +67,43 @@ active_phases:
       
       Target: 127 tests (5 stages), 16 days. Critical for continuous learning.
   
+  - id: "phase-42"
+    name: "Interactive Approval Workflow System"
+    file: "phases/completed/phase-42-interactive-approval-workflow-system.yaml"
+    started: "2026-02-07"
+    completed: "2026-02-07"
+    status: "complete"
+    priority: "P1"
+    execution_order: 4
+    roi_score: 0.89
+    test_status: "44/44 PASSING (16+17+11)"
+    description: |
+      ✅ COMPLETE: Two-phase approval workflow with session-based state management operational.
+      
+      Replaces inline DoR display with stateful approval sessions:
+      - cortex_classify_request: Display DoR + create session (5min TTL)
+      - cortex_approve_request: Execute from session
+      - cortex_reject_request: Abort with reason
+      - cortex_modify_request: Re-classify with corrections
+      
+      Deliverables:
+      - ApprovalSessionManager (378 LOC, 16 tests)
+      - Approval MCP Tools (325 LOC, 17 tests)
+      - MCP Tool Wrappers (249 LOC, 11 tests)
+      - CORTEX.prompt.md Stage 3 update
+      
+      Impact: Cleaner UX, stateful approval, separation of concerns.
+      Duration: 4 stages, ~1 day implementation time.
+    depends_on:
+      - "phase-36"
+      - "phase-41"
+  
   - id: "phase-40"
     name: "Intelligent Upgrade Changelog System"
-    file: "phases/active/phase-40-intelligent-upgrade-changelog-system.yaml"
-    started: null
-    status: "planned"
+    file: "phases/completed/phase-40-intelligent-upgrade-changelog-system.yaml"
+    started: "2026-02-07"
+    completed: "2026-02-07"
+    status: "complete"
     priority: "P2"
     execution_order: 99
     roi_score: 0.87
@@ -133,10 +166,10 @@ active_phases:
   
   - id: "phase-38"
     name: "Brain Cohesion & Health System"
-    file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
+    file: "phases/completed/phase-38-brain-cohesion-health-system.yaml"
     started: "2026-02-07"
-    status: "blocked"
-    blocked_by: "phase-38.0"
+    completed: "2026-02-07"
+    status: "complete"
     priority: "P0"
     execution_order: 1
     roi_score: 0.94
@@ -166,7 +199,7 @@ active_phases:
   
   - id: "phase-39"
     name: "AUDIT Mode Cohesion & Integrity System"
-    file: "phases/active/phase-39-audit-mode-cohesion-integrity-system.yaml"
+    file: "phases/completed/phase-39-audit-mode-cohesion-integrity-system.yaml"
     started: "2026-02-07"
     completed: "2026-02-07"
     status: "complete"
@@ -358,9 +391,10 @@ active_phases:
   
   - id: "phase-36"
     name: "Unified Response Language Engine + Security-First Intelligence"
-    file: "phases/active/phase-36-unified-response-engine.yaml"
-    started: null
-    status: "planned"
+    file: "phases/completed/phase-36-unified-response-engine.yaml"
+    started: "2026-02-07"
+    completed: "2026-02-07"
+    status: "complete"
     priority: "P0"
     execution_order: 6
     estimated_duration: "18 days"
@@ -372,9 +406,10 @@ active_phases:
   
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
-    file: "phases/active/phase-37-role-adaptive-personas.yaml"
-    started: null
-    status: "planned"
+    file: "phases/completed/phase-37-role-adaptive-personas.yaml"
+    started: "2026-02-07"
+    completed: "2026-02-07"
+    status: "complete"
     priority: "P1"
     execution_order: 7
     estimated_duration: "4 days"
@@ -391,39 +426,7 @@ active_phases:
       - Introduction template with role discovery
       - CORE-029 header compliance fix
     depends_on:
-      - "phase-36"  # Can run in parallel, complementary features
-      
-      9 Stages:
-      1. Dual Header System (CORTEX vs CORTEX Architect) — 1 day, 10 tests
-      2. Modular Template Blocks (12 atomic blocks) — 3 days, 40 tests
-      3. Security-First Analysis (P0-P2 classification) — 3 days, 35 tests
-      4. Intelligent Code Comments (5 comment types) — 2 days, 25 tests
-      5. Test Quality Analyzer (FLUFF detection) — 2 days, 30 tests
-      6. Hidden Issue Detector (perf/memory/concurrency) — 2 days, 25 tests
-      7. Business Context Generator (PM/leader summaries) — 2 days, 20 tests
-      8. Multi-Role Response Engine (14 templates) — 3 days, 40 tests
-      9. Legacy Migration + MCP Tools (consolidate 5 systems) — 2 days, 20 tests
-      
-      Deliverables:
-      - 9 new modules (5,500+ LOC)
-      - 9 test suites (2,800+ LOC, 245 tests)
-      - 4 new MCP tools (security, test quality, hidden issues, composition)
-      - Migration guide (legacy → new engine)
-      - Dual header templates (CORTEX.prompt.md, cortex-architect.prompt.md)
-      - 12 composable template blocks (lego-like architecture)
-      
-      Key Features:
-      - ✅ Security-first: P0/P1/P2 threat classification on every request
-      - ✅ Role-aware: ENGINEER, PM, BUSINESS, ARCHITECT, SECURITY
-      - ✅ Modular: 14 role-task combinations from 12 reusable blocks
-      - ✅ Intelligent: Auto-generated "why" comments, FLUFF test detection
-      - ✅ Business-focused: Compliance, user impact, revenue implications
-      - ✅ Backward compatible: Legacy systems migrate via adapters
-      
-      ROI: 0.91 (HIGH) — 50% response generation speedup, 40% template code reduction
-      Authority: chat01.txt (Phase 36 session), cortex-architect.prompt.md v15.0
-    unblocks:
-      - "phase-37+"
+      - "phase-36"
 
 # Completed Phases (Historical)
 completed_phases_2026:
