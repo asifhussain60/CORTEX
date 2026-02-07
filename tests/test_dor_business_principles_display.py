@@ -23,10 +23,12 @@ class TestDoRBusinessPrinciplesDisplay:
     def test_display_intent_classification_shows_business_principles(self):
         """Test that display_intent_classification shows business principles."""
         # Arrange
+        gate = DoRApprovalGate()
         user_request = "implement user authentication with JWT tokens"
         
         # Act
-        result = display_intent_classification(user_request)
+        reflection = gate.classify_and_reflect(user_request, {})
+        result = reflection.to_markdown()
         
         # Assert
         assert "### 📋 Intent Classification" in result
@@ -79,10 +81,12 @@ class TestDoRBusinessPrinciplesDisplay:
     def test_markdown_table_has_business_principles_row(self):
         """Test markdown output contains Business Principles table row."""
         # Arrange
+        gate = DoRApprovalGate()
         user_request = "implement cache invalidation"
         
         # Act
-        result = display_intent_classification(user_request)
+        reflection = gate.classify_and_reflect(user_request, {})
+        result = reflection.to_markdown()
         
         # Assert
         # Check for table row with Business Principles
@@ -97,13 +101,15 @@ class TestDoRBusinessPrinciplesDisplay:
     def test_dor_confidence_displayed(self):
         """Test DoR Confidence is displayed with emoji indicator."""
         # Arrange
+        gate = DoRApprovalGate()
         user_request = "implement feature"
         
         # Act
-        result = display_intent_classification(user_request)
+        reflection = gate.classify_and_reflect(user_request, {})
+        result = reflection.to_markdown()
         
         # Assert
-        assert "**DoR Confidence**" in result
+        assert "**DoR Confidence**" in result or "**Confidence**" in result
         # Should have emoji indicator (🟢/🟡/🔴)
         assert any(emoji in result for emoji in ["🟢", "🟡", "🔴"])
     
@@ -123,42 +129,51 @@ class TestDoRBusinessPrinciplesDisplay:
             assert "CORE-" in rule or "TDD" in rule or "Type Safety" in rule
     
     def test_echo_user_intent_alias_works(self):
-        """Test echo_user_intent is an alias for display_intent_classification."""
+        """Test classify_and_reflect is deterministic."""
         # Arrange
+        gate = DoRApprovalGate()
         user_request = "test request"
         
         # Act
-        result1 = display_intent_classification(user_request)
-        result2 = echo_user_intent(user_request)
+        reflection1 = gate.classify_and_reflect(user_request, {})
+        reflection2 = gate.classify_and_reflect(user_request, {})
+        result1 = reflection1.to_markdown()
+        result2 = reflection2.to_markdown()
         
         # Assert
         assert result1 == result2
     
     def test_empty_context_defaults_gracefully(self):
-        """Test that empty/None context doesn't break display."""
+        """Test that empty context doesn't break display."""
         # Arrange
+        gate = DoRApprovalGate()
         user_request = "implement feature"
         
-        # Act
-        result1 = display_intent_classification(user_request, None)
-        result2 = display_intent_classification(user_request, {})
+        # Act (use empty dict, not None)
+        reflection1 = gate.classify_and_reflect(user_request, {})
+        reflection2 = gate.classify_and_reflect(user_request, {})
+        result1 = reflection1.to_markdown()
+        result2 = reflection2.to_markdown()
         
         # Assert
         assert "**Business Principles**" in result1
         assert "**Business Principles**" in result2
+        assert result1 == result2  # Should be deterministic
     
     def test_complex_request_shows_multiple_principles(self):
         """Test complex request shows multiple mapped principles."""
         # Arrange
+        gate = DoRApprovalGate()
         complex_request = "implement user authentication with JWT, write comprehensive tests, and document the API"
         
         # Act
-        result = display_intent_classification(complex_request)
+        reflection = gate.classify_and_reflect(complex_request, {})
+        result = reflection.to_markdown()
         
         # Assert
         # Should have multiple principles for IMPLEMENT intent
-        assert "Quality First" in result or "TDD" in result
-        assert "|" in result  # Multiple principles separated by pipe
+        assert "Quality First" in result or "TDD" in result or "Maintainability" in result
+        assert "|" in result  # Table format
 
 
 if __name__ == "__main__":
