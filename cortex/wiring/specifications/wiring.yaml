@@ -250,6 +250,7 @@ orchestrators:
         - evidence_based_sizing
         - pert_estimation
       health_check: "decompose_into_subtasks"
+      mcp_adapter: "ComposedOrchestratorAdapter"
       description: "Decomposes large tasks into token-budget-constrained subtasks using CAP framework"
       governance:
         - "CORE-008"
@@ -436,6 +437,7 @@ orchestrators:
         - phase_execution
         - checkpoint_management
       health_check: "execute_phase"
+      mcp_adapter: "PhaseExecutorAdapter"
       metadata:
         icon: "▶️"
         stages: 4
@@ -453,6 +455,7 @@ orchestrators:
         - autonomous_execution
         - multi_step_operations
       health_check: "execute_autonomous"
+      mcp_adapter: "AutonomousExecutionEngineAdapter"
       metadata:
         icon: "🤖"
         stages: 4
@@ -469,6 +472,7 @@ orchestrators:
         - conversation_management
         - context_tracking
       health_check: "manage_conversation"
+      mcp_adapter: "ConversationOrchestratorAdapter"
       metadata:
         icon: "🤝"
         stages: 4
@@ -492,6 +496,7 @@ orchestrators:
         - event_replay
         - dead_letter_management
       health_check: "health_check"
+      mcp_adapter: "OrchestratorEventBusAdapter"
       description: "Event-driven communication backbone enabling decoupled orchestrator communication (Phase 1)"
       mcp_tools: []
       governance:
@@ -520,6 +525,7 @@ orchestrators:
         - dor_enhancement
         - challenge_extension
       health_check: "health_check"
+      mcp_adapter: "InteractionOrchestratorEnhancementAdapter"
       description: "Enhances InteractionOrchestrator with event subscription and planning integration (Phase 6)"
       metadata:
         icon: "🔌"
@@ -537,6 +543,7 @@ orchestrators:
         - user_onboarding
         - tutorial_guidance
       health_check: "start_onboarding"
+      mcp_adapter: "OnboardingOrchestratorAdapter"
       metadata:
         icon: "🎓"
         stages: 3
@@ -552,6 +559,7 @@ orchestrators:
         - tool_discovery
         - capability_enumeration
       health_check: "discover_tools"
+      mcp_adapter: "ToolDiscoveryOrchestratorAdapter"
       metadata:
         icon: "🔍"
         stages: 2
@@ -567,6 +575,7 @@ orchestrators:
         - version_upgrade
         - migration_assistance
       health_check: "check_upgrade"
+      mcp_adapter: "UpgradeOrchestratorAdapter"
       metadata:
         icon: "⬆️"
         stages: 4
@@ -582,6 +591,7 @@ orchestrators:
         - rollback_execution
         - checkpoint_restore
       health_check: "check_rollback"
+      mcp_adapter: "RollbackOrchestratorAdapter"
       metadata:
         icon: "⏪"
         stages: 3
@@ -597,6 +607,7 @@ orchestrators:
         - environment_setup
         - dependency_installation
       health_check: "check_setup"
+      mcp_adapter: "SetupOrchestratorAdapter"
       metadata:
         icon: "🔧"
         stages: 3
@@ -612,6 +623,7 @@ orchestrators:
         - governance_enforcement
         - rule_management
       health_check: "get_rules"
+      mcp_adapter: "GovernanceRegistryAdapter"
       metadata:
         icon: "⚖️"
         stages: 2
@@ -627,6 +639,7 @@ orchestrators:
         - knowledge_retrieval
         - relationship_mapping
       health_check: "query_knowledge"
+      mcp_adapter: "KnowledgeRepositoryAdapter"
       metadata:
         icon: "📚"
         stages: 3
@@ -643,6 +656,7 @@ orchestrators:
         - wrapped_tdd
         - enhanced_testing
       health_check: "generate_wrapped_tests"
+      mcp_adapter: "WrappedTDDOrchestratorAdapter"
       metadata:
         icon: "🧬"
         stages: 4
@@ -659,6 +673,7 @@ orchestrators:
         - fuzzy_matching
         - intent_disambiguation
       health_check: "match_intent"
+      mcp_adapter: "FuzzyIntentMatcherAdapter"
       metadata:
         icon: "🎲"
         stages: 2
@@ -675,6 +690,7 @@ orchestrators:
         - session_management
         - comprehension_tracking
       health_check: "get_session"
+      mcp_adapter: "ComprehensionSessionAdapter"
       metadata:
         icon: "💭"
         stages: 2
@@ -691,6 +707,7 @@ orchestrators:
         - approval_gating
         - dor_validation
       health_check: "validate_dor"
+      mcp_adapter: "DoRApprovalGateAdapter"
       metadata:
         icon: "✅"
         stages: 2
@@ -708,6 +725,7 @@ orchestrators:
         - threat_blocking
         - challenge_enforcement
       health_check: "evaluate_threat"
+      mcp_adapter: "ChallengeEngineAdapter"
       description: "Security gates enforcement preventing critical vulnerabilities from progressing (Phase 8.3)"
       metadata:
         icon: "🛡️"
@@ -730,6 +748,7 @@ orchestrators:
         - fault_detection
         - truth_verification
       health_check: "execute"
+      mcp_adapter: "EducationalOrchestratorAdapter"
       description: "ASK Mode orchestrator for implementation-truth-based educational interaction (Phase 22)"
       mcp_tools:
         - "cortex_ask"
@@ -753,6 +772,7 @@ orchestrators:
         - consolidation_suggestions
         - duplication_reporting
       health_check: "generate_duplication_report"
+      mcp_adapter: "DuplicationDetectorAdapter"
       description: "Detects code duplications using LENS analyzers (Phase 8.3A)"
       lens_analyzers:
         - "GitHistoryAnalyzer"
@@ -798,6 +818,7 @@ orchestrators:
         - test_health_check
         - duplication_check
       health_check: "evaluate"
+      mcp_adapter: "RecommendationGateAdapter"
       description: "Regression prevention layer that validates recommendations before emission (Self-Enhancement)"
       governance:
         - "CORE-030"
@@ -819,6 +840,7 @@ orchestrators:
         - verification_workflow
         - audit_offering
       health_check: "scan_repository"
+      mcp_adapter: "VacuumOrchestratorAdapter"
       description: "Markdown cleanup with post-cleanup validation workflow (CORE-002 enforcement)"
       mcp_tools:
         - "cortex_vacuum"
@@ -847,6 +869,7 @@ orchestrators:
         - threshold_monitoring
         - enhancement_recommendations
       health_check: "get_metrics_summary"
+      mcp_adapter: "InstrumentationOrchestratorAdapter"
       description: "Metrics instrumentation for evidence-driven tool enhancement (Phase 20.9)"
       mcp_tools:
         - "cortex_capture_metrics"
@@ -871,6 +894,7 @@ orchestrators:
         - sensitive_value_exclusion
         - correlation_id_tracking
       health_check: "execute_operation"
+      mcp_adapter: "DebuggingOrchestratorAdapter"
       description: "Smart Debug Injection System for CORTEX-assisted debugging with surgical cleanup"
       mcp_tools:
         - "cortex_debug_inject"
@@ -899,6 +923,7 @@ orchestrators:
         - stage_progress
         - intelligence_indicators
       health_check: "health_check"
+      mcp_adapter: "OrchestratorVisibilityAdapter"
       description: "Training wheels visibility system for orchestrator activity (Phase 20.2)"
       mcp_tools: []
       governance:
@@ -960,6 +985,7 @@ orchestrators:
         - metrics_calculation
         - governance_scanning
       health_check: "process_digest"
+      mcp_adapter: "DigestEnhancementOrchestratorAdapter"
       description: "Automated DIGEST mode with MCP tools, quantitative metrics, and AST governance scanning (Phase 41)"
       mcp_tools:
         - "cortex_digest_session"
