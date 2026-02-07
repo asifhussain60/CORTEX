@@ -1,0 +1,226 @@
+# ENH-060: Test-Gated Auto-Commit
+# Generated: 2026-02-07 via DIGEST mode (chat01.txt)
+# Category: AUTOMATION | Priority: P2 | Confidence: 8.0
+
+id: ENH-060
+title: Test-Gated Auto-Commit
+description: >
+  Auto-commit after test validation during remediation work. When a work phase
+  completes and tests pass, automatically stage files, generate descriptive
+  commit message, and commit changes with proper audit trail.
+
+problem: >
+  Work marked "READY TO COMMIT" but requires manual git commands. Session
+  flow breaks as user switches from CORTEX guidance to terminal commands.
+  
+  Current flow:
+    Phase complete → Tests pass → "✅ READY TO COMMIT" → User manually:
+      git add <files>
+      git commit -m "message"
+      git push
+  
+  Issues:
+    - Context switching reduces flow
+    - Users may forget to commit
+    - Commit messages may be inconsistent
+    - Audit trail gaps (no AC markers)
+    - Lost work if session crashes
+
+solution:
+  trigger:
+    - Work phase marked complete
+    - All tests passing (100%)
+    - P0 governance validation passed
+  
+  auto_commit_flow:
+    step_1_test:
+      - Run full test suite for affected components
+      - If coverage < 80%, warn but continue
+      - If P0 tests fail, STOP and report
+    
+    step_2_stage:
+      - Auto-stage changed files
+      - Respect .gitignore
+      - Exclude temp files
+    
+    step_3_message:
+      - Generate descriptive commit message
+      - Include phase identifier
+      - List key changes
+      - Add AC markers for audit trail
+      - Reference CORE rules applied
+    
+    step_4_commit:
+      - Execute git commit
+      - Log commit SHA
+      - Report success
+    
+    step_5_push_offer:
+      - If autonomous mode: auto-push
+      - If interactive mode: ask "Push to remote? [y/N]"
+      - If no remote: skip
+
+  commit_message_template: |
+    Phase {phase_id}: {short_description}
+    
+    {detailed_changes}
+    
+    AC-START: AC-{phase_id}
+    Description: {work_description}
+    AC-COMPLETE: AC-{phase_id} ✅ {test_count} tests passing
+    
+    Metrics:
+    - Files modified: {modified_count}
+    - Tests: {pass}/{total} ({percentage}%)
+    - Coverage: {coverage}%
+    
+    Governance: {core_rules_applied}
+    Refs: {related_phases}
+
+implementation:
+  components:
+    - GitOrchestrator: Core git operations
+    - CommitMessageGenerator: Template-based message creation
+    - TestRunner: Pre-commit test execution
+    - AuditLogger: AC marker injection
+  
+  safety_gates:
+    - Only in remediation contexts (not exploratory)
+    - Requires test coverage ≥ 80%
+    - P0 governance validation must pass
+    - User can disable via config: `auto_commit_enabled: false`
+    - Respects .gitignore
+    - Never commits to protected branches without approval
+  
+  configuration:
+    auto_commit:
+      enabled: true
+      require_tests: true
+      min_coverage: 0.80
+      auto_push: false  # Only in autonomous mode
+      protected_branches:
+        - main
+        - master
+        - production
+      excluded_patterns:
+        - "**/*-SUMMARY.md"
+        - "**/*-COMPLETION.md"
+        - "**/READY-TO-COMMIT*.md"
+  
+  error_handling:
+    test_failure:
+      - STOP commit process
+      - Report test failures
+      - Wait for manual fix
+    
+    git_conflict:
+      - STOP commit process
+      - Report conflict
+      - Offer to stash/pull/retry
+    
+    push_failure:
+      - Commit still succeeded locally
+      - Report push failure reason
+      - Offer retry
+
+example_execution: |
+  ## Phase 1 Complete ✅
+  
+  **Tests:** 8/8 passing (100%)
+  **Coverage:** 94%
+  **Files changed:** 5
+  
+  🔄 Auto-committing changes...
+  
+  ✅ Staged: cortex/mcp/tool_discovery.py
+  ✅ Staged: cortex/mcp/server.py
+  ✅ Staged: cortex/orchestrators/core/orchestrator_wiring.py
+  ✅ Staged: tests/integration/mcp/test_core_tool_exposure.py
+  ✅ Staged: scripts/audit_mcp_wiring.py
+  
+  📝 Commit message:
+  ```
+  Phase 1: Fix MCP tool discovery and core tool exposure
+  
+  Critical fixes for MCP server initialization:
+  1. Fixed ToolCategory type mismatch
+  2. Created orchestrator_wiring module
+  3. Enhanced decorator tool integration
+  
+  AC-START: AC-PHASE1-001
+  Description: MCP server critical fixes
+  AC-COMPLETE: AC-PHASE1-001 ✅ 8 tests passing
+  
+  Metrics:
+  - Files modified: 5
+  - Tests: 8/8 (100%)
+  - Coverage: 94%
+  
+  Governance: CORE-008, CORE-035
+  Refs: MCP Audit 2026-02-07
+  ```
+  
+  ✅ Committed: abc1234 (Phase 1: Fix MCP tool discovery)
+  
+  Push to remote? [y/N]: _
+
+impact:
+  user_experience:
+    - Reduces friction in workflow
+    - Maintains momentum during multi-phase work
+    - Prevents lost work
+    - Consistent commit messages
+  
+  technical:
+    - Requires git integration
+    - Adds commit message generation
+    - Complexity in error handling
+  
+  governance:
+    - Maintains CORE-027 (Audit trail) via AC markers
+    - Consistent commit message quality
+    - Prevents skipped commits
+
+metrics:
+  priority: P2
+  confidence: 8.0
+  roi_estimate: Medium
+  effort_estimate: 2-3 days
+  category: AUTOMATION
+  
+  success_criteria:
+    - Auto-commit triggers after phase completion
+    - Tests run before commit
+    - Files staged correctly
+    - Commit messages descriptive and consistent
+    - AC markers included
+    - Push offered in interactive mode
+    - Auto-push works in autonomous mode
+    - Safety gates prevent bad commits
+    - User can disable feature
+
+evidence:
+  source_file: _workspaces/.chats/chat01.txt
+  session_date: 2026-02-07
+  manual_commits_observed: 3
+  commit_time_per_phase: ~5 minutes
+  time_savings_estimate: 15 minutes per session
+
+dependencies:
+  optional:
+    - ENH-058: Enhanced in autonomous mode
+    - ENH-059: Triggered from execution options
+
+related_enhancements:
+  - ENH-058: Autonomous Remediation (auto-push in autonomous mode)
+  - ENH-059: Audit-Driven Planning (commit after each phase)
+
+core_rules:
+  - CORE-027: Audit trail (AC markers)
+  - CORE-008: TDD (test-gated)
+  - CORE-035: SSOT (git as source of truth)
+
+status: PROPOSED
+created: 2026-02-07
+updated: 2026-02-07
+author: CORTEX DIGEST (Autonomous Enhancement Detection)
