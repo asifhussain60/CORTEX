@@ -31,7 +31,8 @@ class FeedbackSentiment(str, Enum):
 
 
 # CONSOLIDATED: Import from cortex.orchestrators.response.unified_response_composer
-# class QualityMetricType(str, Enum):
+# Uncommented for backward compatibility (Phase 38.0)
+class QualityMetricType(str, Enum):
     """Quality metric types.
     
     Attributes:
