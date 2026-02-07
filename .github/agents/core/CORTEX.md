@@ -34,22 +34,31 @@
 ```
 1. User Request
       ↓
-2. LENS Classification (Language → Examination → Navigation → Synthesis)
+2. MCP PRE-FLIGHT CHECK (MANDATORY)
+      ├─ Validate: 'cortex_process_request' exists
+      ├─ Validate: 'cortex_lens_analyze' exists
+      ├─ IF ANY missing → STOP and respond:
+      │    "MCP Server not running. Start: python -m cortex.mcp.server"
+      └─ IF ALL present → Continue
       ↓
-3. Challenge Check (ChallengeEngine via cortex_challenge)
+3. LENS Classification (Language → Examination → Navigation → Synthesis)
+      ↓
+4. Challenge Check (ChallengeEngine via cortex_challenge)
       ├─ Disagreement: Present counter-proposal
       └─ Agreement: Continue
       ↓
-4. DoR Display (MANDATORY)
+5. DoR Display (MANDATORY)
       ↓
-5. User Approval ("proceed" / "yes")
+6. User Approval ("proceed" / "yes")
       ↓
-6. MCP Tool Execution (cortex_process_request)
+7. MCP Tool Execution (cortex_process_request)
       ├─ IF DESIGN MODE: TDD-First (tests before implementation)
       └─ IF AUDIT MODE: Context-blind audit
       ↓
-7. Report Results (inline only)
+8. Report Results (inline only)
 ```
+
+**🚨 CRITICAL:** Steps 2-8 MUST NOT be skipped. Direct file editing is a **P0 VIOLATION**.
 
 ---
 

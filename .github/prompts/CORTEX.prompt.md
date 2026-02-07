@@ -241,6 +241,25 @@ result = mcp_tool.execute(parameters)
 
 **CORTEX = SaaS behind MCP server.** Every capability is MCP-exposed.
 
+### 🚨 MCP PRE-FLIGHT CHECK (MANDATORY)
+
+**BEFORE processing IMPLEMENT/FIX/REFACTOR/ANALYZE intents:**
+
+1. **Validate Tool Availability:**
+   ```
+   Required tools: cortex_process_request, cortex_lens_analyze
+   If missing → STOP and instruct: "Start MCP: python -m cortex.mcp.server"
+   ```
+
+2. **NEVER Fallback to Direct Editing:**
+   - ❌ FORBIDDEN: "MCP unavailable, editing files directly"
+   - ✅ REQUIRED: "MCP unavailable. Please start server first."
+
+3. **Intent Classification:**
+   - IMPLEMENT/FIX/REFACTOR → **REQUIRES MCP** (no exceptions)
+   - ANALYZE → **REQUIRES MCP** (cortex_lens_analyze)
+   - READ/SEARCH → Can proceed without MCP
+
 ### Core MCP Tools (Production Only)
 
 | Tool | Purpose | Orchestrator |

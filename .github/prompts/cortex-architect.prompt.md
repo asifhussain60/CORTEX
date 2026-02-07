@@ -953,6 +953,28 @@ Step 4: Return Inline
 
 ## 🧠 MCP Tools Integration
 
+**⚠️ MCP PRE-FLIGHT CHECK REQUIRED FOR ALL MODES:**
+
+Before executing ANY MODE (PRE-FLIGHT/AUDIT/META-AUDIT/DIGEST/QUERY/PLAN/DESIGN):
+
+1. **Validate MCP Availability:**
+   ```
+   Check: 'cortex_process_request' in available_tools
+   Check: 'cortex_lens_analyze' in available_tools
+   If EITHER missing → STOP and respond:
+     "MCP Server not running. Start with: python -m cortex.mcp.server"
+   ```
+
+2. **Intent-Based MCP Enforcement:**
+   - **IMPLEMENT/FIX/REFACTOR** → REQUIRES `cortex_process_request` (P0)
+   - **ANALYZE/AUDIT** → REQUIRES `cortex_lens_analyze` (P0)
+   - **PLAN** → REQUIRES `cortex_plan_*` tools (P1)
+   - **READ/SEARCH** → Can proceed without MCP
+
+3. **NEVER Fallback to Direct File Operations:**
+   - ❌ "MCP unavailable, so I'll edit files directly" → **CRITICAL VIOLATION**
+   - ✅ "MCP unavailable. Please start MCP server first." → **CORRECT**
+
 **QUERY mode leverages existing MCP tools:**
 
 ```yaml

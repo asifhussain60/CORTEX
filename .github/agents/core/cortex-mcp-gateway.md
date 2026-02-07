@@ -11,6 +11,45 @@
 **Protocol:** MCP (Model Context Protocol)  
 **Transport:** stdio / REST API
 
+**🚨 MCP ENFORCEMENT:** This agent ONLY routes to MCP tools. Direct file operations are **FORBIDDEN**.
+
+---
+
+## MCP Pre-Flight Validation (MANDATORY)
+
+**Before routing ANY request:**
+
+```python
+def validate_mcp_availability(intent: str) -> bool:
+    """Check if required MCP tools are available."""
+    
+    # Intent-based requirements
+    required_tools = {
+        'IMPLEMENT': ['cortex_process_request'],
+        'FIX': ['cortex_process_request'],
+        'REFACTOR': ['cortex_process_request'],
+        'ANALYZE': ['cortex_lens_analyze'],
+        'AUDIT': ['cortex_lens_analyze'],
+    }
+    
+    if intent in required_tools:
+        for tool in required_tools[intent]:
+            if tool not in available_tools:
+                raise MCPUnavailableError(
+                    f"MCP tool '{tool}' required for {intent} intent. "
+                    f"Start MCP server: python -m cortex.mcp.server"
+                )
+    
+    return True
+```
+
+**Response if MCP unavailable:**
+```
+❌ MCP Server not running
+Required: python -m cortex.mcp.server
+Cannot proceed with {intent} operations without MCP
+```
+
 ---
 
 ## Response Header
