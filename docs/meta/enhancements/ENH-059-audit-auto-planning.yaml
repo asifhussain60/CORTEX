@@ -1,0 +1,205 @@
+# ENH-059: Audit-Driven Auto-Planning
+# Generated: 2026-02-07 via DIGEST mode (chat01.txt)
+# Category: WORKFLOW | Priority: P1 | Confidence: 8.5
+
+id: ENH-059
+title: Audit-Driven Auto-Planning
+description: >
+  Extend AUDIT mode to generate executable remediation plan with 4 execution
+  options: [1] Auto-execute [2] Phase-by-phase [3] Review only [4] Cancel.
+  Provides user control over autonomy level while enabling ENH-058.
+
+problem: >
+  Audit identifies issues but requires manual "proceed" to execute fixes.
+  Users must guess at execution approach without seeing full remediation plan.
+  No visibility into:
+    - Total phases required
+    - Estimated effort per phase
+    - Dependencies between phases
+    - Risk assessment
+    - Execution options available
+
+solution:
+  enhanced_audit_output:
+    section_1_issues:
+      - Current audit findings (unchanged)
+      - Severity classification (P0/P1/P2)
+      - Impact assessment
+    
+    section_2_remediation_plan:
+      - Phases with clear boundaries
+      - Dependencies between phases
+      - Estimated effort per phase
+      - Test requirements per phase
+      - Risk assessment (LOW/MEDIUM/HIGH)
+      - Expected duration (minutes)
+    
+    section_3_execution_options:
+      option_1: "Auto-execute all phases (autonomous mode)"
+      option_2: "Execute phase-by-phase (interactive approval)"
+      option_3: "Review plan only (no execution)"
+      option_4: "Cancel (exit without changes)"
+    
+    section_4_user_prompt:
+      message: "Choose execution mode [1-4]:"
+      default: 2 (interactive)
+
+  routing_logic:
+    - Option 1 → Routes to ENH-058 autonomous mode
+    - Option 2 → Current behavior (proceed per phase)
+    - Option 3 → Display plan, generate markdown, exit
+    - Option 4 → Exit gracefully
+
+implementation:
+  components:
+    - PlanningOrchestrator: Generate structured remediation plan
+    - PhaseManager: Calculate phase dependencies and effort
+    - IntentRouter: Route based on user selection
+    - RiskAssessment: Analyze change impact per phase
+  
+  plan_generation:
+    inputs:
+      - Audit findings (from AuditOrchestrator)
+      - Current codebase state
+      - Test coverage data
+      - Historical execution times
+    
+    outputs:
+      - Structured phase list with metadata
+      - Dependency graph
+      - Risk scores per phase
+      - Effort estimates
+      - Test requirements
+  
+  user_interaction:
+    display_format: Markdown table with clear sections
+    prompt_style: Numbered options for easy selection
+    timeout: 60 seconds (default to option 2)
+    validation: Accept 1-4 or text aliases
+
+example_output: |
+  ## 🎯 Audit Complete - Remediation Plan
+  
+  ### 📊 Issues Found
+  | Severity | Count | Category |
+  |----------|-------|----------|
+  | P0 | 2 | Tool discovery crash |
+  | P1 | 4 | Missing MCP adapters |
+  | P2 | 1 | Documentation drift |
+  
+  ### 🔧 Remediation Plan
+  
+  **Phase 1: Critical Fixes** (Est: 30 min, Risk: LOW)
+  - Fix tool discovery crash
+  - Create missing wiring module
+  - Update integration tests
+  Dependencies: None
+  Tests: 8 integration tests
+  
+  **Phase 2A: Wire Existing** (Est: 15 min, Risk: LOW)
+  - Wire 10 existing adapters
+  - Update wiring.yaml
+  Dependencies: Phase 1
+  Tests: Server initialization
+  
+  **Phase 2B: Generate New** (Est: 45 min, Risk: MEDIUM)
+  - Generate 16 new adapters
+  - Wire all adapters
+  - Achieve 100% coverage
+  Dependencies: Phase 2A
+  Tests: Full MCP suite
+  
+  **Total Effort:** 90 minutes
+  **Risk Level:** LOW-MEDIUM
+  
+  ### ⚙️ Execution Options
+  
+  1. **Auto-execute all phases** (autonomous mode)
+     → Complete all phases automatically with test gating
+     → Auto-commit after each successful phase
+     → Emergency stop on failures
+  
+  2. **Execute phase-by-phase** (interactive approval) ⭐ DEFAULT
+     → Review and approve each phase individually
+     → Manual commit control
+     → Maximum control and visibility
+  
+  3. **Review plan only** (no execution)
+     → Save plan to markdown file
+     → Exit without making changes
+     → Good for planning sessions
+  
+  4. **Cancel** (exit)
+     → Exit without changes or plan file
+  
+  Choose execution mode [1-4]: _
+
+impact:
+  user_experience:
+    - Clear visibility into remediation scope
+    - Informed decision making
+    - Flexible execution control
+    - Reduced uncertainty
+  
+  technical:
+    - Complements ENH-058 perfectly
+    - Reuses existing PlanningOrchestrator
+    - Minimal new code required
+  
+  governance:
+    - Maintains user agency
+    - Documents execution decisions
+    - Audit trail shows chosen mode
+
+integration:
+  with_enh_058:
+    - Option 1 triggers autonomous mode
+    - Plan structure feeds phase executor
+    - Risk assessment informs safety gates
+  
+  with_current_system:
+    - Option 2 maintains current behavior
+    - Backward compatible
+    - Progressive enhancement
+
+metrics:
+  priority: P1
+  confidence: 8.5
+  roi_estimate: High
+  effort_estimate: 2-3 days
+  category: WORKFLOW
+  
+  success_criteria:
+    - Audit generates complete remediation plan
+    - Plan includes phases, effort, risk, tests
+    - 4 execution options presented clearly
+    - User selection routes correctly
+    - Option 1 triggers ENH-058
+    - Option 2 works like current system
+    - Options 3 & 4 exit gracefully
+
+evidence:
+  source_file: _workspaces/.chats/chat01.txt
+  session_date: 2026-02-07
+  observation: User chose "Option 2" but had to proceed multiple times
+  user_feedback: "All the remediation work should have been autonomous"
+
+dependencies:
+  requires:
+    - ENH-058: Autonomous Remediation Framework
+  enables:
+    - User-controlled autonomy
+    - Informed execution decisions
+
+related_enhancements:
+  - ENH-058: Autonomous mode (Option 1)
+  - ENH-060: Auto-commit (used in Options 1 & 2)
+
+core_rules:
+  - CORE-029: Response header maintained
+  - CORE-002: Plan file only if Option 3 selected
+
+status: PROPOSED
+created: 2026-02-07
+updated: 2026-02-07
+author: CORTEX DIGEST (Autonomous Enhancement Detection)

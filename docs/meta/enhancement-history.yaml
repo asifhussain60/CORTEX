@@ -1,4 +1,73 @@
 enhancements:
+- id: ENH-058
+  description: 'Autonomous Remediation Framework - Enable auto-execution of audit
+    remediation phases without manual gates'
+  category: WORKFLOW
+  confidence_score: 9.0
+  source_file: _workspaces/.chats/chat01.txt
+  timestamp: '2026-02-07T15:30:00'
+  core_rule_ref: CORE-008
+  context: 'DIGEST analysis revealed 0% autonomous execution during audit remediation.
+    All phases (1, 2A, 2B) required manual "proceed" commands despite being systematic
+    fix work. Users expect autonomous execution after audit approval.'
+  code_references:
+  - InteractionOrchestrator
+  - IntentRouter
+  - PlanOrchestrator
+  implementation_details:
+    trigger: User says "proceed autonomously" or "auto-fix all"
+    behavior: Skip DoR gates for remediation, execute all phases, auto-commit with
+      tests
+    scope_limits: AUDIT→REMEDIATION only, not DESIGN mode, test-gated stops
+    safety_gates: Emergency stop on P0 failures, security issues, breaking changes
+  priority: P1
+  roi_estimate: 'High - Reduces 4+ manual interventions per audit session, enables
+    overnight autonomous fixes'
+  effort_estimate: 3-5 days
+- id: ENH-059
+  description: 'Audit-Driven Auto-Planning - Extend AUDIT mode to generate executable
+    remediation plan with execution options'
+  category: WORKFLOW
+  confidence_score: 8.5
+  source_file: _workspaces/.chats/chat01.txt
+  timestamp: '2026-02-07T15:30:00'
+  core_rule_ref: null
+  context: 'Audit identifies issues but requires manual "proceed" to execute. Should
+    generate remediation plan with [1] Auto-execute [2] Phase-by-phase [3] Review
+    only [4] Cancel options.'
+  code_references:
+  - PlanningOrchestrator
+  - AuditOrchestrator
+  implementation_details:
+    output_sections:
+    - Issues (existing)
+    - Remediation Plan (phases, effort, tests, risk)
+    - Execution Options (4 choices)
+    integration: Routes Option 1 to ENH-058 autonomous mode, Option 2 to current behavior
+  priority: P1
+  roi_estimate: 'High - Complements ENH-058, provides user control over autonomy level'
+  effort_estimate: 2-3 days
+- id: ENH-060
+  description: 'Test-Gated Auto-Commit - Auto-commit after test validation during
+    remediation work'
+  category: AUTOMATION
+  confidence_score: 8.0
+  source_file: _workspaces/.chats/chat01.txt
+  timestamp: '2026-02-07T15:30:00'
+  core_rule_ref: CORE-027
+  context: 'Work marked "READY TO COMMIT" but requires manual git commands. Should
+    auto-commit when tests pass during remediation.'
+  code_references:
+  - GitOrchestrator
+  implementation_details:
+    trigger: Work phase complete + all tests passing
+    behavior: Run tests → auto-stage → generate commit message → commit (offer push
+      if autonomous)
+    safety_gates: Only remediation contexts, requires 80%+ coverage, P0 validation,
+      user can disable
+  priority: P2
+  roi_estimate: 'Medium - Reduces friction, maintains audit trail quality'
+  effort_estimate: 2-3 days
 - id: ENH-B69A39
   description: '**Author:** Test User | **Orchestrator:** DigestOrchestrator'
   category: WORKFLOW
