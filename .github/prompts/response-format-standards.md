@@ -644,6 +644,11 @@ Full semantic layering with:
 **Command:** `/implement tool_spec_generator`
 ```
 
+**Prompt Selection:**
+- Use `#file:cortex-architect.prompt.md` if session started with AUDIT/DESIGN/PLAN mode
+- Use `#file:CORTEX.prompt.md` if session started with IMPLEMENT/FIX/REFACTOR mode
+- **CRITICAL:** Use the ORIGINAL prompt that initiated the session, not the current mode
+
 ### Why This Works
 
 | Element | Purpose | Tokens |

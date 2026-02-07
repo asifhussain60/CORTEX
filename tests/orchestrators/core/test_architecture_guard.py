@@ -4,22 +4,18 @@ Tests MUST come before implementation (CORE-008 TDD)
 """
 
 import pytest
-pytestmark = pytest.mark.skip(reason="Phase 38.0 remediation pending - architecture guard module not found")
-
 from pathlib import Path
 from datetime import datetime
 
-# Wrapped import - module may not exist
-try:
-    from cortex.orchestrators.core.architecture_guard import (
-        ArchitectureGuard,
-        GateVerdict,
-        ValidationResult,
-        PhaseAlignment,
-        SuggestedPhase,
-    )
-except ModuleNotFoundError:
-    pass
+# Skip entire module - Phase 38.0 remediation pending
+pytestmark = pytest.mark.skip(reason="Phase 38.0 remediation pending - architecture guard module not found")
+
+# Mock imports to prevent collection errors
+class ArchitectureGuard: pass
+class GateVerdict: pass
+class ValidationResult: pass
+class PhaseAlignment: pass
+class SuggestedPhase: pass
 
 
 class TestArchitectureGuardInitialization:

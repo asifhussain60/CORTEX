@@ -241,6 +241,9 @@ class ContinuationOptimizer:
             next_action: Immediate next action to take
             command: Optional command to resume work
             prompt_file: Prompt file to load (with #file: prefix)
+                        Should be the ORIGINAL prompt that started the session:
+                        - "cortex-architect.prompt.md" for AUDIT/DESIGN/PLAN modes
+                        - "CORTEX.prompt.md" for IMPLEMENT/FIX/REFACTOR modes
             
         Returns:
             Optimized continuation prompt (~200 tokens)
@@ -251,7 +254,8 @@ class ContinuationOptimizer:
             ...     branch="CORTEX",
             ...     last_checkpoint="exposure_auditor.py ✅",
             ...     next_action="Implement tool_spec_generator.py (46 orchestrators)",
-            ...     command="/implement tool_spec_generator"
+            ...     command="/implement tool_spec_generator",
+            ...     prompt_file="cortex-architect.prompt.md"  # Original session prompt
             ... )
         """
         lines = [

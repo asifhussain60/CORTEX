@@ -2666,6 +2666,11 @@ def audit_continuation_efficiency(response_text: str) -> Dict[str, Any]:
 **Command:** `/implement tool_spec_generator`
 ```
 
+**Prompt Selection:**
+- Use `#file:cortex-architect.prompt.md` if session started with AUDIT/DESIGN/PLAN mode
+- Use `#file:CORTEX.prompt.md` if session started with IMPLEMENT/FIX/REFACTOR mode
+- **CRITICAL:** Always use the ORIGINAL prompt that initiated the session
+
 **Savings:** 60,000 → 200 tokens = **99.67% reduction**
 
 #### Evidence & Remediation
