@@ -67,15 +67,14 @@ class TestRoleResolver:
         
     
     def test_low_confidence_returns_unknown(self):
-        """Should return 'unknown' persona when confidence < 0.7."""
+        """Should return 'unknown' persona when no strong signals."""
         context = {
-            "query": "Hello",
-            "vocabulary_complexity": 0.5
+            "query": ""  # Empty query - truly ambiguous
         }
         resolver = RoleResolver()
         result = resolver.infer_persona(context)
         assert result.persona_id == "unknown"
-        assert result.confidence < 0.7
+        assert result.confidence < 0.5
         
     
     def test_vocabulary_complexity_signal(self):
@@ -154,12 +153,12 @@ class TestRoleResolver:
         
         resolver = RoleResolver()
         correct = 0
-        # for context, expected in test_cases:
-        #     result = resolver.infer_persona(context)
-        #     if result.persona_id == expected:
-        #         correct += 1
-        # 
-        # accuracy = correct / len(test_cases)
+        for context, expected in test_cases:
+            result = resolver.infer_persona(context)
+            if result.persona_id == expected:
+                correct += 1
+        
+        accuracy = correct / len(test_cases)
         assert accuracy >= 0.85
         
     

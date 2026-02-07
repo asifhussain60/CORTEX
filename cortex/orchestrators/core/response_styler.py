@@ -41,10 +41,6 @@ class ResponseStyler:
         
         styled = response
         
-        # Apply word limit
-        if persona.word_limit:
-            styled = self._apply_word_limit(styled, persona.word_limit)
-        
         # Filter code blocks
         if persona.show_code is False:
             styled = self._filter_code_blocks(styled)
@@ -53,9 +49,13 @@ class ResponseStyler:
         if available_metrics and persona.show_metrics:
             styled = self._filter_metrics(styled, persona.metric_types, available_metrics)
         
-        # Apply format style
+        # Apply format style (before word limit to ensure BLUF header counted)
         if persona.format == "BLUF":
             styled = self._apply_bluf_format(styled)
+        
+        # Apply word limit LAST to ensure all formatting counted
+        if persona.word_limit:
+            styled = self._apply_word_limit(styled, persona.word_limit)
         
         return styled
     
@@ -110,6 +110,16 @@ class ResponseStyler:
         Returns:
             Text with filtered metrics
         """
+        # Remove any existing metric mentions (case-insensitive)
+        cleaned = text
+        for metric_name in available_metrics.keys():
+            # Remove patterns like "Coverage: 85%" or "coverage=85"
+            pattern = re.compile(rf'\b{metric_name}\s*[:\=]\s*[\d\.]+%?', re.IGNORECASE)
+            cleaned = pattern.sub('', cleaned)
+        
+        # Clean up extra whitespace/commas
+        cleaned = re.sub(r'\s*,\s*', ', ', cleaned).strip(', ')
+        
         # Extract allowed metrics
         allowed_values = {
             k: v for k, v in available_metrics.items()
@@ -117,14 +127,14 @@ class ResponseStyler:
         }
         
         if not allowed_values:
-            return text
+            return cleaned
         
         # Append metrics section
         metrics_section = "\n\n**Metrics:**\n"
         for metric, value in allowed_values.items():
             metrics_section += f"- {metric}: {value}\n"
         
-        return text + metrics_section
+        return cleaned + metrics_section
     
     def _apply_bluf_format(self, text: str) -> str:
         """Apply Bottom Line Up Front format.
