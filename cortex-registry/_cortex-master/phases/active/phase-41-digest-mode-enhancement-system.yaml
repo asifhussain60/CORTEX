@@ -1,0 +1,465 @@
+# Phase 41: DIGEST Mode Enhancement System
+# Purpose: Comprehensive DIGEST mode automation, metrics, and governance for continuous CORTEX learning
+# Authority: DIGEST mode gap analysis 2026-02-07 - 12 gaps identified, 5 critical enhancements planned
+# Created: 2026-02-07
+# Version: 1.0
+
+version: "1.0"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "Asif Hussain"
+status: "planned"
+priority: "P0"
+execution_order: 3  # After Phase 38.0 baseline restoration
+
+metadata:
+  title: "DIGEST Mode Enhancement System"
+  description: "Transform DIGEST mode from manual to fully automated with MCP tools, quantitative metrics, AST-based governance scanning, and self-calibrating detection"
+  category: "Learning + Automation + Governance"
+  impact: "CRITICAL - Closes CORTEX learning feedback loop, enables continuous improvement"
+  roi_score: 0.91
+  roi_calculation:
+    value_score: 0.93  # High automation + learning value
+    success_probability: 0.95  # Clear scope, well-defined
+    urgency_factor: 0.85  # High priority for learning loop
+    effort_cost: 0.40  # 16 days, 127 tests (moderate complexity)
+  maturity_improvement: "6.5 → 9.2 (+41%)"
+
+summary: |
+  Phase 41 implements 5 critical DIGEST mode enhancements (ENH-053 to ENH-057):
+  
+  CURRENT STATE (DIGEST maturity: 6.5/10):
+  - Manual enhancement creation (100% manual effort)
+  - Subjective efficiency scoring (no quantitative metrics)
+  - Grep-based violation detection (~20% violations missed)
+  - Hardcoded detection threshold (15-20% false positives)
+  - No MCP tool (cannot automate DIGEST workflows)
+  
+  TARGET STATE (DIGEST maturity: 9.2/10):
+  - 90% automated enhancement creation via DigestEnhancementOrchestrator
+  - Objective quantitative metrics (efficiency, accuracy, tool success rate, learning velocity)
+  - AST + tree-sitter governance scanning (80% improvement in violation detection)
+  - Self-calibrating detection (60% reduction in false positives)
+  - cortex_digest_session MCP tool enables CI/CD integration
+  
+  ENHANCEMENTS IMPLEMENTED:
+  1. ENH-053: DIGEST Mode MCP Tool Implementation (P0, ROI 0.95) — Foundation
+  2. ENH-055: DIGEST Quantitative Metrics System (P1, ROI 0.88) — Measurement
+  3. ENH-057: DIGEST Detection Calibration System (P1, ROI 0.82) — Quality
+  4. ENH-056: AST-Based Governance Violation Scanner (P1, ROI 0.85) — Compliance
+  5. ENH-054: DIGEST Enhancement Automation Pipeline (P0, ROI 0.93) — Automation
+  
+  IMPACT:
+  - Learning feedback loop closed (insights → enhancements → implementation)
+  - 90% reduction in manual enhancement creation effort
+  - Evidence-based CORTEX optimization through quantitative metrics
+  - 80% improvement in governance rule compliance detection
+  - CI/CD integration enabled for automatic chat session analysis
+
+dependencies:
+  required_phases:
+    - id: "phase-38.0"
+      name: "Remediation & Baseline Restoration"
+      reason: "Need stable test collection before adding learning systems"
+  required_enhancements: []
+  blocking_phases: []
+  related_enhancements:
+    - "ENH-046: Context Consumption Governance (token budget integration)"
+    - "ENH-052: Phase 39 AUDIT Mode (governance validation integration)"
+
+scope:
+  files_to_create:
+    # Stage 1: ENH-053 (MCP Tool)
+    - "cortex/mcp/tools/learning/digest_tools.py"
+    - "cortex/learning/digest/session_parser.py"
+    - "cortex/learning/digest/extraction_engine.py"
+    - "cortex/learning/digest/output_formatter.py"
+    - "tests/mcp/tools/learning/test_digest_tools.py"
+    
+    # Stage 2: ENH-055 (Quantitative Metrics)
+    - "cortex/learning/digest/metrics_calculator.py"
+    - "cortex/learning/digest/metrics_schema.py"
+    - "tests/learning/digest/test_metrics_calculator.py"
+    
+    # Stage 3: ENH-057 (Detection Calibration)
+    - "cortex/learning/digest/detection_calibrator.py"
+    - "cortex/learning/digest/detection_metrics.py"
+    - "tests/learning/digest/test_detection_calibration.py"
+    
+    # Stage 4: ENH-056 (AST Governance Scanner)
+    - "cortex/governance/violation_scanner.py"
+    - "cortex/governance/violation_patterns.yaml"
+    - "tests/governance/test_violation_scanner.py"
+    
+    # Stage 5: ENH-054 (Enhancement Automation)
+    - "cortex/orchestrators/learning/digest_enhancement_orchestrator.py"
+    - "cortex/learning/digest/enhancement_generator.py"
+    - "cortex/learning/digest/similarity_checker.py"
+    - "cortex/mcp/tools/learning/enhancement_tools.py"
+    - "tests/orchestrators/learning/test_digest_enhancement_orchestrator.py"
+  
+  files_to_modify:
+    - "cortex/wiring/specifications/wiring.yaml"  # Register DigestEnhancementOrchestrator + MCP tools
+    - ".github/prompts/cortex-architect.prompt.md"  # Update DIGEST mode with automation
+    - ".github/agents/core/cortex-digest.md"  # Reference new MCP tools and automation
+
+stages:
+  # PRIORITY 1: Foundation (Week 1)
+  stage_1:
+    name: "ENH-053: DIGEST Mode MCP Tool Implementation"
+    enhancement_id: "ENH-053"
+    priority: "P0"
+    description: "Create cortex_digest_session MCP tool for programmatic DIGEST invocation — CRITICAL BLOCKER, unblocks all automation"
+    duration: "4 days"
+    tests_target: 35
+    roi_score: 0.95
+    
+    acceptance_criteria:
+      - id: "AC-PHASE41-001"
+        description: "cortex_digest_session MCP tool registered and functional"
+        validation: "Tool callable via MCP, returns structured DigestResult"
+        tests: 8
+        
+      - id: "AC-PHASE41-002"
+        description: "Chat session parsing extracts all 6 categories"
+        validation: "Parse drifts, patterns, tools, efficiency, accuracy, governance violations"
+        tests: 12
+        
+      - id: "AC-PHASE41-003"
+        description: "Structured JSON output with Pydantic models"
+        validation: "DigestResult model validates, serializes to JSON"
+        tests: 5
+        
+      - id: "AC-PHASE41-004"
+        description: "Dry-run mode operational"
+        validation: "dry_run=True returns extractions without saving"
+        tests: 5
+        
+      - id: "AC-PHASE41-005"
+        description: "Governance violation scanning mandatory"
+        validation: "Scans for CORE-002, 008, 028, 035 violations"
+        tests: 5
+    
+    files:
+      - "cortex/mcp/tools/learning/digest_tools.py"
+      - "cortex/learning/digest/session_parser.py"
+      - "cortex/learning/digest/extraction_engine.py"
+      - "cortex/learning/digest/output_formatter.py"
+      - "tests/mcp/tools/learning/test_digest_tools.py"
+    
+    deliverables:
+      - "cortex_digest_session MCP tool"
+      - "SessionParser class (chat marker detection)"
+      - "ExtractionEngine (5-category extraction logic)"
+      - "OutputFormatter (JSON + markdown)"
+      - "DigestResult Pydantic model"
+    
+    integration:
+      - "Register in wiring.yaml"
+      - "Update cortex-architect.prompt.md DIGEST mode"
+      - "Update cortex-digest.md with MCP tool usage"
+
+  stage_2:
+    name: "ENH-055: DIGEST Quantitative Metrics System"
+    enhancement_id: "ENH-055"
+    priority: "P1"
+    description: "Implement objective metrics for efficiency, accuracy, tool success rate, and learning velocity"
+    duration: "2 days"
+    tests_target: 15
+    roi_score: 0.88
+    depends_on:
+      - "stage_1"  # Uses DigestResult from MCP tool
+    
+    acceptance_criteria:
+      - id: "AC-PHASE41-006"
+        description: "Efficiency score calculation: (expected_turns / actual_turns) × 100"
+        validation: "Calculate based on task complexity estimation"
+        tests: 3
+        
+      - id: "AC-PHASE41-007"
+        description: "Accuracy score calculation: ((total_turns - corrections) / total_turns) × 100"
+        validation: "Track user corrections from chat session"
+        tests: 3
+        
+      - id: "AC-PHASE41-008"
+        description: "Tool success rate: (successful_tools / total_invocations) × 100"
+        validation: "Parse tool invocation results from chat"
+        tests: 3
+        
+      - id: "AC-PHASE41-009"
+        description: "Learning velocity: enhancements_extracted / session_count"
+        validation: "Track rate of enhancement generation"
+        tests: 3
+        
+      - id: "AC-PHASE41-010"
+        description: "Context efficiency: meaningful_tokens / total_tokens"
+        validation: "Identify token waste in chat sessions"
+        tests: 3
+    
+    files:
+      - "cortex/learning/digest/metrics_calculator.py"
+      - "cortex/learning/digest/metrics_schema.py"
+      - "tests/learning/digest/test_metrics_calculator.py"
+    
+    deliverables:
+      - "MetricsCalculator class (5 quantitative metrics)"
+      - "MetricsSchema Pydantic models"
+      - "Baseline comparison logic (current vs historical)"
+    
+    integration:
+      - "Integrate with DigestResult from stage_1"
+      - "Update cortex-digest.md output format with metrics"
+
+  stage_3:
+    name: "ENH-057: DIGEST Detection Calibration System"
+    enhancement_id: "ENH-057"
+    priority: "P1"
+    description: "Self-calibrating chat session detection with precision/recall tracking"
+    duration: "2 days"
+    tests_target: 12
+    roi_score: 0.82
+    depends_on:
+      - "stage_1"  # Uses session_parser from MCP tool
+    
+    acceptance_criteria:
+      - id: "AC-PHASE41-011"
+        description: "Ground truth labeling system operational"
+        validation: "Mark files as chat/non-chat, store labels"
+        tests: 3
+        
+      - id: "AC-PHASE41-012"
+        description: "Precision/recall metrics calculated"
+        validation: "Precision = TP/(TP+FP), Recall = TP/(TP+FN)"
+        tests: 3
+        
+      - id: "AC-PHASE41-013"
+        description: "Auto-threshold adjustment via F1 optimization"
+        validation: "Adjust threshold to maximize F1 score"
+        tests: 3
+        
+      - id: "AC-PHASE41-014"
+        description: "Marker weight learning via gradient descent"
+        validation: "Optimize marker weights based on predictive power"
+        tests: 3
+    
+    files:
+      - "cortex/learning/digest/detection_calibrator.py"
+      - "cortex/learning/digest/detection_metrics.py"
+      - "tests/learning/digest/test_detection_calibration.py"
+    
+    deliverables:
+      - "DetectionCalibrator class (threshold optimization)"
+      - "DetectionMetrics class (precision/recall tracking)"
+      - "Detection performance dashboard"
+    
+    integration:
+      - "Integrate with SessionParser from stage_1"
+      - "Update cortex-architect.prompt.md detection protocol"
+
+  stage_4:
+    name: "ENH-056: AST-Based Governance Violation Scanner"
+    enhancement_id: "ENH-056"
+    priority: "P1"
+    description: "Robust violation detection via Python AST + tree-sitter bash parsing"
+    duration: "3 days"
+    tests_target: 25
+    roi_score: 0.85
+    depends_on:
+      - "stage_1"  # Integrates with ExtractionEngine
+    
+    acceptance_criteria:
+      - id: "AC-PHASE41-015"
+        description: "Python AST parsing for code blocks"
+        validation: "Extract and analyze Python code from chat sessions"
+        tests: 7
+        
+      - id: "AC-PHASE41-016"
+        description: "Tree-sitter bash command parsing"
+        validation: "Detect file generation commands (cat >, echo >, printf >)"
+        tests: 7
+        
+      - id: "AC-PHASE41-017"
+        description: "20+ violation patterns per CORE rule"
+        validation: "Pattern library covers CORE-002, 008, 028, 035"
+        tests: 8
+        
+      - id: "AC-PHASE41-018"
+        description: "80% improvement in violation detection"
+        validation: "Test against historical chat sessions with known violations"
+        tests: 3
+    
+    files:
+      - "cortex/governance/violation_scanner.py"
+      - "cortex/governance/violation_patterns.yaml"
+      - "tests/governance/test_violation_scanner.py"
+    
+    deliverables:
+      - "ViolationScanner class (AST + tree-sitter)"
+      - "violation_patterns.yaml (20+ patterns per rule)"
+      - "CORE-002: File generation detection (8 patterns)"
+      - "CORE-008: TDD violation detection (6 patterns)"
+      - "CORE-028: File naming violations (8 patterns)"
+      - "CORE-035: Duplicate implementation detection (5 patterns)"
+    
+    integration:
+      - "Integrate with ExtractionEngine governance category"
+      - "Update cortex-digest.md governance scanning section"
+
+  stage_5:
+    name: "ENH-054: DIGEST Enhancement Automation Pipeline"
+    enhancement_id: "ENH-054"
+    priority: "P0"
+    description: "Automated ENH-* generation from DIGEST findings with deduplication"
+    duration: "5 days"
+    tests_target: 40
+    roi_score: 0.93
+    depends_on:
+      - "stage_1"  # Uses DigestResult
+      - "stage_2"  # Uses metrics for ROI scoring
+    
+    acceptance_criteria:
+      - id: "AC-PHASE41-019"
+        description: "DigestEnhancementOrchestrator operational"
+        validation: "Orchestrator processes DigestResult → generates ENH-* candidates"
+        tests: 10
+        
+      - id: "AC-PHASE41-020"
+        description: "Automatic ENH-* YAML generation"
+        validation: "Generate complete ENH-* entries from template with all fields"
+        tests: 10
+        
+      - id: "AC-PHASE41-021"
+        description: "Deduplication via RecommendationGate"
+        validation: "Check similarity > 0.7 against enhancement-history.yaml + rejected_recommendations"
+        tests: 10
+        
+      - id: "AC-PHASE41-022"
+        description: "User approval gate functional"
+        validation: "Present ENH-* candidates, user approves/rejects/modifies"
+        tests: 5
+        
+      - id: "AC-PHASE41-023"
+        description: "90% reduction in manual effort"
+        validation: "Measure time to create ENH-* before vs after automation"
+        tests: 5
+    
+    files:
+      - "cortex/orchestrators/learning/digest_enhancement_orchestrator.py"
+      - "cortex/learning/digest/enhancement_generator.py"
+      - "cortex/learning/digest/similarity_checker.py"
+      - "cortex/mcp/tools/learning/enhancement_tools.py"
+      - "tests/orchestrators/learning/test_digest_enhancement_orchestrator.py"
+    
+    deliverables:
+      - "DigestEnhancementOrchestrator (5-stage pipeline)"
+      - "EnhancementGenerator (YAML generation)"
+      - "SimilarityChecker (deduplication)"
+      - "3 new MCP tools:"
+      - "  - cortex_digest_generate_enhancements"
+      - "  - cortex_digest_check_duplicates"
+      - "  - cortex_digest_apply_enhancements"
+    
+    integration:
+      - "Register DigestEnhancementOrchestrator in wiring.yaml"
+      - "Register 3 MCP tools in wiring.yaml"
+      - "Update cortex-architect.prompt.md with automation pipeline"
+      - "Update cortex-digest.md enhancement actions section"
+
+success_criteria:
+  technical:
+    - "All 127 tests passing (35+15+12+25+40)"
+    - "90% test coverage across all 5 enhancements"
+    - "cortex_digest_session MCP tool registered and functional"
+    - "4 new MCP tools operational (digest_session + 3 enhancement tools)"
+    - "DigestEnhancementOrchestrator registered in wiring.yaml"
+  
+  functional:
+    - "DIGEST mode invocable programmatically via MCP"
+    - "5 quantitative metrics calculated for all DIGEST sessions"
+    - "60% reduction in detection false positives"
+    - "80% improvement in governance violation detection"
+    - "90% reduction in manual enhancement creation effort"
+  
+  quality:
+    - "No regression in existing DIGEST functionality"
+    - "DIGEST maturity: 6.5 → 9.2 (+41% improvement)"
+    - "Learning feedback loop closed (insights → enhancements → implementation)"
+    - "CI/CD integration enabled (automatic chat analysis on phase completion)"
+
+metrics:
+  estimated_effort_days: 16
+  estimated_test_count: 127
+  target_coverage: "90%"
+  stages: 5
+  new_orchestrators: 1
+  new_mcp_tools: 4
+  files_created: 20
+  files_modified: 3
+
+risks:
+  - risk: "Tree-sitter-bash dependency may have installation issues"
+    mitigation: "Provide fallback to regex-based bash parsing"
+    probability: "LOW"
+    
+  - risk: "Similarity checking may have high false positive rate"
+    mitigation: "Tune threshold (0.7 default, allow user override)"
+    probability: "MEDIUM"
+    
+  - risk: "ENH-* YAML generation may miss required fields"
+    mitigation: "Pydantic schema validation before generation"
+    probability: "LOW"
+
+testing_strategy:
+  unit_tests: 115  # 90% of tests
+  integration_tests: 12  # 10% of tests
+  test_data:
+    - "5 historical chat sessions with known patterns"
+    - "3 chat sessions with CORE rule violations"
+    - "2 non-chat files for false positive testing"
+  
+  coverage_targets:
+    - "MCP tools: 95% (critical paths)"
+    - "Orchestrators: 90%"
+    - "Parsers/analyzers: 85%"
+    - "Utilities: 80%"
+
+deployment:
+  rollout_strategy: "Progressive (stage-by-stage)"
+  rollback_plan: "Revert wiring.yaml changes, disable MCP tools"
+  monitoring:
+    - "Track DIGEST invocation count via MCP"
+    - "Monitor enhancement generation success rate"
+    - "Track false positive rate for detection"
+    - "Measure manual effort reduction"
+
+documentation:
+  updates_required:
+    - ".github/prompts/cortex-architect.prompt.md"
+    - ".github/agents/core/cortex-digest.md"
+    - "docs/11-mcp-tools/cortex_digest_session.md"
+    - "docs/11-mcp-tools/cortex_digest_generate_enhancements.md"
+    - "docs/meta/enhancement-history.yaml (ENH-053 to ENH-057 status → ACTIVE)"
+
+related_phases:
+  - "Phase 38.0: Remediation & Baseline Restoration (prerequisite)"
+  - "Phase 39: AUDIT Mode Cohesion & Integrity System (governance integration)"
+  - "Phase 40: Intelligent Upgrade Changelog System (UX enhancement)"
+
+related_enhancements:
+  - "ENH-053: DIGEST Mode MCP Tool Implementation"
+  - "ENH-054: DIGEST Enhancement Automation Pipeline"
+  - "ENH-055: DIGEST Quantitative Metrics System"
+  - "ENH-056: AST-Based Governance Violation Scanner"
+  - "ENH-057: DIGEST Detection Calibration System"
+  - "ENH-046: Context Consumption Governance (integration)"
+
+next_steps:
+  immediate:
+    - "Update index.yaml with Phase 41 entry"
+    - "Run readiness validation (dependencies, prerequisites)"
+    - "Begin Stage 1: ENH-053 MCP Tool implementation"
+  
+  future:
+    - "Phase 42: Multi-session pattern mining (GAP-010)"
+    - "Phase 43: Session comparison/trend analysis (GAP-009)"
+    - "Phase 44: Interactive DIGEST mode (GAP-011)"
