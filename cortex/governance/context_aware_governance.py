@@ -84,33 +84,83 @@ class GovernanceContextAdapter:
     def __init__(self):
         """Initialize adapter with default configuration."""
         self._default_weights = self._load_default_weights()
+        self._context_cache: Dict[str, Dict[str, Dict[str, Any]]] = {}
     
     def _load_default_weights(self) -> Dict[str, float]:
         """Load default rule weights."""
         # All rules start at weight 1.0
         return {f'CORE-{i:03d}': 1.0 for i in range(1, 48)}
     
-    def adapt_rules(self, context: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    def _cache_key(self, rules: Optional[list[str]], context: Dict[str, Any]) -> str:
+        """Generate cache key from rules and context."""
+        import hashlib
+        import json
+        
+        # Sort keys for consistent hashing
+        context_str = json.dumps(context, sort_keys=True)
+        rules_str = ','.join(sorted(rules)) if rules else 'all'
+        combined = f"{rules_str}::{context_str}"
+        
+        return hashlib.md5(combined.encode()).hexdigest()
+    
+    def adapt_rules(
+        self, 
+        rules: Optional[list[str]] = None, 
+        context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Dict[str, Any]]:
         """
-        Adapt rules based on context.
+        Adapt rules based on context with caching support.
         
         Args:
-            context: Operation context
+            rules: List of rule IDs to adapt (None = all rules)
+            context: Operation context (supports multiple dimensions)
         
         Returns:
             Dict mapping rule_id to adapted rule config
         """
+        # Support both old signature adapt_rules(context) and new adapt_rules(rules, context)
+        if rules is not None and isinstance(rules, dict) and context is None:
+            # Old signature: adapt_rules(context)
+            context = rules
+            rules = None
+        
+        rules = rules or []
+        context = context or {}
+        
+        # Check cache first
+        cache_key = self._cache_key(rules, context)
+        if cache_key in self._context_cache:
+            return self._context_cache[cache_key]
+        
         from cortex.governance.rule_weight_calculator import RuleWeightCalculator
         
         calculator = RuleWeightCalculator()
         adapted = {}
         
-        for rule_id in self._default_weights:
+        # Use provided rules or all defaults
+        target_rules = rules if rules else list(self._default_weights.keys())
+        
+        # Process each context dimension
+        for rule_id in target_rules:
             weight = calculator.calculate_weight(rule_id, context)
+            
+            # Apply multi-dimensional adjustments
+            if context.get('mode') == 'production' and context.get('domain') == 'security':
+                weight = min(weight * 1.3, 2.0)  # Security boost in production
+            
+            if context.get('user_experience') == 'expert':
+                weight = max(weight * 0.9, 0.1)  # Experts get slight relaxation
+            
+            if context.get('repository_age') == 'mature':
+                weight = min(weight * 1.1, 2.0)  # Mature repos get stricter
+            
             adapted[rule_id] = {
                 'weight': weight,
-                'original_weight': 1.0
+                'original_weight': self._default_weights.get(rule_id, 1.0)
             }
+        
+        # Cache result
+        self._context_cache[cache_key] = adapted
         
         return adapted
     
@@ -155,7 +205,7 @@ class GovernanceContextAdapter:
         Returns:
             Rule weights
         """
-        adapted = self.adapt_rules(context)
+        adapted = self.adapt_rules([], context)  # Empty list = all rules
         return {rule_id: config['weight'] for rule_id, config in adapted.items()}
     
     def get_applicable_rules(self, context: Dict[str, Any]) -> list[str]:
