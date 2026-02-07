@@ -1712,6 +1712,8 @@ p1_checks = checklist.priority_checks["P1"].checks
 **Structure:**
 - **P0 — Security & Critical** (4 checks): Secrets, injection, broken code, test failures
 - **P1 — Infrastructure** (8 checks): Wiring, integration, audit trail, component verification
+- **P1.5 — Cohesion & Integrity** (6 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) — validated via MCP-FIRST tools
+- **P1.6 — Future-Vision** (2 checks): Technology adoption triggers, migration planning (Phase 39)
 - **P2 — Quality** (6 checks): Duplicates, dead code, refactoring needs, LENS analysis (MANDATORY)
 - **P3 — Cleanup** (5 checks): Vacuum (RUN FIRST), MD sprawl, markdown links, code fences
 

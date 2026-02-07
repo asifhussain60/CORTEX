@@ -82,6 +82,22 @@
 | Context governance (ENH-046) | ☐ | governance.db metrics |
 | File naming (CORE-028) | ☐ | No SCREAMING_CASE detected |
 
+### P1.5 — Cohesion & Integrity (Phase 39)
+| Check | Status | Evidence |
+|-------|--------|----------|
+| **Prompt Cohesion** | ☐ | PromptCohesionValidator: version drift, CORE rules, MCP enforcement |
+| **Agent Health** | ☐ | AgentHealthValidator: version tracking, capability coverage, index sync |
+| **Orchestrator Integrity** | ☐ | OrchestratorIntegrityValidator: wiring alignment, MCP exposure, dependencies |
+| **Module Cohesion** | ☐ | ModuleCohesionValidator: import health, circular dependencies |
+| **Test Validity** | ☐ | TestValidityValidator: coverage gaps (80%), contract test health |
+| **Team Collaboration** | ☐ | TeamCollaborationValidator: company/domains/ structure readiness |
+
+### P1.6 — Future-Vision (Phase 39)
+| Check | Status | Evidence |
+|-------|--------|----------|
+| **Technology Adoption** | ☐ | TechStackEvolutionPlanner: performance bottlenecks, extensibility triggers |
+| **Migration Planning** | ☐ | TechStackEvolutionPlanner: readiness scoring, 3-phase migration plans |
+
 ### P2 — Quality (MANDATORY via cortex_lens_analyze)
 | Check | Status | Evidence |
 |-------|--------|----------|
