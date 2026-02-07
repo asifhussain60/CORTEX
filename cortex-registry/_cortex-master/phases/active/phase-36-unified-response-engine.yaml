@@ -22,8 +22,8 @@ metadata:
   author: "Asif Hussain"
   created_date: "2026-02-07T00:00:00Z"
   target_start: "2026-02-10"
-  estimated_duration: "18 days"
-  test_target: 245
+  estimated_duration: "18.5 days"
+  test_target: 260
   coverage_target: 85
   roi_score: 0.91
   
@@ -71,13 +71,14 @@ overview:
   expected_outcomes:
     - 14 role-task response templates (vs current scattered implementations)
     - 12 atomic template blocks (composable, reusable)
-    - 245+ tests (85% coverage)
+    - 260+ tests (85% coverage)
     - 0 legacy response implementations remaining
     - 5 MCP tools exposed
     - 40% template code reduction via modular blocks
+    - Action-first AUDIT format (60% token reduction)
 
 # ============================================================================
-# STAGE BREAKDOWN (9 STAGES, 18 DAYS)
+# STAGE BREAKDOWN (10 STAGES, 18.5 DAYS)
 # ============================================================================
 
 stages:
@@ -393,10 +394,157 @@ stages:
       - "OWASP Top 10 coverage matrix"
 
   # ========================================================================
-  # STAGE 4: INTELLIGENT CODE COMMENTS (2 days)
+  # STAGE 4: ACTION-FIRST AUDIT FORMAT (0.5 days)
   # ========================================================================
   stage_4:
-    name: "Stage 4: Intelligent Code Comments Generation"
+    name: "Stage 4: Action-First AUDIT Format"
+    duration: "0.5 days"
+    priority: "P0"
+    depends_on: "stage_2"
+    
+    goal: |
+      Eliminate 3-layer redundancy in AUDIT responses. Replace with action-first
+      format optimized for production readiness teams who need:
+      - Immediate fix commands at top
+      - One-line issue descriptions
+      - Health snapshot (not verbose P0/P1/P3 sections)
+      - 60% token reduction
+      - 15-second scanability
+    
+    problem_statement: |
+      Current AUDIT format has 3-layer redundancy:
+      Layer 1: Executive Summary table (status only)
+      Layer 2: Section tables P0/P1/P3 (status + brief evidence)
+      Layer 3: Detailed subsections (repeats Layer 2 + recommendations)
+      
+      Example redundancy:
+      Table: "Context governance | 🔴 NOT DEPLOYED | governance.db missing"
+      Section: "P1-1: Context Governance Not Deployed
+               Impact: Token consumption unmonitored
+               Evidence: governance.db does not exist"
+      
+      Result: 40% token waste, 2-minute read time, buried action items
+    
+    new_format_structure:
+      action_table: |
+        TOP section with fix commands and immediate actions
+        | Priority | Issue | Fix Command | Impact |
+      
+      health_snapshot: |
+        MIDDLE section replacing verbose P0/P1/P3 sections
+        | Metric | Status | Score | Evidence |
+      
+      innovation_recs: |
+        BOTTOM section (optional) with future improvements
+        Numbered list format, effort/impact indicators
+    
+    tasks:
+      - id: "s4.1"
+        name: "Create ActionFirstAuditBlock template block"
+        owner: "TBD"
+        effort: "2 hours"
+        acceptance_criteria:
+          - "Inherits from TemplateBlock"
+          - "Renders action table (priority, issue, fix, impact)"
+          - "Calculates production blocker count"
+          - "Estimates total fix time"
+        files:
+          - "cortex/orchestrators/response/blocks/action_first_audit_block.py"
+        deliverables:
+          - "ActionFirstAuditBlock (150 LOC)"
+      
+      - id: "s4.2"
+        name: "Create HealthSnapshotBlock template block"
+        owner: "TBD"
+        effort: "1.5 hours"
+        acceptance_criteria:
+          - "Replaces verbose P0/P1/P3 sections"
+          - "Single table: metric, status, score, evidence"
+          - "Calculates overall health score"
+          - "One-line evidence citations"
+        files:
+          - "cortex/orchestrators/response/blocks/health_snapshot_block.py"
+        deliverables:
+          - "HealthSnapshotBlock (120 LOC)"
+      
+      - id: "s4.3"
+        name: "Update cortex-auditor.md with new format"
+        owner: "TBD"
+        effort: "1 hour"
+        acceptance_criteria:
+          - "Replace old 3-layer format with action-first"
+          - "Show example outputs"
+          - "Document token reduction"
+          - "Update execution flow"
+        files_affected:
+          - ".github/agents/core/cortex-auditor.md"
+        deliverables:
+          - "Updated agent documentation"
+      
+      - id: "s4.4"
+        name: "Update cortex-architect.prompt.md AUDIT section"
+        owner: "TBD"
+        effort: "30 minutes"
+        acceptance_criteria:
+          - "Reference action-first format"
+          - "Update example audit output"
+          - "Document 15-second scanability goal"
+        files_affected:
+          - ".github/prompts/cortex-architect.prompt.md"
+        deliverables:
+          - "Updated prompt documentation"
+    
+    tests:
+      - "tests/unit/orchestrators/response/blocks/test_action_first_audit_block.py (8 tests)"
+      - Block instantiation
+      - Action table rendering
+      - Production blocker count calculation
+      - Fix time estimation
+      - Priority sorting (P0 → P1 → P2 → P3)
+      
+      - "tests/unit/orchestrators/response/blocks/test_health_snapshot_block.py (7 tests)"
+      - Block instantiation
+      - Health snapshot rendering
+      - Overall score calculation
+      - One-line evidence formatting
+      - Category aggregation (Security, Tests, Infrastructure, Cleanup)
+    
+    success_criteria: |
+      - All 15 tests passing
+      - 60% token reduction validated (2,000 → 800 tokens)
+      - User can identify action items in 15 seconds
+      - No redundant information across sections
+    
+    deliverables:
+      - "cortex/orchestrators/response/blocks/action_first_audit_block.py (150 LOC)"
+      - "cortex/orchestrators/response/blocks/health_snapshot_block.py (120 LOC)"
+      - "15 comprehensive tests"
+      - "Updated agent and prompt documentation"
+    
+    before_after_comparison:
+      token_count:
+        before: "~2,000 tokens"
+        after: "~800 tokens"
+        reduction: "60%"
+      
+      read_time:
+        before: "2 minutes"
+        after: "15 seconds"
+        improvement: "87.5%"
+      
+      action_visibility:
+        before: "Buried at bottom in recommendations section"
+        after: "Prominent at top with exact commands"
+      
+      redundancy:
+        before: "3-layer: Executive → Section tables → Detailed subsections"
+        after: "1-layer: Action table + Health snapshot"
+
+  # ========================================================================
+  # STAGE 5: INTELLIGENT CODE COMMENTS (2 days)
+  # ========================================================================
+  stage_6:
+    name: "Stage 6: Intelligent Code Comments Generation"
     duration: "2 days"
     priority: "P1"
     depends_on: "stage_1"
@@ -811,9 +959,9 @@ stages:
       - "20 comprehensive tests"
 
   # ========================================================================
-  # STAGE 8: MULTI-ROLE RESPONSE ENGINE (3 days)
+  # STAGE 9: MULTI-ROLE RESPONSE ENGINE (3 days)
   # ========================================================================
-  stage_8:
+  stage_9:
     name: "Stage 8: Multi-Role Response Engine"
     duration: "3 days"
     priority: "P0"
@@ -1370,8 +1518,8 @@ metrics:
     coverage_after: "85%"
     coverage_improvement: "+13%"
     test_count_before: "1200"
-    test_count_after: "1445"
-    test_improvement: "+245 tests"
+    test_count_after: "1460"
+    test_improvement: "+260 tests"
   
   team_efficiency:
     response_generation_time_before: "3 seconds"
