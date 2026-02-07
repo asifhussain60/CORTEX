@@ -1,15 +1,451 @@
 # CORTEX Meta-Intelligence Enhancement Registry
 # Tracks recommendations, adoptions, and learning feedback loop
 # 
-# Authority: cortex-architect.prompt.md v14.2
+# Authority: cortex-architect.prompt.md v15.0
 # Updated: 2026-02-07
 
-meta_version: "2.6"
+meta_version: "2.7"
 last_updated: "2026-02-07"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-057
+    date: "2026-02-07"
+    recommendation: "DIGEST Detection Calibration System"
+    status: PLANNED
+    domain: Learning + Observability
+    priority: P1
+    source: "DIGEST mode gap analysis - GAP-005: No false positive tracking for auto-detection"
+    adoption_reason: |
+      DIGEST mode auto-detection uses hardcoded threshold (score ≥ 5) with no calibration.
+      Cannot track false positives (non-chat files scored ≥ 5) or false negatives (chat files < 5).
+      Need self-improving detection system with precision/recall tracking.
+      
+      CURRENT LIMITATIONS:
+      - Detection threshold fixed at score ≥ 5 (no adaptability)
+      - No ground truth labeling for detection accuracy
+      - No metrics for precision/recall of detection algorithm
+      - Cannot identify which markers are most reliable
+      
+      IMPACT: Estimated 15-20% false positive rate, 5-10% false negative rate.
+    expected_benefits:
+      - "60% reduction in false positives through adaptive threshold"
+      - "Self-calibrating detection based on accuracy metrics"
+      - "Ground truth tracking for continuous improvement"
+      - "Precision/recall metrics for detection algorithm"
+      - "Marker reliability scoring (which patterns most predictive)"
+      - "A/B testing framework for detection improvements"
+    implementation_notes: |
+      Implementation: 2 days, 12 tests
+      
+      Files to Create:
+      - cortex/learning/digest/detection_calibrator.py (calibration logic)
+      - cortex/learning/digest/detection_metrics.py (precision/recall tracking)
+      - tests/learning/digest/test_detection_calibration.py (12 tests)
+      
+      Features:
+      - Ground truth labeling system (mark files as chat/non-chat)
+      - Precision = TP / (TP + FP), Recall = TP / (TP + FN)
+      - Auto-adjust threshold to optimize F1 score
+      - Marker weight learning (gradient descent on weights)
+      - Detection performance dashboard
+      
+      Files to Modify:
+      - cortex-architect.prompt.md (add calibration to DIGEST mode)
+      - cortex-digest.md (reference calibration system)
+    metrics:
+      estimated_effort_days: 2
+      estimated_test_count: 12
+      target_coverage: "90%"
+      roi_score: 0.82
+      efficiency_gain: 0.75
+      accuracy_improvement: 0.90
+      effort_cost: 0.15
+    evidence_basis:
+      - "cortex-architect.prompt.md: Detection threshold hardcoded to score ≥ 5"
+      - "No tracking of false positives or false negatives"
+      - "No metrics for detection algorithm accuracy"
+    related_enhancements:
+      - ENH-053
+      - ENH-055
+    success_criteria:
+      - "Ground truth labeling system operational"
+      - "Precision/recall metrics calculated for all detections"
+      - "Auto-threshold adjustment reduces false positives by 60%"
+      - "Detection performance dashboard accessible"
+
+  - id: ENH-056
+    date: "2026-02-07"
+    recommendation: "AST-Based Governance Violation Scanner"
+    status: PLANNED
+    domain: Governance + Security
+    priority: P1
+    source: "DIGEST mode gap analysis - GAP-004: Pattern-based rule detection missing"
+    adoption_reason: |
+      Current governance violation detection relies on simple grep patterns.
+      Misses violations with different syntax (e.g., `echo "..." > file.md` vs `cat >`).
+      
+      CURRENT LIMITATIONS:
+      - Grep patterns: `cat >`, `create_file` - fragile
+      - No Python AST parsing for code blocks in chat
+      - No tree-sitter for bash/shell command detection
+      - ~20% of violations missed due to syntax variations
+      
+      CRITICAL for DIGEST mode: Must catch ALL CORE rule violations in chat sessions.
+    expected_benefits:
+      - "80% more violations caught through AST/tree-sitter parsing"
+      - "Robust detection across syntax variations"
+      - "20+ violation patterns per CORE rule (002, 008, 028, 035)"
+      - "Python code block analysis (detect test-before-code violations)"
+      - "Shell command parsing (detect file generation bypasses)"
+      - "Pattern library extensible for new rules"
+    implementation_notes: |
+      Implementation: 3 days, 25 tests
+      
+      Files to Create:
+      - cortex/governance/violation_scanner.py (AST/tree-sitter scanning)
+      - cortex/governance/violation_patterns.yaml (pattern library)
+      - tests/governance/test_violation_scanner.py (25 tests)
+      
+      Technology Stack:
+      - Python: ast module (built-in AST parsing)
+      - Shell: tree-sitter-bash (command parsing)
+      - Pattern matching: regex + AST node visitors
+      
+      Pattern Library (20+ patterns per rule):
+      - CORE-002: File generation detection
+        - `cat >`, `cat >>`, `echo ... >`, `printf ... >`
+        - Python: open(..., 'w'), Path.write_text()
+        - create_file tool invocations
+      - CORE-008: TDD violations
+        - Code implementation before test file creation
+        - Missing @pytest.mark decorators
+      - CORE-028: File naming violations
+        - SCREAMING_CASE detection
+        - Plan file name length >40 chars
+        - Non-kebab-case detection
+      - CORE-035: Duplicate implementations
+        - *_v2, *_old, *_backup patterns
+        - Duplicate function/class names
+      
+      Files to Modify:
+      - cortex-architect.prompt.md (DIGEST governance scanning)
+      - cortex-digest.md (reference AST-based scanner)
+    metrics:
+      estimated_effort_days: 3
+      estimated_test_count: 25
+      target_coverage: "85%"
+      roi_score: 0.85
+      efficiency_gain: 0.70
+      accuracy_improvement: 0.95
+      effort_cost: 0.25
+    evidence_basis:
+      - "cortex-digest.md: Current detection relies on grep patterns"
+      - "Estimated 20% of violations missed due to syntax variations"
+      - "CORE-002, 008, 028, 035 require sophisticated pattern matching"
+    related_enhancements:
+      - ENH-053
+      - ENH-054
+    success_criteria:
+      - "AST-based Python code block parsing operational"
+      - "Tree-sitter bash command parsing operational"
+      - "20+ patterns per CORE rule in violation_patterns.yaml"
+      - "80% increase in violation detection rate"
+      - "Pattern library extensible for new rules"
+
+  - id: ENH-055
+    date: "2026-02-07"
+    recommendation: "DIGEST Quantitative Metrics System"
+    status: PLANNED
+    domain: Observability + Learning
+    priority: P1
+    source: "DIGEST mode gap analysis - GAP-003: No quantitative metrics for efficiency/accuracy"
+    adoption_reason: |
+      DIGEST mode uses subjective "Efficiency Score: {1-10}" with no calculation formula.
+      Cannot measure DIGEST effectiveness, track improvement, or identify regression.
+      
+      CURRENT LIMITATIONS:
+      - Efficiency score is subjective (no formula)
+      - No baseline metrics for comparison
+      - Cannot track CORTEX learning velocity
+      - No evidence-based optimization
+      
+      NEED: Objective, quantitative metrics for all DIGEST outputs.
+    expected_benefits:
+      - "Objective efficiency calculation: turns_to_completion / expected_turns"
+      - "Objective accuracy calculation: corrections_by_user / total_turns"
+      - "Tool success rate tracking: successful_tools / total_invocations"
+      - "Learning velocity metrics: enhancements_per_digest_session"
+      - "Baseline comparison: current vs historical performance"
+      - "Evidence-based CORTEX optimization"
+    implementation_notes: |
+      Implementation: 2 days, 15 tests
+      
+      Files to Create:
+      - cortex/learning/digest/metrics_calculator.py (metric calculations)
+      - cortex/learning/digest/metrics_schema.py (Pydantic models)
+      - tests/learning/digest/test_metrics_calculator.py (15 tests)
+      
+      Metrics Definitions:
+      
+      1. Efficiency Score:
+         - Formula: (expected_turns / actual_turns) × 100
+         - Expected turns based on task complexity estimation
+         - Score: 100% = perfectly efficient, <80% = needs optimization
+      
+      2. Accuracy Score:
+         - Formula: ((total_turns - user_corrections) / total_turns) × 100
+         - User corrections = explicit "no, that's wrong" or regenerations
+         - Score: 100% = no corrections needed
+      
+      3. Tool Success Rate:
+         - Formula: (successful_tools / total_tool_invocations) × 100
+         - Track per-tool success rates
+         - Identify problematic tools
+      
+      4. Learning Velocity:
+         - Formula: enhancements_extracted / session_count
+         - Track rate of CORTEX improvement
+         - Target: ≥2 enhancements per digest session
+      
+      5. Context Efficiency:
+         - Formula: meaningful_tokens / total_tokens_consumed
+         - Meaningful = tokens that contributed to solution
+         - Identify token waste
+      
+      Files to Modify:
+      - cortex-architect.prompt.md (add metrics to DIGEST output)
+      - cortex-digest.md (reference quantitative metrics)
+    metrics:
+      estimated_effort_days: 2
+      estimated_test_count: 15
+      target_coverage: "90%"
+      roi_score: 0.88
+      efficiency_gain: 0.85
+      accuracy_improvement: 0.80
+      effort_cost: 0.15
+    evidence_basis:
+      - "cortex-digest.md: 'Efficiency Score: {1-10}' - no calculation formula"
+      - "No baseline metrics for comparison in enhancement-history.yaml"
+      - "Cannot measure CORTEX learning velocity objectively"
+    related_enhancements:
+      - ENH-053
+      - ENH-054
+      - ENH-057
+    success_criteria:
+      - "5 quantitative metrics calculated for all DIGEST sessions"
+      - "Baseline comparison against historical performance"
+      - "Learning velocity tracking operational"
+      - "Evidence-based optimization recommendations generated"
+
+  - id: ENH-054
+    date: "2026-02-07"
+    recommendation: "DIGEST Enhancement Automation Pipeline"
+    status: PLANNED
+    domain: Automation + Learning
+    priority: P0
+    source: "DIGEST mode gap analysis - GAP-002: No enhancement automation pipeline"
+    adoption_reason: |
+      DIGEST findings require manual propagation to enhancement-history.yaml.
+      Manual bottleneck: 90% of DIGEST findings never integrated into CORTEX.
+      Learning loop broken - insights extracted but not systematically applied.
+      
+      CURRENT STATE:
+      - 52 ENH-* entries in enhancement-history.yaml - ALL manually created
+      - No orchestrator for DIGEST → enhancement-history.yaml updates
+      - No validation that extracted patterns match docs/patterns/ schema
+      - No automatic deduplication (similar enhancements proposed repeatedly)
+      
+      CRITICAL IMPACT: CORTEX learns but cannot self-improve efficiently.
+    expected_benefits:
+      - "90% reduction in manual enhancement creation effort"
+      - "100% of DIGEST findings evaluated for integration"
+      - "Automatic ENH-* YAML snippet generation"
+      - "Integration with RecommendationGate for deduplication"
+      - "Similarity check prevents duplicate enhancements (>0.7 threshold)"
+      - "Closed learning feedback loop (DIGEST → ENH → Implementation)"
+    implementation_notes: |
+      Implementation: 5 days, 40 tests
+      
+      Files to Create:
+      - cortex/orchestrators/learning/digest_enhancement_orchestrator.py (main orchestrator)
+      - cortex/learning/digest/enhancement_generator.py (YAML generation)
+      - cortex/learning/digest/similarity_checker.py (deduplication)
+      - cortex/mcp/tools/learning/enhancement_tools.py (MCP exposure)
+      - tests/orchestrators/learning/test_digest_enhancement_orchestrator.py (40 tests)
+      
+      Pipeline Stages:
+      
+      Stage 1: DIGEST Findings → Enhancement Candidates
+      - Parse DIGEST output (5 categories)
+      - Score each finding (effort, impact, ROI)
+      - Filter by threshold (ROI > 0.6)
+      
+      Stage 2: Deduplication via RecommendationGate
+      - Load enhancement-history.yaml + rejected_recommendations
+      - Calculate similarity (cosine similarity on embeddings)
+      - Block if similarity > 0.7 to existing ENH-* or REJ-*
+      
+      Stage 3: ENH-* YAML Generation
+      - Generate complete ENH-* entry from template
+      - Fill all required fields (id, date, status, domain, priority, etc.)
+      - Validate against enhancement-history.yaml schema
+      
+      Stage 4: User Approval Gate
+      - Present generated ENH-* entries to user
+      - User approves/rejects/modifies
+      - Approved entries appended to enhancement-history.yaml
+      
+      Stage 5: Post-Integration Actions
+      - Update meta_version in enhancement-history.yaml
+      - Log integration in CORTEX observability
+      - Trigger AUDIT mode validation (coherence check)
+      
+      MCP Tools:
+      - cortex_digest_generate_enhancements(digest_output: dict) → List[Enhancement]
+      - cortex_digest_check_duplicates(enhancement: Enhancement) → SimilarityReport
+      - cortex_digest_apply_enhancements(enhancements: List[Enhancement]) → Result
+      
+      Files to Modify:
+      - cortex/wiring/specifications/wiring.yaml (register DigestEnhancementOrchestrator)
+      - cortex-architect.prompt.md (add automation to DIGEST mode)
+      - cortex-digest.md (reference automation pipeline)
+    metrics:
+      estimated_effort_days: 5
+      estimated_test_count: 40
+      target_coverage: "85%"
+      roi_score: 0.93
+      efficiency_gain: 0.95
+      accuracy_improvement: 0.85
+      effort_cost: 0.35
+    evidence_basis:
+      - "enhancement-history.yaml: 52 ENH-* entries, all manually created"
+      - "cortex-digest.md: 'Automatic Updates (After Approval)' section - not implemented"
+      - "No orchestrator for DIGEST → enhancement propagation"
+      - "Estimated 90% of DIGEST findings never integrated"
+    related_enhancements:
+      - ENH-053
+      - ENH-055
+      - ENH-056
+    success_criteria:
+      - "DigestEnhancementOrchestrator operational with 85% test coverage"
+      - "Automatic ENH-* YAML generation from DIGEST findings"
+      - "RecommendationGate integration prevents duplicates (similarity > 0.7)"
+      - "3 new MCP tools registered and functional"
+      - "90% reduction in manual enhancement creation effort"
+      - "User approval gate functional with preview capabilities"
+
+  - id: ENH-053
+    date: "2026-02-07"
+    recommendation: "DIGEST Mode MCP Tool Implementation"
+    status: PLANNED
+    domain: Infrastructure + Learning
+    priority: P0
+    source: "DIGEST mode gap analysis - GAP-001: Missing MCP tool implementation"
+    adoption_reason: |
+      CRITICAL BLOCKER: DIGEST mode cannot be invoked programmatically.
+      
+      EVIDENCE:
+      - cortex-architect.prompt.md references `cortex_digest_session` MCP tool
+      - cortex-digest.md states "Extract learnings via MCP `cortex_digest_session` tool"
+      - grep_search shows NO implementation in cortex/mcp/tools/
+      - file_search for *digest*.py returns 0 results
+      
+      CONSEQUENCES:
+      - DIGEST mode only works via manual prompt reading
+      - No automation possible in CI/CD pipeline
+      - Cannot integrate with Phase completion hooks
+      - Enhancement propagation is 100% manual
+      - Blocks ENH-054 (automation pipeline)
+      
+      This is the foundation for all DIGEST mode automation.
+    expected_benefits:
+      - "Programmatic DIGEST mode invocation via MCP"
+      - "CI/CD integration for automatic chat session analysis"
+      - "Phase completion hooks trigger DIGEST automatically"
+      - "Structured JSON output for downstream processing"
+      - "Enables ENH-054 automation pipeline"
+      - "Foundation for continuous CORTEX learning"
+    implementation_notes: |
+      Implementation: 4 days, 35 tests
+      
+      Files to Create:
+      - cortex/mcp/tools/learning/digest_tools.py (MCP tool implementation)
+      - cortex/learning/digest/session_parser.py (chat session parsing)
+      - cortex/learning/digest/extraction_engine.py (5-category extraction)
+      - cortex/learning/digest/output_formatter.py (JSON + markdown formatters)
+      - tests/mcp/tools/learning/test_digest_tools.py (35 tests)
+      
+      MCP Tool Signature:
+      
+      def cortex_digest_session(
+          file_path: str,
+          dry_run: bool = False,
+          output_format: Literal["json", "markdown"] = "json",
+          categories: Optional[List[str]] = None
+      ) -> DigestResult:
+          '''
+          Extract learnings from GitHub Copilot chat session.
+          
+          Args:
+              file_path: Path to chat session file
+              dry_run: If True, return extractions without saving
+              output_format: "json" for structured data, "markdown" for inline chat
+              categories: Filter to specific categories (drifts, patterns, tools, efficiency, accuracy)
+          
+          Returns:
+              DigestResult with extractions for all 5 categories
+          '''
+      
+      DigestResult Schema (Pydantic):
+      
+      class DigestResult(BaseModel):
+          session_file: str
+          detection_confidence: float  # 0-1 score
+          session_metrics: SessionMetrics
+          drifts_struggles: List[Drift]
+          successful_patterns: List[Pattern]
+          tool_environment: List[ToolStatus]
+          efficiency_opportunities: List[EfficiencyOpportunity]
+          accuracy_improvements: List[AccuracyImprovement]
+          governance_violations: List[GovernanceViolation]  # NEW - mandatory
+      
+      Integration Points:
+      - cortex-architect.prompt.md (DIGEST mode)
+      - cortex-digest.md (extraction logic)
+      - cortex/wiring/specifications/wiring.yaml (MCP tool registration)
+      
+      Files to Modify:
+      - cortex/wiring/specifications/wiring.yaml (register cortex_digest_session)
+      - cortex-architect.prompt.md (reference MCP tool in DIGEST mode)
+      - cortex-digest.md (update to reference MCP tool)
+    metrics:
+      estimated_effort_days: 4
+      estimated_test_count: 35
+      target_coverage: "90%"
+      roi_score: 0.95
+      efficiency_gain: 0.90
+      accuracy_improvement: 0.85
+      effort_cost: 0.30
+    evidence_basis:
+      - "cortex-architect.prompt.md line 2867: References cortex_digest_session tool"
+      - "cortex-digest.md line 94: 'Extract learnings via MCP cortex_digest_session tool'"
+      - "grep_search in cortex/mcp/tools/: No digest implementation found"
+      - "file_search for *digest*.py: 0 results"
+    related_enhancements:
+      - ENH-054
+      - ENH-055
+      - ENH-056
+      - ENH-057
+    success_criteria:
+      - "cortex_digest_session MCP tool registered in wiring.yaml"
+      - "Structured JSON output with all 5 extraction categories"
+      - "90% test coverage for extraction logic"
+      - "Dry-run mode functional for testing"
+      - "CI/CD integration enabled"
+      - "Governance violation scanning mandatory (CORE-002, 008, 028, 035)"
+
   - id: ENH-052
     date: "2026-02-07"
     recommendation: "Phase 39: AUDIT Mode Cohesion & Integrity System"
