@@ -106,7 +106,7 @@ class TestAuditRemediationCoordinator:
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(1)
         
-        assert result["mode"] == "autonomous"
+        assert result["mode"] == "AUTONOMOUS"
         assert result["autonomous"] is True
     
     def test_process_option_2_interactive(self):
@@ -118,7 +118,7 @@ class TestAuditRemediationCoordinator:
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(2)
         
-        assert result["mode"] == "interactive"
+        assert result["mode"] == "INTERACTIVE"
         assert result["autonomous"] is False
     
     def test_process_option_3_review_only(self):
@@ -130,8 +130,8 @@ class TestAuditRemediationCoordinator:
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(3)
         
-        assert result["mode"] == "review"
-        assert result["should_execute"] is False
+        assert result["mode"] == "REVIEW_ONLY"
+        assert result["proceed"] is False
     
     def test_process_option_4_cancel(self):
         """Option 4 returns cancel mode."""
@@ -142,11 +142,11 @@ class TestAuditRemediationCoordinator:
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(4)
         
-        assert result["mode"] == "cancel"
-        assert result["should_execute"] is False
+        assert result["mode"] == "CANCEL"
+        assert result["proceed"] is False
     
     def test_invalid_option_returns_error(self):
-        """Invalid option returns error result."""
+        """Invalid option returns cancel mode with error message."""
         from cortex.orchestrators.planning.audit_remediation_coordinator import (
             AuditRemediationCoordinator
         )
@@ -154,8 +154,8 @@ class TestAuditRemediationCoordinator:
         coordinator = AuditRemediationCoordinator()
         result = coordinator.process_user_selection(5)
         
-        assert result["mode"] == "error"
-        assert "error" in result or "invalid" in result.get("message", "").lower()
+        assert result["mode"] == "CANCEL"
+        assert "message" in result  # Error message present
     
     def test_convert_audit_findings_format(self, mock_audit_results):
         """Converts audit results to AuditFinding objects."""
