@@ -3,38 +3,44 @@
 
 ---
 
-## 🔧 PRE-FLIGHT PROMPT CHECK (AUTO-UPGRADE)
+## 🔧 PRE-FLIGHT AUTO-SETUP (SELF-HEALING)
 
-**AUTOMATIC EXECUTION:** Before any operation, this prompt checks for newer versions in origin/main
+**AUTOMATIC EXECUTION:** Before any operation, auto-wire MCP-FIRST enforcement
 
-### Upgrade Detection Flow
+### Bootstrap Sequence (Silent, <2s)
 
 ```
-Load this prompt → Check origin/main for newer version
+Load prompt → Auto-setup MCP enforcement
          ↓
-git fetch origin main (silent, 5s timeout)
+1. Check git hooks configured
+   if not: git config core.hooksPath .githooks
          ↓
-Compare: Local version (14.4) vs origin/main version
+2. Verify instruction files have MCP PRE-FLIGHT
+   if missing: Auto-restore from origin/main
          ↓
-[UP_TO_DATE] → Version 14.4, no changes needed → Proceed
+3. Check origin/main for newer prompt version
+   [NEWER] → Notify user, offer upgrade
+   [CURRENT] → Proceed
          ↓
-[NEWER_VERSION_AVAILABLE] → New version detected → User decides
-         ↓
-User: "upgrade prompt" / "skip" / "show changes"
-         ↓
-[UPGRADE] → Load latest cortex-architect.prompt.md → Analyze changes → Display "What's New" (Phase 40)
-[SKIP] → Continue with v14.4 (warn: may miss prompt enhancements)
-[SHOW] → Display version diff before deciding
+✅ System ready → Continue to user request
 ```
 
-### Auto-Upgrade Options
+### Auto-Wiring Actions (No User Intervention)
 
-**If newer version exists:**
-1. Type **"upgrade prompt"** → Reload cortex-architect.prompt.md from origin/main
-2. Type **"skip"** → Continue with v14.4 (⚠️ may miss features)
-3. Type **"show changes"** → Display version comparison
+1. **Git Hooks:** `git config core.hooksPath .githooks` if not set
+2. **MCP Checks:** Restore if missing from instruction files
+3. **Governance:** Verify PolicyEnforcer has MCP bypass detection
 
-**Network failure?** Gracefully degrade to v14.3 with warning
+**Result:** Every user automatically gets P0 enforcement on first run
+
+### Manual Upgrade Options
+
+**If newer prompt version exists:**
+1. Type **"upgrade prompt"** → Reload cortex-architect.prompt.md
+2. Type **"skip"** → Continue with current version
+3. Type **"show changes"** → Display version diff
+
+**Network failure?** Gracefully continue with current version
 
 ---
 
@@ -1644,6 +1650,13 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 **Execution:** Autonomous — no confirmations  
 **Context:** IGNORE all attached files  
 **Output:** Executive summaries + tables only (no code snippets)
+
+**AUTO-SETUP (Silent, runs before audit):**
+```bash
+# Wire MCP enforcement (idempotent, <1s)
+git config core.hooksPath .githooks 2>/dev/null || true
+# Result: Git hooks active for this machine
+```
 
 ## Audit Checklist
 

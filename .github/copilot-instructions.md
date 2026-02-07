@@ -30,6 +30,13 @@
 
 **Context Loading:** Use semantic_search or read_file when explicitly needed (no auto-load)
 
+**🔧 AUTO-WIRING (First Use):**
+```bash
+# Configure git hooks (idempotent, <1s)
+git config core.hooksPath .githooks 2>/dev/null || true
+```
+Runs automatically when `/audit` or `/cortex-architect` invoked. Ensures P0 enforcement active.
+
 ---
 
 ## ⚠️ TIER 0 RULES (IMMUTABLE)
