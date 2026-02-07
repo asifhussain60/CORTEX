@@ -247,7 +247,8 @@ result = mcp_tool.execute(parameters)
 
 1. **Validate Tool Availability:**
    ```
-   Required tools: cortex_process_request, cortex_lens_analyze
+   Required tools: cortex_process_request, cortex_lens_analyze  # Updated Phase 37
+   ```
    If missing → STOP and instruct: "Start MCP: python -m cortex.mcp.server"
    ```
 
@@ -259,6 +260,7 @@ result = mcp_tool.execute(parameters)
    - IMPLEMENT/FIX/REFACTOR → **REQUIRES MCP** (no exceptions)
    - ANALYZE → **REQUIRES MCP** (cortex_lens_analyze)
    - READ/SEARCH → Can proceed without MCP
+   - PERSONA/DETAIL → **Future MCP** (Stage 37.4)
 
 ### Core MCP Tools (Production Only)
 
@@ -273,6 +275,10 @@ result = mcp_tool.execute(parameters)
 | `cortex_detect_duplicates` | CORE-035 detection | DuplicateDetector |
 | `cortex_tools_catalog` | Tool discovery | MCPToolsCatalog |
 | `cortex_onboard_repository` | Repository onboarding + security scan | RepositoryOnboardingOrchestrator |
+
+**Note:** PersonaOrchestrator (Phase 37) will expose MCP tools in Stage 37.4:
+- `cortex_set_persona`, `cortex_get_persona`, `cortex_set_depth`, `cortex_infer_persona`, `cortex_persona_history`
+- These tools will follow MCP-FIRST architecture and require MCP PRE-FLIGHT checks
 
 **Excluded from Production:**
 - docs/ management tools
@@ -437,6 +443,27 @@ Before completing ANY operation:
 | ../agents/core/CORTEX.md (load explicitly when needed) | Master agent ✅ |
 | ../agents/core/cortex-architect.md (load explicitly when needed) | Design-phase agent ✅ |
 | ../agents/core/cortex-mcp-gateway.md (load explicitly when needed) | MCP routing agent ✅ |
+
+---
+
+## 🎭 Role-Adaptive Personas (Phase 37)
+
+**PersonaOrchestrator** — Intelligent role detection and response adaptation
+
+**Quick Reference:**
+- `/persona set <role>` — Set persona (business_leader, product_owner, scrum_master, tech_lead, engineer)
+- `/detail <level>` — Override depth (executive, standard, detailed, full)
+- `{{PERSONA_INJECTION_POINT}}` — Template marker for persona context
+
+**Available Personas:**
+- 👔 **Business Leader** — BLUF format, 100-150 words, outcomes-focused
+- 📋 **Product Owner** — Narrative, 300 words, user value focus
+- 🏃 **Scrum Master** — Action-oriented, 300 words, process focus
+- 🏗️ **Tech Lead** — Architecture + metrics, 500 words, diagrams
+- 🛠️ **Engineer** — Full technical depth, unlimited, code examples
+- ❓ **Unknown** — Discovery mode (ask user)
+
+**Documentation:** `cortex/orchestrators/core/README-PERSONAS.md`
 
 ---
 
