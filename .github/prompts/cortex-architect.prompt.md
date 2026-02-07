@@ -2498,6 +2498,205 @@ cortex_process_request --module wire-001-chat-response-integration --mode TDD
 **WIRE-003 Remediation:**
 ```bash
 # Auto-generate yaml_loaders.py scaffold
+cortex_process_request --module yaml-loaders --mode TDD
+```
+
+---
+
+### P7 — Token Efficiency & Continuation Prompts
+
+**Purpose:** Detect token deoptimization patterns in responses, especially bloated continuation prompts that waste 40k-60k tokens.
+
+**Authority:** .github/prompts/response-format-standards.md § Continuation Prompts
+
+**Activation:** ALWAYS (runs on every AUDIT mode execution)
+
+**Detection Patterns:**
+
+```python
+import re
+from pathlib import Path
+
+def audit_continuation_efficiency(response_text: str) -> Dict[str, Any]:
+    """
+    Audit response for token inefficiency patterns.
+    
+    Returns dict with violations and estimated token waste.
+    """
+    violations = []
+    token_waste = 0
+    
+    # Pattern 1: Massive continuation prompts (>1000 tokens)
+    if "continuation" in response_text.lower() or "next session" in response_text.lower():
+        # Check for bloat indicators
+        bloat_indicators = {
+            "session_replay": r"Completed:.*\n.*Stage [0-9]",
+            "detailed_stages": r"Stage [0-9]+:.*\([0-9]+ hours, [0-9]+ tests\)",
+            "file_lists": r"Files to Create/Modify:\n(?:-.*\n){5,}",
+            "implementation_steps": r"Implementation Order:\n(?:[0-9]+\..*\n){5,}",
+            "full_command_history": r"Commands to.*:\n(?:[0-9]+\..*\n){3,}",
+            "extensive_context": r"Session Context:.*\n(?:.*\n){20,}",
+        }
+        
+        for pattern_name, pattern in bloat_indicators.items():
+            if re.search(pattern, response_text, re.MULTILINE):
+                violations.append({
+                    "pattern": pattern_name,
+                    "severity": "P0",
+                    "waste_estimate": "10k-15k tokens",
+                    "fix": f"Remove {pattern_name} - GitHub Copilot has context",
+                })
+                token_waste += 12000  # Average
+    
+    # Pattern 2: Missing #file: prefix
+    if ("continuation" in response_text.lower() and 
+        "#file:" not in response_text and
+        "cortex-architect" in response_text.lower()):
+        violations.append({
+            "pattern": "missing_file_prefix",
+            "severity": "P1",
+            "waste_estimate": "Auto-load failure (user must manually load)",
+            "fix": "Add #file:cortex-architect.prompt.md at start",
+        })
+        token_waste += 2000  # User must manually load
+    
+    # Pattern 3: Duplicate context (already in chat history)
+    duplicate_patterns = [
+        (r"Previously completed:.*\n(?:- .*\n){5,}", "completed_work_list"),
+        (r"Files modified:.*\n(?:- .*\n){5,}", "file_modification_list"),
+        (r"Test results:.*\n(?:.*\n){10,}", "test_result_replay"),
+        (r"Audit trail:.*\n(?:AC-.*\n){3,}", "audit_trail_replay"),
+    ]
+    
+    for pattern, pattern_name in duplicate_patterns:
+        if re.search(pattern, response_text, re.MULTILINE):
+            violations.append({
+                "pattern": f"duplicate_{pattern_name}",
+                "severity": "P1",
+                "waste_estimate": "2k-5k tokens",
+                "fix": f"Remove {pattern_name} - available in chat history",
+            })
+            token_waste += 3500
+    
+    # Pattern 4: Continuation shown when work is complete
+    if ("continuation" in response_text.lower() and
+        ("complete" in response_text.lower() or "✅" in response_text)):
+        violations.append({
+            "pattern": "unnecessary_continuation",
+            "severity": "P0",
+            "waste_estimate": "Entire continuation prompt unnecessary",
+            "fix": 'Use "Implementation Complete" instead',
+        })
+        token_waste += 200  # Minimal waste but conceptually wrong
+    
+    # Pattern 5: Continuation shown at <90% token budget
+    token_match = re.search(r"([0-9]+)%.*token", response_text.lower())
+    if token_match and int(token_match.group(1)) < 90:
+        if "continuation" in response_text.lower():
+            violations.append({
+                "pattern": "premature_continuation",
+                "severity": "P1",
+                "waste_estimate": "User could continue in same session",
+                "fix": "Show continuation only at >90% token usage",
+            })
+    
+    return {
+        "violations": violations,
+        "total_token_waste": token_waste,
+        "efficiency_score": max(0, 100 - (token_waste / 1000)),
+    }
+```
+
+**Audit Report Format:**
+
+```markdown
+### P7: Token Efficiency & Continuation Prompts ✅/❌
+
+**Status:** {PASS|FAIL|WARNING}
+
+**Scan Scope:** Last 5 Copilot Chat sessions in _workspaces/.chats/
+
+#### Token Waste Detection
+
+| Session | Pattern | Severity | Waste Est. | Fix |
+|---------|---------|----------|------------|-----|
+| chat01.txt | session_replay | 🔴 P0 | 15k tokens | Remove - GitHub has history |
+| chat01.txt | detailed_stages | 🔴 P0 | 20k tokens | Remove - Files exist in repo |
+| chat01.txt | file_lists | 🟡 P1 | 5k tokens | Use semantic_search instead |
+| chat01.txt | missing_file_prefix | 🟡 P1 | 2k tokens | Add #file:cortex-architect.prompt.md |
+
+**Total Token Waste:** 42,000 tokens (42% of 100k budget)
+
+#### Continuation Prompt Efficiency
+
+| Session | Token Count | Optimal | Waste | Efficiency |
+|---------|-------------|---------|-------|------------|
+| chat01.txt | ~60,000 | ~200 | 59,800 | ❌ 0.33% |
+| chat02.txt | ~500 | ~200 | 300 | ✅ 40% |
+| chat03.txt | N/A (work complete) | 0 | 0 | ✅ 100% |
+
+**Average Efficiency:** 46.8% (Target: >90%)
+
+#### Recommendations (Auto-Generated)
+
+**P0 Priority:**
+- [ ] **CONT-001:** Remove session replay sections (chat history available) → Save 15k tokens
+- [ ] **CONT-002:** Remove detailed stage documentation (files in repo) → Save 20k tokens
+- [ ] **CONT-003:** Replace file lists with `semantic_search` references → Save 5k tokens
+
+**P1 Priority:**
+- [ ] **CONT-004:** Add #file: prefix to all continuation prompts → Prevent 2k waste
+- [ ] **CONT-005:** Update response-format-standards.md with continuation examples → Training
+
+**Optimal Continuation Format:**
+
+```markdown
+### 🔄 Continuation Required
+
+**Token budget:** 92% used (920k/1M) — Continue in new session
+
+**#file:cortex-architect.prompt.md**
+
+**Session:** Phase 38 Stage 7.2
+**Branch:** CORTEX  
+**Context:** exposure_auditor.py ✅
+
+**Next:** Implement tool_spec_generator.py (46 orchestrators)
+
+**Command:** `/implement tool_spec_generator`
+```
+
+**Savings:** 60,000 → 200 tokens = **99.67% reduction**
+
+#### Evidence & Remediation
+
+**Chat Session Analysis:**
+```bash
+# Scan recent chat sessions for token waste
+python3 -c "
+from pathlib import Path
+import re
+
+chat_files = Path('_workspaces/.chats/').glob('*.txt')
+for chat in sorted(chat_files)[-5:]:
+    content = chat.read_text()
+    # Run audit_continuation_efficiency(content)
+    print(f'{chat.name}: {len(content)} chars')
+"
+```
+
+**Auto-Fix Continuation Prompts:**
+```bash
+# Generate optimal continuation prompt
+cortex_process_request --operation generate_continuation_prompt \
+    --context "Phase 38 Stage 7.2" \
+    --last_checkpoint "exposure_auditor.py" \
+    --next_action "tool_spec_generator.py"
+```
+
+---
+
+### P8 — Response Format Standards Compliance
 cortex_process_request --module yaml-loaders-core-rules --mode TDD
 ```
 

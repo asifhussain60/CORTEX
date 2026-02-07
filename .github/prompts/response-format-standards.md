@@ -582,7 +582,100 @@ Full semantic layering with:
 
 ---
 
-## 📏 Quality Checklist
+## � Continuation Prompts (Token-Efficient)
+
+**CRITICAL:** Continuation prompts are ONLY for token budget exhaustion (>90% usage), NOT for session convenience.
+
+### When to Show Continuation Prompt
+
+**ONLY when:**
+- Token usage ≥ 90% of budget (e.g., 900k/1M tokens)
+- Work is NOT complete
+- GitHub Copilot will begin summarizing conversation
+
+**NEVER when:**
+- Work is complete (show "Implementation Complete" instead)
+- Token budget is healthy (<90%)
+- User can simply reply "continue" in same session
+
+### Token-Efficient Format
+
+**BAD (60,000 tokens):**
+```markdown
+## Phase 38 Continuation Prompt
+
+**Session Context:**
+- Completed: Stages 0-2 (OrchestratorInventoryAuditor with 21/21 tests passing)
+- Current Branch: CORTEX
+[... 50 more lines of session replay ...]
+
+**Remaining Work (High ROI):**
+
+### Stage 3: Baseline Metrics Collector (4 hours, 18 tests)
+- Implement BaselineMetricsCollector class
+  * Metrics: test_execution_time_p50/p95, orchestrator_latency
+[... 40 more lines of detailed stages ...]
+
+**Files to Create/Modify:**
+- cortex/testing/baseline_metrics_collector.py
+[... 15 more file paths ...]
+
+**Implementation Order:**
+1. Create test files FIRST (TDD - CORE-008)
+[... 20 more implementation details ...]
+```
+
+**GOOD (200 tokens - 99.67% reduction):**
+```markdown
+---
+
+### 🔄 Continuation Required
+
+**Token budget:** 92% used (920k/1M) — Continue in new session
+
+**#file:cortex-architect.prompt.md**
+
+**Session:** Phase 38 Stage 7.2
+**Branch:** CORTEX  
+**Context:** exposure_auditor.py ✅
+
+**Next:** Implement tool_spec_generator.py (46 orchestrators)
+
+**Command:** `/implement tool_spec_generator`
+```
+
+### Why This Works
+
+| Element | Purpose | Tokens |
+|---------|---------|--------|
+| **#file: prefix** | Loads prompt automatically | 0 (auto) |
+| **Session ID** | GitHub Copilot has chat history | 10 |
+| **Branch** | Git context available | 5 |
+| **Context** | Last completed item | 15 |
+| **Next** | Immediate action | 20 |
+| **Command** | Executable intent | 10 |
+
+**Total:** ~60 tokens vs 60,000 tokens = **99.9% reduction**
+
+### GitHub Copilot Context Availability
+
+**DON'T duplicate what GitHub Copilot already has:**
+- ❌ Chat history (automatically available)
+- ❌ File contents (use #file: references)
+- ❌ Implementation details (in git history)
+- ❌ Stage specifications (in phase YAMLs)
+- ❌ Commands already executed (in terminal history)
+
+**DO provide:**
+- ✅ Prompt file reference (#file:)
+- ✅ Current phase/stage ID
+- ✅ Last completed checkpoint
+- ✅ Next immediate action
+- ✅ Critical command to resume
+
+---
+
+## �📏 Quality Checklist
 
 Before sending any response, verify:
 
@@ -591,6 +684,8 @@ Before sending any response, verify:
 - [ ] **Linear narrative flow: Context → Analysis → Action → Result (no repetition)**
 - [ ] **Completion confirmation used instead of "Next Steps" when work is done**
 - [ ] **No exit options during holistic implementation**
+- [ ] **Continuation prompt ONLY shown when token budget >90% AND work incomplete**
+- [ ] **Continuation prompt uses efficient format (<500 tokens) with #file: prefix**
 - [ ] All user prompts numbered when decisions required (1️⃣ 2️⃣ 3️⃣)
 - [ ] Severity prefixes applied (🔴 P0, 🟡 P1, 🔵 P2, ⚪ P3)
 - [ ] Executive summary fits in one screen
