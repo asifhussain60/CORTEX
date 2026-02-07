@@ -1,0 +1,36 @@
+{
+  "file_path": "/private/var/folders/q9/5s1lv3rs3zg5j_ncbsck4jc00000gn/T/pytest-of-asifhussain/pytest-115/test_non_dry_run_saves_results0/chat.txt",
+  "is_chat_session": true,
+  "chat_score": 8,
+  "extractions": {
+    "drifts": [
+      "# Drift detected: Manual security tool invocation instead of MCP tool",
+      "detected: Manual security tool invocation instead of MCP tool"
+    ],
+    "patterns": [
+      "TDD workflow successful (tests \u2192 implementation \u2192 validation)",
+      "# Pattern: TDD workflow successful (tests \u2192 implementation \u2192 validation)"
+    ],
+    "tools": [
+      "create_file",
+      "run_in_terminal"
+    ],
+    "efficiency": {
+      "score": 80,
+      "notes": [],
+      "actual_turns": 4,
+      "expected_turns": 5
+    },
+    "accuracy": {
+      "score": 100,
+      "corrections": 0,
+      "total_turns": 5
+    },
+    "governance_violations": [
+      "CORE-008: Implementation before tests (TDD violation)"
+    ]
+  },
+  "timestamp": "2026-02-07T14:27:27.856294",
+  "dry_run": false,
+  "saved": false
+}
