@@ -113,6 +113,77 @@ class OrchestratorCapabilityRegistry:
     def list_all_orchestrators(self) -> List[str]:
         """List all registered orchestrators."""
         return list(self._orchestrators.keys())
+    
+    # Additional methods for AC-PHASE38-003 extended tests
+    
+    def register(self, orchestrator_name: str, capabilities: List[Any]) -> None:
+        """
+        Register orchestrator (alias for register_orchestrator).
+        
+        Args:
+            orchestrator_name: Name of orchestrator
+            capabilities: List of Capability objects or strings
+        """
+        # Convert Capability objects to strings if needed
+        cap_names = []
+        for cap in capabilities:
+            if isinstance(cap, str):
+                cap_names.append(cap)
+            elif hasattr(cap, 'name'):
+                cap_names.append(cap.name)
+        
+        self.register_orchestrator(orchestrator_name, cap_names)
+    
+    def unregister(self, orchestrator_name: str) -> bool:
+        """
+        Unregister an orchestrator.
+        
+        Args:
+            orchestrator_name: Name of orchestrator to remove
+        
+        Returns:
+            True if unregistered, False if not found
+        """
+        if orchestrator_name not in self._orchestrators:
+            return False
+        
+        # Remove from capabilities index
+        caps = self._orchestrators[orchestrator_name]
+        for cap in caps:
+            if cap in self._capabilities:
+                self._capabilities[cap].remove(orchestrator_name)
+                if not self._capabilities[cap]:
+                    del self._capabilities[cap]
+        
+        # Remove from orchestrators
+        del self._orchestrators[orchestrator_name]
+        return True
+    
+    def get_all_orchestrators(self) -> List[str]:
+        """Get all registered orchestrators (alias for list_all_orchestrators)."""
+        return self.list_all_orchestrators()
+    
+    def get_capability_count(self) -> int:
+        """Get total count of registered capabilities."""
+        return len(self._capabilities)
+    
+    def find_by_input_type(self, input_type: str) -> List[str]:
+        """
+        Find orchestrators that accept a specific input type.
+        
+        Args:
+            input_type: Input type to search for
+        
+        Returns:
+            List of matching orchestrator names
+        """
+        # For now, simple implementation - would need capability metadata enhancement
+        matches = []
+        for orch_name, caps in self._orchestrators.items():
+            # Check if any capability name suggests it handles this input
+            if any(input_type.lower() in cap.lower() for cap in caps):
+                matches.append(orch_name)
+        return matches
 
 
 class CapabilityDiscoveryAgent:
