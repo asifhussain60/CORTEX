@@ -570,7 +570,7 @@ class DoRApprovalGate:
             raise RuntimeError("No pending classification to modify")
         
         self._approval_decision = ApprovalDecision(
-            status=ApprovalStatus.MODIFIED,
+            status=ApprovalStatus.APPROVED,  # Modified intents are approved with changes
             feedback=feedback,
             modified_intent=corrected_intent,
         )
@@ -580,10 +580,7 @@ class DoRApprovalGate:
         """Check if current intent is approved for execution."""
         if self._approval_decision is None:
             return False
-        return self._approval_decision.status in [
-            ApprovalStatus.APPROVED,
-            ApprovalStatus.MODIFIED,
-        ]
+        return self._approval_decision.status == ApprovalStatus.APPROVED
     
     @property
     def is_dor_met(self) -> bool:
