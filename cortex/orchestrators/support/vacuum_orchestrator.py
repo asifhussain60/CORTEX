@@ -759,3 +759,106 @@ class VacuumOrchestrator:
             "errors": cleanup_result.errors,
             "issues": verification.issues,
         }
+
+    # ========================================================================
+    # Brain Flush Integration (Phase 38 Stage 6)
+    # ========================================================================
+
+    def trigger_brain_flush(
+        self,
+        targets: Optional[List[str]] = None,
+        force: bool = False,
+    ) -> Dict[str, Any]:
+        """
+        Trigger brain state flush via BrainStateManager.
+        
+        Integrates brain state cleanup into vacuum workflow, ensuring
+        comprehensive cleanup beyond markdown files.
+        
+        Args:
+            targets: Optional list of flush targets (None = all)
+            force: Force flush even if recent snapshot exists
+            
+        Returns:
+            Dictionary with flush results:
+                - success: bool
+                - snapshot_path: str (if successful)
+                - files_captured: int
+                - total_size_mb: float
+                - error_message: str (if failed)
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> result = orchestrator.trigger_brain_flush()
+            >>> print(f"Flushed {result['files_captured']} files")
+        """
+        try:
+            from cortex.brain.core.brain_state_manager import BrainStateManager
+            from pathlib import Path
+            
+            # Get cortex_brain path
+            cortex_brain_path = Path(__file__).parent.parent.parent.parent / "cortex_brain"
+            
+            if not cortex_brain_path.exists():
+                return {
+                    "success": False,
+                    "error_message": f"cortex_brain not found at {cortex_brain_path}",
+                }
+            
+            # Initialize manager
+            manager = BrainStateManager(cortex_brain_path)
+            
+            # Flush state
+            flush_result = manager.flush_state()
+            
+            if flush_result.success and flush_result.snapshot_path:
+                # Get snapshot info
+                snapshot_path = Path(flush_result.snapshot_path)
+                size_mb = snapshot_path.stat().st_size / (1024 * 1024)
+                
+                # Count files in snapshot
+                import json
+                with open(snapshot_path) as f:
+                    snapshot_data = json.load(f)
+                
+                files_captured = sum(
+                    len(tier_data.get("files", {}))
+                    for tier_data in snapshot_data.get("data", {}).values()
+                )
+                
+                return {
+                    "success": True,
+                    "snapshot_path": str(snapshot_path),
+                    "files_captured": files_captured,
+                    "total_size_mb": round(size_mb, 2),
+                }
+            else:
+                return {
+                    "success": False,
+                    "error_message": flush_result.error_message or "Flush failed",
+                }
+                
+        except Exception as e:
+            return {
+                "success": False,
+                "error_message": f"Brain flush error: {str(e)}",
+            }
+
+    def cleanup_brain_state(self) -> Dict[str, Any]:
+        """
+        Alias for trigger_brain_flush() for backward compatibility.
+        
+        Returns:
+            Dictionary with flush results (same as trigger_brain_flush)
+        """
+        return self.trigger_brain_flush()
+
+    def flush_brain_state(self) -> Dict[str, Any]:
+        """
+        Alias for trigger_brain_flush() for backward compatibility.
+        
+        Returns:
+            Dictionary with flush results (same as trigger_brain_flush)
+        """
+        return self.trigger_brain_flush()
+

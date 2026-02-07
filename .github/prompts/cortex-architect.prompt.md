@@ -1805,7 +1805,7 @@ p1_checks = checklist.priority_checks["P1"].checks
 **Structure:**
 - **P0 — Security & Critical** (4 checks): Secrets, injection, broken code, test failures
 - **P1 — Infrastructure** (8 checks): Wiring, integration, audit trail, component verification
-- **P1.5 — Cohesion & Integrity** (6 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) — validated via MCP-FIRST tools
+- **P1.5 — Cohesion & Integrity** (11 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) + **Brain Cohesion & Health (Phase 38)**: Brain health score (≥80%), orchestrator connectivity (≥90%), company domain utilization (≥50%), brain state freshness (<24h), governance adaptation enabled — validated via `cortex_brain_health`, `cortex_capability_mesh`, `cortex_flush_brain` MCP tools
 - **P1.6 — Future-Vision** (2 checks): Technology adoption triggers, migration planning (Phase 39)
 - **P2 — Quality** (6 checks): Duplicates, dead code, refactoring needs, LENS analysis (MANDATORY)
 - **P3 — Cleanup** (5 checks): Vacuum (RUN FIRST), MD sprawl, markdown links, code fences
@@ -2083,6 +2083,74 @@ If violations detected:
 2. Enable context metrics collection
 3. Activate cache layer with 10min TTL
 4. Re-run audit after 24h to verify improvement
+
+### P1.5 Brain Cohesion & Health Workflow (Phase 38)
+
+**Purpose:** Validate CORTEX brain coherence, orchestrator mesh integrity, and domain utilization.
+
+**MCP Tools Required:**
+- `cortex_brain_health` — Aggregated brain health metrics
+- `cortex_capability_mesh` — Orchestrator connectivity analysis
+- `cortex_flush_brain` — Brain state cleanup (auto-fix)
+
+**Validation Sequence:**
+
+```python
+# 1. Check brain health score
+brain_health = call_mcp_tool("cortex_brain_health")
+assert brain_health["health_score"] >= 80, "Brain health below threshold"
+
+# 2. Validate orchestrator connectivity
+mesh_status = call_mcp_tool("cortex_capability_mesh", capability_name="*")
+connectivity = (len(mesh_status["connected"]) / len(mesh_status["total"])) * 100
+assert connectivity >= 90, f"Orchestrator connectivity: {connectivity}% (target: 90%)"
+
+# 3. Check company domain utilization
+domain_query = """
+SELECT COUNT(*) as total, 
+       SUM(CASE WHEN company_standards_used THEN 1 ELSE 0 END) as with_standards
+FROM operations WHERE timestamp > datetime('now', '-7 days')
+"""
+result = query_governance_db(domain_query)
+utilization = (result["with_standards"] / result["total"]) * 100
+assert utilization >= 50, f"Domain utilization: {utilization}% (target: 50%)"
+
+# 4. Validate brain state freshness
+freshness = brain_health["dimensions"]["knowledge_freshness_index"]
+assert freshness >= 95, f"Brain state freshness: {freshness}% (target: 95%)"
+
+# 5. Confirm governance adaptation
+integration_status = call_mcp_tool("cortex_verify_integration", 
+                                    component="GovernanceContextAdapter")
+assert integration_status["active"], "GovernanceContextAdapter not active"
+```
+
+**Auto-Fix Actions:**
+- **P1.5-001 (Brain Health):** `cortex_flush_brain --targets=all` if score < 80%
+- **P1.5-004 (Freshness):** `cortex_flush_brain --targets=stale_caches` if < 95%
+
+**Report Format:**
+
+```markdown
+### P1.5: Brain Cohesion & Health {✅|🟡|❌}
+
+| Check | Current | Target | Status | Auto-Fix |
+|-------|---------|--------|--------|----------|
+| Brain Health Score | {n}% | ≥80% | {✅/❌} | {Available/N/A} |
+| Orchestrator Connectivity | {n}% | ≥90% | {✅/❌} | Manual |
+| Company Domain Utilization | {n}% | ≥50% | {✅/❌} | Manual |
+| Brain State Freshness | {n}% | ≥95% | {✅/❌} | Available |
+| Governance Adaptation | {Yes/No} | Yes | {✅/❌} | Manual |
+
+**Health Dimensions:**
+- Cache Staleness: {n}%
+- Orchestrator Connectivity: {n}%
+- Knowledge Freshness: {n}%
+- Governance Coverage: {n}%
+- Domain Utilization: {n}%
+
+**Action Required:** {Auto-fix available | Manual intervention | None}
+```
 
 ### P1 AUDIT Mode Validation: Context Efficiency Against SQLite Logs
 
