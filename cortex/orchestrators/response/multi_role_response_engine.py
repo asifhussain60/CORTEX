@@ -599,3 +599,6 @@ class MultiRoleResponseEngine:
             List of templates
         """
         return self._registry.get_by_role(role)
+
+# Backward compatibility alias
+TemplateRegistry = ResponseTemplateRegistry

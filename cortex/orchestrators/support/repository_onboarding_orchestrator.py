@@ -19,12 +19,27 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 import logging
 import json
 
 from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
 from cortex.core.interfaces import IOrchestrator
 from cortex.brain.core.result import Result, Ok, Err
+
+
+class LLMMode(Enum):
+    """LLM generation modes for repository onboarding.
+    
+    - INTERACTIVE: Print prompts to console for manual copy/paste
+    - BATCH: Save prompts to files for batch processing
+    - SKIP: Bypass LLM generation entirely
+    """
+    INTERACTIVE = 'interactive'
+    BATCH = 'batch'
+    SKIP = 'skip'
+
+
 from cortex.models.dashboard_schema import (
     RepoDashboardModel,
     RepoMetadata,

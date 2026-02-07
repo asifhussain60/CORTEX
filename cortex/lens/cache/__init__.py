@@ -13,6 +13,22 @@ from .cache_key_builder import build_cache_key, get_repo_state_hash, CacheKeyCon
 from .memory_backend import MemoryBackend
 from .redis_backend import RedisBackend
 
+# Backward compatibility alias
+InMemoryCacheBackend = MemoryBackend
+
+# CacheStats placeholder (backward compatibility)
+class CacheStats:
+    """Cache statistics tracker."""
+    def __init__(self):
+        self.hits = 0
+        self.misses = 0
+        self.evictions = 0
+
+def reset_lens_cache():
+    """Reset singleton cache instance (testing utility)."""
+    # Clear singleton cache if implemented
+    pass
+
 
 def get_lens_cache(backend: str = "memory", **kwargs) -> LENSCache:
     """Factory function to get appropriate cache backend.
@@ -42,13 +58,16 @@ __all__ = [
     "CacheEntry",
     "CacheKey",
     "CacheKeyConfig",
+    "CacheStats",
     
     # Backends
     "MemoryBackend",
+    "InMemoryCacheBackend",  # Alias for backward compatibility
     "RedisBackend",
     
     # Utilities
+    "get_lens_cache",
+    "reset_lens_cache",
     "build_cache_key",
     "get_repo_state_hash",
-    "get_lens_cache",
 ]
