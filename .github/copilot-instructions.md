@@ -243,6 +243,7 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 | CORE-028 | **File naming** — kebab-case, no SCREAMING_CASE, plan files ≤40 chars |
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 | CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
+| CORE-042 | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes required) |
 
 ---
 

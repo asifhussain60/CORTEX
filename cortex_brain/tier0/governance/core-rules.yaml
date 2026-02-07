@@ -1187,6 +1187,141 @@ rules:
       - "Reconciliation runs produce zero false-positive duplicates"
       - "Graph state hash identical after replay"
 
+  # --------------------------------------------------------------------------
+  # CORE-042: Hierarchical Terminology Standard (Phase 38.0)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-042
+    principle: "Clear Hierarchy Eliminates Confusion"
+    category: planning_governance
+    severity: blocked
+    name: Hierarchical Terminology Standard
+    created: "2026-02-07"
+    description: |
+      ALL planning responses MUST use standardized 4-level hierarchy:
+      INITIATIVE → PHASE → STAGE → TASK
+      
+      Business Principle: Ambiguous language creates ambiguous systems.
+      Clear terminology prevents contradictory status messages.
+      
+      Problem Solved: Eliminates confusion like "Phase 38.0 COMPLETE" +
+      "Phase 38 READY" where "Phase" is used at multiple levels.
+      
+      Hierarchy ensures parent/child relationships are explicit,
+      preventing contradictory status messages and improving navigation.
+    
+    hierarchy_levels:
+      initiative:
+        prefix: "I-{num}"
+        scope: "Strategic goal"
+        duration: "Weeks to months"
+        example: "I-38 (Brain Cohesion & Health System)"
+        status_values: ["ACTIVE", "BLOCKED", "ARCHIVED"]
+        numbering: "Sequential (I-1, I-2, I-3...)"
+      
+      phase:
+        prefix: "P-{initiative}.{phase}"
+        scope: "Major deliverable"
+        duration: "1-2 weeks"
+        example: "P-38.1 (Baseline Remediation)"
+        status_values: ["planned", "active", "completed", "blocked"]
+        numbering: "Decimal notation (P-38.1, P-38.2...)"
+      
+      stage:
+        prefix: "S-{num}"
+        scope: "Sequential milestone"
+        duration: "1-3 days"
+        example: "S-1 (Test Collection Fix)"
+        status_values: ["pending", "in-progress", "complete"]
+        numbering: "Sequential within phase context (S-0, S-1, S-2...)"
+        context: "Stage numbers relative to current phase"
+      
+      task:
+        prefix: "T-{num}"
+        scope: "Atomic unit"
+        duration: "Hours"
+        example: "T-1 (Fix test_intent_router.py)"
+        status_values: ["todo", "doing", "done"]
+        numbering: "Sequential within stage context (T-1, T-2, T-3...)"
+        context: "Task numbers relative to current stage"
+    
+    status_icons:
+      completed: "✅ (green checkmark)"
+      ready: "🟢 (green circle - can start)"
+      active: "🔵 (blue circle - in progress)"
+      planned: "⚪ (white circle - not started)"
+      blocked: "🔴 (red circle - cannot proceed)"
+      archived: "⚫ (black circle - deprecated)"
+    
+    forbidden_patterns:
+      - "Phase X.Y notation for sub-phases (use P-X.Y)"
+      - "'Phase 38.0 COMPLETE, Phase 38 READY' (ambiguous)"
+      - "Mixing 'Phase' and 'Stage' at same level"
+      - "Non-prefixed references (just 'Phase 38')"
+    
+    correct_patterns:
+      - "I-38: ACTIVE, P-38.1: COMPLETED, P-38.2: READY"
+      - "Initiative-38 (Parent), Phase-38.1 (Child 1), Phase-38.2 (Child 2)"
+      - "P-38.2 contains S-0 through S-6"
+      - "S-1 contains T-1, T-2, T-3"
+    
+    response_format:
+      status_message: |
+        I-{num} Status: {STATUS}
+          └─ P-{num}.{phase}: {STATUS} ({description})
+          └─ P-{num}.{phase}: {STATUS} ({description})
+      
+      progress_table: |
+        | Phase | Status | Progress | Next Action |
+        |-------|--------|----------|-------------|
+        | P-{num}.1 | ✅ COMPLETE | 100% | - |
+        | P-{num}.2 | 🟢 READY | 0% | Begin S-1 |
+        | P-{num}.3 | ⚪ PLANNED | 0% | Wait for P-{num}.2 |
+    
+    migration_from_old:
+      old_phase_38: "I-38 (initiative)"
+      old_phase_38_0: "P-38.1 (first phase)"
+      old_stage_1_7: "P-38.2 through P-38.8 (were actually phases)"
+      old_stage_0_6: "S-0 through S-6 (true stages within P-38.1)"
+    
+    validation:
+      - "All planning responses use I-/P-/S-/T- prefixes"
+      - "Status messages show clear parent/child hierarchy"
+      - "No contradictory status messages (verified by validator)"
+      - "Registry files use standardized prefixes"
+      - "PlanOrchestrator enforces hierarchy in all outputs"
+    
+    enforcement:
+      orchestrator: "PlanOrchestrator"
+      validator: "cortex/governance/validators/terminology_validator.py"
+      git_hook: "pre-commit (warn only, don't block legacy files)"
+      audit_logging: true
+      audit_event: "TERMINOLOGY_HIERARCHY_VALIDATED"
+      severity_on_bypass: "blocked"
+    
+    implementation:
+      documentation: "docs/meta/TERMINOLOGY-HIERARCHY.md"
+      enforcement_class: "TerminologyHierarchyValidator"
+      registry_migration: "Rename phase-* files to initiative-*/phase-* structure"
+      dashboard_updates: "DashboardGenerator uses I-/P-/S-/T- prefixes"
+    
+    success_criteria:
+      - "Zero contradictory status messages in responses"
+      - "100% of plan responses use standardized prefixes"
+      - "Registry files migrated to new naming"
+      - "User confusion eliminated (measurable via feedback)"
+      - "Clear hierarchy visible in all planning documentation"
+    
+    examples:
+      correct_status_message: |
+        I-38 Status: ACTIVE
+          └─ P-38.1: COMPLETED ✅ (100% readiness)
+          └─ P-38.2: READY 🟢 (Implementation can begin)
+      
+      incorrect_status_message: |
+        Phase 38.0 Status: COMPLETE
+        Phase 38 Status: ACTIVE (Ready to implement)
+        ← VIOLATES CORE-042 (ambiguous use of "Phase")
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
@@ -1209,3 +1344,4 @@ enforcement:
     "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
     "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
     "CORE-035": "� IN_PROGRESS - ConversationProtocol RESOLVED! 323 violations remaining (down from 326). ValidationResult (17), AuditEntry (13) next priority."
+    "CORE-042": "✅ DEFINED - Hierarchical terminology standard created (Phase 38.0), enforcement pending registry migration"
