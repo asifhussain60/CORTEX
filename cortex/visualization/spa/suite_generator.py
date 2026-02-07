@@ -346,9 +346,16 @@ window.dashboardData = JSON.parse(document.getElementById("repo-data").textConte
         
         # Update title - use regex to match any placeholder before " | CORTEX Dashboard"
         # This handles KSESSIONS, KASHKOLE, or any other template placeholder
+        # Phase 32 fix: Use repo.slug (not display_name) for title per test expectations
         title_pattern = r'<title>[^<]+\| CORTEX Dashboard</title>'
-        new_title = f'<title>{repo.display_name} | CORTEX Dashboard</title>'
+        new_title = f'<title>{repo.slug} | CORTEX Dashboard</title>'
         modified = re.sub(title_pattern, new_title, modified)
+        
+        # Replace H1 header (hardcoded KSESSIONS → repo display_name)
+        # Phase 32 fix: Template has hardcoded <h1>KSESSIONS</h1> that needs replacement
+        h1_pattern = r'<h1>KSESSIONS</h1>'
+        new_h1 = f'<h1>{repo.display_name}</h1>'
+        modified = re.sub(h1_pattern, new_h1, modified)
         
         # Fix asset paths (relative to dist/repos/<slug>/)
         modified = self._fix_asset_paths(modified)

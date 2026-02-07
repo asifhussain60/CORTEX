@@ -30,6 +30,13 @@
 
 **Context Loading:** Use semantic_search or read_file when explicitly needed (no auto-load)
 
+**🔧 AUTO-WIRING (First Use):**
+```bash
+# Configure git hooks (idempotent, <1s)
+git config core.hooksPath .githooks 2>/dev/null || true
+```
+Runs automatically when `/audit` or `/cortex-architect` invoked. Ensures P0 enforcement active.
+
 ---
 
 ## ⚠️ TIER 0 RULES (IMMUTABLE)
@@ -97,9 +104,33 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 
 ---
 
+## 🚨 MCP PRE-FLIGHT CHECK (MANDATORY)
+
+**BEFORE processing ANY IMPLEMENT/FIX/REFACTOR/ANALYZE request:**
+
+```python
+# Check if MCP tools are available
+if 'cortex_process_request' not in available_tools:
+    STOP ❌
+    Response: "MCP Server not running. Start with: python -m cortex.mcp.server"
+    DO NOT PROCEED with direct file operations
+```
+
+**Validation Checklist:**
+- [ ] Check tool availability: `cortex_process_request` exists
+- [ ] Check tool availability: `cortex_lens_analyze` exists
+- [ ] If ANY tool missing → STOP and notify user
+- [ ] If ALL tools present → Proceed with MCP-FIRST workflow
+
+**FORBIDDEN FALLBACK:**
+❌ "MCP not available, so I'll just edit files directly" → **NEVER ALLOWED**
+✅ "MCP not available. Please start MCP server first." → **CORRECT**
+
+---
+
 ## �🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
 
-**FORBIDDEN:** Direct file creation when intent = IMPLEMENT
+**FORBIDDEN:** Direct file creation when intent = IMPLEMENT/FIX/REFACTOR
 
 **REQUIRED:** Use MCP tools for all implementation requests:
 
@@ -135,11 +166,20 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 - ❌ Cross-layer validation (CORE-035)
 - ❌ Challenge generation (disagreement detection)
 - ❌ DoR confidence gating
+- ❌ Audit trail (AC markers)
+- ❌ Governance enforcement (EnforcementOrchestrator)
+
+**🔴 THIS IS NOT OPTIONAL:** MCP-FIRST is a P0 requirement. Bypassing MCP for IMPLEMENT/FIX/REFACTOR intents is a **CRITICAL VIOLATION** that undermines CORTEX integrity.
 
 **Exception:** Only for trivial operations:
 - Reading files (analysis only)
 - Documentation updates (non-code)
 - Configuration changes (non-implementation)
+
+**NOT EXCEPTIONS:**
+- ❌ "Simple fix" - still needs MCP
+- ❌ "Just one line" - still needs MCP
+- ❌ "User didn't say /implement" - still needs MCP if intent = IMPLEMENT/FIX
 
 ---
 

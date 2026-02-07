@@ -1,31 +1,12 @@
 # CORTEX Master Registry Index
-# Auto-discovery registry for CORTEX internal development   - id: "phase-38"
-    name: "Brain Cohesion & Health System"
-    file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
-    started: "2026-02-07"
-    status: "active"
-    unblocked_date: "2026-02-07"
-    priority: "P0"
-    execution_order: 1
-    roi_score: 0.94
-    readiness_validation: "phase-38-readiness-20260207-075617.json"
-    description: |
-      🟢 ACTIVE: Phase 38 implementation ready to begin (100% readiness score).
-      
-      Baseline validated by Phase 38.0:
-      - Phase 34: Operational (24/24 tests)
-      - Test collection: 0 errors
-      - Orchestrator inventory: 75 orchestrators documented
-      - Performance baseline: Captured (8,846 tests)
-      - Readiness: 100% (6/6 checks passing)
-      
-      Critical brain cohesion system addressing 12 gaps.thority: cortex-architect.prompt.md v13.0
-# Updated: 2026-02-06
+# Auto-discovery registry for CORTEX internal development
+# Authority: cortex-architect.prompt.md v15.0
+# Updated: 2026-02-07
 
 version: "1.0"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-06"
+last_updated: "2026-02-07"
 
 # Active Phases (Current Development)
 active_phases:
@@ -59,6 +40,31 @@ active_phases:
       
       Total: 37 tests, 3 tools, ~3 hours implementation time.
       Phase 38 implementation now safe to proceed.
+  
+  - id: "phase-41"
+    name: "DIGEST Mode Enhancement System"
+    file: "phases/active/phase-41-digest-mode-enhancement-system.yaml"
+    started: null
+    status: "planned"
+    priority: "P0"
+    execution_order: 3
+    roi_score: 0.91
+    description: |
+      🚀 PLANNED: Transform DIGEST mode from manual to fully automated.
+      
+      Implements 5 critical enhancements (ENH-053 to ENH-057):
+      - ENH-053: cortex_digest_session MCP tool (P0, ROI 0.95)
+      - ENH-055: Quantitative metrics system (P1, ROI 0.88)
+      - ENH-057: Detection calibration (P1, ROI 0.82)
+      - ENH-056: AST-based governance scanner (P1, ROI 0.85)
+      - ENH-054: Enhancement automation pipeline (P0, ROI 0.93)
+      
+      Impact: DIGEST maturity 6.5 → 9.2 (+41%)
+      - 90% reduction in manual enhancement effort
+      - Closes CORTEX learning feedback loop
+      - Enables CI/CD integration for chat analysis
+      
+      Target: 127 tests (5 stages), 16 days. Critical for continuous learning.
   
   - id: "phase-40"
     name: "Intelligent Upgrade Changelog System"

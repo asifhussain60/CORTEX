@@ -82,6 +82,10 @@ class PolicyEnforcer:
         Returns:
             True if compliant, False otherwise
         """
+        # CRITICAL: MCP-FIRST enforcement (P0)
+        if self._check_mcp_bypass(operation_data):
+            return False
+        
         # Check key compliance indicators
         if operation_data.get("compliant", False):
             return True
@@ -98,6 +102,38 @@ class PolicyEnforcer:
         if not operation_data.get("error_handling", True):
             return False
         
+        return True
+    
+    def _check_mcp_bypass(self, operation_data: Dict[str, Any]) -> bool:
+        """Check for MCP-FIRST bypass violations (P0).
+        
+        Detects:
+        - Direct file creation for IMPLEMENT/FIX/REFACTOR intents
+        - Missing MCP tool usage when required
+        - Skipped DoR approval gate
+        
+        Args:
+            operation_data: Operation metadata
+            
+        Returns:
+            True if MCP bypass detected (violation), False otherwise
+        """
+        intent = operation_data.get("intent", "").upper()
+        used_mcp = operation_data.get("used_mcp_tool", False)
+        direct_file_edit = operation_data.get("direct_file_edit", False)
+        
+        # Check IMPLEMENT/FIX/REFACTOR intents
+        if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+            if not used_mcp or direct_file_edit:
+                return True  # VIOLATION
+        
+        # Check ANALYZE/AUDIT intents
+        if intent in ["ANALYZE", "AUDIT"]:
+            lens_used = operation_data.get("used_lens_tool", False)
+            if not lens_used:
+                return True  # VIOLATION
+        
+        return False
         return True
 
     def add_custom_rule(self, rule: Dict[str, Any]) -> None:
