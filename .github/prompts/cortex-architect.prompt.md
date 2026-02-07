@@ -1059,9 +1059,102 @@ All Formats:
 **Core Components:**
 - **PhaseManager** (`cortex/registry/phase_manager.py`) - Intelligent phase resolution, CRUD operations, ROI scoring
 - **DashboardGenerator** (`cortex/registry/dashboard_generator.py`) - Real-time plan visualization, JSON/HTML sync
-- **MCP Tools:** `cortex_plan_setup`, `cortex_plan_teardown`, `cortex_plan_sync`
+- **AutonomousExecutionEngine** (`cortex/orchestrators/domain/autonomous_execution_engine.py`) - Multi-stage autonomous execution with progress tracking
+- **MCP Tools:** 
+  - `cortex_plan_setup` - Pre-execution hook (cleanup, git checkpoint, audit trail)
+  - `cortex_plan_teardown` - Post-execution hook (artifact cleanup, dashboard sync, commit)
+  - `cortex_plan_sync` - Manual dashboard synchronization
+  - `cortex_plan_execute_autonomous` - **AUTONOMOUS MULTI-STAGE EXECUTION** (NEW - Phase 40)
 
 **MANDATORY MODE CLASSIFICATION:** If request contains 2+ triggers above, switch to PLAN mode automatically.
+
+## 🚀 Autonomous Plan Execution (Phase 40)
+
+**Primary Tool:** `cortex_plan_execute_autonomous`
+
+**When to Use:**
+- User says: "continue implementing plan autonomously", "execute phase autonomously", "run entire phase"
+- User requests zero-stop execution through all stages
+- Multi-stage phase needs automatic progression (no approval gates)
+
+**Execution Pattern:**
+
+```yaml
+Step 1: Setup Hook
+  - cortex_plan_setup(phase_id)
+  - Git checkpoint created
+  - VacuumOrchestrator cleanup
+  - Audit trail initialized
+
+Step 2: Load Phase Specification
+  - Read from cortex-registry/_cortex-master/phases/
+  - Parse stages/tasks
+  - Calculate stage duration estimates
+
+Step 3: Autonomous Execution (NO STOPS)
+  - [██░░░░░░░░]  10% ✅ Stage 1: Requirements (12.3s)
+  - [████░░░░░░]  40% ✅ Stage 2: Design (45.1s)
+  - [██████░░░░]  60% 🔵 Stage 3: Implementation (TDD)...
+  - [████████░░]  80% ⚪ Stage 4: Testing (pending)
+  - [██████████] 100% ⚪ Stage 5: Documentation (pending)
+  
+Step 4: Teardown Hook
+  - cortex_plan_teardown(phase_id)
+  - Artifact cleanup
+  - Dashboard sync
+  - Git commit
+
+Step 5: Results
+  - Success: ✅ Phase completed in X minutes
+  - Failure: ❌ Phase failed at stage N (with rollback)
+```
+
+**ASCII Progress Bars (MANDATORY):**
+- Show for EVERY stage during execution
+- Update in real-time as stages complete
+- Format: `[████████░░] 80% ✅ Stage N: Description (duration)`
+- Status icons: 🔵 (in-progress), ✅ (complete), ⚪ (pending), 🔴 (failed)
+
+**User Experience:**
+1. User: "continue implementing plan autonomously"
+2. Copilot: Invokes `cortex_plan_execute_autonomous(phase_id="phase-40")`
+3. Progress bars stream in real-time (no user input required)
+4. Completion report shows all stages ✅ or failure point 🔴
+5. Dashboard auto-synced with results
+
+**NO USER APPROVAL GATES:** Tool runs to completion or failure autonomously.
+
+**Example Invocation:**
+```python
+result = cortex_plan_execute_autonomous(
+    phase_id="phase-40",
+    registry_root="cortex-registry/_cortex-master",
+    timeout_per_stage=1800,  # 30 min
+    show_progress=True
+)
+```
+
+**Example Output:**
+```json
+{
+  "success": true,
+  "phase_id": "phase-40",
+  "stages_completed": 5,
+  "total_stages": 5,
+  "duration_seconds": 1834.2,
+  "test_results": {"passed": 156, "failed": 0, "coverage": 94.5},
+  "progress_log": [
+    "[██████████] 100% ✅ Stage 1: Requirements (12.3s)",
+    "[██████████] 100% ✅ Stage 2: Design (45.1s)",
+    "[██████████] 100% ✅ Stage 3: Implementation (1456.8s)",
+    "[██████████] 100% ✅ Stage 4: Testing (234.5s)",
+    "[██████████] 100% ✅ Stage 5: Documentation (85.5s)"
+  ],
+  "message": "✅ Phase 40 completed autonomously in 30.6 minutes"
+}
+```
+
+**CRITICAL:** This is the PRIMARY tool for autonomous multi-stage execution. Do NOT manually run stages one-by-one. Use this tool instead.
 
 ## Subtle Plan Spine (CODE-ACTION MODES ONLY)
 
