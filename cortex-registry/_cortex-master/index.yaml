@@ -228,6 +228,29 @@ active_phases:
     roi_score: 0.91
     description: |
       ⚪ PLANNED: Comprehensive response language engine overhaul.
+  
+  - id: "phase-37"
+    name: "Role-Adaptive Persona System"
+    file: "phases/active/phase-37-role-adaptive-personas.yaml"
+    started: null
+    status: "planned"
+    priority: "P1"
+    execution_order: 7
+    estimated_duration: "4 days"
+    test_target: 90
+    coverage_target: 90
+    roi_score: 0.85
+    description: |
+      ⚪ PLANNED: Hybrid role-adaptive persona system with context inference.
+      - 6 personas: business_leader, product_owner, scrum_master, tech_lead, engineer, unknown
+      - 4 depth levels: executive, standard, detailed, full
+      - Dynamic switching: /persona and /detail commands
+      - Natural language triggers: "show me the code", "give me the BLUF"
+      - Persistent storage: cross-session user preferences
+      - Introduction template with role discovery
+      - CORE-029 header compliance fix
+    depends_on:
+      - "phase-36"  # Can run in parallel, complementary features
       
       9 Stages:
       1. Dual Header System (CORTEX vs CORTEX Architect) — 1 day, 10 tests

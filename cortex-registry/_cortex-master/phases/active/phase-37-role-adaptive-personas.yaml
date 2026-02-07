@@ -1,0 +1,626 @@
+# ============================================================================
+# PHASE-37: ROLE-ADAPTIVE PERSONA SYSTEM
+# ============================================================================
+# Purpose: Intelligent user role detection, persona-based response adaptation,
+#          dynamic role switching, depth override system, and persistent storage
+# Authority: cortex-architect.prompt.md v15.0, chat01.txt Option B decision
+# Approach: TDD-First, Incremental Delivery, Hybrid Role + Context Inference
+# Status: PLANNED | Target Start: 2026-02-11
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-07"
+status: "planned"
+priority: "P1"
+execution_order: 7
+
+metadata:
+  phase_id: "phase-37"
+  title: "Role-Adaptive Persona System"
+  subtitle: "Humanize CORTEX with intelligent role detection and persona-based responses"
+  author: "Asif Hussain"
+  created_date: "2026-02-07T14:30:00Z"
+  target_start: "2026-02-11"
+  estimated_duration: "4 days"
+  test_target: 90
+  coverage_target: 90
+  roi_score: 0.85
+  
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-029: Response header MANDATORY"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+    - "MCP-FIRST: All functionality via MCP tools"
+    - "MCP-GATE: IMPLEMENT intents via cortex_process_request"
+  
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "EXIT GATE: ContextSynthesisGateway for all context loading"
+    - "TDD enforcement: Tests pass before merge"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    Create a hybrid role-adaptive persona system that:
+    
+    1. **Detects User Roles** — Infer from context signals or explicit declaration
+    2. **Adapts Response Format** — BLUF for executives, full depth for engineers
+    3. **Enables Dynamic Switching** — /persona and /detail commands
+    4. **Persists Preferences** — Cross-session user persona storage
+    5. **Supports Depth Override** — Temporary detail level changes
+    6. **Humanizes CORTEX** — Introduction template with role discovery
+    7. **Fixes Header Compliance** — CORE-029 v15.0 template enforcement
+  
+  business_impact: |
+    - 🎯 **DX Improvement**: Role-specific responses match user expectations
+    - 👥 **Multi-Audience**: Business leaders get BLUF, engineers get code
+    - ⚡ **Efficiency**: No manual depth requests needed
+    - 🧠 **Intelligence**: Context-aware persona inference
+    - 💾 **Persistence**: Preferences survive sessions
+  
+  expected_outcomes:
+    - 6 persona definitions (YAML-driven)
+    - 4 depth levels (executive → full)
+    - 5 MCP tools for persona management
+    - 90+ tests (90% coverage)
+    - CORE-029 header compliance fixed
+    - Introduction template with role discovery
+
+# ============================================================================
+# PERSONA DEFINITIONS
+# ============================================================================
+personas:
+  business_leader:
+    id: "business_leader"
+    display_name: "Business Leader"
+    description: "C-suite, VPs, directors focused on outcomes and metrics"
+    format: "BLUF"
+    depth: "executive"
+    word_limit: 150
+    show_code: false
+    show_metrics: true
+    metric_types: ["ROI", "KPIs", "business_impact"]
+    onboarding: false
+    
+  product_owner:
+    id: "product_owner"
+    display_name: "Product Owner"
+    description: "PMs, POs focused on features and user value"
+    format: "narrative"
+    depth: "business"
+    word_limit: 300
+    show_code: false
+    show_metrics: true
+    metric_types: ["velocity", "feature_progress", "user_impact"]
+    onboarding: true
+    onboarding_focus: ["dashboard_generation", "repo_onboarding"]
+    
+  scrum_master:
+    id: "scrum_master"
+    display_name: "Scrum Master"
+    description: "Agile coaches, scrum masters focused on process"
+    format: "action_oriented"
+    depth: "process"
+    word_limit: 300
+    show_code: false
+    show_metrics: true
+    metric_types: ["sprint_metrics", "velocity", "blockers"]
+    onboarding: true
+    onboarding_focus: ["sprint_planning", "blockers"]
+    
+  tech_lead:
+    id: "tech_lead"
+    display_name: "Tech Lead / Manager"
+    description: "Technical leaders who need architecture + metrics"
+    format: "architecture"
+    depth: "technical_business"
+    word_limit: 500
+    show_code: "diagrams"
+    show_metrics: true
+    metric_types: ["health_metrics", "coverage", "complexity", "tech_debt"]
+    onboarding: true
+    onboarding_focus: ["architecture", "dashboards", "health_metrics"]
+    
+  engineer:
+    id: "engineer"
+    display_name: "Software Engineer"
+    description: "Developers who need full technical depth"
+    format: "technical"
+    depth: "full"
+    word_limit: null  # unlimited
+    show_code: true
+    show_metrics: true
+    metric_types: ["coverage", "complexity", "test_results", "performance"]
+    onboarding: "optional"
+    
+  unknown:
+    id: "unknown"
+    display_name: "Discovery Mode"
+    description: "Role not yet determined, trigger discovery flow"
+    format: "discovery"
+    depth: null
+    word_limit: null
+    show_code: null
+    show_metrics: null
+    trigger_discovery: true
+
+# ============================================================================
+# DEPTH LEVELS
+# ============================================================================
+depth_levels:
+  executive:
+    id: "executive"
+    description: "BLUF, key metrics only"
+    word_limit: 100
+    show_code: false
+    metrics: "high_level"
+    
+  standard:
+    id: "standard"
+    description: "Balanced detail"
+    word_limit: 300
+    show_code: "snippets"
+    metrics: "relevant"
+    
+  detailed:
+    id: "detailed"
+    description: "Technical depth"
+    word_limit: 500
+    show_code: "relevant"
+    metrics: "full"
+    
+  full:
+    id: "full"
+    description: "Engineer mode, complete detail"
+    word_limit: null
+    show_code: "complete"
+    metrics: "all"
+
+# ============================================================================
+# COMMANDS
+# ============================================================================
+commands:
+  persona:
+    command: "/persona"
+    aliases: ["/role"]
+    usage: "/persona {role}"
+    description: "Set primary persona for session"
+    parameters:
+      - name: "role"
+        type: "string"
+        required: true
+        values: ["business_leader", "product_owner", "scrum_master", "tech_lead", "engineer"]
+    subcommands:
+      reset:
+        usage: "/persona reset"
+        description: "Clear persona, return to auto-inference"
+      save:
+        usage: "/persona save"
+        description: "Persist current persona to user config"
+        
+  detail:
+    command: "/detail"
+    aliases: ["/depth"]
+    usage: "/detail {level}"
+    description: "Override response detail level"
+    parameters:
+      - name: "level"
+        type: "string"
+        required: true
+        values: ["executive", "standard", "detailed", "full"]
+    subcommands:
+      sticky:
+        usage: "/detail sticky {level}"
+        description: "Override depth for entire session"
+
+# ============================================================================
+# NATURAL LANGUAGE TRIGGERS
+# ============================================================================
+nl_triggers:
+  depth_overrides:
+    - pattern: "show me the code"
+      action: "depth → full"
+    - pattern: "give me the BLUF"
+      action: "depth → executive"
+    - pattern: "technical details"
+      action: "depth → detailed"
+    - pattern: "summarize"
+      action: "depth → executive"
+    - pattern: "implementation details"
+      action: "depth → full"
+    - pattern: "high level overview"
+      action: "depth → standard"
+      
+  persona_overrides:
+    - pattern: "explain like I'm a PM"
+      action: "persona → product_owner (1 turn)"
+    - pattern: "explain for my VP"
+      action: "persona → business_leader (1 turn)"
+    - pattern: "from an engineer's perspective"
+      action: "persona → engineer (1 turn)"
+
+# ============================================================================
+# STORAGE SCHEMA
+# ============================================================================
+storage:
+  session_context:
+    description: "In-memory, current conversation only"
+    ttl: "session_end"
+    schema:
+      primary_persona: "string"
+      active_depth: "string"
+      depth_override_ttl: "int (turns)"
+      inference_confidence: "float (0-1)"
+      switch_history: "list[dict]"
+      
+  user_preferences:
+    description: "Persistent, cross-session"
+    location: "cortex_brain/state/user_personas.yaml"
+    ttl: "permanent"
+    schema:
+      users:
+        "{username}":
+          primary_persona: "string"
+          depth_preference: "string"
+          created_at: "datetime"
+          last_active: "datetime"
+          overrides: "list[context_override]"
+          
+  workspace_config:
+    description: "Team defaults per repository"
+    location: ".cortex/config.yaml"
+    ttl: "permanent"
+    schema:
+      default_persona: "string"
+      allowed_personas: "list[string]"
+      team_overrides: "dict"
+
+# ============================================================================
+# RESOLUTION ALGORITHM
+# ============================================================================
+resolution:
+  priority_order:
+    1: "Explicit /persona command (highest)"
+    2: "Session context primary_persona"
+    3: "User preferences (persistent storage)"
+    4: "Workspace config (team default)"
+    5: "Context inference (if confidence ≥ 0.7)"
+    6: "Discovery mode (ask user)"
+    
+  inference_signals:
+    - signal: "vocabulary_complexity"
+      description: "Technical terms, code references"
+      weight: 0.3
+    - signal: "file_context"
+      description: "Editing .py = likely engineer"
+      weight: 0.25
+    - signal: "query_type"
+      description: "Metrics questions = leader, code questions = engineer"
+      weight: 0.25
+    - signal: "session_history"
+      description: "Past interaction patterns"
+      weight: 0.2
+      
+  confidence_threshold: 0.7
+
+# ============================================================================
+# STAGE BREAKDOWN (5 STAGES, 4 DAYS)
+# ============================================================================
+stages:
+  - id: "37.1"
+    title: "Persona YAML Schema + Loader"
+    duration: "1 day"
+    status: "planned"
+    description: "Define persona configurations and create loaders"
+    deliverables:
+      - path: "cortex/config/personas.yaml"
+        type: "config"
+        description: "Single Source of Truth for persona definitions"
+        tests: 5
+        
+      - path: "cortex/brain/core/models/persona_models.py"
+        type: "python"
+        description: "Pydantic models for persona, depth, commands"
+        tests: 6
+        
+      - path: "cortex/brain/core/yaml_loaders.py"
+        type: "python"
+        description: "Add load_personas() function"
+        tests: 4
+        
+    tests:
+      unit:
+        - "tests/unit/brain/test_persona_models.py"
+        - "tests/unit/brain/test_persona_loaders.py"
+      count: 15
+      
+    success_criteria:
+      - "Pydantic models validate all 6 personas"
+      - "load_personas() returns PersonasYAML model"
+      - "Schema supports all depth levels and commands"
+      
+  - id: "37.2"
+    title: "RoleResolver + PersonaLoader + DepthManager Agents"
+    duration: "1 day"
+    status: "planned"
+    description: "Create orchestrator agents for persona resolution"
+    deliverables:
+      - path: "cortex/orchestrators/core/role_resolver.py"
+        type: "python"
+        description: "Infer role from context signals"
+        loc: 150
+        tests: 12
+        
+      - path: "cortex/orchestrators/core/persona_loader.py"
+        type: "python"
+        description: "Load and cache persona configurations"
+        loc: 100
+        tests: 8
+        
+      - path: "cortex/orchestrators/core/depth_manager.py"
+        type: "python"
+        description: "Manage depth overrides and TTL"
+        loc: 120
+        tests: 5
+        
+      - path: "cortex/orchestrators/core/response_styler.py"
+        type: "python"
+        description: "Apply persona formatting to responses"
+        loc: 120
+        tests: 5
+        
+    tests:
+      unit:
+        - "tests/unit/orchestrators/core/test_role_resolver.py"
+        - "tests/unit/orchestrators/core/test_persona_loader.py"
+        - "tests/unit/orchestrators/core/test_depth_manager.py"
+        - "tests/unit/orchestrators/core/test_response_styler.py"
+      count: 30
+      
+    success_criteria:
+      - "RoleResolver infers persona with ≥85% accuracy"
+      - "PersonaLoader caches configs (LRU)"
+      - "DepthManager respects TTL for overrides"
+      - "ResponseStyler applies word limits and formatting"
+      
+  - id: "37.3"
+    title: "Prompt Injection Points + Role Commands"
+    duration: "1 day"
+    status: "planned"
+    description: "Modify prompts and implement commands"
+    deliverables:
+      - path: ".github/prompts/CORTEX.prompt.md"
+        type: "prompt"
+        description: "Add {{PERSONA_INJECTION_POINT}} and discovery template"
+        tests: 4
+        
+      - path: ".github/prompts/cortex-architect.prompt.md"
+        type: "prompt"
+        description: "Add mode-aware persona handling"
+        tests: 4
+        
+      - path: "cortex/interaction/command_handlers.py"
+        type: "python"
+        description: "/persona and /detail command handlers"
+        loc: 100
+        tests: 7
+        
+    tests:
+      unit:
+        - "tests/unit/interaction/test_command_handlers.py"
+      integration:
+        - "tests/integration/test_persona_commands.py"
+      count: 15
+      
+    templates:
+      introduction:
+        trigger: "No parameter provided OR first interaction"
+        content: |
+          🧠 CORTEX Introduction
+          
+          I'm CORTEX — your Cognitive Real-Time Execution System.
+          
+          To optimize our collaboration, what's your primary role?
+          
+          1️⃣ Business Leader (executive summaries, metrics)
+          2️⃣ Product Owner / Scrum Master (business guidance)
+          3️⃣ Tech Lead / Manager (architecture + metrics)
+          4️⃣ Software Engineer (full technical depth)
+          
+          [Selection persists for session, adjustable via `/persona {role}`]
+          
+    success_criteria:
+      - "Introduction template triggers on first interaction"
+      - "/persona {role} sets session persona"
+      - "/detail {level} overrides depth for 1 turn"
+      - "/detail sticky {level} persists for session"
+      
+  - id: "37.4"
+    title: "MCP Tools + Persistence Layer"
+    duration: "0.5 days"
+    status: "planned"
+    description: "Expose persona management via MCP tools"
+    deliverables:
+      - path: "cortex/mcp/tools/persona_tools.py"
+        type: "python"
+        description: "5 MCP tools for persona management"
+        loc: 200
+        tests: 12
+        
+      - path: "cortex/interaction/persona_store.py"
+        type: "python"
+        description: "CRUD for persistent user personas"
+        loc: 80
+        tests: 6
+        
+      - path: "cortex_brain/state/user_personas.yaml"
+        type: "data"
+        description: "Persistent storage file"
+        tests: 0
+        
+    mcp_tools:
+      - name: "cortex_set_persona"
+        purpose: "Set primary persona"
+        parameters:
+          - "role: str"
+          - "save: bool = false"
+        returns: "PersonaSetResult"
+        
+      - name: "cortex_get_persona"
+        purpose: "Get current persona state"
+        parameters: []
+        returns: "PersonaState"
+        
+      - name: "cortex_set_depth"
+        purpose: "Override detail level"
+        parameters:
+          - "level: str"
+          - "sticky: bool = false"
+        returns: "DepthSetResult"
+        
+      - name: "cortex_infer_persona"
+        purpose: "Context-based inference"
+        parameters:
+          - "context: dict"
+        returns: "InferenceResult"
+        
+      - name: "cortex_persona_history"
+        purpose: "View switch history"
+        parameters:
+          - "limit: int = 10"
+        returns: "list[PersonaSwitch]"
+        
+    tests:
+      unit:
+        - "tests/unit/mcp/tools/test_persona_tools.py"
+        - "tests/unit/interaction/test_persona_store.py"
+      count: 18
+      
+    success_criteria:
+      - "All 5 MCP tools registered and functional"
+      - "Persona store persists to YAML file"
+      - "Cross-session persona recall works"
+      
+  - id: "37.5"
+    title: "Cleanup + Header Compliance Fix"
+    duration: "0.5 days"
+    status: "planned"
+    description: "Fix CORE-029 header compliance and update wiring"
+    deliverables:
+      - path: "cortex/wiring/specifications/wiring.yaml"
+        type: "config"
+        description: "Register new agents and tools"
+        tests: 2
+        
+      - path: "cortex/mcp/tools/__init__.py"
+        type: "python"
+        description: "Register persona tools"
+        tests: 2
+        
+    cleanup_tasks:
+      - task: "Template Sync"
+        description: "Ensure all modes use CORE-029 v15.0 header"
+        
+      - task: "Icon Consistency"
+        description: "Map mode → icon (🏗️ Architect, 🔍 Audit)"
+        
+      - task: "Deprecate Old Format"
+        description: "Remove **Orchestrator:** pattern from responses"
+        
+    tests:
+      integration:
+        - "tests/integration/test_persona_e2e.py"
+        - "tests/integration/test_header_compliance.py"
+      count: 8
+      
+    success_criteria:
+      - "All modes use CORE-029 v15.0 header format"
+      - "Wiring.yaml includes all new agents"
+      - "E2E persona flow works"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  overall:
+    - metric: "Persona Detection Accuracy"
+      target: "≥85%"
+      measurement: "Test suite with known role signals"
+      
+    - metric: "Session Persistence"
+      target: "100%"
+      measurement: "Persona retained across turns"
+      
+    - metric: "Role Switching Latency"
+      target: "<50ms"
+      measurement: "/persona command execution time"
+      
+    - metric: "NL Trigger Detection"
+      target: "≥80%"
+      measurement: "Natural language depth override accuracy"
+      
+    - metric: "Override TTL Compliance"
+      target: "100%"
+      measurement: "Depth overrides expire correctly"
+      
+    - metric: "Cross-Session Recall"
+      target: "100%"
+      measurement: "Persistent storage retrieval"
+      
+    - metric: "Header Compliance"
+      target: "100%"
+      measurement: "CORE-029 v15.0 format enforced"
+      
+    - metric: "Test Coverage"
+      target: "≥90%"
+      measurement: "pytest-cov on new files"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  internal:
+    - "InteractionOrchestrator (modify)"
+    - "cortex/brain/core/yaml_loaders.py (extend)"
+    - "MCP tool registration system"
+    
+  external:
+    - "PyYAML (existing)"
+    - "Pydantic (existing)"
+    
+  phases:
+    - phase: "phase-36"
+      relationship: "can_parallel"
+      reason: "No direct code overlap, complementary features"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+risks:
+  - risk: "Inference accuracy below target"
+    severity: "medium"
+    mitigation: "Fall back to discovery mode if confidence < 0.7"
+    
+  - risk: "Token overhead from persona injection"
+    severity: "low"
+    mitigation: "Persona config is <500 tokens, cached"
+    
+  - risk: "Command conflicts with existing commands"
+    severity: "low"
+    mitigation: "Use unique command names, check registry first"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+rollback:
+  strategy: "Feature flag based"
+  steps:
+    - "Set CORTEX_PERSONA_ENABLED=false in environment"
+    - "System falls back to default engineer persona"
+    - "No data loss, preferences retained for re-enable"
+  recovery_time: "< 1 minute"
