@@ -40,6 +40,25 @@ active_phases:
       
       BLOCKS: Phase 38 (cannot proceed until 100% cohesion achieved)
   
+  - id: "phase-40"
+    name: "Intelligent Upgrade Changelog System"
+    file: "phases/active/phase-40-intelligent-upgrade-changelog-system.yaml"
+    started: null
+    status: "planned"
+    priority: "P2"
+    execution_order: 99
+    roi_score: 0.87
+    description: |
+      Auto-announce new features after CORTEX upgrade (git pull/merge).
+      
+      When upgrade detection merges origin/main → CORTEX:
+      - Analyze diff: prompts, agents, orchestrators, MCP tools, governance
+      - Extract: new modes, commands, capabilities
+      - Present: elegant table/bullet format inline in chat
+      - Impact: Users discover features immediately, 30% adoption boost
+      
+      Target: 46 tests (5 stages), 1 week. UX enhancement.
+  
   - id: "phase-32"
     name: "Glassmorphism Dashboard Generator Fix"
     file: "phases/active/phase-32-glassmorphism-dashboard-generator-fix.yaml"

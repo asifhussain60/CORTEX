@@ -285,7 +285,7 @@ fi
 **Need Help?** See `../../docs/03-getting-started/0-installation.md` (load explicitly when needed)
 ```
 
-### Upgrade Success
+### Upgrade Success (Phase 40: Intelligent Changelog)
 
 ```markdown
 ## 🔧 CORTEX Upgrade
@@ -293,6 +293,19 @@ fi
 
 **Commits Merged:** {count}  
 **Your local CORTEX branch is now up-to-date with origin/main.**
+
+### 🎯 What's New
+
+| Category | Feature | Description | Impact |
+|----------|---------|-------------|--------|
+| **Modes** | QUERY Mode | Consolidated INTERACTIVE + LIST + ask | 🔴 High |
+| **Commands** | /debug | Full debug cycle (inject → analyze → fix) | 🟡 Medium |
+| **Orchestrators** | DebuggingOrchestrator | Smart marker injection/cleanup | 🟡 Medium |
+| **Governance** | CORE-047 | No file paths in prompts (token optimization) | 🔵 Minor |
+
+**Total:** {N} new features | **Try:** `/list cortex capabilities` to explore
+
+**Note:** Phase 40 auto-detects changes in prompts, agents, orchestrators, MCP tools, and governance.
 
 **Proceeding to {AUDIT|DESIGN} mode...**
 ```

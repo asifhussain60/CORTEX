@@ -22,7 +22,7 @@ Compare: Local version (14.4) vs origin/main version
          ↓
 User: "upgrade prompt" / "skip" / "show changes"
          ↓
-[UPGRADE] → Load latest cortex-architect.prompt.md from origin/main
+[UPGRADE] → Load latest cortex-architect.prompt.md → Analyze changes → Display "What's New" (Phase 40)
 [SKIP] → Continue with v14.4 (warn: may miss prompt enhancements)
 [SHOW] → Display version diff before deciding
 ```
@@ -1551,11 +1551,22 @@ User Request → PRE-FLIGHT CHECK
 **Note:** AUDIT/DESIGN operations cannot proceed until environment is ready.
 ```
 
-### Upgrade Success
+### Upgrade Success (Phase 40: Intelligent Changelog)
 
 ```markdown
 ## 🔧 CORTEX Ecosystem Upgrade
 **Status:** Success ✅ | **Strategy:** {Merge|Rebase}
+
+### 🎯 What's New
+
+| Category | Feature | Description | Impact |
+|----------|---------|-------------|--------|
+| **Modes** | {new_mode} | {description} | 🔴 High |
+| **Commands** | {new_command} | {description} | 🟡 Medium |
+| **Orchestrators** | {new_orchestrator} | {description} | 🟡 Medium |
+| **Governance** | {new_rule} | {description} | 🔵 Minor |
+
+**Total:** {N} new features | **Explore:** `/list cortex capabilities`
 
 **Integrated Changes:**
 - **Commits Merged:** {count}

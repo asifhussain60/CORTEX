@@ -22,7 +22,7 @@ Compare: Local version (8.3) vs origin/main version
          ↓
 User: "upgrade prompt" / "skip" / "show changes"
          ↓
-[UPGRADE] → Load latest CORTEX.prompt.md from origin/main
+[UPGRADE] → Load latest CORTEX.prompt.md → Analyze changes → Display "What's New" (Phase 40)
 [SKIP] → Continue with v8.3 (warn: may miss prompt enhancements)
 [SHOW] → Display version diff before deciding
 ```

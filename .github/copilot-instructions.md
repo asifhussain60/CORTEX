@@ -22,7 +22,7 @@
 | `/onboard {path}` | Repository onboarding + security scan |
 | `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
 | `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/check-env` | **Environment check + CORTEX upgrade detection** |/ directory  
+| `/check-env` | **Environment check + CORTEX upgrade detection + intelligent changelog (Phase 40)** |/ directory  
 **Response Format:** response-format-standards.md in .github/prompts/ directory  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
@@ -356,7 +356,7 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 | `/onboard {path}` | Repository onboarding + security scan |
 | `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
 | `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/check-env` | **Environment check + CORTEX upgrade detection** |
+| `/check-env` | **Environment check + CORTEX upgrade detection + intelligent changelog (Phase 40)** |
 
 ---
 

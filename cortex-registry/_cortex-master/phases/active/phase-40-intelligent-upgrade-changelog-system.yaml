@@ -1,0 +1,302 @@
+# Phase 40: Intelligent Upgrade Changelog System
+# Authority: User Request - Upgrade Feature Discovery Enhancement (2026-02-07)
+# Priority: P2 (High Value UX Enhancement)
+# ROI Score: 0.87 (High user satisfaction, moderate effort)
+
+version: "1.0"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "CORTEX Architect"
+status: "planned"
+blocked_by: null
+
+# Executive Summary
+summary:
+  title: "Intelligent Upgrade Changelog: Auto-Announce New Features"
+  description: |
+    When CORTEX upgrade detection pulls/merges updates from origin/main,
+    automatically analyze what changed (prompts, agents, orchestrators, MCP tools)
+    and elegantly present new features to users in professional tabular or bullet format.
+    
+    Users discover new CORTEX possibilities immediately after upgrade, improving
+    feature adoption and user satisfaction.
+    
+    PROBLEM:
+    - Current upgrade shows "Successfully merged {N} commits" ✅
+    - But users DON'T KNOW what new features they gained 🤷
+    - Manual changelog reading required (low adoption)
+    
+    SOLUTION:
+    - Auto-diff prompts, agents, wiring.yaml, MCP tools
+    - Extract: new modes, commands, orchestrators, capabilities
+    - Present in elegant table/bullet format inline in chat
+    - "What's New" section = instant feature discovery
+  
+  priority: "P2"
+  estimated_effort: "1 week"
+  test_count_target: 45
+  coverage_target: "85%"
+
+# ROI Analysis
+roi_analysis:
+  value_score: 0.90  # High user satisfaction
+  success_probability: 0.95  # Clear scope, well-defined
+  urgency_factor: 0.75  # Nice-to-have, not critical
+  effort_cost: 0.30  # 1 week, straightforward git diff analysis
+  roi_score: 0.87  # (0.90 * 0.95 * 0.75) / 0.30
+
+# Business Impact
+business_impact:
+  - impact: "Feature Discovery"
+    description: "Users immediately aware of new capabilities"
+    value: "High"
+  - impact: "Adoption Rate"
+    description: "30% increase in new feature usage (estimated)"
+    value: "High"
+  - impact: "User Satisfaction"
+    description: "Professional UX, reduces manual changelog reading"
+    value: "Medium"
+  - impact: "Onboarding"
+    description: "New users learn CORTEX features through upgrades"
+    value: "Medium"
+
+# Implementation Plan
+stages:
+  - stage: 1
+    name: "Git Diff Analyzer"
+    duration_days: 2
+    test_count: 15
+    description: |
+      Create UpgradeDiffAnalyzer to detect changes after git merge:
+      
+      Categories:
+      - Prompts: New modes, commands, sections (cortex-architect.prompt.md, CORTEX.prompt.md)
+      - Agents: New agents, capabilities (agents/core/*.md)
+      - Orchestrators: New orchestrators (wiring.yaml changes)
+      - MCP Tools: New tools (cortex_* functions)
+      - Best Practices: New knowledge YAMLs (cortex/knowledge/best-practices/)
+      - Governance: New CORE rules (governance/core-rules.yaml)
+      
+      Output: Structured diff result with categorized changes
+    
+    acceptance_criteria:
+      - AC-PHASE40-001: "Diff analyzer detects prompt changes (new modes/commands)"
+      - AC-PHASE40-002: "Diff analyzer detects agent changes (new/modified agents)"
+      - AC-PHASE40-003: "Diff analyzer detects orchestrator changes (wiring.yaml)"
+      - AC-PHASE40-004: "Diff analyzer detects MCP tool additions"
+      - AC-PHASE40-005: "Diff analyzer extracts version numbers from prompts"
+    
+    files_created:
+      - "cortex/orchestrators/support/upgrade_diff_analyzer.py"
+      - "tests/unit/orchestrators/support/test_upgrade_diff_analyzer.py"
+    
+    files_modified: []
+
+  - stage: 2
+    name: "Changelog Formatter"
+    duration_days: 2
+    test_count: 18
+    description: |
+      Create ChangelogFormatter to present changes elegantly:
+      
+      Formats:
+      - Tabular (default): Category | Feature | Description | Impact
+      - Bullet List: Hierarchical with icons (🎯 🚀 🔧 📊)
+      - Mixed: Executive summary + detailed tables
+      
+      Features:
+      - Auto-detect format (table ≤5 items, bullet >5 items)
+      - Icon assignment by category
+      - Impact scoring (🔴 Critical, 🟡 Medium, 🔵 Minor)
+      - Truncation (max 20 features, "...and N more" link)
+      
+      Output: Markdown-formatted changelog ready for inline display
+    
+    acceptance_criteria:
+      - AC-PHASE40-006: "Formatter generates tabular output (≤5 features)"
+      - AC-PHASE40-007: "Formatter generates bullet output (>5 features)"
+      - AC-PHASE40-008: "Formatter assigns icons by category"
+      - AC-PHASE40-009: "Formatter scores impact (Critical/Medium/Minor)"
+      - AC-PHASE40-010: "Formatter truncates at 20 features max"
+    
+    files_created:
+      - "cortex/orchestrators/support/changelog_formatter.py"
+      - "tests/unit/orchestrators/support/test_changelog_formatter.py"
+    
+    files_modified: []
+
+  - stage: 3
+    name: "Integration: cortex-environment-setup.md"
+    duration_days: 1
+    test_count: 8
+    description: |
+      Integrate UpgradeDiffAnalyzer + ChangelogFormatter into upgrade flow.
+      
+      Flow:
+      1. User types "upgrade prompt" or "upgrade"
+      2. Git pull + merge origin/main → CORTEX
+      3. ✅ Success → Run UpgradeDiffAnalyzer
+      4. Extract changes → ChangelogFormatter
+      5. Display "What's New" section (inline chat)
+      6. Continue to AUDIT/DESIGN mode
+      
+      Example Output:
+      
+      ## 🔧 CORTEX Upgrade Success ✅
+      **Commits Merged:** 12
+      
+      ### 🎯 What's New
+      
+      | Category | Feature | Description | Impact |
+      |----------|---------|-------------|--------|
+      | **Modes** | QUERY Mode | Consolidated INTERACTIVE + LIST + ask | 🔴 High |
+      | **Commands** | /debug | Full debug cycle (inject → analyze → fix) | 🟡 Medium |
+      | **Orchestrators** | DebuggingOrchestrator | Smart marker injection/cleanup | 🟡 Medium |
+      | **Governance** | CORE-047 | No file paths in prompts (token optimization) | 🔵 Minor |
+      
+      **Total:** 4 new features | **Try:** `/list cortex capabilities` to explore
+      
+      **Proceeding to AUDIT mode...**
+    
+    acceptance_criteria:
+      - AC-PHASE40-011: "Upgrade success message includes 'What's New' section"
+      - AC-PHASE40-012: "Changelog appears after git merge success"
+      - AC-PHASE40-013: "No changelog shown if 0 feature changes detected"
+      - AC-PHASE40-014: "Fallback: 'No user-facing changes' message if only internal changes"
+    
+    files_created: []
+    
+    files_modified:
+      - ".github/agents/core/cortex-environment-setup.md"
+
+  - stage: 4
+    name: "Integration: cortex-architect.prompt.md PRE-FLIGHT"
+    duration_days: 1
+    test_count: 4
+    description: |
+      Add changelog display to PRE-FLIGHT auto-upgrade flow.
+      
+      Flow:
+      1. Prompt auto-detects newer version in origin/main
+      2. User chooses "upgrade prompt"
+      3. Load latest cortex-architect.prompt.md
+      4. Run UpgradeDiffAnalyzer (compare v14.4 → v15.0)
+      5. Display "Prompt Upgrade: What's New" section
+      6. Continue to operation
+      
+      Example Output:
+      
+      ## 🔧 Prompt Upgraded: v14.4 → v15.0 ✅
+      
+      ### 🎯 What's New in Architect Prompt
+      
+      1. **QUERY Mode** — Consolidated INTERACTIVE + LIST + cortex-ask (multi-purpose)
+      2. **HOLISTIC WORK PROTOCOL** — Token budget management + continuation pattern
+      3. **Phase 40** — Intelligent upgrade changelog (you're seeing it now!)
+      
+      **Total:** 3 major enhancements | **Full changelog:** See cortex-architect.prompt.md v15.0
+      
+      **Proceeding to {mode}...**
+    
+    acceptance_criteria:
+      - AC-PHASE40-015: "PRE-FLIGHT displays changelog after prompt upgrade"
+      - AC-PHASE40-016: "Version comparison shown (old → new)"
+      - AC-PHASE40-017: "Changelog format matches environment-setup format"
+    
+    files_created: []
+    
+    files_modified:
+      - ".github/prompts/cortex-architect.prompt.md"
+      - ".github/prompts/CORTEX.prompt.md"
+
+  - stage: 5
+    name: "MCP Tool Exposure (Optional)"
+    duration_days: 1
+    test_count: 0
+    description: |
+      Optionally expose as MCP tool for external clients.
+      
+      Tool: cortex_upgrade_changelog
+      Input: old_commit (hash), new_commit (hash)
+      Output: Markdown changelog (JSON-serializable)
+      
+      Use case: External tools can query CORTEX upgrade impact
+    
+    acceptance_criteria:
+      - AC-PHASE40-018: "cortex_upgrade_changelog MCP tool operational"
+      - AC-PHASE40-019: "Tool returns structured changelog JSON"
+    
+    files_created:
+      - "cortex/mcp/tools/upgrade_changelog_tool.py"
+    
+    files_modified:
+      - "cortex/wiring/specifications/wiring.yaml"
+
+# Dependencies
+dependencies:
+  required:
+    - "Phase 38.0 (baseline restoration)"
+    - "Git operations (merge success detection)"
+  
+  optional:
+    - "Phase 39 (AUDIT mode cohesion checks)"
+
+# Testing Strategy
+testing:
+  unit_tests: 45
+  integration_tests: 0
+  e2e_tests: 1
+  total_tests: 46
+  
+  test_focus:
+    - "Git diff parsing accuracy"
+    - "Feature categorization correctness"
+    - "Changelog formatting (table vs bullet)"
+    - "Icon assignment by category"
+    - "Impact scoring algorithm"
+    - "Truncation behavior (>20 features)"
+    - "Edge cases: 0 changes, internal-only changes"
+
+# Success Criteria
+success_criteria:
+  - criterion: "Upgrade shows 'What's New' section"
+    measurement: "Visual inspection after git merge"
+    target: "100%"
+  
+  - criterion: "Feature categorization accuracy"
+    measurement: "Manual review of 10 sample upgrades"
+    target: "≥95%"
+  
+  - criterion: "User satisfaction"
+    measurement: "User feedback (informal)"
+    target: "Positive feedback"
+  
+  - criterion: "Zero regressions"
+    measurement: "Upgrade flow still works without changelog"
+    target: "100%"
+
+# Risks
+risks:
+  - risk: "Git diff parsing complexity"
+    severity: "Medium"
+    mitigation: "Start with simple regex patterns, iterate based on testing"
+    
+  - risk: "False positives (internal changes as features)"
+    severity: "Low"
+    mitigation: "Whitelist user-facing file patterns only"
+    
+  - risk: "Performance impact"
+    severity: "Low"
+    mitigation: "Cache diff results, run async if >100 files changed"
+
+# Related Enhancements
+related_enhancements:
+  - "ENH-010: Git-based CORTEX upgrade detection"
+  - "ENH-011: Branch topology-aware upgrade"
+  - "ENH-028: Semantic response layering"
+
+# Version History
+version_history:
+  - version: "1.0"
+    date: "2026-02-07"
+    changes: "Initial phase specification - intelligent upgrade changelog system"
