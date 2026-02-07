@@ -7,7 +7,22 @@
 
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
-**Primary Prompt:** CORTEX.prompt.md in .github/prompts/ directory  
+**Primary Prompt:** CORTEX.prompt.md in ## 📋 Quick Commands
+
+| Command | Action |
+|---------|--------|
+| `/audit` | Autonomous codebase health scan |
+| `/plan` | **PLAN MODE:** Phase lifecycle management with intelligent resolution, setup/teardown hooks, and dashboard sync. Uses PlanOrchestrator → PhaseManager → DashboardGenerator. Supports: create phase, update phase, complete phase, resolve operation, prioritize phases. |
+| `/list {query}` | **LIST MODE:** Concise tabular/numbered responses for any list-type query (capabilities, modes, git history, phases, tools, etc.) |
+| `/implement {feature}` | TDD implementation |
+| `/fix {issue}` | Bug fixing |
+| `/refactor {target}` | Code improvement |
+| `/analyze {scope}` | LENS analysis |
+| `/recall {feature}` | Feature discovery |
+| `/onboard {path}` | Repository onboarding + security scan |
+| `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
+| `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
+| `/check-env` | **Environment check + CORTEX upgrade detection** |/ directory  
 **Response Format:** response-format-standards.md in .github/prompts/ directory  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  

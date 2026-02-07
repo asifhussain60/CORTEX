@@ -1,16 +1,16 @@
 # CORTEX Modes Registry
-# Purpose: Machine-readable specifications for HEXA-MODE operation
-# Authority: cortex-architect.prompt.md v14.2
+# Purpose: Machine-readable specifications for HEPTA-MODE operation
+# Authority: cortex-architect.prompt.md v14.4
 # Created: 2026-02-06
-# Version: 1.0
+# Version: 1.1
 
 meta:
-  version: "1.0"
-  updated: "2026-02-06"
-  authority: "ENH-048 (Prompt Unbloating System)"
+  version: "1.1"
+  updated: "2026-02-07"
+  authority: "ENH-048 (Prompt Unbloating System) + LIST mode addition"
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
-  total_modes: 7
+  total_modes: 8
 
 # HEXA-MODE definitions
 modes:
@@ -301,6 +301,125 @@ modes:
     related_agents:
       - "cortex-architect"
 
+  LIST:
+    name: "LIST"
+    trigger: "/list command OR list/show/display request"
+    agent: "cortex-architect"
+    priority: 3
+    description: |
+      Concise tabular or numbered responses for any list-type query.
+      Optimized for quick reference and high information density.
+      No TDD, no DoR gate - immediate response.
+    flow:
+      - "Detect list type (capabilities, modes, features, git history, etc.)"
+      - "Gather relevant data using appropriate tools"
+      - "Format as markdown table OR numbered list"
+      - "Return inline (no file generation)"
+    header_template: |
+      ## 🧠 CORTEX List
+      **Author:** Asif Hussain | **Mode:** List | **Query:** {query} ✅
+    output_formats:
+      table:
+        - "Use markdown tables for structured data"
+        - "Headers: relevant columns only"
+        - "Rows: sorted by priority/date/relevance"
+        - "Icons: status indicators (✅❌⚠️🔵🟢)"
+      numbered:
+        - "Use numbered lists for sequential data"
+        - "Indent sub-items with 4 spaces"
+        - "Bold key terms"
+        - "Keep descriptions ≤50 words"
+    supported_queries:
+      capabilities:
+        - "list cortex capabilities"
+        - "what can cortex do"
+        - "show features"
+      modes:
+        - "list modes"
+        - "show architect modes"
+        - "available modes"
+      git_history:
+        - "list last 10 features"
+        - "show recent commits"
+        - "git history summary"
+      phases:
+        - "list active phases"
+        - "show completed phases"
+        - "phase summary"
+      orchestrators:
+        - "list orchestrators"
+        - "show available orchestrators"
+      tools:
+        - "list mcp tools"
+        - "show available tools"
+      agents:
+        - "list agents"
+        - "show available agents"
+      custom:
+        - "Any list-type query"
+    mandatory_tools:
+      - "cortex_git_history (for git queries)"
+      - "cortex_tools_catalog (for tool lists)"
+      - "semantic_search (for capability discovery)"
+    forbidden:
+      - "Long prose explanations"
+      - "Code snippets (unless specifically requested)"
+      - "File generation"
+      - "TDD workflow"
+      - "DoR approval gate"
+    output_constraints:
+      - "Max 50 rows per table"
+      - "Max 20 items per numbered list"
+      - "Use '...' to indicate truncation if needed"
+      - "Provide command to get full list if truncated"
+    success_criteria:
+      - "Response fits in single screen (no scrolling)"
+      - "Information density optimized"
+      - "Actionable insights provided"
+    example_outputs:
+      capabilities: |
+        ### 🚀 CORTEX Capabilities
+        
+        | Category | Capability | Status |
+        |----------|-----------|--------|
+        | **Architecture** | MCP-First SaaS | ✅ Production |
+        | **Testing** | TDD-Mandatory | ✅ Production |
+        | **Intelligence** | LENS Protocol | ✅ Production |
+        | **Planning** | Phase Management | ✅ Production |
+        | **Optimization** | Token Budget Control | ✅ Production |
+        | **Security** | OWASP Compliance | ✅ Production |
+      
+      modes: |
+        ### 🎯 CORTEX Architect Modes
+        
+        1. **PRE-FLIGHT** — Environment validation (automatic)
+        2. **AUDIT** — Codebase health scanning
+        3. **META-AUDIT** — Prompt self-enhancement
+        4. **DIGEST** — Learning extraction from chat
+        5. **INTERACTIVE** — Exploratory Q&A (no TDD)
+        6. **PLAN** — ROI-based phase prioritization
+        7. **DESIGN** — Implementation with TDD
+        8. **LIST** — Concise tabular responses
+      
+      git_history: |
+        ### 📊 Recent Features (Last 10)
+        
+        1. **ENH-046** — Context Consumption Governance (107 tests) ✅
+        2. **Phase 36** — ML Summarization (27 tests) ✅
+        3. **Phase 35** — Autonomous Execution (49 tests) ✅
+        4. **Phase 34** — Response Optimization (64 tests) ✅
+        5. **Phase 33** — Architecture Alignment ✅
+        6. **Phase 32** — Glassmorphism Dashboard (10 tests) ✅
+        7. **Phase 29** — Response Format (48 tests) ✅
+        8. **Phase 28** — Repository Onboarding (18 tests) ✅
+        9. **Phase 27** — Company Integration (30 tests) ✅
+        10. **Phase 25** — PLAN MODE (66 tests) ✅
+    related_agents:
+      - "cortex-architect"
+    related_modes:
+      - "INTERACTIVE"  # Similar no-TDD philosophy
+      - "AUDIT"  # Often generates lists
+
 # Mode Selection Logic
 mode_detection:
   priority_order:
@@ -308,11 +427,18 @@ mode_detection:
     - "DIGEST (if chat markers detected)"
     - "META-AUDIT (if /meta-audit command)"
     - "PLAN (if /plan command or _cortex-master/ files)"
+    - "LIST (if /list command or list/show/display request)"
     - "AUDIT (if no request or /audit command)"
     - "INTERACTIVE (if question detected)"
     - "DESIGN (if implementation request)"
   
   keywords:
+    LIST:
+      - "list"
+      - "show"
+      - "display"
+      - "enumerate"
+      - "summarize"
     AUDIT:
       - "audit"
       - "health scan"

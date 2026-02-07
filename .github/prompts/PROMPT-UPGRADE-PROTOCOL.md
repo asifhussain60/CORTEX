@@ -1,5 +1,5 @@
 # CORTEX Prompt Auto-Upgrade Protocol
-**Version:** 1.0 | **Updated:** 2026-02-04 | **Authority:** Continuous Evolution | **Status:** ✅ ACTIVE
+**Version:** 1.1 | **Updated:** 2026-02-07 | **Authority:** Continuous Evolution | **Status:** ✅ ACTIVE
 
 ---
 
@@ -8,9 +8,9 @@
 All CORTEX prompts now support automatic self-upgrade detection. When loaded, each prompt checks origin/main for newer versions and offers upgrade options without blocking execution.
 
 **Affected Prompts:**
-- ✅ `cortex-architect.prompt.md` (v13.0)
+- ✅ `cortex-architect.prompt.md` (v15.0) — QUERY mode consolidation
 - ✅ `CORTEX.prompt.md` (v8.2)
-- ✅ `cortex-ask.prompt.md` (v1.0)
+- ❌ `cortex-ask.prompt.md` — **DELETED (consolidated into QUERY mode v15.0)**
 
 ---
 
@@ -82,9 +82,8 @@ If git fetch fails (timeout, offline, etc.):
 Format: **Version:** {major}.{minor} | **Updated:** YYYY-MM-DD
 
 Examples:
-- cortex-architect.prompt.md: Version 13.0
+- cortex-architect.prompt.md: Version 15.0
 - CORTEX.prompt.md: Version 8.2
-- cortex-ask.prompt.md: Version 1.0
 ```
 
 ### Timeout Protection
@@ -128,17 +127,11 @@ git fetch timeout: 5 seconds
 
 ---
 
-### cortex-ask.prompt.md (v1.0)
+### ~~cortex-ask.prompt.md (v1.0)~~ — **DELETED in v15.0**
 
-**Purpose:** Educational mode with implementation-verified truth
+**Status:** Functionality consolidated into cortex-architect.prompt.md QUERY mode
 
-**Upgrade Triggers:**
-- New LENS analyzers
-- Enhanced knowledge level detection
-- Improved next-step generation
-- Better fault detection
-
-**Section:** "🔧 PRE-FLIGHT PROMPT CHECK (AUTO-UPGRADE)" (after title, before MODE IDENTITY)
+**Migration:** All educational, verification, and list capabilities now available via `/query` command in cortex-architect
 
 ---
 
@@ -245,14 +238,13 @@ System:
    - Placed: Right after title, before System Identity
    - Status: ✅ Complete
 
-3. `/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-ask.prompt.md`
-   - Added PRE-FLIGHT PROMPT CHECK section (31 lines)
-   - Placed: Right after title, before MODE IDENTITY
-   - Status: ✅ Complete
+3. ~~`/Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-ask.prompt.md`~~
+   - **DELETED in v15.0** — Consolidated into cortex-architect QUERY mode
+   - Migration: All functionality preserved in unified QUERY mode
 
 ### Section Template
 
-All three prompts use identical structure:
+Active prompts (cortex-architect, CORTEX) use identical structure:
 
 ```markdown
 ## 🔧 PRE-FLIGHT PROMPT CHECK (AUTO-UPGRADE)
@@ -327,13 +319,13 @@ All three prompts use identical structure:
 
 ## 🔗 Related
 
-- **cortex-architect.prompt.md** — PRE-FLIGHT PROMPT CHECK section
+- **cortex-architect.prompt.md** — PRE-FLIGHT PROMPT CHECK section (v15.0 - QUERY mode consolidation)
 - **CORTEX.prompt.md** — PRE-FLIGHT PROMPT CHECK section
-- **cortex-ask.prompt.md** — PRE-FLIGHT PROMPT CHECK section
+- ~~**cortex-ask.prompt.md**~~ — **DELETED** (consolidated into cortex-architect QUERY mode)
 - **cortex-environment-setup.md** — Environment validation (parallel system)
 
 ---
 
 *"Keep prompts fresh. Evolve continuously. Let users decide when to upgrade."*
 
-✅ **Status:** All three prompts now support automatic self-upgrade with user control.
+✅ **Status:** Active prompts (cortex-architect, CORTEX) support automatic self-upgrade with user control.
