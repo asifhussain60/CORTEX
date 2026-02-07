@@ -80,13 +80,17 @@ def _get_asset_manager():
 
 
 def _get_landing_page_generator():
-    """Lazy-load LandingPageGenerator."""
+    """Lazy-load LandingPageGenerator (optional, may not exist)."""
     global _landing_page_generator
     if _landing_page_generator is None:
-        from cortex.orchestrators.support.landing_page_generator import (
-            get_landing_page_generator
-        )
-        _landing_page_generator = get_landing_page_generator()
+        try:
+            from cortex.orchestrators.support.landing_page_generator import (
+                get_landing_page_generator
+            )
+            _landing_page_generator = get_landing_page_generator()
+        except ImportError:
+            logger.warning("LandingPageGenerator not available (optional)")
+            return None
     return _landing_page_generator
 
 
@@ -102,13 +106,17 @@ def _get_business_language_orchestrator():
 
 
 def _get_universal_dashboard_generator():
-    """Lazy-load UniversalDashboardGenerator."""
+    """Lazy-load UniversalDashboardGenerator (optional, may not exist)."""
     global _universal_dashboard_generator
     if _universal_dashboard_generator is None:
-        from cortex.orchestrators.support.universal_dashboard_generator import (
-            get_universal_dashboard_generator
-        )
-        _universal_dashboard_generator = get_universal_dashboard_generator()
+        try:
+            from cortex.orchestrators.support.universal_dashboard_generator import (
+                get_universal_dashboard_generator
+            )
+            _universal_dashboard_generator = get_universal_dashboard_generator()
+        except ImportError:
+            logger.warning("UniversalDashboardGenerator not available (optional)")
+            return None
     return _universal_dashboard_generator
 
 
@@ -402,20 +410,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
                 )
                 landing_gen = _get_landing_page_generator()
                 
-                # Determine tagline
-                tagline = getattr(narrative, 'tagline', 'Software Application')
-                confidence = getattr(narrative, 'confidence', None)
-                conf_score = getattr(confidence, 'score', 50) if confidence else 50
+                if landing_gen is not None:
+                    # Determine tagline
+                    tagline = getattr(narrative, 'tagline', 'Software Application')
+                    confidence = getattr(narrative, 'confidence', None)
+                    conf_score = getattr(confidence, 'score', 50) if confidence else 50
+                    
+                    landing_gen.add_repo_to_registry(
+                        repo_name=canonical_name,
+                        title=getattr(narrative, 'title', canonical_name.upper()),
+                        description=tagline[:100],
+                        icon=icon,
+                        confidence_score=conf_score,
+                    )
+                    landing_page_path = landing_gen.regenerate_landing_page()
+                    result.landing_page_path = str(landing_page_path)
+                else:
+                    logger.info("Landing page generation skipped (optional feature not available)")
                 
-                landing_gen.add_repo_to_registry(
-                    repo_name=canonical_name,
-                    title=getattr(narrative, 'title', canonical_name.upper()),
-                    description=tagline[:100],
-                    icon=icon,
-                    confidence_score=conf_score,
-                )
-                landing_page_path = landing_gen.regenerate_landing_page()
-                result.landing_page_path = str(landing_page_path)
                 progress.complete_step()
             
             logger.info("Repository onboarding complete: %s", repo_path)
@@ -455,9 +467,24 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         """
         log_dashboard_generation("schema_conversion_start", repo_name)
         
-        # Extract language detection
-        lang_detection = lens_context.get("language_detection", {})
-        primary_language = lang_detection.get("primary_language", "Unknown")
+        # Extract language detection (handle various formats)
+        lang_detection = lens_context.get("language_detection")
+        
+        # Handle different data structures
+        if isinstance(lang_detection, dict):
+            primary_language = lang_detection.get("primary_language", "Unknown")
+            language_counts = lang_detection.get("language_counts", {})
+        elif isinstance(lang_detection, list):
+            # Should not happen - fallback to repository_summary
+            logger.warning("language_detection is a list (unexpected). Falling back to repository_summary.")
+            repo_summary_data = lens_context.get("repository_summary", {})
+            primary_language = repo_summary_data.get("primary_language", "Unknown")
+            language_counts = repo_summary_data.get("file_counts_by_language", {})
+        else:
+            # No language_detection - try repository_summary
+            repo_summary_data = lens_context.get("repository_summary", {})
+            primary_language = repo_summary_data.get("primary_language", "Unknown")
+            language_counts = repo_summary_data.get("file_counts_by_language", {})
         
         # Repo metadata section
         repo_metadata = RepoMetadata(
@@ -488,7 +515,7 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             blank_lines=repo_summary.get("blank_lines", 0),
             files=repo_summary.get("total_files", 0),
             coverage_pct=repo_summary.get("test_coverage_pct", 0.0),
-            languages=lang_detection.get("language_counts", {}),
+            languages=language_counts,  # Use extracted language_counts
         )
         
         # Security section
@@ -960,6 +987,48 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         except Exception as e:
             logger.warning("Config analysis failed: %s", e)
             return {"error": str(e)}
+    
+    def _analyze_database_layer(self, repo_path: Path) -> Dict[str, Any]:
+        """Analyze database-related files and configurations."""
+        try:
+            db_files = {
+                "migrations": list(repo_path.glob("**/migrations/**/*.py")),
+                "models": list(repo_path.glob("**/models.py")),
+                "sql": list(repo_path.glob("**/*.sql")),
+                "alembic": list(repo_path.glob("**/alembic/**/*.py")),
+            }
+            
+            return {
+                "has_database": any(len(files) > 0 for files in db_files.values()),
+                "migration_files": len(db_files["migrations"]),
+                "model_files": len(db_files["models"]),
+                "sql_files": len(db_files["sql"]),
+                "has_alembic": len(db_files["alembic"]) > 0,
+            }
+        except Exception as e:
+            logger.warning("Database analysis failed: %s", e)
+            return {"error": str(e), "has_database": False}
+    
+    def _analyze_api_layer(self, repo_path: Path) -> Dict[str, Any]:
+        """Analyze API-related files and endpoints."""
+        try:
+            api_patterns = {
+                "flask": list(repo_path.glob("**/app.py")) + list(repo_path.glob("**/api/**/*.py")),
+                "fastapi": list(repo_path.glob("**/main.py")) + list(repo_path.glob("**/routers/**/*.py")),
+                "django": list(repo_path.glob("**/views.py")) + list(repo_path.glob("**/urls.py")),
+                "rest": list(repo_path.glob("**/rest/**/*.py")),
+            }
+            
+            return {
+                "has_api": any(len(files) > 0 for files in api_patterns.values()),
+                "flask_files": len(api_patterns["flask"]),
+                "fastapi_files": len(api_patterns["fastapi"]),
+                "django_files": len(api_patterns["django"]),
+                "rest_files": len(api_patterns["rest"]),
+            }
+        except Exception as e:
+            logger.warning("API analysis failed: %s", e)
+            return {"error": str(e), "has_api": False}
     
     def _analyze_dependency_layer(self, repo_path: Path) -> Dict[str, Any]:
         """
