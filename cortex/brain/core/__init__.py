@@ -7,6 +7,7 @@ Contains SOLID/DRY compliant shared utilities:
 - config.py: Unified configuration loading
 - path_resolver.py: Cross-platform path resolution
 - yaml_loader.py: Single YAML loading implementation
+- session_summary_generator.py: Session summary formatting (ENH-048)
 
 All tools and orchestrators should use these utilities
 to avoid duplication and ensure consistency.
@@ -15,9 +16,21 @@ to avoid duplication and ensure consistency.
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import get_project_root, resolve_path
 from cortex.brain.core.config import load_config
+from cortex.brain.core.session_summary_generator import (
+    format_session_summary,
+    generate_continuation_checkpoint,
+    get_token_status,
+    SessionMetrics,
+    StageResult,
+)
 
 __all__ = [
     "Result", "Ok", "Err",
     "get_project_root", "resolve_path",
-    "load_config"
+    "load_config",
+    "format_session_summary",
+    "generate_continuation_checkpoint",
+    "get_token_status",
+    "SessionMetrics",
+    "StageResult",
 ]
