@@ -1,0 +1,119 @@
+"""
+Test suite for /persona and /detail command handlers.
+
+Tests command parsing and execution.
+
+AC_START: AC-PHASE37.3-002
+"""
+
+import pytest
+from typing import Dict, Any
+
+# GREEN phase - implementation complete
+from cortex.orchestrators.core.persona_commands import PersonaCommandHandler, DetailCommandHandler
+
+
+class TestPersonaCommandHandler:
+    """Test /persona command handler."""
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_persona_set_command(self):
+        """Should set active persona via /persona set <id>."""
+        handler = PersonaCommandHandler()
+        result = handler.execute("/persona set engineer")
+        
+        assert result["success"] is True
+        assert result["persona_id"] == "engineer"
+        assert "engineer" in result["message"].lower()
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_persona_set_with_alias(self):
+        """Should resolve alias via /persona set <alias>."""
+        handler = PersonaCommandHandler()
+        result = handler.execute("/persona set eng")
+        
+        assert result["success"] is True
+        assert result["persona_id"] == "engineer"  # Alias resolved
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_persona_show_command(self):
+        """Should show current persona via /persona show."""
+        handler = PersonaCommandHandler()
+        handler.execute("/persona set business_leader")
+        result = handler.execute("/persona show")
+        
+        assert result["persona_id"] == "business_leader"
+        assert "business" in result["message"].lower()  # Check for readable name
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_persona_list_command(self):
+        """Should list all personas via /persona list."""
+        handler = PersonaCommandHandler()
+        result = handler.execute("/persona list")
+        
+        assert result["success"] is True
+        assert len(result["personas"]) >= 5  # engineer, business_leader, etc.
+        assert "engineer" in result["personas"]
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_persona_invalid_id_returns_error(self):
+        """Should return error for invalid persona ID."""
+        handler = PersonaCommandHandler()
+        result = handler.execute("/persona set invalid_persona")
+        
+        assert result["success"] is False
+        assert "invalid" in result["message"].lower() or "not found" in result["message"].lower()
+
+
+class TestDetailCommandHandler:
+    """Test /detail command handler."""
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_detail_set_command(self):
+        """Should set depth via /detail set <level>."""
+        handler = DetailCommandHandler()
+        result = handler.execute("/detail set detailed")
+        
+        assert result["success"] is True
+        assert result["depth_id"] == "detailed"
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_detail_show_command(self):
+        """Should show current depth via /detail show."""
+        handler = DetailCommandHandler()
+        handler.execute("/detail set executive")
+        result = handler.execute("/detail show")
+        
+        assert result["depth_id"] == "executive"
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_detail_reset_command(self):
+        """Should reset to persona default via /detail reset."""
+        handler = DetailCommandHandler()
+        handler.execute("/detail set full")
+        result = handler.execute("/detail reset")
+        
+        assert result["success"] is True
+        assert "reset" in result["message"].lower()
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_detail_set_with_turns(self):
+        """Should set depth with TTL via /detail set <level> <turns>."""
+        handler = DetailCommandHandler()
+        result = handler.execute("/detail set detailed 3")
+        
+        assert result["success"] is True
+        assert result["depth_id"] == "detailed"
+        assert result["turns"] == 3
+    
+    # @pytest.mark.skip(reason="GREEN phase")
+    def test_detail_invalid_level_returns_error(self):
+        """Should return error for invalid depth level."""
+        handler = DetailCommandHandler()
+        result = handler.execute("/detail set invalid_level")
+        
+        assert result["success"] is False
+        assert "invalid" in result["message"].lower()
+
+
+# AC_COMPLETE: AC-PHASE37.3-002 ✅ 0/10 tests (skipped, RED phase)

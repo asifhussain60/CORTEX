@@ -98,6 +98,14 @@ class PersonaLoader:
         config = self._load_config()
         return config.list_personas()
     
+    def list_personas(self) -> List[str]:
+        """Alias for list_persona_ids() for convenience.
+        
+        Returns:
+            List of persona IDs
+        """
+        return self.list_persona_ids()
+    
     def clear_cache(self) -> None:
         """Clear LRU caches (useful for testing)."""
         self.get_persona.cache_clear()

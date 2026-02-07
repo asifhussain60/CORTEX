@@ -96,6 +96,22 @@ class DepthManager:
             True if override active
         """
         return self._override is not None
+    
+    def get_override(self) -> Optional[DepthOverride]:
+        """Get current depth override.
+        
+        Returns:
+            DepthOverride if active, None otherwise
+        """
+        return self._override
+    
+    def get_persona_default(self) -> Optional[str]:
+        """Get persona default depth.
+        
+        Returns:
+            Default depth ID or None
+        """
+        return self._persona_default
 
 
 # AC_COMPLETE: AC-PHASE37.2-007 ✅ DepthManager with TTL and sticky overrides
