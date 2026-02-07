@@ -1,0 +1,680 @@
+# Phase 38: Brain Cohesion & Health System
+# Authority: CORTEX Architect Holistic Cohesion Audit (2026-02-07)
+# Priority: P0 (Critical architectural gap)
+# ROI Score: 0.94 (High impact, moderate effort - updated)
+
+version: "1.1"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "CORTEX Architect"
+status: "active"
+
+# Executive Summary
+summary:
+  title: "Brain Cohesion & Health System + MCP/SaaS/Collaboration Readiness"
+  description: |
+    Comprehensive system to ensure all CORTEX brain components operate
+    coherently, orchestrators intelligently share capabilities, governance
+    adapts to context, company domains are continuously enhanced, and
+    stale brain state is systematically flushed.
+    
+    Addresses 12 critical gaps (7 original + 5 new):
+    
+    ORIGINAL GAPS:
+    1. No centralized brain health monitoring
+    2. Orchestrators don't share capabilities intelligently  
+    3. Governance rules don't adapt to user context
+    4. company/domains/ nearly empty
+    5. No automatic domain enhancement pipeline
+    6. No unified brain state flush system
+    7. AUDIT mode missing cohesion checks
+    
+    NEW GAPS (2026-02-07 Enhancement):
+    8. Incomplete MCP exposure for CORTEX toolkit (35 orchestrators)
+    9. No central brain architecture for team collaboration
+    10. SaaS/MCP deployment readiness not validated
+    11. Regression risk not systematically checked
+    12. VacuumOrchestrator limited to markdown (no file relocation/recataloging)
+  
+  priority: "P0"
+  estimated_effort: "4 weeks"
+  test_count_target: 220
+  coverage_target: "85%"
+
+# ROI Analysis
+roi_analysis:
+  value_score: 0.96
+  success_probability: 0.92
+  urgency_factor: 0.95
+  effort_days: 20
+  roi_formula: "(0.96 * 0.92 * 0.95) / 20 = 0.042 (normalized: 0.94)"
+  justification: |
+    Critical architectural gap affecting:
+    - Orchestrator efficiency (30% capability overlap without sharing)
+    - Governance accuracy (static rules miss context)
+    - Company domain utilization (0% of potential)
+    - Brain state bloat (unbounded growth)
+    - Team collaboration blocked (no central brain)
+    - MCP toolkit incomplete (coverage gaps)
+    - SaaS readiness unknown (no deployment validation)
+    - Regression risk unmonitored (existing functionality safety)
+
+# Stages (TDD-First)
+stages:
+  stage_1:
+    name: "Brain Health Monitor"
+    description: |
+      Centralized brain health monitoring with cohesion metrics.
+      Detects: stale caches, disconnected orchestrators, knowledge gaps.
+    acceptance_criteria:
+      - id: "AC-PHASE38-001"
+        description: "BrainHealthOrchestrator with 5 health dimensions"
+        tests_required: 15
+        metrics:
+          - "cache_staleness_ratio"
+          - "orchestrator_connectivity_score"
+          - "knowledge_freshness_index"
+          - "governance_coverage_percent"
+          - "domain_utilization_rate"
+      - id: "AC-PHASE38-002"
+        description: "Prometheus metrics export for brain health"
+        tests_required: 8
+    files:
+      - "cortex/orchestrators/support/brain_health_orchestrator.py"
+      - "cortex/infrastructure/brain_health_metrics.py"
+      - "tests/unit/orchestrators/support/test_brain_health_orchestrator.py"
+    duration: "3 days"
+    tests_target: 23
+    
+  stage_2:
+    name: "Orchestrator Capability Mesh"
+    description: |
+      Runtime capability discovery and intelligent sharing between orchestrators.
+      Enables: dynamic capability routing, shared context, cross-orchestrator calls.
+    acceptance_criteria:
+      - id: "AC-PHASE38-003"
+        description: "OrchestratorCapabilityRegistry with dynamic discovery"
+        tests_required: 12
+      - id: "AC-PHASE38-004"
+        description: "CapabilityMeshRouter for intelligent cross-orchestrator calls"
+        tests_required: 15
+      - id: "AC-PHASE38-005"
+        description: "StandardsResolver integration in 15+ orchestrators"
+        tests_required: 10
+    files:
+      - "cortex/orchestrators/registry/capability_mesh.py"
+      - "cortex/orchestrators/registry/capability_discovery.py"
+      - "tests/unit/orchestrators/registry/test_capability_mesh.py"
+    duration: "4 days"
+    tests_target: 37
+    
+  stage_3:
+    name: "Context-Aware Governance"
+    description: |
+      Governance rules that adapt based on user context, repository profile,
+      and operation type. Dynamic CORE rule weighting.
+    acceptance_criteria:
+      - id: "AC-PHASE38-006"
+        description: "GovernanceContextAdapter with profile-based weighting"
+        tests_required: 12
+      - id: "AC-PHASE38-007"
+        description: "Dynamic CORE rule severity adjustment"
+        tests_required: 8
+      - id: "AC-PHASE38-008"
+        description: "EnforcementOrchestrator integration"
+        tests_required: 5
+    files:
+      - "cortex/governance/context_aware_governance.py"
+      - "cortex/governance/rule_weight_calculator.py"
+      - "tests/unit/governance/test_context_aware_governance.py"
+    duration: "3 days"
+    tests_target: 25
+    
+  stage_4:
+    name: "Company Domain Enhancement Pipeline"
+    description: |
+      Automatic domain template generation, gap detection during operations,
+      and continuous domain refinement like DIGEST mode for company standards.
+    acceptance_criteria:
+      - id: "AC-PHASE38-009"
+        description: "DomainEnhancementOrchestrator for automatic domain creation"
+        tests_required: 15
+      - id: "AC-PHASE38-010"
+        description: "Company domain templates for common patterns"
+        tests_required: 8
+        templates:
+          - "security-standards"
+          - "testing-standards"
+          - "documentation-standards"
+          - "api-design-standards"
+          - "deployment-standards"
+      - id: "AC-PHASE38-011"
+        description: "GapAnalyzer integration with AUDIT mode"
+        tests_required: 7
+    files:
+      - "cortex/orchestrators/domain/domain_enhancement_orchestrator.py"
+      - "company/domains/_templates/"
+      - "tests/unit/orchestrators/domain/test_domain_enhancement.py"
+    duration: "3 days"
+    tests_target: 30
+    
+  stage_5:
+    name: "Brain State Flush System"
+    description: |
+      Unified flush system for brain health: cache eviction, context pruning,
+      stale data removal, database compaction. Scheduled and on-demand.
+    acceptance_criteria:
+      - id: "AC-PHASE38-012"
+        description: "BrainFlushOrchestrator with unified cleanup"
+        tests_required: 12
+        flush_targets:
+          - "context_cache (TTL-based)"
+          - "embedding_cache (LRU)"
+          - "governance.db WAL (rotation)"
+          - "stale_sessions (age-based)"
+          - "orphan_checkpoints (reference-based)"
+      - id: "AC-PHASE38-013"
+        description: "Scheduled flush daemon (optional background)"
+        tests_required: 8
+      - id: "AC-PHASE38-014"
+        description: "/flush command for on-demand cleanup"
+        tests_required: 5
+    files:
+      - "cortex/orchestrators/support/brain_flush_orchestrator.py"
+      - "cortex/infrastructure/flush_scheduler.py"
+      - "tests/unit/orchestrators/support/test_brain_flush.py"
+    duration: "3 days"
+    tests_target: 25
+    
+  stage_6:
+    name: "AUDIT Mode Cohesion Checks"
+    description: |
+      Add cohesion checks to audit-checklist.yaml and cortex-architect.prompt.md.
+      New P1.5 category: "Brain Cohesion & Health"
+    acceptance_criteria:
+      - id: "AC-PHASE38-015"
+        description: "audit-checklist.yaml updated with cohesion checks"
+        tests_required: 5
+        new_checks:
+          - "P1.5-001: Brain Health Score (>=80%)"
+          - "P1.5-002: Orchestrator Connectivity (>=90%)"
+          - "P1.5-003: Company Domain Utilization (>=50%)"
+          - "P1.5-004: Brain State Freshness (<24h)"
+          - "P1.5-005: Governance Adaptation Enabled"
+      - id: "AC-PHASE38-016"
+        description: "cortex-architect.prompt.md AUDIT flow updated"
+        tests_required: 3
+      - id: "AC-PHASE38-017"
+        description: "VacuumOrchestrator extended for brain flush"
+        tests_required: 5
+    files:
+      - "cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+      - ".github/prompts/cortex-architect.prompt.md"
+      - "cortex/orchestrators/support/vacuum_orchestrator.py"
+      - "tests/unit/governance/test_cohesion_audit.py"
+    duration: "2 days"
+    tests_target: 13
+    
+  # NEW STAGES (2026-02-07 Enhancement)
+  stage_7:
+    name: "MCP Toolkit Completeness Audit"
+    description: |
+      Audit ALL 35 orchestrators for MCP exposure. Ensure every orchestrator
+      capability is exposed via MCP tool. Generate missing MCP tool specs.
+    acceptance_criteria:
+      - id: "AC-PHASE38-018"
+        description: "MCPExposureAuditor scans all orchestrators"
+        tests_required: 10
+        validation: |
+          - Detect orchestrators without MCP tools
+          - Generate MCP tool specifications
+          - Validate tool inputs/outputs match orchestrator interfaces
+      - id: "AC-PHASE38-019"
+        description: "100% MCP coverage for all 35 orchestrators"
+        tests_required: 8
+        targets:
+          - "Core (8/8 orchestrators)"
+          - "Domain (8/8 orchestrators)"
+          - "Support (21/21 orchestrators)"
+      - id: "AC-PHASE38-020"
+        description: "MCP tool registry auto-generation"
+        tests_required: 7
+    files:
+      - "cortex/mcp/exposure_auditor.py"
+      - "cortex/mcp/tool_spec_generator.py"
+      - "tests/unit/mcp/test_exposure_auditor.py"
+    duration: "3 days"
+    tests_target: 25
+    
+  stage_8:
+    name: "Central Brain Architecture for Team Collaboration"
+    description: |
+      Design and implement central brain state that multiple team members
+      can collaborate through. Shared context, distributed learning,
+      conflict-free concurrent operations.
+    acceptance_criteria:
+      - id: "AC-PHASE38-021"
+        description: "CentralBrainOrchestrator with multi-user support"
+        tests_required: 15
+        features:
+          - "Shared context pool (Redis-backed)"
+          - "User session isolation"
+          - "Learning aggregation across users"
+          - "Conflict-free concurrent writes (CRDT)"
+      - id: "AC-PHASE38-022"
+        description: "Team collaboration MCP tools"
+        tests_required: 10
+        tools:
+          - "cortex_brain_share (share context with team)"
+          - "cortex_brain_merge (merge learnings)"
+          - "cortex_brain_sync (sync state across users)"
+      - id: "AC-PHASE38-023"
+        description: "Multi-tenant brain state management"
+        tests_required: 8
+    files:
+      - "cortex/orchestrators/core/central_brain_orchestrator.py"
+      - "cortex/infrastructure/shared_brain_store.py"
+      - "cortex/mcp/tools/brain_collaboration_tools.py"
+      - "tests/unit/orchestrators/core/test_central_brain.py"
+    duration: "4 days"
+    tests_target: 33
+    
+  stage_9:
+    name: "SaaS/MCP Deployment Validation"
+    description: |
+      Validate CORTEX can be deployed as both MCP server AND SaaS.
+      Load testing, multi-user scaling, API compatibility checks.
+    acceptance_criteria:
+      - id: "AC-PHASE38-024"
+        description: "DeploymentValidator for MCP and SaaS modes"
+        tests_required: 12
+        validations:
+          - "MCP protocol compliance (SSE streaming, tool discovery)"
+          - "SaaS API endpoints (REST + WebSocket)"
+          - "Load testing (100 concurrent users)"
+          - "State persistence across restarts"
+      - id: "AC-PHASE38-025"
+        description: "Multi-user scaling validation"
+        tests_required: 10
+        targets:
+          - "10 users: <200ms p95 latency"
+          - "50 users: <500ms p95 latency"
+          - "100 users: <1s p95 latency"
+      - id: "AC-PHASE38-026"
+        description: "Deployment smoke tests (Docker + Kubernetes)"
+        tests_required: 8
+    files:
+      - "cortex/deployment/deployment_validator.py"
+      - "cortex/deployment/load_test_scenarios.py"
+      - "tests/integration/deployment/test_mcp_saas_validation.py"
+    duration: "3 days"
+    tests_target: 30
+    
+  stage_10:
+    name: "Regression Safety Net"
+    description: |
+      Systematic regression detection for all Phase 38 changes.
+      Ensure NO existing CORTEX functionality breaks.
+    acceptance_criteria:
+      - id: "AC-PHASE38-027"
+        description: "RegressionSafetyOrchestrator with baseline comparison"
+        tests_required: 10
+        checks:
+          - "All existing tests pass (baseline: 100%)"
+          - "No performance degradation (latency +10% threshold)"
+          - "Backward compatibility for all MCP tools"
+          - "No breaking changes to orchestrator interfaces"
+      - id: "AC-PHASE38-028"
+        description: "Pre-commit regression hook"
+        tests_required: 7
+        hook_checks:
+          - "Run all existing unit tests"
+          - "Check for removed/renamed public APIs"
+          - "Validate wiring.yaml integrity"
+      - id: "AC-PHASE38-029"
+        description: "Integration test suite expansion"
+        tests_required: 8
+        coverage:
+          - "End-to-end IMPLEMENT flow"
+          - "AUDIT mode with P1.5 checks"
+          - "Multi-orchestrator workflows"
+    files:
+      - "cortex/governance/regression_safety_orchestrator.py"
+      - "cortex/testing/regression_detector.py"
+      - ".github/hooks/pre-commit-regression-check.sh"
+      - "tests/regression/test_phase_38_safety.py"
+    duration: "3 days"
+    tests_target: 25
+    
+  stage_11:
+    name: "VacuumOrchestrator Enhancement (File Relocation + Recataloging)"
+    description: |
+      Extend VacuumOrchestrator beyond markdown cleanup to handle:
+      1. File relocation with path updates
+      2. Recataloging (update imports, wiring.yaml, registry references)
+      3. SCREAMING_CASE detection and kebab-case migration
+      4. Optimal CORTEX folder state (root + nested compliance)
+    acceptance_criteria:
+      - id: "AC-PHASE38-030"
+        description: "FileRelocationEngine with path update propagation"
+        tests_required: 12
+        features:
+          - "Detect files violating placement rules"
+          - "Generate relocation plan (source → dest)"
+          - "Update all references (imports, wiring, registry)"
+          - "Git mv with history preservation"
+      - id: "AC-PHASE38-031"
+        description: "ScreamingCaseDetector + kebab-case migration"
+        tests_required: 10
+        checks:
+          - "Detect SCREAMING_CASE files (violates CORE-028)"
+          - "Generate kebab-case alternatives"
+          - "Bulk rename with reference updates"
+      - id: "AC-PHASE38-032"
+        description: "Recataloging engine (update wiring + registry)"
+        tests_required: 8
+        updates:
+          - "wiring.yaml orchestrator paths"
+          - "cortex-registry index.yaml references"
+          - "Python import statements"
+          - "Documentation links"
+      - id: "AC-PHASE38-033"
+        description: "Optimal folder state validator"
+        tests_required: 7
+        validation:
+          - "No files in root (except allowed: README, Makefile, etc.)"
+          - "All .py files in cortex/, tests/"
+          - "All .md files in docs/, .github/"
+          - "All orchestrators in cortex/orchestrators/"
+    files:
+      - "cortex/orchestrators/support/vacuum_orchestrator.py (enhance)"
+      - "cortex/orchestrators/support/file_relocation_engine.py"
+      - "cortex/orchestrators/support/recataloging_engine.py"
+      - "cortex/orchestrators/support/screaming_case_detector.py"
+      - "tests/unit/orchestrators/support/test_file_relocation.py"
+      - "tests/unit/orchestrators/support/test_recataloging.py"
+    duration: "4 days"
+    tests_target: 37
+    
+  stage_12:
+    name: "cortex-architect AUDIT Mode Integration"
+    description: |
+      Update cortex-architect.prompt.md to audit ALL Phase 38 enhancements.
+      Ensure AUDIT mode checks: MCP coverage, team collaboration, SaaS readiness,
+      regression safety, file placement governance.
+    acceptance_criteria:
+      - id: "AC-PHASE38-034"
+        description: "cortex-architect.prompt.md updated with Phase 38 checks"
+        tests_required: 5
+        checks_added:
+          - "P1.5-006: MCP Toolkit Completeness (100% coverage)"
+          - "P1.5-007: Central Brain Health (multi-user capable)"
+          - "P1.5-008: SaaS/MCP Deployment Ready (load tests pass)"
+          - "P1.5-009: Regression Safety Net (no broken functionality)"
+          - "P1.5-010: File Placement Governance (kebab-case, optimal folders)"
+      - id: "AC-PHASE38-035"
+        description: "AUDIT mode workflow includes Phase 38 validation"
+        tests_required: 3
+      - id: "AC-PHASE38-036"
+        description: "Documentation updated with Phase 38 capabilities"
+        tests_required: 2
+    files:
+      - ".github/prompts/cortex-architect.prompt.md"
+      - "cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+      - "docs/architecture/phase-38-brain-cohesion.md"
+      - "tests/unit/governance/test_phase_38_audit_integration.py"
+    duration: "2 days"
+    tests_target: 10
+
+# MCP Tools (New)
+mcp_tools:
+  # ORIGINAL TOOLS (Stages 1-6)
+  - name: "cortex_brain_health"
+    description: "Get current brain health metrics"
+    stage: "stage_1"
+    inputs: []
+    outputs:
+      - "health_score: float (0-100)"
+      - "dimensions: Dict[str, float]"
+      - "recommendations: List[str]"
+  
+  - name: "cortex_capability_mesh"
+    description: "Query orchestrator capabilities at runtime"
+    stage: "stage_2"
+    inputs:
+      - "capability_name: str"
+    outputs:
+      - "orchestrators: List[str]"
+      - "best_match: str"
+      - "confidence: float"
+  
+  - name: "cortex_flush_brain"
+    description: "Trigger brain state flush"
+    stage: "stage_5"
+    inputs:
+      - "targets: List[str] (optional)"
+      - "force: bool (default False)"
+    outputs:
+      - "flushed_items: int"
+      - "freed_bytes: int"
+      - "duration_ms: int"
+  
+  - name: "cortex_enhance_domain"
+    description: "Suggest or create company domain enhancements"
+    stage: "stage_4"
+    inputs:
+      - "domain_name: str"
+      - "operation_context: Dict"
+    outputs:
+      - "gaps: List[str]"
+      - "template_suggestion: Optional[str]"
+      - "auto_created: bool"
+  
+  # NEW TOOLS (Stages 7-12)
+  - name: "cortex_mcp_audit"
+    description: "Audit MCP toolkit completeness for all orchestrators"
+    stage: "stage_7"
+    inputs:
+      - "include_missing: bool (default True)"
+    outputs:
+      - "total_orchestrators: int"
+      - "exposed_count: int"
+      - "missing_count: int"
+      - "coverage_percent: float"
+      - "missing_orchestrators: List[str]"
+      - "generated_specs: List[Dict]"
+  
+  - name: "cortex_brain_share"
+    description: "Share brain context with team members"
+    stage: "stage_8"
+    inputs:
+      - "context_id: str"
+      - "target_users: List[str]"
+      - "scope: str (session|project|global)"
+    outputs:
+      - "shared_with: List[str]"
+      - "share_id: str"
+      - "expiry: datetime"
+  
+  - name: "cortex_brain_merge"
+    description: "Merge learnings from team members"
+    stage: "stage_8"
+    inputs:
+      - "source_users: List[str]"
+      - "conflict_resolution: str (latest|vote|manual)"
+    outputs:
+      - "merged_learnings: int"
+      - "conflicts: int"
+      - "success: bool"
+  
+  - name: "cortex_brain_sync"
+    description: "Sync brain state across users/instances"
+    stage: "stage_8"
+    inputs:
+      - "target_instance: str (optional)"
+    outputs:
+      - "synced_items: int"
+      - "sync_time_ms: int"
+      - "conflicts_resolved: int"
+  
+  - name: "cortex_validate_deployment"
+    description: "Validate SaaS/MCP deployment readiness"
+    stage: "stage_9"
+    inputs:
+      - "mode: str (mcp|saas|both)"
+      - "run_load_tests: bool (default False)"
+    outputs:
+      - "mcp_compliant: bool"
+      - "saas_ready: bool"
+      - "load_test_results: Dict"
+      - "issues: List[str]"
+  
+  - name: "cortex_regression_check"
+    description: "Check for regressions in existing functionality"
+    stage: "stage_10"
+    inputs:
+      - "baseline_version: str (optional)"
+      - "check_performance: bool (default True)"
+    outputs:
+      - "regressions_found: int"
+      - "broken_tests: List[str]"
+      - "performance_delta: Dict[str, float]"
+      - "backward_compatible: bool"
+  
+  - name: "cortex_vacuum_relocate"
+    description: "Relocate files with recataloging and path updates"
+    stage: "stage_11"
+    inputs:
+      - "file_paths: List[str]"
+      - "target_location: str (optional, auto-detect if not provided)"
+      - "update_references: bool (default True)"
+    outputs:
+      - "files_relocated: int"
+      - "references_updated: int"
+      - "screaming_case_fixed: int"
+      - "relocation_plan: List[Dict]"
+
+# Governance Integration
+governance:
+  core_rules_affected:
+    - "CORE-008: TDD (all stages)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-028: File naming (kebab-case, stage_11)"
+    - "CORE-035: Single canonical implementation"
+  new_audit_checks:
+    - "P1.5-001 to P1.5-005 (Brain Cohesion - stages 1-6)"
+    - "P1.5-006: MCP Toolkit Completeness (stage_7)"
+    - "P1.5-007: Central Brain Health (stage_8)"
+    - "P1.5-008: SaaS/MCP Deployment Ready (stage_9)"
+    - "P1.5-009: Regression Safety Net (stage_10)"
+    - "P1.5-010: File Placement Governance (stage_11)"
+  enforcement_level: "WARNING (non-blocking initially, P0 escalation if violations >3)"
+  audit_integration:
+    prompt_file: ".github/prompts/cortex-architect.prompt.md"
+    checklist_file: "cortex-registry/_cortex-master/governance/audit-checklist.yaml"
+    enforcement_agent: "EnforcementOrchestrator"
+    audit_mode: "HEXA-MODE AUDIT step includes P1.5 checks"
+
+# Dependencies
+dependencies:
+  requires:
+    - "Phase 27: Company Domain Integration (complete)"
+    - "Phase 28: Repository Onboarding (complete)"
+    - "ENH-046: Context Synthesis Gateway (complete)"
+  enables:
+    - "Phase 39: Adaptive Governance Evolution"
+    - "Phase 40: Self-Healing Brain Architecture"
+
+# Success Metrics
+success_metrics:
+  # ORIGINAL METRICS (Stages 1-6)
+  brain_health_score: ">=80% across all dimensions"
+  orchestrator_connectivity: ">=90% capability mesh coverage"
+  company_domain_utilization: ">=50% of operations use company standards"
+  brain_state_freshness: "All caches <24h age"
+  audit_cohesion_coverage: "100% of new checks implemented"
+  test_coverage: ">=85% on all new code"
+  
+  # NEW METRICS (Stages 7-12)
+  mcp_toolkit_completeness: "100% of 35 orchestrators exposed via MCP"
+  team_collaboration_ready: "Multi-user brain state with <100ms sync latency"
+  saas_deployment_validated: "Load tests pass (100 users, <1s p95 latency)"
+  regression_safety: "0 broken tests, <10% performance degradation"
+  file_placement_compliance: "100% kebab-case, 0 SCREAMING_CASE, optimal folders"
+  vacuum_enhancement: "File relocation + recataloging functional"
+
+# Migration & Cleanup
+migration:
+  vacuum_orchestrator_tasks:
+    - "Extend VacuumOrchestrator to call BrainFlushOrchestrator"
+    - "Add /flush command to quick commands"
+    - "Integrate brain flush into AUDIT mode step_0"
+    - "Add FileRelocationEngine for file moves with reference updates"
+    - "Add RecatalogingEngine for wiring.yaml + registry updates"
+    - "Add ScreamingCaseDetector for CORE-028 compliance"
+    - "Implement optimal folder state validator"
+  deprecated_patterns:
+    - "Direct cache clearing without unified flush"
+    - "Isolated orchestrator operations without capability mesh"
+    - "Static governance without context adaptation"
+    - "Manual file relocation without recataloging"
+    - "SCREAMING_CASE file names (CORE-028 violation)"
+  rollback_plan:
+    - "Feature flag: CORTEX_BRAIN_COHESION_ENABLED=false"
+    - "Feature flag: CORTEX_MCP_COMPLETENESS_ENABLED=false"
+    - "Feature flag: CORTEX_CENTRAL_BRAIN_ENABLED=false"
+    - "Graceful degradation to current behavior"
+    - "No breaking changes to existing APIs"
+    - "Regression tests enforce backward compatibility"
+
+# Timeline
+timeline:
+  total_duration: "20 days (4 weeks)"
+  milestones:
+    - day_3: "Stage 1 complete (Brain Health Monitor)"
+    - day_7: "Stage 2 complete (Capability Mesh)"
+    - day_10: "Stage 3 complete (Context-Aware Governance)"
+    - day_13: "Stages 4-5 complete (Domain Enhancement + Flush)"
+    - day_15: "Stage 6 complete (AUDIT Integration)"
+    - day_18: "Stages 7-8 complete (MCP Audit + Central Brain)"
+    - day_21: "Stages 9-10 complete (SaaS Validation + Regression)"
+    - day_25: "Stage 11 complete (Vacuum Enhancement)"
+    - day_27: "Stage 12 complete (cortex-architect Integration)"
+
+# Verification
+verification:
+  unit_tests: 213
+  integration_tests: 20
+  e2e_tests: 7
+  regression_tests: 15
+  load_tests: 5
+  total_tests: 260
+  coverage_target: "85%"
+  validation_commands:
+    # ORIGINAL STAGES (1-6)
+    - "pytest tests/unit/orchestrators/support/test_brain_health*.py -v"
+    - "pytest tests/unit/orchestrators/registry/test_capability*.py -v"
+    - "pytest tests/unit/governance/test_context_aware*.py -v"
+    - "pytest tests/unit/orchestrators/domain/test_domain_enhancement*.py -v"
+    - "pytest tests/unit/orchestrators/support/test_brain_flush*.py -v"
+    - "pytest tests/unit/governance/test_cohesion_audit*.py -v"
+    # NEW STAGES (7-12)
+    - "pytest tests/unit/mcp/test_exposure_auditor*.py -v"
+    - "pytest tests/unit/orchestrators/core/test_central_brain*.py -v"
+    - "pytest tests/integration/deployment/test_mcp_saas_validation*.py -v"
+    - "pytest tests/regression/test_phase_38_safety*.py -v"
+    - "pytest tests/unit/orchestrators/support/test_file_relocation*.py -v"
+    - "pytest tests/unit/orchestrators/support/test_recataloging*.py -v"
+    - "pytest tests/unit/governance/test_phase_38_audit_integration*.py -v"
+  continuous_integration:
+    pre_commit_hooks:
+      - "Regression safety check"
+      - "MCP toolkit completeness check"
+      - "File placement governance check"
+    ci_pipeline_steps:
+      - "Unit tests (all stages)"
+      - "Integration tests (stages 8-9)"
+      - "Regression tests (stage 10)"
+      - "Load tests (stage 9)"
+      - "Coverage report (>=85%)"

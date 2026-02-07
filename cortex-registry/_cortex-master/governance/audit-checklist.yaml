@@ -216,6 +216,157 @@ priority_checks:
         severity: "LOW"
         related_rules: ["CORE-012"]
 
+  # NEW: Brain Cohesion & Health (Phase 38)
+  P1_5:
+    name: "Brain Cohesion & Health"
+    description: "CORTEX brain coherence, orchestrator mesh, domain utilization"
+    mandatory: true
+    blocking: false
+    phase_reference: "phase-38-brain-cohesion-health-system.yaml"
+    checks:
+      - id: "P1.5-001"
+        name: "Brain Health Score"
+        description: "Aggregated brain health >=80%"
+        tool: "cortex_brain_health"
+        threshold: 80
+        dimensions:
+          - "cache_staleness_ratio"
+          - "orchestrator_connectivity_score"
+          - "knowledge_freshness_index"
+          - "governance_coverage_percent"
+          - "domain_utilization_rate"
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "cortex_flush_brain"
+        severity: "MEDIUM"
+        
+      - id: "P1.5-002"
+        name: "Orchestrator Connectivity"
+        description: ">=90% capability mesh coverage"
+        tool: "cortex_capability_mesh"
+        threshold: 90
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        validation: |
+          Check that orchestrators can discover and call each other's
+          capabilities at runtime. Flag isolated orchestrators.
+        
+      - id: "P1.5-003"
+        name: "Company Domain Utilization"
+        description: ">=50% of operations use company standards"
+        tool: "cortex_audit"
+        query: |
+          SELECT COUNT(*) as total, 
+                 SUM(CASE WHEN company_standards_used THEN 1 ELSE 0 END) as with_standards
+          FROM operations
+          WHERE timestamp > datetime('now', '-7 days')
+        threshold: 50
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+        
+      - id: "P1.5-004"
+        name: "Brain State Freshness"
+        description: "All caches <24h age"
+        tool: "cortex_brain_health"
+        metric: "knowledge_freshness_index"
+        threshold: 95
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "cortex_flush_brain --targets=stale_caches"
+        severity: "LOW"
+        
+      - id: "P1.5-005"
+        name: "Governance Adaptation Enabled"
+        description: "Context-aware governance active"
+        tool: "cortex_verify_integration"
+        component: "GovernanceContextAdapter"
+        evidence_required: true
+        auto_fix: false
+        severity: "LOW"
+        validation: |
+          Verify GovernanceContextAdapter is wired and actively
+          adjusting CORE rule weights based on operation context.
+      
+      # NEW CHECKS (Phase 38 Enhancement - 2026-02-07)
+      - id: "P1.5-006"
+        name: "MCP Toolkit Completeness"
+        description: "100% of orchestrators exposed via MCP"
+        tool: "cortex_mcp_audit"
+        threshold: 100
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "Generate missing MCP tool specs"
+        severity: "MEDIUM"
+        validation: |
+          Audit all 35 orchestrators (8 core, 8 domain, 21 support)
+          for MCP exposure. Flag any orchestrator without MCP tool.
+      
+      - id: "P1.5-007"
+        name: "Central Brain Health (Multi-User)"
+        description: "Team collaboration brain state operational"
+        tool: "cortex_brain_health"
+        metric: "multi_user_capable"
+        threshold: true
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        validation: |
+          Verify CentralBrainOrchestrator is wired and supports:
+          - Shared context pool
+          - User session isolation
+          - Learning aggregation
+          - Conflict-free concurrent operations (CRDT)
+      
+      - id: "P1.5-008"
+        name: "SaaS/MCP Deployment Ready"
+        description: "Load tests pass, deployment validated"
+        tool: "cortex_validate_deployment"
+        mode: "both"
+        run_load_tests: true
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        validation: |
+          Validate CORTEX can deploy as:
+          - MCP server (protocol compliance, tool discovery)
+          - SaaS (REST + WebSocket APIs)
+          Load tests: 100 concurrent users, <1s p95 latency
+      
+      - id: "P1.5-009"
+        name: "Regression Safety Net"
+        description: "No broken functionality, backward compatible"
+        tool: "cortex_regression_check"
+        check_performance: true
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        validation: |
+          Check Phase 38 changes don't break existing functionality:
+          - All existing tests pass (baseline: 100%)
+          - Performance <10% degradation
+          - Backward compatible MCP tools
+          - No breaking API changes
+      
+      - id: "P1.5-010"
+        name: "File Placement Governance"
+        description: "kebab-case, optimal folders, no SCREAMING_CASE"
+        tool: "cortex_vacuum_relocate"
+        update_references: false
+        evidence_required: true
+        auto_fix: true
+        auto_fix_action: "cortex_vacuum_relocate --update-references"
+        severity: "LOW"
+        related_rules: ["CORE-028"]
+        validation: |
+          Check file placement compliance:
+          - All files follow kebab-case naming
+          - No SCREAMING_CASE files (CORE-028)
+          - .py files in cortex/, tests/
+          - .md files in docs/, .github/
+          - Orchestrators in cortex/orchestrators/
+
   P3:
     name: "Cleanup & Maintenance"
     description: "Markdown sprawl, orphan files, temporary artifacts"
@@ -295,6 +446,19 @@ execution_flow:
     blocking: false
     failure_action: "WARN and continue"
     
+  step_2_5:
+    name: "P1.5 Brain Cohesion & Health"
+    description: "Phase 38 cohesion checks (after P1, before P2)"
+    checks: [
+      "P1.5-001", "P1.5-002", "P1.5-003", "P1.5-004", "P1.5-005",
+      "P1.5-006", "P1.5-007", "P1.5-008", "P1.5-009", "P1.5-010"
+    ]
+    blocking: false
+    failure_action: "WARN and continue"
+    auto_fix_available: true
+    priority_checks:
+      - "P1.5-009 (Regression Safety - HIGH priority)"
+    
   step_3:
     name: "P2 Quality"
     checks: ["P2-001", "P2-002", "P2-003", "P2-004", "P2-005", "P2-006"]
@@ -334,6 +498,42 @@ tools:
     description: "3-layer integration validation"
     input: "Component name"
     output: "Validation report"
+  
+  # Phase 38 Tools (Brain Cohesion & Health)
+  cortex_brain_health:
+    description: "Brain health metrics across 5 dimensions"
+    input: "Optional filters"
+    output: "Health score + dimensions + recommendations"
+    
+  cortex_capability_mesh:
+    description: "Runtime orchestrator capability discovery"
+    input: "Capability name"
+    output: "Orchestrators + best match + confidence"
+    
+  cortex_flush_brain:
+    description: "Unified brain state flush"
+    input: "Targets + force flag"
+    output: "Flushed items + freed bytes + duration"
+    
+  cortex_mcp_audit:
+    description: "MCP toolkit completeness audit"
+    input: "Include missing flag"
+    output: "Coverage percent + missing orchestrators + specs"
+    
+  cortex_validate_deployment:
+    description: "SaaS/MCP deployment readiness validator"
+    input: "Mode + run load tests flag"
+    output: "Compliance status + load test results + issues"
+    
+  cortex_regression_check:
+    description: "Regression detection for existing functionality"
+    input: "Baseline version + check performance flag"
+    output: "Regressions found + broken tests + performance delta"
+    
+  cortex_vacuum_relocate:
+    description: "File relocation with recataloging"
+    input: "File paths + target location + update references flag"
+    output: "Files relocated + references updated + SCREAMING_CASE fixed"
     
   grep_search:
     description: "Text pattern search"

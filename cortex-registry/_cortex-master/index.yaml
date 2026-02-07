@@ -56,13 +56,41 @@ active_phases:
       Adapter (14 tests), MCP tool, Frontend SPA, E2E tests (2 tests).
       Progressive enhancement: JSON → SQLite → PostgreSQL.
   
+  - id: "phase-38"
+    name: "Brain Cohesion & Health System"
+    file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
+    started: "2026-02-07"
+    status: "active"
+    priority: "P0"
+    execution_order: 1
+    roi_score: 0.94
+    description: |
+      🔵 IN PROGRESS: Critical brain cohesion system addressing 12 gaps.
+      
+      ORIGINAL (Stages 1-6): Brain Health, Capability Mesh, Context-Aware Governance,
+      Domain Enhancement, Brain Flush, AUDIT Integration.
+      
+      ENHANCED (Stages 7-12): MCP Toolkit Completeness, Central Brain for Teams,
+      SaaS/MCP Deployment Validation, Regression Safety Net, Vacuum Enhancement
+      (file relocation + recataloging + SCREAMING_CASE fix).
+      
+      Target: 260 tests (213 unit + 20 integration + 7 e2e + 15 regression + 5 load).
+      Coverage: 85%. Duration: 20 days (4 weeks).
+      
+      New MCP Tools: cortex_brain_health, cortex_capability_mesh, cortex_flush_brain,
+      cortex_enhance_domain, cortex_mcp_audit, cortex_brain_share, cortex_brain_merge,
+      cortex_brain_sync, cortex_validate_deployment, cortex_regression_check,
+      cortex_vacuum_relocate.
+      
+      AUDIT Integration: P1.5-001 to P1.5-010 checks added to audit-checklist.yaml.
+  
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
     file: "phases/active/phase-24-external-refactoring-tools.yaml"
     started: "2026-02-05"
     status: "planned"
     priority: "P1"
-    execution_order: 5
+    execution_order: 6
   
   - id: "phase-25"
     name: "PLAN MODE Enhancement for cortex-architect"
