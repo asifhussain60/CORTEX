@@ -121,6 +121,43 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
    - Paste prompt + `/plan` command
    - Continue from checkpoint
 
+### Session Summary Format (MANDATORY)
+
+**When generating session summaries (autonomous multi-stage sessions):**
+
+**REQUIRED:** Use SESSION_SUMMARY template from response-format.yaml
+
+**Load template:**
+```python
+from cortex.brain.core.yaml_loaders import load_response_format
+response_format = load_response_format()
+session_template = response_format.formats["SESSION_SUMMARY"]
+```
+
+**Critical Requirements:**
+1. ✅ **Token Budget FIRST** — Must appear as first item in final metrics section
+2. ✅ **Status Indicators** — Use proper status (Excellent! → Critical) based on percentage
+3. ✅ **Constant Visibility** — User MUST see token budget before scrolling
+4. ✅ **Required Sections** — All 6 sections (Status, Deliverables, Remaining, Metrics, Commands, Notes)
+
+**Example Final Metrics Section:**
+```markdown
+## 📊 Final Metrics
+
+**Token Budget:** 84k/1000k (8%) - Excellent! Healthy runway for continued autonomous work.
+
+**Implementation Time:** 32 minutes (within 40-minute target)
+
+**Quality Metrics:**
+- ✅ 46/46 tests passing (100%)
+- ✅ Type hints: 100%
+- ✅ Docstrings: 100%
+
+**Next Stage Preview:** Stage 4 ready (30 tests, 3 days)
+```
+
+**WHY Token Budget First:** During autonomous sessions, users need **immediate awareness** of token consumption without scrolling. This is the MOST CRITICAL metric for session planning and continuation decisions.
+
 ### Audit Integration (CORE-027)
 
 **All work logged with AC markers:**

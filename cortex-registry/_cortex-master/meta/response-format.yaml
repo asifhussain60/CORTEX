@@ -365,6 +365,39 @@ mode_formats:
       - "Pattern Identification"
     forbidden:
       - "Markdown file generation"
+  
+  SESSION_SUMMARY:
+    description: "Summary template for autonomous multi-stage implementation sessions"
+    required_sections:
+      - "Status Overview Table"
+      - "Completed Stages with Deliverables"
+      - "Remaining Stages Table"
+      - "Final Metrics (with token budget)"
+      - "Next Session Commands"
+      - "Governance Notes"
+    final_metrics_order:
+      - "Token Budget (FIRST - most important for user awareness)"
+      - "Implementation Time"
+      - "Quality Metrics"
+      - "Next Stage Preview"
+    token_budget_format: |
+      **Token Budget:** {used}k/{total}k ({percentage}%) - {status}
+      
+      Where status is:
+        - "Excellent!" (< 15%)
+        - "Very healthy!" (15-30%)
+        - "Good" (30-50%)
+        - "Moderate" (50-70%)
+        - "High - consider checkpoint" (70-85%)
+        - "⚠️ Nearing limit - checkpoint recommended" (85-95%)
+        - "🔴 Critical - must checkpoint now" (> 95%)
+    example: |
+      ---
+      
+      **Token Budget:** 85k/1000k (8.5%) - Excellent!  
+      **Implementation Time:** ~2.5 hours  
+      **Quality:** TDD-first, 100% test pass rate  
+      **Next Stage:** Company Domain Enhancement Pipeline (30 tests, 3 days)
 
 # Examples
 examples:
