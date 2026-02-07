@@ -249,8 +249,19 @@ class CORTEXChallengeTool(Tool):
 
 def get_cortex_tools() -> list[Tool]:
     """Get all CORTEX MCP tools."""
-    return [
+    # Core orchestrator tools
+    core_tools = [
         CORTEXProcessRequestTool(),
         CORTEXTotalRecallTool(),
         CORTEXChallengeTool()
     ]
+    
+    # Phase 41: Interactive approval workflow tools
+    try:
+        from cortex.mcp.tools.approval_mcp_tools import get_approval_tools
+        approval_tools = get_approval_tools()
+        logger.info(f"Loaded {len(approval_tools)} approval workflow tools")
+        return core_tools + approval_tools
+    except (ImportError, Exception) as e:
+        logger.warning(f"Could not load approval tools: {e}")
+        return core_tools
