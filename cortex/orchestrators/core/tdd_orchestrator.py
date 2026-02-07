@@ -59,6 +59,9 @@ from cortex.brain.core.knowledge_guidance_engine import (
     ModuleGuidance,
 )
 
+# Phase 27: Import StandardsResolver for company domain integration
+from cortex.common.standards_resolver import StandardsResolver
+
 logger = logging.getLogger(__name__)
 
 
@@ -226,11 +229,15 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         # AC-PHASE24-007: Initialize PhaseCompletionOrchestrator for post-completion hooks
         self._phase_completion_orchestrator = PhaseCompletionOrchestrator()
         
+        # Phase 27: Initialize StandardsResolver for company domain integration
+        self.standards_resolver = StandardsResolver()
+        
         logger.info(
             f"TDD Orchestrator V2 initialized with base protocol + "
             f"{len(self.knowledge_loader.tdd_yamls)} knowledge YAMLs + "
             f"BrittlenessScanner (AC-PHASE24-005) + "
-            f"PhaseCompletionOrchestrator (AC-PHASE24-007)"
+            f"PhaseCompletionOrchestrator (AC-PHASE24-007) + "
+            f"StandardsResolver (Phase 27)"
         )
 
     def _run_pre_execution_brittleness_scan(self, context: Dict[str, Any]) -> None:

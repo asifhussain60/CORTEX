@@ -46,6 +46,9 @@ from cortex.core.orchestrator.holistic_context_builder import HolisticContextBui
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
+# Phase 27: Import StandardsResolver for company domain integration
+from cortex.common.standards_resolver import StandardsResolver
+
 # AC-PHASE-2-5-WIRE-001: Import ComponentHealthTracker for health monitoring
 from cortex.orchestrators.core.component_health import ComponentHealthTracker, ComponentType
 
@@ -298,6 +301,15 @@ class MasterOrchestrator(IOrchestrator):
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
         db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
+        
+        # Phase 27: Initialize StandardsResolver for company domain integration
+        self.standards_resolver = StandardsResolver()
+        self.logger.log_operation_complete(
+            ac_id="AC-PHASE-27-001",
+            operation="STANDARDS_RESOLVER_INIT",
+            success=True,
+            details={"resolver": "StandardsResolver initialized for company domain integration"}
+        )
         
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
         self._governance_registry: Optional[GovernanceRegistry] = None
