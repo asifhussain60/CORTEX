@@ -1,0 +1,625 @@
+# Phase 41: DIGEST Mode Enhancement System
+# Authority: CORTEX Master Plan (index.yaml)
+# Priority: P0 (Critical - Closes learning feedback loop)
+# ROI Score: 0.91 (90% manual effort reduction)
+
+version: "1.0"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "CORTEX Architect"
+status: "in_progress"
+progress: "0/5 stages (0%)"
+
+# Phase Metadata
+priority: "P0"
+roi_score: 0.91
+estimated_duration: "16 days"
+test_target: 127
+coverage_target: "85%"
+
+# Executive Summary
+summary:
+  title: "DIGEST Mode Enhancement System - Automated Learning Pipeline"
+  description: |
+    Transform DIGEST mode from manual markdown-based workflow to fully automated
+    enhancement detection, validation, and integration system.
+    
+    Current State (v6.5):
+    - Manual markdown analysis required
+    - No quantitative confidence scoring
+    - Pattern detection uncalibrated
+    - No code-level governance scanning
+    - Manual enhancement application
+    
+    Target State (v9.2):
+    - Auto-trigger on Copilot chat file detection
+    - Quantitative metrics (confidence 5-10 scale)
+    - Calibrated pattern recognition
+    - AST-based governance enhancement discovery
+    - Automated enhancement pipeline with approval gates
+    
+  gaps_addressed:
+    - "Manual DIGEST workflow bottleneck"
+    - "No confidence scoring for enhancement quality"
+    - "Pattern detection needs calibration"
+    - "Missing code-level enhancement discovery"
+    - "No automation for enhancement application"
+  
+  impact:
+    - "90% reduction in manual enhancement effort"
+    - "DIGEST maturity boost: 6.5 → 9.2 (+41%)"
+    - "Closes CORTEX continuous learning loop"
+    - "Enables CI/CD chat analysis integration"
+    - "Systematic knowledge capture from all sessions"
+
+# ROI Analysis
+roi_analysis:
+  value_score: 0.95
+  effort_score: 0.87
+  strategic_alignment: "Critical"
+  dependencies:
+    - "Phase 39 (AUDIT mode) - complete ✅"
+    - "Phase 38 (Brain cohesion) - complete ✅"
+  benefits:
+    automation: "90% manual effort reduction"
+    quality: "Quantitative confidence scoring"
+    coverage: "100% chat session analysis"
+    velocity: "Real-time enhancement detection"
+    integration: "CI/CD pipeline ready"
+
+# Enhancement Integration (ENH-053 through ENH-057)
+enhancements:
+  - id: "ENH-053"
+    name: "cortex_digest_session MCP Tool"
+    priority: "P0"
+    roi: 0.95
+    description: "Auto-trigger DIGEST on Copilot chat file detection"
+    
+  - id: "ENH-055"
+    name: "Quantitative Metrics System"
+    priority: "P1"
+    roi: 0.88
+    description: "Confidence scoring (5-10 scale) for enhancement quality"
+    
+  - id: "ENH-057"
+    name: "Detection Calibration"
+    priority: "P1"
+    roi: 0.82
+    description: "Pattern recognition tuning for accuracy"
+    
+  - id: "ENH-056"
+    name: "AST-Based Governance Scanner"
+    priority: "P1"
+    roi: 0.85
+    description: "Code-level enhancement discovery via AST analysis"
+    
+  - id: "ENH-054"
+    name: "Enhancement Automation Pipeline"
+    priority: "P0"
+    roi: 0.93
+    description: "Auto-apply approved enhancements with validation gates"
+
+# Stage 1: cortex_digest_session MCP Tool
+stage_1:
+  name: "MCP Tool - Auto-Trigger DIGEST"
+  description: |
+    Create cortex_digest_session MCP tool that:
+    - Detects Copilot chat files (score ≥5 markers)
+    - Auto-extracts learnings via pattern matching
+    - Classifies enhancements (governance, capability, workflow)
+    - Generates enhancement proposals
+    - Updates enhancement-history.yaml
+  
+  deliverables:
+    - component: "DigestSessionOrchestrator"
+      path: "cortex/orchestrators/support/digest_session_orchestrator.py"
+      lines: ~650
+      description: "Core DIGEST orchestration with auto-detection"
+      
+    - component: "ChatFileDetector"
+      path: "cortex/sensory/chat_file_detector.py"
+      lines: ~250
+      description: "Copilot chat file pattern recognition"
+      
+    - component: "EnhancementProposalGenerator"
+      path: "cortex/learning/enhancement_proposal_generator.py"
+      lines: ~400
+      description: "Generate enhancement specs from learnings"
+      
+    - component: "cortex_digest_session MCP Tool"
+      path: "cortex/mcp/tools/digest_tool.py"
+      lines: ~200
+      description: "MCP interface for DIGEST operations"
+  
+  tests:
+    unit: 22
+    integration: 6
+    e2e: 2
+    total: 30
+  
+  acceptance_criteria:
+    - id: "AC-PHASE41-001"
+      description: "DigestSessionOrchestrator detects chat files (score ≥5)"
+      tests: 8
+      
+    - id: "AC-PHASE41-002"
+      description: "ChatFileDetector identifies Copilot markers with 90% accuracy"
+      tests: 6
+      
+    - id: "AC-PHASE41-003"
+      description: "EnhancementProposalGenerator creates valid enhancement specs"
+      tests: 8
+      
+    - id: "AC-PHASE41-004"
+      description: "cortex_digest_session MCP tool exposes DIGEST functionality"
+      tests: 6
+      
+    - id: "AC-PHASE41-005"
+      description: "Integration with enhancement-history.yaml (read/write)"
+      tests: 2
+  
+  estimated_duration: "3 days"
+
+# Stage 2: Quantitative Metrics System
+stage_2:
+  name: "Quantitative Confidence Scoring"
+  description: |
+    Implement confidence scoring system (5-10 scale) for enhancement quality:
+    - Pattern match strength (0-3 points)
+    - Context relevance (0-3 points)
+    - Code evidence (0-2 points)
+    - Historical success rate (0-2 points)
+    
+    Score interpretation:
+    - 9-10: Auto-apply (high confidence)
+    - 7-8: Recommend (review suggested)
+    - 5-6: Analyze (manual review required)
+    - <5: Reject (insufficient evidence)
+  
+  deliverables:
+    - component: "ConfidenceScorer"
+      path: "cortex/learning/confidence_scorer.py"
+      lines: ~350
+      description: "Multi-factor confidence calculation"
+      
+    - component: "MetricsCollector"
+      path: "cortex/learning/metrics_collector.py"
+      lines: ~280
+      description: "Historical success rate tracking"
+      
+    - component: "ScoreCalibrator"
+      path: "cortex/learning/score_calibrator.py"
+      lines: ~220
+      description: "Dynamic threshold adjustment"
+  
+  tests:
+    unit: 18
+    integration: 5
+    e2e: 2
+    total: 25
+  
+  acceptance_criteria:
+    - id: "AC-PHASE41-006"
+      description: "ConfidenceScorer calculates multi-factor scores (5-10 scale)"
+      tests: 8
+      
+    - id: "AC-PHASE41-007"
+      description: "MetricsCollector tracks historical success rates"
+      tests: 6
+      
+    - id: "AC-PHASE41-008"
+      description: "ScoreCalibrator adjusts thresholds based on feedback"
+      tests: 6
+      
+    - id: "AC-PHASE41-009"
+      description: "Score interpretation gates (auto-apply vs review vs reject)"
+      tests: 3
+      
+    - id: "AC-PHASE41-010"
+      description: "Integration with DigestSessionOrchestrator"
+      tests: 2
+  
+  estimated_duration: "3 days"
+
+# Stage 3: Detection Calibration
+stage_3:
+  name: "Pattern Recognition Tuning"
+  description: |
+    Calibrate pattern detection for accuracy:
+    - False positive reduction (target <5%)
+    - True positive optimization (target >95%)
+    - Context-aware pattern matching
+    - Domain-specific pattern libraries
+    - Feedback-driven recalibration
+  
+  deliverables:
+    - component: "PatternCalibrator"
+      path: "cortex/learning/pattern_calibrator.py"
+      lines: ~320
+      description: "Pattern accuracy tuning engine"
+      
+    - component: "FalsePositiveFilter"
+      path: "cortex/learning/false_positive_filter.py"
+      lines: ~240
+      description: "Noise reduction for pattern matches"
+      
+    - component: "DomainPatternLibrary"
+      path: "cortex/learning/domain_pattern_library.py"
+      lines: ~400
+      description: "Domain-specific enhancement patterns"
+  
+  tests:
+    unit: 16
+    integration: 4
+    e2e: 2
+    total: 22
+  
+  acceptance_criteria:
+    - id: "AC-PHASE41-011"
+      description: "PatternCalibrator achieves <5% false positive rate"
+      tests: 6
+      
+    - id: "AC-PHASE41-012"
+      description: "FalsePositiveFilter reduces noise by 80%+"
+      tests: 5
+      
+    - id: "AC-PHASE41-013"
+      description: "DomainPatternLibrary supports 10+ domains"
+      tests: 6
+      
+    - id: "AC-PHASE41-014"
+      description: "Context-aware pattern matching with 95%+ accuracy"
+      tests: 3
+      
+    - id: "AC-PHASE41-015"
+      description: "Feedback-driven recalibration loop operational"
+      tests: 2
+  
+  estimated_duration: "3 days"
+
+# Stage 4: AST-Based Governance Scanner
+stage_4:
+  name: "Code-Level Enhancement Discovery"
+  description: |
+    Implement AST-based scanning for code-level enhancements:
+    - Parse Python files for governance patterns
+    - Detect missing type hints, docstrings, tests
+    - Identify CORE rule violations
+    - Extract refactoring opportunities
+    - Generate code-specific enhancement proposals
+  
+  deliverables:
+    - component: "ASTGovernanceScanner"
+      path: "cortex/governance/ast_governance_scanner.py"
+      lines: ~550
+      description: "AST-based CORE rule detection"
+      
+    - component: "CodeEnhancementDetector"
+      path: "cortex/learning/code_enhancement_detector.py"
+      lines: ~380
+      description: "Refactoring opportunity identification"
+      
+    - component: "TypeHintAnalyzer"
+      path: "cortex/governance/type_hint_analyzer.py"
+      lines: ~280
+      description: "Missing type hint detection (CORE-011)"
+      
+    - component: "DocstringAnalyzer"
+      path: "cortex/governance/docstring_analyzer.py"
+      lines: ~250
+      description: "Missing docstring detection (CORE-012)"
+  
+  tests:
+    unit: 18
+    integration: 5
+    e2e: 2
+    total: 25
+  
+  acceptance_criteria:
+    - id: "AC-PHASE41-016"
+      description: "ASTGovernanceScanner detects 25+ CORE rule patterns"
+      tests: 8
+      
+    - id: "AC-PHASE41-017"
+      description: "CodeEnhancementDetector identifies refactoring opportunities"
+      tests: 6
+      
+    - id: "AC-PHASE41-018"
+      description: "TypeHintAnalyzer detects missing type hints (CORE-011)"
+      tests: 4
+      
+    - id: "AC-PHASE41-019"
+      description: "DocstringAnalyzer detects missing docstrings (CORE-012)"
+      tests: 4
+      
+    - id: "AC-PHASE41-020"
+      description: "Integration with DigestSessionOrchestrator + ConfidenceScorer"
+      tests: 3
+  
+  estimated_duration: "4 days"
+
+# Stage 5: Enhancement Automation Pipeline
+stage_5:
+  name: "Auto-Apply Enhancement Pipeline"
+  description: |
+    Create automated enhancement application pipeline:
+    - Approval gate (confidence score thresholds)
+    - Auto-apply for high-confidence enhancements (score 9-10)
+    - Review queue for medium-confidence (score 7-8)
+    - Validation gate (syntax check, test pass)
+    - Rollback mechanism for failures
+    - Audit trail for all enhancements
+  
+  deliverables:
+    - component: "EnhancementPipeline"
+      path: "cortex/learning/enhancement_pipeline.py"
+      lines: ~480
+      description: "Orchestrate auto-apply with gates"
+      
+    - component: "ApprovalGate"
+      path: "cortex/learning/approval_gate.py"
+      lines: ~220
+      description: "Confidence-based approval logic"
+      
+    - component: "EnhancementApplicator"
+      path: "cortex/learning/enhancement_applicator.py"
+      lines: ~350
+      description: "Apply enhancements with validation"
+      
+    - component: "RollbackManager"
+      path: "cortex/learning/rollback_manager.py"
+      lines: ~280
+      description: "Rollback failed enhancements"
+      
+    - component: "EnhancementAuditTrail"
+      path: "cortex/learning/enhancement_audit_trail.py"
+      lines: ~200
+      description: "Track all enhancement operations"
+  
+  tests:
+    unit: 18
+    integration: 5
+    e2e: 2
+    total: 25
+  
+  acceptance_criteria:
+    - id: "AC-PHASE41-021"
+      description: "EnhancementPipeline orchestrates auto-apply workflow"
+      tests: 6
+      
+    - id: "AC-PHASE41-022"
+      description: "ApprovalGate enforces confidence thresholds (9-10 auto, 7-8 review)"
+      tests: 5
+      
+    - id: "AC-PHASE41-023"
+      description: "EnhancementApplicator applies enhancements with validation"
+      tests: 5
+      
+    - id: "AC-PHASE41-024"
+      description: "RollbackManager reverts failed enhancements"
+      tests: 4
+      
+    - id: "AC-PHASE41-025"
+      description: "EnhancementAuditTrail logs all operations"
+      tests: 3
+      
+    - id: "AC-PHASE41-026"
+      description: "E2E: Detect → Score → Approve → Apply → Validate"
+      tests: 2
+  
+  estimated_duration: "3 days"
+
+# MCP Tools
+mcp_tools:
+  - name: "cortex_digest_session"
+    description: "Auto-trigger DIGEST mode on chat file"
+    orchestrator: "DigestSessionOrchestrator"
+    parameters:
+      - name: "file_path"
+        type: "string"
+        required: true
+        description: "Path to Copilot chat file or markdown document"
+      - name: "auto_apply"
+        type: "boolean"
+        required: false
+        default: false
+        description: "Auto-apply high-confidence enhancements (score ≥9)"
+      - name: "min_confidence"
+        type: "number"
+        required: false
+        default: 5
+        description: "Minimum confidence score (5-10)"
+    returns:
+      - "enhancement_proposals: List[EnhancementProposal]"
+      - "confidence_scores: Dict[str, float]"
+      - "applied_count: int"
+      - "review_queue_count: int"
+
+# Wiring Updates
+wiring_updates:
+  - orchestrator: "DigestSessionOrchestrator"
+    tier: 3
+    priority: 75
+    category: "support"
+    dependencies:
+      - "BrainHealthOrchestrator"
+      - "EnforcementOrchestrator"
+    capabilities:
+      - "chat_file_detection"
+      - "enhancement_extraction"
+      - "confidence_scoring"
+      - "auto_enhancement_application"
+
+# Integration Points
+integration:
+  - component: "enhancement-history.yaml"
+    operation: "read/write"
+    description: "Store enhancement proposals and outcomes"
+    
+  - component: "EnforcementOrchestrator"
+    operation: "validate"
+    description: "Validate enhancements against CORE rules"
+    
+  - component: "BrainHealthOrchestrator"
+    operation: "check_coherence"
+    description: "Ensure enhancements maintain brain coherence"
+    
+  - component: "TDDOrchestrator"
+    operation: "run_tests"
+    description: "Validate enhancements via test execution"
+
+# Success Metrics
+success_metrics:
+  - metric: "Enhancement Detection Rate"
+    target: "95%+ of valid enhancements detected"
+    measurement: "TP / (TP + FN)"
+    
+  - metric: "False Positive Rate"
+    target: "<5% false positives"
+    measurement: "FP / (FP + TN)"
+    
+  - metric: "Auto-Apply Success Rate"
+    target: "98%+ of auto-applied enhancements pass validation"
+    measurement: "Valid / Total Auto-Applied"
+    
+  - metric: "Manual Effort Reduction"
+    target: "90% reduction in manual DIGEST time"
+    measurement: "Time Before / Time After"
+    
+  - metric: "Confidence Score Accuracy"
+    target: "±10% of actual success rate"
+    measurement: "|Predicted - Actual|"
+
+# Testing Strategy
+testing:
+  unit_tests: 92
+  integration_tests: 25
+  e2e_tests: 10
+  total: 127
+  coverage_target: "85%"
+  
+  test_categories:
+    - "Chat file detection accuracy"
+    - "Pattern matching precision/recall"
+    - "Confidence scoring calibration"
+    - "AST governance scanning completeness"
+    - "Enhancement application validation"
+    - "Rollback mechanism reliability"
+    - "Audit trail completeness"
+
+# Dependencies
+dependencies:
+  required:
+    - "Phase 39: AUDIT Mode (P1.5 checks) ✅"
+    - "Phase 38: Brain Cohesion (health monitoring) ✅"
+    - "EnforcementOrchestrator (governance validation) ✅"
+    
+  optional:
+    - "Phase 40: Upgrade Changelog (feature discovery)"
+    - "Phase 36: ML Deduplication (pattern clustering)"
+
+# Risks & Mitigations
+risks:
+  - risk: "False positive rate too high"
+    impact: "P1"
+    mitigation: "Stage 3 calibration + feedback loop + confidence thresholds"
+    
+  - risk: "Auto-apply breaks codebase"
+    impact: "P0"
+    mitigation: "Validation gates + rollback mechanism + audit trail"
+    
+  - risk: "Performance overhead on large files"
+    impact: "P2"
+    mitigation: "Incremental parsing + async processing + timeout limits"
+    
+  - risk: "Enhancement conflicts with existing code"
+    impact: "P1"
+    mitigation: "Pre-apply validation + conflict detection + manual review queue"
+
+# Documentation Updates
+documentation:
+  - file: ".github/prompts/cortex-architect.prompt.md"
+    section: "DIGEST Mode"
+    changes: "Add cortex_digest_session tool documentation"
+    
+  - file: ".github/prompts/CORTEX.prompt.md"
+    section: "Quick Commands"
+    changes: "Add /digest {file} command"
+    
+  - file: "docs/02-orchestrators/digest-session-orchestrator.md"
+    type: "new"
+    content: "DigestSessionOrchestrator architecture + usage guide"
+    
+  - file: "docs/meta/enhancement-history.yaml"
+    section: "schema"
+    changes: "Add confidence_score field to enhancement proposals"
+
+# Timeline
+timeline:
+  start_date: "2026-02-07"
+  estimated_completion: "2026-02-23"
+  total_duration: "16 days"
+  
+  milestones:
+    - date: "2026-02-10"
+      milestone: "Stage 1 Complete (cortex_digest_session MCP tool)"
+      
+    - date: "2026-02-13"
+      milestone: "Stage 2 Complete (Quantitative metrics)"
+      
+    - date: "2026-02-16"
+      milestone: "Stage 3 Complete (Detection calibration)"
+      
+    - date: "2026-02-20"
+      milestone: "Stage 4 Complete (AST governance scanner)"
+      
+    - date: "2026-02-23"
+      milestone: "Stage 5 Complete (Enhancement automation pipeline)"
+
+# Git Checkpoints
+git_strategy:
+  - checkpoint: "AC_START: AC-PHASE41-001 (Stage 1 start)"
+  - checkpoint: "Stage 1 complete: 30/30 tests passing"
+  - checkpoint: "Stage 2 complete: 25/25 tests passing"
+  - checkpoint: "Stage 3 complete: 22/22 tests passing"
+  - checkpoint: "Stage 4 complete: 25/25 tests passing"
+  - checkpoint: "Stage 5 complete: 25/25 tests passing"
+  - checkpoint: "AC_COMPLETE: Phase 41 complete (127/127 tests)"
+
+# Governance Compliance
+governance:
+  core_rules_applied:
+    - "CORE-008: TDD mandatory (tests before code)"
+    - "CORE-011: Type hints required"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC markers)"
+    - "CORE-036: Industry standards (AST patterns)"
+    
+  enforcement:
+    - "EnforcementOrchestrator validation (7-agent gate)"
+    - "Pre-commit governance checks"
+    - "Post-completion audit verification"
+
+# Notes
+notes: |
+  Phase 41 is CRITICAL for closing the CORTEX learning feedback loop.
+  
+  Current manual DIGEST workflow requires:
+  - Human review of chat files
+  - Manual pattern identification
+  - Manual enhancement proposal writing
+  - Manual application and testing
+  
+  Automated DIGEST workflow (Phase 41):
+  - Auto-detect chat files (cortex_digest_session)
+  - AI-driven pattern extraction
+  - Quantitative confidence scoring
+  - Auto-apply high-confidence enhancements
+  - Systematic knowledge capture
+  
+  This transforms DIGEST from periodic manual task to continuous
+  automated learning system, enabling CORTEX to learn from every
+  interaction and systematically improve itself.
+  
+  STRATEGIC IMPACT: Phase 41 + Phase 38 (brain cohesion) + Phase 39
+  (AUDIT integrity) = Complete self-improvement triad.
