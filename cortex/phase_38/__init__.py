@@ -1,0 +1,11 @@
+"""
+Phase 38.0 Remediation Modules
+
+Contains specialized utilities for Phase 38.0 dependency fix and baseline establishment.
+"""
+
+from cortex.phase_38.orchestrator_inventory_auditor import OrchestratorInventoryAuditor
+
+__all__ = [
+    "OrchestratorInventoryAuditor",
+]
