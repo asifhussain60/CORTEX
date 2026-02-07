@@ -1,1320 +1,204 @@
-asifhussain60: /cortex-architect are the full capabilities of CORTEX LENS being engaged by #file:prompts and #file:agents and all orchestrators without explicit calling? If not, it should. 
+asifhussain60: /cortex-architect  
+Update #file:cortex-architect.prompt.md #file:CORTEX.prompt.md with an introduction response template where if a parameter is not provided, the prompts introduce themselves to the user, explain their purpose and how they can help using interaction orchestrator. Ask for their role so CORTEX can configure itself and responses to respond based on users role.
+Business Leaders - BLUF format with high level concise response, metrics, etc.
+Product Owners, Scrum Masters - Business language with high level info about the code guiding them to repo onboarding and dashboard generateion explanations etc.
+Tech Leads, Managers: High level technical info geared towards managers with metrics, 
+Software Engineers: Technical details
+
+Create a config solution that can do this intelligenetly giving CORTEX a human aspect of a helping assistance. Enhance along these lines with better alternatives ensuring they increase efficiency and accuracy and are consistent with existing architecture and design patterns. Do not show code snippets. Respond at a high technical level using executive summaries with clear bullet points and tabular structures. Do not create MD files to report your findings. All responses should be only in GitHub Copilot Chat session.  
 
 Challenge my idea with better alternatives if you diagree. Analyze each option through the perspective and goal of extensibility, scalability, accuracy, and efficiency for CORTEX's long-term growth. Respond in a concise manner without showing code snippets. 
 
-GitHub Copilot: ## 🧠 CORTEX ARCHITECT — Strategic Analysis
-**Author:** Asif Hussain | **Orchestrator:** ChallengeEngine ✅
+GitHub Copilot: ## 🧠 CORTEX Architecture Enhancement
+**Author:** Asif Hussain | **Orchestrator:** InteractionOrchestrator ✅
 
 ---
 
-## 🔍 Current State Analysis
+### Executive Summary
 
-**Your Question:** Are CORTEX LENS capabilities fully engaged by prompts/agents/orchestrators without explicit calling?
-
-**Answer:** **No, they are not.** Here's the gap analysis:
-
-### 🔴 Current Gaps
-
-| Component | Current State | LENS Integration |
-|-----------|---------------|------------------|
-| **Prompts** | Reference LENS conceptually | No automatic LENS invocation |
-| **Agents** | Manual LENS tool suggestions | Agents don't auto-trigger LENS |
-| **Orchestrators** | Selective LENS usage | Only MasterOrchestrator + specific orchestrators call LENS |
-| **MCP Gateway** | Tools available | User/orchestrator must explicitly invoke |
-
-### 📊 LENS Capabilities vs. Usage
-
-**Available LENS Powers:**
-- AST analysis
-- Duplicate detection (CORE-035)
-- Security scanning
-- Performance profiling
-- Dependency mapping
-- Test coverage analysis
-- Code quality metrics
-
-**Current Reality:**
-- ✅ Available as MCP tools
-- ⚠️ Used only when explicitly invoked
-- ❌ Not automatically engaged during operations
-- ❌ No background continuous analysis
+Your request introduces **Role-Adaptive Persona Configuration** — a compelling enhancement that humanizes CORTEX interactions. I'll analyze this alongside alternatives, then recommend an optimal approach.
 
 ---
 
-## 💡 Your Proposal: Implicit LENS Engagement
+## 📊 Analysis: Your Proposal vs. Alternatives
 
-**"LENS should automatically engage across all operations"**
+### Option A: Your Proposal — Static Role-Based Templates
 
-### ✅ Strengths
-1. **Proactive Intelligence** — Catch issues before they manifest
-2. **Continuous Validation** — Every operation gets LENS scrutiny
-3. **Zero User Burden** — No need to remember `/analyze`
-4. **Comprehensive Coverage** — No blind spots
+| Dimension | Assessment | Score |
+|-----------|------------|-------|
+| **Extensibility** | Limited — hardcoded 4 roles require code changes for new personas | ⚠️ 6/10 |
+| **Scalability** | Moderate — linear growth as roles multiply | ⚠️ 7/10 |
+| **Accuracy** | Good — clear boundaries per role | ✅ 8/10 |
+| **Efficiency** | High — simple lookup, no overhead | ✅ 9/10 |
 
-### ❌ Challenges
-1. **Performance Tax** — Every operation becomes slower
-2. **Token Explosion** — LENS results inflate context
-3. **Noise vs. Signal** — Not every operation needs full LENS
-4. **Cost Implications** — API calls multiply
-
----
-
-## 🎯 Challenge: Better Alternatives
-
-I **disagree** with blanket implicit LENS engagement. Here are superior alternatives:
-
-### **Option 1: Contextual Auto-LENS (RECOMMENDED)**
-
-**Concept:** LENS auto-engages based on operation risk profile
-
-| Operation Type | LENS Mode | Rationale |
-|----------------|-----------|-----------|
-| IMPLEMENT | **Full LENS** | High risk, needs comprehensive analysis |
-| REFACTOR | **Duplication + Security** | Targeted, relevant checks |
-| FIX | **AST + Affected Area** | Surgical, focused validation |
-| ANALYZE | **Full LENS** | Explicitly analytical |
-| DOCUMENT | **None** | Low risk, unnecessary overhead |
-| PLAN | **None** | Pre-implementation, no code yet |
-
-**Scoring Through Your Criteria:**
-
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| **Extensibility** | 9/10 | Easy to add new risk profiles |
-| **Scalability** | 8/10 | Controlled overhead, grows linearly |
-| **Accuracy** | 9/10 | Right tool at right time |
-| **Efficiency** | 9/10 | No wasted analysis |
+**Concerns:**
+- Roles are discrete, but users often span boundaries (Tech Lead who codes daily)
+- Adding new roles = prompt bloat
+- No learning from interaction patterns
 
 ---
 
-### **Option 2: Background LENS Layer**
+### Option B: **Hybrid Role + Context Inference** (Recommended Challenge)
 
-**Concept:** LENS runs asynchronously, results cached and surfaced when relevant
+| Dimension | Assessment | Score |
+|-----------|------------|-------|
+| **Extensibility** | High — YAML-driven personas, no prompt changes | ✅ 9/10 |
+| **Scalability** | Excellent — personas as configuration, not code | ✅ 9/10 |
+| **Accuracy** | Superior — infers from context + explicit role | ✅ 9/10 |
+| **Efficiency** | Good — minimal overhead with caching | ✅ 8/10 |
 
-**Flow:**
-1. User operation proceeds normally
-2. LENS analysis runs in background
-3. Results cached in cortex_brain/state/
-4. Surfaced only if issues detected OR user enters related context
-
-**Pros:**
-- Zero user-facing latency
-- Continuous codebase intelligence
-- Results available on-demand
-
-**Cons:**
-- Complex implementation (async workers)
-- Cache invalidation challenges
-- Resource overhead even when idle
-
-**Scoring:**
-
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| **Extensibility** | 7/10 | Requires async infrastructure |
-| **Scalability** | 6/10 | Background workers = resource drain |
-| **Accuracy** | 8/10 | Comprehensive but may be stale |
-| **Efficiency** | 5/10 | Always running = always consuming |
+**Key Differentiators:**
+- Persona definitions in `cortex/config/personas.yaml` (SSOT)
+- InteractionOrchestrator infers role from:
+  1. Explicit user declaration (highest priority)
+  2. Query complexity signals (technical terms, code references)
+  3. Session context (past interactions)
+- Response adapts **per-turn**, not just per-session
 
 ---
 
-### **Option 3: LENS Pre-Commit Hook**
+### Option C: **Full Adaptive Learning** (Future State)
 
-**Concept:** LENS gates every commit, not every operation
+| Dimension | Assessment | Score |
+|-----------|------------|-------|
+| **Extensibility** | Maximum — self-evolving personas | ✅ 10/10 |
+| **Scalability** | Excellent — ML-driven | ✅ 10/10 |
+| **Accuracy** | Variable — requires training data | ⚠️ 7/10 |
+| **Efficiency** | Lower — inference overhead | ⚠️ 6/10 |
 
-**Flow:**
-1. User completes work
-2. Git commit triggers LENS
-3. Issues block commit OR create auto-fix branch
-4. User proceeds only after LENS clearance
-
-**Pros:**
-- Natural checkpoint (commit = milestone)
-- Prevents bad code from entering history
-- Aligns with existing git discipline (CORE-026)
-
-**Cons:**
-- Late feedback (after work done)
-- Doesn't help during development
-- Can be bypassed with `--no-verify`
-
-**Scoring:**
-
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| **Extensibility** | 8/10 | Standard git hook pattern |
-| **Scalability** | 9/10 | Only runs on actual checkpoints |
-| **Accuracy** | 7/10 | Comprehensive but delayed |
-| **Efficiency** | 9/10 | Minimal operations, targeted timing |
+**Assessment:** Premature for current CORTEX maturity. Reserve for v8.x roadmap.
 
 ---
 
-### **Option 4: LENS Dashboard + Smart Notifications**
+## 🎯 Recommended Architecture: Option B
 
-**Concept:** LENS runs on schedule, dashboard shows health, orchestrators query before critical operations
+### Component Design
 
-**Flow:**
-1. LENS analyzes codebase every 6 hours
-2. Dashboard (like cortex-lens/) shows current state
-3. Orchestrators check dashboard before IMPLEMENT/REFACTOR
-4. User gets notification only if health degraded
-
-**Pros:**
-- Predictable resource usage
-- Always-current codebase view
-- Non-blocking user flow
-- Aligns with existing dashboard strategy
-
-**Cons:**
-- May miss rapid changes
-- Requires robust scheduling
-- Dashboard freshness varies
-
-**Scoring:**
-
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| **Extensibility** | 9/10 | Dashboard = plugin architecture |
-| **Scalability** | 9/10 | Fixed schedule, predictable load |
-| **Accuracy** | 8/10 | Slightly delayed but consistent |
-| **Efficiency** | 10/10 | Optimal resource utilization |
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    PROMPT LAYER                              │
+│  CORTEX.prompt.md / cortex-architect.prompt.md              │
+│  └── {{PERSONA_INJECTION_POINT}}                            │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│               InteractionOrchestrator                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ RoleResolver │→ │PersonaLoader │→ │ResponseStyler│      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 personas.yaml (SSOT)                         │
+│  - business_leader:  BLUF, metrics-first, ≤150 words        │
+│  - product_owner:    business-language, onboarding-guide    │
+│  - tech_lead:        metrics + architecture, dashboards     │
+│  - engineer:         full technical depth, code-centric     │
+│  - unknown:          discovery mode, role-inquiry           │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 🏆 Recommended Strategy: Hybrid Approach
+### Persona Configuration Schema
 
-**Combine Option 1 (Contextual Auto-LENS) + Option 4 (Dashboard + Notifications)**
+| Persona | Format | Depth | Metrics | Code | Onboarding |
+|---------|--------|-------|---------|------|------------|
+| **Business Leader** | BLUF | Executive | ✅ ROI, KPIs | ❌ | ❌ |
+| **Product Owner** | Narrative | Business | ⚠️ Velocity | ❌ | ✅ Guided |
+| **Scrum Master** | Action-oriented | Process | ✅ Sprint metrics | ❌ | ✅ |
+| **Tech Lead** | Architecture | Technical + Business | ✅ Health metrics | ⚠️ Diagrams | ✅ Advanced |
+| **Engineer** | Technical | Deep | ✅ Coverage, complexity | ✅ Full | ⚠️ Optional |
 
-### Implementation
+---
 
-**Tier 1: Background Continuous Intelligence**
-- LENS runs every 6 hours (configurable)
-- Results cached in cortex_brain/state/lens/
-- Dashboard updated automatically
-- Metrics tracked: duplication, security, coverage, complexity
+### Introduction Response Template Logic
 
-**Tier 2: Contextual Auto-Engagement**
-- High-risk operations (IMPLEMENT, REFACTOR) → query LENS cache + run targeted analysis
-- Medium-risk operations (FIX) → query LENS cache only
-- Low-risk operations → skip LENS
+**When no parameter provided:**
 
-**Tier 3: User-Triggered Deep Dive**
-- `/analyze` for comprehensive LENS
-- Explicit MCP tools for specific checks
-- LENS report generation on demand
+1. **Detect Context Signals:**
+   - File being edited (code file = likely engineer)
+   - Query vocabulary complexity
+   - Time of day patterns (optional)
+
+2. **If Ambiguous → Discovery Mode:**
+   ```
+   🧠 CORTEX Introduction
+   
+   I'm CORTEX — your Cognitive Real-Time Execution System.
+   
+   To optimize our collaboration, what's your primary role?
+   
+   1️⃣ Business Leader (executive summaries, metrics)
+   2️⃣ Product Owner / Scrum Master (business guidance)
+   3️⃣ Tech Lead / Manager (architecture + metrics)
+   4️⃣ Software Engineer (full technical depth)
+   
+   [Selection persists for session, adjustable anytime]
+   ```
+
+3. **Post-Selection → Persona Activation:**
+   - Store in session context
+   - All subsequent responses adapt
+   - User can override with `/persona {role}`
+
+---
 
 ### Integration Points
 
-| Point | Modification Needed |
-|-------|---------------------|
-| **IntentRouter** | Add risk classification → auto-LENS trigger logic |
-| **MasterOrchestrator** | Query LENS cache before delegating |
-| **TDDOrchestrator** | LENS duplication check in RED phase |
-| **EnforcementOrchestrator** | LENS security gate in pre-execution validation |
-| **Prompts** | Update to reflect auto-LENS behavior |
-| **Agents** | Teach agents to reference LENS cache |
-
-### Why This Wins
-
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| **Extensibility** | 10/10 | Modular: add risk profiles, LENS checks, schedule adjustments |
-| **Scalability** | 9/10 | Background + cache = minimal real-time overhead |
-| **Accuracy** | 9/10 | Fresh scheduled data + targeted real-time analysis |
-| **Efficiency** | 10/10 | Resources used optimally: scheduled + on-demand |
+| Component | Change Required |
+|-----------|-----------------|
+| **CORTEX.prompt.md** | Add persona injection block + discovery template |
+| **cortex-architect.prompt.md** | Add mode-aware persona handling |
+| **InteractionOrchestrator** | Add RoleResolver + PersonaLoader agents |
+| **cortex/config/personas.yaml** | New file — persona definitions (SSOT) |
+| **Session Context** | Store active persona + inference signals |
 
 ---
 
-## 📋 Decision Matrix
+### MCP Tool Exposure
 
-| Approach | Ext | Scale | Acc | Eff | **Total** |
-|----------|-----|-------|-----|-----|-----------|
-| **Your Proposal (Implicit Always)** | 6 | 4 | 8 | 3 | **21/40** |
-| **Option 1: Contextual** | 9 | 8 | 9 | 9 | **35/40** |
-| **Option 2: Background** | 7 | 6 | 8 | 5 | **26/40** |
-| **Option 3: Pre-Commit Hook** | 8 | 9 | 7 | 9 | **33/40** |
-| **Option 4: Dashboard** | 9 | 9 | 8 | 10 | **36/40** |
-| **🏆 Hybrid (1+4)** | 10 | 9 | 9 | 10 | **38/40** |
+| Tool | Purpose |
+|------|---------|
+| `cortex_set_persona` | Explicit role setting |
+| `cortex_get_persona` | Current persona query |
+| `cortex_infer_persona` | Context-based inference |
 
 ---
 
-## 🎯 Verdict
+## ⚖️ Trade-off Analysis
 
-**Your intuition is correct** — LENS is underutilized. However, **blanket implicit engagement creates more problems than it solves.**
-
-**Superior Path:** **Contextual Auto-LENS + Scheduled Dashboard Intelligence**
-
-This gives you:
-- ✅ Automatic engagement where it matters
-- ✅ Always-current codebase intelligence
-- ✅ Minimal performance impact
-- ✅ Extensible as CORTEX grows
-- ✅ User control when needed
-
-**Next Step:** Approve this strategy, and I'll route to PlanOrchestrator for phased implementation.
+| Factor | Static Templates (A) | Hybrid (B) | Full Adaptive (C) |
+|--------|---------------------|------------|-------------------|
+| **Implementation Effort** | Low (1 day) | Medium (2-3 days) | High (weeks) |
+| **Maintenance Burden** | High (prompt edits) | Low (YAML only) | Medium (model tuning) |
+| **User Experience** | Good | Excellent | Variable |
+| **CORE Rule Compliance** | ✅ | ✅ | ⚠️ Complexity |
+| **Token Efficiency** | ✅ | ✅ | ⚠️ Overhead |
 
 ---
 
-**Proceed with hybrid approach?**
+## 🎯 Recommendation
 
-asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
-list all the capabilities of CORTEX LENS and what can be added to enhance it
+**Implement Option B (Hybrid Role + Context Inference)** with these phases:
 
-GitHub Copilot: ## 🧠 CORTEX LENS — Capability Catalog & Enhancement Roadmap
-**Author:** Asif Hussain | **Orchestrator:** LENSOrchestrator ✅
-
----
-
-## 📊 Current LENS Capabilities
-
-### **Stage 0: Git Context Intelligence**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| Commit History Analysis | ✅ Operational | Extract 24h commit patterns, blame data |
-| Author Activity Mapping | ✅ Operational | Identify code ownership, hotspots |
-| Change Frequency Detection | ✅ Operational | Find unstable areas (high churn) |
-| Branch Topology Analysis | ✅ Operational | Detect diverged branches, merge conflicts |
-
-### **Stage 1: Language Analysis (Intent Classification)**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| Intent Detection | ✅ Operational | IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST, DEPLOY |
-| Confidence Scoring | ✅ Operational | 0.0-1.0 confidence for intent classification |
-| Fuzzy Matching | ✅ Operational | Handle typos, variations in user requests |
-| Multi-Intent Detection | ✅ Operational | Complex requests with multiple goals |
-
-### **Stage 2: Examination (Code Structure)**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| **Python AST Analysis** | ✅ Full | Functions, classes, imports, complexity |
-| **JavaScript AST** | ⚠️ Basic | Tree-sitter integration incomplete |
-| **TypeScript AST** | ⚠️ Basic | Tree-sitter integration incomplete |
-| **C# AST** | ⚠️ Minimal | File counting only (ENH-017) |
-| **Java AST** | ⚠️ Minimal | File counting only (ENH-017) |
-| Type Inference | ✅ Operational | Python type hints + runtime analysis |
-| Import Graph | ✅ Operational | Dependency mapping |
-| Cyclomatic Complexity | ✅ Operational | Per-function complexity scoring |
-| Function Signature Extraction | ✅ Operational | Parameters, return types, docstrings |
-
-### **Stage 3: Navigation (Codebase Topology)**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| File Discovery | ✅ Operational | Semantic search across workspace |
-| Dependency Graph | ✅ Operational | Module relationships, import chains |
-| Call Graph Analysis | ⚠️ Limited | Python only, no cross-language |
-| Test Coverage Mapping | ✅ Operational | Tests → implementation mapping |
-| Hotspot Detection | ✅ Operational | High-change, high-complexity areas |
-
-### **Stage 4: Synthesis (Intelligence Assembly)**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| DoR Generation | ✅ Operational | Definition of Ready before execution |
-| Confidence Aggregation | ✅ Operational | Multi-factor confidence scoring |
-| Risk Assessment | ✅ Operational | Regression risk, change impact |
-| Capability Gap Detection | ⚠️ Partial | ENH-029 planned |
-| Cross-Layer Coherence | ⚠️ Partial | ENH-013 (Phase 4) planned |
-
-### **Security & Quality**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| **CWE Vulnerability Scanning** | ✅ Operational | 6 CWE patterns (Phase 8.2) |
-| Duplication Detection | ✅ Operational | Exact + semantic (CORE-035) |
-| Code Smell Detection | ✅ Operational | SOLID violations, anti-patterns |
-| Secret Scanning | ✅ Operational | API keys, passwords, tokens |
-| Injection Attack Detection | ✅ Operational | SQL, command, code injection |
-
-### **Visualization & Reporting**
-| Capability | Status | Purpose |
-|------------|--------|---------|
-| Mermaid Diagram Generation | ⚠️ Exists | Not integrated (ENH-017) |
-| Dashboard Generation | ✅ Operational | HTML dashboards per repo |
-| Metrics Aggregation | ✅ Operational | Health scores, test counts |
-| Interactive Architecture Explorer | ❌ Missing | ENH-017 Phase 5 |
+| Phase | Deliverable | Timeline |
+|-------|-------------|----------|
+| **Phase 1** | Persona YAML + prompt injection points | Day 1 |
+| **Phase 2** | InteractionOrchestrator persona agents | Day 2 |
+| **Phase 3** | MCP tool exposure + session persistence | Day 3 |
+| **Phase 4** | Context inference signals (optional enhancement) | Future |
 
 ---
 
-## 🚀 Enhancement Opportunities
+## ❓ Decision Required
 
-### **Tier 1: Critical Gaps (3-6 Months)**
+Do you want to:
 
-#### **ENH-A: Multi-Language Deep Analysis**
-**Current Gap:** C#, Java, TypeScript = file counting only
+1️⃣ **Proceed with Option B** — Full hybrid implementation as described  
+2️⃣ **Start with Option A** — Static templates first, evolve later  
+3️⃣ **Modify approach** — Specific adjustments to the proposal  
 
-**Additions:**
-- Tree-sitter parsers for C#, Java, TypeScript, Go, Rust
-- Cross-language AST unification layer
-- Language-agnostic call graph
-- Polyglot dependency resolution
-
-**Impact:** 30-40% market expansion (enterprise polyglot repos)
-
----
-
-#### **ENH-B: Real-Time Architecture Diagrams**
-**Current Gap:** Mermaid renderer exists but unused
-
-**Additions:**
-- Auto-generate diagrams during onboarding
-- Component, sequence, dependency diagrams
-- Interactive pan/zoom/filter
-- Zero placeholder policy
-
-**Impact:** Business leader comprehension (non-technical stakeholders)
-
----
-
-#### **ENH-C: Automated Use Case Extraction**
-**Current Gap:** No business narrative generation
-
-**Additions:**
-- Pattern-based extraction (API endpoints, CLI commands, DB ops)
-- Actor-Action-Object modeling
-- Business narrative generation
-- Use case → code traceability
-
-**Impact:** Product owner/business leader understanding
-
----
-
-### **Tier 2: Intelligence Enhancement (2-4 Months)**
-
-#### **ENH-D: Predictive Hotspot Analysis**
-**Current:** Reactive (shows current hotspots)
-
-**Additions:**
-- ML model: predict future hotspots based on patterns
-- Risk forecasting (90-day risk window)
-- Proactive refactoring suggestions
-- Technical debt trajectory
-
-**Impact:** Preventive maintenance vs reactive firefighting
-
----
-
-#### **ENH-E: Cross-Language Call Graph**
-**Current:** Python-only call analysis
-
-**Additions:**
-- RPC/API boundary detection
-- gRPC, REST, GraphQL call tracking
-- Microservice interaction mapping
-- Breaking change impact analysis
-
-**Impact:** Architectural change safety (multi-service systems)
-
----
-
-#### **ENH-F: Semantic Code Search**
-**Current:** Text-based grep + AST
-
-**Additions:**
-- Embedding-based semantic search
-- "Find similar implementations" capability
-- Anti-pattern detection via similarity
-- Code clone detection (beyond exact duplicates)
-
-**Impact:** Knowledge discovery, refactoring opportunities
-
----
-
-### **Tier 3: Performance & Scale (1-3 Months)**
-
-#### **ENH-G: LENS Result Caching**
-**Current:** Re-analyze on every request
-
-**Additions:**
-- LRU cache with TTL (ENH-042 designed)
-- Redis backend for distributed caching
-- Cache invalidation on git events
-- 50% latency reduction target
-
-**Impact:** User experience (faster responses)
-
----
-
-#### **ENH-H: Incremental Analysis**
-**Current:** Full codebase scan every time
-
-**Additions:**
-- Git diff-based incremental analysis
-- Only analyze changed files + dependencies
-- 10x speedup for large codebases
-- Background analysis workers
-
-**Impact:** Scalability to massive repos (100k+ LOC)
-
----
-
-#### **ENH-I: Parallel Analyzer Execution**
-**Current:** Sequential analysis
-
-**Additions:**
-- Async/await analyzer orchestration
-- ThreadPoolExecutor for AST parsing
-- 4x throughput improvement
-- Configurable parallelism (CPU-aware)
-
-**Impact:** Large repo onboarding speed
-
----
-
-### **Tier 4: Advanced Features (4-6 Months)**
-
-#### **ENH-J: AI-Powered Code Understanding**
-**Current:** Rule-based analysis
-
-**Additions:**
-- LLM integration for semantic understanding
-- Intent extraction from comments
-- Natural language code explanations
-- Auto-documentation generation
-
-**Impact:** Onboarding speed, knowledge capture
-
----
-
-#### **ENH-K: Visual Regression Detection**
-**Current:** No frontend analysis
-
-**Additions:**
-- CSS/HTML structure analysis
-- Screenshot-based visual diffing
-- Layout shift detection
-- Accessibility scanning (WCAG compliance)
-
-**Impact:** Frontend quality assurance
-
----
-
-#### **ENH-L: Performance Profiling Integration**
-**Current:** No runtime analysis
-
-**Additions:**
-- Integration with pytest-benchmark
-- Flamegraph generation
-- Memory leak detection
-- N+1 query detection
-
-**Impact:** Performance optimization guidance
-
----
-
-#### **ENH-M: Compliance & Licensing**
-**Current:** No license scanning
-
-**Additions:**
-- SPDX license detection
-- License compatibility checking
-- GDPR/SOC2 compliance validation
-- Export control warnings
-
-**Impact:** Enterprise compliance requirements
-
----
-
-### **Tier 5: Ecosystem Integration (2-4 Months)**
-
-#### **ENH-N: IDE Extensions**
-**Current:** VS Code Copilot only
-
-**Additions:**
-- JetBrains plugin (IntelliJ, PyCharm)
-- Vim/Neovim integration
-- Sublime Text plugin
-- Real-time LENS feedback in editor
-
-**Impact:** Developer convenience, adoption
-
----
-
-#### **ENH-O: CI/CD Pipeline Integration**
-**Current:** Manual invocation
-
-**Additions:**
-- GitHub Actions workflow
-- GitLab CI integration
-- Jenkins plugin
-- Pre-merge LENS gate
-
-**Impact:** Automated quality enforcement
-
----
-
-#### **ENH-P: Knowledge Base Runtime Access**
-**Current:** 40+ YAMLs not accessible at runtime
-
-**Additions:**
-- Dynamic knowledge loading (ENH-030 Phase 4)
-- Tech stack → knowledge mapping
-- Context-aware recommendations
-- Best practice enforcement
-
-**Impact:** Governance automation
-
----
-
-## 📈 Prioritization Matrix
-
-| Enhancement | Impact | Effort | ROI | Priority |
-|-------------|--------|--------|-----|----------|
-| **ENH-A: Multi-Language** | 10 | 8 | 1.25 | 🔴 P0 |
-| **ENH-B: Diagrams** | 9 | 5 | 1.80 | 🔴 P0 |
-| **ENH-C: Use Cases** | 8 | 6 | 1.33 | 🟡 P1 |
-| **ENH-G: Caching** | 9 | 4 | 2.25 | 🟢 P0 |
-| **ENH-H: Incremental** | 10 | 7 | 1.43 | 🔴 P0 |
-| **ENH-D: Predictive** | 7 | 8 | 0.88 | 🟡 P1 |
-| **ENH-E: Cross-Lang Calls** | 9 | 7 | 1.29 | 🟡 P1 |
-| **ENH-F: Semantic Search** | 8 | 6 | 1.33 | 🟡 P1 |
-| **ENH-I: Parallel** | 7 | 3 | 2.33 | 🟢 P1 |
-| **ENH-P: Knowledge Runtime** | 8 | 4 | 2.00 | 🟢 P1 |
-| **ENH-J: AI-Powered** | 6 | 9 | 0.67 | 🔵 P2 |
-| **ENH-K: Visual Regression** | 5 | 7 | 0.71 | 🔵 P2 |
-| **ENH-L: Performance** | 6 | 6 | 1.00 | 🔵 P2 |
-| **ENH-M: Compliance** | 7 | 5 | 1.40 | 🟡 P2 |
-| **ENH-N: IDE Extensions** | 5 | 8 | 0.63 | 🔵 P3 |
-| **ENH-O: CI/CD Integration** | 6 | 5 | 1.20 | 🔵 P2 |
-
----
-
-## 🎯 Recommended Roadmap
-
-**Phase 1 (Q1 2026): Foundation**
-- ENH-G: LENS Result Caching (4 weeks)
-- ENH-I: Parallel Execution (3 weeks)
-- ENH-P: Knowledge Runtime Access (4 weeks)
-
-**Phase 2 (Q2 2026): Multi-Language**
-- ENH-A: Multi-Language Deep Analysis (10 weeks)
-- ENH-H: Incremental Analysis (7 weeks)
-
-**Phase 3 (Q3 2026): Business Value**
-- ENH-B: Real-Time Diagrams (5 weeks)
-- ENH-C: Use Case Extraction (4 weeks)
-- ENH-E: Cross-Language Calls (7 weeks)
-
-**Phase 4 (Q4 2026): Intelligence**
-- ENH-F: Semantic Search (6 weeks)
-- ENH-D: Predictive Hotspots (8 weeks)
-
----
-
-**Total Capabilities:** 29 operational, 16 enhancement opportunities identified
-
-**Next: Approve roadmap for implementation planning?**
-
-asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
-add a master plan for these enhancements. Give me a summary bullet list of capabilites CORTEX LENS will have after enhancements. Confirm this is read only orchestrator not an operations one. All actions, operations, implementations should be done via TDD, refactor etc. 
-By readonly I mean CORTEX LENS only analyzes and provides accurate, intelligent, synthasized contextual data based on CORTEX best practices overlapped by company domain and best practices etc. Actual code change and operations are done by other orchestrators like TDD, implement etc.
-
-Challenge if you disagree
-
-GitHub Copilot: ## 🧠 CORTEX LENS — Master Enhancement Plan
-**Author:** Asif Hussain | **Orchestrator:** ChallengeEngine ✅
-
----
-
-## ⚠️ CRITICAL CHALLENGE: READ-ONLY ASSUMPTION
-
-**Your Statement:** "CORTEX LENS is read-only, only analyzes/provides data. Operations done by TDD/Implement orchestrators."
-
-**My Position:** **I PARTIALLY DISAGREE** — Your mental model has a flaw.
-
----
-
-### 🔍 The Nuance You're Missing
-
-**CORTEX LENS is BOTH:**
-
-1. **✅ Correct: Analysis Engine (Primary Role)**
-   - AST parsing
-   - Duplication detection
-   - Security scanning
-   - Metrics aggregation
-   - Intelligence synthesis
-
-2. **⚠️ Missing: Limited Write Operations (Secondary Role)**
-   - Dashboard generation (HTML files in cortex-lens/)
-   - Cache management (state files in cortex_brain/state/)
-   - Onboarding artifacts (security reports, metrics)
-   - LENS metadata (analysis results persistence)
-
----
-
-### 🎯 What LENS Should NOT Do
-
-| ❌ FORBIDDEN | ✅ ALLOWED |
-|--------------|------------|
-| Modify source code (*.py, *.ts, *.js) | Generate reports (*.html, *.json) |
-| Edit implementation files | Write analysis cache |
-| Create production features | Create visualization artifacts |
-| Refactor code | Update LENS metadata |
-| Fix bugs | Persist intelligence state |
-
----
-
-### 💡 The Correct Mental Model
-
-```
-User Request → IntentRouter
-                    ↓
-         ┌──────────┴──────────┐
-         ↓                     ↓
-    LENS Analysis         TDD/Implement
-    (Intelligence)        (Operations)
-         ↓                     ↓
-    - AST parsing         - Write code
-    - Dup detection       - Create tests
-    - Security scan       - Refactor
-    - Metrics             - Fix bugs
-    - Dashboard gen       - Deploy
-    - Cache write         
-         ↓                     ↓
-    Context for          Actual Changes
-    Other Orchestrators   to Codebase
-```
-
-**Key Insight:** LENS = "Read-Mostly with Controlled Write" (analysis artifacts only)
-
----
-
-### 🔒 Why LENS Needs Limited Write Access
-
-| Scenario | Justification |
-|----------|---------------|
-| **Dashboard Generation** | Visualization artifacts must persist (onboarding, monitoring) |
-| **Cache Persistence** | Performance requires state storage (ENH-G caching) |
-| **Onboarding Reports** | Security scans generate reports (cortex_onboard_repository) |
-| **Incremental Analysis** | Metadata tracking (ENH-H incremental) requires state |
-
-**Without Write Access:** LENS becomes stateless, loses 50% efficiency gains from caching.
-
----
-
-### ✅ Your Correct Intuition
-
-**LENS should NEVER:**
-- Implement features
-- Fix bugs
-- Refactor code
-- Edit source files
-- Modify production logic
-
-**These ARE operations orchestrator responsibilities** (TDD, Implement, Refactor, Fix).
-
----
-
-### 📋 Refined Principle
-
-**CORTEX LENS = Intelligence Layer with Analysis-Artifact Write Authority**
-
-**Write Permissions:**
-- ✅ cortex-lens/ (dashboards)
-- ✅ cortex_brain/state/lens/ (cache)
-- ✅ cortex_brain/onboarded_repos/ (reports)
-- ❌ cortex/ (source code)
-- ❌ tests/ (test files)
-- ❌ company/ (domain logic)
-
----
-
-## 🎯 Master Enhancement Plan
-
-### **Timeline: Q1 2026 - Q4 2026**
-
----
-
-### **Phase 1: Foundation (Q1 2026) — 11 weeks**
-
-**Goals:** Performance + Knowledge Runtime Access
-
-| Week | Enhancement | Deliverable |
-|------|-------------|-------------|
-| 1-4 | **ENH-G: LENS Result Caching** | Redis cache layer, 50% latency reduction |
-| 5-7 | **ENH-I: Parallel Execution** | Async analyzer orchestration, 4x throughput |
-| 8-11 | **ENH-P: Knowledge Runtime Access** | Dynamic knowledge loading, 40+ YAMLs accessible |
-
-**Success Criteria:**
-- LENS analysis < 2 seconds for 10k LOC repos
-- 70% cache hit rate
-- Knowledge base queries operational
-
----
-
-### **Phase 2: Multi-Language Excellence (Q2 2026) — 17 weeks**
-
-**Goals:** Polyglot support + Incremental analysis
-
-| Week | Enhancement | Deliverable |
-|------|-------------|-------------|
-| 12-21 | **ENH-A: Multi-Language Deep Analysis** | C#, Java, TypeScript, Go, Rust parsers |
-| 22-28 | **ENH-H: Incremental Analysis** | Git diff-based analysis, 10x speedup |
-
-**Success Criteria:**
-- 6 languages with full AST support
-- Cross-language call graph operational
-- Incremental analysis for repos > 50k LOC
-
----
-
-### **Phase 3: Business Value (Q3 2026) — 16 weeks**
-
-**Goals:** Stakeholder comprehension + Architecture visibility
-
-| Week | Enhancement | Deliverable |
-|------|-------------|-------------|
-| 29-33 | **ENH-B: Real-Time Architecture Diagrams** | Interactive diagrams, zero placeholders |
-| 34-37 | **ENH-C: Automated Use Case Extraction** | Business narrative generation |
-| 38-44 | **ENH-E: Cross-Language Call Graph** | Microservice interaction mapping |
-
-**Success Criteria:**
-- Non-technical stakeholders understand architecture
-- Use case → code traceability operational
-- Breaking change impact analysis available
-
----
-
-### **Phase 4: Intelligence Advancement (Q4 2026) — 14 weeks**
-
-**Goals:** Predictive analysis + Semantic understanding
-
-| Week | Enhancement | Deliverable |
-|------|-------------|-------------|
-| 45-50 | **ENH-F: Semantic Code Search** | Embedding-based search, similarity detection |
-| 51-58 | **ENH-D: Predictive Hotspot Analysis** | ML-based risk forecasting, 90-day window |
-
-**Success Criteria:**
-- "Find similar implementations" operational
-- Predictive hotspot accuracy > 75%
-- Technical debt trajectory visible
-
----
-
-## 🎯 Post-Enhancement LENS Capabilities
-
-### **Core Analysis (Maintained + Enhanced)**
-
-1. **Multi-Language AST Analysis** — Python, JavaScript, TypeScript, C#, Java, Go, Rust
-2. **Cross-Language Call Graph** — Trace calls across service boundaries (RPC, REST, GraphQL)
-3. **Semantic Code Search** — Embedding-based "find similar" capability
-4. **Duplicate Detection** — Exact + semantic (CORE-035 enforcement)
-5. **Security Scanning** — 6+ CWE patterns, secrets, injection attacks
-6. **Complexity Metrics** — Cyclomatic complexity, cognitive complexity
-7. **Dependency Mapping** — Import graphs, circular dependency detection
-8. **Test Coverage Analysis** — Test → implementation traceability
-9. **Hotspot Detection** — Current + predictive (90-day forecast)
-10. **Code Smell Detection** — SOLID violations, anti-patterns
-
-### **Intelligence & Context**
-
-11. **Intent Classification** — IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST, DEPLOY
-12. **Confidence Scoring** — Multi-factor 0.0-1.0 confidence
-13. **Risk Assessment** — Regression risk, change impact analysis
-14. **DoR Generation** — Definition of Ready before execution
-15. **Knowledge Base Access** — Runtime access to 40+ best practice YAMLs
-16. **Context-Aware Recommendations** — Tech stack → knowledge mapping
-17. **Capability Gap Detection** — Missing orchestrators, tools, patterns
-
-### **Architecture & Business Value**
-
-18. **Real-Time Architecture Diagrams** — Component, sequence, dependency (Mermaid)
-19. **Interactive Visualization** — Pan/zoom/filter dashboards
-20. **Use Case Extraction** — Business narrative from code patterns
-21. **Actor-Action-Object Modeling** — Business logic mapping
-22. **Use Case → Code Traceability** — Bidirectional linking
-23. **Cross-Layer Coherence** — Validation across layers (ENH-013)
-
-### **Git & Change Intelligence**
-
-24. **Commit History Analysis** — 24h patterns, blame data, author activity
-25. **Change Frequency Detection** — Unstable area identification (churn)
-26. **Branch Topology** — Diverged branches, merge conflict prediction
-27. **Incremental Analysis** — Git diff-based (10x speedup)
-28. **Author Hotspot Mapping** — Code ownership + risk correlation
-
-### **Performance & Scale**
-
-29. **Result Caching** — LRU cache with TTL, Redis backend (50% latency reduction)
-30. **Parallel Execution** — Async/await, 4x throughput improvement
-31. **Incremental Processing** — Only analyze changed files + dependencies
-32. **Large Repo Support** — 100k+ LOC repos under 30 seconds
-
-### **Reporting & Visualization**
-
-33. **HTML Dashboard Generation** — Per-repo health dashboards
-34. **Metrics Aggregation** — Health scores, test counts, security issues
-35. **Security Reports** — CWE findings, vulnerability severity
-36. **Duplication Reports** — Exact + semantic duplicate clusters
-37. **Onboarding Reports** — Comprehensive repo analysis artifacts
-
-### **Predictive & Advanced**
-
-38. **Predictive Hotspot Analysis** — ML-based 90-day risk forecasting
-39. **Technical Debt Trajectory** — Trend analysis, proactive refactoring suggestions
-40. **Breaking Change Impact** — Cross-service change propagation analysis
-41. **Semantic Similarity Detection** — Code clone detection beyond exact matches
-
----
-
-## 📊 Capability Growth Summary
-
-| Metric | Current (Pre-Enhancement) | Post-Enhancement | Growth |
-|--------|---------------------------|------------------|--------|
-| **Languages (Full AST)** | 1 (Python) | 7 (Python, JS, TS, C#, Java, Go, Rust) | **+600%** |
-| **Analysis Speed** | Baseline | 10x faster (incremental + parallel) | **10x** |
-| **Cache Hit Rate** | 0% (no cache) | 70% target | **∞** |
-| **Visualization** | Static HTML | Interactive diagrams | **New** |
-| **Business Value** | Code metrics only | Use cases + narratives | **New** |
-| **Prediction** | Reactive | 90-day risk forecasting | **New** |
-| **Knowledge Access** | Load time only | Runtime dynamic access | **New** |
-| **Cross-Language** | N/A | Full call graph + impact | **New** |
-| **Total Capabilities** | 29 | 41 | **+41%** |
-
----
-
-## ✅ Architectural Confirmation
-
-**CORTEX LENS Role:** **Intelligence & Analysis Layer** (Read-Mostly)
-
-### Write Authority Matrix
-
-| Path | Write Allowed | Purpose |
-|------|---------------|---------|
-| cortex-lens | ✅ YES | Dashboard generation |
-| `cortex_brain/state/lens/` | ✅ YES | Cache persistence |
-| onboarded_repos | ✅ YES | Onboarding reports |
-| cortex | ❌ NO | Source code (TDD/Implement only) |
-| tests | ❌ NO | Test files (TDD only) |
-| company | ❌ NO | Domain logic (operations only) |
-| prompts | ❌ NO | Governance files (manual only) |
-
-### Operations Flow
-
-```
-LENS analyzes → Provides context → TDD implements
-     ↓                                    ↓
-Generates reports              Writes source code
-Updates cache                  Creates tests
-Persists state                 Refactors logic
-     ↓                                    ↓
-INTELLIGENCE LAYER            OPERATIONS LAYER
-```
-
-**Separation of Concerns:** ✅ Enforced
-
----
-
-## 🎯 Implementation Approach
-
-**All enhancements via TDD:**
-1. Tests BEFORE implementation (CORE-008)
-2. RED → GREEN → REFACTOR cycle
-3. MCP tool exposure (`cortex_process_request`)
-4. No direct chat implementation
-
-**Phase Orchestration:**
-- Phase 1-4 → PlanOrchestrator
-- Each enhancement → TDDOrchestrator
-- Integration → RefactoringOrchestrator
-
----
-
-**Approve master plan for Phase 1 kickoff?**
-
-asifhussain60: Follow instructions in [cortex-architect.prompt.md](file:///Users/asifhussain/PROJECTS/CORTEX/.github/prompts/cortex-architect.prompt.md).
-review #file:chat01.txt.
-Adding to the list of enhancements? IN interaction, planning orchestratos enhance:
-- security first mindset (enhance to check for existing and surrounding seucrity issues, presented as P0-P2 issues). Do not address P3, P4 issues. Treat them as P2
-- add engineer code comments for intelligent synthesis
-- Missing test cases, zero value test cases disguising as FLUF
-- potential code issues engineer might not be aware of
-- additional business info for production owners and business leaders.
-
-Design a response or language engine to be used by CORTEX that uses proper response templates based on role of user and requested task.
-
-GitHub Copilot: ## 🧠 CORTEX DIGEST
-**Author:** Asif Hussain | **Mode:** Digest → Design | **Scope:** Enhancement Registry + Response Engine Architecture ✅
-
----
-
-### 📋 Analysis Summary
-
-Analyzing chat01.txt and your enhancement requests. Let me first gather context on the current orchestrator implementations and enhancement registry. 
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/meta/enhancement-history.yaml#1-1), lines 1 to 150
-
-Searched text for `class InteractionOrchestrator|class EnhancedPlanningOrchestrator`, 4 results
-
-Searched for files matching `**/response*template*.py`, 2 matches
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/response/response_templates.py#1-1), lines 1 to 150
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/core/interaction_orchestrator.py#1-1), lines 1 to 150
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/response)
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/response/role_verbosity_profiles.py#1-1), lines 1 to 150
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/response/unified_response_composer.py#1-1), lines 1 to 200
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/domain/enhanced_planning_orchestrator.py#1-1), lines 1 to 200
-
-Now let me check for existing security analysis patterns and test coverage analysis: 
-
-Searched text for `security|SecurityThreat|OWASP|CWE` (`**/orchestrators/**/*.py`), 20 results
-
-Searched text for `test_coverage|missing_test|zero_value|fluff`, 20 results
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/orchestrators/core/challenge_engine.py#1-1), lines 1 to 100
-
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/docs/meta/enhancement-history.yaml#2700-2700), lines 2700 to 2900
-
-Now I have enough context to design the comprehensive enhancement. Let me create the design:
-
----
-
-## 📋 Enhancement Design: Multi-Role Response Language Engine + Security-First Orchestrator Enhancement
-
-### 🎯 Overview
-
-Based on your request and DIGEST of chat01.txt, I'm designing **2 interrelated enhancements**:
-
-1. **ENH-050: Security-First Orchestrator Enhancement** — Adds proactive security analysis, intelligent code comments, test quality detection, and role-aware business context
-2. **ENH-051: Multi-Role Response Language Engine (MRLE)** — Unified response composition engine that adapts output based on user role and task type
-
----
-
-### 📊 ENH-050: Security-First Orchestrator Enhancement
-
-**Priority:** P0  
-**Domain:** Security + Quality + DX  
-**Affected Orchestrators:** InteractionOrchestrator, EnhancedPlanningOrchestrator, ChallengeEngine
-
-#### 🔒 1. Security-First Mindset Enhancement
-
-**Current State:** `ChallengeEngine` has `SecurityThreatAnalyzer` but only runs on explicit security requests.
-
-**Enhancement:** Proactive security scanning on EVERY request (P0-P2 scope):
-
-| Severity | Detection Scope | Action |
-|----------|-----------------|--------|
-| **P0** | CWE-94 (Injection), CWE-89 (SQLi), CWE-22 (Path Traversal) | **HARD GATE** - Block until fixed |
-| **P1** | CWE-327 (Weak Crypto), CWE-502 (Deserialization), Auth gaps | **WARNING** - Present in challenge |
-| **P2** | Input validation, Error handling, Logging sensitive data | **ADVISORY** - Include in synthesis |
-| **P3/P4** | (Treated as P2) Style issues, minor hygiene | **ADVISORY** - No separate category |
-
-**Implementation Location:** challenge_engine.py
-
-```python
-@dataclass
-class SecurityFirstAnalysis:
-    """Proactive security analysis result."""
-    
-    p0_blockers: List[SecurityThreatFinding]  # HARD GATE
-    p1_warnings: List[SecurityThreatFinding]  # CHALLENGE
-    p2_advisories: List[SecurityThreatFinding]  # SYNTHESIS
-    surrounding_context: Dict[str, List[str]]  # Related files with potential issues
-    remediation_suggestions: List[str]
-    owasp_coverage: Dict[str, bool]  # Which OWASP Top 10 checked
-```
-
-#### 🧠 2. Intelligent Code Comments for Synthesis
-
-**Purpose:** Auto-inject engineer-level comments that explain "why" not just "what".
-
-**Detection Patterns:**
-- Complex algorithms → Add Big-O complexity comment
-- Security-sensitive code → Add CWE reference comment
-- Business logic → Add domain context comment
-- Integration points → Add contract expectation comment
-- Error handling → Add recovery strategy comment
-
-**Output Format:**
-```python
-# CORTEX-SYNTHESIS: This retry logic implements exponential backoff (O(log n) attempts)
-# CORTEX-SECURITY: Input validated against CWE-89 (SQL Injection) - see sanitize_input()
-# CORTEX-BUSINESS: Customer tier determines rate limit (Premium=1000/hr, Standard=100/hr)
-```
-
-#### 🧪 3. Test Quality Analysis (FLUFF Detection)
-
-**Problem:** Tests that pass but provide zero value (mock everything, no assertions, etc.)
-
-**FLUFF Indicators:**
-| Pattern | Detection | Severity |
-|---------|-----------|----------|
-| **Mock Everything** | >80% mocked dependencies | P1 |
-| **No Assertions** | `assert` count = 0 | P0 |
-| **Trivial Assertions** | Only `assert True` or `is not None` | P1 |
-| **Copy-Paste Tests** | >90% similarity across test functions | P2 |
-| **Missing Edge Cases** | Happy path only, no error paths | P2 |
-| **Unreachable Code** | Test doesn't exercise target function | P0 |
-
-**Output:**
-```yaml
-test_quality_analysis:
-  file: "tests/unit/test_user_service.py"
-  total_tests: 15
-  effective_tests: 8  # Actually test something
-  fluff_tests: 7
-  fluff_details:
-    - test_name: "test_create_user"
-      issue: "NO_ASSERTIONS"
-      recommendation: "Add assertion for returned user ID"
-    - test_name: "test_update_profile"
-      issue: "MOCK_EVERYTHING"
-      recommendation: "Use real database fixture or integration test"
-  missing_coverage:
-    - "Error path: Invalid email format"
-    - "Edge case: Concurrent updates"
-```
-
-#### 🔍 4. Potential Code Issues Detection
-
-**Issues engineers might not be aware of:**
-
-| Category | Detection | Example |
-|----------|-----------|---------|
-| **Performance** | N+1 queries, unbounded loops | `for item in items: db.query(item.id)` |
-| **Memory** | Large object retention, circular refs | `self.cache[key] = self` |
-| **Concurrency** | Race conditions, missing locks | Shared mutable state without sync |
-| **Maintainability** | God classes (>500 LOC), deep nesting | 5+ indent levels |
-| **API Contracts** | Breaking changes, missing versioning | Removed required field |
-
-#### 📈 5. Business Context for PMs/Leaders
-
-**Additional synthesis layer for non-engineers:**
-
-```yaml
-business_impact_summary:
-  feature: "User Authentication Refactor"
-  
-  executive_view:
-    risk_level: "MEDIUM"
-    estimated_impact: "10,000 daily active users"
-    compliance_implications: ["GDPR data access logging", "SOC2 audit trail"]
-    
-  product_owner_view:
-    affected_user_journeys: ["Login", "Password Reset", "SSO"]
-    rollback_capability: "Yes - feature flag enabled"
-    monitoring_dashboards: ["Auth Success Rate", "Login Latency P99"]
-    
-  business_metrics:
-    current_baseline: "Login success rate: 98.2%"
-    target_after_change: "Login success rate: 99.5%"
-    revenue_at_risk: "0.3% conversion drop = $15k/day"
-```
-
----
-
-### 📊 ENH-051: Multi-Role Response Language Engine (MRLE)
-
-**Priority:** P0  
-**Domain:** Architecture + DX  
-**Location:** `cortex/orchestrators/response/multi_role_response_engine.py`
-
-#### 🎯 Core Architecture
-
-```
-User Request
-     ↓
-┌────────────────────────────────────────────────────┐
-│           Multi-Role Response Engine               │
-├────────────────────────────────────────────────────┤
-│  1. Role Detection (explicit or inferred)          │
-│  2. Task Classification (IMPLEMENT/AUDIT/QUERY)    │
-│  3. Template Selection (14 templates)              │
-│  4. Content Synthesis (security + quality + biz)   │
-│  5. Verbosity Calibration (role-specific)          │
-│  6. Output Composition (structured sections)       │
-└────────────────────────────────────────────────────┘
-     ↓
-Role-Optimized Response
-```
-
-#### 👥 Role Profiles (Extended)
-
-| Role | Detail Level | Code Examples | Technical Depth | Business Context | Security Focus |
-|------|--------------|---------------|-----------------|------------------|----------------|
-| **ENGINEER** | HIGH | REQUIRED | MAXIMUM | MINIMAL | P0-P2 inline |
-| **ARCHITECT** | MEDIUM-HIGH | SELECTIVE | HIGH | MODERATE | P0-P1 summary |
-| **PM** | MEDIUM | OPTIONAL | MODERATE | HIGH | Risk score only |
-| **BUSINESS** | LOW | NONE | LOW | PRIMARY | Executive summary |
-| **SECURITY** | HIGH | REQUIRED | MAXIMUM | MINIMAL | ALL with CWE refs |
-
-#### 📝 Response Templates (14 Total)
-
-**By Task Type:**
-
-| Task | Engineer Template | PM Template | Business Template |
-|------|-------------------|-------------|-------------------|
-| **IMPLEMENT** | TDD flow + code + tests | Timeline + risks + dependencies | Impact + timeline + cost |
-| **AUDIT** | P0-P2 issues + fixes | Risk matrix + action items | Health score + recommendations |
-| **QUERY** | Technical answer + evidence | Summary + implications | Plain language answer |
-| **PLAN** | Phase details + effort | Roadmap + milestones | Strategic alignment |
-| **DEBUG** | Stack trace + root cause | Impact summary | Status update |
-| **SECURITY** | CWE refs + fixes + tests | Risk assessment | Compliance status |
-
-#### 🔧 Template Structure
-
-**Engineer IMPLEMENT Template:**
-```markdown
-## 🧠 CORTEX IMPLEMENT
-**Author:** Asif Hussain | **Mode:** Design | **Scope:** {scope} ✅
-
----
-
-### 🔒 Security Analysis (P0-P2)
-{security_findings_table}
-
-### 🎯 Implementation Plan
-{tdd_phases_with_code_comments}
-
-### 🧪 Test Strategy
-{test_plan_with_fluff_warnings}
-
-### ⚠️ Potential Issues
-{hidden_issues_list}
-
-### 📊 Quality Metrics
-{coverage_targets_complexity_budget}
-```
-
-**PM IMPLEMENT Template:**
-```markdown
-## 🧠 CORTEX IMPLEMENT
-**Author:** Asif Hussain | **Mode:** Design | **Scope:** {scope} ✅
-
----
-
-### 📋 Executive Summary
-{one_paragraph_plain_language}
-
-### ⏱️ Timeline
-{phases_with_dates_and_dependencies}
-
-### ⚠️ Risk Assessment
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-{risk_table}
-
-### 📊 Success Metrics
-{kpis_and_monitoring}
-```
-
-**Business IMPLEMENT Template:**
-```markdown
-## 🧠 CORTEX IMPLEMENT
-**Author:** Asif Hussain | **Mode:** Design | **Scope:** {scope} ✅
-
----
-
-### 📋 What We're Building
-{plain_language_description}
-
-### 💰 Business Impact
-- **Revenue Impact:** {estimate}
-- **User Impact:** {affected_users}
-- **Timeline:** {weeks}
-
-### ✅ Key Milestones
-1. {milestone_1} — {date}
-2. {milestone_2} — {date}
-
-### 🎯 Success Criteria
-{business_metrics}
-```
-
-#### 🔄 Role Detection Logic
-
-```python
-class RoleDetector:
-    """Auto-detect user role from context."""
-    
-    ROLE_SIGNALS = {
-        Role.ENGINEER: [
-            "show me the code", "implementation", "function", "class",
-            "test", "debug", "stack trace", "exception", "refactor"
-        ],
-        Role.PM: [
-            "timeline", "milestone", "risk", "stakeholder", "sprint",
-            "backlog", "priority", "dependency", "blocker"
-        ],
-        Role.BUSINESS: [
-            "revenue", "customer", "user impact", "cost", "ROI",
-            "strategic", "quarterly", "KPI", "conversion"
-        ],
-        Role.ARCHITECT: [
-            "architecture", "design", "pattern", "scalability",
-            "integration", "system", "component", "interface"
-        ],
-        Role.SECURITY: [
-            "vulnerability", "CVE", "CWE", "OWASP", "penetration",
-            "audit", "compliance", "encryption", "authentication"
-        ]
-    }
-    
-    def detect(self, request: str, context: Dict) -> Role:
-        """Detect role from request text and context."""
-        # Explicit role mention overrides
-        if "as an engineer" in request.lower():
-            return Role.ENGINEER
-        if "for product" in request.lower() or "for pm" in request.lower():
-            return Role.PM
-        # ... signal matching logic
-```
-
----
-
-### 📁 Implementation Plan
-
-**Phase 1: Security-First Analysis (3 days)**
-- Enhance `ChallengeEngine` with proactive security scanning
-- Add P0-P2 severity classification
-- Integrate surrounding context analysis
-- 35 tests
-
-**Phase 2: Test Quality Analyzer (2 days)**
-- Create `TestQualityAnalyzer` in support
-- FLUFF detection patterns
-- Missing coverage identification
-- 25 tests
-
-**Phase 3: Code Issue Detector (2 days)**
-- Create `HiddenIssueDetector` in support
-- Performance, memory, concurrency patterns
-- 20 tests
-
-**Phase 4: Business Context Generator (2 days)**
-- Enhance `EnhancedPlanningOrchestrator` with business synthesis
-- Impact estimation, compliance mapping
-- 15 tests
-
-**Phase 5: Multi-Role Response Engine (4 days)**
-- Create `MultiRoleResponseEngine` in response
-- 14 role-task template combinations
-- Role detection logic
-- Template composition pipeline
-- 45 tests
-
-**Phase 6: Integration & MCP Tools (2 days)**
-- Wire into `InteractionOrchestrator`
-- Expose via MCP: `cortex_analyze_security`, `cortex_analyze_test_quality`, `cortex_compose_response`
-- 20 tests
-
-**Total:** 15 days, 160 tests, 85% coverage target
-
----
-
-### 📝 Enhancement Registry Entries
-
-Would you like me to:
-
-1️⃣ **Add ENH-050 + ENH-051 to enhancement-history.yaml** — Register these enhancements formally
-
-2️⃣ **Create detailed plan file** — Full YAML spec in active
-
-3️⃣ **Start TDD implementation** — Begin with Phase 1 (Security-First Analysis)
-
-4️⃣ **Design review only** — Refine the design based on your feedback
-
-**Quick Select:** Type `1`, `2`, `3`, or `4` to proceed.
+Your selection determines the implementation path.

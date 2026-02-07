@@ -10,6 +10,36 @@ last_updated: "2026-02-06"
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-38.0"
+    name: "Remediation & Baseline Restoration"
+    file: "phases/active/phase-38.0-remediation-baseline-restoration.yaml"
+    started: "2026-02-07"
+    status: "active"
+    priority: "P0"
+    execution_order: 0
+    roi_score: 0.98
+    description: |
+      🔴 CRITICAL: Baseline restoration BLOCKING Phase 38 implementation.
+      
+      Fixes 5 critical issues:
+      1. Phase 34 regression (sentence-transformers dependency)
+      2. 5 test collection errors (integration + manual tests)
+      3. Orchestrator inventory mismatch (35 vs 234 files)
+      4. Missing regression baseline metrics
+      5. No Phase 38 readiness validation
+      
+      Target: 35 tests (validation framework). Duration: 2 days (16 hours).
+      
+      Success Criteria:
+      - Phase 34: 24/24 tests passing ✅
+      - Test collection: 0 errors (fix 5) ✅
+      - Orchestrator inventory: Documented ✅
+      - Baseline metrics: Captured ✅
+      - Full test suite: ~1,483 passing (100%) ✅
+      - Readiness checks: 5/5 passing ✅
+      
+      BLOCKS: Phase 38 (cannot proceed until 100% cohesion achieved)
+  
   - id: "phase-32"
     name: "Glassmorphism Dashboard Generator Fix"
     file: "phases/active/phase-32-glassmorphism-dashboard-generator-fix.yaml"
@@ -60,12 +90,15 @@ active_phases:
     name: "Brain Cohesion & Health System"
     file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
     started: "2026-02-07"
-    status: "active"
+    status: "blocked"
+    blocked_by: "phase-38.0"
     priority: "P0"
     execution_order: 1
     roi_score: 0.94
     description: |
-      🔵 IN PROGRESS: Critical brain cohesion system addressing 12 gaps.
+      � BLOCKED by Phase 38.0 (Baseline Restoration Required).
+      
+      Critical brain cohesion system addressing 12 gaps.
       
       ORIGINAL (Stages 1-6): Brain Health, Capability Mesh, Context-Aware Governance,
       Domain Enhancement, Brain Flush, AUDIT Integration.
@@ -83,6 +116,36 @@ active_phases:
       cortex_vacuum_relocate.
       
       AUDIT Integration: P1.5-001 to P1.5-010 checks added to audit-checklist.yaml.
+      
+      ⚠️ CANNOT PROCEED until Phase 38.0 restores baseline (100% cohesion required).
+  
+  - id: "phase-39"
+    name: "AUDIT Mode Cohesion & Integrity System"
+    file: "phases/active/phase-39-audit-mode-cohesion-integrity-system.yaml"
+    started: "2026-02-07"
+    status: "active"
+    priority: "P0"
+    execution_order: 2
+    roi_score: 0.92
+    description: |
+      🔵 ACTIVE: Comprehensive cohesion and integrity checks for AUDIT mode.
+      
+      Enhances AUDIT with 15 new checks across 6 categories:
+      
+      1. **Prompt Cohesion** (3 checks) - Validate copilot-instructions.md ↔ CORTEX.prompt.md ↔ cortex-architect.prompt.md sync
+      2. **Agent Health** (4 checks) - Version tracking, capability coverage, cross-references, AGENT-INDEX.md accuracy
+      3. **Orchestrator Integrity** (3 checks) - Wiring.yaml ↔ implementation ↔ MCP tools alignment
+      4. **Module Cohesion** (2 checks) - Import health, circular dependency detection
+      5. **Test Validity** (2 checks) - Coverage gaps, contract test health (Python ↔ JavaScript)
+      6. **Team Collaboration** (1 check) - company/domains/ readiness for multi-team workflows
+      
+      **Future-Vision Capability:** Technology stack evolution planning (when to adopt new tech, migration plans).
+      
+      Target: 220 tests (8 stages). Coverage: 85%. Duration: 27 days (~4 weeks).
+      
+      New MCP Tool: cortex_audit_cohesion (execute all 15 validators).
+      
+      Dependencies: Phase 38.0 (baseline restoration), ENH-046 (context governance).
   
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
@@ -443,17 +506,17 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 39
-  active_phases: 3
+  total_phases: 40
+  active_phases: 4
   completed_phases: 28
   completed_2026: 28
   completed_2025: 11
   total_enhancements: 4
   active_enhancements: 4
-  last_phase_created: "2026-02-06"
+  last_phase_created: "2026-02-07"
   last_phase_completed: "2026-02-06"
   next_expected_completion: "2026-02-20"
-  last_updated: "2026-02-06"
+  last_updated: "2026-02-07"
   phases_completed_today:
     - "phase-21: JSON-First Rewrite (P0, 57/57 tests, 6 phases, progressive enhancement)"
     - "phase-29: Response Format Enhancement (P1, 48/48 tests, 4 phases, ROI=0.7025)"
@@ -470,6 +533,7 @@ statistics:
     - "phase-35: Autonomous Execution Enhancement (P0, execution_order=2, roi_score=0.7425)"
     - "phase-34: Advanced Response Optimization (P1, execution_order=6, roi_score=0.6400)"
     - "phase-36: ML-Based Summarization (P1, execution_order=8, roi_score=0.6825)"
+    - "phase-39: AUDIT Mode Cohesion & Integrity System (P0, execution_order=2, roi_score=0.92)"
   phase_updates_today:
     - "phase-25: Unblocked by phase-26, execution_order=3"
     - "phase-34: Created with ROI-based prioritization"

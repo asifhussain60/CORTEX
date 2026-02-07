@@ -4,12 +4,275 @@
 # Authority: cortex-architect.prompt.md v14.2
 # Updated: 2026-02-07
 
-meta_version: "2.5"
+meta_version: "2.6"
 last_updated: "2026-02-07"
 schema_version: "1.0"
 
 # Implemented Enhancements
 enhancements:
+  - id: ENH-052
+    date: "2026-02-07"
+    recommendation: "Phase 39: AUDIT Mode Cohesion & Integrity System"
+    status: PLANNED
+    domain: Architecture + Governance + Infrastructure
+    priority: P0
+    source: "User request - comprehensive cohesion/integrity checks for proactive issue detection"
+    adoption_reason: |
+      User requested comprehensive AUDIT mode enhancement to detect architecture/infrastructure
+      issues proactively across all CORTEX components:
+      
+      SCOPE REQUIREMENTS:
+      1. Prompt consistency (copilot-instructions.md, CORTEX.prompt.md, cortex-architect.prompt.md)
+      2. Agent health (versioning, capabilities, cross-references)
+      3. Orchestrator integrity (wiring.yaml alignment, MCP exposure, 35 orchestrators)
+      4. Module cohesion (import health, circular dependencies)
+      5. Test validity (coverage gaps, Python ↔ JavaScript contracts)
+      6. MCP exposure completeness (all 35 orchestrators accessible via MCP)
+      7. Team collaboration readiness (company/domains/ multi-team workflows)
+      8. Future-vision planning (technology stack evolution, migration roadmaps)
+      
+      Current AUDIT mode has 23 checks (P0-P5) but lacks comprehensive cohesion validation.
+      Phase 39 adds 15 new checks across 6 categories to shift quality left.
+    expected_benefits:
+      - "Proactive detection of prompt version drift (>7 days)"
+      - "Agent health monitoring (version tracking, capability gaps)"
+      - "Orchestrator wiring validation (35 orchestrators, 100% MCP exposure)"
+      - "Module cohesion verification (import health, zero circular deps)"
+      - "Test validity checks (≥80% coverage, contract alignment)"
+      - "Team collaboration readiness (company/domains/ workflows)"
+      - "Future-vision planning (technology adoption triggers, migration roadmaps)"
+      - "Shift-left quality (detect issues at AUDIT, not runtime)"
+      - "360° architectural visibility (6-domain comprehensive validation)"
+    implementation_notes: |
+      Phase 39 created with 8 stages (27 days, 220 tests):
+      
+      Stage 1: Prompt Cohesion Validator (3 days, 18 tests)
+      - Detect version drift across 3 prompt files
+      - Validate CORE rules consistency (002, 008, 028, 029, 030, 035)
+      - Verify MCP-FIRST enforcement alignment
+      - Files: cortex/orchestrators/audit/prompt_cohesion_validator.py
+      
+      Stage 2: Agent Health Validator (4 days, 28 tests)
+      - Agent version tracking (all agents have version + updated dates)
+      - Capability coverage matrix (6 modes × agent assignments)
+      - Cross-reference validation (no broken agent file paths)
+      - AGENT-INDEX.md synchronization
+      - Files: cortex/orchestrators/audit/agent_health_validator.py
+      
+      Stage 3: Orchestrator Integrity Validator (4 days, 30 tests)
+      - Wiring.yaml ↔ implementation alignment (35 orchestrators)
+      - MCP tool exposure completeness (all orchestrators accessible)
+      - Dependency graph validation (no circular orchestrator deps)
+      - Files: cortex/orchestrators/audit/orchestrator_integrity_validator.py
+      
+      Stage 4: Module Cohesion Validator (3 days, 22 tests)
+      - Import health (no broken imports in cortex/ modules)
+      - Circular dependency detection (0 cycles tolerance)
+      - Files: cortex/orchestrators/audit/module_cohesion_validator.py
+      
+      Stage 5: Test Validity Validator (3 days, 24 tests)
+      - Test coverage gaps (≥80% target, identify low-coverage modules)
+      - Contract test health (Python ↔ JavaScript alignment)
+      - Files: cortex/orchestrators/audit/test_validity_validator.py
+      
+      Stage 6: Team Collaboration Validator (2 days, 16 tests)
+      - company/domains/ readiness for multi-team workflows
+      - Domain template availability
+      - Files: cortex/orchestrators/audit/team_collaboration_validator.py
+      
+      Stage 7: Technology Stack Evolution Planner (5 days, 32 tests)
+      - Adoption trigger detection (when to add new tech)
+      - Migration plan generation (roadmaps for tech transitions)
+      - Technology readiness scoring (assess readiness for new stacks)
+      - Look-forward design recommendations (future-proofing)
+      - Files: cortex/orchestrators/audit/tech_stack_evolution_planner.py
+      
+      Stage 8: AUDIT Mode Integration (3 days, 30 tests)
+      - Update cortex-architect.prompt.md with P1.5/P1.6 sections
+      - Enhance cortex-auditor.md with validation procedures
+      - Create audit-checklist-v2.yaml with 15 new checks
+      - Register cortex_audit_cohesion MCP tool
+      - E2E test (full audit suite <2 min execution)
+      - Files: audit-checklist-v2.yaml, integration test
+      
+      New Audit Checks (15 total):
+      
+      P1.5 Cohesion & Integrity (13 checks):
+      - P1.5-001: Prompt Version Drift
+      - P1.5-002: CORE Rules Consistency
+      - P1.5-003: MCP-FIRST Enforcement Alignment
+      - P1.5-004: Agent Version Drift
+      - P1.5-005: Agent Capability Gaps
+      - P1.5-006: Agent Cross-Reference Integrity
+      - P1.5-007: AGENT-INDEX.md Accuracy
+      - P1.5-008: Wiring-Implementation Alignment
+      - P1.5-009: MCP Tool Exposure Completeness
+      - P1.5-010: Orchestrator Dependency Graph
+      - P1.5-011: Import Health
+      - P1.5-012: Circular Dependency Detection
+      - P1.5-013: Test Coverage Gaps
+      - P1.5-014: Contract Test Health
+      - P1.5-015: Team Collaboration Readiness
+      
+      P1.6 Future-Vision (2 checks):
+      - P1.6-001: Technology Stack Capacity
+      - P1.6-002: Migration Plan Availability
+      
+      Files Created (9):
+      - cortex/orchestrators/audit/prompt_cohesion_validator.py
+      - cortex/orchestrators/audit/agent_health_validator.py
+      - cortex/orchestrators/audit/orchestrator_integrity_validator.py
+      - cortex/orchestrators/audit/module_cohesion_validator.py
+      - cortex/orchestrators/audit/test_validity_validator.py
+      - cortex/orchestrators/audit/team_collaboration_validator.py
+      - cortex/orchestrators/audit/tech_stack_evolution_planner.py
+      - cortex-registry/_cortex-master/governance/audit-checklist-v2.yaml
+      - 8 test files (7 unit + 1 integration)
+      
+      Files Modified (4):
+      - .github/prompts/cortex-architect.prompt.md (P1.5/P1.6 sections)
+      - .github/agents/core/cortex-auditor.md (validation procedures)
+      - cortex/wiring/specifications/wiring.yaml (register 7 audit orchestrators)
+      - cortex-registry/_cortex-master/governance/audit-checklist.yaml (P1.5 reference)
+      
+      New MCP Tool (1):
+      - cortex_audit_cohesion: Unified access to all 15 validators
+      
+      Dependencies:
+      - Phase 38.0 (baseline restoration) - MUST complete first
+      - ENH-046 (context governance) - ContextSynthesisGateway
+    metrics:
+      estimated_effort_days: 27
+      estimated_test_count: 220
+      target_coverage: "85%"
+      stages: 8
+      new_audit_checks: 15
+      new_validators: 7
+      new_mcp_tools: 1
+      roi_score: 0.92
+      architectural_impact: 0.95
+      efficiency_gain: 0.90
+      accuracy_improvement: 0.85
+      effort_cost: 0.45
+      blocking_severity: 0.70
+    evidence_basis:
+      - "User: 'add all these high value cohesion and integrity checks'"
+      - "User: Scope includes prompts, agents, orchestrators, modules, tests, MCP exposure, team collaboration, future tech stack evolution"
+      - "Phase 38 cohesion audit: NOT COHESIVE verdict (3.1/10 score)"
+      - "Current AUDIT mode: 23 checks, no comprehensive cohesion validation"
+      - "35 orchestrators registered in wiring.yaml, no integrity validation"
+      - "3 prompt files (copilot-instructions.md, CORTEX.prompt.md, cortex-architect.prompt.md), no drift detection"
+    related_enhancements:
+      - ENH-051
+      - ENH-046
+    related_phases:
+      - "phase-38.0: Remediation & Baseline Restoration (prerequisite)"
+      - "phase-38: Brain Cohesion & Health System (related scope)"
+    success_criteria:
+      - "15 audit checks implemented and operational"
+      - "7 validator orchestrators created with 85% test coverage"
+      - "cortex_audit_cohesion MCP tool registered and functional"
+      - "AUDIT mode execution <2 min for all 38 checks (23 existing + 15 new)"
+      - "Prompt drift detection operational (3 files monitored)"
+      - "Agent health monitoring operational (version tracking + capabilities)"
+      - "Orchestrator integrity validation operational (35 orchestrators)"
+      - "Technology stack evolution planner operational (adoption triggers + migration roadmaps)"
+  
+  - id: ENH-051
+    date: "2026-02-07"
+    recommendation: "Phase 38.0: Remediation & Baseline Restoration (Pre-Implementation)"
+    status: PLANNED
+    domain: Infrastructure + Governance
+    priority: P0
+    source: "Phase 38 cohesion audit - 5 critical blockers identified"
+    adoption_reason: |
+      Phase 38 cohesion audit revealed CRITICAL baseline instability:
+      
+      BLOCKERS DETECTED (5):
+      1. Phase 34 regression: sentence-transformers dependency broken (18 tests failing)
+      2. Test collection errors: 5 integration/manual tests cannot be collected
+      3. Orchestrator count mismatch: 35 expected (wired) vs 234 files (actual)
+      4. No regression baseline: Performance metrics not captured
+      5. No readiness validation: Phase 38 prerequisites not verified
+      
+      Phase 38 cannot proceed safely without baseline restoration.
+      Remediation phase establishes 100% cohesion and zero-regression framework.
+    expected_benefits:
+      - "Phase 34 fully operational (24/24 tests passing)"
+      - "Zero test collection errors (5 fixed)"
+      - "Orchestrator inventory documented and validated"
+      - "Regression baseline captured (performance metrics stored)"
+      - "Full test suite 100% passing (~1,483 tests)"
+      - "Phase 38 readiness validated (5/5 checks)"
+      - "Safe Phase 38 implementation path (zero regression risk)"
+    implementation_notes: |
+      Phase 38.0 created with 6 stages (2 days, 35 tests):
+      
+      Stage 0: Phase 34 Dependency Fix (2 hours, 24 tests)
+      - Install sentence-transformers + scikit-learn
+      - Validate SemanticDeduplicator (18 unit + 6 integration tests)
+      
+      Stage 1: Test Collection Error Resolution (3 hours, 5 validations)
+      - Fix import errors in 5 test files
+      - Validate: pytest --collect-only succeeds
+      
+      Stage 2: Orchestrator Inventory Audit (3 hours, 11 tests)
+      - Implement OrchestratorInventoryAuditor
+      - Document: 35 orchestrators + 199 support files = 234 total
+      - Cross-reference with wiring.yaml
+      
+      Stage 3: Baseline Performance Metrics (4 hours, 18 tests)
+      - Implement BaselineMetricsCollector + RegressionDetector
+      - Capture: latency, memory, test execution times
+      - Store baseline: baselines/2026-02-07-pre-phase38.json
+      
+      Stage 4: 100% Baseline Validation (2 hours, 0 new tests)
+      - Run full test suite: pytest tests/ -v --maxfail=0
+      - Validate: ~1,483 tests passing (100%)
+      - Critical path validation (Phase 21, 28, 32, 34)
+      
+      Stage 5: Phase 38 Readiness Checklist (2 hours, 17 tests)
+      - Implement Phase38ReadinessValidator
+      - 5 readiness checks: dependencies, baseline, inventory, tests, rollback
+      - Generate readiness report
+      
+      Files Created/Modified:
+      - cortex-registry/_cortex-master/phases/active/phase-38.0-remediation-baseline-restoration.yaml (NEW)
+      - cortex-registry/_cortex-master/phases/active/phase-38-brain-cohesion-health-system.yaml (BLOCKED status)
+      - cortex-registry/_cortex-master/index.yaml (Phase 38.0 registered, Phase 38 blocked)
+      - docs/meta/enhancement-history.yaml (this file - ENH-051)
+      
+      New MCP Tools (2):
+      1. cortex_restore_baseline - Execute full baseline restoration
+      2. cortex_validate_phase38_readiness - Validate Phase 38 readiness
+    metrics:
+      estimated_effort_days: 2
+      estimated_test_count: 35
+      target_coverage: "100% (baseline validation)"
+      stages: 6
+      blocking_phase: "phase-38"
+      roi_score: 0.98
+    evidence_basis:
+      - "Phase 38 audit: 0/260 tests implemented (100% specification-only)"
+      - "Phase 34: sentence-transformers ImportError (18 tests failing)"
+      - "Test collection: 5 errors blocking baseline validation"
+      - "Orchestrator count: 234 files vs 35 expected (6.7x mismatch)"
+      - "No regression baseline: Cannot detect Phase 38 impact"
+      - "Phase 38 HIGH REGRESSION RISK if implemented without remediation"
+    related_enhancements:
+      - ENH-050
+    related_phases:
+      - "phase-34: Advanced Response Optimization (broken, needs restoration)"
+      - "phase-38: Brain Cohesion & Health (blocked until baseline restored)"
+    success_criteria:
+      - "Phase 34: 24/24 tests passing (sentence-transformers operational)"
+      - "Test collection: 0 errors (5 fixed)"
+      - "Orchestrator inventory: Documented (35 + 199 = 234)"
+      - "Baseline metrics: Captured and stored"
+      - "Full test suite: ~1,483 passing (100%)"
+      - "Readiness validation: 5/5 checks pass"
+      - "Phase 38 unblocked: Safe to proceed"
+  
   - id: ENH-050
     date: "2026-02-07"
     recommendation: "Brain Cohesion & Health System (Phase 38)"

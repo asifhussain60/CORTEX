@@ -355,13 +355,12 @@ from enum import Enum
 
 # CONSOLIDATED: Import from cortex.mcp.executor
 # class ExecutionState(Enum):
-    """States of execution."""
-    PENDING = "pending"
-    RUNNING = "running"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    TIMEOUT = "timeout"
-
+#     """States of execution."""
+#     PENDING = "pending"
+#     RUNNING = "running"
+#     COMPLETED = "completed"
+#     FAILED = "failed"
+#     TIMEOUT = "timeout"
 
 from dataclasses import dataclass, field
 from cortex.models.canonical_enums import ExecutionMode

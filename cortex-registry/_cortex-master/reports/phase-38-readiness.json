@@ -1,0 +1,10 @@
+{
+  "ready": false,
+  "checks_passed": 5,
+  "checks_failed": 1,
+  "readiness_score": 0.8333333333333334,
+  "blocking_issues": [
+    "Stage 1: 5 test collection errors remain"
+  ],
+  "timestamp": "2026-02-07T06:12:23.963548"
+}

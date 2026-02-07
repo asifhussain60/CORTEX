@@ -50,7 +50,54 @@
 
 ---
 
-## 🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
+## � HOLISTIC WORK PROTOCOL (NEW - Phase 38.0)
+
+**Core Mandate:** NO SHORTCUTS. Complete, systematic, coherent work regardless of session token budget.
+
+### Token Budget Protocol
+
+**WHEN token usage ≥ 75% AND work NOT complete:**
+
+1. **SAVE** — Commit all progress: `git commit -m "Phase X: [CHECKPOINT]"`
+2. **DOCUMENT** — Generate continuation prompt (200-400 tokens):
+   - What completed + test status
+   - Remaining stages + effort
+   - Key files + next commands
+3. **POST** — User copies to new Copilot Chat + `/plan` command
+4. **CONTINUE** — Pick up from checkpoint
+
+**FORBIDDEN:**
+- ❌ Skip tests to save tokens
+- ❌ Defer refactoring
+- ❌ Leave broken code
+- ❌ Miss governance updates
+
+### Holistic Checklist (EVERY COMPLETION)
+
+Before marking work complete:
+- ✅ Code: TDD, coverage met, no lint errors
+- ✅ Tests: Unit + integration + e2e (as needed)
+- ✅ Governance: CORE rules, audit trail (AC_START → AC_COMPLETE)
+- ✅ Documentation: Code, inline, architecture
+- ✅ Integration: All layers connected (MCP, orchestrators)
+- ✅ Verification: Implementation Truth confirmed
+- ✅ Cleanup: No CORTEX_DEBUG markers, markdown vacuumed
+
+### Audit Integration
+
+All work logged with AC markers:
+```python
+# AC_START: AC-PHASE38.0-001
+# Description: Phase 34 dependency fix
+# ... code ...
+# AC_COMPLETE: AC-PHASE38.0-001 ✅ 18/18 passing
+```
+
+See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
+
+---
+
+## �🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
 
 **FORBIDDEN:** Direct file creation when intent = IMPLEMENT
 

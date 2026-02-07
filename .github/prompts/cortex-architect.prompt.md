@@ -51,6 +51,91 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 
 ---
 
+## 🔄 HOLISTIC WORK PROTOCOL (MANDATORY)
+
+**Authority:** CORTEX-CORE-034: Holistic Implementation Discipline  
+**Effective:** 2026-02-07 (Phase 38.0)  
+**Enforcement:** BLOCKING - All work must comply regardless of session budget
+
+### Core Principle
+
+**NO SHORTCUTS.** All work must be:
+1. ✅ **Complete** — Finish what you start, don't defer
+2. ✅ **Systematic** — Follow TDD→RED→GREEN→REFACTOR rigorously
+3. ✅ **Coherent** — Integrate across all layers (code, tests, docs, governance)
+4. ✅ **Verified** — Implementation Truth before marking complete
+5. ✅ **Documented** — Governance + audit trail maintained
+
+### Token Budget Management (ENH-046 Phase 1.6)
+
+**IF token budget insufficient for complete work:**
+
+**REQUIRED:**
+1. ✅ Save all work completed SO FAR (git commit with full context)
+2. ✅ Generate **Continuation Prompt** (concise, 200-400 tokens):
+   - What was done (checkpoint summary)
+   - What remains (clear next steps)
+   - Context for new session (key files, phase, requirements)
+   - Decision points for continuation
+3. ✅ Post continuation prompt in chat for user to copy-paste in next session
+4. ✅ DO NOT COMPROMISE on implementation quality
+5. ✅ DO NOT leave work half-done or untested
+
+**FORBIDDEN:**
+- ❌ Skipping tests to save tokens
+- ❌ Deferring refactoring for "next time"
+- ❌ Partial implementations without completion plan
+- ❌ Leaving broken code in codebase
+- ❌ Missing governance updates (CORE rules, audit trail)
+
+### Holistic Checklist (EVERY COMPLETION)
+
+**Before marking any work "COMPLETE":**
+
+| Check | Requirement | Status |
+|-------|-------------|--------|
+| **Code** | TDD: tests pass, coverage ≥ target | ✅ |
+| **Quality** | No lint errors, type hints, docstrings | ✅ |
+| **Tests** | Unit + integration + e2e as needed | ✅ |
+| **Governance** | CORE rules applied, audit trail logged | ✅ |
+| **Documentation** | Code + inline + architecture updated | ✅ |
+| **Integration** | All layers connected (MCP, orchestrators) | ✅ |
+| **Verification** | Implementation Truth confirmed (code inspected) | ✅ |
+| **Cleanup** | No CORTEX_DEBUG markers, markdown vacuum applied | ✅ |
+
+**If ANY check fails → INCOMPLETE. Continue work or document blocker.**
+
+### Session Continuation Pattern
+
+**When tokens ≥ 75% used and work not complete:**
+
+1. **Save Progress:**
+   ```bash
+   git add -A && git commit -m "Phase X.Y: [CHECKPOINT] Description of progress"
+   ```
+
+2. **Generate Continuation Prompt** (200-400 tokens max)
+
+3. **User Action:**
+   - Copy continuation prompt to new Copilot Chat session
+   - Paste prompt + `/plan` command
+   - Continue from checkpoint
+
+### Audit Integration (CORE-027)
+
+**All work logged with AC markers:**
+
+```python
+# AC_START: AC-PHASE38.0-001
+# Description: Phase 34 dependency fix
+# Author: [name]
+# Date: 2026-02-07
+# ... implementation code ...
+# AC_COMPLETE: AC-PHASE38.0-001 ✅ 18/18 tests passing
+```
+
+---
+
 ## 🎯 HEPTA-MODE OPERATION
 
 **Load from:** modes.yaml in cortex-registry/_cortex-master/meta/ directory

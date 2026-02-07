@@ -14,8 +14,8 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from cortex.lens.dashboard_data_aggregator_v3 import DashboardDataAggregatorV3
-from cortex.models.dashboard_schema_v3 import validate_dashboard_data
+from cortex.lens.dashboard_data_aggregator import DashboardDataAggregator
+from cortex.models.dashboard_schema import validate_dashboard_model
 
 
 class TestDashboardE2EIntegration:
@@ -91,7 +91,7 @@ A simple Python project for testing.
     def test_e2e_001_full_pipeline_success(self, sample_repository, output_dir):
         """E2E-001: Full pipeline executes successfully from start to finish."""
         # Step 1: Initialize aggregator
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         assert aggregator is not None
         
         # Step 2: Aggregate data
@@ -101,7 +101,7 @@ A simple Python project for testing.
         assert result.data is not None
         
         # Step 3: Validate against schema
-        is_valid, errors = validate_dashboard_data(result.data)
+        is_valid, errors = validate_dashboard_model(result.data)
         assert is_valid is True, f"Validation errors: {errors}"
         assert len(errors) == 0
         
@@ -119,7 +119,7 @@ A simple Python project for testing.
     
     def test_e2e_002_repo_summary_generation(self, sample_repository):
         """E2E-002: Repository summary is generated with correct data."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         repo_summary = result.data['repo_summary']
@@ -141,7 +141,7 @@ A simple Python project for testing.
     
     def test_e2e_003_metrics_summary_generation(self, sample_repository):
         """E2E-003: Metrics summary is generated with valid data."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         metrics = result.data['metrics_summary']
@@ -163,7 +163,7 @@ A simple Python project for testing.
     
     def test_e2e_004_packages_extraction(self, sample_repository):
         """E2E-004: Packages are extracted from requirements.txt."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         packages = result.data['packages']
@@ -180,7 +180,7 @@ A simple Python project for testing.
     
     def test_e2e_005_files_collection(self, sample_repository):
         """E2E-005: Files are collected with LOC counts."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         files = result.data['files']
@@ -197,7 +197,7 @@ A simple Python project for testing.
     
     def test_e2e_006_performance_acceptable(self, sample_repository):
         """E2E-006: Aggregation completes within acceptable time."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         # Should complete within 10 seconds for small repo
@@ -206,7 +206,7 @@ A simple Python project for testing.
     
     def test_e2e_007_json_serialization_roundtrip(self, sample_repository, output_dir):
         """E2E-007: Data survives JSON serialization roundtrip."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         # Write to file
@@ -222,7 +222,7 @@ A simple Python project for testing.
         assert loaded_data['metrics_summary']['total_loc'] == result.data['metrics_summary']['total_loc']
         
         # Re-validate
-        is_valid, errors = validate_dashboard_data(loaded_data)
+        is_valid, errors = validate_dashboard_model(loaded_data)
         assert is_valid is True
     
     def test_e2e_008_empty_repo_handling(self, tmp_path):
@@ -230,7 +230,7 @@ A simple Python project for testing.
         empty_repo = tmp_path / "empty_repo"
         empty_repo.mkdir()
         
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(empty_repo)
         
         # Should succeed even with empty repo
@@ -245,7 +245,7 @@ A simple Python project for testing.
         """E2E-009: Pipeline errors gracefully for nonexistent repository."""
         nonexistent_path = Path("/nonexistent/path/to/repo")
         
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(nonexistent_path)
         
         assert result.success is False
@@ -254,7 +254,7 @@ A simple Python project for testing.
     
     def test_e2e_010_all_sections_present(self, sample_repository):
         """E2E-010: All expected dashboard sections are present in output."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         # Required sections
@@ -279,7 +279,7 @@ A simple Python project for testing.
     
     def test_e2e_011_health_score_calculation(self, sample_repository):
         """E2E-011: Health score is calculated and within valid range."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         health_score = result.data['repo_summary']['health_score']
@@ -290,7 +290,7 @@ A simple Python project for testing.
     
     def test_e2e_012_timestamps_valid(self, sample_repository):
         """E2E-012: All timestamps are valid ISO 8601 format."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         # Check repo_summary timestamp
@@ -309,7 +309,7 @@ A simple Python project for testing.
     
     def test_e2e_013_reusable_aggregator(self, sample_repository, tmp_path):
         """E2E-013: Aggregator can be reused for multiple repositories."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         
         # First aggregation
         result1 = aggregator.aggregate(sample_repository)
@@ -329,7 +329,7 @@ A simple Python project for testing.
     
     def test_e2e_014_json_output_format(self, sample_repository, output_dir):
         """E2E-014: JSON output has correct structure and formatting."""
-        aggregator = DashboardDataAggregatorV3()
+        aggregator = DashboardDataAggregator()
         result = aggregator.aggregate(sample_repository)
         
         json_file = output_dir / "formatted-data.json"
@@ -349,7 +349,7 @@ A simple Python project for testing.
     def test_e2e_015_concurrent_aggregation_safe(self, sample_repository):
         """E2E-015: Multiple aggregators can run concurrently (thread-safe)."""
         # Create multiple aggregator instances
-        aggregators = [DashboardDataAggregatorV3() for _ in range(3)]
+        aggregators = [DashboardDataAggregator() for _ in range(3)]
         
         # Run aggregations
         results = [agg.aggregate(sample_repository) for agg in aggregators]
@@ -359,7 +359,7 @@ A simple Python project for testing.
         
         # All should produce valid data
         for result in results:
-            is_valid, errors = validate_dashboard_data(result.data)
+            is_valid, errors = validate_dashboard_model(result.data)
             assert is_valid is True
 
 

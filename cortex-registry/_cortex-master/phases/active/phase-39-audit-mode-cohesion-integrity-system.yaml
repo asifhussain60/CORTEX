@@ -1,0 +1,464 @@
+# Phase 39: AUDIT Mode Cohesion & Integrity System
+# Purpose: Comprehensive architecture, infrastructure, and governance validation for proactive issue detection
+# Authority: User request 2026-02-07 - "add all high value cohesion and integrity checks"
+# Created: 2026-02-07
+# Version: 1.0
+
+version: "1.0"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "Asif Hussain"
+status: "active"
+priority: "P0"
+execution_order: 2  # After Phase 38.0 baseline restoration
+
+metadata:
+  title: "AUDIT Mode Cohesion & Integrity System"
+  description: "Comprehensive validation system for CORTEX architecture, infrastructure, prompts, agents, orchestrators, modules, tests, MCP exposure, and team collaboration readiness"
+  category: "Infrastructure + Governance + Architecture"
+  impact: "HIGH - Enables proactive detection of cohesion gaps, architectural drift, and governance violations"
+  roi_score: 0.92
+  roi_calculation:
+    architectural_impact: 0.95  # Comprehensive architecture validation
+    efficiency_gain: 0.90  # Early detection prevents late-stage fixes
+    accuracy_improvement: 0.85  # Reduces false negatives in audits
+    effort_cost: 0.45  # 4 weeks, 220 tests (moderate complexity)
+    blocking_severity: 0.70  # Blocks Phase 40+ quality gates
+
+summary: |
+  Phase 39 enhances AUDIT mode with 15 new cohesion and integrity checks across 6 categories:
+  
+  1. **Prompt Cohesion** (3 checks) - copilot-instructions.md ↔ CORTEX.prompt.md ↔ cortex-architect.prompt.md sync validation
+  2. **Agent Health** (4 checks) - Agent versioning, capability coverage, cross-references, AGENT-INDEX.md accuracy
+  3. **Orchestrator Integrity** (3 checks) - Wiring.yaml ↔ implementation ↔ MCP tools alignment
+  4. **Module Cohesion** (2 checks) - Import health, circular dependency detection
+  5. **Test Validity** (2 checks) - Test coverage gaps, contract test health (Python ↔ JavaScript)
+  6. **Team Collaboration** (1 check) - company/domains/ readiness for multi-team workflows
+  
+  Includes future-vision capability: Technology stack evolution planning (when to adopt new tech, migration plans).
+
+dependencies:
+  required_phases:
+    - id: "phase-38.0"
+      name: "Remediation & Baseline Restoration"
+      reason: "Need stable baseline before adding cohesion checks"
+  required_enhancements:
+    - id: "ENH-046"
+      name: "Context Synthesis Gateway"
+      reason: "Token budget compliance validation"
+  blocking_phases: []
+
+scope:
+  files_to_create:
+    - "cortex/orchestrators/audit/prompt_cohesion_validator.py"
+    - "cortex/orchestrators/audit/agent_health_validator.py"
+    - "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
+    - "cortex/orchestrators/audit/module_cohesion_validator.py"
+    - "cortex/orchestrators/audit/test_validity_validator.py"
+    - "cortex/orchestrators/audit/team_collaboration_validator.py"
+    - "cortex/orchestrators/audit/tech_stack_evolution_planner.py"
+    - "cortex-registry/_cortex-master/governance/audit-checklist-v2.yaml"
+    - "tests/unit/orchestrators/audit/test_prompt_cohesion.py"
+    - "tests/unit/orchestrators/audit/test_agent_health.py"
+    - "tests/unit/orchestrators/audit/test_orchestrator_integrity.py"
+    - "tests/unit/orchestrators/audit/test_module_cohesion.py"
+    - "tests/unit/orchestrators/audit/test_test_validity.py"
+    - "tests/unit/orchestrators/audit/test_team_collaboration.py"
+    - "tests/unit/orchestrators/audit/test_tech_stack_evolution.py"
+    - "tests/integration/audit/test_full_audit_suite.py"
+  
+  files_to_modify:
+    - "cortex-registry/_cortex-master/governance/audit-checklist.yaml"  # Add P1.5 Cohesion section
+    - ".github/prompts/cortex-architect.prompt.md"  # Update AUDIT mode with new checks
+    - ".github/agents/core/cortex-auditor.md"  # Add cohesion validation procedures
+    - "cortex/wiring/specifications/wiring.yaml"  # Register new audit orchestrators
+
+stages:
+  # Category 1: Prompt Cohesion (3 checks)
+  stage_1:
+    name: "Prompt Cohesion Validator"
+    description: "Validate consistency across copilot-instructions.md, CORTEX.prompt.md, and cortex-architect.prompt.md"
+    duration: "3 days"
+    tests_target: 18
+    acceptance_criteria:
+      - id: "AC-PHASE39-001"
+        description: "PromptCohesionValidator detects version drift across 3 prompt files"
+        validation: "Compare version numbers, last_updated dates, detect >7 day drift"
+        tests: 6
+        
+      - id: "AC-PHASE39-002"
+        description: "CORE rules consistency check across prompts"
+        validation: "All CORE rules (002, 008, 028, 029, 030, 035) defined identically in all 3 files"
+        tests: 6
+        
+      - id: "AC-PHASE39-003"
+        description: "MCP-FIRST enforcement consistency"
+        validation: "MCP-GATE, MCP-FIRST rules, tool routing identical across prompts"
+        tests: 6
+    
+    files:
+      - "cortex/orchestrators/audit/prompt_cohesion_validator.py"
+      - "tests/unit/orchestrators/audit/test_prompt_cohesion.py"
+    
+    checks_added:
+      - id: "P1.5-001"
+        name: "Prompt Version Drift"
+        tool: "PromptCohesionValidator"
+        severity: "HIGH"
+        
+      - id: "P1.5-002"
+        name: "CORE Rules Consistency"
+        tool: "PromptCohesionValidator"
+        severity: "CRITICAL"
+        
+      - id: "P1.5-003"
+        name: "MCP-FIRST Enforcement Alignment"
+        tool: "PromptCohesionValidator"
+        severity: "HIGH"
+
+  # Category 2: Agent Health (4 checks)
+  stage_2:
+    name: "Agent Health Validator"
+    description: "Validate agent versioning, capability coverage, cross-references, and AGENT-INDEX.md accuracy"
+    duration: "4 days"
+    tests_target: 28
+    acceptance_criteria:
+      - id: "AC-PHASE39-004"
+        description: "Agent version tracking validation"
+        validation: "All agents have version numbers, updated dates, match AGENT-INDEX.md"
+        tests: 7
+        
+      - id: "AC-PHASE39-005"
+        description: "Agent capability coverage matrix"
+        validation: "All 6 modes (AUDIT, DESIGN, PLAN, DIGEST, QUERY, META-AUDIT) have assigned agents"
+        tests: 7
+        
+      - id: "AC-PHASE39-006"
+        description: "Agent cross-reference validation"
+        validation: "All agent file references use correct paths, no broken links"
+        tests: 7
+        
+      - id: "AC-PHASE39-007"
+        description: "AGENT-INDEX.md synchronization"
+        validation: "AGENT-INDEX.md lists all agents in .github/agents/core/, accurate descriptions"
+        tests: 7
+    
+    files:
+      - "cortex/orchestrators/audit/agent_health_validator.py"
+      - "tests/unit/orchestrators/audit/test_agent_health.py"
+    
+    checks_added:
+      - id: "P1.5-004"
+        name: "Agent Version Drift"
+        tool: "AgentHealthValidator"
+        severity: "MEDIUM"
+        
+      - id: "P1.5-005"
+        name: "Agent Capability Gaps"
+        tool: "AgentHealthValidator"
+        severity: "HIGH"
+        
+      - id: "P1.5-006"
+        name: "Agent Cross-Reference Integrity"
+        tool: "AgentHealthValidator"
+        severity: "MEDIUM"
+        
+      - id: "P1.5-007"
+        name: "AGENT-INDEX.md Accuracy"
+        tool: "AgentHealthValidator"
+        severity: "MEDIUM"
+
+  # Category 3: Orchestrator Integrity (3 checks)
+  stage_3:
+    name: "Orchestrator Integrity Validator"
+    description: "Validate wiring.yaml ↔ orchestrator implementation ↔ MCP tools alignment"
+    duration: "4 days"
+    tests_target: 30
+    acceptance_criteria:
+      - id: "AC-PHASE39-008"
+        description: "Wiring.yaml ↔ implementation alignment"
+        validation: "All 35 orchestrators in wiring.yaml have corresponding .py files, health checks callable"
+        tests: 10
+        
+      - id: "AC-PHASE39-009"
+        description: "MCP tool exposure completeness"
+        validation: "All 35 orchestrators have MCP tools exposed, no orphaned @mcp_tool decorators"
+        tests: 10
+        
+      - id: "AC-PHASE39-010"
+        description: "Orchestrator dependency graph validation"
+        validation: "No circular dependencies, all dependencies exist, tier ordering correct"
+        tests: 10
+    
+    files:
+      - "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
+      - "tests/unit/orchestrators/audit/test_orchestrator_integrity.py"
+    
+    checks_added:
+      - id: "P1.5-008"
+        name: "Wiring-Implementation Alignment"
+        tool: "OrchestratorIntegrityValidator"
+        severity: "CRITICAL"
+        
+      - id: "P1.5-009"
+        name: "MCP Tool Exposure Completeness"
+        tool: "OrchestratorIntegrityValidator"
+        severity: "HIGH"
+        
+      - id: "P1.5-010"
+        name: "Orchestrator Dependency Graph"
+        tool: "OrchestratorIntegrityValidator"
+        severity: "HIGH"
+
+  # Category 4: Module Cohesion (2 checks)
+  stage_4:
+    name: "Module Cohesion Validator"
+    description: "Validate import health and circular dependency detection across cortex/ modules"
+    duration: "3 days"
+    tests_target: 22
+    acceptance_criteria:
+      - id: "AC-PHASE39-011"
+        description: "Import health validation"
+        validation: "All imports resolve, no missing modules, no deprecated imports"
+        tests: 11
+        
+      - id: "AC-PHASE39-012"
+        description: "Circular dependency detection"
+        validation: "No circular imports across cortex/ modules, dependency graph is DAG"
+        tests: 11
+    
+    files:
+      - "cortex/orchestrators/audit/module_cohesion_validator.py"
+      - "tests/unit/orchestrators/audit/test_module_cohesion.py"
+    
+    checks_added:
+      - id: "P1.5-011"
+        name: "Import Health"
+        tool: "ModuleCohesionValidator"
+        severity: "HIGH"
+        
+      - id: "P1.5-012"
+        name: "Circular Dependency Detection"
+        tool: "ModuleCohesionValidator"
+        severity: "CRITICAL"
+
+  # Category 5: Test Validity (2 checks)
+  stage_5:
+    name: "Test Validity Validator"
+    description: "Validate test coverage gaps and contract test health (Python ↔ JavaScript alignment)"
+    duration: "3 days"
+    tests_target: 24
+    acceptance_criteria:
+      - id: "AC-PHASE39-013"
+        description: "Test coverage gap detection"
+        validation: "All orchestrators have ≥80% test coverage, identify untested modules"
+        tests: 12
+        
+      - id: "AC-PHASE39-014"
+        description: "Contract test health (Python ↔ JavaScript)"
+        validation: "All cross-layer schemas (Python ↔ JavaScript) have contract tests, detect misalignments"
+        tests: 12
+    
+    files:
+      - "cortex/orchestrators/audit/test_validity_validator.py"
+      - "tests/unit/orchestrators/audit/test_test_validity.py"
+    
+    checks_added:
+      - id: "P1.5-013"
+        name: "Test Coverage Gaps"
+        tool: "TestValidityValidator"
+        severity: "MEDIUM"
+        
+      - id: "P1.5-014"
+        name: "Contract Test Health"
+        tool: "TestValidityValidator"
+        severity: "HIGH"
+
+  # Category 6: Team Collaboration (1 check)
+  stage_6:
+    name: "Team Collaboration Validator"
+    description: "Validate company/domains/ readiness for multi-team workflows and collaborative development"
+    duration: "2 days"
+    tests_target: 16
+    acceptance_criteria:
+      - id: "AC-PHASE39-015"
+        description: "Company domains structure validation"
+        validation: "company/domains/ has templates, onboarding docs, team separation guidelines"
+        tests: 16
+    
+    files:
+      - "cortex/orchestrators/audit/team_collaboration_validator.py"
+      - "tests/unit/orchestrators/audit/test_team_collaboration.py"
+    
+    checks_added:
+      - id: "P1.5-015"
+        name: "Team Collaboration Readiness"
+        tool: "TeamCollaborationValidator"
+        severity: "MEDIUM"
+
+  # Future-Vision Capability
+  stage_7:
+    name: "Technology Stack Evolution Planner"
+    description: "Analyze when to enhance technology stack for extensibility/scalability needs, generate migration plans"
+    duration: "5 days"
+    tests_target: 32
+    acceptance_criteria:
+      - id: "AC-PHASE39-016"
+        description: "Technology adoption trigger detection"
+        validation: "Detect when current stack limits extensibility (>80% capacity, performance degradation)"
+        tests: 8
+        
+      - id: "AC-PHASE39-017"
+        description: "Migration plan generation"
+        validation: "Generate phased migration plans (backward compatibility, rollback, testing)"
+        tests: 8
+        
+      - id: "AC-PHASE39-018"
+        description: "Technology readiness scoring"
+        validation: "Score new technologies (maturity, community, CORTEX fit) on 0-1 scale"
+        tests: 8
+        
+      - id: "AC-PHASE39-019"
+        description: "Look-forward design recommendations"
+        validation: "Recommend architecture changes to enable future technologies (extensibility patterns)"
+        tests: 8
+    
+    files:
+      - "cortex/orchestrators/audit/tech_stack_evolution_planner.py"
+      - "tests/unit/orchestrators/audit/test_tech_stack_evolution.py"
+    
+    checks_added:
+      - id: "P1.6-001"
+        name: "Technology Stack Capacity"
+        tool: "TechStackEvolutionPlanner"
+        severity: "LOW"
+        
+      - id: "P1.6-002"
+        name: "Migration Plan Availability"
+        tool: "TechStackEvolutionPlanner"
+        severity: "LOW"
+
+  # Integration & Documentation
+  stage_8:
+    name: "AUDIT Mode Integration"
+    description: "Integrate all validators into AUDIT mode, update prompts/agents, create comprehensive documentation"
+    duration: "3 days"
+    tests_target: 30
+    acceptance_criteria:
+      - id: "AC-PHASE39-020"
+        description: "AUDIT mode prompt integration"
+        validation: "cortex-architect.prompt.md updated with all 15 new checks in P1.5/P1.6 sections"
+        tests: 5
+        
+      - id: "AC-PHASE39-021"
+        description: "cortex-auditor.md agent enhancement"
+        validation: "cortex-auditor.md includes procedures for all 15 validators"
+        tests: 5
+        
+      - id: "AC-PHASE39-022"
+        description: "audit-checklist.yaml v2 creation"
+        validation: "New YAML with P1.5 (Cohesion) and P1.6 (Future-Vision) sections"
+        tests: 5
+        
+      - id: "AC-PHASE39-023"
+        description: "MCP tool registration"
+        validation: "cortex_audit_cohesion MCP tool exposed, callable via MCP gateway"
+        tests: 5
+        
+      - id: "AC-PHASE39-024"
+        description: "Full audit suite E2E test"
+        validation: "Run complete AUDIT with all 15 new checks, generate report, validate <2 min execution"
+        tests: 10
+    
+    files:
+      - ".github/prompts/cortex-architect.prompt.md"
+      - ".github/agents/core/cortex-auditor.md"
+      - "cortex-registry/_cortex-master/governance/audit-checklist-v2.yaml"
+      - "cortex/mcp/tools/audit/cohesion_tools.py"
+      - "tests/integration/audit/test_full_audit_suite.py"
+    
+    mcp_tools_created:
+      - name: "cortex_audit_cohesion"
+        description: "Execute all 15 cohesion and integrity checks"
+        inputs:
+          - "check_categories: List[str] (optional filter)"
+          - "detailed_report: bool (default: False)"
+        outputs:
+          - "report: Dict with pass/fail/warning status per check"
+          - "recommendations: List[EnhancementOpportunity]"
+
+success_metrics:
+  test_count: 220
+  test_pass_rate_target: 0.95
+  coverage_target: 0.85
+  new_audit_checks: 15
+  execution_time_target: "<2 min (full audit suite)"
+  
+  categories_covered:
+    - "Prompt Cohesion (3 checks)"
+    - "Agent Health (4 checks)"
+    - "Orchestrator Integrity (3 checks)"
+    - "Module Cohesion (2 checks)"
+    - "Test Validity (2 checks)"
+    - "Team Collaboration (1 check)"
+    - "Future-Vision (4 checks in P1.6)"
+
+expected_benefits:
+  - "Proactive detection of architectural drift before production issues"
+  - "Early identification of prompt/agent inconsistencies"
+  - "Comprehensive orchestrator wiring validation"
+  - "Import health and circular dependency prevention"
+  - "Test coverage gap visibility"
+  - "Multi-team collaboration readiness validation"
+  - "Technology evolution planning with migration roadmaps"
+  - "Reduced late-stage debugging (shift-left quality)"
+
+governance_compliance:
+  - "CORE-008: TDD-first (tests before validators)"
+  - "CORE-011: Type hints in all validators"
+  - "CORE-012: Google-style docstrings"
+  - "CORE-027: Audit trail for all validations"
+  - "CORE-030: Implementation Truth verification"
+  - "CORE-035: Single canonical audit system"
+
+risk_assessment:
+  risks:
+    - risk: "Audit execution time exceeds 2 min"
+      mitigation: "Parallel execution of validators, caching, incremental checks"
+      probability: "MEDIUM"
+      
+    - risk: "False positives in cohesion checks"
+      mitigation: "Comprehensive test suite, validation thresholds, user override capability"
+      probability: "LOW"
+      
+    - risk: "Integration complexity with existing AUDIT mode"
+      mitigation: "Phased rollout, backward compatibility, feature flags"
+      probability: "LOW"
+
+rollout_plan:
+  phase_1: "Implement Stage 1-3 validators (prompt, agent, orchestrator)"
+  phase_2: "Implement Stage 4-5 validators (module, test)"
+  phase_3: "Implement Stage 6-7 validators (team collaboration, tech evolution)"
+  phase_4: "Integration + MCP exposure (Stage 8)"
+  phase_5: "Full audit suite testing + production deployment"
+
+related_phases:
+  - id: "phase-38.0"
+    relation: "Prerequisite - baseline restoration"
+  - id: "phase-38"
+    relation: "Complementary - brain cohesion system"
+
+related_enhancements:
+  - id: "ENH-046"
+    relation: "Required - context governance validation"
+  - id: "ENH-048"
+    relation: "Related - prompt unbloating system"
+
+next_phase:
+  id: "phase-40"
+  name: "Continuous Quality Gate System"
+  description: "Automated quality gates in CI/CD pipeline leveraging Phase 39 validators"
+  prerequisite_checks:
+    - "Phase 39 COMPLETE (all 220 tests passing)"
+    - "Audit execution time <2 min validated"
+    - "All 15 cohesion checks operational"

@@ -3,11 +3,13 @@
 # Priority: P0 (Critical architectural gap)
 # ROI Score: 0.94 (High impact, moderate effort - updated)
 
-version: "1.1"
+version: "1.2"
 created: "2026-02-07"
 updated: "2026-02-07"
 author: "CORTEX Architect"
-status: "active"
+status: "blocked"
+blocked_by: "phase-38.0"
+blocker_reason: "Baseline unstable - Phase 34 broken, 5 test collection errors, no regression baseline"
 
 # Executive Summary
 summary:
@@ -579,9 +581,11 @@ governance:
 # Dependencies
 dependencies:
   requires:
+    - "Phase 38.0: Remediation & Baseline Restoration (BLOCKING - must complete first)"
     - "Phase 27: Company Domain Integration (complete)"
     - "Phase 28: Repository Onboarding (complete)"
     - "ENH-046: Context Synthesis Gateway (complete)"
+    - "Phase 34: Advanced Response Optimization (restored via Phase 38.0)"
   enables:
     - "Phase 39: Adaptive Governance Evolution"
     - "Phase 40: Self-Healing Brain Architecture"

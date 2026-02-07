@@ -1,0 +1,385 @@
+# Phase 38.0: Remediation & Baseline Restoration
+# Authority: CORTEX Architect AUDIT Analysis (2026-02-07)
+# Priority: P0 (BLOCKING Phase 38 implementation)
+# ROI Score: 0.98 (Critical prerequisite)
+
+version: "1.0"
+created: "2026-02-07"
+updated: "2026-02-07"
+author: "CORTEX Architect"
+status: "active"
+phase_type: "remediation"
+
+# Executive Summary
+summary:
+  title: "Phase 38.0: Pre-Implementation Remediation & Baseline Restoration"
+  description: |
+    CRITICAL remediation phase to restore CORTEX baseline health before Phase 38
+    implementation. Addresses 5 blocking issues discovered during cohesion audit:
+    
+    1. Phase 34 regression (sentence-transformers dependency broken)
+    2. 5 test collection errors blocking baseline validation
+    3. Orchestrator inventory mismatch (35 expected, 234 files found)
+    4. Missing regression baseline metrics
+    5. No Phase 38 implementation readiness validation
+    
+    This phase establishes 100% cohesion baseline and zero-regression validation
+    framework required for safe Phase 38 implementation.
+  
+  priority: "P0"
+  blocking: ["phase-38"]
+  estimated_effort: "2 days"
+  test_count_target: 35
+  coverage_target: "100% (baseline validation)"
+
+# ROI Analysis
+roi_analysis:
+  value_score: 0.98
+  success_probability: 0.95
+  urgency_factor: 1.0
+  effort_days: 2
+  roi_formula: "(0.98 * 0.95 * 1.0) / 2 = 0.47 (normalized: 0.98)"
+  justification: |
+    Blocks Phase 38 (260 tests, 20 days) until baseline is stable.
+    Prevents cascading failures during Phase 38 implementation.
+    Establishes regression detection framework (Stage 10 requirement).
+    Critical path blocker with minimal effort (2 days vs 20 days).
+
+# Remediation Stages (TDD-First)
+stages:
+  stage_0:
+    name: "Phase 34 Dependency Fix"
+    description: |
+      Restore Phase 34 (Advanced Response Optimization) functionality by
+      installing missing ML dependencies and validating SemanticDeduplicator.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-001"
+        description: "sentence-transformers installed and verified"
+        tests_required: 1
+        validation: "import sentence_transformers succeeds"
+      - id: "AC-PHASE38.0-002"
+        description: "SemanticDeduplicator 18 tests passing"
+        tests_required: 18
+        files:
+          - "tests/unit/orchestrators/response/test_semantic_deduplicator.py"
+      - id: "AC-PHASE38.0-003"
+        description: "Phase 34 integration tests passing"
+        tests_required: 5
+        files:
+          - "tests/integration/orchestrators/response/test_phase_34_advanced_response_optimization.py"
+    fixes:
+      - action: "pip install sentence-transformers>=2.2.0 scikit-learn>=1.3.0"
+        validation: "python3 -c 'import sentence_transformers; print(sentence_transformers.__version__)'"
+      - action: "Run full Phase 34 test suite"
+        command: "pytest tests/unit/orchestrators/response/test_semantic_deduplicator.py -v"
+        expected: "18/18 passing"
+    duration: "2 hours"
+    tests_target: 24
+    
+  stage_1:
+    name: "Test Collection Error Resolution"
+    description: |
+      Fix 5 test collection errors blocking baseline validation.
+      Ensures ALL tests can be discovered and collected.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-004"
+        description: "Fix test_full_onboarding.py import errors"
+        tests_required: 1
+        file: "tests/integration/test_full_onboarding.py"
+      - id: "AC-PHASE38.0-005"
+        description: "Fix test_repository_onboarding_e2e.py import errors"
+        tests_required: 1
+        file: "tests/integration/test_repository_onboarding_e2e.py"
+      - id: "AC-PHASE38.0-006"
+        description: "Fix test_discovery_integration.py import errors"
+        tests_required: 1
+        file: "tests/integration/brain/discovery/test_discovery_integration.py"
+      - id: "AC-PHASE38.0-007"
+        description: "Fix test_domain_dashboard.py import errors"
+        tests_required: 1
+        file: "tests/manual/test_domain_dashboard.py"
+      - id: "AC-PHASE38.0-008"
+        description: "Fix test_json_generation.py import errors"
+        tests_required: 1
+        file: "tests/manual/test_json_generation.py"
+    fixes:
+      - action: "pytest --collect-only tests/integration/test_full_onboarding.py"
+        expected: "No collection errors"
+      - action: "pytest --collect-only tests/integration/test_repository_onboarding_e2e.py"
+        expected: "No collection errors"
+      - action: "pytest --collect-only tests/integration/brain/discovery/test_discovery_integration.py"
+        expected: "No collection errors"
+      - action: "pytest --collect-only tests/manual/test_domain_dashboard.py"
+        expected: "No collection errors"
+      - action: "pytest --collect-only tests/manual/test_json_generation.py"
+        expected: "No collection errors"
+    duration: "3 hours"
+    tests_target: 5
+    
+  stage_2:
+    name: "Orchestrator Inventory Audit"
+    description: |
+      Resolve orchestrator count discrepancy (35 wired vs 234 Python files).
+      Document actual vs expected orchestrator architecture.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-009"
+        description: "OrchestratorInventoryAuditor implementation"
+        tests_required: 8
+        capabilities:
+          - "Scan cortex/orchestrators/ directory recursively"
+          - "Distinguish: orchestrators vs adapters vs utilities vs tests"
+          - "Cross-reference with wiring.yaml (35 orchestrators)"
+          - "Generate inventory report (JSON + markdown)"
+      - id: "AC-PHASE38.0-010"
+        description: "Inventory report generation and validation"
+        tests_required: 3
+        outputs:
+          - "cortex-registry/_cortex-master/reports/orchestrator-inventory.json"
+          - "cortex-registry/_cortex-master/reports/orchestrator-inventory.md"
+    files:
+      - "cortex/tools/orchestrator_inventory_auditor.py"
+      - "tests/unit/tools/test_orchestrator_inventory_auditor.py"
+    validation:
+      - "Compare wiring.yaml (35) vs actual orchestrator classes"
+      - "Document: orchestrators (35) + adapters (35) + utilities (164) = 234 files"
+      - "Verify: No orphaned orchestrators (in code but not wired)"
+    duration: "3 hours"
+    tests_target: 11
+    
+  stage_3:
+    name: "Baseline Performance Metrics Capture"
+    description: |
+      Establish performance baseline for regression detection (Phase 38 Stage 10).
+      Captures: test execution time, orchestrator latency, memory usage.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-011"
+        description: "BaselineMetricsCollector implementation"
+        tests_required: 10
+        metrics:
+          - "test_execution_time_p50"
+          - "test_execution_time_p95"
+          - "orchestrator_routing_latency_ms"
+          - "memory_usage_mb_average"
+          - "cache_hit_rate_percent"
+      - id: "AC-PHASE38.0-012"
+        description: "Baseline snapshot generation"
+        tests_required: 5
+        output: "cortex-registry/_cortex-master/baselines/2026-02-07-pre-phase38.json"
+      - id: "AC-PHASE38.0-013"
+        description: "Regression detection threshold configuration"
+        tests_required: 3
+        thresholds:
+          - "latency_increase_threshold: 10%"
+          - "memory_increase_threshold: 15%"
+          - "test_time_increase_threshold: 20%"
+    files:
+      - "cortex/testing/baseline_metrics_collector.py"
+      - "cortex/testing/regression_detector.py"
+      - "tests/unit/testing/test_baseline_metrics_collector.py"
+      - "tests/unit/testing/test_regression_detector.py"
+    validation:
+      - "Run full test suite with --durations=20"
+      - "Capture MasterOrchestrator routing latency (10 sample operations)"
+      - "Memory profiling: pytest --memray tests/"
+    duration: "4 hours"
+    tests_target: 18
+    
+  stage_4:
+    name: "100% Baseline Validation"
+    description: |
+      Validate ALL existing tests pass before Phase 38 implementation.
+      Zero tolerance: NO test failures, NO collection errors.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-014"
+        description: "Full test suite execution (zero failures)"
+        tests_required: 0
+        validation: "pytest tests/ -v --tb=short --maxfail=0"
+        expected: "~1,483 tests passing (100%)"
+      - id: "AC-PHASE38.0-015"
+        description: "Test collection validation (zero errors)"
+        tests_required: 0
+        validation: "pytest tests/ --collect-only"
+        expected: "All tests collected successfully"
+      - id: "AC-PHASE38.0-016"
+        description: "Critical path test validation"
+        tests_required: 0
+        critical_suites:
+          - "Phase 21 JSON-First: 57/57 passing"
+          - "Phase 28 Onboarding: 18/18 passing"
+          - "Phase 32 Dashboard: 10/10 passing"
+          - "Phase 34 Response: 18/18 passing"
+          - "MasterOrchestrator: All tests passing"
+    validation_script:
+      - "pytest tests/integration/test_phase21_contracts.py -v"
+      - "pytest tests/unit/orchestrators/support/test_repository_onboarding_orchestrator.py -v"
+      - "pytest tests/unit/visualization/test_phase_detail_template.py -v"
+      - "pytest tests/unit/orchestrators/response/test_semantic_deduplicator.py -v"
+      - "pytest tests/unit/orchestrators/core/test_master_orchestrator.py -v"
+    duration: "2 hours"
+    tests_target: 0  # Validation only, no new tests
+    
+  stage_5:
+    name: "Phase 38 Readiness Checklist"
+    description: |
+      Final validation checklist ensuring Phase 38 can proceed safely.
+      Documents dependencies, risks, and rollback plan.
+    acceptance_criteria:
+      - id: "AC-PHASE38.0-017"
+        description: "Phase38ReadinessValidator implementation"
+        tests_required: 12
+        checks:
+          - "All dependencies satisfied (Phase 27, 28, ENH-046, Phase 34)"
+          - "Baseline metrics captured and stored"
+          - "Regression detection framework operational"
+          - "Orchestrator inventory documented"
+          - "Zero test failures/collection errors"
+          - "Feature flag infrastructure ready"
+      - id: "AC-PHASE38.0-018"
+        description: "Readiness report generation"
+        tests_required: 3
+        output: "cortex-registry/_cortex-master/reports/phase-38-readiness.md"
+      - id: "AC-PHASE38.0-019"
+        description: "Rollback plan documentation"
+        tests_required: 2
+        rollback_plan:
+          - "Feature flags: CORTEX_BRAIN_COHESION_ENABLED=false"
+          - "Git revert strategy documented"
+          - "Baseline restoration procedure"
+    files:
+      - "cortex/tools/phase38_readiness_validator.py"
+      - "tests/unit/tools/test_phase38_readiness_validator.py"
+      - "cortex-registry/_cortex-master/reports/phase-38-readiness.md"
+    validation:
+      - "All 5 readiness checks pass (100%)"
+      - "Readiness report generated with green status"
+      - "Rollback plan approved"
+    duration: "2 hours"
+    tests_target: 17
+
+# MCP Tools (Remediation Support)
+mcp_tools:
+  - name: "cortex_restore_baseline"
+    description: "Execute full baseline restoration (Stages 0-4)"
+    stage: "stage_0-4"
+    inputs:
+      - "include_performance_metrics: bool (default True)"
+      - "verbose: bool (default False)"
+    outputs:
+      - "phase34_restored: bool"
+      - "collection_errors_fixed: int"
+      - "orchestrator_inventory: Dict"
+      - "baseline_metrics: Dict"
+      - "tests_passing: int"
+      - "tests_total: int"
+  
+  - name: "cortex_validate_phase38_readiness"
+    description: "Validate Phase 38 implementation readiness"
+    stage: "stage_5"
+    inputs:
+      - "strict_mode: bool (default True)"
+    outputs:
+      - "ready: bool"
+      - "checks_passed: int"
+      - "checks_failed: int"
+      - "blocking_issues: List[str]"
+      - "readiness_score: float (0-1.0)"
+      - "report_path: str"
+
+# Governance Integration
+governance:
+  core_rules_affected:
+    - "CORE-008: TDD (all stages)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth validation"
+  enforcement_level: "BLOCKING (P0 - must pass before Phase 38)"
+  success_criteria:
+    - "Phase 34: 24/24 tests passing (18 unit + 6 integration)"
+    - "Test Collection: 0 errors (5 errors fixed)"
+    - "Orchestrator Inventory: Documented and validated"
+    - "Baseline Metrics: Captured and stored"
+    - "Full Test Suite: 100% passing (~1,483 tests)"
+    - "Readiness Validation: 100% (all 5 checks pass)"
+
+# Dependencies
+dependencies:
+  fixes:
+    - "Phase 34: Advanced Response Optimization (BROKEN → RESTORED)"
+    - "Test Collection: 5 errors → 0 errors"
+  enables:
+    - "Phase 38: Brain Cohesion & Health System (SAFE IMPLEMENTATION)"
+    - "Phase 38 Stage 10: Regression Safety Net (baseline established)"
+
+# Success Metrics
+success_metrics:
+  phase34_health: "24/24 tests passing (sentence-transformers operational)"
+  test_collection_health: "0 collection errors (5 fixed)"
+  orchestrator_inventory_complete: "True (35 orchestrators + 199 support files documented)"
+  baseline_metrics_captured: "True (performance baseline stored)"
+  full_test_suite_health: "100% passing (~1,483 tests)"
+  readiness_validation: "100% (all 5 checks green)"
+  regression_detection_ready: "True (framework operational)"
+  phase38_blocked: "False (ready to proceed)"
+
+# Timeline
+timeline:
+  total_duration: "2 days (16 hours)"
+  milestones:
+    - hour_2: "Stage 0 complete (Phase 34 restored)"
+    - hour_5: "Stage 1 complete (Collection errors fixed)"
+    - hour_8: "Stage 2 complete (Orchestrator inventory documented)"
+    - hour_12: "Stage 3 complete (Baseline metrics captured)"
+    - hour_14: "Stage 4 complete (100% test suite validated)"
+    - hour_16: "Stage 5 complete (Phase 38 readiness confirmed)"
+
+# Verification
+verification:
+  unit_tests: 35
+  integration_tests: 0  # Validation only
+  validation_commands:
+    - "pytest tests/unit/orchestrators/response/test_semantic_deduplicator.py -v"
+    - "pytest tests/integration/orchestrators/response/test_phase_34_advanced_response_optimization.py -v"
+    - "pytest tests/unit/tools/test_orchestrator_inventory_auditor.py -v"
+    - "pytest tests/unit/testing/test_baseline_metrics_collector.py -v"
+    - "pytest tests/unit/testing/test_regression_detector.py -v"
+    - "pytest tests/unit/tools/test_phase38_readiness_validator.py -v"
+    - "pytest tests/ -v --tb=short --maxfail=0  # FULL SUITE"
+  critical_validation:
+    - "Phase 34 restored: sentence-transformers installed and working"
+    - "Test collection: 0 errors (was 5)"
+    - "Orchestrator count: 35 wired + 199 support files = 234 total"
+    - "Baseline metrics: Stored in baselines/2026-02-07-pre-phase38.json"
+    - "Full test suite: ~1,483 tests passing (100%)"
+    - "Readiness checks: 5/5 passing (100%)"
+
+# Rollback Plan
+rollback:
+  not_applicable: "This is a remediation phase - no rollback needed"
+  note: |
+    Phase 38.0 RESTORES baseline functionality. If any stage fails:
+    - Document failure reason
+    - Mark Phase 38 as BLOCKED
+    - Escalate to CORTEX Architect for investigation
+    - DO NOT proceed with Phase 38 until 100% cohesion achieved
+
+# Completion Criteria
+completion_criteria:
+  required:
+    - "All 35 unit tests passing (100%)"
+    - "Phase 34: 24/24 tests passing"
+    - "Test collection: 0 errors"
+    - "Orchestrator inventory: Documented"
+    - "Baseline metrics: Captured"
+    - "Full test suite: ~1,483 passing (100%)"
+    - "Readiness validation: 5/5 checks pass"
+  definition_of_done: |
+    Phase 38.0 is COMPLETE when:
+    1. Phase 34 fully operational (24 tests passing)
+    2. All test collection errors resolved (0 errors)
+    3. Orchestrator inventory documented and validated
+    4. Baseline performance metrics captured and stored
+    5. Full test suite passing at 100% (~1,483 tests)
+    6. Phase 38 readiness validation passes all checks (5/5)
+    7. Regression detection framework operational
+    8. Phase 38 unblocked with documented readiness report
