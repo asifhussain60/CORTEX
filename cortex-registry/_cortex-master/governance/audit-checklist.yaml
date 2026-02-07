@@ -1,17 +1,26 @@
 # CORTEX Audit Checklist Registry
 # Purpose: Machine-readable audit checks for CORTEX codebase health scanning
-# Authority: cortex-architect.prompt.md v14.2 + cortex-auditor.md v2.0
+# Authority: cortex-architect.prompt.md v15.0 + cortex-auditor.md v14.0 + Phase 39
 # Created: 2026-02-06
-# Version: 1.0
+# Updated: 2026-02-07 (Phase 39: +5 P1.5 checks)
+# Version: 2.0
 
 meta:
-  version: "1.0"
-  updated: "2026-02-06"
-  authority: "ENH-048 (Prompt Unbloating System)"
+  version: "2.0"
+  updated: "2026-02-07"
+  authority: "Phase 39: AUDIT Mode Cohesion & Integrity System"
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
     - ".github/agents/core/cortex-auditor.md"
-  total_checks: 23
+    - "cortex-registry/_cortex-master/phases/active/phase-39-audit-mode-cohesion-integrity-system.yaml"
+  total_checks: 28
+  phase_39_additions:
+    - "P1.5-001 to P1.5-003: Prompt Cohesion"
+    - "P1.5-004 to P1.5-007: Agent Health"
+    - "P1.5-008 to P1.5-010: Orchestrator Integrity"
+    - "P1.5-011 to P1.5-012: Module Cohesion"
+    - "P1.5-013 to P1.5-014: Test Validity"
+    - "P1.5-015: Team Collaboration"
 
 # Priority-based audit checks
 priority_checks:
@@ -366,6 +375,77 @@ priority_checks:
           - .py files in cortex/, tests/
           - .md files in docs/, .github/
           - Orchestrators in cortex/orchestrators/
+      
+      - id: "P1.5-011"
+        name: "Import Health"
+        description: "All imports resolve, no missing modules, no deprecated imports"
+        tool: "ModuleCohesionValidator"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        validation: |
+          Check import health:
+          - All imports resolve successfully
+          - No missing modules
+          - No deprecated imports
+          - No wildcard imports (from X import *)
+          - Relative imports valid
+      
+      - id: "P1.5-012"
+        name: "Circular Dependency Detection"
+        description: "No circular imports across cortex/ modules"
+        tool: "ModuleCohesionValidator"
+        evidence_required: true
+        auto_fix: false
+        severity: "CRITICAL"
+        validation: |
+          Check module dependency graph:
+          - No circular imports (A → B → A)
+          - Dependency graph is DAG (Directed Acyclic Graph)
+          - No self-imports
+          - Layer separation enforced
+      
+      - id: "P1.5-013"
+        name: "Test Coverage Gaps"
+        description: "Identify untested functions, classes, and modules"
+        tool: "TestValidityValidator"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        validation: |
+          Check test coverage:
+          - ≥80% coverage threshold
+          - No untested orchestrators
+          - No untested critical paths
+          - Test file naming conventions
+      
+      - id: "P1.5-014"
+        name: "Contract Test Health"
+        description: "Python ↔ JavaScript contract alignment"
+        tool: "TestValidityValidator"
+        evidence_required: true
+        auto_fix: false
+        severity: "HIGH"
+        validation: |
+          Check contract test health:
+          - Schema alignment (Python ↔ JS)
+          - MCP tool contracts validated
+          - API contract consistency
+          - No breaking changes
+      
+      - id: "P1.5-015"
+        name: "Team Collaboration Readiness"
+        description: "company/domains/ readiness for multi-team workflows"
+        tool: "TeamCollaborationValidator"
+        evidence_required: true
+        auto_fix: false
+        severity: "MEDIUM"
+        validation: |
+          Check team collaboration readiness:
+          - company/domains/ structure valid
+          - Templates and onboarding docs exist
+          - Domain ownership clear
+          - Communication channels defined
 
   P3:
     name: "Cleanup & Maintenance"
@@ -447,17 +527,27 @@ execution_flow:
     failure_action: "WARN and continue"
     
   step_2_5:
-    name: "P1.5 Brain Cohesion & Health"
-    description: "Phase 38 cohesion checks (after P1, before P2)"
+    name: "P1.5 Brain Cohesion & Health + Architecture Integrity"
+    description: "Phase 38/39 cohesion checks (15 validators)"
     checks: [
       "P1.5-001", "P1.5-002", "P1.5-003", "P1.5-004", "P1.5-005",
-      "P1.5-006", "P1.5-007", "P1.5-008", "P1.5-009", "P1.5-010"
+      "P1.5-006", "P1.5-007", "P1.5-008", "P1.5-009", "P1.5-010",
+      "P1.5-011", "P1.5-012", "P1.5-013", "P1.5-014", "P1.5-015"
     ]
     blocking: false
     failure_action: "WARN and continue"
     auto_fix_available: true
     priority_checks:
-      - "P1.5-009 (Regression Safety - HIGH priority)"
+      - "P1.5-002 (CORE Rules Consistency - CRITICAL)"
+      - "P1.5-008 (Wiring-Implementation Alignment - CRITICAL)"
+      - "P1.5-012 (Circular Dependency Detection - CRITICAL)"
+    categories:
+      - "Prompt Cohesion (P1.5-001 to P1.5-003)"
+      - "Agent Health (P1.5-004 to P1.5-007)"
+      - "Orchestrator Integrity (P1.5-008 to P1.5-010)"
+      - "Module Cohesion (P1.5-011 to P1.5-012)"
+      - "Test Validity (P1.5-013 to P1.5-014)"
+      - "Team Collaboration (P1.5-015)"
     
   step_3:
     name: "P2 Quality"
