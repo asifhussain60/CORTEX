@@ -42,10 +42,10 @@ enhancements:
       
       ✅ Stage 1: Test Collection Error Resolution (COMPLETE)
       - Fixed cortex/lens/cache/__init__.py import issues
-        - Added InMemoryCacheBackend alias for backward compatibility
-        - Added CacheStats class placeholder
-        - Added reset_lens_cache() function
-        - Fixed __all__ export list
+        * Added InMemoryCacheBackend alias for backward compatibility
+        * Added CacheStats class placeholder
+        * Added reset_lens_cache() function
+        * Fixed __all__ export list
       - Cleaned Python cache (__pycache__, *.pyc)
       - Fixed test_refactoring_tool_adapter.py (removed 252 lines duplicated code)
       - Intelligence tests verified: 137/137 passing
@@ -57,10 +57,10 @@ enhancements:
       - Total Python files: 251 in cortex/orchestrators/
       - Orchestrator classes found: 50+ (grep search)
       - Registered in wiring.yaml: 50 entries
-        - 4 LENS Analyzers (GitHistory, AST, Comment, SecurityThreat)
-        - 8 Core Orchestrators
-        - 6 Domain Orchestrators  
-        - 32 Support Orchestrators
+        * 4 LENS Analyzers (GitHistory, AST, Comment, SecurityThreat)
+        * 8 Core Orchestrators
+        * 6 Domain Orchestrators  
+        * 32 Support Orchestrators
       - Discrepancy explained: Original count (35) excluded analyzers
       - Actual: 46 orchestrators + 4 analyzers = 50 total
       - Status: Inventory documented, wiring verified ✅
@@ -70,10 +70,10 @@ enhancements:
       - Tests run: 689 (stopped at 100 failures via --maxfail)
       - Pass rate: 609 passed / 689 total = 88.4%
       - Performance metrics:
-        - Collection time: 11.10s (target: <15s) ✅
-        - Execution speed: 17.9 tests/sec (target: >10 tests/sec) ✅
-        - Total duration: 38.55s for 689 tests
-        - Memory usage: <250MB peak (target: <500MB) ✅
+        * Collection time: 11.10s (target: <15s) ✅
+        * Execution speed: 17.9 tests/sec (target: >10 tests/sec) ✅
+        * Total duration: 38.55s for 689 tests
+        * Memory usage: <250MB peak (target: <500MB) ✅
       - Slowest test: 0.21s (test_cache_ttl_expiration)
       - Most tests: <0.005s (excellent performance)
       - Known failures: 80 (mostly missing scripts, expected)
@@ -83,44 +83,44 @@ enhancements:
       ✅ Stage 4: 100% Baseline Validation (COMPLETE)
       - Critical paths validated: Phases 21, 28, 32, 34
       - Pass rates:
-        - Phase 34 (Response Optimization): 18/18 = 100% ✅
-        - Phase 21 (Wiring Contract): 23/25 = 92% ✅
-        - Core Orchestrators: 136/141 = 96.5% ✅
-        - MCP Layer: 100/105 = 95.2% ✅
-        - TOTAL: 277/289 = 95.8% (exceeds 90% target) ✅
+        * Phase 34 (Response Optimization): 18/18 = 100% ✅
+        * Phase 21 (Wiring Contract): 23/25 = 92% ✅
+        * Core Orchestrators: 136/141 = 96.5% ✅
+        * MCP Layer: 100/105 = 95.2% ✅
+        * TOTAL: 277/289 = 95.8% (exceeds 90% target) ✅
       - Performance: 45s validation time (target <60s) ✅
       - Critical paths: ALL OPERATIONAL ✅
       - Known issues: 12 minor failures (API migrations, docs)
       - Components validated:
-        - TDD workflow operational
-        - MCP-FIRST enforcement active
-        - Orchestrator registry functional (50 registered)
-        - Semantic deduplication ready
-        - Wiring contract healthy
+        * TDD workflow operational
+        * MCP-FIRST enforcement active
+        * Orchestrator registry functional (50 registered)
+        * Semantic deduplication ready
+        * Wiring contract healthy
       - Duration: ~1 hour
       
       ✅ Stage 5: Phase 38 Readiness Checklist (COMPLETE)
       - Readiness Check 1: Dependency Health = PASS (100%) ✅
-        - Python 3.9.6 + pip operational
-        - sentence-transformers>=2.2.0 + scikit-learn>=1.3.0 installed
-        - All Phase 34 dependencies restored
-        - No import errors
+        * Python 3.9.6 + pip operational
+        * sentence-transformers>=2.2.0 + scikit-learn>=1.3.0 installed
+        * All Phase 34 dependencies restored
+        * No import errors
       - Readiness Check 2: Test Collection = PASS (95%) ✅
-        - 11,821 tests collected
-        - 5 collection warnings (non-blocking, intelligence tests)
-        - Collection time: 11.10s (target <15s)
-        - Core tests collect cleanly
+        * 11,821 tests collected
+        * 5 collection warnings (non-blocking, intelligence tests)
+        * Collection time: 11.10s (target <15s)
+        * Core tests collect cleanly
       - Readiness Check 3: Performance Baselines = PASS (100%) ✅
-        - Execution speed: 17.9 tests/sec (target >10)
-        - Memory usage: <250MB peak (target <500MB)
-        - Pass rate: 88.4% full suite, 95.8% critical paths
-        - Regression detection enabled
+        * Execution speed: 17.9 tests/sec (target >10)
+        * Memory usage: <250MB peak (target <500MB)
+        * Pass rate: 88.4% full suite, 95.8% critical paths
+        * Regression detection enabled
       - Readiness Check 4: Critical Paths = PASS (95.8%) ✅
-        - Phase 34: 100% (18/18)
-        - Phase 21: 92% (23/25)
-        - Core: 96.5% (136/141)
-        - MCP: 95.2% (100/105)
-        - All systems operational, no blocking issues
+        * Phase 34: 100% (18/18)
+        * Phase 21: 92% (23/25)
+        * Core: 96.5% (136/141)
+        * MCP: 95.2% (100/105)
+        * All systems operational, no blocking issues
       - Readiness Check 5: Documentation = PASS (100%) ✅
         - ENH-053 fully documented (Stages 0-5)
         - Baseline reports captured
@@ -129,10 +129,10 @@ enhancements:
       - Overall readiness: 98.2% (ALL 5 CHECKS PASS) ✅
       - Production deployment: APPROVED 🟢
       - Duration: ~30 minutes
-      - |
-        Phase 38.0 Status: COMPLETE ✅
-        🔵 Stage 4: 100% Baseline Validation (PENDING)
-        🔵 Stage 5: Phase 38 Readiness Checklist (PENDING)
+      
+    **Phase 38.0 Status: COMPLETE** ✅
+      🔵 Stage 4: 100% Baseline Validation (PENDING)
+      🔵 Stage 5: Phase 38 Readiness Checklist (PENDING)
       
       Implementation Approach:
       - Holistic completion principle applied
@@ -625,32 +625,32 @@ enhancements:
       - Used [████░░░░░░] format during analysis/verification phases
       - Violation: Phase-31A + copilot-instructions.md lines 271-299
       - Fix: Strengthened MODE enforcement in cortex-architect.prompt.md
-        - Added "ENFORCEMENT MANDATORY" label
-        - Clarified: Analysis operations = NO progress bars
-        - Rule: "If you're NOT writing/modifying code files, NO progress bars"
+        * Added "ENFORCEMENT MANDATORY" label
+        * Clarified: Analysis operations = NO progress bars
+        * Rule: "If you're NOT writing/modifying code files, NO progress bars"
       
       Issue 2: Mode Classification Error (P0) - FIXED ✅
       - User: "review master plan and proceed"
       - Expected: PLAN mode (ROI-based prioritization)
       - Actual: DESIGN mode (manual phase selection)
       - Fix: Enhanced PLAN mode auto-detection
-        - Trigger keywords: "master plan", "review plan", "next phase", "ROI score"
-        - Rule: 2+ triggers = automatic PLAN mode switch
+        * Trigger keywords: "master plan", "review plan", "next phase", "ROI score"
+        * Rule: 2+ triggers = automatic PLAN mode switch
       
       Issue 3: MCP-GATE Bypass (P0) - FIXED ✅
       - 12+ instances of direct replace_string_in_file edits
       - Should route through cortex_process_request
       - Fix: Added Step 4.5 pre-execution MCP-GATE validation
-        - FORBIDDEN: replace_string_in_file for IMPLEMENT intents
-        - REQUIRED: cortex_process_request MCP tool
-        - Exception: Docs, config, analysis-only
+        * FORBIDDEN: replace_string_in_file for IMPLEMENT intents
+        * REQUIRED: cortex_process_request MCP tool
+        * Exception: Docs, config, analysis-only
       
       Issue 4: Response Header Missing (P1) - FIXED ✅
       - Multiple responses lacked "Author: Asif Hussain" header
       - Fix: Strengthened CORE-029 enforcement
-        - Added ❌ BLOCKED enforcement level
-        - Included template in CORE rules section
-        - Marked as MANDATORY for every response
+        * Added ❌ BLOCKED enforcement level
+        * Included template in CORE rules section
+        * Marked as MANDATORY for every response
       
       Issues 5-9: Documentation + Training
       - Token budget violation (no EXIT GATE usage)
@@ -661,13 +661,13 @@ enhancements:
       
       Files Modified:
       - .github/prompts/cortex-architect.prompt.md (v14.2)
-        - Line 272: Progress bar enforcement strengthened
-        - Line 264: PLAN mode auto-detection enhanced
-        - Line 2061: MCP-GATE pre-execution step added
-        - Line 235: CORE-029 header enforcement template
+        * Line 272: Progress bar enforcement strengthened
+        * Line 264: PLAN mode auto-detection enhanced
+        * Line 2061: MCP-GATE pre-execution step added
+        * Line 235: CORE-029 header enforcement template
       
       - docs/meta/enhancement-history.yaml (this file)
-        - Added ENH-049 with full issue breakdown
+        * Added ENH-049 with full issue breakdown
     metrics:
       files_modified: 2
       issues_fixed: 9
@@ -728,50 +728,50 @@ enhancements:
       
       Phase 1: YAML Schema Creation (24 tests) ✅
       - cortex-registry/_cortex-master/governance/core-rules.yaml (560 lines)
-        - 15 CORE rules (CORE-002, CORE-008, CORE-011, etc.)
-        - 5 enforcement levels (BLOCKED, PRE-EXECUTION, WARNING, RUNTIME, PRINCIPLE)
-        - 10 categories (governance, development, code_quality, etc.)
-        - Auto-fix patterns for CORE-047, CORE-019
+        * 15 CORE rules (CORE-002, CORE-008, CORE-011, etc.)
+        * 5 enforcement levels (BLOCKED, PRE-EXECUTION, WARNING, RUNTIME, PRINCIPLE)
+        * 10 categories (governance, development, code_quality, etc.)
+        * Auto-fix patterns for CORE-047, CORE-019
       
       - cortex-registry/_cortex-master/governance/audit-checklist.yaml (462 lines)
-        - 20 audit checks (5 P0 + 5 P1 + 6 P2 + 4 P3)
-        - Tool mappings (cortex_lens_analyze, cortex_detect_duplicates, etc.)
-        - Execution flows and evidence formats
+        * 20 audit checks (5 P0 + 5 P1 + 6 P2 + 4 P3)
+        * Tool mappings (cortex_lens_analyze, cortex_detect_duplicates, etc.)
+        * Execution flows and evidence formats
       
       - cortex-registry/_cortex-master/meta/modes.yaml (398 lines)
-        - 7 HEXA-MODEs (PRE-FLIGHT, AUDIT, DESIGN, PLAN, DIGEST, INTERACTIVE, META-AUDIT)
-        - Trigger conditions, flows, success criteria
-        - Header templates and outputs
+        * 7 HEXA-MODEs (PRE-FLIGHT, AUDIT, DESIGN, PLAN, DIGEST, INTERACTIVE, META-AUDIT)
+        * Trigger conditions, flows, success criteria
+        * Header templates and outputs
       
       - cortex-registry/_cortex-master/meta/response-format.yaml (~200 lines)
-        - Header templates and formatting rules
-        - Icon system (🟢🟡🔴⚪🔵, 1️⃣2️⃣3️⃣, ✅❌⚠️)
-        - Structure requirements and anti-patterns
+        * Header templates and formatting rules
+        * Icon system (🟢🟡🔴⚪🔵, 1️⃣2️⃣3️⃣, ✅❌⚠️)
+        * Structure requirements and anti-patterns
       
       Phase 2: Python Loader Implementation (28 tests) ✅
       - cortex/brain/core/yaml_loaders.py (393 lines)
-        - BaseYAMLLoader with LRU caching
-        - CoreRulesLoader (get_rule_by_id, get_rules_by_enforcement)
-        - AuditChecklistLoader (get_checks_by_priority, get_check_by_id)
-        - ModesLoader (get_mode, get_all_mode_names)
-        - ResponseFormatLoader (get_header_template, get_status_icons)
-        - Performance: <50ms per load (cached)
+        * BaseYAMLLoader with LRU caching
+        * CoreRulesLoader (get_rule_by_id, get_rules_by_enforcement)
+        * AuditChecklistLoader (get_checks_by_priority, get_check_by_id)
+        * ModesLoader (get_mode, get_all_mode_names)
+        * ResponseFormatLoader (get_header_template, get_status_icons)
+        * Performance: <50ms per load (cached)
       
       - cortex/brain/core/models/governance_models.py (137 lines)
-        - Pydantic models: CoreRule, CoreRulesYAML
-        - AuditCheck, PriorityCategory, AuditChecklistYAML
-        - ModeDefinition, ModesYAML
-        - ResponseFormatYAML
-        - Type safety with model_config={'extra': 'allow'}
+        * Pydantic models: CoreRule, CoreRulesYAML
+        * AuditCheck, PriorityCategory, AuditChecklistYAML
+        * ModeDefinition, ModesYAML
+        * ResponseFormatYAML
+        * Type safety with model_config={'extra': 'allow'}
       
       Phase 3: Prompt Unbloating + Regression Validation ✅
       - .github/prompts/cortex-architect.prompt.md
-        - Lines: 2,983 → 2,963 (-20 lines, -0.67%)
-        - HEXA-MODE: Replaced 37-line table → YAML ref + quick table
-        - Response Header: Replaced 25-line template → YAML ref + loader
-        - CORE Rules: Replaced 19-line table → YAML ref + summary
-        - Audit Checklist: Replaced 34-line tables → YAML ref + loader
-        - P5 Governance: Condensed 28 → 21 lines with YAML refs
+        * Lines: 2,983 → 2,963 (-20 lines, -0.67%)
+        * HEXA-MODE: Replaced 37-line table → YAML ref + quick table
+        * Response Header: Replaced 25-line template → YAML ref + loader
+        * CORE Rules: Replaced 19-line table → YAML ref + summary
+        * Audit Checklist: Replaced 34-line tables → YAML ref + loader
+        * P5 Governance: Condensed 28 → 21 lines with YAML refs
       
       Regression Validation Results:
         ✅ All MANDATORY/CRITICAL/BLOCKED directives preserved
@@ -788,9 +788,9 @@ enhancements:
       
       Phase 4: MCP Tool Integration (29 tests) ✅
       - cortex/mcp/tools/governance/yaml_loader_tools.py (419 lines)
-        - 5 MCP tools exposed via governance namespace
-        - Optional filtering (rule_id, enforcement_level, priority, tool_name)
-        - Error handling with fallback responses
+        * 5 MCP tools exposed via governance namespace
+        * Optional filtering (rule_id, enforcement_level, priority, tool_name)
+        * Error handling with fallback responses
       
       MCP Tools Created:
         1. cortex_load_core_rules
@@ -819,17 +819,17 @@ enhancements:
       
       Phase 5: E2E Validation ✅
       - Full Test Suite: 81/81 tests passing (100% pass rate)
-        - tests/unit/brain/test_yaml_loaders.py: 24/24 ✅
-        - tests/unit/brain/test_loaders.py: 28/28 ✅
-        - tests/unit/mcp/test_governance_tools.py: 29/29 ✅
-        - Runtime: 0.80s (all 3 test suites combined)
+        * tests/unit/brain/test_yaml_loaders.py: 24/24 ✅
+        * tests/unit/brain/test_loaders.py: 28/28 ✅
+        * tests/unit/mcp/test_governance_tools.py: 29/29 ✅
+        * Runtime: 0.80s (all 3 test suites combined)
       
       - Performance Validation:
-        - YAML load: <30ms per file
-        - Python loaders: <50ms (first load), <5ms (cached)
-        - MCP tools: <100ms (first call), <50ms (cached)
-        - Combined load (all 4 YAMLs): <200ms
-        - LRU cache hit rate: ~95% in production usage
+        * YAML load: <30ms per file
+        * Python loaders: <50ms (first load), <5ms (cached)
+        * MCP tools: <100ms (first call), <50ms (cached)
+        * Combined load (all 4 YAMLs): <200ms
+        * LRU cache hit rate: ~95% in production usage
       
       - Integration Tests:
         ✅ Load rules + validate workflow
@@ -1060,18 +1060,18 @@ enhancements:
       ## MCP Server = Service-Oriented Architecture
       
       CORTEX is NOT a monolithic application. It operates as:
-      - 'MCP Server:' All 28 orchestrators exposed as MCP tools
-      - 'Gateway Pattern:' cortex_process_request routes to appropriate orchestrator
-      - 'Independent Scaling:' Each orchestrator can scale independently via MCP proxy
-      - 'Protocol-Driven:' Tools communicate via MCP JSON-RPC (language-agnostic)
-      - 'Service Isolation:' Orchestrators don't import each other directly
+      - **MCP Server:** All 28 orchestrators exposed as MCP tools
+      - **Gateway Pattern:** cortex_process_request routes to appropriate orchestrator
+      - **Independent Scaling:** Each orchestrator can scale independently via MCP proxy
+      - **Protocol-Driven:** Tools communicate via MCP JSON-RPC (language-agnostic)
+      - **Service Isolation:** Orchestrators don't import each other directly
       
       ### Why MCP-First?
-      1. 'Service Boundaries:' Each orchestrator = independent service
-      2. 'Language Agnostic:' Clients can be written in any language
-      3. 'Dynamic Discovery:' Tools register at runtime, no static wiring
-      4. 'Versioning:' Each tool can version independently
-      5. 'Observability:' MCP protocol enables centralized tracing
+      1. **Service Boundaries:** Each orchestrator = independent service
+      2. **Language Agnostic:** Clients can be written in any language
+      3. **Dynamic Discovery:** Tools register at runtime, no static wiring
+      4. **Versioning:** Each tool can version independently
+      5. **Observability:** MCP protocol enables centralized tracing
       
       ### Service Catalog (28 Orchestrators)
       - Core (8): MasterOrchestrator, InteractionOrchestrator, IntentRouter, ...
@@ -1532,18 +1532,18 @@ enhancements:
       ## MCP Server = Service-Oriented Architecture
       
       CORTEX is NOT a monolithic application. It operates as:
-      - 'MCP Server:' All 28 orchestrators exposed as MCP tools
-      - 'Gateway Pattern:' cortex_process_request routes to appropriate orchestrator
-      - 'Independent Scaling:' Each orchestrator can scale independently via MCP proxy
-      - 'Protocol-Driven:' Tools communicate via MCP JSON-RPC (language-agnostic)
-      - 'Service Isolation:' Orchestrators don't import each other directly
+      - **MCP Server:** All 28 orchestrators exposed as MCP tools
+      - **Gateway Pattern:** cortex_process_request routes to appropriate orchestrator
+      - **Independent Scaling:** Each orchestrator can scale independently via MCP proxy
+      - **Protocol-Driven:** Tools communicate via MCP JSON-RPC (language-agnostic)
+      - **Service Isolation:** Orchestrators don't import each other directly
       
       ### Why MCP-First?
-      1. 'Service Boundaries:' Each orchestrator = independent service
-      2. 'Language Agnostic:' Clients can be written in any language
-      3. 'Dynamic Discovery:' Tools register at runtime, no static wiring
-      4. 'Versioning:' Each tool can version independently
-      5. 'Observability:' MCP protocol enables centralized tracing
+      1. **Service Boundaries:** Each orchestrator = independent service
+      2. **Language Agnostic:** Clients can be written in any language
+      3. **Dynamic Discovery:** Tools register at runtime, no static wiring
+      4. **Versioning:** Each tool can version independently
+      5. **Observability:** MCP protocol enables centralized tracing
       
       ### Service Catalog (28 Orchestrators)
       - Core (8): MasterOrchestrator, InteractionOrchestrator, IntentRouter, ...
@@ -2158,13 +2158,13 @@ enhancements:
     implementation_notes: |
       Files modified:
       - docs/meta/enhancement-history.yaml (6 code fence blocks removed)
-        - ENH-029: DoR Output Addition (markdown table → box drawing)
-        - ENH-018: Example Output (markdown headings → plain text)
-        - ENH-019: Example usage (python code → indented)
-        - ENH-023: Example Flow (python code → indented)
-        - ENH-024: Challenge Output (markdown table → box drawing)
-        - ENH-025: Example (python code → indented)
-        - ENH-026: Workflow (bash code → plain commands)
+        * ENH-029: DoR Output Addition (markdown table → box drawing)
+        * ENH-018: Example Output (markdown headings → plain text)
+        * ENH-019: Example usage (python code → indented)
+        * ENH-023: Example Flow (python code → indented)
+        * ENH-024: Challenge Output (markdown table → box drawing)
+        * ENH-025: Example (python code → indented)
+        * ENH-026: Workflow (bash code → plain commands)
       
       Files created:
       - docs/meta/yaml-response-format-guide.md (comprehensive guide)
@@ -2223,47 +2223,47 @@ enhancements:
       
       8-Phase Roadmap (10 weeks total):
       - Phase 1: Multi-Language Wiring Completion (Week 1-2)
-        - Wire CSharpAdapter, JavaAdapter, TypeScriptAdapter to PolyglotAnalyzer
-        - Add GoAdapter, RustAdapter for emerging languages
-        - 48 tests, 90% coverage target
+        * Wire CSharpAdapter, JavaAdapter, TypeScriptAdapter to PolyglotAnalyzer
+        * Add GoAdapter, RustAdapter for emerging languages
+        * 48 tests, 90% coverage target
       
       - Phase 2: Use Case Extraction Engine (Week 3-4)
-        - Pattern-based extraction (API endpoints, CLI commands, DB operations)
-        - Business narrative generation
-        - 45 tests, Actor-Action-Object model
+        * Pattern-based extraction (API endpoints, CLI commands, DB operations)
+        * Business narrative generation
+        * 45 tests, Actor-Action-Object model
       
       - Phase 3: Real-Time Diagram Generation (Week 5)
-        - Architecture, sequence, dependency diagrams during onboarding
-        - Zero placeholder policy
-        - 32 tests, DiagramOrchestrator
+        * Architecture, sequence, dependency diagrams during onboarding
+        * Zero placeholder policy
+        * 32 tests, DiagramOrchestrator
       
       - Phase 4: Knowledge Base Runtime Access (Week 6)
-        - Dynamic loading of best-practices YAMLs
-        - Context-aware recommendation engine
-        - Tech stack → knowledge mapping
-        - 28 tests
+        * Dynamic loading of best-practices YAMLs
+        * Context-aware recommendation engine
+        * Tech stack → knowledge mapping
+        * 28 tests
       
       - Phase 5: Capability Feasibility Gate (Week 7)
-        - Pre-execution validation (see ENH-029)
-        - Architecture drift detection
-        - BLOCK mechanism integration
-        - 35 tests
+        * Pre-execution validation (see ENH-029)
+        * Architecture drift detection
+        * BLOCK mechanism integration
+        * 35 tests
       
       - Phase 6: Multi-Language Security Scanning (Week 8)
-        - CWE coverage expansion to all languages
-        - Unified vulnerability reporting
-        - 40 tests
+        * CWE coverage expansion to all languages
+        * Unified vulnerability reporting
+        * 40 tests
       
       - Phase 7: Performance & Caching (Week 9)
-        - LRU cache with TTL
-        - Incremental analysis
-        - 4x speedup target
-        - 25 tests
+        * LRU cache with TTL
+        * Incremental analysis
+        * 4x speedup target
+        * 25 tests
       
       - Phase 8: MCP Tools & Documentation (Week 10)
-        - cortex_lens_analyze_v2, cortex_extract_use_cases, cortex_generate_diagrams
-        - User guides, API reference
-        - 20 tests
+        * cortex_lens_analyze_v2, cortex_extract_use_cases, cortex_generate_diagrams
+        * User guides, API reference
+        * 20 tests
       
       Total: 273 tests, 85% coverage target
       
@@ -2317,26 +2317,26 @@ enhancements:
       4-Phase Implementation (12 days total):
       
       Phase 1: CapabilityFeasibilityAnalyzer (4 days)
-        - Analyze request against registered capabilities
-        - Score: 0.0 (impossible) to 1.0 (fully capable)
-        - Identify gaps with severity (BLOCKING, DEGRADED, MINOR)
-        - 25 tests
+        * Analyze request against registered capabilities
+        * Score: 0.0 (impossible) to 1.0 (fully capable)
+        * Identify gaps with severity (BLOCKING, DEGRADED, MINOR)
+        * 25 tests
       
       Phase 2: ArchitectureDriftDetector (3 days)
-        - Compare code state vs documentation claims
-        - Detect: PLANNED→EXISTS, EXISTS→MISSING, VERSION_MISMATCH
-        - 20 tests
+        * Compare code state vs documentation claims
+        * Detect: PLANNED→EXISTS, EXISTS→MISSING, VERSION_MISMATCH
+        * 20 tests
       
       Phase 3: InteractionOrchestrator Integration (3 days)
-        - Insert feasibility check before DoR display
-        - Add capability matrix to DoR output
-        - BLOCK gate for drift_score > 0.7 OR feasibility < 0.3
-        - 15 tests
+        * Insert feasibility check before DoR display
+        * Add capability matrix to DoR output
+        * BLOCK gate for drift_score > 0.7 OR feasibility < 0.3
+        * 15 tests
       
       Phase 4: MCP Tools + Prompts (2 days)
-        - cortex_validate_feasibility MCP tool
-        - Update cortex-architect.prompt.md with feasibility section
-        - 10 tests
+        * cortex_validate_feasibility MCP tool
+        * Update cortex-architect.prompt.md with feasibility section
+        * 10 tests
       
       Total: 70 tests, 90% coverage target
       
@@ -2643,7 +2643,7 @@ enhancements:
     evidence_basis:
       - "chat01.md line 94: 'Production-Ready with Minor P3 Cleanup' (P0/P2 pending)"
       - "chat01.md line 119: 'P2 Quality (NEEDS ATTENTION) - Not analyzed'"
-      - "chat01.md line 129: ''For User:' 1. Review P0... 2. Implement...'"
+      - "chat01.md line 129: '**For User:** 1. Review P0... 2. Implement...'"
     root_cause:
       - "Prompt allowed 'or' condition in completion ('report OR actions table')"
       - "No explicit definition of '100% production-ready'"
@@ -3326,10 +3326,10 @@ enhancements:
       - Branch topology analysis via git merge-base
       - 4-state classification: UP_TO_DATE, AHEAD, BEHIND, DIVERGED
       - Ecosystem change detection:
-        - .github/prompts/*.md files
-        - .github/agents/core/*.md files
-        - cortex/wiring/specifications/wiring.yaml
-        - New orchestrators in cortex/orchestrators/
+        * .github/prompts/*.md files
+        * .github/agents/core/*.md files
+        * cortex/wiring/specifications/wiring.yaml
+        * New orchestrators in cortex/orchestrators/
       - Merge vs rebase strategy selection (DIVERGED only)
       - Commit ancestry verification via timestamps
       - Enhanced user education (branch status guide)
@@ -3383,8 +3383,8 @@ enhancements:
       Features:
       - Audience detection logic (engineer-focused by default)
       - Two challenge formats:
-        - Engineer-Focused (default): 15-20 lines, condensed analysis
-        - Comprehensive (on request): 150+ lines, multi-role analysis
+        * Engineer-Focused (default): 15-20 lines, condensed analysis
+        * Comprehensive (on request): 150+ lines, multi-role analysis
       - Quick Reference Templates updated with both formats
       - Inline evidence in Critical Issues list
       - Condensed Recommended Fix section
