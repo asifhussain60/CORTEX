@@ -94,18 +94,20 @@ class IntegratedContext:
 # ============================================================================
 # TEMPLATE REGISTRY
 # ============================================================================
+# CORE-035: Renamed from TemplateRegistry to avoid duplication with
+# cortex.tools.scaffolder_templates.TemplateRegistry
 
 
-class TemplateRegistry:
+class ResponseTemplateRegistry:
     """Registry for response templates.
     
-    Singleton pattern for template management across roles and tasks.
+    Domain-specific template registry for multi-role response engine.
     Provides efficient template lookup and registration.
     """
     
-    _instance: Optional['TemplateRegistry'] = None
+    _instance: Optional['ResponseTemplateRegistry'] = None
     
-    def __new__(cls) -> 'TemplateRegistry':
+    def __new__(cls) -> 'ResponseTemplateRegistry':
         """Singleton pattern implementation."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -379,7 +381,7 @@ class MultiRoleResponseEngine:
     
     def __init__(self):
         """Initialize response engine."""
-        self._registry = TemplateRegistry()
+        self._registry = ResponseTemplateRegistry()
         self._adapter = RoleAdaptation()
         self._response_cache: Dict[str, str] = {}
     
