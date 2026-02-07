@@ -382,17 +382,19 @@ class TestRefactoringOperationType:
             assert isinstance(member.value, str)
 
 
+# Test helper class
+class IncompleteAdapter(RefactoringToolAdapter):
+    tool_name = "test"
+    
+    def capabilities(self) -> List[RefactoringCapability]:
+        return []
+    
+    def is_available(self) -> bool:
+        return False
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
-
-        class IncompleteAdapter(RefactoringToolAdapter):
-            tool_name = "test"
-            
-            def capabilities(self) -> List[RefactoringCapability]:
-                return []
-            
-            def is_available(self) -> bool:
-                return False
             
             async def execute_refactoring(
                 self,

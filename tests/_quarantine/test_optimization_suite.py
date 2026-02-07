@@ -28,6 +28,7 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Tuple
 from dataclasses import dataclass
+from cortex.models.canonical_enums import ExecutionStrategy
 from enum import Enum
 import re
 
@@ -253,7 +254,6 @@ class TestOptimizer:
 def main():
     """Main entry point."""
     import argparse
-from cortex.models.canonical_enums import ExecutionStrategy
 
     parser = argparse.ArgumentParser(
         description="CORTEX Test Optimization Suite",

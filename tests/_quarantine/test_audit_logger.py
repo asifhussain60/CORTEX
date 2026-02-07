@@ -34,11 +34,6 @@ import pytest
 
 from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.enhanced_audit_logger import AuditEntry
-    ac_id: Optional[str] = None
-    correlation_id: Optional[str] = None
-    metadata: Optional[Dict[str, Any]] = None
-    previous_hash: str = ""
-    entry_hash: str = ""
 
 
 class TestAuditLogger:
