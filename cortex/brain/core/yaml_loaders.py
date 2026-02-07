@@ -17,9 +17,10 @@ from cortex.brain.core.models import (
     ModesYAML,
     ResponseFormatYAML,
 )
+from cortex.brain.core.models.persona_models import PersonasYAML
 
 # Type variable for generic loader data
-T = TypeVar('T', CoreRulesYAML, AuditChecklistYAML, ModesYAML, ResponseFormatYAML)
+T = TypeVar('T', CoreRulesYAML, AuditChecklistYAML, ModesYAML, ResponseFormatYAML, PersonasYAML)
 
 
 class YAMLLoadError(Exception):
@@ -393,3 +394,72 @@ def load_response_format() -> ResponseFormatYAML:
     loader = get_loader("response_format", registry_path)
     assert isinstance(loader, ResponseFormatLoader)
     return loader.load()
+
+
+# ============================================================================
+# PERSONAS LOADER (Phase 37 - Stage 1)
+# ============================================================================
+
+class PersonasLoader(BaseYAMLLoader):
+    """Loader for personas.yaml with validation."""
+    
+    def load(self) -> PersonasYAML:
+        """Load and validate personas YAML.
+        
+        Returns:
+            Validated PersonasYAML model
+            
+        Raises:
+            YAMLLoadError: If validation fails
+        """
+        if self._data is None:
+            raw_data = self._load_yaml()
+            try:
+                self._data = PersonasYAML(**raw_data)
+            except Exception as e:
+                raise YAMLLoadError(f"Personas validation failed: {e}")
+        
+        return self._data
+
+
+# Cache for personas loader (singleton pattern)
+_personas_cache: Optional[PersonasYAML] = None
+
+
+def load_personas() -> PersonasYAML:
+    """Load personas YAML with caching (convenience function).
+    
+    Returns:
+        Validated PersonasYAML model
+        
+    Raises:
+        YAMLLoadError: If file not found or validation fails
+    """
+    global _personas_cache
+    
+    if _personas_cache is None:
+        # Locate personas.yaml in cortex/config/
+        import cortex
+        cortex_root = Path(cortex.__file__).parent
+        personas_path = cortex_root / "config" / "personas.yaml"
+        
+        if not personas_path.exists():
+            raise YAMLLoadError(f"personas.yaml not found at {personas_path}")
+        
+        loader = PersonasLoader(personas_path)
+        _personas_cache = loader.load()
+    
+    return _personas_cache
+
+
+def clear_personas_cache() -> None:
+    """Clear personas cache (useful for testing)."""
+    global _personas_cache
+    _personas_cache = None
+
+
+# Monkey-patch clear_cache as function attribute for testing
+load_personas.clear_cache = clear_personas_cache  # type: ignore[attr-defined]
+
+
+# AC_COMPLETE: AC-PHASE37.1-004 ✅ load_personas() with caching implemented
