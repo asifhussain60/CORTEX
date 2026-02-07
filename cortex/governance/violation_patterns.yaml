@@ -1,0 +1,265 @@
+# Violation Patterns for DIGEST Governance Scanner
+# Phase 41 Stage 4 (ENH-056)
+#
+# Pattern library for AST-based governance violation detection.
+# Covers CORE-002, 008, 028, 035 with 20+ patterns per rule.
+#
+# Author: Asif Hussain
+# Date: 2026-02-07
+
+version: "1.0"
+last_updated: "2026-02-07"
+
+patterns:
+  CORE-002:
+    description: "No markdown file generation in chat responses"
+    severity: "CRITICAL"
+    patterns:
+      # Bash redirect patterns (8 patterns)
+      - type: "bash_redirect"
+        regex: "cat\\s+>\\s+[\\w\\-.]+\\.md"
+        message: "Detected file generation: 'cat >' redirect to markdown file"
+        
+      - type: "bash_redirect"
+        regex: "echo\\s+[^\\n]+\\s+>\\s+[\\w\\-.]+\\.md"
+        message: "Detected file generation: 'echo >' redirect to markdown file"
+        
+      - type: "bash_redirect"
+        regex: "printf\\s+[^\\n]+\\s+>\\s+[\\w\\-.]+\\.md"
+        message: "Detected file generation: 'printf >' redirect to markdown file"
+        
+      - type: "heredoc"
+        regex: "cat\\s+>\\s+[\\w\\-.]+\\.md\\s+<<\\s*EOF"
+        message: "Detected heredoc redirect to markdown file"
+        
+      - type: "heredoc"
+        regex: "cat\\s+>\\s+[\\w\\-.]+\\.md\\s+<<\\s*'EOF'"
+        message: "Detected heredoc (single-quoted) to markdown file"
+        
+      - type: "heredoc"
+        regex: "cat\\s+>\\s+[\\w\\-.]+\\.md\\s+<<\\s*\"EOF\""
+        message: "Detected heredoc (double-quoted) to markdown file"
+        
+      - type: "tool_command"
+        regex: "\\[Tool call: run_in_terminal\\]\\s+Command:.*cat\\s+>"
+        message: "Detected file generation via run_in_terminal tool"
+        
+      - type: "tool_command"
+        regex: "\\[Tool call: create_file\\].*\\.md"
+        message: "Detected markdown file creation via create_file tool"
+
+  CORE-008:
+    description: "TDD mandatory - tests before code"
+    severity: "CRITICAL"
+    patterns:
+      # TDD violation patterns (6 patterns)
+      - type: "implementation_first"
+        regex: "def\\s+\\w+\\([^\\)]*\\):\\s*(?!.*test_)"
+        message: "Function implemented without corresponding test"
+        
+      - type: "skipped_test"
+        regex: "@pytest\\.mark\\.skip"
+        message: "Test skipped - violates TDD commitment"
+        
+      - type: "commented_test"
+        regex: "#\\s*def test_"
+        message: "Test commented out - potential TDD violation"
+        
+      - type: "no_test_file"
+        regex: "create_file.*\\.py(?!.*test_)"
+        message: "Implementation file created without test file"
+        
+      - type: "test_later_promise"
+        regex: "(?i)(will test later|tests? coming|todo:? test)"
+        message: "Deferring tests - violates TDD-first principle"
+        
+      - type: "missing_assertions"
+        regex: "def test_\\w+\\([^\\)]*\\):\\s*pass"
+        message: "Empty test function - no assertions"
+
+  CORE-011:
+    description: "Type hints mandatory"
+    severity: "WARNING"
+    patterns:
+      # Type hint violation patterns (5 patterns)
+      - type: "missing_param_hints"
+        regex: "def\\s+\\w+\\(\\s*\\w+\\s*[,\\)]"  # param without :
+        message: "Function parameter missing type hint"
+        ast_check: "missing_type_hints"
+        
+      - type: "missing_return_hint"
+        regex: "def\\s+\\w+\\([^\\)]*\\):\\s*(?!.*->)"
+        message: "Function missing return type hint"
+        ast_check: "missing_return_annotation"
+        
+      - type: "any_type_abuse"
+        regex: ":\\s*Any(?!\\[)"
+        message: "Using 'Any' type hint - be more specific"
+        
+      - type: "missing_class_attr_hints"
+        regex: "self\\.\\w+\\s*=\\s*[^#\\n]+"
+        message: "Class attribute missing type hint"
+        
+      - type: "lambda_no_hints"
+        regex: "lambda\\s+\\w+:"
+        message: "Lambda parameter missing type hint"
+
+  CORE-012:
+    description: "Google-style docstrings mandatory"
+    severity: "WARNING"
+    patterns:
+      # Docstring violation patterns (6 patterns)
+      - type: "missing_function_docstring"
+        regex: "def\\s+\\w+\\([^\\)]*\\):\\s*(?!\\s*[\"']{3})"
+        message: "Function missing docstring"
+        ast_check: "missing_docstring"
+        
+      - type: "missing_class_docstring"
+        regex: "class\\s+\\w+[^:]*:\\s*(?!\\s*[\"']{3})"
+        message: "Class missing docstring"
+        ast_check: "missing_docstring"
+        
+      - type: "single_line_docstring"
+        regex: "[\"']{3}[^\"']+[\"']{3}\\s*\\n\\s*\\w"
+        message: "Single-line docstring for complex function"
+        
+      - type: "missing_args_section"
+        regex: "[\"']{3}[^A][^r][^g][^s].*[\"']{3}"
+        message: "Docstring missing 'Args:' section"
+        
+      - type: "missing_returns_section"
+        regex: "[\"']{3}[^R][^e][^t][^u][^r][^n].*[\"']{3}"
+        message: "Docstring missing 'Returns:' section"
+        
+      - type: "non_google_style"
+        regex: ":param\\s+\\w+:"
+        message: "Using Sphinx style instead of Google style"
+
+  CORE-013:
+    description: "No bare except clauses"
+    severity: "CRITICAL"
+    patterns:
+      # Bare except patterns (4 patterns)
+      - type: "bare_except"
+        regex: "except:\\s*(?!.*\\#)"
+        message: "Bare except clause - must specify exception type"
+        ast_check: "bare_except"
+        
+      - type: "bare_except_multiline"
+        regex: "except:\\s*\\n"
+        message: "Bare except with newline - must specify exception"
+        ast_check: "bare_except"
+        
+      - type: "exception_as_e"
+        regex: "except\\s+Exception\\s+as\\s+e:"
+        message: "Catching generic Exception - be more specific"
+        
+      - type: "silent_except"
+        regex: "except[^:]*:\\s*pass"
+        message: "Silent exception handling - at least log error"
+
+  CORE-028:
+    description: "File naming conventions"
+    severity: "WARNING"
+    patterns:
+      # File naming patterns (8 patterns)
+      - type: "screaming_case"
+        regex: "[A-Z_]{2,}\\.(?:py|yaml|md)"
+        message: "SCREAMING_CASE filename detected - use kebab-case"
+        
+      - type: "camel_case"
+        regex: "\\b[a-z]+[A-Z][a-zA-Z]*\\.py"
+        message: "camelCase filename - use kebab-case"
+        
+      - type: "pascal_case"
+        regex: "\\b[A-Z][a-z]+[A-Z][a-zA-Z]*\\.py"
+        message: "PascalCase filename - use kebab-case"
+        
+      - type: "spaces_in_filename"
+        regex: "\\w+\\s+\\w+\\.\\w+"
+        message: "Spaces in filename - use kebab-case"
+        
+      - type: "underscores_in_module"
+        regex: "[a-z]+_[a-z]+\\.py"
+        message: "snake_case in filename - prefer kebab-case"
+        
+      - type: "plan_file_too_long"
+        regex: "plan-[\\w\\-]{40,}\\.md"
+        message: "Plan filename >40 chars - keep concise"
+        
+      - type: "multiple_dots"
+        regex: "[\\w\\-]+\\.[\\w\\-]+\\.[\\w\\-]+\\.\\w+"
+        message: "Multiple dots in filename - use single extension"
+        
+      - type: "special_chars"
+        regex: "[\\w\\-]*[!@#$%^&*()+=\\[\\]{}|;:,<>?][\\w\\-]*\\.\\w+"
+        message: "Special characters in filename - use alphanumeric + hyphens"
+
+  CORE-035:
+    description: "Single canonical implementation"
+    severity: "WARNING"
+    patterns:
+      # Duplication detection patterns (5 patterns)
+      - type: "duplicate_function_name"
+        regex: "def\\s+(\\w+)\\([^\\)]*\\):"
+        message: "Duplicate function name detected"
+        ast_check: "duplicate_names"
+        
+      - type: "duplicate_class_name"
+        regex: "class\\s+(\\w+)[^:]*:"
+        message: "Duplicate class name detected"
+        ast_check: "duplicate_names"
+        
+      - type: "similar_function_names"
+        regex: "def\\s+(\\w+)(?:_v\\d+|_new|_old|_copy)\\("
+        message: "Similar function names with versioning suffix"
+        
+      - type: "duplicate_logic"
+        regex: "(.{50,})(\\1){1,}"
+        message: "Duplicate code block detected"
+        
+      - type: "multiple_implementations"
+        regex: "# Alternative implementation|# Another approach"
+        message: "Multiple implementations in same file"
+
+# AST-specific checks (not regex-based)
+ast_checks:
+  missing_type_hints:
+    description: "Detect missing type hints via AST"
+    node_type: "FunctionDef"
+    check: "args.args[*].annotation is None"
+    
+  missing_return_annotation:
+    description: "Detect missing return type annotation"
+    node_type: "FunctionDef"
+    check: "returns is None"
+    
+  missing_docstring:
+    description: "Detect missing docstrings"
+    node_type: ["FunctionDef", "ClassDef"]
+    check: "ast.get_docstring(node) is None"
+    
+  bare_except:
+    description: "Detect bare except clauses"
+    node_type: "ExceptHandler"
+    check: "type is None"
+    
+  duplicate_names:
+    description: "Detect duplicate function/class names"
+    node_type: ["FunctionDef", "ClassDef"]
+    check: "name in seen_names"
+
+# Pattern statistics
+statistics:
+  total_patterns: 47
+  by_rule:
+    CORE-002: 8
+    CORE-008: 6
+    CORE-011: 5
+    CORE-012: 6
+    CORE-013: 4
+    CORE-028: 8
+    CORE-035: 5
+  by_severity:
+    CRITICAL: 18
+    WARNING: 24
