@@ -340,6 +340,39 @@ class MCPServer:
         except Exception as e:
             self.logger.warning(f"Could not load tools from ToolRegistry: {e}")
         
+        # 2.5. Add decorator-registered tools (@mcp_tool)
+        try:
+            from cortex.mcp.decorators import get_registered_tools as get_decorator_tools
+            decorator_tools = get_decorator_tools()
+            
+            for tool_name, tool_meta in decorator_tools.items():
+                if tool_name not in seen_tools:
+                    # Convert parameter dict to list format
+                    params_list = []
+                    if isinstance(tool_meta.get("parameters"), dict):
+                        for param_name, param_type in tool_meta["parameters"].items():
+                            params_list.append({
+                                "name": param_name,
+                                "type": param_type if isinstance(param_type, str) else "string",
+                                "required": False,  # Can't determine from decorator metadata
+                                "description": "",
+                            })
+                    
+                    tool_dict = {
+                        "name": tool_name,
+                        "description": tool_meta.get("description", ""),
+                        "source": "decorator",
+                        "category": tool_meta.get("category", "utility"),
+                        "parameters": params_list,
+                    }
+                    tools_list.append(tool_dict)
+                    seen_tools.add(tool_name)
+            
+            if len(decorator_tools) > 0:
+                self.logger.info(f"Added {len(decorator_tools)} decorator-registered tools")
+        except Exception as e:
+            self.logger.warning(f"Could not load decorator-registered tools: {e}")
+        
         # 3. Add tools from all 23 registered orchestrators
         try:
             from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator

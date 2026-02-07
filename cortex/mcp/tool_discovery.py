@@ -132,39 +132,61 @@ class ToolDiscoveryEngine:
         self,
         tool_id: str,
         tool_info: Dict[str, Any],
-        category: ToolCategory,
+        category: Any,  # Accept both ToolCategory types
     ) -> None:
         """Register a single tool.
         
         Args:
             tool_id: Tool identifier
             tool_info: Tool metadata and function
-            category: Tool category
+            category: Tool category (ToolCategory enum or compatible object)
         """
-        # Register in tool registry
-        self.registry.register_tool(
-            tool_id=tool_id,
-            tool_name=tool_info["metadata"].get("description", tool_id),
-            description=tool_info["metadata"].get("description", ""),
-            category=category,
-            parameters=tool_info["metadata"].get("parameters", {}),
-            metadata={
-                "category": category.value,
-                "function": tool_info["function"].__name__,
-                "module": tool_info["function"].__module__,
-            },
-        )
+        # Import here to avoid circular dependency
+        from cortex.mcp.tool_registry import ToolMetadata, ToolCategory as RegistryToolCategory
+        
+        # Handle category - convert string to ToolCategory if needed
+        registry_category = RegistryToolCategory.UTILITY  # Default
+        
+        if isinstance(category, str):
+            try:
+                registry_category = RegistryToolCategory(category)
+            except ValueError:
+                logger.warning(f"Unknown category '{category}' for tool {tool_id}, using UTILITY")
+        elif hasattr(category, 'value'):
+            # It's an enum, get its value and convert
+            try:
+                registry_category = RegistryToolCategory(category.value)
+            except ValueError:
+                logger.warning(f"Cannot map category '{category.value}' for tool {tool_id}, using UTILITY")
+        
+        # Register in tool registry using ToolMetadata
+        try:
+            metadata = ToolMetadata(
+                id=tool_id,
+                name=tool_info["metadata"].get("description", tool_id),
+                category=registry_category,
+                description=tool_info["metadata"].get("description", ""),
+                parameters=tool_info["metadata"].get("parameters", {}),
+            )
+            self.registry.register(metadata)
+            logger.debug(f"Registered tool {tool_id} in registry")
+        except Exception as e:
+            logger.error(f"Failed to register tool {tool_id} in registry: {e}")
         
         # Register governance policy
-        policy = ToolGovernancePolicy(
-            tool_id=tool_id,
-            tool_name=tool_id,
-            category=category,
-            auth_level=self.DEFAULT_AUTH_LEVELS.get(category, AuthLevel.AUTHENTICATED),
-            compliance_mode=self.DEFAULT_COMPLIANCE_MODES.get(category, ComplianceMode.NORMAL),
-            description=tool_info["metadata"].get("description", ""),
-        )
-        self.governance.register_policy(policy)
+        try:
+            policy = ToolGovernancePolicy(
+                tool_id=tool_id,
+                tool_name=tool_id,
+                category=category if not isinstance(category, str) else ToolCategory(category),
+                auth_level=self.DEFAULT_AUTH_LEVELS.get(category, AuthLevel.AUTHENTICATED),
+                compliance_mode=self.DEFAULT_COMPLIANCE_MODES.get(category, ComplianceMode.NORMAL),
+                description=tool_info["metadata"].get("description", ""),
+            )
+            self.governance.register_policy(policy)
+            logger.debug(f"Registered governance policy for {tool_id}")
+        except Exception as e:
+            logger.error(f"Failed to register governance policy for {tool_id}: {e}")
     
     def print_discovery_summary(self) -> None:
         """Print discovery summary."""
