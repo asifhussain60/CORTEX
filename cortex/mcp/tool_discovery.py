@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any, Callable
 import logging
 
-from cortex.brain.tier1.orchestrators.cleaners.registry import get_mcp_tool_registry
+from cortex.mcp.tool_registry import get_mcp_tool_registry
 from cortex.mcp.tool_governance import (
     ToolCategory,
     AuthLevel,
