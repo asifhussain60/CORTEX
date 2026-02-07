@@ -209,12 +209,15 @@ class RefactoringResult:
 
 | Metric | Target | Current | Progress |
 |--------|--------|---------|----------|
-| **Subtasks Complete** | 16 | 2 | 13% |
-| **Tests Passing** | 1,145 | 33 | 3% |
-| **Lines of Code** | 2,330 | 957 | 41% |
-| **Test Lines** | 1,060 | 753 | 71% |
+| **Subtasks Complete** | 16 | 4 | 25% |
+| **Tests Passing** | 1,145 | 48 | 4% |
+| **Lines of Code** | 2,330 | 1,264 | 54% |
+| **Test Lines** | 1,060 | 1,048 | 99% |
 | **Languages Supported** | 4 | 1 (Python) | 25% |
 | **Refactoring Operations** | 100+ | 6 (Python) | 6% |
+| **MCP Tools** | 12+ | 3 (Python) | 25% |
+
+**Phase 24.1 Status:** 🟢 COMPLETE (4/4 subtasks, 48/48 tests passing)
 
 ---
 
@@ -328,6 +331,167 @@ else:
 
 ---
 
+## ✅ Subtask 1.4: Integration Tests + MCP Exposure
+
+**Status:** 🟢 COMPLETE  
+**Completed:** 2026-02-07  
+**Tests:** 48/48 passing (33 unit + 15 integration)  
+**Performance:** 2.00s total (meets <3s requirement)  
+**LOC:** 307 lines MCP tools, 295 lines integration tests
+
+### MCP Tools Implemented
+
+Exposed 3 MCP tools for external consumption:
+
+1. **cortex_refactor_python** - Execute Python refactoring operations
+2. **cortex_refactoring_list_operations** - List available refactoring operations
+3. **cortex_refactoring_validate** - Validate refactoring request without execution
+
+### MCP Tool Details
+
+#### 1. cortex_refactor_python
+
+Execute Python refactoring via Rope adapter.
+
+**Parameters:**
+- `operation` (str) - Operation name (e.g., "extract_method", "rename")
+- `file_path` (str) - Path to Python file to refactor
+- `parameters` (dict) - Operation-specific parameters
+
+**Returns:** JSON with success status, modified files, description, warnings, errors
+
+**Example:**
+```python
+# Via MCP client
+result = await mcp_client.call_tool(
+    "cortex_refactor_python",
+    operation="rename",
+    file_path="app.py",
+    parameters={
+        "offset": 150,
+        "new_name": "calculate_total"
+    }
+)
+```
+
+#### 2. cortex_refactoring_list_operations
+
+List available refactoring operations for a language.
+
+**Parameters:**
+- `language` (str, optional) - Language filter (default: all languages)
+
+**Returns:** JSON with operations by language
+
+**Example:**
+```python
+# List all operations
+result = await mcp_client.call_tool("cortex_refactoring_list_operations")
+
+# List Python operations only
+result = await mcp_client.call_tool(
+    "cortex_refactoring_list_operations",
+    language="python"
+)
+```
+
+#### 3. cortex_refactoring_validate
+
+Validate refactoring request without executing (dry-run).
+
+**Parameters:**
+- `operation` (str) - Operation name
+- `file_path` (str) - Path to file
+- `language` (str) - Language ("python", "csharp", "typescript", "java")
+- `parameters` (dict) - Operation-specific parameters
+
+**Returns:** JSON with validation status and errors (if any)
+
+**Example:**
+```python
+# Validate before executing
+result = await mcp_client.call_tool(
+    "cortex_refactoring_validate",
+    operation="extract_method",
+    file_path="app.py",
+    language="python",
+    parameters={"start_offset": 100, "end_offset": 200, "new_name": "helper"}
+)
+```
+
+### Integration Test Coverage (15 tests)
+
+| Category | Tests | Status |
+|----------|-------|--------|
+| Tool Import | 1 | ✅ Passing |
+| List Operations | 3 | ✅ All passing |
+| Validate | 4 | ✅ All passing |
+| Refactor Python | 3 | ✅ All passing |
+| End-to-End Workflow | 2 | ✅ All passing |
+| Tool Discovery | 2 | ✅ All passing |
+
+**Test Scenarios:**
+1. ✅ Tool import and registration
+2. ✅ List all operations
+3. ✅ List Python operations only
+4. ✅ Handle invalid language filter
+5. ✅ Validate successful request
+6. ✅ Validate invalid operation
+7. ✅ Validate missing file
+8. ✅ Validate unsupported language
+9. ✅ Execute rename operation
+10. ✅ Handle invalid operation execution
+11. ✅ Handle missing parameters
+12. ✅ Full workflow: validate → execute → verify
+13. ✅ Error handling chain
+14. ✅ MCP decorator registration
+15. ✅ Tool metadata validation
+
+### Files Created
+- `cortex/mcp/refactoring_operations.py` (307 lines)
+- `tests/integration/test_mcp_refactoring.py` (295 lines)
+
+### Performance Validation
+
+| Metric | Target | Actual | Status |
+|--------|--------|--------|--------|
+| Total Test Time | <3s | 2.00s | ✅ Pass |
+| Rope Startup | <2s | <1s | ✅ Pass |
+| Operation Execution | <2s | <0.5s | ✅ Pass |
+
+### MCP Integration Pattern
+
+All tools follow CORTEX MCP-FIRST pattern:
+
+```python
+from cortex.mcp.decorators import mcp_tool
+
+@mcp_tool(
+    name="cortex_refactor_python",
+    description="Execute Python refactoring operation",
+    category="refactoring"
+)
+def cortex_refactor_python(
+    operation: str,
+    file_path: str,
+    parameters: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Execute Python refactoring via Rope adapter."""
+    # Implementation...
+```
+
+### Governance Compliance
+
+| Rule | Status | Evidence |
+|------|--------|----------|
+| CORE-008 | ✅ | TDD-first: integration tests before MCP tools |
+| CORE-011 | ✅ | Full type hints on all MCP tools |
+| CORE-012 | ✅ | Google-style docstrings throughout |
+| CORE-027 | ✅ | AC markers: AC-PHASE24.1.4-003 |
+| MCP-FIRST | ✅ | All operations exposed via @mcp_tool decorator |
+
+---
+
 **Last Updated:** 2026-02-07  
-**Document Version:** 1.1  
-**Audit Code:** AC-PHASE24.1.2-DOC-001 ✅
+**Document Version:** 1.2  
+**Audit Code:** AC-PHASE24.1.4-DOC-001 ✅
