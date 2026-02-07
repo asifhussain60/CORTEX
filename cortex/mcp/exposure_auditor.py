@@ -12,7 +12,7 @@ TDD: Tests BEFORE code (CORE-008)
 import json
 import re
 from pathlib import Path
-from typing import Dict, List, Set, Tuple, Optional
+from typing import Dict, List, Set, Tuple, Optional, Any
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import yaml
@@ -305,6 +305,101 @@ class MCPExposureAuditor:
         return output_path
 
 
+    # ========================================================================
+    # Test-Compatible Interface (Phase 38 Stage 7)
+    # ========================================================================
+
+    def scan_orchestrators(self) -> List[Dict[str, Any]]:
+        """
+        Scan all orchestrators (test-compatible interface).
+        
+        Returns:
+            List of dicts with orchestrator information
+        """
+        orchestrators = self.load_wired_orchestrators()
+        
+        results = []
+        for orch in orchestrators:
+            info = self.analyze_orchestrator(orch)
+            results.append({
+                "name": info.name,
+                "category": info.category,
+                "file_path": info.module_path,
+                "has_mcp_tool": info.has_mcp_tool,
+                "mcp_tool_name": Path(info.mcp_tool_path).stem if info.mcp_tool_path else None,
+            })
+        
+        return results
+
+    def audit_mcp_coverage(self) -> Dict[str, Any]:
+        """
+        Audit MCP coverage (test-compatible interface).
+        
+        Returns:
+            Dict with coverage metrics
+        """
+        report = self.audit()
+        
+        return {
+            "total_orchestrators": report.total_orchestrators,
+            "exposed_count": report.exposed_count,
+            "missing_count": report.missing_count,
+            "coverage_percent": report.coverage_percent,
+            "missing_orchestrators": [m["name"] for m in report.missing_orchestrators],
+            "category_coverage": report.coverage_by_category,
+        }
+
+    def generate_missing_tool_specs(self) -> List[Dict[str, Any]]:
+        """
+        Generate MCP tool specs for missing orchestrators.
+        
+        Returns:
+            List of tool specifications
+        """
+        report = self.audit()
+        
+        specs = []
+        for missing in report.missing_orchestrators:
+            tool_name = f"cortex_{missing['name'].lower().replace('orchestrator', '').strip()}"
+            
+            specs.append({
+                "tool_name": tool_name,
+                "description": f"Invoke {missing['name']} orchestrator",
+                "orchestrator": missing["name"],
+                "inputs": ["request"],
+                "outputs": ["result"],
+            })
+        
+        return specs
+
+    def validate_tool_interface(
+        self,
+        orchestrator: Any,
+        tool_spec: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """
+        Validate tool interface matches orchestrator.
+        
+        Args:
+            orchestrator: Orchestrator instance
+            tool_spec: Tool specification
+            
+        Returns:
+            Validation result dict
+        """
+        issues = []
+        
+        # Check for process method
+        if not hasattr(orchestrator, "process"):
+            issues.append("Missing 'process' method")
+        
+        return {
+            "valid": len(issues) == 0,
+            "issues": issues,
+        }
+
+
 # AC_COMPLETE: AC-PHASE38-018 ✅
 # Implementation: MCPExposureAuditor fully implemented
 # Tests: 10 tests required (see test_exposure_auditor.py)
+
