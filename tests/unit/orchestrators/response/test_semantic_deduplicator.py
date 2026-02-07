@@ -17,6 +17,13 @@ from cortex.orchestrators.response.semantic_deduplicator import (
     SemanticDeduplicator,
     EmbeddingCache,
     DeduplicationMetrics,
+    SENTENCE_TRANSFORMERS_AVAILABLE,
+)
+
+# Skip all tests if sentence-transformers not available
+pytestmark = pytest.mark.skipif(
+    not SENTENCE_TRANSFORMERS_AVAILABLE,
+    reason="sentence-transformers not installed (optional ML dependency)"
 )
 
 

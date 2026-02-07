@@ -12,8 +12,8 @@ Date: 2026-01-31
 import pytest
 from cortex.orchestrators.core.dor_approval_gate import (
     DoRApprovalGate,
-    display_intent_classification,
-    echo_user_intent,
+    # display_intent_classification,  # DEPRECATED: Function removed in refactor
+    # echo_user_intent,  # DEPRECATED: Function removed in refactor
 )
 
 

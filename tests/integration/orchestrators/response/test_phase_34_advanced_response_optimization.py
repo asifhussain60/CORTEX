@@ -12,7 +12,10 @@ Authority: Phase 34 specification
 import pytest
 from typing import Dict, Any
 
-from cortex.orchestrators.response.semantic_deduplicator import SemanticDeduplicator
+from cortex.orchestrators.response.semantic_deduplicator import (
+    SemanticDeduplicator,
+    SENTENCE_TRANSFORMERS_AVAILABLE,
+)
 from cortex.orchestrators.response.response_quality_scorer import (
     ResponseQualityScorer,
     QualityDimension
@@ -20,6 +23,12 @@ from cortex.orchestrators.response.response_quality_scorer import (
 from cortex.orchestrators.response.role_verbosity_profiles import (
     RoleVerbosityProfiles,
     Role
+)
+
+# Skip all tests if sentence-transformers not available
+pytestmark = pytest.mark.skipif(
+    not SENTENCE_TRANSFORMERS_AVAILABLE,
+    reason="sentence-transformers not installed (optional ML dependency)"
 )
 
 
