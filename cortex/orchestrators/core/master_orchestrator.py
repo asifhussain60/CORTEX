@@ -1939,6 +1939,56 @@ class MasterOrchestrator(IOrchestrator):
                     details={"error": str(exit_gate_err)}
                 )
             
+            # ═══════════════════════════════════════════════════════════════════════
+            # Phase 38 Stage 10: EXIT GATE - Deployment Validation
+            # ═══════════════════════════════════════════════════════════════════════
+            # Validate deployment readiness BEFORE execution (production gate)
+            try:
+                from cortex.deployment.exit_gate_integration import create_deployment_gate
+                import asyncio
+                
+                # Create deployment gate
+                deployment_gate = create_deployment_gate(fail_safe=True)
+                
+                # Run validation (async)
+                gate_result = asyncio.run(
+                    deployment_gate.validate_deployment_gate(
+                        operation_name=operation_name,
+                        parameters=parameters
+                    )
+                )
+                
+                # Log gate result
+                self.logger.log_operation_complete(
+                    ac_id="PHASE38-S10",
+                    operation="DEPLOYMENT_GATE",
+                    success=gate_result.allowed,
+                    details={
+                        "allowed": gate_result.allowed,
+                        "gate_time_ms": gate_result.gate_time_ms,
+                        "audit_id": gate_result.audit_id,
+                        "block_reason": gate_result.block_reason,
+                        "validation_success": gate_result.validation_result.success if gate_result.validation_result else None,
+                        "checks_passed": gate_result.validation_result.checks_passed if gate_result.validation_result else []
+                    }
+                )
+                
+                # Store gate result in parameters
+                parameters["_deployment_gate"] = gate_result
+                
+                # Block if not allowed (strict mode)
+                if not gate_result.allowed:
+                    return Err(f"Deployment blocked: {gate_result.block_reason}")
+                
+            except Exception as deployment_gate_err:
+                # Log failure but don't block execution (fail-safe)
+                self.logger.log_operation_complete(
+                    ac_id="PHASE38-S10",
+                    operation="DEPLOYMENT_GATE_FAILED",
+                    success=False,
+                    details={"error": str(deployment_gate_err)}
+                )
+            
             # AC-GOVE-REM-001: Mandatory intent classification via direct import
             # Enforces intent classification as architectural prerequisite (CORE-032)
             if get_intent_router is not None:
