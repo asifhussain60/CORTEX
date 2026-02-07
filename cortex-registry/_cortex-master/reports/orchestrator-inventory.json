@@ -1,0 +1,3317 @@
+{
+  "timestamp": "2026-02-07T12:18:35.477295",
+  "total_files": 210,
+  "orchestrators": {
+    "autonomous_execution_coordinator.py": {
+      "classes": [
+        "AutonomousExecutionCoordinator"
+      ],
+      "wired": false
+    },
+    "verification_compliance_gate.py": {
+      "classes": [
+        "ComplianceStatus",
+        "ComplianceCheckResult",
+        "VerificationComplianceGate"
+      ],
+      "wired": false
+    },
+    "conversation_continuer.py": {
+      "classes": [
+        "ConversationContinuer"
+      ],
+      "wired": false
+    },
+    "coordinator.py": {
+      "classes": [
+        "LockAcquisitionInfo",
+        "OrchestrationCoordinator"
+      ],
+      "wired": false
+    },
+    "tier1_injector.py": {
+      "classes": [
+        "Tier1Injector"
+      ],
+      "wired": false
+    },
+    "mcp_tools_registry.py": {
+      "classes": [
+        "ToolMetadata",
+        "MCPToolsRegistry"
+      ],
+      "wired": false
+    },
+    "copilot_merger.py": {
+      "classes": [
+        "MergeResult",
+        "Conflict",
+        "CopilotMerger"
+      ],
+      "wired": false
+    },
+    "refactored_architecture.py": {
+      "classes": [
+        "ExecutionContext",
+        "ExecutionResult",
+        "IScheduler",
+        "ILifecycleManager",
+        "IPersistenceManager",
+        "IExecutor",
+        "DependencyContainer",
+        "Orchestrator",
+        "Scheduler",
+        "LifecycleManager",
+        "PersistenceManager"
+      ],
+      "wired": false
+    },
+    "version_manager.py": {
+      "classes": [
+        "VersionManager"
+      ],
+      "wired": false
+    },
+    "continuation_chain.py": {
+      "classes": [
+        "ContinuationChain"
+      ],
+      "wired": false
+    },
+    "intelligence_preserver.py": {
+      "classes": [
+        "IntelligencePreserver"
+      ],
+      "wired": false
+    },
+    "profile_wizard.py": {
+      "classes": [
+        "ProfileWizard"
+      ],
+      "wired": false
+    },
+    "intent_router_refac.py": {
+      "classes": [
+        "RefactoringChanges",
+        "IntentRouterRefactoringGuide",
+        "ImplementationVerification"
+      ],
+      "wired": false
+    },
+    "project_discoverer.py": {
+      "classes": [
+        "ProjectDiscoverer"
+      ],
+      "wired": false
+    },
+    "profile_upgrader.py": {
+      "classes": [
+        "ProfileUpgrader"
+      ],
+      "wired": false
+    },
+    "conversation_orchestrator.py": {
+      "classes": [
+        "ConversationOrchestrator"
+      ],
+      "wired": true
+    },
+    "response_challenge_injector.py": {
+      "classes": [
+        "ResponseFormat",
+        "ChallengeResponse",
+        "ResponseChallengeInjector"
+      ],
+      "wired": false
+    },
+    "profile_versioner.py": {
+      "classes": [
+        "ProfileVersioner"
+      ],
+      "wired": false
+    },
+    "shared_audit_trail.py": {
+      "classes": [
+        "SharedAuditTrail"
+      ],
+      "wired": false
+    },
+    "cross_repo_router.py": {
+      "classes": [
+        "CrossRepoRouter"
+      ],
+      "wired": false
+    },
+    "orchestrator_composite.py": {
+      "classes": [
+        "OrchestratorComposite"
+      ],
+      "wired": false
+    },
+    "state_recovery.py": {
+      "classes": [
+        "StateRecovery"
+      ],
+      "wired": false
+    },
+    "turn_validation_gate.py": {
+      "classes": [
+        "ValidationStatus",
+        "ValidationResult",
+        "TurnValidationGate"
+      ],
+      "wired": false
+    },
+    "confidence_router.py": {
+      "classes": [
+        "RoutingDecisionType",
+        "RoutingDecision",
+        "ConfidenceRouter"
+      ],
+      "wired": false
+    },
+    "multi_turn_workflow.py": {
+      "classes": [
+        "ConversationState",
+        "TurnResult",
+        "MultiTurnWorkflow"
+      ],
+      "wired": false
+    },
+    "wiring_harness_integration.py": {
+      "classes": [
+        "WiringStatus",
+        "ComponentMetadata",
+        "ComponentRegistry",
+        "WiringHarnessIntegration"
+      ],
+      "wired": false
+    },
+    "linting/naming_conventions.py": {
+      "classes": [
+        "NamingConvention",
+        "NamingViolation",
+        "LintResult",
+        "LintReport",
+        "NamingLinter"
+      ],
+      "wired": false
+    },
+    "documentation/capability_docs.py": {
+      "classes": [
+        "DocumentationMetadata",
+        "CapabilityDocumentation",
+        "CapabilityDocGenerator",
+        "SearchResult",
+        "CapabilityIndex"
+      ],
+      "wired": false
+    },
+    "documentation/orchestrator.py": {
+      "classes": [
+        "DiagramType",
+        "CleanupAction",
+        "RedundancyType",
+        "DiagramSpec",
+        "Redundancy",
+        "OrphanedFile",
+        "ObsoleteItem",
+        "CleanupReport",
+        "GenerationReport",
+        "DiagramGenerationOrchestrator",
+        "DocumentationCleanupOrchestrator",
+        "DocumentationOrchestrator"
+      ],
+      "wired": true
+    },
+    "domains/orchestrator_traits.py": {
+      "classes": [
+        "ComposableOrchestrator",
+        "AnalyticalOrchestrator",
+        "ExecutiveOrchestrator",
+        "ValidatingOrchestrator",
+        "IntegrativeOrchestrator"
+      ],
+      "wired": false
+    },
+    "domains/domain_templates.py": {
+      "classes": [
+        "TemplateContext",
+        "DomainTemplate",
+        "PlanningTemplate",
+        "AnalysisTemplate",
+        "IntegrationTemplate",
+        "ValidationTemplate",
+        "ExecutionTemplate",
+        "DomainTemplateFactory"
+      ],
+      "wired": false
+    },
+    "domains/domain_classifier.py": {
+      "classes": [
+        "DomainMetadata",
+        "OrchestratorClassification",
+        "DomainClassifier"
+      ],
+      "wired": false
+    },
+    "core/tool_discovery_orchestrator.py": {
+      "classes": [
+        "ToolCategory",
+        "ToolCapability",
+        "DiscoveryContext",
+        "ToolMatch",
+        "DiscoveryResult",
+        "LENSPhase",
+        "ToolDiscoveryEngine",
+        "CircuitBreaker",
+        "ToolDiscoveryOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/challenge_engine.py": {
+      "classes": [
+        "DisagreementType",
+        "LENSContext",
+        "GateType",
+        "ChallengeType",
+        "ChallengeRule",
+        "ChallengeResponse",
+        "SecurityThreatAssessment",
+        "ChallengeEngine"
+      ],
+      "wired": true
+    },
+    "core/solution_recommendation_engine.py": {
+      "classes": [
+        "RecommendationConfidence",
+        "SolutionOption",
+        "RecommendedSolution",
+        "SolutionRecommendationEngine"
+      ],
+      "wired": false
+    },
+    "core/enterprise_features.py": {
+      "classes": [
+        "OrchestratorNode",
+        "DistributedOrchestrationCoordinator",
+        "Metric",
+        "Alert",
+        "ObservabilityEngine",
+        "AdvancedCacheManager",
+        "PriorityScoreComponents",
+        "PriorityScheduler",
+        "PredictiveAnalyticsEngine"
+      ],
+      "wired": false
+    },
+    "core/master_orchestrator_stage_4.py": {
+      "classes": [
+        "Stage4ApprovalContext",
+        "Stage4Output",
+        "MasterOrchestrationStage4"
+      ],
+      "wired": false
+    },
+    "core/batch_processor.py": {
+      "classes": [
+        "BatchPriority",
+        "BatchedRequest",
+        "BatchResult",
+        "RequestBatcher",
+        "IntelligentBatchProcessor"
+      ],
+      "wired": false
+    },
+    "core/enforcement_orchestrator.py": {
+      "classes": [
+        "EnforcementLevel",
+        "EnforcementResult",
+        "GovernanceEnforcementAgent",
+        "SecurityCheckpointAgent",
+        "ComplianceValidationAgent",
+        "FileNamingEnforcementAgent",
+        "IncrementalExecutionAgent",
+        "MarkdownSuppressionAgent",
+        "ArchitectureIntegrityAgent",
+        "DiscoveryEnforcementAgent",
+        "EnforcementOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/orchestrator_bootstrap.py": {
+      "classes": [
+        "BootstrapContext",
+        "BootstrapResult",
+        "CircuitBreaker",
+        "OrchestratorBootstrap"
+      ],
+      "wired": false
+    },
+    "core/workflow_orchestrator.py": {
+      "classes": [
+        "WorkflowStageResult",
+        "WorkflowExecutionContext",
+        "WorkflowExecutionResult",
+        "WorkflowOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/recommendation_gate.py": {
+      "classes": [
+        "GateStatus",
+        "GateVerdict",
+        "GateResult",
+        "GateEvaluation",
+        "RecommendationGate"
+      ],
+      "wired": true
+    },
+    "core/review_orchestrator.py": {
+      "classes": [
+        "ReviewOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/stage_2_5_gate.py": {
+      "classes": [
+        "GateDecision",
+        "ContinuationDecision",
+        "GateCheckResult",
+        "ConfirmationContext",
+        "Stage25Gate",
+        "ConversationProtocolIntegration"
+      ],
+      "wired": false
+    },
+    "core/lens_synthesis.py": {
+      "classes": [
+        "SynthesisPhase",
+        "LENSContext",
+        "SynthesisRecommendation",
+        "LENSSynthesis"
+      ],
+      "wired": true
+    },
+    "core/advanced_features.py": {
+      "classes": [
+        "MemoizationStrategy",
+        "MemoizationEntry",
+        "AdvancedMemoizer",
+        "TurnOutcome",
+        "MultiTurnLearner",
+        "DeploymentCheck",
+        "DeploymentValidator"
+      ],
+      "wired": false
+    },
+    "core/master_orchestrator_stage_1.py": {
+      "classes": [
+        "Stage1ComprehensionContext",
+        "Stage1Output",
+        "MasterOrchestrationStage1"
+      ],
+      "wired": false
+    },
+    "core/comprehension_session.py": {
+      "classes": [
+        "ComprehensionSession"
+      ],
+      "wired": true
+    },
+    "core/repository_scanner.py": {
+      "classes": [
+        "EntityType",
+        "PatternCategory",
+        "ImportStatement",
+        "FunctionEntity",
+        "ClassEntity",
+        "CodePattern",
+        "FileEntity",
+        "Relationship",
+        "DependencyGraph",
+        "ScanContext",
+        "ScanOutput",
+        "RepositoryScanner"
+      ],
+      "wired": false
+    },
+    "core/fuzzy_intent_matcher.py": {
+      "classes": [
+        "TokenizationStrategy",
+        "MatchType",
+        "FuzzyMatchResult",
+        "IntentExtractionResult",
+        "FuzzyIntentMatcher"
+      ],
+      "wired": true
+    },
+    "core/architecture_guard.py": {
+      "classes": [
+        "GateVerdict",
+        "ValidationResult",
+        "ArchitectureGuard"
+      ],
+      "wired": true
+    },
+    "core/intent_router.py": {
+      "classes": [
+        "RoutingDecision",
+        "RoutingContext",
+        "CompositeIntentDetector",
+        "IntentRouter"
+      ],
+      "wired": true
+    },
+    "core/routing_enforcement.py": {
+      "classes": [
+        "RoutingViolation",
+        "RoutingEnforcementResult",
+        "RoutingEnforcementEngine"
+      ],
+      "wired": false
+    },
+    "core/semantic_ranking.py": {
+      "classes": [
+        "RankedCandidate",
+        "SemanticRankingEngine"
+      ],
+      "wired": false
+    },
+    "core/disambiguation_ui.py": {
+      "classes": [
+        "DisambiguationResult",
+        "DisambiguationUI"
+      ],
+      "wired": false
+    },
+    "core/tdd_orchestrator.py": {
+      "classes": [
+        "TDDPhase",
+        "TDDDisciplineRule",
+        "TDDImplementationGuidance",
+        "TDDKnowledgeLoader",
+        "TDDOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/wrapped_tdd_orchestrator.py": {
+      "classes": [
+        "TDDTurn",
+        "TDDConversationContext",
+        "WrappedTDDOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/complexity_classifier.py": {
+      "classes": [
+        "ComplexityLevel",
+        "ComplexityAnalysis",
+        "ComplexityClassifier"
+      ],
+      "wired": true
+    },
+    "core/clarity_measurement.py": {
+      "classes": [
+        "ClarityComponent",
+        "ClarityComponentScore",
+        "ClarityMeasurement",
+        "ClarityMeasurer"
+      ],
+      "wired": false
+    },
+    "core/governance_registry.py": {
+      "classes": [
+        "GovernanceViolationError",
+        "GovernanceRule",
+        "GovernanceRegistry"
+      ],
+      "wired": true
+    },
+    "core/master_orchestrator.py": {
+      "classes": [
+        "MasterOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/orchestrator_versioning.py": {
+      "classes": [
+        "VersionBump",
+        "SemanticVersion",
+        "OrchestratorVersion",
+        "VersionConstraint",
+        "OrchestratorVersionRegistry"
+      ],
+      "wired": false
+    },
+    "core/smart_analyzer.py": {
+      "classes": [
+        "CircuitBreakerConfig",
+        "OrchestratorHealth",
+        "CircuitBreaker",
+        "SemanticIntentAnalyzer",
+        "SmartIntentAnalyzer"
+      ],
+      "wired": false
+    },
+    "core/component_integration_verification.py": {
+      "classes": [
+        "CIVStatus",
+        "WiringImplementationResult",
+        "MCPToolRegistrationResult",
+        "HealthCheckResult",
+        "CIVReport",
+        "ComponentIntegrationVerifier"
+      ],
+      "wired": false
+    },
+    "core/security_first_analyzer.py": {
+      "classes": [
+        "SeverityLevel",
+        "CWEPattern",
+        "SecurityFinding",
+        "SecurityAnalysis",
+        "SecurityFirstAnalyzer",
+        "SurroundingContextAnalyzer",
+        "OWASPCoverageReport"
+      ],
+      "wired": false
+    },
+    "core/git_analysis_engine.py": {
+      "classes": [
+        "BranchInfo",
+        "FileAnalysis",
+        "DependencyAnalysis",
+        "RiskAssessment",
+        "GitAnalysisResult",
+        "GitAnalysisEngine"
+      ],
+      "wired": false
+    },
+    "core/lens_context_provider.py": {
+      "classes": [
+        "CacheEntry",
+        "LENSCache",
+        "LENSContextProvider"
+      ],
+      "wired": false
+    },
+    "core/orchestrator_base_protocol.py": {
+      "classes": [
+        "ProtocolExecutionResult",
+        "OrchestratorBaseProtocol"
+      ],
+      "wired": false
+    },
+    "core/transform_001_implementation.py": {
+      "classes": [
+        "OrchestratorWiringImplementation"
+      ],
+      "wired": false
+    },
+    "core/relationship_analyzer.py": {
+      "classes": [
+        "EntityType",
+        "RelationshipType",
+        "CodeEntity",
+        "EntityRelationship",
+        "RelationshipGraph",
+        "RelationshipAnalyzer"
+      ],
+      "wired": false
+    },
+    "core/master_orchestrator_stage_2.py": {
+      "classes": [
+        "Stage2RoutingContext",
+        "MasterOrchestrationStage2"
+      ],
+      "wired": false
+    },
+    "core/dor_approval_gate.py": {
+      "classes": [
+        "IntentReflection",
+        "ApprovalDecision",
+        "DoRApprovalGate"
+      ],
+      "wired": true
+    },
+    "core/challenge_engine_plugins.py": {
+      "classes": [
+        "DisagreementContext",
+        "DisagreementPlugin",
+        "PluginRegistry",
+        "ArchitecturalViolationPlugin",
+        "HarmfulActionPlugin",
+        "BetterSolutionPlugin",
+        "MissingContextPlugin",
+        "RedundantWorkPlugin",
+        "PluginBasedChallengeEngine"
+      ],
+      "wired": false
+    },
+    "core/planning_audit_trail.py": {
+      "classes": [
+        "AuditLogEntry",
+        "PlanningAuditTrail"
+      ],
+      "wired": false
+    },
+    "core/plan_registry_sync.py": {
+      "classes": [
+        "PlanRegistrySyncOrchestrator"
+      ],
+      "wired": false
+    },
+    "core/phase_context_resolver.py": {
+      "classes": [
+        "PhaseContext",
+        "PhaseContextResolver"
+      ],
+      "wired": false
+    },
+    "core/audit_trail_verifier.py": {
+      "classes": [
+        "VerificationStatus",
+        "AuditVerificationResult",
+        "ClarityAnalysis",
+        "AuditTrailVerifier"
+      ],
+      "wired": false
+    },
+    "core/master_orchestrator_stages.py": {
+      "classes": [
+        "UnifiedStageExecutor"
+      ],
+      "wired": false
+    },
+    "core/master_orchestrator_stage_3.py": {
+      "classes": [
+        "Stage3KnowledgeContext",
+        "Stage3Output",
+        "MasterOrchestrationStage3"
+      ],
+      "wired": false
+    },
+    "core/interaction_orchestrator.py": {
+      "classes": [
+        "CommunicationPattern",
+        "PatternViolationError",
+        "InteractionOrchestrator"
+      ],
+      "wired": true
+    },
+    "core/component_health.py": {
+      "classes": [
+        "ComponentType",
+        "ComponentStatus",
+        "ComponentHealthTracker"
+      ],
+      "wired": false
+    },
+    "core/parallel_turn_executor.py": {
+      "classes": [
+        "TurnDependency",
+        "TurnExecutionResult",
+        "ParallelExecutionStats",
+        "ParallelTurnExecutor"
+      ],
+      "wired": false
+    },
+    "core/coordination/coordinator.py": {
+      "classes": [
+        "PipelineStage",
+        "StageResult",
+        "Coordinator"
+      ],
+      "wired": false
+    },
+    "core/integration/knowledge_router_connector.py": {
+      "classes": [
+        "KnowledgeSynthesisResult",
+        "KnowledgeRouterConnector"
+      ],
+      "wired": false
+    },
+    "core/integration/domain_brain_connector.py": {
+      "classes": [
+        "DomainBrainResult",
+        "DomainBrainConnector"
+      ],
+      "wired": false
+    },
+    "core/integration/audit_logger_connector.py": {
+      "classes": [
+        "AuditLogEntry",
+        "AuditLoggerConnector"
+      ],
+      "wired": false
+    },
+    "core/execution/execution_coordinator.py": {
+      "classes": [
+        "TDDPhase",
+        "ExecutionCoordinator"
+      ],
+      "wired": false
+    },
+    "core/validation/governance_validator.py": {
+      "classes": [
+        "GovernanceValidationResult",
+        "GovernanceValidator"
+      ],
+      "wired": false
+    },
+    "core/validation/dor_validator.py": {
+      "classes": [
+        "DoRCheckResult",
+        "DoRValidator"
+      ],
+      "wired": false
+    },
+    "response/chat_response_policy.py": {
+      "classes": [
+        "SectionType",
+        "VerbosityPattern",
+        "ChatSection",
+        "PlanSpineProgress",
+        "ChatResponsePolicyValidator"
+      ],
+      "wired": false
+    },
+    "response/copilot_chat_templates.py": {
+      "classes": [
+        "CopilotChatMode",
+        "SectionDefinition",
+        "CopilotChatTemplateEngine"
+      ],
+      "wired": false
+    },
+    "response/template_blocks.py": {
+      "classes": [
+        "BlockCategory",
+        "BlockRole",
+        "BlockVariables",
+        "TemplateBlock",
+        "BlockRegistry",
+        "BlockComposer",
+        "BlockCache"
+      ],
+      "wired": false
+    },
+    "response/semantic_deduplicator.py": {
+      "classes": [
+        "EmbeddingCache",
+        "DeduplicationMetrics",
+        "SemanticDeduplicator"
+      ],
+      "wired": false
+    },
+    "response/fallback_pipeline.py": {
+      "classes": [
+        "FallbackTier",
+        "FallbackResult",
+        "FallbackPipeline"
+      ],
+      "wired": false
+    },
+    "response/markdown_report_ban_policy.py": {
+      "classes": [
+        "ArtifactType",
+        "BlockReason",
+        "BlockedFileWrite",
+        "MarkdownReportBanPolicy",
+        "FileWriteInterceptor",
+        "ReportBanFileWriteInterceptor"
+      ],
+      "wired": false
+    },
+    "response/ascii_progress_bar.py": {
+      "classes": [
+        "Phase",
+        "ASCIIProgressBar"
+      ],
+      "wired": false
+    },
+    "response/intelligent_comments.py": {
+      "classes": [
+        "CommentType",
+        "CommentSeverity",
+        "CodeComment",
+        "CommentContext",
+        "ComplexityCommentGenerator",
+        "SecurityCommentGenerator",
+        "BusinessCommentGenerator",
+        "PerformanceCommentGenerator",
+        "ContractCommentGenerator",
+        "IntelligentCommentGenerator",
+        "CommentRegistry"
+      ],
+      "wired": false
+    },
+    "response/response_templates.py": {
+      "classes": [
+        "VariableSpec",
+        "ResponseTemplate",
+        "ResponseTemplateRegistry",
+        "SimpleTemplateSubstitutor",
+        "TemplateCache",
+        "TemplateEngine"
+      ],
+      "wired": false
+    },
+    "response/model_manager.py": {
+      "classes": [
+        "ModelType",
+        "ModelConfig",
+        "ModelManager"
+      ],
+      "wired": false
+    },
+    "response/minimal_plan_spine.py": {
+      "classes": [
+        "PhaseStatus",
+        "Phase",
+        "MinimalPlanSpine"
+      ],
+      "wired": false
+    },
+    "response/response_optimization_metrics.py": {
+      "classes": [
+        "OptimizationStage",
+        "OptimizationMetric",
+        "ResponseOptimizationMetrics"
+      ],
+      "wired": false
+    },
+    "response/unified_response_composer.py": {
+      "classes": [
+        "ResponseMode",
+        "ResponseTone",
+        "FormattingProfile",
+        "QualityMetricType",
+        "ResponseComposerConfig",
+        "ResponseMetadata",
+        "ResponseSegment",
+        "TurnResponse",
+        "ResponseQualityMetrics",
+        "FormattingOptions",
+        "VariableSpec",
+        "ResponseTemplate",
+        "Challenge",
+        "ResponseWithChallenges",
+        "UnifiedResponseComposer"
+      ],
+      "wired": false
+    },
+    "response/multi_role_response_engine.py": {
+      "classes": [
+        "Role",
+        "ResponseTemplate",
+        "IntegratedContext",
+        "TemplateRegistry",
+        "RoleAdaptation",
+        "MultiRoleResponseEngine"
+      ],
+      "wired": false
+    },
+    "response/business_context_generator.py": {
+      "classes": [
+        "Stakeholder",
+        "BusinessContextType",
+        "CodeContext",
+        "BusinessContext",
+        "StakeholderContextGenerator",
+        "ImpactAnalyzer",
+        "BusinessContextGenerator"
+      ],
+      "wired": false
+    },
+    "response/response_quality_scorer.py": {
+      "classes": [
+        "QualityDimension",
+        "QualityScore",
+        "ResponseQualityScorer"
+      ],
+      "wired": false
+    },
+    "response/ux_optimizer.py": {
+      "classes": [
+        "FeedbackSentiment",
+        "ResponseQualityMetrics",
+        "UserFeedback",
+        "ABTestVariant",
+        "DefaultQualityScoringStrategy",
+        "FeedbackRegistry",
+        "ResponseUXOptimizer"
+      ],
+      "wired": false
+    },
+    "response/dual_header_system.py": {
+      "classes": [
+        "HeaderType",
+        "ResponseMode",
+        "HeaderSpec",
+        "HeaderContext",
+        "HeaderRenderer",
+        "CORTEXOperationsHeaderRenderer",
+        "CORTEXArchitectHeaderRenderer",
+        "HeaderRendererFactory",
+        "DualHeaderManager"
+      ],
+      "wired": false
+    },
+    "response/legacy_migration_mcp_tools.py": {
+      "classes": [
+        "LegacyResponseSystem",
+        "UnifiedResponseEngine",
+        "MCPTool",
+        "ProcessRequestMCPTool",
+        "AnalyzeResponseMCPTool",
+        "GenerateResponseMCPTool",
+        "ValidateDeploymentMCPTool",
+        "MCPToolExporter",
+        "MigrationOrchestrator"
+      ],
+      "wired": false
+    },
+    "response/extractive_summarizer.py": {
+      "classes": [
+        "ExtractionStrategy",
+        "SentenceRanker",
+        "ExtractiveSummarizer"
+      ],
+      "wired": false
+    },
+    "response/hidden_issue_detector.py": {
+      "classes": [
+        "IssueType",
+        "IssueSeverity",
+        "HiddenIssue",
+        "CodeAnalysisContext",
+        "PerformanceDetector",
+        "MemoryDetector",
+        "ConcurrencyDetector",
+        "HiddenIssueDetector"
+      ],
+      "wired": false
+    },
+    "response/role_verbosity_profiles.py": {
+      "classes": [
+        "Role",
+        "VerbosityProfile",
+        "RoleVerbosityProfiles"
+      ],
+      "wired": false
+    },
+    "mixins/security_advisor_mixin.py": {
+      "classes": [
+        "SecurityAdvisorMixin"
+      ],
+      "wired": false
+    },
+    "intelligence/tech_intelligence_orchestrator.py": {
+      "classes": [
+        "TechIntelligenceOrchestrator"
+      ],
+      "wired": true
+    },
+    "intelligence/types.py": {
+      "classes": [
+        "TechStack",
+        "ReadinessScore"
+      ],
+      "wired": false
+    },
+    "intelligence/ecosystem_scanner.py": {
+      "classes": [
+        "DetectedTech",
+        "ScanResult",
+        "EcosystemScanner"
+      ],
+      "wired": false
+    },
+    "intelligence/knowledge_synthesizer.py": {
+      "classes": [
+        "KnowledgeSource",
+        "TemplateType",
+        "SynthesisResult",
+        "KnowledgeSynthesizer"
+      ],
+      "wired": false
+    },
+    "intelligence/learning_trigger.py": {
+      "classes": [
+        "TriggerReason",
+        "TriggerAction",
+        "TriggerEvent",
+        "LearningTrigger"
+      ],
+      "wired": false
+    },
+    "intelligence/readiness_engine.py": {
+      "classes": [
+        "ReadinessComponents",
+        "ReadinessAction",
+        "ReadinessEngine"
+      ],
+      "wired": false
+    },
+    "decorators/orchestrator_context_injector.py": {
+      "classes": [
+        "OrchestratorMetadataRegistry"
+      ],
+      "wired": false
+    },
+    "debugging/debug_cleanup.py": {
+      "classes": [
+        "CleanupResult",
+        "DebugCleanup"
+      ],
+      "wired": false
+    },
+    "debugging/debug_analyzer.py": {
+      "classes": [
+        "IssueSeverity",
+        "IssueType",
+        "DetectedIssue",
+        "RaceCondition",
+        "IntegrationBreak",
+        "DebugAnalyzer"
+      ],
+      "wired": false
+    },
+    "debugging/debug_injector.py": {
+      "classes": [
+        "InjectionPoint",
+        "InjectionResult",
+        "LanguageInjector",
+        "JavaScriptInjector",
+        "PythonInjector",
+        "HTMLInjector",
+        "DebugInjector"
+      ],
+      "wired": false
+    },
+    "debugging/debug_orchestrator.py": {
+      "classes": [
+        "DebugPhase",
+        "DebugSeverity",
+        "LanguageType",
+        "DebugSession",
+        "DebugMarker",
+        "DebugOrchestrator"
+      ],
+      "wired": false
+    },
+    "debugging/debug_capture.py": {
+      "classes": [
+        "CaptureMode",
+        "LogType",
+        "LogEntry",
+        "CaptureResult",
+        "DebugCapture"
+      ],
+      "wired": false
+    },
+    "education/truth_verification_engine.py": {
+      "classes": [
+        "VerificationStatus",
+        "ImplementationEvidence",
+        "TruthVerificationResult",
+        "TruthVerificationEngine"
+      ],
+      "wired": false
+    },
+    "education/educational_orchestrator.py": {
+      "classes": [
+        "KnowledgeLevel",
+        "EducationalContext",
+        "EducationalResponse",
+        "EducationalOrchestrator"
+      ],
+      "wired": true
+    },
+    "education/implementation_verifier.py": {
+      "classes": [
+        "ComplianceLevel",
+        "VerificationResult",
+        "SpecCompliance",
+        "CoverageResult",
+        "AlignmentResult",
+        "SecurityResult",
+        "ComprehensiveResult",
+        "ImplementationVerifier"
+      ],
+      "wired": false
+    },
+    "internal/cortex_docs_orchestrator.py": {
+      "classes": [
+        "NavigationLevel",
+        "ContentSection",
+        "NavigationItem",
+        "PageMetadata",
+        "HTMLGenerationReport",
+        "DiagramRecommendation",
+        "SectionAdvisory",
+        "CortexDocsOrchestrator"
+      ],
+      "wired": false
+    },
+    "planning/incremental_task_decomposer.py": {
+      "classes": [
+        "SubTask",
+        "TaskDecompositionResult",
+        "IncrementalTaskDecomposer"
+      ],
+      "wired": true
+    },
+    "planning/autonomous_plan_executor.py": {
+      "classes": [
+        "PhaseStatus",
+        "ContinuationContext",
+        "AutonomousPlanExecutor"
+      ],
+      "wired": false
+    },
+    "composition/delegation_handler.py": {
+      "classes": [
+        "DelegationContext",
+        "DelegationHandler"
+      ],
+      "wired": false
+    },
+    "composition/composition_engine.py": {
+      "classes": [
+        "CompositionPattern",
+        "ComposedOrchestrator",
+        "DelegationResult"
+      ],
+      "wired": false
+    },
+    "policies/chat_response_policy.py": {
+      "classes": [
+        "ResponseStructureError",
+        "NarrationDetectedError",
+        "ChatResponsePolicy"
+      ],
+      "wired": false
+    },
+    "policies/plan_spine_renderer.py": {
+      "classes": [
+        "PlanSpineRenderer"
+      ],
+      "wired": false
+    },
+    "policies/file_write_policy.py": {
+      "classes": [
+        "MarkdownBanViolation",
+        "ReportIntentDetected",
+        "FileWritePolicy"
+      ],
+      "wired": false
+    },
+    "capacity/capacity_orchestrators.py": {
+      "classes": [
+        "EvidenceCollector",
+        "MultiModelEstimationEngine",
+        "SkillAllocator",
+        "OutputFormatter",
+        "LearningOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/duplication_detector_orchestrator.py": {
+      "classes": [
+        "DuplicationType",
+        "DuplicateEntry",
+        "DuplicationReport",
+        "DuplicationDetector"
+      ],
+      "wired": true
+    },
+    "support/composed_orchestrator.py": {
+      "classes": [
+        "ComposedContext",
+        "ComposedResult",
+        "CircuitBreaker",
+        "ComposedOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/repo_detection_orchestrator.py": {
+      "classes": [
+        "DetectionSignal",
+        "RepoDetectionOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/business_language_orchestrator.py": {
+      "classes": [
+        "ConfidenceScore",
+        "UseCase",
+        "BusinessNarrative",
+        "BusinessLanguageOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/context_assembly_orchestrator.py": {
+      "classes": [
+        "ContextAssemblyOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/discovery_orchestrator.py": {
+      "classes": [
+        "DiscoveryType",
+        "DiscoveryResult",
+        "DiscoveryOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/phase_completion_orchestrator.py": {
+      "classes": [
+        "PhaseCompletionResult",
+        "PhaseCompletionOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/inquiry_cache.py": {
+      "classes": [
+        "InquiryCache"
+      ],
+      "wired": false
+    },
+    "support/decision_journal.py": {
+      "classes": [
+        "DecisionJournal"
+      ],
+      "wired": false
+    },
+    "support/setup_orchestrator.py": {
+      "classes": [
+        "SetupPhase",
+        "SetupContext",
+        "SetupResult",
+        "LENSPhase",
+        "CircuitBreaker",
+        "SetupOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/regression_monitor.py": {
+      "classes": [
+        "RegressionMonitor"
+      ],
+      "wired": false
+    },
+    "support/recommendation_engine.py": {
+      "classes": [
+        "AdvisorType",
+        "Recommendation",
+        "RecommendationResult",
+        "BaseAdvisor",
+        "SecurityAdvisor",
+        "SolidAdvisor",
+        "PerformanceAdvisor",
+        "ComplianceAdvisor",
+        "RecommendationEngine"
+      ],
+      "wired": true
+    },
+    "support/debugging_orchestrator.py": {
+      "classes": [
+        "InjectionStrategy",
+        "CleanupStatus",
+        "InjectionPoint",
+        "InjectionResult",
+        "CleanupResult",
+        "DebugSession",
+        "SessionManifest",
+        "DebugInjector",
+        "DebugCleaner",
+        "DebuggingOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/orchestrator_visibility.py": {
+      "classes": [
+        "OrchestratorVisibility"
+      ],
+      "wired": true
+    },
+    "support/brittleness_scanner.py": {
+      "classes": [
+        "CircularDependencyViolation",
+        "CouplingViolation",
+        "AntiPatternViolation",
+        "BrittlenessReport",
+        "BrittlenessScanner"
+      ],
+      "wired": false
+    },
+    "support/plan_orchestrator.py": {
+      "classes": [
+        "PlanSetupResult",
+        "PlanTeardownResult",
+        "PlanOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/rollback_orchestrator.py": {
+      "classes": [
+        "RollbackStrategy",
+        "RollbackPhase",
+        "StateSnapshot",
+        "RollbackContext",
+        "RollbackStep",
+        "RollbackExecutionPlan",
+        "RollbackResult",
+        "LENSPhase",
+        "RollbackPlanningEngine",
+        "CircuitBreaker",
+        "RollbackOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/upgrade_orchestrator.py": {
+      "classes": [
+        "UpgradeStrategy",
+        "UpgradePhase",
+        "UpgradeComponent",
+        "UpgradeContext",
+        "UpgradeCheckResult",
+        "UpgradeReadinessReport",
+        "UpgradeExecutionPlan",
+        "LENSPhase",
+        "UpgradeValidationEngine",
+        "CircuitBreaker",
+        "UpgradeOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/lens_visualization_orchestrator.py": {
+      "classes": [
+        "DashboardData",
+        "LENSVisualizationOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/duplication_registry.py": {
+      "classes": [
+        "DuplicationStatus",
+        "DuplicationRecord",
+        "DuplicationQuery",
+        "DuplicationRegistry"
+      ],
+      "wired": false
+    },
+    "support/repository_onboarding_orchestrator.py": {
+      "classes": [
+        "RepositoryNotFoundError",
+        "OnboardingResult",
+        "RepositoryOnboardingOrchestrator"
+      ],
+      "wired": false
+    },
+    "support/instrumentation_orchestrator.py": {
+      "classes": [
+        "InstrumentationOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/vacuum_orchestrator.py": {
+      "classes": [
+        "CleanupPlan",
+        "CleanupResult",
+        "VerificationResult",
+        "VacuumOrchestrator"
+      ],
+      "wired": true
+    },
+    "support/pre_commit_pattern_matcher.py": {
+      "classes": [
+        "BlockingPattern",
+        "PatternCheckResult",
+        "PreCommitPatternMatcher"
+      ],
+      "wired": false
+    },
+    "cortical/memory_consolidation_orchestrator.py": {
+      "classes": [
+        "DriftType",
+        "DriftDetection",
+        "ConsolidationReport",
+        "DriftHealer",
+        "MemoryConsolidationOrchestrator"
+      ],
+      "wired": false
+    },
+    "cortical/cortical_integration_orchestrator.py": {
+      "classes": [
+        "QueryType",
+        "FederatedQueryContext",
+        "QueryResult",
+        "LENSSmartFacade",
+        "FederatedGraphQueryEngine",
+        "DependencyClosureQueryEngine",
+        "ComplianceImpactQueryEngine",
+        "CorticalIntegrationOrchestrator"
+      ],
+      "wired": false
+    },
+    "cortical/sensory_input_orchestrator.py": {
+      "classes": [
+        "ProcessingResult",
+        "EventDeduplicationStore",
+        "SensoryInputOrchestrator"
+      ],
+      "wired": false
+    },
+    "registry/orchestrator_lookup.py": {
+      "classes": [
+        "OrchestratorLookup"
+      ],
+      "wired": false
+    },
+    "domain/enhanced_planning_orchestrator.py": {
+      "classes": [
+        "PhaseState",
+        "ResourceType",
+        "PhaseTemplate",
+        "PhaseProgress",
+        "ResourceConstraint",
+        "RiskAssessment",
+        "EnhancedPlanningOrchestrator"
+      ],
+      "wired": false
+    },
+    "domain/phase_executor.py": {
+      "classes": [
+        "TDDCycleResult",
+        "GovernanceCheckResult",
+        "PhaseExecutor"
+      ],
+      "wired": true
+    },
+    "domain/planning_registry_loader.py": {
+      "classes": [
+        "RegistryPathNotFoundError",
+        "RegistryYAMLParseError",
+        "NamingFactory",
+        "PlanningRegistryLoader"
+      ],
+      "wired": false
+    },
+    "domain/coherence_validator.py": {
+      "classes": [
+        "CoherenceValidator"
+      ],
+      "wired": true
+    },
+    "domain/visual_progress_renderer.py": {
+      "classes": [
+        "ProgressBarStyle",
+        "ProgressUpdate",
+        "VisualProgressRenderer"
+      ],
+      "wired": false
+    },
+    "domain/code_level_planner.py": {
+      "classes": [
+        "CodeLevelPlanner"
+      ],
+      "wired": true
+    },
+    "domain/enhanced_refactoring_orchestrator.py": {
+      "classes": [
+        "ViolationType",
+        "SeverityLevel",
+        "StrategyStatus",
+        "AuditEntry",
+        "SOLIDMetrics",
+        "Violation",
+        "RefactoringStrategy",
+        "RefactoringPlan",
+        "ComplexityClassifier",
+        "SOLIDAnalyzer",
+        "ParallelStrategyEvaluator",
+        "PatternCache",
+        "CircuitBreaker",
+        "EnhancedRefactoringOrchestrator"
+      ],
+      "wired": true
+    },
+    "domain/plan_pause_manager.py": {
+      "classes": [
+        "PauseCheckpoint",
+        "UserCorrection",
+        "LENSAnalysisResult",
+        "ResumeContext",
+        "PlanPauseManager"
+      ],
+      "wired": false
+    },
+    "domain/autonomous_execution_engine.py": {
+      "classes": [
+        "PhaseState",
+        "ExecutionEventType",
+        "RollbackReason",
+        "PhaseDefinition",
+        "PlanSpecification",
+        "PhaseCheckpoint",
+        "ExecutionCheckpoint",
+        "ExecutionEvent",
+        "AutonomousExecutionEngine"
+      ],
+      "wired": true
+    },
+    "domain/domain_knowledge_merger.py": {
+      "classes": [
+        "MergeMetrics",
+        "DomainKnowledgeMerger"
+      ],
+      "wired": false
+    },
+    "domain/enhanced_documentation_orchestrator.py": {
+      "classes": [
+        "DocumentationType",
+        "LinkType",
+        "CleanupPriority",
+        "DiagramSpec",
+        "DocumentationFile",
+        "LinkValidation",
+        "CleanupTask",
+        "DocumentationVersion",
+        "EnhancedDocumentationOrchestrator"
+      ],
+      "wired": false
+    },
+    "domain/inquiry_orchestrator.py": {
+      "classes": [
+        "InquiryOrchestrator"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/inquiry_router.py": {
+      "classes": [
+        "InquiryRouter"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/generic_code_inquiry_handler.py": {
+      "classes": [
+        "GenericCodeInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/feature_inquiry_handler.py": {
+      "classes": [
+        "FeatureInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/evolution_inquiry_handler.py": {
+      "classes": [
+        "EvolutionInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/base_inquiry_handler.py": {
+      "classes": [
+        "BaseInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/troubleshooting_inquiry_handler.py": {
+      "classes": [
+        "TroubleshootingInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/best_practice_inquiry_handler.py": {
+      "classes": [
+        "BestPracticeInquiryHandler"
+      ],
+      "wired": false
+    },
+    "domain/inquiry/architecture_inquiry_handler.py": {
+      "classes": [
+        "ArchitectureInquiryHandler"
+      ],
+      "wired": false
+    },
+    "migration/selenium_playwright_orchestrator.py": {
+      "classes": [
+        "ConversionReport",
+        "SeleniumPatternMatcher",
+        "PlaywrightCodeGenerator",
+        "ConversionEngine",
+        "SeleniumPlaywrightOrchestrator"
+      ],
+      "wired": false
+    },
+    "interaction/bluf_orchestrators.py": {
+      "classes": [
+        "OperationContext",
+        "FormatAnalysisResult",
+        "ResponseFormatAnalyzer",
+        "BLUFTemplateEngine",
+        "AdaptiveRouter",
+        "AnalyticsOrchestrator"
+      ],
+      "wired": false
+    },
+    "handlers/intent_classification_handler.py": {
+      "classes": [
+        "Intent",
+        "IntentClassificationHandler"
+      ],
+      "wired": false
+    },
+    "handlers/handler_implementations.py": {
+      "classes": [
+        "Intent",
+        "HandlerResult",
+        "IntentClassificationHandler",
+        "RoutingHandler",
+        "GovernanceHandler",
+        "KnowledgeHandler",
+        "ExecutionCoordinator",
+        "ErrorRecoveryHandler",
+        "HandlerCoordinator"
+      ],
+      "wired": false
+    },
+    "handlers/base_handler.py": {
+      "classes": [
+        "BaseHandler",
+        "HandlerRegistry"
+      ],
+      "wired": false
+    },
+    "adaptive/execution_modes.py": {
+      "classes": [
+        "ModeConfiguration",
+        "AdaptiveExecutor"
+      ],
+      "wired": false
+    },
+    "adaptive/unified_adaptive_layer.py": {
+      "classes": [
+        "StrategyType",
+        "ModeConfiguration",
+        "ExecutionMetrics",
+        "PerformanceProfile",
+        "ResourceAllocation",
+        "FailoverContext",
+        "UnifiedAdaptiveLayer"
+      ],
+      "wired": false
+    },
+    "adaptive/testing_framework.py": {
+      "classes": [
+        "TestScenario",
+        "TestResult",
+        "AdaptiveExecutionTestFramework"
+      ],
+      "wired": false
+    },
+    "adaptive/caching_layer.py": {
+      "classes": [
+        "CacheEntry",
+        "CachingLayer"
+      ],
+      "wired": false
+    },
+    "adaptive/routing_engine.py": {
+      "classes": [
+        "RoutingDecision",
+        "OrchestratorRoutingEngine"
+      ],
+      "wired": false
+    },
+    "adaptive/execution_context_analyzer.py": {
+      "classes": [
+        "ExecutionContext",
+        "ExecutionContextAnalyzer"
+      ],
+      "wired": false
+    },
+    "adaptive/feedback_loop.py": {
+      "classes": [
+        "ExecutionRecord",
+        "FeedbackLoop"
+      ],
+      "wired": false
+    },
+    "adaptive/strategy_selector.py": {
+      "classes": [
+        "StrategyMetrics",
+        "StrategySelector"
+      ],
+      "wired": false
+    },
+    "onboarding/mcp_bootstrapper.py": {
+      "classes": [
+        "ServerStartResult",
+        "ServerStopResult",
+        "HealthCheckResult",
+        "ConfigUpdateResult",
+        "MCPBootstrapper"
+      ],
+      "wired": false
+    },
+    "onboarding/toolchain_validator.py": {
+      "classes": [
+        "ToolValidationResult",
+        "HealthReport",
+        "ToolchainValidator"
+      ],
+      "wired": false
+    },
+    "onboarding/orchestrator.py": {
+      "classes": [
+        "JourneyState",
+        "Journey",
+        "JourneyProgress",
+        "OnboardingOrchestrator"
+      ],
+      "wired": true
+    },
+    "onboarding/dependency_resolver.py": {
+      "classes": [
+        "DependencyConflict",
+        "ResolutionStrategy",
+        "ConflictReport",
+        "DependencyResolver"
+      ],
+      "wired": false
+    },
+    "onboarding/vscode_configurator.py": {
+      "classes": [
+        "VSCodeConfigurator"
+      ],
+      "wired": false
+    }
+  },
+  "adapters": [
+    "adapters/refactoring_tool_adapter.py"
+  ],
+  "utilities": [
+    "domain_brain.py",
+    "core/interaction_orchestrator_enhancement.py",
+    "support/lens_orchestrator.py"
+  ],
+  "tests": [
+    "documentation/test_orchestrator.py",
+    "response/test_quality_analyzer.py"
+  ],
+  "orphaned_orchestrators": [
+    "AutonomousExecutionCoordinator",
+    "ComplianceStatus",
+    "ComplianceCheckResult",
+    "VerificationComplianceGate",
+    "ConversationContinuer",
+    "LockAcquisitionInfo",
+    "OrchestrationCoordinator",
+    "Tier1Injector",
+    "ToolMetadata",
+    "MCPToolsRegistry",
+    "MergeResult",
+    "Conflict",
+    "CopilotMerger",
+    "ExecutionContext",
+    "ExecutionResult",
+    "IScheduler",
+    "ILifecycleManager",
+    "IPersistenceManager",
+    "IExecutor",
+    "DependencyContainer",
+    "Orchestrator",
+    "Scheduler",
+    "LifecycleManager",
+    "PersistenceManager",
+    "VersionManager",
+    "ContinuationChain",
+    "IntelligencePreserver",
+    "ProfileWizard",
+    "RefactoringChanges",
+    "IntentRouterRefactoringGuide",
+    "ImplementationVerification",
+    "ProjectDiscoverer",
+    "ProfileUpgrader",
+    "ResponseFormat",
+    "ChallengeResponse",
+    "ResponseChallengeInjector",
+    "ProfileVersioner",
+    "SharedAuditTrail",
+    "CrossRepoRouter",
+    "OrchestratorComposite",
+    "StateRecovery",
+    "ValidationStatus",
+    "ValidationResult",
+    "TurnValidationGate",
+    "RoutingDecisionType",
+    "RoutingDecision",
+    "ConfidenceRouter",
+    "ConversationState",
+    "TurnResult",
+    "MultiTurnWorkflow",
+    "WiringStatus",
+    "ComponentMetadata",
+    "ComponentRegistry",
+    "WiringHarnessIntegration",
+    "NamingConvention",
+    "NamingViolation",
+    "LintResult",
+    "LintReport",
+    "NamingLinter",
+    "DocumentationMetadata",
+    "CapabilityDocumentation",
+    "CapabilityDocGenerator",
+    "SearchResult",
+    "CapabilityIndex",
+    "ComposableOrchestrator",
+    "AnalyticalOrchestrator",
+    "ExecutiveOrchestrator",
+    "ValidatingOrchestrator",
+    "IntegrativeOrchestrator",
+    "TemplateContext",
+    "DomainTemplate",
+    "PlanningTemplate",
+    "AnalysisTemplate",
+    "IntegrationTemplate",
+    "ValidationTemplate",
+    "ExecutionTemplate",
+    "DomainTemplateFactory",
+    "DomainMetadata",
+    "OrchestratorClassification",
+    "DomainClassifier",
+    "RecommendationConfidence",
+    "SolutionOption",
+    "RecommendedSolution",
+    "SolutionRecommendationEngine",
+    "OrchestratorNode",
+    "DistributedOrchestrationCoordinator",
+    "Metric",
+    "Alert",
+    "ObservabilityEngine",
+    "AdvancedCacheManager",
+    "PriorityScoreComponents",
+    "PriorityScheduler",
+    "PredictiveAnalyticsEngine",
+    "Stage4ApprovalContext",
+    "Stage4Output",
+    "MasterOrchestrationStage4",
+    "BatchPriority",
+    "BatchedRequest",
+    "BatchResult",
+    "RequestBatcher",
+    "IntelligentBatchProcessor",
+    "BootstrapContext",
+    "BootstrapResult",
+    "CircuitBreaker",
+    "OrchestratorBootstrap",
+    "GateDecision",
+    "ContinuationDecision",
+    "GateCheckResult",
+    "ConfirmationContext",
+    "Stage25Gate",
+    "ConversationProtocolIntegration",
+    "MemoizationStrategy",
+    "MemoizationEntry",
+    "AdvancedMemoizer",
+    "TurnOutcome",
+    "MultiTurnLearner",
+    "DeploymentCheck",
+    "DeploymentValidator",
+    "Stage1ComprehensionContext",
+    "Stage1Output",
+    "MasterOrchestrationStage1",
+    "EntityType",
+    "PatternCategory",
+    "ImportStatement",
+    "FunctionEntity",
+    "ClassEntity",
+    "CodePattern",
+    "FileEntity",
+    "Relationship",
+    "DependencyGraph",
+    "ScanContext",
+    "ScanOutput",
+    "RepositoryScanner",
+    "RoutingViolation",
+    "RoutingEnforcementResult",
+    "RoutingEnforcementEngine",
+    "RankedCandidate",
+    "SemanticRankingEngine",
+    "DisambiguationResult",
+    "DisambiguationUI",
+    "ClarityComponent",
+    "ClarityComponentScore",
+    "ClarityMeasurement",
+    "ClarityMeasurer",
+    "VersionBump",
+    "SemanticVersion",
+    "OrchestratorVersion",
+    "VersionConstraint",
+    "OrchestratorVersionRegistry",
+    "CircuitBreakerConfig",
+    "OrchestratorHealth",
+    "CircuitBreaker",
+    "SemanticIntentAnalyzer",
+    "SmartIntentAnalyzer",
+    "CIVStatus",
+    "WiringImplementationResult",
+    "MCPToolRegistrationResult",
+    "HealthCheckResult",
+    "CIVReport",
+    "ComponentIntegrationVerifier",
+    "SeverityLevel",
+    "CWEPattern",
+    "SecurityFinding",
+    "SecurityAnalysis",
+    "SecurityFirstAnalyzer",
+    "SurroundingContextAnalyzer",
+    "OWASPCoverageReport",
+    "BranchInfo",
+    "FileAnalysis",
+    "DependencyAnalysis",
+    "RiskAssessment",
+    "GitAnalysisResult",
+    "GitAnalysisEngine",
+    "CacheEntry",
+    "LENSCache",
+    "LENSContextProvider",
+    "ProtocolExecutionResult",
+    "OrchestratorBaseProtocol",
+    "OrchestratorWiringImplementation",
+    "EntityType",
+    "RelationshipType",
+    "CodeEntity",
+    "EntityRelationship",
+    "RelationshipGraph",
+    "RelationshipAnalyzer",
+    "Stage2RoutingContext",
+    "MasterOrchestrationStage2",
+    "DisagreementContext",
+    "DisagreementPlugin",
+    "PluginRegistry",
+    "ArchitecturalViolationPlugin",
+    "HarmfulActionPlugin",
+    "BetterSolutionPlugin",
+    "MissingContextPlugin",
+    "RedundantWorkPlugin",
+    "PluginBasedChallengeEngine",
+    "AuditLogEntry",
+    "PlanningAuditTrail",
+    "PlanRegistrySyncOrchestrator",
+    "PhaseContext",
+    "PhaseContextResolver",
+    "VerificationStatus",
+    "AuditVerificationResult",
+    "ClarityAnalysis",
+    "AuditTrailVerifier",
+    "UnifiedStageExecutor",
+    "Stage3KnowledgeContext",
+    "Stage3Output",
+    "MasterOrchestrationStage3",
+    "ComponentType",
+    "ComponentStatus",
+    "ComponentHealthTracker",
+    "TurnDependency",
+    "TurnExecutionResult",
+    "ParallelExecutionStats",
+    "ParallelTurnExecutor",
+    "PipelineStage",
+    "StageResult",
+    "Coordinator",
+    "KnowledgeSynthesisResult",
+    "KnowledgeRouterConnector",
+    "DomainBrainResult",
+    "DomainBrainConnector",
+    "AuditLogEntry",
+    "AuditLoggerConnector",
+    "TDDPhase",
+    "ExecutionCoordinator",
+    "GovernanceValidationResult",
+    "GovernanceValidator",
+    "DoRCheckResult",
+    "DoRValidator",
+    "SectionType",
+    "VerbosityPattern",
+    "ChatSection",
+    "PlanSpineProgress",
+    "ChatResponsePolicyValidator",
+    "CopilotChatMode",
+    "SectionDefinition",
+    "CopilotChatTemplateEngine",
+    "BlockCategory",
+    "BlockRole",
+    "BlockVariables",
+    "TemplateBlock",
+    "BlockRegistry",
+    "BlockComposer",
+    "BlockCache",
+    "EmbeddingCache",
+    "DeduplicationMetrics",
+    "SemanticDeduplicator",
+    "FallbackTier",
+    "FallbackResult",
+    "FallbackPipeline",
+    "ArtifactType",
+    "BlockReason",
+    "BlockedFileWrite",
+    "MarkdownReportBanPolicy",
+    "FileWriteInterceptor",
+    "ReportBanFileWriteInterceptor",
+    "Phase",
+    "ASCIIProgressBar",
+    "CommentType",
+    "CommentSeverity",
+    "CodeComment",
+    "CommentContext",
+    "ComplexityCommentGenerator",
+    "SecurityCommentGenerator",
+    "BusinessCommentGenerator",
+    "PerformanceCommentGenerator",
+    "ContractCommentGenerator",
+    "IntelligentCommentGenerator",
+    "CommentRegistry",
+    "VariableSpec",
+    "ResponseTemplate",
+    "ResponseTemplateRegistry",
+    "SimpleTemplateSubstitutor",
+    "TemplateCache",
+    "TemplateEngine",
+    "ModelType",
+    "ModelConfig",
+    "ModelManager",
+    "PhaseStatus",
+    "Phase",
+    "MinimalPlanSpine",
+    "OptimizationStage",
+    "OptimizationMetric",
+    "ResponseOptimizationMetrics",
+    "ResponseMode",
+    "ResponseTone",
+    "FormattingProfile",
+    "QualityMetricType",
+    "ResponseComposerConfig",
+    "ResponseMetadata",
+    "ResponseSegment",
+    "TurnResponse",
+    "ResponseQualityMetrics",
+    "FormattingOptions",
+    "VariableSpec",
+    "ResponseTemplate",
+    "Challenge",
+    "ResponseWithChallenges",
+    "UnifiedResponseComposer",
+    "Role",
+    "ResponseTemplate",
+    "IntegratedContext",
+    "TemplateRegistry",
+    "RoleAdaptation",
+    "MultiRoleResponseEngine",
+    "Stakeholder",
+    "BusinessContextType",
+    "CodeContext",
+    "BusinessContext",
+    "StakeholderContextGenerator",
+    "ImpactAnalyzer",
+    "BusinessContextGenerator",
+    "QualityDimension",
+    "QualityScore",
+    "ResponseQualityScorer",
+    "FeedbackSentiment",
+    "ResponseQualityMetrics",
+    "UserFeedback",
+    "ABTestVariant",
+    "DefaultQualityScoringStrategy",
+    "FeedbackRegistry",
+    "ResponseUXOptimizer",
+    "HeaderType",
+    "ResponseMode",
+    "HeaderSpec",
+    "HeaderContext",
+    "HeaderRenderer",
+    "CORTEXOperationsHeaderRenderer",
+    "CORTEXArchitectHeaderRenderer",
+    "HeaderRendererFactory",
+    "DualHeaderManager",
+    "LegacyResponseSystem",
+    "UnifiedResponseEngine",
+    "MCPTool",
+    "ProcessRequestMCPTool",
+    "AnalyzeResponseMCPTool",
+    "GenerateResponseMCPTool",
+    "ValidateDeploymentMCPTool",
+    "MCPToolExporter",
+    "MigrationOrchestrator",
+    "ExtractionStrategy",
+    "SentenceRanker",
+    "ExtractiveSummarizer",
+    "IssueType",
+    "IssueSeverity",
+    "HiddenIssue",
+    "CodeAnalysisContext",
+    "PerformanceDetector",
+    "MemoryDetector",
+    "ConcurrencyDetector",
+    "HiddenIssueDetector",
+    "Role",
+    "VerbosityProfile",
+    "RoleVerbosityProfiles",
+    "SecurityAdvisorMixin",
+    "TechStack",
+    "ReadinessScore",
+    "DetectedTech",
+    "ScanResult",
+    "EcosystemScanner",
+    "KnowledgeSource",
+    "TemplateType",
+    "SynthesisResult",
+    "KnowledgeSynthesizer",
+    "TriggerReason",
+    "TriggerAction",
+    "TriggerEvent",
+    "LearningTrigger",
+    "ReadinessComponents",
+    "ReadinessAction",
+    "ReadinessEngine",
+    "OrchestratorMetadataRegistry",
+    "CleanupResult",
+    "DebugCleanup",
+    "IssueSeverity",
+    "IssueType",
+    "DetectedIssue",
+    "RaceCondition",
+    "IntegrationBreak",
+    "DebugAnalyzer",
+    "InjectionPoint",
+    "InjectionResult",
+    "LanguageInjector",
+    "JavaScriptInjector",
+    "PythonInjector",
+    "HTMLInjector",
+    "DebugInjector",
+    "DebugPhase",
+    "DebugSeverity",
+    "LanguageType",
+    "DebugSession",
+    "DebugMarker",
+    "DebugOrchestrator",
+    "CaptureMode",
+    "LogType",
+    "LogEntry",
+    "CaptureResult",
+    "DebugCapture",
+    "VerificationStatus",
+    "ImplementationEvidence",
+    "TruthVerificationResult",
+    "TruthVerificationEngine",
+    "ComplianceLevel",
+    "VerificationResult",
+    "SpecCompliance",
+    "CoverageResult",
+    "AlignmentResult",
+    "SecurityResult",
+    "ComprehensiveResult",
+    "ImplementationVerifier",
+    "NavigationLevel",
+    "ContentSection",
+    "NavigationItem",
+    "PageMetadata",
+    "HTMLGenerationReport",
+    "DiagramRecommendation",
+    "SectionAdvisory",
+    "CortexDocsOrchestrator",
+    "PhaseStatus",
+    "ContinuationContext",
+    "AutonomousPlanExecutor",
+    "DelegationContext",
+    "DelegationHandler",
+    "CompositionPattern",
+    "ComposedOrchestrator",
+    "DelegationResult",
+    "ResponseStructureError",
+    "NarrationDetectedError",
+    "ChatResponsePolicy",
+    "PlanSpineRenderer",
+    "MarkdownBanViolation",
+    "ReportIntentDetected",
+    "FileWritePolicy",
+    "EvidenceCollector",
+    "MultiModelEstimationEngine",
+    "SkillAllocator",
+    "OutputFormatter",
+    "LearningOrchestrator",
+    "ComposedContext",
+    "ComposedResult",
+    "CircuitBreaker",
+    "ComposedOrchestrator",
+    "DetectionSignal",
+    "RepoDetectionOrchestrator",
+    "ConfidenceScore",
+    "UseCase",
+    "BusinessNarrative",
+    "BusinessLanguageOrchestrator",
+    "ContextAssemblyOrchestrator",
+    "DiscoveryType",
+    "DiscoveryResult",
+    "DiscoveryOrchestrator",
+    "PhaseCompletionResult",
+    "PhaseCompletionOrchestrator",
+    "InquiryCache",
+    "DecisionJournal",
+    "RegressionMonitor",
+    "CircularDependencyViolation",
+    "CouplingViolation",
+    "AntiPatternViolation",
+    "BrittlenessReport",
+    "BrittlenessScanner",
+    "PlanSetupResult",
+    "PlanTeardownResult",
+    "PlanOrchestrator",
+    "DashboardData",
+    "LENSVisualizationOrchestrator",
+    "DuplicationStatus",
+    "DuplicationRecord",
+    "DuplicationQuery",
+    "DuplicationRegistry",
+    "RepositoryNotFoundError",
+    "OnboardingResult",
+    "RepositoryOnboardingOrchestrator",
+    "BlockingPattern",
+    "PatternCheckResult",
+    "PreCommitPatternMatcher",
+    "DriftType",
+    "DriftDetection",
+    "ConsolidationReport",
+    "DriftHealer",
+    "MemoryConsolidationOrchestrator",
+    "QueryType",
+    "FederatedQueryContext",
+    "QueryResult",
+    "LENSSmartFacade",
+    "FederatedGraphQueryEngine",
+    "DependencyClosureQueryEngine",
+    "ComplianceImpactQueryEngine",
+    "CorticalIntegrationOrchestrator",
+    "ProcessingResult",
+    "EventDeduplicationStore",
+    "SensoryInputOrchestrator",
+    "OrchestratorLookup",
+    "PhaseState",
+    "ResourceType",
+    "PhaseTemplate",
+    "PhaseProgress",
+    "ResourceConstraint",
+    "RiskAssessment",
+    "EnhancedPlanningOrchestrator",
+    "RegistryPathNotFoundError",
+    "RegistryYAMLParseError",
+    "NamingFactory",
+    "PlanningRegistryLoader",
+    "ProgressBarStyle",
+    "ProgressUpdate",
+    "VisualProgressRenderer",
+    "PauseCheckpoint",
+    "UserCorrection",
+    "LENSAnalysisResult",
+    "ResumeContext",
+    "PlanPauseManager",
+    "MergeMetrics",
+    "DomainKnowledgeMerger",
+    "DocumentationType",
+    "LinkType",
+    "CleanupPriority",
+    "DiagramSpec",
+    "DocumentationFile",
+    "LinkValidation",
+    "CleanupTask",
+    "DocumentationVersion",
+    "EnhancedDocumentationOrchestrator",
+    "InquiryOrchestrator",
+    "InquiryRouter",
+    "GenericCodeInquiryHandler",
+    "FeatureInquiryHandler",
+    "EvolutionInquiryHandler",
+    "BaseInquiryHandler",
+    "TroubleshootingInquiryHandler",
+    "BestPracticeInquiryHandler",
+    "ArchitectureInquiryHandler",
+    "ConversionReport",
+    "SeleniumPatternMatcher",
+    "PlaywrightCodeGenerator",
+    "ConversionEngine",
+    "SeleniumPlaywrightOrchestrator",
+    "OperationContext",
+    "FormatAnalysisResult",
+    "ResponseFormatAnalyzer",
+    "BLUFTemplateEngine",
+    "AdaptiveRouter",
+    "AnalyticsOrchestrator",
+    "Intent",
+    "IntentClassificationHandler",
+    "Intent",
+    "HandlerResult",
+    "IntentClassificationHandler",
+    "RoutingHandler",
+    "GovernanceHandler",
+    "KnowledgeHandler",
+    "ExecutionCoordinator",
+    "ErrorRecoveryHandler",
+    "HandlerCoordinator",
+    "BaseHandler",
+    "HandlerRegistry",
+    "ModeConfiguration",
+    "AdaptiveExecutor",
+    "StrategyType",
+    "ModeConfiguration",
+    "ExecutionMetrics",
+    "PerformanceProfile",
+    "ResourceAllocation",
+    "FailoverContext",
+    "UnifiedAdaptiveLayer",
+    "TestScenario",
+    "TestResult",
+    "AdaptiveExecutionTestFramework",
+    "CacheEntry",
+    "CachingLayer",
+    "RoutingDecision",
+    "OrchestratorRoutingEngine",
+    "ExecutionContext",
+    "ExecutionContextAnalyzer",
+    "ExecutionRecord",
+    "FeedbackLoop",
+    "StrategyMetrics",
+    "StrategySelector",
+    "ServerStartResult",
+    "ServerStopResult",
+    "HealthCheckResult",
+    "ConfigUpdateResult",
+    "MCPBootstrapper",
+    "ToolValidationResult",
+    "HealthReport",
+    "ToolchainValidator",
+    "DependencyConflict",
+    "ResolutionStrategy",
+    "ConflictReport",
+    "DependencyResolver",
+    "VSCodeConfigurator"
+  ],
+  "unwired_files": [
+    "autonomous_execution_coordinator.py",
+    "verification_compliance_gate.py",
+    "conversation_continuer.py",
+    "coordinator.py",
+    "tier1_injector.py",
+    "mcp_tools_registry.py",
+    "copilot_merger.py",
+    "refactored_architecture.py",
+    "version_manager.py",
+    "continuation_chain.py",
+    "intelligence_preserver.py",
+    "profile_wizard.py",
+    "intent_router_refac.py",
+    "project_discoverer.py",
+    "profile_upgrader.py",
+    "response_challenge_injector.py",
+    "profile_versioner.py",
+    "shared_audit_trail.py",
+    "cross_repo_router.py",
+    "orchestrator_composite.py",
+    "state_recovery.py",
+    "turn_validation_gate.py",
+    "confidence_router.py",
+    "multi_turn_workflow.py",
+    "wiring_harness_integration.py",
+    "linting/naming_conventions.py",
+    "documentation/capability_docs.py",
+    "domains/orchestrator_traits.py",
+    "domains/domain_templates.py",
+    "domains/domain_classifier.py",
+    "core/solution_recommendation_engine.py",
+    "core/enterprise_features.py",
+    "core/master_orchestrator_stage_4.py",
+    "core/batch_processor.py",
+    "core/orchestrator_bootstrap.py",
+    "core/stage_2_5_gate.py",
+    "core/advanced_features.py",
+    "core/master_orchestrator_stage_1.py",
+    "core/repository_scanner.py",
+    "core/routing_enforcement.py",
+    "core/semantic_ranking.py",
+    "core/disambiguation_ui.py",
+    "core/clarity_measurement.py",
+    "core/orchestrator_versioning.py",
+    "core/smart_analyzer.py",
+    "core/component_integration_verification.py",
+    "core/security_first_analyzer.py",
+    "core/git_analysis_engine.py",
+    "core/lens_context_provider.py",
+    "core/orchestrator_base_protocol.py",
+    "core/transform_001_implementation.py",
+    "core/relationship_analyzer.py",
+    "core/master_orchestrator_stage_2.py",
+    "core/challenge_engine_plugins.py",
+    "core/planning_audit_trail.py",
+    "core/plan_registry_sync.py",
+    "core/phase_context_resolver.py",
+    "core/audit_trail_verifier.py",
+    "core/master_orchestrator_stages.py",
+    "core/master_orchestrator_stage_3.py",
+    "core/component_health.py",
+    "core/parallel_turn_executor.py",
+    "core/coordination/coordinator.py",
+    "core/integration/knowledge_router_connector.py",
+    "core/integration/domain_brain_connector.py",
+    "core/integration/audit_logger_connector.py",
+    "core/execution/execution_coordinator.py",
+    "core/validation/governance_validator.py",
+    "core/validation/dor_validator.py",
+    "response/chat_response_policy.py",
+    "response/copilot_chat_templates.py",
+    "response/template_blocks.py",
+    "response/semantic_deduplicator.py",
+    "response/fallback_pipeline.py",
+    "response/markdown_report_ban_policy.py",
+    "response/ascii_progress_bar.py",
+    "response/intelligent_comments.py",
+    "response/response_templates.py",
+    "response/model_manager.py",
+    "response/minimal_plan_spine.py",
+    "response/response_optimization_metrics.py",
+    "response/unified_response_composer.py",
+    "response/multi_role_response_engine.py",
+    "response/business_context_generator.py",
+    "response/response_quality_scorer.py",
+    "response/ux_optimizer.py",
+    "response/dual_header_system.py",
+    "response/legacy_migration_mcp_tools.py",
+    "response/extractive_summarizer.py",
+    "response/hidden_issue_detector.py",
+    "response/role_verbosity_profiles.py",
+    "mixins/security_advisor_mixin.py",
+    "intelligence/types.py",
+    "intelligence/ecosystem_scanner.py",
+    "intelligence/knowledge_synthesizer.py",
+    "intelligence/learning_trigger.py",
+    "intelligence/readiness_engine.py",
+    "decorators/orchestrator_context_injector.py",
+    "debugging/debug_cleanup.py",
+    "debugging/debug_analyzer.py",
+    "debugging/debug_injector.py",
+    "debugging/debug_orchestrator.py",
+    "debugging/debug_capture.py",
+    "education/truth_verification_engine.py",
+    "education/implementation_verifier.py",
+    "internal/cortex_docs_orchestrator.py",
+    "planning/autonomous_plan_executor.py",
+    "composition/delegation_handler.py",
+    "composition/composition_engine.py",
+    "policies/chat_response_policy.py",
+    "policies/plan_spine_renderer.py",
+    "policies/file_write_policy.py",
+    "capacity/capacity_orchestrators.py",
+    "support/composed_orchestrator.py",
+    "support/repo_detection_orchestrator.py",
+    "support/business_language_orchestrator.py",
+    "support/context_assembly_orchestrator.py",
+    "support/discovery_orchestrator.py",
+    "support/phase_completion_orchestrator.py",
+    "support/inquiry_cache.py",
+    "support/decision_journal.py",
+    "support/regression_monitor.py",
+    "support/brittleness_scanner.py",
+    "support/plan_orchestrator.py",
+    "support/lens_visualization_orchestrator.py",
+    "support/duplication_registry.py",
+    "support/repository_onboarding_orchestrator.py",
+    "support/pre_commit_pattern_matcher.py",
+    "cortical/memory_consolidation_orchestrator.py",
+    "cortical/cortical_integration_orchestrator.py",
+    "cortical/sensory_input_orchestrator.py",
+    "registry/orchestrator_lookup.py",
+    "domain/enhanced_planning_orchestrator.py",
+    "domain/planning_registry_loader.py",
+    "domain/visual_progress_renderer.py",
+    "domain/plan_pause_manager.py",
+    "domain/domain_knowledge_merger.py",
+    "domain/enhanced_documentation_orchestrator.py",
+    "domain/inquiry_orchestrator.py",
+    "domain/inquiry/inquiry_router.py",
+    "domain/inquiry/generic_code_inquiry_handler.py",
+    "domain/inquiry/feature_inquiry_handler.py",
+    "domain/inquiry/evolution_inquiry_handler.py",
+    "domain/inquiry/base_inquiry_handler.py",
+    "domain/inquiry/troubleshooting_inquiry_handler.py",
+    "domain/inquiry/best_practice_inquiry_handler.py",
+    "domain/inquiry/architecture_inquiry_handler.py",
+    "migration/selenium_playwright_orchestrator.py",
+    "interaction/bluf_orchestrators.py",
+    "handlers/intent_classification_handler.py",
+    "handlers/handler_implementations.py",
+    "handlers/base_handler.py",
+    "adaptive/execution_modes.py",
+    "adaptive/unified_adaptive_layer.py",
+    "adaptive/testing_framework.py",
+    "adaptive/caching_layer.py",
+    "adaptive/routing_engine.py",
+    "adaptive/execution_context_analyzer.py",
+    "adaptive/feedback_loop.py",
+    "adaptive/strategy_selector.py",
+    "onboarding/mcp_bootstrapper.py",
+    "onboarding/toolchain_validator.py",
+    "onboarding/dependency_resolver.py",
+    "onboarding/vscode_configurator.py"
+  ],
+  "wiring_status": {
+    "AutonomousExecutionCoordinator": false,
+    "ComplianceStatus": false,
+    "ComplianceCheckResult": false,
+    "VerificationComplianceGate": false,
+    "ConversationContinuer": false,
+    "LockAcquisitionInfo": false,
+    "OrchestrationCoordinator": false,
+    "Tier1Injector": false,
+    "ToolMetadata": false,
+    "MCPToolsRegistry": false,
+    "MergeResult": false,
+    "Conflict": false,
+    "CopilotMerger": false,
+    "ExecutionContext": false,
+    "ExecutionResult": false,
+    "IScheduler": false,
+    "ILifecycleManager": false,
+    "IPersistenceManager": false,
+    "IExecutor": false,
+    "DependencyContainer": false,
+    "Orchestrator": false,
+    "Scheduler": false,
+    "LifecycleManager": false,
+    "PersistenceManager": false,
+    "VersionManager": false,
+    "ContinuationChain": false,
+    "IntelligencePreserver": false,
+    "ProfileWizard": false,
+    "RefactoringChanges": false,
+    "IntentRouterRefactoringGuide": false,
+    "ImplementationVerification": false,
+    "ProjectDiscoverer": false,
+    "ProfileUpgrader": false,
+    "ConversationOrchestrator": true,
+    "ResponseFormat": false,
+    "ChallengeResponse": true,
+    "ResponseChallengeInjector": false,
+    "ProfileVersioner": false,
+    "SharedAuditTrail": false,
+    "CrossRepoRouter": false,
+    "OrchestratorComposite": false,
+    "StateRecovery": false,
+    "ValidationStatus": false,
+    "ValidationResult": true,
+    "TurnValidationGate": false,
+    "RoutingDecisionType": false,
+    "RoutingDecision": false,
+    "ConfidenceRouter": false,
+    "ConversationState": false,
+    "TurnResult": false,
+    "MultiTurnWorkflow": false,
+    "WiringStatus": false,
+    "ComponentMetadata": false,
+    "ComponentRegistry": false,
+    "WiringHarnessIntegration": false,
+    "NamingConvention": false,
+    "NamingViolation": false,
+    "LintResult": false,
+    "LintReport": false,
+    "NamingLinter": false,
+    "DocumentationMetadata": false,
+    "CapabilityDocumentation": false,
+    "CapabilityDocGenerator": false,
+    "SearchResult": false,
+    "CapabilityIndex": false,
+    "DiagramType": true,
+    "CleanupAction": true,
+    "RedundancyType": true,
+    "DiagramSpec": false,
+    "Redundancy": true,
+    "OrphanedFile": true,
+    "ObsoleteItem": true,
+    "CleanupReport": true,
+    "GenerationReport": true,
+    "DiagramGenerationOrchestrator": true,
+    "DocumentationCleanupOrchestrator": true,
+    "DocumentationOrchestrator": true,
+    "ComposableOrchestrator": false,
+    "AnalyticalOrchestrator": false,
+    "ExecutiveOrchestrator": false,
+    "ValidatingOrchestrator": false,
+    "IntegrativeOrchestrator": false,
+    "TemplateContext": false,
+    "DomainTemplate": false,
+    "PlanningTemplate": false,
+    "AnalysisTemplate": false,
+    "IntegrationTemplate": false,
+    "ValidationTemplate": false,
+    "ExecutionTemplate": false,
+    "DomainTemplateFactory": false,
+    "DomainMetadata": false,
+    "OrchestratorClassification": false,
+    "DomainClassifier": false,
+    "ToolCategory": true,
+    "ToolCapability": true,
+    "DiscoveryContext": true,
+    "ToolMatch": true,
+    "DiscoveryResult": false,
+    "LENSPhase": true,
+    "ToolDiscoveryEngine": true,
+    "CircuitBreaker": true,
+    "ToolDiscoveryOrchestrator": true,
+    "DisagreementType": true,
+    "LENSContext": true,
+    "GateType": true,
+    "ChallengeType": true,
+    "ChallengeRule": true,
+    "SecurityThreatAssessment": true,
+    "ChallengeEngine": true,
+    "RecommendationConfidence": false,
+    "SolutionOption": false,
+    "RecommendedSolution": false,
+    "SolutionRecommendationEngine": false,
+    "OrchestratorNode": false,
+    "DistributedOrchestrationCoordinator": false,
+    "Metric": false,
+    "Alert": false,
+    "ObservabilityEngine": false,
+    "AdvancedCacheManager": false,
+    "PriorityScoreComponents": false,
+    "PriorityScheduler": false,
+    "PredictiveAnalyticsEngine": false,
+    "Stage4ApprovalContext": false,
+    "Stage4Output": false,
+    "MasterOrchestrationStage4": false,
+    "BatchPriority": false,
+    "BatchedRequest": false,
+    "BatchResult": false,
+    "RequestBatcher": false,
+    "IntelligentBatchProcessor": false,
+    "EnforcementLevel": true,
+    "EnforcementResult": true,
+    "GovernanceEnforcementAgent": true,
+    "SecurityCheckpointAgent": true,
+    "ComplianceValidationAgent": true,
+    "FileNamingEnforcementAgent": true,
+    "IncrementalExecutionAgent": true,
+    "MarkdownSuppressionAgent": true,
+    "ArchitectureIntegrityAgent": true,
+    "DiscoveryEnforcementAgent": true,
+    "EnforcementOrchestrator": true,
+    "BootstrapContext": false,
+    "BootstrapResult": false,
+    "OrchestratorBootstrap": false,
+    "WorkflowStageResult": true,
+    "WorkflowExecutionContext": true,
+    "WorkflowExecutionResult": true,
+    "WorkflowOrchestrator": true,
+    "GateStatus": true,
+    "GateVerdict": true,
+    "GateResult": true,
+    "GateEvaluation": true,
+    "RecommendationGate": true,
+    "ReviewOrchestrator": true,
+    "GateDecision": false,
+    "ContinuationDecision": false,
+    "GateCheckResult": false,
+    "ConfirmationContext": false,
+    "Stage25Gate": false,
+    "ConversationProtocolIntegration": false,
+    "SynthesisPhase": true,
+    "SynthesisRecommendation": true,
+    "LENSSynthesis": true,
+    "MemoizationStrategy": false,
+    "MemoizationEntry": false,
+    "AdvancedMemoizer": false,
+    "TurnOutcome": false,
+    "MultiTurnLearner": false,
+    "DeploymentCheck": false,
+    "DeploymentValidator": false,
+    "Stage1ComprehensionContext": false,
+    "Stage1Output": false,
+    "MasterOrchestrationStage1": false,
+    "ComprehensionSession": true,
+    "EntityType": false,
+    "PatternCategory": false,
+    "ImportStatement": false,
+    "FunctionEntity": false,
+    "ClassEntity": false,
+    "CodePattern": false,
+    "FileEntity": false,
+    "Relationship": false,
+    "DependencyGraph": false,
+    "ScanContext": false,
+    "ScanOutput": false,
+    "RepositoryScanner": false,
+    "TokenizationStrategy": true,
+    "MatchType": true,
+    "FuzzyMatchResult": true,
+    "IntentExtractionResult": true,
+    "FuzzyIntentMatcher": true,
+    "ArchitectureGuard": true,
+    "RoutingContext": true,
+    "CompositeIntentDetector": true,
+    "IntentRouter": true,
+    "RoutingViolation": false,
+    "RoutingEnforcementResult": false,
+    "RoutingEnforcementEngine": false,
+    "RankedCandidate": false,
+    "SemanticRankingEngine": false,
+    "DisambiguationResult": false,
+    "DisambiguationUI": false,
+    "TDDPhase": false,
+    "TDDDisciplineRule": true,
+    "TDDImplementationGuidance": true,
+    "TDDKnowledgeLoader": true,
+    "TDDOrchestrator": true,
+    "TDDTurn": true,
+    "TDDConversationContext": true,
+    "WrappedTDDOrchestrator": true,
+    "ComplexityLevel": true,
+    "ComplexityAnalysis": true,
+    "ComplexityClassifier": true,
+    "ClarityComponent": false,
+    "ClarityComponentScore": false,
+    "ClarityMeasurement": false,
+    "ClarityMeasurer": false,
+    "GovernanceViolationError": true,
+    "GovernanceRule": true,
+    "GovernanceRegistry": true,
+    "MasterOrchestrator": true,
+    "VersionBump": false,
+    "SemanticVersion": false,
+    "OrchestratorVersion": false,
+    "VersionConstraint": false,
+    "OrchestratorVersionRegistry": false,
+    "CircuitBreakerConfig": false,
+    "OrchestratorHealth": false,
+    "SemanticIntentAnalyzer": false,
+    "SmartIntentAnalyzer": false,
+    "CIVStatus": false,
+    "WiringImplementationResult": false,
+    "MCPToolRegistrationResult": false,
+    "HealthCheckResult": false,
+    "CIVReport": false,
+    "ComponentIntegrationVerifier": false,
+    "SeverityLevel": true,
+    "CWEPattern": false,
+    "SecurityFinding": false,
+    "SecurityAnalysis": false,
+    "SecurityFirstAnalyzer": false,
+    "SurroundingContextAnalyzer": false,
+    "OWASPCoverageReport": false,
+    "BranchInfo": false,
+    "FileAnalysis": false,
+    "DependencyAnalysis": false,
+    "RiskAssessment": false,
+    "GitAnalysisResult": false,
+    "GitAnalysisEngine": false,
+    "CacheEntry": false,
+    "LENSCache": false,
+    "LENSContextProvider": false,
+    "ProtocolExecutionResult": false,
+    "OrchestratorBaseProtocol": false,
+    "OrchestratorWiringImplementation": false,
+    "RelationshipType": false,
+    "CodeEntity": false,
+    "EntityRelationship": false,
+    "RelationshipGraph": false,
+    "RelationshipAnalyzer": false,
+    "Stage2RoutingContext": false,
+    "MasterOrchestrationStage2": false,
+    "IntentReflection": true,
+    "ApprovalDecision": true,
+    "DoRApprovalGate": true,
+    "DisagreementContext": false,
+    "DisagreementPlugin": false,
+    "PluginRegistry": false,
+    "ArchitecturalViolationPlugin": false,
+    "HarmfulActionPlugin": false,
+    "BetterSolutionPlugin": false,
+    "MissingContextPlugin": false,
+    "RedundantWorkPlugin": false,
+    "PluginBasedChallengeEngine": false,
+    "AuditLogEntry": false,
+    "PlanningAuditTrail": false,
+    "PlanRegistrySyncOrchestrator": false,
+    "PhaseContext": false,
+    "PhaseContextResolver": false,
+    "VerificationStatus": false,
+    "AuditVerificationResult": false,
+    "ClarityAnalysis": false,
+    "AuditTrailVerifier": false,
+    "UnifiedStageExecutor": false,
+    "Stage3KnowledgeContext": false,
+    "Stage3Output": false,
+    "MasterOrchestrationStage3": false,
+    "CommunicationPattern": true,
+    "PatternViolationError": true,
+    "InteractionOrchestrator": true,
+    "ComponentType": false,
+    "ComponentStatus": false,
+    "ComponentHealthTracker": false,
+    "TurnDependency": false,
+    "TurnExecutionResult": false,
+    "ParallelExecutionStats": false,
+    "ParallelTurnExecutor": false,
+    "PipelineStage": false,
+    "StageResult": false,
+    "Coordinator": false,
+    "KnowledgeSynthesisResult": false,
+    "KnowledgeRouterConnector": false,
+    "DomainBrainResult": false,
+    "DomainBrainConnector": false,
+    "AuditLoggerConnector": false,
+    "ExecutionCoordinator": false,
+    "GovernanceValidationResult": false,
+    "GovernanceValidator": false,
+    "DoRCheckResult": false,
+    "DoRValidator": false,
+    "SectionType": false,
+    "VerbosityPattern": false,
+    "ChatSection": false,
+    "PlanSpineProgress": false,
+    "ChatResponsePolicyValidator": false,
+    "CopilotChatMode": false,
+    "SectionDefinition": false,
+    "CopilotChatTemplateEngine": false,
+    "BlockCategory": false,
+    "BlockRole": false,
+    "BlockVariables": false,
+    "TemplateBlock": false,
+    "BlockRegistry": false,
+    "BlockComposer": false,
+    "BlockCache": false,
+    "EmbeddingCache": false,
+    "DeduplicationMetrics": false,
+    "SemanticDeduplicator": false,
+    "FallbackTier": false,
+    "FallbackResult": false,
+    "FallbackPipeline": false,
+    "ArtifactType": false,
+    "BlockReason": false,
+    "BlockedFileWrite": false,
+    "MarkdownReportBanPolicy": false,
+    "FileWriteInterceptor": false,
+    "ReportBanFileWriteInterceptor": false,
+    "Phase": false,
+    "ASCIIProgressBar": false,
+    "CommentType": false,
+    "CommentSeverity": false,
+    "CodeComment": false,
+    "CommentContext": false,
+    "ComplexityCommentGenerator": false,
+    "SecurityCommentGenerator": false,
+    "BusinessCommentGenerator": false,
+    "PerformanceCommentGenerator": false,
+    "ContractCommentGenerator": false,
+    "IntelligentCommentGenerator": false,
+    "CommentRegistry": false,
+    "VariableSpec": false,
+    "ResponseTemplate": false,
+    "ResponseTemplateRegistry": false,
+    "SimpleTemplateSubstitutor": false,
+    "TemplateCache": false,
+    "TemplateEngine": false,
+    "ModelType": false,
+    "ModelConfig": false,
+    "ModelManager": false,
+    "PhaseStatus": false,
+    "MinimalPlanSpine": false,
+    "OptimizationStage": false,
+    "OptimizationMetric": false,
+    "ResponseOptimizationMetrics": false,
+    "ResponseMode": false,
+    "ResponseTone": false,
+    "FormattingProfile": false,
+    "QualityMetricType": false,
+    "ResponseComposerConfig": false,
+    "ResponseMetadata": false,
+    "ResponseSegment": false,
+    "TurnResponse": false,
+    "ResponseQualityMetrics": false,
+    "FormattingOptions": false,
+    "Challenge": false,
+    "ResponseWithChallenges": false,
+    "UnifiedResponseComposer": false,
+    "Role": false,
+    "IntegratedContext": false,
+    "TemplateRegistry": false,
+    "RoleAdaptation": false,
+    "MultiRoleResponseEngine": false,
+    "Stakeholder": false,
+    "BusinessContextType": false,
+    "CodeContext": false,
+    "BusinessContext": false,
+    "StakeholderContextGenerator": false,
+    "ImpactAnalyzer": false,
+    "BusinessContextGenerator": false,
+    "QualityDimension": false,
+    "QualityScore": false,
+    "ResponseQualityScorer": false,
+    "FeedbackSentiment": false,
+    "UserFeedback": false,
+    "ABTestVariant": false,
+    "DefaultQualityScoringStrategy": false,
+    "FeedbackRegistry": false,
+    "ResponseUXOptimizer": false,
+    "HeaderType": false,
+    "HeaderSpec": false,
+    "HeaderContext": false,
+    "HeaderRenderer": false,
+    "CORTEXOperationsHeaderRenderer": false,
+    "CORTEXArchitectHeaderRenderer": false,
+    "HeaderRendererFactory": false,
+    "DualHeaderManager": false,
+    "LegacyResponseSystem": false,
+    "UnifiedResponseEngine": false,
+    "MCPTool": false,
+    "ProcessRequestMCPTool": false,
+    "AnalyzeResponseMCPTool": false,
+    "GenerateResponseMCPTool": false,
+    "ValidateDeploymentMCPTool": false,
+    "MCPToolExporter": false,
+    "MigrationOrchestrator": false,
+    "ExtractionStrategy": false,
+    "SentenceRanker": false,
+    "ExtractiveSummarizer": false,
+    "IssueType": false,
+    "IssueSeverity": false,
+    "HiddenIssue": false,
+    "CodeAnalysisContext": false,
+    "PerformanceDetector": false,
+    "MemoryDetector": false,
+    "ConcurrencyDetector": false,
+    "HiddenIssueDetector": false,
+    "VerbosityProfile": false,
+    "RoleVerbosityProfiles": false,
+    "SecurityAdvisorMixin": false,
+    "TechIntelligenceOrchestrator": true,
+    "TechStack": false,
+    "ReadinessScore": false,
+    "DetectedTech": false,
+    "ScanResult": false,
+    "EcosystemScanner": false,
+    "KnowledgeSource": false,
+    "TemplateType": false,
+    "SynthesisResult": false,
+    "KnowledgeSynthesizer": false,
+    "TriggerReason": false,
+    "TriggerAction": false,
+    "TriggerEvent": false,
+    "LearningTrigger": false,
+    "ReadinessComponents": false,
+    "ReadinessAction": false,
+    "ReadinessEngine": false,
+    "OrchestratorMetadataRegistry": false,
+    "CleanupResult": true,
+    "DebugCleanup": false,
+    "DetectedIssue": false,
+    "RaceCondition": false,
+    "IntegrationBreak": false,
+    "DebugAnalyzer": false,
+    "InjectionPoint": true,
+    "InjectionResult": true,
+    "LanguageInjector": false,
+    "JavaScriptInjector": false,
+    "PythonInjector": false,
+    "HTMLInjector": false,
+    "DebugInjector": true,
+    "DebugPhase": false,
+    "DebugSeverity": false,
+    "LanguageType": false,
+    "DebugSession": true,
+    "DebugMarker": false,
+    "DebugOrchestrator": false,
+    "CaptureMode": false,
+    "LogType": false,
+    "LogEntry": false,
+    "CaptureResult": false,
+    "DebugCapture": false,
+    "ImplementationEvidence": false,
+    "TruthVerificationResult": false,
+    "TruthVerificationEngine": false,
+    "KnowledgeLevel": true,
+    "EducationalContext": true,
+    "EducationalResponse": true,
+    "EducationalOrchestrator": true,
+    "ComplianceLevel": false,
+    "VerificationResult": true,
+    "SpecCompliance": false,
+    "CoverageResult": false,
+    "AlignmentResult": false,
+    "SecurityResult": false,
+    "ComprehensiveResult": false,
+    "ImplementationVerifier": false,
+    "NavigationLevel": false,
+    "ContentSection": false,
+    "NavigationItem": false,
+    "PageMetadata": false,
+    "HTMLGenerationReport": false,
+    "DiagramRecommendation": false,
+    "SectionAdvisory": false,
+    "CortexDocsOrchestrator": false,
+    "SubTask": true,
+    "TaskDecompositionResult": true,
+    "IncrementalTaskDecomposer": true,
+    "ContinuationContext": false,
+    "AutonomousPlanExecutor": false,
+    "DelegationContext": false,
+    "DelegationHandler": false,
+    "CompositionPattern": false,
+    "ComposedOrchestrator": false,
+    "DelegationResult": false,
+    "ResponseStructureError": false,
+    "NarrationDetectedError": false,
+    "ChatResponsePolicy": false,
+    "PlanSpineRenderer": false,
+    "MarkdownBanViolation": false,
+    "ReportIntentDetected": false,
+    "FileWritePolicy": false,
+    "EvidenceCollector": false,
+    "MultiModelEstimationEngine": false,
+    "SkillAllocator": false,
+    "OutputFormatter": false,
+    "LearningOrchestrator": false,
+    "DuplicationType": true,
+    "DuplicateEntry": true,
+    "DuplicationReport": true,
+    "DuplicationDetector": true,
+    "ComposedContext": false,
+    "ComposedResult": false,
+    "DetectionSignal": false,
+    "RepoDetectionOrchestrator": false,
+    "ConfidenceScore": false,
+    "UseCase": false,
+    "BusinessNarrative": false,
+    "BusinessLanguageOrchestrator": false,
+    "ContextAssemblyOrchestrator": false,
+    "DiscoveryType": false,
+    "DiscoveryOrchestrator": false,
+    "PhaseCompletionResult": false,
+    "PhaseCompletionOrchestrator": false,
+    "InquiryCache": false,
+    "DecisionJournal": false,
+    "SetupPhase": true,
+    "SetupContext": true,
+    "SetupResult": true,
+    "SetupOrchestrator": true,
+    "RegressionMonitor": false,
+    "AdvisorType": true,
+    "Recommendation": true,
+    "RecommendationResult": true,
+    "BaseAdvisor": true,
+    "SecurityAdvisor": true,
+    "SolidAdvisor": true,
+    "PerformanceAdvisor": true,
+    "ComplianceAdvisor": true,
+    "RecommendationEngine": true,
+    "InjectionStrategy": true,
+    "CleanupStatus": true,
+    "SessionManifest": true,
+    "DebugCleaner": true,
+    "DebuggingOrchestrator": true,
+    "OrchestratorVisibility": true,
+    "CircularDependencyViolation": false,
+    "CouplingViolation": false,
+    "AntiPatternViolation": false,
+    "BrittlenessReport": false,
+    "BrittlenessScanner": false,
+    "PlanSetupResult": false,
+    "PlanTeardownResult": false,
+    "PlanOrchestrator": false,
+    "RollbackStrategy": true,
+    "RollbackPhase": true,
+    "StateSnapshot": true,
+    "RollbackContext": true,
+    "RollbackStep": true,
+    "RollbackExecutionPlan": true,
+    "RollbackResult": true,
+    "RollbackPlanningEngine": true,
+    "RollbackOrchestrator": true,
+    "UpgradeStrategy": true,
+    "UpgradePhase": true,
+    "UpgradeComponent": true,
+    "UpgradeContext": true,
+    "UpgradeCheckResult": true,
+    "UpgradeReadinessReport": true,
+    "UpgradeExecutionPlan": true,
+    "UpgradeValidationEngine": true,
+    "UpgradeOrchestrator": true,
+    "DashboardData": false,
+    "LENSVisualizationOrchestrator": false,
+    "DuplicationStatus": false,
+    "DuplicationRecord": false,
+    "DuplicationQuery": false,
+    "DuplicationRegistry": false,
+    "RepositoryNotFoundError": false,
+    "OnboardingResult": false,
+    "RepositoryOnboardingOrchestrator": false,
+    "InstrumentationOrchestrator": true,
+    "CleanupPlan": true,
+    "VacuumOrchestrator": true,
+    "BlockingPattern": false,
+    "PatternCheckResult": false,
+    "PreCommitPatternMatcher": false,
+    "DriftType": false,
+    "DriftDetection": false,
+    "ConsolidationReport": false,
+    "DriftHealer": false,
+    "MemoryConsolidationOrchestrator": false,
+    "QueryType": false,
+    "FederatedQueryContext": false,
+    "QueryResult": false,
+    "LENSSmartFacade": false,
+    "FederatedGraphQueryEngine": false,
+    "DependencyClosureQueryEngine": false,
+    "ComplianceImpactQueryEngine": false,
+    "CorticalIntegrationOrchestrator": false,
+    "ProcessingResult": false,
+    "EventDeduplicationStore": false,
+    "SensoryInputOrchestrator": false,
+    "OrchestratorLookup": false,
+    "PhaseState": true,
+    "ResourceType": false,
+    "PhaseTemplate": false,
+    "PhaseProgress": false,
+    "ResourceConstraint": false,
+    "EnhancedPlanningOrchestrator": false,
+    "TDDCycleResult": true,
+    "GovernanceCheckResult": true,
+    "PhaseExecutor": true,
+    "RegistryPathNotFoundError": false,
+    "RegistryYAMLParseError": false,
+    "NamingFactory": false,
+    "PlanningRegistryLoader": false,
+    "CoherenceValidator": true,
+    "ProgressBarStyle": false,
+    "ProgressUpdate": false,
+    "VisualProgressRenderer": false,
+    "CodeLevelPlanner": true,
+    "ViolationType": true,
+    "StrategyStatus": true,
+    "AuditEntry": true,
+    "SOLIDMetrics": true,
+    "Violation": true,
+    "RefactoringStrategy": true,
+    "RefactoringPlan": true,
+    "SOLIDAnalyzer": true,
+    "ParallelStrategyEvaluator": true,
+    "PatternCache": true,
+    "EnhancedRefactoringOrchestrator": true,
+    "PauseCheckpoint": false,
+    "UserCorrection": false,
+    "LENSAnalysisResult": false,
+    "ResumeContext": false,
+    "PlanPauseManager": false,
+    "ExecutionEventType": true,
+    "RollbackReason": true,
+    "PhaseDefinition": true,
+    "PlanSpecification": true,
+    "PhaseCheckpoint": true,
+    "ExecutionCheckpoint": true,
+    "ExecutionEvent": true,
+    "AutonomousExecutionEngine": true,
+    "MergeMetrics": false,
+    "DomainKnowledgeMerger": false,
+    "DocumentationType": false,
+    "LinkType": false,
+    "CleanupPriority": false,
+    "DocumentationFile": false,
+    "LinkValidation": false,
+    "CleanupTask": false,
+    "DocumentationVersion": false,
+    "EnhancedDocumentationOrchestrator": false,
+    "InquiryOrchestrator": false,
+    "InquiryRouter": false,
+    "GenericCodeInquiryHandler": false,
+    "FeatureInquiryHandler": false,
+    "EvolutionInquiryHandler": false,
+    "BaseInquiryHandler": false,
+    "TroubleshootingInquiryHandler": false,
+    "BestPracticeInquiryHandler": false,
+    "ArchitectureInquiryHandler": false,
+    "ConversionReport": false,
+    "SeleniumPatternMatcher": false,
+    "PlaywrightCodeGenerator": false,
+    "ConversionEngine": false,
+    "SeleniumPlaywrightOrchestrator": false,
+    "OperationContext": false,
+    "FormatAnalysisResult": false,
+    "ResponseFormatAnalyzer": false,
+    "BLUFTemplateEngine": false,
+    "AdaptiveRouter": false,
+    "AnalyticsOrchestrator": false,
+    "Intent": false,
+    "IntentClassificationHandler": false,
+    "HandlerResult": false,
+    "RoutingHandler": false,
+    "GovernanceHandler": false,
+    "KnowledgeHandler": false,
+    "ErrorRecoveryHandler": false,
+    "HandlerCoordinator": false,
+    "BaseHandler": false,
+    "HandlerRegistry": false,
+    "ModeConfiguration": false,
+    "AdaptiveExecutor": false,
+    "StrategyType": false,
+    "ExecutionMetrics": false,
+    "PerformanceProfile": false,
+    "ResourceAllocation": false,
+    "FailoverContext": false,
+    "UnifiedAdaptiveLayer": false,
+    "TestScenario": false,
+    "TestResult": false,
+    "AdaptiveExecutionTestFramework": false,
+    "CachingLayer": false,
+    "OrchestratorRoutingEngine": false,
+    "ExecutionContextAnalyzer": false,
+    "ExecutionRecord": false,
+    "FeedbackLoop": false,
+    "StrategyMetrics": false,
+    "StrategySelector": false,
+    "ServerStartResult": false,
+    "ServerStopResult": false,
+    "ConfigUpdateResult": false,
+    "MCPBootstrapper": false,
+    "ToolValidationResult": false,
+    "HealthReport": false,
+    "ToolchainValidator": false,
+    "JourneyState": true,
+    "Journey": true,
+    "JourneyProgress": true,
+    "OnboardingOrchestrator": true,
+    "DependencyConflict": false,
+    "ResolutionStrategy": false,
+    "ConflictReport": false,
+    "DependencyResolver": false,
+    "VSCodeConfigurator": false
+  },
+  "summary": {
+    "total_files": 210,
+    "orchestrators": 202,
+    "adapters": 1,
+    "utilities": 3,
+    "tests": 2,
+    "wired": 38,
+    "orphaned": 594,
+    "wired_from_config": 46,
+    "file_type_counts": {
+      "orchestrators": 202,
+      "adapters": 1,
+      "utilities": 3,
+      "tests": 2
+    }
+  }
+}
