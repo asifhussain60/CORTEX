@@ -10,8 +10,8 @@
 #   orchestrators:
 #     core: [...]      # 8 core orchestrators (includes IncrementalTaskDecomposer)
 #     domain: [...]    # 6 domain orchestrators
-#     support: [...]   # 21 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility, TechIntelligenceOrchestrator)
-#   Total: 35 orchestrators + 4 LENS analyzers
+#     support: [...]   # 22 support orchestrators (includes DebuggingOrchestrator, InstrumentationOrchestrator, OrchestratorVisibility, TechIntelligenceOrchestrator, DigestEnhancementOrchestrator)
+#   Total: 36 orchestrators + 4 LENS analyzers
 # =========================================================================
 
 version: "2.0"
@@ -944,6 +944,45 @@ orchestrators:
         intelligence: ["knowledge", "lens"]
         phase: "34B"
         increment: "week1"
+
+    # Phase 41: DIGEST Mode Enhancement System
+    - name: "DigestEnhancementOrchestrator"
+      module: "cortex.orchestrators.learning.digest_enhancement_orchestrator"
+      class: "DigestEnhancementOrchestrator"
+      tier: 3
+      priority: 83
+      dependencies:
+        - "RecommendationGate"
+      capabilities:
+        - digest_automation
+        - enhancement_generation
+        - similarity_checking
+        - metrics_calculation
+        - governance_scanning
+      health_check: "process_digest"
+      description: "Automated DIGEST mode with MCP tools, quantitative metrics, and AST governance scanning (Phase 41)"
+      mcp_tools:
+        - "cortex_digest_session"
+        - "cortex_digest_generate_enhancements"
+        - "cortex_digest_check_duplicates"
+        - "cortex_digest_apply_enhancements"
+      governance:
+        - "CORE-002"
+        - "CORE-008"
+        - "CORE-028"
+        - "CORE-035"
+      version: "1.0.0"
+      metadata:
+        icon: "🔬"
+        stages: 5
+        intelligence: ["lens", "knowledge", "learning"]
+        phase: "41"
+        enhancements:
+          - "ENH-053"
+          - "ENH-054"
+          - "ENH-055"
+          - "ENH-056"
+          - "ENH-057"
 
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
