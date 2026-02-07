@@ -1826,7 +1826,7 @@ for chat_file in chat_files:
     summarization_count = grep_count(chat_file, "Summarized conversation history")
     
     # Step 3: Count file references
-    reference_count = grep_count(chat_file, r"Read \[|#file:")
+    reference_count = grep_count(chat_file, r"Read \[|file reference")
     
     # Step 4: Calculate lines per summarization
     total_lines = wc_l(chat_file)
@@ -2548,15 +2548,15 @@ def audit_continuation_efficiency(response_text: str) -> Dict[str, Any]:
                 })
                 token_waste += 12000  # Average
     
-    # Pattern 2: Missing #file: prefix
+    # Pattern 2: Missing file reference prefix
     if ("continuation" in response_text.lower() and 
-        "#file:" not in response_text and
+        "file reference" not in response_text and
         "cortex-architect" in response_text.lower()):
         violations.append({
             "pattern": "missing_file_prefix",
             "severity": "P1",
             "waste_estimate": "Auto-load failure (user must manually load)",
-            "fix": "Add #file:cortex-architect.prompt.md at start",
+            "fix": "Add prompt reference at start (avoid file paths per CORE-047)",
         })
         token_waste += 2000  # User must manually load
     
@@ -2655,7 +2655,7 @@ def audit_continuation_efficiency(response_text: str) -> Dict[str, Any]:
 
 **Token budget:** 92% used (920k/1M) — Continue in new session
 
-**#file:cortex-architect.prompt.md**
+**Prompt:** cortex-architect (AUDIT/DESIGN/PLAN)
 
 **Session:** Phase 38 Stage 7.2
 **Branch:** CORTEX  
@@ -2667,8 +2667,8 @@ def audit_continuation_efficiency(response_text: str) -> Dict[str, Any]:
 ```
 
 **Prompt Selection:**
-- Use `#file:cortex-architect.prompt.md` if session started with AUDIT/DESIGN/PLAN mode
-- Use `#file:CORTEX.prompt.md` if session started with IMPLEMENT/FIX/REFACTOR mode
+- Use cortex-architect prompt if session started with AUDIT/DESIGN/PLAN mode
+- Use CORTEX prompt if session started with IMPLEMENT/FIX/REFACTOR mode
 - **CRITICAL:** Always use the ORIGINAL prompt that initiated the session
 
 **Savings:** 60,000 → 200 tokens = **99.67% reduction**
@@ -2860,7 +2860,7 @@ If response contains any "Ran terminal command: cat" or "Created [" patterns →
 | User Turn | `^User:` or `^Human:` at line start | 2 |
 | Assistant Turn | `^GitHub Copilot:` or `^Assistant:` | 2 |
 | Tool Invocations | `Searched for`, `Read `, `Ran terminal command:` | 1 |
-| File References | `#file:`, file protocol, `[](file://` | 1 |
+| File References | file protocol markers | 1 |
 | Code Blocks | Triple backticks with language | 1 |
 | CORTEX Headers | `## 🏗️ CORTEX`, `## 🧠 CORTEX` | 3 |
 
