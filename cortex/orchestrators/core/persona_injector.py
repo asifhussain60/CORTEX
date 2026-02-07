@@ -73,14 +73,14 @@ class PersonaInjector:
 ### 🎭 Active Persona: {persona.id.replace('_', ' ').title()}
 
 **Response Format:** {persona.format}
-**Detail Level:** {depth.id.title()} ({depth.word_limit} words max)
+**Detail Level:** {depth.id.title()} ({depth.word_limit or 300} words max)
 **Code Blocks:** {"Shown" if persona.show_code else "Hidden"}
 **Metrics:** {", ".join(persona.metric_types) if persona.show_metrics else "None"}
 
 **Guidance:**
-- Keep responses {"concise and executive-level" if depth.word_limit <= 150 else "detailed and comprehensive" if depth.word_limit >= 500 else "balanced with key details"}
+- Keep responses {"concise and executive-level" if (depth.word_limit or 300) <= 150 else "detailed and comprehensive" if (depth.word_limit or 300) >= 500 else "balanced with key details"}
 - {"Focus on business impact and ROI" if persona.id == "business_leader" else "Focus on user value and features" if persona.id == "product_owner" else "Focus on technical implementation" if persona.id == "engineer" else "Focus on architecture and design" if persona.id == "tech_lead" else "Focus on process and workflow"}
-- Word limit: {depth.word_limit} words (strict enforcement)
+- Word limit: {depth.word_limit or 300} words (strict enforcement)
 """.strip()
         
         return context
