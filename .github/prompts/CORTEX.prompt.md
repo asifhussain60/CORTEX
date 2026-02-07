@@ -187,11 +187,44 @@ Synthesis   → Generate DoR classification
 **⏳ Awaiting approval to proceed...**
 ```
 
-### Stage 3: Await Approval
+### Stage 3: Await Approval (TWO-PHASE WORKFLOW)
 
-- ✅ "proceed" / "yes" / "approve" → Execute
-- ❌ "no" / "cancel" → Abort
-- 🔄 "modify: {changes}" → Re-classify
+**Phase 41 Update:** CORTEX now uses stateful approval sessions for interactive workflows.
+
+**Phase 1: Classification** (via `cortex_classify_request` MCP tool)
+- Display DoR table above
+- Create approval session with unique `session_id`
+- Store gate state for later execution
+- Return session to user for review
+
+**Phase 2: User Decision** (via approval MCP tools)
+- ✅ `cortex_approve_request(session_id)` → Execute approved operation
+- ❌ `cortex_reject_request(session_id, reason)` → Abort with audit trail
+- 🔄 `cortex_modify_request(session_id, corrected_intent, feedback)` → Re-classify with corrections
+
+**Session Management:**
+- Sessions expire after 5 minutes (TTL)
+- One session per classification
+- Thread-safe for concurrent users
+- Cleanup automatic on approve/reject
+
+**Example Flow:**
+```python
+# 1. User request arrives
+result = cortex_classify_request(
+    request="Implement user authentication",
+    context={},
+    user_id="user123"
+)
+# → Displays DoR, returns session_id
+
+# 2. User reviews and approves
+approval_result = cortex_approve_request(
+    session_id=result["session_id"],
+    feedback="Looks good"
+)
+# → Executes via orchestrator, returns result
+```
 
 ### Stage 4: Execute via MCP
 
@@ -267,6 +300,10 @@ result = mcp_tool.execute(parameters)
 | Tool | Purpose | Orchestrator |
 |------|---------|--------------|
 | `cortex_process_request` | Request processing | MasterOrchestrator |
+| `cortex_classify_request` | **NEW Phase 41** — Display DoR, create approval session | DoRApprovalGate |
+| `cortex_approve_request` | **NEW Phase 41** — Approve and execute from session | DoRApprovalGate |
+| `cortex_reject_request` | **NEW Phase 41** — Reject request with reason | DoRApprovalGate |
+| `cortex_modify_request` | **NEW Phase 41** — Modify intent and re-classify | DoRApprovalGate |
 | `cortex_challenge` | Challenge generation | ChallengeEngine |
 | `cortex_total_recall` | Feature discovery | TotalRecallAgent |
 | `cortex_lens_analyze` | Unified code intelligence | LENSOrchestrator |
