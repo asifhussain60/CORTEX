@@ -187,7 +187,7 @@ active_phases:
     depends_on:
       - "phase-33"
   
-  - id: "phase-36"
+  - id: "phase-36-ml"
     name: "ML-Based Summarization (Pragmatic Subset)"
     file: "phases/completed/2026/phase-36-ml-summarization.yaml"
     started: "2026-02-06"
@@ -214,6 +214,52 @@ active_phases:
     actual_tests: 27
     depends_on:
       - "phase-34"
+  
+  - id: "phase-36"
+    name: "Unified Response Language Engine + Security-First Intelligence"
+    file: "phases/active/phase-36-unified-response-engine.yaml"
+    started: null
+    status: "planned"
+    priority: "P0"
+    execution_order: 6
+    estimated_duration: "18 days"
+    test_target: 245
+    coverage_target: 85
+    roi_score: 0.91
+    description: |
+      ⚪ PLANNED: Comprehensive response language engine overhaul.
+      
+      9 Stages:
+      1. Dual Header System (CORTEX vs CORTEX Architect) — 1 day, 10 tests
+      2. Modular Template Blocks (12 atomic blocks) — 3 days, 40 tests
+      3. Security-First Analysis (P0-P2 classification) — 3 days, 35 tests
+      4. Intelligent Code Comments (5 comment types) — 2 days, 25 tests
+      5. Test Quality Analyzer (FLUFF detection) — 2 days, 30 tests
+      6. Hidden Issue Detector (perf/memory/concurrency) — 2 days, 25 tests
+      7. Business Context Generator (PM/leader summaries) — 2 days, 20 tests
+      8. Multi-Role Response Engine (14 templates) — 3 days, 40 tests
+      9. Legacy Migration + MCP Tools (consolidate 5 systems) — 2 days, 20 tests
+      
+      Deliverables:
+      - 9 new modules (5,500+ LOC)
+      - 9 test suites (2,800+ LOC, 245 tests)
+      - 4 new MCP tools (security, test quality, hidden issues, composition)
+      - Migration guide (legacy → new engine)
+      - Dual header templates (CORTEX.prompt.md, cortex-architect.prompt.md)
+      - 12 composable template blocks (lego-like architecture)
+      
+      Key Features:
+      - ✅ Security-first: P0/P1/P2 threat classification on every request
+      - ✅ Role-aware: ENGINEER, PM, BUSINESS, ARCHITECT, SECURITY
+      - ✅ Modular: 14 role-task combinations from 12 reusable blocks
+      - ✅ Intelligent: Auto-generated "why" comments, FLUFF test detection
+      - ✅ Business-focused: Compliance, user impact, revenue implications
+      - ✅ Backward compatible: Legacy systems migrate via adapters
+      
+      ROI: 0.91 (HIGH) — 50% response generation speedup, 40% template code reduction
+      Authority: chat01.txt (Phase 36 session), cortex-architect.prompt.md v15.0
+    unblocks:
+      - "phase-37+"
 
 # Completed Phases (Historical)
 completed_phases_2026:
