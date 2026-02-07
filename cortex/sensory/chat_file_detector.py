@@ -177,8 +177,9 @@ class ChatFileDetector:
             for marker_type, count in marker_type_counts.items()
         )
         
-        # Normalize to 0-10 scale (more generous for chat detection)
-        base_score = min(weighted_score / 1.3, 10.0)
+        # Normalize to 0-10 scale (generous for chat detection)
+        # Lower divisor = higher scores for same marker count
+        base_score = min(weighted_score / 0.8, 10.0)
         
         # Apply bonuses/penalties
         reasons = []
@@ -189,15 +190,16 @@ class ChatFileDetector:
             base_score += 1.5
             reasons.append(f"Diverse markers ({unique_types} types)")
         elif unique_types >= 2:
-            base_score += 0.5
+            base_score += 1.0  # Increased from 0.5 for 2 types
         
-        # Reduce penalty for short content (many chat snippets are short)
-        if len(content) < 100:
-            base_score -= 1.0
-            reasons.append("Short content")
-        elif len(content) < 200:
-            # No penalty for 100-200 chars
-            pass
+        # Minimal penalty for short content (chat snippets can be brief)
+        # Only apply if very minimal content AND low marker count
+        if len(content) < 50 and len(markers) < 2:
+            base_score -= 0.5
+            reasons.append("Very short content")
+        elif len(content) < 100 and len(markers) < 3:
+            # Light penalty for short content with few markers
+            base_score -= 0.3
         
         # Bonus for conversation pattern (user/assistant alternation)
         if self._has_conversation_pattern(markers):
@@ -236,23 +238,11 @@ class ChatFileDetector:
         user_markers = [m for m in markers if m.type == CopilotMarker.USER]
         assistant_markers = [m for m in markers if m.type == CopilotMarker.ASSISTANT]
         
-        # Need at least 2 user and 2 assistant markers
-        if len(user_markers) < 2 or len(assistant_markers) < 2:
-            return False
+        # Minimal conversation: at least 1 user AND 1 assistant marker
+        if len(user_markers) >= 1 and len(assistant_markers) >= 1:
+            return True
         
-        # Check if they roughly alternate
-        all_conv_markers = sorted(
-            user_markers + assistant_markers,
-            key=lambda m: m.line_number
-        )
-        
-        alternations = 0
-        for i in range(len(all_conv_markers) - 1):
-            if all_conv_markers[i].type != all_conv_markers[i + 1].type:
-                alternations += 1
-        
-        # Good conversation has many alternations
-        return alternations >= 3
+        return False
     
     def is_chat_file(self, content: str, threshold: float = 5.0) -> bool:
         """
