@@ -620,11 +620,12 @@ statistics:
     - "phase-52: Enterprise Orchestrator Suite (P1, planned, ROI=0.87)"
     - "phase-24: External Refactoring Tools Integration (P2, planned)"
   enterprise_scalability_phases:
-    - "phase-48: Multi-tenant foundation (6 days, 105 tests)"
-    - "phase-49: Document ingestion pipeline (14 days, 122 tests)"
-    - "phase-50: Cloud storage backends (8 days, 110 tests)"
-    - "phase-51: Secrets + audit hardening (10 days, 126 tests)"
-    - "phase-52: Enterprise orchestrators (18 days, 165 tests)"
+    phases:
+      - "phase-48: Multi-tenant foundation (6 days, 105 tests)"
+      - "phase-49: Document ingestion pipeline (14 days, 122 tests)"
+      - "phase-50: Cloud storage backends (8 days, 110 tests)"
+      - "phase-51: Secrets + audit hardening (10 days, 126 tests)"
+      - "phase-52: Enterprise orchestrators (18 days, 165 tests)"
     total_effort: "56 days"
     total_tests: "628 tests"
   completed_today:
