@@ -1,0 +1,81 @@
+{
+  "repository": {
+    "slug": "kashkole",
+    "display_name": "KASHKOLE",
+    "description": "Machine learning pipeline orchestration and model deployment framework",
+    "owner": "CORTEX ML Team",
+    "primary_language": "Python",
+    "health_score": 88,
+    "version": "1.4.2",
+    "last_analyzed_at": "2026-02-08T09:15:00Z"
+  },
+  "overview": {
+    "summary": "Production ML operations platform supporting 200+ models in production. Handles data ingestion, model training, evaluation, and deployment with comprehensive lineage tracking.",
+    "total_files": 5234,
+    "total_lines": 378921,
+    "file_count": 5234
+  },
+  "metadata": {
+    "primary_language": "Python",
+    "last_updated": "2026-02-08",
+    "languages": ["Python", "SQL", "YAML", "Bash"]
+  },
+  "metrics": {
+    "health_score": 88,
+    "risk_score": 12,
+    "coverage_pct": 82.1,
+    "file_count": 5234,
+    "complexity_score": 3.7,
+    "maintainability_index": 76
+  },
+  "security": {
+    "p0_risks": [],
+    "p1_risks": [
+      {
+        "id": "SEC-004",
+        "title": "Model artifact signing missing",
+        "severity": "HIGH",
+        "description": "Deployed models lack cryptographic signatures",
+        "affected_files": ["deploy/model_registry.py"],
+        "recommendation": "Implement model artifact signing"
+      }
+    ],
+    "p2_risks": [
+      {
+        "id": "SEC-005",
+        "title": "Training data retention policy",
+        "severity": "MEDIUM",
+        "description": "No automatic cleanup of training datasets",
+        "affected_files": ["pipelines/data_manager.py"],
+        "recommendation": "Implement 30-day retention policy"
+      }
+    ]
+  },
+  "health": {
+    "uptime_pct": 99.88,
+    "avg_response_time_ms": 340,
+    "error_rate_pct": 0.12,
+    "deployment_frequency": "daily",
+    "mean_time_to_recovery_min": 15
+  },
+  "recommendations": [
+    {
+      "id": "REC-004",
+      "category": "ML Ops",
+      "priority": "P1",
+      "title": "Implement A/B testing framework",
+      "description": "Current model deployment cannot perform canary releases",
+      "effort_estimate": "10 days",
+      "expected_impact": "Safer model rollouts with 0.1% risk"
+    }
+  ],
+  "tech_stack": [
+    "Python 3.10",
+    "TensorFlow",
+    "PyTorch",
+    "MLflow",
+    "PostgreSQL",
+    "Kafka",
+    "Docker"
+  ]
+}

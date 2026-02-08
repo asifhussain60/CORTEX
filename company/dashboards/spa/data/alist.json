@@ -1,0 +1,72 @@
+{
+  "repository": {
+    "slug": "alist",
+    "display_name": "ALIST",
+    "description": "Distributed file listing and search indexing system for cloud storage",
+    "owner": "CORTEX Storage Team",
+    "primary_language": "Go",
+    "health_score": 91,
+    "version": "3.1.0",
+    "last_analyzed_at": "2026-02-08T08:45:00Z"
+  },
+  "overview": {
+    "summary": "High-performance distributed file system indexer with support for 15+ cloud providers. Indexes 2.3 billion files across 450 storage buckets with sub-second query latency.",
+    "total_files": 3847,
+    "total_lines": 287234,
+    "file_count": 3847
+  },
+  "metadata": {
+    "primary_language": "Go",
+    "last_updated": "2026-02-08",
+    "languages": ["Go", "Rust", "JavaScript", "SQL"]
+  },
+  "metrics": {
+    "health_score": 91,
+    "risk_score": 9,
+    "coverage_pct": 87.4,
+    "file_count": 3847,
+    "complexity_score": 3.4,
+    "maintainability_index": 82
+  },
+  "security": {
+    "p0_risks": [],
+    "p1_risks": [
+      {
+        "id": "SEC-006",
+        "title": "Cloud provider credentials in logs",
+        "severity": "HIGH",
+        "description": "Sensitive credentials accidentally logged in debug mode",
+        "affected_files": ["providers/aws.go", "providers/azure.go"],
+        "recommendation": "Implement credential redaction in logging layer"
+      }
+    ],
+    "p2_risks": []
+  },
+  "health": {
+    "uptime_pct": 99.91,
+    "avg_response_time_ms": 89,
+    "error_rate_pct": 0.09,
+    "deployment_frequency": "weekly",
+    "mean_time_to_recovery_min": 8
+  },
+  "recommendations": [
+    {
+      "id": "REC-005",
+      "category": "Performance",
+      "priority": "P2",
+      "title": "Implement query result caching",
+      "description": "66% of queries are duplicates within 5 minutes",
+      "effort_estimate": "4 days",
+      "expected_impact": "50% latency reduction for hot queries"
+    }
+  ],
+  "tech_stack": [
+    "Go 1.21",
+    "Rust",
+    "Elasticsearch",
+    "PostgreSQL",
+    "AWS S3",
+    "Azure Blob Storage",
+    "Docker Swarm"
+  ]
+}

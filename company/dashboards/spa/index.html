@@ -28,7 +28,7 @@
         </header>
 
         <!-- Repository selector modal (hidden by default) -->
-        <div id="repo-modal" class="modal" style="display: none;">
+        <div id="repo-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>Select Repository</h2>
@@ -45,13 +45,13 @@
         <!-- Main content -->
         <main class="main-content">
             <!-- Loading state -->
-            <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div id="loading-spinner" class="loading-spinner hidden">
                 <div class="spinner"></div>
                 <p>Loading dashboard...</p>
             </div>
 
             <!-- Error state -->
-            <div id="error-message" class="error-message" style="display: none;">
+            <div id="error-message" class="error-message hidden">
                 <i class="fas fa-exclamation-circle"></i>
                 <h3>Dashboard Not Found</h3>
                 <p id="error-text">The requested repository dashboard could not be loaded.</p>
@@ -59,7 +59,7 @@
             </div>
 
             <!-- Tab navigation -->
-            <nav class="tab-navigation" id="tab-navigation" style="display: none;">
+            <nav class="tab-navigation" id="tab-navigation">
                 <button class="tab-button active" data-tab="overview" aria-label="Overview tab">
                     <i class="fas fa-home"></i> Overview
                 </button>
@@ -119,7 +119,7 @@
                 </section>
 
                 <!-- Security Tab -->
-                <section class="tab-panel" id="panel-security" data-tab="security" data-show-if="security" style="display: none;">
+                <section class="tab-panel" id="panel-security" data-tab="security" data-show-if="security">
                     <div class="panel-content">
                         <div class="security-summary">
                             <div class="risk-card risk-p0" data-show-if="security.p0_risks">
@@ -142,7 +142,7 @@
                 </section>
 
                 <!-- Metrics Tab -->
-                <section class="tab-panel" id="panel-metrics" data-tab="metrics" data-show-if="metrics" style="display: none;">
+                <section class="tab-panel" id="panel-metrics" data-tab="metrics" data-show-if="metrics">
                     <div class="panel-content">
                         <div id="charts-container">
                             <!-- Chart containers will be populated by app.js -->
@@ -157,7 +157,7 @@
                 </section>
 
                 <!-- Health Tab -->
-                <section class="tab-panel" id="panel-health" data-tab="health" data-show-if="health" style="display: none;">
+                <section class="tab-panel" id="panel-health" data-tab="health" data-show-if="health">
                     <div class="panel-content">
                         <div id="health-details">
                             <!-- Dynamically populated -->
@@ -166,7 +166,7 @@
                 </section>
 
                 <!-- Recommendations Tab -->
-                <section class="tab-panel" id="panel-recommendations" data-tab="recommendations" data-show-if="recommendations" style="display: none;">
+                <section class="tab-panel" id="panel-recommendations" data-tab="recommendations" data-show-if="recommendations">
                     <div class="panel-content">
                         <div id="recommendations-list">
                             <!-- Dynamically populated -->

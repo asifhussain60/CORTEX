@@ -1,0 +1,72 @@
+{
+  "repository": {
+    "slug": "cortex",
+    "display_name": "CORTEX",
+    "description": "Enterprise cognitive real-time execution system with MCP-first architecture",
+    "owner": "Asif Hussain",
+    "primary_language": "Python",
+    "health_score": 96,
+    "version": "7.6",
+    "last_analyzed_at": "2026-02-08T09:30:00Z"
+  },
+  "overview": {
+    "summary": "Production-grade autonomous software engineering platform with 28 orchestrators, 51 enforcement agents, and comprehensive governance. Powers self-healing architecture with 89% test coverage.",
+    "total_files": 8456,
+    "total_lines": 542187,
+    "file_count": 8456
+  },
+  "metadata": {
+    "primary_language": "Python",
+    "last_updated": "2026-02-08",
+    "languages": ["Python", "JavaScript", "HTML", "CSS"]
+  },
+  "metrics": {
+    "health_score": 96,
+    "risk_score": 4,
+    "coverage_pct": 89.3,
+    "file_count": 8456,
+    "complexity_score": 4.1,
+    "maintainability_index": 85
+  },
+  "security": {
+    "p0_risks": [],
+    "p1_risks": [],
+    "p2_risks": [
+      {
+        "id": "SEC-003",
+        "title": "Dependency version pinning",
+        "severity": "MEDIUM",
+        "description": "Some dependencies allow minor version updates",
+        "affected_files": ["requirements.txt"],
+        "recommendation": "Pin all dependencies to exact versions"
+      }
+    ]
+  },
+  "health": {
+    "uptime_pct": 99.95,
+    "avg_response_time_ms": 120,
+    "error_rate_pct": 0.05,
+    "deployment_frequency": "hourly",
+    "mean_time_to_recovery_min": 5
+  },
+  "recommendations": [
+    {
+      "id": "REC-003",
+      "category": "Architecture",
+      "priority": "P2",
+      "title": "Consolidate duplicate validation logic",
+      "description": "5 validation orchestrators have overlapping functionality",
+      "effort_estimate": "8 days",
+      "expected_impact": "15% code reduction, improved maintainability"
+    }
+  ],
+  "tech_stack": [
+    "Python 3.11",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "Kubernetes",
+    "React",
+    "WebAssembly"
+  ]
+}

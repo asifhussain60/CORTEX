@@ -1,0 +1,90 @@
+{
+  "repository": {
+    "slug": "noor-canvas",
+    "display_name": "NOOR-CANVAS",
+    "description": "Real-time collaborative canvas and whiteboarding platform with infinite zoom",
+    "owner": "CORTEX Design Team",
+    "primary_language": "JavaScript",
+    "health_score": 85,
+    "version": "4.2.1",
+    "last_analyzed_at": "2026-02-08T08:30:00Z"
+  },
+  "overview": {
+    "summary": "WebGL-based collaborative canvas supporting 500+ concurrent users per session. Features real-time synchronization, infinite canvas, and advanced drawing tools with sub-100ms latency.",
+    "total_files": 2156,
+    "total_lines": 189456,
+    "file_count": 2156
+  },
+  "metadata": {
+    "primary_language": "JavaScript",
+    "last_updated": "2026-02-08",
+    "languages": ["JavaScript", "TypeScript", "GLSL", "CSS"]
+  },
+  "metrics": {
+    "health_score": 85,
+    "risk_score": 15,
+    "coverage_pct": 78.9,
+    "file_count": 2156,
+    "complexity_score": 3.9,
+    "maintainability_index": 74
+  },
+  "security": {
+    "p0_risks": [],
+    "p1_risks": [
+      {
+        "id": "SEC-007",
+        "title": "WebSocket frame validation",
+        "severity": "HIGH",
+        "description": "Insufficient validation of incoming canvas operations",
+        "affected_files": ["server/websocket/handler.js"],
+        "recommendation": "Implement comprehensive frame validation schema"
+      }
+    ],
+    "p2_risks": [
+      {
+        "id": "SEC-008",
+        "title": "Rate limiting on canvas operations",
+        "severity": "MEDIUM",
+        "description": "No per-user rate limiting for drawing operations",
+        "affected_files": ["server/operations/executor.js"],
+        "recommendation": "Implement token bucket rate limiter"
+      }
+    ]
+  },
+  "health": {
+    "uptime_pct": 99.82,
+    "avg_response_time_ms": 78,
+    "error_rate_pct": 0.18,
+    "deployment_frequency": "bi-weekly",
+    "mean_time_to_recovery_min": 12
+  },
+  "recommendations": [
+    {
+      "id": "REC-006",
+      "category": "Frontend",
+      "priority": "P1",
+      "title": "Optimize rendering performance",
+      "description": "Frame rate drops below 30fps with 200+ objects",
+      "effort_estimate": "6 days",
+      "expected_impact": "Maintain 60fps with 500+ objects"
+    },
+    {
+      "id": "REC-007",
+      "category": "Networking",
+      "priority": "P2",
+      "title": "Implement compression for sync packets",
+      "description": "Average packet size is 2.4KB, compressible to 400B",
+      "effort_estimate": "3 days",
+      "expected_impact": "83% bandwidth reduction"
+    }
+  ],
+  "tech_stack": [
+    "React 18",
+    "TypeScript",
+    "WebGL 2.0",
+    "Three.js",
+    "Node.js",
+    "WebSocket",
+    "Redis"
+  ]
+}
