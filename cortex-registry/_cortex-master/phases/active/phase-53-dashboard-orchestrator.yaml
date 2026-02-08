@@ -1,0 +1,219 @@
+phase_id: "phase-53"
+name: "Dashboard Orchestrator & SPA Consolidation"
+status: "planned"
+priority: "P1"
+created_date: "2026-02-08"
+estimated_start: "2026-02-15"
+estimated_completion: "2026-02-22"
+roi_score: 0.82
+execution_order: 6
+
+overview: |
+  Consolidate 7,776 generated dashboard files (67MB) into unified SPA 
+  with governance-wired orchestrator. Enable all operational orchestrators 
+  to request dashboard generation through MCP tools with audit trail.
+
+problem_statement: |
+  Chat session (chat01.txt) revealed critical architectural gap:
+  - 67MB dashboard bloat (7,776 generated files)
+  - 5 redundant dashboards with duplicate CSS/JSON (3.5MB data duplication)
+  - Dashboard generation orphaned from governance ecosystem
+  - No MCP wiring, no audit trail, no integration with operational orchestrators
+  - Never tracked in phase registry
+  - Blocks continuous improvement and creates maintenance debt
+
+expected_outcomes: |
+  ✅ Unified SPA: 80KB vs 250KB (68% size reduction)
+  ✅ All 7 operational orchestrators integrated with dashboard capability
+  ✅ Audit trail (AC markers) for every dashboard generation
+  ✅ MCP-wired governance gates (cortex_generate_dashboard, cortex_sync_dashboard_data)
+  ✅ Phase registry synchronized (index.yaml + wiring.yaml)
+  ✅ 126 tests with 90%+ coverage
+  ✅ Future-proof: extensible for new repo dashboards
+
+stages:
+  - id: "s1"
+    name: "Unified SPA Foundation"
+    description: "Single index.html template, app.js SPA controller, CSS extraction, routing"
+    tests: 27
+    effort_hours: 13
+    files_to_create:
+      - "company/dashboards/spa/index.html"
+      - "company/dashboards/spa/app.js"
+      - "company/dashboards/spa/css/dashboard.css"
+    dependencies: []
+    validation: "Routing works for all repo parameters"
+    
+  - id: "s2"
+    name: "Data Separation & Dynamic Loading"
+    description: "Extract JSON data to separate files, implement loader, caching strategy"
+    tests: 19
+    effort_hours: 9
+    files_to_create:
+      - "company/dashboards/data/alist.json"
+      - "company/dashboards/data/cortex.json"
+      - "company/dashboards/data/kashkole.json"
+      - "company/dashboards/data/ksessions.json"
+      - "company/dashboards/data/noor-canvas.json"
+    dependencies: ["s1"]
+    validation: "All 5 JSON files parseable, cache invalidation works"
+    
+  - id: "s3"
+    name: "DashboardOrchestrator Creation"
+    description: "NEW orchestrator: base class, MCP tools, audit trail integration, metrics collection"
+    tests: 28
+    effort_hours: 14
+    files_to_create:
+      - "cortex/orchestrators/domain/dashboard_orchestrator.py"
+      - "cortex/mcp/tools/dashboard_generator.py"
+      - "cortex/mcp/tools/dashboard_syncer.py"
+      - "tests/orchestrators/domain/test_dashboard_orchestrator.py"
+    dependencies: ["s1", "s2"]
+    orchestrator_wiring_required: true
+    mcp_tools: ["cortex_generate_dashboard", "cortex_sync_dashboard_data"]
+    validation: "MCP tools registered, AC_START/AC_COMPLETE logged"
+    
+  - id: "s4"
+    name: "Operational Orchestrator Integration (CRITICAL)"
+    description: "Wire into 7 operational orchestrators - governance-first integration"
+    tests: 0
+    effort_hours: 10
+    dependencies: ["s3"]
+    orchestrator_updates:
+      - orchestrator: "MasterOrchestrator"
+        integration_point: "Route dashboard generation through governance gate"
+        files_to_update: ["cortex/orchestrators/core/master_orchestrator.py"]
+        
+      - orchestrator: "PlanningOrchestrator"
+        integration_point: "Register dashboard generation as deployment artifact"
+        files_to_update: ["cortex/orchestrators/domain/planning_orchestrator.py"]
+        
+      - orchestrator: "InteractionOrchestrator"
+        integration_point: "List dashboard generation as available action"
+        files_to_update: ["cortex/orchestrators/domain/interaction_orchestrator.py"]
+        
+      - orchestrator: "RepositoryOnboardingOrchestrator"
+        integration_point: "Auto-generate dashboard on repo onboarding complete"
+        files_to_update: ["cortex/orchestrators/support/repository_onboarding_orchestrator.py"]
+        
+      - orchestrator: "RefactoringOrchestrator"
+        integration_point: "Regenerate dashboard after major code refactoring"
+        files_to_update: ["cortex/orchestrators/domain/refactoring_orchestrator.py"]
+        
+      - orchestrator: "RecommendationGate"
+        integration_point: "Use dashboard metrics as evidence source"
+        files_to_update: ["cortex/orchestrators/support/recommendation_gate.py"]
+        
+      - orchestrator: "TDDOrchestrator"
+        integration_point: "Add dashboard generation to TDD test suite"
+        files_to_update: ["cortex/orchestrators/core/tdd_orchestrator.py"]
+    
+    blocking_checklist:
+      - "MasterOrchestrator routes through governance"
+      - "PlanningOrchestrator registers dashboard artifact"
+      - "InteractionOrchestrator lists dashboard action"
+      - "RepositoryOnboardingOrchestrator auto-generates on onboard"
+      - "RefactoringOrchestrator regenerates post-refactor"
+      - "RecommendationGate uses metrics as evidence"
+      - "TDDOrchestrator has full test coverage"
+    
+    validation: "All orchestrators have dashboard_generation in capabilities"
+    
+  - id: "s5"
+    name: "Data Migration & Cleanup"
+    description: "Extract 5 repo datasets to JSON, migrate legacy HTML to SPA, verify, delete old"
+    tests: 22
+    effort_hours: 10
+    files_to_delete:
+      - "company/dashboards/repos/alist/index.html"
+      - "company/dashboards/repos/cortex/index.html"
+      - "company/dashboards/repos/kashkole/index.html"
+      - "company/dashboards/repos/ksessions/index.html"
+      - "company/dashboards/repos/noor canvas/index.html"
+    dependencies: ["s4"]
+    validation: "Data integrity verified, old files safely deleted"
+    
+  - id: "s6"
+    name: "Documentation & Registry Synchronization"
+    description: "API docs, MCP tool specs, registry updates, deployment guide"
+    tests: 10
+    effort_hours: 4
+    files_to_create:
+      - "docs/guides/dashboard-orchestrator-guide.md"
+      - "cortex/mcp/tools/dashboard_tools_spec.yaml"
+    files_to_update:
+      - "cortex-registry/_cortex-master/index.yaml"
+      - "cortex/wiring/specifications/wiring.yaml"
+    dependencies: ["s5"]
+    validation: "index.yaml shows phase-53 as completed"
+
+dependencies:
+  - "phase-47"  # Company/CORTEX separation (ensures clean registry)
+  - "phase-48"  # Holistic validation (ensures governance gates ready)
+  - "phase-51"  # MCP-First enforcement (ensures MCP tools mandatory)
+  - "phase-52"  # Enterprise Orchestrator Suite (orchestrators ready to wire)
+
+governance:
+  rules_enforced:
+    - "CORE-002: No markdown file generation (docs/ only)"
+    - "CORE-008: TDD mandatory (tests before code)"
+    - "CORE-035: No duplicate dashboards after consolidation"
+    - "CORE-049: Audit trail for all dashboard operations"
+    - "ARCH-050: MCP-First (all functionality via tools)"
+    - "DASHBOARD-001: Orphaned generation detection (new)"
+    - "DASHBOARD-002: Data duplication prevention (new)"
+    - "DASHBOARD-003: Orchestrator isolation detection (new)"
+
+test_targets:
+  s1_tests: 27
+  s2_tests: 19
+  s3_tests: 28
+  s4_tests: 0
+  s5_tests: 22
+  s6_tests: 10
+  total_tests: 126
+  coverage_target: 90
+  test_framework: "pytest"
+
+metrics_to_collect:
+  - "Dashboard generation latency (P99 target: <500ms)"
+  - "Data refresh frequency vs cache hit rate"
+  - "Orchestrator integration coverage (7/7 required)"
+  - "Audit trail completeness (100% of operations logged)"
+  - "Size reduction: before 67MB, target 15MB"
+
+unblocks:
+  - "Real-time dashboard data refresh capability"
+  - "Governance metrics collection from dashboards"
+  - "Cross-orchestrator dashboard integration"
+  - "Automated dashboard regeneration on code changes"
+  - "Dashboard as evidence source for recommendations"
+  - "Future phases: Dashboard-as-Service for external clients"
+
+completion_criteria:
+  - "SPA created: Single index.html + app.js + dashboard.css"
+  - "Data migrated: 5 repo JSON files in data/ directory"
+  - "DashboardOrchestrator wired: All 7 orchestrators updated"
+  - "MCP tools functional: cortex_generate_dashboard, cortex_sync_dashboard_data callable"
+  - "Audit trail active: Every dashboard operation logged with AC markers"
+  - "Old dashboards deleted: company/dashboards/repos/* empty"
+  - "Tests passing: 126/126 (100%)"
+  - "Phase registry updated: index.yaml reflects completion"
+  - "Governance rules enforced: DASHBOARD-001/002/003 active"
+  - "Documentation complete: API docs, deployment guide, MCP specs"
+
+rollback_plan: |
+  If phase fails:
+  1. Revert SPA commits (git revert)
+  2. Restore old dashboard directories from git
+  3. Remove DashboardOrchestrator from orchestrator mesh
+  4. Phase marked as "blocked" with failure reason
+  5. Root cause analysis in next AUDIT cycle
+
+continuation_prompt: |
+  Phase 53 is planned and ready for implementation after Phase 52 completes.
+  This phase addresses major architectural gap discovered in chat01.txt session.
+  Consolidates 7,776 files into unified SPA with full governance integration.
+  
+  To proceed: After Phase 52 completion, execute Phase 53 via:
+  /plan resolve phase-53

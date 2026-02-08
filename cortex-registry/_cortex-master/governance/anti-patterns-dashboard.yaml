@@ -1,0 +1,292 @@
+version: "1.0"
+description: "Dashboard anti-patterns and governance rules (Phase 53)"
+created: "2026-02-08"
+authority: "cortex-architect.prompt.md + Phase 53 remediation"
+
+anti_patterns:
+  - id: "DASHBOARD-001"
+    name: "Orphaned Dashboard Generation"
+    category: "governance"
+    severity: "P0"
+    description: |
+      Dashboard generation script runs outside orchestrator ecosystem.
+      No MCP wiring, no audit trail, no integration with operational orchestrators.
+      Blocks governance, makes it impossible to track generation ROI or failures.
+    
+    detection:
+      patterns:
+        - "Dashboard generation NOT triggered via cortex_generate_dashboard MCP tool"
+        - "Script runs standalone (not called by operational orchestrator)"
+        - "No AC_START/AC_COMPLETE audit trail in governance.db"
+        - "Generation not registered in PlanningOrchestrator"
+        - "Dashboard not listed in InteractionOrchestrator available_actions"
+      
+      detection_method: |
+        grep -r "generate_dashboards\|dashboard.*\.py" --include="*.py" \
+          | grep -v "cortex_generate_dashboard" \
+          | grep -v "DashboardOrchestrator" \
+          | grep -v "mcp/tools/dashboard"
+        
+        # Expected matches: 0
+        # If > 0: VIOLATION
+    
+    action: "BLOCK"
+    enforcement_level: "pre_execution"
+    error_message: |
+      ❌ GOVERNANCE VIOLATION: Dashboard Generation Orphaned
+      
+      Issue: Dashboard generation detected outside MCP governance ecosystem
+      
+      Required: All dashboard generation must route through:
+        1. cortex_generate_dashboard MCP tool
+        2. DashboardOrchestrator coordination
+        3. MasterOrchestrator governance gate
+        4. AC_START/AC_COMPLETE audit trail
+      
+      Resolution:
+        - Route through DashboardOrchestrator instead
+        - Invoke cortex_generate_dashboard MCP tool
+        - Ensure audit trail logging enabled
+    
+    remediation:
+      change_type: "refactor"
+      effort: "S (2-4 hours)"
+      steps:
+        - "Identify orphaned generation code"
+        - "Extract to DashboardOrchestrator method"
+        - "Call via cortex_generate_dashboard MCP tool"
+        - "Verify AC markers in governance.db"
+
+  - id: "DASHBOARD-002"
+    name: "Dashboard Data Duplication"
+    category: "architecture"
+    severity: "P1"
+    description: |
+      Same dashboard data embedded in multiple files (violates CORE-035).
+      Creates maintenance debt: data updates require regenerating all 5 dashboards.
+      Indicates incomplete refactoring or orphaned generation logic.
+    
+    detection:
+      patterns:
+        - "5+ dashboards with identical JSON structure in HTML"
+        - "CSS duplicated across multiple dashboard files"
+        - "Same repository data in >1 HTML file"
+        - "Dashboard files have size differences <10% (likely duplicates)"
+      
+      detection_method: |
+        # Find duplicate JSON structures
+        find company/dashboards -name "*.html" -exec grep -l "dashboard-data" {} \;
+        
+        # MD5 sum dashboard JSON payloads
+        for f in company/dashboards/repos/*/index.html; do
+          grep -oP '"repository_name".*"analysis_timestamp"' "$f" | md5sum
+        done | sort | uniq -d
+        
+        # Count: Expected 0 duplicate hashes
+        # If > 0: VIOLATION
+      
+      threshold: "3 or more identical data structures"
+    
+    action: "AUTO-FIX or BLOCK"
+    enforcement_level: "pre_commit"
+    priority: "before_phase_completion"
+    
+    error_message: |
+      ⚠️ ARCHITECTURE VIOLATION: Dashboard Data Duplication Detected
+      
+      Issue: Identical dashboard data found in multiple files
+      Files: {file_list}
+      
+      Violates CORE-035 (Single Implementation Principle).
+      Creates maintenance debt and bloats repository.
+      
+      Auto-Fix Available: Extract to data/{repo}.json files
+      
+      Or Manual Fix:
+        1. Consolidate duplicate data to shared JSON files
+        2. Update SPA to load data dynamically
+        3. Verify all dashboards render correctly
+    
+    remediation:
+      change_type: "refactor"
+      effort: "M (4-8 hours)"
+      steps:
+        - "Identify all duplicate dashboard data"
+        - "Extract to separate JSON files"
+        - "Update SPA loader for dynamic data"
+        - "Delete old HTML files"
+        - "Verify SPA renders all repos correctly"
+      
+      prevention: "Phase 53: Unified SPA with data/ directory"
+
+  - id: "DASHBOARD-003"
+    name: "Orchestrator Isolation: Dashboard Generation"
+    category: "integration"
+    severity: "P1"
+    description: |
+      Dashboard generation capability not wired into operational orchestrators.
+      MCP tool exists but not integrated with governance ecosystem.
+      Prevents cross-orchestrator dashboard coordination and planning.
+    
+    detection:
+      patterns:
+        - "Dashboard capability not registered in wiring.yaml"
+        - "MCP tool cortex_generate_dashboard not in MasterOrchestrator"
+        - "PlanningOrchestrator doesn't list dashboard as artifact"
+        - "InteractionOrchestrator missing dashboard in available_actions"
+        - "RepositoryOnboardingOrchestrator doesn't auto-generate dashboard"
+        - "RefactoringOrchestrator doesn't regenerate on refactor"
+        - "TDDOrchestrator missing dashboard generation test coverage"
+      
+      detection_method: |
+        python3 << 'EOF'
+        from cortex.wiring.registry import WiringRegistry
+        
+        registry = WiringRegistry()
+        dashboard_wiring = registry.get_capability("dashboard_generation")
+        
+        required_orchestrators = [
+          "MasterOrchestrator",
+          "PlanningOrchestrator", 
+          "InteractionOrchestrator",
+          "RepositoryOnboardingOrchestrator",
+          "RefactoringOrchestrator",
+          "RecommendationGate",
+          "TDDOrchestrator"
+        ]
+        
+        wired = [o for o in required_orchestrators if o in dashboard_wiring.orchestrators]
+        
+        print(f"Wired: {len(wired)}/{len(required_orchestrators)}")
+        
+        if len(wired) < len(required_orchestrators):
+          missing = set(required_orchestrators) - set(wired)
+          print(f"ERROR: Missing wiring for: {missing}")
+          exit(1)
+        EOF
+        
+        # Expected: "Wired: 7/7"
+        # If < 7: VIOLATION
+      
+      validation_frequency: "on_phase_completion"
+    
+    action: "BLOCK_PHASE_COMPLETION"
+    enforcement_level: "completion_gate"
+    
+    error_message: |
+      ❌ INTEGRATION VIOLATION: Orchestrator Isolation Detected
+      
+      Issue: Dashboard capability not fully wired into orchestrator mesh
+      
+      Wiring Status:
+        MasterOrchestrator: {status}
+        PlanningOrchestrator: {status}
+        InteractionOrchestrator: {status}
+        RepositoryOnboardingOrchestrator: {status}
+        RefactoringOrchestrator: {status}
+        RecommendationGate: {status}
+        TDDOrchestrator: {status}
+      
+      Phase 53 cannot complete until all 7 orchestrators are wired.
+      
+      Blocking Checklist:
+        - [ ] cortex/wiring/specifications/wiring.yaml updated
+        - [ ] MasterOrchestrator routes through governance
+        - [ ] PlanningOrchestrator registers dashboard artifact
+        - [ ] InteractionOrchestrator lists dashboard action
+        - [ ] RepositoryOnboardingOrchestrator auto-generates on onboard
+        - [ ] RefactoringOrchestrator regenerates post-refactor
+        - [ ] RecommendationGate uses metrics as evidence
+        - [ ] TDDOrchestrator has full test coverage
+    
+    remediation:
+      change_type: "integration"
+      effort: "M (8-12 hours for all 7 orchestrators)"
+      steps:
+        - "For each orchestrator:"
+        - "  1. Add dashboard_generation to capabilities"
+        - "  2. Update methods to call cortex_generate_dashboard"
+        - "  3. Add tests for dashboard integration"
+        - "  4. Update wiring.yaml registration"
+        - "Verify all 7 orchestrators in final integration test"
+      
+      prevention: "Phase 53: Mandatory wiring checklist in S4"
+
+audit_checks:
+  - id: "DASHBOARD-001-CHECK"
+    rule_id: "DASHBOARD-001"
+    frequency: "every_audit"
+    command: |
+      grep -r "generate_dashboards\|def.*dashboard" cortex --include="*.py" | \
+      grep -v "cortex_generate_dashboard" | grep -v "test_" | grep -v "#"
+    expected_matches: 0
+    failure_action: "P0_VIOLATION"
+    remediation: "Route through DashboardOrchestrator + MCP tools"
+    
+  - id: "DASHBOARD-002-CHECK"
+    rule_id: "DASHBOARD-002"
+    frequency: "every_commit"
+    command: |
+      find company/dashboards -name "*.html" -exec grep -l "dashboard-data" {} \; | \
+      xargs -I {} sh -c 'grep -oP '"'"'"repository_name".*"analysis_timestamp"'"'"' "{}" | md5sum' | \
+      sort | uniq -d
+    expected_matches: 0
+    failure_action: "P1_VIOLATION_AUTO_FIX"
+    remediation: "Extract dashboard data to JSON files"
+    auto_fix_available: true
+    
+  - id: "DASHBOARD-003-CHECK"
+    rule_id: "DASHBOARD-003"
+    frequency: "on_phase_completion"
+    command: |
+      python3 cortex/validation/validate_orchestrator_wiring.py --capability dashboard_generation
+    expected_result: "all_7_orchestrators_wired"
+    failure_action: "BLOCK_PHASE_COMPLETION"
+    remediation: "Complete Stage 4: Operational Orchestrator Integration"
+
+continuous_monitoring:
+  enabled: true
+  frequency: "on_every_audit"
+  dashboard: "http://localhost:3000/d/cortex-governance-dashboard"
+  panels:
+    - "DASHBOARD-001: Orphaned Generation Detection"
+    - "DASHBOARD-002: Data Duplication Trends"
+    - "DASHBOARD-003: Orchestrator Integration Coverage"
+
+enforcement_hooks:
+  pre_commit:
+    - "DASHBOARD-001-CHECK: Block orphaned generation"
+    - "DASHBOARD-002-CHECK: Detect data duplication"
+  
+  pre_execution:
+    - "DASHBOARD-001-CHECK: Verify MCP-wired generation"
+  
+  phase_completion:
+    - "DASHBOARD-003-CHECK: Validate all orchestrators wired"
+    - "All tests passing (126/126)"
+    - "Coverage target met (90%)"
+  
+  on_audit:
+    - Run all 3 checks
+    - Generate governance report
+    - Flag violations for remediation
+
+learning:
+  lessons:
+    - |
+      Dashboard generation must NEVER run outside orchestrator ecosystem.
+      Lack of wiring creates governance blindness and maintenance debt.
+      
+    - |
+      Data duplication violates CORE-035 and creates single points of failure.
+      Always extract to shared data sources (JSON, DB) accessible to multiple consumers.
+      
+    - |
+      Integration across multiple orchestrators requires completion checklist.
+      Partial wiring creates architectural debt and hidden dependencies.
+  
+  prevention:
+    - "New features: Start with orchestrator wiring checklist"
+    - "Code review: Check for MCP tool invocation"
+    - "Architecture review: Verify multi-orchestrator integration"
+    - "Audit cycle: Monthly governance health check"
