@@ -8,6 +8,14 @@ from typing import Dict, List, Tuple
 from dataclasses import dataclass
 from unittest.mock import Mock, patch, MagicMock
 
+# Import implementations
+from cortex.orchestrators.review.s2_code_review_rules import (
+    SecurityCheckFilter,
+    CodeStandardsValidator,
+    DependencyAnalyzer,
+    ReviewCommentGenerator,
+    ReviewRuleEngine,
+)
 
 # ============================================================================
 # TEST INFRASTRUCTURE: Fixtures & Helpers
@@ -474,6 +482,11 @@ class TestReviewPerformance:
                     "additions": [f"line {j}" for j in range(1000)]
                 }
                 for i in range(100)
+            ] + [
+                {
+                    "filename": "config.py",
+                    "additions": ['API_KEY = "AKIAIOSFODNN7EXAMPLE"']
+                }
             ]
         }
         
@@ -486,6 +499,7 @@ class TestReviewPerformance:
         
         # Should complete in <5 seconds
         assert elapsed < 5.0
+        # Should find at least the API key violation
         assert len(issues) > 0
     
     def test_handles_empty_diffs(self):
@@ -513,65 +527,6 @@ class TestReviewPerformance:
         paths = [i["path"] for i in issues]
         assert "image.png" not in paths
 
-
-# ============================================================================
-# PLACEHOLDER IMPLEMENTATIONS (RED Phase - Tests First)
-# ============================================================================
-
-class SecurityCheckFilter:
-    """AC-PHASE52-S2-001: Detect secrets and credentials"""
-    
-    def find_secrets(self, diff: Dict) -> List[Dict]:
-        """Find hardcoded secrets in PR diff"""
-        raise NotImplementedError("RED: Implement secret detection")
-
-
-class CodeStandardsValidator:
-    """AC-PHASE52-S2-002: Enforce company code standards"""
-    
-    def validate(self, code: str, language: str) -> List[Dict]:
-        """Validate code against standards"""
-        raise NotImplementedError("RED: Implement standards validation")
-
-
-class DependencyAnalyzer:
-    """AC-PHASE52-S2-003: Analyze dependencies for vulnerabilities"""
-    
-    def analyze(self, requirements: List[str]) -> List[Dict]:
-        """Analyze dependencies"""
-        raise NotImplementedError("RED: Implement dependency analysis")
-
-
-class ReviewCommentGenerator:
-    """AC-PHASE52-S2-004: Generate human-readable review comments"""
-    
-    def generate(self, violation: Dict) -> Dict:
-        """Generate single comment"""
-        raise NotImplementedError("RED: Implement comment generation")
-    
-    def batch_generate(self, violations: List[Dict]) -> List[Dict]:
-        """Generate batched comments"""
-        raise NotImplementedError("RED: Implement batch generation")
-
-
-class ReviewRuleEngine:
-    """AC-PHASE52-S2-005: Orchestrate all checks"""
-    
-    def __init__(self, config: Dict = None):
-        self.config = config or {}
-    
-    def analyze(self, diff: Dict) -> List[Dict]:
-        """Analyze PR diff against all rules"""
-        raise NotImplementedError("RED: Implement rule engine")
-    
-    def review(self, diff: Dict) -> Dict:
-        """Generate structured review"""
-        raise NotImplementedError("RED: Implement review generation")
-    
-    def is_check_enabled(self, check_name: str) -> bool:
-        """Check if rule is enabled"""
-        raise NotImplementedError("RED: Implement check enablement")
-    
     def get_severity(self, check_name: str) -> str:
         """Get severity level for check"""
         raise NotImplementedError("RED: Implement severity mapping")
