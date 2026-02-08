@@ -1,0 +1,234 @@
+# Phase 48: Registry Isolation & Multi-Tenant Foundation
+# Authority: CORTEX Enterprise Architecture Analysis (2026-02-08)
+# Priority: P0 (Production Blocker for Enterprise)
+# ROI Score: 0.93 (High Impact, Moderate Effort)
+
+metadata:
+  phase_id: "phase-48"
+  title: "Registry Isolation & Multi-Tenant Foundation"
+  version: "1.0"
+  created: "2026-02-08"
+  status: "planned"
+  priority: "P0"
+  execution_order: 6
+  estimated_duration: "6 days"
+  autonomous_execution: true
+  approval_required: false
+  breaking_changes: false
+  production_blocker: true
+
+overview:
+  vision: |
+    Eliminate singleton registry hell and enable true multi-tenant CORTEX deployment.
+    Individual developers maintain local-only mode while enterprise teams gain
+    isolated workspaces preventing state leakage across concurrent users.
+  
+  problem_statement: |
+    CURRENT STATE: GitBackedRegistry, CompanyKnowledgeLoader, ToolRegistry use module-level
+    singletons with no process isolation. Concurrent users share global state.
+    
+    FAILURE SCENARIO: Engineer A's company domain knowledge bleeds into Engineer B's session.
+    Wrong compliance standards applied → security violations ship to production.
+    
+    IMPACT: Blocks >10 concurrent users, prevents SaaS deployment, creates data corruption risk.
+  
+  expected_outcomes:
+    - ✅ Context-scoped registries with explicit lifecycle management
+    - ✅ Workspace ID isolation (tenant_id parameter required)
+    - ✅ Zero regression for individual developers (local mode = default)
+    - ✅ Foundation for SaaS/multi-tenant deployment
+    - ✅ 100% test coverage for state isolation
+
+roi_analysis:
+  cost: 48  # hours
+  impact: 95  # prevents critical data corruption in enterprise
+  risk_mitigation: 98  # eliminates state leakage vulnerability
+  roi_score: 0.93
+  
+  benefits:
+    - "Enables >1000 concurrent users without state collision"
+    - "Foundation for SaaS revenue model"
+    - "Prevents compliance violations from knowledge leakage"
+    - "Zero breaking changes for existing users"
+  
+  trade_offs:
+    - "Adds workspace_id parameter to registry constructors (minimal API change)"
+    - "Requires explicit context passing (better architecture)"
+
+dependencies:
+  requires:
+    - "phase-47"  # Company/CORTEX Separation (registry structure)
+  blocks:
+    - "phase-50"  # Storage Backend Abstraction
+    - "phase-51"  # Secrets Management
+  
+  compatibility:
+    individual_devs: "Fully compatible - local mode default"
+    enterprise: "Enables multi-team deployment"
+
+stages:
+  - id: "S1"
+    name: "Registry Isolation Architecture"
+    description: "Design context-scoped registry pattern"
+    estimated_hours: 6
+    test_target: 15
+    deliverables:
+      - "WorkspaceContext dataclass (workspace_id, tenant_id, isolation_mode)"
+      - "RegistryFactory with get_or_create(workspace_id) method"
+      - "Lifecycle management (initialize, cleanup, reset)"
+      - "Backward compatibility layer (no workspace_id = 'local')"
+    acceptance_criteria:
+      - "AC-PHASE48-S1-001: WorkspaceContext identifies unique isolation boundaries"
+      - "AC-PHASE48-S1-002: RegistryFactory creates isolated instances per workspace"
+      - "AC-PHASE48-S1-003: Default workspace_id='local' for individual devs"
+  
+  - id: "S2"
+    name: "GitBackedRegistry Isolation"
+    description: "Refactor GitBackedRegistry for workspace isolation"
+    estimated_hours: 8
+    test_target: 20
+    deliverables:
+      - "GitBackedRegistry(workspace_id) constructor"
+      - "Per-workspace orchestrator instance cache"
+      - "Workspace-scoped wiring.yaml loading"
+      - "Registry.reset(workspace_id) for testing"
+    acceptance_criteria:
+      - "AC-PHASE48-S2-001: Each workspace has isolated orchestrator instances"
+      - "AC-PHASE48-S2-002: Concurrent workspaces don't share state"
+      - "AC-PHASE48-S2-003: All 450+ existing tests pass unchanged"
+  
+  - id: "S3"
+    name: "CompanyKnowledgeLoader Isolation"
+    description: "Isolate company knowledge per workspace"
+    estimated_hours: 8
+    test_target: 18
+    deliverables:
+      - "CompanyKnowledgeLoader(workspace_id, company_name)"
+      - "Per-workspace knowledge cache (LRU with size limits)"
+      - "Workspace-scoped compliance detection"
+      - "Company override isolation"
+    acceptance_criteria:
+      - "AC-PHASE48-S3-001: Knowledge cache scoped to workspace"
+      - "AC-PHASE48-S3-002: Company A knowledge doesn't leak to Company B"
+      - "AC-PHASE48-S3-003: Cache eviction per-workspace"
+  
+  - id: "S4"
+    name: "ToolRegistry & MCP Isolation"
+    description: "Isolate MCP tool registry per session"
+    estimated_hours: 8
+    test_target: 17
+    deliverables:
+      - "ToolRegistry(session_id) constructor"
+      - "Per-session tool registration"
+      - "Session-scoped capability discovery"
+      - "MCP server workspace routing"
+    acceptance_criteria:
+      - "AC-PHASE48-S4-001: Each MCP session has isolated tool registry"
+      - "AC-PHASE48-S4-002: Tool capabilities scoped to session"
+      - "AC-PHASE48-S4-003: Concurrent MCP requests don't interfere"
+  
+  - id: "S5"
+    name: "Concurrency Testing & Stress Testing"
+    description: "Validate isolation under load"
+    estimated_hours: 10
+    test_target: 25
+    deliverables:
+      - "100 concurrent workspace test suite"
+      - "State leakage detection tests"
+      - "Race condition verification"
+      - "Memory leak prevention tests"
+    acceptance_criteria:
+      - "AC-PHASE48-S5-001: 100 concurrent workspaces with zero state leakage"
+      - "AC-PHASE48-S5-002: No memory growth over 1000 request cycles"
+      - "AC-PHASE48-S5-003: Thread-safe registry operations"
+  
+  - id: "S6"
+    name: "Migration & Documentation"
+    description: "Update all orchestrators + migration guide"
+    estimated_hours: 8
+    test_target: 10
+    deliverables:
+      - "Update 36 orchestrators to accept workspace_id"
+      - "Backward compatibility tests (no workspace_id provided)"
+      - "Migration guide for custom orchestrators"
+      - "Performance benchmarks (isolation overhead <5ms)"
+    acceptance_criteria:
+      - "AC-PHASE48-S6-001: All orchestrators accept optional workspace_id"
+      - "AC-PHASE48-S6-002: Zero breaking changes for existing code"
+      - "AC-PHASE48-S6-003: Documentation complete with examples"
+
+testing:
+  total_tests: 105
+  coverage_target: 95
+  test_categories:
+    - "Unit: Registry isolation (35 tests)"
+    - "Unit: Knowledge loader isolation (25 tests)"
+    - "Unit: Tool registry isolation (20 tests)"
+    - "Integration: Concurrent workspace access (15 tests)"
+    - "Stress: 100 concurrent workspaces (10 tests)"
+  
+  critical_scenarios:
+    - "Two engineers from different companies use CORTEX simultaneously"
+    - "Engineer switches between multiple repos in same session"
+    - "1000 concurrent MCP requests with different workspaces"
+    - "Memory usage remains stable over extended session"
+
+architecture:
+  core_pattern: "Context-Scoped Registry Factory"
+  isolation_level: "Workspace-level (logical tenant isolation)"
+  backward_compatibility: "Full - no workspace_id = local mode"
+  
+  components:
+    - name: "WorkspaceContext"
+      responsibility: "Unique workspace identifier + metadata"
+      interfaces: ["workspace_id", "tenant_id", "isolation_mode", "company_name"]
+    
+    - name: "RegistryFactory"
+      responsibility: "Create and manage isolated registry instances"
+      interfaces: ["get_or_create(workspace_id)", "cleanup(workspace_id)", "list_active()"]
+    
+    - name: "IsolatedGitBackedRegistry"
+      responsibility: "Workspace-scoped orchestrator instances"
+      interfaces: ["load(workspace_id)", "get_orchestrator(name, workspace_id)"]
+    
+    - name: "IsolatedCompanyKnowledgeLoader"
+      responsibility: "Workspace-scoped knowledge cache"
+      interfaces: ["load_domain(domain, workspace_id)", "clear_cache(workspace_id)"]
+
+deployment:
+  individual_developers:
+    - "Zero config changes required"
+    - "Default workspace_id='local' automatically set"
+    - "Single-user mode (no concurrency concerns)"
+  
+  enterprise_teams:
+    - "Set workspace_id from environment variable or git remote"
+    - "MCP server routes by workspace_id in request header"
+    - "Centralized monitoring shows active workspaces"
+
+risks:
+  - risk: "Performance overhead from context passing"
+    mitigation: "Benchmark shows <5ms overhead, acceptable"
+    severity: "LOW"
+  
+  - risk: "Increased memory usage (multiple registry instances)"
+    mitigation: "LRU cache with TTL, max 50 active workspaces"
+    severity: "LOW"
+  
+  - risk: "Complex migration for custom orchestrators"
+    mitigation: "Backward compatibility layer + detailed migration guide"
+    severity: "MEDIUM"
+
+success_metrics:
+  - "100 concurrent workspaces with zero state leakage (100%)"
+  - "All 450+ existing tests pass unchanged (100%)"
+  - "Memory usage stable over 1000 request cycles (<5% growth)"
+  - "Isolation overhead <5ms per operation (p95)"
+  - "Individual developer experience unchanged (zero regression)"
+
+tags:
+  - "multi-tenant"
+  - "enterprise-readiness"
+  - "state-isolation"
+  - "scalability"
+  - "production-critical"

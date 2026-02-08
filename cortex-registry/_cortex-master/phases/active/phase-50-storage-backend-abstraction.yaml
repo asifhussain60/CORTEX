@@ -1,0 +1,278 @@
+# Phase 50: Storage Backend Abstraction & Cloud Integration
+# Authority: CORTEX Enterprise Architecture Analysis (2026-02-08)
+# Priority: P1 (Enterprise Deployment Foundation)
+# ROI Score: 0.88 (High Impact, Moderate Effort)
+
+metadata:
+  phase_id: "phase-50"
+  title: "Storage Backend Abstraction & Cloud Integration"
+  version: "1.0"
+  created: "2026-02-08"
+  status: "planned"
+  priority: "P1"
+  execution_order: 7
+  estimated_duration: "8 days"
+  autonomous_execution: true
+  approval_required: false
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Decouple CORTEX from local filesystem with pluggable storage backends.
+    Individual developers continue using local files while enterprise teams
+    gain S3, Azure Blob, multi-region replication, and offline-mode capabilities.
+  
+  problem_statement: |
+    CURRENT STATE: All orchestrators directly read from filesystem paths:
+    - company/domains/, cortex/knowledge/, cortex/wiring/specifications/
+    - No abstraction layer, no remote storage, no offline mode
+    
+    FAILURE SCENARIO: Network partition → orchestrators can't load knowledge →
+    every request fails with cryptic YAML errors. No fallback, no cache warming, no degraded mode.
+    
+    IMPACT: Single point of failure, no cloud deployment, no multi-region, no offline mode.
+  
+  expected_outcomes:
+    - ✅ KnowledgeProvider interface with pluggable backends
+    - ✅ LocalFileSystem, S3Backend, AzureBlobBackend implementations
+    - ✅ Write-through caching with TTL
+    - ✅ Offline mode with last-known-good snapshot
+    - ✅ Zero breaking changes (local filesystem = default)
+
+roi_analysis:
+  cost: 64  # hours
+  impact: 88  # enables cloud deployment + disaster recovery
+  risk_mitigation: 92  # eliminates filesystem SPOF
+  roi_score: 0.88
+  
+  benefits:
+    - "Enables multi-region deployment (knowledge replication)"
+    - "Disaster recovery via cloud storage backup"
+    - "Offline mode for disconnected environments"
+    - "Centralized knowledge management (no git required)"
+  
+  trade_offs:
+    - "Adds network latency for remote storage (mitigated by cache)"
+    - "Complexity of multiple storage backends (3 implementations)"
+
+dependencies:
+  requires:
+    - "phase-48"  # Registry Isolation (workspace-scoped caching)
+  blocks:
+    - "Centralized SaaS deployment"
+    - "Multi-region knowledge replication"
+  
+  compatibility:
+    individual_devs: "Zero impact - local filesystem default"
+    enterprise: "Enables cloud deployment + DR"
+
+stages:
+  - id: "S1"
+    name: "Storage Provider Interface"
+    description: "Define abstract storage contract"
+    estimated_hours: 6
+    test_target: 12
+    deliverables:
+      - "IKnowledgeProvider protocol (read, write, list, exists, delete)"
+      - "StorageConfig dataclass (backend, endpoint, credentials, cache_ttl)"
+      - "Factory pattern: get_provider(config) → IKnowledgeProvider"
+      - "Error types: StorageError, NetworkError, PermissionError"
+    acceptance_criteria:
+      - "AC-PHASE50-S1-001: IKnowledgeProvider defines all storage operations"
+      - "AC-PHASE50-S1-002: Factory returns correct provider based on config"
+      - "AC-PHASE50-S1-003: Error handling covers all failure modes"
+  
+  - id: "S2"
+    name: "LocalFileSystem Backend"
+    description: "Wrap existing filesystem access"
+    estimated_hours: 8
+    test_target: 15
+    deliverables:
+      - "LocalFileSystemProvider implementation"
+      - "Path resolution (company/domains/, cortex/knowledge/)"
+      - "YAML caching layer (in-memory LRU)"
+      - "File watcher for auto-reload (optional)"
+    acceptance_criteria:
+      - "AC-PHASE50-S2-001: 100% backward compatible with existing file reads"
+      - "AC-PHASE50-S2-002: All 450+ existing tests pass unchanged"
+      - "AC-PHASE50-S2-003: Cache reduces disk I/O by 70%"
+  
+  - id: "S3"
+    name: "S3 Backend Implementation"
+    description: "AWS S3 storage backend"
+    estimated_hours: 12
+    test_target: 18
+    deliverables:
+      - "S3StorageProvider with boto3 integration"
+      - "Bucket organization: s3://cortex-knowledge/{workspace_id}/domains/"
+      - "Versioning enabled (track knowledge changes)"
+      - "Lifecycle rules (auto-archive old versions to Glacier)"
+      - "Exponential backoff retry logic"
+    acceptance_criteria:
+      - "AC-PHASE50-S3-001: Read/write to S3 with authentication"
+      - "AC-PHASE50-S3-002: Versioning tracks all knowledge changes"
+      - "AC-PHASE50-S3-003: Network failures trigger cache fallback"
+  
+  - id: "S4"
+    name: "Azure Blob Backend Implementation"
+    description: "Azure Blob Storage backend"
+    estimated_hours: 10
+    test_target: 15
+    deliverables:
+      - "AzureBlobProvider with azure-storage-blob integration"
+      - "Container organization: cortex-knowledge/{workspace_id}/domains/"
+      - "Soft delete enabled (30-day retention)"
+      - "Retry logic with jitter"
+    acceptance_criteria:
+      - "AC-PHASE50-S4-001: Read/write to Azure Blob with authentication"
+      - "AC-PHASE50-S4-002: Soft delete enables recovery"
+      - "AC-PHASE50-S4-003: Compatible with Azure Key Vault for secrets"
+  
+  - id: "S5"
+    name: "Write-Through Cache Layer"
+    description: "Multi-level caching for performance"
+    estimated_hours: 12
+    test_target: 20
+    deliverables:
+      - "L1 cache: In-memory LRU (10 MB limit per workspace)"
+      - "L2 cache: Local disk snapshot (last-known-good)"
+      - "Cache warming on startup (load critical domains)"
+      - "TTL configuration (5 min for deployments, 1 hour for knowledge)"
+      - "Cache invalidation on write"
+    acceptance_criteria:
+      - "AC-PHASE50-S5-001: Cache hit rate >70% in production"
+      - "AC-PHASE50-S5-002: L2 cache enables offline mode"
+      - "AC-PHASE50-S5-003: Cache warming reduces cold start by 80%"
+  
+  - id: "S6"
+    name: "Offline Mode & Degraded Operation"
+    description: "Graceful fallback when storage unavailable"
+    estimated_hours: 10
+    test_target: 18
+    deliverables:
+      - "Offline detection (network unreachable, timeout)"
+      - "L2 cache promotion (use last-known-good snapshot)"
+      - "Read-only mode (block writes during outage)"
+      - "Staleness indicator (show last sync timestamp)"
+      - "Auto-recovery when connection restored"
+    acceptance_criteria:
+      - "AC-PHASE50-S6-001: Network partition doesn't crash orchestrators"
+      - "AC-PHASE50-S6-002: Users notified of offline mode (read-only)"
+      - "AC-PHASE50-S6-003: Auto-sync when connection restored"
+  
+  - id: "S7"
+    name: "Migration & Orchestrator Integration"
+    description: "Update all knowledge loaders to use providers"
+    estimated_hours: 6
+    test_target: 12
+    deliverables:
+      - "Update CompanyKnowledgeLoader to use IKnowledgeProvider"
+      - "Update GitBackedRegistry to use IKnowledgeProvider"
+      - "Environment variable configuration (STORAGE_BACKEND=local|s3|azure)"
+      - "Migration guide for custom loaders"
+    acceptance_criteria:
+      - "AC-PHASE50-S7-001: Zero code changes required for local filesystem users"
+      - "AC-PHASE50-S7-002: Environment variable switches backend"
+      - "AC-PHASE50-S7-003: All existing tests pass (450+)"
+
+testing:
+  total_tests: 110
+  coverage_target: 92
+  test_categories:
+    - "Unit: LocalFileSystem backend (20 tests)"
+    - "Unit: S3 backend (25 tests)"
+    - "Unit: Azure backend (20 tests)"
+    - "Unit: Cache layer (25 tests)"
+    - "Integration: Offline mode (15 tests)"
+    - "Integration: Backend switching (5 tests)"
+  
+  critical_scenarios:
+    - "S3 bucket unavailable → L2 cache serves stale knowledge"
+    - "1000 concurrent reads → cache hit rate >70%"
+    - "Network partition for 1 hour → offline mode stable"
+    - "Switch backend local→s3 with zero downtime"
+
+architecture:
+  design_pattern: "Strategy Pattern (pluggable backends) + Decorator Pattern (cache layer)"
+  
+  components:
+    - name: "IKnowledgeProvider"
+      responsibility: "Abstract storage operations"
+      methods: ["read", "write", "list", "exists", "delete"]
+    
+    - name: "StorageProviderFactory"
+      responsibility: "Create provider based on config"
+      method: "get_provider(config: StorageConfig) → IKnowledgeProvider"
+    
+    - name: "CachedKnowledgeProvider"
+      responsibility: "Wrap provider with cache layer"
+      decorates: "Any IKnowledgeProvider"
+    
+    - name: "LocalFileSystemProvider"
+      responsibility: "Local disk access"
+      default: true
+    
+    - name: "S3StorageProvider"
+      responsibility: "AWS S3 access"
+      credentials: "AWS IAM roles or ~/.aws/credentials"
+    
+    - name: "AzureBlobProvider"
+      responsibility: "Azure Blob access"
+      credentials: "Azure managed identity or connection string"
+
+deployment:
+  individual_developers:
+    - "Zero configuration - local filesystem works as before"
+    - "Optional: Enable L1 cache for performance boost"
+  
+  enterprise_teams:
+    - "Set STORAGE_BACKEND=s3 in environment"
+    - "Configure S3 bucket via CORTEX_KNOWLEDGE_BUCKET"
+    - "Use IAM roles for authentication (no hardcoded credentials)"
+    - "Enable multi-region replication in S3 (HA/DR)"
+
+configuration:
+  environment_variables:
+    - "STORAGE_BACKEND: local|s3|azure (default: local)"
+    - "S3_BUCKET: cortex-knowledge (for S3 backend)"
+    - "AZURE_CONTAINER: cortex-knowledge (for Azure backend)"
+    - "CACHE_ENABLED: true|false (default: true)"
+    - "CACHE_TTL_SECONDS: 3600 (default: 1 hour)"
+  
+  example_local:
+    STORAGE_BACKEND: "local"
+    CACHE_ENABLED: "true"
+  
+  example_s3:
+    STORAGE_BACKEND: "s3"
+    S3_BUCKET: "cortex-knowledge-prod"
+    AWS_REGION: "us-east-1"
+    CACHE_TTL_SECONDS: "300"
+
+risks:
+  - risk: "Network latency adds 100-500ms to knowledge loading"
+    mitigation: "L1/L2 cache reduces remote calls by 70%+, cache warming on startup"
+    severity: "LOW"
+  
+  - risk: "Cloud storage costs for large knowledge bases"
+    mitigation: "Lifecycle rules move old versions to Glacier, compression"
+    severity: "LOW"
+  
+  - risk: "Cache staleness during rapid knowledge updates"
+    mitigation: "Short TTL for critical domains, cache invalidation on write"
+    severity: "MEDIUM"
+
+success_metrics:
+  - "Cache hit rate >70% in production workloads"
+  - "Offline mode handles 1-hour network partition without crashes"
+  - "S3 backend enables multi-region deployment (3+ regions)"
+  - "Zero regression for local filesystem users (450+ tests pass)"
+  - "Cold start reduced by 80% via cache warming"
+
+tags:
+  - "storage-abstraction"
+  - "cloud-integration"
+  - "disaster-recovery"
+  - "offline-mode"
+  - "enterprise-ready"

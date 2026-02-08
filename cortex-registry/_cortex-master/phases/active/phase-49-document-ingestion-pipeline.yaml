@@ -1,0 +1,265 @@
+# Phase 49: Document Ingestion & Knowledge Extraction Pipeline
+# Authority: CORTEX Enterprise Architecture Analysis (2026-02-08)
+# Priority: P1 (Enterprise Knowledge Scaling)
+# ROI Score: 0.91 (High Impact, High Effort)
+
+metadata:
+  phase_id: "phase-49"
+  title: "Document Ingestion & Knowledge Extraction Pipeline"
+  version: "1.0"
+  created: "2026-02-08"
+  status: "planned"
+  priority: "P1"
+  execution_order: 8
+  estimated_duration: "14 days"
+  autonomous_execution: false
+  approval_required: true
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Enable enterprise teams to ingest policy documents, compliance manuals, architecture
+    diagrams, and technical standards into CORTEX knowledge base without manual YAML authoring.
+    
+    Supports: Word (.docx), Excel (.xlsx), PowerPoint (.pptx), PDF, Markdown.
+    Future: Images (OCR), videos (transcription), architecture diagrams (vision analysis).
+  
+  problem_statement: |
+    CURRENT STATE: Knowledge scaling bottleneck. Manual YAML authoring doesn't scale beyond
+    50 domains. Enterprise teams have hundreds of policy docs, compliance manuals, standards.
+    
+    FAILURE SCENARIO: Compliance team updates PCI-DSS PDF manual. Engineers don't see changes
+    for weeks because knowledge engineer manually transcribes to YAML. Violation shipped.
+    
+    IMPACT: Knowledge growth bottleneck, compliance lag, manual toil, knowledge drift.
+  
+  expected_outcomes:
+    - ✅ Async document upload → knowledge extraction → YAML generation pipeline
+    - ✅ Multi-format support (Office, PDF, Markdown)
+    - ✅ Human-in-the-loop approval workflow
+    - ✅ Conflict detection & resolution
+    - ✅ Provenance tracking (document → domain YAML)
+
+roi_analysis:
+  cost: 112  # hours
+  impact: 90  # eliminates knowledge bottleneck
+  risk_mitigation: 85  # reduces manual errors, compliance lag
+  roi_score: 0.91
+  
+  benefits:
+    - "10x faster knowledge base growth (days → hours)"
+    - "Reduces compliance lag from weeks to days"
+    - "Eliminates manual transcription errors"
+    - "Enables non-technical teams to contribute knowledge"
+  
+  trade_offs:
+    - "Complex multi-stage pipeline (extraction → parsing → validation)"
+    - "Requires human approval workflow (can't auto-publish)"
+    - "Storage requirements increase (original docs + extracted YAMLs)"
+
+dependencies:
+  requires:
+    - "phase-47"  # Company/CORTEX Separation (registry structure)
+    - "phase-46"  # Infrastructure Discovery (tooling detection)
+  blocks:
+    - "Enterprise knowledge scaling"
+    - "Compliance automation"
+  
+  compatibility:
+    individual_devs: "Optional feature - can ignore completely"
+    enterprise: "Critical enabler for knowledge scaling"
+
+stages:
+  - id: "S1"
+    name: "Ingestion API & Storage"
+    description: "Upload endpoint + document storage"
+    estimated_hours: 12
+    test_target: 18
+    deliverables:
+      - "DocumentIngestionOrchestrator skeleton"
+      - "POST /api/documents/upload endpoint (100 MB limit)"
+      - "File validation (MIME type, size, malware scan stub)"
+      - "S3/local filesystem storage adapter"
+      - "Document metadata database (PostgreSQL/SQLite)"
+    acceptance_criteria:
+      - "AC-PHASE49-S1-001: Upload accepts Word/Excel/PPT/PDF/Markdown"
+      - "AC-PHASE49-S1-002: MIME type validation prevents malicious uploads"
+      - "AC-PHASE49-S1-003: Documents stored with encryption at rest"
+  
+  - id: "S2"
+    name: "Content Extraction Engine"
+    description: "Extract text + structure from documents"
+    estimated_hours: 20
+    test_target: 25
+    deliverables:
+      - "Apache Tika integration (Docker container)"
+      - "Office document extractor (python-docx, openpyxl, python-pptx)"
+      - "PDF extractor (PyPDF2 + pdfplumber)"
+      - "Markdown parser (markdown-it-py)"
+      - "Structured metadata extraction (headings, tables, lists)"
+    acceptance_criteria:
+      - "AC-PHASE49-S2-001: Extracts plain text from all formats"
+      - "AC-PHASE49-S2-002: Preserves heading hierarchy (H1/H2/H3)"
+      - "AC-PHASE49-S2-003: Extracts tables as structured data"
+  
+  - id: "S3"
+    name: "Knowledge Parsing & Entity Recognition"
+    description: "NLP to identify domain concepts"
+    estimated_hours: 24
+    test_target: 20
+    deliverables:
+      - "Domain concept extractor (keyword matching + NER)"
+      - "Compliance keyword detection (PCI-DSS, HIPAA, SOC2)"
+      - "Architecture pattern recognition (microservices, event-driven)"
+      - "Relationship extraction (parent/child domains)"
+      - "Confidence scoring (0.0-1.0)"
+    acceptance_criteria:
+      - "AC-PHASE49-S3-001: Identifies compliance standards with >80% accuracy"
+      - "AC-PHASE49-S3-002: Extracts architecture patterns from docs"
+      - "AC-PHASE49-S3-003: Confidence score correlates with human judgment"
+  
+  - id: "S4"
+    name: "YAML Generation & Schema Validation"
+    description: "Convert extracted knowledge to domain YAMLs"
+    estimated_hours: 18
+    test_target: 22
+    deliverables:
+      - "Knowledge graph to YAML converter (Jinja2 templates)"
+      - "Domain YAML schema validation"
+      - "Duplicate detection (vs existing domains)"
+      - "Conflict detection (contradictory rules)"
+      - "Change proposal generation (diff against existing)"
+    acceptance_criteria:
+      - "AC-PHASE49-S4-001: Generated YAMLs pass schema validation"
+      - "AC-PHASE49-S4-002: Detects 100% of duplicate domains"
+      - "AC-PHASE49-S4-003: Surfaces conflicts for human resolution"
+  
+  - id: "S5"
+    name: "Approval Workflow & Publication"
+    description: "Human-in-the-loop review + publish"
+    estimated_hours: 16
+    test_target: 15
+    deliverables:
+      - "Approval queue UI (Glassmorphism dashboard)"
+      - "Side-by-side diff view (proposed vs existing)"
+      - "Approve/Reject/Edit workflow"
+      - "Git commit automation (approved changes)"
+      - "Provenance tracking (document source → YAML)"
+    acceptance_criteria:
+      - "AC-PHASE49-S5-001: Approval queue shows pending changes"
+      - "AC-PHASE49-S5-002: Domain owners receive notifications"
+      - "AC-PHASE49-S5-003: Approved changes auto-commit to git"
+  
+  - id: "S6"
+    name: "Incremental Updates & Version Control"
+    description: "Handle document updates without full replacement"
+    estimated_hours: 14
+    test_target: 12
+    deliverables:
+      - "Document version tracking (v1, v2, v3)"
+      - "Incremental diff extraction (what changed)"
+      - "Merge strategies (override, append, ignore)"
+      - "Rollback capability (revert to previous version)"
+      - "Change notification system"
+    acceptance_criteria:
+      - "AC-PHASE49-S6-001: Updates generate minimal diffs"
+      - "AC-PHASE49-S6-002: Rollback restores previous domain state"
+      - "AC-PHASE49-S6-003: Stakeholders notified of changes"
+  
+  - id: "S7"
+    name: "Security & Compliance"
+    description: "PII redaction, malware scanning, audit trail"
+    estimated_hours: 8
+    test_target: 10
+    deliverables:
+      - "PII detection & redaction (SSNs, credit cards, emails)"
+      - "Malware scanning (ClamAV integration)"
+      - "Sandboxed document conversion (Docker isolation)"
+      - "Immutable audit log (who uploaded, when, approved by)"
+      - "Access control (RBAC for upload/approve)"
+    acceptance_criteria:
+      - "AC-PHASE49-S7-001: PII automatically redacted before YAML generation"
+      - "AC-PHASE49-S7-002: Malware detected and blocked"
+      - "AC-PHASE49-S7-003: Audit trail immutable and tamper-proof"
+
+testing:
+  total_tests: 122
+  coverage_target: 90
+  test_categories:
+    - "Unit: Document extraction (30 tests)"
+    - "Unit: Knowledge parsing (25 tests)"
+    - "Unit: YAML generation (22 tests)"
+    - "Integration: Full pipeline (25 tests)"
+    - "Security: PII/malware (20 tests)"
+  
+  critical_scenarios:
+    - "Upload 500-page PDF compliance manual → extract 50 domains"
+    - "Excel with PII (SSNs) → redacted in output YAML"
+    - "Malicious Word doc with macros → blocked at upload"
+    - "Updated document → merge changes without full replacement"
+
+architecture:
+  pipeline_stages:
+    - "Upload → Validation → Storage"
+    - "Extraction → Parsing → Entity Recognition"
+    - "YAML Generation → Validation → Conflict Detection"
+    - "Approval Queue → Human Review → Publication"
+  
+  components:
+    - name: "DocumentIngestionOrchestrator"
+      responsibility: "Orchestrate full pipeline"
+      mcp_tools: ["cortex_ingest_document", "cortex_approve_knowledge"]
+    
+    - name: "ExtractionEngine"
+      responsibility: "Multi-format text extraction"
+      adapters: ["TikaAdapter", "OfficeAdapter", "PDFAdapter"]
+    
+    - name: "KnowledgeParser"
+      responsibility: "NLP entity recognition + relationship extraction"
+      methods: ["extract_concepts", "detect_compliance", "score_confidence"]
+    
+    - name: "YAMLGenerator"
+      responsibility: "Knowledge graph → domain YAML"
+      templates: ["compliance.yaml.j2", "architecture.yaml.j2"]
+    
+    - name: "ApprovalWorkflow"
+      responsibility: "Human-in-the-loop approval"
+      ui: "company/dashboards/ingestion-queue.html"
+
+deployment:
+  individual_developers:
+    - "Optional feature - no impact if unused"
+    - "Can ingest personal notes/docs into local domains"
+  
+  enterprise_teams:
+    - "Compliance team uploads PCI-DSS manual → auto-generates rules"
+    - "Architecture team uploads ADRs → extracts patterns"
+    - "Security team uploads threat models → populates security knowledge"
+
+risks:
+  - risk: "NLP accuracy <80% → manual cleanup burden"
+    mitigation: "Human approval workflow catches errors, confidence scoring"
+    severity: "MEDIUM"
+  
+  - risk: "PII leakage in extracted YAMLs"
+    mitigation: "Multi-stage PII detection, manual review required"
+    severity: "HIGH"
+  
+  - risk: "Malicious document exploits (macros, scripts)"
+    mitigation: "Sandboxed conversion, ClamAV scanning, format validation"
+    severity: "HIGH"
+
+success_metrics:
+  - "Ingestion pipeline processes 100-page PDF in <5 minutes (p95)"
+  - "NLP accuracy >80% for compliance keyword detection"
+  - "Zero PII leakage in 1000 document test set (100%)"
+  - "Human approval workflow completes in <1 hour median"
+  - "Knowledge base growth rate increases 10x (measured over 90 days)"
+
+tags:
+  - "document-ingestion"
+  - "knowledge-scaling"
+  - "nlp"
+  - "enterprise-ready"
+  - "compliance-automation"
