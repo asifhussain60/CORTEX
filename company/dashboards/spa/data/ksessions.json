@@ -1,90 +1,695 @@
 {
-  "repository": {
+  "repo": {
     "slug": "ksessions",
     "display_name": "KSESSIONS",
-    "description": "Kubernetes session management and orchestration platform",
-    "owner": "CORTEX Core",
-    "primary_language": "Python",
-    "health_score": 92,
-    "version": "2.3.1",
-    "last_analyzed_at": "2026-02-08T09:45:00Z"
+    "description": "User Authentication platform built with Python",
+    "owner": "Unknown",
+    "primary_language": "JavaScript",
+    "version": "1.0",
+    "last_analyzed_at": "2026-02-08T12:38:25.534690"
   },
   "overview": {
-    "summary": "High-performance Kubernetes session orchestrator with enterprise-grade fault tolerance and distributed consensus. Manages 5000+ active sessions with 99.99% uptime SLA.",
-    "total_files": 29856,
-    "total_lines": 1847392,
-    "file_count": 29856
-  },
-  "metadata": {
-    "primary_language": "Python",
-    "last_updated": "2026-02-08",
-    "languages": ["Python", "JavaScript", "Go", "Bash"]
+    "summary": "Repository analysis",
+    "business_summary": "**KSESSIONS** is a comprehensive .NET Framework 4.8 application for managing educational Islamic sessions, featuring audio recordings with transcripts, etymology analysis, and Arabic linguistic tools. built with Python, C#, ASP.NET. The application provides user authentication, data management, search & discovery.",
+    "key_findings": [
+      "No critical security issues detected",
+      "13 dependencies have known vulnerabilities"
+    ]
   },
   "metrics": {
-    "health_score": 92,
-    "risk_score": 8,
-    "coverage_pct": 94.5,
-    "file_count": 29856,
-    "complexity_score": 3.2,
-    "maintainability_index": 78
+    "health_score": 35,
+    "risk_score": 0,
+    "loc": 0,
+    "code_lines": 0,
+    "comment_lines": 0,
+    "blank_lines": 0,
+    "files": 0,
+    "coverage_pct": 0.0,
+    "languages": {
+      "Python": 318,
+      "JavaScript": 3081,
+      "TypeScript": 40,
+      "C#": 245,
+      "PHP": 2,
+      "HTML": 404,
+      "CSS": 277,
+      "SQL": 59,
+      "Config": 550
+    }
   },
   "security": {
-    "p0_risks": [
+    "total_count": 0,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 0,
+    "low_count": 0,
+    "vulnerabilities": []
+  },
+  "dependencies": {
+    "total_count": 8351,
+    "direct_count": 0,
+    "transitive_count": 8351,
+    "packages": [
       {
-        "id": "SEC-001",
-        "title": "Kubernetes RBAC misconfiguration",
-        "severity": "CRITICAL",
-        "description": "Service account has overly permissive cluster-admin role",
-        "affected_files": ["deployments/ksessions-sa.yaml"],
-        "recommendation": "Restrict to minimal required permissions"
+        "name": "fake",
+        "version": "0.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "far",
+        "version": "0.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "flat-cache",
+        "version": "4.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "c8",
+        "version": "8.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "chai",
+        "version": "4.3.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.56.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-config-prettier",
+        "version": "9.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-mocha",
+        "version": "10.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-prettier",
+        "version": "5.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "glob-expand",
+        "version": "0.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "10.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "prettier",
+        "version": "3.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "5.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "write",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@colors/colors",
+        "version": "1.6.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/triple-beam",
+        "version": "1.3.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "fecha",
+        "version": "4.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ms",
+        "version": "2.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "safe-stable-stringify",
+        "version": "2.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "triple-beam",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/cli",
+        "version": "7.10.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/core",
+        "version": "7.10.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/preset-env",
+        "version": "7.10.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@dabh/eslint-config-populist",
+        "version": "5.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "assume",
+        "version": "2.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "10.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "17.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "5.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@cspotcode/source-map-support",
+        "version": "0.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@tsconfig/node10",
+        "version": "1.0.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@tsconfig/node12",
+        "version": "1.0.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@tsconfig/node14",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@tsconfig/node16",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "acorn",
+        "version": "8.4.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "acorn-walk",
+        "version": "8.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "arg",
+        "version": "4.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "create-require",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "diff",
+        "version": "4.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "make-error",
+        "version": "1.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "v8-compile-cache-lib",
+        "version": "3.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "yn",
+        "version": "3.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@microsoft/api-extractor",
+        "version": "7.19.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@swc/core",
+        "version": "1.3.100",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@swc/wasm",
+        "version": "1.3.100",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/diff",
+        "version": "4.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/lodash",
+        "version": "4.14.151",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "13.13.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/proper-lockfile",
+        "version": "4.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/proxyquire",
+        "version": "1.3.28",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/react",
+        "version": "16.14.19",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/rimraf",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/semver",
+        "version": "7.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@yarnpkg/fslib",
+        "version": "2.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ava",
+        "version": "3.15.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "axios",
+        "version": "0.21.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "dprint",
+        "version": "0.25.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "expect",
+        "version": "27.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "get-stream",
+        "version": "6.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "lodash",
+        "version": "4.17.15",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ntypescript",
+        "version": "1.201507091536.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "15.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "outdent",
+        "version": "0.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "proper-lockfile",
+        "version": "4.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "proxyquire",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "react",
+        "version": "16.14.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "semver",
+        "version": "7.1.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "throat",
+        "version": "6.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typedoc",
+        "version": "0.22.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "4.7.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript-json-schema",
+        "version": "0.53.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "util.promisify",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "abort-controller",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "buffer",
+        "version": "6.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "events",
+        "version": "3.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "process",
+        "version": "0.11.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "string_decoder",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/core",
+        "version": "7.17.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/plugin-proposal-nullish-coalescing-operator",
+        "version": "7.16.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@babel/plugin-proposal-optional-chaining",
+        "version": "7.16.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@eslint/eslintrc",
+        "version": "3.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@rollup/plugin-commonjs",
+        "version": "22.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@rollup/plugin-inject",
+        "version": "4.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@rollup/plugin-node-resolve",
+        "version": "13.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@sinonjs/fake-timers",
+        "version": "9.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "browserify",
+        "version": "17.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "c8",
+        "version": "7.11.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "esbuild",
+        "version": "0.19.9",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "esbuild-plugin-alias",
+        "version": "0.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.15.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-config-standard",
+        "version": "17.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-import",
+        "version": "2.26.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-n",
+        "version": "15.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-plugin-promise",
+        "version": "6.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "playwright",
+        "version": "1.21.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "prettier",
+        "version": "2.6.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup",
+        "version": "2.72.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-polyfill-node",
+        "version": "0.9.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tap",
+        "version": "16.2.0",
+        "license": null,
+        "is_direct": false
       }
     ],
-    "p1_risks": [
-      {
-        "id": "SEC-002",
-        "title": "Unencrypted secrets in etcd",
-        "severity": "HIGH",
-        "description": "Session tokens stored without encryption at rest",
-        "affected_files": ["config/session_storage.py"],
-        "recommendation": "Enable envelope encryption for etcd"
-      }
-    ],
-    "p2_risks": []
+    "licenses": {
+      "null": 100
+    }
   },
-  "health": {
-    "uptime_pct": 99.99,
-    "avg_response_time_ms": 45,
-    "error_rate_pct": 0.01,
-    "deployment_frequency": "daily",
-    "mean_time_to_recovery_min": 3
+  "quality": {
+    "maintainability": 75,
+    "readability": 80,
+    "documentation": 70,
+    "complexity": 65,
+    "code_smells": [],
+    "hotspots": []
   },
-  "recommendations": [
+  "use_cases": [
     {
-      "id": "REC-001",
-      "category": "Performance",
-      "priority": "P1",
-      "title": "Optimize session state synchronization",
-      "description": "Current gossip protocol adds 15-20ms latency. Consider Raft consensus.",
-      "effort_estimate": "5 days",
-      "expected_impact": "20-30% latency reduction"
-    },
-    {
-      "id": "REC-002",
-      "category": "Security",
-      "priority": "P0",
-      "title": "Implement TLS 1.3 for inter-node communication",
-      "description": "Current TLS 1.2 endpoints vulnerable to known attacks.",
-      "effort_estimate": "3 days",
-      "expected_impact": "Eliminating TLS 1.2 attack vectors"
+      "id": "UC-QUAL-001",
+      "title": "Monitor Code Quality Trends",
+      "persona": "Engineering Manager",
+      "category": "Quality",
+      "summary": "Track maintainability and complexity metrics over time",
+      "signals": [
+        "quality.maintainability",
+        "quality.complexity"
+      ],
+      "recommended_actions": [
+        "Review quality tab",
+        "Identify refactoring candidates",
+        "Set quality gates"
+      ],
+      "tags": [
+        "quality",
+        "monitoring"
+      ],
+      "severity": "low"
     }
   ],
-  "tech_stack": [
-    "Kubernetes",
-    "Python 3.11",
-    "gRPC",
-    "Protobuf",
-    "etcd",
-    "PostgreSQL",
-    "Redis"
-  ]
+  "lens": {
+    "analysis_summary": "LENS analysis complete"
+  },
+  "refactoring": {
+    "recommendations": []
+  }
 }
