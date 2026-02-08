@@ -113,6 +113,22 @@ class PathResolver {
             total: assetPaths.length
         };
         
+        // Skip fetch validation for file:// protocol (CORS restriction)
+        if (this.protocol === 'file:') {
+            console.log('ℹ️ [PathResolver] Skipping fetch validation (file:// protocol)');
+            console.log('ℹ️ [PathResolver] Browser will load assets naturally');
+            
+            // Mark all as success (browser will handle loading)
+            assetPaths.forEach(path => {
+                const resolved = this.resolveAssetPath(path);
+                results.success.push({ path, resolved, status: 'skipped' });
+                console.log('✅ [PathResolver]', path, '→', resolved, '(browser-loaded)');
+            });
+            
+            return results;
+        }
+        
+        // HTTP protocol: perform fetch validation
         for (const path of assetPaths) {
             try {
                 const resolved = this.resolveAssetPath(path);

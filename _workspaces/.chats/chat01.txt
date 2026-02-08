@@ -1,87 +1,51 @@
-Root Cause Analysis and Recommendations for the CORTEX Dashboard SPA
-Overview
-
-The file‑based Single‑Page Application (SPA) in the company/dashboards area of the CORTEX repository is designed to render a rich interactive dashboard for repository analysis. The dashboard.html file defines a large number of tabs (Overview, Metrics, Security, Dependencies, Quality, Use Cases, LENS, Refactoring, Testing, Code Explorer, Domain Model and Architecture) and contains placeholders for gauges, charts and diagrams. It loads data through a JSON‑first layer (JSONDataLayer.js) which detects whether the page is running under a file:// protocol or an http:// protocol and selects the appropriate loading mechanism. The application expects JSON data describing the repository to be embedded in the page or fetched from a data directory or API endpoint.
-
-What the SPA expects
-
-Embedded data for static mode – If dashboard.html is loaded via the file:// protocol, the script looks for a <script id="dashboard-data"> block containing JSON. When valid JSON exists, it parses and passes the data to the dashboard initializer.
-
-Dynamic fetch for HTTP mode – If the page is served over HTTP, the loader calls JSONDataLayer.load(repoSlug), which constructs a path /api/dashboards/{repoSlug} and fetches JSON via fetch(). The dashboard_server tool included in the repo starts a local web server and exposes the /api/dashboards endpoint to load the data.
-
-Data directory fallback – For file mode, JSONDataLayer expects a relative directory structure data/{repoSlug}/dashboard.json and attempts to fetch it using the fetch() API.
-
-Observed symptoms
-
-When the user opens dashboard.html directly from disk (file://), the rich charts (gauges, bar charts, tree maps) and diagrams do not load.
-
-The JavaScript console logs errors about failing to fetch data/<repo>/dashboard.json and “Invalid dashboard data structure”. All panels remain in a loading state.
-
-Root cause analysis
-
-Missing data files – The SPA repository does not contain a data directory or any dashboard.json files. The loader searches for data/<repo>/dashboard.json but nothing exists, so fetch() returns 404 and the data layer throws an error. There is an example ksessions‑data.json in company/dashboards/data/ on the main branch, but the SPA’s loader does not know how to find this file because the expected path is data/ksessions/dashboard.json. In addition, dashboard.html includes an empty <script id="dashboard-data">{} block, so there is no embedded data for the fallback mode.
-
-Wrong protocol – The SPA uses the standard fetch() API to load JSON. Modern browsers block fetch() calls to local files when using the file:// protocol due to cross‑origin restrictions. Even if the data were present locally, fetch() from a local HTML file to another local JSON file often fails unless the browser is explicitly launched with relaxed CORS settings. The JSONDataLayer detects the context but still calls fetch() on a local path, which is blocked.
-
-Intended usage: run an HTTP server – The docs/11-mcp-tools/dashboard-server-tool.md document explains that the dashboards should be served via a local HTTP server using the dashboard_server tool or python3 -m http.server. This tool kills previous HTTP processes, starts an HTTP server and verifies that the data load and tab generation succeed. When run this way, the SPA uses the HTTP mode and requests the JSON from /api/dashboards/{repoSlug}. The server will embed the JSON into the <script id="dashboard-data"> element of the HTML, solving cross‑origin issues.
-
-Tech stack mismatch for static use – The SPA uses fetch, ECharts, Cytoscape and Mermaid. These libraries require a proper HTTP environment to load resources and fonts. Running them via file:// is unsupported. Although the loader attempts to support file mode, fetch() is not the right choice for reading local files, and the absence of a bundler or Node.js server further complicates offline usage.
-
-Conclusion
-
-The rich diagrams fail to load because no data is available and the SPA is being run via the wrong protocol. The file‑based fallback is incomplete: there is no data/<repo>/dashboard.json directory, and using fetch() under file:// is blocked. The correct way to use the dashboards is to run the server with python3 cortex/tools/dashboard_server.py start or python3 -m http.server and open the dashboard via http://localhost:PORT/spa/dashboard.html?repo=<slug>. The server will embed the JSON into the page, enabling charts and diagrams to render.
-
-Recommended remediation steps
-
-Serve the SPA over HTTP:
-
-Use the provided dashboard_server tool or a simple python -m http.server to host the SPA. Access the dashboard via http://localhost:8080/spa/dashboard.html?repo=<repo-slug>. This eliminates cross‑origin issues and enables fetch() to work properly.
-
-Generate and locate JSON data:
-
-Ensure that dashboard data is generated for each repository and stored in the expected path. A script like scripts/utilities/generate_dashboard_data.py or generate_dashboard_complete.py can convert repository analysis into JSON files. Place them under company/dashboards/data/<repo>/dashboard.json to match the loader’s expectations, or configure the server to read the central ksessions‑data.json file and embed it.
-
-Consider modifying JSONDataLayer.getBasePath() so that, in file mode, it points to the actual data directory (../data/ksessions-data.json) or load the example JSON through ES modules instead of fetch().
-
-Embed JSON into the HTML at build time:
-
-For true static hosting, modify the build process (e.g., suite_generator.py or dashboard_management.py) to embed the generated JSON into the <script id="dashboard-data"> block inside dashboard.html for each repository. This avoids any runtime fetch() and allows the file to be viewed offline.
-
-Use a build tool and bundler:
-
-Instead of shipping separate .js files, use a bundler (Vite, Rollup or Webpack) to package the SPA. A bundler can import JSON modules directly, handle relative assets correctly, and generate a static site that can be hosted from file:// if needed.
-
-Improve error handling and user feedback:
-
-Extend the loader to show a clear message when JSON cannot be loaded (e.g., “No data found; please run the dashboard server or generate data files”) instead of silently logging to the console.
-
-Recommended diagrams and content enhancements
-
-The existing dashboard is comprehensive but there is room for improvement. Below are suggestions for additional diagrams and visualizations that can enrich the experience:
-
-Proposed diagram/section	Purpose & benefits	Recommended library
-Commit activity timeline	Plot daily/weekly commit counts over time (sparkline or bar chart) to show development intensity. Highlights bursts of activity, stagnation, or release cycles.	ECharts line/bar chart
-Technical debt vs. code health scatter plot	Visualize the relationship between metrics (technical debt days vs. health score) across modules or repositories. Helps prioritize refactoring targets.	D3.js or ECharts scatter plot
-Cyclomatic complexity histogram	Show distribution of function complexities to spot outliers. Can be filtered per module.	ECharts histogram
-Hotspot maps (code churn × complexity)	Identify “hot” files/functions that change frequently and are complex. Use a bubble chart where size represents churn and color indicates complexity.	D3.js bubble chart
-Dependency network graph	Display an interactive graph of internal and external dependencies. Nodes represent packages; edges show dependencies. Cluster by type (core, utilities, external). This complements the existing dependency list.	Cytoscape.js
-Risk matrix heatmap	Combine vulnerability severity and likelihood to plot issues on a 2×2 or 3×3 grid. Helps focus on high‑impact vulnerabilities.	ECharts heatmap
-Refactoring ROI matrix	Plot recommended refactorings by impact vs. effort. Projects high‑impact, low‑effort tasks for immediate action.	D3.js scatter or quadrant chart
-Test coverage drill‑down	Use a sunburst or tree map to show coverage by package/module/file (e.g., coverage-treemap is already defined). Add ability to click into a file to view uncovered lines.	ECharts treemap
-Entity relationship and sequence diagrams	Expand the domain model section with additional Mermaid diagrams. Use sequence diagrams to illustrate key use cases, not just ER/class diagrams.	Mermaid
-Call graph evolution	Show how the call graph changes over time or across releases. This can highlight architectural drift or new modules. Use multi‑layer Cytoscape graphs or slope charts.	Cytoscape.js
-Interactive code smell treemap	Represent code smells by category and file size. Size of each rectangle corresponds to LOC; color indicates severity. It provides a quick overview of where bad smells concentrate.	ECharts treemap
-Developer contribution matrix	Display contributions by team members across modules (heatmap). Encourages balanced ownership and surfaces knowledge silos.	ECharts heatmap
-Additional content suggestions
-
-Narrative executive summary: Include a text summary generated by an LLM that highlights key insights, trends, and recommended actions. Present it at the top of the Executive tab with call‑out boxes.
-
-Machine‑assisted recommendations: Provide links to automated remediation steps (e.g., create GitHub issues or JIRA tasks) based on the refactoring suggestions and vulnerabilities found.
-
-Accessibility improvements: Offer high‑contrast themes and keyboard navigation for the dashboard. Provide alt text for icons and diagrams.
-
-Benchmark comparisons: Compare the repository’s metrics against industry benchmarks or other repositories in the organization to give context (e.g., health score relative to average). Use percentile charts.
-
-Summary
-
-The file‑based SPA fails to display data because it is being used outside of its intended environment. The loader looks for data/<repo>/dashboard.json when run under file://, but no such files exist; fetch() is blocked by browser security; and the <script id="dashboard-data"> element is empty. The recommended solution is to run a local HTTP server (using the provided dashboard_server tool), generate and embed the JSON data, and avoid relying on the file:// protocol. By following these steps and adopting the proposed diagram enhancements, the CORTEX dashboards can become a powerful visualization platform for repository intelligence.
+glass-named-panels.css:1  Failed to load resource: net::ERR_FILE_NOT_FOUND
+index.html:1344 🚀 [KSESSIONS Dashboard] Initializing...
+AuditLogger.js:23 📝 [AuditLogger] Initialized Object
+PathResolver.js:17 🔧 [PathResolver] Initialized Object
+PathResolver.js:108 📦 [PathResolver] Preloading assets... 3
+index.html:1450 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/assets/css/main.css' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
+main.css:1  Failed to load resource: net::ERR_FAILED
+PathResolver.js:132 ❌ [PathResolver] Failed: ../../assets/css/main.css TypeError: Failed to fetch
+    at PathResolver.preloadCriticalAssets (PathResolver.js:119:40)
+    at index.html:1360:56
+    at AuditLogger.measure (AuditLogger.js:238:34)
+    at initializeDashboard (index.html:1354:30)
+    at index.html:1446:11
+preloadCriticalAssets @ PathResolver.js:132
+index.html:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/assets/images/cortex-logo-200.png' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
+/D:/PROJECTS/CORTEX/company/dashboards/assets/images/cortex-logo-200.png:1  Failed to load resource: net::ERR_FAILED
+PathResolver.js:132 ❌ [PathResolver] Failed: ../../assets/images/cortex-logo-200.png TypeError: Failed to fetch
+    at PathResolver.preloadCriticalAssets (PathResolver.js:119:40)
+    at async index.html:1360:37
+    at async AuditLogger.measure (AuditLogger.js:238:28)
+    at async initializeDashboard (index.html:1354:17)
+preloadCriticalAssets @ PathResolver.js:132
+index.html:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/assets/images/CORTEX-logo-64.png' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
+/D:/PROJECTS/CORTEX/company/dashboards/assets/images/CORTEX-logo-64.png:1  Failed to load resource: net::ERR_FAILED
+PathResolver.js:132 ❌ [PathResolver] Failed: ../../assets/images/CORTEX-logo-64.png TypeError: Failed to fetch
+    at PathResolver.preloadCriticalAssets (PathResolver.js:119:40)
+    at async index.html:1360:37
+    at async AuditLogger.measure (AuditLogger.js:238:28)
+    at async initializeDashboard (index.html:1354:17)
+preloadCriticalAssets @ PathResolver.js:132
+PathResolver.js:136 📊 [PathResolver] Preload complete: Object
+PathResolver.js:154 ⚠️ [PathResolver] Broken Paths Detected
+PathResolver.js:155 Array(3)
+AuditLogger.js:168 📈 [AuditLogger] Metric: Object
+AuditLogger.js:245 ⏱️ [AuditLogger] asset-preload: 143.20ms
+DashboardDataLoader.js:23 📥 [DataLoader] Initialized
+DashboardDataLoader.js:65 📦 [DataLoader] Attempting embedded data load...
+DashboardDataLoader.js:245 🧹 [DataLoader] Data sanitized
+AuditLogger.js:60 📊 [AuditLogger] Data Load: Object
+DashboardDataLoader.js:76 ✅ [DataLoader] Embedded data loaded: 2.20 ms
+AuditLogger.js:168 📈 [AuditLogger] Metric: Object
+AuditLogger.js:245 ⏱️ [AuditLogger] data-load: 3.70ms
+index.html:1377 ✅ [KSESSIONS Dashboard] Data loaded: Object
+AuditLogger.js:125 🔄 [AuditLogger] DOM Mutation: Object
+AuditLogger.js:102 ✅ [AuditLogger] Render: Object
+index.html:1424 ✅ [Tab Init] First tab activated
+AuditLogger.js:168 📈 [AuditLogger] Metric: Object
+AuditLogger.js:245 ⏱️ [AuditLogger] tab-init: 1.70ms
+AuditLogger.js:211 📊 [AuditLogger] Session Summary
+AuditLogger.js:212 Object
+index.html:1431 ✅ [KSESSIONS Dashboard] Initialization complete
