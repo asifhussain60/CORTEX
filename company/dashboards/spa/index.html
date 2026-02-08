@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repository Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Glassmorphism background -->
+    <div class="bg-gradients"></div>
+    
+    <!-- Main container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 id="repo-title" data-bind="repository.display_name" data-fallback="Repository Dashboard">Repository Dashboard</h1>
+                <p class="header-subtitle" id="repo-subtitle" data-bind="repository.description" data-fallback="Select a repository to view details"></p>
+            </div>
+            <div class="header-controls">
+                <button id="repo-selector-btn" class="btn btn-secondary" aria-label="Change repository">
+                    <i class="fas fa-th-large"></i> Change Repository
+                </button>
+            </div>
+        </header>
+
+        <!-- Repository selector modal (hidden by default) -->
+        <div id="repo-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Select Repository</h2>
+                    <button id="modal-close" class="btn-close" aria-label="Close repository selector">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="repo-list" class="repo-grid">
+                        <!-- Dynamically populated by app.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- Loading state -->
+            <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading dashboard...</p>
+            </div>
+
+            <!-- Error state -->
+            <div id="error-message" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Dashboard Not Found</h3>
+                <p id="error-text">The requested repository dashboard could not be loaded.</p>
+                <button id="error-back-btn" class="btn btn-primary">Back to Repository List</button>
+            </div>
+
+            <!-- Tab navigation -->
+            <nav class="tab-navigation" id="tab-navigation" style="display: none;">
+                <button class="tab-button active" data-tab="overview" aria-label="Overview tab">
+                    <i class="fas fa-home"></i> Overview
+                </button>
+                <button class="tab-button" data-tab="security" data-show-if="security" aria-label="Security tab">
+                    <i class="fas fa-shield-alt"></i> Security
+                </button>
+                <button class="tab-button" data-tab="metrics" data-show-if="metrics" aria-label="Metrics tab">
+                    <i class="fas fa-chart-bar"></i> Metrics
+                </button>
+                <button class="tab-button" data-tab="health" data-show-if="health" aria-label="Health tab">
+                    <i class="fas fa-heartbeat"></i> Health
+                </button>
+                <button class="tab-button" data-tab="recommendations" data-show-if="recommendations" aria-label="Recommendations tab">
+                    <i class="fas fa-lightbulb"></i> Recommendations
+                </button>
+            </nav>
+
+            <!-- Tab content panels -->
+            <div class="tab-panels">
+                <!-- Overview Tab -->
+                <section class="tab-panel active" id="panel-overview" data-tab="overview">
+                    <div class="panel-content">
+                        <div class="overview-grid">
+                            <div class="stat-card">
+                                <h4>Health Score</h4>
+                                <div class="stat-value" id="health-score" data-bind="repository.health_score" data-fallback="N/A">—</div>
+                                <div class="stat-bar">
+                                    <div class="stat-bar-fill" id="health-bar"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Language</h4>
+                                <div class="stat-value" id="primary-language" data-bind="metadata.primary_language" data-fallback="Unknown">Unknown</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Last Updated</h4>
+                                <div class="stat-value" id="last-updated" data-bind="metadata.last_updated" data-fallback="N/A">N/A</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Files</h4>
+                                <div class="stat-value" id="file-count" data-bind="metrics.file_count" data-fallback="N/A">N/A</div>
+                            </div>
+                        </div>
+
+                        <div class="section" data-show-if="summary">
+                            <h3>Summary</h3>
+                            <p id="repo-summary" data-bind="overview.summary" data-fallback="No summary available">No summary available</p>
+                        </div>
+
+                        <div class="section" data-show-if="tech_stack">
+                            <h3>Technology Stack</h3>
+                            <div id="tech-stack" class="tag-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Security Tab -->
+                <section class="tab-panel" id="panel-security" data-tab="security" data-show-if="security" style="display: none;">
+                    <div class="panel-content">
+                        <div class="security-summary">
+                            <div class="risk-card risk-p0" data-show-if="security.p0_risks">
+                                <h4><i class="fas fa-exclamation"></i> Critical Issues</h4>
+                                <div class="risk-count" id="p0-count" data-bind="security.p0_risks.length" data-fallback="0">0</div>
+                            </div>
+                            <div class="risk-card risk-p1" data-show-if="security.p1_risks">
+                                <h4><i class="fas fa-warning"></i> High Risk</h4>
+                                <div class="risk-count" id="p1-count" data-bind="security.p1_risks.length" data-fallback="0">0</div>
+                            </div>
+                            <div class="risk-card risk-p2" data-show-if="security.p2_risks">
+                                <h4><i class="fas fa-info-circle"></i> Medium Risk</h4>
+                                <div class="risk-count" id="p2-count" data-bind="security.p2_risks.length" data-fallback="0">0</div>
+                            </div>
+                        </div>
+                        <div id="security-details" class="section">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Metrics Tab -->
+                <section class="tab-panel" id="panel-metrics" data-tab="metrics" data-show-if="metrics" style="display: none;">
+                    <div class="panel-content">
+                        <div id="charts-container">
+                            <!-- Chart containers will be populated by app.js -->
+                            <div id="complexity-chart" class="chart-placeholder">
+                                <p>Complexity metrics will be displayed here</p>
+                            </div>
+                            <div id="coverage-chart" class="chart-placeholder">
+                                <p>Code coverage metrics will be displayed here</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Health Tab -->
+                <section class="tab-panel" id="panel-health" data-tab="health" data-show-if="health" style="display: none;">
+                    <div class="panel-content">
+                        <div id="health-details">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recommendations Tab -->
+                <section class="tab-panel" id="panel-recommendations" data-tab="recommendations" data-show-if="recommendations" style="display: none;">
+                    <div class="panel-content">
+                        <div id="recommendations-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 CORTEX. Dashboard powered by unified SPA architecture.</p>
+        </footer>
+    </div>
+
+    <!-- Load app controller -->
+    <script src="app.js"></script>
+</body>
+</html>

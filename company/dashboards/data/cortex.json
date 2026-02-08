@@ -1,0 +1,69 @@
+{
+  "schema_version": "3.0",
+  "repository": {
+    "slug": "cortex",
+    "display_name": "CORTEX",
+    "description": "Cognitive Real-Time Execution System - Enterprise AI platform",
+    "health_score": 94,
+    "last_updated": "2026-02-08",
+    "url": "https://github.com/asif-hussain/cortex"
+  },
+  "overview": {
+    "summary": "CORTEX is an enterprise-grade AI platform designed for sophisticated autonomous execution with governance-first architecture. Production-ready system with 40+ phases completed.",
+    "team_size": 1,
+    "status": "Production"
+  },
+  "metadata": {
+    "primary_language": "Python",
+    "file_count": 450,
+    "total_lines_of_code": 125000,
+    "test_files": 180,
+    "documentation_files": 95
+  },
+  "tech_stack": [
+    "Python 3.13",
+    "FastAPI",
+    "Pydantic",
+    "SQLAlchemy",
+    "pytest",
+    "TypeScript",
+    "React",
+    "PostgreSQL"
+  ],
+  "metrics": {
+    "code_coverage": 87,
+    "test_pass_rate": 98.5,
+    "cyclomatic_complexity": 3.2,
+    "maintainability_index": 78,
+    "technical_debt_ratio": 5.2
+  },
+  "security": {
+    "p0_risks": [],
+    "p1_risks": 2,
+    "p2_risks": 7,
+    "last_security_audit": "2026-02-07"
+  },
+  "health": {
+    "uptime_percent": 99.9,
+    "response_time_ms": 145,
+    "error_rate_percent": 0.08,
+    "cpu_usage_percent": 22,
+    "memory_usage_percent": 58
+  },
+  "recommendations": [
+    {
+      "id": "rec-1",
+      "title": "Complete Phase 53: Dashboard Orchestrator",
+      "priority": "P0",
+      "roi_score": 0.82,
+      "description": "Consolidate dashboard architecture for improved governance"
+    },
+    {
+      "id": "rec-2",
+      "title": "Implement Phase 51: Secrets Management",
+      "priority": "P0",
+      "roi_score": 0.96,
+      "description": "Production-ready secrets management with audit trail"
+    }
+  ]
+}
