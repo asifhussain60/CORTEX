@@ -90,6 +90,8 @@ class DashboardController {
         console.log(`[Controller] loadRepository: Starting load for "${repoName}"`);
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
+        console.log('[Controller] loadRepository: Generation BEFORE state update:', this.stateManager.getGeneration());
+        
         // Update state: loading started
         console.log('[Controller] loadRepository: → Updating state (loading started)...');
         this.stateManager.setState(draft => {
@@ -99,9 +101,9 @@ class DashboardController {
         });
         console.log('[Controller] loadRepository: ✓ State updated');
         
-        // Capture generation AFTER initial state updates to prevent false stale detection
+        // CRITICAL: Capture generation AFTER state update
         const generation = this.stateManager.getGeneration();
-        console.log('[Controller] loadRepository: Current generation (after state update):', generation);
+        console.log('[Controller] loadRepository: Generation AFTER state update (CAPTURED):', generation);
         
         // Show loading UI
         console.log('[Controller] loadRepository: → Showing loading overlay...');
@@ -166,15 +168,9 @@ class DashboardController {
                 console.log('[Controller] loadRepository: ✓ Data cached');
             }
             
-            // Check if generation still current (prevent stale renders)
-            console.log('[Controller] loadRepository: → Checking generation...');
-            if (!this.stateManager.isGenerationCurrent(generation)) {
-                console.warn('[Controller] loadRepository: ✗ Stale render prevented (generation mismatch)');
-                console.warn('[Controller] loadRepository:   Expected:', generation);
-                console.warn('[Controller] loadRepository:   Current:', this.stateManager.getGeneration());
-                return;
-            }
-            console.log('[Controller] loadRepository: ✓ Generation current');
+            // NOTE: No generation check here - _renderCurrentTab() does its own generation tracking
+            // This prevents false positives from intermediate setState calls
+            console.log('[Controller] loadRepository: → Proceeding to render (generation tracking handled by _renderCurrentTab)');
             
             // Update state: loading complete
             console.log('[Controller] loadRepository: → Updating state (loading complete)...');
@@ -184,6 +180,7 @@ class DashboardController {
                 draft.errors = {};
             });
             console.log('[Controller] loadRepository: ✓ State updated with data');
+            console.log('[Controller] loadRepository:   New generation:', this.stateManager.getGeneration());
             
             // Update URL
             console.log('[Controller] loadRepository: → Updating URL...');
@@ -761,15 +758,23 @@ class DashboardController {
      * State change callback
      */
     _onStateChange(oldState, newState) {
+        console.log('[Controller] _onStateChange: State change detected');
+        console.log('[Controller] _onStateChange: Old generation:', oldState.generation);
+        console.log('[Controller] _onStateChange: New generation:', newState.generation);
+        console.log('[Controller] _onStateChange: Generation delta:', newState.generation - oldState.generation);
+        
         // React to state changes if needed
         if (oldState.currentRepo !== newState.currentRepo) {
-            console.log(`[Controller] Repo changed: ${oldState.currentRepo} → ${newState.currentRepo}`);
+            console.log(`[Controller] _onStateChange: Repo changed: ${oldState.currentRepo} → ${newState.currentRepo}`);
         }
         
         if (oldState.currentTab !== newState.currentTab) {
-            console.log(`[Controller] Tab changed: ${oldState.currentTab} → ${newState.currentTab}`);
+            console.log(`[Controller] _onStateChange: Tab changed: ${oldState.currentTab} → ${newState.currentTab}`);
+            // CRITICAL: _updateActiveTab should NOT call setState
             this._updateActiveTab(newState.currentTab);
         }
+        
+        console.log('[Controller] _onStateChange: Handler complete (no state mutations)');
     }
     
     /**

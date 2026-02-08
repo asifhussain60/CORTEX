@@ -52,6 +52,12 @@ class StateManager {
      * @returns {Object} New state
      */
     setState(updater) {
+        // Debug: Track who is calling setState
+        const stack = new Error().stack;
+        const caller = stack.split('\n')[2]?.trim() || 'unknown';
+        console.log(`[StateManager] setState called by: ${caller}`);
+        console.log(`[StateManager] Current generation: ${this._state.generation} → ${this._state.generation + 1}`);
+        
         // Clone current state
         const draft = this._cloneState(this._state);
         
@@ -76,7 +82,9 @@ class StateManager {
         this._state = draft;
         
         // Notify subscribers
+        console.log(`[StateManager] Notifying ${this._subscribers.size} subscribers...`);
         this._notifySubscribers(oldState, draft);
+        console.log(`[StateManager] setState complete. New generation: ${draft.generation}`);
         
         return draft;
     }
