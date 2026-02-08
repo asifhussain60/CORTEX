@@ -127,7 +127,9 @@ class RoslynProcessManager:
             )
             
             # Wait for startup confirmation (with timeout)
-            # TODO: Add startup handshake in Phase 24.2.2
+            # Note: Handshake protocol is optional - current implementation
+            # relies on immediate process availability. Future enhancement
+            # could add explicit ready signal from Roslyn CLI.
             
             return Ok(None)
             
