@@ -27,6 +27,13 @@ metadata:
   test_target: 200
   coverage_target: 85
   roi_score: 0.92
+  consolidated_work:
+    - "ENH-047: Dashboard Data Loading Verification (integrated into S9-S10)"
+    - "ENH-048: Prompt Unbloating System (future phase, referenced in guardrails)"
+    - "chat01.txt requirements: All 28 requirements consolidated into 10 stages"
+  autonomous_execution: true
+  execution_mode: "continuous_until_complete"
+  status_updated: "2026-02-08T19:00:00Z"
 
 governance:
   core_rules:
@@ -583,8 +590,11 @@ stages:
       - "tests/integration/test_lens_dor_refactor_flow.py"
       - "tests/integration/test_onboarding_domain_flow.py"
       - "tests/integration/test_requirements_dor_flow.py"
+      - "tests/integration/dashboard/test_data_loading.py" (ENH-047 consolidated)
+      - "tests/e2e/dashboard/test_dashboard_rendering.py" (ENH-047 consolidated)
     files_to_modify:
       - "cortex/wiring/specifications/wiring.yaml"
+      - "cortex-registry/_cortex-master/dashboard/data/plan-summary.json" (regenerated)
 
 # ============================================================================
 # TESTING STRATEGY
