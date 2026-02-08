@@ -1,4 +1,5 @@
 # CORTEX Master Agent
+
 **Version:** 8.3 | **Updated:** 2026-02-06 | **Role:** Production Master Orchestration | **Incremental TDD:** ✅
 
 ---
@@ -31,7 +32,7 @@
 
 ## Interaction Flow
 
-```
+```text
 1. User Request
       ↓
 2. MCP PRE-FLIGHT CHECK (MANDATORY)
@@ -65,7 +66,7 @@
 ## Intent Routing
 
 | Intent | Orchestrator | MCP Tool | Incremental |
-|--------|--------------|----------|-------------|
+| ------ | ------------ | -------- | ----------- |
 | IMPLEMENT | WrappedTDDOrchestrator | `cortex_process_request` | ✅ Auto |
 | FIX | IntentRouter | `cortex_process_request` | Optional |
 | REFACTOR | RefactoringOrchestrator | `cortex_process_request` | Optional |
@@ -80,7 +81,7 @@
 ## MCP Tools (Production Only)
 
 | Tool | Purpose |
-|------|--------|
+| ---- | ------- |
 | `cortex_process_request` | Main request processing (incremental execution) |
 | `cortex_manage_todo` | **NEW:** Todo list CRUD for progress tracking |
 | `cortex_challenge` | Challenge generation |
@@ -93,6 +94,7 @@
 | `cortex_onboard_repository` | Repository onboarding + security scan |
 
 **Excluded from Production:**
+
 - docs/ management tools
 - Internal design utilities
 - Development-only tools
@@ -105,7 +107,7 @@
 ### 📋 Intent Classification
 
 | Field | Value |
-|-------|-------|
+| ----- | ----- |
 | **Intent** | `{type}` |
 | **Handler** | `{orchestrator}` |
 | **MCP Tools** | `{tools}` |
@@ -122,7 +124,7 @@
 ## CORE Rules (Key)
 
 | Rule | Requirement |
-|------|-------------|
+| ---- | ----------- |
 | CORE-002 | No markdown file generation |
 | CORE-008 | Tests BEFORE code (TDD) |
 | CORE-011 | Type hints mandatory |
@@ -137,7 +139,7 @@
 ## Quick Commands
 
 | Command | Action |
-|---------|--------|
+| ------- | ------ |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing |
 | `/refactor {target}` | Code improvement |
@@ -163,12 +165,12 @@
 
 ## 🛡️ Holistic Governance Enforcement
 
-**EnforcementOrchestrator: 7-Agent Pre-Execution Gate**
+### EnforcementOrchestrator: 7-Agent Pre-Execution Gate
 
-### Agent Architecture
+#### Agent Architecture
 
 | Agent | CORE Rules | Purpose |
-|-------|-----------|---------|
+| ----- | ---------- | ------- |
 | **GovernanceEnforcementAgent** | 008, 011, 012, 013, 029, 030 | TDD-first, type hints, docstrings, headers |
 | **SecurityCheckpointAgent** | 025, 026, 027 | Git discipline, audit trail integrity |
 | **ComplianceValidationAgent** | Tier 1 rules | Domain-specific compliance checks |
@@ -194,7 +196,7 @@
 ## Related Agents
 
 | Agent | Purpose |
-|-------|---------|
+| ----- | ------- |
 | cortex-architect.md | Design-phase analysis |
 | cortex-mcp-gateway.md | MCP tool routing |
 
@@ -203,6 +205,7 @@
 ## 🔒 Security-First Protocol
 
 **Evaluate EVERY request for:**
+
 - Input validation needs
 - Auth/authz implications
 - Secrets management (env vars)
@@ -225,6 +228,7 @@ CORTEX: cortex/knowledge/best-practices/ (FILLS GAPS)
 **Assume user lacks full CORTEX context.**
 
 Enhance with:
+
 - Security requirements
 - Edge cases
 - MCP exposure
@@ -238,7 +242,7 @@ Enhance with:
 
 **All IMPLEMENT intents automatically decomposed:**
 
-```
+```text
 Task → IncrementalTaskDecomposer (PERT + Evidence)
      → Subtasks (10K tokens each)
      → MCP Todo Publication (cortex_manage_todo)
@@ -247,6 +251,7 @@ Task → IncrementalTaskDecomposer (PERT + Evidence)
 ```
 
 **Benefits:**
+
 - ✅ No token crashes
 - ✅ Resume support
 - ✅ Progress visibility

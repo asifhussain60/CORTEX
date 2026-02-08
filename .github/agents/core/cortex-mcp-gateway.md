@@ -1,4 +1,5 @@
 # CORTEX MCP Gateway Agent
+
 **Version:** 1.0 | **Updated:** 2026-01-31 | **Role:** MCP Tool Routing & Execution
 
 ---
@@ -44,7 +45,8 @@ def validate_mcp_availability(intent: str) -> bool:
 ```
 
 **Response if MCP unavailable:**
-```
+
+```text
 ❌ MCP Server not running
 Required: python -m cortex.mcp.server
 Cannot proceed with {intent} operations without MCP
@@ -68,7 +70,7 @@ Cannot proceed with {intent} operations without MCP
 ### Core Operations
 
 | Tool | Endpoint | Purpose |
-|------|----------|---------|
+| ---- | -------- | ------- |
 | `cortex_process_request` | `/tools/cortex_process_request` | Main request processing |
 | `cortex_challenge` | `/tools/cortex_challenge` | Challenge generation |
 | `cortex_total_recall` | `/tools/cortex_total_recall` | Feature discovery |
@@ -76,7 +78,7 @@ Cannot proceed with {intent} operations without MCP
 ### LENS Analysis
 
 | Tool | Endpoint | Purpose |
-|------|----------|---------|
+| ---- | -------- | ------- |
 | `cortex_lens_analyze` | `/tools/cortex_lens_analyze` | Unified code intelligence |
 | `cortex_git_history` | `/tools/cortex_git_history` | 24h git context, blame |
 | `cortex_ast_analyze` | `/tools/cortex_ast_analyze` | Structure, complexity |
@@ -85,7 +87,7 @@ Cannot proceed with {intent} operations without MCP
 ### Dashboard v3 (PHASE-21)
 
 | Tool | Endpoint | Purpose |
-|------|----------|---------|
+| ---- | -------- | ------- |
 | `cortex_aggregate_dashboard_data_v3` | `/tools/cortex_aggregate_dashboard_data_v3` | Generate dashboard JSON |
 | `cortex_serve_dashboard` | `/tools/cortex_serve_dashboard` | HTTP server (port 8888) |
 | `cortex_test_dashboard_e2e` | `/tools/cortex_test_dashboard_e2e` | Playwright browser tests |
@@ -93,14 +95,14 @@ Cannot proceed with {intent} operations without MCP
 ### Governance
 
 | Tool | Endpoint | Purpose |
-|------|----------|---------|
+| ---- | -------- | ------- |
 | `cortex_detect_duplicates` | `/tools/cortex_detect_duplicates` | CORE-035 detection |
 | `cortex_tools_catalog` | `/tools/cortex_tools_catalog` | Tool discovery |
 
 ### Domain Operations
 
 | Tool | Endpoint | Purpose |
-|------|----------|---------|
+| ---- | -------- | ------- |
 | `analyze_code_structure` | `/tools/analyze_code_structure` | AST patterns |
 | `analyze_dependencies` | `/tools/analyze_dependencies` | Dependency graph |
 | `validate_context` | `/tools/validate_context` | Context validation |
@@ -188,7 +190,7 @@ Structured Response
 ### Error Codes
 
 | Code | Meaning |
-|------|---------|
+| ---- | ------- |
 | `TOOL_NOT_FOUND` | Tool name not in catalog |
 | `INVALID_PARAMETERS` | Missing/invalid parameters |
 | `TOOL_EXECUTION_FAILED` | Tool execution error |
