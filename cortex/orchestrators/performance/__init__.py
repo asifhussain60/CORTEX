@@ -6,6 +6,8 @@ Provides orchestrators for:
 - Performance bottleneck identification
 - Flame graph generation
 - Performance metrics collection and reporting
+- Load testing and regression detection
+- SLA validation and baseline tracking
 
 Author: Asif Hussain
 """
@@ -28,7 +30,27 @@ from .performance_orchestrator import (
     FlameGraphNode,
 )
 
+from .load_test_orchestrator import (
+    LoadTestOrchestrator,
+    OpenAPISpecParser,
+    K6ScriptGenerator,
+    LocustScriptGenerator,
+    LoadTestExecutor,
+    SLAValidator,
+    BaselineTracker,
+    RegressionDetector,
+    GitHubActionIntegration,
+    LoadScenario,
+    SLAThreshold,
+    LoadTestResult,
+    PerformanceBaseline,
+    RegressionReport,
+    LoadTestTool,
+    SLAMetric,
+)
+
 __all__ = [
+    # PerformanceOrchestrator
     "PerformanceOrchestrator",
     "PythonProfiler",
     "JavaScriptProfiler",
@@ -44,4 +66,21 @@ __all__ = [
     "ProfilingStrategy",
     "Hotspot",
     "FlameGraphNode",
+    # LoadTestOrchestrator
+    "LoadTestOrchestrator",
+    "OpenAPISpecParser",
+    "K6ScriptGenerator",
+    "LocustScriptGenerator",
+    "LoadTestExecutor",
+    "SLAValidator",
+    "BaselineTracker",
+    "RegressionDetector",
+    "GitHubActionIntegration",
+    "LoadScenario",
+    "SLAThreshold",
+    "LoadTestResult",
+    "PerformanceBaseline",
+    "RegressionReport",
+    "LoadTestTool",
+    "SLAMetric",
 ]
