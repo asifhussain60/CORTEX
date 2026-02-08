@@ -45,92 +45,166 @@ class DashboardController {
      * Initialize dashboard with dependency injection
      */
     async initialize(services) {
+        console.log('[Controller] Initializing dashboard...');
+        
         // Inject dependencies
+        console.log('[Controller] → Injecting dependencies...');
         this.errorBoundary = services.errorBoundary;
         this.stateManager = services.stateManager;
         this.repositoryService = services.repositoryService;
         this.validationService = services.validationService;
+        console.log('[Controller] ✓ Dependencies injected');
         
         // Initialize DOM references
+        console.log('[Controller] → Initializing DOM references...');
         this._initDOMReferences();
+        console.log('[Controller] ✓ DOM references initialized');
         
         // Subscribe to state changes
+        console.log('[Controller] → Subscribing to state changes...');
         this.stateManager.subscribe('controller', this._onStateChange.bind(this));
+        console.log('[Controller] ✓ State subscription active');
         
         // Setup event listeners
+        console.log('[Controller] → Setting up event listeners...');
         this._setupEventListeners();
+        console.log('[Controller] ✓ Event listeners attached');
         
         // Load initial repository from URL or default
         const params = this._parseUrlParams();
         const initialRepo = params.repo || this.config.defaultRepo;
+        console.log('[Controller] → Loading initial repository:', initialRepo);
+        console.log('[Controller]   URL params:', params);
+        console.log('[Controller]   Default repo:', this.config.defaultRepo);
         
         await this.loadRepository(initialRepo);
+        
+        console.log('[Controller] ✅ Initialization complete');
     }
     
     /**
      * Load repository data
      */
     async loadRepository(repoName) {
-        const generation = this.stateManager.getGeneration();
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log(`[Controller] loadRepository: Starting load for "${repoName}"`);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
         // Update state: loading started
+        console.log('[Controller] loadRepository: → Updating state (loading started)...');
         this.stateManager.setState(draft => {
             draft.currentRepo = repoName;
             draft.isLoading = true;
             draft.data = null;
         });
+        console.log('[Controller] loadRepository: ✓ State updated');
+        
+        // Capture generation AFTER initial state updates to prevent false stale detection
+        const generation = this.stateManager.getGeneration();
+        console.log('[Controller] loadRepository: Current generation (after state update):', generation);
         
         // Show loading UI
+        console.log('[Controller] loadRepository: → Showing loading overlay...');
         this._showLoading(true);
+        console.log('[Controller] loadRepository: ✓ Loading overlay visible');
         
         try {
             // Check cache
+            console.log('[Controller] loadRepository: → Checking cache...');
             const cached = this.stateManager.getCacheEntry(repoName);
             let data;
             
             if (cached && (Date.now() - cached.timestamp < 300000)) { // 5 min TTL
+                console.log('[Controller] loadRepository: ✓ Cache HIT');
+                console.log('[Controller] loadRepository:   Cache age:', Math.round((Date.now() - cached.timestamp) / 1000), 'seconds');
+                console.log('[Controller] loadRepository:   Cache hits:', cached.hits);
                 data = cached.data;
                 cached.hits++;
             } else {
+                if (cached) {
+                    console.log('[Controller] loadRepository: ✗ Cache EXPIRED');
+                } else {
+                    console.log('[Controller] loadRepository: ✗ Cache MISS');
+                }
+                
                 // Load from service
+                console.log('[Controller] loadRepository: → Loading from RepositoryService...');
                 data = await this.repositoryService.loadRepository(repoName);
+                console.log('[Controller] loadRepository: ✓ Data loaded from service');
+                
+                if (data) {
+                    console.log('[Controller] loadRepository: → Data structure:');
+                    console.log('[Controller] loadRepository:   Keys:', Object.keys(data));
+                    console.log('[Controller] loadRepository:   Repo:', data.repo?.display_name || data.metadata?.name || 'N/A');
+                    console.log('[Controller] loadRepository:   Overview:', data.overview ? '✓' : '✗');
+                    console.log('[Controller] loadRepository:   Metrics:', data.metrics ? '✓' : '✗');
+                    console.log('[Controller] loadRepository:   Metadata:', data.metadata ? '✓' : '✗');
+                }
                 
                 // Validate integrity BEFORE rendering (only if data loaded)
                 if (data) {
+                    console.log('[Controller] loadRepository: → Validating data integrity...');
                     const validation = this.validationService.validateDataIntegrity(data);
                     
                     if (!validation.valid) {
-                        console.error('[Validation] Integrity issues:', validation.issues);
+                        console.error('[Controller] loadRepository: ✗ Validation FAILED');
+                        console.error('[Controller] loadRepository:   Issues:', validation.issues);
+                    } else {
+                        console.log('[Controller] loadRepository: ✓ Validation PASSED');
+                    }
+                    
+                    if (validation.warnings.length > 0) {
+                        console.warn('[Controller] loadRepository: ⚠ Validation warnings:', validation.warnings);
                     }
                 } else {
-                    console.warn('[Controller] No data loaded - skipping validation');
+                    console.warn('[Controller] loadRepository: ⚠ No data loaded - skipping validation');
                 }
                 
                 // Cache validated data
+                console.log('[Controller] loadRepository: → Caching data...');
                 this.stateManager.setCacheEntry(repoName, data);
+                console.log('[Controller] loadRepository: ✓ Data cached');
             }
             
             // Check if generation still current (prevent stale renders)
+            console.log('[Controller] loadRepository: → Checking generation...');
             if (!this.stateManager.isGenerationCurrent(generation)) {
-                console.log('[Controller] Stale render prevented');
+                console.warn('[Controller] loadRepository: ✗ Stale render prevented (generation mismatch)');
+                console.warn('[Controller] loadRepository:   Expected:', generation);
+                console.warn('[Controller] loadRepository:   Current:', this.stateManager.getGeneration());
                 return;
             }
+            console.log('[Controller] loadRepository: ✓ Generation current');
             
             // Update state: loading complete
+            console.log('[Controller] loadRepository: → Updating state (loading complete)...');
             this.stateManager.setState(draft => {
                 draft.data = data;
                 draft.isLoading = false;
                 draft.errors = {};
             });
+            console.log('[Controller] loadRepository: ✓ State updated with data');
             
             // Update URL
+            console.log('[Controller] loadRepository: → Updating URL...');
             this._updateUrl(repoName);
+            console.log('[Controller] loadRepository: ✓ URL updated');
             
             // Render dashboard (lazy per tab)
+            console.log('[Controller] loadRepository: → Rendering current tab...');
             await this._renderCurrentTab();
+            console.log('[Controller] loadRepository: ✓ Tab rendered');
+            
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log(`[Controller] loadRepository: ✅ SUCCESS - "${repoName}" loaded`);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             
         } catch (error) {
-            console.error('[Controller] Load failed:', error);
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.error('[Controller] loadRepository: ✗ FAILED');
+            console.error('[Controller] loadRepository: Error:', error);
+            console.error('[Controller] loadRepository: Stack:', error.stack);
+            console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             
             this.stateManager.setState(draft => {
                 draft.isLoading = false;
@@ -473,7 +547,18 @@ class DashboardController {
      * Initialize tab navigation
      */
     _initTabs() {
-        if (!this.dom.tabNav) return;
+        console.log('[Controller] _initTabs: Initializing tab navigation...');
+        console.log('[Controller] _initTabs: tabNav element:', this.dom.tabNav ? '✓ Found' : '✗ Not found');
+        
+        if (!this.dom.tabNav) {
+            console.warn('[Controller] _initTabs: ✗ Tab navigation element not found!');
+            return;
+        }
+        
+        console.log('[Controller] _initTabs: Creating', this.config.tabs.length, 'tab buttons');
+        this.config.tabs.forEach((tab, index) => {
+            console.log(`[Controller] _initTabs:   ${index + 1}. ${tab.label} (${tab.id})`);
+        });
         
         // Create tab buttons
         this.dom.tabNav.innerHTML = this.config.tabs.map(tab => `
@@ -483,6 +568,9 @@ class DashboardController {
                 ${tab.label}
             </button>
         `).join('');
+        
+        console.log('[Controller] _initTabs: ✓ Tab HTML generated');
+        console.log('[Controller] _initTabs: ✓ Tab navigation initialized');
     }
     
     /**
