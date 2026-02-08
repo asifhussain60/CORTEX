@@ -1,0 +1,411 @@
+# Phase 51: MCP-FIRST Enforcement with Fail-Fast
+# AC-ID: PHASE-51-001
+# Created: 2026-02-08
+# Priority: P0 - CRITICAL
+# Status: planned
+
+metadata:
+  phase_id: "phase-51"
+  title: "MCP-FIRST Enforcement with Fail-Fast Infrastructure Checks"
+  status: planned
+  priority: P0
+  roi_score: 9.8
+  created_date: "2026-02-08T00:00:00Z"
+  estimated_effort: "4-6 hours"
+  dependencies:
+    - "EnforcementOrchestrator (7 agents)"
+    - "cortex_process_request MCP tool"
+    - "MCP server health endpoint"
+
+overview:
+  vision: |
+    CORTEX must NEVER accept degraded execution modes or bypass quality standards.
+    When infrastructure/dependencies are missing, the system BLOCKS execution and
+    directs user to FIX the infrastructure properly, not work around it.
+    
+    This phase eliminates the "progressive degradation pattern" where CORTEX
+    downgrades from proper TDD/MCP-FIRST to direct file operations, skipping
+    tests, and accepting "basic mode" as acceptable.
+    
+  problem_statement: |
+    **Current Behavior (BROKEN):**
+    User: "onboard repository"
+      ↓
+    ✅ Try MCP tool → ❌ Fail: Missing module
+      ↓
+    ❌ Downgrade: Create file directly (bypass TDD)
+      ↓
+    ❌ Downgrade: Try "basic mode" (reduce quality)
+      ↓
+    ❌ Downgrade: Manual file editing
+      ↓
+    ✅ Success* (*but quality compromised, 5+ CORE rules violated)
+    
+    **Root Cause:**
+    - No pre-flight environment validation
+    - No MCP availability check before IMPLEMENT/FIX/REFACTOR
+    - No enforcement of "fix infrastructure, don't bypass it" policy
+    - EnforcementOrchestrator lacks EnvironmentIntegrityAgent
+    - Direct file tools (create_file, replace_string_in_file) not blocked for IMPLEMENT intents
+    
+  expected_outcomes:
+    - ✅ CORE-050 rule created: "No Quality Degradation" (P0 enforcement)
+    - ✅ EnvironmentIntegrityAgent (8th enforcement agent) operational
+    - ✅ Pre-flight checks BLOCK execution when MCP unavailable
+    - ✅ MCP detection code integrated at session start
+    - ✅ Direct file modification tools blocked for IMPLEMENT/FIX/REFACTOR intents
+    - ✅ Clear error messages guide users to fix infrastructure
+    - ✅ Session quality scorecard improved from D- (28%) to A+ (95%+)
+
+roi_analysis:
+  cost: "4-6 hours implementation + testing"
+  impact:
+    - "Eliminate 80% of quality degradation incidents"
+    - "Enforce single quality standard: Production"
+    - "Reduce debugging time from 30min trial-and-error to 8min proper fix"
+    - "100% CORE compliance vs 40% in degraded mode"
+  risk_mitigation:
+    - "P0: Quality violations → BLOCKED at gate"
+    - "P1: MCP unavailability → User notified immediately, not after 10 failures"
+    - "P2: TDD bypass → Impossible when MCP-FIRST enforced"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD MANDATORY"
+    - "CORE-019: IMPLEMENT via TDDOrchestrator"
+    - "CORE-026: Git checkpoint before major changes"
+    - "CORE-027: Audit trail (AC markers)"
+    - "CORE-048: Holistic Validation Gate"
+    - "CORE-050: No Quality Degradation (NEW)"
+    - "MCP-FIRST: All operations via MCP tools"
+    - "MCP-GATE: IMPLEMENT intents MUST use cortex_process_request"
+  
+  enforcement:
+    level: "BLOCKING"
+    gates:
+      - "Pre-flight environment check (session start)"
+      - "MCP availability check (before IMPLEMENT/FIX/REFACTOR)"
+      - "Direct file tool restriction (intent-based blocking)"
+      - "EnvironmentIntegrityAgent validation (8th agent)"
+    
+  audit_trail: true
+  test_coverage_min: 85%
+
+stages:
+  - stage_id: "S1"
+    name: "CORE-050 Rule Definition + Documentation"
+    description: |
+      Create CORE-050 governance rule: "No Quality Degradation"
+      
+      Rule specification:
+      - Severity: P0 - CRITICAL
+      - Scope: ALL operations (IMPLEMENT/FIX/REFACTOR/ONBOARD)
+      - Enforcement: BLOCKING (no bypass allowed)
+      - Policy: "Fix infrastructure, don't bypass standards"
+      
+      Files to create/update:
+      - cortex_brain/tier0/core_rules.yaml (add CORE-050)
+      - docs/governance/core-rules.md (document CORE-050)
+      - .github/prompts/copilot-instructions.md (update Tier 0 table)
+      
+    tests:
+      - "test_core_050_rule_exists: Verify CORE-050 in core_rules.yaml"
+      - "test_core_050_severity_p0: Verify P0 severity"
+      - "test_core_050_blocking_enforcement: Verify BLOCKING level"
+      - "test_core_050_documentation: Verify docs/governance/core-rules.md updated"
+    
+    estimated_effort: "45 minutes"
+    dependencies: []
+    
+  - stage_id: "S2"
+    name: "EnvironmentIntegrityAgent Implementation (8th Enforcement Agent)"
+    description: |
+      Create 8th agent for EnforcementOrchestrator: EnvironmentIntegrityAgent
+      
+      Responsibilities:
+      - Pre-flight environment validation (session start)
+      - MCP server availability check
+      - Python dependency verification
+      - Git clean state validation
+      - Disk space / permissions check
+      
+      Detection methods:
+      1. Tool availability query (cortex_process_request exists?)
+      2. Environment variable check (MCP_SERVER_PORT, CORTEX_MCP_ENABLED)
+      3. Network port check (localhost:8000 listening?)
+      
+      Blocking conditions:
+      - MCP unavailable + intent = IMPLEMENT/FIX/REFACTOR → BLOCK
+      - Missing critical Python deps → BLOCK
+      - Git dirty state + major operation → WARN (user override)
+      
+      Files to create:
+      - cortex/governance/enforcement/agents/environment_integrity_agent.py
+      - tests/unit/governance/enforcement/agents/test_environment_integrity_agent.py
+      
+    tests:
+      - "test_environment_integrity_agent_initialization"
+      - "test_mcp_availability_detection_tool_query"
+      - "test_mcp_availability_detection_env_vars"
+      - "test_mcp_availability_detection_network_port"
+      - "test_blocking_when_mcp_unavailable_implement_intent"
+      - "test_blocking_when_mcp_unavailable_fix_intent"
+      - "test_blocking_when_mcp_unavailable_refactor_intent"
+      - "test_passing_when_mcp_available"
+      - "test_passing_for_analyze_intent_mcp_unavailable" # Read-only OK
+      - "test_python_dependency_check"
+      - "test_git_clean_state_validation"
+      - "test_integration_with_enforcement_orchestrator"
+    
+    estimated_effort: "2 hours"
+    dependencies: ["S1"]
+    
+  - stage_id: "S3"
+    name: "MCP Pre-Flight Check Protocol"
+    description: |
+      Implement mandatory pre-flight check executed BEFORE any IMPLEMENT/FIX/REFACTOR operation.
+      
+      Check sequence:
+      1. Classify user intent (IMPLEMENT/FIX/REFACTOR/ANALYZE/etc)
+      2. If intent requires MCP → verify_mcp_environment()
+      3. If MCP unavailable → BLOCK with clear error message
+      4. If MCP available → proceed to operation
+      
+      Error message format:
+      ```
+      ❌ MCP Server Required
+      
+      Intent: IMPLEMENT
+      Status: MCP tools not available
+      
+      Resolution Steps:
+      1. Start MCP Server:
+         python -m cortex.mcp.server
+      
+      2. Verify Server Running:
+         curl http://localhost:8000/health
+      
+      3. Restart Copilot session
+      ```
+      
+      Integration points:
+      - MasterOrchestrator.process_request() → Check before routing
+      - IntentRouter → Check after intent classification
+      - copilot-instructions.md → Document pre-flight protocol
+      
+      Files to update:
+      - cortex/orchestrators/core/master_orchestrator.py
+      - cortex/intent_router/intent_router.py
+      - .github/prompts/copilot-instructions.md (MCP PRE-FLIGHT CHECK section)
+      
+    tests:
+      - "test_pre_flight_check_blocks_implement_no_mcp"
+      - "test_pre_flight_check_blocks_fix_no_mcp"
+      - "test_pre_flight_check_blocks_refactor_no_mcp"
+      - "test_pre_flight_check_allows_analyze_no_mcp"
+      - "test_pre_flight_check_passes_with_mcp"
+      - "test_error_message_format"
+      - "test_integration_master_orchestrator"
+      - "test_integration_intent_router"
+    
+    estimated_effort: "1.5 hours"
+    dependencies: ["S2"]
+    
+  - stage_id: "S4"
+    name: "Copilot Native Tool Restrictions (Intent-Based Blocking)"
+    description: |
+      Block Copilot native file modification tools for IMPLEMENT/FIX/REFACTOR intents.
+      
+      Blocked tools for IMPLEMENT/FIX/REFACTOR:
+      - create_file (*.py files only, docs/ allowed)
+      - replace_string_in_file (*.py files only)
+      - multi_replace_string_in_file (*.py files only)
+      - run_in_terminal (file operations only, git/analysis OK)
+      
+      Allowed tools (always):
+      - read_file (analysis only)
+      - semantic_search, grep_search, file_search
+      - cortex_process_request (REQUIRED for IMPLEMENT/FIX/REFACTOR)
+      
+      Implementation approach:
+      - Update copilot-instructions.md with FORBIDDEN/ALLOWED tables
+      - Add enforcement pattern code (Python pseudocode)
+      - Add violation response templates
+      - Document in Quick Reference Matrix
+      
+      Files to update:
+      - .github/prompts/copilot-instructions.md (COPILOT NATIVE TOOL RESTRICTIONS section)
+      
+      Note: This is a PROMPT-BASED enforcement (Copilot internal).
+      No Python code changes needed - the instruction file guides Copilot behavior.
+      
+    tests:
+      - "Manual validation: Test IMPLEMENT intent → verify create_file blocked"
+      - "Manual validation: Test FIX intent → verify replace_string_in_file blocked"
+      - "Manual validation: Test ANALYZE intent → verify create_file allowed for docs/"
+      - "Manual validation: Test error message when tool blocked"
+    
+    estimated_effort: "1 hour"
+    dependencies: ["S3"]
+    
+  - stage_id: "S5"
+    name: "Session Initialization MCP Check"
+    description: |
+      Add session initialization check that verifies MCP availability at startup.
+      
+      Initialization sequence:
+      ```
+      Copilot Session Start
+            ↓
+      1. Load copilot-instructions.md
+            ↓
+      2. Execute session init check:
+         - verify_mcp_environment("IMPLEMENT")
+         - If available → Log "✅ CORTEX ready"
+         - If unavailable → Log "⚠️ READ-ONLY mode"
+            ↓
+      3. Proceed to user request
+      ```
+      
+      Output format:
+      ```
+      🔧 Initializing CORTEX session...
+      
+      ✅ MCP Server: Available
+      ✅ cortex_process_request: Ready
+      ✅ cortex_lens_analyze: Ready
+      
+      🟢 CORTEX ready for operations
+      ```
+      
+      OR (if MCP unavailable):
+      ```
+      🔧 Initializing CORTEX session...
+      
+      ⚠️ MCP Server: Not detected
+      
+      CORTEX will operate in READ-ONLY mode.
+      IMPLEMENT/FIX/REFACTOR operations blocked.
+      
+      To enable full functionality:
+        1. python -m cortex.mcp.server
+        2. Restart Copilot session
+      ```
+      
+      Files to update:
+      - .github/prompts/copilot-instructions.md (SESSION INITIALIZATION CHECK section)
+      
+    tests:
+      - "Manual validation: Start session → verify MCP check runs"
+      - "Manual validation: MCP available → verify ready message"
+      - "Manual validation: MCP unavailable → verify READ-ONLY message"
+    
+    estimated_effort: "30 minutes"
+    dependencies: ["S3", "S4"]
+    
+  - stage_id: "S6"
+    name: "Integration Testing + Documentation"
+    description: |
+      End-to-end integration tests + documentation updates.
+      
+      Integration test scenarios:
+      1. User says "implement feature X" + MCP unavailable → BLOCKED with message
+      2. User says "analyze code" + MCP unavailable → ALLOWED (read-only)
+      3. User says "implement feature X" + MCP available → SUCCESS (via cortex_process_request)
+      4. User attempts create_file for IMPLEMENT → BLOCKED by prompt
+      5. User attempts create_file for docs/ → ALLOWED
+      6. EnvironmentIntegrityAgent triggers pre-flight BLOCK → Error message displayed
+      
+      Documentation updates:
+      - README.md: Add "MCP-FIRST Enforcement" section
+      - docs/governance/: Update governance rules with CORE-050
+      - docs/architecture/: Document EnvironmentIntegrityAgent (8th agent)
+      - CHANGELOG.md: Add Phase 51 entry
+      
+      Files to create/update:
+      - tests/integration/test_mcp_first_enforcement.py
+      - README.md
+      - docs/governance/core-rules.md
+      - docs/architecture/enforcement-orchestrator.md
+      - CHANGELOG.md
+      
+    tests:
+      - "test_end_to_end_implement_blocked_no_mcp"
+      - "test_end_to_end_analyze_allowed_no_mcp"
+      - "test_end_to_end_implement_success_with_mcp"
+      - "test_documentation_completeness"
+      - "test_readme_mcp_first_section"
+      - "test_governance_docs_updated"
+    
+    estimated_effort: "1 hour"
+    dependencies: ["S1", "S2", "S3", "S4", "S5"]
+
+deliverables:
+  - name: "CORE-050 rule created in core_rules.yaml"
+    status: pending
+    file: "cortex_brain/tier0/core_rules.yaml"
+    
+  - name: "EnvironmentIntegrityAgent (8th agent) implemented"
+    status: pending
+    file: "cortex/governance/enforcement/agents/environment_integrity_agent.py"
+    
+  - name: "MCP pre-flight check integrated in MasterOrchestrator"
+    status: pending
+    file: "cortex/orchestrators/core/master_orchestrator.py"
+    
+  - name: "Copilot tool restrictions documented"
+    status: pending
+    file: ".github/prompts/copilot-instructions.md"
+    
+  - name: "Session initialization check implemented"
+    status: pending
+    file: ".github/prompts/copilot-instructions.md"
+    
+  - name: "Integration tests passing (10+ tests)"
+    status: pending
+    file: "tests/integration/test_mcp_first_enforcement.py"
+    
+  - name: "Documentation updated (README, governance, architecture)"
+    status: pending
+    files:
+      - "README.md"
+      - "docs/governance/core-rules.md"
+      - "docs/architecture/enforcement-orchestrator.md"
+
+success_criteria:
+  - "✅ CORE-050 rule enforced at P0 level"
+  - "✅ EnvironmentIntegrityAgent operational (8th agent)"
+  - "✅ MCP unavailable → IMPLEMENT intents BLOCKED with clear message"
+  - "✅ MCP unavailable → ANALYZE intents ALLOWED (read-only)"
+  - "✅ Direct file tools blocked for IMPLEMENT/FIX/REFACTOR (*.py files)"
+  - "✅ Session quality scorecard: A+ (95%+ CORE compliance)"
+  - "✅ Zero quality degradation incidents in test scenarios"
+  - "✅ Documentation complete and accurate"
+
+notes: |
+  **Key Principle:** Fix infrastructure, don't bypass it.
+  
+  **Before Phase 51:** CORTEX degrades quality when infra missing
+  **After Phase 51:** CORTEX blocks and guides user to fix infra properly
+  
+  **Example Behavior Change:**
+  
+  BEFORE:
+  User: "implement feature X"
+  CORTEX: "MCP unavailable, trying direct file creation..."
+          "Tests optional in basic mode..."
+          "✅ Done (quality compromised)"
+  
+  AFTER:
+  User: "implement feature X"
+  CORTEX: "❌ BLOCKED: MCP Server not running
+           
+           Required: python -m cortex.mcp.server
+           
+           CORTEX operates at ONE quality level: Production.
+           No shortcuts. No exceptions."
+  
+  User: [starts MCP server]
+  CORTEX: "✅ MCP available. Proceeding with TDD implementation..."
+          [Proper TDD via cortex_process_request]
+          "✅ Done (100% CORE compliance)"
