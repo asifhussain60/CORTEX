@@ -605,7 +605,7 @@ active_phases:
     name: "Brain Cohesion & Health System"
     file: "phases/completed/2026/phase-38-brain-cohesion-health-system.yaml"
     started: "2026-02-08"
-    status: "in_progress"
+    status: "completed"
     priority: "P0"
     execution_order: 1
     roi_score: 0.94
@@ -734,7 +734,7 @@ active_phases:
     file: "phases/active/phase-48-registry-isolation-multi-tenant.yaml"
     created: "2026-02-08"
     started: "2026-02-08"
-    status: "in_progress"
+    status: "completed"
     priority: "P0"
     execution_order: 3
     roi_score: 0.93
@@ -777,20 +777,21 @@ active_phases:
   
   - id: "phase-49"
     name: "Document Ingestion & Knowledge Extraction Pipeline"
-    file: "phases/active/phase-49-document-ingestion-pipeline.yaml"
+    file: "phases/completed/2026/phase-49-document-ingestion-pipeline.yaml"
     created: "2026-02-08"
     started: "2026-02-08"
-    status: "in_progress"
+    completed: "2026-02-08"
+    status: "completed"
     priority: "P1"
     execution_order: 8
     roi_score: 0.91
     estimated_duration: "14 days"
     test_target: 122
-    tests_passing: 40
+    tests_passing: 146
     coverage_target: 90
-    current_stage: "S2"
-    stage_progress: "40/43 tests passing (S1-S2 complete - 93% of cumulative target)"
-    progress_percent: "33%"
+    current_stage: "S7"
+    stage_progress: "146/146 tests passing (ALL 7 STAGES COMPLETE - 120% of target)"
+    progress_percent: "100%"
     production_blocker: false
     autonomous_execution: true
     approval_required: false
