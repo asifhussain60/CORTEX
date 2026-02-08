@@ -2198,6 +2198,310 @@ assert connectivity >= 90, f"Orchestrator connectivity: {connectivity}% (target:
 
 # 3. Check company domain utilization
 domain_query = """
+
+---
+
+### P1.7: MCP Governance Gap Detection (GAP-001, GAP-002, GAP-003) - NEW
+
+**Authority:** Meta-Audit findings from February 8, 2026  
+**Purpose:** Detect and prevent MCP-FIRST bypass violations  
+**Criticality:** P0 - CRITICAL (prevents unguided Copilot operations)
+
+**Detection Required:**
+
+#### GAP-001: Copilot Native Tool Usage Without Guards
+
+**Issue:** Copilot could use native file modification tools (`create_file`, `replace_string_in_file`, etc.) bypassing MCP-FIRST architecture.
+
+**Detection Logic:**
+
+```python
+def audit_gap_001() -> List[Dict[str, Any]]:
+    """
+    Detect missing Copilot tool usage restrictions in prompt files.
+    
+    Returns:
+        List of violations found
+    """
+    violations = []
+    
+    # Check 1: Are tool restrictions documented?
+    prompt_files = [
+        ".github/copilot-instructions.md",
+        ".github/prompts/CORTEX.prompt.md",
+        ".github/prompts/cortex-architect.prompt.md"
+    ]
+    
+    for prompt_file in prompt_files:
+        content = Path(prompt_file).read_text()
+        
+        # Check for explicit tool restrictions
+        has_tool_restrictions = (
+            "COPILOT NATIVE TOOL RESTRICTIONS" in content or
+            "FORBIDDEN for IMPLEMENT/FIX/REFACTOR" in content
+        )
+        
+        has_enforcement_pattern = (
+            "if intent in [" in content and
+            "if tool in [" in content and
+            "BLOCK with message" in content
+        )
+        
+        if not (has_tool_restrictions and has_enforcement_pattern):
+            violations.append({
+                "gap_id": "GAP-001",
+                "file": prompt_file,
+                "issue": "Missing Copilot native tool usage guards",
+                "severity": "P0",
+                "impact": "Copilot can bypass MCP-FIRST architecture",
+                "fix": "Add COPILOT NATIVE TOOL RESTRICTIONS section with enforcement pattern"
+            })
+    
+    return violations
+```
+
+**Expected Sections:**
+- ✅ Table of FORBIDDEN tools (create_file, replace_string_in_file, etc.)
+- ✅ Table of ALLOWED tools (read_file, semantic_search, etc.)
+- ✅ Enforcement pattern (intent check → tool check → block)
+- ✅ Quick reference matrix (intent × tool permissions)
+- ✅ Violation response template
+
+**Report Format:**
+```markdown
+#### GAP-001: Copilot Tool Guards ✅/❌
+
+**Status:** {PASS|FAIL}
+
+**Files Checked:** {count}
+**Violations:** {count}
+
+| File | Has Restrictions? | Has Enforcement? | Status |
+|------|------------------|------------------|--------|
+| copilot-instructions.md | ✅/❌ | ✅/❌ | ✅/❌ |
+| CORTEX.prompt.md | ✅/❌ | ✅/❌ | ✅/❌ |
+| cortex-architect.prompt.md | ✅/❌ | ✅/❌ | ✅/❌ |
+
+**Action Required:** {Add sections to failing files | None}
+```
+
+---
+
+#### GAP-002: Missing MCP Detection Code
+
+**Issue:** Prompts reference MCP availability checks but don't provide concrete detection implementation.
+
+**Detection Logic:**
+
+```python
+def audit_gap_002() -> List[Dict[str, Any]]:
+    """
+    Detect missing MCP availability detection code in prompts.
+    
+    Returns:
+        List of violations found
+    """
+    violations = []
+    
+    # Check 1: Is detection code present?
+    prompt_file = ".github/copilot-instructions.md"
+    content = Path(prompt_file).read_text()
+    
+    required_patterns = [
+        "def is_mcp_available",
+        "def is_mcp_server_running",
+        "def check_mcp_port",
+        "def verify_mcp_environment",
+        "Session Initialization Check"
+    ]
+    
+    missing_patterns = [p for p in required_patterns if p not in content]
+    
+    if missing_patterns:
+        violations.append({
+            "gap_id": "GAP-002",
+            "file": prompt_file,
+            "issue": "Missing MCP detection code patterns",
+            "severity": "P1",
+            "impact": "Cannot reliably detect MCP availability",
+            "missing_patterns": missing_patterns,
+            "fix": "Add MCP Detection Code section with 3 detection patterns"
+        })
+    
+    # Check 2: Are error messages user-facing?
+    has_error_messages = "MCP Server Required" in content and "Resolution Steps" in content
+    
+    if not has_error_messages:
+        violations.append({
+            "gap_id": "GAP-002",
+            "file": prompt_file,
+            "issue": "Missing user-facing error messages",
+            "severity": "P2",
+            "impact": "Poor UX when MCP unavailable",
+            "fix": "Add error message templates for MCP unavailability"
+        })
+    
+    return violations
+```
+
+**Expected Sections:**
+- ✅ Tool availability query pattern (Pattern 1)
+- ✅ Environment variable check pattern (Pattern 2)
+- ✅ Network port check pattern (Pattern 3)
+- ✅ Comprehensive verification workflow
+- ✅ Session initialization check
+- ✅ User-facing error messages
+
+**Report Format:**
+```markdown
+#### GAP-002: MCP Detection Code ✅/❌
+
+**Status:** {PASS|FAIL}
+
+**Detection Patterns:** {present_count}/5
+**Missing Patterns:**
+{list_of_missing_patterns}
+
+**Action Required:** {Add detection code section | None}
+```
+
+---
+
+#### GAP-003: Weak DESIGN Mode Boundaries
+
+**Issue:** DESIGN mode allows "lightweight implementation" which could bypass MCP.
+
+**Detection Logic:**
+
+```python
+def audit_gap_003() -> List[Dict[str, Any]]:
+    """
+    Detect weak or missing DESIGN mode boundaries.
+    
+    Returns:
+        List of violations found
+    """
+    violations = []
+    
+    # Check cortex-architect.prompt.md for DESIGN mode section
+    prompt_file = ".github/prompts/cortex-architect.prompt.md"
+    content = Path(prompt_file).read_text()
+    
+    # Check 1: Is DESIGN MODE section present?
+    has_design_section = "MODE 2: DESIGN" in content
+    
+    if not has_design_section:
+        violations.append({
+            "gap_id": "GAP-003",
+            "file": prompt_file,
+            "issue": "Missing DESIGN MODE section",
+            "severity": "P1",
+            "fix": "Add MODE 2: DESIGN section"
+        })
+        return violations  # Can't check further without section
+    
+    # Check 2: Are boundaries explicitly defined?
+    required_sections = [
+        "DESIGN MODE BOUNDARIES",
+        "ALLOWED in DESIGN",
+        "FORBIDDEN in DESIGN",
+        "Transition Rule",
+        "Pre-Creation Checkpoint"
+    ]
+    
+    missing_sections = [s for s in required_sections if s not in content]
+    
+    if missing_sections:
+        violations.append({
+            "gap_id": "GAP-003",
+            "file": prompt_file,
+            "issue": "DESIGN mode boundaries not explicitly defined",
+            "severity": "P1",
+            "impact": "Could allow unintended code generation in DESIGN phase",
+            "missing_sections": missing_sections,
+            "fix": "Add DESIGN MODE BOUNDARIES section with explicit ALLOWED/FORBIDDEN tables"
+        })
+    
+    # Check 3: Is .py file creation explicitly blocked?
+    blocks_py_creation = (
+        "Create ANY .py files" in content and
+        "BLOCKED" in content and
+        "validate_design_boundary" in content
+    )
+    
+    if not blocks_py_creation:
+        violations.append({
+            "gap_id": "GAP-003",
+            "file": prompt_file,
+            "issue": "No explicit .py file creation block in DESIGN mode",
+            "severity": "P0",
+            "impact": "CRITICAL - Could bypass MCP-FIRST architecture",
+            "fix": "Add validate_design_boundary() checkpoint before file creation"
+        })
+    
+    return violations
+```
+
+**Expected Sections:**
+- ✅ DESIGN MODE BOUNDARIES header with "STRICTLY ENFORCED" tag
+- ✅ ALLOWED table (read code, generate diagrams, create docs, etc.)
+- ✅ FORBIDDEN table (create .py, modify .py, execute code, etc.)
+- ✅ Transition Rule: DESIGN → IMPLEMENT with step-by-step flow
+- ✅ Pre-Creation Checkpoint (validate_design_boundary function)
+- ✅ Quick Reference table (scenario → correct mode)
+
+**Report Format:**
+```markdown
+#### GAP-003: DESIGN Mode Boundaries ✅/❌
+
+**Status:** {PASS|FAIL}
+
+**Boundary Sections:** {present_count}/5
+**Missing Sections:**
+{list_of_missing_sections}
+
+**.py File Block:** ✅/❌
+
+**Action Required:** {Add boundary definitions | None}
+```
+
+---
+
+### Combined MCP Governance Report
+
+**After all three GAP checks:**
+
+```markdown
+### P1.7: MCP Governance Gap Detection ✅/❌
+
+**Overall Status:** {ALL_PASS|⚠️ GAPS_DETECTED|❌ CRITICAL_FAILURES}
+
+**Summary:**
+| Gap | Status | Severity | Files Affected |
+|-----|--------|----------|----------------|
+| GAP-001 | ✅/❌ | P0 | {count} |
+| GAP-002 | ✅/❌ | P1 | {count} |
+| GAP-003 | ✅/❌ | P1 | {count} |
+
+**Total Violations:** {count}  
+**P0 Violations:** {count} (CRITICAL - blocks MCP-FIRST)  
+**P1 Violations:** {count} (HIGH - weakens governance)
+
+**Auto-Fix Available:** {YES|NO}
+
+**Action Required:**
+{If violations found, list specific fixes for each gap}
+{If all pass, display: "All MCP governance gaps closed. CORTEX controls execution."}
+```
+
+**Auto-Fix Trigger:**
+If ALL violations are in prompt files (not code), offer to auto-fix:
+```
+⚙️ Auto-fix available for all violations.
+Type 'fix gaps' to apply fixes automatically.
+```
+
+---
 SELECT COUNT(*) as total, 
        SUM(CASE WHEN company_standards_used THEN 1 ELSE 0 END) as with_standards
 FROM operations WHERE timestamp > datetime('now', '-7 days')
@@ -3363,6 +3667,123 @@ Score < 5 → Continue to DESIGN MODE
 **Execution:** Stop for approval → autonomous after  
 **Context:** USE attached files  
 **Output:** Executive summaries + tables only (no code snippets)
+
+## 🚨 DESIGN MODE BOUNDARIES (GAP-003 FIX - STRICTLY ENFORCED)
+
+**CRITICAL:** DESIGN mode is for architecture planning WITHOUT code generation.
+
+### ALLOWED in DESIGN Mode
+
+| Activity | Tool | Purpose | Constraint |
+|----------|------|---------|------------|
+| **Read code** | `read_file`, `semantic_search` | Analysis only | No modifications |
+| **Generate diagrams** | Chat markdown (Mermaid) | Architecture visualization | docs/ directory ONLY |
+| **Create design docs** | `create_file` | Documentation | docs/ directory ONLY |
+| **Propose file structure** | Chat markdown (list) | Architecture planning | No actual file creation |
+| **Write test specs** | Chat markdown | TDD preparation | NOT .py files |
+| **Search codebase** | `grep_search`, `file_search` | Discovery | Read-only |
+
+### FORBIDDEN in DESIGN Mode
+
+| Activity | Status | Reason |
+|----------|--------|--------|
+| Create ANY .py files | ❌ **BLOCKED** | Implementation = IMPLEMENT mode |
+| Modify ANY .py files | ❌ **BLOCKED** | Use `cortex_process_request` instead |
+| Use `create_file` for code | ❌ **BLOCKED** | Must transition to IMPLEMENT first |
+| Use `replace_string_in_file` for .py | ❌ **BLOCKED** | Violates MCP-FIRST |
+| Execute Python code | ❌ **BLOCKED** | Analysis/design only |
+| Install packages | ❌ **BLOCKED** | No environment changes |
+| Create test files (test_*.py) | ❌ **BLOCKED** | TDDOrchestrator handles in IMPLEMENT |
+
+### Transition Rule: DESIGN → IMPLEMENT
+
+**When user approves design (`proceed` / `yes` / `approve`):**
+
+```yaml
+Step 1: Save Design
+  - If design docs created → ensure in docs/ directory
+  - Commit design artifacts: git commit -m "docs: Phase X design"
+
+Step 2: MODE SWITCH
+  - Change from DESIGN → IMPLEMENT
+  - Notify user: "Switching to IMPLEMENT mode..."
+
+Step 3: INVOKE MCP
+  - Tool: cortex_process_request
+  - Operation: "implement"
+  - Context: approved design + user request
+
+Step 4: TDD ENFORCEMENT
+  - TDDOrchestrator generates tests FIRST
+  - RED → GREEN → REFACTOR cycle
+  - AC_START audit marker added
+
+Step 5: COMPLETE
+  - All tests passing
+  - AC_COMPLETE audit marker
+  - Phase registry updated
+```
+
+### Pre-Creation Checkpoint (MANDATORY)
+
+**Execute BEFORE ANY file creation:**
+
+```python
+def validate_design_boundary(current_mode: str, file_path: str, operation: str) -> bool:
+    """
+    Validate that file operation respects DESIGN mode boundaries.
+    
+    Args:
+        current_mode: Current mode (DESIGN, IMPLEMENT, etc.)
+        file_path: Path to file being created/modified
+        operation: Operation type (create, modify, delete)
+    
+    Returns:
+        True if allowed, False if blocked
+    """
+    if current_mode == "DESIGN":
+        # Check 1: Is this a .py file?
+        if file_path.endswith(".py"):
+            print("❌ DESIGN MODE VIOLATION: Cannot create/modify .py files in DESIGN mode")
+            print("")
+            print("Required Action:")
+            print("  1. Get user approval for design (type 'proceed')")
+            print("  2. System switches to IMPLEMENT mode automatically")
+            print("  3. Use cortex_process_request for implementation")
+            print("")
+            print("Why: DESIGN = architecture planning, IMPLEMENT = code generation")
+            return False  # BLOCK
+        
+        # Check 2: Is this outside docs/ ?
+        if operation in ["create", "modify"] and not file_path.startswith("docs/"):
+            if file_path.endswith(".md") or file_path.endswith(".yaml"):
+                print("❌ DESIGN MODE VIOLATION: Documentation must be in docs/ directory")
+                print(f"   Attempted: {file_path}")
+                print(f"   Required: docs/{Path(file_path).name}")
+                return False  # BLOCK
+    
+    return True  # ALLOW
+
+# Usage before file operation
+if not validate_design_boundary(current_mode="DESIGN", file_path="cortex/feature.py", operation="create"):
+    STOP_EXECUTION  # Do not proceed with file creation
+```
+
+### Quick Reference: When to Use Each Mode
+
+| Scenario | Correct Mode | Reasoning |
+|----------|--------------|------------|
+| User says "design a solution" | ✅ DESIGN | Architecture planning |
+| User says "implement feature X" | ⚠️ DESIGN → IMPLEMENT | Design first, then switch |
+| User says "create architecture doc" | ✅ DESIGN | Documentation only |
+| User approves design + says "proceed" | ✅ IMPLEMENT | Transition triggered |
+| User says "add this code" with snippet | ⚠️ DESIGN → IMPLEMENT | Validate design, then implement |
+| User says "update design doc" | ✅ DESIGN | Documentation change |
+| User says "fix bug in module X" | ⚠️ DESIGN → IMPLEMENT | Analyze first, then fix |
+
+**Key Principle:** If it involves creating/modifying .py files → MUST use IMPLEMENT mode (via MCP)
+
+---
 
 ## 🚀 AUTONOMOUS CONTINUATION (BYPASS VERBOSE MODE)
 

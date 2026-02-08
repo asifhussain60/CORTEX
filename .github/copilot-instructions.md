@@ -163,6 +163,206 @@ if 'cortex_process_request' not in available_tools:
 
 ---
 
+## 🔍 MCP DETECTION CODE (GAP-002 FIX)
+
+**CRITICAL:** Execute MCP availability check at session start and before IMPLEMENT/FIX/REFACTOR operations.
+
+### Detection Pattern 1: Tool Availability Query
+
+```python
+def is_mcp_available() -> bool:
+    """
+    Check if MCP tools are available in current session.
+    
+    Returns:
+        True if MCP tools available, False otherwise
+    """
+    try:
+        # Query available tools from VS Code/Copilot context
+        # Note: Implementation depends on Copilot's internal tool registry
+        
+        # Attempt to describe the tool (this will fail if tool doesn't exist)
+        # This is a conceptual pattern - actual implementation uses Copilot's context
+        available = check_tool_exists("cortex_process_request")
+        return available
+    except Exception as e:
+        return False
+
+# Usage in pre-flight check
+if not is_mcp_available():
+    print("❌ MCP Server not running")
+    print("Start: python -m cortex.mcp.server")
+    print("Port: 8000 (default)")
+    return STOP_EXECUTION
+```
+
+### Detection Pattern 2: Environment Variable Check
+
+```python
+def is_mcp_server_running() -> bool:
+    """
+    Check if MCP server is running via environment variables.
+    
+    Returns:
+        True if server running, False otherwise
+    """
+    import os
+    
+    # Check standard MCP environment variables
+    mcp_indicators = [
+        "MCP_SERVER_PORT",
+        "MCP_SERVER_HOST",
+        "CORTEX_MCP_ENABLED"
+    ]
+    
+    return any(os.getenv(var) for var in mcp_indicators)
+```
+
+### Detection Pattern 3: Network Port Check
+
+```python
+def check_mcp_port() -> bool:
+    """
+    Check if MCP server is listening on expected port.
+    
+    Returns:
+        True if port is open, False otherwise
+    """
+    import socket
+    import os
+    
+    host = "localhost"
+    port = int(os.getenv("MCP_SERVER_PORT", "8000"))
+    
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)  # 1 second timeout
+        result = sock.connect_ex((host, port))
+        sock.close()
+        return result == 0
+    except Exception:
+        return False
+```
+
+### Recommended Detection Workflow
+
+```python
+def verify_mcp_environment(intent: str) -> tuple[bool, str]:
+    """
+    Comprehensive MCP environment verification.
+    
+    Args:
+        intent: User intent (IMPLEMENT/FIX/REFACTOR/ANALYZE/etc.)
+    
+    Returns:
+        Tuple of (is_available, message)
+    """
+    # Step 1: Check if MCP required for this intent
+    mcp_required_intents = ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE", "AUDIT"]
+    
+    if intent not in mcp_required_intents:
+        return (True, "MCP not required for this intent")
+    
+    # Step 2: Attempt tool availability check (primary)
+    try:
+        if is_mcp_available():
+            return (True, "MCP tools available")
+    except Exception:
+        pass
+    
+    # Step 3: Check environment variables (secondary)
+    if is_mcp_server_running():
+        return (True, "MCP server detected via environment")
+    
+    # Step 4: Check network port (tertiary)
+    if check_mcp_port():
+        return (True, "MCP server detected on port")
+    
+    # Step 5: MCP unavailable
+    return (False, f"MCP required for {intent} but not available")
+
+# Usage before operation
+is_available, message = verify_mcp_environment(intent)
+
+if not is_available:
+    print(f"❌ {message}")
+    print("")
+    print("Start MCP Server:")
+    print("  python -m cortex.mcp.server")
+    print("")
+    print("Verify Running:")
+    print("  curl http://localhost:8000/health")
+    return STOP_EXECUTION
+```
+
+### Session Initialization Check
+
+**Execute at start of EVERY Copilot session:**
+
+```python
+# SESSION INIT - Run automatically
+print("🔧 Initializing CORTEX session...")
+
+# Check MCP availability
+is_available, message = verify_mcp_environment("IMPLEMENT")
+
+if is_available:
+    print("✅ MCP Server: Available")
+    print("✅ cortex_process_request: Ready")
+    print("✅ cortex_lens_analyze: Ready")
+    print("")
+    print("🟢 CORTEX ready for operations")
+else:
+    print("⚠️ MCP Server: Not detected")
+    print("")
+    print("CORTEX will operate in READ-ONLY mode.")
+    print("IMPLEMENT/FIX/REFACTOR operations blocked.")
+    print("")
+    print("To enable full functionality:")
+    print("  1. python -m cortex.mcp.server")
+    print("  2. Restart Copilot session")
+```
+
+### Error Messages (User-Facing)
+
+**When MCP unavailable for required intent:**
+
+```markdown
+❌ **MCP Server Required**
+
+**Intent:** {intent}
+**Status:** MCP tools not available
+**Impact:** Cannot proceed with {intent} operations
+
+**Resolution Steps:**
+
+1. **Start MCP Server:**
+   ```bash
+   python -m cortex.mcp.server
+   ```
+
+2. **Verify Server Running:**
+   ```bash
+   curl http://localhost:8000/health
+   # Expected: {"status": "healthy"}
+   ```
+
+3. **Check Environment:**
+   ```bash
+   echo $MCP_SERVER_PORT  # Should show 8000
+   ```
+
+4. **Restart Copilot:**
+   - Reload VS Code window
+   - Or restart Copilot extension
+
+**Alternative (Temporary):**
+For analysis-only operations, you can continue without MCP.
+However, IMPLEMENT/FIX/REFACTOR will remain blocked.
+```
+
+---
+
 ## �🔒 MCP-FIRST ENFORCEMENT (CRITICAL)
 
 **FORBIDDEN:** Direct file creation when intent = IMPLEMENT/FIX/REFACTOR
@@ -215,6 +415,117 @@ if 'cortex_process_request' not in available_tools:
 - ❌ "Simple fix" - still needs MCP
 - ❌ "Just one line" - still needs MCP
 - ❌ "User didn't say /implement" - still needs MCP if intent = IMPLEMENT/FIX
+
+---
+
+## 🚨 COPILOT NATIVE TOOL RESTRICTIONS (GAP-001 FIX)
+
+**CRITICAL:** Before using ANY Copilot native file modification tool, perform intent check.
+
+### Intent-Based Tool Restrictions
+
+**FORBIDDEN for IMPLEMENT/FIX/REFACTOR intents:**
+
+| Tool | Status | Replacement |
+|------|--------|-------------|
+| `create_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `multi_replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `run_in_terminal` (file ops) | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `edit_notebook_file` (code cells) | ❌ **BLOCKED** | Use `cortex_process_request` |
+
+**ALLOWED for IMPLEMENT/FIX/REFACTOR intents:**
+
+| Tool | Status | Purpose |
+|------|--------|----------|
+| `read_file` | ✅ **ALLOWED** | Analysis only (no modification) |
+| `semantic_search` | ✅ **ALLOWED** | Discovery only |
+| `grep_search` | ✅ **ALLOWED** | Analysis only |
+| `file_search` | ✅ **ALLOWED** | Discovery only |
+| `list_dir` | ✅ **ALLOWED** | Navigation only |
+| `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
+| `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
+
+**ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
+
+- ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
+- ✅ `create_file` for docs/ directory ONLY (documentation)
+- ✅ `replace_string_in_file` for docs/ directory ONLY
+- ❌ NO .py file modifications (use `cortex_process_request` instead)
+
+### Enforcement Pattern (MANDATORY)
+
+**Execute this check BEFORE every file modification tool:**
+
+```python
+# Step 1: Classify intent
+intent = classify_user_request()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
+
+# Step 2: Check tool against intent
+if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+    if tool in ["create_file", "replace_string_in_file", "multi_replace_string_in_file"]:
+        # Check if targeting .py files
+        if file_path.endswith(".py"):
+            BLOCK with message:
+            """
+            ❌ CRITICAL VIOLATION: Direct file modification blocked
+            
+            Intent: {intent}
+            Tool: {tool}
+            File: {file_path}
+            
+            Required Action: Use cortex_process_request instead
+            Example: cortex_process_request(operation="{intent.lower()}", target="{file_path}", ...)
+            
+            Why: MCP-FIRST architecture ensures TDD, security gates, and audit trails.
+            """
+            STOP execution
+
+# Step 3: If allowed, proceed
+if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
+    proceed with tool invocation
+```
+
+### Quick Reference Matrix
+
+| Intent | Native File Tools | MCP Tools | Docs Updates |
+|--------|------------------|-----------|---------------|
+| **IMPLEMENT** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **FIX** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
+| **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
+| **DESIGN** | 📖 Read-only + docs/ | ⚪ Optional | ✅ Allowed |
+
+**Violation Response:**
+```markdown
+❌ **MCP-FIRST VIOLATION DETECTED**
+
+**Attempted Action:** {tool} on {file_path}
+**Intent:** {intent}
+**Severity:** P0 - CRITICAL
+
+**Required Action:**
+1. Stop current operation
+2. Invoke `cortex_process_request` with same parameters
+3. Follow TDD workflow (tests before code)
+
+**Command:**
+```bash
+# Start MCP server if not running
+python -m cortex.mcp.server
+```
+
+**MCP Tool Usage:**
+```python
+cortex_process_request(
+    operation="{intent.lower()}",
+    target="{file_path}",
+    request="{user_request}",
+    mode="TDD"
+)
+```
+```
 
 ---
 
