@@ -115,6 +115,21 @@ async function loadDashboardData(repoName) {
     }
 
     try {
+        // FILE PROTOCOL FIX: Check for embedded data first (CORS workaround)
+        const embeddedDataElement = document.getElementById(`data-${repoName}`);
+        if (embeddedDataElement) {
+            console.log(`[Loading] Embedded data for ${repoName}`);
+            const data = JSON.parse(embeddedDataElement.textContent);
+            
+            // Cache data
+            APP_STATE.cache.set(repoName, data);
+            APP_STATE.cacheTimestamps.set(repoName, Date.now());
+            
+            console.log(`[Loaded] ${repoName} from embedded data (${Object.keys(data).length} sections)`);
+            return data;
+        }
+        
+        // Fallback to fetch for HTTP protocol
         const dataPath = getDataFilePath(repoName);
         console.log(`[Loading] ${dataPath}`);
         
