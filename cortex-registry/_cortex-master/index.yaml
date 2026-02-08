@@ -298,10 +298,11 @@ active_phases:
     roi_score: 0.85
     estimated_duration: "4 days"
     test_target: 90
-    current_stage: "S1"
-    stage_progress: "50%"
-    tests_passing: 0
+    current_stage: "S2"
+    stage_progress: "22/112 tests passing (20%)"
+    tests_passing: 22
     tests_failing: 0
+    coverage_target: 90
     coverage_target: 90
     description: |
       ⚪ PLANNED: Hybrid role-adaptive persona system with context inference.
