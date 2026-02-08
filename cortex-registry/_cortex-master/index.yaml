@@ -160,7 +160,7 @@ active_phases:
   
   - id: "phase-38"
     name: "Brain Cohesion & Health System"
-    file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
+    file: "phases/completed/2026/phase-38-brain-cohesion-health-system.yaml"
     started: null
     status: "planned"
     priority: "P0"
