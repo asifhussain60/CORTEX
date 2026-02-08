@@ -19,7 +19,7 @@
 const CONFIG = {
     REPOSITORIES: ["cortex", "ksessions", "kashkole", "alist", "noor-canvas"],
     DATA_DIR: "./data",
-    SUPPORTED_TABS: ["overview", "security", "metrics", "health", "recommendations"],
+    SUPPORTED_TABS: ["overview", "architecture", "quality", "security", "vulnerabilities", "dependencies", "patterns", "testing", "usecases"],
     CACHE_TTL_MS: 5 * 60 * 1000, // 5 minutes
 };
 
