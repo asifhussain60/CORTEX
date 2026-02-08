@@ -1543,6 +1543,153 @@ Advanced Level:
 
 ---
 
+## 🎨 Enhanced Response Template (Section 14)
+
+### Semantic Color-Coded Headers
+
+CORTEX responses now use emoji-prefixed headers for instant visual status assessment. This enables users to understand work status at a glance without reading entire responses.
+
+**Status Indicators (7 Total):**
+
+| Emoji | Status | Color | Keywords | Use Case |
+|-------|--------|-------|----------|----------|
+| ✅ | COMPLETE | Green | complete, success, passed, ready, finished | Task finished, tests passed, ready deployments |
+| 🔵 | IN_PROGRESS | Orange | in progress, pending, next, todo, active | Active work, pending items, next actions |
+| 🔴 | BLOCKED | Red | blocked, critical, failed, error, emergency | Critical issues, blockers, failures |
+| ➡️ | PLANNED | Orange | planned, upcoming, next phase, future | Future work, planning, upcoming phases |
+| 🎨 | DESIGN | Blue | design, analysis, information, proposal | Neutral analysis, design decisions, info |
+| ⚠️ | WARNING | Yellow | warning, caution, attention, issue | Caution needed, potential problems |
+| 🚨 | CRITICAL | Red | critical, emergency, immediate, blocker | Emergency situations, immediate action |
+
+### Auto-Detection Rules
+
+Headers automatically colorize based on content keywords:
+
+**Complete (✅):** "complete", "completed", "success", "passed", "ready", "finished"  
+**In Progress (🔵):** "in progress", "pending", "next", "todo", "active"  
+**Blocked (🔴):** "blocked", "critical", "failed", "error", "emergency"  
+**Planned (➡️):** "planned", "upcoming", "next phase", "future"  
+**Design (🎨):** "design", "analysis", "information"  
+**Warning (⚠️):** "warning", "caution", "attention"  
+**Critical (🚨):** "critical", "emergency", "immediate"  
+
+### Implementation in Agents
+
+All agents use `ResponseTemplate.create_header()` for response headers:
+
+```python
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
+# Auto-detect status from title
+header = ResponseTemplate.create_header("FIX 1: Implementation Complete")
+# Output: ## ✅ FIX 1: Implementation Complete
+
+# Manual status selection
+from cortex.agents.core.response_template_generator import SectionStatus
+header = EnhancedHeader(
+    title="Database Migration",
+    status=SectionStatus.IN_PROGRESS
+).render()
+# Output: ## 🔵 Database Migration
+
+# Generate session summary with metrics
+summary = ResponseTemplate.session_summary(
+    session_name="Weekly Sprint",
+    completed_items=["Feature A", "Bug Fix B"],
+    in_progress_items=["Feature C"],
+    blocked_items=[],
+    next_steps=["Code review", "Deployment"],
+    token_usage=(150, 200)
+)
+```
+
+### Session Summary Format
+
+All session summaries MUST follow this structure:
+
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## {emoji} SESSION SUMMARY
+**Session:** {name} | **Status:** {overall_status}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 📊 Token Usage
+**Used:** {used}k / {total}k ({percentage}%)
+**Status:** {status_emoji} {health_message}
+
+## ✅ COMPLETED
+- ✅ Item 1
+- ✅ Item 2
+
+## 🔵 IN PROGRESS
+- 🔵 Item 3
+
+## 🔴 BLOCKED (if any)
+- 🔴 Item 4
+
+## ➡️ NEXT STEPS
+1. Next action 1
+2. Next action 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Integration Points
+
+**Agent Files (5 Core Orchestrators):**
+- MasterOrchestrator: `cortex/orchestrators/master_orchestrator.py`
+- TDDOrchestrator: `cortex/orchestrators/tdd_orchestrator.py`
+- IntentRouter: `cortex/orchestrators/intent_router.py`
+- RefactoringOrchestrator: `cortex/orchestrators/refactoring_orchestrator.py`
+- LENSSynthesis: `cortex/orchestrators/lens_synthesis.py`
+
+**MCP Tools:** All tools should use `ResponseTemplate.create_header()`
+
+**Registry Files:**
+- `.github/agents/core/response-template-generator.py` (197 LOC)
+- `cortex-registry/_cortex-master/meta/response-template-enhanced.yaml`
+- `cortex-registry/_cortex-master/meta/semantic-color-coding-section.yaml`
+- `cortex-registry/_cortex-master/meta/response-format.yaml`
+
+### Color Technique Compatibility
+
+Uses **emoji prefix method** (recommended for maximum compatibility):
+
+```markdown
+## ✅ Header Title           ← Emoji prefix (works everywhere)
+## 🔵 Another Header         ← Auto-detected from content
+## 🔴 Critical Issue          ← Always visible in plain text
+```
+
+**Why emoji-based:**
+- ✅ Works in all Markdown renderers
+- ✅ Visible in plain text
+- ✅ Copy-pasteable
+- ✅ No HTML/CSS required
+- ✅ Accessible (screen reader friendly)
+- ✅ Backward compatible (old-style headers work)
+
+### Quick Copy-Paste Headers
+
+```markdown
+## ✅ {YOUR_TITLE}      # Complete/Success
+## 🔵 {YOUR_TITLE}      # In Progress/Pending
+## 🔴 {YOUR_TITLE}      # Blocked/Critical
+## ➡️ {YOUR_TITLE}       # Planned/Next
+## 🎨 {YOUR_TITLE}       # Design/Analysis
+## ⚠️ {YOUR_TITLE}       # Warning/Caution
+## 🚨 {YOUR_TITLE}       # Critical/Emergency
+```
+
+### Reference
+
+**Implementation:** `.github/agents/core/response-template-generator.py` (197 LOC)  
+**Integration Guide:** `.github/agents/core/RESPONSE-TEMPLATE-INTEGRATION.md` (420 LOC)  
+**Registry Manifest:** `cortex-registry/_cortex-master/meta/INTEGRATION-MANIFEST-002.md` (300 LOC)  
+**Authority:** cortex-architect.prompt.md v15.4 + ENH-053 (Semantic Response Coloring)
+
+---
+
 ## ✅ Implementation Truth Verification (EDUCATIONAL/VERIFICATION Formats)
 
 **MANDATORY:** Before answering educational or verification queries, inspect live code:
