@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Version:** 8.4 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅ | **Session Continuity:** Phase Discovery Protocol ✅
+**Version:** 8.3 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Status:** ✅ PRODUCTION | **Token Optimization:** ✅
 
 ---
 
@@ -14,9 +14,9 @@ Load this prompt → Check origin/main for newer version
          ↓
 git fetch origin main (silent, 5s timeout)
          ↓
-Compare: Local version (8.4) vs origin/main version
+Compare: Local version (8.3) vs origin/main version
          ↓
-[UP_TO_DATE] → Version 8.4, no changes needed → Proceed
+[UP_TO_DATE] → Version 8.3, no changes needed → Proceed
          ↓
 [NEWER_VERSION_AVAILABLE] → New version detected → User decides
          ↓
@@ -31,70 +31,10 @@ User: "upgrade prompt" / "skip" / "show changes"
 
 **If newer version exists:**
 1. Type **"upgrade prompt"** → Reload CORTEX.prompt.md from origin/main
-2. Type **"skip"** → Continue with v8.4 (⚠️ may miss features)
+2. Type **"skip"** → Continue with v8.3 (⚠️ may miss features)
 3. Type **"show changes"** → Display version comparison
 
-**Network failure?** Gracefully degrade to v8.4 with warning
-
----
-
-## 🔍 PHASE DISCOVERY PROTOCOL (SESSION CONTINUITY)
-
-**MANDATORY:** When user requests phase-related operations
-
-### Discovery Sequence (REGISTRY-FIRST)
-
-```
-User mentions "phase X" or "implement phase X"
-         ↓
-1. CHECK REGISTRY (PRIMARY SOURCE)
-   Path: cortex-registry/_cortex-master/
-   - Read index.yaml → locate phase entry
-   - Read phases/active/phase-X-*.yaml OR phases/completed/phase-X-*.yaml
-   - Parse phase specification
-         ↓
-2. CHECK PROMPTS (FALLBACK - rarely contains phase specs)
-   Path: .github/prompts/
-   - May reference phases but not define them
-         ↓
-RESULT: Phase spec found in registry (primary)
-        Phase context in prompts (reference only)
-```
-
-### Registry Location (SSOT)
-
-```
-cortex-registry/_cortex-master/
-├── index.yaml                 # Phase list, status, dependencies
-├── phases/
-│   ├── active/               # Current work (status: planned, in_progress)
-│   └── completed/            # Done (status: complete)
-├── enhancements/active/      # ENH-* proposals
-└── governance/core-rules.yaml
-```
-
-### Loading Pattern
-
-**✅ DO:**
-```python
-# 1. Check registry first
-read_file("cortex-registry/_cortex-master/index.yaml")
-# 2. Locate phase in active_phases or completed_phases
-# 3. Read full phase YAML from path
-# 4. Proceed with phase spec
-```
-
-**❌ DON'T:**
-```python
-# Don't search prompts first for phase definitions
-search(".github/prompts/", "phase 43")  # Wrong - phases not in prompts
-```
-
-### Why This Matters
-
-- **Session Continuity:** New sessions can resume phase work immediately
-- **Single Source of Truth:** Registry is authoritative for all phase data
-- **No Duplication:** Avoid "phase not found" errors when spec exists
+**Network failure?** Gracefully degrade to v8.2 with warning
 
 ---
 
