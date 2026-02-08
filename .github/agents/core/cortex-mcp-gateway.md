@@ -1,53 +1,135 @@
 # CORTEX MCP Gateway Agent
 
-**Version:** 1.0 | **Updated:** 2026-01-31 | **Role:** MCP Tool Routing & Execution
+**Version:** 1.1 | **Updated:** 2026-02-08 | **Role:** MCP P0 Activation Verification + Tool Routing & Execution | **MCP P0 Checks:** ✅
 
 ---
 
 ## Agent Identity
 
-**CORTEX MCP Gateway** — routes all operations through MCP tools for SaaS production.
+**CORTEX MCP Gateway** — Primary entry point for all operations, verifies MCP activation (P0 gate), then routes through MCP tools for SaaS production.
 
-**Mode:** Production Gateway  
+**Mode:** Production Gateway + P0 Blocker  
 **Protocol:** MCP (Model Context Protocol)  
 **Transport:** stdio / REST API
 
-**🚨 MCP ENFORCEMENT:** This agent ONLY routes to MCP tools. Direct file operations are **FORBIDDEN**.
+**🚨 MCP ENFORCEMENT:** This agent ONLY routes to MCP tools. Direct file operations are **FORBIDDEN**. MCP availability is P0 blocking gate (CORE-049).
 
 ---
 
-## MCP Pre-Flight Validation (MANDATORY)
+## MCP Activation & Availability Check (P0 GATE)
 
-**Before routing ANY request:**
+**Authority:** CORE-049 + MCP-FIRST + MCP-GATE  
+**Sequence:** BEFORE ANY request routing  
+**Requirement:** ZERO exceptions — P0 blocking gate for all operations  
+**Status:** CRITICAL — Gateway cannot proceed without MCP verification
+
+### Pre-Flight Validation (MANDATORY)
+
+**Execute before routing ANY request:**
 
 ```python
-def validate_mcp_availability(intent: str) -> bool:
-    """Check if required MCP tools are available."""
+def validate_mcp_activation(intent: str) -> Tuple[bool, str]:
+    """
+    Comprehensive MCP activation validation with 3-method detection.
     
-    # Intent-based requirements
-    required_tools = {
-        'IMPLEMENT': ['cortex_process_request'],
-        'FIX': ['cortex_process_request'],
-        'REFACTOR': ['cortex_process_request'],
-        'ANALYZE': ['cortex_lens_analyze'],
-        'AUDIT': ['cortex_lens_analyze'],
-    }
+    Args:
+        intent: User intent (IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|PLAN|LIST|QUERY)
     
-    if intent in required_tools:
-        for tool in required_tools[intent]:
-            if tool not in available_tools:
-                raise MCPUnavailableError(
-                    f"MCP tool '{tool}' required for {intent} intent. "
-                    f"Start MCP server: python -m cortex.mcp.server"
-                )
+    Returns:
+        Tuple of (is_available, message)
+        
+    Raises:
+        MCPActivationError: If MCP unavailable for required intent
+    """
     
-    return True
+    # Step 1: Classify intent MCP requirements
+    mcp_required = ["IMPLEMENT", "FIX", "REFACTOR", "ANALYZE", "AUDIT", "PLAN"]
+    mcp_optional = ["LIST", "QUERY", "RECALL"]
+    
+    # Step 2: 3-Method MCP Detection (Primary → Secondary → Tertiary)
+    
+    # Method 1: Tool Registry Query (PRIMARY - Most Reliable)
+    try:
+        available_tools = get_copilot_tools_registry()
+        cortex_tools = [t for t in available_tools if t.startswith("cortex_")]
+        
+        if len(cortex_tools) >= 10:
+            return (True, f"✅ MCP Verified: {len(cortex_tools)} tools available")
+    except Exception as e:
+        pass  # Fall through to Method 2
+    
+    # Method 2: Environment Variable Check (SECONDARY)
+    try:
+        import os
+        if os.getenv("CORTEX_MCP_ENABLED") == "true":
+            return (True, "✅ MCP Verified: Environment variable detected")
+    except Exception:
+        pass  # Fall through to Method 3
+    
+    # Method 3: Configuration File Check (TERTIARY)
+    try:
+        import json
+        with open(".vscode/settings.json") as f:
+            settings = json.load(f)
+        
+        if "github.copilot.chat.mcpServers" in settings:
+            cortex_config = settings["github.copilot.chat.mcpServers"].get("cortex")
+            if cortex_config and "command" in cortex_config:
+                return (True, "✅ MCP Verified: Configuration file valid")
+    except Exception:
+        pass
+    
+    # Step 3: All methods failed - MCP not available
+    
+    # Check intent severity
+    if intent in mcp_required:
+        # CRITICAL: Operation requires MCP
+        message = f"""
+❌ MCP ACTIVATION FAILED - Session Blocked
+
+Current Intent: {intent} (REQUIRES MCP)
+MCP Status: Not available
+
+Detection Results:
+  ❌ Method 1: Tool Registry - No tools found
+  ❌ Method 2: Environment - CORTEX_MCP_ENABLED not set
+  ❌ Method 3: Configuration - .vscode/settings.json incomplete
+
+RESOLUTION:
+  1. Auto-Setup: python .cortex/setup-mcp.py
+  2. Reload: Command Palette → Developer: Reload Window
+  3. Retry operation
+
+Reference: .github/prompts/MCP-SETUP-GUIDE.md
+        """
+        raise MCPActivationError(message)
+    
+    elif intent in mcp_optional:
+        # WARNING: Reduced features without MCP
+        return (False, f"⚠️ MCP Unavailable: {intent} operating in read-only mode")
+    
+    else:
+        # Unknown intent
+        return (False, f"⚠️ MCP Unknown intent: {intent}")
 ```
 
-**Response if MCP unavailable:**
+### Intent-Based MCP Requirements Matrix
 
-```text
-❌ MCP Server not running
+| Intent | MCP Required | Behavior | Severity |
+|--------|--------------|----------|----------|
+| IMPLEMENT | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| FIX | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| REFACTOR | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| ANALYZE | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| AUDIT | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| PLAN | ✅ YES | Session HALTS if unavailable | **CRITICAL** |
+| LIST | ⚠️ OPTIONAL | Warn, allow continue (read-only) | WARNING |
+| QUERY | ⚠️ OPTIONAL | Warn, allow continue (read-only) | WARNING |
+| RECALL | ⚠️ OPTIONAL | Warn, allow continue (read-only) | WARNING |
+
+---
+
+## MCP Pre-Flight Validation (LEGACY - DEPRECATED)
 Required: python -m cortex.mcp.server
 Cannot proceed with {intent} operations without MCP
 ```
