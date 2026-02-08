@@ -1,0 +1,661 @@
+# ============================================================================
+# PHASE-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene
+# ============================================================================
+# Purpose: Cross-cutting enhancement of LENS code intelligence, onboarding
+#          domain extraction, requirements reverse engineering, and registry
+#          data hygiene — unified as a single cohesive initiative.
+# Authority: chat01.txt analysis (2026-02-08), cortex-architect.prompt.md v15.0
+# Approach: TDD-First, Incremental Delivery, 10 Stages
+# Status: PLANNED | Target Start: 2026-02-09
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "planned"
+priority: "P0"
+execution_order: 1
+
+metadata:
+  phase_id: "phase-43"
+  title: "LENS Tooling, Knowledge Intelligence & Registry Hygiene"
+  subtitle: "Wire disconnected code, add semantic enrichment, enable requirements reverse-engineering, and restore registry data integrity"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  target_start: "2026-02-09"
+  estimated_duration: "14 days"
+  test_target: 200
+  coverage_target: 85
+  roi_score: 0.92
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-029: Response header MANDATORY"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+    - "MCP-FIRST: All functionality via MCP tools"
+    - "MCP-GATE: IMPLEMENT intents via cortex_process_request"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "EXIT GATE: ContextSynthesisGateway for all context loading"
+    - "TDD enforcement: Tests pass before merge"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    A single cohesive initiative that:
+
+    1. **Wires disconnected LENS components** — TypeScript/JS adapters, CallGraphBuilder,
+       DependencyMapper, DoR checks already exist but are not connected
+    2. **Adds semantic enrichment** — Jedi for Python deep analysis, symtable for scope
+    3. **Bridges refactoring execution** — TDD REFACTOR phase actually invokes Rope/Roslyn
+       instead of returning hardcoded strings; adds LibCST for safe transforms
+    4. **Enhances onboarding** — Tiered domain extraction with confidence gating
+    5. **Creates requirements intelligence** — Reverse-engineer requirements from git,
+       AC markers, phase YAMLs, and digest sessions into company/requirements/
+    6. **Restores registry data integrity** — Fix index.yaml status drift, stale
+       plan-summary.json, frozen eras.json, orphan directives, mode naming
+
+  problem_statement: |
+    CORTEX has significant untapped value:
+    - TypeScriptAdapter exists (8/8 tests) but isn't wired into PolyglotAnalyzer
+    - CallGraphBuilder and DependencyMapper exist but LENS never populates relationship_findings
+    - DoRValidator has zero registered checks (passes everything)
+    - TDDOrchestrator REFACTOR phase returns hardcoded suggestion strings
+    - EnhancedRefactoringOrchestrator never delegates to Rope/Roslyn adapters
+    - _compute_risk_scores() and _compute_impact_analysis() are stubs
+    - company/domains/ exists but onboarding doesn't do deep domain extraction
+    - No requirements tracking — approved decisions scattered across git history
+    - Registry data (plan-summary.json, eras.json, index.yaml) has 23% drift
+
+  business_impact:
+    - "🔌 Wire existing code → immediate capability with zero new dependencies"
+    - "🧠 Jedi enrichment → DoR confidence based on real type resolution"
+    - "🔧 Real refactoring execution → TDD cycle completes end-to-end"
+    - "🏢 Deep onboarding → company domain knowledge grows with every repo"
+    - "📋 Requirements intelligence → persistent, searchable decision history"
+    - "📊 Registry hygiene → dashboard shows truth, tooling can trust status fields"
+
+  expected_outcomes:
+    - "PolyglotAnalyzer supports .ts/.tsx/.js/.jsx via existing adapters"
+    - "LENS relationship_findings populated with call graph + dependency data"
+    - "DoRValidator has 5+ default checks registered at init"
+    - "TDD REFACTOR phase invokes RefactoringOrchestrator with real Rope operations"
+    - "SemanticEnricher ABC + JediSemanticEnricher for Tier 2 LENS"
+    - "symtable integration for scope analysis (<5ms)"
+    - "LibCST for formatting-safe code transforms in REFACTOR path"
+    - "DomainKnowledgeExtractor with confidence-gated tiered extraction"
+    - "company/requirements/ with per-artifact YAML tracking"
+    - "cortex_extract_requirements MCP tool"
+    - "index.yaml reconciled, plan-summary.json regenerated, eras.json updated"
+    - "200+ tests across all stages"
+
+# ============================================================================
+# ROI ANALYSIS
+# ============================================================================
+roi_analysis:
+  architectural_impact: 0.95   # Bridges 6 disconnected systems
+  efficiency_gain: 0.90        # Eliminates manual wiring, stub computations
+  accuracy_improvement: 0.85   # Real DoR confidence, real refactoring execution
+  effort_cost: 0.50            # 14 days, 200 tests (moderate-high)
+  blocking_severity: 0.80      # Unblocks Phase 37 persona accuracy + Phase 38 brain cohesion
+  roi_score: 0.92
+  formula: "(0.95×0.35) + (0.90×0.25) + (0.85×0.20) + ((1-0.50)×0.15) + (0.80×0.05)"
+  interpretation: "🔴 IMMEDIATE (≥0.75)"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  required_phases:
+    - id: "phase-39"
+      name: "AUDIT Mode Cohesion & Integrity"
+      reason: "Audit validators needed for registry hygiene verification"
+    - id: "phase-25"
+      name: "PLAN MODE Enhancement"
+      reason: "Plan tooling for registry updates"
+  required_enhancements:
+    - id: "ENH-046"
+      name: "Context Synthesis Gateway"
+      reason: "Token budget compliance for LENS enrichment"
+  external_dependencies:
+    - name: "jedi"
+      version: ">=0.19.0"
+      purpose: "Python semantic analysis (Tier 2 enricher)"
+      install: "pip install jedi"
+    - name: "libcst"
+      version: ">=1.0.0"
+      purpose: "Formatting-safe Python code transformations"
+      install: "pip install libcst"
+  blocking_phases: []
+  unblocks:
+    - "phase-37: Role-Adaptive Personas (richer DoR context)"
+    - "phase-38: Brain Cohesion (domain extraction feeds brain)"
+
+# ============================================================================
+# STAGES (10 Stages — Execution Order)
+# ============================================================================
+# Order: S1-S2 (wire existing) → S3-S4 (enrich) → S5-S6 (refactor bridge)
+#        → S7-S8 (knowledge) → S9-S10 (registry hygiene)
+# ============================================================================
+
+stages:
+  # ──────────────────────────────────────────────────────────────────────
+  # BATCH 1: Wire Existing Disconnected Code (Days 1-3)
+  # ──────────────────────────────────────────────────────────────────────
+  stage_1:
+    name: "Wire LENS Adapters & Relationship Findings"
+    description: |
+      Connect components that already exist but are not wired:
+      1. Wire TypeScriptAdapter + JavaScriptAdapter into PolyglotAnalyzer.language_map
+      2. Wire CallGraphBuilder + DependencyMapper into LENSOrchestrator.analyze_file()
+         to populate relationship_findings
+      3. Wire PatternDetector for architectural pattern recognition
+      
+      All adapters already have passing tests — this is pure wiring work.
+    duration: "1 day"
+    tests_target: 18
+    priority: "P0"
+    effort: "LOW"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-001"
+        description: "PolyglotAnalyzer maps .ts/.tsx to TypeScriptAdapter"
+        tests: 3
+      - id: "AC-PHASE43-002"
+        description: "PolyglotAnalyzer maps .js/.jsx to JavaScriptAdapter"
+        tests: 3
+      - id: "AC-PHASE43-003"
+        description: "LENSOrchestrator.analyze_file() populates relationship_findings via CallGraphBuilder"
+        tests: 4
+      - id: "AC-PHASE43-004"
+        description: "LENSOrchestrator.analyze_file() populates dependency_findings via DependencyMapper"
+        tests: 4
+      - id: "AC-PHASE43-005"
+        description: "PatternDetector results included in LENS context output"
+        tests: 4
+    files_to_modify:
+      - "cortex/lens/analyzers/polyglot_analyzer.py"
+      - "cortex/lens/orchestrator.py"
+    files_to_create:
+      - "tests/unit/lens/test_polyglot_wiring.py"
+      - "tests/unit/lens/test_lens_relationship_findings.py"
+
+  stage_2:
+    name: "Wire DoR Default Checks & Risk Computation"
+    description: |
+      1. Register 5 default checks in DoRValidator at init:
+         - LENS coverage check (files analyzed vs total)
+         - Intent clarity check (keyword extraction confidence)
+         - Target specificity check (file/class/function identified)
+         - Dependency complexity check (import depth)
+         - Test coverage baseline check
+      2. Replace stub _compute_risk_scores() with real LENS-data-driven scoring
+      3. Replace stub _compute_impact_analysis() with dependency-based impact
+    duration: "2 days"
+    tests_target: 22
+    priority: "P0"
+    effort: "LOW"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-006"
+        description: "DoRValidator initializes with 5 default checks"
+        tests: 5
+      - id: "AC-PHASE43-007"
+        description: "LENS coverage check computes file analysis ratio"
+        tests: 3
+      - id: "AC-PHASE43-008"
+        description: "Intent clarity check extracts and scores keywords"
+        tests: 3
+      - id: "AC-PHASE43-009"
+        description: "_compute_risk_scores() uses LENS complexity + dependency data"
+        tests: 5
+      - id: "AC-PHASE43-010"
+        description: "_compute_impact_analysis() uses dependency graph for blast radius"
+        tests: 6
+    files_to_modify:
+      - "cortex/orchestrators/core/validation/dor_validator.py"
+      - "cortex/orchestrators/core/orchestrator_base_protocol.py"
+    files_to_create:
+      - "tests/unit/orchestrators/core/test_dor_default_checks.py"
+      - "tests/unit/orchestrators/core/test_risk_computation.py"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # BATCH 2: Semantic Enrichment (Days 4-6)
+  # ──────────────────────────────────────────────────────────────────────
+  stage_3:
+    name: "SemanticEnricher ABC + Jedi Integration"
+    description: |
+      1. Create SemanticEnricher abstract base class with methods:
+         - enrich(file_path) → SemanticContext
+         - supports_language(lang) → bool
+         - get_cross_references(symbol) → List[Reference]
+         - resolve_types(scope) → TypeMap
+      2. Implement JediSemanticEnricher using jedi library:
+         - Cross-file references (goto_definitions, find_references)
+         - Type inference (infer types for variables/functions)
+         - Import resolution (follow import chains)
+         - Call graph (function call relationships)
+      3. Wire into LENSOrchestrator as optional Tier 2 pass:
+         - Triggered when DoR confidence is borderline (55-65%)
+         - OR when intent is REFACTOR/IMPLEMENT
+         - Results feed into DoR confidence recalculation
+    duration: "3 days"
+    tests_target: 30
+    priority: "P1"
+    effort: "MEDIUM"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-011"
+        description: "SemanticEnricher ABC defines standard enrichment interface"
+        tests: 4
+      - id: "AC-PHASE43-012"
+        description: "JediSemanticEnricher resolves cross-file references for Python"
+        tests: 6
+      - id: "AC-PHASE43-013"
+        description: "JediSemanticEnricher infers types for variables and return values"
+        tests: 6
+      - id: "AC-PHASE43-014"
+        description: "JediSemanticEnricher resolves import chains"
+        tests: 4
+      - id: "AC-PHASE43-015"
+        description: "LENSOrchestrator triggers Tier 2 enrichment when DoR borderline"
+        tests: 5
+      - id: "AC-PHASE43-016"
+        description: "Enriched data recalculates DoR confidence (replaces stubs)"
+        tests: 5
+    files_to_create:
+      - "cortex/lens/enrichers/semantic_enricher.py"
+      - "cortex/lens/enrichers/jedi_enricher.py"
+      - "cortex/lens/enrichers/__init__.py"
+      - "tests/unit/lens/enrichers/test_semantic_enricher.py"
+      - "tests/unit/lens/enrichers/test_jedi_enricher.py"
+    files_to_modify:
+      - "cortex/lens/orchestrator.py"
+
+  stage_4:
+    name: "symtable Integration for Scope Analysis"
+    description: |
+      1. Add symtable (stdlib) integration into ASTAnalyzer:
+         - Variable scope resolution (local, global, free, cell)
+         - Symbol classification (imported, assigned, referenced)
+         - Nested scope analysis (closures, comprehensions)
+      2. Zero external dependencies — stdlib only
+      3. Performance: <5ms per file (negligible overhead)
+    duration: "1 day"
+    tests_target: 12
+    priority: "P1"
+    effort: "LOW"
+    impact: "MEDIUM"
+    acceptance_criteria:
+      - id: "AC-PHASE43-017"
+        description: "ASTAnalyzer.analyze() includes scope_analysis in output"
+        tests: 3
+      - id: "AC-PHASE43-018"
+        description: "Scope analysis identifies local, global, free variables"
+        tests: 3
+      - id: "AC-PHASE43-019"
+        description: "Scope analysis detects imported vs assigned symbols"
+        tests: 3
+      - id: "AC-PHASE43-020"
+        description: "Performance: scope analysis completes in <5ms for 500-line file"
+        tests: 3
+    files_to_modify:
+      - "cortex/lens/analyzers/ast_analyzer.py"
+    files_to_create:
+      - "tests/unit/lens/test_symtable_integration.py"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # BATCH 3: Refactoring Bridge (Days 7-9)
+  # ──────────────────────────────────────────────────────────────────────
+  stage_5:
+    name: "TDD REFACTOR → Real Refactoring Execution"
+    description: |
+      1. Wire TDDOrchestrator REFACTOR phase to invoke
+         RefactoringOrchestrator.execute_refactoring() with the Rope adapter
+         for Python files instead of returning hardcoded suggestion strings
+      2. Wire EnhancedRefactoringOrchestrator to delegate execution to
+         tool-specific adapters (Rope for Python, Roslyn for C#, TS adapter for TypeScript)
+      3. Add tool availability checks to DoD criteria:
+         REFACTOR phase verifies transformations via adapters before marking complete
+    duration: "2 days"
+    tests_target: 20
+    priority: "P1"
+    effort: "MEDIUM"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-021"
+        description: "TDDOrchestrator REFACTOR phase calls RefactoringOrchestrator for Python"
+        tests: 5
+      - id: "AC-PHASE43-022"
+        description: "EnhancedRefactoringOrchestrator delegates to Rope adapter for .py files"
+        tests: 4
+      - id: "AC-PHASE43-023"
+        description: "EnhancedRefactoringOrchestrator delegates to TypeScript adapter for .ts/.tsx"
+        tests: 4
+      - id: "AC-PHASE43-024"
+        description: "DoD criteria includes tool execution verification"
+        tests: 4
+      - id: "AC-PHASE43-025"
+        description: "Graceful fallback when adapter unavailable (returns suggestions, not crash)"
+        tests: 3
+    files_to_modify:
+      - "cortex/testing/tdd_orchestrator.py"
+      - "cortex/domain_orchestrators/refactoring/enhanced_refactoring_orchestrator.py"
+    files_to_create:
+      - "tests/unit/testing/test_tdd_refactor_execution.py"
+      - "tests/unit/domain_orchestrators/test_refactoring_bridge.py"
+
+  stage_6:
+    name: "LibCST for Formatting-Safe Transforms"
+    description: |
+      1. Add LibCST as optional backend for REFACTOR execution path:
+         - Preserves whitespace, comments, and formatting during transforms
+         - Supports extract_method, rename, inline operations
+      2. Create LibCSTTransformer adapter implementing same interface as Rope adapter
+      3. Configure preference: LibCST preferred over raw ast for Python transforms
+         (Rope still used for cross-file operations like rename-across-project)
+    duration: "2 days"
+    tests_target: 16
+    priority: "P1"
+    effort: "MEDIUM"
+    impact: "MEDIUM"
+    acceptance_criteria:
+      - id: "AC-PHASE43-026"
+        description: "LibCSTTransformer preserves whitespace during rename operations"
+        tests: 4
+      - id: "AC-PHASE43-027"
+        description: "LibCSTTransformer preserves comments during extract_method"
+        tests: 4
+      - id: "AC-PHASE43-028"
+        description: "LibCSTTransformer integrates with RefactoringOrchestrator adapter registry"
+        tests: 4
+      - id: "AC-PHASE43-029"
+        description: "Fallback to Rope when LibCST cannot handle operation"
+        tests: 4
+    files_to_create:
+      - "cortex/refactoring/adapters/libcst_adapter.py"
+      - "tests/unit/refactoring/test_libcst_adapter.py"
+    files_to_modify:
+      - "cortex/refactoring/orchestrator.py"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # BATCH 4: Knowledge Intelligence (Days 10-12)
+  # ──────────────────────────────────────────────────────────────────────
+  stage_7:
+    name: "Deep Onboarding Domain Extraction"
+    description: |
+      1. Create DomainKnowledgeExtractor with tiered confidence gating:
+         - T0 (Structural): languages, frameworks, deps, file layout — Always (100%)
+         - T1 (Behavioral): API contracts, DB schemas, config patterns — ≥70%
+         - T2 (Semantic): Business terms, entity names, relationship patterns — ≥80%
+         - T3 (Historical): Code evolution patterns, ADRs, deprecated patterns — ≥85%
+      2. Wire into RepositoryOnboardingOrchestrator pipeline between
+         LENSOrchestrator.analyze_repository_holistic() and _update_company_domains()
+      3. Add staleness detection: extracted_at + source_commit fields in domain YAMLs
+      4. Add DomainMergeStrategy for multi-user conflict resolution
+         (confidence-weighted merge, not last-writer-wins)
+    duration: "3 days"
+    tests_target: 28
+    priority: "P1"
+    effort: "HIGH"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-030"
+        description: "DomainKnowledgeExtractor produces T0 structural findings for any repo"
+        tests: 4
+      - id: "AC-PHASE43-031"
+        description: "T1 behavioral extraction detects API contracts and DB schemas"
+        tests: 4
+      - id: "AC-PHASE43-032"
+        description: "T2 semantic extraction identifies business domain terms from naming"
+        tests: 4
+      - id: "AC-PHASE43-033"
+        description: "T3 historical extraction analyzes git evolution patterns"
+        tests: 4
+      - id: "AC-PHASE43-034"
+        description: "Confidence gating filters low-quality extractions per tier threshold"
+        tests: 4
+      - id: "AC-PHASE43-035"
+        description: "Staleness detection flags domain YAMLs older than source_commit"
+        tests: 4
+      - id: "AC-PHASE43-036"
+        description: "DomainMergeStrategy resolves conflicts via confidence weighting"
+        tests: 4
+    files_to_create:
+      - "cortex/domain_brain/extractors/domain_knowledge_extractor.py"
+      - "cortex/domain_brain/extractors/domain_merge_strategy.py"
+      - "cortex/domain_brain/extractors/__init__.py"
+      - "tests/unit/domain_brain/extractors/test_domain_knowledge_extractor.py"
+      - "tests/unit/domain_brain/extractors/test_domain_merge_strategy.py"
+    files_to_modify:
+      - "cortex/orchestrators/support/onboarding_orchestrator.py"
+
+  stage_8:
+    name: "Requirements Reverse Engineering"
+    description: |
+      1. Create RequirementsExtractor that mines 5 sources:
+         - Phase YAML specs: problem_statement, success_criteria (⭐⭐⭐⭐⭐)
+         - AC markers in code: AC_START/AC_COMPLETE descriptions (⭐⭐⭐⭐)
+         - Copilot chat digests: approved decisions from DIGEST mode (⭐⭐⭐⭐)
+         - Git diff analysis: section evolution patterns (⭐⭐⭐)
+         - Git commit messages: NLP intent classification (⭐⭐)
+      2. Create company/requirements/ structure:
+         - index.yaml — master index of tracked artifacts
+         - artifacts/*.yaml — per-artifact YAML with temporal entries
+         - decisions/*.yaml — monthly decision log
+      3. Expose as MCP tool: cortex_extract_requirements
+         - Parameters: file_paths, depth (shallow|deep), since (date), output_path
+      4. Integration points:
+         - DoR gate checks company/requirements/ for existing context
+         - Total Recall searches company/requirements/ as knowledge source
+         - DIGEST mode adds requirements extraction category
+    duration: "3 days"
+    tests_target: 30
+    priority: "P1"
+    effort: "HIGH"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-037"
+        description: "RequirementsExtractor parses phase YAML problem_statement + success_criteria"
+        tests: 5
+      - id: "AC-PHASE43-038"
+        description: "RequirementsExtractor scans codebase for AC_START/AC_COMPLETE markers"
+        tests: 5
+      - id: "AC-PHASE43-039"
+        description: "RequirementsExtractor extracts decisions from DIGEST session outputs"
+        tests: 4
+      - id: "AC-PHASE43-040"
+        description: "RequirementsExtractor analyzes git diff for file section evolution"
+        tests: 4
+      - id: "AC-PHASE43-041"
+        description: "Per-artifact YAML generated with temporal entries and confidence scores"
+        tests: 4
+      - id: "AC-PHASE43-042"
+        description: "cortex_extract_requirements MCP tool operational"
+        tests: 4
+      - id: "AC-PHASE43-043"
+        description: "DoR gate enriches confidence from company/requirements/ context"
+        tests: 4
+    files_to_create:
+      - "cortex/knowledge/requirements_extractor.py"
+      - "cortex/mcp/tools/requirements_tool.py"
+      - "company/requirements/index.yaml"
+      - "tests/unit/knowledge/test_requirements_extractor.py"
+      - "tests/unit/mcp/tools/test_requirements_tool.py"
+    files_to_modify:
+      - "cortex/wiring/specifications/wiring.yaml"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # BATCH 5: Registry Hygiene (Days 13-14)
+  # ──────────────────────────────────────────────────────────────────────
+  stage_9:
+    name: "Registry Data Reconciliation"
+    description: |
+      Fix all data integrity issues identified in audit:
+      1. index.yaml status reconciliation:
+         - Move completed phases out of active_phases section
+         - Fix Phase 38 status from "complete" to "unblocked" (only 38.0 done)
+         - Remove duplicate Phase 37 entries
+         - Reconcile statistics section with actual counts
+      2. Regenerate plan-summary.json from index.yaml SSOT
+      3. Update eras.json with Eras 7-9 (phases 24-42)
+      4. Unify mode naming: INTERACTIVE+LIST → QUERY in modes.yaml and directives
+      5. Deduplicate enhancement-history.yaml (keep latest per ENH ID)
+      6. CDP directive deprecation notice in directive-protocol.yaml
+    duration: "1 day"
+    tests_target: 14
+    priority: "P0"
+    effort: "LOW"
+    impact: "HIGH"
+    acceptance_criteria:
+      - id: "AC-PHASE43-044"
+        description: "index.yaml active_phases contains only status=active|planned phases"
+        tests: 2
+      - id: "AC-PHASE43-045"
+        description: "plan-summary.json matches index.yaml within 2% variance"
+        tests: 2
+      - id: "AC-PHASE43-046"
+        description: "eras.json covers all phases through Phase 42"
+        tests: 2
+      - id: "AC-PHASE43-047"
+        description: "modes.yaml references QUERY mode (not INTERACTIVE+LIST separately)"
+        tests: 2
+      - id: "AC-PHASE43-048"
+        description: "enhancement-history.yaml has no duplicate ENH IDs"
+        tests: 2
+      - id: "AC-PHASE43-049"
+        description: "Statistics section auto-calculated from actual entries"
+        tests: 2
+      - id: "AC-PHASE43-050"
+        description: "CDP directive-protocol.yaml has deprecation notice"
+        tests: 2
+    files_to_modify:
+      - "cortex-registry/_cortex-master/index.yaml"
+      - "cortex-registry/_cortex-master/dashboard/data/plan-summary.json"
+      - "cortex-registry/_cortex-master/dashboard/data/eras.json"
+      - "cortex-registry/_cortex-master/meta/modes.yaml"
+      - "cortex-registry/_cortex-master/meta/directive-protocol.yaml"
+      - "cortex-registry/_cortex-master/meta/directive-index.yaml"
+
+  stage_10:
+    name: "Registry Validation Script + Integration Tests"
+    description: |
+      1. Create registry validation script that:
+         - Counts phases and verifies statistics accuracy
+         - Checks all file path references resolve to actual files
+         - Validates status field consistency (no completed phases in active section)
+         - Verifies test count claims against actual pytest output
+         - Detects duplicate entries
+      2. Integration tests verifying cross-stage cohesion:
+         - LENS → DoR → TDD → REFACTOR → RefactoringOrchestrator flow
+         - Onboarding → DomainExtraction → company/domains/ flow
+         - Requirements extraction → company/requirements/ → DoR enrichment flow
+      3. Wire validation script into AUDIT mode P1 checks
+    duration: "1 day"
+    tests_target: 10
+    priority: "P1"
+    effort: "LOW"
+    impact: "MEDIUM"
+    acceptance_criteria:
+      - id: "AC-PHASE43-051"
+        description: "Validation script detects index.yaml statistics drift"
+        tests: 2
+      - id: "AC-PHASE43-052"
+        description: "Validation script detects broken file path references"
+        tests: 2
+      - id: "AC-PHASE43-053"
+        description: "Integration: LENS enrichment flows through to DoR confidence"
+        tests: 2
+      - id: "AC-PHASE43-054"
+        description: "Integration: Onboarding produces domain YAMLs with confidence scores"
+        tests: 2
+      - id: "AC-PHASE43-055"
+        description: "Integration: Requirements extraction feeds DoR context enrichment"
+        tests: 2
+    files_to_create:
+      - "cortex/scripts/validate_registry.py"
+      - "tests/integration/test_lens_dor_refactor_flow.py"
+      - "tests/integration/test_onboarding_domain_flow.py"
+      - "tests/integration/test_requirements_dor_flow.py"
+    files_to_modify:
+      - "cortex/wiring/specifications/wiring.yaml"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  approach: "TDD-First (CORE-008)"
+  total_tests: 200
+  breakdown:
+    unit: 170
+    integration: 24
+    e2e: 6
+  coverage_target: "85%"
+  test_distribution:
+    stage_1: 18
+    stage_2: 22
+    stage_3: 30
+    stage_4: 12
+    stage_5: 20
+    stage_6: 16
+    stage_7: 28
+    stage_8: 30
+    stage_9: 14
+    stage_10: 10
+
+# ============================================================================
+# EXECUTION PLAN
+# ============================================================================
+execution:
+  recommended_order: |
+    Batch 1 (Days 1-3):  S1 → S2  — Wire existing code (highest ROI, zero new deps)
+    Batch 2 (Days 4-6):  S4 → S3  — symtable first (no deps), then Jedi (new dep)
+    Batch 3 (Days 7-9):  S5 → S6  — TDD refactor bridge, then LibCST
+    Batch 4 (Days 10-12): S7 → S8 — Domain extraction, then requirements intelligence
+    Batch 5 (Days 13-14): S9 → S10 — Registry hygiene + validation script
+
+  parallel_opportunities:
+    - "S1 + S9 can run in parallel (no file overlap)"
+    - "S4 (symtable) can run in parallel with S2 (DoR checks)"
+    - "S7 (onboarding) can run in parallel with S6 (LibCST)"
+
+  checkpoints:
+    - "After Batch 1: git commit — existing code wired, DoR real checks"
+    - "After Batch 2: git commit — semantic enrichment operational"
+    - "After Batch 3: git commit — refactoring execution end-to-end"
+    - "After Batch 4: git commit — knowledge intelligence operational"
+    - "After Batch 5: git commit — registry integrity restored"
+
+# ============================================================================
+# MCP TOOLS (New)
+# ============================================================================
+mcp_tools:
+  new:
+    - name: "cortex_extract_requirements"
+      description: "Reverse-engineer requirements from git, AC markers, phases, digests"
+      parameters:
+        - "file_paths: List[str] — files to trace requirements for"
+        - "depth: str — shallow (commits only) | deep (all sources)"
+        - "since: Optional[str] — date filter"
+        - "output_path: Optional[str] — default: company/requirements/artifacts/"
+  enhanced:
+    - name: "cortex_lens_analyze"
+      enhancement: "Now populates relationship_findings and optional Tier 2 enrichment"
+    - name: "cortex_onboard_repository"
+      enhancement: "DomainKnowledgeExtractor with tiered confidence-gated extraction"
+
+# ============================================================================
+# WHAT NOT TO DO (Architectural Guardrails)
+# ============================================================================
+guardrails:
+  - "❌ Don't embed Rope/Roslyn into LENS context collection — they're transformation tools, too slow (200ms+) for the 50ms LENS budget"
+  - "❌ Don't replace tree-sitter — it's the right Tier 1 parser (10ms, 40+ languages, same API)"
+  - "❌ Don't add Pyright as embedded dependency — already available via mcp_pylance_* tools in the IDE layer"
+  - "❌ Don't use flat JSON/YAML per commit for requirements — use per-artifact YAML with temporal entries"
+  - "❌ Don't use last-writer-wins for multi-user domain merge — use confidence-weighted strategy"
