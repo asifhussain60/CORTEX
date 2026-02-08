@@ -60,7 +60,7 @@ class TestSemanticRankingEngine:
         
         # Pick first two orchestrators
         candidates = [
-            (name, registry.resolve_orchestrator(name), 0.5)
+            (name, registry.get_orchestrator(name), 0.5)
             for name in orchestrators[:2]
         ]
         
@@ -81,7 +81,7 @@ class TestSemanticRankingEngine:
             pytest.skip("TDDOrchestrator not available")
         
         candidates = [
-            ("TDDOrchestrator", registry.resolve_orchestrator("TDDOrchestrator"), 0.5)
+            ("TDDOrchestrator", registry.get_orchestrator("TDDOrchestrator"), 0.5)
         ]
         context = {"keywords": ["implement"]}
         
@@ -101,7 +101,7 @@ class TestSemanticRankingEngine:
             pytest.skip("TDDOrchestrator not available")
         
         candidates = [
-            ("TDDOrchestrator", registry.resolve_orchestrator("TDDOrchestrator"), 0.5)
+            ("TDDOrchestrator", registry.get_orchestrator("TDDOrchestrator"), 0.5)
         ]
         context = {"keywords": ["implement"]}
         
@@ -128,7 +128,7 @@ class TestDisambiguationUI:
         candidates = [
             RankedCandidate(
                 orchestrator_name=names[0],
-                orchestrator_instance=registry.resolve_orchestrator(names[0]),
+                orchestrator_instance=registry.get_orchestrator(names[0]),
                 base_confidence=0.8,
                 semantic_score=0.15,
                 total_confidence=0.95,
@@ -136,7 +136,7 @@ class TestDisambiguationUI:
             ),
             RankedCandidate(
                 orchestrator_name=names[1],
-                orchestrator_instance=registry.resolve_orchestrator(names[1]),
+                orchestrator_instance=registry.get_orchestrator(names[1]),
                 base_confidence=0.5,
                 semantic_score=0.10,
                 total_confidence=0.60,
@@ -165,7 +165,7 @@ class TestDisambiguationUI:
         candidates = [
             RankedCandidate(
                 orchestrator_name=names[0],
-                orchestrator_instance=registry.resolve_orchestrator(names[0]),
+                orchestrator_instance=registry.get_orchestrator(names[0]),
                 base_confidence=0.6,
                 semantic_score=0.15,
                 total_confidence=0.75,
@@ -173,7 +173,7 @@ class TestDisambiguationUI:
             ),
             RankedCandidate(
                 orchestrator_name=names[1],
-                orchestrator_instance=registry.resolve_orchestrator(names[1]),
+                orchestrator_instance=registry.get_orchestrator(names[1]),
                 base_confidence=0.55,
                 semantic_score=0.15,
                 total_confidence=0.70,
@@ -557,7 +557,7 @@ class TestPhase8Integration:
         
         names = orchestrators[:2]
         candidates = [
-            (name, registry.resolve_orchestrator(name), 0.5)
+            (name, registry.get_orchestrator(name), 0.5)
             for name in names
         ]
         context = {"keywords": list(expanded)}
