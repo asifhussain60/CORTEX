@@ -1,5 +1,177 @@
 # CORTEX Copilot Instructions
-**Version:** 7.6 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅
+**Version:** 7.7 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅ | **MCP P0 Checks:** ✅ MANDATORY
+
+---
+
+## 🚨 MCP ACTIVATION & AVAILABILITY (P0 - CRITICAL)
+
+**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE  
+**Enforcement:** BLOCKING — Every session MUST validate MCP availability  
+**Status:** P0 CRITICAL — Production cannot proceed without MCP
+
+### Session Start: MCP Pre-Flight Check (MANDATORY)
+
+**AUTOMATIC EXECUTION:** Every Copilot Chat session runs this check FIRST:
+
+```python
+# Step 0: MCP Activation Pre-Flight (before any user request processing)
+print("🔧 CORTEX Session: MCP Activation Check...")
+
+# Check 1: MCP Tools Available
+mcp_tools = ["cortex_process_request", "cortex_lens_analyze", "cortex_challenge"]
+available = check_tools_in_copilot_registry(mcp_tools)
+
+if not available:
+    print("""
+    ❌ CRITICAL: MCP tools not available in Copilot Chat
+    
+    MCP Server Status: NOT REGISTERED
+    
+    Actions Required:
+    1. Ensure MCP server running: python -m cortex.mcp
+    2. Verify .vscode/settings.json has cortex MCP configuration
+    3. Restart VS Code: Command Palette → Developer: Reload Window
+    4. Check .cortex/setup.log for configuration details
+    
+    ⚠️ CORTEX cannot proceed without MCP tools.
+    No fallback to direct file operations allowed (CORE-049).
+    """)
+    return HALT_SESSION
+
+# Check 2: Verify Configuration File
+if not path(".vscode/settings.json").exists():
+    print("⚠️ WARNING: .vscode/settings.json missing, running setup...")
+    run(".cortex/setup-mcp.py")
+
+# Check 3: Configuration Validation
+settings = load_json(".vscode/settings.json")
+if "github.copilot.chat.mcpServers" not in settings:
+    print("⚠️ WARNING: MCP not configured in settings.json, injecting...")
+    inject_mcp_config(settings)
+    save_json(".vscode/settings.json", settings)
+
+# Check 4: Setup Log Verification
+setup_log = path(".cortex/setup.log")
+if setup_log.exists():
+    last_status = grep(setup_log, "✅ SETUP COMPLETE")
+    if last_status:
+        print(f"✅ MCP Setup: Confirmed successful")
+    else:
+        print("⚠️ WARNING: MCP setup may have failed, check .cortex/setup.log")
+else:
+    print("ℹ️ INFO: Running MCP setup for first time...")
+    run(".cortex/setup-mcp.py")
+
+print("✅ MCP Activation: READY")
+```
+
+### P0 Check Matrix (BLOCKING)
+
+| Check | Status | Action if Failed |
+|-------|--------|------------------|
+| **MCP Tools in Registry** | CRITICAL | HALT session, display setup instructions |
+| **cortex_process_request Available** | CRITICAL | HALT session, cannot route IMPLEMENT/FIX/REFACTOR |
+| **cortex_lens_analyze Available** | CRITICAL | HALT session, cannot route ANALYZE/AUDIT |
+| **.vscode/settings.json Exists** | CRITICAL | Auto-create + run setup script |
+| **MCP Config in Settings** | CRITICAL | Auto-inject + reload required |
+| **.cortex/setup.log Exists** | WARNING | Run setup script silently |
+| **Last Setup Successful** | WARNING | Display warning, offer re-run |
+| **Python >= 3.9.0** | CRITICAL | HALT, guide Python upgrade |
+| **Virtual Environment Ready** | CRITICAL | HALT, guide venv setup |
+
+### MCP Availability Detection (3-Method Fallback)
+
+```python
+def verify_mcp_availability() -> Tuple[bool, str]:
+    """
+    Comprehensive MCP availability check with 3 detection methods.
+    Returns: (is_available, status_message)
+    """
+    
+    # Method 1: Tool Registry Query (PRIMARY)
+    try:
+        available_tools = get_copilot_tools_registry()
+        mcp_tools = [t for t in available_tools if t.startswith("cortex_")]
+        
+        if len(mcp_tools) >= 10:  # All 10 tools should be available
+            return (True, f"MCP tools available: {len(mcp_tools)} tools registered")
+    except Exception as e:
+        pass  # Fall through to Method 2
+    
+    # Method 2: Environment Variable Check (SECONDARY)
+    try:
+        if os.getenv("CORTEX_MCP_ENABLED") == "true":
+            return (True, "MCP detected via environment variable")
+    except Exception:
+        pass  # Fall through to Method 3
+    
+    # Method 3: Configuration File Check (TERTIARY)
+    try:
+        settings = load_json(".vscode/settings.json")
+        if "github.copilot.chat.mcpServers" in settings:
+            cortex_config = settings["github.copilot.chat.mcpServers"].get("cortex")
+            if cortex_config and "command" in cortex_config:
+                return (True, "MCP configured in .vscode/settings.json")
+    except Exception:
+        pass
+    
+    # All methods failed
+    return (False, "MCP not available (all detection methods failed)")
+```
+
+### User-Facing Status Messages
+
+**When MCP Available:**
+```
+🟢 CORTEX Session Ready
+✅ MCP Tools: cortex_process_request (10 tools total)
+✅ Configuration: .vscode/settings.json
+✅ Python: 3.9.6
+✅ Setup Log: Last successful at 2026-02-08 14:40
+
+Proceeding with full CORTEX capabilities...
+```
+
+**When MCP Unavailable (BLOCKING):**
+```
+❌ CORTEX Session Blocked: MCP Not Available
+
+Available Detection Methods:
+  ❌ Method 1: Tool Registry - No cortex_* tools found
+  ❌ Method 2: Environment - CORTEX_MCP_ENABLED not set
+  ❌ Method 3: Configuration - .vscode/settings.json incomplete
+
+Resolution (Choose One):
+
+OPTION A: Auto-Setup (Recommended)
+  python .cortex/setup-mcp.py
+
+OPTION B: Manual Configuration
+  1. Edit .vscode/settings.json
+  2. Add cortex MCP server config
+  3. Restart VS Code: Developer: Reload Window
+  4. Check .cortex/setup.log
+
+OPTION C: Start MCP Server
+  python -m cortex.mcp
+  (then restart VS Code)
+
+Reference: .github/prompts/MCP-SETUP-GUIDE.md
+```
+
+### Command Routing Gated by MCP Availability
+
+| User Intent | MCP Required | Behavior if Unavailable |
+|------------|--------------|------------------------|
+| `/implement {feature}` | ✅ YES | BLOCK: "MCP required for implementation" |
+| `/fix {issue}` | ✅ YES | BLOCK: "MCP required for bug fixing" |
+| `/refactor {target}` | ✅ YES | BLOCK: "MCP required for refactoring" |
+| `/audit` | ✅ YES | BLOCK: "MCP required for auditing" |
+| `/analyze {scope}` | ✅ YES | BLOCK: "MCP required for analysis" |
+| `/plan` | ✅ YES | BLOCK: "MCP required for planning" |
+| `/list {query}` | ⚠️ OPTIONAL | WARN: Allow read-only analysis |
+| `/query {question}` | ⚠️ OPTIONAL | WARN: Allow educational queries |
+| `/recall {feature}` | ⚠️ OPTIONAL | WARN: Allow feature discovery |
 
 ---
 

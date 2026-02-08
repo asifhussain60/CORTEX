@@ -362,6 +362,119 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 
 ---
 
+## ⚡ MCP ACTIVATION & AVAILABILITY (P0 - MANDATORY GATE)
+
+**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE  
+**Trigger:** Session start + before ANY IMPLEMENT/FIX/REFACTOR intent  
+**Requirement:** ZERO exceptions — MCP MUST be available or session HALTS
+
+### MCP Activation Sequence (Every Session)
+
+```
+Session Start
+    ↓
+1. DETECT MCP Tools Available
+   - cortex_process_request
+   - cortex_lens_analyze
+   - cortex_challenge
+   - (10 total tools)
+    ↓
+2. CHECK Activation Status
+   ├─ Tool Registry Query (PRIMARY)
+   ├─ Environment Variables (SECONDARY)
+   └─ Configuration File (TERTIARY)
+    ↓
+3. RESULT
+   ├─ [✅ AVAILABLE] → Load full CORTEX capabilities
+   ├─ [⚠️ PARTIAL] → Load reduced capabilities + warn user
+   └─ [❌ UNAVAILABLE] → HALT session, show setup instructions
+```
+
+### MCP Availability Check (3-Method Detection)
+
+**Method 1: Tool Registry Query (PRIMARY)**
+```python
+# Check if cortex_* tools exist in Copilot's tool registry
+available_tools = get_copilot_tools_registry()
+mcp_tools = [t for t in available_tools if t.startswith("cortex_")]
+
+if len(mcp_tools) >= 10:
+    print("✅ MCP Available: All 10 tools registered")
+else:
+    print(f"⚠️ MCP Partial: Only {len(mcp_tools)}/10 tools found")
+```
+
+**Method 2: Environment Variable Check (SECONDARY)**
+```python
+# Check if CORTEX_MCP_ENABLED environment variable set
+if os.getenv("CORTEX_MCP_ENABLED") == "true":
+    print("✅ MCP Detected: CORTEX_MCP_ENABLED=true")
+```
+
+**Method 3: Configuration File Check (TERTIARY)**
+```python
+# Verify .vscode/settings.json contains MCP server config
+settings = load_json(".vscode/settings.json")
+if "github.copilot.chat.mcpServers" in settings:
+    if "cortex" in settings["github.copilot.chat.mcpServers"]:
+        print("✅ MCP Configured: .vscode/settings.json verified")
+```
+
+### P0 Check Results & Actions
+
+| Status | User Message | Action |
+|--------|--------------|--------|
+| ✅ **AVAILABLE** | "🟢 MCP Ready: 10 tools available" | Continue with full CORTEX |
+| ⚠️ **PARTIAL** | "🟡 MCP Partial: {N}/10 tools available" | WARN user, allow read-only operations |
+| ❌ **UNAVAILABLE** | "🔴 MCP Not Available: Setup required" | HALT, show instructions |
+
+### Session Halt (MCP Unavailable)
+
+**When MCP unavailable for IMPLEMENT/FIX/REFACTOR/AUDIT/ANALYZE/PLAN:**
+
+```
+❌ CORTEX Session Blocked: MCP Not Available
+
+Status:
+  - Tool Registry: No cortex_* tools found
+  - Environment: CORTEX_MCP_ENABLED not set
+  - Configuration: .vscode/settings.json missing/incomplete
+
+Available Options:
+
+A) AUTO-SETUP (Recommended):
+   python .cortex/setup-mcp.py
+
+B) Manual Configuration:
+   1. Edit .vscode/settings.json
+   2. Add cortex MCP server config
+   3. Restart VS Code
+   4. Check .cortex/setup.log
+
+C) Start MCP Server:
+   python -m cortex.mcp
+   (then restart VS Code)
+
+⚠️ Note: CORTEX enforces MCP-FIRST (no fallback to direct file ops)
+Reference: .github/prompts/MCP-SETUP-GUIDE.md
+```
+
+### Intent-Based MCP Requirements
+
+| Intent | MCP Required | Fallback Allowed |
+|--------|--------------|------------------|
+| IMPLEMENT | ✅ YES | ❌ NO - HALT |
+| FIX | ✅ YES | ❌ NO - HALT |
+| REFACTOR | ✅ YES | ❌ NO - HALT |
+| AUDIT | ✅ YES | ❌ NO - HALT |
+| ANALYZE | ✅ YES | ❌ NO - HALT |
+| PLAN | ✅ YES | ❌ NO - HALT |
+| LIST | ⚠️ OPTIONAL | ✅ YES - read-only |
+| QUERY | ⚠️ OPTIONAL | ✅ YES - educational |
+| RECALL | ⚠️ OPTIONAL | ✅ YES - discovery |
+
+---
+
 ## 🔍 PHASE DISCOVERY PROTOCOL (SESSION CONTINUITY)
 
 **MANDATORY:** When user requests "implement phase X" or "start phase X" or "continue phase X"
