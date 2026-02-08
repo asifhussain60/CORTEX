@@ -13,19 +13,21 @@ PHASE 49 Integration-First Enhancement
 AC-ID: AC-VACUUM-PHASE49-001
 """
 
-import sys
 import json
+import sys
+import traceback
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from cortex.orchestrators.support.vacuum_orchestrator import (
-    VacuumOrchestrator,
     CleanupPlan,
     CleanupResult,
+    VacuumOrchestrator,
 )
 
 
@@ -57,14 +59,11 @@ def main() -> int:
     root_path = Path.cwd()
     
     all_success = True
-    cleanup_report = {
-        "timestamp": None,
+    cleanup_report: Dict[str, Any] = {
+        "timestamp": datetime.now().isoformat(),
         "root_path": str(root_path),
         "sections": {},
     }
-    
-    from datetime import datetime
-    cleanup_report["timestamp"] = datetime.now().isoformat()
     
     # ========================================================================
     # SECTION 1: Detect SCREAMING_CASE Violations (CORE-028)
@@ -143,7 +142,7 @@ def main() -> int:
     print(f"Markdown files found: {scan_result['total_count']}")
     
     # Generate cleanup plan
-    plan = orchestrator.generate_cleanup_plan(
+    plan: CleanupPlan = orchestrator.generate_cleanup_plan(
         scan_result,
         age_threshold_days=0,  # Include all files
         include_conflicting=True,
@@ -193,7 +192,9 @@ def main() -> int:
         
         if proceed in ["yes", "y", "proceed"]:
             print("\n🚀 Executing cleanup...")
-            cleanup_result = orchestrator.execute_cleanup(plan, root_path=str(root_path))
+            cleanup_result: CleanupResult = orchestrator.execute_cleanup(
+                plan, root_path=str(root_path)
+            )
             
             cleanup_report["sections"]["cleanup_result"] = {
                 "success": cleanup_result.success,
@@ -271,6 +272,5 @@ if __name__ == "__main__":
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")
-        import traceback
         traceback.print_exc()
         sys.exit(1)
