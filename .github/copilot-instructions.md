@@ -172,25 +172,183 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 
 ## 🚨 MCP PRE-FLIGHT CHECK (MANDATORY)
 
-**BEFORE processing ANY IMPLEMENT/FIX/REFACTOR/ANALYZE request:**
+**Phase 51 S3: Enforced by EnvironmentIntegrityAgent (8th enforcement agent)**
+
+**BEFORE processing ANY IMPLEMENT/FIX/REFACTOR request:**
 
 ```python
-# Check if MCP tools are available
-if 'cortex_process_request' not in available_tools:
+# Step 1: Classify intent
+from cortex.models.canonical_enums import IntentType
+from cortex.governance.enforcement.agents.environment_integrity_agent import EnvironmentIntegrityAgent
+
+intent = classify_user_request()  # IMPLEMENT | FIX | REFACTOR | ANALYZE
+
+# Step 2: Pre-flight check
+agent = EnvironmentIntegrityAgent()
+result = agent.validate_pre_flight(intent)
+
+# Step 3: Block if failed
+if not result.passed:
     STOP ❌
-    Response: "MCP Server not running. Start with: python -m cortex.mcp.server"
+    Display:
+    """
+    ❌ MCP Server Required
+    
+    Intent: {intent}
+    Status: MCP tools not available
+    
+    Resolution Steps:
+    1. Start MCP Server:
+       python -m cortex.mcp.server
+    
+    2. Verify Server Running:
+       curl http://localhost:8000/health
+    
+    3. Restart Copilot session
+    
+    CORTEX operates at ONE quality level: Production.
+    Fix infrastructure. No bypasses allowed.
+    """
     DO NOT PROCEED with direct file operations
+
+# Step 4: Proceed if passed
+if result.passed:
+    # Route through MCP-FIRST workflow
+    use cortex_process_request(intent=intent, ...)
+```
+
+**For ANALYZE intent (ALLOWED without MCP):**
+
+```python
+# ANALYZE is allowed without MCP (read-only operations)
+# No pre-flight check required for discovery operations
 ```
 
 **Validation Checklist:**
-- [ ] Check tool availability: `cortex_process_request` exists
-- [ ] Check tool availability: `cortex_lens_analyze` exists
-- [ ] If ANY tool missing → STOP and notify user
-- [ ] If ALL tools present → Proceed with MCP-FIRST workflow
+- [ ] Classify user intent (IMPLEMENT/FIX/REFACTOR/ANALYZE)
+- [ ] Run EnvironmentIntegrityAgent.validate_pre_flight()
+- [ ] Check MCP availability (3 methods: tool_query, env_vars, network_port)
+- [ ] If MCP unavailable + IMPLEMENT/FIX/REFACTOR → BLOCK
+- [ ] If MCP unavailable + ANALYZE → ALLOW (read-only OK)
+- [ ] Display clear error with fix instructions
 
 **FORBIDDEN FALLBACK:**
 ❌ "MCP not available, so I'll just edit files directly" → **NEVER ALLOWED**
+❌ "Let me try a simpler approach" → **QUALITY DEGRADATION BLOCKED**
+❌ "Skip tests to save time" → **CORE-008 VIOLATION**
 ✅ "MCP not available. Please start MCP server first." → **CORRECT**
+✅ "Fix infrastructure, then retry" → **CORRECT**
+
+---
+
+## 🚨 COPILOT NATIVE TOOL RESTRICTIONS (GAP-001 FIX)
+
+**CRITICAL:** Before using ANY Copilot native file modification tool, perform intent check.
+
+### Intent-Based Tool Restrictions
+
+**FORBIDDEN for IMPLEMENT/FIX/REFACTOR intents:**
+
+| Tool | Status | Replacement |
+|------|--------|-------------|
+| `create_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `multi_replace_string_in_file` | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `run_in_terminal` (file ops) | ❌ **BLOCKED** | Use `cortex_process_request` |
+| `edit_notebook_file` (code cells) | ❌ **BLOCKED** | Use `cortex_process_request` |
+
+**ALLOWED for IMPLEMENT/FIX/REFACTOR intents:**
+
+| Tool | Status | Purpose |
+|------|--------|----------|
+| `read_file` | ✅ **ALLOWED** | Analysis only (no modification) |
+| `semantic_search` | ✅ **ALLOWED** | Discovery only |
+| `grep_search` | ✅ **ALLOWED** | Analysis only |
+| `file_search` | ✅ **ALLOWED** | Discovery only |
+| `list_dir` | ✅ **ALLOWED** | Navigation only |
+| `cortex_process_request` | ✅ **REQUIRED** | ALL file modifications |
+| `cortex_lens_analyze` | ✅ **ALLOWED** | Code intelligence |
+
+**ALLOWED for ANALYZE/AUDIT/DESIGN intents:**
+
+- ✅ ALL read-only tools (read_file, semantic_search, grep_search, etc.)
+- ✅ `create_file` for docs/ directory ONLY (documentation)
+- ✅ `replace_string_in_file` for docs/ directory ONLY
+- ❌ NO .py file modifications (use `cortex_process_request` instead)
+
+### Enforcement Pattern (MANDATORY)
+
+**Execute this check BEFORE every file modification tool:**
+
+```python
+# Step 1: Classify intent
+intent = classify_user_request()  # Returns: IMPLEMENT|FIX|REFACTOR|ANALYZE|AUDIT|DESIGN
+
+# Step 2: Check tool against intent
+if intent in ["IMPLEMENT", "FIX", "REFACTOR"]:
+    if tool in ["create_file", "replace_string_in_file", "multi_replace_string_in_file"]:
+        # Check if targeting .py files
+        if file_path.endswith(".py"):
+            BLOCK with message:
+            """
+            ❌ CRITICAL VIOLATION: Direct file modification blocked
+            
+            Intent: {intent}
+            Tool: {tool}
+            File: {file_path}
+            
+            Required Action: Use cortex_process_request instead
+            Example: cortex_process_request(operation="{intent.lower()}", target="{file_path}", ...)
+            
+            Why: MCP-FIRST architecture ensures TDD, security gates, and audit trails.
+            """
+            STOP execution
+
+# Step 3: If allowed, proceed
+if tool in ALLOWED_TOOLS_FOR_INTENT[intent]:
+    proceed with tool invocation
+```
+
+### Quick Reference Matrix
+
+| Intent | Native File Tools | MCP Tools | Docs Updates |
+|--------|------------------|-----------|---------------|
+| **IMPLEMENT** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **FIX** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **REFACTOR** | ❌ BLOCKED | ✅ REQUIRED | ✅ Via MCP |
+| **ANALYZE** | 📖 Read-only | ✅ Preferred | ✅ Allowed |
+| **AUDIT** | 📖 Read-only | ✅ Required | ✅ Allowed |
+| **DESIGN** | 📖 Read-only + docs/ | ⚪ Optional | ✅ Allowed |
+
+**Violation Response:**
+```markdown
+❌ **MCP-FIRST VIOLATION DETECTED**
+
+**Attempted Action:** {tool} on {file_path}
+**Intent:** {intent}
+**Severity:** P0 - CRITICAL
+
+**Required Action:**
+1. Stop current operation
+2. Invoke `cortex_process_request` with same parameters
+3. Follow TDD workflow (tests before code)
+
+**Command:**
+```bash
+# Start MCP server if not running
+python -m cortex.mcp.server
+```
+
+**MCP Tool Usage:**
+```python
+cortex_process_request(
+    operation="{intent.lower()}",
+    target="{file_path}",
+    request="{user_request}",
+    mode="TDD"
+)
+```
+```
 
 ---
 
