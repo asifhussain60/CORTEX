@@ -49,6 +49,134 @@ User: "upgrade prompt" / "skip" / "show changes"
 
 ---
 
+## 🔌 MCP INTEGRATION SETUP (ZERO-EXCEPTION REQUIREMENT)
+
+**Status:** 🟢 PRODUCTION | **Authority:** Phase 25 + Phase 48 + Phase 49  
+**Requirement:** MUST be configured on every user machine, NO EXCEPTIONS
+
+### Auto-Configuration (Triggered at Session Start)
+
+**STEP 1: Environment Detection**
+```bash
+# Verify Python environment
+${workspaceFolder}/.venv/bin/python --version
+# Expected: Python 3.9.6+
+```
+
+**STEP 2: Settings File Creation/Update**
+```bash
+# Create .vscode/settings.json if missing
+if [ ! -f .vscode/settings.json ]; then
+  mkdir -p .vscode
+  echo '{}' > .vscode/settings.json
+fi
+
+# Inject MCP configuration (merge with existing settings)
+# DO NOT overwrite other settings
+```
+
+**STEP 3: MCP Server Configuration**
+
+Inject into `.vscode/settings.json`:
+
+```json
+{
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "cortex.mcp"],
+      "env": {
+        "CORTEX_ENV": "development",
+        "CORTEX_MCP_SERVER": "true",
+        "PYTHONPATH": "${workspaceFolder}",
+        "PATH": "${workspaceFolder}/.venv/bin:$PATH"
+      }
+    }
+  }
+}
+```
+
+**STEP 4: Validation Checklist**
+
+| Check | Requirement | Failure Action |
+|-------|-------------|-----------------|
+| `.venv/bin/python` exists | CRITICAL | Error: Python not in venv (run `python -m venv .venv`) |
+| `cortex/mcp/__init__.py` exists | CRITICAL | Error: cortex.mcp module not found |
+| `.vscode/settings.json` writable | CRITICAL | Error: Cannot write settings (check permissions) |
+| `github.copilot.chat.mcpServers` injected | CRITICAL | Error: MCP server not configured |
+| JSON syntax valid | CRITICAL | Error: Invalid JSON in settings.json |
+
+**STEP 5: Server Startup Verification**
+
+```bash
+# Verify MCP server can start
+${workspaceFolder}/.venv/bin/python -m cortex.mcp --help
+
+# If fails, error message displays:
+# "MCP server initialization failed. Check logs at .cortex/setup.log"
+```
+
+### Zero-Exception Requirements (MANDATORY)
+
+**Configuration MUST succeed, NO FALLBACKS:**
+
+1. ✅ **Absolute Path Resolution:** `${workspaceFolder}` MUST resolve to absolute path
+2. ✅ **Virtual Environment Validation:** `.venv/bin/python` MUST exist or setup fails
+3. ✅ **JSON Merge Safety:** MUST preserve existing `.vscode/settings.json` content
+4. ✅ **Error Reporting:** MUST log all setup steps to `.cortex/setup.log`
+5. ✅ **User Notification:** MUST inform user if setup fails (DO NOT silently continue)
+6. ✅ **Idempotency:** MUST be safe to run multiple times (no duplicate entries)
+7. ✅ **Restart Required:** MUST notify user to "Restart Copilot for changes to take effect"
+
+### Setup Logging
+
+**All setup actions logged to:** `.cortex/setup.log`
+
+```
+[2026-02-08 14:32:15] ✅ Environment detected: Python 3.9.6 in .venv/bin/python
+[2026-02-08 14:32:15] ✅ Workspace root: /Users/asifhussain/PROJECTS/CORTEX
+[2026-02-08 14:32:16] ✅ .vscode/settings.json found
+[2026-02-08 14:32:16] ✅ MCP configuration injected (cortex server)
+[2026-02-08 14:32:16] ✅ JSON validation passed
+[2026-02-08 14:32:17] ✅ MCP server startup verification passed
+[2026-02-08 14:32:17] ✅ Setup complete. Restart Copilot for changes to take effect.
+```
+
+### Available MCP Tools (After Setup)
+
+| Tool | Module | Purpose |
+|------|--------|---------|
+| `cortex_process_request` | cortex.mcp.tools | Main TDD implementation |
+| `cortex_lens_analyze` | cortex.lens.mcp_tools | Code intelligence |
+| `cortex_challenge` | cortex.orchestrators.holistic | Challenge gate |
+| `cortex_total_recall` | cortex.orchestrators.domain | Feature discovery |
+| `cortex_git_history` | cortex.ci_cd.git_tools | 24h git context |
+| `cortex_detect_duplicates` | cortex.refactoring.mcp_tools | CORE-035 detection |
+| `cortex_plan_setup` | cortex.registry.mcp_tools | Phase pre-execution |
+| `cortex_plan_execute_autonomous` | cortex.registry.mcp_tools | Autonomous execution |
+| `cortex_plan_teardown` | cortex.registry.mcp_tools | Phase cleanup |
+| `cortex_plan_sync` | cortex.registry.mcp_tools | Dashboard sync |
+
+### Troubleshooting
+
+**If MCP tools not appearing in Copilot Chat:**
+
+1. Verify `.vscode/settings.json` contains `github.copilot.chat.mcpServers.cortex`
+2. Check `.cortex/setup.log` for errors
+3. Restart VS Code (Command Palette → Developer: Reload Window)
+4. Verify `.venv/bin/python -m cortex.mcp --help` works (no errors)
+5. Check VS Code output: Copilot Chat → MCP Server section
+
+**If setup fails:**
+
+```bash
+# Manual reset
+rm -rf .vscode/settings.json
+# Re-run setup by restarting Copilot session
+```
+
+---
+
 ## ⚡ PHASE 49: CONTEXT CRYSTALLIZATION LAYER (CCL) - ACTIVE
 
 **Status:** 🟢 PRODUCTION (152/152 tests ✅) | **Impact:** -15% latency, +30% accuracy

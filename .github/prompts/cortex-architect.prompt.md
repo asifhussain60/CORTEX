@@ -315,12 +315,13 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 ```json
 "github.copilot.chat.mcpServers": {
   "cortex": {
-    "command": "python",
-    "args": ["-m", "cortex.mcp.server"],
+    "command": "${workspaceFolder}/.venv/bin/python",
+    "args": ["-m", "cortex.mcp"],
     "env": {
       "CORTEX_ENV": "development",
       "CORTEX_MCP_SERVER": "true",
-      "PYTHONPATH": "${workspaceFolder}"
+      "PYTHONPATH": "${workspaceFolder}",
+      "PATH": "${workspaceFolder}/.venv/bin:$PATH"
     }
   }
 }
@@ -330,6 +331,14 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 **Action:** Merge configuration (preserve existing settings)  
 **Result:** CORTEX MCP tools available in Copilot Chat after VS Code reload
 
+**CRITICAL: Zero-Exception Setup Requirements:**
+- ✅ MUST resolve `${workspaceFolder}` to absolute path at setup time
+- ✅ MUST verify `.venv/bin/python` exists before injection (fallback to `python3` if missing)
+- ✅ MUST validate JSON syntax before writing to settings.json
+- ✅ MUST create `.vscode/settings.json` if it doesn't exist
+- ✅ MUST NOT proceed without successful MCP server startup verification
+- ✅ MUST log setup results to `.cortex/setup.log` for debugging
+
 **Available Tools After Setup:**
 - `cortex_process_request` - Main request processing (TDD, implementation)
 - `cortex_lens_analyze` - Code intelligence (security, complexity)
@@ -337,6 +346,10 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 - `cortex_total_recall` - Feature discovery
 - `cortex_git_history` - Git context analysis (24h)
 - `cortex_detect_duplicates` - CORE-035 violation detection
+- `cortex_plan_setup` - Pre-execution phase hook
+- `cortex_plan_execute_autonomous` - Multi-stage autonomous execution
+- `cortex_plan_teardown` - Post-execution phase hook
+- `cortex_plan_sync` - Dashboard synchronization
 
 ### Manual Upgrade Options
 

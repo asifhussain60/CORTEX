@@ -98,6 +98,204 @@ Environment Check (cortex_verify_environment)
 
 ---
 
+## MCP Integration Setup (ZERO-EXCEPTION)
+
+**Authority:** Phase 25 + Phase 48 + Phase 49  
+**Trigger:** After environment validation passes (READY status)  
+**Requirement:** MUST NOT PROCEED without successful MCP configuration
+
+### Setup Steps
+
+**STEP 1: Workspace Root Resolution**
+```
+Resolve ${workspaceFolder} to absolute path
+Expected: /Users/asifhussain/PROJECTS/CORTEX (or equivalent on user machine)
+```
+
+**STEP 2: Virtual Environment Detection**
+```bash
+# Verify .venv exists and has python
+if [ ! -f ".venv/bin/python" ]; then
+  ERROR: "Virtual environment not found at .venv/bin/python"
+  ACTION: "Run: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+  HALT: YES
+fi
+```
+
+**STEP 3: Create/Update .vscode/settings.json**
+```bash
+# Create directory if missing
+mkdir -p .vscode
+
+# If settings.json missing, create with empty object
+if [ ! -f ".vscode/settings.json" ]; then
+  echo '{}' > .vscode/settings.json
+fi
+
+# Validate JSON
+python -m json.tool .vscode/settings.json > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  ERROR: ".vscode/settings.json contains invalid JSON"
+  ACTION: "Fix JSON syntax or delete file to auto-create"
+  HALT: YES
+fi
+```
+
+**STEP 4: Inject MCP Configuration**
+```bash
+# Read existing settings
+CURRENT=$(cat .vscode/settings.json)
+
+# Inject MCP configuration (preserving existing settings)
+# Use jq or Python json module to merge safely
+python3 << 'EOF'
+import json
+import os
+from pathlib import Path
+
+settings_path = Path(".vscode/settings.json")
+settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+
+# Inject MCP server configuration
+mcp_config = {
+    "cortex": {
+        "command": "${workspaceFolder}/.venv/bin/python",
+        "args": ["-m", "cortex.mcp"],
+        "env": {
+            "CORTEX_ENV": "development",
+            "CORTEX_MCP_SERVER": "true",
+            "PYTHONPATH": "${workspaceFolder}",
+            "PATH": "${workspaceFolder}/.venv/bin:$PATH"
+        }
+    }
+}
+
+# Merge safely (update existing or create new)
+if "github.copilot.chat.mcpServers" not in settings:
+    settings["github.copilot.chat.mcpServers"] = {}
+settings["github.copilot.chat.mcpServers"].update(mcp_config)
+
+# Write back
+settings_path.write_text(json.dumps(settings, indent=2))
+print("✅ MCP configuration injected")
+EOF
+
+if [ $? -ne 0 ]; then
+  ERROR: "Failed to inject MCP configuration"
+  HALT: YES
+fi
+```
+
+**STEP 5: MCP Server Startup Verification**
+```bash
+# Test MCP server can initialize
+.venv/bin/python -m cortex.mcp --help > /dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+  ERROR: "MCP server initialization failed"
+  ACTION: "Check .cortex/setup.log for details"
+  SUGGESTION: "Run: .venv/bin/python -m cortex.mcp --help (for manual testing)"
+  HALT: YES
+fi
+```
+
+**STEP 6: Log Setup Results**
+```bash
+# Create .cortex directory if missing
+mkdir -p .cortex
+
+# Log all setup actions
+cat >> .cortex/setup.log << EOF
+[$(date +'%Y-%m-%d %H:%M:%S')] ✅ Environment Setup
+- Python: $(.venv/bin/python --version)
+- Workspace: $(pwd)
+- MCP Config: Injected to .vscode/settings.json
+- Verification: PASSED
+- Status: MCP tools available after Copilot restart
+EOF
+```
+
+**STEP 7: Notify User**
+```markdown
+### 🔌 MCP Integration Complete
+
+**Configuration Status:** ✅ SUCCESS
+
+**What was configured:**
+- ✅ .vscode/settings.json updated with cortex MCP server
+- ✅ Python interpreter: ${workspaceFolder}/.venv/bin/python
+- ✅ MCP module: cortex.mcp ready
+- ✅ Environment variables configured
+- ✅ Server startup verification passed
+
+**Next Step:**
+⚡ **Restart Copilot for changes to take effect**
+- In VS Code: Command Palette → Developer: Reload Window
+- Or: Close/reopen VS Code
+
+**Available Tools After Restart:**
+- cortex_process_request (TDD implementation)
+- cortex_lens_analyze (Code intelligence)
+- cortex_challenge (Challenge gate)
+- cortex_plan_execute_autonomous (Phase execution)
+- ... (10 total MCP tools)
+```
+
+### Validation Checklist (NO EXCEPTIONS)
+
+| Check | Status | Error Action |
+|-------|--------|--------------|
+| Python >= 3.9.0 | CRITICAL | Guide upgrade |
+| .venv/bin/python exists | CRITICAL | Guide venv setup |
+| cortex/mcp module found | CRITICAL | Reinstall CORTEX |
+| .vscode/settings.json writable | CRITICAL | Check file permissions |
+| JSON syntax valid after injection | CRITICAL | Error + restore backup |
+| MCP server startup test passes | CRITICAL | Display error from cortex.mcp |
+| .cortex/setup.log created | WARNING | Log to alternative location |
+
+### Failure Recovery
+
+**If ANY step fails:**
+
+1. **Log error to .cortex/setup.log with full context**
+2. **Display user-friendly error message with fix instructions**
+3. **HALT execution (DO NOT PROCEED WITHOUT MCP)**
+4. **Provide manual recovery steps:**
+
+```bash
+# Manual MCP setup
+mkdir -p .vscode
+cat > .vscode/settings.json << 'EOFSET'
+{
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "cortex.mcp"],
+      "env": {
+        "CORTEX_ENV": "development",
+        "CORTEX_MCP_SERVER": "true",
+        "PYTHONPATH": "${workspaceFolder}",
+        "PATH": "${workspaceFolder}/.venv/bin:$PATH"
+      }
+    }
+  }
+}
+EOFSET
+
+# Verify configuration
+cat .vscode/settings.json
+```
+
+### Idempotency (Safe to Run Multiple Times)
+
+**REQUIREMENT:** MCP setup MUST be idempotent
+- ✅ Calling setup twice should succeed without duplicate entries
+- ✅ Existing settings preserved (merge, not overwrite)
+- ✅ No errors if already configured
+- ✅ Same result each time
+
+---
+
 ## Git Upgrade Check (NEW - v2.0)
 
 **Trigger:** After environment validation passes (READY status)
