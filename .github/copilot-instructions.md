@@ -1,5 +1,34 @@
 # CORTEX Copilot Instructions
-**Version:** 7.5 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅ | **Session Continuity:** Phase Discovery Protocol ✅
+**Version:** 7.6 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Silent Autonomous:** ✅ | **Visual Progress:** ASCII Bars | **Session Continuity:** Phase Discovery Protocol ✅
+
+---
+
+## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
+
+**When user says "proceed", "implement", "yes", or "continue":**
+
+| DO | DON'T |
+|----|-------|
+| ✅ Execute silently | ❌ Ask "shall I proceed?" |
+| ✅ Show ASCII progress bars | ❌ Narrate what you're doing |
+| ✅ Report on completion/error | ❌ Request mid-execution approval |
+| ✅ Commit progress automatically | ❌ Multi-paragraph explanations |
+
+**Progress Bar Format:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Phase 48: Holistic Validation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[████████░░] 80% S5: Prompt Enhancement
+├─ ✅ S1: Orchestrator (12 tests)
+├─ ✅ S2: Dependency Graph (10 tests)  
+├─ 🔵 S5: Prompts (in progress)
+└─ ⚪ S6: MCP Tools (pending)
+
+Tests: 50/60 | Coverage: 89%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 
@@ -86,6 +115,8 @@ cortex-registry/_cortex-master/
 | **CORE-035** | Single canonical implementation |
 | **CORE-036** | Industry standards compliance — verify against 45+ knowledge YAMLs |
 | **CORE-047** | **Instruction files MUST NOT include file paths** — Even backticks trigger VS Code auto-load (51k+ token bloat). Use directory references only. AI loads via semantic_search or read_file when explicitly needed. |
+| **CORE-048** | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
+| **CORE-049** | **Silent Autonomous Execution** — No confirmations, no narration, just progress bars + completion report |
 | **MCP-FIRST** | ALL functionality exposed via MCP tools |
 | **MCP-GATE** | IMPLEMENT intents MUST use `cortex_process_request` tool (NO direct file creation) |
 | **ARCH-012** | Standards gate — 12-Factor + SOLID + Clean Code + OWASP required |
@@ -614,7 +645,7 @@ cortex_process_request(
 | **MarkdownSuppressionAgent** | 002 | Block *-summary.md, *-report.md generation |
 | **ArchitectureIntegrityAgent** | 017-020, 032, 034, 035, 038-041 | Versioned filenames, performance, turn budgets |
 
-**Coverage:** 25/29 CORE rules automated (86%) | **Performance:** <150ms validation | **Enforcement:** BLOCKED, WARNING, PASS
+**Coverage:** 26/30 CORE rules automated (87%) | **Performance:** <150ms validation | **Enforcement:** BLOCKED, WARNING, PASS
 
 ### Key CORE Rules
 
@@ -630,6 +661,7 @@ cortex_process_request(
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 | CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
 | CORE-042 | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes required) |
+| CORE-048 | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
 
 ---
 

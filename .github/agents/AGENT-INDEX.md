@@ -1,5 +1,44 @@
 # CORTEX Agent Index
-**Version:** 1.0 | **Updated:** 2026-02-06 | **Purpose:** Lazy loading index to prevent token bloat
+**Version:** 1.2 | **Updated:** 2026-02-08 | **Purpose:** Lazy loading + silent autonomous execution | **Agents:** 12 | **Default Mode:** Silent + Visual Progress
+
+---
+
+## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
+
+**All agents inherit this behavior when user says "proceed" or "implement":**
+
+```yaml
+silent_mode: true
+visual_feedback: "ascii_progress_bars"
+narration: disabled
+approval_gates: disabled
+completion_report: minimal
+```
+
+### Progress Bar Format (UNIVERSAL)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {phase_name}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[████████░░] 80% {current_stage}
+├─ ✅ S1: {stage_1_name} ({tests} tests)
+├─ ✅ S2: {stage_2_name} ({tests} tests)  
+├─ 🔵 S3: {stage_3_name} (in progress)
+└─ ⚪ S4: {stage_4_name} (pending)
+
+Tests: {passed}/{total} | Coverage: {pct}% | {duration}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Status Icons
+| Icon | Meaning |
+|------|---------|
+| ✅ | Complete |
+| 🔵 | In Progress |
+| ⚪ | Pending |
+| 🔴 | Failed/Blocked |
 
 ---
 
@@ -11,13 +50,13 @@
 
 ```yaml
 Default Context: THIS FILE ONLY (~200 tokens)
-Per Intent Load: 1-2 relevant agents (~1,000-2,000 tokens)
+Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 Total Savings: ~245,000 tokens per session (98% reduction)
 ```
 
 ---
 
-## 🤖 Agent Registry (11 Core Agents)
+## 🤖 Agent Registry (12 Core Agents)
 
 ### Master Orchestration
 - **CORTEX.md** — Main orchestrator, routes all requests
@@ -25,17 +64,24 @@ Total Savings: ~245,000 tokens per session (98% reduction)
   - **Size:** ~250 lines
   - **Key capabilities:** Intent routing, MCP gateway, DoR classification
 
-- **cortex-architect.md** — HEXA-mode router (AUDIT/DESIGN/PLAN/DIGEST/INTERACTIVE/META-AUDIT)
+- **cortex-architect.md** — HEXA-mode router (AUDIT/DESIGN/PLAN/DIGEST/QUERY/META-AUDIT)
   - **Load when:** Architecture requests, planning, audits
   - **Size:** ~436 lines
   - **Key capabilities:** Mode detection, challenge generation, ROI prioritization
 
-### Specialist Agents
+### Validation & Governance Agents
+- **cortex-holistic-validator.md** — Pre-implementation holistic validation (Phase 48) ⭐ NEW
+  - **Load when:** Before ANY IMPLEMENT/FIX/REFACTOR intent
+  - **Size:** ~400 lines
+  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_brain self-analysis
+  - **Enforcement:** BLOCKING — No implementation without validation pass
+
 - **cortex-auditor.md** — Codebase health scanning
   - **Load when:** `/audit`, quality analysis
-  - **Size:** ~351 lines
-  - **Key capabilities:** P0-P3 issue detection, security scanning
+  - **Size:** ~400 lines
+  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation
 
+### Specialist Agents
 - **cortex-designer.md** — Design mode specialist
   - **Load when:** Implementation requests with design phase
   - **Size:** ~229 lines
@@ -82,15 +128,39 @@ Total Savings: ~245,000 tokens per session (98% reduction)
 
 | User Intent | Load These Agents |
 |-------------|-------------------|
-| **IMPLEMENT** | CORTEX.md + cortex-designer.md |
+| **IMPLEMENT** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
 | **AUDIT** | CORTEX.md + cortex-architect.md + cortex-auditor.md |
 | **QUESTION** | CORTEX.md + cortex-interactive.md |
 | **PLAN** | cortex-architect.md + cortex-phase-resolver.md |
 | **DIGEST** | cortex-architect.md + cortex-digest.md |
-| **FIX** | CORTEX.md + cortex-designer.md |
-| **REFACTOR** | CORTEX.md + cortex-designer.md |
+| **FIX** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
+| **REFACTOR** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
 | **SETUP** | cortex-environment-setup.md |
 | **MCP** | cortex-mcp-gateway.md |
+| **VALIDATE** | cortex-holistic-validator.md |
+
+---
+
+## 🛡️ Holistic Validation Flow (Phase 48)
+
+**CRITICAL:** For IMPLEMENT/FIX/REFACTOR intents, load cortex-holistic-validator.md BEFORE cortex-designer.md
+
+```
+User Request (IMPLEMENT/FIX/REFACTOR)
+         ↓
+Load: cortex-holistic-validator.md
+         ↓
+Execute Validation Sequence:
+  1. Registry holistic check
+  2. Dependency graph analysis
+  3. Regression risk scoring
+  4. Architecture drift detection
+  5. Mandatory challenge gate
+  6. cortex_brain self-analysis
+         ↓
+IF PASS/WARN → Load cortex-designer.md → Proceed
+IF BLOCK → Stop, show remediation, require override
+```
 
 ---
 
@@ -145,4 +215,4 @@ Remaining for Response: 800,000 tokens ✅
 
 ---
 
-*v1.0 — Token optimization index for lazy agent loading*
+*v1.2 — Silent autonomous execution + token optimization index*

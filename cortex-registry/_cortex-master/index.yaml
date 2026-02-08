@@ -158,6 +158,59 @@ active_phases:
       - "CORTEX open-source distribution"
       - "Clean company-agnostic codebase"
 
+  - id: "phase-48"
+    name: "Holistic Validation & Challenge Gate"
+    file: "phases/active/phase-48-holistic-validation-challenge-gate.yaml"
+    created: "2026-02-08"
+    started: null
+    status: "planned"
+    priority: "P0"
+    execution_order: 3
+    roi_score: 0.91
+    estimated_duration: "3 days"
+    test_target: 60
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Holistic governance enforcement — 6 stages:
+      S1: HolisticValidationOrchestrator (registry + wiring analysis)
+      S2: Dependency Graph Generator (orchestrator mesh)
+      S3: Pre-Implementation Challenge Gate (mandatory alternatives)
+      S4: cortex_brain CORTEX self-analysis integration
+      S5: Prompt/Agent minimal enhancements
+      S6: Integration tests + documentation
+      
+      KEY OBJECTIVES:
+      - Block regressions BEFORE implementation (proactive, not reactive)
+      - Cross-validate ALL orchestrators, components, tools against registry
+      - Enforce mandatory Challenge Gate (alternatives reviewed before proceed)
+      - Integrate cortex_brain for CORTEX self-development
+      - Zero Copilot actions without MasterOrchestrator governance
+      
+      CAPABILITIES ENABLED:
+      - cortex_validate_holistically MCP tool
+      - Pre-execution regression risk scoring (block if > 0.7)
+      - Architecture drift detection
+      - Orchestrator dependency conflict detection
+      - Mandatory challenge with ROI-based alternatives
+      - cortex_brain dog-fooding for CORTEX repo
+      
+      WHY P0:
+      - Prevents cumulative technical debt
+      - Ensures holistic CORTEX evolution
+      - Closes governance gaps identified in GAP analysis
+    depends_on:
+      - "phase-43"
+      - "phase-46"
+    unblocks:
+      - "Regression-free autonomous execution"
+      - "Architecture integrity enforcement"
+      - "Self-improving CORTEX governance"
+
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"
@@ -685,38 +738,78 @@ governance:
   versioning: "semantic"
   file_naming: "kebab-case"
   max_file_name_length: 35
+  
+  # SILENT AUTONOMOUS EXECUTION (CORE-049)
   autonomous_execution:
     enabled: true
     silent_mode: true
+    default_behavior: "proceed_without_confirmation"
     progress_visualization: "ascii_bar"
+    
+    # Visual Progress Settings
+    progress_bar:
+      format: "[{filled}{empty}] {pct}%"
+      width: 10
+      filled_char: "█"
+      empty_char: "░"
+      header_border: "━"
+      status_icons:
+        complete: "✅"
+        in_progress: "🔵"
+        pending: "⚪"
+        failed: "🔴"
+        blocked: "🔴"
+    
+    # Trigger Words (Auto-Enable Silent Mode)
+    trigger_words:
+      - "proceed"
+      - "proceed autonomously"
+      - "proceed silently"
+      - "implement"
+      - "continue"
+      - "yes"
+      - "do it"
+      - "go ahead"
+    
+    # Token Management
     token_budget_per_session: 180000
     token_warning_threshold: 0.75
+    
+    # Continuation Prompt (Minimal)
     continuation_prompt_template: |
-      ## 🔄 SESSION CONTINUATION
-      **Token Budget Reached:** 75%+ of session limit
-      **Current Progress:** [STAGE]/[TOTAL] complete
-      **Estimated Remaining:** [HOURS] hours
-      
-      ### Continue in New Session:
-      Copy & paste the continuation prompt below in a new Copilot Chat window:
-      
+      ## 🔄 CONTINUE
       ```
-      /plan continue phase-{ID}
-      Stage: {STAGE_NUM}
-      Previous: {PREVIOUS_STAGE_SUMMARY}
-      Next: {NEXT_STAGE_DESCRIPTION}
-      Git Checkpoint: {COMMIT_HASH}
+      /plan continue phase-{ID} stage-{NUM}
       ```
-      
-      All code, tests, and progress are automatically committed. No manual recovery needed.
+      Git: {COMMIT_HASH}
+    
+    # Suppression Rules (Silent Mode)
+    suppress_outputs:
+      - "shall_i_proceed"
+      - "here_is_what_i_will_do"
+      - "moving_to_next_stage"
+      - "let_me_check"
+      - "multi_paragraph_explanations"
+      - "approval_requests"
+    
+    # Allowed Outputs (Silent Mode)
+    allowed_outputs:
+      - "progress_bar_updates"
+      - "completion_summary"
+      - "error_reports"
+      - "test_failure_details"
+    
+    # Report Generation
     report_generation:
       enabled: false
       inline_only: true
       suppress_markdown_files: true
+    
+    # Notifications
     user_notification:
-      final_completion: false
-      progress_updates: false
-      error_alerts: true
+      final_completion: true  # Show completion summary
+      progress_updates: false  # No mid-execution updates
+      error_alerts: true  # Always show errors
 
 # Tags
 tags:

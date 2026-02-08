@@ -1,17 +1,17 @@
 # CORTEX Core Rules Registry
 # Purpose: Machine-readable governance rules for CORTEX development
-# Authority: cortex-architect.prompt.md v14.2 + copilot-instructions.md v7.4
+# Authority: cortex-architect.prompt.md v15.3 + copilot-instructions.md v7.6
 # Created: 2026-02-06
-# Version: 1.0
+# Version: 1.1 (CORE-048, CORE-049 added)
 
 meta:
-  version: "1.0"
-  updated: "2026-02-06"
-  authority: "ENH-048 (Prompt Unbloating System)"
+  version: "1.1"
+  updated: "2026-02-08"
+  authority: "ENH-048 (Prompt Unbloating) + CORE-049 (Silent Autonomous)"
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
     - ".github/copilot-instructions.md"
-  total_rules: 14
+  total_rules: 16
 
 core_rules:
   - id: "CORE-002"
@@ -376,6 +376,72 @@ core_rules:
       - "EnforcementOrchestrator"
     related_enhancements:
       - "ENH-048"  # Prompt Unbloating
+
+  - id: "CORE-048"
+    name: "Holistic Validation Gate"
+    category: "governance"
+    priority: "P0"
+    description: |
+      MANDATORY pre-implementation validation + challenge gate.
+      
+      Triggered BEFORE any IMPLEMENT/FIX/REFACTOR intent.
+      
+      Sequence:
+      1. Registry holistic check (index.yaml, wiring.yaml)
+      2. Dependency graph analysis
+      3. Regression risk scoring (0.0 - 1.0)
+      4. Architecture drift detection
+      5. Mandatory challenge gate with alternatives
+      6. cortex_brain context (for CORTEX self-development)
+      
+      BLOCK if risk score > 0.7 (user override required)
+      WARN if risk score > 0.4 (proceed with caution)
+    enforcement: "BLOCKING"
+    violation_action: "Block + show evidence + require explicit proceed"
+    detection_patterns:
+      - "IMPLEMENT intent without validation"
+      - "FIX intent without risk assessment"
+    auto_fix: false
+    enforced_by:
+      - "HolisticValidationOrchestrator"
+      - "cortex-holistic-validator.md"
+    related_phases:
+      - "phase-48"  # Holistic Validation & Challenge Gate
+
+  - id: "CORE-049"
+    name: "Silent Autonomous Execution"
+    category: "interaction"
+    priority: "P0"
+    description: |
+      When user triggers execution (proceed, implement, yes, continue):
+      
+      DO:
+      - Execute silently with ASCII progress bars
+      - Report ONLY on completion or error
+      - Commit progress automatically
+      
+      DON'T:
+      - Ask "shall I proceed?" confirmations
+      - Narrate what you're doing
+      - Request mid-execution approval
+      - Multi-paragraph explanations
+      
+      Progress Bar Format:
+      [████████░░] 80% {stage_name}
+      ├─ ✅ S1: {name} ({n} tests)
+      └─ 🔵 S2: {name} (in progress)
+      
+      Override: User says "verbose" for detailed narration
+    enforcement: "DEFAULT_BEHAVIOR"
+    violation_action: "N/A - behavioral guideline"
+    detection_patterns:
+      - "shall I proceed" after user said proceed
+      - "here's what I'll do" during execution
+    auto_fix: false
+    enforced_by:
+      - "All agents (inherited behavior)"
+    related_enhancements:
+      - "Phase-35"  # Autonomous Execution Enhancement
 
 # Special Rules (Non-CORE)
 special_rules:
