@@ -19,6 +19,7 @@ class ToolCategory(str, Enum):
     ORCHESTRATION = "orchestration"
     KNOWLEDGE = "knowledge"
     UTILITY = "utility"
+    SECURITY = "security"  # Phase 8.2: Security analysis tools (ENH-050)
 
 
 class AuthLevel(str, Enum):

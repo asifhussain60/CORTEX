@@ -434,3 +434,162 @@ class TestVerificationResult:
         assert result.broken_links_count == 0
         assert result.git_status_clean is True
         assert len(result.issues) == 0
+
+# ============================================================================
+# CONFLICTING FILES DETECTION (NEW ENHANCEMENT)
+# ============================================================================
+
+@pytest.mark.skipif(not IMPORTS_AVAILABLE, reason="VacuumOrchestrator not yet implemented")
+class TestConflictingFilesDetection:
+    """Test suite for conflicting files detection enhancement."""
+
+    @pytest.fixture
+    def orchestrator(self) -> VacuumOrchestrator:
+        """Create VacuumOrchestrator instance."""
+        return VacuumOrchestrator()
+
+    def test_detect_conflicting_files_with_old_extension(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test detection of files with .old extension."""
+        # Create test files
+        test_file = tmp_path / "config.yaml"
+        test_file.write_text("original")
+        
+        old_file = tmp_path / "config.yaml.old"
+        old_file.write_text("old version")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert result["status"] == "success"
+        assert result["total_count"] == 1
+        assert len(result["conflicting_files"]) == 1
+        assert result["conflicting_files"][0]["filename"] == "config.yaml.old"
+
+    def test_detect_conflicting_files_with_new_extension(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test detection of files with .new extension."""
+        test_file = tmp_path / "index.html"
+        test_file.write_text("<html></html>")
+        
+        new_file = tmp_path / "index.html.new"
+        new_file.write_text("<html></html><!-- updated -->")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert result["status"] == "success"
+        assert result["total_count"] == 1
+        assert result["conflicting_files"][0]["filename"] == "index.html.new"
+
+    def test_detect_conflicting_files_with_enhanced_fixed_suffixes(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test detection of enhanced and fixed suffix files."""
+        # Create test files with enhanced/fixed suffixes
+        enhanced_file = tmp_path / "script.py.enhanced"
+        enhanced_file.write_text("enhanced code")
+        
+        fixed_file = tmp_path / "script.py.fixed"
+        fixed_file.write_text("fixed code")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert result["status"] == "success"
+        assert result["total_count"] == 2
+        filenames = [f["filename"] for f in result["conflicting_files"]]
+        assert "script.py.enhanced" in filenames
+        assert "script.py.fixed" in filenames
+
+    def test_detect_conflicting_files_with_prefix_patterns(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test detection of files with _old, _new, _backup prefixes."""
+        old_backup = tmp_path / "data_old.json"
+        old_backup.write_text("{}")
+        
+        new_version = tmp_path / "data_new.json"
+        new_version.write_text("{}")
+        
+        backup = tmp_path / "data_backup.json"
+        backup.write_text("{}")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert result["status"] == "success"
+        assert result["total_count"] == 3
+
+    def test_detect_conflicting_files_groups_by_base_name(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test that conflicting files are grouped by base filename."""
+        # Create multiple versions of same file
+        base = tmp_path / "config.yaml"
+        base.write_text("current")
+        
+        old = tmp_path / "config.yaml.old"
+        old.write_text("old")
+        
+        backup = tmp_path / "config.yaml.backup"
+        backup.write_text("backup")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert "config.yaml" in result["groups"]
+        assert len(result["groups"]["config.yaml"]) == 2  # .old and .backup
+
+    def test_detect_conflicting_files_generates_recommendations(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test that cleanup recommendations are generated for conflicting groups."""
+        old = tmp_path / "script.py.old"
+        old.write_text("old")
+        
+        new = tmp_path / "script.py.new"
+        new.write_text("new")
+        
+        result = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        assert len(result["recommendations"]) > 0
+        rec = result["recommendations"][0]
+        assert rec["action"] == "archive_alternates"
+        assert rec["file_count"] == 2
+
+    def test_generate_conflicting_files_cleanup_plan(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test cleanup plan generation for conflicting files."""
+        old_file = tmp_path / "test.txt.old"
+        old_file.write_text("old")
+        
+        # Detect conflicts
+        detection = orchestrator.detect_conflicting_files(str(tmp_path))
+        
+        # Generate plan
+        plan = orchestrator.generate_conflicting_files_cleanup_plan(detection)
+        
+        assert plan.total_files == 1
+        assert plan.archive_base_path == "docs/archive/conflicting"
+        assert len(plan.files_to_archive) == 1
+        assert plan.files_to_archive[0]["category"] == "conflicting"
+
+    def test_scan_repository_includes_conflicting_files(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test that scan_repository now includes conflicting files detection."""
+        # Create docs directory (excluded)
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        doc_md = docs / "guide.md"
+        doc_md.write_text("# Guide")
+        
+        # Create conflicting files
+        old_file = tmp_path / "README.md.old"
+        old_file.write_text("old")
+        
+        result = orchestrator.scan_repository(str(tmp_path))
+        
+        assert result["status"] == "success"
+        assert "conflicting_count" in result
+        assert result["conflicting_count"] == 1
+        assert "conflicting_files" in result
+
+    def test_generate_cleanup_plan_includes_conflicting_files(self, orchestrator: VacuumOrchestrator, tmp_path: Path) -> None:
+        """Test that cleanup plan includes conflicting files."""
+        # Create conflicting files
+        old_file = tmp_path / "config.yaml.old"
+        old_file.write_text("old")
+        
+        # Run scan
+        scan_result = orchestrator.scan_repository(str(tmp_path))
+        
+        # Generate plan with conflicting files included
+        plan = orchestrator.generate_cleanup_plan(scan_result, include_conflicting=True)
+        
+        # Should have plan entry for conflicting file
+        conflicting_entries = [f for f in plan.files_to_archive if f["category"] == "conflicting"]
+        assert len(conflicting_entries) > 0

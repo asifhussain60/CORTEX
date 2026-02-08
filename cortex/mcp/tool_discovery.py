@@ -38,8 +38,7 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: "cortex.brain.mcp.tools.orchestrator_tools",
         ToolCategory.KNOWLEDGE: "cortex.brain.mcp.tools.knowledge_tools",
         ToolCategory.UTILITY: "cortex.brain.mcp.tools.utility_tools",
-        # Phase 8.2-8.4: Security analysis tools
-        "security": "cortex.mcp.tools.security",  # New security tools category
+        ToolCategory.SECURITY: "cortex.mcp.tools.security",  # Phase 8.2: Security tools (ENH-050)
     }
     
     # Default authorization levels by category
@@ -48,7 +47,7 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: AuthLevel.AUTHENTICATED,
         ToolCategory.KNOWLEDGE: AuthLevel.AUTHENTICATED,
         ToolCategory.UTILITY: AuthLevel.PUBLIC,
-        "security": AuthLevel.AUTHENTICATED,  # Security tools require authentication
+        ToolCategory.SECURITY: AuthLevel.AUTHENTICATED,  # Security tools require authentication (ENH-050)
     }
     
     # Default compliance modes by category
@@ -57,7 +56,7 @@ class ToolDiscoveryEngine:
         ToolCategory.ORCHESTRATION: ComplianceMode.NORMAL,
         ToolCategory.KNOWLEDGE: ComplianceMode.NORMAL,
         ToolCategory.UTILITY: ComplianceMode.LIGHTWEIGHT,
-        "security": ComplianceMode.STRICT,  # Security tools require strict compliance
+        ToolCategory.SECURITY: ComplianceMode.STRICT,  # Security tools require strict compliance (ENH-050)
     }
     
     def __init__(self):
@@ -78,6 +77,7 @@ class ToolDiscoveryEngine:
             try:
                 module = importlib.import_module(module_name)
                 tools = self._extract_tools_from_module(module, category)
+                # All categories are now enums (ENH-050: fixed consistent enum usage)
                 self.discovered_tools[category.value] = tools
                 logger.info(f"Discovered {len(tools)} {category.value} tools")
             except (ImportError, ModuleNotFoundError) as e:
@@ -178,7 +178,7 @@ class ToolDiscoveryEngine:
             policy = ToolGovernancePolicy(
                 tool_id=tool_id,
                 tool_name=tool_id,
-                category=category if not isinstance(category, str) else ToolCategory(category),
+                category=category,  # Now guaranteed to be ToolCategory enum (ENH-050)
                 auth_level=self.DEFAULT_AUTH_LEVELS.get(category, AuthLevel.AUTHENTICATED),
                 compliance_mode=self.DEFAULT_COMPLIANCE_MODES.get(category, ComplianceMode.NORMAL),
                 description=tool_info["metadata"].get("description", ""),

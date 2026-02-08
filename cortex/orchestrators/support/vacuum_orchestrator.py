@@ -140,7 +140,7 @@ class VacuumOrchestrator:
 
     def scan_repository(self, root_path: str) -> Dict[str, Any]:
         """
-        Scan repository for markdown files outside docs/.github.
+        Scan repository for markdown files outside docs/.github and conflicting files.
         
         Args:
             root_path: Root directory of repository to scan
@@ -150,6 +150,8 @@ class VacuumOrchestrator:
                 - status: "success" or "partial" or "error"
                 - files_found: List of markdown file paths
                 - total_count: Total number of files found
+                - conflicting_files: List of conflicting/duplicate files detected
+                - conflicting_count: Total number of conflicting files
                 
         Example:
             >>> orchestrator = VacuumOrchestrator()
@@ -182,10 +184,16 @@ class VacuumOrchestrator:
                 if not should_exclude:
                     markdown_files.append(str(relative_path))
             
+            # Detect conflicting files
+            conflicting_detection = self.detect_conflicting_files(root_path)
+            
             return {
                 "status": "success",
                 "files_found": markdown_files,
                 "total_count": len(markdown_files),
+                "conflicting_files": conflicting_detection.get("conflicting_files", []),
+                "conflicting_count": conflicting_detection.get("total_count", 0),
+                "conflicting_size_human": conflicting_detection.get("total_size_human", "0B"),
             }
             
         except Exception as e:
@@ -193,6 +201,8 @@ class VacuumOrchestrator:
                 "status": "error",
                 "files_found": [],
                 "total_count": 0,
+                "conflicting_files": [],
+                "conflicting_count": 0,
                 "error": str(e),
             }
 
@@ -329,6 +339,7 @@ class VacuumOrchestrator:
         self,
         scan_result: Dict[str, Any],
         age_threshold_days: int = 30,
+        include_conflicting: bool = True,
     ) -> CleanupPlan:
         """
         Generate cleanup plan with file categorization.
@@ -336,6 +347,7 @@ class VacuumOrchestrator:
         Args:
             scan_result: Result from scan_repository()
             age_threshold_days: Only archive files older than this (default 30)
+            include_conflicting: Include conflicting files in plan (default True)
             
         Returns:
             CleanupPlan with categorized files and archive paths
@@ -345,10 +357,12 @@ class VacuumOrchestrator:
             - testing: files in tests/
             - workspaces: files in _workspaces/
             - reports: *-REPORT.md, *-AUDIT.md
+            - conflicting: files with .old, .new, .enhanced, .fixed, etc.
             - other: uncategorized files
         """
         files_to_archive = []
         
+        # Process markdown files
         for file_path in scan_result["files_found"]:
             # Determine category
             category = self._categorize_file(file_path)
@@ -362,6 +376,15 @@ class VacuumOrchestrator:
                 "destination": archive_path,
                 "category": category,
             })
+        
+        # Process conflicting files if included
+        if include_conflicting:
+            for file_info in scan_result.get("conflicting_files", []):
+                files_to_archive.append({
+                    "source": file_info['path'],
+                    "destination": f"docs/archive/conflicting/{file_info['filename']}",
+                    "category": "conflicting",
+                })
         
         return CleanupPlan(
             files_to_archive=files_to_archive,
@@ -759,6 +782,164 @@ class VacuumOrchestrator:
             "errors": cleanup_result.errors,
             "issues": verification.issues,
         }
+
+    # ========================================================================
+    # Conflicting File Detection (Enhanced Cleanup)
+    # ========================================================================
+
+    def detect_conflicting_files(self, root_path: str) -> Dict[str, Any]:
+        """
+        Detect conflicting/duplicate files with pattern suffixes.
+        
+        Finds files with common duplicate patterns:
+        - .old, .new, .bak, .backup
+        - .enhanced, .fixed, .updated, .improved
+        - .draft, .temp, .tmp, .v1, .v2, etc.
+        - _old, _new, _backup, _enhanced, _fixed
+        - filename.html.new (incomplete overwrites)
+        
+        Args:
+            root_path: Root directory to scan
+            
+        Returns:
+            Dictionary with:
+                - conflicting_files: List of detected conflicting files
+                - groups: Grouped by base filename (file.html, file.html.new, file.html.old)
+                - recommendations: Cleanup recommendations per group
+                - total_count: Total conflicting files found
+                - total_size_bytes: Total size of conflicting files
+                
+        Example:
+            >>> orchestrator = VacuumOrchestrator()
+            >>> result = orchestrator.detect_conflicting_files(".")
+            >>> print(f"Found {result['total_count']} conflicting files")
+        """
+        try:
+            root = Path(root_path)
+            conflicting_patterns = {
+                r'\.old$': 'backup suffix',
+                r'\.bak$': 'backup suffix',
+                r'\.backup$': 'backup suffix',
+                r'\.new$': 'new version suffix',
+                r'\.enhanced$': 'enhanced version',
+                r'\.fixed$': 'fixed version',
+                r'\.updated$': 'updated version',
+                r'\.improved$': 'improved version',
+                r'\.draft$': 'draft version',
+                r'\.temp$': 'temporary file',
+                r'\.tmp$': 'temporary file',
+                r'_old$': 'old backup prefix',
+                r'_new$': 'new version prefix',
+                r'_backup$': 'backup prefix',
+                r'_enhanced$': 'enhanced version prefix',
+                r'_fixed$': 'fixed version prefix',
+                r'_updated$': 'updated version prefix',
+                r'_improved$': 'improved version prefix',
+                r'_draft$': 'draft version prefix',
+                r'\.v\d+$': 'versioned file',
+            }
+            
+            conflicting_files = []
+            groups = {}
+            total_size = 0
+            
+            # Scan all files
+            for file_path in root.rglob("*"):
+                if not file_path.is_file():
+                    continue
+                
+                filename = file_path.name
+                
+                # Check against conflicting patterns
+                for pattern, pattern_type in conflicting_patterns.items():
+                    if re.search(pattern, filename, re.IGNORECASE):
+                        # Extract base filename
+                        base_name = re.sub(pattern, '', filename, flags=re.IGNORECASE)
+                        
+                        try:
+                            file_size = file_path.stat().st_size
+                            total_size += file_size
+                            
+                            conflicting_files.append({
+                                'path': str(file_path.relative_to(root)),
+                                'filename': filename,
+                                'base_name': base_name,
+                                'pattern_type': pattern_type,
+                                'size_bytes': file_size,
+                                'size_human': self._format_size(file_size),
+                                'modified': datetime.fromtimestamp(file_path.stat().st_mtime).isoformat(),
+                            })
+                            
+                            # Group by base filename
+                            if base_name not in groups:
+                                groups[base_name] = []
+                            groups[base_name].append(filename)
+                        except (OSError, PermissionError):
+                            pass
+                        break
+            
+            # Generate recommendations
+            recommendations = []
+            for base_name, filenames in groups.items():
+                if len(filenames) > 1:
+                    # Multiple versions of same file - recommend archival
+                    recommendations.append({
+                        'base_name': base_name,
+                        'file_count': len(filenames),
+                        'files': filenames,
+                        'action': 'archive_alternates',
+                        'priority': 'medium',
+                        'reason': f'Found {len(filenames)} versions of {base_name}. Archive duplicates to docs/archive/conflicting/',
+                    })
+            
+            return {
+                'status': 'success',
+                'conflicting_files': conflicting_files,
+                'groups': groups,
+                'recommendations': recommendations,
+                'total_count': len(conflicting_files),
+                'total_size_bytes': total_size,
+                'total_size_human': self._format_size(total_size),
+            }
+            
+        except Exception as e:
+            return {
+                'status': 'error',
+                'error': str(e),
+                'conflicting_files': [],
+                'groups': {},
+                'recommendations': [],
+                'total_count': 0,
+                'total_size_bytes': 0,
+            }
+
+    def generate_conflicting_files_cleanup_plan(
+        self,
+        conflict_detection_result: Dict[str, Any],
+    ) -> CleanupPlan:
+        """
+        Generate cleanup plan for conflicting files.
+        
+        Args:
+            conflict_detection_result: Result from detect_conflicting_files()
+            
+        Returns:
+            CleanupPlan with files categorized for archival
+        """
+        files_to_archive = []
+        
+        for file_info in conflict_detection_result.get('conflicting_files', []):
+            files_to_archive.append({
+                'source': file_info['path'],
+                'destination': f"docs/archive/conflicting/{file_info['filename']}",
+                'category': 'conflicting',
+            })
+        
+        return CleanupPlan(
+            files_to_archive=files_to_archive,
+            archive_base_path='docs/archive/conflicting',
+            total_files=len(files_to_archive),
+        )
 
     # ========================================================================
     # Brain Flush Integration (Phase 38 Stage 6)
