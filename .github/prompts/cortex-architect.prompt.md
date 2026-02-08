@@ -315,12 +315,13 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 ```json
 "github.copilot.chat.mcpServers": {
   "cortex": {
-    "command": "python",
-    "args": ["-m", "cortex.mcp.server"],
+    "command": "${workspaceFolder}/.venv/bin/python",
+    "args": ["-m", "cortex.mcp"],
     "env": {
       "CORTEX_ENV": "development",
       "CORTEX_MCP_SERVER": "true",
-      "PYTHONPATH": "${workspaceFolder}"
+      "PYTHONPATH": "${workspaceFolder}",
+      "PATH": "${workspaceFolder}/.venv/bin:$PATH"
     }
   }
 }
@@ -330,6 +331,14 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 **Action:** Merge configuration (preserve existing settings)  
 **Result:** CORTEX MCP tools available in Copilot Chat after VS Code reload
 
+**CRITICAL: Zero-Exception Setup Requirements:**
+- ✅ MUST resolve `${workspaceFolder}` to absolute path at setup time
+- ✅ MUST verify `.venv/bin/python` exists before injection (fallback to `python3` if missing)
+- ✅ MUST validate JSON syntax before writing to settings.json
+- ✅ MUST create `.vscode/settings.json` if it doesn't exist
+- ✅ MUST NOT proceed without successful MCP server startup verification
+- ✅ MUST log setup results to `.cortex/setup.log` for debugging
+
 **Available Tools After Setup:**
 - `cortex_process_request` - Main request processing (TDD, implementation)
 - `cortex_lens_analyze` - Code intelligence (security, complexity)
@@ -337,6 +346,10 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 - `cortex_total_recall` - Feature discovery
 - `cortex_git_history` - Git context analysis (24h)
 - `cortex_detect_duplicates` - CORE-035 violation detection
+- `cortex_plan_setup` - Pre-execution phase hook
+- `cortex_plan_execute_autonomous` - Multi-stage autonomous execution
+- `cortex_plan_teardown` - Post-execution phase hook
+- `cortex_plan_sync` - Dashboard synchronization
 
 ### Manual Upgrade Options
 
@@ -346,6 +359,119 @@ If `.vscode/settings.json` exists but lacks MCP configuration, automatically inj
 3. Type **"show changes"** → Display version diff
 
 **Network failure?** Gracefully continue with current version
+
+---
+
+## ⚡ MCP ACTIVATION & AVAILABILITY (P0 - MANDATORY GATE)
+
+**Authority:** CORE-049 + CORE-030 + MCP-FIRST + MCP-GATE  
+**Trigger:** Session start + before ANY IMPLEMENT/FIX/REFACTOR intent  
+**Requirement:** ZERO exceptions — MCP MUST be available or session HALTS
+
+### MCP Activation Sequence (Every Session)
+
+```
+Session Start
+    ↓
+1. DETECT MCP Tools Available
+   - cortex_process_request
+   - cortex_lens_analyze
+   - cortex_challenge
+   - (10 total tools)
+    ↓
+2. CHECK Activation Status
+   ├─ Tool Registry Query (PRIMARY)
+   ├─ Environment Variables (SECONDARY)
+   └─ Configuration File (TERTIARY)
+    ↓
+3. RESULT
+   ├─ [✅ AVAILABLE] → Load full CORTEX capabilities
+   ├─ [⚠️ PARTIAL] → Load reduced capabilities + warn user
+   └─ [❌ UNAVAILABLE] → HALT session, show setup instructions
+```
+
+### MCP Availability Check (3-Method Detection)
+
+**Method 1: Tool Registry Query (PRIMARY)**
+```python
+# Check if cortex_* tools exist in Copilot's tool registry
+available_tools = get_copilot_tools_registry()
+mcp_tools = [t for t in available_tools if t.startswith("cortex_")]
+
+if len(mcp_tools) >= 10:
+    print("✅ MCP Available: All 10 tools registered")
+else:
+    print(f"⚠️ MCP Partial: Only {len(mcp_tools)}/10 tools found")
+```
+
+**Method 2: Environment Variable Check (SECONDARY)**
+```python
+# Check if CORTEX_MCP_ENABLED environment variable set
+if os.getenv("CORTEX_MCP_ENABLED") == "true":
+    print("✅ MCP Detected: CORTEX_MCP_ENABLED=true")
+```
+
+**Method 3: Configuration File Check (TERTIARY)**
+```python
+# Verify .vscode/settings.json contains MCP server config
+settings = load_json(".vscode/settings.json")
+if "github.copilot.chat.mcpServers" in settings:
+    if "cortex" in settings["github.copilot.chat.mcpServers"]:
+        print("✅ MCP Configured: .vscode/settings.json verified")
+```
+
+### P0 Check Results & Actions
+
+| Status | User Message | Action |
+|--------|--------------|--------|
+| ✅ **AVAILABLE** | "🟢 MCP Ready: 10 tools available" | Continue with full CORTEX |
+| ⚠️ **PARTIAL** | "🟡 MCP Partial: {N}/10 tools available" | WARN user, allow read-only operations |
+| ❌ **UNAVAILABLE** | "🔴 MCP Not Available: Setup required" | HALT, show instructions |
+
+### Session Halt (MCP Unavailable)
+
+**When MCP unavailable for IMPLEMENT/FIX/REFACTOR/AUDIT/ANALYZE/PLAN:**
+
+```
+❌ CORTEX Session Blocked: MCP Not Available
+
+Status:
+  - Tool Registry: No cortex_* tools found
+  - Environment: CORTEX_MCP_ENABLED not set
+  - Configuration: .vscode/settings.json missing/incomplete
+
+Available Options:
+
+A) AUTO-SETUP (Recommended):
+   python .cortex/setup-mcp.py
+
+B) Manual Configuration:
+   1. Edit .vscode/settings.json
+   2. Add cortex MCP server config
+   3. Restart VS Code
+   4. Check .cortex/setup.log
+
+C) Start MCP Server:
+   python -m cortex.mcp
+   (then restart VS Code)
+
+⚠️ Note: CORTEX enforces MCP-FIRST (no fallback to direct file ops)
+Reference: .github/prompts/MCP-SETUP-GUIDE.md
+```
+
+### Intent-Based MCP Requirements
+
+| Intent | MCP Required | Fallback Allowed |
+|--------|--------------|------------------|
+| IMPLEMENT | ✅ YES | ❌ NO - HALT |
+| FIX | ✅ YES | ❌ NO - HALT |
+| REFACTOR | ✅ YES | ❌ NO - HALT |
+| AUDIT | ✅ YES | ❌ NO - HALT |
+| ANALYZE | ✅ YES | ❌ NO - HALT |
+| PLAN | ✅ YES | ❌ NO - HALT |
+| LIST | ⚠️ OPTIONAL | ✅ YES - read-only |
+| QUERY | ⚠️ OPTIONAL | ✅ YES - educational |
+| RECALL | ⚠️ OPTIONAL | ✅ YES - discovery |
 
 ---
 
@@ -1414,6 +1540,153 @@ Advanced Level:
     - Extensibility considerations
     - Reference to research/best practices
 ```
+
+---
+
+## 🎨 Enhanced Response Template (Section 14)
+
+### Semantic Color-Coded Headers
+
+CORTEX responses now use emoji-prefixed headers for instant visual status assessment. This enables users to understand work status at a glance without reading entire responses.
+
+**Status Indicators (7 Total):**
+
+| Emoji | Status | Color | Keywords | Use Case |
+|-------|--------|-------|----------|----------|
+| ✅ | COMPLETE | Green | complete, success, passed, ready, finished | Task finished, tests passed, ready deployments |
+| 🔵 | IN_PROGRESS | Orange | in progress, pending, next, todo, active | Active work, pending items, next actions |
+| 🔴 | BLOCKED | Red | blocked, critical, failed, error, emergency | Critical issues, blockers, failures |
+| ➡️ | PLANNED | Orange | planned, upcoming, next phase, future | Future work, planning, upcoming phases |
+| 🎨 | DESIGN | Blue | design, analysis, information, proposal | Neutral analysis, design decisions, info |
+| ⚠️ | WARNING | Yellow | warning, caution, attention, issue | Caution needed, potential problems |
+| 🚨 | CRITICAL | Red | critical, emergency, immediate, blocker | Emergency situations, immediate action |
+
+### Auto-Detection Rules
+
+Headers automatically colorize based on content keywords:
+
+**Complete (✅):** "complete", "completed", "success", "passed", "ready", "finished"  
+**In Progress (🔵):** "in progress", "pending", "next", "todo", "active"  
+**Blocked (🔴):** "blocked", "critical", "failed", "error", "emergency"  
+**Planned (➡️):** "planned", "upcoming", "next phase", "future"  
+**Design (🎨):** "design", "analysis", "information"  
+**Warning (⚠️):** "warning", "caution", "attention"  
+**Critical (🚨):** "critical", "emergency", "immediate"  
+
+### Implementation in Agents
+
+All agents use `ResponseTemplate.create_header()` for response headers:
+
+```python
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
+# Auto-detect status from title
+header = ResponseTemplate.create_header("FIX 1: Implementation Complete")
+# Output: ## ✅ FIX 1: Implementation Complete
+
+# Manual status selection
+from cortex.agents.core.response_template_generator import SectionStatus
+header = EnhancedHeader(
+    title="Database Migration",
+    status=SectionStatus.IN_PROGRESS
+).render()
+# Output: ## 🔵 Database Migration
+
+# Generate session summary with metrics
+summary = ResponseTemplate.session_summary(
+    session_name="Weekly Sprint",
+    completed_items=["Feature A", "Bug Fix B"],
+    in_progress_items=["Feature C"],
+    blocked_items=[],
+    next_steps=["Code review", "Deployment"],
+    token_usage=(150, 200)
+)
+```
+
+### Session Summary Format
+
+All session summaries MUST follow this structure:
+
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## {emoji} SESSION SUMMARY
+**Session:** {name} | **Status:** {overall_status}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 📊 Token Usage
+**Used:** {used}k / {total}k ({percentage}%)
+**Status:** {status_emoji} {health_message}
+
+## ✅ COMPLETED
+- ✅ Item 1
+- ✅ Item 2
+
+## 🔵 IN PROGRESS
+- 🔵 Item 3
+
+## 🔴 BLOCKED (if any)
+- 🔴 Item 4
+
+## ➡️ NEXT STEPS
+1. Next action 1
+2. Next action 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Integration Points
+
+**Agent Files (5 Core Orchestrators):**
+- MasterOrchestrator: `cortex/orchestrators/master_orchestrator.py`
+- TDDOrchestrator: `cortex/orchestrators/tdd_orchestrator.py`
+- IntentRouter: `cortex/orchestrators/intent_router.py`
+- RefactoringOrchestrator: `cortex/orchestrators/refactoring_orchestrator.py`
+- LENSSynthesis: `cortex/orchestrators/lens_synthesis.py`
+
+**MCP Tools:** All tools should use `ResponseTemplate.create_header()`
+
+**Registry Files:**
+- `.github/agents/core/response-template-generator.py` (197 LOC)
+- `cortex-registry/_cortex-master/meta/response-template-enhanced.yaml`
+- `cortex-registry/_cortex-master/meta/semantic-color-coding-section.yaml`
+- `cortex-registry/_cortex-master/meta/response-format.yaml`
+
+### Color Technique Compatibility
+
+Uses **emoji prefix method** (recommended for maximum compatibility):
+
+```markdown
+## ✅ Header Title           ← Emoji prefix (works everywhere)
+## 🔵 Another Header         ← Auto-detected from content
+## 🔴 Critical Issue          ← Always visible in plain text
+```
+
+**Why emoji-based:**
+- ✅ Works in all Markdown renderers
+- ✅ Visible in plain text
+- ✅ Copy-pasteable
+- ✅ No HTML/CSS required
+- ✅ Accessible (screen reader friendly)
+- ✅ Backward compatible (old-style headers work)
+
+### Quick Copy-Paste Headers
+
+```markdown
+## ✅ {YOUR_TITLE}      # Complete/Success
+## 🔵 {YOUR_TITLE}      # In Progress/Pending
+## 🔴 {YOUR_TITLE}      # Blocked/Critical
+## ➡️ {YOUR_TITLE}       # Planned/Next
+## 🎨 {YOUR_TITLE}       # Design/Analysis
+## ⚠️ {YOUR_TITLE}       # Warning/Caution
+## 🚨 {YOUR_TITLE}       # Critical/Emergency
+```
+
+### Reference
+
+**Implementation:** `.github/agents/core/response-template-generator.py` (197 LOC)  
+**Integration Guide:** `.github/agents/core/RESPONSE-TEMPLATE-INTEGRATION.md` (420 LOC)  
+**Registry Manifest:** `cortex-registry/_cortex-master/meta/INTEGRATION-MANIFEST-002.md` (300 LOC)  
+**Authority:** cortex-architect.prompt.md v15.4 + ENH-053 (Semantic Response Coloring)
 
 ---
 

@@ -139,6 +139,63 @@ class CoreRulesLoader(BaseYAMLLoader):
         
         return rules
 
+    # Additional methods for governance tools
+    def get_all_rules(self) -> list:
+        """Get all rules (core + special).
+        
+        Returns:
+            List of all CoreRule objects
+        """
+        data = self.load()
+        rules = list(data.core_rules)
+        if data.special_rules:
+            rules.extend(data.special_rules)
+        return rules
+
+    def get_enforcement_levels(self) -> Dict[str, list]:
+        """Get rules grouped by enforcement level.
+        
+        Returns:
+            Dictionary mapping enforcement level -> list of rules
+        """
+        data = self.load()
+        levels = {}
+        
+        for rule in data.core_rules:
+            if rule.enforcement:
+                if rule.enforcement not in levels:
+                    levels[rule.enforcement] = []
+                levels[rule.enforcement].append(rule)
+        
+        if data.special_rules:
+            for rule in data.special_rules:
+                if rule.enforcement:
+                    if rule.enforcement not in levels:
+                        levels[rule.enforcement] = []
+                    levels[rule.enforcement].append(rule)
+        
+        return levels
+
+    def get_policy_categories(self) -> list:
+        """Get list of unique policy enforcement levels.
+        
+        Returns:
+            List of enforcement level names
+        """
+        data = self.load()
+        levels = set()
+        
+        for rule in data.core_rules:
+            if rule.enforcement:
+                levels.add(rule.enforcement)
+        
+        if data.special_rules:
+            for rule in data.special_rules:
+                if rule.enforcement:
+                    levels.add(rule.enforcement)
+        
+        return sorted(list(levels))
+
 
 class AuditChecklistLoader(BaseYAMLLoader):
     """Loader for audit-checklist.yaml with validation."""
@@ -286,6 +343,147 @@ class ResponseFormatLoader(BaseYAMLLoader):
             else:
                 result[key] = value
         return result
+
+
+class TierRulesLoader:
+    """Loader for Tier 1/2 (project/team) governance rules from database.
+    
+    Tier 0: Core rules (YAML, immutable)
+    Tier 1: Project-level rules (database, project-scoped)
+    Tier 2: Team-level rules (database, team-scoped)
+    """
+    
+    def __init__(self) -> None:
+        """Initialize Tier rules loader."""
+        # Lazily loaded database manager
+        self._db_manager = None
+    
+    def _get_db(self):
+        """Get database manager instance (lazy load).
+        
+        Returns:
+            GovernanceDatabaseManager singleton
+        """
+        if self._db_manager is None:
+            from cortex.brain.core.governance_database import GovernanceDatabaseManager
+            self._db_manager = GovernanceDatabaseManager.instance()
+            self._db_manager.initialize()
+        return self._db_manager
+    
+    def get_project_rules(self) -> list:
+        """Get all Tier 1 (project-level) rules.
+        
+        Returns:
+            List of project-level GovernanceRule objects
+        """
+        db = self._get_db()
+        rules = db.list_rules(tier=1)
+        return [rule.to_dict() for rule in rules]
+    
+    def get_team_rules(self) -> list:
+        """Get all Tier 2 (team-level) rules.
+        
+        Returns:
+            List of team-level GovernanceRule objects
+        """
+        db = self._get_db()
+        rules = db.list_rules(tier=2)
+        return [rule.to_dict() for rule in rules]
+    
+    def get_rule_by_id(self, rule_id: str, tier: int) -> Optional[Dict[str, Any]]:
+        """Get specific rule by ID from Tier 1 or 2.
+        
+        Args:
+            rule_id: Rule identifier
+            tier: Tier level (1 or 2)
+            
+        Returns:
+            Rule dict if found, None otherwise
+        """
+        db = self._get_db()
+        rule = db.get_rule(rule_id, tier)
+        
+        if rule:
+            return rule.to_dict()
+        return None
+    
+    def get_rules_by_category(self, category: str, tier: int = 1) -> list:
+        """Get all rules with specific category.
+        
+        Args:
+            category: Rule category
+            tier: Tier level (1 or 2)
+            
+        Returns:
+            List of rules with given category
+        """
+        db = self._get_db()
+        rules = db.get_rules_by_category(category, tier)
+        return [rule.to_dict() for rule in rules]
+    
+    def get_rules_by_severity(self, severity: str, tier: int = 1) -> list:
+        """Get all rules with specific severity.
+        
+        Args:
+            severity: Rule severity (CRITICAL, HIGH, MEDIUM, LOW)
+            tier: Tier level (1 or 2)
+            
+        Returns:
+            List of rules with given severity
+        """
+        db = self._get_db()
+        rules = db.get_rules_by_severity(severity, tier)
+        return [rule.to_dict() for rule in rules]
+    
+    def get_rules_by_enforcement_point(self, enforcement_point: str, tier: int = 1) -> list:
+        """Get all rules with specific enforcement point.
+        
+        Args:
+            enforcement_point: Enforcement point name
+            tier: Tier level (1 or 2)
+            
+        Returns:
+            List of rules with given enforcement point
+        """
+        db = self._get_db()
+        rules = db.get_rules_by_enforcement_point(enforcement_point, tier)
+        return [rule.to_dict() for rule in rules]
+    
+    def search_rules(self, query_term: str, tier: int = 1) -> list:
+        """Search rules by query term.
+        
+        Args:
+            query_term: Search term (matches name, description, category)
+            tier: Tier level (1 or 2)
+            
+        Returns:
+            List of matching rules
+        """
+        db = self._get_db()
+        rules = db.search_rules(query_term, tier)
+        return [rule.to_dict() for rule in rules]
+    
+    def get_enforcement_statistics(self) -> Dict[str, Any]:
+        """Get statistics about Tier rules.
+        
+        Returns:
+            Dictionary with rule counts and metrics
+        """
+        db = self._get_db()
+        
+        # Get counts from both tiers
+        tier1_rules = db.list_rules(tier=1)
+        tier2_rules = db.list_rules(tier=2)
+        
+        stats = {
+            "total_project_rules": len(tier1_rules),
+            "total_team_rules": len(tier2_rules),
+            "total_rules": len(tier1_rules) + len(tier2_rules),
+            "active_project_rules": sum(1 for r in tier1_rules if r.is_active),
+            "active_team_rules": sum(1 for r in tier2_rules if r.is_active),
+        }
+        
+        return stats
 
 
 # Global loader registry with lazy initialization

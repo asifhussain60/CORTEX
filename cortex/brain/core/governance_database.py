@@ -35,7 +35,7 @@ import sqlite3
 import json
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
@@ -833,6 +833,241 @@ class GovernanceDatabaseManager:
             Number of cached entries
         """
         return self._query_cache.size()
+
+    # ========================================================================
+    # ADDITIONAL QUERY METHODS (for governance tools)
+    # ========================================================================
+
+    def get_violations_by_rule(self, rule: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+        """
+        Get violations by rule (from audit log).
+        
+        Args:
+            rule: Optional rule_id filter
+            limit: Maximum number of results
+            
+        Returns:
+            List of violation records
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            if rule:
+                cursor.execute(
+                    """
+                    SELECT * FROM governance_audit_log 
+                    WHERE rule_id = ? AND is_compliant = 0
+                    ORDER BY timestamp DESC
+                    LIMIT ?
+                    """,
+                    (rule, limit)
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT * FROM governance_audit_log 
+                    WHERE is_compliant = 0
+                    ORDER BY timestamp DESC
+                    LIMIT ?
+                    """,
+                    (limit,)
+                )
+            
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+
+    def get_violations_since(self, days: int = 7) -> List[Dict[str, Any]]:
+        """
+        Get violations from the last N days.
+        
+        Args:
+            days: Number of days to look back
+            
+        Returns:
+            List of violation records
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            # Calculate cutoff timestamp
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            
+            cursor.execute(
+                """
+                SELECT * FROM governance_audit_log 
+                WHERE timestamp >= ? AND is_compliant = 0
+                ORDER BY timestamp DESC
+                """,
+                (cutoff,)
+            )
+            
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+
+    def get_operation_count(self, days: int = 7) -> int:
+        """
+        Get count of governance operations in the last N days.
+        
+        Args:
+            days: Number of days to look back
+            
+        Returns:
+            Total operation count
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            
+            cursor.execute(
+                """
+                SELECT COUNT(*) FROM governance_audit_log 
+                WHERE timestamp >= ?
+                """,
+                (cutoff,)
+            )
+            
+            result = cursor.fetchone()
+            return result[0] if result else 0
+
+    def get_execution_history(self, days: int = 7) -> List[Dict[str, Any]]:
+        """
+        Get execution history for the last N days.
+        
+        Args:
+            days: Number of days to look back
+            
+        Returns:
+            List of execution records
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            
+            cursor.execute(
+                """
+                SELECT * FROM governance_audit_log 
+                WHERE timestamp >= ?
+                ORDER BY timestamp DESC
+                """,
+                (cutoff,)
+            )
+            
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+
+    def get_active_rules_count(self, tier: int = RuleTier.TIER_1.value) -> int:
+        """
+        Get count of active rules.
+        
+        Args:
+            tier: Rule tier
+            
+        Returns:
+            Count of active rules
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            table_name = "project_rules" if tier == RuleTier.TIER_1.value else "team_rules"
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE is_active = 1")
+            
+            result = cursor.fetchone()
+            return result[0] if result else 0
+
+    def log_enforcement(self, rule_id: str, actor: str, result: str) -> None:
+        """
+        Log a rule enforcement action.
+        
+        Args:
+            rule_id: The rule that was enforced
+            actor: The actor performing enforcement
+            result: The result of enforcement (BLOCKED, WARNING, PASSED)
+        """
+        self.log_audit_event(
+            rule_id=rule_id,
+            action=f"ENFORCEMENT_{result}",
+            actor=actor,
+            reason=f"Rule enforcement action"
+        )
+
+    def log_blocking(self, rule_id: str, actor: str, reason: str) -> None:
+        """
+        Log a blocking action.
+        
+        Args:
+            rule_id: The rule that triggered blocking
+            actor: The actor initiating the block
+            reason: The reason for blocking
+        """
+        self.log_audit_event(
+            rule_id=rule_id,
+            action="OPERATION_BLOCKED",
+            actor=actor,
+            reason=reason
+        )
+
+    def get_audit_trail(self, rule_id: Optional[str] = None, days: int = 30) -> List[Dict[str, Any]]:
+        """
+        Get audit trail for a rule or all rules.
+        
+        Args:
+            rule_id: Optional specific rule filter
+            days: Number of days to look back
+            
+        Returns:
+            List of audit log entries
+        """
+        with self._db_lock:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            
+            if rule_id:
+                cursor.execute(
+                    """
+                    SELECT * FROM governance_audit_log 
+                    WHERE rule_id = ? AND timestamp >= ?
+                    ORDER BY timestamp DESC
+                    """,
+                    (rule_id, cutoff)
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT * FROM governance_audit_log 
+                    WHERE timestamp >= ?
+                    ORDER BY timestamp DESC
+                    """,
+                    (cutoff,)
+                )
+            
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+
+    def log_remediation(self, rule_id: str, actor: str, action: str, description: str) -> None:
+        """
+        Log a remediation action.
+        
+        Args:
+            rule_id: The rule that was remediated
+            actor: The actor performing remediation
+            action: The remediation action taken
+            description: Description of remediation
+        """
+        self.log_audit_event(
+            rule_id=rule_id,
+            action=f"REMEDIATION_{action}",
+            actor=actor,
+            reason=description
+        )
 
     def verify_schema(self) -> bool:
         """

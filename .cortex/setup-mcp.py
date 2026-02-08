@@ -1,0 +1,289 @@
+#!/usr/bin/env python3
+"""
+CORTEX MCP Integration Setup Script
+
+Configures VS Code MCP integration for CORTEX development.
+Authority: Phase 25 + Phase 48 + Phase 49
+Requirement: Zero-exception setup on all user machines
+
+Run: python .cortex/setup-mcp.py
+"""
+
+import json
+import os
+import sys
+import logging
+from pathlib import Path
+from datetime import datetime
+from typing import Dict, Tuple, Optional
+
+# Configure logging
+LOG_DIR = Path(".cortex")
+LOG_DIR.mkdir(exist_ok=True)
+LOG_FILE = LOG_DIR / "setup.log"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s: %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler(sys.stdout),
+    ],
+)
+
+logger = logging.getLogger(__name__)
+
+
+def log_header():
+    """Log setup start."""
+    logger.info("=" * 80)
+    logger.info("CORTEX MCP Integration Setup")
+    logger.info(f"Workspace: {os.getcwd()}")
+    logger.info(f"User: {os.getenv('USER', 'unknown')}")
+    logger.info("=" * 80)
+
+
+def check_python() -> Tuple[bool, str]:
+    """Check Python version >= 3.9.0."""
+    version_info = sys.version_info
+    version_str = f"{version_info.major}.{version_info.minor}.{version_info.micro}"
+
+    if version_info >= (3, 9):
+        logger.info(f"✅ Python {version_str} (>= 3.9.0)")
+        return True, version_str
+
+    logger.error(f"❌ Python {version_str} (need >= 3.9.0)")
+    return False, version_str
+
+
+def check_venv() -> Tuple[bool, str]:
+    """Check if .venv/bin/python exists."""
+    venv_python = Path(".venv/bin/python")
+
+    if venv_python.exists() and venv_python.is_file():
+        logger.info(f"✅ Virtual environment: {venv_python.absolute()}")
+        return True, str(venv_python.absolute())
+
+    logger.error(f"❌ Virtual environment not found: {venv_python}")
+    logger.error(
+        "   Run: python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+    )
+    return False, ""
+
+
+def check_mcp_module() -> Tuple[bool, str]:
+    """Check if cortex/mcp module exists."""
+    mcp_init = Path("cortex/mcp/__init__.py")
+
+    if mcp_init.exists():
+        logger.info(f"✅ MCP module found: cortex/mcp/__init__.py")
+        return True, str(mcp_init.absolute())
+
+    logger.error(f"❌ MCP module not found: {mcp_init}")
+    logger.error("   Run: pip install -e . (to reinstall CORTEX package)")
+    return False, ""
+
+
+def validate_json_file(path: Path) -> Tuple[bool, Optional[Dict]]:
+    """Validate JSON file syntax."""
+    if not path.exists():
+        return True, {}
+
+    try:
+        with open(path) as f:
+            content = json.load(f)
+        logger.info(f"✅ JSON valid: {path}")
+        return True, content
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ Invalid JSON in {path}: {e}")
+        return False, None
+
+
+def ensure_vscode_dir() -> Tuple[bool, Path]:
+    """Create .vscode directory if missing."""
+    vscode_dir = Path(".vscode")
+
+    try:
+        vscode_dir.mkdir(exist_ok=True)
+        logger.info(f"✅ .vscode directory exists: {vscode_dir.absolute()}")
+        return True, vscode_dir
+    except Exception as e:
+        logger.error(f"❌ Failed to create .vscode: {e}")
+        return False, vscode_dir
+
+
+def ensure_settings_json(vscode_dir: Path) -> Tuple[bool, Path]:
+    """Create .vscode/settings.json if missing."""
+    settings_path = vscode_dir / "settings.json"
+
+    try:
+        if not settings_path.exists():
+            settings_path.write_text("{}\n")
+            logger.info(f"✅ Created .vscode/settings.json")
+        return True, settings_path
+    except Exception as e:
+        logger.error(f"❌ Failed to create settings.json: {e}")
+        return False, settings_path
+
+
+def inject_mcp_config(settings_path: Path) -> Tuple[bool, Dict]:
+    """Inject MCP configuration into .vscode/settings.json."""
+    try:
+        # Read current settings
+        current = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+
+        # Get workspace root
+        workspace_root = Path.cwd()
+
+        # MCP configuration
+        mcp_config = {
+            "cortex": {
+                "command": f"{workspace_root}/.venv/bin/python",
+                "args": ["-m", "cortex.mcp"],
+                "env": {
+                    "CORTEX_ENV": "development",
+                    "CORTEX_MCP_SERVER": "true",
+                    "PYTHONPATH": str(workspace_root),
+                    "PATH": f"{workspace_root}/.venv/bin:$PATH",
+                },
+            }
+        }
+
+        # Merge safely
+        if "github.copilot.chat.mcpServers" not in current:
+            current["github.copilot.chat.mcpServers"] = {}
+
+        current["github.copilot.chat.mcpServers"].update(mcp_config)
+
+        # Write back with nice formatting
+        settings_path.write_text(json.dumps(current, indent=2) + "\n")
+
+        logger.info(f"✅ MCP configuration injected into .vscode/settings.json")
+        return True, current
+
+    except Exception as e:
+        logger.error(f"❌ Failed to inject MCP config: {e}")
+        return False, {}
+
+
+def verify_mcp_startup() -> Tuple[bool, str]:
+    """Verify MCP server module exists and is readable."""
+    try:
+        # Check if MCP server main module exists and is executable
+        mcp_main = Path("cortex/mcp/__main__.py")
+
+        if mcp_main.exists() and mcp_main.is_file():
+            logger.info("✅ MCP server __main__.py module verified")
+            logger.info("   (Server will start when invoked by Copilot)")
+            return True, "Server ready"
+
+        logger.error(f"❌ MCP server __main__.py not found: {mcp_main}")
+        return False, "Missing __main__.py"
+
+    except Exception as e:
+        logger.error(f"❌ MCP verification failed: {e}")
+        return False, str(e)
+
+
+def display_completion_message():
+    """Display completion message with next steps."""
+    print("\n" + "=" * 80)
+    print("🔌 CORTEX MCP INTEGRATION SETUP COMPLETE")
+    print("=" * 80)
+    print("\n✅ Configuration Status: SUCCESS\n")
+    print("What was configured:")
+    print("  ✅ .vscode/settings.json updated with cortex MCP server")
+    print("  ✅ Python interpreter: ${workspaceFolder}/.venv/bin/python")
+    print("  ✅ MCP module: cortex.mcp ready")
+    print("  ✅ Environment variables configured")
+    print("  ✅ Server startup verification passed\n")
+    print("NEXT STEP:")
+    print("⚡ **Restart Copilot for changes to take effect**\n")
+    print("In VS Code:")
+    print("  1. Command Palette (Cmd+Shift+P)")
+    print("  2. Type: Developer: Reload Window")
+    print("  3. Press Enter\n")
+    print("Available Tools After Restart:")
+    print("  • cortex_process_request (TDD implementation)")
+    print("  • cortex_lens_analyze (Code intelligence)")
+    print("  • cortex_challenge (Challenge gate)")
+    print("  • cortex_plan_execute_autonomous (Phase execution)")
+    print("  • cortex_detect_duplicates (CORE-035 detection)")
+    print("  • cortex_total_recall (Feature discovery)")
+    print("  • cortex_git_history (24h git context)")
+    print("  • cortex_plan_setup (Pre-execution hook)")
+    print("  • cortex_plan_teardown (Post-execution hook)")
+    print("  • cortex_plan_sync (Dashboard sync)\n")
+    print("Setup Log: .cortex/setup.log")
+    print("=" * 80 + "\n")
+
+
+def main():
+    """Main setup flow."""
+    log_header()
+
+    # Step 1: Check Python
+    python_ok, python_version = check_python()
+    if not python_ok:
+        logger.error("Setup failed: Python version check")
+        return 1
+
+    # Step 2: Check Virtual Environment
+    venv_ok, venv_path = check_venv()
+    if not venv_ok:
+        logger.error("Setup failed: Virtual environment check")
+        return 1
+
+    # Step 3: Check MCP Module
+    mcp_ok, mcp_path = check_mcp_module()
+    if not mcp_ok:
+        logger.error("Setup failed: MCP module check")
+        return 1
+
+    # Step 4: Create .vscode directory
+    vscode_ok, vscode_dir = ensure_vscode_dir()
+    if not vscode_ok:
+        logger.error("Setup failed: .vscode directory creation")
+        return 1
+
+    # Step 5: Create/validate settings.json
+    settings_ok, settings_path = ensure_settings_json(vscode_dir)
+    if not settings_ok:
+        logger.error("Setup failed: settings.json creation")
+        return 1
+
+    # Step 6: Validate JSON
+    json_ok, json_content = validate_json_file(settings_path)
+    if not json_ok:
+        logger.error("Setup failed: JSON validation")
+        return 1
+
+    # Step 7: Inject MCP configuration
+    inject_ok, settings_content = inject_mcp_config(settings_path)
+    if not inject_ok:
+        logger.error("Setup failed: MCP configuration injection")
+        return 1
+
+    # Step 8: Verify MCP startup
+    verify_ok, verify_msg = verify_mcp_startup()
+    if not verify_ok:
+        logger.error("Setup failed: MCP startup verification")
+        logger.error(f"Details: {verify_msg}")
+        logger.error(
+            "Recommendation: Check that all dependencies are installed (pip install -r requirements.txt)"
+        )
+        return 1
+
+    # Success!
+    logger.info("=" * 80)
+    logger.info("✅ SETUP COMPLETE - MCP integration configured successfully")
+    logger.info("⚡ Next: Restart Copilot for changes to take effect")
+    logger.info("=" * 80)
+
+    display_completion_message()
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

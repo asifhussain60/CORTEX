@@ -1,0 +1,132 @@
+# Semantic Color Coding Enhancement Appended to response-format.yaml
+# This section should be appended to the existing response-format.yaml file
+
+# SEMANTIC COLOR CODING (NEW - v1.1)
+# Purpose: Instant visual status assessment via emoji prefixes
+# Authority: Section 14 of cortex-architect.prompt.md
+# Effective: 2026-02-09
+
+semantic_color_coding:
+  enabled: true
+  version: "1.0"
+  template_file: "response-template-enhanced.yaml"
+  implementation_file: ".github/agents/core/response-template-generator.py"
+  
+  description: |
+    Emoji-prefixed headers for instant visual status assessment.
+    Supports auto-detection from content keywords.
+    Zero markdown-specific syntax required (compatible everywhere).
+  
+  status_indicators:
+    complete:
+      emoji: "✅"
+      color: "green"
+      use_cases: ["Completion", "Success", "PASSED", "READY"]
+      keywords: ["complete", "success", "passed", "ready", "finished"]
+      example: "## ✅ FIX 1: Implementation Complete"
+    
+    in_progress:
+      emoji: "🔵"
+      color: "orange"
+      use_cases: ["Active work", "Pending", "Next", "TODO"]
+      keywords: ["in progress", "pending", "next", "todo", "active"]
+      example: "## 🔵 FIX 2: In Progress"
+    
+    blocked:
+      emoji: "🔴"
+      color: "red"
+      use_cases: ["Critical issue", "BLOCKED", "FAILED", "ERROR"]
+      keywords: ["blocked", "critical", "failed", "error"]
+      example: "## 🔴 Database Connection Failed"
+    
+    planned:
+      emoji: "➡️"
+      color: "orange"
+      use_cases: ["Upcoming work", "Planning", "Future tasks"]
+      keywords: ["planned", "upcoming", "next phase", "future"]
+      example: "## ➡️ NEXT: Source Code Consolidation"
+    
+    design:
+      emoji: "🎨"
+      color: "blue"
+      use_cases: ["Analysis", "Design", "Information"]
+      keywords: ["design", "analysis", "information"]
+      example: "## 🎨 Architecture Analysis"
+    
+    warning:
+      emoji: "⚠️"
+      color: "yellow"
+      use_cases: ["Caution", "Attention needed"]
+      keywords: ["warning", "caution", "attention"]
+      example: "## ⚠️ Deprecation Warning"
+    
+    critical:
+      emoji: "🚨"
+      color: "red"
+      use_cases: ["Emergency", "Blocker"]
+      keywords: ["critical", "emergency", "immediate"]
+      example: "## 🚨 Production Down"
+  
+  auto_detection:
+    enabled: true
+    total_patterns: 24
+    source_file: ".github/agents/core/response-template-generator.py"
+    example: |
+      Input:  "FIX 1: Implementation Complete"
+      Detect: "complete" keyword → COMPLETE status
+      Output: "## ✅ FIX 1: Implementation Complete"
+  
+  integration_points:
+    agent_files:
+      - "cortex/orchestrators/master_orchestrator.py"
+      - "cortex/orchestrators/tdd_orchestrator.py"
+      - "cortex/orchestrators/intent_router.py"
+      - "cortex/orchestrators/refactoring_orchestrator.py"
+      - "cortex/orchestrators/lens_synthesis.py"
+    
+    mcp_tools: "All tools should use ResponseTemplate.create_header()"
+    
+    prompt_files:
+      - ".github/prompts/cortex-architect.prompt.md (Section 14)"
+      - ".github/prompts/response-format-standards.md"
+  
+  session_summary_format: |
+    ## {emoji} SESSION SUMMARY
+    **Session:** {name} | **Status:** {overall_status}
+    
+    ## 📊 Token Usage
+    **Used:** {used}k / {total}k ({percentage}%)
+    **Status:** {status_emoji} {health_message}
+    
+    ## ✅ COMPLETED
+    - ✅ Item 1
+    - ✅ Item 2
+    
+    ## 🔵 IN PROGRESS
+    - 🔵 Item 3
+    
+    ## 🔴 BLOCKED (if any)
+    - 🔴 Item 4
+    
+    ## ➡️ NEXT STEPS
+    1. Next action 1
+    2. Next action 2
+  
+  implementation_reference:
+    python_file: ".github/agents/core/response-template-generator.py"
+    python_lines: "1-197"
+    usage_examples:
+      auto_detect: |
+        from cortex.agents.core.response_template_generator import ResponseTemplate
+        header = ResponseTemplate.create_header("FIX 1: Complete")
+        # Output: ## ✅ FIX 1: Complete
+      
+      session_summary: |
+        summary = ResponseTemplate.session_summary(
+            session_name="Weekly Sprint",
+            completed_items=["Feature A"],
+            in_progress_items=["Feature B"],
+            blocked_items=[],
+            next_steps=["Review"],
+            token_usage=(150, 200)
+        )

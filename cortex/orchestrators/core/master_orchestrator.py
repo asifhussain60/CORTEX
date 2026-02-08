@@ -43,6 +43,9 @@ from cortex.brain.mcp.decorator import mcp_tool
 from cortex.core.intent.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 
+# Phase 51: Enhanced response template with semantic color coding
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
