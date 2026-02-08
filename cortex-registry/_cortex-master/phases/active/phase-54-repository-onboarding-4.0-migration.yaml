@@ -23,10 +23,10 @@ metadata:
   author: "Asif Hussain"
   created_date: "2026-02-08T00:00:00Z"
   target_start: "2026-02-10"
-  estimated_duration: "16 hours"
-  test_target: 85
+  estimated_duration: "21 hours"
+  test_target: 115
   coverage_target: 92
-  roi_score: 0.82
+  roi_score: 0.87
   cross_cutting: false
   breaking_changes: false
   production_blocker: false
@@ -76,8 +76,10 @@ overview:
     3. Restore LENSOrchestrator caching layer
     4. Add Jinja2 template system for dashboards
     5. Reduce orchestrator from 2,448 → ~500 LOC
-    6. Maintain 100% feature parity
-    7. 10x performance improvement via caching
+    6. Extract TDD state machine (archive pattern)
+    7. Extract refactoring registry (plug-in pattern)
+    8. Maintain 100% feature parity
+    9. 10x performance improvement via caching
 
   problem_statement: |
     **Root Cause Analysis:** Archive/CORTEX-4.0 had working dashboard crawler
@@ -129,14 +131,14 @@ overview:
 
 # ============================================================================
 # ROI ANALYSIS
-# ============================================================================
-roi_analysis:
-  architectural_impact: 0.85   # Clean architecture restoration
+# ========================90   # Clean architecture restoration + TDD/refactoring patterns
   efficiency_gain: 0.90        # 10x performance via caching
-  accuracy_improvement: 0.75   # Better testability improves quality
-  effort_cost: 0.50            # 16 hours (moderate effort)
-  blocking_severity: 0.60      # Improves experience but not blocking
-  roi_score: 0.82
+  accuracy_improvement: 0.80   # Better testability improves quality
+  effort_cost: 0.45            # 21 hours (moderate-high effort)
+  blocking_severity: 0.65      # Improves experience but not blocking
+  roi_score: 0.87
+  formula: "(0.90×0.35) + (0.90×0.25) + (0.80×0.20) + ((1-0.45)×0.15) + (0.65×0.05)"
+  interpretation: "🔴 IMMEDIATE (≥0.75) — High ROI architectural improvement with governance patterns
   formula: "(0.85×0.35) + (0.90×0.25) + (0.75×0.20) + ((1-0.50)×0.15) + (0.60×0.05)"
   interpretation: "🔴 IMMEDIATE (≥0.75) — High ROI architectural improvement"
 
@@ -157,7 +159,7 @@ dependencies:
     - "Dashboard generation performance"
     - "Repository onboarding scalability"
     - "Custom dashboard templates"
-
+8
 # ============================================================================
 # STAGES (6 Stages — Execution Order)
 # ============================================================================
@@ -587,6 +589,276 @@ stages:
     validation:
       method: "Performance benchmarks + manual review"
       criteria: "≥5x speedup via caching, all tests passing"
+  stage_7:
+    name: "Extract TDD Orchestrator State Machine (Archive Pattern)"
+    id: "S7"
+    duration: "3 hours"
+    priority: "P1"
+    dependen100
+    priority: "P0"
+    frameworks:
+      - "pytest"
+      - "pytest-asyncio"
+      - "pytest-cov"
+    coverage_target: 92
+    test_files:
+      - "tests/orchestrators/support/onboarding_use_cases/ (41 tests)"
+      - "tests/repositories/test_json_profile_repository.py (15 tests)"
+      - "tests/orchestrators/support/test_lens_orchestrator_v2.py (20 tests)"
+      - "tests/orchestrators/support/test_dashboard_renderer.py (10 tests)"
+      - "tests/orchestrators/core/test_tdd_state_machine.py (5 tests)"
+      - "tests/orchestrators/core/tdd_executors/ (12 tests)"
+      - "tests/refactoring/test_registry.py (5 tests)"
+      - "tests/refactoring/test_plugin_discovery.py (3 tests)"
+  
+  integration_tests:
+    target: 15
+    priority: "P0"
+    test_files:
+      - "tests/orchestrators/support/test_repository_onboarding_orchestrator_integration.py (10 tests)"
+      - "tests/orchestrators/core/test_tdd_coordinator_integration.py (1 test)"
+      - "tests/refactoring/test_coordinator_integration.py (4
+      1. Create explicit TDDStateMachine with visible states/transitions
+      2. Extract phase executors: REDExecutor, GREENExecutor, REFACTORExecutor
+      3. Migrate to pure functions (Request → Result[Response])
+      4. Keep protocol infrastructure as middleware (NOT base class)
+      
+      **Architecture:**
+      ```
+      TDDCoordinator (150 LOC)
+        ├─ TDDStateMachine (state management)
+        ├─ REDExecutor (100 LOC) - test generation
+        ├─ GREENExecutor (100 LOC) - implementation
+        └─ REFACTORExecutor (100 LOC) - improvement
+      
+      Protocol Infrastructure (separate)
+        ├─ LENSSynthesisGateway (context enrichment)
+        ├─ SecurityCheckpointGateway (threat assessment)
+        ├─ ChallengeGenerationGateway (disagreement detection)
+        └─ DoRConfidenceGateway (readiness check)
+      ```
+      
+      Output: State machine + 3 executors + 18 tests.
+    
+    tasks:
+      - task: "Implement TDDStateMachine"
+        acceptance_criteria:
+          - "AC-054-S7-01: State machine defines IDLE/RED/GREEN/REFACTOR/COMPLETE states"
+          - "AC-054-S7-02: Transition rules explicit (RED → GREEN on test_failed)"
+          - "AC-054-S7-03: Invalid transitions raise StateMachineError"
+          - "AC-054-S7-04: 5+ unit tests (state transitions)"
+      
+      - task: "Extract REDExecutor"
+        acceptance_criteria:
+          - "AC-054-S7-05: Pure function: execute(request) → Result[Response]"
+          - "AC-054-S7-06: Generates failing test specifications"
+          - "AC-054-S7-07: No orchestrator dependencies"
+          - "AC-054-S7-08: 4+ unit tests"
+    
+    - path: "cortex/orchestrators/core/tdd_state_machine.py"
+      description: "Explicit TDD state machine"
+      lines_of_code: 100
+      test_coverage: 95
+    
+    - path: "cortex/orchestrators/core/tdd_executors/"
+      description: "RED/GREEN/REFACTOR executors (pure functions)"
+      lines_of_code: 300
+      test_coverage: 90
+    
+    - path: "cortex/orchestrators/core/tdd_coordinator.py"
+      description: "TDD coordinator (830 → 350 LOC)"
+      lines_of_code: 350
+      test_coverage: 88
+    
+    - path: "cortex/refactoring/registry.py"
+      description: "Refactoring adapter registry"
+      lines_of_code: 150
+      test_coverage: 90
+    
+    
+    - path: "tests/orchestrators/core/test_tdd_state_machine.py"
+      test_count: 5
+      description: "TDD state machine tests"
+    
+    - path: "tests/orchestrators/core/tdd_executors/"
+      test_count: 12
+      description: "RED/GREEN/REFACTOR executor tests"
+    
+    - path: "tests/orchestrators/core/test_tdd_coordinator_integration.py"
+    
+    - path: "docs/architecture/tdd-state-machine-pattern.md"
+      description: "TDD state machine architecture"
+    
+    - path: "docs/architecture/refactoring-plugin-system.md"
+      description: "Refactoring plugin discovery documentation"
+      test_count: 1
+      description: "TDD coordinator integration test"
+    
+    - path: "tests/refactoring/test_registry.py"
+      test_count: 5
+      description: "Refactoring registry tests"
+    
+    - path: "tests/refactoring/test_plugin_discovery.py"
+      test_count: 3
+      description: "Plugin discovery tests"
+    
+    - path: "tests/refactoring/test_coordinator_integration.py"
+      test_count: 4
+      description: "Refactoring coordinator integration tests"
+    - path: "cortex/refactoring/coordinator.py"
+      description: "Refactoring coordinator (277 → 120 LOC)"
+      lines_of_code: 120
+      test_coverage: 85
+      
+      - task: "Extract GREENExecutor"
+        acceptance_criteria:
+          - "AC-054-S7-09: Pure function: execute(request) → Result[Response]"
+          - "AC-054-S7-10: Generates minimal implementation code"
+          - "AC-054-S7-11: No orchestrator dependencies"
+          - "AC-054-S7-12: 4+ unit tests"
+      
+      - task: "Extract REFACTORExecutor"
+        acceptance_criteria:
+          - "AC-054-S7-13: Pure function: execute(request) → Result[Response]"
+          - "AC-054-S7-14: Applies best practices improvements"
+          - "AC-054-S7-15: No orchestrator dependencies"
+          - "AC-054-S7-16: 4+ unit tests"
+      
+  
+  - name: "TDD State Machine Extracted"
+    description: "Explicit state machine with RED/GREEN/REFACTOR executors"
+    validation: "pytest tests/orchestrators/core/ (18+ tests)"
+    priority: "P1"
+  
+  - name: "Refactoring Registry Operational"
+    description: "Dynamic adapter discovery and plug-in architecture"
+    validation: "pytest tests/refactoring/ (12+ tests)"
+    priority: "P1"
+  
+  - name: "Orchestrator LOC Reduction"
+    description: "TDDCoordinator ≤350 LOC, RefactoringCoordinator ≤120 LOC"
+    validation: "LOC count verification"
+    priority: "P1"
+      - task: "Refactor TDDOrchestrator to TDDCoordinator"
+        acceptance_criteria:
+          - "AC-054-S7-17: Coordinates state machine + executors only"
+          - "AC-054-S7-18: Protocol infrastructure as middleware (not inherited)"
+          - "AC-054-S7-19: Reduced from 830 → ~350 LOC"
+          - "AC-054-S7-20: 1+ integration test"
+    
+    deliverables:
+      - "cortex/orchestrators/core/tdd_state_machine.py"
+      - "cortex/orchestrators/core/tdd_executors/red_executor.py"
+      - "cortex/orchestrators/core/tdd_executors/green_executor.py"
+      - "cortex/orchestrators/core/tdd_executors/refactor_executor.py"
+      - "cortex/orchestrators/core/tdd_coordinator.py (refactored)"
+      - "tests/orchestrators/core/test_tdd_state_machine.py (5 tests)"
+      - "tests/orchestrators/core/tdd_executors/test_red_executor.py (4 tests)"
+      - "tests/orchestrators/core/tdd_executors/test_green_executor.py (4 tests)"
+      - "tests/orchestrators/core/tdd_executors/test_refactor_executor.py (4 tests)"
+      - "tests/orchestrators/core/test_tdd_coordinator_integration.py (1 test)"
+    
+    tests:
+      - "test_tdd_state_machine_transitions"
+      - "test_red_executor_pure_function"
+      - "test_green_executor_pure_function"
+      - "test_refactor_executor_pure_function"
+      - "test_tdd_coordinator_end_to_end"
+    
+    validation:
+      method: "pytest + LOC count verification"
+      criteria: "18+ tests passing, TDDCoordinator ≤350 LOC"
+      estimated_time: "30 minutes"
+
+  stage_8:
+    name: "Extract Refactoring Registry (Plug-in Pattern)"
+  - "Stage 7: TDD state machine extraction applies archive/CORTEX-4.0 pure function pattern"
+  - "Stage 8: Refactoring registry extraction enables plug-in architecture for language support"
+  - "Hybrid approach: Archive patterns + production infrastructure (governance, audit, MCP)"
+  - "Protocol infrastructure becomes middleware (not base class) for cleaner separation"
+  - "ROI increased from 0.82 → 0.87 with additional governance patterns included"
+    id: "S8"
+    duration: "2 hours"
+    priority: "P1"
+    dependencies: []
+    
+    description: |
+      Extract refactoring registry from orchestrator (archive/CORTEX-4.0 pattern):
+      
+      **Archive Pattern:**
+      - Separate RefactoringToolRegistry (adapter management)
+      - RefactoringCoordinator (routing only)
+      - Dynamic adapter discovery (plug-in architecture)
+      - Language-based routing with fallback
+      
+      **Current Problem:**
+      - RefactoringOrchestrator = 277 LOC (orchestrator + registry mixed)
+      - Hardcoded 3 languages (Python, C#, TypeScript)
+      - No dynamic discovery mechanism
+      - Adapter registration in orchestrator __init__
+      
+      **Extraction Goals:**
+      1. Split RefactoringOrchestrator → registry + coordinator
+      2. Implement dynamic adapter discovery (plug-in pattern)
+      3. Support runtime adapter registration
+      4. Enable language extension without orchestrator changes
+      
+      **Architecture:**
+      ```
+      RefactoringRegistry (150 LOC)
+        ├─ register_adapter(adapter) → Result[None]
+        ├─ discover_adapters(plugin_dir) → List[Adapter]
+        ├─ get_adapter(language) → Result[Adapter]
+        └─ list_available() → List[Language]
+      
+      RefactoringCoordinator (120 LOC)
+        ├─ execute_refactoring(request) → Result[Response]
+        └─ route_to_adapter(language) → Adapter
+      ```
+      
+      Output: Registry + coordinator + 12 tests.
+    
+    tasks:
+      - task: "Extract RefactoringRegistry"
+        acceptance_criteria:
+          - "AC-054-S8-01: Registry manages adapter registration"
+          - "AC-054-S8-02: get_adapter(language) returns adapter"
+          - "AC-054-S8-03: list_available() returns available languages"
+          - "AC-054-S8-04: 5+ unit tests"
+      
+      - task: "Implement dynamic adapter discovery"
+        acceptance_criteria:
+          - "AC-054-S8-05: discover_adapters() scans plugin directory"
+          - "AC-054-S8-06: Auto-registers discovered adapters"
+          - "AC-054-S8-07: Graceful handling of invalid plugins"
+          - "AC-054-S8-08: 3+ unit tests"
+      
+      - task: "Refactor RefactoringOrchestrator to coordinator"
+        acceptance_criteria:
+          - "AC-054-S8-09: Uses RefactoringRegistry for routing"
+          - "AC-054-S8-10: Reduced from 277 → ~120 LOC"
+          - "AC-054-S8-11: execute_refactoring() delegates to adapter"
+          - "AC-054-S8-12: 4+ integration tests"
+    
+    deliverables:
+      - "cortex/refactoring/registry.py (extracted from orchestrator.py)"
+      - "cortex/refactoring/coordinator.py (refactored orchestrator)"
+      - "cortex/refactoring/plugin_discovery.py"
+      - "tests/refactoring/test_registry.py (5 tests)"
+      - "tests/refactoring/test_plugin_discovery.py (3 tests)"
+      - "tests/refactoring/test_coordinator_integration.py (4 tests)"
+    
+    tests:
+      - "test_refactoring_registry_operations"
+      - "test_dynamic_adapter_discovery"
+      - "test_refactoring_coordinator_routing"
+      - "test_runtime_adapter_registration"
+    
+    validation:
+      method: "pytest + plugin discovery test"
+      criteria: "12+ tests passing, coordinator ≤120 LOC, dynamic discovery works"
+      estimated_time: "20 minutes"
+
       estimated_time: "1 hour"
 
 # ============================================================================
