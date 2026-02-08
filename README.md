@@ -51,10 +51,44 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# 3. Configure git hooks (IMPORTANT for team collaboration)
+# 3. Start MCP Server (REQUIRED for IMPLEMENT/FIX/REFACTOR operations)
+python -m cortex.mcp.server
+
+# 4. Verify MCP Server (in new terminal)
+curl http://localhost:8000/health
+
+# 5. Configure git hooks (IMPORTANT for team collaboration)
 make setup-hooks
 # or: ./scripts/setup-hooks.sh
 ```
+
+## MCP-FIRST Enforcement (Phase 51)
+
+CORTEX enforces production-quality standards through **MCP-FIRST** architecture:
+
+**✅ ENABLED (when MCP running):**
+- IMPLEMENT/FIX/REFACTOR operations via `cortex_process_request`
+- TDD enforcement (CORE-008: tests before code)
+- Security gates (ARCH-012: OWASP compliance)
+- Audit trail (CORE-027: AC markers)
+- Quality validation (CORE-050: No degradation)
+
+**❌ BLOCKED (when MCP unavailable):**
+- Direct file creation (`create_file` tool)
+- Direct file editing (`replace_string_in_file`)
+- "Basic mode" / "quick fix" quality degradations
+- Test skipping or bypassing
+
+**Environment Check:**
+```python
+from cortex.governance.enforcement.agents.environment_integrity_agent import EnvironmentIntegrityAgent
+
+agent = EnvironmentIntegrityAgent()
+result = agent.check_mcp_availability()
+print(f"MCP Available: {result.available} ({result.detection_method})")
+```
+
+**Why MCP-FIRST?** Ensures TDD, security gates, and audit trails are never bypassed. See [CORE-050](cortex-registry/_cortex-master/governance/core-rules.yaml#L438) for details.
 
 ## Git Hooks
 
