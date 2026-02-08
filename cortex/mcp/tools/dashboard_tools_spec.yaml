@@ -1,0 +1,459 @@
+# Dashboard MCP Tools Specification
+# Phase 53 - Dashboard Orchestrator Integration
+# Authority: CORE-008 (TDD), MCP-FIRST Architecture
+
+tools:
+  - tool_name: cortex_generate_dashboard
+    category: dashboard
+    phase: phase-53
+    status: production
+    
+    description: >
+      Generate comprehensive dashboard JSON for a repository with full metrics,
+      security analysis, health status, and recommendations. Includes audit trail
+      with AC markers for governance compliance.
+    
+    long_description: >
+      The cortex_generate_dashboard tool orchestrates dashboard generation across
+      CORTEX repositories. It:
+      
+      1. Extracts repository metadata and metrics
+      2. Validates against unified schema (v1.0)
+      3. Checks cache (5-minute TTL)
+      4. Generates or returns cached JSON
+      5. Logs operation with AC markers
+      6. Triggers post-generation callbacks to 7 orchestrators
+      
+      Output includes: schema_version, generated_at, repository, type, overview,
+      metrics, security, health, recommendations, metadata.
+    
+    input_schema:
+      type: object
+      properties:
+        repo_path:
+          type: string
+          description: >
+            Path to repository (e.g., "cortex", "alist", "kashkole").
+            Can be absolute path or repository name.
+          examples:
+            - cortex
+            - /path/to/cortex
+            - company/domains/cortex
+        
+        output_format:
+          type: string
+          enum: [json, html]
+          description: Output format for dashboard
+          default: json
+        
+        force_regenerate:
+          type: boolean
+          description: Force regeneration, bypassing cache
+          default: false
+        
+        include_security:
+          type: boolean
+          description: Include security analysis section
+          default: true
+        
+        include_recommendations:
+          type: boolean
+          description: Include recommendations section
+          default: true
+      
+      required:
+        - repo_path
+    
+    output_schema:
+      type: object
+      properties:
+        schema_version:
+          type: string
+          description: Dashboard schema version (1.0)
+          example: "1.0"
+        
+        generated_at:
+          type: string
+          format: date-time
+          description: Generation timestamp (ISO-8601)
+          example: "2025-02-08T12:00:00Z"
+        
+        repository:
+          type: string
+          description: Repository name
+          example: "cortex"
+        
+        type:
+          type: string
+          description: Repository type
+          enum:
+            - core-platform
+            - domain-service
+            - tool-service
+            - file-management-service
+            - web-application
+            - session-management
+            - graphics-engine
+          example: "core-platform"
+        
+        overview:
+          type: object
+          description: Repository overview
+          properties:
+            description:
+              type: string
+              description: Repository description
+            stats:
+              type: object
+              description: Repository statistics
+              properties:
+                files:
+                  type: integer
+                  description: Total file count
+                size_mb:
+                  type: number
+                  description: Repository size in MB
+                loc:
+                  type: integer
+                  description: Lines of code estimate
+                test_coverage:
+                  type: integer
+                  description: Test coverage percentage
+        
+        metrics:
+          type: object
+          description: Repository metrics
+          properties:
+            test_coverage:
+              type: integer
+              description: Test coverage percentage (0-100)
+            build_status:
+              type: string
+              enum: [passing, failing, pending]
+              description: Build status
+            documentation_coverage:
+              type: integer
+              description: Documentation coverage percentage
+            code_quality_score:
+              type: number
+              description: Code quality score (0-100)
+            performance_score:
+              type: number
+              description: Performance score (0-100)
+        
+        security:
+          type: object
+          description: Security analysis results
+          properties:
+            vulnerabilities:
+              type: array
+              description: Found vulnerabilities
+              items:
+                type: object
+            dependency_updates:
+              type: array
+              description: Available dependency updates
+              items:
+                type: object
+            security_score:
+              type: integer
+              description: Security score (0-100)
+        
+        health:
+          type: object
+          description: Repository health status
+          properties:
+            status:
+              type: string
+              enum: [healthy, warning, critical]
+            issues:
+              type: array
+              description: Health issues detected
+              items:
+                type: object
+            last_commit:
+              type: string
+              format: date-time
+              description: Last commit timestamp
+        
+        recommendations:
+          type: array
+          description: Improvement recommendations
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [testing, documentation, performance, security]
+              title:
+                type: string
+              description:
+                type: string
+              priority:
+                type: string
+                enum: [low, medium, high, critical]
+        
+        metadata:
+          type: object
+          description: Generation metadata
+          properties:
+            migrated_from:
+              type: string
+              description: Legacy source (if migrated)
+            migration_timestamp:
+              type: string
+              format: date-time
+            generation_time_ms:
+              type: integer
+              description: Generation duration in milliseconds
+            cache_hit:
+              type: boolean
+              description: Whether result came from cache
+            ac_marker:
+              type: string
+              description: Audit trail marker (AC_START/AC_COMPLETE)
+      
+      required:
+        - schema_version
+        - repository
+        - generated_at
+        - overview
+    
+    examples:
+      request:
+        repo_path: "cortex"
+        output_format: "json"
+        force_regenerate: false
+      
+      response:
+        schema_version: "1.0"
+        generated_at: "2025-02-08T12:00:00Z"
+        repository: "cortex"
+        type: "core-platform"
+        overview:
+          description: "CORTEX core platform"
+          stats:
+            files: 7776
+            size_mb: 67
+            loc: 45000
+            test_coverage: 89
+        metrics:
+          test_coverage: 89
+          build_status: "passing"
+          documentation_coverage: 86
+          code_quality_score: 92
+          performance_score: 88
+        security:
+          vulnerabilities: []
+          dependency_updates: []
+          security_score: 94
+        health:
+          status: "healthy"
+          issues: []
+          last_commit: "2025-02-08T11:30:00Z"
+        recommendations:
+          - type: "documentation"
+            title: "Add API documentation"
+            description: "API endpoints lack comprehensive documentation"
+            priority: "medium"
+        metadata:
+          migrated_from: "company/dashboards/repos/cortex/index.html"
+          migration_timestamp: "2025-02-08T10:00:00Z"
+          generation_time_ms: 245
+          cache_hit: false
+          ac_marker: "AC_COMPLETE: AC-PHASE53.0-DASHBOARD-GEN-001 ✅"
+    
+    error_codes:
+      - code: REPO_NOT_FOUND
+        description: Repository not found at specified path
+      - code: SCHEMA_VALIDATION_ERROR
+        description: Generated data fails schema validation
+      - code: GENERATION_TIMEOUT
+        description: Dashboard generation exceeded timeout
+      - code: PERMISSION_DENIED
+        description: Insufficient permissions to read repository
+
+
+  - tool_name: cortex_sync_dashboard_data
+    category: dashboard
+    phase: phase-53
+    status: production
+    
+    description: >
+      Synchronize dashboard data with latest repository metrics. Updates cache
+      and triggers post-sync callbacks to dependent orchestrators.
+    
+    long_description: >
+      The cortex_sync_dashboard_data tool synchronizes dashboard metrics with
+      current repository state:
+      
+      1. Retrieves current repository metrics
+      2. Updates dashboard cache
+      3. Verifies schema compliance
+      4. Logs operation with AC markers
+      5. Notifies dependent orchestrators
+      
+      This is typically called after repository updates or refactoring operations.
+    
+    input_schema:
+      type: object
+      properties:
+        repo_name:
+          type: string
+          description: Repository name to sync
+          example: "cortex"
+        
+        sync_timeout:
+          type: integer
+          description: Sync timeout in seconds
+          default: 30
+          minimum: 1
+          maximum: 300
+        
+        deep_sync:
+          type: boolean
+          description: Perform deep sync (slower but more comprehensive)
+          default: false
+        
+        notify_orchestrators:
+          type: boolean
+          description: Trigger notifications to dependent orchestrators
+          default: true
+      
+      required:
+        - repo_name
+    
+    output_schema:
+      type: object
+      properties:
+        repository:
+          type: string
+          description: Repository synced
+        
+        sync_status:
+          type: string
+          enum: [success, partial, failed]
+          description: Sync operation status
+        
+        updated_fields:
+          type: array
+          description: Fields that were updated
+          items:
+            type: string
+        
+        timestamp:
+          type: string
+          format: date-time
+          description: Sync completion timestamp
+        
+        metrics_updated:
+          type: integer
+          description: Number of metrics updated
+        
+        orchestrators_notified:
+          type: integer
+          description: Number of orchestrators notified
+        
+        sync_time_ms:
+          type: integer
+          description: Sync duration in milliseconds
+        
+        messages:
+          type: array
+          description: Informational messages
+          items:
+            type: string
+      
+      required:
+        - repository
+        - sync_status
+        - timestamp
+    
+    examples:
+      request:
+        repo_name: "cortex"
+        sync_timeout: 30
+        deep_sync: false
+        notify_orchestrators: true
+      
+      response:
+        repository: "cortex"
+        sync_status: "success"
+        updated_fields:
+          - "metrics.test_coverage"
+          - "metrics.build_status"
+          - "metrics.code_quality_score"
+          - "health.status"
+        timestamp: "2025-02-08T12:05:00Z"
+        metrics_updated: 8
+        orchestrators_notified: 7
+        sync_time_ms: 185
+        messages:
+          - "Test coverage updated: 88% → 89%"
+          - "Build status: passing"
+          - "All orchestrators notified"
+
+
+# ============================================================================
+# Integration Configuration
+# ============================================================================
+
+integration:
+  orchestrator: DashboardOrchestrator
+  mcp_gateway: cortex_mcp_gateway
+  integration_points:
+    - orchestrator: MasterOrchestrator
+      action: governance_gate
+      
+    - orchestrator: PlanningOrchestrator
+      action: artifact_registration
+      
+    - orchestrator: InteractionOrchestrator
+      action: action_discovery
+      
+    - orchestrator: RepositoryOnboardingOrchestrator
+      action: auto_generation
+      
+    - orchestrator: RefactoringOrchestrator
+      action: post_refactor_sync
+      
+    - orchestrator: RecommendationGate
+      action: metrics_evidence
+      
+    - orchestrator: TDDOrchestrator
+      action: test_suite_integration
+
+
+# ============================================================================
+# Audit & Compliance
+# ============================================================================
+
+audit:
+  markers_required:
+    - AC_START: "Logged before operation"
+    - AC_COMPLETE: "Logged after successful operation"
+  
+  compliance:
+    - CORE-008: TDD methodology
+    - CORE-027: Audit trail (AC markers)
+    - CORE-041: Event-driven architecture
+    - MCP-FIRST: All operations via MCP tools
+
+caching:
+  enabled: true
+  ttl_seconds: 300
+  strategy: [in_memory, file_based]
+  location: "company/dashboards/data/"
+
+performance:
+  generation_timeout_ms: 5000
+  sync_timeout_ms: 30000
+  cache_hit_target_percent: 70
+  metrics:
+    - cortex_dashboard_generation_seconds
+    - cortex_dashboard_cache_hits_total
+    - cortex_dashboard_validation_errors_total
+
+version: "1.0"
+last_updated: "2025-02-08T12:00:00Z"
+authority: "Phase 53 - Dashboard Orchestrator Integration"
