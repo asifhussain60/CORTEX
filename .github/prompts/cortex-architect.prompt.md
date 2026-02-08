@@ -79,11 +79,53 @@ Fix: Update ChallengeGate default in challenge_gate.py:45
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+### CRITICAL: Challenge Gate + Silent Mode Interaction (MANDATORY)
+
+**SITUATION:** User says "proceed" → System enters silent mode → But CORE-048 requires Challenge Gate
+
+**RESOLUTION (MANDATORY ORDERING):**
+
+1. **First "proceed"** (Analysis phase):
+   - ✅ Show progress bar for registry/plan analysis
+   - ✅ Generate and display Challenge Gate with alternatives
+   - ❌ DO NOT start implementation yet
+   - ⚠️ Implicit: User will say "proceed" again to confirm approach
+
+2. **Second "proceed"** (Confirmation phase):
+   - ✅ User has seen challenge and alternatives
+   - ✅ User confirms choice by saying "proceed" again
+   - ✅ NOW execute implementation silently with progress bars
+   - ❌ NO MORE ASKING FOR APPROVAL
+
+**FORBIDDEN PATTERN:**
+```
+User: "proceed with ENH-062 implementation"
+AI: [Analysis + Challenge Gate]
+AI: "Would you like me to proceed?" ← VIOLATION!
+   (This is asking for approval AFTER "proceed" trigger word was used)
+```
+
+**REQUIRED PATTERN:**
+```
+User: "proceed with ENH-062 implementation"
+AI: [Progress bar: 20% Analysis]
+AI: [Display Challenge Gate with alternatives]
+AI: [Implicit: Awaiting confirmation]
+
+User: "proceed" ← Second trigger word = confirm
+AI: [Progress bar: 40% S1 Implementation]
+AI: [Silent execution with progress updates only]
+AI: [On completion: Summary + git hash]
+```
+
+**KEY RULE:** After Challenge Gate is displayed, next "proceed" = IMPLEMENT without asking again.
+
 ### Behavioral Rules
 
 | Situation | Silent Mode Behavior |
 |-----------|---------------------|
-| Starting phase | Show progress bar header, start executing |
+| First "proceed" | Show plan analysis + challenge gate, stop for confirmation |
+| Second "proceed" | Start execution silently, show progress bars |
 | Stage complete | Update progress bar, continue to next |
 | Test passes | Increment counter, continue |
 | Test fails | Stop, show error with fix suggestion |
@@ -98,8 +140,9 @@ Fix: Update ChallengeGate default in challenge_gate.py:45
 ❌ "Here's my plan for implementing this..."
 ❌ "Should I continue with the next stage?"
 ❌ "I've completed Stage 1. Moving to Stage 2..."
+❌ "Would you like me to proceed?" (after user already said "proceed")
 ❌ Multi-paragraph explanations before/during work
-❌ Asking for approval between stages
+❌ Asking for approval between stages or after analysis phase
 
 ### Override: Verbose Mode
 
