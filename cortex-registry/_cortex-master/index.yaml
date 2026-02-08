@@ -1,12 +1,12 @@
 # CORTEX Master Registry Index
 # Auto-discovery registry for CORTEX internal development
-# Authority: cortex-architect.prompt.md v15.0
-# Updated: 2026-02-07
+# Authority: cortex-architect.prompt.md v15.1
+# Updated: 2026-02-08
 
 version: "1.0"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-07"
+last_updated: "2026-02-08"
 
 # Active Phases (Current Development)
 active_phases:
@@ -47,6 +47,58 @@ active_phases:
     unblocks:
       - "phase-37"
       - "phase-38"
+  
+  - id: "phase-44"
+    name: "CORTEX Production Readiness - Cross-Cutting Refactor"
+    file: "phases/active/phase-44-cortex-production-readiness.yaml"
+    started: "2026-02-12"
+    status: "planned"
+    priority: "P0"
+    execution_order: 2
+    roi_score: 0.88
+    estimated_duration: "8 hours"
+    test_target: 100
+    coverage_target: 90
+    autonomous_execution: false
+    approval_required: true
+    cross_cutting: true
+    breaking_changes: true
+    production_blocker: true
+    consolidated_enhancements:
+      - "ENH-061: Universal Role-Based Response System (Phase 3 consolidation)"
+      - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement"
+    description: |
+      ⚪ PLANNED: Comprehensive production readiness initiative — 6 stages:
+      S1: Comprehensive repository scan (root, legacy, duplicates, imports)
+      S2: Generate relocation plan with impact analysis (dry-run preview)
+      S3: Implement FileRelocator & ImportReferenceAnalyzer (AST-based)
+      S4: Implement ImportReferenceFixer (absolute/relative imports)
+      S5: Execute cleanup with validation (450+ tests)
+      S6: Duplicate detection & consolidation (ENH-061 Phase 3)
+      
+      CROSS-CUTTING IMPACT:
+      - Root directory: 27+ files → 12 files
+      - Broken imports: 15 → 0
+      - Duplicate LOC: 2,400 → 0
+      - Test suite: 95% → 100% (450 tests)
+      - Docker build: FAIL → PASS
+      - CI/CD pipeline: FAIL → PASS (green)
+      
+      PRODUCTION BLOCKERS RESOLVED:
+      ✅ Root directory pollution (Docker builds fail)
+      ✅ Broken imports (CI/CD failures)
+      ✅ Duplicate implementations (CORE-035 violations)
+      ✅ File organization (maintenance burden)
+      
+      Approval required: File relocations + import changes
+      Rollback plan: Git checkpoint + automated rollback
+    depends_on:
+      - "phase-39"
+    unblocks:
+      - "Docker deployment"
+      - "CI/CD automation"
+      - "Production release"
+      - "ENH-061 Phase 3"
 
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
@@ -236,6 +288,84 @@ active_enhancements:
       Reduce cortex-architect.prompt.md from 2,982 lines to ~800 lines by
       extracting CORE rules, audit checklists, mode specs to machine-readable YAML.
       Enables single source of truth + lazy loading via MCP tools.
+  
+  - id: "enh-061"
+    name: "Universal Role-Based Response System"
+    file: "enhanc4
+  active_phases: 6
+  completed_phases: 41
+  completed_2026: 35
+  completed_2025: 11
+  in_progress_phases: 1
+  planned_phases: 4
+  unblocked_phases: 1
+  total_enhancements: 7
+  active_enhancements: 7
+  last_phase_created: "2026-02-08"
+  last_phase_completed: "2026-02-07"
+  next_expected_completion: "2026-02-23"
+  last_updated: "2026-02-08"
+  active_breakdown:
+    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ready_autonomous, ROI=0.92)"
+    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, planned, ROI=0.88)"
+    - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
+    - "phase-24-arch: Architecture Integrity System (P1, active)"
+    - "phase-38: Brain Cohesion & Health System (P0, unblocked, ROI=0.94)"
+    - "phase-24: External Refactoring Tools Integration (P1, planned)"
+  enhancements_created_today:
+    - "ENH-061: Universal Role-Based Response System (P0, approved, 12 hrs, 15 roles)"
+    - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement (P0, active, 8 hrs, cross-cutting)"
+  phases_created_today:
+    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ROI=0.92, 10 stages, 200 tests)"
+    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, ROI=0.88, 6 stages, 100 tests)"
+  registry_hygiene:
+    - "Reconciled index.yaml: removed completed phases from active_phases"
+    - "Fixed Phase 38 status: complete → unblocked"
+    - "Removed duplicate Phase 37 entries"
+    - "Added Phase 43 with cross-cutting scope"
+    - "Added Phase 44 production readiness with ENH-062"
+    - "Added ENH-061 universal role-based response system"
+    - "Added ENH-062 vacuum enhancement with production blocker resolutionmax 3) + professional colors
+      Vacuum: copilot_chat_templates.py (697), response_formatting_engine.py (~400)
+  
+  - id: "enh-062"
+    name: "CORTEX Production Readiness & Vacuum Enhancement"
+    file: "enhancements/active/enh-062-cortex-production-readiness-vacuum.yaml"
+    status: "active"
+    priority: "P0"
+    version: "1.0"
+    created: "2026-02-08"
+    updated: "2026-02-08"
+    scope: "VacuumOrchestrator + cross-cutting refactor"
+    stages: 6
+    estimated_hours: 8
+    breaking_changes: true
+    production_blocker: true
+    related_phases:
+      - "phase-44"
+    description: |
+      Comprehensive production readiness enhancement:
+      
+      NEW CAPABILITIES:
+      1. Python file relocation (not just markdown)
+      2. Import reference fixing (AST-based analysis)
+      3. Duplicate detection (similarity scoring > 0.7)
+      4. Comprehensive cleanup (Python, markdown, configs, orphans)
+      
+      RELOCATION RULES:
+      - Root utilities → scripts/utilities/ (15+ files)
+      - Legacy tests → tests/_archive/ or delete (13+ files)
+      - Markdown sprawl → docs/archive/2026/02/ (20+ files)
+      - Duplicate implementations → consolidate (2,400 LOC)
+      
+      WORKFLOW:
+      SCAN → ANALYZE → PLAN → VERIFY → EXECUTE → FIX IMPORTS → VALIDATE
+      
+      SAFETY:
+      - Dry-run mode (preview before execution)
+      - Git checkpoint (rollback capability)
+      - Import validation (try importing post-fix)
+      - Test suite validation (450+ tests must pass)
 
 # Metadata
 statistics:

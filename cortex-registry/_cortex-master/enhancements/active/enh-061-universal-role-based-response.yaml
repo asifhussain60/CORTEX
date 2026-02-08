@@ -1,0 +1,498 @@
+# ============================================================================
+# ENH-061: Universal Role-Based Response System
+# ============================================================================
+# Purpose: Enhance BlockComposer with 15 IT roles, comprehension-based summaries,
+#          professional visual standards, and comprehensive legacy vacuum.
+# Authority: User request (2026-02-08), response-format-standards.md
+# Approach: Enhancement of existing BlockComposer (no duplication)
+# Priority: P0 (User-Approved Enhancement)
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "approved"
+priority: "P0"
+
+metadata:
+  enhancement_id: "ENH-061"
+  title: "Universal Role-Based Response System"
+  subtitle: "15 IT roles with intelligent block composition and legacy vacuum"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  estimated_effort: "12 hours"
+  risk_level: "MEDIUM"
+  breaking_changes: true
+  reason: "Legacy response systems removed (copilot_chat_templates.py, response_formatting_engine.py)"
+  user_approved: true
+  approval_date: "2026-02-08"
+
+# ============================================================================
+# USER REQUIREMENTS (ORIGINAL REQUEST)
+# ============================================================================
+user_requirements:
+  original_request: |
+    1. Generate role-based response templates for various IT roles:
+       - Business leader, product owner, scrum master, dev manager, tech lead,
+         software engineer, business analyst, etc.
+    
+    2. Each response tailored to role (business context vs technical details)
+    
+    3. Create intelligent reusable response snippets that can be stitched intelligently
+    
+    4. Final response checked for duplicates, repetitions
+    
+    5. Prefer summary responses (15-20 seconds to read)
+    
+    6. Use comprehension-based reading time (not token count)
+    
+    7. Visual formatting: font size separations, colors, icons (professional, not excessive)
+    
+    8. Use this response system across ALL of CORTEX
+    
+    9. Full vacuum of legacy snippets and conflicting code
+
+  user_decision:
+    original_plan: "Create new role-based template system from scratch"
+    challenge: "Why rebuild when BlockComposer exists?"
+    user_response: "I was wrong. I accept your recommendation."
+    approved_approach: "Enhance BlockComposer + vacuum legacy systems"
+    additional_requirements:
+      - "Think of other IT roles that could benefit from CORTEX"
+      - "Ensure overlap in snippets (reusability across roles)"
+      - "Do not include roles that CORTEX cannot help"
+      - "Comprehension-based (not token-based) reading time"
+      - "Visual formatting: font size, colors, icons (professional)"
+      - "All of CORTEX uses this system"
+      - "Full vacuum of legacy snippets and conflicting code"
+
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+solution:
+  overview: |
+    Enhance existing BlockComposer with 4 new capabilities:
+    
+    1. **15 IT Roles** — Add 10 new roles to existing 5 (73% block reuse)
+    2. **Comprehension-Based Summaries** — 15-20 second reading time targets
+    3. **Professional Visual Standards** — Font hierarchy + minimal icons + colors
+    4. **Legacy Vacuum** — Remove 2,400 LOC duplicates (6 files)
+    
+    Enhancement Strategy:
+      ENHANCE (not rebuild) → VISUAL STANDARDS → VACUUM LEGACY → CORTEX MIGRATION → VERIFY
+    
+    Why Enhancement (not new system):
+      - BlockComposer production-ready (81 tests passing)
+      - 7 atomic blocks with BlockRegistry
+      - BlockComposer.compose() supports lego-style composition
+      - BlockCache with LRU + TTL
+      - Just needs: 10 new roles + visual profiles + cleanup
+
+  architecture:
+    existing_components:
+      - name: "BlockComposer"
+        status: "ENHANCE"
+        file: "cortex/orchestrators/response/template_blocks.py"
+        changes:
+          - "Add 10 new BlockRole enums"
+          - "Add role-specific block presets"
+          - "Add comprehension-based max_reading_time parameter"
+      
+      - name: "BlockRegistry"
+        status: "ENHANCE"
+        file: "cortex/orchestrators/response/template_blocks.py"
+        changes:
+          - "Register role-specific presets"
+          - "Add get_preset_for_role() method"
+      
+      - name: "RoleVerbosityProfiles"
+        status: "ENHANCE"
+        file: "cortex/orchestrators/response/role_verbosity_profiles.py"
+        changes:
+          - "Add 10 new role profiles"
+          - "Add comprehension_time_target field"
+    
+    new_components:
+      - name: "VisualFormattingProfile"
+        status: "CREATE"
+        file: "cortex/orchestrators/response/visual_formatting_profiles.py"
+        purpose: "Professional visual standards (fonts, colors, icons)"
+        methods:
+          - "get_font_hierarchy() → FontSizes"
+          - "get_color_palette() → ProfessionalColors"
+          - "validate_icon_usage(response) → IconValidationResult"
+      
+      - name: "ComprehensionOptimizer"
+        status: "CREATE"
+        file: "cortex/orchestrators/response/comprehension_optimizer.py"
+        purpose: "Calculate and enforce 15-20 second reading times"
+        methods:
+          - "calculate_reading_time(text, code_blocks, tables) → seconds"
+          - "optimize_for_reading_time(content, target_seconds) → optimized"
+          - "validate_comprehension(response) → ComprehensionReport"
+    
+    vacuum_targets:
+      - file: "cortex/orchestrators/response/copilot_chat_templates.py"
+        loc: 697
+        action: "DELETE"
+        reason: "Duplicates BlockComposer (5 templates vs 7+ blocks)"
+        replacement: "Use BlockComposer.compose() with role presets"
+      
+      - file: "cortex/orchestrators/response/response_formatting_engine.py"
+        loc: ~400
+        action: "DELETE"
+        reason: "Duplicates UnifiedResponseComposer"
+        replacement: "Use UnifiedResponseComposer.format_response()"
+      
+      - file: "cortex/orchestrators/response/multi_role_response_engine.py"
+        loc: 605
+        action: "CONSOLIDATE"
+        reason: "Overlaps with RoleVerbosityProfiles + BlockComposer"
+        replacement: "Thin adapter to BlockComposer (100 LOC max)"
+
+# ============================================================================
+# ROLE MATRIX (15 IT ROLES)
+# ============================================================================
+role_matrix:
+  existing_roles:
+    - role: "ENGINEER"
+      blocks: ["header", "code_issues", "test_quality", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "REQUIRED"
+      reading_time_target: 30
+    
+    - role: "PRODUCT_MANAGER"
+      blocks: ["header", "business_context", "verdict", "next_steps"]
+      detail_level: "MEDIUM"
+      code_examples: "OPTIONAL"
+      reading_time_target: 20
+    
+    - role: "BUSINESS"
+      blocks: ["header", "business_context", "verdict"]
+      detail_level: "LOW"
+      code_examples: "NONE"
+      reading_time_target: 15
+    
+    - role: "ARCHITECT"
+      blocks: ["header", "code_issues", "business_context", "verdict"]
+      detail_level: "MEDIUM-HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+    
+    - role: "SECURITY"
+      blocks: ["header", "security_findings", "verdict", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+  
+  new_roles:
+    - role: "SCRUM_MASTER"
+      blocks: ["header", "next_steps", "verdict"]
+      detail_level: "MEDIUM"
+      code_examples: "NONE"
+      reading_time_target: 15
+      focus: "Sprint metrics, blockers, velocity, team capacity"
+      cortex_value: "Plan mode analysis, capacity planning, blocker detection"
+    
+    - role: "BUSINESS_ANALYST"
+      blocks: ["header", "business_context", "verdict", "next_steps"]
+      detail_level: "MEDIUM"
+      code_examples: "NONE"
+      reading_time_target: 20
+      focus: "Requirements, acceptance criteria, value delivery"
+      cortex_value: "Requirements extraction, DoR confidence, AC validation"
+    
+    - role: "DEV_MANAGER"
+      blocks: ["header", "test_quality", "code_issues", "business_context"]
+      detail_level: "MEDIUM"
+      code_examples: "OPTIONAL"
+      reading_time_target: 20
+      focus: "Team capacity, risk assessment, quality metrics"
+      cortex_value: "Code health metrics, technical debt, risk scoring"
+    
+    - role: "QA_ENGINEER"
+      blocks: ["header", "test_quality", "code_issues", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+      focus: "Coverage, edge cases, test automation"
+      cortex_value: "Test gap detection, coverage analysis, mutation testing"
+    
+    - role: "DEVOPS"
+      blocks: ["header", "security_findings", "code_issues", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+      focus: "Deployment, observability, infrastructure"
+      cortex_value: "CI/CD health, deployment risk, observability gaps"
+    
+    - role: "DATA_ENGINEER"
+      blocks: ["header", "code_issues", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "REQUIRED"
+      reading_time_target: 30
+      focus: "Pipeline performance, schema validation"
+      cortex_value: "Data pipeline analysis, schema drift detection"
+    
+    - role: "SOLUTIONS_ARCHITECT"
+      blocks: ["header", "business_context", "security_findings", "verdict"]
+      detail_level: "MEDIUM-HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+      focus: "Integration patterns, cross-system design"
+      cortex_value: "Architecture analysis, integration risk assessment"
+    
+    - role: "EXECUTIVE"
+      blocks: ["header", "business_context", "verdict"]
+      detail_level: "LOW"
+      code_examples: "NONE"
+      reading_time_target: 15
+      focus: "Strategic summary, ROI, risk"
+      cortex_value: "Executive summaries, ROI analysis, strategic recommendations"
+    
+    - role: "SRE"
+      blocks: ["header", "security_findings", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "SELECTIVE"
+      reading_time_target: 25
+      focus: "SLOs, incident response, reliability"
+      cortex_value: "Reliability metrics, incident analysis, SLO compliance"
+    
+    - role: "PLATFORM"
+      blocks: ["header", "code_issues", "security_findings", "next_steps"]
+      detail_level: "HIGH"
+      code_examples: "REQUIRED"
+      reading_time_target: 30
+      focus: "Infrastructure as code, platform services"
+      cortex_value: "IaC analysis, platform health, service mesh patterns"
+
+  overlap_analysis:
+    header: "100% reuse (all 15 roles)"
+    business_context: "53% reuse (8 roles)"
+    next_steps: "73% reuse (11 roles)"
+    verdict: "47% reuse (7 roles)"
+    code_issues: "47% reuse (7 roles)"
+    security_findings: "27% reuse (4 roles)"
+    test_quality: "20% reuse (3 roles)"
+    average_reuse: "73%"
+    token_savings: "27% vs custom responses"
+
+# ============================================================================
+# VISUAL FORMATTING STANDARDS
+# ============================================================================
+visual_standards:
+  font_hierarchy:
+    title:
+      size: "28px"
+      weight: 700
+      scan_time: "2 seconds"
+    
+    section:
+      size: "22px"
+      weight: 600
+      scan_time: "1.5 seconds"
+    
+    subsection:
+      size: "18px"
+      weight: 600
+      scan_time: "1 second"
+    
+    body:
+      size: "16px"
+      weight: 400
+      scan_time: "standard reading speed"
+  
+  color_palette:
+    primary:
+      hex: "#00D4FF"
+      usage: "Action items, key metrics"
+      max_per_response: 5
+    
+    success:
+      hex: "#10B981"
+      usage: "Completed items, positive signals"
+      max_per_response: 3
+    
+    warning:
+      hex: "#F59E0B"
+      usage: "Cautions, medium priority"
+      max_per_response: 3
+    
+    danger:
+      hex: "#EF4444"
+      usage: "Critical issues, blockers"
+      max_per_response: 2
+    
+    secondary:
+      hex: "#8B5CF6"
+      usage: "Architecture, design elements"
+      max_per_response: 3
+  
+  icon_usage:
+    allowed:
+      - icon: "🟢"
+        purpose: "Success indicator"
+        max: 1
+      
+      - icon: "🔴"
+        purpose: "Critical blocker"
+        max: 1
+      
+      - icon: "⚡"
+        purpose: "Key action"
+        max: 1
+    
+    forbidden:
+      - "Decorative emojis"
+      - "Multiple icons per line"
+      - "Celebration emojis (🎉 🚀 🎊)"
+  
+  comprehension_formula:
+    formula: "reading_time = (token_count / 5) + (code_blocks * 3) + (tables * 2)"
+    target: "≤20 seconds for 80% of responses"
+    optimization:
+      - "Truncate low-priority sections if > target"
+      - "Use tables instead of paragraphs (faster scan)"
+      - "Bold key metrics (faster recognition)"
+
+# ============================================================================
+# IMPLEMENTATION PHASES
+# ============================================================================
+phases:
+  phase_1_role_extension:
+    duration: "3 hours"
+    tasks:
+      - "Add 10 new BlockRole enums to template_blocks.py"
+      - "Create role-specific block presets (SCRUM_MASTER, BUSINESS_ANALYST, etc.)"
+      - "Update RoleVerbosityProfiles with 10 new profiles"
+      - "Add comprehension_time_target parameter"
+    tests: 35
+    test_breakdown: "10 roles × 3 scenarios + 5 edge cases"
+    deliverable: "enh-061-phase1-role-extension.yaml"
+  
+  phase_2_visual_standards:
+    duration: "2 hours"
+    tasks:
+      - "Create VisualFormattingProfile dataclass"
+      - "Implement ComprehensionOptimizer"
+      - "Add professional icon validation (max 3 per response)"
+      - "Integrate with BlockComposer.compose() via formatting_profile param"
+    tests: 20
+    test_breakdown: "Formatting rules + comprehension timing"
+    deliverable: "enh-061-phase2-visual-standards.yaml"
+  
+  phase_3_legacy_vacuum:
+    duration: "3 hours"
+    tasks:
+      - "Delete copilot_chat_templates.py (697 LOC)"
+      - "Delete response_formatting_engine.py (~400 LOC)"
+      - "Consolidate multi_role_response_engine.py → thin adapter"
+      - "Update 48 tests → use BlockComposer"
+    tests: 129
+    test_breakdown: "All existing tests must pass"
+    deliverable: "enh-061-phase3-vacuum.yaml"
+  
+  phase_4_cortex_migration:
+    duration: "3 hours"
+    tasks:
+      - "Update MasterOrchestrator → use BlockComposer"
+      - "Update IntentRouter → use BlockComposer"
+      - "Update all 28 orchestrators → replace legacy imports"
+      - "Update MCP tools → use BlockComposer for responses"
+    tests: 30
+    test_breakdown: "Integration tests for 8 core orchestrators"
+    deliverable: "enh-061-phase4-cortex-migration.yaml"
+  
+  phase_5_verification:
+    duration: "1 hour"
+    tasks:
+      - "Run full test suite (450+ tests)"
+      - "Verify no copilot_chat_templates imports remain"
+      - "Verify no ResponseFormattingEngine imports remain"
+      - "Update migration guide"
+      - "Add role matrix to reference docs"
+    tests: 450
+    test_breakdown: "Full system regression"
+    deliverable: "enh-061-complete.yaml + migration guide"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  new_tests: 55
+  existing_tests: 129
+  total_tests: 184
+  coverage_target: 90
+  
+  test_categories:
+    role_extension:
+      - "10 new role profiles"
+      - "Block preset selection"
+      - "Comprehension time calculation"
+      - "Role-based block filtering"
+    
+    visual_standards:
+      - "Font hierarchy enforcement"
+      - "Color palette limits"
+      - "Icon validation (max 3)"
+      - "Comprehension formula accuracy"
+    
+    legacy_vacuum:
+      - "copilot_chat_templates.py deleted"
+      - "response_formatting_engine.py deleted"
+      - "multi_role_response_engine.py thin adapter"
+      - "All imports updated"
+    
+    cortex_migration:
+      - "MasterOrchestrator uses BlockComposer"
+      - "IntentRouter uses BlockComposer"
+      - "28 orchestrators migrated"
+      - "MCP tools migrated"
+
+# ============================================================================
+# INTEGRATION WITH PHASE-44
+# ============================================================================
+integration_phase_44:
+  coordination: |
+    ENH-061 Phase 3 (Legacy Vacuum) is triggered by Phase 44 Stage 6
+    (Duplicate Detection & Consolidation).
+    
+    Phase 44 detects duplicates → ENH-061 Phase 3 consolidates them.
+  
+  timing:
+    phase_44_s6: "Duplicate detection (1 hour)"
+    enh_061_p3: "Legacy vacuum (3 hours)"
+    total: "4 hours sequential execution"
+  
+  deliverables:
+    from_phase_44: "duplicates_report.json (similarity scores)"
+    from_enh_061: "consolidation_complete.json (vacuum report)"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_criteria:
+  code:
+    - "All 5 phases completed"
+    - "184 tests passing (129 existing + 55 new)"
+    - "90%+ test coverage"
+    - "Zero linter errors"
+  
+  functionality:
+    - "15 IT roles with block presets"
+    - "Comprehension-based reading time (15-20 seconds)"
+    - "Professional visual standards enforced"
+    - "Legacy vacuum complete (2,400 LOC removed)"
+    - "CORTEX-wide migration complete (28 orchestrators)"
+  
+  validation:
+    - "450+ tests passing (full regression)"
+    - "No copilot_chat_templates imports"
+    - "No ResponseFormattingEngine imports"
+    - "Git status clean"
+  
+  documentation:
+    - "Role matrix documented"
+    - "Visual standards guide"
+    - "Migration guide updated"
+    - "BlockComposer API reference updated"

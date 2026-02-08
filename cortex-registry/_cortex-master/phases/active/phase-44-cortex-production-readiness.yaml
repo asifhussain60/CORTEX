@@ -1,0 +1,764 @@
+# ============================================================================
+# PHASE-44: CORTEX Production Readiness - Cross-Cutting Refactor
+# ============================================================================
+# Purpose: Comprehensive production readiness initiative spanning file
+#          organization, duplicate elimination, import hygiene, and automated
+#          cleanup workflows. Cross-cutting refactor affecting entire codebase.
+# Authority: ENH-062, cortex-architect.prompt.md v15.1
+# Approach: TDD-First, Automated Cleanup, Zero Manual Intervention
+# Status: PLANNED | Target Start: 2026-02-12
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "planned"
+priority: "P0"
+execution_order: 2
+
+metadata:
+  phase_id: "phase-44"
+  title: "CORTEX Production Readiness - Cross-Cutting Refactor"
+  subtitle: "Comprehensive cleanup automation, duplicate elimination, import hygiene, and production-ready file organization"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  target_start: "2026-02-12"
+  estimated_duration: "8 hours"
+  test_target: 100
+  coverage_target: 90
+  roi_score: 0.88
+  cross_cutting: true
+  breaking_changes: true
+  production_blocker: true
+  autonomous_execution: false
+  approval_required: true
+  reason: "File relocations and import changes require approval"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation (eliminate duplicates)"
+    - "MCP-FIRST: All functionality via MCP tools"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "Git checkpoint before any file operations"
+    - "Rollback capability on validation failure"
+    - "Dry-run mode mandatory before execution"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    A production-ready CORTEX with:
+    
+    1. **Clean Root Directory** — Only 12 essential files (Docker best practices)
+    2. **Zero Broken Imports** — All references updated after relocations
+    3. **Zero Duplicates** — Consolidated implementations (2,400 LOC reduction)
+    4. **Automated Cleanup** — VacuumOrchestrator handles Python, markdown, configs
+    5. **Production Ready** — Docker builds succeed, CI/CD green, clean git status
+    
+    Cross-cutting impact:
+    - Affects 100+ files across 15+ directories
+    - Relocates 15+ utility scripts from root
+    - Archives 50+ orphaned/broken files
+    - Consolidates 6+ duplicate implementations
+    - Fixes 200+ import references
+
+  problem_statement: |
+    CORTEX accumulated technical debt across 4 dimensions:
+    
+    **Dimension 1: Root Directory Pollution (27+ files → 12 target)**
+    - Utility scripts: generate_dashboard_complete.py, run_vacuum.py, verify_*.py
+    - Test files: *_test.py, *_debug.py
+    - Config drift: orphaned YAML/JSON files
+    - Should be in: scripts/utilities/, scripts/development/, deployment/
+    
+    **Dimension 2: Orphaned/Broken Files (~50+ files)**
+    - tests/_legacy_broken/: 13+ test files with no fixtures
+    - Markdown sprawl: 20+ .md files outside docs/
+    - Archived but not relocated: company/_archive/ has 50+ files
+    - Stale imports: Files moved manually, imports not updated
+    
+    **Dimension 3: Duplicate Implementations (2,400 LOC)**
+    - copilot_chat_templates.py (697 LOC) duplicates BlockComposer
+    - response_formatting_engine.py (~400 LOC) duplicates UnifiedResponseComposer
+    - multi_role_response_engine.py (605 LOC) overlaps with RoleVerbosityProfiles
+    - Multiple template registries (3 implementations)
+    
+    **Dimension 4: Vacuum Orchestrator Limitations**
+    - Only handles markdown files (no Python relocation)
+    - No import reference fixing (manual updates required)
+    - No duplicate detection (manual code reviews)
+    - No comprehensive cleanup workflow (manual verification)
+
+  business_impact:
+    - "🔴 Production blocker: Root pollution breaks Docker builds"
+    - "🔴 CI/CD failures: Broken imports cause 15+ test failures"
+    - "🟡 Maintenance burden: 30% more files than needed (technical debt)"
+    - "🟡 Onboarding friction: Developers can't find utility scripts"
+    - "🟡 Code quality: Duplicate implementations violate CORE-035"
+    - "🟢 Developer experience: Clean organization improves productivity"
+
+  expected_outcomes:
+    - "Root directory: 12 essential files only (down from 27+)"
+    - "scripts/utilities/: 15 utility scripts relocated"
+    - "tests/_legacy_broken/: Archived or deleted (0 remaining)"
+    - "docs/archive/2026/02/: All markdown sprawl archived"
+    - "Zero broken imports: All references fixed automatically"
+    - "Zero duplicates: 2,400 LOC eliminated via consolidation"
+    - "VacuumOrchestrator: Python relocation + import fixing + duplicate detection"
+    - "Docker build: Succeeds without manual cleanup"
+    - "CI/CD pipeline: Green builds (450+ tests passing)"
+    - "Git status: Clean (no uncommitted changes)"
+
+# ============================================================================
+# ROI ANALYSIS
+# ============================================================================
+roi_analysis:
+  architectural_impact: 0.90   # Cross-cutting refactor affecting entire codebase
+  efficiency_gain: 0.85        # Automated cleanup saves 2-3 days/month
+  accuracy_improvement: 0.80   # Zero broken imports, zero duplicates
+  effort_cost: 0.60            # 8 hours effort (moderate)
+  blocking_severity: 0.95      # Production blocker (Docker builds fail)
+  roi_score: 0.88
+  formula: "(0.90×0.35) + (0.85×0.25) + (0.80×0.20) + ((1-0.60)×0.15) + (0.95×0.05)"
+  interpretation: "🔴 IMMEDIATE (≥0.75) — Production blocker with high ROI"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  required_phases:
+    - id: "phase-39"
+      name: "AUDIT Mode Cohesion & Integrity"
+      reason: "Audit validators for post-cleanup verification"
+  required_enhancements:
+    - id: "ENH-061"
+      name: "Universal Role-Based Response System"
+      reason: "Phase 3 handles duplicate response system consolidation"
+  external_dependencies: []
+  blocking_phases:
+    - "Docker deployment: Blocked by root directory pollution"
+    - "CI/CD automation: Blocked by broken imports"
+    - "Production release: Blocked by file organization issues"
+  unblocks:
+    - "Docker deployment: Clean root directory"
+    - "CI/CD automation: Zero broken imports"
+    - "Production release: Clean git status"
+    - "ENH-061 Phase 3: Duplicate consolidation ready"
+
+# ============================================================================
+# STAGES (6 Stages — Execution Order)
+# ============================================================================
+stages:
+  stage_1:
+    name: "Comprehensive Repository Scan"
+    id: "S1"
+    duration: "1 hour"
+    priority: "P0"
+    dependencies: []
+    
+    description: |
+      Scan entire repository for cleanup candidates across 4 dimensions:
+      1. Root directory pollution (utility scripts, test files, configs)
+      2. Orphaned/broken files (tests/_legacy_broken/, markdown sprawl)
+      3. Duplicate implementations (AST-based similarity > 0.7)
+      4. Import references (map all imports for impact analysis)
+      
+      Output: Comprehensive inventory with categorization and risk scores.
+    
+    tasks:
+      - task: "Scan root directory for non-essential files"
+        acceptance_criteria:
+          - "AC-044-S1-01: Inventory includes 100% of root .py files"
+          - "AC-044-S1-02: Categorizes files by relocation rules (ENH-062)"
+      
+      - task: "Scan tests/_legacy_broken/ for orphaned test files"
+        acceptance_criteria:
+          - "AC-044-S1-03: Identifies 13+ orphaned test files"
+          - "AC-044-S1-04: Analyzes fixtures and imports for each test"
+      
+      - task: "Scan for markdown files outside docs/.github"
+        acceptance_criteria:
+          - "AC-044-S1-05: Identifies 20+ markdown files for archival"
+          - "AC-044-S1-06: Excludes README.md and production docs"
+      
+      - task: "Run DuplicateDetector on codebase (AST-based)"
+        acceptance_criteria:
+          - "AC-044-S1-07: Detects 6+ known duplicates (similarity > 0.7)"
+          - "AC-044-S1-08: Aligns with ENH-061 duplicate targets"
+      
+      - task: "Map all import references for impact analysis"
+        acceptance_criteria:
+          - "AC-044-S1-09: Maps 200+ import references to scan targets"
+          - "AC-044-S1-10: Calculates impact scores for relocations"
+    
+    deliverables:
+      - "inventory.json: All cleanup candidates with categorization"
+      - "duplicates.json: Duplicate implementations with similarity scores"
+      - "import_references.json: Import map for impact analysis"
+      - "risk_scores.json: Risk assessment for each relocation"
+    
+    tests:
+      - "test_scan_root_directory"
+      - "test_scan_legacy_tests"
+      - "test_detect_duplicates_ast"
+      - "test_map_import_references"
+      - "test_calculate_risk_scores"
+    
+    validation:
+      method: "Manual review of inventory.json"
+      criteria: "All known cleanup targets identified"
+      estimated_time: "30 minutes"
+
+  stage_2:
+    name: "Generate Relocation Plan with Impact Analysis"
+    id: "S2"
+    duration: "1 hour"
+    priority: "P0"
+    dependencies: ["S1"]
+    
+    description: |
+      Generate comprehensive relocation plan with:
+      1. Source → destination mapping for all candidates
+      2. Import impact analysis (files affected by each relocation)
+      3. Conflict detection and resolution strategies
+      4. Risk scores (0-1.0) for each operation
+      5. Dry-run preview for manual approval
+      
+      Output: Relocation plan ready for approval.
+    
+    tasks:
+      - task: "Classify files by relocation rules (ENH-062)"
+        acceptance_criteria:
+          - "AC-044-S2-01: 100% of inventory classified"
+          - "AC-044-S2-02: Respects production-essential exclusions"
+      
+      - task: "Analyze import impact for each relocation"
+        acceptance_criteria:
+          - "AC-044-S2-03: Maps affected imports per relocation"
+          - "AC-044-S2-04: Identifies circular import risks"
+      
+      - task: "Detect naming conflicts in destinations"
+        acceptance_criteria:
+          - "AC-044-S2-05: Identifies conflicts (same filename)"
+          - "AC-044-S2-06: Proposes rename strategies"
+      
+      - task: "Calculate risk scores (0-1.0)"
+        acceptance_criteria:
+          - "AC-044-S2-07: Risk scores for all relocations"
+          - "AC-044-S2-08: Flags high-risk operations (>0.7)"
+      
+      - task: "Generate dry-run preview (no execution)"
+        acceptance_criteria:
+          - "AC-044-S2-09: Preview shows all operations"
+          - "AC-044-S2-10: Includes before/after file tree"
+    
+    deliverables:
+      - "relocation_plan.yaml: Source → dest mapping"
+      - "impact_report.json: Affected imports per relocation"
+      - "conflict_resolution.yaml: Rename strategies"
+      - "dry_run_preview.txt: Human-readable preview"
+    
+    tests:
+      - "test_classify_by_rules"
+      - "test_analyze_import_impact"
+      - "test_detect_conflicts"
+      - "test_calculate_risk_scores"
+      - "test_generate_dry_run"
+    
+    validation:
+      method: "Manual approval of relocation_plan.yaml"
+      criteria: "Plan reviewed, no critical files affected"
+      estimated_time: "1 hour"
+      approval_required: true
+
+  stage_3:
+    name: "Implement FileRelocator & ImportReferenceAnalyzer"
+    id: "S3"
+    duration: "2 hours"
+    priority: "P0"
+    dependencies: ["S2"]
+    
+    description: |
+      Implement core infrastructure for automated file relocation:
+      1. FileRelocator: Move files with conflict resolution
+      2. ImportReferenceAnalyzer: Find all import references (AST-based)
+      3. Git integration: Checkpoint creation and rollback
+      4. Safety: Dry-run mode, validation, rollback capability
+      
+      Output: Production-ready relocator and analyzer.
+    
+    tasks:
+      - task: "Implement FileRelocator class"
+        acceptance_criteria:
+          - "AC-044-S3-01: relocate_file() moves files without data loss"
+          - "AC-044-S3-02: resolve_conflicts() handles naming conflicts"
+          - "AC-044-S3-03: create_directory_structure() creates dest dirs"
+      
+      - task: "Implement ImportReferenceAnalyzer (AST-based)"
+        acceptance_criteria:
+          - "AC-044-S3-04: find_references() finds 100% of import refs"
+          - "AC-044-S3-05: Handles absolute and relative imports"
+          - "AC-044-S3-06: Detects circular import risks"
+      
+      - task: "Add git checkpoint creation"
+        acceptance_criteria:
+          - "AC-044-S3-07: Creates git checkpoint before operations"
+          - "AC-044-S3-08: Stores checkpoint commit hash"
+      
+      - task: "Add rollback capability"
+        acceptance_criteria:
+          - "AC-044-S3-09: rollback() reverts to checkpoint"
+          - "AC-044-S3-10: Validates rollback success"
+      
+      - task: "Integrate with VacuumOrchestrator"
+        acceptance_criteria:
+          - "AC-044-S3-11: VacuumOrchestrator uses FileRelocator"
+          - "AC-044-S3-12: VacuumOrchestrator uses ImportReferenceAnalyzer"
+    
+    deliverables:
+      - "cortex/orchestrators/support/file_relocator.py"
+      - "cortex/orchestrators/support/import_reference_analyzer.py"
+      - "30+ unit tests"
+    
+    tests:
+      - "test_relocate_file_basic"
+      - "test_relocate_with_conflict"
+      - "test_find_import_references"
+      - "test_analyze_absolute_imports"
+      - "test_analyze_relative_imports"
+      - "test_detect_circular_imports"
+      - "test_git_checkpoint"
+      - "test_rollback"
+    
+    validation:
+      method: "Unit tests + integration tests"
+      criteria: "30+ tests passing, 90%+ coverage"
+      estimated_time: "30 minutes"
+
+  stage_4:
+    name: "Implement ImportReferenceFixer"
+    id: "S4"
+    duration: "2 hours"
+    priority: "P0"
+    dependencies: ["S3"]
+    
+    description: |
+      Implement automated import reference fixing:
+      1. Fix absolute imports (update module paths)
+      2. Fix relative imports (recalculate relative paths)
+      3. Update __init__.py files (package imports)
+      4. Validate imports (try importing after fix)
+      5. Handle edge cases (circular imports, missing modules)
+      
+      Output: Production-ready import fixer with validation.
+    
+    tasks:
+      - task: "Implement absolute import fixing"
+        acceptance_criteria:
+          - "AC-044-S4-01: Updates module paths correctly"
+          - "AC-044-S4-02: Handles multi-level imports (a.b.c.d)"
+      
+      - task: "Implement relative import fixing"
+        acceptance_criteria:
+          - "AC-044-S4-03: Recalculates relative paths"
+          - "AC-044-S4-04: Handles parent directory imports (..)"
+      
+      - task: "Add import validation (try importing)"
+        acceptance_criteria:
+          - "AC-044-S4-05: Validates imports post-fix"
+          - "AC-044-S4-06: Reports validation failures"
+      
+      - task: "Handle edge cases"
+        acceptance_criteria:
+          - "AC-044-S4-07: Detects circular imports"
+          - "AC-044-S4-08: Handles missing __init__.py gracefully"
+      
+      - task: "Update __init__.py files"
+        acceptance_criteria:
+          - "AC-044-S4-09: Updates package imports"
+          - "AC-044-S4-10: Maintains package structure"
+    
+    deliverables:
+      - "cortex/orchestrators/support/import_reference_fixer.py"
+      - "25+ unit tests"
+    
+    tests:
+      - "test_fix_absolute_imports"
+      - "test_fix_relative_imports"
+      - "test_validate_imports_post_fix"
+      - "test_handle_circular_imports"
+      - "test_update_init_files"
+    
+    validation:
+      method: "Unit tests + import validation"
+      criteria: "25+ tests passing, imports validate"
+      estimated_time: "30 minutes"
+
+  stage_5:
+    name: "Execute Cleanup with Validation"
+    id: "S5"
+    duration: "1 hour"
+    priority: "P0"
+    dependencies: ["S4"]
+    
+    description: |
+      Execute comprehensive cleanup workflow:
+      1. Dry-run preview (no execution, show changes)
+      2. Create git checkpoint (safety)
+      3. Execute relocations (move files)
+      4. Fix import references (update imports)
+      5. Validate imports (try importing)
+      6. Run test suite (450+ tests)
+      7. Generate completion report
+      
+      Output: Clean repository with validation report.
+    
+    tasks:
+      - task: "Run dry-run mode (preview only)"
+        acceptance_criteria:
+          - "AC-044-S5-01: Preview shows all operations"
+          - "AC-044-S5-02: No files modified in dry-run"
+      
+      - task: "Create git checkpoint"
+        acceptance_criteria:
+          - "AC-044-S5-03: Checkpoint created before operations"
+          - "AC-044-S5-04: Commit hash stored for rollback"
+      
+      - task: "Execute relocations"
+        acceptance_criteria:
+          - "AC-044-S5-05: All files relocated successfully"
+          - "AC-044-S5-06: No data loss during relocation"
+      
+      - task: "Fix import references"
+        acceptance_criteria:
+          - "AC-044-S5-07: All imports updated"
+          - "AC-044-S5-08: Import validation passes"
+      
+      - task: "Run test suite"
+        acceptance_criteria:
+          - "AC-044-S5-09: 450+ tests passing"
+          - "AC-044-S5-10: No new test failures"
+      
+      - task: "Generate completion report"
+        acceptance_criteria:
+          - "AC-044-S5-11: Report includes files moved, imports fixed"
+          - "AC-044-S5-12: Report includes validation results"
+    
+    deliverables:
+      - "cleanup_report.json: Files moved, imports fixed"
+      - "validation_report.json: Test results, import status"
+      - "git_status.txt: Clean git status"
+    
+    tests:
+      - "test_dry_run_preview"
+      - "test_execute_cleanup"
+      - "test_validate_post_cleanup"
+      - "test_rollback_on_failure"
+    
+    validation:
+      method: "Full test suite + manual verification"
+      criteria: "450+ tests passing, git status clean"
+      estimated_time: "1 hour"
+      approval_required: true
+
+  stage_6:
+    name: "Duplicate Detection & Consolidation"
+    id: "S6"
+    duration: "1 hour"
+    priority: "P1"
+    dependencies: ["S5"]
+    
+    description: |
+      Detect and consolidate duplicate implementations:
+      1. Run DuplicateDetector (AST-based similarity)
+      2. Generate consolidation plan (ENH-061 alignment)
+      3. Mark duplicates for removal
+      4. Update references to canonical implementation
+      5. Trigger ENH-061 Phase 3 (duplicate consolidation)
+      
+      Output: Consolidation plan aligned with ENH-061.
+    
+    tasks:
+      - task: "Run DuplicateDetector on codebase"
+        acceptance_criteria:
+          - "AC-044-S6-01: Detects duplicates with >0.7 similarity"
+          - "AC-044-S6-02: Finds 6+ known duplicates"
+      
+      - task: "Generate consolidation plan"
+        acceptance_criteria:
+          - "AC-044-S6-03: Plan aligns with ENH-061 targets"
+          - "AC-044-S6-04: Specifies canonical implementations"
+      
+      - task: "Mark duplicates for removal"
+        acceptance_criteria:
+          - "AC-044-S6-05: Marks copilot_chat_templates.py"
+          - "AC-044-S6-06: Marks response_formatting_engine.py"
+      
+      - task: "Update references to canonical"
+        acceptance_criteria:
+          - "AC-044-S6-07: All imports point to BlockComposer"
+          - "AC-044-S6-08: All imports point to UnifiedResponseComposer"
+      
+      - task: "Trigger ENH-061 Phase 3"
+        acceptance_criteria:
+          - "AC-044-S6-09: ENH-061 Phase 3 initiated"
+          - "AC-044-S6-10: Consolidation plan synchronized"
+    
+    deliverables:
+      - "duplicates_report.json: Similarity scores"
+      - "consolidation_plan.yaml: ENH-061 Phase 3 plan"
+    
+    tests:
+      - "test_detect_duplicates_ast"
+      - "test_calculate_similarity"
+      - "test_generate_consolidation_plan"
+    
+    validation:
+      method: "Manual review + ENH-061 coordination"
+      criteria: "Consolidation plan approved"
+      estimated_time: "30 minutes"
+
+# ============================================================================
+# CROSS-CUTTING IMPACT ANALYSIS
+# ============================================================================
+cross_cutting_impact:
+  affected_directories:
+    - directory: "/ (root)"
+      impact: "HIGH"
+      changes: "15+ utility scripts relocated to scripts/utilities/"
+      files_affected: 27
+      risk_score: 0.8
+    
+    - directory: "tests/_legacy_broken/"
+      impact: "MEDIUM"
+      changes: "13+ orphaned test files archived or deleted"
+      files_affected: 13
+      risk_score: 0.3
+    
+    - directory: "cortex/orchestrators/response/"
+      impact: "HIGH"
+      changes: "3 duplicate implementations consolidated"
+      files_affected: 15
+      risk_score: 0.7
+    
+    - directory: "scripts/"
+      impact: "MEDIUM"
+      changes: "New utilities/ subdirectory created"
+      files_affected: 0
+      risk_score: 0.2
+    
+    - directory: "docs/"
+      impact: "LOW"
+      changes: "20+ markdown files archived to docs/archive/2026/02/"
+      files_affected: 20
+      risk_score: 0.1
+
+  affected_modules:
+    - module: "cortex.orchestrators.support"
+      impact: "HIGH"
+      changes: "3 new modules (file_relocator, import_reference_analyzer, import_reference_fixer)"
+      breaking_changes: false
+    
+    - module: "cortex.orchestrators.response"
+      impact: "HIGH"
+      changes: "Duplicate consolidation (copilot_chat_templates.py → template_blocks.py)"
+      breaking_changes: true
+    
+    - module: "tests"
+      impact: "MEDIUM"
+      changes: "tests/_legacy_broken/ archived, import references fixed"
+      breaking_changes: false
+
+  import_impact:
+    total_imports_affected: 200
+    critical_imports: 15
+    low_risk_imports: 185
+    validation_strategy: "AST-based analysis + import validation post-fix"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  unit_tests: 85
+  integration_tests: 15
+  total_tests: 100
+  coverage_target: 90
+  
+  test_pyramid:
+    unit: "85 tests (FileRelocator, ImportAnalyzer, ImportFixer, DuplicateDetector)"
+    integration: "15 tests (VacuumOrchestrator end-to-end workflow)"
+    system: "1 test (Full cleanup + validation + test suite)"
+  
+  test_data:
+    - "Mock repository structure with 27 root files"
+    - "Sample Python files with various import patterns"
+    - "Duplicate implementations for similarity testing"
+    - "Broken imports for validation testing"
+
+# ============================================================================
+# ROLLOUT PLAN
+# ============================================================================
+rollout:
+  prerequisites:
+    - "ENH-062 specification reviewed and approved"
+    - "Git checkpoint strategy validated"
+    - "Rollback procedure tested"
+    - "Dry-run mode validated"
+  
+  execution_phases:
+    phase_1_preparation:
+      duration: "30 minutes"
+      activities:
+        - "Review relocation plan (dry-run preview)"
+        - "Validate risk scores"
+        - "Approve plan with tech lead"
+      gates:
+        - "Tech lead approval"
+        - "Dry-run preview reviewed"
+    
+    phase_2_execution:
+      duration: "2 hours"
+      activities:
+        - "Create git checkpoint"
+        - "Execute relocations"
+        - "Fix import references"
+        - "Validate imports"
+        - "Run test suite"
+      gates:
+        - "Import validation passes"
+        - "Test suite passes (450+ tests)"
+    
+    phase_3_validation:
+      duration: "1 hour"
+      activities:
+        - "Manual smoke test"
+        - "Docker build verification"
+        - "CI/CD pipeline check"
+        - "Git status verification"
+      gates:
+        - "Docker build succeeds"
+        - "CI/CD green"
+        - "Git status clean"
+    
+    phase_4_deployment:
+      duration: "30 minutes"
+      activities:
+        - "Commit changes"
+        - "Push to remote"
+        - "Update documentation"
+        - "Schedule monthly cleanup"
+      gates:
+        - "Engineering manager approval"
+        - "Documentation updated"
+
+  rollback_plan:
+    trigger: "Any validation failure"
+    procedure:
+      - "git reset --hard CHECKPOINT_COMMIT"
+      - "Verify rollback success"
+      - "Document failure reason"
+      - "Schedule retry after fix"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  file_organization:
+    - metric: "Root directory file count"
+      baseline: "27+ files"
+      target: "12 files"
+      actual: "TBD"
+    
+    - metric: "Orphaned test files"
+      baseline: "13+ files"
+      target: "0 files"
+      actual: "TBD"
+    
+    - metric: "Markdown sprawl"
+      baseline: "20+ files"
+      target: "0 files (all archived)"
+      actual: "TBD"
+  
+  code_quality:
+    - metric: "Broken imports"
+      baseline: "15 known broken"
+      target: "0 broken"
+      actual: "TBD"
+    
+    - metric: "Duplicate LOC"
+      baseline: "2,400 LOC"
+      target: "0 LOC"
+      actual: "TBD"
+    
+    - metric: "Test suite pass rate"
+      baseline: "95% (~430/450)"
+      target: "100% (450/450)"
+      actual: "TBD"
+  
+  production_readiness:
+    - metric: "Docker build"
+      baseline: "FAIL (root pollution)"
+      target: "PASS"
+      actual: "TBD"
+    
+    - metric: "CI/CD pipeline"
+      baseline: "FAIL (broken imports)"
+      target: "PASS (green)"
+      actual: "TBD"
+    
+    - metric: "Git status"
+      baseline: "Dirty (27+ uncommitted)"
+      target: "Clean"
+      actual: "TBD"
+
+# ============================================================================
+# DOCUMENTATION
+# ============================================================================
+documentation:
+  updates_required:
+    - file: "docs/07-guides/development/file-organization.md"
+      change: "Document new file structure (scripts/utilities/, etc.)"
+    
+    - file: "docs/08-reference/vacuum-orchestrator.md"
+      change: "Document new capabilities (Python relocation, import fixing, duplicate detection)"
+    
+    - file: "README.md"
+      change: "Update repository structure section"
+    
+    - file: ".github/prompts/cortex-architect.prompt.md"
+      change: "Add VACUUM mode documentation (comprehensive cleanup)"
+
+# ============================================================================
+# COMPLETION CRITERIA
+# ============================================================================
+completion_criteria:
+  code:
+    - "All 6 stages completed"
+    - "100 tests passing (85 unit + 15 integration)"
+    - "90%+ test coverage"
+    - "Zero linter errors"
+  
+  functionality:
+    - "Root directory: 12 files only"
+    - "Zero broken imports"
+    - "Zero duplicate implementations"
+    - "450+ tests passing"
+    - "VacuumOrchestrator: Python relocation + import fixing + duplicate detection"
+  
+  validation:
+    - "Docker build succeeds"
+    - "CI/CD pipeline green"
+    - "Git status clean"
+    - "Manual smoke test passed"
+  
+  documentation:
+    - "File organization guide updated"
+    - "Vacuum orchestrator docs updated"
+    - "README.md structure updated"
+    - "CORTEX architect prompt updated"
