@@ -1100,7 +1100,148 @@ function createUseCaseTreemap(containerId, useCases) {
         .text(d => d.data.name.length > 18 ? d.data.name.slice(0, 16) + '...' : d.data.name);
 }
 
+// ============================================================================
+// TAB-LEVEL RENDERING (Integration with DashboardController)
+// ============================================================================
+
+/**
+ * Render Architecture Tab
+ */
+async function renderArchitectureTab(data) {
+    console.log('[CortexViz] Rendering Architecture tab...');
+    
+    // Domain Concept Map (ID: viz-domain)
+    const conceptMapContainer = document.getElementById('viz-domain');
+    if (conceptMapContainer && data.overview) {
+        const summary = data.overview.business_summary || data.overview.summary || '';
+        if (summary.length > 50) {
+            createDomainConceptMap('viz-domain', summary);
+        } else {
+            conceptMapContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-project-diagram"></i>
+                    <p>Insufficient data for concept map generation</p>
+                </div>
+            `;
+        }
+    }
+    
+    // Language distribution (ID: viz-languages)
+    const langContainer = document.getElementById('viz-languages');
+    if (langContainer && (data.metrics?.languages || data.overview?.languages)) {
+        const languages = data.metrics.languages || data.overview.languages;
+        createLanguageSunburst('viz-languages', languages);
+    } else if (langContainer) {
+        langContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-chart-pie"></i>
+                <p>No language data available</p>
+            </div>
+        `;
+    }
+    
+    // File structure tree (ID: viz-files)
+    const fileTreeContainer = document.getElementById('viz-files');
+    if (fileTreeContainer && data.metrics?.file_structure) {
+        createFileTree('viz-files', data.metrics.file_structure);
+    } else if (fileTreeContainer) {
+        fileTreeContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-folder-tree"></i>
+                <p>No file structure data available</p>
+            </div>
+        `;
+    }
+    
+    console.log('[CortexViz] Architecture tab rendered');
+}
+
+/**
+ * Render Quality Tab  
+ */
+async function renderQualityTab(data) {
+    console.log('[CortexViz] Rendering Quality tab...');
+    
+    const metrics = data.metrics || {};
+    
+    // Health gauge
+    const healthScore = metrics.health_score || data.metadata?.health_score || 0;
+    createHealthGauge('health-gauge-viz', healthScore);
+    
+    // Language distribution
+    if (metrics.languages || data.overview?.languages) {
+        const languages = metrics.languages || data.overview.languages;
+        createLanguageSunburst('language-distribution-viz', languages);
+    }
+    
+    console.log('[CortexViz] Quality tab rendered');
+}
+
+/**
+ * Render Security Visualizations
+ */
+async function renderSecurityVisualizations(data) {
+    console.log('[CortexViz] Rendering Security visualizations...');
+    
+    const security = data.security || {};
+    const vulnerabilities = security.vulnerabilities || [];
+    
+    if (vulnerabilities.length > 0) {
+        // Group by severity
+        const severityCounts = vulnerabilities.reduce((acc, vuln) => {
+            const sev = vuln.severity || 'unknown';
+            acc[sev] = (acc[sev] || 0) + 1;
+            return acc;
+        }, {});
+        
+        createSecurityDonut('security-severity-viz', severityCounts);
+    }
+    
+    console.log('[CortexViz] Security visualizations rendered');
+}
+
+/**
+ * Render Dependencies Tab
+ */
+async function renderDependenciesTab(data) {
+    console.log('[CortexViz] Rendering Dependencies tab...');
+    
+    const dependencies = data.dependencies || {};
+    
+    if (dependencies.graph) {
+        createDependencyGraph('dependency-graph-viz', dependencies.graph);
+    }
+    
+    console.log('[CortexViz] Dependencies tab rendered');
+}
+
+/**
+ * Render Overview Visualizations
+ */
+async function renderOverviewVisualizations(data) {
+    console.log('[CortexViz] Rendering Overview visualizations...');
+    
+    const metrics = data.metrics || {};
+    
+    // Health gauge (ID: viz-health)
+    const healthScore = metrics.health_score || data.metadata?.health_score || 0;
+    const healthContainer = document.getElementById('viz-health');
+    if (healthContainer) {
+        console.log('[CortexViz] Rendering health gauge, score:', healthScore);
+        createHealthGauge('viz-health', healthScore);
+    } else {
+        console.warn('[CortexViz] Health gauge container not found');
+    }
+    
+    console.log('[CortexViz] Overview visualizations complete');
+}
+
+// ============================================================================
+// EXPORT
+// ============================================================================
+
 window.CortexViz = {
+    // Individual chart functions
     createLanguageSunburst,
     createDependencyGraph,
     createHealthGauge,
@@ -1108,5 +1249,15 @@ window.CortexViz = {
     createFileTree,
     createDomainConceptMap,
     createUseCaseTreemap,
+    
+    // Tab-level rendering
+    renderArchitectureTab,
+    renderQualityTab,
+    renderSecurityVisualizations,
+    renderDependenciesTab,
+    renderOverviewVisualizations,
+    
+    // Constants
     COLORS
 };
+
