@@ -199,8 +199,140 @@ This prompt powers the architect agent to analyze, challenge, design, digest lea
 | **Integration** | All layers connected (MCP, orchestrators) | ✅ |
 | **Verification** | Implementation Truth confirmed (code inspected) | ✅ |
 | **Cleanup** | No CORTEX_DEBUG markers, markdown vacuum applied | ✅ |
+| **🆕 Master Plan** | index.yaml status synced with implementation reality | ✅ |
 
 **If ANY check fails → INCOMPLETE. Continue work or document blocker.**
+
+### Master Plan Synchronization Protocol (NEW - MANDATORY)
+
+**Authority:** CORTEX-ARCH-013: Master Plan Continuous Sync  
+**Criticality:** BLOCKING — All phase/stage work MUST update index.yaml status  
+**Purpose:** Eliminate status drift between implementation reality and plan registry
+
+**WHEN to sync index.yaml:**
+1. ✅ **Stage Start** — Update status from `planned` → `in_progress`
+2. ✅ **Stage Complete** — Update progress percentage, tests passing count
+3. ✅ **Batch Complete** — Update stages_complete counter (e.g., "3/6 stages")
+4. ✅ **Phase Complete** — Move phase file from `active/` → `completed/`, update index.yaml
+5. ✅ **Blocker Encountered** — Document blocker in description field
+6. ✅ **Status Change** — Any transition: planned → in_progress → blocked → completed
+
+**REQUIRED Fields to Update:**
+
+```yaml
+# In cortex-registry/_cortex-master/index.yaml
+
+active_phases:
+  - id: "phase-44"
+    status: "in_progress"              # ← UPDATE on every status change
+    progress: "67%"                     # ← UPDATE after each stage
+    stages_complete: "4/6"              # ← UPDATE after each stage
+    tests_passing: "25/25"              # ← UPDATE when tests run
+    last_updated: "2026-02-08"          # ← UPDATE every sync
+    description: |
+      🔵 IN PROGRESS (67% complete):   # ← UPDATE with current status emoji
+      ✅ S1: Component A (5 tests)     # ← Mark completed stages
+      ✅ S2: Component B (5 tests)
+      ✅ S3: Component C (10 tests)
+      ✅ S4: Component D (5 tests)
+      🔵 S5: Component E (in progress) # ← Show current stage
+      ⚪ S6: Component F (planned)     # ← Show remaining stages
+```
+
+**Sync Workflow (EVERY IMPLEMENTATION TURN):**
+
+```python
+# Step 1: Read current index.yaml
+index = read_file("cortex-registry/_cortex-master/index.yaml")
+
+# Step 2: Identify phase being worked on
+phase_id = detect_current_phase()  # e.g., "phase-44"
+
+# Step 3: Update phase entry
+updated_phase = update_phase_status(
+    phase_id=phase_id,
+    status="in_progress",  # or completed, blocked
+    progress="67%",
+    stages_complete="4/6",
+    tests_passing="25/25",
+    description=generate_current_description()
+)
+
+# Step 4: Write updated index.yaml
+replace_string_in_file(
+    filePath="cortex-registry/_cortex-master/index.yaml",
+    oldString=old_phase_block,
+    newString=updated_phase_block
+)
+
+# Step 5: Commit sync
+run_in_terminal(
+    command='git add cortex-registry/_cortex-master/index.yaml; git commit -m "Plan sync: Phase {phase_id} - {stage_name} complete"',
+    isBackground=False
+)
+```
+
+**Status Emoji Standards:**
+
+| Status | Emoji | When to Use |
+|--------|-------|-------------|
+| **Completed** | ✅ | Stage/phase fully done, tests passing |
+| **In Progress** | 🔵 | Currently being worked on |
+| **Planned** | ⚪ | Not started yet |
+| **Blocked** | 🔴 | Blocker preventing progress |
+| **Warning** | 🟡 | Partial completion or issue detected |
+
+**Description Format Standard:**
+
+```yaml
+description: |
+  {emoji} {STATUS_LABEL} ({progress}% complete): {summary_line}
+  ✅ S1: {stage_name} ({test_count} tests passing)
+  ✅ S2: {stage_name} ({test_count} tests passing)
+  🔵 S3: {stage_name} (in progress)
+  ⚪ S4: {stage_name} (planned)
+  
+  Next: {next_stage_preview}
+  
+  {optional_blocker_notes}
+```
+
+**ENFORCEMENT:**
+
+❌ **FORBIDDEN:**
+- Marking phase "complete" without moving file to `completed/`
+- Leaving status as "planned" when work has started
+- Missing progress percentage when work >0%
+- No test count update when tests added/modified
+- Skipping sync because "minor change"
+
+✅ **REQUIRED:**
+- Sync EVERY time work is saved (git commit)
+- Update index.yaml BEFORE marking stage complete
+- Verify index.yaml accuracy via Implementation Truth check
+- Include sync commit in session summary
+
+**Quick Sync Command Pattern:**
+
+```bash
+# After completing Stage 4
+git add cortex-registry/_cortex-master/index.yaml
+git commit -m "Plan sync: Phase 44 S4 complete (25/25 tests ✅)"
+
+# After moving to Stage 5
+git add cortex-registry/_cortex-master/index.yaml
+git commit -m "Plan sync: Phase 44 S5 in progress"
+
+# After completing entire phase
+mv cortex-registry/_cortex-master/phases/active/phase-44-*.yaml \
+   cortex-registry/_cortex-master/phases/completed/
+git add cortex-registry/_cortex-master/
+git commit -m "Plan sync: Phase 44 complete (moved to completed/)"
+```
+
+**Dashboard Auto-Sync Integration:**
+
+The master plan dashboard ([cortex-registry/_cortex-master/dashboard/index.html](cortex-registry/_cortex-master/dashboard/index.html)) reads from index.yaml. Every sync automatically updates the dashboard view with zero additional work.
 
 ### Session Continuation Pattern
 
@@ -266,6 +398,38 @@ session_template = response_format.formats["SESSION_SUMMARY"]
 # Date: 2026-02-07
 # ... implementation code ...
 # AC_COMPLETE: AC-PHASE38.0-001 ✅ 18/18 tests passing
+```
+
+**Master Plan Audit Trail:**
+
+Every AC_COMPLETE marker MUST trigger an index.yaml sync. This creates a complete audit trail:
+
+```
+Code Changes (AC markers)
+         ↓
+index.yaml Status Update
+         ↓
+Git Commit (both files together)
+         ↓
+Dashboard Auto-Refresh
+```
+
+**Example Complete Audit Cycle:**
+
+```bash
+# 1. Code implementation with AC markers
+# (TDD workflow in code files)
+
+# 2. Update index.yaml status
+# (sync protocol executed)
+
+# 3. Atomic commit of both
+git add cortex/ cortex-registry/_cortex-master/index.yaml
+git commit -m "Phase 44 S5 complete: Component E ✅ + Plan sync"
+
+# 4. Verify sync accuracy
+grep "phase-44" cortex-registry/_cortex-master/index.yaml
+# Should show: status: in_progress, stages_complete: "5/6"
 ```
 
 ---
@@ -1579,11 +1743,44 @@ RETURN PHASE_CREATE  # No match found
 5. Git commit: `chore(phase-{N}): Deprecate - {reason}`
 
 ### COMPLETE (Phase Closure)
-**Requirements:** All deliverables verified, tests passing, dashboard synced, cleanup done
+**Requirements:** All deliverables verified, tests passing, dashboard synced, cleanup done, **index.yaml status accurate**
 
 **Actions:**
-1. Verify sync across 3 sources (registry, implementation, dashboard)
-2. Move from active/ to completed/2026/
+1. **✅ Verify Master Plan Sync** — MANDATORY FIRST STEP
+   ```bash
+   # Check index.yaml shows accurate status
+   grep "phase-{N}" cortex-registry/_cortex-master/index.yaml
+   
+   # Verify:
+   # - status: "completed" (not "in_progress")
+   # - progress: "100%"
+   # - stages_complete: "{N}/{N}" (all stages done)
+   # - tests_passing: "{count}/{count}" (all tests passing)
+   # - description shows all stages with ✅
+   ```
+
+2. Verify sync across 3 sources (registry, implementation, dashboard)
+3. Move phase YAML: `active/` → `completed/2026/`
+4. Update index.yaml:
+   - Remove from `active_phases:` section
+   - Add to `completed_phases_2026:` list
+   - Increment `statistics.completed_phases` counter
+   - Update `statistics.last_phase_completed` date
+5. Regenerate dashboard (plan-summary.json)
+6. Git commit: `feat(phase-{N}): Complete ✅ {name} - {summary}`
+
+**ENFORCEMENT:** Cannot mark phase complete if index.yaml status != implementation reality.
+
+**Validation Checklist:**
+
+| Source | Verification | Status |
+|--------|-------------|--------|
+| **Code** | All deliverables implemented, tests passing | ✅ |
+| **Registry** (index.yaml) | Phase status = "completed", moved to completed/ | ✅ |
+| **Implementation** | Features working, no broken imports | ✅ |
+| **Dashboard** | plan-summary.json shows completion | ✅ |
+| **Tests** | Coverage ≥ target, all passing | ✅ |
+| **Documentation** | Updated for new features | ✅ |
 3. Update index.yaml statistics
 4. Regenerate dashboard with completion stats
 5. Git commit: `feat(phase-{N}): ✅ COMPLETE - {summary}`
@@ -2984,6 +3181,165 @@ return wiring_gaps
 | **WIRE-003** | ENH-048 | yaml_loaders.py ❌ MISSING | N/A | ❌ NO | Inline only | 🔴 CRITICAL |
 | **WIRE-004** | Phase-28 | OnboardingGate ✅ EXISTS | ✅ cortex_onboard_repository | 🟡 PARTIAL | ❌ NOT INTEGRATED | 🟡 HIGH |
 | **WIRE-005** | Phase-32 | suite_generator.py ✅ EXISTS | N/A | 🟡 PARTIAL | ❌ OLD TEMPLATE | 🟡 MEDIUM |
+
+---
+
+### P7 — Master Plan Status Validation (NEW - CRITICAL)
+
+**Authority:** CORTEX-ARCH-013: Master Plan Continuous Sync  
+**Criticality:** P0 — Prevent status drift between implementation and registry  
+**Purpose:** Validate that index.yaml reflects actual implementation reality
+
+**Activation Condition:**
+```python
+master_plan_validation_enabled = (
+    Path("cortex-registry/_cortex-master/index.yaml").exists()
+    and len(active_phases) > 0  # Has active work
+)
+```
+
+**Validation Logic:**
+
+```python
+import yaml
+from pathlib import Path
+from datetime import datetime, timedelta
+
+def audit_master_plan_status():
+    """
+    Verify that index.yaml status matches implementation reality.
+    
+    Returns:
+        List of drift findings with severity and fix actions.
+    """
+    index_yaml = yaml.safe_load(
+        Path("cortex-registry/_cortex-master/index.yaml").read_text()
+    )
+    
+    drifts = []
+    
+    for phase in index_yaml.get("active_phases", []):
+        phase_id = phase["id"]
+        status = phase.get("status", "unknown")
+        progress = phase.get("progress", "0%")
+        tests_passing = phase.get("tests_passing", "0/0")
+        last_updated = phase.get("last_updated", "1970-01-01")
+        
+        # Check 1: Status drift - is "planned" but work started?
+        if status == "planned":
+            # Search for phase implementation
+            phase_files = grep_search(
+                f"AC_START.*{phase_id}|# Phase {phase_id}",
+                includePattern="cortex/**/*.py",
+                isRegexp=True
+            )
+            
+            if len(phase_files) > 0:
+                drifts.append({
+                    "phase": phase_id,
+                    "drift": "STATUS_DRIFT",
+                    "severity": "P0",
+                    "evidence": f"Phase {phase_id} status='planned' but implementation found in {len(phase_files)} files",
+                    "fix": f"Update index.yaml: status → 'in_progress', add progress percentage"
+                })
+        
+        # Check 2: Status "in_progress" but no recent updates (>7 days)
+        if status == "in_progress":
+            days_since_update = (datetime.now() - datetime.fromisoformat(last_updated)).days
+            
+            if days_since_update > 7:
+                drifts.append({
+                    "phase": phase_id,
+                    "drift": "STALE_STATUS",
+                    "severity": "P1",
+                    "evidence": f"Phase {phase_id} in_progress but last_updated {days_since_update} days ago",
+                    "fix": f"Verify implementation status, update index.yaml or move to completed/"
+                })
+        
+        # Check 3: Progress 100% but status not "completed"
+        if progress == "100%" and status != "completed":
+            drifts.append({
+                "phase": phase_id,
+                "drift": "INCOMPLETE_COMPLETION",
+                "severity": "P0",
+                "evidence": f"Phase {phase_id} progress=100% but status='{status}'",
+                "fix": f"Move phase YAML to completed/, update index.yaml status → 'completed'"
+            })
+        
+        # Check 4: Test count mismatch
+        if tests_passing and "/" in tests_passing:
+            passing, total = tests_passing.split("/")
+            if passing == total and int(total) > 0:
+                # All tests passing - should phase be complete?
+                phase_file = Path(phase["file"])
+                phase_yaml = yaml.safe_load(phase_file.read_text())
+                
+                total_stages = len(phase_yaml.get("stages", []))
+                stages_complete = phase.get("stages_complete", "0/0")
+                
+                if "/" in stages_complete:
+                    complete, total_stages_count = stages_complete.split("/")
+                    if complete == total_stages_count:
+                        # All stages + all tests done = phase should be complete
+                        drifts.append({
+                            "phase": phase_id,
+                            "drift": "COMPLETION_READY",
+                            "severity": "P1",
+                            "evidence": f"Phase {phase_id}: all stages ({stages_complete}) + all tests ({tests_passing}) complete",
+                            "fix": f"Verify deliverables, then move to completed/ and update index.yaml"
+                        })
+        
+        # Check 5: Phase file moved but index.yaml not updated
+        phase_file_path = Path(phase["file"])
+        if not phase_file_path.exists():
+            # Maybe moved to completed/?
+            completed_path = Path(str(phase_file_path).replace("active/", "completed/"))
+            if completed_path.exists():
+                drifts.append({
+                    "phase": phase_id,
+                    "drift": "FILE_LOCATION_DRIFT",
+                    "severity": "P0",
+                    "evidence": f"Phase {phase_id} YAML moved to completed/ but still in active_phases list",
+                    "fix": f"Remove from active_phases, add to completed_phases_2026 in index.yaml"
+                })
+    
+    return drifts
+```
+
+**Output Format:**
+
+```markdown
+### P7 — Master Plan Status Validation
+
+| Phase | Drift Type | Severity | Evidence | Fix Action |
+|-------|-----------|----------|----------|------------|
+| phase-43 | STATUS_DRIFT | 🔴 P0 | status='planned' but 200 tests exist | Update to 'completed', move YAML |
+| phase-44 | COMPLETION_READY | 🟡 P1 | All stages + tests done (25/25) | Verify deliverables, mark complete |
+| phase-37 | STALE_STATUS | 🟡 P1 | Last updated 14 days ago | Check actual status, sync index |
+
+**Total Drifts:** 3 | **P0:** 1 | **P1:** 2
+
+**Priority Fix (P0):**
+```bash
+# Fix phase-43 status drift
+mv cortex-registry/_cortex-master/phases/active/phase-43-*.yaml \
+   cortex-registry/_cortex-master/phases/completed/
+
+# Update index.yaml
+# (remove from active_phases, add to completed_phases_2026)
+
+git add cortex-registry/_cortex-master/
+git commit -m "Fix: Phase 43 status drift - completed but marked planned"
+```
+```
+
+**Enforcement:**
+- ✅ **Run on EVERY AUDIT** — Automatic P7 check
+- ✅ **Block PLAN operations** — Cannot create/update phases with drifts
+- ✅ **Require fix before completion** — Holistic checklist item
+- ✅ **Auto-sync protocol** — Update index.yaml after each stage
+
+---
 
 **Detailed Checks:**
 
