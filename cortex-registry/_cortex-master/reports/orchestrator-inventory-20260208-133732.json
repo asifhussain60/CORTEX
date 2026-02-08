@@ -1,0 +1,1463 @@
+{
+  "timestamp": "2026-02-08T18:37:32.679270",
+  "workspace_root": "/Users/asifhussain/PROJECTS/CORTEX",
+  "total_files": 314,
+  "orchestrators_count": 91,
+  "support_files_count": 223,
+  "orchestrators": [
+    {
+      "name": "audit_remediation_coordinator",
+      "path": "cortex/orchestrators/planning/audit_remediation_coordinator.py",
+      "category": "planning"
+    },
+    {
+      "name": "autonomous_execution_coordinator",
+      "path": "cortex/orchestrators/autonomous_execution_coordinator.py",
+      "category": "autonomous_execution_coordinator.py"
+    },
+    {
+      "name": "autonomous_execution_engine",
+      "path": "cortex/orchestrators/domain/autonomous_execution_engine.py",
+      "category": "domain"
+    },
+    {
+      "name": "bluf_orchestrators",
+      "path": "cortex/orchestrators/interaction/bluf_orchestrators.py",
+      "category": "interaction"
+    },
+    {
+      "name": "brain_flush_orchestrator",
+      "path": "cortex/orchestrators/support/brain_flush_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "brain_health_orchestrator",
+      "path": "cortex/orchestrators/support/brain_health_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "business_language_orchestrator",
+      "path": "cortex/orchestrators/support/business_language_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "capacity_orchestrators",
+      "path": "cortex/orchestrators/capacity/capacity_orchestrators.py",
+      "category": "capacity"
+    },
+    {
+      "name": "central_brain_orchestrator",
+      "path": "cortex/orchestrators/core/central_brain_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "challenge_engine",
+      "path": "cortex/orchestrators/core/challenge_engine.py",
+      "category": "core"
+    },
+    {
+      "name": "challenge_engine_plugins",
+      "path": "cortex/orchestrators/core/challenge_engine_plugins.py",
+      "category": "core"
+    },
+    {
+      "name": "composed_orchestrator",
+      "path": "cortex/orchestrators/support/composed_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "composition_engine",
+      "path": "cortex/orchestrators/composition/composition_engine.py",
+      "category": "composition"
+    },
+    {
+      "name": "context_assembly_orchestrator",
+      "path": "cortex/orchestrators/support/context_assembly_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "conversation_orchestrator",
+      "path": "cortex/orchestrators/conversation_orchestrator.py",
+      "category": "conversation_orchestrator.py"
+    },
+    {
+      "name": "coordinator",
+      "path": "cortex/orchestrators/coordinator.py",
+      "category": "coordinator.py"
+    },
+    {
+      "name": "coordinator",
+      "path": "cortex/orchestrators/core/coordination/coordinator.py",
+      "category": "core"
+    },
+    {
+      "name": "cortex_docs_orchestrator",
+      "path": "cortex/orchestrators/internal/cortex_docs_orchestrator.py",
+      "category": "internal"
+    },
+    {
+      "name": "cortical_integration_orchestrator",
+      "path": "cortex/orchestrators/cortical/cortical_integration_orchestrator.py",
+      "category": "cortical"
+    },
+    {
+      "name": "dashboard_asset_manager",
+      "path": "cortex/orchestrators/support/dashboard_asset_manager.py",
+      "category": "support"
+    },
+    {
+      "name": "dashboard_orchestrator",
+      "path": "cortex/orchestrators/domain/dashboard_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "debug_orchestrator",
+      "path": "cortex/orchestrators/debugging/debug_orchestrator.py",
+      "category": "debugging"
+    },
+    {
+      "name": "debugging_orchestrator",
+      "path": "cortex/orchestrators/support/debugging_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "depth_manager",
+      "path": "cortex/orchestrators/core/depth_manager.py",
+      "category": "core"
+    },
+    {
+      "name": "digest_enhancement_orchestrator",
+      "path": "cortex/orchestrators/learning/digest_enhancement_orchestrator.py",
+      "category": "learning"
+    },
+    {
+      "name": "digest_session_orchestrator",
+      "path": "cortex/orchestrators/support/digest_session_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "discovery_orchestrator",
+      "path": "cortex/orchestrators/support/discovery_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "domain_enhancement_orchestrator",
+      "path": "cortex/orchestrators/domain/domain_enhancement_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "duplication_detector_orchestrator",
+      "path": "cortex/orchestrators/support/duplication_detector_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "educational_orchestrator",
+      "path": "cortex/orchestrators/education/educational_orchestrator.py",
+      "category": "education"
+    },
+    {
+      "name": "enforcement_orchestrator",
+      "path": "cortex/orchestrators/core/enforcement_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "enhanced_documentation_orchestrator",
+      "path": "cortex/orchestrators/domain/enhanced_documentation_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "enhanced_planning_orchestrator",
+      "path": "cortex/orchestrators/domain/enhanced_planning_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "enhanced_refactoring_orchestrator",
+      "path": "cortex/orchestrators/domain/enhanced_refactoring_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "execution_coordinator",
+      "path": "cortex/orchestrators/core/execution/execution_coordinator.py",
+      "category": "core"
+    },
+    {
+      "name": "git_analysis_engine",
+      "path": "cortex/orchestrators/core/git_analysis_engine.py",
+      "category": "core"
+    },
+    {
+      "name": "holistic_validation_orchestrator",
+      "path": "cortex/orchestrators/holistic/holistic_validation_orchestrator.py",
+      "category": "holistic"
+    },
+    {
+      "name": "inquiry_orchestrator",
+      "path": "cortex/orchestrators/domain/inquiry_orchestrator.py",
+      "category": "domain"
+    },
+    {
+      "name": "instrumentation_orchestrator",
+      "path": "cortex/orchestrators/support/instrumentation_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "interaction_orchestrator",
+      "path": "cortex/orchestrators/core/interaction_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "interaction_orchestrator_enhancement",
+      "path": "cortex/orchestrators/core/interaction_orchestrator_enhancement.py",
+      "category": "core"
+    },
+    {
+      "name": "lens_orchestrator",
+      "path": "cortex/orchestrators/support/lens_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "lens_visualization_orchestrator",
+      "path": "cortex/orchestrators/support/lens_visualization_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "master_orchestrator",
+      "path": "cortex/orchestrators/core/master_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "master_orchestrator",
+      "path": "cortex/orchestrators/persona/master_orchestrator.py",
+      "category": "persona"
+    },
+    {
+      "name": "master_orchestrator_stage_1",
+      "path": "cortex/orchestrators/core/master_orchestrator_stage_1.py",
+      "category": "core"
+    },
+    {
+      "name": "master_orchestrator_stage_2",
+      "path": "cortex/orchestrators/core/master_orchestrator_stage_2.py",
+      "category": "core"
+    },
+    {
+      "name": "master_orchestrator_stage_3",
+      "path": "cortex/orchestrators/core/master_orchestrator_stage_3.py",
+      "category": "core"
+    },
+    {
+      "name": "master_orchestrator_stage_4",
+      "path": "cortex/orchestrators/core/master_orchestrator_stage_4.py",
+      "category": "core"
+    },
+    {
+      "name": "master_orchestrator_stages",
+      "path": "cortex/orchestrators/core/master_orchestrator_stages.py",
+      "category": "core"
+    },
+    {
+      "name": "memory_consolidation_orchestrator",
+      "path": "cortex/orchestrators/cortical/memory_consolidation_orchestrator.py",
+      "category": "cortical"
+    },
+    {
+      "name": "model_manager",
+      "path": "cortex/orchestrators/response/model_manager.py",
+      "category": "response"
+    },
+    {
+      "name": "multi_role_response_engine",
+      "path": "cortex/orchestrators/response/multi_role_response_engine.py",
+      "category": "response"
+    },
+    {
+      "name": "orchestrator",
+      "path": "cortex/orchestrators/documentation/orchestrator.py",
+      "category": "documentation"
+    },
+    {
+      "name": "orchestrator",
+      "path": "cortex/orchestrators/onboarding/orchestrator.py",
+      "category": "onboarding"
+    },
+    {
+      "name": "orchestrator_base_protocol",
+      "path": "cortex/orchestrators/core/orchestrator_base_protocol.py",
+      "category": "core"
+    },
+    {
+      "name": "orchestrator_bootstrap",
+      "path": "cortex/orchestrators/core/orchestrator_bootstrap.py",
+      "category": "core"
+    },
+    {
+      "name": "orchestrator_composite",
+      "path": "cortex/orchestrators/orchestrator_composite.py",
+      "category": "orchestrator_composite.py"
+    },
+    {
+      "name": "orchestrator_context_injector",
+      "path": "cortex/orchestrators/decorators/orchestrator_context_injector.py",
+      "category": "decorators"
+    },
+    {
+      "name": "orchestrator_integrity_validator",
+      "path": "cortex/orchestrators/audit/orchestrator_integrity_validator.py",
+      "category": "audit"
+    },
+    {
+      "name": "orchestrator_lookup",
+      "path": "cortex/orchestrators/registry/orchestrator_lookup.py",
+      "category": "registry"
+    },
+    {
+      "name": "orchestrator_traits",
+      "path": "cortex/orchestrators/domains/orchestrator_traits.py",
+      "category": "domains"
+    },
+    {
+      "name": "orchestrator_versioning",
+      "path": "cortex/orchestrators/core/orchestrator_versioning.py",
+      "category": "core"
+    },
+    {
+      "name": "orchestrator_visibility",
+      "path": "cortex/orchestrators/support/orchestrator_visibility.py",
+      "category": "support"
+    },
+    {
+      "name": "orchestrator_wiring",
+      "path": "cortex/orchestrators/core/orchestrator_wiring.py",
+      "category": "core"
+    },
+    {
+      "name": "persona_orchestrator",
+      "path": "cortex/orchestrators/core/persona_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "phase_completion_orchestrator",
+      "path": "cortex/orchestrators/support/phase_completion_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "plan_orchestrator",
+      "path": "cortex/orchestrators/support/plan_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "plan_pause_manager",
+      "path": "cortex/orchestrators/domain/plan_pause_manager.py",
+      "category": "domain"
+    },
+    {
+      "name": "readiness_engine",
+      "path": "cortex/orchestrators/intelligence/readiness_engine.py",
+      "category": "intelligence"
+    },
+    {
+      "name": "recommendation_engine",
+      "path": "cortex/orchestrators/support/recommendation_engine.py",
+      "category": "support"
+    },
+    {
+      "name": "repo_detection_orchestrator",
+      "path": "cortex/orchestrators/support/repo_detection_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "repository_onboarding_orchestrator",
+      "path": "cortex/orchestrators/support/repository_onboarding_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "review_orchestrator",
+      "path": "cortex/orchestrators/core/review_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "rollback_orchestrator",
+      "path": "cortex/orchestrators/support/rollback_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "routing_engine",
+      "path": "cortex/orchestrators/adaptive/routing_engine.py",
+      "category": "adaptive"
+    },
+    {
+      "name": "selenium_playwright_orchestrator",
+      "path": "cortex/orchestrators/migration/selenium_playwright_orchestrator.py",
+      "category": "migration"
+    },
+    {
+      "name": "sensory_input_orchestrator",
+      "path": "cortex/orchestrators/cortical/sensory_input_orchestrator.py",
+      "category": "cortical"
+    },
+    {
+      "name": "setup_orchestrator",
+      "path": "cortex/orchestrators/support/setup_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "solution_recommendation_engine",
+      "path": "cortex/orchestrators/core/solution_recommendation_engine.py",
+      "category": "core"
+    },
+    {
+      "name": "tdd_orchestrator",
+      "path": "cortex/orchestrators/core/tdd_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "tech_intelligence_orchestrator",
+      "path": "cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py",
+      "category": "intelligence"
+    },
+    {
+      "name": "test_master_orchestrator",
+      "path": "cortex/orchestrators/persona/test_master_orchestrator.py",
+      "category": "persona"
+    },
+    {
+      "name": "test_orchestrator",
+      "path": "cortex/orchestrators/documentation/test_orchestrator.py",
+      "category": "documentation"
+    },
+    {
+      "name": "tool_discovery_orchestrator",
+      "path": "cortex/orchestrators/core/tool_discovery_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "truth_verification_engine",
+      "path": "cortex/orchestrators/education/truth_verification_engine.py",
+      "category": "education"
+    },
+    {
+      "name": "upgrade_orchestrator",
+      "path": "cortex/orchestrators/support/upgrade_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "vacuum_orchestrator",
+      "path": "cortex/orchestrators/support/vacuum_orchestrator.py",
+      "category": "support"
+    },
+    {
+      "name": "version_manager",
+      "path": "cortex/orchestrators/version_manager.py",
+      "category": "version_manager.py"
+    },
+    {
+      "name": "workflow_orchestrator",
+      "path": "cortex/orchestrators/core/workflow_orchestrator.py",
+      "category": "core"
+    },
+    {
+      "name": "wrapped_tdd_orchestrator",
+      "path": "cortex/orchestrators/core/wrapped_tdd_orchestrator.py",
+      "category": "core"
+    }
+  ],
+  "support_files": [
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/linting/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/holistic/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/phase_finalization/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/documentation/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/domains/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/coordination/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/integration/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/solid_analyzers/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/execution/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/core/validation/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/response/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/mixins/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/intelligence/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/decorators/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/debugging/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/education/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/internal/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/planning/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/composition/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/policies/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/adapters/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/registry/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/persona/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/custom/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/domain/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/migration/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/handlers/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/adaptive/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/onboarding/__init__.py"
+    },
+    {
+      "name": "__init__",
+      "path": "cortex/orchestrators/company_separation/__init__.py"
+    },
+    {
+      "name": "advanced_features",
+      "path": "cortex/orchestrators/core/advanced_features.py"
+    },
+    {
+      "name": "agent_health_validator",
+      "path": "cortex/orchestrators/audit/agent_health_validator.py"
+    },
+    {
+      "name": "architect_prompt_integration",
+      "path": "cortex/orchestrators/support/architect_prompt_integration.py"
+    },
+    {
+      "name": "architecture_guard",
+      "path": "cortex/orchestrators/core/architecture_guard.py"
+    },
+    {
+      "name": "architecture_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/architecture_inquiry_handler.py"
+    },
+    {
+      "name": "ascii_progress_bar",
+      "path": "cortex/orchestrators/response/ascii_progress_bar.py"
+    },
+    {
+      "name": "audit_logger_connector",
+      "path": "cortex/orchestrators/core/integration/audit_logger_connector.py"
+    },
+    {
+      "name": "audit_mode_integrator",
+      "path": "cortex/orchestrators/audit/audit_mode_integrator.py"
+    },
+    {
+      "name": "audit_trail_verifier",
+      "path": "cortex/orchestrators/core/audit_trail_verifier.py"
+    },
+    {
+      "name": "autonomous_plan_executor",
+      "path": "cortex/orchestrators/planning/autonomous_plan_executor.py"
+    },
+    {
+      "name": "base_handler",
+      "path": "cortex/orchestrators/handlers/base_handler.py"
+    },
+    {
+      "name": "base_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/base_inquiry_handler.py"
+    },
+    {
+      "name": "batch_dashboard_seeder",
+      "path": "cortex/orchestrators/domain/batch_dashboard_seeder.py"
+    },
+    {
+      "name": "batch_processor",
+      "path": "cortex/orchestrators/core/batch_processor.py"
+    },
+    {
+      "name": "best_practice_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/best_practice_inquiry_handler.py"
+    },
+    {
+      "name": "brittleness_scanner",
+      "path": "cortex/orchestrators/support/brittleness_scanner.py"
+    },
+    {
+      "name": "business_context_generator",
+      "path": "cortex/orchestrators/response/business_context_generator.py"
+    },
+    {
+      "name": "caching_layer",
+      "path": "cortex/orchestrators/adaptive/caching_layer.py"
+    },
+    {
+      "name": "capability_discovery",
+      "path": "cortex/orchestrators/registry/capability_discovery.py"
+    },
+    {
+      "name": "capability_docs",
+      "path": "cortex/orchestrators/documentation/capability_docs.py"
+    },
+    {
+      "name": "capability_mesh",
+      "path": "cortex/orchestrators/registry/capability_mesh.py"
+    },
+    {
+      "name": "challenge_gate",
+      "path": "cortex/orchestrators/holistic/challenge_gate.py"
+    },
+    {
+      "name": "changelog_formatter",
+      "path": "cortex/orchestrators/support/changelog_formatter.py"
+    },
+    {
+      "name": "chat_response_policy",
+      "path": "cortex/orchestrators/response/chat_response_policy.py"
+    },
+    {
+      "name": "chat_response_policy",
+      "path": "cortex/orchestrators/policies/chat_response_policy.py"
+    },
+    {
+      "name": "clarity_measurement",
+      "path": "cortex/orchestrators/core/clarity_measurement.py"
+    },
+    {
+      "name": "code_level_planner",
+      "path": "cortex/orchestrators/domain/code_level_planner.py"
+    },
+    {
+      "name": "code_reference_updater",
+      "path": "cortex/orchestrators/company_separation/code_reference_updater.py"
+    },
+    {
+      "name": "coherence_validator",
+      "path": "cortex/orchestrators/domain/coherence_validator.py"
+    },
+    {
+      "name": "complexity_classifier",
+      "path": "cortex/orchestrators/core/complexity_classifier.py"
+    },
+    {
+      "name": "component_health",
+      "path": "cortex/orchestrators/core/component_health.py"
+    },
+    {
+      "name": "component_integration_verification",
+      "path": "cortex/orchestrators/core/component_integration_verification.py"
+    },
+    {
+      "name": "comprehension_session",
+      "path": "cortex/orchestrators/core/comprehension_session.py"
+    },
+    {
+      "name": "confidence_router",
+      "path": "cortex/orchestrators/confidence_router.py"
+    },
+    {
+      "name": "continuation_chain",
+      "path": "cortex/orchestrators/continuation_chain.py"
+    },
+    {
+      "name": "conversation_continuer",
+      "path": "cortex/orchestrators/conversation_continuer.py"
+    },
+    {
+      "name": "copilot_chat_templates",
+      "path": "cortex/orchestrators/response/copilot_chat_templates.py"
+    },
+    {
+      "name": "copilot_merger",
+      "path": "cortex/orchestrators/copilot_merger.py"
+    },
+    {
+      "name": "cortex_brain_integration",
+      "path": "cortex/orchestrators/holistic/cortex_brain_integration.py"
+    },
+    {
+      "name": "cross_repo_router",
+      "path": "cortex/orchestrators/cross_repo_router.py"
+    },
+    {
+      "name": "dashboard_capability_broker",
+      "path": "cortex/orchestrators/domain/dashboard_capability_broker.py"
+    },
+    {
+      "name": "dashboard_integration_mixin",
+      "path": "cortex/orchestrators/dashboard_integration_mixin.py"
+    },
+    {
+      "name": "dashboard_schema_models",
+      "path": "cortex/orchestrators/onboarding/dashboard_schema_models.py"
+    },
+    {
+      "name": "debug_analyzer",
+      "path": "cortex/orchestrators/debugging/debug_analyzer.py"
+    },
+    {
+      "name": "debug_capture",
+      "path": "cortex/orchestrators/debugging/debug_capture.py"
+    },
+    {
+      "name": "debug_cleanup",
+      "path": "cortex/orchestrators/debugging/debug_cleanup.py"
+    },
+    {
+      "name": "debug_injector",
+      "path": "cortex/orchestrators/debugging/debug_injector.py"
+    },
+    {
+      "name": "decision_journal",
+      "path": "cortex/orchestrators/support/decision_journal.py"
+    },
+    {
+      "name": "delegation_handler",
+      "path": "cortex/orchestrators/composition/delegation_handler.py"
+    },
+    {
+      "name": "dependency_drift_detector",
+      "path": "cortex/orchestrators/audit/dependency_drift_detector.py"
+    },
+    {
+      "name": "dependency_graph",
+      "path": "cortex/orchestrators/holistic/dependency_graph.py"
+    },
+    {
+      "name": "dependency_resolver",
+      "path": "cortex/orchestrators/onboarding/dependency_resolver.py"
+    },
+    {
+      "name": "disambiguation_ui",
+      "path": "cortex/orchestrators/core/disambiguation_ui.py"
+    },
+    {
+      "name": "documentation",
+      "path": "cortex/orchestrators/company_separation/documentation.py"
+    },
+    {
+      "name": "domain_brain",
+      "path": "cortex/orchestrators/domain_brain.py"
+    },
+    {
+      "name": "domain_brain_connector",
+      "path": "cortex/orchestrators/core/integration/domain_brain_connector.py"
+    },
+    {
+      "name": "domain_classifier",
+      "path": "cortex/orchestrators/domains/domain_classifier.py"
+    },
+    {
+      "name": "domain_knowledge_merger",
+      "path": "cortex/orchestrators/domain/domain_knowledge_merger.py"
+    },
+    {
+      "name": "domain_templates",
+      "path": "cortex/orchestrators/domains/domain_templates.py"
+    },
+    {
+      "name": "dor_approval_gate",
+      "path": "cortex/orchestrators/core/dor_approval_gate.py"
+    },
+    {
+      "name": "dor_validator",
+      "path": "cortex/orchestrators/core/validation/dor_validator.py"
+    },
+    {
+      "name": "dual_header_system",
+      "path": "cortex/orchestrators/response/dual_header_system.py"
+    },
+    {
+      "name": "dual_path_resolver",
+      "path": "cortex/orchestrators/company_separation/dual_path_resolver.py"
+    },
+    {
+      "name": "duplication_registry",
+      "path": "cortex/orchestrators/support/duplication_registry.py"
+    },
+    {
+      "name": "ecosystem_scanner",
+      "path": "cortex/orchestrators/intelligence/ecosystem_scanner.py"
+    },
+    {
+      "name": "enterprise_features",
+      "path": "cortex/orchestrators/core/enterprise_features.py"
+    },
+    {
+      "name": "environment_upgrade_integration",
+      "path": "cortex/orchestrators/support/environment_upgrade_integration.py"
+    },
+    {
+      "name": "environment_validator",
+      "path": "cortex/orchestrators/core/environment_validator.py"
+    },
+    {
+      "name": "evolution_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/evolution_inquiry_handler.py"
+    },
+    {
+      "name": "execution_context_analyzer",
+      "path": "cortex/orchestrators/adaptive/execution_context_analyzer.py"
+    },
+    {
+      "name": "execution_modes",
+      "path": "cortex/orchestrators/adaptive/execution_modes.py"
+    },
+    {
+      "name": "extractive_summarizer",
+      "path": "cortex/orchestrators/response/extractive_summarizer.py"
+    },
+    {
+      "name": "fallback_pipeline",
+      "path": "cortex/orchestrators/response/fallback_pipeline.py"
+    },
+    {
+      "name": "feature_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/feature_inquiry_handler.py"
+    },
+    {
+      "name": "feedback_loop",
+      "path": "cortex/orchestrators/adaptive/feedback_loop.py"
+    },
+    {
+      "name": "file_relocator",
+      "path": "cortex/orchestrators/support/file_relocator.py"
+    },
+    {
+      "name": "file_write_policy",
+      "path": "cortex/orchestrators/policies/file_write_policy.py"
+    },
+    {
+      "name": "fuzzy_intent_matcher",
+      "path": "cortex/orchestrators/core/fuzzy_intent_matcher.py"
+    },
+    {
+      "name": "generic_code_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/generic_code_inquiry_handler.py"
+    },
+    {
+      "name": "governance_principles",
+      "path": "cortex/orchestrators/core/governance_principles.py"
+    },
+    {
+      "name": "governance_registry",
+      "path": "cortex/orchestrators/core/governance_registry.py"
+    },
+    {
+      "name": "governance_validator",
+      "path": "cortex/orchestrators/core/validation/governance_validator.py"
+    },
+    {
+      "name": "handler_implementations",
+      "path": "cortex/orchestrators/handlers/handler_implementations.py"
+    },
+    {
+      "name": "hidden_issue_detector",
+      "path": "cortex/orchestrators/response/hidden_issue_detector.py"
+    },
+    {
+      "name": "implementation_verifier",
+      "path": "cortex/orchestrators/education/implementation_verifier.py"
+    },
+    {
+      "name": "import_reference_analyzer",
+      "path": "cortex/orchestrators/support/import_reference_analyzer.py"
+    },
+    {
+      "name": "import_reference_fixer",
+      "path": "cortex/orchestrators/support/import_reference_fixer.py"
+    },
+    {
+      "name": "incremental_task_decomposer",
+      "path": "cortex/orchestrators/planning/incremental_task_decomposer.py"
+    },
+    {
+      "name": "infrastructure_integration",
+      "path": "cortex/orchestrators/planning/infrastructure_integration.py"
+    },
+    {
+      "name": "inquiry_cache",
+      "path": "cortex/orchestrators/support/inquiry_cache.py"
+    },
+    {
+      "name": "inquiry_router",
+      "path": "cortex/orchestrators/domain/inquiry/inquiry_router.py"
+    },
+    {
+      "name": "integration_validator",
+      "path": "cortex/orchestrators/company_separation/integration_validator.py"
+    },
+    {
+      "name": "intelligence_preserver",
+      "path": "cortex/orchestrators/intelligence_preserver.py"
+    },
+    {
+      "name": "intelligent_comments",
+      "path": "cortex/orchestrators/response/intelligent_comments.py"
+    },
+    {
+      "name": "intent_classification_handler",
+      "path": "cortex/orchestrators/handlers/intent_classification_handler.py"
+    },
+    {
+      "name": "intent_router",
+      "path": "cortex/orchestrators/core/intent_router.py"
+    },
+    {
+      "name": "intent_router_refac",
+      "path": "cortex/orchestrators/intent_router_refac.py"
+    },
+    {
+      "name": "knowledge_router_connector",
+      "path": "cortex/orchestrators/core/integration/knowledge_router_connector.py"
+    },
+    {
+      "name": "knowledge_synthesizer",
+      "path": "cortex/orchestrators/intelligence/knowledge_synthesizer.py"
+    },
+    {
+      "name": "learning_trigger",
+      "path": "cortex/orchestrators/intelligence/learning_trigger.py"
+    },
+    {
+      "name": "legacy_migration_mcp_tools",
+      "path": "cortex/orchestrators/response/legacy_migration_mcp_tools.py"
+    },
+    {
+      "name": "lens_context_provider",
+      "path": "cortex/orchestrators/core/lens_context_provider.py"
+    },
+    {
+      "name": "lens_synthesis",
+      "path": "cortex/orchestrators/core/lens_synthesis.py"
+    },
+    {
+      "name": "markdown_report_ban_policy",
+      "path": "cortex/orchestrators/response/markdown_report_ban_policy.py"
+    },
+    {
+      "name": "mcp_bootstrapper",
+      "path": "cortex/orchestrators/onboarding/mcp_bootstrapper.py"
+    },
+    {
+      "name": "mcp_tools_integration",
+      "path": "cortex/orchestrators/holistic/mcp_tools_integration.py"
+    },
+    {
+      "name": "mcp_tools_registry",
+      "path": "cortex/orchestrators/mcp_tools_registry.py"
+    },
+    {
+      "name": "minimal_plan_spine",
+      "path": "cortex/orchestrators/response/minimal_plan_spine.py"
+    },
+    {
+      "name": "models",
+      "path": "cortex/orchestrators/persona/models.py"
+    },
+    {
+      "name": "module_cohesion_validator",
+      "path": "cortex/orchestrators/audit/module_cohesion_validator.py"
+    },
+    {
+      "name": "multi_turn_workflow",
+      "path": "cortex/orchestrators/multi_turn_workflow.py"
+    },
+    {
+      "name": "naming_conventions",
+      "path": "cortex/orchestrators/linting/naming_conventions.py"
+    },
+    {
+      "name": "onboarding_dashboard_hook",
+      "path": "cortex/orchestrators/support/onboarding_dashboard_hook.py"
+    },
+    {
+      "name": "parallel_turn_executor",
+      "path": "cortex/orchestrators/core/parallel_turn_executor.py"
+    },
+    {
+      "name": "persona_commands",
+      "path": "cortex/orchestrators/core/persona_commands.py"
+    },
+    {
+      "name": "persona_injector",
+      "path": "cortex/orchestrators/core/persona_injector.py"
+    },
+    {
+      "name": "persona_injector",
+      "path": "cortex/orchestrators/persona/persona_injector.py"
+    },
+    {
+      "name": "persona_loader",
+      "path": "cortex/orchestrators/core/persona_loader.py"
+    },
+    {
+      "name": "persona_loader",
+      "path": "cortex/orchestrators/persona/persona_loader.py"
+    },
+    {
+      "name": "phase_53_s4_wiring_verification",
+      "path": "cortex/orchestrators/phase_53_s4_wiring_verification.py"
+    },
+    {
+      "name": "phase_context_resolver",
+      "path": "cortex/orchestrators/core/phase_context_resolver.py"
+    },
+    {
+      "name": "phase_executor",
+      "path": "cortex/orchestrators/domain/phase_executor.py"
+    },
+    {
+      "name": "phase_finalizer",
+      "path": "cortex/orchestrators/phase_finalization/phase_finalizer.py"
+    },
+    {
+      "name": "plan_registry_sync",
+      "path": "cortex/orchestrators/core/plan_registry_sync.py"
+    },
+    {
+      "name": "plan_spine_renderer",
+      "path": "cortex/orchestrators/policies/plan_spine_renderer.py"
+    },
+    {
+      "name": "planning_audit_trail",
+      "path": "cortex/orchestrators/core/planning_audit_trail.py"
+    },
+    {
+      "name": "planning_path_enforcement",
+      "path": "cortex/orchestrators/domain/planning_path_enforcement.py"
+    },
+    {
+      "name": "planning_registry_loader",
+      "path": "cortex/orchestrators/domain/planning_registry_loader.py"
+    },
+    {
+      "name": "pre_commit_pattern_matcher",
+      "path": "cortex/orchestrators/support/pre_commit_pattern_matcher.py"
+    },
+    {
+      "name": "profile_discovery",
+      "path": "cortex/orchestrators/domain/profile_discovery.py"
+    },
+    {
+      "name": "profile_upgrader",
+      "path": "cortex/orchestrators/profile_upgrader.py"
+    },
+    {
+      "name": "profile_versioner",
+      "path": "cortex/orchestrators/profile_versioner.py"
+    },
+    {
+      "name": "profile_wizard",
+      "path": "cortex/orchestrators/profile_wizard.py"
+    },
+    {
+      "name": "project_discoverer",
+      "path": "cortex/orchestrators/project_discoverer.py"
+    },
+    {
+      "name": "prompt_cohesion_validator",
+      "path": "cortex/orchestrators/audit/prompt_cohesion_validator.py"
+    },
+    {
+      "name": "prompt_enhancement",
+      "path": "cortex/orchestrators/holistic/prompt_enhancement.py"
+    },
+    {
+      "name": "recommendation_gate",
+      "path": "cortex/orchestrators/core/recommendation_gate.py"
+    },
+    {
+      "name": "refactored_architecture",
+      "path": "cortex/orchestrators/refactored_architecture.py"
+    },
+    {
+      "name": "refactoring_tool_adapter",
+      "path": "cortex/orchestrators/adapters/refactoring_tool_adapter.py"
+    },
+    {
+      "name": "registry_structure",
+      "path": "cortex/orchestrators/company_separation/registry_structure.py"
+    },
+    {
+      "name": "regression_monitor",
+      "path": "cortex/orchestrators/support/regression_monitor.py"
+    },
+    {
+      "name": "relationship_analyzer",
+      "path": "cortex/orchestrators/core/relationship_analyzer.py"
+    },
+    {
+      "name": "relocation_planner",
+      "path": "cortex/orchestrators/support/relocation_planner.py"
+    },
+    {
+      "name": "remediation_plan_formatter",
+      "path": "cortex/orchestrators/planning/remediation_plan_formatter.py"
+    },
+    {
+      "name": "remediation_plan_generator",
+      "path": "cortex/orchestrators/planning/remediation_plan_generator.py"
+    },
+    {
+      "name": "repository_scanner",
+      "path": "cortex/orchestrators/core/repository_scanner.py"
+    },
+    {
+      "name": "repository_scanner",
+      "path": "cortex/orchestrators/support/repository_scanner.py"
+    },
+    {
+      "name": "response_challenge_injector",
+      "path": "cortex/orchestrators/response_challenge_injector.py"
+    },
+    {
+      "name": "response_optimization_metrics",
+      "path": "cortex/orchestrators/response/response_optimization_metrics.py"
+    },
+    {
+      "name": "response_quality_scorer",
+      "path": "cortex/orchestrators/response/response_quality_scorer.py"
+    },
+    {
+      "name": "response_styler",
+      "path": "cortex/orchestrators/core/response_styler.py"
+    },
+    {
+      "name": "response_templates",
+      "path": "cortex/orchestrators/response/response_templates.py"
+    },
+    {
+      "name": "role_resolver",
+      "path": "cortex/orchestrators/core/role_resolver.py"
+    },
+    {
+      "name": "role_resolver",
+      "path": "cortex/orchestrators/persona/role_resolver.py"
+    },
+    {
+      "name": "role_verbosity_profiles",
+      "path": "cortex/orchestrators/response/role_verbosity_profiles.py"
+    },
+    {
+      "name": "routing_enforcement",
+      "path": "cortex/orchestrators/core/routing_enforcement.py"
+    },
+    {
+      "name": "security_advisor_mixin",
+      "path": "cortex/orchestrators/mixins/security_advisor_mixin.py"
+    },
+    {
+      "name": "security_first_analyzer",
+      "path": "cortex/orchestrators/core/security_first_analyzer.py"
+    },
+    {
+      "name": "semantic_deduplicator",
+      "path": "cortex/orchestrators/response/semantic_deduplicator.py"
+    },
+    {
+      "name": "semantic_ranking",
+      "path": "cortex/orchestrators/core/semantic_ranking.py"
+    },
+    {
+      "name": "session_context",
+      "path": "cortex/orchestrators/persona/session_context.py"
+    },
+    {
+      "name": "shared_audit_trail",
+      "path": "cortex/orchestrators/shared_audit_trail.py"
+    },
+    {
+      "name": "smart_analyzer",
+      "path": "cortex/orchestrators/core/smart_analyzer.py"
+    },
+    {
+      "name": "stage_2_5_gate",
+      "path": "cortex/orchestrators/core/stage_2_5_gate.py"
+    },
+    {
+      "name": "state_recovery",
+      "path": "cortex/orchestrators/state_recovery.py"
+    },
+    {
+      "name": "strategy_selector",
+      "path": "cortex/orchestrators/adaptive/strategy_selector.py"
+    },
+    {
+      "name": "team_collaboration_validator",
+      "path": "cortex/orchestrators/audit/team_collaboration_validator.py"
+    },
+    {
+      "name": "tech_stack_evolution_planner",
+      "path": "cortex/orchestrators/audit/tech_stack_evolution_planner.py"
+    },
+    {
+      "name": "template_blocks",
+      "path": "cortex/orchestrators/response/template_blocks.py"
+    },
+    {
+      "name": "test_performance_analyzer",
+      "path": "cortex/orchestrators/audit/test_performance_analyzer.py"
+    },
+    {
+      "name": "test_persona_injector",
+      "path": "cortex/orchestrators/persona/test_persona_injector.py"
+    },
+    {
+      "name": "test_persona_loader",
+      "path": "cortex/orchestrators/persona/test_persona_loader.py"
+    },
+    {
+      "name": "test_quality_analyzer",
+      "path": "cortex/orchestrators/response/test_quality_analyzer.py"
+    },
+    {
+      "name": "test_role_resolver",
+      "path": "cortex/orchestrators/persona/test_role_resolver.py"
+    },
+    {
+      "name": "test_validity_validator",
+      "path": "cortex/orchestrators/audit/test_validity_validator.py"
+    },
+    {
+      "name": "testing_framework",
+      "path": "cortex/orchestrators/adaptive/testing_framework.py"
+    },
+    {
+      "name": "tier1_injector",
+      "path": "cortex/orchestrators/tier1_injector.py"
+    },
+    {
+      "name": "tier_cleanup",
+      "path": "cortex/orchestrators/company_separation/tier_cleanup.py"
+    },
+    {
+      "name": "toolchain_validator",
+      "path": "cortex/orchestrators/onboarding/toolchain_validator.py"
+    },
+    {
+      "name": "transform_001_implementation",
+      "path": "cortex/orchestrators/core/transform_001_implementation.py"
+    },
+    {
+      "name": "troubleshooting_inquiry_handler",
+      "path": "cortex/orchestrators/domain/inquiry/troubleshooting_inquiry_handler.py"
+    },
+    {
+      "name": "turn_validation_gate",
+      "path": "cortex/orchestrators/turn_validation_gate.py"
+    },
+    {
+      "name": "types",
+      "path": "cortex/orchestrators/intelligence/types.py"
+    },
+    {
+      "name": "unified_adaptive_layer",
+      "path": "cortex/orchestrators/adaptive/unified_adaptive_layer.py"
+    },
+    {
+      "name": "unified_response_composer",
+      "path": "cortex/orchestrators/response/unified_response_composer.py"
+    },
+    {
+      "name": "upgrade_diff_analyzer",
+      "path": "cortex/orchestrators/support/upgrade_diff_analyzer.py"
+    },
+    {
+      "name": "ux_optimizer",
+      "path": "cortex/orchestrators/response/ux_optimizer.py"
+    },
+    {
+      "name": "verification_compliance_gate",
+      "path": "cortex/orchestrators/verification_compliance_gate.py"
+    },
+    {
+      "name": "visual_progress_renderer",
+      "path": "cortex/orchestrators/domain/visual_progress_renderer.py"
+    },
+    {
+      "name": "vscode_configurator",
+      "path": "cortex/orchestrators/onboarding/vscode_configurator.py"
+    },
+    {
+      "name": "wiring_harness_integration",
+      "path": "cortex/orchestrators/wiring_harness_integration.py"
+    }
+  ],
+  "wiring_cross_reference": {
+    "in_wiring": [],
+    "not_in_wiring": [
+      "audit_remediation_coordinator",
+      "autonomous_execution_coordinator",
+      "autonomous_execution_engine",
+      "bluf_orchestrators",
+      "brain_flush_orchestrator",
+      "brain_health_orchestrator",
+      "business_language_orchestrator",
+      "capacity_orchestrators",
+      "central_brain_orchestrator",
+      "challenge_engine",
+      "challenge_engine_plugins",
+      "composed_orchestrator",
+      "composition_engine",
+      "context_assembly_orchestrator",
+      "conversation_orchestrator",
+      "coordinator",
+      "cortex_docs_orchestrator",
+      "cortical_integration_orchestrator",
+      "dashboard_asset_manager",
+      "dashboard_orchestrator",
+      "debug_orchestrator",
+      "debugging_orchestrator",
+      "depth_manager",
+      "digest_enhancement_orchestrator",
+      "digest_session_orchestrator",
+      "discovery_orchestrator",
+      "domain_enhancement_orchestrator",
+      "duplication_detector_orchestrator",
+      "educational_orchestrator",
+      "enforcement_orchestrator",
+      "enhanced_documentation_orchestrator",
+      "enhanced_planning_orchestrator",
+      "enhanced_refactoring_orchestrator",
+      "execution_coordinator",
+      "git_analysis_engine",
+      "holistic_validation_orchestrator",
+      "inquiry_orchestrator",
+      "instrumentation_orchestrator",
+      "interaction_orchestrator",
+      "interaction_orchestrator_enhancement",
+      "lens_orchestrator",
+      "lens_visualization_orchestrator",
+      "master_orchestrator",
+      "master_orchestrator_stage_1",
+      "master_orchestrator_stage_2",
+      "master_orchestrator_stage_3",
+      "master_orchestrator_stage_4",
+      "master_orchestrator_stages",
+      "memory_consolidation_orchestrator",
+      "model_manager",
+      "multi_role_response_engine",
+      "orchestrator",
+      "orchestrator_base_protocol",
+      "orchestrator_bootstrap",
+      "orchestrator_composite",
+      "orchestrator_context_injector",
+      "orchestrator_integrity_validator",
+      "orchestrator_lookup",
+      "orchestrator_traits",
+      "orchestrator_versioning",
+      "orchestrator_visibility",
+      "orchestrator_wiring",
+      "persona_orchestrator",
+      "phase_completion_orchestrator",
+      "plan_orchestrator",
+      "plan_pause_manager",
+      "readiness_engine",
+      "recommendation_engine",
+      "repo_detection_orchestrator",
+      "repository_onboarding_orchestrator",
+      "review_orchestrator",
+      "rollback_orchestrator",
+      "routing_engine",
+      "selenium_playwright_orchestrator",
+      "sensory_input_orchestrator",
+      "setup_orchestrator",
+      "solution_recommendation_engine",
+      "tdd_orchestrator",
+      "tech_intelligence_orchestrator",
+      "test_master_orchestrator",
+      "test_orchestrator",
+      "tool_discovery_orchestrator",
+      "truth_verification_engine",
+      "upgrade_orchestrator",
+      "vacuum_orchestrator",
+      "version_manager",
+      "workflow_orchestrator",
+      "wrapped_tdd_orchestrator"
+    ],
+    "wiring_not_found": [
+      "core",
+      "domain",
+      "support"
+    ]
+  },
+  "phase": "Phase 38.0 - Stage 2",
+  "validation": {
+    "min_orchestrators_expected": 30,
+    "min_support_files_expected": 100,
+    "orchestrators_meets_minimum": true,
+    "support_files_meets_minimum": true
+  }
+}

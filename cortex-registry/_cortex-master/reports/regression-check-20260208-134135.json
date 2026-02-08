@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-02-08T18:41:35.299916",
+  "baseline_timestamp": "2026-02-07T00:00:00",
+  "current_timestamp": "2026-02-07T12:00:00",
+  "comparison": {
+    "regression_detected": false,
+    "test_metrics": {
+      "baseline_duration": 10.0,
+      "current_duration": 10.5,
+      "percentage_change": 5.0,
+      "regression": false
+    },
+    "memory_metrics": {}
+  },
+  "phase": "Phase 38.0 - Regression Check"
+}
