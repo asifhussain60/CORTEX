@@ -2,19 +2,32 @@
 Plan Orchestrator - Phase Lifecycle Management
 
 Orchestrates PLAN MODE operations with setup/teardown hooks,
-VacuumOrchestrator integration, and dashboard synchronization.
+VacuumOrchestrator integration, dashboard synchronization,
+and EventBus-driven state transitions (Phase 45 § Stage 2).
 
 AC-ID: PHASE-25-STAGE-4-001
 Authority: phase-25-plan-mode-cortex-architect.yaml
+Enhanced: phase-45-enhanced-planning-system.yaml § Stage 2
 """
 
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from pathlib import Path
+from uuid import uuid4
 
 from cortex.models.canonical_enums import IntentType
+from cortex.models.event_models import (
+    EventType,
+    OrchestratorEvent,
+    PlanCreatedPayload,
+    PlanStateChangedPayload,
+    PlanArchivedPayload,
+)
 from cortex.registry.phase_manager import PhaseManager, PhaseOperation, PhaseResolutionResult
 from cortex.registry.dashboard_generator import DashboardGenerator
+from cortex.registry.plan_registry import PlanRegistry, PlanSpec
+from cortex.infrastructure.orchestrator_event_bus import OrchestratorEventBus
+
 
 
 @dataclass
@@ -63,7 +76,8 @@ class PlanOrchestrator:
     def __init__(
         self,
         registry_root: str = "cortex-registry/_cortex-master",
-        enable_vacuum: bool = True
+        enable_vacuum: bool = True,
+        event_bus: Optional[OrchestratorEventBus] = None,
     ):
         """
         Initialize PlanOrchestrator.
@@ -71,11 +85,46 @@ class PlanOrchestrator:
         Args:
             registry_root: Path to master registry
             enable_vacuum: Enable VacuumOrchestrator integration
+            event_bus: OrchestratorEventBus instance for event publishing
         """
         self.phase_manager = PhaseManager(registry_root=registry_root)
         self.dashboard_generator = DashboardGenerator(registry_root=registry_root)
+        self.plan_registry = PlanRegistry(registry_path="cortex-registry/planning")
+        self.event_bus = event_bus or OrchestratorEventBus()
         self.enable_vacuum = enable_vacuum
         self.registry_root = Path(registry_root)
+        self.correlation_id = str(uuid4())
+        
+        # Subscribe to relevant events (Phase 45 § Stage 2)
+        self.event_bus.subscribe(
+            EventType.PLAN_INTENT_DETECTED,
+            self._handle_plan_intent_detected,
+        )
+    
+    def _handle_plan_intent_detected(self, event: OrchestratorEvent) -> None:
+        """Handle PLAN_INTENT_DETECTED events from InteractionOrchestrator.
+        
+        Triggered when user intent contains plan-related operations.
+        Initiates plan creation or enrichment workflow.
+        
+        Args:
+            event: The PLAN_INTENT_DETECTED event
+        """
+        try:
+            payload = event.payload
+            plan_id = payload.get("plan_id")
+            user_context = payload.get("user_context", "")
+            detected_type = payload.get("detected_type", "")
+            
+            # If creating new plan, initialize it
+            if not plan_id:
+                plan_id = self._generate_plan_id(detected_type)
+            
+            # Log event processing
+            self._log_audit_trail(plan_id, f"INTENT_DETECTED: {detected_type}")
+            
+        except Exception as e:
+            self._publish_error_event(f"PLAN_INTENT_DETECTED handler failed: {e}")
     
     def resolve_phase_operation(self, user_request: str) -> PhaseResolutionResult:
         """

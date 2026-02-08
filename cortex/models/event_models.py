@@ -31,6 +31,12 @@ class EventType(str, Enum):
     FINAL_REVIEW_COMPLETE = "FINAL_REVIEW_COMPLETE"
     GATE_DECISION_MADE = "GATE_DECISION_MADE"
     ERROR_OCCURRED = "ERROR_OCCURRED"
+    # Phase 45: Plan-specific events (Phase 45 § Stage 2)
+    PLAN_INTENT_DETECTED = "PLAN_INTENT_DETECTED"
+    PLAN_CREATED = "PLAN_CREATED"
+    PLAN_ENRICHED = "PLAN_ENRICHED"
+    PLAN_STATE_CHANGED = "PLAN_STATE_CHANGED"
+    PLAN_ARCHIVED = "PLAN_ARCHIVED"
 
 
 @dataclass
@@ -130,3 +136,118 @@ class PhaseCompletePayload:
     success: bool
     artifacts_created: List[str]
     duration_seconds: float
+
+
+# ============================================================================
+# Plan-Specific Event Payloads (Phase 45 § Stage 2)
+# ============================================================================
+
+
+@dataclass
+class PlanEventPayload:
+    """Payload for plan-related events.
+    
+    Common structure for all plan events with plan context.
+    
+    Attributes:
+        plan_id: Unique plan identifier
+        plan_spec: Full plan specification (when applicable)
+        changes: Dict describing what changed (for state changes)
+        metadata: Additional context (timestamps, user info, etc.)
+    """
+    plan_id: str
+    plan_spec: Optional[Dict[str, Any]] = None
+    changes: Optional[Dict[str, Any]] = None
+    metadata: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class PlanIntentDetectedPayload:
+    """Payload for PLAN_INTENT_DETECTED events.
+    
+    Emitted by InteractionOrchestrator when plan intent is detected.
+    
+    Attributes:
+        plan_id: Plan identifier (if creating from existing)
+        user_context: The user's original request/context
+        detected_type: Type of plan intent (IMPLEMENT, FIX, REFACTOR, etc.)
+        confidence: Confidence in plan intent detection (0.0-1.0)
+    """
+    plan_id: Optional[str] = None
+    user_context: str = ""
+    detected_type: str = ""
+    confidence: float = 0.0
+
+
+@dataclass
+class PlanCreatedPayload:
+    """Payload for PLAN_CREATED events.
+    
+    Emitted by PlanOrchestrator when a plan is created.
+    
+    Attributes:
+        plan_id: Unique plan identifier
+        title: Plan title
+        status: Initial plan status
+        created_at: Timestamp of creation
+    """
+    plan_id: str
+    title: str
+    status: str = "pending"
+    created_at: Optional[datetime] = None
+
+
+@dataclass
+class PlanEnrichedPayload:
+    """Payload for PLAN_ENRICHED events.
+    
+    Emitted by EnhancedPlanningOrchestrator after enrichment.
+    
+    Attributes:
+        plan_id: Plan identifier
+        enrichment_sources: List of enrichers that ran
+        enrichment_data: Merged enrichment results
+        quality_score: DoR quality score post-enrichment (0.0-1.0)
+    """
+    plan_id: str
+    enrichment_sources: List[str] = field(default_factory=list)
+    enrichment_data: Dict[str, Any] = field(default_factory=dict)
+    quality_score: float = 0.0
+
+
+@dataclass
+class PlanStateChangedPayload:
+    """Payload for PLAN_STATE_CHANGED events.
+    
+    Emitted when plan transitions between lifecycle states.
+    
+    Attributes:
+        plan_id: Plan identifier
+        old_status: Previous status
+        new_status: Current status
+        reason: Why the state changed
+        changed_at: Timestamp of change
+    """
+    plan_id: str
+    old_status: str
+    new_status: str
+    reason: str = ""
+    changed_at: Optional[datetime] = None
+
+
+@dataclass
+class PlanArchivedPayload:
+    """Payload for PLAN_ARCHIVED events.
+    
+    Emitted when plan is archived (moved to completed/).
+    
+    Attributes:
+        plan_id: Plan identifier
+        archive_path: Path where plan was archived
+        completion_status: Final status (completed, cancelled, deferred)
+        archived_at: Timestamp of archival
+    """
+    plan_id: str
+    archive_path: str
+    completion_status: str
+    archived_at: Optional[datetime] = None
