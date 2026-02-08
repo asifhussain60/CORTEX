@@ -62,6 +62,13 @@ from cortex.brain.core.knowledge_guidance_engine import (
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.common.standards_resolver import StandardsResolver
 
+# Phase 43: Import RefactoringOrchestrator for REFACTOR phase wiring
+from cortex.refactoring.orchestrator import RefactoringOrchestrator
+from cortex.refactoring.models import (
+    RefactoringRequest,
+    RefactoringLanguage,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -653,14 +660,115 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         guidance: TDDImplementationGuidance,
         context: Dict[str, Any]
     ) -> Result[Dict[str, Any]]:
-        """Execute REFACTOR phase (improve design)."""
-        return Ok({
-            "phase": "REFACTOR",
-            "action": "Refactor code while keeping tests green",
-            "refactoring_patterns": guidance.test_patterns,
-            "rules_applied": [rule.rule_id for rule in guidance.rules],
-            "status": "ready_for_refactoring"
-        })
+        """Execute REFACTOR phase (improve design).
+        
+        AC-PHASE43-021: Wires to RefactoringOrchestrator for actual refactoring execution.
+        
+        For Python files, delegates to Rope adapter via RefactoringOrchestrator.
+        For TypeScript/JavaScript files, delegates to TypeScript adapter.
+        Falls back to guidance suggestions if adapters unavailable.
+        """
+        try:
+            file_path = context.get("file_path", guidance.module_path)
+            language = context.get("language")
+            
+            # Detect language from file extension if not provided
+            if not language:
+                if file_path.endswith(".py"):
+                    language = "python"
+                elif file_path.endswith((".ts", ".tsx")):
+                    language = "typescript"
+                elif file_path.endswith((".js", ".jsx")):
+                    language = "javascript"
+                else:
+                    language = "unknown"
+            
+            # Try to invoke RefactoringOrchestrator for real execution
+            try:
+                from pathlib import Path
+                orchestrator = RefactoringOrchestrator()
+                
+                # Map string language to RefactoringLanguage enum
+                language_map = {
+                    "python": RefactoringLanguage.PYTHON,
+                    "typescript": RefactoringLanguage.TYPESCRIPT,
+                    "javascript": RefactoringLanguage.JAVASCRIPT,
+                    "csharp": RefactoringLanguage.CSHARP,
+                }
+                
+                refactoring_language = language_map.get(language.lower(), RefactoringLanguage.PYTHON)
+                
+                # Create refactoring request
+                request = RefactoringRequest(
+                    operation="suggest_refactorings",
+                    file_path=Path(file_path),
+                    language=refactoring_language,
+                    parameters={"patterns": guidance.test_patterns}
+                )
+                
+                # Execute via RefactoringOrchestrator
+                refactoring_result = orchestrator.execute_refactoring(request)
+                
+                # Process result
+                if isinstance(refactoring_result, Ok):
+                    refactoring_data = refactoring_result.unwrap()
+                    return Ok({
+                        "phase": "REFACTOR",
+                        "action": "Refactor code using " + language + " adapter",
+                        "language": language,
+                        "refactoring_result": refactoring_data if hasattr(refactoring_data, '__dict__') else str(refactoring_data),
+                        "guidance_patterns": guidance.test_patterns,
+                        "rules_applied": [rule.rule_id for rule in guidance.rules],
+                        "source": "RefactoringOrchestrator",
+                        "status": "executed"
+                    })
+                else:
+                    # Graceful fallback to guidance-based suggestions
+                    logger.info(f"RefactoringOrchestrator unavailable, using guidance fallback")
+                    return Ok({
+                        "phase": "REFACTOR",
+                        "action": "Refactor code while keeping tests green",
+                        "language": language,
+                        "refactoring_patterns": guidance.test_patterns,
+                        "rules_applied": [rule.rule_id for rule in guidance.rules],
+                        "guidance": guidance.best_practices,
+                        "source": "TDD guidance fallback",
+                        "status": "suggestion_mode"
+                    })
+                    
+            except Exception as tool_error:
+                # Tool execution failed - return guidance-based suggestions
+                logger.warning(f"RefactoringOrchestrator execution failed: {tool_error}, falling back to guidance")
+                return Ok({
+                    "phase": "REFACTOR",
+                    "action": "Refactor code while keeping tests green",
+                    "language": language,
+                    "refactoring_patterns": guidance.test_patterns,
+                    "rules_applied": [rule.rule_id for rule in guidance.rules],
+                    "guidance": guidance.best_practices,
+                    "available_operations": [
+                        "extract_method",
+                        "rename_variable",
+                        "move_method",
+                        "inline_method",
+                    ],
+                    "source": "TDD guidance (tool unavailable)",
+                    "status": "suggestion_mode",
+                    "note": "Install refactoring tools (rope, libcst) for real execution"
+                })
+                
+        except Exception as e:
+            logger.error(f"REFACTOR phase error: {e}", exc_info=True)
+            # Never crash - always return meaningful suggestion
+            return Ok({
+                "phase": "REFACTOR",
+                "action": "Refactor code while keeping tests green",
+                "refactoring_patterns": guidance.test_patterns,
+                "rules_applied": [rule.rule_id for rule in guidance.rules],
+                "guidance": guidance.best_practices,
+                "status": "ready_for_refactoring",
+                "error_handled": True
+            })
 
     def get_tdd_status(self) -> Dict[str, Any]:
         """
