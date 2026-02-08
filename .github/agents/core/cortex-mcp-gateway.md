@@ -137,7 +137,7 @@ Cannot proceed with {intent} operations without MCP
 ## Server Endpoints
 
 | Endpoint | Method | Purpose |
-|----------|--------|---------|
+| -------- | ------ | ------- |
 | `/tools` | GET | List all available tools |
 | `/tools/{name}` | POST | Execute specific tool |
 | `/health` | GET | Health check |
@@ -149,7 +149,7 @@ Cannot proceed with {intent} operations without MCP
 
 ## Request Routing
 
-```
+```text
 User Request
     ↓
 MCP Gateway (this agent)
@@ -259,7 +259,7 @@ GET /tools
 ## Related
 
 | Component | Location |
-|-----------|----------|
+| --------- | -------- |
 | MCP Server | `cortex/mcp/server.py` |
 | Tool Registry | `cortex/mcp/mcp_tools_catalog.py` |
 | LENS Tools | `cortex/mcp/tools/lens_tools.py` |

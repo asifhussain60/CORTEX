@@ -176,7 +176,7 @@
 | **ComplianceValidationAgent** | Tier 1 rules | Domain-specific compliance checks |
 | **FileNamingEnforcementAgent** | 028 | SCREAMING_CASE blocking, plan file exceptions |
 | **IncrementalExecutionAgent** | 001, 004 | <500 LOC increments, continuation limits |
-| **MarkdownSuppressionAgent** | 002 | Block *-summary.md, *-report.md generation |
+| **MarkdownSuppressionAgent** | 002 | Block \*-summary.md, \*-report.md generation |
 | **ArchitectureIntegrityAgent** | 017-020, 032, 034, 035, 038-041 | Versioned filenames, performance, turn budgets |
 
 ### Enforcement Levels
