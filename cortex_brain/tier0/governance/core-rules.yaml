@@ -1322,6 +1322,119 @@ rules:
         Phase 38 Status: ACTIVE (Ready to implement)
         ← VIOLATES CORE-042 (ambiguous use of "Phase")
 
+  # --------------------------------------------------------------------------
+  # CORE-050: No Quality Degradation (Phase 51 - MCP-FIRST Enforcement)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-050
+    principle: "Single Standard: Production"
+    category: quality_gates
+    severity: blocked
+    name: No Quality Degradation
+    created: "2026-02-08"
+    description: |
+      CORTEX MUST NEVER accept degraded execution modes or bypass quality standards.
+      When infrastructure/dependencies are missing, the system BLOCKS execution and
+      directs users to FIX the infrastructure, not work around it.
+      
+      Business Principle: Quality cannot be compromised. Ever. "Good enough" is never good enough.
+      
+      FORBIDDEN BEHAVIORS:
+      - ❌ Downgrade from MCP-FIRST to direct file operations
+      - ❌ Skip TDD when MCP unavailable
+      - ❌ Accept "basic mode" execution
+      - ❌ Bypass governance gates due to missing tools
+      - ❌ Use direct create_file/replace_string_in_file for IMPLEMENT intents
+      
+      REQUIRED BEHAVIORS:
+      - ✅ Pre-flight environment validation (MCP server health check)
+      - ✅ Block IMPLEMENT/FIX/REFACTOR if MCP unavailable
+      - ✅ Clear error message: "Fix infrastructure, do not bypass standards"
+      - ✅ Force user to: Start MCP server → Restart Copilot → Retry operation
+      - ✅ No fallback paths, no "lite versions", no degradation
+    
+    scope:
+      applies_to:
+        - "IMPLEMENT intents: MUST route through cortex_process_request"
+        - "FIX intents: MUST route through TDDOrchestrator"
+        - "REFACTOR intents: MUST route through RefactoringOrchestrator"
+        - "All direct file modification tools: create_file, replace_string_in_file"
+      
+      blocking_conditions:
+        - "MCP server unavailable + IMPLEMENT/FIX/REFACTOR intent → BLOCK"
+        - "cortex_process_request tool not discoverable → BLOCK"
+        - "Direct file tool usage + IMPLEMENT intent → BLOCK"
+        - "Governance gate bypass attempt → BLOCK"
+    
+    allowed_operations:
+      - "ANALYZE intents: Read-only operations allowed (no MCP required)"
+      - "DESIGN intents: Analysis only, no code generation"
+      - "AUDIT intents: Discovery and assessment"
+      - "QUERY intents: Information retrieval"
+    
+    enforcement_mechanism:
+      mcp_pre_flight_check:
+        - "Check tool availability: cortex_process_request exists?"
+        - "Check environment: MCP_SERVER_PORT, CORTEX_MCP_ENABLED set?"
+        - "Check network: localhost:8000 listening (default MCP port)?"
+      
+      environment_integrity_agent:
+        - "8th enforcement agent (EnforcementOrchestrator)"
+        - "Validates MCP readiness before operation"
+        - "Logs: MCP_HEALTH_CHECK → PASSED/FAILED"
+        - "Blocks if FAILED for IMPLEMENT/FIX/REFACTOR intents"
+      
+      intent_based_tool_blocking:
+        - "IMPLEMENT intent + direct file tool → BLOCK"
+        - "FIX intent + create_file → BLOCK"
+        - "REFACTOR intent + replace_string_in_file → BLOCK"
+        - "ANALYZE intent + same tools → ALLOW (read-only)"
+      
+      error_messaging:
+        - Clear error with root cause
+        - Exact fix instructions (start MCP server)
+        - No ambiguity about what user must do
+        - No fallback suggestions ("try this alternative")
+    
+    success_criteria:
+      - "Zero degraded execution paths"
+      - "100% of IMPLEMENT intents route through MCP"
+      - "0% TDD bypasses due to missing MCP"
+      - "All governance gates mandatory (no disable flag)"
+      - "Challenge gate active for every operation"
+    
+    audit_trail:
+      events:
+        - "MCP_HEALTH_CHECK_STARTED"
+        - "MCP_HEALTH_CHECK_PASSED / MCP_HEALTH_CHECK_FAILED"
+        - "IMPLEMENTATION_BLOCKED_MCP_UNAVAILABLE (if applicable)"
+        - "OPERATION_ROUTED_TO_MCP_TOOL"
+        - "DIRECT_FILE_TOOL_BLOCKED_IMPLEMENT_INTENT"
+    
+    implementation:
+      orchestrator: "EnvironmentIntegrityAgent (8th enforcement agent)"
+      location: "cortex/governance/enforcement/agents/environment_integrity_agent.py"
+      enforcement_point: "MasterOrchestrator pre-execution gate"
+      blocked_tools: "create_file, replace_string_in_file for IMPLEMENT intent"
+      required_tools: "cortex_process_request, cortex_validate_holistically"
+    
+    tests:
+      unit_tests:
+        - "test_core_050_mcp_health_check_passed"
+        - "test_core_050_mcp_health_check_failed_blocks_implement"
+        - "test_core_050_direct_file_tool_blocked_implement"
+        - "test_core_050_analyze_allowed_without_mcp"
+        - "test_core_050_error_message_clear"
+      
+      integration_tests:
+        - "test_phase_51_mcp_enforcement_end_to_end"
+        - "test_quality_degradation_never_occurs"
+        - "test_fallback_paths_not_present"
+    
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-019 (MCP routing), CORE-048 (Holistic validation)"
+      enables: "Phase 51 MCP-FIRST enforcement"
+      blocks_until: "EnvironmentIntegrityAgent implemented"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
