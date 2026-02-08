@@ -1,0 +1,586 @@
+# PHASE-54: INITIAL DASHBOARD SEEDING FOR ONBOARDED REPOSITORIES
+# Version: 1.0 | Created: 2026-02-08 | Authority: cortex-architect.prompt.md v15.1
+# Scope: One-time seeding operation to generate dashboards for all existing onboarded repos
+# Status: PROPOSED | Dependencies: Phase-28 (onboarding profiles), Phase-53 (dashboard orchestrator)
+
+---
+metadata:
+  phase: "54"
+  title: "Initial Dashboard Seeding for Onboarded Repositories"
+  version: "1.0"
+  status: "proposed"
+  author: "Asif Hussain"
+  created: "2026-02-08"
+  priority: "P1"
+  execution_order: 7
+  roi_score: 0.85
+  estimated_effort: "2-3 days"
+  estimated_tests: 28
+  coverage_target: 90
+  governance:
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-030: Implementation Truth"
+    - "CORE-035: Single canonical implementation"
+    - "MCP-FIRST: All functionality via MCP tools"
+  architectural_decision:
+    chosen: "One-time batch seeding with idempotency"
+    rationale: |
+      - Discover all profiles in cortex_brain/onboarded_repos/
+      - Generate dashboard for each via DashboardOrchestrator
+      - Store JSON in company/dashboards/data/
+      - Register in dashboard index
+      - Support re-seeding without duplication
+
+---
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+vision:
+  mission: |
+    Establish initial dashboard presence for all existing onboarded repositories.
+    This one-time seeding operation bridges from Phase-28 (repository profiling)
+    to Phase-53 (dashboard generation), ensuring all repos have dashboards
+    immediately available in the plan viewer SPA.
+    
+    **Core Principles:**
+    1. Auto-discovery of profiles (no manual list maintenance)
+    2. Batch generation with progress tracking
+    3. Idempotent (re-run without side effects)
+    4. Validation of all outputs before registration
+    5. Audit trail for each generation
+
+  current_state: |
+    ✅ Phase-28: KSESSIONS + 4 other repos onboarded (5 profiles in cortex_brain/)
+    ✅ Phase-53: Dashboard SPA infrastructure complete
+    ❌ MISSING: Initial dashboard JSON files for all 5 repos
+    
+    Workaround: Manual `cortex_generate_dashboard` for each repo
+    Goal: Automate one-time batch generation
+
+business_impact:
+  value_drivers:
+    - "Dashboards available for all repos immediately post-onboarding"
+    - "Single discovery point for repository metrics"
+    - "Foundation for Phase-55+ (dashboard enhancements)"
+    - "Reduced manual operational overhead"
+  
+  roi_calculation:
+    time_saved_per_repo: "10 minutes (manual dashboard creation)"
+    total_repos: 5
+    total_time_saved: "50 minutes"
+    future_repos_per_quarter: 8
+    quarterly_time_saved: "6-8 hours"
+    
+  roi_score: 0.85  # 5 existing + 8+ quarterly repos
+
+dependencies:
+  prerequisites:
+    - "phase-28: Repository Onboarding System (profiles available)"
+    - "phase-53: Dashboard Orchestrator (generation capability)"
+  
+  enables:
+    - "Dashboard visibility for all repos in plan viewer"
+    - "Metrics-driven decision making"
+    - "Phase-55+: Dashboard enhancements build on seeded data"
+  
+  unblocks:
+    - "Comprehensive repo dashboard ecosystem"
+    - "Cross-repo metrics analysis"
+
+---
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+current_pain_points:
+  - pain: "No dashboards for existing onboarded repositories"
+    impact: "Plan viewer shows no repo data until manual dashboard generation"
+    evidence: "5 profiles exist but 0 dashboard JSON files"
+  
+  - pain: "Manual dashboard generation for each repo"
+    impact: "Operational overhead, human error, inconsistency"
+    evidence: "No automation for batch generation"
+  
+  - pain: "Unclear dashboard initialization workflow"
+    impact: "Uncertainty about when/how dashboards are created"
+    evidence: "No documented seeding process"
+  
+  - pain: "No idempotent dashboard generation"
+    impact: "Re-running seeding causes duplication or conflicts"
+    evidence: "No duplicate detection in dashboard generation"
+
+root_cause_analysis:
+  primary: "Gap between Phase-28 (profiles) and Phase-53 (dashboard generation)"
+  contributing:
+    - "No batch generation orchestrator"
+    - "No profile discovery mechanism"
+    - "No seeding workflow documentation"
+    - "No idempotency checks"
+
+---
+# ============================================================================
+# SOLUTION DESIGN
+# ============================================================================
+
+solution_overview: |
+  Create BatchDashboardSeeder orchestrator that:
+  1. Discovers all profiles in cortex_brain/onboarded_repos/
+  2. For each profile: calls DashboardOrchestrator
+  3. Validates JSON schema compliance
+  4. Registers in dashboard index (index.yaml)
+  5. Generates completion report with audit trail
+
+architecture:
+  components:
+    - name: "BatchDashboardSeeder Orchestrator"
+      responsibility: "Coordinate batch dashboard generation"
+      location: "cortex/orchestrators/domain/batch_dashboard_seeder.py"
+      methods:
+        - "discover_profiles() → List[Path]"
+        - "generate_dashboard_for_profile(profile_path) → DashboardJSON"
+        - "validate_dashboard_json(json_data) → ValidationResult"
+        - "register_in_index(repo_name, dashboard_path) → RegistrationResult"
+        - "run_seeding() → SeedingReport"
+      
+    - name: "Dashboard Profile Loader"
+      responsibility: "Read repository profiles"
+      location: "cortex_brain/onboarded_repos/ (existing ProfileStore)"
+      dependencies:
+        - "ProfileStore from Phase-28"
+    
+    - name: "Dashboard Generator"
+      responsibility: "Generate dashboard JSON per profile"
+      location: "cortex/orchestrators/domain/dashboard_orchestrator.py (existing)"
+      invocation: "DashboardOrchestrator.generate_from_profile()"
+    
+    - name: "Dashboard JSON Validator"
+      responsibility: "Validate generated dashboards"
+      location: "cortex-registry/_cortex-master/dashboard/schema/ (existing schema)"
+      validation: "JSON Schema Draft 7"
+
+  data_flow: |
+    Profile Discovery
+      ├─ /cortex_brain/onboarded_repos/*.yaml → Discover profiles
+      ├─ Parse each YAML → Profile dataclass
+      └─ Build ProfileList
+    
+    Dashboard Generation (Per Profile)
+      ├─ Profile → DashboardOrchestrator.generate_from_profile()
+      ├─ DashboardOrchestrator reads profile metadata
+      ├─ Generates SPA-compatible JSON
+      └─ Returns DashboardJSON
+    
+    Validation & Storage
+      ├─ DashboardJSON → JSON Schema validation
+      ├─ If valid: Write to company/dashboards/data/{repo_name}.json
+      ├─ If invalid: Log error, skip (no partial writes)
+      └─ AC_START/AC_COMPLETE markers
+    
+    Registration
+      └─ Update cortex-registry/_cortex-master/index.yaml
+         - Add dashboard entries to onboarded_repositories section
+         - Mark dashboard_generated: true
+
+---
+# ============================================================================
+# IMPLEMENTATION PLAN
+# ============================================================================
+
+stages:
+  
+  - id: "s1"
+    name: "Profile Discovery & Analysis"
+    description: "Discover all profiles and analyze their metadata"
+    effort_hours: 5
+    tests: 4
+    
+    tasks:
+      - id: "54.1.1"
+        name: "Create profile discovery service"
+        effort: "2 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/profile_discovery.py"
+        implementation: |
+          class ProfileDiscoveryService:
+            def discover_all_profiles(self) -> List[RepositoryProfile]:
+              """Discover profiles from cortex_brain/onboarded_repos/"""
+              # List all *.yaml files
+              # Load via ProfileStore
+              # Return list of Profile objects
+            
+            def get_profile_metadata(self, profile: Profile) -> ProfileMetadata:
+              """Extract repo name, tech stack, structure info"""
+              # Parse profile YAML
+              # Return essential metadata for dashboard generation
+        
+        validation: "All 5 profiles discovered, metadata extracted"
+        tests:
+          - "test_discover_all_profiles"
+          - "test_profile_metadata_extraction"
+      
+      - id: "54.1.2"
+        name: "Create profile validation"
+        effort: "2 hours"
+        files_to_update:
+          - "cortex/orchestrators/domain/profile_discovery.py"
+        implementation: |
+          class ProfileValidator:
+            def validate_profile_for_dashboard(self, profile: Profile) -> ValidationResult:
+              """Check if profile has required fields for dashboard generation"""
+              required_fields = [
+                'repository.name',
+                'tech_stack',
+                'structure',
+                'standards'
+              ]
+              # Validate presence + schema compliance
+        
+        validation: "All profiles pass validation"
+        tests:
+          - "test_profile_validation_success"
+          - "test_profile_validation_missing_field"
+  
+  - id: "s2"
+    name: "Dashboard Generation (Per Profile)"
+    description: "For each profile, generate dashboard via DashboardOrchestrator"
+    effort_hours: 7
+    tests: 10
+    depends_on: ["s1"]
+    
+    tasks:
+      - id: "54.2.1"
+        name: "Create BatchDashboardSeeder orchestrator"
+        effort: "4 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/batch_dashboard_seeder.py"
+        implementation: |
+          class BatchDashboardSeeder(BaseOrchestrator):
+            def __init__(self, dashboard_orchestrator: DashboardOrchestrator):
+              self.dashboard_gen = dashboard_orchestrator
+              self.profile_service = ProfileDiscoveryService()
+            
+            def generate_dashboard_for_profile(
+              self,
+              profile: RepositoryProfile
+            ) -> DashboardJSON:
+              """Call DashboardOrchestrator for single profile"""
+              # Prepare profile metadata
+              # Call self.dashboard_gen.generate_from_profile(profile)
+              # Return JSON
+        
+        validation: "Dashboard generation works per profile"
+        tests:
+          - "test_single_profile_dashboard_generation"
+          - "test_multiple_profiles_sequential"
+      
+      - id: "54.2.2"
+        name: "Add error handling for generation failures"
+        effort: "2 hours"
+        files_to_update:
+          - "cortex/orchestrators/domain/batch_dashboard_seeder.py"
+        implementation: |
+          - Per-profile error isolation (failure in one doesn't block others)
+          - Detailed error logging with audit trail
+          - Retry logic for transient failures
+          - Skip failed profiles, continue with remaining
+        
+        validation: "Generation failure doesn't block remaining profiles"
+        tests:
+          - "test_skip_failed_profile"
+          - "test_continue_on_error"
+      
+      - id: "54.2.3"
+        name: "Add progress tracking"
+        effort: "1.5 hours"
+        files_to_update:
+          - "cortex/orchestrators/domain/batch_dashboard_seeder.py"
+        implementation: |
+          - Progress callback during generation
+          - Log: "Generating dashboard 2/5 for kashkole..."
+          - Track timing: total_duration, per-profile_duration
+        
+        validation: "Progress visible during batch run"
+        tests:
+          - "test_progress_tracking"
+  
+  - id: "s3"
+    name: "Dashboard Validation & Storage"
+    description: "Validate generated JSON and persist to disk"
+    effort_hours: 6
+    tests: 8
+    depends_on: ["s2"]
+    
+    tasks:
+      - id: "54.3.1"
+        name: "Create dashboard JSON validator"
+        effort: "2 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/dashboard_json_validator.py"
+        implementation: |
+          class DashboardJSONValidator:
+            def validate_dashboard_json(self, json_data: dict) -> ValidationResult:
+              """Validate against repo-dashboard-schema.json"""
+              # Load JSON Schema from cortex-registry/
+              # Validate json_data against schema
+              # Return comprehensive ValidationResult
+            
+            def validate_batch_dashboards(
+              self,
+              dashboards: Dict[str, dict]
+            ) -> Dict[str, ValidationResult]:
+              """Validate multiple dashboards, return per-repo results"""
+        
+        validation: "All generated dashboards pass schema validation"
+        tests:
+          - "test_dashboard_json_validation_valid"
+          - "test_dashboard_json_validation_invalid"
+      
+      - id: "54.3.2"
+        name: "Implement storage layer"
+        effort: "2 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/dashboard_storage.py"
+        implementation: |
+          class DashboardStorage:
+            def save_dashboard(
+              self,
+              repo_name: str,
+              dashboard_json: dict
+            ) -> Path:
+              """
+              Save dashboard to company/dashboards/data/{repo_name}.json
+              
+              - Ensure directory exists
+              - Write with pretty formatting
+              - Return saved path
+              - Log AC_START/AC_COMPLETE
+              """
+            
+            def backup_existing_dashboard(self, repo_name: str) -> Optional[Path]:
+              """If dashboard exists, backup before overwrite"""
+        
+        validation: "Dashboards written to correct paths"
+        tests:
+          - "test_save_dashboard_creates_file"
+          - "test_backup_existing_dashboard"
+      
+      - id: "54.3.3"
+        name: "Add idempotency checks"
+        effort: "2 hours"
+        files_to_update:
+          - "cortex/orchestrators/domain/dashboard_storage.py"
+        implementation: |
+          - Before overwriting: Compare file checksums
+          - If identical: Skip write (idempotent)
+          - If different: Backup + overwrite
+          - Log: "Dashboard for ksessions unchanged (idempotent)"
+        
+        validation: "Re-running seeding doesn't cause unnecessary writes"
+        tests:
+          - "test_idempotent_save_skips_identical"
+          - "test_idempotent_save_overwrites_changed"
+  
+  - id: "s4"
+    name: "Registry Synchronization"
+    description: "Update master registry with seeded dashboards"
+    effort_hours: 4
+    tests: 4
+    depends_on: ["s3"]
+    
+    tasks:
+      - id: "54.4.1"
+        name: "Create registry updater"
+        effort: "2 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/dashboard_registry_updater.py"
+        implementation: |
+          class DashboardRegistryUpdater:
+            def update_onboarded_repos_section(
+              self,
+              seeded_repos: List[str]
+            ) -> UpdateResult:
+              """
+              Update cortex-registry/_cortex-master/index.yaml
+              For each seeded repo:
+                - Set dashboard_generated: true
+                - Set dashboard: "company/dashboards/data/{repo}.json"
+                - Set spa_ready: true
+              """
+        
+        validation: "Registry updated with all seeded repos"
+        tests:
+          - "test_registry_update_adds_dashboard_fields"
+          - "test_registry_update_preserves_existing_fields"
+      
+      - id: "54.4.2"
+        name: "Generate completion report"
+        effort: "2 hours"
+        files_to_create:
+          - "cortex/orchestrators/domain/seeding_report_generator.py"
+        implementation: |
+          class SeedingReportGenerator:
+            def generate_report(
+              self,
+              seeding_result: SeedingResult
+            ) -> SeedingReport:
+              """
+              Generate comprehensive seeding report:
+              - Total repos processed
+              - Successfully seeded
+              - Failed/skipped
+              - Timing breakdown
+              - File locations
+              - Registry updates
+              - Audit trail
+              """
+        
+        validation: "Report generated with all metrics"
+        tests:
+          - "test_report_generation_complete"
+          - "test_report_includes_all_metrics"
+
+---
+# ============================================================================
+# TEST STRATEGY
+# ============================================================================
+
+test_strategy:
+  unit_tests: 12
+    - ProfileDiscoveryService: 2 tests
+    - ProfileValidator: 2 tests
+    - BatchDashboardSeeder: 3 tests
+    - DashboardJSONValidator: 2 tests
+    - DashboardStorage: 2 tests
+    - DashboardRegistryUpdater: 1 test
+  
+  integration_tests: 10
+    - Discovery + Validation: 2 tests
+    - Generation + Storage: 3 tests
+    - Validation + Storage: 2 tests
+    - Registry Update: 2 tests
+    - Full End-to-End (all 5 repos): 1 test
+  
+  e2e_tests: 6
+    - Seeding complete workflow: 1 test
+    - Idempotency (re-run): 1 test
+    - Error recovery (skip failed): 1 test
+    - Registry consistency: 1 test
+    - Dashboard SPA visibility: 1 test
+    - Performance (batch vs sequential): 1 test
+  
+  total_tests: 28
+  coverage_target: 90%
+  
+  critical_paths:
+    - Path 1: Profile discovery → Dashboard generation → Validation → Storage
+    - Path 2: Error handling → Skip + Continue
+    - Path 3: Idempotency → No re-writes
+    - Path 4: Registry sync → Consistency
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+acceptance_criteria:
+  functional:
+    - criterion: "All 5 onboarded repos get dashboards"
+      validation: "company/dashboards/data/{alist,cortex,kashkole,ksessions,noor-canvas}.json exist"
+    
+    - criterion: "Dashboards valid per JSON Schema"
+      validation: "All JSON files validate against schema"
+    
+    - criterion: "Registry updated"
+      validation: "index.yaml shows dashboard_generated: true for all 5"
+    
+    - criterion: "Idempotency verified"
+      validation: "Re-running seeding produces no changes"
+    
+    - criterion: "Error isolation works"
+      validation: "Failure on one repo doesn't block others"
+  
+  performance:
+    - criterion: "Batch seeding completes in <5 minutes"
+      measurement: "Total execution time"
+    
+    - criterion: "Per-repo generation <30 seconds"
+      measurement: "Single dashboard generation time"
+  
+  quality:
+    - criterion: "Test coverage >90%"
+      validation: "pytest --cov report"
+    
+    - criterion: "NO stubs or fake implementations"
+      validation: "All code fully implemented"
+
+---
+# ============================================================================
+# DEPENDENCIES & UNBLOCKS
+# ============================================================================
+
+dependencies:
+  prerequisites:
+    - "phase-28-repository-onboarding-system (profiles must exist)"
+    - "phase-53-dashboard-orchestrator (generation capability)"
+  
+  unblocks:
+    - "Phase-55+: Dashboard enhancement features (enhancements built on seeded data)"
+    - "Cross-repo metrics analysis"
+    - "Dashboard visibility in plan viewer SPA"
+
+---
+# ============================================================================
+# TIMELINE & EFFORT
+# ============================================================================
+
+effort_breakdown:
+  s1_discovery: "5 hours"
+  s2_generation: "7 hours"
+  s3_validation: "6 hours"
+  s4_registry: "4 hours"
+  total_development: "22 hours"
+  
+  testing_overhead: "6 hours"
+  documentation: "2 hours"
+  
+  total_effort: "30 hours (~2.5 days)"
+  
+  team_recommendation: "1 engineer, 3 days"
+  
+  critical_path:
+    - S1 (5h) → S2 (7h) → S3 (6h) → S4 (4h)
+    - Parallel: Testing (ongoing during implementation)
+    - Parallel: Documentation (final 2h)
+
+estimated_completion: "2026-02-10"
+
+---
+# ============================================================================
+# HANDOFF CRITERIA
+# ============================================================================
+
+ready_for_next_phase_when:
+  - [ ] All 28 tests passing (100% pass rate)
+  - [ ] Code coverage >90%
+  - [ ] All 5 dashboards generated + validated
+  - [ ] Registry synchronized + consistency verified
+  - [ ] Idempotency confirmed (re-run with no changes)
+  - [ ] Error handling tested (skip + continue scenarios)
+  - [ ] Documentation complete
+  - [ ] Audit trail (AC markers) logged for all operations
+  - [ ] Performance validated (<5 min batch, <30s per-repo)
+  - [ ] Code review approved (self-validated via Implementation Truth)
+
+---
+
+metadata:
+  created_at: "2026-02-08"
+  created_by: "cortex-architect review"
+  purpose: "Close integration gap between Phase-28 and Phase-53"
+  related_phases:
+    - "phase-28: Repository Onboarding (profile source)"
+    - "phase-53: Dashboard Orchestrator (generation capability)"
+  architecture_decision_validated: false  # NEW PHASE
+  status: "proposed"
+  next_action: "Await implementation approval"

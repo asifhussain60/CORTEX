@@ -77,8 +77,14 @@ dependencies:
   enables:
     - "phase-27: Company Domain Integration"
     - "phase-27: Standards resolution"
+    - "phase-53: Dashboard Orchestrator (auto-generation hook in S5)"
+    - "Dashboard auto-generation on repository onboarding complete"
   
   blocks: []
+  
+  unblocks:
+    - "Integrated repo onboarding + dashboard generation workflow"
+    - "Automated dashboard seeding for newly onboarded repositories"
   
   orchestrators_required:
     - "RepositoryOnboardingOrchestrator (primary)"
@@ -492,6 +498,123 @@ integration:
       
     - orchestrator: "SecurityCheckpointAgent"
       integration: "Baseline security from profiles"
+
+---
+# ============================================================================
+# ENHANCEMENT: STAGE 5 - DASHBOARD AUTO-GENERATION HOOK
+# ============================================================================
+
+enhancement_s5_dashboard_integration:
+  id: "phase-28-s5"
+  name: "Dashboard Auto-Generation Hook"
+  version: "1.0"
+  status: "proposed"
+  created: "2026-02-08"
+  priority: "P0"
+  description: |
+    Post-onboarding trigger to automatically generate dashboard for newly onboarded repositories.
+    Closes the integration gap between repository profiling (Phase-28) and dashboard generation (Phase-53).
+  
+  objective: |
+    Enable seamless workflow: `/onboard /path/to/repo` 
+    → Profile created → Dashboard auto-generated → Both artifacts registered
+    
+    Currently: Manual `cortex_generate_dashboard` call required after onboarding
+    After S5: Automatic via post-profile hook
+  
+  stages:
+    s5_1_onboarding_hook:
+      name: "Post-Profile Hook Integration"
+      description: "Add post_profile_complete callback to RepositoryOnboardingOrchestrator"
+      effort_hours: 2
+      tests: 2
+      files_to_create:
+        - "cortex/orchestrators/support/onboarding_dashboard_hook.py"
+      files_to_update:
+        - "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      implementation: |
+        - Create OnboardingDashboardHook class
+        - Listen for profile_created events
+        - Trigger cortex_generate_dashboard MCP tool
+        - Log AC_START/AC_COMPLETE markers
+      validation: "Profile generated → Dashboard JSON created"
+      tests:
+        - "test_dashboard_hook_triggered_on_profile"
+        - "test_dashboard_hook_skipped_if_disabled"
+    
+    s5_2_mcp_compound_tool:
+      name: "Compound MCP Tool"
+      description: "Create cortex_onboard_and_dashboard compound operation"
+      effort_hours: 1.5
+      tests: 2
+      files_to_create:
+        - "cortex/mcp/tools/compound/onboard_and_dashboard.py"
+      mcp_tools_created:
+        - "cortex_onboard_and_dashboard"
+      implementation: |
+        - New MCP tool combining two operations
+        - Calls cortex_onboard_repository + cortex_generate_dashboard
+        - Single transaction, unified error handling
+        - Returns combined result (profile + dashboard)
+      validation: "Single MCP call returns both artifacts"
+      tests:
+        - "test_compound_tool_success"
+        - "test_compound_tool_partial_failure"
+    
+    s5_3_error_handling:
+      name: "Error Handling & Rollback"
+      description: "Handle dashboard generation failures gracefully"
+      effort_hours: 1.5
+      tests: 2
+      implementation: |
+        - If dashboard generation fails: Profile retained, error logged
+        - User can retry dashboard generation independently
+        - No profile corruption
+        - Audit trail maintained
+      validation: "Profile safe even if dashboard generation fails"
+      tests:
+        - "test_profile_saved_if_dashboard_fails"
+        - "test_error_audit_trail"
+  
+  integration_points:
+    - orchestrator: "RepositoryOnboardingOrchestrator"
+      change: "Add post_profile_complete callback"
+      mcp_integration: "Trigger cortex_generate_dashboard"
+    
+    - orchestrator: "DashboardOrchestrator"
+      change: "Handle async invocation from onboarding flow"
+      mcp_integration: "Receive event-driven calls"
+    
+    - tool: "cortex_onboard_repository"
+      change: "Add optional dashboard_auto_generate param"
+      default: "true"
+  
+  test_strategy:
+    unit_tests: 4
+    integration_tests: 2
+    e2e_tests: 0
+    total: 6
+    coverage_target: "95%"
+  
+  success_criteria:
+    - criterion: "Post-profile hook executes"
+      validation: "Dashboard JSON file created immediately after profile"
+    
+    - criterion: "Compound tool works end-to-end"
+      validation: "Single call returns profile + dashboard"
+    
+    - criterion: "Error handling robust"
+      validation: "Profile safe even if dashboard fails"
+    
+    - criterion: "Backward compatible"
+      validation: "Manual cortex_generate_dashboard still works"
+  
+  effort_estimate: "4 hours"
+  blocking_items: []
+  dependencies:
+    - "phase-53-dashboard-orchestrator (Must be completed before wiring)"
+  
+  estimated_completion: "2026-02-09"
 
 ---
 # ============================================================================
