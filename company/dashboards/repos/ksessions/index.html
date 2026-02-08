@@ -47,12 +47,6 @@
             height: 200px;
             object-fit: contain;
             filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
-            animation: logoGlow 3s ease-in-out infinite alternate;
-        }
-        
-        @keyframes logoGlow {
-            0% { filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3)); }
-            100% { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5)); }
         }
         
         .header-content {
@@ -985,6 +979,11 @@
         <p>© 2024-2026 Asif Hussain | Generated: 2026-02-06 14:39:07</p>
     </footer>
     
+    <!-- Dashboard Utility Modules -->
+    <script src="../../assets/js/PathResolver.js"></script>
+    <script src="../../assets/js/AuditLogger.js"></script>
+    <script src="../../assets/js/DashboardDataLoader.js"></script>
+    
     <!-- Embedded Data -->
     <script type="application/json" id="dashboard-data">
 {
@@ -1339,42 +1338,112 @@
 }
     </script>
     
-    <!-- Tab Navigation Script -->
+    <!-- Dashboard Initialization Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabPanels = document.querySelectorAll('.tab-panel');
+        (async function initializeDashboard() {
+            console.log('🚀 [KSESSIONS Dashboard] Initializing...');
             
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active from all
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    tabPanels.forEach(p => p.classList.remove('active'));
-                    
-                    // Add active to clicked
-                    button.classList.add('active');
-                    const tabId = button.dataset.tab;
-                    const panel = document.getElementById(tabId);
-                    if (panel) panel.classList.add('active');
+            // Initialize audit logger
+            const logger = new AuditLogger();
+            
+            try {
+                // Initialize path resolver
+                const pathResolver = new PathResolver();
+                
+                // Preload critical assets and detect 404s
+                await logger.measure('asset-preload', async () => {
+                    const assets = [
+                        '../../assets/css/main.css',
+                        '../../assets/images/cortex-logo-200.png',
+                        '../../assets/images/CORTEX-logo-64.png'
+                    ];
+                    const results = await pathResolver.preloadCriticalAssets(assets);
+                    pathResolver.reportBrokenPaths();
+                    return results;
                 });
-            });
-            
-            // Activate first tab
-            if (tabButtons.length > 0) {
-                tabButtons[0].click();
+                
+                // Initialize data loader
+                const dataLoader = new DashboardDataLoader(logger);
+                
+                // Load dashboard data
+                const data = await logger.measure('data-load', async () => {
+                    return await dataLoader.loadWithFallback({
+                        embeddedDataId: 'dashboard-data',
+                        timeout: 5000
+                    });
+                });
+                
+                window.dashboardData = data;
+                console.log('✅ [KSESSIONS Dashboard] Data loaded:', dataLoader.getMetadata());
+                
+                // Initialize tab navigation with defensive rendering
+                await logger.measure('tab-init', async () => {
+                    const tabButtons = document.querySelectorAll('.tab-btn');
+                    const tabPanels = document.querySelectorAll('.tab-panel');
+                    
+                    if (tabButtons.length === 0) {
+                        throw new Error('No tab buttons found in DOM');
+                    }
+                    
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', () => {
+                            const startRender = performance.now();
+                            
+                            try {
+                                // Remove active from all
+                                tabButtons.forEach(b => b.classList.remove('active'));
+                                tabPanels.forEach(p => p.classList.remove('active'));
+                                
+                                // Add active to clicked
+                                button.classList.add('active');
+                                const tabId = button.dataset.tab;
+                                const panel = document.getElementById(tabId);
+                                
+                                if (!panel) {
+                                    throw new Error(`Tab panel not found: ${tabId}`);
+                                }
+                                
+                                panel.classList.add('active');
+                                logger.logDOMMutation('add', panel.id, { class: 'active' });
+                                
+                                const renderTime = performance.now() - startRender;
+                                logger.logRenderCycle(tabId, true, renderTime);
+                                
+                            } catch (error) {
+                                const renderTime = performance.now() - startRender;
+                                logger.logRenderCycle(button.dataset.tab, false, renderTime);
+                                logger.logError('tab-render', error, { tabId: button.dataset.tab });
+                                console.error('❌ [Tab Render] Failed:', error);
+                            }
+                        });
+                    });
+                    
+                    // Activate first tab
+                    if (tabButtons.length > 0) {
+                        tabButtons[0].click();
+                        console.log('✅ [Tab Init] First tab activated');
+                    }
+                });
+                
+                // Display audit summary
+                logger.displaySummary();
+                
+                console.log('✅ [KSESSIONS Dashboard] Initialization complete');
+                
+            } catch (error) {
+                logger.logError('initialization', error);
+                console.error('❌ [KSESSIONS Dashboard] Initialization failed:', error);
+                
+                // Show error state in UI
+                document.body.innerHTML = `
+                    <div style="padding: 2rem; text-align: center; color: #ff4444;">
+                        <h1>⚠️ Dashboard Failed to Load</h1>
+                        <p>${error.message}</p>
+                        <pre style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${error.stack}</pre>
+                    </div>
+                `;
             }
-            
-            // Load embedded data
-            const dataEl = document.getElementById('dashboard-data');
-            if (dataEl) {
-                try {
-                    window.dashboardData = JSON.parse(dataEl.textContent);
-                    console.log('📊 Dashboard data loaded:', window.dashboardData);
-                } catch (e) {
-                    console.error('Failed to parse dashboard data:', e);
-                }
-            }
-        });
+        })();
     </script>
 </body>
 </html>
