@@ -1,5 +1,65 @@
 # CORTEX Response Format Standards
-**Version:** 1.2 | **Updated:** 2026-02-05 | **Authority:** ENH-028 + ENH-032 (Chat UI Rendering)
+**Version:** 1.3 | **Updated:** 2026-02-08 | **Authority:** ENH-028 + ENH-032 + CORE-049 (Silent Autonomous)
+
+---
+
+## 🤖 SILENT AUTONOMOUS MODE (DEFAULT)
+
+**When user triggers execution ("proceed", "implement", "yes", "continue"):**
+
+### Progress Bar Format (ONLY OUTPUT)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {Phase Name}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[████████░░] 80% {Current Stage}
+├─ ✅ S1: {name} ({n} tests)
+├─ ✅ S2: {name} ({n} tests)
+├─ 🔵 S3: {name} (in progress)
+└─ ⚪ S4: {name} (pending)
+
+Tests: {passed}/{total} | Coverage: {pct}%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Completion Summary (FINAL OUTPUT)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ {Phase Name}: COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[██████████] 100% | {n}/{n} tests | {pct}% coverage
+
+Git: {commit_hash} "{commit_message}"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Error Report (ON FAILURE)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 {Phase Name}: BLOCKED at {Stage}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[████░░░░░░] 40% | {passed}/{total} tests | {failures} failures
+
+Error: {error_message}
+  - Expected: {expected}
+  - Actual: {actual}
+
+Fix: {fix_suggestion}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### FORBIDDEN in Silent Mode
+
+- ❌ "I'll now proceed to implement..."
+- ❌ "Let me check the registry first..."
+- ❌ "Here's what I plan to do..."
+- ❌ "Should I continue?"
+- ❌ Multi-paragraph explanations
+- ❌ Approval requests between stages
 
 ---
 
@@ -8,6 +68,7 @@
 This document defines the unified response format for all CORTEX operations across all modes (PRE-FLIGHT, AUDIT, DESIGN, DIGEST, META-AUDIT).
 
 **Core Principles:**
+- **Silent by Default** — Progress bars only during execution
 - **Chat UI Compatibility** — Formats render properly in GitHub Copilot Chat panel
 - **Visual Hierarchy** — Generous spacing, H2/H3 headings, color-coded icons
 - **Semantic Layering** — Progressive disclosure (Executive → Tactical → Technical)

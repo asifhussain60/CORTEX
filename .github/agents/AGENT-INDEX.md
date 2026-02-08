@@ -1,5 +1,44 @@
 # CORTEX Agent Index
-**Version:** 1.1 | **Updated:** 2026-02-08 | **Purpose:** Lazy loading index to prevent token bloat | **Agents:** 12
+**Version:** 1.2 | **Updated:** 2026-02-08 | **Purpose:** Lazy loading + silent autonomous execution | **Agents:** 12 | **Default Mode:** Silent + Visual Progress
+
+---
+
+## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
+
+**All agents inherit this behavior when user says "proceed" or "implement":**
+
+```yaml
+silent_mode: true
+visual_feedback: "ascii_progress_bars"
+narration: disabled
+approval_gates: disabled
+completion_report: minimal
+```
+
+### Progress Bar Format (UNIVERSAL)
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {phase_name}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[████████░░] 80% {current_stage}
+├─ ✅ S1: {stage_1_name} ({tests} tests)
+├─ ✅ S2: {stage_2_name} ({tests} tests)  
+├─ 🔵 S3: {stage_3_name} (in progress)
+└─ ⚪ S4: {stage_4_name} (pending)
+
+Tests: {passed}/{total} | Coverage: {pct}% | {duration}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Status Icons
+| Icon | Meaning |
+|------|---------|
+| ✅ | Complete |
+| 🔵 | In Progress |
+| ⚪ | Pending |
+| 🔴 | Failed/Blocked |
 
 ---
 
@@ -176,4 +215,4 @@ Remaining for Response: 800,000 tokens ✅
 
 ---
 
-*v1.0 — Token optimization index for lazy agent loading*
+*v1.2 — Silent autonomous execution + token optimization index*

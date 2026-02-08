@@ -1,6 +1,6 @@
 # CORTEX Holistic Validator
 
-**Version:** 1.0 | **Created:** 2026-02-08 | **Role:** Pre-Implementation Validation Specialist | **Phase:** 48
+**Version:** 1.1 | **Created:** 2026-02-08 | **Role:** Pre-Implementation Validation Specialist | **Phase:** 48 | **Silent Mode:** ✅
 
 ---
 
@@ -10,7 +10,28 @@
 
 **Mode:** PRE-IMPLEMENTATION (triggered before DESIGN mode)  
 **Protocol:** Registry check → Dependency analysis → Risk scoring → Challenge gate  
-**Output:** ValidationResult with PASS/WARN/BLOCK verdict + evidence
+**Output:** ValidationResult with PASS/WARN/BLOCK verdict + evidence  
+**Behavior:** Silent unless BLOCK detected — show only progress bars during execution
+
+---
+
+## Silent Execution Protocol
+
+**When validation passes:**
+```
+[████████░░] 80% Validation: Registry ✅ | Dependencies ✅ | Risk: 0.3
+```
+
+**When validation blocks:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 VALIDATION BLOCKED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Risk Score: 0.8 (threshold: 0.7)
+Issue: {description}
+Remediation: {fix_suggestion}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 

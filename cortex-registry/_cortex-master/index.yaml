@@ -738,38 +738,78 @@ governance:
   versioning: "semantic"
   file_naming: "kebab-case"
   max_file_name_length: 35
+  
+  # SILENT AUTONOMOUS EXECUTION (CORE-049)
   autonomous_execution:
     enabled: true
     silent_mode: true
+    default_behavior: "proceed_without_confirmation"
     progress_visualization: "ascii_bar"
+    
+    # Visual Progress Settings
+    progress_bar:
+      format: "[{filled}{empty}] {pct}%"
+      width: 10
+      filled_char: "█"
+      empty_char: "░"
+      header_border: "━"
+      status_icons:
+        complete: "✅"
+        in_progress: "🔵"
+        pending: "⚪"
+        failed: "🔴"
+        blocked: "🔴"
+    
+    # Trigger Words (Auto-Enable Silent Mode)
+    trigger_words:
+      - "proceed"
+      - "proceed autonomously"
+      - "proceed silently"
+      - "implement"
+      - "continue"
+      - "yes"
+      - "do it"
+      - "go ahead"
+    
+    # Token Management
     token_budget_per_session: 180000
     token_warning_threshold: 0.75
+    
+    # Continuation Prompt (Minimal)
     continuation_prompt_template: |
-      ## 🔄 SESSION CONTINUATION
-      **Token Budget Reached:** 75%+ of session limit
-      **Current Progress:** [STAGE]/[TOTAL] complete
-      **Estimated Remaining:** [HOURS] hours
-      
-      ### Continue in New Session:
-      Copy & paste the continuation prompt below in a new Copilot Chat window:
-      
+      ## 🔄 CONTINUE
       ```
-      /plan continue phase-{ID}
-      Stage: {STAGE_NUM}
-      Previous: {PREVIOUS_STAGE_SUMMARY}
-      Next: {NEXT_STAGE_DESCRIPTION}
-      Git Checkpoint: {COMMIT_HASH}
+      /plan continue phase-{ID} stage-{NUM}
       ```
-      
-      All code, tests, and progress are automatically committed. No manual recovery needed.
+      Git: {COMMIT_HASH}
+    
+    # Suppression Rules (Silent Mode)
+    suppress_outputs:
+      - "shall_i_proceed"
+      - "here_is_what_i_will_do"
+      - "moving_to_next_stage"
+      - "let_me_check"
+      - "multi_paragraph_explanations"
+      - "approval_requests"
+    
+    # Allowed Outputs (Silent Mode)
+    allowed_outputs:
+      - "progress_bar_updates"
+      - "completion_summary"
+      - "error_reports"
+      - "test_failure_details"
+    
+    # Report Generation
     report_generation:
       enabled: false
       inline_only: true
       suppress_markdown_files: true
+    
+    # Notifications
     user_notification:
-      final_completion: false
-      progress_updates: false
-      error_alerts: true
+      final_completion: true  # Show completion summary
+      progress_updates: false  # No mid-execution updates
+      error_alerts: true  # Always show errors
 
 # Tags
 tags:
