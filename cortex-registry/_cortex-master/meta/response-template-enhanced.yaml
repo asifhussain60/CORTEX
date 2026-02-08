@@ -1,0 +1,323 @@
+# Enhanced Response Template with Status Color Coding
+# Purpose: Semantic header coloring for quick status assessment
+# Version: 1.0
+# Authority: CORTEX-ARCH-014: Enhanced Response Templates
+# Effective: 2026-02-08
+
+# Color Coding Standards for Section Headers (## H2)
+# ✅ GREEN (#00AA00): Completion, success, PASSED, READY
+# 🟠 ORANGE (#FF8800): In Progress, PENDING, NEXT, TODO
+# 🔴 RED (#FF0000): Critical, BLOCKED, FAILED, ERROR, Blocker
+# 🟢 BRIGHT GREEN (#00FF00): Complete, EXCELLENT, OPTIMAL
+# 🔵 BLUE (#0055FF): Information, ANALYSIS, DESIGN (neutral)
+
+color_codes:
+  complete: "🟢"           # ✅ Green - EXCELLENT/COMPLETE
+  success: "✅"             # ✅ Green - SUCCESS/PASSED
+  in_progress: "🔵"         # 🔵 Orange - IN PROGRESS/PENDING
+  pending: "🟠"             # 🟠 Orange - PENDING/NEXT
+  blocked: "🔴"             # 🔴 Red - BLOCKED/CRITICAL
+  failed: "❌"              # 🔴 Red - FAILED/ERROR
+  warning: "⚠️"             # 🟡 Yellow - WARNING/CAUTION
+  critical: "🚨"            # 🔴 Red - CRITICAL BLOCKER
+  design: "🎨"              # 🔵 Blue - DESIGN/ANALYSIS
+  information: "ℹ️"         # 🔵 Blue - INFORMATION
+  next: "➡️"                # 🟠 Orange - NEXT STEPS
+
+# Template Structure: Standard sections with status-aware headers
+templates:
+  standard_response:
+    header: |
+      ## {emoji} {title}
+      **Author:** {author} | **Mode:** {mode} {status_badge}
+    sections:
+      - name: "progress"
+        emoji: "📊"
+        color: "neutral"
+        format: |
+          ## 📊 Progress Summary
+          
+          [{progress_bar}] {percent}% | {current}/{total} {metric}
+          
+      - name: "completed_items"
+        emoji: "✅"
+        color: "green"
+        format: |
+          ## ✅ COMPLETED WORK
+          **Status:** 🟢 COMPLETE
+          
+          ### {item_name}
+          - ✅ {achievement1}
+          - ✅ {achievement2}
+          
+      - name: "in_progress_items"
+        emoji: "🔵"
+        color: "orange"
+        format: |
+          ## 🔵 IN PROGRESS WORK
+          **Status:** 🟠 PENDING
+          
+          ### {item_name}
+          - 🔵 {current_task}
+          - ⚪ {next_task}
+          
+      - name: "blocked_items"
+        emoji: "🔴"
+        color: "red"
+        format: |
+          ## 🔴 BLOCKED / CRITICAL
+          **Status:** 🚨 BLOCKER
+          
+          ### {item_name}
+          - ❌ {blocker_reason}
+          - 📋 {resolution_path}
+          
+      - name: "next_steps"
+        emoji: "➡️"
+        color: "orange"
+        format: |
+          ## ➡️ NEXT STEPS
+          **Status:** 🟠 PENDING
+          
+          1. {next_action1}
+          2. {next_action2}
+
+# Semantic Status Badges (Use in headers)
+status_badges:
+  complete: " ✅"
+  success: " ✅"
+  in_progress: " 🔵"
+  pending: " 🟠"
+  blocked: " 🔴"
+  critical: " 🚨"
+  warning: " ⚠️"
+
+# Header Color Mapping (Markdown - Text only, simulated with emojis)
+# NOTE: Pure Markdown doesn't support inline colors, so we use:
+# - Emoji prefixes for quick visual scanning
+# - Status-aware section headers with emojis
+# - Bold/italics for emphasis
+
+header_patterns:
+  # Pattern 1: Completion
+  "## ✅ {title}":
+    use_when: "section is complete, all tasks done, no blockers"
+    example: "## ✅ FIX 1: MCP Governance Tools Implementation"
+    visual: "Bright green header"
+    
+  # Pattern 2: In Progress
+  "## 🔵 {title}":
+    use_when: "section is actively being worked on, pending completion"
+    example: "## 🔵 FIX 2: YAML Loader Enhancement"
+    visual: "Orange header with blue indicator"
+    
+  # Pattern 3: Blocked/Critical
+  "## 🔴 {title}":
+    use_when: "section has blockers, critical issues, or failures"
+    example: "## 🔴 DEPLOYMENT: Database Migration Failed"
+    visual: "Red header for critical attention"
+    
+  # Pattern 4: Next/Planning
+  "## ➡️ {title}":
+    use_when: "section describes upcoming work, not yet started"
+    example: "## ➡️ NEXT PHASE: Source Code Consolidation"
+    visual: "Orange header for future work"
+    
+  # Pattern 5: Analysis/Design
+  "## 🎨 {title}":
+    use_when: "section is design, analysis, or planning phase"
+    example: "## 🎨 DESIGN: Enhanced Response Template"
+    visual: "Blue header for neutral/informational"
+
+# Enhanced Session Summary Template (Mandatory Format)
+session_summary_template:
+  header: |
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ## ✅ SESSION SUMMARY
+    **Session:** {session_name} | **Status:** {status_emoji} {status_text}
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+  sections:
+    - id: "token_budget"
+      header: "## 📊 Token Usage"
+      required: true
+      order: 1
+      content: |
+        **Used:** {tokens_used}k / {tokens_total}k ({percent}%)
+        **Status:** {budget_status_emoji} {budget_status_text}
+        
+    - id: "completed"
+      header: "## ✅ COMPLETED"
+      color: "green"
+      order: 2
+      content: |
+        | Item | Metric | Status |
+        |------|--------|--------|
+        | {item} | {metric} | ✅ {status} |
+        
+    - id: "in_progress"
+      header: "## 🔵 IN PROGRESS"
+      color: "orange"
+      order: 3
+      content: |
+        | Item | Progress | ETA |
+        |------|----------|-----|
+        | {item} | {progress}% | {eta} |
+        
+    - id: "blocked"
+      header: "## 🔴 BLOCKED"
+      color: "red"
+      order: 4
+      content: |
+        | Item | Blocker | Resolution |
+        |------|---------|------------|
+        | {item} | {blocker} | {resolution} |
+        
+    - id: "metrics"
+      header: "## 📈 Quality Metrics"
+      color: "neutral"
+      order: 5
+      content: |
+        | Metric | Value | Target |
+        |--------|-------|--------|
+        | Tests | {tests_pass}/{tests_total} | 100% |
+        | Coverage | {coverage}% | {coverage_target}% |
+        | Errors | {errors} | 0 |
+        
+    - id: "next_steps"
+      header: "## ➡️ NEXT STEPS"
+      color: "orange"
+      order: 6
+      content: |
+        1. {step1}
+        2. {step2}
+        3. {step3}
+
+# Markdown Color Simulation Techniques
+# Since Markdown doesn't support inline colors natively, use:
+markdown_color_techniques:
+  # Technique 1: Emoji Prefixes (RECOMMENDED - Works everywhere)
+  emoji_prefix:
+    complete: "✅"
+    in_progress: "🔵"
+    blocked: "🔴"
+    next: "➡️"
+    design: "🎨"
+    example: |
+      ## ✅ COMPLETED WORK
+      ## 🔵 IN PROGRESS
+      ## 🔴 BLOCKED ITEMS
+      ## ➡️ NEXT STEPS
+    advantage: "Works in all Markdown viewers"
+    limitation: "Not true colors, but effective visual distinction"
+    
+  # Technique 2: Bold with Status Word (SUPPLEMENT)
+  bold_status:
+    example: |
+      ## **COMPLETED:** MCP Governance Tools
+      ## **IN PROGRESS:** YAML Loader Enhancement
+      ## **BLOCKED:** Database Migration
+    advantage: "Clear text-based indication"
+    limitation: "Less visually distinct"
+    
+  # Technique 3: HTML Color Codes (If supported)
+  html_colors:
+    complete: '<span style="color: #00AA00">## COMPLETED: {title}</span>'
+    in_progress: '<span style="color: #FF8800">## IN PROGRESS: {title}</span>'
+    blocked: '<span style="color: #FF0000">## BLOCKED: {title}</span>'
+    advantage: "True colors if HTML supported"
+    limitation: "Not supported in all Markdown renderers (GitHub, VS Code markdown preview)"
+    recommendation: "Use emoji + bold as primary, HTML as fallback"
+
+# Agent Integration Rules
+agent_rules:
+  session_start:
+    - "Load this template YAML"
+    - "Detect session status (complete/in_progress/blocked)"
+    - "Apply appropriate emoji prefix to main header"
+    - "Use status badges throughout response"
+    
+  section_creation:
+    - "Determine section status (BEFORE writing content)"
+    - "Choose appropriate emoji from color_codes"
+    - "Format header as: ## {emoji} {title}"
+    - "Maintain status consistency throughout section"
+    
+  status_propagation:
+    - "Single failed test → mark section as 🔵 (in_progress) or 🔴 (blocked)"
+    - "All tests passing → mark section as ✅ (complete)"
+    - "Awaiting user input → mark as 🟠 (pending)"
+    - "Partial work → use 🔵 (in_progress)"
+    
+  color_override_rules:
+    - "If ANY critical issue exists → use 🔴 (red)"
+    - "If NO blockers BUT work remaining → use 🔵 (orange)"
+    - "If ALL work complete → use ✅ (green)"
+    - "If planning phase → use ➡️ (orange) or 🎨 (blue)"
+
+# Example Usage in Responses
+example_response:
+  "## ✅ FIX 1: Comprehensive MCP Governance Tools":
+    explains: "Section is COMPLETE - use green emoji"
+    template: |
+      ## ✅ FIX 1: Comprehensive MCP Governance Tools
+      **Status:** 🟢 COMPLETE | **Tests:** 23/23 ✅
+      
+      - ✅ 5 production-grade MCP tools implemented
+      - ✅ Zero stubs, all real logic
+      - ✅ Audit trail integration complete
+      
+  "## 🔵 FIX 2: YAML Loader Enhancement":
+    explains: "Section is IN PROGRESS - use orange emoji"
+    template: |
+      ## 🔵 FIX 2: YAML Loader Enhancement
+      **Status:** 🟠 IN PROGRESS | **Progress:** 80%
+      
+      - ✅ TierRulesLoader created
+      - 🔵 Test suite being expanded
+      - ⚪ Final validation pending
+      
+  "## 🔴 DEPLOY: Critical Database Issue":
+    explains: "Section has BLOCKERS - use red emoji"
+    template: |
+      ## 🔴 DEPLOY: Critical Database Issue
+      **Status:** 🚨 BLOCKED | **Fix ETA:** 2h
+      
+      - ❌ Migration script failed
+      - 📋 Rollback in progress
+      - ⏳ Awaiting verification
+      
+  "## ➡️ NEXT: Source Code Consolidation":
+    explains: "Section is UPCOMING - use orange emoji"
+    template: |
+      ## ➡️ NEXT: Source Code Consolidation
+      **Status:** ⚪ PLANNED | **Effort:** 2-3h
+      
+      - Move src/components → cortex-lens/
+      - Update imports across codebase
+      - Run integration tests
+
+# Integration with cortex-architect.prompt.md
+prompt_integration:
+  when_loading: "Load this template YAML on every session"
+  when_creating_responses: "Check template for appropriate emoji + status"
+  when_displaying_headers: "Always use emoji prefix for semantic color coding"
+  when_summarizing: "Apply session_summary_template with proper status badges"
+  
+# Token-Optimized Color Reference (Quick Copy)
+quick_reference: |
+  ✅ = COMPLETE/SUCCESS (green)
+  🔵 = IN PROGRESS (orange)
+  🔴 = BLOCKED/CRITICAL (red)
+  ➡️ = NEXT/PENDING (orange)
+  🎨 = DESIGN/ANALYSIS (blue)
+  ⚪ = PLANNED/TODO (gray)
+  ⚠️ = WARNING/CAUTION (yellow)
+  🚨 = CRITICAL BLOCKER (red alert)
+  ❌ = FAILED/ERROR (red)
+  ℹ️ = INFORMATION (blue)
+
+# AC_COMPLETE: AC-RESPONSE-TEMPLATE-ENHANCEMENT-001 ✅
+# Description: Enhanced response template with status color coding
+# Status: READY FOR INTEGRATION
+# Next: Update response-format.yaml to reference this template
