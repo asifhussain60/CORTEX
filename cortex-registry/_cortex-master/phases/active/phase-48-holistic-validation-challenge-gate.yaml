@@ -1,0 +1,222 @@
+# Phase 48: Holistic Validation & Challenge Gate
+# Authority: cortex-architect.prompt.md v15.1
+# Created: 2026-02-08
+# Status: planned
+
+phase_id: "phase-48"
+title: "Holistic Validation & Challenge Gate"
+version: "1.0.0"
+status: "planned"
+priority: "P0"
+created: "2026-02-08"
+
+overview:
+  vision: |
+    Transform CORTEX governance from reactive (audit after implementation) to proactive
+    (holistic validation before implementation). Every IMPLEMENT/FIX/REFACTOR must pass
+    through a validation gate that cross-analyzes all orchestrators, components, and tools
+    to prevent regressions and ensure architectural coherence.
+  
+  problem_statement: |
+    Current gaps identified:
+    1. Registry holistic check missing — no cross-validation of orchestrators/components
+    2. Regression prevention is reactive — checks happen AFTER implementation
+    3. MasterOrchestrator governance not fully wired — enforcement via prompts only
+    4. cortex_brain underutilized — not used for CORTEX self-development
+    5. Challenge system not mandatory — suboptimal designs can proceed unchallenged
+    
+  expected_outcomes:
+    - Zero regressions from implementation changes
+    - All orchestrator dependencies tracked and validated
+    - Mandatory challenge gate ensures alternatives considered
+    - cortex_brain provides context synthesis for CORTEX repo
+    - MCP-enforced governance (not prompt-reliant)
+
+roi_analysis:
+  score: 0.91
+  cost:
+    estimated_effort: "3 days"
+    test_target: 60
+    risk_level: "medium"
+  
+  impact:
+    - Prevents cumulative technical debt
+    - Ensures holistic CORTEX evolution
+    - Closes 5 governance gaps
+    - Enables regression-free autonomous execution
+  
+  risk_mitigation:
+    - Graceful fallback to prompt-based checks if MCP unavailable
+    - Incremental rollout (enable per-orchestrator)
+    - Comprehensive test coverage before activation
+
+stages:
+  - id: "S1"
+    name: "HolisticValidationOrchestrator"
+    description: |
+      Core orchestrator that performs cross-system validation:
+      - Reads index.yaml (phases, dependencies, status)
+      - Reads wiring.yaml (orchestrator registrations)
+      - Analyzes orchestrator capability mesh
+      - Detects dependency conflicts
+      - Returns PASS/BLOCK verdict with evidence
+    effort: "4 hours"
+    test_count: 12
+    deliverables:
+      - "cortex/orchestrators/holistic/holistic_validation_orchestrator.py"
+      - "cortex/orchestrators/holistic/__init__.py"
+      - "tests/test_holistic_validation_orchestrator.py"
+    acceptance_criteria:
+      - "Validates registry structure (index.yaml, phases/, wiring.yaml)"
+      - "Detects orchestrator dependency conflicts"
+      - "Returns structured ValidationResult with evidence"
+      - "12/12 tests passing"
+
+  - id: "S2"
+    name: "Dependency Graph Generator"
+    description: |
+      Builds and analyzes orchestrator dependency graph:
+      - Parses wiring.yaml for dependencies
+      - Detects circular dependencies
+      - Identifies orphan orchestrators
+      - Calculates impact radius for changes
+    effort: "3 hours"
+    test_count: 10
+    deliverables:
+      - "cortex/orchestrators/holistic/dependency_graph.py"
+      - "tests/test_dependency_graph.py"
+    acceptance_criteria:
+      - "Builds complete dependency graph from wiring.yaml"
+      - "Detects circular dependencies"
+      - "Calculates change impact radius"
+      - "10/10 tests passing"
+
+  - id: "S3"
+    name: "Pre-Implementation Challenge Gate"
+    description: |
+      Mandatory challenge generation before any implementation:
+      - Analyzes user request against architecture
+      - Generates alternatives with ROI comparison
+      - Requires explicit user confirmation before proceed
+      - Logs challenge decisions to governance.db
+    effort: "4 hours"
+    test_count: 14
+    deliverables:
+      - "cortex/orchestrators/holistic/challenge_gate.py"
+      - "cortex/governance/challenge_logger.py"
+      - "tests/test_challenge_gate.py"
+    acceptance_criteria:
+      - "Every IMPLEMENT/FIX/REFACTOR triggers challenge"
+      - "Alternatives generated with ROI scores"
+      - "User must explicitly proceed (no silent execution)"
+      - "Challenge decisions logged to governance.db"
+      - "14/14 tests passing"
+
+  - id: "S4"
+    name: "cortex_brain Self-Analysis Integration"
+    description: |
+      Enable cortex_brain to analyze CORTEX repository itself:
+      - Add CORTEX as onboarded repo in brain
+      - Context synthesis for CORTEX development
+      - Knowledge tier utilization for self-improvement
+    effort: "3 hours"
+    test_count: 8
+    deliverables:
+      - "cortex_brain/onboarded_repos/cortex_self.yaml"
+      - "cortex/brain/self_analysis.py"
+      - "tests/test_cortex_self_analysis.py"
+    acceptance_criteria:
+      - "CORTEX repo onboarded in cortex_brain"
+      - "Context synthesis available for CORTEX files"
+      - "Knowledge tiers consulted for CORTEX development"
+      - "8/8 tests passing"
+
+  - id: "S5"
+    name: "Prompt & Agent Enhancement"
+    description: |
+      Minimal enhancements to prompts and agents:
+      - Add HOLISTIC_VALIDATION_GATE section to cortex-architect.prompt.md
+      - Add P0.5 check to cortex-auditor.md
+      - Create cortex-holistic-validator.md agent
+      - Update AGENT-INDEX.md
+    effort: "2 hours"
+    test_count: 6
+    deliverables:
+      - "cortex-architect.prompt.md updates"
+      - "cortex-auditor.md updates"
+      - ".github/agents/core/cortex-holistic-validator.md"
+      - ".github/agents/AGENT-INDEX.md updates"
+    acceptance_criteria:
+      - "HOLISTIC_VALIDATION_GATE section added"
+      - "P0.5 pre-implementation check documented"
+      - "New agent indexed and discoverable"
+      - "6/6 tests passing"
+
+  - id: "S6"
+    name: "MCP Tools & Integration"
+    description: |
+      Expose functionality via MCP tools:
+      - cortex_validate_holistically MCP tool
+      - Integration with MasterOrchestrator pre-execution
+      - Documentation and usage examples
+    effort: "4 hours"
+    test_count: 10
+    deliverables:
+      - "cortex/mcp/tools/holistic_validation_tool.py"
+      - "cortex/mcp/adapters/holistic_validation_adapter.py"
+      - "tests/test_holistic_validation_mcp.py"
+      - "docs/11-mcp-tools/holistic-validation.md"
+    acceptance_criteria:
+      - "cortex_validate_holistically MCP tool registered"
+      - "MasterOrchestrator calls validation pre-execution"
+      - "Documentation complete with examples"
+      - "10/10 tests passing"
+
+dependencies:
+  phases:
+    - "phase-43"  # LENS tooling provides analysis foundation
+    - "phase-46"  # Infrastructure discovery provides registry patterns
+  
+  orchestrators:
+    - "MasterOrchestrator"      # Integration point
+    - "EnforcementOrchestrator" # Governance layer
+    - "ChallengeEngine"         # Challenge generation
+    - "LENSOrchestrator"        # Analysis capabilities
+  
+  tools:
+    - "cortex_lens_analyze"     # Code analysis
+    - "cortex_detect_duplicates" # CORE-035 validation
+    - "cortex_git_history"      # Change tracking
+
+governance:
+  core_rules:
+    - "CORE-008"  # TDD mandatory
+    - "CORE-019"  # IMPLEMENT via TDDOrchestrator
+    - "CORE-030"  # Implementation Truth
+    - "CORE-035"  # Single implementation
+    - "MCP-GATE"  # MCP tool enforcement
+  
+  new_rule:
+    id: "CORE-048"
+    name: "Holistic Validation Gate"
+    description: "All IMPLEMENT/FIX/REFACTOR intents must pass holistic validation"
+    enforcement: "BLOCKED"
+    scope: "PRE-EXECUTION"
+
+tdd_requirements:
+  test_first: true
+  coverage_target: 90
+  test_types:
+    - "unit"
+    - "integration"
+    - "contract"
+  
+  test_distribution:
+    S1_holistic_validation: 12
+    S2_dependency_graph: 10
+    S3_challenge_gate: 14
+    S4_brain_integration: 8
+    S5_prompt_agent: 6
+    S6_mcp_integration: 10
+  
+  total_tests: 60

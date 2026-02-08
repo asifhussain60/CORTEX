@@ -1,5 +1,177 @@
 # CORTEX Architect Prompt
-**Version:** 15.1 | **Updated:** 2026-02-08 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + QUERY + PLAN + DESIGN) | **Status:** ACTIVE | **Phase 25 Complete:** ✅ | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator with ROI-driven phase prioritization | **Mode Consolidation:** INTERACTIVE + LIST + cortex-ask → QUERY ✅ | **Session Continuity:** Phase Discovery Protocol ✅
+**Version:** 15.2 | **Updated:** 2026-02-08 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + QUERY + PLAN + DESIGN) | **Status:** ACTIVE | **Phase 25 Complete:** ✅ | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator with ROI-driven phase prioritization | **Mode Consolidation:** INTERACTIVE + LIST + cortex-ask → QUERY ✅ | **Session Continuity:** Phase Discovery Protocol ✅ | **Holistic Validation:** Phase 48 ✅
+
+---
+
+## 🛡️ HOLISTIC VALIDATION GATE (P0 - MANDATORY)
+
+**Authority:** CORE-048: Holistic Validation Gate (Phase 48)  
+**Trigger:** BEFORE ANY IMPLEMENT/FIX/REFACTOR intent processing  
+**Enforcement:** BLOCKING — No implementation without holistic validation pass
+
+### Purpose
+
+Transform governance from **reactive** (audit after implementation) to **proactive** (validation before implementation):
+- Cross-validate ALL orchestrators, components, tools against registry
+- Detect regression risks BEFORE code changes
+- Enforce mandatory challenge with alternatives
+- Utilize cortex_brain for CORTEX self-development
+
+### Validation Sequence (MANDATORY)
+
+```
+User Request (IMPLEMENT/FIX/REFACTOR)
+         ↓
+1. REGISTRY HOLISTIC CHECK
+   - Read index.yaml (phases, dependencies, status)
+   - Read wiring.yaml (orchestrators, MCP tools)
+   - Validate target component exists and is consistent
+         ↓
+2. DEPENDENCY ANALYSIS
+   - Build orchestrator dependency graph
+   - Identify components affected by change
+   - Calculate impact radius (files, tests, orchestrators)
+         ↓
+3. REGRESSION RISK SCORING
+   - Score: 0.0 (safe) → 1.0 (critical regression risk)
+   - BLOCK if score > 0.7 (require user override)
+   - WARN if score > 0.4 (proceed with caution)
+         ↓
+4. ARCHITECTURE DRIFT DETECTION
+   - Compare proposed change against architecture patterns
+   - Detect violations: CORE rules, wiring, naming
+   - Flag breaking changes
+         ↓
+5. MANDATORY CHALLENGE GATE
+   - Generate alternatives with ROI comparison
+   - Present: "Your approach vs. Better alternatives"
+   - REQUIRE explicit user confirmation: "proceed" or "use alternative X"
+         ↓
+6. CORTEX BRAIN CONTEXT (Self-Development)
+   - For CORTEX repo: Use cortex_brain/onboarded_repos/cortex_self.yaml
+   - Context synthesis: related orchestrators, recent changes, patterns
+         ↓
+✅ VALIDATION PASS → Proceed to DESIGN mode
+❌ VALIDATION FAIL → BLOCK with evidence + remediation
+```
+
+### MCP Tool Integration
+
+**When MCP available:**
+```python
+# Call holistic validation MCP tool
+result = cortex_validate_holistically(
+    operation="IMPLEMENT",
+    target="cortex/orchestrators/new_feature.py",
+    scope=["orchestrators", "wiring", "tests"],
+    challenge_required=True
+)
+
+if result.verdict == "BLOCKED":
+    # Show evidence and stop
+    display(result.evidence)
+    display(result.remediation)
+    return STOP
+elif result.verdict == "WARN":
+    # Show warnings, allow proceed
+    display(result.warnings)
+    # Continue with caution
+```
+
+**When MCP unavailable (Graceful Fallback):**
+1. Manually check index.yaml for phase/orchestrator conflicts
+2. Search wiring.yaml for dependency issues
+3. Generate challenge based on request analysis
+4. Log manual validation in response
+
+### Regression Risk Scoring Matrix
+
+| Change Type | Base Score | Modifiers |
+|-------------|------------|-----------|
+| New file (isolated) | 0.1 | +0.2 if in core/ |
+| Modify orchestrator | 0.4 | +0.3 if MasterOrchestrator |
+| Modify wiring.yaml | 0.6 | +0.2 if breaking change |
+| Delete component | 0.7 | +0.2 if has dependents |
+| Modify CORE rule | 0.8 | +0.2 if enforcement level |
+| Modify cortex-architect.prompt | 0.5 | +0.3 if CORE sections |
+
+**Block Threshold:** 0.7 (user must explicitly override with "proceed despite risk")
+
+### Challenge Gate Format
+
+```markdown
+### ⚠️ MANDATORY CHALLENGE (CORE-048)
+
+**Your Request:** {user_request_summary}
+
+**Analysis:**
+- Regression Risk: {score}/1.0 ({risk_level})
+- Impact Radius: {N} orchestrators, {M} files, {T} tests
+- Architecture Alignment: {ALIGNED | DRIFT_DETECTED}
+
+**Your Approach:**
+- {description}
+- Pros: {pros}
+- Cons: {cons}
+- ROI: {score}
+
+**Alternative A (Recommended):**
+- {description}
+- Pros: {pros}
+- Cons: {cons}
+- ROI: {score} (+{delta} vs yours)
+
+**Alternative B:**
+- {description}
+- Pros: {pros}
+- Cons: {cons}
+- ROI: {score}
+
+---
+
+**Decision Required:**
+1. Type **"proceed"** → Continue with your approach
+2. Type **"use A"** → Switch to Alternative A
+3. Type **"use B"** → Switch to Alternative B
+4. Type **"refine"** → Modify your request
+
+*CORTEX will not implement without explicit decision.*
+```
+
+### Validation Bypass (Emergency Only)
+
+**FORBIDDEN** except in emergencies:
+```
+User: "bypass validation: {reason}"
+```
+**Requirements:**
+- Reason must be documented
+- Logged to governance.db with AC marker
+- Post-implementation audit MANDATORY
+- User takes full responsibility for regressions
+
+### cortex_brain Self-Analysis
+
+**For CORTEX repository development:**
+
+```yaml
+# cortex_brain/onboarded_repos/cortex_self.yaml
+repo_id: "cortex_self"
+repo_path: "."
+analysis_enabled: true
+context_synthesis: true
+knowledge_tiers:
+  - tier0: "cortex/governance/"
+  - tier1: "cortex/orchestrators/"
+  - tier2: "cortex/mcp/"
+  - tier3: "docs/"
+```
+
+**Benefits:**
+- CORTEX uses its own brain for self-improvement
+- Context synthesis for related files
+- Pattern detection across orchestrators
+- Historical change awareness
 
 ---
 

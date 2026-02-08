@@ -158,6 +158,59 @@ active_phases:
       - "CORTEX open-source distribution"
       - "Clean company-agnostic codebase"
 
+  - id: "phase-48"
+    name: "Holistic Validation & Challenge Gate"
+    file: "phases/active/phase-48-holistic-validation-challenge-gate.yaml"
+    created: "2026-02-08"
+    started: null
+    status: "planned"
+    priority: "P0"
+    execution_order: 3
+    roi_score: 0.91
+    estimated_duration: "3 days"
+    test_target: 60
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Holistic governance enforcement — 6 stages:
+      S1: HolisticValidationOrchestrator (registry + wiring analysis)
+      S2: Dependency Graph Generator (orchestrator mesh)
+      S3: Pre-Implementation Challenge Gate (mandatory alternatives)
+      S4: cortex_brain CORTEX self-analysis integration
+      S5: Prompt/Agent minimal enhancements
+      S6: Integration tests + documentation
+      
+      KEY OBJECTIVES:
+      - Block regressions BEFORE implementation (proactive, not reactive)
+      - Cross-validate ALL orchestrators, components, tools against registry
+      - Enforce mandatory Challenge Gate (alternatives reviewed before proceed)
+      - Integrate cortex_brain for CORTEX self-development
+      - Zero Copilot actions without MasterOrchestrator governance
+      
+      CAPABILITIES ENABLED:
+      - cortex_validate_holistically MCP tool
+      - Pre-execution regression risk scoring (block if > 0.7)
+      - Architecture drift detection
+      - Orchestrator dependency conflict detection
+      - Mandatory challenge with ROI-based alternatives
+      - cortex_brain dog-fooding for CORTEX repo
+      
+      WHY P0:
+      - Prevents cumulative technical debt
+      - Ensures holistic CORTEX evolution
+      - Closes governance gaps identified in GAP analysis
+    depends_on:
+      - "phase-43"
+      - "phase-46"
+    unblocks:
+      - "Regression-free autonomous execution"
+      - "Architecture integrity enforcement"
+      - "Self-improving CORTEX governance"
+
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"

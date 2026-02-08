@@ -53,15 +53,17 @@
       ↓
 1. P0 Checks (Security + Critical) — Mandatory, no exceptions
       ↓
-2. P1 Checks (Infrastructure + Governance) — Mandatory with SQL evidence
+2. P0.5 Holistic Validation (Phase 48) — Registry cross-validation + challenge gate
       ↓
-3. P2 Checks (Quality) — Mandatory via cortex_lens_analyze
+3. P1 Checks (Infrastructure + Governance) — Mandatory with SQL evidence
       ↓
-4. P3 Checks (Cleanup validation) — Verify P0/P1/P2 didn't break anything
+4. P2 Checks (Quality) — Mandatory via cortex_lens_analyze
       ↓
-5. Out-of-the-Box Recommendations (Innovation) — After all checks pass
+5. P3 Checks (Cleanup validation) — Verify P0/P1/P2 didn't break anything
       ↓
-6. Completion Report (Inline only)
+6. Out-of-the-Box Recommendations (Innovation) — After all checks pass
+      ↓
+7. Completion Report (Inline only)
 ```
 
 ---
@@ -74,6 +76,22 @@
 | Secrets scan | ☐ | Grep hardcoded credentials |
 | Injection vectors | ☐ | Manual code review |
 | Broken code | ☐ | cortex_lens_analyze report |
+
+### P0.5 — Holistic Validation (Phase 48 - BLOCKING)
+| Check | Status | Evidence |
+|-------|--------|----------|
+| **Registry Consistency** | ☐ | index.yaml phases, dependencies, status aligned |
+| **Orchestrator Mesh** | ☐ | wiring.yaml registrations complete, no orphans |
+| **Dependency Graph** | ☐ | No circular dependencies, impact radius calculated |
+| **Regression Risk** | ☐ | Score < 0.7 (BLOCK if exceeded without override) |
+| **Architecture Drift** | ☐ | No CORE rule violations, patterns aligned |
+| **Challenge Gate** | ☐ | Alternatives generated, user decision logged |
+| **cortex_brain Self-Check** | ☐ | CORTEX repo context synthesis active |
+
+**P0.5 Enforcement:** 
+- If MCP available: Call `cortex_validate_holistically`
+- If MCP unavailable: Manual registry/wiring inspection required
+- BLOCK implementation if any P0.5 check fails without user override
 
 ### P1 — Infrastructure  
 | Check | Status | Evidence |
@@ -111,6 +129,46 @@
 | Markdown sprawl | ☐ | *.md outside docs/ enumerated |
 | Orphan files | ☐ | *.bak, *_v2.* files listed |
 | Leftover artifacts | ☐ | Temporary files cleaned |
+
+---
+
+## P0.5 Holistic Validation Details (Phase 48)
+
+**Purpose:** Proactive regression prevention BEFORE implementation
+
+**Registry Cross-Validation:**
+```yaml
+Files to Check:
+  - cortex-registry/_cortex-master/index.yaml  # Phase status, dependencies
+  - cortex/wiring/specifications/wiring.yaml   # Orchestrator registrations
+  - .github/agents/AGENT-INDEX.md              # Agent inventory
+  
+Validation Points:
+  - All referenced phases exist in phases/ directory
+  - All orchestrators in wiring.yaml have implementations
+  - All agents in AGENT-INDEX.md exist in agents/core/
+  - Dependency chains are consistent (no missing deps)
+```
+
+**Regression Risk Calculation:**
+```yaml
+Score Components:
+  - Change scope: isolated (0.1) → cross-cutting (0.5)
+  - Target criticality: support (0.1) → core orchestrator (0.4)
+  - Breaking changes: none (0.0) → API change (0.3)
+  - Test coverage: >90% (0.0) → <70% (0.2)
+  
+Thresholds:
+  - < 0.4: SAFE — proceed normally
+  - 0.4-0.7: WARN — proceed with caution
+  - > 0.7: BLOCK — require user override
+```
+
+**Challenge Gate Requirement:**
+- Every IMPLEMENT/FIX/REFACTOR triggers challenge generation
+- Minimum 2 alternatives with ROI comparison
+- User must explicitly choose: "proceed" or "use alternative X"
+- Decision logged to governance.db for audit trail
 
 ---
 

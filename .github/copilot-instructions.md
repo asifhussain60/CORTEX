@@ -614,7 +614,7 @@ cortex_process_request(
 | **MarkdownSuppressionAgent** | 002 | Block *-summary.md, *-report.md generation |
 | **ArchitectureIntegrityAgent** | 017-020, 032, 034, 035, 038-041 | Versioned filenames, performance, turn budgets |
 
-**Coverage:** 25/29 CORE rules automated (86%) | **Performance:** <150ms validation | **Enforcement:** BLOCKED, WARNING, PASS
+**Coverage:** 26/30 CORE rules automated (87%) | **Performance:** <150ms validation | **Enforcement:** BLOCKED, WARNING, PASS
 
 ### Key CORE Rules
 
@@ -630,6 +630,7 @@ cortex_process_request(
 | CORE-036 | **Industry standards compliance** — verify via orchestrators at runtime |
 | CORE-041 | **Event-Driven Architecture** — message-based communication patterns |
 | CORE-042 | **Hierarchical Terminology** — INITIATIVE→PHASE→STAGE→TASK (I-/P-/S-/T- prefixes required) |
+| CORE-048 | **Holistic Validation Gate (Phase 48)** — mandatory pre-implementation validation + challenge gate |
 
 ---
 
