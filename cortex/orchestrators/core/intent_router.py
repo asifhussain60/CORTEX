@@ -284,6 +284,15 @@ class IntentRouter(IOrchestrator):
         "deprecate", "remove orchestrator", "delete feature"
     ]
     
+    # VACUUM mode keywords - Efficient cleanup of CORTEX repo
+    VACUUM_KEYWORDS: List[str] = [
+        "vacuum", "cleanup", "clean up", "clean", "prune", "remove junk",
+        "efficient cleanup", "cortex vacuum", "vacuum repo", "remove artifacts",
+        "delete cache", "clear logs", "compact", "defragment", "garbage collection",
+        "purge", "archive", "organize", "tidyup", "remove old", "remove legacy",
+        "remove broken", "remove unused", "remove temp", "remove temporary"
+    ]
+    
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -315,6 +324,10 @@ class IntentRouter(IOrchestrator):
             IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
             IntentType.PLAN: self.PLAN_KEYWORDS,  # PHASE-25: CORTEX planning
         }
+        
+        # Vacuum keywords (cleanup operations) - mapped to REFACTOR for routing
+        # but tracked separately for specialized vacuum orchestrator routing
+        self.vacuum_keywords = self.VACUUM_KEYWORDS
         
         # AC-FUTURE-001: Try loading routing rules from YAML
         self.routing_rules_config: Dict[str, Any] = self._load_routing_config()
@@ -752,14 +765,20 @@ class IntentRouter(IOrchestrator):
         Detect operation intent type from context.
         
         Analyzes context keywords and description to determine if the
-        operation is an IMPLEMENT, FIX, or REFACTOR operation.
+        operation is an IMPLEMENT, FIX, REFACTOR, or VACUUM operation.
         
         Detection algorithm:
         1. Check explicit "intent" field if provided
-        2. Analyze keywords against type-specific keyword lists
-        3. Score each intent type (0-1)
-        4. Return highest-scoring intent type
-        5. Default to IMPLEMENT if no clear match
+        2. Check for VACUUM keywords first (highest priority for cleanup ops)
+        3. Analyze keywords against type-specific keyword lists
+        4. Score each intent type (0-1)
+        5. Return highest-scoring intent type
+        6. Default to IMPLEMENT if no clear match
+        
+        VACUUM Detection:
+        - When user request contains "vacuum" keyword or related cleanup terms
+        - Routes to VacuumOrchestrator for efficient CORTEX repo cleanup
+        - Special case for repo maintenance operations
         
         Args:
             context: Context dictionary containing operation details
@@ -768,7 +787,7 @@ class IntentRouter(IOrchestrator):
                 - intent: Explicit intent (optional)
         
         Returns:
-            IntentType: Detected intent (IMPLEMENT, FIX, or REFACTOR)
+            IntentType: Detected intent (IMPLEMENT, FIX, REFACTOR, or PLAN for vacuum)
         
         Raises:
             ValueError: If context is None or invalid type
@@ -793,6 +812,14 @@ class IntentRouter(IOrchestrator):
             
             # Combine all text
             combined_text = " ".join(text_parts).lower()
+            
+            # Check for VACUUM keywords FIRST (highest priority)
+            # VACUUM cleanup operations should be routed to VacuumOrchestrator
+            if self._is_vacuum_operation(combined_text):
+                # Mark as REFACTOR (since VACUUM doesn't exist as separate IntentType)
+                # but track it separately via context
+                context["is_vacuum_operation"] = True
+                return IntentType.REFACTOR
             
             # Score each intent type
             intent_scores: Dict[IntentType, float] = {}
@@ -819,6 +846,51 @@ class IntentRouter(IOrchestrator):
                 details={"error": str(e), "context_type": type(context).__name__}
             )
             return IntentType.IMPLEMENT
+    
+    def _is_vacuum_operation(self, combined_text: str) -> bool:
+        """
+        Detect if the operation is a VACUUM cleanup operation.
+        
+        VACUUM operations are requests to clean up the CORTEX repository
+        efficiently, removing artifacts, caches, legacy files, etc.
+        
+        Uses keyword matching against VACUUM_KEYWORDS list.
+        
+        Args:
+            combined_text: Combined text from description, keywords, and operation
+        
+        Returns:
+            bool: True if vacuum operation detected, False otherwise
+        
+        Example:
+            >>> router = IntentRouter()
+            >>> router._is_vacuum_operation("use vacuum to cleanup repo")
+            True
+            >>> router._is_vacuum_operation("implement new feature")
+            False
+        """
+        try:
+            # Check if any vacuum keyword matches
+            for keyword in self.vacuum_keywords:
+                if keyword.lower() in combined_text:
+                    self.logger.log_operation_complete(
+                        ac_id="VACUUM-DETECT-001",
+                        operation="VACUUM_KEYWORD_DETECTED",
+                        success=True,
+                        details={"matched_keyword": keyword}
+                    )
+                    return True
+            
+            return False
+        
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="VACUUM-DETECT-001",
+                operation="VACUUM_DETECTION_ERROR",
+                success=False,
+                details={"error": str(e)}
+            )
+            return False
     
     def _get_cache_key(self, context: Dict[str, Any]) -> str:
         """
@@ -984,6 +1056,18 @@ class IntentRouter(IOrchestrator):
                 reasoning += f", keywords: {', '.join(keywords[:3])}"
             if len(composite_intents) > 1:
                 reasoning += f". Detected composite intents: {', '.join([i.value for i in composite_intents])}"
+            
+            # Special handling for VACUUM operations
+            if context.get("is_vacuum_operation"):
+                reasoning = (
+                    f"VACUUM operation detected for '{context.get('operation')}'. "
+                    f"Routing to VacuumOrchestrator for efficient CORTEX repository cleanup."
+                )
+                target_handler = "VacuumOrchestrator"
+                # Try to resolve VacuumOrchestrator instance
+                vacuum_result = self.orchestrator_lookup.resolve_instance("VacuumOrchestrator")
+                if vacuum_result.is_ok():
+                    target_orchestrator = vacuum_result.value
             
             # Create decision
             decision = RoutingDecision(
