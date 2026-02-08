@@ -1,0 +1,114 @@
+# CORTEX Planning Registry Index
+# Authority: cortex-architect.prompt.md v15.1
+# Pattern: Mirrors _cortex-master/index.yaml (proven across 43 phases)
+# Purpose: SSOT for all user-created execution plans
+# Updated: 2026-02-08
+
+version: "1.0"
+registry_name: "planning"
+description: "CORTEX execution plan registry with lifecycle management, LENS enrichment, and archive"
+last_updated: "2026-02-08"
+schema_version: "2.0"
+
+# Active Plans (Current Work)
+active_plans:
+  - id: "plan-enhanced-planning-system-001"
+    title: "Enhanced Planning System"
+    file: "active/plan-enhanced-planning-system/plan.yaml"
+    created: "2026-02-08"
+    status: "pending_approval"
+    priority: "P0"
+    roi_score: 0.89
+    estimated_hours: 18
+    stage_count: 6
+    test_target: 100
+    description: |
+      Enhance CORTEX planning system with index.yaml SSOT pattern,
+      event-driven orchestrator composition, Pydantic schema validation,
+      LENS enrichment pipeline, and glassmorphism plan-viewer SPA.
+
+# Plans Pending Migration (Legacy Structure)
+legacy_plans:
+  - id: "plan-exec-config-refactor-001"
+    title: "YAML Intent Certification (Execution Config Refactor)"
+    legacy_path: "system/execution-config-refactor/plan.yaml"
+    target_path: "completed/2026/plan-exec-config-refactor/plan.yaml"
+    status: "pending_migration"
+    created: "2026-01-26"
+
+  - id: "plan-doc-portal-001"
+    title: "CORTEX Documentation Portal Development"
+    legacy_path: "documentation/doc-portal-001/plan.yaml"
+    target_path: "completed/2026/plan-doc-portal/plan.yaml"
+    status: "pending_migration"
+    created: "2026-01-25"
+
+  - id: "plan-registry-consolidation-001"
+    title: "Planning Orchestrator Consolidation"
+    legacy_path: "registry/index.yaml"
+    target_path: "completed/2026/plan-registry-consolidation/plan.yaml"
+    status: "pending_migration"
+    created: "2026-01-25"
+
+# Completed Plans (Historical)
+completed_plans:
+  count: 0
+  directory: "completed/"
+
+# Plan Templates
+templates:
+  - id: "feature-plan"
+    name: "Feature Implementation Plan"
+    file: "templates/feature-plan.yaml"
+    description: "Template for feature implementation with TDD stages"
+
+  - id: "refactor-plan"
+    name: "Refactoring Plan"
+    file: "templates/refactor-plan.yaml"
+    description: "Template for refactoring with safety gates"
+
+  - id: "system-plan"
+    name: "System-Level Plan"
+    file: "templates/system-plan.yaml"
+    description: "Template for cross-cutting system changes"
+
+# Statistics
+statistics:
+  total_plans: 4
+  active_plans: 1
+  completed_plans: 0
+  pending_migration: 3
+  average_roi_score: 0.89
+  last_plan_created: "2026-02-08"
+  last_updated: "2026-02-08"
+
+# Viewer Integration
+viewer:
+  enabled: true
+  url: "viewer/plan-viewer.html"
+  data_source: "viewer/data/plans.json"
+  sync_trigger: "PLAN_STATE_CHANGED"
+  auto_sync: true
+
+# Dashboard Cross-Link
+dashboard_link:
+  master_observatory: "../_cortex-master/dashboard/index.html"
+  description: "Cross-link to CORTEX Master Plan Observatory"
+
+# Governance
+governance:
+  managed_by: "PlanOrchestrator"
+  intelligence_by: "EnhancedPlanningOrchestrator"
+  enrichment_by: "PlanEnrichmentPipeline"
+  approval_required: "plan_creation"
+  versioning: "semantic"
+  file_naming: "kebab-case"
+  schema_validation: "Pydantic v2 (PlanSpec model)"
+
+# Tags
+tags:
+  - "execution-plans"
+  - "lifecycle-management"
+  - "lens-enrichment"
+  - "registry-driven"
+  - "event-driven"

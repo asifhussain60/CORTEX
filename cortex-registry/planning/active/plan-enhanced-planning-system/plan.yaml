@@ -1,0 +1,874 @@
+# ==============================================================================
+# COMPREHENSIVE AUTONOMOUS PLAN: Enhanced Planning System
+# Generated: 2026-02-08T16:00:00Z
+# Authority: cortex-architect.prompt.md v15.1
+# Orchestrator: EnhancedPlanningOrchestrator v4.0
+# ==============================================================================
+#
+# MISSION: Unify planning infrastructure using proven _cortex-master index.yaml
+#          pattern, event-driven orchestrator composition, Pydantic schema
+#          validation, and a companion plan-viewer SPA.
+#
+# OUTCOME: Production-grade plan lifecycle management with DoR enrichment,
+#          autonomous execution readiness, searchable archive, and real-time
+#          metrics visualization.
+#
+# TIMELINE: 16-20 implementation hours across 6 stages
+# RISK LEVEL: Low-Medium (builds on proven patterns, no breaking changes)
+# ROI SCORE: 0.89
+#
+# ==============================================================================
+
+---
+plan:
+
+  # ---------------------------------------------------------------------------
+  # SECTION 1: METADATA & CONTEXT
+  # ---------------------------------------------------------------------------
+
+  metadata:
+    plan_id: "plan-enhanced-planning-system-001"
+    created_at: "2026-02-08T16:00:00Z"
+    created_by: "cortex-architect"
+    version: "1.0"
+    schema_version: "2.0"
+    status: "PENDING_APPROVAL"
+    priority: "P0"
+    roi_score: 0.89
+    estimated_hours: 18
+    test_target: 100
+    coverage_target: 90
+
+  request:
+    description: |
+      Enhance CORTEX planning system to use the proven _cortex-master index.yaml
+      pattern for plan management. Unify planning orchestrators, add event-driven
+      composition, Pydantic schema validation, LENS-enriched DoR workflow, and
+      a glassmorphism companion SPA for plan visualization and management.
+    scope: "system"
+    impact: "high"
+    confidence: 0.92
+    intent: "IMPLEMENT"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 2: CLASSIFICATION & ROUTING
+  # ---------------------------------------------------------------------------
+
+  classification:
+    intent: "IMPLEMENT"
+    confidence: 0.92
+    scope: "system"
+    impact: "high"
+    handler: "TDDOrchestrator"
+    rationale: |
+      New system-level capability building on proven patterns. Requires TDD
+      enforcement across 6 stages with progressive integration testing.
+
+  # ---------------------------------------------------------------------------
+  # SECTION 3: ARCHITECTURE DECISION RECORD
+  # ---------------------------------------------------------------------------
+
+  architecture_decisions:
+
+    # ADR-001: Storage Pattern
+    - adr_id: "ADR-PLAN-001"
+      title: "Plan Storage: Unified index.yaml Pattern"
+      status: "ACCEPTED"
+      context: |
+        Existing plans in cortex-registry/planning/ use domain-subfolder structure
+        (system/, documentation/) which is undiscoverable — no index, no lifecycle,
+        no search. The _cortex-master pattern uses flat active/completed/ with a
+        single index.yaml SSOT, proven across 43 phases with 99% discovery rate.
+      decision: |
+        Adopt the _cortex-master index.yaml pattern for cortex-registry/planning/.
+        Plans stored in active/ and completed/ subdirectories. Single index.yaml
+        provides O(1) lookup, status tracking, and machine-readable metadata.
+        Existing plans migrated to new structure.
+      alternatives_rejected:
+        - name: "Keep domain-subfolder structure"
+          reason: "Undiscoverable, no lifecycle management, grows chaotically"
+        - name: "Database-backed plan storage"
+          reason: "Over-engineered for file-based registry, breaks git-native workflow"
+      consequences:
+        positive:
+          - "Consistent with proven _cortex-master pattern"
+          - "O(1) plan lookup via index.yaml"
+          - "Git-native versioning and audit trail"
+          - "Seamless Phase Discovery Protocol reuse"
+        negative:
+          - "Migration of 3 existing plans required (one-time cost)"
+
+    # ADR-002: Visualization
+    - adr_id: "ADR-PLAN-002"
+      title: "Plan Viewer: Companion Page vs Standalone SPA"
+      status: "ACCEPTED"
+      context: |
+        Existing _cortex-master/dashboard/index.html is a 1535-line glassmorphism
+        SPA with tabs (Overview, Phases, Enhancements, Roadmap, Metrics). Creating
+        a second standalone SPA would fragment UX and violate CORE-035 (single
+        canonical implementation).
+      decision: |
+        Create plan-viewer.html as a COMPANION page sharing the dashboard design
+        system (glassmorphism CSS, Inter font, color palette). Cross-linked navigation
+        between dashboard (observatory) and plan-viewer (workbench). Shared data
+        contracts via plans.json + plan-summary.json.
+      alternatives_rejected:
+        - name: "Standalone SPA with independent styling"
+          reason: "CORE-035 violation, dual maintenance burden, fragmented UX"
+        - name: "Add Plans tab to existing dashboard"
+          reason: "Dashboard already 1535 LOC, would become unwieldy. Plans need
+                   dedicated search, archive, and detail-view workflows that don't
+                   fit a single tab."
+      consequences:
+        positive:
+          - "Coherent design language across all CORTEX viewers"
+          - "Shared CSS reduces maintenance"
+          - "Dedicated plan management workflow without dashboard bloat"
+        negative:
+          - "Two HTML files to maintain (mitigated by shared CSS extraction)"
+
+    # ADR-003: Orchestrator Composition
+    - adr_id: "ADR-PLAN-003"
+      title: "Event-Driven Composition via OrchestratorEventBus"
+      status: "ACCEPTED"
+      context: |
+        Direct coupling between InteractionOrchestrator, PlanOrchestrator, and
+        EnhancedPlanningOrchestrator creates circular dependency risk. CORTEX
+        already has OrchestratorEventBus (Phase 1) with EventType enums, dead
+        letter queue, correlation ID tracking, and async support.
+      decision: |
+        Use OrchestratorEventBus for plan lifecycle events. New EventTypes:
+        PLAN_CREATED, PLAN_ENRICHED, PLAN_STATE_CHANGED, PLAN_ARCHIVED.
+        InteractionOrchestrator publishes PLAN_INTENT_DETECTED.
+        EnhancedPlanningOrchestrator subscribes and enriches with LENS context.
+        PlanOrchestrator coordinates lifecycle. DashboardGenerator syncs on
+        state change events.
+      alternatives_rejected:
+        - name: "Direct orchestrator method calls"
+          reason: "Circular deps, tight coupling, not extensible"
+        - name: "Message queue (Redis/RabbitMQ)"
+          reason: "Over-engineered, CORTEX is single-process, EventBus sufficient"
+      consequences:
+        positive:
+          - "Zero circular dependencies"
+          - "New subscribers without changing existing orchestrators"
+          - "Full audit trail via event history"
+          - "Consistent with Phase 1 event-driven architecture"
+        negative:
+          - "Eventual consistency (mitigated by synchronous event dispatch)"
+
+    # ADR-004: Schema Validation
+    - adr_id: "ADR-PLAN-004"
+      title: "Pydantic v2 for Plan Schema Validation (not Yamale)"
+      status: "ACCEPTED"
+      context: |
+        Plans are complex YAML documents with nested structures (metadata,
+        stages, tasks, challenges, gates). Need runtime validation with
+        clear error messages. Options: Pydantic v2 (already in requirements.txt),
+        Yamale (new dep, YAML-native), jsonschema (JSON-focused).
+      decision: |
+        Use Pydantic v2 BaseModel for plan schema validation. Pydantic is already
+        a core dependency (pydantic==2.5.2). Models provide type safety, IDE
+        autocomplete, JSON serialization, and can generate JSON Schema for the
+        plan-viewer frontend validation. No new dependencies required.
+      alternatives_rejected:
+        - name: "Yamale (23andMe/Yamale)"
+          reason: |
+            Excellent YAML-native schema validator (754 stars), but adds a new
+            dependency. Pydantic already handles YAML via yaml.safe_load() → model
+            validation. Yamale would be redundant with Pydantic v2's capabilities.
+            HOWEVER: Yamale recommended for future use if CORTEX needs to validate
+            external/user-submitted YAML without loading into Python objects.
+        - name: "jsonschema (python-jsonschema)"
+          reason: |
+            Strong for JSON Schema validation (4.9k stars), but CORTEX plans are
+            YAML-first. Would require YAML→JSON conversion step. Pydantic can
+            generate JSON Schema if needed for frontend validation.
+        - name: "Manual dict validation"
+          reason: "Error-prone, no type safety, no IDE support, not extensible"
+      consequences:
+        positive:
+          - "Zero new dependencies (Pydantic v2 already installed)"
+          - "Type-safe plan models with IDE autocomplete"
+          - "Automatic JSON Schema generation for frontend"
+          - "Consistent with existing CORTEX data modeling patterns"
+        negative:
+          - "YAML→dict→Pydantic two-step loading (negligible overhead)"
+
+    # ADR-005: LENS Enrichment Pipeline
+    - adr_id: "ADR-PLAN-005"
+      title: "Multi-Source Plan Enrichment via LENS"
+      status: "ACCEPTED"
+      context: |
+        Plans need context from multiple CORTEX subsystems to reach DoR quality:
+        git history (recent changes), code analysis (affected files), company
+        policy (compliance), best practices (patterns), and domain knowledge.
+        Currently, plan creation is manual with no automatic enrichment.
+      decision: |
+        Build a PlanEnrichmentPipeline that composes LENS sources in sequence:
+        1. GitLensEnricher: Recent git history → affected files, recent authors
+        2. CodeLensEnricher: AST analysis → complexity, dependencies, risk areas
+        3. PolicyEnricher: Company domains → compliance requirements
+        4. BestPracticesEnricher: Knowledge base → patterns, anti-patterns
+        5. DomainEnricher: Domain brain → context-specific recommendations
+        Each enricher returns structured data merged into the plan. Pipeline is
+        extensible — new enrichers can be added without changing existing ones.
+      consequences:
+        positive:
+          - "Plans automatically enriched with codebase context"
+          - "DoR quality reached faster with less user effort"
+          - "Extensible pipeline — add enrichers without modifying existing code"
+          - "Consistent with LENS protocol used across CORTEX"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 4: GITHUB LIBRARY EVALUATION
+  # ---------------------------------------------------------------------------
+
+  library_evaluation:
+    description: |
+      Evaluated GitHub libraries for potential integration. Recommendations
+      categorized as ADOPT (use now), WATCH (evaluate later), or SKIP.
+
+    adopt:
+      - name: "Pydantic v2 (pydantic/pydantic)"
+        stars: 26700
+        reason: "Already a dependency. Use BaseModel for plan schema validation,
+                 JSON Schema generation for frontend, and serialization."
+        impact: "Plan validation accuracy, IDE support, type safety"
+        new_dependency: false
+
+    watch:
+      - name: "Yamale (23andMe/Yamale)"
+        stars: 754
+        reason: "Excellent YAML-native schema validator. Useful if CORTEX ever
+                 needs to validate user-submitted YAML files externally without
+                 loading into Python objects. Low overhead, MIT license."
+        impact: "External plan validation, CI/CD pipeline checks"
+        new_dependency: true
+        when: "When CORTEX accepts external plan submissions (multi-tenant)"
+
+      - name: "jsonschema (python-jsonschema/jsonschema)"
+        stars: 4900
+        reason: "Strong JSON Schema validator. Pydantic v2 can generate JSON
+                 Schema for frontend validation. If plan-viewer needs client-side
+                 validation, jsonschema could validate in Python backend too."
+        impact: "Frontend-backend schema parity"
+        new_dependency: true
+        when: "When plan-viewer needs server-side JSON Schema validation"
+
+    skip:
+      - name: "Cerberus"
+        reason: "Less maintained, Pydantic v2 covers all use cases"
+      - name: "marshmallow"
+        reason: "Pydantic v2 is strictly superior for validation + serialization"
+      - name: "SQLite/TinyDB for plan storage"
+        reason: "CORTEX is git-native, YAML files are the right abstraction"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 5: CHALLENGES ADDRESSED
+  # ---------------------------------------------------------------------------
+
+  challenges:
+    - type: "governance"
+      title: "CORE-035 Single Implementation Risk"
+      description: |
+        EnhancedPlanningOrchestrator (608 LOC) and PlanOrchestrator (426 LOC)
+        have overlapping responsibilities. Must consolidate, not add a third.
+      severity: "high"
+      recommendation: |
+        PlanOrchestrator becomes the lifecycle coordinator (setup/teardown/sync).
+        EnhancedPlanningOrchestrator becomes the intelligence layer (enrichment,
+        estimation, risk analysis, topological sorting). Clear responsibility
+        boundary: PlanOrchestrator USES EnhancedPlanningOrchestrator, never
+        the reverse.
+      can_proceed_without_addressing: false
+
+    - type: "alternative_path"
+      title: "Should plans live in _cortex-master or planning/?"
+      description: |
+        _cortex-master manages CORTEX-internal phases. User-created execution
+        plans are a different concern. Mixing them violates separation of concerns.
+      severity: "medium"
+      recommendation: |
+        _cortex-master/ = CORTEX development phases (internal).
+        planning/ = User-created execution plans (external-facing).
+        Both use the same index.yaml pattern but remain separate registries.
+        This allows independent scaling and different governance rules.
+      can_proceed_without_addressing: false
+
+    - type: "scope_creep"
+      title: "Plan-viewer feature scope"
+      description: |
+        Risk of over-building the SPA. Must be a focused workbench, not a
+        full project management tool.
+      severity: "medium"
+      recommendation: |
+        MVP features only in Stage 4: metrics cards, active plan list, search,
+        archive toggle, plan detail modal. NO: Gantt charts, resource allocation,
+        real-time collaboration. Those can be added in future phases.
+      can_proceed_without_addressing: true
+
+    - type: "risk_mismatch"
+      title: "Event bus subscription lifecycle"
+      description: |
+        New EventType additions to event_models.py must be backward-compatible.
+        Existing subscribers must not break.
+      severity: "low"
+      recommendation: |
+        Add new EventTypes (PLAN_CREATED, etc.) to the EventType enum.
+        Existing subscribers only process events they're subscribed to.
+        New subscriptions are opt-in. Zero risk to existing functionality.
+      can_proceed_without_addressing: true
+
+  # ---------------------------------------------------------------------------
+  # SECTION 6: EXECUTION GATES
+  # ---------------------------------------------------------------------------
+
+  execution_gates:
+    gate_type: "notify_and_execute"
+    requires_confirmation: true
+    requires_design_review: false
+    impact_level: "high"
+    confidence_level: "high"
+    reason: |
+      Builds on 3 proven patterns (index.yaml, EventBus, glassmorphism).
+      No breaking changes. All new code behind clean interfaces.
+      TDD enforcement guarantees quality.
+
+  # ---------------------------------------------------------------------------
+  # SECTION 7: DIRECTORY STRUCTURE (TARGET STATE)
+  # ---------------------------------------------------------------------------
+
+  target_structure:
+    description: "Final directory layout after implementation"
+    tree: |
+      cortex-registry/planning/
+      ├── index.yaml                              # SSOT: All plans indexed
+      ├── schema.yaml                             # Human-readable schema reference
+      ├── active/                                 # Plans currently in progress
+      │   ├── plan-enhanced-planning-system/      # This plan
+      │   │   ├── plan.yaml                       # Full plan specification
+      │   │   └── checkpoints/                    # Execution snapshots
+      │   └── {plan-id}/                          # Future plans
+      │       └── plan.yaml
+      ├── completed/                              # Archived completed plans
+      │   └── 2026/
+      │       ├── plan-exec-config-refactor/      # Migrated from system/
+      │       └── plan-doc-portal/                # Migrated from documentation/
+      ├── templates/                              # Reusable plan scaffolds
+      │   ├── feature-plan.yaml                   # Feature implementation template
+      │   ├── refactor-plan.yaml                  # Refactoring template
+      │   └── system-plan.yaml                    # System-level template
+      └── viewer/                                 # Plan viewer SPA
+          ├── plan-viewer.html                    # Companion SPA
+          ├── data/
+          │   └── plans.json                      # Generated plan index for frontend
+          └── assets/
+              └── shared.css                      # Shared glassmorphism styles
+
+      cortex/
+      ├── models/
+      │   └── plan_models.py                      # NEW: Pydantic v2 plan schema
+      ├── registry/
+      │   ├── plan_registry.py                    # NEW: Plan CRUD with index.yaml
+      │   ├── plan_enrichment.py                  # NEW: LENS enrichment pipeline
+      │   ├── phase_manager.py                    # EXISTING: Extended for plans
+      │   └── dashboard_generator.py              # EXISTING: Extended for plans
+      ├── models/
+      │   └── event_models.py                     # EXTENDED: New plan EventTypes
+      └── orchestrators/
+          ├── domain/
+          │   └── enhanced_planning_orchestrator.py  # ENHANCED: Intelligence layer
+          └── support/
+              └── plan_orchestrator.py               # ENHANCED: Lifecycle + events
+
+  # ---------------------------------------------------------------------------
+  # SECTION 8: WORK BREAKDOWN STRUCTURE (6 STAGES)
+  # ---------------------------------------------------------------------------
+
+  stages:
+
+    # ========================================================================
+    # STAGE 1: Plan Registry SSOT + Pydantic Schema (Foundation)
+    # ========================================================================
+
+    - stage_id: "S1"
+      stage_name: "Plan Registry SSOT + Pydantic Schema Models"
+      stage_type: "FOUNDATION"
+      estimated_hours: 3
+      status: "PENDING"
+      test_count: 20
+      description: |
+        Establish the plan registry with index.yaml SSOT pattern and
+        Pydantic v2 models for plan schema validation.
+      
+      deliverables:
+        - file: "cortex/models/plan_models.py"
+          description: "Pydantic v2 BaseModel classes for plan schema"
+          models:
+            - "PlanMetadata: plan_id, title, status, priority, roi_score, timestamps"
+            - "PlanClassification: intent, confidence, scope, handler"
+            - "PlanStage: stage_id, name, tasks, tests, effort, dependencies"
+            - "PlanTask: task_id, name, acceptance_criteria, handler, inputs, outputs"
+            - "PlanChallenge: type, title, severity, recommendation"
+            - "ExecutionGate: gate_type, impact, confidence, requires_confirmation"
+            - "PlanSpec: Full plan specification (root model)"
+          notes: "Generates JSON Schema via PlanSpec.model_json_schema()"
+
+        - file: "cortex/registry/plan_registry.py"
+          description: "Plan CRUD operations with index.yaml management"
+          operations:
+            - "create_plan(plan_spec) → plan_id"
+            - "get_plan(plan_id) → PlanSpec"
+            - "list_plans(status_filter) → List[PlanSummary]"
+            - "update_plan_status(plan_id, new_status)"
+            - "archive_plan(plan_id) → moves active/ → completed/YYYY/"
+            - "search_plans(query) → List[PlanSummary]"
+            - "generate_plans_json() → writes viewer/data/plans.json"
+          notes: "Mirrors PhaseManager pattern for consistency"
+
+        - file: "cortex-registry/planning/index.yaml"
+          description: "Master plan registry index (SSOT)"
+
+        - file: "cortex-registry/planning/schema.yaml"
+          description: "Human-readable schema reference for plan YAML"
+
+      tests:
+        - "test_plan_models.py: 10 tests (model validation, serialization, JSON schema gen)"
+        - "test_plan_registry.py: 10 tests (CRUD, index sync, archive, search)"
+
+      acceptance_criteria:
+        - "PlanSpec validates all existing plan YAMLs (3 plans)"
+        - "PlanSpec.model_json_schema() generates valid JSON Schema"
+        - "PlanRegistry CRUD operations work with real files"
+        - "index.yaml auto-updated on create/archive/update"
+        - "Search finds plans by keyword, status, priority"
+
+      dependencies: []
+
+    # ========================================================================
+    # STAGE 2: Event-Driven Orchestrator Composition
+    # ========================================================================
+
+    - stage_id: "S2"
+      stage_name: "Event-Driven Orchestrator Composition"
+      stage_type: "INTEGRATION"
+      estimated_hours: 3
+      status: "PENDING"
+      test_count: 20
+      description: |
+        Wire plan lifecycle into OrchestratorEventBus. Add new EventTypes,
+        subscriptions, and event-driven state transitions.
+
+      deliverables:
+        - file: "cortex/models/event_models.py"
+          description: "Extended with plan-specific EventTypes"
+          additions:
+            - "PLAN_CREATED = 'PLAN_CREATED'"
+            - "PLAN_ENRICHED = 'PLAN_ENRICHED'"
+            - "PLAN_STATE_CHANGED = 'PLAN_STATE_CHANGED'"
+            - "PLAN_ARCHIVED = 'PLAN_ARCHIVED'"
+            - "PLAN_INTENT_DETECTED = 'PLAN_INTENT_DETECTED'"
+            - "PlanEventPayload dataclass with plan_id, plan_spec, changes"
+
+        - file: "cortex/orchestrators/support/plan_orchestrator.py"
+          description: "Enhanced with EventBus integration"
+          changes:
+            - "Subscribe to PLAN_INTENT_DETECTED → trigger enrichment"
+            - "Publish PLAN_CREATED on new plan creation"
+            - "Publish PLAN_STATE_CHANGED on status transitions"
+            - "Publish PLAN_ARCHIVED on archive operations"
+            - "Use PlanRegistry instead of direct file operations"
+
+        - file: "cortex/orchestrators/domain/enhanced_planning_orchestrator.py"
+          description: "Enhanced as intelligence layer with event subscription"
+          changes:
+            - "Subscribe to PLAN_CREATED → auto-enrich with LENS"
+            - "Subscribe to PLAN_STATE_CHANGED → update risk matrix"
+            - "Expose enrichment via PlanEnrichmentPipeline"
+            - "Clear responsibility: intelligence, NOT lifecycle"
+
+      tests:
+        - "test_plan_events.py: 10 tests (event publishing, subscription, correlation)"
+        - "test_plan_orchestrator_events.py: 10 tests (lifecycle via events)"
+
+      acceptance_criteria:
+        - "Plan creation publishes PLAN_CREATED event"
+        - "EnhancedPlanningOrchestrator receives and processes events"
+        - "DashboardGenerator syncs on PLAN_STATE_CHANGED"
+        - "All events have correlation_id for audit trail"
+        - "Dead letter queue captures failed handlers"
+        - "Zero circular dependencies between orchestrators"
+
+      dependencies:
+        - "S1"
+
+    # ========================================================================
+    # STAGE 3: LENS Enrichment Pipeline + DoR Workflow
+    # ========================================================================
+
+    - stage_id: "S3"
+      stage_name: "LENS Enrichment Pipeline + DoR Workflow"
+      stage_type: "INTELLIGENCE"
+      estimated_hours: 4
+      status: "PENDING"
+      test_count: 25
+      description: |
+        Build multi-source enrichment pipeline that automatically enhances
+        plans with git history, code analysis, company policy, best practices,
+        and domain knowledge. Integrate with InteractionOrchestrator for
+        challenge-driven DoR workflow.
+
+      deliverables:
+        - file: "cortex/registry/plan_enrichment.py"
+          description: "LENS-powered plan enrichment pipeline"
+          classes:
+            - name: "PlanEnrichmentPipeline"
+              description: "Composable pipeline that runs enrichers in sequence"
+              methods:
+                - "enrich(plan_spec) → EnrichedPlanSpec"
+                - "register_enricher(enricher) → adds to pipeline"
+            - name: "GitLensEnricher"
+              description: "Enriches with recent git history context"
+              outputs: "affected_files, recent_authors, change_velocity"
+            - name: "CodeLensEnricher"
+              description: "Enriches with AST analysis of affected files"
+              outputs: "complexity_scores, dependency_map, risk_areas"
+            - name: "PolicyEnricher"
+              description: "Enriches with company domain compliance requirements"
+              outputs: "compliance_checklist, policy_references"
+            - name: "BestPracticesEnricher"
+              description: "Enriches with CORTEX knowledge base patterns"
+              outputs: "recommended_patterns, anti_patterns_to_avoid"
+            - name: "DomainEnricher"
+              description: "Enriches with domain brain context"
+              outputs: "domain_terminology, related_concepts"
+
+        - file: "cortex/orchestrators/core/interaction_orchestrator.py"
+          description: "Extended to publish PLAN_INTENT_DETECTED"
+          changes:
+            - "Detect PLAN intent in turn processing"
+            - "Publish PLAN_INTENT_DETECTED with user context"
+            - "Challenge engine validates plan enrichment quality"
+
+      tests:
+        - "test_plan_enrichment.py: 15 tests (pipeline, each enricher, composition)"
+        - "test_interaction_plan_integration.py: 10 tests (event flow, DoR quality)"
+
+      acceptance_criteria:
+        - "Pipeline enriches plans with 5 LENS sources"
+        - "Each enricher is independently testable and optional"
+        - "New enrichers can be added without modifying pipeline"
+        - "InteractionOrchestrator detects PLAN intent and publishes event"
+        - "Challenge engine validates enriched plan quality"
+        - "Enrichment completes in <500ms for typical plans"
+
+      dependencies:
+        - "S1"
+        - "S2"
+
+    # ========================================================================
+    # STAGE 4: Plan Viewer SPA (Glassmorphism Companion)
+    # ========================================================================
+
+    - stage_id: "S4"
+      stage_name: "Plan Viewer SPA — Glassmorphism Companion"
+      stage_type: "VISUALIZATION"
+      estimated_hours: 3
+      status: "PENDING"
+      test_count: 10
+      description: |
+        Build plan-viewer.html as a companion page to the existing
+        _cortex-master/dashboard/index.html. Shares glassmorphism design
+        system. Focused MVP: metrics, active plans, search, archive.
+
+      deliverables:
+        - file: "cortex-registry/planning/viewer/plan-viewer.html"
+          description: "Glassmorphism companion SPA for plan management"
+          features:
+            - section: "Header + Navigation"
+              details: |
+                CORTEX Plan Workbench title. Cross-link to Master Plan
+                Observatory (_cortex-master/dashboard/). Breadcrumb navigation.
+
+            - section: "Metrics Cards (Top Row)"
+              details: |
+                4 glassmorphism cards: Total Plans, Active Plans, Completed Plans,
+                Average ROI Score. Animated counters on load. Status-colored borders.
+
+            - section: "Active Plans Panel"
+              details: |
+                Grid of active plan cards with: plan_id, title, status badge,
+                priority tag, ROI score, progress bar, stage count, last updated.
+                Click to expand detail modal with full plan specification.
+
+            - section: "Search & Filter Bar"
+              details: |
+                Client-side search across plan titles, descriptions, and IDs.
+                Filter by: status (active/completed/archived), priority (P0-P3),
+                date range. Sort by: ROI score, created date, last updated.
+
+            - section: "Plan History Table"
+              details: |
+                Searchable, sortable table of all plans (active + archived).
+                Columns: ID, Title, Status, Priority, ROI, Created, Completed.
+                Pagination for large plan sets. Archive/restore toggle.
+
+            - section: "Plan Detail Modal"
+              details: |
+                Full plan specification in structured view. Tabs: Overview,
+                Stages, Challenges, Execution Gates, Enrichment Data.
+                Stage progress visualization with status indicators.
+
+          technical:
+            - "Data: Loads from planning/viewer/data/plans.json"
+            - "CSS: Shared glassmorphism (Inter font, same palette as dashboard)"
+            - "JS: Vanilla JS, no framework dependencies"
+            - "Responsive: Works on 1280px+ screens"
+            - "Offline: Static HTML, no backend required"
+
+        - file: "cortex-registry/planning/viewer/data/plans.json"
+          description: "Generated plan index for frontend consumption"
+          generated_by: "PlanRegistry.generate_plans_json()"
+
+      tests:
+        - "test_plan_viewer_data.py: 5 tests (JSON generation, data integrity)"
+        - "test_plan_viewer_html.py: 5 tests (HTML structure validation)"
+
+      acceptance_criteria:
+        - "plan-viewer.html loads and renders with no errors"
+        - "Metrics cards show accurate counts from plans.json"
+        - "Search filters plans in real-time (<100ms)"
+        - "Plan detail modal shows full specification"
+        - "Archive toggle shows/hides completed plans"
+        - "Visual consistency with _cortex-master/dashboard/"
+        - "Cross-link navigation works between dashboard and viewer"
+
+      dependencies:
+        - "S1"
+
+    # ========================================================================
+    # STAGE 5: MCP Tools + Plan Templates
+    # ========================================================================
+
+    - stage_id: "S5"
+      stage_name: "MCP Tools + Plan Templates"
+      stage_type: "INTEGRATION"
+      estimated_hours: 3
+      status: "PENDING"
+      test_count: 15
+      description: |
+        Expose plan management via MCP tools for programmatic access.
+        Create reusable plan templates for common plan types.
+
+      deliverables:
+        - file: "MCP tool registrations"
+          description: "New MCP tools for plan management"
+          tools:
+            - name: "cortex_create_plan"
+              description: "Create a new plan from template or scratch"
+              parameters: "template_type, title, description, priority"
+              returns: "plan_id, plan_path"
+
+            - name: "cortex_list_plans"
+              description: "List plans with optional filters"
+              parameters: "status_filter, priority_filter, search_query"
+              returns: "List of plan summaries"
+
+            - name: "cortex_get_plan"
+              description: "Get full plan specification"
+              parameters: "plan_id"
+              returns: "Full PlanSpec as JSON"
+
+            - name: "cortex_archive_plan"
+              description: "Archive a completed plan"
+              parameters: "plan_id, completion_notes"
+              returns: "archive_path, success"
+
+            - name: "cortex_enrich_plan"
+              description: "Run LENS enrichment pipeline on a plan"
+              parameters: "plan_id, enrichers (optional)"
+              returns: "enrichment_results, updated_plan"
+
+        - file: "cortex-registry/planning/templates/"
+          description: "Reusable plan templates"
+          templates:
+            - "feature-plan.yaml: Feature implementation (stages, TDD, DoR)"
+            - "refactor-plan.yaml: Refactoring with safety gates"
+            - "system-plan.yaml: System-level cross-cutting changes"
+
+      tests:
+        - "test_plan_mcp_tools.py: 10 tests (CRUD via MCP, enrichment)"
+        - "test_plan_templates.py: 5 tests (template loading, validation)"
+
+      acceptance_criteria:
+        - "All 5 MCP tools registered and discoverable"
+        - "cortex_create_plan creates valid plan from template"
+        - "cortex_list_plans returns filtered results"
+        - "cortex_archive_plan moves plan and updates index"
+        - "Templates validate against PlanSpec schema"
+
+      dependencies:
+        - "S1"
+        - "S2"
+        - "S3"
+
+    # ========================================================================
+    # STAGE 6: Integration Tests + Migration + Dashboard Cross-Link
+    # ========================================================================
+
+    - stage_id: "S6"
+      stage_name: "Integration Tests + Migration + Dashboard Cross-Link"
+      stage_type: "FINALIZATION"
+      estimated_hours: 2
+      status: "PENDING"
+      test_count: 10
+      description: |
+        End-to-end integration testing, migration of 3 existing plans,
+        cross-link navigation between dashboard and plan-viewer,
+        and response template wiring for plan outputs.
+
+      deliverables:
+        - description: "Migrate existing plans to new structure"
+          migrations:
+            - from: "cortex-registry/planning/system/execution-config-refactor/"
+              to: "cortex-registry/planning/completed/2026/plan-exec-config-refactor/"
+            - from: "cortex-registry/planning/documentation/doc-portal-001/"
+              to: "cortex-registry/planning/completed/2026/plan-doc-portal/"
+            - from: "cortex-registry/planning/registry/"
+              to: "cortex-registry/planning/completed/2026/plan-registry-consolidation/"
+
+        - description: "Cross-link navigation"
+          changes:
+            - "_cortex-master/dashboard/index.html: Add 'Plan Workbench' link"
+            - "planning/viewer/plan-viewer.html: Add 'Master Observatory' link"
+
+        - description: "Response template integration"
+          changes:
+            - "Plan creation outputs use CORTEX response templates"
+            - "Plan status updates follow response-format.yaml"
+
+      tests:
+        - "test_plan_integration.py: 10 tests (E2E create→enrich→execute→archive)"
+
+      acceptance_criteria:
+        - "E2E: Create plan → enrich → update status → archive → verify in viewer"
+        - "All 3 existing plans migrated and indexed"
+        - "Cross-links work between dashboard and plan-viewer"
+        - "Old planning/ subdirectories cleaned up"
+        - "index.yaml reflects accurate plan count"
+        - "100/100 tests passing across all stages"
+
+      dependencies:
+        - "S1"
+        - "S2"
+        - "S3"
+        - "S4"
+        - "S5"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 9: RISK ASSESSMENT
+  # ---------------------------------------------------------------------------
+
+  risk_assessment:
+    overall_risk: "LOW-MEDIUM"
+    risks:
+      - risk_id: "R1"
+        description: "Event bus performance under high plan volume"
+        probability: 0.15
+        impact: 0.3
+        risk_score: 0.045
+        mitigation: "EventBus is synchronous in-process. Sub-millisecond overhead.
+                     Only plan events added (5 new types). History capped at 1000."
+
+      - risk_id: "R2"
+        description: "Pydantic schema migration if plan format changes"
+        probability: 0.25
+        impact: 0.4
+        risk_score: 0.1
+        mitigation: "Pydantic v2 supports Optional fields and defaults.
+                     Schema evolution via version field in metadata."
+
+      - risk_id: "R3"
+        description: "Plan-viewer data staleness"
+        probability: 0.3
+        impact: 0.2
+        risk_score: 0.06
+        mitigation: "plans.json regenerated on every plan state change event.
+                     Viewer shows last_updated timestamp prominently."
+
+      - risk_id: "R4"
+        description: "Existing plan migration data loss"
+        probability: 0.1
+        impact: 0.5
+        risk_score: 0.05
+        mitigation: "Git checkpoint before migration (CORE-026). All moves
+                     are git mv operations, fully reversible."
+
+  # ---------------------------------------------------------------------------
+  # SECTION 10: SUCCESS METRICS
+  # ---------------------------------------------------------------------------
+
+  success_metrics:
+    - metric: "Plan Discovery Rate"
+      target: "99% (matching _cortex-master pattern)"
+      measurement: "Plans found via index.yaml lookup"
+
+    - metric: "Plan Creation Time"
+      target: "<30 seconds from template"
+      measurement: "MCP tool latency measurement"
+
+    - metric: "Enrichment Quality"
+      target: "≥3 LENS sources per plan"
+      measurement: "Enrichment data completeness"
+
+    - metric: "Test Coverage"
+      target: "≥90% on new code"
+      measurement: "pytest-cov on new files"
+
+    - metric: "Total Tests"
+      target: "100 new tests across 6 stages"
+      measurement: "pytest count"
+
+    - metric: "Plan-Viewer Load Time"
+      target: "<1 second for 100 plans"
+      measurement: "Browser performance measurement"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 11: DEPENDENCY MAP
+  # ---------------------------------------------------------------------------
+
+  dependencies:
+    internal:
+      - "cortex/models/event_models.py (EventType enum extension)"
+      - "cortex/infrastructure/orchestrator_event_bus.py (subscription)"
+      - "cortex/registry/phase_manager.py (pattern reference)"
+      - "cortex/registry/dashboard_generator.py (pattern reference)"
+      - "cortex/orchestrators/core/interaction_orchestrator.py (event publishing)"
+      - "cortex/orchestrators/support/plan_orchestrator.py (lifecycle)"
+      - "cortex/orchestrators/domain/enhanced_planning_orchestrator.py (intelligence)"
+      - "cortex-registry/_cortex-master/dashboard/index.html (design system)"
+    external:
+      - "pydantic==2.5.2 (already installed, no new deps)"
+      - "pyyaml==6.0.1 (already installed)"
+
+  # ---------------------------------------------------------------------------
+  # SECTION 12: GOVERNANCE
+  # ---------------------------------------------------------------------------
+
+  governance:
+    core_rules:
+      - "CORE-002: No markdown file generation (inline only)"
+      - "CORE-008: TDD-first (tests before code)"
+      - "CORE-011: Type hints mandatory"
+      - "CORE-012: Google-style docstrings"
+      - "CORE-013: No bare except clauses"
+      - "CORE-026: Git checkpoint before major changes"
+      - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+      - "CORE-028: File naming (kebab-case, ≤40 chars)"
+      - "CORE-029: Response header mandatory"
+      - "CORE-030: Implementation Truth verification"
+      - "CORE-035: Single canonical implementation"
+      - "CORE-041: Event-driven architecture"
+    tdd_enforcement: "RED → GREEN → REFACTOR per stage"
+    audit_markers: "AC-PLAN-SYSTEM-{stage}-{seq}"
