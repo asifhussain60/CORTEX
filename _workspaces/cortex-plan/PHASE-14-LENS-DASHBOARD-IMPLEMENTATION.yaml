@@ -1,0 +1,2838 @@
+# PHASE 14: CORTEX LENS Dashboard - Comprehensive Implementation Plan
+# Version: 1.0
+# Created: 2026-01-29
+# Authority: CORE-030 (Implementation Truth), CORE-038 (File Placement)
+# Dependencies: Phase 7.1 (LENS Intelligence Complete)
+#
+# ⚠️ SUPERSEDED BY PHASE-14-LENS-DASHBOARD-V2.yaml (2026-01-29)
+# This file is kept for reference only. Do NOT implement from this file.
+# See PHASE-14-LENS-DASHBOARD-V2.yaml for the revised static HTML + JSON approach.
+
+metadata:
+  phase_id: "PHASE-14"
+  name: "LENS Dashboard Visualization System (Self-Contained SPA)"
+  status: "SUPERSEDED"  # SUPERSEDED by PHASE-14-V2 - See PHASE-14-LENS-DASHBOARD-V2.yaml
+  priority: "P1"
+  estimated_effort: "15.5-19.5 days"  # Updated: +1.5 days for self-contained SPA
+  ac_ids:
+    - "LENS-DASH-001"  # LENSVisualizationOrchestrator
+    - "LENS-DASH-002"  # Business Language Content Generator
+    - "LENS-DASH-003"  # D3.js Visualization Extractors
+    - "LENS-DASH-004"  # Dashboard API Routes
+    - "LENS-DASH-005"  # Frontend Integration (Self-Contained SPA)
+    - "LENS-DASH-006"  # Output Management System
+    - "LENS-DASH-007"  # Self-Contained SPA Architecture (NEW)
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary: |
+  The CORTEX LENS Dashboard provides visual intelligence for code repositories through:
+  
+  **ARCHITECTURE: Self-Contained SPA (Offline-First)**
+  - NO external CDN dependencies (all assets bundled locally)
+  - Lazy-loaded modular architecture (initial load <200KB, full bundle 1.5MB)
+  - Alpine.js framework (15KB reactive SPA vs React 130KB)
+  - HTTP static server built-in (cortex lens dashboard serve)
+  - Fully functional offline (air-gapped environments supported)
+  
+  1. **Reverse-Engineered Repository Overview** (NEW TAB 1)
+     - Business-language description of what the codebase does
+     - Key features extracted from AST + Git + Comments
+     - Architecture patterns detected automatically
+     - Technology stack identification
+  
+  2. **Adaptive Multi-Tab Interface** (Context-Aware)
+     
+     **UNIVERSAL Dashboard (5 tabs - ANY repository):**
+     - Tab 1: Repository Overview (NEW - business language)
+     - Tab 2: Dependency Graph (D3.js force-directed network)
+     - Tab 3: Class Diagrams (Mermaid UML generation)
+     - Tab 4: Temporal Analysis (Git commit timeline)
+     - Tab 5: Impact Analysis (change propagation)
+     
+     **CORTEX Extended Dashboard (8 tabs - CORTEX repository only):**
+     - Universal tabs 1-5 PLUS:
+     - Tab 6: Brain Architecture (CORTEX-specific - 4-tier brain map)
+     - Tab 7: Governance Compliance (CORTEX-specific - heatmap visualization)
+     - Tab 8: Orchestrator Constellation (CORTEX-specific - relationship map)
+  
+  3. **Multi-Dimensional Overlay System** (Phase 14.1 - APPROVED)
+     - Security Overlay: Highlights P0/P1/P2 vulnerabilities, insecure patterns, dependency risks
+     - Performance Overlay: Shows bottlenecks, complexity hotspots, optimization opportunities
+     - Compliance Overlay: Displays CORE rule violations, standards compliance, audit status
+     - Overlays toggle on/off independently across all tabs (no tab proliferation)
+     - Visual markers: Icons, color coding, sidebar annotations
+  
+  4. **New D3.js Visualizations**
+     - Call graph visualization (function relationships)
+     - Import dependency graph (module dependencies)
+     - Change frequency heatmap (hot spots)
+     - Author contribution network (expertise map)
+     - Complexity scatter plot (cyclomatic vs LOC)
+  
+  4. **New Mermaid Diagrams**
+     - Entity-relationship diagrams (database models)
+     - State machine diagrams (workflow states)
+     - Sequence diagrams (interaction flows)
+     - Architecture diagrams (system components)
+  
+  5. **Per-Repository Dashboard Generation**
+     - Stored in .cortex/lens-dashboard/ (user repos)
+     - Stored in reports/lens-dashboard/ (CORTEX self-analysis)
+     - Cached in ~/.cortex/cache/<owner>/<repo>/ (remote repos)
+  
+  6. **Bundle Strategy** (Self-Contained SPA)
+     - Core bundle: Alpine.js (15KB) + app code (160KB) = 175KB initial load
+     - D3.js modules: 250KB (lazy-loaded per tab)
+     - Mermaid module: 850KB (lazy-loaded per tab)
+     - Total full bundle: 1.5MB (vs 3MB monolithic)
+     - All assets served from cortex/visualization/static/vendor/
+     - Python http.server for instant serving (no npm/node required)
+
+# ==============================================================================
+# ARCHITECTURE OVERVIEW
+# ==============================================================================
+
+architecture:
+  folder_structure:
+    description: |
+      CORTEX system spans three root-level folders with clear separation:
+      - cortex/ - Orchestration core, analysis engines, visualization renderers
+      - cortex_brain/ - Governance rules, knowledge tiers, compliance
+      - cortex-lens/ - ⭐ Dashboard UI, user-facing entry points, frontend
+      
+      This isolation prevents accidental deletion of critical systems.
+      Dashboard operates as cohesive unit: repo-dashboards.html and 
+      cortex-dashboard.html at root, shared components in subfolders.
+  
+  cortex_lens_structure:
+    entry_points:
+      - "repo-dashboards.html"       # Main entry: repository browser with tiles
+      - "cortex-dashboard.html"      # Direct access: CORTEX 8-tab analysis
+      - "app.py"                     # FastAPI server (serves HTML + API routes)
+    
+    backend_organization:
+      - "backend/orchestrator.py"    # Routes to cortex/visualization/*
+      - "backend/routes.py"          # FastAPI endpoints
+      - "backend/cache_manager.py"   # Manages .cortex/, ~/.cortex/, reports/
+      - "backend/repository_loader.py" # Analyzes and caches repositories
+    
+    frontend_components:
+      - "frontend/css/"              # Shared styling for all dashboards
+      - "frontend/js/"               # Shared Alpine.js logic and utilities
+      - "frontend/views/"            # Tab fragments (8 total)
+      - "static/"                    # Symlink to cortex/visualization/static/vendor/
+    
+    testing_and_deployment:
+      - "tests/"                     # Dashboard-specific tests
+      - "docker/Dockerfile.dashboard"
+      - "docs/dashboard-guide.md"
+  
+  spa_framework:
+    choice: "Alpine.js 3.13.3"
+    rationale: |
+      - 15KB vs React 130KB (8.6x smaller)
+      - Perfect for dashboards (reactive data binding, no build step)
+      - No JSX/Virtual DOM overhead
+      - Direct DOM manipulation (like Vue.js)
+      - Lazy-loadable per tab
+    bundle_strategy:
+      - Core: Alpine.js + app logic (175KB initial)
+      - Modules: D3.js (250KB), Mermaid (850KB), loaded on tab activation
+      - Total: 1.5MB full bundle vs 3MB monolithic
+    dependencies_local:
+      - "cortex/visualization/static/vendor/alpine-3.13.3.min.js"
+      - "cortex/visualization/static/vendor/d3-7.8.5.min.js"
+      - "cortex/visualization/static/vendor/mermaid-10.6.1.min.js"
+      - "cortex/visualization/static/vendor/tailwind-3.4.0.min.css"
+    
+  new_components:
+    orchestrator:
+      path: "cortex/orchestrators/support/lens_visualization_orchestrator.py"
+      purpose: "Coordinate visualization generation, extend LENSOrchestrator"
+      dependencies:
+        - "cortex.orchestrators.support.lens_orchestrator:LENSOrchestrator"
+        - "cortex.visualization.*"
+      
+    visualization_package:
+      path: "cortex/visualization/"
+      structure:
+        - "__init__.py"
+        - "lens_visualization_orchestrator.py"
+        - "output_manager.py"
+        - "business_language_generator.py"  # NEW - AST to business language
+        - "repository_detector.py"          # NEW - Detect CORTEX vs external repos
+        - "dashboard_configuration.py"      # NEW - Context-aware tab selection
+        - "renderers/"
+        - "formatters/"
+        - "templates/"
+        - "static/"
+    
+    renderers:
+      path: "cortex/visualization/renderers/"
+      modules:
+        - "d3_renderer.py"           # D3.js config generation
+        - "mermaid_renderer.py"      # Mermaid syntax generation
+        - "governance_heatmap.py"    # Compliance visualization
+        - "dependency_graph.py"      # Call graph + import graph
+        - "timeline_renderer.py"     # Temporal visualization
+        - "complexity_renderer.py"   # Complexity metrics
+        - "author_network.py"        # Contribution analysis
+    
+    formatters:
+      path: "cortex/visualization/formatters/"
+      modules:
+        - "__init__.py"
+        - "graph_formatter.py"       # D3 data format (nodes/edges)
+        - "diagram_formatter.py"     # Mermaid syntax
+        - "response_formatter.py"    # Multi-mode output
+    
+    entry_points:
+      path: "cortex-lens/"
+      primary_files:
+        - "repo-dashboards.html"     # ⭐ MAIN ENTRY - Repository browser with tiles
+        - "cortex-dashboard.html"    # ⭐ CORTEX-ONLY - Direct 8-tab view
+      rationale: |
+        Root-level entry points provide:
+        - Clear intent: each file's purpose is explicit
+        - Better UX: users see options immediately
+        - Simpler routing: cortex lens dashboard serve cortex → cortex-dashboard.html
+        - No confusion: no generic index.html hiding purpose
+        - Easy CLI: natural command line shortcuts
+    
+    templates:
+      path: "cortex/visualization/templates/"
+      description: "Tab fragments loaded by entry points (not standalone)"
+      files:
+        # Universal tabs (all repos)
+        - "tab-1-repository_overview.html" # Tab 1 - UNIVERSAL
+        - "tab-2-dependency_graph.html"    # Tab 2 - UNIVERSAL
+        - "tab-3-class_diagram.html"       # Tab 3 - UNIVERSAL
+        - "tab-4-temporal_analysis.html"   # Tab 4 - UNIVERSAL
+        - "tab-5-impact_analysis.html"     # Tab 5 - UNIVERSAL
+        
+        # CORTEX-specific tabs (only if is_cortex_repository)
+        - "tab-6-brain_architecture.html"      # Tab 6 - CORTEX ONLY
+        - "tab-7-governance_heatmap.html"      # Tab 7 - CORTEX ONLY
+        - "tab-8-orchestrator_constellation.html" # Tab 8 - CORTEX ONLY
+    
+    frontend_components:
+      path: "cortex-lens/frontend/"
+      structure:
+        - "css/dashboard-ui.css"      # Shared styles for both entry points
+        - "js/dashboard-app.js"       # Shared Alpine.js application logic
+        - "js/tab-controller.js"      # Shared tab management
+        - "js/repo-tiles.js"          # Repository grid for repo-dashboards.html
+        - "js/overlay-ui.js"          # Shared overlay system
+        - "js/navigation.js"          # Top-level navigation (back buttons, etc)
+    
+    static_assets:
+      path: "cortex/visualization/static/"
+      structure:
+        - "css/"
+        - "js/"
+        - "assets/"
+    
+    api_routes:
+      path: "cortex/api/dashboard_routes.py"
+      purpose: "FastAPI endpoints for dashboard data"
+
+  output_locations:
+    per_repo_analysis:
+      pattern: "<repo-root>/.cortex/lens-dashboard/"
+      gitignore: true
+      description: "Generated dashboard for analyzed repository"
+    
+    cortex_self_analysis:
+      pattern: "reports/lens-dashboard/"
+      gitignore: false
+      description: "CORTEX repository self-analysis dashboard"
+    
+    remote_repo_cache:
+      pattern: "~/.cortex/cache/<owner>/<repo>/lens-dashboard/"
+      gitignore: true
+      description: "Cached dashboards for remote repository analysis"
+    
+    ci_artifacts:
+      pattern: "$CI_ARTIFACTS_DIR/lens-dashboard/"
+      gitignore: true
+      description: "Build artifacts in CI/CD pipelines"
+
+# ==============================================================================
+# TAB 1: REPOSITORY OVERVIEW (NEW - Business Language Content)
+# ==============================================================================
+
+tab_1_repository_overview:
+  name: "Repository Overview"
+  purpose: "Generate human-readable, business-language description of repository"
+  
+  algorithm:
+    name: "Business Language Content Generator"
+    implementation: "cortex/visualization/business_language_generator.py"
+    
+    steps:
+      1_ast_extraction:
+        inputs:
+          - "AST analysis (functions, classes, modules)"
+          - "Docstrings and comments"
+          - "Function signatures and parameters"
+        outputs:
+          - "Core capabilities list"
+          - "API endpoints discovered"
+          - "Database models identified"
+      
+      2_git_analysis:
+        inputs:
+          - "Commit messages (last 100 commits)"
+          - "Change frequency patterns"
+          - "Author contributions"
+        outputs:
+          - "Project maturity assessment"
+          - "Active development areas"
+          - "Key contributors"
+      
+      3_technology_detection:
+        inputs:
+          - "Import statements (AST)"
+          - "requirements.txt / package.json / pom.xml"
+          - "Configuration files"
+        outputs:
+          - "Technology stack"
+          - "Framework identification"
+          - "Database technologies"
+      
+      4_pattern_recognition:
+        inputs:
+          - "Directory structure"
+          - "Class inheritance patterns"
+          - "Design patterns in code"
+        outputs:
+          - "Architecture style (MVC, Microservices, Monolith)"
+          - "Design patterns used"
+          - "Code organization strategy"
+      
+      5_business_language_mapping:
+        rules:
+          - "class User → 'User Management System'"
+          - "class Order → 'Order Processing'"
+          - "def authenticate → 'User Authentication'"
+          - "def send_email → 'Email Notification System'"
+          - "API routes → 'RESTful API with X endpoints'"
+          - "Database models → 'Persistent data storage for X entities'"
+        
+        templates:
+          what_it_does: |
+            This is a {architecture_style} {project_type} that provides {core_capabilities}.
+            It uses {technology_stack} and follows {design_patterns} patterns.
+          
+          key_features: |
+            - {feature_1} via {implementation_1}
+            - {feature_2} via {implementation_2}
+            - {feature_3} via {implementation_3}
+          
+          architecture: |
+            The system is organized as a {architecture_style} with {layer_count} layers:
+            {layer_descriptions}
+          
+          technology_stack: |
+            **Backend:** {backend_frameworks}
+            **Frontend:** {frontend_frameworks}
+            **Database:** {database_systems}
+            **Infrastructure:** {deployment_tools}
+      
+      6_confidence_scoring:
+        metrics:
+          - "Docstring coverage (higher = more confident descriptions)"
+          - "Commit message quality (detailed messages = better intent)"
+          - "Pattern detection confidence (explicit patterns = high confidence)"
+        
+        output_format:
+          - "High confidence: Direct statements"
+          - "Medium confidence: 'Appears to provide...'"
+          - "Low confidence: 'Contains components suggesting...'"
+  
+  output_sections:
+    - section: "What This Repository Does"
+      content_type: "prose"
+      sources: ["AST", "Git", "Docstrings"]
+    
+    - section: "Key Features"
+      content_type: "bulleted_list"
+      sources: ["AST functions", "API routes", "Classes"]
+    
+    - section: "Technology Stack"
+      content_type: "badge_grid"
+      sources: ["Imports", "Config files"]
+    
+    - section: "Architecture Overview"
+      content_type: "prose + diagram"
+      sources: ["Directory structure", "Pattern detection"]
+    
+    - section: "Development Activity"
+      content_type: "metrics + timeline"
+      sources: ["Git commits", "Author contributions"]
+    
+    - section: "Code Health Metrics"
+      content_type: "metrics_grid"
+      sources: ["AST complexity", "Test coverage", "Docstring ratio"]
+
+  example_output: |
+    # 📦 Repository Overview: CORTEX
+    
+    ## What This Repository Does
+    CORTEX is a microservices-based orchestration system that provides 
+    AI-powered development workflow automation. It uses Python FastAPI 
+    for backend services, React for frontend dashboards, and PostgreSQL 
+    for persistent storage. The system follows Domain-Driven Design (DDD) 
+    patterns with 23 orchestrators coordinating development tasks.
+    
+    ## Key Features
+    - **Intent Classification** via NLP-powered IntentRouter analyzing user requests
+    - **Test-Driven Development** via TDDOrchestrator enforcing RED-GREEN-REFACTOR cycles
+    - **Code Intelligence** via LENS analyzers (AST, Git, Comments)
+    - **Governance Enforcement** via 38 immutable CORE rules with real-time validation
+    - **Visual Dashboards** via D3.js and Mermaid diagram generation
+    
+    ## Technology Stack
+    **Backend:** Python 3.11, FastAPI, Pydantic
+    **Frontend:** React, D3.js, Tailwind CSS
+    **Database:** PostgreSQL, SQLite (dev)
+    **Infrastructure:** Docker, Kubernetes, Nginx
+    **Testing:** pytest, coverage.py
+    
+    ## Architecture Overview
+    The system follows a 4-tier brain architecture:
+    - **Tier 0:** Immutable governance rules (28 CORE rules)
+    - **Tier 1:** Acceptance criteria and phase validation
+    - **Tier 2:** Response templates and behavioral boundaries
+    - **Tier 3:** Best practices knowledge repository (35+ YAMLs)
+    
+    Orchestrators are wired via Git-backed YAML specifications with 
+    hot-reload support for zero-downtime updates.
+    
+    ## Development Activity
+    - **Total Commits:** 1,247 (last 90 days: 342)
+    - **Active Contributors:** 3 (primary: CORTEX Team)
+    - **Recent Focus Areas:** LENS Intelligence (Phase 7.1), Challenge System (Phase 8)
+    - **Code Churn:** High activity in cortex/orchestrators/ and cortex/brain/analysis/
+
+# ==============================================================================
+# ADAPTIVE TAB STRUCTURE (Context-Aware: 5 Universal + 3 CORTEX-Specific)
+# ==============================================================================
+
+adaptive_tab_structure:
+  description: |
+    Dashboard tabs are context-aware:
+    - Universal tabs (1-5): Shown for ALL repositories
+    - CORTEX-specific tabs (6-8): Only shown when analyzing CORTEX repository
+    
+    Detection logic: Check for cortex_brain/, cortex/orchestrators/, 
+    or .github/prompts/CORTEX.prompt.md
+
+# ------------------------------------------------------------------------------
+# UNIVERSAL TABS (ALL REPOSITORIES)
+# ------------------------------------------------------------------------------
+
+universal_tabs:
+  tab_1_repository_overview:
+    name: "Repository Overview"
+    status: "NEW"
+    applicable_to: "ALL repositories"
+    components:
+      - "Business-language description (generated)"
+      - "Technology stack badges"
+      - "Architecture diagram (auto-generated)"
+      - "Development activity timeline"
+      - "Code health metrics"
+    
+  tab_2_dependency_graph:
+    name: "Dependency Graph"
+    status: "NEW (D3.js force-directed)"
+    applicable_to: "ALL repositories"
+    visualizations:
+      - "Call graph (function calls)"
+      - "Import graph (module dependencies)"
+      - "Cross-module relationships"
+    interactions:
+      - "Click node: Show details panel"
+      - "Hover: Highlight connected nodes"
+      - "Drag: Rearrange layout"
+      - "Zoom/pan: Navigate large graphs"
+    
+  tab_3_class_diagrams:
+    name: "Class Diagrams"
+    status: "ENHANCED (Mermaid + new diagram types)"
+    applicable_to: "ALL repositories"
+    diagram_types:
+      - "UML class diagrams"
+      - "Entity-relationship diagrams (NEW)"
+      - "Interface hierarchy (NEW)"
+    
+  tab_4_temporal_analysis:
+    name: "Temporal Analysis"
+    status: "EXISTING (enhanced)"
+    applicable_to: "ALL repositories"
+    components:
+      - "Commit timeline (D3.js)"
+      - "Change frequency heatmap (NEW)"
+      - "Author contribution over time (NEW)"
+      - "File evolution tracking"
+    
+  tab_5_impact_analysis:
+    name: "Impact Analysis"
+    status: "NEW"
+    applicable_to: "ALL repositories"
+    components:
+      - "Change propagation visualization (NEW)"
+      - "Blast radius calculator (NEW)"
+      - "Dependency impact heatmap (NEW)"
+    purpose: "Show impact of changing a file/function/class"
+
+# ------------------------------------------------------------------------------
+# CORTEX-SPECIFIC TABS (ONLY FOR CORTEX REPOSITORY)
+# ------------------------------------------------------------------------------
+
+cortex_specific_tabs:
+  tab_6_brain_architecture:
+    name: "Brain Architecture"
+    status: "EXISTING (from legacy dashboard)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex_brain/ directory exists"
+      - "cortex/orchestrators/ directory exists"
+    components:
+      - "4-tier brain visualization"
+      - "Governance rule status"
+      - "Orchestrator registry"
+      - "Phase progress tracker"
+    
+  tab_7_governance_compliance:
+    name: "Governance Compliance"
+    status: "EXISTING (from legacy)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex_brain/tier0/governance/ exists"
+      - "CORE rules detected"
+    components:
+      - "CORE rule compliance heatmap"
+      - "Violation detection timeline"
+      - "Phase approval status"
+    
+  tab_8_orchestrator_constellation:
+    name: "Orchestrator Constellation"
+    status: "EXISTING (from legacy)"
+    applicable_to: "CORTEX repository ONLY"
+    detection_markers:
+      - "cortex/wiring/specifications/wiring.yaml exists"
+      - "Orchestrator registry detected"
+    components:
+      - "Orchestrator relationship map"
+      - "Wiring status visualization"
+      - "Request flow animation"
+
+# ==============================================================================
+# NEW D3.JS VISUALIZATIONS
+# ==============================================================================
+
+new_d3_visualizations:
+  call_graph_visualization:
+    name: "Function Call Graph"
+    description: "Interactive network showing function call relationships"
+    data_structure:
+      nodes:
+        - "id: function_name"
+        - "label: function_signature"
+        - "module: module_path"
+        - "complexity: cyclomatic_complexity"
+        - "size: lines_of_code"
+      edges:
+        - "source: caller_function"
+        - "target: callee_function"
+        - "weight: call_frequency"
+    
+    interactions:
+      - "Click: Show function source code"
+      - "Hover: Show call chain"
+      - "Right-click: Show callers/callees"
+    
+    layout: "force-directed with clustering by module"
+  
+  import_dependency_graph:
+    name: "Module Import Graph"
+    description: "Visualize import dependencies between modules"
+    data_structure:
+      nodes:
+        - "id: module_path"
+        - "label: module_name"
+        - "type: internal|external"
+        - "size: module_complexity"
+      edges:
+        - "source: importer_module"
+        - "target: imported_module"
+        - "type: direct|indirect"
+    
+    layout: "hierarchical tree with external dependencies at top"
+  
+  change_frequency_heatmap:
+    name: "Code Change Heatmap"
+    description: "Show which files/functions change most frequently"
+    data_structure:
+      - "file_path: string"
+      - "function_name: string"
+      - "commit_count: integer"
+      - "unique_authors: integer"
+      - "last_modified: datetime"
+    
+    visualization: "treemap with color intensity = change frequency"
+  
+  author_contribution_network:
+    name: "Developer Collaboration Network"
+    description: "Show which developers work on which parts of codebase"
+    data_structure:
+      nodes:
+        - "id: author_name"
+        - "commits: integer"
+        - "expertise_areas: list[string]"
+      edges:
+        - "source: author_1"
+        - "target: author_2"
+        - "shared_files: integer"
+    
+    layout: "force-directed with node size = commit count"
+  
+  complexity_scatter_plot:
+    name: "Complexity vs Size Analysis"
+    description: "Identify complex functions that may need refactoring"
+    axes:
+      x: "Lines of Code"
+      y: "Cyclomatic Complexity"
+    
+    data_points:
+      - "function_name"
+      - "loc: integer"
+      - "complexity: integer"
+      - "module: string"
+    
+    thresholds:
+      - "High complexity, high LOC → Red (refactor candidate)"
+      - "High complexity, low LOC → Yellow (review logic)"
+      - "Low complexity → Green (healthy)"
+
+# ==============================================================================
+# NEW MERMAID DIAGRAMS
+# ==============================================================================
+
+new_mermaid_diagrams:
+  entity_relationship_diagram:
+    name: "Database ERD"
+    description: "Auto-generate ERD from SQLAlchemy/Django models"
+    detection:
+      - "SQLAlchemy: classes inheriting Base with __tablename__"
+      - "Django: classes inheriting models.Model"
+      - "Relationships: ForeignKey, ManyToMany"
+    
+    mermaid_syntax: |
+      erDiagram
+          USER ||--o{ ORDER : places
+          USER {
+              int id PK
+              string name
+              string email
+          }
+          ORDER {
+              int id PK
+              int user_id FK
+              datetime created_at
+          }
+  
+  state_machine_diagram:
+    name: "Workflow State Machines"
+    description: "Detect state transitions in workflow code"
+    detection:
+      - "Enum classes with state values"
+      - "State transition functions (state_machine pattern)"
+      - "Status field updates in code"
+    
+    mermaid_syntax: |
+      stateDiagram-v2
+          [*] --> Draft
+          Draft --> Review: submit()
+          Review --> Approved: approve()
+          Review --> Rejected: reject()
+          Approved --> [*]
+  
+  sequence_diagram:
+    name: "API Interaction Sequences"
+    description: "Generate sequence diagrams from API routes"
+    detection:
+      - "FastAPI routes (@app.get, @app.post)"
+      - "Function calls within route handlers"
+      - "Database queries and external API calls"
+    
+    mermaid_syntax: |
+      sequenceDiagram
+          Client->>+API: POST /users
+          API->>+Database: INSERT user
+          Database-->>-API: user_id
+          API->>+EmailService: send_welcome_email()
+          EmailService-->>-API: success
+          API-->>-Client: 201 Created
+  
+  architecture_diagram:
+    name: "System Architecture"
+    description: "High-level component architecture"
+    detection:
+      - "Top-level packages/directories"
+      - "Inter-package dependencies"
+      - "External service integrations"
+    
+    mermaid_syntax: |
+      graph TB
+          A[Frontend React] -->|REST API| B[FastAPI Backend]
+          B -->|SQLAlchemy| C[(PostgreSQL)]
+          B -->|Redis| D[Cache Layer]
+          B -->|gRPC| E[Orchestrator Service]
+
+# ==============================================================================
+# IMPLEMENTATION TASKS
+# ==============================================================================
+
+tasks:
+  # ============================================================================
+  # PHASE 1: Core Infrastructure (Days 1-4)
+  # ============================================================================
+  
+  task_001_visualization_package_structure:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Create cortex/visualization/ package structure"
+    
+    deliverables:
+      - "cortex/visualization/__init__.py"
+      - "cortex/visualization/renderers/__init__.py"
+      - "cortex/visualization/formatters/__init__.py"
+      - "cortex/visualization/templates/"
+      - "cortex/visualization/static/css/"
+      - "cortex/visualization/static/js/"
+    
+    acceptance_criteria:
+      - "Package structure follows CORE-038 (all files in subfolders)"
+      - "Empty __init__.py files with docstrings"
+      - "README.md in visualization/ explaining purpose"
+  
+  task_002a_repository_detector:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Implement repository type detection (CORTEX vs external)"
+    
+    implementation:
+      file: "cortex/visualization/repository_detector.py"
+      class: "RepositoryDetector"
+      methods:
+        - "is_cortex_repository(repo_path: Path) -> bool"
+        - "detect_cortex_features(repo_path: Path) -> CortexFeatures"
+        - "get_cortex_markers() -> List[Path]"
+    
+    detection_logic:
+      markers:
+        - "cortex_brain/ directory exists"
+        - "cortex/orchestrators/ directory exists"
+        - ".github/prompts/CORTEX.prompt.md exists"
+        - "cortex/wiring/specifications/wiring.yaml exists"
+      
+      result:
+        - "Return True if ANY marker exists"
+        - "Return CortexFeatures dataclass with feature flags"
+    
+    test_file: "tests/visualization/test_repository_detector.py"
+    
+    test_cases:
+      - "Detect CORTEX repository (all markers present)"
+      - "Detect CORTEX repository (partial markers)"
+      - "Detect external repository (no markers)"
+      - "Detect Flask project (external)"
+      - "Detect Django project (external)"
+    
+    acceptance_criteria:
+      - "Accurately detects CORTEX repository"
+      - "Returns False for external repositories"
+      - "100% test coverage"
+      - "CORE-011 (type hints), CORE-012 (docstrings)"
+  
+  task_002b_dashboard_configuration:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Implement context-aware dashboard configuration"
+    
+    implementation:
+      file: "cortex/visualization/dashboard_configuration.py"
+      class: "DashboardConfiguration"
+      methods:
+        - "get_tabs_for_repo(repo_path: Path) -> List[DashboardTab]"
+        - "get_universal_tabs() -> List[DashboardTab]"
+        - "get_cortex_tabs() -> List[DashboardTab]"
+        - "is_tab_applicable(tab_name: str, repo_path: Path) -> bool"
+    
+    dataclass:
+      name: "DashboardTab"
+      fields:
+        - "id: str"
+        - "name: str"
+        - "template: str"
+        - "is_universal: bool"
+        - "requires_cortex: bool"
+    
+    test_file: "tests/visualization/test_dashboard_configuration.py"
+    
+    test_cases:
+      - "Get 5 tabs for external repository"
+      - "Get 8 tabs for CORTEX repository"
+      - "Verify tab ordering (universal first, then CORTEX-specific)"
+      - "Tab applicability check"
+    
+    acceptance_criteria:
+      - "Returns 5 tabs for external repos"
+      - "Returns 8 tabs for CORTEX repo"
+      - "Tab order consistent"
+      - "100% test coverage"
+  
+  task_002c_output_manager:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "1 day"
+    description: "Implement DashboardOutputManager for location routing"
+    
+    implementation:
+      file: "cortex/visualization/output_manager.py"
+      class: "DashboardOutputManager"
+      methods:
+        - "get_output_path(repo_path, is_cortex_repo, is_remote)"
+        - "ensure_output_directory(output_path)"
+        - "generate_index_file(output_path, tabs)"
+        - "clean_old_dashboards(max_age_days)"
+      
+      dependencies:
+        - "Uses RepositoryDetector to determine if CORTEX repo"
+        - "Uses DashboardConfiguration to get applicable tabs"
+    
+    test_file: "tests/visualization/test_output_manager.py"
+    
+    acceptance_criteria:
+      - "Routes to .cortex/lens-dashboard/ for user repos"
+      - "Routes to reports/lens-dashboard/ for CORTEX repo"
+      - "Routes to ~/.cortex/cache/ for remote repos"
+      - "Creates .gitignore in output directories"
+      - "Generates index.html with correct tabs (5 or 8)"
+      - "100% test coverage"
+  
+  task_002d_cortex_lens_entry_points:
+    ac_id: "LENS-DASH-007"
+    priority: "P0"
+    effort: "1 day"
+    description: "Create cortex-lens/ root-level entry points (repo-dashboards.html, cortex-dashboard.html)"
+    
+    rationale: |
+      Root-level entry points provide:
+      - Clear intent: each file's purpose is explicit in name
+      - Better UX: users see navigation options immediately
+      - Simpler routing: cortex lens dashboard serve cortex → cortex-dashboard.html
+      - No confusion: no generic index.html hiding purpose
+      - Discoverable: developers know what each file does immediately
+    
+    deliverables:
+      - "cortex-lens/repo-dashboards.html"
+        purpose: "Main entry point - repository browser with tiles"
+        loads:
+          - "Alpine.js from /static/vendor/alpine-3.13.3.min.js"
+          - "frontend/css/dashboard-ui.css (shared styles)"
+          - "frontend/js/repo-tiles.js (grid display)"
+          - "frontend/js/dashboard-app.js (shared logic)"
+        features:
+          - "Grid of repository tiles from recent analyses"
+          - "Search and filter by name, type, tags"
+          - "[+ Add Repository] button for new analysis"
+          - "Click tile to open that repository's dashboard"
+          - "[Recent] and [Bookmarks] tabs"
+      
+      - "cortex-lens/cortex-dashboard.html"
+        purpose: "Direct access to CORTEX 8-tab analysis"
+        loads:
+          - "Alpine.js from /static/vendor/alpine-3.13.3.min.js"
+          - "D3.js from /static/vendor/d3-7.8.5.min.js"
+          - "frontend/css/dashboard-ui.css (shared styles)"
+          - "frontend/js/dashboard-app.js (shared logic)"
+        features:
+          - "Skips repository selection"
+          - "Loads all 8 tabs immediately (5 universal + 3 CORTEX-specific)"
+          - "[← Back to Repositories] button at top"
+          - "Tab navigation for all 8 tabs"
+          - "Overlay system (security, performance, compliance)"
+    
+    cortex_lens_folder_structure:
+      - "cortex-lens/repo-dashboards.html"          # Main entry
+      - "cortex-lens/cortex-dashboard.html"         # CORTEX shortcut
+      - "cortex-lens/app.py"                        # FastAPI server (serves both + API routes)
+      - "cortex-lens/backend/orchestrator.py"       # Routes to cortex/visualization/*
+      - "cortex-lens/backend/routes.py"             # API endpoints
+      - "cortex-lens/frontend/css/dashboard-ui.css" # Shared styles
+      - "cortex-lens/frontend/js/dashboard-app.js"  # Shared Alpine.js logic
+      - "cortex-lens/frontend/js/repo-tiles.js"     # Repository grid
+      - "cortex-lens/frontend/js/tab-controller.js" # Tab management
+      - "cortex-lens/frontend/js/overlay-ui.js"     # Overlay toggles
+      - "cortex-lens/static/"                       # Symlink to cortex/visualization/static/vendor/
+    
+    app_py_routing:
+      "GET /":
+        description: "Serve repo-dashboards.html"
+        behavior: "Repository browser with tiles"
+      
+      "GET /cortex":
+        description: "Serve cortex-dashboard.html"
+        behavior: "Direct to 8-tab CORTEX analysis"
+      
+      "GET /api/dashboard/analyze":
+        description: "Analyze repository and return data"
+        parameters:
+          - "repo: Path to repository"
+          - "format: json (default), json-full, csv"
+      
+      "GET /api/dashboard/tab/<tab-id>":
+        description: "Get data for specific tab"
+        parameters:
+          - "repo: Repository path"
+          - "overlay: security|performance|compliance (optional)"
+      
+      "GET /api/dashboard/overlay/<overlay-type>":
+        description: "Get overlay data (security, performance, compliance)"
+        parameters:
+          - "repo: Repository path"
+    
+    test_file: "tests/cortex_lens/test_entry_points.py"
+    
+    test_cases:
+      - "GET / returns repo-dashboards.html"
+      - "GET /cortex returns cortex-dashboard.html"
+      - "Both entry points load Alpine.js correctly"
+      - "repo-dashboards.html shows repository tiles"
+      - "cortex-dashboard.html shows 8 tabs"
+      - "Shared JavaScript works from both entry points"
+      - "Tab fragments load correctly"
+      - "API routes serve JSON data"
+    
+    acceptance_criteria:
+      - "Both HTML files at cortex-lens/ root (not in frontend/)"
+      - "Clear, descriptive filenames (repo-dashboards.html, cortex-dashboard.html)"
+      - "app.py routes correctly to both entry points"
+      - "Shared components (CSS, JS) loaded from frontend/"
+      - "Tab fragments loaded from cortex/visualization/templates/"
+      - "100% test coverage"
+      - "Both entry points work offline (no external CDN)"
+  
+  task_003_business_language_generator:
+    ac_id: "LENS-DASH-002"
+    priority: "P0"
+    effort: "2 days"
+    description: "Implement BusinessLanguageGenerator (AST → Business Language)"
+    
+    implementation:
+      file: "cortex/visualization/business_language_generator.py"
+      class: "BusinessLanguageGenerator"
+      methods:
+        - "generate_overview(lens_context) -> RepositoryOverview"
+        - "_extract_core_capabilities(ast_analysis)"
+        - "_detect_technology_stack(ast_analysis)"
+        - "_identify_architecture_style(directory_structure)"
+        - "_map_functions_to_features(functions)"
+        - "_assess_confidence(evidence)"
+    
+    data_classes:
+      - "RepositoryOverview"
+      - "Feature"
+      - "TechnologyStack"
+      - "ArchitectureStyle"
+    
+    test_file: "tests/visualization/test_business_language_generator.py"
+    
+    test_cases:
+      - "Generate overview for Flask API project"
+      - "Generate overview for Django web app"
+      - "Generate overview for CLI tool"
+      - "Handle project with no docstrings (low confidence)"
+      - "Detect microservices architecture"
+      - "Detect monolithic architecture"
+    
+    acceptance_criteria:
+      - "Generates human-readable prose from AST data"
+      - "Confidence scores for each statement"
+      - "Templates for different project types"
+      - "100% test coverage"
+      - "CORE-011 (type hints), CORE-012 (docstrings)"
+  
+  task_004_lens_visualization_orchestrator:
+    ac_id: "LENS-DASH-001"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Create LENSVisualizationOrchestrator extending LENSOrchestrator"
+    
+    implementation:
+      file: "cortex/orchestrators/support/lens_visualization_orchestrator.py"
+      class: "LENSVisualizationOrchestrator"
+      inheritance: "Extends LENSOrchestrator"
+      
+      methods:
+        - "generate_dashboard(repo_path, output_path=None)"
+        - "generate_repository_overview()"
+        - "generate_dependency_graph(visualization_type)"
+        - "generate_class_diagram(modules)"
+        - "generate_temporal_analysis(date_range)"
+        - "generate_governance_heatmap()"
+        - "generate_impact_analysis(target_file)"
+    
+    test_file: "tests/orchestrators/support/test_lens_visualization_orchestrator.py"
+    
+    acceptance_criteria:
+      - "Inherits all LENSOrchestrator capabilities"
+      - "Generates complete multi-tab dashboard"
+      - "Each tab generation has dedicated method"
+      - "Caching for repeated dashboard generation"
+      - "100% test coverage"
+  
+  # ============================================================================
+  # PHASE 2: D3.js Visualization Extractors (Days 5-8)
+  # ============================================================================
+  
+  task_005_dependency_graph_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Extract and enhance D3.js dependency graph from legacy"
+    
+    source: "_workspaces/dashboard/d3-force-graph.js"
+    target: "cortex/visualization/static/js/dependency-graph.js"
+    
+    enhancements:
+      - "Add call graph visualization (function calls)"
+      - "Add import graph visualization (module imports)"
+      - "Add clustering by module/package"
+      - "Add zoom/pan controls"
+      - "Add search/filter functionality"
+    
+    backend_renderer:
+      file: "cortex/visualization/renderers/dependency_graph.py"
+      class: "DependencyGraphRenderer"
+      methods:
+        - "render_call_graph(ast_analysis)"
+        - "render_import_graph(ast_analysis)"
+        - "format_d3_data(nodes, edges)"
+    
+    acceptance_criteria:
+      - "D3.js component works standalone"
+      - "Backend generates correct data format"
+      - "Handles large graphs (1000+ nodes)"
+      - "Tests for Python renderer"
+  
+  task_006_temporal_timeline_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "Extract and enhance temporal timeline from legacy"
+    
+    source: "_workspaces/dashboard/frontend/js/components/temporal/audit-timeline.js"
+    target: "cortex/visualization/static/js/temporal-timeline.js"
+    
+    enhancements:
+      - "Add change frequency heatmap"
+      - "Add author contribution timeline"
+      - "Add file evolution tracking"
+    
+    backend_renderer:
+      file: "cortex/visualization/renderers/timeline_renderer.py"
+      class: "TimelineRenderer"
+      methods:
+        - "render_commit_timeline(git_analysis)"
+        - "render_change_heatmap(git_analysis)"
+        - "render_author_timeline(git_analysis)"
+    
+    acceptance_criteria:
+      - "Timeline shows commit history"
+      - "Heatmap highlights hot files"
+      - "Author contributions tracked"
+      - "100% test coverage for renderer"
+  
+  task_007_complexity_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "NEW - Complexity scatter plot and visualizations"
+    
+    implementation:
+      file: "cortex/visualization/renderers/complexity_renderer.py"
+      class: "ComplexityRenderer"
+      methods:
+        - "render_complexity_scatter(ast_analysis)"
+        - "identify_refactor_candidates(threshold)"
+        - "generate_complexity_heatmap()"
+    
+    frontend:
+      file: "cortex/visualization/static/js/complexity-scatter.js"
+      technology: "D3.js scatter plot"
+    
+    acceptance_criteria:
+      - "Scatter plot: X=LOC, Y=Complexity"
+      - "Color-coded by threshold (red/yellow/green)"
+      - "Click to show function details"
+      - "Tests for backend renderer"
+  
+  task_008_author_network_renderer:
+    ac_id: "LENS-DASH-003"
+    priority: "P2"
+    effort: "1 day"
+    description: "NEW - Developer collaboration network"
+    
+    implementation:
+      file: "cortex/visualization/renderers/author_network.py"
+      class: "AuthorNetworkRenderer"
+      methods:
+        - "render_author_network(git_analysis)"
+        - "calculate_collaboration_strength(author1, author2)"
+        - "identify_expertise_areas(author)"
+    
+    frontend:
+      file: "cortex/visualization/static/js/author-network.js"
+      technology: "D3.js force-directed graph"
+    
+    acceptance_criteria:
+      - "Nodes = authors, edges = shared files"
+      - "Node size = commit count"
+      - "Expertise areas labeled"
+      - "Tests for backend renderer"
+  
+  # ============================================================================
+  # PHASE 3: Mermaid Diagram Generators (Days 9-11)
+  # ============================================================================
+  
+  task_009_enhanced_mermaid_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P0"
+    effort: "1 day"
+    description: "Extract and enhance Mermaid generator from legacy"
+    
+    source: "_workspaces/dashboard/mermaid_diagram_generator.py"
+    target: "cortex/visualization/renderers/mermaid_renderer.py"
+    
+    enhancements:
+      - "Remove graphviz dependency (Mermaid only)"
+      - "Add entity-relationship diagrams (NEW)"
+      - "Add state machine diagrams (NEW)"
+      - "Add sequence diagrams (NEW)"
+    
+    class: "MermaidRenderer"
+    methods:
+      - "generate_class_diagram(ast_analysis)"
+      - "generate_erd(database_models)"  # NEW
+      - "generate_state_diagram(state_enum)"  # NEW
+      - "generate_sequence_diagram(api_routes)"  # NEW
+      - "generate_architecture_diagram(packages)"  # NEW
+    
+    acceptance_criteria:
+      - "All 5 diagram types functional"
+      - "Valid Mermaid syntax"
+      - "Integration with existing LENSOrchestrator"
+      - "100% test coverage"
+  
+  task_010_erd_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P1"
+    effort: "1 day"
+    description: "NEW - Entity-Relationship Diagram generator"
+    
+    implementation:
+      file: "cortex/visualization/renderers/mermaid_renderer.py"
+      method: "generate_erd()"
+      
+      detection_logic:
+        - "Detect SQLAlchemy models (Base, __tablename__)"
+        - "Detect Django models (models.Model)"
+        - "Detect relationships (ForeignKey, ManyToMany)"
+        - "Extract field types and constraints"
+    
+    test_cases:
+      - "SQLAlchemy models with one-to-many"
+      - "Django models with many-to-many"
+      - "Mixed inheritance hierarchies"
+    
+    acceptance_criteria:
+      - "Valid Mermaid ERD syntax"
+      - "Relationships correctly identified"
+      - "Field types included"
+      - "100% test coverage"
+  
+  task_011_state_machine_generator:
+    ac_id: "LENS-DASH-003"
+    priority: "P2"
+    effort: "1 day"
+    description: "NEW - State machine diagram generator"
+    
+    implementation:
+      file: "cortex/visualization/renderers/mermaid_renderer.py"
+      method: "generate_state_diagram()"
+      
+      detection_logic:
+        - "Find Enum classes with state values"
+        - "Find state transition functions"
+        - "Analyze status field updates"
+    
+    acceptance_criteria:
+      - "Valid Mermaid state diagram syntax"
+      - "Transitions detected from code"
+      - "Initial and final states identified"
+      - "100% test coverage"
+  
+  # ============================================================================
+  # PHASE 4: Frontend Integration & Templates (Days 12-14)
+  # ============================================================================
+  
+  task_012_glassmorphism_extraction:
+    ac_id: "LENS-DASH-005"
+    priority: "P0"
+    effort: "0.5 days"
+    description: "Extract glassmorphism CSS as CORTEX design system"
+    
+    source: "_workspaces/dashboard/frontend/css/glassmorphism.css"
+    target: "cortex/visualization/static/css/cortex-design-system.css"
+    
+    changes:
+      - "Namespace all classes with .cortex- prefix"
+      - "Document CSS variables"
+      - "Create design system guide"
+    
+    acceptance_criteria:
+      - "All classes namespaced"
+      - "No conflicts with user stylesheets"
+      - "Design system documentation"
+  
+  task_013_dashboard_templates:
+    ac_id: "LENS-DASH-005"
+    priority: "P0"
+    effort: "1.5 days"
+    description: "Create Jinja2 templates with conditional rendering"
+    
+    templates:
+      universal:
+        - "dashboard_base.html (base template with conditional nav)"
+        - "repository_overview.html (Tab 1 - UNIVERSAL)"
+        - "dependency_graph.html (Tab 2 - UNIVERSAL)"
+        - "class_diagrams.html (Tab 3 - UNIVERSAL)"
+        - "temporal_analysis.html (Tab 4 - UNIVERSAL)"
+        - "impact_analysis.html (Tab 5 - UNIVERSAL)"
+      
+      cortex_specific:
+        - "brain_architecture.html (Tab 6 - CORTEX ONLY)"
+        - "governance_heatmap.html (Tab 7 - CORTEX ONLY)"
+        - "orchestrator_constellation.html (Tab 8 - CORTEX ONLY)"
+    
+    conditional_rendering:
+      logic: |
+        {% if is_cortex_repository %}
+          <!-- Show tabs 1-8 -->
+        {% else %}
+          <!-- Show tabs 1-5 only -->
+        {% endif %}
+    
+    acceptance_criteria:
+      - "All templates extend dashboard_base.html"
+      - "Base template conditionally renders CORTEX tabs"
+      - "Jinja2 variables for dynamic content"
+      - "Mobile-responsive design"
+      - "Tab switching via JavaScript"
+      - "Tab numbering adjusts based on repository type"
+  
+  task_014_api_routes:
+    ac_id: "LENS-DASH-004"
+    priority: "P0"
+    effort: "1 day"
+    description: "Create FastAPI routes for dashboard data"
+    
+    implementation:
+      file: "cortex/api/dashboard_routes.py"
+      routes:
+        - "GET /api/lens/dashboard/overview"
+        - "GET /api/lens/dashboard/dependency-graph"
+        - "GET /api/lens/dashboard/class-diagram/{module}"
+        - "GET /api/lens/dashboard/temporal-analysis"
+        - "GET /api/lens/dashboard/governance-heatmap"
+        - "GET /api/lens/dashboard/impact-analysis/{file_path}"
+        - "POST /api/lens/dashboard/generate"  # Generate full dashboard
+        - "GET /api/lens/dashboard/status/{job_id}"  # Generation status
+    
+    acceptance_criteria:
+      - "All routes tested"
+      - "Async support for long operations"
+      - "WebSocket for real-time updates"
+      - "100% test coverage"
+  
+  task_015_cli_commands:
+    ac_id: "LENS-DASH-006"
+    priority: "P1"
+    effort: "1 day"
+    description: "Add CLI commands for dashboard serving and entry point routing"
+    
+    implementation_approach: |
+      cortex lens dashboard serve routes to cortex-lens/app.py which handles:
+      1. Route / → repo-dashboards.html (repository browser)
+      2. Route /cortex → cortex-dashboard.html (8-tab CORTEX view)
+      3. Route /api/* → FastAPI backend routes (data endpoints)
+      
+      Root entry points (repo-dashboards.html, cortex-dashboard.html) load:
+      - Shared Alpine.js app (cortex-lens/frontend/js/dashboard-app.js)
+      - Tab fragments from cortex/visualization/templates/
+      - Data from cortex-lens/backend/routes.py
+    
+    commands:
+      # Start dashboard server
+      - "cortex lens dashboard serve"
+      - "cortex lens dashboard serve --port=8080"
+      - "cortex lens dashboard serve --host=0.0.0.0"
+      
+      # Start with specific repository pre-loaded
+      - "cortex lens dashboard serve cortex"              # Opens cortex-dashboard.html directly
+      - "cortex lens dashboard serve /path/to/repo"       # Opens repo-dashboards.html with preselection
+      - "cortex lens dashboard serve owner/repo"          # Analyzes remote repo
+      
+      # Generate standalone dashboards
+      - "cortex lens dashboard generate"                  # Generates in reports/lens-dashboard/
+      - "cortex lens dashboard generate --repo=/path"     # Generates in .cortex/lens-dashboard/
+      - "cortex lens dashboard generate --remote=owner/repo"  # Generates in ~/.cortex/cache/
+      
+      # Cache management
+      - "cortex lens dashboard clean --older-than=30d"
+      - "cortex lens dashboard list"                      # Show cached dashboards
+    
+    routing_behavior:
+      repository_browser:
+        trigger: "cortex lens dashboard serve"
+        loads: "cortex-lens/repo-dashboards.html"
+        shows: "Repository tiles with recent analyses"
+        components:
+          - "Alpine.js repo-tiles.js (grid display)"
+          - "Search and filter functionality"
+          - "[+ Add Repository] to analyze new repos"
+          - "Click tile to view dashboard"
+      
+      cortex_direct_access:
+        trigger: "cortex lens dashboard serve cortex"
+        loads: "cortex-lens/cortex-dashboard.html"
+        shows: "Full 8-tab CORTEX analysis immediately"
+        components:
+          - "Alpine.js dashboard-app.js (tab navigation)"
+          - "All 8 tabs enabled (5 universal + 3 CORTEX-specific)"
+          - "[← Back to Repositories] button for navigation"
+          - "No repo selection screen"
+      
+      repository_selection:
+        trigger: "Click on repository tile from repo-dashboards.html"
+        loads: "Depends on repo type (detected by detector.py)"
+        shows: "5-tab dashboard for external, 8-tab for CORTEX"
+        components:
+          - "Tab router (shows appropriate tabs)"
+          - "Overlay system (security, performance, compliance)"
+          - "[← Back] navigation"
+    
+    auto_detection_behavior:
+      - "Auto-detect repository type (CORTEX vs external) at serve time"
+      - "Show 5 tabs for external repositories"
+      - "Show 8 tabs for CORTEX repository"
+      - "Cache detection result in manifest.json"
+      - "Allow manual override via --tabs flag"
+    
+    example_output: |
+      $ cortex lens dashboard serve
+      🚀 CORTEX LENS Dashboard Server
+      � Listening on http://localhost:8888
+      🏠 Repository browser: http://localhost:8888/
+      🧠 CORTEX direct: http://localhost:8888/cortex
+      
+      Browser opens at http://localhost:8888/
+      → repo-dashboards.html (with tiles for recent repos)
+      
+      $ cortex lens dashboard serve cortex
+      🚀 CORTEX LENS Dashboard Server
+      📍 Listening on http://localhost:8888
+      🧠 CORTEX analysis: http://localhost:8888/cortex
+      
+      Browser opens at http://localhost:8888/cortex
+      → cortex-dashboard.html (all 8 tabs immediately loaded)
+    
+    acceptance_criteria:
+      - "cortex lens dashboard serve opens repo-dashboards.html"
+      - "cortex lens dashboard serve cortex opens cortex-dashboard.html"
+      - "Root entry points (*.html) load without frontend/ prefix"
+      - "Shared Alpine.js components work from both entry points"
+      - "Tab fragments load correctly from cortex/visualization/templates/"
+      - "API routes serve JSON from cortex-lens/backend/routes.py"
+      - "Help text explains all routing options"
+      - "Tests verify both entry points work correctly"
+      - "Tests verify repository detection works"
+  
+  # ============================================================================
+  # PHASE 5: Testing & Documentation (Days 15-16)
+  # ============================================================================
+  
+  task_016_integration_tests:
+    ac_id: "LENS-DASH-006"
+    priority: "P0"
+    effort: "1 day"
+    description: "End-to-end integration tests for dashboard generation"
+    
+    test_scenarios:
+      - "Generate dashboard for CORTEX repository"
+      - "Generate dashboard for external repository"
+      - "Generate dashboard for remote GitHub repository"
+      - "All 8 tabs render correctly"
+      - "D3.js visualizations load"
+      - "Mermaid diagrams render"
+    
+    test_file: "tests/integration/test_lens_dashboard_generation.py"
+    
+    acceptance_criteria:
+      - "100% scenario coverage"
+      - "Tests run in CI/CD"
+      - "Performance benchmarks (dashboard generation < 30s)"
+  
+  task_017_documentation:
+    ac_id: "LENS-DASH-006"
+    priority: "P1"
+    effort: "1 day"
+    description: "Create comprehensive documentation"
+    
+    documents:
+      - "docs/guides/lens-dashboard-user-guide.md"
+      - "docs/api-reference/lens-visualization-api.md"
+      - "cortex/visualization/README.md"
+      - "reports/lens-dashboard/README.md"
+    
+    content:
+      - "User guide: How to generate dashboards"
+      - "API reference: All public methods"
+      - "Architecture overview: System design"
+      - "Customization guide: Extending visualizations"
+    
+    acceptance_criteria:
+      - "All documents follow CORE-040 (Documentation Lifecycle)"
+      - "Code examples tested"
+      - "Screenshots included"
+      - "Troubleshooting section"
+
+# ==============================================================================
+# TESTING STRATEGY
+# ==============================================================================
+
+testing:
+  unit_tests:
+    coverage_target: "100%"
+    frameworks: ["pytest", "pytest-cov"]
+    
+    test_files:
+      - "tests/visualization/test_output_manager.py"
+      - "tests/visualization/test_business_language_generator.py"
+      - "tests/visualization/renderers/test_dependency_graph.py"
+      - "tests/visualization/renderers/test_timeline_renderer.py"
+      - "tests/visualization/renderers/test_complexity_renderer.py"
+      - "tests/visualization/renderers/test_mermaid_renderer.py"
+      - "tests/orchestrators/support/test_lens_visualization_orchestrator.py"
+  
+  integration_tests:
+    test_file: "tests/integration/test_lens_dashboard_generation.py"
+    scenarios:
+      - "Full dashboard generation (CORTEX repo)"
+      - "External repository analysis"
+      - "Remote GitHub repository analysis"
+      - "Multi-tab rendering validation"
+      - "Performance benchmarks"
+  
+  frontend_tests:
+    framework: "Jest + Puppeteer"
+    tests:
+      - "Tab switching functionality"
+      - "D3.js graph rendering"
+      - "Mermaid diagram display"
+      - "Mobile responsiveness"
+
+# ==============================================================================
+# ACCEPTANCE CRITERIA
+# ==============================================================================
+
+acceptance_criteria:
+  functional:
+    - "All 8 tabs render correctly"
+    - "Tab 1 generates business-language descriptions"
+    - "D3.js visualizations interactive"
+    - "Mermaid diagrams valid syntax"
+    - "Dashboard generation < 30 seconds"
+    - "Output locations follow specification"
+  
+  quality:
+    - "100% test coverage for Python code"
+    - "CORE-008: Tests exist for all modules"
+    - "CORE-011: All functions have type hints"
+    - "CORE-012: All functions have docstrings"
+    - "CORE-038: All files in subfolders"
+    - "CORE-040: Documentation lifecycle followed"
+  
+  performance:
+    - "Dashboard generation < 30 seconds for 500-file repo"
+    - "D3.js graphs handle 1000+ nodes"
+    - "Memory usage < 500MB during generation"
+  
+  user_experience:
+    - "CLI commands intuitive"
+    - "Error messages helpful"
+    - "Documentation comprehensive"
+    - "Dashboard mobile-responsive"
+
+# ==============================================================================
+# DEPENDENCIES
+# ==============================================================================
+
+dependencies:
+  internal:
+    - "Phase 7.1: LENS Intelligence (GitHistoryAnalyzer, ASTAnalyzer, CommentExtractor)"
+    - "cortex.orchestrators.support.lens_orchestrator:LENSOrchestrator"
+    - "cortex.brain.analysis.*"
+  
+  external:
+    - "D3.js: v7.8.5+ (visualization)"
+    - "Mermaid: v10.0+ (diagrams)"
+    - "FastAPI: Backend API"
+    - "Jinja2: Template rendering"
+    - "Tailwind CSS: Styling"
+
+# ==============================================================================
+# RISKS & MITIGATIONS
+# ==============================================================================
+
+risks:
+  risk_1_large_repositories:
+    description: "Dashboard generation may be slow for very large repositories"
+    probability: "Medium"
+    impact: "Medium"
+    mitigation:
+      - "Implement caching for LENS analysis results"
+      - "Add progress indicators for long operations"
+      - "Support incremental updates (only changed files)"
+  
+  risk_2_legacy_code_extraction:
+    description: "Legacy dashboard code may have undocumented dependencies"
+    probability: "Low"
+    impact: "Medium"
+    mitigation:
+      - "Thorough testing of extracted components"
+      - "Rewrite if extraction proves difficult"
+  
+  risk_3_browser_compatibility:
+    description: "D3.js/Mermaid may not work in older browsers"
+    probability: "Low"
+    impact: "Low"
+    mitigation:
+      - "Test in Chrome, Firefox, Safari"
+      - "Provide fallback static images"
+
+# ==============================================================================
+# ROLLOUT PLAN
+# ==============================================================================
+
+rollout:
+  phase_1_internal_testing:
+    duration: "3 days"
+    activities:
+      - "Generate dashboards for CORTEX repository"
+      - "Test all 8 tabs thoroughly"
+      - "Performance profiling"
+      - "Bug fixing"
+  
+  phase_2_limited_release:
+    duration: "5 days"
+    activities:
+      - "Release to internal team (3 developers)"
+      - "Collect feedback on UX"
+      - "Iterate on business language generation"
+  
+  phase_3_public_release:
+    duration: "Ongoing"
+    activities:
+      - "Announce LENS Dashboard in README"
+      - "Monitor GitHub issues"
+      - "Community contributions"
+
+# ==============================================================================
+# NEW TASKS FOR SELF-CONTAINED SPA (Tasks 018-020)
+# ==============================================================================
+
+tasks:
+  # ... (Tasks 001-017 above)
+  
+  - id: "018"
+    name: "Dependency Bundling Script"
+    estimated_effort: "0.5 days"
+    dependencies: []
+    description: |
+      Create script to bundle all external dependencies locally for offline operation.
+    
+    acceptance_criteria:
+      - script: "cortex/visualization/scripts/bundle_dependencies.py"
+      - downloads: "Alpine.js 3.13.3, D3.js 7.8.5, Mermaid 10.6.1, Tailwind CSS 3.4.0"
+      - output_dir: "cortex/visualization/static/vendor/"
+      - checksum_validation: "SHA-256 checksums verified"
+      - tests: "Test bundle integrity and completeness"
+    
+    deliverables:
+      - file: "cortex/visualization/scripts/bundle_dependencies.py"
+        lines: 200
+        tests: 8
+      - file: "cortex/visualization/static/vendor/.checksums"
+        purpose: "SHA-256 checksums for all bundled assets"
+  
+  - id: "019"
+    name: "Lazy Module Loader"
+    estimated_effort: "0.5 days"
+    dependencies: ["018"]
+    description: |
+      Implement lazy-loading JavaScript module loader for progressive enhancement.
+    
+    acceptance_criteria:
+      - loader: "cortex/visualization/static/js/module_loader.js"
+      - strategy: "Load core (175KB) initially, modules (50-900KB) on tab activation"
+      - caching: "Browser cache with version fingerprints"
+      - fallback: "Graceful degradation if module fails to load"
+      - tests: "Test module loading, caching, and error handling"
+    
+    deliverables:
+      - file: "cortex/visualization/static/js/module_loader.js"
+        lines: 150
+        tests: 10
+      - file: "cortex/visualization/templates/dashboard_base.html"
+        purpose: "Update template with lazy loading logic"
+  
+  - id: "020"
+    name: "HTTP Static Server"
+    estimated_effort: "0.5 days"
+    dependencies: ["019"]
+    description: |
+      Implement HTTP static server using Python stdlib for instant dashboard serving.
+    
+    acceptance_criteria:
+      - command: "cortex lens dashboard serve [--port 8080]"
+      - server: "Python http.server.ThreadingHTTPServer"
+      - mimetype_mapping: "Correct Content-Type headers for .js, .css, .html"
+      - cors: "CORS headers for local development"
+      - tests: "Test server startup, file serving, and graceful shutdown"
+    
+    deliverables:
+      - file: "cortex/visualization/dashboard_server.py"
+        lines: 180
+        tests: 12
+      - cli_command: "cortex lens dashboard serve"
+        handler: "cortex/cli/lens.py (update)"
+    activities:
+      - "Announce in docs"
+      - "Create tutorial videos"
+      - "Monitor usage metrics"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  adoption:
+    - "50+ dashboards generated within first month"
+    - "Average 3 tabs viewed per dashboard session"
+  
+  quality:
+    - "< 5 bugs reported per 100 dashboards generated"
+    - "95%+ user satisfaction (survey)"
+  
+  performance:
+    - "Dashboard generation time < 30s (95th percentile)"
+    - "Zero crashes during generation"
+  
+  engagement:
+    - "Users spend 5+ minutes per dashboard (indicates value)"
+    - "Repeat usage (same user generates multiple dashboards)"
+
+# ==============================================================================
+# PHASE 14.2: ADVANCED CONFIGURATION INTELLIGENCE
+# ==============================================================================
+# These enhancements extend the dashboard with deep configuration analysis
+# capabilities for enterprise monolith codebases. All patterns are generic
+# and applicable to .NET, Java, Python, and multi-language repositories.
+# ==============================================================================
+
+phase_14_2_configuration_intelligence:
+  metadata:
+    name: "Configuration Intelligence Enhancements"
+    priority: "P0-P1"
+    total_effort: "12-15 days"
+    dependencies: ["Phase 14 Core Tasks (001-020)"]
+    applicable_to: "Enterprise monoliths, microservices, multi-module repositories"
+  
+  # ============================================================================
+  # ENHANCEMENT 1: Multi-Solution Architecture Analyzer
+  # ============================================================================
+  enhancement_001_multi_solution_analyzer:
+    id: "LENS-ENH-001"
+    name: "Multi-Solution Architecture Analyzer"
+    priority: "P0"
+    effort: "2 days"
+    
+    description: |
+      Visualize complex multi-solution repositories with hierarchical project
+      relationships. Detects .sln → .slnf → .csproj hierarchies for .NET,
+      multi-module Maven/Gradle for Java, and monorepo structures.
+    
+    detection_patterns:
+      dotnet:
+        - "*.sln"                    # Visual Studio solutions
+        - "*.slnf"                   # Solution filter files
+        - "*.csproj"                 # C# projects
+        - "*.fsproj"                 # F# projects
+        - "Directory.Build.props"   # Central build properties
+        - "Directory.Build.targets" # Central build targets
+      
+      java:
+        - "pom.xml"                  # Maven parent/child POMs
+        - "settings.gradle"          # Gradle multi-project
+        - "build.gradle"             # Gradle build files
+        - "settings.gradle.kts"      # Kotlin DSL
+      
+      python:
+        - "pyproject.toml"           # Modern Python packaging
+        - "setup.py"                 # Legacy packaging
+        - "requirements*.txt"        # Dependency files
+      
+      monorepo:
+        - "lerna.json"               # JavaScript monorepo
+        - "pnpm-workspace.yaml"      # PNPM workspaces
+        - "rush.json"                # Rush monorepo
+        - "nx.json"                  # Nx workspace
+    
+    visualization:
+      type: "D3.js hierarchical tree"
+      features:
+        - "Solution → Project hierarchy with collapsible nodes"
+        - "Solution filter (.slnf) grouping indicators"
+        - "Project type badges (Endpoint, Library, Test, Job)"
+        - "Build complexity score per solution"
+        - "Cross-solution dependency edges"
+    
+    output_sections:
+      - name: "Solution Topology Map"
+        content_type: "interactive_tree"
+        description: "Hierarchical view of all solutions and projects"
+      
+      - name: "Project Type Distribution"
+        content_type: "pie_chart"
+        description: "Count of Endpoints, Libraries, Tests, Jobs"
+      
+      - name: "Build Complexity Score"
+        content_type: "metric_badge"
+        description: "Aggregate complexity based on interdependencies"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/solution_analyzer.py"
+      class: "MultiSolutionAnalyzer"
+      methods:
+        - "discover_solutions(repo_path: Path) -> List[Solution]"
+        - "build_hierarchy(solutions: List[Solution]) -> SolutionTree"
+        - "detect_project_types(projects: List[Project]) -> Dict[str, int]"
+        - "calculate_complexity_score(tree: SolutionTree) -> float"
+    
+    test_file: "tests/visualization/test_solution_analyzer.py"
+    test_cases:
+      - "Parse multi-solution .NET repository"
+      - "Parse multi-module Maven repository"
+      - "Parse Gradle multi-project"
+      - "Detect solution filters and project subsets"
+      - "Calculate build complexity accurately"
+
+  # ============================================================================
+  # ENHANCEMENT 2: Microservices Constellation View
+  # ============================================================================
+  enhancement_002_microservices_constellation:
+    id: "LENS-ENH-002"
+    name: "Microservices Constellation View"
+    priority: "P0"
+    effort: "3 days"
+    
+    description: |
+      Force-directed graph visualization of microservice topology. Automatically
+      detects service boundaries, inter-service communication, and shared
+      library dependencies. Works for any microservices architecture.
+    
+    detection_patterns:
+      service_indicators:
+        dotnet:
+          - "*.Endpoint.csproj"       # API endpoint projects
+          - "*.Api.csproj"            # REST API projects
+          - "*.Service.csproj"        # Service projects
+          - "*.WebApi.csproj"         # Web API projects
+        
+        java:
+          - "*-service/src/main"      # Spring Boot services
+          - "*-api/src/main"          # API modules
+          - "spring-boot-starter-*"   # Spring Boot starters
+        
+        python:
+          - "app/main.py"             # FastAPI/Flask apps
+          - "wsgi.py"                 # WSGI entry points
+          - "asgi.py"                 # ASGI entry points
+        
+        go:
+          - "cmd/*/main.go"           # Go service entry points
+          - "internal/*/service.go"   # Internal services
+        
+        generic:
+          - "Dockerfile"              # Containerized services
+          - "docker-compose*.yml"     # Service definitions
+          - "kubernetes/*.yaml"       # K8s deployments
+    
+    relationship_detection:
+      - "HTTP client references (RestSharp, HttpClient, axios, requests)"
+      - "gRPC proto imports and client stubs"
+      - "Message queue publishers/subscribers (NServiceBus, RabbitMQ, Kafka)"
+      - "Shared library references (common packages)"
+      - "Database connection string patterns"
+    
+    visualization:
+      type: "D3.js force-directed network"
+      node_types:
+        - name: "service"
+          icon: "server"
+          color: "blue"
+        - name: "job"
+          icon: "clock"
+          color: "purple"
+        - name: "library"
+          icon: "book"
+          color: "gray"
+        - name: "database"
+          icon: "database"
+          color: "green"
+        - name: "queue"
+          icon: "layers"
+          color: "orange"
+      
+      edge_types:
+        - name: "http"
+          style: "solid"
+          label: "REST/HTTP"
+        - name: "grpc"
+          style: "dashed"
+          label: "gRPC"
+        - name: "message"
+          style: "dotted"
+          label: "Message Bus"
+        - name: "shared_lib"
+          style: "thin_solid"
+          label: "Library Dependency"
+    
+    features:
+      - "Cluster services by domain/bounded context"
+      - "Highlight cross-domain communication (potential coupling)"
+      - "Show service health indicators (test coverage badge)"
+      - "Filter by communication type (HTTP, gRPC, Messages)"
+      - "Zoom to service for detailed view"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/microservices_analyzer.py"
+      class: "MicroservicesAnalyzer"
+      methods:
+        - "discover_services(repo_path: Path) -> List[Service]"
+        - "detect_relationships(services: List[Service]) -> List[ServiceEdge]"
+        - "cluster_by_domain(services: List[Service]) -> Dict[str, List[Service]]"
+        - "generate_constellation_data() -> D3GraphData"
+
+  # ============================================================================
+  # ENHANCEMENT 3: Centralized Package Management Viewer
+  # ============================================================================
+  enhancement_003_package_management:
+    id: "LENS-ENH-003"
+    name: "Centralized Package Management Viewer"
+    priority: "P0"
+    effort: "1.5 days"
+    
+    description: |
+      Comprehensive view of package dependencies with version management,
+      ownership tracking, and security audit integration. Parses central
+      package management files and extracts organizational metadata.
+    
+    supported_formats:
+      dotnet:
+        - file: "Directory.Packages.props"
+          features:
+            - "Central version management (ManagePackageVersionsCentrally)"
+            - "Transitive pinning (CentralPackageTransitivePinningEnabled)"
+            - "NuGet audit level"
+            - "Ownership comments (<!-- Platform.XYZ -->)"
+        
+        - file: "*.csproj"
+          features:
+            - "PackageReference elements"
+            - "Conditional package inclusion"
+      
+      java:
+        - file: "pom.xml"
+          features:
+            - "dependencyManagement section"
+            - "Property-based version management"
+            - "Parent POM inheritance"
+        
+        - file: "gradle.properties"
+          features:
+            - "Version catalog"
+            - "Dependency constraints"
+      
+      javascript:
+        - file: "package.json"
+          features:
+            - "dependencies and devDependencies"
+            - "peerDependencies"
+            - "Workspace dependencies"
+        
+        - file: "pnpm-lock.yaml / yarn.lock / package-lock.json"
+          features:
+            - "Resolved versions"
+            - "Integrity hashes"
+      
+      python:
+        - file: "requirements.txt / requirements-*.txt"
+          features:
+            - "Pinned versions"
+            - "Environment-specific requirements"
+        
+        - file: "pyproject.toml"
+          features:
+            - "Project dependencies"
+            - "Optional dependencies"
+            - "Dev dependencies"
+    
+    ownership_extraction:
+      description: "Parse comments to extract package ownership"
+      patterns:
+        - "<!-- {Owner} -->"              # XML comment
+        - "# {Owner}"                     # YAML/Python comment
+        - "// {Owner}"                    # JSON5/Java comment
+      
+      output:
+        - "Group packages by owner/platform"
+        - "Show ownership distribution pie chart"
+        - "Highlight orphaned packages (no owner)"
+    
+    security_integration:
+      - "Cross-reference with NVD (National Vulnerability Database)"
+      - "Display CVE badges on vulnerable packages"
+      - "Show NuGet/npm/PyPI security advisories"
+      - "Link to remediation guidance"
+    
+    visualization:
+      table_view:
+        columns:
+          - "Package Name"
+          - "Version"
+          - "Owner/Platform"
+          - "Usage Count (projects using it)"
+          - "Security Status (CVE badge)"
+          - "Last Updated (from lock file)"
+      
+      timeline_view:
+        description: "Git history of version changes"
+        features:
+          - "Version bump timeline"
+          - "Major/minor/patch categorization"
+          - "Author attribution for updates"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/package_analyzer.py"
+      class: "PackageManagementAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 4: Package Feed Topology Map
+  # ============================================================================
+  enhancement_004_feed_topology:
+    id: "LENS-ENH-004"
+    name: "Package Feed Topology Map"
+    priority: "P1"
+    effort: "1 day"
+    
+    description: |
+      Visualize package sources and feed configurations. Shows internal vs
+      external feeds, package source mappings, and feed health status.
+    
+    supported_formats:
+      dotnet:
+        - "NuGet.Config"
+        - "NuGet.*.Config"
+      
+      java:
+        - "settings.xml (Maven)"
+        - "build.gradle (repositories block)"
+      
+      javascript:
+        - ".npmrc"
+        - ".yarnrc.yml"
+      
+      python:
+        - "pip.conf"
+        - "pyproject.toml ([tool.pip] section)"
+    
+    analysis_features:
+      - "Detect internal vs external feeds"
+      - "Parse package source mappings (which packages from which feeds)"
+      - "Identify feed authentication requirements"
+      - "Check feed reachability (optional health check)"
+      - "Warn on fallback patterns that could leak to public feeds"
+    
+    visualization:
+      type: "D3.js Sankey diagram"
+      nodes:
+        - "Package feeds (internal, external, local)"
+        - "Package groups (by pattern or owner)"
+      flows:
+        - "Show which packages come from which feeds"
+        - "Highlight fallback chains"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/feed_analyzer.py"
+      class: "PackageFeedAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 5: Bounded Context / DDD Architecture Map
+  # ============================================================================
+  enhancement_005_bounded_context_map:
+    id: "LENS-ENH-005"
+    name: "Bounded Context / DDD Architecture Map"
+    priority: "P0"
+    effort: "2 days"
+    
+    description: |
+      Automatically detect and visualize Domain-Driven Design (DDD) patterns
+      including bounded contexts, aggregates, and context relationships.
+      Parses solution folder structures and namespace conventions.
+    
+    detection_strategies:
+      solution_folder_analysis:
+        description: "Parse .sln file for solution folder hierarchy"
+        patterns:
+          - "Bounded Contexts/*"
+          - "*Contexts/*"
+          - "Domains/*"
+          - "Modules/*"
+      
+      namespace_analysis:
+        description: "Extract namespaces from source files"
+        patterns:
+          - "{Company}.{Domain}.{Subdomain}"
+          - "{Product}.{Context}.{Layer}"
+      
+      directory_structure:
+        description: "Analyze folder naming conventions"
+        patterns:
+          - "src/{context}/"
+          - "domains/{context}/"
+          - "modules/{context}/"
+      
+      project_naming:
+        description: "Infer context from project names"
+        patterns:
+          - "{Context}.Endpoint"
+          - "{Context}.Domain"
+          - "{Context}.Infrastructure"
+          - "{Context}.Application"
+    
+    context_relationship_detection:
+      - "Shared kernel (common libraries used by multiple contexts)"
+      - "Customer-supplier (one context depends on another)"
+      - "Conformist (follows another context's model)"
+      - "Anti-corruption layer (adapter between contexts)"
+      - "Open host service (published API)"
+    
+    visualization:
+      type: "Mermaid context map"
+      elements:
+        - "Context boxes with layer breakdown"
+        - "Relationship arrows with type labels"
+        - "Shared kernel indicators"
+        - "Team ownership badges (if detectable)"
+    
+    output_sections:
+      - name: "Strategic Context Map"
+        content_type: "mermaid_diagram"
+        description: "High-level DDD context relationships"
+      
+      - name: "Context Detail Cards"
+        content_type: "expandable_cards"
+        description: "Per-context project listing and metrics"
+      
+      - name: "Context Coupling Score"
+        content_type: "heatmap"
+        description: "Cross-context dependency density"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/ddd_analyzer.py"
+      class: "BoundedContextAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 6: Background Job / Worker Discovery
+  # ============================================================================
+  enhancement_006_job_discovery:
+    id: "LENS-ENH-006"
+    name: "Background Job / Worker Discovery"
+    priority: "P1"
+    effort: "1 day"
+    
+    description: |
+      Discover and catalog all background jobs, service workers, scheduled
+      tasks, and async processors. Detects multiple hosting patterns.
+    
+    detection_patterns:
+      dotnet:
+        - "*ServiceJob*"              # NServiceBus/generic service jobs
+        - "*Worker*"                  # .NET Worker Service
+        - "*Jobs*"                    # Job projects
+        - "*.HostedService*"          # IHostedService implementations
+        - "Hangfire*"                 # Hangfire jobs
+        - "Quartz*"                   # Quartz.NET schedulers
+      
+      java:
+        - "@Scheduled"                # Spring scheduled tasks
+        - "*Job.java"                 # Quartz jobs
+        - "*Processor.java"           # Message processors
+        - "@KafkaListener"            # Kafka consumers
+      
+      python:
+        - "celery*"                   # Celery tasks
+        - "*_task.py"                 # Task modules
+        - "apscheduler*"              # APScheduler jobs
+        - "rq*"                       # Redis Queue workers
+      
+      javascript:
+        - "*worker.ts"                # Worker scripts
+        - "bull*"                     # Bull queue jobs
+        - "agenda*"                   # Agenda jobs
+    
+    job_metadata_extraction:
+      - "Job name and description (from class name / attributes)"
+      - "Schedule (CRON expression if available)"
+      - "Dependencies (message bus, database, external services)"
+      - "Hosting model (self-hosted, NServiceBus host, container)"
+      - "Test coverage (corresponding test project exists?)"
+    
+    visualization:
+      type: "Table with expandable rows"
+      columns:
+        - "Job Name"
+        - "Type (ServiceJob, Worker, Scheduled)"
+        - "Trigger (CRON, Message, Manual)"
+        - "Dependencies"
+        - "Test Coverage Badge"
+      
+      timeline_view:
+        description: "CRON schedule visualization"
+        features:
+          - "24-hour timeline showing when jobs run"
+          - "Overlap detection for resource conflicts"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/job_analyzer.py"
+      class: "BackgroundJobAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 7: Database Schema Explorer
+  # ============================================================================
+  enhancement_007_database_explorer:
+    id: "LENS-ENH-007"
+    name: "Database Schema Explorer"
+    priority: "P0"
+    effort: "3 days"
+    
+    description: |
+      Reverse-engineer database schemas from code. Parses Entity Framework
+      models, SQLAlchemy models, Hibernate entities, and raw SQL migrations.
+      Generates ER diagrams and tracks schema evolution.
+    
+    detection_patterns:
+      entity_framework:
+        - "DbContext.cs"              # EF context files
+        - "*DbContext.cs"             # Named contexts
+        - "OnModelCreating"           # Fluent API configuration
+        - "[Table()]"                 # Data annotations
+      
+      ef_core:
+        - "Migrations/*.cs"           # EF Core migrations
+        - "ModelSnapshot.cs"          # Model snapshots
+      
+      sqlalchemy:
+        - "models.py"                 # SQLAlchemy models
+        - "Base = declarative_base()" # Base class detection
+        - "alembic/versions/*.py"     # Alembic migrations
+      
+      hibernate:
+        - "@Entity"                   # JPA entities
+        - "*.hbm.xml"                 # Hibernate mappings
+        - "flyway/migrations/*.sql"   # Flyway migrations
+        - "liquibase/*.xml"           # Liquibase changelogs
+      
+      raw_sql:
+        - "*.sql"                     # Raw SQL files
+        - "schema/*.sql"              # Schema definitions
+        - "migrations/*.sql"          # Migration scripts
+    
+    analysis_features:
+      - "Extract table/entity definitions"
+      - "Detect primary keys and foreign keys"
+      - "Map relationships (one-to-many, many-to-many)"
+      - "Track schema changes over git history"
+      - "Detect database per service patterns"
+    
+    visualization:
+      er_diagram:
+        type: "Mermaid ER diagram"
+        features:
+          - "Tables with columns and types"
+          - "Relationship lines (PK-FK)"
+          - "Cardinality notation"
+          - "Color-coding by schema/context"
+      
+      migration_timeline:
+        type: "D3.js timeline"
+        features:
+          - "Migration history with commit links"
+          - "Breaking change indicators"
+          - "Author attribution"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/database_analyzer.py"
+      class: "DatabaseSchemaAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 8: CI/CD Pipeline Visualization
+  # ============================================================================
+  enhancement_008_cicd_visualization:
+    id: "LENS-ENH-008"
+    name: "CI/CD Pipeline Visualization"
+    priority: "P1"
+    effort: "2 days"
+    
+    description: |
+      Parse and visualize CI/CD pipeline configurations. Supports Azure DevOps,
+      GitHub Actions, GitLab CI, Jenkins, and CircleCI. Shows stages, jobs,
+      dependencies, and deployment targets.
+    
+    supported_formats:
+      azure_devops:
+        - "azure-pipelines.yml"
+        - "azure-pipelines*.yml"
+        - ".azure-pipelines/*.yml"
+      
+      github_actions:
+        - ".github/workflows/*.yml"
+        - ".github/workflows/*.yaml"
+      
+      gitlab_ci:
+        - ".gitlab-ci.yml"
+        - ".gitlab-ci/*.yml"
+      
+      jenkins:
+        - "Jenkinsfile"
+        - "Jenkinsfile.*"
+      
+      circleci:
+        - ".circleci/config.yml"
+      
+      generic:
+        - "Makefile"                  # Make-based builds
+        - "Taskfile.yml"              # Task runner
+        - "justfile"                  # Just command runner
+    
+    analysis_features:
+      - "Parse stages/jobs/steps"
+      - "Detect conditional execution (branch filters, parameters)"
+      - "Extract environment variables and secrets references"
+      - "Identify deployment targets (environments)"
+      - "Calculate pipeline complexity score"
+    
+    visualization:
+      flowchart:
+        type: "Mermaid flowchart LR"
+        features:
+          - "Stages as columns"
+          - "Jobs as nodes"
+          - "Dependencies as arrows"
+          - "Conditional branches"
+          - "Parallel execution indicators"
+      
+      environment_map:
+        type: "Deployment target badges"
+        features:
+          - "Dev → QA → Staging → Production flow"
+          - "Environment variable summary"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/cicd_analyzer.py"
+      class: "CICDPipelineAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 9: Layered Architecture Compliance Checker
+  # ============================================================================
+  enhancement_009_layered_architecture:
+    id: "LENS-ENH-009"
+    name: "Layered Architecture Compliance Checker"
+    priority: "P0"
+    effort: "1.5 days"
+    
+    description: |
+      Detect and validate N-tier/layered architecture compliance. Identifies
+      layer violations (e.g., UI layer directly accessing database layer)
+      and calculates architecture fitness score.
+    
+    layer_detection:
+      strategies:
+        - name: "Solution folder numbers"
+          pattern: "1 {Layer}, 2 {Layer}, ..."
+          example: "1 Presentation, 2 Application, 3 Domain, 4 Infrastructure"
+        
+        - name: "Namespace conventions"
+          pattern: "{Root}.{Layer}.{Module}"
+          example: "Company.Application.Services"
+        
+        - name: "Directory structure"
+          pattern: "src/{layer}/"
+          example: "src/presentation/, src/domain/"
+        
+        - name: "Project suffixes"
+          pattern: "*.{Layer}.csproj"
+          example: "MyApp.Domain.csproj, MyApp.Infrastructure.csproj"
+    
+    common_layer_patterns:
+      three_tier:
+        - "Presentation / UI / Web"
+        - "Business / Application / Services"
+        - "Data / Persistence / Infrastructure"
+      
+      clean_architecture:
+        - "Presentation / API / UI"
+        - "Application (Use Cases)"
+        - "Domain (Entities, Value Objects)"
+        - "Infrastructure (External Concerns)"
+      
+      hexagonal:
+        - "Adapters (Primary / Secondary)"
+        - "Application (Ports)"
+        - "Domain (Core)"
+    
+    violation_detection:
+      - "Upward dependency (lower layer references higher)"
+      - "Layer skip (UI references Database directly)"
+      - "Circular dependency between layers"
+      - "Cross-cutting concern in wrong layer"
+    
+    visualization:
+      layer_diagram:
+        type: "Mermaid graph TD"
+        features:
+          - "Layers as horizontal bands"
+          - "Allowed dependencies (solid arrows)"
+          - "Violations (red dashed arrows)"
+          - "Compliance score per layer"
+      
+      violation_list:
+        type: "Table"
+        columns:
+          - "Source (File:Line)"
+          - "Target (Referenced Layer)"
+          - "Violation Type"
+          - "Severity"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/architecture_analyzer.py"
+      class: "LayeredArchitectureAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 10: Code Analysis Ruleset Comparison
+  # ============================================================================
+  enhancement_010_ruleset_comparison:
+    id: "LENS-ENH-010"
+    name: "Code Analysis Ruleset Comparison"
+    priority: "P2"
+    effort: "0.5 days"
+    
+    description: |
+      Compare code analysis rulesets across segments/projects. Identifies
+      policy inconsistencies, suppressed rules (tech debt), and provides
+      compliance scoring.
+    
+    supported_formats:
+      dotnet:
+        - "*.ruleset"                 # MSBuild rulesets
+        - ".editorconfig"             # EditorConfig rules
+        - "stylecop.json"             # StyleCop configuration
+      
+      java:
+        - "checkstyle.xml"            # Checkstyle rules
+        - "spotbugs.xml"              # SpotBugs configuration
+        - "pmd-ruleset.xml"           # PMD rules
+      
+      javascript:
+        - ".eslintrc.*"               # ESLint configuration
+        - ".prettierrc"               # Prettier configuration
+        - "tslint.json"               # TSLint (legacy)
+      
+      python:
+        - ".flake8"                   # Flake8 configuration
+        - "pyproject.toml [tool.ruff]" # Ruff configuration
+        - ".pylintrc"                 # Pylint configuration
+    
+    analysis_features:
+      - "Parse enabled/disabled rules per file"
+      - "Compare rulesets across segments/projects"
+      - "Identify suppressed rules (potential tech debt)"
+      - "Calculate compliance score per segment"
+      - "Highlight policy drift between teams"
+    
+    visualization:
+      comparison_matrix:
+        type: "Heatmap table"
+        rows: "Rules"
+        columns: "Segments/Projects"
+        cells: "Enabled (green) / Disabled (red) / N/A (gray)"
+      
+      tech_debt_summary:
+        type: "Card with metrics"
+        content:
+          - "Total suppressed rules"
+          - "Highest-risk suppressions"
+          - "Remediation recommendations"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/ruleset_analyzer.py"
+      class: "CodeAnalysisRulesetAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 11: Enterprise Configuration Discovery
+  # ============================================================================
+  enhancement_011_enterprise_config:
+    id: "LENS-ENH-011"
+    name: "Enterprise Configuration Discovery"
+    priority: "P0"
+    effort: "1 day"
+    
+    description: |
+      Discover and catalog enterprise configuration patterns including
+      centralized configuration systems, feature flags, secrets management,
+      and environment-specific settings.
+    
+    detection_patterns:
+      config_systems:
+        - "appsettings.json / appsettings.*.json"   # .NET configuration
+        - "application.yml / application-*.yml"      # Spring Boot
+        - "config/*.yaml"                            # Generic YAML config
+        - ".env / .env.*"                            # Environment files
+      
+      feature_flags:
+        - "LaunchDarkly SDK references"
+        - "FeatureManagement (Microsoft)"
+        - "Unleash client"
+        - "Split.io client"
+        - "Custom feature flag patterns (IFeatureFlag, FeatureToggle)"
+      
+      secrets_management:
+        - "Azure Key Vault references"
+        - "AWS Secrets Manager references"
+        - "HashiCorp Vault references"
+        - "Kubernetes secrets references"
+      
+      centralized_config:
+        - "Azure App Configuration"
+        - "Spring Cloud Config"
+        - "Consul KV"
+        - "etcd references"
+    
+    analysis_features:
+      - "Detect configuration hierarchy (base → environment overlays)"
+      - "Identify hardcoded values that should be externalized"
+      - "Map feature flag usage across codebase"
+      - "Catalog secrets references (not values!)"
+      - "Detect configuration drift between environments"
+    
+    visualization:
+      config_hierarchy:
+        type: "Collapsible tree"
+        description: "Show base config with environment overlays"
+      
+      feature_flag_registry:
+        type: "Searchable table"
+        columns:
+          - "Flag Name"
+          - "Usage Locations (files)"
+          - "Default Value (if detectable)"
+          - "Provider"
+      
+      secrets_catalog:
+        type: "Badge list"
+        description: "List of secrets references (names only, no values)"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/config_discovery_analyzer.py"
+      class: "EnterpriseConfigDiscoveryAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 12: Solution Filter Workspace Analyzer
+  # ============================================================================
+  enhancement_012_solution_filter:
+    id: "LENS-ENH-012"
+    name: "Solution Filter Workspace Analyzer"
+    priority: "P1"
+    effort: "0.5 days"
+    
+    description: |
+      Analyze .slnf (solution filter) files to understand modular development
+      workflows. Shows project subsets, overlap analysis, and recommends
+      optimal filters for different development scenarios.
+    
+    analysis_features:
+      - "Parse all .slnf files in repository"
+      - "Calculate project counts per filter"
+      - "Identify overlapping projects between filters"
+      - "Detect orphaned projects (not in any filter)"
+      - "Estimate build time reduction per filter"
+    
+    visualization:
+      filter_comparison:
+        type: "Venn diagram / Set visualization"
+        description: "Show overlap between solution filters"
+      
+      filter_catalog:
+        type: "Card grid"
+        per_filter:
+          - "Filter name"
+          - "Project count"
+          - "Estimated build time"
+          - "Primary use case (inferred from name)"
+      
+      recommendations:
+        type: "Suggestion cards"
+        content:
+          - "Recommended filter for current task (based on modified files)"
+          - "Underutilized filters"
+          - "Projects missing from all filters"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/solution_filter_analyzer.py"
+      class: "SolutionFilterAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 13: Quality Gate Integration Panel
+  # ============================================================================
+  enhancement_013_quality_gate:
+    id: "LENS-ENH-013"
+    name: "Quality Gate Integration Panel"
+    priority: "P1"
+    effort: "0.5 days"
+    
+    description: |
+      Integrate with quality gate systems (SonarQube, SonarCloud, CodeClimate)
+      to display project quality metrics and gate status in the dashboard.
+    
+    supported_integrations:
+      sonarqube:
+        config_files:
+          - "sonar-project.properties"
+          - "sonar-project.yml"
+        extracted_info:
+          - "Project key"
+          - "Project name"
+          - "Version"
+          - "Source encoding"
+        dashboard_link: "Generate link to SonarQube project dashboard"
+      
+      sonarcloud:
+        config_files:
+          - ".sonarcloud.properties"
+        extracted_info:
+          - "Organization"
+          - "Project key"
+      
+      codeclimate:
+        config_files:
+          - ".codeclimate.yml"
+        extracted_info:
+          - "Engines configured"
+          - "Exclusion patterns"
+    
+    visualization:
+      quality_badge:
+        type: "Status badge"
+        states:
+          - "Passing (green)"
+          - "Warning (yellow)"
+          - "Failing (red)"
+          - "Unknown (gray)"
+      
+      metrics_summary:
+        type: "Metric cards"
+        content:
+          - "Coverage %"
+          - "Duplications %"
+          - "Technical Debt (time)"
+          - "Issues by severity"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/quality_gate_analyzer.py"
+      class: "QualityGateAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 14: Multi-Language Repository Support
+  # ============================================================================
+  enhancement_014_polyglot_analysis:
+    id: "LENS-ENH-014"
+    name: "Multi-Language Repository Support"
+    priority: "P0"
+    effort: "2 days"
+    
+    description: |
+      Enhanced analysis for polyglot repositories that mix multiple
+      programming languages. Provides language distribution, cross-language
+      dependency detection, and unified visualization.
+    
+    language_detection:
+      by_extension:
+        - ".cs → C#"
+        - ".fs → F#"
+        - ".java → Java"
+        - ".kt → Kotlin"
+        - ".py → Python"
+        - ".ts / .tsx → TypeScript"
+        - ".js / .jsx → JavaScript"
+        - ".go → Go"
+        - ".rs → Rust"
+        - ".sql → SQL"
+        - ".ps1 → PowerShell"
+        - ".sh → Shell"
+      
+      by_config_file:
+        - "*.csproj → .NET"
+        - "pom.xml → Java (Maven)"
+        - "build.gradle → Java/Kotlin (Gradle)"
+        - "package.json → JavaScript/TypeScript"
+        - "pyproject.toml → Python"
+        - "go.mod → Go"
+        - "Cargo.toml → Rust"
+    
+    cross_language_patterns:
+      - "FFI (Foreign Function Interface) bindings"
+      - "gRPC proto files shared between languages"
+      - "OpenAPI/Swagger specs with multi-language clients"
+      - "Shared database schemas accessed by multiple languages"
+      - "Message contracts (Protobuf, Avro, JSON Schema)"
+    
+    visualization:
+      language_distribution:
+        type: "Pie chart + treemap"
+        metrics:
+          - "Lines of code per language"
+          - "File count per language"
+          - "Directory distribution"
+      
+      language_stack_badges:
+        type: "Badge grid"
+        description: "Technology stack with version badges"
+      
+      cross_language_map:
+        type: "D3.js network"
+        description: "Show integration points between languages"
+    
+    implementation:
+      file: "cortex/visualization/analyzers/polyglot_analyzer.py"
+      class: "PolyglotRepositoryAnalyzer"
+
+  # ============================================================================
+  # ENHANCEMENT 15: Domain Knowledge Overlay System
+  # ============================================================================
+  enhancement_015_domain_knowledge_overlay:
+    id: "LENS-ENH-015"
+    name: "Domain Knowledge Overlay System"
+    priority: "P0"
+    effort: "2.5 days"
+    
+    description: |
+      Integrate company-specific domain knowledge from CORTEX's knowledge
+      layer to enrich technical dashboards with business context. Overlays
+      business definitions, compliance requirements, and domain terminology
+      on code visualizations.
+    
+    knowledge_sources:
+      company_domains:
+        location: "company/domains/**/*.yaml"
+        content_types:
+          - "Business domain definitions"
+          - "Compliance requirements (regulatory standards)"
+          - "Domain glossary terms"
+          - "Coding standards and conventions"
+      
+      cortex_tier3_knowledge:
+        location: "cortex_brain/tier3/knowledge/**/*.yaml"
+        content_types:
+          - "Best practices"
+          - "Design patterns"
+          - "Anti-patterns to avoid"
+      
+      compliance_standards:
+        location: "company/domains/compliance-standards/*.yaml"
+        content_types:
+          - "Regulatory requirements (HIPAA, PCI-DSS, GDPR, etc.)"
+          - "Compliance patterns and controls"
+    
+    overlay_features:
+      hover_annotations:
+        description: "Show business context when hovering over code elements"
+        examples:
+          - "Class 'UserAccount' → 'Part of Account Management domain. Subject to SOX compliance.'"
+          - "Method 'processPayment' → 'Payment processing. PCI-DSS Level 1 applies.'"
+      
+      compliance_badges:
+        description: "Show applicable compliance standards on components"
+        types:
+          - "HIPAA (healthcare data)"
+          - "PCI-DSS (payment data)"
+          - "GDPR (personal data)"
+          - "SOX (financial reporting)"
+          - "SOC2 (security controls)"
+      
+      domain_glossary_panel:
+        description: "Sidebar with domain terminology definitions"
+        features:
+          - "Searchable glossary"
+          - "Context-aware suggestions based on current view"
+      
+      standards_compliance_meter:
+        description: "Show adherence to coding standards"
+        metrics:
+          - "Naming convention compliance %"
+          - "Documentation coverage %"
+          - "Test pattern adherence %"
+    
+    implementation:
+      file: "cortex/visualization/overlays/domain_knowledge_overlay.py"
+      class: "DomainKnowledgeOverlayProvider"
+      
+      integration_points:
+        - "Load knowledge YAMLs at dashboard generation time"
+        - "Match code elements to domain patterns"
+        - "Inject overlay data into dashboard JSON"
+        - "Frontend: Show overlays on hover/click"
+    
+    test_file: "tests/visualization/test_domain_knowledge_overlay.py"
+    test_cases:
+      - "Load domain knowledge from company/domains/"
+      - "Match class names to domain definitions"
+      - "Apply compliance badges to matching components"
+      - "Generate glossary from domain YAML files"
+
+# ==============================================================================
+# PHASE 14.2 IMPLEMENTATION TASKS
+# ==============================================================================
+
+phase_14_2_tasks:
+  - id: "ENH-001"
+    name: "Create analyzer package structure"
+    effort: "0.5 days"
+    description: "Create cortex/visualization/analyzers/ package with base classes"
+    deliverables:
+      - "cortex/visualization/analyzers/__init__.py"
+      - "cortex/visualization/analyzers/base_analyzer.py"
+      - "cortex/visualization/analyzers/registry.py"
+  
+  - id: "ENH-002"
+    name: "Implement analyzer registry and auto-discovery"
+    effort: "0.5 days"
+    description: "Auto-discover and register all analyzers at startup"
+    deliverables:
+      - "cortex/visualization/analyzers/registry.py"
+      - "Plugin architecture for custom analyzers"
+  
+  - id: "ENH-003"
+    name: "Implement core analyzers (001-007)"
+    effort: "8 days"
+    description: "Implement priority P0 analyzers"
+    deliverables:
+      - "solution_analyzer.py"
+      - "microservices_analyzer.py"
+      - "package_analyzer.py"
+      - "ddd_analyzer.py"
+      - "database_analyzer.py"
+      - "architecture_analyzer.py"
+      - "polyglot_analyzer.py"
+  
+  - id: "ENH-004"
+    name: "Implement secondary analyzers (008-014)"
+    effort: "4 days"
+    description: "Implement P1-P2 analyzers"
+    deliverables:
+      - "feed_analyzer.py"
+      - "job_analyzer.py"
+      - "cicd_analyzer.py"
+      - "ruleset_analyzer.py"
+      - "config_discovery_analyzer.py"
+      - "solution_filter_analyzer.py"
+      - "quality_gate_analyzer.py"
+  
+  - id: "ENH-005"
+    name: "Implement domain knowledge overlay"
+    effort: "2.5 days"
+    description: "Create overlay system for business context"
+    deliverables:
+      - "cortex/visualization/overlays/__init__.py"
+      - "cortex/visualization/overlays/domain_knowledge_overlay.py"
+      - "cortex/visualization/overlays/compliance_overlay.py"
+  
+  - id: "ENH-006"
+    name: "Create frontend components for new visualizations"
+    effort: "3 days"
+    description: "D3.js and Mermaid components for new analyzers"
+    deliverables:
+      - "cortex/visualization/static/js/solution-tree.js"
+      - "cortex/visualization/static/js/microservices-constellation.js"
+      - "cortex/visualization/static/js/package-table.js"
+      - "cortex/visualization/static/js/layer-diagram.js"
+  
+  - id: "ENH-007"
+    name: "Integration tests for all analyzers"
+    effort: "2 days"
+    description: "Comprehensive test suite for Phase 14.2"
+    deliverables:
+      - "tests/visualization/analyzers/test_*.py"
+      - "Test fixtures for .NET, Java, Python repos"
+
+# ==============================================================================
+# PHASE 14.2 SUCCESS METRICS
+# ==============================================================================
+
+phase_14_2_success_metrics:
+  analyzer_coverage:
+    - "15 analyzers implemented and tested"
+    - "Support for 5+ language ecosystems"
+    - "90%+ test coverage on analyzers"
+  
+  dashboard_enrichment:
+    - "3+ new tabs per enterprise repository"
+    - "Domain knowledge overlay active on 80%+ dashboards"
+    - "Configuration intelligence surfaced for 100% of detected patterns"
+  
+  user_value:
+    - "Time to understand new codebase reduced by 50%"
+    - "Architecture violations detected before code review"
+    - "Onboarding time for new developers reduced"

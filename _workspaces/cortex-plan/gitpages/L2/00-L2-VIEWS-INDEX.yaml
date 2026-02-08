@@ -1,0 +1,574 @@
+# L2 VIEWS COMPREHENSIVE INDEX
+# Version: 1.0 | Created: 2026-01-31
+# Authority: PHASE-17, ARCH-011 (execute to completion)
+# Theme Reference: http://localhost:8080/architecture/index.html
+# Hero Pattern: CORTEX logo (300x300) + section-specific content
+
+---
+metadata:
+  title: "L2 Views Master Index"
+  status: "✅ PLANNING COMPLETE (Option C: Hybrid Approach)"
+  total_views: 16
+  completed_views: 16
+  theme: "Dark Blue Glassmorphism"
+  hero_pattern: "300x300 CORTEX logo left-justified + section title/description"
+  d3_requirement: "Minimum 3 unique D3.js visualizations per view"
+  mermaid_requirement: "Minimum 3 Mermaid diagrams per view"
+  target_audience: "Business Leaders, Product Owners, Software Engineers, Security Engineers, Architects"
+  approach: "Hybrid (Option C)"
+  rationale: |
+    16 comprehensive L2 views following Option C (Hybrid Approach):
+    - 4 existing views (Getting Started, LENS, MCP Tools, Security overview)
+    - 6 main feature views (Token Optimization → Story Viewer)
+    - 3 security sub-views (Protection, Assessment, Compliance)
+    - 3 orchestrator sub-views (Core, Domain, Support)
+    
+    Matches pasted images showing:
+    - Security subcategories: Protection/Assessment/Compliance tiles
+    - Orchestrator categories: Core/Domain/Support tiles (24 total orchestrators)
+    
+    Verified against wiring.yaml: 7 core + 6 domain + 11 support = 24 orchestrators
+
+---
+# ============================================================================
+# L2 VIEWS INVENTORY (Priority Order)
+# ============================================================================
+
+views:
+  priority_1_core:
+    - id: "getting-started"
+      title: "Getting Started"
+      path: "docs/getting-started/index.html"
+      icon: "🚀"
+      theme_accent: "#10b981"  # Emerald
+      status: "PENDING"
+      archived_prototype: true
+      yaml_plan: "01-getting-started.yaml"
+      effort_hours: 12
+      
+    - id: "architecture"
+      title: "Architecture"
+      path: "docs/architecture/index.html"
+      icon: "🏛️"
+      theme_accent: "#6366f1"  # Indigo
+      status: "✅ APPROVED"  # Reference implementation
+      archived_prototype: true
+      yaml_plan: "N/A - Reference"
+      effort_hours: 0
+      
+    - id: "lens"
+      title: "CORTEX LENS"
+      path: "docs/lens/index.html"
+      icon: "🔍"
+      theme_accent: "#8b5cf6"  # Violet
+      status: "PENDING"
+      archived_prototype: true
+      yaml_plan: "02-lens.yaml"
+      effort_hours: 14
+      
+    - id: "11-mcp-tools"
+      title: "MCP Tools"
+      path: "docs/11-mcp-tools/index.html"
+      icon: "🔌"
+      theme_accent: "#f59e0b"  # Amber
+      status: "PENDING"
+      archived_prototype: false
+      yaml_plan: "03-mcp-tools.yaml"
+      effort_hours: 16
+
+  priority_2_features:
+    - id: "security"
+      title: "Security (Overview)"
+      path: "docs/security/index.html"
+      icon: "🛡️"
+      theme_accent: "#ef4444"  # Red
+      status: "PENDING"
+      archived_prototype: true
+      yaml_plan: "04-security.yaml"
+      effort_hours: 18
+      sub_views:
+        - "security-protection"
+        - "security-assessment"
+        - "security-compliance"
+      
+    - id: "token-optimization"
+      title: "Token Optimization"
+      path: "docs/token-optimization/index.html"
+      icon: "💰"
+      theme_accent: "#f59e0b"  # Amber
+      status: "✅ COMPLETE"
+      archived_prototype: true
+      yaml_plan: "05-token-optimization.yaml"
+      effort_hours: 15
+      
+    - id: "toolkit-manager"
+      title: "CORTEX Toolkit"
+      path: "docs/toolkit-manager/index.html"
+      icon: "🛠️"
+      theme_accent: "#06b6d4"  # Cyan
+      status: "✅ COMPLETE"
+      archived_prototype: true
+      yaml_plan: "06-toolkit-manager.yaml"
+      effort_hours: 16
+
+  priority_3_knowledge:
+    - id: "knowledge"
+      title: "Knowledge Base"
+      path: "docs/knowledge/index.html"
+      icon: "📚"
+      theme_accent: "#8b5cf6"  # Violet
+      status: "✅ COMPLETE"
+      archived_prototype: true
+      yaml_plan: "07-knowledge.yaml"
+      effort_hours: 20
+      
+    - id: "sts"
+      title: "Sharpen The Saw"
+      path: "docs/sts/index.html"
+      icon: "🔧"
+      theme_accent: "#10b981"  # Emerald
+      status: "✅ COMPLETE"
+      archived_prototype: true
+      yaml_plan: "08-sts.yaml"
+      effort_hours: 18
+      
+    - id: "learning-paths"
+      title: "Learning Paths"
+      path: "docs/learning-paths/index.html"
+      icon: "🎓"
+      theme_accent: "#7b61ff"  # Purple
+      status: "✅ COMPLETE"
+      archived_prototype: false
+      yaml_plan: "09-learning-paths.yaml"
+      effort_hours: 16
+
+  priority_4_special:
+    - id: "story"
+      title: "The Awakening"
+      path: "docs/story/viewer.html"
+      icon: "📖"
+      theme_accent: "#ec4899"  # Pink
+      status: "✅ COMPLETE"
+      archived_prototype: false
+      yaml_plan: "10-story-viewer.yaml"
+      effort_hours: 24
+
+  security_sub_views:
+    - id: "security-protection"
+      title: "Security: Protection"
+      path: "docs/security/protection/index.html"
+      icon: "🔒"
+      theme_accent: "#ef4444"  # Red
+      status: "✅ COMPLETE"
+      parent_view: "security"
+      yaml_plan: "11-security-protection.yaml"
+      effort_hours: 14
+      features:
+        - "RBAC (8 roles)"
+        - "Input validation (25+ validators)"
+        - "Secrets management"
+        - "Hash-chain audit logging"
+      
+    - id: "security-assessment"
+      title: "Security: Assessment"
+      path: "docs/security/assessment/index.html"
+      icon: "🔍"
+      theme_accent: "#ef4444"  # Red
+      status: "✅ COMPLETE"
+      parent_view: "security"
+      yaml_plan: "12-security-assessment.yaml"
+      effort_hours: 16
+      features:
+        - "STRIDE threat modeling"
+        - "6 CWE patterns (SQL/code/command injection, etc.)"
+        - "AST-powered analysis (50+ checks)"
+      
+    - id: "security-compliance"
+      title: "Security: Compliance"
+      path: "docs/security/compliance/index.html"
+      icon: "✅"
+      theme_accent: "#ef4444"  # Red
+      status: "✅ COMPLETE"
+      parent_view: "security"
+      yaml_plan: "13-security-compliance.yaml"
+      effort_hours: 18
+      features:
+        - "OWASP Top 10 2021 (100% coverage)"
+        - "45+ knowledge YAMLs"
+        - "Parameterized queries"
+        - "Output encoding"
+
+  orchestrators_sub_views:
+    - id: "orchestrators-core"
+      title: "Orchestrators: Core"
+      path: "docs/orchestrators/core/index.html"
+      icon: "🧠"
+      theme_accent: "#3b82f6"  # Blue
+      status: "✅ COMPLETE"
+      parent_view: "orchestrators"
+      yaml_plan: "14-orchestrators-core.yaml"
+      effort_hours: 22
+      count: 7
+      orchestrators:
+        - "InteractionOrchestrator (LENS Protocol)"
+        - "IntentRouter (Intent classification)"
+        - "LENSSynthesis (DoR generation)"
+        - "EnforcementOrchestrator (Governance gates)"
+        - "TDDOrchestrator (Test-driven development)"
+        - "WorkflowOrchestrator (Step orchestration)"
+        - "MasterOrchestrator (Coordination)"
+      
+    - id: "orchestrators-domain"
+      title: "Orchestrators: Domain"
+      path: "docs/orchestrators/domain/index.html"
+      icon: "🎯"
+      theme_accent: "#8b5cf6"  # Purple
+      status: "✅ COMPLETE"
+      parent_view: "orchestrators"
+      yaml_plan: "15-orchestrators-domain.yaml"
+      effort_hours: 20
+      count: 6
+      orchestrators:
+        - "RefactoringOrchestrator (Code quality)"
+        - "PlanningOrchestrator (Multi-phase planning)"
+        - "DocumentationOrchestrator (API docs)"
+        - "PhaseExecutor (Phase execution)"
+        - "AutonomousExecutionEngine (Self-directed)"
+        - "ConversationOrchestrator (Multi-turn)"
+      
+    - id: "orchestrators-support"
+      title: "Orchestrators: Support"
+      path: "docs/orchestrators/support/index.html"
+      icon: "🛠️"
+      theme_accent: "#10b981"  # Green
+      status: "✅ COMPLETE"
+      parent_view: "orchestrators"
+      yaml_plan: "16-orchestrators-support.yaml"
+      effort_hours: 24
+      count: 11
+      orchestrators:
+        - "OnboardingOrchestrator (User onboarding)"
+        - "ToolDiscoveryOrchestrator (Tool discovery)"
+        - "UpgradeOrchestrator (Version upgrades)"
+        - "RollbackOrchestrator (Rollback)"
+        - "SetupOrchestrator (Environment setup)"
+        - "GovernanceRegistry (Rule management)"
+        - "KnowledgeRepository (Knowledge YAMLs)"
+        - "WrappedTDDOrchestrator (Enhanced TDD)"
+        - "FuzzyIntentMatcher (Fuzzy matching)"
+        - "ComprehensionSession (Session management)"
+        - "DoRApprovalGate (Approval gating)"
+        - "ChallengeEngine (Security gates - Phase 8.3)"
+        - "DuplicationDetector (Duplication detection - Phase 8.3A)"
+        - "RecommendationEngine (Advisory - Phase 8.4)"
+
+---
+# ============================================================================
+# GENERATION SUMMARY
+# ============================================================================
+
+generation_summary:
+  total_views: 16
+  completed_planning: 16
+  
+  effort_breakdown:
+    existing_views: 60h  # 4 views × 15h avg
+    main_features: 109h  # 6 views (05-10)
+    security_trilogy: 48h  # 3 views (11-13)
+    orchestrators_trilogy: 66h  # 3 views (14-16)
+    total_planning: 283h
+  
+  visualization_counts:
+    d3_visualizations: 36  # 3 per view × 12 new views
+    mermaid_diagrams: 36   # 3 per view × 12 new views
+    
+  orchestrator_verification:
+    source: "cortex/wiring/specifications/wiring.yaml"
+    core_count: 7
+    domain_count: 6
+    support_count: 11
+    total_count: 24
+    verified: true
+
+---
+# ============================================================================
+# APPROVED REFERENCE IMPLEMENTATION
+# ============================================================================
+
+reference_implementation:
+  path: "docs/architecture/index.html"
+  approved_elements:
+    hero:
+      - "300x300 CORTEX logo left-justified"
+      - "Section title and tagline"
+      - "Clean header (NO full hero section)"
+      - "Dark blue glassmorphism background"
+    
+    visualizations:
+      - "D3.js force-directed graph (Orchestrator Network)"
+      - "SVG pipeline diagrams (Request Flow, Wiring)"
+      - "Interactive filtering and hover states"
+      - "Category-based color coding"
+    
+    design_patterns:
+      - "Glass cards with subtle animations"
+      - "Shimmer overlays on hover"
+      - "Border glow pulse effects"
+      - "Floating effects (translateY)"
+      - "Category-specific hover glows"
+    
+    css_framework:
+      - "../assets/css/main.css"
+      - "Inline critical CSS for section-specific styles"
+      - "Font Awesome 6.5.1 icons"
+      - "D3.js v7"
+    
+    responsive:
+      - "Mobile-first design"
+      - "Touch target optimization (44px min)"
+      - "Viewport meta tags"
+      - "Font size adjustment prevention"
+
+---
+# ============================================================================
+# VISUALIZATION REQUIREMENTS (All Views)
+# ============================================================================
+
+visualization_standards:
+  d3_visualizations:
+    requirement: "Minimum 1 unique D3.js visualization per view"
+    approved_types:
+      - "d3-force: Force-directed network graphs"
+      - "d3-sankey: Data flow diagrams"
+      - "d3-hierarchy: Hierarchical tree/sunburst"
+      - "d3-timeline: Temporal event sequences"
+      - "d3-radar: Capability comparison charts"
+      - "d3-matrix: Interaction heatmaps"
+      - "d3-chord: Relationship diagrams"
+    
+    interactive_features:
+      - "Drag-to-reposition nodes"
+      - "Zoom and pan"
+      - "Hover tooltips with rich content"
+      - "Click-to-filter/focus"
+      - "Animated transitions"
+      - "Category-based coloring"
+  
+  mermaid_diagrams:
+    requirement: "Minimum 2 Mermaid diagrams per view"
+    approved_types:
+      - "mindmap: Concept hierarchies"
+      - "flowchart: Process flows"
+      - "sequenceDiagram: Interaction sequences"
+      - "classDiagram: Architecture relationships"
+      - "stateDiagram: State machines"
+      - "erDiagram: Entity relationships"
+      - "journey: User journeys"
+      - "gantt: Timeline planning"
+    
+    styling:
+      - "Dark theme consistent with glassmorphism"
+      - "CORTEX brand colors (purple #7b61ff, cyan #00d4ff)"
+      - "Embedded in glass cards"
+      - "Responsive scaling"
+
+  svg_diagrams:
+    use_cases:
+      - "Simple linear pipelines"
+      - "Layer architecture stacks"
+      - "Component connection diagrams"
+    styling:
+      - "Inline SVG with CSS animations"
+      - "Glassmorphism-consistent colors"
+      - "Hover/focus states"
+
+---
+# ============================================================================
+# CONTENT STRATEGY (Impress All Roles)
+# ============================================================================
+
+content_framework:
+  business_leaders:
+    focus:
+      - "Executive summaries (3-5 sentences max)"
+      - "ROI metrics and cost savings"
+      - "Risk mitigation and governance"
+      - "Competitive advantages"
+      - "Strategic alignment"
+    
+    visualization_preference:
+      - "High-level dashboards"
+      - "Trend charts and metrics"
+      - "Before/after comparisons"
+      - "Executive-friendly diagrams"
+  
+  product_owners:
+    focus:
+      - "Feature capabilities and benefits"
+      - "User stories and journeys"
+      - "Acceptance criteria examples"
+      - "Integration points"
+      - "Roadmap alignment"
+    
+    visualization_preference:
+      - "Feature dependency graphs"
+      - "User journey flowcharts"
+      - "Capability matrices"
+      - "Sprint/epic visualizations"
+  
+  software_engineers:
+    focus:
+      - "Technical implementation details"
+      - "Architecture patterns and principles"
+      - "Code examples and APIs"
+      - "Performance characteristics"
+      - "Integration guides"
+    
+    visualization_preference:
+      - "Class diagrams and UML"
+      - "Sequence diagrams"
+      - "Data flow diagrams"
+      - "Dependency graphs"
+      - "Performance charts"
+
+---
+# ============================================================================
+# DESIGN SYSTEM STANDARDS
+# ============================================================================
+
+design_system:
+  color_palette:
+    primary: "#7b61ff"      # Purple - Core features
+    secondary: "#00d4ff"    # Cyan - Secondary features
+    accent: "#10b981"       # Emerald - Success/completion
+    warning: "#f59e0b"      # Amber - Warnings/planning
+    danger: "#ef4444"       # Red - Errors/security
+    info: "#06b6d4"         # Cyan - Information
+    knowledge: "#8b5cf6"    # Violet - Knowledge/learning
+  
+  typography:
+    heading_font: "system-ui, -apple-system, sans-serif"
+    body_font: "system-ui, -apple-system, sans-serif"
+    code_font: "'Fira Code', 'Consolas', monospace"
+    
+    sizes:
+      hero_title: "3rem (48px)"
+      section_title: "2rem (32px)"
+      subsection_title: "1.5rem (24px)"
+      body_text: "1rem (16px)"
+      small_text: "0.875rem (14px)"
+  
+  spacing:
+    section_padding: "4rem 0"
+    card_padding: "2rem"
+    element_gap: "1.5rem"
+    tight_gap: "0.75rem"
+  
+  glass_effects:
+    background: "rgba(26, 31, 58, 0.7)"
+    backdrop_filter: "blur(20px)"
+    border: "1px solid rgba(255, 255, 255, 0.1)"
+    border_radius: "16px"
+    shadow: "0 8px 32px rgba(0, 0, 0, 0.37)"
+  
+  animations:
+    duration_fast: "0.2s"
+    duration_normal: "0.4s"
+    duration_slow: "0.6s"
+    easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+
+---
+# ============================================================================
+# GENERATION WORKFLOW
+# ============================================================================
+
+workflow:
+  phase_1_planning:
+    - "✅ Create individual YAML plans for each view"
+    - "✅ Define unique D3.js visualizations"
+    - "✅ Define Mermaid diagram types"
+    - "✅ Map content to audience roles"
+    - "✅ Identify data sources from docker-plan"
+  
+  phase_2_assets:
+    - "Copy CORTEX logo (300x300) to each section folder"
+    - "Generate D3.js data files (JSON)"
+    - "Create Mermaid diagram source (.mmd files)"
+    - "Prepare SVG diagrams where needed"
+  
+  phase_3_generation:
+    - "Use CortexDocsOrchestrator advisory mode"
+    - "Generate HTML from YAML plans"
+    - "Inject visualizations"
+    - "Apply glassmorphism theme"
+    - "Test responsive behavior"
+  
+  phase_4_validation:
+    - "HTML5 validation"
+    - "Accessibility (WCAG AA)"
+    - "Performance (Web Vitals)"
+    - "Cross-browser testing"
+    - "Mobile responsiveness"
+
+---
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+
+success_criteria:
+  content:
+    - "Each view has hero section with CORTEX logo"
+    - "Minimum 3 sections per view"
+    - "Content addresses all 3 audience roles"
+    - "No generic filler content"
+    - "Every claim backed by implementation evidence"
+  
+  visualizations:
+    - "At least 1 unique D3.js visualization per view"
+    - "At least 2 Mermaid diagrams per view"
+    - "All visualizations interactive (hover/click)"
+    - "Visualizations load without errors"
+    - "Mobile-responsive scaling"
+  
+  design:
+    - "Consistent glassmorphism theme"
+    - "Matches architecture/index.html reference"
+    - "Smooth animations (60fps)"
+    - "No layout shifts (CLS < 0.1)"
+    - "Accessible (keyboard nav, ARIA)"
+  
+  performance:
+    - "LCP < 2.5s"
+    - "FID < 100ms"
+    - "CLS < 0.1"
+    - "Page size < 500KB (excluding images)"
+    - "D3.js/Mermaid load time < 1s"
+
+---
+# ============================================================================
+# NEXT ACTIONS
+# ============================================================================
+
+next_actions:
+  immediate:
+    - "Create 01-getting-started.yaml"
+    - "Create 02-lens.yaml"
+    - "Create 03-mcp-tools.yaml"
+    - "Create 04-security.yaml"
+    - "Create 05-token-optimization.yaml"
+  
+  phase_2:
+    - "Create 06-toolkit-manager.yaml"
+    - "Create 07-knowledge.yaml"
+    - "Create 08-sts.yaml"
+    - "Create 09-learning-paths.yaml"
+    - "Create 10-story-viewer.yaml"
+  
+  phase_3:
+    - "Generate D3.js data files"
+    - "Create Mermaid diagrams"
+    - "Execute CortexDocsOrchestrator"
+    - "Validate and deploy"
+
+---
+*Master index for L2 views generation. Each view gets dedicated YAML plan with comprehensive content strategy.*

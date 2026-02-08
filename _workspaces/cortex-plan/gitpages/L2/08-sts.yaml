@@ -1,0 +1,698 @@
+# L2 VIEW: SHARPEN THE SAW (STS)
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/sts/index.html
+# Theme: Emerald (#10b981) - Growth & Improvement
+# Reference: http://localhost:8080/architecture/index.html
+
+---
+metadata:
+  view_id: "sts"
+  title: "Sharpen The Saw"
+  tagline: "Continuous Learning • Skill Development • Career Growth"
+  path: "docs/sts/index.html"
+  icon: "🔧"
+  theme_accent: "#10b981"
+  status: "PENDING"
+  effort_hours: 18
+  target_audience:
+    - "Software Engineers (skill development)"
+    - "Engineering Managers (team growth)"
+    - "Learning & Development (L&D) teams"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "Sharpen The Saw"
+  tagline: "Learn • Practice • Master — Powered by CORTEX"
+  description: |
+    Personalized learning paths, skill gap analysis, and hands-on challenges. 
+    CORTEX tracks your progress and recommends next steps based on your goals 
+    and current proficiency.
+  
+  stats_pills:
+    - label: "Learning Paths"
+      value: "25+"
+      icon: "🎓"
+    - label: "Challenges"
+      value: "150+"
+      icon: "💪"
+    - label: "Skills Tracked"
+      value: "80+"
+      icon: "📊"
+    - label: "Avg Completion"
+      value: "18 days"
+      icon: "⏱️"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  skill_gap_radar:
+    type: "d3-radar"
+    name: "Personal Skill Gap Analysis"
+    description: "Radar chart comparing current vs target proficiency across skill domains"
+    data_structure: |
+      {
+        "skills": [
+          "Architecture", "Security", "Testing", "Performance", 
+          "DevOps", "Domain Knowledge", "Communication", "Leadership"
+        ],
+        "profiles": [
+          {
+            "name": "Current Level",
+            "values": [0.7, 0.6, 0.8, 0.5, 0.7, 0.6, 0.8, 0.4],
+            "color": "#7b61ff"
+          },
+          {
+            "name": "Target (Senior)",
+            "values": [0.9, 0.85, 0.9, 0.8, 0.85, 0.8, 0.9, 0.7],
+            "color": "#10b981"
+          },
+          {
+            "name": "Team Average",
+            "values": [0.75, 0.7, 0.75, 0.65, 0.75, 0.7, 0.8, 0.55],
+            "color": "#f59e0b"
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Click skill to see recommended learning path"
+      - "Hover shows skill definition + assessment criteria"
+      - "Toggle between profiles (individual/team/target)"
+      - "Show gap score (target - current)"
+      - "Highlight top 3 gaps to focus on"
+    
+    unique_aspects:
+      - "Real-time updates from code reviews and challenges"
+      - "Peer comparison (anonymized)"
+      - "Historical progress tracking"
+
+  learning_path_timeline:
+    type: "d3-timeline"
+    name: "Learning Journey Timeline"
+    description: "Interactive timeline showing completed and planned learning activities"
+    data_structure: |
+      {
+        "activities": [
+          {
+            "date": "2026-01-15",
+            "type": "course",
+            "title": "SOLID Principles Deep Dive",
+            "duration": 8,
+            "status": "completed",
+            "skill": "Architecture"
+          },
+          {
+            "date": "2026-01-20",
+            "type": "challenge",
+            "title": "Refactor God Object",
+            "duration": 4,
+            "status": "completed",
+            "skill": "Architecture"
+          },
+          {
+            "date": "2026-01-28",
+            "type": "workshop",
+            "title": "OWASP Top 10 2021",
+            "duration": 6,
+            "status": "in_progress",
+            "skill": "Security"
+          },
+          {
+            "date": "2026-02-05",
+            "type": "course",
+            "title": "Advanced TDD Patterns",
+            "duration": 10,
+            "status": "planned",
+            "skill": "Testing"
+          }
+        ],
+        "milestones": [
+          {"date": "2026-01-31", "title": "Junior → Mid-Level", "achieved": true},
+          {"date": "2026-06-30", "title": "Mid-Level → Senior", "achieved": false}
+        ]
+      }
+    
+    interactive_features:
+      - "Brush to zoom into time period"
+      - "Click activity to see details and resources"
+      - "Drag planned activities to reschedule"
+      - "Filter by skill domain"
+      - "Show estimated time to milestone"
+
+  skill_tree_hierarchy:
+    type: "d3-tree"
+    name: "Skill Dependency Tree"
+    description: "Hierarchical tree showing skill prerequisites and progression"
+    data_structure: |
+      {
+        "name": "Software Engineering Mastery",
+        "children": [
+          {
+            "name": "Architecture",
+            "children": [
+              {
+                "name": "Design Patterns",
+                "status": "completed",
+                "children": [
+                  {"name": "Creational", "status": "completed"},
+                  {"name": "Structural", "status": "in_progress"},
+                  {"name": "Behavioral", "status": "locked"}
+                ]
+              },
+              {
+                "name": "SOLID Principles",
+                "status": "completed",
+                "children": [
+                  {"name": "SRP", "status": "completed"},
+                  {"name": "OCP", "status": "completed"},
+                  {"name": "LSP/ISP/DIP", "status": "completed"}
+                ]
+              },
+              {
+                "name": "Domain-Driven Design",
+                "status": "in_progress",
+                "children": [
+                  {"name": "Bounded Contexts", "status": "in_progress"},
+                  {"name": "Aggregates", "status": "locked"}
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Security",
+            "children": [
+              {
+                "name": "OWASP Top 10",
+                "status": "in_progress"
+              },
+              {
+                "name": "Secure Coding",
+                "status": "locked"
+              }
+            ]
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Click node to expand/collapse"
+      - "Color coding: green (completed), yellow (in progress), gray (locked)"
+      - "Hover shows learning resources"
+      - "Show critical path to target skill"
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS (Minimum 2)
+# ============================================================================
+
+mermaid_diagrams:
+  learning_flow:
+    type: "flowchart"
+    title: "Personalized Learning Flow"
+    code: |
+      flowchart TD
+        A[Initial Assessment] --> B{Skill Gaps<br/>Identified?}
+        B -->|Yes| C[Generate Learning Plan]
+        B -->|No| D[Explore Catalog]
+        C --> E[Prioritize by Impact]
+        E --> F{Time Available?}
+        F -->|High| G[Intensive Path<br/>4 weeks]
+        F -->|Medium| H[Balanced Path<br/>8 weeks]
+        F -->|Low| I[Gradual Path<br/>12 weeks]
+        G --> J[Daily Challenges]
+        H --> J
+        I --> J
+        J --> K{Challenge<br/>Completed?}
+        K -->|Yes| L[Award Badge]
+        K -->|No| M[Hints + Resources]
+        M --> J
+        L --> N[Update Skill Profile]
+        N --> O{Milestone<br/>Reached?}
+        O -->|Yes| P[🎉 Level Up!]
+        O -->|No| Q[Next Challenge]
+        P --> Q
+        Q --> J
+        
+        style A fill:#7b61ff,color:#fff
+        style P fill:#10b981,color:#fff
+        style L fill:#10b981,color:#fff
+
+  skill_levels:
+    type: "journey"
+    title: "Skill Progression Journey"
+    code: |
+      journey
+        title Software Engineering Career Progression
+        section Foundations (0-2 years)
+          Learn syntax & basics: 5: Novice
+          Understand OOP: 4: Novice
+          Write first tests: 3: Novice
+          Debug simple issues: 4: Novice
+        section Building (2-4 years)
+          Apply design patterns: 4: Junior
+          Write clean code: 5: Junior
+          TDD workflow: 4: Junior
+          Code reviews: 3: Junior
+        section Architecting (4-7 years)
+          Design systems: 5: Mid
+          SOLID principles: 5: Mid
+          Performance optimization: 4: Mid
+          Mentor juniors: 4: Mid
+        section Leading (7+ years)
+          Technical strategy: 5: Senior
+          Cross-team architecture: 5: Senior
+          Org-wide standards: 4: Senior
+          Thought leadership: 3: Senior
+
+  challenge_sequence:
+    type: "sequenceDiagram"
+    title: "Challenge Completion Flow"
+    code: |
+      sequenceDiagram
+        participant User
+        participant STS as STS System
+        participant CORTEX
+        participant Validator
+        participant BadgeEngine
+        
+        User->>STS: Start challenge
+        STS-->>User: Provide instructions + starter code
+        User->>CORTEX: Implement solution
+        CORTEX->>Validator: Run tests
+        Validator-->>CORTEX: Test results
+        CORTEX-->>User: Feedback
+        User->>STS: Submit solution
+        STS->>Validator: Final validation
+        Validator->>BadgeEngine: Check badge criteria
+        BadgeEngine-->>STS: Badge earned
+        STS->>User: Update skill profile
+        STS-->>User: 🏆 Badge awarded + Next challenge
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+sections:
+  overview:
+    title: "Why Sharpen The Saw?"
+    icon: "💡"
+    content_blocks:
+      - type: "philosophy"
+        title: "Stephen Covey's 7th Habit"
+        description: |
+          "Sharpen the saw means preserving and enhancing the greatest asset 
+          you have—you. It means having a balanced program for self-renewal."
+        
+        applied_to_engineering:
+          - "**Continuous Learning**: Technology evolves, so must you"
+          - "**Deliberate Practice**: Master skills through hands-on challenges"
+          - "**Skill Gap Analysis**: Know where you are vs where you want to be"
+          - "**Career Growth**: Advance from junior → mid → senior → staff"
+      
+      - type: "business_case"
+        title: "Organizational Benefits"
+        points:
+          - "**Retain Top Talent**: Engineers stay when they grow"
+          - "**Reduce Hiring Costs**: Develop internal talent vs external hires"
+          - "**Improve Code Quality**: Better skills = fewer bugs, less tech debt"
+          - "**Faster Onboarding**: Structured learning paths accelerate ramp-up"
+          - "**Innovation Culture**: Learning mindset drives innovation"
+      
+      - type: "metrics"
+        title: "STS Impact Metrics"
+        stats:
+          - label: "Skill Improvement"
+            value: "+35%"
+            description: "Avg skill score increase in 6 months"
+          - label: "Code Quality"
+            value: "+28%"
+            description: "Reduction in code review iterations"
+          - label: "Retention Rate"
+            value: "92%"
+            description: "Engineers using STS vs 78% baseline"
+          - label: "Time to Proficiency"
+            value: "-40%"
+            description: "Faster onboarding for new hires"
+
+  learning_paths:
+    title: "Curated Learning Paths"
+    icon: "🎓"
+    content_blocks:
+      - type: "path_catalog"
+        title: "Available Learning Paths (25+)"
+        paths:
+          - name: "Architecture Foundations"
+            duration: "6 weeks"
+            skills: ["SOLID", "Design Patterns", "Clean Code"]
+            level: "Junior → Mid"
+            challenges: 12
+            completion_rate: "78%"
+          
+          - name: "Security Champion"
+            duration: "8 weeks"
+            skills: ["OWASP Top 10", "Secure Coding", "Threat Modeling"]
+            level: "Mid → Senior"
+            challenges: 15
+            completion_rate: "65%"
+          
+          - name: "TDD Mastery"
+            duration: "4 weeks"
+            skills: ["Unit Testing", "Integration Testing", "TDD Workflow"]
+            level: "Junior → Mid"
+            challenges: 10
+            completion_rate: "82%"
+          
+          - name: "Performance Optimization"
+            duration: "6 weeks"
+            skills: ["Profiling", "Caching", "Database Tuning"]
+            level: "Mid → Senior"
+            challenges: 13
+            completion_rate: "70%"
+          
+          - name: "Cloud Native Architecture"
+            duration: "10 weeks"
+            skills: ["Microservices", "Kubernetes", "Observability"]
+            level: "Senior → Staff"
+            challenges: 18
+            completion_rate: "58%"
+      
+      - type: "path_structure"
+        title: "Learning Path Components"
+        components:
+          - name: "Theory Modules"
+            description: "Video lessons + reading materials from Knowledge Base"
+            time: "30% of path"
+          
+          - name: "Hands-On Challenges"
+            description: "Code challenges validated by CORTEX"
+            time: "50% of path"
+          
+          - name: "Real-World Projects"
+            description: "Apply skills to actual codebase improvements"
+            time: "20% of path"
+
+  challenges:
+    title: "Coding Challenges"
+    icon: "💪"
+    content_blocks:
+      - type: "challenge_catalog"
+        title: "Challenge Categories (150+)"
+        categories:
+          - name: "Architecture"
+            count: 25
+            examples:
+              - "Refactor God Object to SOLID classes"
+              - "Extract interface from concrete class"
+              - "Apply Strategy Pattern to conditionals"
+          
+          - name: "Security"
+            count: 20
+            examples:
+              - "Fix SQL injection vulnerability"
+              - "Implement secure password hashing"
+              - "Add input validation with whitelist"
+          
+          - name: "Testing"
+            count: 18
+            examples:
+              - "Write tests for legacy code"
+              - "Achieve 90% coverage on module"
+              - "Implement test doubles for external API"
+          
+          - name: "Performance"
+            count: 15
+            examples:
+              - "Optimize N+1 query problem"
+              - "Add caching layer to reduce latency"
+              - "Profile and fix memory leak"
+          
+          - name: "Refactoring"
+            count: 22
+            examples:
+              - "Extract method to reduce complexity"
+              - "Eliminate code duplication (DRY)"
+              - "Simplify nested conditionals"
+      
+      - type: "challenge_difficulty"
+        title: "Difficulty Levels"
+        levels:
+          - level: "Beginner"
+            duration: "30-60 min"
+            description: "Single concept, guided hints"
+            example: "Extract a function from repeated code"
+          
+          - level: "Intermediate"
+            duration: "1-2 hours"
+            description: "Multiple concepts, minimal hints"
+            example: "Refactor class to follow SRP and OCP"
+          
+          - level: "Advanced"
+            duration: "2-4 hours"
+            description: "Complex scenarios, no hints"
+            example: "Design microservice architecture with resilience patterns"
+          
+          - level: "Expert"
+            duration: "4-8 hours"
+            description: "Open-ended, real-world complexity"
+            example: "Optimize critical path in production system"
+
+  skill_tracking:
+    title: "Skill Profile & Progress Tracking"
+    icon: "📊"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Automated Skill Assessment"
+        description: |
+          CORTEX tracks your skill level across 80+ competencies by analyzing:
+          - Code you write (via code reviews)
+          - Challenges you complete
+          - Learning paths you finish
+          - Peer feedback and mentoring
+        
+        skill_domains:
+          - name: "Technical Skills"
+            count: 50
+            examples: ["Python", "React", "PostgreSQL", "Docker", "AWS"]
+          
+          - name: "Architecture & Design"
+            count: 15
+            examples: ["SOLID", "Design Patterns", "DDD", "Microservices"]
+          
+          - name: "Quality & Testing"
+            count: 10
+            examples: ["TDD", "Unit Testing", "Integration Testing", "E2E"]
+          
+          - name: "Security"
+            count: 8
+            examples: ["OWASP", "Secure Coding", "Threat Modeling", "Cryptography"]
+          
+          - name: "Soft Skills"
+            count: 12
+            examples: ["Communication", "Code Reviews", "Mentoring", "Leadership"]
+      
+      - type: "proficiency_levels"
+        title: "Skill Proficiency Scale"
+        levels:
+          - level: 1
+            name: "Novice"
+            description: "Aware of concept, no hands-on experience"
+            color: "#ef4444"
+          
+          - level: 2
+            name: "Beginner"
+            description: "Can apply with guidance, limited experience"
+            color: "#f59e0b"
+          
+          - level: 3
+            name: "Intermediate"
+            description: "Can apply independently, moderate experience"
+            color: "#fbbf24"
+          
+          - level: 4
+            name: "Advanced"
+            description: "Deep understanding, extensive experience"
+            color: "#10b981"
+          
+          - level: 5
+            name: "Expert"
+            description: "Authority on topic, can teach others"
+            color: "#059669"
+
+  badges_and_rewards:
+    title: "Badges & Recognition"
+    icon: "🏆"
+    content_blocks:
+      - type: "badge_system"
+        title: "Earn Badges for Milestones"
+        badges:
+          - name: "SOLID Champion"
+            icon: "🏛️"
+            criteria: "Complete all 5 SOLID challenges + refactor 3 classes"
+            rarity: "Common"
+            holders: 245
+          
+          - name: "Security Guardian"
+            icon: "🛡️"
+            criteria: "Fix 10 security vulnerabilities + pass OWASP quiz"
+            rarity: "Rare"
+            holders: 78
+          
+          - name: "TDD Evangelist"
+            icon: "✅"
+            criteria: "Achieve >90% coverage on 5 modules + mentor 2 engineers"
+            rarity: "Rare"
+            holders: 62
+          
+          - name: "Performance Wizard"
+            icon: "⚡"
+            criteria: "Optimize 3 critical paths with >30% improvement"
+            rarity: "Epic"
+            holders: 31
+          
+          - name: "Architecture Master"
+            icon: "🏗️"
+            criteria: "Complete Architecture path + design 2 systems"
+            rarity: "Legendary"
+            holders: 12
+      
+      - type: "leaderboard"
+        title: "STS Leaderboard (Monthly)"
+        description: "Recognize top learners across the organization"
+        categories:
+          - "Most challenges completed"
+          - "Most skills improved"
+          - "Most badges earned"
+          - "Best peer mentor (rated by mentees)"
+
+  personalized_recommendations:
+    title: "AI-Powered Recommendations"
+    icon: "🤖"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "CORTEX Recommends Next Steps"
+        description: |
+          Based on your current skills, goals, and recent activity, 
+          CORTEX suggests:
+          - Next challenge to attempt
+          - Learning path to pursue
+          - Skill to focus on (biggest gap)
+          - Peer to learn from (similar journey)
+        
+        recommendation_algorithm:
+          - step: "Analyze skill profile"
+            description: "Identify gaps relative to target level"
+          - step: "Consider learning style"
+            description: "Video vs reading vs hands-on preference"
+          - step: "Check time commitment"
+            description: "Available hours per week"
+          - step: "Leverage social graph"
+            description: "What peers with similar profile are learning"
+          - step: "Generate ranked list"
+            description: "Top 5 recommendations with rationale"
+
+  integration_with_work:
+    title: "Learn While You Work"
+    icon: "🔄"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Real Codebase Challenges"
+        description: |
+          Apply learning to actual work:
+          - CORTEX identifies refactoring opportunities in your codebase
+          - Suggests learning path to address them
+          - Validates improvements after implementation
+          - Awards badges for real-world impact
+        
+        example_workflow:
+          - step: "CORTEX scans your repo"
+            finding: "3 classes violate SRP"
+          - step: "Recommends learning"
+            action: "Complete 'SOLID Principles' path"
+          - step: "Presents challenge"
+            task: "Refactor User Manager to follow SRP"
+          - step: "Validates solution"
+            result: "✅ Passes SOLID checks"
+          - step: "Awards badge"
+            badge: "SOLID Champion (1/5 challenges)"
+
+  team_learning:
+    title: "Team Learning & Mentorship"
+    icon: "👥"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Collaborative Learning"
+        features:
+          - name: "Learning Circles"
+            description: "Small groups (4-6) work through path together"
+            benefit: "Peer support, shared accountability"
+          
+          - name: "Pair Challenges"
+            description: "Two engineers solve challenge collaboratively"
+            benefit: "Learn from each other's approaches"
+          
+          - name: "Mentorship Matching"
+            description: "CORTEX matches mentors and mentees by skill gaps"
+            benefit: "Structured guidance from experienced engineers"
+          
+          - name: "Team Dashboards"
+            description: "Managers see team skill profile and gaps"
+            benefit: "Identify training needs, allocate budget"
+
+---
+# ============================================================================
+# CALL TO ACTION
+# ============================================================================
+
+cta_section:
+  title: "Start Your Learning Journey"
+  description: "Take the assessment and get your personalized plan"
+  
+  quick_start:
+    - step: "Take skill assessment"
+      link: "/sts/assessment"
+      duration: "15 min"
+    - step: "Review recommended paths"
+      link: "/sts/paths"
+      duration: "5 min"
+    - step: "Start first challenge"
+      link: "/sts/challenges"
+      duration: "30 min"
+    - step: "Earn your first badge"
+      duration: "Complete path"
+  
+  example_commands:
+    - description: "Start skill assessment"
+      command: "cortex sts assess"
+    - description: "List learning paths"
+      command: "cortex sts paths --level mid"
+    - description: "Begin challenge"
+      command: "cortex sts challenge start architecture/solid-srp"
+    - description: "View your progress"
+      command: "cortex sts profile --show-gaps"
+
+---
+# ============================================================================
+# VISUALIZATION DATA FILES
+# ============================================================================
+
+data_files:
+  - name: "skill-gap-radar.json"
+    description: "Personal skill profile vs target"
+  - name: "learning-path-timeline.json"
+    description: "Learning activity history and plans"
+  - name: "skill-tree-hierarchy.json"
+    description: "Skill dependency tree with completion status"
+
+---
+*Sharpen The Saw view — continuous learning and career growth powered by CORTEX.*

@@ -1,0 +1,471 @@
+# =========================================================================
+# PHASE 8.3A - CONSOLIDATION FOUNDATION LAYER
+# =========================================================================
+# Authority: CORTEX Consolidation Architecture (3-Phase Sequential)
+# Date: 2026-01-31
+# Status: PLANNED
+# Dependencies: Phase 8.2 (LENS Intelligence)
+# Downstream: Phase 8.3B (Migration Layer)
+#
+# Purpose:
+#   Build detection and prevention infrastructure BEFORE consolidating code.
+#   This phase establishes governance gates that make duplication impossible.
+#   
+# Philosophy:
+#   "Stop the bleeding before treating the wound"
+#   - Detect duplication at commit time (pre-commit hook)
+#   - Block new violations from entering codebase
+#   - Gather metrics for informed Phase 8.3B/C decisions
+#   - Zero code deletions (additive only)
+#
+# Risk Profile: 🟢 LOW (No deletions, only new infrastructure)
+# =========================================================================
+
+phase:
+  id: "PHASE-8.3A"
+  name: "Consolidation Foundation Layer"
+  version: "1.0"
+  authority: "CORTEX Consolidation Architecture"
+  status: "PLANNED"
+  scheduled_start: "2026-02-03"
+  scheduled_end: "2026-02-07"
+  duration_days: 5
+  owner: "Asif Hussain"
+  
+# =========================================================================
+# ACCEPTANCE CRITERIA
+# =========================================================================
+acceptance_criteria:
+  
+  AC-8.3A-001: "DuplicationDetector Orchestrator Implemented"
+    description: "Orchestrator that detects code duplications using LENS analyzers"
+    status: "NOT_MET"
+    validation: |
+      - Orchestrator exists at cortex/orchestrators/support/duplication_detector_orchestrator.py
+      - Implements IOrchestrator interface
+      - Uses ASTAnalyzer to detect function/class duplication
+      - Uses GitHistoryAnalyzer to detect copy-paste patterns
+      - Generates duplication report with severity scores
+      - 100% unit test coverage
+    test_file: "tests/unit/orchestrators/support/test_duplication_detector_orchestrator.py"
+    
+  AC-8.3A-002: "Pre-Commit Hook Blocks Duplications"
+    description: "Git pre-commit hook that prevents new duplication patterns"
+    status: "NOT_MET"
+    validation: |
+      - Hook file exists at .git/hooks/pre-commit
+      - Detects new ExecutionContext definitions
+      - Detects new Registry definitions without BaseRegistry inheritance
+      - Detects new Orchestrator base classes
+      - Detects new wiring system implementations
+      - Can be bypassed with --no-verify (documented in CONTRIBUTING.md)
+      - Logs all violations to cortex/infrastructure/duplication_audit_log.txt
+    test_file: "tests/integration/test_pre_commit_hook_duplication_prevention.py"
+    
+  AC-8.3A-003: "Duplication Registry Established"
+    description: "Catalog of known duplications with severity and migration path"
+    status: "NOT_MET"
+    validation: |
+      - Registry file created at cortex/core/duplication_registry.py
+      - Contains 8 known duplication categories
+      - Each entry has: name, files, severity, consolidation_path, owner
+      - Severity scoring: CRITICAL (P0), HIGH (P1), MEDIUM (P2), LOW (P3)
+      - Registry is machine-readable for tooling
+      - Can be queried via CLI: `cortex duplication list`
+    test_file: "tests/unit/core/test_duplication_registry.py"
+    
+  AC-8.3A-004: "Duplication Metrics Dashboard Created"
+    description: "Real-time visibility into codebase duplication metrics"
+    status: "NOT_MET"
+    validation: |
+      - Dashboard HTML file created at cortex-lens/duplication-dashboard.html
+      - Shows 8 duplication categories with trends
+      - Displays prevention metrics (violations blocked)
+      - Shows migration path status for each category
+      - Auto-refreshes metrics weekly
+      - Accessible via `cortex lens dashboard duplication`
+    test_file: "tests/integration/test_duplication_dashboard.py"
+    
+  AC-8.3A-005: "Duplication Prevention Tests Comprehensive"
+    description: "Test suite that validates duplication prevention works"
+    status: "NOT_MET"
+    validation: |
+      - 45+ tests covering all 8 duplication categories
+      - Tests verify pre-commit hook blocks violations
+      - Tests verify metrics are recorded correctly
+      - Tests verify duplication registry is accurate
+      - Tests verify LENS analyzers detect true duplications
+      - Integration tests verify end-to-end prevention
+      - All tests pass with 95%+ code coverage
+    test_file: "tests/unit/consolidation/test_duplication_prevention.py"
+    
+  AC-8.3A-006: "Documentation and Runbook Complete"
+    description: "Team can understand and extend duplication prevention"
+    status: "NOT_MET"
+    validation: |
+      - Runbook created at docs/12-infrastructure/duplication-prevention-runbook.md
+      - Explains how pre-commit hook works
+      - Provides troubleshooting guide
+      - Shows how to add new duplication patterns to registry
+      - Shows how to bypass hook (--no-verify) with caution notice
+      - CONTRIBUTING.md updated with duplication policy
+      - ADR-8.3A created explaining foundation layer rationale
+    test_file: "N/A (documentation)"
+    
+# =========================================================================
+# DELIVERABLES
+# =========================================================================
+deliverables:
+
+  D1: "DuplicationDetector Orchestrator"
+    type: "Python Module"
+    location: "cortex/orchestrators/support/duplication_detector_orchestrator.py"
+    description: "Orchestrator that detects code duplications"
+    owner: "Asif Hussain"
+    dependencies:
+      - "cortex.brain.analysis.ast_analyzer"
+      - "cortex.brain.analysis.git_history_analyzer"
+      - "cortex.brain.analysis.comment_extractor"
+    capabilities:
+      - detect_exact_duplications()
+      - detect_semantic_duplications()
+      - detect_copy_paste_patterns()
+      - generate_duplication_report()
+      - suggest_consolidation_path()
+    test_coverage: "95%+"
+    
+  D2: "Pre-Commit Hook Implementation"
+    type: "Shell Script + Python"
+    location: ".git/hooks/pre-commit"
+    description: "Git hook that blocks duplication patterns"
+    owner: "Asif Hussain"
+    blocked_patterns:
+      - "class ExecutionContext:" (unless in cortex/brain/core/orchestrator_base.py)
+      - "class.*Registry:" (unless inherits from BaseRegistry)
+      - "class.*Orchestrator.*BaseOrchestrator:" (except approved list)
+      - "def bootstrap.*wiring():" (unless in cortex/wiring/)
+      - "class Orchestrator:" (except legacy compatibility layer)
+    test_coverage: "100%"
+    
+  D3: "Duplication Registry"
+    type: "Python Module"
+    location: "cortex/core/duplication_registry.py"
+    description: "Catalog of known duplications with metadata"
+    owner: "Asif Hussain"
+    categories: 8
+    entries_per_category: "1-3"
+    fields_per_entry:
+      - id (e.g., "DUP-001-BASE-CLASSES")
+      - name (e.g., "Competing Base Class Hierarchies")
+      - severity (CRITICAL, HIGH, MEDIUM, LOW)
+      - affected_files (list of 3+ files)
+      - consolidation_status (PENDING, IN_PROGRESS, COMPLETE)
+      - consolidation_path (reference to Phase 8.3B/C)
+      - notes (why consolidation is needed)
+    
+  D4: "Duplication Metrics Dashboard"
+    type: "HTML + JavaScript"
+    location: "cortex-lens/duplication-dashboard.html"
+    description: "Real-time visualization of duplication metrics"
+    owner: "Asif Hussain"
+    metrics_tracked:
+      - Total duplications (by severity)
+      - Violations blocked by pre-commit hook (weekly)
+      - Consolidation progress (per phase)
+      - Lines of duplicate code (by category)
+      - Team contributions to prevention
+    refresh_frequency: "Weekly"
+    
+  D5: "Test Suite - Duplication Prevention"
+    type: "Python Test Files"
+    location: "tests/consolidation/test_duplication_prevention.py"
+    description: "45+ tests for duplication detection and prevention"
+    owner: "Asif Hussain"
+    test_categories:
+      - "DuplicationDetector functionality (15 tests)"
+      - "Pre-commit hook enforcement (15 tests)"
+      - "Duplication registry accuracy (10 tests)"
+      - "Metrics collection (5 tests)"
+    coverage_target: "95%+"
+    
+  D6: "Documentation and Runbook"
+    type: "Markdown Files"
+    locations:
+      - "docs/12-infrastructure/duplication-prevention-runbook.md"
+      - "docs/10-contributing/duplication-policy.md"
+      - "CONTRIBUTING.md (updated section)"
+      - "docs/architecture/ADR-8.3A-consolidation-foundation.md"
+    owner: "Asif Hussain"
+    
+# =========================================================================
+# IMPLEMENTATION TASKS
+# =========================================================================
+tasks:
+
+  T1: "DuplicationDetector Orchestrator Implementation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 16
+    dependencies: []
+    subtasks:
+      - "Analyze LENS analyzer capabilities"
+      - "Design orchestrator interface (execute, report_format)"
+      - "Implement ASTAnalyzer integration"
+      - "Implement GitHistoryAnalyzer integration"
+      - "Implement CommentExtractor integration"
+      - "Add duplication severity scoring"
+      - "Add consolidation path suggestions"
+      - "Create 15 unit tests"
+      - "Create 5 integration tests"
+    
+  T2: "Pre-Commit Hook Development"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: ["T1"]
+    subtasks:
+      - "Design hook pattern matching rules"
+      - "Implement bash wrapper script"
+      - "Implement Python pattern detector"
+      - "Add whitelist/exception handling"
+      - "Add audit logging"
+      - "Create installation script"
+      - "Create 15 unit tests"
+      - "Create 5 integration tests"
+    
+  T3: "Duplication Registry Implementation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T1"]
+    subtasks:
+      - "Design registry schema"
+      - "Catalog 8 duplication categories"
+      - "Add severity scoring"
+      - "Add consolidation path references"
+      - "Create CLI commands (duplication list, duplication show)"
+      - "Create 10 unit tests"
+    
+  T4: "Metrics Dashboard Creation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 12
+    dependencies: ["T2", "T3"]
+    subtasks:
+      - "Design dashboard layout"
+      - "Implement metric data collection"
+      - "Create weekly metric aggregation job"
+      - "Design HTML/CSS/JS visualization"
+      - "Add chart for each duplication category"
+      - "Add trend analysis"
+      - "Create 5 integration tests"
+    
+  T5: "Test Suite Development"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 20
+    dependencies: ["T1", "T2", "T3", "T4"]
+    subtasks:
+      - "Create 15 DuplicationDetector tests"
+      - "Create 15 pre-commit hook tests"
+      - "Create 10 registry accuracy tests"
+      - "Create 5 metrics collection tests"
+      - "Create end-to-end integration tests"
+      - "Create false-positive prevention tests"
+      - "Achieve 95%+ code coverage"
+    
+  T6: "Documentation and Runbook"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T1", "T2", "T3", "T4", "T5"]
+    subtasks:
+      - "Write duplication prevention runbook"
+      - "Create duplication policy for CONTRIBUTING.md"
+      - "Write ADR explaining foundation layer"
+      - "Create troubleshooting guide"
+      - "Document how to extend detection patterns"
+      - "Create examples of blocked vs allowed code"
+    
+  T7: "Integration and Validation"
+    status: "NOT_STARTED"
+    assigned_to: "Asif Hussain"
+    estimated_hours: 8
+    dependencies: ["T1", "T2", "T3", "T4", "T5", "T6"]
+    subtasks:
+      - "Run full test suite (172+ existing tests + 45 new)"
+      - "Validate all ACs met"
+      - "Verify no false positives/negatives"
+      - "Performance test pre-commit hook (< 2 second latency)"
+      - "Generate final metrics report"
+      - "Prepare handoff to Phase 8.3B"
+    
+# =========================================================================
+# TEST STRATEGY
+# =========================================================================
+test_strategy:
+  
+  unit_tests:
+    target_coverage: "95%+"
+    test_files:
+      - "tests/unit/orchestrators/support/test_duplication_detector_orchestrator.py"
+      - "tests/unit/core/test_duplication_registry.py"
+      - "tests/unit/consolidation/test_duplication_prevention.py"
+    test_count: 35
+    
+  integration_tests:
+    test_files:
+      - "tests/integration/test_pre_commit_hook_duplication_prevention.py"
+      - "tests/integration/test_duplication_dashboard.py"
+      - "tests/integration/test_end_to_end_prevention.py"
+    test_count: 10
+    
+  regression_tests:
+    description: "Ensure Phase 8.3A doesn't break existing functionality"
+    test_files:
+      - "Run all 172+ existing tests"
+      - "Verify orchestrator wiring still works"
+      - "Verify LENS analyzers still work"
+    acceptance_criteria: "100% pass rate"
+    
+  false_positive_prevention:
+    description: "Validate pre-commit hook doesn't block legitimate code"
+    scenarios:
+      - "Allowed: ExecutionContext in cortex/brain/core/orchestrator_base.py"
+      - "Allowed: Registry classes inheriting from BaseRegistry"
+      - "Allowed: Approved orchestrator base classes"
+      - "Blocked: New ExecutionContext in orchestrators/"
+      - "Blocked: New Registry without BaseRegistry"
+      - "Blocked: New wiring system outside cortex/wiring/"
+    
+# =========================================================================
+# SUCCESS METRICS
+# =========================================================================
+success_metrics:
+  
+  M1: "Zero New Duplications"
+    description: "No new code duplication violations introduced"
+    measurement: "Pre-commit hook blocks per week"
+    target: "0-2 violations/week (caught by hook)"
+    baseline: "N/A (first phase)"
+    
+  M2: "Existing Duplications Cataloged"
+    description: "All 8 duplication categories in registry"
+    measurement: "Registry completeness"
+    target: "100% (8/8 categories)"
+    baseline: "0% (0/8)"
+    
+  M3: "Prevention Infrastructure Operational"
+    description: "All detection and prevention systems working"
+    measurement: "AC pass rate"
+    target: "100% (6/6 ACs)"
+    baseline: "0% (0/6)"
+    
+  M4: "Test Coverage Achieved"
+    description: "New code has high test coverage"
+    measurement: "Code coverage %"
+    target: "95%+"
+    baseline: "0%"
+    
+  M5: "Team Awareness"
+    description: "Team understands duplication prevention"
+    measurement: "Documentation completeness + training"
+    target: "100% (all docs written + training given)"
+    baseline: "0%"
+    
+# =========================================================================
+# DEPENDENCIES AND BLOCKERS
+# =========================================================================
+dependencies:
+  - "Phase 8.2 (LENS Intelligence) - COMPLETE"
+  - "ASTAnalyzer in cortex/brain/analysis/ast_analyzer.py"
+  - "GitHistoryAnalyzer in cortex/brain/analysis/git_history_analyzer.py"
+  - "CommentExtractor in cortex/brain/analysis/comment_extractor.py"
+  
+blockers: []
+  
+# =========================================================================
+# ROLLBACK PLAN
+# =========================================================================
+rollback:
+  description: "Phase 8.3A is additive (no deletions), so rollback is minimal"
+  steps:
+    - "Remove .git/hooks/pre-commit hook (developer can commit bypassed)"
+    - "Remove duplication_detector_orchestrator.py and tests"
+    - "Remove duplication_registry.py and tests"
+    - "Remove duplication metrics dashboard"
+    - "Restore CONTRIBUTING.md to previous version"
+  risk_level: "🟢 VERY LOW (no data loss, no production impact)"
+  
+# =========================================================================
+# HANDOFF TO PHASE 8.3B
+# =========================================================================
+handoff_criteria:
+  - "All 6 ACs met"
+  - "All 35 unit tests passing"
+  - "All 10 integration tests passing"
+  - "172+ existing tests still passing"
+  - "Pre-commit hook deployed to dev environment"
+  - "Duplication registry accurate and validated"
+  - "Metrics dashboard operational"
+  - "Documentation complete"
+  - "Team trained on prevention workflow"
+  
+handoff_deliverables:
+  - "Duplication registry (input to Phase 8.3B)"
+  - "Pre-commit hook (runs during Phase B/C)"
+  - "Metrics baseline (measure Phase B/C progress)"
+  - "Test suite (validate Phase B/C doesn't regress)"
+  - "Documentation (guide Phase B/C implementation)"
+
+# =========================================================================
+# RISK ASSESSMENT
+# =========================================================================
+risks:
+
+  R1: "LENS Analyzers Produce False Positives"
+    severity: "MEDIUM"
+    probability: "30%"
+    mitigation: "Create false-positive prevention tests (T5 subtask)"
+    contingency: "Whitelist exceptions in pre-commit hook"
+    
+  R2: "Pre-Commit Hook Too Strict"
+    severity: "LOW"
+    probability: "40%"
+    mitigation: "Implement exception list + whitelist patterns"
+    contingency: "Developers can bypass with --no-verify (documented)"
+    
+  R3: "Dashboard Metrics Inaccurate"
+    severity: "LOW"
+    probability: "20%"
+    mitigation: "Create duplication registry accuracy tests"
+    contingency: "Manual audit dashboard weekly"
+    
+  R4: "Performance Impact on Git Commits"
+    severity: "MEDIUM"
+    probability: "25%"
+    mitigation: "Optimize hook execution (target < 2 seconds)"
+    contingency: "Cache LENS analyzer results"
+    
+  R5: "Team Resistance to New Process"
+    severity: "LOW"
+    probability: "15%"
+    mitigation: "Clear documentation + training session"
+    contingency: "Make --no-verify easy with documentation"
+
+# =========================================================================
+# PHASE 8.3A COMPLETE DECLARATION
+# =========================================================================
+# This phase is COMPLETE when:
+# 1. All 6 acceptance criteria met
+# 2. All tests passing (45 new + 172 existing = 217 total)
+# 3. Duplication registry accurate
+# 4. Pre-commit hook deployed and operational
+# 5. Documentation complete and team trained
+# 6. Handoff criteria satisfied
+#
+# Phase Duration: 5 working days
+# Estimated Completion: 2026-02-07
+# 
+# Next Phase: PHASE-8.3B-CONSOLIDATION-MIGRATION.yaml
+# =========================================================================

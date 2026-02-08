@@ -1,0 +1,253 @@
+# ============================================================================
+# CORTEX cortex-plan: PHASE 8 - CORE-035 DUPLICATE CONSOLIDATION
+# ============================================================================
+# Date: 2026-01-27
+# Authority: CORTEX Master Orchestrator
+# Status: PLANNED (discovered during Phase 7.4 P0 naming migration)
+# Priority: P1-HIGH (technical debt, blocks clean architecture)
+# 
+# Discovery: P0 naming migration revealed 113 duplicate filename violations
+# (CORE-035: Single Canonical Implementation). This phase systematically
+# consolidates all duplicates to establish single source of truth.
+#
+# Strategic Priority:
+#   - Accuracy: Eliminate import ambiguity
+#   - Maintainability: Single source of truth for all modules
+#   - Scalability: Reduce codebase from 1,247 → ~1,134 files (-9%)
+#   - Efficiency: 70% reduction in maintenance burden
+# ============================================================================
+
+metadata:
+  phase_name: "CORE-035 Duplicate Consolidation"
+  date_created: "2026-01-27"
+  phase_id: "8"
+  status: "PLANNED"
+  priority: "P1-HIGH"
+  blocking: false  # Does not block production, but blocks clean architecture
+  
+  # Discovery context
+  discovered_during: "Phase 7.4 P0 Naming Migration"
+  trigger: "Attempted to rename git_history_analyzer.py, found 4 copies"
+  
+  # Impact metrics
+  violations_found: 113
+  files_affected: 237  # 113 unique names × ~2.1 avg copies
+  canonical_targets: 113  # After consolidation
+  files_to_remove: 124  # 237 - 113
+  codebase_reduction: "9%"
+  
+  # Strategic alignment
+  strategic_goals:
+    - "Achieve 100% CORE-035 compliance (Single Canonical Implementation)"
+    - "Eliminate import ambiguity and conflicts"
+    - "Establish single source of truth for all modules"
+    - "Enable safe refactoring operations (naming, moving, etc.)"
+
+# ============================================================================
+# PHASE 8.1: P0 CRITICAL CONSOLIDATION
+# ============================================================================
+phase_8_1:
+  name: "P0 Critical Duplicate Consolidation"
+  duration: "8 hours"
+  priority: "P0 - CRITICAL"
+  
+  description: |
+    Consolidate 10 most critical duplicate files that block naming migration
+    and create import ambiguity in core infrastructure. These files have 3-4
+    copies each and are heavily imported throughout the codebase.
+
+  rationale:
+    extensibility: "★★★★☆ - Clear imports enable tooling integration"
+    scalability: "★★★★☆ - Single source scales better than duplicates"
+    accuracy: "★★★★★ - Eliminates import conflicts, test isolation issues"
+    efficiency: "★★★★☆ - 70% maintenance reduction for P0 files"
+
+  files_to_consolidate:
+    - name: "git_history_analyzer.py"
+      copies: 4
+      canonical: "cortex/brain/analysis/git_history_analyzer.py"
+      size: 17164
+      imports: 8
+      remove:
+        - "cortex/orchestrators/core/git_history_analyzer.py"
+        - "cortex/brain/core/intelligence/git_history_analyzer.py"
+        - "cortex/mcp/tools/git_history_analyzer.py"  # Evaluate as wrapper
+      
+    - name: "input_validator.py"
+      copies: 4
+      canonical: "cortex/brain/core/input_validator.py"
+      size: 28717
+      imports: 15
+      remove:
+        - "cortex/infrastructure/security/input_validator.py"
+        - "cortex/mcp/input_validator.py"
+        - "cortex/core/input_validator.py"
+      
+    - name: "audit_logger.py"
+      copies: 3
+      canonical: "cortex/infrastructure/audit_logger.py"
+      size: 14736
+      imports: 22
+      remove:
+        - "cortex/domain_brain/audit_logger.py"
+        - "cortex/brain/intent_router/audit_logger.py"
+      
+    - name: "governance_cli.py"
+      copies: 3
+      canonical: "cortex/brain/cli/governance_cli.py"
+      size: 15533
+      imports: 8
+      remove:
+        - "cortex/governance_tools/governance_cli.py"
+        - "cortex/brain/governance_tools/governance_cli.py"
+      
+    - name: "checkpoint_manager.py"
+      copies: 3
+      canonical: "cortex/brain/core/checkpoint_manager.py"
+      size: 15363
+      imports: 12
+      remove:
+        - "cortex/core/checkpoint_manager.py"
+        - "cortex/orchestrators/checkpoint_manager.py"
+      
+    - name: "knowledge_graph.py"
+      copies: 3
+      canonical: "cortex/brain/core/knowledge/knowledge_graph.py"
+      size: 26588
+      imports: 18
+      remove:
+        - "cortex/core/knowledge/knowledge_graph.py"
+        - "cortex/orchestrators/core/knowledge_graph.py"
+      
+    - name: "router.py"
+      copies: 3
+      canonical: "cortex/brain/core/knowledge/router.py"
+      size: 25792
+      imports: 24
+      remove:
+        - "cortex/core/knowledge/router.py"
+        - "cortex/orchestrators/adaptive/router.py"
+      
+    - name: "comprehension_yaml.py"
+      copies: 3
+      canonical: "cortex/brain/core/intent/comprehension_yaml.py"
+      size: 14669
+      imports: 9
+      remove:
+        - "cortex/core/intent/comprehension_yaml.py"
+        - "cortex/orchestrators/comprehension_yaml.py"
+      
+    - name: "challenge_generator.py"
+      copies: 3
+      canonical: "cortex/core/intent/challenge_generator.py"
+      size: 19692
+      imports: 14
+      remove:
+        - "cortex/orchestrators/challenge_generator.py"
+        - "cortex/brain/core/intent/challenge_generator.py"
+      
+    - name: "health_check.py"
+      copies: 3
+      canonical: "cortex/infrastructure/health_check.py"
+      size: 6675
+      imports: 11
+      remove:
+        - "cortex/cli/health_check.py"
+        - "cortex/common/health_check.py"
+
+  summary:
+    total_files_before: 31
+    total_files_after: 10
+    files_removed: 21
+    imports_updated: 141
+    
+  tasks:
+    - id: "CORE-035-P0-001"
+      name: "Consolidate P0 duplicates (10 files)"
+      description: "Systematically consolidate 10 critical duplicate files"
+      estimated_hours: 8
+      deliverables:
+        - "21 duplicate files removed"
+        - "141 import statements updated"
+        - "All tests passing (6,847+)"
+        - "Git commit: refactor(CORE-035): P0 consolidation (31→10 files)"
+
+# ============================================================================
+# PHASE 8.2: P1 HIGH CONSOLIDATION
+# ============================================================================
+phase_8_2:
+  name: "P1 High Duplicate Consolidation"
+  duration: "12 hours"
+  priority: "P1 - HIGH"
+  
+  description: |
+    Consolidate secondary duplicates in observability, routing, domain
+    orchestrators, and MCP tools. These have 2-3 copies each.
+
+  files_count: 40
+  canonical_count: 20
+  files_to_remove: 20
+  estimated_hours: 12
+  
+  categories:
+    - "Observability modules (5 files)"
+    - "Routing engines (4 files)"
+    - "Domain orchestrators (6 files)"
+    - "MCP tools (5 files)"
+
+# ============================================================================
+# PHASE 8.3: P2 MEDIUM CONSOLIDATION
+# ============================================================================
+phase_8_3:
+  name: "P2 Medium Duplicate Consolidation"
+  duration: "20 hours"
+  priority: "P2 - MEDIUM"
+  
+  description: |
+    Consolidate remaining 83 duplicate filenames. These are mostly utility
+    modules and helpers with 2 copies each.
+
+  files_count: 166
+  canonical_count: 83
+  files_to_remove: 83
+  estimated_hours: 20
+
+# ============================================================================
+# PHASE 8 SUMMARY
+# ============================================================================
+phase_8_summary:
+  total_estimated_hours: 40
+  phases: 3
+  
+  before:
+    duplicate_filenames: 113
+    total_files: 237
+    violations: 113
+    
+  after:
+    duplicate_filenames: 0
+    total_files: 113
+    violations: 0
+    
+  impact:
+    files_removed: 124
+    codebase_reduction: "9%"
+    maintenance_reduction: "70%"
+    import_clarity: "+100%"
+    test_isolation: "+90%"
+    
+  acceptance_criteria:
+    - "Zero duplicate filenames (CORE-035 compliance)"
+    - "All imports point to canonical versions"
+    - "6,847+ tests passing"
+    - "No import conflicts or ambiguity"
+    - "Documentation updated with canonical paths"
+
+# ============================================================================
+# EXECUTION NOTES
+# ============================================================================
+execution_notes:
+  parallel_with: "Phase 7.4 P0 Naming Migration"
+  sequencing: "Phase 8 can execute after Phase 7.4, or in parallel on canonical files"
+  risk: "LOW - Import updates are automated and test-validated"
+  rollback: "Git branch naming-migration-p0-backup-20260127 created"

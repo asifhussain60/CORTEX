@@ -1,0 +1,519 @@
+# L2 VIEW: SECURITY PROTECTION
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/security/protection/index.html
+# Theme: Red (#ef4444) - Protection & Defense
+# Parent: Security (L2)
+# Reference: Pasted image showing Protection card
+
+---
+metadata:
+  view_id: "security-protection"
+  title: "Security Protection"
+  tagline: "RBAC • Input Validation • Secrets Management • Audit Logging"
+  path: "docs/security/protection/index.html"
+  icon: "🔒"
+  theme_accent: "#ef4444"
+  status: "PENDING"
+  effort_hours: 14
+  parent_view: "security"
+  target_audience:
+    - "Security Engineers (implementation)"
+    - "Backend Engineers (integration)"
+    - "DevOps Engineers (secrets management)"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "Security Protection"
+  tagline: "Multi-Layered Defense Against Unauthorized Access"
+  description: |
+    Enterprise-grade protection through role-based access control, comprehensive 
+    input validation, secure secrets management via environment variables, and 
+    hash-chain audit logging for governance compliance.
+  
+  stats_pills:
+    - label: "RBAC Roles"
+      value: "8"
+      icon: "👥"
+    - label: "Input Validators"
+      value: "25+"
+      icon: "✅"
+    - label: "Secrets Encrypted"
+      value: "100%"
+      icon: "🔐"
+    - label: "Audit Trail"
+      value: "Immutable"
+      icon: "📝"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  rbac_hierarchy:
+    type: "d3-tree"
+    name: "RBAC Role Hierarchy"
+    description: "Interactive tree showing role inheritance and permissions"
+    data_structure: |
+      {
+        "name": "System",
+        "children": [
+          {
+            "name": "Admin",
+            "permissions": ["*"],
+            "children": [
+              {"name": "Security Admin", "permissions": ["security.*", "audit.read"]},
+              {"name": "System Admin", "permissions": ["system.*", "user.manage"]}
+            ]
+          },
+          {
+            "name": "Developer",
+            "permissions": ["code.read", "code.write", "test.execute"],
+            "children": [
+              {"name": "Senior Developer", "permissions": ["...+", "deploy.staging"]},
+              {"name": "Junior Developer", "permissions": ["code.read", "test.execute"]}
+            ]
+          },
+          {
+            "name": "Viewer",
+            "permissions": ["*.read"],
+            "children": [
+              {"name": "Auditor", "permissions": ["audit.read", "logs.read"]},
+              {"name": "Guest", "permissions": ["docs.read"]}
+            ]
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Click role to expand permissions"
+      - "Hover shows inherited permissions"
+      - "Color coding: red (admin), blue (developer), green (viewer)"
+      - "Filter by permission type"
+
+  access_control_flow:
+    type: "d3-sankey"
+    name: "Access Control Decision Flow"
+    description: "Sankey showing request flow through RBAC validation"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "request", "label": "User Request", "color": "#7b61ff"},
+          {"id": "auth", "label": "Authentication", "color": "#06b6d4"},
+          {"id": "rbac", "label": "RBAC Check", "color": "#f59e0b"},
+          {"id": "resource", "label": "Resource Access", "color": "#10b981"},
+          {"id": "audit", "label": "Audit Log", "color": "#8b5cf6"},
+          {"id": "denied", "label": "Access Denied", "color": "#ef4444"}
+        ],
+        "links": [
+          {"source": "request", "target": "auth", "value": 1000},
+          {"source": "auth", "target": "rbac", "value": 950},
+          {"source": "auth", "target": "denied", "value": 50},
+          {"source": "rbac", "target": "resource", "value": 850},
+          {"source": "rbac", "target": "denied", "value": 100},
+          {"source": "resource", "target": "audit", "value": 850},
+          {"source": "denied", "target": "audit", "value": 150}
+        ]
+      }
+    
+    interactive_features:
+      - "Hover shows percentage approved/denied"
+      - "Click node to see detailed logs"
+      - "Animated flow"
+
+  audit_timeline:
+    type: "d3-timeline"
+    name: "Audit Event Timeline (24h)"
+    description: "Real-time timeline of security events"
+    data_structure: |
+      {
+        "events": [
+          {"timestamp": "2026-01-31T08:00", "type": "login", "user": "admin", "result": "success"},
+          {"timestamp": "2026-01-31T08:15", "type": "rbac_check", "resource": "/api/users", "result": "granted"},
+          {"timestamp": "2026-01-31T09:00", "type": "secret_access", "secret": "DB_PASSWORD", "result": "accessed"},
+          {"timestamp": "2026-01-31T10:30", "type": "rbac_check", "resource": "/api/admin", "result": "denied"},
+          {"timestamp": "2026-01-31T11:00", "type": "input_validation", "field": "email", "result": "rejected"}
+        ]
+      }
+    
+    interactive_features:
+      - "Brush to select time range"
+      - "Filter by event type, user, result"
+      - "Click event to see full audit entry"
+      - "Color coding: green (success), red (denied), yellow (warning)"
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS
+# ============================================================================
+
+mermaid_diagrams:
+  rbac_enforcement:
+    type: "flowchart"
+    title: "RBAC Enforcement Flow"
+    code: |
+      flowchart TD
+        A[User Request] --> B{Authenticated?}
+        B -->|No| C[Return 401]
+        B -->|Yes| D{Extract User Roles}
+        D --> E{Check Required<br/>Permissions}
+        E --> F{User Has<br/>Permission?}
+        F -->|No| G[Return 403 Forbidden]
+        F -->|Yes| H[Allow Access]
+        G --> I[Log Denial Event]
+        H --> J[Log Access Event]
+        I --> K[Hash-Chain Audit]
+        J --> K
+        
+        style A fill:#7b61ff,color:#fff
+        style C fill:#ef4444,color:#fff
+        style G fill:#ef4444,color:#fff
+        style H fill:#10b981,color:#fff
+
+  secrets_management:
+    type: "sequenceDiagram"
+    title: "Secrets Management Workflow"
+    code: |
+      sequenceDiagram
+        participant App
+        participant EnvLoader
+        participant Vault as Secrets Vault
+        participant Audit
+        
+        App->>EnvLoader: Request secret (DB_PASSWORD)
+        EnvLoader->>EnvLoader: Check environment variable
+        alt Secret in env
+          EnvLoader-->>App: Return from env
+        else Secret not in env
+          EnvLoader->>Vault: Fetch from vault
+          Vault-->>EnvLoader: Encrypted secret
+          EnvLoader->>EnvLoader: Decrypt
+          EnvLoader-->>App: Return secret
+        end
+        App->>Audit: Log secret access (NOT value)
+        Note over Audit: AC_SECRET_ACCESS:<br/>user, secret_name, timestamp
+
+  input_validation_layers:
+    type: "mindmap"
+    title: "Input Validation Layers"
+    code: |
+      mindmap
+        root((Input<br/>Validation))
+          Type Validation
+            String length
+            Numeric range
+            Boolean type
+            Array/Object structure
+          Format Validation
+            Email regex
+            URL format
+            Phone number
+            Date/Time format
+          Business Logic
+            Unique constraints
+            Foreign key checks
+            State validation
+          Security
+            SQL injection patterns
+            XSS payload detection
+            Command injection
+            Path traversal
+          Sanitization
+            HTML encode
+            URL encode
+            Strip dangerous chars
+            Whitelist approach
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+sections:
+  rbac_overview:
+    title: "Role-Based Access Control (RBAC)"
+    icon: "👥"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "8 Built-In Roles, Unlimited Custom"
+        description: |
+          CORTEX RBAC enforces least-privilege access control through hierarchical 
+          roles with inherited permissions.
+        
+        built_in_roles:
+          - role: "System Admin"
+            permissions: ["*"]
+            description: "Full system access, user management, configuration"
+          
+          - role: "Security Admin"
+            permissions: ["security.*", "audit.read", "compliance.*"]
+            description: "Security configuration, audit review, compliance management"
+          
+          - role: "Developer"
+            permissions: ["code.*", "test.*", "deploy.staging"]
+            description: "Code access, testing, staging deployment"
+          
+          - role: "Senior Developer"
+            permissions: ["...+", "deploy.production", "architecture.*"]
+            description: "All developer permissions + production deployment + architecture decisions"
+          
+          - role: "Auditor"
+            permissions: ["audit.read", "logs.read", "compliance.read"]
+            description: "Read-only access to audit logs and compliance reports"
+          
+          - role: "Viewer"
+            permissions: ["*.read"]
+            description: "Read-only access to all resources"
+          
+          - role: "API User"
+            permissions: ["api.execute"]
+            description: "API access for integrations"
+          
+          - role: "Guest"
+            permissions: ["docs.read"]
+            description: "Documentation access only"
+      
+      - type: "implementation"
+        title: "RBAC Implementation"
+        code: |
+          # cortex/security/rbac.py
+          from functools import wraps
+          from cortex.security.roles import RoleManager
+          
+          def require_permission(permission: str):
+              """Decorator to enforce RBAC on functions"""
+              def decorator(func):
+                  @wraps(func)
+                  def wrapper(*args, **kwargs):
+                      user = get_current_user()
+                      if not RoleManager.has_permission(user, permission):
+                          audit_log.log_denial(user, permission)
+                          raise PermissionDenied(f"Missing permission: {permission}")
+                      
+                      audit_log.log_access(user, permission)
+                      return func(*args, **kwargs)
+                  return wrapper
+              return decorator
+          
+          # Usage
+          @require_permission("deploy.production")
+          def deploy_to_production(app_name: str):
+              # Only users with deploy.production permission can execute
+              ...
+
+  input_validation:
+    title: "Comprehensive Input Validation"
+    icon: "✅"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "25+ Validators, Whitelist-First Approach"
+        description: |
+          Every input validated BEFORE processing. Whitelist approach (allow 
+          known-good) preferred over blacklist (block known-bad).
+        
+        validation_categories:
+          - category: "Type & Structure"
+            validators: ["string_length", "numeric_range", "boolean_check", "array_validation", "object_schema"]
+          
+          - category: "Format"
+            validators: ["email_regex", "url_format", "phone_number", "datetime_format", "uuid_validation"]
+          
+          - category: "Security"
+            validators: ["sql_injection_pattern", "xss_payload_detection", "command_injection", "path_traversal", "ldap_injection"]
+          
+          - category: "Business Logic"
+            validators: ["unique_constraint", "foreign_key_check", "state_validation", "rate_limit_check"]
+      
+      - type: "code_example"
+        title: "Input Validation Example"
+        code: |
+          # cortex/security/validators.py
+          from cortex.security.validation import validate_input, ValidationRule
+          
+          user_input_rules = [
+              ValidationRule("email", type="email", required=True),
+              ValidationRule("password", type="string", min_length=12, pattern=r"^(?=.*[A-Z])(?=.*[0-9]).*$"),
+              ValidationRule("age", type="int", min=18, max=120),
+              ValidationRule("bio", type="string", max_length=500, sanitize=True)
+          ]
+          
+          @validate_input(user_input_rules)
+          def create_user(email: str, password: str, age: int, bio: str):
+              # All inputs validated before function executes
+              # Invalid inputs raise ValidationError with details
+              ...
+
+  secrets_management:
+    title: "Secrets Management via Environment Variables"
+    icon: "🔐"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Zero Hardcoded Secrets, 100% Encrypted at Rest"
+        description: |
+          All secrets (API keys, DB passwords, tokens) stored in environment 
+          variables or secure vaults. NEVER hardcoded in codebase.
+        
+        best_practices:
+          - "Use `.env` files locally (gitignored)"
+          - "Use platform env vars in production (Heroku, AWS, Docker)"
+          - "Rotate secrets regularly (30-90 days)"
+          - "Encrypt `.env` files if committed (sops, git-crypt)"
+          - "Audit secret access (log WHO accessed WHAT, not the value)"
+      
+      - type: "example"
+        title: "Secrets Usage Pattern"
+        code: |
+          # ❌ BAD: Hardcoded secret
+          db_password = "super_secret_123"
+          
+          # ✅ GOOD: Environment variable
+          import os
+          db_password = os.environ["DB_PASSWORD"]
+          
+          # ✅ BETTER: Secrets manager with fallback
+          from cortex.security.secrets import get_secret
+          db_password = get_secret("DB_PASSWORD", required=True)
+          
+          # ✅ BEST: Encrypted vault with audit
+          from cortex.security.vault import SecureVault
+          vault = SecureVault()
+          db_password = vault.get("DB_PASSWORD", audit=True)
+
+  audit_logging:
+    title: "Hash-Chain Audit Logging"
+    icon: "📝"
+    content_blocks:
+      - type: "feature_explanation"
+        title: "Immutable Audit Trail for Governance Compliance"
+        description: |
+          Every security event logged with hash-chain integrity. Tampering 
+          detection via cryptographic hashing of previous log entries.
+        
+        logged_events:
+          - "Authentication attempts (success/failure)"
+          - "RBAC permission checks (granted/denied)"
+          - "Secret access (who, what, when — NOT the value)"
+          - "Input validation failures"
+          - "Configuration changes"
+          - "Deployment events"
+      
+      - type: "hash_chain_explanation"
+        title: "How Hash-Chain Works"
+        steps:
+          - step: "Log Entry 1"
+            data: '{"event": "login", "user": "admin", "timestamp": "..."}'
+            hash: "hash_1 = SHA256(data_1)"
+          
+          - step: "Log Entry 2"
+            data: '{"event": "rbac_check", "result": "granted", "prev_hash": "hash_1"}'
+            hash: "hash_2 = SHA256(data_2 + hash_1)"
+          
+          - step: "Log Entry 3"
+            data: '{"event": "secret_access", "secret": "DB_PASSWORD", "prev_hash": "hash_2"}'
+            hash: "hash_3 = SHA256(data_3 + hash_2)"
+          
+          - step: "Validation"
+            description: "Recompute all hashes. If any hash doesn't match, chain is broken = tampering detected"
+      
+      - type: "code_example"
+        title: "Audit Logging Implementation"
+        code: |
+          # cortex/governance/audit_logger.py
+          import hashlib
+          import json
+          from datetime import datetime
+          
+          class AuditLogger:
+              def __init__(self):
+                  self.last_hash = "0" * 64  # Genesis hash
+              
+              def log(self, event_type: str, details: dict):
+                  entry = {
+                      "timestamp": datetime.utcnow().isoformat(),
+                      "event_type": event_type,
+                      "details": details,
+                      "prev_hash": self.last_hash
+                  }
+                  
+                  # Compute hash of this entry
+                  entry_json = json.dumps(entry, sort_keys=True)
+                  current_hash = hashlib.sha256(entry_json.encode()).hexdigest()
+                  entry["hash"] = current_hash
+                  
+                  # Store entry (DB, file, etc.)
+                  self.store(entry)
+                  
+                  # Update last hash for next entry
+                  self.last_hash = current_hash
+                  
+                  return current_hash
+
+  integration:
+    title: "Integration with CORTEX Orchestrators"
+    icon: "🔗"
+    content_blocks:
+      - type: "orchestrator_integration"
+        description: "All orchestrators enforce protection by default"
+        
+        examples:
+          - orchestrator: "TDDOrchestrator"
+            protection: "Requires code.write permission to execute"
+            audit: "Logs test execution attempts"
+          
+          - orchestrator: "DeploymentOrchestrator"
+            protection: "deploy.production permission for prod deployments"
+            audit: "Logs deployment events with hash-chain"
+          
+          - orchestrator: "SecurityOrchestrator"
+            protection: "security.* permission to modify security config"
+            audit: "Logs all security changes"
+
+---
+# ============================================================================
+# CALL TO ACTION
+# ============================================================================
+
+cta_section:
+  title: "Implement Protection in Your System"
+  description: "Enable RBAC, input validation, and audit logging"
+  
+  quick_start:
+    - step: "Configure RBAC roles"
+      command: "cortex security rbac --configure"
+    - step: "Enable input validation"
+      command: "cortex security validation --enable-all"
+    - step: "Set up secrets vault"
+      command: "cortex security secrets --init-vault"
+    - step: "Enable audit logging"
+      command: "cortex security audit --enable-hash-chain"
+  
+  next_views:
+    - text: "Security Assessment"
+      link: "../assessment/"
+      description: "STRIDE threat modeling and CWE detection"
+    - text: "Security Compliance"
+      link: "../compliance/"
+      description: "OWASP Top 10 and compliance standards"
+
+---
+# ============================================================================
+# VISUALIZATION DATA FILES
+# ============================================================================
+
+data_files:
+  - name: "rbac-hierarchy.json"
+    description: "Role hierarchy tree with permissions"
+  - name: "access-control-flow.json"
+    description: "Sankey diagram of access control decisions"
+  - name: "audit-timeline.json"
+    description: "24-hour security event timeline"
+
+---
+*Security Protection view — RBAC, input validation, secrets management, and hash-chain audit logging.*

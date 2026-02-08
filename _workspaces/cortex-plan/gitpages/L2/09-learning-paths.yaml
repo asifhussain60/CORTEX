@@ -1,0 +1,708 @@
+# L2 VIEW: LEARNING PATHS
+# Version: 1.0 | Created: 2026-01-31
+# Path: docs/learning-paths/index.html
+# Theme: Purple (#7b61ff) - Education & Mastery
+# Reference: http://localhost:8080/architecture/index.html
+
+---
+metadata:
+  view_id: "learning-paths"
+  title: "Learning Paths"
+  tagline: "Structured • Guided • Progressive"
+  path: "docs/learning-paths/index.html"
+  icon: "🎓"
+  theme_accent: "#7b61ff"
+  status: "PENDING"
+  effort_hours: 16
+  target_audience:
+    - "Engineers advancing careers"
+    - "L&D teams designing curriculum"
+    - "Engineering managers planning training"
+
+---
+# ============================================================================
+# HERO SECTION
+# ============================================================================
+
+hero:
+  layout: "300x300 CORTEX logo left-justified"
+  logo_path: "../assets/images/CORTEX-logo-512.png"
+  logo_size: "300x300px"
+  title: "CORTEX Learning Paths"
+  tagline: "From Novice to Expert in Structured Steps"
+  description: |
+    25+ professionally designed learning paths covering architecture, security, 
+    testing, performance, and leadership. Each path combines theory, hands-on 
+    challenges, and real-world application.
+  
+  stats_pills:
+    - label: "Learning Paths"
+      value: "25+"
+      icon: "🎓"
+    - label: "Total Modules"
+      value: "180+"
+      icon: "📚"
+    - label: "Avg Completion"
+      value: "6 weeks"
+      icon: "⏱️"
+    - label: "Success Rate"
+      value: "76%"
+      icon: "✅"
+
+---
+# ============================================================================
+# D3.JS VISUALIZATIONS
+# ============================================================================
+
+d3_visualizations:
+  path_dependency_network:
+    type: "d3-force"
+    name: "Learning Path Dependencies"
+    description: "Interactive graph showing path relationships and prerequisites"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "python-fundamentals", "category": "foundation", "level": "beginner", "duration": 4},
+          {"id": "clean-code", "category": "architecture", "level": "beginner", "duration": 3},
+          {"id": "solid-principles", "category": "architecture", "level": "intermediate", "duration": 6},
+          {"id": "design-patterns", "category": "architecture", "level": "intermediate", "duration": 8},
+          {"id": "tdd-basics", "category": "testing", "level": "beginner", "duration": 4},
+          {"id": "tdd-advanced", "category": "testing", "level": "intermediate", "duration": 6},
+          {"id": "owasp-top10", "category": "security", "level": "intermediate", "duration": 8},
+          {"id": "ddd-fundamentals", "category": "architecture", "level": "advanced", "duration": 10},
+          {"id": "microservices", "category": "architecture", "level": "advanced", "duration": 12}
+        ],
+        "links": [
+          {"source": "python-fundamentals", "target": "clean-code", "type": "prerequisite"},
+          {"source": "clean-code", "target": "solid-principles", "type": "prerequisite"},
+          {"source": "solid-principles", "target": "design-patterns", "type": "prerequisite"},
+          {"source": "design-patterns", "target": "ddd-fundamentals", "type": "prerequisite"},
+          {"source": "tdd-basics", "target": "tdd-advanced", "type": "prerequisite"},
+          {"source": "clean-code", "target": "tdd-basics", "type": "recommended"},
+          {"source": "design-patterns", "target": "microservices", "type": "prerequisite"}
+        ],
+        "categories": {
+          "foundation": "#10b981",
+          "architecture": "#7b61ff",
+          "testing": "#06b6d4",
+          "security": "#ef4444"
+        }
+      }
+    
+    interactive_features:
+      - "Drag nodes to explore prerequisites"
+      - "Hover shows path details (duration, level, modules)"
+      - "Click to view full curriculum"
+      - "Node size = path duration (weeks)"
+      - "Edge color = prerequisite (red) vs recommended (yellow)"
+      - "Filter by category or level"
+      - "Show critical path to target role"
+    
+    unique_aspects:
+      - "Highlight completed paths (green border)"
+      - "Show your current position in network"
+      - "Suggest next optimal path"
+
+  completion_funnel:
+    type: "d3-sankey"
+    name: "Path Completion Funnel"
+    description: "Sankey showing progression from enrollment to completion"
+    data_structure: |
+      {
+        "nodes": [
+          {"id": "enrolled", "label": "Enrolled", "color": "#7b61ff"},
+          {"id": "module1", "label": "Module 1 Complete", "color": "#8b5cf6"},
+          {"id": "module2", "label": "Module 2 Complete", "color": "#a78bfa"},
+          {"id": "module3", "label": "Module 3 Complete", "color": "#c4b5fd"},
+          {"id": "completed", "label": "Path Completed", "color": "#10b981"},
+          {"id": "dropped", "label": "Dropped", "color": "#ef4444"}
+        ],
+        "links": [
+          {"source": "enrolled", "target": "module1", "value": 1000},
+          {"source": "enrolled", "target": "dropped", "value": 100},
+          {"source": "module1", "target": "module2", "value": 850},
+          {"source": "module1", "target": "dropped", "value": 150},
+          {"source": "module2", "target": "module3", "value": 750},
+          {"source": "module2", "target": "dropped", "value": 100},
+          {"source": "module3", "target": "completed", "value": 700},
+          {"source": "module3", "target": "dropped", "value": 50}
+        ]
+      }
+    
+    interactive_features:
+      - "Hover shows conversion rates"
+      - "Click node to see cohort details"
+      - "Animated flow"
+      - "Filter by specific path or cohort"
+
+  skill_progression_timeline:
+    type: "d3-timeline"
+    name: "Recommended Career Timeline"
+    description: "Timeline showing optimal path sequence for career goals"
+    data_structure: |
+      {
+        "roles": [
+          {
+            "role": "Junior Engineer",
+            "start_month": 0,
+            "end_month": 12,
+            "paths": [
+              {"name": "Python Fundamentals", "start": 0, "duration": 4},
+              {"name": "Clean Code", "start": 4, "duration": 3},
+              {"name": "TDD Basics", "start": 7, "duration": 4},
+              {"name": "Git & Collaboration", "start": 11, "duration": 2}
+            ]
+          },
+          {
+            "role": "Mid-Level Engineer",
+            "start_month": 12,
+            "end_month": 36,
+            "paths": [
+              {"name": "SOLID Principles", "start": 12, "duration": 6},
+              {"name": "Design Patterns", "start": 18, "duration": 8},
+              {"name": "TDD Advanced", "start": 26, "duration": 6},
+              {"name": "OWASP Top 10", "start": 32, "duration": 8}
+            ]
+          },
+          {
+            "role": "Senior Engineer",
+            "start_month": 36,
+            "end_month": 60,
+            "paths": [
+              {"name": "DDD Fundamentals", "start": 36, "duration": 10},
+              {"name": "Microservices Architecture", "start": 46, "duration": 12},
+              {"name": "Performance Optimization", "start": 58, "duration": 6}
+            ]
+          }
+        ]
+      }
+    
+    interactive_features:
+      - "Brush to zoom into time period"
+      - "Click path to see curriculum"
+      - "Toggle between different career tracks"
+      - "Show current position marker"
+      - "Estimate time to target role"
+
+---
+# ============================================================================
+# MERMAID DIAGRAMS (Minimum 2)
+# ============================================================================
+
+mermaid_diagrams:
+  path_structure:
+    type: "flowchart"
+    title: "Learning Path Structure"
+    code: |
+      flowchart TD
+        A[Learning Path] --> B[Theory Modules]
+        A --> C[Hands-On Challenges]
+        A --> D[Real-World Projects]
+        A --> E[Assessments]
+        
+        B --> B1[Video Lessons]
+        B --> B2[Reading Materials]
+        B --> B3[Interactive Demos]
+        
+        C --> C1[Guided Challenges]
+        C --> C2[Independent Challenges]
+        C --> C3[Code Katas]
+        
+        D --> D1[Refactoring Exercises]
+        D --> D2[Feature Implementation]
+        D --> D3[Bug Fixes]
+        
+        E --> E1[Module Quizzes]
+        E --> E2[Final Project]
+        E --> E3[Peer Review]
+        
+        B1 --> F[Progress Tracking]
+        C2 --> F
+        D2 --> F
+        E2 --> F
+        F --> G{Completion<br/>Criteria Met?}
+        G -->|Yes| H[🏆 Badge Awarded]
+        G -->|No| I[Continue Learning]
+        I --> B
+        
+        style A fill:#7b61ff,color:#fff
+        style H fill:#10b981,color:#fff
+
+  career_tracks:
+    type: "mindmap"
+    title: "Career Track Learning Paths"
+    code: |
+      mindmap
+        root((Career<br/>Tracks))
+          Backend Engineer
+            Python Fundamentals
+            Clean Code
+            SOLID Principles
+            Design Patterns
+            REST API Design
+            Database Optimization
+            Microservices
+          Frontend Engineer
+            JavaScript Fundamentals
+            React/Vue/Angular
+            State Management
+            Performance Optimization
+            Accessibility (A11y)
+            UI/UX Best Practices
+          Full-Stack Engineer
+            Backend Foundations
+            Frontend Foundations
+            API Integration
+            DevOps Basics
+            System Design
+          Security Engineer
+            Secure Coding
+            OWASP Top 10
+            Threat Modeling
+            Penetration Testing
+            Incident Response
+          DevOps Engineer
+            Linux Fundamentals
+            CI/CD Pipelines
+            Docker & Kubernetes
+            Infrastructure as Code
+            Monitoring & Observability
+          Architect
+            DDD Fundamentals
+            Microservices Architecture
+            Cloud Native Patterns
+            System Design Interview
+            Technical Leadership
+
+  module_sequence:
+    type: "sequenceDiagram"
+    title: "Module Learning Sequence"
+    code: |
+      sequenceDiagram
+        participant Learner
+        participant Platform as Learning Platform
+        participant CORTEX
+        participant Validator
+        
+        Learner->>Platform: Enroll in path
+        Platform-->>Learner: Module 1: Theory
+        Learner->>Platform: Watch videos + read docs
+        Platform->>Learner: Module 1 Quiz
+        Learner->>Platform: Submit quiz
+        Platform->>Validator: Validate answers
+        Validator-->>Platform: ✅ Pass (80%+)
+        
+        Platform-->>Learner: Module 2: Challenge
+        Learner->>CORTEX: Implement solution
+        CORTEX->>Validator: Run tests
+        Validator-->>CORTEX: ✅ All tests pass
+        CORTEX-->>Learner: Feedback + next challenge
+        
+        Platform-->>Learner: Module 3: Project
+        Learner->>Platform: Submit project
+        Platform->>Validator: Automated review
+        Validator->>Platform: Request peer review
+        Platform->>Learner: Peer feedback
+        Learner->>Platform: Revise + resubmit
+        Platform->>Validator: Final validation
+        Validator-->>Platform: ✅ Approved
+        
+        Platform->>Learner: 🏆 Path completed!
+
+---
+# ============================================================================
+# CONTENT SECTIONS
+# ============================================================================
+
+sections:
+  overview:
+    title: "Structured Learning for Career Growth"
+    icon: "🎯"
+    content_blocks:
+      - type: "business_case"
+        title: "Why Learning Paths?"
+        points:
+          - "**Clear Progression**: Know exactly what to learn next"
+          - "**Industry-Aligned**: Paths match real job requirements"
+          - "**Hands-On Focus**: 70% practical, 30% theory"
+          - "**Self-Paced**: Complete at your own speed"
+          - "**Credential**: Badges recognized by hiring managers"
+      
+      - type: "path_statistics"
+        title: "Learning Path Metrics"
+        stats:
+          - label: "Total Paths"
+            value: "25+"
+            description: "Across all domains"
+          - label: "Active Learners"
+            value: "1,200+"
+            description: "Currently enrolled"
+          - label: "Paths Completed"
+            value: "3,800+"
+            description: "All-time"
+          - label: "Avg Rating"
+            value: "4.7/5"
+            description: "Learner satisfaction"
+
+  path_catalog:
+    title: "Available Learning Paths"
+    icon: "📚"
+    content_blocks:
+      - type: "paths_by_category"
+        title: "Architecture & Design (8 Paths)"
+        paths:
+          - name: "Clean Code Fundamentals"
+            duration: "3 weeks"
+            level: "Beginner"
+            modules: 6
+            challenges: 10
+            description: "Master readable, maintainable code"
+          
+          - name: "SOLID Principles"
+            duration: "6 weeks"
+            level: "Intermediate"
+            modules: 10
+            challenges: 15
+            description: "Deep dive into SRP, OCP, LSP, ISP, DIP"
+          
+          - name: "Design Patterns in Practice"
+            duration: "8 weeks"
+            level: "Intermediate"
+            modules: 12
+            challenges: 20
+            description: "Creational, Structural, Behavioral patterns"
+          
+          - name: "Domain-Driven Design"
+            duration: "10 weeks"
+            level: "Advanced"
+            modules: 15
+            challenges: 18
+            description: "Bounded contexts, aggregates, tactical patterns"
+          
+          - name: "Microservices Architecture"
+            duration: "12 weeks"
+            level: "Advanced"
+            modules: 18
+            challenges: 22
+            description: "Design, deploy, and manage microservices"
+      
+      - type: "paths_by_category"
+        title: "Security (5 Paths)"
+        paths:
+          - name: "Secure Coding Practices"
+            duration: "4 weeks"
+            level: "Beginner"
+            modules: 8
+            challenges: 12
+          
+          - name: "OWASP Top 10 Deep Dive"
+            duration: "8 weeks"
+            level: "Intermediate"
+            modules: 10
+            challenges: 15
+          
+          - name: "Threat Modeling"
+            duration: "6 weeks"
+            level: "Advanced"
+            modules: 9
+            challenges: 10
+          
+          - name: "CWE Pattern Detection"
+            duration: "5 weeks"
+            level: "Intermediate"
+            modules: 6
+            challenges: 12
+          
+          - name: "Security Champion Program"
+            duration: "12 weeks"
+            level: "Advanced"
+            modules: 20
+            challenges: 25
+      
+      - type: "paths_by_category"
+        title: "Testing & Quality (4 Paths)"
+        paths:
+          - name: "TDD Fundamentals"
+            duration: "4 weeks"
+            level: "Beginner"
+            modules: 7
+            challenges: 12
+          
+          - name: "Advanced TDD Patterns"
+            duration: "6 weeks"
+            level: "Intermediate"
+            modules: 10
+            challenges: 15
+          
+          - name: "Integration Testing Strategies"
+            duration: "5 weeks"
+            level: "Intermediate"
+            modules: 8
+            challenges: 10
+          
+          - name: "E2E Testing & Automation"
+            duration: "6 weeks"
+            level: "Advanced"
+            modules: 9
+            challenges: 12
+      
+      - type: "paths_by_category"
+        title: "Performance & Scalability (4 Paths)"
+        paths:
+          - name: "Performance Fundamentals"
+            duration: "4 weeks"
+            level: "Beginner"
+            modules: 7
+            challenges: 10
+          
+          - name: "Database Optimization"
+            duration: "6 weeks"
+            level: "Intermediate"
+            modules: 10
+            challenges: 14
+          
+          - name: "Caching Strategies"
+            duration: "5 weeks"
+            level: "Intermediate"
+            modules: 8
+            challenges: 12
+          
+          - name: "High-Performance Systems"
+            duration: "8 weeks"
+            level: "Advanced"
+            modules: 12
+            challenges: 16
+      
+      - type: "paths_by_category"
+        title: "Leadership & Communication (4 Paths)"
+        paths:
+          - name: "Code Review Excellence"
+            duration: "3 weeks"
+            level: "All"
+            modules: 6
+            challenges: 8
+          
+          - name: "Technical Documentation"
+            duration: "4 weeks"
+            level: "All"
+            modules: 7
+            challenges: 10
+          
+          - name: "Mentoring Engineers"
+            duration: "5 weeks"
+            level: "Senior"
+            modules: 9
+            challenges: 6
+          
+          - name: "Technical Leadership"
+            duration: "8 weeks"
+            level: "Senior"
+            modules: 12
+            challenges: 10
+
+  path_structure_deep_dive:
+    title: "Inside a Learning Path"
+    icon: "🔬"
+    content_blocks:
+      - type: "example_path"
+        title: "Example: SOLID Principles (6 weeks)"
+        structure:
+          week_1:
+            title: "Week 1: Single Responsibility Principle"
+            theory:
+              - "Video: What is SRP? (15 min)"
+              - "Reading: SRP in real codebases (30 min)"
+              - "Interactive demo: Identify SRP violations (20 min)"
+            practice:
+              - "Challenge: Extract responsibilities from God Object"
+              - "Challenge: Refactor UserManager to separate concerns"
+            assessment:
+              - "Quiz: SRP concepts (10 questions)"
+          
+          week_2:
+            title: "Week 2: Open/Closed Principle"
+            theory:
+              - "Video: OCP explained (18 min)"
+              - "Reading: Strategy Pattern for OCP (40 min)"
+            practice:
+              - "Challenge: Replace conditionals with polymorphism"
+              - "Challenge: Extend behavior without modifying class"
+            assessment:
+              - "Quiz: OCP scenarios (12 questions)"
+          
+          weeks_3_5:
+            title: "Weeks 3-5: LSP, ISP, DIP"
+            description: "Similar structure for each principle"
+          
+          week_6:
+            title: "Week 6: Final Project"
+            project:
+              - "Refactor real codebase module to follow all 5 SOLID principles"
+              - "Write tests to verify adherence"
+              - "Document design decisions"
+              - "Peer review (2 peers)"
+      
+      - type: "time_breakdown"
+        title: "Time Allocation (Per Week)"
+        breakdown:
+          - activity: "Video lessons"
+            time: "1-2 hours"
+            percentage: "20%"
+          - activity: "Reading & demos"
+            time: "2-3 hours"
+            percentage: "30%"
+          - activity: "Hands-on challenges"
+            time: "3-4 hours"
+            percentage: "40%"
+          - activity: "Quizzes & reviews"
+            time: "1 hour"
+            percentage: "10%"
+
+  completion_criteria:
+    title: "Completion & Certification"
+    icon: "🏆"
+    content_blocks:
+      - type: "requirements"
+        title: "Path Completion Requirements"
+        criteria:
+          - requirement: "Complete all modules"
+            weight: "Mandatory"
+            description: "Watch videos, read materials, complete demos"
+          
+          - requirement: "Pass all quizzes"
+            weight: "80%+ score"
+            description: "Multiple attempts allowed"
+          
+          - requirement: "Complete 80% of challenges"
+            weight: "Minimum"
+            description: "At least 12 of 15 challenges"
+          
+          - requirement: "Final project approved"
+            weight: "Mandatory"
+            description: "Passes automated + peer review"
+          
+          - requirement: "Peer review participation"
+            weight: "Mandatory"
+            description: "Review 2 peers' projects"
+      
+      - type: "badge_system"
+        title: "Earned Credentials"
+        badges:
+          - name: "Path Completion Badge"
+            description: "Displayed on profile, shareable on LinkedIn"
+            example: "🏆 SOLID Principles - Completed 2026-01-31"
+          
+          - name: "Skill Level Increase"
+            description: "Automatic skill profile update"
+            example: "Architecture: Beginner → Intermediate"
+          
+          - name: "Leaderboard Recognition"
+            description: "Top 10% earners get featured"
+          
+          - name: "Certificate (PDF)"
+            description: "Downloadable certificate with path details"
+
+  personalization:
+    title: "Personalized Learning Experience"
+    icon: "🎨"
+    content_blocks:
+      - type: "adaptive_pacing"
+        title: "Adaptive Learning Pace"
+        description: |
+          CORTEX adjusts difficulty and pacing based on your performance:
+          - Struggling with concept? Extra examples and hints provided
+          - Breezing through? Advanced challenges unlocked early
+          - Prefer videos? More video content recommended
+          - Prefer hands-on? Challenge-heavy path suggested
+      
+      - type: "personalization_features"
+        features:
+          - name: "Learning Style Detection"
+            description: "Visual, auditory, kinesthetic — adapt content format"
+          
+          - name: "Time Commitment Flexibility"
+            description: "Intensive (20h/week), Balanced (10h/week), Gradual (5h/week)"
+          
+          - name: "Skill Gap Focus"
+            description: "Prioritize modules addressing biggest gaps"
+          
+          - name: "Career Goal Alignment"
+            description: "Recommend paths matching target role"
+
+  social_learning:
+    title: "Learn with Others"
+    icon: "👥"
+    content_blocks:
+      - type: "collaborative_features"
+        title: "Social Learning Tools"
+        features:
+          - name: "Learning Circles"
+            description: "Join cohorts of 4-6 learners starting same path"
+            benefit: "Accountability, peer support, shared deadlines"
+          
+          - name: "Discussion Forums"
+            description: "Path-specific forums for Q&A and tips"
+            moderation: "Peer + CORTEX-assisted moderation"
+          
+          - name: "Peer Code Review"
+            description: "Required for final projects, builds review skills"
+            process: "Submit → 2 peers review → revise → approve"
+          
+          - name: "Study Groups"
+            description: "Schedule virtual/in-person sessions"
+            tools: "Video chat integration, screen sharing"
+      
+      - type: "mentorship_integration"
+        title: "Mentorship Program"
+        description: |
+          Connect with experienced engineers who completed the path:
+          - 1-on-1 mentorship (optional, paid or volunteer)
+          - Office hours (group Q&A sessions)
+          - AMA sessions with path creators
+          - Guest lectures from industry experts
+
+---
+# ============================================================================
+# CALL TO ACTION
+# ============================================================================
+
+cta_section:
+  title: "Find Your Path"
+  description: "Explore learning paths tailored to your goals"
+  
+  quick_links:
+    - text: "Browse All Paths"
+      link: "/learning-paths"
+      description: "25+ paths across all domains"
+    - text: "Career Path Recommender"
+      link: "/learning-paths/recommend"
+      description: "Get personalized path suggestions"
+    - text: "Popular Paths"
+      link: "/learning-paths/popular"
+      description: "See what others are learning"
+  
+  example_commands:
+    - description: "List all paths"
+      command: "cortex learn paths list"
+    - description: "Enroll in path"
+      command: "cortex learn enroll solid-principles"
+    - description: "View progress"
+      command: "cortex learn progress"
+    - description: "Get recommendations"
+      command: "cortex learn recommend --role senior"
+
+---
+# ============================================================================
+# VISUALIZATION DATA FILES
+# ============================================================================
+
+data_files:
+  - name: "path-dependency-network.json"
+    description: "Force-directed graph of path prerequisites"
+  - name: "completion-funnel.json"
+    description: "Sankey showing enrollment to completion"
+  - name: "skill-progression-timeline.json"
+    description: "Career timeline with recommended paths"
+
+---
+*Learning Paths view — 25+ structured paths for career advancement.*
