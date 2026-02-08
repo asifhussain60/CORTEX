@@ -16,8 +16,8 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 3
 
 from pathlib import Path
 from typing import List, Optional, Dict, Any
-from tree_sitter import Parser, Node
-from tree_sitter_languages import get_language, get_parser
+from tree_sitter import Parser, Language, Node
+import tree_sitter_javascript as ts_javascript
 
 from cortex.lens.adapters.language_adapter import LanguageAdapter
 from cortex.lens.models.polyglot_ast_result import (
@@ -50,8 +50,8 @@ class JavaScriptAdapter(LanguageAdapter):
     
     def __init__(self):
         """Initialize JavaScriptAdapter with tree-sitter parser."""
-        self.language = get_language("javascript")
-        self.parser = get_parser("javascript")
+        self.language = Language(ts_javascript.language())
+        self.parser = Parser(self.language)
     
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """

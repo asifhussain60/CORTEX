@@ -17,8 +17,7 @@ Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 3
 
 from pathlib import Path
 from typing import List, Optional, Dict, Any
-from tree_sitter import Parser, Node
-from tree_sitter_languages import get_language, get_parser
+from tree_sitter import Parser, Language, Node
 
 from cortex.lens.adapters.language_adapter import LanguageAdapter
 from cortex.lens.models.polyglot_ast_result import (
@@ -51,9 +50,15 @@ class JavaAdapter(LanguageAdapter):
     """
     
     def __init__(self):
-        """Initialize JavaAdapter with tree-sitter parser."""
-        self.language = get_language("java")
-        self.parser = get_parser("java")
+        """Initialize JavaAdapter with tree-sitter parser (requires tree-sitter-java)."""
+        try:
+            import tree_sitter_java as ts_java
+            self.language = Language(ts_java.language())
+            self.parser = Parser(self.language)
+        except ImportError:
+            # Fallback if Java not installed
+            self.language = None
+            self.parser = None
     
     def parse_file(self, file_path: Path) -> PolyglotASTResult:
         """

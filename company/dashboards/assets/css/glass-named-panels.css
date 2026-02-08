@@ -1,0 +1,507 @@
+/**
+ * CORTEX Glassmorphism Design System - Named Panels
+ * Version: 4.0.0
+ * 
+ * Semantic panel taxonomy with 10 named panel types.
+ * Each panel has a specific purpose and visual treatment.
+ * 
+ * Panel Categories:
+ * 1. Display Panels (glass-card-display, glass-panel-*)
+ * 2. Interactive Panels (glass-card-clickable)
+ * 3. Layout Panels (panel-tetris, panel-grid-cards, panel-compact-cards)
+ * 4. Hero Panels (panel-intro, panel-hero-glass)
+ * 5. Specialized Panels (panel-neon-glass, panel-blob-glass)
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+ * License: Source-Available (Use Allowed, No Contributions)
+ */
+
+/* ============================================
+   DISPLAY PANELS (Non-Interactive)
+   ============================================ */
+
+/**
+ * glass-card-display - Standard display panel
+ * Used for: Section containers, content blocks, informational panels
+ * Features: Subtle glass effect, no hover state
+ */
+.glass-card-display {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass-md);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/**
+ * glass-panel-* - Colored accent panels
+ * Used for: Category sections, feature groups
+ * Variants: purple, cyan, emerald, amber, rose
+ */
+.glass-panel-purple {
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(123, 97, 255, 0.05));
+  border-left: 4px solid var(--orch-core, #7b61ff);
+}
+
+.glass-panel-cyan {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+  border-left: 4px solid var(--orch-domain, #00d4ff);
+}
+
+.glass-panel-emerald {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border-left: 4px solid var(--orch-support, #10b981);
+}
+
+.glass-panel-amber {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+  border-left: 4px solid var(--orch-planning, #f59e0b);
+}
+
+.glass-panel-rose {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+  border-left: 4px solid var(--orch-tdd, #ef4444);
+}
+
+/* ============================================
+   INTERACTIVE PANELS (Clickable/Hoverable)
+   ============================================ */
+
+/**
+ * glass-card-clickable - Interactive card with hover effects
+ * Used for: Navigation cards, feature tiles, clickable panels
+ * Features: Hover lift, subtle animations, shimmer effect
+ */
+.glass-card-clickable {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass-md);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition-glass);
+}
+
+/* Shimmer overlay effect */
+.glass-card-clickable::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 45%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: glassShimmer 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-card-clickable:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-glass-hover);
+  background: var(--glass-bg-hover);
+}
+
+.glass-card-clickable:hover::before {
+  animation: glassShimmer 2s ease-in-out infinite;
+}
+
+.glass-card-clickable:active {
+  transform: translateY(-2px) scale(1.005);
+}
+
+/* ============================================
+   LAYOUT PANELS (Grid Systems)
+   ============================================ */
+
+/**
+ * panel-tetris - Compact tile grid layout
+ * Used for: Metric grids, dashboard tiles, stat displays
+ * Features: Small gaps, compact tiles, hover highlights
+ */
+.panel-tetris {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass-md);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--gap-sm);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.panel-tetris__tile {
+  background: var(--glass-bg-tile);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.panel-tetris__tile:hover {
+  background: var(--glass-bg-light-medium);
+  border-color: var(--glass-border-subtle);
+  transform: translateY(-2px);
+}
+
+/**
+ * panel-grid-cards - Spacious card grid
+ * Used for: Feature cards, content previews, large tiles
+ * Features: Large gaps, card emphasis, hover lift
+ */
+.panel-grid-cards {
+  background: var(--glass-bg-base-low);
+  backdrop-filter: blur(var(--glass-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--gap-lg);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.panel-grid-cards__card {
+  background: var(--glass-bg-card);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  transition: var(--transition-glass);
+}
+
+.panel-grid-cards__card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-glass-lg);
+  border-color: var(--glass-border-standard);
+}
+
+/**
+ * panel-compact-cards - Medium density card grid
+ * Used for: List views, directory pages, catalog displays
+ * Features: Medium gaps, balanced layout, hover emphasis
+ */
+.panel-compact-cards {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--gap-md);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.panel-compact-cards__card {
+  background: var(--glass-bg-card);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: var(--transition-glass);
+}
+
+.panel-compact-cards__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glass-md);
+  border-color: var(--glass-border-accent);
+}
+
+/* ============================================
+   HERO PANELS (Landing Sections)
+   ============================================ */
+
+/**
+ * panel-intro - Hero introduction section
+ * Used for: Landing page hero, feature intros, welcome sections
+ * Features: Gradient background, large padding, emphasized content
+ */
+.panel-intro {
+  background: var(--glass-bg-gradient-hero);
+  backdrop-filter: blur(var(--glass-blur-lg));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+  border: 1px solid var(--glass-border-standard);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hero);
+  padding: var(--space-2xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-intro::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--glass-bg-gradient-inner-glow);
+  pointer-events: none;
+}
+
+/**
+ * panel-hero-glass - Large hero section with emphasis
+ * Used for: Main landing heroes, product showcases
+ * Features: Deep blur, strong shadows, visual prominence
+ */
+.panel-hero-glass {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-lg));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+  border: 2px solid var(--glass-border-standard);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hero);
+  padding: var(--space-2xl);
+}
+
+/* ============================================
+   SPECIALIZED PANELS
+   ============================================ */
+
+/**
+ * panel-neon-glass - Neon-accented glass panel
+ * Used for: CTAs, highlighted features, premium content
+ * Features: Neon border, cyan glow, attention-grabbing
+ */
+.panel-neon-glass {
+  background: var(--glass-bg-deep);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass-lg),
+              0 0 30px rgba(0, 212, 255, 0.3);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-neon-glass::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: var(--glass-border-gradient-neon);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+/**
+ * panel-blob-glass - Morphing glass panel
+ * Used for: Interactive elements, organic layouts, dynamic content
+ * Features: Elastic morphing, smooth transitions, playful feel
+ */
+.panel-blob-glass {
+  background: var(--glass-bg-base);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  box-shadow: var(--shadow-glass-md);
+  padding: var(--space-lg);
+  transition: var(--transition-morph);
+}
+
+.panel-blob-glass:hover {
+  border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+  transform: scale(1.02);
+}
+
+/* ============================================
+   ORCHESTRATOR CATEGORY CARDS
+   ============================================ */
+
+/**
+ * Orchestrator-specific accent colors
+ * Used for: Color-coded orchestrator categories
+ */
+:root {
+  --orch-core: #7b61ff;
+  --orch-domain: #00d4ff;
+  --orch-support: #10b981;
+  --orch-planning: #f59e0b;
+  --orch-tdd: #ef4444;
+}
+
+/**
+ * orch-category - Base orchestrator category styling
+ * Used with: orch-category-core, orch-category-domain, orch-category-support
+ */
+.orch-category {
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.orch-category-core {
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(123, 97, 255, 0.05));
+  border-left: 4px solid var(--orch-core);
+}
+
+.orch-category-core:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+              0 0 40px rgba(123, 97, 255, 0.25),
+              inset 0 0 0 1px rgba(123, 97, 255, 0.3);
+}
+
+.orch-category-domain {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+  border-left: 4px solid var(--orch-domain);
+}
+
+.orch-category-domain:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+              0 0 40px rgba(0, 212, 255, 0.25),
+              inset 0 0 0 1px rgba(0, 212, 255, 0.3);
+}
+
+.orch-category-support {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border-left: 4px solid var(--orch-support);
+}
+
+.orch-category-support:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+              0 0 40px rgba(16, 185, 129, 0.25),
+              inset 0 0 0 1px rgba(16, 185, 129, 0.3);
+}
+
+/* Icon pulse animation on hover */
+.glass-card-clickable:hover .card-icon {
+  animation: subtleFloat 2s ease-in-out infinite;
+}
+
+/* ============================================
+   HERO INTRODUCTION SPECIFIC
+   ============================================ */
+
+/**
+ * hero-introduction - Special hero class from approved view
+ * Used for: Main page introduction section
+ * Features: Enhanced hero styling with logo integration
+ */
+.hero-introduction {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+}
+
+.hero-introduction__logo {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.3));
+  animation: subtleFloat 6s ease-in-out infinite;
+}
+
+.hero-introduction__title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.hero-introduction__subtitle {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .panel-tetris {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--gap-sm);
+  }
+  
+  .panel-grid-cards {
+    grid-template-columns: 1fr;
+    gap: var(--gap-md);
+  }
+  
+  .panel-compact-cards {
+    grid-template-columns: 1fr;
+    gap: var(--gap-sm);
+  }
+  
+  .panel-intro,
+  .panel-hero-glass {
+    padding: var(--space-lg);
+  }
+  
+  .hero-introduction__logo {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-tetris {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-introduction__logo {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-card-clickable::before,
+  .panel-neon-glass::before,
+  .panel-blob-glass {
+    animation: none;
+  }
+  
+  .glass-card-clickable:hover,
+  .panel-grid-cards__card:hover,
+  .panel-compact-cards__card:hover,
+  .panel-tetris__tile:hover,
+  .panel-blob-glass:hover {
+    transform: none;
+  }
+  
+  .hero-introduction__logo {
+    animation: none;
+  }
+}

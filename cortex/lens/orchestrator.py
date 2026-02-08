@@ -1255,13 +1255,19 @@ class LENSOrchestrator:
                 "Config": [".yaml", ".yml", ".json", ".xml", ".config"],
             }
             
-            # Count files by language
+            # Count files by language (skip common large directories)
+            SKIP_DIRS = {'node_modules', 'bower_components', '.git', '__pycache__', '.venv', 'venv', 'dist', 'build', 'out'}
+            
             file_counts = {}
             total_source_files = 0
             for lang, exts in language_extensions.items():
                 count = 0
                 for ext in exts:
-                    count += len(list(self.repo_path.rglob(f"*{ext}")))
+                    # Use more efficient scanning with skip logic
+                    for file_path in self.repo_path.rglob(f"*{ext}"):
+                        # Check if any parent directory should be skipped
+                        if not any(skip_dir in file_path.parts for skip_dir in SKIP_DIRS):
+                            count += 1
                 if count > 0:
                     file_counts[lang] = count
                     total_source_files += count

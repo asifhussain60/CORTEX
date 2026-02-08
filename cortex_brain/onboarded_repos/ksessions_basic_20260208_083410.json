@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "repo_path": "D:\\PROJECTS\\KSESSIONS",
+  "timestamp": "2026-02-08T08:34:10.500356",
+  "file_counts": {
+    ".cs": 245,
+    ".py": 319,
+    ".js": 15833,
+    ".ts": 10038,
+    ".json": 1555,
+    ".yaml": 31,
+    ".yml": 174,
+    ".md": 1798
+  },
+  "total_files": 29993,
+  "security_issues": [
+    {
+      "file": "CORTEX\\src\\plugins\\code_review_plugin.py",
+      "issue": "Potential secret",
+      "severity": "P1"
+    }
+  ]
+}
