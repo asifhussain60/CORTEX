@@ -82,6 +82,8 @@ class ValidationService {
      * Check description contradiction
      */
     _checkDescriptionContradiction(data) {
+        if (!data) return;
+        
         const desc = (data.metadata?.description || '').toLowerCase();
         const summary = (data.overview?.business_summary || '').toLowerCase();
         
@@ -113,6 +115,8 @@ class ValidationService {
      * Check LOC inconsistency
      */
     _checkLOCInconsistency(data) {
+        if (!data) return;
+        
         const loc = data.overview?.lines_of_code || 0;
         const languages = data.architecture?.languages || {};
         const totalLanguageLOC = Object.values(languages).reduce((sum, val) => sum + val, 0);
@@ -131,6 +135,8 @@ class ValidationService {
      * Check files inconsistency
      */
     _checkFilesInconsistency(data) {
+        if (!data) return;
+        
         const files = data.overview?.total_files || 0;
         const languages = data.architecture?.languages || {};
         
@@ -148,6 +154,8 @@ class ValidationService {
      * Check dependency inconsistency
      */
     _checkDependencyInconsistency(data) {
+        if (!data) return;
+        
         const direct = data.dependencies?.direct_count || 0;
         const transitive = data.dependencies?.transitive_count || 0;
         
@@ -165,6 +173,8 @@ class ValidationService {
      * Check health score consistency
      */
     _checkHealthScoreConsistency(data) {
+        if (!data) return;
+        
         const healthScore = data.metadata?.health_score || 0;
         const riskScore = data.metadata?.risk_score || 0;
         

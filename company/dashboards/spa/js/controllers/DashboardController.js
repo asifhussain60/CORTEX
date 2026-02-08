@@ -95,11 +95,15 @@ class DashboardController {
                 // Load from service
                 data = await this.repositoryService.loadRepository(repoName);
                 
-                // Validate integrity BEFORE rendering
-                const validation = this.validationService.validateDataIntegrity(data);
-                
-                if (!validation.valid) {
-                    console.error('[Validation] Integrity issues:', validation.issues);
+                // Validate integrity BEFORE rendering (only if data loaded)
+                if (data) {
+                    const validation = this.validationService.validateDataIntegrity(data);
+                    
+                    if (!validation.valid) {
+                        console.error('[Validation] Integrity issues:', validation.issues);
+                    }
+                } else {
+                    console.warn('[Controller] No data loaded - skipping validation');
                 }
                 
                 // Cache validated data

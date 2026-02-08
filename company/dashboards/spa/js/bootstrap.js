@@ -40,10 +40,11 @@
         // PHASE 2: Register Embedded Data (file:// protocol support)
         // ====================================================================
         
-        const embeddedDataScripts = document.querySelectorAll('script[data-repo-data]');
+        const embeddedDataScripts = document.querySelectorAll('script[type="application/json"][id^="data-"]');
         embeddedDataScripts.forEach(script => {
             try {
-                const repoName = script.dataset.repoData;
+                // Extract repo name from id="data-ksessions" -> "ksessions"
+                const repoName = script.id.replace('data-', '');
                 const data = JSON.parse(script.textContent);
                 repositoryService.registerEmbeddedData(repoName, data);
                 console.log(`[Bootstrap] Embedded data registered: ${repoName}`);
