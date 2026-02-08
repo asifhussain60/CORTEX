@@ -1,0 +1,396 @@
+/**
+ * CORTEX Repository Dashboard - Design Tokens CSS
+ * Dark blue glassmorphism theme with comprehensive design system
+ * Matches approved-orchestrator-view reference implementation
+ */
+
+:root {
+  /* ========================================================================
+     PRIMARY COLORS - Dark Blue Glassmorphism Theme
+     ======================================================================== */
+  
+  /* Core brand colors */
+  --color-primary: #1a1f3a;              /* Deep navy (main background) */
+  --color-primary-light: #242d4a;        /* Lighter navy (hover/select) */
+  --color-primary-lighter: #2e3a52;      /* Even lighter navy */
+  
+  /* Accent colors */
+  --color-accent: #00d4ff;               /* Cyan (primary accent) */
+  --color-accent-hover: #00e6ff;         /* Bright cyan (hover) */
+  --color-accent-dark: #00a8cc;          /* Dark cyan (active) */
+  
+  --color-secondary: #7b61ff;            /* Purple (secondary accent) */
+  --color-secondary-hover: #9179ff;      /* Light purple (hover) */
+  
+  --color-success: #10b981;              /* Green (success/good) */
+  --color-success-light: #34d399;        /* Light green */
+  
+  --color-warning: #f59e0b;              /* Amber (warning) */
+  --color-warning-light: #fbbf24;        /* Light amber */
+  
+  --color-error: #ef4444;                /* Red (error/critical) */
+  --color-error-light: #f87171;          /* Light red */
+  
+  --color-info: #06b6d4;                 /* Cyan (info) */
+  --color-info-light: #22d3ee;           /* Light cyan */
+  
+  /* Neutral colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Glassmorphism layers */
+  --glass-background: rgba(26, 31, 58, 0.8);       /* Primary with 80% opacity */
+  --glass-background-light: rgba(36, 45, 74, 0.6); /* Light with 60% opacity */
+  --glass-border: rgba(0, 212, 255, 0.2);          /* Accent with 20% opacity */
+  --glass-hover: rgba(123, 97, 255, 0.1);          /* Purple with 10% opacity */
+  
+  /* ========================================================================
+     TYPOGRAPHY
+     ======================================================================== */
+  
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Courier New', monospace;
+  
+  /* Font sizes */
+  --font-size-xs: 0.75rem;       /* 12px */
+  --font-size-sm: 0.875rem;      /* 14px */
+  --font-size-base: 1rem;        /* 16px */
+  --font-size-lg: 1.125rem;      /* 18px */
+  --font-size-xl: 1.25rem;       /* 20px */
+  --font-size-2xl: 1.5rem;       /* 24px */
+  --font-size-3xl: 1.875rem;     /* 30px */
+  --font-size-4xl: 2.25rem;      /* 36px */
+  --font-size-5xl: 3rem;         /* 48px */
+  
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Letter spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.05em;
+  
+  /* ========================================================================
+     SPACING
+     ======================================================================== */
+  
+  --space-0: 0;
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  
+  /* ========================================================================
+     SHADOWS
+     ======================================================================== */
+  
+  /* Subtle glass shadows */
+  --shadow-glass-sm: 0 2px 8px rgba(0, 0, 0, 0.25), 
+                     inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  --shadow-glass-base: 0 4px 16px rgba(0, 0, 0, 0.35),
+                       inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  --shadow-glass-lg: 0 8px 32px rgba(0, 0, 0, 0.45),
+                     inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  --shadow-glass-xl: 0 16px 48px rgba(0, 0, 0, 0.55),
+                     inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  
+  /* Glowing shadows for accent elements */
+  --shadow-glow-accent: 0 0 20px rgba(0, 212, 255, 0.2),
+                        0 0 40px rgba(0, 212, 255, 0.1);
+  
+  --shadow-glow-secondary: 0 0 20px rgba(123, 97, 255, 0.2),
+                           0 0 40px rgba(123, 97, 255, 0.1);
+  
+  --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.2),
+                         0 0 40px rgba(16, 185, 129, 0.1);
+  
+  --shadow-glow-error: 0 0 20px rgba(239, 68, 68, 0.2),
+                       0 0 40px rgba(239, 68, 68, 0.1);
+  
+  /* ========================================================================
+     BORDERS
+     ======================================================================== */
+  
+  --border-width-thin: 1px;
+  --border-width-base: 2px;
+  --border-width-thick: 3px;
+  
+  --border-radius-sm: 0.375rem;      /* 6px */
+  --border-radius-base: 0.5rem;      /* 8px */
+  --border-radius-lg: 0.75rem;       /* 12px */
+  --border-radius-xl: 1rem;          /* 16px */
+  --border-radius-2xl: 1.5rem;       /* 24px */
+  --border-radius-full: 9999px;      /* Full circle */
+  
+  /* Glassmorphism border colors */
+  --border-color-primary: var(--glass-border);
+  --border-color-accent: rgba(0, 212, 255, 0.3);
+  --border-color-secondary: rgba(123, 97, 255, 0.3);
+  --border-color-light: rgba(255, 255, 255, 0.1);
+  
+  /* ========================================================================
+     TRANSITIONS & ANIMATIONS
+     ======================================================================== */
+  
+  --transition-fast: 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --transition-timing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ========================================================================
+     BACKDROP FILTERS
+     ======================================================================== */
+  
+  --backdrop-blur-sm: blur(4px);
+  --backdrop-blur-base: blur(8px);
+  --backdrop-blur-lg: blur(12px);
+  --backdrop-blur-xl: blur(16px);
+  
+  --backdrop-saturate: saturate(180%);
+  --backdrop-invert: invert(0%);
+  
+  /* ========================================================================
+     Z-INDEX LAYERS
+     ======================================================================== */
+  
+  --z-hide: -1;
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-notification: 1080;
+  
+  /* ========================================================================
+     BREAKPOINTS (Mobile-First)
+     ======================================================================== */
+  
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1600px;
+  
+  /* ========================================================================
+     CONTAINER SIZES
+     ======================================================================== */
+  
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1600px;
+  
+  /* ========================================================================
+     GRID & LAYOUT
+     ======================================================================== */
+  
+  --grid-gap-xs: var(--space-2);
+  --grid-gap-sm: var(--space-3);
+  --grid-gap-base: var(--space-4);
+  --grid-gap-lg: var(--space-6);
+  --grid-gap-xl: var(--space-8);
+  
+  /* ========================================================================
+     DURATION & TIMING
+     ======================================================================== */
+  
+  --duration-shortest: 50ms;
+  --duration-shorter: 100ms;
+  --duration-short: 150ms;
+  --duration-base: 200ms;
+  --duration-long: 300ms;
+  --duration-longer: 500ms;
+  --duration-longest: 1000ms;
+  
+  /* ========================================================================
+     COMPONENT-SPECIFIC TOKENS
+     ======================================================================== */
+  
+  /* Card components */
+  --card-padding: var(--space-4);
+  --card-border-radius: var(--border-radius-lg);
+  --card-shadow: var(--shadow-glass-base);
+  
+  /* Button components */
+  --button-padding-y: var(--space-2);
+  --button-padding-x: var(--space-4);
+  --button-border-radius: var(--border-radius-base);
+  --button-font-weight: var(--font-weight-semibold);
+  --button-transition: background-color var(--transition-base), 
+                       box-shadow var(--transition-base),
+                       transform var(--transition-base);
+  
+  /* Input components */
+  --input-padding-y: var(--space-2);
+  --input-padding-x: var(--space-3);
+  --input-border-radius: var(--border-radius-base);
+  --input-border-width: var(--border-width-thin);
+  --input-border-color: var(--border-color-primary);
+  --input-background: rgba(255, 255, 255, 0.05);
+  --input-focus-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  
+  /* Tab components */
+  --tab-padding-x: var(--space-4);
+  --tab-padding-y: var(--space-3);
+  --tab-border-radius: var(--border-radius-base);
+  --tab-font-weight: var(--font-weight-medium);
+  
+  /* Badge components */
+  --badge-padding-y: var(--space-1);
+  --badge-padding-x: var(--space-2);
+  --badge-border-radius: var(--border-radius-full);
+  --badge-font-size: var(--font-size-xs);
+  --badge-font-weight: var(--font-weight-semibold);
+  
+  /* ========================================================================
+     ACCESSIBILITY
+     ======================================================================== */
+  
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
+  --focus-outline-color: var(--color-accent);
+  
+  /* Reduced motion preferences */
+  --motion-reduce: prefers-reduced-motion;
+  --motion-duration: var(--transition-base);
+}
+
+/* ============================================================================
+   MEDIA QUERY BREAKPOINTS
+   ============================================================================ */
+
+@media (max-width: 479px) {
+  :root {
+    --viewport: 'xs';
+    --grid-columns: 1;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  :root {
+    --viewport: 'sm';
+    --grid-columns: 2;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --viewport: 'md';
+    --grid-columns: 3;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :root {
+    --viewport: 'lg';
+    --grid-columns: 4;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1599px) {
+  :root {
+    --viewport: 'xl';
+    --grid-columns: 5;
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --viewport: '2xl';
+    --grid-columns: 6;
+  }
+}
+
+/* ============================================================================
+   DARK MODE SUPPORT (Already in dark theme, but explicit for clarity)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-mode: 'dark';
+    color-scheme: dark;
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT (Accessibility)
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 10ms linear;
+    --transition-base: 10ms linear;
+    --transition-slow: 10ms linear;
+    --motion-duration: 10ms;
+  }
+  
+  * {
+    animation-duration: 10ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+/* ============================================================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  :root {
+    --border-color-primary: rgba(0, 212, 255, 0.5);
+    --color-gray-500: #7b8ba0;
+    --color-gray-600: #5a6877;
+  }
+}
+
+/* ============================================================================
+   LIGHT MODE FALLBACK (If needed)
+   ============================================================================ */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-primary: #ffffff;
+    --color-primary-light: #f9fafb;
+    --glass-background: rgba(255, 255, 255, 0.95);
+    --color-gray-900: #111827;
+  }
+}

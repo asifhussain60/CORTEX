@@ -1,0 +1,562 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Repository Dashboard Schema",
+  "description": "Complete JSON schema for CORTEX Repository Dashboard with 9 tabs",
+  "type": "object",
+  "required": ["metadata", "overview", "architecture", "quality", "vulnerabilities", "security", "dependencies", "testing", "patterns", "use_cases"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Repository metadata and basic information",
+      "required": ["name", "path", "primary_language", "total_files", "total_lines"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Repository name",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "path": {
+          "type": "string",
+          "description": "Repository path",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Repository description"
+        },
+        "primary_language": {
+          "type": "string",
+          "description": "Primary programming language",
+          "enum": ["C#", "Python", "JavaScript", "TypeScript", "Java", "Go", "Rust", "PHP", "Ruby", "Other"]
+        },
+        "total_files": {
+          "type": "integer",
+          "description": "Total number of files",
+          "minimum": 0
+        },
+        "total_lines": {
+          "type": "integer",
+          "description": "Total lines of code",
+          "minimum": 0
+        },
+        "contributors": {
+          "type": "integer",
+          "description": "Number of contributors",
+          "minimum": 1
+        },
+        "last_updated": {
+          "type": "string",
+          "description": "Last update timestamp (ISO8601)",
+          "format": "date-time"
+        },
+        "repo_age_days": {
+          "type": "integer",
+          "description": "Repository age in days",
+          "minimum": 0
+        }
+      }
+    },
+
+    "overview": {
+      "type": "object",
+      "description": "Overview tab data (📊)",
+      "properties": {
+        "health_score": {
+          "type": "number",
+          "description": "Overall repository health (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "code_quality": {
+          "type": "number",
+          "description": "Code quality score (0-10)",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "test_coverage": {
+          "type": "number",
+          "description": "Test coverage percentage (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "maintainability_index": {
+          "type": "number",
+          "description": "Maintainability index (0-100)",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "technical_debt_hours": {
+          "type": "integer",
+          "description": "Estimated technical debt in hours",
+          "minimum": 0
+        },
+        "languages": {
+          "type": "object",
+          "description": "Lines of code by language",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "audiences": {
+          "type": "array",
+          "description": "Dashboard audience personas",
+          "items": {
+            "type": "object",
+            "properties": {
+              "persona": {
+                "type": "string",
+                "enum": ["Executive", "Product Owner", "Dev Manager", "Engineer", "Leader"]
+              },
+              "icon": {"type": "string"},
+              "description": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+
+    "architecture": {
+      "type": "object",
+      "description": "Architecture tab data (🏗️)",
+      "properties": {
+        "layers": {
+          "type": "array",
+          "description": "Architectural layers",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "description": {"type": "string"},
+              "modules": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "technologies": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        },
+        "modules": {
+          "type": "object",
+          "description": "Module breakdown",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "lines_of_code": {"type": "integer", "minimum": 0},
+              "files": {"type": "integer", "minimum": 0},
+              "complexity": {"type": "number", "minimum": 0},
+              "sub_modules": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        },
+        "design_patterns": {
+          "type": "array",
+          "description": "Detected design patterns",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "description": {"type": "string"},
+              "location": {"type": "string"},
+              "usage_count": {"type": "integer", "minimum": 1}
+            }
+          }
+        }
+      }
+    },
+
+    "quality": {
+      "type": "object",
+      "description": "Quality tab data (✅)",
+      "properties": {
+        "code_quality_score": {"type": "number", "minimum": 0, "maximum": 10},
+        "maintainability_index": {"type": "number", "minimum": 0, "maximum": 100},
+        "code_smells": {"type": "integer", "minimum": 0},
+        "duplication_percentage": {"type": "number", "minimum": 0, "maximum": 100},
+        "technical_debt_hours": {"type": "integer", "minimum": 0},
+        "test_coverage": {"type": "number", "minimum": 0, "maximum": 100},
+        "coverage_trend": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {"type": "string", "format": "date"},
+              "coverage": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+          }
+        },
+        "complexity_trend": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {"type": "string", "format": "date"},
+              "avg_complexity": {"type": "number", "minimum": 0}
+            }
+          }
+        },
+        "complexity_by_module": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0}
+        },
+        "hotspots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": {"type": "string"},
+              "complexity": {"type": "number", "minimum": 0},
+              "issues": {"type": "integer", "minimum": 0},
+              "priority": {"type": "string", "enum": ["high", "medium", "low"]}
+            }
+          }
+        }
+      }
+    },
+
+    "vulnerabilities": {
+      "type": "object",
+      "description": "Vulnerabilities tab data (🛡️)",
+      "properties": {
+        "critical": {"type": "integer", "minimum": 0},
+        "high": {"type": "integer", "minimum": 0},
+        "medium": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0},
+        "owasp_findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {"type": "string"},
+              "severity": {"type": "string", "enum": ["critical", "high", "medium", "low"]},
+              "count": {"type": "integer", "minimum": 0},
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "location": {"type": "string"},
+                    "description": {"type": "string"},
+                    "remediation": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "secrets_scan": {
+          "type": "object",
+          "properties": {
+            "status": {"type": "string", "enum": ["clean", "violations_found"]},
+            "secrets_found": {"type": "integer", "minimum": 0},
+            "last_scan": {"type": "string", "format": "date-time"}
+          }
+        },
+        "cves": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "severity": {"type": "string"},
+              "affected_package": {"type": "string"},
+              "fix_available": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+
+    "security": {
+      "type": "object",
+      "description": "Security tab data (🔒)",
+      "properties": {
+        "security_score": {"type": "number", "minimum": 0, "maximum": 10},
+        "security_posture": {"type": "string"},
+        "frameworks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "status": {"type": "string", "enum": ["compliant", "partial", "non_compliant"]},
+              "score": {"type": "number", "minimum": 0, "maximum": 100},
+              "issues": {"type": "integer", "minimum": 0}
+            }
+          }
+        },
+        "authentication": {
+          "type": "object",
+          "properties": {
+            "implemented": {"type": "string"},
+            "standards": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "multi_factor": {"type": "boolean"}
+          }
+        },
+        "encryption": {
+          "type": "object",
+          "properties": {
+            "at_rest": {"type": "boolean"},
+            "in_transit": {"type": "boolean"},
+            "key_management": {"type": "string"}
+          }
+        },
+        "data_protection": {
+          "type": "object",
+          "properties": {
+            "pii_detection": {"type": "integer", "minimum": 0},
+            "masking": {"type": "boolean"},
+            "retention_policy": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "dependencies": {
+      "type": "object",
+      "description": "Dependencies tab data (📦)",
+      "properties": {
+        "direct_count": {"type": "integer", "minimum": 0},
+        "transitive_count": {"type": "integer", "minimum": 0},
+        "outdated_count": {"type": "integer", "minimum": 0},
+        "vulnerable_count": {"type": "integer", "minimum": 0},
+        "packages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "version": {"type": "string"},
+              "latest": {"type": "string"},
+              "type": {"type": "string", "enum": ["direct", "transitive"]},
+              "license": {"type": "string"},
+              "security_status": {"type": "string", "enum": ["safe", "vulnerable", "critical"]},
+              "update_recommended": {"type": "boolean"}
+            }
+          }
+        },
+        "dependency_graph": {
+          "type": "object",
+          "description": "Dependency relationships",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "count": {"type": "integer", "minimum": 0},
+              "packages": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "testing": {
+      "type": "object",
+      "description": "Testing tab data (🧪)",
+      "properties": {
+        "coverage_percentage": {"type": "number", "minimum": 0, "maximum": 100},
+        "coverage_trend": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {"type": "string", "format": "date"},
+              "coverage": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+          }
+        },
+        "test_counts": {
+          "type": "object",
+          "properties": {
+            "total": {"type": "integer", "minimum": 0},
+            "passing": {"type": "integer", "minimum": 0},
+            "failing": {"type": "integer", "minimum": 0},
+            "skipped": {"type": "integer", "minimum": 0}
+          }
+        },
+        "test_types": {
+          "type": "object",
+          "properties": {
+            "unit": {"type": "integer", "minimum": 0},
+            "integration": {"type": "integer", "minimum": 0},
+            "e2e": {"type": "integer", "minimum": 0}
+          }
+        },
+        "failing_tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "file": {"type": "string"},
+              "error": {"type": "string"},
+              "priority": {"type": "string", "enum": ["high", "medium", "low"]}
+            }
+          }
+        },
+        "coverage_by_module": {
+          "type": "object",
+          "additionalProperties": {"type": "number", "minimum": 0, "maximum": 100}
+        }
+      }
+    },
+
+    "patterns": {
+      "type": "object",
+      "description": "Patterns tab data (🎨)",
+      "properties": {
+        "design_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "description": {"type": "string"},
+              "occurrences": {"type": "integer", "minimum": 0},
+              "locations": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        },
+        "anti_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "severity": {"type": "string", "enum": ["high", "medium", "low"]},
+              "count": {"type": "integer", "minimum": 0},
+              "locations": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "remediation": {"type": "string"}
+            }
+          }
+        },
+        "refactoring_opportunities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "string"},
+              "file": {"type": "string"},
+              "priority": {"type": "string", "enum": ["high", "medium", "low"]},
+              "effort_hours": {"type": "number", "minimum": 0},
+              "description": {"type": "string"}
+            }
+          }
+        },
+        "solid_principles": {
+          "type": "object",
+          "properties": {
+            "single_responsibility": {"type": "number", "minimum": 0, "maximum": 100},
+            "open_closed": {"type": "number", "minimum": 0, "maximum": 100},
+            "liskov_substitution": {"type": "number", "minimum": 0, "maximum": 100},
+            "interface_segregation": {"type": "number", "minimum": 0, "maximum": 100},
+            "dependency_inversion": {"type": "number", "minimum": 0, "maximum": 100}
+          }
+        }
+      }
+    },
+
+    "use_cases": {
+      "type": "object",
+      "description": "Use Cases tab data (📋)",
+      "properties": {
+        "detected_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string"},
+              "business_capability": {"type": "string"},
+              "technical_name": {"type": "string"},
+              "description": {"type": "string"},
+              "business_value": {"type": "string"},
+              "actors": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "systems": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "complexity": {"type": "string", "enum": ["low", "medium", "high"]},
+              "maturity": {"type": "string", "enum": ["emerging", "stable", "mature"]},
+              "modernization_score": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+          }
+        },
+        "business_flows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "description": {"type": "string"},
+              "steps": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "primary_actor": {"type": "string"},
+              "preconditions": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "success_criteria": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        },
+        "integrations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "system": {"type": "string"},
+              "type": {"type": "string", "enum": ["API", "Database", "File", "Message"]},
+              "description": {"type": "string"}
+            }
+          }
+        },
+        "stakeholder_mapping": {
+          "type": "object",
+          "description": "Audience to use cases mapping",
+          "additionalProperties": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}
