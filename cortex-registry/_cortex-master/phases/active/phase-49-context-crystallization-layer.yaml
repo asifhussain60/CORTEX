@@ -1,0 +1,463 @@
+# ============================================================================
+# PHASE-49: Context Crystallization Layer (CCL)
+# ============================================================================
+# Purpose: Non-blocking pre-flight context enrichment layer that async-prefetches
+#          LENS intelligence, rules cache, and infrastructure context PARALLEL
+#          to Stage 1 comprehension. Improves accuracy, efficiency, extensibility
+#          without adding blocking "thinking stage" to MasterOrchestrator.
+# Authority: cortex-architect.prompt.md v15.3, Deep Holistic Analysis 2026-02-08
+# Approach: TDD-First, Async-First, Non-blocking, Graceful Fallback
+# Status: PLANNED | Target Start: 2026-02-15
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "planned"
+priority: "P0"
+execution_order: 7
+
+metadata:
+  phase_id: "phase-49"
+  title: "Context Crystallization Layer (CCL)"
+  subtitle: "Async pre-flight context prefetch layer for MasterOrchestrator Stages 2+"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  target_start: "2026-02-15"
+  estimated_duration: "5 days"
+  test_target: 101
+  coverage_target: 85
+  roi_score: 0.92
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: false
+  reason: "Extensibility + scalability + accuracy improvements without Master coupling"
+  autonomous_config:
+    silent_execution: true
+    user_notification: false
+    progress_visualization: "ascii_bar"
+    report_generation: "none"
+    token_aware: true
+    continuation_prompt: true
+    visual_updates: "copilot_chat_inline"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "MCP-FIRST: All functionality via MCP tools (future)"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "Backward compatibility: 100% existing paths unmodified"
+    - "Async safety: No blocking on CCL (300ms timeout)"
+    - "Zero regression: All 515+ existing tests passing"
+    - "Graceful degradation: All fallback paths tested"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    A lightweight, non-blocking pre-flight context layer that enriches
+    MasterOrchestrator Stages 2+ with pre-warmed knowledge:
+    
+    1. **Transparency** — Users see "thinking" progress:
+       - "[████░░░░░░] 40% Loading rules..."
+       - "[████████░░] 80% Analyzing code..."
+    
+    2. **Async Efficiency** — CCL runs in parallel with Stage 1:
+       - Stage 1 comprehension: 200-300ms
+       - CCL prefetch: 200-300ms (overlap, not additive)
+       - Result: No latency penalty
+    
+    3. **Unified Context** — LENS + Rules + Infrastructure in one object:
+       - CrystallizedContext carries all pre-warmed data
+       - No repeated loading downstream
+       - Orchestrators use ready-made context
+    
+    4. **Extensibility** — New knowledge sources plugged without Master changes:
+       - Phase A/B/C run independently
+       - Add Phase D (security checks) without touching Master
+       - Scales to 50+ orchestrators without coupling
+
+  problem_statement: |
+    Current architecture has 5 scattered "thinking" points:
+    
+    **Problem 1: No Transparency**
+    - Users don't see "thinking" happening
+    - EXIT GATE synthesis invisible
+    - LENS fetching hidden in IntentRouter
+    - Challenge generation opacity → low confidence
+    
+    **Problem 2: Sequential Loading (Latency)**
+    - LENS context loaded in Stage 2 (blocks routing)
+    - Rules synthesized after LENS fetch (blocks again)
+    - Latency: 300-400ms just for knowledge loading
+    - Scales O(n) with new orchestrators
+    
+    **Problem 3: Knowledge Coupling**
+    - Master knows CORTEX rules, Company domains, etc.
+    - 1000+ LOC of knowledge loading in MasterOrchestrator
+    - Hard to extend with Phase 49+
+    - Violates separation of concerns
+    
+    **Problem 4: LENS + Rules Desynchronization**
+    - LENS analyzes code independently
+    - Rules loaded separately
+    - Routing may miss code-specific rule matches
+    - Challenge generation weak (no code context)
+
+  expected_outcomes: |
+    After Phase 48:
+    
+    ✅ **Transparency:** Progress bars show "Thinking..."
+    ✅ **Efficiency:** -15% latency (350ms→300ms overall)
+    ✅ **Accuracy:** +30% rule citation, +40% challenge relevance
+    ✅ **Extensibility:** Add new knowledge without Master changes
+    ✅ **Zero Regression:** All 515+ tests passing
+    ✅ **Scalability:** Constant-time knowledge loading regardless of orchestrator count
+
+# ============================================================================
+# TECHNICAL APPROACH
+# ============================================================================
+technical_approach: |
+  ## Architecture (Layer 0: Pre-Flight)
+  
+  ```
+  USER REQUEST
+      ↓
+  ┌────────────────────────────────────────────────────┐
+  │ LAYER 0 (PRE-FLIGHT): Context Crystallization     │
+  │ Runs ASYNC in background, parallel with Stage 1   │
+  ├────────────────────────────────────────────────────┤
+  │ Phase A: Rules Cache Load (50ms)                   │
+  │   ├─ Load tier0 rules (cached)                     │
+  │   ├─ Load tier1 defaults (cached)                  │
+  │   └─ Apply company precedence                      │
+  │                                                    │
+  │ Phase B: LENS Warm-up (100-200ms, if file given)  │
+  │   ├─ AST analysis (fast)                           │
+  │   ├─ Git history (cached)                          │
+  │   └─ Comment extraction                            │
+  │                                                    │
+  │ Phase C: Infrastructure Detection (50ms)          │
+  │   ├─ Check Phase 46 cache                          │
+  │   ├─ Get environment capabilities                  │
+  │   └─ Build infrastructure context                  │
+  │                                                    │
+  │ RESULT: CrystallizedContext ready                 │
+  └────────────────────────────────────────────────────┘
+      ↓ (merged into request)
+  
+  STAGE 1: InteractionOrchestrator (comprehension + challenge)
+  STAGE 2: IntentRouter (routing — uses pre-warmed context)
+  STAGE 3: GovernanceRegistry (validation)
+  STAGE 4: Domain Orchestrators (execution)
+  ```
+  
+  ## Key Design Decisions
+  
+  1. **Not a Stage** — CCL is a LAYER (Layer 0), not a 5th stage
+     - Rationale: Stages must be serialized; layers can be parallel
+     - Benefit: No MasterOrchestrator wiring changes needed
+  
+  2. **Async + Non-blocking** — CCL runs in thread pool
+     - Rationale: Avoids blocking user request
+     - Benefit: 300-400ms prefetch during 200-300ms Stage 1
+  
+  3. **Timeout SLA** — Max 300ms, fallback at 500ms
+     - Rationale: Better to proceed without context than block
+     - Benefit: Graceful degradation, never stalls
+  
+  4. **Pluggable Phases** — A/B/C independent
+     - Rationale: Phase D (security) or E (compliance) plugged without touching A/B/C
+     - Benefit: Extensibility (scales to Phase 50+)
+
+# ============================================================================
+# STAGES & DELIVERABLES
+# ============================================================================
+stages:
+  - id: "phase-48-s1"
+    name: "Core CCL Component"
+    description: |
+      Build foundational Context Crystallization Layer orchestrator.
+      
+      Deliverables:
+      - ContextCrystallizationLayer class (IOrchestrator)
+      - CrystallizedContext dataclass
+      - Async prefetch coordination
+      - Timeout + fallback handling
+      - Audit logging (AC_START/COMPLETE)
+    tests: 20
+    effort: "2 days"
+    acceptance_criteria:
+      - "CCL can be instantiated and initialized"
+      - "prefetch_async() returns immediately"
+      - "CrystallizedContext structure correct"
+      - "Timeout at 300ms handled gracefully"
+      - "Fallback paths tested"
+      - "Logging includes AC markers"
+    dependencies:
+      - "phase-46 (infrastructure cache)"
+      - "cortex/brain/knowledge/ (synthesis engine)"
+
+  - id: "phase-48-s2"
+    name: "Rules Cache Implementation"
+    description: |
+      Build RulesCache for fast rule resolution.
+      
+      Deliverables:
+      - RulesCache dataclass with tier resolution
+      - Precedence: Company > tier1 > tier0
+      - Caching with TTL (5 min)
+      - Rules by intent type (IMPLEMENT, FIX, REFACTOR, etc.)
+      - Cache invalidation triggers
+    tests: 18
+    effort: "1 day"
+    acceptance_criteria:
+      - "Load tier0 rules from cortex_brain/tier0/"
+      - "Load tier1 defaults from cortex_brain/tier1/"
+      - "Load company rules from cortex-registry/company/"
+      - "Precedence: Company > tier1 > tier0"
+      - "Cache hit rate > 90% (repeated requests)"
+      - "Cache TTL 5-min works"
+      - "Invalidation triggers rebuild"
+    dependencies:
+      - "phase-48-s1"
+      - "phase-47 (company registry structure)"
+
+  - id: "phase-48-s3"
+    name: "LENS Warmer (Async Analysis)"
+    description: |
+      Warm-up LENS context async while Stage 1 runs.
+      
+      Deliverables:
+      - LENSWarmer class with async analysis
+      - File path routing (if provided)
+      - Cache integration (avoid re-analysis)
+      - Timeout handling (100ms max blocking)
+      - Graceful None return if no file
+    tests: 16
+    effort: "1.5 days"
+    acceptance_criteria:
+      - "AST analysis fast (<50ms)"
+      - "Git history uses cache"
+      - "Comment extraction complete"
+      - "LENSContext ready for IntentRouter"
+      - "No file → returns empty LENSContext"
+      - "Repeated files return cached result"
+      - "Timeout at 200ms → partial context ok"
+    dependencies:
+      - "phase-48-s1"
+      - "phase-20 (LENS analyzers)"
+
+  - id: "phase-48-s4"
+    name: "Infrastructure Detection (Phase 46 Integration)"
+    description: |
+      Integrate Phase 46 infrastructure discovery.
+      
+      Deliverables:
+      - InfrastructureDetector class
+      - Read Phase 46 cache (instant)
+      - Detect environment capabilities
+      - Build InfrastructureContext
+      - Fallback if Phase 46 unavailable
+    tests: 14
+    effort: "1 day"
+    acceptance_criteria:
+      - "Phase 46 cache integrated"
+      - "Environment detection works"
+      - "Capabilities accurate (dev/stage/prod)"
+      - "Graceful fallback if Phase 46 missing"
+      - "InfrastructureContext populated"
+      - "No latency penalty (purely async)"
+    dependencies:
+      - "phase-48-s1"
+      - "phase-46 (infrastructure discovery)"
+
+  - id: "phase-48-s5"
+    name: "MasterOrchestrator Integration"
+    description: |
+      Wire CCL into MasterOrchestrator stages.
+      
+      Deliverables:
+      - CCL instantiation in MasterOrchestrator.__init__()
+      - Async prefetch kickoff at request start
+      - CrystallizedContext merge with existing context
+      - Stage 2 (IntentRouter) uses pre-warmed LENS
+      - Progress indicators for user transparency
+      - Timeout handling (fall back to fetch if needed)
+    tests: 18
+    effort: "1.5 days"
+    acceptance_criteria:
+      - "CCL prefetch starts immediately"
+      - "Stage 1 runs in parallel with CCL"
+      - "Stage 2 uses pre-warmed context if ready"
+      - "Fallback to fresh fetch if CCL timeout"
+      - "Progress bars show 'Loading rules...', 'Analyzing code...'"
+      - "CrystallizedContext logged for debugging"
+      - "No latency added (async doesn't block)"
+    dependencies:
+      - "phase-48-s1"
+      - "phase-48-s2"
+      - "phase-48-s3"
+      - "phase-48-s4"
+
+  - id: "phase-48-s6"
+    name: "E2E Testing & Regression Validation"
+    description: |
+      Comprehensive integration testing + regression.
+      
+      Deliverables:
+      - E2E test: user request → CCL → Stage 1 → Stage 2
+      - Latency benchmarks
+      - Challenge quality improvement validation
+      - All 515+ regression tests passing
+      - Performance profiling
+      - Documentation + examples
+    tests: 15
+    effort: "1 day"
+    acceptance_criteria:
+      - "E2E latency < 1500ms (-15% improvement)"
+      - "Stage 2 latency < 100ms (was 300-400ms)"
+      - "Challenge quality +40% relevance score"
+      - "515+ regression tests passing"
+      - "Cache hit rate > 80%"
+      - "Zero fallback invocations in normal flow"
+      - "Documentation complete"
+    dependencies:
+      - "all prior stages"
+
+# ============================================================================
+# INTEGRATION POINTS
+# ============================================================================
+integration_points:
+  - component: "MasterOrchestrator"
+    location: "cortex/orchestrators/core/master_orchestrator.py"
+    change: "Add CCL initialization and async prefetch coordination"
+    risk: "LOW — Non-blocking layer, doesn't change existing flow"
+    
+  - component: "IntentRouter"
+    location: "cortex/orchestrators/core/intent_router.py"
+    change: "Accept optional CrystallizedContext, use pre-warmed LENS"
+    risk: "LOW — Optional parameter, falls back to fetch if missing"
+    
+  - component: "InteractionOrchestrator"
+    location: "cortex/orchestrators/core/interaction_orchestrator.py"
+    change: "Challenge engine uses CCL rules context for citations"
+    risk: "LOW — Enhancement, existing challenges still work"
+    
+  - component: "Phase 46 (Infrastructure)"
+    location: "cortex/infrastructure/"
+    change: "CCL Phase C reads Phase 46 cache"
+    risk: "NONE — Read-only integration"
+    
+  - component: "Phase 47 (Company Registry)"
+    location: "cortex-registry/company/"
+    change: "CCL Phase A loads company rules from new registry"
+    risk: "LOW — Uses DualPathResolver from Phase 47"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+success_metrics:
+  - name: "Latency Improvement"
+    target: "-15% overall request time"
+    measurement: "Stage 2 latency (300-400ms → 50-100ms)"
+    threshold: "< 500ms p99"
+    
+  - name: "Accuracy Improvement"
+    target: "+30% rule citations"
+    measurement: "Routing decision quality score"
+    threshold: "> 85% (was 65%)"
+    
+  - name: "Challenge Quality"
+    target: "+40% relevance"
+    measurement: "Challenge reference accuracy (rules + code patterns)"
+    threshold: "> 80% (was 50%)"
+    
+  - name: "Extensibility"
+    target: "Zero Master changes for new knowledge"
+    measurement: "Phase 49+ development ease"
+    threshold: "Can add phase D in < 1 hour"
+    
+  - name: "Backward Compatibility"
+    target: "100% zero regression"
+    measurement: "All 515+ existing tests passing"
+    threshold: "515/515 (100%)"
+    
+  - name: "Cache Efficiency"
+    target: "> 80% hit rate"
+    measurement: "CCL cache hits / total requests"
+    threshold: "> 85%"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+risks:
+  - risk: "Async loading timeout breaks flow"
+    severity: "MEDIUM"
+    mitigation: "300ms SLA timeout, fallback to fresh fetch"
+    
+  - risk: "Cache coherency issues"
+    severity: "LOW"
+    mitigation: "TTL-based invalidation, manual invalidation triggers"
+    
+  - risk: "Master orchestrator complexity increases"
+    severity: "LOW"
+    mitigation: "CCL in separate module, non-blocking design"
+    
+  - risk: "LENS file analysis fails"
+    severity: "LOW"
+    mitigation: "Graceful None return, Stage 2 handles missing context"
+    
+  - risk: "Infrastructure cache unavailable (Phase 46 not running)"
+    severity: "LOW"
+    mitigation: "Empty InfrastructureContext, graceful degradation"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+depends_on:
+  - "phase-46"  # Infrastructure discovery cache
+  - "phase-47"  # Company registry structure
+  - "phase-20"  # LENS analyzers
+
+unblocks:
+  - "Better rule citations in routing decisions"
+  - "Challenge generation with code context"
+  - "Predictive LENS pre-warming (Phase 49)"
+  - "Multi-intent prefetch optimization"
+  - "Security checks pre-flight (Phase 50)"
+
+# ============================================================================
+# PHASE COMPLETION DEFINITION OF READY
+# ============================================================================
+definition_of_ready: |
+  ✅ Holistic architectural analysis complete
+  ✅ TDD stage breakdown defined (6 stages)
+  ✅ CCL design approved (async, non-blocking, extensible)
+  ✅ Integration points identified (low risk)
+  ✅ Success metrics quantified
+  ✅ Risk mitigation strategies in place
+  ✅ 101 test cases planned (85% coverage target)
+  ✅ Registry entry created (this file)
+
+definition_of_done: |
+  ✅ All 101 tests passing (> 85% coverage)
+  ✅ S1-S6 deliverables complete
+  ✅ MasterOrchestrator integrated successfully
+  ✅ IntentRouter using pre-warmed LENS
+  ✅ Challenge generation improved (+40% relevance)
+  ✅ Latency improved (-15% overall)
+  ✅ All 515+ regression tests passing
+  ✅ Documentation complete (code examples, architecture)
+  ✅ Performance benchmarks published
+  ✅ Phase moved from active/ to completed/

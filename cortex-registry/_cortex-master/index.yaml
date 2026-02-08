@@ -288,6 +288,103 @@ active_phases:
       - "Architecture integrity enforcement"
       - "Self-improving CORTEX governance"
 
+  - id: "phase-49"
+    name: "Context Crystallization Layer (CCL)"
+    file: "phases/active/phase-49-context-crystallization-layer.yaml"
+    created: "2026-02-08"
+    status: "planned"
+    priority: "P0"
+    execution_order: 7
+    roi_score: 0.92
+    estimated_duration: "5 days"
+    test_target: 101
+    coverage_target: 85
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      🟡 PLANNED: Non-blocking pre-flight context enrichment layer (Async + Layer 0)
+      
+      **PROBLEM ANALYSIS:**
+      Current MasterOrchestrator has 5 scattered "thinking" points:
+      1. InteractionOrchestrator (comprehension + LENS Phase 1)
+      2. EXIT GATE (context synthesis, 250 tokens init)
+      3. KnowledgeSynthesisEngine Stage 2.5a (CORTEX rules pre-synthesis)
+      4. IntentRouter + LENS auto-fetch (100-200ms blocking)
+      5. KnowledgeSynthesisEngine Stage 2.5b (full synthesis: LENS+Company+CORTEX)
+      
+      **GAPS:**
+      - ❌ No transparency: Users don't see "thinking"
+      - ❌ Sequential loading: 300-400ms LENS fetch blocks Stage 2
+      - ❌ Knowledge coupling: Master knows rules, Company domains, etc.
+      - ❌ LENS + rules desynchronization: Code analysis separate from rule context
+      
+      **SOLUTION: Context Crystallization Layer (CCL)**
+      - Layer 0 (PRE-FLIGHT): Async parallel phases (A/B/C)
+      - Phase A: Rules cache load (50ms, tier resolution)
+      - Phase B: LENS warm-up (100-200ms if file given)
+      - Phase C: Infrastructure detection (50ms, Phase 46 integration)
+      - Result: CrystallizedContext ready for Stages 2+
+      
+      **BENEFITS:**
+      ✅ Extensibility: +0ms latency for new orchestrators
+      ✅ Scalability: Async parallel, 300-400ms→100ms Stage 2
+      ✅ Accuracy: +30% rule citations, +40% challenge relevance
+      ✅ Efficiency: -15% overall request time (350ms→300ms)
+      ✅ Transparency: Progress bars show "Loading rules...", "Analyzing code..."
+      
+      **ARCHITECTURE:**
+      ```
+      LAYER 0 (PRE-FLIGHT) - Async parallel with Stage 1:
+        Phase A: RulesCache (tier resolution + precedence)
+        Phase B: LENSWarmer (AST + git + comments)
+        Phase C: InfrastructureDetector (Phase 46 integration)
+        → CrystallizedContext (LENS + Rules + Infrastructure ready)
+      
+      STAGE 1: InteractionOrchestrator (comprehension + challenge)
+      STAGE 2: IntentRouter (routing — uses pre-warmed context)
+      STAGE 3: GovernanceRegistry (validation)
+      STAGE 4: Domain Orchestrators (execution)
+      ```
+      
+      **6 STAGES (101 tests, 85% coverage):**
+      - S1: Core CCL component (ContextCrystallizationLayer, CrystallizedContext) - 20 tests
+      - S2: Rules cache implementation (RulesCache, tier resolution, precedence) - 18 tests
+      - S3: LENS warmer async integration (LENSWarmer, file routing, cache) - 16 tests
+      - S4: Infrastructure detection (Phase 46 integration, env capabilities) - 14 tests
+      - S5: MasterOrchestrator integration (async kickoff, context merge, progress) - 18 tests
+      - S6: E2E testing + regression validation (latency benchmarks, quality metrics) - 15 tests
+      
+      **SUCCESS METRICS:**
+      - Latency: Stage 2 (300-400ms → 50-100ms) = -70%
+      - Overall: 1200-1500ms → 1000-1200ms = -15%
+      - Rule citations: 65% → 95% accuracy
+      - Challenge relevance: 50% → 90%
+      - Cache hit rate: > 80%
+      - Backward compatibility: 515+ regression tests passing
+      
+      **DEPENDENCIES:**
+      - Phase 46 (infrastructure cache)
+      - Phase 47 (company registry structure)
+      - Phase 20 (LENS analyzers)
+      
+      **UNBLOCKS:**
+      - Phase 50: Predictive LENS multi-intent prefetch
+      - Phase 51: Security pre-flight checks
+      - Seamless CORTEX scaling to Phase 60+
+      
+    depends_on:
+      - "phase-46"
+      - "phase-47"
+      - "phase-20"
+    unblocks:
+      - "Better rule citations in routing"
+      - "Challenge generation with code context"
+      - "Predictive LENS pre-warming (Phase 50)"
+      - "Security checks pre-flight (Phase 51)"
+
   - id: "phase-55"
     name: ".NET Enterprise LENS Enhancement"
     file: "phases/active/phase-55-dotnet-enterprise-lens-enhancement.yaml"
