@@ -3,744 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Repository Dashboard - 9-Tab Unified Analytics with TDD, Git Tracking, and Quality Gates">
-    <meta name="keywords" content="CORTEX, repository analytics, TDD enforcement, git tracking, quality metrics, security scanning">
+    <meta name="description" content="CORTEX Repository Dashboard - Interactive Code Visualization with D3.js">
     <meta name="author" content="Asif Hussain">
     <title>Repository Dashboard | CORTEX</title>
-    <link rel="icon" type="image/png" href="../../../_workspaces/approved-orchestrator-view/assets/images/CORTEX-logo-64.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <style>
-        /* GPTRecommendation-inspired: TDD, Git, and Error/Warning Status */
-        :root {
-            --status-tdd-pass: #10b981;
-            --status-tdd-fail: #ef4444;
-            --status-git-clean: #10b981;
-            --status-git-dirty: #f59e0b;
-            --status-error-zero: #10b981;
-            --status-error-warn: #ef4444;
-        }
-        
-        /* Health Indicator Strip (top of page) */
-        .health-strip {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, 
-                var(--status-tdd-pass) 0%, 
-                var(--status-tdd-pass) 33%, 
-                var(--status-git-clean) 33%, 
-                var(--status-git-clean) 66%, 
-                var(--status-error-zero) 66%, 
-                var(--status-error-zero) 100%);
-            z-index: 10000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        
-        .health-strip.degraded {
-            background: linear-gradient(90deg, 
-                var(--status-tdd-fail) 0%, 
-                var(--status-tdd-fail) 33%, 
-                var(--status-git-dirty) 33%, 
-                var(--status-git-dirty) 66%, 
-                var(--status-error-warn) 66%, 
-                var(--status-error-warn) 100%);
-        }
-        
-        /* Status badges in header */
-        .status-badges {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-        
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.4rem 0.75rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .status-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .status-badge.tdd-pass { border-color: var(--status-tdd-pass); color: var(--status-tdd-pass); }
-        .status-badge.tdd-fail { border-color: var(--status-tdd-fail); color: var(--status-tdd-fail); }
-        .status-badge.git-clean { border-color: var(--status-git-clean); color: var(--status-git-clean); }
-        .status-badge.git-dirty { border-color: var(--status-git-dirty); color: var(--status-git-dirty); }
-        .status-badge.error-zero { border-color: var(--status-error-zero); color: var(--status-error-zero); }
-        .status-badge.error-warn { border-color: var(--status-error-warn); color: var(--status-error-warn); }
-        
-        .status-badge i {
-            font-size: 1rem;
-        }
-        
-        /* Glassmorphism enhancement from approved-orchestrator-view */
-        .glass-card {
-            animation: borderGlow 4s ease-in-out infinite;
-        }
-        
-        @keyframes borderGlow {
-            0%, 100% {
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
-                            inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-            }
-            50% {
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25),
-                            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-            }
-        }
-        
-        @keyframes glassShimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        /* CORTEX branding logo */
-        .cortex-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            margin-right: 0.75rem;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        }
-        
-        .header-content h1 {
-            display: flex;
-            align-items: center;
-        }
-    </style>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/cortex-logo-200.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <!-- Health status strip (GPTRecommendation: TDD + Git + Errors/Warnings) -->
-    <div class="health-strip" id="health-strip" title="System Health: TDD Pass | Git Clean | Zero Errors/Warnings"></div>
-    
-    <!-- Glassmorphism background -->
+    <!-- Animated Background -->
     <div class="bg-gradients"></div>
     
-    <!-- Main container -->
-    <div class="container">
-        <!-- Header with CORTEX branding and status badges -->
-        <header class="header">
-            <div class="header-content">
-                <h1 id="repo-title" data-bind="repository.display_name" data-fallback="Repository Dashboard">
-                    <img src="../../../_workspaces/approved-orchestrator-view/assets/images/cortex-logo-200.png" 
-                         alt="CORTEX Logo" 
-                         class="cortex-logo"
-                         onerror="this.style.display='none'">
-                    Repository Dashboard
-                </h1>
-                <p class="header-subtitle" id="repo-subtitle" data-bind="repository.description" data-fallback="Select a repository to view details"></p>
-            </div>
-            <div class="header-controls">
-                <!-- GPTRecommendation Status Badges -->
-                <div class="status-badges">
-                    <span class="status-badge tdd-pass" id="status-tdd" title="TDD: RED → GREEN → REFACTOR">
-                        <i class="fas fa-vial"></i> TDD Pass
-                    </span>
-                    <span class="status-badge git-clean" id="status-git" title="Git: Clean working directory">
-                        <i class="fab fa-git-alt"></i> Git Clean
-                    </span>
-                    <span class="status-badge error-zero" id="status-errors" title="Build: 0 errors, 0 warnings">
-                        <i class="fas fa-check-circle"></i> 0 Errors
-                    </span>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <div class="spinner-ring"></div>
+        </div>
+        <div class="loading-text">Loading Dashboard...</div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-brand">
+                <img src="assets/images/cortex-logo-200.png" alt="CORTEX Logo" class="nav-logo">
+                <div>
+                    <div class="nav-title" id="repo-title">Repository Dashboard</div>
+                    <div class="nav-subtitle" id="repo-subtitle">Code Analytics &amp; Visualization</div>
                 </div>
-                <button id="repo-selector-btn" class="btn btn-secondary" aria-label="Change repository">
+            </a>
+            
+            <div class="status-badges">
+                <span id="status-tdd" class="status-badge success">
+                    <i class="fas fa-vial"></i> TDD Pass
+                </span>
+                <span id="status-git" class="status-badge success">
+                    <i class="fab fa-git-alt"></i> Git Clean
+                </span>
+                <span id="status-errors" class="status-badge success">
+                    <i class="fas fa-check-circle"></i> 0 Errors
+                </span>
+                <button id="repo-selector-btn" class="btn" style="margin-left: 1rem;">
                     <i class="fas fa-th-large"></i> Change Repository
                 </button>
             </div>
-        </header>
-
-        <!-- Repository selector modal (hidden by default) -->
-        <div id="repo-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Select Repository</h2>
-                    <button id="modal-close" class="btn-close" aria-label="Close repository selector">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div id="repo-list" class="repo-grid">
-                        <!-- Dynamically populated by app.js -->
-                    </div>
-                </div>
+        </div>
+    </nav>
+    
+    <!-- Repository Selector Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Select Repository</h2>
+                <button id="modal-close" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="repo-grid" class="repo-grid">
+                <!-- Populated by app.js -->
             </div>
         </div>
-
-        <!-- Main content -->
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container">
         <main class="main-content">
-            <!-- Loading state -->
-            <div id="loading-spinner" class="loading-spinner hidden">
-                <div class="spinner"></div>
-                <p>Loading dashboard...</p>
-            </div>
-
-            <!-- Error state -->
-            <div id="error-message" class="error-message hidden">
-                <i class="fas fa-exclamation-circle"></i>
-                <h3>Dashboard Not Found</h3>
-                <p id="error-text">The requested repository dashboard could not be loaded.</p>
-                <button id="error-back-btn" class="btn btn-primary">Back to Repository List</button>
-            </div>
-
-            <!-- 9-TAB NAVIGATION (COMPLETE) -->
-            <nav class="tab-navigation" id="tab-navigation">
-                <!-- Overview Tab -->
-                <button class="tab-button active" data-tab="overview" aria-label="Overview tab">
-                    <i class="fas fa-chart-line"></i> Overview
-                </button>
-                
-                <!-- Architecture Tab -->
-                <button class="tab-button" data-tab="architecture" data-show-if="architecture" aria-label="Architecture tab">
-                    <i class="fas fa-sitemap"></i> Architecture
-                </button>
-                
-                <!-- Quality Tab -->
-                <button class="tab-button" data-tab="quality" data-show-if="quality" aria-label="Quality tab">
-                    <i class="fas fa-check-circle"></i> Quality
-                </button>
-                
-                <!-- Security Tab -->
-                <button class="tab-button" data-tab="security" data-show-if="security" aria-label="Security tab">
-                    <i class="fas fa-lock"></i> Security
-                </button>
-                
-                <!-- Vulnerabilities Tab -->
-                <button class="tab-button" data-tab="vulnerabilities" data-show-if="vulnerabilities" aria-label="Vulnerabilities tab">
-                    <i class="fas fa-exclamation-triangle"></i> Vulnerabilities
-                </button>
-                
-                <!-- Dependencies Tab -->
-                <button class="tab-button" data-tab="dependencies" data-show-if="dependencies" aria-label="Dependencies tab">
-                    <i class="fas fa-cube"></i> Dependencies
-                </button>
-                
-                <!-- Patterns Tab -->
-                <button class="tab-button" data-tab="patterns" data-show-if="patterns" aria-label="Patterns tab">
-                    <i class="fas fa-puzzle-piece"></i> Patterns
-                </button>
-                
-                <!-- Testing Tab -->
-                <button class="tab-button" data-tab="testing" data-show-if="testing" aria-label="Testing tab">
-                    <i class="fas fa-vial"></i> Testing
-                </button>
-                
-                <!-- Use Cases Tab -->
-                <button class="tab-button" data-tab="usecases" data-show-if="usecases" aria-label="Use Cases tab">
-                    <i class="fas fa-lightbulb"></i> Use Cases
-                </button>
+            
+            <!-- Hero Metrics Section -->
+            <section class="glass-card panel-cyan mb-lg">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-heartbeat"></i></div>
+                        <div class="metric-value" id="health-score">--</div>
+                        <div class="metric-label">Health Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-code"></i></div>
+                        <div class="metric-value" id="primary-lang">--</div>
+                        <div class="metric-label">Primary Language</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-file-code"></i></div>
+                        <div class="metric-value" id="total-files">--</div>
+                        <div class="metric-label">Total Files</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-calendar"></i></div>
+                        <div class="metric-value" id="last-updated">--</div>
+                        <div class="metric-label">Last Updated</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tab Navigation -->
+            <nav id="tab-nav" class="tab-nav">
+                <!-- Populated by app.js -->
             </nav>
-
-            <!-- 9-TAB CONTENT PANELS (COMPLETE) -->
-            <div class="tab-panels">
+            
+            <!-- Tab Content: Overview -->
+            <div id="tab-overview" class="tab-content active">
+                <div class="glass-card panel-purple mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-info-circle"></i></div>
+                        <div>
+                            <h2 class="section-title">Repository Overview</h2>
+                            <p class="section-subtitle">Business context and key findings</p>
+                        </div>
+                    </div>
+                    <div id="overview-summary" style="line-height: 1.8; margin-bottom: 1.5rem;">
+                        Loading overview...
+                    </div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-lightbulb" style="color: var(--accent-primary);"></i>
+                        Key Findings
+                    </h3>
+                    <ul id="key-findings" style="list-style: none; padding: 0;">
+                        <!-- Populated by app.js -->
+                    </ul>
+                </div>
                 
-                <!-- Overview Tab -->
-                <section class="tab-panel active" id="panel-overview" data-tab="overview">
-                    <div class="panel-content">
-                        <div class="overview-grid">
-                            <div class="stat-card">
-                                <h4>Health Score</h4>
-                                <div class="stat-value" id="health-score" data-bind="overview.health_score" data-fallback="—">—</div>
-                                <div class="stat-bar">
-                                    <div class="stat-bar-fill" id="health-bar"></div>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <h4>Primary Language</h4>
-                                <div class="stat-value" id="primary-language" data-bind="overview.primary_language" data-fallback="Unknown">Unknown</div>
-                            </div>
-                            <div class="stat-card">
-                                <h4>Total Files</h4>
-                                <div class="stat-value" id="file-count" data-bind="overview.file_count" data-fallback="N/A">N/A</div>
-                            </div>
-                            <div class="stat-card">
-                                <h4>Last Updated</h4>
-                                <div class="stat-value" id="last-updated" data-bind="overview.last_updated" data-fallback="N/A">N/A</div>
-                            </div>
-                        </div>
-                        <div class="section" id="overview-details">
-                            <h3>Repository Overview</h3>
-                            <p id="repo-summary" data-bind="overview.summary" data-fallback="No summary available">No summary available</p>
-                        </div>
+                <!-- Health Gauge Visualization -->
+                <div class="viz-container">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-tachometer-alt"></i> Health Score Gauge</h3>
                     </div>
-                </section>
-
-                <!-- Architecture Tab -->
-                <section class="tab-panel" id="panel-architecture" data-tab="architecture" data-show-if="architecture">
-                    <div class="panel-content">
-                        <div id="architecture-details">
-                            <h3>Architecture Analysis</h3>
-                            <div class="architecture-grid">
-                                <div id="microservices-section" class="info-section">
-                                    <h4><i class="fas fa-server"></i> Microservices Detection</h4>
-                                    <p id="microservices-info" data-bind="architecture.microservices" data-fallback="No microservices detected">No microservices detected</p>
-                                </div>
-                                <div id="layers-section" class="info-section">
-                                    <h4><i class="fas fa-layer-group"></i> Layer Analysis</h4>
-                                    <p id="layers-info" data-bind="architecture.layers" data-fallback="No layer information">No layer information</p>
-                                </div>
-                                <div id="patterns-section" class="info-section">
-                                    <h4><i class="fas fa-pattern"></i> Design Patterns</h4>
-                                    <p id="patterns-info" data-bind="architecture.design_patterns" data-fallback="No patterns identified">No patterns identified</p>
-                                </div>
-                                <div id="tech-stack-section" class="info-section">
-                                    <h4><i class="fas fa-cogs"></i> Technology Stack</h4>
-                                    <div id="tech-stack" class="tag-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Quality Tab -->
-                <section class="tab-panel" id="panel-quality" data-tab="quality" data-show-if="quality">
-                    <div class="panel-content">
-                        <!-- GPTRecommendation: TDD Enforcement Section -->
-                        <div id="tdd-enforcement" class="section glass-card">
-                            <h3><i class="fas fa-vial"></i> TDD Enforcement Status</h3>
-                            <div class="quality-grid">
-                                <div class="metric-card tdd-status">
-                                    <h4>RED → GREEN → REFACTOR</h4>
-                                    <div class="metric-value tdd-pass" id="tdd-cycle-status">✓ Pass</div>
-                                    <p class="metric-detail" id="tdd-cycle-detail">Tests written before implementation</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Test Coverage</h4>
-                                    <div class="metric-value" id="test-coverage-pct" data-bind="quality.test_coverage" data-fallback="0%">0%</div>
-                                    <p class="metric-detail">Minimum: 80% required</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Test Files</h4>
-                                    <div class="metric-value" id="test-file-count" data-bind="quality.test_files" data-fallback="0">0</div>
-                                    <p class="metric-detail">Implementation → Test ratio</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Brain Protector</h4>
-                                    <div class="metric-value" id="brain-protector-status">Active</div>
-                                    <p class="metric-detail">TDD challenges: <span id="tdd-challenges">0</span></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- GPTRecommendation: Git Discipline Section -->
-                        <div id="git-discipline" class="section glass-card">
-                            <h3><i class="fab fa-git-alt"></i> Git Discipline & Commits</h3>
-                            <div class="quality-grid">
-                                <div class="metric-card git-clean">
-                                    <h4>Working Directory</h4>
-                                    <div class="metric-value" id="git-status">Clean</div>
-                                    <p class="metric-detail" id="git-status-detail">0 uncommitted files</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Auto-Commits</h4>
-                                    <div class="metric-value" id="auto-commit-count" data-bind="git.auto_commits" data-fallback="0">0</div>
-                                    <p class="metric-detail">Rule #16 compliance</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Last Commit</h4>
-                                    <div class="metric-value" id="last-commit-time" data-bind="git.last_commit_time" data-fallback="N/A">N/A</div>
-                                    <p class="metric-detail" id="commit-recency">—</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Checkpoint Commits</h4>
-                                    <div class="metric-value" id="checkpoint-commits" data-bind="git.checkpoint_commits" data-fallback="0">0</div>
-                                    <p class="metric-detail">Before major changes</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- GPTRecommendation: Error/Warning State -->
-                        <div id="error-warning-state" class="section glass-card">
-                            <h3><i class="fas fa-exclamation-circle"></i> Build Health & Runtime Status</h3>
-                            <div class="quality-grid">
-                                <div class="metric-card error-zero">
-                                    <h4>Build Errors</h4>
-                                    <div class="metric-value" id="build-errors" data-bind="quality.build_errors" data-fallback="0">0</div>
-                                    <p class="metric-detail">Compilation errors</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Build Warnings</h4>
-                                    <div class="metric-value" id="build-warnings" data-bind="quality.build_warnings" data-fallback="0">0</div>
-                                    <p class="metric-detail">Static analysis warnings</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Runtime Errors</h4>
-                                    <div class="metric-value" id="runtime-errors" data-bind="quality.runtime_errors" data-fallback="0">0</div>
-                                    <p class="metric-detail">Last 24 hours</p>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Definition of DONE</h4>
-                                    <div class="metric-value" id="done-status">✓ Met</div>
-                                    <p class="metric-detail">Zero errors + warnings + tests pass</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Original Quality Metrics -->
-                        <div id="quality-details" class="section">
-                            <h3>Code Quality Metrics</h3>
-                            <div class="quality-grid">
-                                <div class="metric-card">
-                                    <h4>Complexity Score</h4>
-                                    <div class="metric-value" id="complexity-score" data-bind="quality.complexity_score" data-fallback="N/A">N/A</div>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Duplication</h4>
-                                    <div class="metric-value" id="duplication-rate" data-bind="quality.duplication_rate" data-fallback="N/A">N/A</div>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Test Coverage</h4>
-                                    <div class="metric-value" id="test-coverage" data-bind="quality.test_coverage" data-fallback="N/A">N/A</div>
-                                </div>
-                                <div class="metric-card">
-                                    <h4>Maintainability Index</h4>
-                                    <div class="metric-value" id="maintainability" data-bind="quality.maintainability_index" data-fallback="N/A">N/A</div>
-                                </div>
-                            </div>
-                            <div id="quality-charts" class="charts-container">
-                                <!-- Chart placeholders for metrics -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Security Tab -->
-                <section class="tab-panel" id="panel-security" data-tab="security" data-show-if="security">
-                    <div class="panel-content">
-                        <div id="security-details">
-                            <h3>Security Posture</h3>
-                            <div class="security-grid">
-                                <div class="security-metric">
-                                    <h4>Security Score</h4>
-                                    <div class="score" id="security-score" data-bind="security.score" data-fallback="0">0</div>
-                                    <div class="score-label">/10</div>
-                                </div>
-                                <div class="security-metric">
-                                    <h4>Authentication</h4>
-                                    <p id="auth-status" data-bind="security.authentication" data-fallback="Not assessed">Not assessed</p>
-                                </div>
-                                <div class="security-metric">
-                                    <h4>Encryption</h4>
-                                    <p id="encryption-status" data-bind="security.encryption" data-fallback="Not assessed">Not assessed</p>
-                                </div>
-                                <div class="security-metric">
-                                    <h4>Data Protection</h4>
-                                    <p id="data-protection-status" data-bind="security.data_protection" data-fallback="Not assessed">Not assessed</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Vulnerabilities Tab -->
-                <section class="tab-panel" id="panel-vulnerabilities" data-tab="vulnerabilities" data-show-if="vulnerabilities">
-                    <div class="panel-content">
-                        <div id="vulnerabilities-details">
-                            <h3>Vulnerability Assessment</h3>
-                            <div class="vulnerability-summary">
-                                <div class="vuln-card vuln-critical" data-show-if="vulnerabilities.critical">
-                                    <h4><i class="fas fa-fire"></i> Critical</h4>
-                                    <div class="vuln-count" id="critical-count" data-bind="vulnerabilities.critical.length" data-fallback="0">0</div>
-                                </div>
-                                <div class="vuln-card vuln-high" data-show-if="vulnerabilities.high">
-                                    <h4><i class="fas fa-exclamation"></i> High</h4>
-                                    <div class="vuln-count" id="high-count" data-bind="vulnerabilities.high.length" data-fallback="0">0</div>
-                                </div>
-                                <div class="vuln-card vuln-medium" data-show-if="vulnerabilities.medium">
-                                    <h4><i class="fas fa-warning"></i> Medium</h4>
-                                    <div class="vuln-count" id="medium-count" data-bind="vulnerabilities.medium.length" data-fallback="0">0</div>
-                                </div>
-                                <div class="vuln-card vuln-low" data-show-if="vulnerabilities.low">
-                                    <h4><i class="fas fa-info-circle"></i> Low</h4>
-                                    <div class="vuln-count" id="low-count" data-bind="vulnerabilities.low.length" data-fallback="0">0</div>
-                                </div>
-                            </div>
-                            <div id="vulnerability-details" class="section">
-                                <!-- Dynamically populated -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Dependencies Tab -->
-                <section class="tab-panel" id="panel-dependencies" data-tab="dependencies" data-show-if="dependencies">
-                    <div class="panel-content">
-                        <div id="dependencies-details">
-                            <h3>Dependency Management</h3>
-                            <div class="dependency-grid">
-                                <div class="dependency-stat">
-                                    <h4>Direct Dependencies</h4>
-                                    <div class="stat-number" id="direct-deps" data-bind="dependencies.direct_count" data-fallback="0">0</div>
-                                </div>
-                                <div class="dependency-stat">
-                                    <h4>Transitive</h4>
-                                    <div class="stat-number" id="transitive-deps" data-bind="dependencies.transitive_count" data-fallback="0">0</div>
-                                </div>
-                                <div class="dependency-stat">
-                                    <h4>Outdated</h4>
-                                    <div class="stat-number warning" id="outdated-deps" data-bind="dependencies.outdated_count" data-fallback="0">0</div>
-                                </div>
-                                <div class="dependency-stat">
-                                    <h4>Vulnerable</h4>
-                                    <div class="stat-number danger" id="vulnerable-deps" data-bind="dependencies.vulnerable_count" data-fallback="0">0</div>
-                                </div>
-                            </div>
-                            <div id="dependency-list" class="section">
-                                <!-- Dynamically populated -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Patterns Tab -->
-                <section class="tab-panel" id="panel-patterns" data-tab="patterns" data-show-if="patterns">
-                    <div class="panel-content">
-                        <div id="patterns-details">
-                            <h3>Design Patterns & SOLID Analysis</h3>
-                            <div class="patterns-grid">
-                                <div class="pattern-section">
-                                    <h4><i class="fas fa-cube"></i> Design Patterns</h4>
-                                    <div id="design-patterns-list" class="pattern-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                                <div class="pattern-section">
-                                    <h4><i class="fas fa-exclamation-circle"></i> Anti-Patterns</h4>
-                                    <div id="anti-patterns-list" class="pattern-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                                <div class="pattern-section">
-                                    <h4><i class="fas fa-balance-scale"></i> SOLID Principles</h4>
-                                    <div id="solid-metrics" class="solid-grid">
-                                        <div class="solid-metric">
-                                            <span>SRP</span>
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" id="solid-srp" style="width: 0%"></div>
-                                            </div>
-                                        </div>
-                                        <div class="solid-metric">
-                                            <span>OCP</span>
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" id="solid-ocp" style="width: 0%"></div>
-                                            </div>
-                                        </div>
-                                        <div class="solid-metric">
-                                            <span>LSP</span>
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" id="solid-lsp" style="width: 0%"></div>
-                                            </div>
-                                        </div>
-                                        <div class="solid-metric">
-                                            <span>ISP</span>
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" id="solid-isp" style="width: 0%"></div>
-                                            </div>
-                                        </div>
-                                        <div class="solid-metric">
-                                            <span>DIP</span>
-                                            <div class="progress-bar">
-                                                <div class="progress-fill" id="solid-dip" style="width: 0%"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Testing Tab -->
-                <section class="tab-panel" id="panel-testing" data-tab="testing" data-show-if="testing">
-                    <div class="panel-content">
-                        <div id="testing-details">
-                            <h3>Test Analysis & Coverage</h3>
-                            <div class="testing-grid">
-                                <div class="coverage-card">
-                                    <h4>Code Coverage</h4>
-                                    <div class="coverage-percentage" id="coverage-pct" data-bind="testing.coverage_percent" data-fallback="0">0</div>
-                                    <div class="coverage-label">%</div>
-                                </div>
-                                <div class="test-stats">
-                                    <div class="stat-item passing">
-                                        <span>Passing</span>
-                                        <strong id="tests-passing" data-bind="testing.passing_count" data-fallback="0">0</strong>
-                                    </div>
-                                    <div class="stat-item failing">
-                                        <span>Failing</span>
-                                        <strong id="tests-failing" data-bind="testing.failing_count" data-fallback="0">0</strong>
-                                    </div>
-                                    <div class="stat-item skipped">
-                                        <span>Skipped</span>
-                                        <strong id="tests-skipped" data-bind="testing.skipped_count" data-fallback="0">0</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="test-details" class="section">
-                                <h4>Test Distribution</h4>
-                                <div id="test-breakdown">
-                                    <!-- Dynamically populated -->
-                                </div>
-                            </div>
-                            <div id="coverage-trend" class="section">
-                                <h4>Coverage Trend</h4>
-                                <div id="coverage-chart">
-                                    <!-- Dynamically populated with trend data -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Use Cases Tab -->
-                <section class="tab-panel" id="panel-usecases" data-tab="usecases" data-show-if="usecases">
-                    <div class="panel-content">
-                        <div id="usecases-details">
-                            <h3>Business Capabilities & Use Cases</h3>
-                            <div class="usecases-grid">
-                                <div id="capabilities-section" class="usecase-section">
-                                    <h4><i class="fas fa-briefcase"></i> Business Capabilities</h4>
-                                    <div id="capabilities-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                                <div id="flows-section" class="usecase-section">
-                                    <h4><i class="fas fa-project-diagram"></i> Business Flows</h4>
-                                    <div id="flows-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                                <div id="integrations-section" class="usecase-section">
-                                    <h4><i class="fas fa-plug"></i> Integrations</h4>
-                                    <div id="integrations-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                                <div id="stakeholders-section" class="usecase-section">
-                                    <h4><i class="fas fa-users"></i> Stakeholder Mapping</h4>
-                                    <div id="stakeholders-list">
-                                        <!-- Dynamically populated -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                    <div id="viz-health" class="viz-canvas" style="min-height: 220px;"></div>
+                </div>
             </div>
+            
+            <!-- Tab Content: Architecture -->
+            <div id="tab-architecture" class="tab-content">
+                <div class="glass-card panel-emerald mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-sitemap"></i></div>
+                        <div>
+                            <h2 class="section-title">Code Architecture</h2>
+                            <p class="section-subtitle">Language distribution and file structure</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Language Sunburst -->
+                <div class="viz-container">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-chart-pie"></i> Language Distribution</h3>
+                    </div>
+                    <div id="viz-languages" class="viz-canvas"></div>
+                    <div class="viz-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #f7df1e;"></span>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #3178c6;"></span>
+                            <span>TypeScript</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #3572A5;"></span>
+                            <span>Python</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #178600;"></span>
+                            <span>C#</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #e34c26;"></span>
+                            <span>HTML</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #563d7c;"></span>
+                            <span>CSS</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File Treemap -->
+                <div class="viz-container">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-folder-tree"></i> File Structure Treemap</h3>
+                    </div>
+                    <div id="viz-files" class="viz-canvas"></div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Quality -->
+            <div id="tab-quality" class="tab-content">
+                <div class="glass-card panel-purple mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-medal"></i></div>
+                        <div>
+                            <h2 class="section-title">Code Quality</h2>
+                            <p class="section-subtitle">Quality metrics and analysis</p>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid" style="margin-top: 1.5rem;">
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));"><i class="fas fa-vial" style="color: var(--status-success);"></i></div>
+                            <div class="metric-value" style="color: var(--status-success);">0%</div>
+                            <div class="metric-label">Test Coverage</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 97, 255, 0.2));"><i class="fas fa-clone"></i></div>
+                            <div class="metric-value">0</div>
+                            <div class="metric-label">Code Duplications</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));"><i class="fas fa-code-branch" style="color: var(--status-warning);"></i></div>
+                            <div class="metric-value">N/A</div>
+                            <div class="metric-label">Complexity</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, rgba(123, 97, 255, 0.2), rgba(0, 212, 255, 0.2));"><i class="fas fa-file-alt"></i></div>
+                            <div class="metric-value">N/A</div>
+                            <div class="metric-label">Documentation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Security -->
+            <div id="tab-security" class="tab-content">
+                <div class="glass-card panel-cyan mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <h2 class="section-title">Security Analysis</h2>
+                            <p class="section-subtitle">Vulnerability scanning and compliance</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Stats Grid -->
+                    <div class="security-grid" style="margin-top: 1.5rem;">
+                        <div class="security-stat critical">
+                            <div class="security-count">0</div>
+                            <div class="metric-label">Critical</div>
+                        </div>
+                        <div class="security-stat high">
+                            <div class="security-count">0</div>
+                            <div class="metric-label">High</div>
+                        </div>
+                        <div class="security-stat medium">
+                            <div class="security-count">0</div>
+                            <div class="metric-label">Medium</div>
+                        </div>
+                        <div class="security-stat low">
+                            <div class="security-count">0</div>
+                            <div class="metric-label">Low</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Donut -->
+                <div class="viz-container">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-chart-pie"></i> Vulnerability Distribution</h3>
+                    </div>
+                    <div id="viz-security" class="viz-canvas" style="min-height: 300px;"></div>
+                </div>
+                
+                <!-- Vulnerability List -->
+                <div class="glass-card panel-purple">
+                    <h3 style="margin-bottom: 1rem;">
+                        <i class="fas fa-list" style="color: var(--accent-primary); margin-right: 0.5rem;"></i>
+                        Vulnerability Details
+                    </h3>
+                    <div id="sec-vuln-list">
+                        <!-- Populated by app.js -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Dependencies -->
+            <div id="tab-dependencies" class="tab-content">
+                <div class="glass-card panel-emerald mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-cubes"></i></div>
+                        <div>
+                            <h2 class="section-title">Dependency Analysis</h2>
+                            <p class="section-subtitle">Package dependencies and relationships</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dependency Graph -->
+                <div class="viz-container">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-project-diagram"></i> Dependency Network</h3>
+                    </div>
+                    <div id="viz-deps" class="viz-canvas" style="min-height: 500px;"></div>
+                    <div class="viz-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #00d4ff;"></span>
+                            <span>Direct Dependencies</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #7b61ff;"></span>
+                            <span>Transitive Dependencies</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dependency Table -->
+                <div class="glass-card panel-purple">
+                    <h3 style="margin-bottom: 1rem;">
+                        <i class="fas fa-table" style="color: var(--accent-primary); margin-right: 0.5rem;"></i>
+                        Package List
+                    </h3>
+                    <div id="dep-table" style="overflow-x: auto;">
+                        <!-- Populated by app.js -->
+                    </div>
+                </div>
+            </div>
+            
         </main>
-
+        
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2026 CORTEX. 9-Tab Dashboard powered by unified SPA architecture.</p>
+            <p>&copy; 2026 CORTEX. Repository Dashboard powered by D3.js &amp; Glassmorphism Design.</p>
         </footer>
     </div>
-
-    <!-- Embedded data for file:// protocol (CORS workaround) -->
-    <!-- To add more repositories, embed their data here with id="data-{reponame}" -->
-    <script type="application/json" id="data-ksessions">
-{
-  "repository": {
-    "slug": "ksessions",
-    "display_name": "KSESSIONS",
-    "description": "User Authentication platform built with Python",
-    "primary_language": "JavaScript",
-    "version": "1.0"
-  },
-  "overview": {
-    "summary": "Repository analysis",
-    "business_summary": "KSESSIONS is a comprehensive .NET Framework 4.8 application for managing educational Islamic sessions, featuring audio recordings with transcripts, etymology analysis, and Arabic linguistic tools. Built with Python, C#, ASP.NET. The application provides user authentication, data management, search & discovery.",
-    "key_findings": [
-      "No critical security issues detected",
-      "13 dependencies have known vulnerabilities"
-    ],
-    "health_score": 35,
-    "primary_language": "JavaScript",
-    "file_count": 0,
-    "last_updated": "2026-02-08"
-  },
-  "metrics": {
-    "health_score": 35,
-    "risk_score": 0,
-    "loc": 0,
-    "code_lines": 0,
-    "comment_lines": 0,
-    "blank_lines": 0,
-    "files": 0,
-    "coverage_pct": 0.0,
-    "languages": {
-      "JavaScript": 3081,
-      "HTML": 404,
-      "Python": 318,
-      "CSS": 277,
-      "C#": 245,
-      "Config": 550,
-      "SQL": 59,
-      "TypeScript": 40,
-      "PHP": 2
+    
+    <!-- Embedded Data (file:// protocol support) -->
+    <script id="data-ksessions" type="application/json">
+    {
+      "repo": {
+        "slug": "ksessions",
+        "display_name": "KSESSIONS",
+        "description": "User Authentication platform built with Python",
+        "owner": "Unknown",
+        "primary_language": "JavaScript",
+        "version": "1.0",
+        "last_analyzed_at": "2026-02-08T12:38:25.534690"
+      },
+      "overview": {
+        "summary": "Repository analysis",
+        "business_summary": "<strong>KSESSIONS</strong> is a comprehensive .NET Framework 4.8 application for managing educational Islamic sessions, featuring audio recordings with transcripts, etymology analysis, and Arabic linguistic tools. The application provides user authentication, data management, search & discovery capabilities.",
+        "key_findings": [
+          "No critical security issues detected",
+          "Multi-language codebase with JavaScript as primary",
+          "8,351 total dependencies across the project",
+          "Educational platform with rich linguistic features"
+        ]
+      },
+      "metrics": {
+        "health_score": 35,
+        "risk_score": 0,
+        "loc": 4976,
+        "files": 150,
+        "coverage_pct": 0.0,
+        "languages": {
+          "JavaScript": 3081,
+          "Config": 550,
+          "HTML": 404,
+          "Python": 318,
+          "CSS": 277,
+          "C#": 245,
+          "SQL": 59,
+          "TypeScript": 40,
+          "PHP": 2
+        }
+      },
+      "security": {
+        "total_count": 0,
+        "critical_count": 0,
+        "high_count": 0,
+        "medium_count": 0,
+        "low_count": 0,
+        "vulnerabilities": []
+      },
+      "dependencies": {
+        "total_count": 8351,
+        "direct_count": 0,
+        "transitive_count": 8351,
+        "packages": [
+          {"name": "eslint", "version": "8.56.0", "license": "MIT", "is_direct": true},
+          {"name": "prettier", "version": "3.1.1", "license": "MIT", "is_direct": true},
+          {"name": "mocha", "version": "10.2.0", "license": "MIT", "is_direct": true},
+          {"name": "chai", "version": "4.3.10", "license": "MIT", "is_direct": true},
+          {"name": "typescript", "version": "4.7.4", "license": "Apache-2.0", "is_direct": true},
+          {"name": "rimraf", "version": "5.0.5", "license": "ISC", "is_direct": false},
+          {"name": "axios", "version": "0.21.1", "license": "MIT", "is_direct": false},
+          {"name": "lodash", "version": "4.17.15", "license": "MIT", "is_direct": false},
+          {"name": "react", "version": "16.14.0", "license": "MIT", "is_direct": false},
+          {"name": "semver", "version": "7.1.3", "license": "ISC", "is_direct": false},
+          {"name": "@babel/core", "version": "7.10.3", "license": "MIT", "is_direct": false},
+          {"name": "@babel/preset-env", "version": "7.10.3", "license": "MIT", "is_direct": false},
+          {"name": "nyc", "version": "17.1.0", "license": "ISC", "is_direct": false},
+          {"name": "winston", "version": "3.11.0", "license": "MIT", "is_direct": false},
+          {"name": "express", "version": "4.18.2", "license": "MIT", "is_direct": false},
+          {"name": "acorn", "version": "8.4.1", "license": "MIT", "is_direct": false},
+          {"name": "uuid", "version": "9.0.0", "license": "MIT", "is_direct": false},
+          {"name": "dotenv", "version": "16.0.3", "license": "BSD-2-Clause", "is_direct": false},
+          {"name": "commander", "version": "11.0.0", "license": "MIT", "is_direct": false},
+          {"name": "chalk", "version": "5.3.0", "license": "MIT", "is_direct": false}
+        ]
+      }
     }
-  },
-  "security": {
-    "total_count": 0,
-    "critical_count": 0,
-    "high_count": 0,
-    "medium_count": 0,
-    "low_count": 0,
-    "score": 10,
-    "authentication": "Implemented",
-    "encryption": "TLS 1.2+",
-    "data_protection": "Compliant",
-    "vulnerabilities": []
-  },
-  "dependencies": {
-    "total_count": 8351,
-    "direct_count": 0,
-    "transitive_count": 8351,
-    "vulnerable_count": 13,
-    "outdated_count": 0
-  },
-  "quality": {
-    "maintainability": 75,
-    "readability": 80,
-    "documentation": 70,
-    "complexity": 65,
-    "complexity_score": 65,
-    "duplication_rate": "N/A",
-    "test_coverage": "0%",
-    "maintainability_index": 75,
-    "test_coverage_pct": 0,
-    "test_files": 0,
-    "build_errors": 0,
-    "build_warnings": 0,
-    "runtime_errors": 0
-  },
-  "git": {
-    "auto_commits": 0,
-    "last_commit_time": "N/A",
-    "checkpoint_commits": 0
-  },
-  "architecture": {},
-  "vulnerabilities": {},
-  "patterns": {},
-  "testing": {},
-  "usecases": {}
-}
     </script>
-
-    <!-- Load app controller -->
-    <script src="app.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/visualizations.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
