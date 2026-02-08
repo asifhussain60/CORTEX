@@ -288,6 +288,78 @@ active_phases:
       - "Architecture integrity enforcement"
       - "Self-improving CORTEX governance"
 
+  - id: "phase-55"
+    name: ".NET Enterprise LENS Enhancement"
+    file: "phases/active/phase-55-dotnet-enterprise-lens-enhancement.yaml"
+    created: "2026-02-08"
+    status: "proposed"
+    priority: "P1"
+    execution_order: 99
+    roi_score: 0.88
+    estimated_duration: "5 days"
+    test_target: 51
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: false
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      PROPOSED: Comprehensive .NET monolith onboarding capabilities for LENS.
+      
+      PROBLEM: Enterprise .NET monoliths (300+ .csproj, multi-solution architecture) 
+      onboarding reveals LENS gaps:
+      - ❌ No .sln parser (solution structure invisible)
+      - ❌ No MSBuild ProjectReference resolver (dependency graphs incomplete)
+      - ❌ No Directory.Build.props/Directory.Packages.props support (wrong package versions)
+      - ❌ No .sqlproj analyzer (database projects unrecognized)
+      - ❌ No EF migration tracking (schema evolution hidden)
+      - ❌ No Azure DevOps pipeline analysis
+      - ❌ No WCF service discovery
+      
+      CURRENT COVERAGE: ~40% (C# files, basic dependencies, config security)
+      TARGET COVERAGE: >90% (solution architecture, dependencies, database, CI/CD, services)
+      
+      STAGES (9 total, 51 tests):
+      - S1: Solution file (.sln) parser (7 tests)
+      - S2: MSBuild ProjectReference dependency resolver (7 tests)
+      - S3: Directory.Build.props/Directory.Packages.props support (6 tests)
+      - S4: SQL Server database project (.sqlproj) analyzer (5 tests)
+      - S5: Entity Framework migration analyzer (5 tests)
+      - S6: Azure DevOps pipeline analyzer (5 tests)
+      - S7: WCF service contract analyzer (5 tests)
+      - S8: Solution architecture visualizer (5 tests)
+      - S9: RepositoryOnboardingOrchestrator integration (6 tests)
+      
+      KEY DELIVERABLES:
+      - SolutionFileParser (extract project dependency graphs)
+      - MSBuildDependencyResolver (transitive dependency analysis)
+      - Enhanced DependencyAnalyzer (centralized package management)
+      - DatabaseProjectAnalyzer (SQL Server .sqlproj support)
+      - EFMigrationAnalyzer (schema evolution timeline)
+      - AzureDevOpsPipelineAnalyzer (CI/CD maturity scoring)
+      - WCFServiceAnalyzer (monolith decomposition planning)
+      - SolutionArchitectureVisualizer (Mermaid diagrams)
+      
+      SUCCESS METRICS:
+      - Enterprise monolith onboarding: 40% → 90% coverage
+      - Package version accuracy: 60% → 100% (centralized props)
+      - Database schema coverage: 20% → 100% (.sqlproj + EF migrations)
+      - Service inventory: 0% → 100% (WCF + REST APIs)
+      
+      BUSINESS VALUE:
+      - Complete .NET monolith intelligence (security, migration, onboarding)
+      - Accurate transitive dependency vulnerability detection
+      - Service catalog for monolith decomposition planning
+      - Visual architecture diagrams for developer onboarding
+      - Database schema tracking for compliance audits
+    depends_on:
+      - "ENH-017 Phase 2: Multi-Language AST Parsing (CSharpAdapter)"
+    unblocks:
+      - "Enterprise .NET repository onboarding"
+      - "Monolith decomposition planning"
+      - "Complete dependency vulnerability analysis"
+
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"
