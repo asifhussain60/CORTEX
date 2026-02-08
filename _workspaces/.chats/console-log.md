@@ -1,16 +1,108 @@
 bootstrap.js:13 [Bootstrap] Starting CORTEX Dashboard...
 bootstrap.js:37 [Bootstrap] Services created ✓
-DashboardController.js:640 [Controller] Repo changed: null → ksessions
-index.html?repo=ksessions:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
-/D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json:1  Failed to load resource: net::ERR_FAILED
-index.html?repo=ksessions:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
-/D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json:1  Failed to load resource: net::ERR_FAILED
-index.html?repo=ksessions:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
-/D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json:1  Failed to load resource: net::ERR_FAILED
-index.html?repo=ksessions:1 Access to fetch at 'file:///D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.
-/D:/PROJECTS/CORTEX/company/dashboards/spa/data/ksessions.json:1  Failed to load resource: net::ERR_FAILED
-bootstrap.js:25 [ErrorBoundary] repository_ksessions: TypeError: Failed to fetch
-    at errorBoundary.wrap.repoName.repoName (RepositoryService.js:71:40)
+bootstrap.js:50 [Bootstrap] Embedded data registered: ksessions
+DashboardController.js:48 [Controller] Initializing dashboard...
+DashboardController.js:51 [Controller] → Injecting dependencies...
+DashboardController.js:56 [Controller] ✓ Dependencies injected
+DashboardController.js:59 [Controller] → Initializing DOM references...
+DashboardController.js:557 [Controller] _initTabs: Initializing tab navigation...
+DashboardController.js:558 [Controller] _initTabs: tabNav element: ✓ Found
+DashboardController.js:565 [Controller] _initTabs: Creating 6 tab buttons
+DashboardController.js:567 [Controller] _initTabs:   1. Overview (overview)
+DashboardController.js:567 [Controller] _initTabs:   2. Architecture (architecture)
+DashboardController.js:567 [Controller] _initTabs:   3. Quality (quality)
+DashboardController.js:567 [Controller] _initTabs:   4. Security (security)
+DashboardController.js:567 [Controller] _initTabs:   5. Dependencies (dependencies)
+DashboardController.js:567 [Controller] _initTabs:   6. Use Cases (usecases)
+DashboardController.js:579 [Controller] _initTabs: ✓ Tab HTML generated
+DashboardController.js:580 [Controller] _initTabs: ✓ Tab navigation initialized
+DashboardController.js:61 [Controller] ✓ DOM references initialized
+DashboardController.js:64 [Controller] → Subscribing to state changes...
+DashboardController.js:66 [Controller] ✓ State subscription active
+DashboardController.js:69 [Controller] → Setting up event listeners...
+DashboardController.js:71 [Controller] ✓ Event listeners attached
+DashboardController.js:76 [Controller] → Loading initial repository: ksessions
+DashboardController.js:77 [Controller]   URL params: {repo: 'ksessions'}
+DashboardController.js:78 [Controller]   Default repo: ksessions
+DashboardController.js:89 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DashboardController.js:90 [Controller] loadRepository: Starting load for "ksessions"
+DashboardController.js:91 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DashboardController.js:93 [Controller] loadRepository: Generation BEFORE state update: 0
+DashboardController.js:96 [Controller] loadRepository: → Updating state (loading started)...
+StateManager.js:60 [StateManager] setState called by: at DashboardController.loadRepository (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:97:27)
+StateManager.js:61 [StateManager] Current generation: 0 → 1
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 0
+DashboardController.js:773 [Controller] _onStateChange: New generation: 1
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:778 [Controller] _onStateChange: Repo changed: null → ksessions
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 1
+DashboardController.js:102 [Controller] loadRepository: ✓ State updated
+DashboardController.js:106 [Controller] loadRepository: Generation AFTER state update (CAPTURED): 1
+DashboardController.js:109 [Controller] loadRepository: → Showing loading overlay...
+DashboardController.js:111 [Controller] loadRepository: ✓ Loading overlay visible
+DashboardController.js:115 [Controller] loadRepository: → Checking cache...
+DashboardController.js:129 [Controller] loadRepository: ✗ Cache MISS
+DashboardController.js:133 [Controller] loadRepository: → Loading from RepositoryService...
+DashboardController.js:135 [Controller] loadRepository: ✓ Data loaded from service
+DashboardController.js:138 [Controller] loadRepository: → Data structure:
+DashboardController.js:139 [Controller] loadRepository:   Keys: (5) ['repo', 'overview', 'metrics', 'security', 'dependencies']
+DashboardController.js:140 [Controller] loadRepository:   Repo: KSESSIONS
+DashboardController.js:141 [Controller] loadRepository:   Overview: ✓
+DashboardController.js:142 [Controller] loadRepository:   Metrics: ✓
+DashboardController.js:143 [Controller] loadRepository:   Metadata: ✗
+DashboardController.js:148 [Controller] loadRepository: → Validating data integrity...
+DashboardController.js:155 [Controller] loadRepository: ✓ Validation PASSED
+DashboardController.js:159 [Controller] loadRepository: ⚠ Validation warnings: [{…}]
+loadRepository @ DashboardController.js:159
+await in loadRepository
+initialize @ DashboardController.js:80
+bootstrapDashboard @ bootstrap.js:60
+(anonymous) @ bootstrap.js:170
+DashboardController.js:166 [Controller] loadRepository: → Caching data...
+StateManager.js:159 [StateManager] setCacheEntry: Caching ksessions (internal cache, no state mutation)
+StateManager.js:174 [StateManager] setCacheEntry: Cache size: 1 / 10
+DashboardController.js:168 [Controller] loadRepository: ✓ Data cached
+DashboardController.js:173 [Controller] loadRepository: → Proceeding to render (generation tracking handled by _renderCurrentTab)
+DashboardController.js:176 [Controller] loadRepository: → Updating state (loading complete)...
+StateManager.js:60 [StateManager] setState called by: at DashboardController.loadRepository (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:177:31)
+StateManager.js:61 [StateManager] Current generation: 1 → 2
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 1
+DashboardController.js:773 [Controller] _onStateChange: New generation: 2
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 2
+DashboardController.js:182 [Controller] loadRepository: ✓ State updated with data
+DashboardController.js:183 [Controller] loadRepository:   New generation: 2
+DashboardController.js:186 [Controller] loadRepository: → Updating URL...
+DashboardController.js:188 [Controller] loadRepository: ✓ URL updated
+DashboardController.js:191 [Controller] loadRepository: → Rendering current tab...
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 2 → 3
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 2
+DashboardController.js:773 [Controller] _onStateChange: New generation: 3
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 3
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 3
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+bootstrap.js:25 [ErrorBoundary] tab_overview: TypeError: viz.createLanguagePieChart is not a function
+    at DashboardController._renderOverviewVisualizations (DashboardController.js:520:17)
+    at DashboardController._renderOverview (DashboardController.js:330:24)
+    at errorBoundary.wrap.tabId (DashboardController.js:274:40)
     at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
     at ErrorBoundary._handleError (ErrorBoundary.js:96:31)
     at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
@@ -18,44 +110,137 @@ bootstrap.js:25 [ErrorBoundary] repository_ksessions: TypeError: Failed to fetch
     at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
     at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
     at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
-    at async RepositoryService._loadRepositoryInternal (RepositoryService.js:60:16)
-    at async RepositoryService.loadRepository (RepositoryService.js:47:28)
 onError @ bootstrap.js:25
-DashboardController.js:129 [Controller] Load failed: TypeError: Cannot read properties of null (reading 'metadata')
-    at ValidationService._checkDescriptionContradiction (ValidationService.js:85:28)
-    at ValidationService.validateDataIntegrity (ValidationService.js:27:14)
-    at DashboardController.loadRepository (DashboardController.js:99:59)
-    at async DashboardController.initialize (DashboardController.js:67:9)
-    at async bootstrapDashboard (bootstrap.js:59:9)
-loadRepository @ DashboardController.js:129
-bootstrap.js:66 [Bootstrap] Controller initialized ✓
-bootstrap.js:76 [Bootstrap] Dashboard ready ✓
-bootstrap.js:114 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-bootstrap.js:115 🚀 CORTEX Dashboard Development Mode
-bootstrap.js:116 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-bootstrap.js:117 
-bootstrap.js:118 Available Commands:
-bootstrap.js:119   window.dashboardDiagnostics()  - Export diagnostics
-bootstrap.js:120   window.dashboardState          - Access state manager
-bootstrap.js:121   window.dashboardController     - Access controller
-bootstrap.js:122 
-bootstrap.js:123 State Management:
-bootstrap.js:124   - Immutable state with versioning ✓
-bootstrap.js:125   - Race condition prevention ✓
-bootstrap.js:126   - Stale render rejection ✓
-bootstrap.js:127 
-bootstrap.js:128 Error Handling:
-bootstrap.js:129   - Component error boundaries ✓
-bootstrap.js:130   - Retry logic (3x exponential backoff) ✓
-bootstrap.js:131   - Timeout protection (5s) ✓
-bootstrap.js:132 
-bootstrap.js:133 Security:
-bootstrap.js:134   - XSS protection (HTML sanitization) ✓
-bootstrap.js:135   - Data validation before render ✓
-bootstrap.js:136   - Trust boundary enforcement ✓
-bootstrap.js:137 
-bootstrap.js:138 Performance:
-bootstrap.js:139   - Lazy tab loading ✓
-bootstrap.js:140   - Request deduplication ✓
-bootstrap.js:141   - LRU cache (10 items, 5min TTL) ✓
-bootstrap.js:142 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+_handleError @ ErrorBoundary.js:101
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_renderCurrentTab @ DashboardController.js:258
+loadRepository @ DashboardController.js:192
+await in loadRepository
+initialize @ DashboardController.js:80
+bootstrapDashboard @ bootstrap.js:60
+(anonymous) @ bootstrap.js:170
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 3 → 4
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 3
+DashboardController.js:773 [Controller] _onStateChange: New generation: 4
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 4
+DashboardController.js:193 [Controller] loadRepository: ✓ Tab rendered
+DashboardController.js:195 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DashboardController.js:196 [Controller] loadRepository: ✅ SUCCESS - "ksessions" loaded
+DashboardController.js:197 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DashboardController.js:82 [Controller] ✅ Initialization complete
+bootstrap.js:67 [Bootstrap] Controller initialized ✓
+bootstrap.js:77 [Bootstrap] Dashboard ready ✓
+bootstrap.js:115 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+bootstrap.js:116 🚀 CORTEX Dashboard Development Mode
+bootstrap.js:117 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+bootstrap.js:118 
+bootstrap.js:119 Available Commands:
+bootstrap.js:120   window.dashboardDiagnostics()  - Export diagnostics
+bootstrap.js:121   window.dashboardState          - Access state manager
+bootstrap.js:122   window.dashboardController     - Access controller
+bootstrap.js:123 
+bootstrap.js:124 State Management:
+bootstrap.js:125   - Immutable state with versioning ✓
+bootstrap.js:126   - Race condition prevention ✓
+bootstrap.js:127   - Stale render rejection ✓
+bootstrap.js:128 
+bootstrap.js:129 Error Handling:
+bootstrap.js:130   - Component error boundaries ✓
+bootstrap.js:131   - Retry logic (3x exponential backoff) ✓
+bootstrap.js:132   - Timeout protection (5s) ✓
+bootstrap.js:133 
+bootstrap.js:134 Security:
+bootstrap.js:135   - XSS protection (HTML sanitization) ✓
+bootstrap.js:136   - Data validation before render ✓
+bootstrap.js:137   - Trust boundary enforcement ✓
+bootstrap.js:138 
+bootstrap.js:139 Performance:
+bootstrap.js:140   - Lazy tab loading ✓
+bootstrap.js:141   - Request deduplication ✓
+bootstrap.js:142   - LRU cache (10 items, 5min TTL) ✓
+bootstrap.js:143 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 4 → 5
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 4
+DashboardController.js:773 [Controller] _onStateChange: New generation: 5
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: overview → architecture
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 5
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 5 → 6
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 5
+DashboardController.js:773 [Controller] _onStateChange: New generation: 6
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 6
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 6
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+bootstrap.js:25 [ErrorBoundary] tab_architecture: TypeError: window.CortexViz.renderArchitectureTab is not a function
+    at DashboardController._renderArchitecture (DashboardController.js:392:36)
+    at errorBoundary.wrap.tabId (DashboardController.js:277:40)
+    at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
+    at ErrorBoundary._handleError (ErrorBoundary.js:96:31)
+    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
+    at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
+    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
+    at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
+    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
+    at async DashboardController._renderCurrentTab (DashboardController.js:258:13)
+onError @ bootstrap.js:25
+_handleError @ ErrorBoundary.js:101
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_renderCurrentTab @ DashboardController.js:258
+switchTab @ DashboardController.js:229
+(anonymous) @ DashboardController.js:592
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 6 → 7
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 6
+DashboardController.js:773 [Controller] _onStateChange: New generation: 7
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 7

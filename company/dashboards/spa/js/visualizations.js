@@ -1100,13 +1100,222 @@ function createUseCaseTreemap(containerId, useCases) {
         .text(d => d.data.name.length > 18 ? d.data.name.slice(0, 16) + '...' : d.data.name);
 }
 
+/**
+ * Render architecture tab visualizations
+ * Combines system architecture diagram and component hierarchy
+ * @param {Object} data - Repository data with architecture info
+ */
+async function renderArchitectureTab(data) {
+    try {
+        // Extract architecture data
+        const containerIds = ['arch-diagram', 'arch-components', 'arch-dependencies'];
+        
+        // Ensure containers exist or create placeholders
+        containerIds.forEach(id => {
+            let container = document.getElementById(id);
+            if (!container) {
+                container = document.createElement('div');
+                container.id = id;
+                container.style.marginBottom = '20px';
+                // Append to appropriate parent (dashboard should have these)
+                const parent = document.querySelector('[data-tab="architecture"]');
+                if (parent) parent.appendChild(container);
+            }
+        });
+        
+        // Render domain concept map (architecture visualization)
+        if (data.overview) {
+            createDomainConceptMap('arch-diagram', data);
+        }
+        
+        // Render file tree (components)
+        if (data.metrics) {
+            createFileTree('arch-components', data.metrics);
+        }
+        
+        // Render dependency graph
+        if (data.dependencies && data.dependencies.direct) {
+            createDependencyGraph('arch-dependencies', data.dependencies);
+        }
+    } catch (error) {
+        console.error('[Viz] renderArchitectureTab error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Render quality tab visualizations
+ * Shows code quality metrics and health indicators
+ * @param {Object} data - Repository data with quality metrics
+ */
+async function renderQualityTab(data) {
+    try {
+        const containerIds = ['quality-health', 'quality-metrics', 'quality-overview'];
+        
+        // Ensure containers exist
+        containerIds.forEach(id => {
+            let container = document.getElementById(id);
+            if (!container) {
+                container = document.createElement('div');
+                container.id = id;
+                container.style.marginBottom = '20px';
+                const parent = document.querySelector('[data-tab="quality"]');
+                if (parent) parent.appendChild(container);
+            }
+        });
+        
+        // Render health gauge if score available
+        if (data.metrics && data.metrics.quality_score) {
+            createHealthGauge('quality-health', data.metrics.quality_score);
+        }
+        
+        // Render language distribution
+        if (data.metrics && data.metrics.languages) {
+            createLanguageSunburst('quality-metrics', data.metrics.languages);
+        }
+    } catch (error) {
+        console.error('[Viz] renderQualityTab error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Render security visualizations
+ * Shows security vulnerabilities and compliance status
+ * @param {Object} data - Repository data with security info
+ */
+async function renderSecurityVisualizations(data) {
+    try {
+        const containerIds = ['security-donut-chart', 'security-overview'];
+        
+        // Ensure containers exist
+        containerIds.forEach(id => {
+            let container = document.getElementById(id);
+            if (!container) {
+                container = document.createElement('div');
+                container.id = id;
+                container.style.marginBottom = '20px';
+                const parent = document.querySelector('[data-tab="security"]');
+                if (parent) parent.appendChild(container);
+            }
+        });
+        
+        // Render security donut
+        if (data.security) {
+            createSecurityDonut('security-donut-chart', data.security);
+        }
+    } catch (error) {
+        console.error('[Viz] renderSecurityVisualizations error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Render dependency graph wrapper
+ * @param {Object} data - Repository data with dependencies
+ * @param {Object} options - Rendering options
+ */
+async function renderDependencyGraph(data, options = {}) {
+    try {
+        const containerId = options.containerId || 'dependency-visualization';
+        
+        // Ensure container exists
+        let container = document.getElementById(containerId);
+        if (!container) {
+            container = document.createElement('div');
+            container.id = containerId;
+            container.style.marginBottom = '20px';
+            const parent = document.querySelector('[data-tab="dependencies"]');
+            if (parent) parent.appendChild(container);
+        }
+        
+        // Render graph
+        if (data.dependencies) {
+            createDependencyGraph(containerId, data.dependencies);
+        }
+    } catch (error) {
+        console.error('[Viz] renderDependencyGraph error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Render use cases tab
+ * @param {Object} data - Repository data with use cases
+ */
+async function renderUseCasesTab(data) {
+    try {
+        const containerId = 'usecases-treemap';
+        
+        // Ensure container exists
+        let container = document.getElementById(containerId);
+        if (!container) {
+            container = document.createElement('div');
+            container.id = containerId;
+            container.style.marginBottom = '20px';
+            const parent = document.querySelector('[data-tab="usecases"]');
+            if (parent) parent.appendChild(container);
+        }
+        
+        // Extract use cases from data
+        if (data.overview && data.overview.use_cases) {
+            const useCases = Array.isArray(data.overview.use_cases) 
+                ? data.overview.use_cases 
+                : Object.entries(data.overview.use_cases).map(([name, desc]) => ({
+                    name,
+                    value: Math.random() * 50 + 10 // Default weighting
+                }));
+            
+            createUseCaseTreemap(containerId, useCases);
+        }
+    } catch (error) {
+        console.error('[Viz] renderUseCasesTab error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Create language pie chart (alias for backwards compatibility)
+ * @param {Object} data - Repository data with language metrics
+ * @param {string} containerId - DOM element ID
+ */
+async function createLanguagePieChart(data, containerId) {
+    try {
+        // Extract languages from data
+        let languages = {};
+        
+        if (data.metrics && data.metrics.languages) {
+            languages = data.metrics.languages;
+        } else if (data.overview && data.overview.primary_language) {
+            languages[data.overview.primary_language] = 1000;
+        }
+        
+        // Use sunburst instead of pie for better visualization
+        createLanguageSunburst(containerId, languages);
+    } catch (error) {
+        console.error('[Viz] createLanguagePieChart error:', error);
+        throw error;
+    }
+}
+
 window.CortexViz = {
+    // Core visualization functions
     createLanguageSunburst,
+    createLanguagePieChart,
     createDependencyGraph,
     createHealthGauge,
     createSecurityDonut,
     createFileTree,
     createDomainConceptMap,
     createUseCaseTreemap,
+    
+    // Tab rendering wrappers
+    renderArchitectureTab,
+    renderQualityTab,
+    renderSecurityVisualizations,
+    renderDependencyGraph,
+    renderUseCasesTab,
+    
+    // Color palette
     COLORS
 };
