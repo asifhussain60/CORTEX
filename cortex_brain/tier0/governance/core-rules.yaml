@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 29
+  rule_count: 50
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-01-30 - Add business principle aliases (dual naming system)"
-  version: "3.3"
-  consolidation_date: "2026-01-28"
-  consolidation_status: "Phase 11 Prep Complete - CORE-041 added for Event-Driven Architecture"
+  last_update: "2026-02-08 - CORE-050 added for MCP-FIRST Enforcement (Phase 51)"
+  version: "3.4"
+  consolidation_date: "2026-02-08"
+  consolidation_status: "Phase 51 Prep Complete - CORE-050 added for Quality Degradation Prevention"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
 
 categories:

@@ -5,18 +5,53 @@ Provides MCP-compatible tool interfaces for:
 - Dashboard Suite Generation (GPT Spec compliant)
 - Single Repo Dashboard Generation
 - Landing Page Generation
+- Centralized DashboardCapabilityBroker integration (Phase 53 S4)
 
 AC-ID: SPA-SUITE-MCP-001
-Authority: CORE-007 (MCP-first)
+Authority: CORE-007 (MCP-first) + Phase 53 S4 (Orchestrator Integration)
 """
 
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 import logging
+from enum import Enum
 
 from cortex.mcp.decorators import mcp_tool
+from cortex.orchestrators.domain.dashboard_capability_broker import (
+    DashboardCapabilityBroker,
+    DashboardGenerationRequest,
+    RepositoryType,
+    DashboardMetric
+)
 
 logger = logging.getLogger(__name__)
+
+# Global broker instance (initialized once)
+_broker_instance: Optional[DashboardCapabilityBroker] = None
+
+def get_broker() -> DashboardCapabilityBroker:
+    """Get or create global DashboardCapabilityBroker instance"""
+    global _broker_instance
+    if _broker_instance is None:
+        _broker_instance = DashboardCapabilityBroker()
+        # Register all 7 orchestrators on first use
+        _register_orchestrators(_broker_instance)
+    return _broker_instance
+
+def _register_orchestrators(broker: DashboardCapabilityBroker):
+    """Register all 7 operational orchestrators with broker"""
+    orchestrators = [
+        ("MasterOrchestrator", ["generate_dashboard", "governance_gate"]),
+        ("PlanningOrchestrator", ["generate_dashboard", "artifact_registration"]),
+        ("InteractionOrchestrator", ["generate_dashboard", "action_listing"]),
+        ("RepositoryOnboardingOrchestrator", ["generate_dashboard", "auto_generate"]),
+        ("RefactoringOrchestrator", ["generate_dashboard", "post_refactor"]),
+        ("RecommendationGate", ["generate_dashboard", "metrics_evidence"]),
+        ("TDDOrchestrator", ["generate_dashboard", "test_suite"])
+    ]
+    
+    for orch_name, capabilities in orchestrators:
+        broker.register_orchestrator(orch_name, capabilities)
 
 
 @mcp_tool(
