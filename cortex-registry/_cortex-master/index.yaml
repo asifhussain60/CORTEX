@@ -14,7 +14,7 @@ active_phases:
     name: "Enhanced Planning System"
     file: "phases/active/phase-45-enhanced-planning-system.yaml"
     created: "2026-02-08"
-    status: "approved"
+    status: "pending_approval"
     priority: "P0"
     execution_order: 1
     roi_score: 0.89
@@ -169,9 +169,20 @@ active_phases:
     estimated_duration: "20 days"
     test_target: 260
     coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    autonomous_config:
+      silent_execution: true
+      user_notification: false
+      progress_visualization: "ascii_bar"
+      report_generation: "none"
+      token_aware: true
+      continuation_prompt: true
+      visual_updates: "copilot_chat_inline"
     description: |
       ⚪ PLANNED: Phase 38.0 prerequisite complete. Ready for implementation.
       (12 gaps, 260 tests, 20 days estimated effort)
+      🟢 AUTONOMOUS EXECUTION: Enabled with visual progress tracking
     depends_on:
       - "phase-43"
 
@@ -453,6 +464,38 @@ governance:
   versioning: "semantic"
   file_naming: "kebab-case"
   max_file_name_length: 35
+  autonomous_execution:
+    enabled: true
+    silent_mode: true
+    progress_visualization: "ascii_bar"
+    token_budget_per_session: 180000
+    token_warning_threshold: 0.75
+    continuation_prompt_template: |
+      ## 🔄 SESSION CONTINUATION
+      **Token Budget Reached:** 75%+ of session limit
+      **Current Progress:** [STAGE]/[TOTAL] complete
+      **Estimated Remaining:** [HOURS] hours
+      
+      ### Continue in New Session:
+      Copy & paste the continuation prompt below in a new Copilot Chat window:
+      
+      ```
+      /plan continue phase-{ID}
+      Stage: {STAGE_NUM}
+      Previous: {PREVIOUS_STAGE_SUMMARY}
+      Next: {NEXT_STAGE_DESCRIPTION}
+      Git Checkpoint: {COMMIT_HASH}
+      ```
+      
+      All code, tests, and progress are automatically committed. No manual recovery needed.
+    report_generation:
+      enabled: false
+      inline_only: true
+      suppress_markdown_files: true
+    user_notification:
+      final_completion: false
+      progress_updates: false
+      error_alerts: true
 
 # Tags
 tags:

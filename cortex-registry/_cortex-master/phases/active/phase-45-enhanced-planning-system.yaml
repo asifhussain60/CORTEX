@@ -31,6 +31,14 @@ metadata:
   risk_level: "LOW-MEDIUM"
   autonomous_execution: true
   execution_mode: "continuous_until_complete"
+  autonomous_config:
+    silent_execution: true
+    user_notification: false
+    progress_visualization: "ascii_bar"
+    report_generation: "none"
+    token_aware: true
+    continuation_prompt: true
+    visual_updates: "copilot_chat_inline"
 
 governance:
   core_rules:

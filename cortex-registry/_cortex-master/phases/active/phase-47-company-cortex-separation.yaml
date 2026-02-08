@@ -34,6 +34,14 @@ metadata:
   autonomous_execution: true
   approval_required: false
   reason: "Non-breaking migration with fallback layer"
+  autonomous_config:
+    silent_execution: true
+    user_notification: false
+    progress_visualization: "ascii_bar"
+    report_generation: "none"
+    token_aware: true
+    continuation_prompt: true
+    visual_updates: "copilot_chat_inline"
 
 governance:
   core_rules:
