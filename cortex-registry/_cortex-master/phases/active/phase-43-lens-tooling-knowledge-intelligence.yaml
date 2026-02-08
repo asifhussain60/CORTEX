@@ -602,11 +602,11 @@ stages:
 execution_state:
   started_at: "2026-02-08T19:30:00Z"
   current_batch: 1
-  current_stage: 1
+  current_stage: 2
   progress:
     - stage: 1
       name: "Wire LENS Adapters & Relationship Findings"
-      status: "in_progress"
+      status: "completed"
       completed_acs:
         - id: "AC-PHASE43-001"
           description: "PolyglotAnalyzer maps .ts/.tsx to TypeScriptAdapter"
@@ -615,11 +615,47 @@ execution_state:
           tests_total: 8
           commit: "ba69c9b9f"
           timestamp: "2026-02-08T19:30:00Z"
+        - id: "AC-PHASE43-002"
+          description: "PolyglotAnalyzer JavaScript/JSX adapter wiring"
+          status: "completed"
+          tests_passed: 2
+          tests_total: 2
+          commit: "3394f2010"
+          timestamp: "2026-02-08T20:15:00Z"
+        - id: "AC-PHASE43-003"
+          description: "LENSOrchestrator CallGraphBuilder integration"
+          status: "completed"
+          tests_passed: 4
+          tests_total: 4
+          commit: "ae493dc30"
+          timestamp: "2026-02-08T20:45:00Z"
+        - id: "AC-PHASE43-004"
+          description: "LENSOrchestrator DependencyMapper wiring"
+          status: "completed"
+          tests_passed: 4
+          tests_total: 4
+          commit: "6a6a1ea0d"
+          timestamp: "2026-02-08T21:00:00Z"
+        - id: "AC-PHASE43-005"
+          description: "LENSOrchestrator PatternDetector wiring"
+          status: "completed"
+          tests_passed: 4
+          tests_total: 4
+          commit: "7661e42c0"
+          timestamp: "2026-02-08T21:15:00Z"
+      tests_total: 22
+      tests_passed: 22
+      coverage: "100%"
+      pending_acs: []
+    - stage: 2
+      name: "Wire DoR Checks & Risk Computation"
+      status: "planned"
+      completed_acs: []
       pending_acs:
-        - "AC-PHASE43-002: PolyglotAnalyzer JavaScript adapter wiring (3 tests)"
-        - "AC-PHASE43-003: LENSOrchestrator CallGraphBuilder wiring (4 tests)"
-        - "AC-PHASE43-004: LENSOrchestrator DependencyMapper wiring (4 tests)"
-        - "AC-PHASE43-005: PatternDetector integration (4 tests)"
+        - "AC-PHASE43-006: DoRValidator default checks registration (4 tests)"
+        - "AC-PHASE43-007: DoRValidator Jedi integration (5 tests)"
+        - "AC-PHASE43-008: Risk scoring computation (6 tests)"
+        - "AC-PHASE43-009: Impact analysis (7 tests)"
 
 # ============================================================================
 # TESTING STRATEGY
