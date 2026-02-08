@@ -413,8 +413,37 @@ stages:
         message: "Phase 37 S2 Component 1: RoleResolver - 25/25 tests passing ✅"
       - commit: "dd8a14e2f"
         message: "Phase 37 S2: PersonaInjector - 24/24 tests passing + S2 Complete ✅"
-      
+
   - id: "37.3"
+    title: "S3: MasterOrchestrator Integration"
+    duration: "1 day"
+    status: "planned"
+    description: "Orchestrate RoleResolver → PersonaInjector pipeline with session state management"
+    deliverables:
+      - path: "cortex/orchestrators/persona/master_orchestrator.py"
+        type: "python"
+        description: "Coordinate role detection + persona injection"
+        loc: 180
+        tests: 7
+        
+      - path: "cortex/orchestrators/persona/session_context.py"
+        type: "python"
+        description: "Manage session state and user preferences"
+        loc: 120
+        tests: 6
+        
+    tests:
+      unit:
+        - "tests/orchestrators/persona/test_master_orchestrator.py (7/7)"
+        - "tests/orchestrators/persona/test_session_context.py (6/6)"
+      count: 13
+      
+    success_criteria:
+      - "MasterOrchestrator routes: message → RoleResolver → PersonaInjector → response"
+      - "SessionContext maintains user_id → persona mapping"
+      - "E2E workflow integrates cleanly"
+      
+  - id: "37.4"
     title: "Prompt Injection Points + Role Commands"
     duration: "1 day"
     status: "planned"
