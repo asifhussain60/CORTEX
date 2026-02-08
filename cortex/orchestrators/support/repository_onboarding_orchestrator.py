@@ -540,11 +540,54 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         )
         
         # Overview section
-        overview = OverviewSection(
-            summary=getattr(narrative, 'summary', "Repository analysis") if narrative else "Repository analysis",
-            business_summary=getattr(narrative, 'description', "") if narrative else "",
-            key_findings=self._extract_key_findings(lens_context, security_model),
-        )
+        # AC_START: AC-KSESSIONS-HYBRID-008
+        # Try to use UnifiedLLMSynthesisLayer executive summary if available
+        exec_summary = None
+        try:
+            from cortex.orchestrators.support.unified_llm_synthesis_layer import (
+                UnifiedLLMSynthesisLayer,
+            )
+            
+            synthesis_layer = UnifiedLLMSynthesisLayer()
+            synthesis_input = {
+                "repository_name": repo_name,
+                "lens_analysis": lens_context,
+                "git_history": lens_context.get("git_history", {}),
+                "patterns_detected": lens_context.get("patterns_detected", {}),
+                "security_findings": security_model,
+            }
+            
+            result = synthesis_layer.synthesize(synthesis_input)
+            if result and result.executive_summary:
+                exec_summary = result.executive_summary
+                logger.info("UnifiedLLMSynthesisLayer: Generated executive summary for %s", repo_name)
+        except Exception as e:
+            logger.warning("UnifiedLLMSynthesisLayer executive summary failed: %s", e)
+        
+        # Build overview section
+        if exec_summary:
+            # Use LLM-generated executive summary
+            overview = OverviewSection(
+                summary=exec_summary.overview,
+                business_summary=exec_summary.purpose,
+                key_findings=self._extract_key_findings(lens_context, security_model),
+                key_capabilities=exec_summary.key_capabilities,
+                core_functionalities=exec_summary.core_functionalities,
+                repository_age=exec_summary.repository_age,
+                maturity_level=exec_summary.maturity_level,
+                recent_focus=exec_summary.recent_focus,
+                technical_highlights=exec_summary.technical_highlights,
+                business_outcomes=exec_summary.business_outcomes,
+                integration_points=exec_summary.integration_points,
+            )
+        else:
+            # Fallback to basic overview
+            overview = OverviewSection(
+                summary=getattr(narrative, 'summary', "Repository analysis") if narrative else "Repository analysis",
+                business_summary=getattr(narrative, 'description', "") if narrative else "",
+                key_findings=self._extract_key_findings(lens_context, security_model),
+            )
+        # AC_COMPLETE: AC-KSESSIONS-HYBRID-008 ✅ Generic executive summary integration
         
         # Metrics section
         repo_summary = lens_context.get("repository_summary", {})
@@ -781,11 +824,69 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         security_model: Dict[str, Any],
         repo_name: str,
     ) -> List[UseCase]:
-        """Generate use cases for the dashboard."""
+        """
+        Generate use cases for the dashboard.
+        
+        AC_START: AC-KSESSIONS-HYBRID-006
+        ENHANCEMENT: Integrated UnifiedLLMSynthesisLayer for comprehensive use case extraction.
+        Now generates 10-20 business use cases from code analysis using LLM synthesis.
+        Falls back to basic use cases if LLM unavailable.
+        """
         log_dashboard_debug("Generating use cases", repo=repo_name)
         
         use_cases = []
         
+        # TRY: Use UnifiedLLMSynthesisLayer for comprehensive use case extraction
+        try:
+            from cortex.orchestrators.support.unified_llm_synthesis_layer import (
+                UnifiedLLMSynthesisLayer,
+            )
+            
+            synthesis_layer = UnifiedLLMSynthesisLayer()
+            
+            # Build synthesis input dict (matches MultiSourceSynthesizer.to_dict() format)
+            synthesis_input = {
+                "repository_name": repo_name,
+                "lens_analysis": lens_context,
+                "git_history": lens_context.get("git_history", {}),
+                "patterns_detected": lens_context.get("patterns_detected", {}),
+                "security_findings": security_model,
+            }
+            
+            # Call LLM synthesis
+            result = synthesis_layer.synthesize(synthesis_input)
+            
+            if result and result.use_cases:
+                logger.info(
+                    "UnifiedLLMSynthesisLayer: Generated %d use cases for %s",
+                    len(result.use_cases),
+                    repo_name
+                )
+                
+                # Convert dataclass use cases to dashboard UseCase models
+                for uc in result.use_cases:
+                    use_cases.append(UseCase(
+                        id=uc.id,
+                        title=uc.title,
+                        persona=uc.actors[0] if uc.actors else "User",
+                        category=uc.category,
+                        summary=uc.description,
+                        signals=[],  # LLM use cases don't have signals
+                        recommended_actions=uc.business_flows[:3] if uc.business_flows else [],
+                        tags=[uc.category.lower()],
+                        severity="medium",  # Default severity
+                    ))
+                
+                log_dashboard_debug("LLM-generated use cases", count=len(use_cases))
+                return use_cases
+            
+        except Exception as e:
+            logger.warning(
+                "UnifiedLLMSynthesisLayer unavailable or failed: %s. Falling back to basic use cases.",
+                e
+            )
+        
+        # FALLBACK: Generate basic use cases if LLM synthesis fails
         # Security use case
         p0_count = len(security_model.get("p0_risks", []))
         if p0_count > 0:
@@ -842,8 +943,9 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
             severity="low",
         ))
         
-        log_dashboard_debug("Generated use cases", count=len(use_cases))
+        log_dashboard_debug("Generated basic use cases", count=len(use_cases))
         return use_cases
+        # AC_COMPLETE: AC-KSESSIONS-HYBRID-006 ✅ Generic LLM use case generation integrated
     
     def _run_holistic_analysis(self, repo_path: Path) -> Dict[str, Any]:
         """

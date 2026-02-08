@@ -58,14 +58,33 @@ class OverviewSection:
     """
     Overview section with business context.
     
+    AC_START: AC-KSESSIONS-HYBRID-007
+    ENHANCEMENT: Added fields to match Pydantic Overview model for comprehensive executive summary.
+    
     Attributes:
         summary: Technical summary
         business_summary: Business-oriented summary
         key_findings: List of important findings
+        key_capabilities: Main capabilities (from LLM synthesis)
+        core_functionalities: Core functions (from LLM synthesis)
+        repository_age: Age description (e.g., "2.3 years")
+        maturity_level: Development maturity (e.g., "Production-ready")
+        recent_focus: Recent development themes
+        technical_highlights: Key technical achievements
+        business_outcomes: Business impact statements
+        integration_points: External integrations
     """
     summary: str
     business_summary: str
     key_findings: List[str] = field(default_factory=list)
+    key_capabilities: List[str] = field(default_factory=list)
+    core_functionalities: List[str] = field(default_factory=list)
+    repository_age: str = ""
+    maturity_level: str = ""
+    recent_focus: str = ""
+    technical_highlights: List[str] = field(default_factory=list)
+    business_outcomes: List[str] = field(default_factory=list)
+    integration_points: List[str] = field(default_factory=list)
     
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
@@ -74,7 +93,21 @@ class OverviewSection:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "OverviewSection":
         """Deserialize from dictionary."""
-        return cls(**data)
+        # Handle legacy data without new fields
+        defaults = {
+            "key_capabilities": [],
+            "core_functionalities": [],
+            "repository_age": "",
+            "maturity_level": "",
+            "recent_focus": "",
+            "technical_highlights": [],
+            "business_outcomes": [],
+            "integration_points": [],
+        }
+        # Merge defaults with provided data
+        full_data = {**defaults, **data}
+        return cls(**full_data)
+    # AC_COMPLETE: AC-KSESSIONS-HYBRID-007 ✅ OverviewSection dataclass enhanced
 
 
 @dataclass

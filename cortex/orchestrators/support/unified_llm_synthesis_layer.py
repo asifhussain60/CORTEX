@@ -281,7 +281,22 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
         return prompt
     
     def _call_llm(self, prompt: str) -> str:
-        """Call LLM with synthesis prompt."""
+        """
+        Call LLM with synthesis prompt.
+        
+        Attempts to use GitHub Copilot's LLM (when running in VS Code),
+        falls back to Anthropic API if available, otherwise uses mock response.
+        """
+        # Strategy 1: Try GitHub Copilot LLM (when running in VS Code/Copilot Chat)
+        try:
+            response = self._call_copilot_llm(prompt)
+            if response:
+                logger.info("Using GitHub Copilot LLM for synthesis")
+                return response
+        except Exception as e:
+            logger.debug(f"GitHub Copilot LLM not available: {e}")
+        
+        # Strategy 2: Try Anthropic API (external)
         try:
             import anthropic
             
@@ -295,14 +310,143 @@ RESPOND WITH VALID JSON ONLY. No markdown, no explanation. Structure:
                 ]
             )
             
+            logger.info("Using Anthropic API for synthesis")
             return message.content[0].text
             
         except ImportError:
-            logger.warning("Anthropic client not available, returning mock response")
-            return self._get_mock_response()
+            logger.debug("Anthropic client not available")
         except Exception as e:
-            logger.error(f"LLM call failed: {e}")
-            return self._get_mock_response()
+            logger.warning(f"Anthropic API call failed: {e}")
+        
+        # Strategy 3: Mock response (fallback)
+        logger.warning("Using mock response (no LLM available)")
+        return self._get_mock_response()
+    
+    def _call_copilot_llm(self, prompt: str) -> str:
+        """
+        Attempt to use GitHub Copilot's LLM for synthesis.
+        
+        GENERIC APPROACH: This method attempts to use the generic MCP tool
+        cortex_synthesize_repository which works for ANY repository.
+        
+        When running in Copilot Chat, the tool can be invoked directly
+        and Copilot will generate the synthesis response using its inference.
+        
+        This is repository-agnostic - it extracts synthesis data from the prompt
+        and builds a generic request that works for any codebase.
+        """
+        try:
+            # Try to import and use the generic synthesis tool
+            from cortex.mcp.tools.repository_synthesis_tool import cortex_synthesize_repository
+            
+            # Extract repository data from prompt (generic parsing)
+            # This works for any repository because we parse the structured data
+            request_data = self._extract_synthesis_request_from_prompt(prompt)
+            
+            # Call generic synthesis tool (works for any repo)
+            result = cortex_synthesize_repository(request_data)
+            
+            if result.get("success"):
+                synthesis = result.get("synthesis", {})
+                # Convert to expected JSON string format
+                return json.dumps(synthesis, indent=2)
+            else:
+                raise Exception(f"Synthesis failed: {result.get('error')}")
+                
+        except ImportError:
+            logger.debug("Generic synthesis tool not available")
+            raise NotImplementedError("GitHub Copilot synthesis tool not found")
+        except Exception as e:
+            logger.warning(f"Generic Copilot synthesis failed: {e}")
+            raise
+    
+    def _extract_synthesis_request_from_prompt(self, prompt: str) -> Dict[str, Any]:
+        """
+        Extract synthesis request data from prompt (GENERIC parser).
+        
+        This method parses the structured prompt to extract:
+        - Repository metadata
+        - LENS analysis results  
+        - Git history
+        - Tech stack information
+        
+        Works for ANY repository because it uses generic field parsing.
+        """
+        import re
+        
+        # Generic extraction patterns (work for any repo)
+        request_data = {}
+        
+        # Extract repository name (generic)
+        repo_match = re.search(r'REPOSITORY:\s*(.+)', prompt)
+        if repo_match:
+            request_data["repository_name"] = repo_match.group(1).strip()
+        
+        # Extract path (generic)
+        path_match = re.search(r'Path:\s*(.+)', prompt)
+        if path_match:
+            request_data["repository_path"] = path_match.group(1).strip()
+        
+        # Extract LENS patterns (generic JSON parsing)
+        patterns_match = re.search(r'Sample patterns:\s*(\[[\s\S]*?\])', prompt)
+        if patterns_match:
+            try:
+                request_data["lens_patterns"] = json.loads(patterns_match.group(1))
+            except:
+                request_data["lens_patterns"] = []
+        
+        # Extract API contracts (generic JSON parsing)
+        api_match = re.search(r'Sample API contracts:\s*(\[[\s\S]*?\])', prompt)
+        if api_match:
+            try:
+                request_data["api_contracts"] = json.loads(api_match.group(1))
+            except:
+                request_data["api_contracts"] = []
+        
+        # Extract Git data (generic field extraction)
+        age_match = re.search(r'Age \(days\):\s*(\d+)', prompt)
+        if age_match:
+            request_data["age_days"] = int(age_match.group(1))
+        
+        commits_match = re.search(r'Total commits:\s*(\d+)', prompt)
+        if commits_match:
+            request_data["total_commits"] = int(commits_match.group(1))
+        
+        # Extract tech stack (generic list parsing)
+        lang_match = re.search(r'Languages:\s*(\[.*?\])', prompt)
+        if lang_match:
+            try:
+                request_data["languages"] = json.loads(lang_match.group(1))
+            except:
+                request_data["languages"] = []
+        
+        frameworks_match = re.search(r'Frameworks:\s*(\[.*?\])', prompt)
+        if frameworks_match:
+            try:
+                request_data["frameworks"] = json.loads(frameworks_match.group(1))
+            except:
+                request_data["frameworks"] = []
+        
+        # Set defaults for missing fields (generic)
+        request_data.setdefault("repository_name", "Unknown")
+        request_data.setdefault("repository_path", "")
+        request_data.setdefault("lens_patterns", [])
+        request_data.setdefault("api_contracts", [])
+        request_data.setdefault("architectural_layers", {})
+        request_data.setdefault("first_commit", "")
+        request_data.setdefault("last_commit", "")
+        request_data.setdefault("age_days", 0)
+        request_data.setdefault("total_commits", 0)
+        request_data.setdefault("active_contributors", 0)
+        request_data.setdefault("recent_changes", [])
+        request_data.setdefault("languages", [])
+        request_data.setdefault("frameworks", [])
+        request_data.setdefault("databases", [])
+        request_data.setdefault("has_ci_cd", False)
+        request_data.setdefault("containerized", False)
+        request_data.setdefault("readme_summary", "")
+        
+        return request_data
     
     def _get_mock_response(self) -> str:
         """Get mock LLM response for testing."""
