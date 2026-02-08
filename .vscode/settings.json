@@ -36,6 +36,19 @@
     "**/*-REPORT.md": true
   },
   
+  "// CORTEX MCP Server Configuration (Local Development)": null,
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp.server"],
+      "env": {
+        "CORTEX_ENV": "development",
+        "CORTEX_MCP_SERVER": "true",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    }
+  },
+  
   "// Python Environment": null,
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.analysis.typeCheckingMode": "basic",
