@@ -1,0 +1,190 @@
+# Persona System YAML Schema & Definitions
+# Authority: Phase 37 specification
+# TDD RED Phase: Define expected persona structure
+
+version: "1.0"
+description: "Role-adaptive persona system configuration"
+
+personas:
+  business_leader:
+    id: "business_leader"
+    display_name: "Business Leader"
+    description: "C-suite, VPs, directors focused on outcomes and metrics"
+    format: "BLUF"
+    depth: "executive"
+    word_limit: 150
+    show_code: false
+    show_metrics: true
+    metric_types:
+      - "ROI"
+      - "KPIs"
+      - "business_impact"
+    onboarding: false
+
+  product_owner:
+    id: "product_owner"
+    display_name: "Product Owner"
+    description: "PMs, POs focused on features and user value"
+    format: "narrative"
+    depth: "business"
+    word_limit: 300
+    show_code: false
+    show_metrics: true
+    metric_types:
+      - "velocity"
+      - "feature_progress"
+      - "user_impact"
+    onboarding: true
+    onboarding_focus:
+      - "dashboard_generation"
+      - "repo_onboarding"
+
+  scrum_master:
+    id: "scrum_master"
+    display_name: "Scrum Master"
+    description: "Agile coaches, scrum masters focused on process"
+    format: "action_oriented"
+    depth: "process"
+    word_limit: 300
+    show_code: false
+    show_metrics: true
+    metric_types:
+      - "sprint_metrics"
+      - "velocity"
+      - "blockers"
+    onboarding: true
+    onboarding_focus:
+      - "sprint_planning"
+      - "blockers"
+
+  tech_lead:
+    id: "tech_lead"
+    display_name: "Tech Lead / Manager"
+    description: "Technical leaders who need architecture + metrics"
+    format: "architecture"
+    depth: "technical_business"
+    word_limit: 500
+    show_code: "diagrams"
+    show_metrics: true
+    metric_types:
+      - "health_metrics"
+      - "coverage"
+      - "complexity"
+      - "tech_debt"
+    onboarding: true
+    onboarding_focus:
+      - "architecture"
+      - "dashboards"
+      - "health_metrics"
+
+  engineer:
+    id: "engineer"
+    display_name: "Software Engineer"
+    description: "Developers who need full technical depth"
+    format: "technical"
+    depth: "full"
+    word_limit: null
+    show_code: true
+    show_metrics: true
+    metric_types:
+      - "coverage"
+      - "complexity"
+      - "test_results"
+      - "performance"
+    onboarding: false
+
+  unknown:
+    id: "unknown"
+    display_name: "Discovery Mode"
+    description: "Role not yet determined, trigger discovery flow"
+    format: "discovery"
+    depth: null
+    show_code: null
+    show_metrics: null
+    trigger_discovery: true
+
+depth_levels:
+  executive:
+    id: "executive"
+    description: "BLUF, key metrics only"
+    word_limit: 100
+    show_code: false
+    metrics: "high_level"
+
+  standard:
+    id: "standard"
+    description: "Balanced detail"
+    word_limit: 300
+    show_code: "snippets"
+    metrics: "relevant"
+
+  detailed:
+    id: "detailed"
+    description: "Technical depth"
+    word_limit: 500
+    show_code: "relevant"
+    metrics: "full"
+
+  full:
+    id: "full"
+    description: "Engineer mode, complete detail"
+    word_limit: null
+    show_code: "complete"
+    metrics: "all"
+
+commands:
+  persona:
+    command: "/persona"
+    aliases:
+      - "/role"
+    usage: "/persona {role}"
+    description: "Set primary persona for session"
+    parameters:
+      - name: "role"
+        type: "string"
+        required: true
+        values:
+          - "business_leader"
+          - "product_owner"
+          - "scrum_master"
+          - "tech_lead"
+          - "engineer"
+
+  detail:
+    command: "/detail"
+    aliases:
+      - "/depth"
+    usage: "/detail {level}"
+    description: "Override response detail level"
+    parameters:
+      - name: "level"
+        type: "string"
+        required: true
+        values:
+          - "executive"
+          - "standard"
+          - "detailed"
+          - "full"
+
+nl_triggers:
+  depth_overrides:
+    - pattern: "show me the code"
+      action: "depth → full"
+    - pattern: "give me the BLUF"
+      action: "depth → executive"
+    - pattern: "technical details"
+      action: "depth → detailed"
+    - pattern: "summarize"
+      action: "depth → executive"
+    - pattern: "implementation details"
+      action: "depth → full"
+    - pattern: "high level overview"
+      action: "depth → standard"
+
+  persona_overrides:
+    - pattern: "explain like I'm a PM"
+      action: "persona → product_owner (1 turn)"
+    - pattern: "explain for my VP"
+      action: "persona → business_leader (1 turn)"
+    - pattern: "from an engineer's perspective"
+      action: "persona → engineer (1 turn)"
