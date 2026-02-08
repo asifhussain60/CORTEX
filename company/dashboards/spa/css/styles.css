@@ -1111,6 +1111,148 @@ body {
 .mb-lg { margin-bottom: var(--space-lg); }
 
 /* ============================================================================
+   DATA INTEGRITY & ERROR BOUNDARIES (AC-SPA-001-04)
+   ============================================================================ */
+
+.integrity-banner {
+    background: rgba(245, 158, 11, 0.05);
+    border-left: 4px solid var(--status-warning);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.integrity-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.integrity-header h3 {
+    color: var(--status-warning);
+    font-size: 1.1rem;
+    margin: 0;
+    flex: 1;
+}
+
+.integrity-header .btn-close {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.integrity-header .btn-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.integrity-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.integrity-item {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.integrity-item i {
+    font-size: 1.5rem;
+    margin-top: 0.25rem;
+}
+
+.integrity-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--status-warning);
+    margin-bottom: 0.25rem;
+}
+
+.integrity-item p {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+
+.integrity-item .confidence {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+.error-boundary-fallback {
+    padding: 2rem;
+    text-align: center;
+}
+
+.error-boundary-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: var(--status-danger);
+    margin-bottom: 1rem;
+}
+
+.error-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.error-message {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.error-details {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.error-details div {
+    margin-bottom: 0.5rem;
+}
+
+.error-details div:last-child {
+    margin-bottom: 0;
+}
+
+.btn-retry {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.btn-retry:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-2px);
+}
+
+.btn-retry i {
+    margin-right: 0.5rem;
+}
+
+
+/* ============================================================================
    DIGEST ENHANCEMENTS - New UI Components
    ============================================================================ */
 
