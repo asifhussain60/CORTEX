@@ -810,7 +810,8 @@ class DashboardController {
         }
         
         if (this.dom.totalFiles) {
-            const files = metrics.files || overview.total_files || 0;
+            // Support multiple data formats: metrics.files, overview.stats.files, overview.total_files
+            const files = metrics.files ?? overview.stats?.files ?? overview.total_files ?? 0;
             this.dom.totalFiles.textContent = files;
         }
         
