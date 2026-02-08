@@ -508,6 +508,44 @@ active_phases:
       - "Multi-region replication"
   
   - id: "phase-51"
+    name: "MCP-FIRST Enforcement"
+    file: "phases/active/phase-51-mcp-first-enforcement.yaml"
+    created: "2026-02-08"
+    completed: "2026-02-08"
+    status: "completed"
+    priority: "P0"
+    execution_order: 8
+    roi_score: 0.98
+    estimated_duration: "4-6 hours"
+    test_target: 39
+    coverage_target: 95
+    tests_passing: 42
+    production_blocker: true
+    description: |
+      ✅ COMPLETED: MCP-FIRST Enforcement with Fail-Fast Infrastructure Checks (6/6 stages).
+      - S1: CORE-050 Rule Definition & Documentation (4 tests) ✅
+      - S2: EnvironmentIntegrityAgent Implementation (11 tests) ✅
+      - S3: MCP Pre-Flight Check Protocol (8 tests) ✅
+      - S4: Copilot Native Tool Restrictions (4 tests) ✅
+      - S5: Session Initialization MCP Check (3 tests) ✅
+      - S6: Integration Testing & Documentation (9 tests) ✅
+      
+      Key deliverables:
+      - CORE-050: "Single Standard: Production" rule (Tier 0, immutable)
+      - EnvironmentIntegrityAgent: 8th enforcement agent with 3 MCP detection methods
+      - Pre-flight gate: Blocks IMPLEMENT/FIX/REFACTOR if MCP unavailable
+      - Tool restrictions: Intent-based native tool blocking (Copilot compliance)
+      - 42/39 tests passing (107%)
+      - Master Plan Sync: index.yaml updated, phases committed
+    depends_on:
+      - "phase-47"
+      - "phase-48"
+    unblocks:
+      - "phase-52"
+      - "phase-53"
+      - "Production quality assurance"
+
+  - id: "phase-51-alt"
     name: "Secrets Management & Audit Trail Hardening"
     file: "phases/active/phase-51-secrets-management-audit-hardening.yaml"
     created: "2026-02-08"

@@ -750,3 +750,10 @@ Searched for regex `class MasterOrchestrator|class PlanningOrchestrator|class In
 Read [](file:///d%3A/PROJECTS/CORTEX/cortex/orchestrators/core/master_orchestrator.py#202-202), lines 202 to 250
 
 Now let me check how to add dashboard capability. I'll create a mixin for dashboard 
+
+
+
+
+---
+=========================================================
+---

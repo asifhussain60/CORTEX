@@ -1,17 +1,19 @@
 phase_id: "phase-53"
 name: "Dashboard Orchestrator & SPA Consolidation"
-status: "planned"
+status: "in-progress"
 priority: "P1"
 created_date: "2026-02-08"
-estimated_start: "2026-02-15"
-estimated_completion: "2026-02-22"
+estimated_start: "2026-02-08"
+estimated_completion: "2026-02-15"
 roi_score: 0.82
 execution_order: 6
+architecture_decision: "Option B - Centralized DashboardCapabilityBroker"
+decision_date: "2026-02-08"
 
 overview: |
   Consolidate 7,776 generated dashboard files (67MB) into unified SPA 
-  with governance-wired orchestrator. Enable all operational orchestrators 
-  to request dashboard generation through MCP tools with audit trail.
+  with centralized DashboardCapabilityBroker. Single broker routes all 
+  dashboard generation requests through governance gates with unified audit trail.
 
 problem_statement: |
   Chat session (chat01.txt) revealed critical architectural gap:
