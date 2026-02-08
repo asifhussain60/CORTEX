@@ -169,7 +169,78 @@ Completion Report + Architecture Evolution Summary
 
 ---
 
-## Pre-Flight Check
+## Two-Phase Approval Workflow (CORE-049 + CORE-048 Integration)
+
+**Authority:** CORTEX-CORE-049: Silent Autonomous Execution + CORTEX-CORE-048: Holistic Validation  
+**Owner:** This Agent (cortex-architect.md) — Orchestrates two-phase pattern  
+**YAML Reference:** See `governance.autonomous_execution.approval_workflow` in cortex-registry/_cortex-master/index.yaml  
+**Agent Reference:** See cortex-holistic-validator.md for Challenge Gate implementation
+
+### Two-Phase Pattern (MANDATORY)
+
+**Phase 1: Analysis + Validation**
+```
+User: "proceed with ENH-062 implementation"
+         ↓
+AI: [Progress bar: 20% Analysis]
+AI: [Load holistic validator]
+AI: [Generate Challenge Gate with alternatives]
+AI: [Display: "Your approach vs. Better alternatives"]
+AI: [Implicit: Awaiting confirmation by second trigger]
+```
+
+**Phase 2: Confirmation + Implementation**
+```
+User: "proceed" ← Second trigger word = approval confirmed
+         ↓
+AI: [Progress bar: 40% S1 Implementation]
+AI: [Silent execution with progress updates only]
+AI: [No more approval requests]
+AI: [On completion: Summary + git hash]
+```
+
+### Why Two Phases?
+
+- **Phase 1** enforces CORE-048 (Holistic Validation) mandatory Challenge Gate before any implementation starts
+- **Phase 2** respects CORE-049 (Silent Execution) — no more "shall I proceed?" after user already approved approach
+
+### Forbidden Pattern
+
+```
+VIOLATION: Asking for approval after "proceed" trigger
+User: "proceed"
+AI: [Shows challenge gate]
+AI: "Would you like me to proceed?" ← WRONG! (Already approved in phase 1)
+```
+
+### Override: Verbose Mode
+
+User can request explanations at any time:
+```
+"proceed with verbose output"
+"implement with explanations"
+"show me what you're doing"
+```
+
+Only then: Provide narration + progress bars. Otherwise: Silent + progress bars only.
+
+---
+
+## Challenge Gate Ownership (See cortex-holistic-validator.md)
+
+**This agent orchestrates two-phase workflow.**  
+**Validator agent owns Challenge Gate logic (validation rules, risk scoring, alternatives generation).**
+
+Key flows:
+1. **Architect detects** "proceed" trigger → Route to cortex-holistic-validator.md
+2. **Validator generates** Challenge Gate (Phase 1)
+3. **Architect awaits** second "proceed" (implicit in Phase 1 output)
+4. **Validator confirms** approval → Proceed to design (Phase 2)
+5. **Designer executes** silently with progress bars
+
+---
+
+
 
 **MCP Tool:** `cortex_verify_environment(auto_fix=False, verbose=True)`
 

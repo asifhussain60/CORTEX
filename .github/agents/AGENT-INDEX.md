@@ -42,7 +42,66 @@ Tests: {passed}/{total} | Coverage: {pct}% | {duration}
 
 ---
 
-## ⚡ Token Optimization Strategy
+## 🏗️ Governance Architecture (Hybrid Pattern)
+
+**Authority:** CORTEX-CORE-035 (Single Canonical Implementation) + ENH-048 (Prompt Unbloating)  
+**Strategy:** YAML for structural rules (rarely change) + Agents for behavioral rules (actively evolving)
+
+### Tier 1: YAML Structural Rules (SSOT - Read-Only)
+
+**Location:** `cortex-registry/_cortex-master/index.yaml` (governance section)
+
+| Rule Category | Owner | Change Frequency | Examples |
+|---------------|-------|------------------|----------|
+| Trigger Words | YAML | Yearly | "proceed", "implement", "continue" |
+| Progress Bar Format | YAML | Never | `[██░░]`, width=10, chars |
+| Status Icons | YAML | Never | ✅, 🔵, ⚪, 🔴 |
+| Token Budgets | YAML | Quarterly | Per-session limit, warning threshold |
+| File Naming | YAML | Never | kebab-case, max 35 chars |
+| Risk Thresholds | YAML | Quarterly | Block > 0.7, warn > 0.4 |
+
+### Tier 2: Agent Behavioral Rules (Active Development)
+
+**Location:** Agent specification files in `.github/agents/core/`
+
+| Rule Category | Agent Owner | Change Frequency | Examples |
+|---------------|-----------  |------------------|----------|
+| Challenge Gate Logic | cortex-holistic-validator.md | Monthly | Alternatives generation, ROI analysis |
+| Two-Phase Approval | cortex-architect.md | Monthly | When to ask, when to execute silently |
+| Behavioral Patterns | AGENT-INDEX.md | Bi-weekly | What to do on test fail, token budget hit |
+| Validation Sequences | cortex-holistic-validator.md | Monthly | Registry checks, dependency analysis |
+| Response Formats | response-format-standards.md | Bi-weekly | Visual templates, icon usage |
+| Mode Detection | cortex-architect.md | Quarterly | Intent classification, agent routing |
+
+### Tier 3: Cross-References (Consistency)
+
+**Enforcement:** Every 6 months, run Governance Coherence Audit (cortex-auditor.md)
+
+- YAML references agents: "Challenge Gate defined in cortex-holistic-validator.md"
+- Agents reference YAML: "See index.yaml for trigger word list and risk thresholds"
+- All 3 prompts link to agent/YAML definitions, not redefine them
+
+---
+
+## 🎯 Loading + Rule Ownership Protocol
+
+**New agents follow this pattern:**
+
+1. **Declare rule ownership:** "This agent owns X behavioral rule"
+2. **Reference YAML:** "Parameters from cortex-registry/_cortex-master/index.yaml"
+3. **No duplication:** Check CORTEX-AGENT-INDEX.md before defining new rule
+4. **Update audit checklist:** Add new rule to quarterly governance audit
+
+**Existing agents (audit required):**
+- ✅ cortex-holistic-validator.md — Owns Challenge Gate, Validation Sequences
+- ✅ cortex-architect.md — Owns Two-Phase Workflow, Mode Detection
+- ✅ AGENT-INDEX.md — Owns Protocol Definitions, Loading Strategy
+- ⚠️ response-format-standards.md — Owns Response Formats (move duplicates)
+- ⚠️ cortex-architect.prompt.md — Owns Challenge Gate details (consolidate with agent)
+
+---
+
+
 
 **CRITICAL:** This file replaces bulk agent loading. Load specific agents ONLY when needed per intent.
 

@@ -60,7 +60,11 @@ Transform CORTEX governance from **reactive** to **proactive**:
 
 ---
 
-## Validation Sequence
+## Validation Sequence (CORE-048 Specification)
+
+**Authority:** CORTEX-CORE-048: Holistic Validation Gate (Phase 48)  
+**Owner:** This Agent (cortex-holistic-validator.md)  
+**YAML Reference:** See `governance.validation_rules` in cortex-registry/_cortex-master/index.yaml
 
 ```
 User Request (IMPLEMENT/FIX/REFACTOR)
@@ -70,6 +74,7 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 │     - index.yaml consistency        │
 │     - wiring.yaml completeness      │
 │     - Phase dependencies satisfied  │
+│     → See YAML: governance.validation_rules.registry_checks
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
@@ -77,6 +82,7 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 │     - Build orchestrator mesh       │
 │     - Detect circular dependencies  │
 │     - Calculate impact radius       │
+│     → See YAML: governance.validation_rules.dependency_analysis
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
@@ -85,20 +91,23 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 │     - Criticality evaluation        │
 │     - Test coverage check           │
 │     - Risk score: 0.0 → 1.0         │
+│     → See YAML: governance.validation_rules.risk_scoring
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
 │  4. ARCHITECTURE DRIFT DETECTION    │
-│     - CORE rule compliance          │
+│     - CORE rule compliance (index.yaml)
 │     - Pattern alignment             │
 │     - Breaking change detection     │
+│     → See YAML: governance.validation_rules.drift_detection
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
 │  5. MANDATORY CHALLENGE GATE        │
 │     - Generate alternatives         │
-│     - ROI comparison                │
+│     - ROI comparison (Ext/Scale/Acc)
 │     - Require user decision         │
+│     → DEFINED IN THIS AGENT (agent-specific logic)
 └─────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────┐
@@ -106,10 +115,13 @@ User Request (IMPLEMENT/FIX/REFACTOR)
 │     - Self-analysis for CORTEX repo │
 │     - Related file synthesis        │
 │     - Historical pattern awareness  │
+│     → See YAML: governance.validation_rules.cortex_brain_context
 └─────────────────────────────────────┘
          ↓
      VERDICT: PASS | WARN | BLOCK
 ```
+
+**Key Rule:** This agent OWNS Challenge Gate logic. YAML provides parameters (risk thresholds, metrics). Challenge Gate decision tree is agent-specific.
 
 ---
 
