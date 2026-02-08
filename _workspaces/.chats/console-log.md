@@ -93,45 +93,6 @@ StateManager.js:89 [StateManager] setState complete. New generation: 3
 DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 3
 DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
 DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
-DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
-DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 3 vs 3
-DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-bootstrap.js:25 [ErrorBoundary] tab_overview: TypeError: viz.createLanguagePieChart is not a function
-    at DashboardController._renderOverviewVisualizations (DashboardController.js:520:17)
-    at DashboardController._renderOverview (DashboardController.js:330:24)
-    at errorBoundary.wrap.tabId (DashboardController.js:274:40)
-    at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
-    at ErrorBoundary._handleError (ErrorBoundary.js:96:31)
-    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
-    at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
-    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
-    at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
-    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
-onError @ bootstrap.js:25
-_handleError @ ErrorBoundary.js:101
-wrap @ ErrorBoundary.js:54
-await in wrap
-_handleError @ ErrorBoundary.js:96
-await in _handleError
-wrap @ ErrorBoundary.js:54
-await in wrap
-_handleError @ ErrorBoundary.js:96
-await in _handleError
-wrap @ ErrorBoundary.js:54
-await in wrap
-_handleError @ ErrorBoundary.js:96
-await in _handleError
-wrap @ ErrorBoundary.js:54
-await in wrap
-_renderCurrentTab @ DashboardController.js:258
-loadRepository @ DashboardController.js:192
-await in loadRepository
-initialize @ DashboardController.js:80
-bootstrapDashboard @ bootstrap.js:60
-(anonymous) @ bootstrap.js:170
 StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
 StateManager.js:61 [StateManager] Current generation: 3 → 4
 StateManager.js:87 [StateManager] Notifying 1 subscribers...
@@ -199,29 +160,226 @@ StateManager.js:89 [StateManager] setState complete. New generation: 6
 DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 6
 DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
 DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 6 → 7
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 6
+DashboardController.js:773 [Controller] _onStateChange: New generation: 7
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 7
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 7 → 8
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 7
+DashboardController.js:773 [Controller] _onStateChange: New generation: 8
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: architecture → quality
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 8
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 8 → 9
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 8
+DashboardController.js:773 [Controller] _onStateChange: New generation: 9
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 9
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 9
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 9 vs 9
 DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 9 → 10
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 9
+DashboardController.js:773 [Controller] _onStateChange: New generation: 10
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 10
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 10 → 11
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 10
+DashboardController.js:773 [Controller] _onStateChange: New generation: 11
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: quality → security
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 11
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 11 → 12
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 11
+DashboardController.js:773 [Controller] _onStateChange: New generation: 12
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 12
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 12
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 12 vs 12
 DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 6 vs 6
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 12 → 13
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 12
+DashboardController.js:773 [Controller] _onStateChange: New generation: 13
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 13
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 13 → 14
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 13
+DashboardController.js:773 [Controller] _onStateChange: New generation: 14
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: security → dependencies
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 14
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 14 → 15
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 14
+DashboardController.js:773 [Controller] _onStateChange: New generation: 15
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 15
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 15
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 15 vs 15
 DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
-bootstrap.js:25 [ErrorBoundary] tab_architecture: TypeError: window.CortexViz.renderArchitectureTab is not a function
-    at DashboardController._renderArchitecture (DashboardController.js:392:36)
-    at errorBoundary.wrap.tabId (DashboardController.js:277:40)
+visualizations.js:1237 [Viz] renderDependencyGraph error: TypeError: packages.slice is not a function
+    at createDependencyGraph (visualizations.js:195:34)
+    at Object.renderDependencyGraph (visualizations.js:1234:13)
+    at DashboardController._renderDependencies (DashboardController.js:499:36)
+    at errorBoundary.wrap.tabId (DashboardController.js:286:40)
+    at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
+    at DashboardController._renderCurrentTab (DashboardController.js:258:38)
+    at DashboardController.switchTab (DashboardController.js:229:20)
+    at HTMLElement.<anonymous> (DashboardController.js:592:26)
+renderDependencyGraph @ visualizations.js:1237
+_renderDependencies @ DashboardController.js:499
+errorBoundary.wrap.tabId @ DashboardController.js:286
+wrap @ ErrorBoundary.js:41
+_renderCurrentTab @ DashboardController.js:258
+switchTab @ DashboardController.js:229
+(anonymous) @ DashboardController.js:592
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 15 vs 15
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+visualizations.js:1237 [Viz] renderDependencyGraph error: TypeError: packages.slice is not a function
+    at createDependencyGraph (visualizations.js:195:34)
+    at Object.renderDependencyGraph (visualizations.js:1234:13)
+    at DashboardController._renderDependencies (DashboardController.js:499:36)
+    at errorBoundary.wrap.tabId (DashboardController.js:286:40)
+    at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
+    at ErrorBoundary._handleError (ErrorBoundary.js:96:31)
+    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
+    at async DashboardController._renderCurrentTab (DashboardController.js:258:13)
+    at async DashboardController.switchTab (DashboardController.js:229:9)
+renderDependencyGraph @ visualizations.js:1237
+_renderDependencies @ DashboardController.js:499
+errorBoundary.wrap.tabId @ DashboardController.js:286
+wrap @ ErrorBoundary.js:41
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_renderCurrentTab @ DashboardController.js:258
+switchTab @ DashboardController.js:229
+(anonymous) @ DashboardController.js:592
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 15 → 16
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 15
+DashboardController.js:773 [Controller] _onStateChange: New generation: 16
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: dependencies → quality
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 16
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 16 → 17
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 16
+DashboardController.js:773 [Controller] _onStateChange: New generation: 17
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 17
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 17
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 17 vs 17
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 17 → 18
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 17
+DashboardController.js:773 [Controller] _onStateChange: New generation: 18
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 18
+StateManager.js:60 [StateManager] setState called by: at DashboardController.switchTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:224:27)
+StateManager.js:61 [StateManager] Current generation: 18 → 19
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 18
+DashboardController.js:773 [Controller] _onStateChange: New generation: 19
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:782 [Controller] _onStateChange: Tab changed: quality → architecture
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 19
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:247:27)
+StateManager.js:61 [StateManager] Current generation: 19 → 20
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 19
+DashboardController.js:773 [Controller] _onStateChange: New generation: 20
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 20
+DashboardController.js:254 [Controller] _renderCurrentTab: Generation captured for staleness check: 20
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 20 vs 20
+DashboardController.js:270 [Controller] _renderCurrentTab: Generation valid - proceeding with render
+StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
+StateManager.js:61 [StateManager] Current generation: 20 → 21
+StateManager.js:87 [StateManager] Notifying 1 subscribers...
+DashboardController.js:771 [Controller] _onStateChange: State change detected
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 20
+DashboardController.js:773 [Controller] _onStateChange: New generation: 21
+DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
+DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
+StateManager.js:89 [StateManager] setState complete. New generation: 21
+DashboardController.js:263 [Controller] _renderCurrentTab: Pre-render generation check: 15 vs 21
+DashboardController.js:266 [Controller] _renderCurrentTab: Stale render detected - aborting
+errorBoundary.wrap.tabId @ DashboardController.js:266
+wrap @ ErrorBoundary.js:41
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_handleError @ ErrorBoundary.js:96
+await in _handleError
+wrap @ ErrorBoundary.js:54
+await in wrap
+_renderCurrentTab @ DashboardController.js:258
+switchTab @ DashboardController.js:229
+(anonymous) @ DashboardController.js:592
+bootstrap.js:25 [ErrorBoundary] tab_dependencies: Error: Stale render cancelled
+    at errorBoundary.wrap.tabId (DashboardController.js:267:31)
     at ErrorBoundary.wrap (ErrorBoundary.js:41:17)
     at ErrorBoundary._handleError (ErrorBoundary.js:96:31)
     at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
     at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
     at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
-    at async ErrorBoundary._handleError (ErrorBoundary.js:96:20)
-    at async ErrorBoundary.wrap (ErrorBoundary.js:54:20)
     at async DashboardController._renderCurrentTab (DashboardController.js:258:13)
+    at async DashboardController.switchTab (DashboardController.js:229:9)
 onError @ bootstrap.js:25
 _handleError @ ErrorBoundary.js:101
-wrap @ ErrorBoundary.js:54
-await in wrap
-_handleError @ ErrorBoundary.js:96
-await in _handleError
 wrap @ ErrorBoundary.js:54
 await in wrap
 _handleError @ ErrorBoundary.js:96
@@ -236,11 +394,11 @@ _renderCurrentTab @ DashboardController.js:258
 switchTab @ DashboardController.js:229
 (anonymous) @ DashboardController.js:592
 StateManager.js:60 [StateManager] setState called by: at DashboardController._renderCurrentTab (file:///D:/PROJECTS/CORTEX/company/dashboards/spa/js/controllers/DashboardController.js:298:31)
-StateManager.js:61 [StateManager] Current generation: 6 → 7
+StateManager.js:61 [StateManager] Current generation: 21 → 22
 StateManager.js:87 [StateManager] Notifying 1 subscribers...
 DashboardController.js:771 [Controller] _onStateChange: State change detected
-DashboardController.js:772 [Controller] _onStateChange: Old generation: 6
-DashboardController.js:773 [Controller] _onStateChange: New generation: 7
+DashboardController.js:772 [Controller] _onStateChange: Old generation: 21
+DashboardController.js:773 [Controller] _onStateChange: New generation: 22
 DashboardController.js:774 [Controller] _onStateChange: Generation delta: 1
 DashboardController.js:787 [Controller] _onStateChange: Handler complete (no state mutations)
-StateManager.js:89 [StateManager] setState complete. New generation: 7
+StateManager.js:89 [StateManager] setState complete. New generation: 22
