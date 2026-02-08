@@ -265,6 +265,29 @@ active_phases:
       ⚪ PLANNED: Partially superseded by Phase 43 stages S5-S6 (refactoring bridge).
       Remaining scope: advanced multi-language refactoring patterns.
 
+  - id: "phase-45"
+    name: "Enhanced Planning System"
+    file: "phases/active/phase-45-enhanced-planning-system.yaml"
+    created: "2026-02-08"
+    status: "pending_approval"
+    priority: "P0"
+    execution_order: 8
+    roi_score: 0.89
+    estimated_duration: "5 days"
+    test_target: 100
+    coverage_target: 90
+    description: |
+      ⚪ PENDING APPROVAL: Production-grade plan lifecycle management.
+      - Unified index.yaml SSOT pattern for plan registry
+      - Event-driven orchestrator composition (OrchestratorEventBus)
+      - Pydantic v2 schema validation (PlanSpec BaseModel)
+      - LENS-enriched DoR workflow (5-source enrichment pipeline)
+      - Glassmorphism companion SPA (plan-viewer.html)
+      - 5 MCP tools (create, list, get, archive, enrich)
+      - 6 stages, 100 tests, ROI=0.89
+    depends_on:
+      - "phase-43"
+
 # Completed Phases (Historical)
 completed_phases_2026:
   count: 35
@@ -400,43 +423,17 @@ active_enhancements:
   
   - id: "enh-061"
     name: "Universal Role-Based Response System"
-    file: "enhanc4
-  active_phases: 6
-  completed_phases: 41
-  completed_2026: 35
-  completed_2025: 11
-  in_progress_phases: 1
-  planned_phases: 4
-  unblocked_phases: 1
-  total_enhancements: 7
-  active_enhancements: 7
-  last_phase_created: "2026-02-08"
-  last_phase_completed: "2026-02-07"
-  next_expected_completion: "2026-02-23"
-  last_updated: "2026-02-08"
-  active_breakdown:
-    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ready_autonomous, ROI=0.92)"
-    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, planned, ROI=0.88)"
-    - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
-    - "phase-24-arch: Architecture Integrity System (P1, active)"
-    - "phase-38: Brain Cohesion & Health System (P0, unblocked, ROI=0.94)"
-    - "phase-24: External Refactoring Tools Integration (P1, planned)"
-  enhancements_created_today:
-    - "ENH-061: Universal Role-Based Response System (P0, approved, 12 hrs, 15 roles)"
-    - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement (P0, active, 8 hrs, cross-cutting)"
-  phases_created_today:
-    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ROI=0.92, 10 stages, 200 tests)"
-    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, ROI=0.88, 6 stages, 100 tests)"
-  registry_hygiene:
-    - "Reconciled index.yaml: removed completed phases from active_phases"
-    - "Fixed Phase 38 status: complete → unblocked"
-    - "Removed duplicate Phase 37 entries"
-    - "Added Phase 43 with cross-cutting scope"
-    - "Added Phase 44 production readiness with ENH-062"
-    - "Added ENH-061 universal role-based response system"
-    - "Added ENH-062 vacuum enhancement with production blocker resolutionmax 3) + professional colors
-      Vacuum: copilot_chat_templates.py (697), response_formatting_engine.py (~400)
-  
+    file: "enhancements/active/enh-061-universal-role-based-response.yaml"
+    status: "approved"
+    priority: "P0"
+    version: "1.0"
+    created: "2026-02-08"
+    updated: "2026-02-08"
+    scope: "Response formatting + persona system"
+    estimated_hours: 12
+    description: |
+      Universal role-based response system with 15 professional roles.
+
   - id: "enh-062"
     name: "CORTEX Production Readiness & Vacuum Enhancement"
     file: "enhancements/active/enh-062-cortex-production-readiness-vacuum.yaml"
@@ -478,33 +475,46 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 43
-  active_phases: 5
+  total_phases: 44
+  active_phases: 6
   completed_phases: 41
   completed_2026: 35
   completed_2025: 11
   in_progress_phases: 1
   planned_phases: 3
+  pending_approval_phases: 1
   unblocked_phases: 1
-  total_enhancements: 4
-  active_enhancements: 4
+  total_enhancements: 7
+  active_enhancements: 7
   last_phase_created: "2026-02-08"
   last_phase_completed: "2026-02-07"
   next_expected_completion: "2026-02-23"
   last_updated: "2026-02-08"
   active_breakdown:
-    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, planned, ROI=0.92)"
+    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ready_autonomous, ROI=0.92)"
+    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, planned, ROI=0.88)"
     - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
     - "phase-24-arch: Architecture Integrity System (P1, active)"
     - "phase-38: Brain Cohesion & Health System (P0, unblocked, ROI=0.94)"
     - "phase-24: External Refactoring Tools Integration (P1, planned)"
+    - "phase-45: Enhanced Planning System (P0, pending_approval, ROI=0.89)"
+  enhancements_created_today:
+    - "ENH-061: Universal Role-Based Response System (P0, approved, 12 hrs, 15 roles)"
+    - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement (P0, active, 8 hrs, cross-cutting)"
   phases_created_today:
     - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ROI=0.92, 10 stages, 200 tests)"
+    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, ROI=0.88, 6 stages, 100 tests)"
+    - "phase-45: Enhanced Planning System (P0, ROI=0.89, 6 stages, 100 tests)"
   registry_hygiene:
     - "Reconciled index.yaml: removed completed phases from active_phases"
     - "Fixed Phase 38 status: complete → unblocked"
     - "Removed duplicate Phase 37 entries"
     - "Added Phase 43 with cross-cutting scope"
+    - "Added Phase 44 production readiness with ENH-062"
+    - "Added ENH-061 universal role-based response system"
+    - "Added ENH-062 vacuum enhancement with production blocker resolution"
+    - "Added Phase 45 enhanced planning system"
+    - "Fixed corrupt enh-061 entry (truncated file path restored)"
 
 # Dashboard Integration
 dashboard:
