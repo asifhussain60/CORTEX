@@ -840,6 +840,51 @@ active_enhancements:
       - Import validation (try importing post-fix)
       - Test suite validation (450+ tests must pass)
 
+# Onboarded Repositories
+onboarded_repositories:
+  count: 6
+  last_onboarded: "2026-02-08"
+  repositories:
+    - id: "alist"
+      name: "ALIST"
+      status: "active"
+      onboarded_date: "2026-02-08"
+      file_count: 540
+      dashboard: "company/dashboards/data/alist.json"
+      
+    - id: "cortex"
+      name: "CORTEX"
+      status: "active"
+      onboarded_date: "2026-02-08"
+      file_count: 12500
+      dashboard: "company/dashboards/data/cortex.json"
+      
+    - id: "kashkole"
+      name: "Kashkole"
+      status: "active"
+      onboarded_date: "2026-02-08"
+      file_count: 890
+      dashboard: "company/dashboards/data/kashkole.json"
+      
+    - id: "ksessions"
+      name: "KSESSIONS"
+      status: "active"
+      onboarded_date: "2026-02-08"
+      file_count: 29993
+      security_issues_detected: 1
+      security_issues_severity: "P1"
+      security_issues_description: "Potential secret in code_review_plugin.py"
+      dashboard: "company/dashboards/data/ksessions.json"
+      dashboard_generated: true
+      spa_ready: true
+      
+    - id: "noor-canvas"
+      name: "Noor Canvas"
+      status: "active"
+      onboarded_date: "2026-02-08"
+      file_count: 1200
+      dashboard: "company/dashboards/data/noor-canvas.json"
+
 # Metadata
 statistics:
   total_phases: 53
@@ -853,8 +898,10 @@ statistics:
   unblocked_phases: 1
   total_enhancements: 7
   active_enhancements: 7
+  total_onboarded_repos: 6
   last_phase_created: "2026-02-08"
   last_phase_completed: "2026-02-08"
+  last_repo_onboarded: "2026-02-08"
   next_expected_completion: "2026-04-15"
   last_updated: "2026-02-08"
   active_breakdown:
