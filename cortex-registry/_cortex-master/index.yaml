@@ -10,93 +10,37 @@ last_updated: "2026-02-07"
 
 # Active Phases (Current Development)
 active_phases:
-  - id: "phase-38.0"
-    name: "Remediation & Baseline Restoration"
-    file: "phases/active/phase-38.0-remediation-baseline-restoration.yaml"
-    started: "2026-02-07"
-    completed: "2026-02-07"
-    status: "complete"
-    priority: "P0"
-    execution_order: 0
-    roi_score: 0.98
-    readiness_score: 100.0
-    duration: "~3 hours"
-    description: |
-      ✅ COMPLETE: Baseline restoration complete. Phase 38 UNBLOCKED.
-      
-      All 6 stages completed with 100% readiness score:
-      0. Phase 34 restoration: 24/24 tests passing ✅
-      1. Test collection: 0 import errors ✅
-      2. Orchestrator inventory: 75 orchestrators, 237 files ✅
-      3. Baseline metrics: Performance baseline captured ✅
-      4. Test suite: 8,846 tests collected (596% over minimum) ✅
-      5. Readiness validation: 100% READY ✅
-      
-      Deliverables:
-      - OrchestratorInventoryAuditor (10 tests)
-      - BaselineMetricsCollector + RegressionDetector (15 tests)
-      - Phase38ReadinessValidator (12 tests)
-      - 4 comprehensive JSON reports
-      
-      Total: 37 tests, 3 tools, ~3 hours implementation time.
-      Phase 38 implementation now safe to proceed.
-  
-  - id: "phase-41"
-    name: "DIGEST Mode Enhancement System"
-    file: "phases/completed/phase-41-digest-mode-enhancement-system.yaml"
-    started: "2026-02-07"
-    completed: "2026-02-07"
-    status: "complete"
-    priority: "P0"
-    execution_order: 3
-    roi_score: 0.91
-    description: |
-      🚀 PLANNED: Transform DIGEST mode from manual to fully automated.
-      
-      Implements 5 critical enhancements (ENH-053 to ENH-057):
-      - ENH-053: cortex_digest_session MCP tool (P0, ROI 0.95)
-      - ENH-055: Quantitative metrics system (P1, ROI 0.88)
-      - ENH-057: Detection calibration (P1, ROI 0.82)
-      - ENH-056: AST-based governance scanner (P1, ROI 0.85)
-      - ENH-054: Enhancement automation pipeline (P0, ROI 0.93)
-      
-      Impact: DIGEST maturity 6.5 → 9.2 (+41%)
-      - 90% reduction in manual enhancement effort
-      - Closes CORTEX learning feedback loop
-      - Enables CI/CD integration for chat analysis
-      
-      Target: 127 tests (5 stages), 16 days. Critical for continuous learning.
-  
-  - id: "phase-42"
-    name: "Interactive Approval Workflow System"
-    file: "phases/completed/phase-42-interactive-approval-workflow-system.yaml"
-    started: "2026-02-07"
-    completed: "2026-02-07"
-    status: "complete"
+  - id: "phase-37"
+    name: "Role-Adaptive Persona System"
+    file: "phases/active/phase-37-role-adaptive-personas.yaml"
+    started: "2026-02-11"
+    status: "planned"
     priority: "P1"
-    execution_order: 4
-    roi_score: 0.89
-    test_status: "44/44 PASSING (16+17+11)"
+    execution_order: 7
+    roi_score: 0.85
+    estimated_duration: "4 days"
+    test_target: 90
+    coverage_target: 90
     description: |
-      ✅ COMPLETE: Two-phase approval workflow with session-based state management operational.
-      
-      Replaces inline DoR display with stateful approval sessions:
-      - cortex_classify_request: Display DoR + create session (5min TTL)
-      - cortex_approve_request: Execute from session
-      - cortex_reject_request: Abort with reason
-      - cortex_modify_request: Re-classify with corrections
-      
-      Deliverables:
-      - ApprovalSessionManager (378 LOC, 16 tests)
-      - Approval MCP Tools (325 LOC, 17 tests)
-      - MCP Tool Wrappers (249 LOC, 11 tests)
-      - CORTEX.prompt.md Stage 3 update
-      
-      Impact: Cleaner UX, stateful approval, separation of concerns.
-      Duration: 4 stages, ~1 day implementation time.
+      ⚪ PLANNED: Hybrid role-adaptive persona system with context inference.
+      - 6 personas: business_leader, product_owner, scrum_master, tech_lead, engineer, unknown
+      - 4 depth levels: executive, standard, detailed, full
+      - Dynamic switching: /persona and /detail commands
+      - Natural language triggers: "show me the code", "give me the BLUF"
+      - Persistent storage: cross-session user preferences
+      - Introduction template with role discovery
+      - CORE-029 header compliance fix
     depends_on:
       - "phase-36"
-      - "phase-41"
+  
+  - id: "phase-24-arch"
+    name: "Architecture Integrity System"
+    file: "phases/active/phase-24-architecture-integrity-system.yaml"
+    status: "active"
+    priority: "P1"
+    description: |
+      🔵 ACTIVE: Architecture integrity monitoring and enforcement system.
+      Ensures CORTEX maintains architectural consistency across all operations.
   
   - id: "phase-40"
     name: "Intelligent Upgrade Changelog System"
@@ -559,16 +503,16 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 40
-  active_phases: 4
-  completed_phases: 28
-  completed_2026: 28
-  completed_2025: 11
+  total_phases: 37
+  active_phases: 2
+  completed_phases: 35
+  completed_2026: 32
+  completed_2025: 3
   total_enhancements: 4
   active_enhancements: 4
   last_phase_created: "2026-02-07"
-  last_phase_completed: "2026-02-06"
-  next_expected_completion: "2026-02-20"
+  last_phase_completed: "2026-02-07"
+  next_expected_completion: "2026-02-11"
   last_updated: "2026-02-07"
   phases_completed_today:
     - "phase-21: JSON-First Rewrite (P0, 57/57 tests, 6 phases, progressive enhancement)"

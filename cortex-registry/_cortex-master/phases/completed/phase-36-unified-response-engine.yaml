@@ -298,24 +298,27 @@ stages:
     
     severity_matrix:
       P0_BLOCKERS:
-        - "CWE-94: Code Injection"
-        - "CWE-89: SQL Injection"
-        - "CWE-22: Path Traversal"
-        - "CWE-78: OS Command Injection"
+        threats:
+          - "CWE-94: Code Injection"
+          - "CWE-89: SQL Injection"
+          - "CWE-22: Path Traversal"
+          - "CWE-78: OS Command Injection"
         action: "HARD GATE - Block until fixed"
       
       P1_WARNINGS:
-        - "CWE-327: Inadequate Encryption"
-        - "CWE-502: Deserialization of Untrusted Data"
-        - "Authentication/Authorization gaps"
-        - "Session management flaws"
+        threats:
+          - "CWE-327: Inadequate Encryption"
+          - "CWE-502: Deserialization of Untrusted Data"
+          - "Authentication/Authorization gaps"
+          - "Session management flaws"
         action: "CHALLENGE - Present as weakness"
       
       P2_ADVISORIES:
-        - "Input validation gaps"
-        - "Error handling (information disclosure)"
-        - "Logging sensitive data"
-        - "CORS misconfiguration"
+        threats:
+          - "Input validation gaps"
+          - "Error handling (information disclosure)"
+          - "Logging sensitive data"
+          - "CORS misconfiguration"
         action: "ADVISORY - Include in synthesis"
     
     tasks:
