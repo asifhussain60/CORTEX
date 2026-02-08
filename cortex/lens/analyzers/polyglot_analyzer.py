@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult, FunctionInfo, ClassInfo
 from cortex.lens.adapters.csharp_adapter import CSharpAdapter
 from cortex.lens.adapters.java_adapter import JavaAdapter
+from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
 from cortex.lens.models.polyglot_ast_result import PolyglotASTResult, LanguageType
 
 
@@ -80,6 +81,7 @@ class PolyglotAnalyzer:
         self.python_analyzer = ASTAnalyzer()
         self.csharp_adapter = CSharpAdapter()
         self.java_adapter = JavaAdapter()
+        self.typescript_adapter = TypeScriptAdapter()
         
         # Language detection map
         self.language_map = {
@@ -87,9 +89,9 @@ class PolyglotAnalyzer:
             ".cs": "csharp",
             ".csx": "csharp",
             ".java": "java",
-            # TODO Phase 4: Add more languages
-            # ".ts": "typescript",
-            # ".tsx": "typescript",
+            ".ts": "typescript",
+            ".tsx": "typescript",
+            # TODO Phase 43 S1: Add JavaScript adapter
             # ".js": "javascript",
             # ".jsx": "javascript",
         }
@@ -116,6 +118,8 @@ class PolyglotAnalyzer:
             return self._analyze_csharp(file_path)
         elif language == "java":
             return self._analyze_java(file_path)
+        elif language == "typescript":
+            return self._analyze_typescript(file_path)
         else:
             return PolyglotAnalysisResult(
                 success=False,
@@ -344,6 +348,81 @@ class PolyglotAnalyzer:
             return PolyglotAnalysisResult(
                 success=False,
                 language="Java",
+                error=str(e),
+                metadata={"file_path": str(file_path)},
+            )
+    
+    def _analyze_typescript(self, file_path: Path) -> PolyglotAnalysisResult:
+        """
+        Analyze TypeScript file using TypeScriptAdapter.
+        
+        Converts PolyglotASTResult to PolyglotAnalysisResult format.
+        
+        Args:
+            file_path: Path to TypeScript file
+        
+        Returns:
+            PolyglotAnalysisResult
+        """
+        try:
+            result = self.typescript_adapter.parse_file(file_path)
+            
+            # Convert to unified format
+            functions = [
+                {
+                    "name": func.name,
+                    "line_number": func.line_start,
+                    "parameters": func.parameters,
+                    "is_async": func.is_async,
+                    "return_type": func.return_type or "",
+                    "docstring": func.docstring or "",
+                }
+                for func in result.functions
+            ]
+            
+            classes = [
+                {
+                    "name": cls.name,
+                    "line_number": cls.line_start,
+                    "methods": [m.name for m in cls.methods],
+                    "bases": cls.base_classes,
+                    "docstring": cls.docstring or "",
+                    "namespace": cls.namespace or "",
+                    "is_interface": cls.is_interface,
+                    "is_abstract": cls.is_abstract,
+                    "properties": cls.properties,
+                }
+                for cls in result.classes
+            ]
+            
+            imports = [
+                {
+                    "module": imp.module,
+                    "names": imp.names,
+                    "alias": imp.alias or "",
+                    "line_number": imp.line,
+                }
+                for imp in result.imports
+            ]
+            
+            return PolyglotAnalysisResult(
+                success=True,
+                language="TypeScript",
+                functions=functions,
+                classes=classes,
+                imports=imports,
+                error="",
+                metadata={
+                    **result.metadata,
+                    "analyzer": "TypeScriptAdapter",
+                    "parse_errors": result.parse_errors,
+                },
+            )
+        
+        except Exception as e:
+            return PolyglotAnalysisResult(
+                success=False,
+                language="TypeScript",
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )
