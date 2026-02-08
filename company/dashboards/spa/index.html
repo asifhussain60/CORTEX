@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repository Dashboard</title>
+    <meta name="description" content="CORTEX Repository Dashboard - 9-Tab Unified Analytics">
+    <meta name="author" content="Asif Hussain">
+    <title>Repository Dashboard | CORTEX</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
@@ -58,61 +60,142 @@
                 <button id="error-back-btn" class="btn btn-primary">Back to Repository List</button>
             </div>
 
-            <!-- Tab navigation -->
+            <!-- 9-TAB NAVIGATION (COMPLETE) -->
             <nav class="tab-navigation" id="tab-navigation">
+                <!-- Overview Tab -->
                 <button class="tab-button active" data-tab="overview" aria-label="Overview tab">
-                    <i class="fas fa-home"></i> Overview
+                    <i class="fas fa-chart-line"></i> Overview
                 </button>
+                
+                <!-- Architecture Tab -->
+                <button class="tab-button" data-tab="architecture" data-show-if="architecture" aria-label="Architecture tab">
+                    <i class="fas fa-sitemap"></i> Architecture
+                </button>
+                
+                <!-- Quality Tab -->
+                <button class="tab-button" data-tab="quality" data-show-if="quality" aria-label="Quality tab">
+                    <i class="fas fa-check-circle"></i> Quality
+                </button>
+                
+                <!-- Security Tab -->
                 <button class="tab-button" data-tab="security" data-show-if="security" aria-label="Security tab">
-                    <i class="fas fa-shield-alt"></i> Security
+                    <i class="fas fa-lock"></i> Security
                 </button>
-                <button class="tab-button" data-tab="metrics" data-show-if="metrics" aria-label="Metrics tab">
-                    <i class="fas fa-chart-bar"></i> Metrics
+                
+                <!-- Vulnerabilities Tab -->
+                <button class="tab-button" data-tab="vulnerabilities" data-show-if="vulnerabilities" aria-label="Vulnerabilities tab">
+                    <i class="fas fa-exclamation-triangle"></i> Vulnerabilities
                 </button>
-                <button class="tab-button" data-tab="health" data-show-if="health" aria-label="Health tab">
-                    <i class="fas fa-heartbeat"></i> Health
+                
+                <!-- Dependencies Tab -->
+                <button class="tab-button" data-tab="dependencies" data-show-if="dependencies" aria-label="Dependencies tab">
+                    <i class="fas fa-cube"></i> Dependencies
                 </button>
-                <button class="tab-button" data-tab="recommendations" data-show-if="recommendations" aria-label="Recommendations tab">
-                    <i class="fas fa-lightbulb"></i> Recommendations
+                
+                <!-- Patterns Tab -->
+                <button class="tab-button" data-tab="patterns" data-show-if="patterns" aria-label="Patterns tab">
+                    <i class="fas fa-puzzle-piece"></i> Patterns
+                </button>
+                
+                <!-- Testing Tab -->
+                <button class="tab-button" data-tab="testing" data-show-if="testing" aria-label="Testing tab">
+                    <i class="fas fa-vial"></i> Testing
+                </button>
+                
+                <!-- Use Cases Tab -->
+                <button class="tab-button" data-tab="usecases" data-show-if="usecases" aria-label="Use Cases tab">
+                    <i class="fas fa-lightbulb"></i> Use Cases
                 </button>
             </nav>
 
-            <!-- Tab content panels -->
+            <!-- 9-TAB CONTENT PANELS (COMPLETE) -->
             <div class="tab-panels">
+                
                 <!-- Overview Tab -->
                 <section class="tab-panel active" id="panel-overview" data-tab="overview">
                     <div class="panel-content">
                         <div class="overview-grid">
                             <div class="stat-card">
                                 <h4>Health Score</h4>
-                                <div class="stat-value" id="health-score" data-bind="repository.health_score" data-fallback="N/A">—</div>
+                                <div class="stat-value" id="health-score" data-bind="overview.health_score" data-fallback="—">—</div>
                                 <div class="stat-bar">
                                     <div class="stat-bar-fill" id="health-bar"></div>
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <h4>Language</h4>
-                                <div class="stat-value" id="primary-language" data-bind="metadata.primary_language" data-fallback="Unknown">Unknown</div>
-                            </div>
-                            <div class="stat-card">
-                                <h4>Last Updated</h4>
-                                <div class="stat-value" id="last-updated" data-bind="metadata.last_updated" data-fallback="N/A">N/A</div>
+                                <h4>Primary Language</h4>
+                                <div class="stat-value" id="primary-language" data-bind="overview.primary_language" data-fallback="Unknown">Unknown</div>
                             </div>
                             <div class="stat-card">
                                 <h4>Total Files</h4>
-                                <div class="stat-value" id="file-count" data-bind="metrics.file_count" data-fallback="N/A">N/A</div>
+                                <div class="stat-value" id="file-count" data-bind="overview.file_count" data-fallback="N/A">N/A</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Last Updated</h4>
+                                <div class="stat-value" id="last-updated" data-bind="overview.last_updated" data-fallback="N/A">N/A</div>
                             </div>
                         </div>
-
-                        <div class="section" data-show-if="summary">
-                            <h3>Summary</h3>
+                        <div class="section" id="overview-details">
+                            <h3>Repository Overview</h3>
                             <p id="repo-summary" data-bind="overview.summary" data-fallback="No summary available">No summary available</p>
                         </div>
+                    </div>
+                </section>
 
-                        <div class="section" data-show-if="tech_stack">
-                            <h3>Technology Stack</h3>
-                            <div id="tech-stack" class="tag-list">
-                                <!-- Dynamically populated -->
+                <!-- Architecture Tab -->
+                <section class="tab-panel" id="panel-architecture" data-tab="architecture" data-show-if="architecture">
+                    <div class="panel-content">
+                        <div id="architecture-details">
+                            <h3>Architecture Analysis</h3>
+                            <div class="architecture-grid">
+                                <div id="microservices-section" class="info-section">
+                                    <h4><i class="fas fa-server"></i> Microservices Detection</h4>
+                                    <p id="microservices-info" data-bind="architecture.microservices" data-fallback="No microservices detected">No microservices detected</p>
+                                </div>
+                                <div id="layers-section" class="info-section">
+                                    <h4><i class="fas fa-layer-group"></i> Layer Analysis</h4>
+                                    <p id="layers-info" data-bind="architecture.layers" data-fallback="No layer information">No layer information</p>
+                                </div>
+                                <div id="patterns-section" class="info-section">
+                                    <h4><i class="fas fa-pattern"></i> Design Patterns</h4>
+                                    <p id="patterns-info" data-bind="architecture.design_patterns" data-fallback="No patterns identified">No patterns identified</p>
+                                </div>
+                                <div id="tech-stack-section" class="info-section">
+                                    <h4><i class="fas fa-cogs"></i> Technology Stack</h4>
+                                    <div id="tech-stack" class="tag-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quality Tab -->
+                <section class="tab-panel" id="panel-quality" data-tab="quality" data-show-if="quality">
+                    <div class="panel-content">
+                        <div id="quality-details">
+                            <h3>Code Quality Metrics</h3>
+                            <div class="quality-grid">
+                                <div class="metric-card">
+                                    <h4>Complexity Score</h4>
+                                    <div class="metric-value" id="complexity-score" data-bind="quality.complexity_score" data-fallback="N/A">N/A</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Duplication</h4>
+                                    <div class="metric-value" id="duplication-rate" data-bind="quality.duplication_rate" data-fallback="N/A">N/A</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Test Coverage</h4>
+                                    <div class="metric-value" id="test-coverage" data-bind="quality.test_coverage" data-fallback="N/A">N/A</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Maintainability Index</h4>
+                                    <div class="metric-value" id="maintainability" data-bind="quality.maintainability_index" data-fallback="N/A">N/A</div>
+                                </div>
+                            </div>
+                            <div id="quality-charts" class="charts-container">
+                                <!-- Chart placeholders for metrics -->
                             </div>
                         </div>
                     </div>
@@ -121,64 +204,232 @@
                 <!-- Security Tab -->
                 <section class="tab-panel" id="panel-security" data-tab="security" data-show-if="security">
                     <div class="panel-content">
-                        <div class="security-summary">
-                            <div class="risk-card risk-p0" data-show-if="security.p0_risks">
-                                <h4><i class="fas fa-exclamation"></i> Critical Issues</h4>
-                                <div class="risk-count" id="p0-count" data-bind="security.p0_risks.length" data-fallback="0">0</div>
-                            </div>
-                            <div class="risk-card risk-p1" data-show-if="security.p1_risks">
-                                <h4><i class="fas fa-warning"></i> High Risk</h4>
-                                <div class="risk-count" id="p1-count" data-bind="security.p1_risks.length" data-fallback="0">0</div>
-                            </div>
-                            <div class="risk-card risk-p2" data-show-if="security.p2_risks">
-                                <h4><i class="fas fa-info-circle"></i> Medium Risk</h4>
-                                <div class="risk-count" id="p2-count" data-bind="security.p2_risks.length" data-fallback="0">0</div>
-                            </div>
-                        </div>
-                        <div id="security-details" class="section">
-                            <!-- Dynamically populated -->
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Metrics Tab -->
-                <section class="tab-panel" id="panel-metrics" data-tab="metrics" data-show-if="metrics">
-                    <div class="panel-content">
-                        <div id="charts-container">
-                            <!-- Chart containers will be populated by app.js -->
-                            <div id="complexity-chart" class="chart-placeholder">
-                                <p>Complexity metrics will be displayed here</p>
-                            </div>
-                            <div id="coverage-chart" class="chart-placeholder">
-                                <p>Code coverage metrics will be displayed here</p>
+                        <div id="security-details">
+                            <h3>Security Posture</h3>
+                            <div class="security-grid">
+                                <div class="security-metric">
+                                    <h4>Security Score</h4>
+                                    <div class="score" id="security-score" data-bind="security.score" data-fallback="0">0</div>
+                                    <div class="score-label">/10</div>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>Authentication</h4>
+                                    <p id="auth-status" data-bind="security.authentication" data-fallback="Not assessed">Not assessed</p>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>Encryption</h4>
+                                    <p id="encryption-status" data-bind="security.encryption" data-fallback="Not assessed">Not assessed</p>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>Data Protection</h4>
+                                    <p id="data-protection-status" data-bind="security.data_protection" data-fallback="Not assessed">Not assessed</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Health Tab -->
-                <section class="tab-panel" id="panel-health" data-tab="health" data-show-if="health">
+                <!-- Vulnerabilities Tab -->
+                <section class="tab-panel" id="panel-vulnerabilities" data-tab="vulnerabilities" data-show-if="vulnerabilities">
                     <div class="panel-content">
-                        <div id="health-details">
-                            <!-- Dynamically populated -->
+                        <div id="vulnerabilities-details">
+                            <h3>Vulnerability Assessment</h3>
+                            <div class="vulnerability-summary">
+                                <div class="vuln-card vuln-critical" data-show-if="vulnerabilities.critical">
+                                    <h4><i class="fas fa-fire"></i> Critical</h4>
+                                    <div class="vuln-count" id="critical-count" data-bind="vulnerabilities.critical.length" data-fallback="0">0</div>
+                                </div>
+                                <div class="vuln-card vuln-high" data-show-if="vulnerabilities.high">
+                                    <h4><i class="fas fa-exclamation"></i> High</h4>
+                                    <div class="vuln-count" id="high-count" data-bind="vulnerabilities.high.length" data-fallback="0">0</div>
+                                </div>
+                                <div class="vuln-card vuln-medium" data-show-if="vulnerabilities.medium">
+                                    <h4><i class="fas fa-warning"></i> Medium</h4>
+                                    <div class="vuln-count" id="medium-count" data-bind="vulnerabilities.medium.length" data-fallback="0">0</div>
+                                </div>
+                                <div class="vuln-card vuln-low" data-show-if="vulnerabilities.low">
+                                    <h4><i class="fas fa-info-circle"></i> Low</h4>
+                                    <div class="vuln-count" id="low-count" data-bind="vulnerabilities.low.length" data-fallback="0">0</div>
+                                </div>
+                            </div>
+                            <div id="vulnerability-details" class="section">
+                                <!-- Dynamically populated -->
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Recommendations Tab -->
-                <section class="tab-panel" id="panel-recommendations" data-tab="recommendations" data-show-if="recommendations">
+                <!-- Dependencies Tab -->
+                <section class="tab-panel" id="panel-dependencies" data-tab="dependencies" data-show-if="dependencies">
                     <div class="panel-content">
-                        <div id="recommendations-list">
-                            <!-- Dynamically populated -->
+                        <div id="dependencies-details">
+                            <h3>Dependency Management</h3>
+                            <div class="dependency-grid">
+                                <div class="dependency-stat">
+                                    <h4>Direct Dependencies</h4>
+                                    <div class="stat-number" id="direct-deps" data-bind="dependencies.direct_count" data-fallback="0">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Transitive</h4>
+                                    <div class="stat-number" id="transitive-deps" data-bind="dependencies.transitive_count" data-fallback="0">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Outdated</h4>
+                                    <div class="stat-number warning" id="outdated-deps" data-bind="dependencies.outdated_count" data-fallback="0">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Vulnerable</h4>
+                                    <div class="stat-number danger" id="vulnerable-deps" data-bind="dependencies.vulnerable_count" data-fallback="0">0</div>
+                                </div>
+                            </div>
+                            <div id="dependency-list" class="section">
+                                <!-- Dynamically populated -->
+                            </div>
                         </div>
                     </div>
                 </section>
+
+                <!-- Patterns Tab -->
+                <section class="tab-panel" id="panel-patterns" data-tab="patterns" data-show-if="patterns">
+                    <div class="panel-content">
+                        <div id="patterns-details">
+                            <h3>Design Patterns & SOLID Analysis</h3>
+                            <div class="patterns-grid">
+                                <div class="pattern-section">
+                                    <h4><i class="fas fa-cube"></i> Design Patterns</h4>
+                                    <div id="design-patterns-list" class="pattern-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                                <div class="pattern-section">
+                                    <h4><i class="fas fa-exclamation-circle"></i> Anti-Patterns</h4>
+                                    <div id="anti-patterns-list" class="pattern-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                                <div class="pattern-section">
+                                    <h4><i class="fas fa-balance-scale"></i> SOLID Principles</h4>
+                                    <div id="solid-metrics" class="solid-grid">
+                                        <div class="solid-metric">
+                                            <span>SRP</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="solid-srp" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="solid-metric">
+                                            <span>OCP</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="solid-ocp" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="solid-metric">
+                                            <span>LSP</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="solid-lsp" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="solid-metric">
+                                            <span>ISP</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="solid-isp" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="solid-metric">
+                                            <span>DIP</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" id="solid-dip" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Testing Tab -->
+                <section class="tab-panel" id="panel-testing" data-tab="testing" data-show-if="testing">
+                    <div class="panel-content">
+                        <div id="testing-details">
+                            <h3>Test Analysis & Coverage</h3>
+                            <div class="testing-grid">
+                                <div class="coverage-card">
+                                    <h4>Code Coverage</h4>
+                                    <div class="coverage-percentage" id="coverage-pct" data-bind="testing.coverage_percent" data-fallback="0">0</div>
+                                    <div class="coverage-label">%</div>
+                                </div>
+                                <div class="test-stats">
+                                    <div class="stat-item passing">
+                                        <span>Passing</span>
+                                        <strong id="tests-passing" data-bind="testing.passing_count" data-fallback="0">0</strong>
+                                    </div>
+                                    <div class="stat-item failing">
+                                        <span>Failing</span>
+                                        <strong id="tests-failing" data-bind="testing.failing_count" data-fallback="0">0</strong>
+                                    </div>
+                                    <div class="stat-item skipped">
+                                        <span>Skipped</span>
+                                        <strong id="tests-skipped" data-bind="testing.skipped_count" data-fallback="0">0</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="test-details" class="section">
+                                <h4>Test Distribution</h4>
+                                <div id="test-breakdown">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
+                            <div id="coverage-trend" class="section">
+                                <h4>Coverage Trend</h4>
+                                <div id="coverage-chart">
+                                    <!-- Dynamically populated with trend data -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Use Cases Tab -->
+                <section class="tab-panel" id="panel-usecases" data-tab="usecases" data-show-if="usecases">
+                    <div class="panel-content">
+                        <div id="usecases-details">
+                            <h3>Business Capabilities & Use Cases</h3>
+                            <div class="usecases-grid">
+                                <div id="capabilities-section" class="usecase-section">
+                                    <h4><i class="fas fa-briefcase"></i> Business Capabilities</h4>
+                                    <div id="capabilities-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                                <div id="flows-section" class="usecase-section">
+                                    <h4><i class="fas fa-project-diagram"></i> Business Flows</h4>
+                                    <div id="flows-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                                <div id="integrations-section" class="usecase-section">
+                                    <h4><i class="fas fa-plug"></i> Integrations</h4>
+                                    <div id="integrations-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                                <div id="stakeholders-section" class="usecase-section">
+                                    <h4><i class="fas fa-users"></i> Stakeholder Mapping</h4>
+                                    <div id="stakeholders-list">
+                                        <!-- Dynamically populated -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </main>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2026 CORTEX. Dashboard powered by unified SPA architecture.</p>
+            <p>&copy; 2026 CORTEX. 9-Tab Dashboard powered by unified SPA architecture.</p>
         </footer>
     </div>
 
