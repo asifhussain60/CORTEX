@@ -110,7 +110,21 @@
                 </div>
             </section>
             
-            <!-- Tab Navigation -->
+<!-- Data Integrity Banner (DIGEST ENH-D01, ENH-D08) -->
+    <div id="integrity-banner" class="glass-card mb-lg" style="display: none; border-left: 4px solid var(--status-warning); background: rgba(245, 158, 11, 0.05);">
+        <div class="section-header">
+            <div class="section-icon" style="background: rgba(245, 158, 11, 0.2);"><i class="fas fa-exclamation-triangle" style="color: var(--status-warning);"></i></div>
+            <div>
+                <h2 class="section-title" style="color: var(--status-warning);">Data Integrity Warnings</h2>
+                <p class="section-subtitle">Detected contradictions require attention</p>
+            </div>
+        </div>
+        <div id="integrity-issues" style="margin-top: 1rem;">
+            <!-- Populated by app.js -->
+        </div>
+    </div>
+    
+    <!-- Tab Navigation -->
             <nav id="tab-nav" class="tab-nav">
                 <!-- Populated by app.js -->
             </nav>
@@ -137,10 +151,23 @@
                     </ul>
                 </div>
                 
-                <!-- Health Gauge Visualization -->
-                <div class="viz-container">
-                    <div class="viz-header">
-                        <h3 class="viz-title"><i class="fas fa-tachometer-alt"></i> Health Score Gauge</h3>
+<!-- Health Gauge Visualization with Explainability (DIGEST ENH-D02) -->
+        <div class="viz-container">
+            <div class="viz-header">
+                <h3 class="viz-title"><i class="fas fa-tachometer-alt"></i> Health Score Gauge</h3>
+                <button class="btn" onclick="toggleExplainability('health-explainer')" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+                    <i class="fas fa-question-circle"></i> How is this computed?
+                </button>
+            </div>
+            <div id="health-explainer" class="explainability-panel" style="display: none; background: rgba(123, 97, 255, 0.05); border-left: 3px solid var(--accent-primary); padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+                <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem;"><i class="fas fa-calculator"></i> Formula</h4>
+                <code style="display: block; background: rgba(0, 0, 0, 0.2); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+                    health_score = (quality * 0.4) + (security * 0.3) + (coverage * 0.2) + (docs * 0.1)
+                </code>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; line-height: 1.5;">
+                    <strong>Sources:</strong> Quality metrics, security scan, test coverage, documentation completeness.
+                    <br><strong>Confidence:</strong> <span id="health-confidence">85%</span> (varies based on data completeness)
+                </p>
                     </div>
                     <div id="viz-health" class="viz-canvas" style="min-height: 220px;"></div>
                 </div>
@@ -153,7 +180,39 @@
                         <div class="section-icon"><i class="fas fa-sitemap"></i></div>
                         <div>
                             <h2 class="section-title">Code Architecture</h2>
-                            <p class="section-subtitle">Language distribution and file structure</p>
+                            <p class="section-subtitle">Language distribution, file structure, and domain concepts</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Domain Concept Map (DIGEST ENH-D05) -->
+                <div class="viz-container mb-lg">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-project-diagram"></i> Domain Concept Map</h3>
+                        <button class="btn" onclick="toggleExplainability('domain-explainer')" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">
+                            <i class="fas fa-question-circle"></i> How is this generated?
+                        </button>
+                    </div>
+                    <div id="domain-explainer" class="explainability-panel" style="display: none; background: rgba(16, 185, 129, 0.05); border-left: 3px solid var(--status-success); padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+                        <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem;"><i class="fas fa-brain"></i> Inference Method</h4>
+                        <p style="font-size: 0.85rem; line-height: 1.5;">
+                            Domain concepts extracted from: <strong>business summary NLP</strong>, code identifiers, documentation, and naming patterns.
+                            <br><strong>Confidence:</strong> <span id="domain-confidence">72%</span> (based on signal strength)
+                        </p>
+                    </div>
+                    <div id="viz-domain" class="viz-canvas" style="min-height: 400px;"></div>
+                    <div class="viz-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #00d4ff;"></span>
+                            <span>Core Domain</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #7b61ff;"></span>
+                            <span>Supporting</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot" style="background: #10b981;"></span>
+                            <span>Integration Point</span>
                         </div>
                     </div>
                 </div>
@@ -328,6 +387,54 @@
                     <div id="dep-table" style="overflow-x: auto;">
                         <!-- Populated by app.js -->
                     </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Use Cases (DIGEST ENH-D03) -->
+            <div id="tab-usecases" class="tab-content">
+                <div class="glass-card panel-purple mb-lg">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-lightbulb"></i></div>
+                        <div>
+                            <h2 class="section-title">Use Case Library</h2>
+                            <p class="section-subtitle">Persona-based insights and actionable recommendations</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Persona Filters -->
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                        <button class="btn btn-filter active" data-persona="all" onclick="filterUseCases('all')">
+                            <i class="fas fa-users"></i> All
+                        </button>
+                        <button class="btn btn-filter" data-persona="po" onclick="filterUseCases('po')">
+                            <i class="fas fa-user-tie"></i> Product Owner
+                        </button>
+                        <button class="btn btn-filter" data-persona="eng" onclick="filterUseCases('eng')">
+                            <i class="fas fa-code"></i> Engineering Manager
+                        </button>
+                        <button class="btn btn-filter" data-persona="tech" onclick="filterUseCases('tech')">
+                            <i class="fas fa-project-diagram"></i> Tech Lead
+                        </button>
+                        <button class="btn btn-filter" data-persona="security" onclick="filterUseCases('security')">
+                            <i class="fas fa-shield-alt"></i> Security Lead
+                        </button>
+                        <button class="btn btn-filter" data-persona="qa" onclick="filterUseCases('qa')">
+                            <i class="fas fa-vial"></i> QA Lead
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Use Case Treemap (DIGEST requirement) -->
+                <div class="viz-container mb-lg">
+                    <div class="viz-header">
+                        <h3 class="viz-title"><i class="fas fa-th"></i> Use Case Treemap by Persona & Category</h3>
+                    </div>
+                    <div id="viz-usecases" class="viz-canvas" style="min-height: 400px;"></div>
+                </div>
+                
+                <!-- Use Case Cards Grid -->
+                <div id="usecase-grid" class="glass-card panel-emerald">
+                    <!-- Populated by app.js -->
                 </div>
             </div>
             

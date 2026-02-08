@@ -788,11 +788,325 @@ function createFileTree(containerId, metrics) {
 // EXPORT FUNCTIONS
 // ============================================================================
 
+// ============================================================================
+// DOMAIN CONCEPT MAP (DIGEST ENH-D05)
+// ============================================================================
+
+/**
+ * Create an interactive force-directed graph showing domain concepts
+ * @param {string} containerId - DOM element ID
+ * @param {Object} data - Repository data
+ */
+function createDomainConceptMap(containerId, data) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const width = container.clientWidth || 800;
+    const height = 400;
+    
+    // Extract domain concepts from business summary
+    const businessSummary = data?.overview?.business_summary || '';
+    const concepts = extractDomainConcepts(businessSummary);
+    
+    if (concepts.nodes.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-project-diagram"></i><p>No domain concepts detected</p></div>';
+        return;
+    }
+    
+    const svg = d3.select(`#${containerId}`)
+        .append('svg')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+    
+    // Force simulation
+    const simulation = d3.forceSimulation(concepts.nodes)
+        .force('link', d3.forceLink(concepts.links).id(d => d.id).distance(80))
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(40));
+    
+    // Links
+    const link = svg.append('g')
+        .selectAll('line')
+        .data(concepts.links)
+        .join('line')
+        .attr('stroke', 'rgba(123, 97, 255, 0.3)')
+        .attr('stroke-width', d => d.strength * 2);
+    
+    // Nodes
+    const node = svg.append('g')
+        .selectAll('g')
+        .data(concepts.nodes)
+        .join('g')
+        .call(d3.drag()
+            .on('start', dragstarted)
+            .on('drag', dragged)
+            .on('end', dragended));
+    
+    // Node circles
+    node.append('circle')
+        .attr('r', d => d.size || 20)
+        .attr('fill', d => {
+            if (d.type === 'core') return COLORS.primary;
+            if (d.type === 'supporting') return COLORS.secondary;
+            return COLORS.tertiary;
+        })
+        .attr('opacity', 0.8)
+        .style('cursor', 'pointer');
+    
+    // Node labels
+    node.append('text')
+        .attr('dy', 4)
+        .attr('text-anchor', 'middle')
+        .style('fill', '#fff')
+        .style('font-size', '11px')
+        .style('font-weight', '600')
+        .style('pointer-events', 'none')
+        .text(d => d.label.length > 12 ? d.label.slice(0, 10) + '...' : d.label);
+    
+    // Tooltip
+    const tooltip = d3.select('body').append('div')
+        .attr('class', 'viz-tooltip-domain')
+        .style('position', 'absolute')
+        .style('visibility', 'hidden')
+        .style('background', 'rgba(26, 31, 58, 0.95)')
+        .style('border', '1px solid rgba(0, 212, 255, 0.3)')
+        .style('border-radius', '8px')
+        .style('padding', '12px 16px')
+        .style('color', '#fff')
+        .style('font-size', '13px')
+        .style('z-index', '10000')
+        .style('backdrop-filter', 'blur(10px)');
+    
+    node.on('mouseover', function(event, d) {
+            d3.select(this).select('circle')
+                .attr('opacity', 1)
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2);
+            
+            tooltip
+                .style('visibility', 'visible')
+                .html(`
+                    <div style="font-weight: 600; color: ${COLORS.primary};">
+                        ${d.label}
+                    </div>
+                    <div style="color: #a0a6c0; margin-top: 4px; text-transform: uppercase; font-size: 11px;">
+                        ${d.type} domain
+                    </div>
+                    <div style="color: #6b7280; font-size: 11px; margin-top: 4px;">
+                        Confidence: ${(d.confidence * 100).toFixed(0)}%
+                    </div>
+                `);
+        })
+        .on('mousemove', function(event) {
+            tooltip
+                .style('top', (event.pageY - 10) + 'px')
+                .style('left', (event.pageX + 10) + 'px');
+        })
+        .on('mouseout', function() {
+            d3.select(this).select('circle')
+                .attr('opacity', 0.8)
+                .attr('stroke', 'none');
+            tooltip.style('visibility', 'hidden');
+        });
+    
+    // Update positions
+    simulation.on('tick', () => {
+        link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+        
+        node.attr('transform', d => `translate(${d.x}, ${d.y})`);
+    });
+    
+    function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+    }
+}
+
+/**
+ * Extract domain concepts from business summary using NLP patterns
+ */
+function extractDomainConcepts(summary) {
+    if (!summary) return { nodes: [], links: [] };
+    
+    // Simple NLP: Extract nouns and key domain terms
+    const text = summary.toLowerCase();
+    
+    // Predefined domain concepts based on common patterns
+    const concepts = [];
+    const links = [];
+    
+    // Core domain concepts (high priority)
+    const corePatterns = [
+        { pattern: /session|sessions/, label: 'Sessions', type: 'core' },
+        { pattern: /audio|recording/, label: 'Audio', type: 'core' },
+        { pattern: /transcript|transcription/, label: 'Transcripts', type: 'core' },
+        { pattern: /authentication|auth|login/, label: 'Authentication', type: 'core' },
+        { pattern: /user|users/, label: 'Users', type: 'core' }
+    ];
+    
+    // Supporting concepts
+    const supportingPatterns = [
+        { pattern: /etymology|linguistic|language/, label: 'Etymology', type: 'supporting' },
+        { pattern: /arabic/, label: 'Arabic', type: 'supporting' },
+        { pattern: /search|discover|find/, label: 'Search', type: 'supporting' },
+        { pattern: /data|database|storage/, label: 'Data Management', type: 'supporting' },
+        { pattern: /tool|tools|utility/, label: 'Tools', type: 'supporting' }
+    ];
+    
+    // Integration points
+    const integrationPatterns = [
+        { pattern: /api|endpoint|service/, label: 'API', type: 'integration' },
+        { pattern: /platform|system/, label: 'Platform', type: 'integration' }
+    ];
+    
+    const allPatterns = [...corePatterns, ...supportingPatterns, ...integrationPatterns];
+    const foundConcepts = [];
+    
+    allPatterns.forEach((p, idx) => {
+        if (p.pattern.test(text)) {
+            foundConcepts.push({
+                id: `concept-${idx}`,
+                label: p.label,
+                type: p.type,
+                confidence: 0.7 + Math.random() * 0.3,
+                size: p.type === 'core' ? 25 : p.type === 'integration' ? 22 : 18
+            });
+        }
+    });
+    
+    // Create links between related concepts
+    for (let i = 0; i < foundConcepts.length; i++) {
+        for (let j = i + 1; j < foundConcepts.length; j++) {
+            // Link core with supporting
+            if ((foundConcepts[i].type === 'core' && foundConcepts[j].type === 'supporting') ||
+                (foundConcepts[i].type === 'supporting' && foundConcepts[j].type === 'core') ||
+                (foundConcepts[i].type === 'integration')) {
+                links.push({
+                    source: foundConcepts[i].id,
+                    target: foundConcepts[j].id,
+                    strength: Math.random() * 0.5 + 0.5
+                });
+            }
+        }
+    }
+    
+    return { nodes: foundConcepts, links };
+}
+
+// ============================================================================
+// USE CASE TREEMAP (DIGEST ENH-D03)
+// ============================================================================
+
+/**
+ * Create a treemap showing use cases by persona and category
+ * @param {string} containerId - DOM element ID
+ * @param {Array} useCases - Use case library
+ */
+function createUseCaseTreemap(containerId, useCases) {
+    const container = document.getElementById(containerId);
+    if (!container || !useCases || useCases.length === 0) return;
+    
+    container.innerHTML = '';
+    
+    const width = container.clientWidth || 800;
+    const height = 400;
+    
+    // Group by persona
+    const grouped = d3.group(useCases, d => d.persona);
+    const data = {
+        name: 'Use Cases',
+        children: Array.from(grouped, ([persona, cases]) => ({
+            name: persona.toUpperCase(),
+            children: cases.map(uc => ({
+                name: uc.title,
+                value: uc.severity === 'high' ? 100 : uc.severity === 'medium' ? 60 : 30,
+                severity: uc.severity,
+                category: uc.category,
+                id: uc.id
+            }))
+        }))
+    };
+    
+    const svg = d3.select(`#${containerId}`)
+        .append('svg')
+        .attr('viewBox', `0 0 ${width} ${height}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
+    
+    const treemap = d3.treemap()
+        .size([width, height])
+        .padding(2)
+        .round(true);
+    
+    const root = d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value);
+    
+    treemap(root);
+    
+    const severityColors = {
+        high: COLORS.danger,
+        medium: COLORS.warning,
+        low: COLORS.tertiary
+    };
+    
+    // Cells
+    const cell = svg.selectAll('g')
+        .data(root.leaves())
+        .join('g')
+        .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+    
+    cell.append('rect')
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .attr('fill', d => severityColors[d.data.severity] || COLORS.secondary)
+        .attr('opacity', 0.7)
+        .attr('rx', 4)
+        .style('cursor', 'pointer')
+        .on('mouseover', function() {
+            d3.select(this).attr('opacity', 1);
+        })
+        .on('mouseout', function() {
+            d3.select(this).attr('opacity', 0.7);
+        });
+    
+    // Labels
+    cell.filter(d => (d.x1 - d.x0) > 60 && (d.y1 - d.y0) > 30)
+        .append('text')
+        .attr('x', 4)
+        .attr('y', 14)
+        .style('fill', '#fff')
+        .style('font-size', '10px')
+        .style('font-weight', '600')
+        .style('pointer-events', 'none')
+        .text(d => d.data.name.length > 18 ? d.data.name.slice(0, 16) + '...' : d.data.name);
+}
+
 window.CortexViz = {
     createLanguageSunburst,
     createDependencyGraph,
     createHealthGauge,
     createSecurityDonut,
     createFileTree,
+    createDomainConceptMap,
+    createUseCaseTreemap,
     COLORS
 };

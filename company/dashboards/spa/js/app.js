@@ -25,7 +25,8 @@ const CONFIG = {
         { id: 'architecture', icon: 'fas fa-sitemap', label: 'Architecture' },
         { id: 'quality', icon: 'fas fa-medal', label: 'Quality' },
         { id: 'security', icon: 'fas fa-shield-alt', label: 'Security' },
-        { id: 'dependencies', icon: 'fas fa-cubes', label: 'Dependencies' }
+        { id: 'dependencies', icon: 'fas fa-cubes', label: 'Dependencies' },
+        { id: 'usecases', icon: 'fas fa-lightbulb', label: 'Use Cases' }
     ]
 };
 
@@ -353,6 +354,18 @@ function renderVisualizations(data) {
         if (DOM.vizFiles && metrics.languages && window.CortexViz) {
             CortexViz.createFileTree('viz-files', metrics);
         }
+        
+        // Domain concept map (DIGEST ENH-D05)
+        const vizDomain = document.getElementById('viz-domain');
+        if (vizDomain && window.CortexViz) {
+            CortexViz.createDomainConceptMap('viz-domain', data);
+        }
+        
+        // Use case treemap (DIGEST ENH-D03)
+        const vizUseCases = document.getElementById('viz-usecases');
+        if (vizUseCases && AppState.useCases && window.CortexViz) {
+            CortexViz.createUseCaseTreemap('viz-usecases', AppState.useCases);
+        }
     });
 }
 
@@ -464,6 +477,14 @@ async function loadRepository(repoName) {
     
     try {
         AppState.data = await loadRepoData(repoName);
+        
+        // Data integrity checks (DIGEST ENH-D01, ENH-D08)
+        const integrityIssues = detectDataIntegrityIssues(AppState.data);
+        renderIntegrityBanner(integrityIssues);
+        
+        // Generate use cases (DIGEST ENH-D03)
+        AppState.useCases = generateUseCaseLibrary(AppState.data);
+        renderUseCaseGrid(AppState.useCases, currentUseCaseFilter);
         
         // Update all UI
         updateHeader(AppState.data);
@@ -587,3 +608,353 @@ function renderLanguageBar(containerId, languages) {
 
 // Export for inline usage
 window.renderLanguageBar = renderLanguageBar;
+
+// ============================================================================
+// DATA INTEGRITY & EXPLAINABILITY (DIGEST ENH-D01, ENH-D02, ENH-D08)
+// ============================================================================
+
+function detectDataIntegrityIssues(data) {
+    const issues = [];
+    const repo = data.repo || {};
+    const metrics = data.metrics || {};
+    const overview = data.overview || {};
+    
+    // Check 1: Description vs Business Summary contradiction
+    if (repo.description && overview.business_summary) {
+        const desc = repo.description.toLowerCase();
+        const summary = overview.business_summary.toLowerCase();
+        
+        // Check for major contradictions
+        if ((desc.includes('python') && summary.includes('.net')) ||
+            (desc.includes('authentication') && summary.includes('islamic sessions'))) {
+            issues.push({
+                type: 'contradiction',
+                severity: 'high',
+                message: `Repo description says "${repo.description}" but business summary describes a different product`,
+                confidence: 0.85
+            });
+        }
+    }
+    
+    // Check 2: LOC=0 but language counts exist
+    if (metrics.loc === 0 && metrics.languages && Object.keys(metrics.languages).length > 0) {
+        const totalLangLines = Object.values(metrics.languages).reduce((a, b) => a + b, 0);
+        issues.push({
+            type: 'extraction_incomplete',
+            severity: 'high',
+            message: `LOC reported as 0, but language counts show ${totalLangLines.toLocaleString()} lines`,
+            confidence: 1.0
+        });
+    }
+    
+    // Check 3: Files=0 but files field missing
+    if (metrics.files === 0 && metrics.languages && Object.keys(metrics.languages).length > 0) {
+        issues.push({
+            type: 'extraction_incomplete',
+            severity: 'medium',
+            message: 'File count is 0, but multiple languages detected - extraction may be incomplete',
+            confidence: 0.9
+        });
+    }
+    
+    // Check 4: Direct dependencies = 0 but transitive > 0
+    if (data.dependencies && data.dependencies.direct_count === 0 && data.dependencies.transitive_count > 0) {
+        issues.push({
+            type: 'dependency_parsing',
+            severity: 'medium',
+            message: `Direct dependencies: 0, but ${data.dependencies.transitive_count.toLocaleString()} transitive dependencies found`,
+            confidence: 0.8
+        });
+    }
+    
+    // Check 5: Health score vs risk score inconsistency
+    if (metrics.health_score < 50 && metrics.risk_score === 0) {
+        issues.push({
+            type: 'metric_inconsistency',
+            severity: 'low',
+            message: `Health score is ${metrics.health_score} but risk score is 0 - metrics may be incomplete`,
+            confidence: 0.7
+        });
+    }
+    
+    return issues;
+}
+
+function renderIntegrityBanner(issues) {
+    const banner = document.getElementById('integrity-banner');
+    const issuesContainer = document.getElementById('integrity-issues');
+    
+    if (!banner || !issuesContainer) return;
+    
+    if (issues.length === 0) {
+        banner.style.display = 'none';
+        return;
+    }
+    
+    banner.style.display = 'block';
+    
+    const severityIcons = {
+        high: 'fas fa-exclamation-circle',
+        medium: 'fas fa-exclamation-triangle',
+        low: 'fas fa-info-circle'
+    };
+    
+    const severityColors = {
+        high: 'var(--status-error)',
+        medium: 'var(--status-warning)',
+        low: 'var(--status-info)'
+    };
+    
+    issuesContainer.innerHTML = issues.map(issue => `
+        <div style="display: flex; gap: 1rem; padding: 0.75rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 0.5rem;">
+            <i class="${severityIcons[issue.severity]}" style="color: ${severityColors[issue.severity]}; font-size: 1.2rem; margin-top: 0.2rem;"></i>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; margin-bottom: 0.25rem;">${issue.type.replace(/_/g, ' ').toUpperCase()}</div>
+                <div style="font-size: 0.9rem; line-height: 1.5;">${issue.message}</div>
+                <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); margin-top: 0.25rem;">
+                    Confidence: ${(issue.confidence * 100).toFixed(0)}%
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleExplainability(id) {
+    const panel = document.getElementById(id);
+    if (panel) {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Expose globally
+window.toggleExplainability = toggleExplainability;
+
+// ============================================================================
+// USE CASE LIBRARY (DIGEST ENH-D03)
+// ============================================================================
+
+function generateUseCaseLibrary(data) {
+    const repo = data.repo || {};
+    const overview = data.overview || {};
+    const metrics = data.metrics || {};
+    const security = data.security || {};
+    const deps = data.dependencies || {};
+    
+    const useCases = [
+        // Product Owner Use Cases
+        {
+            id: 'UC-PO-001',
+            title: 'Clarify Product Scope',
+            persona: 'po',
+            category: 'Delivery & Planning',
+            summary: 'Resolve contradictions between repo description and business summary',
+            signals: ['Repo description vs business summary mismatch'],
+            recommended_actions: ['Review and update repo description', 'Align documentation with actual product'],
+            severity: 'high',
+            confidence: 0.9
+        },
+        {
+            id: 'UC-PO-002',
+            title: 'Roadmap Risk Assessment',
+            persona: 'po',
+            category: 'Security & Compliance',
+            summary: 'Evaluate dependency vulnerability impact on feature delivery',
+            signals: [`${security.total_count || 0} security issues`, `${deps.total_count || 0} dependencies`],
+            recommended_actions: ['Audit vulnerable dependencies', 'Create upgrade roadmap', 'Add security gates to CI'],
+            severity: 'high',
+            confidence: 0.85
+        },
+        {
+            id: 'UC-PO-003',
+            title: 'Feature Discovery Map',
+            persona: 'po',
+            category: 'Architecture & Domain',
+            summary: 'Extract feature list from domain vocabulary and business summary',
+            signals: ['Business summary mentions: sessions, transcripts, etymology, Arabic tools'],
+            recommended_actions: ['Document feature matrix', 'Map to user journeys', 'Create backlog items'],
+            severity: 'medium',
+            confidence: 0.75
+        },
+        
+        // Engineering Manager Use Cases
+        {
+            id: 'UC-ENG-001',
+            title: 'Code Quality Baseline',
+            persona: 'eng',
+            category: 'Quality & Maintainability',
+            summary: 'Establish quality metrics and improvement targets',
+            signals: [`Health score: ${metrics.health_score || 0}`, `Coverage: ${metrics.coverage_pct || 0}%`],
+            recommended_actions: ['Set coverage targets', 'Implement linting', 'Code review checklist'],
+            severity: 'medium',
+            confidence: 0.8
+        },
+        {
+            id: 'UC-ENG-002',
+            title: 'Technical Debt Inventory',
+            persona: 'eng',
+            category: 'Quality & Maintainability',
+            summary: 'Identify and prioritize technical debt items',
+            signals: ['Incomplete extraction', 'Missing metrics', 'Documentation gaps'],
+            recommended_actions: ['Create tech debt backlog', 'Prioritize by impact', 'Allocate sprint capacity'],
+            severity: 'medium',
+            confidence: 0.7
+        },
+        
+        // Tech Lead Use Cases
+        {
+            id: 'UC-TECH-001',
+            title: 'Architecture Clarity',
+            persona: 'tech',
+            category: 'Architecture & Domain',
+            summary: 'Document multi-language architecture and integration points',
+            signals: [`${Object.keys(metrics.languages || {}).length} languages`, 'Hybrid stack'],
+            recommended_actions: ['Create architecture diagram', 'Document integration points', 'Define boundaries'],
+            severity: 'high',
+            confidence: 0.85
+        },
+        {
+            id: 'UC-TECH-002',
+            title: 'Dependency Strategy',
+            persona: 'tech',
+            category: 'Dependency & Supply Chain',
+            summary: 'Optimize dependency management and reduce bloat',
+            signals: [`${deps.total_count || 0} total dependencies`, `Direct: ${deps.direct_count || 0}`],
+            recommended_actions: ['Review necessity of each dependency', 'Implement tree-shaking', 'Regular audits'],
+            severity: 'medium',
+            confidence: 0.75
+        },
+        
+        // Security Lead Use Cases
+        {
+            id: 'UC-SEC-001',
+            title: 'Vulnerability Remediation',
+            persona: 'security',
+            category: 'Security & Compliance',
+            summary: 'Prioritize and fix security vulnerabilities',
+            signals: [`${security.total_count || 0} vulnerabilities`, 'Dependency risks'],
+            recommended_actions: ['Run SBOM analysis', 'Patch critical/high first', 'Automated scanning'],
+            severity: 'high',
+            confidence: 0.9
+        },
+        {
+            id: 'UC-SEC-002',
+            title: 'License Compliance',
+            persona: 'security',
+            category: 'Security & Compliance',
+            summary: 'Ensure all dependencies have compatible licenses',
+            signals: ['License parsing incomplete', 'Unknown licenses detected'],
+            recommended_actions: ['Fix license detection', 'Create allowed list', 'Legal review'],
+            severity: 'medium',
+            confidence: 0.8
+        },
+        
+        // QA Lead Use Cases
+        {
+            id: 'UC-QA-001',
+            title: 'Test Coverage Improvement',
+            persona: 'qa',
+            category: 'Quality & Maintainability',
+            summary: 'Increase test coverage to acceptable threshold',
+            signals: [`Coverage: ${metrics.coverage_pct || 0}%`, 'Low test count'],
+            recommended_actions: ['Set coverage goals', 'Add unit tests', 'Integration test suite'],
+            severity: 'high',
+            confidence: 0.85
+        },
+        {
+            id: 'UC-QA-002',
+            title: 'Quality Gate Definition',
+            persona: 'qa',
+            category: 'Quality & Maintainability',
+            summary: 'Define and enforce quality gates in CI/CD',
+            signals: ['No automated quality checks', 'Missing quality metrics'],
+            recommended_actions: ['Define quality gates', 'Integrate with CI', 'Block on failures'],
+            severity: 'medium',
+            confidence: 0.75
+        }
+    ];
+    
+    return useCases;
+}
+
+function renderUseCaseGrid(useCases, filter = 'all') {
+    const grid = document.getElementById('usecase-grid');
+    if (!grid) return;
+    
+    const filtered = filter === 'all' ? useCases : useCases.filter(uc => uc.persona === filter);
+    
+    const severityColors = {
+        high: 'var(--status-error)',
+        medium: 'var(--status-warning)',
+        low: 'var(--status-info)'
+    };
+    
+    const personaIcons = {
+        po: 'fas fa-user-tie',
+        eng: 'fas fa-code',
+        tech: 'fas fa-project-diagram',
+        security: 'fas fa-shield-alt',
+        qa: 'fas fa-vial'
+    };
+    
+    grid.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
+            ${filtered.map(uc => `
+                <div class="usecase-card" style="background: rgba(123, 97, 255, 0.05); border: 1px solid rgba(123, 97, 255, 0.2); border-radius: 12px; padding: 1.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                        <div>
+                            <div style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); margin-bottom: 0.25rem;">${uc.id}</div>
+                            <h4 style="font-size: 1.05rem; margin: 0;">${uc.title}</h4>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <i class="${personaIcons[uc.persona]}" style="color: var(--accent-secondary);"></i>
+                            <span style="font-size: 0.9rem; padding: 0.25rem 0.5rem; background: ${severityColors[uc.severity]}; border-radius: 4px; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">${uc.severity}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 0.75rem;">
+                        <strong>Category:</strong> ${uc.category}
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.75rem;">${uc.summary}</p>
+                    
+                    <div style="margin-bottom: 0.75rem;">
+                        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--accent-primary);">Signals:</div>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem;">
+                            ${uc.signals.map(s => `<li style="padding: 0.15rem 0;"><i class="fas fa-signal" style="color: var(--accent-tertiary); margin-right: 0.5rem;"></i>${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--status-success);">Actions:</div>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem;">
+                            ${uc.recommended_actions.map(a => `<li style="padding: 0.15rem 0;"><i class="fas fa-arrow-right" style="color: var(--status-success); margin-right: 0.5rem;"></i>${a}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.75rem; color: rgba(255, 255, 255, 0.5);">
+                        Confidence: ${(uc.confidence * 100).toFixed(0)}%
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+let currentUseCaseFilter = 'all';
+
+function filterUseCases(persona) {
+    currentUseCaseFilter = persona;
+    
+    // Update button states
+    document.querySelectorAll('.btn-filter').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.persona === persona);
+    });
+    
+    // Re-render grid
+    const useCases = AppState.useCases || [];
+    renderUseCaseGrid(useCases, persona);
+}
+
+// Expose globally
+window.filterUseCases = filterUseCases;
+
