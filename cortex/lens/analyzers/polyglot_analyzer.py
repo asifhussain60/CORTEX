@@ -22,6 +22,7 @@ from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer, ASTAnalysisResult, F
 from cortex.lens.adapters.csharp_adapter import CSharpAdapter
 from cortex.lens.adapters.java_adapter import JavaAdapter
 from cortex.lens.adapters.typescript_adapter import TypeScriptAdapter
+from cortex.lens.adapters.javascript_adapter import JavaScriptAdapter
 from cortex.lens.models.polyglot_ast_result import PolyglotASTResult, LanguageType
 
 
@@ -82,6 +83,7 @@ class PolyglotAnalyzer:
         self.csharp_adapter = CSharpAdapter()
         self.java_adapter = JavaAdapter()
         self.typescript_adapter = TypeScriptAdapter()
+        self.javascript_adapter = JavaScriptAdapter()
         
         # Language detection map
         self.language_map = {
@@ -91,9 +93,8 @@ class PolyglotAnalyzer:
             ".java": "java",
             ".ts": "typescript",
             ".tsx": "typescript",
-            # TODO Phase 43 S1: Add JavaScript adapter
-            # ".js": "javascript",
-            # ".jsx": "javascript",
+            ".js": "javascript",
+            ".jsx": "javascript",
         }
     
     def analyze_file(self, file_path: Path) -> PolyglotAnalysisResult:
@@ -120,6 +121,8 @@ class PolyglotAnalyzer:
             return self._analyze_java(file_path)
         elif language == "typescript":
             return self._analyze_typescript(file_path)
+        elif language == "javascript":
+            return self._analyze_javascript(file_path)
         else:
             return PolyglotAnalysisResult(
                 success=False,
@@ -423,6 +426,81 @@ class PolyglotAnalyzer:
             return PolyglotAnalysisResult(
                 success=False,
                 language="TypeScript",
+                error=str(e),
+                metadata={"file_path": str(file_path)},
+            )
+    
+    def _analyze_javascript(self, file_path: Path) -> PolyglotAnalysisResult:
+        """
+        Analyze JavaScript file using JavaScriptAdapter.
+        
+        Converts PolyglotASTResult to PolyglotAnalysisResult format.
+        
+        Args:
+            file_path: Path to JavaScript file
+        
+        Returns:
+            PolyglotAnalysisResult
+        """
+        try:
+            result = self.javascript_adapter.parse_file(file_path)
+            
+            # Convert to unified format
+            functions = [
+                {
+                    "name": func.name,
+                    "line_number": func.line_start,
+                    "parameters": func.parameters,
+                    "is_async": func.is_async,
+                    "return_type": func.return_type or "",
+                    "docstring": func.docstring or "",
+                }
+                for func in result.functions
+            ]
+            
+            classes = [
+                {
+                    "name": cls.name,
+                    "line_number": cls.line_start,
+                    "methods": [m.name for m in cls.methods],
+                    "bases": cls.base_classes,
+                    "docstring": cls.docstring or "",
+                    "namespace": cls.namespace or "",
+                    "is_interface": cls.is_interface,
+                    "is_abstract": cls.is_abstract,
+                    "properties": cls.properties,
+                }
+                for cls in result.classes
+            ]
+            
+            imports = [
+                {
+                    "module": imp.module,
+                    "names": imp.names,
+                    "alias": imp.alias or "",
+                    "line_number": imp.line,
+                }
+                for imp in result.imports
+            ]
+            
+            return PolyglotAnalysisResult(
+                success=True,
+                language="JavaScript",
+                functions=functions,
+                classes=classes,
+                imports=imports,
+                error="",
+                metadata={
+                    **result.metadata,
+                    "analyzer": "JavaScriptAdapter",
+                    "parse_errors": result.parse_errors,
+                },
+            )
+        
+        except Exception as e:
+            return PolyglotAnalysisResult(
+                success=False,
+                language="JavaScript",
                 error=str(e),
                 metadata={"file_path": str(file_path)},
             )

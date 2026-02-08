@@ -155,28 +155,22 @@ class UserService {
 
 
 class TestPolyglotAnalyzerJavaScriptWiring:
-    """Test JavaScript adapter wiring (future - placeholder tests)."""
+    """Test JavaScript adapter wiring."""
     
     def setup_method(self):
         """Initialize analyzer for each test."""
         self.analyzer = PolyglotAnalyzer()
     
-    @pytest.mark.skip(reason="JavaScript adapter not yet implemented (Phase 43 S1 future work)")
     def test_language_map_contains_javascript_extension(self):
         """
         AC-PHASE43-002: PolyglotAnalyzer maps .js to javascript language.
-        
-        Planned for Phase 43 Stage 1.
         """
         assert ".js" in self.analyzer.language_map
         assert self.analyzer.language_map[".js"] == "javascript"
     
-    @pytest.mark.skip(reason="JavaScript adapter not yet implemented (Phase 43 S1 future work)")
     def test_language_map_contains_jsx_extension(self):
         """
         AC-PHASE43-002: PolyglotAnalyzer maps .jsx to javascript language.
-        
-        Planned for Phase 43 Stage 1.
         """
         assert ".jsx" in self.analyzer.language_map
         assert self.analyzer.language_map[".jsx"] == "javascript"
