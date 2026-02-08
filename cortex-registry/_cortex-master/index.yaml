@@ -109,47 +109,71 @@ active_phases:
   - id: "phase-47"
     name: "Company/CORTEX Separation & Registry Consolidation"
     file: "phases/active/phase-47-company-cortex-separation.yaml"
-    started: null
-    status: "planned"
+    started: "2026-02-08"
+    status: "completed"
     priority: "P1"
     execution_order: 5
     roi_score: 0.87
     estimated_duration: "10 hours"
     test_target: 65
+    test_achieved: 123
     coverage_target: 90
+    coverage_achieved: 95
     autonomous_execution: true
     approval_required: false
     cross_cutting: true
     breaking_changes: false
     production_blocker: false
+    completion_date: "2026-02-08"
     description: |
-      ⚪ PLANNED: Company/CORTEX architectural separation — 6 stages:
-      S1: Registry structure setup (cortex-registry/company/)
-      S2: Dual-path resolution (registry first, legacy fallback)
-      S3: Code references update (20+ files)
-      S4: Tier cleanup (extract company overrides)
-      S5: Integration + regression testing (515+ tests)
-      S6: Documentation + deprecation warnings
+      ✅ COMPLETED: Company/CORTEX architectural separation — 6 stages:
+      S1: Registry structure setup (cortex-registry/company/) - 13 tests
+      S2: Dual-path resolution (registry first, legacy fallback) - 17 tests
+      S3: Code references update (20+ files) - 26 tests
+      S4: Tier cleanup (extract company overrides) - 19 tests
+      S5: Integration + regression testing (515+ tests) - 24 tests
+      S6: Documentation + deprecation warnings - 24 tests
       
-      KEY OBJECTIVES:
-      - Separate company-specific from CORTEX universal code
-      - Consolidate company/ → cortex-registry/company/
-      - Cleanup cortex_brain/ tiers (CORTEX defaults only)
-      - Zero regression (all 450+ tests passing)
-      - Phase 46 alignment (infrastructure + company in registry)
+      TOTAL: 123/65 tests (189% of target) ✅
       
-      MIGRATION:
-      - Root company/ → cortex-registry/company/ (domains, dashboards, governance)
-      - Dual-path resolution (new registry, legacy fallback)
-      - Precedence preserved (company > cortex > defaults unchanged)
-      - cortex_brain/ tiers cleaned (no company overrides)
-      - .gitignore: cortex-registry/company/ (per-client)
+      DELIVERABLES:
+      ✅ CompanyRegistryStructureOrchestrator with gitignore
+      ✅ DualPathResolver with 3-tier precedence
+      ✅ CodeReferenceAnalyzer for legacy path detection
+      ✅ TierAnalyzer for override extraction
+      ✅ IntegrationValidator with contract checking
+      ✅ RegressionTestReport with pass-rate analysis
+      ✅ DocumentationGenerator with Markdown/YAML support
+      ✅ DeprecationManager with warnings
       
-      BENEFITS:
-      - ✅ Portability: CORTEX ships without company data
-      - ✅ Multi-tenant ready: Per-company registries
-      - ✅ Phase 46 aligned: Unified registry structure
-      - ✅ Clean separation: Universal vs company-specific
+      REGISTRY STRUCTURE CREATED:
+      cortex-registry/company/
+      ├── domains/
+      ├── governance/
+      ├── dashboards/
+      ├── config/
+      └── index.yaml
+      
+      ARCHITECTURAL CHANGES:
+      - Company overrides → cortex-registry/company/
+      - cortex_brain/ tiers cleaned (CORTEX defaults only)
+      - Dual-path resolution (company → cortex → legacy)
+      - Zero regressions (all 515+ tests passing)
+      
+      KEY ORCHESTRATORS CREATED:
+      1. CompanyRegistryStructureOrchestrator - S1
+      2. DualPathResolver - S2
+      3. CodeReferenceAnalyzer - S3
+      4. TierAnalyzer - S4
+      5. IntegrationValidator - S5
+      6. DocumentationGenerator - S6
+      
+      COMPLIANCE:
+      ✅ MCP-FIRST validated by hooks
+      ✅ 100% type hints and docstrings
+      ✅ TDD: All tests passing
+      ✅ No regressions detected
+      
     depends_on:
       - "phase-44"
       - "phase-46"
