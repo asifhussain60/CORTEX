@@ -43,45 +43,61 @@ active_phases:
 
   - id: "phase-46"
     name: "Infrastructure Discovery & GitHub Integration"
-    file: "phases/active/phase-46-infrastructure-discovery.yaml"
-    started: null
-    status: "planned"
+    file: "phases/completed/2026/phase-46-infrastructure-discovery.yaml"
+    started: "2026-02-08"
+    completed: "2026-02-08"
+    status: "completed"
     priority: "P1"
     execution_order: 4
     roi_score: 0.89
     estimated_duration: "12 hours"
     test_target: 80
     coverage_target: 90
+    tests_passing: 109
     autonomous_execution: true
     approval_required: false
     cross_cutting: true
     breaking_changes: false
     production_blocker: false
     description: |
-      ⚪ PLANNED: Dynamic infrastructure awareness system — 6 stages:
-      S1: Infrastructure registry foundation (cache manager, schemas)
-      S2: GitHub API client (GraphQL/REST, rate limiting, caching)
-      S3: Infrastructure scanner (APIs, tooling, environment detection)
-      S4: MCP tools (cortex_discover_infrastructure, cortex_github_discover)
-      S5: LENS integration (internal packages, security alerts)
-      S6: Planning + Interaction integration (environment-aware, tooling suggestions)
+      ✅ COMPLETED: Dynamic infrastructure awareness system — 6/6 stages.
+      - S1: Infrastructure Registry Foundation (26 tests) ✅
+        Cache manager with TTL, invalidation, thread-safety, LRU, metrics
+      - S2: GitHub API Client (27 tests) ✅
+        GraphQL/REST wrapper, rate limiting, caching, mock mode
+      - S3: Infrastructure Scanner (19 tests) ✅
+        API/tool/service discovery, environment-specific capabilities
+      - S4: MCP Tools (23 tests) ✅
+        cortex_discover_infrastructure, cortex_github_discover
+      - S5: LENS Integration (6 tests) ✅
+        Internal package recommendations, Dependabot security gates
+      - S6: Orchestrator Integration (8 tests) ✅
+        PlanningOrchestrator environment-aware plans, InteractionOrchestrator tooling
       
-      KEY CAPABILITIES:
+      KEY DELIVERABLES:
+      - cortex/infrastructure/: Cache manager, GitHub client, scanner, detector, MCP tools
+      - cortex/lens/infrastructure_integration.py: LENS-aware recommendations
+      - cortex/orchestrators/planning/infrastructure_integration.py: Environment-aware planning
+      - cortex/interaction/tooling_suggestions.py: Tooling suggestions
+      - 109/109 tests passing (136% of 80-test target)
+      
+      CAPABILITIES ENABLED:
       - Real-time infrastructure discovery (APIs, tooling, services)
       - GitHub ecosystem integration (Packages, Actions, Environments, Dependabot)
       - Environment-specific awareness (dev/staging/prod capabilities)
-      - LENS recommends internal packages over external dependencies
-      - Security gates block vulnerable dependencies (Dependabot alerts)
+      - LENS recommends internal packages, blocks vulnerable dependencies
       - PlanningOrchestrator adjusts deployment plans per environment
       - InteractionOrchestrator suggests available company tooling
+      - Security gates: Dependabot CVE detection prevents deployment
       
       ARCHITECTURE:
       - Static best practices: company/domains/infrastructure/ (PRECEDENCE)
-      - Dynamic state: cortex-registry/infrastructure/ (runtime discovery)
+      - Dynamic state: cortex/infrastructure/ (runtime discovery)
       - Cache with TTL: 5-min for deployments, 1-hour for packages
       - Graceful degradation: Fallback to static on API failures
-      
-      Dependencies: PyGithub >=2.1.1, requests >=2.31.0, cachetools >=5.3.0
+      - MCP-FIRST: All functionality via MCP tools
+      - Thread-safe: RLock-protected cache operations
+      - Mock mode: Testing without real GitHub API calls
     depends_on:
       - "phase-44"
     unblocks:
@@ -207,7 +223,7 @@ active_phases:
 
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 41
+  count: 42
   directory: "phases/completed/2026/"
   phases:
     - "phase-01-orchestrator-event-bus.yaml"
@@ -245,6 +261,7 @@ completed_phases_2026:
     - "phase-43-lens-tooling-knowledge-intelligence.yaml"
     - "phase-44-cortex-production-readiness.yaml"
     - "phase-45-enhanced-planning-system.yaml"
+    - "phase-46-infrastructure-discovery.yaml"
 
 completed_phases_2025:
   count: 11
@@ -402,8 +419,9 @@ statistics:
   completed_phases: 45
   completed_2026: 40
   completed_2025: 11
+  completed_2026: 42
   in_progress_phases: 0
-  planned_phases: 5
+  planned_phases: 4
   pending_approval_phases: 1
   unblocked_phases: 0
   total_enhancements: 7
@@ -413,8 +431,6 @@ statistics:
   next_expected_completion: "2026-02-23"
   last_updated: "2026-02-08"
   active_breakdown:
-    - "phase-45: Enhanced Planning System (P0, pending_approval, ROI=0.89)"
-    - "phase-46: Infrastructure Discovery & GitHub Integration (P1, planned, ROI=0.89)"
     - "phase-47: Company/CORTEX Separation & Registry Consolidation (P1, planned, ROI=0.87)"
     - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
     - "phase-38: Brain Cohesion & Health System (P0, planned, ROI=0.94)"
@@ -422,16 +438,19 @@ statistics:
   completed_today:
     - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene ✅"
     - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor ✅"
-    - "phase-24-arch: Architecture Integrity System ✅"
+    - "phase-45: Enhanced Planning System ✅"
+    - "phase-46: Infrastructure Discovery & GitHub Integration ✅"
   enhancements_created_today:
     - "ENH-061: Universal Role-Based Response System (P0, approved, 12 hrs, 15 roles)"
     - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement (P0, active, 8 hrs, cross-cutting)"
   phases_created_today:
-    - "phase-45: Enhanced Planning System (P0, ROI=0.89, 6 stages, 100 tests)"
+    - "phase-45: Enhanced Planning System (P0, ROI=0.89, 6 stages, 110 tests)"
+    - "phase-46: Infrastructure Discovery (P1, ROI=0.89, 6 stages, 109 tests)"
   registry_hygiene:
     - "✅ Moved phase-43 → completed/ (all stages complete)"
     - "✅ Moved phase-44 → completed/ (25/25 tests passing)"
-    - "✅ Moved phase-24-arch → completed/ (monitoring active)"
+    - "✅ Moved phase-45 → completed/ (110/110 tests passing)"
+    - "✅ Moved phase-46 → completed/ (109/109 tests passing)"
     - "✅ Fixed phase-38 status: unblocked → planned"
     - "✅ Removed phase-37 duplicate entry"
     - "✅ Fixed execution_order for all active phases"
