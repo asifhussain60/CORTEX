@@ -37,6 +37,12 @@
         <div class="loading-text">Loading Dashboard...</div>
     </div>
     
+    <!-- Deployment Mode Badge (GPR-001 FIX) -->
+    <div id="deployment-badge" class="deployment-mode-badge">
+        <i class="fas fa-server deployment-icon"></i>
+        <span class="deployment-text" id="deployment-text">Loading...</span>
+    </div>
+    
     <!-- Navigation -->
     <nav class="main-nav">
         <div class="nav-content">
@@ -529,6 +535,10 @@
     <!-- Core Services -->
     <script src="js/core/StateManager.js"></script>
     <script src="js/core/ErrorBoundary.js"></script>
+    
+    <!-- Utilities (NEW - GPR FIXES) -->
+    <script src="js/utils/DeploymentMode.js"></script>
+    <script src="js/utils/DataIntegrityValidator.js"></script>
     
     <!-- Services -->
     <script src="js/services/ValidationService.js"></script>

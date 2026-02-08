@@ -5,9 +5,10 @@
  * - Race conditions (request deduplication)
  * - No request cancellation
  * - No partial failure handling
+ * - GPR-001: file:// protocol fetch failures
  * 
- * Authority: violations.md § Concurrency Hazards
- * Audit: AC_START: AC-SPA-001-03
+ * Authority: violations.md § Concurrency Hazards + GPR Recommendation
+ * Audit: AC_START: AC-SPA-001-03 (EXTENDED)
  */
 
 class RepositoryService {
@@ -16,6 +17,7 @@ class RepositoryService {
         this.inFlightRequests = new Map();
         this.abortControllers = new Map();
         this.embeddedData = new Map();
+        this.deploymentMode = DeploymentMode;  // GPR-001 FIX
     }
     
     /**
@@ -55,6 +57,7 @@ class RepositoryService {
     
     /**
      * Internal load implementation
+     * GPR-001 FIX: Check deployment mode before attempting fetch()
      */
     async _loadRepositoryInternal(repoName, signal, options) {
         return await this.errorBoundary.wrap(
@@ -64,6 +67,14 @@ class RepositoryService {
                 const embedded = this._getEmbeddedData(repoName);
                 if (embedded) {
                     return embedded;
+                }
+                
+                // GPR-001: Check if fetch is allowed in deployment mode
+                const mode = this.deploymentMode.getConfig();
+                if (!mode.canFetch) {
+                    const msg = `[${mode.mode}] Cannot fetch ${repoName}. Must use embedded data. ${mode.warningMessage}`;
+                    console.warn(msg);
+                    throw new Error(msg);
                 }
                 
                 // Fetch from JSON file
@@ -81,7 +92,7 @@ class RepositoryService {
                 
                 return data;
             },
-            { repoName, url: `./data/${repoName}.json` }
+            { repoName, url: `./data/${repoName}.json`, deploymentMode: this.deploymentMode.getConfig().mode }
         );
     }
     
@@ -183,9 +194,10 @@ class RepositoryService {
             inFlightCount: this.inFlightRequests.size,
             embeddedDataCount: this.embeddedData.size,
             inFlight: Array.from(this.inFlightRequests.keys()),
-            embedded: Array.from(this.embeddedData.keys())
+            embedded: Array.from(this.embeddedData.keys()),
+            deploymentMode: this.deploymentMode.getConfig()
         };
     }
 }
 
-// AC_COMPLETE: AC-SPA-001-03 ✅ RepositoryService with request coordination
+// AC_COMPLETE: AC-SPA-001-03 ✅ RepositoryService with GPR-001 deployment mode awareness
