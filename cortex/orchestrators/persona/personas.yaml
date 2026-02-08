@@ -26,7 +26,7 @@ personas:
     display_name: "Product Owner"
     description: "PMs, POs focused on features and user value"
     format: "narrative"
-    depth: "business"
+    depth: "standard"
     word_limit: 300
     show_code: false
     show_metrics: true
@@ -44,7 +44,7 @@ personas:
     display_name: "Scrum Master"
     description: "Agile coaches, scrum masters focused on process"
     format: "action_oriented"
-    depth: "process"
+    depth: "standard"
     word_limit: 300
     show_code: false
     show_metrics: true
@@ -62,7 +62,7 @@ personas:
     display_name: "Tech Lead / Manager"
     description: "Technical leaders who need architecture + metrics"
     format: "architecture"
-    depth: "technical_business"
+    depth: "detailed"
     word_limit: 500
     show_code: "diagrams"
     show_metrics: true
