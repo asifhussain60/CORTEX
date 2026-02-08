@@ -157,57 +157,22 @@ AI: [On completion: Summary + git hash]
 
 ---
 
+---
+
 ## 🛡️ HOLISTIC VALIDATION GATE (P0 - MANDATORY)
 
 **Authority:** CORE-048: Holistic Validation Gate (Phase 48)  
 **Trigger:** BEFORE ANY IMPLEMENT/FIX/REFACTOR intent processing  
-**Enforcement:** BLOCKING — No implementation without holistic validation pass
+**Enforcement:** BLOCKING — No implementation without holistic validation pass  
+**Full Specification:** See `.github/agents/core/cortex-holistic-validator.md` (SSOT for Challenge Gate)
 
 ### Purpose
 
-Transform governance from **reactive** (audit after implementation) to **proactive** (validation before implementation):
-- Cross-validate ALL orchestrators, components, tools against registry
+Transform governance from **reactive** to **proactive**:
+- Cross-validate orchestrators, components, tools against registry
 - Detect regression risks BEFORE code changes
-- Enforce mandatory challenge with alternatives
+- Enforce mandatory Challenge Gate with alternatives
 - Utilize cortex_brain for CORTEX self-development
-
-### Validation Sequence (MANDATORY)
-
-```
-User Request (IMPLEMENT/FIX/REFACTOR)
-         ↓
-1. REGISTRY HOLISTIC CHECK
-   - Read index.yaml (phases, dependencies, status)
-   - Read wiring.yaml (orchestrators, MCP tools)
-   - Validate target component exists and is consistent
-         ↓
-2. DEPENDENCY ANALYSIS
-   - Build orchestrator dependency graph
-   - Identify components affected by change
-   - Calculate impact radius (files, tests, orchestrators)
-         ↓
-3. REGRESSION RISK SCORING
-   - Score: 0.0 (safe) → 1.0 (critical regression risk)
-   - BLOCK if score > 0.7 (require user override)
-   - WARN if score > 0.4 (proceed with caution)
-         ↓
-4. ARCHITECTURE DRIFT DETECTION
-   - Compare proposed change against architecture patterns
-   - Detect violations: CORE rules, wiring, naming
-   - Flag breaking changes
-         ↓
-5. MANDATORY CHALLENGE GATE
-   - Generate alternatives with ROI comparison
-   - Present: "Your approach vs. Better alternatives"
-   - REQUIRE explicit user confirmation: "proceed" or "use alternative X"
-         ↓
-6. CORTEX BRAIN CONTEXT (Self-Development)
-   - For CORTEX repo: Use cortex_brain/onboarded_repos/cortex_self.yaml
-   - Context synthesis: related orchestrators, recent changes, patterns
-         ↓
-✅ VALIDATION PASS → Proceed to DESIGN mode
-❌ VALIDATION FAIL → BLOCK with evidence + remediation
-```
 
 ### MCP Tool Integration
 
@@ -233,63 +198,53 @@ elif result.verdict == "WARN":
 ```
 
 **When MCP unavailable (Graceful Fallback):**
-1. Manually check index.yaml for phase/orchestrator conflicts
-2. Search wiring.yaml for dependency issues
-3. Generate challenge based on request analysis
+1. Load cortex-holistic-validator.md agent spec
+2. Follow validation sequence: Registry → Dependencies → Risk → Drift → Challenge → Brain
+3. Generate Challenge Gate with alternatives (see agent spec)
 4. Log manual validation in response
 
-### Regression Risk Scoring Matrix
+### Validation Sequence Overview
 
-| Change Type | Base Score | Modifiers |
-|-------------|------------|-----------|
-| New file (isolated) | 0.1 | +0.2 if in core/ |
-| Modify orchestrator | 0.4 | +0.3 if MasterOrchestrator |
-| Modify wiring.yaml | 0.6 | +0.2 if breaking change |
-| Delete component | 0.7 | +0.2 if has dependents |
-| Modify CORE rule | 0.8 | +0.2 if enforcement level |
-| Modify cortex-architect.prompt | 0.5 | +0.3 if CORE sections |
+See cortex-holistic-validator.md for full details:
 
-**Block Threshold:** 0.7 (user must explicitly override with "proceed despite risk")
+1. **REGISTRY HOLISTIC CHECK** — index.yaml + wiring.yaml consistency
+2. **DEPENDENCY GRAPH ANALYSIS** — Orchestrator mesh + circular dependency detection
+3. **REGRESSION RISK SCORING** — 0.0 (safe) → 1.0 (critical)
+4. **ARCHITECTURE DRIFT DETECTION** — CORE rules + pattern alignment
+5. **MANDATORY CHALLENGE GATE** — Alternatives with ROI comparison
+6. **CORTEX BRAIN CONTEXT** — Self-analysis for CORTEX repo
 
-### Challenge Gate Format
+### Regression Risk Scoring (Quick Reference)
 
+See cortex-holistic-validator.md for full scoring matrix.
+
+| Score | Verdict | Action |
+|-------|---------|--------|
+| < 0.4 | **PASS** | Proceed normally |
+| 0.4 - 0.7 | **WARN** | Proceed with caution, extra testing |
+| > 0.7 | **BLOCK** | Require user override with reason |
+
+### Challenge Gate (See cortex-holistic-validator.md)
+
+**Key Rule:** This agent OWNS Challenge Gate behavioral logic.
+
+Full format specification + decision tree in cortex-holistic-validator.md.
+
+Pattern overview:
 ```markdown
 ### ⚠️ MANDATORY CHALLENGE (CORE-048)
 
-**Your Request:** {user_request_summary}
-
-**Analysis:**
-- Regression Risk: {score}/1.0 ({risk_level})
-- Impact Radius: {N} orchestrators, {M} files, {T} tests
-- Architecture Alignment: {ALIGNED | DRIFT_DETECTED}
+**Your Request:** {summary}
+**Analysis:** Risk {score}, Impact {radius}, Alignment {status}
 
 **Your Approach:**
-- {description}
-- Pros: {pros}
-- Cons: {cons}
-- ROI: {score}
+- Pros/Cons/ROI
 
 **Alternative A (Recommended):**
-- {description}
-- Pros: {pros}
-- Cons: {cons}
-- ROI: {score} (+{delta} vs yours)
-
-**Alternative B:**
-- {description}
-- Pros: {pros}
-- Cons: {cons}
-- ROI: {score}
-
----
+- Pros/Cons/ROI
 
 **Decision Required:**
-1. Type **"proceed"** → Continue with your approach
-2. Type **"use A"** → Switch to Alternative A
-3. Type **"use B"** → Switch to Alternative B
-4. Type **"refine"** → Modify your request
-
-*CORTEX will not implement without explicit decision.*
+Type "proceed" to confirm or "use A" for alternative
 ```
 
 ### Validation Bypass (Emergency Only)
@@ -302,30 +257,6 @@ User: "bypass validation: {reason}"
 - Reason must be documented
 - Logged to governance.db with AC marker
 - Post-implementation audit MANDATORY
-- User takes full responsibility for regressions
-
-### cortex_brain Self-Analysis
-
-**For CORTEX repository development:**
-
-```yaml
-# cortex_brain/onboarded_repos/cortex_self.yaml
-repo_id: "cortex_self"
-repo_path: "."
-analysis_enabled: true
-context_synthesis: true
-knowledge_tiers:
-  - tier0: "cortex/governance/"
-  - tier1: "cortex/orchestrators/"
-  - tier2: "cortex/mcp/"
-  - tier3: "docs/"
-```
-
-**Benefits:**
-- CORTEX uses its own brain for self-improvement
-- Context synthesis for related files
-- Pattern detection across orchestrators
-- Historical change awareness
 
 ---
 
