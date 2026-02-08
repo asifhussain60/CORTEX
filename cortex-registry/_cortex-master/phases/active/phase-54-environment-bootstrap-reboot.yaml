@@ -1,0 +1,383 @@
+---
+# Phase 54: Environment Bootstrap & Self-Alignment Reboot
+# Root Cause Analysis + Comprehensive Fix
+
+phase_id: PHASE-54
+title: "Environment Bootstrap & Self-Alignment Reboot"
+category: infrastructure
+priority: P0-CRITICAL
+status: proposed
+created_date: 2026-02-08
+owner: CORTEX Architecture Team
+
+problem_statement: |
+  CRITICAL DISCOVERY: The chat01.md session revealed a catastrophic misalignment between
+  CORTEX's sophisticated governance architecture and its actual runtime environment detection.
+  
+  **The Paradox:**
+  - CORTEX has EnvironmentIntegrityAgent (8th enforcement agent)
+  - CORTEX has MCP pre-flight checks in copilot-instructions.md
+  - CORTEX has 3-method MCP detection (tool_query, env_vars, network_port)
+  - CORTEX has GAP-001 and GAP-002 fixes documented
+  
+  **Yet it took 8m 42s and 739 lines to:**
+  1. Realize MCP server wasn't running
+  2. Install missing dependencies (playwright, scikit-learn)
+  3. Initialize governance database
+  4. Skip tests with missing tree-sitter
+  5. Eventually achieve "99.93% production ready"
+  
+  **ROOT CAUSE: Enforcement vs Reality Gap**
+  - EnforcementOrchestrator has 8 agents BUT no startup hook
+  - MCP PRE-FLIGHT documented BUT not auto-executed
+  - Environment detection exists BUT not triggered on session init
+  - Governance gates exist BUT only run DURING operations, not BEFORE
+
+objectives:
+  - Fix: Auto-execute environment validation on EVERY Copilot session start
+  - Fix: Make MCP server startup/detection seamless (<5 seconds)
+  - Fix: Eliminate dependency discovery friction (detect → install → verify)
+  - Fix: Make governance database auto-initialize on first use
+  - Design: "Zero-friction bootstrap" - from fresh session to operational in <30s
+
+root_cause_analysis:
+  
+  symptom_1:
+    description: "Chat required manual 'proceed' → analyze → install → retry cycle"
+    evidence:
+      - "Line 36: User said 'audit' → AI had to manually check tests"
+      - "Line 520: AI discovered playwright missing → had to manually install"
+      - "Line 560: AI discovered governance.db missing → had to manually create"
+      - "Line 650: AI still finding issues (tree-sitter unavailable)"
+    root_cause: "No automatic environment pre-check on session initialization"
+    
+  symptom_2:
+    description: "MCP server availability unknown until operation attempted"
+    evidence:
+      - "EnvironmentIntegrityAgent._check_tool_exists() returns False (line 180 in agent)"
+      - "Comment: 'TODO: Implement actual tool registry query'"
+      - "Fallback to env vars and network check only happens DURING operation"
+    root_cause: "MCP detection is lazy (on-demand) not eager (session-init)"
+    
+  symptom_3:
+    description: "Governance database created manually during operation"
+    evidence:
+      - "Line 520-560: Multiple attempts to initialize via Python -c commands"
+      - "Database schema unclear → trial and error"
+      - "No auto-migration or schema versioning"
+    root_cause: "Database initialization not part of startup sequence"
+    
+  symptom_4:
+    description: "Dependency resolution reactive, not proactive"
+    evidence:
+      - "playwright needed for E2E tests → discovered during test run"
+      - "scikit-learn needed for digest → discovered during execution"
+      - "tree-sitter unavailable for Python 3.14 → discovered, then skipped"
+    root_cause: "No dependency pre-validation against phase requirements"
+
+  architectural_gaps:
+    
+    gap_1_unwired_startup:
+      issue: "EnforcementOrchestrator has 8 agents BUT no startup hook"
+      location: "cortex/orchestrators/core/enforcement_orchestrator.py"
+      impact: "Enforcement only runs DURING operations, not BEFORE session"
+      fix: "Add EnforcementOrchestrator.validate_session_startup() method"
+      
+    gap_2_passive_detection:
+      issue: "Environment detection is passive (called when needed)"
+      location: "cortex/brain/core/environment_detector.py"
+      impact: "User doesn't know environment state until first operation"
+      fix: "Make EnvironmentDetector auto-run on import, cache results"
+      
+    gap_3_missing_bootstrapper:
+      issue: "MCPBootstrapper exists but not wired to session init"
+      location: "cortex/orchestrators/onboarding/mcp_bootstrapper.py"
+      impact: "MCP server startup is manual, not automatic"
+      fix: "Create SessionBootstrapOrchestrator that runs on Copilot init"
+      
+    gap_4_database_laziness:
+      issue: "Governance database initialized on first write, not on startup"
+      location: "cortex/infrastructure/audit_logger.py"
+      impact: "First operation fails if database missing"
+      fix: "Auto-initialize database during bootstrap phase"
+      
+    gap_5_no_health_dashboard:
+      issue: "No startup banner showing environment health"
+      location: "N/A - missing feature"
+      impact: "User has no visibility into CORTEX operational state"
+      fix: "Display ASCII health dashboard on session start"
+
+  why_it_took_so_long:
+    
+    reason_1_no_startup_banner:
+      description: "No visual feedback on session initialization"
+      time_cost: "~2 minutes of user uncertainty"
+      fix: "Add startup banner with health checks"
+      
+    reason_2_reactive_dependency_discovery:
+      description: "Dependencies discovered during test runs, not pre-validated"
+      time_cost: "~3 minutes per missing dependency"
+      fix: "Validate dependencies against phase requirements upfront"
+      
+    reason_3_manual_database_initialization:
+      description: "Database initialization required manual Python commands"
+      time_cost: "~2 minutes of trial-and-error"
+      fix: "Auto-initialize database with schema versioning"
+      
+    reason_4_no_mcp_autostart:
+      description: "MCP server not auto-started or auto-detected"
+      time_cost: "~1 minute of confusion"
+      fix: "Auto-detect or prompt to start MCP server on session init"
+
+stages:
+  
+  s1_session_bootstrap_orchestrator:
+    name: "Session Bootstrap Orchestrator (Auto-Init Hook)"
+    description: |
+      Create SessionBootstrapOrchestrator that runs on EVERY Copilot session start.
+      
+      Responsibilities:
+      - Detect environment (MCP vs Copilot vs Development)
+      - Validate MCP server availability (if required)
+      - Check governance database existence
+      - Validate critical dependencies
+      - Display ASCII health dashboard
+      
+      Trigger: Import-time hook (runs when CORTEX loaded by Copilot)
+    
+    acceptance_criteria:
+      - "SessionBootstrapOrchestrator runs in <5 seconds"
+      - "Health dashboard displayed with MCP status, DB status, dependencies"
+      - "User sees clear action items if environment unhealthy"
+      - "Bootstrap runs silently if all checks pass"
+    
+    tests:
+      - test_bootstrap_orchestrator_runs_on_import
+      - test_bootstrap_detects_mcp_availability
+      - test_bootstrap_checks_governance_database
+      - test_bootstrap_validates_dependencies
+      - test_bootstrap_displays_health_dashboard
+      - test_bootstrap_silent_when_healthy
+      - test_bootstrap_prompts_user_when_unhealthy
+      - test_bootstrap_performance_under_5_seconds
+    
+    test_count: 8
+    
+  s2_mcp_autostart_detection:
+    name: "MCP Server Auto-Start & Detection"
+    description: |
+      Enhance EnvironmentIntegrityAgent to:
+      1. Auto-detect MCP server on session init
+      2. Prompt user to start if not running (with one-click command)
+      3. Cache detection result for session duration
+      
+      Update _check_tool_exists() to actually query Copilot tool registry.
+    
+    acceptance_criteria:
+      - "MCP detection uses actual tool registry (not TODO placeholder)"
+      - "Detection cached for session (don't re-check on every operation)"
+      - "User prompted with copy-pasteable command if MCP unavailable"
+      - "Detection completes in <2 seconds"
+    
+    tests:
+      - test_mcp_detection_queries_tool_registry
+      - test_mcp_detection_caches_result
+      - test_mcp_detection_prompts_user_on_failure
+      - test_mcp_detection_performance
+      - test_mcp_detection_env_var_fallback
+      - test_mcp_detection_network_port_fallback
+    
+    test_count: 6
+    
+  s3_database_auto_initialization:
+    name: "Governance Database Auto-Initialization"
+    description: |
+      Make governance database self-initializing:
+      - Check for database existence on bootstrap
+      - Auto-create with schema versioning if missing
+      - Migrate to latest schema if outdated
+      - Log initialization to audit trail
+    
+    acceptance_criteria:
+      - "Database auto-created on first access (no manual commands)"
+      - "Schema versioning tracks migrations"
+      - "Initialization completes in <1 second"
+      - "Zero user interaction required"
+    
+    tests:
+      - test_database_auto_creates_on_first_access
+      - test_database_schema_versioning
+      - test_database_migration_on_upgrade
+      - test_database_initialization_performance
+      - test_database_handles_existing_database
+    
+    test_count: 5
+    
+  s4_dependency_pre_validation:
+    name: "Dependency Pre-Validation System"
+    description: |
+      Create DependencyValidator that:
+      - Reads phase requirements (from phase YAML)
+      - Validates installed packages against requirements
+      - Prompts user to install missing packages
+      - Caches validation results per session
+    
+    acceptance_criteria:
+      - "Dependency validation runs during bootstrap"
+      - "Missing packages reported with install commands"
+      - "Optional dependencies don't block operations"
+      - "Validation completes in <3 seconds"
+    
+    tests:
+      - test_dependency_validator_reads_phase_requirements
+      - test_dependency_validator_detects_missing_packages
+      - test_dependency_validator_prompts_user
+      - test_dependency_validator_caches_results
+      - test_dependency_validator_handles_optional_dependencies
+      - test_dependency_validator_performance
+    
+    test_count: 6
+    
+  s5_startup_health_dashboard:
+    name: "Startup Health Dashboard (ASCII)"
+    description: |
+      Display visual health dashboard on session initialization:
+      
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      🧠 CORTEX Session Initialized
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      
+      Environment: VS Code Copilot
+      MCP Server: ✅ Available (port 8000)
+      Governance DB: ✅ Initialized (5 tables)
+      Dependencies: ✅ 45/45 installed
+      Orchestrators: ✅ 36/36 wired
+      
+      Status: 🟢 READY FOR OPERATIONS
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    
+    acceptance_criteria:
+      - "Dashboard displays on every session start"
+      - "Shows MCP, DB, dependencies, orchestrators status"
+      - "Clear visual indicators (✅/❌/⚠️)"
+      - "Action items shown if unhealthy"
+      - "Silent mode available via env var"
+    
+    tests:
+      - test_dashboard_displays_on_session_start
+      - test_dashboard_shows_mcp_status
+      - test_dashboard_shows_database_status
+      - test_dashboard_shows_dependency_status
+      - test_dashboard_shows_orchestrator_count
+      - test_dashboard_silent_mode
+    
+    test_count: 6
+    
+  s6_integration_wiring:
+    name: "Bootstrap Integration & MCP Exposure"
+    description: |
+      Wire SessionBootstrapOrchestrator into:
+      - copilot-instructions.md (import-time trigger)
+      - EnforcementOrchestrator (pre-operation validation)
+      - MCP tools (cortex_validate_environment)
+      
+      Ensure bootstrap runs ONCE per session, cached for subsequent operations.
+    
+    acceptance_criteria:
+      - "Bootstrap runs on first Copilot operation"
+      - "Results cached for session duration"
+      - "MCP tool exposes bootstrap functionality"
+      - "Integration tests validate end-to-end flow"
+    
+    tests:
+      - test_bootstrap_wired_to_enforcement_orchestrator
+      - test_bootstrap_cached_per_session
+      - test_bootstrap_exposed_via_mcp_tool
+      - test_bootstrap_integration_end_to_end
+    
+    test_count: 4
+
+total_tests: 35
+
+dependencies:
+  required_phases: []
+  required_orchestrators:
+    - EnforcementOrchestrator
+    - EnvironmentIntegrityAgent
+  required_tools: []
+
+estimated_effort:
+  complexity: high
+  duration_hours: 16
+  risk_level: medium
+
+success_metrics:
+  - metric: "Session initialization time"
+    target: "<30 seconds from fresh Copilot session to operational"
+    current: "~8 minutes (chat01.md baseline)"
+    
+  - metric: "User manual interventions"
+    target: "0 manual commands for standard setup"
+    current: "~15 manual commands (chat01.md baseline)"
+    
+  - metric: "Dependency discovery time"
+    target: "<5 seconds for all dependency validation"
+    current: "~3 minutes (reactive discovery)"
+    
+  - metric: "Database initialization time"
+    target: "<1 second auto-initialization"
+    current: "~2 minutes manual initialization"
+
+rollout_plan:
+  
+  phase_1_internal_testing:
+    duration: "2 days"
+    scope: "Test bootstrap on clean Copilot sessions"
+    validation: "3 developers validate on fresh environments"
+    
+  phase_2_staged_rollout:
+    duration: "3 days"
+    scope: "Enable for 25% of Copilot sessions (feature flag)"
+    validation: "Monitor session init times + error rates"
+    
+  phase_3_full_deployment:
+    duration: "2 days"
+    scope: "Enable for all sessions, make default"
+    validation: "Session init times < 30s for 95% of users"
+
+notes: |
+  **Key Insight from chat01.md:**
+  
+  The session revealed a fundamental architectural paradox:
+  - CORTEX has world-class enforcement agents
+  - CORTEX has comprehensive governance rules
+  - CORTEX has MCP-FIRST architecture documented
+  
+  **BUT:** None of this runs UNTIL the user triggers an operation.
+  
+  **The Fix:** Make enforcement EAGER, not LAZY.
+  - Bootstrap on session init (not first operation)
+  - Validate environment before user asks (not during)
+  - Display health status proactively (not reactively)
+  
+  **Expected Outcome:**
+  - Fresh Copilot session → 30s → "CORTEX READY" banner
+  - Zero manual dependency installs
+  - Zero database initialization commands
+  - Zero MCP server confusion
+  
+  **This is the difference between "powerful but unwired" and "seamlessly integrated."**
+
+related_issues:
+  - GAP-001: Copilot native tool usage without guards
+  - GAP-002: Missing MCP detection code
+  - CORE-048: Holistic validation gate
+  - Phase 51 S3: EnvironmentIntegrityAgent
+
+ac_ids:
+  - AC-PHASE54-001: SessionBootstrapOrchestrator auto-runs on session init
+  - AC-PHASE54-002: MCP server auto-detected in <2 seconds
+  - AC-PHASE54-003: Governance database auto-initialized in <1 second
+  - AC-PHASE54-004: Dependencies pre-validated in <3 seconds
+  - AC-PHASE54-005: Health dashboard displays on session start
+  - AC-PHASE54-006: Zero manual commands for standard setup

@@ -110,6 +110,13 @@ _build/
 *.db.backup*
 tests/test_ac_nfr_003_02_secrets.py
 
+# Git hooks (machine-specific security)
+# Office machine: Strict HealthEquity data leakage prevention
+# Personal machines: No hooks needed (CORTEX-only work)
+# These hooks are LOCAL to office machine and should NOT propagate
+.githooks/*
+!.githooks/.gitkeep
+
 tests/_archive/
 
 # CLI generated dashboard output
