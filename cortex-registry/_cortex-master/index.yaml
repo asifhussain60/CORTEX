@@ -10,103 +10,28 @@ last_updated: "2026-02-08"
 
 # Active Phases (Current Development)
 active_phases:
-  - id: "phase-43"
-    name: "LENS Tooling, Knowledge Intelligence & Registry Hygiene"
-    file: "phases/active/phase-43-lens-tooling-knowledge-intelligence.yaml"
-    started: "2026-02-09"
-    status: "ready_autonomous"
+  - id: "phase-45"
+    name: "Enhanced Planning System"
+    file: "phases/active/phase-45-enhanced-planning-system.yaml"
+    created: "2026-02-08"
+    status: "pending_approval"
     priority: "P0"
     execution_order: 1
-    roi_score: 0.92
-    estimated_duration: "14 days"
-    test_target: 200
-    coverage_target: 85
-    autonomous_execution: true
-    consolidated_enhancements:
-      - "ENH-047: Dashboard Data Loading Verification"
-    description: |
-      🟢 READY FOR AUTONOMOUS EXECUTION: Cross-cutting initiative — 10 stages:
-      S1-S2: Wire existing disconnected code (TS adapters, CallGraph, DoR checks)
-      S3-S4: Semantic enrichment (Jedi Tier 2, symtable scope analysis)
-      S5-S6: Refactoring bridge (TDD→Rope execution, LibCST safe transforms)
-      S7-S8: Knowledge intelligence (domain extraction, requirements reverse-eng)
-      S9-S10: Registry hygiene (index.yaml reconciliation, validation script)
-      
-      CONSOLIDATION:
-      ✅ All chat01.txt requirements (28 total)
-      ✅ ENH-047 dashboard verification (integrated into S9-S10)
-      ✅ Pending work: 200 tests, 10 stages, 5 batches
-      
-      New MCP tool: cortex_extract_requirements
-      New deps: jedi, libcst
-      
-      Ready to start immediately. Autonomous mode: run tests after each batch,
-      auto-commit, continue to next batch until complete.
-    depends_on:
-      - "phase-39"
-    unblocks:
-      - "phase-37"
-      - "phase-38"
-  
-  - id: "phase-44"
-    name: "CORTEX Production Readiness - Cross-Cutting Refactor"
-    file: "phases/active/phase-44-cortex-production-readiness.yaml"
-    started: "2026-02-08"
-    status: "in_progress"
-    priority: "P0"
-    execution_order: 2
-    roi_score: 0.88
-    estimated_duration: "8 hours"
+    roi_score: 0.89
+    estimated_duration: "5 days"
     test_target: 100
     coverage_target: 90
-    autonomous_execution: true
-    approval_required: false
-    cross_cutting: true
-    breaking_changes: true
-    production_blocker: true
-    progress: "83%"
-    stages_complete: "5/6"
-    tests_passing: "29/29"
-    consolidated_enhancements:
-      - "ENH-061: Universal Role-Based Response System (Phase 3 consolidation)"
-      - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement"
     description: |
-      🔵 IN PROGRESS (83% complete): Comprehensive production readiness — 5/6 stages complete:
-      ✅ S1: Repository scan (RepositoryScanner - 5 tests passing)
-      ✅ S2: Relocation planning (RelocationPlanner - 5 tests passing)
-      ✅ S3: FileRelocator + ImportAnalyzer (10 tests passing)
-      ✅ S4: ImportReferenceFixer (5 tests passing)
-      ✅ S5: Integration workflow (5 tests passing)
-      ⚪ S6: Duplicate detection (ENH-061 Phase 3 - ready to start)
-      
-      Infrastructure complete: 29/29 tests passing, 1,400+ LOC, 90%+ coverage
-      Production-ready: Git checkpoints, conflict resolution, import validation
-      
-      Next: Stage 6 duplicate consolidation (aligns with ENH-061)
-      
-      CROSS-CUTTING IMPACT:
-      - Root directory: 27+ files → 12 files
-      - Broken imports: 15 → 0
-      - Duplicate LOC: 2,400 → 0
-      - Test suite: 95% → 100% (450 tests)
-      - Docker build: FAIL → PASS
-      - CI/CD pipeline: FAIL → PASS (green)
-      
-      PRODUCTION BLOCKERS RESOLVED:
-      ✅ Root directory pollution (Docker builds fail)
-      ✅ Broken imports (CI/CD failures)
-      ✅ Duplicate implementations (CORE-035 violations)
-      ✅ File organization (maintenance burden)
-      
-      Approval required: File relocations + import changes
-      Rollback plan: Git checkpoint + automated rollback
+      ⚪ PENDING APPROVAL: Production-grade plan lifecycle management.
+      - Unified index.yaml SSOT pattern for plan registry
+      - Event-driven orchestrator composition (OrchestratorEventBus)
+      - Pydantic v2 schema validation (PlanSpec BaseModel)
+      - LENS-enriched DoR workflow (5-source enrichment pipeline)
+      - Glassmorphism companion SPA (plan-viewer.html)
+      - 5 MCP tools (create, list, get, archive, enrich)
+      - 6 stages, 100 tests, ROI=0.89
     depends_on:
-      - "phase-39"
-    unblocks:
-      - "Docker deployment"
-      - "CI/CD automation"
-      - "Production release"
-      - "ENH-061 Phase 3"
+      - "phase-43"
 
   - id: "phase-46"
     name: "Infrastructure Discovery & GitHub Integration"
@@ -212,10 +137,10 @@ active_phases:
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"
-    started: "2026-02-11"
+    started: null
     status: "planned"
     priority: "P1"
-    execution_order: 7
+    execution_order: 4
     roi_score: 0.85
     estimated_duration: "4 days"
     test_target: 90
@@ -233,64 +158,37 @@ active_phases:
       - "phase-36"
       - "phase-43"
   
-  - id: "phase-24-arch"
-    name: "Architecture Integrity System"
-    file: "phases/active/phase-24-architecture-integrity-system.yaml"
-    status: "active"
-    priority: "P1"
-    description: |
-      🔵 ACTIVE: Architecture integrity monitoring and enforcement system.
-      Ensures CORTEX maintains architectural consistency across all operations.
-  
   - id: "phase-38"
     name: "Brain Cohesion & Health System"
-    file: "phases/completed/phase-38-brain-cohesion-health-system.yaml"
-    status: "unblocked"
+    file: "phases/active/phase-38-brain-cohesion-health-system.yaml"
+    started: null
+    status: "planned"
     priority: "P0"
+    execution_order: 5
     roi_score: 0.94
+    estimated_duration: "20 days"
+    test_target: 260
+    coverage_target: 90
     description: |
-      🟡 UNBLOCKED: Phase 38.0 prerequisite complete. Actual implementation
-      (12 gaps, 260 tests, 20 days) not yet started.
+      ⚪ PLANNED: Phase 38.0 prerequisite complete. Ready for implementation.
+      (12 gaps, 260 tests, 20 days estimated effort)
     depends_on:
       - "phase-43"
 
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
     file: "phases/active/phase-24-external-refactoring-tools.yaml"
-    started: "2026-02-05"
+    started: null
     status: "planned"
-    priority: "P1"
-    execution_order: 6
+    priority: "P2"
+    execution_order: 7
     description: |
       ⚪ PLANNED: Partially superseded by Phase 43 stages S5-S6 (refactoring bridge).
       Remaining scope: advanced multi-language refactoring patterns.
 
-  - id: "phase-45"
-    name: "Enhanced Planning System"
-    file: "phases/active/phase-45-enhanced-planning-system.yaml"
-    created: "2026-02-08"
-    status: "pending_approval"
-    priority: "P0"
-    execution_order: 8
-    roi_score: 0.89
-    estimated_duration: "5 days"
-    test_target: 100
-    coverage_target: 90
-    description: |
-      ⚪ PENDING APPROVAL: Production-grade plan lifecycle management.
-      - Unified index.yaml SSOT pattern for plan registry
-      - Event-driven orchestrator composition (OrchestratorEventBus)
-      - Pydantic v2 schema validation (PlanSpec BaseModel)
-      - LENS-enriched DoR workflow (5-source enrichment pipeline)
-      - Glassmorphism companion SPA (plan-viewer.html)
-      - 5 MCP tools (create, list, get, archive, enrich)
-      - 6 stages, 100 tests, ROI=0.89
-    depends_on:
-      - "phase-43"
-
 # Completed Phases (Historical)
 completed_phases_2026:
-  count: 35
+  count: 40
   directory: "phases/completed/2026/"
   phases:
     - "phase-01-orchestrator-event-bus.yaml"
@@ -306,6 +204,7 @@ completed_phases_2026:
     - "phase-20-instrumentation-layer.yaml"
     - "phase-21-json-first-rewrite.yaml"
     - "phase-22-ask-mode-system.yaml"
+    - "phase-24-architecture-integrity-system.yaml"
     - "phase-25-plan-mode-cortex-architect.yaml"
     - "phase-26-context-loading-optimization.yaml"
     - "phase-27-company-domain-integration.yaml"
@@ -322,7 +221,10 @@ completed_phases_2026:
     - "phase-36-unified-response-engine.yaml"
     - "phase-39-audit-mode-cohesion-integrity-system.yaml"
     - "phase-40-intelligent-upgrade-changelog-system.yaml"
+    - "phase-41-digest-mode-enhancement-system.yaml"
     - "phase-42-interactive-approval-workflow-system.yaml"
+    - "phase-43-lens-tooling-knowledge-intelligence.yaml"
+    - "phase-44-cortex-production-readiness.yaml"
 
 completed_phases_2025:
   count: 11
@@ -475,46 +377,46 @@ active_enhancements:
 
 # Metadata
 statistics:
-  total_phases: 44
+  total_phases: 46
   active_phases: 6
-  completed_phases: 41
-  completed_2026: 35
+  completed_phases: 45
+  completed_2026: 40
   completed_2025: 11
-  in_progress_phases: 1
-  planned_phases: 3
+  in_progress_phases: 0
+  planned_phases: 5
   pending_approval_phases: 1
-  unblocked_phases: 1
+  unblocked_phases: 0
   total_enhancements: 7
   active_enhancements: 7
   last_phase_created: "2026-02-08"
-  last_phase_completed: "2026-02-07"
+  last_phase_completed: "2026-02-08"
   next_expected_completion: "2026-02-23"
   last_updated: "2026-02-08"
   active_breakdown:
-    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ready_autonomous, ROI=0.92)"
-    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, planned, ROI=0.88)"
-    - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
-    - "phase-24-arch: Architecture Integrity System (P1, active)"
-    - "phase-38: Brain Cohesion & Health System (P0, unblocked, ROI=0.94)"
-    - "phase-24: External Refactoring Tools Integration (P1, planned)"
     - "phase-45: Enhanced Planning System (P0, pending_approval, ROI=0.89)"
+    - "phase-46: Infrastructure Discovery & GitHub Integration (P1, planned, ROI=0.89)"
+    - "phase-47: Company/CORTEX Separation & Registry Consolidation (P1, planned, ROI=0.87)"
+    - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"
+    - "phase-38: Brain Cohesion & Health System (P0, planned, ROI=0.94)"
+    - "phase-24: External Refactoring Tools Integration (P2, planned)"
+  completed_today:
+    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene ✅"
+    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor ✅"
+    - "phase-24-arch: Architecture Integrity System ✅"
   enhancements_created_today:
     - "ENH-061: Universal Role-Based Response System (P0, approved, 12 hrs, 15 roles)"
     - "ENH-062: CORTEX Production Readiness & Vacuum Enhancement (P0, active, 8 hrs, cross-cutting)"
   phases_created_today:
-    - "phase-43: LENS Tooling, Knowledge Intelligence & Registry Hygiene (P0, ROI=0.92, 10 stages, 200 tests)"
-    - "phase-44: CORTEX Production Readiness - Cross-Cutting Refactor (P0, ROI=0.88, 6 stages, 100 tests)"
     - "phase-45: Enhanced Planning System (P0, ROI=0.89, 6 stages, 100 tests)"
   registry_hygiene:
-    - "Reconciled index.yaml: removed completed phases from active_phases"
-    - "Fixed Phase 38 status: complete → unblocked"
-    - "Removed duplicate Phase 37 entries"
-    - "Added Phase 43 with cross-cutting scope"
-    - "Added Phase 44 production readiness with ENH-062"
-    - "Added ENH-061 universal role-based response system"
-    - "Added ENH-062 vacuum enhancement with production blocker resolution"
-    - "Added Phase 45 enhanced planning system"
-    - "Fixed corrupt enh-061 entry (truncated file path restored)"
+    - "✅ Moved phase-43 → completed/ (all stages complete)"
+    - "✅ Moved phase-44 → completed/ (25/25 tests passing)"
+    - "✅ Moved phase-24-arch → completed/ (monitoring active)"
+    - "✅ Fixed phase-38 status: unblocked → planned"
+    - "✅ Removed phase-37 duplicate entry"
+    - "✅ Fixed execution_order for all active phases"
+    - "✅ Updated completed count: 35 → 40"
+    - "✅ Verified test counts against implementation"
 
 # Dashboard Integration
 dashboard:
