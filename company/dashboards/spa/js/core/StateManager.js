@@ -21,9 +21,11 @@ class StateManager {
             isLoading: false,
             loadingTabs: new Set(),
             errors: {},
-            cache: new Map(),
             lastUpdate: Date.now()
         };
+        
+        // Internal cache (NOT part of state, doesn't trigger generation increments)
+        this._cache = new Map();
         
         this._subscribers = new Map();
         this._history = [];
@@ -146,25 +148,30 @@ class StateManager {
      * Get cache entry
      */
     getCacheEntry(key) {
-        return this._state.cache.get(key);
+        return this._cache.get(key);
     }
     
     /**
      * Set cache entry with LRU eviction
+     * Note: Uses internal cache, does NOT increment generation
      */
     setCacheEntry(key, value, maxSize = 10) {
-        this.setState(draft => {
-            // LRU eviction
-            if (draft.cache.size >= maxSize) {
-                const firstKey = draft.cache.keys().next().value;
-                draft.cache.delete(firstKey);
-            }
-            draft.cache.set(key, {
-                data: value,
-                timestamp: Date.now(),
-                hits: 0
-            });
+        console.log('[StateManager] setCacheEntry: Caching', key, '(internal cache, no state mutation)');
+        
+        // LRU eviction
+        if (this._cache.size >= maxSize) {
+            const firstKey = this._cache.keys().next().value;
+            this._cache.delete(firstKey);
+            console.log('[StateManager] setCacheEntry: Evicted oldest entry:', firstKey);
+        }
+        
+        this._cache.set(key, {
+            data: value,
+            timestamp: Date.now(),
+            hits: 0
         });
+        
+        console.log('[StateManager] setCacheEntry: Cache size:', this._cache.size, '/', maxSize);
     }
     
     /**
@@ -175,7 +182,6 @@ class StateManager {
             ...state,
             loadingTabs: new Set(state.loadingTabs),
             errors: { ...state.errors },
-            cache: new Map(state.cache),
             data: state.data ? { ...state.data } : null
         };
     }

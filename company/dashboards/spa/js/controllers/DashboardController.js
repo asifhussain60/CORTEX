@@ -237,7 +237,6 @@ class DashboardController {
      */
     async _renderCurrentTab() {
         const state = this.stateManager.getState();
-        const generation = state.generation;
         
         if (!state.data) return;
         
@@ -249,15 +248,26 @@ class DashboardController {
             draft.loadingTabs.add(state.currentTab);
         });
         
+        // CRITICAL: Capture generation AFTER setState above
+        // Otherwise we check against stale generation
+        const generation = this.stateManager.getGeneration();
+        console.log('[Controller] _renderCurrentTab: Generation captured for staleness check:', generation);
+        
         try {
             // Render tab content with error boundary
             await this.errorBoundary.wrap(
                 `tab_${state.currentTab}`,
                 async () => {
                     // Check generation before render
+                    const currentGen = this.stateManager.getGeneration();
+                    console.log('[Controller] _renderCurrentTab: Pre-render generation check:', generation, 'vs', currentGen);
+                    
                     if (!this.stateManager.isGenerationCurrent(generation)) {
+                        console.warn('[Controller] _renderCurrentTab: Stale render detected - aborting');
                         throw new Error('Stale render cancelled');
                     }
+                    
+                    console.log('[Controller] _renderCurrentTab: Generation valid - proceeding with render');
                     
                     switch (state.currentTab) {
                         case 'overview':
