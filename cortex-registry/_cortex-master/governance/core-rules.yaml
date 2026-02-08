@@ -5,13 +5,13 @@
 # Version: 1.1 (CORE-048, CORE-049 added)
 
 meta:
-  version: "1.1"
+  version: "1.2"
   updated: "2026-02-08"
-  authority: "ENH-048 (Prompt Unbloating) + CORE-049 (Silent Autonomous)"
+  authority: "Phase 51: MCP-FIRST Enforcement + CORE-050"
   source_files:
     - ".github/prompts/cortex-architect.prompt.md"
     - ".github/copilot-instructions.md"
-  total_rules: 16
+  total_rules: 17
 
 core_rules:
   - id: "CORE-002"
@@ -435,13 +435,65 @@ core_rules:
     enforcement: "DEFAULT_BEHAVIOR"
     violation_action: "N/A - behavioral guideline"
     detection_patterns:
-      - "shall I proceed" after user said proceed
-      - "here's what I'll do" during execution
+      - '"shall I proceed" after user said proceed'
+      - '"here''s what I''ll do" during execution'
     auto_fix: false
     enforced_by:
       - "All agents (inherited behavior)"
     related_enhancements:
       - "Phase-35"  # Autonomous Execution Enhancement
+
+  - id: "CORE-050"
+    name: "No Quality Degradation"
+    category: "governance"
+    priority: "P0"
+    description: |
+      CORTEX MUST NEVER accept degraded execution modes or bypass quality standards.
+      
+      Policy: Fix infrastructure, don't bypass standards.
+      
+      FORBIDDEN:
+      - "Basic mode" / "simplified analysis" / "quick fix" modes
+      - Skipping TDD when dependencies missing
+      - Direct file operations when MCP unavailable
+      - Accepting incomplete/broken implementations as "done"
+      - Degrading from production quality to "good enough"
+      
+      REQUIRED:
+      - Fix missing dependencies properly (with TDD)
+      - Start MCP server when unavailable (don't bypass)
+      - Maintain 100% CORE compliance at all times
+      - Block execution until prerequisites met
+      - Single quality level: Production standards
+      
+      Example scenarios:
+      - MCP unavailable → BLOCK + show fix instructions (don't use direct files)
+      - Missing module → Implement with TDD (don't create file directly)
+      - Tests failing → Fix tests (don't skip or disable)
+      - Dependencies missing → Install properly (don't work around)
+      
+      Rationale: Progressive quality degradation undermines system integrity.
+      Short-term workarounds create long-term technical debt and governance violations.
+    enforcement: "BLOCKED"
+    violation_action: "Block execution + show infrastructure fix instructions"
+    detection_patterns:
+      - "basic mode"
+      - "simplified analysis"
+      - "quick fix"
+      - "skip tests"
+      - "bypass MCP"
+      - "work around"
+    auto_fix: false
+    enforced_by:
+      - "EnvironmentIntegrityAgent (8th enforcement agent)"
+      - "EnforcementOrchestrator"
+    related_rules:
+      - "CORE-008"  # TDD (don't skip when infra missing)
+      - "CORE-019"  # IMPLEMENT via TDDOrchestrator
+      - "MCP-FIRST"  # Don't bypass MCP
+      - "MCP-GATE"  # Don't use direct file tools
+    related_phases:
+      - "phase-51"  # MCP-FIRST Enforcement with Fail-Fast
 
 # Special Rules (Non-CORE)
 special_rules:
@@ -471,7 +523,7 @@ enforcement_levels:
   BLOCKED:
     description: "Prevents execution, requires fix"
     severity: "CRITICAL"
-    rules: ["CORE-002", "CORE-008", "CORE-019", "CORE-028", "CORE-035", "MCP-GATE"]
+    rules: ["CORE-002", "CORE-008", "CORE-019", "CORE-028", "CORE-035", "CORE-050", "MCP-GATE"]
   
   PRE-EXECUTION:
     description: "Validates before execution, can redirect"
@@ -496,7 +548,7 @@ enforcement_levels:
 # Rule Categories
 categories:
   governance:
-    rules: ["CORE-002", "CORE-027"]
+    rules: ["CORE-002", "CORE-027", "CORE-050"]
     description: "Process and audit trail rules"
   
   development:
