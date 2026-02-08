@@ -1,0 +1,19 @@
+context:
+  industry: fintech
+created: '2026-02-08T13:40:47.313265'
+name: payment-security
+standards:
+  authentication:
+  - Use OAuth 2.0 with PKCE for mobile apps
+  - Implement multi-factor authentication for sensitive operations
+  - Enforce password complexity requirements (min 12 chars)
+  authorization:
+  - Use role-based access control (RBAC)
+  - Implement principle of least privilege
+  - Audit access control changes
+  - Comply with PCI-DSS for payment processing
+  data-protection:
+  - Encrypt sensitive data at rest (AES-256)
+  - Use TLS 1.3+ for data in transit
+  - Implement secure key management
+template: security-standards

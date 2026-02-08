@@ -1,0 +1,17 @@
+context: {}
+created: '2026-02-08T13:40:47.317379'
+name: api-design-standards
+standards:
+  error-handling:
+  - Return consistent error response format
+  - Include error codes and human-readable messages
+  - Log errors with correlation IDs
+  rest-api:
+  - Use RESTful resource naming (plural nouns)
+  - Follow HTTP status code conventions
+  - Implement pagination for list endpoints
+  versioning:
+  - Use URL path versioning (e.g., /v1/)
+  - Maintain backwards compatibility within major versions
+  - Document deprecation timeline (min 6 months)
+template: api-design-standards
