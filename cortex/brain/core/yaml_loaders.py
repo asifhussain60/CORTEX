@@ -139,6 +139,63 @@ class CoreRulesLoader(BaseYAMLLoader):
         
         return rules
 
+    # Additional methods for governance tools
+    def get_all_rules(self) -> list:
+        """Get all rules (core + special).
+        
+        Returns:
+            List of all CoreRule objects
+        """
+        data = self.load()
+        rules = list(data.core_rules)
+        if data.special_rules:
+            rules.extend(data.special_rules)
+        return rules
+
+    def get_enforcement_levels(self) -> Dict[str, list]:
+        """Get rules grouped by enforcement level.
+        
+        Returns:
+            Dictionary mapping enforcement level -> list of rules
+        """
+        data = self.load()
+        levels = {}
+        
+        for rule in data.core_rules:
+            if rule.enforcement:
+                if rule.enforcement not in levels:
+                    levels[rule.enforcement] = []
+                levels[rule.enforcement].append(rule)
+        
+        if data.special_rules:
+            for rule in data.special_rules:
+                if rule.enforcement:
+                    if rule.enforcement not in levels:
+                        levels[rule.enforcement] = []
+                    levels[rule.enforcement].append(rule)
+        
+        return levels
+
+    def get_policy_categories(self) -> list:
+        """Get list of unique policy enforcement levels.
+        
+        Returns:
+            List of enforcement level names
+        """
+        data = self.load()
+        levels = set()
+        
+        for rule in data.core_rules:
+            if rule.enforcement:
+                levels.add(rule.enforcement)
+        
+        if data.special_rules:
+            for rule in data.special_rules:
+                if rule.enforcement:
+                    levels.add(rule.enforcement)
+        
+        return sorted(list(levels))
+
 
 class AuditChecklistLoader(BaseYAMLLoader):
     """Loader for audit-checklist.yaml with validation."""
