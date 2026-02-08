@@ -464,6 +464,25 @@ class DashboardController {
             tabNav: document.getElementById('tab-nav'),
             tabContents: document.querySelectorAll('.tab-content')
         };
+        
+        // Initialize tabs UI
+        this._initTabs();
+    }
+    
+    /**
+     * Initialize tab navigation
+     */
+    _initTabs() {
+        if (!this.dom.tabNav) return;
+        
+        // Create tab buttons
+        this.dom.tabNav.innerHTML = this.config.tabs.map(tab => `
+            <button class="tab-btn ${tab.id === 'overview' ? 'active' : ''}" 
+                    data-tab="${tab.id}">
+                <i class="${tab.icon}"></i>
+                ${tab.label}
+            </button>
+        `).join('');
     }
     
     /**
@@ -521,16 +540,18 @@ class DashboardController {
      * Update header
      */
     _updateHeader(data) {
+        // Handle both old and new data formats
+        const repo = data.repo || {};
         const metadata = data.metadata || {};
         
         if (this.dom.repoTitle) {
-            const name = this.validationService.sanitizeHTML(metadata.name || 'Dashboard');
-            this.dom.repoTitle.textContent = name;
+            const name = repo.display_name || metadata.name || 'Dashboard';
+            this.dom.repoTitle.textContent = this.validationService.sanitizeHTML(name);
         }
         
         if (this.dom.repoSubtitle) {
-            const desc = this.validationService.sanitizeHTML(metadata.description || 'Repository analytics');
-            this.dom.repoSubtitle.textContent = desc;
+            const desc = repo.description || metadata.description || 'Repository analytics';
+            this.dom.repoSubtitle.textContent = this.validationService.sanitizeHTML(desc);
         }
         
         this._updateStatusBadges(data);
@@ -558,25 +579,38 @@ class DashboardController {
      * Update metrics
      */
     _updateMetrics(data) {
+        // Handle both old and new data formats
+        const repo = data.repo || {};
         const metadata = data.metadata || {};
+        const metrics = data.metrics || {};
         const overview = data.overview || {};
         const architecture = data.architecture || {};
         
         if (this.dom.healthScore) {
-            this.dom.healthScore.textContent = metadata.health_score || 0;
+            const score = metrics.health_score || metadata.health_score || 0;
+            this.dom.healthScore.textContent = score;
         }
         
-        if (this.dom.primaryLang && architecture.languages) {
-            const langs = Object.entries(architecture.languages).sort((a, b) => b[1] - a[1]);
-            this.dom.primaryLang.textContent = langs[0]?.[0] || 'N/A';
+        if (this.dom.primaryLang) {
+            const languages = metrics.languages || architecture.languages || {};
+            if (Object.keys(languages).length > 0) {
+                const langs = Object.entries(languages).sort((a, b) => b[1] - a[1]);
+                this.dom.primaryLang.textContent = langs[0]?.[0] || 'N/A';
+            } else if (repo.primary_language) {
+                this.dom.primaryLang.textContent = repo.primary_language;
+            } else {
+                this.dom.primaryLang.textContent = 'N/A';
+            }
         }
         
         if (this.dom.totalFiles) {
-            this.dom.totalFiles.textContent = overview.total_files || 0;
+            const files = metrics.files || overview.total_files || 0;
+            this.dom.totalFiles.textContent = files;
         }
         
         if (this.dom.lastUpdated) {
-            const date = metadata.last_analyzed_at ? new Date(metadata.last_analyzed_at) : new Date();
+            const dateStr = repo.last_analyzed_at || metadata.last_analyzed_at;
+            const date = dateStr ? new Date(dateStr) : new Date();
             this.dom.lastUpdated.textContent = date.toISOString().split('T')[0];
         }
     }
