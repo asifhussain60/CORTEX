@@ -61,7 +61,8 @@ class OrchestratorCapabilityRegistry:
                         source='method',
                         orchestrator=orchestrator_name
                     ))
-            except:
+            except (AttributeError, TypeError, ValueError) as e:
+                # Silently skip if get_capabilities() fails
                 pass
         
         return capabilities
@@ -225,7 +226,8 @@ class CapabilityDiscoveryAgent:
                     if capabilities:
                         orchestrator_name = py_file.stem
                         discovered[orchestrator_name] = capabilities
-                except:
+                except (OSError, ValueError, SyntaxError) as e:
+                    # Skip files that can't be analyzed
                     pass
         
         return discovered
@@ -302,7 +304,8 @@ class CapabilityDiscoveryAgent:
         try:
             code = file_path.read_text()
             return self.extract_capabilities_from_docstring(code)
-        except:
+        except (OSError, UnicodeDecodeError) as e:
+            # Skip files that can't be read
             return []
 
 
