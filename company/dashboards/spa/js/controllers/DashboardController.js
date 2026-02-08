@@ -792,7 +792,8 @@ class DashboardController {
         const architecture = data.architecture || {};
         
         if (this.dom.healthScore) {
-            const score = metrics.health_score || metadata.health_score || 0;
+            // Support multiple data formats: metrics.health_score, metadata.health_score, or overview.health_score
+            const score = metrics.health_score ?? metadata.health_score ?? overview.health_score ?? 0;
             this.dom.healthScore.textContent = score;
         }
         

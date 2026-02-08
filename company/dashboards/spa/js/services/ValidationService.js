@@ -47,6 +47,8 @@ class ValidationService {
     
     /**
      * Sanitize HTML to prevent XSS
+     * Allows safe HTML tags (<strong>, <em>, <b>, <i>, <p>, <br>, <ul>, <li>)
+     * Strips dangerous tags (script, iframe, object, embed)
      * @param {String} html - Raw HTML
      * @returns {String} Sanitized HTML
      */
@@ -55,7 +57,28 @@ class ValidationService {
         
         // Create temporary element
         const temp = document.createElement('div');
-        temp.textContent = html;
+        temp.innerHTML = html;
+        
+        // Remove dangerous elements
+        const dangerous = temp.querySelectorAll('script, iframe, object, embed, link, style');
+        dangerous.forEach(el => el.remove());
+        
+        // Remove event handlers
+        const allElements = temp.querySelectorAll('*');
+        allElements.forEach(el => {
+            // Remove event attributes (onclick, onerror, etc.)
+            Array.from(el.attributes).forEach(attr => {
+                if (attr.name.startsWith('on')) {
+                    el.removeAttribute(attr.name);
+                }
+            });
+            // Remove javascript: URLs
+            ['href', 'src', 'action', 'formaction'].forEach(attr => {
+                if (el.hasAttribute(attr) && el.getAttribute(attr).trim().toLowerCase().startsWith('javascript:')) {
+                    el.removeAttribute(attr);
+                }
+            });
+        });
         
         return temp.innerHTML;
     }

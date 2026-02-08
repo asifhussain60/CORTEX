@@ -15,32 +15,50 @@
 (async function bootstrapDashboard() {
     'use strict';
     
+    console.log('[Bootstrap] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('[Bootstrap] Starting CORTEX Dashboard...');
+    console.log('[Bootstrap] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('[Bootstrap] URL:', window.location.href);
+    console.log('[Bootstrap] Protocol:', window.location.protocol);
     
     try {
         // ====================================================================
         // PHASE 0: Setup Deployment Mode (GPR-001)
         // ====================================================================
+        console.log('[Bootstrap] ━━ PHASE 0: Deployment Mode Setup ━━');
         
+        console.log('[Bootstrap] Checking DeploymentMode availability...');
+        if (typeof DeploymentMode === 'undefined') {
+            throw new Error('DeploymentMode not loaded! Check script loading order.');
+        }
+        console.log('[Bootstrap] DeploymentMode found:', typeof DeploymentMode);
+        
+        console.log('[Bootstrap] Calling DeploymentMode.getConfig()...');
         const deploymentConfig = DeploymentMode.getConfig();
-        console.log(`[Bootstrap] Deployment Mode: ${deploymentConfig.mode}`, deploymentConfig);
+        console.log('[Bootstrap] ✓ Config retrieved successfully');
+        console.log(`[Bootstrap] Deployment Mode: ${deploymentConfig.mode}`);
+        console.log('[Bootstrap] Full config:', JSON.stringify(deploymentConfig, null, 2));
         
         // Display deployment badge
         const badge = document.getElementById('deployment-badge');
-        if (badge && deploymentConfig.mode) {
-            if (deploymentConfig.mode === 'file') {
+        if (badge) {
+            // Defensive: handle undefined/null mode
+            const mode = deploymentConfig.mode || deploymentConfig.description || 'unknown';
+            if (mode === 'file' || deploymentConfig.description === 'Offline (file://)') {
                 badge.classList.add('warning');
             }
             const badgeText = document.getElementById('deployment-text');
             if (badgeText) {
-                badgeText.textContent = `${deploymentConfig.mode.toUpperCase()} Mode`;
+                badgeText.textContent = `${mode.toUpperCase()} Mode`;
             }
         }
         
         // ====================================================================
         // PHASE 1: Create Service Instances
         // ====================================================================
+        console.log('[Bootstrap] ━━ PHASE 1: Service Creation ━━');
         
+        console.log('[Bootstrap] Creating ErrorBoundary...');
         const errorBoundary = new ErrorBoundary({
             maxRetries: 3,
             retryDelay: 1000,
@@ -49,16 +67,25 @@
                 console.error(`[ErrorBoundary] ${componentId}:`, error);
             }
         });
+        console.log('[Bootstrap] ✓ ErrorBoundary created');
         
+        console.log('[Bootstrap] Creating StateManager...');
         const stateManager = new StateManager();
+        console.log('[Bootstrap] ✓ StateManager created');
         
+        console.log('[Bootstrap] Creating ValidationService...');
         const validationService = new ValidationService();
+        console.log('[Bootstrap] ✓ ValidationService created');
         
+        console.log('[Bootstrap] Creating RepositoryService...');
         const repositoryService = new RepositoryService(errorBoundary);
+        console.log('[Bootstrap] ✓ RepositoryService created');
         
+        console.log('[Bootstrap] Creating DashboardController...');
         const controller = new DashboardController();
+        console.log('[Bootstrap] ✓ DashboardController created');
         
-        console.log('[Bootstrap] Services created ✓');
+        console.log('[Bootstrap] ✅ All services created successfully');
         
         // ====================================================================
         // PHASE 2: Register Embedded Data (file:// protocol support)
@@ -173,7 +200,8 @@
             console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             console.log('');
             console.log('Deployment:');
-            console.log(`  Mode: ${deploymentConfig.mode.toUpperCase()}`);
+            const mode = deploymentConfig.mode || deploymentConfig.description || 'unknown';
+            console.log(`  Mode: ${mode.toUpperCase()}`);
             console.log(`  Can Fetch: ${deploymentConfig.canFetch}`);
             console.log(`  Requires Embedded: ${deploymentConfig.requiresEmbeddedData}`);
             console.log('');
@@ -216,7 +244,13 @@
         }
         
     } catch (error) {
-        console.error('[Bootstrap] Fatal error:', error);
+        console.error('[Bootstrap] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('[Bootstrap] ❌ FATAL ERROR');
+        console.error('[Bootstrap] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('[Bootstrap] Error type:', error.constructor.name);
+        console.error('[Bootstrap] Error message:', error.message);
+        console.error('[Bootstrap] Error stack:', error.stack);
+        console.error('[Bootstrap] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         
         // Show fatal error UI
         document.body.innerHTML = `

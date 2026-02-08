@@ -12,19 +12,26 @@
 
 class DeploymentMode {
     constructor() {
+        console.log('[DeploymentMode] Constructor: Initializing...');
         this.mode = this._detectMode();
+        console.log('[DeploymentMode] Mode detected:', this.mode);
         this.config = this._getConfigForMode();
+        console.log('[DeploymentMode] Config generated:', this.config);
     }
 
     /**
      * Detect current deployment mode
      */
     _detectMode() {
+        console.log('[DeploymentMode] _detectMode: protocol =', window.location.protocol);
         if (window.location.protocol === 'file:') {
+            console.log('[DeploymentMode] _detectMode: Detected FILE_MODE');
             return 'FILE_MODE';
         } else if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+            console.log('[DeploymentMode] _detectMode: Detected HTTP_MODE');
             return 'HTTP_MODE';
         }
+        console.log('[DeploymentMode] _detectMode: UNKNOWN mode');
         return 'UNKNOWN';
     }
 
@@ -150,9 +157,18 @@ class DeploymentMode {
      * Static method for direct config access
      */
     static getConfig() {
+        console.log('[DeploymentMode] getConfig: Getting instance...');
         const instance = this.getInstance();
-        return {
-            mode: instance.mode.toLowerCase().replace('_mode', ''),
+        console.log('[DeploymentMode] getConfig: Instance mode =', instance.mode);
+        
+        // Defensive: ensure mode is always defined
+        let modeName = 'unknown';
+        if (instance.mode) {
+            modeName = instance.mode.toLowerCase().replace('_mode', '');
+        }
+        
+        const config = {
+            mode: modeName,
             canFetch: instance.canFetch(),
             requiresEmbeddedData: instance.requiresEmbeddedData(),
             description: instance.getDescription(),
@@ -161,6 +177,8 @@ class DeploymentMode {
             fallbackStrategy: instance.getFallbackStrategy(),
             isHealthy: instance.isHealthy()
         };
+        console.log('[DeploymentMode] getConfig: Returning config:', config);
+        return config;
     }
 }
 
