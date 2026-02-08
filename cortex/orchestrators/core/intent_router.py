@@ -31,6 +31,10 @@ from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.models.canonical_enums import IntentType
 from cortex.brain.knowledge.unified_intelligence_context import UnifiedIntelligenceContext
+
+# Phase 51: Enhanced response template with semantic color coding
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 
 # Phase 8.2: Import orchestrator lookup and enforcement

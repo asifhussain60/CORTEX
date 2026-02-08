@@ -48,6 +48,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Result, Ok, Err
+
+# Phase 51: Enhanced response template with semantic color coding
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
 from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
 from cortex.orchestrators.support.phase_completion_orchestrator import PhaseCompletionOrchestrator
 from cortex.orchestrators.core.orchestrator_base_protocol import (

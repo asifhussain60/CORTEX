@@ -35,6 +35,9 @@ from cortex.refactoring.models import (
 )
 from cortex.refactoring.registry import RefactoringToolRegistry
 
+# Phase 51: Enhanced response template with semantic color coding
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
 logger = logging.getLogger(__name__)
 
 

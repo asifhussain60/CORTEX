@@ -30,6 +30,10 @@ from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
+# Phase 51: Enhanced response template with semantic color coding
+from cortex.agents.core.response_template_generator import ResponseTemplate
+
+
 
 class SynthesisPhase(Enum):
     """
