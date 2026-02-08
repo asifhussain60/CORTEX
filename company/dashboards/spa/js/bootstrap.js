@@ -27,7 +27,7 @@
         
         // Display deployment badge
         const badge = document.getElementById('deployment-badge');
-        if (badge) {
+        if (badge && deploymentConfig.mode) {
             if (deploymentConfig.mode === 'file') {
                 badge.classList.add('warning');
             }

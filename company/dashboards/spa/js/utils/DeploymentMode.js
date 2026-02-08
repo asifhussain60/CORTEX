@@ -150,7 +150,17 @@ class DeploymentMode {
      * Static method for direct config access
      */
     static getConfig() {
-        return this.getInstance().config;
+        const instance = this.getInstance();
+        return {
+            mode: instance.mode.toLowerCase().replace('_mode', ''),
+            canFetch: instance.canFetch(),
+            requiresEmbeddedData: instance.requiresEmbeddedData(),
+            description: instance.getDescription(),
+            icon: instance.getIcon(),
+            warningMessage: instance.getWarning() || '',
+            fallbackStrategy: instance.getFallbackStrategy(),
+            isHealthy: instance.isHealthy()
+        };
     }
 }
 

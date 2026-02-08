@@ -828,15 +828,62 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         Generate use cases for the dashboard.
         
         AC_START: AC-KSESSIONS-HYBRID-006
-        ENHANCEMENT: Integrated UnifiedLLMSynthesisLayer for comprehensive use case extraction.
-        Now generates 10-20 business use cases from code analysis using LLM synthesis.
-        Falls back to basic use cases if LLM unavailable.
+        AC_UPDATE: AC-LENS-ENHANCED-INTEGRATION
+        ENHANCEMENT: Integrated enhanced LENS extractors for aggressive use case mining (50-100+).
+        Falls back to UnifiedLLMSynthesisLayer if extractors fail.
+        Falls back to basic use cases if both fail.
         """
         log_dashboard_debug("Generating use cases", repo=repo_name)
         
         use_cases = []
         
-        # TRY: Use UnifiedLLMSynthesisLayer for comprehensive use case extraction
+        # PHASE 1: Enhanced LENS Extractors (NEW - aggressive extraction)
+        try:
+            from cortex.lens.extractors.enhanced_extractors import extract_enhanced_use_cases
+            from pathlib import Path
+            
+            # Get repository path from metadata or lens_context root
+            repo_path_str = (
+                lens_context.get("metadata", {}).get("repo_path") 
+                or lens_context.get("repository_path") 
+                or "."
+            )
+            repo_path = Path(repo_path_str)
+            
+            logger.info(f"Running enhanced extractors on: {repo_path}")
+            extracted_use_cases = extract_enhanced_use_cases(repo_path)
+            
+            if extracted_use_cases:
+                logger.info(
+                    "Enhanced extractors: Generated %d use cases for %s",
+                    len(extracted_use_cases),
+                    repo_name
+                )
+                
+                # Convert to dashboard UseCase models (compatibility layer)
+                for uc_dict in extracted_use_cases:
+                    # Map extractor format to dashboard schema
+                    use_cases.append(UseCase(
+                        id=uc_dict["id"],
+                        title=uc_dict["title"],
+                        persona="Engineer",  # Default persona
+                        category=uc_dict.get("category", "Delivery"),
+                        summary=uc_dict.get("description", ""),
+                        signals=[uc_dict.get("business_value", "")],
+                        recommended_actions=uc_dict.get("business_flows", []),
+                        tags=uc_dict.get("actors", []),
+                        severity="info",  # Default severity
+                    ))
+                
+                # If we got 20+ use cases from extractors, return them
+                if len(use_cases) >= 20:
+                    logger.info(f"Enhanced extractors achieved target: {len(use_cases)} use cases")
+                    return use_cases
+        
+        except Exception as e:
+            logger.warning(f"Enhanced extractors failed: {e}, falling back to LLM synthesis")
+        
+        # PHASE 2: UnifiedLLMSynthesisLayer fallback
         try:
             from cortex.orchestrators.support.unified_llm_synthesis_layer import (
                 UnifiedLLMSynthesisLayer,

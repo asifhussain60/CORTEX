@@ -6,7 +6,7 @@
     "owner": "Unknown",
     "primary_language": "JavaScript",
     "version": "1.0",
-    "last_analyzed_at": "2026-02-08T16:54:11.302813"
+    "last_analyzed_at": "2026-02-08T17:24:26.166603"
   },
   "overview": {
     "summary": "A sophisticated repository management system with advanced analytics capabilities, designed for automated code analysis and onboarding orchestration across multiple programming languages.",
@@ -89,272 +89,98 @@
     "transitive_count": 8351,
     "packages": [
       {
-        "name": "@types/node",
-        "version": "22.9.0",
+        "name": "babel",
+        "version": "5.4.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint",
-        "version": "9.13.0",
+        "name": "gaze",
+        "version": "0.5.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "neostandard",
-        "version": "0.12.0",
+        "name": "jshint",
+        "version": "2.5.6",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "pre-commit",
-        "version": "1.2.2",
+        "name": "uglify-js",
+        "version": "2.4.22",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tape",
-        "version": "5.0.0",
+        "name": "keyv",
+        "version": "5.5.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "c8",
-        "version": "10.1.2",
+        "name": "@biomejs/biome",
+        "version": "2.2.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "typescript",
-        "version": "5.2.2",
+        "name": "@faker-js/faker",
+        "version": "10.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@azure/msal-common",
-        "version": "15.13.0",
+        "name": "@keyv/redis",
+        "version": "5.1.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "jsonwebtoken",
-        "version": "9.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "uuid",
-        "version": "8.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@microsoft/api-extractor",
-        "version": "7.43.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@rollup/plugin-node-resolve",
-        "version": "15.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@rollup/plugin-typescript",
-        "version": "11.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/jest",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/jsonwebtoken",
-        "version": "9.0.1",
+        "name": "@keyv/valkey",
+        "version": "1.0.8",
         "license": null,
         "is_direct": false
       },
       {
         "name": "@types/node",
-        "version": "20.3.1",
+        "version": "24.5.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@types/uuid",
-        "version": "7.0.0",
+        "name": "@vitest/coverage-v8",
+        "version": "3.2.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-config-msal",
-        "version": "file:../../shared-configs/eslint-config-msal",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jest",
-        "version": "29.5.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jest-junit",
-        "version": "16.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "2.8.7",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup",
-        "version": "4.22.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup-msal",
-        "version": "file:../../shared-configs/rollup-msal",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ts-jest",
-        "version": "29.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tslib",
-        "version": "1.10.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "4.9.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "yargs",
-        "version": "17.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "assume",
-        "version": "2.1.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "istanbul",
-        "version": "0.4.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "5.2.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pre-commit",
-        "version": "1.2.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tslib",
-        "version": "2.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@azure/dev-tool",
-        "version": "1.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@azure/eslint-plugin-azure-sdk",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@microsoft/api-extractor",
-        "version": "7.40.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "18.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@vitest/browser",
-        "version": "1.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@vitest/coverage-istanbul",
-        "version": "1.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "8.56.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "playwright",
-        "version": "1.41.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "3.2.5",
+        "name": "lru-cache",
+        "version": "11.2.2",
         "license": null,
         "is_direct": false
       },
       {
         "name": "rimraf",
-        "version": "5.0.5",
+        "version": "6.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tshy",
-        "version": "1.13.0",
+        "name": "tsup",
+        "version": "8.5.0",
         "license": null,
         "is_direct": false
       },
       {
         "name": "typescript",
-        "version": "5.3.3",
+        "version": "5.9.2",
         "license": null,
         "is_direct": false
       },
       {
         "name": "vitest",
-        "version": "1.3.1",
+        "version": "3.2.4",
         "license": null,
         "is_direct": false
       },
@@ -491,200 +317,374 @@
         "is_direct": false
       },
       {
-        "name": "benchmark",
-        "version": "2.1.4",
+        "name": "which-typed-array",
+        "version": "1.1.16",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@arethetypeswrong/cli",
+        "version": "0.17.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/eslint-config",
+        "version": "21.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/tsconfig",
+        "version": "0.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/for-each",
+        "version": "0.3.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/is-callable",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-arrow-function",
+        "version": "1.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-generator-function",
+        "version": "2.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/node",
+        "version": "20.17.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/object-inspect",
+        "version": "1.13.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/tape",
+        "version": "5.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "auto-changelog",
+        "version": "2.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "encoding",
+        "version": "0.1.13",
         "license": null,
         "is_direct": false
       },
       {
         "name": "eslint",
-        "version": "5.10.0",
+        "version": "8.8.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp",
-        "version": "3.9.1",
+        "name": "evalmd",
+        "version": "0.0.19",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-benchmark",
-        "version": "1.1.1",
+        "name": "for-each",
+        "version": "0.3.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-eslint",
-        "version": "5.0.0",
+        "name": "has-tostringtag",
+        "version": "1.0.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-header",
-        "version": "2.0.5",
+        "name": "in-publish",
+        "version": "2.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-mocha",
-        "version": "6.0.0",
+        "name": "is-callable",
+        "version": "1.2.7",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-rename",
-        "version": "1.4.0",
+        "name": "make-arrow-function",
+        "version": "1.2.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "gulp-sourcemaps",
-        "version": "2.6.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp-uglify",
-        "version": "3.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "5.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "isexe",
+        "name": "make-generator-function",
         "version": "2.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "mkdirp",
-        "version": "0.5.0",
+        "name": "npmignore",
+        "version": "0.3.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "rimraf",
-        "version": "2.6.2",
+        "name": "nyc",
+        "version": "10.3.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tap",
-        "version": "12.0.1",
+        "name": "object-inspect",
+        "version": "1.13.3",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "ajv",
-        "version": "6.12.4",
+        "name": "safe-publish-latest",
+        "version": "2.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "debug",
-        "version": "4.3.2",
+        "name": "tape",
+        "version": "5.9.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "espree",
-        "version": "10.0.1",
+        "name": "typescript",
+        "version": "next",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "globals",
-        "version": "14.0.0",
+        "name": "buildman",
+        "version": "*",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "ignore",
-        "version": "5.2.0",
+        "name": "testman",
+        "version": "*",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "import-fresh",
-        "version": "3.2.1",
+        "name": "is-inside-container",
+        "version": "1.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "js-yaml",
+        "name": "ava",
+        "version": "5.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "esmock",
+        "version": "2.3.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tsd",
+        "version": "0.28.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "xo",
+        "version": "0.55.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "call-bound",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "function.prototype.name",
+        "version": "1.1.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "has-tostringtag",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-async-function",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-date-object",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-finalizationregistry",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-generator-function",
+        "version": "1.0.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-regex",
+        "version": "1.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "is-weakref",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "isarray",
+        "version": "2.0.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "which-boxed-primitive",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "which-collection",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "which-typed-array",
+        "version": "1.1.16",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@arethetypeswrong/cli",
+        "version": "0.17.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/eslint-config",
+        "version": "21.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/tsconfig",
+        "version": "0.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/for-each",
+        "version": "0.3.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/function.prototype.name",
+        "version": "1.1.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/is-async-function",
+        "version": "2.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/is-date-object",
+        "version": "1.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/is-generator-function",
+        "version": "1.0.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/is-weakref",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-arrow-function",
+        "version": "1.2.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/make-async-function",
+        "version": "1.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/object-inspect",
+        "version": "1.13.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/object.assign",
         "version": "4.1.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "minimatch",
-        "version": "3.1.2",
+        "name": "@types/tape",
+        "version": "5.6.5",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "strip-json-comments",
-        "version": "3.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "c8",
-        "version": "7.7.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "chai",
-        "version": "4.3.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "9.20.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-config-eslint",
-        "version": "11.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-release",
-        "version": "3.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "fs-teardown",
-        "version": "0.1.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "9.0.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rollup",
-        "version": "2.70.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "shelljs",
-        "version": "0.8.5",
+        "name": "@types/which-boxed-primitive",
+        "version": "1.0.3",
         "license": null,
         "is_direct": false
       }
@@ -703,34 +703,524 @@
   },
   "use_cases": [
     {
-      "id": "uc-001",
-      "title": "Onboard New Repository",
-      "persona": "Developer",
-      "category": "API",
-      "summary": "Teams can quickly understand a repository by running automated analysis that extracts patterns, architecture, and business context.",
-      "signals": [],
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
       "recommended_actions": [
-        "User provides repository path \u2192 System performs LENS analysis \u2192 System extracts Git history \u2192 LLM synthesizes insights \u2192 Dashboard is generated"
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
       ],
       "tags": [
-        "api"
+        "Content Creator",
+        "Editor",
+        "User"
       ],
-      "severity": "medium"
+      "severity": "info"
     },
     {
-      "id": "uc-002",
-      "title": "Generate Executive Summary",
-      "persona": "Manager",
-      "category": "Processing",
-      "summary": "Stakeholders receive AI-generated narrative about repository purpose, capabilities, and business value.",
-      "signals": [],
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
       "recommended_actions": [
-        "Trigger synthesis \u2192 Gather architectural insights \u2192 Analyze business value \u2192 Generate narrative \u2192 Format for executive audience"
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
       ],
       "tags": [
-        "processing"
+        "Content Creator",
+        "Editor",
+        "User"
       ],
-      "severity": "medium"
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Image Upload and Management",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can upload and insert images into rich text content",
+      "signals": [
+        "Enhances content with visual media"
+      ],
+      "recommended_actions": [
+        "User drags image \u2192 System uploads \u2192 Image inserted into content",
+        "User browses files \u2192 Selects image \u2192 System processes \u2192 Image added"
+      ],
+      "tags": [
+        "Content Creator",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-002",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Image Upload and Management",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can upload and insert images into rich text content",
+      "signals": [
+        "Enhances content with visual media"
+      ],
+      "recommended_actions": [
+        "User drags image \u2192 System uploads \u2192 Image inserted into content",
+        "User browses files \u2192 Selects image \u2192 System processes \u2192 Image added"
+      ],
+      "tags": [
+        "Content Creator",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-002",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-000",
+      "title": "Rich Text Content Editing",
+      "persona": "Engineer",
+      "category": "User Interface",
+      "summary": "Users can create and edit rich text content with WYSIWYG editor powered by Froala",
+      "signals": [
+        "Enables professional content creation without HTML knowledge"
+      ],
+      "recommended_actions": [
+        "User opens editor \u2192 Formats text \u2192 Adds media \u2192 Saves content",
+        "User creates document \u2192 Applies styles \u2192 Previews \u2192 Publishes"
+      ],
+      "tags": [
+        "Content Creator",
+        "Editor",
+        "User"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-froala-001",
+      "title": "Video Embedding",
+      "persona": "Engineer",
+      "category": "Media Management",
+      "summary": "Users can embed videos from various sources (YouTube, Vimeo, etc.)",
+      "signals": [
+        "Enriches content with multimedia"
+      ],
+      "recommended_actions": [
+        "User provides video URL \u2192 System embeds player \u2192 Video displays in content"
+      ],
+      "tags": [
+        "Content Creator"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-001",
+      "title": "Application Build and Bundling",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers build and bundle application assets for production deployment",
+      "signals": [
+        "Optimizes application performance and delivery"
+      ],
+      "recommended_actions": [
+        "Developer runs build \u2192 Webpack bundles assets \u2192 Optimized files generated"
+      ],
+      "tags": [
+        "Developer",
+        "CI/CD System"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-002",
+      "title": "Live Development with Hot Module Replacement",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers see instant updates without full page reload during development",
+      "signals": [
+        "Accelerates development iteration cycle"
+      ],
+      "recommended_actions": [
+        "Developer edits code \u2192 System detects change \u2192 Browser updates instantly"
+      ],
+      "tags": [
+        "Developer"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-001",
+      "title": "Application Build and Bundling",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers build and bundle application assets for production deployment",
+      "signals": [
+        "Optimizes application performance and delivery"
+      ],
+      "recommended_actions": [
+        "Developer runs build \u2192 Webpack bundles assets \u2192 Optimized files generated"
+      ],
+      "tags": [
+        "Developer",
+        "CI/CD System"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-001",
+      "title": "Application Build and Bundling",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers build and bundle application assets for production deployment",
+      "signals": [
+        "Optimizes application performance and delivery"
+      ],
+      "recommended_actions": [
+        "Developer runs build \u2192 Webpack bundles assets \u2192 Optimized files generated"
+      ],
+      "tags": [
+        "Developer",
+        "CI/CD System"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-002",
+      "title": "Live Development with Hot Module Replacement",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers see instant updates without full page reload during development",
+      "signals": [
+        "Accelerates development iteration cycle"
+      ],
+      "recommended_actions": [
+        "Developer edits code \u2192 System detects change \u2192 Browser updates instantly"
+      ],
+      "tags": [
+        "Developer"
+      ],
+      "severity": "info"
+    },
+    {
+      "id": "uc-webpack-001",
+      "title": "Application Build and Bundling",
+      "persona": "Engineer",
+      "category": "Development Workflow",
+      "summary": "Developers build and bundle application assets for production deployment",
+      "signals": [
+        "Optimizes application performance and delivery"
+      ],
+      "recommended_actions": [
+        "Developer runs build \u2192 Webpack bundles assets \u2192 Optimized files generated"
+      ],
+      "tags": [
+        "Developer",
+        "CI/CD System"
+      ],
+      "severity": "info"
     }
   ],
   "lens": {

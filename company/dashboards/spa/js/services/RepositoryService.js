@@ -77,9 +77,15 @@ class RepositoryService {
                     throw new Error(msg);
                 }
                 
-                // Fetch from JSON file
-                const url = `./data/${repoName}.json`;
-                const response = await fetch(url, { signal });
+                // Fetch from JSON file - try multiple paths
+                let url = `./data/${repoName}.json`;
+                let response = await fetch(url, { signal });
+                
+                // If not found in data/, try repos/ directory (new location)
+                if (!response.ok && response.status === 404) {
+                    url = `../repos/${repoName}/dashboard-data.json`;
+                    response = await fetch(url, { signal });
+                }
                 
                 if (!response.ok) {
                     throw new Error(`Failed to load ${repoName}: ${response.status} ${response.statusText}`);
@@ -87,10 +93,13 @@ class RepositoryService {
                 
                 const data = await response.json();
                 
-                // Validate schema
-                this._validateSchema(data, repoName);
+                // Transform schema if needed (new format → old format)
+                const transformedData = this._transformSchema(data);
                 
-                return data;
+                // Validate schema
+                this._validateSchema(transformedData, repoName);
+                
+                return transformedData;
             },
             { repoName, url: `./data/${repoName}.json`, deploymentMode: this.deploymentMode.getConfig().mode }
         );
@@ -120,7 +129,48 @@ class RepositoryService {
      * Get embedded data
      */
     _getEmbeddedData(repoName) {
-        return this.embeddedData.get(repoName);
+        const data = this.embeddedData.get(repoName);
+        return data ? this._transformSchema(data) : data;
+    }
+    
+    /**
+     * Transform new schema format to expected format
+     * New: {repo, overview, metrics, security, dependencies, quality, use_cases}
+     * Old: {metadata, overview, architecture, quality, security, dependencies}
+     */
+    _transformSchema(data) {
+        // If already in old format, return as-is
+        if (data.metadata) {
+            return data;
+        }
+        
+        // Transform new format to old format
+        return {
+            metadata: {
+                name: data.repo?.display_name || data.repo?.slug || 'Unknown',
+                slug: data.repo?.slug || 'unknown',
+                description: data.repo?.description || '',
+                owner: data.repo?.owner || 'Unknown',
+                primary_language: data.repo?.primary_language || 'Unknown',
+                version: data.repo?.version || '1.0',
+                last_analyzed_at: data.repo?.last_analyzed_at || new Date().toISOString(),
+                health_score: data.metrics?.health_score || 0,
+                risk_score: data.metrics?.risk_score || 0,
+                loc: data.metrics?.loc || 0,
+                files: data.metrics?.files || 0,
+                languages: data.metrics?.languages || {}
+            },
+            overview: data.overview || {},
+            architecture: {
+                languages: data.metrics?.languages || {},
+                patterns: [],
+                files: data.metrics?.files || 0
+            },
+            quality: data.quality || {},
+            security: data.security || {},
+            dependencies: data.dependencies || {},
+            use_cases: data.use_cases || []
+        };
     }
     
     /**

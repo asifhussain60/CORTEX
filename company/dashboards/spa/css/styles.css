@@ -1525,3 +1525,132 @@ body {
     line-height: 1.6;
 }
 
+/* ============================================================================
+   USE CASE CARDS - Enhanced Display
+   ============================================================================ */
+
+.use-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.use-case-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.use-case-card:hover {
+    border-color: var(--glass-border-hover);
+    transform: translateY(-4px);
+    box-shadow: var(--glass-shadow-lg);
+}
+
+.use-case-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.use-case-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.use-case-meta {
+    flex: 1;
+}
+
+.use-case-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.use-case-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-persona {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-primary);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.badge-category {
+    background: rgba(123, 97, 255, 0.2);
+    color: var(--accent-secondary);
+    border: 1px solid rgba(123, 97, 255, 0.3);
+}
+
+.use-case-body {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.use-case-summary {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.use-case-actions {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--accent-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.use-case-actions strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.use-case-actions ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+}
+
+.use-case-actions li {
+    margin-bottom: 0.25rem;
+}
+
+.use-case-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.use-case-tags .tag {
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
