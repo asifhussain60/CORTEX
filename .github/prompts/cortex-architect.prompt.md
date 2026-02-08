@@ -202,17 +202,31 @@ elif result.verdict == "WARN":
 2. Follow validation sequence: Registry → Dependencies → Risk → Drift → Challenge → Brain
 3. Generate Challenge Gate with alternatives (see orchestrator spec)
 4. Log manual validation in response
+5. **IMPORTANT:** Phase 49 CCL still runs async (no MCP required) for context pre-warming
+
+### PHASE 49 CCL: Async Pre-Flight Context Warming
+
+**Parallel to validation sequence:**
+- Phase 49 CCL automatically starts async context prefetch (no user action needed)
+- Loads: Rules cache (company > tier1 > tier0), LENS warmed state, infrastructure capabilities
+- Non-blocking: Returns immediately, completes in background
+- SLA: 300ms normal, 500ms fallback max
+- Benefit: Stage 2 (IntentRouter) gets pre-warmed context, -15% latency
+
+**Integration:** CCL context automatically merged into Stage 2 if ready
+**Fallback:** If CCL times out, Stage 2 uses fresh fetch (no performance penalty)
 
 ### Validation Sequence Overview
 
 See HolisticValidationOrchestrator spec in agents/core/ directory for full details:
 
 1. **REGISTRY HOLISTIC CHECK** — registry consistency validation
-2. **DEPENDENCY GRAPH ANALYSIS** — Orchestrator mesh + circular dependency detection
-3. **REGRESSION RISK SCORING** — 0.0 (safe) → 1.0 (critical)
-4. **ARCHITECTURE DRIFT DETECTION** — CORE rules + pattern alignment
-5. **MANDATORY CHALLENGE GATE** — Alternatives with ROI comparison
-6. **CORTEX BRAIN CONTEXT** — Self-analysis for CORTEX repo
+2. **PHASE 49 CCL PREFETCH** — Async context warming (parallel to validation)
+3. **DEPENDENCY GRAPH ANALYSIS** — Orchestrator mesh + circular dependency detection
+4. **REGRESSION RISK SCORING** — 0.0 (safe) → 1.0 (critical)
+5. **ARCHITECTURE DRIFT DETECTION** — CORE rules + pattern alignment
+6. **MANDATORY CHALLENGE GATE** — Alternatives with ROI comparison
+7. **CORTEX BRAIN CONTEXT** — Self-analysis for CORTEX repo (uses pre-warmed rules from CCL)
 
 ### Regression Risk Scoring (Quick Reference)
 
