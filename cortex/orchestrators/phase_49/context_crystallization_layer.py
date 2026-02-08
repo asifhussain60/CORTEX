@@ -368,3 +368,70 @@ class ContextCrystallizationLayer(IOrchestrator):
             return "complete"
         else:
             return "prefetching"
+
+
+# ============================================================================
+# STAGE 5: MASTERORCHESTRATOR INTEGRATION HOOK
+# ============================================================================
+
+
+class MasterOrchestratorCCLIntegration:
+    """
+    Integration point for MasterOrchestrator.
+    
+    Adds CCL to MasterOrchestrator with minimal coupling.
+    """
+
+    @staticmethod
+    def add_ccl_to_master() -> ContextCrystallizationLayer:
+        """
+        Factory method for adding CCL to MasterOrchestrator.
+        
+        Usage in MasterOrchestrator.__init__():
+            self.ccl = MasterOrchestratorCCLIntegration.add_ccl_to_master()
+        
+        Returns:
+            Configured ContextCrystallizationLayer instance
+        """
+        ccl = ContextCrystallizationLayer(
+            timeout_ms=300,
+            enable_rules_cache=True,
+            enable_lens_warmer=True,
+            enable_infra_detection=True,
+        )
+        
+        logger.info(
+            "[MasterOrchestratorCCLIntegration] CCL integrated into MasterOrchestrator"
+        )
+        
+        return ccl
+
+    @staticmethod
+    async def execute_ccl_prefetch_with_stage_1(
+        ccl: ContextCrystallizationLayer,
+        request_id: str,
+        file_path: Optional[str],
+        stage_1_coro,
+    ):
+        """
+        Execute CCL prefetch parallel with Stage 1.
+        
+        Usage in MasterOrchestrator.process():
+            ccl.prefetch_async(request_id, file_path)
+            stage_1_result = await execute_ccl_prefetch_with_stage_1(
+                ccl, request_id, file_path, stage_1_coroutine
+            )
+        
+        Returns:
+            Tuple of (stage_1_result, crystallized_context)
+        """
+        # Start CCL prefetch (non-blocking)
+        ccl.prefetch_async(request_id=request_id, file_path=file_path)
+        
+        # Run Stage 1 in parallel
+        stage_1_result = await stage_1_coro
+        
+        # Get CCL context (may be ready or timeout)
+        ccl_context = await ccl.get_crystallized_context(timeout_ms=250)
+        
+        return stage_1_result, ccl_context
