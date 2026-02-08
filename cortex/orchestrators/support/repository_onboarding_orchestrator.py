@@ -180,6 +180,11 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
     - Security-first assessment with P0/P1/P2 classification
     - Collapsible file references with evidence tracking
     
+    Phase-28 S5 Integration:
+    - Auto-triggers dashboard generation via OnboardingDashboardHook
+    - Hooks into profile_store.save() to trigger dashboard creation
+    - Enables atomic compound workflows via cortex_onboard_and_dashboard MCP tool
+    
     Example:
         >>> orchestrator = RepositoryOnboardingOrchestrator()
         >>> result = orchestrator.onboard_repository(Path("/path/to/repo"))
@@ -194,6 +199,28 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         super().__init__()
         self.lens_orchestrator = None  # Lazy-loaded
         self.dashboard_generator = None  # Lazy-loaded
+        self._dashboard_hook = None  # Phase-28 S5: Lazy-loaded dashboard hook
+    
+    def _get_dashboard_hook(self) -> 'OnboardingDashboardHook':
+        """
+        Lazy-load and return OnboardingDashboardHook instance.
+        
+        Returns:
+            OnboardingDashboardHook instance
+            
+        AC_START: AC-PHASE28-S5-010
+        """
+        if self._dashboard_hook is None:
+            try:
+                from cortex.orchestrators.support.onboarding_dashboard_hook import (
+                    OnboardingDashboardHook
+                )
+                self._dashboard_hook = OnboardingDashboardHook(enabled=True)
+                logger.info("Dashboard hook initialized (Phase-28 S5 integration active)")
+            except ImportError:
+                logger.warning("OnboardingDashboardHook not available (optional feature)")
+                return None
+        return self._dashboard_hook
     
     def onboard_repository(
         self,
@@ -1654,12 +1681,16 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         """
         Onboard repository and save profile to store.
         
+        Triggers dashboard auto-generation hook (Phase-28 S5) after profile save.
+        
         Args:
             repo_path: Path to repository
             profile_store: ProfileStore instance (optional)
             
         Returns:
             RepositoryProfile instance
+            
+        AC_START: AC-PHASE28-S5-011
         """
         from cortex_brain.onboarded_repos import ProfileStore
         
@@ -1670,7 +1701,45 @@ class RepositoryOnboardingOrchestrator(SecurityAdvisorMixin, IOrchestrator):
         if profile_store is None:
             profile_store = ProfileStore()
         
-        profile_store.save(profile)
+        # Save profile to disk
+        profile_path = profile_store.save(profile)
+        
+        # AC_MARKER: AC-PHASE28-S5-011: Trigger dashboard hook after profile save
+        # Phase-28 S5: Auto-generate dashboard for newly onboarded repository
+        try:
+            hook = self._get_dashboard_hook()
+            if hook is not None:
+                from cortex.orchestrators.support.onboarding_dashboard_hook import (
+                    ProfileCreatedEvent
+                )
+                from datetime import datetime
+                
+                # Convert profile to dict for event (using Pydantic model_dump)
+                profile_data = {}
+                if hasattr(profile, 'model_dump'):
+                    profile_data = profile.model_dump(mode='json', exclude_none=False)
+                
+                event = ProfileCreatedEvent(
+                    repo_name=profile.name,
+                    profile_path=str(profile_path),
+                    timestamp=datetime.now(),
+                    profile_data=profile_data
+                )
+                
+                hook_result = hook.on_profile_created(event)
+                logger.info(
+                    "Dashboard hook triggered for %s (Phase-28 S5): %s",
+                    profile.name,
+                    hook_result.get("status", "unknown")
+                )
+                # AC_COMPLETE: AC-PHASE28-S5-011 ✅ Hook triggered successfully
+        except Exception as e:
+            # Error isolation: profile retained even if hook fails
+            logger.warning(
+                "Dashboard hook execution failed for %s (profile retained): %s",
+                profile.name,
+                e
+            )
         
         return profile
     
