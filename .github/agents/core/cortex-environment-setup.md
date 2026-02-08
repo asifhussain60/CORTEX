@@ -1,4 +1,5 @@
 # CORTEX Environment Setup Agent
+
 **Version:** 2.0 | **Updated:** 2026-02-04 | **Role:** Environment Validator + CORTEX Ecosystem Upgrade Manager | **Mode:** PRE-FLIGHT
 
 ---
@@ -7,7 +8,8 @@
 
 **CORTEX Environment Setup Agent** — Validates Python environment and detects CORTEX ecosystem updates (prompts, agents, orchestrators) before AUDIT/DESIGN operations.
 
-**Responsibility:** 
+**Responsibility:**
+
 - Check Python version, dependencies, virtual environment
 - **Detect CORTEX ecosystem updates from origin/main (prompts/agents/orchestrators/wiring)**
 - **Branch topology analysis (ahead/behind/diverged)**
@@ -29,7 +31,7 @@
 
 ## Validation Flow
 
-```
+```text
 Request Received
       ↓
 Environment Check (cortex_verify_environment)
@@ -86,7 +88,7 @@ Environment Check (cortex_verify_environment)
 ### Success Criteria
 
 | Check | Requirement | Status |
-|-------|-------------|--------|
+| ----- | ----------- | ------ |
 | Python Version | >= 3.9.0 | Must pass |
 | Core Dependencies | pyyaml, pydantic, fastapi, uvicorn, httpx | Must pass |
 | Test Dependencies | pytest | Must pass |
@@ -105,6 +107,7 @@ Environment Check (cortex_verify_environment)
 **Flow:**
 
 ### 1. Branch Topology Analysis
+
 ```bash
 # Fetch latest (5s timeout, graceful failure)
 git fetch origin main 2>&1 | timeout 5s
@@ -118,26 +121,30 @@ MAIN_AHEAD=$(git rev-list --count $MERGE_BASE..origin/main)
 ```
 
 ### 2. Classify Branch State
+
 | State | CORTEX Ahead | origin/main Ahead | Action |
-|-------|--------------|-------------------|--------|
+| ----- | ------------ | ----------------- | ------ |
 | UP_TO_DATE | 0 | 0 | ✅ Pass to architect |
 | AHEAD | >0 | 0 | ℹ️ Notify (optional sync) |
 | BEHIND | 0 | >0 | ⬇️ Offer upgrade |
 | DIVERGED | >0 | >0 | 🔀 Detect ecosystem changes + offer merge |
 
 ### 3. Detect Ecosystem Changes (BEHIND/DIVERGED only)
+
 ```bash
 # Check for ecosystem file changes
 git diff --name-only $MERGE_BASE..origin/main | grep -E "^\.github/(prompts|agents)/|^cortex/wiring/specifications/wiring\.yaml|^cortex/orchestrators/"
 ```
 
 **Categories:**
+
 - **Prompts:** `.github/prompts/*.md` files
-- **Agents:** `.github/agents/core/*.md` files  
+- **Agents:** `.github/agents/core/*.md` files
 - **Orchestrators:** New directories in `cortex/orchestrators/`
 - **Wiring:** `cortex/wiring/specifications/wiring.yaml`
 
 ### 4. Display Update Notification
+
 ```markdown
 ### 🆙 CORTEX Ecosystem Updates Available
 **Branch Status:** {BEHIND|DIVERGED} origin/main
@@ -167,14 +174,16 @@ git diff --name-only $MERGE_BASE..origin/main | grep -E "^\.github/(prompts|agen
 ```
 
 ### 5. User Options
+
 | Option | Description | When Available |
-|--------|-------------|----------------|
+| ------ | ----------- | -------------- |
 | **upgrade** | Merge origin/main → CORTEX (preserves your work + adds ecosystem) | BEHIND, DIVERGED |
 | **rebase** | Rebase CORTEX onto origin/main (clean linear history) | DIVERGED only |
 | **skip** | Proceed without updates (⚠️ developing on older ecosystem) | Always |
 | **show changes** | Full commit log + file-level diff | Always |
 
 ### 6. Conflict Pre-Check (before merge)
+
 ```bash
 # Simulate merge to detect conflicts
 git merge-tree $MERGE_BASE HEAD origin/main | grep -q "<<<<<<< "
@@ -191,12 +200,14 @@ fi
 ```
 
 **Branch Strategy:**
+
 - ✅ User stays on local `CORTEX` branch
 - ✅ Merge from `origin/main` into local `CORTEX` branch
 - ✅ Preserves local commits on top of main updates
 - ❌ NEVER merge directly from `origin/main` to current branch
 
 **Safety Features:**
+
 - Conflict detection BEFORE merge (no broken working tree)
 - Network failure gracefully degrades (skip upgrade)
 - Configurable via `--skip-upgrade-check` flag
@@ -275,15 +286,18 @@ fi
    - **Windows:** Download from https://www.python.org/downloads/
 
 2. **Verify Installation**
+
    ```bash
    python3 --version  # Should show 3.9+
    ```
 
-3. **Retry Request**
+1. **Retry Request**
+
    Once Python is upgraded, please retry your original request.
 
 **Need Help?** See `../../docs/03-getting-started/0-installation.md` (load explicitly when needed)
-```
+
+---
 
 ### Upgrade Success (Phase 40: Intelligent Changelog)
 
@@ -332,7 +346,6 @@ git commit -m "Merge origin/main into CORTEX - resolved conflicts"
 ```
 
 **After resolving conflicts, run your command again.**
-```
 
 ### Missing Dependencies
 
@@ -366,10 +379,11 @@ pip install -r requirements.txt
 python -c "import yaml, pydantic, fastapi; print('Dependencies OK')"
 ```
 
-**Option 3: View Setup Guide**
+#### Option 3: View Setup Guide
 
 See `../../docs/03-getting-started/0-installation.md` (load explicitly when needed) for detailed setup instructions.
-```
+
+---
 
 ### Partial Setup (Warnings)
 
@@ -399,12 +413,14 @@ See `../../docs/03-getting-started/0-installation.md` (load explicitly when need
 **Trigger:** User responds "auto-fix", "install", or "fix" to missing dependencies prompt
 
 **Action:**
+
 1. Call `cortex_verify_environment(auto_fix=True, verbose=True)`
 2. Display installation progress
 3. Re-check environment
 4. Proceed to original mode if successful
 
 **Safety:**
+
 - ✅ Never use `sudo pip` (security risk)
 - ✅ Checks for virtual environment first
 - ✅ Falls back to `pip install --user` if no venv
@@ -416,7 +432,7 @@ See `../../docs/03-getting-started/0-installation.md` (load explicitly when need
 
 **cortex-architect.md routing:**
 
-```
+```text
 User Request → cortex-architect
                     ↓
               PRE-FLIGHT CHECK
@@ -435,7 +451,8 @@ User Request → cortex-architect
          ❌ NOT READY → Guide setup, halt operation
 ```
 
-**Key Principles:** 
+**Key Principles:**
+
 - No AUDIT or DESIGN operations proceed until environment is validated
 - Git upgrade check is ALWAYS performed after environment validation
 - User has full control over upgrade timing (upgrade/skip/show)
@@ -445,7 +462,7 @@ User Request → cortex-architect
 ## Edge Cases
 
 | Case | Handling |
-|------|----------|
+| ---- | -------- |
 | Multiple Python versions | Detect via `python3 --version`, guide to correct one |
 | Virtual env already active | Skip venv creation, validate existing environment |
 | Permission errors | Suggest `--user` flag or venv creation |
@@ -461,7 +478,7 @@ User Request → cortex-architect
 ## Exit Conditions
 
 | Condition | Action |
-|-----------|--------|
+| --------- | ------ |
 | Environment READY + Up-to-date | Pass control to cortex-architect (AUDIT/DESIGN) |
 | Environment READY + Updates available | Offer upgrade, await user choice |
 | Upgrade successful | Pass control to cortex-architect (AUDIT/DESIGN) |
@@ -476,7 +493,7 @@ User Request → cortex-architect
 ## Related Components
 
 | Component | Purpose |
-|-----------|---------|
+| --------- | ------- |
 | `cortex_verify_environment` | MCP tool for environment checks |
 | `verify_environment.py` | Underlying validation script |
 | `cortex-architect.md` | Routes to environment-setup agent |
@@ -490,6 +507,7 @@ User Request → cortex-architect
 ### v2.0 (2026-02-04) — Git Upgrade Detection
 
 **Added:**
+
 - ✅ Git upgrade detection (origin/main → local CORTEX branch)
 - ✅ Safe merge with conflict detection via `git merge-tree`
 - ✅ User control over upgrade timing (upgrade/skip/show changes)
@@ -498,12 +516,14 @@ User Request → cortex-architect
 - ✅ Branch strategy: merge origin/main into local CORTEX, preserve local commits
 
 **Edge Cases Handled:**
+
 - Git fetch failures (skip gracefully)
 - Merge conflicts (detect before merge, halt with instructions)
 - Detached HEAD state (warn user)
 - Network timeouts (5s limit)
 
 **Enhanced Response Templates:**
+
 - Environment Ready (No Updates)
 - Environment Ready (Updates Available)
 - Upgrade Success
@@ -512,6 +532,7 @@ User Request → cortex-architect
 ### v1.0 (2026-02-03) — Initial Environment Validation
 
 **Features:**
+
 - Python version validation
 - Dependency checking
 - Auto-fix support
@@ -519,5 +540,4 @@ User Request → cortex-architect
 
 ---
 
-*v2.0 — Environment validation + Git-based CORTEX upgrade detection and safe merge*
-
+**Version:** v2.0 — Environment validation + Git-based CORTEX upgrade detection and safe merge
