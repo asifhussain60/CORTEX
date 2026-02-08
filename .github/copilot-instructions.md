@@ -51,8 +51,9 @@ Tests: 50/60 | Coverage: 89%
 | `/onboard {path}` | Repository onboarding + security scan |
 | `/debug {path}` | **DEBUG:** Full debug cycle (inject → capture → analyze → fix-plan) |
 | `/debug-cleanup` | **DEBUG:** Remove all CORTEX_DEBUG markers |
-| `/check-env` | **Environment check + CORTEX upgrade detection + intelligent changelog (Phase 40)** |/ directory  
-**Response Format:** response-format-standards.md in .github/prompts/ directory  
+| `/check-env` | **Environment check + CORTEX upgrade detection + intelligent changelog (Phase 40)** |
+
+**Response Format:** Formatting rules in .github/prompts/ directory  
 **Production Mode:** MCP Server (SaaS)  
 **Orchestrators:** 28 wired via GitBackedRegistry (8 core, 6 domain, 14 support)  
 **Mindset:** Security-First + Best Practices Layering
@@ -77,11 +78,11 @@ Runs automatically when `/audit` or `/cortex-architect` invoked. Ensures P0 enfo
 ```
 User: "implement phase 43"
          ↓
-1. CHECK cortex-registry/_cortex-master/index.yaml (PRIMARY)
+1. CHECK registry master index (PRIMARY)
    - Locate phase-43 entry
-   - Get file path
+   - Get file path from metadata
          ↓
-2. READ phase YAML file (phases/active/ or phases/completed/)
+2. READ phase YAML file (active or completed phases)
    - Parse full specification
    - Get stages, tests, dependencies
          ↓
@@ -93,7 +94,7 @@ User: "implement phase 43"
 **Registry Location:**
 ```
 cortex-registry/_cortex-master/
-├── index.yaml                 # Master phase index
+├── index.yaml                 # Master phase index (load when needed)
 ├── phases/
 │   ├── active/               # Current phases
 │   └── completed/            # Historical phases
@@ -847,7 +848,7 @@ cortex_process_request(
 
 **BEFORE emitting any recommendation:**
 
-1. Load enhancement-history.yaml from docs/meta/ directory → check rejected_recommendations
+1. Check rejection history from docs/meta/ directory → look for rejected_recommendations
 2. Calculate regression risk score (0-1.0)
 3. BLOCK if risk > 0.7 OR matches REJ-* pattern (similarity > 0.3)
 
@@ -881,7 +882,7 @@ cortex_process_request(
 | Python Code | cortex/, cortex_brain/ directories |
 | Tests | tests/ directory |
 | Documentation | docs/ directory |
-| Wiring | cortex/wiring/specifications/wiring.yaml |
+| Wiring | cortex/wiring/specifications/ directory
 
 ### Forbidden
 
@@ -942,20 +943,20 @@ cortex_process_request(
 ### Prompts (Load Explicitly)
 | File | Purpose | Load When |
 |------|---------|-----------|
-| CORTEX.prompt.md | Production master prompt | IMPLEMENT/FIX intents |
-| cortex-architect.prompt.md | HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | AUDIT/DESIGN/PLAN intents |
-| response-format-standards.md | Response formatting rules | All operations |
+| Main production prompt | Production master prompt | IMPLEMENT/FIX intents |
+| HEXA-MODE prompt | HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + INTERACTIVE + PLAN + DESIGN) | AUDIT/DESIGN/PLAN intents |
+| Response format standards | Response formatting rules | All operations |
 
-**Location:** .github/prompts/ directory  
-**Loading:** Use semantic_search or read_file when actually needed
+**Location:** .github/prompts/ directory (load via semantic_search or read_file when needed)  
+**Loading:** Use intent-based lazy loading, not automatic
 
 ### Agents (Lazy Loading)
-**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using AGENT-INDEX.md
+**⚡ TOKEN OPTIMIZATION:** Load agents on-demand using intent-based lazy loading
 
-**DO NOT pre-load all agents.** Use intent-based lazy loading:
+**DO NOT pre-load all agents.** Strategy:
 - 11 core agents available in agents/core/ directory
 - Load ONLY 1-2 agents per user intent
-- See AGENT-INDEX.md in agents/ directory (load explicitly when needed) for intent → agent mapping
+- Consult intent → agent mapping when needed
 
 **Token Savings:** 88% reduction (245k → 30k tokens at init)
 

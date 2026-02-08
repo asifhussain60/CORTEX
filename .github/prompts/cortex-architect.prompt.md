@@ -164,7 +164,7 @@ AI: [On completion: Summary + git hash]
 **Authority:** CORE-048: Holistic Validation Gate (Phase 48)  
 **Trigger:** BEFORE ANY IMPLEMENT/FIX/REFACTOR intent processing  
 **Enforcement:** BLOCKING — No implementation without holistic validation pass  
-**Full Specification:** See `.github/agents/core/cortex-holistic-validator.md` (SSOT for Challenge Gate)
+**Full Specification:** See .github/agents/core/ directory for HolisticValidationOrchestrator spec (SSOT for Challenge Gate)
 
 ### Purpose
 
@@ -198,16 +198,16 @@ elif result.verdict == "WARN":
 ```
 
 **When MCP unavailable (Graceful Fallback):**
-1. Load cortex-holistic-validator.md agent spec
+1. Load HolisticValidationOrchestrator spec from agents/core/ directory
 2. Follow validation sequence: Registry → Dependencies → Risk → Drift → Challenge → Brain
-3. Generate Challenge Gate with alternatives (see agent spec)
+3. Generate Challenge Gate with alternatives (see orchestrator spec)
 4. Log manual validation in response
 
 ### Validation Sequence Overview
 
-See cortex-holistic-validator.md for full details:
+See HolisticValidationOrchestrator spec in agents/core/ directory for full details:
 
-1. **REGISTRY HOLISTIC CHECK** — index.yaml + wiring.yaml consistency
+1. **REGISTRY HOLISTIC CHECK** — registry consistency validation
 2. **DEPENDENCY GRAPH ANALYSIS** — Orchestrator mesh + circular dependency detection
 3. **REGRESSION RISK SCORING** — 0.0 (safe) → 1.0 (critical)
 4. **ARCHITECTURE DRIFT DETECTION** — CORE rules + pattern alignment
@@ -216,7 +216,7 @@ See cortex-holistic-validator.md for full details:
 
 ### Regression Risk Scoring (Quick Reference)
 
-See cortex-holistic-validator.md for full scoring matrix.
+See HolisticValidationOrchestrator spec in agents/core/ directory for full scoring matrix.
 
 | Score | Verdict | Action |
 |-------|---------|--------|
@@ -224,11 +224,11 @@ See cortex-holistic-validator.md for full scoring matrix.
 | 0.4 - 0.7 | **WARN** | Proceed with caution, extra testing |
 | > 0.7 | **BLOCK** | Require user override with reason |
 
-### Challenge Gate (See cortex-holistic-validator.md)
+### Challenge Gate (See HolisticValidationOrchestrator spec in agents/core/)
 
-**Key Rule:** This agent OWNS Challenge Gate behavioral logic.
+**Key Rule:** This orchestrator OWNS Challenge Gate behavioral logic.
 
-Full format specification + decision tree in cortex-holistic-validator.md.
+Full format specification + decision tree in agents/core/ orchestrator spec.
 
 Pattern overview:
 ```markdown
@@ -293,7 +293,7 @@ Load prompt → Auto-setup MCP enforcement
 ### Manual Upgrade Options
 
 **If newer prompt version exists:**
-1. Type **"upgrade prompt"** → Reload cortex-architect.prompt.md
+1. Type **"upgrade prompt"** → Reload prompt from .github/prompts/ directory
 2. Type **"skip"** → Continue with current version
 3. Type **"show changes"** → Display version diff
 
@@ -311,19 +311,16 @@ Load prompt → Auto-setup MCP enforcement
 User says "implement phase 43"
          ↓
 1. CHECK REGISTRY (FIRST)
-   Path: cortex-registry/_cortex-master/
-   - Read index.yaml → search for phase-43
-   - If found → read phases/active/phase-43-*.yaml
-   - If found → proceed with phase spec
+   - Read registry master index
+   - Search for phase-43
+   - Read phase YAML from active/completed folders
          ↓
 2. CHECK PROMPTS (FALLBACK)
-   Path: .github/prompts/
-   - Search for "Phase 43" references
+   - Search in .github/prompts/ directory
    - Usually NOT found (phases live in registry)
          ↓
 3. CHECK DOCS (FALLBACK)
-   Path: docs/phases/
-   - Search for phase-43-*.md files
+   - Search in docs/ directory
    - Usually outdated or incomplete
          ↓
 RESULT: Phase found in registry (99% of cases)
@@ -369,10 +366,10 @@ search(".github/prompts/", "phase 43")
 **✅ DO:**
 ```python
 # Always check registry first
-1. read_file("cortex-registry/_cortex-master/index.yaml")
+1. Read registry master index
 2. Search for phase-43 entry
 3. Get file path from entry
-4. read_file(phase_file_path)
+4. Load phase YAML from active/completed
 5. Parse YAML → understand scope → proceed
 ```
 
@@ -499,7 +496,7 @@ active_phases:
 **Sync Workflow (EVERY IMPLEMENTATION TURN):**
 
 ```python
-# Step 1: Read current index.yaml
+# Step 1: Read current master index from registry
 index = read_file("cortex-registry/_cortex-master/index.yaml")
 
 # Step 2: Identify phase being worked on
@@ -515,7 +512,7 @@ updated_phase = update_phase_status(
     description=generate_current_description()
 )
 
-# Step 4: Write updated index.yaml
+# Step 4: Write updated registry master index
 replace_string_in_file(
     filePath="cortex-registry/_cortex-master/index.yaml",
     oldString=old_phase_block,
@@ -565,8 +562,8 @@ description: |
 
 ✅ **REQUIRED:**
 - Sync EVERY time work is saved (git commit)
-- Update index.yaml BEFORE marking stage complete
-- Verify index.yaml accuracy via Implementation Truth check
+- Update registry master index BEFORE marking stage complete
+- Verify registry accuracy via Implementation Truth check
 - Include sync commit in session summary
 
 **Quick Sync Command Pattern:**
@@ -589,7 +586,7 @@ git commit -m "Plan sync: Phase 44 complete (moved to completed/)"
 
 **Dashboard Auto-Sync Integration:**
 
-The master plan dashboard ([cortex-registry/_cortex-master/dashboard/index.html](cortex-registry/_cortex-master/dashboard/index.html)) reads from index.yaml. Every sync automatically updates the dashboard view with zero additional work.
+The master plan dashboard in cortex-registry/_cortex-master/dashboard/ reads from registry master index. Every sync automatically updates the dashboard view with zero additional work.
 
 ### Session Continuation Pattern
 
@@ -677,7 +674,7 @@ Dashboard Auto-Refresh
 # 1. Code implementation with AC markers
 # (TDD workflow in code files)
 
-# 2. Update index.yaml status
+# 2. Update registry master index status
 # (sync protocol executed)
 
 # 3. Atomic commit of both
@@ -693,7 +690,7 @@ grep "phase-44" cortex-registry/_cortex-master/index.yaml
 
 ## 🎯 HEPTA-MODE OPERATION
 
-**Load from:** modes.yaml in cortex-registry/_cortex-master/meta/ directory
+**Load from:** cortex-registry/_cortex-master/meta/ directory
 
 Use Python loaders:
 ```python
@@ -721,11 +718,11 @@ print(audit_mode.flow)  # Execution steps
 
 **DIGEST AUTO-DETECTION:** When a file parameter is provided, scan for Copilot chat markers. If detected (score ≥ 5), immediately switch to DIGEST mode.
 
-**PLAN MODE:** Activated by `/plan` command or when working with cortex-registry/_cortex-master/ files.
+**PLAN MODE:** Activated by `/plan` command or when working with registry files.
 
 **LIST MODE:** Activated by `/list` command or keywords: list, show, display, enumerate, summarize. Provides concise tabular/numbered responses with high information density.
 
-**Full details:** See modes.yaml in cortex-registry/_cortex-master/meta/ directory for execution flows, success criteria, and header templates.
+**Full details:** See registry meta directory for execution flows, success criteria, and header templates.
 
 ---
 
@@ -813,7 +810,7 @@ If token usage > 400k before user request:
 
 ## 📋 PLAN REGISTRY INTEGRATION
 
-**Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)
+**Authority:** Registry master index (Single Source of Truth)
 
 **Access:** 
 - Location: cortex-registry/_cortex-master/ directory
@@ -821,7 +818,7 @@ If token usage > 400k before user request:
 - Statistics: 19 total phases, 1 active enhancement, 16 completed
 
 **Dashboard:**
-- View: cortex-registry/_cortex-master/dashboard/index.html (Material.js glassmorphism)
+- View: cortex-registry/_cortex-master/dashboard/ directory (Material.js glassmorphism)
 - Auto-sync: AUDIT triggers sync on variance >10% (silent sync >20%)
 - Tabs: Overview | Phases | Enhancements | Roadmap | Metrics
 
@@ -833,7 +830,7 @@ If token usage > 400k before user request:
 
 ## 🏗️ Response Header (MANDATORY)
 
-**Load from:** cortex-registry/_cortex-master/meta/response-format.yaml
+**Load from:** cortex-registry/_cortex-master/meta/ directory response format spec
 
 Use Python loaders:
 ```python
@@ -849,7 +846,7 @@ status_icons = fmt.icons["status"]
 **Author:** Asif Hussain | **Mode:** {Audit|Design|Digest|Plan|Query|Meta-Audit} | **Scope:** {scope} ✅
 ```
 
-**Full details:** See cortex-registry/_cortex-master/meta/response-format.yaml for:
+**Full details:** See cortex-registry/_cortex-master/meta/ directory for:
 - Icon system (status, priority, actions)
 - Structure requirements
 - Narrative flow standards
@@ -1206,8 +1203,8 @@ Step 2: Gather Data
   - Use cortex_git_history for git queries
   - Use cortex_tools_catalog for tool lists
   - Use semantic_search for capability discovery
-  - Use index.yaml for phase/enhancement data
-  - Use wiring.yaml for orchestrator data
+  - Use registry master index for phase/enhancement data
+  - Use wiring specifications directory for orchestrator data
 
 Step 3: Format Response
   - Apply markdown table OR numbered list format
@@ -1424,7 +1421,7 @@ Step 1: Classify Query Intent
   - Determine knowledge level (if educational)
 
 Step 2: Gather Context
-  - LIST: Use MCP tools, index.yaml, wiring.yaml
+  - LIST: Use MCP tools, registry master index, wiring specifications
   - EDUCATIONAL: Inspect implementation + verify truth
   - VERIFICATION: Deep evidence collection
   - EXPLORATORY: Multi-perspective analysis
@@ -1563,7 +1560,7 @@ All Formats:
 3. Working with cortex-registry/_cortex-master/ directory files, OR
 4. Request involves phase selection/execution order decisions
 
-**Authority:** cortex-registry/_cortex-master/index.yaml (Single Source of Truth)  
+**Authority:** Registry master index (Single Source of Truth)  
 **Execution:** ROI-based phase prioritization with inline ASCII progress indicators  
 **Output:** Priority-ordered phase recommendations with real-time visual progress  
 **Implementation:** Phase 25 COMPLETE (PhaseManager + DashboardGenerator operational)
@@ -1599,7 +1596,7 @@ Step 1: Setup Hook
   - Audit trail initialized
 
 Step 2: Load Phase Specification
-  - Read from cortex-registry/_cortex-master/phases/
+  - Read from registry phases directory
   - Parse stages/tasks
   - Calculate stage duration estimates
 
@@ -1759,7 +1756,7 @@ result = cortex_plan_execute_autonomous(
 ❌ [██████████] 100% - Complete ✅             ← SCREAMING (forbidden)
 ```
 
-**Authority:** Phase-31A Minimal Plan Spine Enhancement (cortex-registry/_cortex-master/phases/active/phase-31a-minimal-plan-spine-enhancement.yaml)
+**Authority:** Phase-31A Minimal Plan Spine Enhancement in registry phases active directory
 
 ### When to Display Plan Spine
 
@@ -1920,9 +1917,9 @@ Variance > 20%: Silent sync (automatic background update)
 ```
 
 **Registry Structure:**
-- **Input:** cortex-registry/_cortex-master/index.yaml
-- **Output:** cortex-registry/_cortex-master/dashboard/data/plan-summary.json
-- **Config:** index.yaml dashboard section (auto_sync, variance_threshold, sync_interval_seconds)
+- **Input:** Registry master index
+- **Output:** Dashboard plan summary data
+- **Config:** Registry configuration section (auto_sync, variance_threshold, sync_interval_seconds)
 
 ## Intelligent Phase Resolution (CORTEX Decides)
 
@@ -1968,10 +1965,10 @@ RETURN PHASE_CREATE  # No match found
 
 **Actions:**
 1. Calculate ROI score for new phase
-2. Generate phase-{N}-{kebab-name}.yaml from template (include ROI)
-3. Add to _cortex-master/phases/active/
-4. Update index.yaml (active_phases with ROI score)
-5. Regenerate dashboard (plan-summary.json with priority visualization)
+2. Generate phase YAML from template (include ROI)
+3. Add to registry phases/active/ directory
+4. Update registry master index (active_phases with ROI score)
+5. Regenerate dashboard (plan summary with priority visualization)
 6. Git commit: `feat(phase-{N}): Initialize {name} phase (ROI: {score})`
 
 **Plan Spine:**
@@ -1983,7 +1980,7 @@ RETURN PHASE_CREATE  # No match found
 **Threshold:** Work aligns with active/planned phase, incremental progress
 
 **Actions:**
-1. Load existing phase YAML
+1. Load existing phase YAML from registry
 2. Update deliverables/tasks/status
 3. Update progress percentage
 4. Regenerate dashboard data
@@ -2203,10 +2200,10 @@ User Request → PRE-FLIGHT CHECK
 ### 🎯 Ecosystem Changes Detected
 | Category | Changes | Files |
 |----------|---------|-------|
-| **Prompts** | {count} updated | {.github/prompts/*.md files} |
-| **Agents** | {count} added/updated | {.github/agents/core/*.md files} |
-| **Orchestrators** | {count} new | {cortex/orchestrators/* directories} |
-| **Wiring** | {changed|unchanged} | cortex/wiring/specifications/wiring.yaml |
+| **Prompts** | {count} updated | {.github/prompts/ directory} |
+| **Agents** | {count} added/updated | {.github/agents/core/ directory} |
+| **Orchestrators** | {count} new | {cortex/orchestrators/ directories} |
+| **Wiring** | {changed|unchanged} | cortex/wiring/specifications/ directory |
 
 **Recent Upstream Commits:**
 - {commit_hash_short}: {commit_message}
@@ -3358,7 +3355,7 @@ Panels:
 
 **CRITICAL:** This check is CORTEX-specific. Load ONLY if project contains cortex-registry/_cortex-master/ directory.
 
-**Authority:** cortex-registry/_cortex-master/index.yaml + phases/active/ + enhancements/active/
+**Authority:** Registry master index + phases/active/ + enhancements/active/
 
 **Activation Condition:**
 ```python
@@ -3619,15 +3616,14 @@ if gap_detected:
 **WIRE-002: PLAN MODE Documentation (Phase-25)**
 ```python
 # Detection
-mode_yaml_exists = Path("cortex-registry/_cortex-master/meta/modes.yaml").exists()
-plan_mode_in_yaml = "PLAN:" in yaml.safe_load(...)["modes"]
-plan_mode_in_prompt = grep_count("cortex-architect.prompt.md", r"MODE 0.5: PLAN|PLAN MODE") > 0
+mode_yaml_exists = Path("cortex-registry/_cortex-master/meta").exists()
+plan_mode_in_prompt = grep_count("cortex-architect.prompt.md", r"MODE.*PLAN|PLAN MODE") > 0
 
-gap_detected = mode_yaml_exists and plan_mode_in_yaml and not plan_mode_in_prompt
+gap_detected = mode_yaml_exists and not plan_mode_in_prompt
 
 # Report
 if gap_detected:
-    print(f"⚠️ WIRE-002: PLAN MODE defined in modes.yaml but not documented in cortex-architect.prompt.md")
+    print(f"⚠️ WIRE-002: PLAN MODE defined in registry but not documented in cortex-architect.prompt.md")
     print(f"   Location: .github/prompts/cortex-architect.prompt.md (add MODE 0.5 section)")
     print(f"   Required: Flow diagram, examples, token cost")
 ```
@@ -3652,15 +3648,6 @@ if gap_detected:
     print(f"     - load_audit_checklist() → AuditChecklistYAML")
     print(f"   Severity: P0 (blocks prompt unbloating)")
 ```
-
-**WIRE-004: OnboardingGate MasterOrchestrator Wiring (Phase-28)**
-```python
-# Detection
-onboarding_gate_exists = Path("cortex/mcp/middleware/onboarding_gate.py").exists()
-mcp_tool_exists = grep_count("cortex/mcp/tools/onboarding_tools.py", r"@mcp_tool.*cortex_onboard_repository") > 0
-gate_called_in_mo = grep_count("master_orchestrator.py", r"OnboardingGate|onboarding_gate") > 0
-
-gap_detected = onboarding_gate_exists and mcp_tool_exists and not gate_called_in_mo
 
 # Report
 if gap_detected:
@@ -5650,11 +5637,11 @@ Innovation Taxonomy Update (system learns)
 
 - **Master Prompt:** CORTEX.prompt.md (load explicitly when needed) — Production execution
 - **Primary Agent:** ../agents/core/cortex-architect.md (load explicitly when needed) — This prompt's agent ✅
-- **Supporting Agents:** ../agents/core/cortex-auditor.md (load explicitly when needed), ../agents/core/cortex-designer.md (load explicitly when needed), ../agents/core/cortex-mcp-gateway.md (load explicitly when needed), ../agents/core/cortex-storyteller.md (load explicitly when needed) ✅
-- **Story Documentation:** [docs/.awakening-of-cortex/](../../docs/.awakening-of-cortex/) — Living narrative of CORTEX evolution
-- **Architecture Guide:** [04-architecture/](../../docs/04-architecture/) — Deep dives
-- **Wiring Registry:** [cortex/wiring/specifications/wiring.yaml](../../cortex/wiring/specifications/wiring.yaml) — Orchestrator graph
-- **Enhancement History:** [docs/meta/enhancement-history.yaml](../../docs/meta/enhancement-history.yaml) — Learning feedback loop
+- **Supporting Agents:** .github/agents/core/ directory (load explicitly when needed) ✅
+- **Story Documentation:** docs/.awakening-of-cortex/ — Living narrative of CORTEX evolution
+- **Architecture Guide:** docs/04-architecture/ — Deep dives
+- **Wiring Registry:** cortex/wiring/specifications/ directory — Orchestrator graph
+- **Enhancement History:** docs/meta/ directory — Learning feedback loop
 
 ---
 
