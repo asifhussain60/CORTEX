@@ -155,6 +155,59 @@ active_phases:
       - "Better LENS recommendations (internal package awareness)"
       - "Environment-aware deployment planning"
       - "Security-first dependency management"
+      - "phase-47"
+
+  - id: "phase-47"
+    name: "Company/CORTEX Separation & Registry Consolidation"
+    file: "phases/active/phase-47-company-cortex-separation.yaml"
+    started: null
+    status: "planned"
+    priority: "P1"
+    execution_order: 5
+    roi_score: 0.87
+    estimated_duration: "10 hours"
+    test_target: 65
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Company/CORTEX architectural separation — 6 stages:
+      S1: Registry structure setup (cortex-registry/company/)
+      S2: Dual-path resolution (registry first, legacy fallback)
+      S3: Code references update (20+ files)
+      S4: Tier cleanup (extract company overrides)
+      S5: Integration + regression testing (515+ tests)
+      S6: Documentation + deprecation warnings
+      
+      KEY OBJECTIVES:
+      - Separate company-specific from CORTEX universal code
+      - Consolidate company/ → cortex-registry/company/
+      - Cleanup cortex_brain/ tiers (CORTEX defaults only)
+      - Zero regression (all 450+ tests passing)
+      - Phase 46 alignment (infrastructure + company in registry)
+      
+      MIGRATION:
+      - Root company/ → cortex-registry/company/ (domains, dashboards, governance)
+      - Dual-path resolution (new registry, legacy fallback)
+      - Precedence preserved (company > cortex > defaults unchanged)
+      - cortex_brain/ tiers cleaned (no company overrides)
+      - .gitignore: cortex-registry/company/ (per-client)
+      
+      BENEFITS:
+      - ✅ Portability: CORTEX ships without company data
+      - ✅ Multi-tenant ready: Per-company registries
+      - ✅ Phase 46 aligned: Unified registry structure
+      - ✅ Clean separation: Universal vs company-specific
+    depends_on:
+      - "phase-44"
+      - "phase-46"
+    unblocks:
+      - "Multi-tenant SaaS model"
+      - "CORTEX open-source distribution"
+      - "Clean company-agnostic codebase"
 
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
