@@ -75,6 +75,8 @@ function createLanguageSunburst(containerId, languages) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
     
@@ -227,6 +229,8 @@ function createDependencyGraph(containerId, packages) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
     
@@ -375,6 +379,8 @@ function createHealthGauge(containerId, score) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
     
@@ -494,6 +500,8 @@ function createSecurityDonut(containerId, security) {
     if (data.length === 0) {
         const svg = d3.select(`#${containerId}`)
             .append('svg')
+            .attr('width', width)
+            .attr('height', height)
             .attr('viewBox', `0 0 ${width} ${height}`)
             .attr('preserveAspectRatio', 'xMidYMid meet');
         
@@ -683,6 +691,8 @@ function createFileTree(containerId, metrics) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
     
@@ -817,10 +827,10 @@ function createDomainConceptMap(containerId, data) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
-    
-    // Force simulation
     const simulation = d3.forceSimulation(concepts.nodes)
         .force('link', d3.forceLink(concepts.links).id(d => d.id).distance(80))
         .force('charge', d3.forceManyBody().strength(-200))
@@ -1048,6 +1058,8 @@ function createUseCaseTreemap(containerId, useCases) {
     
     const svg = d3.select(`#${containerId}`)
         .append('svg')
+        .attr('width', width)
+        .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
     
