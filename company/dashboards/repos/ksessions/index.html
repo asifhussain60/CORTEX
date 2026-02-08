@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KSESSIONS Repository Dashboard - 9-Tab Unified Analytics">
+    <meta name="author" content="Asif Hussain">
+    <title>KSESSIONS Dashboard | CORTEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../spa/css/dashboard.css">
+</head>
+<body>
+    <!-- Glassmorphism background -->
+    <div class="bg-gradients"></div>
+    
+    <!-- Main container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 id="repo-title">KSESSIONS Dashboard</h1>
+                <p class="header-subtitle">User Authentication platform - 9-Tab Analytics</p>
+            </div>
+            <div class="header-controls">
+                <button id="refresh-btn" class="btn btn-secondary" aria-label="Refresh dashboard">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- Loading state -->
+            <div id="loading-spinner" class="loading-spinner hidden">
+                <div class="spinner"></div>
+                <p>Loading dashboard...</p>
+            </div>
+
+            <!-- Error state -->
+            <div id="error-message" class="error-message hidden">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Dashboard Error</h3>
+                <p id="error-text">Unable to load dashboard data.</p>
+            </div>
+
+            <!-- 9-TAB NAVIGATION (COMPLETE) -->
+            <nav class="tab-navigation" id="tab-navigation">
+                <!-- Overview Tab -->
+                <button class="tab-button active" data-tab="overview" aria-label="Overview tab">
+                    <i class="fas fa-chart-line"></i> Overview
+                </button>
+                
+                <!-- Architecture Tab -->
+                <button class="tab-button" data-tab="architecture" aria-label="Architecture tab">
+                    <i class="fas fa-sitemap"></i> Architecture
+                </button>
+                
+                <!-- Quality Tab -->
+                <button class="tab-button" data-tab="quality" aria-label="Quality tab">
+                    <i class="fas fa-check-circle"></i> Quality
+                </button>
+                
+                <!-- Security Tab -->
+                <button class="tab-button" data-tab="security" aria-label="Security tab">
+                    <i class="fas fa-lock"></i> Security
+                </button>
+                
+                <!-- Vulnerabilities Tab -->
+                <button class="tab-button" data-tab="vulnerabilities" aria-label="Vulnerabilities tab">
+                    <i class="fas fa-exclamation-triangle"></i> Vulnerabilities
+                </button>
+                
+                <!-- Dependencies Tab -->
+                <button class="tab-button" data-tab="dependencies" aria-label="Dependencies tab">
+                    <i class="fas fa-cube"></i> Dependencies
+                </button>
+                
+                <!-- Patterns Tab -->
+                <button class="tab-button" data-tab="patterns" aria-label="Patterns tab">
+                    <i class="fas fa-puzzle-piece"></i> Patterns
+                </button>
+                
+                <!-- Testing Tab -->
+                <button class="tab-button" data-tab="testing" aria-label="Testing tab">
+                    <i class="fas fa-vial"></i> Testing
+                </button>
+                
+                <!-- Use Cases Tab -->
+                <button class="tab-button" data-tab="usecases" aria-label="Use Cases tab">
+                    <i class="fas fa-lightbulb"></i> Use Cases
+                </button>
+            </nav>
+
+            <!-- 9-TAB CONTENT PANELS (COMPLETE) -->
+            <div class="tab-panels">
+                
+                <!-- Overview Tab -->
+                <section class="tab-panel active" id="panel-overview" data-tab="overview">
+                    <div class="panel-content">
+                        <div class="overview-grid">
+                            <div class="stat-card">
+                                <h4>Health Score</h4>
+                                <div class="stat-value" id="health-score">—</div>
+                                <div class="stat-bar">
+                                    <div class="stat-bar-fill" id="health-bar"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Primary Language</h4>
+                                <div class="stat-value" id="primary-language">—</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Files</h4>
+                                <div class="stat-value" id="file-count">—</div>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Risk Score</h4>
+                                <div class="stat-value" id="risk-score">—</div>
+                            </div>
+                        </div>
+                        <div class="section" id="overview-details">
+                            <h3>Repository Overview</h3>
+                            <p id="repo-summary">Loading...</p>
+                        </div>
+                        <div class="section" id="key-findings">
+                            <h3>Key Findings</h3>
+                            <ul id="findings-list"></ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Architecture Tab -->
+                <section class="tab-panel" id="panel-architecture" data-tab="architecture">
+                    <div class="panel-content">
+                        <div id="architecture-details">
+                            <h3>Architecture Analysis</h3>
+                            <div class="architecture-grid">
+                                <div class="info-section">
+                                    <h4><i class="fas fa-code"></i> Languages Detected</h4>
+                                    <div id="languages-list"></div>
+                                </div>
+                                <div class="info-section">
+                                    <h4><i class="fas fa-cube"></i> Technology Stack</h4>
+                                    <div id="tech-stack" class="tag-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quality Tab -->
+                <section class="tab-panel" id="panel-quality" data-tab="quality">
+                    <div class="panel-content">
+                        <div id="quality-details">
+                            <h3>Code Quality Metrics</h3>
+                            <div class="quality-grid">
+                                <div class="metric-card">
+                                    <h4>Test Coverage</h4>
+                                    <div class="metric-value" id="test-coverage">—</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Code Lines</h4>
+                                    <div class="metric-value" id="code-lines">—</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Comment Lines</h4>
+                                    <div class="metric-value" id="comment-lines">—</div>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Comment Ratio</h4>
+                                    <div class="metric-value" id="comment-ratio">—</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Security Tab -->
+                <section class="tab-panel" id="panel-security" data-tab="security">
+                    <div class="panel-content">
+                        <div id="security-details">
+                            <h3>Security Posture</h3>
+                            <div class="security-grid">
+                                <div class="security-metric">
+                                    <h4>Critical Issues</h4>
+                                    <div class="score" id="critical-count">0</div>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>High Risk</h4>
+                                    <div class="score" id="high-count">0</div>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>Medium Risk</h4>
+                                    <div class="score" id="medium-count">0</div>
+                                </div>
+                                <div class="security-metric">
+                                    <h4>Low Risk</h4>
+                                    <div class="score" id="low-count">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vulnerabilities Tab -->
+                <section class="tab-panel" id="panel-vulnerabilities" data-tab="vulnerabilities">
+                    <div class="panel-content">
+                        <div id="vulnerabilities-details">
+                            <h3>Vulnerability Assessment</h3>
+                            <div class="vulnerability-summary">
+                                <div class="vuln-card vuln-critical">
+                                    <h4><i class="fas fa-fire"></i> Critical</h4>
+                                    <div class="vuln-count" id="vuln-critical">0</div>
+                                </div>
+                                <div class="vuln-card vuln-high">
+                                    <h4><i class="fas fa-exclamation"></i> High</h4>
+                                    <div class="vuln-count" id="vuln-high">0</div>
+                                </div>
+                                <div class="vuln-card vuln-medium">
+                                    <h4><i class="fas fa-warning"></i> Medium</h4>
+                                    <div class="vuln-count" id="vuln-medium">0</div>
+                                </div>
+                                <div class="vuln-card vuln-low">
+                                    <h4><i class="fas fa-info-circle"></i> Low</h4>
+                                    <div class="vuln-count" id="vuln-low">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dependencies Tab -->
+                <section class="tab-panel" id="panel-dependencies" data-tab="dependencies">
+                    <div class="panel-content">
+                        <div id="dependencies-details">
+                            <h3>Dependency Management</h3>
+                            <div class="dependency-grid">
+                                <div class="dependency-stat">
+                                    <h4>Total Dependencies</h4>
+                                    <div class="stat-number" id="total-deps">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Direct</h4>
+                                    <div class="stat-number" id="direct-deps">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Vulnerable</h4>
+                                    <div class="stat-number danger" id="vulnerable-deps">0</div>
+                                </div>
+                                <div class="dependency-stat">
+                                    <h4>Outdated</h4>
+                                    <div class="stat-number warning" id="outdated-deps">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Patterns Tab -->
+                <section class="tab-panel" id="panel-patterns" data-tab="patterns">
+                    <div class="panel-content">
+                        <div id="patterns-details">
+                            <h3>Design Patterns & SOLID Analysis</h3>
+                            <div class="patterns-grid">
+                                <div class="pattern-section">
+                                    <h4><i class="fas fa-cube"></i> Design Patterns</h4>
+                                    <div id="design-patterns-list" class="pattern-list">No patterns detected</div>
+                                </div>
+                                <div class="pattern-section">
+                                    <h4><i class="fas fa-balance-scale"></i> SOLID Principles</h4>
+                                    <div id="solid-metrics" class="solid-grid">No SOLID analysis available</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Testing Tab -->
+                <section class="tab-panel" id="panel-testing" data-tab="testing">
+                    <div class="panel-content">
+                        <div id="testing-details">
+                            <h3>Test Analysis & Coverage</h3>
+                            <div class="testing-grid">
+                                <div class="coverage-card">
+                                    <h4>Code Coverage</h4>
+                                    <div class="coverage-percentage" id="coverage-pct">0</div>
+                                    <div class="coverage-label">%</div>
+                                </div>
+                                <div class="test-stats">
+                                    <div class="stat-item passing">
+                                        <span>Passing</span>
+                                        <strong id="tests-passing">0</strong>
+                                    </div>
+                                    <div class="stat-item failing">
+                                        <span>Failing</span>
+                                        <strong id="tests-failing">0</strong>
+                                    </div>
+                                    <div class="stat-item skipped">
+                                        <span>Skipped</span>
+                                        <strong id="tests-skipped">0</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Use Cases Tab -->
+                <section class="tab-panel" id="panel-usecases" data-tab="usecases">
+                    <div class="panel-content">
+                        <div id="usecases-details">
+                            <h3>Business Capabilities & Use Cases</h3>
+                            <div class="usecases-grid">
+                                <div class="usecase-section">
+                                    <h4><i class="fas fa-briefcase"></i> Business Context</h4>
+                                    <p id="business-summary">Loading business capabilities...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 CORTEX. KSESSIONS 9-Tab Dashboard powered by unified SPA architecture.</p>
+        </footer>
+    </div>
+
+    <!-- Load dashboard data and initialize -->
+    <script>
+        // Embedded KSESSIONS dashboard data (no CORS issues with file:// protocol)
+        const dashboardData = {
+  "repo": {
+    "slug": "ksessions",
+    "display_name": "KSESSIONS",
+    "description": "User Authentication platform built with Python",
+    "owner": "Unknown",
+    "primary_language": "JavaScript",
+    "version": "1.0",
+    "last_analyzed_at": "2026-02-08T12:38:25.534690"
+  },
+  "overview": {
+    "summary": "Repository analysis",
+    "business_summary": "KSESSIONS is a comprehensive .NET Framework 4.8 application for managing educational Islamic sessions, featuring audio recordings with transcripts, etymology analysis, and Arabic linguistic tools. Built with Python, C#, ASP.NET. The application provides user authentication, data management, search & discovery.",
+    "key_findings": [
+      "No critical security issues detected",
+      "13 dependencies have known vulnerabilities"
+    ]
+  },
+  "metrics": {
+    "health_score": 35,
+    "risk_score": 0,
+    "loc": 0,
+    "code_lines": 0,
+    "comment_lines": 0,
+    "blank_lines": 0,
+    "files": 0,
+    "coverage_pct": 0.0,
+    "languages": {
+      "Python": 318,
+      "JavaScript": 3081,
+      "TypeScript": 40,
+      "C#": 245,
+      "PHP": 2,
+      "HTML": 404,
+      "CSS": 277,
+      "SQL": 59,
+      "Config": 550
+    }
+  },
+  "security": {
+    "total_count": 0,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 0,
+    "low_count": 0,
+    "vulnerabilities": []
+  },
+  "dependencies": {
+    "total_count": 8351,
+    "direct_count": 0,
+    "transitive_count": 8351,
+    "vulnerable_count": 13,
+    "outdated_count": 0
+  },
+  "quality": {
+    "maintainability": 75,
+    "readability": 80,
+    "documentation": 70,
+    "complexity": 65
+  }
+        };
+
+        function populateDashboard() {
+            if (!dashboardData) return;
+
+            // Overview Tab
+            const overview = dashboardData.overview || {};
+            const metrics = dashboardData.metrics || {};
+            const security = dashboardData.security || {};
+            const dependencies = dashboardData.dependencies || {};
+
+            // Health Score
+            const healthScore = metrics.health_score || 0;
+            document.getElementById('health-score').textContent = healthScore;
+            const healthBar = document.getElementById('health-bar');
+            healthBar.style.width = (healthScore * 10) + '%';
+
+            // Primary Language
+            const languages = metrics.languages || {};
+            const primaryLang = Object.keys(languages).reduce((a, b) => 
+                languages[a] > languages[b] ? a : b, Object.keys(languages)[0] || 'Unknown');
+            document.getElementById('primary-language').textContent = primaryLang;
+
+            // File Count
+            document.getElementById('file-count').textContent = metrics.files || '—';
+
+            // Risk Score
+            const riskScore = metrics.risk_score || 0;
+            document.getElementById('risk-score').textContent = riskScore;
+
+            // Summary
+            document.getElementById('repo-summary').textContent = overview.business_summary || overview.summary || 'No summary available';
+
+            // Key Findings
+            const findingsList = document.getElementById('findings-list');
+            if (overview.key_findings) {
+                overview.key_findings.forEach(finding => {
+                    const li = document.createElement('li');
+                    li.textContent = finding;
+                    findingsList.appendChild(li);
+                });
+            }
+
+            // Architecture Tab - Languages
+            const languagesList = document.getElementById('languages-list');
+            Object.entries(languages).forEach(([lang, count]) => {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = lang + ': ' + count + ' lines';
+                languagesList.appendChild(tag);
+            });
+
+            // Quality Tab
+            document.getElementById('test-coverage').textContent = metrics.coverage_pct + '%';
+            document.getElementById('code-lines').textContent = metrics.code_lines || '—';
+            document.getElementById('comment-lines').textContent = metrics.comment_lines || '—';
+            const commentRatio = metrics.code_lines && metrics.comment_lines 
+                ? ((metrics.comment_lines / (metrics.code_lines + metrics.comment_lines)) * 100).toFixed(1) 
+                : '—';
+            document.getElementById('comment-ratio').textContent = commentRatio + '%';
+
+            // Security Tab
+            document.getElementById('critical-count').textContent = security.critical_count || 0;
+            document.getElementById('high-count').textContent = security.high_count || 0;
+            document.getElementById('medium-count').textContent = security.medium_count || 0;
+            document.getElementById('low-count').textContent = security.low_count || 0;
+
+            // Vulnerabilities Tab
+            document.getElementById('vuln-critical').textContent = security.critical_count || 0;
+            document.getElementById('vuln-high').textContent = security.high_count || 0;
+            document.getElementById('vuln-medium').textContent = security.medium_count || 0;
+            document.getElementById('vuln-low').textContent = security.low_count || 0;
+
+            // Dependencies Tab
+            document.getElementById('total-deps').textContent = dependencies.total_count || 0;
+            document.getElementById('direct-deps').textContent = dependencies.direct_count || 0;
+            document.getElementById('vulnerable-deps').textContent = dependencies.vulnerable_count || 0;
+            document.getElementById('outdated-deps').textContent = dependencies.outdated_count || 0;
+
+            // Testing Tab
+            document.getElementById('coverage-pct').textContent = metrics.coverage_pct || 0;
+
+            // Use Cases Tab
+            document.getElementById('business-summary').textContent = overview.business_summary || 'KSESSIONS: User Authentication platform built with Python, C#, ASP.NET. Provides user authentication, data management, search & discovery.';
+        }
+
+        function switchTab(tabName) {
+            // Deactivate all tabs and panels
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+            // Activate selected tab and panel
+            document.querySelector('[data-tab="' + tabName + '"].tab-button').classList.add('active');
+            document.querySelector('[data-tab="' + tabName + '"].tab-panel').classList.add('active');
+        }
+
+        // Tab Navigation
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tabName = e.currentTarget.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+
+        // Refresh Button
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Initialize on load
+        window.addEventListener('load', populateDashboard);
+    </script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+{
+  "repo": {
+    "slug": "alist",
+    "display_name": "ALIST",
+    "description": "Data Management platform built with Python",
+    "owner": "Unknown",
+    "primary_language": "JavaScript",
+    "version": "1.0",
+    "last_analyzed_at": "2026-02-08T12:36:51.436313"
+  },
+  "overview": {
+    "summary": "Repository analysis",
+    "business_summary": "ALIST is a software application built with Python, C#, ASP.NET. The application provides data management, search & discovery, reporting & analytics.",
+    "key_findings": [
+      "No critical security issues detected"
+    ]
+  },
+  "metrics": {
+    "health_score": 100,
+    "risk_score": 0,
+    "loc": 0,
+    "code_lines": 0,
+    "comment_lines": 0,
+    "blank_lines": 0,
+    "files": 0,
+    "coverage_pct": 0.0,
+    "languages": {
+      "Python": 377,
+      "JavaScript": 790,
+      "C#": 231,
+      "HTML": 62,
+      "CSS": 151,
+      "SQL": 37,
+      "Config": 140
+    }
+  },
+  "security": {
+    "total_count": 0,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 0,
+    "low_count": 0,
+    "vulnerabilities": []
+  },
+  "dependencies": {
+    "total_count": 156,
+    "direct_count": 0,
+    "transitive_count": 156,
+    "packages": [
+      {
+        "name": "pytest",
+        "version": "7.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "pytest-cov",
+        "version": "4.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mkdocs",
+        "version": "1.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mkdocs-material",
+        "version": "9.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mkdocs-mermaid2-plugin",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "watchdog",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "psutil",
+        "version": "5.9.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "send2trash",
+        "version": "1.8.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "scikit-learn",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "numpy",
+        "version": "1.24.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "black",
+        "version": "23.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "flake8",
+        "version": "6.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mypy",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "radon",
+        "version": "6.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "pylint",
+        "version": "3.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "vulture",
+        "version": "2.10",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "pyperclip",
+        "version": "1.8.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac.Integration.Mvc",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac.Integration.WebApi",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse.AspNet",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse.Core",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse.Mvc4",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.Core",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.Owin",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.SqlServer",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.SystemWeb",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.Owin.Host.SystemWeb",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.ReportViewer.Common",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.ReportViewer.WebForms",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Newtonsoft.Json",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Ninject",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Owin",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.Web.Infrastructure",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "WebMatrix.Data",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.Web.WebPages.OAuth",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "WebMatrix.WebData",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.AspNet",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.Core",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OAuth.Consumer",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OAuth",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OpenId",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OpenId.RelyingParty",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "WebGrease",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Antlr3.Runtime",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Newtonsoft.Json",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "5.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "5.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "NLog",
+        "version": "2.0.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Dapper",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.Core",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "NLog",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Dapper",
+        "version": "1.13",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.SignalR.Core",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Newtonsoft.Json",
+        "version": "4.5.11",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Dapper",
+        "version": "1.13",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "5.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.Mvc",
+        "version": "4.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.Razor",
+        "version": "2.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.WebApi.Client",
+        "version": "4.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.WebApi.Core",
+        "version": "4.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.WebApi.WebHost",
+        "version": "4.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.AspNet.WebPages",
+        "version": "2.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.Net.Http",
+        "version": "2.0.20710.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.Web.Infrastructure",
+        "version": "1.0.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Moq",
+        "version": "4.0.10827",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Newtonsoft.Json",
+        "version": "4.5.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "NUnit",
+        "version": "2.6.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "WebMatrix.WebData",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Dapper",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Microsoft.CSharp",
+        "version": "unknown",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Angular.Filters",
+        "version": "0.0.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Angular.UI",
+        "version": "0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "angularjs",
+        "version": "1.0.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "AngularJS.ngUpload",
+        "version": "0.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac",
+        "version": "3.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac.Mvc4",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Autofac.WebApi",
+        "version": "3.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.AspNet",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.Core",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OAuth.Consumer",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OAuth.Core",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OpenId.Core",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "DotNetOpenAuth.OpenId.RelyingParty",
+        "version": "4.0.3.12153",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "EntityFramework",
+        "version": "5.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "FontAwesome",
+        "version": "3.0.2.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "FontAwesome.less",
+        "version": "3.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse",
+        "version": "1.4.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse.AspNet",
+        "version": "1.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "Glimpse.Mvc4",
+        "version": "1.3.2",
+        "license": null,
+        "is_direct": false
+      }
+    ],
+    "licenses": {
+      "null": 100
+    }
+  },
+  "quality": {
+    "maintainability": 75,
+    "readability": 80,
+    "documentation": 70,
+    "complexity": 65,
+    "code_smells": [],
+    "hotspots": []
+  },
+  "use_cases": [
+    {
+      "id": "UC-QUAL-001",
+      "title": "Monitor Code Quality Trends",
+      "persona": "Engineering Manager",
+      "category": "Quality",
+      "summary": "Track maintainability and complexity metrics over time",
+      "signals": [
+        "quality.maintainability",
+        "quality.complexity"
+      ],
+      "recommended_actions": [
+        "Review quality tab",
+        "Identify refactoring candidates",
+        "Set quality gates"
+      ],
+      "tags": [
+        "quality",
+        "monitoring"
+      ],
+      "severity": "low"
+    }
+  ],
+  "lens": {
+    "analysis_summary": "LENS analysis complete"
+  },
+  "refactoring": {
+    "recommendations": []
+  }
+}
