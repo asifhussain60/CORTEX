@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2025-02-08T12:00:00Z",
+  "repository": "alist",
+  "type": "file-management-service",
+  "overview": {
+    "description": "File management and listing service with WebDAV support",
+    "stats": {
+      "files": 1200,
+      "size": "12MB",
+      "test_coverage": 82
+    }
+  },
+  "metadata": {
+    "migrated_from": "company/dashboards/repos/alist/index.html",
+    "migration_timestamp": "2025-02-08T12:00:00Z"
+  },
+  "metrics": {
+    "test_coverage": 82,
+    "build_status": "passing",
+    "documentation_coverage": 85
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2025-02-08T12:00:00Z",
+  "repository": "noor-canvas",
+  "type": "graphics-engine",
+  "overview": {
+    "description": "Canvas-based graphics rendering and animation engine",
+    "stats": {
+      "files": 2100,
+      "size": "21MB",
+      "test_coverage": 75
+    }
+  },
+  "metadata": {
+    "migrated_from": "company/dashboards/repos/noor-canvas/index.html",
+    "migration_timestamp": "2025-02-08T12:00:00Z"
+  },
+  "metrics": {
+    "test_coverage": 75,
+    "build_status": "passing",
+    "documentation_coverage": 72
+  }
+}

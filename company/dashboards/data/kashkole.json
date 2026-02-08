@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2025-02-08T12:00:00Z",
+  "repository": "kashkole",
+  "type": "web-application",
+  "overview": {
+    "description": "Interactive web application for data visualization and analytics",
+    "stats": {
+      "files": 890,
+      "size": "8MB",
+      "test_coverage": 78
+    }
+  },
+  "metadata": {
+    "migrated_from": "company/dashboards/repos/kashkole/index.html",
+    "migration_timestamp": "2025-02-08T12:00:00Z"
+  },
+  "metrics": {
+    "test_coverage": 78,
+    "build_status": "passing",
+    "documentation_coverage": 80
+  }
+}
