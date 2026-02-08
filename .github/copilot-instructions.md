@@ -5,14 +5,17 @@
 
 ## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
 
+**PHASE 49 INTEGRATION:** Context Crystallization Layer now active for all requests
+
 **When user says "proceed", "implement", "yes", or "continue":**
 
 | DO | DON'T |
 |----|-------|
-| ✅ Execute silently | ❌ Ask "shall I proceed?" |
+| ✅ Kickoff Phase 49 CCL async prefetch | ❌ Ask "shall I proceed?" |
 | ✅ Show ASCII progress bars | ❌ Narrate what you're doing |
 | ✅ Report on completion/error | ❌ Request mid-execution approval |
 | ✅ Commit progress automatically | ❌ Multi-paragraph explanations |
+| ✅ Merge pre-warmed CCL context into Stage 2 | ❌ Wait for CCL if timeout |
 
 **Progress Bar Format:**
 ```
@@ -175,6 +178,8 @@ See: cortex-architect.prompt.md § HOLISTIC WORK PROTOCOL (full details)
 
 **Phase 51 S3: Enforced by EnvironmentIntegrityAgent (8th enforcement agent)**
 
+**PHASE 49 CCL INTEGRATION:** Context Crystallization Layer starts async prefetch in parallel
+
 **BEFORE processing ANY IMPLEMENT/FIX/REFACTOR request:**
 
 ```python
@@ -184,9 +189,17 @@ from cortex.governance.enforcement.agents.environment_integrity_agent import Env
 
 intent = classify_user_request()  # IMPLEMENT | FIX | REFACTOR | ANALYZE
 
+# Step 1.5: Kickoff Phase 49 CCL async prefetch (NON-BLOCKING)
+from cortex.orchestrators.context_crystallization import ContextCrystallizationLayer
+ccl = ContextCrystallizationLayer()
+ccl.prefetch_async(request_id, file_path, context)  # Runs in background
+
 # Step 2: Pre-flight check
 agent = EnvironmentIntegrityAgent()
 result = agent.validate_pre_flight(intent)
+```
+
+**Key Point:** CCL prefetch (rules, LENS, infrastructure) runs PARALLEL to MCP check. If MCP check passes, Stage 2 will have pre-warmed context ready.
 
 # Step 3: Block if failed
 if not result.passed:
