@@ -291,13 +291,17 @@ active_phases:
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"
-    started: null
-    status: "planned"
+    started: "2026-02-08"
+    status: "in_progress"
     priority: "P1"
     execution_order: 4
     roi_score: 0.85
     estimated_duration: "4 days"
     test_target: 90
+    current_stage: "S1"
+    stage_progress: "50%"
+    tests_passing: 0
+    tests_failing: 0
     coverage_target: 90
     description: |
       ⚪ PLANNED: Hybrid role-adaptive persona system with context inference.
