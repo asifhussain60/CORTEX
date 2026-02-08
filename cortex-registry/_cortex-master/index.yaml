@@ -291,28 +291,45 @@ active_phases:
   - id: "phase-37"
     name: "Role-Adaptive Persona System"
     file: "phases/active/phase-37-role-adaptive-personas.yaml"
-    started: "2026-02-08"
+    started: "2026-02-07"
     status: "in_progress"
     priority: "P1"
-    execution_order: 4
+    execution_order: 5
     roi_score: 0.85
     estimated_duration: "4 days"
-    test_target: 90
-    current_stage: "S2"
-    stage_progress: "22/112 tests passing (20%)"
-    tests_passing: 22
+    test_target: 112
+    current_stage: "S3"
+    stage_progress: "71/112 tests passing (64%)"
+    tests_passing: 71
     tests_failing: 0
     coverage_target: 90
-    coverage_target: 90
     description: |
-      ⚪ PLANNED: Hybrid role-adaptive persona system with context inference.
+      🔵 IN PROGRESS: Hybrid role-adaptive persona system with context inference.
+      
+      COMPLETION STATUS:
+      - S1: PersonaLoader (22/22 tests) ✅ COMPLETE
+      - S2: RoleResolver + PersonaInjector (49/49 tests) ✅ COMPLETE
+        • RoleResolver (25/25 tests): Signal-based role detection
+        • PersonaInjector (24/24 tests): Format + depth override injection
+      - S3: MasterOrchestrator Integration (13 tests planned) - READY FOR IMPLEMENTATION
+      - S4: MCP Tools + Persistence (18 tests planned) - SPECIFIED
+      - S5: Cleanup + Header Compliance (8 tests planned) - SPECIFIED
+      - S6: E2E Integration (TBD) - PENDING
+      
+      ARCHITECTURE:
       - 6 personas: business_leader, product_owner, scrum_master, tech_lead, engineer, unknown
       - 4 depth levels: executive, standard, detailed, full
       - Dynamic switching: /persona and /detail commands
       - Natural language triggers: "show me the code", "give me the BLUF"
-      - Persistent storage: cross-session user preferences
+      - Persistent storage: cross-session user preferences via YAML
       - Introduction template with role discovery
-      - CORE-029 header compliance fix
+      - CORE-029 header compliance v15.0
+      
+      RECENT COMMITS:
+      - 62158248e: S2 Component 1 (RoleResolver)
+      - dd8a14e2f: S2 Complete (PersonaInjector + S2 validation)
+      
+      NEXT: S3 Implementation (MasterOrchestrator orchestration, 4-6 hours, 13 tests)
     depends_on:
       - "phase-36"
       - "phase-43"
