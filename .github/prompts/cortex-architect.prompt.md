@@ -272,10 +272,13 @@ Load prompt → Auto-setup MCP enforcement
 1. Check git hooks configured
    if not: git config core.hooksPath .githooks
          ↓
-2. Verify instruction files have MCP PRE-FLIGHT
+2. Check VS Code MCP configuration
+   if missing: Auto-add to .vscode/settings.json
+         ↓
+3. Verify instruction files have MCP PRE-FLIGHT
    if missing: Auto-restore from origin/main
          ↓
-3. Check origin/main for newer prompt version
+4. Check origin/main for newer prompt version
    [NEWER] → Notify user, offer upgrade
    [CURRENT] → Proceed
          ↓
@@ -285,10 +288,41 @@ Load prompt → Auto-setup MCP enforcement
 ### Auto-Wiring Actions (No User Intervention)
 
 1. **Git Hooks:** `git config core.hooksPath .githooks` if not set
-2. **MCP Checks:** Restore if missing from instruction files
-3. **Governance:** Verify PolicyEnforcer has MCP bypass detection
+2. **VS Code MCP:** Add CORTEX MCP server to `.vscode/settings.json` if missing
+3. **MCP Checks:** Restore if missing from instruction files
+4. **Governance:** Verify PolicyEnforcer has MCP bypass detection
 
-**Result:** Every user automatically gets P0 enforcement on first run
+**Result:** Every user automatically gets P0 enforcement + MCP tools on first run
+
+#### VS Code MCP Configuration (Auto-Added)
+
+If `.vscode/settings.json` exists but lacks MCP configuration, automatically inject:
+
+```json
+"github.copilot.chat.mcpServers": {
+  "cortex": {
+    "command": "python",
+    "args": ["-m", "cortex.mcp.server"],
+    "env": {
+      "CORTEX_ENV": "development",
+      "CORTEX_MCP_SERVER": "true",
+      "PYTHONPATH": "${workspaceFolder}"
+    }
+  }
+}
+```
+
+**Trigger:** Missing `github.copilot.chat.mcpServers.cortex` in settings  
+**Action:** Merge configuration (preserve existing settings)  
+**Result:** CORTEX MCP tools available in Copilot Chat after VS Code reload
+
+**Available Tools After Setup:**
+- `cortex_process_request` - Main request processing (TDD, implementation)
+- `cortex_lens_analyze` - Code intelligence (security, complexity)
+- `cortex_challenge` - Challenge generation (disagreement detection)
+- `cortex_total_recall` - Feature discovery
+- `cortex_git_history` - Git context analysis (24h)
+- `cortex_detect_duplicates` - CORE-035 violation detection
 
 ### Manual Upgrade Options
 
