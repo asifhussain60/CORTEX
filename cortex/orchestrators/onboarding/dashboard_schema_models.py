@@ -477,7 +477,7 @@ class RepositoryDashboardSchema(BaseModel):
     patterns: PatternsTab
     use_cases: UseCasesTab
     
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_schema_completeness(cls, values):
         """Validate schema is complete"""
         required_fields = [
