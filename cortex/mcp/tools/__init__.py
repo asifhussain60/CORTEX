@@ -51,6 +51,16 @@ from .onboarding_tools import (
     cortex_analyze_repository_configs,
 )
 
+# MCP-FIRST Enforcement Tools (PHASE-51)
+from cortex.orchestrators.response.legacy_migration_mcp_tools import (
+    ProcessRequestMCPTool,
+    AnalyzeResponseMCPTool,
+)
+
+# Create tool instances for discovery
+cortex_process_request = ProcessRequestMCPTool()
+cortex_analyze_response = AnalyzeResponseMCPTool()
+
 # Dashboard Tools v3 (PHASE-21)
 # TODO: Implement dashboard_aggregator_v3_tool.py
 # from .dashboard_aggregator_v3_tool import (
