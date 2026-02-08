@@ -1,0 +1,222 @@
+concurrent_user:
+  created_at: '2026-02-08T12:29:17.933099'
+  depth: standard
+  last_active: '2026-02-08T12:29:58.550389'
+  overrides: []
+  persona: engineer
+depth_override_test:
+  created_at: '2026-02-08T12:29:48.625762'
+  depth: standard
+  last_active: '2026-02-08T12:29:58.239524'
+  overrides:
+  - added_at: '2026-02-08T12:29:48.631249'
+    context: test_override
+    level: executive
+  - added_at: '2026-02-08T12:29:58.239516'
+    context: test_override
+    level: executive
+  persona: engineer
+new_user:
+  created_at: '2026-02-08T12:29:48.658176'
+  depth: standard
+  last_active: '2026-02-08T12:32:25.429408'
+  overrides: []
+  persona: engineer
+parser_test:
+  created_at: '2026-02-08T12:29:48.613129'
+  depth: standard
+  last_active: '2026-02-08T12:29:58.189922'
+  overrides: []
+  persona: product_owner
+perf_user_0:
+  created_at: '2026-02-08T12:29:48.724170'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.724170'
+  overrides: []
+  persona: engineer
+perf_user_1:
+  created_at: '2026-02-08T12:29:48.729865'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.729865'
+  overrides: []
+  persona: engineer
+perf_user_10:
+  created_at: '2026-02-08T12:29:48.822591'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.822591'
+  overrides: []
+  persona: engineer
+perf_user_11:
+  created_at: '2026-02-08T12:29:48.833751'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.833751'
+  overrides: []
+  persona: engineer
+perf_user_12:
+  created_at: '2026-02-08T12:29:48.852549'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.852549'
+  overrides: []
+  persona: engineer
+perf_user_13:
+  created_at: '2026-02-08T12:29:48.865206'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.865206'
+  overrides: []
+  persona: engineer
+perf_user_14:
+  created_at: '2026-02-08T12:29:48.878205'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.878205'
+  overrides: []
+  persona: engineer
+perf_user_15:
+  created_at: '2026-02-08T12:29:48.894005'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.894005'
+  overrides: []
+  persona: engineer
+perf_user_16:
+  created_at: '2026-02-08T12:29:48.908959'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.908959'
+  overrides: []
+  persona: engineer
+perf_user_17:
+  created_at: '2026-02-08T12:29:48.924764'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.924764'
+  overrides: []
+  persona: engineer
+perf_user_18:
+  created_at: '2026-02-08T12:29:48.940354'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.940354'
+  overrides: []
+  persona: engineer
+perf_user_19:
+  created_at: '2026-02-08T12:29:48.956511'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.956511'
+  overrides: []
+  persona: engineer
+perf_user_2:
+  created_at: '2026-02-08T12:29:48.736340'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.736340'
+  overrides: []
+  persona: engineer
+perf_user_3:
+  created_at: '2026-02-08T12:29:48.743302'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.743302'
+  overrides: []
+  persona: engineer
+perf_user_4:
+  created_at: '2026-02-08T12:29:48.750416'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.750416'
+  overrides: []
+  persona: engineer
+perf_user_5:
+  created_at: '2026-02-08T12:29:48.758953'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.758953'
+  overrides: []
+  persona: engineer
+perf_user_6:
+  created_at: '2026-02-08T12:29:48.767416'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.767416'
+  overrides: []
+  persona: engineer
+perf_user_7:
+  created_at: '2026-02-08T12:29:48.781750'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.781750'
+  overrides: []
+  persona: engineer
+perf_user_8:
+  created_at: '2026-02-08T12:29:48.793416'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.793416'
+  overrides: []
+  persona: engineer
+perf_user_9:
+  created_at: '2026-02-08T12:29:48.806388'
+  depth: standard
+  last_active: '2026-02-08T12:29:48.806388'
+  overrides: []
+  persona: engineer
+test_business_leader:
+  created_at: '2026-02-08T12:29:48.999508'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.034955'
+  overrides: []
+  persona: business_leader
+test_detailed:
+  created_at: '2026-02-08T12:29:49.428066'
+  depth: detailed
+  last_active: '2026-02-08T12:29:49.450911'
+  overrides: []
+  persona: engineer
+test_engineer:
+  created_at: '2026-02-08T12:29:49.212366'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.232644'
+  overrides: []
+  persona: engineer
+test_executive:
+  created_at: '2026-02-08T12:29:49.296198'
+  depth: executive
+  last_active: '2026-02-08T12:29:49.331076'
+  overrides: []
+  persona: engineer
+test_full:
+  created_at: '2026-02-08T12:29:49.473300'
+  depth: full
+  last_active: '2026-02-08T12:29:49.510262'
+  overrides: []
+  persona: engineer
+test_product_owner:
+  created_at: '2026-02-08T12:29:49.056750'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.074686'
+  overrides: []
+  persona: product_owner
+test_scrum_master:
+  created_at: '2026-02-08T12:29:49.093510'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.141687'
+  overrides: []
+  persona: scrum_master
+test_standard:
+  created_at: '2026-02-08T12:29:49.354166'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.385553'
+  overrides: []
+  persona: engineer
+test_tech_lead:
+  created_at: '2026-02-08T12:29:49.170797'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.190055'
+  overrides: []
+  persona: tech_lead
+test_unknown:
+  created_at: '2026-02-08T12:29:49.252510'
+  depth: standard
+  last_active: '2026-02-08T12:29:49.272963'
+  overrides: []
+  persona: unknown
+user1:
+  created_at: '2026-02-08T12:29:48.638170'
+  depth: standard
+  last_active: '2026-02-08T12:29:58.312720'
+  overrides: []
+  persona: engineer
+user2:
+  created_at: '2026-02-08T12:29:48.641612'
+  depth: executive
+  last_active: '2026-02-08T12:29:58.336618'
+  overrides: []
+  persona: business_leader
