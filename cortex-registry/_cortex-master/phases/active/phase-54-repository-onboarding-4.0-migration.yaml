@@ -1,0 +1,772 @@
+# ============================================================================
+# PHASE-54: Repository Onboarding 4.0 - Archive CORTEX-4.0 Pattern Migration
+# ============================================================================
+# Purpose: Migrate from current monolithic RepositoryOnboardingOrchestrator
+#          (2,448 LOC) to modular archive/CORTEX-4.0 pattern with use cases,
+#          repositories, templates, and caching for 10x performance gain.
+# Authority: cortex-architect.prompt.md v15.3, Archive CORTEX-4.0 Analysis
+# Approach: TDD-First, Incremental Migration, Parallel Implementation
+# Status: PLANNED | Target Start: 2026-02-10
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "planned"
+priority: "P1"
+execution_order: 3
+
+metadata:
+  phase_id: "phase-54"
+  title: "Repository Onboarding 4.0 - Archive Pattern Migration"
+  subtitle: "Migrate to clean use case architecture with caching, templates, and repository pattern from working archive/CORTEX-4.0 implementation"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  target_start: "2026-02-10"
+  estimated_duration: "16 hours"
+  test_target: 85
+  coverage_target: 92
+  roi_score: 0.82
+  cross_cutting: false
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: false
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-028: File naming — kebab-case, no SCREAMING_CASE"
+    - "MCP-FIRST: All functionality via MCP tools"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "Git checkpoint before implementation"
+    - "Parallel implementation (don't break current onboarding)"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    Restore the clean architecture from archive/CORTEX-4.0 that was working well:
+    
+    **Archive/CORTEX-4.0 Pattern (321 LOC orchestrator):**
+    - Clean separation: Use cases + repositories + templates
+    - LENSOrchestrator with caching (10x faster repeated analysis)
+    - Repository pattern for data access (JSON-based, swappable)
+    - Jinja2 template system (UI decoupled from Python)
+    - 6 specialized use cases (single responsibility)
+    - Batch analysis support (multi-file optimization)
+    
+    **Current Implementation Issues (2,448 LOC orchestrator):**
+    - Monolithic orchestrator doing everything
+    - No caching (slow repeated queries)
+    - No use case isolation (tight coupling)
+    - Hardcoded dashboard generation
+    - Lazy loading everything (complexity)
+    - Mixed concerns: LENS, security, dashboard, landing page, narratives
+    
+    **Migration Goals:**
+    1. Extract 6 use cases from current orchestrator
+    2. Implement repository pattern (profile storage)
+    3. Restore LENSOrchestrator caching layer
+    4. Add Jinja2 template system for dashboards
+    5. Reduce orchestrator from 2,448 → ~500 LOC
+    6. Maintain 100% feature parity
+    7. 10x performance improvement via caching
+
+  problem_statement: |
+    **Root Cause Analysis:** Archive/CORTEX-4.0 had working dashboard crawler
+    and onboarding that was fast, modular, and maintainable. Current implementation
+    regressed to monolithic anti-pattern with no separation of concerns.
+    
+    **Key Differences (Archive vs Current):**
+    
+    | Aspect | Archive/CORTEX-4.0 | Current | Impact |
+    |--------|-------------------|---------|---------|
+    | **Orchestrator Size** | 321 LOC | 2,448 LOC | 7.6x bloat |
+    | **Separation** | 6 use cases | 1 monolith | Hard to test |
+    | **Template System** | Jinja2 | Python code | Can't customize |
+    | **Caching** | ✅ LENSOrchestrator | ❌ None | 10x slower |
+    | **Repository Pattern** | ✅ JSON repos | ❌ Direct dicts | Hard to swap |
+    | **Batch Analysis** | ✅ analyze_batch() | ❌ One-by-one | Poor perf |
+    
+    **Technical Debt Accumulated:**
+    - Monolithic orchestrator violates SOLID principles
+    - No caching means repeated LENS analysis (same files, 10x work)
+    - Direct dict manipulation instead of repository pattern
+    - Hardcoded dashboard generation (can't change UI)
+    - All concerns mixed: LENS + security + dashboard + landing + narrative
+    - Lazy loading adds complexity without clear benefit
+    
+    **Performance Impact:**
+    - Onboarding KSESSIONS: ~12 minutes (archive: ~2 minutes with caching)
+    - Repeated dashboard generation: No cache means full re-analysis
+    - Batch operations: Not supported (analyze one file at a time)
+
+  business_impact:
+    - "🔴 Performance: 10x slower than archive implementation (no caching)"
+    - "🟡 Maintainability: 2,448 LOC orchestrator hard to test/modify"
+    - "🟡 Testability: Mixed concerns make unit testing difficult"
+    - "🟡 Customization: Hardcoded dashboard (no template system)"
+    - "🟢 Feature Parity: Can restore fast onboarding from archive"
+    - "🟢 Developer Experience: Clean architecture improves productivity"
+
+  expected_outcomes:
+    - "RepositoryOnboardingOrchestrator: 2,448 → ~500 LOC (orchestration only)"
+    - "6 Use Cases: Extracted and unit-tested independently"
+    - "Repository Pattern: JSONProfileRepository for data access"
+    - "LENSOrchestrator: Restored with caching (10x performance)"
+    - "Template System: Jinja2 for dashboard customization"
+    - "Batch Analysis: Multi-file optimization support"
+    - "Tests: 85+ tests (use case isolation enables better testing)"
+    - "Performance: Onboarding time reduced 5x via caching"
+    - "Zero Regression: Current features maintained 100%"
+
+# ============================================================================
+# ROI ANALYSIS
+# ============================================================================
+roi_analysis:
+  architectural_impact: 0.85   # Clean architecture restoration
+  efficiency_gain: 0.90        # 10x performance via caching
+  accuracy_improvement: 0.75   # Better testability improves quality
+  effort_cost: 0.50            # 16 hours (moderate effort)
+  blocking_severity: 0.60      # Improves experience but not blocking
+  roi_score: 0.82
+  formula: "(0.85×0.35) + (0.90×0.25) + (0.75×0.20) + ((1-0.50)×0.15) + (0.60×0.05)"
+  interpretation: "🔴 IMMEDIATE (≥0.75) — High ROI architectural improvement"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  required_phases:
+    - id: "phase-28"
+      name: "Repository Onboarding System"
+      reason: "Current onboarding implementation (source for migration)"
+  required_enhancements: []
+  external_dependencies:
+    - "Jinja2 library (already installed)"
+    - "Archive CORTEX-4.0 branch access (for reference)"
+  blocking_phases: []
+  unblocks:
+    - "Dashboard generation performance"
+    - "Repository onboarding scalability"
+    - "Custom dashboard templates"
+
+# ============================================================================
+# STAGES (6 Stages — Execution Order)
+# ============================================================================
+stages:
+  stage_1:
+    name: "Extract Use Cases from Monolithic Orchestrator"
+    id: "S1"
+    duration: "3 hours"
+    priority: "P0"
+    dependencies: []
+    
+    description: |
+      Extract 6 independent use cases from RepositoryOnboardingOrchestrator:
+      
+      1. **LoadRepoOverviewUseCase** — Basic repo metadata extraction
+      2. **AnalyzeSecurityThreatsUseCase** — P0/P1/P2 threat modeling
+      3. **GenerateBusinessNarrativeUseCase** — Business language generation
+      4. **BuildDependencyGraphUseCase** — Dependency analysis
+      5. **RenderDashboardJSONUseCase** — Dashboard model conversion
+      6. **UpdateLandingPageUseCase** — Landing page hub updates
+      
+      Each use case:
+      - Single responsibility
+      - Independent unit tests
+      - Repository pattern for data access
+      - No orchestrator dependencies
+      
+      Output: 6 use case classes with 100% test coverage.
+    
+    tasks:
+      - task: "Extract LoadRepoOverviewUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-01: Use case extracts basic repo metadata"
+          - "AC-054-S1-02: Uses JSONProfileRepository for storage"
+          - "AC-054-S1-03: 5+ unit tests (no orchestrator dependency)"
+      
+      - task: "Extract AnalyzeSecurityThreatsUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-04: Use case runs P0/P1/P2 threat modeling"
+          - "AC-054-S1-05: Uses SecurityRisk models"
+          - "AC-054-S1-06: 8+ unit tests with mock data"
+      
+      - task: "Extract GenerateBusinessNarrativeUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-07: Use case generates business narratives"
+          - "AC-054-S1-08: Delegates to BusinessLanguageOrchestrator"
+          - "AC-054-S1-09: 6+ unit tests with confidence scores"
+      
+      - task: "Extract BuildDependencyGraphUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-10: Use case builds dependency graphs"
+          - "AC-054-S1-11: Uses PackageDependency models"
+          - "AC-054-S1-12: 7+ unit tests with mock packages"
+      
+      - task: "Extract RenderDashboardJSONUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-13: Use case converts to RepoDashboardModel"
+          - "AC-054-S1-14: Validates schema v3.0"
+          - "AC-054-S1-15: 10+ unit tests with model validation"
+      
+      - task: "Extract UpdateLandingPageUseCase"
+        acceptance_criteria:
+          - "AC-054-S1-16: Use case updates landing page hub"
+          - "AC-054-S1-17: Uses LandingPageGenerator"
+          - "AC-054-S1-18: 5+ unit tests with mock generator"
+    
+    deliverables:
+      - "cortex/orchestrators/support/onboarding_use_cases/__init__.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/load_repo_overview.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/analyze_security_threats.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/generate_business_narrative.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/build_dependency_graph.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/render_dashboard_json.py"
+      - "cortex/orchestrators/support/onboarding_use_cases/update_landing_page.py"
+      - "tests/orchestrators/support/onboarding_use_cases/ (41+ tests)"
+    
+    tests:
+      - "test_load_repo_overview_use_case"
+      - "test_analyze_security_threats_use_case"
+      - "test_generate_business_narrative_use_case"
+      - "test_build_dependency_graph_use_case"
+      - "test_render_dashboard_json_use_case"
+      - "test_update_landing_page_use_case"
+    
+    validation:
+      method: "pytest tests/orchestrators/support/onboarding_use_cases/"
+      criteria: "41+ tests passing, 100% coverage"
+      estimated_time: "30 minutes"
+
+  stage_2:
+    name: "Implement Repository Pattern for Profile Storage"
+    id: "S2"
+    duration: "2 hours"
+    priority: "P0"
+    dependencies: ["S1"]
+    
+    description: |
+      Implement repository pattern for onboarding profile storage:
+      
+      **JSONProfileRepository:**
+      - get_by_name(repo_name) → OnboardingProfile
+      - save(profile) → str (file path)
+      - delete(repo_name) → bool
+      - list_all() → List[OnboardingProfile]
+      - exists(repo_name) → bool
+      
+      **Benefits:**
+      - Abstraction: Can swap JSON → SQLite → API later
+      - Testability: Mock repository in tests
+      - Encapsulation: Hide storage implementation
+      
+      Output: Repository with 15+ tests.
+    
+    tasks:
+      - task: "Implement JSONProfileRepository interface"
+        acceptance_criteria:
+          - "AC-054-S2-01: Repository implements get_by_name()"
+          - "AC-054-S2-02: Repository implements save()"
+          - "AC-054-S2-03: Repository implements delete()"
+          - "AC-054-S2-04: Repository implements list_all()"
+          - "AC-054-S2-05: Repository implements exists()"
+      
+      - task: "Add profile model validation"
+        acceptance_criteria:
+          - "AC-054-S2-06: Validates OnboardingProfile schema"
+          - "AC-054-S2-07: Rejects invalid profiles"
+      
+      - task: "Implement file operations with error handling"
+        acceptance_criteria:
+          - "AC-054-S2-08: Handles missing files gracefully"
+          - "AC-054-S2-09: Handles write errors"
+          - "AC-054-S2-10: Creates directories as needed"
+    
+    deliverables:
+      - "cortex/repositories/__init__.py"
+      - "cortex/repositories/json_profile_repository.py"
+      - "cortex/repositories/repository_interface.py"
+      - "tests/repositories/test_json_profile_repository.py (15+ tests)"
+    
+    tests:
+      - "test_repository_get_by_name"
+      - "test_repository_save_profile"
+      - "test_repository_delete_profile"
+      - "test_repository_list_all"
+      - "test_repository_exists"
+    
+    validation:
+      method: "pytest tests/repositories/"
+      criteria: "15+ tests passing, error cases covered"
+      estimated_time: "20 minutes"
+
+  stage_3:
+    name: "Restore LENSOrchestrator Caching Layer"
+    id: "S3"
+    duration: "3 hours"
+    priority: "P0"
+    dependencies: []
+    
+    description: |
+      Restore LENSOrchestrator from archive/CORTEX-4.0 with caching:
+      
+      **Key Features:**
+      - analyze_file() with result caching (file_path → LENSContext)
+      - analyze_batch() for multi-file optimization
+      - Cache invalidation on file modification
+      - IntentRouter-compatible output format
+      
+      **Performance:**
+      - First analysis: ~500ms per file
+      - Cached analysis: ~5ms per file (100x faster)
+      - Batch analysis: Parallel processing (4x throughput)
+      
+      Output: LENSOrchestrator with caching + 20 tests.
+    
+    tasks:
+      - task: "Implement LENSOrchestrator with cache"
+        acceptance_criteria:
+          - "AC-054-S3-01: analyze_file() returns LENSContext"
+          - "AC-054-S3-02: Cache stores results by file_path"
+          - "AC-054-S3-03: analyze_batch() supports multi-file"
+      
+      - task: "Implement cache invalidation"
+        acceptance_criteria:
+          - "AC-054-S3-04: Invalidates on file modification"
+          - "AC-054-S3-05: Configurable TTL (default 10 minutes)"
+      
+      - task: "Add GitHistoryAnalyzer integration"
+        acceptance_criteria:
+          - "AC-054-S3-06: Integrates GitHistoryAnalyzer"
+          - "AC-054-S3-07: Returns recent commits data"
+      
+      - task: "Add ASTAnalyzer integration"
+        acceptance_criteria:
+          - "AC-054-S3-08: Integrates ASTAnalyzer"
+          - "AC-054-S3-09: Returns functions, classes, complexity"
+      
+      - task: "Add CommentExtractor integration"
+        acceptance_criteria:
+          - "AC-054-S3-10: Integrates CommentExtractor"
+          - "AC-054-S3-11: Returns TODOs, docstrings"
+    
+    deliverables:
+      - "cortex/orchestrators/support/lens_orchestrator_v2.py"
+      - "tests/orchestrators/support/test_lens_orchestrator_v2.py (20+ tests)"
+    
+    tests:
+      - "test_lens_orchestrator_analyze_file"
+      - "test_lens_orchestrator_caching"
+      - "test_lens_orchestrator_batch_analysis"
+      - "test_lens_orchestrator_cache_invalidation"
+      - "test_lens_orchestrator_integrations"
+    
+    validation:
+      method: "pytest + performance benchmark"
+      criteria: "20+ tests passing, 100x cache speedup measured"
+      estimated_time: "30 minutes"
+
+  stage_4:
+    name: "Implement Jinja2 Template System for Dashboards"
+    id: "S4"
+    duration: "3 hours"
+    priority: "P1"
+    dependencies: ["S1", "S2"]
+    
+    description: |
+      Add Jinja2 template system for dashboard rendering:
+      
+      **Templates:**
+      - onboarding_dashboard.html.j2 — Main dashboard template
+      - dashboard_components/*.html.j2 — Reusable components
+      - Custom filters: format_number, round_decimal, etc.
+      
+      **Benefits:**
+      - UI decoupled from Python code
+      - Designers can edit templates without Python knowledge
+      - Template inheritance (DRY principle)
+      - Server-side rendering (no client JS required)
+      
+      Output: Template system with 3 templates + 10 tests.
+    
+    tasks:
+      - task: "Setup Jinja2 environment"
+        acceptance_criteria:
+          - "AC-054-S4-01: Jinja2 environment initialized"
+          - "AC-054-S4-02: Template loader configured"
+          - "AC-054-S4-03: Auto-escape enabled for security"
+      
+      - task: "Create onboarding_dashboard.html.j2 template"
+        acceptance_criteria:
+          - "AC-054-S4-04: Template renders dashboard HTML"
+          - "AC-054-S4-05: Includes all sections (overview, metrics, security)"
+          - "AC-054-S4-06: Uses template inheritance"
+      
+      - task: "Implement custom Jinja2 filters"
+        acceptance_criteria:
+          - "AC-054-S4-07: format_number filter works"
+          - "AC-054-S4-08: round_decimal filter works"
+          - "AC-054-S4-09: Custom filters registered"
+      
+      - task: "Create DashboardRenderer presentation layer"
+        acceptance_criteria:
+          - "AC-054-S4-10: DashboardRenderer coordinates use cases"
+          - "AC-054-S4-11: Renders templates with data"
+          - "AC-054-S4-12: Error handling for missing templates"
+    
+    deliverables:
+      - "cortex/templates/dashboards/onboarding_dashboard.html.j2"
+      - "cortex/templates/dashboards/components/*.html.j2"
+      - "cortex/orchestrators/support/dashboard_renderer.py"
+      - "tests/orchestrators/support/test_dashboard_renderer.py (10+ tests)"
+    
+    tests:
+      - "test_jinja_environment_setup"
+      - "test_dashboard_template_rendering"
+      - "test_custom_filters"
+      - "test_dashboard_renderer_coordinates_use_cases"
+      - "test_error_handling"
+    
+    validation:
+      method: "pytest + manual template review"
+      criteria: "10+ tests passing, template renders correctly"
+      estimated_time: "30 minutes"
+
+  stage_5:
+    name: "Refactor RepositoryOnboardingOrchestrator to Coordinator"
+    id: "S5"
+    duration: "3 hours"
+    priority: "P0"
+    dependencies: ["S1", "S2", "S3", "S4"]
+    
+    description: |
+      Refactor RepositoryOnboardingOrchestrator from 2,448 LOC monolith
+      to ~500 LOC coordinator:
+      
+      **New Architecture:**
+      ```python
+      class RepositoryOnboardingOrchestrator:
+          def __init__(self):
+              self.lens_orchestrator = LENSOrchestratorV2()
+              self.profile_repo = JSONProfileRepository()
+              self.dashboard_renderer = DashboardRenderer()
+              self.use_cases = {
+                  'overview': LoadRepoOverviewUseCase(),
+                  'security': AnalyzeSecurityThreatsUseCase(),
+                  'narrative': GenerateBusinessNarrativeUseCase(),
+                  'dependencies': BuildDependencyGraphUseCase(),
+                  'dashboard': RenderDashboardJSONUseCase(),
+                  'landing': UpdateLandingPageUseCase(),
+              }
+          
+          def onboard_repository(self, repo_path):
+              # Orchestrate use cases (delegation only)
+              overview = self.use_cases['overview'].execute(repo_path)
+              security = self.use_cases['security'].execute(lens_context)
+              narrative = self.use_cases['narrative'].execute(overview)
+              dependencies = self.use_cases['dependencies'].execute(repo_path)
+              dashboard = self.use_cases['dashboard'].execute(...)
+              landing = self.use_cases['landing'].execute(dashboard)
+              
+              return OnboardingResult(...)
+      ```
+      
+      **Reduction:**
+      - 2,448 LOC → ~500 LOC (orchestration only)
+      - All business logic in use cases (testable)
+      - Clean separation of concerns
+      
+      Output: Refactored orchestrator + 10 integration tests.
+    
+    tasks:
+      - task: "Refactor onboard_repository() to coordinator"
+        acceptance_criteria:
+          - "AC-054-S5-01: Method coordinates use cases only"
+          - "AC-054-S5-02: No business logic in orchestrator"
+          - "AC-054-S5-03: Reduced to ~500 LOC"
+      
+      - task: "Wire use cases via dependency injection"
+        acceptance_criteria:
+          - "AC-054-S5-04: Use cases injected in __init__"
+          - "AC-054-S5-05: Supports mock use cases (testing)"
+      
+      - task: "Remove legacy methods (moved to use cases)"
+        acceptance_criteria:
+          - "AC-054-S5-06: _convert_to_dashboard_model() removed"
+          - "AC-054-S5-07: _generate_dashboard() removed"
+          - "AC-054-S5-08: All helper methods extracted"
+      
+      - task: "Add integration tests"
+        acceptance_criteria:
+          - "AC-054-S5-09: Test end-to-end onboarding flow"
+          - "AC-054-S5-10: Test with real use cases (not mocks)"
+    
+    deliverables:
+      - "cortex/orchestrators/support/repository_onboarding_orchestrator.py (refactored)"
+      - "tests/orchestrators/support/test_repository_onboarding_orchestrator_integration.py (10+ tests)"
+    
+    tests:
+      - "test_onboard_repository_end_to_end"
+      - "test_use_case_coordination"
+      - "test_error_handling"
+      - "test_dependency_injection"
+      - "test_orchestrator_reduced_size"
+    
+    validation:
+      method: "pytest + LOC count verification"
+      criteria: "10+ tests passing, orchestrator ≤500 LOC"
+      estimated_time: "30 minutes"
+
+  stage_6:
+    name: "Performance Benchmarking & Legacy Cleanup"
+    id: "S6"
+    duration: "2 hours"
+    priority: "P1"
+    dependencies: ["S5"]
+    
+    description: |
+      Benchmark performance improvements and clean up legacy code:
+      
+      **Performance Benchmarks:**
+      - Onboarding time (before vs after)
+      - Cache hit rate (target ≥70%)
+      - Repeated analysis speedup (target 100x)
+      - Batch analysis throughput
+      
+      **Legacy Cleanup:**
+      - Archive old _convert_to_dashboard_model() (moved to use case)
+      - Archive old _generate_dashboard() (moved to DashboardRenderer)
+      - Remove lazy loading globals (no longer needed)
+      - Update MCP tool wiring
+      
+      Output: Performance report + clean codebase.
+    
+    tasks:
+      - task: "Run performance benchmarks"
+        acceptance_criteria:
+          - "AC-054-S6-01: Measure onboarding time (before vs after)"
+          - "AC-054-S6-02: Measure cache hit rate"
+          - "AC-054-S6-03: Measure repeated analysis speedup"
+          - "AC-054-S6-04: Document results in performance_report.md"
+      
+      - task: "Archive legacy methods"
+        acceptance_criteria:
+          - "AC-054-S6-05: Old methods moved to _legacy/ directory"
+          - "AC-054-S6-06: Git history preserved"
+      
+      - task: "Update MCP tool wiring"
+        acceptance_criteria:
+          - "AC-054-S6-07: cortex_onboard_repository uses new orchestrator"
+          - "AC-054-S6-08: All MCP tests passing"
+      
+      - task: "Update documentation"
+        acceptance_criteria:
+          - "AC-054-S6-09: Architecture docs updated"
+          - "AC-054-S6-10: Migration guide created"
+    
+    deliverables:
+      - "docs/performance_report_phase_54.md"
+      - "docs/guides/repository-onboarding-4.0-migration.md"
+      - "cortex/orchestrators/support/_legacy/ (archived methods)"
+      - "cortex/wiring/specifications/wiring.yaml (updated)"
+    
+    tests:
+      - "test_performance_benchmarks"
+      - "test_mcp_tool_integration"
+      - "test_legacy_cleanup_complete"
+    
+    validation:
+      method: "Performance benchmarks + manual review"
+      criteria: "≥5x speedup via caching, all tests passing"
+      estimated_time: "1 hour"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  unit_tests:
+    target: 70
+    priority: "P0"
+    frameworks:
+      - "pytest"
+      - "pytest-asyncio"
+      - "pytest-cov"
+    coverage_target: 92
+    test_files:
+      - "tests/orchestrators/support/onboarding_use_cases/ (41 tests)"
+      - "tests/repositories/test_json_profile_repository.py (15 tests)"
+      - "tests/orchestrators/support/test_lens_orchestrator_v2.py (20 tests)"
+      - "tests/orchestrators/support/test_dashboard_renderer.py (10 tests)"
+  
+  integration_tests:
+    target: 10
+    priority: "P0"
+    test_files:
+      - "tests/orchestrators/support/test_repository_onboarding_orchestrator_integration.py (10 tests)"
+  
+  performance_tests:
+    target: 5
+    priority: "P1"
+    benchmarks:
+      - "Onboarding time (before vs after)"
+      - "Cache hit rate measurement"
+      - "Repeated analysis speedup"
+      - "Batch analysis throughput"
+      - "Memory usage comparison"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+deliverables:
+  code:
+    - path: "cortex/orchestrators/support/onboarding_use_cases/"
+      description: "6 extracted use cases"
+      lines_of_code: 600
+      test_coverage: 100
+    
+    - path: "cortex/repositories/json_profile_repository.py"
+      description: "Repository pattern implementation"
+      lines_of_code: 150
+      test_coverage: 95
+    
+    - path: "cortex/orchestrators/support/lens_orchestrator_v2.py"
+      description: "LENS orchestrator with caching"
+      lines_of_code: 400
+      test_coverage: 90
+    
+    - path: "cortex/orchestrators/support/dashboard_renderer.py"
+      description: "Jinja2 template renderer"
+      lines_of_code: 200
+      test_coverage: 85
+    
+    - path: "cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      description: "Refactored coordinator (2,448 → 500 LOC)"
+      lines_of_code: 500
+      test_coverage: 88
+  
+  tests:
+    - path: "tests/orchestrators/support/onboarding_use_cases/"
+      test_count: 41
+      description: "Use case unit tests"
+    
+    - path: "tests/repositories/test_json_profile_repository.py"
+      test_count: 15
+      description: "Repository pattern tests"
+    
+    - path: "tests/orchestrators/support/test_lens_orchestrator_v2.py"
+      test_count: 20
+      description: "LENS orchestrator tests"
+    
+    - path: "tests/orchestrators/support/test_dashboard_renderer.py"
+      test_count: 10
+      description: "Template renderer tests"
+    
+    - path: "tests/orchestrators/support/test_repository_onboarding_orchestrator_integration.py"
+      test_count: 10
+      description: "Integration tests"
+  
+  documentation:
+    - path: "docs/performance_report_phase_54.md"
+      description: "Performance benchmark results"
+    
+    - path: "docs/guides/repository-onboarding-4.0-migration.md"
+      description: "Migration guide from current to 4.0 pattern"
+    
+    - path: "docs/architecture/onboarding-use-cases.md"
+      description: "Use case architecture documentation"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - name: "Use Case Extraction Complete"
+    description: "6 use cases extracted with 41+ tests passing"
+    validation: "pytest tests/orchestrators/support/onboarding_use_cases/"
+    priority: "P0"
+  
+  - name: "Repository Pattern Implemented"
+    description: "JSONProfileRepository with 15+ tests passing"
+    validation: "pytest tests/repositories/"
+    priority: "P0"
+  
+  - name: "LENS Caching Operational"
+    description: "LENSOrchestratorV2 with 100x cache speedup measured"
+    validation: "Performance benchmark script"
+    priority: "P0"
+  
+  - name: "Template System Functional"
+    description: "Jinja2 templates render dashboards correctly"
+    validation: "Manual template review + pytest"
+    priority: "P1"
+  
+  - name: "Orchestrator Refactored"
+    description: "Orchestrator reduced from 2,448 → ≤500 LOC"
+    validation: "LOC count + pytest integration tests"
+    priority: "P0"
+  
+  - name: "Performance Improvement Verified"
+    description: "≥5x onboarding speedup via caching"
+    validation: "Performance benchmarks"
+    priority: "P1"
+  
+  - name: "Zero Regression"
+    description: "All existing onboarding features work"
+    validation: "pytest tests/orchestrators/support/ (full suite)"
+    priority: "P0"
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+rollback:
+  conditions:
+    - "Performance benchmarks show <2x improvement"
+    - "Integration tests fail"
+    - "Regression detected in onboarding features"
+  
+  procedure:
+    - step: "Revert all commits from phase 54"
+      command: "git revert <commit_range>"
+    
+    - step: "Restore original RepositoryOnboardingOrchestrator"
+      command: "git checkout HEAD~N cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+    
+    - step: "Run full test suite"
+      command: "pytest tests/orchestrators/support/"
+    
+    - step: "Verify MCP tools operational"
+      command: "pytest tests/mcp/tools/test_onboarding.py"
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+audit_trail:
+  - event: "Phase created"
+    timestamp: "2026-02-08T00:00:00Z"
+    author: "Asif Hussain"
+    ac_id: "AC-PHASE54-CREATE-001"
+  
+  - event: "Plan approved for execution"
+    timestamp: "TBD"
+    author: "TBD"
+    ac_id: "TBD"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+notes:
+  - "Archive CORTEX-4.0 reference implementation available in _workspaces/dashboard/"
+  - "Current orchestrator at 2,448 LOC (target: ~500 LOC)"
+  - "Parallel implementation approach (don't break current onboarding)"
+  - "Performance benchmarks critical for success validation"
+  - "Jinja2 template system enables UI customization without Python changes"
+  - "Repository pattern enables future migration to SQLite/API storage"
+  - "Use case extraction improves testability and maintainability"
