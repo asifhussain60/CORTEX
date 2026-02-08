@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Version:** 15.0 | **Updated:** 2026-02-07 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + QUERY + PLAN + DESIGN) | **Status:** ACTIVE | **Phase 25 Complete:** ✅ | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator with ROI-driven phase prioritization | **Mode Consolidation:** INTERACTIVE + LIST + cortex-ask → QUERY ✅
+**Version:** 15.1 | **Updated:** 2026-02-08 | **Mode:** HEXA-MODE (PRE-FLIGHT + AUDIT + META-AUDIT + DIGEST + QUERY + PLAN + DESIGN) | **Status:** ACTIVE | **Phase 25 Complete:** ✅ | **Incremental TDD:** ✅ | **Token Optimization:** ✅ | **Continuous Improvement:** ✅ | **Architect Focus:** Master orchestrator with ROI-driven phase prioritization | **Mode Consolidation:** INTERACTIVE + LIST + cortex-ask → QUERY ✅ | **Session Continuity:** Phase Discovery Protocol ✅
 
 ---
 
@@ -41,6 +41,97 @@ Load prompt → Auto-setup MCP enforcement
 3. Type **"show changes"** → Display version diff
 
 **Network failure?** Gracefully continue with current version
+
+---
+
+## 🔍 PHASE DISCOVERY PROTOCOL (SESSION CONTINUITY)
+
+**MANDATORY:** When user requests "implement phase X" or "start phase X" or "continue phase X"
+
+### Discovery Sequence (ALWAYS CHECK REGISTRY FIRST)
+
+```
+User says "implement phase 43"
+         ↓
+1. CHECK REGISTRY (FIRST)
+   Path: cortex-registry/_cortex-master/
+   - Read index.yaml → search for phase-43
+   - If found → read phases/active/phase-43-*.yaml
+   - If found → proceed with phase spec
+         ↓
+2. CHECK PROMPTS (FALLBACK)
+   Path: .github/prompts/
+   - Search for "Phase 43" references
+   - Usually NOT found (phases live in registry)
+         ↓
+3. CHECK DOCS (FALLBACK)
+   Path: docs/phases/
+   - Search for phase-43-*.md files
+   - Usually outdated or incomplete
+         ↓
+RESULT: Phase found in registry (99% of cases)
+        Phase not found anywhere → ask user for scope
+```
+
+### Registry Structure (SSOT for Phases)
+
+```
+cortex-registry/_cortex-master/
+├── index.yaml                          # Master registry (phase list, status, dependencies)
+├── phases/
+│   ├── active/                        # Current work
+│   │   ├── phase-43-*.yaml           # Full phase specification
+│   │   └── phase-37-*.yaml
+│   └── completed/                     # Historical record
+│       ├── phase-42-*.yaml
+│       └── phase-41-*.yaml
+├── enhancements/
+│   └── active/                        # Enhancement proposals (ENH-*)
+└── governance/
+    └── core-rules.yaml                # CORE rules + enforcement
+```
+
+### Phase YAML Structure (What to Expect)
+
+Every phase YAML contains:
+- **metadata:** phase_id, title, status, priority, ROI score
+- **overview:** vision, problem_statement, expected_outcomes
+- **roi_analysis:** cost, impact, risk_mitigation
+- **stages:** breakdown of implementation stages with tests, effort, dependencies
+- **dependencies:** other phases, tools, orchestrators
+- **governance:** CORE rules, enforcement, TDD requirements
+
+### Loading Best Practice
+
+**❌ DON'T:**
+```python
+# Don't search prompts first
+search(".github/prompts/", "phase 43")
+```
+
+**✅ DO:**
+```python
+# Always check registry first
+1. read_file("cortex-registry/_cortex-master/index.yaml")
+2. Search for phase-43 entry
+3. Get file path from entry
+4. read_file(phase_file_path)
+5. Parse YAML → understand scope → proceed
+```
+
+### Why This Matters
+
+**Problem:** Sessions break when AI searches wrong locations
+**Impact:** User says "implement phase 43" → AI says "not defined" → wastes time
+**Solution:** Registry-first discovery → 99% success rate → seamless continuity
+
+### Error Handling
+
+**IF phase not found in registry:**
+1. ✅ Check if phase number is valid (≤ latest phase in index.yaml)
+2. ✅ Suggest user run `/plan` to create new phase if needed
+3. ✅ Display active phases from index.yaml for reference
+4. ❌ Don't assume phase doesn't exist without checking registry
 
 ---
 

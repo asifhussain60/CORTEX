@@ -1,5 +1,5 @@
 # CORTEX Copilot Instructions
-**Version:** 7.4 | **Updated:** 2026-02-06 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅
+**Version:** 7.5 | **Updated:** 2026-02-08 | **Authority:** MCP-First SaaS Architecture | **Token Optimization:** ✅ | **Session Continuity:** Phase Discovery Protocol ✅
 
 ---
 
@@ -36,6 +36,41 @@
 git config core.hooksPath .githooks 2>/dev/null || true
 ```
 Runs automatically when `/audit` or `/cortex-architect` invoked. Ensures P0 enforcement active.
+
+---
+
+## 🔍 PHASE DISCOVERY PROTOCOL (SESSION CONTINUITY)
+
+**MANDATORY:** When user mentions "phase X" or requests phase operations
+
+### Registry-First Discovery
+
+```
+User: "implement phase 43"
+         ↓
+1. CHECK cortex-registry/_cortex-master/index.yaml (PRIMARY)
+   - Locate phase-43 entry
+   - Get file path
+         ↓
+2. READ phase YAML file (phases/active/ or phases/completed/)
+   - Parse full specification
+   - Get stages, tests, dependencies
+         ↓
+3. PROCEED with phase implementation
+   - Use TDDOrchestrator
+   - Follow stage breakdown
+```
+
+**Registry Location:**
+```
+cortex-registry/_cortex-master/
+├── index.yaml                 # Master phase index
+├── phases/
+│   ├── active/               # Current phases
+│   └── completed/            # Historical phases
+```
+
+**Why:** Phases live in registry, NOT in prompt files. Always check registry first for seamless session continuity.
 
 ---
 
