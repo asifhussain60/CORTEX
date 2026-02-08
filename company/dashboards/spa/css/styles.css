@@ -565,9 +565,10 @@ body {
     color: var(--accent-primary);
 }
 
+/* Fix GPR-002: Explicit height prevents SVG collapse */
 .viz-canvas {
     width: 100%;
-    min-height: 400px;
+    height: 520px;  /* EXPLICIT height - prevents collapse */
     position: relative;
     z-index: 1;
     display: flex;
@@ -576,14 +577,36 @@ body {
     background: rgba(10, 14, 39, 0.3);
     border-radius: var(--radius-md);
     border: 1px solid var(--glass-border);
+    overflow: hidden;  /* Prevent overflow */
+}
+
+/* Variant for smaller charts */
+.viz-canvas--small {
+    height: 320px;
+}
+
+/* Variant for large charts */
+.viz-canvas--large {
+    height: 720px;
 }
 
 .viz-canvas svg {
     width: 100%;
     height: 100%;
-    max-width: 100%;
-    max-height: 100%;
     display: block;
+    /* DO NOT use viewBox sizing alone - parent must have explicit height */
+}
+
+/* Empty state message when chart fails to render */
+.viz-canvas.empty::after {
+    content: attr(data-message);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 /* Legend */
@@ -1316,6 +1339,166 @@ body {
     border-color: var(--accent-primary);
     color: var(--bg-primary);
     font-weight: 600;
+}
+
+/* ============================================================================
+   DEPLOYMENT MODE BADGE (GPR-001 FIX)
+   ============================================================================ */
+
+.deployment-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+    font-weight: 500;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+}
+
+.deployment-mode-badge.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+}
+
+.deployment-icon {
+    font-size: 1.1rem;
+}
+
+.deployment-text {
+    white-space: nowrap;
+}
+
+/* ============================================================================
+   DATA INTEGRITY REPORT (GPR-003 FIX)
+   ============================================================================ */
+
+.data-integrity-report {
+    background: rgba(26, 31, 58, 0.8);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+    font-size: 0.9rem;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: var(--space-md);
+}
+
+.report-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.report-status {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.report-section {
+    margin: var(--space-md) 0;
+}
+
+.report-section h4 {
+    font-size: 0.95rem;
+    margin: var(--space-md) 0 var(--space-sm);
+    color: var(--accent-primary);
+}
+
+.contradiction-list,
+.missing-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contradiction-list li,
+.missing-list li {
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: rgba(10, 14, 39, 0.5);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
+.contradiction-critical {
+    border-left-color: #b91c1c;
+    color: #fca5a5;
+}
+
+.contradiction-error {
+    border-left-color: #ef4444;
+    color: #fecaca;
+}
+
+.contradiction-warning {
+    border-left-color: #f59e0b;
+    color: #fcd34d;
+}
+
+.report-footer {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* Data degradation banner */
+.data-degradation-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    justify-content: space-between;
+}
+
+.banner-icon {
+    font-size: 1.5rem;
+}
+
+.banner-text {
+    flex: 1;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.banner-detail-btn {
+    padding: 6px 12px;
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    border-radius: 4px;
+    color: #f59e0b;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.banner-detail-btn:hover {
+    background: rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.7);
 }
 
 /* Empty State Styling */
