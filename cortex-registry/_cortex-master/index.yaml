@@ -370,9 +370,9 @@ active_phases:
     roi_score: 0.85
     estimated_duration: "4 days"
     test_target: 112
-    current_stage: "S5"
-    stage_progress: "117/112 tests passing (105% + 23 PersonaStore CRUD)"
-    tests_passing: 117
+    current_stage: "S6"
+    stage_progress: "142/112 tests passing (127% + 30 additional S5 command/wiring tests)"
+    tests_passing: 142
     tests_failing: 0
     coverage_target: 90
     description: |
@@ -385,11 +385,14 @@ active_phases:
         • PersonaInjector (24/24 tests): Format + depth override injection
       - S3: MasterOrchestrator Integration (23/23 tests) ✅ COMPLETE
         • MasterOrchestrator (23/23 tests): Full pipeline orchestration
-      - S4: MCP Tools + Persistence (23 tests + 12 MCP tool tests) ✅ COMPLETE
+      - S4: MCP Tools + Persistence (23 tests) ✅ COMPLETE
         • PersonaStore (23 tests): YAML-based CRUD with cross-session persistence
-        • PersonaTools (MCP layer pending test alignment)
-      - S5: Prompt Injection + Command Handlers (8 tests planned) - READY
-      - S6: E2E Integration (TBD) - PENDING
+        • PersonaTools (MCP layer with 5 tools)
+      - S5: Cleanup + Header Compliance (25 tests) ✅ COMPLETE
+        • Command Handlers (/persona, /detail) 
+        • Wiring Registration (MCP tools + agents)
+        • CORE-029 compliance verification
+      - S6: E2E Integration (TBD) - READY
       
       ARCHITECTURE:
       - 6 personas: business_leader, product_owner, scrum_master, tech_lead, engineer, unknown
@@ -397,6 +400,7 @@ active_phases:
       - Dynamic switching: /persona and /detail commands
       - Persistent storage: YAML-based cross-session tracking
       - MCP integration: 5 tools for set/get/infer personas
+      - Command handlers: Parse & execute persona/detail commands
       - Natural language triggers: "show me the code", "give me the BLUF"
       - Persistent storage: cross-session user preferences via YAML
       - Introduction template with role discovery
