@@ -713,6 +713,43 @@ orchestrators:
         stages: 2
         intelligence: ["lens", "knowledge"]
 
+    # Phase 45: Enhanced Planning System — Plan Orchestrator (Stage 2)
+    - name: "PlanOrchestrator"
+      module: "cortex.orchestrators.support.plan_orchestrator"
+      class: "PlanOrchestrator"
+      tier: 3
+      priority: 70
+      dependencies:
+        - "OrchestratorEventBus"
+      capabilities:
+        - plan_lifecycle_management
+        - event_driven_coordination
+        - plan_status_updates
+        - plan_archival
+        - dashboard_synchronization
+      health_check: "sync_dashboard"
+      mcp_adapter: "cortex.mcp.adapters.plan_orchestrator_adapter"
+      description: "Plan lifecycle orchestration with EventBus integration, SSOT registry, and dashboard sync (Phase 45 § Stage 2)"
+      mcp_tools:
+        - "cortex_create_plan"
+        - "cortex_update_plan"
+        - "cortex_list_plans"
+        - "cortex_archive_plan"
+      governance:
+        - "CORE-008"
+        - "CORE-011"
+        - "CORE-012"
+        - "CORE-026"
+        - "CORE-027"
+        - "CORE-035"
+        - "CORE-041"
+      metadata:
+        icon: "📋"
+        stages: 5
+        intelligence: ["lens", "knowledge"]
+        phase: "45"
+        stage: "2"
+
     - name: "ChallengeEngine"
       module: "cortex.orchestrators.core.challenge_engine"
       class: "ChallengeEngine"

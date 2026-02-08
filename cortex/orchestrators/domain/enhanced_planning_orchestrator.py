@@ -39,6 +39,13 @@ from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.orchestrators.decorators import inject_orchestrator_context
+from cortex.infrastructure.orchestrator_event_bus import OrchestratorEventBus
+from cortex.models.event_models import (
+    EventType,
+    OrchestratorEvent,
+    PlanEnrichedPayload,
+)
+from uuid import uuid4
 
 logger = logging.getLogger(__name__)
 
@@ -175,6 +182,16 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
         # Audit trail
         self._audit_trail: List[Dict[str, Any]] = []
         self._audit_lock = threading.Lock()
+        
+        # Phase 45 § Stage 2: Event-driven intelligence layer
+        self._event_bus = OrchestratorEventBus()
+        self._correlation_id = str(uuid4())
+        
+        # Subscribe to plan events for enrichment
+        self._event_bus.subscribe(
+            EventType.PLAN_CREATED,
+            self._handle_plan_created,
+        )
     
     # ========================================================================
     # SINGLETON PATTERN
@@ -596,6 +613,44 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
             },
         }
         return Ok(tools)
+    
+    # ========================================================================
+    # Phase 45 § Stage 2: Event-Driven Enrichment Handlers
+    # ========================================================================
+    
+    def _handle_plan_created(self, event: OrchestratorEvent) -> None:
+        """Handle PLAN_CREATED events from PlanOrchestrator.
+        
+        Triggered when a new plan is created. Initiates LENS-powered
+        enrichment workflow to add intelligence layer context.
+        
+        Args:
+            event: The PLAN_CREATED event with plan_spec
+        """
+        try:
+            payload = event.payload
+            plan_id = payload.get("plan_id", "unknown")
+            
+            # TODO: Stage 3 integration - Initialize enrichment pipeline
+            # For Stage 2, just log that event was received
+            self._log_audit("PLAN_ENRICHMENT_STARTED", plan_id)
+            
+            # Publish PLAN_ENRICHED event (Stage 3 will populate enrichment_data)
+            enrichment_event = OrchestratorEvent(
+                event_type=EventType.PLAN_ENRICHED,
+                source_orchestrator="EnhancedPlanningOrchestrator",
+                payload=PlanEnrichedPayload(
+                    plan_id=str(plan_id),
+                    enrichment_sources=[],  # Will be populated in Stage 3
+                    enrichment_data={},      # Will be populated in Stage 3
+                    quality_score=0.0,      # Will be calculated in Stage 3
+                ).__dict__,
+                correlation_id=event.correlation_id,
+            )
+            self._event_bus.publish_event(enrichment_event)
+            
+        except Exception as e:
+            logger.error(f"Plan creation handler failed: {e}")
     
     def get_audit_trail(self) -> List[Dict[str, Any]]:
         """Get audit trail."""

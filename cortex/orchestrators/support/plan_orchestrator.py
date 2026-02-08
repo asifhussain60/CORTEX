@@ -472,3 +472,200 @@ class PlanOrchestrator:
             
         except Exception:
             return []
+
+    # ===== Phase 45 Stage 2: Event-Driven Methods =====
+
+    def _generate_plan_id(self, plan_type: str) -> str:
+        """
+        Generate unique plan ID based on type.
+        
+        Args:
+            plan_type: Type of plan (IMPLEMENT, FIX, REFACTOR, etc.)
+            
+        Returns:
+            Unique plan identifier
+        """
+        prefix = plan_type.lower()[:3] if plan_type else "plan"
+        suffix = str(uuid4())[:8]
+        return f"plan-{prefix}-{suffix}"
+
+    def _publish_error_event(self, error_message: str) -> None:
+        """
+        Publish error event to EventBus.
+        
+        Args:
+            error_message: Error description
+        """
+        try:
+            event = OrchestratorEvent(
+                event_type=EventType.ERROR_OCCURRED,
+                source_orchestrator="PlanOrchestrator",
+                payload={"error": error_message},
+                correlation_id=self.correlation_id,
+            )
+            self.event_bus.publish_event(event)
+        except Exception as e:
+            # Fallback: log locally if EventBus fails
+            print(f"⚠️ Error publishing error event: {e}")
+
+    def create_plan_from_spec(
+        self,
+        plan_spec: PlanSpec,
+        plan_id: Optional[str] = None,
+    ) -> Optional[str]:
+        """
+        Create new plan with EventBus integration.
+        
+        Publishes PLAN_CREATED event after successful creation.
+        Triggers EnhancedPlanningOrchestrator enrichment via event.
+        
+        Args:
+            plan_spec: Full plan specification
+            plan_id: Optional custom plan ID
+            
+        Returns:
+            plan_id if successful, None otherwise
+        """
+        try:
+            # Create plan via registry
+            plan_id = self.plan_registry.create_plan(plan_spec, plan_id)
+            
+            # Publish PLAN_CREATED event
+            payload = PlanCreatedPayload(
+                plan_id=plan_id,
+                title=plan_spec.metadata.title,
+                status=plan_spec.metadata.status,
+                created_at=plan_spec.metadata.created_date,
+            )
+            event = OrchestratorEvent(
+                event_type=EventType.PLAN_CREATED,
+                source_orchestrator="PlanOrchestrator",
+                payload=payload.__dict__,
+                correlation_id=self.correlation_id,
+            )
+            self.event_bus.publish_event(event)
+            
+            # Log audit trail
+            self._log_audit_trail(plan_id, "PLAN_CREATED")
+            
+            return plan_id
+            
+        except Exception as e:
+            self._publish_error_event(f"Plan creation failed: {e}")
+            return None
+
+    def update_plan_status(
+        self,
+        plan_id: str,
+        new_status: str,
+        reason: str = "",
+    ) -> bool:
+        """
+        Update plan status with PLAN_STATE_CHANGED event.
+        
+        Args:
+            plan_id: Plan identifier
+            new_status: New status value
+            reason: Reason for state change
+            
+        Returns:
+            True if update successful
+        """
+        try:
+            # Get current plan
+            plan_spec = self.plan_registry.get_plan(plan_id)
+            old_status = plan_spec.metadata.status
+            
+            # Update status via registry
+            self.plan_registry.update_plan_status(plan_id, new_status)
+            
+            # Publish PLAN_STATE_CHANGED event
+            payload = PlanStateChangedPayload(
+                plan_id=plan_id,
+                old_status=old_status,
+                new_status=new_status,
+                reason=reason,
+                changed_at=None,
+            )
+            event = OrchestratorEvent(
+                event_type=EventType.PLAN_STATE_CHANGED,
+                source_orchestrator="PlanOrchestrator",
+                payload=payload.__dict__,
+                correlation_id=self.correlation_id,
+            )
+            self.event_bus.publish_event(event)
+            
+            # Trigger dashboard sync on state change
+            self.dashboard_generator.sync_dashboard()
+            
+            # Log audit trail
+            self._log_audit_trail(plan_id, f"STATUS_CHANGED: {old_status} → {new_status}")
+            
+            return True
+            
+        except Exception as e:
+            self._publish_error_event(f"Plan status update failed: {e}")
+            return False
+
+    def archive_plan(
+        self,
+        plan_id: str,
+        completion_status: str = "completed",
+    ) -> bool:
+        """
+        Archive plan with PLAN_ARCHIVED event.
+        
+        Moves plan from active/ to completed/YYYY/ directory.
+        
+        Args:
+            plan_id: Plan identifier
+            completion_status: Final status (completed/cancelled/deferred)
+            
+        Returns:
+            True if archive successful
+        """
+        try:
+            # Archive via registry
+            archive_path = self.plan_registry.archive_plan(plan_id)
+            
+            # Publish PLAN_ARCHIVED event
+            payload = PlanArchivedPayload(
+                plan_id=plan_id,
+                archive_path=str(archive_path),
+                completion_status=completion_status,
+                archived_at=None,
+            )
+            event = OrchestratorEvent(
+                event_type=EventType.PLAN_ARCHIVED,
+                source_orchestrator="PlanOrchestrator",
+                payload=payload.__dict__,
+                correlation_id=self.correlation_id,
+            )
+            self.event_bus.publish_event(event)
+            
+            # Update dashboard
+            self.dashboard_generator.sync_dashboard()
+            
+            # Log audit trail
+            self._log_audit_trail(plan_id, f"PLAN_ARCHIVED: {completion_status}")
+            
+            return True
+            
+        except Exception as e:
+            self._publish_error_event(f"Plan archival failed: {e}")
+            return False
+
+    def subscribe_to_events(
+        self,
+        event_types: list,
+        handler_func,
+    ) -> None:
+        """
+        Register event subscription (convenience method).
+        
+        Args:
+            event_types: List of EventType enums to subscribe to
+            handler_func: Callback function for events
+        """
+        for event_type in event_types:
+            self.event_bus.subscribe(event_type, handler_func)
