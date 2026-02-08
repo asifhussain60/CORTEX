@@ -83,13 +83,6 @@ active_phases:
       Production-ready: Git checkpoints, conflict resolution, import validation
       
       Next: Stage 6 duplicate consolidation (aligns with ENH-061)
-      ⚪ PLANNED: Comprehensive production readiness initiative — 6 stages:
-      S1: Comprehensive repository scan (root, legacy, duplicates, imports)
-      S2: Generate relocation plan with impact analysis (dry-run preview)
-      S3: Implement FileRelocator & ImportReferenceAnalyzer (AST-based)
-      S4: Implement ImportReferenceFixer (absolute/relative imports)
-      S5: Execute cleanup with validation (450+ tests)
-      S6: Duplicate detection & consolidation (ENH-061 Phase 3)
       
       CROSS-CUTTING IMPACT:
       - Root directory: 27+ files → 12 files
@@ -114,6 +107,54 @@ active_phases:
       - "CI/CD automation"
       - "Production release"
       - "ENH-061 Phase 3"
+
+  - id: "phase-46"
+    name: "Infrastructure Discovery & GitHub Integration"
+    file: "phases/active/phase-46-infrastructure-discovery.yaml"
+    started: null
+    status: "planned"
+    priority: "P1"
+    execution_order: 4
+    roi_score: 0.89
+    estimated_duration: "12 hours"
+    test_target: 80
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Dynamic infrastructure awareness system — 6 stages:
+      S1: Infrastructure registry foundation (cache manager, schemas)
+      S2: GitHub API client (GraphQL/REST, rate limiting, caching)
+      S3: Infrastructure scanner (APIs, tooling, environment detection)
+      S4: MCP tools (cortex_discover_infrastructure, cortex_github_discover)
+      S5: LENS integration (internal packages, security alerts)
+      S6: Planning + Interaction integration (environment-aware, tooling suggestions)
+      
+      KEY CAPABILITIES:
+      - Real-time infrastructure discovery (APIs, tooling, services)
+      - GitHub ecosystem integration (Packages, Actions, Environments, Dependabot)
+      - Environment-specific awareness (dev/staging/prod capabilities)
+      - LENS recommends internal packages over external dependencies
+      - Security gates block vulnerable dependencies (Dependabot alerts)
+      - PlanningOrchestrator adjusts deployment plans per environment
+      - InteractionOrchestrator suggests available company tooling
+      
+      ARCHITECTURE:
+      - Static best practices: company/domains/infrastructure/ (PRECEDENCE)
+      - Dynamic state: cortex-registry/infrastructure/ (runtime discovery)
+      - Cache with TTL: 5-min for deployments, 1-hour for packages
+      - Graceful degradation: Fallback to static on API failures
+      
+      Dependencies: PyGithub >=2.1.1, requests >=2.31.0, cachetools >=5.3.0
+    depends_on:
+      - "phase-44"
+    unblocks:
+      - "Better LENS recommendations (internal package awareness)"
+      - "Environment-aware deployment planning"
+      - "Security-first dependency management"
 
   - id: "phase-37"
     name: "Role-Adaptive Persona System"

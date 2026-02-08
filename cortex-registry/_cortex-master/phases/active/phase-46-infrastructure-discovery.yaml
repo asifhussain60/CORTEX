@@ -1,0 +1,526 @@
+# ============================================================================
+# PHASE-46: Infrastructure Discovery & GitHub Integration
+# ============================================================================
+# Purpose: Dynamic infrastructure awareness system enabling CORTEX orchestrators
+#          to discover and leverage company infrastructure (APIs, tooling, GitHub
+#          ecosystem) with real-time state synchronization and environment-specific
+#          capability detection.
+# Authority: cortex-architect.prompt.md v7.5, user design discussion 2026-02-08
+# Approach: TDD-First, MCP-First, Dynamic Registry, GitHub GraphQL Integration
+# Status: PLANNED | Target Start: 2026-02-15
+# ============================================================================
+
+version: "1.0"
+created: "2026-02-08"
+updated: "2026-02-08"
+status: "planned"
+priority: "P1"
+execution_order: 4
+
+metadata:
+  phase_id: "phase-46"
+  title: "Infrastructure Discovery & GitHub Integration"
+  subtitle: "Real-time infrastructure awareness with GitHub ecosystem integration for CORTEX orchestrators"
+  author: "Asif Hussain"
+  created_date: "2026-02-08T00:00:00Z"
+  target_start: "2026-02-15"
+  estimated_duration: "12 hours"
+  test_target: 80
+  coverage_target: 90
+  roi_score: 0.89
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: false
+  reason: "Non-breaking enhancement with automated testing"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance (GitHub API best practices)"
+    - "MCP-FIRST: All functionality via MCP tools"
+  enforcement:
+    - "EnforcementOrchestrator: 7-agent pre-execution validation"
+    - "Rate limit handling for GitHub API (5000 req/hr)"
+    - "Secure token management (environment variables only)"
+    - "Cache invalidation strategy (5-minute TTL)"
+    - "Fallback to static data on API failures"
+
+# ============================================================================
+# VISION & GOALS
+# ============================================================================
+overview:
+  vision: |
+    A CORTEX infrastructure awareness system that enables orchestrators to:
+    
+    1. **Discover Company Infrastructure** — APIs, in-house tooling, services (dynamic)
+    2. **GitHub Ecosystem Integration** — Packages, Actions, Environments, Dependabot
+    3. **Environment-Specific Capabilities** — Dev/staging/prod awareness
+    4. **Real-Time State Synchronization** — Health checks, availability monitoring
+    5. **Orchestrator Integration** — LENS, Planning, Interaction, TDD aware of infrastructure
+    
+    Cross-cutting integration:
+    - LENS recommends internal packages over external dependencies
+    - PlanningOrchestrator adjusts plans based on environment capabilities
+    - InteractionOrchestrator suggests available tooling for user tasks
+    - TDDOrchestrator applies reusable GitHub Actions for testing workflows
+    - Security gates block vulnerable dependencies via Dependabot alerts
+
+  problem_statement: |
+    CORTEX currently operates in an infrastructure vacuum:
+    
+    **Problem 1: Static Knowledge Only**
+    - company/domains/ contains best practices (static)
+    - No runtime discovery of available APIs/tooling
+    - Recommendations ignore actual infrastructure state
+    - Example: Suggests npm install when internal package exists
+    
+    **Problem 2: GitHub Blindness**
+    - No awareness of GitHub Actions (reusable workflows)
+    - No internal package registry integration
+    - No deployment environment discovery
+    - No security alert integration (Dependabot)
+    - Example: PlanningOrchestrator can't see what's deployed where
+    
+    **Problem 3: Environment Ignorance**
+    - Dev/staging/prod treated identically
+    - No capability differentiation per environment
+    - Plans fail due to unavailable services in staging
+    - Example: API X available in prod but not staging
+    
+    **Problem 4: Stale Recommendations**
+    - YAML files lag behind infrastructure changes
+    - API deprecations not reflected in CORTEX knowledge
+    - Service outages invisible to orchestrators
+    - Example: Recommends deprecated API version
+    
+    **Problem 5: Manual Infrastructure Maintenance**
+    - Engineers must manually update company/domains/ YAMLs
+    - No automated discovery or refresh mechanism
+    - High maintenance burden for infrastructure changes
+
+  business_impact:
+    - "🟡 Wasted effort: Developers build custom clients when internal packages exist"
+    - "🟡 Deployment friction: Plans fail due to environment capability gaps"
+    - "🔴 Security risk: No blocking of vulnerable dependencies (Dependabot blind)"
+    - "🟢 Productivity: Dynamic discovery enables better recommendations"
+    - "🟢 Consistency: Automated infrastructure awareness reduces manual updates"
+    - "🟢 Cost savings: Leverage existing infrastructure instead of duplicating"
+
+  expected_outcomes:
+    - "cortex-registry/infrastructure/: Dynamic capability registry (JSON state)"
+    - "company/domains/infrastructure/: Static best practices (YAML patterns)"
+    - "New MCP tool: cortex_discover_infrastructure (all infrastructure discovery)"
+    - "New MCP tool: cortex_github_discover (GitHub ecosystem queries)"
+    - "GitHub GraphQL integration: Packages, Actions, Environments, Dependabot"
+    - "LENS integration: 'Package X available, use instead of building custom client'"
+    - "PlanningOrchestrator: Environment-specific deployment plans"
+    - "TDDOrchestrator: Reusable GitHub Actions workflow suggestions"
+    - "Security gates: Block vulnerable dependencies via Dependabot alerts"
+    - "Cache with TTL: 5-minute refresh for dynamic state"
+    - "80+ tests: Discovery logic, API integration, caching, fallbacks"
+
+# ============================================================================
+# ROI ANALYSIS
+# ============================================================================
+roi_analysis:
+  architectural_impact: 0.85   # Cross-cutting enhancement, orchestrator integration
+  efficiency_gain: 0.90        # Automated discovery saves 1-2 hours/week
+  accuracy_improvement: 0.95   # Real-time state vs stale YAML files
+  effort_cost: 0.50            # 12 hours effort (moderate)
+  blocking_severity: 0.70      # Enables better decisions, not blocking
+  roi_score: 0.89
+  formula: "(0.85×0.35) + (0.90×0.25) + (0.95×0.20) + ((1-0.50)×0.15) + (0.70×0.05)"
+  interpretation: "🔴 IMMEDIATE (≥0.75) — High-value infrastructure awareness"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  required_phases:
+    - id: "phase-44"
+      name: "CORTEX Production Readiness"
+      reason: "Clean file organization for new infrastructure modules"
+  required_enhancements: []
+  external_dependencies:
+    - name: "PyGithub"
+      version: ">=2.1.1"
+      reason: "GitHub API client library"
+    - name: "requests"
+      version: ">=2.31.0"
+      reason: "HTTP client for REST API calls"
+    - name: "cachetools"
+      version: ">=5.3.0"
+      reason: "TTL cache for infrastructure state"
+  blocking_phases: []
+  unblocks:
+    - "Better LENS recommendations (internal package awareness)"
+    - "Environment-aware deployment planning"
+    - "Security-first dependency management (Dependabot integration)"
+    - "Reusable workflow suggestions (GitHub Actions discovery)"
+
+# ============================================================================
+# ARCHITECTURE DESIGN
+# ============================================================================
+architecture:
+  components:
+    infrastructure_registry:
+      description: "Dynamic infrastructure state storage with TTL caching"
+      location: "cortex-registry/infrastructure/"
+      structure:
+        - "capabilities.yaml: Static capability schemas (what to discover)"
+        - "discovery-config.yaml: Discovery endpoints and health checks"
+        - "<environment>/apis.json: Available APIs per environment (runtime)"
+        - "<environment>/tools.json: In-house tooling availability (runtime)"
+        - "<environment>/integrations.json: Third-party integrations (runtime)"
+        - "github/packages.json: Internal package catalog (hourly refresh)"
+        - "github/actions.json: Reusable workflows (org-wide)"
+        - "github/deployments.json: Environment deployment states (per repo)"
+      cache_strategy: "5-minute TTL for dynamic state, 1-hour for GitHub packages"
+    
+    static_best_practices:
+      description: "Static infrastructure usage patterns (PRECEDENCE over dynamic)"
+      location: "company/domains/infrastructure/"
+      structure:
+        - "api-standards.yaml: How to USE infrastructure (REST, GraphQL patterns)"
+        - "tooling-patterns.yaml: When to use which tool (decision trees)"
+        - "integration-guidelines.yaml: Third-party integration best practices"
+        - "github-workflows.yaml: GitHub Actions usage patterns"
+      precedence: "HIGHEST — Company standards override CORTEX defaults"
+    
+    discovery_engine:
+      description: "Infrastructure state discovery and synchronization"
+      location: "cortex/infrastructure/"
+      modules:
+        - "infrastructure_scanner.py: Core discovery logic (APIs, tools, services)"
+        - "github_client.py: GitHub GraphQL/REST API wrapper"
+        - "capability_detector.py: Environment-specific capability detection"
+        - "cache_manager.py: TTL cache with invalidation strategies"
+        - "health_monitor.py: Service health checks and availability tracking"
+      mcp_tools:
+        - "cortex_discover_infrastructure: Main discovery tool (all infrastructure)"
+        - "cortex_github_discover: GitHub ecosystem queries (packages, actions, etc.)"
+    
+    orchestrator_integration:
+      description: "Wire infrastructure awareness into orchestrators"
+      affected_orchestrators:
+        lens:
+          integration: "Recommend internal packages, block vulnerable dependencies"
+          queries: ["Available packages for {functionality}", "Security alerts for {dependency}"]
+        planning_orchestrator:
+          integration: "Environment-specific deployment plans, capability gaps detection"
+          queries: ["Capabilities available in {environment}", "Deployment state for {repo}"]
+        interaction_orchestrator:
+          integration: "Suggest available tooling for user tasks"
+          queries: ["Tools available for {task}", "Reusable workflows for {action}"]
+        tdd_orchestrator:
+          integration: "Apply reusable GitHub Actions for testing workflows"
+          queries: ["Test workflows for {language}", "Coverage actions available"]
+
+  data_flow:
+    discovery_workflow: |
+      1. Orchestrator needs infrastructure info
+         ↓
+      2. Invoke cortex_discover_infrastructure(capability, environment)
+         ↓
+      3. Check cache (TTL not expired?)
+         ├─ YES: Return cached state
+         └─ NO: Continue to discovery
+         ↓
+      4. Query discovery endpoints (health checks, API registries)
+         ↓
+      5. Update cache with TTL
+         ↓
+      6. Merge with company/domains/infrastructure/ best practices (PRECEDENCE)
+         ↓
+      7. Return enriched infrastructure state to orchestrator
+    
+    github_workflow: |
+      1. Orchestrator needs GitHub ecosystem info
+         ↓
+      2. Invoke cortex_github_discover(query_type, scope)
+         ↓
+      3. Check cache (1-hour TTL for packages, 5-min for deployments)
+         ├─ YES: Return cached data
+         └─ NO: Continue to GitHub API
+         ↓
+      4. Query GitHub GraphQL API (with rate limit handling)
+         ↓
+      5. Transform response (normalize to CORTEX schema)
+         ↓
+      6. Update cache + persist to cortex-registry/infrastructure/github/
+         ↓
+      7. Return GitHub data to orchestrator
+
+  security_considerations:
+    authentication:
+      - "GitHub token via environment variable (GITHUB_TOKEN)"
+      - "Never log tokens or expose in error messages"
+      - "Validate token scopes: read:packages, read:org, repo:status"
+    rate_limiting:
+      - "GitHub API: 5000 requests/hour (authenticated)"
+      - "Implement exponential backoff on 429 responses"
+      - "Cache aggressively to minimize API calls"
+    error_handling:
+      - "Fallback to static company/domains/infrastructure/ on API failures"
+      - "Log discovery failures for monitoring (no sensitive data)"
+      - "Graceful degradation: Return partial results if some endpoints fail"
+    data_privacy:
+      - "No storage of sensitive infrastructure details in git"
+      - "Dynamic state in cortex-registry/infrastructure/ (gitignored)"
+      - "Only schemas in version control"
+
+# ============================================================================
+# IMPLEMENTATION STAGES
+# ============================================================================
+stages:
+  stage_1:
+    id: "S1"
+    name: "Infrastructure Registry Foundation"
+    description: "Create registry structure, static schemas, and cache manager"
+    effort_hours: 2
+    test_count: 12
+    deliverables:
+      - "cortex-registry/infrastructure/capabilities.yaml"
+      - "cortex-registry/infrastructure/discovery-config.yaml"
+      - "cortex/infrastructure/cache_manager.py (TTL cache with invalidation)"
+      - "tests/unit/infrastructure/test_cache_manager.py (12 tests)"
+    acceptance_criteria:
+      - "✅ Cache manager supports TTL (5-min, 1-hour configurable)"
+      - "✅ Invalidation strategies: manual, TTL expiry, pattern-based"
+      - "✅ Thread-safe cache operations"
+      - "✅ Metrics: cache hit rate, miss rate, eviction count"
+    
+  stage_2:
+    id: "S2"
+    name: "GitHub API Client"
+    description: "GitHub GraphQL/REST wrapper with rate limiting and caching"
+    effort_hours: 3
+    test_count: 20
+    deliverables:
+      - "cortex/infrastructure/github_client.py"
+      - "tests/unit/infrastructure/test_github_client.py (20 tests)"
+      - "GitHub queries: packages, actions, environments, dependabot, deployments"
+    acceptance_criteria:
+      - "✅ GraphQL queries for packages, actions, environments"
+      - "✅ REST API for Dependabot alerts, deployment status"
+      - "✅ Rate limit handling: check remaining, exponential backoff on 429"
+      - "✅ Secure token management (environment variable only)"
+      - "✅ Response normalization to CORTEX schema"
+      - "✅ Mocked tests (no real API calls in CI/CD)"
+    
+  stage_3:
+    id: "S3"
+    name: "Infrastructure Scanner"
+    description: "Core discovery logic for APIs, tooling, services"
+    effort_hours: 2.5
+    test_count: 15
+    deliverables:
+      - "cortex/infrastructure/infrastructure_scanner.py"
+      - "cortex/infrastructure/capability_detector.py"
+      - "tests/unit/infrastructure/test_infrastructure_scanner.py (10 tests)"
+      - "tests/unit/infrastructure/test_capability_detector.py (5 tests)"
+    acceptance_criteria:
+      - "✅ Scan discovery-config.yaml for endpoints"
+      - "✅ Query health checks, API registries"
+      - "✅ Environment-specific capability detection (dev/staging/prod)"
+      - "✅ Merge with company/domains/infrastructure/ (PRECEDENCE)"
+      - "✅ Persist to cortex-registry/infrastructure/<environment>/"
+    
+  stage_4:
+    id: "S4"
+    name: "MCP Tools: Infrastructure Discovery"
+    description: "Expose discovery via MCP tools with orchestrator integration"
+    effort_hours: 2
+    test_count: 18
+    deliverables:
+      - "cortex/mcp/tools/infrastructure_discovery.py"
+      - "MCP tool: cortex_discover_infrastructure"
+      - "MCP tool: cortex_github_discover"
+      - "tests/unit/mcp/tools/test_infrastructure_discovery.py (18 tests)"
+    acceptance_criteria:
+      - "✅ cortex_discover_infrastructure(capability, environment)"
+      - "✅ cortex_github_discover(query_type, scope)"
+      - "✅ Cache integration (check TTL before discovery)"
+      - "✅ Error handling with fallback to static data"
+      - "✅ MCP schema validation (input/output)"
+      - "✅ Tool registration in cortex/mcp/server.py"
+    
+  stage_5:
+    id: "S5"
+    name: "Orchestrator Integration: LENS"
+    description: "Wire infrastructure awareness into LENS for recommendations"
+    effort_hours: 1.5
+    test_count: 10
+    deliverables:
+      - "cortex/lens/infrastructure_integration.py"
+      - "LENS queries: internal packages, security alerts"
+      - "tests/unit/lens/test_infrastructure_integration.py (10 tests)"
+    acceptance_criteria:
+      - "✅ LENS recommends internal packages over external"
+      - "✅ Block vulnerable dependencies via Dependabot alerts"
+      - "✅ 'Package X available in registry, use instead of npm install'"
+      - "✅ Security gates: CVE detection prevents usage"
+    
+  stage_6:
+    id: "S6"
+    name: "Orchestrator Integration: Planning & Interaction"
+    description: "Environment-aware planning and tooling suggestions"
+    effort_hours: 1
+    test_count: 5
+    deliverables:
+      - "cortex/orchestrators/planning/infrastructure_integration.py"
+      - "cortex/interaction/tooling_suggestions.py"
+      - "tests/unit/orchestrators/planning/test_infrastructure_integration.py (3 tests)"
+      - "tests/unit/interaction/test_tooling_suggestions.py (2 tests)"
+    acceptance_criteria:
+      - "✅ PlanningOrchestrator adjusts deployment plans per environment"
+      - "✅ Detect capability gaps (API X unavailable in staging)"
+      - "✅ InteractionOrchestrator suggests available tooling"
+      - "✅ 'Use company/actions/deploy@v1 for deployment'"
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+testing:
+  unit_tests:
+    target: 75
+    coverage: 90
+    focus_areas:
+      - "Cache manager: TTL, invalidation, thread-safety (12 tests)"
+      - "GitHub client: GraphQL queries, rate limiting, mocking (20 tests)"
+      - "Infrastructure scanner: Discovery, environment detection (15 tests)"
+      - "MCP tools: Input validation, caching, fallbacks (18 tests)"
+      - "Orchestrator integration: LENS, Planning, Interaction (15 tests)"
+  
+  integration_tests:
+    target: 5
+    coverage: 85
+    scenarios:
+      - "End-to-end discovery: Cache miss → API query → cache update → orchestrator"
+      - "GitHub ecosystem: Query packages → recommend in LENS → validate usage"
+      - "Environment-aware planning: Detect capability gap → adjust deployment plan"
+      - "Security gates: Dependabot alert → block vulnerable dependency"
+      - "Cache expiry: TTL expires → re-discover → update orchestrators"
+  
+  mocking_strategy:
+    - "Mock GitHub API responses (no real API calls in tests)"
+    - "Mock infrastructure endpoints (health checks, registries)"
+    - "Mock company/domains/infrastructure/ YAML loading"
+    - "Freeze time for TTL cache expiry tests"
+
+# ============================================================================
+# RISK MITIGATION
+# ============================================================================
+risks:
+  api_rate_limits:
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation:
+      - "Aggressive caching (1-hour TTL for packages)"
+      - "Exponential backoff on 429 responses"
+      - "Fallback to static company/domains/ on quota exhaustion"
+  
+  github_api_changes:
+    likelihood: "LOW"
+    impact: "HIGH"
+    mitigation:
+      - "Version GitHub API queries (v4 GraphQL)"
+      - "Graceful degradation on schema changes"
+      - "Monitor GitHub changelog for breaking changes"
+  
+  stale_cache_data:
+    likelihood: "MEDIUM"
+    impact: "LOW"
+    mitigation:
+      - "5-minute TTL for deployments (real-time state)"
+      - "Manual invalidation API for force refresh"
+      - "Cache metrics: track staleness, hit rate"
+  
+  security_token_exposure:
+    likelihood: "LOW"
+    impact: "CRITICAL"
+    mitigation:
+      - "Environment variable only (GITHUB_TOKEN)"
+      - "Never log tokens in error messages"
+      - "Validate token scopes at initialization"
+      - "Audit logs exclude sensitive data"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functionality:
+    - "✅ 80+ tests passing (75 unit + 5 integration)"
+    - "✅ 90%+ test coverage"
+    - "✅ MCP tools registered and operational"
+    - "✅ LENS recommends internal packages"
+    - "✅ PlanningOrchestrator adjusts plans per environment"
+    - "✅ Dependabot alerts block vulnerable dependencies"
+  
+  performance:
+    - "✅ Cache hit rate ≥70% after warm-up"
+    - "✅ GitHub API calls ≤100/hour (well under 5000 limit)"
+    - "✅ Discovery latency <500ms (cache hit), <2s (cache miss)"
+  
+  governance:
+    - "✅ CORE-008: TDD-first (tests before code)"
+    - "✅ CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "✅ MCP-FIRST: All functionality via MCP tools"
+    - "✅ Security gates: No token exposure, rate limit handling"
+  
+  integration:
+    - "✅ LENS integration complete (package recommendations, security alerts)"
+    - "✅ PlanningOrchestrator integration complete (environment awareness)"
+    - "✅ InteractionOrchestrator integration complete (tooling suggestions)"
+    - "✅ TDDOrchestrator integration complete (reusable workflows)"
+
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+completion_checklist:
+  - "[ ] All 6 stages implemented (S1-S6)"
+  - "[ ] 80+ tests passing (100% success rate)"
+  - "[ ] 90%+ test coverage achieved"
+  - "[ ] MCP tools registered in cortex/mcp/server.py"
+  - "[ ] cortex-registry/infrastructure/ structure created"
+  - "[ ] company/domains/infrastructure/ best practices documented"
+  - "[ ] GitHub client with rate limiting operational"
+  - "[ ] Cache manager with TTL and invalidation"
+  - "[ ] LENS recommends internal packages (validated)"
+  - "[ ] PlanningOrchestrator environment-aware (validated)"
+  - "[ ] Dependabot security gates active (validated)"
+  - "[ ] Documentation: MCP tools, orchestrator integration, usage examples"
+  - "[ ] Git checkpoint: All code committed"
+  - "[ ] Registry updated: phase-46 status = 'complete'"
+  - "[ ] CI/CD green: All tests passing in pipeline"
+
+# ============================================================================
+# NOTES & REFERENCES
+# ============================================================================
+notes:
+  design_decisions:
+    - "Separation of static (company/domains/) vs dynamic (cortex-registry/) — prevents stale YAML files, enables real-time awareness"
+    - "MCP-FIRST architecture — consistent with CORTEX design, all discovery via tools"
+    - "Cache with TTL — balance freshness vs API rate limits (5-min for deployments, 1-hour for packages)"
+    - "Graceful degradation — fallback to static data on API failures ensures orchestrators never block"
+    - "GitHub GraphQL preferred over REST — more efficient, single query for multiple resources"
+  
+  future_enhancements:
+    - "AWS/Azure infrastructure discovery (cloud provider APIs)"
+    - "Database schema registry (Postgres, MySQL metadata)"
+    - "API contract discovery (OpenAPI spec auto-ingestion)"
+    - "Real-time service mesh monitoring (Istio, Linkerd integration)"
+    - "Cost awareness (track API usage costs, recommend cheaper alternatives)"
+  
+  references:
+    - "GitHub GraphQL API: https://docs.github.com/en/graphql"
+    - "GitHub REST API: https://docs.github.com/en/rest"
+    - "Dependabot API: https://docs.github.com/en/rest/dependabot"
+    - "GitHub Packages: https://docs.github.com/en/packages"
+    - "GitHub Actions: https://docs.github.com/en/actions"
