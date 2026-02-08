@@ -3,26 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX Repository Dashboard - 9-Tab Unified Analytics">
+    <meta name="description" content="CORTEX Repository Dashboard - 9-Tab Unified Analytics with TDD, Git Tracking, and Quality Gates">
+    <meta name="keywords" content="CORTEX, repository analytics, TDD enforcement, git tracking, quality metrics, security scanning">
     <meta name="author" content="Asif Hussain">
     <title>Repository Dashboard | CORTEX</title>
+    <link rel="icon" type="image/png" href="../../_workspaces/approved-orchestrator-view/assets/images/cortex-logo-200.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        /* GPTRecommendation-inspired: TDD, Git, and Error/Warning Status */
+        :root {
+            --status-tdd-pass: #10b981;
+            --status-tdd-fail: #ef4444;
+            --status-git-clean: #10b981;
+            --status-git-dirty: #f59e0b;
+            --status-error-zero: #10b981;
+            --status-error-warn: #ef4444;
+        }
+        
+        /* Health Indicator Strip (top of page) */
+        .health-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--status-tdd-pass) 0%, 
+                var(--status-tdd-pass) 33%, 
+                var(--status-git-clean) 33%, 
+                var(--status-git-clean) 66%, 
+                var(--status-error-zero) 66%, 
+                var(--status-error-zero) 100%);
+            z-index: 10000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .health-strip.degraded {
+            background: linear-gradient(90deg, 
+                var(--status-tdd-fail) 0%, 
+                var(--status-tdd-fail) 33%, 
+                var(--status-git-dirty) 33%, 
+                var(--status-git-dirty) 66%, 
+                var(--status-error-warn) 66%, 
+                var(--status-error-warn) 100%);
+        }
+        
+        /* Status badges in header */
+        .status-badges {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-badge.tdd-pass { border-color: var(--status-tdd-pass); color: var(--status-tdd-pass); }
+        .status-badge.tdd-fail { border-color: var(--status-tdd-fail); color: var(--status-tdd-fail); }
+        .status-badge.git-clean { border-color: var(--status-git-clean); color: var(--status-git-clean); }
+        .status-badge.git-dirty { border-color: var(--status-git-dirty); color: var(--status-git-dirty); }
+        .status-badge.error-zero { border-color: var(--status-error-zero); color: var(--status-error-zero); }
+        .status-badge.error-warn { border-color: var(--status-error-warn); color: var(--status-error-warn); }
+        
+        .status-badge i {
+            font-size: 1rem;
+        }
+        
+        /* Glassmorphism enhancement from approved-orchestrator-view */
+        .glass-card {
+            animation: borderGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
+                            inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25),
+                            inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            }
+        }
+        
+        @keyframes glassShimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* CORTEX branding logo */
+        .cortex-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            margin-right: 0.75rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        
+        .header-content h1 {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
+    <!-- Health status strip (GPTRecommendation: TDD + Git + Errors/Warnings) -->
+    <div class="health-strip" id="health-strip" title="System Health: TDD Pass | Git Clean | Zero Errors/Warnings"></div>
+    
     <!-- Glassmorphism background -->
     <div class="bg-gradients"></div>
     
     <!-- Main container -->
     <div class="container">
-        <!-- Header -->
+        <!-- Header with CORTEX branding and status badges -->
         <header class="header">
             <div class="header-content">
-                <h1 id="repo-title" data-bind="repository.display_name" data-fallback="Repository Dashboard">Repository Dashboard</h1>
+                <h1 id="repo-title" data-bind="repository.display_name" data-fallback="Repository Dashboard">
+                    <img src="../../_workspaces/approved-orchestrator-view/assets/images/cortex-logo-200.png" 
+                         alt="CORTEX Logo" 
+                         class="cortex-logo"
+                         onerror="this.style.display='none'">
+                    Repository Dashboard
+                </h1>
                 <p class="header-subtitle" id="repo-subtitle" data-bind="repository.description" data-fallback="Select a repository to view details"></p>
             </div>
             <div class="header-controls">
+                <!-- GPTRecommendation Status Badges -->
+                <div class="status-badges">
+                    <span class="status-badge tdd-pass" id="status-tdd" title="TDD: RED → GREEN → REFACTOR">
+                        <i class="fas fa-vial"></i> TDD Pass
+                    </span>
+                    <span class="status-badge git-clean" id="status-git" title="Git: Clean working directory">
+                        <i class="fab fa-git-alt"></i> Git Clean
+                    </span>
+                    <span class="status-badge error-zero" id="status-errors" title="Build: 0 errors, 0 warnings">
+                        <i class="fas fa-check-circle"></i> 0 Errors
+                    </span>
+                </div>
                 <button id="repo-selector-btn" class="btn btn-secondary" aria-label="Change repository">
                     <i class="fas fa-th-large"></i> Change Repository
                 </button>
@@ -174,7 +308,89 @@
                 <!-- Quality Tab -->
                 <section class="tab-panel" id="panel-quality" data-tab="quality" data-show-if="quality">
                     <div class="panel-content">
-                        <div id="quality-details">
+                        <!-- GPTRecommendation: TDD Enforcement Section -->
+                        <div id="tdd-enforcement" class="section glass-card">
+                            <h3><i class="fas fa-vial"></i> TDD Enforcement Status</h3>
+                            <div class="quality-grid">
+                                <div class="metric-card tdd-status">
+                                    <h4>RED → GREEN → REFACTOR</h4>
+                                    <div class="metric-value tdd-pass" id="tdd-cycle-status">✓ Pass</div>
+                                    <p class="metric-detail" id="tdd-cycle-detail">Tests written before implementation</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Test Coverage</h4>
+                                    <div class="metric-value" id="test-coverage-pct" data-bind="quality.test_coverage" data-fallback="0%">0%</div>
+                                    <p class="metric-detail">Minimum: 80% required</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Test Files</h4>
+                                    <div class="metric-value" id="test-file-count" data-bind="quality.test_files" data-fallback="0">0</div>
+                                    <p class="metric-detail">Implementation → Test ratio</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Brain Protector</h4>
+                                    <div class="metric-value" id="brain-protector-status">Active</div>
+                                    <p class="metric-detail">TDD challenges: <span id="tdd-challenges">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GPTRecommendation: Git Discipline Section -->
+                        <div id="git-discipline" class="section glass-card">
+                            <h3><i class="fab fa-git-alt"></i> Git Discipline & Commits</h3>
+                            <div class="quality-grid">
+                                <div class="metric-card git-clean">
+                                    <h4>Working Directory</h4>
+                                    <div class="metric-value" id="git-status">Clean</div>
+                                    <p class="metric-detail" id="git-status-detail">0 uncommitted files</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Auto-Commits</h4>
+                                    <div class="metric-value" id="auto-commit-count" data-bind="git.auto_commits" data-fallback="0">0</div>
+                                    <p class="metric-detail">Rule #16 compliance</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Last Commit</h4>
+                                    <div class="metric-value" id="last-commit-time" data-bind="git.last_commit_time" data-fallback="N/A">N/A</div>
+                                    <p class="metric-detail" id="commit-recency">—</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Checkpoint Commits</h4>
+                                    <div class="metric-value" id="checkpoint-commits" data-bind="git.checkpoint_commits" data-fallback="0">0</div>
+                                    <p class="metric-detail">Before major changes</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GPTRecommendation: Error/Warning State -->
+                        <div id="error-warning-state" class="section glass-card">
+                            <h3><i class="fas fa-exclamation-circle"></i> Build Health & Runtime Status</h3>
+                            <div class="quality-grid">
+                                <div class="metric-card error-zero">
+                                    <h4>Build Errors</h4>
+                                    <div class="metric-value" id="build-errors" data-bind="quality.build_errors" data-fallback="0">0</div>
+                                    <p class="metric-detail">Compilation errors</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Build Warnings</h4>
+                                    <div class="metric-value" id="build-warnings" data-bind="quality.build_warnings" data-fallback="0">0</div>
+                                    <p class="metric-detail">Static analysis warnings</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Runtime Errors</h4>
+                                    <div class="metric-value" id="runtime-errors" data-bind="quality.runtime_errors" data-fallback="0">0</div>
+                                    <p class="metric-detail">Last 24 hours</p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Definition of DONE</h4>
+                                    <div class="metric-value" id="done-status">✓ Met</div>
+                                    <p class="metric-detail">Zero errors + warnings + tests pass</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Original Quality Metrics -->
+                        <div id="quality-details" class="section">
                             <h3>Code Quality Metrics</h3>
                             <div class="quality-grid">
                                 <div class="metric-card">
