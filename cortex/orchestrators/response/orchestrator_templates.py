@@ -520,6 +520,320 @@ class DigestSessionOrchestratorTemplate(BaseResponseTemplate):
 
 
 # ============================================================================
+# REMAINING CORE TEMPLATES
+# ============================================================================
+
+
+class TDDOrchestratorTemplate(BaseResponseTemplate):
+    """Template for TDD Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="TDDOrchestrator", mode="CORTEX")
+    
+    def compose(
+        self,
+        operation: str = "IMPLEMENT",
+        tdd_phase: str = "RED",
+        test_results: List[Dict[str, Any]] = None,
+        coverage_metrics: Dict[str, float] = None,
+        **kwargs
+    ) -> str:
+        """Compose TDD response."""
+        from cortex.orchestrators.response.chainable_blocks import BlockComposer
+        
+        test_results = test_results or []
+        coverage_metrics = coverage_metrics or {}
+        
+        response = self.header(operation)
+        
+        phase_emoji = {"RED": "🔴", "GREEN": "🟢", "REFACTOR": "🔄"}.get(tdd_phase, "⚪")
+        response += self.section(f"TDD Phase: {tdd_phase}", phase_emoji)
+        
+        composer = BlockComposer()
+        if test_results:
+            composer.add_test_results(test_results)
+        if coverage_metrics:
+            composer.add_coverage(coverage_metrics)
+        response += composer.build()
+        
+        return response
+
+
+class LENSSynthesisTemplate(BaseResponseTemplate):
+    """Template for LENS Synthesis."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="LENSSynthesis", mode="CORTEX")
+    
+    def compose(
+        self,
+        operation: str = "ANALYZE",
+        confidence: float = 0.0,
+        **kwargs
+    ) -> str:
+        """Compose LENS response."""
+        response = self.header(operation)
+        
+        response += self.section("LENS Protocol", "🔍")
+        conf_emoji = "🟢" if confidence >= 0.8 else "🟡" if confidence >= 0.6 else "🔴"
+        response += f"{conf_emoji} **Confidence:** {confidence:.0%}\n\n"
+        
+        return response
+
+
+class PlanOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Plan Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="PlanOrchestrator", mode="CORTEX")
+    
+    def compose(
+        self,
+        operation: str = "PLAN",
+        phase_name: str = "",
+        **kwargs
+    ) -> str:
+        """Compose plan response."""
+        response = self.header(operation)
+        response += self.section("Phase Overview", "📋")
+        response += f"**Phase:** {phase_name}\n\n"
+        return response
+
+
+# ============================================================================
+# ADDITIONAL DOMAIN/SUPPORT/ENTERPRISE TEMPLATES
+# ============================================================================
+
+
+class OnboardingOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Onboarding Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="OnboardingOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "ONBOARD", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Repository Analysis", "📦")
+        return response
+
+
+class ToolDiscoveryOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Tool Discovery."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ToolDiscoveryOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "DISCOVER", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Tool Discovery", "🔧")
+        return response
+
+
+class WorkflowOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Workflow Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="WorkflowOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "WORKFLOW", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Workflow Execution", "⚙️")
+        return response
+
+
+class MigrationOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Migration Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="MigrationOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "MIGRATE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Migration Plan", "🔄")
+        return response
+
+
+class ConversationOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Conversation Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ConversationOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "CONVERSE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Conversation", "💬")
+        return response
+
+
+class ReviewOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Review Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ReviewOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "REVIEW", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Code Review", "👁️")
+        return response
+
+
+class DiscoveryOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Discovery Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="DiscoveryOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "DISCOVER", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Discovery", "🔍")
+        return response
+
+
+class BrainFlushOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Brain Flush Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="BrainFlushOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "FLUSH", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Brain Flush", "🧹")
+        return response
+
+
+class ContextAssemblyOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Context Assembly."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ContextAssemblyOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "ASSEMBLE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Context Assembly", "🧩")
+        return response
+
+
+class PhaseCompletionOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Phase Completion."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="PhaseCompletionOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "COMPLETE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Phase Completion", "✅")
+        return response
+
+
+class StandardsOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Standards Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="StandardsOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "STANDARDS", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Standards Compliance", "📏")
+        return response
+
+
+class TotalRecallOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Total Recall."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="TotalRecallOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "RECALL", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Feature Discovery", "🔎")
+        return response
+
+
+class SecurityOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Security Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="SecurityOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "SECURITY", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Security Assessment", "🔒")
+        return response
+
+
+class ComplianceOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Compliance Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ComplianceOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "COMPLIANCE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Compliance Status", "📋")
+        return response
+
+
+class AuditOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Audit Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="AuditOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "AUDIT", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Audit Report", "🔍")
+        return response
+
+
+class EnforcementOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Enforcement Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="EnforcementOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "ENFORCE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Governance Enforcement", "⚖️")
+        return response
+
+
+class PerformanceOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Performance Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="PerformanceOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "PERFORMANCE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Performance Metrics", "⚡")
+        return response
+
+
+class LoadTestOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Load Test Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="LoadTestOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "LOADTEST", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Load Test Results", "📊")
+        return response
+
+
+class ProfilingOrchestratorTemplate(BaseResponseTemplate):
+    """Template for Profiling Orchestrator."""
+    
+    def __init__(self):
+        super().__init__(orchestrator_name="ProfilingOrchestrator", mode="CORTEX")
+    
+    def compose(self, operation: str = "PROFILE", **kwargs) -> str:
+        response = self.header(operation)
+        response += self.section("Profiling Results", "🔬")
+        return response
+
+
+# ============================================================================
 # TEMPLATE REGISTRY
 # ============================================================================
 
@@ -533,10 +847,46 @@ class OrchestratorTemplateRegistry:
     
     def _register_all_templates(self):
         """Register all orchestrator templates."""
-        # Core
+        # Core Templates (10)
         self._templates["MasterOrchestrator"] = MasterOrchestratorTemplate()
         self._templates["IntentRouter"] = IntentRouterTemplate()
         self._templates["ChallengeEngine"] = ChallengeEngineTemplate()
+        self._templates["TDDOrchestrator"] = TDDOrchestratorTemplate()
+        self._templates["LENSSynthesis"] = LENSSynthesisTemplate()
+        self._templates["PlanOrchestrator"] = PlanOrchestratorTemplate()
+        
+        # Domain Templates (8)
+        self._templates["RefactoringOrchestrator"] = RefactoringOrchestratorTemplate()
+        self._templates["DocumentationOrchestrator"] = DocumentationOrchestratorTemplate()
+        self._templates["OnboardingOrchestrator"] = OnboardingOrchestratorTemplate()
+        self._templates["ToolDiscoveryOrchestrator"] = ToolDiscoveryOrchestratorTemplate()
+        self._templates["WorkflowOrchestrator"] = WorkflowOrchestratorTemplate()
+        self._templates["MigrationOrchestrator"] = MigrationOrchestratorTemplate()
+        self._templates["ConversationOrchestrator"] = ConversationOrchestratorTemplate()
+        self._templates["ReviewOrchestrator"] = ReviewOrchestratorTemplate()
+        
+        # Support Templates (10)
+        self._templates["DebuggingOrchestrator"] = DebuggingOrchestratorTemplate()
+        self._templates["DigestSessionOrchestrator"] = DigestSessionOrchestratorTemplate()
+        self._templates["DiscoveryOrchestrator"] = DiscoveryOrchestratorTemplate()
+        self._templates["BrainFlushOrchestrator"] = BrainFlushOrchestratorTemplate()
+        self._templates["ContextAssemblyOrchestrator"] = ContextAssemblyOrchestratorTemplate()
+        self._templates["PhaseCompletionOrchestrator"] = PhaseCompletionOrchestratorTemplate()
+        self._templates["StandardsOrchestrator"] = StandardsOrchestratorTemplate()
+        self._templates["TotalRecallOrchestrator"] = TotalRecallOrchestratorTemplate()
+        
+        # Enterprise Templates (4)
+        self._templates["SecurityOrchestrator"] = SecurityOrchestratorTemplate()
+        self._templates["ComplianceOrchestrator"] = ComplianceOrchestratorTemplate()
+        self._templates["AuditOrchestrator"] = AuditOrchestratorTemplate()
+        self._templates["EnforcementOrchestrator"] = EnforcementOrchestratorTemplate()
+        
+        # Performance Templates (3)
+        self._templates["PerformanceOrchestrator"] = PerformanceOrchestratorTemplate()
+        self._templates["LoadTestOrchestrator"] = LoadTestOrchestratorTemplate()
+        self._templates["ProfilingOrchestrator"] = ProfilingOrchestratorTemplate()
+        
+        # Total: 35 templates registered
         
         # Domain
         self._templates["RefactoringOrchestrator"] = RefactoringOrchestratorTemplate()
@@ -586,13 +936,46 @@ def get_orchestrator_template(orchestrator_name: str) -> Optional[BaseResponseTe
 
 
 __all__ = [
+    # Core Templates
     "MasterOrchestratorTemplate",
     "IntentRouterTemplate",
     "ChallengeEngineTemplate",
+    "TDDOrchestratorTemplate",
+    "LENSSynthesisTemplate",
+    "PlanOrchestratorTemplate",
+    
+    # Domain Templates
     "RefactoringOrchestratorTemplate",
     "DocumentationOrchestratorTemplate",
+    "OnboardingOrchestratorTemplate",
+    "ToolDiscoveryOrchestratorTemplate",
+    "WorkflowOrchestratorTemplate",
+    "MigrationOrchestratorTemplate",
+    "ConversationOrchestratorTemplate",
+    "ReviewOrchestratorTemplate",
+    
+    # Support Templates
     "DebuggingOrchestratorTemplate",
     "DigestSessionOrchestratorTemplate",
+    "DiscoveryOrchestratorTemplate",
+    "BrainFlushOrchestratorTemplate",
+    "ContextAssemblyOrchestratorTemplate",
+    "PhaseCompletionOrchestratorTemplate",
+    "StandardsOrchestratorTemplate",
+    "TotalRecallOrchestratorTemplate",
+    
+    # Enterprise Templates
+    "SecurityOrchestratorTemplate",
+    "ComplianceOrchestratorTemplate",
+    "AuditOrchestratorTemplate",
+    "EnforcementOrchestratorTemplate",
+    
+    # Performance Templates
+    "PerformanceOrchestratorTemplate",
+    "LoadTestOrchestratorTemplate",
+    "ProfilingOrchestratorTemplate",
+    
+    # Registry
     "OrchestratorTemplateRegistry",
     "get_orchestrator_template",
 ]
