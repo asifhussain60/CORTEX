@@ -6,7 +6,7 @@
     "owner": "Unknown",
     "primary_language": "JavaScript",
     "version": "1.0",
-    "last_analyzed_at": "2026-02-09T09:30:26.717809"
+    "last_analyzed_at": "2026-02-09T09:32:38.659869"
   },
   "overview": {
     "summary": "A sophisticated repository management system with advanced analytics capabilities, designed for automated code analysis and onboarding orchestration across multiple programming languages.",
@@ -106,602 +106,602 @@
     "transitive_count": 8351,
     "packages": [
       {
-        "name": "doctoc",
-        "version": "0.15.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "webpack",
-        "version": "1.12.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "buildman",
-        "version": "*",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "testman",
-        "version": "*",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "babel-preset-env",
-        "version": "1.6.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "babel-register",
-        "version": "6.3.13",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "chai",
-        "version": "2.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "espree",
-        "version": "1.11.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp",
-        "version": "3.8.10",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp-bump",
-        "version": "0.2.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp-filter",
-        "version": "2.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp-git",
-        "version": "1.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "gulp-tag-version",
-        "version": "1.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "jshint",
-        "version": "2.5.6",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "2.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "domelementtype",
-        "version": "2.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/jest",
-        "version": "27.4.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "17.0.30",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@typescript-eslint/eslint-plugin",
-        "version": "5.21.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@typescript-eslint/parser",
-        "version": "5.21.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
         "name": "eslint",
-        "version": "8.14.0",
+        "version": "8.57.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-config-prettier",
-        "version": "8.5.0",
+        "name": "globby",
+        "version": "14.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "htmlparser2",
-        "version": "8.0.0",
+        "name": "lodash.sortby",
+        "version": "4.7.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "jest",
-        "version": "27.5.1",
+        "name": "lodash.uniq",
+        "version": "4.5.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "prettier",
-        "version": "2.6.2",
+        "name": "nanoid",
+        "version": "3.3.11",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "ts-jest",
-        "version": "27.1.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "4.6.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "flatted",
-        "version": "3.2.9",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "keyv",
-        "version": "4.5.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "c8",
-        "version": "9.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "chai",
-        "version": "4.3.10",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "8.56.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-config-prettier",
-        "version": "9.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-plugin-mocha",
-        "version": "10.2.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "glob-expand",
-        "version": "0.2.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "10.3.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "3.2.4",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rimraf",
-        "version": "5.0.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "sinon",
-        "version": "17.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "write",
-        "version": "2.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "json-buffer",
-        "version": "3.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@keyv/test-suite",
-        "version": "*",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "8.51.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint-plugin-promise",
-        "version": "6.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pify",
-        "version": "5.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "timekeeper",
-        "version": "2.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tsd",
-        "version": "0.29.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "assume",
-        "version": "2.1.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "5.2.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "pre-commit",
-        "version": "1.2.x",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@fastify/pre-commit",
-        "version": "2.1.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "ajv",
-        "version": "8.16.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "9.17.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "neostandard",
-        "version": "0.12.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "playwright-test",
-        "version": "14.1.12",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tape",
-        "version": "5.8.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tsd",
-        "version": "0.32.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "4.18.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "expect.js",
-        "version": "0.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "husky",
-        "version": "0.14.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "lint-staged",
-        "version": "5.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mocha",
-        "version": "4.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "2.0.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tslib",
-        "version": "2.6.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@azure/dev-tool",
-        "version": "1.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@azure/eslint-plugin-azure-sdk",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@microsoft/api-extractor",
-        "version": "7.40.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@types/node",
-        "version": "18.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@vitest/browser",
-        "version": "1.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@vitest/coverage-istanbul",
-        "version": "1.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "eslint",
-        "version": "8.56.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "playwright",
-        "version": "1.41.2",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "prettier",
-        "version": "3.2.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "rimraf",
-        "version": "5.0.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tshy",
-        "version": "1.13.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "typescript",
-        "version": "5.3.3",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "vitest",
-        "version": "1.3.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@keyv/serialize",
+        "name": "picocolors",
         "version": "1.1.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@biomejs/biome",
-        "version": "2.2.3",
+        "name": "source-map-js",
+        "version": "1.2.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@faker-js/faker",
-        "version": "10.0.0",
+        "name": "event-target-shim",
+        "version": "5.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@vitest/coverage-v8",
-        "version": "3.2.4",
+        "name": "@babel/core",
+        "version": "7.2.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "rimraf",
-        "version": "6.0.1",
+        "name": "@babel/plugin-transform-modules-commonjs",
+        "version": "7.2.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "timekeeper",
-        "version": "2.3.1",
+        "name": "@babel/preset-env",
+        "version": "7.3.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "tsd",
-        "version": "0.33.0",
+        "name": "@babel/register",
+        "version": "7.0.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "vitest",
-        "version": "3.2.4",
+        "name": "@mysticatea/eslint-plugin",
+        "version": "8.0.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/mongo",
-        "version": "3.0.3",
+        "name": "@mysticatea/spy",
+        "version": "0.1.2",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/compress-gzip",
-        "version": "2.0.3",
+        "name": "@types/mocha",
+        "version": "5.2.5",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/compress-lz4",
-        "version": "1.0.1",
+        "name": "@types/node",
+        "version": "10.12.18",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/memcache",
-        "version": "2.0.2",
+        "name": "assert",
+        "version": "1.4.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/sqlite",
-        "version": "4.0.5",
+        "name": "codecov",
+        "version": "3.1.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "@keyv/compress-brotli",
-        "version": "2.0.5",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "@keyv/test-suite",
-        "version": "2.1.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "airtap",
-        "version": "3.0.0",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "standard",
-        "version": "*",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "tape",
-        "version": "5.0.1",
-        "license": null,
-        "is_direct": false
-      },
-      {
-        "name": "mime-db",
-        "version": "1.52.0",
+        "name": "dts-bundle-generator",
+        "version": "2.0.0",
         "license": null,
         "is_direct": false
       },
       {
         "name": "eslint",
-        "version": "7.32.0",
+        "version": "5.12.1",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-config-standard",
-        "version": "14.1.1",
+        "name": "karma",
+        "version": "3.1.4",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-plugin-import",
-        "version": "2.25.4",
+        "name": "karma-chrome-launcher",
+        "version": "2.2.0",
         "license": null,
         "is_direct": false
       },
       {
-        "name": "eslint-plugin-markdown",
-        "version": "2.2.1",
+        "name": "karma-coverage",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-firefox-launcher",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-growl-reporter",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-ie-launcher",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-mocha",
+        "version": "1.3.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "karma-rollup-preprocessor",
+        "version": "7.0.0-rc.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "mocha",
+        "version": "5.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "npm-run-all",
+        "version": "4.1.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "13.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "opener",
+        "version": "1.5.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rimraf",
+        "version": "2.6.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup",
+        "version": "1.1.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-babel",
+        "version": "4.3.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-babel-minify",
+        "version": "7.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-commonjs",
+        "version": "9.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-node-resolve",
+        "version": "4.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-sourcemaps",
+        "version": "0.4.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-typescript",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-watch",
+        "version": "4.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ts-node",
+        "version": "8.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "type-tester",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "typescript",
+        "version": "3.2.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jquery",
+        "version": "1.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "clone-deep",
+        "version": "4.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "codecov",
+        "version": "3.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "deep-copy",
+        "version": "1.4.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "fast-copy",
+        "version": "1.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "fastbench",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "fastest-json-copy",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "lodash.clonedeep",
+        "version": "4.5.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nano-copy",
+        "version": "0.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "plain-object-clone",
+        "version": "1.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ramda",
+        "version": "0.27.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "standard",
+        "version": "17.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tap",
+        "version": "12.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tsd",
+        "version": "0.7.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "node-static",
+        "version": "0.6.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "call-bind",
+        "version": "1.0.7",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "define-properties",
+        "version": "1.2.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "es-object-atoms",
+        "version": "1.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@es-shims/api",
+        "version": "2.4.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@ljharb/eslint-config",
+        "version": "21.1.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "aud",
+        "version": "2.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "auto-changelog",
+        "version": "2.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "8.8.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "functions-have-names",
+        "version": "1.2.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "has-strict-mode",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "in-publish",
+        "version": "2.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "npmignore",
+        "version": "0.3.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "nyc",
+        "version": "10.3.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "safe-publish-latest",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tape",
+        "version": "5.7.5",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "buffer-equal-constant-time",
+        "version": "1.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ecdsa-sig-formatter",
+        "version": "1.0.11",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "safe-buffer",
+        "version": "5.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "base64url",
+        "version": "2.0.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jwk-to-pem",
+        "version": "2.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "semver",
+        "version": "4.3.6",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tap",
+        "version": "6.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "chai",
+        "version": "4.1.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "jest",
+        "version": "20.0.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "xo",
+        "version": "0.18.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@nuxtjs/eslint-config",
+        "version": "latest",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint",
+        "version": "latest",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tap",
+        "version": "latest",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "standard-version",
+        "version": "latest",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "ava",
+        "version": "1.4.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "tsd",
+        "version": "0.11.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "xo",
+        "version": "0.28.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/estree",
+        "version": "0.0.51",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@types/estree-jsx",
+        "version": "0.0.1",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "8.7.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "eslint-release",
+        "version": "3.2.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "esquery",
+        "version": "1.4.0",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "json-diff",
+        "version": "0.7.3",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "opener",
+        "version": "1.5.2",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup",
+        "version": "4.22.4",
+        "license": null,
+        "is_direct": false
+      },
+      {
+        "name": "rollup-plugin-dts",
+        "version": "6.1.1",
         "license": null,
         "is_direct": false
       }
@@ -713,484 +713,484 @@
       "dependency_graph": {
         "nodes": [
           {
-            "id": "doctoc",
+            "id": "eslint",
             "x": 550.0,
             "y": 250.0,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.15.0"
+            "version": "8.57.0"
           },
           {
-            "id": "webpack",
+            "id": "globby",
             "x": 548.8172051971717,
             "y": 268.79998503464566,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.12.0"
+            "version": "14.0.1"
           },
           {
-            "id": "buildman",
+            "id": "lodash.sortby",
             "x": 545.2874741692947,
             "y": 287.3034830747282,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "*"
+            "version": "4.7.0"
           },
           {
-            "id": "testman",
+            "id": "lodash.uniq",
             "x": 539.4664728832377,
             "y": 305.2186829027017,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "*"
+            "version": "4.5.0"
           },
           {
-            "id": "babel-preset-env",
+            "id": "nanoid",
             "x": 531.4460020065795,
             "y": 322.2630511152573,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.6.1"
+            "version": "3.3.11"
           },
           {
-            "id": "babel-register",
+            "id": "picocolors",
             "x": 521.3525491562422,
             "y": 338.167787843871,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "6.3.13"
+            "version": "1.1.1"
           },
           {
-            "id": "chai",
+            "id": "source-map-js",
             "x": 509.3452941132117,
             "y": 352.6820658893033,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.1.1"
+            "version": "1.2.1"
           },
           {
-            "id": "espree",
+            "id": "event-target-shim",
             "x": 495.61359846230346,
             "y": 365.5769864163684,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.11.0"
-          },
-          {
-            "id": "gulp",
-            "x": 480.37401924684946,
-            "y": 376.64918882530225,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.8.10"
-          },
-          {
-            "id": "gulp-bump",
-            "x": 463.8668937347609,
-            "y": 385.72405786990294,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.2.2"
-          },
-          {
-            "id": "gulp-filter",
-            "x": 446.3525491562421,
-            "y": 392.658477444273,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.0.0"
-          },
-          {
-            "id": "gulp-git",
-            "x": 428.10719718785873,
-            "y": 397.3430876093033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.0.1"
-          },
-          {
-            "id": "gulp-tag-version",
-            "x": 409.41857792939703,
-            "y": 399.70400926424077,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "1.3.0"
-          },
-          {
-            "id": "jshint",
-            "x": 390.58142207060297,
-            "y": 399.70400926424077,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.5.6"
-          },
-          {
-            "id": "mocha",
-            "x": 371.89280281214127,
-            "y": 397.3430876093033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.1.0"
-          },
-          {
-            "id": "domelementtype",
-            "x": 353.6474508437579,
-            "y": 392.65847744427305,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.3.0"
-          },
-          {
-            "id": "@types/jest",
-            "x": 336.1331062652391,
-            "y": 385.72405786990294,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "27.4.1"
-          },
-          {
-            "id": "@types/node",
-            "x": 319.6259807531505,
-            "y": 376.64918882530225,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "17.0.30"
-          },
-          {
-            "id": "@typescript-eslint/eslint-plugin",
-            "x": 304.38640153769654,
-            "y": 365.5769864163684,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "5.21.0"
-          },
-          {
-            "id": "@typescript-eslint/parser",
-            "x": 290.6547058867883,
-            "y": 352.6820658893033,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "5.21.0"
-          },
-          {
-            "id": "eslint",
-            "x": 278.6474508437579,
-            "y": 338.167787843871,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "8.14.0"
-          },
-          {
-            "id": "eslint-config-prettier",
-            "x": 268.55399799342047,
-            "y": 322.2630511152573,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "8.5.0"
-          },
-          {
-            "id": "htmlparser2",
-            "x": 260.5335271167623,
-            "y": 305.21868290270174,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "8.0.0"
-          },
-          {
-            "id": "jest",
-            "x": 254.71252583070535,
-            "y": 287.3034830747282,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "27.5.1"
-          },
-          {
-            "id": "prettier",
-            "x": 251.18279480282834,
-            "y": 268.79998503464566,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.6.2"
-          },
-          {
-            "id": "ts-jest",
-            "x": 250.0,
-            "y": 250.00000000000003,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "27.1.4"
-          },
-          {
-            "id": "typescript",
-            "x": 251.1827948028283,
-            "y": 231.20001496535434,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.6.4"
-          },
-          {
-            "id": "flatted",
-            "x": 254.71252583070535,
-            "y": 212.69651692527174,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.2.9"
-          },
-          {
-            "id": "keyv",
-            "x": 260.53352711676234,
-            "y": 194.78131709729826,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.5.4"
-          },
-          {
-            "id": "c8",
-            "x": 268.55399799342047,
-            "y": 177.73694888474273,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "9.1.0"
-          },
-          {
-            "id": "chai",
-            "x": 278.6474508437579,
-            "y": 161.83221215612906,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "4.3.10"
-          },
-          {
-            "id": "eslint",
-            "x": 290.6547058867883,
-            "y": 147.31793411069668,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "8.56.0"
-          },
-          {
-            "id": "eslint-config-prettier",
-            "x": 304.38640153769654,
-            "y": 134.4230135836316,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "9.1.0"
-          },
-          {
-            "id": "eslint-plugin-mocha",
-            "x": 319.62598075315054,
-            "y": 123.35081117469771,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "10.2.0"
-          },
-          {
-            "id": "glob-expand",
-            "x": 336.1331062652392,
-            "y": 114.27594213009704,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "0.2.1"
-          },
-          {
-            "id": "mocha",
-            "x": 353.64745084375784,
-            "y": 107.34152255572698,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "10.3.0"
-          },
-          {
-            "id": "prettier",
-            "x": 371.8928028121413,
-            "y": 102.6569123906967,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.2.4"
-          },
-          {
-            "id": "rimraf",
-            "x": 390.581422070603,
-            "y": 100.29599073575926,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "5.0.5"
-          },
-          {
-            "id": "sinon",
-            "x": 409.4185779293969,
-            "y": 100.29599073575926,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "17.0.1"
-          },
-          {
-            "id": "write",
-            "x": 428.1071971878586,
-            "y": 102.6569123906967,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "2.0.0"
-          },
-          {
-            "id": "json-buffer",
-            "x": 446.3525491562421,
-            "y": 107.34152255572695,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "3.0.1"
-          },
-          {
-            "id": "@keyv/test-suite",
-            "x": 463.86689373476077,
-            "y": 114.27594213009701,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "*"
-          },
-          {
-            "id": "eslint",
-            "x": 480.3740192468494,
-            "y": 123.35081117469767,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "8.51.0"
-          },
-          {
-            "id": "eslint-plugin-promise",
-            "x": 495.6135984623034,
-            "y": 134.42301358363156,
-            "radius": 6,
-            "color": "#7b61ff",
-            "is_direct": false,
-            "version": "6.1.1"
-          },
-          {
-            "id": "pify",
-            "x": 509.3452941132117,
-            "y": 147.31793411069665,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
             "version": "5.0.0"
           },
           {
-            "id": "timekeeper",
+            "id": "@babel/core",
+            "x": 480.37401924684946,
+            "y": 376.64918882530225,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.2.2"
+          },
+          {
+            "id": "@babel/plugin-transform-modules-commonjs",
+            "x": 463.8668937347609,
+            "y": 385.72405786990294,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.2.0"
+          },
+          {
+            "id": "@babel/preset-env",
+            "x": 446.3525491562421,
+            "y": 392.658477444273,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.3.0"
+          },
+          {
+            "id": "@babel/register",
+            "x": 428.10719718785873,
+            "y": 397.3430876093033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.0.0"
+          },
+          {
+            "id": "@mysticatea/eslint-plugin",
+            "x": 409.41857792939703,
+            "y": 399.70400926424077,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "8.0.1"
+          },
+          {
+            "id": "@mysticatea/spy",
+            "x": 390.58142207060297,
+            "y": 399.70400926424077,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "0.1.2"
+          },
+          {
+            "id": "@types/mocha",
+            "x": 371.89280281214127,
+            "y": 397.3430876093033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "5.2.5"
+          },
+          {
+            "id": "@types/node",
+            "x": 353.6474508437579,
+            "y": 392.65847744427305,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "10.12.18"
+          },
+          {
+            "id": "assert",
+            "x": 336.1331062652391,
+            "y": 385.72405786990294,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.4.1"
+          },
+          {
+            "id": "codecov",
+            "x": 319.6259807531505,
+            "y": 376.64918882530225,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.1.0"
+          },
+          {
+            "id": "dts-bundle-generator",
+            "x": 304.38640153769654,
+            "y": 365.5769864163684,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.0.0"
+          },
+          {
+            "id": "eslint",
+            "x": 290.6547058867883,
+            "y": 352.6820658893033,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "5.12.1"
+          },
+          {
+            "id": "karma",
+            "x": 278.6474508437579,
+            "y": 338.167787843871,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.1.4"
+          },
+          {
+            "id": "karma-chrome-launcher",
+            "x": 268.55399799342047,
+            "y": 322.2630511152573,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.2.0"
+          },
+          {
+            "id": "karma-coverage",
+            "x": 260.5335271167623,
+            "y": 305.21868290270174,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.1.2"
+          },
+          {
+            "id": "karma-firefox-launcher",
+            "x": 254.71252583070535,
+            "y": 287.3034830747282,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.1.0"
+          },
+          {
+            "id": "karma-growl-reporter",
+            "x": 251.18279480282834,
+            "y": 268.79998503464566,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.0"
+          },
+          {
+            "id": "karma-ie-launcher",
+            "x": 250.0,
+            "y": 250.00000000000003,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.0"
+          },
+          {
+            "id": "karma-mocha",
+            "x": 251.1827948028283,
+            "y": 231.20001496535434,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.3.0"
+          },
+          {
+            "id": "karma-rollup-preprocessor",
+            "x": 254.71252583070535,
+            "y": 212.69651692527174,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.0.0-rc.2"
+          },
+          {
+            "id": "mocha",
+            "x": 260.53352711676234,
+            "y": 194.78131709729826,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "5.2.0"
+          },
+          {
+            "id": "npm-run-all",
+            "x": 268.55399799342047,
+            "y": 177.73694888474273,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.1.5"
+          },
+          {
+            "id": "nyc",
+            "x": 278.6474508437579,
+            "y": 161.83221215612906,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "13.1.0"
+          },
+          {
+            "id": "opener",
+            "x": 290.6547058867883,
+            "y": 147.31793411069668,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.5.1"
+          },
+          {
+            "id": "rimraf",
+            "x": 304.38640153769654,
+            "y": 134.4230135836316,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "2.6.3"
+          },
+          {
+            "id": "rollup",
+            "x": 319.62598075315054,
+            "y": 123.35081117469771,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.1.2"
+          },
+          {
+            "id": "rollup-plugin-babel",
+            "x": 336.1331062652392,
+            "y": 114.27594213009704,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.3.2"
+          },
+          {
+            "id": "rollup-plugin-babel-minify",
+            "x": 353.64745084375784,
+            "y": 107.34152255572698,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "7.0.0"
+          },
+          {
+            "id": "rollup-plugin-commonjs",
+            "x": 371.8928028121413,
+            "y": 102.6569123906967,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "9.2.0"
+          },
+          {
+            "id": "rollup-plugin-node-resolve",
+            "x": 390.581422070603,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.0.0"
+          },
+          {
+            "id": "rollup-plugin-sourcemaps",
+            "x": 409.4185779293969,
+            "y": 100.29599073575926,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "0.4.2"
+          },
+          {
+            "id": "rollup-plugin-typescript",
+            "x": 428.1071971878586,
+            "y": 102.6569123906967,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.0"
+          },
+          {
+            "id": "rollup-watch",
+            "x": 446.3525491562421,
+            "y": 107.34152255572695,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "4.3.1"
+          },
+          {
+            "id": "ts-node",
+            "x": 463.86689373476077,
+            "y": 114.27594213009701,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "8.0.1"
+          },
+          {
+            "id": "type-tester",
+            "x": 480.3740192468494,
+            "y": 123.35081117469767,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.0.0"
+          },
+          {
+            "id": "typescript",
+            "x": 495.6135984623034,
+            "y": 134.42301358363156,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "3.2.4"
+          },
+          {
+            "id": "jquery",
+            "x": 509.3452941132117,
+            "y": 147.31793411069665,
+            "radius": 6,
+            "color": "#7b61ff",
+            "is_direct": false,
+            "version": "1.5.0"
+          },
+          {
+            "id": "clone-deep",
             "x": 521.352549156242,
             "y": 161.832212156129,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.3.1"
+            "version": "4.0.1"
           },
           {
-            "id": "tsd",
+            "id": "codecov",
             "x": 531.4460020065795,
             "y": 177.7369488847427,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "0.29.0"
+            "version": "3.4.0"
           },
           {
-            "id": "assume",
+            "id": "deep-copy",
             "x": 539.4664728832377,
             "y": 194.7813170972982,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "2.1.x"
+            "version": "1.4.2"
           },
           {
-            "id": "mocha",
+            "id": "fast-copy",
             "x": 545.2874741692947,
             "y": 212.69651692527168,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "5.2.x"
+            "version": "1.2.1"
           },
           {
-            "id": "pre-commit",
+            "id": "fastbench",
             "x": 548.8172051971717,
             "y": 231.2000149653543,
             "radius": 6,
             "color": "#7b61ff",
             "is_direct": false,
-            "version": "1.2.x"
+            "version": "1.0.1"
           }
         ],
         "edges": [
           {
-            "source": "doctoc",
-            "target": "webpack",
+            "source": "eslint",
+            "target": "globby",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "webpack",
-            "target": "buildman",
+            "source": "globby",
+            "target": "lodash.sortby",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "buildman",
-            "target": "testman",
+            "source": "lodash.sortby",
+            "target": "lodash.uniq",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "testman",
-            "target": "babel-preset-env",
+            "source": "lodash.uniq",
+            "target": "nanoid",
             "import_type": "inferred",
             "weight": 0.5
           },
           {
-            "source": "babel-preset-env",
-            "target": "babel-register",
+            "source": "nanoid",
+            "target": "picocolors",
             "import_type": "inferred",
             "weight": 0.5
           }
