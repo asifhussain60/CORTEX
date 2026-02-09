@@ -1,0 +1,376 @@
+{% comment %}
+Repository Onboarding Dashboard Template (Phase 54-A S3)
+
+MVP Template: Single comprehensive dashboard for repository analysis
+- Repository overview (metadata)
+- Security threats (P0/P1/P2)
+- Business narrative
+- Dependency analysis
+
+AC_START: AC-PHASE54A-S3-TEMPLATE
+Authority: phase-54-A-incremental-onboarding-refactor.yaml
+{% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ repository_name }} - Repository Onboarding Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        main {
+            padding: 2rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .threat-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .threat-p0 {
+            background-color: #FFE5E5;
+            color: #C41C3B;
+        }
+        
+        .threat-p1 {
+            background-color: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .threat-p2 {
+            background-color: #FFFDE7;
+            color: #F57F17;
+        }
+        
+        .threat-list {
+            list-style: none;
+        }
+        
+        .threat-item {
+            background: white;
+            border-left: 4px solid #ccc;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+        
+        .threat-item.p0 {
+            border-left-color: #C41C3B;
+        }
+        
+        .threat-item.p1 {
+            border-left-color: #E65100;
+        }
+        
+        .threat-item.p2 {
+            border-left-color: #F57F17;
+        }
+        
+        .dependency-list {
+            list-style: none;
+        }
+        
+        .dependency-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: white;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .footer {
+            background: #f0f0f0;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            main { padding: 1rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ repository_name }}</h1>
+            <p class="subtitle">Repository Onboarding Dashboard</p>
+        </header>
+        
+        <main>
+            <!-- Repository Overview -->
+            <div class="grid">
+                <div class="card">
+                    <h2>📊 Overview</h2>
+                    {% if overview %}
+                        <div class="metric">
+                            <span>Files:</span>
+                            <span class="metric-value">{{ overview.file_count|format_count }}</span>
+                        </div>
+                        <div class="metric">
+                            <span>Has Tests:</span>
+                            <span class="metric-value">{{ overview.has_tests|default('Unknown') }}</span>
+                        </div>
+                        {% if overview.test_framework %}
+                        <div class="metric">
+                            <span>Test Framework:</span>
+                            <span class="metric-value">{{ overview.test_framework }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="metric">
+                            <span>Has Docs:</span>
+                            <span class="metric-value">{{ overview.has_docs|default('Unknown') }}</span>
+                        </div>
+                    {% else %}
+                        <p style="color: #999;">No overview data available</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Security Summary -->
+                <div class="card">
+                    <h2>🔒 Security Summary</h2>
+                    {% if threat_count > 0 %}
+                        <div class="metric">
+                            <span>Total Threats:</span>
+                            <span class="metric-value">{{ threat_count }}</span>
+                        </div>
+                        {% if p0_threats > 0 %}
+                        <div class="metric">
+                            <span>P0 (Critical):</span>
+                            <span class="metric-value" style="color: #C41C3B;">{{ p0_threats }}</span>
+                        </div>
+                        {% endif %}
+                        {% if p1_threats > 0 %}
+                        <div class="metric">
+                            <span>P1 (High):</span>
+                            <span class="metric-value" style="color: #E65100;">{{ p1_threats }}</span>
+                        </div>
+                        {% endif %}
+                        {% if p2_threats > 0 %}
+                        <div class="metric">
+                            <span>P2 (Medium):</span>
+                            <span class="metric-value" style="color: #F57F17;">{{ p2_threats }}</span>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <p style="color: #2e7d32; font-weight: bold;">✓ No security threats detected</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Dependency Summary -->
+                <div class="card">
+                    <h2>📦 Dependencies</h2>
+                    {% if dependencies %}
+                        <div class="metric">
+                            <span>Total Dependencies:</span>
+                            <span class="metric-value">{{ dependencies.dependency_count|default(0)|format_count }}</span>
+                        </div>
+                        <div class="metric">
+                            <span>Runtime:</span>
+                            <span class="metric-value">{{ dependencies.runtime_count|default(0) }}</span>
+                        </div>
+                        <div class="metric">
+                            <span>Development:</span>
+                            <span class="metric-value">{{ dependencies.dev_count|default(0) }}</span>
+                        </div>
+                    {% else %}
+                        <p style="color: #999;">No dependency data available</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Business Narrative -->
+            {% if narrative %}
+            <div class="card" style="margin-bottom: 2rem;">
+                <h2>💼 Business Context</h2>
+                <div style="margin: 1rem 0;">
+                    <strong>{{ narrative.title|default('Unnamed') }}</strong>
+                    <p style="margin-top: 0.5rem; color: #666;">
+                        {{ narrative.description|default('No description available') }}
+                    </p>
+                </div>
+                {% if narrative.value_proposition %}
+                <div style="margin: 1rem 0; padding: 1rem; background: #e3f2fd; border-radius: 4px;">
+                    <strong style="color: #1976d2;">Value Proposition:</strong>
+                    <p style="margin-top: 0.5rem;">{{ narrative.value_proposition }}</p>
+                </div>
+                {% endif %}
+                {% if narrative.confidence %}
+                <div style="margin-top: 1rem;">
+                    <strong>Confidence Score:</strong>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (narrative.confidence * 100)|int }}%"></div>
+                    </div>
+                    <span style="font-size: 0.9rem; color: #999;">{{ (narrative.confidence * 100)|int }}%</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Security Threats Details -->
+            {% if threats and threat_count > 0 %}
+            <div class="card" style="margin-bottom: 2rem;">
+                <h2>🚨 Security Threats</h2>
+                <ul class="threat-list">
+                    {% for threat in threats %}
+                    <li class="threat-item {{ threat.get('level', 'p2')|lower }}">
+                        <div>
+                            <strong>{{ threat.get('title', 'Unknown') }}</strong>
+                            <span class="threat-badge threat-{{ threat.get('level', 'p2')|lower }}">
+                                {{ threat.get('level', 'P2') }}
+                            </span>
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                            {{ threat.get('description', '') }}
+                        </div>
+                        {% if threat.get('remediation') %}
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #2e7d32;">
+                            <strong>Remediation:</strong> {{ threat.get('remediation', '') }}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Dependencies List -->
+            {% if dependencies and dependencies.dependencies %}
+            <div class="card">
+                <h2>📋 Top Dependencies</h2>
+                <ul class="dependency-list">
+                    {% for dep in dependencies.dependencies[:10] %}
+                    <li class="dependency-item">
+                        <span>{{ dep.name|default('Unknown') }}</span>
+                        <span style="font-weight: bold; color: #667eea;">{{ dep.version|default('*') }}</span>
+                    </li>
+                    {% else %}
+                    <p style="color: #999;">No dependency details available</p>
+                    {% endfor %}
+                </ul>
+                {% if dependencies.dependencies|length > 10 %}
+                <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">
+                    ... and {{ (dependencies.dependencies|length - 10) }} more dependencies
+                </p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </main>
+        
+        <footer>
+            <p>
+                Generated on {{ now|format_date if now else 'Unknown Date' }} | 
+                Repository Onboarding Dashboard (Phase 54-A MVP)
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
+
+{% comment %} AC_COMPLETE: AC-PHASE54A-S3-TEMPLATE ✅ {% endcomment %}
