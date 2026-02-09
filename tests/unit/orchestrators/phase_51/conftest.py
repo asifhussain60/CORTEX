@@ -55,6 +55,9 @@ def pytest_configure(config):
     if 'azure.core' not in sys.modules:
         sys.modules['azure.core'] = MagicMock()
     
+    if 'azure.identity' not in sys.modules:
+        sys.modules['azure.identity'] = MagicMock()
+    
     if 'azure.core.exceptions' not in sys.modules:
         azure_exceptions = MagicMock()
         
