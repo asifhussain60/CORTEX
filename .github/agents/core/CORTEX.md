@@ -78,13 +78,15 @@
 | Intent | Orchestrator | MCP Tool | Incremental |
 | ------ | ------------ | -------- | ----------- |
 | IMPLEMENT | WrappedTDDOrchestrator | `cortex_process_request` | ✅ Auto |
-| FIX | IntentRouter | `cortex_process_request` | Optional |
+| FIX | IntentRouter → Domain Handler\* | `cortex_process_request` | Optional |
 | REFACTOR | RefactoringOrchestrator | `cortex_process_request` | Optional |
 | ANALYZE | MasterOrchestrator | `cortex_lens_analyze` | N/A |
 | TEST | TDDOrchestrator | `cortex_process_request` | N/A |
 | DEPLOY | GitOrchestrator | `cortex_process_request` | N/A |
 | ONBOARD | RepositoryOnboardingOrchestrator | `cortex_onboard_repository` | N/A |
 | **DIGEST** | **DigestOrchestrator** | `cortex_digest_session` | N/A |
+
+**\*** IntentRouter performs intent analysis and returns target_orchestrator (TDDOrchestrator, RefactoringOrchestrator, or domain-specific handler). Actual fix delegated to returned handler via MasterOrchestrator coordination.
 
 ---
 

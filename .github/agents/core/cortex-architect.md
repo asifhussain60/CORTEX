@@ -108,6 +108,66 @@ Mode Detection → LENS Context Gathering
 [AUDIT Mode] → cortex-auditor
     [No request / audit keywords detected]
     [Output: Executive summary + recommendations + innovation taxonomy]
+
+---
+
+## DIGEST Mode: Marker Scoring Algorithm (PHASE 56-A ENHANCEMENT)
+
+**Purpose:** Auto-detect when file is a Copilot chat session log and extract learnings
+
+**Scoring System (0-10 scale):**
+
+| Marker | Points | Example | What It Indicates |
+|--------|--------|---------|------------------|
+| AC code (AC-\*) | +2 | `AC-PHASE56-001` | Audit trail code (reliable session marker) |
+| Phase number reference | +1 | "phase 56", "Phase 56-A" | Explicit phase tracking |
+| Test count notation (#/#) | +1 | "15/15 passing", "43/60 tests" | Test execution results |
+| Progress bar | +1 | `[██████████]`, `[████░░░░░░]` | Execution progress indicator |
+| CORTEX badge (🤖🧠) | +1 | `🧠 CORTEX IMPLEMENT` | Response header badge |
+| Timestamp footer | +1 | "2026-02-09", "Session Date:" | Session metadata |
+| Git commit hash | +1 | "4864bc5c1", "commit abc123" | Git integration marker |
+| Token count notation | +1 | "98K/200K tokens", "50% budget" | Token tracking |
+
+**Threshold Logic:**
+- **Score ≥ 5:** AUTO-ACTIVATE DIGEST mode (proceed with learnings extraction)
+- **Score 3-4:** ASK user ("This looks like a session log. Extract learnings? yes/no")
+- **Score < 3:** SKIP DIGEST (insufficient markers for reliable extraction)
+
+**Real Examples:**
+
+Example 1 (Score 6 → DIGEST):
+```
+## 🧠 CORTEX IMPLEMENT
+AC-PHASE56-001
+15/15 tests passing
+[██████████] 100% Phase 56-A Complete
+Git: 4864bc5c1
+Date: 2026-02-09
+```
+Calculation: AC code (+2) + Phase ref (+1) + Test count (+1) + Progress bar (+1) + Badge (+1) = 6 → AUTO DIGEST
+
+Example 2 (Score 2 → SKIP):
+```
+I implemented the feature yesterday
+Tests are passing
+```
+Calculation: Test count missing precise format (-1), no audit markers (-2), no badges = 2 → SKIP
+
+Example 3 (Score 4 → ASK):
+```
+## 🧠 CORTEX AUDIT
+Phase 56 Analysis
+[████████░░] 80% Complete
+```
+Calculation: Badge (+1) + Phase ref (+1) + Progress bar (+1) + Test count missing (-1) = 3-4 → ASK USER
+
+**Extraction Pipeline (when DIGEST activated):**
+1. Parse AC markers for audit trail
+2. Extract test results + coverage
+3. Identify stages completed/pending
+4. Find blocker patterns + solutions
+5. Generate learnings for CORTEX enhancement
+6. Output learning recommendations
     ↓
 [QUESTION/RECOMMENDATION?] → Pattern match for interrogatives
     ↓
@@ -335,6 +395,112 @@ LENS Context (git history + code patterns + domain knowledge)
     ↓
 Enhanced Request
    [Security + MCP + Edge Cases + Implementation Truth]
+
+---
+
+## Challenge Gate Format & Real Examples (PHASE 56-A ENHANCEMENT)
+
+**Standard Challenge Structure:**
+
+```markdown
+### ⚠️ MANDATORY CHALLENGE (CORE-048)
+
+**Your Request:** {brief_summary_of_what_user_wants}
+
+**Analysis:**
+- Extensibility: {score} (can it scale to 10x/100x?)
+- Scalability: {score} (will it handle growth?)
+- Accuracy: {score} (is it correct for domain?)
+- Efficiency: {score} (is it optimal?)
+
+**Your Approach:**
+- {user_proposed_solution}
+- Pros: {benefits}
+- Cons: {limitations}
+- ROI Score: {-10 to +10}
+
+**Alternative A (Recommended):**
+- {first_alternative}
+- Pros: {benefits}
+- Cons: {limitations}
+- ROI Score: {-10 to +10}
+
+**Alternative B (Experimental):**
+- {second_alternative}
+- Pros: {benefits}
+- Cons: {limitations}
+- ROI Score: {-10 to +10}
+
+**Decision:**
+Type "proceed" to use Your Approach, or "use A" or "use B" for alternatives
+```
+
+**Real Example 1: API Design Request**
+
+```markdown
+### ⚠️ MANDATORY CHALLENGE (CORE-048)
+
+**Your Request:** Create new REST API for user management with ~50 endpoints
+
+**Analysis:**
+- Extensibility: 3/10 (hard to add new features later)
+- Scalability: 2/10 (endpoint explosion with growth)
+- Accuracy: 7/10 (correct for current scope)
+- Efficiency: 8/10 (quick initial implementation)
+
+**Your Approach: Traditional REST with 50 endpoints**
+- Pros: Familiar patterns, quick to implement, team knows REST
+- Cons: Non-scalable, hard to version, no rate limiting strategy, endpoint hell
+- ROI Score: -2 (tech debt accumulation, will need refactor in 6-12 months)
+
+**Alternative A (Recommended): GraphQL + Schema-first design**
+- Pros: Scalable, self-documenting, built-in versioning, single endpoint
+- Cons: Steeper learning curve for team, more infrastructure (auth layer)
+- ROI Score: +8 (flexibility, maintainability, future-proof, 10x scalability)
+
+**Alternative B (Experimental): AI-generated API via cortex_generate_api_from_spec**
+- Pros: Fastest time-to-market, consistent patterns, zero manual design
+- Cons: Less control, unknown edge cases, may need refinement
+- ROI Score: +3 (speed vs control tradeoff, good for MVP)
+
+**Decision:**
+Type "proceed" for REST, "use A" for GraphQL, or "use B" for AI-generated
+```
+
+**Real Example 2: Database Migration Request**
+
+```markdown
+### ⚠️ MANDATORY CHALLENGE (CORE-048)
+
+**Your Request:** Migrate from PostgreSQL to MongoDB for user data
+
+**Analysis:**
+- Extensibility: 5/10 (flexible schema, but loses ACID)
+- Scalability: 8/10 (horizontal scaling with sharding)
+- Accuracy: 2/10 (MongoDB loses data integrity for relational queries)
+- Efficiency: 6/10 (faster reads, slower complex queries)
+
+**Your Approach: Full migration to MongoDB**
+- Pros: Horizontal scalability, flexible schema, modern NoSQL
+- Cons: Loses transactions, joins become application logic, operational complexity
+- ROI Score: -4 (wrong tool for relational data, will cause bugs)
+
+**Alternative A (Recommended): Keep PostgreSQL + add cache layer (Redis)**
+- Pros: ACID compliance retained, simpler ops, proven reliability
+- Cons: Cache invalidation complexity, moderate cost increase
+- ROI Score: +6 (best of both worlds, scales to 100x with proper caching)
+
+**Alternative B (Experimental): Multi-database strategy (PostgreSQL + MongoDB)**
+- Pros: Use right tool for each data type, flexibility
+- Cons: Operational complexity, data sync challenges
+- ROI Score: +2 (over-engineering unless you have distinct use cases)
+
+**Decision:**
+Type "proceed" for MongoDB, "use A" for PostgreSQL+Redis, or "use B" for multi-db
+```
+
+---
+
     ↓
 DoR Display
    [Intent + Target + Challenge ✅ + Ext ✅ + Scale ✅ + Security ✅ + Roles ✅]
