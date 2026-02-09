@@ -81,3 +81,21 @@ def pytest_configure(config):
     
     if 'hvac' not in sys.modules:
         sys.modules['hvac'] = MagicMock()
+    
+    if 'hvac.exceptions' not in sys.modules:
+        hvac_exceptions = MagicMock()
+        
+        # Create exception classes
+        class InvalidPath(Exception):
+            pass
+        
+        class Unauthorized(Exception):
+            pass
+        
+        class Forbidden(Exception):
+            pass
+        
+        hvac_exceptions.InvalidPath = InvalidPath
+        hvac_exceptions.Unauthorized = Unauthorized
+        hvac_exceptions.Forbidden = Forbidden
+        sys.modules['hvac.exceptions'] = hvac_exceptions
