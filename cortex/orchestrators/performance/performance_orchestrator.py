@@ -258,7 +258,8 @@ class PythonProfiler(Profiler):
                     percentage=(stat_tuple[3] / (sum(s[3] for _, s in func_stats_list) or 1) * 100) 
                                if len(stat_tuple) > 3 else 0
                 ))
-        except:
+        except (ValueError, TypeError, IndexError):
+            # Silent failure: skip malformed profiling stats
             pass
         
         return hotspots

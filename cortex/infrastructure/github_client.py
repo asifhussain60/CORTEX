@@ -344,7 +344,7 @@ class GitHubClient:
                         latest_version="v1.0.0",
                     )
                 )
-            except:
+            except (Exception,):  # CORE-013: Specific exception handling (generic fallback if API unavailable)
                 pass
 
             return actions
@@ -405,7 +405,7 @@ class GitHubClient:
                 # GitHub doesn't expose environments directly in PyGithub
                 # Would need to use raw REST calls
                 pass
-            except:
+            except (Exception,):  # CORE-013: Specific exception handling (generic fallback if API unavailable)
                 pass
 
             return environments
