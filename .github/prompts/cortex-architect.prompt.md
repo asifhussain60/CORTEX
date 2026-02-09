@@ -2685,9 +2685,12 @@ p1_checks = checklist.priority_checks["P1"].checks
 **Structure:**
 - **P0 — Security & Critical** (4 checks): Secrets, injection, broken code, test failures
 - **P1 — Infrastructure** (8 checks): Wiring, integration, audit trail, component verification
-- **P1.5 — Cohesion & Integrity** (11 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) + **Brain Cohesion & Health (Phase 38)**: Brain health score (≥80%), orchestrator connectivity (≥90%), company domain utilization (≥50%), brain state freshness (<24h), governance adaptation enabled — validated via `cortex_brain_health`, `cortex_capability_mesh`, `cortex_flush_brain` MCP tools
+- **P1 — Intelligence Architecture** (NEW - 3 checks): Synthesis duplication, LENS scope validation, intelligence gateway enforcement
+- **P1 — Wiring Integrity** (NEW - 4 checks): Orphaned orchestrators, circular dependencies, missing intelligence flags, registry-wiring sync
+- **P1.5 — Cohesion & Integrity** (11 checks): Prompt cohesion, agent health, orchestrator integrity, module cohesion, test validity, team collaboration (Phase 39) + **Brain Cohesion & Health (Phase 38)**: Brain health score (≥80%), orchestrator connectivity (≥90%), company domain utilization (≥50%), brain state freshness (<24h), governance adaptation enabled — validated via `cortex_brain_health`, `cortex_capability_mesh`, `cortex_flush_brain` MCP tools + **Prompt Cleanup Cycle**: AC-PROMPT-CLEANUP-001 through 005 (drift detection)
 - **P1.6 — Future-Vision** (2 checks): Technology adoption triggers, migration planning (Phase 39)
 - **P2 — Quality** (6 checks): Duplicates, dead code, refactoring needs, LENS analysis (MANDATORY)
+- **P2 — Knowledge Synthesis** (NEW - 2 checks): Company domain loader duplication, synthesis timing consistency
 - **P3 — Cleanup** (5 checks): Vacuum (RUN FIRST), MD sprawl, markdown links, code fences
 
 **CRITICAL:** 
@@ -2738,6 +2741,14 @@ p1_checks = checklist.priority_checks["P1"].checks
 
 ---
 | 7. Audit Log | AC_START → AC_COMPLETE with compliance status | Hash chain integrity |
+
+### P2 — Knowledge Synthesis (Phase 56 + Phase 20.5)
+| Check | Status | Evidence | Auto-Fix |
+|-------|--------|----------|----------|
+| **Company Domain Loader Duplication** | ☐ | Detect 3+ loaders for `company/domains/*.yaml` (CompanyDomainLoader, CompanyKnowledgeLoader, StandardsResolver) | Consolidate to single canonical loader |
+| **Synthesis Timing Consistency** | ☐ | AC marker analysis: multiple synthesis points (MasterOrchestrator Stage 2, IntentRouter, EnforcementOrchestrator) | Enforce single entry point: MasterOrchestrator Stage 2 → IntelligenceGateway |
+
+---
 
 **Violation Response Template:**
 
@@ -4429,6 +4440,158 @@ P6 Wiring Integrity audit runs on EVERY AUDIT invocation if cortex-registry/_cor
 
 **Violation Detection:**
 If response contains any "Ran terminal command: cat" or "Created [" patterns → BLOCK and regenerate response without file generation.
+
+## 5-Gate Defense-in-Depth Architecture
+
+**Challenge to User's Audit-Only Approach:**
+
+User proposed: *"If audit catches it, it'll always propose a fix and we can keep functionality aligned."*
+
+**CORTEX Position:** Reactive audit is **insufficient**. Waiting for Gate 5 (Audit) to catch issues means:
+- ❌ **Code already written** (wasted effort)
+- ❌ **Tests already passing** (false confidence)
+- ❌ **Refactoring cost high** (technical debt)
+- ❌ **Momentum lost** (context switching)
+
+**Alternative: 5-Gate Defense-in-Depth**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     CORTEX REQUEST FLOW                     │
+└─────────────────────────────────────────────────────────────┘
+
+User Request → [INTENT CLASSIFICATION]
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ GATE 1: DESIGN (Preventive)                                 │
+│ ├─ HolisticValidationOrchestrator (Phase 48)                │
+│ ├─ DoR Confidence Scoring (≥0.7 required)                   │
+│ ├─ Challenge Generation (5 alternatives)                    │
+│ └─ Registry Consistency Check                               │
+│ ❌ BLOCK if: DoR < 0.7, no alternatives, registry conflict  │
+└─────────────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ GATE 2: PRE-EXECUTION (Blocking)                            │
+│ ├─ EnforcementOrchestrator (7 agents, 26 CORE rules)        │
+│ ├─ MCP Availability Check (EnvironmentIntegrityAgent)       │
+│ ├─ File Naming Enforcement (CORE-028)                       │
+│ ├─ Intelligence Gateway Validation                          │
+│ └─ Wiring Integrity Check                                   │
+│ ❌ BLOCK if: MCP unavailable, violations ≥3, wiring broken  │
+└─────────────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ GATE 3: RUNTIME (Monitoring)                                │
+│ ├─ TDD Enforcement (Tests BEFORE code)                      │
+│ ├─ Audit Trail Generation (AC_START → AC_COMPLETE)          │
+│ ├─ Regression Risk Scoring                                  │
+│ └─ 3-Strike Policy (halt at 3 violations)                   │
+│ ⚠️ WARN at 1-2 violations, ❌ HALT at 3                     │
+└─────────────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ GATE 4: POST-EXECUTION (Verification)                       │
+│ ├─ Test Validation (coverage ≥80%)                          │
+│ ├─ LENS Analysis (no duplicates, dead code)                 │
+│ ├─ Governance Database Update                               │
+│ └─ Registry Synchronization                                 │
+│ ❌ BLOCK merge if: tests fail, coverage <80%, LENS errors   │
+└─────────────────────────────────────────────────────────────┘
+                        ↓
+┌─────────────────────────────────────────────────────────────┐
+│ GATE 5: AUDIT (Reactive - Last Line of Defense)             │
+│ ├─ Comprehensive Health Scan                                │
+│ ├─ Intelligence Architecture Validation                     │
+│ ├─ Wiring Integrity Audit                                   │
+│ ├─ Prompt Coherence Check (PromptCoherenceValidator)        │
+│ └─ Auto-Fix Proposal Generation                             │
+│ 🔍 DETECT what Gates 1-4 missed, LEARN, improve gates       │
+└─────────────────────────────────────────────────────────────┘
+                        ↓
+              ✅ Production Ready
+```
+
+### Gate Effectiveness Comparison
+
+| Metric | User's Approach (Gate 5 Only) | 5-Gate Defense-in-Depth |
+|--------|-------------------------------|-------------------------|
+| **Issue Detection Time** | Post-implementation (late) | Pre-implementation (early) |
+| **Refactoring Cost** | HIGH (code exists) | LOW (blocked before write) |
+| **Developer Experience** | Frustrating (redo work) | Smooth (clear up-front) |
+| **Architecture Drift** | Gradual erosion | Prevented by Gates 1-2 |
+| **False Confidence** | Tests pass, but wrong design | Design validated first |
+| **Technical Debt** | Accumulates | Minimal |
+| **Audit Overhead** | High (catch-all gate) | Low (validates gates work) |
+
+### Intelligence Break Detection (Gate Integration)
+
+**Your Concern:** *"Intelligence orchestrator synthesis pattern not working consistently."*
+
+**5-Gate Response:**
+
+| Gate | Detection Mechanism | Action |
+|------|---------------------|--------|
+| **Gate 1 (Design)** | HolisticValidationOrchestrator detects multiple synthesis points in design doc | ❌ BLOCK: "Design calls for 3 synthesis locations. Require single gateway." |
+| **Gate 2 (Pre-Exec)** | EnforcementOrchestrator scans for `synthesize_unified_context` calls | ❌ BLOCK: "2 synthesis calls found. Use IntelligenceGateway abstraction." |
+| **Gate 3 (Runtime)** | TDDOrchestrator test fails: `assert synthesis_calls == 1` | ❌ HALT: "Test expects 1 synthesis call, found 2. Fix before continuing." |
+| **Gate 4 (Post-Exec)** | LENS duplication detection finds 3 similar synthesis implementations | ⚠️ WARN: "CORE-035 violation. Consolidate to single implementation." |
+| **Gate 5 (Audit)** | PromptCoherenceValidator finds prompt says "single gateway" but code has 3 | 🔧 AUTO-FIX: "Generate PR to extract IntelligenceGateway class." |
+
+**Result:** Issue caught at **Gate 1 (Design)** instead of **Gate 5 (Audit)**.
+
+### Wiring Integrity (Gate Integration)
+
+| Gate | Detection | Prevention |
+|------|-----------|------------|
+| **Gate 1** | Challenge phase: "Is this orchestrator wired?" | Architect must verify registry entry |
+| **Gate 2** | EnforcementOrchestrator: Scan `__wiring_contract__.yaml` | BLOCK if missing wiring metadata |
+| **Gate 3** | Runtime: MasterOrchestrator fails to load unwired orchestrator | HALT with clear error |
+| **Gate 4** | Post-exec: Verify registry updated with new orchestrator | BLOCK merge if registry stale |
+| **Gate 5** | Audit: Detect orphaned code (exists but not wired) | AUTO-FIX: Add to wiring or mark deprecated |
+
+### Why Audit-Only Fails (Real Examples)
+
+**Scenario 1: LENS Scope Creep**
+- ❌ **Audit-Only:** Developer adds vision analysis to `cortex/lens/`, tests pass, merged. Audit catches it 3 weeks later. 400 LOC refactor required.
+- ✅ **5-Gate:** Gate 1 (Design) challenges: "LENS is orchestration. Vision analysis is computation. Extract to cortex/intelligence/?" Prevented before coding.
+
+**Scenario 2: Company Domain Loader Duplication**
+- ❌ **Audit-Only:** 3 loaders created over 2 months. Audit finds them, proposes consolidation. Merge conflicts, regression risk high.
+- ✅ **5-Gate:** Gate 2 (Pre-Exec) detects 2nd loader: "CompanyDomainLoader exists. Reuse or justify new?" Duplication prevented.
+
+**Scenario 3: Synthesis Timing Inconsistency**
+- ❌ **Audit-Only:** IntentRouter re-synthesizes what MasterOrchestrator already synthesized. Audit detects inefficiency. Refactor requires IntentRouter API change.
+- ✅ **5-Gate:** Gate 1 (Design) shows synthesis flow diagram. Designer sees duplication before coding.
+
+### Implementation: Gate Activation Matrix
+
+| Intent | Gate 1 | Gate 2 | Gate 3 | Gate 4 | Gate 5 |
+|--------|--------|--------|--------|--------|--------|
+| **IMPLEMENT** | ✅ DoR | ✅ Enforcement | ✅ TDD | ✅ LENS | ⚪ Audit |
+| **FIX** | ✅ DoR | ✅ Enforcement | ✅ TDD | ✅ LENS | ⚪ Audit |
+| **REFACTOR** | ✅ DoR | ✅ Enforcement | ✅ TDD | ✅ LENS | ⚪ Audit |
+| **DESIGN** | ✅ DoR | ⚪ Optional | ❌ Skip | ❌ Skip | ⚪ Audit |
+| **AUDIT** | ❌ Skip | ❌ Skip | ❌ Skip | ❌ Skip | ✅ Full Scan |
+
+**Key Insight:** IMPLEMENT/FIX/REFACTOR activate **all 5 gates**. Audit is last, not only.
+
+### User's Proposal vs. 5-Gate Defense
+
+**User:** "If audit catches it, it'll always propose a fix."
+
+**CORTEX Challenge:**
+1. ✅ **Agrees:** Audit WILL catch issues (Gate 5 works)
+2. ❌ **Disagrees:** Waiting for audit is **too late**
+3. ✅ **Proposes:** Catch at Gates 1-2 (design/pre-exec) → **10x cheaper**
+4. ✅ **Validates:** Phase 56 pilot success criteria include **preventive gate coverage**
+
+**Recommended Path:**
+- **Short-term:** Enhance audit (your request) ← **DONE in this session**
+- **Medium-term:** Strengthen Gates 1-2 (EnforcementOrchestrator agents)
+- **Long-term:** Shift-left all checks (prevent > detect)
+
+---
 
 ## Auto-Detection Protocol
 

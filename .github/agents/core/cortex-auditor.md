@@ -193,11 +193,37 @@ print("✅ MCP Available: Proceeding with audit...")
 | Context governance (ENH-046) | ☐ | governance.db metrics |
 | File naming (CORE-028) | ☐ | No SCREAMING_CASE detected |
 
-### P1.5 — Cohesion & Integrity (Phase 39)
+### P1 — Intelligence Architecture (Phase 56)
+| Check | Status | Evidence | MCP Tool |
+|-------|--------|----------|----------|
+| **Synthesis Duplication** | ☐ | Multiple `synthesize_unified_context` calls | `grep_search` |
+| **LENS Scope Creep** | ☐ | Non-orchestration code in cortex/lens/ | `semantic_search` |
+| **Intelligence Gateway** | ☐ | Orchestrators bypass gateway | `cortex_lens_analyze` |
+
+### P1 — Wiring Integrity
+| Check | Status | Evidence | MCP Tool |
+|-------|--------|----------|----------|
+| **Orphaned Orchestrators** | ☐ | Code vs wiring.yaml mismatch | `file_search` + `grep_search` |
+| **Circular Dependencies** | ☐ | Import cycles detected | `cortex_brain_health` |
+| **Missing Intelligence Flags** | ☐ | wiring.yaml missing metadata | `grep_search` |
+| **Registry-Wiring Sync** | ☐ | Phase registry drift | `semantic_search` |
+
+### P1.5 — Cohesion & Integrity (Phase 39 + Prompt Cleanup)
 | Check | Status | Evidence |
 |-------|--------|----------|
 | **Prompt Cohesion** | ☐ | PromptCohesionValidator: version drift, CORE rules, MCP enforcement |
 | **Agent Health** | ☐ | AgentHealthValidator: version tracking, capability coverage, index sync |
+| **Architect-Auditor Sync** | ☐ | AC-PROMPT-CLEANUP-001: Deprecated orchestrators removed |
+| **Production Prompt Sync** | ☐ | AC-PROMPT-CLEANUP-002: MCP tools match implementation |
+| **Agent Capability Drift** | ☐ | AC-PROMPT-CLEANUP-003: Sync with HolisticValidationOrchestrator |
+| **Challenge Gate Docs** | ☐ | AC-PROMPT-CLEANUP-004: Sync with ChallengeEngine |
+| **Response Format DRY** | ☐ | AC-PROMPT-CLEANUP-005: Consolidate duplicates |
+
+### P2 — Knowledge Synthesis (Phase 20.5 + Phase 56)
+| Check | Status | Evidence | Auto-Fix |
+|-------|--------|----------|----------|
+| **Loader Duplication** | ☐ | 3+ loaders for company/domains/ | Consolidate to single loader |
+| **Synthesis Timing** | ☐ | Multiple synthesis entry points | Enforce MasterOrchestrator Stage 2 gateway |
 | **Orchestrator Integrity** | ☐ | OrchestratorIntegrityValidator: wiring alignment, MCP exposure, dependencies |
 | **Module Cohesion** | ☐ | ModuleCohesionValidator: import health, circular dependencies |
 | **Test Validity** | ☐ | TestValidityValidator: coverage gaps (80%), contract test health |

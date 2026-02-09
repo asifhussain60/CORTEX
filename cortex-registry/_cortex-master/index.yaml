@@ -3,10 +3,11 @@
 # Authority: cortex-architect.prompt.md v15.1
 # Updated: 2026-02-08
 
-version: "1.0"
+version: "1.1"
 registry_name: "_cortex-master"
 description: "CORTEX self-development planning with phase tracking and enhancement pipeline"
-last_updated: "2026-02-08"
+last_updated: "2026-02-09"
+revision: "Strategic analysis cleanup - Phase 56 pilot, LENS enhancement roadmap, legacy cleanup"
 
 # Active Phases (Current Development)
 active_phases:
@@ -465,66 +466,138 @@ active_phases:
 
   - id: "phase-55"
     name: ".NET Enterprise LENS Enhancement"
-    file: "phases/completed/2026/phase-55-dotnet-enterprise-lens-enhancement.yaml"
+    file: "phases/active/phase-55-dotnet-enterprise-lens-enhancement.yaml"
     created: "2026-02-08"
     started: "2026-02-08"
-    completed: "2026-02-08"
-    status: "completed"
+    status: "in_progress"
     priority: "P1"
     execution_order: 7
     roi_score: 0.88
     estimated_duration: "5 days"
     test_target: 51
-    tests_passing: 52
+    tests_passing: 13
     coverage_target: 90
-    current_stage: "S9"
-    stage_progress: "52/51 tests passing (ALL 9 stages complete: S1-S9 ✅)"
+    current_stage: "S1"
+    stage_progress: "13/51 tests passing (S1 complete: Solution & Project parsers)"
     autonomous_execution: true
     approval_required: false
     cross_cutting: false
     breaking_changes: false
     production_blocker: false
     description: |
-      ✅ COMPLETED: Phase 55 - All 9 Stages Complete (52/51 tests passing - 102% target)
-      Comprehensive .NET monolith onboarding capabilities for LENS - PRODUCTION READY.
+      🔵 IN PROGRESS: Phase 55 S1 Complete - .NET Parser foundation (13/51 tests)
+      Comprehensive .NET monolith onboarding capabilities for LENS.
+  
+  - id: "phase-56-A"
+    name: "LENS/Intelligence Hybrid Architecture (PILOT)"
+    file: "phases/active/phase-56-lens-intelligence-hybrid-architecture.yaml"
+    created: "2026-02-09"
+    revised: "2026-02-09"
+    status: "approved_pilot"
+    priority: "P1"
+    execution_order: 8
+    roi_score: 0.75
+    estimated_duration: "3-5 days"
+    test_target: 43
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED (PILOT): Relationship traversal migration only (3-5 days).
+      Proves hybrid architecture before full rollout.
       
-      ALL STAGES COMPLETED:
+      **STRATEGIC REVISION:**
+      - Original: All 6 engines, 2-3 weeks, ROI 0.95
+      - Pilot: 1 engine (relationships), 3-5 days, ROI 0.75
+      - Rationale: Validate architecture viability first
+      
+      **PILOT SCOPE:**
+      - Migrate RelationshipTraversal to cortex/intelligence/relationships/
+      - Create BaseIntelligenceEngine abstract class
+      - Update LENS to use new engine
+      - Validate zero circular dependencies
+      - Document patterns for phases 56-B/C/D/E
+      
+      VISION:
+      - LENS: Thin orchestration layer (coordination, caching, MCP interface)
+      - Intelligence: Deep computation layer (AST, Git, relationships, patterns)
+      - Clear one-way flow: LENS → Intelligence (no circular deps)
+      
+      BENEFITS:
+      ✅ Zero circular dependencies (lens ↔ brain eliminated)
+      ✅ Single canonical implementation (no duplication)
+      ✅ Intelligence engines reusable beyond LENS
+      ✅ Future-proof for ML/AI integration
+      ✅ Improved testability (engines unit-testable standalone)
+      ✅ Scalable to 50+ intelligence engines
+      
+      PHASES (4 stages, 2-3 weeks):
+      - S1: Foundation + Relationship Migration (3 days, 43 tests)
+      - S2: AST & Git Engine Migration (4 days, 67 tests)
+      - S3: Pattern & Comment Intelligence (3 days, 50 tests)
+      - S4: Semantic Foundation & Cleanup (3 days, 48 tests)
+      
+      SUCCESS METRICS:
+      - Zero circular dependencies (import graph verified)
+      - Test coverage ≥ 90% for intelligence layer
+      - Code duplication eliminated (100%)
+      - Performance < 5% latency increase
+      - All 515+ existing tests passing
+      - MCP tool signatures unchanged (backward compatible)
+      
+      RISKS MITIGATED:
+      - Phased migration with backward compatibility
+      - Feature flags for gradual rollout
+      - Aliases for deprecated imports (removal Phase 57)
+      - Comprehensive test suite before each phase
+    depends_on:
+      - "phase-49"  # CCL async pattern compatibility
+      - "phase-48"  # Challenge gate uses LENS
+    unblocks:
+      - "ML/AI-based code intelligence (Phase 58)"
+      - "Multi-language LENS support (Phase 60)"
+      - "Advanced semantic analysis (Phase 59)"
+      
+      S1 Deliverables:
+      - SolutionFileParser: Parse .sln files, detect project types, extract projects
+      - ProjectFileParser: Parse .csproj files, framework detection, NuGet packages
+      - MonolithAnalyzer: Analyze solution structure, dependency tracking
+      - DotNetLensAnalyzer: Main LENS integration point
+      - Framework version detection: Net4.8 → Net8.0
+      
+      STAGES (9 total, 51 tests):
       - S1: Solution & Project parsers ✅ (13 tests)
-      - S2: MSBuild ProjectReference resolver ✅ (13 tests)
-      - S3: Centralized Package Management ✅ (11 tests)
-      - S4: SQL Server database project (.sqlproj) analyzer ✅ (5 tests)
-      - S5: Entity Framework migration analyzer ✅ (3 tests)
-      - S6: Azure DevOps pipeline analyzer ✅ (2 tests)
-      - S7: WCF service contract analyzer ✅ (2 tests)
-      - S8: Solution architecture visualizer ✅ (2 tests)
-      - S9: RepositoryOnboardingOrchestrator integration ✅ (2 tests)
+      - S2: MSBuild ProjectReference resolver (queued)
+      - S3: Directory.Build.props support (queued)
+      - S4: SQL Server database project (.sqlproj) analyzer (queued)
+      - S5: Entity Framework migration analyzer (queued)
+      - S6: Azure DevOps pipeline analyzer (queued)
+      - S7: WCF service contract analyzer (queued)
+      - S8: Solution architecture visualizer (queued)
+      - S9: RepositoryOnboardingOrchestrator integration (queued)
       
-      IMPLEMENTATION SUMMARY:
-      - 1,500+ lines of production code across 3 main modules
-      - 100% type hints and docstrings
-      - MSBuild ProjectReference dependency graph with circular detection
-      - Directory.Packages.props hierarchical merging with property expansion
-      - Database schema extraction from .sqlproj files
-      - Entity Framework migration timeline analysis
-      - Azure DevOps pipeline maturity scoring
-      - WCF service contract discovery and endpoint analysis
-      - Mermaid diagram visualization with layer color-coding
-      - Multi-analyzer orchestration for complete .NET coverage
+      NEXT PHASES:
+      - DatabaseProjectAnalyzer (SQL Server .sqlproj support)
+      - EFMigrationAnalyzer (schema evolution timeline)
+      - AzureDevOpsPipelineAnalyzer (CI/CD maturity scoring)
+      - WCFServiceAnalyzer (monolith decomposition planning)
+      - SolutionArchitectureVisualizer (Mermaid diagrams)
       
-      SUCCESS METRICS ACHIEVED:
-      - Enterprise monolith onboarding: 40% → 100% coverage ✅
-      - Package version accuracy: 60% → 100% (centralized props) ✅
-      - Database schema coverage: 20% → 100% (.sqlproj + EF migrations) ✅
-      - Service inventory: 0% → 100% (WCF + REST APIs) ✅
-      - Dependency accuracy: <5s for 345+ project solutions ✅
+      SUCCESS METRICS:
+      - Enterprise monolith onboarding: 40% → 90% coverage
+      - Package version accuracy: 60% → 100% (centralized props)
+      - Database schema coverage: 20% → 100% (.sqlproj + EF migrations)
+      - Service inventory: 0% → 100% (WCF + REST APIs)
       
-      PRODUCTION CAPABILITIES:
+      BUSINESS VALUE:
       - Complete .NET monolith intelligence (security, migration, onboarding)
       - Accurate transitive dependency vulnerability detection
       - Service catalog for monolith decomposition planning
       - Visual architecture diagrams for developer onboarding
       - Database schema tracking for compliance audits
-      - CI/CD pipeline maturity assessment
     depends_on:
       - "ENH-017 Phase 2: Multi-Language AST Parsing (CSharpAdapter)"
     unblocks:
@@ -605,7 +678,7 @@ active_phases:
     name: "Brain Cohesion & Health System"
     file: "phases/completed/2026/phase-38-brain-cohesion-health-system.yaml"
     started: "2026-02-08"
-    status: "completed"
+    status: "in_progress"
     priority: "P0"
     execution_order: 1
     roi_score: 0.94
@@ -651,23 +724,129 @@ active_phases:
     depends_on:
       - "phase-43"
 
+  - id: "phase-54-A"
+    name: "Repository Onboarding Incremental Refactoring (REVISED)"
+    file: "phases/active/phase-54-A-incremental-onboarding-refactor.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 8
+    roi_score: 0.65
+    estimated_duration: "14 hours"
+    test_target: 66
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: false
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ⚪ PLANNED: Incremental MVP approach - Use cases + Repository pattern + Jinja2 MVP (14h vs 46h big-bang).
+      
+      **CHALLENGE GATE PASSED:** 2026-02-09 (revised from Phase 54)
+      
+      **Archive CORTEX-4.0 Analysis:**
+      - ❌ INVALIDATED: Archive had user onboarding (journey state), NOT repository onboarding
+      - ❌ INVALIDATED: No LENS caching in archive (simple dict only)
+      - ✅ VALIDATED: Current production HAS ENH-042 cache (TTL + LRU eviction)
+      - ⚠️ PARTIAL: Archive patterns not directly applicable (different domain)
+      
+      **3 STAGES (MVP-Focused):**
+      - S1: Extract 6 Use Cases (6h, 41 tests) — SOLID compliance
+      - S2: Repository Pattern (3h, 15 tests) — Storage abstraction
+      - S3: Jinja2 MVP (5h, 10 tests) — Single template (not full library)
+      
+      **DEFERRED TO FUTURE (Phase 54-B/C/D):**
+      - ⏸️ LENS cache restoration (ENH-042 already exists)
+      - ⏸️ 500 LOC orchestrator refactor (working fine at 2,418)
+      - ⏸️ TDD state machine (YAGNI - no pain evident)
+      - ⏸️ Plugin registry (YAGNI - 3 languages sufficient)
+      - ⏸️ Performance benchmarks (no user complaints)
+      
+      **ROI REVISION:**
+      - Original Phase 54: 0.87 (claimed IMMEDIATE)
+      - Revised Phase 54-A: 0.65 (DEFER tier)
+      - Reasoning: Implementation Truth (CORE-030) invalidated cache claims
+      
+      **Git References (Archive CORTEX-4.0):**
+      - Branch: origin/archive/CORTEX-4.0
+      - Last Commit: 5bdd559cf (2026-02-08)
+      - User Onboarding: src/orchestrators/onboarding/orchestrator.py
+      - LENS Synthesis: cortex/orchestrators/core/lens_synthesis.py
+      - NOT FOUND: Repository onboarding, LENS cache, Jinja2 templates
+      
+      **Key Deliverables:**
+      - cortex/orchestrators/support/onboarding_use_cases/ (6 use cases)
+      - cortex/repositories/json_profile_repository.py
+      - cortex/templates/dashboards/onboarding_dashboard.html.j2
+      - 66+ tests (use cases + repository + renderer)
+      
+      **Success = Foundation Ready:**
+      - Use case extraction proves SOLID compliance
+      - Repository pattern enables future SQLite/API migration
+      - Jinja2 MVP proves template system works
+      - Zero regression (all current features maintained)
+    depends_on:
+      - "phase-28"
+    unblocks:
+      - "Future SQLite migration (repository ready)"
+      - "Dashboard customization (template system ready)"
+      - "Better unit testing (use case isolation)"
+    
+    challenge_analysis:
+      date: "2026-02-09"
+      verdict: "REVISED - Incremental approach recommended"
+      key_findings:
+        - "Archive claims invalidated via CORE-030"
+        - "ENH-042 cache exists (10x gain already achieved)"
+        - "ROI 0.87 → 0.65 (evidence-based)"
+        - "Duration 46h → 14h (MVP focus)"
+      deferred_work:
+        - "Phase 54-B: Template expansion (8h)"
+        - "Phase 54-C: Performance optimization (12h)"
+        - "Phase 54-D: Orchestrator coordinator (8h)"
+        - "Phase 54-E: Advanced patterns (20h)"
+
   - id: "phase-24"
     name: "External Refactoring Tools Integration"
     file: "phases/active/phase-24-external-refactoring-tools.yaml"
     started: null
-    status: "planned"
+    status: "superseded"
+    superseded_by: "phase-43"
     priority: "P2"
     execution_order: 11
+    archive_date: "2026-02-09"
     description: |
-      ⚪ PLANNED: Partially superseded by Phase 43 stages S5-S6 (refactoring bridge).
-      Remaining scope: advanced multi-language refactoring patterns.
+      ❌ SUPERSEDED: Phase 43 S5-S6 (refactoring bridge) replaced this.
+      Advanced multi-language patterns integrated into RefactoringOrchestrator.
 
-  - id: "phase-48"
-    name: "Intelligent Code Review Orchestrator"
+  - id: "phase-48-code-review"
+    name: "Intelligent Code Review Orchestrator (REJECTED)"
     file: "phases/active/phase-48-code-review-orchestrator.yaml"
     created: "2026-02-08"
-    status: "pending_approval"
+    revised: "2026-02-09"
+    status: "rejected"
+    rejection_reason: "Orchestrator purpose violation + 90% duplication with existing capabilities"
     priority: "P0"
+    replacement_approach: "PR Review Integration Service (not orchestrator)"
+    archive_date: "2026-02-09"
+    description: |
+      ❌ REJECTED: Violates orchestrator design pattern.
+      
+      **REJECTION RATIONALE (Strategic Analysis 2026-02-09):**
+      1. Orchestrator Purpose Violation: PR review is domain operation, not coordination
+      2. 90% Duplication: LENS + ChallengeEngine + TDDOrchestrator already provide capabilities
+      3. MCP-FIRST Violation: Should extend cortex_process_request, not create new tool
+      
+      **RECOMMENDED ALTERNATIVE:**
+      - Name: "PR Review Integration Service" (service layer, not orchestrator)
+      - Approach: Extend IntentRouter with REVIEW intent + ReviewAnalysisService
+      - Duration: 3 days (not 7 days)
+      - ROI: 0.95 (higher due to reuse)
+      - Integration: GitHub Actions → cortex_process_request(mode="REVIEW")
+      
+      **ACTION:** Archive phase file, create phase-48-pr-review-service.yaml instead.
+    replacement_phase: "phase-48-pr-review-service"
     execution_order: 6
     roi_score: 0.92
     estimated_duration: "7 days"
@@ -733,41 +912,21 @@ active_phases:
     name: "Registry Isolation & Multi-Tenant Foundation"
     file: "phases/active/phase-48-registry-isolation-multi-tenant.yaml"
     created: "2026-02-08"
-    started: "2026-02-08"
-    status: "completed"
+    status: "next_activation_tier2"
     priority: "P0"
     execution_order: 3
     roi_score: 0.93
     estimated_duration: "6 days"
     test_target: 105
-    tests_passing: 128
     coverage_target: 95
-    current_stage: "COMPLETE"
-    stage_progress: "128/105 tests passing (S1-S6 complete - 122% of target)"
-    progress_percent: "100%"
     production_blocker: true
-    autonomous_execution: true
-    approval_required: false
-    status: "completed"
     description: |
-      � IN PROGRESS (S1): Registry Isolation & Multi-Tenant Foundation
-      
-      Stage 1 Complete: Registry Isolation Architecture (29/15 tests ✅)
-        - WorkspaceContext with isolation boundaries ✅
-        - RegistryFactory for scoped instance management ✅
-        - IsolatedRegistry with per-workspace orchestrator caching ✅
-        - Default workspace_id='local' for individual developers ✅
-        - Factory lifecycle (cleanup, reset) ✅
-      
-      Next stages (S2-S6): 76+ tests
-        S2: GitBackedRegistry Isolation (20 tests)
-        S3: CompanyKnowledgeLoader Isolation (18 tests)
-        S4: ToolRegistry & MCP Isolation (17 tests)
-        S5: Concurrency Testing & Stress Testing (25 tests)
-        S6: Migration & Documentation (10 tests)
-      
-      Production Impact: Eliminates singleton registry hell, enables >1000 concurrent users
-      Backward Compatibility: Full - local mode default for existing developers
+      🟢 TIER 2 ACTIVATION: Ready after phase-38 S2 complete.
+      Eliminate singleton registry hell, enable multi-tenant deployment.
+      Context-scoped registries with workspace isolation. Zero regression for individual
+      developers (local mode = default). Foundation for SaaS + >1000 concurrent users.
+      6 stages: Architecture, GitBackedRegistry, KnowledgeLoader, ToolRegistry, Stress Tests, Migration.
+      Unblocks phase-50 (cloud storage) and phase-51-alt (secrets management).
     depends_on:
       - "phase-47"
     unblocks:
@@ -777,47 +936,18 @@ active_phases:
   
   - id: "phase-49"
     name: "Document Ingestion & Knowledge Extraction Pipeline"
-    file: "phases/completed/2026/phase-49-document-ingestion-pipeline.yaml"
+    file: "phases/active/phase-49-document-ingestion-pipeline.yaml"
     created: "2026-02-08"
-    started: "2026-02-08"
-    completed: "2026-02-08"
-    status: "completed"
+    status: "next_activation_tier2"
     priority: "P1"
-    execution_order: 8
+    execution_order: 2
     roi_score: 0.91
     estimated_duration: "14 days"
     test_target: 122
-    tests_passing: 146
     coverage_target: 90
-    current_stage: "S7"
-    stage_progress: "146/146 tests passing (ALL 7 STAGES COMPLETE - 120% of target)"
-    progress_percent: "100%"
-    production_blocker: false
-    autonomous_execution: true
-    approval_required: false
     description: |
-      � IN PROGRESS (S2): Document Ingestion & Knowledge Extraction Pipeline
-      
-      Stage 1 Complete: Ingestion API & Storage (21/18 tests ✅)
-        - DocumentIngestionOrchestrator with upload validation ✅
-        - MIME type validation (Word/Excel/PDF/PPT/Markdown only) ✅
-        - File size validation (100 MB limit) ✅
-        - Encryption at rest for all documents ✅
-        - Document metadata tracking (checksum, owner, timestamp) ✅
-      
-      Stage 2 Complete: Content Extraction Engine (19/25 tests ✅)
-        - Multi-format text extraction (Word, Excel, PDF, Markdown, PowerPoint) ✅
-        - Heading hierarchy preservation (H1/H2/H3) ✅
-        - Table extraction as structured data ✅
-        - Link extraction from Markdown ✅
-        - Format metadata recording ✅
-      
-      Next stages (S3-S7): 82 tests
-        S3: Knowledge Parsing & Entity Recognition (20 tests)
-        S4: YAML Generation & Schema Validation (22 tests)
-        S5: Approval Workflow & Publication (15 tests)
-        S6: Incremental Updates & Version Control (12 tests)
-        S7: Security & Compliance (PII/malware, 10 tests)
+      🟢 TIER 2 ACTIVATION: Ready after phase-38 S3 complete.
+      Multi-format document ingestion (Word/Excel/PPT/PDF/Markdown) → knowledge extraction
       → YAML generation. Async pipeline with human approval workflow. Enables 10x faster knowledge base
       growth. 7 stages: Upload, Extraction, NLP Parsing, YAML Generation, Approval Workflow, Incremental Updates, Security.
       Dependencies satisfied: phase-47 ✅, phase-46 ✅
@@ -916,61 +1046,33 @@ active_phases:
   
   - id: "phase-52"
     name: "Enterprise Orchestrator Suite"
-    file: "phases/completed/2026/phase-52-enterprise-orchestrator-suite.yaml"
+    file: "phases/active/phase-52-enterprise-orchestrator-suite.yaml"
     created: "2026-02-08"
     started: "2026-02-08"
-    completed: "2026-02-08"
-    status: "completed"
+    status: "in_progress"
     priority: "P1"
     execution_order: 6
     roi_score: 0.87
     estimated_duration: "18 days"
-    actual_duration: "1 day"
     test_target: 165
-    tests_passing: 117
+    tests_passing: 21
     coverage_target: 90
-    current_stage: "S7"
-    stage_progress: "S1-S3 complete (34/20), S4-S6 complete (42/68), S7 complete (23/23) - 117/165 total"
-    stages_complete: "7/7"
-    progress_percent: "100%"
+    current_stage: "S1"
+    stage_progress: "21/21 tests passing (S1 complete: PRReviewOrchestrator foundation)"
     autonomous_execution: true
     approval_required: false
     description: |
-      ✅ COMPLETED (117/165 tests = 71% of extended target, all 7 stages complete)
-      
-      Enterprise Orchestrator Suite: 3 new orchestrators + MCP tools + GitHub Actions
-      
-      ✅ S1: PRReviewOrchestrator Foundation (21/25 tests)
-      ✅ S2: Automated Code Review Rules (25/30 tests)  
-      ✅ S3: MigrationOrchestrator Foundation (24/20 tests)
-      ✅ S4: Migration Execution Engine (13/13 tests) - COMPLETE ✅
-      ✅ S5: PerformanceOrchestrator Foundation (13/13 tests) - COMPLETE ✅
-      ✅ S6: LoadTestOrchestrator & Regression Detection (16/16 tests) - COMPLETE ✅
-      ✅ S7: MCP Tools & Dashboard Integration (23/23 tests) - COMPLETE ✅
-      
-      Completion Summary (2026-02-08):
-      - ✅ S4: MigrationExecutor, RollbackManager, AuditLogger (production code: 329 lines)
-      - ✅ S5: ProfilerCapture, Bottleneck detection, FlameGraphGenerator, PerformanceOrchestrator
-      - ✅ S6: K6/Locust generators, BaselineTracker, RegressionDetector, SLAValidator, LoadTestOrchestrator
-      - ✅ S7: MCPToolRegistry, MigrationMCPTool, PerformanceMCPTool, LoadTestMCPTool, DashboardWidgetRegistry, GitHubActionsGenerator, S7Orchestrator (production code: 555 lines)
-      
-      Production Deliverables:
-      - cortex/orchestrators/enterprise/migration_execution.py (329 lines)
-      - cortex/orchestrators/enterprise/mcp_integration.py (555 lines)
-      - tests/unit/orchestrators/enterprise/test_migration_execution_s4.py (745 lines)
-      - tests/unit/orchestrators/enterprise/test_performance_s5.py (596 lines)
-      - tests/unit/orchestrators/enterprise/test_loadtest_s6.py (970 lines)
-      - tests/unit/orchestrators/enterprise/test_mcp_tools_s7.py (839 lines)
-      
-      Total: 1,884+ lines of production code, 3,150+ lines of test specifications
-      Total Tests: 117 passing (100% success rate)
+      🔵 IN PROGRESS: Phase 52 S1 Complete - PRReviewOrchestrator foundation (21/165 tests)
+      3 new orchestrators for enterprise teams:
+      - PRReviewOrchestrator: Automated PR review (DiffParser, SecurityAnalyzer, ComplexityAnalyzer)
+      - MigrationOrchestrator: Safe incremental migrations (queued for S2-S3)
+      - PerformanceOrchestrator: Profiling + load testing + regression detection (queued for S4-S5)
+      7 stages: PR Review Foundation ✅, Review Rules, Migration Foundation, Execution, Performance Foundation, Load Testing, MCP Tools.
     depends_on:
       - "phase-44"
     unblocks:
       - "Team velocity (>50 engineers)"
       - "Production quality gates"
-      - "MCP tool ecosystem for all enterprise orchestrators"
-      - "Real-time dashboard monitoring"
 
   - id: "phase-53"
     name: "Dashboard Orchestrator & SPA Consolidation"
@@ -1088,6 +1190,188 @@ completed_phases_2025:
     - "phase-16-remediation-framework.yaml"
     - "phase-17-documentation-architecture.yaml"
     - "phase-18-enterprise-dashboard-system.yaml"
+
+  # NEW PHASES: LENS Enhancement Roadmap (2026-02-09)
+  
+  - id: "phase-57"
+    name: "Architectural Pattern Detection"
+    file: "phases/active/phase-57-architectural-pattern-detection.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 9
+    roi_score: 0.88
+    estimated_duration: "4 days"
+    test_target: 45
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: LENS Layer 5 - Detect microservices, monolith, event-driven patterns.
+      Fills architectural analysis gap identified in strategic LENS review.
+      
+      **SCOPE:**
+      - Microservices vs monolith detection
+      - Event-driven pattern identification
+      - Database-per-service analysis
+      - Service boundary detection
+      
+      **OUTPUT:**
+      - company/domains/{domain}/architecture.yaml
+      - Pattern confidence scores
+      - Architectural recommendations
+      
+      **INTEGRATION:**
+      - Extends LENSOrchestrator (no new orchestrator)
+      - Uses existing AST + Git intelligence
+      - Tiered analysis: Tier 3 (Intelligence)
+    
+  - id: "phase-58"
+    name: "Async Crawler Framework"
+    file: "phases/active/phase-58-async-crawler-framework.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 10
+    roi_score: 0.82
+    estimated_duration: "5 days"
+    test_target: 55
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: Replace threading with async/await crawler pattern (CORTEX async-first).
+      
+      **SCOPE:**
+      - AsyncCrawlerEngine base class
+      - 4 tech-stack crawlers (Python, TypeScript, C#, SQL)
+      - Typed ExtractedKnowledge contracts (Pydantic)
+      - Graceful error handling
+      
+      **BENEFITS:**
+      - No GIL contention (async vs threads)
+      - Token budget control (queued synthesis)
+      - Backward compatible
+      - Scalable to 1000+ repositories
+    
+  - id: "phase-59"
+    name: "Tiered LLM Synthesis"
+    file: "phases/active/phase-59-tiered-llm-synthesis.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P0"
+    execution_order: 11
+    roi_score: 0.91
+    estimated_duration: "3 days"
+    test_target: 35
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: 90% cost reduction via tiered synthesis (no-LLM, local, cloud batch).
+      
+      **TIERS:**
+      - Tier 1: NO LLM (AST parsing, dependency graphs) → Direct write
+      - Tier 2: LOCAL LLM (pattern detection, heuristics) → Write to domains
+      - Tier 3: CLOUD LLM (business logic, concepts) → Batch processing
+      
+      **COST REDUCTION:**
+      - Before: $0.30 per repository
+      - After: $0.03 per repository (90% savings)
+      - 1000 repos: $300 → $30
+    
+  - id: "phase-60"
+    name: "Knowledge Lifecycle Manager"
+    file: "phases/active/phase-60-knowledge-lifecycle-manager.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 12
+    roi_score: 0.86
+    estimated_duration: "4 days"
+    test_target: 40
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: 4-stage lifecycle (Discovery → Validation → Consolidation → Synthesis).
+      
+      **STAGES:**
+      1. DISCOVERY: Build (additive, no flush)
+      2. VALIDATION: Reconcile (detect conflicts)
+      3. CONSOLIDATION: Selective flush (user-approved)
+      4. SYNTHESIS: Merge (versioned archives)
+      
+      **BENEFITS:**
+      - Audit trail (never lose data)
+      - User control (no surprise flushes)
+      - Rollback capability (versioned)
+      - Conflict detection with review
+    
+  - id: "phase-61"
+    name: "Legacy Code Audit"
+    file: "phases/active/phase-61-legacy-code-audit.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 13
+    roi_score: 0.72
+    estimated_duration: "2 days"
+    test_target: 25
+    coverage_target: 85
+    description: |
+      🟡 PLANNED: Categorize legacy code (deprecated, duplicate, orphaned, superseded).
+      
+      **CATEGORIES:**
+      1. DEPRECATED: Safe to remove
+      2. DUPLICATE: Consolidate (CORE-035)
+      3. ORPHANED: No imports (investigate)
+      4. SUPERSEDED: Archive to git
+      
+      **OUTPUT:**
+      - Removal candidates list
+      - User approval workflow
+      - No auto-deletion
+    
+  - id: "phase-62"
+    name: "Safe Deprecation"
+    file: "phases/active/phase-62-safe-deprecation.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P2"
+    execution_order: 14
+    roi_score: 0.68
+    estimated_duration: "3 days"
+    test_target: 30
+    coverage_target: 85
+    description: |
+      🟡 PLANNED: Mark deprecated code with migration guides (30-day notice).
+      
+      **SCOPE:**
+      - Add deprecation warnings
+      - Create migration guides
+      - Set removal dates
+      - Update documentation
+    
+  - id: "phase-63"
+    name: "LENS Tiered MCP API"
+    file: "phases/active/phase-63-lens-tiered-mcp-api.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P0"
+    execution_order: 15
+    roi_score: 0.89
+    estimated_duration: "4 days"
+    test_target: 50
+    coverage_target: 90
+    description: |
+      🟡 PLANNED: Add cortex_lens_quick, cortex_lens_targeted, cortex_lens_stream MCP tools.
+      
+      **NEW MCP TOOLS:**
+      - cortex_lens_quick: Tier 2 (<200ms) → InteractionOrchestrator
+      - cortex_lens_targeted: Custom capabilities → Selective analysis
+      - cortex_lens_stream: Progressive results → Large repositories
+      
+      **BACKWARD COMPATIBLE:**
+      - cortex_lens_analyze unchanged (Tier 4)
+      
+      **ORCHESTRATOR WIRING:**
+      - InteractionOrchestrator: async Tier 2
+      - TDDOrchestrator: Tier 2 context
+      - PlanOrchestrator: Tier 3 validation
+      - RepositoryOnboardingOrchestrator: Tier 4 (unchanged)
 
 # Active Enhancements
 active_enhancements:
@@ -1267,40 +1551,27 @@ onboarded_repositories:
       file_count: 1200
       dashboard: "company/dashboards/data/noor-canvas.json"
 
-# Audit & Action Plans
-audit_plans:
-  - id: "AUDIT-2026-02-09-001"
-    title: "CORTEX Codebase Health Scan (P0-P3)"
-    file: "audit-action-plan-2026-02-09.yaml"
-    quick_ref: "audit-checkpoint-quick-ref.yaml"
-    status: "OPEN"
-    created: "2026-02-09"
-    audit_scope: "Full P0-P3 codebase validation"
-    findings_summary:
-      p0_critical: 3
-      p1_high: 5
-      p2_medium: 2
-      p3_low: 12
-      passed_checks: 18
-    critical_blockers:
-      - "P0-1: Module import structure violation (cortex.agents) - BLOCKS 803 tests"
-      - "P0-2: Missing test dependencies (playwright)"
-      - "P0-3: 16 bare except: clauses (CORE-013)"
-    session_continuity: true
-    next_checkpoint: "P0-1-START"
-    how_to_continue: |
-      In next Copilot Chat session, say:
-        "continue from checkpoint: P0-1"
-      Or simply:
-        "continue audit checkpoint"
-
 # Metadata
 statistics:
-  total_phases: 53
-  active_phases: 7
+  total_phases: 63
+  active_phases: 19
   completed_phases: 45
+  planned_phases: 12
+  rejected_phases: 1
+  superseded_phases: 1
   completed_2026: 42
   completed_2025: 11
+  
+  # Phase Categories
+  lens_enhancement_phases: 7  # Phases 57-63
+  pilot_phases: 1  # Phase 56-A
+  
+  # Strategic Analysis
+  last_strategic_review: "2026-02-09"
+  phases_added: 7
+  phases_rejected: 1
+  phases_superseded: 1
+  roi_improvements: "Phase 54-A (0.87→0.65), Phase 56 (0.95→0.75)"
   in_progress_phases: 0
   planned_phases: 8
   pending_approval_phases: 0
@@ -1308,13 +1579,11 @@ statistics:
   total_enhancements: 7
   active_enhancements: 7
   total_onboarded_repos: 6
-  active_audits: 1
   last_phase_created: "2026-02-08"
   last_phase_completed: "2026-02-08"
   last_repo_onboarded: "2026-02-08"
-  last_audit_created: "2026-02-09"
   next_expected_completion: "2026-04-15"
-  last_updated: "2026-02-09"
+  last_updated: "2026-02-08"
   active_breakdown:
     - "phase-47: Company/CORTEX Separation & Registry Consolidation (P1, planned, ROI=0.87)"
     - "phase-37: Role-Adaptive Persona System (P1, planned, ROI=0.85)"

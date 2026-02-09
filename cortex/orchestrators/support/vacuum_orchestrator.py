@@ -157,27 +157,6 @@ class VacuumOrchestrator:
                 "action": "keep",
             },
         }
-        
-        # Integration-First Pattern Detection (Phase 4)
-        # Detects files generated during Integration-First implementation
-        self.integration_first_patterns = {
-            "intent_classifier": r"intent_classifier\.py",
-            "mcp_preflight_checker": r"mcp_preflight_checker\.py",
-            "phase_completion_hook": r"phase_completion_hook_integrator\.py",
-            "integration_first_guide": r"integration_first_enhancement\.md",
-            "integration_first_tests": r"test_integration_first\.py",
-        }
-        
-        # SCREAMING_CASE File Detection (CORE-028 violation)
-        # Detects PHASE-*-COMPLETION.md, PHASE-*-SUMMARY.md patterns
-        self.screaming_case_patterns = [
-            r"PHASE-\d+-.*\.md",  # PHASE-37-COMPLETION.md, etc.
-            r".*-COMPLETION-.*\.md",  # *-COMPLETION-*.md
-            r".*-SUMMARY\.md",  # *-SUMMARY.md
-            r"INTEGRATION-FIRST-.*\.md",  # INTEGRATION-FIRST-*.md
-            r"EXECUTIVE-.*\.md",  # EXECUTIVE-*.md
-            r".*-P\d+-.*\.md",  # Phase checks like P0, P1
-        ]
 
     def scan_repository(self, root_path: str) -> Dict[str, Any]:
         """
@@ -463,27 +442,20 @@ class VacuumOrchestrator:
         """
         Categorize file based on path and name patterns.
         
-        Enhanced to detect Integration-First and SCREAMING_CASE patterns.
-        
         Args:
             file_path: Relative file path
             
         Returns:
-            Category name: "phases", "testing", "workspaces", "reports", "integration", or "other"
+            Category name: "phases", "testing", "workspaces", "reports", or "other"
         """
         file_name = Path(file_path).name.upper()
         path_lower = file_path.lower()
         
-        # Category: Integration-First files (Phase 49)
-        if "INTEGRATION-FIRST" in file_name or "INTEGRATION_FIRST" in file_name:
-            return "integration"
-        
-        # Category: phases (SCREAMING_CASE CORE-028 violations)
+        # Category: phases
         if file_name.startswith("PHASE-") or \
            "COMPLETION" in file_name or \
            "SUMMARY" in file_name or \
-           "PROGRESS" in file_name or \
-           file_name.startswith("EXECUTIVE-"):
+           "PROGRESS" in file_name:
             return "phases"
         
         # Category: testing
@@ -1098,193 +1070,6 @@ class VacuumOrchestrator:
                 "success": False,
                 "error_message": f"Brain flush error: {str(e)}",
             }
-    
-    # ========================================================================
-    # Integration-First Pattern Detection (Phase 49 Enhancement)
-    # ========================================================================
-    
-    def detect_integration_first_files(self, root_path: str) -> Dict[str, Any]:
-        """
-        Detect Integration-First implementation files.
-        
-        Identifies files created during Integration-First implementation phase:
-        - intent_classifier.py
-        - mcp_preflight_checker.py
-        - phase_completion_hook_integrator.py
-        - integration_first_enhancement.md
-        - test_integration_first.py
-        
-        Useful for validating that all Integration-First components are present
-        and properly placed in cortex/orchestrators/integration/
-        
-        Args:
-            root_path: Root directory to scan
-            
-        Returns:
-            Dictionary with findings:
-                - status: "complete" | "partial" | "missing"
-                - files_found: List of found files with paths
-                - files_missing: List of expected files not found
-                - total_expected: 5 (number of expected files)
-                - coverage_percent: Percentage of files found
-                - integration_dir_exists: bool
-        """
-        try:
-            root = Path(root_path)
-            integration_dir = root / "cortex" / "orchestrators" / "integration"
-            
-            files_found = []
-            files_missing = []
-            
-            # Check each expected Integration-First file
-            expected_files = {
-                "intent_classifier.py": integration_dir / "intent_classifier.py",
-                "mcp_preflight_checker.py": integration_dir / "mcp_preflight_checker.py",
-                "phase_completion_hook_integrator.py": integration_dir / "phase_completion_hook_integrator.py",
-                "integration_first_enhancement.md": integration_dir / "integration_first_enhancement.md",
-                "test_integration_first.py": root / "tests" / "unit" / "orchestrators" / "integration" / "test_integration_first.py",
-            }
-            
-            for name, path in expected_files.items():
-                if path.exists():
-                    files_found.append({
-                        "name": name,
-                        "path": str(path.relative_to(root)),
-                        "size_bytes": path.stat().st_size,
-                        "type": "implementation" if ".py" in name and "test" not in name else "test" if "test" in name else "documentation",
-                    })
-                else:
-                    files_missing.append(name)
-            
-            coverage_percent = int((len(files_found) / len(expected_files)) * 100)
-            
-            status = "complete" if not files_missing else "partial" if files_found else "missing"
-            
-            return {
-                "status": status,
-                "files_found": files_found,
-                "files_missing": files_missing,
-                "total_expected": len(expected_files),
-                "coverage_percent": coverage_percent,
-                "integration_dir_exists": integration_dir.exists(),
-                "message": f"Integration-First: {len(files_found)}/{len(expected_files)} files found ({coverage_percent}%)",
-            }
-            
-        except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e),
-                "files_found": [],
-                "files_missing": [],
-            }
-    
-    # ========================================================================
-    # SCREAMING_CASE File Detection (CORE-028 Enforcement)
-    # ========================================================================
-    
-    def detect_screaming_case_violations(self, root_path: str) -> Dict[str, Any]:
-        """
-        Detect SCREAMING_CASE file naming violations (CORE-028).
-        
-        Identifies markdown files that violate CORE-028 naming requirements:
-        - PHASE-*.md files (should be in registry, not root)
-        - *-COMPLETION-*.md files (should not be in root)
-        - INTEGRATION-FIRST-*.md (session reports, should be archived)
-        - EXECUTIVE-*.md (session summaries, should be archived)
-        - *-P0-CHECKS-*.md (phase checks, should be archived)
-        
-        These are typically generated during copilot chat sessions and should
-        be moved to docs/archive/ for later reference.
-        
-        Args:
-            root_path: Root directory to scan (typically project root)
-            
-        Returns:
-            Dictionary with findings:
-                - status: "clean" | "violations" | "error"
-                - violations: List of violating files with details
-                - total_violations: Count of violations
-                - recommendations: List of cleanup actions
-                - affected_size_bytes: Total size of violating files
-                - affected_size_human: Human-readable total size
-        """
-        try:
-            root = Path(root_path)
-            violations = []
-            total_size = 0
-            
-            # Scan root-level markdown files
-            for md_file in root.glob("*.md"):
-                # Skip legitimate root files
-                if md_file.name in ["README.md", "LICENSE.md"]:
-                    continue
-                
-                # Check against SCREAMING_CASE patterns
-                for pattern in self.screaming_case_patterns:
-                    if re.match(pattern, md_file.name):
-                        file_size = md_file.stat().st_size
-                        total_size += file_size
-                        
-                        violations.append({
-                            "filename": md_file.name,
-                            "path": str(md_file.relative_to(root)),
-                            "size_bytes": file_size,
-                            "size_human": self._format_size(file_size),
-                            "pattern": pattern,
-                            "category": self._categorize_screaming_case_file(md_file.name),
-                            "created_at": datetime.fromtimestamp(md_file.stat().st_ctime).isoformat(),
-                        })
-                        break
-            
-            # Generate recommendations
-            recommendations = []
-            for violation in violations:
-                recommendations.append({
-                    "file": violation["filename"],
-                    "action": "archive",
-                    "destination": f"docs/archive/{violation['category']}/{violation['filename']}",
-                    "reason": f"CORE-028 violation: {violation['pattern']} in root directory",
-                    "priority": "high",
-                })
-            
-            status = "clean" if not violations else "violations"
-            
-            return {
-                "status": status,
-                "violations": violations,
-                "total_violations": len(violations),
-                "recommendations": recommendations,
-                "affected_size_bytes": total_size,
-                "affected_size_human": self._format_size(total_size),
-                "message": f"Found {len(violations)} SCREAMING_CASE violations ({self._format_size(total_size)})",
-            }
-            
-        except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e),
-                "violations": [],
-                "total_violations": 0,
-            }
-    
-    def _categorize_screaming_case_file(self, filename: str) -> str:
-        """
-        Categorize SCREAMING_CASE violation file.
-        
-        Args:
-            filename: Filename to categorize
-            
-        Returns:
-            Category: "phases" | "reports" | "integration" | "other"
-        """
-        if "PHASE" in filename:
-            return "phases"
-        elif "COMPLETION" in filename or "SUMMARY" in filename:
-            return "reports"
-        elif "INTEGRATION" in filename or "EXECUTIVE" in filename:
-            return "integration"
-        else:
-            return "other"
 
     def cleanup_brain_state(self) -> Dict[str, Any]:
         """
