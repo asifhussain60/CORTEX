@@ -1,0 +1,881 @@
+# Phase 65: LENS Intelligence Remediation
+# Authority: CORTEX Architect Analysis — LENS Holistic Review (2026-02-09)
+# Created: 2026-02-09
+# AC-ID: AC-PHASE65-001
+
+metadata:
+  phase_id: "phase-65"
+  title: "LENS Intelligence Remediation — End-to-End Knowledge Pipeline"
+  status: "planned"
+  priority: "P0"
+  created: "2026-02-09"
+  estimated_duration: "8 days"
+  roi_score: 0.95
+  execution_order: 16
+  test_target: 120
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: false
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: true
+
+overview:
+  vision: |
+    Transform CORTEX LENS from a structurally complete but operationally 
+    disconnected intelligence system into a production-grade end-to-end 
+    knowledge pipeline that enables CORTEX to function as a software 
+    engineering partner (implementer, tester, reviewer, architect).
+
+  problem_statement: |
+    Holistic review (2026-02-09) revealed that the LENS intelligence 
+    pipeline is architecturally sound but operationally hollow:
+    
+    1. KnowledgeSynthesisEngine._load_cortex_best_practices() returns a 
+       hardcoded 10-rule dict instead of loading 40+ YAML best practices
+    2. LENSWarmer (Phase 49 CCL) returns hardcoded dicts from all 5 analyzers
+    3. ChallengeEngine.build_lens_context() has 4 stub methods returning 
+       empty data — InteractionOrchestrator gets zero real intelligence
+    4. Tiered MCP API (Phase 63) capabilities return metadata-only findings
+    5. Two incompatible LENSContext data classes exist (CORE-035 violation)
+    6. Three competing cache implementations (CORE-035 violation)
+    7. InteractionOrchestrator has zero integration with onboarded repo 
+       profiles, domain brain, or knowledge graph
+    8. MasterOrchestrator._stage_2_routing() passes empty LENSIntelligence 
+       and CompanyKnowledge structs to synthesis engine
+
+  expected_outcomes:
+    - "40+ YAML best practices loaded dynamically at runtime (not hardcoded)"
+    - "InteractionOrchestrator receives real synthesized intelligence per turn"
+    - "Single UnifiedIntelligenceProvider serves all orchestrators (CORE-035)"
+    - "Turn-over-turn intelligence accumulation within sessions"
+    - "Onboarded repo profiles feed into every intelligence query"
+    - "Tiered MCP API capabilities execute real analysis"
+    - "Single canonical LENSContext data class"
+    - "Single canonical cache implementation"
+
+roi_analysis:
+  cost: "8 developer-days across 8 stages"
+  impact: |
+    - LENS intelligence accuracy: 30% → 85% (knowledge-grounded)
+    - InteractionOrchestrator challenge relevance: ~0% → 70%+
+    - Knowledge utilization: 0/40 YAMLs → 40/40 YAMLs loaded
+    - CORE-035 violations eliminated: 3 duplications removed
+    - CCL pre-warming: decorative → operational
+    - End-to-end partner readiness: 3/10 → 7/10
+  risk_mitigation: |
+    - All changes are additive (wiring existing components)
+    - No interface changes to MCP tools (backward compatible)
+    - Each stage independently testable and deployable
+    - Fallback to empty defaults if any knowledge source unavailable
+
+dependencies:
+  required:
+    - "phase-63: LENS Tiered MCP API (provides tier framework)"
+    - "phase-49: Context Crystallization Layer (provides CCL framework)"
+    - "phase-28: Repository Onboarding (provides ProfileStore)"
+  optional:
+    - "phase-54: Intelligence Enforcement (enhances gap-filling)"
+    - "phase-53: LENS Intelligence Upgrade (provides analyzer enhancements)"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — tests before implementation for every stage"
+    - "CORE-011: Type hints mandatory on all new/modified functions"
+    - "CORE-012: Google-style docstrings on all public methods"
+    - "CORE-035: Single canonical implementation — eliminate duplicates"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGES
+# ============================================================================
+
+stages:
+
+  # --------------------------------------------------------------------------
+  # STAGE 1: Wire YAML Best Practice Loading (Foundation — Unblocks Everything)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "Wire YAML Best Practice Loading"
+    status: "planned"
+    effort: "1 day"
+    priority: "P0"
+    tests_expected: 15
+    description: |
+      Replace the hardcoded 10-rule dict in KnowledgeSynthesisEngine with 
+      dynamic loading from cortex/knowledge/best-practices/ using INDEX.yaml.
+      
+      This is the single highest-leverage change. Every downstream consumer 
+      (ChallengeEngine, LENSSynthesis, UnifiedIntelligenceProvider) needs 
+      real YAML data. Without it, all synthesis returns empty results 
+      regardless of wiring quality.
+
+    tasks:
+      - id: "S1-T1"
+        name: "Implement INDEX.yaml parser with keyword-to-intent matching"
+        description: |
+          Parse cortex/knowledge/best-practices/INDEX.yaml to build a 
+          lookup table mapping intent types to applicable YAML file paths.
+          
+          Mapping logic:
+            IMPLEMENT → tdd-best-practices, clean-code, secure-coding-practices, 
+                        engineering-design-patterns
+            FIX → code-review, secure-coding-practices, engineering-anti-patterns
+            REFACTOR → refactoring, engineering-solid-principles, clean-code
+            ANALYZE → code-review, engineering-anti-patterns, monitoring-observability
+            AUDIT → owasp-top-10, api-security-checklist, secure-coding-practices
+          
+          Support keyword-based matching as fallback using INDEX.yaml keywords field.
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        method: "_load_cortex_best_practices"
+
+      - id: "S1-T2"
+        name: "Implement YAML loading with caching and error resilience"
+        description: |
+          Load matched YAML files, extract rules/practices/patterns, cache 
+          results with intent-keyed TTL (5 min). Graceful degradation: if 
+          any YAML fails to load, continue with successfully loaded ones.
+          Log loaded count vs expected count for observability.
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+
+      - id: "S1-T3"
+        name: "Wire _extract_applicable_patterns from loaded YAMLs"
+        description: |
+          Replace hardcoded pattern lists with extraction from loaded YAML 
+          content. Each best-practice YAML has a patterns/practices section 
+          that should feed into applicable_patterns.
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        method: "_extract_applicable_patterns"
+
+      - id: "S1-T4"
+        name: "Wire _extract_anti_patterns from loaded YAMLs"
+        description: |
+          Replace hardcoded anti-pattern list with extraction from 
+          engineering-anti-patterns.yaml and cross-domain anti-pattern 
+          sections in loaded YAMLs.
+        file: "cortex/brain/knowledge/knowledge_synthesis_engine.py"
+        method: "_extract_anti_patterns"
+
+    test_requirements:
+      - "test_load_practices_returns_real_yaml_content"
+      - "test_intent_to_yaml_mapping_implement"
+      - "test_intent_to_yaml_mapping_fix"
+      - "test_intent_to_yaml_mapping_refactor"
+      - "test_intent_to_yaml_mapping_analyze"
+      - "test_keyword_fallback_matching"
+      - "test_yaml_loading_cache_hit"
+      - "test_yaml_loading_cache_ttl_expiry"
+      - "test_graceful_degradation_on_missing_yaml"
+      - "test_graceful_degradation_on_malformed_yaml"
+      - "test_applicable_patterns_from_real_yaml"
+      - "test_anti_patterns_from_real_yaml"
+      - "test_loaded_count_matches_index_count"
+      - "test_empty_intent_returns_core_rules"
+      - "test_performance_under_500ms_for_full_load"
+
+    acceptance_criteria:
+      - "synthesize_unified_context() returns practices loaded from YAML files"
+      - "At least 30/40+ YAML files successfully loaded per intent"
+      - "Cache prevents repeated disk I/O for same intent within TTL"
+      - "Missing/malformed YAMLs logged but don't crash synthesis"
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: Wire LENSWarmer to Real Analyzers
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "Wire LENSWarmer to Real Analyzers"
+    status: "planned"
+    effort: "1 day"
+    priority: "P0"
+    tests_expected: 12
+    depends_on: []
+    description: |
+      Replace 5 hardcoded-return methods in LENSWarmer with delegation to 
+      actual LENSOrchestrator analyzers. CCL pre-warming becomes operational 
+      instead of decorative. Cache-first strategy for sub-300ms SLA.
+
+    tasks:
+      - id: "S2-T1"
+        name: "Wire _analyze_ast to PolyglotAnalyzer"
+        description: |
+          Delegate to LENSOrchestrator's polyglot_analyzer.analyze_file() 
+          instead of returning hardcoded complexity/function counts.
+          Wrap in try/except with fallback to current hardcoded dict.
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+        method: "_analyze_ast"
+
+      - id: "S2-T2"
+        name: "Wire _analyze_git_history to GitHistoryAnalyzer"
+        description: |
+          Delegate to LENSOrchestrator's git_analyzer.get_file_history() 
+          instead of returning hardcoded churn scores. Extract real commit 
+          count, last author, last modified timestamp.
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+        method: "_analyze_git_history"
+
+      - id: "S2-T3"
+        name: "Wire _extract_comments to CommentExtractor"
+        description: |
+          Delegate to LENSOrchestrator's comment_extractor.extract_from_file() 
+          instead of returning hardcoded docstring coverage and TODO counts.
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+        method: "_extract_comments"
+
+      - id: "S2-T4"
+        name: "Wire _check_security to SecurityThreatAnalyzer"
+        description: |
+          Delegate to ChallengeEngine's security_analyzer or config_analyzer 
+          for real secret detection and security pattern identification.
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+        method: "_check_security"
+
+      - id: "S2-T5"
+        name: "Wire _check_performance with real AST complexity metrics"
+        description: |
+          Use AST analysis results to identify actual performance issues 
+          (high cyclomatic complexity, deep nesting, large functions) 
+          instead of returning hardcoded empty findings.
+        file: "cortex/orchestrators/context_crystallization/lens_warmer.py"
+        method: "_check_performance"
+
+    test_requirements:
+      - "test_warmer_ast_returns_real_function_count"
+      - "test_warmer_ast_returns_real_class_count"
+      - "test_warmer_git_returns_real_commit_data"
+      - "test_warmer_comments_returns_real_todo_count"
+      - "test_warmer_security_detects_real_patterns"
+      - "test_warmer_performance_detects_high_complexity"
+      - "test_warmer_cache_prevents_repeated_analysis"
+      - "test_warmer_fallback_on_analyzer_failure"
+      - "test_warmer_latency_under_300ms_cached"
+      - "test_warmer_latency_under_500ms_uncached"
+      - "test_warmer_handles_nonexistent_file"
+      - "test_warmer_handles_non_python_file"
+
+    acceptance_criteria:
+      - "LENSWarmer.analyze() returns real data from actual analyzers"
+      - "Cache-first strategy achieves <300ms for cached files"
+      - "Fallback to hardcoded defaults on analyzer failure (no regression)"
+      - "Non-Python files handled gracefully"
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Wire ChallengeEngine LENS Methods to Real Intelligence
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "Wire ChallengeEngine LENS Methods"
+    status: "planned"
+    effort: "1 day"
+    priority: "P0"
+    tests_expected: 18
+    depends_on: ["S1", "S2"]
+    description: |
+      Replace 4 stub methods in ChallengeEngine.build_lens_context() with 
+      real implementations. This directly feeds InteractionOrchestrator with 
+      actual intelligence on every turn.
+      
+      Also wire onboarded repo profile loading via ProfileStore so that 
+      domain context, tech stack, and standards are available to the 
+      challenge system.
+
+    tasks:
+      - id: "S3-T1"
+        name: "Wire _parse_language to intent classification"
+        description: |
+          Replace string template with call to domain_brain/intent_classifier 
+          or IntentRouter's classification logic. Extract: intent type, 
+          target scope, confidence, keywords.
+        file: "cortex/orchestrators/core/challenge_engine.py"
+        method: "_parse_language"
+
+      - id: "S3-T2"
+        name: "Wire _examine_implementation to LENSOrchestrator"
+        description: |
+          When file_path is available in search_tools context, invoke 
+          LENSOrchestrator.analyze_file() for real AST/git/comment analysis.
+          When file_path unavailable, use ProfileStore to load the active 
+          repo's profile for repo-level intelligence (tech stack, frameworks, 
+          test patterns, security baseline).
+        file: "cortex/orchestrators/core/challenge_engine.py"
+        method: "_examine_implementation"
+
+      - id: "S3-T3"
+        name: "Wire _navigate_context to KnowledgeQuerier"
+        description: |
+          Use KnowledgeQuerier.find_related_entities() and 
+          KnowledgeInference.analyze_impact() from domain_brain to traverse 
+          relationships. If onboarded repo has a knowledge graph populated, 
+          navigate it for context. Fallback to empty list if KG not available.
+        file: "cortex/orchestrators/core/challenge_engine.py"
+        method: "_navigate_context"
+
+      - id: "S3-T4"
+        name: "Wire _synthesize_context to KnowledgeSynthesisEngine"
+        description: |
+          Replace confidence-from-data-availability with actual call to 
+          KnowledgeSynthesisEngine.synthesize_unified_context(). This 
+          now works because S1 wired real YAML loading. Confidence becomes 
+          grounded in knowledge coverage, not data presence.
+        file: "cortex/orchestrators/core/challenge_engine.py"
+        method: "_synthesize_context"
+
+      - id: "S3-T5"
+        name: "Add ProfileStore integration for onboarded repo context"
+        description: |
+          On ChallengeEngine initialization or first build_lens_context() 
+          call, attempt to load the active repository's profile from 
+          ProfileStore. Cache the profile for session lifetime. Make 
+          tech_stack, standards, security metadata available to all 
+          LENS methods.
+        file: "cortex/orchestrators/core/challenge_engine.py"
+
+    test_requirements:
+      - "test_parse_language_returns_classified_intent"
+      - "test_parse_language_extracts_keywords"
+      - "test_examine_with_file_path_invokes_lens_orchestrator"
+      - "test_examine_without_file_path_loads_repo_profile"
+      - "test_examine_fallback_on_lens_failure"
+      - "test_navigate_queries_knowledge_graph"
+      - "test_navigate_returns_related_entities"
+      - "test_navigate_fallback_on_kg_unavailable"
+      - "test_synthesize_calls_knowledge_synthesis_engine"
+      - "test_synthesize_confidence_reflects_knowledge_coverage"
+      - "test_profile_store_loaded_on_init"
+      - "test_profile_store_cached_for_session"
+      - "test_profile_store_fallback_on_missing_profile"
+      - "test_build_lens_context_end_to_end_with_file"
+      - "test_build_lens_context_end_to_end_without_file"
+      - "test_challenge_uses_real_intelligence_for_disagreement"
+      - "test_challenge_confidence_above_threshold_with_real_data"
+      - "test_interaction_orchestrator_receives_real_context"
+
+    acceptance_criteria:
+      - "ChallengeEngine.build_lens_context() returns non-empty examination results"
+      - "Confidence score reflects actual knowledge coverage (not always 0.3)"
+      - "InteractionOrchestrator execute_turn() passes real LENS context to challenge"
+      - "Onboarded repo profile available in challenge decision-making"
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Unified Intelligence Provider
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Unified Intelligence Provider"
+    status: "planned"
+    effort: "1.5 days"
+    priority: "P0"
+    tests_expected: 20
+    depends_on: ["S1", "S2", "S3"]
+    description: |
+      Create a single IIntelligenceProvider interface and 
+      UnifiedIntelligenceProvider implementation that both 
+      InteractionOrchestrator and MasterOrchestrator consume.
+      
+      Encapsulates ALL knowledge retrieval (LENS, KG, Profiles, YAMLs, 
+      tier3) behind one interface with caching, budget control, and 
+      incremental enrichment. Eliminates dual synthesis paths.
+
+    tasks:
+      - id: "S4-T1"
+        name: "Define IIntelligenceProvider interface"
+        description: |
+          Abstract interface extending BaseIntelligenceEngine contract.
+          Methods:
+            get_context(intent, file_path, repo_name) → IntelligenceContext
+            get_lens_analysis(file_path) → Dict
+            get_domain_knowledge(intent, repo_name) → Dict
+            get_best_practices(intent) → Dict  
+            get_repo_profile(repo_name) → RepositoryProfile
+            synthesize(intent, lens, domain, practices) → UnifiedIntelligenceContext
+          
+          Tiered execution matching Phase 63:
+            quick(intent) → cached core rules only (<200ms)
+            targeted(intent, file_path) → LENS + relevant YAMLs (<2s)
+            full(intent, file_path, repo_name) → everything (<10s)
+        file: "cortex/intelligence/provider.py"
+
+      - id: "S4-T2"
+        name: "Implement UnifiedIntelligenceProvider"
+        description: |
+          Concrete implementation composing:
+            - LENSOrchestrator (file analysis)
+            - KnowledgeSynthesisEngine (YAML + company knowledge)
+            - ProfileStore (onboarded repo profiles)
+            - KnowledgeQuerier (knowledge graph entities)
+            - SynthesisEngine from cortex_brain/tier3 (cross-domain)
+          
+          Internal caching with single LENSCache instance (canonical).
+          Budget-aware execution: caller specifies tier (quick/targeted/full).
+          Thread-safe singleton pattern.
+        file: "cortex/intelligence/provider.py"
+
+      - id: "S4-T3"
+        name: "Wire InteractionOrchestrator to UnifiedIntelligenceProvider"
+        description: |
+          Replace ChallengeEngine.build_lens_context() delegation with 
+          provider.get_context(). ChallengeEngine's disagreement detection 
+          now receives real synthesized intelligence. InteractionOrchestrator 
+          injects the provider at init time.
+        file: "cortex/orchestrators/core/interaction_orchestrator.py"
+
+      - id: "S4-T4"
+        name: "Wire MasterOrchestrator._stage_2_routing() to same provider"
+        description: |
+          Replace inline empty LENSIntelligence()/CompanyKnowledge() 
+          construction with provider.get_context(). Single intelligence 
+          path for both Stage 1 (comprehension) and Stage 2 (routing).
+          Eliminates redundant synthesis.
+        file: "cortex/orchestrators/core/master_orchestrator.py"
+
+    test_requirements:
+      - "test_provider_interface_defines_all_methods"
+      - "test_provider_get_context_returns_unified_context"
+      - "test_provider_quick_tier_under_200ms"
+      - "test_provider_targeted_tier_includes_lens"
+      - "test_provider_full_tier_includes_all_sources"
+      - "test_provider_caches_results_per_intent"
+      - "test_provider_cache_ttl_expiry"
+      - "test_provider_thread_safe_singleton"
+      - "test_provider_graceful_degradation_lens_failure"
+      - "test_provider_graceful_degradation_kg_failure"
+      - "test_provider_graceful_degradation_profile_missing"
+      - "test_interaction_orchestrator_uses_provider"
+      - "test_master_orchestrator_uses_provider"
+      - "test_both_orchestrators_share_same_provider_instance"
+      - "test_provider_eliminates_duplicate_synthesis"
+      - "test_provider_integrates_repo_profile"
+      - "test_provider_integrates_tier3_cross_domain"
+      - "test_provider_budget_awareness_quick_vs_full"
+      - "test_provider_returns_cited_rules"
+      - "test_provider_returns_violations"
+
+    acceptance_criteria:
+      - "Single provider instance serves both orchestrators"
+      - "No duplicate synthesis calls for same intent+file in same session"
+      - "Tiered execution respects latency SLAs from Phase 63"
+      - "Fallback to partial results on any source failure"
+
+  # --------------------------------------------------------------------------
+  # STAGE 5: Turn-Over-Turn Intelligence Accumulation
+  # --------------------------------------------------------------------------
+  - id: "S5"
+    name: "Turn-Over-Turn Intelligence Accumulation"
+    status: "planned"
+    effort: "1 day"
+    priority: "P1"
+    tests_expected: 15
+    depends_on: ["S4"]
+    description: |
+      Add session-scoped intelligence accumulation to 
+      UnifiedIntelligenceProvider. Each turn's intelligence results 
+      (entities discovered, patterns detected, standards applied) persist 
+      in-session. Subsequent turns reference accumulated context.
+
+    tasks:
+      - id: "S5-T1"
+        name: "Implement TurnContext accumulator"
+        description: |
+          Session-scoped storage that accumulates per-turn results:
+            - Entities discovered (classes, functions, APIs, models)
+            - Patterns detected (design patterns, anti-patterns)
+            - Standards applied (which CORE rules cited)
+            - Files analyzed (avoid re-analysis within session)
+            - Violations found (track across turns)
+          
+          Accessible via provider.get_accumulated_context().
+          Memory-bounded: cap at 100 turn entries, LRU eviction.
+        file: "cortex/intelligence/provider.py"
+
+      - id: "S5-T2"
+        name: "Wire repo profile loading on session start"
+        description: |
+          When UnifiedIntelligenceProvider initializes for a session, 
+          attempt to load active repo's RepositoryProfile from ProfileStore.
+          Cache for session lifetime. Tech stack, standards, security 
+          metadata become baseline for all subsequent turns.
+        file: "cortex/intelligence/provider.py"
+
+      - id: "S5-T3"
+        name: "Wire tier3 SynthesisEngine cross-domain knowledge"
+        description: |
+          Enable queries like: given IMPLEMENT intent for FastAPI endpoint 
+          in repo with DDD patterns, synthesize applicable knowledge from 
+          architecture + security + testing domains. Use tier3 SynthesisEngine 
+          for cross-domain relationship traversal.
+        file: "cortex/intelligence/provider.py"
+
+      - id: "S5-T4"
+        name: "Enrich InteractionOrchestrator engage_interactive_mode()"
+        description: |
+          Replace hardcoded recommendation string and tradeoff scores with 
+          real intelligence from provider's accumulated context. Alternatives 
+          grounded in actual domain knowledge and repo standards.
+        file: "cortex/orchestrators/core/interaction_orchestrator.py"
+        method: "engage_interactive_mode"
+
+    test_requirements:
+      - "test_turn_context_accumulates_entities"
+      - "test_turn_context_accumulates_patterns"
+      - "test_turn_context_accumulates_standards"
+      - "test_turn_context_accumulates_files_analyzed"
+      - "test_turn_context_memory_bounded_lru"
+      - "test_second_turn_references_first_turn_entities"
+      - "test_repo_profile_loaded_on_session_start"
+      - "test_repo_profile_cached_for_session"
+      - "test_tier3_cross_domain_synthesis"
+      - "test_interactive_mode_uses_real_recommendation"
+      - "test_interactive_mode_tradeoffs_from_analysis"
+      - "test_accumulated_context_available_to_challenge"
+      - "test_accumulated_violations_persist_across_turns"
+      - "test_turn_context_cleared_on_new_session"
+      - "test_accumulated_context_feeds_stage_2_routing"
+
+    acceptance_criteria:
+      - "Turn N+1 has access to entities discovered in Turn N"
+      - "Recommendations in interactive mode grounded in real analysis"
+      - "Tradeoff scores computed from actual LENS/domain data"
+      - "Session start loads repo profile if available"
+
+  # --------------------------------------------------------------------------
+  # STAGE 6: Unify LENSContext and Cache (CORE-035 Compliance)
+  # --------------------------------------------------------------------------
+  - id: "S6"
+    name: "Unify LENSContext and Cache (CORE-035)"
+    status: "planned"
+    effort: "0.5 days"
+    priority: "P1"
+    tests_expected: 10
+    depends_on: ["S4"]
+    description: |
+      Eliminate CORE-035 violations identified in holistic review:
+      1. Two LENSContext data classes → one canonical model
+      2. Three cache implementations → one canonical LENSCache
+      3. Remove lens/core.py backward-compatibility stub
+
+    tasks:
+      - id: "S6-T1"
+        name: "Merge two LENSContext into canonical model"
+        description: |
+          cortex/lens/orchestrator.py::LENSContext has: git_analysis, 
+          ast_analysis, comment_analysis, vision_analysis, metadata.
+          
+          cortex/orchestrators/core/lens_synthesis.py::LENSContext has: 
+          operation, language_analysis, code_examination, domain_navigation, 
+          synthesis_output, timestamp, turn_number.
+          
+          Create single canonical LENSContext in cortex/lens/models/ that 
+          contains all fields. Update all imports. Mark old locations as 
+          re-exports with deprecation warnings.
+        file: "cortex/lens/models/context.py"
+
+      - id: "S6-T2"
+        name: "Consolidate 3 cache implementations"
+        description: |
+          Canonical: cortex/lens/cache/lens_cache.py (TTL-based, LRU).
+          Remove duplicate LENSCache from lens_context_provider.py.
+          Ensure cached_lens_orchestrator.py delegates to canonical cache.
+          All cache consumers use get_lens_cache() singleton.
+        file: "cortex/lens/cache/lens_cache.py"
+
+      - id: "S6-T3"
+        name: "Remove lens/core.py stub"
+        description: |
+          cortex/lens/core.py is a Phase 56-A backward compatibility stub 
+          whose analyze() returns {"status": "analyzed"}. No production 
+          consumers depend on it. Remove and update any residual imports 
+          to point to BaseIntelligenceEngine or LENSOrchestrator.
+        file: "cortex/lens/core.py"
+
+    test_requirements:
+      - "test_canonical_lens_context_has_all_fields"
+      - "test_old_lens_context_imports_redirect"
+      - "test_lens_synthesis_uses_canonical_context"
+      - "test_lens_orchestrator_uses_canonical_context"
+      - "test_canonical_cache_singleton"
+      - "test_no_duplicate_cache_instances"
+      - "test_cached_orchestrator_uses_canonical_cache"
+      - "test_lens_core_removed_no_import_errors"
+      - "test_no_core035_violations_in_lens_module"
+      - "test_backward_compatibility_maintained"
+
+    acceptance_criteria:
+      - "Single LENSContext class in cortex/lens/models/context.py"
+      - "Single LENSCache accessed via get_lens_cache()"
+      - "cortex/lens/core.py deleted"
+      - "No import errors across codebase"
+
+  # --------------------------------------------------------------------------
+  # STAGE 7: Wire Tiered MCP API to Real Analyzers
+  # --------------------------------------------------------------------------
+  - id: "S7"
+    name: "Wire Tiered MCP API to Real Analyzers"
+    status: "planned"
+    effort: "1 day"
+    priority: "P1"
+    tests_expected: 15
+    depends_on: ["S6"]
+    description: |
+      Phase 63's LensQuickTier2, LensTargetedTier3, LensStreamTier3, 
+      and LensAnalyzerTier4 currently return metadata-only findings 
+      from the capability registry. Wire each capability to the actual 
+      analyzer in cortex/lens/analyzers/.
+
+    tasks:
+      - id: "S7-T1"
+        name: "Wire Tier 2 capabilities to fast analyzers"
+        description: |
+          syntax_check → ASTAnalyzer parse validation
+          type_hints_analysis → ASTAnalyzer type hint extraction
+          import_analysis → ASTAnalyzer import listing
+          function_complexity → ASTAnalyzer complexity calculation
+          
+          All must complete within 200ms SLA (use cached results).
+        file: "cortex/lens/lens_tiered_mcp_api.py"
+        class: "LensQuickTier2"
+
+      - id: "S7-T2"
+        name: "Wire Tier 3 targeted capabilities to medium analyzers"
+        description: |
+          security_scan → ConfigAnalyzer + SecurityThreatAnalyzer
+          performance_analysis → AST complexity + deep nesting detection
+          documentation_analysis → CommentExtractor docstring coverage
+          
+          Custom capability selection per request.
+        file: "cortex/lens/lens_tiered_mcp_api.py"
+        class: "LensTargetedTier3"
+
+      - id: "S7-T3"
+        name: "Wire Tier 3 streaming to batch file analysis"
+        description: |
+          Each batch of files analyzed via LENSOrchestrator.analyze_file().
+          Stream events contain real findings, not stub metadata.
+          Respect batch_size for memory management.
+        file: "cortex/lens/lens_tiered_mcp_api.py"
+        class: "LensStreamTier3"
+
+      - id: "S7-T4"
+        name: "Wire Tier 4 to full LENSOrchestrator pipeline"
+        description: |
+          Full analysis delegates to LENSOrchestrator.analyze_file() which 
+          already runs real git, AST, comment, relationship, dependency, 
+          and pattern analysis. Tier 4 wraps this in LensAnalysisResult.
+        file: "cortex/lens/lens_tiered_mcp_api.py"
+        class: "LensAnalyzerTier4"
+
+      - id: "S7-T5"
+        name: "Wire LensOrchestratorIntegration helpers"
+        description: |
+          Ensure interaction_orchestrator_quick_analysis, 
+          tdd_orchestrator_context_enrichment, plan_orchestrator_validation, 
+          and onboarding_orchestrator_full_analysis delegate to the correct 
+          wired tiers (not stub tiers).
+        file: "cortex/lens/lens_tiered_mcp_api.py"
+        class: "LensOrchestratorIntegration"
+
+    test_requirements:
+      - "test_tier2_syntax_check_detects_real_errors"
+      - "test_tier2_type_hints_counts_real_annotations"
+      - "test_tier2_import_analysis_lists_real_imports"
+      - "test_tier2_complexity_calculates_real_score"
+      - "test_tier2_latency_under_200ms"
+      - "test_tier3_security_scan_finds_real_issues"
+      - "test_tier3_performance_detects_deep_nesting"
+      - "test_tier3_docs_measures_real_coverage"
+      - "test_tier3_custom_capability_selection"
+      - "test_tier3_stream_returns_real_findings_per_batch"
+      - "test_tier3_stream_respects_batch_size"
+      - "test_tier4_full_analysis_matches_lens_orchestrator"
+      - "test_orchestrator_integration_quick_uses_tier2"
+      - "test_orchestrator_integration_validation_uses_tier3"
+      - "test_orchestrator_integration_full_uses_tier4"
+
+    acceptance_criteria:
+      - "All tier capabilities return real analysis findings"
+      - "Tier 2 SLA <200ms maintained with cached results"
+      - "Tier 3 streaming yields real findings per batch"
+      - "Tier 4 output matches LENSOrchestrator.analyze_file() output"
+
+  # --------------------------------------------------------------------------
+  # STAGE 8: Integration Testing and Verification
+  # --------------------------------------------------------------------------
+  - id: "S8"
+    name: "End-to-End Integration Testing"
+    status: "planned"
+    effort: "1 day"
+    priority: "P0"
+    tests_expected: 15
+    depends_on: ["S5", "S6", "S7"]
+    description: |
+      End-to-end integration tests verifying the complete intelligence 
+      pipeline from user request through InteractionOrchestrator to 
+      knowledge-grounded response. Verify no regressions across the 
+      full CORTEX test suite.
+
+    tasks:
+      - id: "S8-T1"
+        name: "E2E: InteractionOrchestrator with real intelligence"
+        description: |
+          Test that execute_turn() with a real user request produces 
+          a challenge response grounded in actual LENS analysis and 
+          knowledge base content. Verify confidence > 0.5.
+        test_file: "tests/integration/test_lens_intelligence_e2e.py"
+
+      - id: "S8-T2"
+        name: "E2E: MasterOrchestrator._stage_2_routing with provider"
+        description: |
+          Test that stage_2_routing passes real intelligence context 
+          to IntentRouter and receives cited_rules and violations from 
+          loaded YAML best practices.
+        test_file: "tests/integration/test_lens_intelligence_e2e.py"
+
+      - id: "S8-T3"
+        name: "E2E: Turn accumulation across 3 turns"
+        description: |
+          Simulate 3 sequential turns and verify that turn 3 has access 
+          to entities and patterns discovered in turns 1 and 2.
+        test_file: "tests/integration/test_lens_intelligence_e2e.py"
+
+      - id: "S8-T4"
+        name: "E2E: Tiered MCP API with real file analysis"
+        description: |
+          Test cortex_lens_quick, cortex_lens_targeted, cortex_lens_analyze 
+          MCP endpoints against a real Python file and verify non-stub 
+          findings in response.
+        test_file: "tests/integration/test_lens_intelligence_e2e.py"
+
+      - id: "S8-T5"
+        name: "Regression: Full CORTEX test suite"
+        description: |
+          Run complete test suite to verify zero regressions from all 
+          wiring changes. Document any test count changes with rationale.
+        test_file: "tests/"
+
+    test_requirements:
+      - "test_e2e_interaction_orchestrator_real_intelligence"
+      - "test_e2e_challenge_engine_real_disagreement_detection"
+      - "test_e2e_master_orchestrator_real_synthesis"
+      - "test_e2e_turn_accumulation_3_turns"
+      - "test_e2e_tier2_quick_real_findings"
+      - "test_e2e_tier3_targeted_real_findings"
+      - "test_e2e_tier4_full_real_findings"
+      - "test_e2e_provider_shared_between_orchestrators"
+      - "test_e2e_repo_profile_feeds_intelligence"
+      - "test_e2e_yaml_practices_in_cited_rules"
+      - "test_e2e_ccl_prewarming_real_data"
+      - "test_e2e_graceful_degradation_all_sources_fail"
+      - "test_regression_existing_lens_tests_pass"
+      - "test_regression_existing_orchestrator_tests_pass"
+      - "test_regression_existing_brain_tests_pass"
+
+    acceptance_criteria:
+      - "InteractionOrchestrator produces knowledge-grounded challenges"
+      - "MasterOrchestrator routes with real cited rules"
+      - "Turn accumulation verified across multi-turn session"
+      - "All tiered MCP endpoints return real findings"
+      - "Zero regressions in existing test suite"
+      - "LENS intelligence readiness score: ≥7/10 (up from 3/10)"
+
+# ============================================================================
+# EXECUTION CONSTRAINTS
+# ============================================================================
+
+execution:
+  tdd_mandatory: true
+  incremental: true
+  max_loc_per_increment: 500
+  checkpoint_frequency: "per_stage"
+  rollback_strategy: "git revert to pre-stage commit"
+
+  stage_order:
+    critical_path: "S1 → S3 → S4 → S5 → S8"
+    parallel_safe: ["S2 (parallel with S1)", "S6 (parallel with S5)", "S7 (after S6)"]
+    
+  execution_sequence:
+    - batch_1:
+        stages: ["S1", "S2"]
+        parallel: true
+        description: "Foundation — wire YAML loading and LENSWarmer in parallel"
+    - batch_2:
+        stages: ["S3"]
+        parallel: false
+        description: "ChallengeEngine wiring — depends on S1 and S2"
+    - batch_3:
+        stages: ["S4"]
+        parallel: false
+        description: "Unified Provider — depends on S1, S2, S3"
+    - batch_4:
+        stages: ["S5", "S6"]
+        parallel: true
+        description: "Accumulation + consolidation in parallel"
+    - batch_5:
+        stages: ["S7"]
+        parallel: false
+        description: "Tier wiring — depends on S6 canonical models"
+    - batch_6:
+        stages: ["S8"]
+        parallel: false
+        description: "Integration testing — depends on everything"
+
+# ============================================================================
+# RISK ASSESSMENT
+# ============================================================================
+
+risks:
+  - id: "RISK-001"
+    description: "YAML loading performance — 40+ files on every intent"
+    probability: "medium"
+    impact: "medium"
+    mitigation: "TTL-based caching (5 min). First load ~500ms, cached <10ms."
+
+  - id: "RISK-002"
+    description: "Breaking existing tests — wiring changes touch core orchestrators"
+    probability: "low"
+    impact: "high"
+    mitigation: "All wiring uses delegation with try/except fallback to original stubs."
+
+  - id: "RISK-003"
+    description: "Circular imports — intelligence/provider.py importing from multiple layers"
+    probability: "medium"
+    impact: "medium"
+    mitigation: "Use lazy imports and interface-based injection (IIntelligenceProvider)."
+
+  - id: "RISK-004"
+    description: "Token budget impact — richer intelligence context increases response size"
+    probability: "medium"
+    impact: "low"
+    mitigation: "Provider respects tier budgets. Quick tier caps at 2KB context."
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - metric: "YAML practices loaded"
+      baseline: "0/40"
+      target: "40/40"
+    - metric: "InteractionOrchestrator intelligence confidence"
+      baseline: "0.3 (hardcoded)"
+      target: ">0.6 (knowledge-grounded)"
+    - metric: "CORE-035 violations in LENS"
+      baseline: "3 (context, cache, core.py)"
+      target: "0"
+    - metric: "LENSWarmer real analysis"
+      baseline: "0/5 methods"
+      target: "5/5 methods"
+    - metric: "ChallengeEngine real data"
+      baseline: "0/4 methods"
+      target: "4/4 methods"
+    - metric: "Tiered API real findings"
+      baseline: "0/4 tiers"
+      target: "4/4 tiers"
+    - metric: "E2E partner readiness"
+      baseline: "3/10"
+      target: "7/10"
+  
+  qualitative:
+    - "InteractionOrchestrator challenges are domain-aware"
+    - "MasterOrchestrator routes with cited knowledge rules"
+    - "Turn-over-turn context enrichment observable"
+    - "Onboarded repo context feeds every intelligence query"

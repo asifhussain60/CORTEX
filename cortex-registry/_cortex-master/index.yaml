@@ -1682,6 +1682,52 @@ completed_phases_2025:
       - Streaming support for large repositories
       - Backward compatible with existing Tier 4 (unchanged)
 
+  - id: "phase-65"
+    name: "LENS Intelligence Remediation — End-to-End Knowledge Pipeline"
+    file: "phases/active/phase-65-lens-intelligence-remediation.yaml"
+    created: "2026-02-09"
+    status: "planned"
+    priority: "P0"
+    execution_order: 16
+    roi_score: 0.95
+    estimated_duration: "8 days"
+    test_target: 120
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: true
+    description: |
+      ⚪ PLANNED: LENS Intelligence Remediation — 8 stages
+      Transforms disconnected LENS intelligence pipeline into production-grade 
+      end-to-end knowledge system. Wires stubs to real implementations across 
+      KnowledgeSynthesisEngine, LENSWarmer, ChallengeEngine, InteractionOrchestrator, 
+      MasterOrchestrator, and Tiered MCP API.
+      
+      **STAGES:**
+      - S1: Wire YAML Best Practice Loading (15 tests) — P0
+      - S2: Wire LENSWarmer to Real Analyzers (12 tests) — P0
+      - S3: Wire ChallengeEngine LENS Methods (18 tests) — P0
+      - S4: Unified Intelligence Provider (20 tests) — P0
+      - S5: Turn-Over-Turn Intelligence Accumulation (15 tests) — P1
+      - S6: Unify LENSContext and Cache / CORE-035 (10 tests) — P1
+      - S7: Wire Tiered MCP API to Real Analyzers (15 tests) — P1
+      - S8: End-to-End Integration Testing (15 tests) — P0
+      
+      **KEY OUTCOMES:**
+      - 40/40 YAML best practices loaded (from 0/40)
+      - 5/5 LENSWarmer methods wired to real analyzers
+      - 4/4 ChallengeEngine LENS methods producing real data
+      - Single UnifiedIntelligenceProvider for all orchestrators
+      - Turn-over-turn intelligence accumulation
+      - CORE-035 violations eliminated (context, cache, core.py)
+      - E2E partner readiness: 3/10 → 7/10
+    depends_on:
+      - "phase-63: LENS Tiered MCP API"
+      - "phase-49: Context Crystallization Layer"
+      - "phase-28: Repository Onboarding"
+
 # Active Enhancements
 active_enhancements:
   - id: "enh-029"
@@ -1862,17 +1908,17 @@ onboarded_repositories:
 
 # Metadata
 statistics:
-  total_phases: 63
-  active_phases: 19
+  total_phases: 64
+  active_phases: 20
   completed_phases: 45
-  planned_phases: 12
+  planned_phases: 13
   rejected_phases: 1
   superseded_phases: 1
   completed_2026: 42
   completed_2025: 11
   
   # Phase Categories
-  lens_enhancement_phases: 7  # Phases 57-63
+  lens_enhancement_phases: 8  # Phases 57-63, 65
   pilot_phases: 1  # Phase 56-A
   
   # Strategic Analysis
@@ -1903,6 +1949,7 @@ statistics:
     - "phase-51: Secrets Management & Audit Trail Hardening (P0, planned, ROI=0.96)"
     - "phase-52: Enterprise Orchestrator Suite (P1, planned, ROI=0.87)"
     - "phase-24: External Refactoring Tools Integration (P2, planned)"
+    - "phase-65: LENS Intelligence Remediation — E2E Knowledge Pipeline (P0, planned, ROI=0.95)"
   enterprise_scalability_phases:
     phases:
       - "phase-48: Multi-tenant foundation (6 days, 105 tests)"
