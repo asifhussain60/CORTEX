@@ -1556,17 +1556,45 @@ completed_phases_2025:
     
   - id: "phase-61"
     name: "Legacy Code Audit"
-    file: "phases/active/phase-61-legacy-code-audit.yaml"
+    file: "phases/completed/2026/phase-61-legacy-code-audit.yaml"
     created: "2026-02-09"
-    status: "planned"
+    completed: "2026-02-09"
+    status: "completed"
     priority: "P2"
     execution_order: 13
     roi_score: 0.72
     estimated_duration: "2 days"
     test_target: 25
+    test_achieved: 38
     coverage_target: 85
+    coverage_achieved: 92
     description: |
-      🟡 PLANNED: Categorize legacy code (deprecated, duplicate, orphaned, superseded).
+      ✅ COMPLETED: Legacy Code Audit — 4/4 detection systems implemented.
+      - DEPRECATED detection: @deprecated markers, deprecation comments
+      - DUPLICATE detection: MD5 hash-based (CORE-035 compliance)
+      - ORPHANED detection: No imports + active directory filtering
+      - SUPERSEDED detection: Version pattern matching (v1 vs v2)
+      
+      **DELIVERABLES:**
+      - LegacyCodeAudit class: Comprehensive scanning engine (420 LOC)
+      - RemovalApprovalWorkflow: User approval system (no auto-deletion)
+      - AuditReport: YAML export with statistics
+      - LegacyCodeAuditOrchestrator: Full workflow orchestration (300 LOC)
+      - 38/38 tests passing (100% > 25 target)
+      - 92% coverage (maintained from Phase 38)
+      
+      **KEY FEATURES:**
+      - Confidence scoring (0.45-0.99)
+      - Risk analysis (cost, lines, affected modules)
+      - Migration guide generation
+      - Governance audit trail (JSON export)
+      - Zero regressions (66/66 baseline maintained)
+      
+      **FILES:**
+      - cortex/orchestrators/support/legacy_code_audit.py (420 LOC)
+      - cortex/orchestrators/support/legacy_code_audit_orchestrator.py (300 LOC)
+      - tests/unit/orchestrators/support/test_legacy_code_audit.py (23 tests)
+      - tests/unit/orchestrators/support/test_legacy_code_audit_orchestrator.py (15 tests)
       
       **CATEGORIES:**
       1. DEPRECATED: Safe to remove
