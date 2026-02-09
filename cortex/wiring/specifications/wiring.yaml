@@ -1285,6 +1285,81 @@ orchestrators:
         sla_target_ms: 300
         fallback_timeout_ms: 500
 
+    - name: "ContentExtractionEngine"
+      module: "cortex.orchestrators.phase_49.content_extraction_engine"
+      class: "ContentExtractionEngine"
+      tier: 3
+      priority: 88
+      dependencies: ["ContextCrystallizationLayer"]
+      capabilities: [document_parsing, text_extraction, semantic_chunking, metadata_enrichment]
+      mcp_tools: [cortex_extract_content, cortex_parse_document, cortex_extract_metadata]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "📄"
+        phase: "49"
+        stage: "2"
+
+    - name: "KnowledgeParser"
+      module: "cortex.orchestrators.phase_49.knowledge_parser"
+      class: "KnowledgeParser"
+      tier: 3
+      priority: 87
+      dependencies: ["ContentExtractionEngine"]
+      capabilities: [entity_recognition, relationship_extraction, knowledge_graph_construction, semantic_analysis]
+      mcp_tools: [cortex_parse_knowledge, cortex_extract_entities, cortex_build_graph]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🧠"
+        phase: "49"
+        stage: "3"
+
+    - name: "YAMLGenerator"
+      module: "cortex.orchestrators.phase_49.yaml_generator"
+      class: "YAMLGenerator"
+      tier: 3
+      priority: 86
+      dependencies: ["KnowledgeParser"]
+      capabilities: [schema_validation, yaml_generation, format_enforcement, completeness_checking]
+      mcp_tools: [cortex_generate_yaml, cortex_validate_schema, cortex_enforce_format]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "📋"
+        phase: "49"
+        stage: "4"
+
+    - name: "ApprovalWorkflow"
+      module: "cortex.orchestrators.phase_49.approval_workflow"
+      class: "ApprovalWorkflow"
+      tier: 3
+      priority: 85
+      dependencies: ["YAMLGenerator"]
+      capabilities: [approval_routing, stakeholder_notification, version_tracking, publication_gating]
+      mcp_tools: [cortex_route_approval, cortex_notify_stakeholder, cortex_track_version]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "✅"
+        phase: "49"
+        stage: "5"
+
+    - name: "IncrementalUpdater"
+      module: "cortex.orchestrators.phase_49.incremental_updater"
+      class: "IncrementalUpdater"
+      tier: 3
+      priority: 84
+      dependencies: ["ApprovalWorkflow"]
+      capabilities: [delta_detection, incremental_sync, version_control, rollback_support]
+      mcp_tools: [cortex_detect_delta, cortex_sync_incremental, cortex_manage_versions]
+      governance: [CORE-035, CORE-049]
+      version: "1.0.0"
+      metadata:
+        icon: "🔄"
+        phase: "49"
+        stage: "6"
+
 # -------------------------------------------------------------------------
 # DEPENDENCY VALIDATION RULES
 # -------------------------------------------------------------------------
