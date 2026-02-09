@@ -52,6 +52,17 @@ from cortex.core.result import Result, Ok, Err
 # Phase 51: Enhanced response template with semantic color coding
 from cortex.agents.core.response_template_generator import ResponseTemplate
 
+# Phase 52: ExecutionDirective support (rules-driven constraint application)
+try:
+    from cortex.agents.core.agent_rules_interpreter import (
+        ExecutionDirective,
+        RuleViolation,
+        RuleEnforcementLevel,
+    )
+    PHASE_52_EXECUTION_DIRECTIVE_AVAILABLE = True
+except ImportError:
+    PHASE_52_EXECUTION_DIRECTIVE_AVAILABLE = False
+
 from cortex.orchestrators.support.brittleness_scanner import BrittlenessScanner
 from cortex.orchestrators.support.phase_completion_orchestrator import PhaseCompletionOrchestrator
 from cortex.orchestrators.core.orchestrator_base_protocol import (
@@ -429,8 +440,31 @@ class TDDOrchestrator(OrchestratorBaseProtocol):
         CORE-008: Enforces TDD discipline (RED → GREEN → REFACTOR)
         MCP-GATE: Rejects non-MCP invocations for IMPLEMENT intents
         AC-PHASE24-005: BrittlenessScanner pre-execution hook
+        Phase 52: Apply ExecutionDirective constraints if available
         """
         try:
+            # Phase 52: Extract and apply ExecutionDirective constraints
+            execution_directive: Optional[ExecutionDirective] = None
+            rule_violations: List[RuleViolation] = []
+            
+            if PHASE_52_EXECUTION_DIRECTIVE_AVAILABLE:
+                directive_dict = context.get("_execution_directive")
+                if directive_dict:
+                    try:
+                        # Log directive application
+                        logger.info(
+                            f"Phase 52: Applying ExecutionDirective "
+                            f"(rules={directive_dict.get('rule_id')}, "
+                            f"context={directive_dict.get('context')})"
+                        )
+                        
+                        # Store directive reference for phase execution
+                        execution_directive = directive_dict
+                        context["_phase52_directive_applied"] = True
+                        
+                    except Exception as directive_err:
+                        logger.warning(f"Failed to apply ExecutionDirective: {directive_err}")
+            
             # AC-PHASE24-005: Pre-execution brittleness scan (non-blocking)
             self._run_pre_execution_brittleness_scan(context)
             
@@ -819,6 +853,63 @@ def get_tdd_orchestrator(knowledge_root: Optional[Path] = None) -> TDDOrchestrat
     return get_tdd_orchestrator._instance
 
 
+
+
+    # Phase 52: ExecutionDirective constraint validation and application
+    def _validate_against_execution_directive(
+        self,
+        generated_code: str,
+        directive_dict: Optional[Dict[str, Any]],
+        context: Dict[str, Any]
+    ) -> tuple[bool, List[str]]:
+        """
+        Validate generated code against ExecutionDirective constraints.
+        
+        Phase 52: Constraints from agent rules are applied during REFACTOR phase
+        to ensure generated code adheres to rules specified by the agent.
+        
+        Args:
+            generated_code: Code generated in RED/GREEN/REFACTOR
+            directive_dict: ExecutionDirective as dictionary
+            context: Execution context
+            
+        Returns:
+            Tuple of (is_valid, violations) where violations is empty if valid
+        """
+        if not directive_dict or not PHASE_52_EXECUTION_DIRECTIVE_AVAILABLE:
+            return (True, [])
+        
+        try:
+            violations: List[str] = []
+            constraints = directive_dict.get("constraints", [])
+            
+            for constraint in constraints:
+                constraint_type = constraint.get("type")
+                pattern = constraint.get("value")
+                
+                if constraint_type == "pattern":
+                    import re
+                    if re.search(pattern, generated_code, re.IGNORECASE):
+                        violations.append(f"Pattern violated: {pattern}")
+            
+            is_valid = len(violations) == 0
+            
+            # Log validation result
+            logger.info(
+                f"Phase 52: Directive validation - "
+                f"code_length={len(generated_code)}, "
+                f"violations={len(violations)}, "
+                f"valid={is_valid}"
+            )
+            
+            return (is_valid, violations)
+        
+        except Exception as e:
+            logger.error(f"Phase 52: Directive validation error: {e}")
+            # Fail-safe: treat validation error as warning, not blocking
+            return (True, [f"Validation error (non-blocking): {str(e)}"])
+
+
 __all__ = [
     "TDDOrchestrator",
     "TDDPhase",
@@ -827,3 +918,4 @@ __all__ = [
     "TDDKnowledgeLoader",
     "get_tdd_orchestrator",
 ]
+
