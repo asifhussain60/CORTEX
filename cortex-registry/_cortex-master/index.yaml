@@ -11,6 +11,32 @@ revision: "Production Status Update - Phases 54-60 Verified Complete | 54/57 pha
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-65"
+    name: "LENS Intelligence Remediation"
+    file: "phases/active/phase-65-lens-intelligence-remediation.yaml"
+    created: "2026-02-09"
+    started: "2026-02-09"
+    status: "in_progress"
+    priority: "P0"
+    execution_order: 16
+    roi_score: 0.95
+    estimated_duration: "10 days"
+    test_target: 155
+    coverage_target: 90
+    tests_passing: 12
+    stages_complete: "1/9"
+    description: |
+      🔵 IN PROGRESS: End-to-end knowledge pipeline transformation (1/9 stages).
+      - ✅ S1: YAML Best Practice Loading (12 tests) — Dynamic loading operational
+      - 🔵 S2: LENSWarmer Real Analyzers (next)
+      - ⚪ S3-S9: Remaining integration stages
+      
+      Transforming CORTEX LENS from hollow architecture to operational intelligence.
+    depends_on:
+      - "phase-63"
+      - "phase-49"
+      - "phase-28"
+
   - id: "phase-45"
     name: "Enhanced Planning System"
     file: "phases/completed/2026/phase-45-enhanced-planning-system.yaml"
