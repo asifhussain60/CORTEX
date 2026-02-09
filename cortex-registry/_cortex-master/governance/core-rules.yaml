@@ -673,35 +673,3 @@ phase_52_migration:
       migration_type: "MarkdownSuppressionAgent integration"
       enforcement_point: "MasterOrchestrator.execute_operation()"
       validation_level: "BLOCKED"
-      
-    - rule_id: "CORE-029"
-      migration_type: "ResponseTemplate integration"
-      enforcement_point: "MasterOrchestrator.get_response_with_headers()"
-      validation_level: "WARNING"
-      
-    - rule_id: "CORE-011"
-      migration_type: "LENSSynthesis context-aware"
-      enforcement_point: "LENSSynthesis.synthesize_with_execution_context()"
-      validation_level: "WARNING"
-      
-    - rule_id: "CORE-035"
-      migration_type: "Architecture validation"
-      enforcement_point: "LENSSynthesis.synthesize_with_execution_context()"
-      validation_level: "BLOCKED"
-  
-  benefits:
-    - No duplicate validation logic across agents
-    - Context-aware enforcement (stricter for CORTEX internal)
-    - Centralized rule updates (single YAML file)
-    - Agent-agnostic rule evaluation
-    - Foundation for Alternative 2 (pure orchestrator path)
-  
-  next_phase:
-    description: "Phase 53: Complete orchestrator separation"
-    tasks:
-      - Migrate remaining 10 CORE rules to rules-driven validation
-      - Remove agent-level validation logic
-      - Enable true multi-agent orchestration
-      - Support Alternative 2 pure-orchestrator architecture
-
-```
