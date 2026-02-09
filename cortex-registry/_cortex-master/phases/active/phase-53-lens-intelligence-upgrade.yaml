@@ -1,0 +1,791 @@
+phase_id: "phase-53"
+phase_name: "LENS Intelligence Upgrade"
+version: "1.0.0"
+status: "planned"
+priority: "P0"
+created_date: "2026-02-09"
+target_completion: "2026-03-02"
+
+# ============================================================================
+# PHASE OVERVIEW
+# ============================================================================
+
+description: |
+  Comprehensive upgrade of CORTEX LENS (Language→Examination→Navigation→Synthesis)
+  from rule-based stubs to production-grade intelligent system with real codebase
+  analysis, knowledge integration, adaptive routing, and mandatory cleanup/migration.
+  
+  Current State: 5.0/10 - Good foundation, critical intelligence gaps
+  Target State: 9.0/10 - Production-ready adaptive intelligence
+  
+  Critical Blockers:
+  - Phase 2: Stub examination (no real codebase analysis)
+  - Phase 4: Empty knowledge retrieval (45+ YAML files unused)
+  - Phase 3: Static 1:1 routing (no adaptive workflows)
+  - No integration between cortex/brain/lens/pipeline.py and cortex/lens/orchestrator.py
+
+objectives:
+  - "Connect LENS Pipeline Phase 2 to LENSOrchestrator for real AST/Git analysis"
+  - "Integrate Phase 4 knowledge retrieval with cortex/knowledge/ YAML repository"
+  - "Implement semantic intent classification (replace pattern matching)"
+  - "Build multi-orchestrator adaptive routing with confidence gating"
+  - "Add dynamic confidence scoring with historical success tracking"
+  - "Cleanup obsolete implementations and migrate to unified LENS system"
+
+success_metrics:
+  - intent_accuracy: "95% (from 60%)"
+  - codebase_understanding: "90% (from 0%)"
+  - knowledge_retrieval: "100% (from 0%)"
+  - routing_accuracy: "95% (from 70%)"
+  - latency_p95: "<50ms (maintain current <10ms)"
+  - test_coverage: "≥90% for all LENS components"
+
+dependencies:
+  required_before:
+    - "Phase 48: Multi-Tenant Foundation (COMPLETE)"
+    - "Phase 49: Context Crystallization (COMPLETE)"
+    - "Phase 50: Storage Backend (COMPLETE)"
+    - "Phase 51: MCP-FIRST Enforcement (COMPLETE)"
+  unlocks_phases:
+    - "Phase 54: Production Hardening"
+    - "Phase 55: Multi-Tenant Expansion"
+
+# ============================================================================
+# STAGE 1: FOUNDATION FIXES (P0 BLOCKERS)
+# ============================================================================
+
+stages:
+  - stage_id: "S1"
+    stage_name: "Foundation Fixes - Phase 2 Integration"
+    duration_days: 2
+    priority: "P0"
+    
+    description: |
+      Connect LENS Pipeline Phase 2 (Examination) to LENSOrchestrator for real
+      codebase analysis instead of stub data. Replace hardcoded feature lists
+      with actual AST analysis, Git history, and comment extraction.
+    
+    tasks:
+      - task_id: "S1.T1"
+        description: "Create LENSOrchestrator integration adapter"
+        file: "cortex/brain/lens/orchestrator_adapter.py"
+        tests: "tests/unit/brain/lens/test_orchestrator_adapter.py"
+        acceptance_criteria:
+          - "Adapter wraps LENSOrchestrator.analyze_file()"
+          - "Returns ExaminationPhaseOutput format"
+          - "Handles missing repo_path gracefully"
+          - "100% test coverage"
+      
+      - task_id: "S1.T2"
+        description: "Replace ExaminationPhase stub logic with real analysis"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_pipeline_s1.py"
+        acceptance_criteria:
+          - "ExaminationPhase.execute() calls orchestrator_adapter"
+          - "features_identified from AST analysis"
+          - "relationships from call graph"
+          - "complexity_score from McCabe complexity"
+          - "Backwards compatible (graceful degradation if adapter fails)"
+      
+      - task_id: "S1.T3"
+        description: "Add AST call graph relationship extraction"
+        file: "cortex/lens/analyzers/ast_analyzer.py"
+        tests: "tests/unit/lens/analyzers/test_ast_call_graph.py"
+        acceptance_criteria:
+          - "Extract function calls within file"
+          - "Return List[Tuple[caller, callee]]"
+          - "Handle import chains"
+          - "Performance: <100ms for 1000 LOC file"
+      
+      - task_id: "S1.T4"
+        description: "Integration test: Pipeline with real Python file"
+        file: "tests/integration/lens/test_pipeline_real_analysis.py"
+        acceptance_criteria:
+          - "Analyze cortex/orchestrators/core/master_orchestrator.py"
+          - "Extract ≥10 real functions"
+          - "Identify ≥5 real relationships"
+          - "Complexity score > 0.5 (non-trivial file)"
+          - "End-to-end latency <50ms"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_orchestrator_adapter.py -v"
+      - "pytest tests/unit/brain/lens/test_pipeline_s1.py -v"
+      - "pytest tests/integration/lens/test_pipeline_real_analysis.py -v"
+      - "Coverage ≥90% for Stage 1 files"
+
+  # ========================================================================
+  # STAGE 2: KNOWLEDGE INTEGRATION (P0 BLOCKER)
+  # ========================================================================
+
+  - stage_id: "S2"
+    stage_name: "Knowledge Base Integration - Phase 4"
+    duration_days: 2
+    priority: "P0"
+    
+    description: |
+      Implement dynamic knowledge retrieval from cortex/knowledge/ YAML repository.
+      Replace empty cache with intelligent loading of best practices, standards,
+      and domain knowledge based on intent, context, and examination results.
+    
+    tasks:
+      - task_id: "S2.T1"
+        description: "Create knowledge loader with semantic search"
+        file: "cortex/brain/lens/knowledge_loader.py"
+        tests: "tests/unit/brain/lens/test_knowledge_loader.py"
+        acceptance_criteria:
+          - "load_knowledge_for_intent(intent, context, patterns)"
+          - "Loads relevant YAMLs from cortex/knowledge/best-practices/"
+          - "Semantic matching (fuzzy string similarity ≥0.7)"
+          - "Returns structured knowledge entries"
+          - "Cache loaded YAMLs (avoid re-parsing)"
+      
+      - task_id: "S2.T2"
+        description: "Intent-to-knowledge category mapping"
+        file: "cortex/brain/lens/knowledge_categories.py"
+        tests: "tests/unit/brain/lens/test_knowledge_categories.py"
+        acceptance_criteria:
+          - "IMPLEMENT → ['TDD', 'clean-code', '12-factor']"
+          - "FIX → ['debugging', 'error-handling', 'testing']"
+          - "REFACTOR → ['design-patterns', 'solid-principles']"
+          - "SECURITY → ['owasp', 'authentication', 'encryption']"
+          - "Extensible (easy to add new mappings)"
+      
+      - task_id: "S2.T3"
+        description: "Replace KnowledgePhase stub with real retrieval"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_pipeline_s2.py"
+        acceptance_criteria:
+          - "KnowledgePhase.execute() calls knowledge_loader"
+          - "Cache key = (intent, context_hash, patterns)"
+          - "Returns ≥3 knowledge entries for common intents"
+          - "Graceful degradation if knowledge loading fails"
+      
+      - task_id: "S2.T4"
+        description: "Integration test: Knowledge retrieval for all intents"
+        file: "tests/integration/lens/test_knowledge_retrieval.py"
+        acceptance_criteria:
+          - "Test all 5 intent types (IMPLEMENT, FIX, REFACTOR, UNDERSTAND, TEST)"
+          - "Each returns ≥3 knowledge entries"
+          - "Verify TDD patterns for IMPLEMENT"
+          - "Verify OWASP for security-related intents"
+          - "Latency <20ms for cached queries"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_knowledge_loader.py -v"
+      - "pytest tests/integration/lens/test_knowledge_retrieval.py -v"
+      - "Verify 45+ YAML files now accessible"
+      - "Cache hit rate ≥70% after warmup"
+
+  # ========================================================================
+  # STAGE 3: SEMANTIC INTENT CLASSIFICATION
+  # ========================================================================
+
+  - stage_id: "S3"
+    stage_name: "Semantic Intent Classification"
+    duration_days: 3
+    priority: "P1"
+    
+    description: |
+      Replace pattern matching with semantic intent classification using
+      embeddings and similarity scoring. Enable multi-label classification
+      (compound intents like "fix and refactor").
+    
+    tasks:
+      - task_id: "S3.T1"
+        description: "Create intent embedding database"
+        file: "cortex/brain/lens/intent_embeddings.py"
+        tests: "tests/unit/brain/lens/test_intent_embeddings.py"
+        acceptance_criteria:
+          - "Pre-compute embeddings for 100+ example requests per intent"
+          - "Use sentence-transformers (lightweight, no API calls)"
+          - "Store in SQLite for fast lookup"
+          - "Support multi-label classification"
+      
+      - task_id: "S3.T2"
+        description: "Semantic similarity classifier"
+        file: "cortex/brain/lens/semantic_classifier.py"
+        tests: "tests/unit/brain/lens/test_semantic_classifier.py"
+        acceptance_criteria:
+          - "Calculate cosine similarity to example embeddings"
+          - "Threshold: primary intent ≥0.7, secondary ≥0.5"
+          - "Return confidence scores for all intents"
+          - "Fallback to pattern matching if similarity <0.5"
+      
+      - task_id: "S3.T3"
+        description: "Upgrade LanguagePhase to semantic classification"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_pipeline_s3.py"
+        acceptance_criteria:
+          - "LanguagePhase.execute() uses semantic_classifier"
+          - "Return multi-label intents (sorted by confidence)"
+          - "Maintain backwards compatibility (single intent as primary)"
+          - "Performance: <10ms for classification"
+      
+      - task_id: "S3.T4"
+        description: "Ambiguous intent test suite"
+        file: "tests/integration/lens/test_ambiguous_intents.py"
+        acceptance_criteria:
+          - "'Fix bug and optimize performance' → [FIX:0.85, REFACTOR:0.65]"
+          - "'Add feature with tests' → [IMPLEMENT:0.90, TEST:0.70]"
+          - "'Investigate slow query' → [UNDERSTAND:0.80, REFACTOR:0.55]"
+          - "Accuracy ≥90% on 100 ambiguous test cases"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_semantic_classifier.py -v"
+      - "pytest tests/integration/lens/test_ambiguous_intents.py -v"
+      - "Benchmark: Intent accuracy on validation set ≥95%"
+
+  # ========================================================================
+  # STAGE 4: DYNAMIC CONFIDENCE SCORING
+  # ========================================================================
+
+  - stage_id: "S4"
+    stage_name: "Dynamic Confidence Scoring with History"
+    duration_days: 2
+    priority: "P1"
+    
+    description: |
+      Replace naive averaging with weighted confidence scoring that incorporates
+      examination quality, historical success rates, and uncertainty quantification.
+    
+    tasks:
+      - task_id: "S4.T1"
+        description: "Create confidence scoring engine"
+        file: "cortex/brain/lens/confidence_engine.py"
+        tests: "tests/unit/brain/lens/test_confidence_engine.py"
+        acceptance_criteria:
+          - "calculate_confidence(language, examination, history)"
+          - "Weights: 40% language, 30% examination, 30% history"
+          - "Examination quality = features_found / expected_features"
+          - "Historical success from execution tracking"
+          - "Return confidence + uncertainty bounds"
+      
+      - task_id: "S4.T2"
+        description: "Execution history tracker"
+        file: "cortex/brain/lens/execution_history.py"
+        tests: "tests/unit/brain/lens/test_execution_history.py"
+        acceptance_criteria:
+          - "Track (intent, context_signature) → success_rate"
+          - "Store last 1000 executions (LRU eviction)"
+          - "Persist to SQLite for cross-session learning"
+          - "Query by intent+context in <5ms"
+      
+      - task_id: "S4.T3"
+        description: "Integrate confidence engine into SynthesisPhase"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_pipeline_s4.py"
+        acceptance_criteria:
+          - "SynthesisPhase uses confidence_engine.calculate_confidence()"
+          - "Include uncertainty bounds in metadata"
+          - "Log confidence components for debugging"
+          - "Maintain backwards compatible final_confidence field"
+      
+      - task_id: "S4.T4"
+        description: "Confidence calibration validation"
+        file: "tests/integration/lens/test_confidence_calibration.py"
+        acceptance_criteria:
+          - "High confidence (≥0.9) → success rate ≥85%"
+          - "Medium confidence (0.7-0.9) → success rate ≥70%"
+          - "Low confidence (<0.7) → success rate ≥50%"
+          - "Calibration error ≤10% across 100 test cases"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_confidence_engine.py -v"
+      - "pytest tests/integration/lens/test_confidence_calibration.py -v"
+      - "Verify confidence correlates with actual success"
+
+  # ========================================================================
+  # STAGE 5: MULTI-ORCHESTRATOR ADAPTIVE ROUTING
+  # ========================================================================
+
+  - stage_id: "S5"
+    stage_name: "Multi-Orchestrator Adaptive Routing"
+    duration_days: 3
+    priority: "P1"
+    
+    description: |
+      Replace static 1:1 intent→orchestrator mapping with adaptive routing that
+      can compose multi-orchestrator workflows based on confidence, complexity,
+      and context. Enable conditional routing (e.g., security checks only for
+      high-risk operations).
+    
+    tasks:
+      - task_id: "S5.T1"
+        description: "Create orchestrator workflow builder"
+        file: "cortex/brain/lens/workflow_builder.py"
+        tests: "tests/unit/brain/lens/test_workflow_builder.py"
+        acceptance_criteria:
+          - "build_workflow(intent, confidence, examination)"
+          - "Returns List[OrchestratorStep] (pipeline)"
+          - "Conditional routing: if complexity > 0.7 → add analyzer"
+          - "Multi-stage: TDD → Implementation → Security → Deployment"
+          - "Fallback chains: primary fails → fallback orchestrator"
+      
+      - task_id: "S5.T2"
+        description: "Routing rules engine"
+        file: "cortex/brain/lens/routing_rules.py"
+        tests: "tests/unit/brain/lens/test_routing_rules.py"
+        acceptance_criteria:
+          - "Rule: test_coverage < 50% → add tdd_orchestrator"
+          - "Rule: 'security' in features → add security_checkpoint"
+          - "Rule: confidence < 0.6 → add analysis_orchestrator first"
+          - "Rule: complexity > 0.8 → add refactoring_orchestrator"
+          - "Extensible (YAML-based rule definitions)"
+      
+      - task_id: "S5.T3"
+        description: "Upgrade SynthesisPhase to multi-orchestrator routing"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_pipeline_s5.py"
+        acceptance_criteria:
+          - "routing_decision becomes List[str] (orchestrator pipeline)"
+          - "Backwards compatible: single orchestrator if no multi-routing needed"
+          - "Include routing reasoning (why each orchestrator selected)"
+          - "Performance: <5ms for workflow composition"
+      
+      - task_id: "S5.T4"
+        description: "Integration test: Complex workflow scenarios"
+        file: "tests/integration/lens/test_multi_orchestrator_routing.py"
+        acceptance_criteria:
+          - "High complexity + low coverage → [Analyzer, TDD, Refactor, Primary]"
+          - "Security feature + low confidence → [Security, Analysis, Primary]"
+          - "Simple intent + high confidence → [Primary only]"
+          - "Test 20 routing scenarios with expected workflows"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_workflow_builder.py -v"
+      - "pytest tests/integration/lens/test_multi_orchestrator_routing.py -v"
+      - "Verify routing accuracy ≥95% on validation set"
+
+  # ========================================================================
+  # STAGE 6: PERFORMANCE OPTIMIZATION & CACHING
+  # ========================================================================
+
+  - stage_id: "S6"
+    stage_name: "Performance Optimization & Intelligent Caching"
+    duration_days: 2
+    priority: "P2"
+    
+    description: |
+      Optimize LENS pipeline for production latency targets (<50ms P95) with
+      intelligent caching, lazy loading, and parallel phase execution where possible.
+    
+    tasks:
+      - task_id: "S6.T1"
+        description: "Multi-level caching strategy"
+        file: "cortex/brain/lens/cache_manager.py"
+        tests: "tests/unit/brain/lens/test_cache_manager.py"
+        acceptance_criteria:
+          - "L1: In-memory LRU (1000 entries, <1ms lookup)"
+          - "L2: SQLite persistent cache (10000 entries, <5ms)"
+          - "L3: Knowledge YAML cache (preload at startup)"
+          - "Cache invalidation on file changes (watch repo)"
+          - "Cache hit rate target: ≥70% after warmup"
+      
+      - task_id: "S6.T2"
+        description: "Lazy orchestrator adapter initialization"
+        file: "cortex/brain/lens/orchestrator_adapter.py"
+        tests: "tests/unit/brain/lens/test_lazy_initialization.py"
+        acceptance_criteria:
+          - "Initialize LENSOrchestrator only when needed"
+          - "Reuse instance across multiple pipeline executions"
+          - "Graceful degradation if initialization fails"
+          - "Reduces cold-start latency by 50%"
+      
+      - task_id: "S6.T3"
+        description: "Parallel phase execution where independent"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/brain/lens/test_parallel_execution.py"
+        acceptance_criteria:
+          - "Phases 1+4 can run in parallel (Language + Knowledge warmup)"
+          - "Use asyncio for non-blocking I/O"
+          - "Fallback to sequential if parallelization fails"
+          - "Latency improvement: 20-30% for cold cache"
+      
+      - task_id: "S6.T4"
+        description: "Performance regression test suite"
+        file: "tests/performance/lens/test_pipeline_performance.py"
+        acceptance_criteria:
+          - "P50 latency <20ms (warm cache)"
+          - "P95 latency <50ms (cold cache)"
+          - "P99 latency <100ms"
+          - "Cache hit rate ≥70% after 100 requests"
+          - "Memory usage <100MB for 1000 cached entries"
+    
+    validation:
+      - "pytest tests/performance/lens/test_pipeline_performance.py -v"
+      - "Run profiler: python -m cProfile cortex/brain/lens/pipeline.py"
+      - "Verify latency targets met"
+
+  # ========================================================================
+  # STAGE 7: MANDATORY CLEANUP & MIGRATION
+  # ========================================================================
+
+  - stage_id: "S7"
+    stage_name: "Mandatory Cleanup & Migration"
+    duration_days: 3
+    priority: "P0"
+    blocking: true
+    
+    description: |
+      MANDATORY FINAL STAGE: Remove obsolete LENS implementations, consolidate
+      duplicated logic, migrate all consumers to unified LENS system, deprecate
+      old APIs, and ensure zero breaking changes for existing workflows.
+      
+      THIS STAGE CANNOT BE SKIPPED. All previous stages build new capabilities,
+      but S7 ensures production cleanliness and maintainability.
+    
+    tasks:
+      - task_id: "S7.T1"
+        description: "Deprecate obsolete LENS implementations"
+        files:
+          - "cortex/orchestrators/core/lens_synthesis.py"
+          - "cortex/domain_brain/lens_integration.py"
+        tests: "tests/unit/lens/test_deprecation_warnings.py"
+        acceptance_criteria:
+          - "Add @deprecated decorator with migration guide"
+          - "Emit DeprecationWarning when old APIs called"
+          - "Update all internal CORTEX callers to new pipeline"
+          - "Document migration path in docstrings"
+          - "No breaking changes (old APIs still work but warn)"
+      
+      - task_id: "S7.T2"
+        description: "Consolidate LENS context models"
+        files:
+          - "cortex/brain/lens/models.py (NEW unified models)"
+          - "cortex/orchestrators/core/lens_synthesis.py (migrate)"
+          - "cortex/orchestrators/phase_49/context_crystallization_layer.py (migrate)"
+        tests: "tests/unit/lens/test_unified_models.py"
+        acceptance_criteria:
+          - "Single LENSContext model (merge 3 existing variants)"
+          - "Single LENSPipelineOutput (canonical format)"
+          - "Backwards compatibility adapters for old models"
+          - "All imports updated to use cortex.brain.lens.models"
+          - "Zero breaking changes for existing code"
+      
+      - task_id: "S7.T3"
+        description: "Migrate all LENS consumers to unified pipeline"
+        files:
+          - "cortex/orchestrators/core/challenge_engine.py"
+          - "cortex/orchestrators/domain/enhanced_refactoring_orchestrator.py"
+          - "cortex/orchestrators/support/upgrade_orchestrator.py"
+          - "cortex/orchestrators/support/setup_orchestrator.py"
+          - "cortex/orchestrators/support/rollback_orchestrator.py"
+        tests: "tests/integration/lens/test_consumer_migration.py"
+        acceptance_criteria:
+          - "All 5 consumers use cortex.brain.lens.pipeline.LENSPipeline"
+          - "Remove custom LENS implementations (LENSPhase classes)"
+          - "Verify functionality unchanged (regression tests)"
+          - "Update imports in 20+ files"
+          - "All existing tests still pass (≥98%)"
+      
+      - task_id: "S7.T4"
+        description: "Remove duplicate LENS logic"
+        files:
+          - "DELETE: cortex/orchestrators/support/lens_analysis_extractor.py"
+          - "DELETE: cortex/orchestrators/domain/plan_pause_manager.py (LENSAnalysisResult)"
+          - "CONSOLIDATE: cortex/lens/cached_lens_orchestrator.py → cortex/brain/lens/pipeline.py"
+        tests: "tests/unit/lens/test_no_duplicates.py"
+        acceptance_criteria:
+          - "Single source of truth: cortex/brain/lens/pipeline.py"
+          - "Remove 3 duplicate LENS implementations"
+          - "Update 15+ files with new imports"
+          - "Verify no orphaned LENS code (grep audit)"
+          - "All tests still pass after deletion"
+      
+      - task_id: "S7.T5"
+        description: "Update documentation for unified LENS system"
+        files:
+          - "docs/02-orchestrators/LENS-ARCHITECTURE.md (NEW)"
+          - "docs/02-orchestrators/LENS-MIGRATION-GUIDE.md (NEW)"
+          - "README.md (update LENS references)"
+          - ".github/prompts/cortex-architect.prompt.md (update LENS section)"
+        acceptance_criteria:
+          - "Architecture diagram: 4-phase pipeline"
+          - "Migration guide: Old API → New API mappings"
+          - "Performance benchmarks: <50ms P95"
+          - "Integration examples for common use cases"
+          - "API reference for all public classes"
+      
+      - task_id: "S7.T6"
+        description: "LENS system-wide audit & validation"
+        file: "scripts/audit_lens_migration.py (NEW)"
+        acceptance_criteria:
+          - "Grep audit: No references to deprecated LENS files"
+          - "Import audit: All use cortex.brain.lens.*"
+          - "Test audit: Zero skipped LENS tests"
+          - "Performance audit: Latency targets met (S6 validation)"
+          - "Breaking change audit: Zero breaking changes detected"
+          - "Generate migration report: Files changed, tests updated, performance delta"
+      
+      - task_id: "S7.T7"
+        description: "Production readiness checklist"
+        file: "docs/LENS-PRODUCTION-READINESS.md (NEW)"
+        acceptance_criteria:
+          - "All 6 previous stages validated (S1-S6)"
+          - "Test coverage ≥90% (cortex/brain/lens/)"
+          - "Performance targets met (P95 <50ms)"
+          - "Zero P0/P1 issues in LENS codebase"
+          - "Security scan passed (no vulnerabilities)"
+          - "Documentation complete (architecture + migration + API)"
+          - "Deployment plan approved"
+          - "Rollback plan documented"
+    
+    validation:
+      - "python scripts/audit_lens_migration.py --strict"
+      - "pytest tests/ -k lens -v --cov=cortex/brain/lens --cov-report=html"
+      - "pytest tests/integration/lens/ -v (all consumers work)"
+      - "grep -r 'cortex.orchestrators.core.lens_synthesis' cortex/ (should be 0 hits)"
+      - "grep -r '@deprecated' cortex/ | grep -i lens (verify deprecations marked)"
+      - "Verify documentation: docs/02-orchestrators/LENS-*.md exists"
+      - "Generate final report: LENS-PHASE53-COMPLETION-REPORT.md"
+    
+    rollback_plan: |
+      If S7 validation fails:
+      1. Revert S7 commits (git revert S7.T1..S7.T7)
+      2. Old APIs still work (backwards compatibility maintained)
+      3. New features available but old code paths intact
+      4. Incremental migration: deprecate in Phase 53, remove in Phase 54
+      5. No production impact (new pipeline opt-in via feature flag)
+
+# ============================================================================
+# ACCEPTANCE CRITERIA (PHASE-LEVEL)
+# ============================================================================
+
+acceptance_criteria:
+  - id: "AC-PHASE53-001"
+    description: "LENS Phase 2 uses real codebase analysis (not stubs)"
+    validation: "pytest tests/integration/lens/test_pipeline_real_analysis.py -v"
+    
+  - id: "AC-PHASE53-002"
+    description: "LENS Phase 4 retrieves from 45+ knowledge YAML files"
+    validation: "pytest tests/integration/lens/test_knowledge_retrieval.py -v"
+    
+  - id: "AC-PHASE53-003"
+    description: "Intent classification accuracy ≥95% (semantic, not pattern)"
+    validation: "pytest tests/integration/lens/test_ambiguous_intents.py -v"
+    
+  - id: "AC-PHASE53-004"
+    description: "Confidence calibration error ≤10% (predictions match reality)"
+    validation: "pytest tests/integration/lens/test_confidence_calibration.py -v"
+    
+  - id: "AC-PHASE53-005"
+    description: "Multi-orchestrator routing accuracy ≥95%"
+    validation: "pytest tests/integration/lens/test_multi_orchestrator_routing.py -v"
+    
+  - id: "AC-PHASE53-006"
+    description: "Latency P95 <50ms, P50 <20ms (with caching)"
+    validation: "pytest tests/performance/lens/test_pipeline_performance.py -v"
+    
+  - id: "AC-PHASE53-007"
+    description: "Zero breaking changes for existing LENS consumers"
+    validation: "pytest tests/integration/lens/test_consumer_migration.py -v"
+    
+  - id: "AC-PHASE53-008"
+    description: "All obsolete LENS implementations deprecated (S7.T1)"
+    validation: "grep -r '@deprecated' cortex/ | grep -i lens | wc -l ≥2"
+    
+  - id: "AC-PHASE53-009"
+    description: "Single source of truth: cortex/brain/lens/pipeline.py"
+    validation: "python scripts/audit_lens_migration.py --check-duplicates"
+    
+  - id: "AC-PHASE53-010"
+    description: "Documentation complete (architecture + migration + API)"
+    validation: "ls docs/02-orchestrators/LENS-*.md | wc -l ≥2"
+
+# ============================================================================
+# CORE GOVERNANCE
+# ============================================================================
+
+core_rules:
+  - "CORE-008: TDD - Tests BEFORE code (all 30+ test files)"
+  - "CORE-011: Type hints mandatory (Python 3.9+)"
+  - "CORE-012: Google-style docstrings"
+  - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+  - "CORE-030: Implementation Truth (verify code not docs)"
+  - "CORE-048: Holistic Validation Gate (pre-implementation review)"
+
+# ============================================================================
+# ROLLBACK & RISK MITIGATION
+# ============================================================================
+
+risk_mitigation:
+  - risk: "Breaking changes for existing LENS consumers"
+    mitigation: "Backwards compatibility adapters + deprecation warnings"
+    severity: "HIGH"
+    
+  - risk: "Performance regression (latency >50ms P95)"
+    mitigation: "Performance test suite gates + caching strategy"
+    severity: "HIGH"
+    
+  - risk: "Knowledge YAML loading too slow"
+    mitigation: "Preload + cache at startup, lazy load on demand"
+    severity: "MEDIUM"
+    
+  - risk: "Semantic classification less accurate than patterns"
+    mitigation: "Fallback to pattern matching if similarity <0.5"
+    severity: "MEDIUM"
+    
+  - risk: "S7 cleanup breaks hidden dependencies"
+    mitigation: "Comprehensive grep audit + integration tests + rollback plan"
+    severity: "HIGH"
+
+rollback_procedure: |
+  If Phase 53 needs rollback:
+  
+  PARTIAL ROLLBACK (Stage-level):
+  1. Identify failing stage (S1-S7)
+  2. Revert commits for that stage only
+  3. Previous stages remain active
+  4. Fix issues, re-run stage with fixes
+  
+  FULL ROLLBACK (Phase-level):
+  1. git revert <phase-53-commits>
+  2. Old LENS implementations still work (backwards compatible)
+  3. New features disabled via feature flag
+  4. No production impact (opt-in migration)
+  5. Re-plan Phase 53 with adjusted scope
+  
+  EMERGENCY ROLLBACK (Production incident):
+  1. Feature flag: CORTEX_LENS_UNIFIED=false
+  2. Reverts to old LENS implementations immediately
+  3. Zero downtime
+  4. Investigate incident post-rollback
+
+# ============================================================================
+# TESTING STRATEGY
+# ============================================================================
+
+testing_strategy:
+  unit_tests:
+    - "30+ test files (1 per task)"
+    - "Coverage target: ≥90%"
+    - "Fast: <5s total execution"
+    
+  integration_tests:
+    - "7 integration test suites (1 per stage)"
+    - "Test real CORTEX files (not mocks)"
+    - "Verify cross-component integration"
+    
+  performance_tests:
+    - "Latency benchmarks (P50/P95/P99)"
+    - "Cache hit rate tracking"
+    - "Memory profiling"
+    
+  regression_tests:
+    - "All existing LENS tests must pass"
+    - "Zero breaking changes detected"
+    - "Backwards compatibility validation"
+    
+  end_to_end_tests:
+    - "Full pipeline: User request → LENS → Orchestrator selection → Execution"
+    - "Test 20 real-world scenarios"
+    - "Validate intelligence improvements (95% accuracy targets)"
+
+# ============================================================================
+# DEPLOYMENT PLAN
+# ============================================================================
+
+deployment:
+  strategy: "Phased rollout with feature flags"
+  
+  phases:
+    - phase: "Stage 1-2 (P0 Fixes)"
+      enabled_by_default: false
+      feature_flag: "CORTEX_LENS_UNIFIED_EXAMINATION"
+      rollout: "Internal testing only"
+      
+    - phase: "Stage 3-5 (Intelligence)"
+      enabled_by_default: false
+      feature_flag: "CORTEX_LENS_UNIFIED_FULL"
+      rollout: "Beta users (opt-in)"
+      
+    - phase: "Stage 6 (Performance)"
+      enabled_by_default: false
+      feature_flag: "CORTEX_LENS_UNIFIED_OPTIMIZED"
+      rollout: "50% canary deployment"
+      
+    - phase: "Stage 7 (Cleanup)"
+      enabled_by_default: true
+      feature_flag: "CORTEX_LENS_UNIFIED"
+      rollout: "100% production (after validation)"
+  
+  validation_gates:
+    - "Stage 1-2 complete → Enable for internal testing"
+    - "No P0 issues for 48h → Enable for beta users"
+    - "Beta feedback positive → 50% canary rollout"
+    - "Canary metrics stable (7 days) → 100% production"
+    - "Production metrics stable (14 days) → Deprecate old APIs"
+
+# ============================================================================
+# SUCCESS METRICS & MONITORING
+# ============================================================================
+
+monitoring:
+  metrics:
+    - "lens.intent.classification.accuracy (target: ≥95%)"
+    - "lens.confidence.calibration.error (target: ≤10%)"
+    - "lens.routing.accuracy (target: ≥95%)"
+    - "lens.pipeline.latency.p95 (target: <50ms)"
+    - "lens.cache.hit_rate (target: ≥70%)"
+    - "lens.knowledge.retrieval.count (target: ≥3 per request)"
+    - "lens.breaking_changes.detected (target: 0)"
+  
+  alerts:
+    - condition: "lens.pipeline.latency.p95 > 100ms"
+      severity: "WARNING"
+      action: "Investigate performance regression"
+      
+    - condition: "lens.cache.hit_rate < 50%"
+      severity: "WARNING"
+      action: "Review caching strategy"
+      
+    - condition: "lens.intent.classification.accuracy < 85%"
+      severity: "CRITICAL"
+      action: "Fallback to pattern matching, investigate semantic classifier"
+      
+    - condition: "lens.breaking_changes.detected > 0"
+      severity: "CRITICAL"
+      action: "Rollback immediately, fix backwards compatibility"
+
+# ============================================================================
+# PHASE COMPLETION CRITERIA
+# ============================================================================
+
+completion_criteria:
+  blockers_resolved:
+    - "✅ Phase 2 examination uses real codebase analysis"
+    - "✅ Phase 4 knowledge retrieval accesses 45+ YAML files"
+    - "✅ Intent classification achieves 95% accuracy"
+    - "✅ Confidence calibration error ≤10%"
+    - "✅ Multi-orchestrator routing accuracy ≥95%"
+    - "✅ Latency P95 <50ms maintained"
+    - "✅ S7 cleanup complete (zero duplicates)"
+    - "✅ S7 migration complete (zero breaking changes)"
+    - "✅ S7 documentation complete"
+  
+  test_coverage:
+    - "cortex/brain/lens/: ≥90%"
+    - "All integration tests: 100% passing"
+    - "Performance tests: All targets met"
+    - "Regression tests: Zero breaking changes"
+  
+  documentation:
+    - "docs/02-orchestrators/LENS-ARCHITECTURE.md"
+    - "docs/02-orchestrators/LENS-MIGRATION-GUIDE.md"
+    - "docs/LENS-PRODUCTION-READINESS.md"
+    - "API reference for cortex.brain.lens"
+  
+  sign_off:
+    - "Engineering Lead: Architecture review"
+    - "QA: Test coverage + performance validation"
+    - "Product: Intelligence metrics + user experience"
+    - "Security: No vulnerabilities detected"
+
+next_phase:
+  phase_id: "phase-54"
+  phase_name: "Production Hardening"
+  prerequisites:
+    - "Phase 53 COMPLETE (LENS Intelligence Upgrade)"
+    - "Zero P0/P1 issues in LENS codebase"
+    - "All acceptance criteria met"
+    - "S7 cleanup validated (no duplicate implementations)"
