@@ -28,9 +28,10 @@ from __future__ import annotations
 
 import logging
 import time
+import yaml
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 20.5: Unified Intelligence Context
 from cortex.brain.knowledge.unified_intelligence_context import (
@@ -76,7 +77,8 @@ class KnowledgeSynthesisEngine:
     def __init__(self):
         """Initialize synthesis engine."""
         self._cache: Dict[str, SynthesizedInstruction] = {}
-        self._cortex_knowledge_cache: Dict[str, Dict[str, Any]] = {}
+        # Phase 65 S1: Cache now stores (timestamp, practices) tuple
+        self._cortex_knowledge_cache: Dict[str, Tuple[float, Dict[str, Any]]] = {}
     
     # =========================================================================
     # PHASE 20.5: UNIFIED INTELLIGENCE CONTEXT SYNTHESIS
@@ -195,44 +197,282 @@ class KnowledgeSynthesisEngine:
     
     def _load_cortex_best_practices(self, intent_type: str) -> Dict[str, Any]:
         """
-        Load applicable CORTEX best practices from 45+ YAMLs.
+        Load applicable CORTEX best practices from 40+ YAMLs.
+        
+        Phase 65 S1: Dynamically loads from cortex/knowledge/best-practices/
+        using INDEX.yaml for intent-to-YAML mapping.
         
         Args:
             intent_type: Intent type to filter applicable practices
         
         Returns:
-            Dictionary of best practices keyed by rule ID
+            Dictionary of best practices keyed by rule ID or practice name
+        
+        Authority: AC-PHASE65-S1-001
         """
-        # Check cache first
+        # Check cache first (5-min TTL)
         cache_key = f"cortex_practices_{intent_type}"
-        if cache_key in self._cortex_knowledge_cache:
-            return self._cortex_knowledge_cache[cache_key]
+        cache_entry = self._cortex_knowledge_cache.get(cache_key)
+        if cache_entry:
+            cache_time, cached_practices = cache_entry
+            if time.time() - cache_time < 300:  # 5-min TTL
+                return cached_practices
         
         practices = {}
         
         try:
-            # TODO: Load from cortex_brain/tier3/knowledge/*.yaml
-            # For now, return common CORE rules
-            practices = {
-                "CORE-008": "TDD First - Write tests before implementation",
-                "CORE-011": "Type Hints - All functions must have type annotations",
-                "CORE-012": "Google-style Docstrings - Document all public methods",
-                "CORE-013": "No Bare Except - Always specify exception types",
-                "CORE-026": "Git Checkpoint - Commit before major changes",
-                "CORE-027": "Audit Trail - Log AC_START and AC_COMPLETE",
-                "CORE-029": "Response Header - Include CORTEX header in responses",
-                "CORE-030": "Implementation Truth - Verify code, not docs",
-                "CORE-035": "Single Implementation - One canonical implementation",
-                "CORE-036": "Industry Standards - Comply with 12-Factor, SOLID, Clean Code, OWASP",
-            }
+            # Load INDEX.yaml
+            index_path = Path(__file__).parent.parent.parent / "knowledge" / "best-practices" / "INDEX.yaml"
             
-            # Filter by intent type (all CORE rules apply to all intents for now)
-            # In full implementation, load YAMLs and filter by intent
+            if not index_path.exists():
+                logger.warning(f"INDEX.yaml not found at {index_path}, using CORE rules only")
+                return self._get_core_rules()
             
-            self._cortex_knowledge_cache[cache_key] = practices
+            with open(index_path, 'r', encoding='utf-8') as f:
+                index_data = yaml.safe_load(f)
+            
+            # Map intent to applicable YAML files
+            yaml_paths = self._map_intent_to_yamls(intent_type, index_data)
+            
+            # Load each YAML and extract practices
+            loaded_count = 0
+            for yaml_path in yaml_paths:
+                try:
+                    full_path = index_path.parent / yaml_path
+                    if full_path.exists():
+                        with open(full_path, 'r', encoding='utf-8') as f:
+                            yaml_data = yaml.safe_load(f)
+                            # Extract practices/rules/patterns from YAML
+                            extracted = self._extract_practices_from_yaml(yaml_data, yaml_path)
+                            practices.update(extracted)
+                            loaded_count += 1
+                except Exception as e:
+                    logger.warning(f"Failed to load {yaml_path}: {e}")
+                    continue
+            
+            # Always include CORE rules
+            practices.update(self._get_core_rules())
+            
+            logger.info(f"Loaded {len(practices)} practices from {loaded_count} YAML files for {intent_type}")
+            
+            # Cache with timestamp
+            self._cortex_knowledge_cache[cache_key] = (time.time(), practices)
             
         except Exception as e:
             logger.error(f"Failed to load CORTEX best practices: {e}")
+            # Fallback to CORE rules
+            practices = self._get_core_rules()
+        
+        return practices
+    
+    def _get_core_rules(self) -> Dict[str, Any]:
+        """
+        Get CORE rules as fallback when YAML loading fails.
+        
+        Returns:
+            Dictionary of CORE rules
+        """
+        return {
+            "CORE-008": "TDD First - Write tests before implementation",
+            "CORE-011": "Type Hints - All functions must have type annotations",
+            "CORE-012": "Google-style Docstrings - Document all public methods",
+            "CORE-013": "No Bare Except - Always specify exception types",
+            "CORE-026": "Git Checkpoint - Commit before major changes",
+            "CORE-027": "Audit Trail - Log AC_START and AC_COMPLETE",
+            "CORE-029": "Response Header - Include CORTEX header in responses",
+            "CORE-030": "Implementation Truth - Verify code, not docs",
+            "CORE-035": "Single Implementation - One canonical implementation",
+            "CORE-036": "Industry Standards - Comply with 12-Factor, SOLID, Clean Code, OWASP",
+        }
+    
+    def _map_intent_to_yamls(self, intent_type: str, index_data: Dict[str, Any]) -> List[str]:
+        """
+        Map intent type to applicable YAML file paths.
+        
+        Args:
+            intent_type: Intent type (IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.)
+            index_data: Loaded INDEX.yaml data
+        
+        Returns:
+            List of relative YAML paths to load
+        """
+        yaml_paths = []
+        
+        # Intent-specific mappings
+        intent_mappings = {
+            "IMPLEMENT": [
+                "testing-validation/tdd-best-practices.yaml",
+                "backend-python/clean-code.yaml",
+                "security/secure-coding-practices.yaml",
+                "architecture/engineering-design-patterns.yaml",
+                "architecture/engineering-solid-principles.yaml",
+            ],
+            "FIX": [
+                "backend-python/code-review.yaml",
+                "security/secure-coding-practices.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+                "testing-validation/tdd-best-practices.yaml",
+            ],
+            "REFACTOR": [
+                "backend-python/refactoring.yaml",
+                "architecture/engineering-solid-principles.yaml",
+                "backend-python/clean-code.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+            ],
+            "ANALYZE": [
+                "backend-python/code-review.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+                "devops-infrastructure/monitoring-observability.yaml",
+                "performance-optimization/profiling-analysis.yaml",
+            ],
+            "AUDIT": [
+                "security/owasp-top-10.yaml",
+                "security/api-security-checklist.yaml",
+                "security/secure-coding-practices.yaml",
+                "backend-python/code-review.yaml",
+            ],
+        }
+        
+        # Get mapped YAMLs for this intent
+        if intent_type in intent_mappings:
+            yaml_paths.extend(intent_mappings[intent_type])
+        else:
+            # Fallback: keyword-based matching from INDEX.yaml
+            yaml_paths = self._keyword_fallback_matching(intent_type, index_data)
+        
+        return yaml_paths
+    
+    def _keyword_fallback_matching(self, intent_type: str, index_data: Dict[str, Any]) -> List[str]:
+        """
+        Fallback keyword-based matching when intent not explicitly mapped.
+        
+        Args:
+            intent_type: Intent type
+            index_data: INDEX.yaml data
+        
+        Returns:
+            List of YAML paths matching keywords
+        """
+        yaml_paths = []
+        intent_lower = intent_type.lower()
+        
+        # Search all categories for keyword matches
+        for category_key in ['architecture', 'backend-python', 'security', 'testing-validation',
+                              'performance-optimization', 'devops-infrastructure']:
+            category = index_data.get(category_key, {})
+            guides = category.get('guides', [])
+            
+            for guide in guides:
+                keywords = guide.get('keywords', [])
+                # Match if intent appears in keywords
+                if any(intent_lower in kw.lower() for kw in keywords):
+                    yaml_paths.append(guide['path'])
+        
+        return yaml_paths[:5]  # Limit to top 5 matches
+    
+    def _extract_practices_from_yaml(self, yaml_data: Dict[str, Any], yaml_path: str) -> Dict[str, Any]:
+        """
+        Extract practices/rules/patterns from loaded YAML file.
+        
+        Phase 65 S1: Flexible extraction supporting multiple YAML structures.
+        
+        Args:
+            yaml_data: Loaded YAML data
+            yaml_path: Path to YAML file (for context)
+        
+        Returns:
+            Dictionary of extracted practices
+        """
+        practices = {}
+        
+        try:
+            # Strategy 1: Extract from 'three_laws' (TDD pattern)
+            if 'three_laws' in yaml_data:
+                laws = yaml_data['three_laws']
+                if isinstance(laws, dict):
+                    for law_key, law_data in laws.items():
+                        if isinstance(law_data, dict) and 'statement' in law_data:
+                            rule_id = f"TDD:{law_key}"
+                            practices[rule_id] = law_data['statement']
+            
+            # Strategy 2: Extract from 'best_practices' (nested dict structure)
+            if 'best_practices' in yaml_data:
+                bp_data = yaml_data['best_practices']
+                if isinstance(bp_data, dict):
+                    # Nested structure like {'test_design': {...}, 'workflow': {...}}
+                    for category_key, category_data in bp_data.items():
+                        if isinstance(category_data, dict):
+                            for item_key, item_data in category_data.items():
+                                if isinstance(item_data, dict):
+                                    description = item_data.get('description') or item_data.get('guideline') or item_data.get('rationale') or str(item_data)[:100]
+                                    practices[f"{category_key}:{item_key}"] = description
+                                elif isinstance(item_data, str):
+                                    practices[f"{category_key}:{item_key}"] = item_data
+                elif isinstance(bp_data, list):
+                    # List structure
+                    for idx, item in enumerate(bp_data):
+                        if isinstance(item, dict):
+                            key = item.get('name') or item.get('id') or f"BP{idx}"
+                            val = item.get('description') or item.get('guideline') or str(item)[:100]
+                            practices[key] = val
+                        elif isinstance(item, str):
+                            practices[f"BP{idx}"] = item
+            
+            # Strategy 3: Extract from 'practices' list
+            if 'practices' in yaml_data:
+                for idx, practice in enumerate(yaml_data['practices']):
+                    if isinstance(practice, dict):
+                        rule_id = practice.get('id') or practice.get('name') or f"{yaml_path}:P{idx}"
+                        description = practice.get('description') or practice.get('guideline') or practice.get('name')
+                        if description:
+                            practices[rule_id] = description
+            
+            # Strategy 4: Extract from 'rules' list
+            if 'rules' in yaml_data:
+                for idx, rule in enumerate(yaml_data['rules']):
+                    if isinstance(rule, dict):
+                        rule_id = rule.get('id') or rule.get('name') or f"{yaml_path}:R{idx}"
+                        description = rule.get('description') or rule.get('guideline') or rule.get('name')
+                        if description:
+                            practices[rule_id] = description
+            
+            # Strategy 5: Extract from 'patterns' list
+            if 'patterns' in yaml_data:
+                for idx, pattern in enumerate(yaml_data['patterns']):
+                    if isinstance(pattern, dict):
+                        pattern_id = pattern.get('name') or pattern.get('id') or f"{yaml_path}:PT{idx}"
+                        description = pattern.get('description') or pattern.get('when_to_use') or pattern.get('name')
+                        if description:
+                            practices[pattern_id] = description
+            
+            # Strategy 6: Extract from 'guidelines' list
+            if 'guidelines' in yaml_data:
+                items = yaml_data['guidelines']
+                if isinstance(items, list):
+                    for idx, item in enumerate(items):
+                        if isinstance(item, dict):
+                            key = item.get('name') or f"{yaml_path}:GL{idx}"
+                            val = item.get('description') or str(item)[:100]
+                            practices[key] = val
+                        elif isinstance(item, str):
+                            practices[f"{yaml_path}:GL{idx}"] = item
+            
+            # Strategy 7: Extract from 'overview' section
+            if 'overview' in yaml_data and len(practices) < 5:
+                overview = yaml_data['overview']
+                if isinstance(overview, dict):
+                    if 'core_principles' in overview:
+                        principles = overview['core_principles']
+                        if isinstance(principles, list):
+                            for idx, principle in enumerate(principles):
+                                if isinstance(principle, dict):
+                                    name = principle.get('principle') or f"principle{idx}"
+                                    desc = principle.get('description') or principle.get('rationale')
+                                    if desc:
+                                        practices[f"PRINCIPLE:{name}"] = desc
+            
+        except Exception as e:
+            logger.warning(f"Failed to extract practices from {yaml_path}: {e}")
         
         return practices
     
