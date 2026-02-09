@@ -11,6 +11,33 @@ revision: "Production Status Update - Phases 54-60 Verified Complete | 54/57 pha
 
 # Active Phases (Current Development)
 active_phases:
+  - id: "phase-66"
+    name: "LENS Knowledge Graph & Domain Intelligence"
+    file: "phases/active/phase-66-lens-knowledge-graph-domain-intelligence.yaml"
+    created: "2026-02-09"
+    started: "2026-02-09"
+    status: "planned"
+    priority: "P1"
+    execution_order: 17
+    roi_score: 0.88
+    estimated_duration: "11-13 weeks"
+    test_target: 110
+    coverage_target: 90
+    tests_passing: 0
+    stages_complete: "0/4"
+    description: |
+      ⚪ PLANNED: Transform LENS from syntax analyzer to domain-aware intelligence engine.
+      - ⚪ S1: Architecture Lens + Dependency Analysis (25 tests, 2-3 weeks)
+      - ⚪ S2: Knowledge Graph Lite (30 tests, 3-4 weeks)
+      - ⚪ S3: Domain Inference Engine (35 tests, 4-5 weeks)
+      - ⚪ S4: Runtime Correlation [OPTIONAL] (20 tests, 6-8 weeks)
+      
+      Digest: chat01.md reverse-engineering patterns + Challenge Engine Alternative A.
+      Strategic: Pattern-based (language-agnostic), incremental delivery, token-efficient.
+    depends_on:
+      - "phase-64"
+      - "phase-63"
+
   - id: "phase-65"
     name: "LENS Intelligence Remediation"
     file: "phases/active/phase-65-lens-intelligence-remediation.yaml"

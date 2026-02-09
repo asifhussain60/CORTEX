@@ -1,0 +1,615 @@
+# Phase 66: LENS Knowledge Graph & Domain Intelligence
+# Authority: CORTEX Architect DIGEST Analysis (chat01.md) + Challenge Engine
+# Created: 2026-02-09
+# AC-ID: AC-PHASE66-001
+
+metadata:
+  phase_id: "phase-66"
+  title: "LENS Knowledge Graph & Domain Intelligence"
+  status: "planned"
+  priority: "P1"
+  created: "2026-02-09"
+  estimated_duration: "11-13 weeks"
+  roi_score: 0.88
+  execution_order: 17
+  test_target: 110
+  coverage_target: 90
+  autonomous_execution: true
+  approval_required: false
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+
+overview:
+  vision: |
+    Transform CORTEX LENS from syntax analyzer to domain-aware intelligence 
+    engine through incremental knowledge graph construction and pattern-based 
+    domain inference. Enable CORTEX to understand codebases as architects do: 
+    layers, boundaries, domains, relationships, and business rules.
+    
+    Strategic alignment with Phase 64 (Intelligent Tier Selection) and 
+    addresses reverse-engineering intelligence gaps identified in chat01.md 
+    digest analysis.
+
+  problem_statement: |
+    Current LENS provides syntax-level analysis (AST, complexity, security) 
+    but lacks architectural and domain awareness:
+    
+    1. Cannot detect layering violations (Controller bypassing Service)
+    2. Cannot answer "Which files write to User table?" (relationship queries)
+    3. Cannot identify bounded contexts or business domains automatically
+    4. Cannot infer state machines from status enums
+    5. Cannot extract business rules from validation logic
+    6. Token-inefficient: Full codebase scans = 50-150K tokens per query
+    
+    Intelligence gap: CORTEX analyzes trees but doesn't see the forest.
+    
+    Digest insight: Real codebases need "three-lens triangulation" - 
+    static structure + runtime truth + data model. Phase 66 focuses on 
+    static structure patterns (foundational) with optional runtime correlation.
+
+  expected_outcomes:
+    - "Architecture pattern detection (MVC, Repository, Service layers)"
+    - "Dependency graph with circular dependency detection"
+    - "Layering violation detection (upward dependencies blocked)"
+    - "Queryable knowledge graph (SQLite storage, <100ms queries)"
+    - "Relationship queries: 'Which files call UserRepository.save()?'"
+    - "Domain inference from naming patterns and clustering"
+    - "Lifecycle state detection from enums → state machines"
+    - "Business rule extraction from validation decorators"
+    - "Domain glossary generation (entities + relationships)"
+    - "Token efficiency: 80-90% reduction vs. full codebase scans"
+    - "Optional: Runtime correlation from pytest traces (Stage 4)"
+
+roi_analysis:
+  cost: "70-82 hours (Stage 1-3) + optional 32-40 hours (Stage 4)"
+  impact: |
+    Immediate (Stage 1-2):
+    - Architectural violation prevention (tech debt reduction)
+    - Cross-file relationship queries (5-10K vs. 50-150K tokens)
+    - Dependency analysis for refactoring safety
+    
+    Medium-term (Stage 3):
+    - Domain-driven documentation generation
+    - Bounded context discovery (modularity insights)
+    - Business rule catalog (audit + compliance)
+    
+    Long-term (Stage 4 - optional):
+    - Test coverage gap identification
+    - Performance hot path optimization
+    - Dead code elimination
+    
+    Token efficiency: 80-90% reduction in context loading for queries.
+    
+  risk_mitigation: |
+    - Incremental delivery: Value every 2-3 weeks vs. 6-9 months all-or-nothing
+    - Builds on existing LENS foundation (Phase 64) — no new subsystem
+    - Language-agnostic patterns work across Python/TS/Go stacks
+    - Stage 4 deferred: Evaluate need after Stage 3 completion
+    - Fallback: If graph queries insufficient, can upgrade to full Roslyn pipeline
+    - Each stage independently testable and deployable
+
+dependencies:
+  required:
+    - "phase-64: Intelligent LENS Tier Selection (Complete)"
+    - "phase-63: LENS Tiered MCP API (Complete)"
+  optional:
+    - "phase-65: LENS Intelligence Remediation (enhances data quality)"
+  blocks:
+    - "Architectural reasoning capabilities"
+    - "Domain-driven documentation generation"
+
+governance:
+  core_rules:
+    - "CORE-008: TDD — tests before implementation for every stage"
+    - "CORE-011: Type hints mandatory on all new/modified functions"
+    - "CORE-012: Google-style docstrings on all public methods"
+    - "CORE-035: Single canonical implementation — no duplicate graph stores"
+    - "CORE-027: Audit trail — AC_START/AC_COMPLETE markers"
+    - "CORE-030: Implementation Truth — verify code not docs"
+  enforcement: "EnforcementOrchestrator 7-agent pre-execution gate"
+  tdd_required: true
+
+# ============================================================================
+# STAGE BREAKDOWN
+# ============================================================================
+
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Architecture Lens + Dependency Analysis (2-3 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S1"
+    name: "Architecture Lens + Dependency Analysis"
+    description: |
+      Detect architectural patterns and layering violations through 
+      import graph analysis and naming conventions.
+    
+    deliverables:
+      - "Architecture pattern detector (MVC, Repository, Service layers)"
+      - "Dependency graph builder (import relationship mapping)"
+      - "Layering violation detector (upward dependency prevention)"
+      - "Circular dependency detector with cycle visualization"
+      - "Integration with LENS Advanced tier"
+      
+    acceptance_criteria:
+      - "Detect 'Controller → Repository' violations (bypass Service layer)"
+      - "Identify circular dependencies across modules with path display"
+      - "Map component hierarchy: presentation → business → data"
+      - "Generate architecture violation report with severity scoring"
+      - "25+ tests covering pattern detection and violation scenarios"
+      - "90%+ test coverage"
+      - "Integration test: Analyze CORTEX codebase, detect known patterns"
+      
+    technical_approach: |
+      1. Extend LENS Advanced tier with ArchitectureLens class
+      2. Parse Python imports via AST → build directed graph
+      3. Apply pattern matchers:
+         - MVC: *Controller → *Service → *Repository
+         - Layering: cortex/ → cortex_brain/ allowed, reverse blocked
+      4. Detect violations: DFS for upward edges, cycle detection
+      5. Output: ArchitectureReport with violations + suggestions
+      
+    files_to_create:
+      - "cortex_lens/analyzers/architecture_lens.py"
+      - "cortex_lens/models/architecture_report.py"
+      - "tests/unit/cortex_lens/analyzers/test_architecture_lens.py"
+      - "tests/integration/cortex_lens/test_architecture_analysis_e2e.py"
+      
+    tests:
+      - "test_detect_mvc_pattern"
+      - "test_detect_repository_pattern"
+      - "test_detect_layering_violation_upward"
+      - "test_detect_circular_dependency"
+      - "test_component_hierarchy_mapping"
+      - "test_architecture_report_generation"
+      - "test_severity_scoring"
+      - "test_integration_cortex_codebase_analysis"
+      
+    estimated_effort: "18-22 hours"
+    depends_on: []
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: Knowledge Graph Lite (3-4 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S2"
+    name: "Knowledge Graph Lite"
+    description: |
+      Store LENS analysis results as queryable graph structure in SQLite 
+      for efficient relationship queries and incremental updates.
+    
+    deliverables:
+      - "Graph schema design (nodes: File/Class/Function/Import/Test)"
+      - "Edge types (calls, imports, tests, depends_on, writes_to)"
+      - "SQLite storage backend with optimized indexes"
+      - "Query interface for relationship traversal (Python API)"
+      - "Incremental update system (file change → graph delta)"
+      - "MCP tool: cortex_knowledge_graph_query"
+      
+    acceptance_criteria:
+      - "Store full CORTEX codebase graph in <50MB SQLite DB"
+      - "Query 'Which files call UserRepository.save()?' in <100ms"
+      - "Support incremental updates: file change → rebuild subgraph only"
+      - "2-hop queries (e.g., 'Which tests cover X through Y?') in <200ms"
+      - "Graph serialization/deserialization for persistence"
+      - "30+ tests covering graph operations (insert, query, update, delete)"
+      - "90%+ test coverage"
+      - "MCP tool integration test: Query graph via tool interface"
+      
+    technical_approach: |
+      1. Design property graph schema:
+         - Nodes: id, type, name, file_path, metadata (JSON)
+         - Edges: source_id, target_id, edge_type, metadata (JSON)
+      2. SQLite storage with indexes on (type, name), (edge_type, source_id)
+      3. Query API: GraphQuery.traverse(start_node, edge_type, depth)
+      4. Incremental updates: file hash tracking → rebuild delta only
+      5. MCP tool wrapper for Copilot Chat access
+      
+    files_to_create:
+      - "cortex_lens/knowledge_graph/graph_schema.py"
+      - "cortex_lens/knowledge_graph/graph_storage.py"
+      - "cortex_lens/knowledge_graph/graph_query.py"
+      - "cortex_lens/knowledge_graph/graph_builder.py"
+      - "cortex/mcp/tools/knowledge_graph_query_tool.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_graph_storage.py"
+      - "tests/unit/cortex_lens/knowledge_graph/test_graph_query.py"
+      - "tests/integration/cortex_lens/test_knowledge_graph_e2e.py"
+      - "tests/integration/cortex/mcp/test_knowledge_graph_query_tool.py"
+      
+    tests:
+      - "test_graph_schema_validation"
+      - "test_node_insertion"
+      - "test_edge_insertion"
+      - "test_query_1hop_relationships"
+      - "test_query_2hop_relationships"
+      - "test_query_performance_100ms"
+      - "test_incremental_update_file_change"
+      - "test_graph_serialization"
+      - "test_mcp_tool_query_interface"
+      
+    estimated_effort: "24-28 hours"
+    depends_on: ["S1"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Domain Inference Engine (4-5 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S3"
+    name: "Domain Inference Engine"
+    description: |
+      Automatically identify bounded contexts, business domains, state 
+      machines, and business rules from code patterns and naming conventions.
+    
+    deliverables:
+      - "Naming pattern analyzer (shared prefixes → domain clusters)"
+      - "Lifecycle state detector (status enums → state machines)"
+      - "Business rule extractor (validation decorators → constraints)"
+      - "Domain glossary generator (entities + relationships + definitions)"
+      - "Bounded context mapper with dependency visualization"
+      
+    acceptance_criteria:
+      - "Identify 5+ domains in CORTEX codebase with 85%+ precision"
+      - "Detect state transitions: Phase (planned → active → completed)"
+      - "Extract business rules from validation logic (e.g., @validator)"
+      - "Generate queryable domain glossary with entity relationships"
+      - "Map bounded contexts with inter-context dependencies"
+      - "Confidence scoring for each inference (0.0-1.0)"
+      - "35+ tests with real CORTEX codebase examples"
+      - "90%+ test coverage"
+      - "Human validation: 85%+ precision on 50 inferred domains"
+      
+    technical_approach: |
+      1. Naming pattern analysis:
+         - Cluster classes by shared prefixes (e.g., User*, Order*)
+         - Identify domain aggregates (root + children)
+      2. State machine detection:
+         - Parse Enum classes for status fields
+         - Build transition graph from assignment patterns
+      3. Business rule extraction:
+         - Parse validation decorators (@validator, @field_validator)
+         - Extract constraint logic from if/raise patterns
+      4. Domain glossary:
+         - Entity: name, domain, relationships, lifecycle
+         - Verb: use cases extracted from method names
+         - Rule: constraints extracted from validators
+      5. Confidence scoring: weighted combination of signals
+      
+    files_to_create:
+      - "cortex_lens/domain_inference/pattern_analyzer.py"
+      - "cortex_lens/domain_inference/state_detector.py"
+      - "cortex_lens/domain_inference/rule_extractor.py"
+      - "cortex_lens/domain_inference/glossary_generator.py"
+      - "cortex_lens/domain_inference/bounded_context_mapper.py"
+      - "cortex_lens/models/domain_glossary.py"
+      - "tests/unit/cortex_lens/domain_inference/test_pattern_analyzer.py"
+      - "tests/unit/cortex_lens/domain_inference/test_state_detector.py"
+      - "tests/unit/cortex_lens/domain_inference/test_rule_extractor.py"
+      - "tests/integration/cortex_lens/test_domain_inference_e2e.py"
+      
+    tests:
+      - "test_domain_clustering_by_prefix"
+      - "test_aggregate_root_detection"
+      - "test_state_machine_extraction_from_enum"
+      - "test_state_transition_graph_building"
+      - "test_validation_rule_extraction"
+      - "test_business_constraint_detection"
+      - "test_domain_glossary_generation"
+      - "test_bounded_context_mapping"
+      - "test_confidence_scoring"
+      - "test_cortex_domain_inference_accuracy"
+      
+    estimated_effort: "28-32 hours"
+    depends_on: ["S2"]
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Runtime Correlation (OPTIONAL - 6-8 weeks)
+  # --------------------------------------------------------------------------
+  - id: "S4"
+    name: "Runtime Correlation (OPTIONAL)"
+    description: |
+      Enhance knowledge graph with execution traces from test runs to 
+      identify hot paths, dead code, and actual call chains.
+      
+      DECISION POINT: Evaluate necessity after Stage 3 completion based 
+      on user feedback and static analysis sufficiency.
+    
+    deliverables:
+      - "pytest JSON output parser"
+      - "Test coverage mapper (test → code paths)"
+      - "Hot path identifier (frequently executed code)"
+      - "Dead code detector (untested + uncalled)"
+      - "Integration test flow analyzer"
+      
+    acceptance_criteria:
+      - "Parse pytest --json output into graph edges"
+      - "Map test_user_creation → UserRepository.save() call chain"
+      - "Identify top 10 hot paths in CORTEX codebase"
+      - "Flag dead code candidates (0 test coverage + 0 runtime calls)"
+      - "Integration test flow visualization with coverage overlay"
+      - "20+ tests covering trace parsing and analysis"
+      - "90%+ test coverage"
+      
+    technical_approach: |
+      1. pytest JSON parser:
+         - Extract test → file → function execution paths
+         - Build runtime call graph from coverage data
+      2. Test coverage mapper:
+         - Correlate pytest-cov output with knowledge graph
+         - Add 'covered_by_test' edges
+      3. Hot path analysis:
+         - Frequency counting from test execution counts
+         - Weight by execution time from pytest duration
+      4. Dead code detection:
+         - Cross-reference: no test coverage + no import edges = dead
+      
+    files_to_create:
+      - "cortex_lens/runtime_correlation/pytest_parser.py"
+      - "cortex_lens/runtime_correlation/coverage_mapper.py"
+      - "cortex_lens/runtime_correlation/hot_path_analyzer.py"
+      - "cortex_lens/runtime_correlation/dead_code_detector.py"
+      - "tests/unit/cortex_lens/runtime_correlation/test_pytest_parser.py"
+      - "tests/integration/cortex_lens/test_runtime_correlation_e2e.py"
+      
+    tests:
+      - "test_pytest_json_parsing"
+      - "test_coverage_data_integration"
+      - "test_hot_path_identification"
+      - "test_dead_code_detection"
+      - "test_integration_flow_analysis"
+      
+    estimated_effort: "32-40 hours"
+    depends_on: ["S3"]
+    deferred: true
+    defer_reason: "Evaluate necessity after Stage 3 based on static analysis sufficiency"
+
+# ============================================================================
+# INTEGRATION & TESTING
+# ============================================================================
+
+integration:
+  entry_points:
+    - "LENS Advanced tier → ArchitectureLens → Graph Builder"
+    - "MCP tools → cortex_knowledge_graph_query → Graph Query API"
+    - "InteractionOrchestrator → Domain Inference → Context enrichment"
+    
+  data_flow: |
+    User Request
+         ↓
+    LENS Advanced (AST Analysis)
+         ↓
+    Architecture Lens (Pattern Detection)
+         ↓
+    Graph Builder (Store Relationships)
+         ↓
+    Knowledge Graph (SQLite)
+         ↓
+    Domain Inference Engine (Pattern Recognition)
+         ↓
+    Domain Glossary + Bounded Contexts
+         ↓
+    MCP Query Tool (Copilot Chat Interface)
+         ↓
+    InteractionOrchestrator (Context Enrichment)
+
+  backward_compatibility:
+    - "All changes additive — no breaking changes to existing LENS API"
+    - "Graph queries optional — fallback to direct AST analysis"
+    - "MCP tool registration backward compatible with Phase 63 framework"
+
+testing_strategy:
+  unit_tests:
+    - "110+ tests across 4 stages (25 + 30 + 35 + 20)"
+    - "90%+ coverage target for all modules"
+    - "Mocked dependencies for fast execution (<5s total)"
+    
+  integration_tests:
+    - "E2E: Analyze CORTEX codebase → Build graph → Query relationships"
+    - "E2E: Infer domains from CORTEX → Validate against known structure"
+    - "E2E: MCP tool → Graph query → Response formatting"
+    - "Performance: Graph build <30s, queries <100ms"
+    
+  validation:
+    - "Human review: 50 inferred domains → 85%+ precision target"
+    - "Benchmark: Token efficiency (5-10K vs. 50-150K baseline)"
+    - "Load test: 1000 graph queries → <100ms p95 latency"
+
+performance_targets:
+  - "Graph build time: <30s for CORTEX codebase (~50K LOC)"
+  - "1-hop query: <50ms p95"
+  - "2-hop query: <100ms p95"
+  - "Graph storage: <50MB for 100K LOC codebase"
+  - "Incremental update: <5s for single file change"
+  - "Domain inference: <10s for full codebase analysis"
+
+# ============================================================================
+# SUCCESS METRICS & MONITORING
+# ============================================================================
+
+success_metrics:
+  quantitative:
+    - "Token efficiency: 80-90% reduction for relationship queries"
+    - "Query performance: <100ms for 2-hop queries (p95)"
+    - "Storage efficiency: <50MB for 100K LOC"
+    - "Domain inference precision: 85%+ on human validation"
+    - "Test coverage: 90%+ across all stages"
+    - "Graph build time: <30s for CORTEX codebase"
+    
+  qualitative:
+    - "Architectural violation detection operational"
+    - "Domain glossary useful for onboarding"
+    - "Bounded context map accurate for modularity planning"
+    - "MCP tool queries intuitive for Copilot Chat users"
+    - "Knowledge graph queries reduce context loading overhead"
+
+monitoring:
+  metrics:
+    - "cortex_lens_graph_query_duration_seconds (histogram)"
+    - "cortex_lens_graph_build_duration_seconds (histogram)"
+    - "cortex_lens_graph_size_bytes (gauge)"
+    - "cortex_lens_domain_inference_precision (gauge)"
+    - "cortex_lens_architecture_violations_detected (counter)"
+    
+  alerts:
+    - "Graph query p95 > 200ms → performance degradation"
+    - "Graph build time > 60s → scaling issue"
+    - "Domain inference precision < 70% → pattern tuning needed"
+
+# ============================================================================
+# RISKS & MITIGATION
+# ============================================================================
+
+risks:
+  - id: "RISK-66-01"
+    description: "Pattern detection false positives"
+    severity: "medium"
+    probability: "medium"
+    mitigation: |
+      - Human-in-loop validation for Stage 3
+      - Confidence scoring (0.0-1.0) on all inferences
+      - Adjustable thresholds via configuration
+      - Whitelist/blacklist patterns for known exceptions
+    fallback: "Flag low-confidence inferences for manual review"
+
+  - id: "RISK-66-02"
+    description: "Graph storage scales poorly for large codebases"
+    severity: "medium"
+    probability: "low"
+    mitigation: |
+      - Indexing strategy on (type, name), (edge_type, source_id)
+      - Periodic graph pruning (old analysis data)
+      - Benchmark on 100K LOC codebase before production
+    fallback: "PostgreSQL backend if SQLite insufficient (week 12 decision)"
+
+  - id: "RISK-66-03"
+    description: "Stage 4 runtime data insufficient for value"
+    severity: "low"
+    probability: "medium"
+    mitigation: |
+      - Defer Stage 4 until Stage 1-3 validated
+      - Evaluate necessity based on user feedback after Stage 3
+      - Decision point: Week 12 (after Stage 3 completion)
+    fallback: "Skip Stage 4 if static analysis sufficient (70% value achieved)"
+
+  - id: "RISK-66-04"
+    description: "Integration complexity with existing LENS"
+    severity: "medium"
+    probability: "low"
+    mitigation: |
+      - Graph builder = separate module with clean interfaces
+      - Feature flag for gradual rollout
+      - Backward compatibility maintained (no breaking changes)
+      - Integration tests cover all entry points
+    fallback: "Parallel implementation until stability confirmed"
+
+# ============================================================================
+# TIMELINE & MILESTONES
+# ============================================================================
+
+timeline:
+  total_duration: "11-13 weeks (20% allocation)"
+  
+  milestones:
+    - week: 3
+      stage: "S1"
+      deliverable: "Architecture Lens operational"
+      tests_passing: 25
+      
+    - week: 7
+      stage: "S2"
+      deliverable: "Knowledge Graph Lite with MCP tool"
+      tests_passing: 55
+      
+    - week: 12
+      stage: "S3"
+      deliverable: "Domain Inference Engine complete"
+      tests_passing: 90
+      
+    - week: 13
+      stage: "Integration"
+      deliverable: "E2E testing + documentation complete"
+      tests_passing: 110
+      
+    - week: 14
+      stage: "Decision Point"
+      deliverable: "Stage 4 evaluation (proceed/defer)"
+      tests_passing: 110
+
+  critical_path:
+    - "Stage 1 → Stage 2 (graph storage dependency)"
+    - "Stage 2 → Stage 3 (pattern detection needs graph)"
+    - "Stage 3 → Stage 4 evaluation (data-driven decision)"
+
+# ============================================================================
+# DOCUMENTATION & KNOWLEDGE TRANSFER
+# ============================================================================
+
+documentation:
+  technical:
+    - "Architecture decision record: Why SQLite over Neo4j"
+    - "Graph schema specification with examples"
+    - "Query API reference with code samples"
+    - "Domain inference algorithm documentation"
+    - "Performance tuning guide"
+    
+  user_guides:
+    - "MCP tool usage guide for Copilot Chat"
+    - "Architectural analysis workflow guide"
+    - "Domain glossary interpretation guide"
+    - "Knowledge graph query patterns cookbook"
+    
+  operational:
+    - "Graph maintenance procedures (pruning, backup)"
+    - "Performance monitoring and alerting setup"
+    - "Troubleshooting common graph query issues"
+
+knowledge_transfer:
+  - "Weekly demo sessions during each stage completion"
+  - "Code walkthrough for graph storage and query modules"
+  - "Pair programming session for domain inference patterns"
+  - "Documentation review and feedback loops"
+
+# ============================================================================
+# POST-COMPLETION
+# ============================================================================
+
+future_enhancements:
+  - "GraphQL query interface for external tool integration"
+  - "Cypher-like DSL for complex relationship queries"
+  - "Visual graph explorer UI (web-based)"
+  - "Multi-language support (TypeScript, Go analyzers)"
+  - "Temporal graph analysis (code evolution over time)"
+  - "Machine learning for pattern confidence scoring"
+
+maintenance:
+  - "Monthly graph schema evolution review"
+  - "Quarterly pattern detection accuracy validation"
+  - "Continuous monitoring of query performance"
+  - "Annual architectural pattern library updates"
+
+# ============================================================================
+# APPROVAL & SIGN-OFF
+# ============================================================================
+
+approval:
+  architect: "Asif Hussain"
+  created_by: "CORTEX Architect (DigestOrchestrator + ChallengeEngine)"
+  approved_date: "2026-02-09"
+  review_cycle: "Single-phase approval (autonomous execution enabled)"
+
+notes: |
+  This phase represents the winning alternative (Option A: Phased Minimal 
+  Viable Intelligence) from the challenge analysis of chat01.md digest.
+  
+  Key strategic decisions:
+  1. Incremental delivery (2-3 week cycles) over all-or-nothing (6-9 months)
+  2. Pattern-based approach (language-agnostic) over stack-specific (C#/Angular)
+  3. Token-efficient graph queries over full codebase scans
+  4. Deferred Stage 4 (runtime correlation) pending Stage 3 validation
+  
+  Success criteria prioritize:
+  - Extensibility: Graph schema + query API designed for future enhancement
+  - Scalability: <100ms queries, <50MB storage for 100K LOC
+  - Accuracy: 85%+ domain inference precision with confidence scoring
+  - Efficiency: 80-90% token reduction for relationship queries
+  
+  This phase builds on Phase 64 (Intelligent Tier Selection) and Phase 65 
+  (Intelligence Remediation) to complete the LENS transformation from 
+  syntax analyzer to domain-aware intelligence engine.
