@@ -557,9 +557,10 @@ active_phases:
       - "phase-49"  # CCL async pattern compatibility
       - "phase-48"  # Challenge gate uses LENS
     unblocks:
-      - "ML/AI-based code intelligence (Phase 58)"
-      - "Multi-language LENS support (Phase 60)"
-      - "Advanced semantic analysis (Phase 59)"
+      - "Architectural Pattern Detection (Phase 57)"
+      - "Async Crawler Framework (Phase 58)"
+      - "ML-Based Pattern Similarity (Phase 59)"
+      - "Enterprise Pattern Registry (Phase 60)"
     
     additional_deliverables: |
       S1 Deliverables:
@@ -605,6 +606,161 @@ active_phases:
       - "Enterprise .NET repository onboarding"
       - "Monolith decomposition planning"
       - "Complete dependency vulnerability analysis"
+
+  - id: "phase-57"
+    name: "Architectural Pattern Detection & Classification"
+    file: "phases/active/phase-57-architectural-pattern-detection.yaml"
+    created: "2026-02-09"
+    status: "approved"
+    priority: "P1"
+    execution_order: 9
+    roi_score: 0.82
+    estimated_duration: "4 days"
+    test_target: 45
+    coverage_target: 92
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED: AI-driven architectural pattern recognition engine.
+      
+      **SCOPE:**
+      - S1: Pattern Recognition Foundation (25+ design patterns) - 9 tests
+      - S2: Design Pattern Detectors (15+ patterns) - 12 tests
+      - S3: Architecture Classification (7+ types) - 10 tests
+      - S4: Anti-Pattern Detection & Code Smells - 8 tests
+      - S5: LENS Integration & MCP Tools - 8 tests
+      
+      **DELIVERABLES:**
+      - BasePatternDetector + PatternCatalog (25+ patterns)
+      - Architecture classifier (MVC, DDD, Layered, Microservices, etc.)
+      - Anti-pattern detector (GodClass, CircularDeps, etc.)
+      - 3 MCP tools (detect_patterns, classify_architecture, detect_anti_patterns)
+      - ArchitecturePatternSource for LENS
+      
+      **BUSINESS VALUE:**
+      - Reduce architectural review time by 40%
+      - Automated compliance checks for pattern usage
+      - Improve architecture consistency across teams
+      - Support enterprise custom pattern definitions
+    depends_on:
+      - "phase-56-A: LENS/Intelligence Hybrid Architecture"
+    unblocks:
+      - "Async Crawler Framework (Phase 58)"
+      - "ML-Based Pattern Similarity (Phase 59)"
+      - "Enterprise Pattern Registry (Phase 60)"
+
+  - id: "phase-58"
+    name: "Async Crawler Framework & Repository Pattern Learning"
+    file: "phases/active/phase-58-async-crawler-framework.yaml"
+    created: "2026-02-09"
+    status: "approved"
+    priority: "P2"
+    execution_order: 10
+    roi_score: 0.78
+    estimated_duration: "5 days"
+    test_target: 48
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: true
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED: High-performance async crawler for pattern discovery.
+      
+      **SCOPE:**
+      - S1: Async Repository Crawler Foundation - 10 tests
+      - S2: Pattern Discovery Pipeline & Batch Processing - 12 tests
+      - S3: Pattern Statistics & Distribution Analysis - 12 tests
+      - S4: Crawler Orchestration & Progress Reporting - 10 tests
+      - S5: MCP Tools & LENS Integration - 4 tests
+      
+      **DELIVERABLES:**
+      - AsyncRepositoryCrawler + RepositoryWalker
+      - PatternDiscoveryPipeline with concurrent processing
+      - PatternDistribution with co-occurrence detection
+      - ArchitectureProfiler with similarity scoring
+      - 2 MCP tools (crawl_repository, analyze_pattern_distribution)
+      
+      **PERFORMANCE:**
+      - Crawl 1000+ files in < 5 seconds
+      - Discover patterns across multiple repositories
+      - Build statistical models of pattern usage
+    depends_on:
+      - "phase-57: Architectural Pattern Detection"
+    unblocks:
+      - "ML-Based Pattern Similarity (Phase 59)"
+      - "Enterprise Pattern Registry (Phase 60)"
+
+  - id: "phase-59"
+    name: "ML-Based Pattern Similarity & Clustering"
+    file: "phases/active/phase-59-ml-pattern-similarity.yaml"
+    created: "2026-02-09"
+    status: "approved"
+    priority: "P2"
+    execution_order: 11
+    roi_score: 0.75
+    estimated_duration: "5 days"
+    test_target: 40
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: false
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED: Embedding-based pattern similarity and repository clustering.
+      
+      **SCOPE:**
+      - S1: Pattern Embedding Model - 10 tests
+      - S2: Similarity Metrics & Clustering - 12 tests
+      - S3: Repository Fingerprinting - 10 tests
+      - S4: MCP Tools & Dashboard - 8 tests
+      
+      **DELIVERABLES:**
+      - Pattern embeddings with statistical features
+      - Cosine similarity, hierarchical clustering, DBSCAN
+      - Repository fingerprints for fast comparison
+      - Clustering visualization dashboard
+    depends_on:
+      - "phase-58: Async Crawler Framework"
+    unblocks:
+      - "Enterprise Pattern Registry (Phase 60)"
+
+  - id: "phase-60"
+    name: "Enterprise Pattern Registry & Policy Engine"
+    file: "phases/active/phase-60-enterprise-pattern-registry.yaml"
+    created: "2026-02-09"
+    status: "approved"
+    priority: "P3"
+    execution_order: 12
+    roi_score: 0.70
+    estimated_duration: "3 days"
+    test_target: 32
+    coverage_target: 90
+    autonomous_execution: true
+    approval_required: false
+    cross_cutting: false
+    breaking_changes: false
+    production_blocker: false
+    description: |
+      ✅ APPROVED: Custom pattern definitions and governance policies.
+      
+      **SCOPE:**
+      - S1: Custom Pattern Registry & Schema - 12 tests
+      - S2: Policy Engine & Compliance Rules - 12 tests
+      - S3: MCP Tools & Governance Dashboard - 8 tests
+      
+      **DELIVERABLES:**
+      - Custom pattern definitions via YAML/JSON
+      - Policy evaluation engine
+      - Compliance rule checking
+      - Governance dashboard for policy monitoring
+    depends_on:
+      - "phase-59: ML-Based Pattern Similarity"
 
   - id: "phase-37"
     name: "Role-Adaptive Persona System"

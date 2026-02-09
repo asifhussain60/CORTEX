@@ -1,0 +1,248 @@
+# ============================================================================
+# PHASE-58: Async Crawler Framework & Repository Pattern Learning
+# ============================================================================
+# Purpose: Build high-performance async crawler for discovering architectural
+#          patterns across repositories, learning from pattern distributions,
+#          and building pattern similarity models
+# Authority: cortex-architect.prompt.md, Strategic LENS Analysis 2026-02-09
+# Approach: TDD-First, Async/Await, Pattern Learning, ML-Ready
+# Status: PLANNED | Target Start: 2026-02-13
+# ============================================================================
+
+version: "1.1"
+created: "2026-02-09"
+updated: "2026-02-09"
+status: "approved"
+priority: "P2"
+execution_order: 10
+
+metadata:
+  phase_id: "phase-58"
+  title: "Async Crawler Framework & Repository Pattern Learning"
+  subtitle: "High-performance discovery and statistical analysis of patterns across codebases"
+  author: "Asif Hussain"
+  created_date: "2026-02-09T00:00:00Z"
+  revised_date: "2026-02-09T12:00:00Z"
+  target_start: "2026-02-13"
+  estimated_duration: "5 days"
+  test_target: 48
+  coverage_target: 90
+  roi_score: 0.78
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: false
+  
+  autonomous_config:
+    silent_execution: true
+    user_notification: true
+    progress_visualization: "ascii_bar"
+    report_generation: "completion_report"
+    token_aware: true
+    continuation_prompt: true
+
+depends_on:
+  - "phase-57: Architectural Pattern Detection"
+
+# ============================================================================
+# STAGE BREAKDOWN (5 Days, 48+ Tests)
+# ============================================================================
+stages:
+  - id: "S1"
+    name: "Async Crawler Foundation & Repository Walker"
+    duration: "1 day"
+    test_target: 10
+    description: |
+      Build async foundation for traversing repositories and discovering files.
+      
+      **Deliverables:**
+      1. AsyncRepositoryCrawler (base class)
+         - Non-blocking file system traversal
+         - Pattern filtering (include/exclude)
+         - Progress tracking and cancellation
+      
+      2. RepositoryWalker (concrete implementation)
+         - Async tree traversal with concurrent limits
+         - Gitignore respecting
+         - File type filtering (*.py, *.ts, *.cs, etc.)
+      
+      3. PatternDiscoveryScheduler
+         - Queue management for discovered files
+         - Work distribution across asyncio tasks
+         - Backpressure handling (queue size limits)
+      
+      **Tests (10):**
+         - T1-T3: AsyncRepositoryCrawler interface and lifecycle
+         - T4-T6: RepositoryWalker file traversal
+         - T7-T8: Pattern filtering and gitignore handling
+         - T9-T10: Error handling and cancellation
+    
+    completion_criteria:
+      - "✅ AsyncRepositoryCrawler base class"
+      - "✅ RepositoryWalker implementation"
+      - "✅ 10/10 tests passing"
+
+  - id: "S2"
+    name: "Pattern Discovery Pipeline & Batch Processing"
+    duration: "1.5 days"
+    test_target: 12
+    description: |
+      Implement pipeline for discovering patterns in discovered files.
+      
+      **Deliverables:**
+      1. PatternDiscoveryPipeline
+         - File → AST parsing (async)
+         - Pattern detection (Phase 57 integration)
+         - Result aggregation and deduplication
+      
+      2. BatchProcessor
+         - Concurrent pattern detection (configurable pool size)
+         - Timeout handling (kill long-running detections)
+         - Memory management (unbounded result accumulation prevention)
+      
+      3. DiscoveryMetrics
+         - Patterns found per repository
+         - Distribution by type
+         - Performance metrics (files/sec, patterns/sec)
+      
+      **Tests (12):**
+         - T1-T3: Pipeline construction and initialization
+         - T4-T6: Batch processing and concurrency
+         - T7-T9: Timeout and error handling
+         - T10-T12: Metrics collection and reporting
+    
+    completion_criteria:
+      - "✅ PatternDiscoveryPipeline implementation"
+      - "✅ Concurrent processing (10+ async tasks)"
+      - "✅ 12/12 tests passing"
+
+  - id: "S3"
+    name: "Pattern Statistics & Distribution Analysis"
+    duration: "1.5 days"
+    test_target: 12
+    description: |
+      Analyze discovered patterns to build statistical models.
+      
+      **Deliverables:**
+      1. PatternDistribution
+         - Frequency analysis (pattern occurrences per repository)
+         - Co-occurrence detection (which patterns appear together)
+         - Correlation scoring (pattern relationships)
+      
+      2. ArchitectureProfiler
+         - Build architecture signatures from pattern distributions
+         - Calculate similarity metrics between repositories
+         - Identify common architecture patterns
+      
+      3. LearningModel
+         - Pattern frequency tables
+         - Conditional probabilities (pattern A → pattern B likelihood)
+         - Architecture fingerprints
+      
+      **Tests (12):**
+         - T1-T4: Frequency analysis
+         - T5-T8: Co-occurrence and correlation detection
+         - T9-T12: Learning model construction and querying
+    
+    completion_criteria:
+      - "✅ PatternDistribution implementation"
+      - "✅ ArchitectureProfiler with similarity scoring"
+      - "✅ 12/12 tests passing"
+
+  - id: "S4"
+    name: "Crawler Orchestration & Progress Reporting"
+    duration: "1 day"
+    test_target: 10
+    description: |
+      Build orchestration for crawler lifecycle and user feedback.
+      
+      **Deliverables:**
+      1. CrawlOrchestrator
+         - Session management (start, pause, resume, cancel)
+         - Configuration (concurrency, timeouts, filters)
+         - State persistence (checkpoint and resume)
+      
+      2. ProgressReporter
+         - Real-time progress updates
+         - ETA estimation
+         - Result streaming (findings as discovered)
+      
+      3. CrawlerCache
+         - Memoize detected patterns per file
+         - Cache invalidation strategy
+         - Storage backend (file-based, memory-based)
+      
+      **Tests (10):**
+         - T1-T3: Session lifecycle management
+         - T2-T4: Configuration validation
+         - T5-T7: Progress reporting accuracy
+         - T8-T10: Cache behavior
+    
+    completion_criteria:
+      - "✅ CrawlOrchestrator implementation"
+      - "✅ ProgressReporter with streaming results"
+      - "✅ 10/10 tests passing"
+
+  - id: "S5"
+    name: "MCP Tools & LENS Integration"
+    duration: "1 day"
+    test_target: 4
+    description: |
+      Expose crawler via MCP tools and integrate with LENS.
+      
+      **Deliverables:**
+      1. MCP Tools:
+         - cortex_crawl_repository
+           Input: {repo_path, pattern_types, max_files}
+           Output: {patterns_found, statistics, architecture_profile}
+         
+         - cortex_analyze_pattern_distribution
+           Input: {repo_path}
+           Output: {pattern_distribution, co_occurrences, architecture_type}
+      
+      2. LENS Integration:
+         - RepositoryCrawlerSource (LENS source)
+         - Pattern statistics enrichment
+         - Architecture learning recommendations
+      
+      **Tests (4):**
+         - T1-T2: MCP tool functionality
+         - T2-T3: LENS source integration
+         - T4: End-to-end workflow
+    
+    completion_criteria:
+      - "✅ 2 MCP tools exposed"
+      - "✅ LENS source implementation"
+      - "✅ 4/4 tests passing"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functional:
+    - "✅ Crawl 1000+ files in < 5 seconds (typical repo)"
+    - "✅ Discover patterns across multiple repositories"
+    - "✅ Build statistical models of pattern usage"
+    - "✅ Calculate architecture similarity scores"
+    - "✅ Provide pattern recommendations based on distribution"
+  
+  quality:
+    - "✅ 48+ tests passing"
+    - "✅ Test coverage ≥ 90%"
+    - "✅ Async/await code audit passed"
+    - "✅ Memory leak tests passing"
+  
+  performance:
+    - "✅ Pattern discovery scalable to 10,000+ files"
+    - "✅ Memory usage < 1GB for typical repo"
+    - "✅ No blocking operations in async code"
+
+# ============================================================================
+# NEXT PHASE
+# ============================================================================
+next_phase:
+  id: "phase-59"
+  name: "ML-Based Pattern Similarity & Clustering"
+  description: "Implement embedding-based pattern similarity and repository clustering"
+
