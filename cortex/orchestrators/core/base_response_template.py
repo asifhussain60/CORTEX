@@ -50,6 +50,26 @@ class SectionType(str, Enum):
     VERDICT = "verdict"
 
 
+class ContentZone(str, Enum):
+    """Semantic content zones for duplication prevention."""
+    
+    TEST_RESULTS = "test_results"
+    COVERAGE_METRICS = "coverage_metrics"
+    RECOMMENDATIONS = "recommendations"
+    CHALLENGES = "challenges"
+    STATUS = "status"
+    AUDIT_TRAIL = "audit_trail"
+    NAVIGATION = "navigation"
+    METRICS = "metrics"
+    ANALYSIS = "analysis"
+    PLAN = "plan"
+    SECURITY = "security"
+    PERFORMANCE = "performance"
+    REFACTORING = "refactoring"
+    DOCUMENTATION = "documentation"
+    CONTEXT = "context"
+
+
 # ============================================================================
 # DATA MODELS
 # ============================================================================
@@ -62,8 +82,14 @@ class TemplateConfig:
     orchestrator_name: str
     """Name of the orchestrator"""
     
+    content_zones: set = field(default_factory=set)
+    """Semantic content zones this template uses"""
+    
     custom_blocks: List[str] = field(default_factory=list)
     """Custom template blocks available"""
+    
+    content_zones: set = field(default_factory=set)
+    """Semantic content zones this template uses"""
     
     section_icons: Dict[str, str] = field(default_factory=dict)
     """Section name → emoji mapping"""
@@ -112,7 +138,8 @@ class BaseResponseTemplate(ABC):
         orchestrator_name: str,
         mode: str = "CORTEX",
         author: str = "Asif Hussain",
-        config_path: Optional[Path] = None
+        config_path: Optional[Path] = None,
+        content_zones: Optional[set] = None
     ):
         """
         Initialize base response template.
@@ -122,15 +149,19 @@ class BaseResponseTemplate(ABC):
             mode: Response mode (default: "CORTEX")
             author: Author name (default: "Asif Hussain")
             config_path: Path to template configuration YAML
+            content_zones: Set of ContentZone enums this template uses
         """
         self.orchestrator_name = orchestrator_name
         self.mode = mode
         self.author = author
         self._header_generated = False
         self._section_count = 0
+        self._active_zones: set = set()
         
         # Load configuration
         self.config = self._load_config(config_path)
+        if content_zones:
+            self.config.content_zones = content_zones
         
         # Section icon mapping
         self._section_icons = {
@@ -429,6 +460,42 @@ class BaseResponseTemplate(ABC):
         """
         self._header_generated = False
         self._section_count = 0
+        self._active_zones = set()
+    
+    def add_zone(self, zone: ContentZone) -> None:
+        """
+        Mark a content zone as active in this response.
+        
+        Args:
+            zone: ContentZone to add
+        
+        Raises:
+            RuntimeError: If zone already active (duplication)
+        """
+        if zone in self._active_zones:
+            raise RuntimeError(
+                f"Content zone '{zone.value}' already active. "
+                f"Duplicate content detected in {self.orchestrator_name}."
+            )
+        self._active_zones.add(zone)
+    
+    def validate_zones(self, zones: set) -> None:
+        """
+        Validate that zones don't conflict with active zones.
+        
+        Args:
+            zones: Set of ContentZone enums to validate
+        
+        Raises:
+            RuntimeError: If any zone conflicts
+        """
+        conflicts = zones & self._active_zones
+        if conflicts:
+            conflict_names = [z.value for z in conflicts]
+            raise RuntimeError(
+                f"Content zone conflict in {self.orchestrator_name}: {conflict_names}. "
+                f"These zones are already active in the current response."
+            )
     
     def get_section_count(self) -> int:
         """Get number of sections generated."""
@@ -477,4 +544,5 @@ __all__ = [
     "TemplateConfig",
     "SeverityLevel",
     "SectionType",
+    "ContentZone",
 ]

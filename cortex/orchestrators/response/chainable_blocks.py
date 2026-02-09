@@ -12,9 +12,11 @@ Version: 1.0
 Authority: ENH-064 Response Template Migration
 """
 
-from typing import Dict, List, Any, Optional, Tuple, Callable
+from typing import Dict, List, Any, Optional, Tuple, Callable, Set
 from dataclasses import dataclass
 from enum import Enum
+
+from cortex.orchestrators.core.base_response_template import ContentZone
 
 
 # ============================================================================
@@ -46,8 +48,9 @@ class ChainableBlock:
     using the + operator or compose() method.
     """
     
-    def __init__(self, content: str = ""):
+    def __init__(self, content: str = "", zone: Optional[ContentZone] = None):
         self.content = content
+        self.zone = zone
     
     def __add__(self, other: 'ChainableBlock') -> 'ChainableBlock':
         """Chain blocks using + operator."""
@@ -60,6 +63,10 @@ class ChainableBlock:
     def is_empty(self) -> bool:
         """Check if block is empty."""
         return not self.content.strip()
+    
+    def get_zone(self) -> Optional[ContentZone]:
+        """Get content zone for this block."""
+        return self.zone
 
 
 # ============================================================================
@@ -475,7 +482,30 @@ class BlockComposer:
         return self
     
     def build(self) -> str:
-        """Build final response from all blocks."""
+        """
+        Build final response from all blocks.
+        
+        Validates zone conflicts before composition.
+        
+        Returns:
+            Combined response content
+        
+        Raises:
+            RuntimeError: If zone conflicts detected
+        """
+        # Validate no zone conflicts
+        zones_used: Set[ContentZone] = set()
+        
+        for block in self.blocks:
+            if block.zone:
+                if block.zone in zones_used:
+                    raise RuntimeError(
+                        f"Content zone conflict: {block.zone.value} used multiple times. "
+                        f"BlockComposer detected duplicate semantic content."
+                    )
+                zones_used.add(block.zone)
+        
+        # Compose blocks
         return "\n".join(block.render() for block in self.blocks)
 
 
