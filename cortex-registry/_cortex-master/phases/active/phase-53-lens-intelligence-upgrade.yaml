@@ -1,10 +1,11 @@
 phase_id: "phase-53"
 phase_name: "LENS Intelligence Upgrade"
-version: "1.0.0"
+version: "2.0.0"
 status: "planned"
 priority: "P0"
 created_date: "2026-02-09"
-target_completion: "2026-03-02"
+updated_date: "2026-02-09"
+target_completion: "2026-03-06"
 
 # ============================================================================
 # PHASE OVERVIEW
@@ -13,16 +14,24 @@ target_completion: "2026-03-02"
 description: |
   Comprehensive upgrade of CORTEX LENS (Language→Examination→Navigation→Synthesis)
   from rule-based stubs to production-grade intelligent system with real codebase
-  analysis, knowledge integration, adaptive routing, and mandatory cleanup/migration.
+  analysis, layered knowledge integration, adaptive routing, and mandatory cleanup/migration.
   
   Current State: 5.0/10 - Good foundation, critical intelligence gaps
-  Target State: 9.0/10 - Production-ready adaptive intelligence
+  Target State: 9.5/10 - Production-ready adaptive intelligence with intelligent orchestration
   
   Critical Blockers:
   - Phase 2: Stub examination (no real codebase analysis)
   - Phase 4: Empty knowledge retrieval (45+ YAML files unused)
   - Phase 3: Static 1:1 routing (no adaptive workflows)
   - No integration between cortex/brain/lens/pipeline.py and cortex/lens/orchestrator.py
+  - Missing intelligence layer for layered knowledge synthesis and staleness detection
+  
+  NEW (v2.0): Intelligence Layer Integration
+  - Adds IntelligenceOrchestrator between Phase 2 and Phase 3
+  - Implements Company → Domain → CORTEX layered knowledge loading
+  - Staleness detection and auto-refresh for missing tech stacks
+  - Rich instruction synthesis for downstream orchestrators
+  - Lightweight YAML summary layer for performance optimization
 
 objectives:
   - "Connect LENS Pipeline Phase 2 to LENSOrchestrator for real AST/Git analysis"
@@ -30,14 +39,23 @@ objectives:
   - "Implement semantic intent classification (replace pattern matching)"
   - "Build multi-orchestrator adaptive routing with confidence gating"
   - "Add dynamic confidence scoring with historical success tracking"
+  - "⭐ NEW: Implement Intelligence Layer with layered knowledge synthesis"
+  - "⭐ NEW: Build staleness detection and auto-refresh mechanism"
+  - "⭐ NEW: Create instruction synthesizer for orchestrator enrichment"
+  - "⭐ NEW: Add lightweight YAML summary layer for performance"
   - "Cleanup obsolete implementations and migrate to unified LENS system"
 
 success_metrics:
   - intent_accuracy: "95% (from 60%)"
   - codebase_understanding: "90% (from 0%)"
   - knowledge_retrieval: "100% (from 0%)"
+  - knowledge_relevance: "92% (from 45%)"  # NEW: Context-aware knowledge
+  - gap_coverage: "98% (from 60%)"  # NEW: Layered fallback coverage
+  - tech_stack_detection: "100% (from 0%)"  # NEW: Auto-detect from AST
+  - staleness_detection: "Auto (from manual)"  # NEW: Per-request staleness check
   - routing_accuracy: "95% (from 70%)"
-  - latency_p95: "<50ms (maintain current <10ms)"
+  - confidence_calibration_error: "≤10%"  # NEW: Calibrated predictions
+  - latency_p95: "<50ms (from <10ms baseline, +15ms for intelligence layer acceptable)"
   - test_coverage: "≥90% for all LENS components"
 
 dependencies:
@@ -417,10 +435,156 @@ stages:
       - "Verify latency targets met"
 
   # ========================================================================
-  # STAGE 7: MANDATORY CLEANUP & MIGRATION
+  # STAGE 8: INTELLIGENCE LAYER INTEGRATION (NEW v2.0)
   # ========================================================================
 
-  - stage_id: "S7"
+  - stage_id: "S8"
+    stage_name: "Intelligence Layer Integration"
+    duration_days: 4
+    priority: "P1"
+    
+    description: |
+      Integrate IntelligenceOrchestrator between Phase 2 and Phase 3 to provide
+      layered knowledge synthesis, staleness detection, and rich orchestrator
+      instructions. Implements Company → Domain → CORTEX layered knowledge loading
+      with automatic gap filling and tech stack awareness.
+      
+      NEW CAPABILITIES:
+      - Layered knowledge loading (company best practices → domain rules → CORTEX base)
+      - Automatic gap detection and filling across knowledge layers
+      - Tech stack detection from AST imports
+      - Staleness detection and auto-refresh triggers
+      - Rich instruction synthesis for downstream orchestrators
+      - Lightweight YAML summary layer for performance optimization
+    
+    tasks:
+      - task_id: "S8.T1"
+        description: "Create IntelligenceOrchestrator with 4-stage pipeline"
+        file: "cortex/brain/lens/intelligence_orchestrator.py"
+        tests: "tests/unit/brain/lens/test_intelligence_orchestrator.py"
+        acceptance_criteria:
+          - "4-stage pipeline: Context Analysis → Knowledge Loading → Staleness Check → Instruction Synthesis"
+          - "Returns IntelligenceContext with enriched instructions"
+          - "Tech stack detection from AST imports"
+          - "Layered knowledge loading (company → domain → cortex)"
+          - "Gap detection with automatic fallback"
+          - "Test coverage: ≥95%"
+      
+      - task_id: "S8.T2"
+        description: "Build layered knowledge loading system"
+        file: "cortex/brain/lens/knowledge_layers.py"
+        tests: "tests/unit/brain/lens/test_knowledge_layers.py"
+        acceptance_criteria:
+          - "Layer 1: Query company/domains/ for best practices"
+          - "Layer 2: Query cortex/knowledge/best-practices/ for domain rules"
+          - "Layer 3: Query cortex/knowledge/best-practices/ for base knowledge"
+          - "Coverage calculation per layer (0.0-1.0)"
+          - "Automatic gap filling when coverage <0.8"
+          - "Precedence resolution (company > domain > cortex)"
+      
+      - task_id: "S8.T3"
+        description: "Implement staleness checker with auto-refresh"
+        file: "cortex/brain/lens/staleness_checker.py"
+        tests: "tests/unit/brain/lens/test_staleness_checker.py"
+        acceptance_criteria:
+          - "Compare detected tech stack (AST) vs documented tech (YAMLs)"
+          - "Flag missing frameworks/libraries"
+          - "Generate refresh recommendations"
+          - "Trigger async refresh (background job)"
+          - "Staleness report format: {status, missing_tech, recommendation}"
+      
+      - task_id: "S8.T4"
+        description: "Create instruction synthesizer for orchestrators"
+        file: "cortex/brain/lens/instruction_synthesizer.py"
+        tests: "tests/unit/brain/lens/test_instruction_synthesizer.py"
+        acceptance_criteria:
+          - "Merge all knowledge layers with precedence"
+          - "Output format: {patterns, constraints, best_practices, security, testing, context}"
+          - "Deduplicate across layers"
+          - "Prioritize by source (company > domain > cortex)"
+          - "Include staleness warnings if present"
+      
+      - task_id: "S8.T5"
+        description: "Build lightweight YAML summary layer"
+        file: "cortex/brain/lens/knowledge_summarizer.py"
+        tests: "tests/unit/brain/lens/test_knowledge_summarizer.py"
+        acceptance_criteria:
+          - "Extract summaries from YAML headers (first 50 lines only)"
+          - "KnowledgeSummary: id, title, domain, tags, priority, size, last_modified"
+          - "Summary index built at startup (<100ms for 100 YAMLs)"
+          - "Lazy expansion: load full YAML only when needed"
+          - "Performance: <1ms per summary, 78% faster than full load"
+      
+      - task_id: "S8.T6"
+        description: "Integrate IntelligenceOrchestrator into LENS Pipeline"
+        file: "cortex/brain/lens/pipeline.py"
+        tests: "tests/integration/lens/test_intelligence_integration.py"
+        acceptance_criteria:
+          - "Call IntelligenceOrchestrator between Phase 2 and Phase 3"
+          - "Pass IntelligenceContext to Phase 3 (Synthesis)"
+          - "Enrich SynthesisPhaseOutput with instruction_set"
+          - "Pass instruction_set to Phase 4 (Knowledge)"
+          - "Backwards compatible: graceful degradation if intelligence layer fails"
+      
+      - task_id: "S8.T7"
+        description: "Tech stack detection from AST imports"
+        file: "cortex/brain/lens/tech_stack_detector.py"
+        tests: "tests/unit/brain/lens/test_tech_stack_detector.py"
+        acceptance_criteria:
+          - "Map imports to tech categories: fastapi → [fastapi, python-web, rest-api]"
+          - "Support 20+ common frameworks (fastapi, flask, django, pytest, sqlalchemy, etc.)"
+          - "Return List[str] of tech tags"
+          - "Extensible: YAML-based tech mapping configuration"
+      
+      - task_id: "S8.T8"
+        description: "Integration tests: Layered knowledge scenarios"
+        file: "tests/integration/lens/test_intelligence_scenarios.py"
+        acceptance_criteria:
+          - "Scenario 1: Company knowledge complete → no domain/cortex loading"
+          - "Scenario 2: Company gaps → domain fills gaps"
+          - "Scenario 3: Company+domain gaps → cortex fills remaining"
+          - "Scenario 4: Missing tech stack → staleness warning"
+          - "Scenario 5: All layers empty → graceful degradation"
+          - "All scenarios: instruction_set properly synthesized"
+    
+    validation:
+      - "pytest tests/unit/brain/lens/test_intelligence_*.py -v"
+      - "pytest tests/integration/lens/test_intelligence_*.py -v"
+      - "Verify knowledge relevance ≥92% (context-aware queries)"
+      - "Verify gap coverage ≥98% (layered fallback working)"
+      - "Verify tech stack detection 100% for common frameworks"
+      - "Verify latency impact ≤15ms (intelligence layer overhead acceptable)"
+    
+    acceptance_criteria:
+      - id: "AC-PHASE53-011"
+        description: "IntelligenceOrchestrator integrated into LENS Pipeline"
+        validation: "pytest tests/integration/lens/test_intelligence_integration.py -v"
+      
+      - id: "AC-PHASE53-012"
+        description: "Knowledge relevance ≥92% with layered loading"
+        validation: "pytest tests/integration/lens/test_knowledge_relevance.py -v"
+      
+      - id: "AC-PHASE53-013"
+        description: "Gap coverage ≥98% with automatic fallback"
+        validation: "pytest tests/integration/lens/test_gap_coverage.py -v"
+      
+      - id: "AC-PHASE53-014"
+        description: "Tech stack detection 100% for common frameworks"
+        validation: "pytest tests/unit/brain/lens/test_tech_stack_detector.py -v"
+      
+      - id: "AC-PHASE53-015"
+        description: "Staleness detection identifies missing frameworks"
+        validation: "pytest tests/unit/brain/lens/test_staleness_checker.py -v"
+      
+      - id: "AC-PHASE53-016"
+        description: "Instruction synthesis produces rich orchestrator context"
+        validation: "pytest tests/integration/lens/test_instruction_synthesis.py -v"
+
+  # ========================================================================
+  # STAGE 7 (was Stage 7, now Stage 9): MANDATORY CLEANUP & MIGRATION
+  # ========================================================================
+
+  - stage_id: "S9"
     stage_name: "Mandatory Cleanup & Migration"
     duration_days: 3
     priority: "P0"
@@ -435,7 +599,7 @@ stages:
       but S7 ensures production cleanliness and maintainability.
     
     tasks:
-      - task_id: "S7.T1"
+      - task_id: "S9.T1"
         description: "Deprecate obsolete LENS implementations"
         files:
           - "cortex/orchestrators/core/lens_synthesis.py"
@@ -448,7 +612,7 @@ stages:
           - "Document migration path in docstrings"
           - "No breaking changes (old APIs still work but warn)"
       
-      - task_id: "S7.T2"
+      - task_id: "S9.T2"
         description: "Consolidate LENS context models"
         files:
           - "cortex/brain/lens/models.py (NEW unified models)"
@@ -462,7 +626,7 @@ stages:
           - "All imports updated to use cortex.brain.lens.models"
           - "Zero breaking changes for existing code"
       
-      - task_id: "S7.T3"
+      - task_id: "S9.T3"
         description: "Migrate all LENS consumers to unified pipeline"
         files:
           - "cortex/orchestrators/core/challenge_engine.py"
@@ -478,7 +642,7 @@ stages:
           - "Update imports in 20+ files"
           - "All existing tests still pass (≥98%)"
       
-      - task_id: "S7.T4"
+      - task_id: "S9.T4"
         description: "Remove duplicate LENS logic"
         files:
           - "DELETE: cortex/orchestrators/support/lens_analysis_extractor.py"
@@ -492,7 +656,7 @@ stages:
           - "Verify no orphaned LENS code (grep audit)"
           - "All tests still pass after deletion"
       
-      - task_id: "S7.T5"
+      - task_id: "S9.T5"
         description: "Update documentation for unified LENS system"
         files:
           - "docs/02-orchestrators/LENS-ARCHITECTURE.md (NEW)"
@@ -506,7 +670,7 @@ stages:
           - "Integration examples for common use cases"
           - "API reference for all public classes"
       
-      - task_id: "S7.T6"
+      - task_id: "S9.T6"
         description: "LENS system-wide audit & validation"
         file: "scripts/audit_lens_migration.py (NEW)"
         acceptance_criteria:
@@ -517,7 +681,7 @@ stages:
           - "Breaking change audit: Zero breaking changes detected"
           - "Generate migration report: Files changed, tests updated, performance delta"
       
-      - task_id: "S7.T7"
+      - task_id: "S9.T7"
         description: "Production readiness checklist"
         file: "docs/LENS-PRODUCTION-READINESS.md (NEW)"
         acceptance_criteria:
@@ -540,8 +704,8 @@ stages:
       - "Generate final report: LENS-PHASE53-COMPLETION-REPORT.md"
     
     rollback_plan: |
-      If S7 validation fails:
-      1. Revert S7 commits (git revert S7.T1..S7.T7)
+      If S9 validation fails:
+      1. Revert S9 commits (git revert S9.T1..S9.T7)
       2. Old APIs still work (backwards compatibility maintained)
       3. New features available but old code paths intact
       4. Incremental migration: deprecate in Phase 53, remove in Phase 54
@@ -581,7 +745,7 @@ acceptance_criteria:
     validation: "pytest tests/integration/lens/test_consumer_migration.py -v"
     
   - id: "AC-PHASE53-008"
-    description: "All obsolete LENS implementations deprecated (S7.T1)"
+    description: "All obsolete LENS implementations deprecated (S9.T1)"
     validation: "grep -r '@deprecated' cortex/ | grep -i lens | wc -l ≥2"
     
   - id: "AC-PHASE53-009"
