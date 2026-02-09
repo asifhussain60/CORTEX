@@ -34,7 +34,7 @@ config:
 # -------------------------------------------------------------------------
 analyzers:
   - name: "GitHistoryAnalyzer"
-    module: "cortex.brain.analysis.git_history_analyzer"
+    module: "cortex.lens.analyzers.git_history_analyzer"
     class: "GitHistoryAnalyzer"
     purpose: "Extract commit history, blame, author patterns"
     phase: "7.1"
