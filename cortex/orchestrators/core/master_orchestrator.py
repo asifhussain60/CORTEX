@@ -46,6 +46,19 @@ from cortex.core.orchestrator.holistic_context_builder import HolisticContextBui
 # Phase 51: Enhanced response template with semantic color coding
 from cortex.agents.core.response_template_generator import ResponseTemplate
 
+# Phase 52: AgentRulesInterpreter integration (rules-driven orchestration)
+try:
+    from cortex.agents.core.agent_rules_interpreter import (
+        AgentRulesInterpreter,
+        ExecutionContext,
+        ExecutionDirective,
+        RuleEnforcementLevel,
+        OrchestratorInvocationHelper,
+    )
+    PHASE_52_AGENT_RULES_AVAILABLE = True
+except ImportError:
+    PHASE_52_AGENT_RULES_AVAILABLE = False
+
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
 
@@ -235,6 +248,28 @@ class MasterOrchestrator(IOrchestrator):
             success=True,
             details={"manager": "StateManager initialized for cross-phase consistency"}
         )
+        
+        # Phase 52: Initialize AgentRulesInterpreter for rules-driven orchestration
+        # Bridges agent behavior (Markdown) with machine-readable rules (YAML) and orchestrator execution
+        self._agent_rules_interpreter: Optional[AgentRulesInterpreter] = None
+        if PHASE_52_AGENT_RULES_AVAILABLE:
+            try:
+                registry_path = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "_cortex-master" / "governance"
+                self._agent_rules_interpreter = AgentRulesInterpreter(registry_path)
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE52-001",
+                    operation="AGENT_RULES_INTERPRETER_INIT",
+                    success=True,
+                    details={"registry_path": str(registry_path), "phase": "52_rules_driven"}
+                )
+            except Exception as ari_err:
+                # Log but don't fail - Phase 52 is enhancement, not blocking
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE52-001",
+                    operation="AGENT_RULES_INTERPRETER_INIT",
+                    success=False,
+                    details={"error": f"Failed to initialize AgentRulesInterpreter: {str(ari_err)}"}
+                )
         
         # AC-REM-011-01: Initialize stage orchestrators for E2E workflow
         # Stage 1: Interaction Orchestrator (Comprehension)
@@ -1941,6 +1976,95 @@ class MasterOrchestrator(IOrchestrator):
                     success=False,
                     details={"error": str(exit_gate_err)}
                 )
+            
+            # ═══════════════════════════════════════════════════════════════════════
+            # Phase 52: Agent Rules Interpretation (NEW)
+            # ═══════════════════════════════════════════════════════════════════════
+            # Transform operation request into ExecutionDirective using agent rules
+            # Determines applicable rules, constraints, and orchestrator routing
+            execution_directive: Optional[ExecutionDirective] = None
+            if self._agent_rules_interpreter and PHASE_52_AGENT_RULES_AVAILABLE:
+                try:
+                    # Determine agent ID from operation context
+                    agent_id = parameters.get("agent_id", "cortex-executor")
+                    execution_context_str = parameters.get("execution_context", "production_repo")
+                    
+                    # Map string context to ExecutionContext enum
+                    try:
+                        exec_context = ExecutionContext(execution_context_str)
+                    except ValueError:
+                        exec_context = ExecutionContext.PRODUCTION_REPO
+                    
+                    # Interpret agent request to get ExecutionDirective
+                    directive_result = self._agent_rules_interpreter.interpret_agent_request(
+                        agent_id=agent_id,
+                        request=f"{operation_name}: {str(parameters)}",
+                        context=exec_context,
+                        target_orchestrator=parameters.get("target_orchestrator")
+                    )
+                    
+                    if directive_result.is_ok():
+                        execution_directive = directive_result.unwrap()
+                        
+                        # Log interpreted directive
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-002",
+                            operation="AGENT_INTERPRETATION",
+                            success=True,
+                            details={
+                                "agent_id": execution_directive.agent_id,
+                                "target_orchestrator": execution_directive.target_orchestrator,
+                                "rule_id": execution_directive.rule_id,
+                                "context": execution_directive.context.value,
+                                "constraints_count": len(execution_directive.constraints),
+                                "phase": "52_directive_generation"
+                            }
+                        )
+                        
+                        # Store directive in parameters for downstream orchestrators
+                        parameters["_execution_directive"] = {
+                            "agent_id": execution_directive.agent_id,
+                            "rule_id": execution_directive.rule_id,
+                            "rule_version": execution_directive.rule_version,
+                            "context": execution_directive.context.value,
+                            "action": execution_directive.action,
+                            "target_orchestrator": execution_directive.target_orchestrator,
+                            "constraints": [
+                                {"type": c.constraint_type, "value": c.value}
+                                for c in execution_directive.constraints
+                            ],
+                            "metadata": execution_directive.metadata,
+                        }
+                        
+                        # Override target_orchestrator if directive specified one
+                        if execution_directive.target_orchestrator:
+                            parameters["_directive_orchestrator"] = execution_directive.target_orchestrator
+                    
+                    else:
+                        # Log interpretation failure but continue
+                        self.logger.log_operation_complete(
+                            ac_id="AC-PHASE52-002",
+                            operation="AGENT_INTERPRETATION_FAILED",
+                            success=False,
+                            details={
+                                "error": directive_result.error,
+                                "agent_id": agent_id,
+                                "operation": operation_name
+                            }
+                        )
+                
+                except Exception as phase52_err:
+                    # Log but don't block - Phase 52 is enhancement
+                    self.logger.log_operation_complete(
+                        ac_id="AC-PHASE52-002",
+                        operation="AGENT_INTERPRETATION_ERROR",
+                        success=False,
+                        details={
+                            "error": str(phase52_err),
+                            "operation": operation_name,
+                            "phase": "52_directive_generation"
+                        }
+                    )
             
             # ═══════════════════════════════════════════════════════════════════════
             # Phase 38 Stage 10: EXIT GATE - Deployment Validation
