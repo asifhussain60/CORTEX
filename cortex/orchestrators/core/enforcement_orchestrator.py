@@ -541,7 +541,7 @@ class MarkdownSuppressionAgent:
 
 class ArchitectureIntegrityAgent:
     """
-    Enforces architectural integrity rules (CORE-017-020, 032, 034, 035, 038-041).
+    Enforces architectural integrity rules (CORE-017-020, 032, 034, 035, 038-041, ENH-064).
     
     Covers:
     - CORE-017-020: Versioned filenames, temporal naming patterns
@@ -552,6 +552,7 @@ class ArchitectureIntegrityAgent:
     - CORE-039: Context management
     - CORE-040: Performance optimization
     - CORE-041: Event-driven architecture patterns
+    - ENH-064: Response template wiring (orchestrators must use template system)
     """
     
     def validate(self, context: Dict[str, Any]) -> EnforcementResult:
@@ -563,12 +564,28 @@ class ArchitectureIntegrityAgent:
                 - output_files: List of files to be generated (optional)
                 - turn_count: Number of turns in current session (optional)
                 - estimated_duration_seconds: Estimated operation duration (optional)
+                - orchestrator_files: Dict mapping orchestrator names to file content (optional)
         
         Returns:
-            EnforcementResult with BLOCKED (CORE-035), WARNING (budgets), or PASS
+            EnforcementResult with BLOCKED (CORE-035, ENH-064), WARNING (budgets), or PASS
         """
         violations = []
         warnings = []
+        
+        # ENH-064: Check orchestrators use response template system
+        orchestrator_files = context.get("orchestrator_files", {})
+        for orchestrator_name, file_content in orchestrator_files.items():
+            # Check for template integration markers
+            has_base_template = "BaseResponseTemplate" in file_content
+            has_template_integration = "TemplateIntegration" in file_content
+            has_registry_usage = "get_orchestrator_template" in file_content
+            
+            if not (has_base_template or has_template_integration or has_registry_usage):
+                violations.append(
+                    f"ENH-064 VIOLATION: Orchestrator '{orchestrator_name}' must use response template system. "
+                    f"Options: 1) Inherit BaseResponseTemplate, 2) Use TemplateIntegration mixin, "
+                    f"3) Call get_orchestrator_template() from registry."
+                )
         
         # CORE-035: Check for versioned filenames (_v2, _v3, etc.)
         output_files = context.get("output_files", [])
